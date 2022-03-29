@@ -1,0 +1,8 @@
+{
+  "name": "app",
+  "private": "true",
+  "scripts": {
+    "build": "rollup -c rollup.config.js",
+    "build:css": "sass ./app/assets/stylesheets/application.sass.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules"
+  }
+}
