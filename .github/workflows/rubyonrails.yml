@@ -55,6 +55,6 @@ jobs:
       - name: Security audit dependencies
         run: bundler exec bundle audit check
       - name: Security audit application code
-        run: bin/brakeman -q -w2
+        run: bundler exec brakeman -q -w2
       - name: Lint Ruby files
-        run: bin/rubocop --parallel
+        run: bundler exec rubocop --parallel

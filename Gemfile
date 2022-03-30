@@ -69,3 +69,7 @@ group :test do
 end
 
 gem "bundler-audit", "~> 0.9.0"
+
+gem "brakeman", "~> 5.2"
+
+gem "rubocop", "~> 1.26"
