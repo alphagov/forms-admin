@@ -67,3 +67,5 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+gem "bundler-audit", "~> 0.9.0"
