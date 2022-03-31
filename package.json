@@ -14,7 +14,8 @@
     "build:css": "sass ./app/assets/stylesheets/application.sass.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules",
     "watch:css": "sass ./app/assets/stylesheets/application.sass.scss ./app/assets/builds/application.css --load-path=node_modules --watch",
     "test": "jest",
-    "cypress": "cypress open"
+    "cypress": "cypress open",
+    "lint": "standard & stylelint '**/*.scss'"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",
