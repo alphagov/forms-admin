@@ -27,9 +27,22 @@
     "cypress": "^9.5.3",
     "jest": "^27.5.1",
     "rollup": "^2.70.1",
-    "sass": "^1.49.9"
+    "sass": "^1.49.9",
+    "standard": "^16.0.4",
+    "stylelint": "^14.6.1",
+    "stylelint-config-gds": "^0.2.0"
   },
   "dependencies": {
     "govuk-frontend": "^4.0.1"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "it",
+      "cy"
+    ]
+  },
+  "stylelint": {
+    "extends": "stylelint-config-gds/scss"
   }
 }
