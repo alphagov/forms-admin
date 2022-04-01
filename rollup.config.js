@@ -20,7 +20,8 @@ export default [
       scss({
         processor: () => postcss([autoprefixer({ grid: 'no-autoplace' })]),
         output: true,
-        sourceMap: true
+        sourceMap: true,
+        quietDeps: true
       }),
       babel({ babelHelpers: 'bundled' })
     ]
