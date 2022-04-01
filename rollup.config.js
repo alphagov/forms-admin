@@ -3,6 +3,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import scss from 'rollup-plugin-scss'
 import postcss from 'postcss'
 import autoprefixer from 'autoprefixer'
+import command from 'rollup-plugin-command'
 import { babel } from '@rollup/plugin-babel'
 
 export default [
@@ -17,6 +18,7 @@ export default [
     plugins: [
       resolve(),
       commonjs(),
+      command('npm run lint'),
       scss({
         processor: () => postcss([autoprefixer({ grid: 'no-autoplace' })]),
         output: true,

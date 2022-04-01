@@ -12,7 +12,8 @@
     "dev": "rollup -c rollup.config.js --watch",
     "test": "jest",
     "cypress": "cypress open",
-    "lint": "standard & stylelint '**/*.scss'"
+    "lint": "standard | snazzy & stylelint '**/*.scss'",
+    "format": "standard --fix & stylelint '**/*.scss' --fix"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",
@@ -27,8 +28,10 @@
     "jest": "^27.5.1",
     "postcss": "^8.4.12",
     "rollup": "^2.70.1",
+    "rollup-plugin-command": "^1.1.3",
     "rollup-plugin-scss": "^3.0.0",
     "sass": "^1.49.9",
+    "snazzy": "^9.0.0",
     "standard": "^16.0.4",
     "stylelint": "^14.6.1",
     "stylelint-config-gds": "^0.2.0"
