@@ -10,7 +10,7 @@
   "scripts": {
     "build": "gulp javascript",
     "build:css": "gulp css",
-    "watch": "gulp watch",
+    "dev": "gulp dev",
     "test": "jest",
     "cypress": "cypress open",
     "lint": "npm run lint:js && npm run lint:css",
