@@ -1,0 +1,37 @@
+# The below is taken from the GOV.UK Rubocop config
+
+AllCops:
+  NewCops: disable
+  SuggestExtensions: false
+  Exclude:
+    - 'bin/**'
+    - 'config.ru'
+    - 'tmp/**/*'
+    - 'db/schema.rb'
+    - 'db/migrate/*'
+    - 'vendor/**/*'
+    - 'node_modules/**/*'
+
+  DisplayCopNames:
+    Enabled: true
+
+  ExtraDetails:
+    Enabled: true
+
+  DisplayStyleGuide:
+    Enabled: true
+
+# Introduced in: c69a7eb3af955d6c4c0cf0c3cec8e9f330c74429
+# Documenting every class is a lot of effort and we don't
+# expect to get any value from this. Another risk of adding
+# more documentation is the potential for confusion if that
+# documentation gets out-of-sync with the class/module.
+Style/Documentation:
+  Enabled: false
+
+# Introduced in: b171d652d3e434b74ddc621df3b5be24c49bc7e8
+# This cop was added in preperation for a Ruby feature
+# that is no longer likely to become part of the language.
+# https://github.com/rubocop-hq/rubocop/issues/7197
+Style/FrozenStringLiteralComment:
+  Enabled: false
