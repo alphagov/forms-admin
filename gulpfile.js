@@ -7,8 +7,8 @@ const { rollup } = require('rollup')
 const { nodeResolve } = require('@rollup/plugin-node-resolve')
 const commonjs = require('@rollup/plugin-commonjs')
 const { babel } = require('@rollup/plugin-babel')
-
 const execShPromise = require('exec-sh').promise
+
 const javascriptEntryPoint = 'app/javascript/application.js'
 const sassEntrypoint = 'app/assets/stylesheets/application.scss'
 const outputFolder = 'app/assets/builds'
