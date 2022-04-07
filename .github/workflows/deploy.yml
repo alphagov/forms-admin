@@ -5,7 +5,7 @@ on:
     branches: [ setup-deploy ]
 
 jobs:
-  build-api:
+  deploy:
     runs-on: ubuntu-latest
     environment: dev
 
