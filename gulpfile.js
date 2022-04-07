@@ -6,25 +6,21 @@ const log = require('fancy-log')
 const { rollup } = require('rollup')
 const { nodeResolve } = require('@rollup/plugin-node-resolve')
 const commonjs = require('@rollup/plugin-commonjs')
-const command = require('rollup-plugin-command')
 const { babel } = require('@rollup/plugin-babel')
 
-const sassSourceFile = 'app/assets/stylesheets/application.scss'
+const execShPromise = require('exec-sh').promise
+const javascriptEntryPoint = 'app/javascript/application.js'
+const sassEntrypoint = 'app/assets/stylesheets/application.scss'
 const outputFolder = 'app/assets/builds'
 
 async function javascript () {
   const bundle = await rollup({
-    input: 'app/javascript/application.js',
-    plugins: [
-      nodeResolve(),
-      commonjs(),
-      command('npm run lint'),
-      babel({ babelHelpers: 'bundled' })
-    ]
+    input: javascriptEntryPoint,
+    plugins: [nodeResolve(), commonjs(), babel({ babelHelpers: 'bundled' })]
   })
 
   await bundle.write({
-    file: 'app/assets/builds/application.js',
+    dir: outputFolder,
     format: 'es',
     inlineDynamicImports: true,
     sourcemap: true
@@ -32,7 +28,7 @@ async function javascript () {
 }
 
 function css () {
-  return src(sassSourceFile)
+  return src(sassEntrypoint)
     .pipe(sourcemaps.init())
     .pipe(
       sass({
@@ -47,15 +43,24 @@ function css () {
     .pipe(dest(outputFolder))
 }
 
-const build = parallel(css, javascript)
+async function lint () {
+  try {
+    await execShPromise('yarn lint', [])
+  } catch {}
+}
 
-const watchTask = async function () {
-  build()
-  watch(['app/assets/stylesheets/**/*.scss', 'app/javascript/*.js'], build)
+const buildAndLint = parallel(css, javascript, lint)
+const buildAndLintCss = parallel(css, lint)
+const buildAndLintJs = parallel(javascript, lint)
+
+const dev = function () {
+  buildAndLint()
+  watch('app/assets/stylesheets/**/*.scss', buildAndLintCss)
+  watch('app/javascript/*.js', buildAndLintJs)
 }
 
 module.exports = {
   css,
   javascript,
-  watch: watchTask
+  dev
 }

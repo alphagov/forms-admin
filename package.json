@@ -13,7 +13,9 @@
     "watch": "gulp watch",
     "test": "jest",
     "cypress": "cypress open",
-    "lint": "standard | snazzy & stylelint 'app/assets/**/*.scss'",
+    "lint": "npm run lint:js && npm run lint:css",
+    "lint:js": "standard | snazzy",
+    "lint:css": "stylelint 'app/assets/**/*.scss'",
     "format": "standard --fix & stylelint 'app/assets/**/*.scss' --fix"
   },
   "devDependencies": {
@@ -26,6 +28,7 @@
     "autoprefixer": "^10.4.4",
     "core-js": "^3.21.1",
     "cypress": "^9.5.3",
+    "exec-sh": "^0.4.0",
     "gulp": "^4.0.2",
     "gulp-postcss": "^9.0.1",
     "gulp-sass": "^5.1.0",
