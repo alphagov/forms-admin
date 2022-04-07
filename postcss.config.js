@@ -1,3 +1,6 @@
+const autoprefixer = require('autoprefixer')
+const cssnano = require('cssnano')
+
 module.exports = {
-  plugins: [require('autoprefixer')({ grid: 'no-autoplace' })]
+  plugins: [autoprefixer({ grid: 'no-autoplace' }), cssnano()]
 }

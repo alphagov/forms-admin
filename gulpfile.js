@@ -7,6 +7,7 @@ const { rollup } = require('rollup')
 const { nodeResolve } = require('@rollup/plugin-node-resolve')
 const commonjs = require('@rollup/plugin-commonjs')
 const { babel } = require('@rollup/plugin-babel')
+const { terser } = require('rollup-plugin-terser')
 const execShPromise = require('exec-sh').promise
 
 const javascriptEntryPoint = 'app/javascript/application.js'
@@ -16,7 +17,12 @@ const outputFolder = 'app/assets/builds'
 async function javascript () {
   const bundle = await rollup({
     input: javascriptEntryPoint,
-    plugins: [nodeResolve(), commonjs(), babel({ babelHelpers: 'bundled' })]
+    plugins: [
+      nodeResolve(),
+      commonjs(),
+      terser(),
+      babel({ babelHelpers: 'bundled' })
+    ]
   })
 
   await bundle.write({
