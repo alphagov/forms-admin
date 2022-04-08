@@ -8,6 +8,7 @@ To run the project you will need to install:
 
 - [Ruby](https://www.ruby-lang.org/en/) - we use version 3 of Ruby. Before running the project, double check the [.ruby-version] file to see the exact version.
 - [Node.js](https://nodejs.org/en/) - the frontend build requires Node.js. We use Node 16 LTS versions.
+- a running [PostgreSQL] (https://www.postgresql.org/) database
 - [Yarn](https://yarnpkg.com/) - we use Yarn rather than `npm` to install and run the frontend.
 
 We recommend using a version manager to install and manage these, such as:
