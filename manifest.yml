@@ -1,0 +1,11 @@
+---
+applications:
+- name: forms-admin-dev
+  memory: 256M
+  command: rake db:migrate && bin/rails server
+  services:
+    - forms-admin-dev-db
+    - forms-admin-dev-splunk
+  env:
+    RAILS_ENV: production
+    RACK_ENV: production
