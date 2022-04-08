@@ -24,12 +24,18 @@ We recommend using a version manager to install and manage these, such as:
 # 1. Clone the git repository and change directory to the new folder
 git clone git@github.com:alphagov/forms-admin.git
 cd forms-admin
+
 # 2. Install the ruby dependencies
 bundle install
-# 3. Install the node dependencies
+
+# 3. Set up the database
+rake db:prepare
+
+# 4. Install the node dependencies
 yarn
-# 4. Run the frontend build task
-npm run build
+
+# 5. Run the frontend build tasks
+yarn build & yarn build:css
 ```
 
 ### Running the app
@@ -37,7 +43,7 @@ npm run build
 You can either run the development task:
 
 ```bash
-# Run the foreman dev server and start the frontend dev task
+# Run the foreman dev server. This will also start the frontend dev task
 bin/dev
 ```
 
@@ -46,6 +52,7 @@ or run the rails server:
 ```bash
 # Run a local Rails server
 bin/rails server
+
 # When running the server, you can use any of the frontend tasks, e.g.:
 yarn dev
 ```
