@@ -7,9 +7,9 @@
 name: "Ruby on Rails CI"
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -58,3 +58,5 @@ jobs:
         run: bundler exec brakeman -q -w2
       - name: Lint Ruby files
         run: bundler exec rubocop app --parallel
+      - name: Lint Javascript and Sass files
+        run: yarn lint
