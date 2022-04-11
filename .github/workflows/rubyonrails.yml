@@ -11,7 +11,7 @@ on:
   pull_request:
     branches: [main]
 jobs:
-  test:
+  build_and_test:
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -33,6 +33,10 @@ jobs:
         uses: ruby/setup-ruby@8f312efe1262fb463d906e9bf040319394c18d3e # v1.92
         with:
           bundler-cache: true
+      - name: Install frontend dependencies
+        run: yarn
+      - name: Run Frontend build
+        run: yarn build & yarn build:css
       # Add or replace database setup steps here
       - name: Create db
         run: bin/rails db:migrate
