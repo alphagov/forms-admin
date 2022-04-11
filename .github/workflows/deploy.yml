@@ -1,0 +1,41 @@
+name: Deploy to GOV.UK PaaS
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@8f312efe1262fb463d906e9bf040319394c18d3e # v1.92
+        with:
+          bundler-cache: true
+
+      - name: Precompile assets
+        run: bundle exec rake assets:precompile
+
+      - name: Install cloudfoundry
+        shell: bash
+        id: install-cf-cli
+        run: |
+          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+          sudo apt-get update
+          sudo apt-get install cf8-cli
+
+      - name: Deploy to Gov.uk PaaS
+        id: deploy-to-paas
+        shell: bash
+        run: |
+          cf api ${{ secrets.CF_API }}
+          cf auth "${{ secrets.CF_USER }}" "${{ secrets.CF_PASSWORD }}"
+          cf target -o ${{ secrets.CF_ORGANISATION }} -s ${{ secrets.CF_SPACE }}
+          cf push --strategy rolling
+
