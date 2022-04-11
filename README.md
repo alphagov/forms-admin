@@ -1,4 +1,4 @@
-# GOV.UK Forms Admin
+# GOV.UK Forms Admin [![Ruby on Rails CI](https://github.com/alphagov/forms-admin/actions/workflows/rubyonrails.yml/badge.svg)](https://github.com/alphagov/forms-admin/actions/workflows/rubyonrails.yml) [![Deploy to GOV.UK PaaS](https://github.com/alphagov/forms-admin/actions/workflows/deploy.yml/badge.svg)](https://github.com/alphagov/forms-admin/actions/workflows/deploy.yml)
 
 GOV.UK Forms is a service for creating forms. GOV.UK Forms Admin is a an application to handle the administration, design and publishing of those forms. It's a Ruby on Rails application built on a PostgreSQL database.
 
