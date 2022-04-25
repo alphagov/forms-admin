@@ -73,6 +73,17 @@ yarn test
 yarn cypress
 ```
 
+## Explain how to use Sentry
+
+We currently have a very basic setup for Sentry in this repo for testing, which we will continue to build upon. 
+
+In order to use this:
+  - first sign up to [Sentry](https://sentry.io) and create a new project
+  - create a file called `.env` in the root of this repo
+  - add the Sentry DNS to`.env` as a variable named `SENTRY_DNS`
+  - uncomment out the exception triggers in [this file](config/initializers/sentry.rb)
+  - Build the project and watch the errors come through on Sentry
+
 ## Support
 
 Raise a Github issue if you need support.
