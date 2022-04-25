@@ -24,6 +24,13 @@ gem "cssbundling-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+# Use Sentry (https://sentry.io/for/ruby/?platform=sentry.ruby.rails#)
+gem "sentry-ruby"
+gem "sentry-rails"
+
+gem 'dotenv-rails', groups: [:development, :test]
+
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
