@@ -33,7 +33,6 @@
     "gulp": "^4.0.2",
     "gulp-postcss": "^9.0.1",
     "gulp-sass": "^5.1.0",
-    "gulp-sourcemaps": "^3.0.0",
     "jest": "^27.5.1",
     "postcss": "^8.4.12",
     "rollup": "^2.70.1",

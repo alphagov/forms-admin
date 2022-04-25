@@ -1,7 +1,6 @@
 const { watch, src, dest, parallel } = require('gulp')
 const sass = require('gulp-sass')(require('sass'))
 const postcss = require('gulp-postcss')
-const sourcemaps = require('gulp-sourcemaps')
 const log = require('fancy-log')
 const { rollup } = require('rollup')
 const { nodeResolve } = require('@rollup/plugin-node-resolve')
@@ -34,8 +33,7 @@ async function javascript () {
 }
 
 function css () {
-  return src(sassEntrypoint)
-    .pipe(sourcemaps.init())
+  return src(sassEntrypoint, { sourcemaps: true })
     .pipe(
       sass({
         includePaths: './node_modules/govuk-frontend/',
@@ -45,8 +43,7 @@ function css () {
       })
     )
     .pipe(postcss())
-    .pipe(sourcemaps.write('.'))
-    .pipe(dest(outputFolder))
+    .pipe(dest(outputFolder, { sourcemaps: '.' }))
 }
 
 async function lint () {
