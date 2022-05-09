@@ -37,5 +37,7 @@ jobs:
           cf api ${{ secrets.CF_API }}
           cf auth "${{ secrets.CF_USER }}" "${{ secrets.CF_PASSWORD }}"
           cf target -o ${{ secrets.CF_ORGANISATION }} -s ${{ secrets.CF_SPACE }}
-          cf push --strategy rolling
-
+          cf push --strategy rolling \
+            --var GDS_SSO_OAUTH_ID=${{ secrets.GDS_SSO_OAUTH_ID }} \
+            --var GDS_SSO_OAUTH_SECRET=${{ secrets.GDS_SSO_OAUTH_SECRET }} \
+            --var GOVUK_APP_DOMAIN=${{ secrets.GOVUK_APP_DOMAIN }}
