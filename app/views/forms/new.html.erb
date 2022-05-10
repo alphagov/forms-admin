@@ -1,0 +1,15 @@
+<%= form_with  model: @form do |webform| %>
+  <div class="govuk-form-group">
+    <h1 class="govuk-label-wrapper">
+      <%= webform.label :title, "What is the name of your form?", class: "govuk-label govuk-label--l" %>
+    </h1>
+    <div id="form-title-hint" class="govuk-hint">
+      The form name will be shown at the top of each page of the form. Use a name that describes what the form will help people to do. For example ‘Apply for a juggling licence’.
+    </div>
+    <%= webform.text_field :title, class: "govuk-input", 'aria-describedby': "form-title-hint" %>
+  </div>
+
+  <div>
+    <%= webform.submit "Save and continue", class: "govuk-button" %>
+  </div>
+<% end %>

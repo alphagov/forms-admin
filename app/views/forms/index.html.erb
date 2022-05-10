@@ -1,0 +1,12 @@
+<h1 class="govuk-heading-xl">Your forms</h1>
+<a href="<%= new_form_path %>" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
+  Create a new form
+</a>
+
+<ul class="govuk-list govuk-list--bullet">
+  <% @forms.each do |form| %>
+    <li>
+      <%= link_to form.title, edit_form_path(form) %>
+    </li>
+  <% end %>
+</ul>
