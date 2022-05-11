@@ -3,4 +3,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "home#index"
+
+  get "/form/new", to: "forms#new"
+  post "/form/new", to: "forms#create"
 end
