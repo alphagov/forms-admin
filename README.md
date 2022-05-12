@@ -39,6 +39,14 @@ yarn
 yarn build & yarn build:css
 ```
 
+### Environment variables
+
+| Name | Purpose |
+| ------------- | ------------- |
+| `DATABASE_URL` | The URL to the postgres instance (without the database at the end) |
+| `SENTRY_DSN` | The DSN provided by Sentry |
+| `API_BASE` | The base url for the API - E.g. `http://localhost:9090/api` |
+
 ### Running the app
 
 You can either run the development task:
