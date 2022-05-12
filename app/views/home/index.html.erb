@@ -1,10 +1,19 @@
 <h1 class="govuk-heading-xl">GOV.UK Forms</h1>
+
 <% if flash[:message] %>
-  <%= flash[:message] %>
+  <p class="govuk-body">
+    <%= flash[:message] %>
+  </p>
 <% end %>
 
 <p class="govuk-body">Under construction, coming soon<p>
 
-<% @forms.each do |form| %>
-  <p class="govuk-body"><%= form.id%>: <%= form.name %></p>
-<% end %>
+<h2 class="govuk-heading-l">Your forms</h2>
+
+<ul class="govuk-list govuk-list--bullet">
+  <% @forms.each do |form| %>
+    <li>
+      <%= link_to form.name, edit_form_path(form.id), class: "govuk-link govuk-link--no-visited-state" %>
+    </li>
+  <% end %>
+</ul>
