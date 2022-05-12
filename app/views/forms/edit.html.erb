@@ -1,4 +1,4 @@
-<h1 class="govuk-heading-l">Create a form</h1>
+<h1 class="govuk-heading-l">Edit form</h1>
 
 <% if flash[:message] %>
   <p class="govuk-body">
@@ -6,7 +6,7 @@
   </p>
 <% end %>
 
-<%= form_with do |form| %>
+<%= form_with model: @form do |form| %>
   <div class="govuk-form-group">
     <h1 class="govuk-label-wrapper">
       <%= form.label :name, "What is the name of your form?", class: "govuk-label" %>
