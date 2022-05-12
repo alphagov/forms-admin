@@ -40,4 +40,6 @@ jobs:
           cf push --strategy rolling \
             --var GDS_SSO_OAUTH_ID=${{ secrets.GDS_SSO_OAUTH_ID }} \
             --var GDS_SSO_OAUTH_SECRET=${{ secrets.GDS_SSO_OAUTH_SECRET }} \
-            --var GOVUK_APP_DOMAIN=${{ secrets.GOVUK_APP_DOMAIN }}
+            --var GOVUK_APP_DOMAIN=${{ secrets.GOVUK_APP_DOMAIN }} \
+            --var SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
+            --var API_BASE=${{ secrets.API_BASE }}
