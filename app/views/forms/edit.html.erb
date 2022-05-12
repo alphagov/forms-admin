@@ -20,12 +20,12 @@
   <div class="govuk-form-group">
     <label class="govuk-label" for="email">
       Email address
-      <%= form.label :email, "What email should responses be sent to?", class: "govuk-label" %>
+      <%= form.label :submission_email, "What email should responses be sent to?", class: "govuk-label" %>
     </label>
     <div id="email-hint" class="govuk-hint">
       This should be a departmental shared inbox.
     </div>
-    <%= form.email_field :email, class: "govuk-input", 'aria-describedby': "email-hint", spellcheck: "false", autocomplete: "email" %>
+    <%= form.email_field :submission_email, class: "govuk-input", 'aria-describedby': "email-hint", spellcheck: "false", autocomplete: "email" %>
   </div>
 
   <div>
