@@ -1,12 +1,24 @@
+<h1 class="govuk-heading-l">Edit form</h1>
 <%= form_with  model: @form do |webform| %>
   <div class="govuk-form-group">
     <h1 class="govuk-label-wrapper">
-      <%= webform.label :title, "What is the name of your form?", class: "govuk-label govuk-label--l" %>
+      <%= webform.label :title, "What is the name of your form?", class: "govuk-label" %>
     </h1>
     <div id="form-title-hint" class="govuk-hint">
       The form name will be shown at the top of each page of the form. Use a name that describes what the form will help people to do. For example ‘Apply for a juggling licence’.
     </div>
     <%= webform.text_field :title, class: "govuk-input", 'aria-describedby': "form-title-hint" %>
+  </div>
+
+  <div class="govuk-form-group">
+    <label class="govuk-label" for="email">
+      Email address
+      <%= webform.label :email, "What email should responses be sent to?", class: "govuk-label" %>
+    </label>
+    <div id="email-hint" class="govuk-hint">
+      This should be a departmental shared inbox.
+    </div>
+    <%= webform.email_field :email, class: "govuk-input", 'aria-describedby': "email-hint", spellcheck: "false", autocomplete: "email" %>
   </div>
 
   <div>

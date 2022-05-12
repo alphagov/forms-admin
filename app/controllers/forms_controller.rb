@@ -33,6 +33,6 @@ class FormsController < ApplicationController
 
   private
     def form_params
-      params.require(:form).permit(:title)
+      params.require(:form).permit(:title,:email)
     end
 end
