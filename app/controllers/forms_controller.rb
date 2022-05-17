@@ -34,4 +34,15 @@ class FormsController < ApplicationController
     flash[:message] = 'Unsuccessful'
     render :edit
   end
+
+  def destroy
+    form = Form.find(params[:id])
+    form.destroy
+
+    flash[:message] = "Successfully deleted #{form.name}"
+    redirect_to root_path, status: :see_other
+  rescue StandardError
+    flash[:message] = 'Unsuccessful'
+    render :edit
+  end
 end
