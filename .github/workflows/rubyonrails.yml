@@ -63,6 +63,6 @@ jobs:
       - name: Security audit application code
         run: bundler exec brakeman -q -w2
       - name: Lint Ruby files
-        run: bundler exec rubocop app --parallel
+        run: bundler exec rubocop --parallel
       - name: Lint Javascript and Sass files
         run: yarn lint
