@@ -23,8 +23,9 @@ class FormsController < ApplicationController
   def update
     form = Form.find(params[:id])
 
-    form.name = params[:name]
-    form.submission_email = params[:submission_email]
+    binding.pry
+    form.name = form_params[:name]
+    form.submission_email = form_params[:submission_email]
 
     form.save
 
@@ -32,6 +33,11 @@ class FormsController < ApplicationController
     redirect_to :root
   rescue StandardError
     flash[:message] = 'Unsuccessful'
-    render :edit
+    redirect_to :edit_form, id: params[:id]
+  end
+
+private
+  def form_params
+    params.require(:form).permit(:name, :submission_email)
   end
 end
