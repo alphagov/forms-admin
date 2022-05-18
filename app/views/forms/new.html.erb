@@ -6,7 +6,7 @@
   </p>
 <% end %>
 
-<%= form_with do |form| %>
+<%= form_with url: forms_path do |form| %>
   <div class="govuk-form-group">
     <h1 class="govuk-label-wrapper">
       <%= form.label :name, "What is the name of your form?", class: "govuk-label" %>

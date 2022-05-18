@@ -39,7 +39,7 @@ RSpec.describe "Forms", type: :request do
       before do
         form_response
         form_update_response
-        patch form_path(id: 2), params: { name: "Updated name", submission_email: "submission@email.com"}
+        patch form_path(id: 2), params: { form: { name: "Updated name", submission_email: "submission@email.com"} }
       end
 
       it "Reads the form from the API" do
