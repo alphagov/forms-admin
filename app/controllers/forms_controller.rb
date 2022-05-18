@@ -23,7 +23,6 @@ class FormsController < ApplicationController
   def update
     form = Form.find(params[:id])
 
-    binding.pry
     form.name = form_params[:name]
     form.submission_email = form_params[:submission_email]
 
@@ -36,7 +35,8 @@ class FormsController < ApplicationController
     redirect_to :edit_form, id: params[:id]
   end
 
-private
+  private
+
   def form_params
     params.require(:form).permit(:name, :submission_email)
   end
