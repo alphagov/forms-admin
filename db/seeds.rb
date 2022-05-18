@@ -7,5 +7,5 @@
 #   Character.create(name: "Luke", movie: movies.first)
 #
 unless User.any?
-  User.create!({email: "example@example.com"})
+  User.create!({ email: "example@example.com" })
 end

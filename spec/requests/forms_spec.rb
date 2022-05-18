@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "Forms", type: :request do
   before do
@@ -9,7 +9,7 @@ RSpec.describe "Forms", type: :request do
     describe "Given a form" do
       let(:form_response) do
         stub_request(:get, "#{ENV['API_BASE']}/v1/forms/2")
-          .to_return(status: 200, body: {name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
+          .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
       end
 
       before do
@@ -27,19 +27,19 @@ RSpec.describe "Forms", type: :request do
     describe "Given a form" do
       let(:form_response) do
         stub_request(:get, "#{ENV['API_BASE']}/v1/forms/2")
-          .to_return(status: 200, body: {name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
+          .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
       end
 
       let(:form_update_response) do
         stub_request(:put, "#{ENV['API_BASE']}/v1/forms/2")
-          .with(body: {name: "Updated name", submission_email: "submission@email.com", id: 2 })
+          .with(body: { name: "Updated name", submission_email: "submission@email.com", id: 2 })
           .to_return(status: 200)
       end
 
       before do
         form_response
         form_update_response
-        patch form_path(id: 2), params: { form: { name: "Updated name", submission_email: "submission@email.com"} }
+        patch form_path(id: 2), params: { form: { name: "Updated name", submission_email: "submission@email.com" } }
       end
 
       it "Reads the form from the API" do
@@ -60,7 +60,7 @@ RSpec.describe "Forms", type: :request do
     describe "Given a valid form" do
       let(:form_creation_request) do
         stub_request(:post, "#{ENV['API_BASE']}/v1/forms")
-          .with(body: {name: "Form name", submission_email: "submission@email.com" })
+          .with(body: { name: "Form name", submission_email: "submission@email.com" })
           .to_return(status: 200)
       end
 
