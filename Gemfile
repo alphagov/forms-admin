@@ -6,7 +6,7 @@ ruby "3.0.3"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "7.0.2.4"
 
-gem 'activeresource', '~> 6.0'
+gem "activeresource", "~> 6.0"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
@@ -27,11 +27,10 @@ gem "cssbundling-rails"
 gem "jbuilder"
 
 # Use Sentry (https://sentry.io/for/ruby/?platform=sentry.ruby.rails#)
-gem "sentry-ruby"
 gem "sentry-rails"
+gem "sentry-ruby"
 
-gem 'dotenv-rails', groups: [:development, :test]
-
+gem "dotenv-rails", groups: %i[development test]
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
@@ -43,7 +42,7 @@ gem 'dotenv-rails', groups: [:development, :test]
 # gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
+gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -58,9 +57,12 @@ gem "gds-sso"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri mingw x64_mingw ]
-  gem 'rspec-rails', ">= 3.9.0"
+  gem "debug", platforms: %i[mri mingw x64_mingw]
   gem "pry"
+  gem "rspec-rails", ">= 3.9.0"
+  # gem "rubocop", "~> 1.26"
+  # gem "rubocop-rails", "~> 2.14"
+  gem "rubocop-govuk", require: false
 end
 
 group :development do
@@ -85,7 +87,3 @@ end
 gem "bundler-audit", "~> 0.9.0"
 
 gem "brakeman", "~> 5.2"
-
-gem "rubocop", "~> 1.26"
-
-gem "rubocop-rails", "~> 2.14"
