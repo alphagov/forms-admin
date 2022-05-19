@@ -35,12 +35,6 @@ class FormsController < ApplicationController
     redirect_to :edit_form, id: params[:id]
   end
 
-private
-
-  def form_params
-    params.require(:form).permit(:name, :submission_email)
-  end
-
   def destroy
     form = Form.find(params[:id])
     form.destroy
@@ -50,5 +44,11 @@ private
   rescue StandardError
     flash[:message] = 'Unsuccessful'
     render :edit
+  end
+
+private
+
+  def form_params
+    params.require(:form).permit(:name, :submission_email)
   end
 end
