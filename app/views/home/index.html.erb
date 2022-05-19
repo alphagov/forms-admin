@@ -20,7 +20,8 @@
 <ul class="govuk-list govuk-list--bullet">
   <% @forms.each do |form| %>
     <li>
-      <%= link_to form.name, edit_form_path(form.id), class: "govuk-link govuk-link--no-visited-state" %>
+      <%= link_to form.name, edit_form_path(form.id), class: "govuk-link govuk-link--no-visited-state" %><br />
+      <a class="govuk-link govuk-link--no-visited-state" href="<%= ENV['RUNNER_BASE'] %>/<%= form.id %>">View in runner</a>
     </li>
   <% end %>
 </ul>
