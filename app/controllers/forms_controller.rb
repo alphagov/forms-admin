@@ -3,16 +3,16 @@ class FormsController < ApplicationController
 
   def create
     form = Form.new({
-                      name: params[:name],
-                      submission_email: params[:submission_email]
-                    })
+      name: params[:name],
+      submission_email: params[:submission_email],
+    })
 
-    form.save
+    form.save!
 
-    flash[:message] = 'Successfully created!'
+    flash[:message] = "Successfully created!"
     redirect_to :root
   rescue StandardError
-    flash[:message] = 'Unsuccessful'
+    flash[:message] = "Unsuccessful"
     render :new
   end
 
@@ -26,16 +26,16 @@ class FormsController < ApplicationController
     form.name = form_params[:name]
     form.submission_email = form_params[:submission_email]
 
-    form.save
+    form.save!
 
-    flash[:message] = 'Successfully created!'
+    flash[:message] = "Successfully created!"
     redirect_to :root
   rescue StandardError
-    flash[:message] = 'Unsuccessful'
+    flash[:message] = "Unsuccessful"
     redirect_to :edit_form, id: params[:id]
   end
 
-  private
+private
 
   def form_params
     params.require(:form).permit(:name, :submission_email)
