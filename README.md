@@ -26,26 +26,19 @@ We recommend using a version manager to install and manage these, such as:
 git clone git@github.com:alphagov/forms-admin.git
 cd forms-admin
 
-# 2. Install the ruby dependencies
-bundle install
-
-# 3. Set up the database
-rake db:prepare
-
-# 4. Install the node dependencies
-yarn
-
-# 5. Run the frontend build tasks
-yarn build & yarn build:css
+# 2. Run the setup script
+bin/setup
 ```
+
+`bin/setup` is idempotent, so you can also run it whenever you pull new changes.
 
 ### Environment variables
 
-| Name | Purpose |
-| ------------- | ------------- |
+| Name           | Purpose                                                            |
+| -------------- | ------------------------------------------------------------------ |
 | `DATABASE_URL` | The URL to the postgres instance (without the database at the end) |
-| `SENTRY_DSN` | The DSN provided by Sentry |
-| `API_BASE` | The base url for the API - E.g. `http://localhost:9090/api` |
+| `SENTRY_DSN`   | The DSN provided by Sentry                                         |
+| `API_BASE`     | The base url for the API - E.g. `http://localhost:9090/api`        |
 
 ### Running the app
 
@@ -83,14 +76,15 @@ yarn cypress
 
 ## Explain how to use Sentry
 
-We currently have a very basic setup for Sentry in this repo for testing, which we will continue to build upon. 
+We currently have a very basic setup for Sentry in this repo for testing, which we will continue to build upon.
 
 In order to use this:
-  - first sign up to [Sentry](https://sentry.io) and create a new project
-  - create a file called `.env` in the root of this repo
-  - add the Sentry DNS to`.env` as a variable named `SENTRY_DNS`
-  - uncomment out the exception triggers in [this file](config/initializers/sentry.rb)
-  - Build the project and watch the errors come through on Sentry
+
+- first sign up to [Sentry](https://sentry.io) and create a new project
+- create a file called `.env` in the root of this repo
+- add the Sentry DNS to`.env` as a variable named `SENTRY_DNS`
+- uncomment out the exception triggers in [this file](config/initializers/sentry.rb)
+- Build the project and watch the errors come through on Sentry
 
 ## Support
 
