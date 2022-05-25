@@ -5,8 +5,8 @@
     <%= flash[:message] %>
   </p>
 <% end %>
-<p class="govuk-body">Last seen: <%= session[:last_seen] %><p>
-  <% session[:last_seen] =  DateTime.now.strftime("%A %B %d %Y, at %I:%M.") %>
+<p class="govuk-body">Last seen: <%= cache.read([:last_seen]) %><p>
+  <% session.write([:last_seen]) =  DateTime.now.strftime("%A %B %d %Y, at %I:%M.") %>
 
 <p class="govuk-body">Under construction, coming soon<p>
 
