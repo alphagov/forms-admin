@@ -12,7 +12,8 @@
     "build:css": "gulp css",
     "dev": "gulp dev",
     "test": "jest",
-    "cypress": "cypress open",
+    "cypress": "cypress run",
+    "cypress:open": "cypress open",
     "lint": "npm run lint:js && npm run lint:css",
     "lint:js": "standard | snazzy",
     "lint:css": "stylelint 'app/assets/**/*.scss'",
@@ -28,7 +29,7 @@
     "autoprefixer": "^10.4.4",
     "core-js": "^3.21.1",
     "cssnano": "^5.1.7",
-    "cypress": "^9.5.3",
+    "cypress": "^9.7.0",
     "exec-sh": "^0.4.0",
     "gulp": "^4.0.2",
     "gulp-postcss": "^9.0.1",
@@ -51,7 +52,9 @@
     "globals": [
       "describe",
       "it",
-      "cy"
+      "cy",
+      "Cypress",
+      "beforeEach"
     ]
   },
   "stylelint": {

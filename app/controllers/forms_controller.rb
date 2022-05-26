@@ -10,10 +10,14 @@ class FormsController < ApplicationController
     form.save!
 
     flash[:message] = "Successfully created!"
-    redirect_to :root
+    redirect_to action: "show", id: form.id
   rescue StandardError
     flash[:message] = "Unsuccessful"
     render :new
+  end
+
+  def show
+    @form = Form.find(params[:id])
   end
 
   def edit
@@ -28,8 +32,8 @@ class FormsController < ApplicationController
 
     form.save!
 
-    flash[:message] = "Successfully created!"
-    redirect_to :root
+    flash[:message] = "Successfully updated!"
+    redirect_to action: "show", id: form.id
   rescue StandardError
     flash[:message] = "Unsuccessful"
     redirect_to :edit_form, id: params[:id]

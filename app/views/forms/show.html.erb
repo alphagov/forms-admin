@@ -1,0 +1,12 @@
+<h1 class="govuk-heading-l"><%= @form.name %></h1>
+
+<% if flash[:message] %>
+  <p class="govuk-body">
+    <%= flash[:message] %>
+  </p>
+<% end %>
+
+<p class="govuk-body"><%= @form.submission_email %></p>
+<p class="govuk-body"><%= @form.id %></p>
+
+<%= link_to "Edit form", edit_form_path(@form.id), class: "govuk-link govuk-link--no-visited-state" %>

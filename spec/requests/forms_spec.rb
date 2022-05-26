@@ -5,6 +5,24 @@ RSpec.describe "Forms", type: :request do
     User.create!(email: "user@example.com")
   end
 
+  describe "Showing an existing form" do
+    describe "Given a form" do
+      let(:form_response) do
+        stub_request(:get, "#{ENV['API_BASE']}/v1/forms/2")
+          .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
+      end
+
+      before do
+        form_response
+        get form_path(id: 2)
+      end
+
+      it "Reads the form from the API" do
+        expect(form_response).to have_been_made
+      end
+    end
+  end
+
   describe "Editing an existing form" do
     describe "Given a form" do
       let(:form_response) do
@@ -50,8 +68,8 @@ RSpec.describe "Forms", type: :request do
         expect(form_update_response).to have_been_made
       end
 
-      it "Redirects to the homepage" do
-        expect(response).to redirect_to(root_url)
+      it "Redirects you to the form overview page" do
+        expect(response).to redirect_to(form_path(2))
       end
     end
   end
@@ -61,7 +79,7 @@ RSpec.describe "Forms", type: :request do
       let(:form_creation_request) do
         stub_request(:post, "#{ENV['API_BASE']}/v1/forms")
           .with(body: { name: "Form name", submission_email: "submission@email.com" })
-          .to_return(status: 200)
+          .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
       end
 
       before do
@@ -69,8 +87,8 @@ RSpec.describe "Forms", type: :request do
         post "/forms", params: { name: "Form name", submission_email: "submission@email.com" }
       end
 
-      it "Redirects you to the home page" do
-        expect(response).to redirect_to(root_path)
+      it "Redirects you to the form overview page" do
+        expect(response).to redirect_to(form_path(2))
       end
 
       it "Creates the form on the API" do
