@@ -45,6 +45,11 @@ jobs:
       # Add or replace test runners here
       - name: Run tests
         run: bin/rake
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          build: yarn
+          start: bin/dev
 
   lint:
     runs-on: ubuntu-latest
