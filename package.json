@@ -12,7 +12,8 @@
     "build:css": "gulp css",
     "dev": "gulp dev",
     "test": "jest",
-    "cypress": "cypress open",
+    "cypress": "cypress run",
+    "cypress:open": "cypress open",
     "lint": "npm run lint:js && npm run lint:css",
     "lint:js": "standard | snazzy",
     "lint:css": "stylelint 'app/assets/**/*.scss'",
@@ -51,7 +52,9 @@
     "globals": [
       "describe",
       "it",
-      "cy"
+      "cy",
+      "Cypress",
+      "beforeEach"
     ]
   },
   "stylelint": {
