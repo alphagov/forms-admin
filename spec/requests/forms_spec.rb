@@ -5,6 +5,24 @@ RSpec.describe "Forms", type: :request do
     User.create!(email: "user@example.com")
   end
 
+  describe "Showing an existing form" do
+    describe "Given a form" do
+      let(:form_response) do
+        stub_request(:get, "#{ENV['API_BASE']}/v1/forms/2")
+          .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
+      end
+
+      before do
+        form_response
+        get form_path(id: 2)
+      end
+
+      it "Reads the form from the API" do
+        expect(form_response).to have_been_made
+      end
+    end
+  end
+
   describe "Editing an existing form" do
     describe "Given a form" do
       let(:form_response) do
