@@ -9,8 +9,6 @@ class FormsController < ApplicationController
 
     form.save!
 
-    flash[:message] = form.id
-
     flash[:message] = "Successfully created!"
     redirect_to action: "show", id: form.id
   rescue StandardError
