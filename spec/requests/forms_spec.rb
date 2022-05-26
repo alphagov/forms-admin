@@ -50,8 +50,8 @@ RSpec.describe "Forms", type: :request do
         expect(form_update_response).to have_been_made
       end
 
-      it "Redirects to the homepage" do
-        expect(response).to redirect_to(root_url)
+      it "Redirects you to the form overview page" do
+        expect(response).to redirect_to(form_path(2))
       end
     end
   end
@@ -61,7 +61,7 @@ RSpec.describe "Forms", type: :request do
       let(:form_creation_request) do
         stub_request(:post, "#{ENV['API_BASE']}/v1/forms")
           .with(body: { name: "Form name", submission_email: "submission@email.com" })
-          .to_return(status: 200)
+          .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
       end
 
       before do
@@ -69,8 +69,8 @@ RSpec.describe "Forms", type: :request do
         post "/forms", params: { name: "Form name", submission_email: "submission@email.com" }
       end
 
-      it "Redirects you to the home page" do
-        expect(response).to redirect_to(root_path)
+      it "Redirects you to the form overview page" do
+        expect(response).to redirect_to(form_path(2))
       end
 
       it "Creates the form on the API" do
