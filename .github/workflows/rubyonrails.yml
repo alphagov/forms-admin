@@ -48,8 +48,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          build: yarn
-          start: bin/rails server
+          start: yarn run ci
 
   lint:
     runs-on: ubuntu-latest

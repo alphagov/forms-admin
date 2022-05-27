@@ -17,7 +17,8 @@
     "lint": "npm run lint:js && npm run lint:css",
     "lint:js": "standard | snazzy",
     "lint:css": "stylelint 'app/assets/**/*.scss'",
-    "format": "standard --fix & stylelint 'app/assets/**/*.scss' --fix"
+    "format": "standard --fix & stylelint 'app/assets/**/*.scss' --fix",
+    "ci": "bin/rails server"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",
