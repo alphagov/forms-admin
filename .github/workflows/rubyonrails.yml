@@ -48,7 +48,8 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           install: false
-          start: yarn run ci
+          build: bundle exec rails db:prepare
+          start: bundle exec rails server
       - name: Run tests
         run: bin/rake
 
