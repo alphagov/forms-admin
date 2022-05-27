@@ -105,8 +105,8 @@ RSpec.describe "Forms", type: :request do
       end
 
       let(:form_deletion_request) do
-        stub_request(:delete, "#{ENV['API_BASE']}/v1/forms/2").
-          to_return(status: 200, body: "", headers: {})
+        stub_request(:delete, "#{ENV['API_BASE']}/v1/forms/2")
+        .to_return(status: 200, body: "", headers: {})
       end
 
       before do
