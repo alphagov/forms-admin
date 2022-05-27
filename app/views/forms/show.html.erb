@@ -1,12 +1,50 @@
-<h1 class="govuk-heading-l"><%= @form.name %></h1>
+<% set_page_title(@form.name) %>
 
-<% if flash[:message] %>
-  <p class="govuk-body">
-    <%= flash[:message] %>
-  </p>
+<% content_for :back_link do %>
+  <%= link_to "Back", root_path, class: "govuk-back-link" %>
 <% end %>
 
-<p class="govuk-body"><%= @form.submission_email %></p>
-<p class="govuk-body"><%= @form.id %></p>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l"><%= @form.name %></span>
+    <h1 class="govuk-heading-l">Form overview</h1>
 
-<%= link_to "Edit form", edit_form_path(@form.id), class: "govuk-link govuk-link--no-visited-state" %>
+    <% if flash[:message] %>
+      <p class="govuk-body"><%= flash[:message] %></p>
+    <% end %>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0">
+      Form name
+    </h2>
+
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
+          <%= @form.name %>
+        </dt>
+        <dd class="govuk-summary-list__actions">
+          <%= link_to edit_form_path(@form.id), class: "govuk-link govuk-link--no-visited-state" do %>
+              Edit<span class="govuk-visually-hidden"> form name</span>
+          <% end %>
+        </dd>
+      </div>
+    </dl>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0">
+      Submission email
+    </h2>
+
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
+          <%= @form.submission_email %>
+        </dt>
+        <dd class="govuk-summary-list__actions">
+          <%= link_to edit_form_path(@form.id), class: "govuk-link govuk-link--no-visited-state" do %>
+              Edit<span class="govuk-visually-hidden"> submission email</span>
+          <% end %>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>
