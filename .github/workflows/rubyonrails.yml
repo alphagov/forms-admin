@@ -25,6 +25,7 @@ jobs:
     env:
       RAILS_ENV: test
       DATABASE_URL: "postgres://rails:password@localhost:5432/rails_test"
+      API_BASE: ${{ secrets.API_BASE }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -39,7 +40,7 @@ jobs:
         run: yarn build & yarn build:css
       # Add or replace database setup steps here
       - name: Create db
-        run: bin/rails db:migrate
+        run: bin/rails db:prepare
       - name: Set up database schema
         run: bin/rails db:schema:load
       # Add or replace test runners here
@@ -48,6 +49,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
+          install: false
           start: yarn run ci
 
   lint:
