@@ -41,7 +41,7 @@ class FormsController < ApplicationController
 
   def destroy
     form = Form.find(params[:id])
-    form.destroy!
+    form.destroy
 
     flash[:message] = "Successfully deleted #{form.name}"
     redirect_to root_path, status: :see_other
