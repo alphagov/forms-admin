@@ -48,7 +48,7 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           install: false
-          start: bundle exec rails db:prepare && bundle exec rails server
+          start: bundle exec rails db:prepare server
       - name: Run tests
         run: bin/rake
 
