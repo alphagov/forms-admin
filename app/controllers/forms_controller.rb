@@ -35,19 +35,21 @@ class FormsController < ApplicationController
     flash[:message] = "Successfully updated!"
     redirect_to action: "show", id: form.id
   rescue StandardError
-    flash[:message] = "Unsuccessful"
+    flash[:message] = "Update unsuccessful"
     redirect_to :edit_form, id: params[:id]
   end
 
   def destroy
     form = Form.find(params[:id])
-    form.destroy!
-
-    flash[:message] = "Successfully deleted #{form.name}"
-    redirect_to root_path, status: :see_other
+    if form.destroy
+      flash[:message] = "Successfully deleted #{form.name}"
+      redirect_to root_path, status: :see_other
+    else
+      raise StandardError, "Deletion unsuccessful"
+    end
   rescue StandardError
-    flash[:message] = "Unsuccessful"
-    render :edit
+    flash[:message] = "Deletion unsuccessful"
+    redirect_to :form, id: params[:id]
   end
 
 private
