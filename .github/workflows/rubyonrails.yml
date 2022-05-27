@@ -49,7 +49,7 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           build: yarn
-          start: bin/dev
+          start: bin/rails server
 
   lint:
     runs-on: ubuntu-latest
