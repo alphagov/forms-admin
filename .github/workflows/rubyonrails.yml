@@ -25,7 +25,6 @@ jobs:
     env:
       RAILS_ENV: test
       DATABASE_URL: "postgres://rails:password@localhost:5432/rails_test"
-      API_BASE: ${{ secrets.API_BASE }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
