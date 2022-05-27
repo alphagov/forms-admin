@@ -47,7 +47,7 @@ class FormsController < ApplicationController
     redirect_to root_path, status: :see_other
   rescue StandardError
     flash[:message] = "Unsuccessful"
-    render :edit
+    redirect_to :form, id: params[:id]
   end
 
 private
