@@ -35,7 +35,7 @@ class FormsController < ApplicationController
     flash[:message] = "Successfully updated!"
     redirect_to action: "show", id: form.id
   rescue StandardError
-    flash[:message] = "Unsuccessful"
+    flash[:message] = "Update unsuccessful"
     redirect_to :edit_form, id: params[:id]
   end
 
@@ -46,7 +46,7 @@ class FormsController < ApplicationController
     flash[:message] = "Successfully deleted #{form.name}"
     redirect_to root_path, status: :see_other
   rescue StandardError
-    flash[:message] = "Unsuccessful"
+    flash[:message] = "Deletion unsuccessful"
     redirect_to :form, id: params[:id]
   end
 
