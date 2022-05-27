@@ -96,4 +96,32 @@ RSpec.describe "Forms", type: :request do
       end
     end
   end
+
+  describe "Deleting an existing form form" do
+    describe "Given a valid form" do
+      let(:form_response) do
+        stub_request(:get, "#{ENV['API_BASE']}/v1/forms/2")
+          .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
+      end
+
+      let(:form_deletion_request) do
+        stub_request(:delete, "#{ENV['API_BASE']}/v1/forms/2").
+          to_return(status: 200, body: "", headers: {})
+      end
+
+      before do
+        form_response
+        form_deletion_request
+        delete form_path(id: 2), params: { id: 2 }
+      end
+
+      it "Redirects you to the home screen" do
+        expect(response).to redirect_to(root_path)
+      end
+
+      it "Deletes the form on the API" do
+        expect(form_deletion_request).to have_been_made
+      end
+    end
+  end
 end
