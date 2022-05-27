@@ -41,10 +41,12 @@ class FormsController < ApplicationController
 
   def destroy
     form = Form.find(params[:id])
-    form.destroy
-
-    flash[:message] = "Successfully deleted #{form.name}"
-    redirect_to root_path, status: :see_other
+    if form.destroy
+      flash[:message] = "Successfully deleted #{form.name}"
+      redirect_to root_path, status: :see_other
+    else
+      raise StandardError, "Deletion unsuccessful"
+    end
   rescue StandardError
     flash[:message] = "Deletion unsuccessful"
     redirect_to :form, id: params[:id]
