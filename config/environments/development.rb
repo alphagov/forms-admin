@@ -19,7 +19,7 @@ Rails.application.configure do
 
   # config.session_store :cache_store, key: '_app_session_key'
   config.session_store :redis_session_store, 
-    servers: 'redis://localhost:6379/1',
+    servers: ENV['REDIS_URL'],
     key: '_app_session_key'
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
