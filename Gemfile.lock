@@ -234,6 +234,9 @@ GEM
     rainbow (3.1.1)
     rake (13.0.6)
     redis (4.6.0)
+    redis-session-store (0.11.4)
+      actionpack (>= 3, < 8)
+      redis (>= 3, < 5)
     regexp_parser (2.2.1)
     reline (0.3.1)
       io-console (~> 0.5)
@@ -353,6 +356,7 @@ DEPENDENCIES
   puma (~> 5.6.4)
   rails (= 7.0.2.4)
   redis
+  redis-session-store
   rspec-rails (>= 3.9.0)
   rubocop-govuk
   selenium-webdriver
