@@ -17,11 +17,6 @@ Rails.application.configure do
   # Enable server timing
   config.server_timing = true
 
-  # config.session_store :cache_store, key: '_app_session_key'
-  config.session_store :redis_session_store, 
-    servers: ENV['REDIS_URL'],
-    key: '_app_session_key'
-
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 

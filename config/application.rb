@@ -20,5 +20,8 @@ module FormsAdmin
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     #
+    config.session_store :redis_session_store, 
+      servers: ENV['REDIS_URL'],
+      key: '_app_session_key'
   end
 end
