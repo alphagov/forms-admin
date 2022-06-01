@@ -20,8 +20,24 @@ module FormsAdmin
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     #
-    config.session_store :redis_session_store, 
-      servers: ENV['REDIS_URL'],
-      key: '_app_session_key'
+
+    # Get redis url based on VCAP_SERVICES or REDIS_URL depending on environment
+    # GovPaaS provides the URI in VCAP_SERVICES
+
+    redis_url = if ENV['VCAP_SERVICES']
+                  vcap_services = JSON.parse(ENV['VCAP_SERVICES'])
+                  if(vcap_services["redis"])
+                    vcap_services["redis"][0]["credentials"]["uri"]
+                  end
+                elsif ENV['REDIS_URL']
+                  ENV['REDIS_URL']
+                end
+
+    if redis_url
+      binding.pry
+      config.session_store :redis_session_store, 
+        servers: ENV['REDIS_URL'],
+        key: '_app_session_key'
+    end
   end
 end
