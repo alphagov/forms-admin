@@ -8,7 +8,7 @@ RSpec.describe "Forms", type: :request do
   describe "Showing an existing form" do
     describe "Given a form" do
       let(:form_response) do
-        stub_request(:get, "#{ENV['API_BASE']}/v1/forms/2")
+        stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2")
           .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
       end
 
@@ -26,7 +26,7 @@ RSpec.describe "Forms", type: :request do
   describe "Editing an existing form" do
     describe "Given a form" do
       let(:form_response) do
-        stub_request(:get, "#{ENV['API_BASE']}/v1/forms/2")
+        stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2")
           .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
       end
 
@@ -44,12 +44,12 @@ RSpec.describe "Forms", type: :request do
   describe "Updating an existing form" do
     describe "Given a form" do
       let(:form_response) do
-        stub_request(:get, "#{ENV['API_BASE']}/v1/forms/2")
+        stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2")
           .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
       end
 
       let(:form_update_response) do
-        stub_request(:put, "#{ENV['API_BASE']}/v1/forms/2")
+        stub_request(:put, "#{ENV['API_BASE']}/api/v1/forms/2")
           .with(body: { name: "Updated name", submission_email: "submission@email.com", id: 2 })
           .to_return(status: 200)
       end
@@ -77,7 +77,7 @@ RSpec.describe "Forms", type: :request do
   describe "Creating a new form" do
     describe "Given a valid form" do
       let(:form_creation_request) do
-        stub_request(:post, "#{ENV['API_BASE']}/v1/forms")
+        stub_request(:post, "#{ENV['API_BASE']}/api/v1/forms")
           .with(body: { name: "Form name", submission_email: "submission@email.com" })
           .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
       end
@@ -100,12 +100,12 @@ RSpec.describe "Forms", type: :request do
   describe "Deleting an existing form form" do
     describe "Given a valid form" do
       let(:form_response) do
-        stub_request(:get, "#{ENV['API_BASE']}/v1/forms/2")
+        stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2")
           .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
       end
 
       let(:form_deletion_request) do
-        stub_request(:delete, "#{ENV['API_BASE']}/v1/forms/2")
+        stub_request(:delete, "#{ENV['API_BASE']}/api/v1/forms/2")
         .to_return(status: 200, body: "", headers: {})
       end
 
