@@ -1,0 +1,19 @@
+en:
+  helpers:
+    label:
+      forms_change_name_form:
+        name: What is the name of your form?
+    hint:
+      forms_change_name_form:
+        name: |-
+          The form name will be shown at the top of each page of the form. Use a name
+          that describes what the form will help people to do. For example ‘Apply for a
+          juggling licence’.
+  activemodel:
+    errors:
+      models:
+        forms/change_name_form:
+          attributes:
+            name:
+              blank: Enter a name for the form
+
