@@ -1,0 +1,117 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Question <%= @page_number %></span>
+    <h1 class="govuk-heading-l">Edit question</h1>
+    <%= form_with model: @page, url: form_pages_path(@form.id) do |form| %>
+
+      <!-- Long question text input -->
+      <div class="govuk-form-group govuk-!-margin-bottom-3">
+        <%= form.label :question_text, "Question text", class: "govuk-label
+        govuk-label--m" %>
+        <div id="question-text-hint" class="govuk-hint">
+          Ask a question the way you would in person. For example ‘What is your
+          address?’.
+        </div>
+        <%= form.text_field :question_text, class: "govuk-input",
+        'aria-describedby': "question-text-hint" %>
+      </div>
+
+      <!-- Short question text input -->
+      <div class="govuk-form-group">
+        <%= form.label :question_short_name, "Question short name (optional)",
+        class: "govuk-label govuk-label--m" %>
+        <div id="short-name-hint" class="govuk-hint">
+          The short name will be used when the form’s questions are all displayed
+          in a list. Use a short descriptive name. For example ‘Address’.
+        </div>
+        <%= form.text_field :question_short_name, class: "govuk-input",
+        'aria-describedby': "short-name-hint" %>
+      </div>
+      <hr
+        class="govuk-section-break govuk-section-break--m govuk-section-break--visible"
+      />
+
+      <!-- Hint text -->
+      <details
+        class="govuk-details govuk-!-margin-bottom-0"
+        data-module="govuk-details"
+      >
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            Add hint text to help people answer the question
+          </span>
+        </summary>
+        <div class="govuk-details__text govuk-!-padding-bottom-0">
+          <div class="govuk-form-group">
+            <%= form.label :hint_text, "Hint text (optional)", class: "govuk-label govuk-visually-hidden" %>
+            <div id="hint-text-hint" class="govuk-hint">
+              You can use hint text if you need to explain the format the answer
+              should be in, or where to find the information you’ve asked for.
+            </div>
+            <%= form.text_field :hint_text, class: "govuk-input", 'aria-describedby':
+        "hint-text-hint" %>
+          </div>
+        </div>
+      </details>
+
+      <hr
+        class="govuk-section-break govuk-section-break--m govuk-section-break--visible"
+      />
+
+      <div class="govuk-form-group">
+        <%= field_set_tag nil, class: "govuk-fieldset", 'aria-describedby': "type-hint" do %>
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+            What kind of answer do you need to this question?
+          </legend>
+
+          <div id="type-hint" class="govuk-hint">
+            The answer will be validated to check it’s in the selected format.
+          </div>
+          <div
+            class="govuk-radios govuk-radios--small"
+            data-module="govuk-radios"
+          >
+            <div class="govuk-radios__item">
+              <%= form.radio_button :answer_type, 'single_line', class: "govuk-radios__input", checked: true  %>
+
+              <%= form.label :answer_type, "Single line of text", :value => 'single_line', class: "govuk-label govuk-radios__label" %>
+            </div>
+            <div class="govuk-radios__item">
+              <%= form.radio_button :answer_type, 'address', class: "govuk-radios__input"  %>
+
+              <%= form.label :answer_type, "Address", :value => 'address', class: "govuk-label govuk-radios__label" %>
+            </div>
+            <div class="govuk-radios__item">
+              <%= form.radio_button :answer_type, 'date', class: "govuk-radios__input"  %>
+
+              <%= form.label :answer_type, "Date", :value => 'date', class: "govuk-label govuk-radios__label" %>
+            </div>
+            <div class="govuk-radios__item">
+              <%= form.radio_button :answer_type, 'email', class: "govuk-radios__input"  %>
+
+              <%= form.label :answer_type, "Email address", :value => 'email', class: "govuk-label govuk-radios__label" %>
+            </div>
+            <div class="govuk-radios__item">
+              <%= form.radio_button :answer_type, 'national_insurance_number', class: "govuk-radios__input"  %>
+
+              <%= form.label :answer_type, "National Insurance number", :value => 'national_insurance_number', class: "govuk-label govuk-radios__label" %>
+            </div>
+            <div class="govuk-radios__item">
+              <%= form.radio_button :answer_type, 'phone_number', class: "govuk-radios__input"  %>
+
+              <%= form.label :answer_type, "Phone number", :value => 'phone_number', class: "govuk-label govuk-radios__label" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="govuk-button-group">
+        <%= form.submit "Save and continue", class: "govuk-button", 'data-module': "govuk-button" %>
+
+        <p class="govuk-body">
+          or <%= link_to "go to form overview", form_path(@form), class: "govuk-link govuk-link--no-visited-state" %>
+        </p>
+      </div>
+    <% end %>
+  </div>
+</div>
