@@ -2,8 +2,38 @@
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">Question <%= @page_number %></span>
     <h1 class="govuk-heading-l">Edit question</h1>
-  <%= form_with model: [@form,@page], url: form_page_path(@form, @page), method: "PATCH" do |form| %>
-
+    <%= form_with model: [@form,@page], url: form_page_path(@form, @page), method: "PATCH" do |form| %>
+      <% if @page.errors.count > 0 %>
+        <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" data-module="govuk-error-summary">
+          <h2 class="govuk-error-summary__title" id="error-summary-title">
+            There is a problem
+          </h2>
+          <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+              <% @page.errors.full_messages_for(:question_text).each do |message| %>
+                  <li>
+                    <a href="#page_question_text"><%= message %></a>
+                  </li>
+              <% end %>
+              <% @page.errors.full_messages_for(:question_short_name).each do |message| %>
+                  <li>
+                    <a href="#page_question_short_name"><%= message %></a>
+                  </li>
+              <% end %>
+              <% @page.errors.full_messages_for(:hint_text).each do |message| %>
+                  <li>
+                    <a href="#page_hint_text"><%= message %></a>
+                  </li>
+              <% end %>
+              <% @page.errors.full_messages_for(:answer_type).each do |message| %>
+                  <li>
+                    <a href="#page_answer_type_single_line"><%= message %></a>
+                  </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      <% end %>
       <!-- Long question text input -->
       <div class="govuk-form-group govuk-!-margin-bottom-3">
         <%= form.label :question_text, "Question text", class: "govuk-label
@@ -12,8 +42,13 @@
           Ask a question the way you would in person. For example ‘What is your
           address?’.
         </div>
+        <p id="question-text-error" class="govuk-error-message">
+          <% @page.errors.full_messages_for(:question_text).each do |message| %>
+              <span class="govuk-visually-hidden">Error:</span> <%= message %>
+          <% end %>
+        </p>
         <%= form.text_field :question_text, class: "govuk-input",
-        'aria-describedby': "question-text-hint" %>
+        'aria-describedby': "question-text-hint question-text-error" %>
       </div>
 
       <!-- Short question text input -->
@@ -24,8 +59,13 @@
           The short name will be used when the form’s questions are all displayed
           in a list. Use a short descriptive name. For example ‘Address’.
         </div>
+        <p id="short-name-error" class="govuk-error-message">
+          <% @page.errors.full_messages_for(:question_short_name).each do |message| %>
+            <span class="govuk-visually-hidden">Error:</span> <%= message %>
+          <% end %>
+        </p>
         <%= form.text_field :question_short_name, class: "govuk-input",
-        'aria-describedby': "short-name-hint" %>
+        'aria-describedby': "short-name-hint short-name-error" %>
       </div>
       <hr
         class="govuk-section-break govuk-section-break--m govuk-section-break--visible"
@@ -48,8 +88,13 @@
               You can use hint text if you need to explain the format the answer
               should be in, or where to find the information you’ve asked for.
             </div>
+            <p id="hint-text-error" class="govuk-error-message">
+              <% @page.errors.full_messages_for(:hint_text).each do |message| %>
+                  <span class="govuk-visually-hidden">Error:</span> <%= message %>
+              <% end %>
+            </p>
             <%= form.text_field :hint_text, class: "govuk-input", 'aria-describedby':
-        "hint-text-hint" %>
+        "hint-text-hint hint-text-error" %>
           </div>
         </div>
       </details>
@@ -59,14 +104,21 @@
       />
 
       <div class="govuk-form-group">
-        <%= field_set_tag nil, class: "govuk-fieldset", 'aria-describedby': "type-hint" do %>
+        <%= field_set_tag nil, class: "govuk-fieldset", 'aria-describedby': "answer-type-hint answer-type-error" do %>
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
             What kind of answer do you need to this question?
           </legend>
 
-          <div id="type-hint" class="govuk-hint">
+          <div id="answer-type-hint" class="govuk-hint">
             The answer will be validated to check it’s in the selected format.
           </div>
+
+          <p id="answer-type-error" class="govuk-error-message">
+            <% @page.errors.full_messages_for(:answer_type).each do |message| %>
+                <span class="govuk-visually-hidden">Error:</span> <%= message %>
+            <% end %>
+          </p>
+
           <div
             class="govuk-radios govuk-radios--small"
             data-module="govuk-radios"
