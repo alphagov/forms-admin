@@ -12,4 +12,9 @@ describe('Form overview page', () => {
     cy.contains('Back').click()
     cy.url().should('eq', `${Cypress.config().baseUrl}/`)
   })
+
+  it('contains an add question button', () => {
+    cy.contains('Add a question').click()
+    cy.url().should('eq', `${Cypress.config().baseUrl}/forms/2/pages/new`)
+  })
 })
