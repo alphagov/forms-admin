@@ -2,15 +2,15 @@
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">Question <%= @page_number %></span>
     <h1 class="govuk-heading-l">Edit question</h1>
-    <%= form_with model: [@form,@page], url: form_page_path(@form, @page), method: "PATCH" do |form| %>
+    <%= form_with model: [@form,@page], url: form_page_path(@form, @page), method: "PATCH" do |f| %>
       <% if @page.errors.any? %>
-        <%= form.govuk_error_summary %>
+        <%= f.govuk_error_summary %>
       <% end %>
       <!-- Long question text input -->
-      <%= form.govuk_text_field :question_text, label: { text: "Question text", size: 'm' }, hint: { text: "Ask a question the way you would in person. For example ‘What is your address?’." } %>
+      <%= f.govuk_text_field :question_text, label: { text: "Question text", size: 'm' }, hint: { text: "Ask a question the way you would in person. For example ‘What is your address?’." } %>
 
       <!-- Short question text input -->
-      <%= form.govuk_text_field :question_short_name, label: { text: "Question short name (optional)", size: 'm' }, hint: { text: "The short name will be used when the form’s questions are all displayed in a list. Use a short descriptive name. For example ‘Address’." } %>
+      <%= f.govuk_text_field :question_short_name, label: { text: "Question short name (optional)", size: 'm' }, hint: { text: "The short name will be used when the form’s questions are all displayed in a list. Use a short descriptive name. For example ‘Address’." } %>
 
       <hr
         class="govuk-section-break govuk-section-break--m govuk-section-break--visible"
@@ -28,7 +28,7 @@
           </span>
         </summary>
         <div class="govuk-details__text govuk-!-padding-bottom-0">
-          <%= form.govuk_text_field :hint_text, label: { text: "Hint text (optional)", hidden: true }, hint: { text: "You can use hint text if you need to explain the format the answer should be in, or where to find the information you’ve asked for." } %>
+          <%= f.govuk_text_field :hint_text, label: { text: "Hint text (optional)", hidden: true }, hint: { text: "You can use hint text if you need to explain the format the answer should be in, or where to find the information you’ve asked for." } %>
         </div>
       </details>
 
@@ -36,17 +36,17 @@
         class="govuk-section-break govuk-section-break--m govuk-section-break--visible"
       />
 
-      <%= form.govuk_radio_buttons_fieldset :answer_type, small: true, inline: false, legend: { text: "What kind of answer do you need to this question?" }, hint: { text: 'The answer will be validated to check it’s in the selected format.' } do %>
-        <%= form.govuk_radio_button :answer_type, 'single_line', label: { text: 'Single line of text' }, link_errors: true %>
-        <%= form.govuk_radio_button :answer_type, 'address', label: { text: 'Address' } %>
-        <%= form.govuk_radio_button :answer_type, 'date', label: { text: 'Date' } %>
-        <%= form.govuk_radio_button :answer_type, 'email', label: { text: 'Email address' } %>
-        <%= form.govuk_radio_button :answer_type, 'national_insurance_number', label: { text: 'National Insurance number' } %>
-        <%= form.govuk_radio_button :answer_type, 'phone_number', label: { text: 'Phone number' } %>
+      <%= f.govuk_radio_buttons_fieldset :answer_type, small: true, inline: false, legend: { text: "What kind of answer do you need to this question?" }, hint: { text: 'The answer will be validated to check it’s in the selected format.' } do %>
+        <%= f.govuk_radio_button :answer_type, 'single_line', label: { text: 'Single line of text' }, link_errors: true %>
+        <%= f.govuk_radio_button :answer_type, 'address', label: { text: 'Address' } %>
+        <%= f.govuk_radio_button :answer_type, 'date', label: { text: 'Date' } %>
+        <%= f.govuk_radio_button :answer_type, 'email', label: { text: 'Email address' } %>
+        <%= f.govuk_radio_button :answer_type, 'national_insurance_number', label: { text: 'National Insurance number' } %>
+        <%= f.govuk_radio_button :answer_type, 'phone_number', label: { text: 'Phone number' } %>
       <% end %>
 
       <div class="govuk-button-group">
-        <%= form.submit "Save and continue", class: "govuk-button", 'data-module': "govuk-button" %>
+        <%= f.submit "Save and continue", class: "govuk-button", 'data-module': "govuk-button" %>
 
         <p class="govuk-body">
           or <%= link_to "go to form overview", form_path(@form), class: "govuk-link govuk-link--no-visited-state" %>
