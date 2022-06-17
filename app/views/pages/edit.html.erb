@@ -2,7 +2,7 @@
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">Question <%= @page_number %></span>
     <h1 class="govuk-heading-l">Edit question</h1>
-    <%= form_with model: [@form,@page], url: form_page_path(@form, @page), method: "PATCH" do |f| %>
+    <%= form_with model: [@form,@page], url: update_page_path(@form, @page), method: "PATCH" do |f| %>
       <% if @page.errors.any? %>
         <%= f.govuk_error_summary %>
       <% end %>

@@ -13,7 +13,7 @@
       <p class="govuk-body"><%= flash[:message] %></p>
     <% end %>
 
-    <%= link_to "Add a question", new_form_page_path(@form), class: "govuk-button govuk-!-margin-bottom-3 govuk-!-margin-top-3", 'data-module':"govuk-button", draggable:"false", role: "button" %>
+    <%= link_to "Add a question", new_page_path(@form), class: "govuk-button govuk-!-margin-bottom-3 govuk-!-margin-top-3", 'data-module':"govuk-button", draggable:"false", role: "button" %>
 
     <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0">
       Form name
@@ -25,7 +25,7 @@
           <%= @form.name %>
         </dt>
         <dd class="govuk-summary-list__actions">
-          <%= link_to edit_form_path(@form.id), class: "govuk-link govuk-link--no-visited-state" do %>
+          <%= link_to change_form_name_path(@form), class: "govuk-link govuk-link--no-visited-state" do %>
               Edit<span class="govuk-visually-hidden"> form name</span>
           <% end %>
         </dd>

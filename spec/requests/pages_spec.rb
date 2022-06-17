@@ -44,7 +44,7 @@ RSpec.describe "Pages", type: :request do
         form_response
         form_pages_response
         page_response
-        get edit_form_page_path(form_id: 2, id: 1)
+        get edit_page_path(form_id: 2, page_id: 1)
       end
 
       it "Reads the page from the API" do
@@ -76,7 +76,7 @@ RSpec.describe "Pages", type: :request do
         form_pages_response
         page_response
         page_update_response
-        patch form_page_path(form_id: 2, id: 1), params: { page: {
+        patch update_page_path(form_id: 2, page_id: 1), params: { page: {
           form_id: 2,
           question_text: "What is your home address?",
           question_short_name: "Home address",
@@ -96,7 +96,7 @@ RSpec.describe "Pages", type: :request do
       end
 
       it "Redirects you to the page list" do
-        expect(response).to redirect_to(form_pages_path(form_id: 2))
+        expect(response).to redirect_to(pages_path(form_id: 2))
       end
     end
   end
@@ -126,7 +126,7 @@ RSpec.describe "Pages", type: :request do
         form_response
         form_pages_response
         page_creation_request
-        post form_pages_path(2), params: { page: {
+        post create_page_path(2), params: { page: {
           question_text: "What is your home address?",
           question_short_name: "Home address",
           hint_text: "This should be the location stated in your contract.",
@@ -135,7 +135,7 @@ RSpec.describe "Pages", type: :request do
       end
 
       it "Redirects you to the page list" do
-        expect(response).to redirect_to(form_pages_path(form_id: 2))
+        expect(response).to redirect_to(pages_path(form_id: 2))
       end
 
       it "Creates the page on the API" do

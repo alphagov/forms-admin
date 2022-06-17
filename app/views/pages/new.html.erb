@@ -2,7 +2,7 @@
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">Question <%= @page_number %></span>
     <h1 class="govuk-heading-l">Edit question</h1>
-    <%= form_with model: @page, url: form_pages_path(@form.id) do |f| %>
+    <%= form_with model: @page, url: create_page_path(@form) do |f| %>
       <% if @page.errors.count > 0 %>
         <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" data-module="govuk-error-summary">
           <h2 class="govuk-error-summary__title" id="error-summary-title">

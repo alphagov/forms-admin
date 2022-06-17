@@ -1,5 +1,5 @@
 <% @pages.each do |page| %>
-  <h2><%= page.id %> (<%= link_to "Edit", edit_form_page_path(@form,page) %>)</h2>
+  <h2><%= page.id %> (<%= link_to "Edit", edit_page_path(@form,page) %>)</h2>
   <p>
     <strong>question_text:</strong>
     <%= page.question_text %>

@@ -24,13 +24,13 @@ class PagesController < ApplicationController
 
   def edit
     @form = Form.find(params[:form_id])
-    @page = Page.find(params[:id], params: { form_id: @form.id })
+    @page = Page.find(params[:page_id], params: { form_id: @form.id })
     @page_number = @form.pages.index(@page) + 1
   end
 
   def update
     @form = Form.find(params[:form_id])
-    @page = Page.find(params[:id], params: { form_id: @form.id })
+    @page = Page.find(params[:page_id], params: { form_id: @form.id })
     @page_number = @form.pages.index(@page) + 1
 
     @page.load(page_params(@form.id))
