@@ -37,4 +37,6 @@
 
 .env
 
+# Ignore Cypress output
+/cypress/screenshots
 /cypress/videos
