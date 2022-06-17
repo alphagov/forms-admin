@@ -1,5 +1,36 @@
 require "rails_helper"
 
+RSpec.shared_context "with mocked page requests" do
+  let(:form_response) do
+    stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2")
+      .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
+  end
+
+  let(:form_pages_response) do
+    stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2/pages")
+      .to_return(status: 200, body: [{
+        id: 1,
+        form_id: 2,
+        question_text: "What is your work address?",
+        question_short_name: "Work address",
+        hint_text: "This should be the location stated in your contract.",
+        answer_type: "address",
+      }].to_json)
+  end
+
+  let(:page_response) do
+    stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2/pages/1")
+    .to_return(status: 200, body: {
+      id: 1,
+      form_id: 2,
+      question_text: "What is your work address?",
+      question_short_name: "Work address",
+      hint_text: "This should be the location stated in your contract.",
+      answer_type: "address",
+    }.to_json)
+  end
+end
+
 RSpec.describe "Pages", type: :request do
   before do
     User.create!(email: "user@example.com")
@@ -7,34 +38,7 @@ RSpec.describe "Pages", type: :request do
 
   describe "Editing an existing page" do
     describe "Given a page" do
-      let(:form_response) do
-        stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2")
-          .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
-      end
-
-      let(:form_pages_response) do
-        stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2/pages")
-          .to_return(status: 200, body: [{
-            id: 1,
-            form_id: 2,
-            question_text: "What is your work address?",
-            question_short_name: "Work address",
-            hint_text: "This should be the location stated in your contract.",
-            answer_type: "address",
-          }].to_json)
-      end
-
-      let(:page_response) do
-        stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2/pages/1")
-        .to_return(status: 200, body: {
-          id: 1,
-          form_id: 2,
-          question_text: "What is your work address?",
-          question_short_name: "Work address",
-          hint_text: "This should be the location stated in your contract.",
-          answer_type: "address",
-        }.to_json)
-      end
+      include_context "with mocked page requests"
 
       before do
         form_response
@@ -53,34 +57,7 @@ RSpec.describe "Pages", type: :request do
 
   describe "Updating an existing page" do
     describe "Given a page" do
-      let(:form_response) do
-        stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2")
-          .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
-      end
-
-      let(:form_pages_response) do
-        stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2/pages")
-          .to_return(status: 200, body: [{
-            id: 1,
-            form_id: 2,
-            question_text: "What is your work address?",
-            question_short_name: "Work address",
-            hint_text: "This should be the location stated in your contract.",
-            answer_type: "address",
-          }].to_json)
-      end
-
-      let(:page_response) do
-        stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2/pages/1")
-        .to_return(status: 200, body: {
-          id: 1,
-          form_id: 2,
-          question_text: "What is your work address?",
-          question_short_name: "Work address",
-          hint_text: "This should be the location stated in your contract.",
-          answer_type: "address",
-        }.to_json)
-      end
+      include_context "with mocked page requests"
 
       let(:page_update_response) do
         stub_request(:put, "#{ENV['API_BASE']}/api/v1/forms/2/pages/1")
@@ -126,22 +103,7 @@ RSpec.describe "Pages", type: :request do
 
   describe "Creating a new page" do
     describe "Given a valid page" do
-      let(:form_response) do
-        stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2")
-          .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
-      end
-
-      let(:form_pages_response) do
-        stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2/pages")
-          .to_return(status: 200, body: [{
-            id: 1,
-            form_id: 2,
-            question_text: "What is your work address?",
-            question_short_name: "Work address",
-            hint_text: "This should be the location stated in your contract.",
-            answer_type: "address",
-          }].to_json)
-      end
+      include_context "with mocked page requests"
 
       let(:page_creation_request) do
         stub_request(:post, "#{ENV['API_BASE']}/api/v1/forms/2/pages")
