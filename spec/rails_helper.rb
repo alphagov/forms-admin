@@ -61,7 +61,7 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
-  config.before(:example, type: :request) do |example|
+  config.before(:example, type: :request) do |_example|
     User.create!(email: "email@example.com")
   end
 end
