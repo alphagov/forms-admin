@@ -127,8 +127,20 @@ GEM
       warden-oauth2 (~> 0.0.1)
     globalid (1.0.0)
       activesupport (>= 5.0)
+    govuk-components (3.0.6)
+      activemodel (>= 6.1)
+      html-attributes-utils (~> 0.9.0)
+      railties (>= 6.1)
+      view_component (~> 2.49.1)
+    govuk_design_system_formbuilder (3.0.3)
+      actionview (>= 6.1)
+      activemodel (>= 6.1)
+      activesupport (>= 6.1)
+      html-attributes-utils (~> 0.9.0)
     hashdiff (1.0.1)
     hashie (5.0.0)
+    html-attributes-utils (0.9.0)
+      activesupport (>= 6.1.4.4)
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     io-console (0.5.11)
@@ -307,6 +319,9 @@ GEM
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.1.0)
+    view_component (2.49.1)
+      activesupport (>= 5.0.0, < 8.0)
+      method_source (~> 1.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     warden-oauth2 (0.0.1)
@@ -345,6 +360,8 @@ DEPENDENCIES
   debug
   dotenv-rails
   gds-sso
+  govuk-components (~> 3.0.3)
+  govuk_design_system_formbuilder (~> 3.0.2)
   jbuilder
   jsbundling-rails
   pg (~> 1.1)
@@ -358,6 +375,7 @@ DEPENDENCIES
   sentry-ruby
   sprockets-rails
   tzinfo-data
+  view_component
   web-console
   webdrivers
   webmock

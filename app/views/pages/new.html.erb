@@ -1,7 +1,8 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">Question <%= @page_number %></span>
-    <h1 class="govuk-heading-l">Edit question</h1><%= form_with model: @page, url: form_pages_path(@form.id) do |form| %>
+    <h1 class="govuk-heading-l">Edit question</h1>
+    <%= form_with model: @page, url: form_pages_path(@form.id) do |form| %>
       <% if @page.errors.count > 0 %>
         <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" data-module="govuk-error-summary">
           <h2 class="govuk-error-summary__title" id="error-summary-title">
@@ -102,59 +103,14 @@
         class="govuk-section-break govuk-section-break--m govuk-section-break--visible"
       />
 
-      <div class="govuk-form-group">
-        <%= field_set_tag nil, class: "govuk-fieldset", 'aria-describedby': "answer-type-hint answer-type-error" do %>
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            What kind of answer do you need to this question?
-          </legend>
-
-          <div id="answer-type-hint" class="govuk-hint">
-            The answer will be validated to check it’s in the selected format.
-          </div>
-
-          <p id="answer-type-error" class="govuk-error-message">
-            <% @page.errors.full_messages_for(:answer_type).each do |message| %>
-                <span class="govuk-visually-hidden">Error:</span> <%= message %>
-            <% end %>
-          </p>
-
-          <div
-            class="govuk-radios govuk-radios--small"
-            data-module="govuk-radios"
-          >
-            <div class="govuk-radios__item">
-              <%= form.radio_button :answer_type, 'single_line', class: "govuk-radios__input", checked: true  %>
-
-              <%= form.label :answer_type, "Single line of text", :value => 'single_line', class: "govuk-label govuk-radios__label" %>
-            </div>
-            <div class="govuk-radios__item">
-              <%= form.radio_button :answer_type, 'address', class: "govuk-radios__input"  %>
-
-              <%= form.label :answer_type, "Address", :value => 'address', class: "govuk-label govuk-radios__label" %>
-            </div>
-            <div class="govuk-radios__item">
-              <%= form.radio_button :answer_type, 'date', class: "govuk-radios__input"  %>
-
-              <%= form.label :answer_type, "Date", :value => 'date', class: "govuk-label govuk-radios__label" %>
-            </div>
-            <div class="govuk-radios__item">
-              <%= form.radio_button :answer_type, 'email', class: "govuk-radios__input"  %>
-
-              <%= form.label :answer_type, "Email address", :value => 'email', class: "govuk-label govuk-radios__label" %>
-            </div>
-            <div class="govuk-radios__item">
-              <%= form.radio_button :answer_type, 'national_insurance_number', class: "govuk-radios__input"  %>
-
-              <%= form.label :answer_type, "National Insurance number", :value => 'national_insurance_number', class: "govuk-label govuk-radios__label" %>
-            </div>
-            <div class="govuk-radios__item">
-              <%= form.radio_button :answer_type, 'phone_number', class: "govuk-radios__input"  %>
-
-              <%= form.label :answer_type, "Phone number", :value => 'phone_number', class: "govuk-label govuk-radios__label" %>
-            </div>
-          </div>
-        <% end %>
-      </div>
+      <%= form.govuk_radio_buttons_fieldset :answer_type, small: true, inline: false, legend: { text: "What kind of answer do you need to this question?" }, hint: { text: 'The answer will be validated to check it’s in the selected format.' } do %>
+        <%= form.govuk_radio_button :answer_type, 'single_line', label: { text: 'Single line of text' }, link_errors: true, checked: true %>
+        <%= form.govuk_radio_button :answer_type, 'address', label: { text: 'Address' } %>
+        <%= form.govuk_radio_button :answer_type, 'date', label: { text: 'Date' } %>
+        <%= form.govuk_radio_button :answer_type, 'email', label: { text: 'Email address' } %>
+        <%= form.govuk_radio_button :answer_type, 'national_insurance_number', label: { text: 'National Insurance number' } %>
+        <%= form.govuk_radio_button :answer_type, 'phone_number', label: { text: 'Phone number' } %>
+      <% end %>
 
       <div class="govuk-button-group">
         <%= form.submit "Save and continue", class: "govuk-button", 'data-module': "govuk-button" %>
