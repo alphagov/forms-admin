@@ -4,8 +4,7 @@ RSpec.describe "Forms", type: :request do
   describe "Showing an existing form" do
     describe "Given a form" do
       let(:form) do
-        Form.new(
-        {
+        Form.new({
           id: 2,
           name: "Form name",
           submission_email: "submission@email.com",
