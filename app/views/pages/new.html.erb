@@ -1,72 +1,15 @@
+<% set_page_title(title_with_error_prefix(t("page_titles.new_page_form"), @page.errors.any?)) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-l">Question <%= @page_number %></span>
-    <h1 class="govuk-heading-l">Edit question</h1>
+    <span class="govuk-caption-l"><%= t("pages.question") %> <%= @page_number %></span>
+    <h1 class="govuk-heading-l"><%= t("pages.heading") %></h1>
     <%= form_with model: @page, url: create_page_path(@form) do |f| %>
-      <% if @page.errors.count > 0 %>
-        <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" data-module="govuk-error-summary">
-          <h2 class="govuk-error-summary__title" id="error-summary-title">
-            There is a problem
-          </h2>
-          <div class="govuk-error-summary__body">
-            <ul class="govuk-list govuk-error-summary__list">
-              <% @page.errors.full_messages_for(:question_text).each do |message| %>
-                  <li>
-                    <a href="#page_question_text"><%= message %></a>
-                  </li>
-              <% end %>
-              <% @page.errors.full_messages_for(:question_short_name).each do |message| %>
-                  <li>
-                    <a href="#page_question_short_name"><%= message %></a>
-                  </li>
-              <% end %>
-              <% @page.errors.full_messages_for(:hint_text).each do |message| %>
-                  <li>
-                    <a href="#page_hint_text"><%= message %></a>
-                  </li>
-              <% end %>
-              <% @page.errors.full_messages_for(:answer_type).each do |message| %>
-                  <li>
-                    <a href="#page_answer_type_single_line"><%= message %></a>
-                  </li>
-              <% end %>
-            </ul>
-          </div>
-        </div>
-      <% end %>
+     <%= f.govuk_error_summary %>
       <!-- Long question text input -->
-      <div class="govuk-form-group govuk-!-margin-bottom-3">
-        <%= f.label :question_text, "Question text", class: "govuk-label
-        govuk-label--m" %>
-        <div id="question-text-hint" class="govuk-hint">
-          Ask a question the way you would in person. For example ‘What is your
-          address?’.
-        </div>
-        <p id="question-text-error" class="govuk-error-message">
-          <% @page.errors.full_messages_for(:question_text).each do |message| %>
-              <span class="govuk-visually-hidden">Error:</span> <%= message %>
-          <% end %>
-        </p>
-        <%= f.text_field :question_text, class: "govuk-input",
-        'aria-describedby': "question-text-hint question-text-error" %>
-      </div>
+      <%= f.govuk_text_field :question_text, label: { size: 'm' } %>
 
       <!-- Short question text input -->
-      <div class="govuk-form-group">
-        <%= f.label :question_short_name, "Question short name (optional)",
-        class: "govuk-label govuk-label--m" %>
-        <div id="short-name-hint" class="govuk-hint">
-          The short name will be used when the form’s questions are all displayed
-          in a list. Use a short descriptive name. For example ‘Address’.
-        </div>
-        <p id="short-name-error" class="govuk-error-message">
-          <% @page.errors.full_messages_for(:question_short_name).each do |message| %>
-            <span class="govuk-visually-hidden">Error:</span> <%= message %>
-          <% end %>
-        </p>
-        <%= f.text_field :question_short_name, class: "govuk-input",
-        'aria-describedby': "short-name-hint short-name-error" %>
-      </div>
+      <%= f.govuk_text_field :question_short_name, label: { size: 'm' } %>
       <hr
         class="govuk-section-break govuk-section-break--m govuk-section-break--visible"
       />
@@ -78,24 +21,11 @@
       >
         <summary class="govuk-details__summary">
           <span class="govuk-details__summary-text">
-            Add hint text to help people answer the question
+            <%= t("pages.add_hint_text") %>
           </span>
         </summary>
         <div class="govuk-details__text govuk-!-padding-bottom-0">
-          <div class="govuk-form-group">
-            <%= f.label :hint_text, "Hint text (optional)", class: "govuk-label govuk-visually-hidden" %>
-            <div id="hint-text-hint" class="govuk-hint">
-              You can use hint text if you need to explain the format the answer
-              should be in, or where to find the information you’ve asked for.
-            </div>
-            <p id="hint-text-error" class="govuk-error-message">
-              <% @page.errors.full_messages_for(:hint_text).each do |message| %>
-                  <span class="govuk-visually-hidden">Error:</span> <%= message %>
-              <% end %>
-            </p>
-            <%= f.text_field :hint_text, class: "govuk-input", 'aria-describedby':
-        "hint-text-hint hint-text-error" %>
-          </div>
+          <%= f.govuk_text_field :hint_text, label: { hidden: true } %>
         </div>
       </details>
 
@@ -103,20 +33,23 @@
         class="govuk-section-break govuk-section-break--m govuk-section-break--visible"
       />
 
-      <%= f.govuk_radio_buttons_fieldset :answer_type, small: true, inline: false, legend: { text: "What kind of answer do you need to this question?" }, hint: { text: 'The answer will be validated to check it’s in the selected format.' } do %>
-        <%= f.govuk_radio_button :answer_type, 'single_line', label: { text: 'Single line of text' }, link_errors: true, checked: true %>
-        <%= f.govuk_radio_button :answer_type, 'address', label: { text: 'Address' } %>
-        <%= f.govuk_radio_button :answer_type, 'date', label: { text: 'Date' } %>
-        <%= f.govuk_radio_button :answer_type, 'email', label: { text: 'Email address' } %>
-        <%= f.govuk_radio_button :answer_type, 'national_insurance_number', label: { text: 'National Insurance number' } %>
-        <%= f.govuk_radio_button :answer_type, 'phone_number', label: { text: 'Phone number' } %>
-      <% end %>
+      <!-- Answer type -->
+      <% answer_types= [
+        OpenStruct.new(value: 'single_line'),
+        OpenStruct.new(value: 'address'),
+        OpenStruct.new(value: 'date'),
+        OpenStruct.new(value: 'email'),
+        OpenStruct.new(value: 'national_insurance_number'),
+        OpenStruct.new(value: 'phone_number')
+      ]  %>
+
+      <%= f.govuk_collection_radio_buttons :answer_type, answer_types, :value, small: true %>
 
       <div class="govuk-button-group">
-        <%= f.submit "Save and continue", class: "govuk-button", 'data-module': "govuk-button" %>
+        <%= f.govuk_submit t("pages.submit") %>
 
         <p class="govuk-body">
-          or <%= link_to "go to form overview", form_path(@form), class: "govuk-link govuk-link--no-visited-state" %>
+          <%=t('pages.or')%> <%= link_to t('pages.go_to_form_overview'), form_path(@form), class: "govuk-link govuk-link--no-visited-state" %>
         </p>
       </div>
     <% end %>

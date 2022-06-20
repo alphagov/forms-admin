@@ -1,17 +1,15 @@
+<% set_page_title(title_with_error_prefix(@page.question_text, @page.errors.any?)) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-l">Question <%= @page_number %></span>
-    <h1 class="govuk-heading-l">Edit question</h1>
+    <span class="govuk-caption-l"><%= t("pages.question") %> <%= @page_number %></span>
+    <h1 class="govuk-heading-l"><%= t("pages.heading") %></h1>
     <%= form_with model: [@form,@page], url: update_page_path(@form, @page), method: "PATCH" do |f| %>
-      <% if @page.errors.any? %>
-        <%= f.govuk_error_summary %>
-      <% end %>
+      <%= f.govuk_error_summary %>
       <!-- Long question text input -->
-      <%= f.govuk_text_field :question_text, label: { text: "Question text", size: 'm' }, hint: { text: "Ask a question the way you would in person. For example ‘What is your address?’." } %>
+      <%= f.govuk_text_field :question_text, label: { size: 'm' } %>
 
       <!-- Short question text input -->
-      <%= f.govuk_text_field :question_short_name, label: { text: "Question short name (optional)", size: 'm' }, hint: { text: "The short name will be used when the form’s questions are all displayed in a list. Use a short descriptive name. For example ‘Address’." } %>
-
+      <%= f.govuk_text_field :question_short_name, label: { size: 'm' } %>
       <hr
         class="govuk-section-break govuk-section-break--m govuk-section-break--visible"
       />
@@ -20,15 +18,14 @@
       <details
         class="govuk-details govuk-!-margin-bottom-0"
         data-module="govuk-details"
-        <%= !@page.hint_text.blank? ? %(open="true") : '' %>
       >
         <summary class="govuk-details__summary">
           <span class="govuk-details__summary-text">
-            Add hint text to help people answer the question
+            <%= t("pages.add_hint_text") %>
           </span>
         </summary>
         <div class="govuk-details__text govuk-!-padding-bottom-0">
-          <%= f.govuk_text_field :hint_text, label: { text: "Hint text (optional)", hidden: true }, hint: { text: "You can use hint text if you need to explain the format the answer should be in, or where to find the information you’ve asked for." } %>
+          <%= f.govuk_text_field :hint_text, label: { hidden: true } %>
         </div>
       </details>
 
@@ -36,20 +33,23 @@
         class="govuk-section-break govuk-section-break--m govuk-section-break--visible"
       />
 
-      <%= f.govuk_radio_buttons_fieldset :answer_type, small: true, inline: false, legend: { text: "What kind of answer do you need to this question?" }, hint: { text: 'The answer will be validated to check it’s in the selected format.' } do %>
-        <%= f.govuk_radio_button :answer_type, 'single_line', label: { text: 'Single line of text' }, link_errors: true %>
-        <%= f.govuk_radio_button :answer_type, 'address', label: { text: 'Address' } %>
-        <%= f.govuk_radio_button :answer_type, 'date', label: { text: 'Date' } %>
-        <%= f.govuk_radio_button :answer_type, 'email', label: { text: 'Email address' } %>
-        <%= f.govuk_radio_button :answer_type, 'national_insurance_number', label: { text: 'National Insurance number' } %>
-        <%= f.govuk_radio_button :answer_type, 'phone_number', label: { text: 'Phone number' } %>
-      <% end %>
+      <!-- Answer type -->
+      <% answer_types= [
+        OpenStruct.new(value: 'single_line'),
+        OpenStruct.new(value: 'address'),
+        OpenStruct.new(value: 'date'),
+        OpenStruct.new(value: 'email'),
+        OpenStruct.new(value: 'national_insurance_number'),
+        OpenStruct.new(value: 'phone_number')
+      ]  %>
+
+      <%= f.govuk_collection_radio_buttons :answer_type, answer_types, :value, small: true %>
 
       <div class="govuk-button-group">
-        <%= f.submit "Save and continue", class: "govuk-button", 'data-module': "govuk-button" %>
+        <%= f.govuk_submit t("pages.submit") %>
 
         <p class="govuk-body">
-          or <%= link_to "go to form overview", form_path(@form), class: "govuk-link govuk-link--no-visited-state" %>
+          <%=t('pages.or')%> <%= link_to t('pages.go_to_form_overview'), form_path(@form), class: "govuk-link govuk-link--no-visited-state" %>
         </p>
       </div>
     <% end %>
