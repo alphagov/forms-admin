@@ -14,5 +14,4 @@ Rails.application.routes.draw do
   patch "forms/:form_id/pages/:page_id/edit" => "pages#update", as: :update_page
   get "forms/:form_id/pages/new" => "pages#new", as: :new_page
   post "forms/:form_id/pages/new" => "pages#create", as: :create_page
-
 end
