@@ -4,55 +4,6 @@
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l"><%= t("pages.question") %> <%= @page_number %></span>
     <h1 class="govuk-heading-l"><%= t("pages.heading") %></h1>
-    <%= form_with model: [@form,@page], url: update_page_path(@form, @page), method: "PATCH" do |f| %>
-      <%= f.govuk_error_summary %>
-      <!-- Long question text input -->
-      <%= f.govuk_text_field :question_text, label: { size: 'm' } %>
-
-      <!-- Short question text input -->
-      <%= f.govuk_text_field :question_short_name, label: { size: 'm' } %>
-      <hr
-        class="govuk-section-break govuk-section-break--m govuk-section-break--visible"
-      />
-
-      <!-- Hint text -->
-      <details
-        class="govuk-details govuk-!-margin-bottom-0"
-        data-module="govuk-details"
-      >
-        <summary class="govuk-details__summary">
-          <span class="govuk-details__summary-text">
-            <%= t("pages.add_hint_text") %>
-          </span>
-        </summary>
-        <div class="govuk-details__text govuk-!-padding-bottom-0">
-          <%= f.govuk_text_field :hint_text, label: { hidden: true } %>
-        </div>
-      </details>
-
-      <hr
-        class="govuk-section-break govuk-section-break--m govuk-section-break--visible"
-      />
-
-      <!-- Answer type -->
-      <% answer_types= [
-        OpenStruct.new(value: 'single_line'),
-        OpenStruct.new(value: 'address'),
-        OpenStruct.new(value: 'date'),
-        OpenStruct.new(value: 'email'),
-        OpenStruct.new(value: 'national_insurance_number'),
-        OpenStruct.new(value: 'phone_number')
-      ]  %>
-
-      <%= f.govuk_collection_radio_buttons :answer_type, answer_types, :value, small: true %>
-
-      <div class="govuk-button-group">
-        <%= f.govuk_submit t("pages.submit") %>
-
-        <p class="govuk-body">
-          <%=t('pages.or')%> <%= link_to t('pages.go_to_form_overview'), form_path(@form), class: "govuk-link govuk-link--no-visited-state" %>
-        </p>
-      </div>
-    <% end %>
+    <%= render :partial => 'form', locals: {form: @form, page: @page, url: update_page_path(@form), method: 'PATCH'} %>
   </div>
 </div>
