@@ -55,6 +55,11 @@ gem "bootsnap", require: false
 #
 gem "gds-sso"
 
+# Use govuk-components for displaying govuk themed forms
+gem "govuk-components", "~> 3.0.3"
+gem "govuk_design_system_formbuilder", "~> 3.0.2"
+gem "view_component"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri mingw x64_mingw]

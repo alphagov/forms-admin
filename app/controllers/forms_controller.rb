@@ -1,4 +1,6 @@
 class FormsController < ApplicationController
+  rescue_from ActiveResource::ResourceNotFound, with: :render_not_found_error
+
   def new; end
 
   def create
@@ -50,6 +52,10 @@ class FormsController < ApplicationController
   rescue StandardError
     flash[:message] = "Deletion unsuccessful"
     redirect_to :form, id: params[:id]
+  end
+
+  def render_not_found_error
+    render "not_found", status: :not_found, formats: :html
   end
 
 private

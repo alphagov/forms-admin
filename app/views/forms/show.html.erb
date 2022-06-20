@@ -23,7 +23,7 @@
           <%= @form.name %>
         </dt>
         <dd class="govuk-summary-list__actions">
-          <%= link_to edit_form_path(@form.id), class: "govuk-link govuk-link--no-visited-state" do %>
+          <%= link_to change_form_name_path(@form), class: "govuk-link govuk-link--no-visited-state" do %>
               Edit<span class="govuk-visually-hidden"> form name</span>
           <% end %>
         </dd>

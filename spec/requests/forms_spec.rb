@@ -1,71 +1,90 @@
 require "rails_helper"
 
 RSpec.describe "Forms", type: :request do
-  before do
-    User.create!(email: "user@example.com")
-  end
-
   describe "Showing an existing form" do
     describe "Given a form" do
-      let(:form_response) do
-        stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2")
-          .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
+      let(:form_data) do
+        {
+          name: "Form name",
+          submission_email: "submission@email.com",
+          id: 2,
+        }.to_json
       end
 
       before do
-        form_response
-        get form_path(id: 2)
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/2", {}, form_data, 200
+        end
+
+        get form_path(2)
       end
 
       it "Reads the form from the API" do
-        expect(form_response).to have_been_made
+        expected_request = ActiveResource::Request.new(:get, "/api/v1/forms/2")
+        expect(ActiveResource::HttpMock.requests).to include expected_request
       end
     end
   end
 
   describe "Editing an existing form" do
     describe "Given a form" do
-      let(:form_response) do
-        stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2")
-          .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
+      let(:form_data) do
+        {
+          name: "Form name",
+          submission_email: "submission@email.com",
+          id: 2,
+        }.to_json
       end
 
       before do
-        form_response
-        get edit_form_path(id: 2)
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/2", {}, form_data, 200
+        end
+
+        get edit_form_path(2)
       end
 
       it "Reads the form from the API" do
-        expect(form_response).to have_been_made
+        expected_request = ActiveResource::Request.new(:get, "/api/v1/forms/2")
+        expect(ActiveResource::HttpMock.requests).to include expected_request
       end
     end
   end
 
   describe "Updating an existing form" do
     describe "Given a form" do
-      let(:form_response) do
-        stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2")
-          .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
+      let(:form_data) do
+        {
+          name: "Form name",
+          submission_email: "submission@email.com",
+          id: 2,
+        }.to_json
       end
 
-      let(:form_update_response) do
-        stub_request(:put, "#{ENV['API_BASE']}/api/v1/forms/2")
-          .with(body: { name: "Updated name", submission_email: "submission@email.com", id: 2 })
-          .to_return(status: 200)
+      let(:updated_form_data) do
+        {
+          name: "Updated name",
+          submission_email: "submission@email.com",
+        }
       end
 
       before do
-        form_response
-        form_update_response
-        patch form_path(id: 2), params: { form: { name: "Updated name", submission_email: "submission@email.com" } }
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/2", {}, form_data, 200
+          mock.put "/api/v1/forms/2"
+        end
+
+        patch form_path(id: 2), params: { form: updated_form_data }
       end
 
       it "Reads the form from the API" do
-        expect(form_response).to have_been_made
+        expected_request = ActiveResource::Request.new(:get, "/api/v1/forms/2")
+        expect(ActiveResource::HttpMock.requests).to include(expected_request)
       end
 
       it "Updates the form on the API" do
-        expect(form_update_response).to have_been_made
+        expected_request = ActiveResource::Request.new(:put, "/api/v1/forms/2", updated_form_data.to_json)
+        expect(ActiveResource::HttpMock.requests).to include(expected_request)
       end
 
       it "Redirects you to the form overview page" do
@@ -76,15 +95,19 @@ RSpec.describe "Forms", type: :request do
 
   describe "Creating a new form" do
     describe "Given a valid form" do
-      let(:form_creation_request) do
-        stub_request(:post, "#{ENV['API_BASE']}/api/v1/forms")
-          .with(body: { name: "Form name", submission_email: "submission@email.com" })
-          .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
+      let(:form_data) do
+        {
+          name: "Form name",
+          submission_email: "submission@email.com",
+        }
       end
 
       before do
-        form_creation_request
-        post "/forms", params: { name: "Form name", submission_email: "submission@email.com" }
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.post "/api/v1/forms", {}, { id: 2 }.to_json, 200
+        end
+
+        post "/forms", params: form_data
       end
 
       it "Redirects you to the form overview page" do
@@ -92,27 +115,29 @@ RSpec.describe "Forms", type: :request do
       end
 
       it "Creates the form on the API" do
-        expect(form_creation_request).to have_been_made
+        expected_request = ActiveResource::Request.new(:post, "/api/v1/forms", form_data.to_json)
+        expect(ActiveResource::HttpMock.requests).to include(expected_request)
       end
     end
   end
 
-  describe "Deleting an existing form form" do
+  describe "Deleting an existing form" do
     describe "Given a valid form" do
-      let(:form_response) do
-        stub_request(:get, "#{ENV['API_BASE']}/api/v1/forms/2")
-          .to_return(status: 200, body: { name: "Form name", submission_email: "submission@email.com", id: 2 }.to_json)
-      end
-
-      let(:form_deletion_request) do
-        stub_request(:delete, "#{ENV['API_BASE']}/api/v1/forms/2")
-        .to_return(status: 200, body: "", headers: {})
+      let(:form_data) do
+        {
+          name: "Form name",
+          submission_email: "submission@email.com",
+          id: 2,
+        }.to_json
       end
 
       before do
-        form_response
-        form_deletion_request
-        delete form_path(id: 2), params: { id: 2 }
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/2", {}, form_data, 200
+          mock.delete "/api/v1/forms/2"
+        end
+
+        delete form_path(id: 2)
       end
 
       it "Redirects you to the home screen" do
@@ -120,7 +145,8 @@ RSpec.describe "Forms", type: :request do
       end
 
       it "Deletes the form on the API" do
-        expect(form_deletion_request).to have_been_made
+        expected_request = ActiveResource::Request.new(:delete, "/api/v1/forms/2")
+        expect(ActiveResource::HttpMock.requests).to include(expected_request)
       end
     end
   end
