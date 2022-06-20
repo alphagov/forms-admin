@@ -13,6 +13,8 @@
       <p class="govuk-body"><%= flash[:message] %></p>
     <% end %>
 
+    <%= link_to "Add a question", new_page_path(@form), class: "govuk-button govuk-!-margin-bottom-3 govuk-!-margin-top-3", 'data-module':"govuk-button", draggable:"false", role: "button" %>
+
     <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0">
       Form name
     </h2>
