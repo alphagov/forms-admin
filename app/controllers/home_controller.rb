@@ -1,7 +1,6 @@
 class HomeController < ApplicationController
   def index
-    @forms = Form.all
-    @forms.first.pages
+    @forms = Form.all || []
     # Create a page
     # page = Page.new(form_id: @forms.first.id)
     # page.question_text = "a"
