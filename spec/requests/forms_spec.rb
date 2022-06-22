@@ -27,8 +27,7 @@ RSpec.describe "Forms", type: :request do
           mock.get "/api/v1/forms/2", {}, form.to_json, 200
           mock.get "/api/v1/forms/2/pages", {}, pages.to_json, 200
         end
-        # ActiveResourceMock.mock_resource(form, { read: { response: form } })
-        # ActiveResourceMock.mock_resource(page, { all: { response: [page] } })
+
         get form_path(2)
       end
 
