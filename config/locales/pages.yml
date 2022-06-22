@@ -6,6 +6,9 @@ en:
     submit: Save and continue
     or: or
     go_to_form_overview: go to form overview
+  pages_list:
+    heading: Your questions
+    edit: Edit
   helpers:
     label:
       page:

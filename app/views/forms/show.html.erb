@@ -26,14 +26,14 @@
         </dt>
         <dd class="govuk-summary-list__actions">
           <%= link_to change_form_name_path(@form), class: "govuk-link govuk-link--no-visited-state" do %>
-              Edit<span class="govuk-visually-hidden"> form name</span>
+              Edit <span class="govuk-visually-hidden">form name</span>
           <% end %>
         </dd>
       </div>
     </dl>
 
     <% if @pages.any? %>
-      <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0">Your questions</h2>
+      <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0"><%= t("pages_list.heading") %></h2>
       <% @pages.each do |page| %>
         <dl class="govuk-summary-list">
           <div class="govuk-summary-list__row">
@@ -42,7 +42,7 @@
             </dt>
             <dd class="govuk-summary-list__actions">
               <%= link_to edit_page_path(@form,page), class: "govuk-link govuk-link--no-visited-state" do %>
-                Edit <span class="govuk-visually-hidden"><%= page.question_text %></span>
+                <%= t("pages_list.edit") %> <span class="govuk-visually-hidden"><%= page.question_text %></span>
               <% end %>
             </dd>
           </div>
