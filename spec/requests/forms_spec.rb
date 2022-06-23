@@ -4,22 +4,38 @@ RSpec.describe "Forms", type: :request do
   describe "Showing an existing form" do
     describe "Given a form" do
       let(:form) do
-        Form.new(
-          {
-            id: 2,
-            name: "Form name",
-            submission_email: "submission@email.com",
-          },
-        )
+        Form.new({
+          id: 2,
+          name: "Form name",
+          submission_email: "submission@email.com",
+        })
+      end
+
+      let(:pages) do
+        [Page.new({
+          id: 1,
+          form_id: 2,
+          question_text: "What is your work address?",
+          question_short_name: "Work address",
+          hint_text: "This should be the location stated in your contract.",
+          answer_type: "address",
+        })]
       end
 
       before do
-        ActiveResourceMock.mock_resource(form, { read: { response: form } })
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/2", {}, form.to_json, 200
+          mock.get "/api/v1/forms/2/pages", {}, pages.to_json, 200
+        end
+
         get form_path(2)
       end
 
       it "Reads the form from the API" do
         expect(form).to have_been_read
+
+        pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2")
+        expect(ActiveResource::HttpMock.requests).to include pages_request
       end
     end
   end

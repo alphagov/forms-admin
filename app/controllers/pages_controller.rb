@@ -1,9 +1,4 @@
 class PagesController < ApplicationController
-  def index
-    @form = Form.find(params[:form_id])
-    @pages = @form.pages
-  end
-
   def new
     @form = Form.find(params[:form_id])
     @page = Page.new(form_id: @form.id)
@@ -16,7 +11,7 @@ class PagesController < ApplicationController
     @page_number = @form.pages.length + 1
 
     if @page.save
-      redirect_to action: "index", form_id: @form.id
+      redirect_to form_path(@form)
     else
       render :new, status: :unprocessable_entity
     end
@@ -36,7 +31,7 @@ class PagesController < ApplicationController
     @page.load(page_params(@form.id))
 
     if @page.save
-      redirect_to action: "index", form_id: @form.id
+      redirect_to form_path(@form)
     else
       render :edit, status: :unprocessable_entity
     end
