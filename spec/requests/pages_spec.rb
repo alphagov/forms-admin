@@ -12,7 +12,7 @@ RSpec.describe "Pages", type: :request do
           name: "Form name",
           submission_email: "submission@email.com",
           id: 2,
-          org: "test-org"
+          org: "test-org",
         }.to_json
       end
 
@@ -68,7 +68,7 @@ RSpec.describe "Pages", type: :request do
           name: "Form name",
           submission_email: "submission@email.com",
           id: 2,
-          org: "test-org"
+          org: "test-org",
         }.to_json
       end
 
@@ -148,7 +148,7 @@ RSpec.describe "Pages", type: :request do
         name: "Form name",
         submission_email: "submission@email.com",
         id: 2,
-        org: "test-org"
+        org: "test-org",
       }.to_json
     end
 

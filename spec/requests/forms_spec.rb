@@ -73,7 +73,6 @@ RSpec.describe "Forms", type: :request do
         )
       end
 
-
       let(:updated_form_data) do
         {
           id: 2,
