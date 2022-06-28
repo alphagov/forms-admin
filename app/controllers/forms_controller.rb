@@ -4,11 +4,10 @@ class FormsController < ApplicationController
   def new; end
 
   def create
-    user = User.find_by(id: session[:user_id]) #TODO or maybe current_user?
     form = Form.new({
       name: params[:name],
       submission_email: params[:submission_email],
-      org: user.organisation_slug,
+      org: current_user.organisation_slug,
     })
 
     form.save!
@@ -34,6 +33,7 @@ class FormsController < ApplicationController
 
     form.name = form_params[:name]
     form.submission_email = form_params[:submission_email]
+    form.org = current_user.organisation_slug
 
     form.save!
 
