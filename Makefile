@@ -4,7 +4,7 @@ setup:
 
 .PHONY: serve
 serve: setup
-	bin/rails s
+	bin/dev
 
 .PHONY: test
 test:
