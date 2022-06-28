@@ -11,6 +11,12 @@ class PagesController < ApplicationController
     @page_number = @form.pages.length + 1
 
     if @page.save
+      if @page_number > 1
+        page_to_update = previous_last_page
+        page_to_update.next = @page.id
+        page_to_update.save!
+      end
+
       redirect_to form_path(@form)
     else
       render :new, status: :unprocessable_entity
@@ -38,6 +44,10 @@ class PagesController < ApplicationController
   end
 
 private
+
+  def previous_last_page
+    @form.pages.find { |p| !p.has_next? }
+  end
 
   def page_params(form_id)
     params.require(:page).permit(:question_text, :question_short_name, :hint_text, :answer_type).merge(form_id: form_id)

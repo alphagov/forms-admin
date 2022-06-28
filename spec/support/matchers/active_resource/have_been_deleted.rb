@@ -1,6 +1,6 @@
 RSpec::Matchers.define :have_been_deleted do
   match do |resource|
-    expected_request_path = resource.class.element_path(resource.id)
+    expected_request_path = resource.class.element_path(resource.id, resource.prefix_options)
     expected_request = ActiveResource::Request.new(:delete, expected_request_path)
 
     matched_request = ActiveResource::HttpMock.requests.find do |request|
@@ -12,7 +12,7 @@ RSpec::Matchers.define :have_been_deleted do
   end
 
   failure_message do |resource|
-    expected_request_path = resource.class.collection_path(resource.prefix_options)
+    expected_request_path = resource.class.element_path(resource.id, resource.prefix_options)
     expected_request = ActiveResource::Request.new(:delete, expected_request_path)
 
     HelperMethods.format_failure_message(resource, expected_request, ActiveResource::HttpMock.requests)
