@@ -50,6 +50,6 @@ private
   end
 
   def page_params(form_id)
-    params.require(:page).permit(:question_text, :question_short_name, :hint_text, :answer_type).merge(:form_id)
+    params.require(:page).permit(:question_text, :question_short_name, :hint_text, :answer_type).merge(form_id:)
   end
 end
