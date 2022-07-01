@@ -24,6 +24,8 @@ jobs:
     env:
       RAILS_ENV: test
       DATABASE_URL: "postgres://rails:password@localhost:5432"
+      API_BASE: http://localhost:9292
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -42,8 +44,8 @@ jobs:
       - name: Run docker image
         run: docker run -d -p 9292:9292 --network=host -e DATABASE_URL=$DATABASE_URL forms-api
       # Add or replace dependency steps here
-      - name: Ls
-        run: ls forms-api
+      - name: Check if api is running
+        run: curl localhost:9292
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@8f312efe1262fb463d906e9bf040319394c18d3e # v1.92
         with:
