@@ -18,7 +18,7 @@
     "lint:js": "standard | snazzy",
     "lint:css": "stylelint 'app/assets/**/*.scss'",
     "format": "standard --fix & stylelint 'app/assets/**/*.scss' --fix",
-    "ci": "bin/setup && bin rails db:seed && bin/rails server"
+    "ci": "bin/setup && bin/rails db:seed && bin/rails server"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",
