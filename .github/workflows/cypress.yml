@@ -41,14 +41,6 @@ jobs:
         run: yarn
       - name: Run Frontend build
         run: yarn build & yarn build:css
-      # Add or replace database setup steps here
-      - name: Create db
-        run: bin/rails db:migrate
-      - name: Set up database schema
-        run: bin/rails db:schema:load
-      # Add or replace test runners here
-      - name: Run tests
-        run: bin/rake
       - name: Run Cypress tests
         uses: cypress-io/github-action@v4
         with:
