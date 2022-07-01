@@ -46,10 +46,12 @@ jobs:
       - name: Run tests
         run: bin/rake
       - name: Run Cypress tests
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         with:
           install: false
           start: yarn run ci
+          wait-on: 'http://localhost:3000'
+          headless: true
 
   lint:
     runs-on: ubuntu-latest
