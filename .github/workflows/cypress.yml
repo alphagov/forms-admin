@@ -1,0 +1,85 @@
+# This workflow uses actions that are not certified by GitHub.  They are
+# provided by a third-party and are governed by separate terms of service,
+# privacy policy, and support documentation.
+#
+# This workflow will install a prebuilt Ruby version, install dependencies, and
+# run tests and linters.
+name: "Ruby on Rails CI"
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:11-alpine
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_USER: rails
+          POSTGRES_PASSWORD: password
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: "postgres://rails:password@localhost:5432"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+        repository: alphagov/forms-api
+        path: forms-api
+      # Add or replace dependency steps here
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@8f312efe1262fb463d906e9bf040319394c18d3e # v1.92
+        with:
+          bundler-cache: true
+      - name: Install frontend dependencies
+        run: yarn
+      - name: Run Frontend build
+        run: yarn build & yarn build:css
+      # Add or replace database setup steps here
+      - name: Create db
+        run: bin/rails db:migrate
+      - name: Set up database schema
+        run: bin/rails db:schema:load
+      # Add or replace test runners here
+      - name: Run tests
+        run: bin/rake
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v4
+        with:
+          install: false
+          start: yarn run ci
+          wait-on: 'http://localhost:3000'
+      - name: Archive cypress artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress
+          path: |
+            cypress/videos
+            cypress/screenshots
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@8f312efe1262fb463d906e9bf040319394c18d3e # v1.92
+        with:
+          bundler-cache: true
+      - name: Install frontend dependencies
+        run: yarn
+      # Add or replace any other lints here
+      - name: Security audit dependencies
+        run: bundler exec bundle audit check
+      - name: Security audit application code
+        run: bundler exec brakeman -q -w2
+      - name: Lint Ruby files
+        run: bundler exec rubocop --parallel
+      - name: Lint Javascript and Sass files
+        run: yarn lint
