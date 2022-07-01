@@ -45,20 +45,6 @@ jobs:
       # Add or replace test runners here
       - name: Run tests
         run: bin/rake
-      - name: Run Cypress tests
-        uses: cypress-io/github-action@v4
-        with:
-          install: false
-          start: yarn run ci
-          wait-on: 'http://localhost:3000'
-      - name: Archive cypress artifacts
-        if: ${{ failure() }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: cypress
-          path: |
-            cypress/videos
-            cypress/screenshots
 
   lint:
     runs-on: ubuntu-latest
