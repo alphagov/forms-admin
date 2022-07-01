@@ -32,6 +32,13 @@ jobs:
         with:
           repository: alphagov/forms-api
           path: forms-api
+          ref: Dockerfile
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: forms-api
+          push: false
+          tags: forms-api
       # Add or replace dependency steps here
       - name: Ls
         run: ls forms-api
