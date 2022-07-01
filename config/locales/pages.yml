@@ -1,0 +1,47 @@
+en:
+  pages:
+    heading: Edit question
+    question: Question
+    add_hint_text: Add hint text to help people answer the question
+    submit: Save and continue
+    or: or
+    go_to_form_overview: go to form overview
+  pages_list:
+    heading: Your questions
+    edit: Edit
+  helpers:
+    label:
+      page:
+        question_text: Question text
+        question_short_name: Question short name (optional)
+        hint_text: Hint text (optional)
+        answer_type_options:
+          single_line: Single line of text
+          address: Address
+          date: Date
+          email: Email address
+          national_insurance_number: National Insurance number
+          phone_number: Phone number
+    legend:
+      page:
+        answer_type: What kind of answer do you need to this question?
+    hint:
+      page:
+        question_text: |-
+          Ask a question the way you would in person. For example ‘What is your
+          address?’.
+        question_short_name: |-
+          The short name will be used when the form’s questions are all displayed in a list. Use a short descriptive name. For example ‘Address’.
+        hint_text: |-
+          You can use hint text if you need to explain the format the answer should be in, or where to find the information you’ve asked for.
+        answer_type: |-
+          The answer will be validated to check it’s in the selected format.
+  activemodel:
+    errors:
+      models:
+        page:
+          attributes:
+            question_text:
+              blank: Question text can't be blank
+            answer_type:
+              blank: Answer type can't be blank

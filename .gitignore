@@ -36,3 +36,7 @@
 /node_modules
 
 .env
+
+# Ignore Cypress output
+/cypress/screenshots
+/cypress/videos

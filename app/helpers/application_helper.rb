@@ -9,4 +9,20 @@ module ApplicationHelper
   def set_page_title(title)
     content_for(:title) { title }
   end
+
+  def title_with_error_prefix(title, error)
+    "#{t('page_titles.error_prefix') if error}#{title}"
+  end
+
+  def govuk_back_link_to(url = :back, body = "Back")
+    classes = "govuk-!-display-none-print"
+
+    url = back_link_url if url == :back
+
+    render GovukComponent::BackLinkComponent.new(
+      text: body,
+      href: url,
+      classes: classes,
+    )
+  end
 end

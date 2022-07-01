@@ -51,7 +51,9 @@
     </header>
 
     <div class="govuk-width-container ">
-      <main class="govuk-main-wrapper " id="main-content" role="main">
+      <%= yield :back_link %>
+
+      <main class="govuk-main-wrapper <% if !content_for?(:back_link) %>govuk-main-wrapper--auto-spacing<% end %>" id="main-content" role="main">
         <%= yield %>
       </main>
     </div>
