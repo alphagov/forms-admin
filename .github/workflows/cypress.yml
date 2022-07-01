@@ -40,7 +40,7 @@ jobs:
           push: false
           tags: forms-api
       - name: Run docker image
-        run: docker run -p 9292:9292 -e DATABASE_URL=$DATABASE_URL forms-api
+        run: docker run -p 9292:9292 -e --network=host DATABASE_URL=$DATABASE_URL forms-api
       # Add or replace dependency steps here
       - name: Ls
         run: ls forms-api
