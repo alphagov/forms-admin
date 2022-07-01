@@ -42,10 +42,12 @@ jobs:
           push: false
           tags: forms-api
       - name: Run docker image
-        run: docker run -d -p 9292:9292 --network=host -e DATABASE_URL=$DATABASE_URL forms-api
+        run: docker run -d -p 9292:9292 --network=host -e DATABASE_URL=$DATABASE_URL --name forms-api forms-api
       # Add or replace dependency steps here
       - name: Check if api is running
-        run: curl localhost:9292
+        run: docker ps
+      - name: logs
+        run: docker logs forms-api
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@8f312efe1262fb463d906e9bf040319394c18d3e # v1.92
         with:
