@@ -13,7 +13,6 @@ on:
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
-    container: ubuntu
     services:
       postgres:
         image: postgres:11-alpine
@@ -36,10 +35,6 @@ jobs:
           repository: alphagov/forms-api
           path: forms-api
           ref: Dockerfile
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
