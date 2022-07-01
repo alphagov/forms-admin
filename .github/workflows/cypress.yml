@@ -41,13 +41,6 @@ jobs:
           context: forms-api
           push: false
           tags: forms-api
-      - name: Run docker image
-        run: 
-      # Add or replace dependency steps here
-      - name: Check if api is running
-        run: docker ps
-      - name: logs
-        run: docker logs forms-api
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@8f312efe1262fb463d906e9bf040319394c18d3e # v1.92
         with:
