@@ -6,6 +6,8 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 #
+puts "User count: #{User.count}"
 unless User.any?
   User.create!({ email: "example@example.com" })
 end
+puts "User count: #{User.count}"

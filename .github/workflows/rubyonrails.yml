@@ -51,7 +51,6 @@ jobs:
           install: false
           start: yarn run ci
           wait-on: 'http://localhost:3000'
-          headless: true
 
   lint:
     runs-on: ubuntu-latest
