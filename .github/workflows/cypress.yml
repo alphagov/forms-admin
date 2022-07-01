@@ -56,7 +56,7 @@ jobs:
         uses: cypress-io/github-action@v4
         with:
           install: false
-          start: BUNDLE_GEMFILE=forms-api/Gemfile bundle exec rackup
+          start: yarn run ci
           wait-on: 'http://localhost:9292'
       - name: Archive cypress artifacts
         if: ${{ failure() }}
