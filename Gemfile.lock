@@ -152,7 +152,7 @@ GEM
     jsbundling-rails (1.0.2)
       railties (>= 6.0.0)
     jwt (2.3.0)
-    loofah (2.17.0)
+    loofah (2.18.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -234,7 +234,7 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.4.2)
+    rails-html-sanitizer (1.4.3)
       loofah (~> 2.3)
     railties (7.0.2.4)
       actionpack (= 7.0.2.4)
@@ -368,6 +368,7 @@ DEPENDENCIES
   pry
   puma (~> 5.6.4)
   rails (= 7.0.2.4)
+  rails-html-sanitizer (~> 1.4.3)
   rspec-rails (>= 3.9.0)
   rubocop-govuk
   selenium-webdriver

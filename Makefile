@@ -13,10 +13,9 @@ test: setup
 #	bundle exec guard -i --notify false -P rspec
 
 lint:
-	bundle exec rubocop
-
-lint-fix:
 	bundle exec rubocop -A
+	bundle exec bundle-audit check
+
 db:
 	docker-compose up -d
 clean:

@@ -5,6 +5,7 @@ ruby "3.1.1"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "7.0.2.4"
+gem "rails-html-sanitizer", "~> 1.4.3"
 
 gem "activeresource", "~> 6.0"
 
