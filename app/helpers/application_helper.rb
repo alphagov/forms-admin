@@ -22,7 +22,7 @@ module ApplicationHelper
     render GovukComponent::BackLinkComponent.new(
       text: body,
       href: url,
-      classes: classes,
+      classes:,
     )
   end
 end
