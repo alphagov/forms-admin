@@ -355,7 +355,7 @@ PLATFORMS
 DEPENDENCIES
   activeresource (~> 6.0)
   bootsnap
-  brakeman (~> 5.2)
+  brakeman (~> 5.2.3)
   bundler-audit (~> 0.9.0)
   capybara
   cssbundling-rails
@@ -383,7 +383,7 @@ DEPENDENCIES
   webmock
 
 RUBY VERSION
-   ruby 3.0.3p157
+   ruby 3.1.1p18
 
 BUNDLED WITH
    2.2.33

@@ -73,16 +73,17 @@ RSpec.describe "Forms", type: :request do
         )
       end
 
-      let(:updated_form) do
-        Form.new(updated_form_data)
-      end
-
       let(:updated_form_data) do
         {
           id: 2,
           name: "Updated name",
           submission_email: "submission@email.com",
+          org: "test-org",
         }
+      end
+
+      let(:updated_form) do
+        Form.new(updated_form_data)
       end
 
       before do
@@ -115,6 +116,7 @@ RSpec.describe "Forms", type: :request do
         {
           name: "Form name",
           submission_email: "submission@email.com",
+          org: "test-org",
         }
       end
 
@@ -131,7 +133,8 @@ RSpec.describe "Forms", type: :request do
       end
 
       it "Creates the form on the API" do
-        expect(Form.new(form_data)).to have_been_created
+        form = Form.new(form_data)
+        expect(form).to have_been_created
       end
     end
   end
