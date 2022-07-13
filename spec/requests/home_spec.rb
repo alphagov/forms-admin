@@ -8,7 +8,7 @@ RSpec.describe "Home", type: :request do
           id: 2,
           name: "Form name",
           submission_email: "submission@email.com",
-          org: "test-org"
+          org: "test-org",
         }]
       end
 
@@ -16,7 +16,7 @@ RSpec.describe "Home", type: :request do
         ActiveResource::HttpMock.respond_to do |mock|
           mock.get "/api/v1/forms?org=test-org", {}, forms_response.to_json, 200
         end
-        get root_path()
+        get root_path
       end
 
       it "Reads the forms from the API" do
