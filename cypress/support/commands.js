@@ -24,3 +24,49 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 import '@testing-library/cypress/add-commands'
+
+Cypress.Commands.add('createForm', () => {
+  return cy
+    .request({
+      method: 'POST',
+      url: 'http://localhost:9292/api/v1/forms',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: JSON.stringify({
+        name: 'Apply for a forms licence',
+        submission_email: 'submission@email.com',
+        start_page: 1,
+        org: 'government-digital-service'
+      })
+    })
+    .then(() => {
+      return cy.request('http://localhost:9292/api/v1/forms').then(response => {
+        return response.body.reverse()[0]
+      })
+    })
+})
+
+Cypress.Commands.add('createPage', formId => {
+  return cy
+    .request({
+      method: 'POST',
+      url: `http://localhost:9292/api/v1/forms/${formId}/pages`,
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: JSON.stringify({
+        question_text: 'What is your work address?',
+        question_short_name: 'Work address',
+        hint_text: 'This should be the location stated in your contract.',
+        answer_type: 'address'
+      })
+    })
+    .then(() => {
+      return cy
+        .request(`http://localhost:9292/api/v1/forms/${formId}/pages`)
+        .then(response => {
+          return response.body.reverse()[0]
+        })
+    })
+})

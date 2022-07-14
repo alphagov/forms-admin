@@ -1,17 +1,18 @@
-describe('Edit a form page', () => {
-  beforeEach(() => {
-    cy.visit('/forms/2/edit')
+describe('Edit a form page', function () {
+  beforeEach(function () {
+    cy.visit(`/forms/${this.formId}/edit`)
   })
 
-  it('contains a populated form field for the form title', () => {
+  it('contains a populated form field for the form title', function () {
     cy.get('form')
       .findByLabelText('What is the name of your form?')
       .should('exist')
       .should('have.value', 'Apply for a forms licence')
   })
 
-  it('allows the user to navigate back to the form overview page', () => {
+  it('allows the user to navigate back to the form overview page', function () {
     cy.contains('Back').click()
-    cy.url().should('eq', `${Cypress.config().baseUrl}/forms/2`)
+
+    cy.url().should('eq', `${Cypress.config().baseUrl}/forms/${this.formId}`)
   })
 })

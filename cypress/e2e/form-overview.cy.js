@@ -1,35 +1,46 @@
-describe('Form overview page', () => {
-  beforeEach(() => {
-    cy.visit('/forms/2')
+describe('Form overview page', function () {
+  beforeEach(function () {
+    cy.visit(`/forms/${this.formId}`)
   })
 
-  it('allows the user to edit the form', () => {
+  it('allows the user to edit the form', function () {
     cy.contains('Edit').click()
-    cy.url().should('eq', `${Cypress.config().baseUrl}/forms/2/change-name`)
+    cy.url().should(
+      'eq',
+      `${Cypress.config().baseUrl}/forms/${this.formId}/change-name`
+    )
   })
 
-  it('allows the user to navigate back to the home page', () => {
+  it('allows the user to navigate back to the home page', function () {
     cy.contains('Back').click()
     cy.url().should('eq', `${Cypress.config().baseUrl}/`)
   })
 
-  it('contains an add question button', () => {
+  it('contains an add question button', function () {
     cy.contains('Add a question').click()
-    cy.url().should('eq', `${Cypress.config().baseUrl}/forms/2/pages/new`)
+    cy.url().should(
+      'eq',
+      `${Cypress.config().baseUrl}/forms/${this.formId}/pages/new`
+    )
   })
 
-  it('contains a list of questions', () => {
+  it('contains a list of questions', function () {
     cy.findByRole('heading', {
       name: 'Your questions'
     }).should('be.visible')
 
-    cy.findAllByText('How many forms do you expect to publish annually?')
+    cy.findAllByText('What is your work address?')
       .first()
       .should('be.visible')
 
     cy.findByRole('link', {
-      name: 'Edit How many forms do you expect to publish annually?'
+      name: 'Edit What is your work address?'
     }).click()
-    cy.url().should('eq', `${Cypress.config().baseUrl}/forms/2/pages/27/edit`)
+    cy.url().should(
+      'eq',
+      `${Cypress.config().baseUrl}/forms/${this.formId}/pages/${
+        this.pageId
+      }/edit`
+    )
   })
 })

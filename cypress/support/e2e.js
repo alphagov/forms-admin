@@ -18,3 +18,22 @@ import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+before(function () {
+  cy.createForm()
+    .its('id')
+    .as('formId')
+    .then(function () {
+      cy.createPage(this.formId)
+        .its('id')
+        .as('pageId')
+    })
+})
+
+after(function () {
+  cy.request(
+    'DELETE',
+    `http://localhost:9292/api/v1/forms/${this.formId}/pages/${this.pageId}`
+  )
+  cy.request('DELETE', `http://localhost:9292/api/v1/forms/${this.formId}`)
+})

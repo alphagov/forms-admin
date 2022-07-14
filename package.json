@@ -56,7 +56,9 @@
       "it",
       "cy",
       "Cypress",
-      "beforeEach"
+      "beforeEach",
+      "before",
+      "after"
     ]
   },
   "stylelint": {
