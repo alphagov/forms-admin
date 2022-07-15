@@ -24,3 +24,50 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 import '@testing-library/cypress/add-commands'
+
+Cypress.Commands.add('createForm', formData => {
+  return cy
+    .request({
+      method: 'POST',
+      url: 'http://localhost:9292/api/v1/forms',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: formData
+    })
+    .then(() => {
+      return cy.request('http://localhost:9292/api/v1/forms').then(response => {
+        return response.body.reverse()[0]
+      })
+    })
+})
+
+Cypress.Commands.add('createPage', (formId, pageData) => {
+  return cy
+    .request({
+      method: 'POST',
+      url: `http://localhost:9292/api/v1/forms/${formId}/pages`,
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: pageData
+    })
+    .then(() => {
+      return cy
+        .request(`http://localhost:9292/api/v1/forms/${formId}/pages`)
+        .then(response => {
+          return response.body.reverse()[0]
+        })
+    })
+})
+
+Cypress.Commands.add('deleteForm', formId => {
+  cy.request('DELETE', `http://localhost:9292/api/v1/forms/${formId}`)
+})
+
+Cypress.Commands.add('deletePage', (formId, pageId) => {
+  cy.request(
+    'DELETE',
+    `http://localhost:9292/api/v1/forms/${formId}/pages/${pageId}`
+  )
+})
