@@ -25,7 +25,7 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 import '@testing-library/cypress/add-commands'
 
-Cypress.Commands.add('createForm', () => {
+Cypress.Commands.add('createForm', formData => {
   return cy
     .request({
       method: 'POST',
@@ -33,12 +33,7 @@ Cypress.Commands.add('createForm', () => {
       headers: {
         'Content-Type': 'application/json; charset=utf-8'
       },
-      body: JSON.stringify({
-        name: 'Apply for a forms licence',
-        submission_email: 'submission@email.com',
-        start_page: 1,
-        org: 'government-digital-service'
-      })
+      body: formData
     })
     .then(() => {
       return cy.request('http://localhost:9292/api/v1/forms').then(response => {
@@ -47,7 +42,7 @@ Cypress.Commands.add('createForm', () => {
     })
 })
 
-Cypress.Commands.add('createPage', formId => {
+Cypress.Commands.add('createPage', (formId, pageData) => {
   return cy
     .request({
       method: 'POST',
@@ -55,12 +50,7 @@ Cypress.Commands.add('createPage', formId => {
       headers: {
         'Content-Type': 'application/json; charset=utf-8'
       },
-      body: JSON.stringify({
-        question_text: 'What is your work address?',
-        question_short_name: 'Work address',
-        hint_text: 'This should be the location stated in your contract.',
-        answer_type: 'address'
-      })
+      body: pageData
     })
     .then(() => {
       return cy
@@ -69,4 +59,15 @@ Cypress.Commands.add('createPage', formId => {
           return response.body.reverse()[0]
         })
     })
+})
+
+Cypress.Commands.add('deleteForm', formId => {
+  cy.request('DELETE', `http://localhost:9292/api/v1/forms/${formId}`)
+})
+
+Cypress.Commands.add('deletePage', (formId, pageId) => {
+  cy.request(
+    'DELETE',
+    `http://localhost:9292/api/v1/forms/${formId}/pages/${pageId}`
+  )
 })

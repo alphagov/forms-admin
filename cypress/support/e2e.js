@@ -20,20 +20,23 @@ import './commands'
 // require('./commands')
 
 before(function () {
-  cy.createForm()
-    .its('id')
-    .as('formId')
-    .then(function () {
-      cy.createPage(this.formId)
-        .its('id')
-        .as('pageId')
-    })
+  // Create test form and page in database
+  cy.fixture('seed-data').then(function (seedDataJSON) {
+    const { form, page } = seedDataJSON
+
+    cy.createForm(form)
+      .its('id')
+      .as('formId')
+      .then(function () {
+        cy.createPage(this.formId, page)
+          .its('id')
+          .as('pageId')
+      })
+  })
 })
 
 after(function () {
-  cy.request(
-    'DELETE',
-    `http://localhost:9292/api/v1/forms/${this.formId}/pages/${this.pageId}`
-  )
-  cy.request('DELETE', `http://localhost:9292/api/v1/forms/${this.formId}`)
+  // Delete test form and page
+  cy.deletePage(this.formId, this.pageId)
+  cy.deleteForm(this.formId)
 })
