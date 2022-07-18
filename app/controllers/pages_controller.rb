@@ -43,6 +43,25 @@ class PagesController < ApplicationController
     end
   end
 
+  def delete
+    @form = Form.find(params[:form_id])
+    @page = Page.find(params[:page_id], params: { form_id: @form.id })
+  end
+
+  def destroy
+    @form = Form.find(params[:form_id])
+    @page = Page.find(params[:page_id], params: { form_id: @form.id })
+    if @page.destroy
+      flash[:message] = "Successfully deleted page"
+      redirect_to form_path(params[:form_id]), status: :see_other
+    else
+      raise StandardError, "Deletion unsuccessful"
+    end
+  rescue StandardError
+    flash[:message] = "Deletion unsuccessful"
+    render :edit, status: :unprocessable_entity
+  end
+
 private
 
   def previous_last_page

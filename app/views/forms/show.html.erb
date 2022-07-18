@@ -66,6 +66,6 @@
         </dd>
       </div>
     </dl>
-    <%= button_to "Delete form", @form, :method => :delete, class: "govuk-button govuk-button--warning", "data-module": "govuk-button" %>
+    <%= govuk_button_link_to 'Delete this form', delete_form_path(@form), secondary: true %>
   </div>
 </div>

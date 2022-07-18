@@ -44,6 +44,10 @@ class FormsController < ApplicationController
     redirect_to :edit_form, id: params[:id]
   end
 
+  def delete
+    @form = Form.find(params[:form_id])
+  end
+
   def destroy
     form = Form.find(params[:id])
     if form.destroy

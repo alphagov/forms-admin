@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :forms, only: %i[new create show edit update destroy]
   get "forms/:id/change-name" => "forms/change_name#new", as: :change_form_name
   post "forms/:id/change-name" => "forms/change_name#create"
+  get "forms/:form_id/delete" => "forms#delete", as: :delete_form
 
   # Page routes
   get "forms/:form_id/pages" => "pages#index", as: :pages
@@ -14,4 +15,6 @@ Rails.application.routes.draw do
   patch "forms/:form_id/pages/:page_id/edit" => "pages#update", as: :update_page
   get "forms/:form_id/pages/new" => "pages#new", as: :new_page
   post "forms/:form_id/pages/new" => "pages#create", as: :create_page
+  get "forms/:form_id/pages/:page_id/delete" => "pages#delete", as: :delete_page
+  delete "forms/:form_id/pages/:page_id" => "pages#destroy", as: :destroy_page
 end
