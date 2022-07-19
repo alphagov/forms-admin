@@ -51,7 +51,17 @@ class PagesController < ApplicationController
   def destroy
     @form = Form.find(params[:form_id])
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    if @page.destroy
+    next_page = @page.next
+
+    if @form.start_page == @page.id
+      page_to_update = @form
+      page_to_update.start_page = next_page
+    else
+      page_to_update = previous_page(@page.id)
+      page_to_update.next = next_page
+    end
+
+    if page_to_update.save && @page.destroy
       flash[:message] = "Successfully deleted page"
       redirect_to form_path(params[:form_id]), status: :see_other
     else
@@ -66,6 +76,10 @@ private
 
   def previous_last_page
     @form.pages.find { |p| !p.has_next? }
+  end
+
+  def previous_page(id)
+    @form.pages.find { |p| p.next = id }
   end
 
   def page_params(form_id)
