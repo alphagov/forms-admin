@@ -51,21 +51,27 @@ class PagesController < ApplicationController
   def destroy
     @form = Form.find(params[:form_id])
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    next_page = @page.next
+    confirm_deletion = params[:delete][:confirm_deletion]
 
-    if @form.start_page == @page.id
-      page_to_update = @form
-      page_to_update.start_page = next_page
-    else
-      page_to_update = previous_page(@page.id)
-      page_to_update.next = next_page
-    end
+    if confirm_deletion == "true"
+      next_page = @page.next
 
-    if page_to_update.save && @page.destroy
-      flash[:message] = "Successfully deleted page"
-      redirect_to form_path(params[:form_id]), status: :see_other
+      if @form.start_page == @page.id
+        page_to_update = @form
+        page_to_update.start_page = next_page
+      else
+        page_to_update = previous_page(@page.id)
+        page_to_update.next = next_page
+      end
+
+      if page_to_update.save && @page.destroy
+        flash[:message] = "Successfully deleted page"
+        redirect_to form_path(params[:form_id]), status: :see_other
+      else
+        raise StandardError, "Deletion unsuccessful"
+      end
     else
-      raise StandardError, "Deletion unsuccessful"
+      redirect_to edit_page_path(@form,@page)
     end
   rescue StandardError
     flash[:message] = "Deletion unsuccessful"

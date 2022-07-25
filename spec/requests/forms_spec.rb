@@ -142,6 +142,32 @@ RSpec.describe "Forms", type: :request do
   describe "Deleting an existing form" do
     describe "Given a valid form" do
       let(:form) do
+        Form.new({
+          name: "Form name",
+          submission_email: "submission@email.com",
+          id: 2,
+          org: "test-org",
+          start_page: 1,
+        })
+      end
+
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/2", {}, form.to_json, 200
+        end
+
+        get delete_form_path(form_id: 2)
+      end
+
+      it "reads the form from the API" do
+        expect(form).to have_been_read
+      end
+    end
+  end
+
+  describe "Destroying an existing form" do
+    describe "Given a valid form" do
+      let(:form) do
         Form.new(
           name: "Form name",
           submission_email: "submission@email.com",
@@ -156,7 +182,7 @@ RSpec.describe "Forms", type: :request do
                                            delete: { response: {}, status: 200 },
                                          })
 
-        delete form_path(id: 2)
+        delete form_path(id: 2, delete: { confirm_deletion: "true" })
       end
 
       it "Redirects you to the home screen" do
