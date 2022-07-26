@@ -40,6 +40,7 @@ bin/setup
 | `SENTRY_DSN`   | The DSN provided by Sentry                                         |
 | `API_BASE`     | The base url for the API - E.g. `http://localhost:9090`            |
 | `RUNNER_BASE`  | The base url for the Runner - E.g. `http://localhost:3001`         |
+| `API_KEY`      | The API key for authentication                                     |
 
 ### Running the app
 
