@@ -2,6 +2,7 @@ class Page < ActiveResource::Base
   self.site = (ENV["API_BASE"]).to_s
   self.prefix = "/api/v1/forms/:form_id/"
   self.include_format_in_path = false
+  self.headers["X-Api-Token"] = ENV["API_KEY"]
 
   belongs_to :form
   validates :question_text, presence: true
