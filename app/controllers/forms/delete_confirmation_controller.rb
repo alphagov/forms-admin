@@ -7,7 +7,6 @@ module Forms
     def destroy
       load_page_variables
       @delete_confirmation_form = DeleteConfirmationForm.new(delete_confirmation_form_params)
-      failure_url = params[:page_id].present? ? edit_page_path(@form, @page) : form_path(@form)
 
       if @delete_confirmation_form.valid?
         if @delete_confirmation_form.confirm_deletion == "true"
@@ -17,14 +16,14 @@ module Forms
             delete_form(@form)
           end
         else
-          redirect_to failure_url
+          redirect_to @back_url
         end
       else
         render :delete
       end
     rescue StandardError
       flash[:message] = "Deletion unsuccessful"
-      redirect_to failure_url
+      redirect_to @back_url
     end
 
   private
@@ -68,10 +67,12 @@ module Forms
         @url = destroy_page_path(@form, @page)
         @confirm_deletion_legend = t("forms_delete_confirmation_form.confirm_deletion_page")
         @item_name = @page.question_text
+        @back_url = edit_page_path(@form, @page)
       else
         @url = destroy_form_path(@form)
         @confirm_deletion_legend = t("forms_delete_confirmation_form.confirm_deletion_form")
         @item_name = @form.name
+        @back_url = form_path(@form)
       end
     end
 

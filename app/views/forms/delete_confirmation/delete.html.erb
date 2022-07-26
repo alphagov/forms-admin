@@ -1,4 +1,5 @@
-
+<% set_page_title(title_with_error_prefix(@confirm_deletion_legend, @delete_confirmation_form.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(@back_url) %>
 <%= form_with(model: @delete_confirmation_form, url: @url, method: 'delete') do |f| %>
   <% if @delete_confirmation_form&.errors.any? %>
     <%= f.govuk_error_summary %>

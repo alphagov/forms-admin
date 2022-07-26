@@ -10,6 +10,6 @@
     <span class="govuk-caption-l"><%= t("pages.question") %> <%= @page_number %></span>
     <h1 class="govuk-heading-l"><%= t("pages.heading") %></h1>
     <%= render :partial => 'form', locals: {form: @form, page: @page, url: update_page_path(@form), method: 'PATCH'} %>
-    <%= govuk_button_link_to 'Delete this page', delete_page_path(@form, @page), secondary: true %>
+    <%= govuk_button_link_to t("pages.delete_question"), delete_page_path(@form, @page), secondary: true %>
   </div>
 </div>
