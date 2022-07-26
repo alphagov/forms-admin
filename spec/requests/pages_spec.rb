@@ -315,7 +315,7 @@ RSpec.describe "Pages", type: :request do
           mock.delete "/api/v1/forms/2/pages/1", {}, {}, 200
         end
 
-        delete destroy_page_path(form_id: 2, page_id: 1, delete: { confirm_deletion: "true" })
+        delete destroy_page_path(form_id: 2, page_id: 1, forms_delete_confirmation_form: { confirm_deletion: "true" })
       end
 
       it "Redirects you to the home screen" do

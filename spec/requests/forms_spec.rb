@@ -182,7 +182,7 @@ RSpec.describe "Forms", type: :request do
                                            delete: { response: {}, status: 200 },
                                          })
 
-        delete form_path(id: 2, delete: { confirm_deletion: "true" })
+        delete destroy_form_path(form_id: 2, forms_delete_confirmation_form: { confirm_deletion: "true" })
       end
 
       it "Redirects you to the home screen" do

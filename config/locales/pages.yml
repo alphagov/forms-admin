@@ -9,9 +9,6 @@ en:
   pages_list:
     heading: Your questions
     edit: Edit
-  delete:
-    confirm_delete_page: Are you sure you want to delete this page?
-    confirm_delete_form: Are you sure you want to delete this form?
   helpers:
     label:
       page:
@@ -25,10 +22,6 @@ en:
           email: Email address
           national_insurance_number: National Insurance number
           phone_number: Phone number
-      delete:
-        confirm_deletion_options:
-          true: "Yes"
-          false: "No"
     legend:
       page:
         answer_type: What kind of answer do you need to this question?

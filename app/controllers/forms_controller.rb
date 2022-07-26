@@ -44,28 +44,6 @@ class FormsController < ApplicationController
     redirect_to :edit_form, id: params[:id]
   end
 
-  def delete
-    @form = Form.find(params[:form_id])
-  end
-
-  def destroy
-    confirm_deletion = params[:delete][:confirm_deletion]
-    if confirm_deletion == "true"
-      form = Form.find(params[:id])
-      if form.destroy
-        flash[:message] = "Successfully deleted #{form.name}"
-        redirect_to root_path, status: :see_other
-      else
-        raise StandardError, "Deletion unsuccessful"
-      end
-    else
-      redirect_to :form, id: params[:id]
-    end
-  rescue StandardError
-    flash[:message] = "Deletion unsuccessful"
-    redirect_to :form, id: params[:id]
-  end
-
   def render_not_found_error
     render "not_found", status: :not_found, formats: :html
   end
