@@ -54,15 +54,7 @@ class PagesController < ApplicationController
     confirm_deletion = params[:delete][:confirm_deletion]
 
     if confirm_deletion == "true"
-      next_page = @page.next
-
-      if @form.start_page == @page.id
-        page_to_update = @form
-        page_to_update.start_page = next_page
-      else
-        page_to_update = previous_page(@page.id)
-        page_to_update.next = next_page
-      end
+      page_to_update = update_next_page(@form, @page)
 
       if page_to_update.save && @page.destroy
         flash[:message] = "Successfully deleted page"
@@ -90,5 +82,19 @@ private
 
   def page_params(form_id)
     params.require(:page).permit(:question_text, :question_short_name, :hint_text, :answer_type).merge(form_id:)
+  end
+
+  def update_next_page(form, page)
+    next_page = page.next
+
+    if form.start_page == page.id
+      page_to_update = form
+      page_to_update.start_page = next_page
+    else
+      page_to_update = previous_page(page.id)
+      page_to_update.next = next_page
+    end
+
+    return page_to_update
   end
 end
