@@ -7,9 +7,7 @@
   </p>
 <% end %>
 
-<%= link_to new_form_path, role: "button", draggable: "false", class: "govuk-button govuk-button--primary", "data-module": "govuk-button" do %>
-  Create a form
-<% end %>
+<%= govuk_start_button(text: "Create a form", href: new_form_path) %>
 
 <h2 class="govuk-heading-m">Your forms</h2>
 <dl class="govuk-summary-list">
