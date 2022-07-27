@@ -6,5 +6,5 @@
   <% end %>
   <span class="govuk-caption-l"><%= @item_name %></span>
   <%= f.govuk_collection_radio_buttons :confirm_deletion, @confirm_deletion_options, :value, legend: { text: @confirm_deletion_legend, size: 'l', tag: 'h1' } %>
-  <%= f.govuk_submit warning: true %>
+  <%= f.govuk_submit %>
 <% end %>
