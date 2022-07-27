@@ -6,6 +6,7 @@ en:
     submit: Save and continue
     or: or
     go_to_form_overview: go to form overview
+    delete_question: Delete question
   pages_list:
     heading: Your questions
     edit: Edit

@@ -2,8 +2,14 @@
 <% content_for :back_link, govuk_back_link_to(form_path(@form)) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+
+    <% if flash[:message] %>
+      <p class="govuk-body"><%= flash[:message] %></p>
+    <% end %>
+
     <span class="govuk-caption-l"><%= t("pages.question") %> <%= @page_number %></span>
     <h1 class="govuk-heading-l"><%= t("pages.heading") %></h1>
     <%= render :partial => 'form', locals: {form: @form, page: @page, url: update_page_path(@form), method: 'PATCH'} %>
+    <%= govuk_button_link_to t("pages.delete_question"), delete_page_path(@form, @page), warning: true %>
   </div>
 </div>
