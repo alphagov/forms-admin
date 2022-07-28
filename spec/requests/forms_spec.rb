@@ -40,35 +40,6 @@ RSpec.describe "Forms", type: :request do
     end
   end
 
-  describe "Creating a new form" do
-    describe "Given a valid form" do
-      let(:form_data) do
-        {
-          name: "Form name",
-          submission_email: "submission@email.com",
-          org: "test-org",
-        }
-      end
-
-      before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.post "/api/v1/forms", {}, { id: 2 }.to_json, 200
-        end
-
-        post "/forms", params: form_data
-      end
-
-      it "Redirects you to the form overview page" do
-        expect(response).to redirect_to(form_path(2))
-      end
-
-      it "Creates the form on the API" do
-        form = Form.new(form_data)
-        expect(form).to have_been_created
-      end
-    end
-  end
-
   describe "Deleting an existing form" do
     describe "Given a valid form" do
       let(:form) do
