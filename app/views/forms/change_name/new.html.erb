@@ -1,9 +1,13 @@
 <% set_page_title(title_with_error_prefix(t('page_titles.change_name_form'), @change_name_form.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_path) %>
-<%= form_with(model: @change_name_form, url: change_form_name_path) do |f| %>
-  <% if @change_name_form&.errors.any? %>
-    <%= f.govuk_error_summary %>
-  <% end %>
-  <%= f.govuk_text_field :name, label: {  tag: 'h3', size: 'm' } %>
-  <%= f.govuk_submit %>
-<% end %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: @change_name_form, url: change_form_name_path) do |f| %>
+      <% if @change_name_form&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+      <%= f.govuk_text_field :name, label: {  tag: 'h1', size: 'l' } %>
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

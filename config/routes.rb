@@ -4,9 +4,11 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "home#index"
 
-  resources :forms, only: %i[new create show edit update]
+  resources :forms, only: %i[new create show]
   get "forms/:id/change-name" => "forms/change_name#new", as: :change_form_name
   post "forms/:id/change-name" => "forms/change_name#create"
+  get "forms/:id/change-email" => "forms/change_email#new", as: :change_form_email
+  post "forms/:id/change-email" => "forms/change_email#create"
   get "forms/:form_id/delete" => "forms/delete_confirmation#delete", as: :delete_form
   delete "forms/:form_id/delete" => "forms/delete_confirmation#destroy", as: :destroy_form
 

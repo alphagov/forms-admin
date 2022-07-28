@@ -24,26 +24,6 @@ class FormsController < ApplicationController
     @pages = @form.pages
   end
 
-  def edit
-    @form = Form.find(params[:id])
-  end
-
-  def update
-    form = Form.find(params[:id])
-
-    form.name = form_params[:name]
-    form.submission_email = form_params[:submission_email]
-    form.org = current_user.organisation_slug
-
-    form.save!
-
-    flash[:message] = "Successfully updated!"
-    redirect_to action: "show", id: form.id
-  rescue StandardError
-    flash[:message] = "Update unsuccessful"
-    redirect_to :edit_form, id: params[:id]
-  end
-
   def render_not_found_error
     render "not_found", status: :not_found, formats: :html
   end
