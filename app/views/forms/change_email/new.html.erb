@@ -1,0 +1,14 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.change_email_form'), @change_email_form.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(form_path) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: @change_email_form, url: change_form_email_path) do |f| %>
+      <% if @change_email_form&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+      <%= f.govuk_email_field :submission_email, label: {  tag: 'h1', size: 'l' }, spellcheck: "false", autocomplete: "email"  %>
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

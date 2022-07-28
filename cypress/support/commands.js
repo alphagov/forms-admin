@@ -36,9 +36,13 @@ Cypress.Commands.add('createForm', formData => {
       body: formData
     })
     .then(() => {
-      return cy.request('http://localhost:9292/api/v1/forms').then(response => {
-        return response.body.reverse()[0]
-      })
+      return cy
+        .request(
+          'http://localhost:9292/api/v1/forms?org=government-digital-service'
+        )
+        .then(response => {
+          return response.body.reverse()[0]
+        })
     })
 })
 

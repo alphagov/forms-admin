@@ -1,47 +1,9 @@
 class FormsController < ApplicationController
   rescue_from ActiveResource::ResourceNotFound, with: :render_not_found_error
 
-  def new; end
-
-  def create
-    form = Form.new({
-      name: params[:name],
-      submission_email: params[:submission_email],
-      org: current_user.organisation_slug,
-    })
-
-    form.save!
-
-    flash[:message] = "Successfully created!"
-    redirect_to action: "show", id: form.id
-  rescue StandardError
-    flash[:message] = "Unsuccessful"
-    render :new
-  end
-
   def show
     @form = Form.find(params[:id])
     @pages = @form.pages
-  end
-
-  def edit
-    @form = Form.find(params[:id])
-  end
-
-  def update
-    form = Form.find(params[:id])
-
-    form.name = form_params[:name]
-    form.submission_email = form_params[:submission_email]
-    form.org = current_user.organisation_slug
-
-    form.save!
-
-    flash[:message] = "Successfully updated!"
-    redirect_to action: "show", id: form.id
-  rescue StandardError
-    flash[:message] = "Update unsuccessful"
-    redirect_to :edit_form, id: params[:id]
   end
 
   def render_not_found_error
