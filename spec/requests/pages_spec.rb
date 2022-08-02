@@ -38,24 +38,31 @@ RSpec.describe "Pages", type: :request do
         }.to_json
       end
 
+      let(:headers) do
+        {
+        "X-API-Token"=>ENV["API_KEY"],
+        "Accept"=>"application/json"
+        }
+      end
+
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", {}, form_response, 200
-          mock.get "/api/v1/forms/2/pages", {}, form_pages_response, 200
-          mock.get "/api/v1/forms/2/pages/1", {}, page_response, 200
+          mock.get "/api/v1/forms/2", headers, form_response, 200
+          mock.get "/api/v1/forms/2/pages", headers, form_pages_response, 200
+          mock.get "/api/v1/forms/2/pages/1", headers, page_response, 200
         end
 
         get edit_page_path(form_id: 2, page_id: 1)
       end
 
       it "Reads the page from the API" do
-        form_request = ActiveResource::Request.new(:get, "/api/v1/forms/2")
+        form_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", nil, headers)
         expect(ActiveResource::HttpMock.requests).to include form_request
 
-        form_pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2")
+        form_pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", nil, headers)
         expect(ActiveResource::HttpMock.requests).to include form_pages_request
 
-        page_request = ActiveResource::Request.new(:get, "/api/v1/forms/2")
+        page_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", nil, headers)
         expect(ActiveResource::HttpMock.requests).to include page_request
       end
     end

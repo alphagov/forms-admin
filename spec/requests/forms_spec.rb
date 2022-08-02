@@ -22,10 +22,17 @@ RSpec.describe "Forms", type: :request do
         })]
       end
 
+      let(:headers) do
+        {
+          "X-API-Token"=>ENV["API_KEY"],
+          "Accept"=>"application/json"
+        }
+      end
+
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", {}, form.to_json, 200
-          mock.get "/api/v1/forms/2/pages", {}, pages.to_json, 200
+          mock.get "/api/v1/forms/2", headers, form.to_json, 200
+          mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
         end
 
         get form_path(2)
@@ -34,7 +41,7 @@ RSpec.describe "Forms", type: :request do
       it "Reads the form from the API" do
         expect(form).to have_been_read
 
-        pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2")
+        pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", nil, headers)
         expect(ActiveResource::HttpMock.requests).to include pages_request
       end
     end

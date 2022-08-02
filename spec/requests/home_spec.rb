@@ -12,15 +12,22 @@ RSpec.describe "Home", type: :request do
         }]
       end
 
+      let(:headers) do
+        {
+        "X-API-Token"=>ENV["API_KEY"],
+        "Accept"=>"application/json"
+        }
+      end
+
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms?org=test-org", {}, forms_response.to_json, 200
+          mock.get "/api/v1/forms?org=test-org", headers, forms_response.to_json, 200
         end
         get root_path
       end
 
       it "Reads the forms from the API" do
-        forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?org=test-org")
+        forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?org=test-org", {}, headers)
         expect(ActiveResource::HttpMock.requests).to include forms_request
       end
     end
