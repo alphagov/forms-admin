@@ -2,8 +2,19 @@
 <% content_for :back_link, govuk_back_link_to(form_path(@form)) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-l"><%= t("pages.question") %> <%= @page_number %></span>
+
+    <span class="govuk-caption-l"><%= t("pages.question") %> <%= @page.number(@form) %></span>
     <h1 class="govuk-heading-l"><%= t("pages.heading") %></h1>
-    <%= render :partial => 'form', locals: {form: @form, page: @page, url: create_page_path(@form), method: 'POST'} %>
+
+    <%= form_with model: [@form, @page], url: create_page_path(@form) do |f| %>
+      <%= render :partial => 'form', locals: { f: f } %>
+      <%= f.govuk_submit @page.has_next? ? t("pages.submit_edit") : t("pages.submit_add") do %>
+        <%= f.govuk_submit t('pages.submit_save'), name: :save_preview, secondary: true %>
+      <% end %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= link_to t('pages.go_to_form_overview'), form_path(@form), class: "govuk-link govuk-link--no-visited-state" %>
+    </p>
   </div>
 </div>

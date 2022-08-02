@@ -124,9 +124,6 @@ RSpec.describe "Pages", type: :request do
         form_request = ActiveResource::Request.new(:get, "/api/v1/forms/2")
         expect(ActiveResource::HttpMock.requests).to include form_request
 
-        form_pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2/pages")
-        expect(ActiveResource::HttpMock.requests).to include form_pages_request
-
         page_request = ActiveResource::Request.new(:put, "/api/v1/forms/2/pages/1")
         expect(ActiveResource::HttpMock.requests).to include page_request
       end
@@ -136,8 +133,8 @@ RSpec.describe "Pages", type: :request do
         expect(ActiveResource::HttpMock.requests).to include(expected_request)
       end
 
-      it "Redirects you to the page list" do
-        expect(response).to redirect_to(form_path(id: 2))
+      it "Redirects you to the current edit page" do
+        expect(response).to redirect_to(new_page_path(form_id: 2))
       end
     end
   end
@@ -178,7 +175,7 @@ RSpec.describe "Pages", type: :request do
       end
 
       it "Redirects you to the page list" do
-        expect(response).to redirect_to(form_path(id: 2))
+        expect(response).to redirect_to(new_page_path(form_id: 2))
       end
 
       it "Creates the page on the API" do

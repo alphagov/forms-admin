@@ -11,7 +11,7 @@ describe('Edit a form page', function () {
   })
 
   it('allows the user to navigate back to the form overview page', function () {
-    cy.contains('go to form overview').click()
+    cy.contains('Go to form overview').click()
     cy.url().should('eq', `${Cypress.config().baseUrl}/forms/${this.formId}`)
   })
 })
