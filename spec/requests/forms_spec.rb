@@ -126,10 +126,17 @@ RSpec.describe "Forms", type: :request do
           org: "test-org",
         }
       end
+    
+      let(:post_headers) do
+        {
+        "X-API-Token"=>ENV["API_KEY"],
+        "Content-Type"=>"application/json"
+        }
+      end
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.post "/api/v1/forms", {}, { id: 2 }.to_json, 200
+          mock.post "/api/v1/forms", post_headers, { id: 2 }.to_json, 200
         end
 
         post "/forms", params: form_data
