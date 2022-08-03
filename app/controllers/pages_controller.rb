@@ -8,7 +8,8 @@ class PagesController < ApplicationController
   def create
     @page = Page.new(page_params(@form.id))
 
-    if @form.save_page(@page)
+    # if @form.save_page(@page)
+    if @page.save
       handle_submit_action
     else
       render :new, status: :unprocessable_entity
