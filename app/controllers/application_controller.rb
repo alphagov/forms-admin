@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   def check_service_unavailable
     if ENV["SERVICE_UNAVAILABLE"].present?
-      render "errors/service_unavailable", status: 503, formats: :html
+      render "errors/service_unavailable", status: :service_unavailable, formats: :html
     end
   end
 end
