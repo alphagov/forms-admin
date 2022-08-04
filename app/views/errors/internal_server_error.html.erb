@@ -1,10 +1,10 @@
-<% set_page_title("Sorry, there is a problem with the service") %>
+<% set_page_title(t("page_titles.internal_server_error")) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Sorry, there is a problem with the service</h1>
+    <h1 class="govuk-heading-l"><%= t('internal_server_error.title') %></h1>
     <p class="govuk-body">
-      Please try again later.
+      <%= t('internal_server_error.body') %>
     </p>
   </div>
 </div>
