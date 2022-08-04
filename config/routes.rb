@@ -22,4 +22,6 @@ Rails.application.routes.draw do
   post "forms/:form_id/pages/new" => "pages#create", as: :create_page
   get "forms/:form_id/pages/:page_id/delete" => "forms/delete_confirmation#delete", as: :delete_page
   delete "forms/:form_id/pages/:page_id/delete" => "forms/delete_confirmation#destroy", as: :destroy_page
+
+  get "*other" => "application#render_not_found_error"
 end
