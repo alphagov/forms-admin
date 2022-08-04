@@ -1,8 +1,10 @@
 en:
   not_found:
     title: Page not found
-    first_body_paragraph: If you typed the web address, check it is correct.
-    second_body_paragraph: If you pasted the web address, check you copied the entire address.
+    body: |
+      If you typed the web address, check it is correct.
+
+      If you pasted the web address, check you copied the entire address.
   internal_server_error:
     title: Sorry, there is a problem with the service
     body: Please try again later.

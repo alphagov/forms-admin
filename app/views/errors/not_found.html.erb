@@ -3,11 +3,6 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l"><%= t('not_found.title') %></h1>
-    <p class="govuk-body">
-      <%= t('not_found.first_body_paragraph') %>
-    </p>
-    <p class="govuk-body">
-      <%= t('not_found.second_body_paragraph') %>
-    </p>
+    <%= simple_format(t('not_found.body'), class: 'govuk-body') %>
   </div>
 </div>
