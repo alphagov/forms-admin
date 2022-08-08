@@ -1,11 +1,11 @@
 ---
 applications:
-- name: forms-admin-dev
+- name: forms-admin-((PAAS_ENVIRONMENT))
   memory: 256M
   command: rake db:migrate && bin/rails server
   services:
-    - forms-admin-dev-db
-    - forms-admin-dev-splunk
+    - forms-admin-((PAAS_ENVIRONMENT))-postgres
+    - forms-admin-((PAAS_ENVIRONMENT))-splunk
   env:
     RAILS_ENV: production
     RACK_ENV: production
