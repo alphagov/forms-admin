@@ -1,6 +1,6 @@
-describe('Edit a form page', function () {
+describe('Edit form name page', function () {
   beforeEach(function () {
-    cy.visit(`/forms/${this.formId}/edit`)
+    cy.visit(`/forms/${this.formId}/change-name`)
   })
 
   it('contains a populated form field for the form title', function () {

@@ -51,9 +51,14 @@
     </header>
 
     <div class="govuk-width-container ">
+      <%= govuk_phase_banner(tag: { text: "Beta" }) do %>
+        <%= t("phase_banner.before_link") %>
+        <%= govuk_link_to(t("phase_banner.link"), "mailto:govuk-forms@digital.cabinet-office.gov.uk") %>
+        <%= t("phase_banner.after_link") %>
+      <% end %>
       <%= yield :back_link %>
 
-      <main class="govuk-main-wrapper <% if !content_for?(:back_link) %>govuk-main-wrapper--auto-spacing<% end %>" id="main-content" role="main">
+      <main class="govuk-main-wrapper" id="main-content" role="main">
         <%= yield %>
       </main>
     </div>

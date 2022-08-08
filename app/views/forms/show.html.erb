@@ -60,12 +60,12 @@
           <%= @form.submission_email %>
         </dt>
         <dd class="govuk-summary-list__actions">
-          <%= link_to edit_form_path(@form.id), class: "govuk-link govuk-link--no-visited-state" do %>
+          <%= link_to change_form_email_path(@form.id), class: "govuk-link govuk-link--no-visited-state" do %>
               Edit<span class="govuk-visually-hidden"> submission email</span>
           <% end %>
         </dd>
       </div>
     </dl>
-    <%= button_to "Delete form", @form, :method => :delete, class: "govuk-button govuk-button--warning", "data-module": "govuk-button" %>
+    <%= govuk_button_link_to t("forms.delete_form"), delete_form_path(@form), warning: true %>
   </div>
 </div>

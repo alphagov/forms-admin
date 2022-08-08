@@ -47,84 +47,16 @@ RSpec.describe "Forms", type: :request do
     end
   end
 
-  describe "Editing an existing form" do
-    describe "Given a form" do
-      let(:form) do
-        Form.new(
-          {
-            id: 2,
-            name: "Form name",
-            submission_email: "submission@email.com",
-          },
-        )
-      end
-
-      before do
-        ActiveResourceMock.mock_resource(form, { read: { response: form } })
-        get edit_form_path(2)
-      end
-
-      it "Reads the form from the API" do
-        expect(form).to have_been_read
-      end
-    end
-  end
-
-  describe "Updating an existing form" do
-    describe "Given a form" do
-      let(:form) do
-        Form.new(
-          name: "Form name",
-          submission_email: "submission@email.com",
-          id: 2,
-        )
-      end
-
-      let(:updated_form_data) do
-        {
-          id: 2,
-          name: "Updated name",
-          submission_email: "submission@email.com",
-          org: "test-org",
-        }
-      end
-
-      let(:updated_form) do
-        Form.new(updated_form_data)
-      end
-
-      before do
-        ActiveResourceMock.mock_resource(form,
-                                         {
-                                           read: { response: form, status: 200 },
-                                           update: { response: updated_form, status: 200 },
-                                         })
-
-        patch form_path(id: 2), params: { form: updated_form_data }
-      end
-
-      it "Reads the form from the API" do
-        expect(form).to have_been_read
-      end
-
-      it "Updates the form on the API" do
-        expect(updated_form).to have_been_updated
-      end
-
-      it "Redirects you to the form overview page" do
-        expect(response).to redirect_to(form_path(2))
-      end
-    end
-  end
-
-  describe "Creating a new form" do
+  describe "Deleting an existing form" do
     describe "Given a valid form" do
-      let(:form_data) do
-        {
+      let(:form) do
+        Form.new({
           name: "Form name",
           submission_email: "submission@email.com",
+          id: 2,
           org: "test-org",
-        }
+          start_page: 1,
+        })
       end
     
       let(:post_headers) do
@@ -136,24 +68,19 @@ RSpec.describe "Forms", type: :request do
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.post "/api/v1/forms", post_headers, { id: 2 }.to_json, 200
+          mock.get "/api/v1/forms/2", {}, form.to_json, 200
         end
 
-        post "/forms", params: form_data
+        get delete_form_path(form_id: 2)
       end
 
-      it "Redirects you to the form overview page" do
-        expect(response).to redirect_to(form_path(2))
-      end
-
-      it "Creates the form on the API" do
-        form = Form.new(form_data)
-        expect(form).to have_been_created
+      it "reads the form from the API" do
+        expect(form).to have_been_read
       end
     end
   end
 
-  describe "Deleting an existing form" do
+  describe "Destroying an existing form" do
     describe "Given a valid form" do
       let(:form) do
         Form.new(
@@ -170,7 +97,7 @@ RSpec.describe "Forms", type: :request do
                                            delete: { response: {}, status: 200 },
                                          })
 
-        delete form_path(id: 2)
+        delete destroy_form_path(form_id: 2, forms_delete_confirmation_form: { confirm_deletion: "true" })
       end
 
       it "Redirects you to the home screen" do
