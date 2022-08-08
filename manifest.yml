@@ -4,7 +4,7 @@ applications:
   memory: 256M
   command: rake db:migrate && bin/rails server
   services:
-    - forms-admin-((PAAS_ENVIRONMENT))-postgres
+    - forms-admin-((PAAS_ENVIRONMENT))-db
     - forms-admin-((PAAS_ENVIRONMENT))-splunk
   env:
     RAILS_ENV: production
