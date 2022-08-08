@@ -20,7 +20,7 @@
         <%= link_to form_path(form.id), class: "govuk-link govuk-link--no-visited-state" do %>
           Edit <span class="govuk-visually-hidden"> <%= form.name %></span>
         <% end %><br>
-        <a class="govuk-link govuk-link--no-visited-state" href="<%= ENV['RUNNER_BASE'] %>/<%= form.id %>">View in runner<span class="govuk-visually-hidden">: <%= form.name %></span></a>
+        <a class="govuk-link govuk-link--no-visited-state" href="<%= ENV['RUNNER_BASE'] %>/form/<%= form.id %>">View in runner<span class="govuk-visually-hidden">: <%= form.name %></span></a>
       </dd>
     </div>
   <% end %>
