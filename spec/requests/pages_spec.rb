@@ -56,13 +56,13 @@ RSpec.describe "Pages", type: :request do
       end
 
       it "Reads the page from the API" do
-        form_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", nil, req_headers)
+        form_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, req_headers)
         expect(ActiveResource::HttpMock.requests).to include form_request
 
-        form_pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", nil, req_headers)
+        form_pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, req_headers)
         expect(ActiveResource::HttpMock.requests).to include form_pages_request
 
-        page_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", nil, req_headers)
+        page_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, req_headers)
         expect(ActiveResource::HttpMock.requests).to include page_request
       end
     end
@@ -142,13 +142,13 @@ RSpec.describe "Pages", type: :request do
       end
 
       it "Reads the page from the API" do
-        form_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", nil, req_headers)
+        form_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, req_headers)
         expect(ActiveResource::HttpMock.requests).to include form_request
 
-        form_pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2/pages", nil, req_headers)
+        form_pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2/pages", {}, req_headers)
         expect(ActiveResource::HttpMock.requests).to include form_pages_request
 
-        page_request = ActiveResource::Request.new(:put, "/api/v1/forms/2/pages/1", nil, post_headers)
+        page_request = ActiveResource::Request.new(:put, "/api/v1/forms/2/pages/1", {}, post_headers)
         expect(ActiveResource::HttpMock.requests).to include page_request
       end
 
@@ -262,9 +262,9 @@ RSpec.describe "Pages", type: :request do
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", request, form_response, 200
-          mock.get "/api/v1/forms/2/pages", request, form_pages_data.to_json, 200
-          mock.post "/api/v1/forms/2/pages", request, { id: "3" }.to_json
+          mock.get "/api/v1/forms/2", req_headers, form_response, 200
+          mock.get "/api/v1/forms/2/pages", req_headers, form_pages_data.to_json, 200
+          mock.post "/api/v1/forms/2/pages", post_headers, { id: "3" }.to_json, 200, {}
           mock.put "/api/v1/forms/2/pages/2", post_headers
         end
 

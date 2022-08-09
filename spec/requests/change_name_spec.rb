@@ -68,7 +68,7 @@ RSpec.describe "ChangeName controller", type: :request do
     end
 
     it "fetches the from from the API" do
-      expected_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", nil, req_headers)
+      expected_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, req_headers)
       expect(ActiveResource::HttpMock.requests).to include expected_request
     end
   end
