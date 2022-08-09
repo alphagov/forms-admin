@@ -78,6 +78,15 @@ yarn test
 yarn cypress
 ```
 
+## Explain how to add a user to the database
+
+In order to run this project, your database will need to have a user in it. To add one, run the follwing commands:
+
+```bash
+bin/rails console
+User.create!(name: "test", email: "test@example.com", organisation_slug:"test-org")
+```
+
 ## Explain how to use Sentry
 
 We currently have a very basic setup for Sentry in this repo for testing, which we will continue to build upon.
