@@ -3,9 +3,10 @@ en:
     heading: Edit question
     question: Question
     add_hint_text: Add hint text to help people answer the question
-    submit: Save and continue
-    or: or
-    go_to_form_overview: go to form overview
+    submit_add: Save and add next question
+    submit_edit: Save and edit next question
+    submit_save: Save question
+    go_to_form_overview: Go to form overview
     delete_question: Delete question
   pages_list:
     heading: Your questions

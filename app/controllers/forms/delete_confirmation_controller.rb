@@ -43,20 +43,6 @@ module Forms
       @form.pages.find { |p| p.next = id }
     end
 
-    def update_next_page(form, page)
-      next_page = page.next
-
-      if form.start_page == page.id
-        page_to_update = form
-        page_to_update.start_page = next_page
-      else
-        page_to_update = previous_page(page.id)
-        page_to_update.next = next_page
-      end
-
-      page_to_update
-    end
-
     def load_page_variables
       @form = Form.find(params[:form_id])
       @confirm_deletion_options = delete_confirmation_options
@@ -89,9 +75,8 @@ module Forms
 
     def delete_page(form, page)
       success_url = form_path(form)
-      page_to_update = update_next_page(form, page)
 
-      if page_to_update.save && page.destroy
+      if page.destroy
         flash[:message] = "Successfully deleted #{page.question_text}"
         redirect_to success_url, status: :see_other
       else

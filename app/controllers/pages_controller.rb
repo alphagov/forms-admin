@@ -1,43 +1,32 @@
 class PagesController < ApplicationController
+  before_action :fetch_form
+
   def new
-    @form = Form.find(params[:form_id])
     @page = Page.new(form_id: @form.id)
-    @page_number = @form.pages.length + 1
   end
 
   def create
-    @form = Form.find(params[:form_id])
     @page = Page.new(page_params(@form.id))
-    @page_number = @form.pages.length + 1
 
+    # if @form.save_page(@page)
     if @page.save
-      if @page_number > 1
-        page_to_update = previous_last_page
-        page_to_update.next = @page.id
-        page_to_update.save!
-      end
-
-      redirect_to form_path(@form)
+      handle_submit_action
     else
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
-    @form = Form.find(params[:form_id])
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    @page_number = @form.pages.index(@page) + 1
   end
 
   def update
-    @form = Form.find(params[:form_id])
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    @page_number = @form.pages.index(@page) + 1
 
     @page.load(page_params(@form.id))
 
     if @page.save
-      redirect_to form_path(@form)
+      handle_submit_action
     else
       render :edit, status: :unprocessable_entity
     end
@@ -45,11 +34,25 @@ class PagesController < ApplicationController
 
 private
 
-  def previous_last_page
-    @form.pages.find { |p| !p.has_next? }
-  end
-
   def page_params(form_id)
     params.require(:page).permit(:question_text, :question_short_name, :hint_text, :answer_type).merge(form_id:)
+  end
+
+  def fetch_form
+    @form = Form.find(params[:form_id])
+  end
+
+  def handle_submit_action
+    # if user chose to save and reload current page
+    return redirect_to edit_page_path(@form, @page) if params[:save_preview]
+
+    return redirect_to delete_page_path(@form, @page) if params[:delete]
+
+    # Default: either edit the next page or create a new one
+    if @page.has_next?
+      redirect_to edit_page_path(@form, @page.next)
+    else
+      redirect_to new_page_path(@form)
+    end
   end
 end
