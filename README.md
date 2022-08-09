@@ -82,8 +82,7 @@ yarn cypress
 In order to run this project, your database will need to have a user in it. To add one, run the follwing commands:
 
 ```bash
-bin/rails console
-User.create!(name: "test", email: "test@example.com", organisation_slug:"test-org")
+bin/rails db:seed
 ```
 
 ## Explain how to use Sentry
