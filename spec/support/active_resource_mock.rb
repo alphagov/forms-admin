@@ -33,8 +33,8 @@ class ActiveResourceMock
 
     def all(response, status)
       req_headers = {
-        "X-API-Token"=>ENV["API_KEY"],
-        "Accept"=>"application/json"
+        "X-API-Token" => ENV["API_KEY"],
+        "Accept" => "application/json",
       }
       response = [] if response.nil?
       status = 200 if status.nil?
@@ -44,8 +44,8 @@ class ActiveResourceMock
 
     def create(response, status)
       req_headers = {
-        "X-API-Token"=>ENV["API_KEY"],
-        "Accept"=>"application/json"
+        "X-API-Token" => ENV["API_KEY"],
+        "Accept" => "application/json",
       }
       response = {} if response.nil?
       status = 200 if status.nil?
@@ -55,8 +55,8 @@ class ActiveResourceMock
 
     def read(response, status)
       req_headers = {
-        "X-API-Token"=>ENV["API_KEY"],
-        "Accept"=>"application/json"
+        "X-API-Token" => ENV["API_KEY"],
+        "Accept" => "application/json",
       }
       response = {} if response.nil?
       status = 200 if status.nil?
@@ -66,8 +66,8 @@ class ActiveResourceMock
 
     def update(response, status)
       req_headers = {
-        "X-API-Token"=>ENV["API_KEY"],
-        "Accept"=>"application/json"
+        "X-API-Token" => ENV["API_KEY"],
+        "Accept" => "application/json",
       }
       response = {} if response.nil?
       status = 200 if status.nil?
@@ -77,8 +77,8 @@ class ActiveResourceMock
 
     def delete(response, status)
       req_headers = {
-        "X-API-Token"=>ENV["API_KEY"],
-        "Accept"=>"application/json"
+        "X-API-Token" => ENV["API_KEY"],
+        "Accept" => "application/json",
       }
       response = {} if response.nil?
       status = 200 if status.nil?

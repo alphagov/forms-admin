@@ -24,8 +24,8 @@ RSpec.describe "Forms", type: :request do
 
       let(:headers) do
         {
-          "X-API-Token"=>ENV["API_KEY"],
-          "Accept"=>"application/json"
+          "X-API-Token" => ENV["API_KEY"],
+          "Accept" => "application/json",
         }
       end
 
@@ -58,17 +58,24 @@ RSpec.describe "Forms", type: :request do
           start_page: 1,
         })
       end
-    
+
+      let(:req_headers) do
+        {
+          "X-API-Token" => ENV["API_KEY"],
+          "Accept" => "application/json",
+        }
+      end
+
       let(:post_headers) do
         {
-        "X-API-Token"=>ENV["API_KEY"],
-        "Content-Type"=>"application/json"
+          "X-API-Token" => ENV["API_KEY"],
+          "Content-Type" => "application/json",
         }
       end
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", {}, form.to_json, 200
+          mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
         end
 
         get delete_form_path(form_id: 2)

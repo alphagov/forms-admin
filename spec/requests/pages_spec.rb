@@ -40,8 +40,8 @@ RSpec.describe "Pages", type: :request do
 
       let(:req_headers) do
         {
-        "X-API-Token"=>ENV["API_KEY"],
-        "Accept"=>"application/json"
+          "X-API-Token" => ENV["API_KEY"],
+          "Accept" => "application/json",
         }
       end
 
@@ -112,15 +112,15 @@ RSpec.describe "Pages", type: :request do
 
       let(:req_headers) do
         {
-        "X-API-Token"=>ENV["API_KEY"],
-        "Accept"=>"application/json"
+          "X-API-Token" => ENV["API_KEY"],
+          "Accept" => "application/json",
         }
       end
-    
+
       let(:post_headers) do
         {
-        "X-API-Token"=>ENV["API_KEY"],
-        "Content-Type"=>"application/json"
+          "X-API-Token" => ENV["API_KEY"],
+          "Content-Type" => "application/json",
         }
       end
 
@@ -175,15 +175,15 @@ RSpec.describe "Pages", type: :request do
 
     let(:req_headers) do
       {
-      "X-API-Token"=>ENV["API_KEY"],
-      "Accept"=>"application/json"
+        "X-API-Token" => ENV["API_KEY"],
+        "Accept" => "application/json",
       }
     end
-  
+
     let(:post_headers) do
       {
-      "X-API-Token"=>ENV["API_KEY"],
-      "Content-Type"=>"application/json"
+        "X-API-Token" => ENV["API_KEY"],
+        "Content-Type" => "application/json",
       }
     end
 
@@ -248,15 +248,15 @@ RSpec.describe "Pages", type: :request do
 
       let(:req_headers) do
         {
-        "X-API-Token"=>ENV["API_KEY"],
-        "Accept"=>"application/json"
+          "X-API-Token" => ENV["API_KEY"],
+          "Accept" => "application/json",
         }
       end
-    
+
       let(:post_headers) do
         {
-        "X-API-Token"=>ENV["API_KEY"],
-        "Content-Type"=>"application/json"
+          "X-API-Token" => ENV["API_KEY"],
+          "Content-Type" => "application/json",
         }
       end
 
@@ -308,10 +308,17 @@ RSpec.describe "Pages", type: :request do
         })
       end
 
+      let(:req_headers) do
+        {
+          "X-API-Token" => ENV["API_KEY"],
+          "Accept" => "application/json",
+        }
+      end
+
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", {}, form.to_json, 200
-          mock.get "/api/v1/forms/2/pages/1", {}, page.to_json, 200
+          mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
+          mock.get "/api/v1/forms/2/pages/1", req_headers, page.to_json, 200
         end
 
         get delete_page_path(form_id: 2, page_id: 1)
@@ -355,13 +362,27 @@ RSpec.describe "Pages", type: :request do
         [page].to_json
       end
 
+      let(:req_headers) do
+        {
+          "X-API-Token" => ENV["API_KEY"],
+          "Accept" => "application/json",
+        }
+      end
+
+      let(:post_headers) do
+        {
+          "X-API-Token" => ENV["API_KEY"],
+          "Content-Type" => "application/json",
+        }
+      end
+
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", {}, form, 200
-          mock.get "/api/v1/forms/2/pages", {}, form_pages_response, 200
-          mock.get "/api/v1/forms/2/pages/1", {}, page.to_json, 200
-          mock.put "/api/v1/forms/2"
-          mock.delete "/api/v1/forms/2/pages/1", {}, {}, 200
+          mock.get "/api/v1/forms/2", req_headers, form, 200
+          mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
+          mock.get "/api/v1/forms/2/pages/1", req_headers, page.to_json, 200
+          mock.put "/api/v1/forms/2", post_headers
+          mock.delete "/api/v1/forms/2/pages/1", req_headers, {}, 200
         end
 
         delete destroy_page_path(form_id: 2, page_id: 1, forms_delete_confirmation_form: { confirm_deletion: "true" })

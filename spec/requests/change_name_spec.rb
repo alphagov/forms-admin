@@ -21,23 +21,23 @@ RSpec.describe "ChangeName controller", type: :request do
 
   let(:req_headers) do
     {
-    "X-API-Token"=>ENV["API_KEY"],
-    "Accept"=>"application/json"
+      "X-API-Token" => ENV["API_KEY"],
+      "Accept" => "application/json",
     }
   end
 
   let(:post_headers) do
     {
-    "X-API-Token"=>ENV["API_KEY"],
-    "Content-Type"=>"application/json"
+      "X-API-Token" => ENV["API_KEY"],
+      "Content-Type" => "application/json",
     }
   end
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms/2", {}, form_response_data, 200
-      mock.post "/api/v1/forms", {}, { id: 2 }.to_json, 200
-      mock.put "/api/v1/forms/2"
+      mock.get "/api/v1/forms/2", req_headers, form_response_data, 200
+      mock.post "/api/v1/forms", post_headers, { id: 2 }.to_json, 200
+      mock.put "/api/v1/forms/2", post_headers
     end
   end
 
@@ -47,6 +47,7 @@ RSpec.describe "ChangeName controller", type: :request do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/2", req_headers, form_response_data, 200
         mock.put "/api/v1/forms/2", post_headers
+        mock.post "/api/v1/forms", post_headers, { id: 2 }.to_json, 200
       end
       post new_form_path, params: { forms_change_name_form: { name: form_data[:name] } }
     end

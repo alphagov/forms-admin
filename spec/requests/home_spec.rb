@@ -14,8 +14,8 @@ RSpec.describe "Home", type: :request do
 
       let(:headers) do
         {
-        "X-API-Token"=>ENV["API_KEY"],
-        "Accept"=>"application/json"
+          "X-API-Token" => ENV["API_KEY"],
+          "Accept" => "application/json",
         }
       end
 
