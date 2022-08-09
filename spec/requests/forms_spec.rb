@@ -41,7 +41,7 @@ RSpec.describe "Forms", type: :request do
       it "Reads the form from the API" do
         expect(form).to have_been_read
 
-        pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", nil, headers)
+        pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
         expect(ActiveResource::HttpMock.requests).to include pages_request
       end
     end
