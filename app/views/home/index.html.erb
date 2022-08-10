@@ -10,18 +10,13 @@
 <%= govuk_start_button(text: "Create a form", href: new_form_path) %>
 
 <h2 class="govuk-heading-m">Your forms</h2>
-<dl class="govuk-summary-list">
-  <% @forms.each do |form| %>
-    <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key govuk-!-width-full govuk-!-font-weight-regular">
-        <p class="govuk-body"><%= form.name %></p>
-      </dt>
-      <dd class="govuk-summary-list__actions">
-        <%= link_to form_path(form.id), class: "govuk-link govuk-link--no-visited-state" do %>
-          Edit <span class="govuk-visually-hidden"> <%= form.name %></span>
-        <% end %><br>
-        <a class="govuk-link govuk-link--no-visited-state" href="<%= ENV['RUNNER_BASE'] %>/form/<%= form.id %>">View in runner<span class="govuk-visually-hidden">: <%= form.name %></span></a>
-      </dd>
-    </div>
-  <% end %>
-</dl>
+
+<%= govuk_summary_list do |summary_list|
+  @forms.each do |form|
+    summary_list.row do |row|
+      row.key { form.name }
+      row.action(text: "Edit", href: form_path(form.id), visually_hidden_text: form.name )
+      row.action(text: "View in runner", href: "#{ENV['RUNNER_BASE']}/form/#{form.id}", visually_hidden_text: ": #{form.name}")
+    end
+  end
+end %>
