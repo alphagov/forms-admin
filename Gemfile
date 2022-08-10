@@ -85,6 +85,10 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+
+  # Code coverage reporter
+  gem "simplecov", "~> 0.21.2", require: false
+
   gem "webdrivers"
   gem "webmock"
 end
