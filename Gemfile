@@ -67,6 +67,7 @@ group :development, :test do
   gem "rspec-rails", ">= 3.9.0"
   # gem "rubocop", "~> 1.26"
   # gem "rubocop-rails", "~> 2.14"
+  gem "i18n-tasks", "~> 1.0.11"
   gem "rails-controller-testing"
   gem "rubocop-govuk", require: false
 end
