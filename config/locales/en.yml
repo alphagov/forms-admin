@@ -1,5 +1,6 @@
 en:
   page_titles:
+    home: Home
     change_name_form: Name your form
     new_page_form: Edit question
     error_prefix: "Error: "
