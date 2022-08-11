@@ -45,6 +45,11 @@ jobs:
       # Add or replace test runners here
       - name: Run tests
         run: bin/rake
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   lint:
     runs-on: ubuntu-latest
