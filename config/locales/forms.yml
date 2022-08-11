@@ -2,7 +2,6 @@ en:
   forms:
     delete_form: Delete form
     form_overview:
-      back: Back
       title: Form overview
       add_question: Add a question
       form_name: Form name
