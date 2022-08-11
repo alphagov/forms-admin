@@ -2,7 +2,7 @@
 applications:
 - name: forms-admin-((PAAS_ENVIRONMENT))
   memory: 256M
-  command: rake db:migrate && rake assets:precompile && bin/rails server
+  command: rake db:migrate && bin/rails server
   services:
     - forms-admin-((PAAS_ENVIRONMENT))-db
     - forms-admin-((PAAS_ENVIRONMENT))-splunk
