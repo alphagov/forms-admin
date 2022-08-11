@@ -3,6 +3,7 @@ en:
     delete_form: Delete form
     form_overview:
       title: Form overview
+      your_questions: Your questions
       add_question: Add a question
       form_name: Form name
       edit: Edit
