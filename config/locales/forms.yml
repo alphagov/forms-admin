@@ -1,10 +1,11 @@
+---
 en:
   forms:
     delete_form: Delete form
     form_overview:
+      add_question: Add a question
+      edit: Edit
+      form_name: Form name
+      submission_email: Submission email
       title: Form overview
       your_questions: Your questions
-      add_question: Add a question
-      form_name: Form name
-      edit: Edit
-      submission_email: Submission email
