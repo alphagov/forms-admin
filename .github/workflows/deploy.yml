@@ -13,14 +13,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Install Ruby and gems
-        uses: ruby/setup-ruby@08245253a76fa4d1e459b7809579c62bd9eb718a # v1.111.0
-        with:
-          bundler-cache: true
-
-      - name: Precompile assets
-        run: bundle exec rake assets:precompile
-
       - name: Install cloudfoundry
         shell: bash
         id: install-cf-cli
