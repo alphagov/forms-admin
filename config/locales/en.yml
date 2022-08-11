@@ -11,3 +11,8 @@ en:
     before_link: This is a new service, your
     link: feedback
     after_link: will help us improve it.
+  skip_to_main_content: Skip to main content
+  footer:
+    licence_link_text: Open Government Licence v3.0
+    licence_main_text_html: All content is available under the <a class="govuk-footer__link" href="%{url}" rel="license">%{link_text}</a>, except where otherwise stated
+    crown_copyright: © Crown copyright
