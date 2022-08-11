@@ -1,7 +1,8 @@
+---
 en:
   home:
-    main_heading: GOV.UK Forms
-    your_forms: Your forms
     create_a_form: Create a form
     edit: Edit
+    main_heading: GOV.UK Forms
     preview: View in runner
+    your_forms: Your forms
