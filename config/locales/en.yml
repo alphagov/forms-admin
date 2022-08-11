@@ -2,6 +2,7 @@ en:
   page_titles:
     home: Home
     change_name_form: Name your form
+    change_email_form: What email address should form responses be sent to?
     new_page_form: Edit question
     error_prefix: "Error: "
     success_prefix: "Success: "
