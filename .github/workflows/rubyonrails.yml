@@ -37,6 +37,8 @@ jobs:
         run: yarn
       - name: Run Frontend build
         run: yarn build & yarn build:css
+      - name: Setup sonarqube
+        uses: warchant/setup-sonar-scanner@v3
       # Add or replace database setup steps here
       - name: Create db
         run: bin/rails db:migrate
@@ -45,11 +47,17 @@ jobs:
       # Add or replace test runners here
       - name: Run tests
         run: bin/rake
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+      - name: Keep Code Coverage Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: Code_Coverage
+          path: ${{ github.workspace }}/coverage/*
+
+      - name: Run sonarqube
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: sonar-scanner
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
   lint:
     runs-on: ubuntu-latest
