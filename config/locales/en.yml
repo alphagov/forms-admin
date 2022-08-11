@@ -5,7 +5,6 @@ en:
     change_email_form: What email address should form responses be sent to?
     new_page_form: Edit question
     error_prefix: "Error: "
-    success_prefix: "Success: "
     not_found: Page not found
     internal_server_error: Sorry, there is a problem with the service
     service_unavailable: Sorry, the service is unavailable
