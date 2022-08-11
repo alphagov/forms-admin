@@ -234,6 +234,10 @@ GEM
       activesupport (= 7.0.3.1)
       bundler (>= 1.15.0)
       railties (= 7.0.3.1)
+    rails-controller-testing (1.0.5)
+      actionpack (>= 5.0.1.rc1)
+      actionview (>= 5.0.1.rc1)
+      activesupport (>= 5.0.1.rc1)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
@@ -380,6 +384,7 @@ DEPENDENCIES
   pry
   puma (~> 5.6.4)
   rails (= 7.0.3.1)
+  rails-controller-testing
   rspec-rails (>= 3.9.0)
   rubocop-govuk
   selenium-webdriver
