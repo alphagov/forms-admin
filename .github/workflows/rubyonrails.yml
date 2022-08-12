@@ -28,6 +28,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       # Add or replace dependency steps here
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@08245253a76fa4d1e459b7809579c62bd9eb718a # v1.111.0
@@ -37,8 +39,7 @@ jobs:
         run: yarn
       - name: Run Frontend build
         run: yarn build & yarn build:css
-      - name: Setup sonarqube
-        uses: warchant/setup-sonar-scanner@v3
+
       # Add or replace database setup steps here
       - name: Create db
         run: bin/rails db:migrate
@@ -53,11 +54,11 @@ jobs:
           name: Code_Coverage
           path: ${{ github.workspace }}/coverage/*
 
-      - name: Run sonarqube
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: sonar-scanner
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
 
   lint:
