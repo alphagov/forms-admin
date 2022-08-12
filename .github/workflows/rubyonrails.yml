@@ -56,7 +56,7 @@ jobs:
       - name: Run sonarqube
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: sonar-scanner -x
+        run: sonar-scanner -X
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
 
