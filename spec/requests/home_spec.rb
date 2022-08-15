@@ -6,10 +6,31 @@ RSpec.describe "Home", type: :request do
       let(:forms_response) do
         [{
           id: 2,
-          name: "Form name",
+          name: "Form",
           submission_email: "submission@email.com",
           org: "test-org",
-        }]
+        },
+         {
+           id: 3,
+           name: "Another form",
+           submission_email: "submission@email.com",
+           org: "test-org",
+         }]
+      end
+
+      let(:forms_response_alphabetised) do
+        [{
+          id: 3,
+          name: "Another form",
+          submission_email: "submission@email.com",
+          org: "test-org",
+        },
+         {
+           id: 2,
+           name: "Form",
+           submission_email: "submission@email.com",
+           org: "test-org",
+         }]
       end
 
       let(:headers) do
@@ -29,6 +50,11 @@ RSpec.describe "Home", type: :request do
       it "Reads the forms from the API" do
         forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?org=test-org", {}, headers)
         expect(ActiveResource::HttpMock.requests).to include forms_request
+      end
+
+      it "Alphabetises the response" do
+        forms = assigns(:forms)
+        expect(forms.to_json).to eq forms_response_alphabetised.to_json
       end
     end
   end

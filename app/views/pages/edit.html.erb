@@ -7,9 +7,19 @@
       <p class="govuk-body"><%= flash[:message] %></p>
     <% end %>
 
-    <span class="govuk-caption-l"><%= t("pages.question") %> <%= @page_number %></span>
+    <span class="govuk-caption-l"><%= t("pages.question") %> <%= @page.number(@form) %></span>
     <h1 class="govuk-heading-l"><%= t("pages.heading") %></h1>
-    <%= render :partial => 'form', locals: {form: @form, page: @page, url: update_page_path(@form), method: 'PATCH'} %>
-    <%= govuk_button_link_to t("pages.delete_question"), delete_page_path(@form, @page), warning: true %>
+
+    <%= form_with model: [@form, @page], url: update_page_path(@form, @page) do |f| %>
+      <%= render :partial => 'form', locals: { f: f } %>
+      <%= f.govuk_submit @page.has_next? ? t("pages.submit_edit") : t("pages.submit_add") do %>
+        <%= f.govuk_submit t('pages.submit_save'), name: :save_preview, secondary: true %>
+      <% end %>
+      <%= f.govuk_submit t('pages.delete_question'), name: :delete, warning: true %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= link_to t('pages.go_to_form_overview'), form_path(@form), class: "govuk-link govuk-link--no-visited-state" %>
+    </p>
   </div>
 </div>

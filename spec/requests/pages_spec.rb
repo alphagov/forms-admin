@@ -157,8 +157,8 @@ RSpec.describe "Pages", type: :request do
         expect(ActiveResource::HttpMock.requests).to include(expected_request)
       end
 
-      it "Redirects you to the page list" do
-        expect(response).to redirect_to(form_path(id: 2))
+      it "Redirects you to the current edit page" do
+        expect(response).to redirect_to(new_page_path(form_id: 2))
       end
     end
   end
@@ -213,73 +213,12 @@ RSpec.describe "Pages", type: :request do
       end
 
       it "Redirects you to the page list" do
-        expect(response).to redirect_to(form_path(id: 2))
+        expect(response).to redirect_to(new_page_path(form_id: 2))
       end
 
       it "Creates the page on the API" do
         expected_request = ActiveResource::Request.new(:post, "/api/v1/forms/2/pages", new_page_data.to_json, post_headers)
         expect(ActiveResource::HttpMock.requests).to include(expected_request)
-      end
-    end
-
-    describe "Given multiple pages exist" do
-      let(:form_pages_data) do
-        [
-          Page.new(
-            id: 1,
-            question_text: "What is your work address?",
-            question_short_name: "Work address",
-            hint_text: "This should be the location stated in your contract.",
-            answer_type: "address",
-            next: "2",
-            form_id: 2,
-          ),
-          Page.new(
-            id: 2,
-            question_text: "What is your work address?",
-            question_short_name: "Work address",
-            hint_text: "This should be the location stated in your contract.",
-            answer_type: "address",
-            next: nil,
-            form_id: 2,
-          ),
-        ]
-      end
-
-      let(:req_headers) do
-        {
-          "X-API-Token" => ENV["API_KEY"],
-          "Accept" => "application/json",
-        }
-      end
-
-      let(:post_headers) do
-        {
-          "X-API-Token" => ENV["API_KEY"],
-          "Content-Type" => "application/json",
-        }
-      end
-
-      before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form_response, 200
-          mock.get "/api/v1/forms/2/pages", req_headers, form_pages_data.to_json, 200
-          mock.post "/api/v1/forms/2/pages", post_headers, { id: "3" }.to_json, 200, {}
-          mock.put "/api/v1/forms/2/pages/2", post_headers
-        end
-
-        post create_page_path(2), params: { page: {
-          question_text: "What is your home address?",
-          question_short_name: "Home address",
-          hint_text: "This should be the location stated in your contract.",
-          answer_type: "address",
-        } }
-      end
-
-      it "Updates the previous last page to point to the new page" do
-        second_page = form_pages_data.last
-        second_page.next = "3"
-        expect(second_page).to have_been_updated
       end
     end
   end

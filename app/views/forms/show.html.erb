@@ -1,22 +1,20 @@
 <% set_page_title(@form.name) %>
 
-<% content_for :back_link do %>
-  <%= link_to "Back", root_path, class: "govuk-back-link" %>
-<% end %>
+<% content_for :back_link, govuk_back_link_to(root_path) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l"><%= @form.name %></span>
-    <h1 class="govuk-heading-l">Form overview</h1>
+    <h1 class="govuk-heading-l"><%= t("forms.form_overview.title") %></h1>
 
     <% if flash[:message] %>
       <p class="govuk-body"><%= flash[:message] %></p>
     <% end %>
 
-    <%= link_to "Add a question", new_page_path(@form), class: "govuk-button govuk-!-margin-bottom-3 govuk-!-margin-top-3", 'data-module':"govuk-button", draggable:"false", role: "button" %>
+    <%= link_to t("forms.form_overview.add_question"), new_page_path(@form), class: "govuk-button govuk-!-margin-bottom-3 govuk-!-margin-top-3", 'data-module':"govuk-button", draggable:"false", role: "button" %>
 
     <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0">
-      Form name
+      <%= t("forms.form_overview.form_name") %>
     </h2>
 
     <dl class="govuk-summary-list">
@@ -26,14 +24,14 @@
         </dt>
         <dd class="govuk-summary-list__actions">
           <%= link_to change_form_name_path(@form), class: "govuk-link govuk-link--no-visited-state" do %>
-              Edit <span class="govuk-visually-hidden">form name</span>
+              <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= t("forms.form_overview.form_name") %></span>
           <% end %>
         </dd>
       </div>
     </dl>
 
     <% if @pages.any? %>
-      <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0"><%= t("pages_list.heading") %></h2>
+      <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0"><%= t("forms.form_overview.your_questions") %></h2>
       <% @pages.each do |page| %>
         <dl class="govuk-summary-list">
           <div class="govuk-summary-list__row">
@@ -42,7 +40,7 @@
             </dt>
             <dd class="govuk-summary-list__actions">
               <%= link_to edit_page_path(@form,page), class: "govuk-link govuk-link--no-visited-state" do %>
-                <%= t("pages_list.edit") %> <span class="govuk-visually-hidden"><%= page.question_text %></span>
+              <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= page.question_text %></span>
               <% end %>
             </dd>
           </div>
@@ -61,7 +59,7 @@
         </dt>
         <dd class="govuk-summary-list__actions">
           <%= link_to change_form_email_path(@form.id), class: "govuk-link govuk-link--no-visited-state" do %>
-              Edit<span class="govuk-visually-hidden"> submission email</span>
+              <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= t("forms.form_overview.submission_email") %></span>
           <% end %>
         </dd>
       </div>
