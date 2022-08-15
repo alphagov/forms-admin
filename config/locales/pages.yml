@@ -1,56 +1,54 @@
+---
 en:
-  pages:
-    heading: Edit question
-    question: Question
-    add_hint_text: Hint text (optional)
-    submit_add: Save and add next question
-    submit_edit: Save and edit next question
-    submit_save: Save question
-    go_to_form_overview: Go to form overview
-    delete_question: Delete question
-  pages_list:
-    heading: Your questions
-    edit: Edit
-    legend:
-      page:
-        answer_type: What kind of answer do you need to this question?
-    hint:
-      page:
-        question_text: |-
-          Ask a question the way you would in person. For example ‘What is your
-          address?’
-        question_short_name: |-
-          The short name will be used when the form’s questions are all displayed in a list. Use a short descriptive name. For example ‘Address’.
-        hint_text: |-
-          Use hint text to help people answer the question. For example, to explain the format the answer should be in, or where to find the information you’ve asked for.
-        answer_type: |-
-          The answer will be checked to make sure it’s in the selected format.
   activemodel:
     errors:
       models:
         page:
           attributes:
-            question_text:
-              blank: Question text can't be blank
             answer_type:
               blank: Answer type can't be blank
+            question_text:
+              blank: Question text can't be blank
   helpers:
+    page:
+      answer_type_options:
+        descriptions:
+          address: To collect an address with separate fields for line 1, line 2, town or city, county and postcode
+          date: Requires a day, month and year
+          email: Requires an answer in the format of an email address
+          national_insurance_number: Requires an answer in the format of a National Insurance number
+          phone_number: Requires an answer in the format of a phone number
+          single_line: For a short answer
+        names:
+          address: Address
+          date: Date
+          email: Email address
+          national_insurance_number: National Insurance number
+          phone_number: Phone number
+          single_line: Single line of text
+      hint_text: Hint text (optional)
+      question_short_name: Question short name (optional)
+      question_text: Question text
+  pages:
+    add_hint_text: Hint text (optional)
+    delete_question: Delete question
+    go_to_form_overview: Go to form overview
+    heading: Edit question
+    question: Question
+    submit_add: Save and add next question
+    submit_edit: Save and edit next question
+    submit_save: Save question
+  pages_list:
+    edit: Edit
+    heading: Your questions
+    hint:
       page:
-        question_text: Question text
-        question_short_name: Question short name (optional)
-        hint_text: Hint text (optional)
-        answer_type_options:
-          names:
-            single_line: Single line of text
-            address: Address
-            date: Date
-            email: Email address
-            national_insurance_number: National Insurance number
-            phone_number: Phone number
-          descriptions:
-            single_line: For a short answer
-            address: To collect an address with separate fields for line 1, line 2, town or city, county and postcode
-            date: Requires a day, month and year
-            email: Requires an answer in the format of an email address
-            national_insurance_number: Requires an answer in the format of a National Insurance number
-            phone_number: Requires an answer in the format of a phone number
+        answer_type: The answer will be checked to make sure it’s in the selected format.
+        hint_text: Use hint text to help people answer the question. For example, to explain the format the answer should be in, or where to find the information you’ve asked for.
+        question_short_name: The short name will be used when the form’s questions are all displayed in a list. Use a short descriptive name. For example ‘Address’.
+        question_text: |-
+          Ask a question the way you would in person. For example ‘What is your
+          address?’
+    legend:
+      page:
+        answer_type: What kind of answer do you need to this question?

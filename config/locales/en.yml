@@ -1,14 +1,5 @@
 ---
 en:
-  activemodel:
-    errors:
-      models:
-        page:
-          attributes:
-            answer_type:
-              blank: Answer type can't be blank
-            question_text:
-              blank: Question text can't be blank
   footer:
     crown_copyright: "© Crown copyright"
     licence_link_text: Open Government Licence v3.0
@@ -73,18 +64,6 @@ en:
     new_page_form: Edit question
     not_found: Page not found
     service_unavailable: Sorry, the service is unavailable
-  pages:
-    add_hint_text: Hint text (optional)
-    delete_question: Delete question
-    go_to_form_overview: Go to form overview
-    heading: Edit question
-    question: Question
-    submit_add: Save and add next question
-    submit_edit: Save and edit next question
-    submit_save: Save question
-  pages_list:
-    edit: Edit
-    heading: Your questions
   phase_banner:
     after_link: will help us improve it.
     before_link: This is a new service, your
