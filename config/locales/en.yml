@@ -1,12 +1,69 @@
 ---
 en:
+  activemodel:
+    errors:
+      models:
+        page:
+          attributes:
+            answer_type:
+              blank: Answer type can't be blank
+            question_text:
+              blank: Question text can't be blank
   footer:
     crown_copyright: "© Crown copyright"
     licence_link_text: Open Government Licence v3.0
     licence_main_text_html: All content is available under the <a class="govuk-footer__link" href="%{url}" rel="license">%{link_text}</a>, except where otherwise stated
+  forms:
+    delete_form: Delete form
+    form_overview:
+      add_question: Add a question
+      edit: Edit
+      form_name: Form name
+      submission_email: Submission email
+      title: Form overview
+      your_questions: Your questions
   forms_delete_confirmation_form:
     confirm_deletion_form: Are you sure you want to delete this form?
     confirm_deletion_page: Are you sure you want to delete this page?
+  helpers:
+    hint:
+      page:
+        answer_type: The answer will be checked to make sure it’s in the selected format.
+        hint_text: Use hint text to help people answer the question. For example, to explain the format the answer should be in, or where to find the information you’ve asked for.
+        question_short_name: The short name will be used when the form’s questions are all displayed in a list. Use a short descriptive name. For example ‘Address’.
+        question_text: |-
+          Ask a question the way you would in person. For example ‘What is your
+          address?’
+    label:
+      page:
+        answer_type_options:
+          address: Address
+          date: Date
+          email: Email address
+          national_insurance_number: National Insurance number
+          phone_number: Phone number
+          single_line: Single line of text
+        hint_text: Hint text (optional)
+        question_short_name: Question short name (optional)
+        question_text: Question text
+    legend:
+      page:
+        answer_type: What kind of answer do you need to this question?
+  home:
+    create_a_form: Create a form
+    edit: Edit
+    main_heading: GOV.UK Forms
+    preview: View in runner
+    your_forms: Your forms
+  internal_server_error:
+    body: Please try again later.
+    title: Sorry, there is a problem with the service
+  not_found:
+    body: |
+      If you typed the web address, check it is correct.
+
+      If you pasted the web address, check you copied the entire address.
+    title: Page not found
   page_titles:
     change_email_form: What email address should form responses be sent to?
     change_name_form: Name your form
@@ -16,8 +73,23 @@ en:
     new_page_form: Edit question
     not_found: Page not found
     service_unavailable: Sorry, the service is unavailable
+  pages:
+    add_hint_text: Hint text (optional)
+    delete_question: Delete question
+    go_to_form_overview: Go to form overview
+    heading: Edit question
+    question: Question
+    submit_add: Save and add next question
+    submit_edit: Save and edit next question
+    submit_save: Save question
+  pages_list:
+    edit: Edit
+    heading: Your questions
   phase_banner:
     after_link: will help us improve it.
     before_link: This is a new service, your
     link: feedback
+  service_unavailable:
+    body: Contact the GOV.UK Forms team if you need to make changes to your forms or speak to someone about the service.
+    title: Sorry, the service is unavailable
   skip_to_main_content: Skip to main content
