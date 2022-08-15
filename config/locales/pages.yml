@@ -38,17 +38,3 @@ en:
     submit_add: Save and add next question
     submit_edit: Save and edit next question
     submit_save: Save question
-  pages_list:
-    edit: Edit
-    heading: Your questions
-    hint:
-      page:
-        answer_type: The answer will be checked to make sure it’s in the selected format.
-        hint_text: Use hint text to help people answer the question. For example, to explain the format the answer should be in, or where to find the information you’ve asked for.
-        question_short_name: The short name will be used when the form’s questions are all displayed in a list. Use a short descriptive name. For example ‘Address’.
-        question_text: |-
-          Ask a question the way you would in person. For example ‘What is your
-          address?’
-    legend:
-      page:
-        answer_type: What kind of answer do you need to this question?
