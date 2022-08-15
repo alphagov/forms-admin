@@ -9,14 +9,16 @@
 
 <%= govuk_start_button(text: t("home.create_a_form"), href: new_form_path) %>
 
-<h2 class="govuk-heading-m"><%= t("home.your_forms") %></h2>
+<% if @forms.any? %>
+  <h2 class="govuk-heading-m"><%= t("home.your_forms") %></h2>
 
-<%= govuk_summary_list do |summary_list|
-  @forms.each do |form|
-    summary_list.row do |row|
-      row.key { form.name }
-      row.action(text: t("home.edit"), href: form_path(form.id), visually_hidden_text: form.name )
-      row.action(text: t("home.preview"), href: "#{ENV['RUNNER_BASE']}/form/#{form.id}", visually_hidden_text: ": #{form.name}")
+  <%= govuk_summary_list do |summary_list|
+    @forms.each do |form|
+      summary_list.row do |row|
+        row.key { form.name }
+        row.action(text: t("home.edit"), href: form_path(form.id), visually_hidden_text: form.name )
+        row.action(text: t("home.preview"), href: "#{ENV['RUNNER_BASE']}/form/#{form.id}", visually_hidden_text: ": #{form.name}")
+      end
     end
-  end
-end %>
+  end %>
+<% end %>
