@@ -145,9 +145,6 @@ RSpec.describe "Pages", type: :request do
         form_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, req_headers)
         expect(ActiveResource::HttpMock.requests).to include form_request
 
-        form_pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2/pages", {}, req_headers)
-        expect(ActiveResource::HttpMock.requests).to include form_pages_request
-
         page_request = ActiveResource::Request.new(:put, "/api/v1/forms/2/pages/1", {}, post_headers)
         expect(ActiveResource::HttpMock.requests).to include page_request
       end
