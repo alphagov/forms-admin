@@ -5,7 +5,7 @@
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
 <!-- Hint text -->
-<%= f.govuk_text_field :hint_text, label: { class: 'govuk-label--m', text: t("pages.add_hint_text")  } %>
+<%= f.govuk_text_field :hint_text, label: { size: 'm' } %>
 
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
@@ -13,7 +13,7 @@
       :answer_type,
       @answer_types,
       ->(option) { option },
-      ->(option) { I18n.t('helpers.page.answer_type_options.names.' + option) },
-      ->(option) { I18n.t('helpers.page.answer_type_options.descriptions.' + option) },
+      ->(option) { I18n.t('helpers.label.page.answer_type_options.names.' + option) },
+      ->(option) { I18n.t('helpers.label.page.answer_type_options.descriptions.' + option) },
       small: true
 )  %>
