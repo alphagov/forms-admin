@@ -1,5 +1,14 @@
 ---
 en:
+  activemodel:
+    errors:
+      models:
+        page:
+          attributes:
+            answer_type:
+              blank: Answer type can't be blank
+            question_text:
+              blank: Question text can't be blank
   footer:
     crown_copyright: "© Crown copyright"
     licence_link_text: Open Government Licence v3.0
@@ -28,12 +37,20 @@ en:
     label:
       page:
         answer_type_options:
-          address: Address
-          date: Date
-          email: Email address
-          national_insurance_number: National Insurance number
-          phone_number: Phone number
-          single_line: Single line of text
+          descriptions:
+            address: To collect an address with separate fields for line 1, line 2, town or city, county and postcode
+            date: Requires a day, month and year
+            email: Requires an answer in the format of an email address
+            national_insurance_number: Requires an answer in the format of a National Insurance number
+            phone_number: Requires an answer in the format of a phone number
+            single_line: For a short answer
+          names:
+            address: Address
+            date: Date
+            email: Email address
+            national_insurance_number: National Insurance number
+            phone_number: Phone number
+            single_line: Single line of text
         hint_text: Hint text (optional)
         question_short_name: Question short name (optional)
         question_text: Question text
@@ -64,6 +81,14 @@ en:
     new_page_form: Edit question
     not_found: Page not found
     service_unavailable: Sorry, the service is unavailable
+  pages:
+    delete_question: Delete question
+    go_to_form_overview: Go to form overview
+    heading: Edit question
+    question: Question
+    submit_add: Save and add next question
+    submit_edit: Save and edit next question
+    submit_save: Save question
   phase_banner:
     after_link: will help us improve it.
     before_link: This is a new service, your
