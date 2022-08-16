@@ -5,19 +5,15 @@
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
 <!-- Hint text -->
-<%= f.govuk_text_field :hint_text, label: { class: 'govuk-label--m', text: t("pages.add_hint_text")  } %>
+<%= f.govuk_text_field :hint_text, label: { size: 'm' } %>
 
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
-<!-- Answer type -->
-<% answer_types= [
-  OpenStruct.new(value: 'single_line'),
-  OpenStruct.new(value: 'address'),
-  OpenStruct.new(value: 'date'),
-  OpenStruct.new(value: 'email'),
-  OpenStruct.new(value: 'national_insurance_number'),
-  OpenStruct.new(value: 'phone_number')
-]  %>
-
-<%= f.govuk_collection_radio_buttons :answer_type, answer_types, :value, small: true %>
-
+<%= f.govuk_collection_radio_buttons(
+      :answer_type,
+      @answer_types,
+      ->(option) { option },
+      ->(option) { I18n.t('helpers.label.page.answer_type_options.names.' + option) },
+      ->(option) { I18n.t('helpers.label.page.answer_type_options.descriptions.' + option) },
+      small: true
+)  %>
