@@ -14,3 +14,4 @@ applications:
     GOVUK_APP_DOMAIN: ((GOVUK_APP_DOMAIN))
     API_BASE: ((API_BASE))
     RUNNER_BASE: ((RUNNER_BASE))
+    API_KEY: ((API_KEY))
