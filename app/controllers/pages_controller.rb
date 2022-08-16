@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  before_action :fetch_form
+  before_action :fetch_form, :answer_types
 
   def new
     @page = Page.new(form_id: @form.id)
@@ -54,5 +54,9 @@ private
     else
       redirect_to new_page_path(@form)
     end
+  end
+
+  def answer_types
+    @answer_types = %w[ single_line address date email national_insurance_number phone_number ]
   end
 end

@@ -9,13 +9,9 @@
 
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
-<!-- Answer type -->
-<% answer_types= %w[ single_line address date email national_insurance_number phone_number ]  %>
-
-<%# <%= f.govuk_collection_radio_buttons :answer_type, answer_types, :value, small: true %1> %>
 <%= f.govuk_collection_radio_buttons(
       :answer_type,
-      answer_types,
+      @answer_types,
       ->(option) { option },
       ->(option) { I18n.t('helpers.page.answer_type_options.names.' + option) },
       ->(option) { I18n.t('helpers.page.answer_type_options.descriptions.' + option) },
