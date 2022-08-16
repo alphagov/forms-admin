@@ -41,6 +41,7 @@ bin/setup
 | `API_BASE`            | The base url for the API - E.g. `http://localhost:9090`            |
 | `RUNNER_BASE`         | The base url for the Runner - E.g. `http://localhost:3001`         |
 | `SERVICE_UNAVAILABLE` | All pages will render 'Service unavailable' if set to `true`       |
+| `API_KEY`             | The API key for authentication                                     |
 
 ### Running the app
 
@@ -74,6 +75,14 @@ bin/rake
 yarn test
 # To run the end-to-end tests, run
 yarn cypress
+```
+
+## Explain how to add a user to the database
+
+In order to run this project, your database will need to have a user in it. To add one, run the follwing commands:
+
+```bash
+bin/rails db:seed
 ```
 
 ## Explain how to use Sentry
