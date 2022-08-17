@@ -5,7 +5,7 @@ describe('Edit form email page', function () {
 
   it('contains a populated form field for the form email', function () {
     cy.get('form')
-      .findByLabelText('What email address should form responses be sent to?')
+      .findByLabelText('What email address should completed forms be sent to?')
       .should('exist')
       .should('have.value', 'submission@email.com')
   })
