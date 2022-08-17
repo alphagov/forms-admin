@@ -3,7 +3,7 @@ Sentry.init do |config|
   config.breadcrumbs_logger = %i[active_support_logger http_logger]
   config.debug = true
   config.traces_sample_rate = 1.0
-  config.environment = ENV['PAAS_ENVIRONMENT'] || 'local'
+  config.environment = ENV["PAAS_ENVIRONMENT"] || "local"
 end
 
 # Uncomment out the below to test Sentry - this
