@@ -6,7 +6,7 @@ en:
     hint:
       forms_change_email_form:
         submission_email: |-
-          This should be a departmental shared inbox.
+          This should be a shared government email inbox
   activemodel:
     errors:
       models:
