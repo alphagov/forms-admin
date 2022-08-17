@@ -2,7 +2,7 @@ en:
   helpers:
     label:
       forms_change_email_form:
-        submission_email: What email address should form responses be sent to?
+        submission_email: What email address should completed forms be sent to?
     hint:
       forms_change_email_form:
         submission_email: |-
