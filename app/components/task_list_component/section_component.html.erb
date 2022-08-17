@@ -1,0 +1,33 @@
+<%= tag.li do %>
+  <h2 class="app-task-list__section">
+    <span class="app-task-list__section-number"><%= number %>. </span> <%= title %>
+  </h2>
+  <ul class="app-task-list__items">
+    <% rows.each do |row| %>
+        <%= tag.li(**row.html_attributes) do %>
+          <% if row.active %>
+            <a href="<%= row.get_path %>" class="govuk-link app-task-list__key" aria-describedby="<%= row.status_id %>">
+              <%= row.task_name %>
+            </a>
+          <% else %>
+            <span class="app-task-list__task-name" aria-describedby="<%= row.status_id %>">
+              <%= row.task_name %>
+            </span>
+          <% end %>
+
+          <% if any_row_has_status? %>
+            <%= render GovukComponent::TagComponent.new(
+              text: "<span class='govuk-visually-hidden'>Status </span>".html_safe + I18n.t(row.status),
+              colour: row.get_status_colour,
+              html_attributes: { id: row.status_id },
+            ) %>
+        <% end %>
+
+        <% if row.hint_text.present? %>
+          <br>
+          <span class="app-task-list__hint govuk-hint"><%= row.hint_text %></span>
+        <% end %>
+      <% end %>
+  <% end %>
+</ul>
+<% end %>

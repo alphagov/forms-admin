@@ -19,5 +19,9 @@ module FormsAdmin
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     config.exceptions_app = routes
+
+    config.view_component.preview_paths = [Rails.root.join("spec/components")]
+    config.view_component.preview_route = "/view_components"
+    config.view_component.show_previews = !Rails.env.production?
   end
 end

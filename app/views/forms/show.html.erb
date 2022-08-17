@@ -11,59 +11,71 @@
       <p class="govuk-body"><%= flash[:message] %></p>
     <% end %>
 
-    <%= link_to t("forms.form_overview.add_question"), new_page_path(@form), class: "govuk-button govuk-!-margin-bottom-3 govuk-!-margin-top-3", 'data-module':"govuk-button", draggable:"false", role: "button" %>
+    <%= render(TaskListComponent.new) do |tasklist|
+      tasklist.with_section(title: 'Make a form') do |section|
+        section.with_row(task_name: "Edit the name of your form", path: change_form_name_path(@form), status: :complete, active: true)
+        section.with_row(task_name: "Edit the email address", path: change_form_name_path(@form), status: :complete)
+      end
 
-    <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0">
-      <%= t("forms.form_overview.form_name") %>
-    </h2>
+      tasklist.with_section(title: 'Do something else with the form') do |section|
+        section.with_row(task_name: "Edit the questions or something", path: change_form_name_path(@form), status: :complete)
+        section.with_row(task_name: "Make it live!", path: change_form_name_path(@form), status: :complete)
+      end
+    end %>
 
-    <dl class="govuk-summary-list">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
-          <%= @form.name %>
-        </dt>
-        <dd class="govuk-summary-list__actions">
-          <%= link_to change_form_name_path(@form), class: "govuk-link govuk-link--no-visited-state" do %>
-              <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= t("forms.form_overview.form_name") %></span>
-          <% end %>
-        </dd>
-      </div>
-    </dl>
+    <%# <%= link_to t("forms.form_overview.add_question"), new_page_path(@form), class: "govuk-button govuk-!-margin-bottom-3 govuk-!-margin-top-3", 'data-module':"govuk-button", draggable:"false", role: "button" %1> %>
 
-    <% if @pages.any? %>
-      <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0"><%= t("forms.form_overview.your_questions") %></h2>
-      <% @pages.each do |page| %>
-        <dl class="govuk-summary-list">
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
-              <%= page.question_text %>
-            </dt>
-            <dd class="govuk-summary-list__actions">
-              <%= link_to edit_page_path(@form,page), class: "govuk-link govuk-link--no-visited-state" do %>
-              <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= page.question_text %></span>
-              <% end %>
-            </dd>
-          </div>
-        </dl>
-      <% end %>
-    <% end %>
+    <%# <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0"> %>
+    <%#   <%= t("forms.form_overview.form_name") %1> %>
+    <%# </h2> %>
 
-    <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0">
-      Submission email
-    </h2>
+    <%# <dl class="govuk-summary-list"> %>
+    <%#   <div class="govuk-summary-list__row"> %>
+    <%#     <dt class="govuk-summary-list__key govuk-!-font-weight-regular"> %>
+    <%#       <%= @form.name %1> %>
+    <%#     </dt> %>
+    <%#     <dd class="govuk-summary-list__actions"> %>
+    <%#       <%= link_to change_form_name_path(@form), class: "govuk-link govuk-link--no-visited-state" do %1> %>
+    <%#           <%= t("forms.form_overview.edit") %1> <span class="govuk-visually-hidden"><%= t("forms.form_overview.form_name") %1></span> %>
+    <%#       <% end %1> %>
+    <%#     </dd> %>
+    <%#   </div> %>
+    <%# </dl> %>
 
-    <dl class="govuk-summary-list">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
-          <%= @form.submission_email %>
-        </dt>
-        <dd class="govuk-summary-list__actions">
-          <%= link_to change_form_email_path(@form.id), class: "govuk-link govuk-link--no-visited-state" do %>
-              <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= t("forms.form_overview.submission_email") %></span>
-          <% end %>
-        </dd>
-      </div>
-    </dl>
+    <%# <% if @pages.any? %1> %>
+    <%#   <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0"><%= t("forms.form_overview.your_questions") %1></h2> %>
+    <%#   <% @pages.each do |page| %1> %>
+    <%#     <dl class="govuk-summary-list"> %>
+    <%#       <div class="govuk-summary-list__row"> %>
+    <%#         <dt class="govuk-summary-list__key govuk-!-font-weight-regular"> %>
+    <%#           <%= page.question_text %1> %>
+    <%#         </dt> %>
+    <%#         <dd class="govuk-summary-list__actions"> %>
+    <%#           <%= link_to edit_page_path(@form,page), class: "govuk-link govuk-link--no-visited-state" do %1> %>
+    <%#           <%= t("forms.form_overview.edit") %1> <span class="govuk-visually-hidden"><%= page.question_text %1></span> %>
+    <%#           <% end %1> %>
+    <%#         </dd> %>
+    <%#       </div> %>
+    <%#     </dl> %>
+    <%#   <% end %1> %>
+    <%# <% end %1> %>
+
+    <%# <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0"> %>
+    <%#   Submission email %>
+    <%# </h2> %>
+
+    <%# <dl class="govuk-summary-list"> %>
+    <%#   <div class="govuk-summary-list__row"> %>
+    <%#     <dt class="govuk-summary-list__key govuk-!-font-weight-regular"> %>
+    <%#       <%= @form.submission_email %1> %>
+    <%#     </dt> %>
+    <%#     <dd class="govuk-summary-list__actions"> %>
+    <%#       <%= link_to change_form_email_path(@form.id), class: "govuk-link govuk-link--no-visited-state" do %1> %>
+    <%#           <%= t("forms.form_overview.edit") %1> <span class="govuk-visually-hidden"><%= t("forms.form_overview.submission_email") %1></span> %>
+    <%#       <% end %1> %>
+    <%#     </dd> %>
+    <%#   </div> %>
+    <%# </dl> %>
     <%= govuk_button_link_to t("forms.delete_form"), delete_form_path(@form), warning: true %>
   </div>
 </div>
