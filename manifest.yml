@@ -1,17 +1,18 @@
 ---
 applications:
-- name: forms-admin-((PAAS_ENVIRONMENT))
-  memory: 256M
-  command: rake db:migrate && bin/rails server
-  services:
-    - forms-admin-((PAAS_ENVIRONMENT))-db
-    - forms-admin-((PAAS_ENVIRONMENT))-splunk
-  env:
-    RAILS_ENV: production
-    RACK_ENV: production
-    GDS_SSO_OAUTH_ID: ((GDS_SSO_OAUTH_ID))
-    GDS_SSO_OAUTH_SECRET: ((GDS_SSO_OAUTH_SECRET))
-    GOVUK_APP_DOMAIN: ((GOVUK_APP_DOMAIN))
-    API_BASE: ((API_BASE))
-    RUNNER_BASE: ((RUNNER_BASE))
-    API_KEY: ((API_KEY))
+  - name: forms-admin-((PAAS_ENVIRONMENT))
+    memory: 256M
+    command: rake db:migrate && bin/rails server
+    services:
+      - forms-admin-((PAAS_ENVIRONMENT))-db
+      - forms-admin-((PAAS_ENVIRONMENT))-splunk
+    env:
+      RAILS_ENV: production
+      RACK_ENV: production
+      GDS_SSO_OAUTH_ID: ((GDS_SSO_OAUTH_ID))
+      GDS_SSO_OAUTH_SECRET: ((GDS_SSO_OAUTH_SECRET))
+      GOVUK_APP_DOMAIN: ((GOVUK_APP_DOMAIN))
+      API_BASE: ((API_BASE))
+      RUNNER_BASE: ((RUNNER_BASE))
+      API_KEY: ((API_KEY))
+      PAAS_ENVIRONMENT: ((PAAS_ENVIRONMENT))
