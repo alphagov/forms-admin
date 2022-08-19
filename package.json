@@ -12,13 +12,13 @@
     "build:css": "gulp css",
     "dev": "gulp dev",
     "test": "jest",
-    "cypress": "cypress run",
-    "cypress:open": "cypress open",
+    "cypress": "cypress run --env API_KEY=$API_KEY",
+    "cypress:open": "cypress open --env API_KEY=$API_KEY",
     "lint": "npm run lint:js && npm run lint:css",
     "lint:js": "standard | snazzy",
     "lint:css": "stylelint 'app/assets/**/*.scss'",
     "format": "standard --fix & stylelint 'app/assets/**/*.scss' --fix",
-    "ci": "bin/setup && bin/rails db:seed && bin/rails server"
+    "ci": "bin/setup && bin/rails db:seed && API_KEY=test bin/rails server"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",
