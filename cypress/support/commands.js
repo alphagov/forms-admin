@@ -31,15 +31,21 @@ Cypress.Commands.add('createForm', formData => {
       method: 'POST',
       url: 'http://localhost:9292/api/v1/forms',
       headers: {
-        'Content-Type': 'application/json; charset=utf-8'
+        'Content-Type': 'application/json; charset=utf-8',
+        'X-Api-Token': Cypress.env('API_KEY')
       },
       body: formData
     })
     .then(() => {
       return cy
-        .request(
-          'http://localhost:9292/api/v1/forms?org=government-digital-service'
-        )
+        .request({
+          method: 'GET',
+          url:
+            'http://localhost:9292/api/v1/forms?org=government-digital-service',
+          headers: {
+            'X-Api-Token': Cypress.env('API_KEY')
+          }
+        })
         .then(response => {
           return response.body.reverse()[0]
         })
@@ -52,13 +58,20 @@ Cypress.Commands.add('createPage', (formId, pageData) => {
       method: 'POST',
       url: `http://localhost:9292/api/v1/forms/${formId}/pages`,
       headers: {
-        'Content-Type': 'application/json; charset=utf-8'
+        'Content-Type': 'application/json; charset=utf-8',
+        'X-Api-Token': Cypress.env('API_KEY')
       },
       body: pageData
     })
     .then(() => {
       return cy
-        .request(`http://localhost:9292/api/v1/forms/${formId}/pages`)
+        .request({
+          method: 'GET',
+          url: `http://localhost:9292/api/v1/forms/${formId}/pages`,
+          headers: {
+            'X-Api-Token': Cypress.env('API_KEY')
+          }
+        })
         .then(response => {
           return response.body.reverse()[0]
         })
@@ -66,12 +79,21 @@ Cypress.Commands.add('createPage', (formId, pageData) => {
 })
 
 Cypress.Commands.add('deleteForm', formId => {
-  cy.request('DELETE', `http://localhost:9292/api/v1/forms/${formId}`)
+  cy.request({
+    method: 'DELETE',
+    url: `http://localhost:9292/api/v1/forms/${formId}`,
+    headers: {
+      'X-Api-Token': Cypress.env('API_KEY')
+    }
+  })
 })
 
 Cypress.Commands.add('deletePage', (formId, pageId) => {
-  cy.request(
-    'DELETE',
-    `http://localhost:9292/api/v1/forms/${formId}/pages/${pageId}`
-  )
+  cy.request({
+    method: 'DELETE',
+    url: `http://localhost:9292/api/v1/forms/${formId}/pages/${pageId}`,
+    headers: {
+      'X-Api-Token': Cypress.env('API_KEY')
+    }
+  })
 })
