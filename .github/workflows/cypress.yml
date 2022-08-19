@@ -35,7 +35,7 @@ jobs:
         with:
           repository: alphagov/forms-api
           path: forms-api
-          ref: Dockerfile
+          ref: main
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
