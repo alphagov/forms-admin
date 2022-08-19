@@ -16,31 +16,17 @@ describe('Form overview page', function () {
     cy.url().should('eq', `${Cypress.config().baseUrl}/`)
   })
 
-  it('contains an add question button', function () {
-    cy.contains('Add a question').click()
-    cy.url().should(
-      'eq',
-      `${Cypress.config().baseUrl}/forms/${this.formId}/pages/new`
-    )
-  })
-
-  it('contains a list of questions', function () {
+  it('contains a question section', function () {
     cy.findByRole('heading', {
       name: 'Your questions'
     }).should('be.visible')
+  })
 
-    cy.findAllByText('What is your work address?')
-      .first()
-      .should('be.visible')
-
-    cy.findByRole('link', {
-      name: 'Edit What is your work address?'
-    }).click()
+  it('contains a link to add/edit the forms questions', function () {
+    cy.contains('Add and edit your questions').click()
     cy.url().should(
       'eq',
-      `${Cypress.config().baseUrl}/forms/${this.formId}/pages/${
-        this.pageId
-      }/edit`
+      `${Cypress.config().baseUrl}/forms/${this.formId}/pages`
     )
   })
 })

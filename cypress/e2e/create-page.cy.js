@@ -10,8 +10,8 @@ describe('Create a page page', function () {
       .should('have.value', '')
   })
 
-  it('allows the user to navigate back to the form overview page', function () {
-    cy.contains('Go to form overview').click()
-    cy.url().should('eq', `${Cypress.config().baseUrl}/forms/${this.formId}`)
+  it('allows the user to navigate back to the form pages', function () {
+    cy.contains('Go to your questions').click()
+    cy.url().should('eq', `${Cypress.config().baseUrl}/forms/${this.formId}/pages`)
   })
 })

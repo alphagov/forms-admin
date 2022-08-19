@@ -16,7 +16,7 @@ en:
   forms:
     delete_form: Delete form
     form_overview:
-      add_question: Add a question
+      add_or_edit_questions: Add and edit your questions
       edit: Edit
       form_name: Form name
       submission_email: Submission email
@@ -83,8 +83,11 @@ en:
     service_unavailable: Sorry, the service is unavailable
   pages:
     delete_question: Delete question
-    go_to_form_overview: Go to form overview
+    go_to_your_questions: Go to your questions
     heading: Edit question
+    index:
+      add_question: Add a question
+      title: Add and edit your questions
     question: Question
     submit_add: Save and add next question
     submit_edit: Save and edit next question

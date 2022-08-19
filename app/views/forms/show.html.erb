@@ -11,8 +11,6 @@
       <p class="govuk-body"><%= flash[:message] %></p>
     <% end %>
 
-    <%= link_to t("forms.form_overview.add_question"), new_page_path(@form), class: "govuk-button govuk-!-margin-bottom-3 govuk-!-margin-top-3", 'data-module':"govuk-button", draggable:"false", role: "button" %>
-
     <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0">
       <%= t("forms.form_overview.form_name") %>
     </h2>
@@ -30,23 +28,17 @@
       </div>
     </dl>
 
-    <% if @pages.any? %>
-      <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0"><%= t("forms.form_overview.your_questions") %></h2>
-      <% @pages.each do |page| %>
-        <dl class="govuk-summary-list">
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
-              <%= page.question_text %>
-            </dt>
-            <dd class="govuk-summary-list__actions">
-              <%= link_to edit_page_path(@form,page), class: "govuk-link govuk-link--no-visited-state" do %>
-              <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= page.question_text %></span>
-              <% end %>
-            </dd>
-          </div>
-        </dl>
-      <% end %>
-    <% end %>
+    <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0"><%= t("forms.form_overview.your_questions") %></h2>
+
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
+          <%= govuk_link_to t("forms.form_overview.add_or_edit_questions"), form_pages_path(@form) %>
+        </dt>
+
+      </div>
+    </dl>
+
 
     <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0">
       Submission email

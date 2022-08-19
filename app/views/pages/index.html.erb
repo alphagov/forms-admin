@@ -1,0 +1,35 @@
+<% set_page_title(@form.name) %>
+
+<% content_for :back_link, govuk_back_link_to(form_path(@form), "Back to create a form") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l"><%= @form.name %></span>
+    <h1 class="govuk-heading-l"><%= t("pages.index.title") %></h1>
+
+    <% if flash[:message] %>
+      <p class="govuk-body"><%= flash[:message] %></p>
+    <% end %>
+
+    <%= link_to t("pages.index.add_question"), new_page_path(@form), class: "govuk-button govuk-!-margin-bottom-3 govuk-!-margin-top-3", 'data-module':"govuk-button", draggable:"false", role: "button" %>
+
+    <% if @pages.any? %>
+      <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0"><%= t("forms.form_overview.your_questions") %></h2>
+      <% @pages.each do |page| %>
+        <dl class="govuk-summary-list">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
+              <%= page.question_text %>
+            </dt>
+            <dd class="govuk-summary-list__actions">
+              <%= link_to edit_page_path(@form,page), class: "govuk-link govuk-link--no-visited-state" do %>
+                <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= page.question_text %></span>
+              <% end %>
+            </dd>
+          </div>
+        </dl>
+      <% end %>
+    <% end %>
+
+  </div>
+</div>
