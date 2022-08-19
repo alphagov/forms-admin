@@ -25,6 +25,7 @@ jobs:
       RAILS_ENV: test
       DATABASE_URL: "postgres://rails:password@localhost:5432"
       API_BASE: http://localhost:9292
+      API_KEY: test
 
     steps:
       - name: Checkout code
@@ -53,8 +54,9 @@ jobs:
         uses: cypress-io/github-action@v4
         with:
           install: false
-          start: yarn run ci, docker run -p 9292:9292 --network=host -e DATABASE_URL=postgres://rails:password@localhost:5432 --name forms-api forms-api
+          start: yarn run ci, docker run -p 9292:9292 --network=host -e DATABASE_URL=postgres://rails:password@localhost:5432 -e API_KEY=test --name forms-api forms-api
           wait-on: "http://localhost:3000"
+          env: API_KEY=test
       - name: Archive cypress artifacts
         if: ${{ failure() }}
         uses: actions/upload-artifact@v3
