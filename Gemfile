@@ -58,7 +58,6 @@ gem "gds-sso"
 # Use govuk-components for displaying govuk themed forms
 gem "govuk-components", "3.1.5"
 gem "govuk_design_system_formbuilder", "3.1.2"
-gem "view_component"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
