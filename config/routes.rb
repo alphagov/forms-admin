@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   delete "forms/:form_id/delete" => "forms/delete_confirmation#destroy", as: :destroy_form
 
   # Page routes
-  get "forms/:form_id/pages" => "pages#index", as: :pages
+  get "forms/:form_id/pages" => "pages#index", as: :form_pages
   get "forms/:form_id/pages/:page_id/edit" => "pages#edit", as: :edit_page
   patch "forms/:form_id/pages/:page_id/edit" => "pages#update", as: :update_page
   get "forms/:form_id/pages/new" => "pages#new", as: :new_page

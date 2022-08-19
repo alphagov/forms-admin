@@ -5,6 +5,52 @@ RSpec.describe "Pages", type: :request do
     User.create!(email: "user@example.com")
   end
 
+  describe "Showing an existing pages" do
+    describe "Given a form" do
+      let(:form) do
+        Form.new({
+          id: 2,
+          name: "Form name",
+          submission_email: "submission@email.com",
+        })
+      end
+
+      let(:pages) do
+        [Page.new({
+          id: 1,
+          form_id: 2,
+          question_text: "What is your work address?",
+          question_short_name: "Work address",
+          hint_text: "This should be the location stated in your contract.",
+          answer_type: "address",
+        })]
+      end
+
+      let(:headers) do
+        {
+          "X-API-Token" => ENV["API_KEY"],
+          "Accept" => "application/json",
+        }
+      end
+
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/2", headers, form.to_json, 200
+          mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
+        end
+
+        get form_pages_path(2)
+      end
+
+      it "Reads the form from the API" do
+        expect(form).to have_been_read
+
+        pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
+        expect(ActiveResource::HttpMock.requests).to include pages_request
+      end
+    end
+  end
+
   describe "Editing an existing page" do
     describe "Given a page" do
       let(:form_response) do
