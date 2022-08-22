@@ -11,7 +11,7 @@
       <p class="govuk-body"><%= flash[:message] %></p>
     <% end %>
 
-    <%= link_to t("pages.index.add_question"), new_page_path(@form), class: "govuk-button govuk-!-margin-bottom-3 govuk-!-margin-top-3", 'data-module':"govuk-button", draggable:"false", role: "button" %>
+    <%= govuk_button_link_to t("pages.index.add_question"), new_page_path(@form), class: "govuk-!-margin-bottom-3 govuk-!-margin-top-3" %>
 
     <% if @pages.any? %>
       <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0"><%= t("forms.form_overview.your_questions") %></h2>
@@ -22,7 +22,7 @@
               <%= page.question_text %>
             </dt>
             <dd class="govuk-summary-list__actions">
-              <%= link_to edit_page_path(@form,page), class: "govuk-link govuk-link--no-visited-state" do %>
+              <%= govuk_link_to edit_page_path(@form,page) do %>
                 <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= page.question_text %></span>
               <% end %>
             </dd>
