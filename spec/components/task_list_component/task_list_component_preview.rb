@@ -5,15 +5,15 @@ class TaskListComponent::TaskListComponentPreview < ViewComponent::Preview
         rows: [
           { task_name: "Edit the name of your form", path: "#", status: :completed, active: true },
           { task_name: "Edit the questions of your form", path: "#", status: :not_started, active: true },
-          { task_name: "Edit the email address", path: "#", status: :connot_start },
-          { task_name: "Confirm the submission email address", path: "#", status: :connot_start, active: false },
+          { task_name: "Edit the email address", path: "#", status: :cannot_start },
+          { task_name: "Confirm the submission email address", path: "#", status: :cannot_start, active: false },
         ] },
       { title: "do something else with a form",
         rows: [
           { task_name: "Edit the name of your form", path: "#", status: :completed, active: true },
           { task_name: "Edit the questions of your form", path: "#", status: :not_started, active: true },
-          { task_name: "Edit the email address", path: "#", status: :connot_start },
-          { task_name: "Confirm the submission email address", path: "#", status: :connot_start, active: false },
+          { task_name: "Edit the email address", path: "#", status: :cannot_start },
+          { task_name: "Confirm the submission email address", path: "#", status: :cannot_start, active: false },
         ] },
     ]))
   end
@@ -43,7 +43,7 @@ class TaskListComponent::TaskListComponentPreview < ViewComponent::Preview
       { title: "Make a form",
         rows: [
           { task_name: "Edit the name of your form", path: "#", status: :not_started, active: true },
-          { task_name: "Edit the questions of your form", path: "#", status: :connot_start, active: false, hint_text: "You can only complete this step if you have entered a name for your form" },
+          { task_name: "Edit the questions of your form", path: "#", status: :cannot_start, active: false, hint_text: "You can only complete this step if you have entered a name for your form" },
           { task_name: "Edit the email address", path: "#", status: :not_started },
           { task_name: "Confirm the submission email address", path: "#", status: :not_started },
         ] },
@@ -56,8 +56,8 @@ class TaskListComponent::TaskListComponentPreview < ViewComponent::Preview
         rows: [
           { task_name: "Edit the name of your form", path: "#", active: true, status: :completed, hint_text: "Describe your form clearly", confirm_path: "#confirm-path" },
           { task_name: "Edit the questions of your form", path: "#", status: :not_started, active: true },
-          { task_name: "Edit the email address", path: "#", status: :connot_start },
-          { task_name: "Confirm the submission email address", path: "#", status: :connot_start, active: false },
+          { task_name: "Edit the email address", path: "#", status: :cannot_start },
+          { task_name: "Confirm the submission email address", path: "#", status: :cannot_start, active: false },
         ] },
     ]))
   end
