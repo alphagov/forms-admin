@@ -102,5 +102,5 @@ en:
   skip_to_main_content: Skip to main content
   task_statuses:
     completed: completed
-    connot_start: cannot start yet
+    cannot_start: cannot start yet
     not_started: not started yet
