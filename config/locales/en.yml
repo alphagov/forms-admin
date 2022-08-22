@@ -101,6 +101,6 @@ en:
     title: Sorry, the service is unavailable
   skip_to_main_content: Skip to main content
   task_statuses:
-    completed: completed
     cannot_start: cannot start yet
+    completed: completed
     not_started: not started yet
