@@ -19,5 +19,10 @@ module FormsAdmin
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     config.exceptions_app = routes
+
+    config.view_component.preview_paths = [Rails.root.join("spec/components")]
+    config.view_component.preview_route = "/preview"
+    # Replace with value which will be true in local dev and PAAS dev
+    config.view_component.show_previews = !Rails.env.production?
   end
 end
