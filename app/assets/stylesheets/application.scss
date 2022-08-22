@@ -2,3 +2,4 @@ $govuk-images-path: "./images/";
 $govuk-fonts-path: "./fonts/";
 
 @import "govuk/all";
+@import "../../components/task_list_component/";
