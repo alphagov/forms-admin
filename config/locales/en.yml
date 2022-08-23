@@ -100,3 +100,7 @@ en:
     body: Contact the GOV.UK Forms team if you need to make changes to your forms or speak to someone about the service.
     title: Sorry, the service is unavailable
   skip_to_main_content: Skip to main content
+  task_statuses:
+    cannot_start: cannot start yet
+    completed: completed
+    not_started: not started yet
