@@ -1,0 +1,21 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.privacy_policy_form'), @privacy_policy_form.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(form_path, "Back to create a form") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <%= form_with(model: @privacy_policy_form, url: privacy_policy_path) do |f| %>
+      <% if @privacy_policy_form&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+
+      <h1 class="govuk-heading-l">
+        <%= t('privacy_policy_form.heading') %>
+      </h1>
+
+      <%= t('privacy_policy_form.body_html') %>
+      <%= f.govuk_text_field :privacy_policy_url, label: {  size: 'm' }, class: "govuk-!-width-two-thirds", spellcheck: "false"  %>
+      <%= f.govuk_submit t('privacy_policy_form.submit_button') %>
+    <% end %>
+  </div>
+</div>
