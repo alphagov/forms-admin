@@ -54,8 +54,8 @@ private
     return redirect_to delete_page_path(@form, @page) if params[:delete]
 
     # Default: either edit the next page or create a new one
-    if @page.has_next?
-      redirect_to edit_page_path(@form, @page.next)
+    if @page.has_next_page?
+      redirect_to edit_page_path(@form, @page.next_page)
     else
       redirect_to new_page_path(@form)
     end
