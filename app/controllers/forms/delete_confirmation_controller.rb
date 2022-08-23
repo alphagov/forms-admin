@@ -40,7 +40,7 @@ module Forms
     end
 
     def previous_page(id)
-      @form.pages.find { |p| p.next = id }
+      @form.pages.find { |p| p.next_page = id }
     end
 
     def load_page_variables

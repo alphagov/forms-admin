@@ -8,8 +8,8 @@ class Page < ActiveResource::Base
   validates :question_text, presence: true
   validates :answer_type, presence: true, inclusion: { in: %w[single_line address date email national_insurance_number phone_number] }
 
-  def has_next?
-    attributes.include?("next") && !attributes["next"].nil?
+  def has_next_page?
+    attributes.include?("next_page") && !attributes["next_page"].nil?
   end
 
   def number(form)

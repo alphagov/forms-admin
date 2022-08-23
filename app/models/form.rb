@@ -6,7 +6,7 @@ class Form < ActiveResource::Base
   has_many :pages
 
   def last_page
-    pages.find { |p| !p.has_next? }
+    pages.find { |p| !p.has_next_page? }
   end
 
   def save_page(page)
@@ -16,11 +16,11 @@ class Form < ActiveResource::Base
   def append_page(page)
     return true if pages.empty?
 
-    # if there is already a last page, set it's next value to our new page. This
+    # if there is already a last page, set its next_page value to our new page. This
     # should probably be done in the API, here we cannot add a page and set
-    # the next value atomically
+    # the next_page value atomically
     current_last_page = last_page
-    current_last_page.next = page.id
+    current_last_page.next_page = page.id
     current_last_page.save!
   end
 end
