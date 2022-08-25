@@ -18,18 +18,18 @@ private
                        new_page_path(@form)
                      end
 
-    @task_list = [{ title: "Create your form",
+    @task_list = [{ title: t("forms.task_lists.section_1.title"),
                     rows: [
-                      { task_name: "Edit the name of your form", path: change_form_name_path(@form) },
-                      { task_name: t("forms.form_overview.add_or_edit_questions"), path: @question_path },
+                      { task_name: t("forms.task_lists.section_1.change_name"), path: change_form_name_path(@form) },
+                      { task_name: t("forms.task_lists.section_1.add_or_edit_questions"), path: @question_path },
                     ] },
-                  { title: "Set email address for completed forms",
+                  { title: t("forms.task_lists.section_2.title"),
                     rows: [
-                      { task_name: "Set the email address completed forms will be sent to", path: change_form_email_path(@form.id) },
+                      { task_name: t("forms.task_lists.section_2.submission_email"), path: change_form_email_path(@form.id) },
                     ] },
-                  { title: "Provide privacy and contact details",
+                  { title: t("forms.task_lists.section_3.title"),
                     rows: [
-                      { task_name: "Provide a link to privacy information for this form", path: privacy_policy_path(@form.id) },
+                      { task_name: t("forms.task_lists.section_3.privacy_policy"), path: privacy_policy_path(@form.id) },
                     ] }]
   end
 end
