@@ -11,69 +11,9 @@
       <p class="govuk-body"><%= flash[:message] %></p>
     <% end %>
 
-    <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0">
-      <%= t("forms.form_overview.form_name") %>
-    </h2>
+    <%= render TaskListComponent::View.new(sections: @task_list)
+    %>
 
-    <dl class="govuk-summary-list">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
-          <%= @form.name %>
-        </dt>
-        <dd class="govuk-summary-list__actions">
-          <%= link_to change_form_name_path(@form), class: "govuk-link govuk-link--no-visited-state" do %>
-              <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= t("forms.form_overview.form_name") %></span>
-          <% end %>
-        </dd>
-      </div>
-    </dl>
-
-    <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0"><%= t("forms.form_overview.your_questions") %></h2>
-
-    <dl class="govuk-summary-list">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
-          <%= govuk_link_to t("forms.form_overview.add_or_edit_questions"), form_pages_path(@form) %>
-        </dt>
-
-      </div>
-    </dl>
-
-
-    <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0">
-      Submission email
-    </h2>
-
-    <dl class="govuk-summary-list">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
-          <%= @form.submission_email %>
-        </dt>
-        <dd class="govuk-summary-list__actions">
-          <%= link_to change_form_email_path(@form.id), class: "govuk-link govuk-link--no-visited-state" do %>
-              <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= t("forms.form_overview.submission_email") %></span>
-          <% end %>
-        </dd>
-      </div>
-    </dl>
-
-
-    <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0">
-      <%= t("forms.form_overview.privacy_policy") %>
-    </h2>
-
-    <dl class="govuk-summary-list">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
-          <%= @form.privacy_policy_url %>
-        </dt>
-        <dd class="govuk-summary-list__actions">
-          <%= link_to privacy_policy_path(@form.id), class: "govuk-link govuk-link--no-visited-state" do %>
-              <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= t("forms.form_overview.privacy_policy") %></span>
-          <% end %>
-        </dd>
-      </div>
-    </dl>
     <%= govuk_button_link_to t("forms.delete_form"), delete_form_path(@form), warning: true %>
   </div>
 </div>
