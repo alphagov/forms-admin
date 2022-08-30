@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
+  get :ping, controller: :heartbeat
+
   # Defines the root path route ("/")
   root "home#index"
 
@@ -13,6 +15,8 @@ Rails.application.routes.draw do
   post "forms/:id/change-email" => "forms/change_email#create"
   get "forms/:form_id/delete" => "forms/delete_confirmation#delete", as: :delete_form
   delete "forms/:form_id/delete" => "forms/delete_confirmation#destroy", as: :destroy_form
+  get "forms/:id/privacy_policy" => "forms/privacy_policy#new", as: :privacy_policy
+  post "forms/:id/privacy_policy" => "forms/privacy_policy#create"
 
   # Page routes
   get "forms/:form_id/pages" => "pages#index", as: :form_pages

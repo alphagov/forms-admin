@@ -16,12 +16,20 @@ en:
   forms:
     delete_form: Delete form
     form_overview:
-      add_or_edit_questions: Add and edit your questions
       edit: Edit
-      form_name: Form name
-      submission_email: Submission email
-      title: Form overview
+      title: Create a form
       your_questions: Your questions
+    task_lists:
+      section_1:
+        add_or_edit_questions: Add and edit your questions
+        change_name: Edit the name of your form
+        title: Create your form
+      section_2:
+        submission_email: Set the email address completed forms will be sent to
+        title: Set email address for completed forms
+      section_3:
+        privacy_policy: Provide a link to privacy information for this form
+        title: Provide privacy and contact details
   forms_delete_confirmation_form:
     confirm_deletion_form: Are you sure you want to delete this form?
     confirm_deletion_page: Are you sure you want to delete this page?
@@ -80,6 +88,7 @@ en:
     internal_server_error: Sorry, there is a problem with the service
     new_page_form: Edit question
     not_found: Page not found
+    privacy_policy_form: Provide a link to privacy information for this form
     service_unavailable: Sorry, the service is unavailable
   pages:
     delete_question: Delete question
@@ -96,6 +105,39 @@ en:
     after_link: will help us improve it.
     before_link: This is a new service, your
     link: feedback
+  privacy_policy_form:
+    body_html: |
+      <p class="govuk-body">
+        To comply with the UK General Data Protection Regulation (UK GDPR), you must provide privacy information for the people who will enter their data into your form.
+      </p>
+
+      <p class="govuk-body">
+        The privacy information must include details such as:
+        <ul class="govuk-list govuk-list--bullet">
+          <li>
+            your purposes for processing the personal data
+          </li>
+          <li>
+            how long you’ll keep the personal data
+          </li>
+          <li>
+            who the data will be shared with
+          </li>
+          <li>
+            contact details for your department and your data protection officer
+          </li>
+        </ul>
+      </p>
+
+      <p class="govuk-body">
+        You may already publish this information, for example in a privacy notice or personal information charter. Existing privacy information may need to be updated to cover the data you are collecting in this form, or you may need a new privacy notice.
+      </p>
+
+      <p class="govuk-body">
+        To get help, contact your department’s data protection officer or data protection manager.
+      </p>
+    heading: Provide a link to privacy information for this form
+    submit_button: Save and continue
   service_unavailable:
     body: Contact the GOV.UK Forms team if you need to make changes to your forms or speak to someone about the service.
     title: Sorry, the service is unavailable

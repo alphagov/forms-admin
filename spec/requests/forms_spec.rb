@@ -8,6 +8,7 @@ RSpec.describe "Forms", type: :request do
           id: 2,
           name: "Form name",
           submission_email: "submission@email.com",
+          privacy_policy_url: "https://example.com/privacy_policy",
         })
       end
 
