@@ -16,3 +16,4 @@ applications:
       RUNNER_BASE: ((RUNNER_BASE))
       API_KEY: ((API_KEY))
       PAAS_ENVIRONMENT: ((PAAS_ENVIRONMENT))
+      SENTRY_DSN: ((SENTRY_DSN))
