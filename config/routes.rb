@@ -17,6 +17,9 @@ Rails.application.routes.draw do
   delete "forms/:form_id/delete" => "forms/delete_confirmation#destroy", as: :destroy_form
   get "forms/:id/privacy_policy" => "forms/privacy_policy#new", as: :privacy_policy
   post "forms/:id/privacy_policy" => "forms/privacy_policy#create"
+  get "forms/:id/make_live" => "forms/make_live#new", as: :make_live
+  post "forms/:id/make_live" => "forms/make_live#create", as: :make_live_create
+  get "forms/:id/live_confirmation" => "forms/make_live#confirmation", as: :live_confirmation
 
   # Page routes
   get "forms/:form_id/pages" => "pages#index", as: :form_pages
