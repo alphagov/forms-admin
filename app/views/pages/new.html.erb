@@ -3,8 +3,11 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <span class="govuk-caption-l"><%= t("pages.question") %> <%= @page.number(@form) %></span>
-    <h1 class="govuk-heading-l"><%= t("pages.heading") %></h1>
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= t("pages.question") %> <%= @page.number(@form) %></span>
+      <span class="govuk-visually-hidden"> - </span>
+      <%= t("pages.heading") %>
+    </h1>
 
     <%= form_with model: [@form, @page], url: create_page_path(@form) do |f| %>
       <%= render :partial => 'form', locals: { f: f } %>
