@@ -17,7 +17,7 @@
       summary_list.row do |row|
         row.key { form.name }
         row.action(text: t("home.edit"), href: form_path(form.id), visually_hidden_text: form.name )
-        row.action(text: t("home.preview"), href: "#{ENV['RUNNER_BASE']}/form/#{form.id}", visually_hidden_text: ": #{form.name}")
+        row.action(text: t("home.preview"), href: "#{ENV['RUNNER_BASE']}/form/#{form.id}", visually_hidden_text: ": #{form.name}", html_attributes: { target:"_blank", rel:"noopener noreferrer"})
       end
     end
   end %>
