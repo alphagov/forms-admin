@@ -43,6 +43,8 @@ en:
           Ask a question the way you would in person. For example ‘What is your
           address?’
     label:
+      forms_make_live_form:
+        confirm_make_live: Are you sure you want to make your form live?
       page:
         answer_type_options:
           descriptions:
@@ -86,6 +88,7 @@ en:
     error_prefix: 'Error: '
     home: Home
     internal_server_error: Sorry, there is a problem with the service
+    make_live_form: Make form live
     new_page_form: Edit question
     not_found: Page not found
     privacy_policy_form: Provide a link to privacy information for this form

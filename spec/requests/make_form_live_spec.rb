@@ -1,0 +1,176 @@
+require "rails_helper"
+
+RSpec.describe "MakeLive controller", type: :request do
+  let(:form_response_data) do
+    {
+      id: 2,
+      name: "Form name",
+      submission_email: "submission@email.com",
+      start_page: 1,
+      org: "test-org",
+      privacy_policy_url: "https://www.example.gov.uk/privacy-policy",
+      live_at: "",
+    }.to_json
+  end
+
+  let(:form) do
+    Form.new(
+      name: "Form name",
+      submission_email: "submission@email.com",
+      id: 2,
+      org: "test-org",
+      privacy_policy_url: "https://www.example.gov.uk/privacy-policy",
+      live_at: "",
+    )
+  end
+
+  let(:updated_form) do
+    Form.new({
+      name: "Form name",
+      submission_email: "submission@email.com",
+      id: 2,
+      org: "test-org",
+      privacy_policy_url: "https://www.example.gov.uk/privacy-policy",
+      live_at: "2021-01-01T00:00:00.000Z",
+    })
+  end
+
+  let(:req_headers) do
+    {
+      "X-API-Token" => ENV["API_KEY"],
+      "Accept" => "application/json",
+    }
+  end
+
+  let(:post_headers) do
+    {
+      "X-API-Token" => ENV["API_KEY"],
+      "Content-Type" => "application/json",
+    }
+  end
+
+  describe "#new" do
+    before do
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.put "/api/v1/forms/2", post_headers
+        mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
+      end
+
+      ActiveResourceMock.mock_resource(form,
+                                       {
+                                         read: { response: form, status: 200 },
+                                         update: { response: updated_form, status: 200 },
+                                       })
+      get make_live_path(id: 2)
+    end
+
+    context "when the form is not live" do
+      it "Reads the form from the API" do
+        expect(form).to have_been_read
+      end
+
+      it "returns 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders new" do
+        expect(response).to render_template(:new)
+      end
+    end
+
+    context "when the form is already live" do
+      let(:form) do
+        Form.new(
+          name: "Form name",
+          submission_email: "submission@email.com",
+          id: 2,
+          org: "test-org",
+          privacy_policy_url: "https://www.example.com",
+          live_at: "not blank",
+        )
+      end
+
+      it "Reads the form from the API" do
+        expect(form).to have_been_read
+      end
+
+      it "redirects to confirmation page" do
+        expect(response).to redirect_to(live_confirmation_url(2))
+      end
+    end
+  end
+
+  describe "#confirmation" do
+    before do
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.put "/api/v1/forms/2", post_headers
+        mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
+      end
+      get live_confirmation_url(id: 2)
+    end
+
+    context "when the form is already live" do
+      let(:form) do
+        Form.new(
+          name: "Form name",
+          submission_email: "submission@email.com",
+          id: 2,
+          org: "test-org",
+          privacy_policy_url: "https://www.example.com",
+          live_at: "not blank",
+        )
+      end
+
+      it "Reads the form from the API" do
+        expect(form).to have_been_read
+      end
+
+      it "returns 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders confirmation" do
+        expect(response).to render_template(:confirmation)
+      end
+    end
+
+    context "when the form is not live" do
+      it "Reads the form from the API" do
+        expect(form).to have_been_read
+      end
+
+      it "redirects to the make_live page" do
+        expect(response).to redirect_to(make_live_url(2))
+      end
+    end
+  end
+
+  describe "#create" do
+    around do |example|
+      Timecop.freeze(Time.zone.local(2021, 1, 1)) do
+        example.run
+      end
+    end
+
+    before do
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.put "/api/v1/forms/2", post_headers
+        mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
+      end
+
+      post(make_live_path(id: 2), params: { forms_make_live_form: { confirm_make_live: :made_live } })
+    end
+
+    it "Reads the form from the API" do
+      expect(form).to have_been_read
+    end
+
+    it "Updates the form on the API" do
+      expect(updated_form).to have_been_updated
+    end
+
+    it "redirects you to the confirmation page" do
+      expect(response).to redirect_to(live_confirmation_url(2))
+    end
+  end
+end

@@ -1,0 +1,14 @@
+en:
+  helpers:
+    label:
+      forms_make_live_form:
+        options:
+          made_live: "Yes"
+          not_made_live: "No"
+  activemodel:
+    errors:
+      models:
+        forms/make_live_form:
+          attributes:
+            confirm_make_live:
+              blank: You must choose an option
