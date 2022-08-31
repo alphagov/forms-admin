@@ -72,6 +72,7 @@ group :development, :test do
   gem "i18n-tasks", "~> 1.0.11"
   gem "rails-controller-testing"
   gem "rubocop-govuk", require: false
+  gem "timecop"
 end
 
 group :development do
