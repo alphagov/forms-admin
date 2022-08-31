@@ -10,8 +10,10 @@
     <% if flash[:message] %>
       <p class="govuk-body"><%= flash[:message] %></p>
     <% end %>
-
-    <%= govuk_button_link_to t("pages.index.add_question"), new_page_path(@form), class: "govuk-!-margin-bottom-3 govuk-!-margin-top-3" %>
+    <div class="govuk-button-group">
+      <%= govuk_button_link_to t("pages.index.add_question"), new_page_path(@form), class:"govuk-!-margin-bottom-3 govuk-!-margin-top-3" %>
+      <%= govuk_link_to t("home.preview"),"#{ENV['RUNNER_BASE']}/form/#{@form.id}", { target:"_blank", rel:"noopener noreferrer"} %>
+    </div>
 
     <% if @pages.any? %>
       <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0"><%= t("forms.form_overview.your_questions") %></h2>

@@ -69,7 +69,7 @@ en:
     create_a_form: Create a form
     edit: Edit
     main_heading: GOV.UK Forms
-    preview: View in runner
+    preview: Preview this form
     your_forms: Your forms
   internal_server_error:
     body: Please try again later.
