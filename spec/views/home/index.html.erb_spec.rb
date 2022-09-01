@@ -19,7 +19,7 @@ describe "home/index.html.erb" do
 
   describe "when there are one or more forms to display" do
     around do |example|
-      ClimateControl.modify RUNNER_BASE: "api-host" do
+      ClimateControl.modify RUNNER_BASE: "runner-host" do
         example.run
       end
     end
@@ -39,8 +39,8 @@ describe "home/index.html.erb" do
     end
 
     it "displays preview links for each form" do
-      expect(rendered).to have_link("Preview this form : Form 1", href: "api-host/form/1", visible: :all)
-      expect(rendered).to have_link("Preview this form : Form 2", href: "api-host/form/2", visible: :all)
+      expect(rendered).to have_link("Preview this form : Form 1", href: "runner-host/form/1", visible: :all)
+      expect(rendered).to have_link("Preview this form : Form 2", href: "runner-host/form/2", visible: :all)
     end
   end
 end
