@@ -25,4 +25,8 @@ module ApplicationHelper
       classes:,
     )
   end
+
+  def link_to_runner(runner_url, form_id)
+    "#{runner_url}/form/#{form_id}"
+  end
 end
