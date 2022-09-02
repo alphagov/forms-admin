@@ -17,7 +17,7 @@
     %>
 
     <p class="govuk-body govuk-!-margin-bottom-9">
-      <%= govuk_link_to t("home.preview"),"#{ENV['RUNNER_BASE']}/form/#{@form.id}", { target:"_blank", rel:"noopener noreferrer"} %>
+      <%= govuk_link_to t("home.preview"),link_to_runner(ENV["RUNNER_BASE"], @form.id ), { target:"_blank", rel:"noopener noreferrer"} %>
     </p>
 
     <%= govuk_button_link_to t("forms.delete_form"), delete_form_path(@form.id), warning: true %>

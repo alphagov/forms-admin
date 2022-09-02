@@ -7,7 +7,7 @@
       The URL for your form is:
 
       <span class="govuk-!-display-block govuk-!-margin-top-6 govuk-!-padding-bottom-6">
-        <%= govuk_link_to "#{ENV['RUNNER_BASE']}/form/#{@form.id}","#{ENV['RUNNER_BASE']}/form/#{@form.id}", { target:"_blank", rel:"noopener noreferrer"} %>
+        <%= govuk_link_to link_to_runner(ENV["RUNNER_BASE"], @form.id ), link_to_runner(ENV["RUNNER_BASE"], @form.id ), { target:"_blank", rel:"noopener noreferrer"} %>
       </span>
     </p>
 
