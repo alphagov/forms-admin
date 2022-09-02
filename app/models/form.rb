@@ -3,10 +3,26 @@ class Form < ActiveResource::Base
   self.include_format_in_path = false
   headers["X-API-Token"] = ENV["API_KEY"]
 
+  STATUSES = { draft: "draft", live: "live" }.freeze
+
   has_many :pages
 
   def last_page
     pages.find { |p| !p.has_next_page? }
+  end
+
+  def live?
+    live_at.present?
+  end
+
+  def draft?
+    !live?
+  end
+
+  def status
+    return STATUSES[:live] if live?
+
+    STATUSES[:draft]
   end
 
   def save_page(page)
