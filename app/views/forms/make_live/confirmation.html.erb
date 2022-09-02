@@ -1,1 +1,23 @@
-<h1 class="govuk-heading-xl">its live!</h1>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l"><%= @form.name %></span>
+    <h1 class="govuk-heading-l">Your form is live</h1>
+
+    <p class="govuk-body">
+      The URL for your form is:
+
+      <span class="govuk-!-display-block govuk-!-margin-top-6 govuk-!-padding-bottom-6">
+        <%= govuk_link_to "#{ENV['RUNNER_BASE']}/form/#{@form.id}","#{ENV['RUNNER_BASE']}/form/#{@form.id}", { target:"_blank", rel:"noopener noreferrer"} %>
+      </span>
+    </p>
+
+    <p class="govuk-body">
+      The form will not be indexed by search engines, so people will not be able to find it easily.
+      Contact your GOV.UK publishing team to publish a link to your form on GOV.UK so people can find it.
+    </p>
+
+    <p class="govuk-body">
+      <%= govuk_link_to "Continue to form details", form_path(@form.id) %>
+    </p>
+  </div>
+</div>

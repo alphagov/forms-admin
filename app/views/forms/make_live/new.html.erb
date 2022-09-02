@@ -4,38 +4,33 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Make your form live</h1>
+    <%= form_with(model: @make_live_form, url: make_live_create_path) do |f| %>
+      <% if @make_live_form&.errors&.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
 
-    <p class="govuk-body">
-      When you make your form live you will get a URL for the form. The form
-      will not be indexed by search engines, so people will not be able to
-      find it easily. Contact your GOV.UK publishing team to publish a link to
-      your form on GOV.UK so people can find it.
-    </p>
-    <p></p>
-    <p class="govuk-body">
-      Make sure you are happy with the form before you make it live. After you
-      have made your form live:
-    </p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>completed forms will be sent to asd</li>
-      <li>you will not be able to change the name of the form</li>
-    </ul>
-    <div
-      class="govuk-notification-banner"
-      role="region"
-      aria-labelledby="govuk-notification-banner-title"
-      data-module="govuk-notification-banner"
-    >
-      <div class="govuk-notification-banner__header">
-        <h2
-          class="govuk-notification-banner__title"
-          id="govuk-notification-banner-title"
-        >
-          Important
-        </h2>
-      </div>
-      <div class="govuk-notification-banner__content">
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @make_live_form.form.name %></span>
+        Make your form live
+      </h1>
+
+      <p class="govuk-body">
+        When you make your form live you will get a URL for the form. The form
+        will not be indexed by search engines, so people will not be able to
+        find it easily. Contact your GOV.UK publishing team to publish a link to
+        your form on GOV.UK so people can find it.
+      </p>
+      <p></p>
+      <p class="govuk-body">
+        Make sure you are happy with the form before you make it live. After you
+        have made your form live:
+      </p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>completed forms will be sent to <%= @make_live_form.form.submission_email %></li>
+        <li>you will not be able to change the name of the form</li>
+      </ul>
+      <%= govuk_notification_banner(title_text: "Important") do  %>
         <p class="govuk-notification-banner__heading">
           Any changes you make to a live form will be updated in the form
           immediately.
@@ -45,15 +40,12 @@
           the same time. They may lose any answers they have already provided
           and may need to start again.
         </p>
-      </div>
-    </div>
-
-    <%= form_with(model: @make_live_form, url: make_live_create_path) do |f| %>
-      <% if @make_live_form&.errors&.any? %>
-        <%= f.govuk_error_summary %>
       <% end %>
-      <span class="govuk-caption-l"><%= @item_name %></span>
-      <%= f.govuk_collection_radio_buttons :confirm_make_live, @make_live_form.values, ->(option) { option }, ->(option) { I18n.t('helpers.label.forms_make_live_form.options.' + "#{option}") }, legend: { text: I18n.t('helpers.label.forms_make_live_form.confirm_make_live'), size: 'l', tag: 'h1' } %>
+
+      <%= f.govuk_collection_radio_buttons :confirm_make_live,
+                                           @make_live_form.values, ->(option) { option }, ->(option) { I18n.t('helpers.label.forms_make_live_form.options.' + "#{option}") },
+                                           legend: { text: I18n.t('helpers.label.forms_make_live_form.confirm_make_live'),
+                                                     size: 'm'}, inline: true %>
       <%= f.govuk_submit %>
     <% end %>
   </div>
