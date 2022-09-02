@@ -30,5 +30,12 @@ private
                     rows: [
                       { task_name: t("forms.task_lists.section_3.privacy_policy"), path: privacy_policy_path(@form.id) },
                     ] }]
+
+    unless @form.live?
+      @task_list.append({ title: t("forms.task_lists.section_4.title"),
+                          rows: [
+                            { task_name: t("forms.task_lists.section_4.make_live"), path: make_live_path(@form.id) },
+                          ] })
+    end
   end
 end
