@@ -49,6 +49,8 @@ RSpec.describe "MakeLive controller", type: :request do
     }
   end
 
+  let(:form_params) { nil }
+
   describe "#new" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -86,7 +88,7 @@ RSpec.describe "MakeLive controller", type: :request do
           id: 2,
           org: "test-org",
           privacy_policy_url: "https://www.example.com",
-          live_at: "not blank",
+          live_at: "2021-01-01T00:00:00.000Z",
         )
       end
 
@@ -117,7 +119,7 @@ RSpec.describe "MakeLive controller", type: :request do
           id: 2,
           org: "test-org",
           privacy_policy_url: "https://www.example.com",
-          live_at: "not blank",
+          live_at: "2021-01-01T00:00:00.000Z",
         )
       end
 
@@ -158,19 +160,39 @@ RSpec.describe "MakeLive controller", type: :request do
         mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
       end
 
-      post(make_live_path(id: 2), params: { forms_make_live_form: { confirm_make_live: :made_live } })
+      post(make_live_path(id: 2), params: form_params)
     end
 
-    it "Reads the form from the API" do
-      expect(form).to have_been_read
+    context "when making a form live" do
+      let(:form_params) { { forms_make_live_form: { confirm_make_live: :made_live } } }
+
+      it "Reads the form from the API" do
+        expect(form).to have_been_read
+      end
+
+      it "Updates the form on the API" do
+        expect(updated_form).to have_been_updated
+      end
+
+      it "redirects you to the confirmation page" do
+        expect(response).to redirect_to(live_confirmation_url(2))
+      end
     end
 
-    it "Updates the form on the API" do
-      expect(updated_form).to have_been_updated
-    end
+    context "when deciding not to make a form live" do
+      let(:form_params) { { forms_make_live_form: { confirm_make_live: :not_made_live } } }
 
-    it "redirects you to the confirmation page" do
-      expect(response).to redirect_to(live_confirmation_url(2))
+      it "Reads the form from the API" do
+        expect(form).to have_been_read
+      end
+
+      it "does not update the form on the API" do
+        expect(form).not_to have_been_updated
+      end
+
+      it "redirects you to the form page" do
+        expect(response).to redirect_to(form_path(2))
+      end
     end
   end
 end
