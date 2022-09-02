@@ -1,7 +1,7 @@
 module Forms
   class MakeLiveController < BaseController
     def new
-      redirect_to live_confirmation_url if current_form.live_at.present?
+      redirect_to live_confirmation_url if current_form.live?
       @make_live_form = MakeLiveForm.new(form: current_form)
     end
 
@@ -20,7 +20,8 @@ module Forms
     end
 
     def confirmation
-      redirect_to make_live_path if current_form.live_at.blank?
+      redirect_to make_live_path if current_form.draft?
+      @form = current_form
     end
 
   private
