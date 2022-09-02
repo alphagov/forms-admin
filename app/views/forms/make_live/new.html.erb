@@ -9,37 +9,15 @@
         <%= f.govuk_error_summary %>
       <% end %>
 
-
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= @make_live_form.form.name %></span>
-        Make your form live
+        <%= t("page_titles.make_live_form") %>
       </h1>
 
-      <p class="govuk-body">
-        When you make your form live you will get a URL for the form. The form
-        will not be indexed by search engines, so people will not be able to
-        find it easily. Contact your GOV.UK publishing team to publish a link to
-        your form on GOV.UK so people can find it.
-      </p>
-      <p></p>
-      <p class="govuk-body">
-        Make sure you are happy with the form before you make it live. After you
-        have made your form live:
-      </p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>completed forms will be sent to <%= @make_live_form.form.submission_email %></li>
-        <li>you will not be able to change the name of the form</li>
-      </ul>
+      <%= t("make_live.new.body_html", submission_email: @make_live_form.form.submission_email) %>
+
       <%= govuk_notification_banner(title_text: "Important") do  %>
-        <p class="govuk-notification-banner__heading">
-          Any changes you make to a live form will be updated in the form
-          immediately.
-        </p>
-        <p class="govuk-body">
-          This could have an impact on people who are filling in the form at
-          the same time. They may lose any answers they have already provided
-          and may need to start again.
-        </p>
+        <%= t("make_live.new.notification_content_html") %>
       <% end %>
 
       <%= f.govuk_collection_radio_buttons :confirm_make_live,
