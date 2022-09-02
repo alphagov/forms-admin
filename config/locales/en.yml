@@ -79,6 +79,41 @@ en:
   internal_server_error:
     body: Please try again later.
     title: Sorry, there is a problem with the service
+  make_live:
+    confirmation:
+      body_html: |
+        <p class="govuk-body">
+          The form will not be indexed by search engines, so people will not be able to find it easily.
+          Contact your GOV.UK publishing team to publish a link to your form on GOV.UK so people can find it.
+        </p>
+      continue_link: Continue to form details
+    new:
+      body_html: |
+        <p class="govuk-body">
+          When you make your form live you will get a URL for the form. The form
+          will not be indexed by search engines, so people will not be able to
+          find it easily. Contact your GOV.UK publishing team to publish a link to
+          your form on GOV.UK so people can find it.
+        </p>
+
+        <p class="govuk-body">
+          Make sure you are happy with the form before you make it live. After you
+          have made your form live:
+        </p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>completed forms will be sent to %{submission_email}</li>
+          <li>you will not be able to change the name of the form</li>
+        </ul>
+      notification_content_html: |
+        <p class="govuk-notification-banner__heading">
+          Any changes you make to a live form will be updated in the form
+          immediately.
+        </p>
+        <p class="govuk-body">
+          This could have an impact on people who are filling in the form at
+          the same time. They may lose any answers they have already provided
+          and may need to start again.
+        </p>
   not_found:
     body: |
       If you typed the web address, check it is correct.
@@ -96,6 +131,7 @@ en:
     not_found: Page not found
     privacy_policy_form: Provide a link to privacy information for this form
     service_unavailable: Sorry, the service is unavailable
+    your_form_is_live: Your form is live
   pages:
     delete_question: Delete question
     go_to_your_questions: Go to your questions
