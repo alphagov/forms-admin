@@ -43,6 +43,6 @@ jobs:
             --var GDS_SSO_OAUTH_SECRET=${{ secrets.GDS_SSO_OAUTH_SECRET }} \
             --var GOVUK_APP_DOMAIN=${{ secrets.GOVUK_APP_DOMAIN }} \
             --var SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
-            --var API_BASE=${{ secrets.API_BASE }} \
+            --var SETTINGS__FORMS_API__BASE_URL=${{ secrets.API_BASE }} \
             --var RUNNER_BASE=${{ secrets.RUNNER_BASE }} \
-            --var API_KEY=${{ secrets.API_KEY }} 
+            --var API_KEY=${{ secrets.API_KEY }}

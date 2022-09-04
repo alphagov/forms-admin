@@ -24,8 +24,8 @@ jobs:
     env:
       RAILS_ENV: test
       DATABASE_URL: "postgres://rails:password@localhost:5432"
-      API_BASE: http://localhost:9292
       API_KEY: test
+      SETTINGS__FORMS_API__BASE_URL: http://localhost:9292
 
     steps:
       - name: Checkout code

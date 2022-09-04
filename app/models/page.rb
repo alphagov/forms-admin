@@ -1,5 +1,5 @@
 class Page < ActiveResource::Base
-  self.site = (ENV["API_BASE"]).to_s
+  self.site = Settings.forms_api.base_url
   self.prefix = "/api/v1/forms/:form_id/"
   self.include_format_in_path = false
   headers["X-API-Token"] = ENV["API_KEY"]
