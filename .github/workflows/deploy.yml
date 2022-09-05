@@ -44,5 +44,5 @@ jobs:
             --var GOVUK_APP_DOMAIN=${{ secrets.GOVUK_APP_DOMAIN }} \
             --var SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
             --var SETTINGS__FORMS_API__BASE_URL=${{ secrets.API_BASE }} \
-            --var RUNNER_BASE=${{ secrets.RUNNER_BASE }} \
-            --var API_KEY=${{ secrets.API_KEY }}
+            --var SETTINGS__FORMS_API__AUTH_KEY=${{ secrets.API_KEY }} \
+            --var RUNNER_BASE=${{ secrets.RUNNER_BASE }}

@@ -32,7 +32,7 @@ Cypress.Commands.add('createForm', formData => {
       url: 'http://localhost:9292/api/v1/forms',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
-        'X-Api-Token': Cypress.env('API_KEY')
+        'X-Api-Token': Cypress.env('SETTINGS__FORMS_API__AUTH_KEY')
       },
       body: formData
     })
@@ -43,7 +43,7 @@ Cypress.Commands.add('createForm', formData => {
           url:
             'http://localhost:9292/api/v1/forms?org=government-digital-service',
           headers: {
-            'X-Api-Token': Cypress.env('API_KEY')
+            'X-Api-Token': Cypress.env('SETTINGS__FORMS_API__AUTH_KEY')
           }
         })
         .then(response => {
@@ -59,7 +59,7 @@ Cypress.Commands.add('createPage', (formId, pageData) => {
       url: `http://localhost:9292/api/v1/forms/${formId}/pages`,
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
-        'X-Api-Token': Cypress.env('API_KEY')
+        'X-Api-Token': Cypress.env('SETTINGS__FORMS_API__AUTH_KEY')
       },
       body: pageData
     })
@@ -69,7 +69,7 @@ Cypress.Commands.add('createPage', (formId, pageData) => {
           method: 'GET',
           url: `http://localhost:9292/api/v1/forms/${formId}/pages`,
           headers: {
-            'X-Api-Token': Cypress.env('API_KEY')
+            'X-Api-Token': Cypress.env('SETTINGS__FORMS_API__AUTH_KEY')
           }
         })
         .then(response => {
@@ -83,7 +83,7 @@ Cypress.Commands.add('deleteForm', formId => {
     method: 'DELETE',
     url: `http://localhost:9292/api/v1/forms/${formId}`,
     headers: {
-      'X-Api-Token': Cypress.env('API_KEY')
+      'X-Api-Token': Cypress.env('SETTINGS__FORMS_API__AUTH_KEY')
     }
   })
 })
@@ -93,7 +93,7 @@ Cypress.Commands.add('deletePage', (formId, pageId) => {
     method: 'DELETE',
     url: `http://localhost:9292/api/v1/forms/${formId}/pages/${pageId}`,
     headers: {
-      'X-Api-Token': Cypress.env('API_KEY')
+      'X-Api-Token': Cypress.env('SETTINGS__FORMS_API__AUTH_KEY')
     }
   })
 })

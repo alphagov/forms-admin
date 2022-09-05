@@ -31,14 +31,14 @@ RSpec.describe "ChangeEmail controller", type: :request do
 
   let(:req_headers) do
     {
-      "X-API-Token" => ENV["API_KEY"],
+      "X-API-Token" => Settings.forms_api.auth_key,
       "Accept" => "application/json",
     }
   end
 
   let(:post_headers) do
     {
-      "X-API-Token" => ENV["API_KEY"],
+      "X-API-Token" => Settings.forms_api.auth_key,
       "Content-Type" => "application/json",
     }
   end
