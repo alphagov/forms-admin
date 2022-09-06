@@ -10,9 +10,10 @@ en:
             question_text:
               blank: Question text can't be blank
   footer:
-    crown_copyright: "© Crown copyright"
-    licence_link_text: Open Government Licence v3.0
-    licence_main_text_html: All content is available under the <a class="govuk-footer__link" href="%{url}" rel="license">%{link_text}</a>, except where otherwise stated
+    accessibility_statement: Accessibility statement
+    cookies: Cookies
+    helpful_links: Helpful links
+    privacy: Privacy
   forms:
     delete_form: Delete form
     form_overview:
@@ -123,7 +124,7 @@ en:
   page_titles:
     change_email_form: What email address should form responses be sent to?
     change_name_form: Name your form
-    error_prefix: 'Error: '
+    error_prefix: "Error: "
     home: Home
     internal_server_error: Sorry, there is a problem with the service
     make_live_form: Make form live
