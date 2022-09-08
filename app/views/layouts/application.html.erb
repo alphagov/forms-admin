@@ -10,16 +10,16 @@
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon.ico" type="image/x-icon">
-    <link rel="mask-icon" href="/assets/images/govuk-mask-icon.svg" color="#0b0c0c">
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/govuk-apple-touch-icon-180x180.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="/assets/images/govuk-apple-touch-icon-167x167.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/govuk-apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
+    <%= favicon_link_tag "images/favicon.ico", rel:"shortcut icon", sizes:"16x16 32x32 48x48", type:"image/x-icon" %>
+    <%= favicon_link_tag "images/govuk-mask-icon.svg", rel:"mask-icon", color:"#0b0c0c", type: nil %>
+    <%= favicon_link_tag "images/govuk-apple-touch-icon-180x180.png", rel:"apple-touch-icon", sizes:"180x180", type: nil %>
+    <%= favicon_link_tag "images/govuk-apple-touch-icon-167x167.png", rel:"apple-touch-icon", sizes:"167x167", type: nil %>
+    <%= favicon_link_tag "images/govuk-apple-touch-icon-152x152.png", rel:"apple-touch-icon", sizes:"152x152", type: nil %>
+    <%= favicon_link_tag "images/govuk-apple-touch-icon.png", rel:"apple-touch-icon", type: nil %>
 
     <%= stylesheet_link_tag "application" %>
 
-    <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
+    <meta property="og:image" content="<%= image_path 'images/govuk-opengraph-image.png' %>">
   </head>
 
   <body class="govuk-template__body ">
