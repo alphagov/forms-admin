@@ -18,7 +18,6 @@ RSpec.describe "Errors", type: :request do
         expect(response.body).to include(I18n.t("not_found.title"))
       end
     end
-
   end
 
   describe "Internal server error" do

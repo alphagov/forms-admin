@@ -62,6 +62,7 @@ RSpec.describe "Forms", type: :request do
         "error": "not_found",
       }
     end
+
     before do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/999", headers, no_data_found_response, 404
