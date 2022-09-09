@@ -6,11 +6,25 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
       <span class="govuk-caption-l"><%= @form.name %></span><span class="govuk-visually-hidden"> - </span>
-      <%= t("forms.form_overview.title") %>
+      <%= @form_is_live ? t("forms.form_overview.live_title") : t("forms.form_overview.title") %>
     </h1>
 
     <% if flash[:message] %>
       <p class="govuk-body"><%= flash[:message] %></p>
+    <% end %>
+
+    <% if @form_is_live %>
+      <p class="govuk-body">
+        The URL for your form is:
+
+        <span class="govuk-!-display-block govuk-!-margin-top-6 govuk-!-padding-bottom-6">
+          <%= govuk_link_to link_to_runner(ENV["RUNNER_BASE"], @form.id ), link_to_runner(ENV["RUNNER_BASE"], @form.id ), { target:"_blank", rel:"noopener noreferrer"} %>
+        </span>
+      </p>
+      <div class="govuk-inset-text">
+        <p><%= t("live_form_warning.notification_heading") %></p>
+        <p><%= t("live_form_warning.notification_content") %></p>
+      </div>
     <% end %>
 
     <%= render TaskListComponent::View.new(sections: @task_list)

@@ -19,6 +19,7 @@ en:
     form_overview:
       edit: Edit
       title: Create a form
+      live_title: Your form
       your_questions: Your questions
     task_lists:
       section_1:
@@ -80,6 +81,15 @@ en:
   internal_server_error:
     body: Please try again later.
     title: Sorry, there is a problem with the service
+  live_form_warning:
+    notification_content: |
+      This could have an impact on people who are filling in the form at
+      the same time. They may lose any answers they have already provided
+      and may need to start again.
+    notification_heading: |
+      Any changes you make to a live form will be updated in the form
+      immediately.
+    notification_title: Important
   make_live:
     confirmation:
       body_html: |
@@ -105,14 +115,6 @@ en:
           <li>completed forms will be sent to %{submission_email}</li>
           <li>you will not be able to change the name of the form</li>
         </ul>
-      notification_content: |
-        This could have an impact on people who are filling in the form at
-        the same time. They may lose any answers they have already provided
-        and may need to start again.
-      notification_heading: |
-        Any changes you make to a live form will be updated in the form
-        immediately.
-      notification_title: Important
   not_found:
     body: |
       If you typed the web address, check it is correct.
@@ -122,7 +124,7 @@ en:
   page_titles:
     change_email_form: What email address should form responses be sent to?
     change_name_form: Name your form
-    error_prefix: 'Error: '
+    error_prefix: "Error: "
     home: Home
     internal_server_error: Sorry, there is a problem with the service
     make_live_form: Make form live

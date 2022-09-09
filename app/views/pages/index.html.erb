@@ -5,7 +5,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <% if @form.live_at && @form.live_at < Time.now %>
+    <% if @form_is_live %>
       <%= render LiveFormWarningComponent::View.new() %>
     <% end %>
 
