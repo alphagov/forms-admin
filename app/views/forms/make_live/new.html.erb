@@ -16,9 +16,7 @@
 
       <%= t("make_live.new.body_html", submission_email: @make_live_form.form.submission_email) %>
 
-      <%= govuk_notification_banner(title_text: "Important") do  %>
-        <%= t("make_live.new.notification_content_html") %>
-      <% end %>
+      <%= render LiveFormWarningComponent::View.new() %>
 
       <%= f.govuk_collection_radio_buttons :confirm_make_live,
                                            @make_live_form.values, ->(option) { option }, ->(option) { I18n.t('helpers.label.forms_make_live_form.options.' + "#{option}") },
