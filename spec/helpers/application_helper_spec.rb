@@ -15,9 +15,10 @@ RSpec.describe ApplicationHelper, type: :helper do
           submission_email: "submission@email.com",
           id: 2,
           org: "test-org",
-          live_at: ""
+          live_at: "",
         )
       end
+
       it "returns false" do
         expect(helper.form_is_live(form)).to be(false)
       end
@@ -30,9 +31,10 @@ RSpec.describe ApplicationHelper, type: :helper do
           submission_email: "submission@email.com",
           id: 2,
           org: "test-org",
-          live_at: "2020-09-09 11:01:25 +0100"
+          live_at: "2020-09-09 11:01:25 +0100",
         )
       end
+
       it "returns false" do
         expect(helper.form_is_live(form)).to be(true)
       end
