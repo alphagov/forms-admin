@@ -30,6 +30,8 @@ Rails.application.routes.draw do
   get "forms/:form_id/pages/:page_id/delete" => "forms/delete_confirmation#delete", as: :delete_page
   delete "forms/:form_id/pages/:page_id/delete" => "forms/delete_confirmation#destroy", as: :destroy_page
 
-  match "/404", to: "errors#not_found", via: :all
-  match "/500", to: "errors#internal_server_error", via: :all
+  match "/404", to: "errors#not_found", as: :error_404, via: :all
+  match "/500", to: "errors#internal_server_error", as: :error_500, via: :all
+
+  match "*path", to: "errors#not_found", via: :all
 end
