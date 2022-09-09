@@ -14,12 +14,14 @@ en:
     cookies: Cookies
     helpful_links: Helpful links
     privacy: Privacy
+  form_url_component:
+    url_is: 'The URL for your form is:'
   forms:
     delete_form: Delete form
     form_overview:
       edit: Edit
-      title: Create a form
       live_title: Your form
+      title: Create a form
       your_questions: Your questions
     task_lists:
       section_1:
@@ -124,7 +126,7 @@ en:
   page_titles:
     change_email_form: What email address should form responses be sent to?
     change_name_form: Name your form
-    error_prefix: "Error: "
+    error_prefix: 'Error: '
     home: Home
     internal_server_error: Sorry, there is a problem with the service
     make_live_form: Make form live

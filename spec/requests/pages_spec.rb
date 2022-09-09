@@ -12,6 +12,7 @@ RSpec.describe "Pages", type: :request do
           id: 2,
           name: "Form name",
           submission_email: "submission@email.com",
+          live_at: "",
         })
       end
 

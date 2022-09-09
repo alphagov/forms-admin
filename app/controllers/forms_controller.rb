@@ -2,7 +2,7 @@ class FormsController < ApplicationController
   def show
     @form = Form.find(params[:id])
     create_form_task_list
-    @form_is_live = @form.live_at && @form.live_at < Time.now
+    @form_is_live = @form.live_at.present? && @form.live_at < Time.zone.now
   end
 
 private

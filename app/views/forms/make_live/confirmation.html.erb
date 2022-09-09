@@ -5,13 +5,7 @@
     <span class="govuk-caption-l"><%= @form.name %></span>
     <h1 class="govuk-heading-l"><%= t('page_titles.your_form_is_live') %></h1>
 
-    <p class="govuk-body">
-      The URL for your form is:
-
-      <span class="govuk-!-display-block govuk-!-margin-top-6 govuk-!-padding-bottom-6">
-        <%= govuk_link_to link_to_runner(ENV["RUNNER_BASE"], @form.id ), link_to_runner(ENV["RUNNER_BASE"], @form.id ), { target:"_blank", rel:"noopener noreferrer"} %>
-      </span>
-    </p>
+    <%= render FormUrlComponent::View.new(link_to_runner(ENV["RUNNER_BASE"], @form.id )) %>
 
     <%= t("make_live.confirmation.body_html") %>
 

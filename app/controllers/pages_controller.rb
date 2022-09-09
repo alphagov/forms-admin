@@ -8,7 +8,7 @@ class PagesController < ApplicationController
   def index
     @form = Form.find(params[:form_id])
     @pages = @form.pages
-    @form_is_live = @form.live_at && @form.live_at < Time.now
+    @form_is_live = @form.live_at.present? && @form.live_at < Time.zone.now
   end
 
   def create
