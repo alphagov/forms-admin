@@ -49,6 +49,36 @@ RSpec.describe "Forms", type: :request do
     end
   end
 
+  describe "no form found" do
+    let(:headers) do
+      {
+        "X-API-Token" => ENV["API_KEY"],
+        "Accept" => "application/json",
+      }
+    end
+
+    let(:no_data_found_response) do
+      {
+        "error": "not_found",
+      }
+    end
+    before do
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get "/api/v1/forms/999", headers, no_data_found_response, 404
+      end
+
+      get form_path(999)
+    end
+
+    it "Render the not found page" do
+      expect(response.body).to include(I18n.t("not_found.title"))
+    end
+
+    it "returns 404" do
+      expect(response.status).to eq(404)
+    end
+  end
+
   describe "Deleting an existing form" do
     describe "Given a valid form" do
       let(:form) do

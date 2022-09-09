@@ -1,4 +1,8 @@
 class FormsController < ApplicationController
+  rescue_from ActiveResource::ResourceNotFound do
+    render template: "errors/not_found", status: :not_found
+  end
+
   def show
     @form = Form.find(params[:id])
     create_form_task_list
