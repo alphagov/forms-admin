@@ -14,10 +14,13 @@ en:
     cookies: Cookies
     helpful_links: Helpful links
     privacy: Privacy
+  form_url_component:
+    url_is: 'The URL for your form is:'
   forms:
     delete_form: Delete form
     form_overview:
       edit: Edit
+      live_title: Your form
       title: Create a form
       your_questions: Your questions
     task_lists:
@@ -80,6 +83,15 @@ en:
   internal_server_error:
     body: Please try again later.
     title: Sorry, there is a problem with the service
+  live_form_warning:
+    notification_content: |
+      This could have an impact on people who are filling in the form at
+      the same time. They may lose any answers they have already provided
+      and may need to start again.
+    notification_heading: |
+      Any changes you make to a live form will be updated in the form
+      immediately.
+    notification_title: Important
   make_live:
     confirmation:
       body_html: |
@@ -105,16 +117,6 @@ en:
           <li>completed forms will be sent to %{submission_email}</li>
           <li>you will not be able to change the name of the form</li>
         </ul>
-      notification_content_html: |
-        <p class="govuk-notification-banner__heading">
-          Any changes you make to a live form will be updated in the form
-          immediately.
-        </p>
-        <p class="govuk-body">
-          This could have an impact on people who are filling in the form at
-          the same time. They may lose any answers they have already provided
-          and may need to start again.
-        </p>
   not_found:
     body: |
       If you typed the web address, check it is correct.

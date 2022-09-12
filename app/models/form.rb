@@ -12,7 +12,7 @@ class Form < ActiveResource::Base
   end
 
   def live?
-    live_at.present?
+    live_at.present? && live_at < Time.zone.now
   end
 
   def draft?
