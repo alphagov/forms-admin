@@ -17,6 +17,13 @@ describe Form do
         expect(form.live?).to eq true
       end
     end
+
+    context "when form is live in the future" do
+      it "return false" do
+        form.live_at = "2101-01-01T00:00:00.000Z"
+        expect(form.live?).to eq false
+      end
+    end
   end
 
   describe "#status" do

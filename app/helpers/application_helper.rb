@@ -29,8 +29,4 @@ module ApplicationHelper
   def link_to_runner(runner_url, form_id)
     "#{runner_url}/form/#{form_id}"
   end
-
-  def form_is_live(form)
-    form.live_at.present? && form.live_at < Time.zone.now
-  end
 end
