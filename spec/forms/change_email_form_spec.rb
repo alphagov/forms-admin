@@ -24,6 +24,17 @@ RSpec.describe Forms::ChangeEmailForm, type: :model do
       )
     end
 
+    it "is invalid if email address does not end in .gov.uk" do
+      change_email_form = described_class.new(submission_email: "laura.mipsum@gmail.com")
+      error_message = I18n.t("activemodel.errors.models.forms/change_email_form.attributes.submission_email.non_govuk_email")
+
+      change_email_form.validate(:submission_email)
+
+      expect(change_email_form.errors.full_messages_for(:submission_email)).to include(
+        "Submission email #{error_message}",
+      )
+    end
+
     # More tests are required here -  e.g. that a valid submission updates the Form object
   end
 end

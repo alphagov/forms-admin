@@ -5,7 +5,9 @@ class Forms::ChangeEmailForm
   attr_accessor :form, :submission_email
 
   EMAIL_REGEX = /.*@.*/
+  GOVUK_EMAIL_REGEX = /\.gov\.uk\z/
   validates :submission_email, presence: true, format: { with: EMAIL_REGEX, message: :invalid_email }
+  validates :submission_email, format: { with: GOVUK_EMAIL_REGEX, message: :non_govuk_email }
 
   def submit
     return false if invalid?
