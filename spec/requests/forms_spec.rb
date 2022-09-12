@@ -53,7 +53,7 @@ RSpec.describe "Forms", type: :request do
   describe "no form found" do
     let(:headers) do
       {
-        "X-API-Token" => ENV["API_KEY"],
+        "X-API-Token" => Settings.forms_api.auth_key,
         "Accept" => "application/json",
       }
     end
