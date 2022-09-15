@@ -20,6 +20,8 @@ Rails.application.routes.draw do
   get "forms/:id/make_live" => "forms/make_live#new", as: :make_live
   post "forms/:id/make_live" => "forms/make_live#create", as: :make_live_create
   get "forms/:id/live_confirmation" => "forms/make_live#confirmation", as: :live_confirmation
+  get "forms/:id/what-happens-next" => "forms/what_happens_next#new", as: :what_happens_next
+  post "forms/:id/what-happens-next" => "forms/what_happens_next#create", as: :what_happens_next_create
 
   # Page routes
   get "forms/:form_id/pages" => "pages#index", as: :form_pages

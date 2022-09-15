@@ -26,6 +26,7 @@ en:
     task_lists:
       section_1:
         add_or_edit_questions: Add and edit your questions
+        add_what_happens_next: Add information about what happens next
         change_name: Edit the name of your form
         title: Create your form
       section_2:
@@ -134,6 +135,7 @@ en:
     not_found: Page not found
     privacy_policy_form: Provide a link to privacy information for this form
     service_unavailable: Sorry, the service is unavailable
+    what_happens_next_form: Form submitted page
     your_form_is_live: Your form is live
   pages:
     delete_question: Delete question

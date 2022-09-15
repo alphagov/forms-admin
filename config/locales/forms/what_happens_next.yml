@@ -1,0 +1,13 @@
+en:
+  helpers:
+    label:
+      forms_what_happens_next_form:
+        what_happens_next_text: Enter some information to tell people what will happen next
+  activemodel:
+    errors:
+      models:
+        forms/what_happens_next_form:
+          attributes:
+            what_happens_next_text:
+              blank: Enter some information about what happens next
+              too_long: The information about what happens next cannot be longer than 2,000 characters
