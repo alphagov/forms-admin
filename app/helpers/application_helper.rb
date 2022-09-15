@@ -7,7 +7,7 @@ module ApplicationHelper
   end
 
   def set_page_title(title)
-    content_for(:title) { title }
+    content_for(:title) { title.html_safe }
   end
 
   def title_with_error_prefix(title, error)
