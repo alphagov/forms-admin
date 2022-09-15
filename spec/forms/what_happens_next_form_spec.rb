@@ -25,7 +25,7 @@ RSpec.describe Forms::WhatHappensNextForm, type: :model do
 
         expect(what_happens_next_form.errors.full_messages_for(:what_happens_next_text)).to include(
           "What happens next text #{error_message}",
-          )
+        )
       end
     end
 

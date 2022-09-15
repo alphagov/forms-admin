@@ -25,6 +25,7 @@ private
                     rows: [
                       { task_name: t("forms.task_lists.section_1.change_name"), path: change_form_name_path(@form) },
                       { task_name: t("forms.task_lists.section_1.add_or_edit_questions"), path: @question_path },
+                      { task_name: t("forms.task_lists.section_1.add_what_happens_next"), path: what_happens_next_path(@form.id) },
                     ] },
                   { title: t("forms.task_lists.section_2.title"),
                     rows: [
