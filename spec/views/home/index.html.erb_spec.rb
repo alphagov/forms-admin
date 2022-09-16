@@ -39,8 +39,8 @@ describe "home/index.html.erb" do
     end
 
     it "displays preview links for each form" do
-      expect(rendered).to have_link("Preview this form : Form 1", href: "preview-/form/1", visible: :all)
-      expect(rendered).to have_link("Preview this form : Form 2", href: "preview-/form/2", visible: :all)
+      expect(rendered).to have_link("Preview this form : Form 1", href: "runner-host/preview-form/1", visible: :all)
+      expect(rendered).to have_link("Preview this form : Form 2", href: "runner-host/preview-form/2", visible: :all)
     end
   end
 end

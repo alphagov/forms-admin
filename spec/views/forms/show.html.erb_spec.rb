@@ -18,7 +18,7 @@ describe "forms/show.html.erb" do
   end
 
   it "contains a link to preview the form" do
-    expect(rendered).to have_link("Preview this form", href: "runner-host/form/1", visible: :all)
+    expect(rendered).to have_link("Preview this form", href: "runner-host/preview-form/1", visible: :all)
   end
 
   it "contains a link to delete the form" do
