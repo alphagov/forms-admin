@@ -5,7 +5,7 @@
     <span class="govuk-caption-l"><%= @form.name %></span>
     <h1 class="govuk-heading-l"><%= t('page_titles.your_form_is_live') %></h1>
 
-    <%= render FormUrlComponent::View.new(link_to_runner(ENV["RUNNER_BASE"], @form.id )) %>
+    <%= render FormUrlComponent::View.new(link_to_runner(ENV["RUNNER_BASE"], @form.id, true )) %>
 
     <%= t("make_live.confirmation.body_html") %>
 
