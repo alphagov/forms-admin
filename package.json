@@ -58,7 +58,10 @@
       "Cypress",
       "beforeEach",
       "before",
-      "after"
+      "after",
+      "test",
+      "jest",
+      "expect"
     ]
   },
   "stylelint": {
