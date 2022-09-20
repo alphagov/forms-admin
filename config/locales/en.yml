@@ -16,7 +16,7 @@ en:
     privacy: Privacy
   form_url_component:
     copy_to_clipboard: Copy URL to clipboard
-    url_is: "The URL for your form is:"
+    url_is: 'The URL for your form is:'
   forms:
     delete_form: Delete form
     form_overview:
@@ -128,7 +128,7 @@ en:
   page_titles:
     change_email_form: What email address should form responses be sent to?
     change_name_form: Name your form
-    error_prefix: "Error: "
+    error_prefix: 'Error: '
     home: Home
     internal_server_error: Sorry, there is a problem with the service
     make_live_form: Make form live
