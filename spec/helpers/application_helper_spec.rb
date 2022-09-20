@@ -10,13 +10,13 @@ RSpec.describe ApplicationHelper, type: :helper do
 
     context "with live set to false" do
       it "returns url to the form-runner's preview form" do
-        expect(helper.link_to_runner("example.com", 2, false)).to eq "example.com/preview-form/2"
+        expect(helper.link_to_runner("example.com", 2, live: false)).to eq "example.com/preview-form/2"
       end
     end
 
     context "with live set to true" do
       it "returns url to the form-runner's live form" do
-        expect(helper.link_to_runner("example.com", 2, true)).to eq "example.com/form/2"
+        expect(helper.link_to_runner("example.com", 2, live: true)).to eq "example.com/form/2"
       end
     end
   end
