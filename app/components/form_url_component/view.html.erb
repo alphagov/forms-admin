@@ -1,7 +1,9 @@
-<p class="govuk-body">
-  <%= t("form_url_component.url_is") %>
+<div data-module="copy-to-clipboard" data-copy-button-text="Copy URL to clipboard">
+  <p class="govuk-body">
+    <%= t("form_url_component.url_is") %>
+  </p>
 
-  <span class="govuk-!-display-block govuk-!-margin-top-6 govuk-!-padding-bottom-6">
-    <%= govuk_link_to @runner_link, @runner_link, { target:"_blank", rel:"noopener noreferrer"} %>
-  </span>
-</p>
+  <p class="govuk-body" data-copy-target>
+    <strong><%= @runner_link %><strong>
+  </p>
+</div>
