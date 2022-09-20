@@ -26,7 +26,7 @@ module ApplicationHelper
     )
   end
 
-  def link_to_runner(runner_url, form_id, live = false)
+  def link_to_runner(runner_url, form_id, live: false)
     mode_segment = live ? "form" : "preview-form"
     "#{runner_url}/#{mode_segment}/#{form_id}"
   end
