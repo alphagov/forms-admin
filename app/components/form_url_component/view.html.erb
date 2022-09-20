@@ -1,4 +1,4 @@
-<div data-module="copy-to-clipboard" data-copy-button-text="Copy URL to clipboard">
+<%= tag.div "data-module": "copy-to-clipboard", "data-copy-button-text": t("form_url_component.copy_to_clipboard") do %>
   <p class="govuk-body">
     <%= t("form_url_component.url_is") %>
   </p>
@@ -7,3 +7,4 @@
     <strong><%= @runner_link %><strong>
   </p>
 </div>
+<% end %>
