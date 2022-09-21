@@ -24,14 +24,15 @@ Rails.application.routes.draw do
   post "forms/:id/what-happens-next" => "forms/what_happens_next#create", as: :what_happens_next_create
 
   # Page routes
-  get "forms/:form_id/pages" => "pages#index", as: :form_pages
-  get "forms/:form_id/pages/:page_id/edit" => "pages#edit", as: :edit_page
-  patch "forms/:form_id/pages/:page_id/edit" => "pages#update", as: :update_page
-  get "forms/:form_id/pages/new" => "pages#new", as: :new_page
-  post "forms/:form_id/pages/new" => "pages#create", as: :create_page
-  get "forms/:form_id/pages/:page_id/delete" => "forms/delete_confirmation#delete", as: :delete_page
-  delete "forms/:form_id/pages/:page_id/delete" => "forms/delete_confirmation#destroy", as: :destroy_page
-
+  scope "forms/:form_id/pages" do
+    get "/" => "pages#index", as: :form_pages
+    get "/:page_id/edit" => "pages#edit", as: :edit_page
+    patch "/:page_id/edit" => "pages#update", as: :update_page
+    get "/new" => "pages#new", as: :new_page
+    post "/new" => "pages#create", as: :create_page
+    get "/:page_id/delete" => "forms/delete_confirmation#delete", as: :delete_page
+    delete "/:page_id/delete" => "forms/delete_confirmation#destroy", as: :destroy_page
+  end
   match "/404", to: "errors#not_found", as: :error_404, via: :all
   match "/500", to: "errors#internal_server_error", as: :error_500, via: :all
 
