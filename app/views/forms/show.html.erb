@@ -14,7 +14,7 @@
     <% end %>
 
     <% if @form.live? %>
-      <%= render FormUrlComponent::View.new(link_to_runner(ENV["RUNNER_BASE"], @form.id, live: true ))%>
+      <%= render FormUrlComponent::View.new(link_to_runner(ENV["RUNNER_BASE"], @form.id, @form.form_slug, live: true ))%>
 
       <div class="govuk-inset-text">
         <p><%= t("live_form_warning.notification_heading") %></p>
@@ -26,7 +26,7 @@
     %>
 
     <p class="govuk-body govuk-!-margin-bottom-9">
-      <%= govuk_link_to t("home.preview"),link_to_runner(ENV["RUNNER_BASE"], @form.id ), { target:"_blank", rel:"noopener noreferrer"} %>
+      <%= govuk_link_to t("home.preview"),link_to_runner(ENV["RUNNER_BASE"], @form.id, @form.form_slug), { target:"_blank", rel:"noopener noreferrer"} %>
     </p>
 
     <%= govuk_button_link_to t("forms.delete_form"), delete_form_path(@form.id), warning: true %>

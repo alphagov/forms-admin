@@ -7,6 +7,7 @@ RSpec.describe "Forms", type: :request do
         Form.new({
           id: 2,
           name: "Form name",
+          form_slug: "form-name",
           submission_email: "submission@email.com",
           privacy_policy_url: "https://example.com/privacy_policy",
           live_at: "",
@@ -85,6 +86,7 @@ RSpec.describe "Forms", type: :request do
       let(:form) do
         Form.new({
           name: "Form name",
+          form_slug: "form-name",
           submission_email: "submission@email.com",
           id: 2,
           org: "test-org",
@@ -126,6 +128,7 @@ RSpec.describe "Forms", type: :request do
       let(:form) do
         Form.new(
           name: "Form name",
+          form_slug: "form-name",
           submission_email: "submission@email.com",
           id: 2,
         )
