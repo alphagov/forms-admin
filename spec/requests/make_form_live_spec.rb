@@ -5,6 +5,7 @@ RSpec.describe "MakeLive controller", type: :request do
     {
       id: 2,
       name: "Form name",
+      form_slug: "form-name",
       submission_email: "submission@email.com",
       start_page: 1,
       org: "test-org",
@@ -16,6 +17,7 @@ RSpec.describe "MakeLive controller", type: :request do
   let(:form) do
     Form.new(
       name: "Form name",
+      form_slug: "form-name",
       submission_email: "submission@email.com",
       id: 2,
       org: "test-org",
@@ -27,6 +29,7 @@ RSpec.describe "MakeLive controller", type: :request do
   let(:updated_form) do
     Form.new({
       name: "Form name",
+      form_slug: "form-name",
       submission_email: "submission@email.com",
       id: 2,
       org: "test-org",
@@ -84,6 +87,7 @@ RSpec.describe "MakeLive controller", type: :request do
       let(:form) do
         Form.new(
           name: "Form name",
+          form_slug: "form-name",
           submission_email: "submission@email.com",
           id: 2,
           org: "test-org",
@@ -115,6 +119,7 @@ RSpec.describe "MakeLive controller", type: :request do
       let(:form) do
         Form.new(
           name: "Form name",
+          form_slug: "form-name",
           submission_email: "submission@email.com",
           id: 2,
           org: "test-org",

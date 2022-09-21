@@ -7,12 +7,14 @@ RSpec.describe "Home", type: :request do
         [{
           id: 2,
           name: "Form",
+          form_slug: "form",
           submission_email: "submission@email.com",
           org: "test-org",
         },
          {
            id: 3,
            name: "Another form",
+           form_slug: "another-form",
            submission_email: "submission@email.com",
            org: "test-org",
          }]
@@ -22,12 +24,14 @@ RSpec.describe "Home", type: :request do
         [{
           id: 3,
           name: "Another form",
+          form_slug: "another-form",
           submission_email: "submission@email.com",
           org: "test-org",
         },
          {
            id: 2,
            name: "Form",
+           form_slug: "form",
            submission_email: "submission@email.com",
            org: "test-org",
          }]
