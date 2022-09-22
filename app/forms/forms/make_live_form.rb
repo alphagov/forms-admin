@@ -8,6 +8,8 @@ class Forms::MakeLiveForm
 
   validates :confirm_make_live, presence: true, inclusion: { in: CONFIRM_LIVE_VALUES.values }
 
+  validate :required_parts_of_form_completed
+
   def submit
     return false if invalid?
     # we are valid and didn't need to save
@@ -23,5 +25,29 @@ class Forms::MakeLiveForm
 
   def values
     CONFIRM_LIVE_VALUES.keys
+  end
+
+private
+
+  def required_parts_of_form_completed
+    # we are valid and didn't need to save
+    return unless made_live?
+
+    if form.pages.blank?
+      errors.add(:confirm_make_live, :missing_pages)
+      return false
+    end
+
+    if form.submission_email.blank?
+      errors.add(:confirm_make_live, :missing_submission_email)
+      return false
+    end
+
+    if form.privacy_policy_url.blank?
+      return false
+      errors.add(:confirm_make_live, :missing_privacy_policy_url)
+    end
+
+
   end
 end
