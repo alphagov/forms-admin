@@ -7,8 +7,11 @@
       <p class="govuk-body"><%= flash[:message] %></p>
     <% end %>
 
-    <span class="govuk-caption-l"><%= t("pages.question") %> <%= @page.number(@form) %></span>
-    <h1 class="govuk-heading-l"><%= t("pages.heading") %></h1>
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= t("pages.question") %> <%= @page.number(@form) %></span><span class="govuk-visually-hidden"> - </span>
+      <%= t("pages.heading") %>
+    </h1>
+
 
     <%= form_with model: [@form, @page], url: update_page_path(@form, @page) do |f| %>
       <%= render :partial => 'form', locals: { f: f } %>

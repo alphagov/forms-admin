@@ -9,8 +9,11 @@
       <%= render LiveFormWarningComponent::View.new() %>
     <% end %>
 
-    <span class="govuk-caption-l"><%= @form.name %></span>
-    <h1 class="govuk-heading-l"><%= t("pages.index.title") %></h1>
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= @form.name %></span><span class="govuk-visually-hidden"> - </span>
+      <%= t("pages.index.title") %>
+      <span class="govuk-!-display-block"><%= render FormStatusTagComponent::View.new(status: @form.status) %></span>
+    </h1>
 
     <% if flash[:message] %>
       <p class="govuk-body"><%= flash[:message] %></p>
