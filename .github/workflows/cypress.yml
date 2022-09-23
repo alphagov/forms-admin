@@ -43,7 +43,7 @@ jobs:
           push: false
           tags: forms-api
       - name: Install Ruby and gems
-        uses: ruby/setup-ruby@08245253a76fa4d1e459b7809579c62bd9eb718a # v1.111
+        uses: ruby/setup-ruby@3068fa83f9cbd7ae106cac45483635a2f3a195c9 # v1.111
         with:
           bundler-cache: true
       - name: Install frontend dependencies
