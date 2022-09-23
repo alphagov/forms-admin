@@ -10,15 +10,30 @@
 <%= govuk_start_button(text: t("home.create_a_form"), href: new_form_path) %>
 
 <% if @forms.any? %>
-  <h2 class="govuk-heading-m"><%= t("home.your_forms") %></h2>
+  <%= govuk_table do |table| %>
+    <%= table.caption(size: 'm', text: t("home.your_forms")) %>
 
-  <%= govuk_summary_list do |summary_list|
-    @forms.each do |form|
-      summary_list.row do |row|
-        row.key { form.name }
-        row.action(text: t("home.edit"), href: form_path(form.id), visually_hidden_text: form.name )
-        row.action(text: t("home.preview"), href: link_to_runner(ENV["RUNNER_BASE"], form.id, form.form_slug), visually_hidden_text: ": #{form.name}", html_attributes: { target:"_blank", rel:"noopener noreferrer"})
+    <%= table.head do |head|
+       head.row do |row|
+        row.cell(header: true, text: t("home.form_name_heading"), width: "full")
+        row.cell(header: true, text: t("home.form_status_heading"), numeric: true)
       end
-    end
-  end %>
+    end %>
+
+    <%= table.body do |body|
+      @forms.each do |form|
+        body.row do |row|
+          row.cell do
+            govuk_link_to(form.name, form_path(form.id))
+          end
+          row.cell(numeric: true) do
+            render FormStateTagComponent::View.new( state: form.status)
+          end
+        end
+      end
+    end %>
+
+  <% end %>
+
+
 <% end %>

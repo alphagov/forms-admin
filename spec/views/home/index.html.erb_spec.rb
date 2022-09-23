@@ -25,7 +25,7 @@ describe "home/index.html.erb" do
     end
 
     before do
-      assign(:forms, [OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1"), OpenStruct.new(id: 2, name: "Form 2", form_slug: "form-2")])
+      assign(:forms, [OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft"), OpenStruct.new(id: 2, name: "Form 2", form_slug: "form-2", status: "live")])
       render template: "home/index"
     end
 
@@ -33,14 +33,14 @@ describe "home/index.html.erb" do
       expect(rendered).to have_link("Create a form", href: forms_new_path)
     end
 
-    it "does contain a list of forms with actions" do
-      expect(rendered).to have_text "Your forms"
-      expect(rendered).to have_css ".govuk-summary-list .govuk-summary-list__row", count: 2
+    it "does contain a table listing the users forms and their status" do
+      expect(rendered).to have_css(".govuk-table__caption", text: "Your forms")
+      expect(rendered).to have_css "tbody .govuk-table__row", count: 2
     end
 
-    it "displays preview links for each form" do
-      expect(rendered).to have_link("Preview this form : Form 1", href: "runner-host/preview-form/1/form-1", visible: :all)
-      expect(rendered).to have_link("Preview this form : Form 2", href: "runner-host/preview-form/2/form-2", visible: :all)
+    it "displays links for each form" do
+      expect(rendered).to have_link("Form 1", href: form_path(1))
+      expect(rendered).to have_link("Form 2", href: form_path(2))
     end
   end
 end

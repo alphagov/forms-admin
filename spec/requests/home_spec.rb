@@ -3,12 +3,14 @@ require "rails_helper"
 RSpec.describe "Home", type: :request do
   describe "Viewing all forms for an organisation" do
     describe "Given a form" do
+      let(:live_at) { Time.now }
       let(:forms_response) do
         [{
           id: 2,
           name: "Form",
           form_slug: "form",
           submission_email: "submission@email.com",
+          live_at: live_at,
           org: "test-org",
         },
          {
@@ -16,6 +18,7 @@ RSpec.describe "Home", type: :request do
            name: "Another form",
            form_slug: "another-form",
            submission_email: "submission@email.com",
+           live_at: nil,
            org: "test-org",
          }]
       end
@@ -26,6 +29,7 @@ RSpec.describe "Home", type: :request do
           name: "Another form",
           form_slug: "another-form",
           submission_email: "submission@email.com",
+          live_at: nil,
           org: "test-org",
         },
          {
@@ -33,6 +37,7 @@ RSpec.describe "Home", type: :request do
            name: "Form",
            form_slug: "form",
            submission_email: "submission@email.com",
+           live_at: live_at,
            org: "test-org",
          }]
       end

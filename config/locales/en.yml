@@ -78,7 +78,8 @@ en:
         answer_type: What kind of answer do you need to this question?
   home:
     create_a_form: Create a form
-    edit: Edit
+    form_name_heading: Form name
+    form_status_heading: Status
     main_heading: GOV.UK Forms
     preview: Preview this form
     your_forms: Your forms
