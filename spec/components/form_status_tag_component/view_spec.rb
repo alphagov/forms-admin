@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe FormStateTagComponent::View, type: :component do
+RSpec.describe FormStatusTagComponent::View, type: :component do
   describe "draft/default status" do
     before do
       render_inline(described_class.new)
@@ -17,7 +17,7 @@ RSpec.describe FormStateTagComponent::View, type: :component do
 
   describe "live status" do
     before do
-      render_inline(described_class.new(state: "live"))
+      render_inline(described_class.new(status: "live"))
     end
 
     it "renders the status text" do
