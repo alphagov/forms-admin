@@ -4,11 +4,14 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
       <span class="govuk-caption-l"><%= @form.name %></span><span class="govuk-visually-hidden"> - </span>
       <%= @form.live? ? t("forms.form_overview.live_title") : t("forms.form_overview.title") %>
-      <span class="govuk-!-display-block"><%= render FormStatusTagComponent::View.new(status: @form.status) %></span>
     </h1>
+    <dl class="govuk-!-margin-bottom-7">
+      <dt class="govuk-visually-hidden">Status</dt>
+      <dd class="govuk-!-margin-0"><%= render FormStatusTagComponent::View.new(status: @form.status) %></dd>
+    </dl>
 
 
 
