@@ -7,7 +7,7 @@
     <h1 class="govuk-heading-l">
       <span class="govuk-caption-l"><%= @form.name %></span><span class="govuk-visually-hidden"> - </span>
       <%= @form.live? ? t("forms.form_overview.live_title") : t("forms.form_overview.title") %>
-      <span class="govuk-!-display-block"><%= render FormStateTagComponent::View.new( state: @form.status) %></span>
+      <span class="govuk-!-display-block"><%= render FormStatusTagComponent::View.new(status: @form.status) %></span>
     </h1>
 
 

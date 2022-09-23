@@ -27,7 +27,7 @@
             govuk_link_to(form.name, form_path(form.id))
           end
           row.cell(numeric: true) do
-            render FormStateTagComponent::View.new( state: form.status)
+            render FormStatusTagComponent::View.new(status: form.status)
           end
         end
       end
