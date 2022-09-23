@@ -8,7 +8,7 @@ describe "forms/show.html.erb" do
   end
 
   before do
-    assign(:form, OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1"))
+    assign(:form, OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft"))
     render template: "forms/show"
   end
 
@@ -23,5 +23,19 @@ describe "forms/show.html.erb" do
 
   it "contains a link to delete the form" do
     expect(rendered).to have_link("Delete form", href: delete_form_path(1))
+  end
+
+  describe "form states" do
+    it "rendered draft tag " do
+      assign(:form, OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft"))
+      render template: "forms/show"
+      expect(rendered).to have_css(".govuk-tag.govuk-tag--purple", text: "DRAFT")
+    end
+
+    it "rendered live tag" do
+      assign(:form, OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "live"))
+      render template: "forms/show"
+      expect(rendered).to have_css(".govuk-tag.govuk-tag--blue", text: "LIVE")
+    end
   end
 end
