@@ -9,6 +9,7 @@ describe "forms/show.html.erb" do
 
   before do
     assign(:form, OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft"))
+    assign(:pages, [{ id: 183, question_text: "What is your address?", question_short_name: nil, hint_text: "", answer_type: "address", next_page: nil }])
     render template: "forms/show"
   end
 
