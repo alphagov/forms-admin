@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe PreviewLinkComponent::View, type: :component do
-  let(:preview_url) { "https://example.com"}
+  let(:preview_url) { "https://example.com" }
 
   context "when the form has pages" do
     it "renders the link" do
