@@ -7,5 +7,9 @@ module PreviewLinkComponent
       @pages = pages
       @link = link
     end
+
+    def render?
+      @pages.any?
+    end
   end
 end
