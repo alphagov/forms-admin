@@ -5,7 +5,6 @@ class FormsController < ApplicationController
 
   def show
     @form = Form.find(params[:id])
-    @pages = @form.pages
     create_form_task_list
   end
 

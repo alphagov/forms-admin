@@ -1,6 +1,8 @@
 require "rails_helper"
 
 describe "forms/show.html.erb" do
+  let(:pages) { [{ id: 183, question_text: "What is your address?", question_short_name: nil, hint_text: "", answer_type: "address", next_page: nil }] }
+
   around do |example|
     ClimateControl.modify RUNNER_BASE: "runner-host" do
       example.run
@@ -8,8 +10,7 @@ describe "forms/show.html.erb" do
   end
 
   before do
-    assign(:form, OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft"))
-    assign(:pages, [{ id: 183, question_text: "What is your address?", question_short_name: nil, hint_text: "", answer_type: "address", next_page: nil }])
+    assign(:form, OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft", pages:))
     render template: "forms/show"
   end
 
@@ -28,13 +29,13 @@ describe "forms/show.html.erb" do
 
   describe "form states" do
     it "rendered draft tag " do
-      assign(:form, OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft"))
+      assign(:form, OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft", pages: []))
       render template: "forms/show"
       expect(rendered).to have_css(".govuk-tag.govuk-tag--purple", text: "DRAFT")
     end
 
     it "rendered live tag" do
-      assign(:form, OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "live"))
+      assign(:form, OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "live", pages: []))
       render template: "forms/show"
       expect(rendered).to have_css(".govuk-tag.govuk-tag--blue", text: "LIVE")
     end
