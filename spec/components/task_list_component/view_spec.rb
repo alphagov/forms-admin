@@ -53,8 +53,8 @@ RSpec.describe TaskListComponent::View, type: :component do
       ]))
     end
 
-    it "renders" do
-      expect(page).to have_text("section title")
+    it "does not render section without rows" do
+      expect(page).not_to have_text("section title")
     end
   end
 

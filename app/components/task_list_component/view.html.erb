@@ -1,37 +1,39 @@
 <%= tag.ol(**html_attributes) do %>
   <% sections.each do |section| %>
-    <li>
-      <h2 class="app-task-list__section">
-        <span class="app-task-list__section-number"><%= section.number %>. </span> <%= section.title %>
-      </h2>
-      <ul class="app-task-list__items">
-        <% section.rows.each do |row| %>
-          <li class="app-task-list__item">
-            <span class="app-task-list__task-name">
-              <% if row.active %>
-                <%= govuk_link_to row.task_name, row.get_path, aria_describedby: row.status_id %>
-              <% else %>
-                <%= row.task_name %>
-              <% end %>
-            </span>
+    <% unless section.rows.empty? %>
+      <li>
+        <h2 class="app-task-list__section">
+          <span class="app-task-list__section-number"><%= section.number %>. </span> <%= section.title %>
+        </h2>
+        <ul class="app-task-list__items">
+          <% section.rows.each do |row| %>
+            <li class="app-task-list__item">
+              <span class="app-task-list__task-name">
+                <% if row.active %>
+                  <%= govuk_link_to row.task_name, row.get_path, aria_describedby: row.status_id %>
+                <% else %>
+                  <%= row.task_name %>
+                <% end %>
+              </span>
 
-            <% if row.status.present? %>
-              <%= render GovukComponent::TagComponent.new(
-                text: "<span class='govuk-visually-hidden'>Status </span>".html_safe + I18n.t("task_statuses.#{row.status}"),
-                classes: "app-task-list__tag",
-                colour: row.get_status_colour,
-                html_attributes: { id: row.status_id },
-              ) %>
-          <% end %>
+              <% if row.status.present? %>
+                <%= render GovukComponent::TagComponent.new(
+                  text: "<span class='govuk-visually-hidden'>Status </span>".html_safe + I18n.t("task_statuses.#{row.status}"),
+                  classes: "app-task-list__tag",
+                  colour: row.get_status_colour,
+                  html_attributes: { id: row.status_id },
+                ) %>
+            <% end %>
 
-          <% if row.hint_text.present? %>
-            <br>
-            <span class="app-task-list__hint govuk-hint"><%= row.hint_text %></span>
-          <% end %>
+            <% if row.hint_text.present? %>
+              <br>
+              <span class="app-task-list__hint govuk-hint"><%= row.hint_text %></span>
+            <% end %>
 
-        </li>
-      <% end %>
-      </ul>
-    </li>
+          </li>
+        <% end %>
+        </ul>
+      </li>
+    <% end %>
   <% end %>
 <% end %>
