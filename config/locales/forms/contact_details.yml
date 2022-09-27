@@ -1,0 +1,41 @@
+en:
+  helpers:
+    label:
+      forms_contact_details_form:
+        contact_details_supplied_options:
+          supply_email: Email
+          supply_phone: Phone
+          supply_link: Online contact link
+        email: Email address
+        phone: Phone contact details
+        link: Link to a web page
+        link_href: Enter the link
+        link_text: What text should be used to describe this link?
+    hint:
+      forms_contact_details_form:
+        email: Enter the email address
+        phone: Enter the phone number and its opening times
+        link_href: For example, https://gov.uk/contact-form
+        link_text: For example, ‘Online contact form’
+  activemodel:
+    errors:
+      models:
+        forms/contact_details_form:
+          attributes:
+            email:
+              blank: Enter an email address
+              invalid_email: Enter an email address in the correct format, like name@example.com
+              non_govuk_email: Enter an email address ending in .gov.uk
+            phone:
+              blank: Enter a phone number and opening hours
+              too_long: The phone contact information must 500 characters or less
+            link_href:
+              blank: Enter an online contact link
+              url: Enter a link in the correct format
+              too_long: The link must 120 characters or less
+            link_text:
+              blank: Enter an online contact link description
+              too_long: The link description must 120 characters or less
+            contact_details_supplied:
+              too_short: Select at least one
+

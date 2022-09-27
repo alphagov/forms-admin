@@ -1,0 +1,46 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.contact_details_form'), @contact_details_form&.errors&.any?)) %>
+<% content_for :back_link, govuk_back_link_to(root_path) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+
+    <%= form_with(model: @contact_details_form, url: contact_details_create_path(@contact_details_form.form)) do |f| %>
+      <% if @contact_details_form&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @contact_details_form.form.name %></span>
+        <%= t("page_titles.contact_details_form") %>
+      </h1>
+
+      <p class="govuk-body">
+        You need to provide at least one way for people to get help if they get stuck while filling in this form.
+      </p>
+
+      <p class="govuk-body">
+        The contact information will be displayed at the bottom of every page of the form.
+      </p>
+
+        <%= f.govuk_check_boxes_fieldset :contact_details_supplied, legend: { text: t('helpers.label.forms_contact_details_form.title') } do %>
+          <%= f.govuk_check_box :contact_details_supplied, :supply_email, checked: @contact_details_form.check_email? do %>
+            <%= f.govuk_text_field :email %>
+          <% end %>
+
+          <%= f.govuk_check_box :contact_details_supplied, :supply_phone, checked: @contact_details_form.check_phone? do %>
+            <%= f.govuk_text_area :phone %>
+          <% end %>
+
+          <%= f.govuk_check_box :contact_details_supplied, :supply_link, checked: @contact_details_form.check_link? do %>
+            <%= f.govuk_fieldset legend: { text: t('helpers.label.forms_contact_details_form.link'), size: 's' } do %>
+              <%= f.govuk_text_field :link_href  %>
+              <%= f.govuk_text_field :link_text  %>
+            <% end %>
+          <% end %>
+        <% end %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
