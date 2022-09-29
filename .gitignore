@@ -35,9 +35,6 @@
 
 /node_modules
 
-.env*
-!.env.test
-
 # Ignore Cypress output
 /cypress/screenshots
 /cypress/videos
