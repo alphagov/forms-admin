@@ -41,8 +41,8 @@ private
 
   def section_3_tasks
     [
-     { task_name: I18n.t("forms.task_lists.section_3.privacy_policy"), path: privacy_policy_path(@form.id) },
-     { task_name: I18n.t("forms.task_lists.section_3.contact_details"), path: contact_details_path(@form.id) }
+      { task_name: I18n.t("forms.task_lists.section_3.privacy_policy"), path: privacy_policy_path(@form.id) },
+      { task_name: I18n.t("forms.task_lists.section_3.contact_details"), path: contact_details_path(@form.id) },
     ]
   end
 

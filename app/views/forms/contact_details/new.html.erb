@@ -1,5 +1,5 @@
 <% set_page_title(title_with_error_prefix(t('page_titles.contact_details_form'), @contact_details_form&.errors&.any?)) %>
-<% content_for :back_link, govuk_back_link_to(root_path) %>
+<% content_for :back_link, govuk_back_link_to(form_path, "Back to create a form") %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
