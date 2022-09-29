@@ -7,6 +7,8 @@ class Form < ActiveResource::Base
 
   has_many :pages
 
+  attr_accessor :missing_sections
+
   def last_page
     pages.find { |p| !p.has_next_page? }
   end
@@ -38,5 +40,18 @@ class Form < ActiveResource::Base
     current_last_page = last_page
     current_last_page.next_page = page.id
     current_last_page.save!
+  end
+
+  def ready_for_live?
+    @missing_sections = []
+    @missing_sections << :missing_pages unless pages.any?
+    @missing_sections << :missing_submission_email if submission_email.blank?
+    @missing_sections << :missing_privacy_policy_url if privacy_policy_url.blank?
+
+    if @missing_sections.any?
+      false
+    else
+      true
+    end
   end
 end

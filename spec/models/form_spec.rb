@@ -41,4 +41,38 @@ describe Form do
       end
     end
   end
+
+  describe "#ready_for_live?" do
+    context "when a form is complete and ready to be made live" do
+      let(:completed_form) { build :form, :with_pages, :live }
+
+      it "returns true" do
+        expect(completed_form.ready_for_live?).to eq true
+      end
+
+      it "returns no missing fields" do
+        results = completed_form
+        results.ready_for_live?
+
+        expect(results.missing_sections).to be_empty
+      end
+    end
+
+    context "when a form is incomplete and should still be in draft state" do
+      let(:new_form) { build :form, :new_form }
+
+      it "returns false" do
+        new_form.pages = []
+        expect(new_form.ready_for_live?).to eq false
+      end
+
+      it "returns a set of keys related to missing fields" do
+        new_form.pages = []
+        results = new_form
+        results.ready_for_live?
+
+        expect(results.missing_sections).to eq %i[missing_pages missing_submission_email missing_privacy_policy_url]
+      end
+    end
+  end
 end
