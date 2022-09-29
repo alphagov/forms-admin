@@ -1,3 +1,7 @@
+forms_admin:
+  # The URL to the postgres instance (without the database at the end)
+  database_url: postgres://postgres:password@localhost:5432/postgres
+
 forms_api:
   # URL to form-api endpoints
   base_url: http://localhost:9292

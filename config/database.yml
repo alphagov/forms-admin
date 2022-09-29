@@ -81,6 +81,7 @@ test:
 #
 production:
   <<: *default
+  url: <%= Settings.forms_admin.database_url %>
   database: forms_admin_production
   username: forms_admin
   password: <%= ENV["FORMS_ADMIN_DATABASE_PASSWORD"] %>
