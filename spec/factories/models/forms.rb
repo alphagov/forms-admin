@@ -3,16 +3,20 @@ FactoryBot.define do
     sequence(:name) { |n| "Form #{n}" }
     submission_email { Faker::Internet.email(domain: "example.gov.uk") }
     privacy_policy_url { Faker::Internet.url(host: "gov.uk") }
-
     live_at { nil }
+    missing_sections { nil }
 
     trait :new_form do
-      submission_email { nil }
-      privacy_policy_url { nil }
+      submission_email { "" }
+      privacy_policy_url { "" }
       pages { [] }
     end
 
-    factory :form_with_pages do
+    trait :live do
+      live_at { Time.zone.now }
+    end
+
+    trait :with_pages do
       transient do
         pages_count { 5 }
       end

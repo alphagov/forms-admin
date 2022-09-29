@@ -2,6 +2,6 @@ FactoryBot.define do
   factory :make_live_form, class: "Forms::MakeLiveForm" do
     confirm_make_live { %w[made_live not_made_live].sample }
 
-    form { build :form }
+    form { build :form, :with_pages }
   end
 end
