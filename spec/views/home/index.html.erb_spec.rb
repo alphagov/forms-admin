@@ -18,12 +18,6 @@ describe "home/index.html.erb" do
   end
 
   describe "when there are one or more forms to display" do
-    around do |example|
-      ClimateControl.modify RUNNER_BASE: "runner-host" do
-        example.run
-      end
-    end
-
     before do
       assign(:forms, [OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft"), OpenStruct.new(id: 2, name: "Form 2", form_slug: "form-2", status: "live")])
       render template: "home/index"

@@ -3,3 +3,7 @@ forms_api:
   base_url: http://localhost:9292
   # Authentication key to authenticate forms-admin to forms-api
   auth_key: "test"
+
+# URL used to direct admin users to their form preview
+forms_runner:
+  base_url: http://runner-host

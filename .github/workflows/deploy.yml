@@ -45,4 +45,4 @@ jobs:
             --var SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
             --var SETTINGS__FORMS_API__BASE_URL=${{ secrets.API_BASE }} \
             --var SETTINGS__FORMS_API__AUTH_KEY=${{ secrets.API_KEY }} \
-            --var RUNNER_BASE=${{ secrets.RUNNER_BASE }}
+            --var SETTINGS__FORMS_RUNNER__BASE_URL=${{ secrets.RUNNER_BASE }}

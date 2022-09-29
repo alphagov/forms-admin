@@ -5,4 +5,5 @@ forms_api:
   auth_key: "123456"
 
 # URL used to direct admin users to their form preview
-runner_base: http://localhost:3001
+forms_runner:
+  base_url: http://localhost:3001
