@@ -1,5 +1,5 @@
 Sentry.init do |config|
-  config.dsn = ENV["SENTRY_DSN"]
+  config.dsn = Settings.sentry_dsn
   config.breadcrumbs_logger = %i[active_support_logger http_logger]
   config.debug = true
   config.traces_sample_rate = 1.0

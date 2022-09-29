@@ -11,3 +11,6 @@ forms_api:
 # URL used to direct admin users to their form preview
 forms_runner:
   base_url: http://localhost:3001
+
+# The DSN provided by Sentry
+sentry_dsn:
