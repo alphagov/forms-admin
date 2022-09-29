@@ -20,6 +20,7 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  url: <%= Settings.forms_admin.database_url %>
 
 development:
   <<: *default
@@ -81,7 +82,6 @@ test:
 #
 production:
   <<: *default
-  url: <%= Settings.forms_admin.database_url %>
   database: forms_admin_production
   username: forms_admin
   password: <%= ENV["FORMS_ADMIN_DATABASE_PASSWORD"] %>
