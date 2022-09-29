@@ -15,7 +15,7 @@ RSpec.describe Forms::MakeLiveForm, type: :model do
   end
 
   describe "#submit" do
-    let(:make_live_form) { described_class.new(form: OpenStruct.new(live_at: nil)) }
+    let(:make_live_form) { described_class.new(form: build(:form, :with_pages)) }
 
     context "when form is invalid" do
       it "returns false" do
@@ -53,26 +53,26 @@ RSpec.describe Forms::MakeLiveForm, type: :model do
       end
 
       before do
-        form.confirm_make_live = "made_live"
+        allow(make_live_form.form).to receive(:save!).and_return(1)
+        make_live_form.confirm_make_live = "made_live"
       end
 
       it "sets live_at to current date/time" do
-        make_form = form
-        form.submit
-        expect(make_form.form.live_at).to eq " 2021-01-01 04:30:00.000000000 +0000"
+        make_live_form.submit
+        expect(make_live_form.form.live_at).to eq " 2021-01-01 04:30:00.000000000 +0000"
       end
 
       it "sets no error messages" do
-        make_live_form = form
         make_live_form.submit
         expect(make_live_form.errors).to be_empty
       end
     end
 
     context "when form is being made live but not all the required sections have been completed" do
-      before(:each) do
+      let(:make_live_form) { build :make_live_form }
+
+      before do
         make_live_form.confirm_make_live = "made_live"
-        make_live_form.form = build(:form)
       end
 
       it "is invalid if submission_email is blank" do

@@ -32,22 +32,20 @@ private
   def required_parts_of_form_completed
     # we are valid and didn't need to save
     return unless made_live?
+    return if form.ready_for_live?
 
-    if form.pages.blank?
+    if form.missing_sections.include?(:missing_pages)
       errors.add(:confirm_make_live, :missing_pages)
       return false
     end
 
-    if form.submission_email.blank?
+    if form.missing_sections.include?(:missing_submission_email)
       errors.add(:confirm_make_live, :missing_submission_email)
       return false
     end
 
-    if form.privacy_policy_url.blank?
-      return false
+    if form.missing_sections.include?(:missing_privacy_policy_url)
       errors.add(:confirm_make_live, :missing_privacy_policy_url)
     end
-
-
   end
 end

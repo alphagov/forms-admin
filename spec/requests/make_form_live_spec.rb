@@ -14,7 +14,13 @@ RSpec.describe "MakeLive controller", type: :request do
     }.to_json
   end
 
+  let(:page_data) do
+    build(:page, form_id: 2).to_json
+  end
+
   let(:form) do
+    page = build(:page)
+
     Form.new(
       name: "Form name",
       form_slug: "form-name",
@@ -23,10 +29,13 @@ RSpec.describe "MakeLive controller", type: :request do
       org: "test-org",
       privacy_policy_url: "https://www.example.gov.uk/privacy-policy",
       live_at: "",
+      pages: [page],
     )
   end
 
   let(:updated_form) do
+    page = form.pages
+
     Form.new({
       name: "Form name",
       form_slug: "form-name",
@@ -35,6 +44,7 @@ RSpec.describe "MakeLive controller", type: :request do
       org: "test-org",
       privacy_policy_url: "https://www.example.gov.uk/privacy-policy",
       live_at: "2021-01-01T00:00:00.000Z",
+      pages: page,
     })
   end
 
@@ -169,7 +179,7 @@ RSpec.describe "MakeLive controller", type: :request do
     end
 
     context "when making a form live" do
-      let(:form_params) { { forms_make_live_form: { confirm_make_live: :made_live } } }
+      let(:form_params) { { forms_make_live_form: { confirm_make_live: :made_live, form: } } }
 
       it "Reads the form from the API" do
         expect(form).to have_been_read
