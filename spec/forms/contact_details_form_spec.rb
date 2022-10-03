@@ -143,9 +143,15 @@ RSpec.describe Forms::ContactDetailsForm, type: :model do
     end
 
     context "when nothing is ticked" do
-      it "is invalid " do
+      it "is valid if form is in draft" do
+        contact_details_form = build :contact_details_form
+        expect(contact_details_form).to be_valid
+      end
+
+      it "is invalid if form is live" do
         error_message = I18n.t("activemodel.errors.models.forms/contact_details_form.attributes.contact_details_supplied.must_be_supply_contact_details")
-        contact_details_form = build :contact_details_form, contact_details_supplied: []
+        live_form = build :form, :live
+        contact_details_form = build :contact_details_form, form: live_form, contact_details_supplied: []
         expect(contact_details_form).to be_invalid
         expect(contact_details_form.errors.full_messages_for(:contact_details_supplied)).to include "Contact details supplied #{error_message}"
       end
@@ -214,7 +220,7 @@ RSpec.describe Forms::ContactDetailsForm, type: :model do
 
   describe "#submit" do
     context "when invalid" do
-      subject(:contact_details_form) { build :contact_details_form, contact_details_supplied: [] }
+      subject(:contact_details_form) { build :contact_details_form, contact_details_supplied: [:supply_email], email: "invalid_email" }
 
       before do
         allow(contact_details_form.form).to receive(:save!)

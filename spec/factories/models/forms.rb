@@ -5,6 +5,10 @@ FactoryBot.define do
     privacy_policy_url { Faker::Internet.url(host: "gov.uk") }
     live_at { nil }
     missing_sections { nil }
+    support_email { nil }
+    support_phone { nil }
+    support_url { nil }
+    support_url_text { nil }
 
     trait :new_form do
       submission_email { "" }
@@ -14,6 +18,7 @@ FactoryBot.define do
 
     trait :live do
       live_at { Time.zone.now }
+      support_email { Faker::Internet.email(domain: "example.gov.uk") }
     end
 
     trait :with_pages do

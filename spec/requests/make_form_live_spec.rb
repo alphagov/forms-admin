@@ -11,6 +11,10 @@ RSpec.describe "MakeLive controller", type: :request do
       org: "test-org",
       privacy_policy_url: "https://www.example.gov.uk/privacy-policy",
       live_at: "",
+      support_email: nil,
+      support_phone: nil,
+      support_url: nil,
+      support_url_text: nil,
     }.to_json
   end
 
@@ -29,6 +33,10 @@ RSpec.describe "MakeLive controller", type: :request do
       org: "test-org",
       privacy_policy_url: "https://www.example.gov.uk/privacy-policy",
       live_at: "",
+      support_email: "test@example.gov.uk",
+      support_phone: nil,
+      support_url: nil,
+      support_url_text: nil,
       pages: [page],
     )
   end
@@ -44,6 +52,10 @@ RSpec.describe "MakeLive controller", type: :request do
       org: "test-org",
       privacy_policy_url: "https://www.example.gov.uk/privacy-policy",
       live_at: "2021-01-01T00:00:00.000Z",
+      support_email: "test@example.gov.uk",
+      support_phone: nil,
+      support_url: nil,
+      support_url_text: nil,
       pages: page,
     })
   end
