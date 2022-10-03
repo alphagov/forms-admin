@@ -256,4 +256,5 @@ en:
   task_statuses:
     cannot_start: cannot start yet
     completed: completed
+    incomplete: incomplete
     not_started: not started yet

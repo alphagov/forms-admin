@@ -29,23 +29,23 @@ private
                       new_page_path(@form.id)
                     end
     [
-      { task_name: I18n.t("forms.task_lists.section_1.change_name"), path: change_form_name_path(@form.id) },
-      { task_name: I18n.t("forms.task_lists.section_1.add_or_edit_questions"), path: question_path },
+      { task_name: I18n.t("forms.task_lists.section_1.change_name"), path: change_form_name_path(@form.id), status: section_1_statuses[0] },
+      { task_name: I18n.t("forms.task_lists.section_1.add_or_edit_questions"), path: question_path, status: section_1_statuses[1] },
       { task_name: I18n.t("forms.task_lists.section_1.declaration"), path: declaration_path(@form.id) },
-      { task_name: I18n.t("forms.task_lists.section_1.add_what_happens_next"), path: what_happens_next_path(@form.id) },
+      { task_name: I18n.t("forms.task_lists.section_1.add_what_happens_next"), path: what_happens_next_path(@form.id), status: section_1_statuses[2]  },
     ]
   end
 
   def section_2_tasks
     hint_text = I18n.t("forms.task_lists.section_2.hint_text", submission_email: @form.submission_email) if @form.submission_email.present?
 
-    [{ task_name: I18n.t("forms.task_lists.section_2.submission_email"), path: change_form_email_path(@form.id), hint_text: }]
+    [{ task_name: I18n.t("forms.task_lists.section_2.submission_email"), path: change_form_email_path(@form.id), hint_text:, status: section_2_statuses[0]  }]
   end
 
   def section_3_tasks
     [
-      { task_name: I18n.t("forms.task_lists.section_3.privacy_policy"), path: privacy_policy_path(@form.id) },
-      { task_name: I18n.t("forms.task_lists.section_3.contact_details"), path: contact_details_path(@form.id) },
+      { task_name: I18n.t("forms.task_lists.section_3.privacy_policy"), path: privacy_policy_path(@form.id), status: section_3_statuses[0] },
+      { task_name: I18n.t("forms.task_lists.section_3.contact_details"), path: contact_details_path(@form.id), status: section_3_statuses[1] },
     ]
   end
 
@@ -55,4 +55,55 @@ private
 
     [{ task_name: I18n.t("forms.task_lists.section_4.make_live"), path: "", active: false }]
   end
+
+  def section_1_statuses
+    pages_statues = if @form.pages.empty?
+                      :incomplete
+                    else
+                      :completed
+                    end
+
+    what_happens_next_status = if @form.what_happens_next_text.present?
+                                 :completed
+                               else
+                                 :incomplete
+                               end
+    results = []
+    results << :completed
+    results << pages_statues
+    results << what_happens_next_status
+
+    results
+  end
+  def section_2_statuses
+    submission_status = if @form.submission_email.present?
+                          :completed
+                        else
+                          :incomplete
+                        end
+
+    results = []
+    results << submission_status
+    results
+  end
+
+  def section_3_statuses
+    privacy_policy_status = if @form.privacy_policy_url.present?
+                              :completed
+                            else
+                              :incomplete
+                            end
+
+    support_contact_details = if @form.support_email.present? || @form.support_phone.present? || (@form.support_url_text.present? && @form.support_url)
+                                :completed
+                              else
+                                :incomplete
+                              end
+
+    results = []
+    results << privacy_policy_status
+    results << support_contact_details
+    results
+  end
+
 end
