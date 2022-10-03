@@ -9,6 +9,18 @@ en:
               blank: Answer type can't be blank
             question_text:
               blank: Question text can't be blank
+  contact_details:
+    new:
+      body_html: |
+        <p class="govuk-body">
+          You need to provide at least one way for people to get help if they get stuck while filling in this form.
+        </p>
+
+        <p class="govuk-body">
+          The contact information will be displayed at the bottom of every page of the form.
+        </p>
+      hint: Select at least one option
+      title: How can people get help with filling in this form?
   footer:
     accessibility_statement: Accessibility statement
     cookies: Cookies
@@ -184,6 +196,7 @@ en:
       </p>
     heading: Provide a link to privacy information for this form
     submit_button: Save and continue
+  save_and_continue: Save and continue
   service_unavailable:
     body: Contact the GOV.UK Forms team if you need to make changes to your forms or speak to someone about the service.
     title: Sorry, the service is unavailable
