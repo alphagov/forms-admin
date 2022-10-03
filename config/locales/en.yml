@@ -113,7 +113,7 @@ en:
         </p>
 
         <p class="govuk-body">
-        After you have made your form live, completed forms will be sent to %{submission_email}.
+          After you have made your form live, completed forms will be sent to %{submission_email}.
         </p>
   not_found:
     body: |
