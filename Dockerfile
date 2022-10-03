@@ -32,8 +32,7 @@ COPY --chown=ruby:ruby . .
 
 # you can't run rails commands like assets:precompile without a secret key set
 # even though the command doesn't use the value itself
-RUN if [ "${RAILS_ENV}" != "development" ]; then \
-  SECRET_KEY_BASE=dummyvalue rails assets:precompile; fi
+RUN SECRET_KEY_BASE=dummyvalue rails assets:precompile
 
 FROM ruby:3.1.1-alpine3.15 AS app
 
