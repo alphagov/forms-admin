@@ -1,0 +1,37 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.contact_details_form'), @contact_details_form&.errors&.any?)) %>
+<% content_for :back_link, govuk_back_link_to(form_path, "Back to create a form") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <%= form_with(model: @contact_details_form, url: contact_details_create_path(@contact_details_form.form)) do |f| %>
+      <% if @contact_details_form&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @contact_details_form.form.name %></span>
+        <%= t("page_titles.contact_details_form") %>
+      </h1>
+
+      <%= t("contact_details.new.body_html") %>
+
+      <%= f.govuk_check_boxes_fieldset :contact_details_supplied, legend: { text: t('contact_details.new.title') }, hint: { text: t('contact_details.new.hint') } do %>
+        <%= f.govuk_check_box :contact_details_supplied, :supply_email, checked: @contact_details_form.check_email? do %>
+          <%= f.govuk_text_field :email %>
+        <% end %>
+
+        <%= f.govuk_check_box :contact_details_supplied, :supply_phone, checked: @contact_details_form.check_phone? do %>
+          <%= f.govuk_text_area :phone %>
+        <% end %>
+
+        <%= f.govuk_check_box :contact_details_supplied, :supply_link, checked: @contact_details_form.check_link? do %>
+          <%= f.govuk_text_field :link_href  %>
+          <%= f.govuk_text_field :link_text  %>
+        <% end %>
+      <% end %>
+
+      <%= f.govuk_submit t('save_and_continue' )%>
+    <% end %>
+  </div>
+</div>

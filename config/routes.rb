@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   get "forms/:id/live_confirmation" => "forms/make_live#confirmation", as: :live_confirmation
   get "forms/:id/what-happens-next" => "forms/what_happens_next#new", as: :what_happens_next
   post "forms/:id/what-happens-next" => "forms/what_happens_next#create", as: :what_happens_next_create
+  get "forms/:id/contact-details" => "forms/contact_details#new", as: :contact_details
+  post "forms/:id/contact-details" => "forms/contact_details#create", as: :contact_details_create
 
   # Page routes
   scope "forms/:form_id/pages" do
