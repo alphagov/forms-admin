@@ -67,6 +67,11 @@ describe FormTaskListService do
         expect(section_rows.first[:task_name]).to eq "Provide a link to privacy information for this form"
         expect(section_rows.first[:path]).to eq "/forms/1/privacy_policy"
       end
+
+      it "has link to set contact details url" do
+        expect(section_rows[1][:task_name]).to eq "Provide contact details for support"
+        expect(section_rows[1][:path]).to eq "/forms/1/contact-details"
+      end
     end
 
     describe "section 4 tasks" do
