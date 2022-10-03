@@ -35,5 +35,5 @@ en:
               blank: Enter an online contact link description
               too_long: The link description cannot be longer than 120 characters
             contact_details_supplied:
-              too_short: Select at least one option
+              must_be_supply_contact_details: Select at least one option
 

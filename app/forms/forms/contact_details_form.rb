@@ -13,7 +13,11 @@ class Forms::ContactDetailsForm
   validates :link_href, presence: true, url: true, length: { maximum: 120 }, if: -> { supplied :supply_link }
   validates :link_text, presence: true, length: { maximum: 120 }, if: -> { supplied :supply_link }
 
-  validates :contact_details_supplied, length: { minimum: 2 }
+  validate :must_be_supply_contact_details
+
+  def must_be_supply_contact_details
+    errors.add(:contact_details_supplied, :must_be_supply_contact_details) if contact_details_supplied.reject(&:blank?).empty?
+  end
 
   def initialize(attrs = {})
     attrs.deep_symbolize_keys!
