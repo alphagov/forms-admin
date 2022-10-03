@@ -1,10 +1,10 @@
-.PHONY: setup serve serve-watch test test watch lint lint-fix install db db-down
+.PHONY: setup serve test test-watch lint db db-down
 
 setup:
-	bundle install
+	bin/setup
 
 serve: setup
-	bundle exec bin/rails s
+	bin/dev
 
 test: setup
 	bundle exec bin/rake

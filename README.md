@@ -27,10 +27,10 @@ git clone git@github.com:alphagov/forms-admin.git
 cd forms-admin
 
 # 2. Run the setup script
-bin/setup
+make setup
 ```
 
-`bin/setup` is idempotent, so you can also run it whenever you pull new changes.
+`make setup` runs `bin/setup` which is idempotent, so you can also run it whenever you pull new changes.
 
 ### Environment variables
 
@@ -45,7 +45,13 @@ bin/setup
 
 ### Running the app
 
-You can either run the development task:
+You can run this using the make command:
+
+```bash
+make serve
+```
+
+Without make, you can either run the development task:
 
 ```bash
 # Run the foreman dev server. This will also start the frontend dev task
@@ -60,6 +66,28 @@ bin/rails server
 
 # When running the server, you can use any of the frontend tasks, e.g.:
 yarn dev
+```
+
+### Running the tests
+
+The tests run with Rspec and can be run via make:
+
+```bash
+make test
+```
+
+To run specific tests, you can also call rspec directly with
+
+```bash
+bundle exec rspec
+```
+
+### Linting
+
+To run linting with fixes you can use
+
+```bash
+make lint-fix
 ```
 
 ## Configuration and deployment
