@@ -32,6 +32,31 @@ make setup
 
 `make setup` runs `bin/setup` which is idempotent, so you can also run it whenever you pull new changes.
 
+### Secrets vs Settings
+
+Refer to the [the config gem](https://github.com/railsconfig/config#accessing-the-settings-object) to understand the `file based settings` loading order.
+
+To override file based via `Machine based env variables settings`
+
+```bash
+cat config/settings.yml
+file
+  based
+    settings
+      env1: 'foo'
+```
+
+```bash
+export SETTINGS__FILE__BASED__SETTINGS__ENV1="bar"
+```
+
+```ruby
+puts Settings.file.based.setting.env1
+bar
+```
+
+Refer to the [settings file](config/settings.yml) for all the settings required to run this app
+
 ### Environment variables
 
 | Name                  | Purpose                                                            |
