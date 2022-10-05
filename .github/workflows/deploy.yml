@@ -45,4 +45,5 @@ jobs:
             --var SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
             --var API_BASE=${{ secrets.API_BASE }} \
             --var RUNNER_BASE=${{ secrets.RUNNER_BASE }} \
+            --var INSTANCES=2 \
             --var API_KEY=${{ secrets.API_KEY }} 
