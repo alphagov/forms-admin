@@ -65,7 +65,7 @@ RSpec.describe "PrivacyPolicy controller", type: :request do
         mock.put "/api/v1/forms/2", post_headers
         mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
       end
-      get privacy_policy_path(id: 2)
+      get privacy_policy_path(form_id: 2)
     end
 
     it "Reads the form from the API" do
@@ -79,7 +79,7 @@ RSpec.describe "PrivacyPolicy controller", type: :request do
         mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
         mock.put "/api/v1/forms/2", post_headers
       end
-      post privacy_policy_path(id: 2), params: { forms_privacy_policy_form: { privacy_policy_url: "https://www.example.gov.uk/privacy-policy" } }
+      post privacy_policy_path(form_id: 2), params: { forms_privacy_policy_form: { privacy_policy_url: "https://www.example.gov.uk/privacy-policy" } }
     end
 
     it "Reads the form from the API" do

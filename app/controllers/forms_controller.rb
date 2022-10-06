@@ -4,7 +4,7 @@ class FormsController < ApplicationController
   end
 
   def show
-    @form = Form.find(params[:id])
+    @form = Form.find(params[:form_id])
     @task_list = FormTaskListService.call(form: @form).all_tasks
   end
 

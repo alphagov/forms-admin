@@ -65,7 +65,7 @@ RSpec.describe "WhatHappensNext controller", type: :request do
         mock.put "/api/v1/forms/2", post_headers
         mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
       end
-      get what_happens_next_path(id: 2)
+      get what_happens_next_path(form_id: 2)
     end
 
     it "Reads the form from the API" do
@@ -79,7 +79,7 @@ RSpec.describe "WhatHappensNext controller", type: :request do
         mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
         mock.put "/api/v1/forms/2", post_headers
       end
-      post what_happens_next_path(id: 2), params: { forms_what_happens_next_form: { what_happens_next_text: "Wait until you get a reply" } }
+      post what_happens_next_path(form_id: 2), params: { forms_what_happens_next_form: { what_happens_next_text: "Wait until you get a reply" } }
     end
 
     it "Reads the form from the API" do

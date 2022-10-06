@@ -62,7 +62,7 @@ RSpec.describe "ChangeEmail controller", type: :request do
         mock.put "/api/v1/forms/2", post_headers
         mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
       end
-      get change_form_email_path(id: 2)
+      get change_form_email_path(form_id: 2)
     end
 
     it "Reads the form from the API" do
@@ -76,7 +76,7 @@ RSpec.describe "ChangeEmail controller", type: :request do
         mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
         mock.put "/api/v1/forms/2", post_headers
       end
-      post change_form_email_path(id: 2), params: { forms_change_email_form: { submission_email: "new_submission@test-org.gov.uk" } }
+      post change_form_email_path(form_id: 2), params: { forms_change_email_form: { submission_email: "new_submission@test-org.gov.uk" } }
     end
 
     it "Reads the form from the API" do
