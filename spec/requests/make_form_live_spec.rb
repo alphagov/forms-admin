@@ -88,7 +88,7 @@ RSpec.describe "MakeLive controller", type: :request do
                                          read: { response: form, status: 200 },
                                          update: { response: updated_form, status: 200 },
                                        })
-      get make_live_path(id: 2)
+      get make_live_path(form_id: 2)
     end
 
     context "when the form is not live" do
@@ -134,7 +134,7 @@ RSpec.describe "MakeLive controller", type: :request do
         mock.put "/api/v1/forms/2", post_headers
         mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
       end
-      get live_confirmation_url(id: 2)
+      get live_confirmation_url(form_id: 2)
     end
 
     context "when the form is already live" do
@@ -187,7 +187,7 @@ RSpec.describe "MakeLive controller", type: :request do
         mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
       end
 
-      post(make_live_path(id: 2), params: form_params)
+      post(make_live_path(form_id: 2), params: form_params)
     end
 
     context "when making a form live" do

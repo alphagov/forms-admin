@@ -22,7 +22,7 @@ RSpec.describe "ContactDetails controller", type: :request do
 
     before do
       ActiveResourceMock.mock_resource(form, { read: { response: form, status: 200 } })
-      get contact_details_path(id: 2)
+      get contact_details_path(form_id: 2)
     end
 
     context "when the does not have any contact details set" do
@@ -60,7 +60,7 @@ RSpec.describe "ContactDetails controller", type: :request do
         mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
       end
 
-      post contact_details_create_path(id: 2), params:
+      post contact_details_create_path(form_id: 2), params:
     end
 
     context "when given valid params" do
@@ -75,7 +75,7 @@ RSpec.describe "ContactDetails controller", type: :request do
       end
 
       it "redirects to the confirmation page" do
-        expect(response).to redirect_to(form_path(id: 2))
+        expect(response).to redirect_to(form_path(form_id: 2))
       end
     end
 

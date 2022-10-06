@@ -378,7 +378,7 @@ RSpec.describe "Pages", type: :request do
       end
 
       it "Redirects you to the home screen" do
-        expect(response).to redirect_to(form_path(id: 2))
+        expect(response).to redirect_to(form_path(form_id: 2))
       end
 
       it "Deletes the form on the API" do
