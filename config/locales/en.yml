@@ -26,6 +26,9 @@ en:
     cookies: Cookies
     helpful_links: Helpful links
     privacy: Privacy
+  forbidden:
+    body: You do not have permission to view this page as it does not belong to your organisation. Contact the GOV.UK Forms team if you think this is incorrect.
+    title: You cannot view this page
   form_url_component:
     copy_to_clipboard: Copy URL to clipboard
     url_is: 'The URL for your form is:'
@@ -139,6 +142,7 @@ en:
     change_name_form: Name your form
     contact_details_form: Provide contact details for support
     error_prefix: 'Error: '
+    forbidden: You cannot view this page
     home: Home
     internal_server_error: Sorry, there is a problem with the service
     make_live_form: Make your form live
