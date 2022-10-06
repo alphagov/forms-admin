@@ -10,7 +10,6 @@ Rails.application.routes.draw do
   post "forms/new" => "forms/change_name#create"
 
   scope "forms/:form_id" do
-    # resources :forms, only: %i[show]
     get "/" => "forms#show", as: :form
     get "/change-name" => "forms/change_name#edit", as: :change_form_name
     post "/change-name" => "forms/change_name#update"
