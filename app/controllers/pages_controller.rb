@@ -1,4 +1,5 @@
 class PagesController < ApplicationController
+  include CheckFormOrganisation
   before_action :fetch_form, :answer_types
 
   def new
