@@ -45,6 +45,7 @@ RSpec.describe "ChangeName controller", type: :request do
     before do
       ActiveResource::HttpMock.reset!
       ActiveResource::HttpMock.respond_to do |mock|
+        mock.get "/api/v1/forms/", req_headers, form_response_data, 200
         mock.get "/api/v1/forms/2", req_headers, form_response_data, 200
         mock.put "/api/v1/forms/2", post_headers
         mock.post "/api/v1/forms", post_headers, { id: 2 }.to_json, 200
@@ -78,7 +79,7 @@ RSpec.describe "ChangeName controller", type: :request do
       post change_form_name_path(form_id: 2), params: { forms_change_name_form: { name: "new_form_name" } }
       expected_request = ActiveResource::Request.new(:put, "/api/v1/forms/2", { "id": 2, "name": "new_form_name", "submission_email": "submission@email.com", "start_page": 1, org: "test-org" }.to_json, post_headers)
       expect(ActiveResource::HttpMock.requests).to include expected_request
-      expect(ActiveResource::HttpMock.requests[1].body).to eq expected_request.body
+      expect(ActiveResource::HttpMock.requests[2].body).to eq expected_request.body
       expect(response).to redirect_to(form_path(form_id: 2))
     end
   end

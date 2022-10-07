@@ -14,6 +14,7 @@ RSpec.describe "Pages", type: :request do
           form_slug: "form-name",
           submission_email: "submission@email.com",
           live_at: "",
+          org: "test-org",
         })
       end
 

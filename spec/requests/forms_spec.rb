@@ -11,6 +11,7 @@ RSpec.describe "Forms", type: :request do
           submission_email: "submission@email.com",
           privacy_policy_url: "https://example.com/privacy_policy",
           live_at: "",
+          org: "test-org",
           support_email: "test@example.gov.uk",
           support_phone: nil,
           support_url: nil,
@@ -134,6 +135,7 @@ RSpec.describe "Forms", type: :request do
           name: "Form name",
           form_slug: "form-name",
           submission_email: "submission@email.com",
+          org: "test-org",
           id: 2,
         )
       end
