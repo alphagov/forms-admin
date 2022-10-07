@@ -4,10 +4,11 @@ module CheckFormOrganisation
   end
 
 private
+
   def check_form_organisation
     form = Form.find(params[:form_id])
     if form.org == current_user.organisation_slug
-      return
+      nil
     else
       render "errors/forbidden", status: :forbidden, formats: :html
     end
