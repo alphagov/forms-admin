@@ -7,6 +7,7 @@ class Page < ActiveResource::Base
   belongs_to :form
   validates :question_text, presence: true
   validates :answer_type, presence: true, inclusion: { in: %w[single_line address date email national_insurance_number phone_number] }
+  before_validation :convert_is_optional_to_boolean
 
   def has_next_page?
     attributes.include?("next_page") && !attributes["next_page"].nil?
@@ -17,5 +18,17 @@ class Page < ActiveResource::Base
     # return the number if it was inserted at the end
     index = form.pages.index(self)
     (index.nil? ? form.pages.length : index) + 1
+  end
+
+  def convert_is_optional_to_boolean
+    return nil unless FeatureService.enabled?(:make_question_optional)
+
+    self.is_optional = is_optional_value
+  end
+
+private
+
+  def is_optional_value
+    return true if is_optional == "true"
   end
 end

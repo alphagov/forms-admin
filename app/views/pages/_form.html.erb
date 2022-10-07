@@ -9,6 +9,17 @@
 
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
+<% if FeatureService.enabled?(:make_question_optional) %>
+  <%= f.govuk_check_boxes_fieldset :is_optional, multiple: false, legend: { text: "Add rules to this question", size: 'm' } do %>
+    <%= f.govuk_check_box :is_optional, true,0, multiple: false,
+                          small: true,
+                          label: { text: "Make this question optional" },
+                          hint: { text: 'Allow people to skip this question if it does not apply to them.' } %>
+
+  <% end %>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+<% end  %>
+
 <%= f.govuk_collection_radio_buttons(
       :answer_type,
       @answer_types,

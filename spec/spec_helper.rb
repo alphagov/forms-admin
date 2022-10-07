@@ -2,6 +2,7 @@ require "capybara/rspec"
 
 require_relative "support/active_resource_mock"
 require_relative "support/factorybot"
+require_relative "support/features"
 require_relative "support/matchers/active_resource/have_been_created"
 require_relative "support/matchers/active_resource/have_been_updated"
 require_relative "support/matchers/active_resource/have_been_read"

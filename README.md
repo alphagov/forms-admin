@@ -89,6 +89,11 @@ features:
 
 And check with `FeatureService.enabled?("some.nested_feature")`.
 
+### Testing with features
+
+Rspec tests can also be tagged with `feature_{name}: true`. This will turn that feature on just for the duration of that test.
+
+
 
 ### Running the app
 
