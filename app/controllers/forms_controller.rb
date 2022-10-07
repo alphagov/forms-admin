@@ -1,4 +1,6 @@
 class FormsController < ApplicationController
+  include CheckFormOrganisation
+
   rescue_from ActiveResource::ResourceNotFound do
     render template: "errors/not_found", status: :not_found
   end
