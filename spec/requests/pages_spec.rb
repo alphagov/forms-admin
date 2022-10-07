@@ -55,7 +55,7 @@ RSpec.describe "Pages", type: :request do
 
     context "with a form from another organisation" do
       let(:form) do
-        build :form, :from_other_org, id: 2
+        build :form, org: "another-org", id: 2
       end
 
       before do
