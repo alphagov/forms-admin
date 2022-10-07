@@ -38,5 +38,9 @@ FactoryBot.define do
       support_url { Faker::Internet.url(host: "gov.uk") }
       support_url_text { Faker::Lorem.sentence(word_count: 1, random_words_to_add: 4) }
     end
+
+    trait :from_other_org do
+      org { "another-org" }
+    end
   end
 end

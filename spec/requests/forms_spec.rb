@@ -2,6 +2,13 @@ require "rails_helper"
 
 RSpec.describe "Forms", type: :request do
   describe "Showing an existing form" do
+    let(:headers) do
+      {
+        "X-API-Token" => ENV["API_KEY"],
+        "Accept" => "application/json",
+      }
+    end
+
     describe "Given a form" do
       let(:form) do
         Form.new({
@@ -30,13 +37,6 @@ RSpec.describe "Forms", type: :request do
         })]
       end
 
-      let(:headers) do
-        {
-          "X-API-Token" => ENV["API_KEY"],
-          "Accept" => "application/json",
-        }
-      end
-
       before do
         ActiveResource::HttpMock.respond_to do |mock|
           mock.get "/api/v1/forms/2", headers, form.to_json, 200
@@ -51,6 +51,28 @@ RSpec.describe "Forms", type: :request do
 
         pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
         expect(ActiveResource::HttpMock.requests).to include pages_request
+      end
+    end
+
+    context "with a form from another organisation" do
+      let(:form) do
+        build :form, :from_other_org, id: 2
+      end
+
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/2", headers, form.to_json, 200
+        end
+
+        get form_path(2)
+      end
+
+      it "Renders the forbidden page" do
+        expect(response).to render_template("errors/forbidden")
+      end
+
+      it "Returns a 403 status" do
+        expect(response.status).to eq(403)
       end
     end
   end
