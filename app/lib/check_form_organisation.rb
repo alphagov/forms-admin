@@ -6,6 +6,8 @@ module CheckFormOrganisation
 private
 
   def check_form_organisation
+    return nil unless params[:form_id].present?
+
     form = Form.find(params[:form_id])
     if form.org == current_user.organisation_slug
       nil
