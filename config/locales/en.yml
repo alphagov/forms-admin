@@ -21,6 +21,7 @@ en:
         </p>
       hint: Select at least one option
       title: How can people get help with filling in this form?
+  contact_govuk_forms: Contact the GOV.UK Forms team
   footer:
     accessibility_statement: Accessibility statement
     cookies: Cookies
@@ -202,7 +203,7 @@ en:
     submit_button: Save and continue
   save_and_continue: Save and continue
   service_unavailable:
-    body: Contact the GOV.UK Forms team if you need to make changes to your forms or speak to someone about the service.
+    body_html: "%{link} if you need to make changes to your forms or speak to someone about the service."
     title: Sorry, the service is unavailable
   skip_to_main_content: Skip to main content
   task_statuses:

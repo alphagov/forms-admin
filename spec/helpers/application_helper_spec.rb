@@ -20,4 +20,20 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
     end
   end
+
+  describe "contact_url" do
+    it "returns a link to the contact email address" do
+      expect(helper.contact_url).to eq "mailto:govuk-forms@digital.cabinet-office.gov.uk"
+    end
+  end
+
+  describe "contact_link" do
+    it "returns a link to the contact email address with default text" do
+      expect(helper.contact_link).to eq '<a class="govuk-link" href="mailto:govuk-forms@digital.cabinet-office.gov.uk">Contact the GOV.UK Forms team</a>'
+    end
+
+    it "returns a link to the contact email address with custom text" do
+      expect(helper.contact_link("test")).to eq '<a class="govuk-link" href="mailto:govuk-forms@digital.cabinet-office.gov.uk">test</a>'
+    end
+  end
 end
