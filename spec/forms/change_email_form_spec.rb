@@ -35,6 +35,14 @@ RSpec.describe Forms::ChangeEmailForm, type: :model do
       )
     end
 
+    it "domain validation is case insensitive" do
+      change_email_form = described_class.new(submission_email: "laura.mipsum@juggling.GOV.UK")
+
+      change_email_form.validate(:submission_email)
+
+      expect(change_email_form).to be_valid
+    end
+
     # More tests are required here -  e.g. that a valid submission updates the Form object
   end
 end
