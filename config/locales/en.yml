@@ -108,6 +108,7 @@ en:
             number: Requires a numerical answer
             phone_number: Requires an answer in the format of a phone number
             single_line: For a short answer
+            long_text: For a longer answer
           names:
             address: Address
             date: Date
@@ -116,6 +117,7 @@ en:
             number: Number
             phone_number: Phone number
             single_line: Single line of text
+            long_text: Multiple lines of text
         hint_text: Hint text (optional)
         question_short_name: Question short name (optional)
         question_text: Question text

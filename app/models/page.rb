@@ -4,7 +4,7 @@ class Page < ActiveResource::Base
   self.include_format_in_path = false
   headers["X-API-Token"] = ENV["API_KEY"]
 
-  ANSWER_TYPES = %w[single_line number address date email national_insurance_number phone_number].freeze
+  ANSWER_TYPES = %w[single_line number address date email national_insurance_number phone_number long_text].freeze
 
   belongs_to :form
   validates :question_text, presence: true
