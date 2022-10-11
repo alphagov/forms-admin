@@ -30,4 +30,12 @@ module ApplicationHelper
     mode_segment = live ? "form" : "preview-form"
     "#{runner_url}/#{mode_segment}/#{form_id}/#{form_slug}"
   end
+
+  def contact_url
+    "mailto:govuk-forms@digital.cabinet-office.gov.uk"
+  end
+
+  def contact_link(text = t("contact_govuk_forms"))
+    govuk_link_to(text, contact_url)
+  end
 end
