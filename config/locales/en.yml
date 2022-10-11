@@ -104,20 +104,20 @@ en:
             address: To collect an address with separate fields for line 1, line 2, town or city, county and postcode
             date: Requires a day, month and year
             email: Requires an answer in the format of an email address
+            long_text: For a longer answer
             national_insurance_number: Requires an answer in the format of a National Insurance number
             number: Requires a numerical answer
             phone_number: Requires an answer in the format of a phone number
             single_line: For a short answer
-            long_text: For a longer answer
           names:
             address: Address
             date: Date
             email: Email address
+            long_text: Multiple lines of text
             national_insurance_number: National Insurance number
             number: Number
             phone_number: Phone number
             single_line: Single line of text
-            long_text: Multiple lines of text
         hint_text: Hint text (optional)
         question_short_name: Question short name (optional)
         question_text: Question text
