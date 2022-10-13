@@ -1,32 +1,14 @@
 require "rails_helper"
 
 RSpec.describe "ChangeEmail controller", type: :request do
-  let(:form_response_data) do
-    {
-      id: 2,
-      name: "Form name",
-      submission_email: "submission@test-org.gov.uk",
-      start_page: 1,
-      org: "test-org",
-    }.to_json
-  end
-
   let(:form) do
-    Form.new(
-      name: "Form name",
-      submission_email: "submission@test-org.gov.uk",
-      id: 2,
-      org: "test-org",
-    )
+    build(:form, :live, id: 2)
   end
 
   let(:updated_form) do
-    Form.new({
-      id: 2,
-      name: "Form name",
-      submission_email: "new_submission@test-org.gov.uk",
-      org: "test-org",
-    })
+    new_form = form
+    new_form.submission_email = "new_submission@test-org.gov.uk"
+    new_form
   end
 
   let(:req_headers) do

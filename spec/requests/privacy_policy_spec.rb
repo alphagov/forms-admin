@@ -1,35 +1,14 @@
 require "rails_helper"
 
 RSpec.describe "PrivacyPolicy controller", type: :request do
-  let(:form_response_data) do
-    {
-      id: 2,
-      name: "Form name",
-      submission_email: "submission@email.com",
-      start_page: 1,
-      org: "test-org",
-      privacy_policy_url: "https://www.example.com",
-    }.to_json
-  end
-
   let(:form) do
-    Form.new(
-      name: "Form name",
-      submission_email: "submission@email.com",
-      id: 2,
-      org: "test-org",
-      privacy_policy_url: "https://www.example.com",
-    )
+    build(:form, :live, id: 2, privacy_policy_url: "https://www.example.com")
   end
 
   let(:updated_form) do
-    Form.new({
-      name: "Form name",
-      submission_email: "submission@email.com",
-      id: 2,
-      org: "test-org",
-      privacy_policy_url: "https://www.example.gov.uk/privacy-policy",
-    })
+    new_form = form
+    new_form.privacy_policy_url = "https://www.example.gov.uk/privacy-policy"
+    new_form
   end
 
   let(:req_headers) do

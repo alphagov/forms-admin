@@ -6,7 +6,8 @@ class Forms::PrivacyPolicyForm
 
   attr_accessor :form, :privacy_policy_url
 
-  validates :privacy_policy_url, presence: true, url: true
+  validates :privacy_policy_url, presence: true, if: -> { form.live? }
+  validates :privacy_policy_url, url: true, if: -> { privacy_policy_url.present? }
 
   def submit
     return false if invalid?
