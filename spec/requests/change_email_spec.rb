@@ -8,6 +8,7 @@ RSpec.describe "ChangeEmail controller", type: :request do
       submission_email: "submission@test-org.gov.uk",
       start_page: 1,
       org: "test-org",
+      live_at: Time.zone.now,
     }.to_json
   end
 
@@ -17,6 +18,7 @@ RSpec.describe "ChangeEmail controller", type: :request do
       submission_email: "submission@test-org.gov.uk",
       id: 2,
       org: "test-org",
+      live_at: Time.zone.now,
     )
   end
 
@@ -26,6 +28,7 @@ RSpec.describe "ChangeEmail controller", type: :request do
       name: "Form name",
       submission_email: "new_submission@test-org.gov.uk",
       org: "test-org",
+      live_at: Time.zone.now,
     })
   end
 

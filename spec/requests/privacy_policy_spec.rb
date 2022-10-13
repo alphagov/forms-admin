@@ -9,6 +9,7 @@ RSpec.describe "PrivacyPolicy controller", type: :request do
       start_page: 1,
       org: "test-org",
       privacy_policy_url: "https://www.example.com",
+      live_at: Time.zone.now,
     }.to_json
   end
 
@@ -19,6 +20,7 @@ RSpec.describe "PrivacyPolicy controller", type: :request do
       id: 2,
       org: "test-org",
       privacy_policy_url: "https://www.example.com",
+      live_at: Time.zone.now,
     )
   end
 
@@ -29,6 +31,7 @@ RSpec.describe "PrivacyPolicy controller", type: :request do
       id: 2,
       org: "test-org",
       privacy_policy_url: "https://www.example.gov.uk/privacy-policy",
+      live_at: Time.zone.now,
     })
   end
 
