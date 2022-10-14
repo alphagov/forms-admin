@@ -63,6 +63,6 @@ private
   end
 
   def answer_types
-    @answer_types = %w[single_line address date email national_insurance_number phone_number]
+    @answer_types = %w[single_line number address date email national_insurance_number phone_number]
   end
 end

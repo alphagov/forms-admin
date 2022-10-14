@@ -6,7 +6,7 @@ class Page < ActiveResource::Base
 
   belongs_to :form
   validates :question_text, presence: true
-  validates :answer_type, presence: true, inclusion: { in: %w[single_line address date email national_insurance_number phone_number] }
+  validates :answer_type, presence: true, inclusion: { in: %w[single_line number address date email national_insurance_number phone_number] }
   before_validation :convert_is_optional_to_boolean
 
   def has_next_page?
