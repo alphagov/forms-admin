@@ -31,6 +31,7 @@ private
     [
       { task_name: I18n.t("forms.task_lists.section_1.change_name"), path: change_form_name_path(@form.id) },
       { task_name: I18n.t("forms.task_lists.section_1.add_or_edit_questions"), path: question_path },
+      { task_name: I18n.t("forms.task_lists.section_1.declaration"), path: declaration_path(@form.id) },
       { task_name: I18n.t("forms.task_lists.section_1.add_what_happens_next"), path: what_happens_next_path(@form.id) },
     ]
   end

@@ -1,0 +1,24 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.declaration_form'), @declaration_form.errors.present?)) %>
+<% content_for :back_link, govuk_back_link_to(form_path(@declaration_form.form), "Back to create a form") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: @declaration_form, url: declaration_create_path(@declaration_form.form)) do |f| %>
+      <% if @declaration_form&.errors&.present? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @declaration_form.form.name %></span>
+        <%= t("page_titles.declaration_form") %>
+      </h1>
+
+      <%= t("declaration_form.new.body_html") %>
+
+      <%= f.govuk_text_area :declaration_text, max_chars: 2000, label: {size: 'm' } %>
+
+      <%= f.govuk_submit "Save and continue" %>
+    <% end %>
+  </div>
+</div>
+

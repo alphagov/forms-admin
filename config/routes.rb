@@ -26,6 +26,8 @@ Rails.application.routes.draw do
     post "/what-happens-next" => "forms/what_happens_next#create", as: :what_happens_next_create
     get "/contact-details" => "forms/contact_details#new", as: :contact_details
     post "/contact-details" => "forms/contact_details#create", as: :contact_details_create
+    get "/declaration" => "forms/declaration#new", as: :declaration
+    post "/declaration" => "forms/declaration#create", as: :declaration_create
 
     scope "/pages" do
       get "/" => "pages#index", as: :form_pages
