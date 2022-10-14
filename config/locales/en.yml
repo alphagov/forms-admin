@@ -78,6 +78,7 @@ en:
             date: Requires a day, month and year
             email: Requires an answer in the format of an email address
             national_insurance_number: Requires an answer in the format of a National Insurance number
+            number: Requires a numerical answer
             phone_number: Requires an answer in the format of a phone number
             single_line: For a short answer
           names:
@@ -85,6 +86,7 @@ en:
             date: Date
             email: Email address
             national_insurance_number: National Insurance number
+            number: Number
             phone_number: Phone number
             single_line: Single line of text
         hint_text: Hint text (optional)
