@@ -22,6 +22,32 @@ en:
       hint: Select at least one option
       title: How can people get help with filling in this form?
   contact_govuk_forms: Contact the GOV.UK Forms team
+  declaration_form:
+    new:
+      body_html: |
+        <p class="govuk-body">
+          When someone has answered all the questions in
+          your form, they will be shown a page that lists all of their answers.
+          The page will ask them to check their answers before they submit the
+          form.
+        </p>
+        <p class="govuk-body">
+          You can add a declaration to this page. A declaration is some content
+          that people must confirm they understand and agree to before they
+          submit the form.
+        </p>
+        <p class="govuk-body">
+          You might want to add a declaration if you need people to confirm they
+          have provided accurate information, or that they understand the
+          consequences of providing false information.
+        </p>
+
+        <h2 class="govuk-heading-s">Example</h2>
+
+        <div class="govuk-inset-text">
+          By submitting this form you are confirming that, to the best of your
+          knowledge, the answers you are providing are correct.
+        </div>
   footer:
     accessibility_statement: Accessibility statement
     cookies: Cookies
@@ -45,6 +71,7 @@ en:
         add_or_edit_questions: Add and edit your questions
         add_what_happens_next: Add information about what happens next
         change_name: Edit the name of your form
+        declaration: Add a declaration for people to agree to
         title: Create your form
       section_2:
         submission_email: Set the email address completed forms will be sent to
@@ -144,6 +171,7 @@ en:
     change_email_form: What email address should form responses be sent to?
     change_name_form: Name your form
     contact_details_form: Provide contact details for support
+    declaration_form: Add a declaration
     error_prefix: 'Error: '
     forbidden: You cannot view this page
     home: Home

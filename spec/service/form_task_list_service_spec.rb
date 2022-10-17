@@ -37,9 +37,14 @@ describe FormTaskListService do
         expect(section_rows[1][:path]).to eq "/forms/1/pages"
       end
 
+      it "has a link to add/edit declaration" do
+        expect(section_rows[2][:task_name]).to eq "Add a declaration for people to agree to"
+        expect(section_rows[2][:path]).to eq "/forms/1/declaration"
+      end
+
       it "has a link to add/edit 'What happens next'" do
-        expect(section_rows[2][:task_name]).to eq "Add information about what happens next"
-        expect(section_rows[2][:path]).to eq "/forms/1/what-happens-next"
+        expect(section_rows[3][:task_name]).to eq "Add information about what happens next"
+        expect(section_rows[3][:path]).to eq "/forms/1/what-happens-next"
       end
     end
 
