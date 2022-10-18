@@ -58,7 +58,7 @@ en:
     title: You cannot view this page
   form_url_component:
     copy_to_clipboard: Copy URL to clipboard
-    url_is: 'The URL for your form is:'
+    url_is: "The URL for your form is:"
   forms:
     delete_form: Delete form
     form_overview:
@@ -172,7 +172,7 @@ en:
     change_name_form: Name your form
     contact_details_form: Provide contact details for support
     declaration_form: Add a declaration
-    error_prefix: 'Error: '
+    error_prefix: "Error: "
     forbidden: You cannot view this page
     home: Home
     internal_server_error: Sorry, there is a problem with the service
@@ -194,6 +194,9 @@ en:
     submit_add: Save and add next question
     submit_edit: Save and edit next question
     submit_save: Save question
+    make_optional_hint: ‘(optional)’ will be added to the end of the question text
+    make_optional_text: Make this question optional
+    add_rules_legend: Add rules to this question
   phase_banner:
     after_link: will help us improve it.
     before_link: This is a new service, your
