@@ -36,4 +36,20 @@ RSpec.describe ApplicationHelper, type: :helper do
       expect(helper.contact_link("test")).to eq '<a class="govuk-link" href="mailto:govuk-forms@digital.cabinet-office.gov.uk">test</a>'
     end
   end
+
+  describe "question_text_with_optional_suffix" do
+    context "with an optional question" do
+      it "returns the title with the optional suffix" do
+        page = OpenStruct.new(question_text: "What is your name?", is_optional: true)
+        expect(helper.question_text_with_optional_suffix(page)).to eq(I18n.t("pages.optional", question_text: "What is your name?"))
+      end
+    end
+
+    context "with a required question" do
+      it "returns the title with the optional suffix" do
+        page = OpenStruct.new(question_text: "What is your name?", is_optional: false)
+        expect(helper.question_text_with_optional_suffix(page)).to eq("What is your name?")
+      end
+    end
+  end
 end
