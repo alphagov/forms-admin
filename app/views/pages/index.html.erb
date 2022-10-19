@@ -32,7 +32,11 @@
         <dl class="govuk-summary-list">
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
-              <%= page.question_text %>
+              <% if FeatureService.enabled?(:make_question_optional) %>
+                <%= question_text_with_optional_suffix(page) %>
+              <% else %>
+                <%= page.question_text %>
+              <% end %>
             </dt>
             <dd class="govuk-summary-list__actions">
               <%= govuk_link_to edit_page_path(@form,page) do %>

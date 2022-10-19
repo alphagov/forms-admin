@@ -38,4 +38,8 @@ module ApplicationHelper
   def contact_link(text = t("contact_govuk_forms"))
     govuk_link_to(text, contact_url)
   end
+
+  def question_text_with_optional_suffix(page)
+    page.is_optional ? t("pages.optional", question_text: page.question_text) : page.question_text
+  end
 end

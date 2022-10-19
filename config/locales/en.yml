@@ -193,6 +193,7 @@ en:
       title: Add and edit your questions
     make_optional_hint: "‘(optional)’ will be added to the end of the question text"
     make_optional_text: Make this question optional
+    optional: "%{question_text} (optional)"
     question: Question
     submit_add: Save and add next question
     submit_edit: Save and edit next question
