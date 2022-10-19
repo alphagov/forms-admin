@@ -21,6 +21,6 @@ describe "Settings" do
   describe ".features" do
     features = settings[:features]
 
-    include_examples expected_value_test, :make_question_optional, features, false
+    include_examples expected_value_test, :make_question_optional, features, true
   end
 end
