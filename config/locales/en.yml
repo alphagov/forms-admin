@@ -184,12 +184,16 @@ en:
     what_happens_next_form: Form submitted page
     your_form_is_live: Your form is live
   pages:
+    add_rules_legend: Add rules to this question
     delete_question: Delete question
     go_to_your_questions: Go to your questions
     heading: Edit question
     index:
       add_question: Add a question
       title: Add and edit your questions
+    make_optional_hint: "‘(optional)’ will be added to the end of the question text"
+    make_optional_text: Make this question optional
+    optional: "%{question_text} (optional)"
     question: Question
     submit_add: Save and add next question
     submit_edit: Save and edit next question
