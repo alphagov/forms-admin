@@ -6,9 +6,9 @@ en:
         page:
           attributes:
             answer_type:
-              blank: Answer type can't be blank
+              blank: Answer type cannot be blank
             question_text:
-              blank: Question text can't be blank
+              blank: Question text cannot be blank
   contact_details:
     new:
       body_html: |
@@ -186,7 +186,7 @@ en:
     what_happens_next_form: Form submitted page
     your_form_is_live: Your form is live
   pages:
-    add_rules_legend: Add rules to this question
+    add_rules_legend: Question settings
     delete_question: Delete question
     go_to_your_questions: Go to your questions
     heading: Edit question
