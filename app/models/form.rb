@@ -48,6 +48,7 @@ class Form < ActiveResource::Base
     @missing_sections << :missing_submission_email if submission_email.blank?
     @missing_sections << :missing_privacy_policy_url if privacy_policy_url.blank?
     @missing_sections << :missing_contact_details unless support_email.present? || support_phone.present? || (support_url.present? && support_url_text.present?)
+    @missing_sections << :missing_what_happens_next if what_happens_next_text.blank?
 
     if @missing_sections.any?
       false

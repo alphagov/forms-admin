@@ -4,6 +4,7 @@ class Forms::WhatHappensNextForm
 
   attr_accessor :form, :what_happens_next_text
 
+  validates :what_happens_next_text, presence: true, if: -> { form.live? }
   validates :what_happens_next_text, length: { maximum: 2000 }
 
   def submit

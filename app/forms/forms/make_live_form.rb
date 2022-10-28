@@ -47,5 +47,15 @@ private
     if form.missing_sections.include?(:missing_privacy_policy_url)
       errors.add(:confirm_make_live, :missing_privacy_policy_url)
     end
+
+    if form.missing_sections.include?(:missing_contact_details)
+      errors.add(:confirm_make_live, :missing_contact_details)
+      return false
+    end
+
+    if form.missing_sections.include?(:missing_what_happens_next)
+      errors.add(:confirm_make_live, :missing_what_happens_next)
+      false
+    end
   end
 end
