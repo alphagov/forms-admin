@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :form, class: "Form" do
     sequence(:name) { |n| "Form #{n}" }
+    sequence(:form_slug) { |n| "form-#{n}" }
     submission_email { Faker::Internet.email(domain: "example.gov.uk") }
     privacy_policy_url { Faker::Internet.url(host: "gov.uk") }
     org { "test-org" }
@@ -10,6 +11,7 @@ FactoryBot.define do
     support_phone { nil }
     support_url { nil }
     support_url_text { nil }
+    what_happens_next_text { nil }
 
     trait :new_form do
       submission_email { "" }
@@ -17,9 +19,15 @@ FactoryBot.define do
       pages { [] }
     end
 
+    trait :ready_for_live do
+      support_email { Faker::Internet.email(domain: "example.gov.uk") }
+      what_happens_next_text { "We usually respond to applications within 10 working days." }
+    end
+
     trait :live do
       live_at { Time.zone.now }
       support_email { Faker::Internet.email(domain: "example.gov.uk") }
+      what_happens_next_text { "We usually respond to applications within 10 working days." }
     end
 
     trait :with_pages do

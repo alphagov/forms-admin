@@ -9,6 +9,7 @@ RSpec.describe "WhatHappensNext controller", type: :request do
       start_page: 1,
       org: "test-org",
       what_happens_next_text: "Good things come to those who wait",
+      live_at: nil,
     }.to_json
   end
 
@@ -19,6 +20,7 @@ RSpec.describe "WhatHappensNext controller", type: :request do
       id: 2,
       org: "test-org",
       what_happens_next_text: "",
+      live_at: nil,
     )
   end
 
@@ -29,6 +31,7 @@ RSpec.describe "WhatHappensNext controller", type: :request do
       id: 2,
       org: "test-org",
       what_happens_next_text: "Wait until you get a reply",
+      live_at: nil,
     })
   end
 

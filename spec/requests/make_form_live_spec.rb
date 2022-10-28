@@ -1,63 +1,23 @@
 require "rails_helper"
 
 RSpec.describe "MakeLive controller", type: :request do
-  let(:form_response_data) do
-    {
-      id: 2,
-      name: "Form name",
-      form_slug: "form-name",
-      submission_email: "submission@email.com",
-      start_page: 1,
-      org: "test-org",
-      privacy_policy_url: "https://www.example.gov.uk/privacy-policy",
-      live_at: "",
-      support_email: nil,
-      support_phone: nil,
-      support_url: nil,
-      support_url_text: nil,
-    }.to_json
-  end
-
-  let(:page_data) do
-    build(:page, form_id: 2).to_json
-  end
-
   let(:form) do
-    page = build(:page)
-
-    Form.new(
-      name: "Form name",
-      form_slug: "form-name",
-      submission_email: "submission@email.com",
-      id: 2,
-      org: "test-org",
-      privacy_policy_url: "https://www.example.gov.uk/privacy-policy",
-      live_at: "",
-      support_email: "test@example.gov.uk",
-      support_phone: nil,
-      support_url: nil,
-      support_url_text: nil,
-      pages: [page],
-    )
+    build(:form,
+          :with_pages,
+          :ready_for_live,
+          id: 2)
   end
 
   let(:updated_form) do
-    page = form.pages
-
-    Form.new({
-      name: "Form name",
-      form_slug: "form-name",
-      submission_email: "submission@email.com",
-      id: 2,
-      org: "test-org",
-      privacy_policy_url: "https://www.example.gov.uk/privacy-policy",
-      live_at: "2021-01-01T00:00:00.000Z",
-      support_email: "test@example.gov.uk",
-      support_phone: nil,
-      support_url: nil,
-      support_url_text: nil,
-      pages: page,
-    })
+    build(:form,
+          :live,
+          id: 2,
+          name: form.name,
+          form_slug: form.form_slug,
+          submission_email: form.submission_email,
+          privacy_policy_url: form.privacy_policy_url,
+          support_email: form.support_email,
+          pages: form.pages)
   end
 
   let(:req_headers) do
@@ -107,15 +67,9 @@ RSpec.describe "MakeLive controller", type: :request do
 
     context "when the form is already live" do
       let(:form) do
-        Form.new(
-          name: "Form name",
-          form_slug: "form-name",
-          submission_email: "submission@email.com",
-          id: 2,
-          org: "test-org",
-          privacy_policy_url: "https://www.example.com",
-          live_at: "2021-01-01T00:00:00.000Z",
-        )
+        build(:form,
+              :live,
+              id: 2)
       end
 
       it "Reads the form from the API" do
@@ -147,6 +101,7 @@ RSpec.describe "MakeLive controller", type: :request do
           org: "test-org",
           privacy_policy_url: "https://www.example.com",
           live_at: "2021-01-01T00:00:00.000Z",
+          what_happens_next_text: "We usually respond to applications within 10 working days.",
         )
       end
 

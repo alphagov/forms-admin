@@ -71,7 +71,7 @@ describe Form do
         results = new_form
         results.ready_for_live?
 
-        expect(results.missing_sections).to eq %i[missing_pages missing_submission_email missing_privacy_policy_url missing_contact_details]
+        expect(results.missing_sections).to eq %i[missing_pages missing_submission_email missing_privacy_policy_url missing_contact_details missing_what_happens_next]
       end
     end
   end
