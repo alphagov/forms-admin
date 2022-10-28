@@ -15,7 +15,7 @@ RSpec.describe Forms::MakeLiveForm, type: :model do
   end
 
   describe "#submit" do
-    let(:make_live_form) { described_class.new(form: build(:form, :with_pages)) }
+    let(:make_live_form) { described_class.new(form: build(:form, :with_pages, :with_support, what_happens_next_text: "We usually respond to applications within 10 working days.")) }
 
     context "when form is invalid" do
       it "returns false" do

@@ -11,19 +11,7 @@ RSpec.describe "Forms", type: :request do
 
     describe "Given a form" do
       let(:form) do
-        Form.new({
-          id: 2,
-          name: "Form name",
-          form_slug: "form-name",
-          submission_email: "submission@email.com",
-          privacy_policy_url: "https://example.com/privacy_policy",
-          live_at: "",
-          org: "test-org",
-          support_email: "test@example.gov.uk",
-          support_phone: nil,
-          support_url: nil,
-          support_url_text: nil,
-        })
+        build(:form, :live, id: 2)
       end
 
       let(:pages) do
@@ -111,15 +99,7 @@ RSpec.describe "Forms", type: :request do
   describe "Deleting an existing form" do
     describe "Given a valid form" do
       let(:form) do
-        Form.new({
-          name: "Form name",
-          form_slug: "form-name",
-          submission_email: "submission@email.com",
-          id: 2,
-          org: "test-org",
-          start_page: 1,
-          live_at: "",
-        })
+        build(:form, id: 2)
       end
 
       let(:req_headers) do
@@ -153,13 +133,7 @@ RSpec.describe "Forms", type: :request do
   describe "Destroying an existing form" do
     describe "Given a valid form" do
       let(:form) do
-        Form.new(
-          name: "Form name",
-          form_slug: "form-name",
-          submission_email: "submission@email.com",
-          org: "test-org",
-          id: 2,
-        )
+        build(:form, id: 2)
       end
 
       before do
