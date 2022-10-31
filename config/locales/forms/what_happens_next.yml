@@ -10,3 +10,4 @@ en:
           attributes:
             what_happens_next_text:
               too_long: The information about what happens next cannot be longer than 2,000 characters
+              blank: Enter information about what happens next
