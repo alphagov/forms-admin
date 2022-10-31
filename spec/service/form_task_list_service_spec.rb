@@ -70,7 +70,7 @@ describe FormTaskListService do
 
       it "has link to set privacy policy url" do
         expect(section_rows.first[:task_name]).to eq "Provide a link to privacy information for this form"
-        expect(section_rows.first[:path]).to eq "/forms/1/privacy_policy"
+        expect(section_rows.first[:path]).to eq "/forms/1/privacy-policy"
       end
 
       it "has link to set contact details url" do
@@ -101,7 +101,7 @@ describe FormTaskListService do
 
         it "has link to make the form live" do
           expect(section_rows.first[:task_name]).to eq "Make your form live"
-          expect(section_rows.first[:path]).to eq "/forms/1/make_live"
+          expect(section_rows.first[:path]).to eq "/forms/1/make-live"
         end
       end
 

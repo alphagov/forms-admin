@@ -17,11 +17,11 @@ Rails.application.routes.draw do
     post "/change-email" => "forms/change_email#create"
     get "/delete" => "forms/delete_confirmation#delete", as: :delete_form
     delete "/delete" => "forms/delete_confirmation#destroy", as: :destroy_form
-    get "/privacy_policy" => "forms/privacy_policy#new", as: :privacy_policy
-    post "/privacy_policy" => "forms/privacy_policy#create"
-    get "/make_live" => "forms/make_live#new", as: :make_live
-    post "/make_live" => "forms/make_live#create", as: :make_live_create
-    get "/live_confirmation" => "forms/make_live#confirmation", as: :live_confirmation
+    get "/privacy-policy" => "forms/privacy_policy#new", as: :privacy_policy
+    post "/privacy-policy" => "forms/privacy_policy#create"
+    get "/make-live" => "forms/make_live#new", as: :make_live
+    post "/make-live" => "forms/make_live#create", as: :make_live_create
+    get "/live-confirmation" => "forms/make_live#confirmation", as: :live_confirmation
     get "/what-happens-next" => "forms/what_happens_next#new", as: :what_happens_next
     post "/what-happens-next" => "forms/what_happens_next#create", as: :what_happens_next_create
     get "/contact-details" => "forms/contact_details#new", as: :contact_details
