@@ -1,6 +1,6 @@
 # NOTE: Before using in production we must consider the need to pin
 # images to a SHA
-FROM ruby:3.1.1-alpine3.15 AS build
+FROM ruby:3.1.2-alpine3.16 AS build
 
 WORKDIR /app
 
@@ -34,7 +34,7 @@ COPY --chown=ruby:ruby . .
 # even though the command doesn't use the value itself
 RUN SECRET_KEY_BASE=dummyvalue rails assets:precompile
 
-FROM ruby:3.1.1-alpine3.15 AS app
+FROM ruby:3.1.2-alpine3.16 AS app
 
 ENV RAILS_ENV="${RAILS_ENV:-production}" \
     PATH="${PATH}:/home/ruby/.local/bin" \
