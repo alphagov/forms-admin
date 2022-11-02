@@ -46,6 +46,12 @@
           </div>
         </dl>
       <% end %>
+      <% if FeatureService.enabled?(:task_list_statuses) %>
+        <%= form_with model: @mark_complete_form, url: form_pages_path(@form) do |f| %>
+          <%= f.govuk_collection_radio_buttons :mark_complete, @mark_complete_options, :value, :name, legend: { size: 'm' } %>
+          <%= f.govuk_submit %>
+        <% end %>
+      <% end %>
     <% end %>
 
   </div>
