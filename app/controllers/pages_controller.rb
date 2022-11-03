@@ -50,15 +50,11 @@ class PagesController < ApplicationController
       @mark_complete_options = mark_complete_options
 
       if @mark_complete_form.valid?
-        if @mark_complete_form.mark_complete
-          @form.question_section_completed = true
-          if @form.save
-            redirect_to form_path(@form)
-          else
-            raise StandardError, "Save unsuccessful"
-          end
-        else
+        @form.question_section_completed = @mark_complete_form.mark_complete
+        if @form.save
           redirect_to form_path(@form)
+        else
+          raise StandardError, "Save unsuccessful"
         end
       else
         render :index, status: :unprocessable_entity
