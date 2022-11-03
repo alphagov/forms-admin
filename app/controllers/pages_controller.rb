@@ -6,15 +6,6 @@ class PagesController < ApplicationController
     @page = Page.new(form_id: @form.id)
   end
 
-  def index
-    @form = Form.find(params[:form_id])
-    @pages = @form.pages
-    if FeatureService.enabled?(:task_list_statuses)
-      @mark_complete_form = Forms::MarkCompleteForm.new(form: @form).assign_form_values
-      @mark_complete_options = mark_complete_options
-    end
-  end
-
   def create
     @page = Page.new(page_params(@form.id))
 
@@ -40,29 +31,6 @@ class PagesController < ApplicationController
     else
       render :edit, status: :unprocessable_entity
     end
-  end
-
-  def mark_complete
-    if FeatureService.enabled?(:task_list_statuses)
-      @form = Form.find(params[:form_id])
-      @pages = @form.pages
-      @mark_complete_form = Forms::MarkCompleteForm.new(mark_complete_form_params)
-      @mark_complete_options = mark_complete_options
-
-      if @mark_complete_form.valid?
-        @form.question_section_completed = @mark_complete_form.mark_complete
-        if @form.save
-          redirect_to form_path(@form)
-        else
-          raise StandardError, "Save unsuccessful"
-        end
-      else
-        render :index, status: :unprocessable_entity
-      end
-    end
-  rescue StandardError => e
-    flash[:message] = e
-    render :index, status: :unprocessable_entity
   end
 
 private
@@ -91,15 +59,5 @@ private
 
   def answer_types
     @answer_types = Page::ANSWER_TYPES
-  end
-
-  if FeatureService.enabled?(:task_list_statuses)
-    def mark_complete_options
-      [OpenStruct.new(value: "true"), OpenStruct.new(value: "false")]
-    end
-
-    def mark_complete_form_params
-      params.require(:forms_mark_complete_form).permit(:mark_complete)
-    end
   end
 end

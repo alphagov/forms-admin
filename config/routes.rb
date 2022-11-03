@@ -30,8 +30,8 @@ Rails.application.routes.draw do
     post "/declaration" => "forms/declaration#create", as: :declaration_create
 
     scope "/pages" do
-      get "/" => "pages#index", as: :form_pages
-      post "/" => "pages#mark_complete"
+      get "/" => "page_list#edit", as: :form_pages
+      post "/" => "page_list#update"
       get "/:page_id/edit" => "pages#edit", as: :edit_page
       patch "/:page_id/edit" => "pages#update", as: :update_page
       get "/new" => "pages#new", as: :new_page
