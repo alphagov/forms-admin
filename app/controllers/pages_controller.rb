@@ -33,6 +33,11 @@ class PagesController < ApplicationController
     end
   end
 
+  def append_info_to_payload(payload)
+    super
+    payload[:form_id] = params[:form_id]
+  end
+
 private
 
   def page_params(form_id)

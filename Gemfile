@@ -62,6 +62,9 @@ gem "gds-sso"
 gem "govuk-components", "3.2.2"
 gem "govuk_design_system_formbuilder", "3.1.2"
 
+# For structured logging
+gem "lograge"
+
 # Use validate_url so we don't have to write custom URL validation
 gem "validate_url"
 
