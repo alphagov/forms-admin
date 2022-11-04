@@ -6,11 +6,6 @@ class PagesController < ApplicationController
     @page = Page.new(form_id: @form.id)
   end
 
-  def index
-    @form = Form.find(params[:form_id])
-    @pages = @form.pages
-  end
-
   def create
     @page = Page.new(page_params(@form.id))
 

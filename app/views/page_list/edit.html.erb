@@ -46,6 +46,8 @@
           </div>
         </dl>
       <% end %>
+
+      <%= render MarkCompleteComponent::View.new(@form.pages, @mark_complete_form, form_pages_path(@form)) %>
     <% end %>
 
   </div>
