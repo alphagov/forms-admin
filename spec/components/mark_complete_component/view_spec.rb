@@ -7,7 +7,6 @@ RSpec.describe MarkCompleteComponent::View, type: :component do
     let(:form) { build(:form, :with_pages, id: 2) }
 
     context "when the task status feature is enabled", feature_task_list_statuses: true do
-
       it "renders the form" do
         render_inline(described_class.new(form.pages, mark_complete_form, "/"))
 
@@ -16,7 +15,6 @@ RSpec.describe MarkCompleteComponent::View, type: :component do
     end
 
     context "when the task status feature is disabled", feature_task_list_statuses: false do
-
       it "renders the form" do
         render_inline(described_class.new(form.pages, mark_complete_form, "/"))
 
