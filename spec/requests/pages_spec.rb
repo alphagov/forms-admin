@@ -1,10 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "Pages", type: :request do
-  before do
-    User.create!(email: "user@example.com")
-  end
-
   let(:headers) do
     {
       "X-API-Token" => ENV["API_KEY"],
