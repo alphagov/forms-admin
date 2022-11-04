@@ -37,7 +37,12 @@ private
   end
 
   def section_2_tasks
-    [{ task_name: I18n.t("forms.task_lists.section_2.submission_email"), path: change_form_email_path(@form.id) }]
+    if FeatureService.enabled?(:submission_email_confirmation)
+      [{ task_name: I18n.t("forms.task_lists.section_2.set_email"), path: submission_email_form_path(@form.id) },
+       { task_name: I18n.t("forms.task_lists.section_2.confirm_email"), path: submission_email_code_path(@form.id) }]
+    else
+      [{ task_name: I18n.t("forms.task_lists.section_2.submission_email"), path: change_form_email_path(@form.id) }]
+    end
   end
 
   def section_3_tasks

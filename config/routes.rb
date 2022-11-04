@@ -15,6 +15,15 @@ Rails.application.routes.draw do
     post "/change-name" => "forms/change_name#update"
     get "/change-email" => "forms/change_email#new", as: :change_form_email
     post "/change-email" => "forms/change_email#create"
+
+    get "/submission-email" => "forms/submission_email#new", as: :submission_email_form
+
+    post "/submission-email" => "forms/submission_email#create"
+    get "/confirm-submission-email" => "forms/submission_email#submission_email_code", as: :submission_email_code
+    post "/confirm-submission-email" => "forms/submission_email#confirm_submission_email_code", as: :confirm_submission_email_code
+    get "/submission-email-confirmed" => "forms/submission_email#submission_email_confirmed", as: :submission_email_confirmed
+    get "/email-code-sent" => "forms/submission_email#submission_email_code_sent", as: :submission_email_code_sent
+
     get "/delete" => "forms/delete_confirmation#delete", as: :delete_form
     delete "/delete" => "forms/delete_confirmation#destroy", as: :destroy_form
     get "/privacy-policy" => "forms/privacy_policy#new", as: :privacy_policy
