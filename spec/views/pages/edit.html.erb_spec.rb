@@ -7,7 +7,7 @@ describe "pages/edit.html.erb" do
     # Initialize models
     page = Page.new(id: 1, question_text:, form_id: 1)
     form = Form.new(id: 1, name: "Form 1", form_id: 1, pages: [page])
-    current_user = OpenStruct.new(uid: 123456)
+    current_user = OpenStruct.new(uid: "123456")
 
     # If models aren't persisted, they won't work with form builders correctly
     allow(page).to receive(:persisted?).and_return(true)
