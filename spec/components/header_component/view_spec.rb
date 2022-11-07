@@ -1,40 +1,43 @@
 require "rails_helper"
 
 RSpec.describe HeaderComponent::View, type: :component do
+  let(:user) do
+    build(:user)
+  end
+
   describe "default status" do
     before do
       render_inline(described_class.new(nil))
     end
 
     it "contains the service name" do
-      expect(page).to have_text("Forms")
+      expect(page).to have_text(I18n.t("header.product_name"))
     end
 
     it "does not contain the profile link" do
-      expect(page).not_to have_link("A User", href: "http://signon.dev.gov.uk/users/123456/edit")
+      expect(page).not_to have_link(user.name, href: "http://signon.dev.gov.uk/users/#{user.uid}/edit")
     end
 
     it "does not contain the sign out link" do
-      expect(page).not_to have_link("Sign out", href: "/auth/gds/sign_out")
+      expect(page).not_to have_link(I18n.t("header.sign_out"), href: "/auth/gds/sign_out")
     end
   end
 
   describe "logged in status" do
     before do
-      current_user = OpenStruct.new(name: "A User", uid: "123456")
-      render_inline(described_class.new(current_user))
+      render_inline(described_class.new(user))
     end
 
     it "contains the service name" do
-      expect(page).to have_text("Forms")
+      expect(page).to have_text(I18n.t("header.product_name"))
     end
 
     it "contains the profile link" do
-      expect(page).to have_link("A User", href: "http://signon.dev.gov.uk/users/123456/edit")
+      expect(page).to have_link(user.name, href: "http://signon.dev.gov.uk/users/#{user.uid}/edit")
     end
 
     it "contains the sign out link" do
-      expect(page).to have_link("Sign out", href: "/auth/gds/sign_out")
+      expect(page).to have_link(I18n.t("header.sign_out"), href: "/auth/gds/sign_out")
     end
   end
 end
