@@ -59,7 +59,7 @@ gem "bootsnap", require: false
 gem "gds-sso"
 
 # Use govuk-components for displaying govuk themed forms
-gem "govuk-components", "3.2.1"
+gem "govuk-components", "3.2.2"
 gem "govuk_design_system_formbuilder", "3.1.2"
 
 # Use validate_url so we don't have to write custom URL validation
