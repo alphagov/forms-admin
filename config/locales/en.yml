@@ -76,6 +76,8 @@ en:
       section_2:
         submission_email: Set the email address completed forms will be sent to
         title: Set email address for completed forms
+        set_email: Set the email address completed forms will be sent to
+        confirm_email: Enter the email address confirmation code
       section_3:
         contact_details: Provide contact details for support
         privacy_policy: Provide a link to privacy information for this form
