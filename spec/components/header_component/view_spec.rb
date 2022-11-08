@@ -15,7 +15,7 @@ RSpec.describe HeaderComponent::View, type: :component do
     end
 
     it "does not contain the profile link" do
-      expect(page).not_to have_link(user.name, href: "http://signon.dev.gov.uk/users/#{user.uid}/edit")
+      expect(page).not_to have_link(user.name, href: "http://signon.dev.gov.uk")
     end
 
     it "does not contain the sign out link" do
@@ -33,7 +33,7 @@ RSpec.describe HeaderComponent::View, type: :component do
     end
 
     it "contains the profile link" do
-      expect(page).to have_link(user.name, href: "http://signon.dev.gov.uk/users/#{user.uid}/edit")
+      expect(page).to have_link(user.name, href: "http://signon.dev.gov.uk")
     end
 
     it "contains the sign out link" do
