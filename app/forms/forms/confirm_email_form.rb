@@ -11,6 +11,8 @@ class Forms::ConfirmEmailForm
   def submit
     return false if invalid?
 
+    # Add validation to check the code is correct
+    # set email here
     true
   end
 end

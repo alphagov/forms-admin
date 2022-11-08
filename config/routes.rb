@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     get "/change-email" => "forms/change_email#new", as: :change_form_email
     post "/change-email" => "forms/change_email#create"
     get "/set-email" => "forms/set_email#new", as: :set_form_email
+    get "/email-code-sent" => "forms/set_email#code_sent", as: :email_code_sent
     post "/set-email" => "forms/set_email#create"
     get "/confirm-email" => "forms/confirm_email#new", as: :confirm_form_email
     get "/confirm-email-success" => "forms/confirm_email#success", as: :confirm_form_email_sucess

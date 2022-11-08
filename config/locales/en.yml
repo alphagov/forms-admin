@@ -48,6 +48,11 @@ en:
           By submitting this form you are confirming that, to the best of your
           knowledge, the answers you are providing are correct.
         </div>
+  email_code_sent:
+    body_html: |
+      <p class="govuk-body">We've sent a confirmation code and your email address to %{temp_email}.</p>
+      <p class="govuk-body">The recipient will be asked to give you the code. You need to enter the code to confirm the email address.</p>
+    continue: Continue creating a form
   email_code_success:
     body_html: '<p class="govuk-body">Completed forms will be sent to %{submission_email}.</p>
 
@@ -186,6 +191,7 @@ en:
     confirm_email_success: Email address confirmed
     contact_details_form: Provide contact details for support
     declaration_form: Add a declaration
+    email_code_sent: Confirmation code sent
     error_prefix: 'Error: '
     forbidden: You cannot view this page
     home: Home

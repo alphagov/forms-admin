@@ -8,10 +8,18 @@ module Forms
       @set_email_form = SetEmailForm.new(set_email_form_params)
 
       if @set_email_form.submit
-        redirect_to form_path(@set_email_form.form)
+        # if @set_email_form.submission_email != form.submission_email
+        # ask for confirmation
+        # else
+        redirect_to email_code_sent_path(@set_email_form.form)
       else
         render :new
       end
+    end
+
+    def code_sent
+      @form = current_form
+      @temp_email = "temp@example.org"
     end
 
     def set_email_form_params
