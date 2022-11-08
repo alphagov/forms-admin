@@ -22,7 +22,7 @@
                                            @make_live_form.values, ->(option) { option }, ->(option) { I18n.t('helpers.label.forms_make_live_form.options.' + "#{option}") },
                                            legend: { text: I18n.t('helpers.label.forms_make_live_form.confirm_make_live'),
                                                      size: 'm'}, inline: true %>
-      <%= f.govuk_submit %>
+      <%= f.govuk_submit t("save_and_continue") %>
     <% end %>
   </div>
 </div>

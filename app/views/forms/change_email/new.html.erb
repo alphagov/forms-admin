@@ -8,7 +8,7 @@
         <%= f.govuk_error_summary %>
       <% end %>
       <%= f.govuk_email_field :submission_email, label: {  tag: 'h1', size: 'l' }, spellcheck: "false", autocomplete: "email"  %>
-      <%= f.govuk_submit %>
+      <%= f.govuk_submit t("save_and_continue") %>
     <% end %>
   </div>
 </div>
