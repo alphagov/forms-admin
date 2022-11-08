@@ -8,7 +8,7 @@
     </h1>
     <%= t("set_email_form.new.body_html") %>
 
-    <%= form_with(model: @set_email_form, url: new_form_path) do |f| %>
+    <%= form_with(model: @set_email_form, url: set_form_email_path) do |f| %>
       <% if @set_email_form&.errors.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
