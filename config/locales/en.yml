@@ -74,10 +74,10 @@ en:
         declaration: Add a declaration for people to agree to
         title: Create your form
       section_2:
+        confirm_email: Enter the email address confirmation code
+        set_email: Set the email address completed forms will be sent to
         submission_email: Set the email address completed forms will be sent to
         title: Set email address for completed forms
-        set_email: Set the email address completed forms will be sent to
-        confirm_email: Enter the email address confirmation code
       section_3:
         contact_details: Provide contact details for support
         privacy_policy: Provide a link to privacy information for this form
@@ -188,6 +188,7 @@ en:
     not_found: Page not found
     privacy_policy_form: Provide a link to privacy information for this form
     service_unavailable: Sorry, the service is unavailable
+    set_email_form: Set the email address for completed forms
     what_happens_next_form: Form submitted page
     your_form_is_live: Your form is live
   pages:
@@ -246,6 +247,20 @@ en:
   service_unavailable:
     body_html: "%{link} if you need to make changes to your forms or speak to someone about the service."
     title: Sorry, the service is unavailable
+  set_email_form:
+    new:
+      body_html: |
+        <p class="govuk-body">
+          You need to provide an email address for completed forms to be sent to for processing. It should be a shared government email inbox.
+        </p>
+
+        <p class="govuk-body">
+          To make sure the email address you provide is correct, we’ll send an email to it with a confirmation code and your email address.
+        </p>
+
+        <p class="govuk-body">
+          The recipient will be asked to tell you the code. You will then need to enter the code to confirm the email address.
+        </p>
   skip_to_main_content: Skip to main content
   task_statuses:
     cannot_start: cannot start yet

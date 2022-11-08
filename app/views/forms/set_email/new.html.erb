@@ -1,0 +1,19 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.set_email_form'), @set_email_form.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(form_path(@set_email_form.form), "Back to create a form") %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= @set_email_form.form.name %></span>
+      <%= t("page_titles.set_email_form") %>
+    </h1>
+    <%= t("set_email_form.new.body_html") %>
+
+    <%= form_with(model: @set_email_form, url: new_form_path) do |f| %>
+      <% if @set_email_form&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+      <%= f.govuk_text_field :submission_email, label: {  tag: 'h2', size: 'm' } %>
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

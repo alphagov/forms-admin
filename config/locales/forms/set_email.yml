@@ -1,0 +1,14 @@
+en:
+  helpers:
+    label:
+      forms_set_email_form:
+        submission_email: What email address should completed forms be sent to?
+  activemodel:
+    errors:
+      models:
+        forms/set_email_form:
+          attributes:
+            submission_email:
+              blank: Enter an email address for the form
+
+
