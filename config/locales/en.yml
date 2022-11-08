@@ -48,6 +48,11 @@ en:
           By submitting this form you are confirming that, to the best of your
           knowledge, the answers you are providing are correct.
         </div>
+  email_code_success:
+    body_html: '<p class="govuk-body">Completed forms will be sent to %{submission_email}.</p>
+
+      '
+    continue: Continue creating a form
   footer:
     accessibility_statement: Accessibility statement
     cookies: Cookies
@@ -177,6 +182,8 @@ en:
   page_titles:
     change_email_form: What email address should form responses be sent to?
     change_name_form: Name your form
+    confirm_email_form: Enter the confirmation code
+    confirm_email_success: Email address confirmed
     contact_details_form: Provide contact details for support
     declaration_form: Add a declaration
     error_prefix: 'Error: '

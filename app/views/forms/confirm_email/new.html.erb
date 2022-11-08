@@ -1,0 +1,13 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.confirm_email_form'), @confirm_email_form.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(form_path(@confirm_email_form.form), "Back to create a form") %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: @confirm_email_form, url: confirm_form_email_path) do |f| %>
+      <% if @confirm_email_form&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+      <%= f.govuk_text_field :email_code, label: {  tag: 'h1', size: 'l' } %>
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

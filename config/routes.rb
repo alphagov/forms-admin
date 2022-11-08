@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     get "/set-email" => "forms/set_email#new", as: :set_form_email
     post "/set-email" => "forms/set_email#create"
     get "/confirm-email" => "forms/confirm_email#new", as: :confirm_form_email
+    get "/confirm-email-success" => "forms/confirm_email#success", as: :confirm_form_email_sucess
     post "/confirm-email" => "forms/confirm_email#create"
     get "/delete" => "forms/delete_confirmation#delete", as: :delete_form
     delete "/delete" => "forms/delete_confirmation#destroy", as: :destroy_form

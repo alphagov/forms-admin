@@ -1,0 +1,16 @@
+en:
+  helpers:
+    label:
+      forms_confirm_email_form:
+        email_code: Enter the confirmation code
+  activemodel:
+    errors:
+      models:
+        forms/confirm_email_form:
+          attributes:
+            email_code:
+              blank: Enter a confirmation code
+              invalid_email_code: Enter a valid confirmation code
+
+
+
