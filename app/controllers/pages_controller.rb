@@ -3,13 +3,13 @@ class PagesController < ApplicationController
   before_action :fetch_form, :answer_types
 
   def new
-    @page = Page.new(form_id: @form.id)
+    answer_type = session[:page]["answer_type"]
+    @page = Page.new(form_id: @form.id, answer_type:)
   end
 
   def create
-    @page = Page.new(page_params(@form.id))
+    @page = Page.new(page_params)
 
-    # if @form.save_page(@page)
     if @page.save
       handle_submit_action
     else
@@ -24,7 +24,7 @@ class PagesController < ApplicationController
   def update
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
 
-    @page.load(page_params(@form.id))
+    @page.load(page_params)
 
     if @page.save
       handle_submit_action
@@ -35,8 +35,8 @@ class PagesController < ApplicationController
 
 private
 
-  def page_params(form_id)
-    params.require(:page).permit(:question_text, :question_short_name, :hint_text, :answer_type, :is_optional).merge(form_id:)
+  def page_params
+    params.require(:page).permit(:question_text, :question_short_name, :hint_text, :answer_type, :is_optional).merge(form_id: @form.id).merge(session:)
   end
 
   def fetch_form
@@ -53,7 +53,7 @@ private
     if @page.has_next_page?
       redirect_to edit_page_path(@form, @page.next_page)
     else
-      redirect_to new_page_path(@form)
+      redirect_to type_of_answer_new_path(@form)
     end
   end
 

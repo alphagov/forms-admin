@@ -25,11 +25,13 @@ class Page < ActiveResource::Base
   def convert_is_optional_to_boolean
     self.is_optional = is_optional_value
   end
-
   def move_page(direction)
     return false unless %i[up down].include? direction
 
     put(direction)
+  end
+  def submit
+    save!
   end
 
 private

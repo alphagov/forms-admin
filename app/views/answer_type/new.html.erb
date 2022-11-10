@@ -1,0 +1,10 @@
+<%= form_with(model: @answer_type_form, url: answer_type_create_path) do |f| %>
+  <%= f.govuk_collection_radio_buttons(
+        :answer_type,
+        @answer_types,
+        ->(option) { option },
+        ->(option) { I18n.t('helpers.label.page.answer_type_options.names.' + option) },
+        ->(option) { I18n.t('helpers.label.page.answer_type_options.descriptions.' + option) }
+      )  %>
+  <%= f.govuk_submit t('pages.submit_save'), name: :save_preview, secondary: true %>
+<% end %>
