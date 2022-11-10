@@ -40,7 +40,12 @@ private
   def section_2_tasks
     hint_text = I18n.t("forms.task_lists.section_2.hint_text", submission_email: @form.submission_email) if @form.submission_email.present?
 
-    [{ task_name: I18n.t("forms.task_lists.section_2.submission_email"), path: change_form_email_path(@form.id), hint_text:, status: @task_list_statuses.submission_email_status }]
+    if FeatureService.enabled?(:submission_email_confirmation)
+      [{ task_name: I18n.t("forms.task_lists.section_2.set_email"), path: submission_email_form_path(@form.id), hint_text: },
+       { task_name: I18n.t("forms.task_lists.section_2.confirm_email"), path: submission_email_code_path(@form.id) }]
+    else
+      [{ task_name: I18n.t("forms.task_lists.section_2.submission_email"), path: change_form_email_path(@form.id), hint_text:, status: @task_list_statuses.submission_email_status }]
+    end
   end
 
   def section_3_tasks

@@ -64,22 +64,10 @@ describe FormTaskListService do
 
       let(:section_rows) { section[:rows] }
 
-      it "has no hint text explaining where completed forms will be sent to" do
-        expect(section_rows.first[:hint_text]).to be_nil
-      end
-
-      context "when task list statuses are enabled", feature_task_list_statuses: true do
-        it "has the correct default status" do
-          expect(section_rows.first[:status]).to eq :incomplete
-        end
-      end
-
-      context "with email set" do
-        let(:form) { build(:form, id: 1) }
-
-        it "has link to set submission email" do
-          expect(section_rows.first[:task_name]).to eq "Set the email address completed forms will be sent to"
-          expect(section_rows.first[:path]).to eq "/forms/1/change-email"
+      context "when submission_email is set" do
+        let(:section) do
+          form.submission_email = "test@example.gov.uk"
+          described_class.call(form:).all_tasks[1]
         end
 
         it "has hint text explaining where completed forms will be sent to" do
@@ -90,6 +78,35 @@ describe FormTaskListService do
           it "has the correct default status" do
             expect(section_rows.first[:status]).to eq :completed
           end
+        end
+      end
+
+      it "has no hint text explaining where completed forms will be sent to" do
+        expect(section_rows.first[:hint_text]).to be_nil
+      end
+
+      context "when submission_email_confirmation flag is true", feature_submission_email_confirmation: true do
+        it "has link to set submission email" do
+          expect(section_rows.first[:task_name]).to eq "Set the email address completed forms will be sent to"
+          expect(section_rows.first[:path]).to eq "/forms/1/submission-email"
+        end
+
+        it "has link to confirm submission email" do
+          expect(section_rows[1][:task_name]).to eq "Enter the email address confirmation code"
+          expect(section_rows[1][:path]).to eq "/forms/1/confirm-submission-email"
+        end
+      end
+
+      context "when submission_email_confirmation flag is false", feature_submission_email_confirmation: false do
+        it "has link to set submission email" do
+          expect(section_rows.first[:task_name]).to eq "Set the email address completed forms will be sent to"
+          expect(section_rows.first[:path]).to eq "/forms/1/change-email"
+        end
+      end
+
+      context "when task list statuses are enabled", feature_task_list_statuses: true do
+        it "has the correct default status" do
+          expect(section_rows.first[:status]).to eq :incomplete
         end
       end
     end

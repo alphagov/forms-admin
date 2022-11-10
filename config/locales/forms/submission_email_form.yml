@@ -1,0 +1,18 @@
+en:
+  helpers:
+    label:
+      forms_submission_email_form:
+        temporary_submission_email: What email address should completed forms be sent to?
+        email_code: Enter the confirmation code
+  activemodel:
+    errors:
+      models:
+        forms/submission_email_form:
+          attributes:
+            temporary_submission_email:
+              blank: Enter an email address for the form
+              invalid_email: Enter an email address in the correct format, like name@example.com
+              non_govuk_email: Enter an email address ending in .gov.uk
+            email_code:
+              invalid_email_code: The code should be 6 characters long
+              email_code_mismatch: This code is not correct - double check the code or send a new one
