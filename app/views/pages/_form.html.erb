@@ -1,5 +1,6 @@
 <%= f.govuk_error_summary %>
 <!-- Long question text input -->
+
 <%= f.govuk_text_field :question_text, label: { size: 'm' } %>
 
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
@@ -16,12 +17,3 @@
                         hint: { text: t("pages.make_optional_hint") } %>
 
 <% end %>
-<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
-
-<%= f.govuk_collection_radio_buttons(
-      :answer_type,
-      @answer_types,
-      ->(option) { option },
-      ->(option) { I18n.t('helpers.label.page.answer_type_options.names.' + option) },
-      ->(option) { I18n.t('helpers.label.page.answer_type_options.descriptions.' + option) }
-)  %>

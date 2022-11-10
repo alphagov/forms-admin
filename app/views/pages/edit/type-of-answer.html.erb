@@ -1,0 +1,23 @@
+<% set_page_title(title_with_error_prefix(t("page_titles.new_page_form"), @type_of_answer_form.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(form_pages_path(@form)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= t("pages.question") %> <%= @type_of_answer_form.number(@form) %></span>
+      <span class="govuk-visually-hidden"> - </span>
+      <%= t("pages.heading") %>
+    </h1>
+    <%= form_with model: [@form, @type_of_answer_form], url: type_of_answer_update_path(@form) do |f| %>
+      <%= f.govuk_error_summary %>
+      <%= f.govuk_collection_radio_buttons(
+            :answer_type,
+            @answer_types,
+            ->(option) { option },
+            ->(option) { I18n.t('helpers.label.page.answer_type_options.names.' + option) },
+            ->(option) { I18n.t('helpers.label.page.answer_type_options.descriptions.' + option) }
+          )  %>
+      <%= f.govuk_submit t('pages.submit_save'), value: "true", name: :set_answer_type, secondary: true %>
+    <% end %>
+  </div>
+</div>

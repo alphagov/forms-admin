@@ -12,9 +12,20 @@
       <%= t("pages.heading") %>
     </h1>
 
-
     <%= form_with model: [@form, @page], url: update_page_path(@form, @page) do |f| %>
+      <%= f.hidden_field :answer_type, value: session[:answer_type] %>
       <%= render :partial => 'form', locals: { f: f } %>
+      <%= govuk_summary_list do |summary_list|
+        summary_list.row do |row|
+          row.key(text: "Answer type")
+          row.value(text: t("helpers.label.page.answer_type_options.names.#{@page.answer_type}"))
+          row.action(text: "Change",
+                     href: type_of_answer_edit_path(@form),
+                     visually_hidden_text: t("helpers.label.page.answer_type_options.names.#{session[:new_page_answer_type]}")
+          )
+        end
+      end %>
+
       <%= f.govuk_submit @page.has_next_page? ? t("pages.submit_edit") : t("pages.submit_add") do %>
         <%= f.govuk_submit t('pages.submit_save'), name: :save_preview, secondary: true %>
       <% end %>

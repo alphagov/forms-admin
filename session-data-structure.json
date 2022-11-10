@@ -1,0 +1,19 @@
+{"pages":  {
+  "new_page" : {
+    "answer_type": "email"
+  },
+  "page_id_1": {
+    "answer_type": "single_line",
+    "question_text": "",
+
+  },
+  "page_id_2": {
+    "answer_type": "email"
+  }
+}
+
+{"page": {
+  "answer_type": "email",
+  "id": 2
+}
+  
