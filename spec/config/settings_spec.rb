@@ -23,4 +23,12 @@ describe "Settings" do
 
     include_examples expected_value_test, :task_list_statuses, features, true
   end
+
+  describe "govuk_notify" do
+    govuk_notify = settings[:govuk_notify]
+
+    include_examples expected_value_test, :api_key, govuk_notify, "changeme"
+
+    include_examples expected_value_test, :submission_email_confirmation_code_email_template_id, govuk_notify, "ce2638ab-754c-416d-8df6-c0ccb5e1a688"
+  end
 end

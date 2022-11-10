@@ -2,3 +2,8 @@
 features:
   task_list_statuses: true
   submission_email_confirmation: false
+
+# Settings for GOV.UK Notify api & email templates
+govuk_notify:
+  api_key: changeme
+  submission_email_confirmation_code_email_template_id: ce2638ab-754c-416d-8df6-c0ccb5e1a688
