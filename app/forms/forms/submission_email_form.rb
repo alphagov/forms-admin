@@ -28,9 +28,14 @@ class Forms::SubmissionEmailForm
                        update_submission_email_record(confirmation_code, form_submission_email)
                      end
 
-    if form_processed
+    if form_processed && temporary_submission_email.present?
       # send notify email?
       Rails.logger.info "Email sent to #{temporary_submission_email} with code #{confirmation_code}"
+      SubmissionEmailMailer.confirmation_code_email(
+        new_submission_email: temporary_submission_email,
+        form_name: form.name,
+        confirmation_code:,
+        current_user:).deliver_now
       true
     else
       false
