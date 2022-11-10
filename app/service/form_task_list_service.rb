@@ -31,8 +31,8 @@ private
     [
       { task_name: I18n.t("forms.task_lists.section_1.change_name"), path: change_form_name_path(@form.id), status: section_1_statuses[0] },
       { task_name: I18n.t("forms.task_lists.section_1.add_or_edit_questions"), path: question_path, status: section_1_statuses[1] },
-      { task_name: I18n.t("forms.task_lists.section_1.declaration"), path: declaration_path(@form.id) },
-      { task_name: I18n.t("forms.task_lists.section_1.add_what_happens_next"), path: what_happens_next_path(@form.id), status: section_1_statuses[2]  },
+      { task_name: I18n.t("forms.task_lists.section_1.declaration"), path: declaration_path(@form.id), status: section_1_statuses[2] },
+      { task_name: I18n.t("forms.task_lists.section_1.add_what_happens_next"), path: what_happens_next_path(@form.id), status: section_1_statuses[3]  },
     ]
   end
 
@@ -57,11 +57,17 @@ private
   end
 
   def section_1_statuses
-    pages_statues = if @form.pages.empty?
-                      :incomplete
-                    else
+    pages_statues = if @form.question_section_completed
                       :completed
+                    else
+                      :incomplete
                     end
+
+    declaration_statues = if @form.declaration_section_completed
+                            :completed
+                          else
+                            :incomplete
+                          end
 
     what_happens_next_status = if @form.what_happens_next_text.present?
                                  :completed
@@ -71,6 +77,7 @@ private
     results = []
     results << :completed
     results << pages_statues
+    results << declaration_statues
     results << what_happens_next_status
 
     results
