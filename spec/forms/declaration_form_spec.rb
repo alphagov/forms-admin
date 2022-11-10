@@ -63,8 +63,7 @@ RSpec.describe Forms::DeclarationForm, type: :model do
     context "when the task status feature is not enabled", feature_task_list_statuses: false do
       it "sets the form's attribute value" do
         form = OpenStruct.new(declaration_text: "abc")
-        declaration_form = described_class.new(form:)
-        declaration_form.declaration_text = "new declaration text"
+        declaration_form = described_class.new(form:, declaration_text: "new declaration text")
         declaration_form.submit
         expect(declaration_form.form.declaration_text).to eq "new declaration text"
       end
@@ -73,9 +72,7 @@ RSpec.describe Forms::DeclarationForm, type: :model do
     context "when the task status feature is enabled", feature_task_list_statuses: true do
       it "sets the form's attribute values" do
         form = OpenStruct.new(declaration_text: "abc", declaration_section_completed: "false")
-        declaration_form = described_class.new(form:)
-        declaration_form.declaration_text = "new declaration text"
-        declaration_form.mark_complete = "true"
+        declaration_form = described_class.new(form:, declaration_text: "new declaration text", mark_complete: "true")
         declaration_form.submit
         expect(declaration_form.form.declaration_text).to eq "new declaration text"
         expect(declaration_form.form.declaration_section_completed).to eq "true"
