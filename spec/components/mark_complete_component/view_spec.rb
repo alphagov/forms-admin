@@ -9,14 +9,14 @@ RSpec.describe MarkCompleteComponent::View, type: :component do
     it "renders the form" do
       render_inline(described_class.new(form: mark_complete_form, path: "/"))
 
-      expect(page.text).to have_text("Do you want to mark this task as complete?")
+      expect(page.text).to have_text(I18n.t("mark_complete.legend"))
     end
 
-    it "the label and hint text cna be overridden" do
-      render_inline(described_class.new(form: mark_complete_form, path: "/", legend: "Have you finished editing your questions?", hint: "You can come back to your questions later"))
+    it "the label and hint text can be overridden" do
+      render_inline(described_class.new(form: mark_complete_form, path: "/", legend: I18n.t("pages.index.mark_complete.legend"), hint: "You can come back to your questions later"))
 
-      expect(page.text).not_to have_text("Do you want to mark this task as complete?")
-      expect(page.text).to have_text("Have you finished editing your questions?")
+      expect(page.text).not_to have_text(I18n.t("mark_complete.legend"))
+      expect(page.text).to have_text(I18n.t("pages.index.mark_complete.legend"))
       expect(page.text).to have_text("You can come back to your questions later")
     end
   end
@@ -25,7 +25,7 @@ RSpec.describe MarkCompleteComponent::View, type: :component do
     it "renders the form" do
       render_inline(described_class.new(form: mark_complete_form, path: "/"))
 
-      expect(page.text).not_to have_text("Do you want to mark this task as complete?")
+      expect(page.text).not_to have_text(I18n.t("mark_complete.legend"))
     end
   end
 end
