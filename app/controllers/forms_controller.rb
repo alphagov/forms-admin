@@ -10,11 +10,6 @@ class FormsController < ApplicationController
     @task_list = FormTaskListService.call(form: @form).all_tasks
   end
 
-  def append_info_to_payload(payload)
-    super
-    payload[:form_id] = params[:form_id]
-  end
-
 private
 
   def form_params

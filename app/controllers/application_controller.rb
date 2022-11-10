@@ -24,5 +24,6 @@ class ApplicationController < ActionController::Base
       payload[:user_organisation_slug] = current_user.organisation_slug
     end
     payload[:request_id] = request.request_id
+    payload[:form_id] = params[:form_id]
   end
 end
