@@ -10,4 +10,5 @@ en:
           attributes:
             declaration_text:
               too_long: The declaration cannot be longer than 2,000 characters
-
+            mark_complete:
+              blank: You must choose an option

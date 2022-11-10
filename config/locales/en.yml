@@ -166,6 +166,11 @@ en:
         <p class="govuk-body">
           After you have made your form live, completed forms will be sent to %{submission_email}.
         </p>
+  mark_complete:
+    'false': No, I'll come back later
+    hint: Selecting 'Yes' will mark this task as complete. You will still be able to make changes if you need to.
+    legend: Do you want to mark this task as complete?
+    'true': 'Yes'
   not_found:
     body: |
       If you typed the web address, check it is correct.
@@ -195,6 +200,8 @@ en:
     heading: Edit question
     index:
       add_question: Add a question
+      mark_complete:
+        legend: Have you finished editing your questions?
       title: Add and edit your questions
     make_optional_hint: "‘(optional)’ will be added to the end of the question text"
     make_optional_text: Make this question optional

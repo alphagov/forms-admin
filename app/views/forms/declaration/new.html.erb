@@ -17,6 +17,10 @@
 
       <%= f.govuk_text_area :declaration_text, max_chars: 2000, label: {size: 'm' } %>
 
+      <% if FeatureService.enabled?(:task_list_statuses) %>
+        <%= render MarkCompleteComponent::View.new(generate_form: false, form_builder: f, form_model: @declaration_form) %>
+      <% end %>
+
       <%= f.govuk_submit "Save and continue" %>
     <% end %>
   </div>
