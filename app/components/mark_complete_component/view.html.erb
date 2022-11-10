@@ -1,4 +1,4 @@
 <%= form_with model: @mark_complete_form, url: @path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-  <%= f.govuk_collection_radio_buttons :mark_complete, @mark_complete_options, :value, :name, legend: { size: 'm' } %>
+  <%= render :partial => 'forms/mark_complete/form', locals: { form: f, hint: @hint, legend: @legend} %>
   <%= f.govuk_submit t("save_and_continue") %>
 <% end %>

@@ -1,16 +1,4 @@
 en:
-  helpers:
-    legend:
-      forms_mark_complete_form:
-        mark_complete: Have you finished editing your questions?
-    hint:
-      forms_mark_complete_form:
-        mark_complete: Selecting 'Yes' will mark this task as complete. You will still be able to make changes if you need to.
-    label:
-      forms_mark_complete_form:
-        mark_complete_options:
-          true: "Yes"
-          false: "No, I'll come back later"
   activemodel:
     errors:
       models:

@@ -47,7 +47,9 @@
         </dl>
       <% end %>
 
-      <%= render MarkCompleteComponent::View.new(@form.pages, @mark_complete_form, form_pages_path(@form)) %>
+      <% if @pages.any? %>
+        <%= render MarkCompleteComponent::View.new(form: @mark_complete_form, path: form_pages_path(@form), legend: t("pages.index.mark_complete.legend")) %>
+      <% end %>
     <% end %>
 
   </div>

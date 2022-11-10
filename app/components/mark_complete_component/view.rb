@@ -2,16 +2,16 @@
 
 module MarkCompleteComponent
   class View < ViewComponent::Base
-    def initialize(pages, mark_complete_form, path)
+    def initialize(form:, path:, legend: t("mark_complete.legend"), hint: t("mark_complete.hint"))
       super
-      @pages = pages
-      @mark_complete_form = mark_complete_form
+      @mark_complete_form = form
       @path = path
-      @mark_complete_options = [OpenStruct.new(value: "true"), OpenStruct.new(value: "false")]
+      @legend = legend
+      @hint = hint
     end
 
     def render?
-      @pages.any? && FeatureService.enabled?(:task_list_statuses)
+      FeatureService.enabled?(:task_list_statuses)
     end
   end
 end
