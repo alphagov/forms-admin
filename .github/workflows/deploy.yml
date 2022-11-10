@@ -41,9 +41,10 @@ jobs:
             --var PAAS_ENVIRONMENT=dev \
             --var GDS_SSO_OAUTH_ID=${{ secrets.GDS_SSO_OAUTH_ID }} \
             --var GDS_SSO_OAUTH_SECRET=${{ secrets.GDS_SSO_OAUTH_SECRET }} \
+            --var SETTINGS__GOVUK_NOTIFY__API_KEY=${{ secrets.SETTINGS__GOVUK_NOTIFY__API_KEY }} \
             --var GOVUK_APP_DOMAIN=${{ secrets.GOVUK_APP_DOMAIN }} \
             --var SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
             --var API_BASE=${{ secrets.API_BASE }} \
             --var RUNNER_BASE=${{ secrets.RUNNER_BASE }} \
             --var INSTANCES=2 \
-            --var API_KEY=${{ secrets.API_KEY }} 
+            --var API_KEY=${{ secrets.API_KEY }}
