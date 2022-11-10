@@ -17,6 +17,10 @@
 
       <%= f.govuk_text_area :declaration_text, max_chars: 2000, label: {size: 'm' } %>
 
+      <% if FeatureService.enabled?(:task_list_statuses) %>
+        <%= render :partial => 'forms/mark_complete/form', locals: { form: f, legend: t("mark_complete.legend"), hint: t("mark_complete.hint")} %>
+      <% end %>
+
       <%= f.govuk_submit "Save and continue" %>
     <% end %>
   </div>

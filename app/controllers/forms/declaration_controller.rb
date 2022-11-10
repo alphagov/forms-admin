@@ -17,7 +17,7 @@ module Forms
   private
 
     def declaration_form_params
-      params.require(:forms_declaration_form).permit(:declaration_text).merge(form: current_form)
+      params.require(:forms_declaration_form).permit(:declaration_text, :mark_complete).merge(form: current_form)
     end
   end
 end
