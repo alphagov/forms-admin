@@ -65,6 +65,9 @@ gem "govuk_design_system_formbuilder", "3.2.0"
 # For structured logging
 gem "lograge"
 
+# Use GOV.UK Nofity api to send emails
+gem "govuk_notify_rails"
+
 # Use validate_url so we don't have to write custom URL validation
 gem "validate_url"
 
