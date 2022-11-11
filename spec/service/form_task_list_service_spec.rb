@@ -59,6 +59,23 @@ describe FormTaskListService do
         expect(section_rows.first[:task_name]).to eq "Set the email address completed forms will be sent to"
         expect(section_rows.first[:path]).to eq "/forms/1/change-email"
       end
+
+      it "has hint text explaining where completed forms will be sent to" do
+        expect(section_rows.first[:hint_text]).to eq I18n.t("forms.task_lists.section_2.hint_text", submission_email: form.submission_email)
+      end
+    end
+
+    describe "section 2 tasks - with no submission email" do
+      let(:section) do
+        form.submission_email = nil
+        described_class.call(form:).all_tasks[1]
+      end
+
+      let(:section_rows) { section[:rows] }
+
+      it "has no hint text explaining where completed forms will be sent to" do
+        expect(section_rows.first[:hint_text]).to be_nil
+      end
     end
 
     describe "section 3 tasks" do
