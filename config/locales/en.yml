@@ -74,6 +74,7 @@ en:
         declaration: Add a declaration for people to agree to
         title: Create your form
       section_2:
+        hint_text: Completed forms will be sent to %{submission_email}
         submission_email: Set the email address completed forms will be sent to
         title: Set email address for completed forms
       section_3:
