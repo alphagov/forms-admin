@@ -2,7 +2,7 @@ class Forms::SubmissionEmailForm
   include ActiveModel::Model
   include ActiveModel::Validations
 
-  attr_accessor :form, :temporary_submission_email, :email_code, :confirmation_code, :current_user
+  attr_accessor :form, :temporary_submission_email, :email_code, :confirmation_code, :current_user, :notify_response_id
 
   EMAIL_REGEX = /.*@.*/
   GOVUK_EMAIL_REGEX = /\.gov\.uk\z/i
@@ -35,7 +35,9 @@ class Forms::SubmissionEmailForm
         new_submission_email: temporary_submission_email,
         form_name: form.name,
         confirmation_code:,
-        current_user:).deliver_now
+        notify_response_id:,
+        current_user:,
+      ).deliver_now
       true
     else
       false
@@ -66,6 +68,8 @@ class Forms::SubmissionEmailForm
       self.temporary_submission_email = form_submission_email.temporary_submission_email
       self.confirmation_code = form_submission_email.confirmation_code
     end
+
+    self.notify_response_id ||= SecureRandom.uuid
 
     self
   end

@@ -33,7 +33,7 @@ module Forms
   private
 
     def set_email_form_params
-      params.require(:forms_submission_email_form).permit(:temporary_submission_email).merge(form: current_form).merge(current_user:)
+      params.require(:forms_submission_email_form).permit(:temporary_submission_email, :notify_response_id).merge(form: current_form).merge(current_user:)
     end
 
     def set_email_code_form_params

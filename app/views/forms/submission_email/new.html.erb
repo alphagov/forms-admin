@@ -13,6 +13,7 @@
       </h1>
 
       <%= t("set_email_form.new.body_html") %>
+      <%= f.hidden_field :notify_response_id, id: 'notification-id' %>
       <%= f.govuk_text_field :temporary_submission_email, label: {  tag: 'h2', size: 'm' } %>
       <%= f.govuk_submit t("save_and_continue") %>
     <% end %>
