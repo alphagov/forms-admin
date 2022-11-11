@@ -39,7 +39,7 @@ private
   def section_2_tasks
     hint_text = I18n.t("forms.task_lists.section_2.hint_text", submission_email: @form.submission_email) if @form.submission_email.present?
 
-    [{ task_name: I18n.t("forms.task_lists.section_2.submission_email"), path: change_form_email_path(@form.id), hint_text:, status: section_2_statuses[0]  }]
+    [{ task_name: I18n.t("forms.task_lists.section_2.submission_email"), path: change_form_email_path(@form.id), hint_text:, status: section_2_statuses[0] }]
   end
 
   def section_3_tasks
