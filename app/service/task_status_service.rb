@@ -43,7 +43,18 @@ class TaskStatusService
                                      else
                                        :incomplete
                                      end
-    { name_status:, pages_status:, declaration_status:, what_happens_next_status:, submission_email_status:, privacy_policy_status:, support_contact_details_status: }
+
+    make_live_status = if [pages_status,
+                           what_happens_next_status,
+                           submission_email_status,
+                           privacy_policy_status,
+                           support_contact_details_status].all? { |task| task == :completed }
+                         :not_started
+                       else
+                         :cannot_start
+                       end
+
+    { name_status:, pages_status:, declaration_status:, what_happens_next_status:, submission_email_status:, privacy_policy_status:, support_contact_details_status:, make_live_status: }
   end
 
   def is_complete?(task)

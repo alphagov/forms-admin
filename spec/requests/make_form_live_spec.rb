@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.describe "MakeLive controller", type: :request do
   let(:form) do
     build(:form,
-          :with_pages,
           :ready_for_live,
           id: 2)
   end

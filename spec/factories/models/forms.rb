@@ -22,6 +22,7 @@ FactoryBot.define do
     end
 
     trait :ready_for_live do
+      with_pages
       support_email { Faker::Internet.email(domain: "example.gov.uk") }
       what_happens_next_text { "We usually respond to applications within 10 working days." }
       question_section_completed { true }

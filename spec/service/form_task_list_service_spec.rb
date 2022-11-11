@@ -138,8 +138,8 @@ describe FormTaskListService do
       end
 
       context "when form is ready to make live" do
+        let(:form) { build(:form, :ready_for_live, id: 1) }
         let(:section) do
-          allow(form).to receive(:ready_for_live?).and_return(true)
           described_class.call(form:).all_tasks[3]
         end
 

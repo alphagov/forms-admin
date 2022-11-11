@@ -52,8 +52,12 @@ private
 
   def section_4_tasks
     return [] if @form.live?
-    return [{ task_name: I18n.t("forms.task_lists.section_4.make_live"), path: make_live_path(@form.id), status: :not_started }] if @form.ready_for_live?
 
-    [{ task_name: I18n.t("forms.task_lists.section_4.make_live"), path: "", active: false, status: :cannot_start }]
+    [{
+      task_name: I18n.t("forms.task_lists.section_4.make_live"),
+      path: @form.ready_for_live? ? make_live_path(@form.id) : "",
+      status: @task_list_statuses[:make_live_status],
+      active: @form.ready_for_live?,
+    }]
   end
 end
