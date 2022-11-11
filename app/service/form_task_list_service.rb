@@ -32,7 +32,7 @@ private
       { task_name: I18n.t("forms.task_lists.section_1.change_name"), path: change_form_name_path(@form.id), status: section_1_statuses[0] },
       { task_name: I18n.t("forms.task_lists.section_1.add_or_edit_questions"), path: question_path, status: section_1_statuses[1] },
       { task_name: I18n.t("forms.task_lists.section_1.declaration"), path: declaration_path(@form.id), status: section_1_statuses[2] },
-      { task_name: I18n.t("forms.task_lists.section_1.add_what_happens_next"), path: what_happens_next_path(@form.id), status: section_1_statuses[3]  },
+      { task_name: I18n.t("forms.task_lists.section_1.add_what_happens_next"), path: what_happens_next_path(@form.id), status: section_1_statuses[3] },
     ]
   end
 
@@ -51,23 +51,25 @@ private
 
   def section_4_tasks
     return [] if @form.live?
-    return [{ task_name: I18n.t("forms.task_lists.section_4.make_live"), path: make_live_path(@form.id) }] if @form.ready_for_live?
+    return [{ task_name: I18n.t("forms.task_lists.section_4.make_live"), path: make_live_path(@form.id), status: :not_started }] if @form.ready_for_live?
 
-    [{ task_name: I18n.t("forms.task_lists.section_4.make_live"), path: "", active: false }]
+    [{ task_name: I18n.t("forms.task_lists.section_4.make_live"), path: "", active: false, status: :cannot_start }]
   end
 
   def section_1_statuses
-    pages_statues = if @form.question_section_completed
-                      :completed
-                    else
-                      :incomplete
-                    end
+    pages_status = if @form.question_section_completed
+                     :completed
+                   elsif @form.pages.any?
+                     :in_progress
+                   else
+                     :incomplete
+                   end
 
-    declaration_statues = if @form.declaration_section_completed
-                            :completed
-                          else
-                            :incomplete
-                          end
+    declaration_status = if @form.declaration_section_completed
+                           :completed
+                         else
+                           :incomplete
+                         end
 
     what_happens_next_status = if @form.what_happens_next_text.present?
                                  :completed
@@ -76,12 +78,13 @@ private
                                end
     results = []
     results << :completed
-    results << pages_statues
-    results << declaration_statues
+    results << pages_status
+    results << declaration_status
     results << what_happens_next_status
 
     results
   end
+
   def section_2_statuses
     submission_status = if @form.submission_email.present?
                           :completed
@@ -112,5 +115,4 @@ private
     results << support_contact_details
     results
   end
-
 end
