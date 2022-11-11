@@ -24,12 +24,16 @@ FactoryBot.define do
     trait :ready_for_live do
       support_email { Faker::Internet.email(domain: "example.gov.uk") }
       what_happens_next_text { "We usually respond to applications within 10 working days." }
+      question_section_completed { true }
+      declaration_section_completed { true }
     end
 
     trait :live do
       live_at { Time.zone.now }
       support_email { Faker::Internet.email(domain: "example.gov.uk") }
       what_happens_next_text { "We usually respond to applications within 10 working days." }
+      question_section_completed { true }
+      declaration_section_completed { true }
     end
 
     trait :with_pages do
@@ -40,6 +44,8 @@ FactoryBot.define do
       pages do
         Array.new(pages_count) { association(:page) }
       end
+
+      question_section_completed { true }
     end
 
     trait :with_support do
