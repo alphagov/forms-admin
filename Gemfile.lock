@@ -183,7 +183,7 @@ GEM
       pagy (~> 5.10.1)
       railties (>= 6.1)
       view_component (~> 2.74.1)
-    govuk_design_system_formbuilder (3.1.2)
+    govuk_design_system_formbuilder (3.2.0)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
@@ -463,7 +463,7 @@ DEPENDENCIES
   faker
   gds-sso
   govuk-components (= 3.2.2)
-  govuk_design_system_formbuilder (= 3.1.2)
+  govuk_design_system_formbuilder (= 3.2.0)
   i18n-tasks (~> 1.0.11)
   jbuilder
   jsbundling-rails
