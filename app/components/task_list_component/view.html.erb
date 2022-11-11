@@ -16,7 +16,7 @@
                 <% end %>
               </span>
 
-              <% if row.status.present? %>
+              <% if FeatureService.enabled?(:task_list_statuses) && row.status.present? %>
                 <%= render GovukComponent::TagComponent.new(
                   text: "<span class='govuk-visually-hidden'>Status </span>".html_safe + I18n.t("task_statuses.#{row.status}"),
                   classes: "app-task-list__tag",
