@@ -14,4 +14,16 @@ class ApplicationController < ActionController::Base
   def set_user_instance_variable
     @current_user = current_user
   end
+
+  def append_info_to_payload(payload)
+    super
+    payload[:host] = request.host
+    if current_user.present?
+      payload[:user_id] = current_user.id
+      payload[:user_email] = current_user.email
+      payload[:user_organisation_slug] = current_user.organisation_slug
+    end
+    payload[:request_id] = request.request_id
+    payload[:form_id] = params[:form_id] if params[:form_id].present?
+  end
 end
