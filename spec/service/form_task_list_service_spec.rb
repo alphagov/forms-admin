@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe FormTaskListService do
   describe "#all_tasks" do
-    let(:form) { build(:form, id: 1) }
+    let(:form) { build(:form, :new_form, id: 1) }
 
     it "returns array of tasks objects for a given form" do
       expect(described_class.call(form:).all_tasks).to be_an_instance_of(Array)
@@ -46,6 +46,15 @@ describe FormTaskListService do
         expect(section_rows[3][:task_name]).to eq "Add information about what happens next"
         expect(section_rows[3][:path]).to eq "/forms/1/what-happens-next"
       end
+
+      context "when task list statuses are enabled", feature_task_list_statuses: true do
+        it "has the correct default statuses" do
+          expect(section_rows.first[:status]).to eq :completed
+          expect(section_rows[1][:status]).to eq :incomplete
+          expect(section_rows[2][:status]).to eq :incomplete
+          expect(section_rows[3][:status]).to eq :incomplete
+        end
+      end
     end
 
     describe "section 2 tasks" do
@@ -55,26 +64,33 @@ describe FormTaskListService do
 
       let(:section_rows) { section[:rows] }
 
-      it "has link to set submission email" do
-        expect(section_rows.first[:task_name]).to eq "Set the email address completed forms will be sent to"
-        expect(section_rows.first[:path]).to eq "/forms/1/change-email"
-      end
-
-      it "has hint text explaining where completed forms will be sent to" do
-        expect(section_rows.first[:hint_text]).to eq I18n.t("forms.task_lists.section_2.hint_text", submission_email: form.submission_email)
-      end
-    end
-
-    describe "section 2 tasks - with no submission email" do
-      let(:section) do
-        form.submission_email = nil
-        described_class.call(form:).all_tasks[1]
-      end
-
-      let(:section_rows) { section[:rows] }
-
       it "has no hint text explaining where completed forms will be sent to" do
         expect(section_rows.first[:hint_text]).to be_nil
+      end
+
+      context "when task list statuses are enabled", feature_task_list_statuses: true do
+        it "has the correct default status" do
+          expect(section_rows.first[:status]).to eq :incomplete
+        end
+      end
+
+      context "with email set" do
+        let(:form) { build(:form, id: 1) }
+
+        it "has link to set submission email" do
+          expect(section_rows.first[:task_name]).to eq "Set the email address completed forms will be sent to"
+          expect(section_rows.first[:path]).to eq "/forms/1/change-email"
+        end
+
+        it "has hint text explaining where completed forms will be sent to" do
+          expect(section_rows.first[:hint_text]).to eq I18n.t("forms.task_lists.section_2.hint_text", submission_email: form.submission_email)
+        end
+
+        context "when task list statuses are enabled", feature_task_list_statuses: true do
+          it "has the correct default status" do
+            expect(section_rows.first[:status]).to eq :completed
+          end
+        end
       end
     end
 
@@ -94,6 +110,13 @@ describe FormTaskListService do
         expect(section_rows[1][:task_name]).to eq "Provide contact details for support"
         expect(section_rows[1][:path]).to eq "/forms/1/contact-details"
       end
+
+      context "when task list statuses are enabled", feature_task_list_statuses: true do
+        it "has the correct default statuses" do
+          expect(section_rows.first[:status]).to eq :incomplete
+          expect(section_rows[1][:status]).to eq :incomplete
+        end
+      end
     end
 
     describe "section 4 tasks" do
@@ -108,9 +131,15 @@ describe FormTaskListService do
         expect(section_rows.first[:path]).to be_empty
       end
 
-      describe "when form is ready to make live" do
+      context "when task list statuses are enabled", feature_task_list_statuses: true do
+        it "has the correct default status" do
+          expect(section_rows.first[:status]).to eq :cannot_start
+        end
+      end
+
+      context "when form is ready to make live" do
+        let(:form) { build(:form, :ready_for_live, id: 1) }
         let(:section) do
-          allow(form).to receive(:ready_for_live?).and_return(true)
           described_class.call(form:).all_tasks[3]
         end
 
@@ -120,9 +149,15 @@ describe FormTaskListService do
           expect(section_rows.first[:task_name]).to eq "Make your form live"
           expect(section_rows.first[:path]).to eq "/forms/1/make-live"
         end
+
+        context "when task list statuses are enabled", feature_task_list_statuses: true do
+          it "has the correct default status" do
+            expect(section_rows.first[:status]).to eq :not_started
+          end
+        end
       end
 
-      describe "when form is live" do
+      context "when form is live" do
         let(:section) do
           allow(form).to receive(:live?).and_return(true)
           described_class.call(form:).all_tasks[3]

@@ -57,7 +57,13 @@ module TaskListComponent
     end
 
     def get_status_colour
-      status == :completed ? nil : "grey" # passing nil, is standard govuk dark blue
+      {
+        completed: nil,
+        incomplete: "grey",
+        in_progress: "blue",
+        cannot_start: "grey",
+        not_started: "grey",
+      }[status.downcase.to_sym]
     end
 
     def status_id
