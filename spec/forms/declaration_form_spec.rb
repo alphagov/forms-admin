@@ -3,39 +3,68 @@ require "rails_helper"
 RSpec.describe Forms::DeclarationForm, type: :model do
   describe "validations" do
     describe "Character length" do
-      it "is valid if less than 2000 characters" do
-        declaration_form = described_class.new(declaration_text: "a")
+      context "when the task status feature is not enabled", feature_task_list_statuses: false do
+        it "is valid if less than 2000 characters" do
+          declaration_form = described_class.new(declaration_text: "a")
 
-        expect(declaration_form).to be_valid
+          expect(declaration_form).to be_valid
+        end
+
+        it "is valid if 2000 characters" do
+          declaration_form = described_class.new(declaration_text: "a" * 2000)
+
+          expect(declaration_form).to be_valid
+        end
+
+        it "is invalid if more than 2000 characters" do
+          declaration_form = described_class.new(declaration_text: "a" * 2001)
+          error_message = I18n.t("activemodel.errors.models.forms/declaration_form.attributes.declaration_text.too_long")
+
+          expect(declaration_form).not_to be_valid
+
+          declaration_form.validate(:declaration_text)
+
+          expect(declaration_form.errors.full_messages_for(:declaration_text)).to include(
+            "Declaration text #{error_message}",
+          )
+        end
       end
 
-      it "is valid if 2000 characters" do
-        declaration_form = described_class.new(declaration_text: "a" * 2000)
+      context "when the task status feature is enabled", feature_task_list_statuses: true do
+        it "is valid if less than 2000 characters" do
+          declaration_form = described_class.new(declaration_text: "a", mark_complete: true)
 
-        expect(declaration_form).to be_valid
+          expect(declaration_form).to be_valid
+        end
+
+        it "is valid if 2000 characters" do
+          declaration_form = described_class.new(declaration_text: "a" * 2000, mark_complete: true)
+
+          expect(declaration_form).to be_valid
+        end
+
+        it "is invalid if more than 2000 characters" do
+          declaration_form = described_class.new(declaration_text: "a" * 2001, mark_complete: true)
+          error_message = I18n.t("activemodel.errors.models.forms/declaration_form.attributes.declaration_text.too_long")
+
+          expect(declaration_form).not_to be_valid
+
+          declaration_form.validate(:declaration_text)
+
+          expect(declaration_form.errors.full_messages_for(:declaration_text)).to include(
+            "Declaration text #{error_message}",
+          )
+        end
       end
-
-      it "is invalid if more than 2000 characters" do
-        declaration_form = described_class.new(declaration_text: "a" * 2001)
-        error_message = I18n.t("activemodel.errors.models.forms/declaration_form.attributes.declaration_text.too_long")
-
-        expect(declaration_form).not_to be_valid
-
-        declaration_form.validate(:declaration_text)
-
-        expect(declaration_form.errors.full_messages_for(:declaration_text)).to include(
-          "Declaration text #{error_message}",
-        )
-      end
-    end
-
-    it "is valid if declaration text is blank" do
-      declaration_form = described_class.new(declaration_text: "")
-
-      expect(declaration_form).to be_valid
     end
 
     context "when the task status feature is not enabled", feature_task_list_statuses: false do
+      it "is valid if declaration text is blank" do
+        declaration_form = described_class.new(declaration_text: "")
+
+        expect(declaration_form).to be_valid
+      end
+
       it "is valid if mark complete is blank" do
         declaration_form = described_class.new(mark_complete: "")
 
@@ -45,6 +74,12 @@ RSpec.describe Forms::DeclarationForm, type: :model do
     end
 
     context "when the task status feature is enabled", feature_task_list_statuses: true do
+      it "is valid if declaration text is blank" do
+        declaration_form = described_class.new(declaration_text: "", mark_complete: true)
+
+        expect(declaration_form).to be_valid
+      end
+
       it "is not valid if mark complete is blank" do
         declaration_form = described_class.new(mark_complete: nil)
 
