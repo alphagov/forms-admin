@@ -8,8 +8,8 @@ class Forms::SubmissionEmailForm
   GOVUK_EMAIL_REGEX = /\.gov\.uk\z/i
 
   validates :temporary_submission_email, presence: true
-  validates :temporary_submission_email, format: { with: EMAIL_REGEX, message: :invalid_email }, if: -> { temporary_submission_email.present? }
-  validates :temporary_submission_email, format: { with: GOVUK_EMAIL_REGEX, message: :non_govuk_email }, if: -> { temporary_submission_email.present? }
+  validates :temporary_submission_email, format: { with: EMAIL_REGEX, message: :invalid_email }
+  validates :temporary_submission_email, format: { with: GOVUK_EMAIL_REGEX, message: :non_govuk_email }
 
   EMAIL_CODE_REGEX = /[0-9]{6}/
   validates :email_code, format: { with: EMAIL_CODE_REGEX, message: :invalid_email_code }, if: -> { email_code.present? }
