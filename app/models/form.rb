@@ -47,11 +47,11 @@ class Form < ActiveResource::Base
 
     if FeatureService.enabled?(:task_list_statuses)
       task_list_statuses = TaskStatusService.new(form: self)
-      @missing_sections << :missing_pages unless task_list_statuses.is_complete?(:pages_status)
-      @missing_sections << :missing_submission_email unless task_list_statuses.is_complete?(:submission_email_status)
-      @missing_sections << :missing_privacy_policy_url unless task_list_statuses.is_complete?(:privacy_policy_status)
-      @missing_sections << :missing_contact_details unless task_list_statuses.is_complete?(:support_contact_details_status)
-      @missing_sections << :missing_what_happens_next unless task_list_statuses.is_complete?(:what_happens_next_status)
+      @missing_sections << :missing_pages unless task_list_statuses.pages_status == :completed
+      @missing_sections << :missing_submission_email unless task_list_statuses.submission_email_status == :completed
+      @missing_sections << :missing_privacy_policy_url unless task_list_statuses.privacy_policy_status == :completed
+      @missing_sections << :missing_contact_details unless task_list_statuses.support_contact_details_status == :completed
+      @missing_sections << :missing_what_happens_next unless task_list_statuses.what_happens_next_status == :completed
     else
       @missing_sections << :missing_pages unless pages.any?
       @missing_sections << :missing_submission_email if submission_email.blank?
