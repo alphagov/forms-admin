@@ -23,8 +23,6 @@ class Page < ActiveResource::Base
   end
 
   def convert_is_optional_to_boolean
-    return nil unless FeatureService.enabled?(:make_question_optional)
-
     self.is_optional = is_optional_value
   end
 
