@@ -85,7 +85,7 @@ en:
         title: Create your form
       section_2:
         confirm_email: Enter the email address confirmation code
-        hint_text: Completed forms will be sent to %{submission_email}
+        hint_text_html: Completed forms will be sent to:<br> %{submission_email}
         set_email: Set the email address completed forms will be sent to
         submission_email: Set the email address completed forms will be sent to
         title: Set email address for completed forms

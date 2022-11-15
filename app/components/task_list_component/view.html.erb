@@ -27,7 +27,7 @@
 
             <% if row.hint_text.present? %>
               <br>
-              <span class="app-task-list__hint govuk-hint"><%= row.hint_text %></span>
+              <span class="app-task-list__hint govuk-hint"><%= row.hint_text.html_safe %></span>
             <% end %>
 
           </li>
