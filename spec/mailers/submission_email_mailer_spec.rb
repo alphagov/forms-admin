@@ -6,6 +6,7 @@ describe SubmissionEmailMailer, type: :mailer do
       new_submission_email: "test@example.com",
       form_name: "Testing API",
       confirmation_code: "654321",
+      notify_response_id: "abc-123",
       current_user: OpenStruct.new(name: "Joe Bloggs", email: "example@example.com", confirmation_code: "654321"),
     )
   end
@@ -30,6 +31,10 @@ describe SubmissionEmailMailer, type: :mailer do
 
     it "includes the form name" do
       expect(mail.govuk_notify_personalisation[:form_name]).to eq("Testing API")
+    end
+
+    it "includes a UUID reference when the form was submit and can be used to find email in notify" do
+      expect(mail.govuk_notify_reference).to eq("abc-123")
     end
   end
 end

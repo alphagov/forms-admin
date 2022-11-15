@@ -1,6 +1,16 @@
 require "rails_helper"
 
 RSpec.describe Forms::SubmissionEmailForm, type: :model do
+  let(:form) { build :form, id: 1, submission_email: "curent_value@gds.gov.uk" }
+
+  let(:submission_email_form_with_user) do
+    build :submission_email_form, :with_user,
+          form:,
+          temporary_submission_email: "test@test.gov.uk",
+          confirmation_code: "123456",
+          current_user: OpenStruct.new(name: "User", email: "user@gov.uk")
+  end
+
   it "has a valid factory" do
     submission_email_form = build :submission_email_form
     expect(submission_email_form).to be_valid
@@ -31,7 +41,6 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
   describe "#assign_form_values" do
     context "when FormSubmissionEmail does not exist for form" do
       it "sets temporary_submission_email to form submission_email" do
-        form = build :form, submission_email: "curent_value@gds.gov.uk"
         submission_email_form = build :submission_email_form, form: form
 
         submission_email_form.assign_form_values
@@ -41,7 +50,6 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
 
     context "when FormSubmissionEmail exists for form" do
       it "sets temporary_submission_email and confirmation_code from model" do
-        form = build :form, id: 1, submission_email: "curent_value@gds.gov.uk"
         create :form_submission_email, form_id: form.id, temporary_submission_email: "test@test.gov.uk", confirmation_code: "654321"
         submission_email_form = build :submission_email_form, form: form
 
@@ -60,10 +68,21 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
 
     context "when FormSubmissionEmail does not exist for form" do
       it "creates a FormSubmissionEmail object with form_id" do
-        form = build :form, submission_email: "curent_value@gds.gov.uk", id: 1
-        submission_email_form = build :submission_email_form, :with_user, form: form, temporary_submission_email: "test@test.gov.uk", current_user: OpenStruct.new(name: "User", email: "user@gov.uk")
+        delivery = double
+        expect(delivery).to receive(:deliver_now).with(no_args)
 
-        result = submission_email_form.submit
+        allow(submission_email_form_with_user).to receive(:generate_confirmation_code).and_return("123456")
+
+        allow(SubmissionEmailMailer).to receive(:confirmation_code_email)
+                                          .with(
+                                            new_submission_email: submission_email_form_with_user.temporary_submission_email,
+                                            form_name: form.name,
+                                            confirmation_code: submission_email_form_with_user.confirmation_code,
+                                            notify_response_id: submission_email_form_with_user.notify_response_id,
+                                            current_user: submission_email_form_with_user.current_user,
+                                          ).and_return(delivery)
+
+        result = submission_email_form_with_user.submit
         expect(result).to be_truthy
         form_submission_email = FormSubmissionEmail.find_by_form_id(1)
         expect(form_submission_email).to be_present
@@ -76,11 +95,23 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
 
     context "when FormSubmissionEmail does exist for form" do
       it "updates a FormSubmissionEmail object with form_id" do
-        form = build :form, submission_email: "curent_value@gds.gov.uk", id: 1
         create :form_submission_email, form_id: form.id
-        submission_email_form = build :submission_email_form, :with_user, form: form, temporary_submission_email: "test@test.gov.uk", current_user: OpenStruct.new(name: "User", email: "user@gov.uk")
 
-        result = submission_email_form.submit
+        delivery = double
+        expect(delivery).to receive(:deliver_now).with(no_args)
+
+        allow(submission_email_form_with_user).to receive(:generate_confirmation_code).and_return("123456")
+
+        allow(SubmissionEmailMailer).to receive(:confirmation_code_email)
+                                          .with(
+                                            new_submission_email: submission_email_form_with_user.temporary_submission_email,
+                                            form_name: form.name,
+                                            confirmation_code: submission_email_form_with_user.confirmation_code,
+                                            notify_response_id: submission_email_form_with_user.notify_response_id,
+                                            current_user: submission_email_form_with_user.current_user,
+                                          ).and_return(delivery)
+
+        result = submission_email_form_with_user.submit
         expect(result).to be_truthy
         form_submission_email = FormSubmissionEmail.find_by_form_id(1)
         expect(form_submission_email).to be_present
@@ -99,7 +130,6 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
     end
 
     it "returns false and does not update form if confirmation code does not match" do
-      form = build :form, submission_email: "curent_value@gds.gov.uk", id: 1
       allow(form).to receive(:save!).and_return(true)
       create :form_submission_email, form_id: form.id, confirmation_code: "654321"
       submission_email_form = build :submission_email_form, :with_user, form: form, temporary_submission_email: "test@test.gov.uk", email_code: "123456"
@@ -110,11 +140,10 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
     end
 
     it "returns true and updates form if confirmation code does not match" do
-      form = build :form, submission_email: "curent_value@gds.gov.uk", id: 1
       allow(form).to receive(:save!).and_return(true)
       create :form_submission_email, form_id: form.id, confirmation_code: "123456", temporary_submission_email: "test@test.gov.uk"
-      submission_email_form = build :submission_email_form, :with_user, form: form, email_code: "123456"
-      submission_email_form.assign_form_values
+
+      submission_email_form_with_user.assign_form_values
       # Returns true and updates the form's submission email
       expect(submission_email_form.confirm_confirmation_code).to be_truthy
       expect(form.submission_email).to eq("test@test.gov.uk")
@@ -127,10 +156,21 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
 
     context "when FormSubmissionEmail does not exist for form" do
       it "creates a FormSubmissionEmail object with form_id" do
-        form = build :form, submission_email: "curent_value@gds.gov.uk", id: 1
-        submission_email_form = build :submission_email_form, :with_user, form: form, temporary_submission_email: "test@test.gov.uk", current_user: OpenStruct.new(name: "User", email: "user@gov.uk")
+        delivery = double
+        expect(delivery).to receive(:deliver_now).with(no_args)
 
-        result = submission_email_form.submit
+        allow(submission_email_form_with_user).to receive(:generate_confirmation_code).and_return("123456")
+
+        allow(SubmissionEmailMailer).to receive(:confirmation_code_email)
+                                          .with(
+                                            new_submission_email: submission_email_form_with_user.temporary_submission_email,
+                                            form_name: form.name,
+                                            confirmation_code: submission_email_form_with_user.confirmation_code,
+                                            notify_response_id: submission_email_form_with_user.notify_response_id,
+                                            current_user: submission_email_form_with_user.current_user,
+                                          ).and_return(delivery)
+
+        result = submission_email_form_with_user.submit
         expect(result).to be_truthy
         form_submission_email = FormSubmissionEmail.find_by_form_id(1)
         expect(form_submission_email).to be_present
@@ -143,11 +183,22 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
 
     context "when FormSubmissionEmail does exist for form" do
       it "updates a FormSubmissionEmail object with form_id" do
-        form = build :form, submission_email: "curent_value@gds.gov.uk", id: 1
         create :form_submission_email, form_id: form.id
-        submission_email_form = build :submission_email_form, :with_user, form: form, temporary_submission_email: "test@test.gov.uk", current_user: OpenStruct.new(name: "User", email: "user@gov.uk")
+        delivery = double
+        expect(delivery).to receive(:deliver_now).with(no_args)
 
-        result = submission_email_form.submit
+        allow(submission_email_form_with_user).to receive(:generate_confirmation_code).and_return("123456")
+
+        allow(SubmissionEmailMailer).to receive(:confirmation_code_email)
+                                          .with(
+                                            new_submission_email: submission_email_form_with_user.temporary_submission_email,
+                                            form_name: form.name,
+                                            confirmation_code: submission_email_form_with_user.confirmation_code,
+                                            notify_response_id: submission_email_form_with_user.notify_response_id,
+                                            current_user: submission_email_form_with_user.current_user,
+                                          ).and_return(delivery)
+
+        result = submission_email_form_with_user.submit
         expect(result).to be_truthy
         form_submission_email = FormSubmissionEmail.find_by_form_id(1)
         expect(form_submission_email).to be_present
