@@ -32,7 +32,7 @@ Config.setup do |config|
   # with Heroku, but you might want to change it for example for '__' to easy override settings from command line, where
   # using dots in variable names might not be allowed (eg. Bash).
   #
-  # config.env_separator = '.'
+  config.env_separator = "__"
 
   # Ability to process variables names:
   #   * nil  - no change
@@ -42,7 +42,7 @@ Config.setup do |config|
 
   # Parse numeric values as integers instead of strings.
   #
-  # config.env_parse_values = true
+  config.env_parse_values = true
 
   # Validate presence and type of specific config values. Check https://github.com/dry-rb/dry-validation for details.
   #
