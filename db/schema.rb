@@ -10,9 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_13_111847) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_03_162118) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "form_submission_emails", force: :cascade do |t|
+    t.integer "form_id"
+    t.string "temporary_submission_email"
+    t.string "confirmation_code"
+    t.string "created_by_name"
+    t.string "created_by_email"
+    t.string "updated_by_name"
+    t.string "updated_by_email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["form_id"], name: "index_form_submission_emails_on_form_id"
+  end
 
   create_table "forms", id: :bigint, default: nil, force: :cascade do |t|
     t.text "name"
