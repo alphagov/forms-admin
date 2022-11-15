@@ -1,5 +1,4 @@
 # Used to add feature flags in the app to control access to certain features.
 features:
-  make_question_optional: true
   task_list_statuses: true
   submission_email_confirmation: true

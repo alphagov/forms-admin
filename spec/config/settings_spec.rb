@@ -21,6 +21,6 @@ describe "Settings" do
   describe ".features" do
     features = settings[:features]
 
-    include_examples expected_value_test, :make_question_optional, features, true
+    include_examples expected_value_test, :task_list_statuses, features, true
   end
 end
