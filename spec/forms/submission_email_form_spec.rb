@@ -145,7 +145,7 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
 
       submission_email_form_with_user.assign_form_values
       # Returns true and updates the form's submission email
-      expect(submission_email_form.confirm_confirmation_code).to be_truthy
+      expect(submission_email_form_with_user.confirm_confirmation_code).to be_truthy
       expect(form.submission_email).to eq("test@test.gov.uk")
 
       # updates the FormSubmissionEmail to show cleared
