@@ -36,11 +36,28 @@ class TaskStatusService
   end
 
   def submission_email_status
-    if @form.submission_email.present?
+    if FeatureService.enabled?(:submission_email_confirmation)
+      {
+        email_set_without_confirmation: :completed,
+        not_started: :not_started,
+        sent: :in_progress,
+        confirmed: :completed,
+      }[@form.email_confirmation_status]
+    # without submission_email_confirmation feature
+    elsif @form.submission_email.present?
       :completed
     else
       :not_started
     end
+  end
+
+  def confirm_submission_email_status
+    {
+      email_set_without_confirmation: :completed,
+      not_started: :cannot_start,
+      sent: :not_started,
+      confirmed: :completed,
+    }[@form.email_confirmation_status]
   end
 
   def privacy_policy_status
@@ -73,5 +90,9 @@ class TaskStatusService
      submission_email_status,
      privacy_policy_status,
      support_contact_details_status].all? { |task| task == :completed }
+  end
+
+  def can_enter_submission_email_code
+    @form.email_confirmation_status == :sent
   end
 end
