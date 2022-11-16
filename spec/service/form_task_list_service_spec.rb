@@ -50,9 +50,9 @@ describe FormTaskListService do
       context "when task list statuses are enabled", feature_task_list_statuses: true do
         it "has the correct default statuses" do
           expect(section_rows.first[:status]).to eq :completed
-          expect(section_rows[1][:status]).to eq :incomplete
-          expect(section_rows[2][:status]).to eq :incomplete
-          expect(section_rows[3][:status]).to eq :incomplete
+          expect(section_rows[1][:status]).to eq :not_started
+          expect(section_rows[2][:status]).to eq :not_started
+          expect(section_rows[3][:status]).to eq :not_started
         end
       end
     end
@@ -106,7 +106,7 @@ describe FormTaskListService do
 
       context "when task list statuses are enabled", feature_task_list_statuses: true do
         it "has the correct default status" do
-          expect(section_rows.first[:status]).to eq :incomplete
+          expect(section_rows.first[:status]).to eq :not_started
         end
       end
     end
@@ -130,8 +130,8 @@ describe FormTaskListService do
 
       context "when task list statuses are enabled", feature_task_list_statuses: true do
         it "has the correct default statuses" do
-          expect(section_rows.first[:status]).to eq :incomplete
-          expect(section_rows[1][:status]).to eq :incomplete
+          expect(section_rows.first[:status]).to eq :not_started
+          expect(section_rows[1][:status]).to eq :not_started
         end
       end
     end

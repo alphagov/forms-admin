@@ -13,15 +13,17 @@ class TaskStatusService
     elsif @form.pages.any?
       :in_progress
     else
-      :incomplete
+      :not_started
     end
   end
 
   def declaration_status
     if @form.declaration_section_completed
       :completed
+    elsif @form.declaration_text.present?
+      :in_progress
     else
-      :incomplete
+      :not_started
     end
   end
 
@@ -29,7 +31,7 @@ class TaskStatusService
     if @form.what_happens_next_text.present?
       :completed
     else
-      :incomplete
+      :not_started
     end
   end
 
@@ -37,7 +39,7 @@ class TaskStatusService
     if @form.submission_email.present?
       :completed
     else
-      :incomplete
+      :not_started
     end
   end
 
@@ -45,7 +47,7 @@ class TaskStatusService
     if @form.privacy_policy_url.present?
       :completed
     else
-      :incomplete
+      :not_started
     end
   end
 
@@ -53,7 +55,7 @@ class TaskStatusService
     if @form.support_email.present? || @form.support_phone.present? || (@form.support_url_text.present? && @form.support_url)
       :completed
     else
-      :incomplete
+      :not_started
     end
   end
 

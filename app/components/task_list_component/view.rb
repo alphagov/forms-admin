@@ -59,7 +59,6 @@ module TaskListComponent
     def get_status_colour
       {
         completed: nil,
-        incomplete: "grey",
         in_progress: "blue",
         cannot_start: "grey",
         not_started: "grey",
