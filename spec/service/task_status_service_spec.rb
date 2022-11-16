@@ -19,7 +19,7 @@ describe TaskStatusService do
         let(:form) { build(:form, :new_form, id: 1) }
 
         it "returns the correct default value" do
-          expect(task_status_service.pages_status).to eq :incomplete
+          expect(task_status_service.pages_status).to eq :not_started
         end
       end
 
@@ -45,15 +45,15 @@ describe TaskStatusService do
         let(:form) { build(:form, :new_form, id: 1) }
 
         it "returns the correct default value" do
-          expect(task_status_service.declaration_status).to eq :incomplete
+          expect(task_status_service.declaration_status).to eq :not_started
         end
       end
 
       context "with a form which has no declaration content and is marked incomplete" do
         let(:form) { build(:form, id: 1, declaration_section_completed: false) }
 
-        it "returns the incomplete status" do
-          expect(task_status_service.declaration_status).to eq :incomplete
+        it "returns the not started status" do
+          expect(task_status_service.declaration_status).to eq :not_started
         end
       end
 
@@ -79,7 +79,7 @@ describe TaskStatusService do
         let(:form) { build(:form, :new_form, id: 1) }
 
         it "returns the correct default value" do
-          expect(task_status_service.what_happens_next_status).to eq :incomplete
+          expect(task_status_service.what_happens_next_status).to eq :not_started
         end
       end
 
@@ -97,7 +97,7 @@ describe TaskStatusService do
         let(:form) { build(:form, :new_form, id: 1) }
 
         it "returns the correct default value" do
-          expect(task_status_service.submission_email_status).to eq :incomplete
+          expect(task_status_service.submission_email_status).to eq :not_started
         end
       end
 
@@ -115,7 +115,7 @@ describe TaskStatusService do
         let(:form) { build(:form, :new_form, id: 1) }
 
         it "returns the correct default value" do
-          expect(task_status_service.privacy_policy_status).to eq :incomplete
+          expect(task_status_service.privacy_policy_status).to eq :not_started
         end
       end
 
@@ -133,7 +133,7 @@ describe TaskStatusService do
         let(:form) { build(:form, :new_form, id: 1) }
 
         it "returns the correct default value" do
-          expect(task_status_service.support_contact_details_status).to eq :incomplete
+          expect(task_status_service.support_contact_details_status).to eq :not_started
         end
       end
 
