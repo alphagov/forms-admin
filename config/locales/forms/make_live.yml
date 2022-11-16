@@ -12,7 +12,7 @@ en:
           attributes:
             confirm_make_live:
               blank: You must choose an option
-              missing_pages: You cannot make your form live because it does not have any questions. Answer ‘No’ and add one or more questions.
+              missing_pages: You cannot make your form live because you have not finished adding questions. Answer ‘No’, add one or more questions, and mark the task as complete.
               missing_privacy_policy_url: You cannot make your form live because it does not have a link to privacy information. Answer ‘No’ and add a link.
               missing_submission_email: You cannot make your form live because it does not have an email address to send completed forms to. Answer ‘No’ and add an email address.
               missing_what_happens_next: You cannot make your form live because it does not have information about what happens next. Answer ‘No’ and add information about what happens next.
