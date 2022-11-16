@@ -20,6 +20,8 @@ class TaskStatusService
   def declaration_status
     if @form.declaration_section_completed
       :completed
+    elsif @form.declaration_text.present?
+      :in_progress
     else
       :incomplete
     end

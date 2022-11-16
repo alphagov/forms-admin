@@ -49,11 +49,19 @@ describe TaskStatusService do
         end
       end
 
-      context "with a form which has a declaration marked incomplete" do
+      context "with a form which has no declaration content and is marked incomplete" do
         let(:form) { build(:form, id: 1, declaration_section_completed: false) }
 
         it "returns the incomplete status" do
           expect(task_status_service.declaration_status).to eq :incomplete
+        end
+      end
+
+      context "with a form which has declaration content and is marked incomplete" do
+        let(:form) { build(:form, id: 1, declaration_text: "I understand the implications", declaration_section_completed: false) }
+
+        it "returns the in progress status" do
+          expect(task_status_service.declaration_status).to eq :in_progress
         end
       end
 
