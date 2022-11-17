@@ -62,4 +62,4 @@ COPY --chown=ruby:ruby . .
 
 EXPOSE 3000
 
-CMD ["rails", "s", "-b", "0.0.0.0"]
+CMD ["/bin/sh", "-c", "rake db:migrate && rails s -b 0.0.0.0"]
