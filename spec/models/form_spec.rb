@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe Form do
-  let(:form) { described_class.new(name: "Form 1", org: "Test org", live_at: "") }
+  let(:form) { described_class.new(id: 1, name: "Form 1", org: "Test org", live_at: "", submission_email: "") }
 
   describe "#live?" do
     context "when form is draft" do
@@ -73,6 +73,33 @@ describe Form do
 
         expect(results.missing_sections).to eq %i[missing_pages missing_submission_email missing_privacy_policy_url missing_contact_details missing_what_happens_next]
       end
+    end
+  end
+
+  describe "#email_confirmation_status" do
+    it "returns :not_started" do
+      expect(form.email_confirmation_status).to eq(:not_started)
+    end
+
+    it "with submission_email set and no FormSubmissionEmail, returns :email_set_without_confirmation" do
+      form.submission_email = "test@example.gov.uk"
+      expect(form.email_confirmation_status).to eq(:email_set_without_confirmation)
+    end
+
+    it "with FormSubmissionEmail code returns :sent" do
+      create :form_submission_email, form_id: form.id, temporary_submission_email: "test@example.gov.uk", confirmation_code: "123456"
+      expect(form.email_confirmation_status).to eq(:sent)
+    end
+
+    it "with FormSubmissionEmail with no code returns :confirmed" do
+      create :form_submission_email, form_id: form.id, temporary_submission_email: "test@example.gov.uk", confirmation_code: ""
+      expect(form.email_confirmation_status).to eq(:confirmed)
+    end
+
+    it "with FormSubmissionEmail with code and email matches forms returns :confirmed" do
+      form.submission_email = "test@example.gov.uk"
+      create :form_submission_email, form_id: form.id, temporary_submission_email: "test@example.gov.uk", confirmation_code: "123456"
+      expect(form.email_confirmation_status).to eq(:confirmed)
     end
   end
 end

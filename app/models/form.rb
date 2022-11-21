@@ -66,4 +66,23 @@ class Form < ActiveResource::Base
       true
     end
   end
+
+  def form_submission_email
+    FormSubmissionEmail.find_by_form_id(id)
+  end
+
+  def email_confirmation_status
+    # Email set before confirmation feature introduced
+    return :email_set_without_confirmation if submission_email.present? && form_submission_email.blank?
+
+    if form_submission_email.present?
+      if form_submission_email.confirmed? || submission_email == form_submission_email.temporary_submission_email
+        :confirmed
+      else
+        :sent
+      end
+    else
+      :not_started
+    end
+  end
 end
