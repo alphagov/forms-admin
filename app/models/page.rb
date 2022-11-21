@@ -26,6 +26,10 @@ class Page < ActiveResource::Base
     self.is_optional = is_optional_value
   end
 
+  def move_down
+    put(:down)
+  end
+
 private
 
   def is_optional_value

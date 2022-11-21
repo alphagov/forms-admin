@@ -29,6 +29,13 @@ class PageListController < ApplicationController
     render :edit, status: :unprocessable_entity
   end
 
+  def down
+    form_id = params.require(:form_id)
+    page_id = params.require(:page_id)
+    Page.find(page_id, params: { form_id: }).move_down
+    redirect_to form_pages_path
+  end
+
 private
 
   def mark_complete_options

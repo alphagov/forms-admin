@@ -27,14 +27,23 @@
     </div>
 
     <% if @pages.any? %>
+      <%= form_with url: down_page_url, method: :post do |f| %>
       <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0"><%= t("forms.form_overview.your_questions") %></h2>
-      <% @pages.each do |page| %>
+      <% @pages.each_with_index do |page, index| %>
         <dl class="govuk-summary-list">
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
               <%= question_text_with_optional_suffix(page) %>
             </dt>
             <dd class="govuk-summary-list__actions">
+            <div class="govuk-button-group form-action-group govuk-!-margin-bottom-0">
+              <% if index != 0 %>
+                <%= f.govuk_submit "Move up" , secondary: true, name: 'page_id', value: @pages[index - 1].id %>
+              <% end %>
+              <% if index != @pages.length - 1 %>
+                <%= f.govuk_submit "Move down" , secondary: true, name: 'page_id', value: page.id %>
+              <% end %>
+            </div>
               <%= govuk_link_to edit_page_path(@form,page) do %>
                 <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= page.question_text %></span>
               <% end %>
@@ -42,6 +51,7 @@
           </div>
         </dl>
       <% end %>
+    <% end %>
 
       <% if @pages.any? %>
         <%= render MarkCompleteComponent::View.new(form_model: @mark_complete_form, path: form_pages_path(@form), legend: t("pages.index.mark_complete.legend")) %>
