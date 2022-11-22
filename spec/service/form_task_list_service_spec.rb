@@ -86,9 +86,11 @@ describe FormTaskListService do
           expect(section_rows.first[:hint_text]).to be_nil
         end
 
-        it "has link to set submission email" do
-          expect(section_rows.first[:task_name]).to eq "Set the email address completed forms will be sent to"
-          expect(section_rows.first[:path]).to eq "/forms/1/change-email"
+        context "when task list statuses are enabled", feature_submission_email_confirmation: false do
+          it "has link to set submission email" do
+            expect(section_rows.first[:task_name]).to eq "Set the email address completed forms will be sent to"
+            expect(section_rows.first[:path]).to eq "/forms/1/change-email"
+          end
         end
 
         context "when task list statuses are enabled", feature_task_list_statuses: true do
