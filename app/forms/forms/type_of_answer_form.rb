@@ -7,7 +7,7 @@ class Forms::TypeOfAnswerForm
   validates :answer_type, presence: true
 
   def submit(session)
-    valid?
+    return false if invalid?
 
     session[:page] = { answer_type: }
   end
