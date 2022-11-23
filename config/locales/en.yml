@@ -5,8 +5,6 @@ en:
       models:
         page:
           attributes:
-            answer_type:
-              blank: Answer type cannot be blank
             question_text:
               blank: Question text cannot be blank
   contact_details:
