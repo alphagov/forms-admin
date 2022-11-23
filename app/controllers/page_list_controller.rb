@@ -1,5 +1,6 @@
 class PageListController < ApplicationController
   include CheckFormOrganisation
+  skip_before_action :clear_questions_session_data
 
   def edit
     @form = Form.find(params[:form_id])

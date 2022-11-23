@@ -1,6 +1,7 @@
 class PagesController < ApplicationController
   include CheckFormOrganisation
   before_action :fetch_form, :answer_types
+  skip_before_action :clear_questions_session_data
 
   def new
     answer_type = session[:page]["answer_type"]
