@@ -6,7 +6,6 @@ class PageListController < ApplicationController
     @pages = @form.pages
     @mark_complete_form = Forms::MarkCompleteForm.new(form: @form).assign_form_values
     @mark_complete_options = mark_complete_options
-
   end
 
   def update

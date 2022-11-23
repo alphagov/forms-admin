@@ -1,11 +1,11 @@
 module Forms
   class ChangeEmailController < BaseController
     def new
-      @change_email_form = Forms::ChangeEmailForm.new(form: current_form).assign_form_values
+      @change_email_form = ChangeEmailForm.new(form: current_form).assign_form_values
     end
 
     def create
-      @change_email_form = Forms::ChangeEmailForm.new(change_email_form_params)
+      @change_email_form = ChangeEmailForm.new(change_email_form_params)
 
       if @change_email_form.submit
         redirect_to form_path(@change_email_form.form)
