@@ -13,7 +13,7 @@ class Page < ActiveResource::Base
   validates :answer_type, presence: true, inclusion: { in: ANSWER_TYPES }
   before_validation :convert_is_optional_to_boolean
 
-  after_save :clear_session, if: -> (obj) { obj.session.present? }
+  after_save :clear_session, if: ->(obj) { obj.session.present? }
 
   def has_next_page?
     attributes.include?("next_page") && !attributes["next_page"].nil?

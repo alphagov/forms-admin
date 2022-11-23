@@ -24,7 +24,6 @@ class PagesController < ApplicationController
 
     # if session[:page]["id"] == @page.id
     #   session[:page]["answer_type"]
-
   end
 
   def update
@@ -40,8 +39,9 @@ class PagesController < ApplicationController
   end
 
 private
+
   def page_params
-    params.require(:page).permit(:question_text, :question_short_name, :hint_text, :answer_type, :is_optional).merge(form_id: @form.id).merge(session: session)
+    params.require(:page).permit(:question_text, :question_short_name, :hint_text, :answer_type, :is_optional).merge(form_id: @form.id).merge(session:)
   end
 
   def fetch_form

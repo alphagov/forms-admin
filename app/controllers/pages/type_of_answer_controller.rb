@@ -1,9 +1,8 @@
 class Pages::TypeOfAnswerController < PagesController
-
   def new
     answer_type = session[:page]["answer_type"] if session[:page].present?
     @type_of_answer_form = Forms::TypeOfAnswerForm.new(answer_type:)
-    render 'pages/new/type-of-answer'
+    render "pages/new/type-of-answer"
   end
 
   def create
@@ -38,6 +37,6 @@ private
 
   def answer_type_form_params
     form = Form.find(params[:form_id])
-    params.require(:forms_type_of_answer_form).permit(:answer_type).merge(form: form)
+    params.require(:forms_type_of_answer_form).permit(:answer_type).merge(form:)
   end
 end
