@@ -27,7 +27,7 @@ private
     question_path = if @form.pages.any?
                       form_pages_path(@form.id)
                     else
-                      new_page_path(@form.id)
+                      type_of_answer_new_path(@form.id)
                     end
     [
       { task_name: I18n.t("forms.task_lists.section_1.change_name"), path: change_form_name_path(@form.id), status: @task_list_statuses.name_status },
