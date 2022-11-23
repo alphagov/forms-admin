@@ -3,11 +3,6 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">
-      <span class="govuk-caption-l"><%= t("pages.question") %> <%= @type_of_answer_form.number(@form) %></span>
-      <span class="govuk-visually-hidden"> - </span>
-      <%= t("pages.heading") %>
-    </h1>
     <%= form_with model: [@form, @type_of_answer_form], url: type_of_answer_create_path(@form) do |f| %>
       <%= f.govuk_error_summary %>
       <%= f.govuk_collection_radio_buttons(
@@ -15,7 +10,9 @@
             @answer_types,
             ->(option) { option },
             ->(option) { I18n.t('helpers.label.page.answer_type_options.names.' + option) },
-            ->(option) { I18n.t('helpers.label.page.answer_type_options.descriptions.' + option) }
+            ->(option) { I18n.t('helpers.label.page.answer_type_options.descriptions.' + option) },
+            legend: { text: t('helpers.legend.page.answer_type'), size: 'l', tag: 'h1' },
+            caption: { text: "#{t("pages.question")} #{@type_of_answer_form.number(@form)}" , size: 'l' },
           )  %>
       <%= f.govuk_submit t('save_and_continue'), value: "true", name: :set_answer_type %>
     <% end %>
