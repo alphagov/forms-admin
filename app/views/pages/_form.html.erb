@@ -1,19 +1,38 @@
-<%= f.govuk_error_summary %>
-<!-- Long question text input -->
+<%= form_with model: [form_object, page_object], url: action_path do |f| %>
+  <%= f.hidden_field :answer_type if is_new_page %>
 
-<%= f.govuk_text_field :question_text, label: { size: 'm' } %>
+  <%= f.govuk_error_summary %>
 
-<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <%= f.govuk_text_field :question_text, label: { size: 'm' } %>
 
-<!-- Hint text -->
-<%= f.govuk_text_field :hint_text, label: { size: 'm' } %>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
-<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <%= f.govuk_text_field :hint_text, label: { size: 'm' } %>
 
-<%= f.govuk_check_boxes_fieldset :is_optional, multiple: false, legend: { text: t("pages.add_rules_legend") , size: 'm' } do %>
-  <%= f.govuk_check_box :is_optional, true,0, multiple: false,
-                        small: true,
-                        label: { text: t("pages.make_optional_text")  },
-                        hint: { text: t("pages.make_optional_hint") } %>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
+  <%= f.govuk_check_boxes_fieldset :is_optional, multiple: false, legend: { text: t("pages.add_rules_legend") , size: 'm' } do %>
+    <%= f.govuk_check_box :is_optional, true,0, multiple: false,
+                          small: true,
+                          label: { text: t("pages.make_optional_text")  },
+                          hint: { text: t("pages.make_optional_hint") } %>
+
+  <% end %>
+
+  <%= govuk_summary_list do |summary_list|
+    summary_list.row do |row|
+      row.key(text: "Answer type")
+      row.value(text: t("helpers.label.page.answer_type_options.names.#{page_object.answer_type}"))
+      row.action(text: "Change",
+                 href: change_answer_type_path,
+                 visually_hidden_text: "Answer type " + t("helpers.label.page.answer_type_options.names.#{page_object.answer_type}")
+      )
+    end
+  end %>
+
+  <%= f.govuk_submit page_object.has_next_page? ? t("pages.submit_edit") : t("pages.submit_add") do %>
+    <%= f.govuk_submit t('pages.submit_save'), name: :save_preview, secondary: true %>
+  <% end %>
+
+  <%= f.govuk_submit t('pages.delete_question'), name: :delete, warning: true unless is_new_page %>
 <% end %>
