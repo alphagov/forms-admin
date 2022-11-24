@@ -13,7 +13,6 @@
     </h1>
 
     <%= form_with model: [@form, @page], url: update_page_path(@form, @page) do |f| %>
-      <%= f.hidden_field :answer_type, value: session[:answer_type] %>
       <%= render :partial => 'form', locals: { f: f } %>
       <%= govuk_summary_list do |summary_list|
         summary_list.row do |row|
