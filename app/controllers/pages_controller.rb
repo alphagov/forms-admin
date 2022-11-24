@@ -10,10 +10,8 @@ class PagesController < ApplicationController
 
   def create
     @page = Page.new(page_params)
-    @page.session = session
-    # if @form.save_page(@page)
-    if @page.submit
 
+    if @page.save
       handle_submit_action
     else
       render :new, status: :unprocessable_entity
@@ -32,7 +30,7 @@ class PagesController < ApplicationController
 
     @page.load(page_params)
 
-    if @page.submit
+    if @page.save
       handle_submit_action
     else
       render :edit, status: :unprocessable_entity
