@@ -163,7 +163,7 @@ RSpec.describe "Pages", type: :request do
       end
 
       it "Redirects you to the current edit page" do
-        expect(response).to redirect_to(new_page_path(form_id: 2))
+        expect(response).to redirect_to(type_of_answer_create_path(form_id: 2))
       end
     end
   end
@@ -219,8 +219,8 @@ RSpec.describe "Pages", type: :request do
         } }
       end
 
-      it "Redirects you to the page list" do
-        expect(response).to redirect_to(new_page_path(form_id: 2))
+      it "Redirects you to a new type of answer page" do
+        expect(response).to redirect_to(type_of_answer_new_path(form_id: 2))
       end
 
       it "Creates the page on the API" do
