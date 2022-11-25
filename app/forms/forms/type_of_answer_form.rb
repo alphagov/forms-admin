@@ -4,7 +4,7 @@ class Forms::TypeOfAnswerForm
 
   attr_accessor :answer_type, :form
 
-  validates :answer_type, presence: true
+  validates :answer_type, presence: true, inclusion: { in: Page::ANSWER_TYPES }
 
   def submit(session)
     return false if invalid?
