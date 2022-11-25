@@ -28,24 +28,8 @@
 
     <% if @pages.any? %>
       <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0"><%= t("forms.form_overview.your_questions") %></h2>
-      <% @pages.each do |page| %>
-        <dl class="govuk-summary-list">
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
-              <%= question_text_with_optional_suffix(page) %>
-            </dt>
-            <dd class="govuk-summary-list__actions">
-              <%= govuk_link_to edit_page_path(@form,page) do %>
-                <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= page.question_text %></span>
-              <% end %>
-            </dd>
-          </div>
-        </dl>
-      <% end %>
-
-      <% if @pages.any? %>
-        <%= render MarkCompleteComponent::View.new(form_model: @mark_complete_form, path: form_pages_path(@form), legend: t("pages.index.mark_complete.legend")) %>
-      <% end %>
+      <%= render PageListComponent::View.new(pages: @pages, form_id: @form.id) %>
+      <%= render MarkCompleteComponent::View.new(form_model: @mark_complete_form, path: form_pages_path(@form), legend: t("pages.index.mark_complete.legend")) %>
     <% end %>
 
   </div>
