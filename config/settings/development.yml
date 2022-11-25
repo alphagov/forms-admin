@@ -2,3 +2,4 @@
 features:
   task_list_statuses: true
   submission_email_confirmation: true
+  reorder_pages: true

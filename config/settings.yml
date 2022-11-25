@@ -2,6 +2,7 @@
 features:
   task_list_statuses: true
   submission_email_confirmation: true
+  reorder_pages: false
 
 # Settings for GOV.UK Notify api & email templates
 govuk_notify:
