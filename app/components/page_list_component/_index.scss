@@ -1,3 +1,9 @@
-.govuk-button-group-right {
+.app-page-list {
+  .govuk-summary-list:not(:last-child) {
+    margin-bottom: 0;
+  }
+}
+
+.app-page-list__button-group {
   justify-content: end;
 }

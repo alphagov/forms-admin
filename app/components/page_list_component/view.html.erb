@@ -1,16 +1,17 @@
 <%if FeatureService.enabled?(:reorder_pages) %>
-  <%= form_with url: move_page_url(@form_id), method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-    <% @pages.each_with_index do |page, index| %>
-      <dl class="govuk-summary-list govuk-!-margin-bottom-0">
-        <div class="govuk-summary-list__row">
+  <div class="app-page-list">
+    <%= form_with url: move_page_url(@form_id), method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <% @pages.each_with_index do |page, index| %>
+        <dl class="govuk-summary-list">
+          <div class="govuk-summary-list__row">
 
-          <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
+            <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
             <%= question_text_with_optional_suffix(page) %>
-          </dt>
+            </dt>
 
-          <dd class="govuk-summary-list__actions govuk-!-padding-bottom-6">
+            <dd class="govuk-summary-list__actions govuk-!-padding-bottom-6">
 
-            <div class="govuk-button-group form-action-group govuk-button-group-right" }">
+            <div class="govuk-button-group form-action-group app-page-list__button-group" }">
               <% if show_up_button(index) %>
                 <%= f.govuk_submit t("forms.form_overview.move_up_html", title: page.question_text), secondary: true, name: 'move_direction[up]', value: page.id %>
               <% end %>
@@ -23,12 +24,13 @@
               <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= page.question_text %></span>
             <% end %>
 
-          </dd>
+            </dd>
 
-        </div>
-      </dl>
+          </div>
+        </dl>
 
-    <% end %>
+      <% end %>
+  </div>
   <% end %>
   <% else %>
   <% @pages.each do |page| %>
