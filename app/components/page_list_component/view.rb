@@ -7,5 +7,13 @@ module PageListComponent
       @pages = pages
       @form_id = form_id
     end
+
+    def show_up_button(index)
+      index != 0
+    end
+
+    def show_down_button(index)
+      index != @pages.length - 1
+    end
   end
 end

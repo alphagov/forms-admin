@@ -30,4 +30,24 @@ describe Page do
       end
     end
   end
+
+  describe "#move_page" do
+    it "when given :up calls put(:up)" do
+      page = described_class.new
+      allow(page).to receive(:put).with(:up).and_return(true)
+      expect(page.move_page(:up)).to eq(true)
+    end
+
+    it "when given :down calls put(:down)" do
+      page = described_class.new
+      allow(page).to receive(:put).with(:down).and_return(true)
+      expect(page.move_page(:down)).to eq(true)
+    end
+
+    it "when given anything else returns false and does not call put" do
+      page = described_class.new
+      allow(page).to receive(:put).and_return(true)
+      expect(page.move_page(:invalid_direction)).to eq(false)
+    end
+  end
 end

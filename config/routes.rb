@@ -42,6 +42,7 @@ Rails.application.routes.draw do
       post "/" => "page_list#update"
       get "/:page_id/edit" => "pages#edit", as: :edit_page
       patch "/:page_id/edit" => "pages#update", as: :update_page
+      post "/move-page" => "page_list#move_page", as: :move_page
       get "/new" => "pages#new", as: :new_page
       post "/new" => "pages#create", as: :create_page
       get "/:page_id/delete" => "forms/delete_confirmation#delete", as: :delete_page

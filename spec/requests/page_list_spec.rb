@@ -18,7 +18,9 @@ RSpec.describe "Page list", type: :request do
   describe "Showing an existing form's pages" do
     describe "Given a form" do
       let(:pages) do
-        build(:page, page_id: 99)
+        [build(:page, id: 99),
+         build(:page, id: 100),
+         build(:page, id: 101)]
       end
       let(:form) do
         build(:form, id: 2, pages:)
@@ -99,6 +101,33 @@ RSpec.describe "Page list", type: :request do
 
     it "Redirects you to the form overview page" do
       expect(response).to redirect_to(form_path(2))
+    end
+  end
+
+  describe "Moving a page in a form" do
+    let(:pages) do
+      [build(:page, id: 99),
+       build(:page, id: 100),
+       build(:page, id: 101)]
+    end
+    let(:form) do
+      build(:form, id: 2, pages:)
+    end
+
+    before do
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1/pages/100", headers, pages[1].to_json, 200
+        mock.put "/api/v1/forms/1/pages/100/up", post_headers
+      end
+
+      post move_page_path({ form_id: 1, move_direction: { up: 100 } })
+    end
+
+    it "Reads the form from the API" do
+      move_post = ActiveResource::Request.new(:put, "/api/v1/forms/1/pages/100/up", {}, post_headers)
+      expect(ActiveResource::HttpMock.requests).to include move_post
     end
   end
 end

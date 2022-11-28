@@ -74,6 +74,8 @@ en:
     form_overview:
       edit: Edit
       live_title: Your form
+      move_down: Move down
+      move_up: Move up
       title: Create a form
       your_questions: Your questions
     task_lists:
