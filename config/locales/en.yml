@@ -74,8 +74,8 @@ en:
     form_overview:
       edit: Edit
       live_title: Your form
-      move_down: Move down
-      move_up: Move up
+      move_down_html: Move down <span class="govuk-visually-hidden">%{title}</span>
+      move_up_html: Move up <span class="govuk-visually-hidden">%{title}</span>
       title: Create a form
       your_questions: Your questions
     task_lists:
