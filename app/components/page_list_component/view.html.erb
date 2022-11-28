@@ -12,12 +12,10 @@
 
             <div class="govuk-button-group form-action-group govuk-button-group-right" }">
               <% if show_up_button(index) %>
-                <%= f.govuk_submit t("forms.form_overview.move_up"), secondary: true, name: 'move_direction[up]', value: page.id %>
-                <span class="govuk-visually-hidden"><%= page.question_text %></span>
+                <%= f.govuk_submit t("forms.form_overview.move_up_html", title: page.question_text), secondary: true, name: 'move_direction[up]', value: page.id %>
               <% end %>
               <% if show_down_button(index)  %>
-                <%= f.govuk_submit t("forms.form_overview.move_down"), secondary: true, name: 'move_direction[down]', value: page.id  %>
-                <span class="govuk-visually-hidden"><%= page.question_text %></span>
+                <%= f.govuk_submit t("forms.form_overview.move_down_html", title: page.question_text), secondary: true, name: 'move_direction[down]', value: page.id %>
               <% end %>
             </div>
 
