@@ -13,6 +13,13 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
     }
   end
 
+  let(:post_headers) do
+    {
+      "X-API-Token" => ENV["API_KEY"],
+      "Content-Type" => "application/json",
+    }
+  end
+
   describe "#new" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -32,18 +39,42 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
       expect(path).to eq type_of_answer_new_path(subject.form.id)
     end
 
-    it "renders the new template" do
+    it "renders the template" do
       expect(response).to have_rendered("pages/type-of-answer")
     end
   end
 
   describe "#create" do
-    describe "when form is valid and ready to store" do
-      it "saves the answer type to session" do; end
-      xit "redirects the user to the question details page " do; end
+    before do
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
+      end
     end
 
-    xit "renders the type of answer view if there are errors" do; end
+    context "when form is valid and ready to store" do
+      before do
+        post type_of_answer_create_path form_id: form.id, params: { forms_type_of_answer_form: { answer_type: subject.answer_type } }
+      end
+
+      it "saves the answer type to session" do
+        expect(session[:page]).to eq({"answer_type": subject.answer_type})
+      end
+
+      it "redirects the user to the question details page" do
+        expect(response).to redirect_to new_page_path(form.id)
+      end
+    end
+
+    context "when form is invalid" do
+      before do
+        post type_of_answer_create_path form_id: form.id, params: { forms_type_of_answer_form: { answer_type: nil } }
+      end
+
+      it "renders the type of answer view if there are errors" do
+        expect(response).to have_rendered("pages/type-of-answer")
+      end
+    end
   end
 
   describe "#edit" do
@@ -63,8 +94,9 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
       expect(form).to have_been_read
     end
 
-    it "reads the existing page" do
-      expect(page).to have_been_read
+    it "returns the existing page answer type" do
+      form = assigns(:type_of_answer_form)
+      expect(form.answer_type).to eq page.answer_type
     end
 
     it "sets an instance variable for type_of_answer_path" do
@@ -72,17 +104,19 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
       expect(path).to eq type_of_answer_edit_path(subject.form.id)
     end
 
-    it "renders the new template" do
+    it "renders the template" do
       expect(response).to have_rendered("pages/type-of-answer")
     end
   end
 
   describe "#update" do
-    describe "when form is valid and ready to update in the DB" do
+    context "when form is valid and ready to update in the DB" do
       xit "saves the updated answer type to DB" do; end
       xit "redirects the user to the question details page " do; end
     end
 
-    xit "renders the type of answer view if there are errors" do; end
+    context "when the form is invalid" do
+      xit "renders the type of answer view if there are errors" do; end
+    end
   end
 end

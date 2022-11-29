@@ -12,6 +12,7 @@ class Pages::TypeOfAnswerController < PagesController
     if @type_of_answer_form.submit(session)
       redirect_to new_page_path(@form)
     else
+      @type_of_answer_path = type_of_answer_create_path(@form)
       render "pages/type-of-answer"
     end
   end
@@ -31,6 +32,7 @@ class Pages::TypeOfAnswerController < PagesController
     if @type_of_answer_form.valid? && @page.save!
       redirect_to edit_page_path(@form)
     else
+      @type_of_answer_path = type_of_answer_update_path(@form)
       render "pages/type-of-answer"
     end
   end
