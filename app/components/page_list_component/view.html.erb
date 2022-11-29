@@ -11,7 +11,7 @@
 
             <dd class="govuk-summary-list__actions govuk-!-padding-bottom-6">
 
-            <div class="govuk-button-group form-action-group app-page-list__button-group" }">
+            <div class="govuk-button-group form-action-group app-page-list__button-group">
               <% if show_up_button(index) %>
                 <%= f.govuk_submit t("forms.form_overview.move_up_html", title: page.question_text), secondary: true, name: 'move_direction[up]', value: page.id %>
               <% end %>
