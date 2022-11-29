@@ -22,6 +22,9 @@ module FormsAdmin
     # config.eager_load_paths << Rails.root.join("extras")
     config.exceptions_app = routes
 
+    # All forms should use GOVUKDesignSystemFormBuilder by default
+    config.action_view.default_form_builder = GOVUKDesignSystemFormBuilder::FormBuilder
+
     config.view_component.preview_paths = [Rails.root.join("spec/components")]
     config.view_component.preview_route = "/preview"
     # Replace with value which will be true in local dev and PAAS dev
