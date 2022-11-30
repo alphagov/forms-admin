@@ -2,14 +2,14 @@ require "rails_helper"
 
 RSpec.describe "TypeOfAnswer controller", type: :request do
   let(:form) { build :form, id: 1 }
-  let(:pages){ build_list :page, 5, form_id: form.id }
+  let(:pages) { build_list :page, 5, form_id: form.id }
 
-  let(:subject) { build :type_of_answer_form, form: }
+  let(:type_of_answer_form) { build :type_of_answer_form, form: }
 
   let(:req_headers) do
     {
       "X-API-Token" => ENV["API_KEY"],
-      "Accept" => "application/json"
+      "Accept" => "application/json",
     }
   end
 
@@ -27,7 +27,7 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
       end
 
-      get type_of_answer_new_path(form_id: subject.form.id)
+      get type_of_answer_new_path(form_id: type_of_answer_form.form.id)
     end
 
     it "reads the existing form" do
@@ -36,7 +36,7 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
 
     it "sets an instance variable for type_of_answer_path" do
       path = assigns(:type_of_answer_path)
-      expect(path).to eq type_of_answer_new_path(subject.form.id)
+      expect(path).to eq type_of_answer_new_path(type_of_answer_form.form.id)
     end
 
     it "renders the template" do
@@ -54,11 +54,11 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
 
     context "when form is valid and ready to store" do
       before do
-        post type_of_answer_create_path form_id: form.id, params: { forms_type_of_answer_form: { answer_type: subject.answer_type } }
+        post type_of_answer_create_path form_id: form.id, params: { forms_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
       end
 
       it "saves the answer type to session" do
-        expect(session[:page]).to eq({"answer_type": subject.answer_type})
+        expect(session[:page]).to eq({ "answer_type": type_of_answer_form.answer_type })
       end
 
       it "redirects the user to the question details page" do
@@ -101,7 +101,7 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
 
     it "sets an instance variable for type_of_answer_path" do
       path = assigns(:type_of_answer_path)
-      expect(path).to eq type_of_answer_edit_path(subject.form.id)
+      expect(path).to eq type_of_answer_edit_path(type_of_answer_form.form.id)
     end
 
     it "renders the template" do
@@ -123,7 +123,7 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
 
     context "when form is valid and ready to update in the DB" do
       before do
-        post type_of_answer_update_path(form_id: page.form_id, page_id: page.id),  params: { forms_type_of_answer_form: { answer_type: "number" }}
+        post type_of_answer_update_path(form_id: page.form_id, page_id: page.id), params: { forms_type_of_answer_form: { answer_type: "number" } }
       end
 
       it "saves the updated answer type to DB" do
@@ -131,7 +131,7 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
         expect(form.answer_type).to eq "number"
       end
 
-      it "redirects the user to the question details page " do;
+      it "redirects the user to the question details page " do
         expect(response).to redirect_to edit_page_path(form.id, page.id)
       end
     end

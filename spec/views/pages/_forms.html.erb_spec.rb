@@ -6,12 +6,11 @@ describe "pages/_form.html.erb", type: :view do
   let(:is_new_page) { true }
 
   before do
-    render partial: 'pages/form', locals: { is_new_page: is_new_page,
+    render partial: "pages/form", locals: { is_new_page:,
                                             form_object: form,
                                             page_object: question,
-                                            action_path: 'http://example.com',
-                                            change_answer_type_path: "http://change-me-please.com"
-    }
+                                            action_path: "http://example.com",
+                                            change_answer_type_path: "http://change-me-please.com" }
   end
 
   it "has a form with correct action" do
@@ -19,7 +18,7 @@ describe "pages/_form.html.erb", type: :view do
   end
 
   it "has a hidden field for the answer type" do
-    expect(rendered).to have_field('page[answer_type]', with: question.answer_type, type: :hidden)
+    expect(rendered).to have_field("page[answer_type]", with: question.answer_type, type: :hidden)
   end
 
   it "has a field with the question text" do
@@ -31,30 +30,30 @@ describe "pages/_form.html.erb", type: :view do
   end
 
   it "has an unchecked optional checkbox" do
-    expect(rendered).to have_unchecked_field('page[is_optional]')
+    expect(rendered).to have_unchecked_field("page[is_optional]")
   end
 
   it "has a link to change the answer type" do
-    expect(rendered).to have_link(text: "Change", href:"http://change-me-please.com")
+    expect(rendered).to have_link(text: "Change", href: "http://change-me-please.com")
   end
 
   it "has a submit button with the correct text" do
-    expect(rendered).to have_button('Save and add next question')
+    expect(rendered).to have_button("Save and add next question")
   end
 
   it "does not have a delete button" do
-    expect(rendered).to_not have_button('delete')
+    expect(rendered).not_to have_button("delete")
   end
 
   context "when it is not a new page" do
     let(:is_new_page) { false }
 
     it "has no hidden field for the answer type" do
-      expect(rendered).not_to have_field('page[answer_type]', type: :hidden)
+      expect(rendered).not_to have_field("page[answer_type]", type: :hidden)
     end
 
     it "has a delete button" do
-      expect(rendered).to have_button('delete')
+      expect(rendered).to have_button("delete")
     end
   end
 end
