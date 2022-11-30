@@ -137,9 +137,6 @@ en:
         hint_text: Hint text (optional)
         question_short_name: Question short name (optional)
         question_text: Question text
-    legend:
-      page:
-        answer_type: What kind of answer do you need to this question?
   home:
     create_a_form: Create a form
     form_name_heading: Form name
@@ -208,6 +205,7 @@ en:
     privacy_policy_form: Provide a link to privacy information for this form
     service_unavailable: Sorry, the service is unavailable
     set_email_form: Set the email address for completed forms
+    type_of_answer: What kind of answer do you need to this question?
     what_happens_next_form: Form submitted page
     your_form_is_live: Your form is live
   pages:
