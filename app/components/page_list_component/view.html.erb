@@ -7,44 +7,43 @@
             <div class="govuk-summary-list__row">
 
               <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
-              <%= question_text_with_optional_suffix(page) %>
+                <%= question_text_with_optional_suffix(page) %>
               </dt>
 
               <dd class="govuk-summary-list__actions govuk-!-padding-bottom-6">
 
-              <div class="govuk-button-group form-action-group app-page-list__button-group">
-                <% if show_up_button(index) %>
-                  <%= f.govuk_submit t("forms.form_overview.move_up_html", title: page.question_text), secondary: true, name: 'move_direction[up]', value: page.id %>
-                <% end %>
-                <% if show_down_button(index)  %>
-                  <%= f.govuk_submit t("forms.form_overview.move_down_html", title: page.question_text), secondary: true, name: 'move_direction[down]', value: page.id %>
-                <% end %>
-              </div>
+                <div class="govuk-button-group form-action-group app-page-list__button-group">
+                  <% if show_up_button(index) %>
+                    <%= f.govuk_submit t("forms.form_overview.move_up_html", title: page.question_text), secondary: true, name: 'move_direction[up]', value: page.id %>
+                  <% end %>
+                  <% if show_down_button(index)  %>
+                    <%= f.govuk_submit t("forms.form_overview.move_down_html", title: page.question_text), secondary: true, name: 'move_direction[down]', value: page.id %>
+                  <% end %>
+                </div>
 
-              <%= govuk_link_to edit_page_path(@form_id, page) do %>
-                <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= page.question_text %></span>
-              <% end %>
+                <%= govuk_link_to edit_page_path(@form_id, page) do %>
+                  <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= page.question_text %></span>
+                <% end %>
 
               </dd>
 
             </div>
           </dl>
-
         <% end %>
+      <% end %>
     </div>
   <% end %>
-<% end %>
-  <% else %>
+<% else %>
   <% @pages.each do |page| %>
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
-        <%= question_text_with_optional_suffix(page) %>
+          <%= question_text_with_optional_suffix(page) %>
         </dt>
         <dd class="govuk-summary-list__actions">
-        <%= govuk_link_to edit_page_path(@form_id, page) do %>
-          <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= page.question_text %></span>
-        <% end %>
+          <%= govuk_link_to edit_page_path(@form_id, page) do %>
+            <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= page.question_text %></span>
+          <% end %>
         </dd>
       </div>
     </dl>
