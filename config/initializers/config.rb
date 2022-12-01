@@ -56,3 +56,11 @@ Config.setup do |config|
   #
   # config.evaluate_erb_in_yaml = true
 end
+
+# Add deployment specific settings, which overide those in development, production etc.
+Rails.application.config.to_prepare do
+  environment_name = ENV.fetch("PAAS_ENVIRONMENT", "unknown-environment").downcase.strip
+  source = Rails.root.join("config", "settings", "named_environments", "paas_#{environment_name}.yml")
+  Settings.add_source!(source)
+  Settings.reload!
+end

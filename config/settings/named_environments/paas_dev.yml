@@ -1,0 +1,5 @@
+# Used to add feature flags in the app to control access to certain features.
+features:
+  task_list_statuses: true
+  submission_email_confirmation: true
+  reorder_pages: true
