@@ -12,6 +12,7 @@ class PagesController < ApplicationController
     @page = Page.new(page_params)
 
     if @page.save
+      clear_questions_session_data
       handle_submit_action
     else
       render :new, status: :unprocessable_entity
@@ -37,7 +38,7 @@ class PagesController < ApplicationController
 private
 
   def page_params
-    params.require(:page).permit(:question_text, :question_short_name, :hint_text, :answer_type, :is_optional).merge(form_id: @form.id).merge(session:)
+    params.require(:page).permit(:question_text, :question_short_name, :hint_text, :answer_type, :is_optional).merge(form_id: @form.id)
   end
 
   def fetch_form
