@@ -1,20 +1,20 @@
 <% set_page_title(title_with_error_prefix(t("page_titles.new_page_form"), @page.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_pages_path(@form)) %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-
     <h1 class="govuk-heading-l">
-      <span class="govuk-caption-l"><%= t("pages.question") %> <%= @page.number(@form) %></span>
+      <span class="govuk-caption-l"><%= t("pages.question") %> <%= @form.page_number(@page) %></span>
       <span class="govuk-visually-hidden"> - </span>
       <%= t("pages.heading") %>
     </h1>
 
-    <%= form_with model: [@form, @page], url: create_page_path(@form) do |f| %>
-      <%= render :partial => 'form', locals: { f: f } %>
-      <%= f.govuk_submit @page.has_next_page? ? t("pages.submit_edit") : t("pages.submit_add") do %>
-        <%= f.govuk_submit t('pages.submit_save'), name: :save_preview, secondary: true %>
-      <% end %>
-    <% end %>
+    <%= render :partial => 'form', locals: { is_new_page: true,
+                                             form_object: @form,
+                                             page_object: @page,
+                                             action_path: create_page_path(@form),
+                                             change_answer_type_path: type_of_answer_new_path(@form)
+    } %>
 
     <p class="govuk-body">
       <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(@form) %>

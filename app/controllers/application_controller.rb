@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   before_action :check_service_unavailable
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
+  before_action :clear_questions_session_data
+
   def check_service_unavailable
     if ENV["SERVICE_UNAVAILABLE"].present?
       render "errors/service_unavailable", status: :service_unavailable, formats: :html
@@ -25,5 +27,9 @@ class ApplicationController < ActionController::Base
     end
     payload[:request_id] = request.request_id
     payload[:form_id] = params[:form_id] if params[:form_id].present?
+  end
+
+  def clear_questions_session_data
+    session.delete(:page) if session[:page].present?
   end
 end

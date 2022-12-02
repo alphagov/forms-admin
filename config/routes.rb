@@ -40,13 +40,28 @@ Rails.application.routes.draw do
     scope "/pages" do
       get "/" => "page_list#edit", as: :form_pages
       post "/" => "page_list#update"
-      get "/:page_id/edit" => "pages#edit", as: :edit_page
-      patch "/:page_id/edit" => "pages#update", as: :update_page
       post "/move-page" => "page_list#move_page", as: :move_page
-      get "/new" => "pages#new", as: :new_page
-      post "/new" => "pages#create", as: :create_page
-      get "/:page_id/delete" => "forms/delete_confirmation#delete", as: :delete_page
-      delete "/:page_id/delete" => "forms/delete_confirmation#destroy", as: :destroy_page
+
+      scope "/new" do
+        get "/type-of-answer" => "pages/type_of_answer#new", as: :type_of_answer_new
+        post "/type-of-answer" => "pages/type_of_answer#create", as: :type_of_answer_create
+        get "/" => "pages#new", as: :new_page
+        post "/" => "pages#create", as: :create_page
+      end
+
+      scope "/:page_id" do
+        scope "/edit" do
+          get "/type-of-answer" => "pages/type_of_answer#edit", as: :type_of_answer_edit
+          post "/type-of-answer" => "pages/type_of_answer#update", as: :type_of_answer_update
+          get "/" => "pages#edit", as: :edit_page
+          patch "/" => "pages#update", as: :update_page
+        end
+
+        scope "/delete" do
+          get "/" => "forms/delete_confirmation#delete", as: :delete_page
+          delete "/" => "forms/delete_confirmation#destroy", as: :destroy_page
+        end
+      end
     end
   end
 

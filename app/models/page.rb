@@ -15,13 +15,6 @@ class Page < ActiveResource::Base
     attributes.include?("next_page") && !attributes["next_page"].nil?
   end
 
-  def number(form)
-    # If this page is in form, return the position, else it must be new so
-    # return the number if it was inserted at the end
-    index = form.pages.index(self)
-    (index.nil? ? form.pages.length : index) + 1
-  end
-
   def convert_is_optional_to_boolean
     self.is_optional = is_optional_value
   end
@@ -30,6 +23,10 @@ class Page < ActiveResource::Base
     return false unless %i[up down].include? direction
 
     put(direction)
+  end
+
+  def submit
+    save!
   end
 
 private

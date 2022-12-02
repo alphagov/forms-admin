@@ -27,7 +27,7 @@ describe FormTaskListService do
 
       it "has a link to add new pages/questions (if no pages/questions exist)" do
         expect(section_rows[1][:task_name]).to eq "Add and edit your questions"
-        expect(section_rows[1][:path]).to eq "/forms/1/pages/new"
+        expect(section_rows[1][:path]).to eq "/forms/1/pages/new/type-of-answer"
       end
 
       it "has a link to add/edit existing pages (if pages/questions exist)" do
