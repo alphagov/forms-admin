@@ -1,6 +1,6 @@
 require "rails_helper"
 
-feature "Add/editing an address question", type: :feature do
+feature "Add/editing a single line question", type: :feature do
   let(:form) { build :form, id: 1 }
   let(:req_headers) do
     {
@@ -26,12 +26,14 @@ feature "Add/editing an address question", type: :feature do
   context "when a form has no existing pages" do
     let(:pages) { [] }
 
-    scenario "add an address question" do
-      when_i_viewing_an_existing_form
-      and_i_want_to_create_or_edit_a_page
-      and_i_select_a_address_option
-      and_i_provide_a_question_text
-      and_i_save_and_create_another
+    scenario "add a question for each type of answer" do
+      Page::ANSWER_TYPES.each do |answer_type|
+        when_i_viewing_an_existing_form
+        and_i_want_to_create_or_edit_a_page
+        and_i_select_a_type_of_answer_option(answer_type)
+        and_i_provide_a_question_text
+        and_i_save_and_create_another
+      end
     end
   end
 
@@ -42,14 +44,16 @@ feature "Add/editing an address question", type: :feature do
       existing_pages
     end
 
-    scenario "add an address question" do
-      when_i_viewing_an_existing_form
-      and_i_want_to_create_or_edit_a_page
-      and_i_can_see_a_list_of_existing_pages
-      and_i_start_adding_a_new_question
-      and_i_select_a_address_option
-      and_i_provide_a_question_text
-      and_i_save_and_create_another
+    scenario "add a question for each type of answer" do
+      Page::ANSWER_TYPES.each do |answer_type|
+        when_i_viewing_an_existing_form
+        and_i_want_to_create_or_edit_a_page
+        and_i_can_see_a_list_of_existing_pages
+        and_i_start_adding_a_new_question
+        and_i_select_a_type_of_answer_option(answer_type)
+        and_i_provide_a_question_text
+        and_i_save_and_create_another
+      end
     end
   end
 
@@ -63,9 +67,9 @@ private
     click_on "Add and edit your questions"
   end
 
-  def and_i_select_a_address_option
+  def and_i_select_a_type_of_answer_option(answer_type)
     expect(page.find("h1")).to have_text "What kind of answer do you need to this question?"
-    choose "Address"
+    choose I18n.t("helpers.label.page.answer_type_options.names.#{answer_type}")
     click_button "Save and continue"
     expect(page.find("h1")).to have_content "Edit question"
   end
