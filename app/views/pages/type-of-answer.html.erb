@@ -12,7 +12,7 @@
             ->(option) { I18n.t('helpers.label.page.answer_type_options.names.' + option) },
             ->(option) { I18n.t('helpers.label.page.answer_type_options.descriptions.' + option) },
             legend: { text: t('page_titles.type_of_answer'), size: 'l', tag: 'h1' },
-            caption: { text: "#{t("pages.question")} #{@type_of_answer_form.number(@form)}" , size: 'l' },
+            caption: { text: "#{t("pages.question")} #{@form.page_number(@page)}" , size: 'l' },
           )  %>
       <%= f.govuk_submit t('save_and_continue'), value: "true", name: :set_answer_type %>
     <% end %>

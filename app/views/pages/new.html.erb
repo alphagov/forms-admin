@@ -4,7 +4,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      <span class="govuk-caption-l"><%= t("pages.question") %> <%= @page.number(@form) %></span>
+      <span class="govuk-caption-l"><%= t("pages.question") %> <%= @form.page_number(@page) %></span>
       <span class="govuk-visually-hidden"> - </span>
       <%= t("pages.heading") %>
     </h1>

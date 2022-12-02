@@ -19,7 +19,7 @@ class Pages::TypeOfAnswerController < PagesController
 
   def edit
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    @type_of_answer_form = Forms::TypeOfAnswerForm.new(answer_type: @page.answer_type)
+    @type_of_answer_form = Forms::TypeOfAnswerForm.new(answer_type: @page.answer_type, page: @page)
     @type_of_answer_path = type_of_answer_update_path(@form)
     render "pages/type-of-answer"
   end

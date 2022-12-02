@@ -41,16 +41,4 @@ RSpec.describe Forms::TypeOfAnswerForm, type: :model do
       expect(session_mock[:page]).to include(answer_type: "email")
     end
   end
-
-  describe "#number" do
-    it "returns 1 if there are no other pages" do
-      expect(type_of_answer_form.number(form)).to eq 1
-    end
-
-    it "returns next available question number i.e 6 if there is already 5 existing pages for the form" do
-      pages = build_list :page, 5
-      form.pages = pages
-      expect(type_of_answer_form.number(form)).to eq 6
-    end
-  end
 end
