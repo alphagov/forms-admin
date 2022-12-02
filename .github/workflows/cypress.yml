@@ -51,7 +51,7 @@ jobs:
       - name: Run Frontend build
         run: yarn build & yarn build:css
       - name: Run Cypress tests
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v5
         with:
           install: false
           start: yarn run ci, docker run -p 9292:9292 --network=host -e DATABASE_URL=postgres://rails:password@localhost:5432 -e API_KEY=test --name forms-api forms-api
