@@ -71,6 +71,10 @@ RSpec.configure do |config|
     User.create!(email: "email@example.com", organisation_slug: "test-org")
   end
 
+  config.before(:example, type: :feature) do |_example|
+    User.create!(email: "email@example.com", organisation_slug: "test-org")
+  end
+
   config.include ViewComponent::TestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
 end
