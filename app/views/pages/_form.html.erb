@@ -11,24 +11,49 @@
 
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
-  <%= f.govuk_check_boxes_fieldset :is_optional, multiple: false, legend: { text: t("pages.add_rules_legend") , size: 'm' } do %>
-    <%= f.govuk_check_box :is_optional, true,0, multiple: false,
-                          small: true,
-                          label: { text: t("pages.make_optional_text")  },
-                          hint: { text: t("pages.make_optional_hint") } %>
+  <% if @page.answer_type == 'selection' %>
+    <%= f.hidden_field :is_optional %>
+  <% else %>
+    <%= f.govuk_check_boxes_fieldset :is_optional, multiple: false, legend: { text: t("pages.add_rules_legend") , size: 'm' } do %>
+      <%= f.govuk_check_box :is_optional, true,0, multiple: false,
+                            small: true,
+                            label: { text: t("pages.make_optional_text")  },
+                            hint: { text: t("pages.make_optional_hint") } %>
 
+    <% end %>
   <% end %>
 
-  <%= govuk_summary_list do |summary_list|
-    summary_list.row do |row|
+  <%# TODO: move to component? %>
+  <%= govuk_summary_list do |summary_list| %>
+    <%= summary_list.row do |row|
       row.key(text: "Answer type")
       row.value(text: t("helpers.label.page.answer_type_options.names.#{page_object.answer_type}"))
       row.action(text: "Change",
                  href: change_answer_type_path,
-                 visually_hidden_text: "Answer type " + t("helpers.label.page.answer_type_options.names.#{page_object.answer_type}")
-      )
-    end
-  end %>
+                 visually_hidden_text: "Answer type"
+      ) end %>
+
+      <% if (@page.answer_type == "selection") %>
+        <%= summary_list.row do |row|
+          row.key(text: "Options")
+          row.value(text: @page.show_selection_options)
+          row.action(text: "Change",
+                    href: change_selections_settings_path,
+                    visually_hidden_text: "Options") end %>
+        <%= summary_list.row do |row|
+          row.key(text: "Only select one option")
+          row.value(text: @page.answer_settings.only_one_option ? "Yes" : "No")
+          row.action(text: "Change",
+                    href: change_selections_settings_path,
+                    visually_hidden_text: "Only select one option") end %>
+        <%= summary_list.row do |row|
+          row.key(text: "Include an option for ‘None of the above’")
+          row.value(text: @page.is_optional? ? "Yes" : "No")
+          row.action(text: "Change",
+                    href: change_selections_settings_path,
+                    visually_hidden_text: "Include an option for ‘None of the above’") end %>
+    <% end %>
+  <% end %>
 
   <%= f.govuk_submit page_object.has_next_page? ? t("pages.submit_edit") : t("pages.submit_add") do %>
     <%= f.govuk_submit t('pages.submit_save'), name: :save_preview, secondary: true %>

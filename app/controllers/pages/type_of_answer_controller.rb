@@ -10,7 +10,7 @@ class Pages::TypeOfAnswerController < PagesController
     @type_of_answer_form = Forms::TypeOfAnswerForm.new(answer_type_form_params)
 
     if @type_of_answer_form.submit(session)
-      redirect_to new_page_path(@form)
+      redirect_to next_page_path(@form, @type_of_answer_form.answer_type, :create)
     else
       @type_of_answer_path = type_of_answer_create_path(@form)
       render "pages/type-of-answer"
@@ -28,9 +28,10 @@ class Pages::TypeOfAnswerController < PagesController
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     @type_of_answer_form = Forms::TypeOfAnswerForm.new(answer_type_form_params)
     @page.answer_type = @type_of_answer_form.answer_type if @type_of_answer_form.valid?
+    @page.answer_settings = nil if @type_of_answer_form.valid?
 
     if @type_of_answer_form.valid? && @page.save!
-      redirect_to edit_page_path(@form)
+      redirect_to next_page_path(@form, @type_of_answer_form.answer_type, :update)
     else
       @type_of_answer_path = type_of_answer_update_path(@form)
       render "pages/type-of-answer"
@@ -38,6 +39,20 @@ class Pages::TypeOfAnswerController < PagesController
   end
 
 private
+
+  def next_page_path(form, answer_type, action)
+    if answer_type == "selection"
+      if action == :create
+        selections_settings_new_path(form)
+      else
+        selections_settings_edit_path(form)
+      end
+    elsif action == :create
+      new_page_path(@form)
+    else
+      edit_page_path(@form)
+    end
+  end
 
   def answer_type_form_params
     form = Form.find(params[:form_id])

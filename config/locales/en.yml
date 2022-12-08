@@ -124,6 +124,7 @@ en:
             national_insurance_number: Requires an answer in the format of a National Insurance number
             number: Requires a numerical answer
             phone_number: Requires an answer in the format of a phone number
+            selection: Create a list of options for people to select from
             single_line: For a short answer
           names:
             address: Address
@@ -133,6 +134,7 @@ en:
             national_insurance_number: National Insurance number
             number: Number
             phone_number: Phone number
+            selection: Selection from a list
             single_line: Single line of text
         hint_text: Hint text (optional)
         question_short_name: Question short name (optional)

@@ -1,0 +1,11 @@
+en:
+  activemodel:
+    errors:
+      models:
+        forms/selections_settings_form:
+          attributes:
+            selection_options:
+              blank: Add text for all of your options
+              uniqueness: All your options must be unique
+              minimum: Enter at least 2 options
+              maximum: You cannot have more than 20 options

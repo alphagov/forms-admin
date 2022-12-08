@@ -1,0 +1,27 @@
+.app-select-options {
+  &__list-item {
+    max-width: 20.5em;
+
+    @media (min-width: mq-get-breakpoint-width(tablet)) {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: flex-start;
+      max-width: none;
+    }
+  }
+
+  &__form-group {
+    @media (min-width: mq-get-breakpoint-width(tablet)) {
+      flex: 1 0 auto;
+      max-width: 20.5em;
+    }
+  }
+
+  &__button {
+    @media (min-width: mq-get-breakpoint-width(tablet)) {
+      flex: 0 0 5em;
+      width: auto;
+    }
+  }
+}

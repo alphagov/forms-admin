@@ -1,0 +1,54 @@
+<% set_page_title(title_with_error_prefix(t("page_titles.new_page_form"), @selections_settings_form.errors.any?)) %>
+
+<%# Send back link to answer type selection / edit page view %>
+<% content_for :back_link, govuk_back_link_to(form_pages_path(@form)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: [@form, @selections_settings_form], url: @selections_settings_path do |f| %>
+      <%= f.govuk_error_summary %>
+      <%# TODO: internationalize %>
+      <%# TODO: accessibility checking %>
+
+      <%#
+        Browsers use the first submit button in a form when the enter key is pressed, so we have to put this hidden button here,
+        otherwise pressing the enter key will delete the first item in the list instead of submnitting the form.
+      %>
+      <%= f.submit t('save_and_continue'), hidden: true  %>
+
+      <span class="govuk-caption-l"><%= t("pages.question") %> <%= @form.page_number(@page) %></span>
+      <h1 class="govuk-heading-l">Create a list of options</h1>
+
+      <%= f.govuk_check_boxes_fieldset 'only_one_option', multiple: false, legend: { text: "List settings", size: 'm' } do %>
+        <%= f.govuk_check_box 'only_one_option', "true", 0, multiple: false,
+                          small: true, label: { text: "People can only select one option"  }%>
+        <%= f.govuk_check_box 'include_none_of_the_above', "true", 0, multiple: false,
+                          small: true, label: { text: "Include an option for ‘None of the above’"  }%>
+      <% end %>
+
+      <%= f.govuk_fieldset legend: { text: 'Add options to your list' } do %>
+        <p class="govuk-hint">You can add up to 20 options</p>
+        <ul class="govuk-list app-select-options">
+          <% @selections_settings_form.selection_options.each_with_index do |selection_option, index| %>
+            <%= f.fields_for :selection_options, selection_option, index: index do |selection_options_form| %>
+              <li class="app-select-options__list-item">
+                <%= selection_options_form.govuk_text_field :name, label: { text: "Option #{index + 1}" }, class: "govuk-input--width-20", form_group: { classes: "app-select-options__form-group" } %>
+                <%= f.govuk_submit "Remove", class: "app-select-options__button", name: :remove, value: index, secondary: true %>
+              </li>
+            <% end %>
+          <% end %>
+        </ul>
+      <% end %>
+
+      <div>
+      <%if @selections_settings_form.selection_options.length < 20 %>
+        <%= f.govuk_submit "Add another option", name: :add_another, secondary: true  %>
+        <% else %>
+        <p class="govuk-inset-text">You cannot add any more options as you have reached the maximum of 20 options.</p>
+      <% end %>
+      </div>
+
+      <%= f.govuk_submit t('save_and_continue') %>
+    <% end %>
+  </div>
+</div>
