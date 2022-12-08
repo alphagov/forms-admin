@@ -11,7 +11,7 @@ class PagesController < ApplicationController
   end
 
   def create
-    answer_settings = session[:page]["answer_settings"]
+    answer_settings = session[:page]["answer_settings"] if session[:page].present?
     @page = Page.new(page_params.merge(answer_settings:))
 
     if @page.save
