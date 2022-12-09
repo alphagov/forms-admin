@@ -12,5 +12,10 @@ FactoryBot.define do
     trait :without_selection_answer_type do
       answer_type { %w[single_line number address date email national_insurance_number phone_number long_text].sample }
     end
+
+    trait :with_selections_settings do
+      answer_type { "selection" }
+      answer_settings { { only_one_option: "true", selection_options: [Forms::SelectionOption.new({ name: "Option 1" }), Forms::SelectionOption.new({ name: "Option 2" })] } }
+    end
   end
 end
