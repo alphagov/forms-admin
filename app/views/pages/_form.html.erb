@@ -41,17 +41,17 @@
                     href: change_selections_settings_path,
                     visually_hidden_text: "Options") end %>
         <%= summary_list.row do |row|
-          row.key(text: "Only select one option")
-          row.value(text: page_object.answer_settings.only_one_option == "true" ? "Yes" : "No")
+          row.key(text: t("selections_settings.only_one_option"))
+          row.value(text: page_object.answer_settings.only_one_option == "true" ? t("selections_settings.yes") : t("selections_settings.no"))
           row.action(text: "Change",
                     href: change_selections_settings_path,
-                    visually_hidden_text: "Only select one option") end %>
+                    visually_hidden_text: t("selections_settings.only_one_option")) end %>
         <%= summary_list.row do |row|
-          row.key(text: "Include an option for ‘None of the above’")
-          row.value(text: page_object.is_optional? ? "Yes" : "No")
+          row.key(text: t("selections_settings.include_none_of_the_above"))
+          row.value(text: page_object.is_optional? ? t("selections_settings.yes") : t("selections_settings.no"))
           row.action(text: "Change",
                     href: change_selections_settings_path,
-                    visually_hidden_text: "Include an option for ‘None of the above’") end %>
+                    visually_hidden_text: t("selections_settings.include_none_of_the_above")) end %>
     <% end %>
   <% end %>
 

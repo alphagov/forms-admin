@@ -7,7 +7,6 @@
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: [@form, @selections_settings_form], url: @selections_settings_path do |f| %>
       <%= f.govuk_error_summary %>
-      <%# TODO: internationalize %>
       <%# TODO: accessibility checking %>
 
       <%#
@@ -17,23 +16,23 @@
       <%= f.submit t('save_and_continue'), hidden: true  %>
 
       <span class="govuk-caption-l"><%= t("pages.question") %> <%= @form.page_number(@page) %></span>
-      <h1 class="govuk-heading-l">Create a list of options</h1>
+      <h1 class="govuk-heading-l"><%= t("selections_settings.heading") %></h1>
 
-      <%= f.govuk_check_boxes_fieldset 'only_one_option', multiple: false, legend: { text: "List settings", size: 'm' } do %>
+      <%= f.govuk_check_boxes_fieldset 'list_settings', multiple: false, legend: { text: t("selections_settings.list_settings"), size: 'm' } do %>
         <%= f.govuk_check_box 'only_one_option', "true", 0, multiple: false,
-                          small: true, label: { text: "People can only select one option"  }%>
+                          small: true, label: { text: t("selections_settings.only_one_option")  }%>
         <%= f.govuk_check_box 'include_none_of_the_above', "true", 0, multiple: false,
-                          small: true, label: { text: "Include an option for ‘None of the above’"  }%>
+                          small: true, label: { text: t("selections_settings.include_none_of_the_above")  }%>
       <% end %>
 
-      <%= f.govuk_fieldset legend: { text: 'Add options to your list' } do %>
-        <p class="govuk-hint">You can add up to 20 options</p>
+      <%= f.govuk_fieldset legend: { text: t("selections_settings.add_options") } do %>
+        <p class="govuk-hint"><%= t("selections_settings.add_options_hint") %></p>
         <ul class="govuk-list app-select-options">
           <% @selections_settings_form.selection_options.each_with_index do |selection_option, index| %>
             <%= f.fields_for :selection_options, selection_option, index: index do |selection_options_form| %>
               <li class="app-select-options__list-item">
-                <%= selection_options_form.govuk_text_field :name, label: { text: "Option #{index + 1}" }, class: "govuk-input--width-20", form_group: { classes: "app-select-options__form-group" } %>
-                <%= f.govuk_submit "Remove", class: "app-select-options__button", name: :remove, value: index, secondary: true %>
+                <%= selection_options_form.govuk_text_field :name, label: { text: t("selections_settings.option", number: index + 1) }, class: "govuk-input--width-20", form_group: { classes: "app-select-options__form-group" } %>
+                <%= f.govuk_submit t("selections_settings.remove"), class: "app-select-options__button", name: :remove, value: index, secondary: true %>
               </li>
             <% end %>
           <% end %>
@@ -42,9 +41,9 @@
 
       <div>
       <%if @selections_settings_form.selection_options.length < 20 %>
-        <%= f.govuk_submit "Add another option", name: :add_another, secondary: true  %>
+        <%= f.govuk_submit t("selections_settings.add_another"), name: :add_another, secondary: true  %>
         <% else %>
-        <p class="govuk-inset-text">You cannot add any more options as you have reached the maximum of 20 options.</p>
+        <p class="govuk-inset-text"><%= t("selections_settings.cannot_add_more_options") %></p>
       <% end %>
       </div>
 
