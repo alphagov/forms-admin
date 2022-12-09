@@ -4,7 +4,7 @@ class Pages::SelectionsSettingsController < PagesController
     @selections_settings_form = Forms::SelectionsSettingsForm.new(answer_settings)
     @selections_settings_path = selections_settings_create_path(@form)
     @back_link_url = type_of_answer_new_path(@form)
-    render "pages/selections_settings"
+    render selection_settings_view
   end
 
   def create
@@ -14,14 +14,14 @@ class Pages::SelectionsSettingsController < PagesController
 
     if params[:add_another]
       @selections_settings_form.add_another
-      render "pages/selections_settings"
+      render selection_settings_view
     elsif params[:remove]
       @selections_settings_form.remove(params[:remove].to_i)
-      render "pages/selections_settings"
+      render selection_settings_view
     elsif @selections_settings_form.submit(session)
       redirect_to new_page_path(@form)
     else
-      render "pages/selections_settings"
+      render selection_settings_view
     end
   end
 
@@ -30,7 +30,7 @@ class Pages::SelectionsSettingsController < PagesController
     @selections_settings_path = selections_settings_update_path(@form)
     @selections_settings_form = Forms::SelectionsSettingsForm.new(load_form_from_params(@page.answer_settings))
     @back_link_url = edit_page_path(@form, @page)
-    render "pages/selections_settings"
+    render selection_settings_view
   end
 
   def update
@@ -41,17 +41,17 @@ class Pages::SelectionsSettingsController < PagesController
 
     if params[:add_another]
       @selections_settings_form.add_another
-      render "pages/selections_settings"
+      render selection_settings_view
     elsif params[:remove]
       @selections_settings_form.remove(params[:remove].to_i)
-      render "pages/selections_settings"
+      render selection_settings_view
     else
       @selections_settings_form.assign_values_to_page(@page)
 
       if @page.save!
         redirect_to edit_page_path(@form)
       else
-        render "pages/selections_settings"
+        render selection_settings_view
       end
     end
   end
@@ -87,5 +87,9 @@ private
 
   def selections_settings_form_params
     params.require(:forms_selections_settings_form).permit(:only_one_option, :include_none_of_the_above, selection_options: [:name])
+  end
+
+  def selection_settings_view
+    "pages/selections_settings"
   end
 end
