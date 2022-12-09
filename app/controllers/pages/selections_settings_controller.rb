@@ -3,12 +3,14 @@ class Pages::SelectionsSettingsController < PagesController
     answer_settings = load_answer_settings_from_session
     @selections_settings_form = Forms::SelectionsSettingsForm.new(answer_settings)
     @selections_settings_path = selections_settings_create_path(@form)
+    @back_link_url = type_of_answer_new_path(@form)
     render "pages/selections_settings"
   end
 
   def create
     @selections_settings_form = Forms::SelectionsSettingsForm.new(selections_settings_form_params)
     @selections_settings_path = selections_settings_create_path(@form)
+    @back_link_url = type_of_answer_new_path(@form)
 
     if params[:add_another]
       @selections_settings_form.add_another
@@ -27,6 +29,7 @@ class Pages::SelectionsSettingsController < PagesController
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     @selections_settings_path = selections_settings_update_path(@form)
     @selections_settings_form = Forms::SelectionsSettingsForm.new(load_form_from_params(@page.answer_settings))
+    @back_link_url = edit_page_path(@form, @page)
     render "pages/selections_settings"
   end
 
@@ -34,6 +37,7 @@ class Pages::SelectionsSettingsController < PagesController
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     @selections_settings_path = selections_settings_update_path(@form)
     @selections_settings_form = Forms::SelectionsSettingsForm.new(selections_settings_form_params)
+    @back_link_url = edit_page_path(@form, @page)
 
     if params[:add_another]
       @selections_settings_form.add_another
