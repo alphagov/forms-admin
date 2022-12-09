@@ -42,7 +42,7 @@
                     visually_hidden_text: "Options") end %>
         <%= summary_list.row do |row|
           row.key(text: "Only select one option")
-          row.value(text: page_object.answer_settings.only_one_option ? "Yes" : "No")
+          row.value(text: page_object.answer_settings.only_one_option == "true" ? "Yes" : "No")
           row.action(text: "Change",
                     href: change_selections_settings_path,
                     visually_hidden_text: "Only select one option") end %>

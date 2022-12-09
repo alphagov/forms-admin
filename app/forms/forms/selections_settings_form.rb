@@ -36,11 +36,11 @@ class Forms::SelectionsSettingsForm
     session[:page][:is_optional] = include_none_of_the_above
   end
 
-  def save_page(page)
+  def assign_values_to_page(page)
     return false if invalid?
 
+    page.answer_settings = answer_settings
     page.is_optional = include_none_of_the_above
-    page.save!
   end
 
   def validate_selection_options

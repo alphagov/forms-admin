@@ -42,9 +42,9 @@ class Pages::SelectionsSettingsController < PagesController
       @selections_settings_form.remove(params[:remove].to_i)
       render "pages/selections_settings"
     else
-      @page.answer_settings = @selections_settings_form.answer_settings if @selections_settings_form.valid?
+      @selections_settings_form.assign_values_to_page(@page)
 
-      if @selections_settings_form.save_page(@page)
+      if @page.save!
         redirect_to edit_page_path(@form)
       else
         render "pages/selections_settings"
