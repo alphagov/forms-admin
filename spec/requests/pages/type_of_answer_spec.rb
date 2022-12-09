@@ -56,6 +56,7 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
       before do
         post type_of_answer_create_path form_id: form.id, params: { forms_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
       end
+
       context "when answer type is not selection" do
         let(:type_of_answer_form) { build :type_of_answer_form, :without_selection_answer_type, form: }
 
