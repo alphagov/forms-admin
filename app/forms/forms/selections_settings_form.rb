@@ -8,12 +8,6 @@ class Forms::SelectionsSettingsForm
   attr_accessor :selection_options, :only_one_option, :include_none_of_the_above
 
   validate :selection_options, :validate_selection_options
-  # TODO: try to make this initialiser neater
-  def initialize(params = {})
-    @selection_options = params[:selection_options] ? params[:selection_options].values.map { |s| Forms::SelectionOption.new(s) } : []
-    @only_one_option = params[:only_one_option]
-    @include_none_of_the_above = params[:include_none_of_the_above]
-  end
 
   def add_another
     selection_options.append(Forms::SelectionOption.new({ name: "" }))

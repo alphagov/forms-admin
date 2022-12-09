@@ -50,6 +50,7 @@ RSpec.describe Forms::SelectionsSettingsForm, type: :model do
     let(:session_mock) { {} }
 
     it "returns false if the form is invalid" do
+      selections_settings_form.selection_options = []
       expect(selections_settings_form.submit(session_mock)).to be_falsey
     end
 
@@ -96,6 +97,7 @@ RSpec.describe Forms::SelectionsSettingsForm, type: :model do
     let(:page) { build :page, :with_hints, answer_type: "selection", id: 1, form_id: 1 }
 
     it "returns false if the form is invalid" do
+      selections_settings_form.selection_options = []
       expect(selections_settings_form.submit(page)).to be_falsey
     end
 
