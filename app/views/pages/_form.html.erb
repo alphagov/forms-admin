@@ -30,7 +30,7 @@
       row.value(text: t("helpers.label.page.answer_type_options.names.#{page_object.answer_type}"))
       row.action(text: "Change",
                  href: change_answer_type_path,
-                 visually_hidden_text: "Answer type"
+                 visually_hidden_text: "Answer type " + t("helpers.label.page.answer_type_options.names.#{page_object.answer_type}")
       ) end %>
 
       <% if (page_object.answer_type == "selection") %>
