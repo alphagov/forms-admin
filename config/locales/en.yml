@@ -276,7 +276,7 @@ en:
     'no': 'No'
     only_one_option: People can only select one option
     option: Option %{number}
-    remove: Remove
+    remove_html: Remove <span class="govuk-visually-hidden">option %{option_number}</span>
     'yes': 'Yes'
   service_unavailable:
     body_html: "%{link} if you need to make changes to your forms or speak to someone about the service."
