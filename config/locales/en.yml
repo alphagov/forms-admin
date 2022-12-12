@@ -124,6 +124,7 @@ en:
             national_insurance_number: Requires an answer in the format of a National Insurance number
             number: Requires a numerical answer
             phone_number: Requires an answer in the format of a phone number
+            selection: Create a list of options for people to select from
             single_line: For a short answer
           names:
             address: Address
@@ -133,6 +134,7 @@ en:
             national_insurance_number: National Insurance number
             number: Number
             phone_number: Phone number
+            selection: Selection from a list
             single_line: Single line of text
         hint_text: Hint text (optional)
         question_short_name: Question short name (optional)
@@ -263,6 +265,19 @@ en:
     heading: Provide a link to privacy information for this form
     submit_button: Save and continue
   save_and_continue: Save and continue
+  selections_settings:
+    add_another: Add another option
+    add_options: Add options to your list
+    add_options_hint: You can add up to 20 options
+    cannot_add_more_options: You cannot add any more options as you have reached the maximum of 20 options.
+    heading: Create a list of options
+    include_none_of_the_above: Include an option for ‘None of the above’
+    list_settings: List settings
+    'no': 'No'
+    only_one_option: People can only select one option
+    option: Option %{number}
+    remove_html: Remove <span class="govuk-visually-hidden">option %{option_number}</span>
+    'yes': 'Yes'
   service_unavailable:
     body_html: "%{link} if you need to make changes to your forms or speak to someone about the service."
     title: Sorry, the service is unavailable

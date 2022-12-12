@@ -4,7 +4,7 @@ class Page < ActiveResource::Base
   self.include_format_in_path = false
   headers["X-API-Token"] = ENV["API_KEY"]
 
-  ANSWER_TYPES = %w[single_line number address date email national_insurance_number phone_number long_text].freeze
+  ANSWER_TYPES = %w[single_line number address date email national_insurance_number phone_number long_text selection].freeze
 
   belongs_to :form
   validates :question_text, presence: true
@@ -23,6 +23,10 @@ class Page < ActiveResource::Base
     return false unless %i[up down].include? direction
 
     put(direction)
+  end
+
+  def show_selection_options
+    answer_settings.selection_options.map(&:name).join(", ")
   end
 
   def submit

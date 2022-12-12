@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "pages/_form.html.erb", type: :view do
-  let(:question) { build :page, :with_hints, id: 1, form_id: 1 }
+  let(:question) { build :page, :with_hints, :without_selection_answer_type, id: 1, form_id: 1 }
   let(:form) { build :form, id: 1, pages: [question] }
   let(:is_new_page) { true }
 
@@ -10,7 +10,8 @@ describe "pages/_form.html.erb", type: :view do
                                             form_object: form,
                                             page_object: question,
                                             action_path: "http://example.com",
-                                            change_answer_type_path: "http://change-me-please.com" }
+                                            change_answer_type_path: "http://change-me-please.com",
+                                            change_selections_settings_path: "http://change-me-please.com" }
   end
 
   it "has a form with correct action" do

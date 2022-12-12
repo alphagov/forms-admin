@@ -2,5 +2,6 @@ $govuk-images-path: "./images/";
 $govuk-fonts-path: "./fonts/";
 
 @import "govuk/all";
+@import "modules/app_select_options";
 @import "../../components/task_list_component/";
 @import "../../components/page_list_component/";
