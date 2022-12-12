@@ -96,12 +96,19 @@ private
 
   def fill_in_selection_settings
     expect(page.find("h1")).to have_text "Create a list of options"
-    check "People can only select one option"
     check "Include an option for ‘None of the above’"
-    fill_in "Option 1", with: "Selection option 1"
-    fill_in "Option 2", with: "Selection option 2"
+    fill_in "Option 1", with: "Checkbox option 1"
+    fill_in "Option 2", with: "Checkbox option 2"
     click_button "Add another option"
-    fill_in "Option 3", with: "Selection option 3"
+    fill_in "Option 3", with: "Checkbox option 3"
+    click_button "Save and continue"
+    click_link "Change Options"
+    expect(page.find("h1")).to have_text "Create a list of options"
+    check "People can only select one option"
+    uncheck "Include an option for ‘None of the above’"
+    click_button "Remove option 3"
+    fill_in "Option 1", with: "Radio option 1"
+    fill_in "Option 2", with: "Radio option 2"
     click_button "Save and continue"
   end
 end
