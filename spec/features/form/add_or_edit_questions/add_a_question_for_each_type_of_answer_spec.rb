@@ -71,6 +71,7 @@ private
     expect(page.find("h1")).to have_text "What kind of answer do you need to this question?"
     choose I18n.t("helpers.label.page.answer_type_options.names.#{answer_type}")
     click_button "Save and continue"
+    fill_in_selection_settings if answer_type == "selection"
     expect(page.find("h1")).to have_content "Edit question"
   end
 
@@ -91,5 +92,16 @@ private
 
   def and_i_start_adding_a_new_question
     click_link "Add a question"
+  end
+
+  def fill_in_selection_settings
+    expect(page.find("h1")).to have_text "Create a list of options"
+    check "People can only select one option"
+    check "Include an option for ‘None of the above’"
+    fill_in "Option 1", with: "Selection option 1"
+    fill_in "Option 2", with: "Selection option 2"
+    click_button "Add another option"
+    fill_in "Option 3", with: "Selection option 3"
+    click_button "Save and continue"
   end
 end
