@@ -1,8 +1,8 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require "spec_helper"
 require "view_component/test_helpers"
-require "capybara/rspec"
 require "validate_url/rspec_matcher"
+require "selenium/webdriver"
 
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
@@ -10,6 +10,8 @@ require_relative "../config/environment"
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
+
+require_relative "support/capybara_headless_chrome"
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -66,6 +68,10 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
   config.before(:example, type: :request) do |_example|
+    User.create!(email: "email@example.com", organisation_slug: "test-org")
+  end
+
+  config.before(:example, type: :feature) do |_example|
     User.create!(email: "email@example.com", organisation_slug: "test-org")
   end
 
