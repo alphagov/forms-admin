@@ -1,0 +1,30 @@
+<%= govuk_summary_list do |summary_list| %>
+    <%= summary_list.row do |row|
+      row.key(text: "Answer type")
+      row.value(text: t("helpers.label.page.answer_type_options.names.#{@page_object.answer_type}"))
+      row.action(text: "Change",
+                 href: @change_answer_type_path,
+                 visually_hidden_text: "Answer type " + t("helpers.label.page.answer_type_options.names.#{@page_object.answer_type}")
+      ) end %>
+
+      <% if (@page_object.answer_type == "selection") %>
+        <%= summary_list.row do |row|
+          row.key(text: "Options")
+          row.value(text: @page_object.show_selection_options)
+          row.action(text: "Change",
+                    href: @change_selections_settings_path,
+                    visually_hidden_text: "Options") end %>
+        <%= summary_list.row do |row|
+          row.key(text: t("selections_settings.only_one_option"))
+          row.value(text: @page_object.answer_settings.only_one_option == "true" ? t("selections_settings.yes") : t("selections_settings.no"))
+          row.action(text: "Change",
+                    href: @change_selections_settings_path,
+                    visually_hidden_text: t("selections_settings.only_one_option")) end %>
+        <%= summary_list.row do |row|
+          row.key(text: t("selections_settings.include_none_of_the_above"))
+          row.value(text: @page_object.is_optional? ? t("selections_settings.yes") : t("selections_settings.no"))
+          row.action(text: "Change",
+                    href: @change_selections_settings_path,
+                    visually_hidden_text: t("selections_settings.include_none_of_the_above")) end %>
+    <% end %>
+  <% end %>
