@@ -28,6 +28,7 @@ RSpec.describe "Pages", type: :request do
           question_short_name: "Work address",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
+          answer_settings: nil,
         }].to_json
       end
 
@@ -39,6 +40,7 @@ RSpec.describe "Pages", type: :request do
           question_short_name: "Work address",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
+          answer_settings: nil,
         }.to_json
       end
 
