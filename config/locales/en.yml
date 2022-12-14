@@ -133,6 +133,7 @@ en:
             long_text: Multiple lines of text
             national_insurance_number: National Insurance number
             number: Number
+            organisation_name: Company or organisation’s name
             phone_number: Phone number
             selection: Selection from a list
             single_line: Single line of text

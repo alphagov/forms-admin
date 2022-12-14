@@ -4,7 +4,7 @@ FactoryBot.define do
     form { build :form }
 
     trait :without_selection_answer_type do
-      answer_type { %w[single_line number address date email national_insurance_number phone_number long_text].sample }
+      answer_type { %w[single_line number address date email national_insurance_number phone_number long_text organisation_name].sample }
     end
   end
 end
