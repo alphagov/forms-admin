@@ -52,4 +52,55 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
     end
   end
+
+  describe "translation_key_for_answer_type" do
+    let(:answer_type) { "email" }
+    let(:answer_settings) { {} }
+
+    context "with a non-selection answer type" do
+      it "returns the answer type" do
+        expect(helper.translation_key_for_answer_type(answer_type, answer_settings)).to eq "email"
+      end
+    end
+
+    context "with selection answer type" do
+      context "and 'only_one_option' set to 'true'" do
+        let(:answer_type) { "selection" }
+        let(:answer_settings) { OpenStruct.new(only_one_option: "true") }
+
+        it "returns the answer subtype" do
+          expect(helper.translation_key_for_answer_type(answer_type, answer_settings)).to eq "radio"
+        end
+      end
+
+      context "and 'only_one_option' set to 'false'" do
+        let(:answer_type) { "selection" }
+        let(:answer_settings) { OpenStruct.new(only_one_option: false) }
+
+        it "returns the answer subtype" do
+          expect(helper.translation_key_for_answer_type(answer_type, answer_settings)).to eq "checkbox"
+        end
+      end
+    end
+  end
+
+  describe "hint_for_edit_page_field" do
+    context "with an answer type that has custom text" do
+      let(:answer_type) { "email" }
+      let(:answer_settings) { {} }
+
+      it "returns the custom hint text for the answer type" do
+        expect(helper.hint_for_edit_page_field("question_text", answer_type, answer_settings)).to eq(I18n.t("helpers.hint.page.question_text.email"))
+      end
+    end
+
+    context "with an answer type that does not have custom text" do
+      let(:answer_type) { "some_random_string" }
+      let(:answer_settings) { {} }
+
+      it "returns the default hint text" do
+        expect(helper.hint_for_edit_page_field("question_text", answer_type, answer_settings)).to eq(I18n.t("helpers.hint.page.question_text.default"))
+      end
+    end
+  end
 end

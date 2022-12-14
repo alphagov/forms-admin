@@ -42,4 +42,18 @@ module ApplicationHelper
   def question_text_with_optional_suffix(page)
     page.is_optional ? t("pages.optional", question_text: page.question_text) : page.question_text
   end
+
+  def translation_key_for_answer_type(answer_type, answer_settings)
+    case answer_type
+    when "selection"
+      answer_settings.only_one_option == "true" ? "radio" : "checkbox"
+    else
+      answer_type
+    end
+  end
+
+  def hint_for_edit_page_field(field, answer_type, answer_settings)
+    key = translation_key_for_answer_type(answer_type, answer_settings)
+    t("helpers.hint.page.#{field}.#{key}", default: t("helpers.hint.page.question_text.default"))
+  end
 end

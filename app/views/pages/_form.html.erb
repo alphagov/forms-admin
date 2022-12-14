@@ -3,11 +3,11 @@
 
   <%= f.govuk_error_summary %>
 
-  <%= f.govuk_text_field :question_text, label: { size: 'm' } %>
+  <%= f.govuk_text_field :question_text, label: { size: 'm' }, hint: { text: hint_for_edit_page_field("question_text", page_object.answer_type, page_object.answer_settings) } %>
 
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
-  <%= f.govuk_text_field :hint_text, label: { size: 'm' } %>
+  <%= f.govuk_text_field :hint_text, label: { size: 'm' }, hint: { text: hint_for_edit_page_field("hint_text", page_object.answer_type, page_object.answer_settings) } %>
 
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
