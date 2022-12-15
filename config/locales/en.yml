@@ -106,11 +106,33 @@ en:
     hint:
       page:
         answer_type: The answer will be checked to make sure it’s in the selected format.
-        hint_text: Use hint text to help people answer the question. For example, to explain the format the answer should be in, or where to find the information you’ve asked for.
+        hint_text:
+          address: You could use hint text to tell people how you will use their address. For example, ‘We’ll send your licence to this address.’
+          checkbox: Use hint text to help people answer the question. For a question where people can select more than one answer you might want to use ‘Select all that apply’.
+          date: Use hint text to help people answer the question. For a date question you could use ‘For example, 27 3 2007’.
+          default: Use hint text to help people answer the question. For example, to explain the format the answer should be in, or where to find the information you’ve asked for.
+          email: You could use hint text to tell people how you will use their email address. For example, ‘We’ll only use your email address to contact you about your application.’
+          long_text: Use hint text to help people answer the question. For example, you could give a bit more detail about the information you need.
+          national_insurance_number: Use hint text to help people answer the question. For example, ‘It’s on your National Insurance card, benefit letter, payslip or P60. For example, QQ 12 34 56 C.’
+          number: Use hint text to help people answer the question. For example, ‘Do not include bank holidays’.
+          organisation_name: Use hint text to help people answer the question. For example, you might need to ask people to enter the registered name of their company.
+          phone_number: Use hint text to help people answer the question. For example, ‘You can provide either a home or mobile phone number.’
+          radio: Use hint text to help people answer the question. For a question where people can only select one answer you might want to use ‘Select one option’.
+          single_line: Use hint text to help people answer the question. For example, you could say what format the answer should be in or where to find it.
         question_short_name: The short name will be used when the form’s questions are all displayed in a list. Use a short descriptive name. For example ‘Address’.
-        question_text: |-
-          Ask a question the way you would in person. For example ‘What is your
-          address?’
+        question_text:
+          address: Ask the question the way you would in person. For example, ‘What’s your address?’
+          checkbox: Ask the question the way you would in person. For example, ‘Which of these countries have you lived in?’
+          date: Ask the question the way you would in person. For example, ‘What date was your passport issued?’
+          default: Ask a question the way you would in person. For example ‘What is your address?’
+          email: Ask the question the way you would in person. For example, ‘What’s your email address?’
+          long_text: Ask the question the way you would in person. For example, ‘Why do you want to apply for this role?’
+          national_insurance_number: Ask the question the way you would in person. For example, ‘What’s your National Insurance number?’
+          number: Ask the question the way you would in person. For example, ‘How many holiday days do you get a year?’
+          organisation_name: Ask the question the way you would in person. For example, ‘What’s the name of the organisation?’
+          phone_number: Ask the question the way you would in person. For example, ‘What’s your phone number?’
+          radio: Ask the question the way you would in person. For example, ‘What country do you live in?’
+          single_line: Ask the question the way you would in person. For example, ‘What’s your reference number?’
     label:
       forms_make_live_form:
         confirm_make_live: Are you sure you want to make your form live?
