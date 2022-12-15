@@ -28,6 +28,7 @@ class Pages::TypeOfAnswerController < PagesController
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     @type_of_answer_form = Forms::TypeOfAnswerForm.new(answer_type_form_params)
     @page.answer_type = @type_of_answer_form.answer_type if @type_of_answer_form.valid?
+    # TODO: Can we only do this if the answer type changes?
     @page.answer_settings = nil if @type_of_answer_form.valid?
 
     if @type_of_answer_form.valid? && @page.save!
@@ -41,16 +42,13 @@ class Pages::TypeOfAnswerController < PagesController
 private
 
   def next_page_path(form, answer_type, action)
-    if answer_type == "selection"
-      if action == :create
-        selections_settings_new_path(form)
-      else
-        selections_settings_edit_path(form)
-      end
-    elsif action == :create
-      new_page_path(@form)
+    case answer_type
+    when "selection"
+      action == :create ? selections_settings_new_path(form) : selections_settings_edit_path(form)
+    when "text"
+      action == :create ? text_settings_new_path(form) : text_settings_edit_path(form)
     else
-      edit_page_path(@form)
+      action == :create ? new_page_path(@form) : edit_page_path(@form)
     end
   end
 

@@ -5,7 +5,7 @@ class Page < ActiveResource::Base
   headers["X-API-Token"] = ENV["API_KEY"]
 
   ANSWER_TYPES = if FeatureService.enabled?(:autocomplete_answer_types)
-                   %w[organisation_name email phone_number national_insurance_number address date selection number single_line long_text].freeze
+                   %w[organisation_name email phone_number national_insurance_number address date selection number text].freeze
                  else
                    %w[single_line number address date email national_insurance_number phone_number long_text selection].freeze
                  end

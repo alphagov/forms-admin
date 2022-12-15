@@ -45,6 +45,8 @@ Rails.application.routes.draw do
       scope "/new" do
         get "/type-of-answer" => "pages/type_of_answer#new", as: :type_of_answer_new
         post "/type-of-answer" => "pages/type_of_answer#create", as: :type_of_answer_create
+        get "/text-settings" => "pages/text_settings#new", as: :text_settings_new
+        post "/text-settings" => "pages/text_settings#create", as: :text_settings_create
         get "/selections-settings" => "pages/selections_settings#new", as: :selections_settings_new
         post "/selections-settings" => "pages/selections_settings#create", as: :selections_settings_create
         get "/" => "pages#new", as: :new_page
@@ -55,6 +57,8 @@ Rails.application.routes.draw do
         scope "/edit" do
           get "/type-of-answer" => "pages/type_of_answer#edit", as: :type_of_answer_edit
           post "/type-of-answer" => "pages/type_of_answer#update", as: :type_of_answer_update
+          get "/text-settings" => "pages/text_settings#edit", as: :text_settings_edit
+          post "/text-settings" => "pages/text_settings#update", as: :text_settings_update
           get "/selections-settings" => "pages/selections_settings#edit", as: :selections_settings_edit
           post "/selections-settings" => "pages/selections_settings#update", as: :selections_settings_update
           get "/" => "pages#edit", as: :edit_page
