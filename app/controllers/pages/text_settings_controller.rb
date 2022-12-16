@@ -3,12 +3,14 @@ class Pages::TextSettingsController < PagesController
     input_type = session.dig(:page, "answer_settings", "input_type")
     @text_settings_form = Forms::TextSettingsForm.new(input_type:)
     @text_settings_path = text_settings_create_path(@form)
+    @back_link_url = type_of_answer_new_path(@form)
     render "pages/text_settings"
   end
 
   def create
     @text_settings_form = Forms::TextSettingsForm.new(text_settings_form_params)
     @text_settings_path = text_settings_create_path(@form)
+    @back_link_url = type_of_answer_new_path(@form)
 
     if @text_settings_form.submit(session)
       redirect_to new_page_path(@form)
@@ -22,6 +24,7 @@ class Pages::TextSettingsController < PagesController
     input_type = @page&.answer_settings&.input_type
     @text_settings_form = Forms::TextSettingsForm.new(input_type:, page: @page)
     @text_settings_path = text_settings_update_path(@form)
+    @back_link_url = type_of_answer_edit_path(@form)
     render "pages/text_settings"
   end
 
@@ -29,6 +32,7 @@ class Pages::TextSettingsController < PagesController
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     @text_settings_form = Forms::TextSettingsForm.new(text_settings_form_params)
     @text_settings_path = text_settings_update_path(@form)
+    @back_link_url = type_of_answer_edit_path(@form)
 
     if @text_settings_form.assign_values_to_page(@page) && @page.save!
       redirect_to edit_page_path(@form)
