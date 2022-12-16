@@ -34,6 +34,7 @@ class Pages::TextSettingsController < PagesController
     @input_types = Forms::TextSettingsForm::INPUT_TYPES
     @text_settings_path = text_settings_update_path(@form)
 
+    # TODO: validation issue
     @text_settings_form.assign_values_to_page(@page)
 
     if @page.save!
