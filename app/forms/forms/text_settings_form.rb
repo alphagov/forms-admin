@@ -11,6 +11,7 @@ class Forms::TextSettingsForm
   def submit(session)
     return false if invalid?
 
+    session[:page] = {} if session[:page].blank?
     session[:page][:answer_settings] = { input_type: }
   end
 

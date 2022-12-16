@@ -1,6 +1,6 @@
 class Pages::TextSettingsController < PagesController
   def new
-    input_type = session[:page]["answer_settings"]["input_type"] if session[:page]["answer_settings"].present?
+    input_type = session.dig(:page, "answer_settings", "input_type")
     @text_settings_form = Forms::TextSettingsForm.new(input_type:)
     @text_settings_path = text_settings_create_path(@form)
     render "pages/text_settings"
@@ -19,7 +19,7 @@ class Pages::TextSettingsController < PagesController
 
   def edit
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    input_type = @page&.answer_settings&.input_type ? @page.answer_settings&.input_type : ""
+    input_type = @page&.answer_settings&.input_type
     @text_settings_form = Forms::TextSettingsForm.new(input_type:, page: @page)
     @text_settings_path = text_settings_update_path(@form)
     render "pages/text_settings"

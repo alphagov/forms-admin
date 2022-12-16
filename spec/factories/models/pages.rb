@@ -21,5 +21,10 @@ FactoryBot.define do
       answer_type { "selection" }
       answer_settings { { only_one_option: "true", selection_options: [Forms::SelectionOption.new({ name: "Option 1" }), Forms::SelectionOption.new({ name: "Option 2" })] } }
     end
+
+    trait :with_text_settings do
+      answer_type { "text" }
+      answer_settings { { input_type: Forms::TextSettingsForm::INPUT_TYPES.sample } }
+    end
   end
 end
