@@ -1,7 +1,7 @@
 class Pages::TextSettingsController < PagesController
   def new
-    # TODO: Load from session
-    @text_settings_form = Forms::TextSettingsForm.new
+    input_type = session[:page]["answer_settings"]["input_type"] if session[:page]["answer_settings"].present?
+    @text_settings_form = Forms::TextSettingsForm.new(input_type:)
     @input_types = Forms::TextSettingsForm::INPUT_TYPES
     @text_settings_path = text_settings_create_path(@form)
     render "pages/text_settings"
@@ -34,10 +34,7 @@ class Pages::TextSettingsController < PagesController
     @input_types = Forms::TextSettingsForm::INPUT_TYPES
     @text_settings_path = text_settings_update_path(@form)
 
-    # TODO: validation issue
-    @text_settings_form.assign_values_to_page(@page)
-
-    if @page.save!
+    if @text_settings_form.assign_values_to_page(@page) && @page.save!
       redirect_to edit_page_path(@form)
     else
       render "pages/text_settings"

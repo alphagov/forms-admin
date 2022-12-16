@@ -1,0 +1,9 @@
+en:
+  activemodel:
+    errors:
+      models:
+        forms/text_settings_form:
+          attributes:
+            input_type:
+              blank: Select how much text people will need to provide
+              inclusion: Select ‘Single line of text’ or ‘More than a single line of text’

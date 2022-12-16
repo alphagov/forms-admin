@@ -27,8 +27,9 @@ class Pages::TypeOfAnswerController < PagesController
   def update
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     @type_of_answer_form = Forms::TypeOfAnswerForm.new(answer_type_form_params)
+    return redirect_to edit_page_path(@form) unless answer_type_changed?
+
     @page.answer_type = @type_of_answer_form.answer_type if @type_of_answer_form.valid?
-    # TODO: Can we only do this if the answer type changes?
     @page.answer_settings = nil if @type_of_answer_form.valid?
 
     if @type_of_answer_form.valid? && @page.save!
@@ -55,5 +56,9 @@ private
   def answer_type_form_params
     form = Form.find(params[:form_id])
     params.require(:forms_type_of_answer_form).permit(:answer_type).merge(form:)
+  end
+
+  def answer_type_changed?
+    @type_of_answer_form.answer_type != @page.answer_type
   end
 end

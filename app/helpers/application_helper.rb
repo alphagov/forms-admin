@@ -44,10 +44,11 @@ module ApplicationHelper
   end
 
   def translation_key_for_answer_type(answer_type, answer_settings)
-    # TODO: add logic for text inputs
     case answer_type
     when "selection"
       answer_settings.only_one_option == "true" ? "radio" : "checkbox"
+    when "text"
+      answer_settings.input_type
     else
       answer_type
     end
