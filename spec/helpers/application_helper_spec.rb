@@ -64,8 +64,9 @@ RSpec.describe ApplicationHelper, type: :helper do
     end
 
     context "with selection answer type" do
+      let(:answer_type) { "selection" }
+
       context "and 'only_one_option' set to 'true'" do
-        let(:answer_type) { "selection" }
         let(:answer_settings) { OpenStruct.new(only_one_option: "true") }
 
         it "returns the answer subtype" do
@@ -74,11 +75,23 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
 
       context "and 'only_one_option' set to 'false'" do
-        let(:answer_type) { "selection" }
         let(:answer_settings) { OpenStruct.new(only_one_option: false) }
 
         it "returns the answer subtype" do
           expect(helper.translation_key_for_answer_type(answer_type, answer_settings)).to eq "checkbox"
+        end
+      end
+    end
+
+    context "with text answer type" do
+      let(:answer_type) { "text" }
+      let(:answer_settings) { OpenStruct.new(input_type:) }
+
+      context "and 'input_type' set to a valid value" do
+        let(:input_type) { Forms::TextSettingsForm::INPUT_TYPES.sample }
+
+        it "returns the answer subtype" do
+          expect(helper.translation_key_for_answer_type(answer_type, answer_settings)).to eq input_type
         end
       end
     end
