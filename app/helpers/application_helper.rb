@@ -47,6 +47,8 @@ module ApplicationHelper
     case answer_type
     when "selection"
       answer_settings.only_one_option == "true" ? "radio" : "checkbox"
+    when "text"
+      answer_settings.input_type
     else
       answer_type
     end

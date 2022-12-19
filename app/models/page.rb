@@ -4,11 +4,7 @@ class Page < ActiveResource::Base
   self.include_format_in_path = false
   headers["X-API-Token"] = ENV["API_KEY"]
 
-  ANSWER_TYPES = if FeatureService.enabled?(:autocomplete_answer_types)
-                   %w[organisation_name email phone_number national_insurance_number address date selection number single_line long_text].freeze
-                 else
-                   %w[single_line number address date email national_insurance_number phone_number long_text selection].freeze
-                 end
+  ANSWER_TYPES = %w[single_line number address date email national_insurance_number phone_number long_text selection organisation_name text].freeze
 
   belongs_to :form
   validates :question_text, presence: true
