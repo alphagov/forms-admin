@@ -93,8 +93,6 @@ And check with `FeatureService.enabled?("some.nested_feature")`.
 
 Rspec tests can also be tagged with `feature_{name}: true`. This will turn that feature on just for the duration of that test.
 
-
-
 ### Running the app
 
 You can run this using the make command:
@@ -153,8 +151,6 @@ TODO: Add these details once we've got our deployment running.
 bin/rake
 # To run the Javascript test suite, run
 yarn test
-# To run the end-to-end tests, run
-yarn cypress
 ```
 
 ## Explain how to add a user to the database
