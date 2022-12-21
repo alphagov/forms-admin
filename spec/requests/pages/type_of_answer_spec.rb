@@ -85,7 +85,21 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
         end
       end
 
-      # TODO: : Add text answer type case
+      context "when answer type is text" do
+        let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "text", form: }
+
+        before do
+          post type_of_answer_create_path form_id: form.id, params: { forms_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
+        end
+
+        it "saves the answer type to session" do
+          expect(session[:page]).to eq({ "answer_type": type_of_answer_form.answer_type })
+        end
+
+        it "redirects the user to the question details page" do
+          expect(response).to redirect_to text_settings_new_path(form.id)
+        end
+      end
 
       context "when answer type is date" do
         let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "date", form: }
