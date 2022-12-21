@@ -9,19 +9,19 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
   context "when the page is not a selection page" do
     it "has a link to change the answer type" do
-      render_inline(described_class.new(page_object, change_answer_type_path))
+      render_inline(described_class.new(page_object, change_answer_type_path:))
       expect(page).to have_link("Change Answer type", href: change_answer_type_path)
     end
 
     it "does not have links to change the selection options" do
-      render_inline(described_class.new(page_object, change_answer_type_path, change_selections_settings_path))
+      render_inline(described_class.new(page_object, change_answer_type_path:, change_selections_settings_path:))
       expect(page).not_to have_link("Change Options", href: change_selections_settings_path)
       expect(page).not_to have_link("Change People can only select one option", href: change_selections_settings_path)
       expect(page).not_to have_link("Change Include an option for ‘None of the above’", href: change_selections_settings_path)
     end
 
     it "does not render the selection settings" do
-      render_inline(described_class.new(page_object, change_answer_type_path, change_selections_settings_path))
+      render_inline(described_class.new(page_object, change_answer_type_path:, change_selections_settings_path:))
       expect(page).not_to have_text "Selection from a list"
       expect(page).not_to have_text "Option 1, Option 2"
     end
@@ -35,19 +35,19 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
     end
 
     it "has a link to change the answer type" do
-      render_inline(described_class.new(page_object, change_answer_type_path, change_selections_settings_path))
+      render_inline(described_class.new(page_object, change_answer_type_path:, change_selections_settings_path:))
       expect(page).to have_link("Change Answer type Selection from a list", href: change_answer_type_path)
     end
 
     it "has links to change the selection options" do
-      render_inline(described_class.new(page_object, change_answer_type_path, change_selections_settings_path))
+      render_inline(described_class.new(page_object, change_answer_type_path:, change_selections_settings_path:))
       expect(page).to have_link("Change Options", href: change_selections_settings_path)
       expect(page).to have_link("Change People can only select one option", href: change_selections_settings_path)
       expect(page).to have_link("Change Include an option for ‘None of the above’", href: change_selections_settings_path)
     end
 
     it "renders the selection settings" do
-      render_inline(described_class.new(page_object, change_answer_type_path, change_selections_settings_path))
+      render_inline(described_class.new(page_object, change_answer_type_path:, change_selections_settings_path:))
       expect(page).to have_text "Selection from a list"
       expect(page).to have_text "Option 1, Option 2"
       expect(page).to have_text "Yes"
@@ -63,17 +63,17 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
     end
 
     it "has a link to change the answer type" do
-      render_inline(described_class.new(page_object, change_answer_type_path, "", change_text_settings_path))
+      render_inline(described_class.new(page_object, change_answer_type_path:, change_text_settings_path:))
       expect(page).to have_link("Change Answer type Text", href: change_answer_type_path)
     end
 
     it "has links to change the selection options" do
-      render_inline(described_class.new(page_object, change_answer_type_path, "", change_text_settings_path))
+      render_inline(described_class.new(page_object, change_answer_type_path:, change_text_settings_path:))
       expect(page).to have_link("Change input type", href: change_text_settings_path)
     end
 
     it "renders the input type" do
-      render_inline(described_class.new(page_object, change_answer_type_path, "", change_text_settings_path))
+      render_inline(described_class.new(page_object, change_answer_type_path:, change_text_settings_path:))
       expect(page).to have_text "Input type"
       expect(page).to have_text I18n.t("helpers.label.page.text_settings_options.names.#{page_object.answer_settings.input_type}")
     end
@@ -87,17 +87,17 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
     end
 
     it "has a link to change the answer type" do
-      render_inline(described_class.new(page_object, change_answer_type_path, "", "", change_date_settings_path))
+      render_inline(described_class.new(page_object, change_answer_type_path:, change_date_settings_path:))
       expect(page).to have_link("Change Answer type Date", href: change_answer_type_path)
     end
 
     it "has links to change the selection options" do
-      render_inline(described_class.new(page_object, change_answer_type_path, "", "", change_date_settings_path))
+      render_inline(described_class.new(page_object, change_answer_type_path:, change_date_settings_path:))
       expect(page).to have_link("Change input type", href: change_date_settings_path)
     end
 
     it "renders the input type" do
-      render_inline(described_class.new(page_object, change_answer_type_path, "", "", change_date_settings_path))
+      render_inline(described_class.new(page_object, change_answer_type_path:, change_date_settings_path:))
       expect(page).to have_text "Input type"
       expect(page).to have_text I18n.t("helpers.label.page.date_settings_options.input_types.#{page_object.answer_settings.input_type}")
     end
