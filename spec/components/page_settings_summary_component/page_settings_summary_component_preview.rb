@@ -42,7 +42,7 @@ class PageSettingsSummaryComponent::PageSettingsSummaryComponentPreview < ViewCo
     page.answer_settings = OpenStruct.new(page.answer_settings)
     change_answer_type_path = "https://example.com/change_answer_type"
     change_text_settings_path = "https://example.com/change_text_settings"
-    render(PageSettingsSummaryComponent::View.new(page, change_answer_type_path, "", change_text_settings_path))
+    render(PageSettingsSummaryComponent::View.new(page, change_answer_type_path:, change_text_settings_path:))
   end
 
   def with_date_answer_type
@@ -50,6 +50,6 @@ class PageSettingsSummaryComponent::PageSettingsSummaryComponentPreview < ViewCo
     page.answer_settings = OpenStruct.new(page.answer_settings)
     change_answer_type_path = "https://example.com/change_answer_type"
     change_date_settings_path = "https://example.com/change_date_settings"
-    render(PageSettingsSummaryComponent::View.new(page, change_answer_type_path, "", "", change_date_settings_path))
+    render(PageSettingsSummaryComponent::View.new(page, change_answer_type_path:, change_date_settings_path:))
   end
 end

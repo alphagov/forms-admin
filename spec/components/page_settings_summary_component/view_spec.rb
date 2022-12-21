@@ -96,6 +96,11 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
       expect(page).to have_link("Change input type", href: change_date_settings_path)
     end
 
+    it "has links to change the selection options" do
+      render_inline(described_class.new(page_object, change_answer_type_path:, change_date_settings_path:))
+      expect(page).to have_link("Change input type", href: change_date_settings_path)
+    end
+
     it "renders the input type" do
       render_inline(described_class.new(page_object, change_answer_type_path:, change_date_settings_path:))
       expect(page).to have_text "Input type"
