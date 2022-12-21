@@ -1,0 +1,19 @@
+<% set_page_title(title_with_error_prefix(t("page_titles.date_settings"), @date_settings_form.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(@back_link_url) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: [@form, @date_settings_form], url: @date_settings_path do |f| %>
+      <%= f.govuk_error_summary %>
+      <%= f.govuk_collection_radio_buttons(
+            :input_type,
+            Forms::DateSettingsForm::INPUT_TYPES,
+            ->(option) { option },
+            ->(option) { I18n.t('helpers.label.page.date_settings_options.names.' + option) },
+            legend: { text: t('page_titles.date_settings'), size: 'l', tag: 'h1' },
+            caption: { text: "#{t("pages.question")} #{@form.page_number(@page)}" , size: 'l' },
+          )  %>
+      <%= f.govuk_submit t('save_and_continue') %>
+    <% end %>
+  </div>
+</div>
