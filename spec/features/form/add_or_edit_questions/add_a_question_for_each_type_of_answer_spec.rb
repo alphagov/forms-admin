@@ -105,6 +105,7 @@ private
     click_button "Save and continue"
     fill_in_selection_settings if answer_type == "selection"
     fill_in_text_settings if answer_type == "text"
+    fill_in_date_settings if answer_type == "date"
     expect(page.find("h1")).to have_content "Edit question"
   end
 
@@ -148,6 +149,12 @@ private
   def fill_in_text_settings
     expect(page.find("h1")).to have_text "How much text will people need to provide?"
     choose "Single line of text"
+    click_button "Save and continue"
+  end
+
+  def fill_in_date_settings
+    expect(page.find("h1")).to have_text "Are you asking for someone's date of birth?"
+    choose "No"
     click_button "Save and continue"
   end
 end

@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe PageSettingsSummaryComponent::View, type: :component do
-  let(:page_object) { build :page, :without_selection_answer_type, id: 1 }
+  let(:page_object) { build :page, :with_simple_answer_type, id: 1 }
   let(:change_answer_type_path) { "https://example.com/change_answer_type" }
   let(:change_selections_settings_path) { "https://example.com/change_selections_settings" }
+  let(:change_date_settings_path) { "https://example.com/change_date_settings" }
 
   context "when the page is not a selection page" do
     it "has a link to change the answer type" do
@@ -50,6 +51,32 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
       expect(page).to have_text "Option 1, Option 2"
       expect(page).to have_text "Yes"
       expect(page).to have_text "No"
+    end
+  end
+
+  # TODO: Add tests for text inputs
+
+  context "when the page is a date page" do
+    let(:page_object) do
+      page = FactoryBot.build(:page, :with_date_settings, id: 1)
+      page.answer_settings = OpenStruct.new(page.answer_settings)
+      page
+    end
+
+    it "has a link to change the answer type" do
+      render_inline(described_class.new(page_object, change_answer_type_path, "", "", change_date_settings_path))
+      expect(page).to have_link("Change Answer type Date", href: change_answer_type_path)
+    end
+
+    it "has links to change the selection options" do
+      render_inline(described_class.new(page_object, change_answer_type_path, "", "", change_date_settings_path))
+      expect(page).to have_link("Change input type", href: change_date_settings_path)
+    end
+
+    it "renders the input type" do
+      render_inline(described_class.new(page_object, change_answer_type_path, "", "", change_date_settings_path))
+      expect(page).to have_text "Input type"
+      expect(page).to have_text I18n.t("helpers.label.page.date_settings_options.input_types.#{page_object.answer_settings.input_type}")
     end
   end
 end
