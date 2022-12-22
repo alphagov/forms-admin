@@ -30,11 +30,11 @@ We follow the style conventions detailed in [the GDS Way](https://gds-way.clouda
 
 ## Supported browsers
 
-TODO: Add browser support, once we know what we're supporting. For now, let's assume that we're using [the Service Manual's browsers to test in](https://www.gov.uk/service-manual/technology/designing-for-different-browsers-and-devices).
+While the project is in beta, we're using [the Service Manual's browsers to test in](https://www.gov.uk/service-manual/technology/designing-for-different-browsers-and-devices). We will reassess this at some point before our next service assessment based on usage data.
 
 ## Supported assistive technology
 
-TODO: Add assistive technology support, once we know what we're supporting. For now, let's assume that we're using [the Service Manual's assistive technologies to test with](https://www.gov.uk/service-manual/technology/testing-with-assistive-technologies).
+While the project is in beta, we're using [the Service Manual's assistive technologies to test with](https://www.gov.uk/service-manual/technology/testing-with-assistive-technologies). We will reassess this at some point before our next service assessment based on usage data.
 
 ## Commit hygiene
 
