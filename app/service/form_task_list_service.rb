@@ -42,13 +42,8 @@ private
 
   def section_2_tasks
     hint_text = I18n.t("forms.task_lists.section_2.hint_text_html", submission_email: @form.submission_email) if @form.submission_email.present?
-
-    if FeatureService.enabled?(:submission_email_confirmation)
-      [{ task_name: I18n.t("forms.task_lists.section_2.set_email"), path: submission_email_form_path(@form.id), hint_text:, status: @task_list_statuses.submission_email_status },
-       { task_name: I18n.t("forms.task_lists.section_2.confirm_email"), path: submission_email_code_path(@form.id), status: @task_list_statuses.confirm_submission_email_status, active: @task_list_statuses.can_enter_submission_email_code }]
-    else
-      [{ task_name: I18n.t("forms.task_lists.section_2.submission_email"), path: change_form_email_path(@form.id), hint_text:, status: @task_list_statuses.submission_email_status }]
-    end
+    [{ task_name: I18n.t("forms.task_lists.section_2.set_email"), path: submission_email_form_path(@form.id), hint_text:, status: @task_list_statuses.submission_email_status },
+     { task_name: I18n.t("forms.task_lists.section_2.confirm_email"), path: submission_email_code_path(@form.id), status: @task_list_statuses.confirm_submission_email_status, active: @task_list_statuses.can_enter_submission_email_code }]
   end
 
   def section_3_tasks

@@ -108,14 +108,6 @@ describe TaskStatusService do
           expect(task_status_service.submission_email_status).to eq :completed
         end
       end
-
-      context "when task list statuses are enabled", feature_submission_email_confirmation: true do
-        let(:form) { OpenStruct.new(email_confirmation_status: :email_set_without_confirmation) }
-
-        it "returns correct values based on email_confirmation_status" do
-          expect(task_status_service.submission_email_status).to eq :completed
-        end
-      end
     end
 
     describe "privacy policy status" do
