@@ -13,8 +13,6 @@ Rails.application.routes.draw do
     get "/" => "forms#show", as: :form
     get "/change-name" => "forms/change_name#edit", as: :change_form_name
     post "/change-name" => "forms/change_name#update"
-    get "/change-email" => "forms/change_email#new", as: :change_form_email
-    post "/change-email" => "forms/change_email#create"
 
     get "/submission-email" => "forms/submission_email#new", as: :submission_email_form
     post "/submission-email" => "forms/submission_email#create"

@@ -41,19 +41,12 @@ class TaskStatusService
   end
 
   def submission_email_status
-    if FeatureService.enabled?(:submission_email_confirmation)
-      {
-        email_set_without_confirmation: :completed,
-        not_started: :not_started,
-        sent: :in_progress,
-        confirmed: :completed,
-      }[@form.email_confirmation_status]
-    # without submission_email_confirmation feature
-    elsif @form.submission_email.present?
-      :completed
-    else
-      :not_started
-    end
+    {
+      email_set_without_confirmation: :completed,
+      not_started: :not_started,
+      sent: :in_progress,
+      confirmed: :completed,
+    }[@form.email_confirmation_status]
   end
 
   def confirm_submission_email_status

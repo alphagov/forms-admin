@@ -86,6 +86,16 @@ describe FormTaskListService do
           described_class.call(form:).all_tasks[1]
         end
 
+        it "has link to set submission email" do
+          expect(section_rows.first[:task_name]).to eq "Set the email address completed forms will be sent to"
+          expect(section_rows.first[:path]).to eq "/forms/1/submission-email"
+        end
+
+        it "has link to confirm submission email" do
+          expect(section_rows[1][:task_name]).to eq "Enter the email address confirmation code"
+          expect(section_rows[1][:path]).to eq "/forms/1/confirm-submission-email"
+        end
+
         it "has hint text explaining where completed forms will be sent to" do
           expect(section_rows.first[:hint_text]).to eq I18n.t("forms.task_lists.section_2.hint_text_html", submission_email: form.submission_email)
         end
@@ -102,13 +112,6 @@ describe FormTaskListService do
           expect(section_rows.first[:hint_text]).to be_nil
         end
 
-        context "when task list statuses are enabled", feature_submission_email_confirmation: false do
-          it "has link to set submission email" do
-            expect(section_rows.first[:task_name]).to eq "Set the email address completed forms will be sent to"
-            expect(section_rows.first[:path]).to eq "/forms/1/change-email"
-          end
-        end
-
         context "when task list statuses are enabled", feature_task_list_statuses: true do
           it "has the correct default status" do
             expect(section_rows.first[:status]).to eq :not_started
@@ -116,77 +119,65 @@ describe FormTaskListService do
         end
       end
 
-      context "when submission_email_confirmation flag is true", feature_submission_email_confirmation: true do
-        it "has link to set submission email" do
-          expect(section_rows.first[:task_name]).to eq "Set the email address completed forms will be sent to"
-          expect(section_rows.first[:path]).to eq "/forms/1/submission-email"
+      context "when task list statuses are enabled", feature_task_list_statuses: true do
+        context "and submission_email is set and no code sent" do
+          before do
+            form.submission_email = "test@example.gov.uk"
+          end
+
+          it "enter email has status of completed" do
+            expect(section_rows.first[:status]).to eq :completed
+          end
+
+          it "enter code has status of completed" do
+            expect(section_rows[1][:status]).to eq :completed
+          end
         end
 
-        it "has link to confirm submission email" do
-          expect(section_rows[1][:task_name]).to eq "Enter the email address confirmation code"
-          expect(section_rows[1][:path]).to eq "/forms/1/confirm-submission-email"
+        context "and submission_email is not set and no code sent" do
+          it "enter email has status of not_started" do
+            expect(section_rows.first[:status]).to eq :not_started
+          end
+
+          it "enter code has status of cannot_start" do
+            expect(section_rows[1][:status]).to eq :cannot_start
+          end
+
+          it "enter code is not active" do
+            expect(section_rows[1][:active]).to be_falsy
+          end
         end
 
-        context "when task list statuses are enabled", feature_task_list_statuses: true do
-          context "and submission_email is set and no code sent" do
-            before do
-              form.submission_email = "test@example.gov.uk"
-            end
-
-            it "enter email has status of completed" do
-              expect(section_rows.first[:status]).to eq :completed
-            end
-
-            it "enter code has status of completed" do
-              expect(section_rows[1][:status]).to eq :completed
-            end
+        context "and submission_email is not set and code sent" do
+          before do
+            create :form_submission_email, form_id: form.id, confirmation_code: form.id
           end
 
-          context "and submission_email is not set and no code sent" do
-            it "enter email has status of not_started" do
-              expect(section_rows.first[:status]).to eq :not_started
-            end
-
-            it "enter code has status of cannot_start" do
-              expect(section_rows[1][:status]).to eq :cannot_start
-            end
-
-            it "enter code is not active" do
-              expect(section_rows[1][:active]).to be_falsy
-            end
+          it "enter email has status of in_progress" do
+            expect(section_rows.first[:status]).to eq :in_progress
           end
 
-          context "and submission_email is not set and code sent" do
-            before do
-              create :form_submission_email, form_id: form.id, confirmation_code: form.id
-            end
-
-            it "enter email has status of in_progress" do
-              expect(section_rows.first[:status]).to eq :in_progress
-            end
-
-            it "enter code has status of incomplete" do
-              expect(section_rows[1][:status]).to eq :not_started
-            end
-
-            it "enter code is active" do
-              expect(section_rows[1][:active]).to be_truthy
-            end
+          it "enter code has status of incomplete" do
+            expect(section_rows[1][:status]).to eq :not_started
           end
 
-          context "and submission_email is set and code blank" do
-            before do
-              form.submission_email = "test@example.gov.uk"
-              create :form_submission_email, form_id: form.id, confirmation_code: nil
-            end
+          it "enter code is active" do
+            expect(section_rows[1][:active]).to be_truthy
+          end
+        end
 
-            it "enter email has status of completed" do
-              expect(section_rows.first[:status]).to eq :completed
-            end
+        context "and submission_email is set and code blank" do
+          before do
+            form.submission_email = "test@example.gov.uk"
+            create :form_submission_email, form_id: form.id, confirmation_code: nil
+          end
 
-            it "enter code has status of completed" do
-              expect(section_rows[1][:status]).to eq :completed
-            end
+          it "enter email has status of completed" do
+            expect(section_rows.first[:status]).to eq :completed
+          end
+
+          it "enter code has status of completed" do
+            expect(section_rows[1][:status]).to eq :completed
           end
         end
       end

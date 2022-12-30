@@ -92,7 +92,6 @@ en:
         confirm_email: Enter the email address confirmation code
         hint_text_html: Completed forms will be sent to:<br> %{submission_email}
         set_email: Set the email address completed forms will be sent to
-        submission_email: Set the email address completed forms will be sent to
         title: Set email address for completed forms
       section_3:
         contact_details: Provide contact details for support
@@ -239,7 +238,6 @@ en:
     title: Page not found
   page_titles:
     address_settings: What kind of addresses do you expect to receive?
-    change_email_form: What email address should form responses be sent to?
     change_name_form: Name your form
     confirm_email_form: Enter the confirmation code
     confirm_email_success: Email address confirmed
