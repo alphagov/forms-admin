@@ -11,9 +11,9 @@ FactoryBot.define do
 
     trait :with_simple_answer_type do
       if FeatureService.enabled?(:autocomplete_answer_types)
-        answer_type { %w[single_line number address email national_insurance_number phone_number long_text organisation_name].sample }
+        answer_type { %w[single_line number email national_insurance_number phone_number long_text organisation_name].sample }
       else
-        answer_type { %w[single_line number address email national_insurance_number phone_number long_text].sample }
+        answer_type { %w[single_line number email national_insurance_number phone_number long_text].sample }
       end
     end
 
@@ -30,6 +30,11 @@ FactoryBot.define do
     trait :with_date_settings do
       answer_type { "date" }
       answer_settings { { input_type: Forms::DateSettingsForm::INPUT_TYPES.sample } }
+    end
+
+    trait :with_address_settings do
+      answer_type { "address" }
+      answer_settings { { input_type: Forms::AddressSettingsForm::INPUT_TYPES.sample } }
     end
   end
 end

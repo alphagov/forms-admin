@@ -106,6 +106,7 @@ private
     fill_in_selection_settings if answer_type == "selection"
     fill_in_text_settings if answer_type == "text"
     fill_in_date_settings if answer_type == "date"
+    fill_in_address_settings if answer_type == "address"
     expect(page.find("h1")).to have_content "Edit question"
   end
 
@@ -155,6 +156,12 @@ private
   def fill_in_date_settings
     expect(page.find("h1")).to have_text "Are you asking for someone's date of birth?"
     choose "No"
+    click_button "Save and continue"
+  end
+
+  def fill_in_address_settings
+    expect(page.find("h1")).to have_text "What kind of addresses do you expect to receive?"
+    choose "Yes"
     click_button "Save and continue"
   end
 end
