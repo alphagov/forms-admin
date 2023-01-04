@@ -28,6 +28,10 @@ class Pages::SelectionsSettingsController < PagesController
 
   def edit
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
+    answer_type = session.dig(:page, "answer_type")
+    answer_settings = session.dig(:page, "answer_settings")
+
+    @page.load(answer_type:, answer_settings:)
     @selections_settings_path = selections_settings_update_path(@form)
     @selections_settings_form = Forms::SelectionsSettingsForm.new(load_answer_settings_from_page_object(@page))
     @back_link_url = edit_page_path(@form, @page)
@@ -47,14 +51,11 @@ class Pages::SelectionsSettingsController < PagesController
     elsif params[:remove]
       @selections_settings_form.remove(params[:remove].to_i)
       render selection_settings_view
-    else
-      @selections_settings_form.assign_values_to_page(@page)
+    elsif @selections_settings_form.valid? && @selections_settings_form.submit(session)
 
-      if @selections_settings_form.valid? && @page.save!
-        redirect_to edit_page_path(@form)
-      else
-        render selection_settings_view
-      end
+      redirect_to edit_page_path(@form)
+    else
+      render selection_settings_view
     end
   end
 

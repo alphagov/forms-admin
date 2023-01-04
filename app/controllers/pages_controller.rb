@@ -4,15 +4,16 @@ class PagesController < ApplicationController
   skip_before_action :clear_questions_session_data
 
   def new
-    answer_type = session[:page]["answer_type"]
-    answer_settings = session[:page]["answer_settings"]
-    is_optional = session[:page]["is_optional"] == "true"
+    answer_type = session.dig(:page, "answer_type")
+    answer_settings = session.dig(:page, "answer_settings")
+    is_optional = session.dig(:page, "is_optional") == "true"
     @page = Page.new(form_id: @form.id, answer_type:, answer_settings:, is_optional:)
   end
 
   def create
-    answer_settings = session[:page]["answer_settings"] if session[:page].present?
-    @page = Page.new(page_params.merge(answer_settings:))
+    answer_type = session.dig(:page, "answer_type")
+    answer_settings = session.dig(:page, "answer_settings")
+    @page = Page.new(page_params.merge(answer_settings:, answer_type:))
 
     if @page.save
       clear_questions_session_data
@@ -24,12 +25,18 @@ class PagesController < ApplicationController
 
   def edit
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
+    answer_type = session.dig(:page, "answer_type")
+    answer_settings = session.dig(:page, "answer_settings")
+
+    @page.load(answer_settings:, answer_type:)
   end
 
   def update
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
+    answer_type = session.dig(:page, "answer_type")
+    answer_settings = session.dig(:page, "answer_settings")
 
-    @page.load(page_params)
+    @page.load(page_params.merge(answer_settings:, answer_type:))
 
     if @page.save
       handle_submit_action
