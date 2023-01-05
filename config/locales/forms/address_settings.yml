@@ -4,6 +4,9 @@ en:
       models:
         forms/address_settings_form:
           attributes:
-            input_type:
+            uk_address:
+              blank: Select the kind of addresses you expect to receive
+              inclusion: Select ‘UK addresses’ or ‘International addresses’
+            international_address:
               blank: Select the kind of addresses you expect to receive
               inclusion: Select ‘UK addresses’ or ‘International addresses’

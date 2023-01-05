@@ -7,6 +7,8 @@ en:
           attributes:
             question_text:
               blank: Question text cannot be blank
+  address_settings:
+    hint: Select all that apply
   contact_details:
     new:
       body_html: |
@@ -139,11 +141,11 @@ en:
       page:
         address_settings_options:
           input_types:
+            international_address: International address
+            uk_address: UK address
+          names:
             international_address: International addresses
             uk_address: UK addresses
-          names:
-            international_address: 'No'
-            uk_address: 'Yes'
         answer_type_options:
           descriptions:
             address: To collect an address with separate fields for line 1, line 2, town or city, county and postcode
