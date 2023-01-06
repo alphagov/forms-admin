@@ -28,22 +28,24 @@
                     visually_hidden_text: t("selections_settings.include_none_of_the_above")) end %>
       <% end %>
 
-      <% if (@page_object.answer_type == "text") %>
-        <%= summary_list.row do |row|
-          row.key(text: "Input type")
-          row.value(text: t("helpers.label.page.text_settings_options.names.#{@page_object.answer_settings.input_type}"))
-          row.action(text: "Change",
-                    href: @change_text_settings_path,
-                    visually_hidden_text: "input type") end %>
-      <% end %>
+      <% if @page_object&.answer_settings&.input_type %>
+        <% if (@page_object.answer_type == "text") %>
+          <%= summary_list.row do |row|
+            row.key(text: "Input type")
+            row.value(text: t("helpers.label.page.text_settings_options.names.#{@page_object.answer_settings.input_type}"))
+            row.action(text: "Change",
+                      href: @change_text_settings_path,
+                      visually_hidden_text: "input type") end %>
+        <% end %>
 
-      <% if (@page_object.answer_type == "date") %>
-        <%= summary_list.row do |row|
-          row.key(text: "Input type")
-          row.value(text: t("helpers.label.page.date_settings_options.input_types.#{@page_object.answer_settings.input_type}"))
-          row.action(text: "Change",
-                    href: @change_date_settings_path,
-                    visually_hidden_text: "input type") end %>
+        <% if (@page_object.answer_type == "date") %>
+          <%= summary_list.row do |row|
+            row.key(text: "Input type")
+            row.value(text: t("helpers.label.page.date_settings_options.input_types.#{@page_object.answer_settings.input_type}"))
+            row.action(text: "Change",
+                      href: @change_date_settings_path,
+                      visually_hidden_text: "input type") end %>
+        <% end %>
       <% end %>
 
   <% end %>
