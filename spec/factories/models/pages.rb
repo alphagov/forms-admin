@@ -34,7 +34,7 @@ FactoryBot.define do
 
     trait :with_address_settings do
       answer_type { "address" }
-      answer_settings { { input_type: Forms::AddressSettingsForm::INPUT_TYPES.sample } }
+      answer_settings { { input_type: { "uk_address": "true", "international_address": "true" } } }
     end
   end
 end

@@ -126,8 +126,13 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
     let(:page_object) do
       page = FactoryBot.build(:page, :with_address_settings, id: 1)
       page.answer_settings = OpenStruct.new(page.answer_settings)
+      page.answer_settings.input_type = input_type
       page
     end
+
+    let(:input_type){ OpenStruct.new({ uk_address:, international_address: }) }
+    let(:uk_address){ "true" }
+    let(:international_address) { "true" }
 
     it "has a link to change the answer type" do
       render_inline(described_class.new(page_object, change_answer_type_path:, change_address_settings_path:))
@@ -142,7 +147,27 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
     it "renders the input type" do
       render_inline(described_class.new(page_object, change_answer_type_path:, change_address_settings_path:))
       expect(page).to have_text "Input type"
-      expect(page).to have_text I18n.t("helpers.label.page.address_settings_options.input_types.#{page_object.answer_settings.input_type}")
+      expect(page).to have_text I18n.t("helpers.label.page.address_settings_options.names.uk_and_international_addresses")
+    end
+
+    context "when the input type is uk addresses only" do
+      let(:uk_address){ "true" }
+      let(:international_address) { "false" }
+
+      it "renders the input type as uk addresses" do
+        render_inline(described_class.new(page_object, change_answer_type_path:, change_address_settings_path:))
+        expect(page).to have_text I18n.t("helpers.label.page.address_settings_options.names.uk_addresses")
+      end
+    end
+
+    context "when the input type is international addresses only" do
+      let(:uk_address){ "false" }
+      let(:international_address) { "true" }
+
+      it "renders the input type as international addresses" do
+        render_inline(described_class.new(page_object, change_answer_type_path:, change_address_settings_path:))
+        expect(page).to have_text I18n.t("helpers.label.page.address_settings_options.names.international_addresses")
+      end
     end
   end
 end
