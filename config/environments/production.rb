@@ -90,4 +90,22 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # enable json request logging
+  config.lograge.enabled = true
+
+  config.lograge.custom_options = lambda do |event|
+    {}.tap do |h|
+      h[:host] = event.payload[:host]
+      h[:user_id] = event.payload[:user_id]
+      h[:user_email] = event.payload[:user_email]
+      h[:user_organisation_slug] = event.payload[:user_organisation_slug]
+      h[:user_ip] = event.payload[:user_ip]
+      h[:request_id] = event.payload[:request_id]
+      h[:user_id] = event.payload[:user_id]
+      h[:form_id] = event.payload[:form_id] if event.payload[:form_id]
+    end
+  end
+
+  config.lograge.formatter = Lograge::Formatters::Json.new
 end
