@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :set_user_instance_variable
   before_action :check_service_unavailable
+  before_action :set_request_id
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
   before_action :clear_questions_session_data
@@ -32,5 +33,13 @@ class ApplicationController < ActionController::Base
 
   def clear_questions_session_data
     session.delete(:page) if session[:page].present?
+  end
+
+  def set_request_id
+    if Rails.env.production?
+      [Form, Page].each do |active_resource_model|
+        active_resource_model.headers["X-Request-ID"] = request.request_id
+      end
+    end
   end
 end
