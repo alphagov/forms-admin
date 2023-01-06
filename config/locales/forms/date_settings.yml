@@ -1,0 +1,9 @@
+en:
+  activemodel:
+    errors:
+      models:
+        forms/date_settings_form:
+          attributes:
+            input_type:
+              blank: Select yes if you’re asking for a date of birth
+              inclusion: Select ‘Yes’ or ‘No’

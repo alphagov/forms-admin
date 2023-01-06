@@ -48,6 +48,8 @@ private
       action == :create ? selections_settings_new_path(form) : selections_settings_edit_path(form)
     when "text"
       action == :create ? text_settings_new_path(form) : text_settings_edit_path(form)
+    when "date"
+      action == :create ? date_settings_new_path(form) : date_settings_edit_path(form)
     else
       action == :create ? new_page_path(@form) : edit_page_path(@form)
     end

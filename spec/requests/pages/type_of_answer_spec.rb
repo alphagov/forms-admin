@@ -58,7 +58,7 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
       end
 
       context "when answer type is not selection" do
-        let(:type_of_answer_form) { build :type_of_answer_form, :without_selection_answer_type, form: }
+        let(:type_of_answer_form) { build :type_of_answer_form, :with_simple_answer_type, form: }
 
         it "saves the answer type to session" do
           expect(session[:page]).to eq({ "answer_type": type_of_answer_form.answer_type })
@@ -84,6 +84,38 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
           expect(response).to redirect_to selections_settings_new_path(form.id)
         end
       end
+
+      context "when answer type is text" do
+        let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "text", form: }
+
+        before do
+          post type_of_answer_create_path form_id: form.id, params: { forms_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
+        end
+
+        it "saves the answer type to session" do
+          expect(session[:page]).to eq({ "answer_type": type_of_answer_form.answer_type })
+        end
+
+        it "redirects the user to the question details page" do
+          expect(response).to redirect_to text_settings_new_path(form.id)
+        end
+      end
+
+      context "when answer type is date" do
+        let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "date", form: }
+
+        before do
+          post type_of_answer_create_path form_id: form.id, params: { forms_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
+        end
+
+        it "saves the answer type to session" do
+          expect(session[:page]).to eq({ "answer_type": type_of_answer_form.answer_type })
+        end
+
+        it "redirects the user to the question details page" do
+          expect(response).to redirect_to date_settings_new_path(form.id)
+        end
+      end
     end
 
     context "when form is invalid" do
@@ -98,7 +130,7 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
   end
 
   describe "#edit" do
-    let(:page) { build :page, :without_selection_answer_type, id: 2, form_id: form.id }
+    let(:page) { build :page, :with_simple_answer_type, id: 2, form_id: form.id }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -130,7 +162,7 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
   end
 
   describe "#update" do
-    let(:page) { build :page, :without_selection_answer_type, id: 2, form_id: form.id, answer_type: "email" }
+    let(:page) { build :page, :with_simple_answer_type, id: 2, form_id: form.id, answer_type: "email" }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|

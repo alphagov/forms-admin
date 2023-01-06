@@ -160,6 +160,13 @@ en:
             selection: Selection from a list
             single_line: Single line of text
             text: Text
+        date_settings_options:
+          input_types:
+            date_of_birth: Date of birth
+            other_date: Other date
+          names:
+            date_of_birth: 'Yes'
+            other_date: 'No'
         hint_text: Hint text (optional)
         question_short_name: Question short name (optional)
         question_text: Question text
@@ -223,6 +230,7 @@ en:
     confirm_email_form: Enter the confirmation code
     confirm_email_success: Email address confirmed
     contact_details_form: Provide contact details for support
+    date_settings: Are you asking for someone's date of birth?
     declaration_form: Add a declaration
     email_code_sent: Confirmation code sent
     error_prefix: 'Error: '
