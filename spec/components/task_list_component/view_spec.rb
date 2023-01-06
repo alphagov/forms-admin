@@ -58,6 +58,46 @@ RSpec.describe TaskListComponent::View, type: :component do
     end
   end
 
+  describe "summary text with count of completed tasks and total number of tasks" do
+    context "when given no task completion values" do
+      before do
+        render_inline(described_class.new(sections: [
+          { title: "section a",
+            rows: [
+              { task_name: "task a", path: "#", status:, active: },
+            ] },
+          { title: "section 2",
+            rows: [
+              { task_name: "task d", path: "#", status:, active: },
+            ] },
+        ]))
+      end
+
+      it "does not render the summary text at the top of the task list" do
+        expect(page).not_to have_selector(".app-task-list__summary")
+      end
+    end
+
+    context "when given task completion values" do
+      before do
+        render_inline(described_class.new(completed_task_count: "23", total_task_count: "34", sections: [
+          { title: "section a",
+            rows: [
+              { task_name: "task a", path: "#", status:, active: },
+            ] },
+          { title: "section 2",
+            rows: [
+              { task_name: "task d", path: "#", status:, active: },
+            ] },
+        ]))
+      end
+
+      it "does render the summary text at the top of the task list" do
+        expect(page).to have_selector(".app-task-list__summary", text: "You've completed 23 of 34 tasks.")
+      end
+    end
+  end
+
   describe "#get_path" do
     subject(:row) do
       TaskListComponent::Row.new(

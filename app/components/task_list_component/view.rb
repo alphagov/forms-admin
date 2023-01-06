@@ -1,13 +1,15 @@
 module TaskListComponent
   class View < GovukComponent::Base
-    attr_accessor :sections
+    attr_accessor :sections, :completed_task_count, :total_task_count
 
     Section = Struct.new(:rows, :title, :number, keyword_init: true)
 
-    def initialize(sections: [], classes: [], html_attributes: {})
+    def initialize(completed_task_count: nil, total_task_count: nil, sections: [], classes: [], html_attributes: {})
       @count = 0
       super(classes:, html_attributes:)
       @sections = sections.blank? ? [] : sections.map { |s| build_section(s) }
+      @completed_task_count = completed_task_count
+      @total_task_count = total_task_count
     end
 
   private
