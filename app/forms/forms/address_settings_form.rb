@@ -6,7 +6,7 @@ class Forms::AddressSettingsForm
 
   INPUT_TYPES = %w[uk_address international_address].freeze
 
-  # validate :any_present?
+  validate :at_least_one_selected?
   # validates :input_type, presence: true
   validates :uk_address, inclusion: { in: %w[true false] }
   # validates :international_address, inclusion: { in: %w[true false] }
@@ -24,7 +24,7 @@ class Forms::AddressSettingsForm
     page.answer_settings = { input_type: { uk_address:, international_address: } }
   end
 
-  def any_present?
+  def at_least_one_selected?
     return errors.add(:uk_address, :blank) if uk_address == "false" && international_address == "false"
   end
 end
