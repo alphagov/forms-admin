@@ -1,3 +1,8 @@
+<% if completed_task_count.present? && total_task_count.present? %>
+  <%= tag.p(class:"govuk-body app-task-list__summary") do %>
+    You've completed <%= completed_task_count %> of <%= total_task_count %> tasks.
+  <% end %>
+<% end %>
 <%= tag.ol(**html_attributes) do %>
   <% sections.each do |section| %>
     <% unless section.rows.empty? %>
