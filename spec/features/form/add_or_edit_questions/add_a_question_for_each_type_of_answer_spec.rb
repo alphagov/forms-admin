@@ -1,6 +1,6 @@
 require "rails_helper"
 
-feature "Add/editing a single line question", type: :feature do
+feature "Add/editing a single question", type: :feature do
   let(:form) { build :form, id: 1 }
   let(:req_headers) do
     {
@@ -161,7 +161,9 @@ private
 
   def fill_in_address_settings
     expect(page.find("h1")).to have_text "What kind of addresses do you expect to receive?"
-    choose "Yes"
+    check "UK addresses"
+    check "International addresses"
     click_button "Save and continue"
+    expect(page.find(".govuk-summary-list")).to have_text "UK and international addresses"
   end
 end

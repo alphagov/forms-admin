@@ -5,7 +5,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: [@form, @address_settings_form], url: @address_settings_path do |f| %>
       <%= f.govuk_error_summary %>
-      <%= f.govuk_check_boxes_fieldset 'address_types', multiple: false, legend: { text: t("page_titles.address_settings") }, caption: { text: "#{t("pages.question")} #{@form.page_number(@page)}" , size: 'l' }, hint: { text: t("address_settings.hint")} do %>
+      <%= f.govuk_check_boxes_fieldset 'address_types', multiple: false, legend: { text: t("page_titles.address_settings"), tag: "h1", size: "l" }, caption: { text: "#{t("pages.question")} #{@form.page_number(@page)}" , size: 'l' }, hint: { text: t("address_settings.hint")} do %>
         <%= f.govuk_check_box 'uk_address', "true", "false", multiple: false, small: true, label: { text: t("helpers.label.page.address_settings_options.names.uk_addresses") }%>
         <%= f.govuk_check_box 'international_address', "true", "false", multiple: false, small: true, label: { text: t("helpers.label.page.address_settings_options.names.international_addresses") }%>
       <% end %>

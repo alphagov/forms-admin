@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :address_settings_form, class: "Forms::AddressSettingsForm" do
-    input_type { Forms::AddressSettingsForm::INPUT_TYPES.sample }
+    uk_address { "true" }
+    international_address { "true" }
   end
 end

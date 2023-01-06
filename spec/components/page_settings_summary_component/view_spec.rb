@@ -130,8 +130,8 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
       page
     end
 
-    let(:input_type){ OpenStruct.new({ uk_address:, international_address: }) }
-    let(:uk_address){ "true" }
+    let(:input_type) { OpenStruct.new({ uk_address:, international_address: }) }
+    let(:uk_address) { "true" }
     let(:international_address) { "true" }
 
     it "has a link to change the answer type" do
@@ -151,7 +151,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
     end
 
     context "when the input type is uk addresses only" do
-      let(:uk_address){ "true" }
+      let(:uk_address) { "true" }
       let(:international_address) { "false" }
 
       it "renders the input type as uk addresses" do
@@ -161,7 +161,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
     end
 
     context "when the input type is international addresses only" do
-      let(:uk_address){ "false" }
+      let(:uk_address) { "false" }
       let(:international_address) { "true" }
 
       it "renders the input type as international addresses" do

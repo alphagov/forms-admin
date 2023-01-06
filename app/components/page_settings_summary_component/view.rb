@@ -13,6 +13,7 @@ module PageSettingsSummaryComponent
     end
 
   private
+
     def address_input_type_to_string
       input_type = @page_object.answer_settings.input_type
       if input_type.uk_address == "true" && input_type.international_address == "true"
