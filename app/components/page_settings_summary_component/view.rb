@@ -11,5 +11,16 @@ module PageSettingsSummaryComponent
       @change_date_settings_path = change_date_settings_path
       @change_address_settings_path = change_address_settings_path
     end
+
+    def address_input_type_to_string
+      input_type = @page_object.answer_settings.input_type
+      if input_type.uk_address == "true" && input_type.international_address == "true"
+        "uk_and_international_addresses"
+      elsif input_type.uk_address == "true"
+        "uk_addresses"
+      else
+        "international_addresses"
+      end
+    end
   end
 end

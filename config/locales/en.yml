@@ -144,8 +144,9 @@ en:
             international_address: International address
             uk_address: UK address
           names:
-            international_address: International addresses
-            uk_address: UK addresses
+            international_addresses: International addresses
+            uk_addresses: UK addresses
+            uk_and_international_addresses: UK and international addresses
         answer_type_options:
           descriptions:
             address: To collect an address with separate fields for line 1, line 2, town or city, county and postcode

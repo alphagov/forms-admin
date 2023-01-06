@@ -49,7 +49,7 @@
       <% if (@page_object.answer_type == "address") %>
         <%= summary_list.row do |row|
           row.key(text: "Input type")
-          row.value(text: t("helpers.label.page.address_settings_options.input_types.#{@page_object.answer_settings.input_type}"))
+          row.value(text: t("helpers.label.page.address_settings_options.names.#{address_input_type_to_string}"))
           row.action(text: "Change",
                      href: @change_address_settings_path,
                      visually_hidden_text: "input type") end %>
