@@ -28,7 +28,7 @@
                     visually_hidden_text: t("selections_settings.include_none_of_the_above")) end %>
       <% end %>
 
-      <% if (@page_object.answer_type == "text") %>
+      <% if (@page_object.answer_type == "text") && @page_object&.answer_settings&.input_type%>
         <%= summary_list.row do |row|
           row.key(text: "Input type")
           row.value(text: t("helpers.label.page.text_settings_options.names.#{@page_object.answer_settings.input_type}"))
@@ -37,7 +37,7 @@
                     visually_hidden_text: "input type") end %>
       <% end %>
 
-      <% if (@page_object.answer_type == "date") %>
+      <% if (@page_object.answer_type == "date") && @page_object&.answer_settings&.input_type %>
         <%= summary_list.row do |row|
           row.key(text: "Input type")
           row.value(text: t("helpers.label.page.date_settings_options.input_types.#{@page_object.answer_settings.input_type}"))

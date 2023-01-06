@@ -91,7 +91,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
       expect(page).to have_link("Change Answer type Date", href: change_answer_type_path)
     end
 
-    it "has links to change the selection options" do
+    it "has a link to change the input type" do
       render_inline(described_class.new(page_object, change_answer_type_path:, change_date_settings_path:))
       expect(page).to have_link("Change input type", href: change_date_settings_path)
     end
@@ -100,6 +100,19 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
       render_inline(described_class.new(page_object, change_answer_type_path:, change_date_settings_path:))
       expect(page).to have_text "Input type"
       expect(page).to have_text I18n.t("helpers.label.page.date_settings_options.input_types.#{page_object.answer_settings.input_type}")
+    end
+
+    context "when the date has no answer settings" do
+      let(:page_object) do
+        page = FactoryBot.build(:page, :with_date_settings, id: 1)
+        page.answer_settings = nil
+        page
+      end
+
+      it "has no link to change the input type" do
+        render_inline(described_class.new(page_object, change_answer_type_path:, change_date_settings_path:))
+        expect(page).not_to have_link("Change input type", href: change_date_settings_path)
+      end
     end
   end
 end
