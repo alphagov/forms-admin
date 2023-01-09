@@ -2,7 +2,7 @@ Sentry.init do |config|
   config.dsn = ENV["SENTRY_DSN"]
   config.breadcrumbs_logger = %i[active_support_logger http_logger]
   config.debug = true
-  config.traces_sample_rate = 1.0
+  config.traces_sample_rate = 0.0
   config.environment = ENV["PAAS_ENVIRONMENT"] || "local"
 end
 
