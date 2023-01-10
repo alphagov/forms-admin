@@ -10,5 +10,9 @@ govuk_notify:
   api_key: changeme
   submission_email_confirmation_code_email_template_id: ce2638ab-754c-416d-8df6-c0ccb5e1a688
 
+sentry:
+  dsn:
+  environment: local
+
 # When set to true, any capybara tests will run chrome normally rather than in headless mode.
 show_browser_during_tests: false
