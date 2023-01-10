@@ -31,4 +31,12 @@ describe "Settings" do
 
     include_examples expected_value_test, :submission_email_confirmation_code_email_template_id, govuk_notify, "ce2638ab-754c-416d-8df6-c0ccb5e1a688"
   end
+
+  describe "sentry" do
+    sentry = settings[:sentry]
+
+    include_examples expected_value_test, :dsn, sentry, nil
+
+    include_examples expected_value_test, :environment, sentry, "local"
+  end
 end

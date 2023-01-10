@@ -62,7 +62,6 @@ Refer to the [settings file](config/settings.yml) for all the settings required 
 | Name                  | Purpose                                                            |
 | --------------------- | ------------------------------------------------------------------ |
 | `DATABASE_URL`        | The URL to the postgres instance (without the database at the end) |
-| `SENTRY_DSN`          | The DSN provided by Sentry                                         |
 | `API_BASE`            | The base url for the API - E.g. `http://localhost:9090`            |
 | `RUNNER_BASE`         | The base url for the Runner - E.g. `http://localhost:3001`         |
 | `SERVICE_UNAVAILABLE` | All pages will render 'Service unavailable' if set to `true`       |
@@ -186,7 +185,7 @@ In order to use this:
 
 - first sign up to [Sentry](https://sentry.io) and create a new project
 - create a file called `.env` in the root of this repo
-- add the Sentry DNS to`.env` as a variable named `SENTRY_DNS`
+- add the Sentry DNS to local settings config file eg. `config/settings.local.yml` ((more details)[https://github.com/alphagov/forms-admin/blob/fbefdea6de9dbbee75b0f67e4bc9f4e1080acffd/README.md])
 - uncomment out the exception triggers in [this file](config/initializers/sentry.rb)
 - Build the project and watch the errors come through on Sentry
 
