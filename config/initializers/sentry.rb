@@ -4,7 +4,7 @@ if Settings.sentry.dsn.present?
     config.breadcrumbs_logger = %i[active_support_logger http_logger]
     config.debug = true
     config.traces_sample_rate = 0.0
-    config.environment = Settings.sentry.environment || "local"
+    config.environment = Settings.sentry.environment
   end
 end
 
