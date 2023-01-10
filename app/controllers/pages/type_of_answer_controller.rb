@@ -58,8 +58,8 @@ private
     action == :create ? address_settings_new_path(form) : address_settings_edit_path(form)
   end
 
-  def default_path(_form, action)
-    action == :create ? new_page_path(@form) : edit_page_path(@form)
+  def default_path(form, action)
+    action == :create ? new_page_path(form) : edit_page_path(form)
   end
 
   def next_page_path(form, answer_type, action)
