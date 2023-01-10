@@ -1,5 +1,5 @@
 <% set_page_title(title_with_error_prefix(t('page_titles.make_live_form'), @make_live_form.errors.any?)) %>
-<% content_for :back_link, govuk_back_link_to(form_path, "Back to create a form") %>
+<% content_for :back_link, govuk_back_link_to(form_path, I18n.t("back_link.form_create")) %>
 
 
 <div class="govuk-grid-row">
