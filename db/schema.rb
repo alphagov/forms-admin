@@ -27,25 +27,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_03_162118) do
     t.index ["form_id"], name: "index_form_submission_emails_on_form_id"
   end
 
-  create_table "forms", id: :bigint, default: nil, force: :cascade do |t|
-    t.text "name"
-    t.text "submission_email"
-    t.text "org"
-  end
-
-  create_table "pages", id: :bigint, default: nil, force: :cascade do |t|
-    t.bigint "form_id"
-    t.text "question_text"
-    t.text "question_short_name"
-    t.text "hint_text"
-    t.text "answer_type"
-    t.text "next"
-  end
-
-  create_table "schema_info", id: false, force: :cascade do |t|
-    t.integer "version", default: 0, null: false
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -60,5 +41,4 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_03_162118) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "pages", "forms", name: "pages_form_id_fkey"
 end
