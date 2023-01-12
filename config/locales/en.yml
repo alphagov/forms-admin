@@ -27,12 +27,12 @@ en:
       body_html: |
         <p class="govuk-body">
           When someone has answered all the questions in
-          your form, they will be shown a page that lists all of their answers.
+          your form, they’ll be shown a page that lists all of their answers.
           The page will ask them to check their answers before they submit the
           form.
         </p>
         <p class="govuk-body">
-          You can add a declaration to this page. A declaration is some content
+          You can add a declaration to this page. A declaration is a statement
           that people must confirm they understand and agree to before they
           submit the form.
         </p>
@@ -45,8 +45,8 @@ en:
         <h2 class="govuk-heading-s">Example</h2>
 
         <div class="govuk-inset-text">
-          By submitting this form you are confirming that, to the best of your
-          knowledge, the answers you are providing are correct.
+          By submitting this form you’re confirming that, to the best of your
+          knowledge, the answers you’re providing are correct.
         </div>
   email_code_sent:
     body_html: |
@@ -214,7 +214,7 @@ en:
     new:
       body_html: |
         <p class="govuk-body">
-          When you make your form live you will get a URL for the form. The form
+          When you make your form live you’ll get a URL for the form. The form
           will not be indexed by search engines, so people will not be able to
           find it easily. Contact your GOV.UK publishing team to publish a link to
           your form on GOV.UK so people can find it.
@@ -225,7 +225,7 @@ en:
         </p>
   mark_complete:
     'false': No, I'll come back later
-    hint: Selecting 'Yes' will mark this task as complete. You will still be able to make changes if you need to.
+    hint: Selecting ‘Yes’ will mark this task as complete. You’ll still be able to make changes if you need to.
     legend: Do you want to mark this task as complete?
     'true': 'Yes'
   not_found:
@@ -242,7 +242,7 @@ en:
     confirm_email_success: Email address confirmed
     contact_details_form: Provide contact details for support
     date_settings: Are you asking for someone's date of birth?
-    declaration_form: Add a declaration
+    declaration_form: Add a declaration for people to agree to
     email_code_sent: Confirmation code sent
     error_prefix: 'Error: '
     forbidden: You cannot view this page
