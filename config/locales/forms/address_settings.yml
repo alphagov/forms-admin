@@ -1,0 +1,12 @@
+en:
+  activemodel:
+    errors:
+      models:
+        forms/address_settings_form:
+          attributes:
+            base:
+              blank: Select the kind of addresses you expect to receive
+            uk_address:
+              inclusion: Select ‘UK addresses’ or ‘International addresses’
+            international_address:
+              inclusion: Select ‘UK addresses’ or ‘International addresses’

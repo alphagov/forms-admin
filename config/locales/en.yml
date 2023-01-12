@@ -7,6 +7,8 @@ en:
           attributes:
             question_text:
               blank: Question text cannot be blank
+  address_settings:
+    hint: Select all that apply
   contact_details:
     new:
       body_html: |
@@ -137,6 +139,14 @@ en:
       forms_make_live_form:
         confirm_make_live: Are you sure you want to make your form live?
       page:
+        address_settings_options:
+          input_types:
+            international_address: International address
+            uk_address: UK address
+          names:
+            international_addresses: International addresses
+            uk_addresses: UK addresses
+            uk_and_international_addresses: UK and international addresses
         answer_type_options:
           descriptions:
             address: To collect an address with separate fields for line 1, line 2, town or city, county and postcode
@@ -225,6 +235,7 @@ en:
       If you pasted the web address, check you copied the entire address.
     title: Page not found
   page_titles:
+    address_settings: What kind of addresses do you expect to receive?
     change_email_form: What email address should form responses be sent to?
     change_name_form: Name your form
     confirm_email_form: Enter the confirmation code

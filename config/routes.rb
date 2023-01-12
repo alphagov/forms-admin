@@ -51,6 +51,8 @@ Rails.application.routes.draw do
         post "/date-settings" => "pages/date_settings#create", as: :date_settings_create
         get "/selections-settings" => "pages/selections_settings#new", as: :selections_settings_new
         post "/selections-settings" => "pages/selections_settings#create", as: :selections_settings_create
+        get "/address-settings" => "pages/address_settings#new", as: :address_settings_new
+        post "/address-settings" => "pages/address_settings#create", as: :address_settings_create
         get "/" => "pages#new", as: :new_page
         post "/" => "pages#create", as: :create_page
       end
@@ -65,6 +67,8 @@ Rails.application.routes.draw do
           post "/date-settings" => "pages/date_settings#update", as: :date_settings_update
           get "/selections-settings" => "pages/selections_settings#edit", as: :selections_settings_edit
           post "/selections-settings" => "pages/selections_settings#update", as: :selections_settings_update
+          get "/address-settings" => "pages/address_settings#edit", as: :address_settings_edit
+          post "/address-settings" => "pages/address_settings#update", as: :address_settings_update
           get "/" => "pages#edit", as: :edit_page
           patch "/" => "pages#update", as: :update_page
         end

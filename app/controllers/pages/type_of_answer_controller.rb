@@ -42,16 +42,38 @@ class Pages::TypeOfAnswerController < PagesController
 
 private
 
+  def selection_path(form, action)
+    action == :create ? selections_settings_new_path(form) : selections_settings_edit_path(form)
+  end
+
+  def text_path(form, action)
+    action == :create ? text_settings_new_path(form) : text_settings_edit_path(form)
+  end
+
+  def date_path(form, action)
+    action == :create ? date_settings_new_path(form) : date_settings_edit_path(form)
+  end
+
+  def address_path(form, action)
+    action == :create ? address_settings_new_path(form) : address_settings_edit_path(form)
+  end
+
+  def default_path(form, action)
+    action == :create ? new_page_path(form) : edit_page_path(form)
+  end
+
   def next_page_path(form, answer_type, action)
     case answer_type
     when "selection"
-      action == :create ? selections_settings_new_path(form) : selections_settings_edit_path(form)
+      selection_path(form, action)
     when "text"
-      action == :create ? text_settings_new_path(form) : text_settings_edit_path(form)
+      text_path(form, action)
     when "date"
-      action == :create ? date_settings_new_path(form) : date_settings_edit_path(form)
+      date_path(form, action)
+    when "address"
+      address_path(form, action)
     else
-      action == :create ? new_page_path(@form) : edit_page_path(@form)
+      default_path(form, action)
     end
   end
 
