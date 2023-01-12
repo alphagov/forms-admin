@@ -46,7 +46,7 @@
                     visually_hidden_text: "input type") end %>
       <% end %>
 
-      <% if (@page_object.answer_type == "address") %>
+      <% if (@page_object.answer_type == "address") && @page_object&.answer_settings&.input_type %>
         <%= summary_list.row do |row|
           row.key(text: "Input type")
           row.value(text: t("helpers.label.page.address_settings_options.names.#{address_input_type_to_string}"))
