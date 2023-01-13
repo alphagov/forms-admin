@@ -190,4 +190,13 @@ describe TaskStatusService do
       end
     end
   end
+
+  describe "#status_counts" do
+    let(:form) { build :form }
+
+    it "returns a hash containing total count of completed task and total number of tasks" do
+      allow(task_status_service).to receive(:all_task_status).and_return(%i[completed completed something_else])
+      expect(task_status_service.status_counts).to eq({ completed: 2, total: 3 })
+    end
+  end
 end
