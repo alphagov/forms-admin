@@ -28,9 +28,9 @@ class Pages::SelectionsSettingsController < PagesController
 
   def edit
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    answer_type = session.dig(:page, "answer_type")
-    answer_settings = session.dig(:page, "answer_settings")
-    is_optional = session.dig(:page, "is_optional")
+    answer_type = session.dig(:page, "answer_type") || @page.answer_type
+    answer_settings = session.dig(:page, "answer_settings") || @page.answer_settings
+    is_optional = session.dig(:page, "is_optional") || @page.is_optional
 
     @page.load(answer_type:, answer_settings:, is_optional:)
     @selections_settings_path = selections_settings_update_path(@form)
@@ -91,7 +91,7 @@ private
   end
 
   def load_answer_settings_from_page_object(page)
-    if page.answer_settings.present?
+    if page.answer_settings.present? && page.answer_settings.attributes.include?(:only_one_option) && page.answer_settings.attributes.include?(:selection_options)
       only_one_option = page.answer_settings.only_one_option
       include_none_of_the_above = page.is_optional
       selection_options = page.answer_settings.selection_options

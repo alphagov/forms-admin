@@ -13,8 +13,7 @@ class PagesController < ApplicationController
   def create
     answer_type = session.dig(:page, "answer_type")
     answer_settings = session.dig(:page, "answer_settings")
-    is_optional = session.dig(:page, "is_optional") == "true"
-    @page = Page.new(page_params.merge(answer_settings:, answer_type:, is_optional:))
+    @page = Page.new(page_params.merge({ answer_type:, answer_settings: }))
 
     if @page.save
       clear_questions_session_data
@@ -28,7 +27,7 @@ class PagesController < ApplicationController
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     answer_type = session.dig(:page, "answer_type") || @page.answer_type
     answer_settings = session.dig(:page, "answer_settings") || @page.answer_settings
-    is_optional = session.dig(:page, "is_optional") == "true" || @page.is_optional
+    is_optional = session.dig(:page, "is_optional") || @page.is_optional
 
     @page.load(answer_settings:, answer_type:, is_optional:)
   end
@@ -37,11 +36,11 @@ class PagesController < ApplicationController
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     answer_type = session.dig(:page, "answer_type") || @page.answer_type
     answer_settings = session.dig(:page, "answer_settings") || @page.answer_settings
-    is_optional = session.dig(:page, "is_optional") == "true" || @page.is_optional
 
-    @page.load(page_params.merge(answer_settings:, answer_type:, is_optional:))
+    @page.load(page_params.merge(answer_settings:, answer_type:))
 
     if @page.save
+      clear_questions_session_data
       handle_submit_action
     else
       render :edit, status: :unprocessable_entity

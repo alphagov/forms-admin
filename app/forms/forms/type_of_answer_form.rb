@@ -9,6 +9,6 @@ class Forms::TypeOfAnswerForm
   def submit(session)
     return false if invalid?
 
-    session[:page] = { answer_type: }
+    session[:page] = { answer_type:, answer_settings: nil }
   end
 end
