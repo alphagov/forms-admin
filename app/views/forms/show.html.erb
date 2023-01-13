@@ -32,8 +32,7 @@
       <%= render PreviewLinkComponent::View.new(@form.pages, link_to_runner(ENV["RUNNER_BASE"], @form.id, @form.form_slug)) %>
     </p>
 
-    <%= render TaskListComponent::View.new(sections: @task_list)
-    %>
+    <%= render TaskListComponent::View.new(sections: @task_list) %>
 
     <%= govuk_button_link_to t("forms.delete_form"), delete_form_path(@form.id), warning: true %>
   </div>
