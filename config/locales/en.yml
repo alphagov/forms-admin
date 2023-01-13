@@ -189,7 +189,7 @@ en:
     form_name_heading: Form name
     form_status_heading: Status
     main_heading: GOV.UK Forms
-    preview: Preview this form
+    preview: Preview this form in a new tab
     your_forms: Your forms
   internal_server_error:
     body: Please try again later.
