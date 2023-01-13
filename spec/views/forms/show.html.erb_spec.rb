@@ -11,6 +11,7 @@ describe "forms/show.html.erb" do
 
   before do
     assign(:form, OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft", pages:))
+    assign(:task_status_counts, { completed: 12, total: 20 })
     render template: "forms/show"
   end
 
@@ -25,6 +26,10 @@ describe "forms/show.html.erb" do
 
   it "contains a link to delete the form" do
     expect(rendered).to have_link("Delete form", href: delete_form_path(1))
+  end
+
+  it "contains a summary of completed tasks out of the total tasks" do
+    expect(rendered).to have_selector(".app-task-list__summary", text: "You've completed 12 of 20 tasks.")
   end
 
   describe "form states" do
