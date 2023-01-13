@@ -1,5 +1,5 @@
 <% set_page_title(title_with_error_prefix(t('page_titles.make_live_form'), @make_live_form.errors.any?)) %>
-<% content_for :back_link, govuk_back_link_to(form_path, I18n.t("back_link.form_create")) %>
+<% content_for :back_link, govuk_back_link_to(form_path, t("back_link.form_create")) %>
 
 
 <div class="govuk-grid-row">
@@ -19,8 +19,8 @@
       <%= render LiveFormWarningComponent::View.new() %>
 
       <%= f.govuk_collection_radio_buttons :confirm_make_live,
-                                           @make_live_form.values, ->(option) { option }, ->(option) { I18n.t('helpers.label.forms_make_live_form.options.' + "#{option}") },
-                                           legend: { text: I18n.t('helpers.label.forms_make_live_form.confirm_make_live'),
+                                           @make_live_form.values, ->(option) { option }, ->(option) { t('helpers.label.forms_make_live_form.options.' + "#{option}") },
+                                           legend: { text: t('helpers.label.forms_make_live_form.confirm_make_live'),
                                                      size: 'm'}, inline: true %>
       <%= f.govuk_submit t("save_and_continue") %>
     <% end %>
