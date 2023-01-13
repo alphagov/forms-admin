@@ -1,6 +1,8 @@
 class FormTaskListService
   include Rails.application.routes.url_helpers
 
+  attr_reader :task_counts
+
   class << self
     def call(**args)
       new(**args)
@@ -10,6 +12,7 @@ class FormTaskListService
   def initialize(form:)
     @form = form
     @task_list_statuses = TaskStatusService.new(form: @form)
+    @task_counts = @task_list_statuses.status_counts
   end
 
   def all_tasks
