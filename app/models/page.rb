@@ -19,6 +19,10 @@ class Page < ActiveResource::Base
     self.is_optional = is_optional_value
   end
 
+  def is_optional?
+    is_optional_value || is_optional == true
+  end
+
   def move_page(direction)
     return false unless %i[up down].include? direction
 
