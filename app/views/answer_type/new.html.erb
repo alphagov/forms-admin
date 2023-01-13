@@ -3,8 +3,8 @@
         :answer_type,
         @answer_types,
         ->(option) { option },
-        ->(option) { I18n.t('helpers.label.page.answer_type_options.names.' + option) },
-        ->(option) { I18n.t('helpers.label.page.answer_type_options.descriptions.' + option) }
+        ->(option) { t('helpers.label.page.answer_type_options.names.' + option) },
+        ->(option) { t('helpers.label.page.answer_type_options.descriptions.' + option) }
       )  %>
   <%= f.govuk_submit t('pages.submit_save'), name: :save_preview, secondary: true %>
 <% end %>
