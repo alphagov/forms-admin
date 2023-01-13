@@ -3,6 +3,11 @@ class TaskStatusService
     @form = form
   end
 
+  def status_counts
+    { completed: all_task_status.count(:completed),
+      total: all_task_status.count }
+  end
+
   def name_status
     :completed
   end
@@ -94,5 +99,21 @@ class TaskStatusService
 
   def can_enter_submission_email_code
     @form.email_confirmation_status == :sent
+  end
+
+private
+
+  def all_task_status
+    [
+      name_status,
+      pages_status,
+      declaration_status,
+      what_happens_next_status,
+      submission_email_status,
+      confirm_submission_email_status,
+      privacy_policy_status,
+      support_contact_details_status,
+      make_live_status,
+    ]
   end
 end
