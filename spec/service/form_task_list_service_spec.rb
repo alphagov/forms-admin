@@ -1,6 +1,22 @@
 require "rails_helper"
 
 describe FormTaskListService do
+  describe ".task_counts" do
+    let(:form) { build(:form) }
+    let(:task_status_service) { instance_double(TaskStatusService) }
+
+    before do
+      allow(task_status_service).to receive(:status_counts).and_return(1234)
+      allow(TaskStatusService).to receive(:new).and_return(task_status_service)
+    end
+
+    it "returns counts from task status service" do
+      result = described_class.new(form:)
+      expect(TaskStatusService).to have_received(:new)
+      expect(result.task_counts).to eq 1234
+    end
+  end
+
   describe "#all_tasks" do
     let(:form) { build(:form, :new_form, id: 1) }
 
