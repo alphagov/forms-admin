@@ -24,6 +24,7 @@ class PagesController < ApplicationController
   end
 
   def edit
+    reset_session_if_answer_settings_not_present
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     answer_type = session.dig(:page, "answer_type") || @page.answer_type
     answer_settings = session.dig(:page, "answer_settings") || @page.answer_settings
@@ -55,6 +56,16 @@ private
 
   def fetch_form
     @form = Form.find(params[:form_id])
+  end
+
+  def reset_session_if_answer_settings_not_present
+    answer_type = session.dig(:page, "answer_type")
+    answer_settings = session.dig(:page, "answer_settings")
+
+    if (%w[selection text date address].include? answer_type) && (answer_settings.blank? || answer_settings == {})
+      clear_questions_session_data
+      redirect_to edit_page_path(params[:form_id], params[:page_id])
+    end
   end
 
   def handle_submit_action
