@@ -7,14 +7,26 @@ class FormsController < ApplicationController
 
   def show
     @form = Form.find(params[:form_id])
-    task_service = FormTaskListService.call(form: @form)
-    @task_list = task_service.all_tasks
-    @task_status_counts = task_service.task_counts
+    if show_live?
+      render template: "forms/show_live"
+    else
+      configure_tasklist
+    end
   end
 
 private
 
   def form_params
     params.require(:form).permit(:name, :submission_email)
+  end
+
+  def configure_tasklist
+    task_service = FormTaskListService.call(form: @form)
+    @task_list = task_service.all_tasks
+    @task_status_counts = task_service.task_counts
+  end
+
+  def show_live?
+    FeatureService.enabled?(:live_view) && @form.live? && params[:edit].blank?
   end
 end
