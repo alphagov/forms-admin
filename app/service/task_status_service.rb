@@ -75,11 +75,10 @@ class TaskStatusService
   end
 
   def make_live_status
-    if mandatory_tasks_completed?
-      :not_started
-    else
-      :cannot_start
-    end
+    return :completed if @form.live?
+    return :not_started if mandatory_tasks_completed?
+
+    :cannot_start
   end
 
   def mandatory_tasks_completed?
