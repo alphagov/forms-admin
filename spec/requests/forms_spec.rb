@@ -9,29 +9,22 @@ RSpec.describe "Forms", type: :request do
       }
     end
 
-    describe "Given a form" do
+    describe "Given a live form" do
       let(:form) do
         build(:form, :live, id: 2)
       end
 
-      let(:pages) do
-        [Page.new({
-          id: 1,
-          form_id: 2,
-          question_text: "What is your work address?",
-          question_short_name: "Work address",
-          hint_text: "This should be the location stated in your contract.",
-          answer_type: "address",
-        })]
+      let(:params) do
+        {}
       end
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
           mock.get "/api/v1/forms/2", headers, form.to_json, 200
-          mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
+          mock.get "/api/v1/forms/2/pages", headers, form.pages.to_json, 200
         end
 
-        get form_path(2)
+        get form_path(2, params)
       end
 
       it "Reads the form from the API" do
@@ -39,6 +32,43 @@ RSpec.describe "Forms", type: :request do
 
         pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
         expect(ActiveResource::HttpMock.requests).to include pages_request
+      end
+
+      it "renders the show template" do
+        expect(response).to render_template("forms/show")
+      end
+
+      context "when live_view feature is enabled", feature_live_view: true do
+        it "renders the live template and no param" do
+          expect(response).to render_template("forms/show_live")
+        end
+
+        context "when edit param exists" do
+          let(:params) { { edit: true }  }
+
+          it "renders the show template if param" do
+            expect(response).to render_template("forms/show")
+          end
+        end
+      end
+    end
+
+    context "with a non-live form" do
+      let(:form) do
+        build :form, id: 2
+      end
+
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/2", headers, form.to_json, 200
+          mock.get "/api/v1/forms/2/pages", headers, form.pages.to_json, 200
+        end
+
+        get form_path(2)
+      end
+
+      it "renders the show template" do
+        expect(response).to render_template("forms/show")
       end
     end
 
