@@ -3,3 +3,4 @@ features:
   task_list_statuses: true
   reorder_pages: true
   autocomplete_answer_types: true
+  live_view: true
