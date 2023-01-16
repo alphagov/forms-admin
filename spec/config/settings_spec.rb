@@ -21,8 +21,9 @@ describe "Settings" do
   describe ".features" do
     features = settings[:features]
 
-    include_examples expected_value_test, :task_list_statuses, features, true
     include_examples expected_value_test, :live_view, features, false
+    include_examples expected_value_test, :reorder_pages, features, true
+    include_examples expected_value_test, :autocomplete_answer_types, features, false
   end
 
   describe "govuk_notify" do

@@ -15,10 +15,6 @@ module MarkCompleteComponent
       @hint = hint
     end
 
-    def render?
-      FeatureService.enabled?(:task_list_statuses)
-    end
-
     def mark_complete_options
       [OpenStruct.new(value: "true", name: t("mark_complete.true")), OpenStruct.new(value: "false", name: t("mark_complete.false"))]
     end
