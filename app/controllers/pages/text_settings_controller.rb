@@ -21,8 +21,8 @@ class Pages::TextSettingsController < PagesController
 
   def edit
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    answer_type = session.dig(:page, "answer_type")
-    answer_settings = session.dig(:page, "answer_settings")
+    answer_type = session.dig(:page, "answer_type") || @page.answer_type
+    answer_settings = session.dig(:page, "answer_settings") || @page.answer_settings
     @page.load(answer_type:, answer_settings:)
     input_type = @page&.answer_settings&.input_type
     @text_settings_form = Forms::TextSettingsForm.new(input_type:, page: @page)
