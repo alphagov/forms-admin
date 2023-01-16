@@ -64,8 +64,8 @@ class TaskListComponent::TaskListComponentPreview < ViewComponent::Preview
 
   def with_status_summary
     render(TaskListComponent::View.new(
-             completed_task_count: "10",
-             total_task_count: "20",
+             completed_task_count: "1",
+             total_task_count: "4",
              sections: [
                { title: "Make a form",
                  rows: [
@@ -73,6 +73,22 @@ class TaskListComponent::TaskListComponentPreview < ViewComponent::Preview
                    { task_name: "Edit the questions of your form", path: "#", status: :not_started, active: true },
                    { task_name: "Edit the email address", path: "#", status: :cannot_start },
                    { task_name: "Confirm the submission email address", path: "#", status: :cannot_start, active: false },
+                 ] },
+             ],
+           ))
+  end
+
+  def with_status_summary_all_tasks_completed
+    render(TaskListComponent::View.new(
+             completed_task_count: "4",
+             total_task_count: "4",
+             sections: [
+               { title: "Make a form",
+                 rows: [
+                   { task_name: "Edit the name of your form", path: "#", active: true, status: :completed, hint_text: "Describe your form clearly", confirm_path: "#confirm-path" },
+                   { task_name: "Edit the questions of your form", path: "#", status: :completed, active: true },
+                   { task_name: "Edit the email address", path: "#", status: :completed },
+                   { task_name: "Confirm the submission email address", path: "#", status: :completed, active: false },
                  ] },
              ],
            ))

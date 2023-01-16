@@ -1,4 +1,4 @@
-<% if completed_task_count.present? && total_task_count.present? %>
+<% if (completed_task_count.present? && total_task_count.present?) && (completed_task_count != total_task_count ) %>
   <%= tag.p(class:"govuk-body app-task-list__summary") do %>
     You've completed <%= completed_task_count %> of <%= total_task_count %> tasks.
   <% end %>

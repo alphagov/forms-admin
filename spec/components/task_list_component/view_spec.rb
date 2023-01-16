@@ -95,6 +95,25 @@ RSpec.describe TaskListComponent::View, type: :component do
       it "does render the summary text at the top of the task list" do
         expect(page).to have_selector(".app-task-list__summary", text: "You've completed 23 of 34 tasks.")
       end
+
+      context "when all tasks completed then hide the summary text (i.e form is live)" do
+        before do
+          render_inline(described_class.new(completed_task_count: "34", total_task_count: "34", sections: [
+            { title: "section a",
+              rows: [
+                { task_name: "task a", path: "#", status:, active: },
+              ] },
+            { title: "section 2",
+              rows: [
+                { task_name: "task d", path: "#", status:, active: },
+              ] },
+          ]))
+        end
+
+        it "does not render the summary text at the top of the task list" do
+          expect(page).not_to have_selector(".app-task-list__summary", text: "You've completed 34 of 34 tasks.")
+        end
+      end
     end
   end
 
