@@ -45,20 +45,12 @@ class Form < ActiveResource::Base
   def ready_for_live?
     @missing_sections = []
 
-    if FeatureService.enabled?(:task_list_statuses)
-      task_list_statuses = TaskStatusService.new(form: self)
-      @missing_sections << :missing_pages unless task_list_statuses.pages_status == :completed
-      @missing_sections << :missing_submission_email unless task_list_statuses.submission_email_status == :completed
-      @missing_sections << :missing_privacy_policy_url unless task_list_statuses.privacy_policy_status == :completed
-      @missing_sections << :missing_contact_details unless task_list_statuses.support_contact_details_status == :completed
-      @missing_sections << :missing_what_happens_next unless task_list_statuses.what_happens_next_status == :completed
-    else
-      @missing_sections << :missing_pages unless pages.any?
-      @missing_sections << :missing_submission_email if submission_email.blank?
-      @missing_sections << :missing_privacy_policy_url if privacy_policy_url.blank?
-      @missing_sections << :missing_contact_details unless support_email.present? || support_phone.present? || (support_url.present? && support_url_text.present?)
-      @missing_sections << :missing_what_happens_next if what_happens_next_text.blank?
-    end
+    task_list_statuses = TaskStatusService.new(form: self)
+    @missing_sections << :missing_pages unless task_list_statuses.pages_status == :completed
+    @missing_sections << :missing_submission_email unless task_list_statuses.submission_email_status == :completed
+    @missing_sections << :missing_privacy_policy_url unless task_list_statuses.privacy_policy_status == :completed
+    @missing_sections << :missing_contact_details unless task_list_statuses.support_contact_details_status == :completed
+    @missing_sections << :missing_what_happens_next unless task_list_statuses.what_happens_next_status == :completed
 
     if @missing_sections.any?
       false

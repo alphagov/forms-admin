@@ -5,7 +5,7 @@ class Forms::DeclarationForm
   attr_accessor :form, :declaration_text, :mark_complete
 
   validates :declaration_text, length: { maximum: 2000 }
-  validates :mark_complete, presence: true, if: -> { FeatureService.enabled?(:task_list_statuses) }
+  validates :mark_complete, presence: true
 
   def submit
     return false if invalid?

@@ -1,6 +1,5 @@
 # Used to add feature flags in the app to control access to certain features.
 features:
-  task_list_statuses: true
   reorder_pages: true
   autocomplete_answer_types: false
   live_view: false

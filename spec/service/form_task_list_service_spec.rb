@@ -63,13 +63,11 @@ describe FormTaskListService do
         expect(section_rows[3][:path]).to eq "/forms/1/what-happens-next"
       end
 
-      context "when task list statuses are enabled", feature_task_list_statuses: true do
-        it "has the correct default statuses" do
-          expect(section_rows.first[:status]).to eq :completed
-          expect(section_rows[1][:status]).to eq :not_started
-          expect(section_rows[2][:status]).to eq :not_started
-          expect(section_rows[3][:status]).to eq :not_started
-        end
+      it "has the correct default statuses" do
+        expect(section_rows.first[:status]).to eq :completed
+        expect(section_rows[1][:status]).to eq :not_started
+        expect(section_rows[2][:status]).to eq :not_started
+        expect(section_rows[3][:status]).to eq :not_started
       end
     end
 
@@ -100,10 +98,8 @@ describe FormTaskListService do
           expect(section_rows.first[:hint_text]).to eq I18n.t("forms.task_lists.section_2.hint_text_html", submission_email: form.submission_email)
         end
 
-        context "when task list statuses are enabled", feature_task_list_statuses: true do
-          it "has the correct default status" do
-            expect(section_rows.first[:status]).to eq :completed
-          end
+        it "has the correct default status" do
+          expect(section_rows.first[:status]).to eq :completed
         end
       end
 
@@ -112,73 +108,69 @@ describe FormTaskListService do
           expect(section_rows.first[:hint_text]).to be_nil
         end
 
-        context "when task list statuses are enabled", feature_task_list_statuses: true do
-          it "has the correct default status" do
-            expect(section_rows.first[:status]).to eq :not_started
-          end
+        it "has the correct default status" do
+          expect(section_rows.first[:status]).to eq :not_started
         end
       end
 
-      context "when task list statuses are enabled", feature_task_list_statuses: true do
-        context "and submission_email is set and no code sent" do
-          before do
-            form.submission_email = "test@example.gov.uk"
-          end
-
-          it "enter email has status of completed" do
-            expect(section_rows.first[:status]).to eq :completed
-          end
-
-          it "enter code has status of completed" do
-            expect(section_rows[1][:status]).to eq :completed
-          end
+      context "and submission_email is set and no code sent" do
+        before do
+          form.submission_email = "test@example.gov.uk"
         end
 
-        context "and submission_email is not set and no code sent" do
-          it "enter email has status of not_started" do
-            expect(section_rows.first[:status]).to eq :not_started
-          end
-
-          it "enter code has status of cannot_start" do
-            expect(section_rows[1][:status]).to eq :cannot_start
-          end
-
-          it "enter code is not active" do
-            expect(section_rows[1][:active]).to be_falsy
-          end
+        it "enter email has status of completed" do
+          expect(section_rows.first[:status]).to eq :completed
         end
 
-        context "and submission_email is not set and code sent" do
-          before do
-            create :form_submission_email, form_id: form.id, confirmation_code: form.id
-          end
+        it "enter code has status of completed" do
+          expect(section_rows[1][:status]).to eq :completed
+        end
+      end
 
-          it "enter email has status of in_progress" do
-            expect(section_rows.first[:status]).to eq :in_progress
-          end
-
-          it "enter code has status of incomplete" do
-            expect(section_rows[1][:status]).to eq :not_started
-          end
-
-          it "enter code is active" do
-            expect(section_rows[1][:active]).to be_truthy
-          end
+      context "and submission_email is not set and no code sent" do
+        it "enter email has status of not_started" do
+          expect(section_rows.first[:status]).to eq :not_started
         end
 
-        context "and submission_email is set and code blank" do
-          before do
-            form.submission_email = "test@example.gov.uk"
-            create :form_submission_email, form_id: form.id, confirmation_code: nil
-          end
+        it "enter code has status of cannot_start" do
+          expect(section_rows[1][:status]).to eq :cannot_start
+        end
 
-          it "enter email has status of completed" do
-            expect(section_rows.first[:status]).to eq :completed
-          end
+        it "enter code is not active" do
+          expect(section_rows[1][:active]).to be_falsy
+        end
+      end
 
-          it "enter code has status of completed" do
-            expect(section_rows[1][:status]).to eq :completed
-          end
+      context "and submission_email is not set and code sent" do
+        before do
+          create :form_submission_email, form_id: form.id, confirmation_code: form.id
+        end
+
+        it "enter email has status of in_progress" do
+          expect(section_rows.first[:status]).to eq :in_progress
+        end
+
+        it "enter code has status of incomplete" do
+          expect(section_rows[1][:status]).to eq :not_started
+        end
+
+        it "enter code is active" do
+          expect(section_rows[1][:active]).to be_truthy
+        end
+      end
+
+      context "and submission_email is set and code blank" do
+        before do
+          form.submission_email = "test@example.gov.uk"
+          create :form_submission_email, form_id: form.id, confirmation_code: nil
+        end
+
+        it "enter email has status of completed" do
+          expect(section_rows.first[:status]).to eq :completed
+        end
+
+        it "enter code has status of completed" do
+          expect(section_rows[1][:status]).to eq :completed
         end
       end
     end
@@ -200,11 +192,9 @@ describe FormTaskListService do
         expect(section_rows[1][:path]).to eq "/forms/1/contact-details"
       end
 
-      context "when task list statuses are enabled", feature_task_list_statuses: true do
-        it "has the correct default statuses" do
-          expect(section_rows.first[:status]).to eq :not_started
-          expect(section_rows[1][:status]).to eq :not_started
-        end
+      it "has the correct default statuses" do
+        expect(section_rows.first[:status]).to eq :not_started
+        expect(section_rows[1][:status]).to eq :not_started
       end
     end
 
@@ -220,10 +210,8 @@ describe FormTaskListService do
         expect(section_rows.first[:path]).to be_empty
       end
 
-      context "when task list statuses are enabled", feature_task_list_statuses: true do
-        it "has the correct default status" do
-          expect(section_rows.first[:status]).to eq :cannot_start
-        end
+      it "has the correct default status" do
+        expect(section_rows.first[:status]).to eq :cannot_start
       end
 
       context "when form is ready to make live" do
@@ -239,10 +227,8 @@ describe FormTaskListService do
           expect(section_rows.first[:path]).to eq "/forms/1/make-live"
         end
 
-        context "when task list statuses are enabled", feature_task_list_statuses: true do
-          it "has the correct default status" do
-            expect(section_rows.first[:status]).to eq :not_started
-          end
+        it "has the correct default status" do
+          expect(section_rows.first[:status]).to eq :not_started
         end
       end
 
