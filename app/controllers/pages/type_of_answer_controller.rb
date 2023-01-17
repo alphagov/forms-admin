@@ -83,9 +83,20 @@ private
     @type_of_answer_form.answer_type != @page.answer_type
   end
 
+  def default_answer_settings_for_answer_type(answer_type)
+    case answer_type
+    when "selection"
+      Forms::SelectionsSettingsForm.new.default_options
+    when "text", "date", "address"
+      { input_type: nil }
+    else
+      {}
+    end
+  end
+
   def save_to_session(session)
     if @type_of_answer_form.submit(session)
-      session[:page]["answer_settings"] = nil
+      session[:page]["answer_settings"] = default_answer_settings_for_answer_type(@type_of_answer_form.answer_type)
       redirect_to next_page_path(@form, @type_of_answer_form.answer_type, :update)
     else
       @type_of_answer_path = type_of_answer_update_path(@form)

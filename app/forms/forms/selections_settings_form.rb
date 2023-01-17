@@ -46,4 +46,12 @@ class Forms::SelectionsSettingsForm
   def filter_out_blank_options
     self.selection_options = selection_options.filter { |option| option.name.present? }
   end
+
+  def convert_to_selection_option(hash)
+    Forms::SelectionOption.new(hash)
+  end
+
+  def default_options
+    { selection_options: [{ name: "" }, { name: "" }].map(&method(:convert_to_selection_option)), only_one_option: false, include_none_of_the_above: false }
+  end
 end

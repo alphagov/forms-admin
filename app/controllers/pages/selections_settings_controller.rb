@@ -65,10 +65,6 @@ private
     Forms::SelectionOption.new(hash)
   end
 
-  def default_options
-    { selection_options: [{ name: "" }, { name: "" }].map(&method(:convert_to_selection_option)), only_one_option: false, include_none_of_the_above: false }
-  end
-
   def load_answer_settings_from_params(params)
     selection_options = params[:selection_options] ? params[:selection_options].values.map(&method(:convert_to_selection_option)) : []
     only_one_option = params[:only_one_option]
@@ -85,20 +81,16 @@ private
 
       { only_one_option:, selection_options:, include_none_of_the_above: }
     else
-      default_options
+      Forms::SelectionsSettingsForm.new.default_options
     end
   end
 
   def load_answer_settings_from_page_object(page)
-    if page.answer_settings.present? && page.answer_settings.attributes.include?(:only_one_option) && page.answer_settings.attributes.include?(:selection_options)
-      only_one_option = page.answer_settings.only_one_option
-      include_none_of_the_above = page.is_optional
-      selection_options = page.answer_settings.selection_options
+    only_one_option = page.answer_settings.only_one_option
+    include_none_of_the_above = page.is_optional
+    selection_options = page.answer_settings.selection_options
 
-      { only_one_option:, selection_options:, include_none_of_the_above: }
-    else
-      default_options
-    end
+    { only_one_option:, selection_options:, include_none_of_the_above: }
   end
 
   def selections_settings_form_params
