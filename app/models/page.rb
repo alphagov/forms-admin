@@ -39,8 +39,10 @@ class Page < ActiveResource::Base
     save!
   end
 
-  def load_from_session(session, key)
-    self.load(key => session.dig(:page, key) || send(key.to_sym))
+  def load_from_session(session, keys)
+    keys.each do |key|
+      self.load(key => session.dig(:page, key) || send(key.to_sym))
+    end
   end
 
 private

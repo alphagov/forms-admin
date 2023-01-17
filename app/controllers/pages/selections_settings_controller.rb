@@ -28,10 +28,7 @@ class Pages::SelectionsSettingsController < PagesController
 
   def edit
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    @page.load_from_session(session, "answer_type")
-    @page.load_from_session(session, "answer_settings")
-    @page.load_from_session(session, "is_optional")
-
+    @page.load_from_session(session, %w[answer_type answer_settings is_optional])
     @selections_settings_path = selections_settings_update_path(@form)
     @selections_settings_form = Forms::SelectionsSettingsForm.new(load_answer_settings_from_page_object(@page))
     @back_link_url = edit_page_path(@form, @page)
