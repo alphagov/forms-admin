@@ -12,9 +12,8 @@ describe "forms/make_live/confirmation.html.erb" do
     render template: "forms/make_live/confirmation"
   end
 
-  it "contains page heading and sub-heading" do
-    expect(rendered).to have_css(".govuk-caption-l:has(+ h1)", text: "Form 1")
-    expect(rendered).to have_css("h1.govuk-heading-l", text: /Your form is live/)
+  it "contains a confirmation panel with a title" do
+    expect(rendered).to have_css(".govuk-panel--confirmation h1", text: /Your form is live/)
   end
 
   it "contains the URL of the live form" do
