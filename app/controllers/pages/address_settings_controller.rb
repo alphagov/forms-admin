@@ -22,9 +22,8 @@ class Pages::AddressSettingsController < PagesController
 
   def edit
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    answer_type = session.dig(:page, "answer_type") || @page.answer_type
-    answer_settings = session.dig(:page, "answer_settings") || @page.answer_settings
-    @page.load(answer_type:, answer_settings:)
+    @page.load_from_session(session, "answer_type")
+    @page.load_from_session(session, "answer_settings")
     input_type = @page&.answer_settings&.input_type
     uk_address = input_type&.uk_address
     international_address = input_type&.international_address

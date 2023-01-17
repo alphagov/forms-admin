@@ -21,9 +21,8 @@ class Pages::DateSettingsController < PagesController
 
   def edit
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    answer_type = session.dig(:page, "answer_type") || @page.answer_type
-    answer_settings = session.dig(:page, "answer_settings") || @page.answer_settings
-    @page.load(answer_type:, answer_settings:)
+    @page.load_from_session(session, "answer_type")
+    @page.load_from_session(session, "answer_settings")
     input_type = @page&.answer_settings&.input_type
     @date_settings_form = Forms::DateSettingsForm.new(input_type:, page: @page)
     @date_settings_path = date_settings_update_path(@form)

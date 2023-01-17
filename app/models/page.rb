@@ -37,6 +37,10 @@ class Page < ActiveResource::Base
     save!
   end
 
+  def load_from_session(session, key)
+    self.load(key => session.dig(:page, key) || send(key.to_sym))
+  end
+
 private
 
   def is_optional_value
