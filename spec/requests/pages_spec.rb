@@ -115,12 +115,13 @@ RSpec.describe "Pages", type: :request do
 
       let(:updated_page_data) do
         {
+          id: 1,
           question_text: "What is your home address?",
           question_short_name: "Home address",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
           answer_settings: nil,
-          is_optional: false,
+          is_optional: nil,
         }
       end
 
@@ -165,7 +166,13 @@ RSpec.describe "Pages", type: :request do
 
       it "Updates the page on the API" do
         expected_request = ActiveResource::Request.new(:put, "/api/v1/forms/2/pages/1", updated_page_data.to_json, post_headers)
-        expect(ActiveResource::HttpMock.requests).to include(expected_request)
+        matched_request = ActiveResource::HttpMock.requests.find do |request|
+          request.method == expected_request.method &&
+            request.path == expected_request.path &&
+            request.body == expected_request.body
+        end
+
+        expect(matched_request).to eq expected_request
       end
 
       it "Redirects you to the new type of answer page" do
@@ -206,6 +213,8 @@ RSpec.describe "Pages", type: :request do
           question_short_name: "Home address",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
+          is_optional: nil,
+          answer_settings: nil,
         }
       end
 
@@ -231,7 +240,13 @@ RSpec.describe "Pages", type: :request do
 
       it "Creates the page on the API" do
         expected_request = ActiveResource::Request.new(:post, "/api/v1/forms/2/pages", new_page_data.to_json, post_headers)
-        expect(ActiveResource::HttpMock.requests).to include(expected_request)
+        matched_request = ActiveResource::HttpMock.requests.find do |request|
+          request.method == expected_request.method &&
+            request.path == expected_request.path &&
+            request.body == expected_request.body
+        end
+
+        expect(matched_request).to eq expected_request
       end
     end
   end

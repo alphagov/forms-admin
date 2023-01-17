@@ -11,9 +11,8 @@ class PagesController < ApplicationController
   end
 
   def create
-    answer_type = session.dig(:page, "answer_type")
     answer_settings = session.dig(:page, "answer_settings")
-    @page = Page.new(page_params.merge({ answer_type:, answer_settings: }))
+    @page = Page.new(page_params.merge(answer_settings:))
 
     if @page.save
       clear_questions_session_data
