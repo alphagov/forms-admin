@@ -114,7 +114,7 @@ RSpec.describe "DateSettings controller", type: :request, feature_autocomplete_a
   describe "#update" do
     let(:page) do
       new_page = build :page, :with_date_settings, id: 2, form_id: form.id
-      new_page.answer_settings = OpenStruct.new(input_type: OpenStruct.new(uk_date: "false", international_date: "true"))
+      new_page.answer_settings = { input_type: { uk_date: "false", international_date: "true" } }
       new_page
     end
 
@@ -137,8 +137,7 @@ RSpec.describe "DateSettings controller", type: :request, feature_autocomplete_a
       it "loads the updated input type from the page params" do
         form_instance_variable = assigns(:date_settings_form)
         expect(form_instance_variable.input_type).to eq "other_date"
-        page_instance_variable = assigns(:page)
-        expect(page_instance_variable.answer_settings["input_type"]).to eq "other_date"
+        expect(session[:page][:answer_settings]).to eq({ "input_type": "other_date" })
       end
 
       it "redirects the user to the edit question page" do
