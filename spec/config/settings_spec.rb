@@ -22,6 +22,7 @@ describe "Settings" do
     features = settings[:features]
 
     include_examples expected_value_test, :task_list_statuses, features, true
+    include_examples expected_value_test, :live_view, features, false
   end
 
   describe "govuk_notify" do
