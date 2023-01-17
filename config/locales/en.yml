@@ -346,6 +346,22 @@ en:
         <p class="govuk-body">
           The recipient will be asked to tell you the code. You will then need to enter the code to confirm the email address.
         </p>
+  show_live_form:
+    contact_details: Your form’s contact details
+    declaration: Declaration
+    edit_link: Edit this form
+    form_content: Form content
+    form_url: Form URL
+    privacy_policy_link: Privacy policy link
+    questions:
+      one: 1 question
+      other: "%{count} questions"
+      zero: no quesions
+    submission_email: Submission email
+    support_email: Email
+    support_phone: Phone
+    support_url: Support contact online
+    what_happens_next: What happens next
   skip_to_main_content: Skip to main content
   task_statuses:
     cannot_start: cannot start yet
