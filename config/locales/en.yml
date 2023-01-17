@@ -25,6 +25,7 @@ en:
       hint: Select at least one option
       title: How can people get help with filling in this form?
   contact_govuk_forms: Contact the GOV.UK Forms team
+  continue: Continue
   declaration_form:
     new:
       body_html: |
