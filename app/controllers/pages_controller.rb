@@ -43,7 +43,7 @@ class PagesController < ApplicationController
 private
 
   def page_params
-    params.require(:page).permit(:question_text, :question_short_name, :hint_text, :answer_type, :is_optional, :answer_settings).merge(form_id: @form.id)
+    params.require(:page).permit(:question_text, :question_short_name, :hint_text, :answer_type, :is_optional).merge(form_id: @form.id)
   end
 
   def fetch_form
