@@ -9,6 +9,12 @@ class Forms::SelectionsSettingsForm
 
   validate :selection_options, :validate_selection_options
 
+  def convert_to_selection_option(hash)
+    Forms::SelectionOption.new(hash)
+  end
+
+  DEFAULT_OPTIONS = { selection_options: [{ name: "" }, { name: "" }].map { |hash| Forms::SelectionOption.new(hash) }, only_one_option: false, include_none_of_the_above: false }.freeze
+
   def add_another
     selection_options.append(Forms::SelectionOption.new({ name: "" }))
   end
@@ -45,13 +51,5 @@ class Forms::SelectionsSettingsForm
 
   def filter_out_blank_options
     self.selection_options = selection_options.filter { |option| option.name.present? }
-  end
-
-  def convert_to_selection_option(hash)
-    Forms::SelectionOption.new(hash)
-  end
-
-  def default_options
-    { selection_options: [{ name: "" }, { name: "" }].map(&method(:convert_to_selection_option)), only_one_option: false, include_none_of_the_above: false }
   end
 end

@@ -78,7 +78,7 @@ private
 
       { only_one_option:, selection_options:, include_none_of_the_above: }
     else
-      Forms::SelectionsSettingsForm.new.default_options
+      Forms::SelectionsSettingsForm::DEFAULT_OPTIONS
     end
   end
 
