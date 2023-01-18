@@ -17,12 +17,6 @@ class Forms::AddressSettingsForm
     session[:page][:answer_settings] = { input_type: { uk_address:, international_address: } }
   end
 
-  def assign_values_to_page(page)
-    return false if invalid?
-
-    page.answer_settings = { input_type: { uk_address:, international_address: } }
-  end
-
   def at_least_one_selected?
     errors.add(:base, :blank) if uk_address == "false" && international_address == "false"
   end

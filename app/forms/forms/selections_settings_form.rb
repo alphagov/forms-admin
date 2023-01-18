@@ -36,13 +36,6 @@ class Forms::SelectionsSettingsForm
     session[:page][:is_optional] = include_none_of_the_above
   end
 
-  def assign_values_to_page(page)
-    return false if invalid?
-
-    page.answer_settings = answer_settings
-    page.is_optional = include_none_of_the_above
-  end
-
   def validate_selection_options
     return errors.add(:selection_options, :minimum) if selection_options.length < 2
     return errors.add(:selection_options, :maximum) if selection_options.length > 20
