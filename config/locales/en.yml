@@ -213,6 +213,8 @@ en:
           Contact your GOV.UK publishing team to publish a link to your form on GOV.UK so people can find it.
         </p>
       continue_link: Continue to form details
+      form_name: Form name
+      form_url: Form URL
     new:
       body_html: |
         <p class="govuk-body">
