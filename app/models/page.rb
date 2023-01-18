@@ -43,6 +43,7 @@ class Page < ActiveResource::Base
     keys.each do |key|
       self.load(key => session.dig(:page, key) || send(key.to_sym))
     end
+    self
   end
 
 private

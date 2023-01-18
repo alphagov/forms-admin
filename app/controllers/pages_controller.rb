@@ -25,19 +25,12 @@ class PagesController < ApplicationController
   def edit
     reset_session_if_answer_settings_not_present
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    answer_type = session.dig(:page, "answer_type") || @page.answer_type
-    answer_settings = session.dig(:page, "answer_settings") || @page.answer_settings
-    is_optional = session.dig(:page, "is_optional") || @page.is_optional
-
-    @page.load(answer_settings:, answer_type:, is_optional:)
+    @page.load_from_session(session, %w[answer_settings answer_type is_optional])
   end
 
   def update
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    answer_type = session.dig(:page, "answer_type") || @page.answer_type
-    answer_settings = session.dig(:page, "answer_settings") || @page.answer_settings
-
-    @page.load(page_params.merge(answer_settings:, answer_type:))
+    @page.load_from_session(session, %w[answer_type answer_settings]).load(page_params)
 
     if @page.save
       clear_questions_session_data
