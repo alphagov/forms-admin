@@ -363,6 +363,8 @@ en:
     support_url: Support contact online
     what_happens_next: What happens next
   skip_to_main_content: Skip to main content
+  status_tag_description_component:
+    status: Status
   task_statuses:
     cannot_start: cannot start yet
     completed: completed

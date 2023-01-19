@@ -7,10 +7,8 @@
     <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
       <%= @form.name %>
     </h1>
-    <dl class="govuk-!-margin-bottom-7">
-      <dt class="govuk-visually-hidden">Status</dt>
-      <dd class="govuk-!-margin-0"><%= render FormStatusTagComponent::View.new(status: @form.status) %></dd>
-    </dl>
+
+    <%= render FormStatusTagDescriptionComponent::View.new(status: @form.status) %>
 
     <p class="govuk-body">
       <%= render PreviewLinkComponent::View.new(@form.pages, link_to_runner(ENV["RUNNER_BASE"], @form.id, @form.form_slug)) %>
