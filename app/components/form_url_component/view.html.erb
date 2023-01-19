@@ -1,9 +1,9 @@
 <%= tag.div "data-module": "copy-to-clipboard", "data-copy-button-text": t("form_url_component.copy_to_clipboard") do %>
-  <p class="govuk-body">
-    <%= t("form_url_component.url_is") %>
-  </p>
+  <h2 class="govuk-heading-m">
+    <%= t("form_url_component.form_url") %>
+  </h2>
 
   <p class="govuk-body" data-copy-target>
-    <strong><%= @runner_link %></strong>
+    <%= @runner_link %>
   </p>
 <% end %>

@@ -72,7 +72,7 @@ en:
     title: You cannot view this page
   form_url_component:
     copy_to_clipboard: Copy URL to clipboard
-    url_is: 'The URL for your form is:'
+    form_url: Form URL
   forms:
     delete_form: Delete form
     form_overview:
@@ -215,7 +215,6 @@ en:
         </p>
       continue_link: Continue to form details
       form_name: Form name
-      form_url: Form URL
     new:
       body_html: |
         <p class="govuk-body">
@@ -352,7 +351,6 @@ en:
     declaration: Declaration
     edit_link: Edit this form
     form_content: Form content
-    form_url: Form URL
     privacy_policy_link: Privacy policy link
     questions:
       one: 1 question

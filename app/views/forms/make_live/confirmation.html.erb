@@ -8,8 +8,6 @@
 
     <p class="govuk-body"><%= @form.name %></p>
 
-    <h2 class="govuk-heading-m"><%= t('make_live.confirmation.form_url') %></h2>
-
     <%= render FormUrlComponent::View.new(link_to_runner(ENV["RUNNER_BASE"], @form.id, @form.form_slug, live: true )) %>
 
     <%= t("make_live.confirmation.body_html") %>

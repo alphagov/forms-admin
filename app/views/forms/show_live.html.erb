@@ -14,7 +14,6 @@
       <%= render PreviewLinkComponent::View.new(@form.pages, link_to_runner(ENV["RUNNER_BASE"], @form.id, @form.form_slug)) %>
     </p>
 
-    <h2 class="govuk-heading-m"><%= t('show_live_form.form_url') %></h2>
     <%= render FormUrlComponent::View.new(link_to_runner(ENV["RUNNER_BASE"], @form.id, @form.form_slug, live: true ))%>
 
     <h2 class="govuk-heading-m"><%= t('show_live_form.form_content') %></h2>
