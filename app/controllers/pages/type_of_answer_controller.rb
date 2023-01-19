@@ -1,6 +1,6 @@
 class Pages::TypeOfAnswerController < PagesController
   def new
-    answer_type = session[:page]["answer_type"] if session[:page].present?
+    answer_type = session.dig(:page, "answer_type")
     @type_of_answer_form = Forms::TypeOfAnswerForm.new(answer_type:)
     @type_of_answer_path = type_of_answer_create_path(@form)
     render "pages/type-of-answer"
@@ -19,6 +19,8 @@ class Pages::TypeOfAnswerController < PagesController
 
   def edit
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
+    @page.load_from_session(session, %w[answer_type])
+
     @type_of_answer_form = Forms::TypeOfAnswerForm.new(answer_type: @page.answer_type, page: @page)
     @type_of_answer_path = type_of_answer_update_path(@form)
     render "pages/type-of-answer"
@@ -26,18 +28,13 @@ class Pages::TypeOfAnswerController < PagesController
 
   def update
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
+    answer_type = session.dig(:page, "answer_type")
+
+    @page.load(answer_type:)
     @type_of_answer_form = Forms::TypeOfAnswerForm.new(answer_type_form_params)
     return redirect_to edit_page_path(@form) unless answer_type_changed?
 
-    @page.answer_type = @type_of_answer_form.answer_type if @type_of_answer_form.valid?
-    @page.answer_settings = nil if @type_of_answer_form.valid?
-
-    if @type_of_answer_form.valid? && @page.save!
-      redirect_to next_page_path(@form, @type_of_answer_form.answer_type, :update)
-    else
-      @type_of_answer_path = type_of_answer_update_path(@form)
-      render "pages/type-of-answer"
-    end
+    save_to_session(session)
   end
 
 private
@@ -84,5 +81,26 @@ private
 
   def answer_type_changed?
     @type_of_answer_form.answer_type != @page.answer_type
+  end
+
+  def default_answer_settings_for_answer_type(answer_type)
+    case answer_type
+    when "selection"
+      Forms::SelectionsSettingsForm::DEFAULT_OPTIONS
+    when "text", "date", "address"
+      { input_type: nil }
+    else
+      {}
+    end
+  end
+
+  def save_to_session(session)
+    if @type_of_answer_form.submit(session)
+      session[:page]["answer_settings"] = default_answer_settings_for_answer_type(@type_of_answer_form.answer_type)
+      redirect_to next_page_path(@form, @type_of_answer_form.answer_type, :update)
+    else
+      @type_of_answer_path = type_of_answer_update_path(@form)
+      render "pages/type-of-answer"
+    end
   end
 end

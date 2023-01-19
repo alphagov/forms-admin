@@ -8,18 +8,12 @@ RSpec.describe "Pages", type: :request do
     }
   end
 
+  let(:form_response) do
+    (build :form, id: 2)
+  end
+
   describe "Editing an existing page" do
     describe "Given a page" do
-      let(:form_response) do
-        {
-          name: "Form name",
-          form_slug: "form-name",
-          submission_email: "submission@email.com",
-          id: 2,
-          org: "test-org",
-        }.to_json
-      end
-
       let(:form_pages_response) do
         [{
           id: 1,
@@ -41,6 +35,7 @@ RSpec.describe "Pages", type: :request do
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
           answer_settings: nil,
+          is_optional: false,
         }.to_json
       end
 
@@ -53,7 +48,7 @@ RSpec.describe "Pages", type: :request do
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form_response, 200
+          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
           mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
           mock.get "/api/v1/forms/2/pages/1", req_headers, page_response, 200
         end
@@ -76,16 +71,6 @@ RSpec.describe "Pages", type: :request do
 
   describe "Updating an existing page" do
     describe "Given a page" do
-      let(:form_response) do
-        {
-          name: "Form name",
-          form_slug: "form-name",
-          submission_email: "submission@email.com",
-          id: 2,
-          org: "test-org",
-        }.to_json
-      end
-
       let(:form_pages_response) do
         [{
           id: 1,
@@ -94,6 +79,7 @@ RSpec.describe "Pages", type: :request do
           question_short_name: "Work address",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
+          answer_settings: nil,
           is_optional: false,
         }].to_json
       end
@@ -106,17 +92,20 @@ RSpec.describe "Pages", type: :request do
           question_short_name: "Work address",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
+          answer_settings: nil,
           is_optional: false,
         }.to_json
       end
 
       let(:updated_page_data) do
         {
+          id: 1,
           question_text: "What is your home address?",
           question_short_name: "Home address",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
-          is_optional: false,
+          answer_settings: nil,
+          is_optional: nil,
         }
       end
 
@@ -136,7 +125,7 @@ RSpec.describe "Pages", type: :request do
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form_response, 200
+          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
           mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
           mock.get "/api/v1/forms/2/pages/1", req_headers, page_response, 200
           mock.put "/api/v1/forms/2/pages/1", post_headers
@@ -161,7 +150,13 @@ RSpec.describe "Pages", type: :request do
 
       it "Updates the page on the API" do
         expected_request = ActiveResource::Request.new(:put, "/api/v1/forms/2/pages/1", updated_page_data.to_json, post_headers)
-        expect(ActiveResource::HttpMock.requests).to include(expected_request)
+        matched_request = ActiveResource::HttpMock.requests.find do |request|
+          request.method == expected_request.method &&
+            request.path == expected_request.path &&
+            request.body == expected_request.body
+        end
+
+        expect(matched_request).to eq expected_request
       end
 
       it "Redirects you to the new type of answer page" do
@@ -171,16 +166,6 @@ RSpec.describe "Pages", type: :request do
   end
 
   describe "Creating a new page" do
-    let(:form_response) do
-      {
-        name: "Form name",
-        form_slug: "form-name",
-        submission_email: "submission@email.com",
-        id: 2,
-        org: "test-org",
-      }.to_json
-    end
-
     let(:req_headers) do
       {
         "X-API-Token" => ENV["API_KEY"],
@@ -202,12 +187,14 @@ RSpec.describe "Pages", type: :request do
           question_short_name: "Home address",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
+          is_optional: nil,
+          answer_settings: nil,
         }
       end
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form_response, 200
+          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
           mock.get "/api/v1/forms/2/pages", req_headers, [].to_json, 200
           mock.post "/api/v1/forms/2/pages", post_headers
         end
@@ -227,24 +214,19 @@ RSpec.describe "Pages", type: :request do
 
       it "Creates the page on the API" do
         expected_request = ActiveResource::Request.new(:post, "/api/v1/forms/2/pages", new_page_data.to_json, post_headers)
-        expect(ActiveResource::HttpMock.requests).to include(expected_request)
+        matched_request = ActiveResource::HttpMock.requests.find do |request|
+          request.method == expected_request.method &&
+            request.path == expected_request.path &&
+            request.body == expected_request.body
+        end
+
+        expect(matched_request).to eq expected_request
       end
     end
   end
 
   describe "Deleting an existing page" do
     describe "Given a valid page" do
-      let(:form) do
-        Form.new({
-          name: "Form name",
-          form_slug: "form-name",
-          submission_email: "submission@email.com",
-          id: 2,
-          org: "test-org",
-          start_page: 1,
-        })
-      end
-
       let(:page) do
         Page.new({
           id: 1,
@@ -267,7 +249,7 @@ RSpec.describe "Pages", type: :request do
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
+          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
           mock.get "/api/v1/forms/2/pages/1", req_headers, page.to_json, 200
         end
 
@@ -275,7 +257,7 @@ RSpec.describe "Pages", type: :request do
       end
 
       it "reads the form from the API" do
-        expect(form).to have_been_read
+        expect(form_response).to have_been_read
       end
 
       it "reads the page from the API" do
@@ -286,17 +268,6 @@ RSpec.describe "Pages", type: :request do
 
   describe "Destroying an existing page" do
     describe "Given a valid page" do
-      let(:form) do
-        {
-          name: "Form name",
-          form_slug: "form-name",
-          submission_email: "submission@email.com",
-          id: 2,
-          org: "test-org",
-          start_page: 1,
-        }.to_json
-      end
-
       let(:page) do
         Page.new({
           id: 1,
@@ -329,7 +300,7 @@ RSpec.describe "Pages", type: :request do
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form, 200
+          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
           mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
           mock.get "/api/v1/forms/2/pages/1", req_headers, page.to_json, 200
           mock.put "/api/v1/forms/2", post_headers

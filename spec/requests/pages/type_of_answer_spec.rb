@@ -61,7 +61,7 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
         let(:type_of_answer_form) { build :type_of_answer_form, :with_simple_answer_type, form: }
 
         it "saves the answer type to session" do
-          expect(session[:page]).to eq({ "answer_type": type_of_answer_form.answer_type })
+          expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
         end
 
         it "redirects the user to the question details page" do
@@ -77,7 +77,7 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
         end
 
         it "saves the answer type to session" do
-          expect(session[:page]).to eq({ "answer_type": type_of_answer_form.answer_type })
+          expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
         end
 
         it "redirects the user to the question details page" do
@@ -93,7 +93,7 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
         end
 
         it "saves the answer type to session" do
-          expect(session[:page]).to eq({ "answer_type": type_of_answer_form.answer_type })
+          expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
         end
 
         it "redirects the user to the question details page" do
@@ -109,7 +109,7 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
         end
 
         it "saves the answer type to session" do
-          expect(session[:page]).to eq({ "answer_type": type_of_answer_form.answer_type })
+          expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
         end
 
         it "redirects the user to the question details page" do
@@ -125,7 +125,7 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
         end
 
         it "saves the answer type to session" do
-          expect(session[:page]).to eq({ "answer_type": type_of_answer_form.answer_type })
+          expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
         end
 
         it "redirects the user to the question details page" do

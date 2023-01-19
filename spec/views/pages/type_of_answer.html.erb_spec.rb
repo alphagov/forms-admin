@@ -12,7 +12,7 @@ describe "pages/type_of_answer.html.erb", type: :view do
     allow(form).to receive(:persisted?).and_return(true)
     allow(type_of_answer_form).to receive(:persisted?).and_return(true)
 
-    # mock the formg.page_number method
+    # mock the form.page_number method
     allow(form).to receive(:page_number).and_return(question_number)
 
     # mock the path helper
@@ -61,6 +61,6 @@ describe "pages/type_of_answer.html.erb", type: :view do
   end
 
   it "has a submit button with the correct text" do
-    expect(rendered).to have_button("Save and continue")
+    expect(rendered).to have_button("Continue")
   end
 end

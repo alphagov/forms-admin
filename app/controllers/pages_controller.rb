@@ -4,14 +4,14 @@ class PagesController < ApplicationController
   skip_before_action :clear_questions_session_data
 
   def new
-    answer_type = session[:page]["answer_type"]
-    answer_settings = session[:page]["answer_settings"]
-    is_optional = session[:page]["is_optional"] == "true"
+    answer_type = session.dig(:page, "answer_type")
+    answer_settings = session.dig(:page, "answer_settings")
+    is_optional = session.dig(:page, "is_optional") == "true"
     @page = Page.new(form_id: @form.id, answer_type:, answer_settings:, is_optional:)
   end
 
   def create
-    answer_settings = session[:page]["answer_settings"] if session[:page].present?
+    answer_settings = session.dig(:page, "answer_settings")
     @page = Page.new(page_params.merge(answer_settings:))
 
     if @page.save
@@ -23,15 +23,17 @@ class PagesController < ApplicationController
   end
 
   def edit
+    reset_session_if_answer_settings_not_present
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
+    @page.load_from_session(session, %w[answer_settings answer_type is_optional])
   end
 
   def update
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
-
-    @page.load(page_params)
+    @page.load_from_session(session, %w[answer_type answer_settings]).load(page_params)
 
     if @page.save
+      clear_questions_session_data
       handle_submit_action
     else
       render :edit, status: :unprocessable_entity
@@ -41,11 +43,21 @@ class PagesController < ApplicationController
 private
 
   def page_params
-    params.require(:page).permit(:question_text, :question_short_name, :hint_text, :answer_type, :is_optional, :answer_settings).merge(form_id: @form.id)
+    params.require(:page).permit(:question_text, :question_short_name, :hint_text, :answer_type, :is_optional).merge(form_id: @form.id)
   end
 
   def fetch_form
     @form = Form.find(params[:form_id])
+  end
+
+  def reset_session_if_answer_settings_not_present
+    answer_type = session.dig(:page, "answer_type")
+    answer_settings = session.dig(:page, "answer_settings")
+
+    if (Page::COMPLEX_ANSWER_TYPES.include? answer_type) && (answer_settings.blank? || answer_settings == {})
+      clear_questions_session_data
+      redirect_to edit_page_path(params[:form_id], params[:page_id])
+    end
   end
 
   def handle_submit_action

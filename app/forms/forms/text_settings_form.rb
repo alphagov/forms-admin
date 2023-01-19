@@ -14,10 +14,4 @@ class Forms::TextSettingsForm
     session[:page] = {} if session[:page].blank?
     session[:page][:answer_settings] = { input_type: }
   end
-
-  def assign_values_to_page(page)
-    return false if invalid?
-
-    page.answer_settings = { input_type: }
-  end
 end

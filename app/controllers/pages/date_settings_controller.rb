@@ -21,6 +21,7 @@ class Pages::DateSettingsController < PagesController
 
   def edit
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
+    @page.load_from_session(session, %w[answer_type answer_settings])
     input_type = @page&.answer_settings&.input_type
     @date_settings_form = Forms::DateSettingsForm.new(input_type:, page: @page)
     @date_settings_path = date_settings_update_path(@form)
@@ -34,7 +35,7 @@ class Pages::DateSettingsController < PagesController
     @date_settings_path = date_settings_update_path(@form)
     @back_link_url = type_of_answer_edit_path(@form)
 
-    if @date_settings_form.assign_values_to_page(@page) && @page.save!
+    if @date_settings_form.submit(session)
       redirect_to edit_page_path(@form)
     else
       render "pages/date_settings"

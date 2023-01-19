@@ -22,6 +22,7 @@ class Pages::AddressSettingsController < PagesController
 
   def edit
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
+    @page.load_from_session(session, %w[answer_type answer_settings])
     input_type = @page&.answer_settings&.input_type
     uk_address = input_type&.uk_address
     international_address = input_type&.international_address
@@ -37,7 +38,7 @@ class Pages::AddressSettingsController < PagesController
     @address_settings_path = address_settings_update_path(@form)
     @back_link_url = type_of_answer_edit_path(@form)
 
-    if @address_settings_form.assign_values_to_page(@page) && @page.save!
+    if @address_settings_form.submit(session)
       redirect_to edit_page_path(@form)
     else
       render address_settings_view

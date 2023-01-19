@@ -93,24 +93,6 @@ RSpec.describe Forms::SelectionsSettingsForm, type: :model do
     end
   end
 
-  describe "assign_values_to_page" do
-    let(:page) { build :page, :with_hints, answer_type: "selection", id: 1, form_id: 1 }
-
-    it "returns false if the form is invalid" do
-      selections_settings_form.selection_options = []
-      expect(selections_settings_form.submit(page)).to be_falsey
-    end
-
-    it "assigns values to the page object" do
-      selections_settings_form.selection_options = (1..2).to_a.map { |i| Forms::SelectionOption.new({ name: i.to_s }) }
-      selections_settings_form.only_one_option = true
-      selections_settings_form.include_none_of_the_above = true
-      selections_settings_form.assign_values_to_page(page)
-      expect(page.answer_settings.to_json).to eq({ only_one_option: true, selection_options: [Forms::SelectionOption.new(name: "1"), Forms::SelectionOption.new(name: "2")] }.to_json)
-      expect(page.is_optional).to eq(true)
-    end
-  end
-
   describe "filter_out_blank_options" do
     it "filters out blank inputs" do
       selections_settings_form.selection_options = [Forms::SelectionOption.new(name: "1"), Forms::SelectionOption.new(name: ""), Forms::SelectionOption.new(name: "2")]

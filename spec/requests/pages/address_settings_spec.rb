@@ -115,7 +115,7 @@ RSpec.describe "AddressSettings controller", type: :request, feature_autocomplet
   describe "#update" do
     let(:page) do
       new_page = build :page, :with_address_settings, id: 2, form_id: form.id
-      new_page.answer_settings = OpenStruct.new(input_type: OpenStruct.new(uk_address: "false", international_address: "true"))
+      new_page.answer_settings = { input_type: { uk_address: "false", international_address: "true" } }
       new_page
     end
 
@@ -137,12 +137,11 @@ RSpec.describe "AddressSettings controller", type: :request, feature_autocomplet
         post address_settings_update_path(form_id: page.form_id, page_id: page.id), params: { forms_address_settings_form: { uk_address: "true", international_address: "false" } }
       end
 
-      it "loads the updated input type from the page params" do
+      it "loads the updated input type into the session from the page params" do
         form_instance_variable = assigns(:address_settings_form)
         expect(form_instance_variable.uk_address).to eq "true"
         expect(form_instance_variable.international_address).to eq "false"
-        page_instance_variable = assigns(:page)
-        expect(page_instance_variable.answer_settings["input_type"]).to eq({ "international_address" => "false", "uk_address" => "true" })
+        expect(session[:page][:answer_settings]).to eq({ "input_type": { uk_address: "true", international_address: "false" } })
       end
 
       it "redirects the user to the edit question page" do

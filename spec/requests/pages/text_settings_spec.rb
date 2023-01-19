@@ -133,8 +133,7 @@ RSpec.describe "TextSettings controller", type: :request, feature_autocomplete_a
       it "saves the updated input type to DB" do
         form_instance_variable = assigns(:text_settings_form)
         expect(form_instance_variable.input_type).to eq input_type
-        page_instance_variable = assigns(:page)
-        expect(page_instance_variable.answer_settings["input_type"]).to eq input_type
+        expect(session[:page][:answer_settings]).to eq({ input_type: })
       end
 
       it "redirects the user to the edit question page" do
