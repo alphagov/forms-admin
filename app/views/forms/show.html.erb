@@ -8,12 +8,8 @@
       <span class="govuk-caption-l"><%= @form.name %></span><span class="govuk-visually-hidden"> - </span>
       <%= @form.live? ? t("forms.form_overview.live_title") : t("forms.form_overview.title") %>
     </h1>
-    <dl class="govuk-!-margin-bottom-7">
-      <dt class="govuk-visually-hidden">Status</dt>
-      <dd class="govuk-!-margin-0"><%= render FormStatusTagComponent::View.new(status: @form.status) %></dd>
-    </dl>
 
-
+    <%= render FormStatusTagDescriptionComponent::View.new(status: @form.status) %>
 
     <% if flash[:message] %>
       <p class="govuk-body"><%= flash[:message] %></p>
