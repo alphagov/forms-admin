@@ -3,17 +3,17 @@ class Forms::SelectionsSettingsForm
   include ActiveModel::Validations
   include ActiveModel::Validations::Callbacks
 
-  before_validation :filter_out_blank_options
+  DEFAULT_OPTIONS = { selection_options: [{ name: "" }, { name: "" }].map { |hash| Forms::SelectionOption.new(hash) }, only_one_option: false, include_none_of_the_above: false }.freeze
 
   attr_accessor :selection_options, :only_one_option, :include_none_of_the_above
+
+  before_validation :filter_out_blank_options
 
   validate :selection_options, :validate_selection_options
 
   def convert_to_selection_option(hash)
     Forms::SelectionOption.new(hash)
   end
-
-  DEFAULT_OPTIONS = { selection_options: [{ name: "" }, { name: "" }].map { |hash| Forms::SelectionOption.new(hash) }, only_one_option: false, include_none_of_the_above: false }.freeze
 
   def add_another
     selection_options.append(Forms::SelectionOption.new({ name: "" }))
