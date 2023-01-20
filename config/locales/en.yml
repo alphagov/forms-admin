@@ -166,6 +166,7 @@ en:
             date: Date
             email: Email address
             long_text: Multiple lines of text
+            name: Person's name
             national_insurance_number: National Insurance number
             number: Number
             organisation_name: Company or organisation’s name
