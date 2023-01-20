@@ -182,30 +182,30 @@ en:
             date_of_birth: 'Yes'
             other_date: 'No'
         hint_text: Hint text (optional)
+        name_settings_options:
+          hints:
+            first_and_last_name: ''
+            first_middle_and_last_name: Middle name will not be mandatory
+            full_name: ''
+          input_types:
+            first_and_last_name: First and last names in separate fields
+            first_middle_and_last_name: First, middle and last names in separate fields
+            full_name: Full name in a single field
+          names:
+            'false': 'No'
+            first_and_last_name: First and last names in separate fields
+            first_middle_and_last_name: First, middle and last names in separate fields
+            full_name: Full name in a single field
+            'true': 'Yes'
+          title_needed:
+            'false': 'No'
+            'true': 'Yes'
         question_short_name: Question short name (optional)
         question_text: Question text
         text_settings_options:
           names:
             long_text: More than a single line of text
             single_line: Single line of text
-        name_settings_options:
-          input_types:
-            full_name: Full name in a single field
-            first_and_last_name: First and last names in separate fields
-            first_middle_and_last_name: First, middle and last names in separate fields
-          title_needed:
-            'true': 'Yes'
-            'false': 'No'
-          names:
-            full_name: Full name in a single field
-            first_and_last_name: First and last names in separate fields
-            first_middle_and_last_name: First, middle and last names in separate fields
-            Yes: 'Yes'
-            No: 'No'
-          hints:
-            full_name: ""
-            first_and_last_name:  ""
-            first_middle_and_last_name: Middle name will not be mandatory
   home:
     create_a_form: Create a form
     form_name_heading: Form name
@@ -258,7 +258,6 @@ en:
       If you pasted the web address, check you copied the entire address.
     title: Page not found
   page_titles:
-    name_settings: Ask for a person’s name
     address_settings: What kind of addresses do you expect to receive?
     change_name_form: Name your form
     confirm_email_form: Enter the confirmation code
@@ -272,6 +271,7 @@ en:
     home: Home
     internal_server_error: Sorry, there is a problem with the service
     make_live_form: Make your form live
+    name_settings: Ask for a person’s name
     new_page_form: Edit question
     not_found: Page not found
     privacy_policy_form: Provide a link to privacy information for this form

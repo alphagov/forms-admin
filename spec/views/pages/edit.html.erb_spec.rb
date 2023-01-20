@@ -17,6 +17,7 @@ describe "pages/edit.html.erb" do
     allow(view).to receive(:text_settings_edit_path).and_return("/text-settings")
     allow(view).to receive(:date_settings_edit_path).and_return("/date-settings")
     allow(view).to receive(:address_settings_edit_path).and_return("/address-settings")
+    allow(view).to receive(:name_settings_edit_path).and_return("/name-settings")
 
     # Assign instance variables so they can be accessed from views
     assign(:form, form)

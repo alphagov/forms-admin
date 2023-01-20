@@ -44,4 +44,12 @@ class PageSettingsSummaryComponent::PageSettingsSummaryComponentPreview < ViewCo
     change_address_settings_path = "https://example.com/change_address_settings"
     render(PageSettingsSummaryComponent::View.new(page, change_answer_type_path:, change_address_settings_path:))
   end
+
+  def with_name_answer_type
+    page = FactoryBot.build(:page, :with_name_settings, id: 1)
+    page.answer_settings = OpenStruct.new(page.answer_settings)
+    change_answer_type_path = "https://example.com/change_answer_type"
+    change_name_settings_path = "https://example.com/change_name_settings"
+    render(PageSettingsSummaryComponent::View.new(page, change_answer_type_path:, change_name_settings_path:))
+  end
 end
