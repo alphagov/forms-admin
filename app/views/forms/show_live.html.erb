@@ -19,9 +19,11 @@
     <h2 class="govuk-heading-m"><%= t('show_live_form.questions') %></h2>
     <p class="govuk-body"><%= govuk_link_to t('show_live_form.questions_link', count: @form.pages.count), form_pages_path(@form.id) %></p>
 
-    <h2 class="govuk-heading-m"><%= t('show_live_form.declaration') %></h2>
-    <p class="govuk-body"><%= @form.declaration_text %></p>
-    <%= govuk_details(summary_text: t('show_live_form.what_is_declaration'), text: t('show_live_form.declaration_description')) %>
+    <% if @form.declaration_text.present? %>
+      <h2 class="govuk-heading-m"><%= t('show_live_form.declaration') %></h2>
+      <p class="govuk-body"><%= @form.declaration_text %></p>
+      <%= govuk_details(summary_text: t('show_live_form.what_is_declaration'), text: t('show_live_form.declaration_description')) %>
+    <% end %>
 
     <h2 class="govuk-heading-m"><%= t('show_live_form.what_happens_next') %></h2>
     <p class="govuk-body"><%= @form.what_happens_next_text %></p>

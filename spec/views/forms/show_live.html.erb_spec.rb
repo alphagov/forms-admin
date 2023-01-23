@@ -57,7 +57,16 @@ describe "forms/show_live.html.erb" do
   end
 
   it "contains declaration" do
+    expect(rendered).to have_css("h2", text: "Declaration")
     expect(rendered).to have_content(form.declaration_text)
+  end
+
+  context "with no declaration set" do
+    let(:form) { build(:form, :live, :with_pages, id: 2) }
+
+    it "does not include declaration" do
+      expect(rendered).not_to have_css("h2", text: "Declaration")
+    end
   end
 
   it "contains what happens next text" do
