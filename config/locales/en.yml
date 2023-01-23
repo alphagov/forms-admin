@@ -376,7 +376,6 @@ en:
     questions_link:
       one: View your form's 1 question
       other: View your form's %{count} questions
-      zero: no questions
     submission_email: Submission email
     support_email: Email
     support_phone: Phone
