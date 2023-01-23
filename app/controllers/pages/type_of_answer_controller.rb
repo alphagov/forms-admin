@@ -56,7 +56,7 @@ private
   end
 
   def name_path(form, action)
-      action == :create ? name_settings_new_path(form) : name_settings_edit_path(form)
+    action == :create ? name_settings_new_path(form) : name_settings_edit_path(form)
   end
 
   def default_path(form, action)
