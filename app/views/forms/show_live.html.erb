@@ -16,12 +16,16 @@
 
     <%= render FormUrlComponent::View.new(link_to_runner(ENV["RUNNER_BASE"], @form.id, @form.form_slug, live: true ))%>
 
-    <h2 class="govuk-heading-m"><%= t('show_live_form.form_content') %></h2>
-    <ul class="govuk-list">
-      <li> <%= govuk_link_to t('show_live_form.questions', count: @form.pages.count), form_pages_path(@form.id) %> </li>
-      <li> <%= govuk_link_to t('show_live_form.declaration'), declaration_path(@form.id) %> </li>
-      <li> <%= govuk_link_to t('show_live_form.what_happens_next'), what_happens_next_path(@form.id) %> </li>
-    </ul>
+    <h2 class="govuk-heading-m"><%= t('show_live_form.questions') %></h2>
+    <p class="govuk-body"><%= govuk_link_to t('show_live_form.questions_link', count: @form.pages.count), form_pages_path(@form.id) %></p>
+
+    <h2 class="govuk-heading-m"><%= t('show_live_form.declaration') %></h2>
+    <p class="govuk-body"><%= @form.declaration_text %></p>
+    <%= govuk_details(summary_text: t('show_live_form.what_is_declaration'), text: t('show_live_form.declaration_description')) %>
+
+    <h2 class="govuk-heading-m"><%= t('show_live_form.what_happens_next') %></h2>
+    <p class="govuk-body"><%= @form.what_happens_next_text %></p>
+    <%= govuk_details(summary_text: t('show_live_form.what_is_what_happens_next'), text: t('show_live_form.what_happens_next_description')) %>
 
     <h2 class="govuk-heading-m"><%= t('show_live_form.submission_email') %></h2>
     <p class="govuk-body"><%= @form.submission_email %></p>

@@ -1,7 +1,9 @@
 require "rails_helper"
 
 describe "forms/show_live.html.erb" do
-  let(:form) { build(:form, :live, :with_pages, id: 2) }
+  let(:declaration) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
+  let(:what_happens_next) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
+  let(:form) { build(:form, :live, :with_pages, id: 2, declaration_text: declaration, what_happens_next_text: what_happens_next) }
 
   around do |example|
     ClimateControl.modify RUNNER_BASE: "runner-host" do
@@ -54,12 +56,12 @@ describe "forms/show_live.html.erb" do
     end
   end
 
-  it "contains a link to declaration" do
-    expect(rendered).to have_link("Declaration", href: "/declaration_path")
+  it "contains declaration" do
+    expect(rendered).to have_content(form.declaration_text)
   end
 
-  it "contains a link to what happens next" do
-    expect(rendered).to have_link("What happens next", href: "/what_happens_next_path")
+  it "contains what happens next text" do
+    expect(rendered).to have_content(form.what_happens_next_text)
   end
 
   it "contains the submission email" do
