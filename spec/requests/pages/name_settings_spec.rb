@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "NameSettings controller", type: :request, feature_autocomplete_answer_types: true do
+RSpec.describe Pages::NameSettingsController, type: :request, feature_autocomplete_answer_types: true do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
 
