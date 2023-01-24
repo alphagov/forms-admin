@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "TypeOfAnswer controller", type: :request do
+RSpec.describe Pages::TypeOfAnswerController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
 
@@ -80,7 +80,7 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
           expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
         end
 
-        it "redirects the user to the question details page" do
+        it "redirects the user to the selection settings page" do
           expect(response).to redirect_to selections_settings_new_path(form.id)
         end
       end
@@ -96,7 +96,7 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
           expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
         end
 
-        it "redirects the user to the question details page" do
+        it "redirects the user to the text settings page" do
           expect(response).to redirect_to text_settings_new_path(form.id)
         end
       end
@@ -112,7 +112,7 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
           expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
         end
 
-        it "redirects the user to the question details page" do
+        it "redirects the user to the date settings page" do
           expect(response).to redirect_to date_settings_new_path(form.id)
         end
       end
@@ -128,8 +128,24 @@ RSpec.describe "TypeOfAnswer controller", type: :request do
           expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
         end
 
-        it "redirects the user to the question details page" do
+        it "redirects the user to the address settings page" do
           expect(response).to redirect_to address_settings_new_path(form.id)
+        end
+      end
+
+      context "when answer type is name" do
+        let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "name", form: }
+
+        before do
+          post type_of_answer_create_path form_id: form.id, params: { forms_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
+        end
+
+        it "saves the answer type to session" do
+          expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
+        end
+
+        it "redirects the user to the name settings page" do
+          expect(response).to redirect_to name_settings_new_path(form.id)
         end
       end
     end

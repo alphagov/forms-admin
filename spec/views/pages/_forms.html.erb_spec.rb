@@ -14,7 +14,8 @@ describe "pages/_form.html.erb", type: :view do
                                             change_selections_settings_path: "http://change-me-please.com",
                                             change_text_settings_path: "http://change-me-please.com",
                                             change_date_settings_path: "http://change-me-please.com",
-                                            change_address_settings_path: "http://change-me-please.com" }
+                                            change_address_settings_path: "http://change-me-please.com",
+                                            change_name_settings_path: "http://change-me-please.com" }
   end
 
   it "has a form with correct action" do

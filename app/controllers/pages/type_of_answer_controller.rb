@@ -55,6 +55,10 @@ private
     action == :create ? address_settings_new_path(form) : address_settings_edit_path(form)
   end
 
+  def name_path(form, action)
+    action == :create ? name_settings_new_path(form) : name_settings_edit_path(form)
+  end
+
   def default_path(form, action)
     action == :create ? new_page_path(form) : edit_page_path(form)
   end
@@ -69,6 +73,8 @@ private
       date_path(form, action)
     when "address"
       address_path(form, action)
+    when "name"
+      name_path(form, action)
     else
       default_path(form, action)
     end
@@ -89,6 +95,8 @@ private
       Forms::SelectionsSettingsForm::DEFAULT_OPTIONS
     when "text", "date", "address"
       { input_type: nil }
+    when "name"
+      { input_type: nil, title_needed: nil }
     else
       {}
     end

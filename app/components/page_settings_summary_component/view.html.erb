@@ -54,4 +54,20 @@
                      href: @change_address_settings_path,
                      visually_hidden_text: "input type") end %>
       <% end %>
+
+      <% if (@page_object.answer_type == "name") && @page_object&.answer_settings&.input_type %>
+        <%= summary_list.row do |row|
+          row.key(text: "Input type")
+          row.value(text: t("helpers.label.page.name_settings_options.names.#{@page_object.answer_settings.input_type}"))
+          row.action(text: "Change",
+                     href: @change_name_settings_path,
+                     visually_hidden_text: "input type") end %>
+
+        <%= summary_list.row do |row|
+          row.key(text: "Title needed")
+          row.value(text: t("helpers.label.page.name_settings_options.names.#{@page_object.answer_settings.title_needed}"))
+          row.action(text: "Change",
+                     href: @change_name_settings_path,
+                     visually_hidden_text: "title needed") end %>
+      <% end %>
   <% end %>

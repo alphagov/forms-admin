@@ -1,0 +1,33 @@
+<% set_page_title(title_with_error_prefix(t("page_titles.name_settings"), @name_settings_form.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(@back_link_url) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><span class="govuk-caption-l"><%= "#{t("pages.question")} #{@form.page_number(@page)}" %></span>
+      <%= t("page_titles.name_settings") %>
+    </h1>
+    <%= form_with model: [@form, @name_settings_form], url: @name_settings_path do |f| %>
+      <%= f.govuk_error_summary %>
+      <%= f.govuk_collection_radio_buttons(
+            :input_type,
+            Forms::NameSettingsForm::INPUT_TYPES,
+            ->(option) { option },
+            ->(option) { t('helpers.label.page.name_settings_options.names.' + option) },
+            ->(option) { t('helpers.label.page.name_settings_options.hints.' + option) },
+            legend: { text: "How do you need to collect the name?" },
+            hint: { text: "A single name field is easiest for people to complete - only ask for names separately if you need the individual parts of the name." , size: 'm' },
+            bold_labels: false,
+            )  %>
+      <%= f.govuk_collection_radio_buttons(
+            :title_needed,
+            Forms::NameSettingsForm::TITLE_NEEDED,
+            ->(option) { option },
+            ->(option) { t('helpers.label.page.name_settings_options.names.' + option) },
+            legend: { text: "Do you need the person’s title?" },
+            hint: { text: "For example Mr, Mrs, Mx, Miss" , size: 'm' },
+            )  %>
+      <%= f.govuk_submit t('continue') %>
+    <% end %>
+  </div>
+</div>
+

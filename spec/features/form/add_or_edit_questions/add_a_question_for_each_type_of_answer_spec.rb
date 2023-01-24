@@ -107,6 +107,7 @@ private
     fill_in_text_settings if answer_type == "text"
     fill_in_date_settings if answer_type == "date"
     fill_in_address_settings if answer_type == "address"
+    fill_in_name_settings if answer_type == "name"
     expect(page.find("h1")).to have_content "Edit question"
   end
 
@@ -165,5 +166,13 @@ private
     check "International addresses"
     click_button "Continue"
     expect(page.find(".govuk-summary-list")).to have_text "UK and international addresses"
+  end
+
+  def fill_in_name_settings
+    expect(page.find("h1")).to have_text "Ask for a person’s name"
+    within_fieldset("How do you need to collect the name?") { choose("Full name in a single field") }
+    within_fieldset("Do you need the person’s title?") { choose("No") }
+    click_button "Continue"
+    expect(page.find(".govuk-summary-list")).to have_text "Full name in a single field"
   end
 end

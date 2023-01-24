@@ -166,6 +166,7 @@ en:
             date: Date
             email: Email address
             long_text: Multiple lines of text
+            name: Person's name
             national_insurance_number: National Insurance number
             number: Number
             organisation_name: Company or organisation’s name
@@ -181,6 +182,24 @@ en:
             date_of_birth: 'Yes'
             other_date: 'No'
         hint_text: Hint text (optional)
+        name_settings_options:
+          hints:
+            first_and_last_name: ''
+            first_middle_and_last_name: Middle name will not be mandatory
+            full_name: ''
+          input_types:
+            first_and_last_name: First and last names in separate fields
+            first_middle_and_last_name: First, middle and last names in separate fields
+            full_name: Full name in a single field
+          names:
+            'false': 'No'
+            first_and_last_name: First and last names in separate fields
+            first_middle_and_last_name: First, middle and last names in separate fields
+            full_name: Full name in a single field
+            'true': 'Yes'
+          title_needed:
+            'false': 'No'
+            'true': 'Yes'
         question_short_name: Question short name (optional)
         question_text: Question text
         text_settings_options:
@@ -252,6 +271,7 @@ en:
     home: Home
     internal_server_error: Sorry, there is a problem with the service
     make_live_form: Make your form live
+    name_settings: Ask for a person’s name
     new_page_form: Edit question
     not_found: Page not found
     privacy_policy_form: Provide a link to privacy information for this form
