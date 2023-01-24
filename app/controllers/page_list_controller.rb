@@ -5,8 +5,13 @@ class PageListController < ApplicationController
   def edit
     @form = Form.find(params[:form_id])
     @pages = @form.pages
-    @mark_complete_form = Forms::MarkCompleteForm.new(form: @form).assign_form_values
-    @mark_complete_options = mark_complete_options
+
+    if show_live?
+      render template: "page_list/edit_live"
+    else
+      @mark_complete_form = Forms::MarkCompleteForm.new(form: @form).assign_form_values
+      @mark_complete_options = mark_complete_options
+    end
   end
 
   def update
@@ -51,5 +56,9 @@ private
 
   def mark_complete_form_params
     params.require(:forms_mark_complete_form).permit(:mark_complete)
+  end
+
+  def show_live?
+    FeatureService.enabled?(:live_view) && @form.live? && params[:edit].blank?
   end
 end

@@ -1,0 +1,22 @@
+<% set_page_title(@form.name) %>
+
+<% content_for :back_link, govuk_back_link_to(form_path(@form), t("back_link.form_view")) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+      <span class="govuk-caption-l"><%= @form.name %></span><span class="govuk-visually-hidden"> - </span>
+      <%= t("forms.form_overview.your_questions") %>
+    </h1>
+
+    <%= render FormStatusTagDescriptionComponent::View.new(status: @form.status) %>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-7"></h2>
+    <% @pages.each_with_index do |page, index| %>
+      <%= render(SummaryCardComponent::View.new(
+        title: page.question_text,
+        rows: PageOptionsService.call(page:).all_options_for_answer_type
+      )) %>
+  <% end %>
+  </div>
+</div>
