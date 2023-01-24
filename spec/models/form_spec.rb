@@ -44,7 +44,7 @@ describe Form do
 
   describe "#ready_for_live?" do
     context "when a form is complete and ready to be made live" do
-      let(:completed_form) { build :form, :with_pages, :live }
+      let(:completed_form) { build :form, :live }
 
       it "returns true" do
         expect(completed_form.ready_for_live?).to eq true
@@ -104,7 +104,7 @@ describe Form do
   end
 
   describe "#page_number" do
-    let(:completed_form) { build :form, :with_pages, :live }
+    let(:completed_form) { build :form, :live }
 
     context "with an existing page" do
       let(:page)  { completed_form.pages.first }
