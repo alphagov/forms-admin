@@ -1,0 +1,24 @@
+<section class="app-summary-card govuk-!-margin-bottom-6">
+  <header class="app-summary-card__header">
+    <h<%= heading_level %> class="app-summary-card__title">
+      <%= title %>
+    </h<%= heading_level %>>
+
+    <% if header_actions %>
+      <div class="app-summary-card__actions">
+        <%= header_actions %>
+      </div>
+    <% end %>
+  </header>
+  <div class="app-summary-card__body">
+    <%= render GovukComponent::SummaryListComponent.new do |summary_list| %>
+      <% summary_rows.each do |summary_row| %>
+        <% summary_list.row(html_attributes: { id: row_title(summary_row[:key]) }, classes: row_title(summary_row[:key])) do |row|
+          row.key(text: summary_row[:key])
+          row.value(text: summary_row[:value])
+          row.action(href: summary_row[:action_href], text: summary_row[:action_text], visually_hidden_text: summary_row[:action_visually_hidden_text] )
+        end %>
+      <% end %>
+    <% end %>
+  </div>
+</section>
