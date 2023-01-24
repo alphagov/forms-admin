@@ -62,7 +62,7 @@ describe "forms/show_live.html.erb" do
   end
 
   context "with no declaration set" do
-    let(:form) { build(:form, :live, :with_pages, id: 2) }
+    let(:declaration) { nil }
 
     it "does not include declaration" do
       expect(rendered).not_to have_css("h2", text: "Declaration")
