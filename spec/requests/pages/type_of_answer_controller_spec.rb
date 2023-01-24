@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "TypeOfAnswer controller", type: :request do
+RSpec.describe Pages::TypeOfAnswerController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
 
