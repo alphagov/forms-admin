@@ -14,8 +14,8 @@
             ->(option) { option },
             ->(option) { t('helpers.label.page.name_settings_options.names.' + option) },
             ->(option) { t('helpers.label.page.name_settings_options.hints.' + option) },
-            legend: { text: "How do you need to collect the name?" },
-            hint: { text: "A single name field is easiest for people to complete - only ask for names separately if you need the individual parts of the name." , size: 'm' },
+            legend: { text: t("helpers.label.page.name_settings_options.legends.input_type") },
+            hint: { text: t("helpers.label.page.name_settings_options.hints.input_type"), size: 'm' },
             bold_labels: false,
             )  %>
       <%= f.govuk_collection_radio_buttons(
@@ -23,8 +23,8 @@
             Forms::NameSettingsForm::TITLE_NEEDED,
             ->(option) { option },
             ->(option) { t('helpers.label.page.name_settings_options.names.' + option) },
-            legend: { text: "Do you need the person’s title?" },
-            hint: { text: "For example Mr, Mrs, Mx, Miss" , size: 'm' },
+            legend: { text: t("helpers.label.page.name_settings_options.legends.title") },
+            hint: { text: t("helpers.label.page.name_settings_options.hints.title"), size: 'm' },
             )  %>
       <%= f.govuk_submit t('continue') %>
     <% end %>
