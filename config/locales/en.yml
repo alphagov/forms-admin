@@ -152,15 +152,18 @@ en:
             uk_and_international_addresses: UK and international addresses
         answer_type_options:
           descriptions:
-            address: To collect an address with separate fields for line 1, line 2, town or city, county and postcode
-            date: Requires a day, month and year
-            email: Requires an answer in the format of an email address
-            long_text: For a longer answer
-            national_insurance_number: Requires an answer in the format of a National Insurance number
-            number: Requires a numerical answer
-            phone_number: Requires an answer in the format of a phone number
-            selection: Create a list of options for people to select from
-            single_line: For a short answer
+            address: ''
+            date: ''
+            email: ''
+            long_text: ''
+            name: ''
+            national_insurance_number: ''
+            number: People will only be able to enter whole or decimal numbers
+            organisation_name: ''
+            phone_number: ''
+            selection: You’ll be able to create a list of options for people to select from
+            single_line: ''
+            text: ''
           names:
             address: Address
             date: Date
@@ -171,7 +174,7 @@ en:
             number: Number
             organisation_name: Company or organisation’s name
             phone_number: Phone number
-            selection: Selection from a list
+            selection: Selection from a list of options
             single_line: Single line of text
             text: Text
         date_settings_options:

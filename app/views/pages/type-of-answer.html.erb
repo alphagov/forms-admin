@@ -12,8 +12,10 @@
               @answer_types,
               ->(option) { option },
               ->(option) { t('helpers.label.page.answer_type_options.names.' + option) },
+              ->(option) { t('helpers.label.page.answer_type_options.descriptions.' + option) },
               legend: { text: t('page_titles.type_of_answer'), size: 'l', tag: 'h1' },
               caption: { text: "#{t("pages.question")} #{@form.page_number(@page)}" , size: 'l' },
+              bold_labels: false,
             )  %>
       <% else %>
         <%= f.govuk_collection_radio_buttons(
@@ -24,6 +26,7 @@
               ->(option) { t('helpers.label.page.answer_type_options.descriptions.' + option) },
               legend: { text: t('page_titles.type_of_answer'), size: 'l', tag: 'h1' },
               caption: { text: "#{t("pages.question")} #{@form.page_number(@page)}" , size: 'l' },
+              bold_labels: false,
             )  %>
       <% end %>
 
