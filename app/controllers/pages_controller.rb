@@ -54,7 +54,7 @@ private
     answer_type = session.dig(:page, "answer_type")
     answer_settings = session.dig(:page, "answer_settings")
 
-    if (Page::COMPLEX_ANSWER_TYPES.include? answer_type) && (answer_settings.blank? || answer_settings == {})
+    if (Page::ANSWER_TYPES_WITH_SETTINGS.include? answer_type) && (answer_settings.blank? || answer_settings == {})
       clear_questions_session_data
       redirect_to edit_page_path(params[:form_id], params[:page_id])
     end
@@ -78,7 +78,7 @@ private
     @answer_types = if FeatureService.enabled?(:autocomplete_answer_types)
                       Page::ANSWER_TYPES.reject { |e| %w[single_line long_text].include?(e) }
                     else
-                      Page::ANSWER_TYPES.reject { |e| %w[organisation_name text].include?(e) }
+                      Page::ANSWER_TYPES.reject { |e| %w[organisation_name text name].include?(e) }
                     end
   end
 end

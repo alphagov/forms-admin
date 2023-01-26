@@ -152,15 +152,18 @@ en:
             uk_and_international_addresses: UK and international addresses
         answer_type_options:
           descriptions:
-            address: To collect an address with separate fields for line 1, line 2, town or city, county and postcode
-            date: Requires a day, month and year
-            email: Requires an answer in the format of an email address
-            long_text: For a longer answer
-            national_insurance_number: Requires an answer in the format of a National Insurance number
-            number: Requires a numerical answer
-            phone_number: Requires an answer in the format of a phone number
-            selection: Create a list of options for people to select from
-            single_line: For a short answer
+            address: ''
+            date: ''
+            email: ''
+            long_text: ''
+            name: ''
+            national_insurance_number: ''
+            number: People will only be able to enter whole or decimal numbers
+            organisation_name: ''
+            phone_number: ''
+            selection: You’ll be able to create a list of options for people to select from
+            single_line: ''
+            text: ''
           names:
             address: Address
             date: Date
@@ -171,7 +174,7 @@ en:
             number: Number
             organisation_name: Company or organisation’s name
             phone_number: Phone number
-            selection: Selection from a list
+            selection: Selection from a list of options
             single_line: Single line of text
             text: Text
         date_settings_options:
@@ -187,10 +190,15 @@ en:
             first_and_last_name: ''
             first_middle_and_last_name: Middle name will not be mandatory
             full_name: ''
+            input_type: A single name field is easiest for people to complete - only ask for names separately if you need the individual parts of the name.
+            title: For example Mr, Mrs, Miss, Ms, Mx
           input_types:
             first_and_last_name: First and last names in separate fields
             first_middle_and_last_name: First, middle and last names in separate fields
             full_name: Full name in a single field
+          legends:
+            input_type: How do you need to collect the name?
+            title: Do you need the person’s title?
           names:
             'false': 'No'
             first_and_last_name: First and last names in separate fields
