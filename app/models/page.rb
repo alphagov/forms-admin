@@ -6,7 +6,7 @@ class Page < ActiveResource::Base
 
   ANSWER_TYPES = %w[name organisation_name email phone_number national_insurance_number address date selection number text single_line long_text].freeze
 
-  COMPLEX_ANSWER_TYPES = %w[selection text date address name].freeze
+  ANSWER_TYPES_WITH_SETTINGS = %w[selection text date address name].freeze
 
   belongs_to :form
   validates :question_text, presence: true

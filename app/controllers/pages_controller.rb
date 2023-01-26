@@ -54,7 +54,7 @@ private
     answer_type = session.dig(:page, "answer_type")
     answer_settings = session.dig(:page, "answer_settings")
 
-    if (Page::COMPLEX_ANSWER_TYPES.include? answer_type) && (answer_settings.blank? || answer_settings == {})
+    if (Page::ANSWER_TYPES_WITH_SETTINGS.include? answer_type) && (answer_settings.blank? || answer_settings == {})
       clear_questions_session_data
       redirect_to edit_page_path(params[:form_id], params[:page_id])
     end
