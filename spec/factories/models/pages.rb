@@ -66,8 +66,13 @@ FactoryBot.define do
     end
 
     trait :with_name_settings do
+      transient do
+        input_type { Forms::NameSettingsForm::INPUT_TYPES.sample }
+        title_needed { Forms::NameSettingsForm::TITLE_NEEDED.sample }
+      end
+
       answer_type { "name" }
-      answer_settings { { input_type: Forms::NameSettingsForm::INPUT_TYPES.sample, title_needed: Forms::NameSettingsForm::TITLE_NEEDED.sample } }
+      answer_settings { DataStruct.new(input_type:, title_needed:) }
     end
   end
 end
