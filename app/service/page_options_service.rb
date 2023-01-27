@@ -25,8 +25,8 @@ class PageOptionsService
 
   def optional
     [{
-      key: "Optional",
-      value: @page.is_optional ? "Yes" : "No",
+      key: I18n.t("helpers.label.page.answer_type_options.optional"),
+      value: @page.is_optional ? I18n.t("helpers.label.page.answer_type_options.optional_yes") : I18n.t("helpers.label.page.answer_type_options.optional_no"),
     }]
   end
 
@@ -55,15 +55,15 @@ class PageOptionsService
   end
 
   def text_options
-    [{ key: "Input type", value: I18n.t("helpers.label.page.text_settings_options.names.#{@page.answer_settings.input_type}") }]
+    [{ key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.text_settings_options.names.#{@page.answer_settings.input_type}") }]
   end
 
   def date_options
-    [{ key: "Input type", value: I18n.t("helpers.label.page.date_settings_options.input_types.#{@page.answer_settings.input_type}") }]
+    [{ key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.date_settings_options.input_types.#{@page.answer_settings.input_type}") }]
   end
 
   def address_options
-    [{ key: "Input type", value: I18n.t("helpers.label.page.address_settings_options.names.#{address_input_type_to_string}") }]
+    [{ key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.address_settings_options.names.#{address_input_type_to_string}") }]
   end
 
   def address_input_type_to_string

@@ -165,6 +165,7 @@ en:
             selection: You’ll be able to create a list of options for people to select from
             single_line: ''
             text: ''
+          input_type: Input type
           names:
             address: Address
             date: Date
@@ -178,6 +179,10 @@ en:
             selection: Selection from a list of options
             single_line: Single line of text
             text: Text
+          optional: Optional
+          optional_no: 'No'
+          optional_yes: 'Yes'
+          title: Answer type
         date_settings_options:
           input_types:
             date_of_birth: Date of birth
