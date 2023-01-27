@@ -11,9 +11,9 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq(
-          [{ key: "Answer type", value: "Address" },
-           { key: "Optional", value: "No" },
-           { key: "Input type", value: "UK and international addresses" }],
+          [{ key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.answer_type_options.names.address") },
+           { key: I18n.t("helpers.label.page.answer_type_options.optional"), value: I18n.t("helpers.label.page.answer_type_options.optional_no") },
+           { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.address_settings_options.names.uk_and_international_addresses") }],
         )
       end
     end
@@ -23,9 +23,9 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq(
-          [{ key: "Answer type", value: "Address" },
-           { key: "Optional", value: "No" },
-           { key: "Input type", value: "International addresses" }],
+          [{ key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.answer_type_options.names.address") },
+           { key: I18n.t("helpers.label.page.answer_type_options.optional"), value: I18n.t("helpers.label.page.answer_type_options.optional_no") },
+           { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.address_settings_options.names.international_addresses") }],
         )
       end
     end
@@ -35,9 +35,9 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq(
-          [{ key: "Answer type", value: "Address" },
-           { key: "Optional", value: "No" },
-           { key: "Input type", value: "UK addresses" }],
+          [{ key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.answer_type_options.names.address") },
+           { key: I18n.t("helpers.label.page.answer_type_options.optional"), value: I18n.t("helpers.label.page.answer_type_options.optional_no") },
+           { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.address_settings_options.names.uk_addresses") }],
         )
       end
     end
@@ -47,9 +47,9 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq(
-          [{ key: "Answer type", value: "Address" },
-           { key: "Optional", value: "No" },
-           { key: "Input type", value: "International addresses" }],
+          [{ key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.answer_type_options.names.address") },
+           { key: I18n.t("helpers.label.page.answer_type_options.optional"), value: I18n.t("helpers.label.page.answer_type_options.optional_no") },
+           { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.address_settings_options.names.international_addresses") }],
         )
       end
     end
@@ -59,9 +59,9 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key: "Answer type", value: "Date" },
-          { key: "Optional", value: "No" },
-          { key: "Input type", value: "Date of birth" },
+          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.answer_type_options.names.date") },
+          { key: I18n.t("helpers.label.page.answer_type_options.optional"), value: I18n.t("helpers.label.page.answer_type_options.optional_no") },
+          { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.date_settings_options.input_types.date_of_birth") },
         ])
       end
     end
@@ -71,9 +71,9 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key: "Answer type", value: "Date" },
-          { key: "Optional", value: "No" },
-          { key: "Input type", value: "Other date" },
+          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.answer_type_options.names.date") },
+          { key: I18n.t("helpers.label.page.answer_type_options.optional"), value: I18n.t("helpers.label.page.answer_type_options.optional_no") },
+          { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.date_settings_options.input_types.other_date") },
         ])
       end
     end
@@ -83,9 +83,9 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key: "Answer type", value: "Text" },
-          { key: "Optional", value: "No" },
-          { key: "Input type", value: "Single line of text" },
+          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.answer_type_options.names.text") },
+          { key: I18n.t("helpers.label.page.answer_type_options.optional"), value: I18n.t("helpers.label.page.answer_type_options.optional_no") },
+          { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.text_settings_options.names.single_line") },
         ])
       end
     end
@@ -95,9 +95,9 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key: "Answer type", value: "Text" },
-          { key: "Optional", value: "No" },
-          { key: "Input type", value: "More than a single line of text" },
+          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.answer_type_options.names.text") },
+          { key: I18n.t("helpers.label.page.answer_type_options.optional"), value: I18n.t("helpers.label.page.answer_type_options.optional_no") },
+          { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.text_settings_options.names.long_text") },
         ])
       end
     end
@@ -107,10 +107,10 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key: "Answer type", value: "Selection from a list" },
-          { key: "Options", value: "Option 1, Option 2" },
-          { key: "People can only select one option", value: "Yes" },
-          { key: "Include an option for ‘None of the above’", value: "No" },
+          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.answer_type_options.names.#{page.answer_type}") },
+          { key: I18n.t("selections_settings.options_title"), value: "Option 1, Option 2" },
+          { key: I18n.t("selections_settings.only_one_option"), value: I18n.t("selections_settings.yes") },
+          { key: I18n.t("selections_settings.include_none_of_the_above"), value: I18n.t("selections_settings.no") },
         ])
       end
     end
@@ -120,30 +120,22 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key: "Answer type", value: "Selection from a list" },
+          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.answer_type_options.names.#{page.answer_type}") },
           { key: "Options", value: "Option 1, Option 2" },
-          { key: "People can only select one option", value: "No" },
-          { key: "Include an option for ‘None of the above’", value: "No" },
+          { key: "People can only select one option", value: I18n.t("selections_settings.no") },
+          { key: I18n.t("selections_settings.include_none_of_the_above"), value: I18n.t("selections_settings.no") },
         ])
       end
     end
 
-    [
-      ["national_insurance_number", "National Insurance number"],
-      %w[number Number],
-      ["email", "Email address"],
-      ["phone_number", "Phone number"],
-      ["single_line", "Single line of text"],
-      ["organisation_name", "Company or organisation’s name"],
-      ["long_text", "Multiple lines of text"],
-    ].each do |answer_type, expected_options|
+    %w[number national_insurance_number email phone_number single_line organisation_name long_text].each do |answer_type|
       context "with #{answer_type}" do
         let(:page) { build :page, answer_type: }
 
         it "returns the correct options" do
           expect(page_options_service.all_options_for_answer_type).to eq([
-            { key: "Answer type", value: expected_options },
-            { key: "Optional", value: "No" },
+            { key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.answer_type_options.names.#{answer_type}") },
+            { key: I18n.t("helpers.label.page.answer_type_options.optional"), value: I18n.t("helpers.label.page.answer_type_options.optional_no") },
           ])
         end
       end
