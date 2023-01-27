@@ -20,6 +20,7 @@ class PageOptionsService
     options.concat(text_options) if @page.answer_type == "text"
     options.concat(date_options) if @page.answer_type == "date"
     options.concat(address_options) if @page.answer_type == "address"
+    options.concat(name_options) if @page.answer_type == "name"
     options
   end
 
@@ -48,7 +49,7 @@ class PageOptionsService
 
   def selection_options
     [
-      { key: "Options", value: @page.show_selection_options },
+      { key: I18n.t("selections_settings.options_title"), value: @page.show_selection_options },
       { key: I18n.t("selections_settings.only_one_option"), value: @page.answer_settings.only_one_option == "true" ? I18n.t("selections_settings.yes") : I18n.t("selections_settings.no") },
       { key: I18n.t("selections_settings.include_none_of_the_above"), value: @page.is_optional? ? I18n.t("selections_settings.yes") : I18n.t("selections_settings.no") },
     ]
@@ -64,6 +65,11 @@ class PageOptionsService
 
   def address_options
     [{ key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.address_settings_options.names.#{address_input_type_to_string}") }]
+  end
+
+  def name_options
+    [{ key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.name_settings_options.names.#{@page.answer_settings.input_type}") },
+     { key: I18n.t("helpers.label.page.name_settings_options.title_needed.name"), value: I18n.t("helpers.label.page.name_settings_options.names.#{@page.answer_settings.title_needed}") }]
   end
 
   def address_input_type_to_string

@@ -213,6 +213,7 @@ en:
             'true': 'Yes'
           title_needed:
             'false': 'No'
+            name: Title needed
             'true': 'Yes'
         question_short_name: Question short name (optional)
         question_text: Question text
@@ -361,6 +362,7 @@ en:
     'no': 'No'
     only_one_option: People can only select one option
     option: Option %{number}
+    options_title: Options
     remove_html: Remove <span class="govuk-visually-hidden">option %{option_number}</span>
     'yes': 'Yes'
   service_unavailable:

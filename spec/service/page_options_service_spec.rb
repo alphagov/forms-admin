@@ -121,9 +121,48 @@ describe PageOptionsService do
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
           { key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.answer_type_options.names.#{page.answer_type}") },
-          { key: "Options", value: "Option 1, Option 2" },
-          { key: "People can only select one option", value: I18n.t("selections_settings.no") },
+          { key: I18n.t("selections_settings.options_title"), value: "Option 1, Option 2" },
+          { key: I18n.t("selections_settings.only_one_option"), value: I18n.t("selections_settings.no") },
           { key: I18n.t("selections_settings.include_none_of_the_above"), value: I18n.t("selections_settings.no") },
+        ])
+      end
+    end
+
+    context "with full name, no title needed" do
+      let(:page) { build :page, :with_name_settings, input_type: "full_name", title_needed: "false" }
+
+      it "returns the correct options" do
+        expect(page_options_service.all_options_for_answer_type).to eq([
+          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.answer_type_options.names.name") },
+          { key: I18n.t("helpers.label.page.answer_type_options.optional"), value: I18n.t("helpers.label.page.answer_type_options.optional_no") },
+          { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.name_settings_options.names.full_name") },
+          { key: I18n.t("helpers.label.page.name_settings_options.title_needed.name"), value: I18n.t("helpers.label.page.name_settings_options.title_needed.false") },
+        ])
+      end
+    end
+
+    context "with first_and_last_name, title needed" do
+      let(:page) { build :page, :with_name_settings, input_type: "first_and_last_name", title_needed: "true" }
+
+      it "returns the correct options" do
+        expect(page_options_service.all_options_for_answer_type).to eq([
+          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.answer_type_options.names.name") },
+          { key: I18n.t("helpers.label.page.answer_type_options.optional"), value: I18n.t("helpers.label.page.answer_type_options.optional_no") },
+          { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.name_settings_options.names.first_and_last_name") },
+          { key: I18n.t("helpers.label.page.name_settings_options.title_needed.name"), value: I18n.t("helpers.label.page.name_settings_options.title_needed.true") },
+        ])
+      end
+    end
+
+    context "with first_middle_and_last_name, title needed" do
+      let(:page) { build :page, :with_name_settings, input_type: "first_middle_and_last_name", title_needed: "true" }
+
+      it "returns the correct options" do
+        expect(page_options_service.all_options_for_answer_type).to eq([
+          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.answer_type_options.names.name") },
+          { key: I18n.t("helpers.label.page.answer_type_options.optional"), value: I18n.t("helpers.label.page.answer_type_options.optional_no") },
+          { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.name_settings_options.names.first_middle_and_last_name") },
+          { key: I18n.t("helpers.label.page.name_settings_options.title_needed.name"), value: I18n.t("helpers.label.page.name_settings_options.title_needed.true") },
         ])
       end
     end
