@@ -7,7 +7,7 @@ describe SubmissionEmailMailer, type: :mailer do
       form_name: "Testing API",
       confirmation_code: "654321",
       notify_response_id: "abc-123",
-      current_user: OpenStruct.new(name: "Joe Bloggs", email: "example@example.com", confirmation_code: "654321"),
+      user_information: OpenStruct.new(name: "Joe Bloggs", email: "example@example.com", confirmation_code: "654321"),
     )
   end
 

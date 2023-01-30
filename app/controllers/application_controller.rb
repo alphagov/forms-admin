@@ -1,9 +1,9 @@
 require "resolv"
 
 class ApplicationController < ActionController::Base
-  include GDS::SSO::ControllerMethods
+  include GDS::SSO::ControllerMethods unless Settings.basic_auth.enabled
   before_action :set_request_id
-  before_action :authenticate_user!
+  before_action :authenticate_user! unless Settings.basic_auth.enabled
   before_action :set_user_instance_variable
   before_action :check_service_unavailable
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
@@ -16,17 +16,21 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def user_information
+    Settings.basic_auth.enabled ? OpenStruct.new({ email: "example@example.com", organisation_slug: "government-digital-service", name: "A User" }) : current_user
+  end
+
   def set_user_instance_variable
-    @current_user = current_user
+    @current_user = user_information
   end
 
   def append_info_to_payload(payload)
     super
     payload[:host] = request.host
-    if current_user.present?
-      payload[:user_id] = current_user.id
-      payload[:user_email] = current_user.email
-      payload[:user_organisation_slug] = current_user.organisation_slug
+    if user_information.present?
+      payload[:user_id] = user_information.id
+      payload[:user_email] = user_information.email
+      payload[:user_organisation_slug] = user_information.organisation_slug
     end
     payload[:request_id] = request.request_id
     payload[:user_ip] = user_ip(request.env.fetch("HTTP_X_FORWARDED_FOR", ""))

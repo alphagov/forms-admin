@@ -7,7 +7,7 @@ FactoryBot.define do
     email_code { confirmation_code }
 
     trait :with_user do
-      current_user { OpenStruct.new(name: "User", email: "user@gov.uk") }
+      user_information { OpenStruct.new(name: "User", email: "user@gov.uk") }
     end
   end
 end

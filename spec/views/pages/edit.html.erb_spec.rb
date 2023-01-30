@@ -7,7 +7,7 @@ describe "pages/edit.html.erb" do
     # Initialize models
     page = Page.new(id: 1, question_text:, form_id: 1, answer_type: "email", answer_settings: nil)
     form = Form.new(id: 1, name: "Form 1", form_id: 1, pages: [page])
-    current_user = OpenStruct.new(uid: "123456")
+    user_information = OpenStruct.new(uid: "123456")
 
     # If models aren't persisted, they won't work with form builders correctly
     allow(page).to receive(:persisted?).and_return(true)
@@ -22,7 +22,7 @@ describe "pages/edit.html.erb" do
     # Assign instance variables so they can be accessed from views
     assign(:form, form)
     assign(:page, page)
-    assign(:current_user, current_user)
+    assign(:current_user, user_information)
     assign(:answer_types, [])
 
     # This is normally done in the ApplicationController, but we aren't using

@@ -2,7 +2,7 @@ class Forms::SubmissionEmailForm
   include ActiveModel::Model
   include ActiveModel::Validations
 
-  attr_accessor :form, :temporary_submission_email, :email_code, :confirmation_code, :current_user, :notify_response_id
+  attr_accessor :form, :temporary_submission_email, :email_code, :confirmation_code, :user_information, :notify_response_id
 
   EMAIL_REGEX = /.*@.*/
   GOVUK_EMAIL_REGEX = /\.gov\.uk\z/i
@@ -36,7 +36,7 @@ class Forms::SubmissionEmailForm
         form_name: form.name,
         confirmation_code:,
         notify_response_id:,
-        current_user:,
+        user_information:,
       ).deliver_now
       true
     else
@@ -56,7 +56,7 @@ class Forms::SubmissionEmailForm
   def mark_submission_email_as_confirmed
     self.confirmation_code = nil
     form_submission_email = FormSubmissionEmail.find_by_form_id(form.id)
-    form_submission_email.update!(confirmation_code: nil, updated_by_name: current_user.name, updated_by_email: current_user.email)
+    form_submission_email.update!(confirmation_code: nil, updated_by_name: user_information.name, updated_by_email: user_information.email)
   end
 
   def assign_form_values
@@ -90,14 +90,14 @@ private
     FormSubmissionEmail.create!(form_id: form.id,
                                 temporary_submission_email:,
                                 confirmation_code:,
-                                created_by_name: current_user.name,
-                                created_by_email: current_user.email)
+                                created_by_name: user_information.name,
+                                created_by_email: user_information.email)
   end
 
   def update_submission_email_record(confirmation_code, form)
     form.update(temporary_submission_email:,
                 confirmation_code:,
-                updated_by_name: current_user.name,
-                updated_by_email: current_user.email)
+                updated_by_name: user_information.name,
+                updated_by_email: user_information.email)
   end
 end

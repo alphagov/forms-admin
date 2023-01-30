@@ -8,7 +8,7 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
           form:,
           temporary_submission_email: "test@test.gov.uk",
           confirmation_code: "123456",
-          current_user: OpenStruct.new(name: "User", email: "user@gov.uk")
+          user_information: OpenStruct.new(name: "User", email: "user@gov.uk")
   end
 
   it "has a valid factory" do
@@ -79,7 +79,7 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
                                             form_name: form.name,
                                             confirmation_code: submission_email_form_with_user.confirmation_code,
                                             notify_response_id: submission_email_form_with_user.notify_response_id,
-                                            current_user: submission_email_form_with_user.current_user,
+                                            user_information: submission_email_form_with_user.user_information,
                                           ).and_return(delivery)
 
         result = submission_email_form_with_user.submit
@@ -108,7 +108,7 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
                                             form_name: form.name,
                                             confirmation_code: submission_email_form_with_user.confirmation_code,
                                             notify_response_id: submission_email_form_with_user.notify_response_id,
-                                            current_user: submission_email_form_with_user.current_user,
+                                            user_information: submission_email_form_with_user.user_information,
                                           ).and_return(delivery)
 
         result = submission_email_form_with_user.submit
@@ -167,7 +167,7 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
                                             form_name: form.name,
                                             confirmation_code: submission_email_form_with_user.confirmation_code,
                                             notify_response_id: submission_email_form_with_user.notify_response_id,
-                                            current_user: submission_email_form_with_user.current_user,
+                                            user_information: submission_email_form_with_user.user_information,
                                           ).and_return(delivery)
 
         result = submission_email_form_with_user.submit
@@ -195,7 +195,7 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
                                             form_name: form.name,
                                             confirmation_code: submission_email_form_with_user.confirmation_code,
                                             notify_response_id: submission_email_form_with_user.notify_response_id,
-                                            current_user: submission_email_form_with_user.current_user,
+                                            user_information: submission_email_form_with_user.user_information,
                                           ).and_return(delivery)
 
         result = submission_email_form_with_user.submit

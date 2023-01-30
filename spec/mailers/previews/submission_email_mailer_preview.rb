@@ -5,7 +5,7 @@ class SubmissionEmailMailerPreview < ActionMailer::Preview
       form_name: "My fantastic form",
       confirmation_code: "12345",
       notify_response_id: "67890",
-      current_user: OpenStruct.new(name: "Joe Bloggs", email: "example@example.com"),
+      user_information: OpenStruct.new(name: "Joe Bloggs", email: "example@example.com"),
     )
   end
 end

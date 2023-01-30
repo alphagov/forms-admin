@@ -3,3 +3,7 @@ features:
   reorder_pages: true
   autocomplete_answer_types: true
   live_view: true
+basic_auth:
+  enabled: true
+  username: test
+  password: test
