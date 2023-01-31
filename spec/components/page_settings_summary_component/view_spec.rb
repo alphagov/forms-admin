@@ -181,7 +181,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
     it "has a link to change the answer type" do
       render_inline(described_class.new(page_object, change_answer_type_path:, change_name_settings_path:))
-      expect(page).to have_link("Change Answer type Person's name", href: change_answer_type_path)
+      expect(page).to have_link("Change Answer type Person’s name", href: change_answer_type_path)
     end
 
     it "has links to change the answer settings" do

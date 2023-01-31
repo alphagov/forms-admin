@@ -155,7 +155,7 @@ private
   end
 
   def fill_in_date_settings
-    expect(page.find("h1")).to have_text "Are you asking for someone's date of birth?"
+    expect(page.find("h1")).to have_text "Are you asking for someone’s date of birth?"
     choose "No"
     click_button "Continue"
   end
