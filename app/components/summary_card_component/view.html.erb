@@ -1,7 +1,12 @@
 <section class="app-summary-card govuk-!-margin-bottom-6">
   <header class="app-summary-card__header">
-    <h<%= heading_level %> class="app-summary-card__title">
+    <h<%= heading_level %> class="app-summary-card__title govuk-!-font-weight-bold">
       <%= title %>
+      <% if hint.present? %>
+        <div class="govuk-!-font-weight-regular">
+          <%= hint %>
+        </div>
+      <% end %>
     </h<%= heading_level %>>
 
     <% if header_actions %>

@@ -11,7 +11,7 @@ class SummaryCardComponent::ViewPreview < ViewComponent::Preview
   end
 
   def with_hint_text_in_title
-    render(SummaryCardComponent::View.new(title: "How many balls can you juggle with?", rows: [
+    render(SummaryCardComponent::View.new(title: "What is your full name?", hint: "For example as shown on a passport", rows: [
       { key: "First names", value: "Mike" },
       { key: "Middle names", value: "Larson" },
       { key: "Last name", value: "Doyle" },
