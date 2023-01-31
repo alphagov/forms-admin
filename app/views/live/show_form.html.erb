@@ -17,7 +17,7 @@
     <%= render FormUrlComponent::View.new(link_to_runner(ENV["RUNNER_BASE"], form.id, form.form_slug, live: true ))%>
 
     <h2 class="govuk-heading-m"><%= t('show_live_form.questions') %></h2>
-    <p class="govuk-body"><%= govuk_link_to t('show_live_form.questions_link', count: form.pages.count), form_pages_path(form.id) %></p>
+    <p class="govuk-body"><%= govuk_link_to t('show_live_form.questions_link', count: form.pages.count), live_form_pages_path(form.id) %></p>
 
     <% if form.declaration_text.present? %>
       <h2 class="govuk-heading-m"><%= t('show_live_form.declaration') %></h2>

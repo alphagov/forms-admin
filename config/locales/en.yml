@@ -11,7 +11,7 @@ en:
     hint: Select all that apply
   back_link:
     form_create: Back to create your form
-    form_view: Back to view your form
+    form_view: Back to your form
     forms: Back to your forms
   contact_details:
     new:

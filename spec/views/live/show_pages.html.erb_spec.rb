@@ -1,15 +1,13 @@
 require "rails_helper"
 
-describe "page_list/edit_live.html.erb" do
+describe "live/show_pages.html.erb" do
   let(:form) { build :form, :live, id: 1 }
+  let(:pages) { form.pages }
 
   before do
-    assign(:form, form)
-    assign(:pages, form.pages)
+    allow(view).to receive(:live_form_path).and_return("/live-form-path")
 
-    allow(view).to receive(:form_path).and_return("/form-path")
-
-    render(template: "page_list/edit_live", layout: "layouts/application")
+    render(template: "live/show_pages", layout: "layouts/application", locals: { form:, pages: })
   end
 
   it "form name is in the page title" do
@@ -17,7 +15,7 @@ describe "page_list/edit_live.html.erb" do
   end
 
   it "back link is set to form_path" do
-    expect(rendered).to have_link("Back to view your form", href: "/form-path")
+    expect(rendered).to have_link("Back to your form", href: "/live-form-path")
   end
 
   it "has correct page heading" do
