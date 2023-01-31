@@ -44,7 +44,7 @@
     "stylelint-config-gds": "^0.2.0"
   },
   "dependencies": {
-    "govuk-frontend": "~4.4.1"
+    "govuk-frontend": "~4.5.0"
   },
   "standard": {
     "globals": [
