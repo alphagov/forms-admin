@@ -48,7 +48,6 @@ jobs:
             --var GOVUK_APP_DOMAIN=${{ secrets.GOVUK_APP_DOMAIN }} \
             --var SETTINGS__SENTRY__DSN=${{ secrets.SENTRY_DSN }} \
             --var SETTINGS__SENTRY__ENVIRONMENT=dev \
-            --var SETTINGS__FEATURES__LIVE_VIEW=true \
             --var API_BASE=${{ secrets.API_BASE }} \
             --var RUNNER_BASE=${{ secrets.RUNNER_BASE }} \
             --var INSTANCES=2 \
