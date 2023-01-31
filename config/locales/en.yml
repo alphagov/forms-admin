@@ -171,7 +171,7 @@ en:
             date: Date
             email: Email address
             long_text: Multiple lines of text
-            name: Person's name
+            name: Person’s name
             national_insurance_number: National Insurance number
             number: Number
             organisation_name: Company or organisation’s name
@@ -278,7 +278,7 @@ en:
     confirm_email_form: Enter the confirmation code
     confirm_email_success: Email address confirmed
     contact_details_form: Provide contact details for support
-    date_settings: Are you asking for someone's date of birth?
+    date_settings: Are you asking for someone’s date of birth?
     declaration_form: Add a declaration for people to agree to
     email_code_sent: Confirmation code sent
     error_prefix: 'Error: '
@@ -383,14 +383,14 @@ en:
           The recipient will be asked to tell you the code. You will then need to enter the code to confirm the email address.
         </p>
   show_live_form:
-    contact_details: Your form‘s contact details
+    contact_details: Your form’s contact details for support
     declaration: Declaration
-    declaration_description: Your form‘s declaration is shown to people when they have answered all the questions, just before they submit the form.
+    declaration_description: Your form’s declaration is shown to people when they have answered all the questions, just before they submit the form.
     privacy_policy_link: Privacy policy link
     questions: Questions
     questions_link:
-      one: View your form‘s 1 question
-      other: View your form‘s %{count} questions
+      one: View your form’s 1 question
+      other: View your form’s %{count} questions
     submission_email: Submission email
     support_email: Email
     support_phone: Phone
