@@ -3,8 +3,9 @@
 class SummaryCardComponent::View < ViewComponent::Base
   renders_one :header_actions
 
-  def initialize(title:, rows:, heading_level: 2, id_suffix: nil)
+  def initialize(title:, hint:, rows:, heading_level: 2, id_suffix: nil)
     @title = title
+    @hint = hint
     @heading_level = heading_level
     @rows = rows
     @id_suffix = id_suffix
@@ -17,7 +18,7 @@ class SummaryCardComponent::View < ViewComponent::Base
 
 private
 
-  attr_accessor :title, :heading_level, :id_suffix
+  attr_accessor :title, :hint, :heading_level, :id_suffix
 
   def row_title(key)
     return key.parameterize if id_suffix.nil?
