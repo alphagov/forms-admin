@@ -383,15 +383,14 @@ en:
           The recipient will be asked to tell you the code. You will then need to enter the code to confirm the email address.
         </p>
   show_live_form:
-    contact_details: Your form’s contact details
+    contact_details: Your form‘s contact details
     declaration: Declaration
-    declaration_description: Your form's declaration is shown to people when they have answered all the questions, just before they submit the form.
-    edit_link: Edit this form
+    declaration_description: Your form‘s declaration is shown to people when they have answered all the questions, just before they submit the form.
     privacy_policy_link: Privacy policy link
     questions: Questions
     questions_link:
-      one: View your form's 1 question
-      other: View your form's %{count} questions
+      one: View your form‘s 1 question
+      other: View your form‘s %{count} questions
     submission_email: Submission email
     support_email: Email
     support_phone: Phone

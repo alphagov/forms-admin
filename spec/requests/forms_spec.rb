@@ -37,20 +37,6 @@ RSpec.describe "Forms", type: :request do
       it "renders the show template" do
         expect(response).to render_template("forms/show")
       end
-
-      context "when live_view feature is enabled", feature_live_view: true do
-        it "renders the live template and no param" do
-          expect(response).to render_template("forms/show_live")
-        end
-
-        context "when edit param exists" do
-          let(:params) { { edit: true }  }
-
-          it "renders the show template if param" do
-            expect(response).to render_template("forms/show")
-          end
-        end
-      end
     end
 
     context "with a non-live form" do
