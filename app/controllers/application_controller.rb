@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
   include GDS::SSO::ControllerMethods unless Settings.basic_auth.enabled
   before_action :set_request_id
   before_action :authenticate_user! unless Settings.basic_auth.enabled
-  before_action :http_auth_user if Settings.basic_auth.enabled
   before_action :set_user_instance_variable
   before_action :check_service_unavailable
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
