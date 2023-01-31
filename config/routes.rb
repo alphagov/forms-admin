@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
     scope "/live" do
       get "/" => "forms/live#show_form", as: :live_form
+      get "/pages" => "forms/live#show_pages", as: :live_form_pages
     end
 
     get "/submission-email" => "forms/submission_email#new", as: :submission_email_form

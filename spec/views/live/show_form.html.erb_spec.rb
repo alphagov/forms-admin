@@ -12,7 +12,7 @@ describe "live/show_form.html.erb" do
   end
 
   before do
-    allow(view).to receive(:form_pages_path).and_return("/form-pages-path")
+    allow(view).to receive(:live_form_pages_path).and_return("/live-form-pages-path")
 
     # assign(:form, form)
     render(template: "live/show_form", layout: "layouts/application", locals: { form: })
@@ -42,15 +42,15 @@ describe "live/show_form.html.erb" do
     expect(rendered).to have_content("runner-host/form/2/#{form.form_slug}")
   end
 
-  it "contains a link to edit questions" do
-    expect(rendered).to have_link("#{form.pages.count} questions", href: "/form-pages-path")
+  it "contains a link to view questions" do
+    expect(rendered).to have_link("#{form.pages.count} questions", href: "/live-form-pages-path")
   end
 
   context "with only a single question" do
     let(:form) { build(:form, :live, id: 2, pages_count: 1) }
 
-    it "contains a link to edit questions with correct pluralization" do
-      expect(rendered).to have_link("1 question", href: "/form-pages-path")
+    it "contains a link to view questions with correct pluralization" do
+      expect(rendered).to have_link("1 question", href: "/live-form-pages-path")
     end
   end
 

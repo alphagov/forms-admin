@@ -64,26 +64,6 @@ RSpec.describe "Page list", type: :request do
         expect(response.status).to eq(403)
       end
     end
-
-    context "with a live form" do
-      let(:form) do
-        build :form, :live, id: 2
-      end
-
-      before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", headers, form.to_json, 200
-        end
-
-        get form_pages_path(2)
-      end
-
-      context "when live_view feature is enabled", feature_live_view: true do
-        it "renders the live template and no param" do
-          expect(response).to render_template("page_list/edit_live")
-        end
-      end
-    end
   end
 
   describe "Marking the 'add pages' task as complete" do
