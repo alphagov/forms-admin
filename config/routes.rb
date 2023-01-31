@@ -14,6 +14,10 @@ Rails.application.routes.draw do
     get "/change-name" => "forms/change_name#edit", as: :change_form_name
     post "/change-name" => "forms/change_name#update"
 
+    scope "/live" do
+      get "/" => "forms/live#show_form", as: :live_form
+    end
+
     get "/submission-email" => "forms/submission_email#new", as: :submission_email_form
     post "/submission-email" => "forms/submission_email#create"
     get "/confirm-submission-email" => "forms/submission_email#submission_email_code", as: :submission_email_code

@@ -24,7 +24,11 @@
       @forms.each do |form|
         body.row do |row|
           row.cell do
-            govuk_link_to(form.name, form_path(form.id))
+            if FeatureService.enabled?(:live_view) && form.live?
+              govuk_link_to(form.name, live_form_path(form.id))
+            else
+              govuk_link_to(form.name, form_path(form.id))
+            end
           end
           row.cell(numeric: true) do
             render FormStatusTagComponent::View.new(status: form.status)
