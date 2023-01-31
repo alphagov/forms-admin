@@ -2,7 +2,7 @@
   <%= govuk_header navigation_classes: ["govuk-header__navigation--end"] do |header|
     header.product_name(name: t("header.product_name"))
     header.navigation_item(text: @user_information.name, href: @user_profile_url, active: false) if @show_profile_link
-    header.navigation_item(text: t("header.sign_out"), href: gds_sign_out_path, active: false)
+    header.navigation_item(text: t("header.sign_out"), href: @sign_out_path, active: false)
   end %>
 <% else %>
   <%= govuk_header do |header|

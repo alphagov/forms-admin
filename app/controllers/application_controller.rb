@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   include GDS::SSO::ControllerMethods unless Settings.basic_auth.enabled
   before_action :set_request_id
   before_action :authenticate_user! unless Settings.basic_auth.enabled
+  before_action :http_auth_user if Settings.basic_auth.enabled
   before_action :set_user_instance_variable
   before_action :check_service_unavailable
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
@@ -16,12 +17,21 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  if Settings.basic_auth.enabled
+    http_basic_authenticate_with(
+      name: Settings.basic_auth.username,
+      password: Settings.basic_auth.password,
+    )
+  end
+
   def user_information
     Settings.basic_auth.enabled ? OpenStruct.new({ email: "example@example.com", organisation_slug: "government-digital-service", name: "A User" }) : current_user
   end
 
   def set_user_instance_variable
     @current_user = user_information
+    @profile_path = Settings.basic_auth.enabled ? "https://example.com" : GDS::SSO::Config.oauth_root_url
+    @sign_out_path = Settings.basic_auth.enabled ? "https://example.com" : gds_sign_out_path
   end
 
   def append_info_to_payload(payload)

@@ -29,7 +29,7 @@
 
     <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link"><%= t("skip_to_main_content") %></a>
 
-    <%= render HeaderComponent::View.new(@current_user) %>
+    <%= render HeaderComponent::View.new(@current_user, @profile_path, @sign_out_path) %>
 
     <div class="govuk-width-container ">
       <%= govuk_phase_banner(tag: { text: "Beta" }) do %>
