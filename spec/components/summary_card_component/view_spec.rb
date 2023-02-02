@@ -32,8 +32,4 @@ describe SummaryCardComponent::View, type: :component do
     expect(page).to have_css(".app-summary-card__title", text: "Lando Calrissian")
     expect(page).to have_css("h6.app-summary-card__title")
   end
-
-  it "renders a link alongside rows with an action value" do
-    expect(page).to have_css(".govuk-link", text: "Change")
-  end
 end

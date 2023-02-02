@@ -21,7 +21,6 @@
         <% summary_list.row(html_attributes: { id: row_title(summary_row[:key]) }, classes: row_title(summary_row[:key])) do |row|
           row.key(text: summary_row[:key])
           row.value(text: summary_row[:value])
-          row.action(href: summary_row[:action_href], text: summary_row[:action_text], visually_hidden_text: summary_row[:action_visually_hidden_text] )
         end %>
       <% end %>
     <% end %>

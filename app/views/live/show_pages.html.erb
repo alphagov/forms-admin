@@ -11,12 +11,8 @@
 
     <%= render FormStatusTagDescriptionComponent::View.new(status: form.status) %>
 
-    <h2 class="govuk-heading-m govuk-!-margin-top-7"></h2>
     <% pages.each_with_index do |page, index| %>
-      <%= render(SummaryCardComponent::View.new(
-        title: page.question_text,
-        rows: PageOptionsService.call(page:).all_options_for_answer_type
-      )) %>
+      <%= render(SummaryCardComponent::View.new( **PageSummaryCardDataService.call(page:).build_data)) %>
     <% end %>
 
     <p class="govuk-body">

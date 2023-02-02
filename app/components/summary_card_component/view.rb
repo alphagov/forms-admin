@@ -3,7 +3,7 @@
 class SummaryCardComponent::View < ViewComponent::Base
   renders_one :header_actions
 
-  def initialize(title:, hint:, rows:, heading_level: 2, id_suffix: nil)
+  def initialize(title:, rows:, hint: nil, heading_level: 2, id_suffix: nil)
     @title = title
     @hint = hint
     @heading_level = heading_level

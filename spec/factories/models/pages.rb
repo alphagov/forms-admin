@@ -14,6 +14,7 @@ FactoryBot.define do
     answer_type { %w[single_line number email national_insurance_number phone_number long_text organisation_name].sample }
     is_optional { nil }
     answer_settings { nil }
+    hint_text { nil }
 
     trait :with_hints do
       hint_text { Faker::Quote.yoda }
