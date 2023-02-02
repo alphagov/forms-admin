@@ -53,11 +53,6 @@ gem "bootsnap", require: false
 # Use Sass to process CSS
 # gem "sassc-rails"
 
-# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
-#
-gem "gds-sso"
-
 # Use govuk-components for displaying govuk themed forms
 gem "govuk-components", "~> 3.3.0"
 gem "govuk_design_system_formbuilder", "~> 3.3.0"
