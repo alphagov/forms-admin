@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   before_action :set_request_id
   before_action :set_user_instance_variable
   before_action :check_service_unavailable
+  before_action :authenticate_with_basic_auth
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
   before_action :clear_questions_session_data
@@ -14,11 +15,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  if Settings.basic_auth.enabled
-    http_basic_authenticate_with(
-      name: Settings.basic_auth.username,
-      password: Settings.basic_auth.password,
-    )
+  def authenticate_with_basic_auth
+    if Settings.basic_auth.enabled
+
+      authenticate_or_request_with_http_basic do |name, password|
+        name == Settings.basic_auth.username && password == Settings.basic_auth.password
+      end
+    end
   end
 
   def user_information
