@@ -50,136 +50,114 @@ class SummaryCardComponent::ViewPreview < ViewComponent::Preview
   end
 
   def answer_types_01_person_name_with_full_name_details_no_title
-    render(SummaryCardComponent::View.new(title: "What is your full name?", rows: [
-      { key: "Hint", value: "As it appears in your passport" },
-      { key: "Answer type", value: I18n.t("helpers.label.page.answer_type_options.names.name") },
-      { key: "Optional", value: "No" },
-      { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.name_settings_options.input_types.first_middle_and_last_name") },
-      { key: I18n.t("helpers.label.page.name_settings_options.title_needed.name"), value: I18n.t("helpers.label.page.name_settings_options.names.false") },
-    ]))
+    options = [I18n.t("helpers.label.page.answer_type_options.names.name")]
+    options << I18n.t("helpers.label.page.name_settings_options.input_types.first_middle_and_last_name")
+    options << "Title not needed"
+
+    render(SummaryCardComponent::View.new(title: "What is your full name? (Optional)", hint: "As it appears in your passport",
+                                          rows: [
+                                            { key: "Answer type", value: ActionController::Base.helpers.sanitize("<ul class='govuk-list'><li>#{options.split(' ').join('</li><li>')}</li></ul>") },
+                                          ]))
   end
 
-  def answer_types_01_person_name_with_full_name_details_and_title
-    render(SummaryCardComponent::View.new(title: "What is your full name?", rows: [
-      { key: "Hint", value: "As it appears in your passport" },
-      { key: "Answer type", value: I18n.t("helpers.label.page.answer_type_options.names.name") },
-      { key: "Optional", value: "No" },
-      { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.name_settings_options.input_types.first_middle_and_last_name") },
-      { key: I18n.t("helpers.label.page.name_settings_options.title_needed.name"), value: I18n.t("helpers.label.page.name_settings_options.names.true") },
-    ]))
+  def answer_types_01_person_name_with_first_and_last_details_and_title
+    options = [I18n.t("helpers.label.page.answer_type_options.names.name")]
+    options << I18n.t("helpers.label.page.name_settings_options.input_types.first_and_last_name")
+    options << "Title needed"
+
+    render(SummaryCardComponent::View.new(title: "What is your full name? (Optional)", hint: "As it appears in your passport",
+                                          rows: [
+                                            { key: "Answer type", value: ActionController::Base.helpers.sanitize("<ul class='govuk-list'><li>#{options.split(' ').join('</li><li>')}</li></ul>") },
+                                          ]))
   end
 
   def answer_types_02_company_or_org_name
-    render(SummaryCardComponent::View.new(title: "Who do you work for?", rows: [
-      { key: "Hint", value: "Think carefully" },
+    render(SummaryCardComponent::View.new(title: "Who do you work for?", hint: "Think carefully", rows: [
       { key: "Answer type", value: I18n.t("helpers.label.page.answer_type_options.names.organisation_name") },
-      { key: "Optional", value: "No" },
     ]))
   end
 
   def answer_types_03_email
-    render(SummaryCardComponent::View.new(title: "What is your email address", rows: [
-      { key: "Hint", value: "example@example.gov.uk" },
+    render(SummaryCardComponent::View.new(title: "What is your email address?", hint: "example@example.gov.uk", rows: [
       { key: "Answer type", value: I18n.t("helpers.label.page.answer_type_options.names.email") },
-      { key: "Optional", value: "No" },
     ]))
   end
 
   def answer_types_04_phone_number
-    render(SummaryCardComponent::View.new(title: "What is your phone number", rows: [
-      { key: "Hint", value: "Mobile number or landline" },
+    render(SummaryCardComponent::View.new(title: "What is your phone number?", hint: "Mobile number or landline", rows: [
       { key: "Answer type", value: I18n.t("helpers.label.page.answer_type_options.names.phone_number") },
-      { key: "Optional", value: "No" },
     ]))
   end
 
   def answer_types_05_ni_number
-    render(SummaryCardComponent::View.new(title: "What is your NI Number", rows: [
-      { key: "Hint", value: "AB123456C" },
+    render(SummaryCardComponent::View.new(title: "What is your NI number?", hint: "AB123456C", rows: [
       { key: "Answer type", value: I18n.t("helpers.label.page.answer_type_options.names.national_insurance_number") },
-      { key: "Optional", value: "No" },
     ]))
   end
 
   def answer_types_06_addresses_uk_address
-    render(SummaryCardComponent::View.new(title: "Where in do you live?", rows: [
-      { key: "Hint", value: "Must be based in UK" },
-      { key: "Answer type", value: I18n.t("helpers.label.page.answer_type_options.names.address") },
-      { key: "Optional", value: "No" },
-      { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.address_settings_options.names.uk_addresses") },
+    render(SummaryCardComponent::View.new(title: "Where in do you live?", hint: "Must be based in UK", rows: [
+      { key: "Answer type", value: I18n.t("helpers.label.page.address_settings_options.names.uk_addresses") },
     ]))
   end
 
   def answer_types_06_addresses_international_address
-    render(SummaryCardComponent::View.new(title: "Where in do you live?", rows: [
-      { key: "Hint", value: "Must be based outside the UK" },
-      { key: "Answer type", value: I18n.t("helpers.label.page.answer_type_options.names.address") },
-      { key: "Optional", value: "No" },
-      { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.address_settings_options.names.international_addresses") },
+    render(SummaryCardComponent::View.new(title: "Where in do you live?", hint: "Must be based outside the UK", rows: [
+      { key: "Answer type", value: I18n.t("helpers.label.page.address_settings_options.names.international_addresses") },
     ]))
   end
 
   def answer_types_06_addresses_uk_and_international_address
-    render(SummaryCardComponent::View.new(title: "Where in do you live?", rows: [
-      { key: "Hint", value: "Please be specific as possible" },
-      { key: "Answer type", value: I18n.t("helpers.label.page.answer_type_options.names.address") },
-      { key: "Optional", value: "No" },
-      { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.address_settings_options.names.uk_and_international_addresses") },
+    render(SummaryCardComponent::View.new(title: "Where in do you live?", hint: "Please be specific as possible", rows: [
+      { key: "Answer type", value: I18n.t("helpers.label.page.address_settings_options.names.uk_and_international_addresses") },
     ]))
   end
 
   def answer_types_07_dates_dob
-    render(SummaryCardComponent::View.new(title: "What is you date of birth?", rows: [
-      { key: "Hint", value: "As it appears in your passport" },
-      { key: "Answer type", value: I18n.t("helpers.label.page.answer_type_options.names.date") },
-      { key: "Optional", value: "No" },
-      { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.date_settings_options.input_types.date_of_birth") },
+    render(SummaryCardComponent::View.new(title: "What is you date of birth?", hint: "As it appears in your passport", rows: [
+      { key: "Answer type", value: "Date of birth" },
     ]))
   end
 
   def answer_types_07_dates_other
-    render(SummaryCardComponent::View.new(title: "What is todays date?", rows: [
-      { key: "Hint", value: "The day after yesterday but the day before tomorrow" },
-      { key: "Answer type", value: I18n.t("helpers.label.page.answer_type_options.names.date") },
-      { key: "Optional", value: "No" },
-      { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.date_settings_options.input_types.other_date") },
+    render(SummaryCardComponent::View.new(title: "What is todays date?", hint: "The day after yesterday but the day before tomorrow", rows: [
+      { key: "Answer type", value: "Date" },
     ]))
   end
 
   def answer_types_08_selection_from_list_select_one_option
     options = "body cowboy affect southern feet football fill they jack aboard leather total everybody flame straw opportunity equally connected brave hospital"
-    render(SummaryCardComponent::View.new(title: "Which option do you like the look of?", rows: [
-      { key: "Hint", value: "Select all that apply" },
-      { key: "Answer type", value: I18n.t("helpers.label.page.answer_type_options.names.selection") },
-      { key: I18n.t("selections_settings.options_title"), value: options.split(" ").join(", ") },
-      { key: I18n.t("selections_settings.only_one_option"), value: "Yes or No" },
-      { key: I18n.t("selections_settings.include_none_of_the_above"), value: "Yes or No" },
-    ]))
+    render(SummaryCardComponent::View.new(title: "Which option do you like the look of?", hint: "Select all that apply",
+                                          rows: [
+                                            { key: "Answer type", value: "Selection from a list, one option only." },
+                                            { key: I18n.t("selections_settings.options_title"), value: ActionController::Base.helpers.sanitize("<ul class='govuk-list'><li>#{options.split(' ').join('</li><li>')}</li></ul>") },
+                                          ]))
+  end
+
+  def answer_types_08_selection_from_list_optional
+    options = "body cowboy affect southern feet football fill they jack aboard leather total everybody flame straw opportunity equally connected brave hospital"
+    render(SummaryCardComponent::View.new(title: "Which option do you like the look of?",
+                                          rows: [
+                                            { key: "Answer type", value: "Selection from a list" },
+                                            { key: I18n.t("selections_settings.options_title"), value: ActionController::Base.helpers.sanitize("<ul class='govuk-list'><li>#{options.split(' ').concat(['None of the above']).join('</li><li>')}</li></ul>") },
+                                          ]))
   end
 
   def answer_types_09_number
-    render(SummaryCardComponent::View.new(title: "How old are you?", rows: [
-      { key: "Hint", value: "0-99" },
+    render(SummaryCardComponent::View.new(title: "How old are you?", hint: "0-99", rows: [
       { key: "Answer type", value: I18n.t("helpers.label.page.answer_type_options.names.number") },
-      { key: "Optional", value: "No" },
     ]))
   end
 
   def answer_types_10_text_long_text
-    render(SummaryCardComponent::View.new(title: "What is the meaning of life?", rows: [
-      { key: "Hint", value: "Hitchhikers Guid to the Galaxy" },
-      { key: "Answer type", value: I18n.t("helpers.label.page.answer_type_options.names.text") },
-      { key: "Optional", value: "No" },
-      { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.text_settings_options.names.long_text") },
+    render(SummaryCardComponent::View.new(title: "What is the meaning of life?", hint: "Hitchhikers Guid to the Galaxy", rows: [
+      { key: "Answer type", value: I18n.t("helpers.label.page.text_settings_options.names.long_text") },
     ]))
   end
 
   def answer_types_10_text_single_line_of_text
-    render(SummaryCardComponent::View.new(title: "What is the meaning of life?", rows: [
-      { key: "Hint", value: "Hitchhikers Guid to the Galaxy" },
-      { key: "Answer type", value: I18n.t("helpers.label.page.answer_type_options.names.text") },
-      { key: "Optional", value: "No" },
-      { key: I18n.t("helpers.label.page.answer_type_options.input_type"), value: I18n.t("helpers.label.page.answer_type_options.names.single_line") },
+    render(SummaryCardComponent::View.new(title: "What is the meaning of life?", hint: "Hitchhikers Guid to the Galaxy", rows: [
+      { key: "Answer type", value: I18n.t("helpers.label.page.answer_type_options.names.single_line") },
     ]))
   end
 end
