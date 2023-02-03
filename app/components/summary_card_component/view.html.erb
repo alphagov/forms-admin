@@ -16,7 +16,7 @@
     <% end %>
   </header>
   <div class="app-summary-card__body">
-    <%= render GovukComponent::SummaryListComponent.new do |summary_list| %>
+    <%= render GovukComponent::SummaryListComponent.new(actions: false) do |summary_list| %>
       <% summary_rows.each do |summary_row| %>
         <% summary_list.row(html_attributes: { id: row_title(summary_row[:key]) }, classes: row_title(summary_row[:key])) do |row|
           row.key(text: summary_row[:key])
