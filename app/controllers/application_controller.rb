@@ -30,8 +30,8 @@ class ApplicationController < ActionController::Base
 
   def set_user_instance_variable
     @current_user = user_information
-    @profile_path = "https://example.com"
-    @sign_out_path = "https://example.com"
+    @profile_path = nil
+    @sign_out_path = nil
   end
 
   def append_info_to_payload(payload)
