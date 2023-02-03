@@ -27,7 +27,7 @@
   }
 
   .app-summary-card__actions {
-    @include govuk-font($size: 19);
+    @include govuk-font($size: 16);
   }
 
   .app-summary-card__actions-list {
@@ -52,12 +52,18 @@
   }
 
   .app-summary-card__body {
-    @include govuk-font($size: 19);
+    @include govuk-font($size: 16);
     padding: govuk-spacing(2) govuk-spacing(3);
   }
 
   // Summary list component overrides
   .govuk-summary-list {
+    @include govuk-font($size: 16);
+    margin-bottom: govuk-spacing(-2);
+  }
+
+  .govuk-summary-list .govuk-list {
+    @include govuk-font($size: 16);
     margin-bottom: govuk-spacing(-2);
   }
 
