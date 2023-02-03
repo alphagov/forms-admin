@@ -272,6 +272,17 @@ en:
 
       If you pasted the web address, check you copied the entire address.
     title: Page not found
+  page_options_service:
+    answer_type: Answer type
+    date: Date
+    hint_text: Hint text
+    name_type:
+      title_not_selected: Title not needed
+      title_selected: Title needed
+    selection_type:
+      default: Selection from a list
+      none_of_the_above: None of the above
+      only_one_option: Selection from a list, one option only.
   page_titles:
     address_settings: What kind of addresses do you expect to receive?
     change_name_form: Name your form

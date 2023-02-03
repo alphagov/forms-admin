@@ -28,7 +28,7 @@ private
 
   def hint_options
     [{
-      key: "Hint text",
+      key: I18n.t("page_options_service.hint_text"),
       value: @page.hint_text,
     }]
   end
@@ -36,7 +36,7 @@ private
   def generic_options
     [].tap do |options|
       options << {
-        key: "Answer type",
+        key: I18n.t("page_options_service.answer_type"),
         value: I18n.t("helpers.label.page.answer_type_options.names.#{@page.answer_type}"),
       }
     end
@@ -44,54 +44,54 @@ private
 
   def selection_options
     [
-      { key: "Answer type", value: selection_answer_type },
+      { key: I18n.t("page_options_service.answer_type"), value: selection_answer_type },
       { key: I18n.t("selections_settings.options_title"), value: selection_list },
     ]
   end
 
   def selection_answer_type
-    return "Selection from a list" unless @page.answer_settings.only_one_option == "true"
+    return I18n.t("page_options_service.selection_type.default") unless @page.answer_settings.only_one_option == "true"
 
-    "Selection from a list, one option only."
+    I18n.t("page_options_service.selection_type.only_one_option")
   end
 
   def selection_list
     return @page.show_selection_options unless @page.answer_settings.selection_options.map(&:name).length >= 1
 
     options = @page.answer_settings.selection_options.map(&:name)
-    options << "None of the above</li>" if @page.is_optional?
+    options << "#{I18n.t('page_options_service.selection_type.none_of_the_above')}</li>" if @page.is_optional?
     formatted_list = options.join("</li><li>")
 
     ActionController::Base.helpers.sanitize("<ul class='govuk-list'><li>#{formatted_list}</li></ul>")
   end
 
   def text_options
-    [{ key: "Answer type", value: I18n.t("helpers.label.page.text_settings_options.names.#{@page.answer_settings.input_type}") }]
+    [{ key: I18n.t("page_options_service.answer_type"), value: I18n.t("helpers.label.page.text_settings_options.names.#{@page.answer_settings.input_type}") }]
   end
 
   def date_options
-    [{ key: "Answer type", value: date_answer_type_text }]
+    [{ key: I18n.t("page_options_service.answer_type"), value: date_answer_type_text }]
   end
 
   def date_answer_type_text
     return I18n.t("helpers.label.page.date_settings_options.input_types.#{@page.answer_settings.input_type}") if @page.answer_settings.input_type.to_sym == :date_of_birth
 
-    "Date"
+    I18n.t("page_options_service.date")
   end
 
   def address_options
-    [{ key: "Answer type", value: I18n.t("helpers.label.page.address_settings_options.names.#{address_input_type_to_string}") }]
+    [{ key: I18n.t("page_options_service.answer_type"), value: I18n.t("helpers.label.page.address_settings_options.names.#{address_input_type_to_string}") }]
   end
 
   def name_options
-    [{ key: "Answer type", value: name_answer_type }]
+    [{ key: I18n.t("page_options_service.answer_type"), value: name_answer_type }]
   end
 
   def name_answer_type
     title_needed = if @page.answer_settings.title_needed == "true"
-                     "Title needed"
+                     I18n.t("page_options_service.name_type.title_selected")
                    else
-                     "Title not needed"
+                     I18n.t("page_options_service.name_type.title_not_selected")
                    end
 
     settings = [I18n.t("helpers.label.page.answer_type_options.names.#{@page.answer_type}"),
