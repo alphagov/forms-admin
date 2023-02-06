@@ -19,7 +19,6 @@ RSpec.describe "Pages", type: :request do
           id: 1,
           form_id: 2,
           question_text: "What is your work address?",
-          question_short_name: "Work address",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
           answer_settings: nil,
@@ -31,7 +30,6 @@ RSpec.describe "Pages", type: :request do
           id: 1,
           form_id: 2,
           question_text: "What is your work address?",
-          question_short_name: "Work address",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
           answer_settings: nil,
@@ -76,7 +74,6 @@ RSpec.describe "Pages", type: :request do
           id: 1,
           form_id: 2,
           question_text: "What is your work address?",
-          question_short_name: "Work address",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
           answer_settings: nil,
@@ -89,7 +86,6 @@ RSpec.describe "Pages", type: :request do
           id: 1,
           form_id: 2,
           question_text: "What is your work address?",
-          question_short_name: "Work address",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
           answer_settings: nil,
@@ -101,7 +97,6 @@ RSpec.describe "Pages", type: :request do
         {
           id: 1,
           question_text: "What is your home address?",
-          question_short_name: "Home address",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
           answer_settings: nil,
@@ -134,7 +129,6 @@ RSpec.describe "Pages", type: :request do
         patch update_page_path(form_id: 2, page_id: 1), params: { page: {
           form_id: 2,
           question_text: "What is your home address?",
-          question_short_name: "Home address",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
         } }
@@ -184,7 +178,6 @@ RSpec.describe "Pages", type: :request do
       let(:new_page_data) do
         {
           question_text: "What is your home address?",
-          question_short_name: "Home address",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
           is_optional: nil,
@@ -201,7 +194,6 @@ RSpec.describe "Pages", type: :request do
 
         post create_page_path(2), params: { page: {
           question_text: "What is your home address?",
-          question_short_name: "Home address",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
           is_optional: false,
@@ -232,7 +224,6 @@ RSpec.describe "Pages", type: :request do
           id: 1,
           form_id: 2,
           question_text: "What is your work address?",
-          question_short_name: "Work address",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
           next_page: nil,
@@ -273,7 +264,6 @@ RSpec.describe "Pages", type: :request do
           id: 1,
           form_id: 2,
           question_text: "What is your work address?",
-          question_short_name: "Work address",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
           next_page: nil,
