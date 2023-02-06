@@ -17,3 +17,8 @@ show_browser_during_tests: false
 sentry:
   dsn:
   environment: local
+
+basic_auth:
+  enabled: false
+  username: basic_auth_user
+  password:

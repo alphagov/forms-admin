@@ -9,7 +9,7 @@ private
     return nil if params[:form_id].blank?
 
     form = Form.find(params[:form_id])
-    if form.org == current_user.organisation_slug
+    if form.org == @current_user.organisation_slug
       nil
     else
       render "errors/forbidden", status: :forbidden, formats: :html
