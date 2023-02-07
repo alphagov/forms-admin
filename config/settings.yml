@@ -2,6 +2,7 @@
 features:
   reorder_pages: true
   autocomplete_answer_types: false
+  draft_live_versioning: false
   live_view: false
 
 # Settings for GOV.UK Notify api & email templates
