@@ -23,4 +23,10 @@ describe "forms/make_live/confirmation.html.erb" do
   it "contains a link to the form details" do
     expect(rendered).to have_link("Continue to form details", href: form_path(1))
   end
+
+  context "when live form feature enabled", feature_live_view: true do
+    it "contains a link to the live form details" do
+      expect(rendered).to have_link("Continue to form details", href: live_form_path(1))
+    end
+  end
 end
