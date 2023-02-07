@@ -13,7 +13,11 @@
     <%= t("make_live.confirmation.body_html") %>
 
     <p class="govuk-body">
-      <%= govuk_link_to t("make_live.confirmation.continue_link"), form_path(@form.id) %>
+      <% if FeatureService.enabled?(:live_view) %>
+        <%= govuk_link_to t("make_live.confirmation.continue_link"), live_form_path(@form.id) %>
+      <% else %>
+        <%= govuk_link_to t("make_live.confirmation.continue_link"), form_path(@form.id) %>
+      <% end %>
     </p>
   </div>
 </div>
