@@ -21,6 +21,7 @@ describe "Settings" do
   describe ".features" do
     features = settings[:features]
 
+    include_examples expected_value_test, :draft_live_versioning, features, false
     include_examples expected_value_test, :live_view, features, false
     include_examples expected_value_test, :reorder_pages, features, true
     include_examples expected_value_test, :autocomplete_answer_types, features, false
