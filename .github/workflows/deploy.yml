@@ -51,4 +51,5 @@ jobs:
             --var API_BASE=${{ secrets.API_BASE }} \
             --var RUNNER_BASE=${{ secrets.RUNNER_BASE }} \
             --var INSTANCES=2 \
-            --var API_KEY=${{ secrets.API_KEY }}
+            --var API_KEY=${{ secrets.API_KEY }} \
+            --var SETTINGS__FEATURES__AUTOCOMPLETE_ANSWER_TYPES=true
