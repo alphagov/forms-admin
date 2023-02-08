@@ -1,6 +1,7 @@
 require "rails_helper"
 
 describe "forms/show.html.erb" do
+  let(:form) { OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft", pages:) }
   let(:pages) { [{ id: 183, question_text: "What is your address?", question_short_name: nil, hint_text: "", answer_type: "address", next_page: nil }] }
 
   around do |example|
@@ -10,7 +11,7 @@ describe "forms/show.html.erb" do
   end
 
   before do
-    assign(:form, OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft", pages:))
+    assign(:form, form)
     assign(:task_status_counts, { completed: 12, total: 20 })
     render template: "forms/show"
   end
@@ -32,16 +33,18 @@ describe "forms/show.html.erb" do
     expect(rendered).to have_selector(".app-task-list__summary", text: "You've completed 12 of 20 tasks.")
   end
 
-  describe "form states" do
+  context "when form states is a draft" do
+    let(:form) { OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft", pages: []) }
+
     it "rendered draft tag " do
-      assign(:form, OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft", pages: []))
-      render template: "forms/show"
       expect(rendered).to have_css(".govuk-tag.govuk-tag--purple", text: "DRAFT")
     end
+  end
+
+  context "when form states is a live" do
+    let(:form) { OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "live", pages: []) }
 
     it "rendered live tag" do
-      assign(:form, OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "live", pages: []))
-      render template: "forms/show"
       expect(rendered).to have_css(".govuk-tag.govuk-tag--blue", text: "LIVE")
     end
   end
