@@ -47,5 +47,11 @@ describe "forms/show.html.erb" do
     it "rendered live tag" do
       expect(rendered).to have_css(".govuk-tag.govuk-tag--blue", text: "LIVE")
     end
+
+    context "when feature flag is enabled", feature_draft_live_versioning: true do
+      it "rendered draft tag" do
+        expect(rendered).to have_css(".govuk-tag.govuk-tag--purple", text: "DRAFT")
+      end
+    end
   end
 end
