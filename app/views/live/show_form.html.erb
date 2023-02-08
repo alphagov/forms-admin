@@ -51,5 +51,11 @@
       <h3 class="govuk-heading-s"><%= t('show_live_form.support_url') %></h3>
       <p class="govuk-body"><%= govuk_link_to form.support_url_text, form.support_url %></p>
     <% end %>
+
+    <% if FeatureService.enabled?(:draft_live_versioning) %>
+      <p class="govuk-body">
+        <%= govuk_button_link_to t('show_live_form.draft_create'), form_path(form.id) %>
+      </p>
+    <% end %>
   </div>
 </div>
