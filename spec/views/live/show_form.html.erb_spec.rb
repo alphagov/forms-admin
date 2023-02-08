@@ -116,7 +116,13 @@ describe "live/show_form.html.erb" do
     end
   end
 
-  xit "contains a link to edit the form" do
-    expect(rendered).to have_link("Edit this form", href: form_path(form.id, edit: true))
+  it "does not contain a link to create a new draft" do
+    expect(rendered).not_to have_link(t("show_live_form.draft_create"), href: form_path(form.id))
+  end
+
+  context "when draft/live feature enabled", feature_draft_live_versioning: true do
+    it "contains a link to create a new draft" do
+      expect(rendered).to have_link(t("show_live_form.draft_create"), href: form_path(form.id))
+    end
   end
 end
