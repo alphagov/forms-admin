@@ -39,7 +39,14 @@ RSpec.describe Forms::WhatHappensNextForm, type: :model do
 
         expect(what_happens_next_form).not_to be_valid
       end
-      # More tests are required here -  e.g. that a valid submission updates the Form object
+
+      context "when draft/live version feature enabled", feature_draft_live_versioning: true do
+        it "is valid if blank" do
+          what_happens_next_form = described_class.new(form:, what_happens_next_text: "")
+
+          expect(what_happens_next_form).to be_valid
+        end
+      end
     end
 
     describe "#submit" do
@@ -96,7 +103,6 @@ RSpec.describe Forms::WhatHappensNextForm, type: :model do
 
         expect(what_happens_next_form).to be_valid
       end
-      # More tests are required here -  e.g. that a valid submission updates the Form object
     end
 
     describe "#submit" do

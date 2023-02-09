@@ -28,6 +28,14 @@ RSpec.describe Forms::PrivacyPolicyForm, type: :model do
           "Privacy policy url #{error_message}",
         )
       end
+
+      context "when draft/live version feature enabled", feature_draft_live_versioning: true do
+        it "is valid if blank" do
+          privacy_policy_form = described_class.new(form:, privacy_policy_url: "")
+
+          expect(privacy_policy_form).to be_valid
+        end
+      end
     end
 
     context "when form is not live" do
