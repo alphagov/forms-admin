@@ -30,7 +30,7 @@ describe "forms/show.html.erb" do
   end
 
   it "contains a summary of completed tasks out of the total tasks" do
-    expect(rendered).to have_selector(".app-task-list__summary", text: "You've completed 12 of 20 tasks.")
+    expect(rendered).to have_selector(".app-task-list__summary", text: "You’ve completed 12 of 20 tasks.")
   end
 
   context "when form states is a draft" do

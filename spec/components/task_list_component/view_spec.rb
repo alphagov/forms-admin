@@ -93,7 +93,7 @@ RSpec.describe TaskListComponent::View, type: :component do
       end
 
       it "does render the summary text at the top of the task list" do
-        expect(page).to have_selector(".app-task-list__summary", text: "You've completed 23 of 34 tasks.")
+        expect(page).to have_selector(".app-task-list__summary", text: "You’ve completed 23 of 34 tasks.")
       end
 
       context "when all tasks completed then hide the summary text (i.e form is live)" do
@@ -111,8 +111,38 @@ RSpec.describe TaskListComponent::View, type: :component do
         end
 
         it "does not render the summary text at the top of the task list" do
-          expect(page).not_to have_selector(".app-task-list__summary", text: "You've completed 34 of 34 tasks.")
+          expect(page).not_to have_selector(".app-task-list__summary", text: "You’ve completed 34 of 34 tasks.")
         end
+      end
+    end
+  end
+
+  describe "#render_counter?" do
+    [
+      { completed_task_count: nil, total_task_count: nil },
+      { completed_task_count: nil, total_task_count: 9 },
+      { completed_task_count: 1, total_task_count: nil },
+    ].each do |scenario|
+      it "returns false if completed_task_count or total_task_count nil" do
+        task_list = described_class.new(
+          completed_task_count: scenario[:completed_task_count],
+          total_task_count: scenario[:total_task_count],
+        )
+        expect(task_list.render_counter?).to eq false
+      end
+    end
+
+    [
+      { completed_task_count: 0, total_task_count: 9, result: true },
+      { completed_task_count: 1, total_task_count: 9, result: true },
+      { completed_task_count: 9, total_task_count: 9, result: false },
+    ].each do |scenario|
+      it "returns #{scenario[:result]} when there are #{scenario[:total_task_count] - scenario[:completed_task_count]} tasks not completed" do
+        task_list = described_class.new(
+          completed_task_count: scenario[:completed_task_count],
+          total_task_count: scenario[:total_task_count],
+        )
+        expect(task_list.render_counter?).to eq scenario[:result]
       end
     end
   end
