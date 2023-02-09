@@ -54,7 +54,9 @@ private
   end
 
   def section_4_tasks
-    return [] if @form.live?
+    if !FeatureService.enabled?(:draft_live_versioning) && @form.live?
+      return []
+    end
 
     [{
       task_name: I18n.t("forms.task_lists.section_4.make_live"),
