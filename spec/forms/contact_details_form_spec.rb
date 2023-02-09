@@ -144,7 +144,7 @@ RSpec.describe Forms::ContactDetailsForm, type: :model do
 
     context "when nothing is ticked" do
       it "is valid if form is in draft" do
-        contact_details_form = build :contact_details_form
+        contact_details_form = build :contact_details_form, contact_details_supplied: []
         expect(contact_details_form).to be_valid
       end
 
