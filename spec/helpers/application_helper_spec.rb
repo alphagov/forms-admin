@@ -95,6 +95,19 @@ RSpec.describe ApplicationHelper, type: :helper do
         end
       end
     end
+
+    context "with date answer type" do
+      let(:answer_type) { "date" }
+      let(:answer_settings) { OpenStruct.new(input_type:) }
+
+      context "and 'input_type' set to a valid value" do
+        let(:input_type) { Forms::DateSettingsForm::INPUT_TYPES.sample }
+
+        it "returns the answer subtype" do
+          expect(helper.translation_key_for_answer_type(answer_type, answer_settings)).to eq input_type
+        end
+      end
+    end
   end
 
   describe "hint_for_edit_page_field" do
@@ -112,7 +125,7 @@ RSpec.describe ApplicationHelper, type: :helper do
       let(:answer_settings) { {} }
 
       it "returns the default hint text" do
-        expect(helper.hint_for_edit_page_field("question_text", answer_type, answer_settings)).to eq(I18n.t("helpers.hint.page.question_text.default"))
+        expect(helper.hint_for_edit_page_field("hint_text", answer_type, answer_settings)).to eq(I18n.t("helpers.hint.page.hint_text.default"))
       end
     end
   end

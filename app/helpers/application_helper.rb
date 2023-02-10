@@ -47,7 +47,7 @@ module ApplicationHelper
     case answer_type
     when "selection"
       answer_settings.only_one_option == "true" ? "radio" : "checkbox"
-    when "text"
+    when "text", "date"
       answer_settings.input_type
     else
       answer_type
@@ -56,6 +56,6 @@ module ApplicationHelper
 
   def hint_for_edit_page_field(field, answer_type, answer_settings)
     key = translation_key_for_answer_type(answer_type, answer_settings)
-    t("helpers.hint.page.#{field}.#{key}", default: t("helpers.hint.page.question_text.default"))
+    t("helpers.hint.page.#{field}.#{key}", default: t("helpers.hint.page.#{field}.default"))
   end
 end
