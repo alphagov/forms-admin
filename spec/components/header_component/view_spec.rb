@@ -40,4 +40,22 @@ RSpec.describe HeaderComponent::View, type: :component do
       expect(page).to have_link(I18n.t("header.sign_out"), href: "/auth/gds/sign_out")
     end
   end
+
+  context "when basic auth is enabled" do
+    before do
+      basic_auth_double = object_double("basic_auth_double", enabled: true)
+      allow(Settings).to receive(:basic_auth).and_return(basic_auth_double)
+      render_inline(described_class.new(user))
+    end
+
+    it "the user name appears without a link" do
+      expect(page).not_to have_link(user.name)
+      expect(page).to have_text(user.name)
+    end
+
+    it "Signout appears without a link" do
+      expect(page).not_to have_link(I18n.t("header.sign_out"))
+      expect(page).to have_text(I18n.t("header.sign_out"))
+    end
+  end
 end
