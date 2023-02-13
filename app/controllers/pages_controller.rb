@@ -75,10 +75,6 @@ private
   end
 
   def answer_types
-    @answer_types = if FeatureService.enabled?(:autocomplete_answer_types)
-                      Page::ANSWER_TYPES.reject { |e| %w[single_line long_text].include?(e) }
-                    else
-                      Page::ANSWER_TYPES.reject { |e| %w[organisation_name text name].include?(e) }
-                    end
+    @answer_types = Page::ANSWER_TYPES
   end
 end
