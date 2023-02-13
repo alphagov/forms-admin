@@ -1,5 +1,4 @@
 # Used to add feature flags in the app to control access to certain features.
 features:
   reorder_pages: true
-  autocomplete_answer_types: true
   live_view: true

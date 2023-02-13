@@ -25,7 +25,7 @@ feature "Add/editing a single question", type: :feature do
 
   context "when a form has no existing pages" do
     let(:pages) { [] }
-    let(:answer_types) { %w[single_line number address date email national_insurance_number phone_number long_text selection] }
+    let(:answer_types) { %w[organisation_name email phone_number national_insurance_number address date selection number text] }
 
     scenario "add a question for each type of answer" do
       answer_types.each do |answer_type|
@@ -34,20 +34,6 @@ feature "Add/editing a single question", type: :feature do
         and_i_select_a_type_of_answer_option(answer_type)
         and_i_provide_a_question_text
         and_i_save_and_create_another
-      end
-    end
-
-    context "with the autocomplete_answer_types flag enabled", feature_autocomplete_answer_types: true do
-      let(:answer_types) { %w[organisation_name email phone_number national_insurance_number address date selection number text] }
-
-      scenario "add a question for each type of answer" do
-        answer_types.each do |answer_type|
-          when_i_viewing_an_existing_form
-          and_i_want_to_create_or_edit_a_page
-          and_i_select_a_type_of_answer_option(answer_type)
-          and_i_provide_a_question_text
-          and_i_save_and_create_another
-        end
       end
     end
   end
@@ -58,7 +44,7 @@ feature "Add/editing a single question", type: :feature do
       5.times { |id| existing_pages.push(build(:page, id:, form_id: 1)) }
       existing_pages
     end
-    let(:answer_types) { %w[single_line number address date email national_insurance_number phone_number long_text selection] }
+    let(:answer_types) { %w[organisation_name email phone_number national_insurance_number address date selection number text] }
 
     scenario "add a question for each type of answer" do
       answer_types.each do |answer_type|
@@ -69,22 +55,6 @@ feature "Add/editing a single question", type: :feature do
         and_i_select_a_type_of_answer_option(answer_type)
         and_i_provide_a_question_text
         and_i_save_and_create_another
-      end
-    end
-
-    context "with the autocomplete_answer_types flag enabled", feature_autocomplete_answer_types: true do
-      let(:answer_types) { %w[organisation_name email phone_number national_insurance_number address date selection number text] }
-
-      scenario "add a question for each type of answer" do
-        answer_types.each do |answer_type|
-          when_i_viewing_an_existing_form
-          and_i_want_to_create_or_edit_a_page
-          and_i_can_see_a_list_of_existing_pages
-          and_i_start_adding_a_new_question
-          and_i_select_a_type_of_answer_option(answer_type)
-          and_i_provide_a_question_text
-          and_i_save_and_create_another
-        end
       end
     end
   end
