@@ -11,7 +11,7 @@ end
 FactoryBot.define do
   factory :page, class: "Page" do
     question_text { Faker::Lorem.question }
-    answer_type { %w[single_line number email national_insurance_number phone_number long_text organisation_name].sample }
+    answer_type { Page::ANSWER_TYPES.reject { |item| Page::ANSWER_TYPES_WITH_SETTINGS.include? item }.sample }
     is_optional { nil }
     answer_settings { nil }
     hint_text { nil }
@@ -21,7 +21,7 @@ FactoryBot.define do
     end
 
     trait :with_simple_answer_type do
-      answer_type { %w[single_line number email national_insurance_number phone_number long_text organisation_name].sample }
+      answer_type { Page::ANSWER_TYPES.reject { |item| Page::ANSWER_TYPES_WITH_SETTINGS.include? item }.sample }
     end
 
     trait :with_selections_settings do

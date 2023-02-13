@@ -172,7 +172,7 @@ class SummaryCardComponent::ViewPreview < ViewComponent::Preview
   def answer_types_10_text_single_line_of_text
     render(SummaryCardComponent::View.new(title: "What is the meaning of life?", rows: [
       { key: "Hint text", value: "Hitchhikers Guide to the Galaxy" },
-      { key: "Answer type", value: I18n.t("helpers.label.page.answer_type_options.names.single_line") },
+      { key: "Answer type", value: I18n.t("helpers.label.page.text_settings_options.names.single_line") },
     ]))
   end
 end

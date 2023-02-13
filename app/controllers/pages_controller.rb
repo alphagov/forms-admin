@@ -75,6 +75,6 @@ private
   end
 
   def answer_types
-    @answer_types = Page::ANSWER_TYPES.reject { |e| %w[single_line long_text].include?(e) }
+    @answer_types = Page::ANSWER_TYPES
   end
 end

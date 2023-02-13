@@ -162,28 +162,24 @@ en:
             address: ''
             date: ''
             email: ''
-            long_text: ''
             name: ''
             national_insurance_number: ''
             number: People will only be able to enter whole or decimal numbers
             organisation_name: ''
             phone_number: ''
             selection: You’ll be able to create a list of options for people to select from
-            single_line: ''
             text: ''
           input_type: Input type
           names:
             address: Address
             date: Date
             email: Email address
-            long_text: Multiple lines of text
             name: Person’s name
             national_insurance_number: National Insurance number
             number: Number
             organisation_name: Company or organisation’s name
             phone_number: Phone number
             selection: Selection from a list of options
-            single_line: Single line of text
             text: Text
           optional: Optional
           optional_no: 'No'

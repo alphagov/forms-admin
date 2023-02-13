@@ -138,7 +138,7 @@ describe PageOptionsService do
       end
     end
 
-    %w[number national_insurance_number email phone_number single_line organisation_name long_text].each do |answer_type|
+    Page::ANSWER_TYPES.reject { |item| Page::ANSWER_TYPES_WITH_SETTINGS.include? item }.each do |answer_type|
       context "with #{answer_type}" do
         let(:page) { build :page, answer_type: }
 

@@ -4,7 +4,7 @@ class Page < ActiveResource::Base
   self.include_format_in_path = false
   headers["X-API-Token"] = ENV["API_KEY"]
 
-  ANSWER_TYPES = %w[name organisation_name email phone_number national_insurance_number address date selection number text single_line long_text].freeze
+  ANSWER_TYPES = %w[name organisation_name email phone_number national_insurance_number address date selection number text].freeze
 
   ANSWER_TYPES_WITH_SETTINGS = %w[selection text date address name].freeze
 
