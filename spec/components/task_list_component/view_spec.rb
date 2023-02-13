@@ -93,7 +93,7 @@ RSpec.describe TaskListComponent::View, type: :component do
       end
 
       it "does render the summary text at the top of the task list" do
-        expect(page).to have_selector(".app-task-list__summary", text: "You've completed 23 of 34 tasks.")
+        expect(page).to have_selector(".app-task-list__summary", text: "You’ve completed 23 of 34 tasks.")
       end
 
       context "when all tasks completed then hide the summary text (i.e form is live)" do
@@ -111,8 +111,74 @@ RSpec.describe TaskListComponent::View, type: :component do
         end
 
         it "does not render the summary text at the top of the task list" do
-          expect(page).not_to have_selector(".app-task-list__summary", text: "You've completed 34 of 34 tasks.")
+          expect(page).not_to have_selector(".app-task-list__summary", text: "You’ve completed 34 of 34 tasks.")
         end
+
+        context "when draft_live_versioning feature is enabled", feature_draft_live_versioning: true do
+          before do
+            render_inline(described_class.new(completed_task_count: "34", total_task_count: "34", sections: [
+              { title: "section a",
+                rows: [
+                  { task_name: "task a", path: "#", status:, active: },
+                ] },
+              { title: "section 2",
+                rows: [
+                  { task_name: "task d", path: "#", status:, active: },
+                ] },
+            ]))
+          end
+
+          it "does render the summary text at the top of the task list" do
+            expect(page).to have_selector(".app-task-list__summary", text: "You’ve completed 34 of 34 tasks.")
+          end
+        end
+      end
+    end
+  end
+
+  describe "#render_counter?" do
+    [
+      { completed_task_count: nil, total_task_count: nil, feature_draft_live_versioning: false },
+      { completed_task_count: nil, total_task_count: 9, feature_draft_live_versioning: false },
+      { completed_task_count: 1, total_task_count: nil, feature_draft_live_versioning: false },
+      { completed_task_count: nil, total_task_count: nil, feature_draft_live_versioning: true },
+      { completed_task_count: nil, total_task_count: 9, feature_draft_live_versioning: true },
+      { completed_task_count: 1, total_task_count: nil, feature_draft_live_versioning: true },
+    ].each do |scenario|
+      it "returns false if completed_task_count or total_task_count nil", feature_draft_live_versioning: scenario[:feature_draft_live_versioning] do
+        task_list = described_class.new(
+          completed_task_count: scenario[:completed_task_count],
+          total_task_count: scenario[:total_task_count],
+        )
+        expect(task_list.render_counter?).to eq false
+      end
+    end
+
+    [
+      { completed_task_count: 0, total_task_count: 9 },
+      { completed_task_count: 1, total_task_count: 9 },
+      { completed_task_count: 9, total_task_count: 9 },
+    ].each do |scenario|
+      it "always returns true if draft_live_versioning feature is enabled", feature_draft_live_versioning: true do
+        task_list = described_class.new(
+          completed_task_count: scenario[:completed_task_count],
+          total_task_count: scenario[:total_task_count],
+        )
+        expect(task_list.render_counter?).to eq true
+      end
+    end
+
+    [
+      { completed_task_count: 0, total_task_count: 9, result: true },
+      { completed_task_count: 1, total_task_count: 9, result: true },
+      { completed_task_count: 9, total_task_count: 9, result: false },
+    ].each do |scenario|
+      it "returns #{scenario[:result]} when there are #{scenario[:total_task_count] - scenario[:completed_task_count]} tasks not completed" do
+        task_list = described_class.new(
+          completed_task_count: scenario[:completed_task_count],
+          total_task_count: scenario[:total_task_count],
+        )
+        expect(task_list.render_counter?).to eq scenario[:result]
       end
     end
   end

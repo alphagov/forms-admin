@@ -240,8 +240,16 @@ describe FormTaskListService do
 
         let(:section_rows) { section[:rows] }
 
-        it "has no tasks" do
-          expect(section_rows).to be_empty
+        context "and draft_live_versioning feature is enabled", feature_draft_live_versioning: true do
+          it "has tasks" do
+            expect(section_rows).not_to be_empty
+          end
+        end
+
+        context "and draft_live_versioning feature is not enabled" do
+          it "has no tasks" do
+            expect(section_rows).to be_empty
+          end
         end
       end
     end

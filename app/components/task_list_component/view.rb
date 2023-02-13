@@ -12,6 +12,13 @@ module TaskListComponent
       @total_task_count = total_task_count
     end
 
+    def render_counter?
+      return false unless @completed_task_count.present? && @total_task_count.present?
+      return true if FeatureService.enabled?(:draft_live_versioning)
+
+      @completed_task_count != @total_task_count
+    end
+
   private
 
     def default_attributes

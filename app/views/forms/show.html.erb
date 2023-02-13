@@ -9,7 +9,7 @@
       <%= @form.live? ? t("forms.form_overview.live_title") : t("forms.form_overview.title") %>
     </h1>
 
-    <%= render FormStatusTagDescriptionComponent::View.new(status: @form.status) %>
+    <%= render FormStatusTagDescriptionComponent::View.new(status: ( FeatureService.enabled?(:draft_live_versioning) ? :draft : @form.status )) %>
 
     <% if flash[:message] %>
       <p class="govuk-body"><%= flash[:message] %></p>
