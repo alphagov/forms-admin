@@ -144,7 +144,7 @@ RSpec.describe Forms::ContactDetailsForm, type: :model do
 
     context "when nothing is ticked" do
       it "is valid if form is in draft" do
-        contact_details_form = build :contact_details_form
+        contact_details_form = build :contact_details_form, contact_details_supplied: []
         expect(contact_details_form).to be_valid
       end
 
@@ -154,6 +154,13 @@ RSpec.describe Forms::ContactDetailsForm, type: :model do
         contact_details_form = build :contact_details_form, form: live_form, contact_details_supplied: []
         expect(contact_details_form).to be_invalid
         expect(contact_details_form.errors.full_messages_for(:contact_details_supplied)).to include "Contact details supplied #{error_message}"
+      end
+
+      context "when draft/live version feature enabled", feature_draft_live_versioning: true do
+        it "is valid if form is in draft" do
+          contact_details_form = build :contact_details_form, contact_details_supplied: []
+          expect(contact_details_form).to be_valid
+        end
       end
     end
   end

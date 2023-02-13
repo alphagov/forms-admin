@@ -6,7 +6,7 @@ class Forms::PrivacyPolicyForm
 
   attr_accessor :form, :privacy_policy_url
 
-  validates :privacy_policy_url, presence: true, if: -> { form.live? }
+  validates :privacy_policy_url, presence: true, if: -> { validate_presence }
   validates :privacy_policy_url, url: true, if: -> { privacy_policy_url.present? }
 
   def submit
@@ -19,5 +19,13 @@ class Forms::PrivacyPolicyForm
   def assign_form_values
     self.privacy_policy_url = form.privacy_policy_url
     self
+  end
+
+private
+
+  def validate_presence
+    return false if FeatureService.enabled?(:draft_live_versioning)
+
+    form.live?
   end
 end

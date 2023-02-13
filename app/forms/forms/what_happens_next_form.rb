@@ -4,7 +4,7 @@ class Forms::WhatHappensNextForm
 
   attr_accessor :form, :what_happens_next_text
 
-  validates :what_happens_next_text, presence: true, if: -> { form.live? }
+  validates :what_happens_next_text, presence: true, if: -> { validate_presence }
   validates :what_happens_next_text, length: { maximum: 2000 }
 
   def submit
@@ -17,5 +17,13 @@ class Forms::WhatHappensNextForm
   def assign_form_values
     self.what_happens_next_text = form.what_happens_next_text
     self
+  end
+
+private
+
+  def validate_presence
+    return false if FeatureService.enabled?(:draft_live_versioning)
+
+    form.live?
   end
 end
