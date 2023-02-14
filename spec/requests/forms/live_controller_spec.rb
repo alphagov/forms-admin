@@ -44,10 +44,8 @@ RSpec.describe Forms::LiveController, type: :request do
         get live_form_pages_path(2)
       end
 
-      context "when live_view feature is enabled", feature_live_view: true do
-        it "renders the live template and no param" do
-          expect(response).to render_template("live/show_pages")
-        end
+      it "renders the live template and no param" do
+        expect(response).to render_template("live/show_pages")
       end
     end
   end

@@ -24,7 +24,7 @@
       @forms.each do |form|
         body.row do |row|
           row.cell do
-            if FeatureService.enabled?(:live_view) && form.live?
+            if form.live?
               govuk_link_to(form.name, live_form_path(form.id))
             else
               govuk_link_to(form.name, form_path(form.id))
