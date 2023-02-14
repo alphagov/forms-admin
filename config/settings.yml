@@ -2,7 +2,6 @@
 features:
   reorder_pages: true
   draft_live_versioning: false
-  live_view: false
 
 # Settings for GOV.UK Notify api & email templates
 govuk_notify:

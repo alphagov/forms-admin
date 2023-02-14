@@ -42,7 +42,7 @@ describe "home/index.html.erb" do
       expect(rendered).to have_link("Form 2", href: form_path(2))
     end
 
-    context "when a form is live renders link to 'live' form readonly view", feature_live_view: true do
+    context "when a form is live renders link to 'live' form readonly view" do
       let(:forms) { [OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft", live?: false), OpenStruct.new(id: 2, name: "Form 2", form_slug: "form-2", status: "live", live?: true)] }
 
       it "allows the user to create a new form" do
