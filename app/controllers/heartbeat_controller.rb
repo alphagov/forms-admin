@@ -1,5 +1,5 @@
 class HeartbeatController < ApplicationController
-  skip_before_action :authenticate_user!
+  skip_before_action :authenticate
 
   def ping
     render(body: "PONG")

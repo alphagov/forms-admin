@@ -1,14 +1,41 @@
 require "resolv"
 
 class ApplicationController < ActionController::Base
-  include GDS::SSO::ControllerMethods
+  include GDS::SSO::ControllerMethods unless Settings.basic_auth.enabled
   before_action :set_request_id
-  before_action :authenticate_user!
-  before_action :set_user_instance_variable
+  before_action :authenticate
   before_action :check_service_unavailable
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
   before_action :clear_questions_session_data
+
+  def authenticate
+    if Settings.basic_auth.enabled
+      basic_auth
+    else
+      signon_auth
+    end
+  end
+
+  def basic_auth
+    request.env["warden"].manager.config.intercept_401 = false
+
+    http_basic_authenticate_or_request_with(
+      name: Settings.basic_auth.username,
+      password: Settings.basic_auth.password,
+    )
+
+    @current_user = User.new(
+      name: Settings.basic_auth.username,
+      email: "#{Settings.basic_auth.username}@example.com",
+      organisation_slug: "government-digital-service",
+    )
+  end
+
+  def signon_auth
+    authenticate_user!
+    @current_user = current_user
+  end
 
   def check_service_unavailable
     if ENV["SERVICE_UNAVAILABLE"].present?
@@ -16,17 +43,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def set_user_instance_variable
-    @current_user = current_user
-  end
-
   def append_info_to_payload(payload)
     super
     payload[:host] = request.host
-    if current_user.present?
-      payload[:user_id] = current_user.id
-      payload[:user_email] = current_user.email
-      payload[:user_organisation_slug] = current_user.organisation_slug
+    if @current_user.present?
+      payload[:user_id] = @current_user.id
+      payload[:user_email] = @current_user.email
+      payload[:user_organisation_slug] = @current_user.organisation_slug
     end
     payload[:request_id] = request.request_id
     payload[:user_ip] = user_ip(request.env.fetch("HTTP_X_FORWARDED_FOR", ""))
