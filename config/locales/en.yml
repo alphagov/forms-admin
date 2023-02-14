@@ -128,7 +128,6 @@ en:
           phone_number: Use hint text to help people answer the question. For example, ‘You can provide either a home or mobile phone number.’
           radio: Use hint text to help people answer the question. For a question where people can only select one answer you might want to use ‘Select one option’.
           single_line: Use hint text to help people answer the question. For example, you could say what format the answer should be in or where to find it.
-        question_short_name: The short name will be used when the form’s questions are all displayed in a list. Use a short descriptive name. For example ‘Address’.
         question_text:
           address: Ask the question the way you would in person. For example, ‘What’s your address?’
           checkbox: Ask the question the way you would in person. For example, ‘Which of these countries have you lived in?’
@@ -217,7 +216,6 @@ en:
             'false': 'No'
             name: Title needed
             'true': 'Yes'
-        question_short_name: Question short name (optional)
         question_text: Question text
         text_settings_options:
           names:

@@ -4,7 +4,7 @@ class PreviewLinkComponent::PreviewLinkComponentPreview < ViewComponent::Preview
   end
 
   def with_pages
-    pages = [{ id: 183, question_text: "What is your address?", question_short_name: nil, hint_text: "", answer_type: "address", next_page: nil }]
+    pages = [{ id: 183, question_text: "What is your address?", hint_text: "", answer_type: "address", next_page: nil }]
     render(PreviewLinkComponent::View.new(pages, "https://submit.forms.service.gov.uk/example-form"))
   end
 end
