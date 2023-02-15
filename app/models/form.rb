@@ -59,6 +59,11 @@ class Form < ActiveResource::Base
     end
   end
 
+  def make_live!
+    live_at = Time.zone.now
+    save!
+  end
+
   def form_submission_email
     FormSubmissionEmail.find_by_form_id(id)
   end
