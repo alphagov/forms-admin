@@ -53,13 +53,12 @@ RSpec.describe Forms::MakeLiveForm, type: :model do
       end
 
       before do
-        allow(make_live_form.form).to receive(:save!).and_return(1)
+        allow(make_live_form.form).to receive(:make_live!).and_return(:make_live_called)
         make_live_form.confirm_make_live = "made_live"
       end
 
-      it "sets live_at to current date/time" do
-        make_live_form.submit
-        expect(make_live_form.form.live_at).to eq " 2021-01-01 04:30:00.000000000 +0000"
+      it "makes form live" do
+        expect(make_live_form.submit).to eq :make_live_called
       end
 
       it "sets no error messages" do

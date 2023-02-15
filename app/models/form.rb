@@ -60,8 +60,7 @@ class Form < ActiveResource::Base
   end
 
   def make_live!
-    live_at = Time.zone.now
-    save!
+    post "make-live"
   end
 
   def form_submission_email
