@@ -17,7 +17,7 @@ jobs:
           ref: ${{ inputs.ref_to_deploy }}
 
       - name: Install Ruby and gems
-        uses: ruby/setup-ruby@f60ef1e8084a2e64569f928c3f1cfac6c7e12ad7 # v1.117.0
+        uses: ruby/setup-ruby@d3c9825d67b0d8720afdfdde5af56c79fdb38d16 # v1.117.0
         with:
           bundler-cache: true
 
