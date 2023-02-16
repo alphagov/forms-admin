@@ -15,8 +15,7 @@ class Forms::MakeLiveForm
     # we are valid and didn't need to save
     return true unless made_live?
 
-    form.live_at = Time.zone.now
-    form.save!
+    form.make_live!
   end
 
   def made_live?

@@ -59,6 +59,10 @@ class Form < ActiveResource::Base
     end
   end
 
+  def make_live!
+    post "make-live"
+  end
+
   def form_submission_email
     FormSubmissionEmail.find_by_form_id(id)
   end

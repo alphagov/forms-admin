@@ -137,7 +137,7 @@ RSpec.describe "MakeLive controller", type: :request do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.put "/api/v1/forms/2", post_headers
+        mock.post "/api/v1/forms/2/make-live", post_headers
         mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
       end
 
@@ -151,8 +151,9 @@ RSpec.describe "MakeLive controller", type: :request do
         expect(form).to have_been_read
       end
 
-      it "Updates the form on the API" do
-        expect(updated_form).to have_been_updated
+      it "Makes form live on the API" do
+        make_live_post = ActiveResource::Request.new(:post, "/api/v1/forms/2/make-live", {}, post_headers)
+        expect(ActiveResource::HttpMock.requests).to include make_live_post
       end
 
       it "redirects you to the confirmation page" do
