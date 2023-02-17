@@ -6,7 +6,7 @@ WORKDIR /app
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
 RUN apk update
 RUN apk upgrade --available
-RUN apk add libc6-compat openssl-dev build-base libpq-dev yarn nodejs=16.17.1-r0
+RUN apk add libc6-compat openssl-dev build-base libpq-dev yarn nodejs=16.19.1-r0
 RUN adduser -D ruby
 RUN mkdir /node_modules && chown ruby:ruby -R /node_modules /app
 
