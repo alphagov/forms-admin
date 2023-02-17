@@ -11,7 +11,7 @@
 
     <%= render FormStatusTagDescriptionComponent::View.new(status: form.status) %>
 
-    <% pages.each_with_index do |page, index| %>
+    <% form.pages.each_with_index do |page, index| %>
       <%= render(SummaryCardComponent::View.new( **PageSummaryCardDataService.call(page:).build_data)) %>
     <% end %>
 

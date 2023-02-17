@@ -16,7 +16,7 @@ RSpec.describe Forms::LiveController, type: :request do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/2", headers, form.to_json, 200
-        mock.get "/api/v1/forms/2/pages", headers, form.pages.to_json, 200
+        mock.get "/api/v1/forms/2/live", headers, form.to_json, 200
       end
 
       get live_form_path(2)
@@ -39,6 +39,7 @@ RSpec.describe Forms::LiveController, type: :request do
       before do
         ActiveResource::HttpMock.respond_to do |mock|
           mock.get "/api/v1/forms/2", headers, form.to_json, 200
+          mock.get "/api/v1/forms/2/live", headers, form.to_json, 200
         end
 
         get live_form_pages_path(2)
