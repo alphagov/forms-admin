@@ -1,22 +1,19 @@
 require "rails_helper"
 
 RSpec.describe "Forms", type: :request do
+  let(:headers) do
+    {
+      "X-API-Token" => ENV["API_KEY"],
+      "Accept" => "application/json",
+    }
+  end
+
+  let(:form) { build(:form, id: 2) }
+
   describe "Showing an existing form" do
-    let(:headers) do
-      {
-        "X-API-Token" => ENV["API_KEY"],
-        "Accept" => "application/json",
-      }
-    end
-
     describe "Given a live form" do
-      let(:form) do
-        build(:form, :live, id: 2)
-      end
-
-      let(:params) do
-        {}
-      end
+      let(:form) { build(:form, :live, id: 2) }
+      let(:params) { {} }
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
@@ -40,10 +37,6 @@ RSpec.describe "Forms", type: :request do
     end
 
     context "with a non-live form" do
-      let(:form) do
-        build :form, id: 2
-      end
-
       before do
         ActiveResource::HttpMock.respond_to do |mock|
           mock.get "/api/v1/forms/2", headers, form.to_json, 200
@@ -82,13 +75,6 @@ RSpec.describe "Forms", type: :request do
   end
 
   describe "no form found" do
-    let(:headers) do
-      {
-        "X-API-Token" => ENV["API_KEY"],
-        "Accept" => "application/json",
-      }
-    end
-
     let(:no_data_found_response) do
       {
         "error": "not_found",
@@ -114,27 +100,9 @@ RSpec.describe "Forms", type: :request do
 
   describe "Deleting an existing form" do
     describe "Given a valid form" do
-      let(:form) do
-        build(:form, id: 2)
-      end
-
-      let(:req_headers) do
-        {
-          "X-API-Token" => ENV["API_KEY"],
-          "Accept" => "application/json",
-        }
-      end
-
-      let(:post_headers) do
-        {
-          "X-API-Token" => ENV["API_KEY"],
-          "Content-Type" => "application/json",
-        }
-      end
-
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
+          mock.get "/api/v1/forms/2", headers, form.to_json, 200
         end
 
         get delete_form_path(form_id: 2)
@@ -148,10 +116,6 @@ RSpec.describe "Forms", type: :request do
 
   describe "Destroying an existing form" do
     describe "Given a valid form" do
-      let(:form) do
-        build(:form, id: 2)
-      end
-
       before do
         ActiveResourceMock.mock_resource(form,
                                          {
@@ -169,6 +133,39 @@ RSpec.describe "Forms", type: :request do
       it "Deletes the form on the API" do
         expect(form).to have_been_deleted
       end
+    end
+  end
+
+  describe "#index" do
+    let(:forms_response) do
+      [{
+        id: 2,
+        name: "Form",
+        form_slug: "form",
+        submission_email: "submission@email.com",
+        live_at: nil,
+        org: "test-org",
+      },
+       {
+         id: 3,
+         name: "Another form",
+         form_slug: "another-form",
+         submission_email: "submission@email.com",
+         live_at: nil,
+         org: "test-org",
+       }]
+    end
+
+    before do
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get "/api/v1/forms?org=test-org", headers, forms_response.to_json, 200
+      end
+      get root_path
+    end
+
+    it "Reads the forms from the API" do
+      forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?org=test-org", {}, headers)
+      expect(ActiveResource::HttpMock.requests).to include forms_request
     end
   end
 end

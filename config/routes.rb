@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get :ping, controller: :heartbeat
 
   # Defines the root path route ("/")
-  root "home#index"
+  root "forms#index"
 
   get "forms/new" => "forms/change_name#new", as: :new_form
   post "forms/new" => "forms/change_name#create"

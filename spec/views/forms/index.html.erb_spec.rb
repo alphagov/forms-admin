@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "home/index.html.erb" do
+describe "forms/index.html.erb" do
   let(:forms) { [] }
 
   around do |example|
@@ -11,7 +11,7 @@ describe "home/index.html.erb" do
 
   before do
     assign(:forms, forms)
-    render template: "home/index"
+    render template: "forms/index"
   end
 
   describe "when there are no forms to display" do

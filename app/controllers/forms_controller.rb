@@ -5,6 +5,10 @@ class FormsController < ApplicationController
     render template: "errors/not_found", status: :not_found
   end
 
+  def index
+    @forms = Form.all(params: { org: @current_user.organisation_slug }) || []
+  end
+
   def show
     @form = Form.find(params[:form_id])
     task_service = FormTaskListService.call(form: @form)
