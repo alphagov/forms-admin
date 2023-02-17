@@ -41,7 +41,7 @@ Rails.application.routes.draw do
     post "/declaration" => "forms/declaration#create", as: :declaration_create
 
     scope "/pages" do
-      get "/" => "page_list#edit", as: :form_pages
+      get "/" => "pages#index", as: :form_pages
       post "/" => "page_list#update"
       post "/move-page" => "pages#move_page", as: :move_page
 

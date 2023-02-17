@@ -1,13 +1,6 @@
 class PageListController < ApplicationController
   include CheckFormOrganisation
-  skip_before_action :clear_questions_session_data, except: %i[edit update]
-
-  def edit
-    @form = Form.find(params[:form_id])
-    @pages = @form.pages
-    @mark_complete_form = Forms::MarkCompleteForm.new(form: @form).assign_form_values
-    @mark_complete_options = mark_complete_options
-  end
+  skip_before_action :clear_questions_session_data, except: %i[update]
 
   def update
     @form = Form.find(params[:form_id])
@@ -23,11 +16,11 @@ class PageListController < ApplicationController
         raise StandardError, "Save unsuccessful"
       end
     else
-      render :edit, status: :unprocessable_entity
+      render :index, status: :unprocessable_entity
     end
   rescue StandardError => e
     flash[:message] = e
-    render :edit, status: :unprocessable_entity
+    render :index, status: :unprocessable_entity
   end
 
 private

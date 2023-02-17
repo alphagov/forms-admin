@@ -1,7 +1,13 @@
 class PagesController < ApplicationController
   include CheckFormOrganisation
   before_action :fetch_form, :answer_types
-  skip_before_action :clear_questions_session_data
+  skip_before_action :clear_questions_session_data, except: %i[index move_page]
+
+  def index
+    @pages = @form.pages
+    @mark_complete_form = Forms::MarkCompleteForm.new(form: @form).assign_form_values
+    @mark_complete_options = mark_complete_options
+  end
 
   def new
     answer_type = session.dig(:page, "answer_type")
@@ -89,5 +95,9 @@ private
 
   def answer_types
     @answer_types = Page::ANSWER_TYPES
+  end
+
+  def mark_complete_options
+    [OpenStruct.new(value: "true"), OpenStruct.new(value: "false")]
   end
 end
