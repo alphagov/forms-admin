@@ -7,7 +7,6 @@ module Forms
     def create
       form = Form.new({
         name: params[:name],
-        submission_email: "",
         org: @current_user.organisation_slug,
       })
       @change_name_form = ChangeNameForm.new(change_name_form_params(form))
