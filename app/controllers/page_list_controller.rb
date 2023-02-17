@@ -30,20 +30,7 @@ class PageListController < ApplicationController
     render :edit, status: :unprocessable_entity
   end
 
-  def move_page
-    Page.find(move_params[:page_id], params: { form_id: move_params[:form_id] }).move_page(move_params[:direction])
-    redirect_to form_pages_path
-  end
-
 private
-
-  def move_params
-    form_id = params.require(:form_id)
-    p = params.require(:move_direction).permit(%i[up down])
-    direction = p[:up] ? :up : :down
-    page_id = p[direction]
-    @move_params ||= { form_id:, page_id:, direction: }
-  end
 
   def mark_complete_options
     [OpenStruct.new(value: "true"), OpenStruct.new(value: "false")]

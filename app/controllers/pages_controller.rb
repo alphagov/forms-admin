@@ -40,6 +40,11 @@ class PagesController < ApplicationController
     end
   end
 
+  def move_page
+    Page.find(move_params[:page_id], params: { form_id: move_params[:form_id] }).move_page(move_params[:direction])
+    redirect_to form_pages_path
+  end
+
 private
 
   def page_params
@@ -48,6 +53,14 @@ private
 
   def fetch_form
     @form = Form.find(params[:form_id])
+  end
+
+  def move_params
+    form_id = params.require(:form_id)
+    p = params.require(:move_direction).permit(%i[up down])
+    direction = p[:up] ? :up : :down
+    page_id = p[direction]
+    @move_params ||= { form_id:, page_id:, direction: }
   end
 
   def reset_session_if_answer_settings_not_present
