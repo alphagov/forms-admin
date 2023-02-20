@@ -3,6 +3,10 @@ features:
   reorder_pages: true
   draft_live_versioning: false
 
+forms_runner:
+  # Base URL to point users to the app in the UI
+  url: http://localhost:3001
+
 # Settings for GOV.UK Notify api & email templates
 govuk_notify:
   api_key: changeme

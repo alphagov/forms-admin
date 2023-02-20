@@ -1,12 +1,6 @@
 require "rails_helper"
 
 describe "forms/make_live/confirmation.html.erb" do
-  around do |example|
-    ClimateControl.modify RUNNER_BASE: "runner-host" do
-      example.run
-    end
-  end
-
   before do
     assign(:form, OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1"))
     render template: "forms/make_live/confirmation"

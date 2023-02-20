@@ -4,12 +4,6 @@ describe "forms/show.html.erb" do
   let(:form) { OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft", pages:) }
   let(:pages) { [{ id: 183, question_text: "What is your address?", hint_text: "", answer_type: "address", next_page: nil }] }
 
-  around do |example|
-    ClimateControl.modify RUNNER_BASE: "runner-host" do
-      example.run
-    end
-  end
-
   before do
     assign(:form, form)
     assign(:task_status_counts, { completed: 12, total: 20 })

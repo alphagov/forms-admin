@@ -5,12 +5,6 @@ describe "live/show_form.html.erb" do
   let(:what_happens_next) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:form) { build(:form, :live, id: 2, declaration_text: declaration, what_happens_next_text: what_happens_next) }
 
-  around do |example|
-    ClimateControl.modify RUNNER_BASE: "runner-host" do
-      example.run
-    end
-  end
-
   before do
     allow(view).to receive(:live_form_pages_path).and_return("/live-form-pages-path")
 
