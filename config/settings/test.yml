@@ -1,3 +1,9 @@
+forms_api:
+  # URL to form-api endpoints
+  base_url: http://localhost:9292
+  # Authentication key to authenticate forms-runner to forms-api
+  auth_key:
+
 forms_runner:
   # Base URL to point users to the app in the UI
   url: runner-host

@@ -3,6 +3,12 @@ features:
   reorder_pages: true
   draft_live_versioning: false
 
+forms_api:
+  # URL to form-api endpoints
+  base_url: http://localhost:9292
+  # Authentication key to authenticate forms-runner to forms-api
+  auth_key: "123456"
+
 forms_runner:
   # Base URL to point users to the app in the UI
   url: http://localhost:3001
