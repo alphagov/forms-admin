@@ -22,24 +22,17 @@ class FormsController < ApplicationController
     @mark_complete_form = Forms::MarkCompleteForm.new(mark_complete_form_params)
     @mark_complete_options = [OpenStruct.new(value: "true"), OpenStruct.new(value: "false")]
 
-    if @mark_complete_form.valid?
-      @form.question_section_completed = @mark_complete_form.mark_complete
-      if @form.save
-        redirect_to form_path(@form)
-      else
-        raise StandardError, "Save unsuccessful"
-      end
+    if @mark_complete_form.mark_section
+      redirect_to form_path(@form)
     else
+      flash[:message] = "Save unsuccessful"
       render "pages/index", status: :unprocessable_entity
     end
-  rescue StandardError => e
-    flash[:message] = e
-    render "pages/index", status: :unprocessable_entity
   end
 
 private
 
   def mark_complete_form_params
-    params.require(:forms_mark_complete_form).permit(:mark_complete)
+    params.require(:forms_mark_complete_form).permit(:mark_complete).merge(form: @form)
   end
 end

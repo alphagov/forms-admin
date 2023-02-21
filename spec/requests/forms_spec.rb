@@ -212,5 +212,29 @@ RSpec.describe "Forms", type: :request do
     it "Redirects you to the form overview page" do
       expect(response).to redirect_to(form_path(2))
     end
+
+    context "when the mark completed form is invalid" do
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/2", headers, form.to_json, 200
+          mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
+          mock.put "/api/v1/forms/2", post_headers
+        end
+
+        post form_pages_path(2), params: { forms_mark_complete_form: { mark_complete: nil } }
+      end
+
+      it "renders the index page" do
+        expect(response).to render_template("pages/index")
+      end
+
+      it "returns 300 error code" do
+        expect(response.status).to eq(422)
+      end
+
+      it "sets a flash message" do
+        expect(flash[:message]).to eq "Save unsuccessful"
+      end
+    end
   end
 end
