@@ -8,6 +8,13 @@ RSpec.describe "Forms", type: :request do
     }
   end
 
+  let(:post_headers) do
+    {
+      "X-API-Token" => ENV["API_KEY"],
+      "Content-Type" => "application/json",
+    }
+  end
+
   let(:form) { build(:form, id: 2) }
 
   describe "Showing an existing form" do
@@ -166,6 +173,44 @@ RSpec.describe "Forms", type: :request do
     it "Reads the forms from the API" do
       forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?org=test-org", {}, headers)
       expect(ActiveResource::HttpMock.requests).to include forms_request
+    end
+  end
+
+  describe "#mark_pages_section_completed" do
+    let(:pages) do
+      build(:page, page_id: 99)
+    end
+
+    let(:form) do
+      build(:form, id: 2, pages:, question_section_completed: "false")
+    end
+
+    let(:updated_form) do
+      new_form = form
+      new_form.question_section_completed = "true"
+      new_form
+    end
+
+    before do
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get "/api/v1/forms/2", headers, form.to_json, 200
+        mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
+        mock.put "/api/v1/forms/2", post_headers
+      end
+
+      post form_pages_path(2), params: { forms_mark_complete_form: { mark_complete: "true" } }
+    end
+
+    it "Reads the form from the API" do
+      expect(form).to have_been_read
+    end
+
+    it "Updates the form on the API" do
+      expect(updated_form).to have_been_updated
+    end
+
+    it "Redirects you to the form overview page" do
+      expect(response).to redirect_to(form_path(2))
     end
   end
 end
