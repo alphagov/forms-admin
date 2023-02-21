@@ -20,7 +20,6 @@ class FormsController < ApplicationController
     @form = Form.find(params[:form_id])
     @pages = @form.pages
     @mark_complete_form = Forms::MarkCompleteForm.new(mark_complete_form_params)
-    @mark_complete_options = [OpenStruct.new(value: "true"), OpenStruct.new(value: "false")]
 
     if @mark_complete_form.mark_section
       redirect_to form_path(@form)

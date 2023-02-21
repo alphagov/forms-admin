@@ -6,7 +6,6 @@ class PagesController < ApplicationController
   def index
     @pages = @form.pages
     @mark_complete_form = Forms::MarkCompleteForm.new(form: @form).assign_form_values
-    @mark_complete_options = mark_complete_options
   end
 
   def new
@@ -95,9 +94,5 @@ private
 
   def answer_types
     @answer_types = Page::ANSWER_TYPES
-  end
-
-  def mark_complete_options
-    [OpenStruct.new(value: "true"), OpenStruct.new(value: "false")]
   end
 end
