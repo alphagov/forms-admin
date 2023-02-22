@@ -1,7 +1,7 @@
 module Forms
   class MakeLiveController < BaseController
     def new
-      redirect_to live_confirmation_url if current_form.live?
+      redirect_to live_confirmation_url if current_form.live? && !FeatureService.enabled?(:draft_live_versioning)
       @make_live_form = MakeLiveForm.new(form: current_form)
     end
 

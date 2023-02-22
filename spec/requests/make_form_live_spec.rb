@@ -50,21 +50,19 @@ RSpec.describe "MakeLive controller", type: :request do
       get make_live_path(form_id: 2)
     end
 
-    context "when the form is not live" do
-      it "Reads the form from the API" do
-        expect(form).to have_been_read
-      end
-
-      it "returns 200" do
-        expect(response).to have_http_status(:ok)
-      end
-
-      it "renders new" do
-        expect(response).to render_template(:new)
-      end
+    it "Reads the form from the API" do
+      expect(form).to have_been_read
     end
 
-    context "when the form is already live" do
+    it "returns 200" do
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "renders new" do
+      expect(response).to render_template(:new)
+    end
+
+    context "when the form is already live", feature_draft_live_versioning: false do
       let(:form) do
         build(:form,
               :live,
