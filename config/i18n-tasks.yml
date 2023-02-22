@@ -155,3 +155,9 @@ ignore_unused:
 #
 # <%# I18n::Tasks.add_scanner 'I18n::Tasks::Scanners::PatternMapper',
 #       patterns: [['\bSpree\.t[( ]\s*%{key}', 'spree.%{key}']] %>
+<% I18n::Tasks.add_scanner 'I18n::Tasks::Scanners::PatternMapper',
+        only: %w(app/service/form_task_list_service.rb),
+        patterns: [
+          ['forms\.task_list_#\{create_or_edit\}(?<rest>(\.\w+)*)', 'forms.task_list_create%{rest}'],
+          ['forms\.task_list_#\{create_or_edit\}(?<rest>(\.\w+)*)', 'forms.task_list_edit%{rest}'],
+        ] %>

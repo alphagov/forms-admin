@@ -1,12 +1,12 @@
 <% set_page_title(@form.name) %>
 
-<% content_for :back_link, govuk_back_link_to(root_path, t("back_link.forms")) %>
+<% content_for :back_link, @form.live? ? govuk_back_link_to(live_form_path(@form.id), t("back_link.form_view")) : govuk_back_link_to(root_path, t("back_link.forms")) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
       <span class="govuk-caption-l"><%= @form.name %></span><span class="govuk-visually-hidden"> - </span>
-      <%= @form.live? ? t("forms.form_overview.live_title") : t("forms.form_overview.title") %>
+      <%= @form.live? ? t("forms.form_overview.title_edit") : t("forms.form_overview.title_create") %>
     </h1>
 
     <%= render FormStatusTagDescriptionComponent::View.new(status: ( FeatureService.enabled?(:draft_live_versioning) ? :draft : @form.status )) %>
@@ -15,18 +15,16 @@
       <p class="govuk-body"><%= flash[:message] %></p>
     <% end %>
 
-    <% if @form.live? %>
-      <%= render FormUrlComponent::View.new(link_to_runner(Settings.forms_runner.url, @form.id, @form.form_slug, live: true ))%>
+    <p class="govuk-body">
+      <%= render PreviewLinkComponent::View.new(@form.pages, link_to_runner(Settings.forms_runner.url, @form.id, @form.form_slug)) %>
+    </p>
 
+    <% if @form.live? %>
       <div class="govuk-inset-text">
         <p><%= t("live_form_warning.notification_heading") %></p>
         <p><%= t("live_form_warning.notification_content") %></p>
       </div>
     <% end %>
-
-    <p class="govuk-body govuk-!-margin-bottom-9">
-      <%= render PreviewLinkComponent::View.new(@form.pages, link_to_runner(Settings.forms_runner.url, @form.id, @form.form_slug)) %>
-    </p>
 
     <%= render TaskListComponent::View.new(completed_task_count: @task_status_counts[:completed],
                                            total_task_count: @task_status_counts[:total] ,
