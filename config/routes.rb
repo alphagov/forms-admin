@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get :ping, controller: :heartbeat
 
   # Defines the root path route ("/")
-  root "home#index"
+  root "forms#index"
 
   get "forms/new" => "forms/change_name#new", as: :new_form
   post "forms/new" => "forms/change_name#create"
@@ -41,9 +41,9 @@ Rails.application.routes.draw do
     post "/declaration" => "forms/declaration#create", as: :declaration_create
 
     scope "/pages" do
-      get "/" => "page_list#edit", as: :form_pages
-      post "/" => "page_list#update"
-      post "/move-page" => "page_list#move_page", as: :move_page
+      get "/" => "pages#index", as: :form_pages
+      post "/" => "forms#mark_pages_section_completed"
+      post "/move-page" => "pages#move_page", as: :move_page
 
       scope "/new" do
         get "/type-of-answer" => "pages/type_of_answer#new", as: :type_of_answer_new

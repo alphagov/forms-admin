@@ -4,7 +4,6 @@ RSpec.describe "ChangeName controller", type: :request do
   let(:form_data) do
     {
       name: "Form name",
-      submission_email: "",
       org: "test-org",
     }
   end
@@ -13,8 +12,6 @@ RSpec.describe "ChangeName controller", type: :request do
     {
       id: 2,
       name: "Form name",
-      submission_email: "submission@email.com",
-      start_page: 1,
       org: "test-org",
     }.to_json
   end
@@ -76,8 +73,8 @@ RSpec.describe "ChangeName controller", type: :request do
 
   describe "#update" do
     it "renames form" do
-      post change_form_name_path(form_id: 2), params: { forms_change_name_form: { name: "new_form_name" } }
-      expected_request = ActiveResource::Request.new(:put, "/api/v1/forms/2", { "id": 2, "name": "new_form_name", "submission_email": "submission@email.com", "start_page": 1, org: "test-org" }.to_json, post_headers)
+      post change_form_name_path(form_id: 2), params: { forms_change_name_form: { name: "new_form_name", org: "test-org" } }
+      expected_request = ActiveResource::Request.new(:put, "/api/v1/forms/2", { "id": 2, "name": "new_form_name", org: "test-org" }.to_json, post_headers)
       expect(ActiveResource::HttpMock.requests).to include expected_request
       expect(ActiveResource::HttpMock.requests[2].body).to eq expected_request.body
       expect(response).to redirect_to(form_path(form_id: 2))

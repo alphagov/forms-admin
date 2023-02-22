@@ -7,9 +7,64 @@ RSpec.describe "Pages", type: :request do
       "Accept" => "application/json",
     }
   end
+  let(:post_headers) do
+    {
+      "X-API-Token" => ENV["API_KEY"],
+      "Content-Type" => "application/json",
+    }
+  end
 
   let(:form_response) do
     (build :form, id: 2)
+  end
+
+  describe "#index" do
+    let(:pages) do
+      [build(:page, id: 99),
+       build(:page, id: 100),
+       build(:page, id: 101)]
+    end
+    let(:form) do
+      build(:form, id: 2, pages:)
+    end
+
+    before do
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get "/api/v1/forms/2", headers, form.to_json, 200
+        mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
+      end
+
+      get form_pages_path(2)
+    end
+
+    it "Reads the form from the API" do
+      expect(form).to have_been_read
+
+      pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
+      expect(ActiveResource::HttpMock.requests).to include pages_request
+    end
+
+    context "with a form from another organisation" do
+      let(:form) do
+        build :form, org: "another-org", id: 2
+      end
+
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/2", headers, form.to_json, 200
+        end
+
+        get form_pages_path(2)
+      end
+
+      it "Renders the forbidden page" do
+        expect(response).to render_template("errors/forbidden")
+      end
+
+      it "Returns a 403 status" do
+        expect(response.status).to eq(403)
+      end
+    end
   end
 
   describe "Editing an existing page" do
@@ -307,6 +362,33 @@ RSpec.describe "Pages", type: :request do
       it "Deletes the form on the API" do
         expect(page).to have_been_deleted
       end
+    end
+  end
+
+  describe "#move_page" do
+    let(:pages) do
+      [build(:page, id: 99),
+       build(:page, id: 100),
+       build(:page, id: 101)]
+    end
+    let(:form) do
+      build(:form, id: 2, pages:)
+    end
+
+    before do
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1/pages/100", headers, pages[1].to_json, 200
+        mock.put "/api/v1/forms/1/pages/100/up", post_headers
+      end
+
+      post move_page_path({ form_id: 1, move_direction: { up: 100 } })
+    end
+
+    it "Reads the form from the API" do
+      move_post = ActiveResource::Request.new(:put, "/api/v1/forms/1/pages/100/up", {}, post_headers)
+      expect(ActiveResource::HttpMock.requests).to include move_post
     end
   end
 end
