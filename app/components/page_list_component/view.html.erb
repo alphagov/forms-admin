@@ -2,34 +2,37 @@
   <%if @pages.present?  %>
     <div class="app-page-list">
       <%= form_with url: move_page_url(@form_id), method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-        <% @pages.each_with_index do |page, index| %>
-          <dl class="govuk-summary-list">
+        <dl class="govuk-summary-list">
+          <% @pages.each_with_index do |page, index| %>
             <div class="govuk-summary-list__row">
 
-              <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
-                <%= question_text_with_optional_suffix(page) %>
+              <dt class="govuk-summary-list__key app-page-list__key">
+                <%= index + 1 %>
               </dt>
+
+              <dd class="govuk-summary-list__value">
+                <%= question_text_with_optional_suffix(page) %>
+              </dd>
 
               <dd class="govuk-summary-list__actions govuk-!-padding-bottom-6">
 
                 <div class="govuk-button-group form-action-group app-page-list__button-group">
                   <% if show_up_button(index) %>
-                    <%= f.govuk_submit t("forms.form_overview.move_up_html", title: page.question_text), secondary: true, name: 'move_direction[up]', value: page.id %>
+                    <%= f.govuk_submit t("forms.form_overview.move_up_html", title: index + 1), secondary: true, name: 'move_direction[up]', value: page.id %>
                   <% end %>
                   <% if show_down_button(index)  %>
-                    <%= f.govuk_submit t("forms.form_overview.move_down_html", title: page.question_text), secondary: true, name: 'move_direction[down]', value: page.id %>
+                    <%= f.govuk_submit t("forms.form_overview.move_down_html", title: index + 1), secondary: true, name: 'move_direction[down]', value: page.id %>
                   <% end %>
                 </div>
 
                 <%= govuk_link_to edit_page_path(@form_id, page) do %>
-                  <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= page.question_text %></span>
+                  <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= index + 1 %></span>
                 <% end %>
 
               </dd>
-
             </div>
-          </dl>
-        <% end %>
+          <% end %>
+        </dl>
       <% end %>
     </div>
   <% end %>
