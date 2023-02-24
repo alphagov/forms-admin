@@ -58,11 +58,29 @@ RSpec.describe "MakeLive controller", type: :request do
       expect(response).to have_http_status(:ok)
     end
 
-    it "renders new" do
-      expect(response).to render_template(:new)
+    context "when the form is being created for the first time" do
+      it "renders make your form live" do
+        expect(response).to render_template("make_your_form_live")
+      end
     end
 
-    context "when the form is already live", feature_draft_live_versioning: false do
+    context "when editing a draft of an existing live form", feature_draft_live_versioning: true do
+      let(:form) do
+        build(:form,
+              :live,
+              id: 2)
+      end
+
+      it "Reads the form from the API" do
+        expect(form).to have_been_read
+      end
+
+      it "renders make your changes live" do
+        expect(response).to render_template("make_your_changes_live")
+      end
+    end
+
+    context "when the form is already live and the draft feature is not enabled", feature_draft_live_versioning: false do
       let(:form) do
         build(:form,
               :live,

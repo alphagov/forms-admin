@@ -11,6 +11,7 @@ en:
     hint: Select all that apply
   back_link:
     form_create: Back to create your form
+    form_edit: Back to edit your form
     form_view: Back to your form
     forms: Back to your forms
   contact_details:
@@ -164,6 +165,8 @@ en:
           radio: Ask the question the way you would in person. For example, ‘What country do you live in?’
           single_line: Ask the question the way you would in person. For example, ‘What’s your reference number?’
     label:
+      forms_make_changes_live_form:
+        confirm_make_live: Are you sure you want to make your draft live?
       forms_make_live_form:
         confirm_make_live: Are you sure you want to make your form live?
       page:
@@ -315,6 +318,7 @@ en:
     forbidden: You cannot view this page
     home: Home
     internal_server_error: Sorry, there is a problem with the service
+    make_changes_live_form: Make your changes live
     make_live_form: Make your form live
     name_settings: Ask for a person’s name
     new_page_form: Edit question
