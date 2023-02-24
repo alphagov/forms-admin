@@ -20,10 +20,16 @@
     </p>
 
     <% if @form.live? %>
-      <div class="govuk-inset-text">
-        <p><%= t("live_form_warning.notification_heading") %></p>
-        <p><%= t("live_form_warning.notification_content") %></p>
-      </div>
+      <% if FeatureService.enabled? :draft_live_versioning %>
+        <div class="govuk-inset-text">
+          <p><%= t("make_changes_live.warning") %></p>
+        </div>
+      <% else%>
+        <div class="govuk-inset-text">
+          <p><%= t("live_form_warning.notification_heading") %></p>
+          <p><%= t("live_form_warning.notification_content") %></p>
+        </div>
+      <% end %>
     <% end %>
 
     <%= render TaskListComponent::View.new(completed_task_count: @task_status_counts[:completed],

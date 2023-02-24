@@ -262,6 +262,12 @@ en:
       Any changes you make to a live form will be updated in the form
       immediately.
     notification_title: Important
+  make_changes_live:
+    url_will_remain_same: The URL for the live form will remain the same.
+    warning: |
+      When you make your changes live, there may be an impact on people who are
+      filling in the live form at the same time. They may lose any answers they
+      have already provided and may need to start again.
   make_live:
     confirmation:
       body_html: |

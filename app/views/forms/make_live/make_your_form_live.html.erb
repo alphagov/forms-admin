@@ -16,7 +16,9 @@
 
       <%= t("make_live.new.body_html", submission_email: @make_live_form.form.submission_email) %>
 
-      <%= render LiveFormWarningComponent::View.new() %>
+      <% unless FeatureService.enabled?(:draft_live_versioning) %>
+        <%= render LiveFormWarningComponent::View.new() %>
+      <% end %>
 
       <%= f.govuk_collection_radio_buttons :confirm_make_live,
                                            @make_live_form.values, ->(option) { option }, ->(option) { t('helpers.label.forms_make_live_form.options.' + "#{option}") },
