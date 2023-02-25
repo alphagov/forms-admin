@@ -48,4 +48,10 @@ describe "Settings" do
 
     include_examples expected_value_test, :environment, sentry, "local"
   end
+
+  describe "service_unavailable" do
+    it "has a default value" do
+      expect(settings[:service_unavailable]).to eq(false)
+    end
+  end
 end

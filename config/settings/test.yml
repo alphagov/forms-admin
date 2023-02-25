@@ -4,6 +4,10 @@ forms_api:
   # Authentication key to authenticate forms-runner to forms-api
   auth_key:
 
+
+# When set to true, All pages will render 'Service unavailable'
+service_unavailable: false
+
 forms_runner:
   # Base URL to point users to the app in the UI
   url: runner-host

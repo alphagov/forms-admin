@@ -62,7 +62,6 @@ Refer to the [settings file](config/settings.yml) for all the settings required 
 | Name                  | Purpose                                                            |
 | --------------------- | ------------------------------------------------------------------ |
 | `DATABASE_URL`        | The URL to the postgres instance (without the database at the end) |
-| `SERVICE_UNAVAILABLE` | All pages will render 'Service unavailable' if set to `true`       |
 
 ### Feature flags
 
