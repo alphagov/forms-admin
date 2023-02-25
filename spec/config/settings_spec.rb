@@ -25,6 +25,14 @@ describe "Settings" do
     include_examples expected_value_test, :reorder_pages, features, true
   end
 
+  describe "forms_api" do
+    forms_api = settings[:forms_api]
+
+    include_examples expected_value_test, :auth_key, forms_api, "changeme"
+
+    include_examples expected_value_test, :base_url, forms_api, "http://localhost:9292"
+  end
+
   describe "govuk_notify" do
     govuk_notify = settings[:govuk_notify]
 
