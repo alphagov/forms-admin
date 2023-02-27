@@ -329,6 +329,7 @@ en:
     text_settings: How much text will people need to provide?
     type_of_answer: What kind of answer do you need to this question?
     what_happens_next_form: Form submitted page
+    your_changes_are_live: Your changes are live
     your_form_is_live: Your form is live
   pages:
     add_rules_legend: Question settings

@@ -50,7 +50,7 @@ RSpec.describe "MakeLive controller", type: :request do
       get make_live_path(form_id: 2)
     end
 
-    it "Reads the form from the API" do
+    it "reads the form from the API" do
       expect(form).to have_been_read
     end
 
@@ -71,7 +71,7 @@ RSpec.describe "MakeLive controller", type: :request do
               id: 2)
       end
 
-      it "Reads the form from the API" do
+      it "reads the form from the API" do
         expect(form).to have_been_read
       end
 
@@ -87,70 +87,17 @@ RSpec.describe "MakeLive controller", type: :request do
               id: 2)
       end
 
-      it "Reads the form from the API" do
+      it "reads the form from the API" do
         expect(form).to have_been_read
       end
 
-      it "redirects to confirmation page" do
-        expect(response).to redirect_to(live_confirmation_url(2))
-      end
-    end
-  end
-
-  describe "#confirmation" do
-    before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.put "/api/v1/forms/2", post_headers
-        mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
-      end
-      get live_confirmation_url(form_id: 2)
-    end
-
-    context "when the form is already live" do
-      let(:form) do
-        Form.new(
-          name: "Form name",
-          form_slug: "form-name",
-          submission_email: "submission@email.com",
-          id: 2,
-          org: "test-org",
-          privacy_policy_url: "https://www.example.com",
-          live_at: "2021-01-01T00:00:00.000Z",
-          what_happens_next_text: "We usually respond to applications within 10 working days.",
-        )
-      end
-
-      it "Reads the form from the API" do
-        expect(form).to have_been_read
-      end
-
-      it "returns 200" do
-        expect(response).to have_http_status(:ok)
-      end
-
-      it "renders confirmation" do
+      it "renders the confirmation page" do
         expect(response).to render_template(:confirmation)
-      end
-    end
-
-    context "when the form is not live" do
-      it "Reads the form from the API" do
-        expect(form).to have_been_read
-      end
-
-      it "redirects to the make_live page" do
-        expect(response).to redirect_to(make_live_url(2))
       end
     end
   end
 
   describe "#create" do
-    around do |example|
-      Timecop.freeze(Time.zone.local(2021, 1, 1)) do
-        example.run
-      end
-    end
-
     before do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.post "/api/v1/forms/2/make-live", post_headers
@@ -163,24 +110,42 @@ RSpec.describe "MakeLive controller", type: :request do
     context "when making a form live" do
       let(:form_params) { { forms_make_live_form: { confirm_make_live: :made_live, form: } } }
 
-      it "Reads the form from the API" do
+      it "reads the form from the API" do
         expect(form).to have_been_read
       end
 
-      it "Makes form live on the API" do
+      it "makes form live on the API" do
         make_live_post = ActiveResource::Request.new(:post, "/api/v1/forms/2/make-live", {}, post_headers)
         expect(ActiveResource::HttpMock.requests).to include make_live_post
       end
 
-      it "redirects you to the confirmation page" do
-        expect(response).to redirect_to(live_confirmation_url(2))
+      it "renders the confirmation page" do
+        expect(response).to render_template(:confirmation)
+      end
+
+      context "and that form has not been made live before" do
+        it "has the page title 'Your form is live'" do
+          expect(assigns(:confirmation_page_title)).to eq "Your form is live"
+        end
+      end
+
+      context "and that form has already been made live before" do
+        let(:form) do
+          build(:form,
+                :live,
+                id: 2)
+        end
+
+        it "has the page title 'Your changes are live'" do
+          expect(assigns(:confirmation_page_title)).to eq "Your changes are live"
+        end
       end
     end
 
     context "when deciding not to make a form live" do
       let(:form_params) { { forms_make_live_form: { confirm_make_live: :not_made_live } } }
 
-      it "Reads the form from the API" do
+      it "reads the form from the API" do
         expect(form).to have_been_read
       end
 
