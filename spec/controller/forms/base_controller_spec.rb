@@ -6,7 +6,7 @@ describe Forms::BaseController, type: :controller do
   let(:form) { build :form, id: 1 }
   let(:headers) do
     {
-      "X-API-Token" => ENV["API_KEY"],
+      "X-API-Token" => Settings.forms_api.auth_key,
       "Accept" => "application/json",
     }
   end

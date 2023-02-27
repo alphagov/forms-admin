@@ -3,12 +3,6 @@ require "rails_helper"
 describe "forms/index.html.erb" do
   let(:forms) { [] }
 
-  around do |example|
-    ClimateControl.modify RUNNER_BASE: "runner-host" do
-      example.run
-    end
-  end
-
   before do
     assign(:forms, forms)
     render template: "forms/index"

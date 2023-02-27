@@ -3,6 +3,16 @@ features:
   reorder_pages: true
   draft_live_versioning: false
 
+forms_api:
+  # Authentication key to authenticate forms-runner to forms-api
+  auth_key: changeme
+  # URL to form-api endpoints
+  base_url: http://localhost:9292
+
+forms_runner:
+  # Base URL to point users to the app in the UI
+  url: http://localhost:3001
+
 # Settings for GOV.UK Notify api & email templates
 govuk_notify:
   api_key: changeme
@@ -10,6 +20,9 @@ govuk_notify:
 
 # When set to true, any capybara tests will run chrome normally rather than in headless mode.
 show_browser_during_tests: false
+
+# When set to true, All pages will render 'Service unavailable'
+service_unavailable: false
 
 # Configuration for Sentry
 # Sentry will only initialise if dsn is set to some other value

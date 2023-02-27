@@ -24,7 +24,7 @@ RSpec.describe "Errors", type: :request do
 
   describe "Service unavailable page" do
     it "returns http code 503" do
-      stub_const "ENV", ENV.to_h.merge("SERVICE_UNAVAILABLE" => "true")
+      allow(Settings).to receive(:service_unavailable).and_return(true)
       get "/"
       expect(response).to have_http_status(:service_unavailable)
     end

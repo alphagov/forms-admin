@@ -1,8 +1,8 @@
 class Page < ActiveResource::Base
-  self.site = (ENV["API_BASE"]).to_s
+  self.site = Settings.forms_api.base_url
   self.prefix = "/api/v1/forms/:form_id/"
   self.include_format_in_path = false
-  headers["X-API-Token"] = ENV["API_KEY"]
+  headers["X-API-Token"] = Settings.forms_api.auth_key
 
   ANSWER_TYPES = %w[name organisation_name email phone_number national_insurance_number address date selection number text].freeze
 

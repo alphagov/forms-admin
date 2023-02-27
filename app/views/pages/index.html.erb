@@ -23,7 +23,7 @@
     <% end %>
     <div class="govuk-button-group">
       <%= govuk_button_link_to t("pages.index.add_question"), type_of_answer_new_path(@form), class:"govuk-!-margin-bottom-3 govuk-!-margin-top-3" %>
-      <%= render PreviewLinkComponent::View.new(@pages, link_to_runner(ENV["RUNNER_BASE"], @form.id, @form.form_slug)) %>
+      <%= render PreviewLinkComponent::View.new(@pages, link_to_runner(Settings.forms_runner.url, @form.id, @form.form_slug)) %>
     </div>
 
     <% if @pages.any? %>

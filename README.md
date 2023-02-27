@@ -62,10 +62,6 @@ Refer to the [settings file](config/settings.yml) for all the settings required 
 | Name                  | Purpose                                                            |
 | --------------------- | ------------------------------------------------------------------ |
 | `DATABASE_URL`        | The URL to the postgres instance (without the database at the end) |
-| `API_BASE`            | The base url for the API - E.g. `http://localhost:9090`            |
-| `RUNNER_BASE`         | The base url for the Runner - E.g. `http://localhost:3001`         |
-| `SERVICE_UNAVAILABLE` | All pages will render 'Service unavailable' if set to `true`       |
-| `API_KEY`             | The API key for authentication                                     |
 
 ### Feature flags
 
