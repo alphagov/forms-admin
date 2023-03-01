@@ -10,11 +10,11 @@
 
     <%= render FormStatusTagDescriptionComponent::View.new(status: :live) %>
 
-    <p class="govuk-body">
-      <%= render PreviewLinkComponent::View.new(form.pages, link_to_runner(Settings.forms_runner.url, form.id, form.form_slug)) %>
+      <p class="govuk-body">
+        <%= render PreviewLinkComponent::View.new(form.pages, link_to_runner(Settings.forms_runner.url, form.id, form.form_slug, mode: :preview_live)) %>
     </p>
 
-    <%= render FormUrlComponent::View.new(link_to_runner(Settings.forms_runner.url, form.id, form.form_slug, live: true ))%>
+    <%= render FormUrlComponent::View.new(link_to_runner(Settings.forms_runner.url, form.id, form.form_slug, mode: :live ))%>
 
     <h2 class="govuk-heading-m"><%= t('show_live_form.questions') %></h2>
     <p class="govuk-body"><%= govuk_link_to t('show_live_form.questions_link', count: form.pages.count), live_form_pages_path(form.id) %></p>
