@@ -82,6 +82,7 @@ en:
     delete_form: Delete draft form
     form_overview:
       edit: Edit
+      edit_with_visually_hidden_text_html: Edit <span class="govuk-visually-hidden">%{visually_hidden_text}</span>
       move_down_html: Move down <span class="govuk-visually-hidden">%{title}</span>
       move_up_html: Move up <span class="govuk-visually-hidden">%{title}</span>
       title_create: Create a form
@@ -304,6 +305,14 @@ en:
 
       If you pasted the web address, check you copied the entire address.
     title: Page not found
+  page_conditions:
+    condition_compact_html: 'If the answer is “%{answer_value}”<br> then skip to question %{goto_page_number}: “%{goto_page_text}”'
+    condition_html: |
+      If the question “%{check_page_text}”<br>
+      is answered as “%{answer_value}”<br>
+      take the person to “%{goto_page_text}”
+    condition_name: Question %{page_index}'s route
+    route: Route
   page_options_service:
     answer_type: Answer type
     date: Date

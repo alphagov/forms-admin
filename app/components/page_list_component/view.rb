@@ -15,5 +15,9 @@ module PageListComponent
     def show_down_button(index)
       index != @pages.length - 1
     end
+
+    def question_text_for_page(id)
+      @pages.find { |page| page.id == id }.question_text
+    end
   end
 end

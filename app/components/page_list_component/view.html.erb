@@ -31,6 +31,30 @@
 
             </dd>
           </div>
+
+          <% if FeatureService.enabled?(:basic_routing) %>
+            <% page.routing_conditions.each do |condition| %>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key govuk-summary-list__key app-page-list__key">
+                  <%= t("page_conditions.condition_name", page_index: index + 1) %>
+                </dt>
+
+                <dd class="govuk-summary-list__value">
+                  <%= t('page_conditions.condition_html',
+                    check_page_text: question_text_for_page(condition.check_page_id),
+                    answer_value: condition.answer_value,
+                    goto_page_text: question_text_for_page(condition.goto_page_id)
+                  ) %>
+                </dd>
+
+                <dd class="govuk-summary-list__actions govuk-!-padding-bottom-6">
+                  <%= govuk_link_to "#" do %>
+                    <%= t("forms.form_overview.edit_with_visually_hidden_text_html", visually_hidden_text: t("page_conditions.condition_name", page_index: index + 1)) %>
+                  <% end %>
+                </dd>
+              </div>
+            <% end %>
+          <% end %>
         <% end %>
       </dl>
     <% end %>
