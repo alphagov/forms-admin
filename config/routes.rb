@@ -32,7 +32,6 @@ Rails.application.routes.draw do
     post "/privacy-policy" => "forms/privacy_policy#create"
     get "/make-live" => "forms/make_live#new", as: :make_live
     post "/make-live" => "forms/make_live#create", as: :make_live_create
-    get "/live-confirmation" => "forms/make_live#confirmation", as: :live_confirmation
     get "/what-happens-next" => "forms/what_happens_next#new", as: :what_happens_next
     post "/what-happens-next" => "forms/what_happens_next#create", as: :what_happens_next_create
     get "/contact-details" => "forms/contact_details#new", as: :contact_details

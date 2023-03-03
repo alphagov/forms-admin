@@ -95,7 +95,7 @@ describe FormTaskListService do
         end
 
         it "has hint text explaining where completed forms will be sent to" do
-          expect(section_rows.first[:hint_text]).to eq I18n.t("forms.task_lists.section_2.hint_text_html", submission_email: form.submission_email)
+          expect(section_rows.first[:hint_text]).to eq I18n.t("forms.task_list_create.section_2.hint_text_html", submission_email: form.submission_email)
         end
 
         it "has the correct default status" do
@@ -243,6 +243,14 @@ describe FormTaskListService do
         context "and draft_live_versioning feature is enabled", feature_draft_live_versioning: true do
           it "has tasks" do
             expect(section_rows).not_to be_empty
+          end
+
+          it "describes the section title correctly" do
+            expect(section[:title]).to eq I18n.t("forms.task_list_edit.section_4.make_live")
+          end
+
+          it "describes the task correctly" do
+            expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_edit.section_4.make_live")
           end
         end
 
