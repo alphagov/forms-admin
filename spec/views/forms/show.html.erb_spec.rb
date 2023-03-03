@@ -42,7 +42,7 @@ describe "forms/show.html.erb" do
   end
 
   context "when form states is a live" do
-    let(:form) { OpenStruct.new(id: 2, name: "Form 2", form_slug: "form-2", status: "live", live?: true, pages: []) }
+    let(:form) { OpenStruct.new(id: 2, name: "Form 2", form_slug: "form-2", status: "live", has_live_version: true, pages: []) }
 
     it "rendered live tag" do
       expect(rendered).to have_css(".govuk-tag.govuk-tag--blue", text: "LIVE")

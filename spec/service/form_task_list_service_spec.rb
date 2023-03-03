@@ -234,7 +234,7 @@ describe FormTaskListService do
 
       context "when form is live" do
         let(:section) do
-          allow(form).to receive(:live?).and_return(true)
+          allow(form).to receive(:has_live_version).and_return(true)
           described_class.call(form:).all_tasks[3]
         end
 

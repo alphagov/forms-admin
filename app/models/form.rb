@@ -15,12 +15,8 @@ class Form < ActiveResource::Base
     pages.find { |p| !p.has_next_page? }
   end
 
-  def live?
-    live_at.present? && live_at < Time.zone.now
-  end
-
   def status
-    live? ? :live : :draft
+    has_live_version ? :live : :draft
   end
 
   def save_page(page)

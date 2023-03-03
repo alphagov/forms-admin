@@ -80,6 +80,6 @@ private
   def validate_presence
     return false if FeatureService.enabled?(:draft_live_versioning)
 
-    form.live?
+    form.has_live_version
   end
 end
