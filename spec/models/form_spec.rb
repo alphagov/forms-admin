@@ -30,14 +30,14 @@ describe Form do
     context "when form is draft (live_at not set)" do
       it "returns 'draft'" do
         form.live_at = ""
-        expect(form.status).to eq "draft"
+        expect(form.status).to eq :draft
       end
     end
 
     context "when form is live (live_at is set)" do
       it "returns 'live'" do
         form.live_at = Time.zone.now.to_s
-        expect(form.status).to eq "live"
+        expect(form.status).to eq :live
       end
     end
   end

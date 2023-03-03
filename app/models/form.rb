@@ -3,8 +3,6 @@ class Form < ActiveResource::Base
   self.include_format_in_path = false
   headers["X-API-Token"] = Settings.forms_api.auth_key
 
-  STATUSES = { draft: "draft", live: "live" }.freeze
-
   has_many :pages
 
   attr_accessor :missing_sections
@@ -26,9 +24,7 @@ class Form < ActiveResource::Base
   end
 
   def status
-    return STATUSES[:live] if live?
-
-    STATUSES[:draft]
+    live? ? :live : :draft
   end
 
   def save_page(page)
