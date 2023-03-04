@@ -1,4 +1,4 @@
-FROM ruby:3.1.2-alpine3.16@sha256:05b990dbaa3a118f96e9ddbf046f388b3c4953d5ef3d18908af96f42c0e138d9 AS build
+FROM ruby:3.2.0-alpine3.17@sha256:c690d3b45ef65e0098104c272f1736b0595b824908d5639c3a3d17636581a905  AS build
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ RUN mkdir /node_modules && chown ruby:ruby -R /node_modules /app
 USER ruby
 
 COPY --chown=ruby:ruby Gemfile* ./
-RUN gem install bundler -v 2.3.20
+RUN gem install bundler -v 2.4.10
 RUN bundle install --jobs "$(nproc)"
 
 COPY --chown=ruby:ruby package.json ./
@@ -32,7 +32,7 @@ COPY --chown=ruby:ruby . .
 # even though the command doesn't use the value itself
 RUN SECRET_KEY_BASE=dummyvalue rails assets:precompile
 
-FROM ruby:3.1.2-alpine3.16@sha256:05b990dbaa3a118f96e9ddbf046f388b3c4953d5ef3d18908af96f42c0e138d9 AS app
+FROM ruby:3.2.0-alpine3.17@sha256:c690d3b45ef65e0098104c272f1736b0595b824908d5639c3a3d17636581a905  AS app
 
 ENV RAILS_ENV="${RAILS_ENV:-production}" \
     PATH="${PATH}:/home/ruby/.local/bin" \
