@@ -8,7 +8,7 @@
       <%= form.name %>
     </h1>
 
-    <%= render FormStatusTagDescriptionComponent::View.new(status: form.status) %>
+    <%= render FormStatusTagDescriptionComponent::View.new(status: :live) %>
 
     <p class="govuk-body">
       <%= render PreviewLinkComponent::View.new(form.pages, link_to_runner(Settings.forms_runner.url, form.id, form.form_slug)) %>

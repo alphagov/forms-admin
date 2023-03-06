@@ -17,7 +17,7 @@ RSpec.describe FormStatusTagComponent::View, type: :component do
 
   describe "live status" do
     before do
-      render_inline(described_class.new(status: "live"))
+      render_inline(described_class.new(status: :live))
     end
 
     it "renders the status text" do
@@ -29,7 +29,10 @@ RSpec.describe FormStatusTagComponent::View, type: :component do
     end
   end
 
-  # it "renders the link" do
-  #   expect(page).to have_text("https://example.com")
-  # end
+  describe "string status" do
+    it "accepts status as a string" do
+      expect(described_class.new(status: "draft").status_colour).to eq "purple"
+      expect(described_class.new(status: "live").status_colour).to eq "blue"
+    end
+  end
 end

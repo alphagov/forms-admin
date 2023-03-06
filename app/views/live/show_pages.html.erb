@@ -9,7 +9,7 @@
       <%= t("forms.form_overview.your_questions") %>
     </h1>
 
-    <%= render FormStatusTagDescriptionComponent::View.new(status: form.status) %>
+    <%= render FormStatusTagDescriptionComponent::View.new(status: :live) %>
 
     <% form.pages.each_with_index do |page, index| %>
       <%= render(SummaryCardComponent::View.new( **PageSummaryCardDataService.call(page:).build_data)) %>

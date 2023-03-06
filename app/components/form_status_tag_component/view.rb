@@ -1,17 +1,21 @@
 module FormStatusTagComponent
   class View < ViewComponent::Base
-    attr_accessor :status
-
-    def initialize(status: "DRAFT")
+    def initialize(status: :draft)
       super
-      @status = status.upcase
+      @status = status.to_sym
     end
 
     def status_colour
       {
         draft: "purple",
         live: "blue",
-      }[status.downcase.to_sym]
+      }[@status]
+    end
+
+    def status_text
+      # i18n-tasks-use t('form_statuses.draft')
+      # i18n-tasks-use t('form_statuses.live')
+      I18n.t("form_statuses.#{@status}")
     end
   end
 end

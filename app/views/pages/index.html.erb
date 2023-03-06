@@ -15,7 +15,7 @@
     </h1>
     <dl class="govuk-!-margin-bottom-7">
       <dt class="govuk-visually-hidden">Status</dt>
-      <dd class="govuk-!-margin-0"><%= render FormStatusTagComponent::View.new(status: @form.status) %></dd>
+      <dd class="govuk-!-margin-0"><%= render FormStatusTagComponent::View.new(status: ( FeatureService.enabled?(:draft_live_versioning) ? :draft : @form.status )) %></dd>
     </dl>
 
     <% if flash[:message] %>

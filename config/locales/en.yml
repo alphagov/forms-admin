@@ -72,6 +72,9 @@ en:
   forbidden:
     body_html: You do not have permission to view this page as it does not belong to your organisation. %{link} if you think this is incorrect.
     title: You cannot view this page
+  form_statuses:
+    draft: DRAFT
+    live: LIVE
   form_url_component:
     copy_to_clipboard: Copy URL to clipboard
     form_url: Form URL
