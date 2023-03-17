@@ -13,8 +13,8 @@
   ],
   "scripts": {
     "test": "jest",
-    "lint": "standard | snazzy & stylelint 'app/frontend/**/*.scss'",
-    "format": "standard --fix & stylelint 'app/frontend/**/*.scss' --fix",
+    "lint": "standard | snazzy & stylelint 'app/**/*.scss'",
+    "format": "standard --fix & stylelint 'app/**/*.scss' --fix",
     "ci": "bin/setup && bin/rails server"
   },
   "devDependencies": {
