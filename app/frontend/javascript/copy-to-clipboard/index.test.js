@@ -13,7 +13,7 @@ describe('Copy to clipboard', () => {
       <p data-copy-target>It worked!</p>
     </div>
   `
-  require('../../application.js')
+  require('../../entrypoints/application.js')
   const copyButton = document.querySelector('button')
 
   test('button is created', () => {

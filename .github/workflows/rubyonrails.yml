@@ -38,7 +38,7 @@ jobs:
       - name: Install frontend dependencies
         run: yarn
       - name: Run Frontend build
-        run: yarn build & yarn build:css
+        run: bin/vite build
       # Add or replace database setup steps here
       - name: Create db
         run: bin/rails db:migrate

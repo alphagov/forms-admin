@@ -32,7 +32,7 @@ FileUtils.chdir APP_ROOT do
   system! "yarn"
 
   puts "\n== Building frontend assets =="
-  system! "yarn build & yarn build:css"
+  system! "bin/vite build"
 
   puts "\n== Restarting application server =="
   system! "bin/rails restart"
