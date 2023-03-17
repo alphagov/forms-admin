@@ -2,10 +2,14 @@
   "name": "app",
   "private": "true",
   "browserslist": [
-    "last 2 versions",
-    "ie 8",
-    "ie 9",
-    "iOS 9"
+    ">0.1%",
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Edge versions",
+    "last 2 Samsung versions",
+    "Firefox ESR",
+    "iOS >= 12.1",
+    "Safari >= 12"
   ],
   "scripts": {
     "build": "gulp javascript",
