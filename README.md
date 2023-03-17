@@ -9,7 +9,6 @@ To run the project you will need to install:
 - [Ruby](https://www.ruby-lang.org/en/) - we use version 3 of Ruby. Before running the project, double check the [.ruby-version] file to see the exact version.
 - [Node.js](https://nodejs.org/en/) - the frontend build requires Node.js. We use Node 16 LTS versions.
 - a running [PostgreSQL](https://www.postgresql.org/) database
-- [Yarn](https://yarnpkg.com/) - we use Yarn rather than `npm` to install and run the frontend.
 
 We recommend using a version manager to install and manage these, such as:
 
@@ -59,9 +58,9 @@ Refer to the [settings file](config/settings.yml) for all the settings required 
 
 ### Environment variables
 
-| Name                  | Purpose                                                            |
-| --------------------- | ------------------------------------------------------------------ |
-| `DATABASE_URL`        | The URL to the postgres instance (without the database at the end) |
+| Name           | Purpose                                                            |
+| -------------- | ------------------------------------------------------------------ |
+| `DATABASE_URL` | The URL to the postgres instance (without the database at the end) |
 
 ### Feature flags
 
@@ -110,7 +109,7 @@ or run the rails server:
 bin/rails server
 
 # When running the server, you can use any of the frontend tasks, e.g.:
-yarn dev
+npm run dev
 ```
 
 ### Running the tests
@@ -147,7 +146,7 @@ If you are planning to deploy to GOV.UK PaaS without using the container, you ca
 # Run the Ruby test suite
 bin/rake
 # To run the Javascript test suite, run
-yarn test
+npm run test
 ```
 
 ## Explain how to add a user to the database
