@@ -15,7 +15,6 @@
       <p class="govuk-body"><%= flash[:message] %></p>
     <% end %>
 
-    <p class="govuk-body">
     <% if @form.live? %>
       <%= render FormUrlComponent::View.new(link_to_runner(Settings.forms_runner.url, @form.id, @form.form_slug, mode: :live ))%>
 
