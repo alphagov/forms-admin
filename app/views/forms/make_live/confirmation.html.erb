@@ -8,7 +8,7 @@
 
     <p class="govuk-body"><%= @form.name %></p>
 
-    <%= render FormUrlComponent::View.new(link_to_runner(Settings.forms_runner.url, @form.id, @form.form_slug, live: true )) %>
+    <%= render FormUrlComponent::View.new(link_to_runner(Settings.forms_runner.url, @form.id, @form.form_slug, mode: :live )) %>
 
     <%= t("make_live.confirmation.body_html") %>
 

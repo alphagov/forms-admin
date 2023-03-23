@@ -4,19 +4,25 @@ RSpec.describe ApplicationHelper, type: :helper do
   describe "#link_to_runner" do
     context "with no live argument" do
       it "returns url to the form-runner's preview form" do
-        expect(helper.link_to_runner("example.com", 2, "garden-form-slug")).to eq "example.com/preview-form/2/garden-form-slug"
+        expect(helper.link_to_runner("example.com", 2, "garden-form-slug")).to eq "example.com/preview-draft/2/garden-form-slug"
       end
     end
 
-    context "with live set to false" do
+    context "with mode set to preview_draft" do
       it "returns url to the form-runner's preview form" do
-        expect(helper.link_to_runner("example.com", 2, "garden-form-slug", live: false)).to eq "example.com/preview-form/2/garden-form-slug"
+        expect(helper.link_to_runner("example.com", 2, "garden-form-slug", mode: :preview_draft)).to eq "example.com/preview-draft/2/garden-form-slug"
       end
     end
 
-    context "with live set to true" do
+    context "with mode set to preview_live" do
       it "returns url to the form-runner's live form" do
-        expect(helper.link_to_runner("example.com", 2, "garden-form-slug", live: true)).to eq "example.com/form/2/garden-form-slug"
+        expect(helper.link_to_runner("example.com", 2, "garden-form-slug", mode: :preview_live)).to eq "example.com/preview-live/2/garden-form-slug"
+      end
+    end
+
+    context "with mode set to live" do
+      it "returns url to the form-runner's live form" do
+        expect(helper.link_to_runner("example.com", 2, "garden-form-slug", mode: :live)).to eq "example.com/form/2/garden-form-slug"
       end
     end
   end
