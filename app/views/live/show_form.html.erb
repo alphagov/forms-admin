@@ -10,8 +10,8 @@
 
     <%= render FormStatusTagDescriptionComponent::View.new(status: :live) %>
 
-      <p class="govuk-body">
-        <%= render PreviewLinkComponent::View.new(form.pages, link_to_runner(Settings.forms_runner.url, form.id, form.form_slug, mode: :preview_live)) %>
+    <p class="govuk-body">
+      <%= render PreviewLinkComponent::View.new(form.pages, link_to_runner(Settings.forms_runner.url, form.id, form.form_slug, mode: :preview_live)) %>
     </p>
 
     <%= render FormUrlComponent::View.new(link_to_runner(Settings.forms_runner.url, form.id, form.form_slug, mode: :live ))%>
