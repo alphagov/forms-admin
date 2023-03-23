@@ -8,20 +8,11 @@ gem "rails", "7.0.4.3"
 
 gem "activeresource", "~> 6.0"
 
-# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
-gem "sprockets-rails"
-
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.4"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 6.1.1"
-
-# Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
-gem "jsbundling-rails"
-
-# Bundle and process CSS [https://github.com/rails/cssbundling-rails]
-gem "cssbundling-rails"
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
@@ -115,3 +106,5 @@ end
 gem "bundler-audit", "~> 0.9.0"
 
 gem "brakeman", "~> 5.4.1"
+
+gem "vite_rails"

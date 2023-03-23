@@ -58,4 +58,8 @@ module ApplicationHelper
     key = translation_key_for_answer_type(answer_type, answer_settings)
     t("helpers.hint.page.#{field}.#{key}", default: t("helpers.hint.page.#{field}.default"))
   end
+
+  def govuk_assets_path
+    "/node_modules/govuk-frontend/govuk/assets"
+  end
 end

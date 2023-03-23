@@ -10,21 +10,23 @@
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <%= favicon_link_tag "images/favicon.ico", rel:"shortcut icon", sizes:"16x16 32x32 48x48", type:"image/x-icon" %>
-    <%= favicon_link_tag "images/govuk-mask-icon.svg", rel:"mask-icon", color:"#0b0c0c", type: nil %>
-    <%= favicon_link_tag "images/govuk-apple-touch-icon-180x180.png", rel:"apple-touch-icon", sizes:"180x180", type: nil %>
-    <%= favicon_link_tag "images/govuk-apple-touch-icon-167x167.png", rel:"apple-touch-icon", sizes:"167x167", type: nil %>
-    <%= favicon_link_tag "images/govuk-apple-touch-icon-152x152.png", rel:"apple-touch-icon", sizes:"152x152", type: nil %>
-    <%= favicon_link_tag "images/govuk-apple-touch-icon.png", rel:"apple-touch-icon", type: nil %>
+    <link rel="shortcut icon" type="image/x-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/favicon.ico"%>" sizes="16x16 32x32 48x48" />
+    <link rel="mask-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-mask-icon.svg"%>" color="#0b0c0c" />
+    <link rel="apple-touch-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-apple-touch-icon-180x180.png"%>" sizes="180x180" />
+    <link rel="apple-touch-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-apple-touch-icon-167x167.png"%>" sizes="167x167" />
+    <link rel="apple-touch-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-apple-touch-icon-152x152.png"%>" sizes="152x152" />
+    <link rel="apple-touch-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-apple-touch-icon.png"%>" />
+    <meta property="og:image" content="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-opengraph-image.png" %>">
 
-    <%= stylesheet_link_tag "application" %>
-
-    <meta property="og:image" content="<%= image_path 'images/govuk-opengraph-image.png' %>">
+    <%= vite_stylesheet_tag 'application.scss' %>
   </head>
 
   <body class="govuk-template__body ">
     <script>
-      document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
+      if ('noModule' in HTMLScriptElement.prototype) {
+        document.body.classList
+          .add('js-enabled')
+      }
     </script>
 
     <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link"><%= t("skip_to_main_content") %></a>
@@ -47,6 +49,7 @@
     <% meta_links = {t("footer.accessibility_statement") => "https://www.forms.service.gov.uk/accessibility", t("footer.cookies") => "https://www.forms.service.gov.uk/cookies", t("footer.privacy") => "https://www.forms.service.gov.uk/privacy"} %>
     <%= govuk_footer meta_items_title: t("footer.helpful_links"), meta_items: meta_links %>
 
-    <%= javascript_include_tag "application" %>
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag 'application' %>
   </body>
 </html>
