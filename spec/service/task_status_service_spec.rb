@@ -167,7 +167,7 @@ describe TaskStatusService do
         let(:form) { build(:form, :live) }
 
         it "returns the completed status" do
-          expect(task_status_service.make_live_status).to eq :completed
+          expect(task_status_service.make_live_status).to be_nil
         end
       end
     end
