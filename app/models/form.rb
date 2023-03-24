@@ -19,10 +19,6 @@ class Form < ActiveResource::Base
     live_at.present? && live_at < Time.zone.now
   end
 
-  def draft?
-    !live?
-  end
-
   def status
     live? ? :live : :draft
   end
