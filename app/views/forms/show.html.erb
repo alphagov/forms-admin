@@ -15,15 +15,6 @@
       <p class="govuk-body"><%= flash[:message] %></p>
     <% end %>
 
-    <% if @form.live? %>
-      <%= render FormUrlComponent::View.new(link_to_runner(Settings.forms_runner.url, @form.id, @form.form_slug, mode: :live ))%>
-
-      <div class="govuk-inset-text">
-        <p><%= t("live_form_warning.notification_heading") %></p>
-        <p><%= t("live_form_warning.notification_content") %></p>
-      </div>
-    <% end %>
-
     <p class="govuk-body govuk-!-margin-bottom-9">
       <%= render PreviewLinkComponent::View.new(@form.pages, link_to_runner(Settings.forms_runner.url, @form.id, @form.form_slug)) %>
     </p>
