@@ -58,6 +58,10 @@ describe "forms/show.html.erb" do
       it "rendered draft tag" do
         expect(rendered).to have_css(".govuk-tag.govuk-tag--purple", text: "DRAFT")
       end
+
+      it "does not contain a link to delete the form" do
+        expect(rendered).not_to have_link("Delete form", href: delete_form_path(1))
+      end
     end
   end
 end
