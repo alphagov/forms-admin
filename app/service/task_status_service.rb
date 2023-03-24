@@ -4,8 +4,8 @@ class TaskStatusService
   end
 
   def status_counts
-    { completed: all_task_status.count(:completed),
-      total: all_task_status.count }
+    { completed: all_task_status.compact.count(:completed),
+      total: all_task_status.compact.count }
   end
 
   def name_status
@@ -75,7 +75,7 @@ class TaskStatusService
   end
 
   def make_live_status
-    return :completed if @form.live?
+    return nil if @form.live?
     return :not_started if mandatory_tasks_completed?
 
     :cannot_start
