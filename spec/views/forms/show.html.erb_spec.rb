@@ -20,7 +20,7 @@ describe "forms/show.html.erb" do
   end
 
   it "contains a link to delete the form" do
-    expect(rendered).to have_link("Delete form", href: delete_form_path(1))
+    expect(rendered).to have_link("Delete draft form", href: delete_form_path(1))
   end
 
   it "contains a summary of completed tasks out of the total tasks" do
@@ -60,7 +60,7 @@ describe "forms/show.html.erb" do
       end
 
       it "does not contain a link to delete the form" do
-        expect(rendered).not_to have_link("Delete form", href: delete_form_path(1))
+        expect(rendered).not_to have_link("Delete draft form", href: delete_form_path(1))
       end
     end
   end
