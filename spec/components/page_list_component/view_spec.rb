@@ -28,11 +28,9 @@ RSpec.describe PageListComponent::View, type: :component do
       expect(page).to have_link("Edit")
     end
 
-    context "when re-ordering pages feature is enabled", feature_reorder_pages: true do
-      it "does not have re-ordering buttons" do
-        expect(page).not_to have_button("Move up")
-        expect(page).not_to have_button("Move down")
-      end
+    it "does not have re-ordering buttons" do
+      expect(page).not_to have_button("Move up")
+      expect(page).not_to have_button("Move down")
     end
   end
 
@@ -44,14 +42,12 @@ RSpec.describe PageListComponent::View, type: :component do
       expect(page).to have_css("dt.govuk-summary-list__key", text: "2")
     end
 
-    context "when re-ordering pages feature is enabled", feature_reorder_pages: true do
-      it "renders a move up link" do
-        expect(page).to have_button("Move up")
-      end
+    it "renders a move up link" do
+      expect(page).to have_button("Move up")
+    end
 
-      it "renders a move down link" do
-        expect(page).to have_button("Move down")
-      end
+    it "renders a move down link" do
+      expect(page).to have_button("Move down")
     end
   end
 end

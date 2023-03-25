@@ -22,7 +22,6 @@ describe "Settings" do
     features = settings[:features]
 
     include_examples expected_value_test, :draft_live_versioning, features, false
-    include_examples expected_value_test, :reorder_pages, features, true
   end
 
   describe "forms_api" do
