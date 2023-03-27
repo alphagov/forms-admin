@@ -57,6 +57,7 @@ module Forms
       else
         @url = destroy_form_path(@form)
         @confirm_deletion_legend = t("forms_delete_confirmation_form.confirm_deletion_form")
+        @confirm_deletion_live_form = t("forms_delete_confirmation_form.confirm_deletion_form_live_form") if @form.live?
         @item_name = @form.name
         @back_url = form_path(@form)
       end
