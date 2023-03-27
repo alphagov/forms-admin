@@ -1,42 +1,19 @@
 require "rails_helper"
 
 describe Form do
-  let(:form) { described_class.new(id: 1, name: "Form 1", org: "Test org", live_at: "", submission_email: "") }
-
-  describe "#live?" do
-    context "when form is draft" do
-      it "return false" do
-        form.live_at = ""
-        expect(form.live?).to eq false
-      end
-    end
-
-    context "when form is live" do
-      it "return true" do
-        form.live_at = "2021-01-01T00:00:00.000Z"
-        expect(form.live?).to eq true
-      end
-    end
-
-    context "when form is live in the future" do
-      it "return false" do
-        form.live_at = "2101-01-01T00:00:00.000Z"
-        expect(form.live?).to eq false
-      end
-    end
-  end
+  let(:form) { described_class.new(id: 1, name: "Form 1", org: "Test org", submission_email: "") }
 
   describe "#status" do
-    context "when form is draft (live_at not set)" do
+    context "when form has not been made live" do
       it "returns 'draft'" do
-        form.live_at = ""
+        form.has_live_version = false
         expect(form.status).to eq :draft
       end
     end
 
-    context "when form is live (live_at is set)" do
+    context "when form has been made live" do
       it "returns 'live'" do
-        form.live_at = Time.zone.now.to_s
+        form.has_live_version = true
         expect(form.status).to eq :live
       end
     end

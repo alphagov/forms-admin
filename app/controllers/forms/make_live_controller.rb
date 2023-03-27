@@ -1,7 +1,7 @@
 module Forms
   class MakeLiveController < BaseController
     def new
-      if current_form.live? && !FeatureService.enabled?(:draft_live_versioning)
+      if current_form.has_live_version && !FeatureService.enabled?(:draft_live_versioning)
         render_confirmation(:form)
       else
         @make_live_form = MakeLiveForm.new(form: current_form)
@@ -11,7 +11,7 @@ module Forms
 
     def create
       @make_live_form = MakeLiveForm.new(**make_live_form_params)
-      already_live = @make_live_form.form.live?
+      already_live = @make_live_form.form.has_live_version
 
       if @make_live_form.submit
         if @make_live_form.made_live?
@@ -31,7 +31,7 @@ module Forms
     end
 
     def render_new
-      if current_form.live?
+      if current_form.has_live_version
         render "make_your_changes_live"
       else
         render "make_your_form_live"

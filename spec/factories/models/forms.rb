@@ -2,6 +2,8 @@ FactoryBot.define do
   factory :form, class: "Form" do
     sequence(:name) { |n| "Form #{n}" }
     sequence(:form_slug) { |n| "form-#{n}" }
+    has_draft_version { true }
+    has_live_version { false }
     submission_email { Faker::Internet.email(domain: "example.gov.uk") }
     privacy_policy_url { Faker::Internet.url(host: "gov.uk") }
     org { "test-org" }
@@ -33,6 +35,8 @@ FactoryBot.define do
     trait :live do
       ready_for_live
       live_at { Time.zone.now }
+      has_draft_version { false }
+      has_live_version { true }
     end
 
     trait :with_pages do

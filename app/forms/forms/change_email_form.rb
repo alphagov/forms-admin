@@ -6,7 +6,7 @@ class Forms::ChangeEmailForm
 
   EMAIL_REGEX = /.*@.*/
   GOVUK_EMAIL_REGEX = /\.gov\.uk\z/i
-  validates :submission_email, presence: true, if: -> { form.live? }
+  validates :submission_email, presence: true, if: -> { form.has_live_version }
   validates :submission_email, format: { with: EMAIL_REGEX, message: :invalid_email }, if: -> { submission_email.present? }
   validates :submission_email, format: { with: GOVUK_EMAIL_REGEX, message: :non_govuk_email }, if: -> { submission_email.present? }
 

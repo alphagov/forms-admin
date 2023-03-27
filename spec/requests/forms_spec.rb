@@ -151,6 +151,7 @@ RSpec.describe "Forms", type: :request do
         form_slug: "form",
         submission_email: "submission@email.com",
         live_at: nil,
+        has_live_version: false,
         org: "test-org",
       },
        {
@@ -159,6 +160,7 @@ RSpec.describe "Forms", type: :request do
          form_slug: "another-form",
          submission_email: "submission@email.com",
          live_at: nil,
+         has_live_version: false,
          org: "test-org",
        }]
     end

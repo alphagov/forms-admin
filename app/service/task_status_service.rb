@@ -75,7 +75,7 @@ class TaskStatusService
   end
 
   def make_live_status
-    return nil if @form.live?
+    return nil if @form.has_live_version
     return :not_started if mandatory_tasks_completed?
 
     :cannot_start

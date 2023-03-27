@@ -27,7 +27,7 @@ class FormTaskListService
 private
 
   def create_or_edit
-    @form.live? ? "edit" : "create"
+    @form.has_live_version ? "edit" : "create"
   end
 
   def section_1_tasks
@@ -58,7 +58,7 @@ private
   end
 
   def section_4_tasks
-    if !FeatureService.enabled?(:draft_live_versioning) && @form.live?
+    if !FeatureService.enabled?(:draft_live_versioning) && @form.has_live_version
       return []
     end
 
