@@ -1,6 +1,5 @@
 # Used to add feature flags in the app to control access to certain features.
 features:
-  reorder_pages: true
   draft_live_versioning: false
 
 forms_api:
