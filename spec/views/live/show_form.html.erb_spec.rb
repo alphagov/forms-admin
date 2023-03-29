@@ -3,13 +3,14 @@ require "rails_helper"
 describe "live/show_form.html.erb" do
   let(:declaration) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:what_happens_next) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
+  let(:form_metadata) { OpenStruct.new(has_draft_version: false) }
   let(:form) { build(:form, :live, id: 2, declaration_text: declaration, what_happens_next_text: what_happens_next) }
 
   before do
     allow(view).to receive(:live_form_pages_path).and_return("/live-form-pages-path")
 
     # assign(:form, form)
-    render(template: "live/show_form", layout: "layouts/application", locals: { form: })
+    render(template: "live/show_form", layout: "layouts/application", locals: { form_metadata:, form: })
   end
 
   it "has the correct title" do
@@ -117,6 +118,14 @@ describe "live/show_form.html.erb" do
   context "when draft/live feature enabled", feature_draft_live_versioning: true do
     it "contains a link to create a new draft" do
       expect(rendered).to have_link(t("show_live_form.draft_create"), href: form_path(form.id))
+    end
+
+    context "when form has a draft version already" do
+      let(:form_metadata) { OpenStruct.new(has_draft_version: true) }
+
+      it "contains a link to edit the draft" do
+        expect(rendered).to have_link(t("show_live_form.draft_edit"), href: form_path(form.id))
+      end
     end
   end
 end

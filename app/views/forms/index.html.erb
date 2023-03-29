@@ -15,7 +15,7 @@
 
     <%= table.head do |head|
        head.row do |row|
-        row.cell(header: true, text: t("home.form_name_heading"), width: "full")
+        row.cell(header: true, text: t("home.form_name_heading"))
         row.cell(header: true, text: t("home.form_status_heading"), numeric: true)
       end
     end %>
@@ -31,7 +31,10 @@
             end
           end
           row.cell(numeric: true) do
-            render FormStatusTagComponent::View.new(status: form.status)
+            html = ""
+            html << render(FormStatusTagComponent::View.new(status: :draft)) if form.has_draft_version
+            html << render(FormStatusTagComponent::View.new(status: :live)) if form.has_live_version
+            html.html_safe
           end
         end
       end
