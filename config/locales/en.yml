@@ -432,6 +432,7 @@ en:
     declaration: Declaration
     declaration_description: Your form’s declaration is shown to people when they have answered all the questions, just before they submit the form.
     draft_create: Create a draft to edit
+    draft_edit: Edit the draft of this form
     privacy_policy_link: Privacy policy link
     questions: Questions
     questions_link:
