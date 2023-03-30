@@ -6,7 +6,7 @@ WORKDIR /app
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
 RUN apk update
 RUN apk upgrade --available
-RUN apk add libc6-compat openssl-dev build-base libpq-dev nodejs=16.19.1-r0 npm
+RUN apk add libc6-compat openssl-dev build-base libpq-dev nodejs=18.15.0-r0 npm
 RUN adduser -D ruby
 RUN mkdir /node_modules && chown ruby:ruby -R /node_modules /app
 
@@ -17,7 +17,7 @@ RUN gem install bundler -v 2.3.20
 RUN bundle install --jobs "$(nproc)"
 
 COPY --chown=ruby:ruby package.json ./
-RUN npm install
+RUN npm install --ignore-scripts
 
 ENV RAILS_ENV="${RAILS_ENV:-production}" \
     NODE_ENV="${NODE_ENV:-production}" \
