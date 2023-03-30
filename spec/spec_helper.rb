@@ -1,5 +1,6 @@
 require "capybara/rspec"
 
+require "pundit/matchers"
 require_relative "support/active_resource_mock"
 require_relative "support/factorybot"
 require_relative "support/features"
