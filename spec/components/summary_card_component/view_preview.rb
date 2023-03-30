@@ -49,6 +49,34 @@ class SummaryCardComponent::ViewPreview < ViewComponent::Preview
     ]))
   end
 
+  def with_one_condition
+    options = ["England", "Wales", "Scotland", "Northern Ireland"]
+    condition_text = I18n.t("page_conditions.condition_compact_html", answer_value: "Wales", goto_page_number: 3, goto_page_text: "What is your name?").html_safe
+
+    render(SummaryCardComponent::View.new(title: "Which country do you live in?",
+                                          rows: [
+                                            { key: "Hint text", value: "Select all that apply" },
+                                            { key: "Answer type", value: "Selection from a list, one option only." },
+                                            { key: I18n.t("selections_settings.options_title"), value: ActionController::Base.helpers.sanitize("<ul class='govuk-list'><li>#{options.join('</li><li>')}</li></ul>") },
+                                            { key: "Route", value: condition_text },
+                                          ]))
+  end
+
+  def with_multiple_conditions
+    options = ["England", "Wales", "Scotland", "Northern Ireland"]
+    conditions = [I18n.t("page_conditions.condition_compact_html", answer_value: "Wales", goto_page_number: 3, goto_page_text: "What is your name?").html_safe,
+                  I18n.t("page_conditions.condition_compact_html", answer_value: "England", goto_page_number: 4, goto_page_text: "What is your address?").html_safe,
+                  I18n.t("page_conditions.condition_compact_html", answer_value: "Scotland", goto_page_number: 5, goto_page_text: "What is your date of birth?").html_safe]
+
+    render(SummaryCardComponent::View.new(title: "Which country do you live in?",
+                                          rows: [
+                                            { key: "Hint text", value: "Select all that apply" },
+                                            { key: "Answer type", value: "Selection from a list, one option only." },
+                                            { key: I18n.t("selections_settings.options_title"), value: ActionController::Base.helpers.sanitize("<ul class='govuk-list'><li>#{options.join('</li><li>')}</li></ul>") },
+                                            { key: "Route", value: ActionController::Base.helpers.sanitize("<ol class='govuk-list govuk-list--number'><li>#{conditions.join('</li><li>')}</li></ol>") },
+                                          ]))
+  end
+
   def answer_types_01_person_name_with_full_name_details_no_title
     options = [I18n.t("helpers.label.page.answer_type_options.names.name")]
     options << I18n.t("helpers.label.page.name_settings_options.input_types.first_middle_and_last_name")

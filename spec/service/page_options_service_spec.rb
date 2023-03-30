@@ -2,12 +2,16 @@ require "rails_helper"
 
 describe PageOptionsService do
   subject(:page_options_service) do
-    described_class.new(page:)
+    described_class.new(page:, pages:)
+  end
+
+  let(:pages) do
+    [page, (build :page, id: 2), (build :page, id: 3), (build :page, id: 4)]
   end
 
   describe "#all_options_for_answer_type" do
     context "with uk and international address" do
-      let(:page) { build :page, :with_address_settings, uk_address: "true", international_address: "true" }
+      let(:page) { build :page, :with_address_settings, uk_address: "true", international_address: "true", routing_conditions: [] }
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq(
@@ -146,6 +150,48 @@ describe PageOptionsService do
           expect(page_options_service.all_options_for_answer_type).to eq([
             { key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.answer_type_options.names.#{answer_type}") },
           ])
+        end
+      end
+    end
+
+    context "with basic routing enabled", feature_basic_routing: true do
+      let(:page) { build :page, id: 1, answer_type: "email", routing_conditions: }
+      let(:condition_1) { build :condition, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
+      let(:condition_2) { build :condition, routing_page_id: 1, check_page_id: 1, answer_value: "England", goto_page_id: 4 }
+
+      context "with no condition" do
+        let(:routing_conditions) { [] }
+
+        it "returns the correct options" do
+          expect(page_options_service.all_options_for_answer_type).not_to include([
+            { key: "Answer type", value: "Email address" },
+          ])
+        end
+      end
+
+      context "with a single condition" do
+        let(:routing_conditions) { [condition_1] }
+
+        it "returns the correct options" do
+          expect(page_options_service.all_options_for_answer_type).to include(
+            {
+              key: I18n.t("page_conditions.route"),
+              value: I18n.t("page_conditions.condition_compact_html", answer_value: condition_1.answer_value, goto_page_number: 3, goto_page_text: pages[2].question_text),
+            },
+          )
+        end
+      end
+
+      context "with multiple conditions" do
+        let(:routing_conditions) { [condition_1, condition_2] }
+
+        it "returns the correct options" do
+          expect(page_options_service.all_options_for_answer_type).to include(
+            {
+              key: I18n.t("page_conditions.route"),
+              value: "<ol class=\"govuk-list govuk-list--number\"><li>#{I18n.t('page_conditions.condition_compact_html', answer_value: condition_1.answer_value, goto_page_number: 3, goto_page_text: pages[2].question_text)}</li><li>#{I18n.t('page_conditions.condition_compact_html', answer_value: condition_2.answer_value, goto_page_number: 4, goto_page_text: pages[3].question_text)}</li></ol>",
+            },
+          )
         end
       end
     end
