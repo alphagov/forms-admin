@@ -17,7 +17,7 @@ RUN gem install bundler -v 2.3.20
 RUN bundle install --jobs "$(nproc)"
 
 COPY --chown=ruby:ruby package.json ./
-RUN npm install
+RUN npm install --ignore-scripts
 
 ENV RAILS_ENV="${RAILS_ENV:-production}" \
     NODE_ENV="${NODE_ENV:-production}" \
