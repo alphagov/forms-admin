@@ -1,6 +1,7 @@
 # Used to add feature flags in the app to control access to certain features.
 features:
   draft_live_versioning: false
+  basic_routing: false
 
 forms_api:
   # Authentication key to authenticate forms-runner to forms-api
