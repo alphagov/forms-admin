@@ -402,7 +402,7 @@ GEM
     timeout (0.3.2)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    tzinfo-data (1.2023.2)
+    tzinfo-data (1.2023.3)
       tzinfo (>= 1.0.0)
     unicode-display_width (2.3.0)
     validate_url (1.0.15)
