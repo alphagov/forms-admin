@@ -60,7 +60,7 @@ describe "forms/show.html.erb" do
       end
 
       it "does not contain a link to delete the form" do
-        expect(rendered).not_to have_link("Delete draft form", href: delete_form_path(1))
+        expect(rendered).not_to have_link("Delete draft form", href: delete_form_path(2))
       end
     end
   end

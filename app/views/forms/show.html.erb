@@ -37,6 +37,6 @@
                                            sections: @task_list)
     %>
 
-    <%= govuk_button_link_to(t("forms.delete_form"), delete_form_path(@form.id), warning: true) unless @form.live?  %>
+    <%= govuk_button_link_to(t("forms.delete_form"), delete_form_path(@form.id), warning: true) unless @form.has_live_version  %>
   </div>
 </div>
