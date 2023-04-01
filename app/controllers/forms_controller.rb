@@ -1,4 +1,7 @@
 class FormsController < ApplicationController
+  after_action :verify_authorized, except: :index
+  after_action :verify_policy_scoped, only: :index
+
   rescue_from ActiveResource::ResourceNotFound do
     render template: "errors/not_found", status: :not_found
   end
