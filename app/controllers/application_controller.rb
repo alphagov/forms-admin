@@ -10,6 +10,14 @@ class ApplicationController < ActionController::Base
 
   before_action :clear_questions_session_data
 
+  rescue_from Pundit::NotAuthorizedError do |_exception|
+    # Useful when we start adding more policies that require custom errors
+    # policy_name = exception.policy.class.to_s.underscore
+    # permission_error_msg = t "#{policy_name}.#{exception.query}", scope: "pundit", default: :default
+
+    render "errors/forbidden", status: :forbidden, formats: :html
+  end
+
   def authenticate
     if Settings.basic_auth.enabled
       basic_auth
