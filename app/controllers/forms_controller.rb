@@ -6,7 +6,7 @@ class FormsController < ApplicationController
   end
 
   def index
-    @forms = Form.all(params: { org: @current_user.organisation_slug }) || []
+    @forms = policy_scope(Form) || []
   end
 
   def show

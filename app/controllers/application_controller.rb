@@ -2,6 +2,7 @@ require "resolv"
 
 class ApplicationController < ActionController::Base
   include GDS::SSO::ControllerMethods unless Settings.basic_auth.enabled
+  include Pundit::Authorization
   before_action :set_request_id
   before_action :authenticate
   before_action :check_service_unavailable
