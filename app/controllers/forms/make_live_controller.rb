@@ -1,6 +1,8 @@
 module Forms
   class MakeLiveController < BaseController
+    after_action :verify_authorized
     def new
+      authorize current_form, :can_make_live?
       if current_form.has_live_version && !FeatureService.enabled?(:draft_live_versioning)
         render_confirmation(:form)
       else
@@ -10,6 +12,8 @@ module Forms
     end
 
     def create
+      authorize current_form, :can_make_live?
+
       @make_live_form = MakeLiveForm.new(**make_live_form_params)
       already_live = @make_live_form.form.has_live_version
 

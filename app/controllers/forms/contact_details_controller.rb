@@ -1,10 +1,13 @@
 module Forms
   class ContactDetailsController < BaseController
+    after_action :verify_authorized
     def new
+      authorize current_form, :edit?
       @contact_details_form = ContactDetailsForm.new(form: current_form).assign_form_values
     end
 
     def create
+      authorize current_form
       @contact_details_form = ContactDetailsForm.new(**contact_details_form_params)
 
       if @contact_details_form.submit

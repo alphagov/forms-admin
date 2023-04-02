@@ -62,6 +62,7 @@ RSpec.describe "ChangeName controller", type: :request do
 
   describe "#edit" do
     before do
+      allow(Pundit).to receive(:authorize).and_return(true)
       get change_form_name_path(form_id: 2)
     end
 

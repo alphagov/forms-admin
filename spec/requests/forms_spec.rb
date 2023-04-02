@@ -129,7 +129,7 @@ RSpec.describe "Forms", type: :request do
                                            read: { response: form, status: 200 },
                                            delete: { response: {}, status: 200 },
                                          })
-
+        allow(Pundit).to receive(:authorize).and_return(true)
         delete destroy_form_path(form_id: 2, forms_delete_confirmation_form: { confirm_deletion: "true" })
       end
 

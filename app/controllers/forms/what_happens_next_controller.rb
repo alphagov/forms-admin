@@ -1,10 +1,13 @@
 module Forms
   class WhatHappensNextController < BaseController
+    after_action :verify_authorized
     def new
+      authorize current_form, :edit?
       @what_happens_next_form = WhatHappensNextForm.new(form: current_form).assign_form_values
     end
 
     def create
+      authorize current_form, :edit?
       @what_happens_next_form = WhatHappensNextForm.new(**what_happens_next_form_params)
 
       if @what_happens_next_form.submit

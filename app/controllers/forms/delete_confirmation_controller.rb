@@ -66,6 +66,7 @@ module Forms
     def delete_form(form)
       success_url = root_path
 
+      authorize form
       if form.destroy
         flash[:message] = "Successfully deleted #{form.name}"
         redirect_to success_url, status: :see_other
