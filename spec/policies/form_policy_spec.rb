@@ -7,12 +7,12 @@ describe FormPolicy do
   let(:user) { build :user, organisation_slug: "gds" }
 
   context "with a form editor" do
-    it { is_expected.to permit_actions(%i[show create edit update delete_form can_make_live mark_pages_section_completed]) }
+    it { is_expected.to permit_actions(%i[can_view_form]) }
 
     context "but from another organisation" do
       let(:user) { build :user, organisation_slug: "non-gds" }
 
-      it { is_expected.to forbid_actions(%i[show create edit update delete_form can_make_live mark_pages_section_completed]) }
+      it { is_expected.to forbid_actions(%i[can_view_form]) }
     end
   end
 

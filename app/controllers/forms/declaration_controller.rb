@@ -2,12 +2,12 @@ module Forms
   class DeclarationController < BaseController
     after_action :verify_authorized
     def new
-      authorize current_form, :update?
+      authorize current_form, :can_view_form?
       @declaration_form = DeclarationForm.new(form: current_form).assign_form_values
     end
 
     def create
-      authorize current_form, :update?
+      authorize current_form, :can_view_form?
       @declaration_form = DeclarationForm.new(**declaration_form_params)
 
       if @declaration_form.submit

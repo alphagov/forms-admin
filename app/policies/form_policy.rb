@@ -20,16 +20,9 @@ class FormPolicy
     @form = form
   end
 
-  def show?
+  def can_view_form?
     users_organisation_owns_form
   end
-
-  alias_method :mark_pages_section_completed?, :show?
-  alias_method :can_make_live?, :show?
-  alias_method :delete_form?, :show?
-  alias_method :create?, :show?
-  alias_method :edit?, :create?
-  alias_method :update?, :edit?
 
 private
 

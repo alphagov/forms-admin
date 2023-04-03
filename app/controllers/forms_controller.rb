@@ -11,7 +11,7 @@ class FormsController < ApplicationController
   end
 
   def show
-    authorize current_form
+    authorize current_form, :can_view_form?
     @form = current_form
     task_service = FormTaskListService.call(form: @form)
     @task_list = task_service.all_tasks
@@ -19,7 +19,7 @@ class FormsController < ApplicationController
   end
 
   def mark_pages_section_completed
-    authorize current_form
+    authorize current_form, :can_view_form?
     @form = current_form
     @pages = @form.pages
     @mark_complete_form = Forms::MarkCompleteForm.new(mark_complete_form_params)
