@@ -224,7 +224,7 @@ en:
             first_middle_and_last_name: Middle name will not be mandatory
             full_name: ''
             input_type: A single name field is easiest for people to complete - only ask for names separately if you need the individual parts of the name.
-            title: For example Mr, Mrs, Miss, Ms, Mx
+            title: Only ask for a title if you really need it. People will be able to enter their preferred title.
           input_types:
             first_and_last_name: First and last names in separate fields
             first_middle_and_last_name: First, middle and last names in separate fields
