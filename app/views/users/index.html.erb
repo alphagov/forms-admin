@@ -1,0 +1,33 @@
+<% set_page_title(t("users.index.title")) %>
+<h1 class="govuk-heading-l"><%= t("users.index.title") %></h1>
+
+<% if users.any? %>
+  <%= govuk_table do |table| %>
+     <%= table.caption(size: 'm', text: t("users.index.title")) %>
+
+    <%= table.head do |head|
+       head.row do |row|
+         row.cell(header: true, text: t("users.index.table_headings.name"))
+         row.cell(header: true, text: t("users.index.table_headings.email"))
+         row.cell(header: true, text: t("users.index.table_headings.organisation"))
+         row.cell(header: true, text: t("users.index.table_headings.permission"))
+       end
+     end %>
+
+     <%= table.body do |body|
+       users.each do |user|
+        body.row do |row|
+          row.cell do
+            govuk_link_to(user.name, live_form_path(user.id))
+          end
+          row.cell( text: user.email)
+          row.cell( text: user.organisation_slug)
+          row.cell( text: user.is_super_admin?)
+        end
+      end
+    end %>
+
+  <% end %>
+
+
+  <% end %>

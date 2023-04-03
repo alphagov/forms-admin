@@ -454,3 +454,11 @@ en:
     completed: completed
     in_progress: in progress
     not_started: not started
+  users:
+    index:
+      table_headings:
+        email: Email
+        name: Full name
+        organisation: Organisation
+        role: Role
+      title: List of users
