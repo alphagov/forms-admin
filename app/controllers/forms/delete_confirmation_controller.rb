@@ -78,6 +78,7 @@ module Forms
     def delete_page(form, page)
       success_url = form_path(form)
 
+      authorize form, :can_view_form?
       if page.destroy
         flash[:message] = "Successfully deleted #{page.question_text}"
         redirect_to success_url, status: :see_other

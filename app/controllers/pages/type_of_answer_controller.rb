@@ -1,5 +1,7 @@
 class Pages::TypeOfAnswerController < PagesController
   def new
+    authorize @form, :can_view_form?
+
     answer_type = session.dig(:page, "answer_type")
     @type_of_answer_form = Forms::TypeOfAnswerForm.new(answer_type:)
     @type_of_answer_path = type_of_answer_create_path(@form)
@@ -7,6 +9,8 @@ class Pages::TypeOfAnswerController < PagesController
   end
 
   def create
+    authorize @form, :can_view_form?
+
     @type_of_answer_form = Forms::TypeOfAnswerForm.new(answer_type_form_params)
 
     if @type_of_answer_form.submit(session)
@@ -18,6 +22,8 @@ class Pages::TypeOfAnswerController < PagesController
   end
 
   def edit
+    authorize @form, :can_view_form?
+
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     @page.load_from_session(session, %w[answer_type])
 
@@ -27,6 +33,8 @@ class Pages::TypeOfAnswerController < PagesController
   end
 
   def update
+    authorize @form, :can_view_form?
+
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     answer_type = session.dig(:page, "answer_type")
 

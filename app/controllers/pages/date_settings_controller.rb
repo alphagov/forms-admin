@@ -1,5 +1,7 @@
 class Pages::DateSettingsController < PagesController
   def new
+    authorize @form, :can_view_form?
+
     input_type = session.dig(:page, "answer_settings", "input_type")
     @date_settings_form = Forms::DateSettingsForm.new(input_type:)
     @date_settings_path = date_settings_create_path(@form)
@@ -8,6 +10,8 @@ class Pages::DateSettingsController < PagesController
   end
 
   def create
+    authorize @form, :can_view_form?
+
     @date_settings_form = Forms::DateSettingsForm.new(date_settings_form_params)
     @date_settings_path = date_settings_create_path(@form)
     @back_link_url = type_of_answer_new_path(@form)
@@ -20,6 +24,8 @@ class Pages::DateSettingsController < PagesController
   end
 
   def edit
+    authorize @form, :can_view_form?
+
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     @page.load_from_session(session, %w[answer_type answer_settings])
     input_type = @page&.answer_settings&.input_type
@@ -30,6 +36,8 @@ class Pages::DateSettingsController < PagesController
   end
 
   def update
+    authorize @form, :can_view_form?
+
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     @date_settings_form = Forms::DateSettingsForm.new(date_settings_form_params)
     @date_settings_path = date_settings_update_path(@form)
