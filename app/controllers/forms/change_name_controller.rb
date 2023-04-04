@@ -1,5 +1,7 @@
 module Forms
   class ChangeNameController < BaseController
+    after_action :verify_authorized, except: :new
+
     def new
       @change_name_form = ChangeNameForm.new
     end
@@ -9,6 +11,8 @@ module Forms
         name: params[:name],
         org: @current_user.organisation_slug,
       })
+
+      authorize form, :can_view_form?
       @change_name_form = ChangeNameForm.new(change_name_form_params(form))
 
       if @change_name_form.submit
@@ -19,10 +23,12 @@ module Forms
     end
 
     def edit
+      authorize current_form, :can_view_form?
       @change_name_form = ChangeNameForm.new(form: current_form).assign_form_values
     end
 
     def update
+      authorize current_form, :can_view_form?
       @change_name_form = ChangeNameForm.new(change_name_form_params(current_form))
 
       if @change_name_form.submit

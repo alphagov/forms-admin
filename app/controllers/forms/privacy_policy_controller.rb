@@ -1,10 +1,13 @@
 module Forms
   class PrivacyPolicyController < BaseController
+    after_action :verify_authorized
     def new
+      authorize current_form, :can_view_form?
       @privacy_policy_form = PrivacyPolicyForm.new(form: current_form).assign_form_values
     end
 
     def create
+      authorize current_form, :can_view_form?
       @privacy_policy_form = PrivacyPolicyForm.new(privacy_policy_form_params)
 
       if @privacy_policy_form.submit

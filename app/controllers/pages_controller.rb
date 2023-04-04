@@ -1,14 +1,17 @@
 class PagesController < ApplicationController
-  include CheckFormOrganisation
   before_action :fetch_form, :answer_types
+  before_action :check_user_has_permission
   skip_before_action :clear_questions_session_data, except: %i[index move_page]
+  after_action :verify_authorized
 
   def index
+    authorize @form, :can_view_form?
     @pages = @form.pages
     @mark_complete_form = Forms::MarkCompleteForm.new(form: @form).assign_form_values
   end
 
   def new
+    authorize @form, :can_view_form?
     answer_type = session.dig(:page, "answer_type")
     answer_settings = session.dig(:page, "answer_settings")
     is_optional = session.dig(:page, "is_optional") == "true"
@@ -16,6 +19,8 @@ class PagesController < ApplicationController
   end
 
   def create
+    authorize @form, :can_view_form?
+
     answer_settings = session.dig(:page, "answer_settings")
     @page = Page.new(page_params.merge(answer_settings:))
 
@@ -28,12 +33,16 @@ class PagesController < ApplicationController
   end
 
   def edit
+    authorize @form, :can_view_form?
+
     reset_session_if_answer_settings_not_present
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     @page.load_from_session(session, %w[answer_settings answer_type is_optional])
   end
 
   def update
+    authorize @form, :can_view_form?
+
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     @page.load_from_session(session, %w[answer_type answer_settings]).load(page_params)
 
@@ -46,11 +55,17 @@ class PagesController < ApplicationController
   end
 
   def move_page
+    authorize @form, :can_view_form?
+
     Page.find(move_params[:page_id], params: { form_id: move_params[:form_id] }).move_page(move_params[:direction])
     redirect_to form_pages_path
   end
 
 private
+
+  def check_user_has_permission
+    authorize @form, :can_view_form?
+  end
 
   def page_params
     params.require(:page).permit(:question_text, :hint_text, :answer_type, :is_optional).merge(form_id: @form.id)

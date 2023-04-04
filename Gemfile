@@ -14,6 +14,9 @@ gem "pg", "~> 1.4"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 6.2.1"
 
+# Used for handling authorisation policies
+gem "pundit"
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
@@ -94,6 +97,8 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+
+  gem "pundit-matchers"
 
   # Code coverage reporter
   gem "simplecov", "~> 0.21.2", require: false

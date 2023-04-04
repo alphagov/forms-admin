@@ -1,10 +1,14 @@
 module Forms
   class SubmissionEmailController < BaseController
     before_action :submission_email_form, except: %i[create confirm_submission_email_code]
+    after_action :verify_authorized
 
-    def new; end
+    def new
+      authorize current_form, :can_view_form?
+    end
 
     def create
+      authorize current_form, :can_view_form?
       @submission_email_form = SubmissionEmailForm.new(set_email_form_params)
 
       if @submission_email_form.submit
@@ -14,11 +18,16 @@ module Forms
       end
     end
 
-    def submission_email_code_sent; end
+    def submission_email_code_sent
+      authorize current_form, :can_view_form?
+    end
 
-    def submission_email_code; end
+    def submission_email_code
+      authorize current_form, :can_view_form?
+    end
 
     def confirm_submission_email_code
+      authorize :current_form, :can_view_form?
       @submission_email_form = SubmissionEmailForm.new(set_email_code_form_params).assign_form_values
 
       if @submission_email_form.confirm_confirmation_code
@@ -28,7 +37,9 @@ module Forms
       end
     end
 
-    def submission_email_confirmed; end
+    def submission_email_confirmed
+      authorize current_form, :can_view_form?
+    end
 
   private
 

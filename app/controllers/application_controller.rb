@@ -2,12 +2,21 @@ require "resolv"
 
 class ApplicationController < ActionController::Base
   include GDS::SSO::ControllerMethods unless Settings.basic_auth.enabled
+  include Pundit::Authorization
   before_action :set_request_id
   before_action :authenticate
   before_action :check_service_unavailable
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
   before_action :clear_questions_session_data
+
+  rescue_from Pundit::NotAuthorizedError do |_exception|
+    # Useful when we start adding more policies that require custom errors
+    # policy_name = exception.policy.class.to_s.underscore
+    # permission_error_msg = t "#{policy_name}.#{exception.query}", scope: "pundit", default: :default
+
+    render "errors/forbidden", status: :forbidden, formats: :html
+  end
 
   def authenticate
     if Settings.basic_auth.enabled
