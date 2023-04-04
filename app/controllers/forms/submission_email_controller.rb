@@ -27,7 +27,7 @@ module Forms
     end
 
     def confirm_submission_email_code
-      authorize :current_form, :can_view_form?
+      authorize current_form, :can_view_form?
       @submission_email_form = SubmissionEmailForm.new(set_email_code_form_params).assign_form_values
 
       if @submission_email_form.confirm_confirmation_code
