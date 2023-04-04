@@ -101,4 +101,11 @@ class ApplicationController < ActionController::Base
     first_ip_string = forwarded_for.split(",").first
     Regexp.union([Resolv::IPv4::Regex, Resolv::IPv6::Regex]).match(first_ip_string) && first_ip_string
   end
+
+  # By default pundit uses `current_user` which worked when we are using signon
+  # but if we use basic auth `current_user` method isn't set and so we manually
+  # create @current_user and set that.
+  def pundit_user
+    @current_user
+  end
 end
