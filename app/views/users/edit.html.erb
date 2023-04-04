@@ -1,0 +1,24 @@
+<% set_page_title(title_with_error_prefix(@user.name, @user.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(users_path) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-9">
+      <span class="govuk-caption-l"><%= @user.name %></span><span class="govuk-visually-hidden"> - </span>
+      Edit user details
+    </h1>
+    <%= form_with(model: @user, url: user_path) do |f| %>
+      <% if @user.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+      <span class="govuk-caption-l"><%= @item_name %></span>
+      <%= f.govuk_collection_radio_buttons :super_admin_user,       [
+        OpenStruct.new(label: "Yes", value: true),
+        OpenStruct.new(label: "No", value: false),
+      ], :value,:label,
+                                           legend: { text: "Is this user a super admin?", size: 'm', tag: 'h2' } %>
+
+      <%= f.govuk_submit "Update" %>
+    <% end %>
+  </div>
+</div>

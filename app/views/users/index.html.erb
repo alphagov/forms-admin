@@ -18,7 +18,7 @@
        users.each do |user|
         body.row do |row|
           row.cell do
-            govuk_link_to(user.name, live_form_path(user.id))
+            govuk_link_to(user.name, edit_user_path(user.id))
           end
           row.cell( text: user.email)
           row.cell( text: user.organisation_slug)
