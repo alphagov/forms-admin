@@ -10,7 +10,7 @@
          row.cell(header: true, text: t("users.index.table_headings.name"))
          row.cell(header: true, text: t("users.index.table_headings.email"))
          row.cell(header: true, text: t("users.index.table_headings.organisation"))
-         row.cell(header: true, text: t("users.index.table_headings.permission"))
+         row.cell(header: true, text: t("users.index.table_headings.super_admin"))
        end
      end %>
 
@@ -22,7 +22,7 @@
           end
           row.cell( text: user.email)
           row.cell( text: user.organisation_slug)
-          row.cell( text: user.is_super_admin?)
+          row.cell( text: user.super_admin_user)
         end
       end
     end %>
