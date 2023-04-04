@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
   before_action :fetch_form, :answer_types
+  before_action :check_user_has_permission
   skip_before_action :clear_questions_session_data, except: %i[index move_page]
   after_action :verify_authorized
 
@@ -61,6 +62,10 @@ class PagesController < ApplicationController
   end
 
 private
+
+  def check_user_has_permission
+    authorize @form, :can_view_form?
+  end
 
   def page_params
     params.require(:page).permit(:question_text, :hint_text, :answer_type, :is_optional).merge(form_id: @form.id)

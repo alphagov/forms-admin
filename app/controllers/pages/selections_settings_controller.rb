@@ -1,7 +1,5 @@
 class Pages::SelectionsSettingsController < PagesController
   def new
-    authorize @form, :can_view_form?
-
     answer_settings = load_answer_settings_from_session
     @selections_settings_form = Forms::SelectionsSettingsForm.new(answer_settings)
     @selections_settings_path = selections_settings_create_path(@form)
@@ -10,8 +8,6 @@ class Pages::SelectionsSettingsController < PagesController
   end
 
   def create
-    authorize @form, :can_view_form?
-
     answer_settings = load_answer_settings_from_params(selections_settings_form_params)
     @selections_settings_form = Forms::SelectionsSettingsForm.new(answer_settings)
     @selections_settings_path = selections_settings_create_path(@form)
@@ -31,8 +27,6 @@ class Pages::SelectionsSettingsController < PagesController
   end
 
   def edit
-    authorize @form, :can_view_form?
-
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     @page.load_from_session(session, %w[answer_type answer_settings is_optional])
     @selections_settings_path = selections_settings_update_path(@form)
@@ -42,8 +36,6 @@ class Pages::SelectionsSettingsController < PagesController
   end
 
   def update
-    authorize @form, :can_view_form?
-
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     @selections_settings_path = selections_settings_update_path(@form)
     answer_settings = load_answer_settings_from_params(selections_settings_form_params)

@@ -1,7 +1,5 @@
 class Pages::NameSettingsController < PagesController
   def new
-    authorize @form, :can_view_form?
-
     input_type = session.dig(:page, "answer_settings", "input_type")
     title_needed = session.dig(:page, "answer_settings", "title_needed")
     @name_settings_form = Forms::NameSettingsForm.new(input_type:, title_needed:)
@@ -11,8 +9,6 @@ class Pages::NameSettingsController < PagesController
   end
 
   def create
-    authorize @form, :can_view_form?
-
     @name_settings_form = Forms::NameSettingsForm.new(name_settings_form_params)
     @name_settings_path = name_settings_create_path(@form)
     @back_link_url = type_of_answer_new_path(@form)
@@ -25,8 +21,6 @@ class Pages::NameSettingsController < PagesController
   end
 
   def edit
-    authorize @form, :can_view_form?
-
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     @page.load_from_session(session, %w[answer_type answer_settings])
     input_type = @page&.answer_settings&.input_type
@@ -38,8 +32,6 @@ class Pages::NameSettingsController < PagesController
   end
 
   def update
-    authorize @form, :can_view_form?
-
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
     @name_settings_form = Forms::NameSettingsForm.new(name_settings_form_params)
     @name_settings_path = name_settings_update_path(@form)
