@@ -223,20 +223,20 @@ en:
             first_and_last_name: ''
             first_middle_and_last_name: Middle name will not be mandatory
             full_name: ''
-            input_type: A single name field is easiest for people to complete - only ask for names separately if you need the individual parts of the name.
+            input_type: A single box for the full name is easiest for people to complete - only ask for names separately if you need the individual parts of the name.
             title: Only ask for a title if you really need it. People will be able to enter their preferred title.
           input_types:
-            first_and_last_name: First and last names in separate fields
-            first_middle_and_last_name: First, middle and last names in separate fields
-            full_name: Full name in a single field
+            first_and_last_name: First and last names in separate boxes
+            first_middle_and_last_name: First, middle and last names in separate boxes
+            full_name: Full name in a single box
           legends:
             input_type: How do you need to collect the name?
             title: Do you need the person’s title?
           names:
             'false': 'No'
-            first_and_last_name: First and last names in separate fields
-            first_middle_and_last_name: First, middle and last names in separate fields
-            full_name: Full name in a single field
+            first_and_last_name: First and last names in separate boxes
+            first_middle_and_last_name: First, middle and last names in separate boxes
+            full_name: Full name in a single box
             'true': 'Yes'
           title_needed:
             'false': 'No'
