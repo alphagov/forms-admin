@@ -9,14 +9,13 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    @user.super_admin_user = user_params[:super_admin_user]
-    @user.save!
+    @user.update!(user_params)
     redirect_to users_path
   end
 
 private
 
   def user_params
-    params.require(:user).permit(:super_admin_user)
+    params.require(:user).permit(:role)
   end
 end
