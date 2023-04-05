@@ -6,12 +6,7 @@ FactoryBot.define do
     organisation_slug { "test-org" }
     role { :editor }
 
-    trait :super_admin do
-      # TODO: remove this once we have a super_admin role
-      email { Faker::Internet.email(domain: "digital.cabinet-office.gov.uk") }
-      # Phase 2, included already because it makes testing for super_admin? now
-      # easier, rather than adding more methods to the model which will change
-      # in phase 2
+    trait :with_super_admin do
       role { :super_admin }
     end
   end
