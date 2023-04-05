@@ -1,6 +1,22 @@
 class UserPolicy
   attr_reader :user, :record
 
+  class Scope
+    attr_reader :user, :record, :scope
+
+    def initialize(user, scope)
+      @user = user
+      @scope = scope
+    end
+
+    def resolve
+      if user.email.downcase.include?("@digital.cabinet-office.gov.uk")
+        scope
+          .all
+      end
+    end
+  end
+
   def initialize(user, record)
     @user = user
     @record = record
