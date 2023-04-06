@@ -113,7 +113,7 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: "<ul class=\"govuk-list\">\n<li>Person’s name</li>\n<li>Full name in a single field</li>\n<li>Title not needed</li>\n</ul>" },
+          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: "<ul class=\"govuk-list\">\n<li>Person’s name</li>\n<li>Full name in a single box</li>\n<li>Title not needed</li>\n</ul>" },
         ])
       end
     end
@@ -123,7 +123,7 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: "<ul class=\"govuk-list\">\n<li>Person’s name</li>\n<li>First and last names in separate fields</li>\n<li>Title needed</li>\n</ul>" },
+          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: "<ul class=\"govuk-list\">\n<li>Person’s name</li>\n<li>First and last names in separate boxes</li>\n<li>Title needed</li>\n</ul>" },
         ])
       end
     end
@@ -133,7 +133,7 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: "<ul class=\"govuk-list\">\n<li>Person’s name</li>\n<li>First, middle and last names in separate fields</li>\n<li>Title not needed</li>\n</ul>" },
+          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: "<ul class=\"govuk-list\">\n<li>Person’s name</li>\n<li>First, middle and last names in separate boxes</li>\n<li>Title not needed</li>\n</ul>" },
         ])
       end
     end

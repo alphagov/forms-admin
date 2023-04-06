@@ -140,9 +140,9 @@ private
 
   def fill_in_name_settings
     expect(page.find("h1")).to have_text "Ask for a person’s name"
-    within_fieldset("How do you need to collect the name?") { choose("Full name in a single field") }
+    within_fieldset("How do you need to collect the name?") { choose("Full name in a single box") }
     within_fieldset("Do you need the person’s title?") { choose("No") }
     click_button "Continue"
-    expect(page.find(".govuk-summary-list")).to have_text "Full name in a single field"
+    expect(page.find(".govuk-summary-list")).to have_text "Full name in a single box"
   end
 end
