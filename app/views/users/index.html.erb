@@ -17,10 +17,12 @@
     <%= table.body do |body|
       users.each do |user|
         body.row do |row|
-          row.cell( text: user.name)
+          row.cell do
+            govuk_link_to(user.name, edit_user_path(user))
+          end
           row.cell( text: user.email)
           row.cell( text: user.organisation_slug)
-          row.cell( text: t("users.roles.#{user.role}"))
+          row.cell( text: t("users.roles.#{user.role}.name"))
         end
       end
     end %>

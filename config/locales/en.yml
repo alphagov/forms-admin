@@ -455,6 +455,10 @@ en:
     in_progress: in progress
     not_started: not started
   users:
+    cancel: Cancel
+    edit:
+      caption: User details
+      title: Edit user
     index:
       table_headings:
         email: Email address
@@ -464,5 +468,10 @@ en:
       title: Users
       users_caption: All users
     roles:
-      editor: Editor
-      super_adimn: Superadmin
+      editor:
+        description: Can create forms
+        name: Editor
+      super_admin:
+        description: Can create forms and manage users
+        name: Super admin
+    save: Save

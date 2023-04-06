@@ -87,7 +87,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users, only: %i[index]
+  resources :users, only: %i[index edit update]
 
   # Page routes
   match "/403", to: "errors#forbidden", as: :error_403, via: :all

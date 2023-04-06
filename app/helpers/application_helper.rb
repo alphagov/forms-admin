@@ -70,4 +70,10 @@ module ApplicationHelper
       user_profile_link: (user.blank? || Settings.basic_auth.enabled ? nil : GDS::SSO::Config.oauth_root_url),
       signout_link: (user.blank? || Settings.basic_auth.enabled ? nil : gds_sign_out_path) }
   end
+
+  def user_role_options(roles = User.roles.keys)
+    roles.map do |role|
+      OpenStruct.new(label: t("users.roles.#{role}.name"), value: role, description: t("users.roles.#{role}.description"))
+    end
+  end
 end
