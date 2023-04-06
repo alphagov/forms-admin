@@ -1,13 +1,12 @@
 require "rails_helper"
 
 RSpec.describe HeaderComponent::View, type: :component do
-  let(:user) do
-    build(:user)
-  end
-
   describe "default status" do
     before do
-      render_inline(described_class.new(nil))
+      render_inline(described_class.new(is_signed_in: false,
+                                        user_name: nil,
+                                        user_profile_link: nil,
+                                        signout_link: nil))
     end
 
     it "contains the service name" do
@@ -15,7 +14,7 @@ RSpec.describe HeaderComponent::View, type: :component do
     end
 
     it "does not contain the profile link" do
-      expect(page).not_to have_link(user.name, href: "http://signon.dev.gov.uk")
+      expect(page).not_to have_link("Joe Smith", href: "http://signon.dev.gov.uk")
     end
 
     it "does not contain the sign out link" do
@@ -25,7 +24,10 @@ RSpec.describe HeaderComponent::View, type: :component do
 
   describe "logged in status" do
     before do
-      render_inline(described_class.new(user))
+      render_inline(described_class.new(is_signed_in: true,
+                                        user_name: "Joe Smith",
+                                        user_profile_link: "http://signon.dev.gov.uk",
+                                        signout_link: "/auth/gds/sign_out"))
     end
 
     it "contains the service name" do
@@ -33,7 +35,7 @@ RSpec.describe HeaderComponent::View, type: :component do
     end
 
     it "contains the profile link" do
-      expect(page).to have_link(user.name, href: "http://signon.dev.gov.uk")
+      expect(page).to have_link("Joe Smith", href: "http://signon.dev.gov.uk")
     end
 
     it "contains the sign out link" do
@@ -41,16 +43,17 @@ RSpec.describe HeaderComponent::View, type: :component do
     end
   end
 
-  context "when basic auth is enabled" do
+  context "when no profile link or signout in passed in" do
     before do
-      basic_auth_double = object_double("basic_auth_double", enabled: true)
-      allow(Settings).to receive(:basic_auth).and_return(basic_auth_double)
-      render_inline(described_class.new(user))
+      render_inline(described_class.new(is_signed_in: true,
+                                        user_name: "Joe Smith",
+                                        user_profile_link: nil,
+                                        signout_link: nil))
     end
 
     it "the user name appears without a link" do
-      expect(page).not_to have_link(user.name)
-      expect(page).to have_text(user.name)
+      expect(page).not_to have_link("Joe Smith")
+      expect(page).to have_text("Joe Smith")
     end
 
     it "Signout appears without a link" do
