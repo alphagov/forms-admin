@@ -2,15 +2,18 @@
 
 module HeaderComponent
   class View < ViewComponent::Base
-    def initialize(current_user)
+    attr_accessor :is_signed_in, :user_name, :user_profile_link, :signout_link
+
+    def initialize(is_signed_in:, user_name:, user_profile_link:, signout_link:)
       super
-      @current_user = current_user
-      @show_profile_link = @current_user&.name.present?
-      @user_profile_url = Settings.basic_auth.enabled ? nil : GDS::SSO::Config.oauth_root_url
+      @is_signed_in = is_signed_in
+      @user_name = user_name
+      @user_profile_link = user_profile_link
+      @signout_link = signout_link
     end
 
-    def before_render
-      @signout_url = Settings.basic_auth.enabled ? nil : gds_sign_out_path
+    def is_signed_in?
+      is_signed_in
     end
   end
 end

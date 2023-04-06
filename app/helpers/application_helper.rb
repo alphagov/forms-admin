@@ -63,4 +63,11 @@ module ApplicationHelper
   def govuk_assets_path
     "/node_modules/govuk-frontend/govuk/assets"
   end
+
+  def header_component_options(user)
+    { is_signed_in: user.present?,
+      user_name: user&.name.presence,
+      user_profile_link: (user.blank? || Settings.basic_auth.enabled ? nil : GDS::SSO::Config.oauth_root_url),
+      signout_link: (user.blank? || Settings.basic_auth.enabled ? nil : gds_sign_out_path) }
+  end
 end
