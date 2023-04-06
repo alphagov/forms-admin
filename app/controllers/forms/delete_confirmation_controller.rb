@@ -76,7 +76,7 @@ module Forms
     end
 
     def delete_page(form, page)
-      success_url = form_path(form)
+      success_url = form_pages_path(form)
 
       authorize form, :can_view_form?
       if page.destroy
