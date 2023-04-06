@@ -355,8 +355,8 @@ RSpec.describe "Pages", type: :request do
         delete destroy_page_path(form_id: 2, page_id: 1, forms_delete_confirmation_form: { confirm_deletion: "true" })
       end
 
-      it "Redirects you to the home screen" do
-        expect(response).to redirect_to(form_path(form_id: 2))
+      it "Redirects you to the page index screen" do
+        expect(response).to redirect_to(form_pages_path)
       end
 
       it "Deletes the form on the API" do
