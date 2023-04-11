@@ -132,6 +132,7 @@ en:
   header:
     product_name: Forms
     sign_out: Sign out
+    users: Users
   helpers:
     hint:
       page:
