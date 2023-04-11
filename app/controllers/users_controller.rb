@@ -13,16 +13,14 @@ class UsersController < ApplicationController
 
   def edit
     authorize current_user, :can_manage_user?
-    @user = User.find(params[:id])
+    user
   end
 
   def update
     authorize current_user, :can_manage_user?
+    user.role = user_params[:role]
 
-    @user = User.find(params[:id])
-    @user.role = user_params[:role]
-
-    if @user.save
+    if user.save
       redirect_to users_path
     else
       render :edit
@@ -33,5 +31,9 @@ private
 
   def user_params
     params.require(:user).permit(:role)
+  end
+
+  def user
+    @user ||= User.find(params[:id])
   end
 end
