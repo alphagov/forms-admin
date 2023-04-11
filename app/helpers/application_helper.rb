@@ -64,10 +64,11 @@ module ApplicationHelper
     "/node_modules/govuk-frontend/govuk/assets"
   end
 
-  def header_component_options(user)
+  def header_component_options(user:, can_manage_users:)
     { is_signed_in: user.present?,
       user_name: user&.name.presence,
       user_profile_link: (user.blank? || Settings.basic_auth.enabled ? nil : GDS::SSO::Config.oauth_root_url),
+      list_of_users_path: (can_manage_users ? users_path : nil),
       signout_link: (user.blank? || Settings.basic_auth.enabled ? nil : gds_sign_out_path) }
   end
 

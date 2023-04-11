@@ -144,21 +144,35 @@ RSpec.describe ApplicationHelper, type: :helper do
 
   describe "#header_component_options" do
     let(:user) { build :user }
+    let(:can_manage_users) { false }
 
     context "when a user is not signed in" do
       let(:user) { nil }
 
       it "returns options" do
-        expect(helper.header_component_options(user)).to eq({ is_signed_in: false, signout_link: nil, user_name: nil, user_profile_link: nil })
+        expect(helper.header_component_options(user:, can_manage_users:)).to eq({ is_signed_in: false, list_of_users_path: nil, signout_link: nil, user_name: nil, user_profile_link: nil })
       end
     end
 
     context "when a user is signed in" do
       it "returns the following options" do
-        expect(helper.header_component_options(user)).to eq({ is_signed_in: true,
-                                                              signout_link: "/auth/gds/sign_out",
-                                                              user_name: user.name,
-                                                              user_profile_link: "http://signon.dev.gov.uk" })
+        expect(helper.header_component_options(user:, can_manage_users:)).to eq({ is_signed_in: true,
+                                                                                  list_of_users_path: nil,
+                                                                                  signout_link: "/auth/gds/sign_out",
+                                                                                  user_name: user.name,
+                                                                                  user_profile_link: "http://signon.dev.gov.uk" })
+      end
+
+      context "when can manager users" do
+        let(:can_manage_users) { true }
+
+        it "returns the following options" do
+          expect(helper.header_component_options(user:, can_manage_users:)).to eq({ is_signed_in: true,
+                                                                                    list_of_users_path: users_path,
+                                                                                    signout_link: "/auth/gds/sign_out",
+                                                                                    user_name: user.name,
+                                                                                    user_profile_link: "http://signon.dev.gov.uk" })
+        end
       end
 
       context "when http basic auth is enabled" do
@@ -166,10 +180,11 @@ RSpec.describe ApplicationHelper, type: :helper do
           basic_auth_double = object_double("basic_auth_double", enabled: true)
           allow(Settings).to receive(:basic_auth).and_return(basic_auth_double)
 
-          expect(helper.header_component_options(user)).to eq({ is_signed_in: true,
-                                                                signout_link: nil,
-                                                                user_name: user.name,
-                                                                user_profile_link: nil })
+          expect(helper.header_component_options(user:, can_manage_users:)).to eq({ is_signed_in: true,
+                                                                                    list_of_users_path: nil,
+                                                                                    signout_link: nil,
+                                                                                    user_name: user.name,
+                                                                                    user_profile_link: nil })
         end
       end
     end
