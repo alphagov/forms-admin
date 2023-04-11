@@ -34,7 +34,7 @@
       legend: { text: "Role", size: 'm', tag: 'h2' } %>
 
     <%= f.govuk_submit t('users.save') do
-      govuk_link_to(t('users.cancel'), users_path, class: 'govuk-button govuk-button--secondary')
+      govuk_button_link_to t('users.cancel'), users_path, secondary: true
     end %>
   <% end %>
 
