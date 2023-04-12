@@ -1,12 +1,10 @@
-FROM ruby:3.2.0-alpine3.17@sha256:c690d3b45ef65e0098104c272f1736b0595b824908d5639c3a3d17636581a905  AS build
+FROM ruby:3.2.0-alpine3.17@sha256:c690d3b45ef65e0098104c272f1736b0595b824908d5639c3a3d17636581a905 AS build
 
 WORKDIR /app
 
-# Edge repo is necessary for Node 16 and openssl 3
-RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
 RUN apk update
 RUN apk upgrade --available
-RUN apk add libc6-compat openssl-dev build-base libpq-dev nodejs=18.15.0-r0 npm
+RUN apk add libc6-compat openssl-dev build-base libpq-dev nodejs npm
 RUN adduser -D ruby
 RUN mkdir /node_modules && chown ruby:ruby -R /node_modules /app
 
@@ -32,7 +30,7 @@ COPY --chown=ruby:ruby . .
 # even though the command doesn't use the value itself
 RUN SECRET_KEY_BASE=dummyvalue rails assets:precompile
 
-FROM ruby:3.2.0-alpine3.17@sha256:c690d3b45ef65e0098104c272f1736b0595b824908d5639c3a3d17636581a905  AS app
+FROM ruby:3.2.0-alpine3.17@sha256:c690d3b45ef65e0098104c272f1736b0595b824908d5639c3a3d17636581a905 AS app
 
 ENV RAILS_ENV="${RAILS_ENV:-production}" \
     PATH="${PATH}:/home/ruby/.local/bin" \
