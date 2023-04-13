@@ -108,7 +108,7 @@ class ApplicationController < ActionController::Base
       basic_auth
     else
       # signon auth
-      super
+      warden.authenticate! Settings.auth_provider.to_sym
       @current_user = current_user
     end
   end

@@ -40,11 +40,13 @@ describe ApplicationController, type: :controller do
         allow(warden_spy).to receive(:authenticate!).and_return(true)
         allow(controller).to receive(:current_user).and_return(user)
 
+        allow(Settings).to receive(:auth_provider).and_return("gds_sso")
+
         get :index
       end
 
       it "uses GOV.UK Signon" do
-        expect(warden_spy).to have_received(:authenticate!)
+        expect(warden_spy).to have_received(:authenticate!).with(:gds_sso)
       end
 
       it "sets @current_user" do

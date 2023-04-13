@@ -6,3 +6,6 @@ forms_api:
   base_url: http://localhost:9292
   # Authentication key to authenticate forms-runner to forms-api
   auth_key: changeme
+
+# Use mock authentication
+auth_provider: mock_gds_sso

@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "usage of gds-sso gem" do
+  before do
+    allow(Settings).to receive(:auth_provider).and_return("gds_sso")
+  end
+
   let(:omniauth_hash) do
     OmniAuth::AuthHash.new({
       provider: "gds",
