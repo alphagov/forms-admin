@@ -1,10 +1,11 @@
 require "resolv"
 
 class ApplicationController < ActionController::Base
-  include GDS::SSO::ControllerMethods unless Settings.basic_auth.enabled
+  include GDS::SSO::ControllerMethods
   include Pundit::Authorization
   before_action :set_request_id
-  before_action :authenticate
+  before_action :authenticate_user!
+  before_action :set_user_instance_variable
   before_action :check_service_unavailable
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
@@ -18,32 +19,7 @@ class ApplicationController < ActionController::Base
     render "errors/forbidden", status: :forbidden, formats: :html
   end
 
-  def authenticate
-    if Settings.basic_auth.enabled
-      basic_auth
-    else
-      signon_auth
-    end
-  end
-
-  def basic_auth
-    request.env["warden"].manager.config.intercept_401 = false
-
-    http_basic_authenticate_or_request_with(
-      name: Settings.basic_auth.username,
-      password: Settings.basic_auth.password,
-    )
-
-    @current_user = User.new(
-      name: Settings.basic_auth.username,
-      email: "#{Settings.basic_auth.username}@example.com",
-      role: :editor,
-      organisation_slug: "government-digital-service",
-    )
-  end
-
-  def signon_auth
-    authenticate_user!
+  def set_user_instance_variable
     @current_user = current_user
   end
 
