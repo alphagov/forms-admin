@@ -5,7 +5,20 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
-#
-unless User.any?
-  User.create!({ email: "example@example.com", organisation_slug: "government-digital-service", name: "A User", uid: "123456" })
+
+require "factory_bot"
+
+if HostingEnvironment.local_development? && User.none?
+  # Create default super-admin
+  User.create!({ email: "example@example.com",
+                 organisation_slug: "government-digital-service",
+                 name: "A User",
+                 role: :super_admin,
+                 uid: "123456" })
+
+  # create extra editors
+  FactoryBot.create_list :user, 3, role: :editor
+
+  # create extra super admins
+  FactoryBot.create_list :user, 3, :with_super_admin
 end

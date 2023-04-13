@@ -37,6 +37,7 @@ class ApplicationController < ActionController::Base
     @current_user = User.new(
       name: Settings.basic_auth.username,
       email: "#{Settings.basic_auth.username}@example.com",
+      role: :editor,
       organisation_slug: "government-digital-service",
     )
   end
