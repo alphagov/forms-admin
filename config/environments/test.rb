@@ -57,4 +57,7 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+
+  # Use mock authentication
+  config.warden_default_strategies = %i[mock_gds_sso]
 end

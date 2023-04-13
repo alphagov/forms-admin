@@ -108,4 +108,7 @@ Rails.application.configure do
   end
 
   config.lograge.formatter = Lograge::Formatters::Json.new
+
+  # Use real authentication
+  config.warden_default_strategies = %i[gds_sso]
 end
