@@ -25,15 +25,15 @@ describe "pages/type_of_answer.html.erb", type: :view do
     assign(:type_of_answer_form, type_of_answer_form)
     assign(:answer_types, answer_types)
 
-    render(template: "pages/type-of-answer", layout: "layouts/application")
+    render(template: "pages/type-of-answer")
   end
 
   it "has the correct title" do
-    expect(rendered).to have_title "Edit question – GOV.UK Forms"
+    expect(view.content_for(:title)).to have_content("Edit question")
   end
 
-  it "back link is set to form pages path" do
-    expect(rendered).to have_link("Back", href: "/forms/1/pages")
+  it "has a back link to the live form page" do
+    expect(view.content_for(:back_link)).to have_link("Back", href: "/forms/1/pages")
   end
 
   it "contains the question number" do

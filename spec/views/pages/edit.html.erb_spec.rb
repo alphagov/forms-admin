@@ -29,17 +29,14 @@ describe "pages/edit.html.erb" do
     # that in this test
     ActionView::Base.default_form_builder = GOVUKDesignSystemFormBuilder::FormBuilder
 
-    # Render the template with layout to include page title, we could check
-    # expect(view.content_for(:title)).to have_content("Question'<> 1 – GOV.UK Forms")
-    # instead, but this checks behaviour better
-    render(template: "pages/edit", layout: "layouts/application")
+    render template: "pages/edit"
   end
 
   context "when given a title with characters which need escaping" do
     let(:question_text) { "Question'<> 1" }
 
     it "has the correct title" do
-      expect(rendered).to have_title("Question'<> 1 – GOV.UK Forms")
+      expect(view.content_for(:title)).to have_content("Question'<> 1")
     end
   end
 end

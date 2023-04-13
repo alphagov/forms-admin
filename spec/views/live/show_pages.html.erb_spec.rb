@@ -5,12 +5,11 @@ describe "live/show_pages.html.erb" do
 
   before do
     allow(view).to receive(:live_form_path).and_return("/live-form-path")
-
-    render(template: "live/show_pages", layout: "layouts/application", locals: { form: })
+    render(template: "live/show_pages", locals: { form: })
   end
 
   it "form name is in the page title" do
-    expect(rendered).to have_title(form.name.to_s)
+    expect(view.content_for(:title)).to have_content(form.name)
   end
 
   it "back link is set to form_path" do

@@ -8,7 +8,7 @@ describe "users/index.html.erb" do
   end
 
   before do
-    render template: "users/index", layout: "layouts/application", locals: { users: }
+    render template: "users/index", locals: { users: }
   end
 
   it "contains page heading" do

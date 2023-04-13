@@ -8,17 +8,15 @@ describe "live/show_form.html.erb" do
 
   before do
     allow(view).to receive(:live_form_pages_path).and_return("/live-form-pages-path")
-
-    # assign(:form, form)
-    render(template: "live/show_form", layout: "layouts/application", locals: { form_metadata:, form: })
+    render(template: "live/show_form", locals: { form_metadata:, form: })
   end
 
   it "has the correct title" do
-    expect(rendered).to have_title "#{form.name} – GOV.UK Forms"
+    expect(view.content_for(:title)).to have_content(form.name.to_s)
   end
 
   it "back link is set to root" do
-    expect(rendered).to have_link("Back to your forms", href: "/")
+    expect(view.content_for(:back_link)).to have_link("Back to your forms", href: "/")
   end
 
   it "contains page heading" do

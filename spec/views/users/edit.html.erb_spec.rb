@@ -7,7 +7,7 @@ describe "users/edit.html.erb" do
 
   before do
     assign(:user, user)
-    render template: "users/edit", layout: "layouts/application"
+    render template: "users/edit"
   end
 
   it "contains page heading" do
