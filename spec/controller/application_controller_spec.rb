@@ -56,30 +56,21 @@ describe ApplicationController, type: :controller do
 
     context "when basic auth is enabled" do
       before do
-        # Mock warden manager and config
-        warden_config_double = instance_double(Warden::Config, intercept_401: false)
-        warden_manager_double = instance_double(Warden::Manager, config: warden_config_double)
-        allow(warden_spy).to receive(:manager).and_return(warden_manager_double)
-        expect(warden_config_double).to receive(:intercept_401=).with(false)
+        # Mock Warden
+        allow(warden_spy).to receive(:authenticate!).and_return(true)
+        allow(controller).to receive(:current_user).and_return(user)
 
         allow(Settings.basic_auth).to receive(:enabled).and_return(true)
-
-        allow(controller)
-          .to receive(:http_basic_authenticate_or_request_with)
-          .and_return(true)
 
         get :index
       end
 
       it "uses HTTP Basic Authentication" do
-        expect(controller)
-          .to have_received(:http_basic_authenticate_or_request_with)
+        expect(warden_spy).to have_received(:authenticate!).with(:basic_auth)
       end
 
       it "sets @current_user" do
-        expect(assigns[:current_user].name).to eq("basic_auth_user")
-        expect(assigns[:current_user].email).to eq("basic_auth_user@example.com")
-        expect(assigns[:current_user].organisation.slug).to eq("gds-user-research")
+        expect(assigns[:current_user]).to eq user
       end
     end
   end

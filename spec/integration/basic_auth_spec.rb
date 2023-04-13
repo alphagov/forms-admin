@@ -49,6 +49,10 @@ RSpec.describe "using basic auth" do
       get root_path, headers: { "HTTP_AUTHORIZATION": auth }
     end
 
+    it "authenticates with Warden" do
+      expect(request.env["warden"].authenticated?).to be true
+    end
+
     it "signs in user as defined in settings" do
       expect(assigns[:current_user].name).to eq username
       expect(assigns[:current_user].email).to eq "#{username}@example.com"
