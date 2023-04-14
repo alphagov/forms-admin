@@ -15,6 +15,10 @@ class Form < ActiveResource::Base
     pages.find { |p| !p.has_next_page? }
   end
 
+  def qualifying_route_pages
+    pages.filter { |p| p.answer_type == "selection" && p.answer_settings.only_one_option == "true" }
+  end
+
   def status
     has_live_version ? :live : :draft
   end

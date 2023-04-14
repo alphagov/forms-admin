@@ -105,4 +105,14 @@ describe Form do
       end
     end
   end
+
+  describe "#qualifying_route_pages" do
+    let(:non_select_from_list_pages) { build_list(:page, 2) }
+    let(:select_from_list_pages) { build_list(:page, 4, :with_selections_settings) }
+    let(:form) { build :form, name: "Form 1", org: "Test org", submission_email: "", pages: non_select_from_list_pages + select_from_list_pages }
+
+    it "returns a list of pages that can be used as routing pages" do
+      expect(form.qualifying_route_pages).to eq(select_from_list_pages)
+    end
+  end
 end
