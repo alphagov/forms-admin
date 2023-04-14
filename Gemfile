@@ -17,6 +17,7 @@ gem "puma", "~> 6.3.0"
 # Used for handling authentication
 gem "gds-sso"
 gem "omniauth"
+gem "omniauth-auth0"
 gem "warden"
 
 # Used for handling authorisation policies

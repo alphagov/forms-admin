@@ -35,6 +35,7 @@ describe ApplicationController, type: :controller do
     end
 
     %w[
+      auth0
       basic_auth
       gds_sso
     ].each do |provider|

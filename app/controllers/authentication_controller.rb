@@ -43,4 +43,13 @@ private
   def stored_location
     session["user_return_to"]
   end
+
+  def auth0_sign_out_url
+    request_params = {
+      returnTo: root_url,
+      client_id: Settings.auth0.client_id,
+    }
+
+    URI::HTTPS.build(host: Settings.auth0.domain, path: "/v2/logout", query: request_params.to_query).to_s
+  end
 end
