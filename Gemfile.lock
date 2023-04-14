@@ -476,6 +476,7 @@ DEPENDENCIES
   i18n-tasks (~> 1.0.11)
   jbuilder
   lograge
+  omniauth
   pg (~> 1.5)
   puma (~> 6.3.0)
   pundit
