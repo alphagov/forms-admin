@@ -14,6 +14,12 @@ gem "pg", "~> 1.4"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 6.2.1"
 
+# Used for handling authentication
+gem "omniauth"
+gem "omniauth-rails_csrf_protection"
+gem "warden"
+gem "gds-sso"
+
 # Used for handling authorisation policies
 gem "pundit"
 
@@ -49,8 +55,6 @@ gem "bootsnap", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
-#
-gem "gds-sso"
 
 # Use govuk-components for displaying govuk themed forms
 gem "govuk-components", "~> 3.3.0"

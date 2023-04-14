@@ -268,6 +268,9 @@ GEM
     omniauth-oauth2 (1.8.0)
       oauth2 (>= 1.4, < 3)
       omniauth (~> 2.0)
+    omniauth-rails_csrf_protection (1.0.1)
+      actionpack (>= 4.2)
+      omniauth (~> 2.0)
     pagy (5.10.1)
       activesupport
     parallel (1.22.1)
@@ -477,6 +480,8 @@ DEPENDENCIES
   i18n-tasks (~> 1.0.11)
   jbuilder
   lograge
+  omniauth
+  omniauth-rails_csrf_protection
   pg (~> 1.4)
   pry
   puma (~> 6.2.1)
@@ -495,6 +500,7 @@ DEPENDENCIES
   tzinfo-data
   validate_url
   vite_rails
+  warden
   web-console
   webdrivers
   webmock
