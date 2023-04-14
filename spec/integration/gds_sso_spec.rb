@@ -65,6 +65,7 @@ RSpec.describe "usage of gds-sso gem" do
         expect(described_class).to have_received(:find_for_gds_oauth)
 
         expect(described_class).to have_received(:find_for_auth).with(
+          provider: "gds",
           uid: "123456",
           email: "test@example.com",
           name: "Test User",

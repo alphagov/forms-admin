@@ -3,6 +3,7 @@ FactoryBot.define do
     name { Faker::Name.name }
     email { Faker::Internet.email(name:, domain: "example.gov.uk") }
     uid { Faker::Internet.uuid }
+    provider { "factory_bot" }
     role { :editor }
     has_access { true }
 

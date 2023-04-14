@@ -19,6 +19,7 @@ class User < ApplicationRecord
   def self.find_for_gds_oauth(auth_hash)
     auth_hash = auth_hash.to_hash
     find_for_auth(
+      provider: auth_hash["provider"],
       uid: auth_hash["uid"],
       email: auth_hash["info"]["email"],
       name: auth_hash["info"]["name"],
