@@ -344,6 +344,7 @@ en:
     new_page_form: Edit question
     not_found: Page not found
     privacy_policy_form: Provide a link to privacy information for this form
+    routing_page: Add a question route
     service_unavailable: Sorry, the service is unavailable
     set_email_form: Set the email address for completed forms
     text_settings: How much text will people need to provide?
@@ -405,6 +406,10 @@ en:
       </p>
     heading: Provide a link to privacy information for this form
     submit_button: Save and continue
+  routing_page:
+    body_text: "You can send people directly to the question or page you want, based on their previous answer. \nThis means they’ll only see questions that are relevant to them.\n"
+    legend_hint_text: A route can only start from a question where people select one item from a list
+    legend_text: Which question do you want your route to start from?
   save_and_continue: Save and continue
   selections_settings:
     add_another: Add another option
