@@ -1,13 +1,16 @@
 class PageOptionsService
+  include ActionView::Helpers::TagHelper
+
   class << self
     def call(**args)
       new(**args)
     end
   end
 
-  def initialize(page:, read_only: true)
+  def initialize(page:, pages:, read_only: true)
     @read_only = read_only
     @page = page
+    @pages = pages
   end
 
   def all_options_for_answer_type
@@ -21,6 +24,7 @@ class PageOptionsService
     options.concat(date_options) if @page.answer_type == "date"
     options.concat(address_options) if @page.answer_type == "address"
     options.concat(name_options) if @page.answer_type == "name"
+    options.concat(route_options) if FeatureService.enabled?(:basic_routing) && @page.routing_conditions.present?
     options
   end
 
@@ -98,9 +102,9 @@ private
                 I18n.t("helpers.label.page.name_settings_options.names.#{@page.answer_settings.input_type}")]
     settings << title_needed
 
-    formatted_list = settings.join("</li><li>")
+    formatted_list = html_list_item(settings)
 
-    ActionController::Base.helpers.sanitize("<ul class='govuk-list'><li>#{formatted_list}</li></ul>")
+    ActionController::Base.helpers.sanitize("<ul class='govuk-list'>#{formatted_list}</ul>")
   end
 
   def address_input_type_to_string
@@ -112,5 +116,34 @@ private
     else
       "international_addresses"
     end
+  end
+
+  def route_options
+    [{ key: I18n.t("page_conditions.route"), value: route_value.html_safe }]
+  end
+
+  def route_value
+    if @page.routing_conditions.length == 1
+      print_route(@page.routing_conditions.first)
+    else
+      html_ordered_list(@page.routing_conditions.map { |condition| print_route(condition) })
+    end
+  end
+
+  def print_route(condition)
+    goto_question = @pages.find { |page| page.id == condition.goto_page_id }
+    goto_page_text = ActionController::Base.helpers.sanitize(goto_question.question_text)
+    goto_page_number = @pages.find_index(goto_question) + 1
+    answer_value = ActionController::Base.helpers.sanitize(condition.answer_value)
+
+    I18n.t("page_conditions.condition_compact_html", answer_value:, goto_page_number:, goto_page_text:).html_safe
+  end
+
+  def html_ordered_list(list_items)
+    content_tag(:ol, html_list_item(list_items), class: ["govuk-list", "govuk-list--number"])
+  end
+
+  def html_list_item(item)
+    item.map { |i| content_tag(:li, i) }.join.html_safe
   end
 end

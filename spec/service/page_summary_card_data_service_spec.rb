@@ -3,7 +3,11 @@ require "rails_helper"
 describe PageSummaryCardDataService do
   let(:page) { build :page, is_optional: optional }
   let(:optional) { false }
-  let(:service) { described_class.call(page:) }
+  let(:pages) do
+    form = build :form, :with_pages
+    form.pages
+  end
+  let(:service) { described_class.call(page:, pages:) }
 
   describe "#build_data" do
     before do
