@@ -7,7 +7,7 @@ describe "forms/show.html.erb" do
   before do
     assign(:form, form)
     assign(:task_status_counts, { completed: 12, total: 20 })
-    render template: "forms/show", layout: "layouts/application"
+    render template: "forms/show"
   end
 
   it "contains page heading and sub-heading" do
@@ -35,9 +35,7 @@ describe "forms/show.html.erb" do
     end
 
     it "has a back link to the forms page" do
-      expect(rendered).to have_link("Back to your forms", href: "/") { |link|
-        link.matches_css?(".govuk-back-link")
-      }
+      expect(view.content_for(:back_link)).to have_link("Back to your forms", href: "/")
     end
   end
 
@@ -49,9 +47,7 @@ describe "forms/show.html.erb" do
     end
 
     it "has a back link to the live form page" do
-      expect(rendered).to have_link("Back", href: "/forms/2/live") { |link|
-        link.matches_css?(".govuk-back-link")
-      }
+      expect(view.content_for(:back_link)).to have_link("Back", href: "/forms/2/live")
     end
 
     context "when feature flag is enabled", feature_draft_live_versioning: true do

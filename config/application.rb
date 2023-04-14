@@ -27,6 +27,7 @@ module FormsAdmin
 
     config.view_component.preview_paths = [Rails.root.join("spec/components")]
     config.view_component.preview_route = "/preview"
+    config.view_component.preview_controller = "ComponentPreviewController"
     # Replace with value which will be true in local dev and PAAS dev
     config.view_component.show_previews = HostingEnvironment.test_environment?
   end
