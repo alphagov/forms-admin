@@ -19,6 +19,7 @@ gem "omniauth"
 gem "omniauth-rails_csrf_protection"
 gem "warden"
 gem "gds-sso"
+gem "omniauth-auth0"
 
 # Used for handling authorisation policies
 gem "pundit"

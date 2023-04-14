@@ -6,6 +6,9 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "forms#index"
 
+  # OmniAuth user authentication routes
+  get "auth/:provider/callback" => "authentication#callback"
+
   get "forms/new" => "forms/change_name#new", as: :new_form
   post "forms/new" => "forms/change_name#create"
 
