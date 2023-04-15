@@ -300,6 +300,9 @@ en:
     hint: Selecting ‘Yes’ will mark this task as complete. You’ll still be able to make changes if you need to.
     legend: Do you want to mark this task as complete?
     'true': 'Yes'
+  new_condition:
+    routing_page_change_html: Change <span class="govuk-visually-hidden">routing question</span>
+    routing_page_text: If the question
   not_found:
     body: |
       If you typed the web address, check it is correct.
