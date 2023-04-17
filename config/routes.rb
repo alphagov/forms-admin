@@ -61,7 +61,15 @@ Rails.application.routes.draw do
         post "/" => "pages#create", as: :create_page
       end
 
+      get "/new-condition" => "pages/conditions#routing_page", as: :routing_page
+      post "/new-condition" => "pages/conditions#set_routing_page", as: :set_routing_page
+
       scope "/:page_id" do
+        scope "/conditions" do
+          get "/new" => "pages/conditions#new", as: :new_condition
+          # post "/new" => "pages/conditions#create", as: :create_condition
+        end
+
         scope "/edit" do
           get "/type-of-answer" => "pages/type_of_answer#edit", as: :type_of_answer_edit
           post "/type-of-answer" => "pages/type_of_answer#update", as: :type_of_answer_update

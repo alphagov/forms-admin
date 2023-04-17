@@ -75,6 +75,10 @@ private
     @form = Form.find(params[:form_id])
   end
 
+  def page
+    @page ||= Page.find(params[:page_id], params: { form_id: @form.id })
+  end
+
   def move_params
     form_id = params.require(:form_id)
     p = params.require(:move_direction).permit(%i[up down])
