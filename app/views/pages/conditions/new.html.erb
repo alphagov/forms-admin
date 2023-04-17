@@ -9,18 +9,13 @@
       <%= t("page_titles.routing_page") %>
     </h1>
 
-    <!-- If the question "where were you born" Change -->
-    <dl class="govuk-summary-list">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key"><%= t("new_condition.routing_page_text") %></dt>
-        <dd class="govuk-summary-list__value">“<%= page.question_text %>”</dd>
-        <dd class="govuk-summary-list__actions">
-          <%= govuk_link_to routing_page_path(form) do %>
-            <%= t("new_condition.routing_page_change_html") %>
-          <% end %>
-        </dd>
-      </div>
-    </dl>
+    <%= govuk_summary_list do |summary_list|
+      summary_list.with_row do |row|
+        row.with_key { t("new_condition.routing_page_text") }
+        row.with_value { page.question_text }
+        row.with_action(text: "Change", href: routing_page_path(form), visually_hidden_text: "routing question")
+      end;
+    end %>
 
     <%= form_with(model: nil, url: "#", method: 'POST') do |f| %>
       <%= f.govuk_collection_select :routing_answer, page.answer_settings.selection_options, :name, :name, label: { text: "is answered as" } %>
