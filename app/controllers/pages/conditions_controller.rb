@@ -1,4 +1,5 @@
 class Pages::ConditionsController < PagesController
+  before_action :can_add_page_routing
   def routing_page
     render template: "pages/conditions/routing_page", locals: { form: @form }
   end
@@ -10,5 +11,11 @@ class Pages::ConditionsController < PagesController
 
   def new
     render template: "pages/conditions/new", locals: { form: @form, page: }
+  end
+
+private
+
+  def can_add_page_routing
+    authorize @form, :can_add_page_routing_conditions?
   end
 end

@@ -24,6 +24,10 @@ class FormPolicy
     users_organisation_owns_form
   end
 
+  def can_add_page_routing_conditions?
+    FeatureService.enabled?(:basic_routing) || user.super_admin?
+  end
+
 private
 
   def users_organisation_owns_form
