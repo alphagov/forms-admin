@@ -1,0 +1,26 @@
+<% set_page_title(t("page_titles.routing_page")) %>
+<% content_for :back_link, govuk_back_link_to(routing_page_path(form)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= form.name %></span>
+      <%= t("page_titles.routing_page") %>
+    </h1>
+
+    <%= govuk_summary_list do |summary_list|
+      summary_list.with_row do |row|
+        row.with_key { t("new_condition.routing_page_text") }
+        row.with_value { page.question_text }
+        row.with_action(text: "Change", href: routing_page_path(form), visually_hidden_text: "routing question")
+      end;
+    end %>
+
+    <%= form_with(model: nil, url: "#", method: 'POST') do |f| %>
+      <%= f.govuk_collection_select :routing_answer, page.answer_settings.selection_options, :name, :name, label: { text: "is answered as" } %>
+      <%= f.govuk_collection_select :goto_page_id, form.pages, :id, :question_text, label: { text: "take the person to" } %>
+      <%= f.govuk_submit t("save_and_continue") %>
+    <% end %>
+  </div>
+</div>

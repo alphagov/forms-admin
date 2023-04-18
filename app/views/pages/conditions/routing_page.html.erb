@@ -1,0 +1,27 @@
+<% set_page_title(t("page_titles.routing_page")) %>
+<% content_for :back_link, govuk_back_link_to(form_pages_path(form.id)) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= form.name %> </span>
+      <%= t("page_titles.routing_page") %>
+    </h1>
+
+    <p class="govuk-body">
+      <%= t("routing_page.body_text") %>
+    </p>
+
+    <%= form_with(model: form, url: set_routing_page_path(form.id), method: 'POST') do |f| %>
+      <%= f.govuk_collection_radio_buttons :routing_page_id,
+                                           form.qualifying_route_pages,
+                                           :id, :question_text,
+                                           legend: {
+                                             text: t("routing_page.legend_text"),
+                                             size: 'm' },
+                                           hint:{
+                                             text: t("routing_page.legend_hint_text") }
+      %>
+      <%= f.govuk_submit t("continue") %>
+    <% end %>
+  </div>
+</div>

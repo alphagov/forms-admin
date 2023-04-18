@@ -6,13 +6,35 @@ describe FormPolicy do
   let(:form) { build :form, org: "gds" }
   let(:user) { build :user, organisation_slug: "gds" }
 
-  context "with a form editor" do
-    it { is_expected.to permit_actions(%i[can_view_form]) }
+  describe "#can_view_form?" do
+    context "with a form editor" do
+      it { is_expected.to permit_actions(%i[can_view_form]) }
 
-    context "but from another organisation" do
-      let(:user) { build :user, organisation_slug: "non-gds" }
+      context "but from another organisation" do
+        let(:user) { build :user, organisation_slug: "non-gds" }
 
-      it { is_expected.to forbid_actions(%i[can_view_form]) }
+        it { is_expected.to forbid_actions(%i[can_view_form]) }
+      end
+    end
+  end
+
+  describe "#can_add_page_routing_conditions?" do
+    describe "with a form editor" do
+      it { is_expected.to forbid_actions(%i[can_add_page_routing_conditions]) }
+
+      context "when feature flag is enabled", feature_basic_routing: true do
+        it { is_expected.to permit_actions(%i[can_add_page_routing_conditions]) }
+      end
+    end
+
+    describe "with a super admin user" do
+      let(:user) { build :user, :with_super_admin, organisation_slug: "gds" }
+
+      it { is_expected.to permit_actions(%i[can_add_page_routing_conditions]) }
+
+      context "when feature flag is enabled", feature_basic_routing: true do
+        it { is_expected.to permit_actions(%i[can_add_page_routing_conditions]) }
+      end
     end
   end
 
