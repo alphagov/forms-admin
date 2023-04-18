@@ -10,6 +10,7 @@ end
 
 FactoryBot.define do
   factory :page, class: "Page" do
+    association :form
     question_text { Faker::Lorem.question }
     answer_type { Page::ANSWER_TYPES.reject { |item| Page::ANSWER_TYPES_WITH_SETTINGS.include? item }.sample }
     is_optional { nil }

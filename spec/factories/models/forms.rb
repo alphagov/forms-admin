@@ -21,7 +21,6 @@ FactoryBot.define do
     trait :new_form do
       submission_email { "" }
       privacy_policy_url { "" }
-      pages { [] }
     end
 
     trait :ready_for_live do

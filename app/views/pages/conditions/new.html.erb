@@ -1,25 +1,28 @@
-<% set_page_title(t("page_titles.routing_page")) %>
-<% content_for :back_link, govuk_back_link_to(routing_page_path(form)) %>
+<% set_page_title(title_with_error_prefix(t('page_titles.routing_page'), condition_form.errors&.any?)) %>
+<% content_for :back_link, govuk_back_link_to(routing_page_path(condition_form.form.id)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: condition_form, url: create_condition_path(condition_form.form.id), method: 'POST') do |f| %>
+      <% if condition_form&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
 
-    <h1 class="govuk-heading-l">
-      <span class="govuk-caption-l"><%= form.name %></span>
-      <%= t("page_titles.routing_page") %>
-    </h1>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= condition_form.form.name %></span>
+        <%= t("page_titles.routing_page") %>
+      </h1>
 
-    <%= govuk_summary_list do |summary_list|
-      summary_list.with_row do |row|
-        row.with_key { t("new_condition.routing_page_text") }
-        row.with_value { page.question_text }
-        row.with_action(text: "Change", href: routing_page_path(form), visually_hidden_text: "routing question")
-      end;
-    end %>
+      <%= govuk_summary_list do |summary_list|
+        summary_list.with_row do |row|
+          row.with_key { t("new_condition.routing_page_text") }
+          row.with_value { condition_form.page.question_text }
+          row.with_action(text: "Change", href: routing_page_path(condition_form.form.id), visually_hidden_text: "routing question")
+        end;
+      end %>
 
-    <%= form_with(model: nil, url: "#", method: 'POST') do |f| %>
-      <%= f.govuk_collection_select :routing_answer, page.answer_settings.selection_options, :name, :name, label: { text: "is answered as" } %>
-      <%= f.govuk_collection_select :goto_page_id, form.pages, :id, :question_text, label: { text: "take the person to" } %>
+      <%= f.govuk_collection_select :answer_value, condition_form.routing_answer_options, :name, :name %>
+      <%= f.govuk_collection_select :goto_page_id, condition_form.goto_page_options, :id, :question_text %>
       <%= f.govuk_submit t("save_and_continue") %>
     <% end %>
   </div>
