@@ -12,7 +12,7 @@ gem "activeresource", "~> 6.0"
 gem "pg", "~> 1.4"
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", "~> 6.2.1"
+gem "puma", "~> 6.2.2"
 
 # Used for handling authorisation policies
 gem "pundit"
