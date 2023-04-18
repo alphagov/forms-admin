@@ -139,7 +139,7 @@ en:
       page:
         answer_type: The answer will be checked to make sure it’s in the selected format.
         hint_text:
-          address: You could use hint text to tell people how you'll use their address. For example, ‘We’ll send your licence to this address.’
+          address: You could use hint text to tell people how you’ll use their address. For example, ‘We’ll send your licence to this address.’
           checkbox: Use hint text to help people answer the question. For a question where people can select more than one answer you might want to use ‘Select all that apply’.
           date: Use hint text to help people answer the question. For a date question you could use ‘For example, 27 3 2007’.
           date_of_birth: Use hint text to help people answer the question. For a date of birth question you could use ‘For example, 27 3 1998’.
