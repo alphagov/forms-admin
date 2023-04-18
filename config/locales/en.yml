@@ -139,12 +139,12 @@ en:
       page:
         answer_type: The answer will be checked to make sure it’s in the selected format.
         hint_text:
-          address: You could use hint text to tell people how you will use their address. For example, ‘We’ll send your licence to this address.’
+          address: You could use hint text to tell people how you'll use their address. For example, ‘We’ll send your licence to this address.’
           checkbox: Use hint text to help people answer the question. For a question where people can select more than one answer you might want to use ‘Select all that apply’.
           date: Use hint text to help people answer the question. For a date question you could use ‘For example, 27 3 2007’.
           date_of_birth: Use hint text to help people answer the question. For a date of birth question you could use ‘For example, 27 3 1998’.
           default: Use hint text to help people answer the question. For example, to explain the format the answer should be in, or where to find the information you’ve asked for.
-          email: You could use hint text to tell people how you will use their email address. For example, ‘We’ll only use your email address to contact you about your application.’
+          email: You could use hint text to tell people how you'll use their email address. For example, ‘We’ll only use your email address to contact you about your application.’
           long_text: Use hint text to help people answer the question. For example, you could give a bit more detail about the information you need.
           name: Use hint text to help people answer the question. For example, you might need to ask people to enter their name as it’s written on an official document such as a passport or driving licence.
           national_insurance_number: Use hint text to help people answer the question. For example, ‘It’s on your National Insurance card, benefit letter, payslip or P60. For example, QQ 12 34 56 C.’
