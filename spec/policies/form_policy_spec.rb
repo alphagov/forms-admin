@@ -63,5 +63,21 @@ describe FormPolicy do
         expect(ActiveResource::HttpMock.requests).to include forms_request
       end
     end
+
+    context "with a user with no organisation_slug" do
+      let(:user) { build :user, organisation_slug: nil }
+
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms?org=", headers, gds_forms.to_json, 200
+        end
+      end
+
+      it "throws an eception" do
+        expect { policy_scope.resolve }.to raise_error(FormPolicy::UserMissingOrganisationError)
+        forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?org=", {}, headers)
+        expect(ActiveResource::HttpMock.requests).not_to include forms_request
+      end
+    end
   end
 end

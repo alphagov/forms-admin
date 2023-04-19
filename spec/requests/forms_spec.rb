@@ -196,6 +196,10 @@ RSpec.describe "Forms", type: :request do
         expect(response).to have_http_status(:ok)
       end
 
+      it "renders correct page" do
+        expect(response).to render_template("errors/user_missing_organisation_error")
+      end
+
       it "does not make a call to the API" do
         expect(ActiveResource::HttpMock.requests).to be_empty
       end

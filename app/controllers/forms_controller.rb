@@ -8,6 +8,8 @@ class FormsController < ApplicationController
 
   def index
     @forms = policy_scope(Form) || []
+  rescue FormPolicy::UserMissingOrganisationError
+    render template: "errors/user_missing_organisation_error", status: :ok
   end
 
   def show
