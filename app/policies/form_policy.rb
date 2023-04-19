@@ -1,6 +1,8 @@
 class FormPolicy
   attr_reader :user, :form
 
+  class UserMissingOrganisationError < StandardError; end
+
   class Scope
     attr_reader :user, :form, :scope
 
@@ -10,6 +12,8 @@ class FormPolicy
     end
 
     def resolve
+      raise UserMissingOrganisationError, "Missing required attribute organisation_slug" if user.organisation_slug.blank?
+
       scope
         .where(org: user.organisation_slug)
     end

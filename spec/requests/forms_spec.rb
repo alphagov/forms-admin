@@ -167,16 +167,42 @@ RSpec.describe "Forms", type: :request do
        }]
     end
 
-    before do
+    it "Reads the forms from the API" do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms?org=test-org", headers, forms_response.to_json, 200
       end
       get root_path
-    end
 
-    it "Reads the forms from the API" do
       forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?org=test-org", {}, headers)
       expect(ActiveResource::HttpMock.requests).to include forms_request
+    end
+
+    context "when the user does not hve a valid organisation set" do
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms?org=", headers, forms_response.to_json, 200
+        end
+
+        login_as build(:user, organisation_slug: nil)
+
+        get root_path
+      end
+
+      after do
+        GDS::SSO.test_user = nil
+      end
+
+      it "returns 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders correct page" do
+        expect(response).to render_template("errors/user_missing_organisation_error")
+      end
+
+      it "does not make a call to the API" do
+        expect(ActiveResource::HttpMock.requests).to be_empty
+      end
     end
   end
 
