@@ -33,7 +33,7 @@ module ApplicationHelper
   end
 
   def contact_url
-    "mailto:govuk-forms@digital.cabinet-office.gov.uk"
+    "mailto:govuk-forms-support@govuk.zendesk.com"
   end
 
   def contact_link(text = t("contact_govuk_forms"))
