@@ -1,10 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Pages::ConditionsForm, type: :model do
-  let(:conditions_form) { described_class.new(form: page.form, page:) }
-  let(:form) { build :form, id: 1 }
-  let(:form_with_pages) { build :form, pages: }
-  let(:pages) { build_list :page, 5, :with_selections_settings, form: }
+  let(:conditions_form) { described_class.new(form:, page:) }
+  let(:form) { build :form, :ready_for_routing, id: 1 }
+  let(:pages) { form.pages }
   let(:page) { pages.second }
 
   let(:post_headers) do
@@ -75,8 +74,8 @@ RSpec.describe Pages::ConditionsForm, type: :model do
 
   describe "#goto_page_options" do
     it "returns a list of answers for the given page" do
-      result = described_class.new(form: form_with_pages, page: form_with_pages.pages.first).goto_page_options
-      expect(result).to eq([OpenStruct.new(id: nil, question_text: nil), form_with_pages.pages.map { |p| OpenStruct.new(id: p.id, question_text: p.question_text) }].flatten)
+      result = described_class.new(form:, page: pages.first).goto_page_options
+      expect(result).to eq([OpenStruct.new(id: nil, question_text: nil), form.pages.map { |p| OpenStruct.new(id: p.id, question_text: p.question_text) }].flatten)
     end
   end
 end

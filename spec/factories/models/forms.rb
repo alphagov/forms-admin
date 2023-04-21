@@ -56,5 +56,15 @@ FactoryBot.define do
       support_url { Faker::Internet.url(host: "gov.uk") }
       support_url_text { Faker::Lorem.sentence(word_count: 1, random_words_to_add: 4) }
     end
+
+    trait :ready_for_routing do
+      transient do
+        pages_count { 5 }
+      end
+
+      pages do
+        Array.new(pages_count) { association(:page, :with_selections_settings) }
+      end
+    end
   end
 end
