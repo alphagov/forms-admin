@@ -58,16 +58,26 @@ RSpec.describe Pages::ConditionsForm, type: :model do
 
   describe "#routing_answer_options" do
     it "returns a list of answers for the given page" do
-      result = conditions_form.routing_answer_options.map(&:name)
-      expect(result).to eq([nil, "Option 1", "Option 2"])
+      result = conditions_form.routing_answer_options
+      expect(result).to eq([
+        OpenStruct.new(value: nil, label: I18n.t("helpers.label.pages_conditions_form.default_answer_value")),
+        OpenStruct.new(value: "Option 1", label: "Option 1"),
+        OpenStruct.new(value: "Option 2", label: "Option 2"),
+      ])
     end
 
     context "when selection setting includes 'none of the above'" do
       let(:page) { build :page, :with_selections_settings, is_optional: "true" }
 
       it "adds extra 'None of above' options to the end" do
-        result = conditions_form.routing_answer_options.map(&:name)
-        expect(result).to eq([nil, "Option 1", "Option 2", I18n.t("page_options_service.selection_type.none_of_the_above")])
+        result = conditions_form.routing_answer_options
+        expect(result).to eq([
+          OpenStruct.new(value: nil, label: I18n.t("helpers.label.pages_conditions_form.default_answer_value")),
+          OpenStruct.new(value: "Option 1", label: "Option 1"),
+          OpenStruct.new(value: "Option 2", label: "Option 2"),
+          OpenStruct.new(value: I18n.t("page_options_service.selection_type.none_of_the_above"),
+                         label: I18n.t("page_options_service.selection_type.none_of_the_above")),
+        ])
       end
     end
   end
@@ -75,7 +85,7 @@ RSpec.describe Pages::ConditionsForm, type: :model do
   describe "#goto_page_options" do
     it "returns a list of answers for the given page" do
       result = described_class.new(form:, page: pages.first).goto_page_options
-      expect(result).to eq([OpenStruct.new(id: nil, question_text: nil), form.pages.map { |p| OpenStruct.new(id: p.id, question_text: p.question_text) }].flatten)
+      expect(result).to eq([OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")), form.pages.map { |p| OpenStruct.new(id: p.id, question_text: p.question_text) }].flatten)
     end
   end
 end
