@@ -67,7 +67,7 @@ Rails.application.routes.draw do
       scope "/:page_id" do
         scope "/conditions" do
           get "/new" => "pages/conditions#new", as: :new_condition
-          # post "/new" => "pages/conditions#create", as: :create_condition
+          post "/new" => "pages/conditions#create", as: :create_condition
         end
 
         scope "/edit" do

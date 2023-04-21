@@ -1,0 +1,15 @@
+en:
+  helpers:
+    label:
+      pages_conditions_form:
+        answer_value: is answered as
+        goto_page_id: take the person to
+  activemodel:
+    errors:
+      models:
+        pages/conditions_form:
+          attributes:
+            answer_value:
+              blank: Select an answer value
+            goto_page_id:
+              blank: Select a page to take the person to

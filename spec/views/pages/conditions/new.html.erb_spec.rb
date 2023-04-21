@@ -3,14 +3,16 @@ require "rails_helper"
 describe "pages/conditions/new.html.erb" do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 3, :with_selections_settings, form_id: 1 }
+  let(:condition_form) { Pages::ConditionsForm.new(form:, page: pages.first) }
 
   before do
     allow(view).to receive(:form_pages_path).and_return("/forms/1/pages")
     allow(view).to receive(:routing_page_path).and_return("/forms/1/new-condition")
     allow(view).to receive(:set_routing_page_path).and_return("/forms/1/new-condition")
+    allow(view).to receive(:create_condition_path).and_return("/forms/1/pages/1/conditions/new")
     allow(form).to receive(:qualifying_route_pages).and_return(pages)
 
-    render template: "pages/conditions/new", locals: { form:, page: pages.first }
+    render template: "pages/conditions/new", locals: { condition_form: }
   end
 
   it "contains page heading and sub-heading" do

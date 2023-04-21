@@ -10,12 +10,27 @@ class Pages::ConditionsController < PagesController
   end
 
   def new
-    render template: "pages/conditions/new", locals: { form: @form, page: }
+    condition_form = Pages::ConditionsForm.new(form: @form, page:)
+    render template: "pages/conditions/new", locals: { condition_form: }
+  end
+
+  def create
+    condition_form = Pages::ConditionsForm.new(condition_form_params)
+
+    if condition_form.submit
+      redirect_to form_pages_path(@form)
+    else
+      render template: "pages/conditions/new", locals: { condition_form: }, status: :unprocessable_entity
+    end
   end
 
 private
 
   def can_add_page_routing
     authorize @form, :can_add_page_routing_conditions?
+  end
+
+  def condition_form_params
+    params.require(:pages_conditions_form).permit(:answer_value, :goto_page_id).merge(form: @form, page:)
   end
 end
