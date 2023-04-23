@@ -350,6 +350,7 @@ en:
     not_found: Page not found
     privacy_policy_form: Provide a link to privacy information for this form
     routing_page: Add a question route
+    routing_page_edit: Edit question %{question_position}’s routes
     service_unavailable: Sorry, the service is unavailable
     set_email_form: Set the email address for completed forms
     text_settings: How much text will people need to provide?

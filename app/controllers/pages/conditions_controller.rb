@@ -24,6 +24,14 @@ class Pages::ConditionsController < PagesController
     end
   end
 
+  def edit
+    condition = Condition.find(params[:condition_id], params: { form_id: @form.id, page_id: page.id })
+
+    condition_form = Pages::ConditionsForm.new(form: @form, page:, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id)
+
+    render template: "pages/conditions/edit", locals: { condition_form: }
+  end
+
 private
 
   def can_add_page_routing
