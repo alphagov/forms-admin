@@ -67,7 +67,7 @@ RSpec.describe PageListComponent::View, type: :component do
         end
 
         context "when the page has a single condition" do
-          let(:routing_conditions) { [(build :condition, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3)] }
+          let(:routing_conditions) { [(build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3)] }
 
           it "renders the routing details" do
             translation_text = I18n.t("page_conditions.condition_html", check_page_text: pages[0].question_text, answer_value: "Wales", goto_page_text: pages[2].question_text)
