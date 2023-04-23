@@ -13,10 +13,6 @@ RSpec.describe Pages::ConditionsForm, type: :model do
     }
   end
 
-  # before do
-  #   form
-  # end
-
   describe "validations" do
     it "is invalid if answer_value is nil" do
       error_message = I18n.t("activemodel.errors.models.pages/conditions_form.attributes.answer_value.blank")
