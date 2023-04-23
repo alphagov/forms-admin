@@ -1,8 +1,9 @@
 require "rails_helper"
 
 describe "pages/conditions/edit.html.erb" do
-  let(:condition_form) { Pages::ConditionsForm.new(form:, page:) }
+  let(:condition_form) { Pages::ConditionsForm.new(form:, page:, record: condition) }
   let(:form) { build :form, :ready_for_routing, id: 1 }
+  let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
   let(:pages) { form.pages }
   let(:page) { pages.first }
 
