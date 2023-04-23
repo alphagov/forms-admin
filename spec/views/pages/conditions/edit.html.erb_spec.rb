@@ -11,6 +11,7 @@ describe "pages/conditions/edit.html.erb" do
     page.position = 1
     allow(view).to receive(:form_pages_path).and_return("/forms/1/pages")
     allow(view).to receive(:create_condition_path).and_return("/forms/1/pages/1/conditions/new")
+    allow(view).to receive(:delete_condition_path).and_return("/forms/1/pages/1/conditions/2/delete")
     allow(form).to receive(:qualifying_route_pages).and_return(pages)
 
     render template: "pages/conditions/edit", locals: { condition_form: }
@@ -27,5 +28,9 @@ describe "pages/conditions/edit.html.erb" do
 
   it "has a submit button" do
     expect(rendered).to have_css("button[type='submit'].govuk-button", text: I18n.t("save_and_continue"))
+  end
+
+  it "has a delete route link" do
+    expect(rendered).to have_link(text: "Delete question route", href: "/forms/1/pages/1/conditions/2/delete")
   end
 end
