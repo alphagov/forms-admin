@@ -10,6 +10,6 @@ en:
         pages/conditions_form:
           attributes:
             answer_value:
-              blank: Select an answer value
+              blank: Select the answer you want to base your route on
             goto_page_id:
-              blank: Select a page to take the person to
+              blank: Select the question or page you want to take the person to

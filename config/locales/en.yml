@@ -249,6 +249,9 @@ en:
           names:
             long_text: More than a single line of text
             single_line: Single line of text
+      pages_conditions_form:
+        default_answer_value: Select an answer
+        default_goto_page_id: Select a question or page
   home:
     create_a_form: Create a form
     form_name_heading: Form name
