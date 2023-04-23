@@ -1,0 +1,50 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.routing_page'), condition_form.errors&.any?)) %>
+<% content_for :back_link, govuk_back_link_to(edit_condition_path(condition_form.form.id, condition_form.page.id, condition_form.record.id)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: condition_form, url: update_condition_path(condition_form.form.id, condition_form.page.id, condition_form.record.id), method: "PUT") do |f| %>
+      <% if condition_form&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= condition_form.form.name %></span>
+        <%= t("page_titles.routing_page_delete", question_position: condition_form.page.position) %>
+      </h1>
+
+      <%= govuk_summary_list(actions: false) do |summary_list|
+        summary_list.with_row do |row|
+          row.with_key { t("new_condition.routing_page_text") }
+          row.with_value { condition_form.page.question_text }
+        end;
+        summary_list.with_row do |row|
+          row.with_key { "is answered as" }
+          row.with_value { condition_form.answer_value }
+        end;
+        summary_list.with_row do |row|
+          row.with_key { "take the person to" }
+          row.with_value { condition_form.goto_page_options.find{ |options| options.id == condition_form.goto_page_id}.question_text }
+        end;
+
+      end %>
+
+      <%= govuk_inset_text do %>
+        <p>
+          By deleting this question route the person filling in the form will have to complete every question, even if you do not need them to.
+        </p>
+
+        <p>Do you want this to happen? If you do, select ‘Yes’.</p>
+      <% end %>
+      <%= f.govuk_collection_radio_buttons :confirm_deletion,  [
+        OpenStruct.new(value: "true", label: "Yes"),
+        OpenStruct.new(value: "false", label: "No"),
+      ], :value, :label,
+                                           legend: { text: "Are you sure you want to delete this question route?"}
+      %>
+
+
+      <%= f.govuk_submit t("save_and_continue") %>
+    <% end %>
+  </div>
+</div>

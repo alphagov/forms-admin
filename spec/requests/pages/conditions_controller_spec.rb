@@ -302,4 +302,53 @@ RSpec.describe Pages::ConditionsController, type: :request do
       end
     end
   end
+
+  describe "#delete" do
+    let(:routing_conditions) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
+
+    before do
+      selected_page.routing_conditions = [routing_conditions]
+      selected_page.position = 1
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1/pages/#{selected_page.id}", req_headers, selected_page.to_json, 200
+        mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", req_headers, routing_conditions.to_json, 200
+      end
+
+      if expected_to_raise_error
+        allow(Pundit).to receive(:authorize).and_raise(Pundit::NotAuthorizedError)
+      else
+        allow(Pundit).to receive(:authorize).and_return(true)
+      end
+
+      conditional_form = Pages::ConditionsForm.new(form:, page: selected_page, record: routing_conditions, answer_value: "Yes", goto_page_id: 3)
+
+      allow(conditional_form).to receive(:goto_page_options).and_return([OpenStruct.new(id: 3, question_text: "What is your name?")])
+
+      allow(Pages::ConditionsForm).to receive(:new).and_return(conditional_form)
+
+      get delete_condition_path(form_id: 1, page_id: selected_page.id, condition_id: routing_conditions.id)
+    end
+
+    it "Reads the form from the API" do
+      expect(form).to have_been_read
+    end
+
+    it "renders the delete condition page template" do
+      expect(response).to render_template("pages/conditions/delete")
+    end
+
+    context "when user should not be allowed to add routes to pages" do
+      let(:expected_to_raise_error) { true }
+
+      it "Renders the forbidden page" do
+        expect(response).to render_template("errors/forbidden")
+      end
+
+      it "Returns a 403 status" do
+        expect(response.status).to eq(403)
+      end
+    end
+  end
 end
