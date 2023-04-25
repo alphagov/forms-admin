@@ -2,7 +2,7 @@ class Pages::ConditionsForm
   include ActiveModel::Model
   include ActiveModel::Validations
 
-  attr_accessor :form, :page, :check_page_id, :routing_page_id, :answer_value, :goto_page_id
+  attr_accessor :form, :page, :check_page_id, :routing_page_id, :answer_value, :goto_page_id, :record
 
   validates :answer_value, :goto_page_id, presence: true
 
@@ -15,6 +15,15 @@ class Pages::ConditionsForm
                       routing_page_id: page.id,
                       answer_value:,
                       goto_page_id:)
+  end
+
+  def update
+    return false if invalid?
+
+    record.answer_value = answer_value
+    record.goto_page_id = goto_page_id
+
+    record.save!
   end
 
   def routing_answer_options

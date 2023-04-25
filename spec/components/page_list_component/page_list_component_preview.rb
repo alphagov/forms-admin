@@ -13,7 +13,7 @@ class PageListComponent::PageListComponentPreview < ViewComponent::Preview
   end
 
   def with_pages_and_one_condition
-    routing_conditions = [(build :condition, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3)]
+    routing_conditions = [(build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3)]
     pages = [OpenStruct.new(id: 1, question_text: "Enter your name", routing_conditions:),
              OpenStruct.new(id: 2, question_text: "What is your pet's phone number?", routing_conditions:),
              OpenStruct.new(id: 3, question_text: "How many pets do you own?", routing_conditions: [])]
@@ -21,7 +21,8 @@ class PageListComponent::PageListComponentPreview < ViewComponent::Preview
   end
 
   def with_pages_and_multiple_conditions
-    routing_conditions = [(build :condition, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3), (build :condition, routing_page_id: 1, check_page_id: 1, answer_value: "England", goto_page_id: 2)]
+    routing_conditions = [(build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3),
+                          (build :condition, id: 2, routing_page_id: 1, check_page_id: 1, answer_value: "England", goto_page_id: 2)]
     pages = [OpenStruct.new(id: 1, question_text: "Enter your name", routing_conditions:),
              OpenStruct.new(id: 2, question_text: "What is your pet's phone number?", routing_conditions:),
              OpenStruct.new(id: 3, question_text: "How many pets do you own?", routing_conditions: [])]

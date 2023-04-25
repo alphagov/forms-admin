@@ -1,10 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Pages::ConditionsForm, type: :model do
-  let(:conditions_form) { described_class.new(form:, page:) }
+  let(:conditions_form) { described_class.new(form:, page:, record: condition) }
   let(:form) { build :form, :ready_for_routing, id: 1 }
   let(:pages) { form.pages }
   let(:page) { pages.second }
+  let(:condition) { nil }
 
   let(:post_headers) do
     {
@@ -12,10 +13,6 @@ RSpec.describe Pages::ConditionsForm, type: :model do
       "Content-Type" => "application/json",
     }
   end
-
-  # before do
-  #   form
-  # end
 
   describe "validations" do
     it "is invalid if answer_value is nil" do
@@ -52,6 +49,31 @@ RSpec.describe Pages::ConditionsForm, type: :model do
       it "returns false" do
         invalid_conditions_form = described_class.new
         expect(invalid_conditions_form.submit).to be false
+      end
+    end
+  end
+
+  describe "#update" do
+    context "when validation pass" do
+      let(:condition) { Condition.new id: 3, form_id: 1, page_id: 2, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
+
+      it "updates a condition" do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.post "/api/v1/forms/1/pages/2/conditions", post_headers, { success: true }.to_json, 200
+          mock.put "/api/v1/forms/1/pages/2/conditions/3", post_headers, { success: true }.to_json, 200
+        end
+
+        conditions_form.answer_value = "England"
+        conditions_form.goto_page_id = 4
+
+        expect(conditions_form.update).to be_truthy
+      end
+    end
+
+    context "when validations fail" do
+      it "returns false" do
+        invalid_conditions_form = described_class.new
+        expect(invalid_conditions_form.update).to be false
       end
     end
   end
