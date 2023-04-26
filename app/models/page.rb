@@ -46,6 +46,10 @@ class Page < ActiveResource::Base
     self
   end
 
+  def conditions
+    routing_conditions.map { |routing_condition| Condition.new(routing_condition.attributes) }
+  end
+
 private
 
   def is_optional_value

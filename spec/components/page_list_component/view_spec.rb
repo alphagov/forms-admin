@@ -17,7 +17,7 @@ RSpec.describe PageListComponent::View, type: :component do
     end
 
     context "when the form has a single page" do
-      let(:pages) { [OpenStruct.new(id: 1, question_text: "Enter your name?")] }
+      let(:pages) { [(build :page, id: 1, question_text: "Enter your name?")] }
 
       it "renders the question number" do
         expect(page).to have_css("dt.govuk-summary-list__key", text: "1")
@@ -38,7 +38,7 @@ RSpec.describe PageListComponent::View, type: :component do
     end
 
     context "when the form has multiple pages" do
-      let(:pages) { [OpenStruct.new(id: 1, question_text: "Enter your name?"), OpenStruct.new(id: 2, question_text: "What is you pet's name?")] }
+      let(:pages) { [(build :page, id: 1, question_text: "Enter your name?"), (build :page, id: 2, question_text: "What is you pet's name?")] }
 
       it "renders the question numbers" do
         expect(page).to have_css("dt.govuk-summary-list__key", text: "1")
@@ -55,9 +55,9 @@ RSpec.describe PageListComponent::View, type: :component do
 
       context "when conditions are enabled", feature_basic_routing: true do
         let(:pages) do
-          [OpenStruct.new(id: 1, question_text: "What country do you live in?", routing_conditions:),
-           OpenStruct.new(id: 2, question_text: "What is your name?", routing_conditions:),
-           OpenStruct.new(id: 3, question_text: "What is your pet's name?", routing_conditions:)]
+          [(build :page, id: 1, question_text: "What country do you live in?", routing_conditions:),
+           (build :page, id: 2, question_text: "What is your name?", routing_conditions:),
+           (build :page, id: 3, question_text: "What is your pet's name?", routing_conditions:)]
         end
 
         context "when there are no conditions" do
@@ -70,23 +70,29 @@ RSpec.describe PageListComponent::View, type: :component do
           let(:routing_conditions) { [(build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3)] }
 
           it "renders the routing details" do
-            translation_text = I18n.t("page_conditions.condition_html", check_page_text: pages[0].question_text, answer_value: "Wales", goto_page_text: pages[2].question_text)
-            expect(page).to have_css("dd.govuk-summary-list__value", text: ActionController::Base.helpers.strip_tags(translation_text))
+            condition_check_page_text = I18n.t("page_conditions.condition_check_page_text", check_page_text: pages[0].question_text)
+            condition_answer_value_text = I18n.t("page_conditions.condition_answer_value_text", answer_value: "Wales")
+            condition_goto_page_text = I18n.t("page_conditions.condition_goto_page_text", goto_page_text: pages[2].question_text)
+            expect(page).to have_css("dd.govuk-summary-list__value", text: condition_check_page_text)
+            expect(page).to have_css("dd.govuk-summary-list__value", text: condition_answer_value_text)
+            expect(page).to have_css("dd.govuk-summary-list__value", text: condition_goto_page_text)
           end
 
           it "renders link" do
             expect(page).to have_link("Edit")
           end
         end
+
+        # TODO: add tests for error cases
       end
     end
   end
 
   describe "class methods" do
     let(:pages) do
-      [OpenStruct.new(id: 1, question_text: "What country do you live in?", routing_conditions:),
-       OpenStruct.new(id: 2, question_text: "What is your name?", routing_conditions:),
-       OpenStruct.new(id: 3, question_text: "What is your pet's name?", routing_conditions:)]
+      [(build :page, id: 1, question_text: "What country do you live in?", routing_conditions:),
+       (build :page, id: 2, question_text: "What is your name?", routing_conditions:),
+       (build :page, id: 3, question_text: "What is your pet's name?", routing_conditions:)]
     end
 
     describe "show_up_button" do

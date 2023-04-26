@@ -14,16 +14,13 @@
   }
 }
 
-.app-page-list__row--error {
-  border-left: 5px solid $govuk-error-colour;
-  padding-left: 10px;
+.govuk-form-group--error .app-page-list__key {
   @include govuk-media-query($from: tablet) {
-    padding-left: 0;
+    padding-left: govuk-spacing(3);
   }
 }
 
-.app-page-list__row--error .app-page-list__key {
-  @include govuk-media-query($from: tablet) {
-    padding-left: 10px;
-  }
+.app-page_list__route-text--error:link,
+.app-page_list__route-text--error:visited {
+  color: $govuk-error-colour;
 }

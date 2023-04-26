@@ -5,4 +5,13 @@ class Condition < ActiveResource::Base
   headers["X-API-Token"] = Settings.forms_api.auth_key
 
   belongs_to :page
+
+  def has_errors?
+    # TODO: remove defined check once custom errors are in API
+    defined?(validation_errors) && validation_errors.any?
+  end
+
+  def errors_include(error_name)
+    has_errors? && validation_errors.map(&:name)&.include?(error_name)
+  end
 end

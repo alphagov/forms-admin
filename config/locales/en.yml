@@ -316,12 +316,15 @@ en:
       If you pasted the web address, check you copied the entire address.
     title: Page not found
   page_conditions:
+    condition_answer_value_text: is answered as “%{answer_value}”
+    condition_check_page_text: If the question “%{check_page_text}”
     condition_compact_html: 'If the answer is “%{answer_value}”<br> then skip to question %{goto_page_number}: “%{goto_page_text}”'
-    condition_html: |
-      If the question “%{check_page_text}”<br>
-      is answered as “%{answer_value}”<br>
-      take the person to “%{goto_page_text}”
+    condition_goto_page_text: take the person to “%{goto_page_text}”
     condition_name: Question %{page_index}'s route
+    errors:
+      answer_value_doesnt_exist: select the answer you want to base your route on
+      goto_page_doesnt_exist: select the question or page you want to take the person to, or delete this route
+      goto_page_doesnt_exist_and_nor_does_answer_value: and select the question or page you want to take the person to, or delete this route
     route: Route
   page_options_service:
     answer_type: Answer type
