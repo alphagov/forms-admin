@@ -23,6 +23,6 @@ class UserPolicy
   end
 
   def can_manage_user?
-    user&.super_admin?
+    user.super_admin?
   end
 end
