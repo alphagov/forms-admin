@@ -32,7 +32,7 @@
     <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link"><%= t("skip_to_main_content") %></a>
 
     <%= render HeaderComponent::View.new(**header_component_options(user:@current_user,
-                                                                    can_manage_users: policy(@current_user).can_manage_user? ))%>
+                                                                    can_manage_users: @current_user && policy(@current_user).can_manage_user? ))%>
 
     <div class="govuk-width-container ">
       <%= govuk_phase_banner(tag: { text: "Beta" }) do %>
