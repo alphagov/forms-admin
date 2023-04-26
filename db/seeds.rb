@@ -9,12 +9,20 @@
 require "factory_bot"
 
 if HostingEnvironment.local_development? && User.none?
+  Organisation.create!(content_id: "af07d5a5-df63-4ddc-9383-6a666845ebe9", slug: "government-digital-service", name: "Government Digital Service")
+
   # Create default super-admin
   User.create!({ email: "example@example.com",
                  organisation_slug: "government-digital-service",
+                 organisation_content_id: "af07d5a5-df63-4ddc-9383-6a666845ebe9",
                  name: "A User",
                  role: :super_admin,
                  uid: "123456" })
+
+  # create extra organisations
+  test_org = FactoryBot.create :organisation, slug: "test-org"
+  FactoryBot.create :organisation, slug: "ministry-of-tests"
+  FactoryBot.create :organisation, slug: "department-for-testing"
 
   # create extra editors
   FactoryBot.create_list :user, 3, role: :editor
