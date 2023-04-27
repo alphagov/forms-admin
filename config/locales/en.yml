@@ -70,7 +70,11 @@ en:
     helpful_links: Helpful links
     privacy: Privacy
   forbidden:
-    body_html: You do not have permission to view this page as it does not belong to your organisation. %{link} if you think this is incorrect.
+    body_html: |
+      You do not have permission to view this page.
+
+      %{link} if you think this is incorrect.
+    link_text: Contact the GOV⁠.⁠UK Forms team
     title: You cannot view this page
   form_statuses:
     draft: DRAFT
