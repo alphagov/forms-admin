@@ -490,6 +490,7 @@ en:
       caption: User details
       title: Edit user
     index:
+      organisation_blank: No organisation set
       table_headings:
         email: Email address
         name: Name

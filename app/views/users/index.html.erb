@@ -21,7 +21,7 @@
             govuk_link_to(user.name, edit_user_path(user))
           end
           row.with_cell( text: user.email)
-          row.with_cell( text: user.organisation_slug)
+          row.with_cell( text: user.organisation&.name || t("users.index.organisation_blank"))
           row.with_cell( text: t("users.roles.#{user.role}.name"))
         end
       end
