@@ -72,7 +72,6 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "faker"
 
-  gem "pry"
   gem "rspec-rails", ">= 3.9.0"
   # gem "rubocop", "~> 1.26"
   # gem "rubocop-rails", "~> 2.14"
