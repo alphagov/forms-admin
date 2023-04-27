@@ -11,6 +11,8 @@ en:
       models:
         user:
           attributes:
+            organisation_id:
+              blank: Select the user’s organisation
             role:
               blank: Select a role for the user
   address_settings:
@@ -494,6 +496,9 @@ en:
     cancel: Cancel
     edit:
       caption: User details
+      organisation: Organisation
+      organisation_hint: The user will only be able to see their organisation’s forms
+      organisation_prompt: Select an organisation
       role: Role
       title: Edit user
     index:

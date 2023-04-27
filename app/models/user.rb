@@ -11,4 +11,5 @@ class User < ApplicationRecord
   }
 
   validates :role, presence: true
+  validates :organisation_id, presence: true, if: -> { organisation_id_was.present? }
 end

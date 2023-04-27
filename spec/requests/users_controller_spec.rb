@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe UsersController, type: :request do
   describe "#index" do
-    context "when user is a super_admin" do
+    context "when logged in as a super admin" do
       before do
         login_as_super_admin_user
         get users_path
@@ -18,7 +18,7 @@ RSpec.describe UsersController, type: :request do
       end
     end
 
-    context "when user is not a super_admin" do
+    context "when logged in without super admin role" do
       it "is forbidden" do
         login_as_editor_user
         get users_path
@@ -30,7 +30,7 @@ RSpec.describe UsersController, type: :request do
   describe "#edit" do
     let(:user) { create(:user) }
 
-    context "when user is a super_admin" do
+    context "when logged in as a super admin" do
       before do
         login_as_super_admin_user
         get edit_user_path(user)
@@ -45,7 +45,7 @@ RSpec.describe UsersController, type: :request do
       end
     end
 
-    context "when user is not a super_admin" do
+    context "when logged in without super admin role" do
       it "is forbidden" do
         login_as_editor_user
         get edit_user_path(user)
@@ -58,7 +58,7 @@ RSpec.describe UsersController, type: :request do
     let(:user) { create(:user) }
     let(:role) { :super_admin }
 
-    context "when user is a super_admin" do
+    context "when logged in as a super admin" do
       before do
         login_as_super_admin_user
       end
@@ -81,9 +81,33 @@ RSpec.describe UsersController, type: :request do
         expect(response.body).to include "Select a role for the user"
         expect(user.reload.role).not_to eq(nil)
       end
+
+      context "when user belongs to an organistion" do
+        it "does not update user if organisation is not chosen" do
+          put user_path(user), params: { user: { organisation_id: nil } }
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response.body).to include "Select the user’s organisation"
+          expect(user.reload.organisation).not_to eq(nil)
+        end
+      end
+
+      [
+        ["with an unknown organisation", :with_unknown_org],
+        ["with no organisation set", :with_no_org],
+      ].each do |(title, trait)|
+        context "with a user #{title}" do
+          let(:user) { create(:user, trait) }
+
+          it "does not return error if organisation is not chosen" do
+            put user_path(user), params: { user: { organisation_id: nil } }
+            expect(response).to redirect_to(users_path)
+            expect(user.reload.organisation).to eq(nil)
+          end
+        end
+      end
     end
 
-    context "when user is not a super_admin" do
+    context "when logged in without super admin role" do
       it "is forbidden" do
         login_as_editor_user
         put user_path(user), params: { user: { role: "super_admin" } }

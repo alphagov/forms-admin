@@ -18,9 +18,8 @@ class UsersController < ApplicationController
 
   def update
     authorize @current_user, :can_manage_user?
-    user.role = user_params[:role]
 
-    if user.save
+    if user.update(user_params)
       redirect_to users_path
     else
       render :edit, status: :unprocessable_entity
@@ -30,7 +29,7 @@ class UsersController < ApplicationController
 private
 
   def user_params
-    params.require(:user).permit(:role)
+    params.require(:user).permit(:role, :organisation_id)
   end
 
   def user

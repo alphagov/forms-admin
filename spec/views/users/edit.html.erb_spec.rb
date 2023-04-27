@@ -6,6 +6,10 @@ describe "users/edit.html.erb" do
   end
 
   before do
+    build :organisation, slug: "test-org"
+    build :organisation, slug: "ministry-of-testing"
+    build :organisation, slug: "department-for-tests"
+
     assign(:user, user)
     render template: "users/edit"
   end
@@ -40,9 +44,17 @@ describe "users/edit.html.erb" do
     end
   end
 
-  it "has form fields" do
-    expect(rendered).to have_checked_field("Editor")
-    expect(rendered).to have_unchecked_field("Super admin")
+  describe "form" do
+    it "has role fields" do
+      expect(rendered).to have_checked_field("Editor")
+      expect(rendered).to have_unchecked_field("Super admin")
+    end
+
+    it "has organisation fields" do
+      expect(rendered).to have_select(
+        "Organisation", selected: "Test Org", with_options: ["Department For Tests", "Ministry Of Testing", "Test Org"]
+      )
+    end
   end
 
   context "with a user with an unknown organisation" do
@@ -55,6 +67,10 @@ describe "users/edit.html.erb" do
     it "shows no organisation set" do
       expect(rendered).to have_text("No organisation set")
     end
+
+    it "prompts super admin to choose organisation" do
+      expect(rendered).to have_select("Organisation", with_options: ["Select an organisation"])
+    end
   end
 
   context "with a user with no organisation set" do
@@ -62,6 +78,10 @@ describe "users/edit.html.erb" do
 
     it "shows no organisation set" do
       expect(rendered).to have_text("No organisation set")
+    end
+
+    it "prompts super admin to choose organisation" do
+      expect(rendered).to have_select("Organisation", with_options: ["Select an organisation"])
     end
   end
 end
