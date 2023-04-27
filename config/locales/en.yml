@@ -488,6 +488,7 @@ en:
     cancel: Cancel
     edit:
       caption: User details
+      role: Role
       title: Edit user
     index:
       organisation_blank: No organisation set
