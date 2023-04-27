@@ -1,5 +1,5 @@
 <%= govuk_notification_banner(title_text: t("live_form_warning.notification_title")) do |nb| %>
-  <% nb.heading(text: t("live_form_warning.notification_heading")) %>
+  <% nb.with_heading(text: t("live_form_warning.notification_heading")) %>
   <p>
     <%= t("live_form_warning.notification_content") %>
   </p>
