@@ -100,7 +100,7 @@ group :test do
   gem "pundit-matchers"
 
   # Code coverage reporter
-  gem "simplecov", "~> 0.21.2", require: false
+  gem "simplecov", "~> 0.22.0", require: false
 
   gem "climate_control"
   gem "webdrivers"
