@@ -21,7 +21,7 @@
 
       summary_list.with_row do |row|
         row.with_key { t('users.index.table_headings.organisation') }
-        row.with_value { @user.organisation_slug }
+        row.with_value { @user.organisation&.name || t("users.index.organisation_blank") }
       end
 
       summary_list.with_row do |row|
