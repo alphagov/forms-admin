@@ -34,13 +34,13 @@
       <% if @user.errors.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
-      <span class="govuk-caption-l"><%= @item_name %></span>
-      <%= f.govuk_collection_radio_buttons :role, user_role_options, :value,:label, :description,
-      legend: { text: "Role", size: 'm', tag: 'h2' } %>
 
-    <%= f.govuk_submit t('users.save') do
-      govuk_button_link_to t('users.cancel'), users_path, secondary: true
-    end %>
+      <%= f.govuk_collection_radio_buttons :role, user_role_options, :value,:label, :description,
+        legend: { text: t('users.edit.role'), size: 'm', tag: 'h2' } %>
+
+      <%= f.govuk_submit t('users.save') do
+        govuk_button_link_to t('users.cancel'), users_path, secondary: true
+      end %>
   <% end %>
 
   </div>
