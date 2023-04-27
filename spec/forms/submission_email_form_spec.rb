@@ -41,7 +41,7 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
   describe "#assign_form_values" do
     context "when FormSubmissionEmail does not exist for form" do
       it "sets temporary_submission_email to form submission_email" do
-        submission_email_form = build :submission_email_form, form: form
+        submission_email_form = build(:submission_email_form, form:)
 
         submission_email_form.assign_form_values
         expect(submission_email_form.temporary_submission_email).to eq("curent_value@gds.gov.uk")
@@ -51,7 +51,7 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
     context "when FormSubmissionEmail exists for form" do
       it "sets temporary_submission_email and confirmation_code from model" do
         create :form_submission_email, form_id: form.id, temporary_submission_email: "test@test.gov.uk", confirmation_code: "654321"
-        submission_email_form = build :submission_email_form, form: form
+        submission_email_form = build(:submission_email_form, form:)
 
         submission_email_form.assign_form_values
         expect(submission_email_form.temporary_submission_email).to eq("test@test.gov.uk")
@@ -132,7 +132,7 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
     it "returns false and does not update form if confirmation code does not match" do
       allow(form).to receive(:save!).and_return(true)
       create :form_submission_email, form_id: form.id, confirmation_code: "654321"
-      submission_email_form = build :submission_email_form, :with_user, form: form, temporary_submission_email: "test@test.gov.uk", email_code: "123456"
+      submission_email_form = build :submission_email_form, :with_user, form:, temporary_submission_email: "test@test.gov.uk", email_code: "123456"
       submission_email_form.assign_form_values
       expect(submission_email_form.confirm_confirmation_code).to be_falsy
       # Returns form's submission email is unchanged
