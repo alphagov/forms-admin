@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "ContactDetails controller", type: :request do
+RSpec.describe Forms::ContactDetailsController, type: :request do
   let(:req_headers) do
     {
       "X-API-Token" => Settings.forms_api.auth_key,

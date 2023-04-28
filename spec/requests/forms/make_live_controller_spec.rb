@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "MakeLive controller", type: :request do
+RSpec.describe Forms::MakeLiveController, type: :request do
   let(:form) do
     build(:form,
           :ready_for_live,

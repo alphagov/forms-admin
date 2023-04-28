@@ -1,41 +1,14 @@
 require "rails_helper"
 
-RSpec.describe "WhatHappensNext controller", type: :request do
-  let(:form_response_data) do
-    {
-      id: 2,
-      name: "Form name",
-      submission_email: "submission@email.com",
-      start_page: 1,
-      org: "test-org",
-      what_happens_next_text: "Good things come to those who wait",
-      live_at: nil,
-      has_live_version: false,
-    }.to_json
-  end
-
+RSpec.describe Forms::PrivacyPolicyController, type: :request do
   let(:form) do
-    Form.new(
-      name: "Form name",
-      submission_email: "submission@email.com",
-      id: 2,
-      org: "test-org",
-      what_happens_next_text: "",
-      live_at: nil,
-      has_live_version: false,
-    )
+    build(:form, :live, id: 2, privacy_policy_url: "https://www.example.com")
   end
 
   let(:updated_form) do
-    Form.new({
-      name: "Form name",
-      submission_email: "submission@email.com",
-      id: 2,
-      org: "test-org",
-      what_happens_next_text: "Wait until you get a reply",
-      live_at: nil,
-      has_live_version: false,
-    })
+    new_form = form
+    new_form.privacy_policy_url = "https://www.example.gov.uk/privacy-policy"
+    new_form
   end
 
   let(:req_headers) do
@@ -71,7 +44,7 @@ RSpec.describe "WhatHappensNext controller", type: :request do
         mock.put "/api/v1/forms/2", post_headers
         mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
       end
-      get what_happens_next_path(form_id: 2)
+      get privacy_policy_path(form_id: 2)
     end
 
     it "Reads the form from the API" do
@@ -85,7 +58,7 @@ RSpec.describe "WhatHappensNext controller", type: :request do
         mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
         mock.put "/api/v1/forms/2", post_headers
       end
-      post what_happens_next_path(form_id: 2), params: { forms_what_happens_next_form: { what_happens_next_text: "Wait until you get a reply" } }
+      post privacy_policy_path(form_id: 2), params: { forms_privacy_policy_form: { privacy_policy_url: "https://www.example.gov.uk/privacy-policy" } }
     end
 
     it "Reads the form from the API" do

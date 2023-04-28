@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "ChangeName controller", type: :request do
+RSpec.describe Forms::ChangeNameController, type: :request do
   let(:form_data) do
     {
       name: "Form name",
