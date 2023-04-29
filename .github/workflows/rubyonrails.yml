@@ -32,7 +32,7 @@ jobs:
       - name: Install Chrome for integration/e2e tests
         uses: nanasess/setup-chromedriver@v2.0.0
       - name: Install Ruby and gems
-        uses: ruby/setup-ruby@6cecb48364174b0952995175c55f9bf5527e6682 # v1.117.0
+        uses: ruby/setup-ruby@d2b39ad0b52eca07d23f3aa14fdf2a3fcc1f411c # v1.117.0
         with:
           bundler-cache: true
       - name: Install frontend dependencies
@@ -54,7 +54,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Install Ruby and gems
-        uses: ruby/setup-ruby@6cecb48364174b0952995175c55f9bf5527e6682 # v1.117.0
+        uses: ruby/setup-ruby@d2b39ad0b52eca07d23f3aa14fdf2a3fcc1f411c # v1.117.0
         with:
           bundler-cache: true
       - name: Install frontend dependencies
