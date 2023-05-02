@@ -72,7 +72,6 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "faker"
 
-  gem "pry"
   gem "rspec-rails", ">= 3.9.0"
   # gem "rubocop", "~> 1.26"
   # gem "rubocop-rails", "~> 2.14"
@@ -101,7 +100,7 @@ group :test do
   gem "pundit-matchers"
 
   # Code coverage reporter
-  gem "simplecov", "~> 0.21.2", require: false
+  gem "simplecov", "~> 0.22.0", require: false
 
   gem "climate_control"
   gem "webdrivers"
