@@ -183,7 +183,7 @@ RSpec.describe FormsController, type: :request do
           mock.get "/api/v1/forms?org=", headers, forms_response.to_json, 200
         end
 
-        login_as build(:user, organisation_slug: nil)
+        login_as build(:user, :with_no_org)
 
         get root_path
       end

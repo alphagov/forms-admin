@@ -35,6 +35,7 @@ class FormPolicy
 private
 
   def users_organisation_owns_form
-    user.organisation_slug == form.org
+    organisation_slug = user.organisation&.slug || user.organisation_slug
+    organisation_slug == form.org
   end
 end

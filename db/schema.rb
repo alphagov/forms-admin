@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_26_150135) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_26_150951) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_26_150135) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "role", default: "editor"
+    t.bigint "organisation_id"
+    t.index ["organisation_id"], name: "index_users_on_organisation_id"
   end
 
+  add_foreign_key "users", "organisations"
 end

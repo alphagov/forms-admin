@@ -15,6 +15,12 @@ describe FormPolicy do
 
         it { is_expected.to forbid_actions(%i[can_view_form]) }
       end
+
+      context "with an organisation not in the organisation table" do
+        let(:user) { build :user, :with_unknown_org, organisation_slug: "gds" }
+
+        it { is_expected.to permit_actions(%i[can_view_form]) }
+      end
     end
   end
 
@@ -64,8 +70,8 @@ describe FormPolicy do
       end
     end
 
-    context "with a user with no organisation_slug" do
-      let(:user) { build :user, organisation_slug: nil }
+    context "with a user with no organisation" do
+      let(:user) { build :user, :with_no_org }
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
