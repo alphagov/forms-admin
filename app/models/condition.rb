@@ -7,8 +7,7 @@ class Condition < ActiveResource::Base
   belongs_to :page
 
   def has_errors?
-    # TODO: remove defined check once custom errors are in API
-    defined?(validation_errors) && validation_errors.any?
+    validation_errors.any?
   end
 
   def errors_include(error_name)
