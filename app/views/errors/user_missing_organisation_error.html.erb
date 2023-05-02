@@ -3,7 +3,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l"><%= t('user_missing_organisation.title') %></h1>
-    <%= simple_format(t('user_missing_organisation.body'), class: 'govuk-body') %>
+    <%= simple_format(t('user_missing_organisation.body', contact_link: contact_link), class: 'govuk-body') %>
   </div>
 </div>
 

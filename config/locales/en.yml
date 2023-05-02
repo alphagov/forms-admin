@@ -481,9 +481,7 @@ en:
     in_progress: in progress
     not_started: not started
   user_missing_organisation:
-    body: 'Contact the GOV.UK Forms team to assign an organisation to your account.
-
-      '
+    body: "%{contact_link} to assign an organisation to your account."
     title: You do not have an organisation set for your account
   users:
     cancel: Cancel
