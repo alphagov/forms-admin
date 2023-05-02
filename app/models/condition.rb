@@ -10,7 +10,7 @@ class Condition < ActiveResource::Base
     validation_errors.any?
   end
 
-  def errors_include(error_name)
+  def errors_include?(error_name)
     has_errors? && validation_errors.map(&:name)&.include?(error_name)
   end
 end

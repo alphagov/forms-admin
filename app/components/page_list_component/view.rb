@@ -34,7 +34,7 @@ module PageListComponent
     end
 
     def answer_value_text_for_condition(condition, edit_link)
-      if condition.errors_include("answer_value_doesnt_exist")
+      if condition.errors_include?("answer_value_doesnt_exist")
         error_link("answer_value_doesnt_exist", edit_link)
       else
         t("page_conditions.condition_answer_value_text", answer_value: condition.answer_value)
@@ -42,8 +42,8 @@ module PageListComponent
     end
 
     def goto_page_text_for_condition(condition, edit_link)
-      if condition.errors_include("goto_page_doesnt_exist")
-        error_key = condition.errors_include("answer_value_doesnt_exist") ? "goto_page_doesnt_exist_and_nor_does_answer_value" : "goto_page_doesnt_exist"
+      if condition.errors_include?("goto_page_doesnt_exist")
+        error_key = condition.errors_include?("answer_value_doesnt_exist") ? "goto_page_doesnt_exist_and_nor_does_answer_value" : "goto_page_doesnt_exist"
         error_link(error_key, edit_link)
       else
         t("page_conditions.condition_goto_page_text", goto_page_text: question_text_for_page(condition.goto_page_id))
