@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Users", type: :request do
+RSpec.describe UsersController, type: :request do
   describe "#index" do
     context "when user is a super_admin" do
       before do
