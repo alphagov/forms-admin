@@ -359,7 +359,7 @@ en:
     set_email_form: Set the email address for completed forms
     text_settings: How much text will people need to provide?
     type_of_answer: What kind of answer do you need to this question?
-    user_missing_organisation: You have not been assigned an organisation
+    user_missing_organisation: You do not have an organisation set for your account
     what_happens_next_form: Form submitted page
     your_changes_are_live: Your changes are live
     your_form_is_live: Your form is live
@@ -481,10 +481,8 @@ en:
     in_progress: in progress
     not_started: not started
   user_missing_organisation:
-    body: 'You don’t have an organisation assigned to your account. Contact a GOV.UK Forms super admin to assign an organisation to your account. You will then be able to use GOV.UK Forms.
-
-      '
-    title: You have not been assigned an organisation
+    body: "%{contact_link} to assign an organisation to your account."
+    title: You do not have an organisation set for your account
   users:
     cancel: Cancel
     edit:
