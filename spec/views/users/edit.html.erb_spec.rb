@@ -30,6 +30,10 @@ describe "users/edit.html.erb" do
     it "contains org" do
       expect(summary_list).to have_text(user.organisation_slug)
     end
+
+    it "contains role" do
+      expect(summary_list).to have_text("Editor")
+    end
   end
 
   it "has form fields" do
