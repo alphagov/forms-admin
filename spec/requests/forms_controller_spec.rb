@@ -79,6 +79,31 @@ RSpec.describe FormsController, type: :request do
         expect(response.status).to eq(403)
       end
     end
+
+    context "with a user with no organisation" do
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/2", headers, form.to_json, 200
+          mock.get "/api/v1/forms/2/pages", headers, form.pages.to_json, 200
+        end
+
+        login_as build(:user, :with_no_org)
+
+        get form_path(2)
+      end
+
+      after do
+        logout
+      end
+
+      it "returns 403 Forbidden" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders organisation missing page" do
+        expect(response).to render_template("errors/user_missing_organisation_error")
+      end
+    end
   end
 
   describe "no form found" do
@@ -177,7 +202,7 @@ RSpec.describe FormsController, type: :request do
       expect(ActiveResource::HttpMock.requests).to include forms_request
     end
 
-    context "when the user does not hve a valid organisation set" do
+    context "with a user with no organisation" do
       before do
         ActiveResource::HttpMock.respond_to do |mock|
           mock.get "/api/v1/forms?org=", headers, forms_response.to_json, 200
@@ -192,7 +217,7 @@ RSpec.describe FormsController, type: :request do
         expect(response).to have_http_status(:forbidden)
       end
 
-      it "renders correct page" do
+      it "renders organisation missing page" do
         expect(response).to render_template("errors/user_missing_organisation_error")
       end
 
@@ -217,12 +242,18 @@ RSpec.describe FormsController, type: :request do
       new_form
     end
 
+    let(:user) do
+      editor_user
+    end
+
     before do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/2", headers, form.to_json, 200
         mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
         mock.put "/api/v1/forms/2", post_headers
       end
+
+      login_as user
 
       post form_pages_path(2), params: { forms_mark_complete_form: { mark_complete: "true" } }
     end
@@ -260,6 +291,24 @@ RSpec.describe FormsController, type: :request do
 
       it "sets a flash message" do
         expect(flash[:message]).to eq "Save unsuccessful"
+      end
+    end
+
+    context "with a user with no organisation" do
+      let(:user) do
+        build :user, :with_no_org
+      end
+
+      it "returns 403 Forbidden" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders organisation missing page" do
+        expect(response).to render_template("errors/user_missing_organisation_error")
+      end
+
+      it "does not update the form on the API" do
+        expect(updated_form).not_to have_been_updated
       end
     end
   end
