@@ -41,8 +41,8 @@
 
                 <dd class="govuk-summary-list__value">
                   <%= t("page_conditions.condition_check_page_text", check_page_text: question_text_for_page(condition.check_page_id)) %><br>
-                  <%= answer_value_text_for_condition(condition, edit_condition_path(form_id: @form_id, page_id: page.id, condition_id: condition.id)) %><br>
-                  <%= goto_page_text_for_condition(condition, edit_condition_path(form_id: @form_id, page_id: page.id, condition_id: condition.id)) %>
+                  <%= answer_value_text_for_condition(condition, edit_condition_path(form_id: @form_id, page_id: page.id, condition_id: condition.id), index + 1) %><br>
+                  <%= goto_page_text_for_condition(condition, edit_condition_path(form_id: @form_id, page_id: page.id, condition_id: condition.id), index + 1) %>
                 </dd>
 
                 <dd class="govuk-summary-list__actions govuk-!-padding-bottom-6">

@@ -89,7 +89,7 @@ RSpec.describe PageListComponent::View, type: :component do
 
           it "renders the routing details" do
             condition_check_page_text = I18n.t("page_conditions.condition_check_page_text", check_page_text: pages[0].question_text)
-            condition_answer_value_error = I18n.t("page_conditions.errors.answer_value_doesnt_exist")
+            condition_answer_value_error = I18n.t("page_conditions.errors.answer_value_doesnt_exist", page_index: 1)
             condition_goto_page_text = I18n.t("page_conditions.condition_goto_page_text", goto_page_text: pages[2].question_text)
             expect(page).to have_css("dd.govuk-summary-list__value", text: condition_check_page_text)
             expect(page).to have_link(condition_answer_value_error, href: edit_condition_path)
@@ -107,7 +107,7 @@ RSpec.describe PageListComponent::View, type: :component do
           it "renders the routing details" do
             condition_check_page_text = I18n.t("page_conditions.condition_check_page_text", check_page_text: pages[0].question_text)
             condition_answer_value_text = I18n.t("page_conditions.condition_answer_value_text", answer_value: "Wales")
-            condition_goto_page_error = I18n.t("page_conditions.errors.goto_page_doesnt_exist")
+            condition_goto_page_error = I18n.t("page_conditions.errors.goto_page_doesnt_exist", page_index: 1)
             expect(page).to have_css("dd.govuk-summary-list__value", text: condition_check_page_text)
             expect(page).to have_css("dd.govuk-summary-list__value", text: condition_answer_value_text)
             expect(page).to have_link(condition_goto_page_error, href: edit_condition_path)
@@ -123,8 +123,8 @@ RSpec.describe PageListComponent::View, type: :component do
 
           it "renders the routing details" do
             condition_check_page_text = I18n.t("page_conditions.condition_check_page_text", check_page_text: pages[0].question_text)
-            condition_answer_value_error = I18n.t("page_conditions.errors.answer_value_doesnt_exist")
-            condition_goto_page_error = I18n.t("page_conditions.errors.goto_page_doesnt_exist_and_nor_does_answer_value")
+            condition_answer_value_error = I18n.t("page_conditions.errors.answer_value_doesnt_exist", page_index: 1)
+            condition_goto_page_error = I18n.t("page_conditions.errors.goto_page_doesnt_exist_and_nor_does_answer_value", page_index: 1)
             expect(page).to have_css("dd.govuk-summary-list__value", text: condition_check_page_text)
             expect(page).to have_link(condition_answer_value_error, href: edit_condition_path)
             expect(page).to have_link(condition_goto_page_error, href: edit_condition_path)
@@ -181,16 +181,16 @@ RSpec.describe PageListComponent::View, type: :component do
       let(:condition) { (build :condition, :with_answer_value_missing, id: 1, routing_page_id: 1, check_page_id: 1, goto_page_id: 3) }
       let(:error_name) { condition.validation_errors[0].name }
       let(:condition_edit_path) { "https://example.gov.uk" }
-      let(:error_link) { page_list_component.error_link(error_name, condition_edit_path) }
+      let(:error_link) { page_list_component.error_link(error_name, condition_edit_path, 1) }
 
       it "returns the corrrect error html for a given condition" do
-        expect(error_link).to eq "<a class=\"govuk-link app-page_list__route-text--error\" href=\"#{condition_edit_path}\">#{I18n.t("page_conditions.errors.#{error_name}")}</a>"
+        expect(error_link).to eq "<a class=\"govuk-link app-page_list__route-text--error\" href=\"#{condition_edit_path}\">#{I18n.t("page_conditions.errors.#{error_name}", page_index: 1)}</a>"
       end
     end
 
     describe "answer_value_text_for_condition" do
       let(:condition_edit_path) { "https://example.gov.uk" }
-      let(:answer_value_text) { page_list_component.answer_value_text_for_condition(condition, condition_edit_path) }
+      let(:answer_value_text) { page_list_component.answer_value_text_for_condition(condition, condition_edit_path, 1) }
 
       context "when the answer value is present" do
         let(:condition) { (build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3) }
@@ -204,14 +204,14 @@ RSpec.describe PageListComponent::View, type: :component do
         let(:condition) { (build :condition, :with_answer_value_missing, id: 1, routing_page_id: 1, check_page_id: 1, goto_page_id: 3) }
 
         it "returns the error link" do
-          expect(answer_value_text).to eq page_list_component.error_link("answer_value_doesnt_exist", condition_edit_path)
+          expect(answer_value_text).to eq page_list_component.error_link("answer_value_doesnt_exist", condition_edit_path, 1)
         end
       end
     end
 
     describe "goto_page_text_for_condition" do
       let(:condition_edit_path) { "https://example.gov.uk" }
-      let(:goto_page_text) { page_list_component.goto_page_text_for_condition(condition, condition_edit_path) }
+      let(:goto_page_text) { page_list_component.goto_page_text_for_condition(condition, condition_edit_path, 1) }
 
       context "when the goto page is set" do
         let(:condition) { (build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3) }
@@ -225,14 +225,14 @@ RSpec.describe PageListComponent::View, type: :component do
         let(:condition) { (build :condition, :with_goto_page_missing, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales") }
 
         it "returns the goto page error link" do
-          expect(goto_page_text).to eq page_list_component.error_link("goto_page_doesnt_exist", condition_edit_path)
+          expect(goto_page_text).to eq page_list_component.error_link("goto_page_doesnt_exist", condition_edit_path, 1)
         end
 
         context "and the answer value is not present" do
           let(:condition) { (build :condition, :with_answer_value_and_goto_page_missing, id: 1, routing_page_id: 1, check_page_id: 1) }
 
           it "returns the combined answer value and goto page error link" do
-            expect(goto_page_text).to eq page_list_component.error_link("goto_page_doesnt_exist_and_nor_does_answer_value", condition_edit_path)
+            expect(goto_page_text).to eq page_list_component.error_link("goto_page_doesnt_exist_and_nor_does_answer_value", condition_edit_path, 1)
           end
         end
       end
