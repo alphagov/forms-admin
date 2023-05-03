@@ -14,16 +14,22 @@ describe "users/edit.html.erb" do
     expect(rendered).to have_css("h1.govuk-heading-l", text: /Edit user/)
   end
 
-  it "contains name" do
-    expect(rendered).to have_text(user.name)
-  end
+  describe "summary list" do
+    let(:summary_list) do
+      Capybara.string(rendered).find(".govuk-summary-list")
+    end
 
-  it "contains email" do
-    expect(rendered).to have_text(user.email)
-  end
+    it "contains name" do
+      expect(summary_list).to have_text(user.name)
+    end
 
-  it "contains org" do
-    expect(rendered).to have_text(user.organisation_slug)
+    it "contains email" do
+      expect(summary_list).to have_text(user.email)
+    end
+
+    it "contains org" do
+      expect(summary_list).to have_text(user.organisation_slug)
+    end
   end
 
   it "has form fields" do
