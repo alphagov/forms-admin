@@ -4,6 +4,7 @@
 #
 # This workflow will install a prebuilt Ruby version, install dependencies, and
 # run tests and linters.
+
 name: "Ruby on Rails CI"
 on:
   push:
@@ -31,8 +32,9 @@ jobs:
       # Add or replace dependency steps here
       - name: Install Chrome for integration/e2e tests
         uses: nanasess/setup-chromedriver@v2.0.0
+      # The ruby version is taken from the .ruby-version file, no need to specify here.
       - name: Install Ruby and gems
-        uses: ruby/setup-ruby@d2b39ad0b52eca07d23f3aa14fdf2a3fcc1f411c # v1.117.0
+        uses: ruby/setup-ruby@d2b39ad0b52eca07d23f3aa14fdf2a3fcc1f411c
         with:
           bundler-cache: true
       - name: Install frontend dependencies
