@@ -24,18 +24,18 @@ module PageListComponent
       "condition_#{number}"
     end
 
-    def error_link(error_name, edit_link, page_index)
+    def error_link(error_key:, edit_link:, page_index:, field:)
       content_tag(
         :a,
-        I18n.t("page_conditions.errors.#{error_name}", page_index:),
+        I18n.t("page_conditions.errors.#{error_key}", page_index:),
         class: "govuk-link app-page_list__route-text--error",
-        href: edit_link,
+        href: "#{edit_link}##{Pages::ConditionsForm.new.id_for_field(field)}",
       )
     end
 
     def answer_value_text_for_condition(condition, edit_link, page_index)
       if condition.errors_include?("answer_value_doesnt_exist")
-        error_link("answer_value_doesnt_exist", edit_link, page_index)
+        error_link(error_key: "answer_value_doesnt_exist", edit_link:, page_index:, field: :answer_value)
       else
         t("page_conditions.condition_answer_value_text", answer_value: condition.answer_value)
       end
@@ -44,7 +44,7 @@ module PageListComponent
     def goto_page_text_for_condition(condition, edit_link, page_index)
       if condition.errors_include?("goto_page_doesnt_exist")
         error_key = condition.errors_include?("answer_value_doesnt_exist") ? "goto_page_doesnt_exist_and_nor_does_answer_value" : "goto_page_doesnt_exist"
-        error_link(error_key, edit_link, page_index)
+        error_link(error_key:, edit_link:, page_index:, field: :goto_page_id)
       else
         t("page_conditions.condition_goto_page_text", goto_page_text: question_text_for_page(condition.goto_page_id))
       end

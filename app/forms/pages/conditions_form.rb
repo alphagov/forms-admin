@@ -37,4 +37,8 @@ class Pages::ConditionsForm
     # TODO: add end of form/check your answers as an option
     [OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")), form.pages.map { |p| OpenStruct.new(id: p.id, question_text: p.question_text) }].flatten
   end
+
+  def id_for_field(field)
+    "condition_#{field}"
+  end
 end
