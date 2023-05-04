@@ -318,6 +318,7 @@ en:
   page_conditions:
     condition_answer_value_text: is answered as “%{answer_value}”
     condition_check_page_text: If the question “%{check_page_text}”
+    condition_check_page_text_with_errors: For the question “%{check_page_text}”
     condition_compact_html: 'If the answer is “%{answer_value}”<br> then skip to question %{goto_page_number}: “%{goto_page_text}”'
     condition_goto_page_text: take the person to “%{goto_page_text}”
     condition_name: Question %{page_index}’s route
