@@ -184,6 +184,10 @@ In order to use this:
 - uncomment out the exception triggers in [this file](config/initializers/sentry.rb)
 - Build the project and watch the errors come through on Sentry
 
+## Updating versions
+
+Use the [update_app_versions.sh script in forms-deploy](https://github.com/alphagov/forms-deploy/blob/main/support/update_app_versions.sh)
+
 ## Support
 
 Raise a Github issue if you need support.
