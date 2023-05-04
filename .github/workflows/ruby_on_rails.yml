@@ -49,18 +49,6 @@ jobs:
       # Add or replace test runners here
       - name: Run tests
         run: bundle exec rspec
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Install Ruby and gems
-        uses: ruby/setup-ruby@d2b39ad0b52eca07d23f3aa14fdf2a3fcc1f411c # v1.117.0
-        with:
-          bundler-cache: true
-      - name: Install frontend dependencies
-        run: npm ci
       # Add or replace any other lints here
       - name: Security audit dependencies
         run: bundler exec bundle audit check
