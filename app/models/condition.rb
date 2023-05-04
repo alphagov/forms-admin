@@ -20,6 +20,6 @@ class Condition < ActiveResource::Base
   end
 
   def errors_include?(error_name)
-    has_errors? && validation_errors.map(&:name)&.include?(error_name)
+    has_errors? && validation_errors.map(&:name).include?(error_name)
   end
 end
