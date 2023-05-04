@@ -25,10 +25,12 @@ module AuthenticationFeatureHelpers
 end
 
 RSpec.configure do |config|
+  config.include AuthenticationFeatureHelpers, type: :feature
   config.include AuthenticationFeatureHelpers, type: :request
-  # TODO: This might be useful when we check for permissions in app, not in
-  # signon
-  #   config.before(:each, type: :request) do
-  #     login_as_editor_user
-  #   end
+  config.before(:example, type: :feature) do
+    login_as_editor_user
+  end
+  config.before(:example, type: :request) do
+    login_as_editor_user
+  end
 end

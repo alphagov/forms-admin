@@ -188,10 +188,6 @@ RSpec.describe FormsController, type: :request do
         get root_path
       end
 
-      after do
-        logout
-      end
-
       it "returns 200" do
         expect(response).to have_http_status(:ok)
       end
