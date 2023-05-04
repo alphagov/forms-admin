@@ -57,8 +57,6 @@ class Pages::ConditionsController < PagesController
   def destroy
     condition = Condition.find(params[:condition_id], params: { form_id: @form.id, page_id: page.id })
 
-    condition_form = Pages::ConditionsForm.new(form: @form, page:, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id)
-
     case condition_form_params[:confirm_deletion]
     when "false"
       redirect_to edit_condition_path(@form.id, page.id, params[:condition_id])
@@ -72,6 +70,8 @@ class Pages::ConditionsController < PagesController
       raise StandardError, "Deletion unsuccessful"
     end
   rescue StandardError
+    condition_form = Pages::ConditionsForm.new(form: @form, page:, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id)
+
     render template: "pages/conditions/delete", locals: { condition_form: }, status: :unprocessable_entity
   end
 
