@@ -27,6 +27,10 @@ describe "users/edit.html.erb" do
       expect(summary_list).to have_text(user.email)
     end
 
+    it "contains organisation slug from GOV.UK Signon" do
+      expect(summary_list).to have_text(user.organisation_slug)
+    end
+
     it "contains organisation name" do
       expect(rendered).to have_text(user.organisation.name)
     end
@@ -43,6 +47,10 @@ describe "users/edit.html.erb" do
 
   context "with a user with an unknown organisation" do
     let(:user) { build(:user, :with_unknown_org, id: 1) }
+
+    it "shows the organisation slug" do
+      expect(rendered).to have_text("unknown-org")
+    end
 
     it "shows no organisation set" do
       expect(rendered).to have_text("No organisation set")

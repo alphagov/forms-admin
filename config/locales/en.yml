@@ -503,6 +503,7 @@ en:
         name: Name
         organisation: Organisation
         role: Role
+        signon_organisation: Signon organisation slug
       title: Users
       users_caption: All users
     roles:
