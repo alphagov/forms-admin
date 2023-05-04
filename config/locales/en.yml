@@ -324,7 +324,6 @@ en:
     errors:
       answer_value_doesnt_exist: select the answer you want to base question %{page_index}’s route on
       goto_page_doesnt_exist: select the question or page you want to take the person to, or delete question %{page_index}’s route
-      goto_page_doesnt_exist_and_nor_does_answer_value: and select the question or page you want to take the person to, or delete this route
     route: Route
   page_options_service:
     answer_type: Answer type

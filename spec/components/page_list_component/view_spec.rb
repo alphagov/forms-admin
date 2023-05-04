@@ -124,7 +124,7 @@ RSpec.describe PageListComponent::View, type: :component do
           it "renders the routing details" do
             condition_check_page_text = I18n.t("page_conditions.condition_check_page_text", check_page_text: pages[0].question_text)
             condition_answer_value_error = I18n.t("page_conditions.errors.answer_value_doesnt_exist", page_index: 1)
-            condition_goto_page_error = I18n.t("page_conditions.errors.goto_page_doesnt_exist_and_nor_does_answer_value", page_index: 1)
+            condition_goto_page_error = I18n.t("page_conditions.errors.goto_page_doesnt_exist", page_index: 1)
             expect(page).to have_css("dd.govuk-summary-list__value", text: condition_check_page_text)
             expect(page).to have_link(condition_answer_value_error, href: "#{edit_condition_path}##{Pages::ConditionsForm.new.id_for_field(:answer_value)}")
             expect(page).to have_link(condition_goto_page_error, href: "#{edit_condition_path}##{Pages::ConditionsForm.new.id_for_field(:goto_page_id)}")
@@ -226,14 +226,6 @@ RSpec.describe PageListComponent::View, type: :component do
 
         it "returns the goto page error link" do
           expect(goto_page_text).to eq page_list_component.error_link(error_key: "goto_page_doesnt_exist", edit_link: condition_edit_path, page_index: 1, field: :goto_page_id)
-        end
-
-        context "and the answer value is not present" do
-          let(:condition) { (build :condition, :with_answer_value_and_goto_page_missing, id: 1, routing_page_id: 1, check_page_id: 1) }
-
-          it "returns the combined answer value and goto page error link" do
-            expect(goto_page_text).to eq page_list_component.error_link(error_key: "goto_page_doesnt_exist_and_nor_does_answer_value", edit_link: condition_edit_path, page_index: 1, field: :goto_page_id)
-          end
         end
       end
     end
