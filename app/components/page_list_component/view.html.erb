@@ -4,10 +4,11 @@
     <%= form_with url: move_page_url(@form_id), method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
       <dl class="govuk-summary-list">
         <% @pages.each_with_index do |page, index| %>
+          <% page_index = index + 1 %>
           <div class="govuk-summary-list__row">
 
             <dt class="govuk-summary-list__key app-page-list__key">
-              <%= index + 1 %>
+              <%= page_index %>
             </dt>
 
             <dd class="govuk-summary-list__value">
@@ -18,15 +19,15 @@
 
               <div class="govuk-button-group form-action-group app-page-list__button-group">
                 <% if show_up_button(index) %>
-                  <%= f.govuk_submit t("forms.form_overview.move_up_html", title: index + 1), secondary: true, name: 'move_direction[up]', value: page.id %>
+                  <%= f.govuk_submit t("forms.form_overview.move_up_html", title: page_index), secondary: true, name: 'move_direction[up]', value: page.id %>
                 <% end %>
                 <% if show_down_button(index)  %>
-                  <%= f.govuk_submit t("forms.form_overview.move_down_html", title: index + 1), secondary: true, name: 'move_direction[down]', value: page.id %>
+                  <%= f.govuk_submit t("forms.form_overview.move_down_html", title: page_index), secondary: true, name: 'move_direction[down]', value: page.id %>
                 <% end %>
               </div>
 
               <%= govuk_link_to edit_page_path(@form_id, page.id) do %>
-                <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= index + 1 %></span>
+                <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= page_index %></span>
               <% end %>
 
             </dd>
@@ -36,18 +37,18 @@
             <% page.conditions.each do |condition| %>
               <div id="<%= error_id(condition.id) %>" class="govuk-summary-list__row app-page-list__row <%= class_names( "govuk-form-group--error": condition.has_errors?) %>">
                 <dt class="govuk-summary-list__key govuk-summary-list__key app-page-list__key">
-                  <%= t("page_conditions.condition_name", page_index: index + 1) %>
+                  <%= t("page_conditions.condition_name", page_index:) %>
                 </dt>
 
                 <dd class="govuk-summary-list__value">
                   <%= t("page_conditions.condition_check_page_text", check_page_text: question_text_for_page(condition.check_page_id)) %><br>
-                  <%= answer_value_text_for_condition(condition, edit_condition_path(form_id: @form_id, page_id: page.id, condition_id: condition.id), index + 1) %><br>
-                  <%= goto_page_text_for_condition(condition, edit_condition_path(form_id: @form_id, page_id: page.id, condition_id: condition.id), index + 1) %>
+                  <%= answer_value_text_for_condition(condition, edit_condition_path(form_id: @form_id, page_id: page.id, condition_id: condition.id), page_index) %><br>
+                  <%= goto_page_text_for_condition(condition, edit_condition_path(form_id: @form_id, page_id: page.id, condition_id: condition.id), page_index) %>
                 </dd>
 
                 <dd class="govuk-summary-list__actions govuk-!-padding-bottom-6">
                   <%= govuk_link_to edit_condition_path(form_id: @form_id, page_id: page.id, condition_id: condition.id) do %>
-                    <%= t("forms.form_overview.edit_with_visually_hidden_text_html", visually_hidden_text: t("page_conditions.condition_name", page_index: index + 1)) %>
+                    <%= t("forms.form_overview.edit_with_visually_hidden_text_html", visually_hidden_text: t("page_conditions.condition_name", page_index:)) %>
                   <% end %>
                 </dd>
               </div>
