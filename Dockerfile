@@ -1,4 +1,4 @@
-FROM ruby:3.2.0-alpine3.17@sha256:c690d3b45ef65e0098104c272f1736b0595b824908d5639c3a3d17636581a905 AS build
+FROM ruby:3.2.2-alpine3.17@sha256:b529c297be08b526c03d9f3d6911e13b15be7b9e25b992f4584e9208108bb132 AS build
 
 WORKDIR /app
 
@@ -30,7 +30,7 @@ COPY --chown=ruby:ruby . .
 # even though the command doesn't use the value itself
 RUN SECRET_KEY_BASE=dummyvalue rails assets:precompile
 
-FROM ruby:3.2.0-alpine3.17@sha256:c690d3b45ef65e0098104c272f1736b0595b824908d5639c3a3d17636581a905 AS app
+FROM ruby:3.2.2-alpine3.17@sha256:b529c297be08b526c03d9f3d6911e13b15be7b9e25b992f4584e9208108bb132 AS app
 
 ENV RAILS_ENV="${RAILS_ENV:-production}" \
     PATH="${PATH}:/home/ruby/.local/bin" \
