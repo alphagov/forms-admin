@@ -189,7 +189,7 @@ RSpec.describe FormsController, type: :request do
       end
 
       after do
-        GDS::SSO.test_user = nil
+        logout
       end
 
       it "returns 200" do

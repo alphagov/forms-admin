@@ -3,6 +3,10 @@ module AuthenticationFeatureHelpers
     GDS::SSO.test_user = user
   end
 
+  def logout
+    GDS::SSO.test_user = nil
+  end
+
   def editor_user
     @editor_user ||= FactoryBot.build(:user)
   end
