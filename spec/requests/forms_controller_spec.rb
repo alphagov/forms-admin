@@ -188,8 +188,8 @@ RSpec.describe FormsController, type: :request do
         get root_path
       end
 
-      it "returns 200" do
-        expect(response).to have_http_status(:ok)
+      it "returns 403 Forbidden" do
+        expect(response).to have_http_status(:forbidden)
       end
 
       it "renders correct page" do
