@@ -27,7 +27,9 @@ describe FormPolicy do
       context "with an organisation not in the organisation table" do
         let(:user) { build :user, :with_unknown_org, organisation_slug: "gds" }
 
-        it { is_expected.to permit_actions(%i[can_view_form]) }
+        it "raises an error" do
+          expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+        end
       end
     end
   end
@@ -63,6 +65,17 @@ describe FormPolicy do
     end
 
     let(:gds_forms) { build_list :form, 2, org: "gds" }
+
+    it "uses organisation slug to scope what forms a user can see" do
+      organisation_slug = instance_double(String)
+      scope = class_spy(Form)
+
+      allow(user).to receive_message_chain(:organisation, :slug) { organisation_slug } # rubocop:disable RSpec/MessageChain
+
+      described_class.new(user, scope).resolve
+
+      expect(scope).to have_received(:where).with(org: organisation_slug)
+    end
 
     context "with no organisation set" do
       let(:user) { build :user, :with_no_org }
