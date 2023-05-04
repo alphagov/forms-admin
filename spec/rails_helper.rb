@@ -67,13 +67,6 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
-  config.before(:example, type: :request) do |_example|
-    User.create!(email: "email@example.com", organisation_slug: "test-org")
-  end
-
-  config.before(:example, type: :feature) do |_example|
-    User.create!(email: "email@example.com", organisation_slug: "test-org")
-  end
 
   config.include ViewComponent::TestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component

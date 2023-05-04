@@ -188,10 +188,6 @@ RSpec.describe FormsController, type: :request do
         get root_path
       end
 
-      after do
-        GDS::SSO.test_user = nil
-      end
-
       it "returns 200" do
         expect(response).to have_http_status(:ok)
       end
