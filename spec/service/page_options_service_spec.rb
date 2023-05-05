@@ -15,7 +15,8 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq(
-          [{ key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.address_settings_options.names.uk_and_international_addresses") }],
+          [{ key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
+             value: { text: I18n.t("helpers.label.page.address_settings_options.names.uk_and_international_addresses") } }],
         )
       end
     end
@@ -25,7 +26,8 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq(
-          [{ key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.address_settings_options.names.international_addresses") }],
+          [{ key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
+             value: { text: I18n.t("helpers.label.page.address_settings_options.names.international_addresses") } }],
         )
       end
     end
@@ -35,7 +37,8 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq(
-          [{ key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.address_settings_options.names.uk_addresses") }],
+          [{ key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
+             value: { text: I18n.t("helpers.label.page.address_settings_options.names.uk_addresses") } }],
         )
       end
     end
@@ -45,7 +48,8 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq(
-          [{ key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.address_settings_options.names.international_addresses") }],
+          [{ key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
+             value: { text: I18n.t("helpers.label.page.address_settings_options.names.international_addresses") } }],
         )
       end
     end
@@ -55,7 +59,8 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.date_settings_options.input_types.date_of_birth") },
+          { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
+            value: { text: I18n.t("helpers.label.page.date_settings_options.input_types.date_of_birth") } },
         ])
       end
     end
@@ -65,7 +70,8 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.answer_type_options.names.date") },
+          { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
+            value: { text: I18n.t("helpers.label.page.answer_type_options.names.date") } },
         ])
       end
     end
@@ -75,7 +81,8 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.text_settings_options.names.single_line") },
+          { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
+            value: { text: I18n.t("helpers.label.page.text_settings_options.names.single_line") } },
         ])
       end
     end
@@ -85,7 +92,8 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.text_settings_options.names.long_text") },
+          { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
+            value: { text: I18n.t("helpers.label.page.text_settings_options.names.long_text") } },
         ])
       end
     end
@@ -95,8 +103,8 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: "Selection from a list, one option only." },
-          { key: I18n.t("selections_settings.options_title"), value: "<ul class=\"govuk-list\">\n<li>Option 1</li>\n<li>Option 2</li>\n</ul>" },
+          { key:  { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list, one option only." } },
+          { key:  { text: I18n.t("selections_settings.options_title") }, value: { text: "<ul class=\"govuk-list\">\n<li>Option 1</li>\n<li>Option 2</li>\n</ul>" } },
         ])
       end
     end
@@ -106,8 +114,8 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: "Selection from a list" },
-          { key: "Options", value: "<ul class=\"govuk-list\">\n<li>Option 1</li>\n<li>Option 2</li>\n</ul>" },
+          { key:  { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list" } },
+          { key:  { text: "Options" }, value: { text: "<ul class=\"govuk-list\">\n<li>Option 1</li>\n<li>Option 2</li>\n</ul>" } },
         ])
       end
     end
@@ -117,7 +125,8 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: "<ul class=\"govuk-list\">\n<li>Person’s name</li>\n<li>Full name in a single box</li>\n<li>Title not needed</li>\n</ul>" },
+          { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
+            value: { text: "<ul class=\"govuk-list\">\n<li>Person’s name</li>\n<li>Full name in a single box</li>\n<li>Title not needed</li>\n</ul>" } },
         ])
       end
     end
@@ -127,7 +136,8 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: "<ul class=\"govuk-list\">\n<li>Person’s name</li>\n<li>First and last names in separate boxes</li>\n<li>Title needed</li>\n</ul>" },
+          { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
+            value: { text: "<ul class=\"govuk-list\">\n<li>Person’s name</li>\n<li>First and last names in separate boxes</li>\n<li>Title needed</li>\n</ul>" } },
         ])
       end
     end
@@ -137,7 +147,8 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key: I18n.t("helpers.label.page.answer_type_options.title"), value: "<ul class=\"govuk-list\">\n<li>Person’s name</li>\n<li>First, middle and last names in separate boxes</li>\n<li>Title not needed</li>\n</ul>" },
+          { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
+            value: { text: "<ul class=\"govuk-list\">\n<li>Person’s name</li>\n<li>First, middle and last names in separate boxes</li>\n<li>Title not needed</li>\n</ul>" } },
         ])
       end
     end
@@ -148,7 +159,7 @@ describe PageOptionsService do
 
         it "returns the correct options" do
           expect(page_options_service.all_options_for_answer_type).to eq([
-            { key: I18n.t("helpers.label.page.answer_type_options.title"), value: I18n.t("helpers.label.page.answer_type_options.names.#{answer_type}") },
+            { key:  { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: I18n.t("helpers.label.page.answer_type_options.names.#{answer_type}") } },
           ])
         end
       end
@@ -164,7 +175,7 @@ describe PageOptionsService do
 
         it "returns the correct options" do
           expect(page_options_service.all_options_for_answer_type).not_to include([
-            { key: "Answer type", value: "Email address" },
+            { key:  { text: "Answer type" }, value: { text: "Email address" } },
           ])
         end
       end
@@ -175,8 +186,8 @@ describe PageOptionsService do
         it "returns the correct options" do
           expect(page_options_service.all_options_for_answer_type).to include(
             {
-              key: I18n.t("page_conditions.route"),
-              value: I18n.t("page_conditions.condition_compact_html", answer_value: condition_1.answer_value, goto_page_number: 3, goto_page_text: pages[2].question_text),
+              key: { text: I18n.t("page_conditions.route") },
+              value: { text: I18n.t("page_conditions.condition_compact_html", answer_value: condition_1.answer_value, goto_page_number: 3, goto_page_text: pages[2].question_text) },
             },
           )
         end
@@ -188,8 +199,8 @@ describe PageOptionsService do
         it "returns the correct options" do
           expect(page_options_service.all_options_for_answer_type).to include(
             {
-              key: I18n.t("page_conditions.route"),
-              value: "<ol class=\"govuk-list govuk-list--number\"><li>#{I18n.t('page_conditions.condition_compact_html', answer_value: condition_1.answer_value, goto_page_number: 3, goto_page_text: pages[2].question_text)}</li><li>#{I18n.t('page_conditions.condition_compact_html', answer_value: condition_2.answer_value, goto_page_number: 4, goto_page_text: pages[3].question_text)}</li></ol>",
+              key: { text: I18n.t("page_conditions.route") },
+              value: { text: "<ol class=\"govuk-list govuk-list--number\"><li>#{I18n.t('page_conditions.condition_compact_html', answer_value: condition_1.answer_value, goto_page_number: 3, goto_page_text: pages[2].question_text)}</li><li>#{I18n.t('page_conditions.condition_compact_html', answer_value: condition_2.answer_value, goto_page_number: 4, goto_page_text: pages[3].question_text)}</li></ol>" },
             },
           )
         end
