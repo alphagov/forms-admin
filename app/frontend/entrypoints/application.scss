@@ -3,6 +3,6 @@ $govuk-fonts-path: "@govuk/assets/fonts/";
 
 @import "govuk/all";
 @import "../styles/app_select_options";
+@import "../styles/app_summary_card";
 @import "../../components/task_list_component/";
 @import "../../components/page_list_component/";
-@import "../../components/summary_card_component/";
