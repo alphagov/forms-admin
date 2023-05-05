@@ -6,6 +6,14 @@ describe FormPolicy do
   let(:form) { build :form, org: "gds" }
   let(:user) { build :user, organisation_slug: "gds" }
 
+  context "with no organisation set" do
+    let(:user) { build :user, :with_no_org }
+
+    it "raises an error" do
+      expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+    end
+  end
+
   describe "#can_view_form?" do
     context "with a form editor" do
       it { is_expected.to permit_actions(%i[can_view_form]) }
@@ -14,6 +22,12 @@ describe FormPolicy do
         let(:user) { build :user, organisation_slug: "non-gds" }
 
         it { is_expected.to forbid_actions(%i[can_view_form]) }
+      end
+
+      context "with an organisation not in the organisation table" do
+        let(:user) { build :user, :with_unknown_org, organisation_slug: "gds" }
+
+        it { is_expected.to permit_actions(%i[can_view_form]) }
       end
     end
   end
@@ -50,6 +64,14 @@ describe FormPolicy do
 
     let(:gds_forms) { build_list :form, 2, org: "gds" }
 
+    context "with no organisation set" do
+      let(:user) { build :user, :with_no_org }
+
+      it "raises an error" do
+        expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+      end
+    end
+
     context "with a form editor" do
       before do
         ActiveResource::HttpMock.respond_to do |mock|
@@ -64,8 +86,8 @@ describe FormPolicy do
       end
     end
 
-    context "with a user with no organisation_slug" do
-      let(:user) { build :user, organisation_slug: nil }
+    context "with a user with no organisation" do
+      let(:user) { build :user, :with_no_org }
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
@@ -73,7 +95,7 @@ describe FormPolicy do
         end
       end
 
-      it "throws an eception" do
+      it "raises an error" do
         expect { policy_scope.resolve }.to raise_error(FormPolicy::UserMissingOrganisationError)
         forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?org=", {}, headers)
         expect(ActiveResource::HttpMock.requests).not_to include forms_request

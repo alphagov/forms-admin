@@ -6,10 +6,12 @@ class FormsController < ApplicationController
     render template: "errors/not_found", status: :not_found
   end
 
+  rescue_from FormPolicy::UserMissingOrganisationError do
+    render template: "errors/user_missing_organisation_error", status: :forbidden
+  end
+
   def index
     @forms = policy_scope(Form) || []
-  rescue FormPolicy::UserMissingOrganisationError
-    render template: "errors/user_missing_organisation_error", status: :ok
   end
 
   def show
