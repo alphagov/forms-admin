@@ -1,9 +1,11 @@
 require "rails_helper"
 
 describe "forms/index.html.erb" do
+  let(:user) { build :user }
   let(:forms) { [] }
 
   before do
+    assign(:current_user, user)
     assign(:forms, forms)
     render template: "forms/index"
   end
@@ -14,8 +16,7 @@ describe "forms/index.html.erb" do
     end
 
     it "does not contain a a list of forms" do
-      expect(rendered).not_to have_text "Your forms"
-      expect(rendered).not_to have_css ".govuk-summary-list"
+      expect(rendered).not_to have_table
     end
   end
 
@@ -33,8 +34,11 @@ describe "forms/index.html.erb" do
     end
 
     it "does contain a table listing the users forms and their status" do
-      expect(rendered).to have_css(".govuk-table__caption", text: "Your forms")
       expect(rendered).to have_css "tbody .govuk-table__row", count: 3
+    end
+
+    it "has a table caption with the name of the organisation that owns the forms" do
+      expect(rendered).to have_css(".govuk-table__caption", text: "#{user.organisation.name} forms")
     end
 
     it "displays links for each form" do
@@ -70,7 +74,6 @@ describe "forms/index.html.erb" do
       end
 
       it "does contain a table listing the users forms and their status" do
-        expect(rendered).to have_css(".govuk-table__caption", text: "Your forms")
         expect(rendered).to have_css "tbody .govuk-table__row", count: 2
       end
 
