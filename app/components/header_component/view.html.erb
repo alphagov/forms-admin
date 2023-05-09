@@ -1,12 +1,12 @@
 <% if is_signed_in? %>
   <%= govuk_header navigation_classes: ["govuk-header__navigation--end"] do |header|
-    header.product_name(name: t("header.product_name"))
-    header.navigation_item(text: t('header.users'), href: list_of_users_path, active: false) if list_of_users_path.present?
-    header.navigation_item(text: user_name, href: user_profile_link, active: false) if user_name.present?
-    header.navigation_item(text: t("header.sign_out"), href: signout_link, active: false)
+    header.with_product_name(name: t("header.product_name"))
+    header.with_navigation_item(text: t('header.users'), href: list_of_users_path, active: false) if list_of_users_path.present?
+    header.with_navigation_item(text: user_name, href: user_profile_link, active: false) if user_name.present?
+    header.with_navigation_item(text: t("header.sign_out"), href: signout_link, active: false)
   end %>
 <% else %>
   <%= govuk_header do |header|
-    header.product_name(name: t("header.product_name"))
+    header.with_product_name(name: t("header.product_name"))
   end %>
 <% end %>

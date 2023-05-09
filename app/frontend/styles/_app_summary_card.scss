@@ -1,0 +1,22 @@
+.app-summary-card {
+  // Summary list component overrides
+  .govuk-summary-list {
+    @include govuk-font($size: 16);
+    margin-bottom: govuk-spacing(-2);
+  }
+
+  .govuk-summary-list .govuk-list {
+    @include govuk-font($size: 16);
+    margin-bottom: govuk-spacing(-2);
+  }
+
+  // Remove last item’s bottom border on mobile
+  .govuk-summary-list__row:last-child {
+    border-bottom: 0;
+  }
+
+  // Remove lsat item’s bottom border on tablet and larger
+  .govuk-summary-list__row:last-child > * {
+    border-bottom: 0;
+  }
+}

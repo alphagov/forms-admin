@@ -53,8 +53,8 @@ gem "bootsnap", require: false
 gem "gds-sso"
 
 # Use govuk-components for displaying govuk themed forms
-gem "govuk-components", "~> 3.3.0"
-gem "govuk_design_system_formbuilder", "~> 3.3.0"
+gem "govuk-components", "~> 4.0.0"
+gem "govuk_design_system_formbuilder", "~> 4.0.0"
 
 # For structured logging
 gem "lograge"

@@ -12,8 +12,12 @@ class PageSummaryCardDataService
 
   def build_data
     {
-      title: build_title,
+      card: {
+        title: build_title,
+        classes: "app-summary-card",
+      },
       rows: PageOptionsService.call(page: @page, pages: @pages).all_options_for_answer_type,
+
     }
   end
 

@@ -15,7 +15,7 @@ describe PageSummaryCardDataService do
     end
 
     it "includes a title" do
-      expect(service.build_data[:title]).to eq page.question_text
+      expect(service.build_data[:card][:title]).to eq page.question_text
     end
 
     it "includes an array of rows " do
@@ -26,7 +26,7 @@ describe PageSummaryCardDataService do
       let(:optional) { "true" }
 
       it "includes a title with (optional) added to it" do
-        expect(service.build_data[:title]).to eq "#{page.question_text} (optional)"
+        expect(service.build_data[:card][:title]).to eq "#{page.question_text} (optional)"
       end
     end
 
@@ -34,7 +34,7 @@ describe PageSummaryCardDataService do
       let(:optional) { nil }
 
       it "includes a title" do
-        expect(service.build_data[:title]).to eq page.question_text
+        expect(service.build_data[:card][:title]).to eq page.question_text
       end
     end
   end
