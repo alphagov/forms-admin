@@ -78,7 +78,7 @@ private
   end
 
   def and_i_fill_in_the_form_name
-    fill_in "What is the name of your form?", with: form.name
+    fill_in "What’s the name of your form?", with: form.name
     click_button "Save and continue"
   end
 
@@ -96,8 +96,8 @@ private
 
   def then_i_edit_the_name_of_the_form
     click_link "Edit the name of your form"
-    expect(page).to have_field("What is the name of your form?", with: form.name)
-    fill_in "What is the name of your form?", with: "Another form of juggling"
+    expect(page).to have_field("What’s the name of your form?", with: form.name)
+    fill_in "What’s the name of your form?", with: "Another form of juggling"
     click_button "Save and continue"
   end
 

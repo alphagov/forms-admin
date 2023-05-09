@@ -2,7 +2,7 @@ en:
   helpers:
     label:
       forms_change_name_form:
-        name: What is the name of your form?
+        name: What’s the name of your form?
     hint:
       forms_change_name_form:
         name: |-
