@@ -74,6 +74,12 @@ RSpec.describe UsersController, type: :request do
         put user_path(-1), params: { user: { role: } }
         expect(response).to have_http_status(:not_found)
       end
+
+      it "does not update user if role is invalid" do
+        put user_path(user), params: { user: { role: nil } }
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(user.reload.role).not_to eq(nil)
+      end
     end
 
     context "when user is not a super_admin" do
