@@ -126,6 +126,7 @@ ignore_unused:
 # - 'simple_form.{placeholders,hints,labels}.*'
 # - 'simple_form.{error_notification,required}.:'
 - 'activemodel.errors.*'
+- 'activerecord.errors.*'
 - 'helpers.*'
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
