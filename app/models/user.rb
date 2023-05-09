@@ -11,4 +11,10 @@ class User < ApplicationRecord
   }
 
   validates :role, presence: true
+
+  def user_role_options(roles = User.roles.keys)
+    roles.map do |role|
+      OpenStruct.new(label: I18n.t("users.roles.#{role}.name"), value: role, description: I18n.t("users.roles.#{role}.description"))
+    end
+  end
 end
