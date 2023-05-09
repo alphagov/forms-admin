@@ -11,7 +11,7 @@
 
 <% if @forms.any? %>
   <%= govuk_table do |table| %>
-    <%= table.with_caption(size: 'm', text: t("home.form_table_caption", organisation_name: @current_user.organisation.name)) %>
+    <%= table.with_caption(size: 'm', text: @current_user.organisation ? t("home.form_table_caption", organisation_name: @current_user.organisation.name) : t("home.your_forms")) %>
 
     <%= table.with_head do |head|
        head.with_row do |row|
