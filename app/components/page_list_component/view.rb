@@ -37,7 +37,7 @@ module PageListComponent
       if condition.errors_include?("goto_page_doesnt_exist")
         error_link(error_key: "goto_page_doesnt_exist", edit_link:, page_index:, field: :goto_page_id)
       else
-        t("page_conditions.condition_goto_page_text", goto_page_text: question_text_for_page(condition.goto_page_id))
+        I18n.t("page_conditions.condition_goto_page_text", goto_page_text: question_text_for_page(condition.goto_page_id))
       end
     end
   end
