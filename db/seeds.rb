@@ -9,7 +9,8 @@
 require "factory_bot"
 
 if HostingEnvironment.local_development? && User.none?
-  gds = Organisation.create!(content_id: "af07d5a5-df63-4ddc-9383-6a666845ebe9", slug: "government-digital-service", name: "Government Digital Service")
+
+  gds = Organisation.find_or_create_by!(content_id: "af07d5a5-df63-4ddc-9383-6a666845ebe9", slug: "government-digital-service", name: "Government Digital Service")
 
   # Create default super-admin
   User.create!({ email: "example@example.com",
