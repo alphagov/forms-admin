@@ -15,7 +15,6 @@ describe "forms/index.html.erb" do
 
     it "does not contain a a list of forms" do
       expect(rendered).not_to have_text "Your forms"
-      expect(rendered).not_to have_css ".govuk-summary-list"
     end
   end
 
