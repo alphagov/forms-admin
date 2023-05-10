@@ -3,11 +3,13 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l"><span class="govuk-caption-l"><%= "#{t("pages.question")} #{@form.page_number(@page)}" %></span>
-      <%= t("page_titles.name_settings") %>
-    </h1>
     <%= form_with model: [@form, @name_settings_form], url: @name_settings_path do |f| %>
       <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l"><span class="govuk-caption-l"><%= "#{t("pages.question")} #{@form.page_number(@page)}" %></span>
+        <%= t("page_titles.name_settings") %>
+      </h1>
+
       <%= f.govuk_collection_radio_buttons(
             :input_type,
             Forms::NameSettingsForm::INPUT_TYPES,
