@@ -7,7 +7,7 @@ class FormPolicy
     attr_reader :user, :form, :scope
 
     def initialize(user, scope)
-      raise UserMissingOrganisationError, "Missing required attribute organisation_id" if user.organisation.blank?
+      raise UserMissingOrganisationError, "Missing required attribute organisation_slug" if user.organisation_slug.blank?
 
       @user = user
       @scope = scope
@@ -15,12 +15,12 @@ class FormPolicy
 
     def resolve
       scope
-        .where(org: user.organisation.slug)
+        .where(org: user.organisation&.slug || user.organisation_slug)
     end
   end
 
   def initialize(user, form)
-    raise UserMissingOrganisationError, "Missing required attribute organisation_id" if user.organisation.blank?
+    raise UserMissingOrganisationError, "Missing required attribute organisation_slug" if user.organisation_slug.blank?
 
     @user = user
     @form = form
@@ -37,6 +37,7 @@ class FormPolicy
 private
 
   def users_organisation_owns_form
-    user.organisation.slug == form.org
+    organisation_slug = user.organisation&.slug || user.organisation_slug
+    organisation_slug == form.org
   end
 end
