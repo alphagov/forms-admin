@@ -54,6 +54,27 @@ class Pages::ConditionsController < PagesController
     render template: "pages/conditions/delete", locals: { condition_form: }
   end
 
+  def destroy
+    condition = Condition.find(params[:condition_id], params: { form_id: @form.id, page_id: page.id })
+
+    condition_form = Pages::ConditionsForm.new(form: @form, page:, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id)
+
+    case condition_form_params[:confirm_deletion]
+    when "false"
+      redirect_to edit_condition_path(@form.id, page.id, params[:condition_id])
+    when "true"
+      if condition.destroy
+        redirect_to form_pages_path(@form.id, page.id)
+      else
+        raise StandardError, "Deletion unsuccessful"
+      end
+    else
+      raise StandardError, "Deletion unsuccessful"
+    end
+  rescue StandardError
+    render template: "pages/conditions/delete", locals: { condition_form: }, status: :unprocessable_entity
+  end
+
 private
 
   def can_add_page_routing
@@ -61,6 +82,6 @@ private
   end
 
   def condition_form_params
-    params.require(:pages_conditions_form).permit(:answer_value, :goto_page_id).merge(form: @form, page:)
+    params.require(:pages_conditions_form).permit(:answer_value, :goto_page_id, :confirm_deletion).merge(form: @form, page:)
   end
 end

@@ -71,6 +71,7 @@ Rails.application.routes.draw do
           get "/:condition_id/edit" => "pages/conditions#edit", as: :edit_condition
           put "/:condition_id" => "pages/conditions#update", as: :update_condition
           get "/:condition_id/delete" => "pages/conditions#delete", as: :delete_condition
+          delete "/:condition_id/delete" => "pages/conditions#destroy", as: :destroy_condition
         end
 
         scope "/edit" do

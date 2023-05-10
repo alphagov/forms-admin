@@ -3,7 +3,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with(model: condition_form, url: update_condition_path(condition_form.form.id, condition_form.page.id, condition_form.record.id), method: "PUT") do |f| %>
+    <%= form_with(model: condition_form, url: delete_condition_path(condition_form.form.id, condition_form.page.id, condition_form.record.id), method: :delete) do |f| %>
       <% if condition_form&.errors.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
