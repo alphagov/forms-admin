@@ -17,7 +17,7 @@ RSpec.describe PageListComponent::View, type: :component do
     end
 
     context "when the form has a single page" do
-      let(:pages) { [(build :page, id: 1, question_text: "Enter your name?")] }
+      let(:pages) { [(build :page, id: 1, position: 1, question_text: "Enter your name?")] }
 
       it "renders the question number" do
         expect(page).to have_css("dt.govuk-summary-list__key", text: "1")
@@ -38,7 +38,7 @@ RSpec.describe PageListComponent::View, type: :component do
     end
 
     context "when the form has multiple pages" do
-      let(:pages) { [(build :page, id: 1, question_text: "Enter your name?"), (build :page, id: 2, question_text: "What is you pet's name?")] }
+      let(:pages) { [(build :page, id: 1, position: 1, question_text: "Enter your name?"), (build :page, id: 2, position: 2, question_text: "What is you pet's name?")] }
 
       it "renders the question numbers" do
         expect(page).to have_css("dt.govuk-summary-list__key", text: "1")
@@ -55,9 +55,9 @@ RSpec.describe PageListComponent::View, type: :component do
 
       context "when conditions are enabled", feature_basic_routing: true do
         let(:pages) do
-          [(build :page, id: 1, question_text: "What country do you live in?", routing_conditions:),
-           (build :page, id: 2, question_text: "What is your name?", routing_conditions:),
-           (build :page, id: 3, question_text: "What is your pet's name?", routing_conditions:)]
+          [(build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:),
+           (build :page, id: 2, position: 2, question_text: "What is your name?", routing_conditions:),
+           (build :page, id: 3, position: 3, question_text: "What is your pet's name?", routing_conditions:)]
         end
         let(:edit_condition_path) { "/forms/0/pages/1/conditions/1/edit" }
 
@@ -177,9 +177,9 @@ RSpec.describe PageListComponent::View, type: :component do
 
   describe "class methods" do
     let(:pages) do
-      [(build :page, id: 1, question_text: "What country do you live in?", routing_conditions:),
-       (build :page, id: 2, question_text: "What is your name?", routing_conditions:),
-       (build :page, id: 3, question_text: "What is your pet's name?", routing_conditions:)]
+      [(build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:),
+       (build :page, id: 2, position: 2, question_text: "What is your name?", routing_conditions:),
+       (build :page, id: 3, position: 3, question_text: "What is your pet's name?", routing_conditions:)]
     end
 
     describe "show_up_button" do
@@ -218,7 +218,7 @@ RSpec.describe PageListComponent::View, type: :component do
       let(:condition) { (build :condition, :with_answer_value_missing, id: 1, routing_page_id: 1, check_page_id: 1, goto_page_id: 3) }
       let(:error_name) { condition.validation_errors[0].name }
       let(:condition_edit_path) { "https://example.gov.uk" }
-      let(:error_link) { page_list_component.error_link(error_key: error_name, edit_link: condition_edit_path, page_index: 1, field: :answer_value) }
+      let(:error_link) { page_list_component.error_link(error_key: error_name, edit_link: condition_edit_path, page: pages[0], field: :answer_value) }
 
       it "returns the corrrect error html for a given condition" do
         expect(error_link).to eq "<a class=\"govuk-link app-page_list__route-text--error\" href=\"#{condition_edit_path}##{Pages::ConditionsForm.new.id_for_field(:answer_value)}\">#{I18n.t("page_conditions.errors.#{error_name}", page_index: 1)}</a>"
@@ -227,7 +227,7 @@ RSpec.describe PageListComponent::View, type: :component do
 
     describe "goto_page_text_for_condition" do
       let(:condition_edit_path) { "https://example.gov.uk" }
-      let(:goto_page_text) { page_list_component.goto_page_text_for_condition(condition, condition_edit_path, 1) }
+      let(:goto_page_text) { page_list_component.goto_page_text_for_condition(condition, condition_edit_path, pages[0]) }
 
       context "when the goto page is set" do
         let(:condition) { (build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3) }
@@ -241,7 +241,7 @@ RSpec.describe PageListComponent::View, type: :component do
         let(:condition) { (build :condition, :with_goto_page_missing, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales") }
 
         it "returns the goto page error link" do
-          expect(goto_page_text).to eq page_list_component.error_link(error_key: "goto_page_doesnt_exist", edit_link: condition_edit_path, page_index: 1, field: :goto_page_id)
+          expect(goto_page_text).to eq page_list_component.error_link(error_key: "goto_page_doesnt_exist", edit_link: condition_edit_path, page: pages[0], field: :goto_page_id)
         end
       end
     end

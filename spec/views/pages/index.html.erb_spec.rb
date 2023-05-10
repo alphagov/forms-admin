@@ -38,7 +38,7 @@ describe "pages/index.html.erb" do
   end
 
   describe "when there are one or more page to display" do
-    let(:pages) { [(build :page, id: 1, form_id: 1), (build :page, id: 2, form_id: 1), (build :page, id: 3, form_id: 1)] }
+    let(:pages) { [(build :page, id: 1, position: 1, form_id: 1), (build :page, id: 2, position: 2, form_id: 1), (build :page, id: 3, position: 3, form_id: 1)] }
 
     it "allows the user to add a page" do
       expect(rendered).to have_link(I18n.t("pages.index.add_question"), href: type_of_answer_create_path(form.id))
