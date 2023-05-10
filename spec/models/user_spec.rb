@@ -24,4 +24,26 @@ describe User do
       expect(user.valid?).to be false
     end
   end
+
+  describe "organisation_id" do
+    it "is allowed to be nil" do
+      user.organisation_id = nil
+
+      expect(user.valid?).to be true
+    end
+  end
+
+  context "when updating organisation" do
+    it "is valid to leave organisation unset" do
+      user = create :user, :with_no_org
+      user.organisation_id = nil
+      expect(user.valid?).to be true
+    end
+
+    it "is not valid to unset organisation if it is already set" do
+      user = create :user, organisation_slug: "test-org"
+      user.organisation_id = nil
+      expect(user.valid?).to be false
+    end
+  end
 end
