@@ -23,11 +23,27 @@ describe "users/index.html.erb" do
     expect(rendered).to have_text(users.first.email)
   end
 
-  it "contains org" do
-    expect(rendered).to have_text(users.first.organisation_slug)
+  it "contains organisation name" do
+    expect(rendered).to have_text(users.first.organisation.name)
   end
 
   it "contains role" do
     expect(rendered).to have_text("Editor")
+  end
+
+  context "with a user with an unknown organisation" do
+    let(:users) { [build(:user, :with_unknown_org, id: 1)] }
+
+    it "shows no organisation set" do
+      expect(rendered).to have_text("No organisation set")
+    end
+  end
+
+  context "with a user with no organisation set" do
+    let(:users) { [build(:user, :with_no_org, id: 1)] }
+
+    it "shows no organisation set" do
+      expect(rendered).to have_text("No organisation set")
+    end
   end
 end

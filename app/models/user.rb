@@ -9,4 +9,6 @@ class User < ApplicationRecord
     super_admin: "super_admin",
     editor: "editor",
   }
+
+  validates :role, presence: true
 end

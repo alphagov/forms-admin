@@ -2,11 +2,17 @@
 en:
   activemodel:
     errors:
+      page:
+        attributes:
+          question_text:
+            blank: Question text cannot be blank
+  activerecord:
+    errors:
       models:
-        page:
+        user:
           attributes:
-            question_text:
-              blank: Question text cannot be blank
+            role:
+              blank: Select a role for the user
   address_settings:
     hint: Select all that apply
   back_link:
@@ -488,8 +494,10 @@ en:
     cancel: Cancel
     edit:
       caption: User details
+      role: Role
       title: Edit user
     index:
+      organisation_blank: No organisation set
       table_headings:
         email: Email address
         name: Name
