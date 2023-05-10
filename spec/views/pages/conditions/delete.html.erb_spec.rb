@@ -1,15 +1,15 @@
 require "rails_helper"
 
 describe "pages/conditions/delete.html.erb" do
-  let(:condition_form) { Pages::ConditionsForm.new(form:, page:, record: condition) }
+  let(:delete_condition_form) { Pages::DeleteConditionForm.new(form:, page:, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id) }
   let(:form) { build :form, :ready_for_routing, id: 1 }
-  let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
+  let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: pages.last.id }
   let(:pages) { form.pages }
   let(:page) { pages.first }
 
   before do
     page.position = 1
-    render template: "pages/conditions/delete", locals: { condition_form: }
+    render template: "pages/conditions/delete", locals: { delete_condition_form: }
   end
 
   it "contains page heading and sub-heading" do

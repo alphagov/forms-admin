@@ -68,7 +68,7 @@ en:
         By deleting this question route the person filling in the form will have to complete every question, even if you do not need them to.
       </p>
       <p>
-        Do you want this to happen? If you do, select ‘Yes’.
+        Do you want this to happen? If you do, select yes.
       </p>
     delete_condition_legend: Are you sure you want to delete this question route?
   email_code_sent:
@@ -381,7 +381,7 @@ en:
     not_found: Page not found
     privacy_policy_form: Provide a link to privacy information for this form
     routing_page: Add a question route
-    routing_page_delete: Delete question %{question_position}’s routes
+    routing_page_delete: Delete question %{question_position}’s route
     routing_page_edit: Edit question %{question_position}’s routes
     service_unavailable: Sorry, the service is unavailable
     set_email_form: Set the email address for completed forms
