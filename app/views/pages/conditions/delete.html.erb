@@ -24,7 +24,7 @@
         end;
         summary_list.with_row do |row|
           row.with_key { "take the person to" }
-          row.with_value { delete_condition_form.goto_page_options.find{ |options| options.id == delete_condition_form.goto_page_id}.question_text }
+          row.with_value { delete_condition_form.goto_page_question_text }
         end;
 
       end %>

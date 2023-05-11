@@ -324,7 +324,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
       delete_condition_form = Pages::DeleteConditionForm.new(form:, page: selected_page, record: routing_conditions, answer_value: "Yes", goto_page_id: 3)
 
-      allow(delete_condition_form).to receive(:goto_page_options).and_return([OpenStruct.new(id: 3, question_text: "What is your name?")])
+      allow(delete_condition_form).to receive(:goto_page_question_text).and_return("What is your name?")
 
       allow(Pages::DeleteConditionForm).to receive(:new).and_return(delete_condition_form)
 
@@ -376,7 +376,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
       delete_condition_form = Pages::DeleteConditionForm.new(form:, page: selected_page, record: routing_conditions, answer_value: "Wales", goto_page_id: 3, confirm_deletion:)
 
-      allow(delete_condition_form).to receive(:goto_page_options).and_return([OpenStruct.new(id: 3, question_text: "What is your name?")])
+      allow(delete_condition_form).to receive(:goto_page_question_text).and_return("What is your name?")
 
       allow(delete_condition_form).to receive(:delete).and_return(delete_bool)
 

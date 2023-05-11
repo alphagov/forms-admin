@@ -18,7 +18,7 @@ class Pages::DeleteConditionForm
     result
   end
 
-  def goto_page_options
-    [OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")), form.pages.map { |p| OpenStruct.new(id: p.id, question_text: p.question_text) }].flatten
+  def goto_page_question_text
+    form.pages.filter { |p| p.id == goto_page_id }.first&.question_text
   end
 end

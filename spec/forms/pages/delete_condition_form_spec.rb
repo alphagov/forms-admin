@@ -1,10 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Pages::DeleteConditionForm, type: :model do
-  let(:delete_condition_form) { described_class.new(form:, page:, record: condition) }
+  let(:delete_condition_form) { described_class.new(form:, page:, record: condition, goto_page_id: goto_page.id) }
   let(:form) { build :form, :ready_for_routing, id: 1 }
   let(:pages) { form.pages }
   let(:page) { pages.second }
+  let(:goto_page) { pages.last }
   let(:condition) { nil }
 
   let(:delete_headers) do
@@ -46,10 +47,25 @@ RSpec.describe Pages::DeleteConditionForm, type: :model do
     end
   end
 
-  describe "#goto_page_options" do
-    it "returns a list of answers for the given page" do
-      result = described_class.new(form:, page: pages.first).goto_page_options
-      expect(result).to eq([OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")), form.pages.map { |p| OpenStruct.new(id: p.id, question_text: p.question_text) }].flatten)
+  describe "#goto_page_question_text" do
+    context "when there is a goto_page_id" do
+      let(:condition) { Condition.new id: 2, form_id: 1, page_id: 1, routing_page_id: page.id, check_page_id: page.id, answer_value: "Wales", goto_page_id: goto_page.id }
+
+      it "returns the question text for the given page" do
+        result = delete_condition_form.goto_page_question_text
+        expect(result).to eq(goto_page.question_text)
+      end
+    end
+
+    context "when there is no goto_page_id" do
+      let(:condition) { Condition.new id: 2, form_id: 1, page_id: 1, routing_page_id: page.id, check_page_id: page.id, answer_value: "Wales", goto_page_id: nil }
+      let(:goto_page) { nil }
+      let(:delete_condition_form) { described_class.new(form:, page:, record: condition) }
+
+      it "returns nil" do
+        result = delete_condition_form.goto_page_question_text
+        expect(result).to be_nil
+      end
     end
   end
 end
