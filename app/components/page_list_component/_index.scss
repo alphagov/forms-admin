@@ -9,5 +9,18 @@
 }
 
 .app-page-list__key {
-  width: 15%;
+  @include govuk-media-query($from: desktop) {
+    width: 20%;
+  }
+}
+
+.govuk-form-group--error .app-page-list__key {
+  @include govuk-media-query($from: tablet) {
+    padding-left: govuk-spacing(3);
+  }
+}
+
+.app-page_list__route-text--error:link,
+.app-page_list__route-text--error:visited {
+  color: $govuk-error-colour;
 }

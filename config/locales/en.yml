@@ -325,12 +325,15 @@ en:
       If you pasted the web address, check you copied the entire address.
     title: Page not found
   page_conditions:
+    condition_answer_value_text: is answered as “%{answer_value}”
+    condition_check_page_text: If the question “%{check_page_text}”
+    condition_check_page_text_with_errors: For the question “%{check_page_text}”
     condition_compact_html: 'If the answer is “%{answer_value}”<br> then skip to question %{goto_page_number}: “%{goto_page_text}”'
-    condition_html: |
-      If the question “%{check_page_text}”<br>
-      is answered as “%{answer_value}”<br>
-      take the person to “%{goto_page_text}”
-    condition_name: Question %{page_index}'s route
+    condition_goto_page_text: take the person to “%{goto_page_text}”
+    condition_name: Question %{page_index}’s route
+    errors:
+      answer_value_doesnt_exist: select the answer you want to base question %{page_index}’s route on
+      goto_page_doesnt_exist: select the question or page you want to take the person to, or delete question %{page_index}’s route
     route: Route
   page_options_service:
     answer_type: Answer type
@@ -363,7 +366,7 @@ en:
     not_found: Page not found
     privacy_policy_form: Provide a link to privacy information for this form
     routing_page: Add a question route
-    routing_page_edit: Edit question %{question_position}’s routes
+    routing_page_edit: Edit question %{question_position}’s route
     service_unavailable: Sorry, the service is unavailable
     set_email_form: Set the email address for completed forms
     text_settings: How much text will people need to provide?

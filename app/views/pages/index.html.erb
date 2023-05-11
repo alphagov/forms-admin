@@ -4,6 +4,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <%# TODO: add error summary %>
 
     <% if !FeatureService.enabled?(:draft_live_versioning) and @form.has_live_version %>
       <%= render LiveFormWarningComponent::View.new() %>

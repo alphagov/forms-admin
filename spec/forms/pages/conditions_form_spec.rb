@@ -110,4 +110,11 @@ RSpec.describe Pages::ConditionsForm, type: :model do
       expect(result).to eq([OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")), form.pages.map { |p| OpenStruct.new(id: p.id, question_text: p.question_text) }].flatten)
     end
   end
+
+  describe "#id_for_field" do
+    it "returns the correct id for a field" do
+      result = described_class.new(form:, page: pages.first).id_for_field(:answer_value)
+      expect(result).to eq("condition_answer_value")
+    end
+  end
 end

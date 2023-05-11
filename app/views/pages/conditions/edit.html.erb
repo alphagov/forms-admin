@@ -1,4 +1,4 @@
-<% set_page_title(title_with_error_prefix(t('page_titles.routing_page'), condition_form.errors&.any?)) %>
+<% set_page_title(title_with_error_prefix(t('page_titles.routing_page_edit'), condition_form.errors&.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_pages_path(condition_form.form.id)) %>
 
 <div class="govuk-grid-row">
@@ -20,8 +20,8 @@
         end;
       end %>
 
-      <%= f.govuk_collection_select :answer_value, condition_form.routing_answer_options, :value, :label %>
-      <%= f.govuk_collection_select :goto_page_id, condition_form.goto_page_options, :id, :question_text %>
+      <%= f.govuk_collection_select :answer_value, condition_form.routing_answer_options, :value, :label, id: condition_form.id_for_field(:answer_value), label: { for: condition_form.id_for_field(:answer_value) } %>
+      <%= f.govuk_collection_select :goto_page_id, condition_form.goto_page_options, :id, :question_text, id: condition_form.id_for_field(:goto_page_id), label: { for: condition_form.id_for_field(:goto_page_id) }  %>
       <%= f.govuk_submit t("save_and_continue") %>
     <% end %>
   </div>
