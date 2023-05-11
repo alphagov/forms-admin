@@ -22,7 +22,9 @@
 
       <%= f.govuk_collection_select :answer_value, condition_form.routing_answer_options, :value, :label, id: condition_form.id_for_field(:answer_value), label: { for: condition_form.id_for_field(:answer_value) } %>
       <%= f.govuk_collection_select :goto_page_id, condition_form.goto_page_options, :id, :question_text, id: condition_form.id_for_field(:goto_page_id), label: { for: condition_form.id_for_field(:goto_page_id) }  %>
-      <%= f.govuk_submit t("save_and_continue") %>
+      <%= f.govuk_submit t("save_and_continue") do
+        govuk_button_link_to "Delete question route", delete_condition_path(condition_form.form.id, condition_form.page.id, condition_form.record.id), warning: true
+      end %>
     <% end %>
   </div>
 </div>
