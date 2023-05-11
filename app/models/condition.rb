@@ -8,7 +8,9 @@ class Condition < ActiveResource::Base
 
   def errors_with_fields
     error_fields = { "goto_page_doesnt_exist" => :goto_page_id, "answer_value_doesnt_exist" => :answer_value }
-    validation_errors.map { |error| { name: error.name, field: error_fields[error.name] } }
+    validation_errors.map do |error|
+      { name: error.name, field: error_fields[error.name] || :answer_value }
+    end
   end
 
   def has_errors_for_field?(field)

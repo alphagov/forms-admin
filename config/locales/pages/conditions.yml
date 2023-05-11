@@ -11,8 +11,10 @@ en:
           attributes:
             answer_value:
               blank: Select the answer you want to base your route on
+              answer_value_doesnt_exist: Select the answer you want to base your route on, or delete this route
             goto_page_id:
               blank: Select the question or page you want to take the person to
+              goto_page_doesnt_exist: Select the question or page you want to take the person to, or delete this route
         pages/delete_condition_form:
           attributes:
             confirm_deletion:
