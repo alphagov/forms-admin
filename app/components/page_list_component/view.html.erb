@@ -34,7 +34,7 @@
 
           <% if FeatureService.enabled?(:basic_routing) %>
             <% page.conditions.each do |condition| %>
-              <div id="<%= error_id(condition.id) %>" class="govuk-summary-list__row app-page-list__row <%= class_names( "govuk-form-group--error": condition.has_errors?) %>">
+              <div id="<%= PageListComponent::ErrorSummary::View.error_id(condition.id) %>" class="govuk-summary-list__row app-page-list__row <%= class_names( "govuk-form-group--error": condition.has_errors?) %>">
                 <dt class="govuk-summary-list__key govuk-summary-list__key app-page-list__key">
                   <%= t("page_conditions.condition_name", page_index: page.position) %>
                 </dt>

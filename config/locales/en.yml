@@ -334,8 +334,12 @@ en:
     condition_goto_page_text: take the person to “%{goto_page_text}”
     condition_name: Question %{page_index}’s route
     errors:
-      answer_value_doesnt_exist: select the answer you want to base question %{page_index}’s route on
-      goto_page_doesnt_exist: select the question or page you want to take the person to, or delete question %{page_index}’s route
+      error_summary:
+        answer_value_doesnt_exist: The answer that question %{page_index}’s route is based on no longer exists - edit question %{page_index}’s route
+        goto_page_doesnt_exist: The question you’re taking the person to no longer exists - edit question %{page_index}’s route
+      page_list:
+        answer_value_doesnt_exist: select the answer you want to base question %{page_index}’s route on
+        goto_page_doesnt_exist: select the question or page you want to take the person to, or delete question %{page_index}’s route
     route: Route
   page_options_service:
     answer_type: Answer type
