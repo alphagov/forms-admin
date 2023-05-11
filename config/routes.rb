@@ -68,7 +68,7 @@ Rails.application.routes.draw do
         scope "/conditions" do
           get "/new" => "pages/conditions#new", as: :new_condition
           post "/new" => "pages/conditions#create", as: :create_condition
-          get "/:condition_id/edit" => "pages/conditions#edit", as: :edit_condition
+          get "/:condition_id" => "pages/conditions#edit", as: :edit_condition
           put "/:condition_id" => "pages/conditions#update", as: :update_condition
           get "/:condition_id/delete" => "pages/conditions#delete", as: :delete_condition
           delete "/:condition_id/delete" => "pages/conditions#destroy", as: :destroy_condition
