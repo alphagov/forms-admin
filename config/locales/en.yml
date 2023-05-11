@@ -72,6 +72,8 @@ en:
 
       '
     continue: Continue creating a form
+  error_summary:
+    heading: There is a problem
   footer:
     accessibility_statement: Accessibility statement
     cookies: Cookies
