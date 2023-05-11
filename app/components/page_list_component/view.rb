@@ -20,14 +20,10 @@ module PageListComponent
       @pages.find { |page| page.id == id }.question_text
     end
 
-    def error_id(number)
-      "condition_#{number}"
-    end
-
     def error_link(error_key:, edit_link:, page:, field:)
       content_tag(
         :a,
-        I18n.t("page_conditions.errors.#{error_key}", page_index: page.position),
+        I18n.t("page_conditions.errors.page_list.#{error_key}", page_index: page.position),
         class: "govuk-link app-page_list__route-text--error",
         href: "#{edit_link}##{Pages::ConditionsForm.new.id_for_field(field)}",
       )
