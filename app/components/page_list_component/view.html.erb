@@ -32,7 +32,7 @@
             </dd>
           </div>
 
-          <% if FeatureService.enabled?(:basic_routing) %>
+          <% if render_routing? %>
             <% page.conditions.each do |condition| %>
               <div id="<%= PageListComponent::ErrorSummary::View.error_id(condition.id) %>" class="govuk-summary-list__row app-page-list__row <%= class_names( "govuk-form-group--error": condition.has_errors?) %>">
                 <dt class="govuk-summary-list__key govuk-summary-list__key app-page-list__key">
