@@ -34,6 +34,12 @@ class FormPolicy
     FeatureService.enabled?(:basic_routing) || user.super_admin?
   end
 
+  def can_edit_page_routing_conditions?
+    FeatureService.enabled?(:basic_routing)
+  end
+
+  alias_method :can_delete_page_routing_conditions?, :can_edit_page_routing_conditions?
+
 private
 
   def users_organisation_owns_form

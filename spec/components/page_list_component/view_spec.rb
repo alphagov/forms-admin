@@ -273,7 +273,7 @@ RSpec.describe PageListComponent::View, type: :component do
         end
       end
     end
-    
+
     describe "render_routing?" do
       it "returns false" do
         expect(page_list_component.render_routing?).to eq(can_edit_page_routing)
