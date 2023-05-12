@@ -508,6 +508,16 @@ en:
     completed: completed
     in_progress: in progress
     not_started: not started
+  type_of_answer:
+    routing_warning_about_change_answer_type_html: |
+      <p class="govuk-body">
+        Changing the type of answer you need from “Selection from a list of options” to a different answer type means your
+        question route will no longer work and will be deleted.
+      </p>
+      <p class="govuk-body">
+        If you do not want to lose your question route you can cancel this change by using the back button or
+        clicking the “Go to your questions” link.
+      </p>
   user_missing_organisation:
     body: "%{contact_link} to assign an organisation to your account."
     title: You do not have an organisation set for your account
