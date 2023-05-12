@@ -107,12 +107,26 @@ describe Form do
   end
 
   describe "#qualifying_route_pages" do
-    let(:non_select_from_list_pages) { build_list(:page, 2) }
-    let(:select_from_list_pages) { build_list(:page, 4, :with_selections_settings) }
-    let(:form) { build :form, name: "Form 1", org: "Test org", submission_email: "", pages: non_select_from_list_pages + select_from_list_pages }
+    let(:non_select_from_list_pages) do
+      (1..3).map do |index|
+        build :page, id: index, position: index
+      end
+    end
+    let(:selection_pages_with_routes) do
+      (4..5).map do |index|
+        build :page, :with_selections_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, check_page_id: index, goto_page_id: index + 2)]
+      end
+    end
+    let(:selection_pages_without_routes) do
+      (6..9).map do |index|
+        build :page, :with_selections_settings, id: index, position: index, routing_conditions: []
+      end
+    end
+    let(:form) { build :form, name: "Form 1", org: "Test org", submission_email: "", pages: non_select_from_list_pages + selection_pages_with_routes + selection_pages_without_routes }
 
     it "returns a list of pages that can be used as routing pages" do
-      expect(form.qualifying_route_pages).to eq(select_from_list_pages)
+      selection_pages_with_routes_excluding_last_page = selection_pages_without_routes.take(selection_pages_without_routes.length - 1)
+      expect(form.qualifying_route_pages).to eq(selection_pages_with_routes_excluding_last_page)
     end
   end
 end
