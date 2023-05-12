@@ -59,7 +59,7 @@ RSpec.describe PageListComponent::View, type: :component do
            (build :page, id: 2, position: 2, question_text: "What is your name?", routing_conditions:),
            (build :page, id: 3, position: 3, question_text: "What is your pet's name?", routing_conditions:)]
         end
-        let(:edit_condition_path) { "/forms/0/pages/1/conditions/1/edit" }
+        let(:edit_condition_path) { "/forms/0/pages/1/conditions/1" }
 
         context "when there are no conditions" do
           it "conditions section is not present" do

@@ -29,6 +29,8 @@ class Pages::ConditionsController < PagesController
 
     condition_form = Pages::ConditionsForm.new(form: @form, page:, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id)
 
+    condition_form.check_errors_from_api
+
     render template: "pages/conditions/edit", locals: { condition_form: }
   end
 

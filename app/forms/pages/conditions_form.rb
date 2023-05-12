@@ -41,4 +41,10 @@ class Pages::ConditionsForm
   def id_for_field(field)
     "condition_#{field}"
   end
+
+  def check_errors_from_api
+    record.errors_with_fields.each do |error|
+      errors.add(error[:field], error[:name].to_sym)
+    end
+  end
 end

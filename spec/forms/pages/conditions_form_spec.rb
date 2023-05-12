@@ -117,4 +117,14 @@ RSpec.describe Pages::ConditionsForm, type: :model do
       expect(result).to eq("condition_answer_value")
     end
   end
+
+  describe "#check_errors_from_api" do
+    let(:condition) { build :condition, :with_answer_value_missing, id: 3, page_id: 2, routing_page_id: 1, answer_value: "England", check_page_id: 1, goto_page_id: 3 }
+
+    it "is invalid if there are API validation errors" do
+      error_message = I18n.t("activemodel.errors.models.pages/conditions_form.attributes.answer_value.answer_value_doesnt_exist")
+      conditions_form.check_errors_from_api
+      expect(conditions_form.errors.full_messages_for(:answer_value)).to include("Answer value #{error_message}")
+    end
+  end
 end
