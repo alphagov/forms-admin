@@ -4,6 +4,7 @@ describe "pages/type_of_answer.html.erb", type: :view do
   let(:form) { build :form, id: 1 }
   let(:type_of_answer_form) { build :type_of_answer_form, form: }
   let(:answer_types) { Page::ANSWER_TYPES }
+  let(:page) { OpenStruct.new(conditions: [], answer_type: "number") }
   let(:question_number) { 1 }
   let(:is_new_page) { true }
 
@@ -22,6 +23,7 @@ describe "pages/type_of_answer.html.erb", type: :view do
 
     # setup instance variables
     assign(:form, form)
+    assign(:page, page)
     assign(:type_of_answer_form, type_of_answer_form)
     assign(:answer_types, answer_types)
 
@@ -62,5 +64,37 @@ describe "pages/type_of_answer.html.erb", type: :view do
 
   it "has a submit button with the correct text" do
     expect(rendered).to have_button("Continue")
+  end
+
+  it "does not display a warning about routes being deleted if answer type changes" do
+    expect(rendered).not_to have_selector(".govuk-inset-text")
+  end
+
+  context "when editing an existing" do
+    let(:page) { OpenStruct.new(conditions:, answer_type:) }
+    let(:answer_type) { "selection" }
+    let(:conditions) { [(build :condition)] }
+
+    it "displays a warning about routes being deleted if answer type changes" do
+      expect(Capybara.string(rendered).find(".govuk-inset-text").text(normalize_ws: true))
+        .to eq(Capybara.string(I18n.t("type_of_answer.routing_warning_about_change_answer_type_html"))
+                        .text(normalize_ws: true))
+    end
+
+    context "when answer type is not a selection" do
+      let(:answer_type) { "number" }
+
+      it "does not display a warning about routes being deleted if answer type changes" do
+        expect(rendered).not_to have_selector(".govuk-inset-text")
+      end
+    end
+
+    context "when no routing conditions set" do
+      let(:conditions) { [] }
+
+      it "does not display a warning about routes being deleted if answer type changes" do
+        expect(rendered).not_to have_selector(".govuk-inset-text")
+      end
+    end
   end
 end

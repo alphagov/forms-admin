@@ -17,6 +17,12 @@
             bold_labels: false,
           )  %>
 
+      <% if @page.present? && @page.answer_type.to_sym == :selection && @page.conditions.any?  %>
+        <%= govuk_inset_text do %>
+          <%= t("type_of_answer.routing_warning_about_change_answer_type_html") %>
+        <% end %>
+      <% end %>
+
       <%= f.govuk_submit t('continue'), value: "true", name: :set_answer_type %>
     <% end %>
 
