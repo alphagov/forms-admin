@@ -397,6 +397,7 @@ en:
     go_to_your_questions: Go to your questions
     heading: Edit question
     index:
+      add_a_question_route: Add a question route
       add_question: Add a question
       mark_complete:
         legend: Have you finished editing your questions?
