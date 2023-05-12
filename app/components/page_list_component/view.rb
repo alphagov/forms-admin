@@ -29,6 +29,14 @@ module PageListComponent
       )
     end
 
+    def answer_value_text_for_condition(condition, edit_link, page)
+      if condition.errors_include?("answer_value_doesnt_exist")
+        error_link(error_key: "answer_value_doesnt_exist", edit_link:, page:, field: :answer_value)
+      else
+        I18n.t("page_conditions.condition_answer_value_text", answer_value: condition.answer_value)
+      end
+    end
+
     def goto_page_text_for_condition(condition, edit_link, page)
       if condition.errors_include?("goto_page_doesnt_exist")
         error_link(error_key: "goto_page_doesnt_exist", edit_link:, page:, field: :goto_page_id)

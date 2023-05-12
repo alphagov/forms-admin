@@ -105,9 +105,14 @@ RSpec.describe PageListComponent::View, type: :component do
             expect(page).to have_css("dd.govuk-summary-list__value", text: condition_check_page_text_with_errors)
           end
 
-          it "renders the answer_value error in an unordered list" do
+          it "does not render the unordered error list" do
+            condition_goto_page_error = I18n.t("page_conditions.errors.page_list.goto_page_doesnt_exist", page_index: 1)
+            expect(page).not_to have_css("ul > li > a", text: condition_goto_page_error)
+          end
+
+          it "renders the answer_value error in in a separate paragraph" do
             condition_answer_value_error = I18n.t("page_conditions.errors.page_list.answer_value_doesnt_exist", page_index: 1)
-            expect(page).to have_css("ul > li > a", text: condition_answer_value_error)
+            expect(page).to have_css("dd.govuk-summary-list__value > p", text: condition_answer_value_error)
             expect(page).to have_link(condition_answer_value_error, href: "#{edit_condition_path}##{Pages::ConditionsForm.new.id_for_field(:answer_value)}")
           end
 
@@ -222,6 +227,27 @@ RSpec.describe PageListComponent::View, type: :component do
 
       it "returns the corrrect error html for a given condition" do
         expect(error_link).to eq "<a class=\"govuk-link app-page_list__route-text--error\" href=\"#{condition_edit_path}##{Pages::ConditionsForm.new.id_for_field(:answer_value)}\">#{I18n.t("page_conditions.errors.page_list.#{error_name}", page_index: 1)}</a>"
+      end
+    end
+
+    describe "answer_value_text_for_condition" do
+      let(:condition_edit_path) { "https://example.gov.uk" }
+      let(:answer_value_text) { page_list_component.answer_value_text_for_condition(condition, condition_edit_path, pages[0]) }
+
+      context "when the answer value is set" do
+        let(:condition) { (build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3) }
+
+        it "returns the answer value text" do
+          expect(answer_value_text).to eq I18n.t("page_conditions.condition_answer_value_text", answer_value: condition.answer_value)
+        end
+      end
+
+      context "when the answer value is not set" do
+        let(:condition) { (build :condition, :with_answer_value_missing, id: 1, routing_page_id: 1, check_page_id: 1, goto_page_id: 3) }
+
+        it "returns the answer value error link" do
+          expect(answer_value_text).to eq page_list_component.error_link(error_key: "answer_value_doesnt_exist", edit_link: condition_edit_path, page: pages[0], field: :answer_value)
+        end
       end
     end
 

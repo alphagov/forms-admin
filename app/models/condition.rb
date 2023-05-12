@@ -21,6 +21,10 @@ class Condition < ActiveResource::Base
     validation_errors.any?
   end
 
+  def has_multiple_errors?
+    validation_errors.length >= 2
+  end
+
   def errors_include?(error_name)
     has_errors? && validation_errors.map(&:name).include?(error_name)
   end

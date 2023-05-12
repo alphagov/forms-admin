@@ -40,31 +40,28 @@
                 </dt>
 
                 <dd class="govuk-summary-list__value">
-                  <% if condition.has_errors_for_field?(:answer_value) %>
-                    <p class="govuk-!-margin-2">
-                      <%= t("page_conditions.condition_check_page_text_with_errors", check_page_text: question_text_for_page(condition.check_page_id)) %>
-                    </p>
-                    <%# List all errors, including for other fields %>
+                  <p class="govuk-!-margin-2">
+                    <%= t("page_conditions.#{condition.validation_errors.length > 1 || condition.has_errors_for_field?(:answer_value) ? "condition_check_page_text_with_errors" : "condition_check_page_text"}", check_page_text: question_text_for_page(condition.check_page_id)) %>
+                  </p>
+
+                  <% if condition.has_multiple_errors? %>
                     <ul class="govuk-list govuk-list--bullet">
                       <% condition.errors_with_fields.each do |error| %>
                       <li><%= error_link(error_key: error[:name], edit_link:edit_condition_path(form_id: @form_id, page_id: page.id, condition_id: condition.id), page:, field: error[:field]) %></li>
                       <% end %>
                     </ul>
                   <% else %>
-                    <p class="govuk-!-margin-2">
-                      <%= t("page_conditions.condition_check_page_text", check_page_text: question_text_for_page(condition.check_page_id)) %>
-                    </p>
                     <%= content_tag(
                       :p,
-                      t("page_conditions.condition_answer_value_text", answer_value: condition.answer_value),
+                      answer_value_text_for_condition(condition, edit_condition_path(form_id: @form_id, page_id: page.id, condition_id: condition.id), page),
+                      class: "govuk-!-margin-2"
+                      ) %>
+                    <%= content_tag(
+                      :p,
+                      goto_page_text_for_condition(condition, edit_condition_path(form_id: @form_id, page_id: page.id, condition_id: condition.id), page),
                       class: "govuk-!-margin-2"
                       ) %>
                   <% end %>
-                  <%= content_tag(
-                    :p,
-                    goto_page_text_for_condition(condition, edit_condition_path(form_id: @form_id, page_id: page.id, condition_id: condition.id), page),
-                    class: "govuk-!-margin-2"
-                    ) unless condition.has_errors_for_field?(:answer_value) && condition.has_errors_for_field?(:goto_page_id) %>
                 </dd>
 
                 <dd class="govuk-summary-list__actions govuk-!-padding-bottom-6">

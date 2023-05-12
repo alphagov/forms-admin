@@ -6,6 +6,10 @@ module PageListComponent
         @pages = pages
       end
 
+      def render?
+        FeatureService.enabled?(:basic_routing)
+      end
+
       def self.error_id(number)
         "condition_#{number}"
       end

@@ -20,6 +20,30 @@ describe Condition do
     end
   end
 
+  describe "#has_multiple_errors?" do
+    context "when condition has no errors" do
+      it "returns false" do
+        expect(condition.has_multiple_errors?).to be false
+      end
+    end
+
+    context "when condition has one error" do
+      let(:validation_errors) { [OpenStruct.new(name: "answer_value_doesnt_exist")] }
+
+      it "returns false" do
+        expect(condition.has_multiple_errors?).to be false
+      end
+    end
+
+    context "when condition has an error" do
+      let(:validation_errors) { [OpenStruct.new(name: "answer_value_doesnt_exist"), OpenStruct.new(name: "goto_page_doesnt_exist")] }
+
+      it "returns true" do
+        expect(condition.has_multiple_errors?).to be true
+      end
+    end
+  end
+
   describe "#errors_include?" do
     context "when condition has no errors" do
       it "returns false" do
