@@ -66,8 +66,7 @@ RSpec.describe UsersController, type: :request do
       it "redirects to /users page and updates user" do
         put user_path(user), params: { user: { role: } }
         expect(response).to redirect_to(users_path)
-        # TODO: This can change to .super_admin? after phase 2
-        expect(user.reload.role).to eq("super_admin")
+        expect(user.reload.super_admin?).to be true
       end
 
       it "when given a user which doesn't exist returns 404" do
