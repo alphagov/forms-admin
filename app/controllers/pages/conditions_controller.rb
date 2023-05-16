@@ -21,7 +21,7 @@ class Pages::ConditionsController < PagesController
     condition_form = Pages::ConditionsForm.new(condition_form_params)
 
     if condition_form.submit
-      redirect_to form_pages_path(@form)
+      redirect_to form_pages_path(@form), success: t("banner.success.route_created", question_position: condition_form.page.position)
     else
       render template: "pages/conditions/new", locals: { condition_form: }, status: :unprocessable_entity
     end
