@@ -43,6 +43,16 @@
       <%= yield :back_link %>
 
       <main class="govuk-main-wrapper" id="main-content" role="main">
+        <% if success %>
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+              <%= govuk_notification_banner(title_text: t("banner.success.title"), success: true) do |nb| %>
+                <% nb.with_heading(text: success) %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
         <%= yield %>
       </main>
     </div>

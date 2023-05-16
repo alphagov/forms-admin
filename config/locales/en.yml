@@ -22,6 +22,10 @@ en:
     form_edit: Back to edit your form
     form_view: Back to your form
     forms: Back to your forms
+  banner:
+    success:
+      route_created: Question %{question_position}’s route has been created
+      title: Success
   contact_details:
     new:
       body_html: |
