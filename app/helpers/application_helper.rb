@@ -77,4 +77,10 @@ module ApplicationHelper
       OpenStruct.new(label: t("users.roles.#{role}.name"), value: role, description: t("users.roles.#{role}.description"))
     end
   end
+
+  def user_access_options(access_options = %w[true false])
+    access_options.map do |access|
+      OpenStruct.new(label: t("users.has_access.#{access}.name"), value: access, description: t("users.has_access.#{access}.description"))
+    end
+  end
 end

@@ -69,6 +69,11 @@ RSpec.describe UsersController, type: :request do
         expect(user.reload.super_admin?).to be true
       end
 
+      it "can update whether user has access" do
+        patch user_path(user), params: { user: { has_access: false } }
+        expect(user.reload.has_access).to be false
+      end
+
       it "when given a user which doesn't exist returns 404" do
         put user_path(-1), params: { user: { role: } }
         expect(response).to have_http_status(:not_found)

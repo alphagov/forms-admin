@@ -38,6 +38,11 @@
           row.with_key { t('users.index.table_headings.role') }
           row.with_value { t("users.roles.#{@user.role}.name") }
         end
+
+        summary_list.with_row do |row|
+          row.with_key { t('users.edit.has_access') }
+          row.with_value { t("users.has_access.#{@user.has_access}.name") }
+        end
       end %>
 
       <%= f.govuk_collection_select :organisation_id, Organisation.order(:slug), :id, :name,
@@ -49,10 +54,13 @@
       <%= f.govuk_collection_radio_buttons :role, user_role_options, :value, :label, :description,
         legend: { text: t('users.edit.role'), size: 'm', tag: 'h2' } %>
 
+      <%= f.govuk_collection_radio_buttons :has_access, user_access_options, :value, :label, :description,
+        legend: { text: t('users.edit.access'), size: 'm', tag: 'h2' } %>
+
       <%= f.govuk_submit t('users.save') do
         govuk_button_link_to t('users.cancel'), users_path, secondary: true
       end %>
-  <% end %>
 
+    <% end %>
   </div>
 </div>
