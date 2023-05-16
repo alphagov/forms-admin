@@ -31,7 +31,7 @@ describe "pages/_form.html.erb", type: :view do
   end
 
   it "has a field with the hint text" do
-    expect(rendered).to have_field(type: "text", with: question.hint_text)
+    expect(rendered).to have_field(type: "textarea", with: question.hint_text)
   end
 
   it "has an unchecked optional checkbox" do
