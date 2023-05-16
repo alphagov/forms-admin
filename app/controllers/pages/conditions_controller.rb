@@ -45,7 +45,7 @@ class Pages::ConditionsController < PagesController
     condition_form = Pages::ConditionsForm.new(form_params)
 
     if condition_form.update
-      redirect_to form_pages_path(@form), success: t("banner.success.route_updated", question_position: condition_form.page.position )
+      redirect_to form_pages_path(@form), success: t("banner.success.route_updated", question_position: condition_form.page.position)
     else
       render template: "pages/conditions/edit", locals: { condition_form: }, status: :unprocessable_entity
     end
@@ -69,7 +69,7 @@ class Pages::ConditionsController < PagesController
     if delete_condition_form.delete
       case delete_condition_form.confirm_deletion
       when "true"
-        redirect_to form_pages_path(@form.id, page.id)
+        redirect_to form_pages_path(@form.id, page.id), success: t("banner.success.route_deleted", question_position: delete_condition_form.page.position)
       when "false"
         redirect_to edit_condition_path(@form.id, page.id, condition.id)
       end

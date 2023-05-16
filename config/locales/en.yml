@@ -25,6 +25,7 @@ en:
   banner:
     success:
       route_created: Question %{question_position}’s route has been created
+      route_deleted: Question %{question_position}’s route has been deleted
       route_updated: Question %{question_position}’s route has been updated
       title: Success
   contact_details:
