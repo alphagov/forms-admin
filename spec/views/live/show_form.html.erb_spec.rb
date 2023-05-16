@@ -28,7 +28,7 @@ describe "live/show_form.html.erb" do
   end
 
   it "contains a link to preview the form" do
-    expect(rendered).to have_link("Preview this form in a new tab", href: "runner-host/preview-live/2/#{form.form_slug}", visible: :all)
+    expect(rendered).to have_link(t("home.preview"), href: "runner-host/preview-live/2/#{form.form_slug}", visible: :all)
   end
 
   it "contains a link to the form in the runner" do
