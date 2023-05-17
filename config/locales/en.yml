@@ -281,7 +281,7 @@ en:
     form_status_heading: Status
     form_table_caption: "%{organisation_name} forms"
     main_heading: GOV.UK Forms
-    preview: Preview this form in a new tab
+    preview: Preview this form
     your_forms: Your forms
   internal_server_error:
     body: Please try again later.
