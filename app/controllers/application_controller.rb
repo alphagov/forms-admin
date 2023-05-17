@@ -10,6 +10,8 @@ class ApplicationController < ActionController::Base
 
   before_action :clear_questions_session_data
 
+  add_flash_types :success
+
   rescue_from Pundit::NotAuthorizedError do |_exception|
     # Useful when we start adding more policies that require custom errors
     # policy_name = exception.policy.class.to_s.underscore

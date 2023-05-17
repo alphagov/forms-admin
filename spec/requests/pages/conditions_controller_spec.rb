@@ -171,6 +171,11 @@ RSpec.describe Pages::ConditionsController, type: :request do
       expect(response).to redirect_to form_pages_path(form.id)
     end
 
+    it "displays success message" do
+      follow_redirect!
+      expect(response.body).to include(I18n.t("banner.success.route_created", question_position: 1))
+    end
+
     context "when form submit fails" do
       let(:submit_result) { false }
 
@@ -284,6 +289,11 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
     it "redirects to the page list" do
       expect(response).to redirect_to form_pages_path(form.id)
+    end
+
+    it "displays success message" do
+      follow_redirect!
+      expect(response.body).to include(I18n.t("banner.success.route_updated", question_position: 1))
     end
 
     context "when form submit fails" do
@@ -402,6 +412,11 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
     it "redirects to the page list" do
       expect(response).to redirect_to form_pages_path(form.id, selected_page.id)
+    end
+
+    it "displays success message" do
+      follow_redirect!
+      expect(response.body).to include(I18n.t("banner.success.route_deleted", question_position: 1))
     end
 
     context "when confirm deletion is false" do
