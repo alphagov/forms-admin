@@ -345,9 +345,11 @@ en:
     errors:
       error_summary:
         answer_value_doesnt_exist: The answer that question %{page_index}’s route is based on no longer exists - edit question %{page_index}’s route
+        cannot_have_goto_page_before_routing_page: The question you’re taking the person to is now above the route - edit question %{page_index}’s route
         goto_page_doesnt_exist: The question you’re taking the person to no longer exists - edit question %{page_index}’s route
       page_list:
         answer_value_doesnt_exist: select the answer you want to base question %{page_index}’s route on
+        cannot_have_goto_page_before_routing_page: select another question or page you want to take the person to, or delete question %{page_index}’s route
         goto_page_doesnt_exist: select the question or page you want to take the person to, or delete question %{page_index}’s route
     route: Route
   page_options_service:
