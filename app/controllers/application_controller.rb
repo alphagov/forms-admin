@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   before_action :set_request_id
   before_action :authenticate
   before_action :check_service_unavailable
+  before_action :check_access
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
   before_action :clear_questions_session_data
@@ -52,6 +53,12 @@ class ApplicationController < ActionController::Base
   def check_service_unavailable
     if Settings.service_unavailable
       render "errors/service_unavailable", status: :service_unavailable, formats: :html
+    end
+  end
+
+  def check_access
+    unless @current_user.has_access?
+      render "errors/access_denied", status: :forbidden, formats: :html
     end
   end
 
