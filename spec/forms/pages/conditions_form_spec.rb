@@ -114,7 +114,7 @@ RSpec.describe Pages::ConditionsForm, type: :model do
   describe "#id_for_field" do
     it "returns the correct id for a field" do
       result = described_class.new(form:, page: pages.first).id_for_field(:answer_value)
-      expect(result).to eq("condition_answer_value")
+      expect(result).to eq("pages-conditions-form-answer-value-field-error")
     end
   end
 

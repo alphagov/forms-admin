@@ -39,7 +39,7 @@ class Pages::ConditionsForm
   end
 
   def id_for_field(field)
-    "condition_#{field}"
+    "pages-conditions-form-#{field.to_s.dasherize}-field-error"
   end
 
   def check_errors_from_api
