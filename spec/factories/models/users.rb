@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :user, class: "User" do
-    email { Faker::Internet.email(domain: "example.gov.uk") }
     name { Faker::Name.name }
+    email { Faker::Internet.email(name:, domain: "example.gov.uk") }
     uid { Faker::Internet.uuid }
     role { :editor }
 
