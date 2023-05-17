@@ -134,6 +134,14 @@ To run linting with fixes you can use
 make lint-fix
 ```
 
+### Running tasks before pushing
+
+Before pushing code changes, it's a good idea to run the tests, use rubocop to format your code, and normalize the locales. We have a rake task for running all of these commands in parallel:
+
+```bash
+bin/rake run_code_quality_checks
+```
+
 ## Configuration and deployment
 
 The forms-admin app is containerised (see [Dockerfile](https://github.com/alphagov/forms-admin/blob/main/Dockerfile)) and can be deployed however you would normally deploy a containerised app.
