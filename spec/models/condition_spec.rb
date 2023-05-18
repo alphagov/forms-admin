@@ -70,10 +70,10 @@ describe Condition do
 
   describe "#errors_with_fields" do
     context "when the error is a known error" do
-      let(:validation_errors) { [OpenStruct.new(name: "answer_value_doesnt_exist"), OpenStruct.new(name: "goto_page_doesnt_exist")] }
+      let(:validation_errors) { [OpenStruct.new(name: "answer_value_doesnt_exist"), OpenStruct.new(name: "goto_page_doesnt_exist"), OpenStruct.new(name: "cannot_have_goto_page_before_routing_page")] }
 
       it "returns the correct values for each error type" do
-        expect(condition.errors_with_fields).to eq [{ field: :answer_value, name: "answer_value_doesnt_exist" }, { field: :goto_page_id, name: "goto_page_doesnt_exist" }]
+        expect(condition.errors_with_fields).to eq [{ field: :answer_value, name: "answer_value_doesnt_exist" }, { field: :goto_page_id, name: "goto_page_doesnt_exist" }, { field: :goto_page_id, name: "cannot_have_goto_page_before_routing_page" }]
       end
     end
 

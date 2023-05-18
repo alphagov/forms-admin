@@ -13,6 +13,7 @@ describe "pages/conditions/edit.html.erb" do
     allow(view).to receive(:create_condition_path).and_return("/forms/1/pages/1/conditions/new")
     allow(view).to receive(:delete_condition_path).and_return("/forms/1/pages/1/conditions/2/delete")
     allow(form).to receive(:qualifying_route_pages).and_return(pages)
+    condition_form.check_errors_from_api
 
     render template: "pages/conditions/edit", locals: { condition_form: }
   end
@@ -32,5 +33,17 @@ describe "pages/conditions/edit.html.erb" do
 
   it "has a delete route link" do
     expect(rendered).to have_link(text: "Delete question route", href: "/forms/1/pages/1/conditions/2/delete")
+  end
+
+  context "with a validation error" do
+    let(:condition) { build :condition, :with_answer_value_missing, id: 1, routing_page_id: 1, check_page_id: 1, goto_page_id: 3 }
+
+    it "has an error link that matches the field with errors" do
+      field_id = "pages-conditions-form-answer-value-field-error"
+
+      expect(rendered).to have_css(".govuk-error-summary")
+      expect(rendered).to have_link(I18n.t("activemodel.errors.models.pages/conditions_form.attributes.answer_value.answer_value_doesnt_exist", href: "##{field_id}"))
+      expect(rendered).to have_css("##{field_id}")
+    end
   end
 end

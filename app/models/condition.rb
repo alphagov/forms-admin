@@ -7,9 +7,13 @@ class Condition < ActiveResource::Base
   belongs_to :page
 
   def errors_with_fields
-    error_fields = { "goto_page_doesnt_exist" => :goto_page_id, "answer_value_doesnt_exist" => :answer_value }
+    error_fields = {
+      answer_value_doesnt_exist: :answer_value,
+      goto_page_doesnt_exist: :goto_page_id,
+      cannot_have_goto_page_before_routing_page: :goto_page_id,
+    }
     validation_errors.map do |error|
-      { name: error.name, field: error_fields[error.name] || :answer_value }
+      { name: error.name, field: error_fields[error.name.to_sym] || :answer_value }
     end
   end
 
