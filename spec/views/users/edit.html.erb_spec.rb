@@ -42,6 +42,10 @@ describe "users/edit.html.erb" do
     it "contains role" do
       expect(summary_list).to have_text("Editor")
     end
+
+    it "contains access" do
+      expect(summary_list).to have_text("Permitted")
+    end
   end
 
   describe "form" do
@@ -54,6 +58,11 @@ describe "users/edit.html.erb" do
       expect(rendered).to have_select(
         "Organisation", selected: "Test Org", with_options: ["Department For Tests", "Ministry Of Testing", "Test Org"]
       )
+    end
+
+    it "has access fields" do
+      expect(rendered).to have_checked_field("Permitted")
+      expect(rendered).to have_unchecked_field("Denied")
     end
   end
 

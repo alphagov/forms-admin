@@ -370,6 +370,7 @@ en:
       none_of_the_above: None of the above
       only_one_option: Selection from a list, one option only.
   page_titles:
+    access_denied: You do not have permission to access GOV.UK Forms
     address_settings: What kind of addresses do you expect to receive?
     change_name_form: Name your form
     confirm_email_form: Enter the confirmation code
@@ -533,15 +534,25 @@ en:
   users:
     cancel: Cancel
     edit:
+      access: Permission to access GOV.UK Forms
       caption: User details
+      has_access: Access to GOV.UK Forms
       organisation: Organisation
       organisation_hint: The user will only be able to see their organisation’s forms
       organisation_prompt: Select an organisation
       role: Role
       title: Edit user
+    has_access:
+      'false':
+        description: Will not be able to use GOV.UK Forms
+        name: Denied
+      'true':
+        description: Will be able to use GOV.UK Forms
+        name: Permitted
     index:
       organisation_blank: No organisation set
       table_headings:
+        access: Access
         email: Email address
         name: Name
         organisation: Organisation

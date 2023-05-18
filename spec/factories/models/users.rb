@@ -4,6 +4,7 @@ FactoryBot.define do
     email { Faker::Internet.email(name:, domain: "example.gov.uk") }
     uid { Faker::Internet.uuid }
     role { :editor }
+    has_access { true }
 
     trait :with_super_admin do
       role { :super_admin }

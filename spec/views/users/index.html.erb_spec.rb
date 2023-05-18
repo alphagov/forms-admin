@@ -31,6 +31,10 @@ describe "users/index.html.erb" do
     expect(rendered).to have_text("Editor")
   end
 
+  it "contains access" do
+    expect(rendered).to have_text("Permitted")
+  end
+
   context "with a user with an unknown organisation" do
     let(:users) { [build(:user, :with_unknown_org, id: 1)] }
 

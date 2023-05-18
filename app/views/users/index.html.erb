@@ -11,6 +11,7 @@
         row.with_cell(header: true, text: t("users.index.table_headings.email"))
         row.with_cell(header: true, text: t("users.index.table_headings.organisation"))
         row.with_cell(header: true, text: t("users.index.table_headings.role"))
+        row.with_cell(header: true, text: t("users.index.table_headings.access"))
       end
     end %>
 
@@ -23,6 +24,7 @@
           row.with_cell( text: user.email)
           row.with_cell( text: user.organisation&.name || t("users.index.organisation_blank"))
           row.with_cell( text: t("users.roles.#{user.role}.name"))
+          row.with_cell( text: t("users.has_access.#{user.has_access}.name"))
         end
       end
     end %>
