@@ -280,6 +280,14 @@ RSpec.describe PageListComponent::View, type: :component do
           expect(goto_page_text).to eq page_list_component.error_link(error_key: "cannot_have_goto_page_before_routing_page", edit_link: condition_edit_path, page: pages[0], field: :goto_page_id)
         end
       end
+
+      context "when the goto page is immediately after the check page" do
+        let(:condition) { (build :condition, :with_goto_page_immediately_after_check_page, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 2) }
+
+        it "returns the goto page error link" do
+          expect(goto_page_text).to eq page_list_component.error_link(error_key: "cannot_route_to_next_page", edit_link: condition_edit_path, page: pages[0], field: :goto_page_id)
+        end
+      end
     end
 
     describe "render_routing?" do

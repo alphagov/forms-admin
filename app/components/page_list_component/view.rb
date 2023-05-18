@@ -43,6 +43,8 @@ module PageListComponent
         error_link(error_key: "goto_page_doesnt_exist", edit_link:, page:, field: :goto_page_id)
       elsif condition.errors_include?("cannot_have_goto_page_before_routing_page")
         error_link(error_key: "cannot_have_goto_page_before_routing_page", edit_link:, page:, field: :goto_page_id)
+      elsif condition.errors_include?("cannot_route_to_next_page")
+        error_link(error_key: "cannot_route_to_next_page", edit_link:, page:, field: :goto_page_id)
       else
         I18n.t("page_conditions.condition_goto_page_text", goto_page_text: question_text_for_page(condition.goto_page_id))
       end
