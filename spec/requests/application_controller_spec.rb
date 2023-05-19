@@ -1,6 +1,21 @@
 require "rails_helper"
 
 RSpec.describe ApplicationController, type: :request do
+  context "when the service is unavailable" do
+    before do
+      allow(Settings).to receive(:service_unavailable).and_return(true)
+      get "/"
+    end
+
+    it "returns http code 503" do
+      expect(response).to have_http_status(:service_unavailable)
+    end
+
+    it "renders the service unavailable page" do
+      expect(response).to render_template("errors/service_unavailable")
+    end
+  end
+
   context "when a user is logged in who does not have access" do
     let(:headers) do
       {
