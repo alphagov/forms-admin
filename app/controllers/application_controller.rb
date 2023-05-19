@@ -41,7 +41,11 @@ class ApplicationController < ActionController::Base
       name: Settings.basic_auth.username,
       email: "#{Settings.basic_auth.username}@example.com",
       role: :editor,
-      organisation_slug: "government-digital-service",
+      organisation: Organisation.new(
+        name: Settings.basic_auth.organisation.name,
+        slug: Settings.basic_auth.organisation.slug,
+        content_id: Settings.basic_auth.organisation.content_id,
+      ),
     )
   end
 
@@ -68,7 +72,7 @@ class ApplicationController < ActionController::Base
     if @current_user.present?
       payload[:user_id] = @current_user.id
       payload[:user_email] = @current_user.email
-      payload[:user_organisation_slug] = @current_user.organisation_slug
+      payload[:user_organisation_slug] = @current_user.organisation&.slug
     end
     payload[:request_id] = request.request_id
     payload[:user_ip] = user_ip(request.env.fetch("HTTP_X_FORWARDED_FOR", ""))

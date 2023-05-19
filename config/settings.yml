@@ -34,3 +34,7 @@ basic_auth:
   enabled: false
   username: basic_auth_user
   password:
+  organisation:
+    name: GDS User Research
+    slug: gds-user-research
+    content_id: "00000000-0000-0000-0000-000000000000"
