@@ -5,8 +5,7 @@ class ApplicationController < ActionController::Base
   include Pundit::Authorization
   before_action :set_request_id
   before_action :check_service_unavailable
-  before_action :authenticate
-  before_action :check_access
+  before_action :authenticate_and_check_access
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
   before_action :clear_questions_session_data
@@ -121,5 +120,12 @@ class ApplicationController < ActionController::Base
   # create @current_user and set that.
   def pundit_user
     @current_user
+  end
+
+private
+
+  def authenticate_and_check_access
+    authenticate
+    check_access
   end
 end
