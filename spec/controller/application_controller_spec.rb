@@ -47,7 +47,8 @@ describe ApplicationController, type: :controller do
       # Mock basic auth settings
       test_user_name = "tester"
       test_password = "password"
-      basic_auth_double = object_double("basic_auth_double", enabled: true, username: test_user_name, password: test_password)
+      basic_auth_organisation_double = object_double("basic_auth_organisation_double", slug: "test-org", name: "Test Org", content_id: "")
+      basic_auth_double = object_double("basic_auth_double", enabled: true, username: test_user_name, password: test_password, organisation: basic_auth_organisation_double)
       allow(Settings).to receive(:basic_auth).and_return(basic_auth_double)
 
       # Mock warden manager and config
@@ -62,7 +63,7 @@ describe ApplicationController, type: :controller do
 
       expect(assigns[:current_user].name).to eq(test_user_name)
       expect(assigns[:current_user].email).to eq("#{test_user_name}@example.com")
-      expect(assigns[:current_user].organisation.slug).to eq("government-digital-service")
+      expect(assigns[:current_user].organisation.slug).to eq("test-org")
     end
   end
 end
