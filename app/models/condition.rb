@@ -11,6 +11,7 @@ class Condition < ActiveResource::Base
       answer_value_doesnt_exist: :answer_value,
       goto_page_doesnt_exist: :goto_page_id,
       cannot_have_goto_page_before_routing_page: :goto_page_id,
+      cannot_route_to_next_page: :goto_page_id,
     }
     validation_errors.map do |error|
       { name: error.name, field: error_fields[error.name.to_sym] || :answer_value }

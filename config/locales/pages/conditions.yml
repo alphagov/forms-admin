@@ -15,6 +15,7 @@ en:
             goto_page_id:
               blank: Select the question or page you want to take the person to
               cannot_have_goto_page_before_routing_page: Select the question or page you want to take the person to, or delete this route
+              cannot_route_to_next_page: Select the question or page you want to take the person to, or delete this route
               goto_page_doesnt_exist: Select the question or page you want to take the person to, or delete this route
         pages/delete_condition_form:
           attributes:
