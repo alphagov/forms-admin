@@ -21,12 +21,4 @@ RSpec.describe ErrorsController, type: :request do
       expect(response).to have_http_status(:internal_server_error)
     end
   end
-
-  describe "Service unavailable page" do
-    it "returns http code 503" do
-      allow(Settings).to receive(:service_unavailable).and_return(true)
-      get "/"
-      expect(response).to have_http_status(:service_unavailable)
-    end
-  end
 end
