@@ -3,12 +3,8 @@ module Forms
     after_action :verify_authorized
     def new
       authorize current_form, :can_view_form?
-      if current_form.has_live_version && !FeatureService.enabled?(:draft_live_versioning)
-        render_confirmation(:form)
-      else
-        @make_live_form = MakeLiveForm.new(form: current_form)
-        render_new
-      end
+      @make_live_form = MakeLiveForm.new(form: current_form)
+      render_new
     end
 
     def create

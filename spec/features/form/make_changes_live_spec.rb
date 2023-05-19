@@ -1,6 +1,6 @@
 require "rails_helper"
 
-feature "Make changes live", type: :feature, feature_draft_live_versioning: true do
+feature "Make changes live", type: :feature do
   let(:form) { build :form, :live, id: 1, name: "Apply for a juggling license" }
   let(:org_forms) { [form] }
   let(:pages) { build_list :page, 5, form_id: form.id }

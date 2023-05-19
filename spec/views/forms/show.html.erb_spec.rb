@@ -42,22 +42,16 @@ describe "forms/show.html.erb" do
   context "when form states is a live" do
     let(:form) { OpenStruct.new(id: 2, name: "Form 2", form_slug: "form-2", status: "live", has_live_version: true, pages: []) }
 
-    it "rendered live tag" do
-      expect(rendered).to have_css(".govuk-tag.govuk-tag--blue", text: "LIVE")
-    end
-
     it "has a back link to the live form page" do
       expect(view.content_for(:back_link)).to have_link("Back", href: "/forms/2/live")
     end
 
-    context "when feature flag is enabled", feature_draft_live_versioning: true do
-      it "rendered draft tag" do
-        expect(rendered).to have_css(".govuk-tag.govuk-tag--purple", text: "DRAFT")
-      end
+    it "rendered draft tag" do
+      expect(rendered).to have_css(".govuk-tag.govuk-tag--purple", text: "DRAFT")
+    end
 
-      it "does not contain a link to delete the form" do
-        expect(rendered).not_to have_link("Delete draft form", href: delete_form_path(2))
-      end
+    it "does not contain a link to delete the form" do
+      expect(rendered).not_to have_link("Delete draft form", href: delete_form_path(2))
     end
   end
 end

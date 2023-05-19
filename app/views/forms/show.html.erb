@@ -9,7 +9,7 @@
       <%= @form.has_live_version ? t("forms.form_overview.title_edit") : t("forms.form_overview.title_create") %>
     </h1>
 
-    <%= render FormStatusTagDescriptionComponent::View.new(status: ( FeatureService.enabled?(:draft_live_versioning) ? :draft : @form.status )) %>
+    <%= render FormStatusTagDescriptionComponent::View.new(status: :draft) %>
 
     <% if flash[:message] %>
       <p class="govuk-body"><%= flash[:message] %></p>
@@ -20,16 +20,9 @@
     </p>
 
     <% if @form.has_live_version %>
-      <% if FeatureService.enabled? :draft_live_versioning %>
-        <div class="govuk-inset-text">
-          <p><%= t("make_changes_live.warning") %></p>
-        </div>
-      <% else%>
-        <div class="govuk-inset-text">
-          <p><%= t("live_form_warning.notification_heading") %></p>
-          <p><%= t("live_form_warning.notification_content") %></p>
-        </div>
-      <% end %>
+      <div class="govuk-inset-text">
+        <p><%= t("make_changes_live.warning") %></p>
+      </div>
     <% end %>
 
     <%= render TaskListComponent::View.new(completed_task_count: @task_status_counts[:completed],

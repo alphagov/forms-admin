@@ -109,21 +109,15 @@ describe "live/show_form.html.erb" do
     end
   end
 
-  it "does not contain a link to create a new draft" do
-    expect(rendered).not_to have_link(t("show_live_form.draft_create"), href: form_path(form.id))
+  it "contains a link to create a new draft" do
+    expect(rendered).to have_link(t("show_live_form.draft_create"), href: form_path(form.id))
   end
 
-  context "when draft/live feature enabled", feature_draft_live_versioning: true do
-    it "contains a link to create a new draft" do
-      expect(rendered).to have_link(t("show_live_form.draft_create"), href: form_path(form.id))
-    end
+  context "when form has a draft version already" do
+    let(:form_metadata) { OpenStruct.new(has_draft_version: true) }
 
-    context "when form has a draft version already" do
-      let(:form_metadata) { OpenStruct.new(has_draft_version: true) }
-
-      it "contains a link to edit the draft" do
-        expect(rendered).to have_link(t("show_live_form.draft_edit"), href: form_path(form.id))
-      end
+    it "contains a link to edit the draft" do
+      expect(rendered).to have_link(t("show_live_form.draft_edit"), href: form_path(form.id))
     end
   end
 end

@@ -64,7 +64,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
       end
     end
 
-    context "when editing a draft of an existing live form", feature_draft_live_versioning: true do
+    context "when editing a draft of an existing live form" do
       let(:form) do
         build(:form,
               :live,
@@ -77,22 +77,6 @@ RSpec.describe Forms::MakeLiveController, type: :request do
 
       it "renders make your changes live" do
         expect(response).to render_template("make_your_changes_live")
-      end
-    end
-
-    context "when the form is already live and the draft feature is not enabled", feature_draft_live_versioning: false do
-      let(:form) do
-        build(:form,
-              :live,
-              id: 2)
-      end
-
-      it "reads the form from the API" do
-        expect(form).to have_been_read
-      end
-
-      it "renders the confirmation page" do
-        expect(response).to render_template(:confirmation)
       end
     end
   end

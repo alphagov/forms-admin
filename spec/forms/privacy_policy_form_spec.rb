@@ -7,17 +7,6 @@ RSpec.describe Forms::PrivacyPolicyForm, type: :model do
         build(:form, :live)
       end
 
-      it "is invalid if blank" do
-        privacy_policy_form = described_class.new(form:, privacy_policy_url: "")
-        error_message = I18n.t("activemodel.errors.models.forms/privacy_policy_form.attributes.privacy_policy_url.blank")
-
-        privacy_policy_form.validate(:privacy_policy_url)
-
-        expect(privacy_policy_form.errors.full_messages_for(:privacy_policy_url)).to include(
-          "Privacy policy url #{error_message}",
-        )
-      end
-
       it "validates the URL" do
         privacy_policy_form = described_class.new(form:, privacy_policy_url: "gov.uk")
         error_message = I18n.t("errors.messages.url")
@@ -29,12 +18,10 @@ RSpec.describe Forms::PrivacyPolicyForm, type: :model do
         )
       end
 
-      context "when draft/live version feature enabled", feature_draft_live_versioning: true do
-        it "is valid if blank" do
-          privacy_policy_form = described_class.new(form:, privacy_policy_url: "")
+      it "is valid if blank" do
+        privacy_policy_form = described_class.new(form:, privacy_policy_url: "")
 
-          expect(privacy_policy_form).to be_valid
-        end
+        expect(privacy_policy_form).to be_valid
       end
     end
 

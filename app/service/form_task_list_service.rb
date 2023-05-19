@@ -58,10 +58,6 @@ private
   end
 
   def section_4_tasks
-    if !FeatureService.enabled?(:draft_live_versioning) && @form.has_live_version
-      return []
-    end
-
     [{
       task_name: I18n.t("forms.task_list_#{create_or_edit}.section_4.make_live"),
       path: @form.ready_for_live? ? make_live_path(@form.id) : "",
