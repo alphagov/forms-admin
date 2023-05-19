@@ -62,7 +62,7 @@ describe ApplicationController, type: :controller do
 
       expect(assigns[:current_user].name).to eq(test_user_name)
       expect(assigns[:current_user].email).to eq("#{test_user_name}@example.com")
-      expect(assigns[:current_user].organisation_slug).to eq("government-digital-service")
+      expect(assigns[:current_user].organisation.slug).to eq("government-digital-service")
     end
   end
 end

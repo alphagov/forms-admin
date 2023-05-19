@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
       name: Settings.basic_auth.username,
       email: "#{Settings.basic_auth.username}@example.com",
       role: :editor,
-      organisation_slug: "government-digital-service",
+      organisation: Organisation.find_by(slug: "government-digital-service"),
     )
   end
 
