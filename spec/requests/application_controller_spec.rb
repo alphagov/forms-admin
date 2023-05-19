@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.describe ApplicationController, type: :request do
   context "when the service is unavailable" do
     before do
+      logout # service unavailable page should be visible even if user is not logged in
+
       allow(Settings).to receive(:service_unavailable).and_return(true)
       get "/"
     end
