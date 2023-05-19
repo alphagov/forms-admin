@@ -68,7 +68,7 @@ class ApplicationController < ActionController::Base
     if @current_user.present?
       payload[:user_id] = @current_user.id
       payload[:user_email] = @current_user.email
-      payload[:user_organisation_slug] = @current_user.organisation_slug
+      payload[:user_organisation_slug] = @current_user.organisation&.slug
     end
     payload[:request_id] = request.request_id
     payload[:user_ip] = user_ip(request.env.fetch("HTTP_X_FORWARDED_FOR", ""))

@@ -9,7 +9,7 @@ module Forms
     def create
       form = Form.new({
         name: params[:name],
-        org: @current_user.organisation_slug,
+        org: @current_user.organisation.slug,
       })
 
       authorize form, :can_view_form?

@@ -29,7 +29,7 @@ describe ApplicationController, type: :controller do
 
   context "when authenticating a user" do
     it "invokes Signon authentication when basic auth is not enabled" do
-      signon_user = User.new(name: "tester", organisation_slug: "testing")
+      signon_user = build :user, name: "tester", organisation_slug: "testing"
 
       # Mock GDS SSO
       allow(request.env["warden"]).to receive(:authenticate!).and_return(true)

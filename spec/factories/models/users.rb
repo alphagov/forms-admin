@@ -15,8 +15,9 @@ FactoryBot.define do
 
     after(:build) do |user|
       if user.organisation.present?
-        user.organisation_slug = user.organisation.slug
-        user.organisation_content_id = user.organisation.content_id
+        # set deprecated attributes to nil to make sure no code is accidentally relying on them
+        user.organisation_slug = nil
+        user.organisation_content_id = nil
       end
     end
 
