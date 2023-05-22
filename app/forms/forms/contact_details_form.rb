@@ -13,8 +13,6 @@ class Forms::ContactDetailsForm
   validates :link_href, presence: true, url: true, length: { maximum: 120 }, if: -> { supplied :supply_link }
   validates :link_text, presence: true, length: { maximum: 120 }, if: -> { supplied :supply_link }
 
-  validate :must_be_supply_contact_details, if: -> { validate_presence }
-
   def must_be_supply_contact_details
     errors.add(:contact_details_supplied, :must_be_supply_contact_details) if contact_details_supplied.reject(&:blank?).empty?
   end
@@ -75,11 +73,5 @@ private
 
   def supplied(field)
     contact_details_supplied.map(&:to_sym).include? field
-  end
-
-  def validate_presence
-    return false if FeatureService.enabled?(:draft_live_versioning)
-
-    form.has_live_version
   end
 end

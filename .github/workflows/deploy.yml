@@ -52,4 +52,3 @@ jobs:
             --var SETTINGS__FORMS_API__BASE_URL=${{ secrets.API_BASE }} \
             --var INSTANCES=2 \
             --var SETTINGS__FORMS_API__AUTH_KEY=${{ secrets.API_KEY }} \
-            --var SETTINGS__FEATURES__DRAFT_LIVE_VERSIONING=true

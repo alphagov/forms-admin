@@ -52,12 +52,10 @@
       <p class="govuk-body"><%= govuk_link_to form.support_url_text, form.support_url %></p>
     <% end %>
 
-    <% if FeatureService.enabled?(:draft_live_versioning) %>
-      <p class="govuk-body">
-        <%# i18n-tasks-use t('show_live_form.draft_create') %>
-        <%# i18n-tasks-use t('show_live_form.draft_edit') %>
-        <%= govuk_button_link_to t("show_live_form.draft_#{ form_metadata.has_draft_version ? 'edit': 'create'}"), form_path(form.id) %>
-      </p>
-    <% end %>
+    <p class="govuk-body">
+      <%# i18n-tasks-use t('show_live_form.draft_create') %>
+      <%# i18n-tasks-use t('show_live_form.draft_edit') %>
+      <%= govuk_button_link_to t("show_live_form.draft_#{ form_metadata.has_draft_version ? 'edit': 'create'}"), form_path(form.id) %>
+    </p>
   </div>
 </div>
