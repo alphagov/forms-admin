@@ -67,7 +67,7 @@ describe "pages/type_of_answer.html.erb", type: :view do
   end
 
   it "does not display a warning about routes being deleted if answer type changes" do
-    expect(rendered).not_to have_selector(".govuk-inset-text")
+    expect(rendered).not_to have_selector(".govuk-notification-banner__content")
   end
 
   context "when editing an existing" do
@@ -76,8 +76,8 @@ describe "pages/type_of_answer.html.erb", type: :view do
     let(:conditions) { [(build :condition)] }
 
     it "displays a warning about routes being deleted if answer type changes" do
-      expect(Capybara.string(rendered).find(".govuk-inset-text").text(normalize_ws: true))
-        .to eq(Capybara.string(I18n.t("type_of_answer.routing_warning_about_change_answer_type_html"))
+      expect(Capybara.string(rendered).find(".govuk-notification-banner__content").text(normalize_ws: true))
+        .to include(Capybara.string(I18n.t("type_of_answer.routing_warning_about_change_answer_type_html"))
                         .text(normalize_ws: true))
     end
 
@@ -85,7 +85,7 @@ describe "pages/type_of_answer.html.erb", type: :view do
       let(:answer_type) { "number" }
 
       it "does not display a warning about routes being deleted if answer type changes" do
-        expect(rendered).not_to have_selector(".govuk-inset-text")
+        expect(rendered).not_to have_selector(".govuk-notification-banner__content")
       end
     end
 
@@ -93,7 +93,7 @@ describe "pages/type_of_answer.html.erb", type: :view do
       let(:conditions) { [] }
 
       it "does not display a warning about routes being deleted if answer type changes" do
-        expect(rendered).not_to have_selector(".govuk-inset-text")
+        expect(rendered).not_to have_selector(".govuk-notification-banner__content")
       end
     end
   end
