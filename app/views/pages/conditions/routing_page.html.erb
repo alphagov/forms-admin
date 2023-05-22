@@ -12,15 +12,28 @@
     </p>
 
     <%= form_with(model: form, url: set_routing_page_path(form.id), method: 'POST') do |f| %>
-      <%= f.govuk_collection_radio_buttons :routing_page_id,
-                                           form.qualifying_route_pages,
-                                           :id, :question_text,
-                                           legend: {
-                                             text: t("routing_page.legend_text"),
-                                             size: 'm' },
-                                           hint:{
-                                             text: t("routing_page.legend_hint_text") }
-      %>
+      <% if form.qualifying_route_pages.length <= 10 %>
+        <%= f.govuk_collection_radio_buttons :routing_page_id,
+                                            form.qualifying_route_pages,
+                                            :id, :question_text,
+                                            legend: {
+                                              text: t("routing_page.legend_text"),
+                                              size: 'm' },
+                                            hint:{
+                                              text: t("routing_page.legend_hint_text") }
+        %>
+      <% else %>
+        <%= f.govuk_collection_select :routing_page_id,
+                                            form.qualifying_route_pages,
+                                            :id, :question_text,
+                                            label: {
+                                              text: t("routing_page.legend_text"),
+                                              size: 'm' },
+                                            hint:{
+                                              text: t("routing_page.legend_hint_text") }
+        %>
+      <% end %>
+
       <%= f.govuk_submit t("continue") %>
     <% end %>
   </div>
