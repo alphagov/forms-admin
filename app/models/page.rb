@@ -50,6 +50,10 @@ class Page < ActiveResource::Base
     routing_conditions.map { |routing_condition| Condition.new(routing_condition.attributes) }
   end
 
+  def question_with_number
+    "#{position}. #{question_text}"
+  end
+
 private
 
   def is_optional_value

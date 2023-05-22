@@ -57,6 +57,10 @@ describe "pages/conditions/routing_page.html.erb" do
     it "has a select option for each routing pages" do
       expect(rendered).to have_css("select > option", count: pages.length)
     end
+
+    it "includes the page number and question text" do
+      expect(rendered).to have_text(pages.first.question_with_number)
+    end
   end
 
   it "has a submit button" do

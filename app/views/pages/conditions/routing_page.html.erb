@@ -25,7 +25,7 @@
       <% else %>
         <%= f.govuk_collection_select :routing_page_id,
                                             form.qualifying_route_pages,
-                                            :id, :question_text,
+                                            :id, :question_with_number,
                                             label: {
                                               text: t("routing_page.legend_text"),
                                               size: 'm' },
