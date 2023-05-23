@@ -36,7 +36,7 @@ jobs:
         uses: nanasess/setup-chromedriver@v2.0.0
       # The ruby version is taken from the .ruby-version file, no need to specify here.
       - name: Install Ruby and gems
-        uses: ruby/setup-ruby@7d546f4868fb108ed378764d873683f920672ae2
+        uses: ruby/setup-ruby@8a45918450651f5e4784b6031db26f4b9f76b251
         with:
           bundler-cache: true
       - name: Install frontend dependencies
