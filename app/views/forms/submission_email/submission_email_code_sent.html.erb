@@ -4,5 +4,5 @@
 </h1>
 <%= t('email_code_sent.body_html', temp_email: @submission_email_form.temporary_submission_email) %>
 
-<p class="govuk-body"><%= govuk_link_to "Enter the email address confirmation code", submission_email_code_path( @submission_email_form.form) %></p>
-<p class="govuk-body"><%= govuk_link_to(t('email_code_sent.continue'), form_path) %></p>
+<p><%= govuk_link_to "Enter the email address confirmation code", submission_email_code_path( @submission_email_form.form) %></p>
+<p><%= govuk_link_to(t('email_code_sent.continue'), form_path) %></p>

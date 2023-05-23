@@ -10,49 +10,49 @@
 
     <%= render FormStatusTagDescriptionComponent::View.new(status: :live) %>
 
-    <p class="govuk-body">
+    <p>
       <%= render PreviewLinkComponent::View.new(form.pages, link_to_runner(Settings.forms_runner.url, form.id, form.form_slug, mode: :preview_live)) %>
     </p>
 
     <%= render FormUrlComponent::View.new(link_to_runner(Settings.forms_runner.url, form.id, form.form_slug, mode: :live ))%>
 
     <h2 class="govuk-heading-m"><%= t('show_live_form.questions') %></h2>
-    <p class="govuk-body"><%= govuk_link_to t('show_live_form.questions_link', count: form.pages.count), live_form_pages_path(form.id) %></p>
+    <p><%= govuk_link_to t('show_live_form.questions_link', count: form.pages.count), live_form_pages_path(form.id) %></p>
 
     <% if form.declaration_text.present? %>
       <h2 class="govuk-heading-m"><%= t('show_live_form.declaration') %></h2>
-      <p class="govuk-body"><%= form.declaration_text %></p>
+      <p><%= form.declaration_text %></p>
       <%= govuk_details(summary_text: t('show_live_form.what_is_declaration'), text: t('show_live_form.declaration_description')) %>
     <% end %>
 
     <h2 class="govuk-heading-m"><%= t('show_live_form.what_happens_next') %></h2>
-    <p class="govuk-body"><%= form.what_happens_next_text %></p>
+    <p><%= form.what_happens_next_text %></p>
     <%= govuk_details(summary_text: t('show_live_form.what_is_what_happens_next'), text: t('show_live_form.what_happens_next_description')) %>
 
     <h2 class="govuk-heading-m"><%= t('show_live_form.submission_email') %></h2>
-    <p class="govuk-body"><%= form.submission_email %></p>
+    <p><%= form.submission_email %></p>
 
     <h2 class="govuk-heading-m"><%= t('show_live_form.privacy_policy_link') %></h2>
-    <p class="govuk-body"><%= govuk_link_to(form.privacy_policy_url, form.privacy_policy_url) %></p>
+    <p><%= govuk_link_to(form.privacy_policy_url, form.privacy_policy_url) %></p>
 
     <h2 class="govuk-heading-m"><%= t('show_live_form.contact_details') %></h2>
 
     <% if form.support_email %>
       <h3 class="govuk-heading-s"><%= t('show_live_form.support_email') %></h3>
-      <p class="govuk-body"><%= form.support_email %></p>
+      <p><%= form.support_email %></p>
     <% end %>
 
     <% if form.support_phone %>
       <h3 class="govuk-heading-s"><%= t('show_live_form.support_phone') %></h3>
-      <p class="govuk-body"><%= form.support_phone %></p>
+      <p><%= form.support_phone %></p>
     <% end %>
 
     <% if form.support_url %>
       <h3 class="govuk-heading-s"><%= t('show_live_form.support_url') %></h3>
-      <p class="govuk-body"><%= govuk_link_to form.support_url_text, form.support_url %></p>
+      <p><%= govuk_link_to form.support_url_text, form.support_url %></p>
     <% end %>
 
-    <p class="govuk-body">
+    <p>
       <%# i18n-tasks-use t('show_live_form.draft_create') %>
       <%# i18n-tasks-use t('show_live_form.draft_edit') %>
       <%= govuk_button_link_to t("show_live_form.draft_#{ form_metadata.has_draft_version ? 'edit': 'create'}"), form_path(form.id) %>

@@ -6,13 +6,13 @@
 
     <h2 class="govuk-heading-m"><%= t('make_live.confirmation.form_name') %></h2>
 
-    <p class="govuk-body"><%= @form.name %></p>
+    <p><%= @form.name %></p>
 
     <%= render FormUrlComponent::View.new(link_to_runner(Settings.forms_runner.url, @form.id, @form.form_slug, mode: :live )) %>
 
     <%= t("make_live.confirmation.body_html") %>
 
-    <p class="govuk-body">
+    <p>
       <%= govuk_link_to t("make_live.confirmation.continue_link"), live_form_path(@form.id) %>
     </p>
   </div>

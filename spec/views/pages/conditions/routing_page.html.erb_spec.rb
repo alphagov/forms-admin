@@ -19,7 +19,7 @@ describe "pages/conditions/routing_page.html.erb" do
   end
 
   it "contains body text" do
-    expect(rendered).to have_css("p.govuk-body", text: t("routing_page.body_text"))
+    expect(rendered).to have_css("p", text: t("routing_page.body_text"))
   end
 
   context "with fewer than 10 options" do
