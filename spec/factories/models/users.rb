@@ -11,6 +11,10 @@ FactoryBot.define do
       role { :super_admin }
     end
 
+    trait :with_trial do
+      role { :trial }
+    end
+
     organisation_slug { "test-org" }
     organisation { association :organisation, slug: organisation_slug }
 

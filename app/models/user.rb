@@ -10,6 +10,7 @@ class User < ApplicationRecord
   enum :role, {
     super_admin: "super_admin",
     editor: "editor",
+    trial: "trial",
   }
 
   validates :role, presence: true
