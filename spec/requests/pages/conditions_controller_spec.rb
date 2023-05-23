@@ -62,6 +62,8 @@ RSpec.describe Pages::ConditionsController, type: :request do
   end
 
   describe "#set_routing_page" do
+    let(:params) { { pages_routing_page_form: { routing_page_id: 1 } } }
+
     before do
       selected_page.id = 1
       ActiveResource::HttpMock.respond_to do |mock|
@@ -76,7 +78,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
         allow(Pundit).to receive(:authorize).and_return(true)
       end
 
-      post routing_page_path(form_id: 1, params: { form: { routing_page_id: 1 } })
+      post routing_page_path(form_id: 1, params:)
     end
 
     it "Reads the form from the API" do
@@ -96,6 +98,18 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
       it "Returns a 403 status" do
         expect(response.status).to eq(403)
+      end
+    end
+
+    context "when the routing page is not set" do
+      let(:params) { { pages_routing_page_form: { routing_page_id: nil } } }
+
+      it "renders the routing page view" do
+        expect(response).to render_template("pages/conditions/routing_page")
+      end
+
+      it "Returns a 422 status" do
+        expect(response.status).to eq(422)
       end
     end
   end

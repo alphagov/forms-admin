@@ -1,17 +1,20 @@
-<% set_page_title(t("page_titles.routing_page")) %>
+<% set_page_title(title_with_error_prefix(t('page_titles.routing_page'), routing_page_form.errors&.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_pages_path(form.id)) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">
-      <span class="govuk-caption-l"><%= form.name %> </span>
-      <%= t("page_titles.routing_page") %>
-    </h1>
+    <%= form_with(model: routing_page_form, url: set_routing_page_path(form.id), method: 'POST') do |f| %>
+      <% if routing_page_form&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= form.name %> </span>
+        <%= t("page_titles.routing_page") %>
+      </h1>
 
-    <p>
-      <%= t("routing_page.body_text") %>
-    </p>
+      <p>
+        <%= t("routing_page.body_text") %>
+      </p>
 
-    <%= form_with(model: form, url: set_routing_page_path(form.id), method: 'POST') do |f| %>
       <% if form.qualifying_route_pages.length <= 10 %>
         <%= f.govuk_collection_radio_buttons :routing_page_id,
                                             form.qualifying_route_pages,
