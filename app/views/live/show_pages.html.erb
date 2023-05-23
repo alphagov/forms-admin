@@ -15,7 +15,7 @@
       <%= govuk_summary_list(**PageSummaryCardDataService.call(page:, pages: form.pages).build_data)%>
     <% end %>
 
-    <p class="govuk-body">
+    <p>
       <%= govuk_link_to t("back_link.form_view"), live_form_path(form) %>
     </p>
   </div>

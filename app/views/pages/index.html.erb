@@ -16,7 +16,7 @@
     </dl>
 
     <% if flash[:message] %>
-      <p class="govuk-body"><%= flash[:message] %></p>
+      <p><%= flash[:message] %></p>
     <% end %>
     <div class="govuk-button-group">
       <%= govuk_button_link_to t("pages.index.add_question"), type_of_answer_new_path(@form), class:"govuk-!-margin-bottom-3 govuk-!-margin-top-3" %>

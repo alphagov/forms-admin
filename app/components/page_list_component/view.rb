@@ -25,7 +25,7 @@ module PageListComponent
       content_tag(
         :a,
         I18n.t("page_conditions.errors.page_list.#{error_key}", page_index: page.position),
-        class: "govuk-link app-page_list__route-text--error",
+        class: "app-page_list__route-text--error",
         href: "#{edit_link}##{Pages::ConditionsForm.new.id_for_field(field)}",
       )
     end

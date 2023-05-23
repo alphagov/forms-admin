@@ -1,5 +1,7 @@
 $govuk-images-path: "@govuk/assets/images/";
 $govuk-fonts-path: "@govuk/assets/fonts/";
+$govuk-new-link-styles: true;
+$govuk-global-styles: true;
 
 @import "govuk/all";
 @import "../styles/app_select_options";

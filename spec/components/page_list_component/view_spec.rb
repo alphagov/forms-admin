@@ -228,7 +228,7 @@ RSpec.describe PageListComponent::View, type: :component do
       let(:error_link) { page_list_component.error_link(error_key: error_name, edit_link: condition_edit_path, page: pages[0], field: :answer_value) }
 
       it "returns the corrrect error html for a given condition" do
-        expect(error_link).to eq "<a class=\"govuk-link app-page_list__route-text--error\" href=\"#{condition_edit_path}##{Pages::ConditionsForm.new.id_for_field(:answer_value)}\">#{I18n.t("page_conditions.errors.page_list.#{error_name}", page_index: 1)}</a>"
+        expect(error_link).to eq "<a class=\"app-page_list__route-text--error\" href=\"#{condition_edit_path}##{Pages::ConditionsForm.new.id_for_field(:answer_value)}\">#{I18n.t("page_conditions.errors.page_list.#{error_name}", page_index: 1)}</a>"
       end
     end
 

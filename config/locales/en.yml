@@ -31,11 +31,11 @@ en:
   contact_details:
     new:
       body_html: |
-        <p class="govuk-body">
+        <p>
           You need to provide at least one way for people to get help if they get stuck while filling in this form.
         </p>
 
-        <p class="govuk-body">
+        <p>
           The contact information will be displayed at the bottom of every page of the form.
         </p>
       hint: Select at least one option
@@ -45,18 +45,18 @@ en:
   declaration_form:
     new:
       body_html: |
-        <p class="govuk-body">
+        <p>
           When someone has answered all the questions in
           your form, they’ll be shown a page that lists all of their answers.
           The page will ask them to check their answers before they submit the
           form.
         </p>
-        <p class="govuk-body">
+        <p>
           You can add a declaration to this page. A declaration is a statement
           that people must confirm they understand and agree to before they
           submit the form.
         </p>
-        <p class="govuk-body">
+        <p>
           You might want to add a declaration if you need people to confirm they
           have provided accurate information, or that they understand the
           consequences of providing false information.
@@ -79,13 +79,11 @@ en:
     delete_condition_legend: Are you sure you want to delete this question route?
   email_code_sent:
     body_html: |
-      <p class="govuk-body">We've sent a confirmation code and your email address to %{temp_email}.</p>
-      <p class="govuk-body">The recipient will be asked to give you the code. You need to enter the code to confirm the email address.</p>
+      <p>We've sent a confirmation code and your email address to %{temp_email}.</p>
+      <p>The recipient will be asked to give you the code. You need to enter the code to confirm the email address.</p>
     continue: Continue creating a form
   email_code_success:
-    body_html: '<p class="govuk-body">Completed forms will be sent to %{submission_email}.</p>
-
-      '
+    body_html: "<p>Completed forms will be sent to %{submission_email}.</p>\n"
     continue: Continue creating a form
   error_summary:
     heading: There is a problem
@@ -310,7 +308,7 @@ en:
   make_live:
     confirmation:
       body_html: |
-        <p class="govuk-body">
+        <p>
           The form will not be indexed by search engines, so people will not be able to find it easily.
           Contact your GOV.UK publishing team to publish a link to your form on GOV.UK so people can find it.
         </p>
@@ -318,14 +316,14 @@ en:
       form_name: Form name
     new:
       body_html: |
-        <p class="govuk-body">
+        <p>
           When you make your form live you’ll get a URL for the form. The form
           will not be indexed by search engines, so people will not be able to
           find it easily. Contact your GOV.UK publishing team to publish a link to
           your form on GOV.UK so people can find it.
         </p>
 
-        <p class="govuk-body">
+        <p>
           After you have made your form live, completed forms will be sent to %{submission_email}.
         </p>
   mark_complete:
@@ -426,11 +424,11 @@ en:
     link: feedback
   privacy_policy_form:
     body_html: |
-      <p class="govuk-body">
+      <p>
         To comply with the UK General Data Protection Regulation (UK GDPR), you must provide privacy information for the people who will enter their data into your form.
       </p>
 
-      <p class="govuk-body">
+      <p>
         The privacy information must include details such as:
         <ul class="govuk-list govuk-list--bullet">
           <li>
@@ -448,11 +446,11 @@ en:
         </ul>
       </p>
 
-      <p class="govuk-body">
+      <p>
         You may already publish this information, for example in a privacy notice or personal information charter. Existing privacy information may need to be updated to cover the data you are collecting in this form, or you may need a new privacy notice.
       </p>
 
-      <p class="govuk-body">
+      <p>
         To get help, contact your department’s data protection officer or data protection manager.
       </p>
     heading: Provide a link to privacy information for this form
@@ -482,15 +480,15 @@ en:
   set_email_form:
     new:
       body_html: |
-        <p class="govuk-body">
+        <p>
           You need to provide an email address for completed forms to be sent to for processing. It should be a shared government email inbox.
         </p>
 
-        <p class="govuk-body">
+        <p>
           To make sure the email address you provide is correct, we’ll send an email to it with a confirmation code and your email address.
         </p>
 
-        <p class="govuk-body">
+        <p>
           The recipient will be asked to tell you the code. You will then need to enter the code to confirm the email address.
         </p>
   show_live_form:
@@ -522,7 +520,7 @@ en:
     not_started: not started
   type_of_answer:
     routing_warning_about_change_answer_type_heading: Your existing question route may be deleted
-    routing_warning_about_change_answer_type_html: "<p class=\"govuk-body\">\n  Changing the answer type from \"Selection from a list of options\" to a different answer \n  type means your route will no longer work and will be deleted.\n</p>\n<p class=\"govuk-body\">\n  If you do not want to lose your question route you can cancel this change by using the back button \n  or clicking the \"Go to your questions\" link.\n</p>\n"
+    routing_warning_about_change_answer_type_html: "<p>\n  Changing the answer type from \"Selection from a list of options\" to a different answer \n  type means your route will no longer work and will be deleted.\n</p>\n<p>\n  If you do not want to lose your question route you can cancel this change by using the back button \n  or clicking the \"Go to your questions\" link.\n</p>\n"
     routing_warning_notification_title: Important
   user_missing_organisation:
     body: "%{contact_link} to assign an organisation to your account."

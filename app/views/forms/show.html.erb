@@ -12,10 +12,10 @@
     <%= render FormStatusTagDescriptionComponent::View.new(status: :draft) %>
 
     <% if flash[:message] %>
-      <p class="govuk-body"><%= flash[:message] %></p>
+      <p><%= flash[:message] %></p>
     <% end %>
 
-    <p class="govuk-body govuk-!-margin-bottom-9">
+    <p class="govuk-!-margin-bottom-9">
       <%= render PreviewLinkComponent::View.new(@form.pages, link_to_runner(Settings.forms_runner.url, @form.id, @form.form_slug)) %>
     </p>
 
