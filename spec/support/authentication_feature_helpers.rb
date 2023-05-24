@@ -15,20 +15,28 @@ module AuthenticationFeatureHelpers
     GDS::SSO.test_user = nil
   end
 
+  def super_admin_user
+    @super_admin_user ||= FactoryBot.build(:user, :super_admin)
+  end
+
   def editor_user
     @editor_user ||= FactoryBot.build(:user)
   end
 
-  def super_admin_user
-    @super_admin_user ||= FactoryBot.build(:user, :super_admin)
+  def trial_user
+    @trial_user ||= FactoryBot.build(:user, :trial)
+  end
+
+  def login_as_super_admin_user
+    login_as super_admin_user
   end
 
   def login_as_editor_user
     login_as editor_user
   end
 
-  def login_as_super_admin_user
-    login_as super_admin_user
+  def login_as_trial_user
+    login_as trial_user
   end
 end
 

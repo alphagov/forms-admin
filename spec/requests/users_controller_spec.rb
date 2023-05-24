@@ -18,9 +18,17 @@ RSpec.describe UsersController, type: :request do
       end
     end
 
-    context "when logged in without super admin role" do
+    context "when logged in with editor role" do
       it "is forbidden" do
         login_as_editor_user
+        get users_path
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when logged in with trial role" do
+      it "is forbidden" do
+        login_as_trial_user
         get users_path
         expect(response).to have_http_status(:forbidden)
       end
@@ -45,9 +53,17 @@ RSpec.describe UsersController, type: :request do
       end
     end
 
-    context "when logged in without super admin role" do
+    context "when logged in with editor role" do
       it "is forbidden" do
         login_as_editor_user
+        get edit_user_path(user)
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when logged in with trial role" do
+      it "is forbidden" do
+        login_as_trial_user
         get edit_user_path(user)
         expect(response).to have_http_status(:forbidden)
       end
@@ -111,9 +127,17 @@ RSpec.describe UsersController, type: :request do
       end
     end
 
-    context "when logged in without super admin role" do
+    context "when logged in with editor role" do
       it "is forbidden" do
         login_as_editor_user
+        put user_path(user), params: { user: { role: "super_admin" } }
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when logged in with trial role" do
+      it "is forbidden" do
+        login_as_trial_user
         put user_path(user), params: { user: { role: "super_admin" } }
         expect(response).to have_http_status(:forbidden)
       end
