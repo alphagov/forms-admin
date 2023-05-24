@@ -21,3 +21,7 @@ en:
           attributes:
             confirm_deletion:
               blank: Select yes if you want to delete this route
+        pages/routing_page_form:
+          attributes:
+            routing_page_id:
+              blank: Select the question you want your route to start from

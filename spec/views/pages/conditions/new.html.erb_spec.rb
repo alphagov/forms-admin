@@ -8,7 +8,7 @@ describe "pages/conditions/new.html.erb" do
   before do
     allow(view).to receive(:form_pages_path).and_return("/forms/1/pages")
     allow(view).to receive(:routing_page_path).and_return("/forms/1/new-condition")
-    allow(view).to receive(:set_routing_page_path).and_return("/forms/1/new-condition")
+    allow(view).to receive(:set_routing_page_path).with(routing_page_id: condition_form.page.id).and_return("/forms/1/new-condition?routing-page_id=#{condition_form.page.id}")
     allow(view).to receive(:create_condition_path).and_return("/forms/1/pages/1/conditions/new")
     allow(form).to receive(:qualifying_route_pages).and_return(pages)
 

@@ -4,12 +4,20 @@ class Pages::ConditionsController < PagesController
   before_action :can_delete_page_routing, only: %i[delete destroy]
 
   def routing_page
-    render template: "pages/conditions/routing_page", locals: { form: @form }
+    routing_page_form = Pages::RoutingPageForm.new(routing_page_id: params[:routing_page_id])
+    render template: "pages/conditions/routing_page", locals: { form: @form, routing_page_form: }
   end
 
   def set_routing_page
-    routing_page = Page.find(params[:form][:routing_page_id], params: { form_id: @form.id })
-    redirect_to new_condition_path(@form, routing_page)
+    routing_page_id = params[:pages_routing_page_form][:routing_page_id]
+    routing_page_form = Pages::RoutingPageForm.new(routing_page_id:)
+
+    if routing_page_form.valid?
+      routing_page = Page.find(routing_page_id, params: { form_id: @form.id })
+      redirect_to new_condition_path(@form, routing_page)
+    else
+      render template: "pages/conditions/routing_page", locals: { form: @form, routing_page_form: }, status: :unprocessable_entity
+    end
   end
 
   def new

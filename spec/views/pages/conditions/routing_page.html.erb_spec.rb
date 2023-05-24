@@ -3,6 +3,7 @@ require "rails_helper"
 describe "pages/conditions/routing_page.html.erb" do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 3, :with_selections_settings, form_id: 1 }
+  let(:routing_page_form) { Pages::RoutingPageForm.new }
 
   before do
     allow(view).to receive(:form_pages_path).and_return("/forms/1/pages")
@@ -10,7 +11,7 @@ describe "pages/conditions/routing_page.html.erb" do
     allow(view).to receive(:set_routing_page_path).and_return("/forms/1/new-condition")
     allow(form).to receive(:qualifying_route_pages).and_return(pages)
 
-    render template: "pages/conditions/routing_page", locals: { form: }
+    render template: "pages/conditions/routing_page", locals: { form:, routing_page_form: }
   end
 
   it "contains page heading and sub-heading" do
