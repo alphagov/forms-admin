@@ -20,7 +20,8 @@
   }
 }
 
-.app-page_list__route-text--error:link,
-.app-page_list__route-text--error:visited {
+.app-page_list__route-text--error {
+  @include govuk-responsive-margin(2, "bottom");
   color: $govuk-error-colour;
+  font-weight: 700;
 }

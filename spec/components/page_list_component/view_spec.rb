@@ -72,7 +72,11 @@ RSpec.describe PageListComponent::View, type: :component do
         context "when the page has a single condition" do
           let(:routing_conditions) { [(build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3)] }
 
-          it "renders the non-error text for the chack page" do
+          it "does not render any errors" do
+            expect(page).not_to have_css(".app-page_list__route-text--error")
+          end
+
+          it "renders the text for the check page" do
             condition_check_page_text = I18n.t("page_conditions.condition_check_page_text", check_page_text: pages[0].question_text)
             expect(page).to have_css("dd.govuk-summary-list__value", text: condition_check_page_text)
           end
@@ -102,20 +106,18 @@ RSpec.describe PageListComponent::View, type: :component do
         context "when the page has a condition with no answer_value" do
           let(:routing_conditions) { [(build :condition, :with_answer_value_missing, id: 1, routing_page_id: 1, check_page_id: 1, goto_page_id: 3)] }
 
-          it "renders the error-specific text for the check page" do
-            condition_check_page_text_with_errors = I18n.t("page_conditions.condition_check_page_text_with_errors", check_page_text: pages[0].question_text)
-            expect(page).to have_css("dd.govuk-summary-list__value", text: condition_check_page_text_with_errors)
-          end
-
-          it "does not render the unordered error list" do
-            condition_goto_page_error = I18n.t("page_conditions.errors.page_list.goto_page_doesnt_exist", page_index: 1)
-            expect(page).not_to have_css("ul > li > a", text: condition_goto_page_error)
-          end
-
-          it "renders the answer_value error in in a separate paragraph" do
+          it "renders the errors in an unordered list" do
             condition_answer_value_error = I18n.t("page_conditions.errors.page_list.answer_value_doesnt_exist", page_index: 1)
-            expect(page).to have_css("dd.govuk-summary-list__value > p", text: condition_answer_value_error)
-            expect(page).to have_link(condition_answer_value_error, href: "#{edit_condition_path}##{Pages::ConditionsForm.new.id_for_field(:answer_value)}")
+            expect(page).to have_css("ul > li", text: condition_answer_value_error)
+          end
+
+          it "renders the text for the check page" do
+            condition_check_page_text = I18n.t("page_conditions.condition_check_page_text", check_page_text: pages[0].question_text)
+            expect(page).to have_css("dd.govuk-summary-list__value", text: condition_check_page_text)
+          end
+
+          it "renders the answer_value text with placeholder text" do
+            expect(page).to have_css("dd.govuk-summary-list__value > p", text: I18n.t("page_conditions.condition_answer_value_text_with_errors"))
           end
 
           it "renders the goto_page text in a separate paragraph" do
@@ -131,20 +133,18 @@ RSpec.describe PageListComponent::View, type: :component do
         context "when the page has a condition with no goto_page set" do
           let(:routing_conditions) { [(build :condition, :with_goto_page_missing, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales")] }
 
-          it "renders the non-error text for the check page" do
+          it "renders the errors in an unordered list" do
+            condition_goto_page_error = I18n.t("page_conditions.errors.page_list.goto_page_doesnt_exist", page_index: 1)
+            expect(page).to have_css("ul > li", text: condition_goto_page_error)
+          end
+
+          it "renders the text for the check page" do
             condition_check_page_text = I18n.t("page_conditions.condition_check_page_text", check_page_text: pages[0].question_text)
             expect(page).to have_css("dd.govuk-summary-list__value", text: condition_check_page_text)
           end
 
-          it "does not render the unordered error list" do
-            condition_goto_page_error = I18n.t("page_conditions.errors.page_list.goto_page_doesnt_exist", page_index: 1)
-            expect(page).not_to have_css("ul > li > a", text: condition_goto_page_error)
-          end
-
-          it "renders the goto_page error in a separate paragraph" do
-            condition_goto_page_error = I18n.t("page_conditions.errors.page_list.goto_page_doesnt_exist", page_index: 1)
-            expect(page).to have_css("dd.govuk-summary-list__value > p > a", text: condition_goto_page_error)
-            expect(page).to have_link(condition_goto_page_error, href: "#{edit_condition_path}##{Pages::ConditionsForm.new.id_for_field(:goto_page_id)}")
+          it "renders the goto_page text with placeholder text" do
+            expect(page).to have_css("dd.govuk-summary-list__value > p", text: I18n.t("page_conditions.condition_goto_page_text_with_errors"))
           end
 
           it "renders the answer_value text in a separate paragraph" do
@@ -157,21 +157,14 @@ RSpec.describe PageListComponent::View, type: :component do
           end
         end
 
-        context "when the page has a condition with no answer value or goto_page set" do
+        context "when the page has a condition with multiple errors" do
           let(:routing_conditions) { [(build :condition, :with_answer_value_and_goto_page_missing, id: 1, routing_page_id: 1, check_page_id: 1)] }
-
-          it "renders the error-specific text for the check page" do
-            condition_check_page_text_with_errors = I18n.t("page_conditions.condition_check_page_text_with_errors", check_page_text: pages[0].question_text)
-            expect(page).to have_css("dd.govuk-summary-list__value", text: condition_check_page_text_with_errors)
-          end
 
           it "renders the errors in an unordered list" do
             condition_answer_value_error = I18n.t("page_conditions.errors.page_list.answer_value_doesnt_exist", page_index: 1)
             condition_goto_page_error = I18n.t("page_conditions.errors.page_list.goto_page_doesnt_exist", page_index: 1)
-            expect(page).to have_css("ul > li > a", text: condition_answer_value_error)
-            expect(page).to have_css("ul > li > a", text: condition_goto_page_error)
-            expect(page).to have_link(condition_answer_value_error, href: "#{edit_condition_path}##{Pages::ConditionsForm.new.id_for_field(:answer_value)}")
-            expect(page).to have_link(condition_goto_page_error, href: "#{edit_condition_path}##{Pages::ConditionsForm.new.id_for_field(:goto_page_id)}")
+            expect(page).to have_css("ul > li", text: condition_answer_value_error)
+            expect(page).to have_css("ul > li", text: condition_goto_page_error)
           end
 
           it "renders link" do
@@ -221,20 +214,9 @@ RSpec.describe PageListComponent::View, type: :component do
       end
     end
 
-    describe "error_link" do
-      let(:condition) { (build :condition, :with_answer_value_missing, id: 1, routing_page_id: 1, check_page_id: 1, goto_page_id: 3) }
-      let(:error_name) { condition.validation_errors[0].name }
-      let(:condition_edit_path) { "https://example.gov.uk" }
-      let(:error_link) { page_list_component.error_link(error_key: error_name, edit_link: condition_edit_path, page: pages[0], field: :answer_value) }
-
-      it "returns the corrrect error html for a given condition" do
-        expect(error_link).to eq "<a class=\"app-page_list__route-text--error\" href=\"#{condition_edit_path}##{Pages::ConditionsForm.new.id_for_field(:answer_value)}\">#{I18n.t("page_conditions.errors.page_list.#{error_name}", page_index: 1)}</a>"
-      end
-    end
-
     describe "answer_value_text_for_condition" do
       let(:condition_edit_path) { "https://example.gov.uk" }
-      let(:answer_value_text) { page_list_component.answer_value_text_for_condition(condition, condition_edit_path, pages[0]) }
+      let(:answer_value_text) { page_list_component.answer_value_text_for_condition(condition) }
 
       context "when the answer value is set" do
         let(:condition) { (build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3) }
@@ -247,15 +229,15 @@ RSpec.describe PageListComponent::View, type: :component do
       context "when the answer value is not set" do
         let(:condition) { (build :condition, :with_answer_value_missing, id: 1, routing_page_id: 1, check_page_id: 1, goto_page_id: 3) }
 
-        it "returns the answer value error link" do
-          expect(answer_value_text).to eq page_list_component.error_link(error_key: "answer_value_doesnt_exist", edit_link: condition_edit_path, page: pages[0], field: :answer_value)
+        it "returns the answer value error text" do
+          expect(answer_value_text).to eq I18n.t("page_conditions.condition_answer_value_text_with_errors")
         end
       end
     end
 
     describe "goto_page_text_for_condition" do
       let(:condition_edit_path) { "https://example.gov.uk" }
-      let(:goto_page_text) { page_list_component.goto_page_text_for_condition(condition, condition_edit_path, pages[0]) }
+      let(:goto_page_text) { page_list_component.goto_page_text_for_condition(condition) }
 
       context "when the goto page is set" do
         let(:condition) { (build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3) }
@@ -268,24 +250,8 @@ RSpec.describe PageListComponent::View, type: :component do
       context "when the goto page is not set" do
         let(:condition) { (build :condition, :with_goto_page_missing, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales") }
 
-        it "returns the goto page error link" do
-          expect(goto_page_text).to eq page_list_component.error_link(error_key: "goto_page_doesnt_exist", edit_link: condition_edit_path, page: pages[0], field: :goto_page_id)
-        end
-      end
-
-      context "when the goto page is before the check page" do
-        let(:condition) { (build :condition, :with_goto_page_before_check_page, id: 1, routing_page_id: 2, check_page_id: 2, answer_value: "Wales", goto_page_id: 1) }
-
-        it "returns the goto page error link" do
-          expect(goto_page_text).to eq page_list_component.error_link(error_key: "cannot_have_goto_page_before_routing_page", edit_link: condition_edit_path, page: pages[0], field: :goto_page_id)
-        end
-      end
-
-      context "when the goto page is immediately after the check page" do
-        let(:condition) { (build :condition, :with_goto_page_immediately_after_check_page, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 2) }
-
-        it "returns the goto page error link" do
-          expect(goto_page_text).to eq page_list_component.error_link(error_key: "cannot_route_to_next_page", edit_link: condition_edit_path, page: pages[0], field: :goto_page_id)
+        it "returns the goto page error text" do
+          expect(goto_page_text).to eq I18n.t("page_conditions.condition_goto_page_text_with_errors")
         end
       end
     end

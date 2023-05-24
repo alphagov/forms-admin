@@ -20,54 +20,6 @@ describe Condition do
     end
   end
 
-  describe "#has_multiple_errors?" do
-    context "when condition has no errors" do
-      it "returns false" do
-        expect(condition.has_multiple_errors?).to be false
-      end
-    end
-
-    context "when condition has one error" do
-      let(:validation_errors) { [OpenStruct.new(name: "answer_value_doesnt_exist")] }
-
-      it "returns false" do
-        expect(condition.has_multiple_errors?).to be false
-      end
-    end
-
-    context "when condition has an error" do
-      let(:validation_errors) { [OpenStruct.new(name: "answer_value_doesnt_exist"), OpenStruct.new(name: "goto_page_doesnt_exist")] }
-
-      it "returns true" do
-        expect(condition.has_multiple_errors?).to be true
-      end
-    end
-  end
-
-  describe "#errors_include?" do
-    context "when condition has no errors" do
-      it "returns false" do
-        expect(condition.errors_include?("answer_value_doesnt_exist")).to be false
-      end
-    end
-
-    context "when condition contains a different error" do
-      let(:validation_errors) { [OpenStruct.new(name: "goto_page_doesnt_exist")] }
-
-      it "returns false" do
-        expect(condition.errors_include?("answer_value_doesnt_exist")).to be false
-      end
-    end
-
-    context "when condition contains the relevant error" do
-      let(:validation_errors) { [OpenStruct.new(name: "answer_value_doesnt_exist")] }
-
-      it "returns true" do
-        expect(condition.errors_include?("answer_value_doesnt_exist")).to be true
-      end
-    end
-  end
-
   describe "#errors_with_fields" do
     context "when the error is a known error" do
       let(:validation_errors) { [OpenStruct.new(name: "answer_value_doesnt_exist"), OpenStruct.new(name: "goto_page_doesnt_exist"), OpenStruct.new(name: "cannot_have_goto_page_before_routing_page"), OpenStruct.new(name: "cannot_route_to_next_page")] }
@@ -83,18 +35,6 @@ describe Condition do
       it "returns answer_value as a default" do
         expect(condition.errors_with_fields).to eq [{ field: :answer_value, name: "some_unknown_error" }]
       end
-    end
-  end
-
-  describe "#has_errors_for_field?" do
-    let(:validation_errors) { [OpenStruct.new(name: "answer_value_doesnt_exist")] }
-
-    it "returns true when the field has an error" do
-      expect(condition.has_errors_for_field?(:answer_value)).to be true
-    end
-
-    it "returns false when the field has no errors" do
-      expect(condition.has_errors_for_field?(:goto_page_id)).to be false
     end
   end
 end
