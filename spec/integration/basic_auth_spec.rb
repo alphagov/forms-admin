@@ -15,7 +15,6 @@ RSpec.describe "using basic auth" do
         name: "Test Org",
         content_id: organisation.content_id,
       ),
-      enabled: true,
       username:,
       password:,
     )
@@ -31,7 +30,7 @@ RSpec.describe "using basic auth" do
       mock.get "/api/v1/forms?org=test-org", api_headers, [].to_json, 200
     end
 
-    allow(Settings).to receive(:basic_auth).and_return(basic_auth_settings)
+    allow(Settings).to receive(:auth_provider).and_return("basic_auth")
   end
 
   it "app requests HTTP Basic Authentication when no user is logged in" do

@@ -77,7 +77,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user!
-    warden.authenticate! Settings.basic_auth.enabled ? :basic_auth : Settings.auth_provider.to_sym
+    warden.authenticate! Settings.auth_provider.to_sym
 
     # set user instance variable for views
     @current_user = current_user

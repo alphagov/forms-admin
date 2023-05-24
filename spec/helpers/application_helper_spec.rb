@@ -154,7 +154,11 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
     end
 
-    context "when a user is signed in" do
+    context "when a user is signed in with GOV.UK Signon" do
+      before do
+        allow(Settings).to receive(:auth_provider).and_return("gds_sso")
+      end
+
       it "returns the following options" do
         expect(helper.header_component_options(user:, can_manage_users:)).to eq({ is_signed_in: true,
                                                                                   list_of_users_path: nil,
@@ -177,8 +181,7 @@ RSpec.describe ApplicationHelper, type: :helper do
 
       context "when http basic auth is enabled" do
         it "returns the following options" do
-          basic_auth_double = object_double("basic_auth_double", enabled: true)
-          allow(Settings).to receive(:basic_auth).and_return(basic_auth_double)
+          allow(Settings).to receive(:auth_provider).and_return("basic_auth")
 
           expect(helper.header_component_options(user:, can_manage_users:)).to eq({ is_signed_in: true,
                                                                                     list_of_users_path: nil,

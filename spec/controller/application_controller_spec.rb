@@ -60,7 +60,7 @@ describe ApplicationController, type: :controller do
         allow(warden_spy).to receive(:authenticate!).and_return(true)
         allow(controller).to receive(:current_user).and_return(user)
 
-        allow(Settings.basic_auth).to receive(:enabled).and_return(true)
+        allow(Settings).to receive(:auth_provider).and_return("basic_auth")
 
         get :index
       end
