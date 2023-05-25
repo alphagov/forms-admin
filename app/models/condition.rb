@@ -18,19 +18,7 @@ class Condition < ActiveResource::Base
     end
   end
 
-  def has_errors_for_field?(field)
-    errors_with_fields.filter { |error| error[:field] == field }.any?
-  end
-
   def has_errors?
     validation_errors.any?
-  end
-
-  def has_multiple_errors?
-    validation_errors.length >= 2
-  end
-
-  def errors_include?(error_name)
-    has_errors? && validation_errors.map(&:name).include?(error_name)
   end
 end

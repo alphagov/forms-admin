@@ -111,13 +111,6 @@ RSpec.describe Pages::ConditionsForm, type: :model do
     end
   end
 
-  describe "#id_for_field" do
-    it "returns the correct id for a field" do
-      result = described_class.new(form:, page: pages.first).id_for_field(:answer_value)
-      expect(result).to eq("pages-conditions-form-answer-value-field-error")
-    end
-  end
-
   describe "#check_errors_from_api" do
     let(:condition) { build :condition, :with_answer_value_missing, id: 3, page_id: 2, routing_page_id: 1, answer_value: "England", check_page_id: 1, goto_page_id: 3 }
 

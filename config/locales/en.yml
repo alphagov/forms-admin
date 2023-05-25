@@ -341,10 +341,11 @@ en:
     title: Page not found
   page_conditions:
     condition_answer_value_text: is answered as “%{answer_value}”
+    condition_answer_value_text_with_errors: is answered as [Answer not selected]
     condition_check_page_text: If the question “%{check_page_text}”
-    condition_check_page_text_with_errors: For the question “%{check_page_text}”
     condition_compact_html: 'If the answer is “%{answer_value}”<br> then skip to question %{goto_page_number}: “%{goto_page_text}”'
     condition_goto_page_text: take the person to “%{goto_page_text}”
+    condition_goto_page_text_with_errors: take the person to [Question not selected]
     condition_name: Question %{page_index}’s route
     errors:
       error_summary:
@@ -353,10 +354,10 @@ en:
         cannot_route_to_next_page: Question %{page_index}’s route is now next to the route’s end question - this makes the route unnecessary. Edit question %{page_index}’s route.
         goto_page_doesnt_exist: The question you’re taking the person to no longer exists - edit question %{page_index}’s route
       page_list:
-        answer_value_doesnt_exist: select the answer you want to base question %{page_index}’s route on
-        cannot_have_goto_page_before_routing_page: select another question or page you want to take the person to, or delete question %{page_index}’s route
-        cannot_route_to_next_page: select another question or page you want to take the person to, or delete question %{page_index}’s route
-        goto_page_doesnt_exist: select the question or page you want to take the person to, or delete question %{page_index}’s route
+        answer_value_doesnt_exist: The answer that question %{page_index}’s route is based on no longer exists - edit question %{page_index}’s route
+        cannot_have_goto_page_before_routing_page: The question you’re taking the person to is now above the route - edit question %{page_index}’s route
+        cannot_route_to_next_page: Question %{page_index}’s route is now next to the route’s end question - this makes the route unnecessary. Edit question %{page_index}’s route.
+        goto_page_doesnt_exist: The question you’re taking the person to no longer exists - edit question %{page_index}’s route
     route: Route
   page_options_service:
     answer_type: Answer type
