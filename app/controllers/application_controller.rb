@@ -20,14 +20,6 @@ class ApplicationController < ActionController::Base
     render "errors/forbidden", status: :forbidden, formats: :html
   end
 
-  def authenticate
-    if Settings.basic_auth.enabled
-      basic_auth
-    else
-      signon_auth
-    end
-  end
-
   def basic_auth
     request.env["warden"].manager.config.intercept_401 = false
 
@@ -48,20 +40,9 @@ class ApplicationController < ActionController::Base
     )
   end
 
-  def signon_auth
-    authenticate_user!
-    @current_user = current_user
-  end
-
   def check_service_unavailable
     if Settings.service_unavailable
       render "errors/service_unavailable", status: :service_unavailable, formats: :html
-    end
-  end
-
-  def check_access
-    unless @current_user.has_access?
-      render "errors/access_denied", status: :forbidden, formats: :html
     end
   end
 
@@ -122,10 +103,24 @@ class ApplicationController < ActionController::Base
     @current_user
   end
 
+  def authenticate_user!
+    if Settings.basic_auth.enabled
+      basic_auth
+    else
+      # signon auth
+      super
+      @current_user = current_user
+    end
+  end
+
 private
 
   def authenticate_and_check_access
-    authenticate
-    check_access
+    authenticate_user!
+
+    # check access
+    unless @current_user.has_access?
+      render "errors/access_denied", status: :forbidden, formats: :html
+    end
   end
 end
