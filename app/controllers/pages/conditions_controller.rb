@@ -38,7 +38,7 @@ class Pages::ConditionsController < PagesController
   def edit
     condition = Condition.find(params[:condition_id], params: { form_id: @form.id, page_id: page.id })
 
-    condition_form = Pages::ConditionsForm.new(form: @form, page:, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id)
+    condition_form = Pages::ConditionsForm.new(form: @form, page:, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id, skip_to_end: condition.skip_to_end).assign_condition_values
 
     condition_form.check_errors_from_api
 
@@ -52,7 +52,7 @@ class Pages::ConditionsController < PagesController
 
     condition_form = Pages::ConditionsForm.new(form_params)
 
-    if condition_form.update
+    if condition_form.update_condition
       redirect_to form_pages_path(@form), success: t("banner.success.route_updated", question_position: condition_form.page.position)
     else
       render template: "pages/conditions/edit", locals: { condition_form: }, status: :unprocessable_entity

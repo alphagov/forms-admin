@@ -32,7 +32,7 @@ RSpec.describe Pages::ConditionsForm, type: :model do
 
   describe "#submit" do
     context "when validation pass" do
-      it "creates a condition" do
+      before do
         ActiveResource::HttpMock.respond_to do |mock|
           mock.post "/api/v1/forms/1/pages/2/conditions", post_headers, { id: 2 }.to_json, 200
         end
@@ -40,7 +40,16 @@ RSpec.describe Pages::ConditionsForm, type: :model do
         page.id = 2
         conditions_form.answer_value = "Rabbit"
         conditions_form.goto_page_id = 4
+      end
 
+      it "calls assign_skip_to_end" do
+        allow(conditions_form).to receive(:assign_skip_to_end)
+        conditions_form.submit
+
+        expect(conditions_form).to have_received(:assign_skip_to_end).exactly(1).times
+      end
+
+      it "creates a condition" do
         expect(conditions_form.submit).to be_truthy
       end
     end
@@ -53,11 +62,11 @@ RSpec.describe Pages::ConditionsForm, type: :model do
     end
   end
 
-  describe "#update" do
+  describe "#update_condition" do
     context "when validation pass" do
       let(:condition) { Condition.new id: 3, form_id: 1, page_id: 2, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
 
-      it "updates a condition" do
+      before do
         ActiveResource::HttpMock.respond_to do |mock|
           mock.post "/api/v1/forms/1/pages/2/conditions", post_headers, { success: true }.to_json, 200
           mock.put "/api/v1/forms/1/pages/2/conditions/3", post_headers, { success: true }.to_json, 200
@@ -65,15 +74,25 @@ RSpec.describe Pages::ConditionsForm, type: :model do
 
         conditions_form.answer_value = "England"
         conditions_form.goto_page_id = 4
+      end
 
-        expect(conditions_form.update).to be_truthy
+      it "calls assign_skip_to_end" do
+        allow(conditions_form).to receive(:assign_skip_to_end)
+
+        conditions_form.update_condition
+
+        expect(conditions_form).to have_received(:assign_skip_to_end).exactly(1).times
+      end
+
+      it "updates a condition" do
+        expect(conditions_form.update_condition).to be_truthy
       end
     end
 
     context "when validations fail" do
       it "returns false" do
         invalid_conditions_form = described_class.new
-        expect(invalid_conditions_form.update).to be false
+        expect(invalid_conditions_form.update_condition).to be false
       end
     end
   end
@@ -107,7 +126,7 @@ RSpec.describe Pages::ConditionsForm, type: :model do
   describe "#goto_page_options" do
     it "returns a list of answers for the given page" do
       result = described_class.new(form:, page: pages.first).goto_page_options
-      expect(result).to eq([OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")), form.pages.map { |p| OpenStruct.new(id: p.id, question_text: p.question_text) }].flatten)
+      expect(result).to eq([OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")), form.pages.map { |p| OpenStruct.new(id: p.id, question_text: p.question_text) }, OpenStruct.new(id: "check_your_answers", question_text: "Check your answers")].flatten)
     end
   end
 
@@ -118,6 +137,58 @@ RSpec.describe Pages::ConditionsForm, type: :model do
       error_message = I18n.t("activemodel.errors.models.pages/conditions_form.attributes.answer_value.answer_value_doesnt_exist")
       conditions_form.check_errors_from_api
       expect(conditions_form.errors.full_messages_for(:answer_value)).to include("Answer value #{error_message}")
+    end
+  end
+
+  describe "#assign_condition_values" do
+    let(:conditions_form) { described_class.new(form:, page:, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id, skip_to_end: condition.skip_to_end) }
+    let(:condition) { build :condition, id: 3, page_id: 2, routing_page_id: 1, answer_value: "England", check_page_id: 1, goto_page_id: nil, skip_to_end: true }
+
+    context "when goto_page is nil and skip_to_end is set to true" do
+      it "sets goto_page_id to 'check_your_answers'" do
+        conditions_form.assign_condition_values
+        expect(conditions_form.goto_page_id).to eq "check_your_answers"
+      end
+    end
+
+    context "when goto_page is nil and skip_to_end is set to false" do
+      let(:condition) { build :condition, id: 3, page_id: 2, routing_page_id: 1, answer_value: "England", check_page_id: 1, goto_page_id: nil, skip_to_end: false }
+
+      it "sets goto_page_id to 'check_your_answers'" do
+        conditions_form.assign_condition_values
+        expect(conditions_form.goto_page_id).to eq nil
+      end
+    end
+
+    context "when goto_page is not nil" do
+      let(:condition) { build :condition, id: 3, page_id: 2, routing_page_id: 1, answer_value: "England", check_page_id: 1, goto_page_id: 3, skip_to_end: true }
+
+      it "sets goto_page_id to 'check_your_answers'" do
+        conditions_form.assign_condition_values
+        expect(conditions_form.goto_page_id).to eq 3
+      end
+    end
+  end
+
+  describe "#assign_skip_to_end" do
+    context "when goto_page is 'check_your_answers" do
+      let(:conditions_form) { described_class.new(form:, page:, goto_page_id: "check_your_answers", skip_to_end: false) }
+
+      it "sets goto_page_id to nil and skip_to_end to true" do
+        conditions_form.assign_skip_to_end
+        expect(conditions_form.goto_page_id).to eq nil
+        expect(conditions_form.skip_to_end).to eq true
+      end
+    end
+
+    context "when goto_page is not 'check_your_answers" do
+      let(:conditions_form) { described_class.new(form:, page:, goto_page_id: 3, skip_to_end: nil) }
+
+      it "does not change goto_page_id and sets skip_to_end to false" do
+        conditions_form.assign_skip_to_end
+        expect(conditions_form.goto_page_id).to eq 3
+        expect(conditions_form.skip_to_end).to eq false
+      end
     end
   end
 end
