@@ -40,8 +40,7 @@ class Pages::ConditionsForm
   end
 
   def goto_page_options
-    # TODO: add end of form/check your answers as an option
-    [OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")), form.pages.map { |p| OpenStruct.new(id: p.id, question_text: p.question_text) }, OpenStruct.new(id: "check_your_answers", question_text: "Check your answers")].flatten
+    [OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")), form.pages.map { |p| OpenStruct.new(id: p.id, question_text: p.question_text) }, OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers"))].flatten
   end
 
   def check_errors_from_api

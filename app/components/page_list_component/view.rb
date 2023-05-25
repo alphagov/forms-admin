@@ -33,7 +33,7 @@ module PageListComponent
       if condition.goto_page_id.present?
         I18n.t("page_conditions.condition_goto_page_text", goto_page_text: question_text_for_page(condition.goto_page_id))
       elsif condition.skip_to_end
-        I18n.t("page_conditions.condition_goto_page_text", goto_page_text: "Check your answers")
+        I18n.t("page_conditions.condition_goto_page_text", goto_page_text: I18n.t("page_conditions.check_your_answers"))
       else
         I18n.t("page_conditions.condition_goto_page_text_with_errors")
       end

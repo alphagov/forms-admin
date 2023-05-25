@@ -126,7 +126,7 @@ RSpec.describe Pages::ConditionsForm, type: :model do
   describe "#goto_page_options" do
     it "returns a list of answers for the given page" do
       result = described_class.new(form:, page: pages.first).goto_page_options
-      expect(result).to eq([OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")), form.pages.map { |p| OpenStruct.new(id: p.id, question_text: p.question_text) }, OpenStruct.new(id: "check_your_answers", question_text: "Check your answers")].flatten)
+      expect(result).to eq([OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")), form.pages.map { |p| OpenStruct.new(id: p.id, question_text: p.question_text) }, OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers"))].flatten)
     end
   end
 

@@ -252,7 +252,7 @@ RSpec.describe PageListComponent::View, type: :component do
           let(:condition) { (build :condition, :with_goto_page_missing, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", skip_to_end: true) }
 
           it "returns the goto page error text" do
-            expect(goto_page_text).to eq I18n.t("page_conditions.condition_goto_page_text", goto_page_text: "Check your answers")
+            expect(goto_page_text).to eq I18n.t("page_conditions.condition_goto_page_text", goto_page_text: I18n.t("page_conditions.check_your_answers"))
           end
         end
 

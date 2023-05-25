@@ -340,6 +340,7 @@ en:
       If you pasted the web address, check you copied the entire address.
     title: Page not found
   page_conditions:
+    check_your_answers: Check your answers
     condition_answer_value_text: is answered as “%{answer_value}”
     condition_answer_value_text_with_errors: is answered as [Answer not selected]
     condition_check_page_text: If the question “%{check_page_text}”
