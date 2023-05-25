@@ -17,6 +17,12 @@ describe "pages/conditions/delete.html.erb" do
     expect(rendered).to have_css("h1.govuk-heading-l", text: t("page_titles.routing_page_delete", question_position: page.position))
   end
 
+  it "contains the condition details" do
+    expect(rendered).to have_css(".govuk-summary-list__value", text: delete_condition_form.page.question_text)
+    expect(rendered).to have_css(".govuk-summary-list__value", text: delete_condition_form.answer_value)
+    expect(rendered).to have_css(".govuk-summary-list__value", text: delete_condition_form.goto_page_question_text)
+  end
+
   it "has a submit button" do
     expect(rendered).to have_css("button[type='submit'].govuk-button", text: I18n.t("save_and_continue"))
   end
