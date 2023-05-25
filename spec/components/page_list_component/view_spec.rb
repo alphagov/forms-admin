@@ -248,8 +248,11 @@ RSpec.describe PageListComponent::View, type: :component do
       end
 
       context "when the goto page is not set" do
+        let(:condition) { (build :condition, :with_goto_page_missing, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", skip_to_end:) }
+        let(:skip_to_end) { false }
+
         context "and skip_to_end is true" do
-          let(:condition) { (build :condition, :with_goto_page_missing, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", skip_to_end: true) }
+          let(:skip_to_end) { true }
 
           it "returns the goto page error text" do
             expect(goto_page_text).to eq I18n.t("page_conditions.condition_goto_page_text", goto_page_text: I18n.t("page_conditions.check_your_answers"))
@@ -257,8 +260,6 @@ RSpec.describe PageListComponent::View, type: :component do
         end
 
         context "and skip_to_end is false" do
-          let(:condition) { (build :condition, :with_goto_page_missing, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", skip_to_end: false) }
-
           it "returns the goto page error text" do
             expect(goto_page_text).to eq I18n.t("page_conditions.condition_goto_page_text_with_errors")
           end

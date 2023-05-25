@@ -142,9 +142,13 @@ RSpec.describe Pages::ConditionsForm, type: :model do
 
   describe "#assign_condition_values" do
     let(:conditions_form) { described_class.new(form:, page:, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id, skip_to_end: condition.skip_to_end) }
-    let(:condition) { build :condition, id: 3, page_id: 2, routing_page_id: 1, answer_value: "England", check_page_id: 1, goto_page_id: nil, skip_to_end: true }
+    let(:condition) { build :condition, id: 3, page_id: 2, routing_page_id: 1, answer_value: "England", check_page_id: 1, goto_page_id:, skip_to_end: }
+    let(:goto_page_id) { nil }
+    let(:skip_to_end) { false }
 
     context "when goto_page is nil and skip_to_end is set to true" do
+      let(:skip_to_end) { true }
+
       it "sets goto_page_id to 'check_your_answers'" do
         conditions_form.assign_condition_values
         expect(conditions_form.goto_page_id).to eq "check_your_answers"
@@ -152,8 +156,6 @@ RSpec.describe Pages::ConditionsForm, type: :model do
     end
 
     context "when goto_page is nil and skip_to_end is set to false" do
-      let(:condition) { build :condition, id: 3, page_id: 2, routing_page_id: 1, answer_value: "England", check_page_id: 1, goto_page_id: nil, skip_to_end: false }
-
       it "sets goto_page_id to 'check_your_answers'" do
         conditions_form.assign_condition_values
         expect(conditions_form.goto_page_id).to eq nil
@@ -161,7 +163,8 @@ RSpec.describe Pages::ConditionsForm, type: :model do
     end
 
     context "when goto_page is not nil" do
-      let(:condition) { build :condition, id: 3, page_id: 2, routing_page_id: 1, answer_value: "England", check_page_id: 1, goto_page_id: 3, skip_to_end: true }
+      let(:goto_page_id) { 3 }
+      let(:skip_to_end) { true }
 
       it "sets goto_page_id to 'check_your_answers'" do
         conditions_form.assign_condition_values
@@ -171,8 +174,12 @@ RSpec.describe Pages::ConditionsForm, type: :model do
   end
 
   describe "#assign_skip_to_end" do
+    let(:conditions_form) { described_class.new(form:, page:, goto_page_id:, skip_to_end:) }
+    let(:goto_page_id) { 3 }
+    let(:skip_to_end) { false }
+
     context "when goto_page is 'check_your_answers" do
-      let(:conditions_form) { described_class.new(form:, page:, goto_page_id: "check_your_answers", skip_to_end: false) }
+      let(:goto_page_id) { "check_your_answers" }
 
       it "sets goto_page_id to nil and skip_to_end to true" do
         conditions_form.assign_skip_to_end
@@ -182,7 +189,8 @@ RSpec.describe Pages::ConditionsForm, type: :model do
     end
 
     context "when goto_page is not 'check_your_answers" do
-      let(:conditions_form) { described_class.new(form:, page:, goto_page_id: 3, skip_to_end: nil) }
+      let(:goto_page_id) { 3 }
+      let(:skip_to_end) { true }
 
       it "does not change goto_page_id and sets skip_to_end to false" do
         conditions_form.assign_skip_to_end
