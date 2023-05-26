@@ -46,4 +46,43 @@ describe User do
       expect(user.valid?).to be false
     end
   end
+
+  describe ".find_for_auth" do
+    let!(:user) do
+      create :user, uid: "123456", name: "Test User", email: "test@example.com"
+    end
+
+    it "finds a user by uid" do
+      expect(described_class.find_for_auth(uid: "123456"))
+        .to eq user
+    end
+
+    it "finds a user by email address if no user with uid is found" do
+      expect(described_class.find_for_auth(uid: "111111", email: "test@example.com"))
+        .to eq user
+
+      expect(user.reload.uid).to eq "111111"
+    end
+
+    it "creates a user if one does not already exist" do
+      allow(described_class).to receive(:create!)
+
+      described_class.find_for_auth(
+        uid: "9999",
+        email: "fake@example.com",
+        name: "Fake Name",
+      )
+
+      expect(described_class).to have_received(:create!)
+    end
+
+    it "updates any user attributes that have changed" do
+      described_class.find_for_auth(
+        uid: "123456",
+        name: "New Name",
+      )
+
+      expect(user.reload.name).to eq "New Name"
+    end
+  end
 end

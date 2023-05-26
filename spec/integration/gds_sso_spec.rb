@@ -50,4 +50,32 @@ RSpec.describe "usage of gds-sso gem" do
       expect(request.env["warden"].authenticated?).to be true
     end
   end
+
+  describe User do
+    describe ".find_for_gds_oauth" do
+      it "is called by the gds_sso Warden strategy" do
+        allow(described_class).to receive(:find_for_gds_oauth).and_call_original
+        allow(described_class).to receive(:find_for_auth).and_call_original
+
+        gds_sso = Warden::Strategies[:gds_sso].new({
+          "omniauth.auth" => omniauth_hash,
+        })
+        gds_sso.authenticate!
+
+        expect(described_class).to have_received(:find_for_gds_oauth)
+
+        expect(described_class).to have_received(:find_for_auth).with(
+          uid: "123456",
+          email: "test@example.com",
+          name: "Test User",
+          permissions: ["---"],
+          organisation_slug: "test-org",
+          organisation_content_id: "00000000-0000-0000-0000-000000000000",
+          disabled: false,
+        )
+
+        expect(gds_sso.successful?).to be true
+      end
+    end
+  end
 end
