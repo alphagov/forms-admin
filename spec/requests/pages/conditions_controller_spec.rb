@@ -237,6 +237,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
       allow(Pages::ConditionsForm).to receive(:new).and_return(conditions_form)
       allow(conditions_form).to receive(:check_errors_from_api)
+      allow(conditions_form).to receive(:assign_condition_values).and_return(conditions_form)
 
       get edit_condition_path(form_id: 1, page_id: selected_page.id, condition_id: condition.id)
     end
@@ -247,6 +248,10 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
     it "Checks the errors from the API response" do
       expect(conditions_form).to have_received(:check_errors_from_api).exactly(1).times
+    end
+
+    it "Calls assign_condition_values" do
+      expect(conditions_form).to have_received(:assign_condition_values).exactly(1).times
     end
 
     it "renders the new condition page template" do
@@ -287,7 +292,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
       conditional_form = Pages::ConditionsForm.new(form:, page: selected_page, record: condition, answer_value: "Yes", goto_page_id: 3)
 
-      allow(conditional_form).to receive(:update).and_return(submit_result)
+      allow(conditional_form).to receive(:update_condition).and_return(submit_result)
 
       allow(Pages::ConditionsForm).to receive(:new).and_return(conditional_form)
 

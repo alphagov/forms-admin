@@ -4,6 +4,7 @@ FactoryBot.define do
     check_page_id { nil }
     answer_value { nil }
     goto_page_id { nil }
+    skip_to_end { false }
     validation_errors { [] }
 
     trait :with_answer_value_missing do
