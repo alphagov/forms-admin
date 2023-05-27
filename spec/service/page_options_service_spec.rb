@@ -169,14 +169,28 @@ describe PageOptionsService do
       let(:page) { build :page, id: 1, answer_type: "email", routing_conditions: }
       let(:condition_1) { build :condition, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
       let(:condition_2) { build :condition, routing_page_id: 1, check_page_id: 1, answer_value: "England", goto_page_id: 4 }
+      let(:routing_conditions) { nil }
+
+      context "with a legacy page that doesn't have routing conditions method" do
+        subject(:page_options_service) do
+          page_without_routing_conditions_method = page.dup.tap { |p| p.routing_conditions = nil }
+          described_class.new(page: page_without_routing_conditions_method, pages:)
+        end
+
+        it "returns the correct options" do
+          expect(page_options_service.all_options_for_answer_type).to include(
+            { key:  { text: "Answer type" }, value: { text: "Email address" } },
+          )
+        end
+      end
 
       context "with no condition" do
         let(:routing_conditions) { [] }
 
         it "returns the correct options" do
-          expect(page_options_service.all_options_for_answer_type).not_to include([
+          expect(page_options_service.all_options_for_answer_type).to include(
             { key:  { text: "Answer type" }, value: { text: "Email address" } },
-          ])
+          )
         end
       end
 
