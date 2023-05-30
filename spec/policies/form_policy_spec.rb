@@ -3,7 +3,7 @@ require "rails_helper"
 describe FormPolicy do
   subject(:policy) { described_class.new(user, form) }
 
-  let(:form) { build :form, org: "gds" }
+  let(:form) { build :form, org: "gds", creator_id: 123 }
   let(:user) { build :user, organisation_slug: "gds" }
 
   context "with no organisation set" do
@@ -32,10 +32,41 @@ describe FormPolicy do
         end
       end
     end
+
+    context "with a trial role" do
+      context "when the user created the form" do
+        context "with an organisation" do
+          let(:user) { build :user, :with_trial, organisation_slug: "gds" }
+
+          it { is_expected.to permit_actions(%i[can_view_form]) }
+        end
+
+        context "without an organisation" do
+          let(:form) { build :form, creator_id: 1234 }
+          let(:user) { build :user, :with_no_org, :with_trial, id: 1234 }
+
+          it { is_expected.to permit_actions(%i[can_view_form]) }
+        end
+      end
+
+      context "when the user didn't create the form" do
+        context "with a different user" do
+          let(:user) { build :user, id: 321 }
+
+          it { is_expected.to forbid_actions(%i[can_view_form]) }
+        end
+
+        context "without a form creator" do
+          let(:form) { build :form }
+
+          it { is_expected.to forbid_actions(%i[can_view_form]) }
+        end
+      end
+    end
   end
 
   describe "#can_add_page_routing_conditions?" do
-    let(:form) { build :form, pages:, org: "gds" }
+    let(:form) { build :form, pages:, org: "gds", creator_id: 123 }
     let(:pages) { [] }
 
     describe "when basic_routing feature flag is not enabled", feature_basic_routing: false do
@@ -103,6 +134,36 @@ describe FormPolicy do
       described_class.new(user, scope).resolve
 
       expect(scope).to have_received(:where).with(org: organisation_slug)
+    end
+
+    context "with a trial user role" do
+      let(:user) { build :user, :with_no_org, :with_trial, id: 123 }
+      let(:form) { build(:form, creator_id: 123) }
+
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms?creator_id=123", headers, [form].to_json, 200
+        end
+      end
+
+      it "only shows forms the user created" do
+        expect(policy_scope.resolve).to eq [form]
+      end
+    end
+
+    context "with a non-trial user role" do
+      let(:user) { build :user, organisation_slug: "test-org", id: 123 }
+      let(:form) { build(:form, org: "test-org", creator_id: 1234) }
+
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms?org=test-org", headers, [form].to_json, 200
+        end
+      end
+
+      it "only shows forms belonging to the user's organisation" do
+        expect(policy_scope.resolve).to eq [form]
+      end
     end
 
     context "with no organisation set" do

@@ -14,8 +14,12 @@ class FormPolicy
     end
 
     def resolve
-      scope
-        .where(org: user.organisation.slug)
+      if user.trial?
+        scope.where(creator_id: user.id)
+      else
+        scope
+          .where(org: user.organisation.slug)
+      end
     end
   end
 
@@ -44,6 +48,10 @@ class FormPolicy
   alias_method :can_delete_page_routing_conditions?, :can_edit_page_routing_conditions?
 
 private
+
+  def user_is_form_creator
+    form.respond_to?(:creator_id) ? user.id == form.creator_id : false
+  end
 
   def users_organisation_owns_form
     user.organisation.slug == form.org
