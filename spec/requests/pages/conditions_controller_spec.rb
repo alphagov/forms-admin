@@ -187,7 +187,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
     it "displays success message" do
       follow_redirect!
-      expect(response.body).to include(I18n.t("banner.success.route_created", question_position: 1))
+      expect(response.body).to include(I18n.t("banner.success.route_created", question_position: selected_page.position))
     end
 
     context "when form submit fails" do
