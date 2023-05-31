@@ -84,5 +84,26 @@ describe User do
 
       expect(user.reload.name).to eq "New Name"
     end
+
+    it "logs attributes that will be updated" do
+      allow(EventLogger).to receive(:log)
+
+      described_class.find_for_auth(
+        uid: "111111",
+        name: "Test A. User",
+        email: "test@example.com",
+      )
+
+      expect(EventLogger).to have_received(:log).with(
+        "auth",
+        {
+          "user_id": user.id,
+          "user_changes": {
+            uid: %w[123456 111111],
+            name: ["Test User", "Test A. User"],
+          },
+        },
+      )
+    end
   end
 end

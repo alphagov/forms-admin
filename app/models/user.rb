@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   include GDS::SSO::User
 
+  class UserAuthenticationException < StandardError; end
+
   belongs_to :organisation, optional: true
 
   serialize :permissions, Array
@@ -32,7 +34,16 @@ class User < ApplicationRecord
       where(email: attributes[:email]).first
 
     if user
-      user.update!(attributes)
+      user.assign_attributes(attributes)
+
+      if user.has_changes_to_save?
+        EventLogger.log("auth", {
+          user_id: user.id,
+          user_changes: user.changes_to_save,
+        })
+      end
+
+      user.save!
       user
     else # Create a new user.
       create!(attributes)
