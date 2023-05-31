@@ -4,22 +4,6 @@ describe Condition do
   let(:validation_errors) { [] }
   let(:condition) { described_class.new(id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3, validation_errors:) }
 
-  describe "#has_errors?" do
-    context "when condition has no errors" do
-      it "returns false" do
-        expect(condition.has_errors?).to be false
-      end
-    end
-
-    context "when condition has an error" do
-      let(:validation_errors) { [OpenStruct.new(name: "answer_value_doesnt_exist")] }
-
-      it "returns true" do
-        expect(condition.has_errors?).to be true
-      end
-    end
-  end
-
   describe "#errors_with_fields" do
     context "when the error is a known error" do
       let(:validation_errors) { [OpenStruct.new(name: "answer_value_doesnt_exist"), OpenStruct.new(name: "goto_page_doesnt_exist"), OpenStruct.new(name: "cannot_have_goto_page_before_routing_page"), OpenStruct.new(name: "cannot_route_to_next_page")] }

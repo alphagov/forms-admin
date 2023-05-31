@@ -17,8 +17,4 @@ class Condition < ActiveResource::Base
       { name: error.name, field: error_fields[error.name.to_sym] || :answer_value }
     end
   end
-
-  def has_errors?
-    validation_errors.any?
-  end
 end

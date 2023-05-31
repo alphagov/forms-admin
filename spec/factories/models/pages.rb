@@ -19,6 +19,7 @@ FactoryBot.define do
     routing_conditions { [] }
     sequence(:position) { |n| n }
     question_with_text { "#{position}. #{question_text}" }
+    has_routing_errors { false }
 
     trait :with_hints do
       hint_text { Faker::Quote.yoda }

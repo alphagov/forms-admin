@@ -288,10 +288,6 @@ RSpec.describe FormsController, type: :request do
       it "returns 300 error code" do
         expect(response.status).to eq(422)
       end
-
-      it "sets a flash message" do
-        expect(flash[:message]).to eq "Save unsuccessful"
-      end
     end
 
     context "with a user with no organisation" do
