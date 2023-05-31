@@ -40,7 +40,8 @@ class Pages::ConditionsForm
   end
 
   def goto_page_options
-    [OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")), form.pages.map { |p| OpenStruct.new(id: p.id, question_text: p.question_with_number) }, OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers"))].flatten
+    page_options = pages_after_current_page(form.pages, page).map { |p| OpenStruct.new(id: p.id, question_text: p.question_with_number) }
+    [OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")), page_options, OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers"))].flatten
   end
 
   def check_errors_from_api
@@ -63,5 +64,11 @@ class Pages::ConditionsForm
     else
       self.skip_to_end = false
     end
+  end
+
+private
+
+  def pages_after_current_page(all_pages, current_page)
+    all_pages.filter { |page| page.position > current_page.position }
   end
 end
