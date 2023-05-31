@@ -124,9 +124,27 @@ RSpec.describe Pages::ConditionsForm, type: :model do
   end
 
   describe "#goto_page_options" do
-    it "returns a list of answers for the given page" do
-      result = described_class.new(form:, page: pages.first).goto_page_options
-      expect(result).to eq([OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")), form.pages.map { |p| OpenStruct.new(id: p.id, question_text: p.question_text) }, OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers"))].flatten)
+    context "when routing from the first form page" do
+      it "returns a list of all pages after the first page and includes 'Check your answers'" do
+        result = described_class.new(form:, page: pages.first).goto_page_options
+        expect(result).to eq([
+          OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")),
+          form.pages.drop(1).map { |p| OpenStruct.new(id: p.id, question_text: "#{p.position}. #{p.question_text}") },
+          OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers")),
+        ].flatten)
+      end
+    end
+
+    context "when routing from the third form page" do
+      it "returns a list of answers that excludes any pages before the given page and the given page" do
+        routing_from_page_position = 3
+        result = described_class.new(form:, page: pages[routing_from_page_position - 1]).goto_page_options
+        expect(result).to eq([
+          OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")),
+          form.pages.drop(routing_from_page_position).map { |p| OpenStruct.new(id: p.id, question_text: "#{p.position}. #{p.question_text}") },
+          OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers")),
+        ].flatten)
+      end
     end
   end
 

@@ -17,7 +17,8 @@ FactoryBot.define do
     answer_settings { nil }
     hint_text { nil }
     routing_conditions { [] }
-    position { 1 }
+    sequence(:position) { |n| n }
+    question_with_text { "#{position}. #{question_text}" }
 
     trait :with_hints do
       hint_text { Faker::Quote.yoda }
