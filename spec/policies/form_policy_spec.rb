@@ -44,9 +44,10 @@ describe FormPolicy do
     end
 
     context "with a trial role" do
+      let(:form) { build :form, org: nil, creator_id: 123 }
+
       context "when the user created the form" do
-        let(:form) { build :form, creator_id: 1234 }
-        let(:user) { build :user, :with_no_org, :with_trial, id: 1234 }
+        let(:user) { build :user, :with_no_org, :with_trial, id: 123 }
 
         it { is_expected.to permit_actions(%i[can_view_form]) }
       end
@@ -59,7 +60,7 @@ describe FormPolicy do
         end
 
         context "without a form creator" do
-          let(:form) { build :form }
+          let(:form) { build :form, org: nil, creator_id: nil }
 
           it { is_expected.to forbid_actions(%i[can_view_form]) }
         end
@@ -140,7 +141,7 @@ describe FormPolicy do
 
     context "with a trial user role" do
       let(:user) { build :user, :with_no_org, :with_trial, id: 123 }
-      let(:form) { build(:form, creator_id: 123) }
+      let(:form) { build(:form, creator_id: 123, org: nil) }
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|

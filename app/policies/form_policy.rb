@@ -31,7 +31,7 @@ class FormPolicy
   end
 
   def can_view_form?
-    users_organisation_owns_form
+    users_organisation_owns_form || (user.trial? && user_is_form_creator)
   end
 
   def can_add_page_routing_conditions?
@@ -50,10 +50,10 @@ class FormPolicy
 private
 
   def user_is_form_creator
-    form.respond_to?(:creator_id) ? user.id == form.creator_id : false
+    form.creator_id.present? ? user.id == form.creator_id : false
   end
 
   def users_organisation_owns_form
-    user.organisation&.slug == form.org
+    user.organisation.present? ? user.organisation.slug == form.org : false
   end
 end
