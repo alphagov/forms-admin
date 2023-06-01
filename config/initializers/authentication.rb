@@ -8,7 +8,7 @@ Rails.application.config.before_initialize do
     Settings.auth0.domain,
     callback_path: "/auth/auth0/callback",
     authorize_params: {
-      scope: "openid email profile",
+      scope: "openid email",
     },
   )
 
