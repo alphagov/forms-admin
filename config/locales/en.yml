@@ -345,6 +345,7 @@ en:
     condition_answer_value_text_with_errors: is answered as [Answer not selected]
     condition_check_page_text: If the question “%{check_page_text}”
     condition_compact_html: 'If the answer is “%{answer_value}”<br> then skip to question %{goto_page_number}: “%{goto_page_text}”'
+    condition_compact_html_end_of_form: If the answer is “%{answer_value}”<br> then skip to “Check your answers”
     condition_goto_page_text: take the person to “%{goto_page_text}”
     condition_goto_page_text_with_errors: take the person to [Question not selected]
     condition_name: Question %{page_index}’s route

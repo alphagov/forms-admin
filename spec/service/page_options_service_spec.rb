@@ -219,6 +219,21 @@ describe PageOptionsService do
           )
         end
       end
+
+      context "with a condition that points to the end of the form" do
+        let(:routing_conditions) { [condition] }
+        let(:answer_value) { "Wales" }
+        let(:condition) { build :condition, answer_value:, goto_page_id: nil, skip_to_end: true }
+
+        it "returns the correct options" do
+          expect(page_options_service.all_options_for_answer_type).to include(
+            {
+              key: { text: I18n.t("page_conditions.route") },
+              value: { text: I18n.t("page_conditions.condition_compact_html_end_of_form", answer_value:) },
+            },
+          )
+        end
+      end
     end
   end
 end
