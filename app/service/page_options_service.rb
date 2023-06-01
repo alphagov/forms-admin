@@ -131,12 +131,17 @@ private
   end
 
   def print_route(condition)
-    goto_question = @pages.find { |page| page.id == condition.goto_page_id }
-    goto_page_text = ActionController::Base.helpers.sanitize(goto_question.question_text)
-    goto_page_number = @pages.find_index(goto_question) + 1
     answer_value = ActionController::Base.helpers.sanitize(condition.answer_value)
 
-    I18n.t("page_conditions.condition_compact_html", answer_value:, goto_page_number:, goto_page_text:).html_safe
+    if condition.skip_to_end
+      I18n.t("page_conditions.condition_compact_html_end_of_form", answer_value:).html_safe
+    else
+      goto_question = @pages.find { |page| page.id == condition.goto_page_id }
+      goto_page_text = ActionController::Base.helpers.sanitize(goto_question.question_text)
+      goto_page_number = @pages.find_index(goto_question) + 1
+
+      I18n.t("page_conditions.condition_compact_html", answer_value:, goto_page_number:, goto_page_text:).html_safe
+    end
   end
 
   def html_ordered_list(list_items)
