@@ -49,12 +49,17 @@ describe User do
 
   describe ".find_for_auth" do
     let!(:user) do
-      create :user, uid: "123456", name: "Test User", email: "test@example.com"
+      create :user, provider: "test", uid: "123456", name: "Test User", email: "test@example.com"
     end
 
     it "finds a user by uid" do
-      expect(described_class.find_for_auth(uid: "123456"))
+      expect(described_class.find_for_auth(provider: "test", uid: "123456"))
         .to eq user
+    end
+
+    it "avoids uid collisions" do
+      expect(described_class.find_for_auth(provider: "other", uid: "123456"))
+        .not_to eq user
     end
 
     it "finds a user by email address if no user with uid is found" do
@@ -68,6 +73,7 @@ describe User do
       allow(described_class).to receive(:create!)
 
       described_class.find_for_auth(
+        provider: "test",
         uid: "9999",
         email: "fake@example.com",
         name: "Fake Name",
@@ -78,6 +84,7 @@ describe User do
 
     it "updates any user attributes that have changed" do
       described_class.find_for_auth(
+        provider: "test",
         uid: "123456",
         name: "New Name",
       )
@@ -89,6 +96,7 @@ describe User do
       allow(EventLogger).to receive(:log)
 
       described_class.find_for_auth(
+        provider: "test",
         uid: "111111",
         name: "Test A. User",
         email: "test@example.com",

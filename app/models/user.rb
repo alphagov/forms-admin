@@ -31,7 +31,7 @@ class User < ApplicationRecord
   end
 
   def self.find_for_auth(attributes)
-    user = where(uid: attributes[:uid]).first ||
+    user = where(provider: attributes[:provider], uid: attributes[:uid]).first ||
       where(email: attributes[:email]).first
 
     if user
