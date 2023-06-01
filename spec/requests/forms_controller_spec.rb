@@ -285,8 +285,12 @@ RSpec.describe FormsController, type: :request do
         expect(response).to render_template("pages/index")
       end
 
-      it "returns 300 error code" do
+      it "returns 422 error code" do
         expect(response.status).to eq(422)
+      end
+
+      it "sets mark_complete to false" do
+        expect(assigns[:mark_complete_form].mark_complete).to eq("false")
       end
     end
 
