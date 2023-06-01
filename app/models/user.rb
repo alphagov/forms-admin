@@ -50,4 +50,8 @@ class User < ApplicationRecord
       create!(attributes)
     end
   end
+
+  def organisation_valid?
+    trial? || organisation.present?
+  end
 end

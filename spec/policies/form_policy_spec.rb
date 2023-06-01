@@ -7,10 +7,20 @@ describe FormPolicy do
   let(:user) { build :user, organisation_slug: "gds" }
 
   context "with no organisation set" do
-    let(:user) { build :user, :with_no_org }
+    context "with editor role" do
+      let(:user) { build :user, :with_no_org }
 
-    it "raises an error" do
-      expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+      it "raises an error" do
+        expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+      end
+    end
+
+    context "with trial role" do
+      let(:user) { build :user, :with_no_org, :with_trial }
+
+      it "does not raise an error" do
+        expect { policy }.not_to raise_error
+      end
     end
   end
 
@@ -35,18 +45,10 @@ describe FormPolicy do
 
     context "with a trial role" do
       context "when the user created the form" do
-        context "with an organisation" do
-          let(:user) { build :user, :with_trial, organisation_slug: "gds" }
+        let(:form) { build :form, creator_id: 1234 }
+        let(:user) { build :user, :with_no_org, :with_trial, id: 1234 }
 
-          it { is_expected.to permit_actions(%i[can_view_form]) }
-        end
-
-        context "without an organisation" do
-          let(:form) { build :form, creator_id: 1234 }
-          let(:user) { build :user, :with_no_org, :with_trial, id: 1234 }
-
-          it { is_expected.to permit_actions(%i[can_view_form]) }
-        end
+        it { is_expected.to permit_actions(%i[can_view_form]) }
       end
 
       context "when the user didn't create the form" do
@@ -66,7 +68,7 @@ describe FormPolicy do
   end
 
   describe "#can_add_page_routing_conditions?" do
-    let(:form) { build :form, pages:, org: "gds", creator_id: 123 }
+    let(:form) { build :form, pages:, org: "gds" }
     let(:pages) { [] }
 
     describe "when basic_routing feature flag is not enabled", feature_basic_routing: false do
@@ -167,10 +169,20 @@ describe FormPolicy do
     end
 
     context "with no organisation set" do
-      let(:user) { build :user, :with_no_org }
+      context "with editor role" do
+        let(:user) { build :user, :with_no_org }
 
-      it "raises an error" do
-        expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+        it "raises an error" do
+          expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+        end
+      end
+
+      context "with trial role" do
+        let(:user) { build :user, :with_no_org, :with_trial }
+
+        it "does not an error" do
+          expect { policy }.not_to raise_error
+        end
       end
     end
 
