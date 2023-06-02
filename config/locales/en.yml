@@ -476,6 +476,15 @@ en:
     option: Option %{number}
     options_title: Options
     remove_html: Remove <span class="govuk-visually-hidden">option %{option_number}</span>
+    routing_warning_about_change_only_one_option_heading: Your existing question route may be deleted
+    routing_warning_about_change_only_one_option_html: |
+      <p>
+        Removing the “People can only select one option” setting means your route will no longer work and will be deleted.
+      </p>
+      <p>
+        If you do not want to lose your question route you can cancel this change by using the back button or <a href="%{pages_link_url}">go to your questions</a>.
+      </p>
+    routing_warning_notification_title: Important
     'yes': 'Yes'
   service_unavailable:
     body_html: "%{link} if you need to make changes to your forms or speak to someone about the service."

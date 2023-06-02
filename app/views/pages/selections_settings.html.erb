@@ -4,6 +4,13 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <% if @page.present? && @page.conditions.any? %>
+      <%= govuk_notification_banner(title_text: t("selections_settings.routing_warning_notification_title")) do |banner| %>
+        <% banner.with_heading(text: t("selections_settings.routing_warning_about_change_only_one_option_heading")) %>
+        <%= t("selections_settings.routing_warning_about_change_only_one_option_html", pages_link_url: form_pages_path(@form)) %>
+      <% end %>
+    <% end %>
+
     <%= form_with model: [@form, @selections_settings_form], url: @selections_settings_path do |f| %>
       <%= f.govuk_error_summary %>
 

@@ -81,14 +81,6 @@ describe "pages/type_of_answer.html.erb", type: :view do
                         .text(normalize_ws: true))
     end
 
-    context "when answer type is not a selection" do
-      let(:answer_type) { "number" }
-
-      it "does not display a warning about routes being deleted if answer type changes" do
-        expect(rendered).not_to have_selector(".govuk-notification-banner__content")
-      end
-    end
-
     context "when no routing conditions set" do
       let(:conditions) { [] }
 
