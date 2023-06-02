@@ -28,42 +28,57 @@ describe ApplicationController, type: :controller do
   end
 
   context "when authenticating a user" do
-    it "invokes Signon authentication when basic auth is not enabled" do
-      signon_user = build :user, name: "tester", organisation_slug: "testing"
+    let(:user) { build :user }
 
-      # Mock GDS SSO
-      allow(request.env["warden"]).to receive(:authenticate!).and_return(true)
-      expect(request.env["warden"]).to receive(:authenticate!)
-      allow(controller).to receive(:current_user).and_return(signon_user)
-
-      get :index
-
-      expect(assigns[:current_user].name).to be signon_user.name
-      expect(assigns[:current_user].email).to be signon_user.email
-      expect(assigns[:current_user].organisation_slug).to be signon_user.organisation_slug
+    let(:warden_spy) do
+      request.env["warden"] = instance_double(Warden::Proxy)
     end
 
-    it "invokes basic auth when it is enabled" do
-      # Mock basic auth settings
-      test_user_name = "tester"
-      test_password = "password"
-      basic_auth_organisation_double = object_double("basic_auth_organisation_double", slug: "test-org", name: "Test Org", content_id: "")
-      basic_auth_double = object_double("basic_auth_double", enabled: true, username: test_user_name, password: test_password, organisation: basic_auth_organisation_double)
-      allow(Settings).to receive(:basic_auth).and_return(basic_auth_double)
+    context "when Signon is enabled" do
+      before do
+        # Mock GDS SSO
+        allow(warden_spy).to receive(:authenticate!).and_return(true)
+        allow(controller).to receive(:current_user).and_return(user)
 
-      # Mock warden manager and config
-      warden_config_double = instance_double(Warden::Config, intercept_401: false)
-      warden_manager_double = instance_double(Warden::Manager, config: warden_config_double)
-      allow(request.env["warden"]).to receive(:manager).and_return(warden_manager_double)
-      expect(warden_config_double).to receive(:intercept_401=).with(false)
-      allow(controller).to receive(:http_basic_authenticate_or_request_with).and_return(true)
-      expect(controller).to receive(:http_basic_authenticate_or_request_with)
+        get :index
+      end
 
-      get :index
+      it "uses GOV.UK Signon" do
+        expect(warden_spy).to have_received(:authenticate!)
+      end
 
-      expect(assigns[:current_user].name).to eq(test_user_name)
-      expect(assigns[:current_user].email).to eq("#{test_user_name}@example.com")
-      expect(assigns[:current_user].organisation.slug).to eq("test-org")
+      it "sets @current_user" do
+        expect(assigns[:current_user]).to eq user
+      end
+    end
+
+    context "when basic auth is enabled" do
+      before do
+        # Mock warden manager and config
+        warden_config_double = instance_double(Warden::Config, intercept_401: false)
+        warden_manager_double = instance_double(Warden::Manager, config: warden_config_double)
+        allow(warden_spy).to receive(:manager).and_return(warden_manager_double)
+        expect(warden_config_double).to receive(:intercept_401=).with(false)
+
+        allow(Settings.basic_auth).to receive(:enabled).and_return(true)
+
+        allow(controller)
+          .to receive(:http_basic_authenticate_or_request_with)
+          .and_return(true)
+
+        get :index
+      end
+
+      it "uses HTTP Basic Authentication" do
+        expect(controller)
+          .to have_received(:http_basic_authenticate_or_request_with)
+      end
+
+      it "sets @current_user" do
+        expect(assigns[:current_user].name).to eq("basic_auth_user")
+        expect(assigns[:current_user].email).to eq("basic_auth_user@example.com")
+        expect(assigns[:current_user].organisation.slug).to eq("gds-user-research")
+      end
     end
   end
 end
