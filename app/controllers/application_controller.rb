@@ -1,7 +1,6 @@
 require "resolv"
 
 class ApplicationController < ActionController::Base
-  include GDS::SSO::ControllerMethods
   include Pundit::Authorization
   before_action :set_request_id
   before_action :check_service_unavailable
@@ -74,6 +73,18 @@ class ApplicationController < ActionController::Base
   def user_ip(forwarded_for = "")
     first_ip_string = forwarded_for.split(",").first
     Regexp.union([Resolv::IPv4::Regex, Resolv::IPv6::Regex]).match(first_ip_string) && first_ip_string
+  end
+
+  def warden
+    request.env["warden"]
+  end
+
+  def user_signed_in
+    warden && warden.authenticated? && !warden.user.remotely_signed_out?
+  end
+
+  def current_user
+    warden.user if user_signed_in
   end
 
   def authenticate_user!
