@@ -2,6 +2,7 @@ require "capybara/rspec"
 
 require "pundit/matchers"
 require_relative "support/active_resource_mock"
+require_relative "support/logger_mock"
 require_relative "support/factorybot"
 require_relative "support/features"
 require_relative "support/authentication_feature_helpers"
