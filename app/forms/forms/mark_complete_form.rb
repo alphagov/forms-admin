@@ -5,6 +5,7 @@ class Forms::MarkCompleteForm
   attr_accessor :mark_complete, :form
 
   validates :mark_complete, presence: true
+  validate :has_routing_errors, if: :marked_complete?
 
   def mark_section
     return false if invalid?
@@ -20,5 +21,13 @@ class Forms::MarkCompleteForm
   def assign_form_values
     self.mark_complete = form.try(:question_section_completed)
     self
+  end
+
+  def marked_complete?
+    mark_complete == "true"
+  end
+
+  def has_routing_errors
+    errors.add :base, :has_routing_errors if form.has_routing_errors?
   end
 end

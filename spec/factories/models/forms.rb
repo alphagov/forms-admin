@@ -17,6 +17,7 @@ FactoryBot.define do
     declaration_text { nil }
     question_section_completed { false }
     declaration_section_completed { false }
+    has_routing_errors { false }
 
     trait :new_form do
       submission_email { "" }

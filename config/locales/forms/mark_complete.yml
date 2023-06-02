@@ -4,5 +4,7 @@ en:
       models:
         forms/mark_complete_form:
           attributes:
+            base:
+              has_routing_errors: This form has validation errors
             mark_complete:
               blank: You must choose an option

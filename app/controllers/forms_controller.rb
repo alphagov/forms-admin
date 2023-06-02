@@ -31,7 +31,7 @@ class FormsController < ApplicationController
     if @mark_complete_form.mark_section
       redirect_to form_path(@form)
     else
-      flash[:message] = "Save unsuccessful"
+      @mark_complete_form.mark_complete = "false"
       render "pages/index", status: :unprocessable_entity
     end
   end
