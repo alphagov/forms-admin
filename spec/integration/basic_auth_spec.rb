@@ -4,12 +4,16 @@ RSpec.describe "using basic auth" do
   let(:username) { "tester" }
   let(:password) { "password" }
 
+  let!(:organisation) do
+    build :organisation, slug: "test-org"
+  end
+
   let(:basic_auth_settings) do
     Config::Options.new(
       organisation: Config::Options.new(
         slug: "test-org",
         name: "Test Org",
-        content_id: "",
+        content_id: organisation.content_id,
       ),
       enabled: true,
       username:,

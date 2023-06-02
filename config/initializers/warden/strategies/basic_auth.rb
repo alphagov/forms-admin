@@ -20,11 +20,11 @@ Warden::Strategies.add(:basic_auth) do
     )
 
     if status.nil?
-      success! User.new(
+      success! User.find_or_initialize_by(
         name: Settings.basic_auth.username,
         email: "#{Settings.basic_auth.username}@example.com",
         role: :editor,
-        organisation: Organisation.new(
+        organisation: Organisation.find_or_initialize_by(
           name: Settings.basic_auth.organisation.name,
           slug: Settings.basic_auth.organisation.slug,
           content_id: Settings.basic_auth.organisation.content_id,
