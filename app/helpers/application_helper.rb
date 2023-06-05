@@ -65,11 +65,20 @@ module ApplicationHelper
   end
 
   def header_component_options(user:, can_manage_users:)
+    auth_links = {
+      gds_sso: {
+        user_profile_link: GDS::SSO::Config.oauth_root_url,
+        signout_link: gds_sign_out_path,
+      },
+    }
+    auth_links.default = {}
+    links = auth_links[Settings.auth_provider.to_sym]
+
     { is_signed_in: user.present?,
       user_name: user&.name.presence,
-      user_profile_link: (user.blank? || Settings.basic_auth.enabled ? nil : GDS::SSO::Config.oauth_root_url),
+      user_profile_link: (user.blank? ? nil : links[:user_profile_link]),
       list_of_users_path: (can_manage_users ? users_path : nil),
-      signout_link: (user.blank? || Settings.basic_auth.enabled ? nil : gds_sign_out_path) }
+      signout_link: (user.blank? ? nil : links[:signout_link]) }
   end
 
   def user_role_options(roles = User.roles.keys)

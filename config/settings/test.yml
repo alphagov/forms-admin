@@ -11,3 +11,6 @@ service_unavailable: false
 forms_runner:
   # Base URL to point users to the app in the UI
   url: runner-host
+
+# Use mock authentication
+auth_provider: mock_gds_sso

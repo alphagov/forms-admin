@@ -1,7 +1,6 @@
 require "resolv"
 
 class ApplicationController < ActionController::Base
-  include GDS::SSO::ControllerMethods unless Settings.basic_auth.enabled
   include Pundit::Authorization
   before_action :set_request_id
   before_action :check_service_unavailable
@@ -20,48 +19,9 @@ class ApplicationController < ActionController::Base
     render "errors/forbidden", status: :forbidden, formats: :html
   end
 
-  def authenticate
-    if Settings.basic_auth.enabled
-      basic_auth
-    else
-      signon_auth
-    end
-  end
-
-  def basic_auth
-    request.env["warden"].manager.config.intercept_401 = false
-
-    http_basic_authenticate_or_request_with(
-      name: Settings.basic_auth.username,
-      password: Settings.basic_auth.password,
-    )
-
-    @current_user = User.new(
-      name: Settings.basic_auth.username,
-      email: "#{Settings.basic_auth.username}@example.com",
-      role: :editor,
-      organisation: Organisation.new(
-        name: Settings.basic_auth.organisation.name,
-        slug: Settings.basic_auth.organisation.slug,
-        content_id: Settings.basic_auth.organisation.content_id,
-      ),
-    )
-  end
-
-  def signon_auth
-    authenticate_user!
-    @current_user = current_user
-  end
-
   def check_service_unavailable
     if Settings.service_unavailable
       render "errors/service_unavailable", status: :service_unavailable, formats: :html
-    end
-  end
-
-  def check_access
-    unless @current_user.has_access?
-      render "errors/access_denied", status: :forbidden, formats: :html
     end
   end
 
@@ -115,17 +75,33 @@ class ApplicationController < ActionController::Base
     Regexp.union([Resolv::IPv4::Regex, Resolv::IPv6::Regex]).match(first_ip_string) && first_ip_string
   end
 
-  # By default pundit uses `current_user` which worked when we are using signon
-  # but if we use basic auth `current_user` method isn't set and so we manually
-  # create @current_user and set that.
-  def pundit_user
-    @current_user
+  def warden
+    request.env["warden"]
+  end
+
+  def user_signed_in
+    warden && warden.authenticated? && !warden.user.remotely_signed_out?
+  end
+
+  def current_user
+    warden.user if user_signed_in
+  end
+
+  def authenticate_user!
+    warden.authenticate! Settings.auth_provider.to_sym
+
+    # set user instance variable for views
+    @current_user = current_user
   end
 
 private
 
   def authenticate_and_check_access
-    authenticate
-    check_access
+    authenticate_user!
+
+    # check access
+    unless @current_user.has_access?
+      render "errors/access_denied", status: :forbidden, formats: :html
+    end
   end
 end

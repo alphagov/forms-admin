@@ -29,8 +29,10 @@ sentry:
   dsn:
   environment: local
 
+# How we authenticate users
+auth_provider: # use default auth_provider from environment
+
 basic_auth:
-  enabled: false
   username: basic_auth_user
   password:
   organisation:
