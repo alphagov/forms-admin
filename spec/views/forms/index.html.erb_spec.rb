@@ -74,6 +74,14 @@ describe "forms/index.html.erb" do
       end
     end
 
+    context "with a user with a trial role" do
+      let(:user) { build :user, :with_no_org, :with_trial }
+
+      it "has a table caption without an organisation name" do
+        expect(rendered).to have_css(".govuk-table__caption", text: "Your forms")
+      end
+    end
+
     context "when a form is live renders link to 'live' form readonly view" do
       let(:forms) { [OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft", has_live_version: false), OpenStruct.new(id: 2, name: "Form 2", form_slug: "form-2", status: "live", has_live_version: true)] }
 
