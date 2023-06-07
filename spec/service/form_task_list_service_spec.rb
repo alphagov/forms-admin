@@ -17,21 +17,21 @@ describe FormTaskListService do
     end
   end
 
-  describe "#all_tasks" do
+  describe "#all_sections" do
     let(:form) { build(:form, :new_form, id: 1) }
 
     it "returns array of tasks objects for a given form" do
-      expect(described_class.call(form:).all_tasks).to be_an_instance_of(Array)
+      expect(described_class.call(form:).all_sections).to be_an_instance_of(Array)
     end
 
     it "returns 4 sections" do
       expected_sections = [{ title: "Task 1" }, { title: "Task 2" }, { title: "Task 3" }, { title: "Task 4" }]
-      expect(described_class.call(form:).all_tasks.count).to eq expected_sections.count
+      expect(described_class.call(form:).all_sections.count).to eq expected_sections.count
     end
 
     describe "section 1 tasks" do
       let(:section) do
-        described_class.call(form:).all_tasks.first
+        described_class.call(form:).all_sections.first
       end
 
       let(:section_rows) { section[:rows] }
@@ -73,7 +73,7 @@ describe FormTaskListService do
 
     describe "section 2 tasks" do
       let(:section) do
-        described_class.call(form:).all_tasks[1]
+        described_class.call(form:).all_sections[1]
       end
 
       let(:section_rows) { section[:rows] }
@@ -81,7 +81,7 @@ describe FormTaskListService do
       context "when submission_email is set" do
         let(:section) do
           form.submission_email = "test@example.gov.uk"
-          described_class.call(form:).all_tasks[1]
+          described_class.call(form:).all_sections[1]
         end
 
         it "has link to set submission email" do
@@ -177,7 +177,7 @@ describe FormTaskListService do
 
     describe "section 3 tasks" do
       let(:section) do
-        described_class.call(form:).all_tasks[2]
+        described_class.call(form:).all_sections[2]
       end
 
       let(:section_rows) { section[:rows] }
@@ -200,7 +200,7 @@ describe FormTaskListService do
 
     describe "section 4 tasks" do
       let(:section) do
-        described_class.call(form:).all_tasks[3]
+        described_class.call(form:).all_sections[3]
       end
 
       let(:section_rows) { section[:rows] }
@@ -217,7 +217,7 @@ describe FormTaskListService do
       context "when form is ready to make live" do
         let(:form) { build(:form, :ready_for_live, id: 1) }
         let(:section) do
-          described_class.call(form:).all_tasks[3]
+          described_class.call(form:).all_sections[3]
         end
 
         let(:section_rows) { section[:rows] }
@@ -235,7 +235,7 @@ describe FormTaskListService do
       context "when form is live" do
         let(:section) do
           allow(form).to receive(:has_live_version).and_return(true)
-          described_class.call(form:).all_tasks[3]
+          described_class.call(form:).all_sections[3]
         end
 
         let(:section_rows) { section[:rows] }
