@@ -1,6 +1,8 @@
 require "rails_helper"
 
 describe FormTaskListService do
+  let(:current_user) { build(:user) }
+
   describe ".task_counts" do
     let(:form) { build(:form) }
     let(:task_status_service) { instance_double(TaskStatusService) }
@@ -11,7 +13,7 @@ describe FormTaskListService do
     end
 
     it "returns counts from task status service" do
-      result = described_class.new(form:)
+      result = described_class.new(form:, current_user:)
       expect(TaskStatusService).to have_received(:new)
       expect(result.task_counts).to eq 1234
     end
@@ -20,7 +22,7 @@ describe FormTaskListService do
   describe "#all_sections" do
     let(:form) { build(:form, :new_form, id: 1) }
 
-    let(:all_sections) { described_class.call(form:).all_sections }
+    let(:all_sections) { described_class.call(form:, current_user:).all_sections }
 
     it "returns array of tasks objects for a given form" do
       expect(all_sections).to be_an_instance_of(Array)
