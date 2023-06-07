@@ -34,43 +34,28 @@ describe ApplicationController, type: :controller do
       request.env["warden"] = instance_double(Warden::Proxy)
     end
 
-    context "when Signon is enabled" do
-      before do
-        # Mock GDS SSO
-        allow(warden_spy).to receive(:authenticate!).and_return(true)
-        allow(controller).to receive(:current_user).and_return(user)
+    %w[
+      auth0
+      basic_auth
+      gds_sso
+    ].each do |provider|
+      context "when #{provider} auth is enabled" do
+        before do
+          allow(warden_spy).to receive(:authenticate!).and_return(true)
+          allow(controller).to receive(:current_user).and_return(user)
 
-        allow(Settings).to receive(:auth_provider).and_return("gds_sso")
+          allow(Settings).to receive(:auth_provider).and_return(provider)
 
-        get :index
-      end
+          get :index
+        end
 
-      it "uses GOV.UK Signon" do
-        expect(warden_spy).to have_received(:authenticate!).with(:gds_sso)
-      end
+        it "uses the #{provider} Warden strategy" do
+          expect(warden_spy).to have_received(:authenticate!).with(provider.to_sym)
+        end
 
-      it "sets @current_user" do
-        expect(assigns[:current_user]).to eq user
-      end
-    end
-
-    context "when basic auth is enabled" do
-      before do
-        # Mock Warden
-        allow(warden_spy).to receive(:authenticate!).and_return(true)
-        allow(controller).to receive(:current_user).and_return(user)
-
-        allow(Settings).to receive(:auth_provider).and_return("basic_auth")
-
-        get :index
-      end
-
-      it "uses HTTP Basic Authentication" do
-        expect(warden_spy).to have_received(:authenticate!).with(:basic_auth)
-      end
-
-      it "sets @current_user" do
-        expect(assigns[:current_user]).to eq user
+        it "sets @current_user" do
+          expect(assigns[:current_user]).to eq user
+        end
       end
     end
   end

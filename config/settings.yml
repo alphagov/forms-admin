@@ -32,6 +32,11 @@ sentry:
 # How we authenticate users
 auth_provider: # use default auth_provider from environment
 
+auth0:
+  client_id: changeme
+  client_secret:
+  domain: changeme.uk.auth0.com
+
 basic_auth:
   username: basic_auth_user
   password:
