@@ -176,6 +176,26 @@ describe FormTaskListService do
           expect(section_rows[1][:status]).to eq :completed
         end
       end
+
+      context "when current user has a trial account" do
+        let(:current_user) { build :user, role: :trial }
+
+        before do
+          form.submission_email = current_user.email
+        end
+
+        it "has no tasks" do
+          expect(section).not_to include(:rows)
+        end
+
+        it "has text explaining where completed forms will be sent to" do
+          expect(section[:body_text])
+            .to eq I18n.t(
+              "forms.task_list_create.section_2.if_trial_user.body_text",
+              submission_email: form.submission_email,
+            )
+        end
+      end
     end
 
     describe "section 3 tasks" do
