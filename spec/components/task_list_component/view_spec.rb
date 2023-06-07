@@ -46,6 +46,31 @@ RSpec.describe TaskListComponent::View, type: :component do
     end
   end
 
+  context "when given a section body instead of any rows" do
+    before do
+      render_inline(described_class.new(sections: [
+        { title: "section title", body_text: "section body" },
+      ]))
+    end
+
+    it "renders the section title" do
+      expect(page).to have_text("section title")
+    end
+
+    it "renders the section body" do
+      expect(page).to have_text("section body")
+    end
+
+    it "can render HTML in the section body" do
+      render_inline(described_class.new(sections: [{
+        title: "section title",
+        body_text: "section\n\nbody",
+      }]))
+
+      expect(page).to have_css("p", exact_text: "body")
+    end
+  end
+
   context "when given an empty rows array" do
     before do
       render_inline(described_class.new(sections: [
