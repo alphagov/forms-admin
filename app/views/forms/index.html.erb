@@ -7,6 +7,13 @@
   </p>
 <% end %>
 
+<% if @current_user.trial?  %>
+  <%= govuk_notification_banner(title_text: t("trial_role_warning.title")) do |banner| %>
+    <% banner.with_heading(text: t("trial_role_warning.heading")) %>
+    <%= t("trial_role_warning.content") %>
+  <% end %>
+<% end %>
+
 <%= govuk_start_button(text: t("home.create_a_form"), href: new_form_path) %>
 
 <% if @forms.any? %>
