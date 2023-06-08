@@ -15,9 +15,12 @@
       <p><%= flash[:message] %></p>
     <% end %>
 
-    <p class="govuk-!-margin-bottom-9">
-      <%= render PreviewLinkComponent::View.new(@form.pages, link_to_runner(Settings.forms_runner.url, @form.id, @form.form_slug)) %>
-    </p>
+    <% preview_link = PreviewLinkComponent::View.new(@form.pages, link_to_runner(Settings.forms_runner.url, @form.id, @form.form_slug)) %>
+    <% if preview_link.render? %>
+      <p class="govuk-!-margin-bottom-9">
+        <%= render preview_link %>
+      </p>
+    <% end %>
 
     <% if @form.has_live_version %>
       <div class="govuk-inset-text">
