@@ -125,7 +125,7 @@ RSpec.describe Pages::ConditionsForm, type: :model do
 
   describe "#goto_page_options" do
     context "when routing from the first form page" do
-      it "returns a list of all pages after the first page and includes 'Check your answers'" do
+      it "returns a list of all pages after the first page and includes 'Check your answers before submitting'" do
         result = described_class.new(form:, page: pages.first).goto_page_options
         expect(result).to eq([
           OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")),
