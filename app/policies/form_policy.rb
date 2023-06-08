@@ -7,27 +7,31 @@ class FormPolicy
     attr_reader :user, :form, :scope
 
     def initialize(user, scope)
-      raise UserMissingOrganisationError, "Missing required attribute organisation_id" if user.organisation.blank?
+      raise UserMissingOrganisationError, "Missing required attribute organisation_id" unless user.organisation_valid?
 
       @user = user
       @scope = scope
     end
 
     def resolve
-      scope
-        .where(org: user.organisation.slug)
+      if user.trial?
+        scope.where(creator_id: user.id)
+      else
+        scope
+          .where(org: user.organisation.slug)
+      end
     end
   end
 
   def initialize(user, form)
-    raise UserMissingOrganisationError, "Missing required attribute organisation_id" if user.organisation.blank?
+    raise UserMissingOrganisationError, "Missing required attribute organisation_id" unless user.organisation_valid?
 
     @user = user
     @form = form
   end
 
   def can_view_form?
-    users_organisation_owns_form
+    users_organisation_owns_form || (user.trial? && user_is_form_creator)
   end
 
   def can_add_page_routing_conditions?
@@ -45,7 +49,11 @@ class FormPolicy
 
 private
 
+  def user_is_form_creator
+    form.creator_id.present? ? user.id == form.creator_id : false
+  end
+
   def users_organisation_owns_form
-    user.organisation.slug == form.org
+    user.organisation.present? ? user.organisation.slug == form.org : false
   end
 end

@@ -10,6 +10,7 @@ class User < ApplicationRecord
   enum :role, {
     super_admin: "super_admin",
     editor: "editor",
+    trial: "trial",
   }
 
   validates :role, presence: true
@@ -48,5 +49,9 @@ class User < ApplicationRecord
     else # Create a new user.
       create!(attributes)
     end
+  end
+
+  def organisation_valid?
+    trial? || organisation.present?
   end
 end

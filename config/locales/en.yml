@@ -579,4 +579,7 @@ en:
       super_admin:
         description: Can create forms and manage users
         name: Super admin
+      trial:
+        description: Can create forms but cannot make them live
+        name: Trial
     save: Save

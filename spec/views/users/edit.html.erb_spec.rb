@@ -52,6 +52,7 @@ describe "users/edit.html.erb" do
     it "has role fields" do
       expect(rendered).to have_checked_field("Editor")
       expect(rendered).to have_unchecked_field("Super admin")
+      expect(rendered).to have_unchecked_field("Trial")
     end
 
     it "has organisation fields" do

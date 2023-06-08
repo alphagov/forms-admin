@@ -3,14 +3,24 @@ require "rails_helper"
 describe FormPolicy do
   subject(:policy) { described_class.new(user, form) }
 
-  let(:form) { build :form, org: "gds" }
+  let(:form) { build :form, org: "gds", creator_id: 123 }
   let(:user) { build :user, organisation_slug: "gds" }
 
   context "with no organisation set" do
-    let(:user) { build :user, :with_no_org }
+    context "with editor role" do
+      let(:user) { build :user, :with_no_org }
 
-    it "raises an error" do
-      expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+      it "raises an error" do
+        expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+      end
+    end
+
+    context "with trial role" do
+      let(:user) { build :user, :with_no_org, :with_trial }
+
+      it "does not raise an error" do
+        expect { policy }.not_to raise_error
+      end
     end
   end
 
@@ -29,6 +39,30 @@ describe FormPolicy do
 
         it "raises an error" do
           expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+        end
+      end
+    end
+
+    context "with a trial role" do
+      let(:form) { build :form, org: nil, creator_id: 123 }
+
+      context "when the user created the form" do
+        let(:user) { build :user, :with_no_org, :with_trial, id: 123 }
+
+        it { is_expected.to permit_actions(%i[can_view_form]) }
+      end
+
+      context "when the user didn't create the form" do
+        context "with a different user" do
+          let(:user) { build :user, id: 321 }
+
+          it { is_expected.to forbid_actions(%i[can_view_form]) }
+        end
+
+        context "without a form creator" do
+          let(:form) { build :form, org: nil, creator_id: nil }
+
+          it { is_expected.to forbid_actions(%i[can_view_form]) }
         end
       end
     end
@@ -105,11 +139,51 @@ describe FormPolicy do
       expect(scope).to have_received(:where).with(org: organisation_slug)
     end
 
-    context "with no organisation set" do
-      let(:user) { build :user, :with_no_org }
+    context "with a trial user role" do
+      let(:user) { build :user, :with_no_org, :with_trial, id: 123 }
+      let(:form) { build(:form, creator_id: 123, org: nil) }
 
-      it "raises an error" do
-        expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms?creator_id=123", headers, [form].to_json, 200
+        end
+      end
+
+      it "only shows forms the user created" do
+        expect(policy_scope.resolve).to eq [form]
+      end
+    end
+
+    context "with a non-trial user role" do
+      let(:user) { build :user, organisation_slug: "test-org", id: 123 }
+      let(:form) { build(:form, org: "test-org", creator_id: 1234) }
+
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms?org=test-org", headers, [form].to_json, 200
+        end
+      end
+
+      it "only shows forms belonging to the user's organisation" do
+        expect(policy_scope.resolve).to eq [form]
+      end
+    end
+
+    context "with no organisation set" do
+      context "with editor role" do
+        let(:user) { build :user, :with_no_org }
+
+        it "raises an error" do
+          expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+        end
+      end
+
+      context "with trial role" do
+        let(:user) { build :user, :with_no_org, :with_trial }
+
+        it "does not an error" do
+          expect { policy }.not_to raise_error
+        end
       end
     end
 
