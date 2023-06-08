@@ -5,11 +5,19 @@
 <% end %>
 <%= tag.ol(**html_attributes) do %>
   <% sections.each do |section| %>
-    <% unless section.rows.empty? %>
+    <% unless section.rows.empty? && section.body_text.blank? %>
       <li>
         <h2 class="app-task-list__section">
           <span class="app-task-list__section-number"><%= section.number %>. </span> <%= section.title %>
         </h2>
+
+        <% if section.body_text.present? %>
+        <div class="app-task-list__body">
+          <%= simple_format(section.body_text) %>
+        </div>
+        <% end %>
+
+        <% unless section.rows.empty? %>
         <ul class="app-task-list__items">
           <% section.rows.each do |row| %>
             <li class="app-task-list__item">
@@ -38,6 +46,8 @@
           </li>
         <% end %>
         </ul>
+        <% end %>
+
       </li>
     <% end %>
   <% end %>

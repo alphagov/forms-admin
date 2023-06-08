@@ -30,6 +30,15 @@
   }
 }
 
+.app-task-list__body {
+  @include govuk-font($size: 19);
+  @include govuk-responsive-margin(9, "bottom");
+  padding-left: 0;
+  @include govuk-media-query($from: tablet) {
+    padding-left: govuk-spacing(6);
+  }
+}
+
 .app-task-list__items {
   @include govuk-font($size: 19);
   @include govuk-responsive-margin(9, "bottom");
