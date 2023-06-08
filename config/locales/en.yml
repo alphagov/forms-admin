@@ -530,6 +530,10 @@ en:
     completed: completed
     in_progress: in progress
     not_started: not started
+  trial_role_warning:
+    content: You can create a form and test it, but you cannot make a form live.
+    heading: You have a trial account
+    title: Important
   type_of_answer:
     routing_warning_about_change_answer_type_heading: Your existing question route may be deleted
     routing_warning_about_change_answer_type_html: |

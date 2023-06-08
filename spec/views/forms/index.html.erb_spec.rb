@@ -98,5 +98,25 @@ describe "forms/index.html.erb" do
         expect(rendered).to have_link("Form 2", href: live_form_path(2))
       end
     end
+
+    context "and a user has the trial role" do
+      let(:user) { build :user, :with_trial }
+
+      it "displays a banner informing the user they have a trial account" do
+        banner = Capybara.string(rendered).find(".govuk-notification-banner__content")
+
+        expect(rendered).to have_selector(".govuk-notification-banner__content")
+        expect(banner).to have_text(I18n.t("trial_role_warning.heading"))
+        expect(banner).to have_text(I18n.t("trial_role_warning.content"))
+      end
+    end
+
+    context "and a user does not have the trial role" do
+      let(:user) { build :user }
+
+      it "does not display a banner" do
+        expect(rendered).not_to have_selector(".govuk-notification-banner__content")
+      end
+    end
   end
 end
