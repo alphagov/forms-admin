@@ -226,6 +226,14 @@ RSpec.describe PageListComponent::View, type: :component do
         end
       end
 
+      context "when the answer value is set to 'None of the above'" do
+        let(:condition) { (build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "none_of_the_above", goto_page_id: 3) }
+
+        it "returns the answer value text" do
+          expect(answer_value_text).to eq I18n.t("page_conditions.condition_answer_value_text", answer_value: I18n.t("page_conditions.none_of_the_above"))
+        end
+      end
+
       context "when the answer value is not set" do
         let(:condition) { (build :condition, :with_answer_value_missing, id: 1, routing_page_id: 1, check_page_id: 1, goto_page_id: 3) }
 

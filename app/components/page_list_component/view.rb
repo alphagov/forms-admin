@@ -23,7 +23,8 @@ module PageListComponent
 
     def answer_value_text_for_condition(condition)
       if condition.answer_value.present?
-        I18n.t("page_conditions.condition_answer_value_text", answer_value: condition.answer_value)
+        answer_value = condition.answer_value == :none_of_the_above.to_s ? I18n.t("page_conditions.none_of_the_above") : condition.answer_value
+        I18n.t("page_conditions.condition_answer_value_text", answer_value:)
       else
         I18n.t("page_conditions.condition_answer_value_text_with_errors")
       end

@@ -114,8 +114,8 @@ RSpec.describe Pages::ConditionsForm, type: :model do
         expect(result).to eq([
           OpenStruct.new(value: "Option 1", label: "Option 1"),
           OpenStruct.new(value: "Option 2", label: "Option 2"),
-          OpenStruct.new(value: I18n.t("page_options_service.selection_type.none_of_the_above"),
-                         label: I18n.t("page_options_service.selection_type.none_of_the_above")),
+          OpenStruct.new(value: :none_of_the_above.to_s,
+                         label: I18n.t("page_conditions.none_of_the_above")),
         ])
       end
     end
