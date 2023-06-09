@@ -14,7 +14,7 @@ class User < ApplicationRecord
   }
 
   validates :role, presence: true
-  validates :organisation_id, presence: true, if: -> { organisation_id_was.present? }
+  validates :organisation_id, presence: true, if: :requires_organisation?
   validates :has_access, inclusion: [true, false]
 
   def self.find_for_gds_oauth(auth_hash)
@@ -53,5 +53,11 @@ class User < ApplicationRecord
 
   def organisation_valid?
     trial? || organisation.present?
+  end
+
+private
+
+  def requires_organisation?
+    organisation_id_was.present? || role_changed?(to: :editor)
   end
 end

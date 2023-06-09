@@ -45,6 +45,12 @@ describe User do
       user.organisation_id = nil
       expect(user.valid?).to be false
     end
+
+    it "is not valid to leave organisation unset if changing role to editor" do
+      user = create :user, :with_no_org, role: :trial
+      user.role = :editor
+      expect(user.valid?).to be false
+    end
   end
 
   describe ".find_for_auth" do
