@@ -36,12 +36,14 @@ class Pages::ConditionsForm
     options = page.answer_settings.selection_options.map { |option| OpenStruct.new(value: option.name, label: option.name) }
     options << OpenStruct.new(value: I18n.t("page_options_service.selection_type.none_of_the_above"), label: I18n.t("page_options_service.selection_type.none_of_the_above")) if page.is_optional
 
-    [OpenStruct.new(value: nil, label: I18n.t("helpers.label.pages_conditions_form.default_answer_value")), options].flatten
+    options
   end
 
   def goto_page_options
     page_options = pages_after_current_page(form.pages, page).map { |p| OpenStruct.new(id: p.id, question_text: p.question_with_number) }
-    [OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")), page_options, OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers"))].flatten
+    page_options << OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers"))
+
+    page_options
   end
 
   def check_errors_from_api

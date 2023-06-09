@@ -21,8 +21,8 @@
         end;
       end %>
 
-      <%= f.govuk_collection_select :answer_value, condition_form.routing_answer_options, :value, :label %>
-      <%= f.govuk_collection_select :goto_page_id, condition_form.goto_page_options, :id, :question_text %>
+      <%= f.govuk_collection_select :answer_value, condition_form.routing_answer_options, :value, :label, options: { include_blank: t("helpers.label.pages_conditions_form.default_answer_value") } %>
+      <%= f.govuk_collection_select :goto_page_id, condition_form.goto_page_options, :id, :question_text, options: { include_blank: t("helpers.label.pages_conditions_form.default_goto_page_id") } %>
       <%= f.govuk_submit t("save_and_continue") %>
     <% end %>
   </div>

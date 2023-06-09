@@ -55,8 +55,8 @@ describe "pages/conditions/routing_page.html.erb" do
       expect(rendered).to have_css("div.govuk-hint", text: t("routing_page.legend_hint_text"))
     end
 
-    it "has a select option for each routing pages" do
-      expect(rendered).to have_css("select > option", count: pages.length)
+    it "has a select option for each routing page and the default value" do
+      expect(rendered).to have_css("select > option", count: pages.length + 1)
     end
 
     it "includes the page number and question text" do
