@@ -7,17 +7,17 @@ class UsersController < ApplicationController
   end
 
   def index
-    authorize @current_user, :can_manage_user?
+    authorize current_user, :can_manage_user?
     render template: "users/index", locals: { users: policy_scope(User) }
   end
 
   def edit
-    authorize @current_user, :can_manage_user?
+    authorize current_user, :can_manage_user?
     user
   end
 
   def update
-    authorize @current_user, :can_manage_user?
+    authorize current_user, :can_manage_user?
 
     if user.update(user_params)
       redirect_to users_path
