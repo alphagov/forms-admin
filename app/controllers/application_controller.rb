@@ -28,10 +28,10 @@ class ApplicationController < ActionController::Base
   def append_info_to_payload(payload)
     super
     payload[:host] = request.host
-    if @current_user.present?
-      payload[:user_id] = @current_user.id
-      payload[:user_email] = @current_user.email
-      payload[:user_organisation_slug] = @current_user.organisation&.slug
+    if current_user.present?
+      payload[:user_id] = current_user.id
+      payload[:user_email] = current_user.email
+      payload[:user_organisation_slug] = current_user.organisation&.slug
     end
     payload[:request_id] = request.request_id
     payload[:user_ip] = user_ip(request.env.fetch("HTTP_X_FORWARDED_FOR", ""))
@@ -100,7 +100,7 @@ private
     authenticate_user!
 
     # check access
-    unless @current_user.has_access?
+    unless current_user.has_access?
       render "errors/access_denied", status: :forbidden, formats: :html
     end
   end

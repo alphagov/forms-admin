@@ -82,6 +82,7 @@ RSpec.describe AuthenticationController, type: :request do
   describe "#sign_out" do
     let(:warden_spy) do
       warden_spy = instance_spy(Warden::Proxy)
+      allow(warden_spy).to receive(:user).and_return(instance_spy(User))
       allow(controller_spy).to receive(:warden).and_return(warden_spy)
       warden_spy
     end
