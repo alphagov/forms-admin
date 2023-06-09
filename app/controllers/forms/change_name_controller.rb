@@ -13,6 +13,10 @@ module Forms
         creator_id: current_user.id,
       })
 
+      if @current_user.trial?
+        form.submission_email = @current_user.email
+      end
+
       authorize form, :can_view_form?
       @change_name_form = ChangeNameForm.new(change_name_form_params(form))
 

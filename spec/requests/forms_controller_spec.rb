@@ -41,6 +41,10 @@ RSpec.describe FormsController, type: :request do
       it "renders the show template" do
         expect(response).to render_template("forms/show")
       end
+
+      it "includes a task list" do
+        expect(assigns[:task_list]).to be_truthy
+      end
     end
 
     context "with a non-live form" do
@@ -102,6 +106,31 @@ RSpec.describe FormsController, type: :request do
 
       it "renders organisation missing page" do
         expect(response).to render_template("errors/user_missing_organisation_error")
+      end
+    end
+
+    context "with a user with a trial account" do
+      let(:user) { build(:user, role: :trial) }
+      let(:form) { build(:form, :ready_for_live, id: 2, creator_id: user.id) }
+
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/2", headers, form.to_json, 200
+          mock.get "/api/v1/forms/2/pages", headers, form.pages.to_json, 200
+        end
+
+        login_as user
+
+        get form_path(2)
+      end
+
+      it "explains where completed forms will be sent to" do
+        expect(response.body).to include(form.submission_email)
+      end
+
+      it "does not include setting the submission email address" do
+        expect(response.body).not_to include(submission_email_form_path(2))
+        expect(response.body).not_to include(submission_email_code_path(2))
       end
     end
   end

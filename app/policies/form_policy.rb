@@ -34,6 +34,10 @@ class FormPolicy
     users_organisation_owns_form || (user.trial? && user_is_form_creator)
   end
 
+  def can_change_form_submission_email?
+    can_view_form? && !user.trial?
+  end
+
   def can_add_page_routing_conditions?
     form_has_two_or_more_pages = form.pages.length >= 2
     form_has_qualifying_pages = form.qualifying_route_pages.any?

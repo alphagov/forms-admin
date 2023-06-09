@@ -4,11 +4,11 @@ module Forms
     after_action :verify_authorized
 
     def new
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_change_form_submission_email?
     end
 
     def create
-      authorize current_form, :can_view_form?
+      authorize current_form, :change_form_submission_email?
       @submission_email_form = SubmissionEmailForm.new(set_email_form_params)
 
       if @submission_email_form.submit
@@ -19,15 +19,15 @@ module Forms
     end
 
     def submission_email_code_sent
-      authorize current_form, :can_view_form?
+      authorize current_form, :change_form_submission_email?
     end
 
     def submission_email_code
-      authorize current_form, :can_view_form?
+      authorize current_form, :change_form_submission_email?
     end
 
     def confirm_submission_email_code
-      authorize current_form, :can_view_form?
+      authorize current_form, :change_form_submission_email?
       @submission_email_form = SubmissionEmailForm.new(set_email_code_form_params).assign_form_values
 
       if @submission_email_form.confirm_confirmation_code
@@ -38,7 +38,7 @@ module Forms
     end
 
     def submission_email_confirmed
-      authorize current_form, :can_view_form?
+      authorize current_form, :change_form_submission_email?
     end
 
   private

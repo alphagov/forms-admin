@@ -68,6 +68,42 @@ describe FormPolicy do
     end
   end
 
+  describe "#can_change_form_submission_email?" do
+    context "with a form editor" do
+      it { is_expected.to permit_actions(%i[can_change_form_submission_email]) }
+
+      context "but from another organisation" do
+        let(:user) { build :user, organisation_slug: "non-gds" }
+
+        it { is_expected.to forbid_actions(%i[can_change_form_submission_email]) }
+      end
+    end
+
+    context "with a trial role" do
+      let(:form) { build :form, org: nil, creator_id: 123 }
+
+      context "when the user created the form" do
+        let(:user) { build :user, :with_no_org, :with_trial, id: 123 }
+
+        it { is_expected.to forbid_actions(%i[can_change_form_submission_email]) }
+      end
+
+      context "when the user didn't create the form" do
+        context "with a different user" do
+          let(:user) { build :user, id: 321 }
+
+          it { is_expected.to forbid_actions(%i[can_change_form_submission_email]) }
+        end
+
+        context "without a form creator" do
+          let(:form) { build :form, org: nil, creator_id: nil }
+
+          it { is_expected.to forbid_actions(%i[can_change_form_submission_email]) }
+        end
+      end
+    end
+  end
+
   describe "#can_add_page_routing_conditions?" do
     let(:form) { build :form, pages:, org: "gds" }
     let(:pages) { [] }
