@@ -111,6 +111,22 @@ RSpec.describe UsersController, type: :request do
         end
       end
 
+      context "with a trial user with no organisation set" do
+        let(:user) { create(:user, :with_no_org, role: :trial) }
+
+        it "does not return error if organisation is not chosen and role is not changed" do
+          put user_path(user), params: { user: { role: "trial", organisation_id: nil } }
+          expect(response).to redirect_to(users_path)
+          expect(user.reload.organisation).to eq(nil)
+        end
+
+        it "returns an error if organisation is not chosen and role is changed to editor" do
+          put user_path(user), params: { user: { role: "editor", organisation_id: nil } }
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(user.reload.role).to eq("trial")
+        end
+      end
+
       [
         ["with an unknown organisation", :with_unknown_org],
         ["with no organisation set", :with_no_org],
