@@ -365,6 +365,7 @@ en:
         cannot_have_goto_page_before_routing_page: The question you’re taking the person to is now above the route - edit question %{page_index}’s route
         cannot_route_to_next_page: Question %{page_index}’s route is now next to the route’s end question - this makes the route unnecessary. Edit question %{page_index}’s route.
         goto_page_doesnt_exist: The question you’re taking the person to no longer exists - edit question %{page_index}’s route
+    none_of_the_above: None of the above
     route: Route
   page_options_service:
     answer_type: Answer type
