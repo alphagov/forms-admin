@@ -101,7 +101,6 @@ RSpec.describe Pages::ConditionsForm, type: :model do
     it "returns a list of answers for the given page" do
       result = conditions_form.routing_answer_options
       expect(result).to eq([
-        OpenStruct.new(value: nil, label: I18n.t("helpers.label.pages_conditions_form.default_answer_value")),
         OpenStruct.new(value: "Option 1", label: "Option 1"),
         OpenStruct.new(value: "Option 2", label: "Option 2"),
       ])
@@ -113,7 +112,6 @@ RSpec.describe Pages::ConditionsForm, type: :model do
       it "adds extra 'None of above' options to the end" do
         result = conditions_form.routing_answer_options
         expect(result).to eq([
-          OpenStruct.new(value: nil, label: I18n.t("helpers.label.pages_conditions_form.default_answer_value")),
           OpenStruct.new(value: "Option 1", label: "Option 1"),
           OpenStruct.new(value: "Option 2", label: "Option 2"),
           OpenStruct.new(value: I18n.t("page_options_service.selection_type.none_of_the_above"),
@@ -128,7 +126,6 @@ RSpec.describe Pages::ConditionsForm, type: :model do
       it "returns a list of all pages after the first page and includes 'Check your answers before submitting'" do
         result = described_class.new(form:, page: pages.first).goto_page_options
         expect(result).to eq([
-          OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")),
           form.pages.drop(1).map { |p| OpenStruct.new(id: p.id, question_text: "#{p.position}. #{p.question_text}") },
           OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers")),
         ].flatten)
@@ -140,7 +137,6 @@ RSpec.describe Pages::ConditionsForm, type: :model do
         routing_from_page_position = 3
         result = described_class.new(form:, page: pages[routing_from_page_position - 1]).goto_page_options
         expect(result).to eq([
-          OpenStruct.new(id: nil, question_text: I18n.t("helpers.label.pages_conditions_form.default_goto_page_id")),
           form.pages.drop(routing_from_page_position).map { |p| OpenStruct.new(id: p.id, question_text: "#{p.position}. #{p.question_text}") },
           OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers")),
         ].flatten)
