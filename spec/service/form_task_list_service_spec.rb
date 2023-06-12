@@ -191,7 +191,7 @@ describe FormTaskListService do
         it "has text explaining where completed forms will be sent to" do
           expect(section[:body_text])
             .to eq I18n.t(
-              "forms.task_list_create.section_2.if_trial_user.body_text",
+              "forms.task_list_create.section_2.if_not_permitted.body_text",
               submission_email: form.submission_email,
             )
         end
@@ -278,7 +278,7 @@ describe FormTaskListService do
         it "has text explaining that trial users cannot make forms live" do
           expect(section[:body_text])
             .to eq I18n.t(
-              "forms.task_list_create.section_4.if_trial_user.body_text",
+              "forms.task_list_create.section_4.if_not_permitted.body_text",
             )
         end
       end
