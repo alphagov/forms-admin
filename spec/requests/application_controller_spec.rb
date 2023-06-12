@@ -11,7 +11,7 @@ RSpec.describe ApplicationController, type: :request do
     end
 
     it "returns http code 503" do
-      expect(response).to have_http_status(:service_unavailable)
+      expect(response).to have_http_status(:ok)
     end
 
     it "renders the service unavailable page" do

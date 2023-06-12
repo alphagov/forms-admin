@@ -15,6 +15,6 @@ class ErrorsController < ApplicationController
   end
 
   def maintenance
-    render "errors/maintenance", status: :service_unavailable, formats: :html
+    render "errors/maintenance", formats: :html
   end
 end
