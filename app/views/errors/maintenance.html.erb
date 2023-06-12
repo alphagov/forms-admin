@@ -1,0 +1,8 @@
+<% set_page_title(t("page_titles.maintenance")) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= t('maintenance.title') %></h1>
+    <%= simple_format(t('maintenance.body_html', link: contact_link)) %>
+  </div>
+</div>

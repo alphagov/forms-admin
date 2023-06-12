@@ -1,6 +1,6 @@
 class ErrorsController < ApplicationController
   skip_before_action :authenticate_and_check_access, except: :forbidden
-  skip_before_action :check_service_unavailable, only: :maintenance
+  skip_before_action :check_maintenance_mode_is_enabled, only: :maintenance
 
   def not_found
     render status: :not_found
@@ -15,6 +15,6 @@ class ErrorsController < ApplicationController
   end
 
   def maintenance
-    render "errors/service_unavailable", status: :service_unavailable, formats: :html
+    render "errors/maintenance", status: :service_unavailable, formats: :html
   end
 end

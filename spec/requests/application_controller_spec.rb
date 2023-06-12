@@ -15,7 +15,7 @@ RSpec.describe ApplicationController, type: :request do
     end
 
     it "renders the service unavailable page" do
-      expect(response).to render_template("errors/service_unavailable")
+      expect(response).to render_template("errors/maintenance")
     end
   end
 
