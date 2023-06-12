@@ -5,7 +5,7 @@ RSpec.describe ApplicationController, type: :request do
     before do
       logout # service unavailable page should be visible even if user is not logged in
 
-      allow(Settings).to receive(:service_unavailable).and_return(true)
+      allow(Settings).to receive(:maintenance_mode_enabled).and_return(true)
       get root_path
       follow_redirect!
     end

@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_maintenance_mode_is_enabled
-    if Settings.service_unavailable
+    if Settings.maintenance_mode_enabled
       redirect_to maintenance_page_path
     end
   end
