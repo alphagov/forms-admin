@@ -90,10 +90,17 @@ private
   end
 
   def section_4
-    {
+    section = {
       title: I18n.t("forms.task_list_#{create_or_edit}.section_4.title"),
-      rows: section_4_tasks,
     }
+
+    if @current_user.trial?
+      section[:body_text] = I18n.t("forms.task_list_create.section_4.if_trial_user.body_text")
+    else
+      section[:rows] = section_4_tasks
+    end
+
+    section
   end
 
   def section_4_tasks

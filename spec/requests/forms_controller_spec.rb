@@ -132,6 +132,10 @@ RSpec.describe FormsController, type: :request do
         expect(response.body).not_to include(submission_email_form_path(2))
         expect(response.body).not_to include(submission_email_code_path(2))
       end
+
+      it "does not include making a form live" do
+        expect(response.body).not_to include(make_live_path(2))
+      end
     end
   end
 
