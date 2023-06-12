@@ -2,13 +2,13 @@ module Forms
   class MakeLiveController < BaseController
     after_action :verify_authorized
     def new
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_make_form_live?
       @make_live_form = MakeLiveForm.new(form: current_form)
       render_new
     end
 
     def create
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_make_form_live?
 
       @make_live_form = MakeLiveForm.new(**make_live_form_params)
       already_live = @make_live_form.form.has_live_version
