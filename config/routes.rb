@@ -3,12 +3,12 @@ Rails.application.routes.draw do
 
   get :ping, controller: :heartbeat
 
-  # Defines the root path route ("/")
   root "forms#index"
 
-  # OmniAuth user authentication routes
-  get "auth/:provider/callback" => "authentication#callback_from_omniauth"
-  get "auth/:provider/sign_out" => "authentication#sign_out", as: :sign_out
+  scope "auth/:provider" do
+    get "/callback" => "authentication#callback_from_omniauth"
+    get "/sign_out" => "authentication#sign_out", as: :sign_out
+  end
 
   get "forms/new" => "forms/change_name#new", as: :new_form
   post "forms/new" => "forms/change_name#create"
