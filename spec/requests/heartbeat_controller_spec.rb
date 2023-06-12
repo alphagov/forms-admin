@@ -7,5 +7,16 @@ describe HeartbeatController, type: :request do
 
       expect(response.body).to eq "PONG"
     end
+
+    context "when service is in maintenance mode" do
+      before do
+        allow(Settings).to receive(:service_unavailable).and_return(true)
+      end
+
+      it "returns PONG" do
+        get "/ping"
+        expect(response.body).to eq "PONG"
+      end
+    end
   end
 end
