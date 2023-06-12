@@ -1,7 +1,6 @@
 class ErrorsController < ApplicationController
-  # We are safe to authenitcate forbidden errors as the user must be logged in
-  # to get to this point
-  skip_before_action :authenticate_and_check_access, only: %i[not_found internal_server_error]
+  skip_before_action :authenticate_and_check_access, except: :forbidden
+  skip_before_action :check_service_unavailable, only: :maintenance
 
   def not_found
     render status: :not_found
@@ -13,5 +12,9 @@ class ErrorsController < ApplicationController
 
   def forbidden
     render status: :forbidden
+  end
+
+  def maintenance
+    render "errors/service_unavailable", status: :service_unavailable, formats: :html
   end
 end

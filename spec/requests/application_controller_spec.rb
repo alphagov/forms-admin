@@ -6,7 +6,8 @@ RSpec.describe ApplicationController, type: :request do
       logout # service unavailable page should be visible even if user is not logged in
 
       allow(Settings).to receive(:service_unavailable).and_return(true)
-      get "/"
+      get root_path
+      follow_redirect!
     end
 
     it "returns http code 503" do

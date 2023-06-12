@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
 
   def check_service_unavailable
     if Settings.service_unavailable
-      render "errors/service_unavailable", status: :service_unavailable, formats: :html
+      redirect_to maintenance_page_path
     end
   end
 
