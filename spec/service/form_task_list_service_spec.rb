@@ -191,7 +191,7 @@ describe FormTaskListService do
         it "has text explaining where completed forms will be sent to" do
           expect(section[:body_text])
             .to eq I18n.t(
-              "forms.task_list_create.section_2.if_trial_user.body_text",
+              "forms.task_list_create.section_2.if_not_permitted.body_text",
               submission_email: form.submission_email,
             )
         end
@@ -265,6 +265,21 @@ describe FormTaskListService do
 
         it "describes the task correctly" do
           expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_edit.section_4.make_live")
+        end
+      end
+
+      context "when current user has a trial account" do
+        let(:current_user) { build :user, :with_trial }
+
+        it "has no tasks" do
+          expect(section).not_to include(:rows)
+        end
+
+        it "has text explaining that trial users cannot make forms live" do
+          expect(section[:body_text])
+            .to eq I18n.t(
+              "forms.task_list_create.section_4.if_not_permitted.body_text",
+            )
         end
       end
     end

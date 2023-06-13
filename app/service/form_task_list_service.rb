@@ -57,13 +57,13 @@ private
       title: I18n.t("forms.task_list_#{create_or_edit}.section_2.title"),
     }
 
-    if @current_user.trial?
+    if Pundit.policy(@current_user, @form).can_change_form_submission_email?
+      section[:rows] = section_2_tasks
+    else
       section[:body_text] = I18n.t(
-        "forms.task_list_create.section_2.if_trial_user.body_text",
+        "forms.task_list_create.section_2.if_not_permitted.body_text",
         submission_email: @form.submission_email,
       )
-    else
-      section[:rows] = section_2_tasks
     end
 
     section
@@ -90,10 +90,17 @@ private
   end
 
   def section_4
-    {
+    section = {
       title: I18n.t("forms.task_list_#{create_or_edit}.section_4.title"),
-      rows: section_4_tasks,
     }
+
+    if Pundit.policy(@current_user, @form).can_make_form_live?
+      section[:rows] = section_4_tasks
+    else
+      section[:body_text] = I18n.t("forms.task_list_create.section_4.if_not_permitted.body_text")
+    end
+
+    section
   end
 
   def section_4_tasks

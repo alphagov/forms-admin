@@ -126,7 +126,7 @@ en:
         confirm_email: Enter the email address confirmation code
         email: Set the email address completed forms will be sent to
         hint_text_html: Completed forms will be sent to:<br> %{submission_email}
-        if_trial_user:
+        if_not_permitted:
           body_text: |
             For a trial account, completed draft forms will be sent to your email address: %{submission_email}
 
@@ -137,6 +137,8 @@ en:
         privacy_policy: Provide a link to privacy information for this form
         title: Provide privacy and contact details
       section_4:
+        if_not_permitted:
+          body_text: You cannot make a form live with a trial account
         make_live: Make your form live
         title: Make your form live
     task_list_edit:

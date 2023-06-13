@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Forms::MakeLiveController, type: :request do
+  let(:user) { build :user }
+
   let(:form) do
     build(:form,
           :ready_for_live,
@@ -47,6 +49,9 @@ RSpec.describe Forms::MakeLiveController, type: :request do
                                          read: { response: form, status: 200 },
                                          update: { response: updated_form, status: 200 },
                                        })
+
+      login_as user
+
       get make_live_path(form_id: 2)
     end
 
@@ -79,6 +84,14 @@ RSpec.describe Forms::MakeLiveController, type: :request do
         expect(response).to render_template("make_your_changes_live")
       end
     end
+
+    context "when current user has a trial account" do
+      let(:user) { build :user, :with_trial }
+
+      it "is forbidden" do
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
   end
 
   describe "#create" do
@@ -87,6 +100,8 @@ RSpec.describe Forms::MakeLiveController, type: :request do
         mock.post "/api/v1/forms/2/make-live", post_headers
         mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
       end
+
+      login_as user
 
       post(make_live_path(form_id: 2), params: form_params)
     end
@@ -139,6 +154,14 @@ RSpec.describe Forms::MakeLiveController, type: :request do
 
       it "redirects you to the form page" do
         expect(response).to redirect_to(form_path(2))
+      end
+    end
+
+    context "when current user has a trial account" do
+      let(:user) { build :user, :with_trial }
+
+      it "is forbidden" do
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
