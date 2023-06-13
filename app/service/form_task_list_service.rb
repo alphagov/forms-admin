@@ -13,7 +13,7 @@ class FormTaskListService
     @current_user = current_user
     @form = form
     @task_list_statuses = TaskStatusService.new(form: @form)
-    @task_counts = @task_list_statuses.status_counts
+    @task_counts = @task_list_statuses.status_counts(@current_user)
   end
 
   def all_sections

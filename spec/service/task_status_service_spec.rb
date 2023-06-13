@@ -5,6 +5,8 @@ describe TaskStatusService do
     described_class.new(form:)
   end
 
+  let(:current_user) { build(:user) }
+
   describe "statuses" do
     describe "name status" do
       let(:form) { build(:form, :new_form) }
@@ -194,9 +196,23 @@ describe TaskStatusService do
   describe "#status_counts" do
     let(:form) { build :form }
 
-    it "returns a hash containing total count of completed task and total number of tasks" do
-      allow(task_status_service).to receive(:all_task_status).and_return(%i[completed completed something_else])
-      expect(task_status_service.status_counts).to eq({ completed: 2, total: 3 })
+    context "when user has editor role" do
+      it "returns a hash containing count of completed tasks and total number of tasks" do
+        allow(task_status_service).to receive(:all_task_status).and_return(%i[completed completed something_else])
+        expect(task_status_service.status_counts(current_user)).to eq({ completed: 2, total: 3 })
+      end
+
+      it "includes all status" do
+        expect(task_status_service.status_counts(current_user)).to include(total: 9)
+      end
+    end
+
+    context "when user has trial role" do
+      let(:current_user) { build :user, :with_trial }
+
+      it "excludes status for restricted tasks" do
+        expect(task_status_service.status_counts(current_user)).to include(total: 6)
+      end
     end
   end
 end
