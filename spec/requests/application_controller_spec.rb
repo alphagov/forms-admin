@@ -5,16 +5,17 @@ RSpec.describe ApplicationController, type: :request do
     before do
       logout # service unavailable page should be visible even if user is not logged in
 
-      allow(Settings).to receive(:service_unavailable).and_return(true)
-      get "/"
+      allow(Settings).to receive(:maintenance_mode_enabled).and_return(true)
+      get root_path
+      follow_redirect!
     end
 
     it "returns http code 503" do
-      expect(response).to have_http_status(:service_unavailable)
+      expect(response).to have_http_status(:ok)
     end
 
     it "renders the service unavailable page" do
-      expect(response).to render_template("errors/service_unavailable")
+      expect(response).to render_template("errors/maintenance")
     end
   end
 

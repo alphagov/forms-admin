@@ -306,6 +306,9 @@ en:
       Any changes you make to a live form will be updated in the form
       immediately.
     notification_title: Important
+  maintenance:
+    body_html: "%{link} if you need to make changes to your forms or speak to someone about the service."
+    title: Sorry, the service is unavailable
   make_changes_live:
     url_will_remain_same: The URL for the live form will remain the same.
     warning: |
@@ -394,6 +397,7 @@ en:
     forbidden: You cannot view this page
     home: Home
     internal_server_error: Sorry, there is a problem with the service
+    maintenance: Sorry, the service is unavailable
     make_changes_live_form: Make your changes live
     make_live_form: Make your form live
     name_settings: Ask for a person’s name
@@ -403,7 +407,6 @@ en:
     routing_page: Add a question route
     routing_page_delete: Delete question %{question_position}’s route
     routing_page_edit: Edit question %{question_position}’s route
-    service_unavailable: Sorry, the service is unavailable
     set_email_form: Set the email address for completed forms
     text_settings: How much text will people need to provide?
     type_of_answer: What kind of answer do you need to this question?
@@ -495,9 +498,6 @@ en:
       </p>
     routing_warning_notification_title: Important
     'yes': 'Yes'
-  service_unavailable:
-    body_html: "%{link} if you need to make changes to your forms or speak to someone about the service."
-    title: Sorry, the service is unavailable
   set_email_form:
     new:
       body_html: |

@@ -3,7 +3,7 @@ require "resolv"
 class ApplicationController < ActionController::Base
   include Pundit::Authorization
   before_action :set_request_id
-  before_action :check_service_unavailable
+  before_action :check_maintenance_mode_is_enabled
   before_action :authenticate_and_check_access
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
@@ -19,9 +19,9 @@ class ApplicationController < ActionController::Base
     render "errors/forbidden", status: :forbidden, formats: :html
   end
 
-  def check_service_unavailable
-    if Settings.service_unavailable
-      render "errors/service_unavailable", status: :service_unavailable, formats: :html
+  def check_maintenance_mode_is_enabled
+    if Settings.maintenance_mode_enabled
+      redirect_to maintenance_page_path
     end
   end
 
