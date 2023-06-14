@@ -43,6 +43,7 @@ jobs:
           cf push --strategy rolling \
             --var PAAS_ENVIRONMENT=dev \
             --var SETTINGS__MAINTENANCE_MODE_ENABLED=false \
+            --var SETTINGS__SUPPORT_USER_IP_RANGE=${{ secrets.SETTINGS__SUPPORT_USER_IP_RANGE }} \
             --var GDS_SSO_OAUTH_ID=${{ secrets.GDS_SSO_OAUTH_ID }} \
             --var GDS_SSO_OAUTH_SECRET=${{ secrets.GDS_SSO_OAUTH_SECRET }} \
             --var SETTINGS__GOVUK_NOTIFY__API_KEY=${{ secrets.SETTINGS__GOVUK_NOTIFY__API_KEY }} \
@@ -53,4 +54,4 @@ jobs:
             --var SETTINGS__FORMS_API__BASE_URL=${{ secrets.API_BASE }} \
             --var INSTANCES=2 \
             --var SETTINGS__FORMS_API__AUTH_KEY=${{ secrets.API_KEY }} \
-            --var SETTINGS__FEATURES__BASIC_ROUTING=true
+            --var SETTINGS__FEATURES__BASIC_ROUTING=true 
