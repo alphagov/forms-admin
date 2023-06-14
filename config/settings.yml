@@ -43,4 +43,4 @@ basic_auth:
   organisation:
     name: GDS User Research
     slug: gds-user-research
-    content_id: "00000000-0000-0000-0000-000000000000"
+    govuk_content_id: "00000000-0000-0000-0000-000000000000"

@@ -13,7 +13,7 @@ RSpec.describe "using basic auth" do
       organisation: Config::Options.new(
         slug: "test-org",
         name: "Test Org",
-        content_id: organisation.content_id,
+        govuk_content_id: organisation.govuk_content_id,
       ),
       username:,
       password:,

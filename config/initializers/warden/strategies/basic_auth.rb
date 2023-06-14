@@ -27,7 +27,7 @@ Warden::Strategies.add(:basic_auth) do
         organisation: Organisation.find_or_initialize_by(
           name: Settings.basic_auth.organisation.name,
           slug: Settings.basic_auth.organisation.slug,
-          content_id: Settings.basic_auth.organisation.content_id,
+          govuk_content_id: Settings.basic_auth.organisation.govuk_content_id,
         ),
       )
     else

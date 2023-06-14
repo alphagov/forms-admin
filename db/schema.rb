@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_31_131201) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_13_133847) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -27,14 +27,33 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_31_131201) do
     t.index ["form_id"], name: "index_form_submission_emails_on_form_id"
   end
 
+  create_table "forms", id: :bigint, default: nil, force: :cascade do |t|
+    t.text "name"
+    t.text "submission_email"
+    t.text "org"
+  end
+
   create_table "organisations", force: :cascade do |t|
-    t.string "content_id", null: false
+    t.string "govuk_content_id"
     t.string "slug", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["content_id"], name: "index_organisations_on_content_id", unique: true
+    t.index ["govuk_content_id"], name: "index_organisations_on_govuk_content_id", unique: true
     t.index ["slug"], name: "index_organisations_on_slug", unique: true
+  end
+
+  create_table "pages", id: :bigint, default: nil, force: :cascade do |t|
+    t.bigint "form_id"
+    t.text "question_text"
+    t.text "question_short_name"
+    t.text "hint_text"
+    t.text "answer_type"
+    t.text "next"
+  end
+
+  create_table "schema_info", id: false, force: :cascade do |t|
+    t.integer "version", default: 0, null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -57,5 +76,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_31_131201) do
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
   end
 
+  add_foreign_key "pages", "forms", name: "pages_form_id_fkey"
   add_foreign_key "users", "organisations"
 end
