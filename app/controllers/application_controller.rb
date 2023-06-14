@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_maintenance_mode_is_enabled
-    if Settings.maintenance_mode.enabled
+    if Settings.maintenance_mode.enabled && non_maintenance_bypass_ip_address?
       redirect_to maintenance_page_path
     end
   end
@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # Becuase determining the clients real IP is hard, simply return the first
+  # Because determining the clients real IP is hard, simply return the first
   # value of the x-forwarded_for, checking it's an IP. This will probably be
   # enough for out basic monitoring in PaaS
   def user_ip(forwarded_for = "")
@@ -103,5 +103,14 @@ private
     unless current_user.has_access?
       render "errors/access_denied", status: :forbidden, formats: :html
     end
+  end
+
+  def non_maintenance_bypass_ip_address?
+    bypass_ips = Settings.maintenance_mode.bypass_ips
+
+    return true if bypass_ips.blank?
+
+    bypass_ip_list = bypass_ips.split(",").map { |ip| IPAddr.new ip.strip }
+    bypass_ip_list.none? { |ip| ip.include?(user_ip(request.env.fetch("HTTP_X_FORWARDED_FOR", ""))) }
   end
 end
