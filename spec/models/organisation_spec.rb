@@ -5,7 +5,7 @@ RSpec.describe Organisation, type: :model do
     organisation = create(:organisation, slug: "duplicate-org")
 
     expect {
-      described_class.create!(content_id: Faker::Internet.uuid, slug: organisation.slug, name: organisation.name)
+      described_class.create!(govuk_content_id: Faker::Internet.uuid, slug: organisation.slug, name: organisation.name)
     }.to raise_error ActiveRecord::RecordNotUnique
   end
 
