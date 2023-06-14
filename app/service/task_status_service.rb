@@ -3,9 +3,10 @@ class TaskStatusService
     @form = form
   end
 
-  def status_counts
-    { completed: all_task_status.compact.count(:completed),
-      total: all_task_status.compact.count }
+  def status_counts(current_user)
+    all_task_status_compact = all_task_status(current_user).compact
+    { completed: all_task_status_compact.count(:completed),
+      total: all_task_status_compact.count }
   end
 
   def name_status
@@ -95,17 +96,19 @@ class TaskStatusService
 
 private
 
-  def all_task_status
-    [
+  def all_task_status(current_user)
+    status = [
       name_status,
       pages_status,
       declaration_status,
       what_happens_next_status,
-      submission_email_status,
-      confirm_submission_email_status,
       privacy_policy_status,
       support_contact_details_status,
-      make_live_status,
     ]
+
+    status.push(submission_email_status, confirm_submission_email_status) if Pundit.policy(current_user, @form).can_change_form_submission_email?
+    status.push(make_live_status) if Pundit.policy(current_user, @form).can_make_form_live?
+
+    status
   end
 end
