@@ -23,6 +23,8 @@ show_browser_during_tests: false
 maintenance_mode:
   # When set to true, All pages will render 'Maintenance mode' message
   enabled: false
+  # List of IP addresses which will bypass the maintenance mode message
+  bypass_ips:
 
 # Configuration for Sentry
 # Sentry will only initialise if dsn is set to some other value
