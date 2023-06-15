@@ -73,6 +73,7 @@ private
     expect(page.find("h1")).to have_text "What kind of answer do you need to this question?"
     choose I18n.t("helpers.label.page.answer_type_options.names.#{answer_type}")
     click_button "Continue"
+    fill_in_question_text if answer_type == "selection"
     fill_in_selection_settings if answer_type == "selection"
     fill_in_text_settings if answer_type == "text"
     fill_in_date_settings if answer_type == "date"
@@ -98,6 +99,12 @@ private
 
   def and_i_start_adding_a_new_question
     click_link "Add a question"
+  end
+
+  def fill_in_question_text
+    expect(page.find("h1")).to have_text "What's your question?"
+    fill_in "What's your question?", with: "What is your name?"
+    click_button "Continue"
   end
 
   def fill_in_selection_settings

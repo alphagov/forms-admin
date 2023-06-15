@@ -80,8 +80,8 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
           expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
         end
 
-        it "redirects the user to the selection settings page" do
-          expect(response).to redirect_to selections_settings_new_path(form.id)
+        it "redirects the user to the question text page" do
+          expect(response).to redirect_to question_text_new_path(form.id)
         end
       end
 

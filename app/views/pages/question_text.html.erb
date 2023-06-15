@@ -1,0 +1,17 @@
+<% set_page_title(title_with_error_prefix(t("page_titles.date_settings"), @question_text_form.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(@back_link_url) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: [@form, @question_text_form], url: @question_text_path do |f| %>
+      <%= f.govuk_error_summary %>
+      <%# TODO: do translations properly %>
+      <%= f.govuk_text_field :question_text, label: { tag: 'h1', size: 'l', text: "What's your question?"  }, hint: { text: t("helpers.hint.page.question_text.checkbox") } %>
+      <%= f.govuk_submit t('continue') %>
+    <% end %>
+
+    <p>
+      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(@form) %>
+    </p>
+  </div>
+</div>

@@ -40,7 +40,7 @@ class Pages::TypeOfAnswerController < PagesController
 private
 
   def selection_path(form, action)
-    action == :create ? selections_settings_new_path(form) : selections_settings_edit_path(form)
+    action == :create ? question_text_new_path(form) : selections_settings_edit_path(form)
   end
 
   def text_path(form, action)

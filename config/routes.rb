@@ -61,6 +61,8 @@ Rails.application.routes.draw do
         post "/address-settings" => "pages/address_settings#create", as: :address_settings_create
         get "/name-settings" => "pages/name_settings#new", as: :name_settings_new
         post "/name-settings" => "pages/name_settings#create", as: :name_settings_create
+        get "/question_text" => "pages/question_text#new", as: :question_text_new
+        post "/question_text" => "pages/question_text#create", as: :question_text_create
         get "/" => "pages#new", as: :new_page
         post "/" => "pages#create", as: :create_page
       end
@@ -91,6 +93,8 @@ Rails.application.routes.draw do
           post "/address-settings" => "pages/address_settings#update", as: :address_settings_update
           get "/name-settings" => "pages/name_settings#edit", as: :name_settings_edit
           post "/name-settings" => "pages/name_settings#update", as: :name_settings_update
+          get "/question_text" => "pages/question_text#edit", as: :question_text_edit
+          post "/question_text" => "pages/question_text#update", as: :question_text_update
           get "/" => "pages#edit", as: :edit_page
           patch "/" => "pages#update", as: :update_page
         end
