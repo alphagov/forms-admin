@@ -48,9 +48,9 @@ describe "Settings" do
     include_examples expected_value_test, :environment, sentry, "local"
   end
 
-  describe "maintenance_mode_enabled" do
-    it "has a default value" do
-      expect(settings[:maintenance_mode_enabled]).to eq(false)
-    end
+  describe "maintenance_mode" do
+    maintenance_mode = settings[:maintenance_mode]
+
+    include_examples expected_value_test, :enabled, maintenance_mode, false
   end
 end

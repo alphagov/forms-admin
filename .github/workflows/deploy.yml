@@ -42,7 +42,7 @@ jobs:
           cf target -o ${{ secrets.CF_ORGANISATION }} -s ${{ secrets.CF_SPACE }}
           cf push --strategy rolling \
             --var PAAS_ENVIRONMENT=dev \
-            --var SETTINGS__MAINTENANCE_MODE_ENABLED=false \
+            --var SETTINGS__MAINTENANCE_MODE__ENABLED=false \
             --var GDS_SSO_OAUTH_ID=${{ secrets.GDS_SSO_OAUTH_ID }} \
             --var GDS_SSO_OAUTH_SECRET=${{ secrets.GDS_SSO_OAUTH_SECRET }} \
             --var SETTINGS__GOVUK_NOTIFY__API_KEY=${{ secrets.SETTINGS__GOVUK_NOTIFY__API_KEY }} \
