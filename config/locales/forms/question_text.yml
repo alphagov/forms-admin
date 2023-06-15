@@ -1,0 +1,8 @@
+en:
+  activemodel:
+    errors:
+      models:
+        forms/question_text_form:
+          attributes:
+            question_text:
+              blank: Question text cannot be blank

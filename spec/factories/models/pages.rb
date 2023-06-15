@@ -35,6 +35,7 @@ FactoryBot.define do
         selection_options { [Forms::SelectionOption.new({ name: "Option 1" }), Forms::SelectionOption.new({ name: "Option 2" })] }
       end
 
+      question_text { Faker::Lorem.question }
       answer_type { "selection" }
       answer_settings { DataStruct.new(only_one_option:, selection_options:) }
     end
