@@ -5,8 +5,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: [@form, @question_text_form], url: @question_text_path do |f| %>
       <%= f.govuk_error_summary %>
-      <%# TODO: do translations properly %>
-      <%= f.govuk_text_field :question_text, label: { tag: 'h1', size: 'l', text: "What's your question?"  }, hint: { text: t("helpers.hint.page.question_text.checkbox") } %>
+      <%= f.govuk_text_field :question_text, label: { tag: 'h1', size: 'l' }, hint: { text: t("helpers.hint.page.question_text.checkbox") } %>
       <%= f.govuk_submit t('continue') %>
     <% end %>
 

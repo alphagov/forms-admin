@@ -1,4 +1,8 @@
 en:
+  helpers:
+    label:
+      forms_question_text_form:
+        question_text: What's your question?
   activemodel:
     errors:
       models:
