@@ -66,10 +66,17 @@ RSpec.describe Forms::ChangeNameController, type: :request do
     end
 
     context "with a trial user" do
-      let(:user) { build(:user, role: :trial, id: 1) }
+      let(:user) { build(:user, :with_trial, :with_no_org, id: 1) }
+      let(:form_data) do
+        {
+          name: "Form name",
+          org: nil,
+          creator_id: user.id,
+          submission_email: user.email,
+        }
+      end
 
       it "sets the submission email address" do
-        form_data[:submission_email] = user.email
         form = Form.new(form_data)
         expect(form).to have_been_created
       end
