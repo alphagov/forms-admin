@@ -11,9 +11,10 @@ class PagesController < ApplicationController
 
   def new
     answer_type = session.dig(:page, "answer_type")
+    question_text = session.dig(:page, "question_text")
     answer_settings = session.dig(:page, "answer_settings")
     is_optional = session.dig(:page, "is_optional") == "true"
-    @page = Page.new(form_id: @form.id, answer_type:, answer_settings:, is_optional:)
+    @page = Page.new(form_id: @form.id, question_text:, answer_type:, answer_settings:, is_optional:)
   end
 
   def create

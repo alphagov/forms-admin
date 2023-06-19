@@ -80,8 +80,8 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
           expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
         end
 
-        it "redirects the user to the selection settings page" do
-          expect(response).to redirect_to selections_settings_new_path(form.id)
+        it "redirects the user to the question text page" do
+          expect(response).to redirect_to question_text_new_path(form.id)
         end
       end
 
@@ -206,8 +206,10 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
     end
 
     context "when form is valid and ready to update in the DB" do
+      let(:forms_type_of_answer_form) { { answer_type: "number" } }
+
       before do
-        post type_of_answer_update_path(form_id: page.form_id, page_id: page.id), params: { forms_type_of_answer_form: { answer_type: "number" } }
+        post type_of_answer_update_path(form_id: page.form_id, page_id: page.id), params: { forms_type_of_answer_form: }
       end
 
       it "saves the updated answer type to DB" do
@@ -217,6 +219,19 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
       it "redirects the user to the question details page " do
         expect(response).to redirect_to edit_page_path(form.id, page.id)
+      end
+
+      context "when answer type is selection" do
+        let(:forms_type_of_answer_form) { { answer_type: "selection" } }
+
+        it "saves the answer type to session" do
+          form = assigns(:type_of_answer_form)
+          expect(form.answer_type).to eq "selection"
+        end
+
+        it "redirects the user to the question text page" do
+          expect(response).to redirect_to selections_settings_edit_path(form.id, page.id)
+        end
       end
     end
 

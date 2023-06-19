@@ -1,0 +1,12 @@
+en:
+  helpers:
+    label:
+      forms_question_text_form:
+        question_text: What’s your question?
+  activemodel:
+    errors:
+      models:
+        forms/question_text_form:
+          attributes:
+            question_text:
+              blank: Question text cannot be blank

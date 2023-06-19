@@ -3,7 +3,7 @@ class Pages::SelectionsSettingsController < PagesController
     answer_settings = load_answer_settings_from_session
     @selections_settings_form = Forms::SelectionsSettingsForm.new(answer_settings)
     @selections_settings_path = selections_settings_create_path(@form)
-    @back_link_url = type_of_answer_new_path(@form)
+    @back_link_url = question_text_new_path(@form)
     render selection_settings_view
   end
 
@@ -11,7 +11,7 @@ class Pages::SelectionsSettingsController < PagesController
     answer_settings = load_answer_settings_from_params(selections_settings_form_params)
     @selections_settings_form = Forms::SelectionsSettingsForm.new(answer_settings)
     @selections_settings_path = selections_settings_create_path(@form)
-    @back_link_url = type_of_answer_new_path(@form)
+    @back_link_url = question_text_new_path(@form)
 
     if params[:add_another]
       @selections_settings_form.add_another

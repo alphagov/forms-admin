@@ -61,6 +61,8 @@ Rails.application.routes.draw do
         post "/address-settings" => "pages/address_settings#create", as: :address_settings_create
         get "/name-settings" => "pages/name_settings#new", as: :name_settings_new
         post "/name-settings" => "pages/name_settings#create", as: :name_settings_create
+        get "/question_text" => "pages/question_text#new", as: :question_text_new
+        post "/question_text" => "pages/question_text#create", as: :question_text_create
         get "/" => "pages#new", as: :new_page
         post "/" => "pages#create", as: :create_page
       end
