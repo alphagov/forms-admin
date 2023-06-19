@@ -102,8 +102,8 @@ private
   end
 
   def fill_in_question_text
-    expect(page.find("h1")).to have_text "What's your question?"
-    fill_in "What's your question?", with: "What is your name?"
+    expect(page.find("h1")).to have_text "What’s your question?"
+    fill_in "What’s your question?", with: "What is your name?"
     click_button "Continue"
   end
 
