@@ -11,7 +11,7 @@ describe HeartbeatController, type: :request do
 
     context "when service is in maintenance mode" do
       before do
-        allow(Settings).to receive(:maintenance_mode_enabled).and_return(true)
+        allow(Settings.maintenance_mode).to receive(:enabled).and_return(true)
       end
 
       it "returns PONG" do
