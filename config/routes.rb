@@ -93,8 +93,6 @@ Rails.application.routes.draw do
           post "/address-settings" => "pages/address_settings#update", as: :address_settings_update
           get "/name-settings" => "pages/name_settings#edit", as: :name_settings_edit
           post "/name-settings" => "pages/name_settings#update", as: :name_settings_update
-          get "/question_text" => "pages/question_text#edit", as: :question_text_edit
-          post "/question_text" => "pages/question_text#update", as: :question_text_update
           get "/" => "pages#edit", as: :edit_page
           patch "/" => "pages#update", as: :update_page
         end

@@ -13,7 +13,7 @@ class Pages::QuestionTextController < PagesController
     @back_link_url = type_of_answer_new_path(@form)
 
     if @question_text_form.submit(session)
-      redirect_to next_page_path(@form, :create)
+      redirect_to selections_settings_new_path(@form)
     else
       render "pages/question_text"
     end
@@ -22,11 +22,6 @@ class Pages::QuestionTextController < PagesController
 private
 
   def question_text_form_params
-    form = Form.find(params[:form_id])
-    params.require(:forms_question_text_form).permit(:question_text).merge(form:)
-  end
-
-  def next_page_path(form, action)
-    action == :create ? selections_settings_new_path(form) : selections_settings_edit_path(form)
+    params.require(:forms_question_text_form).permit(:question_text)
   end
 end

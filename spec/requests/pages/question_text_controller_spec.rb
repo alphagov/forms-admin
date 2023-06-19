@@ -27,7 +27,7 @@ RSpec.describe Pages::QuestionTextController, type: :request do
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
       end
 
-      get question_text_new_path(form_id: question_text_form.form.id)
+      get question_text_new_path(form_id: form.id)
     end
 
     it "reads the existing form" do
@@ -36,7 +36,7 @@ RSpec.describe Pages::QuestionTextController, type: :request do
 
     it "sets an instance variable for question_text_path" do
       path = assigns(:question_text_path)
-      expect(path).to eq question_text_new_path(question_text_form.form.id)
+      expect(path).to eq question_text_new_path(form.id)
     end
 
     it "renders the template" do
@@ -67,7 +67,7 @@ RSpec.describe Pages::QuestionTextController, type: :request do
         post question_text_create_path form_id: form.id, params: { forms_question_text_form: { question_text: "Are you a higher rate taxpayer?" } }
       end
 
-      let(:question_text_form) { build :question_text_form, form: }
+      let(:question_text_form) { build :question_text_form }
 
       it "saves the input type to session" do
         expect(session[:page][:question_text]).to eq "Are you a higher rate taxpayer?"

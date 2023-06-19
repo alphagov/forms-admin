@@ -2,7 +2,7 @@ class Forms::QuestionTextForm
   include ActiveModel::Model
   include ActiveModel::Validations
 
-  attr_accessor :question_text, :form, :page
+  attr_accessor :question_text
 
   validates :question_text, presence: true
 
