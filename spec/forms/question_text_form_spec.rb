@@ -10,18 +10,13 @@ RSpec.describe Forms::QuestionTextForm, type: :model do
   end
 
   describe "validations" do
-    it "is invalid if not given question text" do
-      error_message = I18n.t("activemodel.errors.models.forms/question_text_form.attributes.question_text.blank")
-      question_text_form.question_text = nil
-      expect(question_text_form).to be_invalid
-      expect(question_text_form.errors.full_messages_for(:question_text)).to include("Question text #{error_message}")
-    end
-
-    it "is invalid given an empty string question_text" do
-      error_message = I18n.t("activemodel.errors.models.forms/question_text_form.attributes.question_text.blank")
-      question_text_form.question_text = ""
-      expect(question_text_form).to be_invalid
-      expect(question_text_form.errors.full_messages_for(:question_text)).to include("Question text #{error_message}")
+    [nil, ""].each do |question_text|
+      it "is invalid given {question_text} question text" do
+        error_message = I18n.t("activemodel.errors.models.forms/question_text_form.attributes.question_text.blank")
+        question_text_form.question_text = question_text
+        expect(question_text_form).to be_invalid
+        expect(question_text_form.errors.full_messages_for(:question_text)).to include("Question text #{error_message}")
+      end
     end
 
     it "is valid if input type is a valid input type" do
