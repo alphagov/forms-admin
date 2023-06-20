@@ -1,7 +1,5 @@
 class Pages::ConditionsController < PagesController
   before_action :can_add_page_routing, only: %i[routing_page new create]
-  before_action :can_edit_page_routing, only: %i[edit update]
-  before_action :can_delete_page_routing, only: %i[delete destroy]
 
   def routing_page
     routing_page_form = Pages::RoutingPageForm.new(routing_page_id: params[:routing_page_id])
@@ -90,14 +88,6 @@ private
 
   def can_add_page_routing
     authorize @form, :can_add_page_routing_conditions?
-  end
-
-  def can_edit_page_routing
-    authorize @form, :can_edit_page_routing_conditions?
-  end
-
-  def can_delete_page_routing
-    authorize @form, :can_delete_page_routing_conditions?
   end
 
   def condition_form_params

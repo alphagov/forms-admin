@@ -32,42 +32,40 @@
             </dd>
           </div>
 
-          <% if render_routing? %>
-            <% page.conditions.each do |condition| %>
-              <div id="<%= PageListComponent::ErrorSummary::View.error_id(condition.id) %>" class="govuk-summary-list__row app-page-list__row <%= class_names( "govuk-form-group--error": condition.has_routing_errors?) %>">
-                <dt class="govuk-summary-list__key govuk-summary-list__key app-page-list__key">
-                  <%= t("page_conditions.condition_name", page_index: page.position) %>
-                </dt>
+          <% page.conditions.each do |condition| %>
+            <div id="<%= PageListComponent::ErrorSummary::View.error_id(condition.id) %>" class="govuk-summary-list__row app-page-list__row <%= class_names( "govuk-form-group--error": condition.has_routing_errors?) %>">
+              <dt class="govuk-summary-list__key govuk-summary-list__key app-page-list__key">
+                <%= t("page_conditions.condition_name", page_index: page.position) %>
+              </dt>
 
-                <dd class="govuk-summary-list__value">
-                  <ul class="govuk-list govuk-!-margin-0">
-                    <% condition.validation_errors.each do |error| %>
-                      <li class="app-page_list__route-text--error">
-                        <%= t("page_conditions.errors.page_list.#{error.name}", page_index: page.position) %>
-                      </li>
-                    <% end %>
-                  </ul>
-
-                  <p>
-                    <%= t("page_conditions.condition_check_page_text", check_page_text: question_text_for_page(condition.check_page_id)) %>
-                  </p>
-
-                  <p>
-                    <%= answer_value_text_for_condition(condition) %>
-                  </p>
-
-                  <p>
-                    <%= goto_page_text_for_condition(condition) %>
-                  </p>
-                </dd>
-
-                <dd class="govuk-summary-list__actions govuk-!-padding-bottom-6">
-                  <%= govuk_link_to edit_condition_path(form_id: @form_id, page_id: page.id, condition_id: condition.id) do %>
-                    <%= t("forms.form_overview.edit_with_visually_hidden_text_html", visually_hidden_text: t("page_conditions.condition_name", page_index: page.position)) %>
+              <dd class="govuk-summary-list__value">
+                <ul class="govuk-list govuk-!-margin-0">
+                  <% condition.validation_errors.each do |error| %>
+                    <li class="app-page_list__route-text--error">
+                      <%= t("page_conditions.errors.page_list.#{error.name}", page_index: page.position) %>
+                    </li>
                   <% end %>
-                </dd>
-              </div>
-            <% end %>
+                </ul>
+
+                <p>
+                  <%= t("page_conditions.condition_check_page_text", check_page_text: question_text_for_page(condition.check_page_id)) %>
+                </p>
+
+                <p>
+                  <%= answer_value_text_for_condition(condition) %>
+                </p>
+
+                <p>
+                  <%= goto_page_text_for_condition(condition) %>
+                </p>
+              </dd>
+
+              <dd class="govuk-summary-list__actions govuk-!-padding-bottom-6">
+                <%= govuk_link_to edit_condition_path(form_id: @form_id, page_id: page.id, condition_id: condition.id) do %>
+                  <%= t("forms.form_overview.edit_with_visually_hidden_text_html", visually_hidden_text: t("page_conditions.condition_name", page_index: page.position)) %>
+                <% end %>
+              </dd>
+            </div>
           <% end %>
         <% end %>
       </dl>

@@ -3,8 +3,7 @@ require "rails_helper"
 RSpec.describe PageListComponent::View, type: :component do
   let(:pages) { [] }
   let(:routing_conditions) { [] }
-  let(:can_edit_page_routing) { false }
-  let(:page_list_component) { described_class.new(pages:, form_id: 0, can_edit_page_routing:) }
+  let(:page_list_component) { described_class.new(pages:, form_id: 0) }
 
   describe "rendering component" do
     before do
@@ -61,7 +60,6 @@ RSpec.describe PageListComponent::View, type: :component do
            (build :page, id: 3, position: 3, question_text: "What is your pet's name?", routing_conditions:)]
         end
         let(:edit_condition_path) { "/forms/0/pages/1/conditions/1" }
-        let(:can_edit_page_routing) { true }
 
         context "when there are no conditions" do
           it "conditions section is not present" do
@@ -271,20 +269,6 @@ RSpec.describe PageListComponent::View, type: :component do
           it "returns the goto page error text" do
             expect(goto_page_text).to eq I18n.t("page_conditions.condition_goto_page_text_with_errors")
           end
-        end
-      end
-    end
-
-    describe "render_routing?" do
-      it "returns false" do
-        expect(page_list_component.render_routing?).to eq(can_edit_page_routing)
-      end
-
-      context "when can edit routing conditions is true" do
-        let(:can_edit_page_routing) { true }
-
-        it "returns true" do
-          expect(page_list_component.render_routing?).to eq(can_edit_page_routing)
         end
       end
     end

@@ -45,11 +45,6 @@ class FormPolicy
     form_has_two_or_more_pages && form_has_qualifying_pages
   end
 
-  def can_edit_page_routing_conditions?
-    true
-  end
-
-  alias_method :can_delete_page_routing_conditions?, :can_edit_page_routing_conditions?
   alias_method :can_make_form_live?, :can_change_form_submission_email?
 
 private
