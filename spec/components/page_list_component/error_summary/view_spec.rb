@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe PageListComponent::ErrorSummary::View, type: :component, feature_basic_routing: true do
+RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
   let(:pages) { [] }
   let(:routing_conditions) { [] }
   let(:error_summary_component) { described_class.new(pages:) }

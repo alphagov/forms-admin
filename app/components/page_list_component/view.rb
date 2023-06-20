@@ -2,11 +2,10 @@ module PageListComponent
   class View < ViewComponent::Base
     delegate :question_text_with_optional_suffix, to: :helpers
 
-    def initialize(form_id:, can_edit_page_routing:, pages: [])
+    def initialize(form_id:, pages: [])
       super
       @pages = pages
       @form_id = form_id
-      @can_edit_page_routing = can_edit_page_routing
     end
 
     def show_up_button(index)
@@ -38,10 +37,6 @@ module PageListComponent
       else
         I18n.t("page_conditions.condition_goto_page_text_with_errors")
       end
-    end
-
-    def render_routing?
-      @can_edit_page_routing
     end
   end
 end

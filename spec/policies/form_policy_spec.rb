@@ -110,45 +110,39 @@ describe FormPolicy do
     let(:form) { build :form, pages:, org: "gds" }
     let(:pages) { [] }
 
-    describe "when basic_routing feature flag is not enabled", feature_basic_routing: false do
+    context "and the form has one page" do
+      let(:pages) { [(build :page, position: 1, id: 1)] }
+
       it { is_expected.to forbid_actions(%i[can_add_page_routing_conditions]) }
     end
 
-    context "when basic_routing feature flag is enabled", feature_basic_routing: true do
-      context "and the form has one page" do
-        let(:pages) { [(build :page, position: 1, id: 1)] }
+    context "and the form has two or more pages" do
+      let(:pages) { [(build :page, position: 1, id: 1), (build :page, position: 2, id: 2)] }
+
+      context "and the form does not have a selection question" do
+        it { is_expected.to forbid_actions(%i[can_add_page_routing_conditions]) }
+      end
+
+      context "and the form only has a selection question with an existing route" do
+        let(:routing_conditions) { [(build :condition, id: 1, check_page_id: 1, answer_value: "Wales", goto_pageid: 2)] }
+        let(:pages) { [(build :page, :with_selections_settings, position: 1, id: 1, routing_conditions:), (build :page, position: 2, id: 2)] }
 
         it { is_expected.to forbid_actions(%i[can_add_page_routing_conditions]) }
       end
 
-      context "and the form has two or more pages" do
-        let(:pages) { [(build :page, position: 1, id: 1), (build :page, position: 2, id: 2)] }
-
-        context "and the form does not have a selection question" do
-          it { is_expected.to forbid_actions(%i[can_add_page_routing_conditions]) }
-        end
-
-        context "and the form only has a selection question with an existing route" do
+      context "and the form has a selection question without an existing route" do
+        context "and the available selection question is the last page in the form" do
           let(:routing_conditions) { [(build :condition, id: 1, check_page_id: 1, answer_value: "Wales", goto_pageid: 2)] }
-          let(:pages) { [(build :page, :with_selections_settings, position: 1, id: 1, routing_conditions:), (build :page, position: 2, id: 2)] }
+          let(:pages) { [(build :page, :with_selections_settings, position: 1, id: 1, routing_conditions:), (build :page, position: 2, id: 2), (build :page, :with_selections_settings, position: 3, id: 3)] }
 
           it { is_expected.to forbid_actions(%i[can_add_page_routing_conditions]) }
         end
 
-        context "and the form has a selection question without an existing route" do
-          context "and the available selection question is the last page in the form" do
-            let(:routing_conditions) { [(build :condition, id: 1, check_page_id: 1, answer_value: "Wales", goto_pageid: 2)] }
-            let(:pages) { [(build :page, :with_selections_settings, position: 1, id: 1, routing_conditions:), (build :page, position: 2, id: 2), (build :page, :with_selections_settings, position: 3, id: 3)] }
+        context "and the available selection question is not the last page in the form" do
+          let(:routing_conditions) { [(build :condition, id: 1, check_page_id: 1, answer_value: "Wales", goto_pageid: 2)] }
+          let(:pages) { [(build :page, :with_selections_settings, position: 1, id: 1, routing_conditions:), (build :page, :with_selections_settings, position: 2, id: 2), (build :page, position: 3, id: 3)] }
 
-            it { is_expected.to forbid_actions(%i[can_add_page_routing_conditions]) }
-          end
-
-          context "and the available selection question is not the last page in the form" do
-            let(:routing_conditions) { [(build :condition, id: 1, check_page_id: 1, answer_value: "Wales", goto_pageid: 2)] }
-            let(:pages) { [(build :page, :with_selections_settings, position: 1, id: 1, routing_conditions:), (build :page, :with_selections_settings, position: 2, id: 2), (build :page, position: 3, id: 3)] }
-
-            it { is_expected.to permit_actions(%i[can_add_page_routing_conditions]) }
-          end
+          it { is_expected.to permit_actions(%i[can_add_page_routing_conditions]) }
         end
       end
     end

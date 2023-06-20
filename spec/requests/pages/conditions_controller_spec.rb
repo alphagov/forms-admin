@@ -272,7 +272,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
   end
 
   describe "#update" do
-    let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
+    let(:condition) { build :condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Wales", goto_page_id: pages.last.id }
 
     before do
       selected_page.routing_conditions = [condition]
@@ -341,16 +341,16 @@ RSpec.describe Pages::ConditionsController, type: :request do
   end
 
   describe "#delete" do
-    let(:routing_conditions) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
+    let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
 
     before do
-      selected_page.routing_conditions = [routing_conditions]
+      selected_page.routing_conditions = [condition]
       selected_page.position = 1
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
         mock.get "/api/v1/forms/1/pages/#{selected_page.id}", req_headers, selected_page.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", req_headers, routing_conditions.to_json, 200
+        mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", req_headers, condition.to_json, 200
       end
 
       if expected_to_raise_error
@@ -359,13 +359,13 @@ RSpec.describe Pages::ConditionsController, type: :request do
         allow(Pundit).to receive(:authorize).and_return(true)
       end
 
-      delete_condition_form = Pages::DeleteConditionForm.new(form:, page: selected_page, record: routing_conditions, answer_value: "Yes", goto_page_id: 3)
+      delete_condition_form = Pages::DeleteConditionForm.new(form:, page: selected_page, record: condition, answer_value: "Yes", goto_page_id: 3)
 
       allow(delete_condition_form).to receive(:goto_page_question_text).and_return("What is your name?")
 
       allow(Pages::DeleteConditionForm).to receive(:new).and_return(delete_condition_form)
 
-      get delete_condition_path(form_id: 1, page_id: selected_page.id, condition_id: routing_conditions.id)
+      get delete_condition_path(form_id: 1, page_id: selected_page.id, condition_id: condition.id)
     end
 
     it "Reads the form from the API" do
@@ -390,18 +390,18 @@ RSpec.describe Pages::ConditionsController, type: :request do
   end
 
   describe "#destroy" do
-    let(:routing_conditions) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
+    let(:condition) { build :condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Wales", goto_page_id: pages.last.id }
     let(:confirm_deletion) { "true" }
     let(:delete_bool) { true }
 
     before do
-      selected_page.routing_conditions = [routing_conditions]
+      selected_page.routing_conditions = [condition]
       selected_page.position = 1
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
         mock.get "/api/v1/forms/1/pages/#{selected_page.id}", req_headers, selected_page.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", req_headers, routing_conditions.to_json, 200
+        mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", req_headers, condition.to_json, 200
         mock.delete "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", req_headers, { success: true }, 200
       end
 
@@ -411,7 +411,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
         allow(Pundit).to receive(:authorize).and_return(true)
       end
 
-      delete_condition_form = Pages::DeleteConditionForm.new(form:, page: selected_page, record: routing_conditions, answer_value: "Wales", goto_page_id: 3, confirm_deletion:)
+      delete_condition_form = Pages::DeleteConditionForm.new(form:, page: selected_page, record: condition, answer_value: "Wales", goto_page_id: 3, confirm_deletion:)
 
       allow(delete_condition_form).to receive(:goto_page_question_text).and_return("What is your name?")
 
@@ -421,7 +421,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
       delete destroy_condition_path(form_id: form.id,
                                     page_id: selected_page.id,
-                                    condition_id: routing_conditions.id,
+                                    condition_id: condition.id,
                                     params: { pages_delete_condition_form: { confirm_deletion:, goto_page_id: 3, answer_value: "Wales" } })
     end
 
@@ -442,7 +442,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
       let(:confirm_deletion) { "false" }
 
       it "redirects to edit the condition" do
-        expect(response).to redirect_to edit_condition_path(form.id, selected_page.id, routing_conditions.id)
+        expect(response).to redirect_to edit_condition_path(form.id, selected_page.id, condition.id)
       end
     end
 
