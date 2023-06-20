@@ -54,7 +54,7 @@ RSpec.describe PageListComponent::View, type: :component do
         expect(page).to have_button("Move down")
       end
 
-      context "when conditions are enabled", feature_basic_routing: true do
+      context "when the form has conditions" do
         let(:pages) do
           [(build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:),
            (build :page, id: 2, position: 2, question_text: "What is your name?", routing_conditions:),

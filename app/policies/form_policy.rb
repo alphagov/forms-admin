@@ -42,11 +42,11 @@ class FormPolicy
     form_has_two_or_more_pages = form.pages.length >= 2
     form_has_qualifying_pages = form.qualifying_route_pages.any?
 
-    FeatureService.enabled?(:basic_routing) && form_has_two_or_more_pages && form_has_qualifying_pages
+    form_has_two_or_more_pages && form_has_qualifying_pages
   end
 
   def can_edit_page_routing_conditions?
-    FeatureService.enabled?(:basic_routing)
+    true
   end
 
   alias_method :can_delete_page_routing_conditions?, :can_edit_page_routing_conditions?

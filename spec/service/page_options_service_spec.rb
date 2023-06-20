@@ -165,7 +165,7 @@ describe PageOptionsService do
       end
     end
 
-    context "with basic routing enabled", feature_basic_routing: true do
+    context "with conditions" do
       let(:page) { build :page, id: 1, answer_type: "email", routing_conditions: }
       let(:condition_1) { build :condition, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
       let(:condition_2) { build :condition, routing_page_id: 1, check_page_id: 1, answer_value: "England", goto_page_id: 4 }

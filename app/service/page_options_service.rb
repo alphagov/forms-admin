@@ -24,7 +24,7 @@ class PageOptionsService
     options.concat(date_options) if @page.answer_type == "date"
     options.concat(address_options) if @page.answer_type == "address"
     options.concat(name_options) if @page.answer_type == "name"
-    options.concat(route_options) if FeatureService.enabled?(:basic_routing) && @page.respond_to?(:routing_conditions) && @page.routing_conditions.present?
+    options.concat(route_options) if @page.respond_to?(:routing_conditions) && @page.routing_conditions.present?
     options
   end
 
