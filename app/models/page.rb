@@ -54,6 +54,10 @@ class Page < ActiveResource::Base
     "#{position}. #{question_text}"
   end
 
+  def show_optional_suffix?
+    is_optional? && answer_type != "selection"
+  end
+
 private
 
   def is_optional_value

@@ -41,7 +41,7 @@ module ApplicationHelper
   end
 
   def question_text_with_optional_suffix(page)
-    page.is_optional ? t("pages.optional", question_text: page.question_text) : page.question_text
+    page.show_optional_suffix? ? t("pages.optional", question_text: page.question_text) : page.question_text
   end
 
   def translation_key_for_answer_type(answer_type, answer_settings)
