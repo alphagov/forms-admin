@@ -104,4 +104,32 @@ describe Page do
       expect(page.question_with_number).to eq("#{page.position}. #{page.question_text}")
     end
   end
+
+  describe "#show_optional_suffix?" do
+    let(:page) { described_class.new(is_optional:, answer_type:) }
+    let(:is_optional) { "true" }
+    let(:answer_type) { "national_insurance_number" }
+
+    context "when question is optional and answer type is not selection" do
+      it "returns true" do
+        expect(page.show_optional_suffix?).to be true
+      end
+    end
+
+    context "when question is optional and has answer_type selection" do
+      let(:answer_type) { "selection" }
+
+      it "returns false" do
+        expect(page.show_optional_suffix?).to be false
+      end
+    end
+
+    context "when question is not optional and answer type is not selection" do
+      let(:is_optional) { "false" }
+
+      it "returns false" do
+        expect(page.show_optional_suffix?).to be false
+      end
+    end
+  end
 end
