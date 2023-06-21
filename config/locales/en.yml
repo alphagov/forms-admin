@@ -307,7 +307,7 @@ en:
       immediately.
     notification_title: Important
   maintenance:
-    body_html: "%{link} if you need to make changes to your forms or speak to someone about the service."
+    body_html: You’ll be able to use the service on Wednesday 5 July 2023.
     title: Sorry, the service is unavailable
   make_changes_live:
     url_will_remain_same: The URL for the live form will remain the same.
