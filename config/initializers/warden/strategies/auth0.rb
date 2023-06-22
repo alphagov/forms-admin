@@ -1,15 +1,7 @@
+require "warden/strategies/omniauth"
+
 Warden::Strategies.add(:auth0) do
-  def valid?
-    env["omniauth.auth"].present?
-  end
-
-  def authenticate!
-    logger.debug("Authenticating with auth0 strategy")
-
-    user = prep_user(request.env["omniauth.auth"])
-    fail!("Couldn't process credentials") unless user
-    success!(user)
-  end
+  include Warden::Strategies::OmniAuth
 
 private
 

@@ -63,10 +63,9 @@ RSpec.describe "usage of omniauth-auth0 gem" do
       it "is called by the auth0 Warden strategy" do
         allow(described_class).to receive(:find_for_auth).and_call_original
 
-        auth0 = Warden::Strategies[:auth0].new({
-          "omniauth.auth" => omniauth_hash,
-        })
-        auth0.authenticate!
+        OmniAuth.config.mock_auth[:auth0] = omniauth_hash
+        get "/auth/auth0"
+        get "/auth/auth0/callback"
 
         expect(described_class).to have_received(:find_for_auth).with(
           provider: "auth0",
@@ -74,7 +73,9 @@ RSpec.describe "usage of omniauth-auth0 gem" do
           email: "test@example.com",
         )
 
-        expect(auth0.successful?).to be true
+        winning_strategy = request.env["warden"].winning_strategy
+        expect(winning_strategy).to be_a Warden::Strategies[:auth0]
+        expect(winning_strategy).to be_successful
       end
     end
   end
