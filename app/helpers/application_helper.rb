@@ -70,6 +70,10 @@ module ApplicationHelper
         user_profile_link: nil,
         signout_link: sign_out_path,
       },
+      cddo_sso: {
+        user_profile_link: "https://sso.service.security.gov.uk/profile",
+        signout_link: sign_out_path,
+      },
       gds: {
         user_profile_link: GDS::SSO::Config.oauth_root_url,
         signout_link: gds_sign_out_path,
