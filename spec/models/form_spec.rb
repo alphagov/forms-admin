@@ -129,4 +129,28 @@ describe Form do
       expect(form.qualifying_route_pages).to eq(selection_pages_with_routes_excluding_last_page)
     end
   end
+
+  describe "#update_org_for_creator" do
+    let(:headers) do
+      {
+        "X-API-Token" => Settings.forms_api.auth_key,
+        "Content-Type" => "application/json",
+      }
+    end
+
+    it "makes patch request to the API" do
+      creator_id = 123
+      org = "org"
+      expected_path = "/api/v1/forms/update-org-for-creator?creator_id=123&org=org"
+
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.patch expected_path, headers, {}.to_json, 204
+      end
+
+      described_class.update_org_for_creator(creator_id, org)
+
+      request = ActiveResource::Request.new(:patch, expected_path, {}, headers)
+      expect(ActiveResource::HttpMock.requests).to include request
+    end
+  end
 end

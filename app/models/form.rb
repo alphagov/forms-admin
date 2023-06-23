@@ -59,6 +59,10 @@ class Form < ActiveResource::Base
     post "make-live"
   end
 
+  def self.update_org_for_creator(creator_id, org)
+    patch("update-org-for-creator", creator_id:, org:)
+  end
+
   def form_submission_email
     FormSubmissionEmail.find_by_form_id(id)
   end
