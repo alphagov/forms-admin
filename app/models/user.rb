@@ -17,6 +17,8 @@ class User < ApplicationRecord
   validates :organisation_id, presence: true, if: :requires_organisation?
   validates :has_access, inclusion: [true, false]
 
+  before_save :update_org
+
   def self.find_for_gds_oauth(auth_hash)
     find_for_auth(
       provider: auth_hash["provider"],
@@ -59,5 +61,11 @@ private
 
   def requires_organisation?
     organisation_id_was.present? || role_changed?(to: :editor)
+  end
+
+  def update_org
+    if role_changed?(from: :trial)
+      Form.update_org_for_creator(id, organisation.slug)
+    end
   end
 end
