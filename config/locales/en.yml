@@ -85,6 +85,16 @@ en:
   email_code_success:
     body_html: "<p>Completed forms will be sent to %{submission_email}.</p>\n"
     continue: Continue creating a form
+  environment_names:
+    aws-dev: development
+    aws-production: production
+    aws-staging: staging
+    aws-user-research: user research
+    dev: development
+    local: local
+    production: production
+    staging: staging
+    user-research: user research
   error_summary:
     heading: There is a problem
   footer:
