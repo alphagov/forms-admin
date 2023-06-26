@@ -86,12 +86,11 @@ en:
     body_html: "<p>Completed forms will be sent to %{submission_email}.</p>\n"
     continue: Continue creating a form
   environment_names:
-    aws-dev: development
-    aws-production: production
-    aws-staging: staging
-    aws-user-research: user research
     dev: development
     local: local
+    paas_dev: development
+    paas_production: production
+    paas_staging: staging
     production: production
     staging: staging
     user-research: user research
