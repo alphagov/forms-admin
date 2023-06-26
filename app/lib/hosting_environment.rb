@@ -1,20 +1,18 @@
 module HostingEnvironment
   def self.environment_name
-    ENV.fetch("PAAS_ENVIRONMENT", "unknown-environment")
+    Settings.forms_env
   end
 
   def self.friendly_environment_name
-    key = local_development? ? "local" : environment_name
-
-    I18n.t("environment_names.#{key}", default: key)
+    I18n.t("environment_names.#{environment_name}", default: environment_name)
   end
 
   def self.local_development?
-    environment_name == "unknown-environment" && !Rails.env.production?
+    environment_name == "local"
   end
 
   def self.dev?
-    environment_name == "dev"
+    environment_name == "dev" || environment_name == "paas_dev"
   end
 
   def self.test_environment?
