@@ -119,5 +119,27 @@ describe User do
         },
       )
     end
+
+    context "when changing role" do
+      described_class.roles.reject { |role| role == "trial" }.each do |_role_name, role_value|
+        it "updates org when changing from trial to #{role_value}" do
+          user = create(:user, :with_trial)
+
+          expect(Form).to receive(:update_org_for_creator).with(user.id, user.organisation.slug)
+
+          user.role = role_value
+          user.save!
+        end
+
+        it "does not update org when changing from #{role_value} to editor" do
+          user = create :user, role: role_value
+
+          expect(Form).not_to receive(:update_org_for_creator).with(user.id, user.organisation.slug)
+
+          user.role = :editor
+          user.save!
+        end
+      end
+    end
   end
 end
