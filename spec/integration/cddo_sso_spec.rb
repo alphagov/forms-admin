@@ -43,6 +43,18 @@ RSpec.describe "usage of cddo_sso auth provider" do
 
       expect(request.env["warden"].authenticated?).to be true
     end
+
+    it "redirects to the OmniAuth callback URL" do
+      OmniAuth.config.test_mode = false
+
+      allow(Settings.cddo_sso).to receive(:identifier).and_return("foo")
+      allow(Settings.cddo_sso).to receive(:secret).and_return("bar")
+
+      get "/auth/cddo_sso"
+
+      expect(response).to redirect_to %r{^https://sso\.service\.security\.gov\.uk}
+      expect(response).to redirect_to %r{redirect_uri=http%3A%2F%2Fwww\.example\.com%2Fauth%2Fcddo_sso%2Fcallback}
+    end
   end
 
   describe "signing out" do

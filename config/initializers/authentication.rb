@@ -34,3 +34,10 @@ Rails.application.config.before_initialize do
     warden.failure_app = AuthenticationController
   end
 end
+
+# Monkeypatch omniauth_openid_connect
+class OmniAuth::Strategies::OpenIDConnect
+  def redirect_uri
+    callback_url
+  end
+end
