@@ -5,7 +5,7 @@ FactoryBot.define do
     name { ActiveSupport::Inflector.titleize slug }
 
     initialize_with do
-      Organisation.create_with(govuk_content_id:, name:).find_or_create_by(slug:)
+      Organisation.create_with(govuk_content_id:, name:).find_or_initialize_by(slug:)
     end
   end
 end
