@@ -163,9 +163,7 @@ RSpec.describe ApplicationHelper, type: :helper do
     end
 
     context "when a user is signed in with GOV.UK Signon" do
-      before do
-        allow(Settings).to receive(:auth_provider).and_return("gds_sso")
-      end
+      let(:user) { build :user, provider: :gds }
 
       it "returns the following options" do
         expect(helper.header_component_options(user:, can_manage_users:)).to eq({ is_signed_in: true,
@@ -187,14 +185,26 @@ RSpec.describe ApplicationHelper, type: :helper do
         end
       end
 
-      context "when http basic auth is enabled" do
-        it "returns the following options" do
-          allow(Settings).to receive(:auth_provider).and_return("basic_auth")
+      context "when a user is signed in with http basic auth" do
+        let(:user) { build :user, provider: :basic_auth }
 
+        it "returns the following options" do
           expect(helper.header_component_options(user:, can_manage_users:)).to eq({ is_signed_in: true,
                                                                                     list_of_users_path: nil,
                                                                                     signout_link: nil,
                                                                                     user_name: user.name,
+                                                                                    user_profile_link: nil })
+        end
+      end
+
+      context "when a user is signed in with auth0" do
+        let(:user) { build :user, provider: :auth0, name: nil }
+
+        it "returns the following options" do
+          expect(helper.header_component_options(user:, can_manage_users:)).to eq({ is_signed_in: true,
+                                                                                    list_of_users_path: nil,
+                                                                                    signout_link: "/sign_out",
+                                                                                    user_name: nil,
                                                                                     user_profile_link: nil })
         end
       end

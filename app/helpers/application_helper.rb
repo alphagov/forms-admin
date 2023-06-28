@@ -68,15 +68,15 @@ module ApplicationHelper
     auth_links = {
       auth0: {
         user_profile_link: nil,
-        signout_link: sign_out_path(:auth0),
+        signout_link: sign_out_path,
       },
-      gds_sso: {
+      gds: {
         user_profile_link: GDS::SSO::Config.oauth_root_url,
         signout_link: gds_sign_out_path,
       },
     }
     auth_links.default = {}
-    links = auth_links[Settings.auth_provider.to_sym]
+    links = auth_links[user&.provider&.to_sym]
 
     { is_signed_in: user.present?,
       user_name: user&.name.presence,

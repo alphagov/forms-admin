@@ -1,10 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "usage of omniauth-auth0 gem" do
-  before do
-    allow(Settings).to receive(:auth_provider).and_return("auth0")
-  end
-
   let(:omniauth_hash) do
     Faker::Omniauth.auth0(
       uid: "123456",
@@ -12,16 +8,18 @@ RSpec.describe "usage of omniauth-auth0 gem" do
     )
   end
 
+  before do
+    allow(Settings).to receive(:auth_provider).and_return("auth0")
+
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.mock_auth[:auth0] = nil
+  end
+
+  after do
+    OmniAuth.config.test_mode = false
+  end
+
   describe "authentication" do
-    before do
-      OmniAuth.config.test_mode = true
-      OmniAuth.config.mock_auth[:auth0] = nil
-    end
-
-    after do
-      OmniAuth.config.test_mode = false
-    end
-
     it "redirects to OmniAuth when no user is logged in" do
       logout
 
@@ -44,11 +42,17 @@ RSpec.describe "usage of omniauth-auth0 gem" do
   end
 
   describe "signing out" do
+    before do
+      OmniAuth.config.mock_auth[:auth0] = omniauth_hash
+      get "/auth/auth0"
+      get "/auth/auth0/callback"
+    end
+
     it "signs the user out of auth0" do
       allow(Settings.auth0).to receive(:domain).and_return("test")
       allow(Settings.auth0).to receive(:client_id).and_return("baz")
 
-      get sign_out_path(:auth0)
+      get sign_out_path
 
       expect(response).to redirect_to("https://test/v2/logout?client_id=baz&returnTo=http%3A%2F%2Fwww.example.com%2F")
     end
