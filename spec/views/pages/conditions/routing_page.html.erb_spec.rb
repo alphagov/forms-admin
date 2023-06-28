@@ -4,8 +4,13 @@ describe "pages/conditions/routing_page.html.erb" do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 3, :with_selections_settings, form_id: 1 }
   let(:routing_page_form) { Pages::RoutingPageForm.new }
+  let(:allowed_to_create_routes) { true }
 
   before do
+    without_partial_double_verification do
+      allow(view).to receive(:policy).and_return(OpenStruct.new(can_add_page_routing_conditions?: allowed_to_create_routes))
+    end
+
     allow(view).to receive(:form_pages_path).and_return("/forms/1/pages")
     allow(view).to receive(:routing_page_path).and_return("/forms/1/new-condition")
     allow(view).to receive(:set_routing_page_path).and_return("/forms/1/new-condition")
@@ -66,5 +71,14 @@ describe "pages/conditions/routing_page.html.erb" do
 
   it "has a submit button" do
     expect(rendered).to have_css("button[type='submit'].govuk-button", text: "Continue")
+  end
+
+  context "when form doesn't meet requirements for creating a route" do
+    let(:allowed_to_create_routes) { false }
+
+    it "explains to the user what is required for them to be able to add a new routes" do
+      guidance = Capybara.string(I18n.t("routing_page.routing_requirements_not_met_html")).text(normalize_ws: true)
+      expect(Capybara.string(rendered).text(normalize_ws: true)).to have_text(guidance)
+    end
   end
 end

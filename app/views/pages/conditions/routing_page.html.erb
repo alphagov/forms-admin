@@ -2,10 +2,10 @@
 <% content_for :back_link, govuk_back_link_to(form_pages_path(form.id)) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with(model: routing_page_form, url: set_routing_page_path(form.id), method: 'POST') do |f| %>
-      <% if routing_page_form&.errors.any? %>
-        <%= f.govuk_error_summary %>
-      <% end %>
+
+    <% if policy(form).can_add_page_routing_conditions? %>
+      <%= render partial: "pages/conditions/routing_options", locals: {form:, routing_page_form:} %>
+    <% else %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= form.name %> </span>
         <%= t("page_titles.routing_page") %>
@@ -15,24 +15,12 @@
         <%= t("routing_page.body_text") %>
       </p>
 
-      <% if form.qualifying_route_pages.length <= 10 %>
-        <%= f.govuk_collection_radio_buttons :routing_page_id,
-                                            form.qualifying_route_pages,
-                                            :id, :question_text,
-                                            legend: { text: t("routing_page.legend_text"), size: 'm' },
-                                            hint:{ text: t("routing_page.legend_hint_text") }
-        %>
-      <% else %>
-        <%= f.govuk_collection_select :routing_page_id,
-                                            form.qualifying_route_pages,
-                                            :id, :question_with_number,
-                                            label: { text: t("routing_page.legend_text"), size: 'm' },
-                                            hint: { text: t("routing_page.legend_hint_text") },
-                                            options: { include_blank: t("routing_page.dropdown_default_text") }
-        %>
-      <% end %>
+      <h2 class="govuk-heading-m"><%= t("routing_page.routing_requirements_not_met_heading") %></h2>
 
-      <%= f.govuk_submit t("continue") %>
+      <%= t('routing_page.routing_requirements_not_met_html') %>
     <% end %>
+    <p>
+      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(form.id) %>
+    </p>
   </div>
 </div>

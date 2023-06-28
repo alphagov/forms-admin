@@ -1,0 +1,32 @@
+<%= form_with(model: routing_page_form, url: set_routing_page_path(form.id), method: 'POST') do |f| %>
+  <% if routing_page_form&.errors.any? %>
+    <%= f.govuk_error_summary %>
+  <% end %>
+  <h1 class="govuk-heading-l">
+    <span class="govuk-caption-l"><%= form.name %> </span>
+    <%= t("page_titles.routing_page") %>
+  </h1>
+
+  <p>
+    <%= t("routing_page.body_text") %>
+  </p>
+
+  <% if form.qualifying_route_pages.length <= 10 %>
+    <%= f.govuk_collection_radio_buttons :routing_page_id,
+                                         form.qualifying_route_pages,
+                                         :id, :question_text,
+                                         legend: { text: t("routing_page.legend_text"), size: 'm' },
+                                         hint:{ text: t("routing_page.legend_hint_text") }
+    %>
+  <% else %>
+    <%= f.govuk_collection_select :routing_page_id,
+                                  form.qualifying_route_pages,
+                                  :id, :question_with_number,
+                                  label: { text: t("routing_page.legend_text"), size: 'm' },
+                                  hint: { text: t("routing_page.legend_hint_text") },
+                                  options: { include_blank: t("routing_page.dropdown_default_text") }
+    %>
+  <% end %>
+
+  <%= f.govuk_submit t("continue") %>
+<% end %>
