@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :organisation do
-    govuk_content_id { Faker::Internet.uuid }
+    govuk_content_id { nil }
     slug { "test-org" }
     name { ActiveSupport::Inflector.titleize slug }
 
