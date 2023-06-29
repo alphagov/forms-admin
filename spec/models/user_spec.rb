@@ -144,4 +144,9 @@ describe User do
       end
     end
   end
+
+  it "defaults to the trial role" do
+    user = described_class.new
+    expect(user.role).to eq("trial")
+  end
 end
