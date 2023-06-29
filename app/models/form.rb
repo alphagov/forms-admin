@@ -19,6 +19,10 @@ class Form < ActiveResource::Base
     pages.filter { |p| p.answer_type == "selection" && p.answer_settings.only_one_option == "true" && p.position != pages.length && p.conditions.empty? }
   end
 
+  def has_no_remaining_routes_available?
+    qualifying_route_pages.none? && has_routing_conditions
+  end
+
   def status
     has_live_version ? :live : :draft
   end
@@ -87,5 +91,11 @@ class Form < ActiveResource::Base
 
     index = pages.index { |existing_page| existing_page.attributes == page.attributes }
     (index.nil? ? pages.length : index) + 1
+  end
+
+private
+
+  def has_routing_conditions
+    pages.filter { |p| p.conditions.any? }.any?
   end
 end

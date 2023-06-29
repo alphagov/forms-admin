@@ -31,12 +31,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
       end
 
-      if expected_to_raise_error
-        allow(Pundit).to receive(:authorize).and_raise(Pundit::NotAuthorizedError)
-      else
-        allow(Pundit).to receive(:authorize).and_return(true)
-      end
-
       get routing_page_path(form_id: form.id)
     end
 
@@ -46,18 +40,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
     it "renders the routing page template" do
       expect(response).to render_template("pages/conditions/routing_page")
-    end
-
-    context "when user should not be allowed to  add routes to pages" do
-      let(:expected_to_raise_error) { true }
-
-      it "Renders the forbidden page" do
-        expect(response).to render_template("errors/forbidden")
-      end
-
-      it "Returns a 403 status" do
-        expect(response.status).to eq(403)
-      end
     end
   end
 

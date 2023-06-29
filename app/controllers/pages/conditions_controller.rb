@@ -1,5 +1,5 @@
 class Pages::ConditionsController < PagesController
-  before_action :can_add_page_routing, only: %i[routing_page new create]
+  before_action :can_add_page_routing, only: %i[new create]
 
   def routing_page
     routing_page_form = Pages::RoutingPageForm.new(routing_page_id: params[:routing_page_id])

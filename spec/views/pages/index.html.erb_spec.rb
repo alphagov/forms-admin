@@ -3,14 +3,9 @@ require "rails_helper"
 describe "pages/index.html.erb" do
   let(:form) { build :form, id: 1, pages: }
   let(:pages) { [] }
-  let(:add_routing) { false }
 
   before do
     # mock the path helper
-    without_partial_double_verification do
-      allow(view).to receive(:policy).and_return(OpenStruct.new(can_add_page_routing_conditions?: add_routing))
-    end
-
     allow(view).to receive(:form_path).and_return("/forms/1")
     allow(view).to receive(:type_of_answer_new_path).and_return("/forms/1/pages/new/type-of-answer")
     allow(view).to receive(:edit_page_path).and_return("/forms/1/pages/2/edit")
@@ -47,14 +42,6 @@ describe "pages/index.html.erb" do
     it "does contain a summary list entry each page" do
       expect(rendered).to have_text I18n.t("forms.form_overview.your_questions")
       expect(rendered).to have_css ".govuk-summary-list__row", count: 3
-    end
-  end
-
-  describe "when the user can add page routing condition" do
-    let(:add_routing) { true }
-
-    it "does not contain a link to add page routing" do
-      expect(rendered).not_to have_link("Add a question route", href: routing_page_path(form.id))
     end
   end
 end
