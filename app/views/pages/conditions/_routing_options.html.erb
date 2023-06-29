@@ -14,7 +14,7 @@
   <% if form.qualifying_route_pages.length <= 10 %>
     <%= f.govuk_collection_radio_buttons :routing_page_id,
                                          form.qualifying_route_pages,
-                                         :id, :question_text,
+                                         :id, :question_with_number,
                                          legend: { text: t("routing_page.legend_text"), size: 'm' },
                                          hint:{ text: t("routing_page.legend_hint_text") }
     %>
