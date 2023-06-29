@@ -36,8 +36,10 @@ describe "pages/conditions/routing_page.html.erb" do
       expect(rendered).to have_css("div.govuk-hint", text: t("routing_page.legend_hint_text"))
     end
 
-    it "has a radio option for each routing pages" do
-      expect(rendered).to have_css(".govuk-radios__item", count: pages.length)
+    it "includes a radio button for each page, with the page number and question text" do
+      pages.each do |page|
+        expect(rendered).to have_css(".govuk-radios__item", text: page.question_with_number)
+      end
     end
   end
 
@@ -49,8 +51,10 @@ describe "pages/conditions/routing_page.html.erb" do
       expect(rendered).to have_css("div.govuk-hint", text: t("routing_page.legend_hint_text"))
     end
 
-    it "has a radio option for each routing pages" do
-      expect(rendered).to have_css(".govuk-radios__item", count: pages.length)
+    it "includes a radio button for each page, with the page number and question text" do
+      pages.each do |page|
+        expect(rendered).to have_css(".govuk-radios__item", text: page.question_with_number)
+      end
     end
   end
 
@@ -62,12 +66,14 @@ describe "pages/conditions/routing_page.html.erb" do
       expect(rendered).to have_css("div.govuk-hint", text: t("routing_page.legend_hint_text"))
     end
 
-    it "has a select option for each routing page and the default value" do
-      expect(rendered).to have_css("select > option", count: pages.length + 1)
+    it "has a select the default value" do
+      expect(rendered).to have_css("select > option", text: I18n.t("routing_page.dropdown_default_text"))
     end
 
-    it "includes the page number and question text" do
-      expect(rendered).to have_text(pages.first.question_with_number)
+    it "includes a select option for each page, with the page number and question text" do
+      pages.each do |page|
+        expect(rendered).to have_text(page.question_with_number)
+      end
     end
   end
 
