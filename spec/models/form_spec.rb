@@ -148,7 +148,7 @@ describe Form do
       expect(form.has_no_remaining_routes_available?).to eq true
     end
 
-    context "when there is at least on selection page with no route" do
+    context "when there is at least one selection page with no route" do
       let(:form) { build :form, pages: selection_pages_with_routes + selection_pages_without_routes }
 
       it "returns false" do

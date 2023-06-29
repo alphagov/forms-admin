@@ -487,7 +487,7 @@ en:
     no_remaining_routes_heading: You have no more questions to start a route from
     routing_requirements_not_met_heading: What you need to create a route
     routing_requirements_not_met_html: |
-      <p>Before you can add a route you'll need:</p>
+      <p>Before you can add a route you’ll need:</p>
       <ul class="govuk-list govuk-list--bullet">
         <li>2 or more questions</li>
         <li>at least one question where people must select a single item from a list of options</li>
