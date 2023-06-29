@@ -63,6 +63,8 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
                                        read: { response: form, status: 200 },
                                        update: { response: updated_form, status: 200 },
                                      })
+
+    login_as_editor_user
   end
 
   describe "#new" do

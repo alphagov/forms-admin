@@ -24,6 +24,10 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
   let(:expected_to_raise_error) { false }
 
+  before do
+    login_as_editor_user
+  end
+
   describe "#routing_page" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|

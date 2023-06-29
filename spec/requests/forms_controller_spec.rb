@@ -17,6 +17,10 @@ RSpec.describe FormsController, type: :request do
 
   let(:form) { build(:form, id: 2) }
 
+  before do
+    login_as_editor_user
+  end
+
   describe "Showing an existing form" do
     describe "Given a live form" do
       let(:form) { build(:form, :live, id: 2) }

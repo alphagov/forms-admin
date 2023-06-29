@@ -16,15 +16,15 @@ module AuthenticationFeatureHelpers
   end
 
   def super_admin_user
-    @super_admin_user ||= FactoryBot.build(:user, :super_admin)
+    @super_admin_user ||= FactoryBot.create(:user, role: :super_admin)
   end
 
   def editor_user
-    @editor_user ||= FactoryBot.build(:user)
+    @editor_user ||= FactoryBot.create(:user, role: :editor)
   end
 
   def trial_user
-    @trial_user ||= FactoryBot.build(:user, :trial)
+    @trial_user ||= FactoryBot.create(:user, role: :trial)
   end
 
   def login_as_super_admin_user
@@ -43,10 +43,11 @@ end
 RSpec.configure do |config|
   config.include AuthenticationFeatureHelpers, type: :feature
   config.include AuthenticationFeatureHelpers, type: :request
-  config.before(:example, type: :feature) do
-    login_as_editor_user
+
+  config.after(:example, type: :feature) do
+    logout
   end
-  config.before(:example, type: :request) do
-    login_as_editor_user
+  config.after(:example, type: :request) do
+    logout
   end
 end
