@@ -5,6 +5,7 @@ describe "pages/conditions/routing_page.html.erb" do
   let(:pages) { build_list :page, 3, :with_selections_settings, form_id: 1 }
   let(:routing_page_form) { Pages::RoutingPageForm.new }
   let(:allowed_to_create_routes) { true }
+  let(:all_routes_created) { false }
 
   before do
     without_partial_double_verification do
@@ -15,6 +16,7 @@ describe "pages/conditions/routing_page.html.erb" do
     allow(view).to receive(:routing_page_path).and_return("/forms/1/new-condition")
     allow(view).to receive(:set_routing_page_path).and_return("/forms/1/new-condition")
     allow(form).to receive(:qualifying_route_pages).and_return(pages)
+    allow(form).to receive(:has_no_remaining_routes_available?).and_return(all_routes_created)
 
     render template: "pages/conditions/routing_page", locals: { form:, routing_page_form: }
   end
@@ -79,6 +81,15 @@ describe "pages/conditions/routing_page.html.erb" do
     it "explains to the user what is required for them to be able to add a new routes" do
       guidance = Capybara.string(I18n.t("routing_page.routing_requirements_not_met_html")).text(normalize_ws: true)
       expect(Capybara.string(rendered).text(normalize_ws: true)).to have_text(guidance)
+    end
+
+    context "when all qualifying questions have a route" do
+      let(:all_routes_created) { true }
+
+      it "explains to the user that they have created all available routes" do
+        guidance = Capybara.string(I18n.t("routing_page.no_remaining_routes")).text(normalize_ws: true)
+        expect(Capybara.string(rendered).text(normalize_ws: true)).to have_text(guidance)
+      end
     end
   end
 end

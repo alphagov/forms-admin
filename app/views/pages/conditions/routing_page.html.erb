@@ -15,9 +15,13 @@
         <%= t("routing_page.body_text") %>
       </p>
 
-      <h2 class="govuk-heading-m"><%= t("routing_page.routing_requirements_not_met_heading") %></h2>
-
-      <%= t('routing_page.routing_requirements_not_met_html') %>
+      <% if form.has_no_remaining_routes_available? %>
+        <h2 class="govuk-heading-m"><%= t("routing_page.no_remaining_routes_heading") %></h2>
+        <p><%= t("routing_page.no_remaining_routes") %></p>
+      <% else %>
+        <h2 class="govuk-heading-m"><%= t("routing_page.routing_requirements_not_met_heading") %></h2>
+        <%= t('routing_page.routing_requirements_not_met_html') %>
+      <% end %>
     <% end %>
     <p>
       <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(form.id) %>

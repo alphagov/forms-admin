@@ -130,6 +130,33 @@ describe Form do
     end
   end
 
+  describe "#has_no_remaining_routes_available?" do
+    let(:selection_pages_with_routes) do
+      (1..3).map do |index|
+        build :page, :with_selections_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, check_page_id: index, goto_page_id: index + 2)]
+      end
+    end
+    let(:selection_pages_without_routes) do
+      (4..5).map do |index|
+        build :page, :with_selections_settings, id: index, position: index, routing_conditions: []
+      end
+    end
+
+    let(:form) { build :form, pages: selection_pages_with_routes }
+
+    it "returns true if no available routes" do
+      expect(form.has_no_remaining_routes_available?).to eq true
+    end
+
+    context "when there is at least on selection page with no route" do
+      let(:form) { build :form, pages: selection_pages_with_routes + selection_pages_without_routes }
+
+      it "returns false" do
+        expect(form.has_no_remaining_routes_available?).to eq false
+      end
+    end
+  end
+
   describe "#update_org_for_creator" do
     let(:headers) do
       {
