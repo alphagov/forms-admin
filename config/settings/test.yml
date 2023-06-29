@@ -12,5 +12,5 @@ forms_runner:
   # Base URL to point users to the app in the UI
   url: runner-host
 
-# Use mock authentication
-auth_provider: mock_gds_sso
+# No default strategy as Warden test mode is used
+auth_provider: ""

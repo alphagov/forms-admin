@@ -2,6 +2,18 @@ require "rails_helper"
 
 RSpec.describe AuthenticationController, type: :request do
   before do
+    Warden::Strategies.add(:mock_not_logged_in) do
+      def valid?
+        false
+      end
+
+      def authenticate!
+        raise NotImplementedError
+      end
+    end
+
+    allow(Settings).to receive(:auth_provider).and_return("mock_not_logged_in")
+
     OmniAuth.config.test_mode = true
   end
 
@@ -31,7 +43,7 @@ RSpec.describe AuthenticationController, type: :request do
     it "redirects to OmniAuth request phase" do
       get root_path
 
-      expect(response).to redirect_to("/auth/mock_gds_sso")
+      expect(response).to redirect_to("/auth/#{Settings.auth_provider}")
     end
 
     it "uses the configured OmniAuth provider" do
