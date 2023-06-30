@@ -59,4 +59,8 @@ private
 
     URI::HTTPS.build(host: Settings.auth0.domain, path: "/v2/logout", query: request_params.to_query).to_s
   end
+
+  def mock_gds_sso_sign_out_url
+    "https://signon.integration.publishing.service.gov.uk/users/sign_out"
+  end
 end

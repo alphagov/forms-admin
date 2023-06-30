@@ -74,6 +74,10 @@ module ApplicationHelper
         user_profile_link: GDS::SSO::Config.oauth_root_url,
         signout_link: gds_sign_out_path,
       },
+      mock_gds_sso: {
+        user_profile_link: nil,
+        signout_link: sign_out_path,
+      },
     }
     auth_links.default = {}
     links = auth_links[user&.provider&.to_sym]
