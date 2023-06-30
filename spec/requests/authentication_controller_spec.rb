@@ -92,21 +92,52 @@ RSpec.describe AuthenticationController, type: :request do
   end
 
   describe "#sign_out" do
-    let(:warden_spy) do
-      warden_spy = instance_spy(Warden::Proxy)
-      allow(warden_spy).to receive(:user).and_return(instance_spy(User))
-      allow(controller_spy).to receive(:warden).and_return(warden_spy)
-      warden_spy
+    let(:user) do
+      create :user, provider: :test_provider
     end
 
-    it "calls Warden to clear the session" do
-      expect(warden_spy).to receive(:logout)
+    before do
+      login_as user
 
-      get sign_out_path(:auth0)
+      get new_form_path # populate the user session
+    end
+
+    it "clears the user session" do
+      without_partial_double_verification do
+        allow(controller_spy)
+          .to receive(:test_provider_sign_out_url)
+          .and_return("http://test.org/sign_out")
+
+        expect(session).to include("warden.user.default.key")
+
+        get sign_out_path
+
+        expect(session).not_to include("warden.user.default.key")
+      end
+    end
+
+    it "redirects the user to sign out of their auth provider" do
+      without_partial_double_verification do
+        allow(controller_spy)
+          .to receive(:test_provider_sign_out_url)
+          .and_return("http://test.org/sign_out")
+
+        get sign_out_path
+
+        expect(response).to redirect_to("http://test.org/sign_out")
+      end
     end
 
     it "raises error if sign out URL not defined for provider" do
-      expect { get sign_out_path(:not_a_provider) }.to raise_error NoMethodError
+      expect { get sign_out_path }.to raise_error NoMethodError
+    end
+
+    it "redirects users who are not signed in to the home page" do
+      reset!
+
+      get sign_out_path
+
+      expect(response).to redirect_to("/")
     end
   end
 end

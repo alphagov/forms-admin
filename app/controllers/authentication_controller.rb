@@ -24,8 +24,15 @@ class AuthenticationController < ApplicationController
   end
 
   def sign_out
-    warden.logout
-    redirect_to send(:"#{params[:provider]}_sign_out_url"), allow_other_host: true
+    # get current_user before user is logged out of warden
+    auth_provider = current_user&.provider
+
+    if user_signed_in
+      warden.logout
+      redirect_to send(:"#{auth_provider}_sign_out_url"), allow_other_host: true
+    else
+      redirect_to root_path
+    end
   end
 
 private
@@ -51,5 +58,9 @@ private
     }
 
     URI::HTTPS.build(host: Settings.auth0.domain, path: "/v2/logout", query: request_params.to_query).to_s
+  end
+
+  def mock_gds_sso_sign_out_url
+    "https://signon.integration.publishing.service.gov.uk/users/sign_out"
   end
 end

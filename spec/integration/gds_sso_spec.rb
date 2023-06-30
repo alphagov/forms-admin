@@ -55,6 +55,14 @@ RSpec.describe "usage of gds-sso gem" do
     end
   end
 
+  describe "signing out" do
+    it "signs the user out of GOV.UK Signon" do
+      get gds_sign_out_path
+
+      expect(response).to redirect_to("http://signon.dev.gov.uk/users/sign_out")
+    end
+  end
+
   describe User do
     describe ".find_for_gds_oauth" do
       it "is called by the gds_sso Warden strategy" do

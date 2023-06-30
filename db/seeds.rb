@@ -19,7 +19,8 @@ if HostingEnvironment.local_development? && User.none?
                  organisation: gds,
                  name: "A User",
                  role: :super_admin,
-                 uid: "123456" })
+                 uid: "123456",
+                 provider: :mock_gds_sso })
 
   # create extra organisations
   test_org = FactoryBot.create :organisation, slug: "test-org"
