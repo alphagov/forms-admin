@@ -6,9 +6,9 @@ describe "users/edit.html.erb" do
   end
 
   before do
-    build :organisation, slug: "test-org"
-    build :organisation, slug: "ministry-of-testing"
-    build :organisation, slug: "department-for-tests"
+    create :organisation, slug: "test-org"
+    create :organisation, slug: "ministry-of-testing"
+    create :organisation, slug: "department-for-tests"
 
     assign(:user, user)
     render template: "users/edit"

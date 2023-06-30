@@ -15,6 +15,10 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
     }
   end
 
+  before do
+    login_as_editor_user
+  end
+
   describe "#new" do
     let(:form) do
       build :form, :with_support, id: 2

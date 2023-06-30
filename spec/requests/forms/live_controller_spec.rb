@@ -12,6 +12,10 @@ RSpec.describe Forms::LiveController, type: :request do
     build(:form, :live, id: 2)
   end
 
+  before do
+    login_as_editor_user
+  end
+
   describe "#show_form" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|

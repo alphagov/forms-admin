@@ -18,6 +18,10 @@ RSpec.describe PagesController, type: :request do
     (build :form, id: 2)
   end
 
+  before do
+    login_as_editor_user
+  end
+
   describe "#index" do
     let(:pages) do
       [build(:page, id: 99),

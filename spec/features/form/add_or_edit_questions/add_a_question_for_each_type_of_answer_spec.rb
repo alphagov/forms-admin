@@ -21,6 +21,8 @@ feature "Add/editing a single question", type: :feature do
       mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
       mock.post "/api/v1/forms/1/pages", post_headers
     end
+
+    login_as_editor_user
   end
 
   context "when a form has no existing pages" do

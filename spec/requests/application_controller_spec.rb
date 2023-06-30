@@ -8,7 +8,6 @@ RSpec.describe ApplicationController, type: :request do
     }
   end
 
-  let(:user) { build :user, :super_admin, has_access: false }
   let(:form) { build :form, id: 1 }
 
   before do
@@ -17,6 +16,8 @@ RSpec.describe ApplicationController, type: :request do
       mock.get "/api/v1/forms/1", headers, form.to_json, 200
       mock.get "/api/v1/forms/1/pages", headers, form.pages.to_json, 200
     end
+
+    login_as_editor_user
   end
 
   context "when the service is in maintenance mode" do
@@ -67,6 +68,8 @@ RSpec.describe ApplicationController, type: :request do
   end
 
   context "when a user is logged in who does not have access" do
+    let(:user) { build :user, :super_admin, has_access: false }
+
     before do
       login_as user
     end

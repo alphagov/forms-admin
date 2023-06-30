@@ -17,6 +17,10 @@ feature "Create or edit a form", type: :feature do
     }
   end
 
+  before do
+    login_as_editor_user
+  end
+
   context "when creating a form" do
     let(:pages) { [] }
 

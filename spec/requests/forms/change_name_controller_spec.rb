@@ -24,17 +24,21 @@ RSpec.describe Forms::ChangeNameController, type: :request do
     }
   end
 
+  let(:user) { build :user, id: 1 }
+
   before do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms/2", req_headers, form_response_data, 200
       mock.post "/api/v1/forms", post_headers, { id: 2 }.to_json, 200
       mock.put "/api/v1/forms/2", post_headers
     end
+
     allow(Pundit).to receive(:authorize).and_return(true)
+
+    login_as user
   end
 
   describe "#create" do
-    let(:user) { build :user, id: 1 }
     let(:form_data) do
       {
         name: "Form name",
@@ -44,8 +48,6 @@ RSpec.describe Forms::ChangeNameController, type: :request do
     end
 
     before do
-      login_as user
-
       ActiveResource::HttpMock.reset!
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/", req_headers, form_response_data, 200
