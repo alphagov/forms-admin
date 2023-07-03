@@ -20,7 +20,7 @@ class UsersController < ApplicationController
     authorize current_user, :can_manage_user?
 
     if user.update(user_params)
-      user.update_org
+      user.update_user_forms
       redirect_to users_path
     else
       render :edit, status: :unprocessable_entity

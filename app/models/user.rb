@@ -55,7 +55,7 @@ class User < ApplicationRecord
     trial? || organisation.present?
   end
 
-  def update_org
+  def update_user_forms
     if role_previously_changed?(from: :trial)
       Form.update_org_for_creator(id, organisation.slug)
     end
