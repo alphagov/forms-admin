@@ -1,7 +1,20 @@
 require "rails_helper"
 
 describe Form do
-  let(:form) { described_class.new(id: 1, name: "Form 1", org: "Test org", submission_email: "") }
+  let(:organisation) { build :organisation, id: 1 }
+  let(:form) { described_class.new(id: 1, name: "Form 1", organisation:, submission_email: "") }
+
+  describe "validations" do
+    it "does not require an org" do
+      form.org = nil
+      expect(form).to be_valid
+    end
+
+    it "does not require an organisation_id" do
+      form.organisation_id = nil
+      expect(form).to be_valid
+    end
+  end
 
   describe "#status" do
     context "when form has not been made live" do
@@ -122,7 +135,7 @@ describe Form do
         build :page, :with_selections_settings, id: index, position: index, routing_conditions: []
       end
     end
-    let(:form) { build :form, name: "Form 1", org: "Test org", submission_email: "", pages: non_select_from_list_pages + selection_pages_with_routes + selection_pages_without_routes }
+    let(:form) { build :form, name: "Form 1", organisation:, submission_email: "", pages: non_select_from_list_pages + selection_pages_with_routes + selection_pages_without_routes }
 
     it "returns a list of pages that can be used as routing pages" do
       selection_pages_with_routes_excluding_last_page = selection_pages_without_routes.take(selection_pages_without_routes.length - 1)
