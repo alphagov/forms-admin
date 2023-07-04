@@ -10,6 +10,7 @@ module Forms
       form = Form.new({
         name: params[:name],
         org: current_user.organisation&.slug,
+        organisation_id: current_user.organisation_id,
         creator_id: current_user.id,
       })
 

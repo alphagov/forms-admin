@@ -2,13 +2,13 @@ require "rails_helper"
 
 describe "users/edit.html.erb" do
   let(:user) do
-    build :user, role: :editor, id: 1
+    build :user, role: :editor, id: 1, organisation_id: 1
   end
 
   before do
-    create :organisation, slug: "test-org"
-    create :organisation, slug: "ministry-of-testing"
-    create :organisation, slug: "department-for-tests"
+    create :organisation, id: 1, slug: "test-org"
+    create :organisation, id: 2, slug: "ministry-of-testing"
+    create :organisation, id: 3, slug: "department-for-tests"
 
     assign(:user, user)
     render template: "users/edit"

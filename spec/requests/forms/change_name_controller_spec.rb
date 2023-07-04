@@ -6,6 +6,7 @@ RSpec.describe Forms::ChangeNameController, type: :request do
       id: 2,
       name: "Form name",
       org: "test-org",
+      organisation_id: 1,
       creator_id: 123,
     }.to_json
   end
@@ -24,7 +25,8 @@ RSpec.describe Forms::ChangeNameController, type: :request do
     }
   end
 
-  let(:user) { build :user, role: :editor, id: 1 }
+  let(:organisation) { build :organisation, id: 1, slug: "test-org" }
+  let(:user) { build :user, role: :editor, id: 1, organisation: }
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
@@ -43,6 +45,7 @@ RSpec.describe Forms::ChangeNameController, type: :request do
       {
         name: "Form name",
         org: "test-org",
+        organisation_id: 1,
         creator_id: user.id,
       }
     end
@@ -73,6 +76,7 @@ RSpec.describe Forms::ChangeNameController, type: :request do
         {
           name: "Form name",
           org: nil,
+          organisation_id: nil,
           creator_id: user.id,
           submission_email: user.email,
         }
@@ -98,8 +102,8 @@ RSpec.describe Forms::ChangeNameController, type: :request do
 
   describe "#update" do
     it "renames form" do
-      post change_form_name_path(form_id: 2), params: { forms_change_name_form: { name: "new_form_name", org: "test-org", creator_id: 123 } }
-      expected_request = ActiveResource::Request.new(:put, "/api/v1/forms/2", { "id": 2, "name": "new_form_name", org: "test-org", creator_id: 123 }.to_json, post_headers)
+      post change_form_name_path(form_id: 2), params: { forms_change_name_form: { name: "new_form_name", org: "test-org", organisation_id: 1, creator_id: 123 } }
+      expected_request = ActiveResource::Request.new(:put, "/api/v1/forms/2", { "id": 2, "name": "new_form_name", org: "test-org", organisation_id: 1, creator_id: 123 }.to_json, post_headers)
       expect(ActiveResource::HttpMock.requests).to include expected_request
       expect(ActiveResource::HttpMock.requests[1].body).to eq expected_request.body
       expect(response).to redirect_to(form_path(form_id: 2))
