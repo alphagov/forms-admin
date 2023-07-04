@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Forms::MakeLiveController, type: :request do
-  let(:user) { build :user }
+  let(:user) { build :user, role: :editor }
 
   let(:form) do
     build(:form,
@@ -86,7 +86,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
     end
 
     context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial }
+      let(:user) { build :user, :with_trial_role }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
@@ -158,7 +158,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
     end
 
     context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial }
+      let(:user) { build :user, :with_trial_role }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)

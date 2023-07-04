@@ -95,7 +95,7 @@ RSpec.describe FormsController, type: :request do
           mock.get "/api/v1/forms/2/pages", headers, form.pages.to_json, 200
         end
 
-        login_as build(:user, :with_no_org)
+        login_as build(:user, :with_no_org, role: :editor)
 
         get form_path(2)
       end
@@ -114,7 +114,7 @@ RSpec.describe FormsController, type: :request do
     end
 
     context "with a user with a trial account" do
-      let(:user) { build(:user, role: :trial) }
+      let(:user) { build(:user, :with_trial_role, id: 123) }
       let(:form) { build(:form, :ready_for_live, id: 2, creator_id: user.id) }
 
       before do
@@ -245,7 +245,7 @@ RSpec.describe FormsController, type: :request do
           mock.get "/api/v1/forms?org=", headers, forms_response.to_json, 200
         end
 
-        login_as build(:user, :with_no_org)
+        login_as build(:user, :with_no_org, role: :editor)
 
         get root_path
       end
@@ -333,7 +333,7 @@ RSpec.describe FormsController, type: :request do
 
     context "with a user with no organisation" do
       let(:user) do
-        build :user, :with_no_org
+        build :user, :with_no_org, role: :editor
       end
 
       it "returns 403 Forbidden" do

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "forms/index.html.erb" do
-  let(:user) { build :user }
+  let(:user) { build :user, role: :editor }
   let(:forms) { [] }
 
   before do
@@ -67,7 +67,7 @@ describe "forms/index.html.erb" do
     end
 
     context "with a user has no organisation" do
-      let(:user) { build :user, :with_no_org }
+      let(:user) { build :user, :with_no_org, role: :editor }
 
       it "has a table caption without an organisation name" do
         expect(rendered).to have_css(".govuk-table__caption", text: "Your forms")
@@ -75,7 +75,7 @@ describe "forms/index.html.erb" do
     end
 
     context "with a user with a trial role" do
-      let(:user) { build :user, :with_no_org, :with_trial }
+      let(:user) { build :user, :with_trial_role }
 
       it "has a table caption without an organisation name" do
         expect(rendered).to have_css(".govuk-table__caption", text: "Your forms")
@@ -100,7 +100,7 @@ describe "forms/index.html.erb" do
     end
 
     context "and a user has the trial role" do
-      let(:user) { build :user, :with_trial }
+      let(:user) { build :user, :with_trial_role }
 
       it "displays a banner informing the user they have a trial account" do
         banner = Capybara.string(rendered).find(".govuk-notification-banner__content")
@@ -112,7 +112,7 @@ describe "forms/index.html.erb" do
     end
 
     context "and a user does not have the trial role" do
-      let(:user) { build :user }
+      let(:user) { build :user, role: :editor }
 
       it "does not display a banner" do
         expect(rendered).not_to have_selector(".govuk-notification-banner__content")

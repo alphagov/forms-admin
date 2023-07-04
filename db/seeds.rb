@@ -31,7 +31,7 @@ if HostingEnvironment.local_development? && User.none?
   FactoryBot.create_list :user, 3, role: :editor
 
   # create extra super admins
-  FactoryBot.create_list :user, 3, :with_super_admin
+  FactoryBot.create_list :user, 3, role: :super_admin
 
   # while we're using Signon it is possible to have users who aren't linked to
   # the same organisation as in Signon, or who have an organisation that isn't
@@ -43,5 +43,5 @@ if HostingEnvironment.local_development? && User.none?
   FactoryBot.create :user, :with_no_org
 
   # create a trial user
-  FactoryBot.create :user, :with_no_org, :with_trial
+  FactoryBot.create :user, :with_trial_role
 end

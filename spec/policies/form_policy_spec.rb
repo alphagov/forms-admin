@@ -4,11 +4,11 @@ describe FormPolicy do
   subject(:policy) { described_class.new(user, form) }
 
   let(:form) { build :form, org: "gds", creator_id: 123 }
-  let(:user) { build :user, organisation_slug: "gds" }
+  let(:user) { build :user, role: :editor, organisation_slug: "gds" }
 
   context "with no organisation set" do
     context "with editor role" do
-      let(:user) { build :user, :with_no_org }
+      let(:user) { build :user, :with_no_org, role: :editor }
 
       it "raises an error" do
         expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
@@ -16,7 +16,7 @@ describe FormPolicy do
     end
 
     context "with trial role" do
-      let(:user) { build :user, :with_no_org, :with_trial }
+      let(:user) { build :user, :with_trial_role }
 
       it "does not raise an error" do
         expect { policy }.not_to raise_error
@@ -29,13 +29,13 @@ describe FormPolicy do
       it { is_expected.to permit_actions(%i[can_view_form]) }
 
       context "but from another organisation" do
-        let(:user) { build :user, organisation_slug: "non-gds" }
+        let(:user) { build :user, role: :editor, organisation_slug: "non-gds" }
 
         it { is_expected.to forbid_actions(%i[can_view_form]) }
       end
 
       context "with an organisation not in the organisation table" do
-        let(:user) { build :user, :with_unknown_org, organisation_slug: "gds" }
+        let(:user) { build :user, :with_unknown_org, role: :editor, organisation_slug: "gds" }
 
         it "raises an error" do
           expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
@@ -47,7 +47,7 @@ describe FormPolicy do
       let(:form) { build :form, org: nil, creator_id: 123 }
 
       context "when the user created the form" do
-        let(:user) { build :user, :with_no_org, :with_trial, id: 123 }
+        let(:user) { build :user, :with_trial_role, id: 123 }
 
         it { is_expected.to permit_actions(%i[can_view_form]) }
       end
@@ -74,7 +74,7 @@ describe FormPolicy do
         it { is_expected.to permit_actions(permission) }
 
         context "but from another organisation" do
-          let(:user) { build :user, organisation_slug: "non-gds" }
+          let(:user) { build :user, role: :editor, organisation_slug: "non-gds" }
 
           it { is_expected.to forbid_actions(permission) }
         end
@@ -84,7 +84,7 @@ describe FormPolicy do
         let(:form) { build :form, org: nil, creator_id: 123 }
 
         context "when the user created the form" do
-          let(:user) { build :user, :with_no_org, :with_trial, id: 123 }
+          let(:user) { build :user, :with_trial_role, id: 123 }
 
           it { is_expected.to forbid_actions(permission) }
         end
@@ -172,7 +172,7 @@ describe FormPolicy do
     end
 
     context "with a trial user role" do
-      let(:user) { build :user, :with_no_org, :with_trial, id: 123 }
+      let(:user) { build :user, :with_trial_role, id: 123 }
       let(:form) { build(:form, creator_id: 123, org: nil) }
 
       before do
@@ -187,7 +187,7 @@ describe FormPolicy do
     end
 
     context "with a non-trial user role" do
-      let(:user) { build :user, organisation_slug: "test-org", id: 123 }
+      let(:user) { build :user, role: :editor, organisation_slug: "test-org", id: 123 }
       let(:form) { build(:form, org: "test-org", creator_id: 1234) }
 
       before do
@@ -203,7 +203,7 @@ describe FormPolicy do
 
     context "with no organisation set" do
       context "with editor role" do
-        let(:user) { build :user, :with_no_org }
+        let(:user) { build :user, :with_no_org, role: :editor }
 
         it "raises an error" do
           expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
@@ -211,7 +211,7 @@ describe FormPolicy do
       end
 
       context "with trial role" do
-        let(:user) { build :user, :with_no_org, :with_trial }
+        let(:user) { build :user, :with_trial_role }
 
         it "does not an error" do
           expect { policy }.not_to raise_error
@@ -234,7 +234,7 @@ describe FormPolicy do
     end
 
     context "with a user with no organisation" do
-      let(:user) { build :user, :with_no_org }
+      let(:user) { build :user, :with_no_org, role: :editor }
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|

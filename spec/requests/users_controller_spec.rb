@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe UsersController, type: :request do
+  before do
+    ActiveResource::HttpMock.reset!
+  end
+
   describe "#index" do
     context "when logged in as a super admin" do
       before do
@@ -71,7 +75,7 @@ RSpec.describe UsersController, type: :request do
   end
 
   describe "#update" do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, role: :editor) }
     let(:role) { :super_admin }
 
     context "when logged in as a super admin" do
@@ -112,7 +116,7 @@ RSpec.describe UsersController, type: :request do
       end
 
       context "with a trial user with no organisation set" do
-        let(:user) { create(:user, :with_no_org, role: :trial) }
+        let(:user) { create(:user, :with_trial_role) }
 
         it "does not return error if organisation is not chosen and role is not changed" do
           put user_path(user), params: { user: { role: "trial", organisation_id: nil } }

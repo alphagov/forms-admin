@@ -10,11 +10,11 @@ describe "Set or change a user's role", type: :feature do
   end
 
   let(:super_admin_user) do
-    create(:user, :with_super_admin, id: 1, organisation_slug: "gds")
+    create(:user, role: :super_admin, id: 1, organisation_slug: "gds")
   end
 
   let(:trial_user) do
-    create(:user, :with_no_org, :with_trial, id: 2)
+    create(:user, :with_trial_role, id: 2)
   end
 
   let(:req_headers) do
