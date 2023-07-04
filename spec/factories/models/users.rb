@@ -12,8 +12,7 @@ FactoryBot.define do
       with_no_org
     end
 
-    organisation_slug { "test-org" }
-    organisation { association :organisation, slug: organisation_slug }
+    organisation { association :organisation }
 
     after(:build) do |user|
       if user.organisation.present?

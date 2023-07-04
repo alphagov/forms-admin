@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Forms::SubmissionEmailController, type: :request do
-  let(:user) { build :user, role: :editor, id: 1, organisation_slug: "test-org" }
+  let(:organisation) { build :organisation, slug: "test-org" }
+  let(:user) { build :user, role: :editor, id: 1, organisation: }
   let(:form) { build :form, id: 1, creator_id: 1, org: "test-org" }
 
   let(:submission_email_mailer_spy) do

@@ -3,8 +3,9 @@ require "rails_helper"
 describe FormPolicy do
   subject(:policy) { described_class.new(user, form) }
 
+  let(:organisation) { build :organisation, slug: "gds" }
   let(:form) { build :form, org: "gds", creator_id: 123 }
-  let(:user) { build :user, role: :editor, organisation_slug: "gds" }
+  let(:user) { build :user, role: :editor, organisation: }
 
   context "with no organisation set" do
     context "with editor role" do
@@ -29,7 +30,7 @@ describe FormPolicy do
       it { is_expected.to permit_actions(%i[can_view_form]) }
 
       context "but from another organisation" do
-        let(:user) { build :user, role: :editor, organisation_slug: "non-gds" }
+        let(:organisation) { build :organisation, slug: "non-gds" }
 
         it { is_expected.to forbid_actions(%i[can_view_form]) }
       end
@@ -70,7 +71,7 @@ describe FormPolicy do
         it { is_expected.to permit_actions(permission) }
 
         context "but from another organisation" do
-          let(:user) { build :user, role: :editor, organisation_slug: "non-gds" }
+          let(:organisation) { build :organisation, slug: "non-gds" }
 
           it { is_expected.to forbid_actions(permission) }
         end
@@ -183,7 +184,8 @@ describe FormPolicy do
     end
 
     context "with a non-trial user role" do
-      let(:user) { build :user, role: :editor, organisation_slug: "test-org", id: 123 }
+      let(:organisation) { build :organisation, slug: "test-org" }
+      let(:user) { build :user, role: :editor, organisation:, id: 123 }
       let(:form) { build(:form, org: "test-org", creator_id: 1234) }
 
       before do
