@@ -41,4 +41,7 @@ if HostingEnvironment.local_development? && User.none?
 
   # create a user who hasn't been assigned to an organisation yet
   FactoryBot.create :user, :with_no_org
+
+  # create a trial user
+  FactoryBot.create :user, :with_no_org, :with_trial
 end

@@ -165,6 +165,10 @@ describe Form do
       }
     end
 
+    before do
+      ActiveResource::HttpMock.reset!
+    end
+
     it "makes patch request to the API" do
       creator_id = 123
       org = "org"
@@ -178,6 +182,16 @@ describe Form do
 
       request = ActiveResource::Request.new(:patch, expected_path, {}, headers)
       expect(ActiveResource::HttpMock.requests).to include request
+    end
+
+    %w[creator_id org].each do |missing_param|
+      it "does not make request to the API with #{missing_param} missing" do
+        params = [missing_param == "creator_id" ? nil : 123, missing_param == "org" ? nil : "org"]
+
+        described_class.update_org_for_creator(*params)
+
+        expect(ActiveResource::HttpMock.requests).to match_array([])
+      end
     end
   end
 end

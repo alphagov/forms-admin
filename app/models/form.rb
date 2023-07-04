@@ -64,7 +64,9 @@ class Form < ActiveResource::Base
   end
 
   def self.update_org_for_creator(creator_id, org)
-    patch("update-org-for-creator", creator_id:, org:)
+    if creator_id.present? && org.present?
+      patch("update-org-for-creator", creator_id:, org:)
+    end
   end
 
   def form_submission_email
