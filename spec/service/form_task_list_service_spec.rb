@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe FormTaskListService do
-  let(:current_user) { build(:user) }
+  let(:current_user) { build(:user, role: :editor) }
 
   describe ".task_counts" do
     let(:form) { build(:form) }
@@ -269,7 +269,7 @@ describe FormTaskListService do
       end
 
       context "when current user has a trial account" do
-        let(:current_user) { build :user, :with_trial }
+        let(:current_user) { build :user, :with_trial_role }
 
         it "has no tasks" do
           expect(section).not_to include(:rows)

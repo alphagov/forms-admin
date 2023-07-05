@@ -7,12 +7,9 @@ FactoryBot.define do
     role { :editor }
     has_access { true }
 
-    trait :with_super_admin do
-      role { :super_admin }
-    end
-
-    trait :with_trial do
+    trait :with_trial_role do
       role { :trial }
+      with_no_org
     end
 
     organisation_slug { "test-org" }

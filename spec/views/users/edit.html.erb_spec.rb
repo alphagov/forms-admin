@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "users/edit.html.erb" do
   let(:user) do
-    build :user, id: 1
+    build :user, role: :editor, id: 1
   end
 
   before do
@@ -68,7 +68,7 @@ describe "users/edit.html.erb" do
   end
 
   context "with a user with an unknown organisation" do
-    let(:user) { build(:user, :with_unknown_org, id: 1) }
+    let(:user) { build(:user, :with_unknown_org, role: :editor, id: 1) }
 
     it "shows the organisation slug" do
       expect(rendered).to have_text("unknown-org")
@@ -84,7 +84,7 @@ describe "users/edit.html.erb" do
   end
 
   context "with a user with no organisation set" do
-    let(:user) { build(:user, :with_no_org, id: 1) }
+    let(:user) { build(:user, :with_no_org, role: :editor, id: 1) }
 
     it "shows no organisation set" do
       expect(rendered).to have_text("No organisation set")

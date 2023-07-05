@@ -4,6 +4,7 @@ describe "users/index.html.erb" do
   let(:users) do
     build_list(:user, 3) do |user, i|
       user.id = i
+      user.role = :editor
     end
   end
 

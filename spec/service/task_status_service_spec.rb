@@ -5,7 +5,7 @@ describe TaskStatusService do
     described_class.new(form:)
   end
 
-  let(:current_user) { build(:user) }
+  let(:current_user) { build(:user, role: :editor) }
 
   describe "statuses" do
     describe "name status" do
@@ -208,7 +208,7 @@ describe TaskStatusService do
     end
 
     context "when user has trial role" do
-      let(:current_user) { build :user, :with_trial }
+      let(:current_user) { build :user, :with_trial_role }
 
       it "excludes status for restricted tasks" do
         expect(task_status_service.status_counts(current_user)).to include(total: 6)

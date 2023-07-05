@@ -24,7 +24,7 @@ RSpec.describe Forms::ChangeNameController, type: :request do
     }
   end
 
-  let(:user) { build :user, id: 1 }
+  let(:user) { build :user, role: :editor, id: 1 }
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
@@ -68,7 +68,7 @@ RSpec.describe Forms::ChangeNameController, type: :request do
     end
 
     context "with a trial user" do
-      let(:user) { build(:user, :with_trial, :with_no_org, id: 1) }
+      let(:user) { build(:user, :with_trial_role, id: 1) }
       let(:form_data) do
         {
           name: "Form name",

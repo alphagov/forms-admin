@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Forms::SubmissionEmailController, type: :request do
-  let(:user) { build :user, id: 1, organisation_slug: "test-org" }
+  let(:user) { build :user, role: :editor, id: 1, organisation_slug: "test-org" }
   let(:form) { build :form, id: 1, creator_id: 1, org: "test-org" }
 
   let(:submission_email_mailer_spy) do
@@ -56,7 +56,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     end
 
     context "when current user has a trial account" do
-      let(:user) { build :user, id: 1, role: :trial }
+      let(:user) { build :user, :with_trial_role, id: 1 }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
@@ -92,7 +92,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     end
 
     context "when current user has a trial account" do
-      let(:user) { build :user, id: 1, role: :trial }
+      let(:user) { build :user, :with_trial_role, id: 1 }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
@@ -122,7 +122,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     end
 
     context "when current user has a trial account" do
-      let(:user) { build :user, id: 1, role: :trial }
+      let(:user) { build :user, :with_trial_role, id: 1 }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
@@ -152,7 +152,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     end
 
     context "when current user has a trial account" do
-      let(:user) { build :user, id: 1, role: :trial }
+      let(:user) { build :user, :with_trial_role, id: 1 }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
@@ -192,7 +192,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     end
 
     context "when current user has a trial account" do
-      let(:user) { build :user, id: 1, role: :trial }
+      let(:user) { build :user, :with_trial_role, id: 1 }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
@@ -222,7 +222,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     end
 
     context "when current user has a trial account" do
-      let(:user) { build :user, id: 1, role: :trial }
+      let(:user) { build :user, :with_trial_role, id: 1 }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
