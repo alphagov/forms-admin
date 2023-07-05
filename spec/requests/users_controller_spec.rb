@@ -1,10 +1,6 @@
 require "rails_helper"
 
 RSpec.describe UsersController, type: :request do
-  before do
-    ActiveResource::HttpMock.reset!
-  end
-
   describe "#index" do
     context "when logged in as a super admin" do
       before do

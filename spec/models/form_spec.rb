@@ -175,7 +175,7 @@ describe Form do
       expected_path = "/api/v1/forms/update-org-for-creator?creator_id=123&org=org"
 
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.patch expected_path, headers, {}.to_json, 204
+        mock.patch expected_path, headers, {}.to_json, 200
       end
 
       described_class.update_org_for_creator(creator_id, org)

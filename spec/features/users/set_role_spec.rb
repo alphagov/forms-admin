@@ -49,7 +49,7 @@ describe "Set or change a user's role", type: :feature do
   it "A trial user's forms move to their organisation on role upgrade" do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms?org=test-org", req_headers, (org_forms + trial_forms).to_json, 200
-      mock.patch "/api/v1/forms/update-org-for-creator?creator_id=2&org=test-org", post_headers, { success: true }.to_json, 204
+      mock.patch "/api/v1/forms/update-org-for-creator?creator_id=2&org=test-org", post_headers, { success: true }.to_json, 200
     end
 
     login_as super_admin_user
