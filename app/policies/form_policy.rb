@@ -31,7 +31,11 @@ class FormPolicy
   end
 
   def can_view_form?
-    users_organisation_owns_form || (user.trial? && user_is_form_creator)
+    if user.trial?
+      user_is_form_creator
+    else
+      users_organisation_owns_form
+    end
   end
 
   def can_change_form_submission_email?

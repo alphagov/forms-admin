@@ -44,23 +44,19 @@ describe FormPolicy do
     end
 
     context "with a trial role" do
-      let(:form) { build :form, org: nil, creator_id: 123 }
+      let(:user) { build :user, :with_trial_role, id: 123 }
 
       context "when the user created the form" do
-        let(:user) { build :user, :with_trial_role, id: 123 }
-
         it { is_expected.to permit_actions(%i[can_view_form]) }
       end
 
       context "when the user didn't create the form" do
-        context "with a different user" do
-          let(:user) { build :user, id: 321 }
+        let(:user) { build :user, :with_trial_role, id: 321 }
 
-          it { is_expected.to forbid_actions(%i[can_view_form]) }
-        end
+        it { is_expected.to forbid_actions(%i[can_view_form]) }
 
-        context "without a form creator" do
-          let(:form) { build :form, org: nil, creator_id: nil }
+        context "but the user belongs to the organisation that the form belongs to" do
+          let(:user) { build :user, role: :trial, organisation_slug: "gds", id: 321 }
 
           it { is_expected.to forbid_actions(%i[can_view_form]) }
         end
