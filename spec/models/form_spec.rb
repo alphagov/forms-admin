@@ -170,7 +170,7 @@ describe Form do
     end
   end
 
-  describe "#update_org_for_creator" do
+  describe "#update_organisation_for_creator" do
     let(:headers) do
       {
         "X-API-Token" => Settings.forms_api.auth_key,
@@ -184,24 +184,24 @@ describe Form do
 
     it "makes patch request to the API" do
       creator_id = 123
-      org = "org"
-      expected_path = "/api/v1/forms/update-org-for-creator?creator_id=123&org=org"
+      organisation_id = 1
+      expected_path = "/api/v1/forms/update-organisation-for-creator?creator_id=123&organisation_id=1"
 
       ActiveResource::HttpMock.respond_to do |mock|
         mock.patch expected_path, headers, {}.to_json, 200
       end
 
-      described_class.update_org_for_creator(creator_id, org)
+      described_class.update_organisation_for_creator(creator_id, organisation_id)
 
       request = ActiveResource::Request.new(:patch, expected_path, {}, headers)
       expect(ActiveResource::HttpMock.requests).to include request
     end
 
-    %w[creator_id org].each do |missing_param|
+    %w[creator_id organisation].each do |missing_param|
       it "does not make request to the API with #{missing_param} missing" do
-        params = [missing_param == "creator_id" ? nil : 123, missing_param == "org" ? nil : "org"]
+        params = [missing_param == "creator_id" ? nil : 123, missing_param == "organisation" ? nil : "organisation"]
 
-        described_class.update_org_for_creator(*params)
+        described_class.update_organisation_for_creator(*params)
 
         expect(ActiveResource::HttpMock.requests).to match_array([])
       end

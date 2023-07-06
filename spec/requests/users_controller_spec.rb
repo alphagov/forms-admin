@@ -167,7 +167,7 @@ RSpec.describe UsersController, type: :request do
       User.roles.reject { |role| role == "trial" }.each do |_role_name, role_value|
         it "updates user's forms' org when changing role from trial to #{role_value}" do
           user = create(:user, role: :trial)
-          expect(Form).to receive(:update_org_for_creator).with(user.id, user.organisation.slug)
+          expect(Form).to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)
 
           patch user_path(user), params: { user: { role: role_value } }
 
@@ -178,7 +178,7 @@ RSpec.describe UsersController, type: :request do
         it "does not update user's forms' org when changing role from #{role_value} to editor" do
           user = create :user, role: role_value
 
-          expect(Form).not_to receive(:update_org_for_creator).with(user.id, user.organisation.slug)
+          expect(Form).not_to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)
 
           patch user_path(user), params: { user: { role: "editor" } }
 
@@ -189,14 +189,14 @@ RSpec.describe UsersController, type: :request do
         it "does not update user's forms' org when role is unchanged" do
           user = create :user, role: :trial
 
-          expect(Form).to receive(:update_org_for_creator).with(user.id, user.organisation.slug)
+          expect(Form).to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)
 
           patch user_path(user), params: { user: { role: "editor" } }
 
           expect(response).to have_http_status(:found)
           expect(response).to redirect_to(users_path)
 
-          expect(Form).not_to receive(:update_org_for_creator).with(user.id, user.organisation.slug)
+          expect(Form).not_to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)
           patch user_path(user), params: { user: { role: "editor" } }
           expect(response).to have_http_status(:found)
           expect(response).to redirect_to(users_path)
