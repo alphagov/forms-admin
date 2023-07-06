@@ -155,22 +155,22 @@ describe FormPolicy do
       }
     end
 
-    let(:gds_forms) { build_list :form, 2, org: "gds" }
+    let(:gds_forms) { build_list :form, 2, organisation_id: 1 }
 
-    it "uses organisation slug to scope what forms a user can see" do
-      organisation_slug = instance_double(String)
+    it "uses organisation id to scope what forms a user can see" do
+      organisation_id = instance_double(Integer, "organisation_id")
       scope = class_spy(Form)
 
-      allow(user).to receive_message_chain(:organisation, :slug) { organisation_slug } # rubocop:disable RSpec/MessageChain
+      allow(user).to receive_message_chain(:organisation, :id) { organisation_id } # rubocop:disable RSpec/MessageChain
 
       described_class.new(user, scope).resolve
 
-      expect(scope).to have_received(:where).with(org: organisation_slug)
+      expect(scope).to have_received(:where).with(organisation_id:)
     end
 
     context "with a trial user role" do
       let(:user) { build :user, :with_trial_role, id: 123 }
-      let(:form) { build(:form, creator_id: 123, org: nil) }
+      let(:form) { build(:form, creator_id: 123, organisation_id: nil) }
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
@@ -184,13 +184,13 @@ describe FormPolicy do
     end
 
     context "with a non-trial user role" do
-      let(:organisation) { build :organisation, slug: "test-org" }
+      let(:organisation) { build :organisation, id: 1, slug: "test-org" }
+      let(:form) { build(:form, organisation_id: 1, creator_id: 1234) }
       let(:user) { build :user, role: :editor, organisation:, id: 123 }
-      let(:form) { build(:form, org: "test-org", creator_id: 1234) }
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms?org=test-org", headers, [form].to_json, 200
+          mock.get "/api/v1/forms?organisation_id=1", headers, [form].to_json, 200
         end
       end
 
@@ -220,13 +220,13 @@ describe FormPolicy do
     context "with a form editor" do
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms?org=gds", headers, gds_forms.to_json, 200
+          mock.get "/api/v1/forms?organisation_id=1", headers, gds_forms.to_json, 200
         end
         policy_scope.resolve
       end
 
       it "Reads the forms from the API" do
-        forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?org=gds", {}, headers)
+        forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?organisation_id=1", {}, headers)
         expect(ActiveResource::HttpMock.requests).to include forms_request
       end
     end
@@ -236,7 +236,7 @@ describe FormPolicy do
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms?org=", headers, gds_forms.to_json, 200
+          mock.get "/api/v1/forms?organisation_id=", headers, gds_forms.to_json, 200
         end
       end
 

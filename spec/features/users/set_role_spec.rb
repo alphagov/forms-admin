@@ -2,15 +2,15 @@ require "rails_helper"
 
 describe "Set or change a user's role", type: :feature do
   let!(:gds_org) do
-    create :organisation, slug: "government-digital-service"
+    create :organisation, id: 2, slug: "government-digital-service"
   end
 
   let(:org_forms) do
-    create :organisation, slug: "test-org"
-    [build(:form, id: 1, creator_id: 1, org: "test-org", name: "Org form")]
+    create :organisation, id: 1, slug: "test-org"
+    [build(:form, id: 1, creator_id: 1, organisation_id: 1, name: "Org form")]
   end
   let(:trial_forms) do
-    [build(:form, id: 2, creator_id: 2, org: nil, name: "Trial form")]
+    [build(:form, id: 2, creator_id: 2, organisation_id: nil, name: "Trial form")]
   end
 
   let(:super_admin_user) do
@@ -37,7 +37,7 @@ describe "Set or change a user's role", type: :feature do
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?org=test-org", req_headers, org_forms.to_json, 200
+      mock.get "/api/v1/forms?organisation_id=1", req_headers, org_forms.to_json, 200
       mock.get "/api/v1/forms?creator_id=2", req_headers, trial_forms.to_json, 200
     end
   end
@@ -50,7 +50,7 @@ describe "Set or change a user's role", type: :feature do
 
   it "A trial user's forms move to their organisation on role upgrade" do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?org=test-org", req_headers, (org_forms + trial_forms).to_json, 200
+      mock.get "/api/v1/forms?organisation_id=1", req_headers, (org_forms + trial_forms).to_json, 200
       mock.patch "/api/v1/forms/update-org-for-creator?creator_id=2&org=test-org", post_headers, { success: true }.to_json, 200
     end
 

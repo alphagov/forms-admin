@@ -5,7 +5,7 @@ RSpec.describe "using basic auth" do
   let(:password) { "password" }
 
   let!(:organisation) do
-    build :organisation, slug: "test-org"
+    create :organisation, id: 1, slug: "test-org", name: "Test Org"
   end
 
   let(:basic_auth_settings) do
@@ -27,7 +27,7 @@ RSpec.describe "using basic auth" do
     }
 
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?org=test-org", api_headers, [].to_json, 200
+      mock.get "/api/v1/forms?organisation_id=1", api_headers, [].to_json, 200
     end
 
     allow(Settings).to receive(:auth_provider).and_return("basic_auth")

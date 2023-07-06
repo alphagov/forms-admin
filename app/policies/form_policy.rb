@@ -18,7 +18,7 @@ class FormPolicy
         scope.where(creator_id: user.id)
       else
         scope
-          .where(org: user.organisation.slug)
+          .where(organisation_id: user.organisation.id)
       end
     end
   end
