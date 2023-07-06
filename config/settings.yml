@@ -47,4 +47,9 @@ basic_auth:
     slug: gds-user-research
     govuk_content_id: "00000000-0000-0000-0000-000000000000"
 
+# CDDO SSO at sso.service.security.gov.uk via OpenID Connect
+cddo_sso:
+  identifier: changeme
+  secret:
+
 forms_env: local

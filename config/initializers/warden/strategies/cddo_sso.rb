@@ -1,6 +1,6 @@
 require "warden/strategies/omniauth"
 
-Warden::Strategies.add(:auth0) do
+Warden::Strategies.add(:cddo_sso) do
   include Warden::Strategies::OmniAuth
 
 private
@@ -10,6 +10,7 @@ private
       provider: auth_hash[:provider],
       uid: auth_hash[:uid],
       email: auth_hash[:info][:email],
+      name: auth_hash[:info][:name],
     )
   end
 end
