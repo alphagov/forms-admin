@@ -24,9 +24,6 @@ gem "warden"
 # Used for handling authorisation policies
 gem "pundit"
 
-# Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
-
 # Use Sentry (https://sentry.io/for/ruby/?platform=sentry.ruby.rails#)
 gem "sentry-rails"
 gem "sentry-ruby"
