@@ -3,8 +3,8 @@ require "rails_helper"
 describe FormPolicy do
   subject(:policy) { described_class.new(user, form) }
 
-  let(:organisation) { build :organisation, slug: "gds" }
-  let(:form) { build :form, org: "gds", creator_id: 123 }
+  let(:organisation) { build :organisation, id: 1, slug: "gds" }
+  let(:form) { build :form, organisation_id: 1, creator_id: 123 }
   let(:user) { build :user, role: :editor, organisation: }
 
   context "with no organisation set" do
@@ -30,7 +30,7 @@ describe FormPolicy do
       it { is_expected.to permit_actions(%i[can_view_form]) }
 
       context "but from another organisation" do
-        let(:organisation) { build :organisation, slug: "non-gds" }
+        let(:organisation) { build :organisation, id: 2, slug: "non-gds" }
 
         it { is_expected.to forbid_actions(%i[can_view_form]) }
       end
@@ -71,14 +71,14 @@ describe FormPolicy do
         it { is_expected.to permit_actions(permission) }
 
         context "but from another organisation" do
-          let(:organisation) { build :organisation, slug: "non-gds" }
+          let(:organisation) { build :organisation, id: 2, slug: "non-gds" }
 
           it { is_expected.to forbid_actions(permission) }
         end
       end
 
       context "with a trial role" do
-        let(:form) { build :form, org: nil, creator_id: 123 }
+        let(:form) { build :form, organisation_id: nil, creator_id: 123 }
 
         context "when the user created the form" do
           let(:user) { build :user, :with_trial_role, id: 123 }
@@ -94,7 +94,7 @@ describe FormPolicy do
           end
 
           context "without a form creator" do
-            let(:form) { build :form, org: nil, creator_id: nil }
+            let(:form) { build :form, organisation_id: nil, creator_id: nil }
 
             it { is_expected.to forbid_actions(permission) }
           end
@@ -104,7 +104,7 @@ describe FormPolicy do
   end
 
   describe "#can_add_page_routing_conditions?" do
-    let(:form) { build :form, pages:, org: "gds" }
+    let(:form) { build :form, pages:, organisation_id: 1 }
     let(:pages) { [] }
 
     context "and the form has one page" do

@@ -50,7 +50,7 @@ RSpec.describe PagesController, type: :request do
 
     context "with a form from another organisation" do
       let(:form) do
-        build :form, org: "another-org", id: 2
+        build :form, organisation_id: 2, id: 2
       end
 
       before do

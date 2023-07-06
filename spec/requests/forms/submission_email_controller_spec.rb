@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Forms::SubmissionEmailController, type: :request do
-  let(:organisation) { build :organisation, slug: "test-org" }
+  let(:organisation) { build :organisation, id: 1, slug: "test-org" }
   let(:user) { build :user, role: :editor, id: 1, organisation: }
-  let(:form) { build :form, id: 1, creator_id: 1, org: "test-org" }
+  let(:form) { build :form, id: 1, creator_id: 1, organisation_id: 1 }
 
   let(:submission_email_mailer_spy) do
     submission_email_mailer = instance_spy(SubmissionEmailMailer)
@@ -49,7 +49,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     end
 
     context "when current user does not own form" do
-      let(:form) { build :form, id: 1, creator_id: 2, org: "other-org" }
+      let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
@@ -85,7 +85,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     end
 
     context "when current user does not own form" do
-      let(:form) { build :form, id: 1, creator_id: 2, org: "other-org" }
+      let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
@@ -115,7 +115,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     end
 
     context "when current user does not own form" do
-      let(:form) { build :form, id: 1, creator_id: 2, org: "other-org" }
+      let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
@@ -145,7 +145,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     end
 
     context "when current user does not own form" do
-      let(:form) { build :form, id: 1, creator_id: 2, org: "other-org" }
+      let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
@@ -185,7 +185,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     end
 
     context "when current user does not own form" do
-      let(:form) { build :form, id: 1, creator_id: 2, org: "other-org" }
+      let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
@@ -215,7 +215,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     end
 
     context "when current user does not own form" do
-      let(:form) { build :form, id: 1, creator_id: 2, org: "other-org" }
+      let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)

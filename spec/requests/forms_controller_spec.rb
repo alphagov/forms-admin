@@ -68,7 +68,8 @@ RSpec.describe FormsController, type: :request do
 
     context "with a form from another organisation" do
       let(:form) do
-        build :form, org: "another-org", id: 2
+        create :organisation, id: 111, slug: "another-org"
+        build :form, organisation_id: 111, id: 2
       end
 
       before do
@@ -215,7 +216,7 @@ RSpec.describe FormsController, type: :request do
         live_at: nil,
         has_draft_version: true,
         has_live_version: false,
-        org: "test-org",
+        organisation_id: 1,
       },
        {
          id: 3,
@@ -225,7 +226,7 @@ RSpec.describe FormsController, type: :request do
          live_at: nil,
          has_draft_version: true,
          has_live_version: false,
-         org: "test-org",
+         organisation_id: 1,
        }]
     end
 
