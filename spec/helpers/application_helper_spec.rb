@@ -203,7 +203,7 @@ RSpec.describe ApplicationHelper, type: :helper do
         it "returns the following options" do
           expect(helper.header_component_options(user:, can_manage_users:)).to eq({ is_signed_in: true,
                                                                                     list_of_users_path: nil,
-                                                                                    signout_link: "/sign_out",
+                                                                                    signout_link: "/sign-out",
                                                                                     user_name: nil,
                                                                                     user_profile_link: nil })
         end

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   root "forms#index"
 
-  get "/sign_out" => "authentication#sign_out", as: :sign_out
+  get "/sign-out" => "authentication#sign_out", as: :sign_out
 
   scope "auth/:provider" do
     get "/callback" => "authentication#callback_from_omniauth"

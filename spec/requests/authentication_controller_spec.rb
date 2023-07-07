@@ -106,7 +106,7 @@ RSpec.describe AuthenticationController, type: :request do
       without_partial_double_verification do
         allow(controller_spy)
           .to receive(:test_provider_sign_out_url)
-          .and_return("http://test.org/sign_out")
+          .and_return("http://test.org/sign-out")
 
         expect(session).to include("warden.user.default.key")
 
@@ -120,11 +120,11 @@ RSpec.describe AuthenticationController, type: :request do
       without_partial_double_verification do
         allow(controller_spy)
           .to receive(:test_provider_sign_out_url)
-          .and_return("http://test.org/sign_out")
+          .and_return("http://test.org/sign-out")
 
         get sign_out_path
 
-        expect(response).to redirect_to("http://test.org/sign_out")
+        expect(response).to redirect_to("http://test.org/sign-out")
       end
     end
 
