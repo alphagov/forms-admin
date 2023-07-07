@@ -8,14 +8,8 @@ class AuthenticationController < ApplicationController
   end
 
   def redirect_to_omniauth
-    provider = if Settings.auth_provider == "gds_sso"
-                 "gds"
-               else
-                 Settings.auth_provider
-               end
-
     store_location(attempted_path) if request.get?
-    redirect_to "/auth/#{provider}"
+    redirect_to "/auth/#{default_provider}"
   end
 
   def callback_from_omniauth
@@ -49,6 +43,14 @@ private
 
   def stored_location
     session["user_return_to"]
+  end
+
+  def default_provider
+    if Settings.auth_provider == "gds_sso"
+      "gds"
+    else
+      Settings.auth_provider
+    end
   end
 
   def auth0_sign_out_url
