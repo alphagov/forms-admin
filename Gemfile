@@ -97,7 +97,6 @@ group :test do
   # Code coverage reporter
   gem "simplecov", "~> 0.22.0", require: false
 
-  gem "climate_control"
   gem "webdrivers"
   gem "webmock"
 end
