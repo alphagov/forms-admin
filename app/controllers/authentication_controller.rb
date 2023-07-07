@@ -17,6 +17,15 @@ class AuthenticationController < ApplicationController
     redirect_to stored_location || "/"
   end
 
+  def sign_up
+    if default_provider == "auth0"
+      store_location root_path
+      redirect_to "/auth/auth0?screen_hint=signup"
+    else
+      redirect_to_omniauth
+    end
+  end
+
   def sign_out
     # get current_user before user is logged out of warden
     auth_provider = current_user&.provider

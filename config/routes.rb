@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   root "forms#index"
 
+  get "/sign-up" => "authentication#sign_up", as: :sign_up
   get "/sign-out" => "authentication#sign_out", as: :sign_out
 
   scope "auth/:provider" do
