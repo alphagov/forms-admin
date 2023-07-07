@@ -1,5 +1,6 @@
 # Used to add feature flags in the app to control access to certain features.
-features: {}
+features:
+  detailed_guidance_enabled: false
 
 forms_api:
   # Authentication key to authenticate forms-runner to forms-api
