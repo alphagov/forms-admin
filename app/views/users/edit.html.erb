@@ -45,7 +45,7 @@
         end
       end %>
 
-      <%= f.govuk_collection_select :organisation_id, Organisation.order(:slug), :id, :name,
+      <%= f.govuk_collection_select :organisation_id, Organisation.order(:name), :id, :name,
         class: ['govuk-!-width-three-quarters'],
         options: { prompt: t('users.edit.organisation_prompt') },
         label: { text: t('users.edit.organisation'), size: 'm', tag: 'h2' },
