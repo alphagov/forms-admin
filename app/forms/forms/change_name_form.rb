@@ -1,7 +1,4 @@
-class Forms::ChangeNameForm
-  include ActiveModel::Model
-  include ActiveModel::Validations
-
+class Forms::ChangeNameForm < BaseForm
   attr_accessor :form, :name
 
   validates :name, presence: true

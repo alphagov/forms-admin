@@ -1,7 +1,4 @@
-class Forms::MakeLiveForm
-  include ActiveModel::Model
-  include ActiveModel::Validations
-
+class Forms::MakeLiveForm < BaseForm
   attr_accessor :form, :confirm_make_live
 
   CONFIRM_LIVE_VALUES = { made_live: "made_live", not_made_live: "not_made_live" }.freeze

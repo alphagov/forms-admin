@@ -1,7 +1,4 @@
-class Pages::ConditionsForm
-  include ActiveModel::Model
-  include ActiveModel::Validations
-
+class Pages::ConditionsForm < BaseForm
   attr_accessor :form, :page, :check_page_id, :routing_page_id, :answer_value, :goto_page_id, :record, :skip_to_end
 
   validates :answer_value, :goto_page_id, presence: true

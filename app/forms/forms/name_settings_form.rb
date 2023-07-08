@@ -1,7 +1,4 @@
-class Forms::NameSettingsForm
-  include ActiveModel::Model
-  include ActiveModel::Validations
-
+class Forms::NameSettingsForm < BaseForm
   attr_accessor :input_type, :title_needed, :form, :page
 
   INPUT_TYPES = %w[full_name first_and_last_name first_middle_and_last_name].freeze

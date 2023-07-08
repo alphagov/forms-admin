@@ -1,7 +1,4 @@
-class Forms::SelectionOption
-  include ActiveModel::Model
-  include ActiveModel::Validations
-
+class Forms::SelectionOption < BaseForm
   attr_accessor :name
 
   def init(name)

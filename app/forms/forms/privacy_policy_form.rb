@@ -1,9 +1,6 @@
 require "uri"
 
-class Forms::PrivacyPolicyForm
-  include ActiveModel::Model
-  include ActiveModel::Validations
-
+class Forms::PrivacyPolicyForm < BaseForm
   attr_accessor :form, :privacy_policy_url
 
   validates :privacy_policy_url, url: true, if: -> { privacy_policy_url.present? }

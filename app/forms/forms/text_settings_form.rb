@@ -1,7 +1,4 @@
-class Forms::TextSettingsForm
-  include ActiveModel::Model
-  include ActiveModel::Validations
-
+class Forms::TextSettingsForm < BaseForm
   attr_accessor :input_type, :form, :page
 
   INPUT_TYPES = %w[single_line long_text].freeze

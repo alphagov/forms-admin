@@ -1,7 +1,4 @@
-class Forms::QuestionTextForm
-  include ActiveModel::Model
-  include ActiveModel::Validations
-
+class Forms::QuestionTextForm < BaseForm
   attr_accessor :question_text
 
   validates :question_text, presence: true

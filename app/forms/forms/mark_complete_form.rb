@@ -1,7 +1,4 @@
-class Forms::MarkCompleteForm
-  include ActiveModel::Model
-  include ActiveModel::Validations
-
+class Forms::MarkCompleteForm < BaseForm
   attr_accessor :mark_complete, :form
 
   validates :mark_complete, presence: true

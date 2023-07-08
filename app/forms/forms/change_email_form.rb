@@ -1,7 +1,4 @@
-class Forms::ChangeEmailForm
-  include ActiveModel::Model
-  include ActiveModel::Validations
-
+class Forms::ChangeEmailForm < BaseForm
   attr_accessor :form, :submission_email
 
   EMAIL_REGEX = /.*@.*/
