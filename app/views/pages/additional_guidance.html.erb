@@ -1,0 +1,44 @@
+<% set_page_title(title_with_error_prefix(t("page_titles.new_page_form"), @addition_guidance_form&.errors&.any?)) %>
+<% content_for :back_link, govuk_back_link_to(form_pages_path(form)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= t("pages.question") %> <%= form.page_number(page) %></span>
+      <span class="govuk-visually-hidden"> - </span>
+      Add additional guidance
+    </h1>
+
+    <p>
+      Do not use hint text if you need to give a lengthy explanation with lists and paragraphs. Screen readers read out the entire text when users interact with the form element. This could frustrate users if the text is long.
+    </p>
+    <p>
+      Do not use links in hint text. While screen readers will read out the link text when describing the field, they will not tell users the text is a link
+    </p>
+
+    <h2 class="govuk-heading-m">Formatting help</h2>
+
+    <p>To put a subheading in your template, use 2 hashes:</p>
+
+    <%= govuk_inset_text(text: "## This is a subheading") %>
+
+    <p>To make bullet points, use asterisks:</p>
+
+    <%= govuk_inset_text do %>
+      <ul class="govuk-list">
+        <li>* point 1</li>
+        <li>* point 2</li>
+        <li>* point 3</li>
+      </ul>
+    <% end %>
+
+    <h2 class="govuk-heading-m">Links and URLs</h2>
+    <p>If the recipient is not expecting to receive an email from you, write the URL in full, starting with https:// </p>
+
+    <%= govuk_inset_text(text: "Apply now at https://www.gov.uk/example") %>
+
+    <p>To convert text into a link, use square brackets [] around the link text and round brackets () around the full URL. Make sure there are no spaces between the brackets or the link will not work. For example:</p>
+
+    <%= govuk_inset_text(text: "[Apply now](https://www.gov.uk/example)") %>
+  </div>
+</div>
