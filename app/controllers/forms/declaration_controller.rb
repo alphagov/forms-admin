@@ -11,7 +11,13 @@ module Forms
       @declaration_form = DeclarationForm.new(**declaration_form_params)
 
       if @declaration_form.submit
-        redirect_to form_path(@declaration_form.form)
+        success_message = if @declaration_form.mark_complete == "true"
+                            t("banner.success.form.declaration_saved_and_completed")
+                          else
+                            t("banner.success.form.declaration_saved")
+                          end
+
+        redirect_to form_path(@declaration_form.form), success: success_message
       else
         render :new
       end
