@@ -38,7 +38,7 @@ module Forms
       @change_name_form = ChangeNameForm.new(change_name_form_params(current_form))
 
       if @change_name_form.submit
-        redirect_to form_path(@change_name_form.form)
+        redirect_to form_path(@change_name_form.form), success: t("banner.success.form.change_name")
       else
         render :edit
       end
