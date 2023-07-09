@@ -11,7 +11,7 @@ module Forms
       @what_happens_next_form = WhatHappensNextForm.new(**what_happens_next_form_params)
 
       if @what_happens_next_form.submit
-        redirect_to form_path(@what_happens_next_form.form)
+        redirect_to form_path(@what_happens_next_form.form), success: t("banner.success.form.what_happens_next_saved")
       else
         render :new
       end
