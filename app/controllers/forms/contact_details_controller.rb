@@ -11,7 +11,7 @@ module Forms
       @contact_details_form = ContactDetailsForm.new(**contact_details_form_params)
 
       if @contact_details_form.submit
-        redirect_to form_path(@contact_details_form.form)
+        redirect_to form_path(@contact_details_form.form), success: t("banner.success.form.support_details_saved")
       else
         render :new
       end
