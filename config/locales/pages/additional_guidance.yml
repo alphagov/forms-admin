@@ -1,0 +1,15 @@
+en:
+  helpers:
+    label:
+      pages_additional_guidance_form:
+        page_heading: Give your page a heading
+        additional_guidance_markdown: Additional guidance text
+  activemodel:
+    errors:
+      models:
+        pages/additional_guidance_form:
+          attributes:
+            page_heading:
+              blank: Enter a page heading
+            additional_guidance_markdown:
+              blank: Enter additional guidance text
