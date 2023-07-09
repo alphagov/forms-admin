@@ -99,7 +99,7 @@ private
 
   def handle_submit_action
     # if user chose to save and reload current page
-    return redirect_to edit_page_path(@form, @page) if params[:save_preview]
+    return redirect_to edit_page_path(@form, @page), success: "Your changes have been saved" if params[:save_preview]
 
     return redirect_to delete_page_path(@form, @page) if params[:delete]
 
