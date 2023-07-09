@@ -68,8 +68,7 @@ module Forms
 
       authorize form, :can_view_form?
       if form.destroy
-        flash[:message] = "Successfully deleted #{form.name}"
-        redirect_to success_url, status: :see_other
+        redirect_to success_url, status: :see_other, success: "Successfully deleted ‘#{form.name}’"
       else
         raise StandardError, "Deletion unsuccessful"
       end
@@ -80,8 +79,7 @@ module Forms
 
       authorize form, :can_view_form?
       if page.destroy
-        flash[:message] = "Successfully deleted #{page.question_text}"
-        redirect_to success_url, status: :see_other
+        redirect_to success_url, status: :see_other, success: "Successfully deleted ‘#{page.question_text}’"
       else
         raise StandardError, "Deletion unsuccessful"
       end
