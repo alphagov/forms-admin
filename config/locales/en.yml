@@ -28,6 +28,7 @@ en:
         change_name: Your form name has been saved
         declaration_saved: Your declaration has been saved
         declaration_saved_and_completed: Your declaration has been saved and marked as complete
+        page_moved: "‘%{question_text}’ has moved %{direction} to number %{position}"
         privacy_details_saved: Your privacy information link has been saved
         support_details_saved: Your contact details for support have been saved
         what_happens_next_saved: Your information about what happens next has been saved
