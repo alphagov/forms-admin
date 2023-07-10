@@ -24,14 +24,9 @@ gem "warden"
 # Used for handling authorisation policies
 gem "pundit"
 
-# Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
-
 # Use Sentry (https://sentry.io/for/ruby/?platform=sentry.ruby.rails#)
 gem "sentry-rails"
 gem "sentry-ruby"
-
-gem "dotenv-rails", groups: %i[development test]
 
 gem "config"
 
@@ -51,13 +46,10 @@ gem "tzinfo-data"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
-# Use Sass to process CSS
-# gem "sassc-rails"
+# For compiling our frontend assets
+gem "vite_rails"
 
-# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
-
-# Use govuk-components for displaying govuk themed forms
+# For GOV.UK branding
 gem "govuk-components", "~> 4.0.0"
 gem "govuk_design_system_formbuilder", "~> 4.0.0"
 
@@ -77,11 +69,9 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "faker"
 
-  gem "rspec-rails", ">= 3.9.0"
-  # gem "rubocop", "~> 1.26"
-  # gem "rubocop-rails", "~> 2.14"
   gem "i18n-tasks", "~> 1.0.11"
   gem "rails-controller-testing"
+  gem "rspec-rails", ">= 3.9.0"
   gem "rubocop-govuk", require: false
   gem "timecop"
 end
@@ -107,13 +97,12 @@ group :test do
   # Code coverage reporter
   gem "simplecov", "~> 0.22.0", require: false
 
-  gem "climate_control"
   gem "webdrivers"
   gem "webmock"
 end
 
+# For security auditing gem vulnerabilities. RUN IN CI
 gem "bundler-audit", "~> 0.9.0"
 
+# For detecting security vulnerabilities in Ruby on Rails applications via static analysis.
 gem "brakeman", "~> 6.0.0"
-
-gem "vite_rails"
