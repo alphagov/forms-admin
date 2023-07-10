@@ -91,6 +91,66 @@ RSpec.describe AuthenticationController, type: :request do
     end
   end
 
+  describe "#sign_up" do
+    it "redirects to auth0 sign up page when using auth0" do
+      allow(Settings).to receive(:auth_provider).and_return("auth0")
+
+      get sign_up_path
+
+      expect(response).to redirect_to "/auth/auth0?screen_hint=signup"
+    end
+
+    it "redirects user to homepage after they have signed up" do
+      allow(Settings).to receive(:auth_provider).and_return("auth0")
+
+      get sign_up_path
+
+      expect(response).to redirect_to "/auth/auth0?screen_hint=signup"
+      get "/auth/auth0?screen_hint=signup"
+
+      expect(response).to redirect_to("/auth/auth0/callback?screen_hint=signup")
+      get "/auth/auth0/callback?screen_hint=signup"
+
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "signs the user in after they have signed up" do
+      allow(Settings).to receive(:auth_provider).and_return("auth0")
+
+      get sign_up_path
+
+      expect(response).to redirect_to "/auth/auth0?screen_hint=signup"
+      get "/auth/auth0?screen_hint=signup"
+
+      expect(response).to redirect_to("/auth/auth0/callback?screen_hint=signup")
+      get "/auth/auth0/callback?screen_hint=signup"
+
+      expect(request.env["warden"]).to be_authenticated
+    end
+
+    it "redirects to sign in page when not using auth0" do
+      allow(Settings).to receive(:auth_provider).and_return("mock_not_logged_in")
+
+      get sign_up_path
+
+      expect(response).to redirect_to "/auth/mock_not_logged_in"
+    end
+
+    it "redirects user to homepage after they have signed in" do
+      allow(Settings).to receive(:auth_provider).and_return("cddo_sso")
+
+      get sign_up_path
+
+      expect(response).to redirect_to "/auth/cddo_sso"
+      get "/auth/cddo_sso"
+
+      expect(response).to redirect_to("/auth/cddo_sso/callback")
+      get "/auth/cddo_sso/callback"
+
+      expect(response).to redirect_to(root_path)
+    end
+  end
+
   describe "#sign_out" do
     let(:user) do
       create :user, provider: :test_provider
