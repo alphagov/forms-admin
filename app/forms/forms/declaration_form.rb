@@ -1,7 +1,4 @@
-class Forms::DeclarationForm
-  include ActiveModel::Model
-  include ActiveModel::Validations
-
+class Forms::DeclarationForm < BaseForm
   attr_accessor :form, :declaration_text, :mark_complete
 
   validates :declaration_text, length: { maximum: 2000 }

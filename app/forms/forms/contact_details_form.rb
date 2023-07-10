@@ -1,7 +1,4 @@
-class Forms::ContactDetailsForm
-  include ActiveModel::Model
-  include ActiveModel::Validations
-
+class Forms::ContactDetailsForm < BaseForm
   attr_accessor :form, :email, :phone, :link_text, :link_href, :contact_details_supplied
 
   EMAIL_REGEX = /.*@.*/

@@ -1,7 +1,4 @@
-class Forms::SubmissionEmailForm
-  include ActiveModel::Model
-  include ActiveModel::Validations
-
+class Forms::SubmissionEmailForm < BaseForm
   attr_accessor :form, :temporary_submission_email, :email_code, :confirmation_code, :current_user, :notify_response_id
 
   EMAIL_REGEX = /.*@.*/

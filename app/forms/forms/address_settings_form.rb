@@ -1,7 +1,4 @@
-class Forms::AddressSettingsForm
-  include ActiveModel::Model
-  include ActiveModel::Validations
-
+class Forms::AddressSettingsForm < BaseForm
   attr_accessor :uk_address, :international_address, :form, :page
 
   INPUT_TYPES = %w[uk_address international_address].freeze

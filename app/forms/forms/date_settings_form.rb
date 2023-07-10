@@ -1,7 +1,4 @@
-class Forms::DateSettingsForm
-  include ActiveModel::Model
-  include ActiveModel::Validations
-
+class Forms::DateSettingsForm < BaseForm
   attr_accessor :input_type, :form, :page
 
   INPUT_TYPES = %w[date_of_birth other_date].freeze

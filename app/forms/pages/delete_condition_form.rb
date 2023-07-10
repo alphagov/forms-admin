@@ -1,7 +1,4 @@
-class Pages::DeleteConditionForm
-  include ActiveModel::Model
-  include ActiveModel::Validations
-
+class Pages::DeleteConditionForm < BaseForm
   attr_accessor :form, :page, :check_page_id, :routing_page_id, :answer_value, :goto_page_id, :record, :confirm_deletion
 
   validates :confirm_deletion, presence: true, inclusion: { in: %w[true false] }

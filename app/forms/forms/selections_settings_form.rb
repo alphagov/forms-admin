@@ -1,6 +1,4 @@
-class Forms::SelectionsSettingsForm
-  include ActiveModel::Model
-  include ActiveModel::Validations
+class Forms::SelectionsSettingsForm < BaseForm
   include ActiveModel::Validations::Callbacks
 
   DEFAULT_OPTIONS = { selection_options: [{ name: "" }, { name: "" }].map { |hash| Forms::SelectionOption.new(hash) }, only_one_option: false, include_none_of_the_above: false }.freeze

@@ -1,7 +1,4 @@
-class Forms::WhatHappensNextForm
-  include ActiveModel::Model
-  include ActiveModel::Validations
-
+class Forms::WhatHappensNextForm < BaseForm
   attr_accessor :form, :what_happens_next_text
 
   validates :what_happens_next_text, length: { maximum: 2000 }
