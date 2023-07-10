@@ -1,12 +1,18 @@
 require "rails_helper"
 
 feature "Set or change a user's organisation", type: :feature do
-  let(:gds_forms) do
-    [build(:form, id: 1, org: "government-digital-service", name: "Test GDS Form")]
+  let!(:test_org) do
+    create(:organisation, id: 1, slug: "test-org")
+  end
+  let!(:gds_org) do
+    create(:organisation, id: 2, slug: "government-digital-service")
   end
 
   let(:test_org_forms) do
-    [build(:form, id: 2, org: "test-org", name: "Test Org Form")]
+    [build(:form, id: 1, org: "test-org", name: "Test Org Form")]
+  end
+  let(:gds_forms) do
+    [build(:form, id: 2, org: "government-digital-service", name: "Test GDS Form")]
   end
 
   let(:req_headers) do
@@ -17,12 +23,12 @@ feature "Set or change a user's organisation", type: :feature do
   end
 
   before do
-    Rails.application.load_seed
-
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?org=government-digital-service", req_headers, gds_forms.to_json, 200
       mock.get "/api/v1/forms?org=test-org", req_headers, test_org_forms.to_json, 200
+      mock.get "/api/v1/forms?org=government-digital-service", req_headers, gds_forms.to_json, 200
     end
+
+    create_list :user, 6, organisation: test_org
 
     login_as_super_admin_user
   end
@@ -71,8 +77,7 @@ private
   end
 
   def given_i_am_a_super_admin_in_the_government_digital_service_organisation
-    gds = Organisation.find_by(slug: "government-digital-service")
-    @user = User.find_by!(role: "super_admin", organisation: gds)
+    @user = create(:user, role: "super_admin", organisation: gds_org)
     login_as @user
 
     visit edit_user_path(@user.id)

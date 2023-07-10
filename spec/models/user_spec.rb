@@ -41,7 +41,7 @@ describe User do
     end
 
     it "is not valid to unset organisation if it is already set" do
-      user = create :user, organisation_slug: "test-org"
+      user = create(:user, organisation: create(:organisation, slug: "test-org"))
       user.organisation_id = nil
       expect(user.valid?).to be false
     end

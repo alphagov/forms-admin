@@ -3,6 +3,7 @@ class Form < ActiveResource::Base
   self.include_format_in_path = false
   headers["X-API-Token"] = Settings.forms_api.auth_key
 
+  belongs_to :organisation
   has_many :pages
 
   attr_accessor :missing_sections
