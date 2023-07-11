@@ -78,10 +78,10 @@ en:
       </p>
     delete_condition_legend: Are you sure you want to delete this question route?
   email_code_sent:
-    body_html: |
-      <p>We've sent a confirmation code and your email address to %{temp_email}.</p>
-      <p>The recipient will be asked to give you the code. You need to enter the code to confirm the email address.</p>
+    body_html: "<p>We've sent a confirmation code and your email address to %{temp_email}.</p>\n"
     continue: Continue creating a form
+    sub_heading: What you need to do next
+    what_happens_next_body_html: "<p>The recipient will be asked to give you the code. You need to enter the code to confirm the email address.</p>\n"
   email_code_success:
     body_html: "<p>Completed forms will be sent to %{submission_email}.</p>\n"
     continue: Continue creating a form
