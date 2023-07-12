@@ -48,8 +48,17 @@ class PagesController < ApplicationController
   end
 
   def move_page
-    Page.find(move_params[:page_id], params: { form_id: move_params[:form_id] }).move_page(move_params[:direction])
-    redirect_to form_pages_path
+    page_to_move = Page.find(move_params[:page_id], params: { form_id: move_params[:form_id] })
+
+    page_to_move.move_page(move_params[:direction])
+
+    position = if move_params[:direction] == :up
+                 page_to_move.position - 1
+               else
+                 page_to_move.position + 1
+               end
+
+    redirect_to form_pages_path, success: t("banner.success.form.page_moved", question_text: page_to_move.question_text, direction: move_params[:direction], position:)
   end
 
 private
@@ -90,7 +99,7 @@ private
 
   def handle_submit_action
     # if user chose to save and reload current page
-    return redirect_to edit_page_path(@form, @page) if params[:save_preview]
+    return redirect_to edit_page_path(@form, @page), success: "Your changes have been saved" if params[:save_preview]
 
     return redirect_to delete_page_path(@form, @page) if params[:delete]
 

@@ -24,6 +24,16 @@ en:
     forms: Back to your forms
   banner:
     success:
+      form:
+        change_name: Your form name has been saved
+        declaration_saved: Your declaration has been saved
+        declaration_saved_and_completed: Your declaration has been saved and marked as complete
+        page_moved: "‘%{question_text}’ has moved %{direction} to number %{position}"
+        pages_saved: Your questions have been saved
+        pages_saved_and_section_completed: Your questions have been saved and marked as complete
+        privacy_details_saved: Your privacy information link has been saved
+        support_details_saved: Your contact details for support have been saved
+        what_happens_next_saved: Your information about what happens next has been saved
       route_created: Question %{question_position}’s route has been created
       route_deleted: Question %{question_position}’s route has been deleted
       route_updated: Question %{question_position}’s route has been updated

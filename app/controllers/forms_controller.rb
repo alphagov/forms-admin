@@ -20,7 +20,12 @@ class FormsController < ApplicationController
     @mark_complete_form = Forms::MarkCompleteForm.new(mark_complete_form_params)
 
     if @mark_complete_form.mark_section
-      redirect_to form_path(@form)
+      success_message = if @mark_complete_form.mark_complete == "true"
+                          t("banner.success.form.pages_saved_and_section_completed")
+                        else
+                          t("banner.success.form.pages_saved")
+                        end
+      redirect_to form_path(@form), success: success_message
     else
       @mark_complete_form.mark_complete = "false"
       render "pages/index", status: :unprocessable_entity
