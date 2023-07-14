@@ -26,10 +26,10 @@ git clone git@github.com:alphagov/forms-admin.git
 cd forms-admin
 
 # 2. Run the setup script
-make setup
+bin/setup
 ```
 
-`make setup` runs `bin/setup` which is idempotent, so you can also run it whenever you pull new changes.
+The setup script is idempotent, so you can also run it whenever you pull new changes.
 
 ### Secrets vs Settings
 
@@ -89,13 +89,7 @@ Rspec tests can also be tagged with `feature_{name}: true`. This will turn that 
 
 ### Running the app
 
-You can run this using the make command:
-
-```bash
-make serve
-```
-
-Without make, you can either run the development task:
+You can either run the development task:
 
 ```bash
 # Run the foreman dev server. This will also start the frontend dev task
@@ -114,25 +108,30 @@ npm run dev
 
 ### Running the tests
 
-The tests run with Rspec and can be run via make:
-
-```bash
-make test
-```
-
-To run specific tests, you can also call rspec directly with
+The tests are written with [rspec-rails] and can be run with:
 
 ```bash
 bundle exec rspec
 ```
 
+[rspec-rails]: https://github.com/rspec/rspec-rails
+
 ### Linting
 
-To run linting with fixes you can use
+We use [RuboCop GOV.UK] for linting code, to autocorrect issues run:
 
 ```bash
-make lint-fix
+bundle exec rubocop -A
 ```
+
+On GitHub pull requests we also check our dependencies for security issues using [bundler-audit], you can run this locally with:
+
+```bash
+bundle audit
+```
+
+[RuboCop GOV.UK]: https://github.com/alphagov/rubocop-govuk
+[bundle-audit]: https://github.com/rubysec/bundler-audit
 
 ### Running tasks before pushing
 
