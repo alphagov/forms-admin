@@ -57,4 +57,7 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+
+  # Allow previews so we can run feature tests against components
+  config.view_component.show_previews = true
 end
