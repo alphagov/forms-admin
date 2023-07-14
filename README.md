@@ -108,13 +108,20 @@ npm run dev
 
 ### Running the tests
 
-The tests are written with [rspec-rails] and can be run with:
+The app tests are written with [rspec-rails] and can be run with:
 
 ```bash
 bundle exec rspec
 ```
 
+There are also unit tests for JavaScript code (look for files named `*.test.js`), written with [Jest]. These can be run with:
+
+```bash
+npm run test
+```
+
 [rspec-rails]: https://github.com/rspec/rspec-rails
+[Jest]: https://jest.io
 
 ### Linting
 
@@ -149,15 +156,6 @@ bin/rake run_code_quality_checks
 The forms-admin app is containerised (see our [Dockerfile](./Dockerfile)) and can be deployed however you would normally deploy a containerised app.
 
 We host our apps using Amazon Web Services, you can [read about how deployments happen on our team wiki](https://github.com/alphagov/forms-team/wiki/Deploying-code-changes-AWS).
-
-## Explain how to test the project
-
-```bash
-# Run the Ruby test suite
-bin/rake
-# To run the Javascript test suite, run
-npm run test
-```
 
 ## Explain how to add a user to the database
 
