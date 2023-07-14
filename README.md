@@ -135,11 +135,14 @@ bundle audit
 
 ### Running tasks before pushing
 
-Before pushing code changes, it's a good idea to run the tests, use rubocop to format your code, and normalize the locales. We have a rake task for running all of these commands in parallel:
+Before pushing code changes, it's a good idea to run the tests, use RuboCop to format your code, and [normalize the locales]. We have a [rake] task for running all of these commands in parallel:
 
 ```bash
 bin/rake run_code_quality_checks
 ```
+
+[normalize the locales]: https://github.com/glebm/i18n-tasks#normalize-data
+[rake]: https://ruby.github.io/rake/
 
 ## Configuration and deployment
 
