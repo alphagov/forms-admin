@@ -7,16 +7,17 @@ module Forms
     end
 
     def create
-      form = Form.new({
-        name: params[:name],
-        org: current_user.organisation&.slug,
-        organisation_id: current_user.organisation_id,
-        creator_id: current_user.id,
-      })
+      form_args = { name: params[:name], creator_id: @current_user.id }
 
+      # don't set organisation data for forms created by trial users
       if @current_user.trial?
-        form.submission_email = @current_user.email
+        form_args[:submission_email] = @current_user.email
+      else
+        form_args[:org] = @current_user.organisation&.slug
+        form_args[:organisation_id] = @current_user.organisation_id
       end
+
+      form = Form.new(form_args)
 
       authorize form, :can_view_form?
       @change_name_form = ChangeNameForm.new(change_name_form_params(form))

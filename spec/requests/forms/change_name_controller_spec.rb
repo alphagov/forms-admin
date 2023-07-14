@@ -44,9 +44,9 @@ RSpec.describe Forms::ChangeNameController, type: :request do
     let(:form_data) do
       {
         name: "Form name",
+        creator_id: user.id,
         org: "test-org",
         organisation_id: 1,
-        creator_id: user.id,
       }
     end
 
@@ -75,8 +75,6 @@ RSpec.describe Forms::ChangeNameController, type: :request do
       let(:form_data) do
         {
           name: "Form name",
-          org: nil,
-          organisation_id: nil,
           creator_id: user.id,
           submission_email: user.email,
         }
