@@ -18,11 +18,11 @@ class AuthenticationController < ApplicationController
   end
 
   def sign_up
+    store_location root_path
     if default_provider == "auth0"
-      store_location root_path
       redirect_to "/auth/auth0?screen_hint=signup"
     else
-      redirect_to_omniauth
+      redirect_to "/auth/#{default_provider}"
     end
   end
 
