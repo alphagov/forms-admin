@@ -65,6 +65,7 @@ private
 
   def when_i_viewing_an_existing_form
     visit form_path(form.id)
+    expect_page_to_have_no_axe_errors(page)
   end
 
   def and_i_want_to_create_or_edit_a_page
@@ -73,6 +74,7 @@ private
 
   def and_i_select_a_type_of_answer_option(answer_type)
     expect(page.find("h1")).to have_text "What kind of answer do you need to this question?"
+    expect_page_to_have_no_axe_errors(page)
     choose I18n.t("helpers.label.page.answer_type_options.names.#{answer_type}")
     click_button "Continue"
     fill_in_question_text if answer_type == "selection"
@@ -82,6 +84,7 @@ private
     fill_in_address_settings if answer_type == "address"
     fill_in_name_settings if answer_type == "name"
     expect(page.find("h1")).to have_content "Edit question"
+    expect_page_to_have_no_axe_errors(page)
   end
 
   def and_i_provide_a_question_text
@@ -92,11 +95,13 @@ private
     click_button "Save and add next question"
     expect(page.find("h1")).to have_text "What kind of answer do you need to this question?"
     expect(page).not_to have_selector("main input:checked", visible: :hidden), "Type of answer page should not have any preselected radio buttons"
+    expect_page_to_have_no_axe_errors(page)
   end
 
   def and_i_can_see_a_list_of_existing_pages
     expect(page.find("h1")).to have_text "Add and edit your questions"
     expect(page).to have_selector(".govuk-summary-list__row", count: 5)
+    expect_page_to_have_no_axe_errors(page)
   end
 
   def and_i_start_adding_a_new_question
@@ -105,12 +110,14 @@ private
 
   def fill_in_question_text
     expect(page.find("h1")).to have_text "What’s your question?"
+    expect_page_to_have_no_axe_errors(page)
     fill_in "What’s your question?", with: "What is your name?"
     click_button "Continue"
   end
 
   def fill_in_selection_settings
     expect(page.find("h1")).to have_text "Create a list of options"
+    expect_page_to_have_no_axe_errors(page)
     check "Include an option for ‘None of the above’"
     fill_in "Option 1", with: "Checkbox option 1"
     fill_in "Option 2", with: "Checkbox option 2"
@@ -119,6 +126,7 @@ private
     click_button "Continue"
     click_link "Change Options"
     expect(page.find("h1")).to have_text "Create a list of options"
+    expect_page_to_have_no_axe_errors(page)
     check "People can only select one option"
     uncheck "Include an option for ‘None of the above’"
     click_button "Remove option 3"
@@ -129,18 +137,21 @@ private
 
   def fill_in_text_settings
     expect(page.find("h1")).to have_text "How much text will people need to provide?"
+    expect_page_to_have_no_axe_errors(page)
     choose "Single line of text"
     click_button "Continue"
   end
 
   def fill_in_date_settings
     expect(page.find("h1")).to have_text "Are you asking for someone’s date of birth?"
+    expect_page_to_have_no_axe_errors(page)
     choose "No"
     click_button "Continue"
   end
 
   def fill_in_address_settings
     expect(page.find("h1")).to have_text "What kind of addresses do you expect to receive?"
+    expect_page_to_have_no_axe_errors(page)
     check "UK addresses"
     check "International addresses"
     click_button "Continue"
@@ -149,6 +160,7 @@ private
 
   def fill_in_name_settings
     expect(page.find("h1")).to have_text "Ask for a person’s name"
+    expect_page_to_have_no_axe_errors(page)
     within_fieldset("How do you need to collect the name?") { choose("Full name in a single box") }
     within_fieldset("Do you need the person’s title?") { choose("No") }
     click_button "Continue"

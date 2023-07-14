@@ -75,6 +75,7 @@ private
   def when_i_am_viewing_home_page
     visit root_path
     expect(page.find("h1")).to have_text "GOV.UK Forms"
+    expect_page_to_have_no_axe_errors(page)
   end
 
   def and_i_click_create_a_form
@@ -82,6 +83,7 @@ private
   end
 
   def and_i_fill_in_the_form_name
+    expect_page_to_have_no_axe_errors(page)
     fill_in "What’s the name of your form?", with: form.name
     click_button "Save and continue"
   end
@@ -90,17 +92,20 @@ private
     expect(page.find("h1")).to have_text "Create a form"
     expect(page.find("h1")).to have_text form.name
     expect(page.find(".govuk-tag.govuk-tag--purple")).to have_text "DRAFT"
+    expect_page_to_have_no_axe_errors(page)
   end
 
   def and_i_view_an_existing_form
     click_link form.name
     expect(page.find("h1")).to have_text "Create a form"
     expect(page.find("h1")).to have_text form.name
+    expect_page_to_have_no_axe_errors(page)
   end
 
   def then_i_edit_the_name_of_the_form
     click_link "Edit the name of your form"
     expect(page).to have_field("What’s the name of your form?", with: form.name)
+    expect_page_to_have_no_axe_errors(page)
     fill_in "What’s the name of your form?", with: "Another form of juggling"
     click_button "Save and continue"
   end
@@ -108,5 +113,6 @@ private
   def and_the_form_name_is_updated
     expect(page.find("h1")).to have_text "Create a form"
     expect(page.find("h1")).to have_text "Another form of juggling"
+    expect_page_to_have_no_axe_errors(page)
   end
 end
