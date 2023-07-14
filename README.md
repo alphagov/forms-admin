@@ -1,4 +1,4 @@
-# GOV.UK Forms Admin [![Ruby on Rails CI](https://github.com/alphagov/forms-admin/actions/workflows/test.yml/badge.svg)](https://github.com/alphagov/forms-admin/actions/workflows/test.yml) [![Deploy to GOV.UK PaaS](https://github.com/alphagov/forms-admin/actions/workflows/deploy.yml/badge.svg)](https://github.com/alphagov/forms-admin/actions/workflows/deploy.yml)
+# GOV.UK Forms Admin [![Ruby on Rails CI](https://github.com/alphagov/forms-admin/actions/workflows/test.yml/badge.svg)](https://github.com/alphagov/forms-admin/actions/workflows/test.yml)
 
 GOV.UK Forms is a service for creating forms. GOV.UK Forms Admin is a an application to handle the administration, design and publishing of those forms. It's a Ruby on Rails application built on a PostgreSQL database.
 
@@ -143,9 +143,9 @@ bin/rake run_code_quality_checks
 
 ## Configuration and deployment
 
-The forms-admin app is containerised (see [Dockerfile](https://github.com/alphagov/forms-admin/blob/main/Dockerfile)) and can be deployed however you would normally deploy a containerised app.
+The forms-admin app is containerised (see our [Dockerfile](./Dockerfile)) and can be deployed however you would normally deploy a containerised app.
 
-If you are planning to deploy to GOV.UK PaaS without using the container, you can see how this runs in our [Deployment CI action](https://github.com/alphagov/forms-admin/blob/main/.github/workflows/deploy.yml).
+We host our apps using Amazon Web Services, you can [read about how deployments happen on our team wiki](https://github.com/alphagov/forms-team/wiki/Deploying-code-changes-AWS).
 
 ## Explain how to test the project
 
