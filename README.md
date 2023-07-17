@@ -31,6 +31,82 @@ bin/setup
 
 The setup script is idempotent, so you can also run it whenever you pull new changes.
 
+### Running the app
+
+You can either run the development task:
+
+```bash
+# Run the foreman dev server. This will also start the frontend dev task
+bin/dev
+```
+
+or run the rails server:
+
+```bash
+# Run a local Rails server
+bin/rails server
+
+# When running the server, you can use any of the frontend tasks, e.g.:
+npm run dev
+```
+
+## Development tools
+
+### Running the tests
+
+The app tests are written with [rspec-rails] and can be run with:
+
+```bash
+bundle exec rspec
+```
+
+There are also unit tests for JavaScript code (look for files named `*.test.js`), written with [Jest]. These can be run with:
+
+```bash
+npm run test
+```
+
+[rspec-rails]: https://github.com/rspec/rspec-rails
+[Jest]: https://jest.io
+
+### Linting
+
+We use [RuboCop GOV.UK] for linting code, to autocorrect issues run:
+
+```bash
+bundle exec rubocop -A
+```
+
+On GitHub pull requests we also check our dependencies for security issues using [bundler-audit], you can run this locally with:
+
+```bash
+bundle audit
+```
+
+[RuboCop GOV.UK]: https://github.com/alphagov/rubocop-govuk
+[bundle-audit]: https://github.com/rubysec/bundler-audit
+
+### Running tasks before pushing
+
+Before pushing code changes, it's a good idea to run the tests, use RuboCop to format your code, and [normalize the locales]. We have a [rake] task for running all of these commands in parallel:
+
+```bash
+bin/rake run_code_quality_checks
+```
+
+[normalize the locales]: https://github.com/glebm/i18n-tasks#normalize-data
+[rake]: https://ruby.github.io/rake/
+
+## Setting up the database
+
+In order to run this project, your database will need to have a user in it. The `bin/setup` script will normally take care of this for you, but if you need to quickly add some users you can do so by loading the database seed:
+
+```bash
+bin/rails db:seed
+```
+
+## Changing configuration
+
 ### Secrets vs Settings
 
 Refer to the [the config gem](https://github.com/railsconfig/config#accessing-the-settings-object) to understand the `file based settings` loading order.
@@ -87,84 +163,6 @@ And check with `FeatureService.enabled?("some.nested_feature")`.
 
 Rspec tests can also be tagged with `feature_{name}: true`. This will turn that feature on just for the duration of that test.
 
-### Running the app
-
-You can either run the development task:
-
-```bash
-# Run the foreman dev server. This will also start the frontend dev task
-bin/dev
-```
-
-or run the rails server:
-
-```bash
-# Run a local Rails server
-bin/rails server
-
-# When running the server, you can use any of the frontend tasks, e.g.:
-npm run dev
-```
-
-### Running the tests
-
-The app tests are written with [rspec-rails] and can be run with:
-
-```bash
-bundle exec rspec
-```
-
-There are also unit tests for JavaScript code (look for files named `*.test.js`), written with [Jest]. These can be run with:
-
-```bash
-npm run test
-```
-
-[rspec-rails]: https://github.com/rspec/rspec-rails
-[Jest]: https://jest.io
-
-### Linting
-
-We use [RuboCop GOV.UK] for linting code, to autocorrect issues run:
-
-```bash
-bundle exec rubocop -A
-```
-
-On GitHub pull requests we also check our dependencies for security issues using [bundler-audit], you can run this locally with:
-
-```bash
-bundle audit
-```
-
-[RuboCop GOV.UK]: https://github.com/alphagov/rubocop-govuk
-[bundle-audit]: https://github.com/rubysec/bundler-audit
-
-### Running tasks before pushing
-
-Before pushing code changes, it's a good idea to run the tests, use RuboCop to format your code, and [normalize the locales]. We have a [rake] task for running all of these commands in parallel:
-
-```bash
-bin/rake run_code_quality_checks
-```
-
-[normalize the locales]: https://github.com/glebm/i18n-tasks#normalize-data
-[rake]: https://ruby.github.io/rake/
-
-## Configuration and deployment
-
-The forms-admin app is containerised (see our [Dockerfile](./Dockerfile)) and can be deployed however you would normally deploy a containerised app.
-
-We host our apps using Amazon Web Services, you can [read about how deployments happen on our team wiki](https://github.com/alphagov/forms-team/wiki/Deploying-code-changes-AWS).
-
-## Setting up the database
-
-In order to run this project, your database will need to have a user in it. The `bin/setup` script will normally take care of this for you, but if you need to quickly add some users you can do so by loading the database seed:
-
-```bash
-bin/rails db:seed
-```
-
 ## Configuring GOV.UK Notify
 
 We use [GOV.UK Notify] to send emails from our apps.
@@ -202,7 +200,13 @@ If you want to deliberately raise an exception to test, uncomment out the trigge
 
 [Sentry]: https://sentry.io
 
-## Updating Docker files
+## Deployment
+
+The forms-admin app is containerised (see [Dockerfile](./Dockerfile)) and can be deployed however you would normally deploy a containerised app.
+
+We host our apps using Amazon Web Services, you can [read about how deployments happen on our team wiki](https://github.com/alphagov/forms-team/wiki/Deploying-code-changes-AWS).
+
+### Updating Docker files
 
 To update the version of [Alpine Linux] and Ruby used in the Dockerfile, use the [update_app_versions.sh script in forms-deploy](https://github.com/alphagov/forms-deploy/blob/main/support/update_app_versions.sh)
 
