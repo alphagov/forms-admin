@@ -28,10 +28,10 @@ if HostingEnvironment.local_development? && User.none?
   FactoryBot.create :organisation, slug: "department-for-testing"
 
   # create extra editors
-  FactoryBot.create_list :user, 3, role: :editor
+  FactoryBot.create_list :user, 3, organisation: test_org, role: :editor
 
   # create extra super admins
-  FactoryBot.create_list :user, 3, role: :super_admin
+  FactoryBot.create_list :user, 3, organisation: gds, role: :super_admin
 
   # while we're using Signon it is possible to have users who aren't linked to
   # the same organisation as in Signon, or who have an organisation that isn't
