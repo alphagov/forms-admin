@@ -212,7 +212,7 @@ To update the version of [Alpine Linux] and Ruby used in the Dockerfile, use the
 
 Raise a Github issue if you need support.
 
-## Explain how users can contribute
+## How to contribute
 
 We welcome contributions - please read [CONTRIBUTING.md](CONTRIBUTING.md) and the [alphagov Code of Conduct](https://github.com/alphagov/.github/blob/main/CODE_OF_CONDUCT.md) before contributing.
 
