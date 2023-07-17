@@ -192,9 +192,11 @@ In order to use this:
 - uncomment out the exception triggers in [this file](config/initializers/sentry.rb)
 - Build the project and watch the errors come through on Sentry
 
-## Updating versions
+## Updating Docker files
 
-Use the [update_app_versions.sh script in forms-deploy](https://github.com/alphagov/forms-deploy/blob/main/support/update_app_versions.sh)
+To update the version of [Alpine Linux] and Ruby used in the Dockerfile, use the [update_app_versions.sh script in forms-deploy](https://github.com/alphagov/forms-deploy/blob/main/support/update_app_versions.sh)
+
+[Alpine Linux]: https://www.alpinelinux.org/
 
 ## Support
 
