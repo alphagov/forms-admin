@@ -5,13 +5,11 @@ class TaskListComponent::TaskListComponentPreview < ViewComponent::Preview
         rows: [
           { task_name: "Edit the name of your form", path: "#", status: :completed, active: true },
           { task_name: "Edit the questions of your form", path: "#", status: :not_started, active: true },
-          { task_name: "Edit the email address", path: "#", status: :cannot_start },
-          { task_name: "Confirm the submission email address", path: "#", status: :cannot_start, active: false },
+          { task_name: "Edit the declaration", path: "#", status: :cannot_start },
+          { task_name: "Edit the information about what happens next", path: "#", status: :cannot_start, active: false },
         ] },
       { title: "Do something else with a form",
         rows: [
-          { task_name: "Edit the name of your form", path: "#", status: :completed, active: true },
-          { task_name: "Edit the questions of your form", path: "#", status: :not_started, active: true },
           { task_name: "Edit the email address", path: "#", status: :cannot_start },
           { task_name: "Confirm the submission email address", path: "#", status: :cannot_start, active: false },
         ] },
@@ -19,10 +17,8 @@ class TaskListComponent::TaskListComponentPreview < ViewComponent::Preview
         body_text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet ex nisl. Maecenas at erat mi. Nunc feugiat egestas ligula ac feugiat. Nam et dictum felis.\n\nCras cursus leo vitae vestibulum dictum. Donec sit amet turpis faucibus, bibendum leo vel, fermentum lacus." },
       { title: "Do yet another thing with a form",
         rows: [
-          { task_name: "Edit the name of your form", path: "#", status: :completed, active: true },
-          { task_name: "Edit the questions of your form", path: "#", status: :not_started, active: true },
-          { task_name: "Edit the email address", path: "#", status: :cannot_start },
-          { task_name: "Confirm the submission email address", path: "#", status: :cannot_start, active: false },
+          { task_name: "Edit the privacy link", path: "#", status: :cannot_start },
+          { task_name: "Edit the contact details", path: "#", status: :cannot_start, active: false },
         ] },
     ]))
   end

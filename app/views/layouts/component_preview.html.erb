@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" class="govuk-template ">
+  <head>
+    <meta charset="utf-8">
+    <title><%= page_title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#0b0c0c">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="shortcut icon" type="image/x-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/favicon.ico"%>" sizes="16x16 32x32 48x48" />
+    <link rel="mask-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-mask-icon.svg"%>" color="#0b0c0c" />
+    <link rel="apple-touch-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-apple-touch-icon-180x180.png"%>" sizes="180x180" />
+    <link rel="apple-touch-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-apple-touch-icon-167x167.png"%>" sizes="167x167" />
+    <link rel="apple-touch-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-apple-touch-icon-152x152.png"%>" sizes="152x152" />
+    <link rel="apple-touch-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-apple-touch-icon.png"%>" />
+    <meta property="og:image" content="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-opengraph-image.png" %>">
+
+    <%= vite_stylesheet_tag 'application.scss' %>
+  </head>
+
+  <body class="govuk-template__body ">
+    <script>
+      if ('noModule' in HTMLScriptElement.prototype) {
+        document.body.classList
+          .add('js-enabled')
+      }
+    </script>
+
+    <div class="govuk-width-container ">
+      <main class="govuk-main-wrapper" id="main-content" role="main">
+        <% if success %>
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+              <%= govuk_notification_banner(title_text: t("banner.success.title"), success: true) do |nb| %>
+                <% nb.with_heading(text: success) %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <%= yield %>
+      </main>
+    </div>
+
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag 'application' %>
+  </body>
+</html>

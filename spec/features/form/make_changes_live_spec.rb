@@ -33,23 +33,28 @@ feature "Make changes live", type: :feature do
   scenario "Form creator makes changes after making form live" do
     visit root_path
     expect(page.find("h1")).to have_text "GOV.UK Forms"
+    expect_page_to_have_no_axe_errors(page)
 
     click_link form.name
     expect(page.find("h1")).to have_text form.name
     expect(page).to have_css ".govuk-tag.govuk-tag--blue", text: "LIVE"
+    expect_page_to_have_no_axe_errors(page)
 
     click_link_or_button "Create a draft to edit"
     expect(page.find("h1")).to have_text "Edit your form"
     expect(page.find("h1")).to have_text form.name
     expect(page).to have_css ".govuk-tag.govuk-tag--purple", text: "DRAFT"
+    expect_page_to_have_no_axe_errors(page)
 
     click_link "Make your changes live"
     expect(page.find("h1")).to have_text "Make your changes live"
     expect(page.find("h1")).to have_text form.name
     expect(page).to have_text "Are you sure you want to make your draft live?"
+    expect_page_to_have_no_axe_errors(page)
 
     choose "Yes"
     click_button "Save and continue"
     expect(page.find("h1")).to have_text "Your changes are live"
+    expect_page_to_have_no_axe_errors(page)
   end
 end

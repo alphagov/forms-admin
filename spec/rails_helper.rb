@@ -3,6 +3,7 @@ require "spec_helper"
 require "view_component/test_helpers"
 require "validate_url/rspec_matcher"
 require "selenium/webdriver"
+require "axe-rspec"
 
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"

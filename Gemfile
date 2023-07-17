@@ -99,6 +99,9 @@ group :test do
 
   gem "webdrivers"
   gem "webmock"
+
+  # axe-core for running automated accessibility checks
+  gem "axe-core-rspec"
 end
 
 # For security auditing gem vulnerabilities. RUN IN CI
