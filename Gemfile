@@ -51,7 +51,7 @@ gem "vite_rails"
 
 # For GOV.UK branding
 gem "govuk-components", "~> 4.0.0"
-gem "govuk_design_system_formbuilder", "~> 4.0.0"
+gem "govuk_design_system_formbuilder", "~> 4.1.0"
 
 # For structured logging
 gem "lograge"
