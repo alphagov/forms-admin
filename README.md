@@ -180,17 +180,24 @@ govuk_notify:
 
 Example emails can be seen locally by visiting `http://localhost:3000/rails/mailers`
 
-## Explain how to use Sentry
+## Configuring Sentry
+
+We use [Sentry] to catch exceptions in production apps and alert us.
 
 We currently have a very basic setup for Sentry in this repo for testing, which we will continue to build upon.
 
-In order to use this:
+In order to use this locally you will need to sign up to Sentry and create a new project. Then add the Sentry DSN to your environment as `SETTINGS__SENTRY__DSN`, or add it to a local config file:
 
-- first sign up to [Sentry](https://sentry.io) and create a new project
-- create a file called `.env` in the root of this repo
-- add the Sentry DNS to local settings config file eg. `config/settings.local.yml` ((more details)[https://github.com/alphagov/forms-admin/blob/fbefdea6de9dbbee75b0f67e4bc9f4e1080acffd/README.md])
-- uncomment out the exception triggers in [this file](config/initializers/sentry.rb)
-- Build the project and watch the errors come through on Sentry
+```
+# config/settings.local.yml
+
+sentry:
+  DSN: <DSN from Sentry>
+```
+
+If you want to deliberately raise an exception to test, uncomment out the triggers in the [Sentry initializer script](config/initializers/sentry.rb). Whenever you run the app errors will be raised and should also come through on Sentry.
+
+[Sentry]: https://sentry.io
 
 ## Updating Docker files
 
