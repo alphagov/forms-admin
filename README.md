@@ -165,20 +165,23 @@ In order to run this project, your database will need to have a user in it. To a
 bin/rails db:seed
 ```
 
-## Explain how to use GOV.UK Notify
+## Configuring GOV.UK Notify
 
-If you want to test the notify function, you will need to get a test API key
-from the [notify service](https://www.notifications.service.gov.uk/) Add it as
-an environment variable under `SETTINGS__GOVUK_NOTIFY__API_KEY=` or creating/edit
-a `config/settings/development.local.yml` and adding the following to it.
+We use [GOV.UK Notify] to send emails from our apps.
+
+If you want to test the Notify functionality locally, you will need to get a test API key from the Notify service. Add it as an environment variable under `SETTINGS__GOVUK_NOTIFY__API_KEY` or add it to a local config file:
 
 ```
+# config/settings.local.yml
+
 # Settings for GOV.UK Notify api & email templates
 govuk_notify:
-  api_key: KEY_FROM_NOTIFY_SERVICE
+  api_key: <API key from Notify>
 ```
 
 Example emails can be seen locally by visiting `http://localhost:3000/rails/mailers`
+
+[GOV.UK Notify]: https://www.notifications.service.gov.uk/
 
 ## Configuring Sentry
 
