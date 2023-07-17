@@ -157,9 +157,9 @@ The forms-admin app is containerised (see our [Dockerfile](./Dockerfile)) and ca
 
 We host our apps using Amazon Web Services, you can [read about how deployments happen on our team wiki](https://github.com/alphagov/forms-team/wiki/Deploying-code-changes-AWS).
 
-## Explain how to add a user to the database
+## Setting up the database
 
-In order to run this project, your database will need to have a user in it. To add one, run the follwing commands:
+In order to run this project, your database will need to have a user in it. The `bin/setup` script will normally take care of this for you, but if you need to quickly add some users you can do so by loading the database seed:
 
 ```bash
 bin/rails db:seed
