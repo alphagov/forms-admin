@@ -29,7 +29,14 @@
       }
     </script>
 
+    <%= yield :skip_link %>
+
+    <%= yield :header %>
+
     <div class="govuk-width-container ">
+
+    <%= yield :before_content %>
+
       <main class="govuk-main-wrapper" id="main-content" role="main">
         <% if success %>
           <div class="govuk-grid-row">
@@ -44,6 +51,9 @@
         <%= yield %>
       </main>
     </div>
+
+
+    <%= yield :footer %>
 
     <%= vite_client_tag %>
     <%= vite_javascript_tag 'application' %>

@@ -1,6 +1,4 @@
 class HeaderComponent::HeaderComponentPreview < ViewComponent::Preview
-  layout "component_preview"
-
   def default
     render(HeaderComponent::View.new(is_signed_in: false,
                                      list_of_users_path: nil,
