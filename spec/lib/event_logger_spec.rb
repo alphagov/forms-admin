@@ -9,10 +9,10 @@ RSpec.describe EventLogger do
   end
 
   it "logs an event" do
-    described_class.log("event", { test: true })
+    described_class.log({ event: "testing", test: true })
 
     expect(Rails.logger.logged(:info)).to eq [
-      '[event] {"test":true}',
+      '{"event":"testing","test":true}',
     ]
   end
 end

@@ -38,7 +38,8 @@ class User < ApplicationRecord
       user.assign_attributes(attributes)
 
       if user.has_changes_to_save?
-        EventLogger.log("auth", {
+        EventLogger.log({
+          event: "auth",
           user_id: user.id,
           user_changes: user.changes_to_save,
         })

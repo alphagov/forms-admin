@@ -148,6 +148,12 @@ The forms-admin app is containerised (see [Dockerfile](https://github.com/alphag
 
 If you are planning to deploy to GOV.UK PaaS without using the container, you can see how this runs in our [Deployment CI action](https://github.com/alphagov/forms-admin/blob/main/.github/workflows/deploy.yml).
 
+## Logging
+
+- HTTP access logs are managed using [Lograge](https://github.com/roidrage/lograge) and configured within [the application config](./config/application.rb)
+- The output format is JSON using the [JsonLogFormatter](./app/lib/json_log_formatter.rb) to enable simpler searching and visbility especially in Splunk.
+- **DO NOT** use [log_tags](https://guides.rubyonrails.org/configuring.html#config-log-tags) since it breaks the JSON formatting produced by Lograge.
+
 ## Explain how to test the project
 
 ```bash

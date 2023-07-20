@@ -109,8 +109,8 @@ describe User do
       )
 
       expect(EventLogger).to have_received(:log).with(
-        "auth",
         {
+          "event": "auth",
           "user_id": user.id,
           "user_changes": {
             uid: %w[123456 111111],
