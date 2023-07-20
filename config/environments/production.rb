@@ -48,13 +48,6 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
 
-  # Include generic and useful information about system operation, but avoid logging too much
-  # information to avoid inadvertent exposure of personally identifiable information (PII).
-  config.log_level = :info
-
-  # Prepend all log lines with the following tags.
-  config.log_tags = [:request_id]
-
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
@@ -75,37 +68,6 @@ Rails.application.configure do
   # Don't log any deprecations.
   config.active_support.report_deprecations = false
 
-  # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
-
-  # Use a different logger for distributed setups.
-  # require "syslog/logger"
-  # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new "app-name")
-
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger           = ActiveSupport::Logger.new($stdout)
-    logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
-  end
-
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
-  # enable json request logging
-  config.lograge.enabled = true
-
-  config.lograge.custom_options = lambda do |event|
-    {}.tap do |h|
-      h[:host] = event.payload[:host]
-      h[:user_id] = event.payload[:user_id]
-      h[:user_email] = event.payload[:user_email]
-      h[:user_organisation_slug] = event.payload[:user_organisation_slug]
-      h[:user_ip] = event.payload[:user_ip]
-      h[:request_id] = event.payload[:request_id]
-      h[:user_id] = event.payload[:user_id]
-      h[:form_id] = event.payload[:form_id] if event.payload[:form_id]
-    end
-  end
-
-  config.lograge.formatter = Lograge::Formatters::Json.new
 end
