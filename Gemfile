@@ -108,4 +108,4 @@ end
 gem "bundler-audit", "~> 0.9.0"
 
 # For detecting security vulnerabilities in Ruby on Rails applications via static analysis.
-gem "brakeman", "~> 6.0.0"
+gem "brakeman", "~> 6.0.1"
