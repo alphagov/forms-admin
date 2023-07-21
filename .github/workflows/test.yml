@@ -49,8 +49,10 @@ jobs:
       - name: Set up database schema
         run: bin/rails db:schema:load
       # Add or replace test runners here
-      - name: Run tests
+      - name: Run Ruby tests
         run: bundle exec rspec
+      - name: Run JS tests
+        run: npm test
       # Add or replace any other lints here
       - name: Security audit dependencies
         run: bundler exec bundle audit check
