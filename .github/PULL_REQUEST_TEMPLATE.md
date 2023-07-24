@@ -1,12 +1,15 @@
-#### What problem does the pull request solve?
+### What problem does this pull request solve?
 
-Trello card:
+Trello card: <!-- link -->
 
-#### Checklist
+<!-- Add some description here about what the PR is about, even if you have a Trello card to link to -->
 
-- [ ] I've used the pull request template
-- [ ] I've linked this PR to the relevant issue (if mission work)
-- [ ] I've written unit tests for these changes (if code change)
-- [ ] I've updated the documentation in (If any documentation requires updating)
-  - [ ] README.md
-  - [ ] Elsewhere (please link)
+### Things to consider when reviewing
+
+<!-- If this section isn't relevant for your PR feel free to edit or remove it -->
+
+- Does it work when run on your machine?
+- Is it clear what the code is doing?
+- Do the commit messages explain why the changes were made?
+- Are there all the unit tests needed?
+- Has all relevant documentation been updated?
