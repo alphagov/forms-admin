@@ -34,6 +34,8 @@ jobs:
       # Add or replace dependency steps here
       - name: Install Chrome for integration/e2e tests
         uses: nanasess/setup-chromedriver@v2.0.0
+        with:
+          chromedriver-version: "114.0.5735.90"
       # The ruby version is taken from the .ruby-version file, no need to specify here.
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@250fcd6a742febb1123a77a841497ccaa8b9e939
