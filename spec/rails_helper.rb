@@ -4,7 +4,6 @@ require "view_component/test_helpers"
 require "validate_url/rspec_matcher"
 require "selenium/webdriver"
 require "axe-rspec"
-require "webdrivers"
 
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
@@ -14,11 +13,6 @@ require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
 
 require_relative "support/capybara_headless_chrome"
-
-# TODO: this is only required whilst we need to pin Chromedriver to v114 until the
-# https://github.com/nanasess/setup-chromedriver supports installing Chromedriver
-# version 115 from the new location.
-Webdrivers::Chromedriver.required_version = "114.0.5735.90"
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
