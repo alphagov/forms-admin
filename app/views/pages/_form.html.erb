@@ -9,6 +9,16 @@
 
   <%= f.govuk_text_area :hint_text, label: { size: 'm' }, hint: { text: hint_for_edit_page_field("hint_text", page_object.answer_type, page_object.answer_settings) } %>
 
+  <% if FeatureService.enabled? :detailed_guidance_enabled %>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+
+    <h2 class="govuk-heading-m">Help people understand how to answer your question</h2>
+
+    <p>
+      <%= govuk_button_link_to "Add additional guidance", additional_guidance_new_path(form_id: form_object.id), {secondary: true} %>
+    </p>
+  <% end %>
+
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
   <% if page_object.answer_type == 'selection' %>

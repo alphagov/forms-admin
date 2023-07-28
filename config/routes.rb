@@ -51,6 +51,7 @@ Rails.application.routes.draw do
       post "/move-page" => "pages#move_page", as: :move_page
 
       scope "/new" do
+        get "/additional-guidance" => "pages/additional_guidance#new", as: :additional_guidance_new
         get "/type-of-answer" => "pages/type_of_answer#new", as: :type_of_answer_new
         post "/type-of-answer" => "pages/type_of_answer#create", as: :type_of_answer_create
         get "/text-settings" => "pages/text_settings#new", as: :text_settings_new
