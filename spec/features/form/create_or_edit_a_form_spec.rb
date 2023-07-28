@@ -26,7 +26,7 @@ feature "Create or edit a form", type: :feature do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms?org=test-org", req_headers, org_forms.to_json, 200
+        mock.get "/api/v1/forms?organisation_id=1", req_headers, org_forms.to_json, 200
         mock.post "/api/v1/forms", post_headers, { id: 1 }.to_json
         mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
@@ -54,7 +54,7 @@ feature "Create or edit a form", type: :feature do
       form.name = "Another form of juggling"
 
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms?org=test-org", req_headers, org_forms.to_json, 200
+        mock.get "/api/v1/forms?organisation_id=1", req_headers, org_forms.to_json, 200
         mock.put "/api/v1/forms/1", post_headers
         mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
         mock.get "/api/v1/forms/1", req_headers, updated_form.to_json, 200

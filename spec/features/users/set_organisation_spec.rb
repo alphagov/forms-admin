@@ -9,10 +9,10 @@ feature "Set or change a user's organisation", type: :feature do
   end
 
   let(:test_org_forms) do
-    [build(:form, id: 1, org: "test-org", name: "Test Org Form")]
+    [build(:form, id: 1, organisation_id: 1, name: "Test Org Form")]
   end
   let(:gds_forms) do
-    [build(:form, id: 2, org: "government-digital-service", name: "Test GDS Form")]
+    [build(:form, id: 2, organisation_id: 2, name: "Test GDS Form")]
   end
 
   let(:req_headers) do
@@ -24,8 +24,8 @@ feature "Set or change a user's organisation", type: :feature do
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?org=test-org", req_headers, test_org_forms.to_json, 200
-      mock.get "/api/v1/forms?org=government-digital-service", req_headers, gds_forms.to_json, 200
+      mock.get "/api/v1/forms?organisation_id=1", req_headers, test_org_forms.to_json, 200
+      mock.get "/api/v1/forms?organisation_id=2", req_headers, gds_forms.to_json, 200
     end
 
     create_list :user, 6, organisation: test_org

@@ -68,7 +68,8 @@ RSpec.describe FormsController, type: :request do
 
     context "with a form from another organisation" do
       let(:form) do
-        build :form, org: "another-org", id: 2
+        create :organisation, id: 111, slug: "another-org"
+        build :form, organisation_id: 111, id: 2
       end
 
       before do
@@ -215,7 +216,7 @@ RSpec.describe FormsController, type: :request do
         live_at: nil,
         has_draft_version: true,
         has_live_version: false,
-        org: "test-org",
+        organisation_id: 1,
       },
        {
          id: 3,
@@ -225,25 +226,23 @@ RSpec.describe FormsController, type: :request do
          live_at: nil,
          has_draft_version: true,
          has_live_version: false,
-         org: "test-org",
+         organisation_id: 1,
        }]
     end
 
     it "Reads the forms from the API" do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms?org=test-org", headers, forms_response.to_json, 200
+        mock.get "/api/v1/forms?organisation_id=1", headers, forms_response.to_json, 200
       end
       get root_path
 
-      forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?org=test-org", {}, headers)
+      forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?organisation_id=1", {}, headers)
       expect(ActiveResource::HttpMock.requests).to include forms_request
     end
 
     context "with a user with no organisation" do
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms?org=", headers, forms_response.to_json, 200
-        end
+        ActiveResource::HttpMock.reset! # not expecting any API calls
 
         login_as build(:user, :with_no_org, role: :editor)
 

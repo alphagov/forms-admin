@@ -18,7 +18,7 @@ class FormPolicy
         scope.where(creator_id: user.id)
       else
         scope
-          .where(org: user.organisation.slug)
+          .where(organisation_id: user.organisation.id)
       end
     end
   end
@@ -58,6 +58,6 @@ private
   end
 
   def users_organisation_owns_form
-    user.organisation.present? ? user.organisation.slug == form.org : false
+    user.organisation.present? ? user.organisation_id == form.organisation_id : false
   end
 end

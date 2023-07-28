@@ -58,7 +58,7 @@ class User < ApplicationRecord
 
   def update_user_forms
     if role_previously_changed?(from: :trial, to: :editor) || role_previously_changed?(from: :trial, to: :super_admin)
-      Form.update_org_for_creator(id, organisation.slug)
+      Form.update_organisation_for_creator(id, organisation_id)
     end
   end
 

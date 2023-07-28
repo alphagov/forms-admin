@@ -13,7 +13,6 @@ module Forms
       if @current_user.trial?
         form_args[:submission_email] = @current_user.email
       else
-        form_args[:org] = @current_user.organisation&.slug
         form_args[:organisation_id] = @current_user.organisation_id
       end
 
