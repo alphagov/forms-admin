@@ -35,18 +35,20 @@ You can either run the development task:
 
 ```bash
 # Run the foreman dev server. This will also start the frontend dev task
-bin/dev
+./bin/dev
 ```
 
 or run the rails server:
 
 ```bash
 # Run a local Rails server
-bin/rails server
+./bin/rails server
 
 # When running the server, you can use any of the frontend tasks, e.g.:
 npm run dev
 ```
+
+You will also need to run the [forms-api service](https://github.com/alphagov/forms-api), as this app needs the API to create and access forms.
 
 ## Development tools
 
@@ -108,7 +110,7 @@ bundle exec rake
 In order to run this project, your database will need to have a user in it. The `bin/setup` script will normally take care of this for you, but if you need to quickly add some users you can do so by loading the database seed:
 
 ```bash
-bin/rails db:seed
+./bin/rails db:seed
 ```
 
 ## Changing configuration
@@ -167,9 +169,9 @@ And check with `FeatureService.enabled?("some.nested_feature")`.
 
 ### Testing with features
 
-Rspec tests can also be tagged with `feature_{name}: true`. This will turn that feature on just for the duration of that test.
+RSpec tests can also be tagged with `feature_{name}: true`. This will turn that feature on just for the duration of that test.
 
-## Configuring GOV.UK Notify
+### Configuring GOV.UK Notify
 
 We use [GOV.UK Notify] to send emails from our apps.
 
@@ -187,7 +189,7 @@ Example emails can be seen locally by visiting `http://localhost:3000/rails/mail
 
 [GOV.UK Notify]: https://www.notifications.service.gov.uk/
 
-## Configuring Sentry
+### Configuring Sentry
 
 We use [Sentry] to catch exceptions in production apps and alert us.
 
@@ -214,7 +216,7 @@ We host our apps using Amazon Web Services, you can [read about how deployments 
 
 ### Logging
 
-- HTTP access logs are managed using [Lograge](https://github.com/roidrage/lograge) and configured within [the application config](./config/application.rb)
+- HTTP access logs are managed using [Lograge](https://github.com/roidrage/lograge) and configured within [the application config](./config/application.rb).
 - The output format is JSON using the [JsonLogFormatter](./app/lib/json_log_formatter.rb) to enable simpler searching and visbility especially in Splunk.
 - **DO NOT** use [log_tags](https://guides.rubyonrails.org/configuring.html#config-log-tags) since it breaks the JSON formatting produced by Lograge.
 
