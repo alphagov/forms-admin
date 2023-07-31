@@ -501,7 +501,7 @@ en:
     routing_requirements_not_met_html: |
       <p>Before you can add a route you’ll need:</p>
       <ul class="govuk-list govuk-list--bullet">
-        <li>at least 2 questions</li>
+        <li>2 or more questions</li>
         <li>at least one question where people must select a single item from a list of options</li>
       </ul>
       <p>
