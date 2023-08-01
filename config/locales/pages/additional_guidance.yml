@@ -3,7 +3,7 @@ en:
     label:
       pages_additional_guidance_form:
         page_heading: Give your page a heading
-        additional_guidance_markdown: Additional guidance text
+        additional_guidance_markdown: Add guidance text
   activemodel:
     errors:
       models:
