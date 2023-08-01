@@ -493,9 +493,9 @@ en:
   routing_page:
     body_text: "You can send people directly to the question or page you want, based on their previous answer. \nThis means they’ll only see questions that are relevant to them.\n"
     dropdown_default_text: Select a question to start your route from
-    legend_hint_text: A route can only start from a question where people select one item from a list
+    legend_hint_text: A route can only start from a question where people select one item from a list. You can only add one route from each question.
     legend_text: Which question do you want your route to start from?
-    no_remaining_routes: A route can only start from a question where people select one item from a list. You can only add one route per question.
+    no_remaining_routes: A route can only start from a question where people select one item from a list. You can only add one route from each question.
     no_remaining_routes_heading: You have no more questions to start a route from
     routing_requirements_not_met_heading: What you need to create a route
     routing_requirements_not_met_html: |
@@ -505,7 +505,7 @@ en:
         <li>at least one question where people must select a single item from a list of options</li>
       </ul>
       <p>
-        You can only add one route per question.
+        You can only add one route from each question.
       </p>
   save_and_continue: Save and continue
   selections_settings:
