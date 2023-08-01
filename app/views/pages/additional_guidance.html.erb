@@ -4,7 +4,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
 
-    <%= form_with model: [@form, additional_guidance_form], url: additional_guidance_new_path do |f| %>
+    <%= form_with model: [@form, additional_guidance_form], url: additional_guidance_create_path(form_id: @form.id) do |f| %>
       <%= f.govuk_error_summary %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= t("pages.question") %> <%= form.page_number(page) %></span>
@@ -27,6 +27,18 @@
                              label: { size: 'm' },
                              hint: { text: "Use Markdown if you need to format your guidance content. Formatting help can be found below."},
                              rows: 15)  %>
+
+      <% if preview_html.present? %>
+        <h2 class="govuk-heading-m">Preview your guidance below</h2>
+
+        <p>Below is a preview of how your guidance content will be shown to the person completing your form.</p>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <%= preview_html.html_safe %>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      <% end %>
 
       <%= govuk_details(summary_text: "<h2 class='govuk-!-font-size-19 govuk-!-margin-0 govuk-!-font-weight-regular'>Formatting help</h2>".html_safe) do %>
 
