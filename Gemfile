@@ -21,6 +21,7 @@ gem "omniauth-auth0"
 gem "omniauth_openid_connect"
 gem "warden"
 
+gem "govuk-forms-markdown", github: "alphagov/govuk-forms-markdown", branch: "add-render-part-2"
 # Used for handling authorisation policies
 gem "pundit"
 
