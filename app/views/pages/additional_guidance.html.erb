@@ -28,52 +28,59 @@
                              hint: { text: "Use Markdown if you need to format your guidance content. Formatting help can be found below."},
                              rows: 15)  %>
 
+      <%= govuk_details(summary_text: "Formatting help") do %>
 
-      <h2 class="govuk-heading-m">Formatting help</h2>
+        <h2 class="govuk-visually-hidden">Formatting help</h2>
 
-      <h3 class="govuk-heading-s">Links and URLs</h3>
+        <h3 class="govuk-heading-m">Links and URLs</h3>
 
-      <p>To add a link, use square brackets [ ] around the link text, and round brackets ( ) around the full URL. For example:</p>
+        <p>To add a link, use square brackets [ ] around the link text, and round brackets ( ) around the full URL. For example:</p>
 
-      <%= govuk_inset_text(text: "[Link text](https://www.gov.uk/link-text-url)") %>
+        <%= govuk_inset_text(text: "[Link text](https://www.gov.uk/link-text-url)") %>
 
-      <h3 class="govuk-heading-s">Second-level headings</h3>
+        <h3 class="govuk-heading-m">Second-level headings</h3>
 
-      <p>To add a second-level heading, use 2 hashtags followed by a space. For example:</p>
+        <p>To add a second-level heading, use 2 hashtags followed by a space. For example:</p>
 
-      <%= govuk_inset_text(text: "## This is a second-level heading") %>
+        <%= govuk_inset_text(text: "## This is a second-level heading") %>
 
-      <h3 class="govuk-heading-s">Third-level headings</h3>
+        <h3 class="govuk-heading-m">Third-level headings</h3>
 
-      <p>To add a third-level heading, use 3 hashtags followed by a space. For example:</p>
+        <p>To add a third-level heading, use 3 hashtags followed by a space. For example:</p>
 
-      <%= govuk_inset_text(text: "### This is a third-level heading") %>
+        <%= govuk_inset_text(text: "### This is a third-level heading") %>
 
-      <h3 class="govuk-heading-s">Bulleted lists</h3>
+        <h3 class="govuk-heading-m">Bulleted lists</h3>
 
-      <p>To add bullet points, start each item with * (asterisk) or - (dash). Use one space after the asterisk or dash. For example:</p>
+        <p>To add bullet points, start each item with * (asterisk) or - (dash). Use one space after the asterisk or dash. For example:</p>
 
-      <%= govuk_inset_text do %>
-        <ul class="govuk-list">
-          <li>* First bullet point</li>
-          <li>* Second bullet point</li>
-          <li>* Third bullet point 3</li>
-        </ul>
+        <%= govuk_inset_text do %>
+          <ul class="govuk-list">
+            <li>* First bullet point</li>
+            <li>* Second bullet point</li>
+            <li>* Third bullet point 3</li>
+          </ul>
+        <% end %>
+
+        <h3 class="govuk-heading-s">Numbered lists</h3>
+
+        <p>Use numbers for each list item, followed by a full stop. Make sure there is one space after the full stop.</p>
+
+        <p>You need one empty line space before the numbers start, and one at the end. For example:</p>
+
+        <%= govuk_inset_text do %>
+          <ol class="govuk-list govuk-list--number">
+            <li>* First item</li>
+            <li>* Second item</li>
+            <li>* Third item</li>
+          </ol>
+        <% end %>
+
       <% end %>
 
-     <h3 class="govuk-heading-s">Numbered lists</h3>
 
-     <p>Use numbers for each list item, followed by a full stop. Make sure there is one space after the full stop.</p> 
 
-     <p>You need one empty line space before the numbers start, and one at the end. For example:</p>
 
-      <%= govuk_inset_text do %>
-        <ol class="govuk-list govuk-list--number">
-          <li>* First item</li>
-          <li>* Second item</li>
-          <li>* Third item</li>
-        </ol>
-      <% end %>
 
 
       <%= f.govuk_submit t('continue'), value: "true", name: :set_answer_type %>
