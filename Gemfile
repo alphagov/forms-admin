@@ -67,6 +67,9 @@ gem "govuk_notify_rails"
 # Use validate_url so we don't have to write custom URL validation
 gem "validate_url"
 
+# For auditing tables
+gem "paper_trail"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri mingw x64_mingw]
