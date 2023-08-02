@@ -28,9 +28,7 @@
                              hint: { text: "Use Markdown if you need to format your guidance content. Formatting help can be found below."},
                              rows: 15)  %>
 
-      <%= govuk_details(summary_text: "Formatting help") do %>
-
-        <h2 class="govuk-visually-hidden">Formatting help</h2>
+      <%= govuk_details(summary_text: "<h2 class='govuk-!-font-size-19 govuk-!-margin-0 govuk-!-font-weight-regular'>Formatting help</h2>".html_safe) do %>
 
         <h3 class="govuk-heading-m">Links and URLs</h3>
 
