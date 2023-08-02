@@ -2,7 +2,7 @@
 <% content_for :back_link, govuk_back_link_to(form_pages_path(form)) %>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-full-from-desktop">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
 
     <%= form_with model: [@form, additional_guidance_form], url: additional_guidance_new_path do |f| %>
       <%= f.govuk_error_summary %>
@@ -50,13 +50,15 @@
 
         <h3 class="govuk-heading-m">Bulleted lists</h3>
 
-        <p>To add bullet points, start each item with * (asterisk) or - (dash). Use one space after the asterisk or dash. For example:</p>
+        <p>To add bullet points, start each item with * (asterisk) or - (dash). Use one space after the asterisk or dash.</p>
+
+        <p>You need one empty line space before the bullets start, and one at the end. For example:</p>
 
         <%= govuk_inset_text do %>
           <ul class="govuk-list">
             <li>* First bullet point</li>
             <li>* Second bullet point</li>
-            <li>* Third bullet point 3</li>
+            <li>* Third bullet point</li>
           </ul>
         <% end %>
 
@@ -68,9 +70,9 @@
 
         <%= govuk_inset_text do %>
           <ol class="govuk-list govuk-list--number">
-            <li>* First item</li>
-            <li>* Second item</li>
-            <li>* Third item</li>
+            <li>First item</li>
+            <li>Second item</li>
+            <li>Third item</li>
           </ol>
         <% end %>
 
