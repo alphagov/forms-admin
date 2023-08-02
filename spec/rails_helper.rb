@@ -12,6 +12,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
 
+require "paper_trail/frameworks/rspec"
 require_relative "support/capybara_headless_chrome"
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
