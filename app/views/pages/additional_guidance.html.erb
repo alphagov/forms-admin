@@ -9,48 +9,72 @@
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= t("pages.question") %> <%= form.page_number(page) %></span>
         <span class="govuk-visually-hidden"> - </span>
-        Add additional guidance
+        Add guidance
       </h1>
 
       <p>
-        Do not use hint text if you need to give a lengthy explanation with lists and paragraphs. Screen readers read out the entire text when users interact with the form element. This could frustrate users if the text is long.
+        Use guidance if you need to:
       </p>
-      <p class="govuk-!-margin-bottom-9">
-        Do not use links in hint text. While screen readers will read out the link text when describing the field, they will not tell users the text is a link
-      </p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>explain how to answer the question in more detail</li>
+        <li>provide more context</li>
+        <li>format your content - for example, with links, sub-headings or lists</li>
+      </ul>
 
-      <%= f.govuk_text_field( :page_heading, label: { size: 'm' }, hint: { text: "Use a heading that’s a statement rather than a question - for example, ‘Interview needs’"})  %>
+      <%= f.govuk_text_field( :page_heading, label: { size: 'm' }, hint: { text: "Use a heading that’s a statement rather than a question - for example, ‘Interview needs’. This will be your main page heading."})  %>
 
       <%= f.govuk_text_area( :additional_guidance_markdown,
                              label: { size: 'm' },
-                             hint: { text: "Use markdown to add formatting to your content. Formatting help can be found below the text area."},
+                             hint: { text: "Use Markdown if you need to format your guidance content. Formatting help can be found below."},
                              rows: 15)  %>
 
 
       <h2 class="govuk-heading-m">Formatting help</h2>
 
-      <p>To put a subheading in your template, use 2 hashes:</p>
+      <h3 class="govuk-heading-s">Links and URLs</h3>
 
-      <%= govuk_inset_text(text: "## This is a subheading") %>
+      <p>To add a link, use square brackets [ ] around the link text, and round brackets ( ) around the full URL. For example:</p>
 
-      <p>To make bullet points, use asterisks:</p>
+      <%= govuk_inset_text(text: "[Link text](https://www.gov.uk/link-text-url)") %>
+
+      <h3 class="govuk-heading-s">Second-level headings</h3>
+
+      <p>To add a second-level heading, use 2 hashtags followed by a space. For example:</p>
+
+      <%= govuk_inset_text(text: "## This is a second-level heading") %>
+
+      <h3 class="govuk-heading-s">Third-level headings</h3>
+
+      <p>To add a third-level heading, use 3 hashtags followed by a space. For example:</p>
+
+      <%= govuk_inset_text(text: "### This is a third-level heading") %>
+
+      <h3 class="govuk-heading-s">Bulleted lists</h3>
+
+      <p>To add bullet points, start each item with * (asterisk) or - (dash). Use one space after the asterisk or dash. For example:</p>
 
       <%= govuk_inset_text do %>
         <ul class="govuk-list">
-          <li>* point 1</li>
-          <li>* point 2</li>
-          <li>* point 3</li>
+          <li>* First bullet point</li>
+          <li>* Second bullet point</li>
+          <li>* Third bullet point 3</li>
         </ul>
       <% end %>
 
-      <h2 class="govuk-heading-m">Links and URLs</h2>
-      <p>If the recipient is not expecting to receive an email from you, write the URL in full, starting with https:// </p>
+     <h3 class="govuk-heading-s">Numbered lists</h3>
 
-      <%= govuk_inset_text(text: "Apply now at https://www.gov.uk/example") %>
+     <p>Use numbers for each list item, followed by a full stop. Make sure there is one space after the full stop.</p> 
 
-      <p>To convert text into a link, use square brackets [] around the link text and round brackets () around the full URL. Make sure there are no spaces between the brackets or the link will not work. For example:</p>
+     <p>You need one empty line space before the numbers start, and one at the end. For example:</p>
 
-      <%= govuk_inset_text(text: "[Apply now](https://www.gov.uk/example)") %>
+      <%= govuk_inset_text do %>
+        <ol class="govuk-list govuk-list--number">
+          <li>* First item</li>
+          <li>* Second item</li>
+          <li>* Third item</li>
+        </ol>
+      <% end %>
+
 
       <%= f.govuk_submit t('continue'), value: "true", name: :set_answer_type %>
     <% end %>
