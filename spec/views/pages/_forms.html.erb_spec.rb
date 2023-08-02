@@ -50,20 +50,20 @@ describe "pages/_form.html.erb", type: :view do
     expect(rendered).not_to have_button("delete")
   end
 
-  it "does not contain a link to add additional guidance" do
-    expect(rendered).to have_no_link(text: "Add additional guidance", href: additional_guidance_new_path(form_id: form.id))
+  it "does not contain a link to add guidance" do
+    expect(rendered).to have_no_link(text: "Add guidance", href: additional_guidance_new_path(form_id: form.id))
   end
 
   context "when detailed_guidance feature flag enabled", feature_detailed_guidance_enabled: true do
-    it "contains a link to add additional guidance" do
-      expect(rendered).to have_link(text: "Add additional guidance", href: additional_guidance_new_path(form_id: form.id))
+    it "contains a link to add guidance" do
+      expect(rendered).to have_link(text: "Add guidance", href: additional_guidance_new_path(form_id: form.id))
     end
 
     context "when it is not a new page" do
       let(:is_new_page) { false }
 
-      it "contains a link to add additional guidance" do
-        expect(rendered).to have_link(text: "Add additional guidance", href: additional_guidance_new_path(form_id: form.id))
+      it "contains a link to add guidance" do
+        expect(rendered).to have_link(text: "Add guidance", href: additional_guidance_new_path(form_id: form.id))
       end
     end
   end
