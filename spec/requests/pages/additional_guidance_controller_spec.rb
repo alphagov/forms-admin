@@ -44,4 +44,30 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
       expect(response).to have_http_status(:ok)
     end
   end
+
+  describe "#create" do
+    before do
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
+      end
+      post additional_guidance_new_path(form_id: form.id), params: { pages_additional_guidance_form: { page_heading: "Page heading", additional_guidance_markdown: "## Heading level 2" } }
+    end
+
+    it "reads the existing form" do
+      expect(form).to have_been_read
+    end
+
+    it "renders the template" do
+      expect(response).to have_rendered("pages/additional_guidance")
+    end
+
+    it "returns 200" do
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "renders the additional guidance markdown as html" do
+      expect(response.body).to include('<h2 class="govuk-heading-l">Heading level 2</h2>')
+    end
+  end
 end

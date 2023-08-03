@@ -56,7 +56,6 @@ gem "govuk_design_system_formbuilder", "~> 4.1.1"
 # Our own custom markdown renderer
 gem "govuk-forms-markdown", github: "alphagov/govuk-forms-markdown", tag: "0.1.0"
 
-
 # For structured logging
 gem "lograge"
 

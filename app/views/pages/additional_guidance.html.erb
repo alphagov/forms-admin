@@ -28,6 +28,8 @@
                              hint: { text: "Use Markdown if you need to format your guidance content. Formatting help can be found below."},
                              rows: 15)  %>
 
+      <%= f.govuk_submit (additional_guidance_form.additional_guidance_markdown.blank? ? "Preview guidance" : "Update preview"), secondary: true,  name: :preview_markdown %>
+
       <%= govuk_details(summary_text: "<h2 class='govuk-!-font-size-19 govuk-!-margin-0 govuk-!-font-weight-regular'>Formatting help</h2>".html_safe) do %>
 
         <h3 class="govuk-heading-m">Links and URLs</h3>
@@ -78,12 +80,18 @@
 
       <% end %>
 
+      <% if preview_html.present? %>
+        <h2 class="govuk-heading-m">Preview your guidance below</h2>
 
+        <p>Below is a preview of how your guidance content will be shown to the person completing your form.</p>
 
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
+        <%= preview_html.html_safe %>
 
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      <% end %>
 
-      <%= f.govuk_submit t('continue'), value: "true", name: :set_answer_type %>
     <% end %>
     <p>
       <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(@form) %>
