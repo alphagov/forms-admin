@@ -20,7 +20,7 @@
                              label: { size: 'm' },
                              rows: 15)  %>
 
-      <%= f.govuk_submit (additional_guidance_form.additional_guidance_markdown.blank? ? "Preview guidance" : "Update preview"), secondary: true,  name: :preview_markdown %>
+      <%= f.govuk_submit (additional_guidance_form.additional_guidance_markdown.blank? ? t("guidance.preview_guidance") : t("guidance.update_preview")), secondary: true,  name: :preview_markdown %>
 
       <%= govuk_details(summary_text: "<h2 class='govuk-!-font-size-19 govuk-!-margin-0 govuk-!-font-weight-regular'>#{t("guidance.formatting_help.heading")}</h2>".html_safe) do %>
 
@@ -36,9 +36,9 @@
       <% end %>
 
       <% if preview_html.present? %>
-        <h2 class="govuk-heading-m">Preview your guidance below</h2>
+        <h2 class="govuk-heading-m"><%= t("guidance.preview.heading") %></h2>
 
-        <p>Below is a preview of how your guidance content will be shown to the person completing your form.</p>
+        <p><%= t("guidance.preview.description") %></p>
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 

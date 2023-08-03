@@ -221,6 +221,11 @@ en:
         instructions: 'To add a third-level heading, use 3 hashtags followed by a space. For example:'
     guidance: Guidance
     instructions: Only add guidance if you need to give a longer explanation of how to answer the question, or to format your content. For example, you can use paragraphs, links or lists.
+    preview:
+      description: Below is a preview of how your guidance content will be shown to the person completing your form.
+      heading: Preview your guidance below
+    preview_guidance: Preview guidance
+    update_preview: Update preview
     when_to_use_guidance_html: |
       <p>
         Use guidance if you need to:
