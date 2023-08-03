@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/alphagov/govuk-forms-markdown.git
+  revision: 726bc74cd828bdce382ea681d5c5f71fa8dd68e1
+  tag: 0.1.0
+  specs:
+    govuk-forms-markdown (0.1.0)
+      redcarpet (~> 3.6)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -371,6 +379,7 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
+    redcarpet (3.6.0)
     regexp_parser (2.8.1)
     reline (0.3.3)
       io-console (~> 0.5)
@@ -530,6 +539,7 @@ DEPENDENCIES
   faker
   gds-sso
   govuk-components (~> 4.1.0)
+  govuk-forms-markdown!
   govuk_design_system_formbuilder (~> 4.1.1)
   govuk_notify_rails
   i18n-tasks (~> 1.0.11)
