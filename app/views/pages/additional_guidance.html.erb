@@ -1,4 +1,4 @@
-<% set_page_title(title_with_error_prefix(t("page_titles.new_page_form"), additional_guidance_form.errors&.any?)) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.add_guidance"), additional_guidance_form.errors&.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_pages_path(form)) %>
 
 <div class="govuk-grid-row">
@@ -9,81 +9,36 @@
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= t("pages.question") %> <%= form.page_number(page) %></span>
         <span class="govuk-visually-hidden"> - </span>
-        Add guidance
+        <%= t("guidance.add_guidance") %>
       </h1>
 
-      <p>
-        Use guidance if you need to:
-      </p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>explain how to answer the question in more detail</li>
-        <li>provide more context</li>
-        <li>format your content - for example, with links, sub-headings or lists</li>
-      </ul>
+      <%= t("guidance.when_to_use_guidance_html") %>
 
-      <%= f.govuk_text_field( :page_heading, label: { size: 'm' }, hint: { text: "Use a heading that’s a statement rather than a question - for example, ‘Interview needs’. This will be your main page heading."})  %>
+      <%= f.govuk_text_field( :page_heading, label: { size: 'm' })  %>
 
       <%= f.govuk_text_area( :additional_guidance_markdown,
                              label: { size: 'm' },
-                             hint: { text: "Use Markdown if you need to format your guidance content. Formatting help can be found below."},
                              rows: 15)  %>
 
-      <%= f.govuk_submit (additional_guidance_form.additional_guidance_markdown.blank? ? "Preview guidance" : "Update preview"), secondary: true,  name: :preview_markdown %>
+      <%= f.govuk_submit (additional_guidance_form.additional_guidance_markdown.blank? ? t("guidance.preview_guidance") : t("guidance.update_preview")), secondary: true,  name: :preview_markdown %>
 
-      <%= govuk_details(summary_text: "<h2 class='govuk-!-font-size-19 govuk-!-margin-0 govuk-!-font-weight-regular'>Formatting help</h2>".html_safe) do %>
+      <%= govuk_details(summary_text: "<h2 class='govuk-!-font-size-19 govuk-!-margin-0 govuk-!-font-weight-regular'>#{t("guidance.formatting_help.heading")}</h2>".html_safe) do %>
 
-        <h3 class="govuk-heading-m">Links and URLs</h3>
+        <% %w[links second_level_headings third_level_headings bulleted_lists numbered_lists].each do |format_name| %>
+          <h3 class="govuk-heading-m"><%= t("guidance.formatting_help.#{format_name}.heading") %></h3>
 
-        <p>To add a link, use square brackets [ ] around the link text, and round brackets ( ) around the full URL. For example:</p>
+          <p><%= simple_format(t("guidance.formatting_help.#{format_name}.instructions")) %></p>
 
-        <%= govuk_inset_text(text: "[Link text](https://www.gov.uk/link-text-url)") %>
-
-        <h3 class="govuk-heading-m">Second-level headings</h3>
-
-        <p>To add a second-level heading, use 2 hashtags followed by a space. For example:</p>
-
-        <%= govuk_inset_text(text: "## This is a second-level heading") %>
-
-        <h3 class="govuk-heading-m">Third-level headings</h3>
-
-        <p>To add a third-level heading, use 3 hashtags followed by a space. For example:</p>
-
-        <%= govuk_inset_text(text: "### This is a third-level heading") %>
-
-        <h3 class="govuk-heading-m">Bulleted lists</h3>
-
-        <p>To add bullet points, start each item with * (asterisk) or - (dash). Use one space after the asterisk or dash.</p>
-
-        <p>You need one empty line space before the bullets start, and one at the end. For example:</p>
-
-        <%= govuk_inset_text do %>
-          <ul class="govuk-list">
-            <li>* First bullet point</li>
-            <li>* Second bullet point</li>
-            <li>* Third bullet point</li>
-          </ul>
+          <%= govuk_inset_text do %>
+            <%= simple_format(t("guidance.formatting_help.#{format_name}.example")) %>
+          <% end %>
         <% end %>
-
-        <h3 class="govuk-heading-s">Numbered lists</h3>
-
-        <p>Use numbers for each list item, followed by a full stop. Make sure there is one space after the full stop.</p>
-
-        <p>You need one empty line space before the numbers start, and one at the end. For example:</p>
-
-        <%= govuk_inset_text do %>
-          <ol class="govuk-list govuk-list--number">
-            <li>First item</li>
-            <li>Second item</li>
-            <li>Third item</li>
-          </ol>
-        <% end %>
-
       <% end %>
 
       <% if preview_html.present? %>
-        <h2 class="govuk-heading-m">Preview your guidance below</h2>
+        <h2 class="govuk-heading-m"><%= t("guidance.preview.heading") %></h2>
 
-        <p>Below is a preview of how your guidance content will be shown to the person completing your form.</p>
+        <p><%= t("guidance.preview.description") %></p>
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
