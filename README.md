@@ -35,30 +35,32 @@ You can either run the development task:
 
 ```bash
 # Run the foreman dev server. This will also start the frontend dev task
-bin/dev
+./bin/dev
 ```
 
 or run the rails server:
 
 ```bash
 # Run a local Rails server
-bin/rails server
+./bin/rails server
 
 # When running the server, you can use any of the frontend tasks, e.g.:
 npm run dev
 ```
 
+You will also need to run the [forms-api service](https://github.com/alphagov/forms-api), as this app needs the API to create and access forms.
+
 ## Development tools
 
 ### Running the tests
 
-The app tests are written with [rspec-rails] and can be run with:
+The app tests are written with [rspec-rails] and you can run them with:
 
 ```bash
 bundle exec rspec
 ```
 
-There are also unit tests for JavaScript code (look for files named `*.test.js`), written with [Jest]. These can be run with:
+There are also unit tests for JavaScript code (look for files named `*.test.js`), written with [Jest]. You can run those with:
 
 ```bash
 npm run test
@@ -69,19 +71,19 @@ npm run test
 
 ### Linting
 
-We use [RuboCop GOV.UK] for linting code, to autocorrect issues run:
+We use [RuboCop GOV.UK] for linting code. To autocorrect issues run:
 
 ```bash
 bundle exec rubocop -A
 ```
 
-We also use the [i18n-tasks] tool to keep our locales files in a consistent order. When the tests run they will check if the locale files are normalised, and fail if they are not. To fix the locale files automatically you can run:
+We also use the [i18n-tasks] tool to keep our locales files in a consistent order. When the tests run, they will check if the locale files are normalised and fail if they are not. To fix the locale files automatically, you can run:
 
 ```bash
 bundle exec i18n-tasks normalize
 ```
 
-On GitHub pull requests we also check our dependencies for security issues using [bundler-audit], you can run this locally with:
+On GitHub pull requests, we also check our dependencies for security issues using [bundler-audit]. You can run this locally with:
 
 ```bash
 bundle audit
@@ -91,11 +93,11 @@ bundle audit
 [i18n-tasks]: https://github.com/glebm/i18n-tasks
 [bundle-audit]: https://github.com/rubysec/bundler-audit
 
-### Running tasks with rake
+### Running tasks with Rake
 
-We have a [Rakefile](./Rakefile) that is setup to follow the [GOV.UK conventions for Rails applications].
+We have a [Rakefile](./Rakefile) that is set up to follow the [GOV.UK conventions for Rails applications].
 
-To lint your changes and run tests with one command you can run
+To lint your changes and run tests with one command, you can run:
 
 ```bash
 bundle exec rake
@@ -105,15 +107,15 @@ bundle exec rake
 
 ## Setting up the database
 
-In order to run this project, your database will need to have a user in it. The `bin/setup` script will normally take care of this for you, but if you need to quickly add some users you can do so by loading the database seed:
+To run this project, your database will need to have a user in it. The `bin/setup` script will normally take care of this for you. However, if you need to quickly add some users, you can do so by loading the database seed:
 
 ```bash
-bin/rails db:seed
+./bin/rails db:seed
 ```
 
 ## Changing configuration
 
-### Secrets vs Settings
+### Changing settings
 
 Refer to the [the config gem](https://github.com/railsconfig/config#accessing-the-settings-object) to understand the `file based settings` loading order.
 
@@ -167,9 +169,9 @@ And check with `FeatureService.enabled?("some.nested_feature")`.
 
 ### Testing with features
 
-Rspec tests can also be tagged with `feature_{name}: true`. This will turn that feature on just for the duration of that test.
+You can also tag RSpec tests with `feature_{name}: true`. This will turn that feature on just for the duration of that test.
 
-## Configuring GOV.UK Notify
+### Configuring GOV.UK Notify
 
 We use [GOV.UK Notify] to send emails from our apps.
 
@@ -183,17 +185,21 @@ govuk_notify:
   api_key: <API key from Notify>
 ```
 
-Example emails can be seen locally by visiting `http://localhost:3000/rails/mailers`
+You can view example emails locally by visiting `http://localhost:3000/rails/mailers`
 
 [GOV.UK Notify]: https://www.notifications.service.gov.uk/
 
-## Configuring Sentry
+### Configuring Sentry
 
-We use [Sentry] to catch exceptions in production apps and alert us.
+We use [Sentry] to catch and alert us about exceptions in production apps.
 
 We currently have a very basic setup for Sentry in this repo for testing, which we will continue to build upon.
 
-In order to use this locally you will need to sign up to Sentry and create a new project. Then add the Sentry DSN to your environment as `SETTINGS__SENTRY__DSN`, or add it to a local config file:
+In order to use Sentry locally, you will need to:
+
+1. Sign in to Sentry using your work Google account.
+2. Create a new project.
+3. Add the Sentry DSN to your environment as `SETTINGS__SENTRY__DSN`, or add it to a local config file:
 
 ```
 # config/settings.local.yml
@@ -206,17 +212,17 @@ If you want to deliberately raise an exception to test, uncomment out the trigge
 
 [Sentry]: https://sentry.io
 
-## Deployment
+## Deploying apps
 
 The forms-admin app is containerised (see [Dockerfile](Dockerfile)) and can be deployed however you would normally deploy a containerised app.
 
-We host our apps using Amazon Web Services, you can [read about how deployments happen on our team wiki, if you have access](https://github.com/alphagov/forms-team/wiki/Deploying-code-changes-AWS).
+We host our apps using Amazon Web Services (AWS). You can [read about how deployments happen on our team wiki, if you have access](https://github.com/alphagov/forms-team/wiki/Deploying-code-changes-AWS).
 
 ### Logging
 
-- HTTP access logs are managed using [Lograge](https://github.com/roidrage/lograge) and configured within [the application config](./config/application.rb)
-- The output format is JSON using the [JsonLogFormatter](./app/lib/json_log_formatter.rb) to enable simpler searching and visbility especially in Splunk.
-- **DO NOT** use [log_tags](https://guides.rubyonrails.org/configuring.html#config-log-tags) since it breaks the JSON formatting produced by Lograge.
+- HTTP access logs are managed using [Lograge](https://github.com/roidrage/lograge) and configured within [the application config](./config/application.rb).
+- The output format is JSON using the [JsonLogFormatter](./app/lib/json_log_formatter.rb) to enable simpler searching and visbility, especially in Splunk.
+- Do not use [log_tags](https://guides.rubyonrails.org/configuring.html#config-log-tags) since it breaks the JSON formatting produced by Lograge.
 
 ### Updating Docker files
 
@@ -226,7 +232,7 @@ To update the version of [Alpine Linux] and Ruby used in the Dockerfile, use the
 
 ## Support
 
-Raise a Github issue if you need support.
+Raise a GitHub issue if you need support.
 
 ## How to contribute
 
