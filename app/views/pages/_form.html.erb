@@ -12,12 +12,12 @@
   <% if FeatureService.enabled? :detailed_guidance_enabled %>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
-    <h2 class="govuk-heading-m">Guidance</h2>
+    <h2 class="govuk-heading-m"><%= t("guidance.guidance") %></h2>
 
-    <p>Only add guidance if you need to give a longer explanation of how to answer the question, or to format your content. For example, you can use paragraphs, links or lists.</p>
+    <p><%= t("guidance.instructions") %></p>
 
     <p>
-      <%= govuk_button_link_to "Add guidance", additional_guidance_new_path(form_id: form_object.id), {secondary: true} %>
+      <%= govuk_button_link_to t("guidance.add_guidance"), additional_guidance_new_path(form_id: form_object.id), {secondary: true} %>
     </p>
   <% end %>
 

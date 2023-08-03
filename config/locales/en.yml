@@ -183,6 +183,53 @@ en:
     confirm_deletion_form: Are you sure you want to delete this draft?
     confirm_deletion_form_live_form: Deleting this draft will not remove the live form.
     confirm_deletion_page: Are you sure you want to delete this page?
+  guidance:
+    add_guidance: Add guidance
+    formatting_help:
+      bulleted_lists:
+        example: |
+          * First bullet point
+          * Second bullet point
+          * Third bullet point
+        heading: Bulleted lists
+        instructions: |
+          To add bullet points, start each item with * (asterisk) or - (dash). Use one space after the asterisk or dash.
+
+          You need one empty line space before the bullets start, and one at the end. For example:
+      heading: Formatting help
+      links:
+        example: "[Link text](https://www.gov.uk/link-text-url)"
+        heading: Links and URLs
+        instructions: 'To add a link, use square brackets [ ] around the link text, and round brackets ( ) around the full URL. For example:'
+      numbered_lists:
+        example: |
+          1. First item
+          2. Second item
+          3. Third item
+        heading: Numbered lists
+        instructions: |
+          Use numbers for each list item, followed by a full stop. Make sure there is one space after the full stop.
+
+          You need one empty line space before the numbers start, and one at the end. For example:
+      second_level_headings:
+        example: "## This is a second-level heading"
+        heading: Second-level headings
+        instructions: 'To add a second-level heading, use 2 hashtags followed by a space. For example:'
+      third_level_headings:
+        example: "## This is a third-level heading"
+        heading: Third-level headings
+        instructions: 'To add a third-level heading, use 3 hashtags followed by a space. For example:'
+    guidance: Guidance
+    instructions: Only add guidance if you need to give a longer explanation of how to answer the question, or to format your content. For example, you can use paragraphs, links or lists.
+    when_to_use_guidance_html: |
+      <p>
+        Use guidance if you need to:
+      </p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>explain how to answer the question in more detail</li>
+        <li>provide more context</li>
+        <li>format your content - for example, with links, sub-headings or lists</li>
+      </ul>
   header:
     product_name: Forms
     sign_out: Sign out
@@ -406,6 +453,7 @@ en:
       only_one_option: Selection from a list, one option only.
   page_titles:
     access_denied: You do not have permission to access GOV.UK Forms
+    add_guidance: Add guidance
     address_settings: What kind of addresses do you expect to receive?
     change_name_form: Name your form
     confirm_email_form: Enter the confirmation code
