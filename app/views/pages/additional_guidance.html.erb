@@ -29,8 +29,9 @@
 
           <p><%= simple_format(t("guidance.formatting_help.#{format_name}.instructions")) %></p>
 
-          <%= govuk_inset_text do %>
-            <%= simple_format(t("guidance.formatting_help.#{format_name}.example")) %>
+            <%= govuk_inset_text do %>
+              <pre class="app-markdown-example-block"><code class="app-markdown-example-block__code"><%= t("guidance.formatting_help.#{format_name}.example") %></code ></pre>
+            <% end %>
           <% end %>
         <% end %>
       <% end %>
