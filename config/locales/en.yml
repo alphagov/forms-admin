@@ -490,6 +490,7 @@ en:
     your_form_is_live: Your form is live
   pages:
     add_rules_legend: Question settings
+    answer_settings: Answer settings
     delete_question: Delete question
     go_to_your_questions: Go to your questions
     heading: Edit question

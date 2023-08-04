@@ -9,32 +9,37 @@
 
   <%= f.govuk_text_area :hint_text, label: { size: 'm' }, hint: { text: hint_for_edit_page_field("hint_text", page_object.answer_type, page_object.answer_settings) } %>
 
-  <% if FeatureService.enabled? :detailed_guidance_enabled %>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
-
-    <h2 class="govuk-heading-m"><%= t("guidance.guidance") %></h2>
-
-    <p><%= t("guidance.instructions") %></p>
-
-    <p>
-      <%= govuk_button_link_to t("guidance.add_guidance"), additional_guidance_new_path(form_id: form_object.id), {secondary: true} %>
-    </p>
-  <% end %>
-
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+
+  <% if FeatureService.enabled? :detailed_guidance_enabled %>
+    <h2 class="govuk-heading-m"><%= t("guidance.guidance") %></h2>
+    <% if page_object.page_heading.present? && page_object.additional_guidance_markdown.present? %>
+      <%= govuk_summary_list(**PageSummaryData::GuidanceService.call(form: form_object, page: page_object).build_data) %>
+
+    <% else %>
+      <p><%= t("guidance.instructions") %></p>
+
+      <p>
+        <%= govuk_button_link_to t("guidance.add_guidance"), additional_guidance_new_path(form_id: form_object.id), {secondary: true} %>
+      </p>
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <% end %>
+  <% end %>
 
   <% if page_object.answer_type == 'selection' %>
     <%= f.hidden_field :is_optional %>
   <% else %>
-    <%= f.govuk_check_boxes_fieldset :is_optional, multiple: false, legend: { text: t("pages.add_rules_legend") , size: 'm' } do %>
+    <%= f.govuk_check_boxes_fieldset :is_optional, multiple: false, legend: { tag: "h2", text: t("pages.add_rules_legend") , size: 'm' } do %>
       <%= f.govuk_check_box :is_optional, true,0, multiple: false,
                             small: true,
                             label: { text: t("pages.make_optional_text")  },
                             hint: { text: t("pages.make_optional_hint") } %>
 
     <% end %>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <% end %>
 
+  <h2 class="govuk-heading-m"><%= t("pages.answer_settings") %></h2>
   <%= render PageSettingsSummaryComponent::View.new(page_object, change_answer_type_path:, change_selections_settings_path:, change_text_settings_path:, change_date_settings_path:, change_address_settings_path:, change_name_settings_path:) %>
 
   <%= f.govuk_submit page_object.has_next_page? ? t("pages.submit_edit") : t("pages.submit_add") do %>

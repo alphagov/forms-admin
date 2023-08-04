@@ -14,13 +14,16 @@ class PagesController < ApplicationController
     question_text = session.dig(:page, "question_text")
     answer_settings = session.dig(:page, "answer_settings")
     is_optional = session.dig(:page, "is_optional") == "true"
-    @page = Page.new(form_id: @form.id, question_text:, answer_type:, answer_settings:, is_optional:)
+    page_heading = session.dig(:page, "page_heading")
+    additional_guidance_markdown = session.dig(:page, "additional_guidance_markdown")
+    @page = Page.new(form_id: @form.id, question_text:, answer_type:, answer_settings:, is_optional:, page_heading:, additional_guidance_markdown:)
   end
 
   def create
     answer_settings = session.dig(:page, "answer_settings")
     page_heading = session.dig(:page, "page_heading")
     additional_guidance_markdown = session.dig(:page, "additional_guidance_markdown")
+
     @page = Page.new(page_params.merge(answer_settings:, page_heading:, additional_guidance_markdown:))
 
     if @page.save
@@ -34,7 +37,7 @@ class PagesController < ApplicationController
   def edit
     reset_session_if_answer_settings_not_present
     @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    @page.load_from_session(session, %w[answer_settings answer_type is_optional])
+    @page.load_from_session(session, %w[answer_settings answer_type is_optional page_heading additional_guidance_markdown])
   end
 
   def update

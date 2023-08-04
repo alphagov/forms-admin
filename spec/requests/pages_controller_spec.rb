@@ -93,6 +93,8 @@ RSpec.describe PagesController, type: :request do
           answer_type: "address",
           answer_settings: nil,
           is_optional: false,
+          page_heading: nil,
+          additional_guidance_markdown: nil,
         }.to_json
       end
 
