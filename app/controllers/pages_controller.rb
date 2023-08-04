@@ -19,7 +19,9 @@ class PagesController < ApplicationController
 
   def create
     answer_settings = session.dig(:page, "answer_settings")
-    @page = Page.new(page_params.merge(answer_settings:))
+    page_heading = session.dig(:page, "page_heading")
+    additional_guidance_markdown = session.dig(:page, "additional_guidance_markdown")
+    @page = Page.new(page_params.merge(answer_settings:, page_heading:, additional_guidance_markdown:))
 
     if @page.save
       clear_questions_session_data

@@ -241,6 +241,8 @@ RSpec.describe PagesController, type: :request do
           answer_type: "address",
           is_optional: nil,
           answer_settings: nil,
+          page_heading: nil,
+          additional_guidance_markdown: nil,
         }
       end
 
