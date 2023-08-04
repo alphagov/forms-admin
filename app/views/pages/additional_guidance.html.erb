@@ -27,7 +27,7 @@
         <% %w[links second_level_headings third_level_headings bulleted_lists numbered_lists].each do |format_name| %>
           <h3 class="govuk-heading-m"><%= t("guidance.formatting_help.#{format_name}.heading") %></h3>
 
-          <p><%= simple_format(t("guidance.formatting_help.#{format_name}.instructions")) %></p>
+            <%= simple_format(t("guidance.formatting_help.#{format_name}.instructions")) %>
 
             <%= govuk_inset_text do %>
               <pre class="app-markdown-example-block"><code class="app-markdown-example-block__code"><%= t("guidance.formatting_help.#{format_name}.example") %></code ></pre>
