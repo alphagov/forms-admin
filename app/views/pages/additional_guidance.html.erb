@@ -22,10 +22,15 @@
 
       <%= f.govuk_submit (additional_guidance_form.additional_guidance_markdown.blank? ? t("guidance.preview_guidance") : t("guidance.update_preview")), secondary: true,  name: :preview_markdown %>
 
-      <%= govuk_details(summary_text: "<h2 class='govuk-!-font-size-19 govuk-!-margin-0 govuk-!-font-weight-regular'>#{t("guidance.formatting_help.heading")}</h2>".html_safe) do %>
-
-        <% %w[links second_level_headings third_level_headings bulleted_lists numbered_lists].each do |format_name| %>
-          <h3 class="govuk-heading-m"><%= t("guidance.formatting_help.#{format_name}.heading") %></h3>
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+          <h2 class='govuk-details__summary-text govuk-!-font-size-19 govuk-!-margin-0 govuk-!-font-weight-regular'>
+            <%= t("guidance.formatting_help.heading") %>
+          </h2>
+        </summary>
+        <div class="govuk-details__text">
+          <% %w[links second_level_headings third_level_headings bulleted_lists numbered_lists].each do |format_name| %>
+            <h3 class="govuk-heading-m"><%= t("guidance.formatting_help.#{format_name}.heading") %></h3>
 
             <%= simple_format(t("guidance.formatting_help.#{format_name}.instructions")) %>
 
@@ -33,8 +38,8 @@
               <pre class="app-markdown-example-block"><code class="app-markdown-example-block__code"><%= t("guidance.formatting_help.#{format_name}.example") %></code ></pre>
             <% end %>
           <% end %>
-        <% end %>
-      <% end %>
+        </div>
+      </details>
 
       <% if preview_html.present? %>
         <h2 class="govuk-heading-m"><%= t("guidance.preview.heading") %></h2>
