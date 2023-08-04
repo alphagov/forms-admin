@@ -30,10 +30,23 @@ class UsersController < ApplicationController
 private
 
   def user_params
-    params.require(:user).permit(:has_access, :role, :organisation_id)
+    params.require(:user).permit(:has_access, :role, :organisation_id).tap do |p|
+      # We have to take steps to detect when the autocomplete compoenent is
+      # empty. We use the value of rawAttribute, which is the text input when JS
+      # is enabled. When it's empty, the user has cleared it. This isn't needed
+      # when the no JS select is used but we have to allow organisation_id to be
+      # nil still.
+      if p.key?(:organisation_id) && organisation_id_raw && organisation_id_raw.empty?
+        p[:organisation_id] = nil
+      end
+    end
   end
 
   def user
     @user ||= User.find(params[:id])
+  end
+
+  def organisation_id_raw
+    params.dig(:user, :organisation_id_raw)
   end
 end
