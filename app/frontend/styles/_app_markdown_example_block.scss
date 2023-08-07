@@ -1,0 +1,10 @@
+.app-markdown-example-block {
+  white-space: pre-wrap;
+  font-size: inherit;
+  font-family: inherit;
+
+  &__code {
+    font-size: inherit;
+    font-family: inherit;
+  }
+}
