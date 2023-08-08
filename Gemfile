@@ -53,7 +53,8 @@ gem "vite_rails"
 gem "govuk-components", "~> 4.1.0"
 gem "govuk_design_system_formbuilder", "~> 4.1.1"
 
-# The autocomplete component is not currently published as a gem
+# The autocomplete component is not currently published as a gem, if changing
+# the hash, also change in package.json
 gem "dfe-autocomplete", require: "dfe/autocomplete", github: "DFE-Digital/dfe-autocomplete", ref: "36d80e6b5bba67c92cd9ec6982a4e536d1889aed"
 
 # Our own custom markdown renderer
