@@ -66,7 +66,8 @@ private
   def when_i_change_the_users_organisation
     @old_organisation_name = @user.organisation&.name || I18n.t("users.index.organisation_blank")
     @new_organisation_name = Organisation.pluck(:name).reject { |name| name == @old_organisation_name }.sample
-    select @new_organisation_name, from: "Organisation"
+    # The \n is important, it "presses enter"
+    fill_in "Organisation", with: "#{@new_organisation_name}\n"
     click_button "Save"
   end
 
@@ -89,7 +90,8 @@ private
 
   def when_i_change_my_organisation_to_test_org
     visit edit_user_path(@user.id)
-    select "Test Org", from: "Organisation"
+    # The \n is important, it "presses enter"
+    fill_in "Organisation", with: "Test Org\n"
     click_button "Save"
   end
 

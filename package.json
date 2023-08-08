@@ -33,7 +33,8 @@
     "vite-plugin-ruby": "^3.2.2"
   },
   "dependencies": {
-    "govuk-frontend": "~4.7.0"
+    "govuk-frontend": "~4.7.0",
+    "dfe-autocomplete": "github:DFE-Digital/dfe-autocomplete"
   },
   "standard": {
     "globals": [

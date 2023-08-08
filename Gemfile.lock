@@ -1,4 +1,15 @@
 GIT
+  remote: https://github.com/DFE-Digital/dfe-autocomplete.git
+  revision: 36d80e6b5bba67c92cd9ec6982a4e536d1889aed
+  specs:
+    dfe-autocomplete (0.1.0)
+      actionview (>= 7.0.2.3)
+      activemodel (>= 7.0.2.3)
+      govuk-components
+      rails (>= 7.0.2.3)
+      view_component
+
+GIT
   remote: https://github.com/alphagov/govuk-forms-markdown.git
   revision: 726bc74cd828bdce382ea681d5c5f71fa8dd68e1
   tag: 0.1.0
@@ -535,6 +546,7 @@ DEPENDENCIES
   capybara
   config
   debug
+  dfe-autocomplete!
   factory_bot_rails
   faker
   gds-sso

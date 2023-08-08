@@ -45,11 +45,15 @@
         end
       end %>
 
-      <%= f.govuk_collection_select :organisation_id, Organisation.order(:name), :id, :name,
-        class: ['govuk-!-width-three-quarters'],
-        options: { prompt: t('users.edit.organisation_prompt') },
-        label: { text: t('users.edit.organisation'), size: 'm', tag: 'h2' },
-        hint: { text: t('users.edit.organisation_hint') } %>
+      <%= render DfE::Autocomplete::View.new(
+        f,
+        attribute_name: :organisation_id,
+        form_field: f.govuk_collection_select(:organisation_id, Organisation.order(:slug), :id, :name,
+                                              class: ['govuk-!-width-three-quarters'],
+                                              options: { prompt: t('users.edit.organisation_prompt') },
+                                              label: { text: t('users.edit.organisation'), size: 'm', tag: 'h2' },
+                                              hint: { text: t('users.edit.organisation_hint') })
+      ) %>
 
       <%= f.govuk_collection_radio_buttons :role, user_role_options, :value, :label, :description,
         legend: { text: t('users.edit.role'), size: 'm', tag: 'h2' } %>

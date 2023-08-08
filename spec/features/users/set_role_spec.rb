@@ -71,7 +71,7 @@ private
     expect(page).to have_css "h1.govuk-heading-l", text: "Edit user"
     expect(page).to have_text trial_user.name
 
-    select("Test Org", from: "Organisation")
+    fill_in "Organisation", with: "Test Org\n"
     choose("Editor")
     click_button "Save"
   end
