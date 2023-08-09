@@ -20,7 +20,7 @@
                              label: { size: 'm' },
                              rows: 15)  %>
 
-      <%= f.govuk_submit (additional_guidance_form.additional_guidance_markdown.blank? ? t("guidance.preview_guidance") : t("guidance.update_preview")), secondary: true,  name: :preview_markdown %>
+      <%= f.govuk_submit (additional_guidance_form.additional_guidance_markdown.blank? ? t("guidance.preview_guidance") : t("guidance.update_preview")), secondary: true,  name: "route_to", value: "preview" %>
 
       <details class="govuk-details" data-module="govuk-details">
         <summary class="govuk-details__summary">
@@ -52,6 +52,8 @@
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
       <% end %>
+
+      <%= f.govuk_submit t("continue"), name: "route_to", value: "save_and_continue" %>
 
     <% end %>
     <p>
