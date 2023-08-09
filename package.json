@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "govuk-frontend": "~4.7.0",
-    "dfe-autocomplete": "github:DFE-Digital/dfe-autocomplete"
+    "dfe-autocomplete": "github:DFE-Digital/dfe-autocomplete#36d80e6b5bba67c92cd9ec6982a4e536d1889aed"
   },
   "standard": {
     "globals": [
