@@ -98,9 +98,6 @@ en:
   environment_names:
     dev: development
     local: local
-    paas_dev: development
-    paas_production: production
-    paas_staging: staging
     production: production
     staging: staging
     user-research: user research

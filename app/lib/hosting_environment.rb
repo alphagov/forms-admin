@@ -12,7 +12,7 @@ module HostingEnvironment
   end
 
   def self.dev?
-    environment_name == "dev" || environment_name == "paas_dev"
+    environment_name == "dev"
   end
 
   def self.test_environment?
