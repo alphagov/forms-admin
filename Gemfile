@@ -84,6 +84,12 @@ group :development, :test do
   gem "rspec-rails", ">= 3.9.0"
   gem "rubocop-govuk", require: false
   gem "timecop"
+
+  # For security auditing gem vulnerabilities. RUN IN CI
+  gem "bundler-audit", "~> 0.9.0"
+
+  # For detecting security vulnerabilities in Ruby on Rails applications via static analysis.
+  gem "brakeman", "~> 6.0.1"
 end
 
 group :development do
@@ -112,9 +118,3 @@ group :test do
   # axe-core for running automated accessibility checks
   gem "axe-core-rspec"
 end
-
-# For security auditing gem vulnerabilities. RUN IN CI
-gem "bundler-audit", "~> 0.9.0"
-
-# For detecting security vulnerabilities in Ruby on Rails applications via static analysis.
-gem "brakeman", "~> 6.0.1"
