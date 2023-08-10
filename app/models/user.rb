@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   include GDS::SSO::User
+  has_paper_trail only: %i[role organisation_id has_access]
 
   class UserAuthenticationException < StandardError; end
 

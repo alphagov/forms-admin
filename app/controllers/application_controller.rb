@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   before_action :set_request_id
   before_action :check_maintenance_mode_is_enabled
   before_action :authenticate_and_check_access
+  before_action :set_paper_trail_whodunnit
+
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
   before_action :clear_questions_session_data

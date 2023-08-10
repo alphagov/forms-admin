@@ -8,6 +8,12 @@ describe User do
     expect(user.valid?).to be true
   end
 
+  describe "versioning", versioning: true do
+    it "enables paper trail" do
+      expect(user).to be_versioned
+    end
+  end
+
   describe "role enum" do
     it "returns a list of roles" do
       expect(described_class.roles.keys).to eq(%w[super_admin editor trial])
@@ -148,5 +154,38 @@ describe User do
   it "defaults to the trial role" do
     user = described_class.new
     expect(user.role).to eq("trial")
+  end
+
+  describe "versioning" do
+    with_versioning do
+      it "creates a version when role is changed" do
+        user = create :user
+        expect {
+          user.update!(role: :editor)
+        }.to change { user.versions.size }.by(1)
+      end
+
+      it "creates a version when organisation_id is changed" do
+        user = create :user, :with_no_org
+        expect {
+          org = create :organisation
+          user.update!(organisation: org)
+        }.to change { user.versions.size }.by(1)
+      end
+
+      it "creates a version when has_access is changed" do
+        user = create :user
+        expect {
+          user.update!(has_access: false)
+        }.to change { user.versions.size }.by(1)
+      end
+
+      it "does not create a version when other attributes are changed" do
+        user = create :user
+        expect {
+          user.update(name: "new_name", email: "new_email@example.gov.uk", uid: Faker::Internet.uuid, provider: "new_provider")
+        }.not_to(change { user.versions.size })
+      end
+    end
   end
 end
