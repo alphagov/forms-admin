@@ -53,8 +53,6 @@ class ApplicationController < ActionController::Base
   end
 
   def set_request_id
-    request.request_id = request_id
-
     # Pass the request id to the API to enable tracing
     if Rails.env.production?
       [Form, Page].each do |active_resource_model|
@@ -63,23 +61,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # PaaS uses a different header to pass on the request_id
-  # https://github.com/cloudfoundry/gorouter/issues/148 If PaaS header exists,
-  # use it, otherwise use standard header or generate new value
-  def request_id
-    vcap_request_id = request.env.fetch("HTTP_X_VCAP_REQUEST_ID", false)
-    if vcap_request_id
-      # This is a user input so take basic precautions by limiting chars to
-      # range and length
-      vcap_request_id.gsub(/[^\w\-@]/, "").first(255)
-    else
-      request.request_id
-    end
-  end
-
   # Because determining the clients real IP is hard, simply return the first
   # value of the x-forwarded_for, checking it's an IP. This will probably be
-  # enough for our basic monitoring in PaaS
+  # enough for our basic monitoring
   def user_ip(forwarded_for = "")
     first_ip_string = forwarded_for.split(",").first
     Regexp.union([Resolv::IPv4::Regex, Resolv::IPv6::Regex]).match(first_ip_string) && first_ip_string

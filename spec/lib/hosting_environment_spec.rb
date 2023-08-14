@@ -38,14 +38,6 @@ RSpec.describe HostingEnvironment do
       end
     end
 
-    context "with forms_env set to paas_dev" do
-      let(:settings__forms_env) { "paas_dev" }
-
-      it "returns true" do
-        expect(described_class.test_environment?).to be(true)
-      end
-    end
-
     context "with forms_env set to production" do
       let(:settings__forms_env) { "production" }
 
@@ -78,8 +70,6 @@ RSpec.describe HostingEnvironment do
     [
       { environment_name: "local", expected_key: "local" },
       { environment_name: "dev", expected_key: "dev" },
-      { environment_name: "paas_production", expected_key: "production" },
-      { environment_name: "paas_staging", expected_key: "staging" },
       { environment_name: "user-research", expected_key: "user-research" },
     ].each do |scenario|
       context "with environment name set to '#{scenario[:environment_name]}'" do
