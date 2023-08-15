@@ -81,6 +81,8 @@ RSpec.describe PagesController, type: :request do
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
           answer_settings: nil,
+          page_heading: nil,
+          additional_guidance_markdown: nil,
         }].to_json
       end
 
@@ -151,6 +153,8 @@ RSpec.describe PagesController, type: :request do
           answer_type: "address",
           answer_settings: nil,
           is_optional: false,
+          page_heading: "New page heading",
+          additional_guidance_markdown: "## Heading level 2",
         }.to_json
       end
 
@@ -162,6 +166,8 @@ RSpec.describe PagesController, type: :request do
           answer_type: "address",
           answer_settings: nil,
           is_optional: nil,
+          page_heading: "New page heading",
+          additional_guidance_markdown: "## Heading level 2",
         }
       end
 
@@ -192,6 +198,8 @@ RSpec.describe PagesController, type: :request do
           question_text: "What is your home address?",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
+          page_heading: "New page heading",
+          additional_guidance_markdown: "## Heading level 2",
         } }
       end
 

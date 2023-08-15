@@ -40,9 +40,9 @@ class PagesController < ApplicationController
   end
 
   def update
-    page.load_from_session(session, %w[answer_type answer_settings]).load(page_params)
+    page.load_from_session(session, %w[answer_type answer_settings page_heading additional_guidance_markdown]).load(page_params)
 
-    if @page.save
+    if page.save
       clear_questions_session_data
       handle_submit_action
     else
