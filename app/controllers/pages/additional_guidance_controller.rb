@@ -23,6 +23,30 @@ class Pages::AdditionalGuidanceController < PagesController
     end
   end
 
+  def edit
+    page.load_from_session(session, %w[answer_type page_heading additional_guidance_markdown])
+
+    additional_guidance_form = Pages::AdditionalGuidanceForm.new(page_heading: page.page_heading,
+                                                                 additional_guidance_markdown: page.additional_guidance_markdown)
+
+    render "pages/additional_guidance", locals: view_locals(additional_guidance_form)
+  end
+
+  def update
+    additional_guidance_form = Pages::AdditionalGuidanceForm.new(additional_guidance_form_params)
+
+    case route_to
+    when :preview
+      render "pages/additional_guidance", locals: view_locals(additional_guidance_form)
+    when :save_and_continue
+      if additional_guidance_form.submit(session)
+        redirect_to edit_page_path(@form.id, page.id)
+      else
+        render "pages/additional_guidance", locals: view_locals(additional_guidance_form), status: :unprocessable_entity
+      end
+    end
+  end
+
 private
 
   def additional_guidance_form_params
