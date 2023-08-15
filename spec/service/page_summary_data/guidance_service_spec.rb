@@ -5,7 +5,8 @@ RSpec.describe PageSummaryData::GuidanceService do
 
   let(:service) { described_class.call(form:, page:) }
   let(:form) { build :form, id: 1 }
-  let(:page) { build :page, :with_guidance, form: }
+  let(:page) { build :page, :with_guidance, id: page_id, form: }
+  let(:page_id) { nil }
 
   describe "#build_data" do
     let(:result) { service.build_data }
@@ -28,6 +29,14 @@ RSpec.describe PageSummaryData::GuidanceService do
       it "has an action to take the user back to change the value" do
         expect(row[:actions].first[:href]).to eq(additional_guidance_new_path(form_id: form.id))
       end
+
+      context "when editing guidance for an existing page" do
+        let(:page_id) { 1 }
+
+        it "has an action to take the user back to change the value" do
+          expect(row[:actions].first[:href]).to eq(additional_guidance_edit_path(form_id: form.id, page_id:))
+        end
+      end
     end
 
     describe "second row of summary list" do
@@ -43,6 +52,14 @@ RSpec.describe PageSummaryData::GuidanceService do
 
       it "has an action to take the user back to change the value" do
         expect(row[:actions].first[:href]).to eq(additional_guidance_new_path(form_id: form.id))
+      end
+
+      context "when editing guidance for an existing page" do
+        let(:page_id) { 1 }
+
+        it "has an action to take the user back to change the value" do
+          expect(row[:actions].first[:href]).to eq(additional_guidance_edit_path(form_id: form.id, page_id:))
+        end
       end
     end
 

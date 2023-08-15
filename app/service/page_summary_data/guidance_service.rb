@@ -28,19 +28,27 @@ module PageSummaryData
       [{
         key: { text: "Page heading" },
         value: { text: page.page_heading },
-        actions: [{ href: additional_guidance_new_path(form_id: form.id), visually_hidden_text: "page heading" }],
+        actions: [{ href: change_url, visually_hidden_text: "page heading" }],
       },
        {
          key: { text: "Guidance text" },
          value: {
            text: markdown_content,
          },
-         actions: [{ href: additional_guidance_new_path(form_id: form.id), visually_hidden_text: "guidance text" }],
+         actions: [{ href: change_url, visually_hidden_text: "guidance text" }],
        }]
     end
 
     def markdown_content
       safe_join(['<pre class="app-markdown-example-block">'.html_safe, page.additional_guidance_markdown, "</pre>".html_safe])
+    end
+
+    def change_url
+      if page.id.present?
+        additional_guidance_edit_path(form_id: form.id, page_id: page.id)
+      else
+        additional_guidance_new_path(form_id: form.id)
+      end
     end
   end
 end
