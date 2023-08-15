@@ -63,7 +63,7 @@ describe "pages/_form.html.erb", type: :view do
       let(:is_new_page) { false }
 
       it "contains a link to add guidance" do
-        expect(rendered).to have_link(text: I18n.t("guidance.add_guidance"), href: additional_guidance_new_path(form_id: form.id))
+        expect(rendered).to have_link(text: I18n.t("guidance.add_guidance"), href: additional_guidance_edit_path(form_id: form.id, page_id: question.id))
       end
     end
   end
