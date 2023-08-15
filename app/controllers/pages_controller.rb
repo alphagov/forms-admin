@@ -36,13 +36,11 @@ class PagesController < ApplicationController
 
   def edit
     reset_session_if_answer_settings_not_present
-    @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    @page.load_from_session(session, %w[answer_settings answer_type is_optional page_heading additional_guidance_markdown])
+    page.load_from_session(session, %w[answer_settings answer_type is_optional page_heading additional_guidance_markdown])
   end
 
   def update
-    @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    @page.load_from_session(session, %w[answer_type answer_settings]).load(page_params)
+    page.load_from_session(session, %w[answer_type answer_settings]).load(page_params)
 
     if @page.save
       clear_questions_session_data

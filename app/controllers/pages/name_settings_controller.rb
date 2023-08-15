@@ -21,8 +21,7 @@ class Pages::NameSettingsController < PagesController
   end
 
   def edit
-    @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    @page.load_from_session(session, %w[answer_type answer_settings])
+    page.load_from_session(session, %w[answer_type answer_settings])
     input_type = @page&.answer_settings&.input_type
     title_needed = @page&.answer_settings&.title_needed
     @name_settings_form = Forms::NameSettingsForm.new(input_type:, title_needed:, page: @page)
@@ -32,7 +31,7 @@ class Pages::NameSettingsController < PagesController
   end
 
   def update
-    @page = Page.find(params[:page_id], params: { form_id: @form.id })
+    page
     @name_settings_form = Forms::NameSettingsForm.new(name_settings_form_params)
     @name_settings_path = name_settings_update_path(@form)
     @back_link_url = type_of_answer_edit_path(@form)
