@@ -20,8 +20,7 @@ class Pages::TextSettingsController < PagesController
   end
 
   def edit
-    @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    @page.load_from_session(session, %w[answer_type answer_settings])
+    page.load_from_session(session, %w[answer_type answer_settings])
     input_type = @page&.answer_settings&.input_type
     @text_settings_form = Forms::TextSettingsForm.new(input_type:, page: @page)
     @text_settings_path = text_settings_update_path(@form)
@@ -30,7 +29,7 @@ class Pages::TextSettingsController < PagesController
   end
 
   def update
-    @page = Page.find(params[:page_id], params: { form_id: @form.id })
+    page
     @text_settings_form = Forms::TextSettingsForm.new(text_settings_form_params)
     @text_settings_path = text_settings_update_path(@form)
     @back_link_url = type_of_answer_edit_path(@form)

@@ -18,8 +18,7 @@ class Pages::TypeOfAnswerController < PagesController
   end
 
   def edit
-    @page = Page.find(params[:page_id], params: { form_id: @form.id })
-    @page.load_from_session(session, %w[answer_type])
+    page.load_from_session(session, %w[answer_type])
 
     @type_of_answer_form = Forms::TypeOfAnswerForm.new(answer_type: @page.answer_type, page: @page)
     @type_of_answer_path = type_of_answer_update_path(@form)
@@ -27,7 +26,7 @@ class Pages::TypeOfAnswerController < PagesController
   end
 
   def update
-    @page = Page.find(params[:page_id], params: { form_id: @form.id })
+    page
     answer_type = session.dig(:page, "answer_type")
 
     @page.load(answer_type:)
