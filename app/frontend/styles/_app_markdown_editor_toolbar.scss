@@ -1,0 +1,46 @@
+.app-markdown-editor-toolbar {
+  display: flex;
+  gap: 5px;
+  flex-flow: row wrap;
+  padding: 10px 3px;
+
+  &:focus-within {
+    box-shadow: inset 0 0 0 2px;
+    outline: 3px solid $govuk-focus-colour;
+    outline-offset: 0;
+  }
+}
+
+.app-markdown-editor-toolbar__button-group {
+  display: flex;
+  gap: 0 govuk-px-to-rem(1);
+}
+
+.app-markdown-editor-toolbar__button {
+  width: govuk-px-to-rem(40);
+  height: govuk-px-to-rem(40);
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  margin: 0;
+
+  &--h2 {
+    background-image: url("../../assets/icons/markdown-editor-h2.svg");
+  }
+
+  &--h3 {
+    background-image: url("../../assets/icons/markdown-editor-h3.svg");
+  }
+
+  &--bullet-list {
+    background-image: url("../../assets/icons/markdown-editor-bullet-list.svg");
+  }
+
+  &--numbered-list {
+    background-image: url("../../assets/icons/markdown-editor-numbered-list.svg");
+  }
+
+  &--link {
+    background-image: url("../../assets/icons/markdown-editor-link.svg");
+  }
+}

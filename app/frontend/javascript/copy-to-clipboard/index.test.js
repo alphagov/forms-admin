@@ -1,6 +1,9 @@
 /**
  * @jest-environment jsdom
  */
+
+import copyToClipboard from '../copy-to-clipboard'
+
 Object.defineProperty(navigator, 'clipboard', {
   value: {
     writeText: () => {}
@@ -13,7 +16,17 @@ describe('Copy to clipboard', () => {
       <p data-copy-target>It worked!</p>
     </div>
   `
-  require('../../entrypoints/application.js')
+
+  document
+    .querySelectorAll('[data-module="copy-to-clipboard"]')
+    .forEach(element => {
+      copyToClipboard(
+        element,
+        element.querySelector('[data-copy-target]'),
+        element.dataset.copyButtonText
+      )
+    })
+
   const copyButton = document.querySelector('button')
 
   test('button is created', () => {
