@@ -61,10 +61,10 @@ describe('Markdown toolbar', () => {
 
   test('toolbar has the required buttons', () => {
     ;[
-      'Add a level 2 heading',
-      'Add a level 3 heading',
+      'Add a second-level heading',
+      'Add a third-level heading',
       'Add a link',
-      'Add a bullet list',
+      'Add a bulleted list',
       'Add a numbered list'
     ].forEach(buttonText => {
       const button = getByText(document, buttonText)
@@ -115,11 +115,11 @@ describe('Markdown toolbar', () => {
     })
   })
 
-  describe('level 2 heading button', () => {
+  describe('second-level heading button', () => {
     test('formats the whole line if only a part of the line is selected', () => {
       selectText(textArea, 'references')
 
-      getByText(toolbar, 'Add a level 2 heading').click()
+      getByText(toolbar, 'Add a second-level heading').click()
 
       expect(
         textArea.value.substring(textArea.selectionStart, textArea.selectionEnd)
@@ -132,7 +132,7 @@ describe('Markdown toolbar', () => {
         textArea.value.length - 1
       )
 
-      getByText(toolbar, 'Add a level 2 heading').click()
+      getByText(toolbar, 'Add a second-level heading').click()
 
       expect(
         textArea.value.substring(textArea.selectionStart, textArea.selectionEnd)
@@ -147,7 +147,7 @@ describe('Markdown toolbar', () => {
           'This is an item with an existing markdown block style'
         )
 
-        getByText(toolbar, 'Add a level 2 heading').click()
+        getByText(toolbar, 'Add a second-level heading').click()
 
         expect(
           textArea.value.substring(
@@ -159,11 +159,11 @@ describe('Markdown toolbar', () => {
     })
   })
 
-  describe('level 3 heading button', () => {
+  describe('third-level heading button', () => {
     test('formats the whole line if only a part of the line is selected', () => {
       selectText(textArea, 'find a 10 figure grid reference')
 
-      getByText(toolbar, 'Add a level 3 heading').click()
+      getByText(toolbar, 'Add a third-level heading').click()
 
       expect(
         textArea.value.substring(textArea.selectionStart, textArea.selectionEnd)
@@ -176,7 +176,7 @@ describe('Markdown toolbar', () => {
         textArea.value.length - 1
       )
 
-      getByText(toolbar, 'Add a level 3 heading').click()
+      getByText(toolbar, 'Add a third-level heading').click()
 
       expect(
         textArea.value.substring(textArea.selectionStart, textArea.selectionEnd)
@@ -191,7 +191,7 @@ describe('Markdown toolbar', () => {
           'This is an item with an existing markdown block style'
         )
 
-        getByText(toolbar, 'Add a level 3 heading').click()
+        getByText(toolbar, 'Add a third-level heading').click()
 
         expect(
           textArea.value.substring(
@@ -251,7 +251,7 @@ describe('Markdown toolbar', () => {
     test('formats the whole line if only a part of the line is selected', () => {
       selectText(textArea, 'Grid Reference Finder')
 
-      getByText(toolbar, 'Add a bullet list').click()
+      getByText(toolbar, 'Add a bulleted list').click()
 
       expect(
         textArea.value.substring(textArea.selectionStart, textArea.selectionEnd)
@@ -264,7 +264,7 @@ describe('Markdown toolbar', () => {
         textArea.value.length - 1
       )
 
-      getByText(toolbar, 'Add a bullet list').click()
+      getByText(toolbar, 'Add a bulleted list').click()
 
       expect(
         textArea.value.substring(textArea.selectionStart, textArea.selectionEnd)
@@ -279,7 +279,7 @@ describe('Markdown toolbar', () => {
           'This is an item with an existing markdown block style'
         )
 
-        getByText(toolbar, 'Add a bullet list').click()
+        getByText(toolbar, 'Add a bulleted list').click()
 
         expect(
           textArea.value.substring(
@@ -299,7 +299,9 @@ describe('Markdown toolbar', () => {
 
       expect(
         textArea.value.substring(textArea.selectionStart, textArea.selectionEnd)
-      ).toBe('[Grid Reference Finder website](https://example.com)')
+      ).toBe(
+        '[Grid Reference Finder website](https://www.gov.uk/link-text-url)'
+      )
     })
 
     test('adds placeholder text if there is no text on the selected line', () => {
@@ -312,7 +314,7 @@ describe('Markdown toolbar', () => {
 
       expect(
         textArea.value.substring(textArea.selectionStart, textArea.selectionEnd)
-      ).toBe('[Link text](https://example.com)')
+      ).toBe('[Link text](https://www.gov.uk/link-text-url)')
     })
 
     test('excludes the existing prefix from the link', () => {
@@ -328,7 +330,7 @@ describe('Markdown toolbar', () => {
             textArea.selectionEnd
           )
         ).toBe(
-          `${prefix}[This is an item with an existing markdown block style](https://example.com)`
+          `${prefix}[This is an item with an existing markdown block style](https://www.gov.uk/link-text-url)`
         )
       })
     })

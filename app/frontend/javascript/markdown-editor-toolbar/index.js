@@ -9,7 +9,7 @@ const addLink = (event, textArea) => {
   const selectionWithoutPrefix = selection.replace(blockPrefix, '')
   const linkMarkdown = `${blockPrefix}[${
     selectionEnd === selectionStart ? 'Link text' : selectionWithoutPrefix
-  }](https://example.com)`
+  }](https://www.gov.uk/link-text-url)`
   updateSelection(textArea, selectionStart, selectionEnd, linkMarkdown)
 }
 
@@ -44,13 +44,21 @@ const addUnorderedList = addBlockElement(
 
 const buttonGroupConfiguration = [
   [
-    { buttonText: 'Add a level 2 heading', identifier: 'h2', callback: addH2 },
-    { buttonText: 'Add a level 3 heading', identifier: 'h3', callback: addH3 }
+    {
+      buttonText: 'Add a second-level heading',
+      identifier: 'h2',
+      callback: addH2
+    },
+    {
+      buttonText: 'Add a third-level heading',
+      identifier: 'h3',
+      callback: addH3
+    }
   ],
   [{ buttonText: 'Add a link', identifier: 'link', callback: addLink }],
   [
     {
-      buttonText: 'Add a bullet list',
+      buttonText: 'Add a bulleted list',
       identifier: 'bullet-list',
       callback: addUnorderedList
     },
