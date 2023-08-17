@@ -1,6 +1,7 @@
 import { initAll } from 'govuk-frontend'
-import copyToClipboard from '../javascript/copy-to-clipboard'
 import dfeAutocomplete from 'dfe-autocomplete'
+import copyToClipboard from '../javascript/copy-to-clipboard'
+import markdownEditorToolbar from '../javascript/markdown-editor-toolbar'
 
 document
   .querySelectorAll('[data-module="copy-to-clipboard"]')
@@ -10,6 +11,12 @@ document
       element.querySelector('[data-copy-target]'),
       element.dataset.copyButtonText
     )
+  })
+
+document
+  .querySelectorAll('[data-module="markdown-editor-toolbar"]')
+  .forEach(element => {
+    markdownEditorToolbar(element)
   })
 
 initAll()

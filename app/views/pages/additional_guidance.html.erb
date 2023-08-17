@@ -18,7 +18,8 @@
 
       <%= f.govuk_text_area( :additional_guidance_markdown,
                              label: { size: 'm' },
-                             rows: 15)  %>
+                             rows: 15,
+                             "data-module": "markdown-editor-toolbar")  %>
 
       <%= f.govuk_submit (additional_guidance_form.additional_guidance_markdown.blank? ? t("guidance.preview_guidance") : t("guidance.update_preview")), secondary: true,  name: "route_to", value: "preview" %>
 
