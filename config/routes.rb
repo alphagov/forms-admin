@@ -99,6 +99,8 @@ Rails.application.routes.draw do
           post "/name-settings" => "pages/name_settings#update", as: :name_settings_update
           get "/" => "pages#edit", as: :edit_page
           patch "/" => "pages#update", as: :update_page
+          get "/additional-guidance" => "pages/additional_guidance#edit", as: :additional_guidance_edit
+          post "/additional-guidance" => "pages/additional_guidance#update", as: :additional_guidance_update
         end
 
         scope "/delete" do
