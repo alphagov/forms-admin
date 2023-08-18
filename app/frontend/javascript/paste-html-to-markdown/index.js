@@ -18,17 +18,11 @@ const insertTextAtCursor = (field, contentToInsert) => {
 }
 
 const htmlFromPasteEvent = event => {
-  if (event.clipboardData) {
-    return event.clipboardData.getData('text/html')
-  }
+  return event.clipboardData.getData('text/html')
 }
 
 const textFromPasteEvent = event => {
-  if (event.clipboardData) {
-    return event.clipboardData.getData('text/plain')
-  } else if (window.clipboardData) {
-    return window.clipboardData.getData('Text')
-  }
+  return event.clipboardData.getData('text/plain')
 }
 
 const triggerPasteEvent = (element, eventName, detail) => {
@@ -41,20 +35,22 @@ const triggerPasteEvent = (element, eventName, detail) => {
 }
 
 const pasteListener = event => {
-  const element = event.target
+  if (event.clipboardData) {
+    const element = event.target
 
-  const html = htmlFromPasteEvent(event)
-  triggerPasteEvent(element, 'htmlpaste', html)
+    const html = htmlFromPasteEvent(event)
+    triggerPasteEvent(element, 'htmlpaste', html)
 
-  const text = textFromPasteEvent(event)
-  triggerPasteEvent(element, 'textpaste', text)
+    const text = textFromPasteEvent(event)
+    triggerPasteEvent(element, 'textpaste', text)
 
-  if (html?.length) {
-    const markdown = htmlToMarkdown(html)
-    triggerPasteEvent(element, 'markdown', markdown)
+    if (html?.length) {
+      const markdown = htmlToMarkdown(html)
+      triggerPasteEvent(element, 'markdown', markdown)
 
-    insertTextAtCursor(element, markdown)
-    event.preventDefault()
+      insertTextAtCursor(element, markdown)
+      event.preventDefault()
+    }
   }
 }
 
