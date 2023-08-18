@@ -1,7 +1,21 @@
 // Adapted from the [Paste HTML to govspeak](https://github.com/alphagov/paste-html-to-govspeak) package.
 
 import htmlToMarkdown from './html-to-markdown'
-import insertTextAtCursor from 'insert-text-at-cursor'
+
+const insertTextAtCursor = (field, contentToInsert) => {
+  const selectionStart = field.selectionStart
+  const selectionEnd = field.selectionEnd
+  if (selectionStart || selectionStart == '0') {
+    const contentBeforeSelection = field.value.substring(0, selectionStart)
+    const contentAfterSelection = field.value.substring(
+      selectionEnd,
+      field.value.length
+    )
+    field.value = `${contentBeforeSelection}${contentToInsert}${contentAfterSelection}`
+  } else {
+    field.value += contentToInsert
+  }
+}
 
 const htmlFromPasteEvent = event => {
   if (event.clipboardData) {

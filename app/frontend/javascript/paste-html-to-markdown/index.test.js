@@ -9,8 +9,6 @@ let textarea
 beforeEach(() => {
   textarea = document.createElement('textarea')
   textarea.addEventListener('paste', pasteListener)
-
-  document.execCommand = jest.fn()
 })
 
 const createHtmlPasteEvent = (html = null, text = null) => {
