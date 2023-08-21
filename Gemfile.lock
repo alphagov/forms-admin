@@ -12,10 +12,10 @@ GIT
 
 GIT
   remote: https://github.com/alphagov/govuk-forms-markdown.git
-  revision: 9f7c3953078ca636102d1cb0de0dfad792af16ee
-  tag: 0.2.0
+  revision: c1d9b83d7510b0f8d259238901de2bb9a5c2041c
+  tag: 0.2.1
   specs:
-    govuk-forms-markdown (0.2.0)
+    govuk-forms-markdown (0.2.1)
       redcarpet (~> 3.6)
 
 GEM
