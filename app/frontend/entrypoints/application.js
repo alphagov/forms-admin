@@ -2,6 +2,7 @@ import { initAll } from 'govuk-frontend'
 import dfeAutocomplete from 'dfe-autocomplete'
 import copyToClipboard from '../javascript/copy-to-clipboard'
 import markdownEditorToolbar from '../javascript/markdown-editor-toolbar'
+import { pasteListener } from '../javascript/paste-html-to-markdown'
 
 document
   .querySelectorAll('[data-module="copy-to-clipboard"]')
@@ -17,6 +18,7 @@ document
   .querySelectorAll('[data-module="markdown-editor-toolbar"]')
   .forEach(element => {
     markdownEditorToolbar(element)
+    element.addEventListener('paste', pasteListener)
   })
 
 initAll()
