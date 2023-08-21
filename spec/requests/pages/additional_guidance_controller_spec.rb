@@ -75,7 +75,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
       end
 
       it "renders the additional guidance markdown as html" do
-        expect(response.body).to include('<h2 class="govuk-heading-l">Heading level 2</h2>')
+        expect(response.body).to include('<h2 class="govuk-heading-m">Heading level 2</h2>')
       end
     end
 
@@ -162,7 +162,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
       end
 
       it "renders the additional guidance markdown as html" do
-        expect(response.body).to include('<h2 class="govuk-heading-l">Heading level 2</h2>')
+        expect(response.body).to include('<h2 class="govuk-heading-m">Heading level 2</h2>')
       end
     end
 
