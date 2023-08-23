@@ -5,7 +5,7 @@ import htmlToMarkdown from './html-to-markdown'
 const insertTextAtCursor = (field, contentToInsert) => {
   const selectionStart = field.selectionStart
   const selectionEnd = field.selectionEnd
-  if (selectionStart || selectionStart == '0') {
+  if (selectionStart || selectionStart === '0') {
     const contentBeforeSelection = field.value.substring(0, selectionStart)
     const contentAfterSelection = field.value.substring(
       selectionEnd,
@@ -27,9 +27,7 @@ const textFromPasteEvent = event => {
 
 const triggerPasteEvent = (element, eventName, detail) => {
   const params = { bubbles: false, cancelable: false, detail: detail || null }
-  let event
-
-  event = new window.CustomEvent(eventName, params)
+  const event = new window.CustomEvent(eventName, params)
 
   element.dispatchEvent(event)
 }
