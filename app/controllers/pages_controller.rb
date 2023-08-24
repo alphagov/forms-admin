@@ -15,16 +15,16 @@ class PagesController < ApplicationController
     answer_settings = session.dig(:page, "answer_settings")
     is_optional = session.dig(:page, "is_optional") == "true"
     page_heading = session.dig(:page, "page_heading")
-    additional_guidance_markdown = session.dig(:page, "additional_guidance_markdown")
-    @page = Page.new(form_id: @form.id, question_text:, answer_type:, answer_settings:, is_optional:, page_heading:, additional_guidance_markdown:)
+    guidance_markdown = session.dig(:page, "guidance_markdown")
+    @page = Page.new(form_id: @form.id, question_text:, answer_type:, answer_settings:, is_optional:, page_heading:, guidance_markdown:)
   end
 
   def create
     answer_settings = session.dig(:page, "answer_settings")
     page_heading = session.dig(:page, "page_heading")
-    additional_guidance_markdown = session.dig(:page, "additional_guidance_markdown")
+    guidance_markdown = session.dig(:page, "guidance_markdown")
 
-    @page = Page.new(page_params.merge(answer_settings:, page_heading:, additional_guidance_markdown:))
+    @page = Page.new(page_params.merge(answer_settings:, page_heading:, guidance_markdown:))
 
     if @page.save
       clear_questions_session_data
@@ -36,11 +36,11 @@ class PagesController < ApplicationController
 
   def edit
     reset_session_if_answer_settings_not_present
-    page.load_from_session(session, %w[answer_settings answer_type is_optional page_heading additional_guidance_markdown])
+    page.load_from_session(session, %w[answer_settings answer_type is_optional page_heading guidance_markdown])
   end
 
   def update
-    page.load_from_session(session, %w[answer_type answer_settings page_heading additional_guidance_markdown]).load(page_params)
+    page.load_from_session(session, %w[answer_type answer_settings page_heading guidance_markdown]).load(page_params)
 
     if page.save
       clear_questions_session_data

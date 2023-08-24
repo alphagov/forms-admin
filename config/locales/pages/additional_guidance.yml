@@ -3,11 +3,11 @@ en:
     hint:
       pages_additional_guidance_form:
         page_heading: Use a heading that’s a statement rather than a question - for example, ‘Interview needs’. This will be your main page heading.
-        additional_guidance_markdown: Use Markdown if you need to format your guidance content. Formatting help can be found below.
+        guidance_markdown: Use Markdown if you need to format your guidance content. Formatting help can be found below.
     label:
       pages_additional_guidance_form:
         page_heading: Give your page a heading
-        additional_guidance_markdown: Add guidance text
+        guidance_markdown: Add guidance text
   activemodel:
     errors:
       models:
@@ -15,5 +15,5 @@ en:
           attributes:
             page_heading:
               blank: Enter a page heading
-            additional_guidance_markdown:
+            guidance_markdown:
               blank: Enter guidance text

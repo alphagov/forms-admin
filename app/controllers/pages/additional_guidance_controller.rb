@@ -3,8 +3,8 @@ require "govuk_forms_markdown"
 class Pages::AdditionalGuidanceController < PagesController
   def new
     page_heading = session.dig(:page, "page_heading")
-    additional_guidance_markdown = session.dig(:page, "additional_guidance_markdown")
-    additional_guidance_form = Pages::AdditionalGuidanceForm.new(page_heading:, additional_guidance_markdown:)
+    guidance_markdown = session.dig(:page, "guidance_markdown")
+    additional_guidance_form = Pages::AdditionalGuidanceForm.new(page_heading:, guidance_markdown:)
     render "pages/additional_guidance", locals: view_locals(nil, additional_guidance_form)
   end
 
@@ -24,10 +24,10 @@ class Pages::AdditionalGuidanceController < PagesController
   end
 
   def edit
-    page.load_from_session(session, %w[answer_type page_heading additional_guidance_markdown])
+    page.load_from_session(session, %w[answer_type page_heading guidance_markdown])
 
     additional_guidance_form = Pages::AdditionalGuidanceForm.new(page_heading: page.page_heading,
-                                                                 additional_guidance_markdown: page.additional_guidance_markdown)
+                                                                 guidance_markdown: page.guidance_markdown)
 
     render "pages/additional_guidance", locals: view_locals(page, additional_guidance_form)
   end
@@ -50,7 +50,7 @@ class Pages::AdditionalGuidanceController < PagesController
 private
 
   def additional_guidance_form_params
-    params.require(:pages_additional_guidance_form).permit(:page_heading, :additional_guidance_markdown)
+    params.require(:pages_additional_guidance_form).permit(:page_heading, :guidance_markdown)
   end
 
   def route_to
@@ -58,9 +58,9 @@ private
   end
 
   def preview_html(guidance_form)
-    return nil if guidance_form.additional_guidance_markdown.blank?
+    return nil if guidance_form.guidance_markdown.blank?
 
-    GovukFormsMarkdown.render(guidance_form.additional_guidance_markdown)
+    GovukFormsMarkdown.render(guidance_form.guidance_markdown)
   end
 
   def view_locals(current_page, guidance_form)

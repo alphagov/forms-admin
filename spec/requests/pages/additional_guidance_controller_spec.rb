@@ -5,7 +5,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
   let(:pages) { build_list :page, 5, form_id: form.id }
   let(:page) { pages.first }
   let(:page_heading) { "Page heading" }
-  let(:additional_guidance_markdown) { "## Heading level 2" }
+  let(:guidance_markdown) { "## Heading level 2" }
 
   let(:req_headers) do
     {
@@ -56,7 +56,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
         mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
       end
-      post additional_guidance_new_path(form_id: form.id), params: { pages_additional_guidance_form: { page_heading:, additional_guidance_markdown: }, route_to: }
+      post additional_guidance_new_path(form_id: form.id), params: { pages_additional_guidance_form: { page_heading:, guidance_markdown: }, route_to: }
     end
 
     context "when previewing markdown" do
@@ -74,7 +74,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
         expect(response).to have_http_status(:ok)
       end
 
-      it "renders the additional guidance markdown as html" do
+      it "renders the guidance markdown as html" do
         expect(response.body).to include('<h2 class="govuk-heading-m">Heading level 2</h2>')
       end
     end
@@ -86,9 +86,9 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
         expect(form).to have_been_read
       end
 
-      it "saves the page_heading and additional_guidance_markdown to session" do
+      it "saves the page_heading and guidance_markdown to session" do
         expect(session[:page][:page_heading]).to eq("Page heading")
-        expect(session[:page][:additional_guidance_markdown]).to eq("## Heading level 2")
+        expect(session[:page][:guidance_markdown]).to eq("## Heading level 2")
       end
 
       it "redirects the user to the new question page" do
@@ -143,7 +143,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
         mock.get "/api/v1/forms/1/pages/#{page.id}", req_headers, page.to_json, 200
       end
-      post additional_guidance_update_path(form_id: form.id, page_id: page.id), params: { pages_additional_guidance_form: { page_heading:, additional_guidance_markdown: }, route_to: }
+      post additional_guidance_update_path(form_id: form.id, page_id: page.id), params: { pages_additional_guidance_form: { page_heading:, guidance_markdown: }, route_to: }
     end
 
     context "when previewing markdown" do
@@ -161,7 +161,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
         expect(response).to have_http_status(:ok)
       end
 
-      it "renders the additional guidance markdown as html" do
+      it "renders the guidance markdown as html" do
         expect(response.body).to include('<h2 class="govuk-heading-m">Heading level 2</h2>')
       end
     end
@@ -173,9 +173,9 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
         expect(form).to have_been_read
       end
 
-      it "saves the page_heading and additional_guidance_markdown to session" do
+      it "saves the page_heading and guidance_markdown to session" do
         expect(session[:page][:page_heading]).to eq("Page heading")
-        expect(session[:page][:additional_guidance_markdown]).to eq("## Heading level 2")
+        expect(session[:page][:guidance_markdown]).to eq("## Heading level 2")
       end
 
       it "redirects the user to the edit question page" do

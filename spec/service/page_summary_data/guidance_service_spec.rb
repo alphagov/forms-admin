@@ -47,7 +47,7 @@ RSpec.describe PageSummaryData::GuidanceService do
       end
 
       it "has a value" do
-        expect(row[:value][:text]).to eq("<pre class=\"app-markdown-example-block\">#{page.additional_guidance_markdown}</pre>")
+        expect(row[:value][:text]).to eq("<pre class=\"app-markdown-example-block\">#{page.guidance_markdown}</pre>")
       end
 
       it "has an action to take the user back to change the value" do

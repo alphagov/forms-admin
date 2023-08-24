@@ -17,7 +17,7 @@ module PageSummaryData
     end
 
     def build_data
-      return nil unless page.page_heading.present? && page.additional_guidance_markdown.present?
+      return nil unless page.page_heading.present? && page.guidance_markdown.present?
 
       { rows: options }
     end
@@ -40,7 +40,7 @@ module PageSummaryData
     end
 
     def markdown_content
-      safe_join(['<pre class="app-markdown-example-block">'.html_safe, page.additional_guidance_markdown, "</pre>".html_safe])
+      safe_join(['<pre class="app-markdown-example-block">'.html_safe, page.guidance_markdown, "</pre>".html_safe])
     end
 
     def change_url
