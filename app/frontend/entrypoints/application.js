@@ -3,6 +3,7 @@ import dfeAutocomplete from 'dfe-autocomplete'
 import copyToClipboard from '../javascript/copy-to-clipboard'
 import markdownEditorToolbar from '../javascript/markdown-editor-toolbar'
 import { pasteListener } from '../javascript/paste-html-to-markdown'
+import ajaxMarkdownPreview from '../javascript/ajax-markdown-preview'
 
 document
   .querySelectorAll('[data-module="copy-to-clipboard"]')
@@ -19,6 +20,18 @@ document
   .forEach(element => {
     markdownEditorToolbar(element)
     element.addEventListener('paste', pasteListener)
+  })
+
+document
+  .querySelectorAll('[data-module="ajax-markdown-preview"]')
+  .forEach(element => {
+    ajaxMarkdownPreview(
+      element.querySelector('[data-ajax-markdown-target]'),
+      element.querySelector('[data-ajax-markdown-source]'),
+      element.getAttribute('data-ajax-markdown-endpoint'),
+      element.getAttribute('data-ajax-markdown-failure-text'),
+      element.getAttribute('data-ajax-markdown-loading-text')
+    )
   })
 
 initAll()

@@ -1,0 +1,7 @@
+.app-markdown-editor__notification-area {
+  @include govuk-visually-hidden;
+}
+
+.js-enabled .app-markdown-editor__preview-button {
+  display: none;
+}
