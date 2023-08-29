@@ -148,6 +148,7 @@ const updateSelection = (element, start, end, updatedText) => {
     start
   )}${updatedText}${element.value.slice(end)}`
   element.setSelectionRange(start, start + updatedText.length)
+  element.dispatchEvent(new window.InputEvent('input'))
 }
 const removeBlockPrefix = text => text.trim().replace(blockPrefixPattern, '')
 

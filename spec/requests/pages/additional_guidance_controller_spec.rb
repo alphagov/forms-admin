@@ -195,4 +195,20 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
       end
     end
   end
+
+  describe "#render_preview" do
+    let(:guidance_markdown) { "### Markdown" }
+
+    before do
+      post additional_guidance_render_preview_path(form_id: form.id), params: { guidance_markdown: }
+    end
+
+    it "returns a JSON object containing the converted HTML" do
+      expect(response.body).to eq({ preview_html: "<h3 class=\"govuk-heading-s\">Markdown</h3>" }.to_json)
+    end
+
+    it "returns 200" do
+      expect(response).to have_http_status(:ok)
+    end
+  end
 end

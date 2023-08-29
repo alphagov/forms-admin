@@ -47,6 +47,12 @@ class Pages::AdditionalGuidanceController < PagesController
     end
   end
 
+  def render_preview
+    additional_guidance_form = Pages::AdditionalGuidanceForm.new(guidance_markdown: params[:guidance_markdown])
+
+    render json: { preview_html: preview_html(additional_guidance_form) }.to_json
+  end
+
 private
 
   def additional_guidance_form_params
@@ -58,7 +64,7 @@ private
   end
 
   def preview_html(guidance_form)
-    return nil if guidance_form.guidance_markdown.blank?
+    return "<p>You have no content to preview</p>" if guidance_form.guidance_markdown.blank?
 
     GovukFormsMarkdown.render(guidance_form.guidance_markdown)
   end
