@@ -53,6 +53,7 @@ Rails.application.routes.draw do
       scope "/new" do
         get "/additional-guidance" => "pages/additional_guidance#new", as: :additional_guidance_new
         post "/additional-guidance" => "pages/additional_guidance#create", as: :additional_guidance_create
+        post "/additional-guidance-preview" => "pages/additional_guidance#render_preview", as: :additional_guidance_render_preview
         get "/type-of-answer" => "pages/type_of_answer#new", as: :type_of_answer_new
         post "/type-of-answer" => "pages/type_of_answer#create", as: :type_of_answer_create
         get "/text-settings" => "pages/text_settings#new", as: :text_settings_new
