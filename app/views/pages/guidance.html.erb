@@ -16,46 +16,59 @@
 
       <%= f.govuk_text_field( :page_heading, label: { size: 'm' })  %>
 
-      <div class="app-markdown-editor" data-module="ajax-markdown-preview" data-ajax-markdown-endpoint="<%= guidance_render_preview_path(@form) %>" data-ajax-markdown-loading-text="Loading..." data-ajax-markdown-failure-text="There was an error">
-        <%= f.govuk_text_area( :guidance_markdown,
-                              label: { size: 'm' },
+      <div class="app-markdown-editor" data-module="ajax-markdown-preview" data-ajax-markdown-endpoint="<%= additional_guidance_render_preview_path(@form) %>" data-ajax-markdown-loading-text="Preview loading" data-ajax-markdown-failure-text="Sorry, there is a problem with the service. Try again later.">
+        <label class="govuk-label govuk-label--m" for='pages-additional-guidance-form-guidance-markdown-field'>
+          <h2 class="govuk-heading-m">Add guidance text</h2>
+        </label>
+        <div class="govuk-hint" id="pages-additional-guidance-form-guidance-markdown-hint">Use Markdown if you need to format your guidance content. Formatting help can be found below.</div>
+        <%= govuk_tabs(title: nil) do |c| %>
+          <% c.with_tab(label: "Write guidance") do %>
+            <%= f.govuk_text_area( :guidance_markdown,
+                              label: nil,
+                              hint: nil,
                               rows: 15,
                               "data-module": "markdown-editor-toolbar",
                               "data-ajax-markdown-source": true)  %>
 
-        <%= f.govuk_submit (guidance_form.guidance_markdown.blank? ? t("guidance.preview_guidance") : t("guidance.update_preview")), secondary: true,  name: "route_to", value: "preview", class: "app-markdown-editor__preview-button","data-ajax-markdown-trigger": true %>
+            <%= f.govuk_submit (additional_guidance_form.guidance_markdown.blank? ? t("guidance.preview_guidance") : t("guidance.update_preview")), secondary: true,  name: "route_to", value: "preview", class: "app-markdown-editor__preview-button","data-ajax-markdown-trigger": true %>
 
-        <details class="govuk-details" data-module="govuk-details">
-          <summary class="govuk-details__summary">
-            <h2 class='govuk-details__summary-text govuk-!-font-size-19 govuk-!-margin-0 govuk-!-font-weight-regular'>
-              <%= t("guidance.formatting_help.heading") %>
-            </h2>
-          </summary>
-          <div class="govuk-details__text">
-            <% %w[links second_level_headings third_level_headings bulleted_lists numbered_lists].each do |format_name| %>
-              <h3 class="govuk-heading-m"><%= t("guidance.formatting_help.#{format_name}.heading") %></h3>
+            <details class="govuk-details" data-module="govuk-details">
+              <summary class="govuk-details__summary">
+                <h2 class='govuk-details__summary-text govuk-!-font-size-19 govuk-!-margin-0 govuk-!-font-weight-regular'>
+                  <%= t("guidance.formatting_help.heading") %>
+                </h2>
+              </summary>
+              <div class="govuk-details__text">
+                <% %w[links second_level_headings third_level_headings bulleted_lists numbered_lists].each do |format_name| %>
+                  <h3 class="govuk-heading-m"><%= t("guidance.formatting_help.#{format_name}.heading") %></h3>
 
-              <%= simple_format(t("guidance.formatting_help.#{format_name}.instructions")) %>
+                  <%= simple_format(t("guidance.formatting_help.#{format_name}.instructions")) %>
 
-              <%= govuk_inset_text do %>
-                <pre class="app-markdown-example-block"><code class="app-markdown-example-block__code"><%= t("guidance.formatting_help.#{format_name}.example") %></code ></pre>
-              <% end %>
+                  <%= govuk_inset_text do %>
+                    <pre class="app-markdown-example-block"><code class="app-markdown-example-block__code"><%= t("guidance.formatting_help.#{format_name}.example") %></code ></pre>
+                  <% end %>
+                <% end %>
+              </div>
+            </details>
+          <% end %>
+
+          <% c.with_tab(label: "Preview guidance") do %>
+            <% if preview_html.present? %>
+              <div class="app-markdown-editor__preview-intro">
+                <h2 class="govuk-heading-m"><%= t("guidance.preview.heading") %></h2>
+
+                <p><%= t("guidance.preview.description") %></p>
+              </div>
+
+              <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible app-markdown-editor__preview-line-break">
+
+              <div data-ajax-markdown-target>
+                <%= preview_html.html_safe %>
+              </div>
+
+              <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible app-markdown-editor__preview-line-break">
             <% end %>
-          </div>
-        </details>
-
-        <% if preview_html.present? %>
-          <h2 class="govuk-heading-m"><%= t("guidance.preview.heading") %></h2>
-
-          <p><%= t("guidance.preview.description") %></p>
-
-          <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-
-          <div data-ajax-markdown-target>
-            <%= preview_html.html_safe %>
-          </div>
-
-          <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+          <% end %>
         <% end %>
       </div>
 

@@ -5,3 +5,15 @@
 .js-enabled .app-markdown-editor__preview-button {
   display: none;
 }
+
+.js-enabled .app-markdown-editor__preview-intro {
+  @include govuk-media-query($from: tablet) {
+    display: none;
+  }
+}
+
+.js-enabled .app-markdown-editor__preview-line-break {
+  @include govuk-media-query($from: tablet) {
+    display: none;
+  }
+}
