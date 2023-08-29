@@ -193,6 +193,28 @@ describe TaskStatusService do
     end
   end
 
+  describe "#missing_sections" do
+    context "when mandatory tasks have not been completed" do
+      let(:form) { build(:form, :new_form) }
+
+      it "returns missing sections" do
+        expect(task_status_service.missing_sections).to eq %i[missing_pages
+                                                              missing_what_happens_next
+                                                              missing_submission_email
+                                                              missing_privacy_policy_url
+                                                              missing_contact_details]
+      end
+    end
+
+    context "when mandatory tasks have been completed" do
+      let(:form) { build(:form, :ready_for_live) }
+
+      it "returns true" do
+        expect(task_status_service.missing_sections).to eq []
+      end
+    end
+  end
+
   describe "#status_counts" do
     let(:form) { build :form }
 

@@ -30,26 +30,28 @@ private
     return unless made_live?
     return if form.ready_for_live?
 
-    if form.missing_sections.include?(:missing_pages)
+    task_status_service = TaskStatusService.new(form:)
+
+    if task_status_service.missing_sections.include?(:missing_pages)
       errors.add(:confirm_make_live, :missing_pages)
       return false
     end
 
-    if form.missing_sections.include?(:missing_submission_email)
+    if task_status_service.missing_sections.include?(:missing_submission_email)
       errors.add(:confirm_make_live, :missing_submission_email)
       return false
     end
 
-    if form.missing_sections.include?(:missing_privacy_policy_url)
+    if task_status_service.missing_sections.include?(:missing_privacy_policy_url)
       errors.add(:confirm_make_live, :missing_privacy_policy_url)
     end
 
-    if form.missing_sections.include?(:missing_contact_details)
+    if task_status_service.missing_sections.include?(:missing_contact_details)
       errors.add(:confirm_make_live, :missing_contact_details)
       return false
     end
 
-    if form.missing_sections.include?(:missing_what_happens_next)
+    if task_status_service.missing_sections.include?(:missing_what_happens_next)
       errors.add(:confirm_make_live, :missing_what_happens_next)
       false
     end

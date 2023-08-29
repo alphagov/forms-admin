@@ -39,13 +39,6 @@ describe Form, type: :model do
       it "returns true" do
         expect(completed_form.ready_for_live?).to eq true
       end
-
-      it "returns no missing fields" do
-        results = completed_form
-        results.ready_for_live?
-
-        expect(results.missing_sections).to be_empty
-      end
     end
 
     context "when a form is incomplete and should still be in draft state" do
@@ -54,14 +47,6 @@ describe Form, type: :model do
       it "returns false" do
         new_form.pages = []
         expect(new_form.ready_for_live?).to eq false
-      end
-
-      it "returns a set of keys related to missing fields" do
-        new_form.pages = []
-        results = new_form
-        results.ready_for_live?
-
-        expect(results.missing_sections).to eq %i[missing_pages missing_submission_email missing_privacy_policy_url missing_contact_details missing_what_happens_next]
       end
     end
   end

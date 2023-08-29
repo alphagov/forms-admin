@@ -90,6 +90,14 @@ class TaskStatusService
      support_contact_details_status].all? { |task| task == :completed }
   end
 
+  def missing_sections
+    { missing_pages: pages_status,
+      missing_what_happens_next: what_happens_next_status,
+      missing_submission_email: submission_email_status,
+      missing_privacy_policy_url: privacy_policy_status,
+      missing_contact_details: support_contact_details_status }.reject { |_k, v| v == :completed }.map { |k, _v| k }
+  end
+
   def can_enter_submission_email_code
     @form.email_confirmation_status == :sent
   end

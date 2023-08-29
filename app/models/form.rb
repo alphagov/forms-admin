@@ -6,8 +6,6 @@ class Form < ActiveResource::Base
   belongs_to :organisation
   has_many :pages
 
-  attr_accessor :missing_sections
-
   def self.find_live(id)
     find(:one, from: "#{prefix}forms/#{id}/live")
   end
@@ -44,20 +42,7 @@ class Form < ActiveResource::Base
   end
 
   def ready_for_live?
-    @missing_sections = []
-
-    task_list_statuses = TaskStatusService.new(form: self)
-    @missing_sections << :missing_pages unless task_list_statuses.pages_status == :completed
-    @missing_sections << :missing_submission_email unless task_list_statuses.submission_email_status == :completed
-    @missing_sections << :missing_privacy_policy_url unless task_list_statuses.privacy_policy_status == :completed
-    @missing_sections << :missing_contact_details unless task_list_statuses.support_contact_details_status == :completed
-    @missing_sections << :missing_what_happens_next unless task_list_statuses.what_happens_next_status == :completed
-
-    if @missing_sections.any?
-      false
-    else
-      true
-    end
+    TaskStatusService.new(form: self).mandatory_tasks_completed?
   end
 
   def make_live!
