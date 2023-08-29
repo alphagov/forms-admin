@@ -2,10 +2,7 @@ require "rails_helper"
 
 RSpec.describe "usage of omniauth-auth0 gem" do
   let(:omniauth_hash) do
-    Faker::Omniauth.auth0(
-      uid: "123456",
-      email: "test@example.com",
-    )
+    Faker::Omniauth.auth0
   end
 
   before do
@@ -68,14 +65,17 @@ RSpec.describe "usage of omniauth-auth0 gem" do
         get "/auth/auth0/callback"
 
         expect(described_class).to have_received(:find_for_auth).with(
-          provider: "auth0",
-          uid: "123456",
-          email: "test@example.com",
+          provider: omniauth_hash[:provider],
+          uid: omniauth_hash[:uid],
+          email: omniauth_hash[:info][:email],
+          name: omniauth_hash[:info][:nickname],
         )
 
         winning_strategy = request.env["warden"].winning_strategy
         expect(winning_strategy).to be_a Warden::Strategies[:auth0]
         expect(winning_strategy).to be_successful
+        new_user = described_class.find_for_auth(email: omniauth_hash[:info][:email])
+        expect(new_user.name).to eq omniauth_hash[:info][:nickname]
       end
     end
   end
