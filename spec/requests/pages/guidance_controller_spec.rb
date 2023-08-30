@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Pages::AdditionalGuidanceController, type: :request do
+RSpec.describe Pages::GuidanceController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
   let(:page) { pages.first }
@@ -40,7 +40,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
     end
 
     it "renders the template" do
-      expect(response).to have_rendered("pages/additional_guidance")
+      expect(response).to have_rendered("pages/guidance")
     end
 
     it "returns 200" do
@@ -67,7 +67,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
       end
 
       it "renders the template" do
-        expect(response).to have_rendered("pages/additional_guidance")
+        expect(response).to have_rendered("pages/guidance")
       end
 
       it "returns 200" do
@@ -103,7 +103,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
         end
 
         it "renders the template" do
-          expect(response).to have_rendered("pages/additional_guidance")
+          expect(response).to have_rendered("pages/guidance")
         end
       end
     end
@@ -125,7 +125,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
     end
 
     it "renders the template" do
-      expect(response).to have_rendered("pages/additional_guidance")
+      expect(response).to have_rendered("pages/guidance")
     end
 
     it "returns 200" do
@@ -154,7 +154,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
       end
 
       it "renders the template" do
-        expect(response).to have_rendered("pages/additional_guidance")
+        expect(response).to have_rendered("pages/guidance")
       end
 
       it "returns 200" do
@@ -190,7 +190,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
         end
 
         it "renders the template" do
-          expect(response).to have_rendered("pages/additional_guidance")
+          expect(response).to have_rendered("pages/guidance")
         end
       end
     end

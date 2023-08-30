@@ -11,7 +11,7 @@ en:
   activemodel:
     errors:
       models:
-        pages/additional_guidance_form:
+        pages/guidance_form:
           attributes:
             page_heading:
               blank: Enter a page heading

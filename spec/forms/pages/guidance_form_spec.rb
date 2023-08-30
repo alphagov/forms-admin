@@ -1,20 +1,20 @@
 require "rails_helper"
 
-RSpec.describe Pages::AdditionalGuidanceForm, type: :model do
+RSpec.describe Pages::GuidanceForm, type: :model do
   let(:additional_guidance_form) { described_class.new(page_heading:, guidance_markdown:) }
   let(:page_heading) { nil }
   let(:guidance_markdown) { nil }
 
   describe "validations" do
     it "is invalid if page heading is nil" do
-      error_message = I18n.t("activemodel.errors.models.pages/additional_guidance_form.attributes.page_heading.blank")
+      error_message = I18n.t("activemodel.errors.models.pages/guidance_form.attributes.page_heading.blank")
       additional_guidance_form.page_heading = nil
       expect(additional_guidance_form).to be_invalid
       expect(additional_guidance_form.errors.full_messages_for(:page_heading)).to include("Page heading #{error_message}")
     end
 
     it "is invalid if guidance_markdown is nil" do
-      error_message = I18n.t("activemodel.errors.models.pages/additional_guidance_form.attributes.guidance_markdown.blank")
+      error_message = I18n.t("activemodel.errors.models.pages/guidance_form.attributes.guidance_markdown.blank")
       additional_guidance_form.guidance_markdown = nil
       expect(additional_guidance_form).to be_invalid
       expect(additional_guidance_form.errors.full_messages_for(:guidance_markdown)).to include("Guidance markdown #{error_message}")

@@ -1,24 +1,24 @@
 require "govuk_forms_markdown"
 
-class Pages::AdditionalGuidanceController < PagesController
+class Pages::GuidanceController < PagesController
   def new
     page_heading = session.dig(:page, "page_heading")
     guidance_markdown = session.dig(:page, "guidance_markdown")
-    additional_guidance_form = Pages::AdditionalGuidanceForm.new(page_heading:, guidance_markdown:)
-    render "pages/additional_guidance", locals: view_locals(nil, additional_guidance_form)
+    additional_guidance_form = Pages::GuidanceForm.new(page_heading:, guidance_markdown:)
+    render "pages/guidance", locals: view_locals(nil, additional_guidance_form)
   end
 
   def create
-    additional_guidance_form = Pages::AdditionalGuidanceForm.new(additional_guidance_form_params)
+    additional_guidance_form = Pages::GuidanceForm.new(additional_guidance_form_params)
 
     case route_to
     when :preview
-      render "pages/additional_guidance", locals: view_locals(nil, additional_guidance_form)
+      render "pages/guidance", locals: view_locals(nil, additional_guidance_form)
     when :save_and_continue
       if additional_guidance_form.submit(session)
         redirect_to new_page_path(@form)
       else
-        render "pages/additional_guidance", locals: view_locals(nil, additional_guidance_form), status: :unprocessable_entity
+        render "pages/guidance", locals: view_locals(nil, additional_guidance_form), status: :unprocessable_entity
       end
     end
   end
@@ -26,29 +26,29 @@ class Pages::AdditionalGuidanceController < PagesController
   def edit
     page.load_from_session(session, %w[answer_type page_heading guidance_markdown])
 
-    additional_guidance_form = Pages::AdditionalGuidanceForm.new(page_heading: page.page_heading,
-                                                                 guidance_markdown: page.guidance_markdown)
+    additional_guidance_form = Pages::GuidanceForm.new(page_heading: page.page_heading,
+                                                       guidance_markdown: page.guidance_markdown)
 
-    render "pages/additional_guidance", locals: view_locals(page, additional_guidance_form)
+    render "pages/guidance", locals: view_locals(page, additional_guidance_form)
   end
 
   def update
-    additional_guidance_form = Pages::AdditionalGuidanceForm.new(additional_guidance_form_params)
+    additional_guidance_form = Pages::GuidanceForm.new(additional_guidance_form_params)
 
     case route_to
     when :preview
-      render "pages/additional_guidance", locals: view_locals(page, additional_guidance_form)
+      render "pages/guidance", locals: view_locals(page, additional_guidance_form)
     when :save_and_continue
       if additional_guidance_form.submit(session)
         redirect_to edit_page_path(@form.id, page.id)
       else
-        render "pages/additional_guidance", locals: view_locals(page, additional_guidance_form), status: :unprocessable_entity
+        render "pages/guidance", locals: view_locals(page, additional_guidance_form), status: :unprocessable_entity
       end
     end
   end
 
   def render_preview
-    additional_guidance_form = Pages::AdditionalGuidanceForm.new(guidance_markdown: params[:guidance_markdown])
+    additional_guidance_form = Pages::GuidanceForm.new(guidance_markdown: params[:guidance_markdown])
 
     render json: { preview_html: preview_html(additional_guidance_form) }.to_json
   end

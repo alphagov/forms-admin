@@ -1,4 +1,4 @@
-class Pages::AdditionalGuidanceForm < BaseForm
+class Pages::GuidanceForm < BaseForm
   attr_accessor :page_heading, :guidance_markdown
 
   validates :page_heading, :guidance_markdown, presence: true
