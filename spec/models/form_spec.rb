@@ -51,6 +51,43 @@ describe Form, type: :model do
     end
   end
 
+  describe "#missing_sections" do
+    context "when a form is complete and ready to be made live" do
+      let(:completed_form) { build :form, :live }
+
+      it "returns no missing sections" do
+        expect(completed_form.missing_sections).to be_empty
+      end
+    end
+
+    context "when a form is incomplete and should still be in draft state" do
+      let(:new_form) { build :form, :new_form }
+
+      it "returns a set of keys related to missing fields" do
+        expect(new_form.missing_sections).to match_array(%i[missing_pages missing_submission_email missing_privacy_policy_url missing_contact_details missing_what_happens_next])
+      end
+    end
+  end
+
+  describe "#task_statuses" do
+    let(:completed_form) { build :form, :live }
+
+    it "returns a hash with each of the task statuses" do
+      expected_hash = {
+        name_status: :completed,
+        pages_status: :completed,
+        declaration_status: :completed,
+        what_happens_next_status: :completed,
+        submission_email_status: :completed,
+        confirm_submission_email_status: :completed,
+        privacy_policy_status: :completed,
+        support_contact_details_status: :completed,
+        make_live_status: nil,
+      }
+      expect(completed_form.task_statuses).to eq expected_hash
+    end
+  end
+
   describe "#email_confirmation_status" do
     it "returns :not_started" do
       expect(form.email_confirmation_status).to eq(:not_started)

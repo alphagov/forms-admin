@@ -194,47 +194,39 @@ describe TaskStatusService do
   end
 
   describe "#missing_sections" do
-    context "when mandatory tasks have not been completed" do
-      let(:form) { build(:form, :new_form) }
+    context "when mandatory tasks are complete" do
+      let(:form) { build :form, :live }
 
-      it "returns missing sections" do
-        expect(task_status_service.missing_sections).to eq %i[missing_pages
-                                                              missing_what_happens_next
-                                                              missing_submission_email
-                                                              missing_privacy_policy_url
-                                                              missing_contact_details]
+      it "returns no missing sections" do
+        expect(task_status_service.missing_sections).to be_empty
       end
     end
 
-    context "when mandatory tasks have been completed" do
-      let(:form) { build(:form, :ready_for_live) }
+    context "when a form is incomplete and should still be in draft state" do
+      let(:form) { build :form, :new_form }
 
-      it "returns true" do
-        expect(task_status_service.missing_sections).to eq []
+      it "returns a set of keys related to missing fields" do
+        expect(task_status_service.missing_sections).to match_array(%i[missing_pages missing_submission_email missing_privacy_policy_url missing_contact_details missing_what_happens_next])
       end
     end
   end
 
-  describe "#status_counts" do
-    let(:form) { build :form }
+  describe "#task_statuses" do
+    let(:form) { build :form, :live }
 
-    context "when user has editor role" do
-      it "returns a hash containing count of completed tasks and total number of tasks" do
-        allow(task_status_service).to receive(:all_task_status).and_return(%i[completed completed something_else])
-        expect(task_status_service.status_counts(current_user)).to eq({ completed: 2, total: 3 })
-      end
-
-      it "includes all status" do
-        expect(task_status_service.status_counts(current_user)).to include(total: 9)
-      end
-    end
-
-    context "when user has trial role" do
-      let(:current_user) { build :user, :with_trial_role }
-
-      it "excludes status for restricted tasks" do
-        expect(task_status_service.status_counts(current_user)).to include(total: 6)
-      end
+    it "returns a hash with each of the task statuses" do
+      expected_hash = {
+        name_status: :completed,
+        pages_status: :completed,
+        declaration_status: :completed,
+        what_happens_next_status: :completed,
+        submission_email_status: :completed,
+        confirm_submission_email_status: :completed,
+        privacy_policy_status: :completed,
+        support_contact_details_status: :completed,
+        make_live_status: nil,
+      }
+      expect(task_status_service.task_statuses).to eq expected_hash
     end
   end
 end

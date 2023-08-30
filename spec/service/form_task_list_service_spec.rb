@@ -8,14 +8,41 @@ describe FormTaskListService do
     let(:task_status_service) { instance_double(TaskStatusService) }
 
     before do
-      allow(task_status_service).to receive(:status_counts).and_return(1234)
       allow(TaskStatusService).to receive(:new).and_return(task_status_service)
+      allow(task_status_service).to receive(:task_statuses).and_return({
+        name_status: :completed,
+        pages_status: :completed,
+        declaration_status: :completed,
+        what_happens_next_status: :completed,
+        submission_email_status: :completed,
+        confirm_submission_email_status: :not_started,
+        privacy_policy_status: :not_started,
+        support_contact_details_status: :not_started,
+        make_live_status: :not_started,
+      })
     end
 
-    it "returns counts from task status service" do
-      result = described_class.new(form:, current_user:)
-      expect(TaskStatusService).to have_received(:new)
-      expect(result.task_counts).to eq 1234
+    context "when the user has the editor role" do
+      it "returns counts from task status service" do
+        result = described_class.new(form:, current_user:)
+
+        expected_hash = { completed: 5, total: 9 }
+        expect(TaskStatusService).to have_received(:new)
+        expect(result.task_counts).to eq expected_hash
+      end
+    end
+
+    context "when the user has the trial role" do
+      let(:current_user) { build :user, :with_trial_role }
+
+      it "returns all statuses except for those inaccessible for trial users" do
+        result = described_class.new(form:, current_user:)
+
+        expected_hash = { completed: 4, total: 6 }
+        expect(TaskStatusService).to have_received(:new)
+
+        expect(result.task_counts).to eq expected_hash
+      end
     end
   end
 

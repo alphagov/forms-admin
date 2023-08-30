@@ -42,8 +42,12 @@ class Form < ActiveResource::Base
   end
 
   def ready_for_live?
-    TaskStatusService.new(form: self).mandatory_tasks_completed?
+    task_status_service.mandatory_tasks_completed?
   end
+
+  delegate :missing_sections, to: :task_status_service
+
+  delegate :task_statuses, to: :task_status_service
 
   def make_live!
     post "make-live"
@@ -85,5 +89,9 @@ private
 
   def has_routing_conditions
     pages.filter { |p| p.conditions.any? }.any?
+  end
+
+  def task_status_service
+    @task_status_service ||= TaskStatusService.new(form: self)
   end
 end
