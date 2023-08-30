@@ -26,27 +26,31 @@ const setFailureStatus = () => {
 
 const triggerAjaxMarkdownPreview = async () => {
   try {
-    const response = await window.fetch(store.endpoint, {
-      method: 'POST',
-      mode: 'same-origin',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': store.csrfToken
-      },
-      redirect: 'follow',
-      referrerPolicy: 'same-origin',
-      body: JSON.stringify({
-        guidance_markdown: store.source.value,
-        authenticity_token: store.authenticityToken
+    if (store.endpoint) {
+      const response = await window.fetch(store.endpoint, {
+        method: 'POST',
+        mode: 'same-origin',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': store.csrfToken
+        },
+        redirect: 'follow',
+        referrerPolicy: 'same-origin',
+        body: JSON.stringify({
+          guidance_markdown: store.source.value,
+          authenticity_token: store.authenticityToken
+        })
       })
-    })
 
-    // insert the preview into the DOM
-    const json = await response.json()
-    store.target.innerHTML = json.preview_html
-    addNotification('Preview updated.')
+      // insert the preview into the DOM
+      const json = await response.json()
+      store.target.innerHTML = json.preview_html
+      addNotification('Preview updated.')
+    } else {
+      throw new Error('No endpoint set')
+    }
   } catch {
     setFailureStatus()
     addNotification(store.failureText)

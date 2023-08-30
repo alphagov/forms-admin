@@ -2,6 +2,10 @@
   @include govuk-visually-hidden;
 }
 
+.app-markdown-editor__preview-area :last-child {
+  margin-bottom: 0;
+}
+
 .js-enabled .app-markdown-editor__preview-button {
   display: none;
 }
