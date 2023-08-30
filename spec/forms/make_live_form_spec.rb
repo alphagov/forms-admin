@@ -74,28 +74,40 @@ RSpec.describe Forms::MakeLiveForm, type: :model do
         make_live_form.confirm_make_live = "made_live"
       end
 
-      it "is invalid if submission_email is blank" do
-        error_message = I18n.t("activemodel.errors.models.forms/make_live_form.attributes.confirm_make_live.missing_submission_email")
-        make_live_form.form.submission_email = nil
-        expect(make_live_form).not_to be_valid
+      [
+        {
+          attribute: :pages,
+          attribute_value: [],
+          error_message: I18n.t("activemodel.errors.models.forms/make_live_form.attributes.confirm_make_live.missing_pages"),
+        },
+        {
+          attribute: :what_happens_next_text,
+          attribute_value: nil,
+          error_message: I18n.t("activemodel.errors.models.forms/make_live_form.attributes.confirm_make_live.missing_what_happens_next"),
+        },
+        {
+          attribute: :submission_email,
+          attribute_value: nil,
+          error_message: I18n.t("activemodel.errors.models.forms/make_live_form.attributes.confirm_make_live.missing_submission_email"),
+        },
+        {
+          attribute: :privacy_policy_url,
+          attribute_value: nil,
+          error_message: I18n.t("activemodel.errors.models.forms/make_live_form.attributes.confirm_make_live.missing_privacy_policy_url"),
+        },
+        {
+          attribute: :support_email,
+          attribute_value: nil,
+          error_message: I18n.t("activemodel.errors.models.forms/make_live_form.attributes.confirm_make_live.missing_contact_details"),
+        },
+      ].each do |scenario|
+        it "is invalid if #{scenario[:attribute]} is missing" do
+          # this just sets the attribute to the attribute_value for each test
+          make_live_form.form.send("#{scenario[:attribute]}=", scenario[:attribute_value])
 
-        expect(make_live_form.errors.full_messages_for(:confirm_make_live)).to include("Confirm make live #{error_message}")
-      end
-
-      it "is invalid is no privacy_policy" do
-        error_message = I18n.t("activemodel.errors.models.forms/make_live_form.attributes.confirm_make_live.missing_privacy_policy_url")
-        make_live_form.form.privacy_policy_url = nil
-        expect(make_live_form).not_to be_valid
-
-        expect(make_live_form.errors.full_messages_for(:confirm_make_live)).to include("Confirm make live #{error_message}")
-      end
-
-      it "is invalid if no questions have been added" do
-        error_message = I18n.t("activemodel.errors.models.forms/make_live_form.attributes.confirm_make_live.missing_pages")
-        make_live_form.form.pages = []
-        expect(make_live_form).not_to be_valid
-
-        expect(make_live_form.errors.full_messages_for(:confirm_make_live)).to include("Confirm make live #{error_message}")
+          expect(make_live_form).not_to be_valid
+          expect(make_live_form.errors.full_messages_for(:confirm_make_live)).to include("Confirm make live #{scenario[:error_message]}")
+        end
       end
     end
   end
