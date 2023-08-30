@@ -21,9 +21,9 @@
 
       <p>
         <% guidance_link = unless is_new_page
-                             additional_guidance_edit_path(form_id: form_object.id, page_id: page_object.id)
+                             guidance_edit_path(form_id: form_object.id, page_id: page_object.id)
                            else
-                             additional_guidance_new_path(form_id: form_object.id)
+                             guidance_new_path(form_id: form_object.id)
                            end%>
         <%= govuk_button_link_to t("guidance.add_guidance"), guidance_link, {secondary: true} %>
       </p>

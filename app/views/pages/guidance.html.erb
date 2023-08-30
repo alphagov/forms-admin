@@ -1,10 +1,10 @@
-<% set_page_title(title_with_error_prefix(t("page_titles.add_guidance"), additional_guidance_form.errors&.any?)) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.add_guidance"), guidance_form.errors&.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_pages_path(form)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
 
-    <%= form_with model: [@form, additional_guidance_form], url: post_url do |f| %>
+    <%= form_with model: [@form, guidance_form], url: post_url do |f| %>
       <%= f.govuk_error_summary %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= t("pages.question") %> <%= form.page_number(page) %></span>
@@ -16,14 +16,14 @@
 
       <%= f.govuk_text_field( :page_heading, label: { size: 'm' })  %>
 
-      <div class="app-markdown-editor" data-module="ajax-markdown-preview" data-ajax-markdown-endpoint="<%= additional_guidance_render_preview_path(@form) %>" data-ajax-markdown-loading-text="Loading..." data-ajax-markdown-failure-text="There was an error">
+      <div class="app-markdown-editor" data-module="ajax-markdown-preview" data-ajax-markdown-endpoint="<%= guidance_render_preview_path(@form) %>" data-ajax-markdown-loading-text="Loading..." data-ajax-markdown-failure-text="There was an error">
         <%= f.govuk_text_area( :guidance_markdown,
                               label: { size: 'm' },
                               rows: 15,
                               "data-module": "markdown-editor-toolbar",
                               "data-ajax-markdown-source": true)  %>
 
-        <%= f.govuk_submit (additional_guidance_form.guidance_markdown.blank? ? t("guidance.preview_guidance") : t("guidance.update_preview")), secondary: true,  name: "route_to", value: "preview", class: "app-markdown-editor__preview-button","data-ajax-markdown-trigger": true %>
+        <%= f.govuk_submit (guidance_form.guidance_markdown.blank? ? t("guidance.preview_guidance") : t("guidance.update_preview")), secondary: true,  name: "route_to", value: "preview", class: "app-markdown-editor__preview-button","data-ajax-markdown-trigger": true %>
 
         <details class="govuk-details" data-module="govuk-details">
           <summary class="govuk-details__summary">

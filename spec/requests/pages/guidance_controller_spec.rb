@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Pages::AdditionalGuidanceController, type: :request do
+RSpec.describe Pages::GuidanceController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
   let(:page) { pages.first }
@@ -32,7 +32,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
       end
 
-      get additional_guidance_new_path(form_id: form.id)
+      get guidance_new_path(form_id: form.id)
     end
 
     it "reads the existing form" do
@@ -40,7 +40,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
     end
 
     it "renders the template" do
-      expect(response).to have_rendered("pages/additional_guidance")
+      expect(response).to have_rendered("pages/guidance")
     end
 
     it "returns 200" do
@@ -56,7 +56,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
         mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
       end
-      post additional_guidance_new_path(form_id: form.id), params: { pages_additional_guidance_form: { page_heading:, guidance_markdown: }, route_to: }
+      post guidance_new_path(form_id: form.id), params: { pages_guidance_form: { page_heading:, guidance_markdown: }, route_to: }
     end
 
     context "when previewing markdown" do
@@ -67,7 +67,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
       end
 
       it "renders the template" do
-        expect(response).to have_rendered("pages/additional_guidance")
+        expect(response).to have_rendered("pages/guidance")
       end
 
       it "returns 200" do
@@ -103,7 +103,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
         end
 
         it "renders the template" do
-          expect(response).to have_rendered("pages/additional_guidance")
+          expect(response).to have_rendered("pages/guidance")
         end
       end
     end
@@ -117,7 +117,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
         mock.get "/api/v1/forms/1/pages/#{page.id}", req_headers, page.to_json, 200
       end
 
-      get additional_guidance_edit_path(form_id: form.id, page_id: page.id)
+      get guidance_edit_path(form_id: form.id, page_id: page.id)
     end
 
     it "reads the existing form" do
@@ -125,7 +125,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
     end
 
     it "renders the template" do
-      expect(response).to have_rendered("pages/additional_guidance")
+      expect(response).to have_rendered("pages/guidance")
     end
 
     it "returns 200" do
@@ -143,7 +143,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
         mock.get "/api/v1/forms/1/pages/#{page.id}", req_headers, page.to_json, 200
       end
-      post additional_guidance_update_path(form_id: form.id, page_id: page.id), params: { pages_additional_guidance_form: { page_heading:, guidance_markdown: }, route_to: }
+      post guidance_update_path(form_id: form.id, page_id: page.id), params: { pages_guidance_form: { page_heading:, guidance_markdown: }, route_to: }
     end
 
     context "when previewing markdown" do
@@ -154,7 +154,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
       end
 
       it "renders the template" do
-        expect(response).to have_rendered("pages/additional_guidance")
+        expect(response).to have_rendered("pages/guidance")
       end
 
       it "returns 200" do
@@ -190,7 +190,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
         end
 
         it "renders the template" do
-          expect(response).to have_rendered("pages/additional_guidance")
+          expect(response).to have_rendered("pages/guidance")
         end
       end
     end
@@ -200,7 +200,7 @@ RSpec.describe Pages::AdditionalGuidanceController, type: :request do
     let(:guidance_markdown) { "### Markdown" }
 
     before do
-      post additional_guidance_render_preview_path(form_id: form.id), params: { guidance_markdown: }
+      post guidance_render_preview_path(form_id: form.id), params: { guidance_markdown: }
     end
 
     it "returns a JSON object containing the converted HTML" do
