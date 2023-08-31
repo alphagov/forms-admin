@@ -235,5 +235,23 @@ describe PageOptionsService do
         end
       end
     end
+
+    context "with guidance" do
+      let(:page) { build :page, :with_guidance }
+
+      it "returns the correct page heading" do
+        expect(page_options_service.all_options_for_answer_type).to include(
+          { key: { text: I18n.t("page_options_service.page_heading") },
+            value: { text: page.page_heading } },
+        )
+      end
+
+      it "returns the correct guidance markdown" do
+        expect(page_options_service.all_options_for_answer_type).to include(
+          { key: { text: I18n.t("page_options_service.guidance_markdown") },
+            value: { text: "<pre class=\"app-markdown-example-block\">#{page.guidance_markdown}</pre>" } },
+        )
+      end
+    end
   end
 end

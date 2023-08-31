@@ -445,10 +445,12 @@ en:
   page_options_service:
     answer_type: Answer type
     date: Date
+    guidance_markdown: Guidance
     hint_text: Hint text
     name_type:
       title_not_selected: Title not needed
       title_selected: Title needed
+    page_heading: Page heading
     selection_type:
       default: Selection from a list
       none_of_the_above: None of the above

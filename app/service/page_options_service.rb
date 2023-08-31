@@ -15,6 +15,8 @@ class PageOptionsService
 
   def all_options_for_answer_type
     options = []
+    options.concat(page_heading_options) if @page.page_heading.present?
+    options.concat(guidance_markdown_options) if @page.guidance_markdown.present?
 
     options.concat(hint_options) if @page.hint_text?.present?
     options.concat(generic_options) if @read_only && %w[address date text selection name].exclude?(@page.answer_type)
@@ -29,6 +31,24 @@ class PageOptionsService
   end
 
 private
+
+  def page_heading_options
+    [{
+      key: { text: I18n.t("page_options_service.page_heading") },
+      value: { text: @page.page_heading },
+    }]
+  end
+
+  def markdown_content
+    safe_join(['<pre class="app-markdown-example-block">'.html_safe, @page.guidance_markdown, "</pre>".html_safe])
+  end
+
+  def guidance_markdown_options
+    [{
+      key: { text: I18n.t("page_options_service.guidance_markdown") },
+      value: { text: markdown_content },
+    }]
+  end
 
   def hint_options
     [{
