@@ -20,13 +20,27 @@ RSpec.describe Pages::GuidanceForm, type: :model do
       expect(guidance_form.errors.full_messages_for(:guidance_markdown)).to include("Guidance markdown #{error_message}")
     end
 
-    context "when page_heading and guidance_markdown are blank" do
+    context "when page_heading and guidance_markdown are not blank" do
       let(:page_heading) { "New guidance heading" }
       let(:guidance_markdown) { "## Level heading 2" }
 
-      it "is validate" do
+      it "is valid" do
         expect(guidance_form).to be_valid
       end
+    end
+
+    it "is invalid if guidance markdown contains unsupported tags" do
+      error_message = I18n.t("activemodel.errors.models.pages/guidance_form.attributes.guidance_markdown.unsupported_markdown_syntax")
+      guidance_form.guidance_markdown = "# Heading level 1"
+      expect(guidance_form).to be_invalid
+      expect(guidance_form.errors.full_messages_for(:guidance_markdown)).to include("Guidance markdown #{error_message}")
+    end
+
+    it "is invalid if guidance markdown is over 5000 characters" do
+      error_message = I18n.t("activemodel.errors.models.pages/guidance_form.attributes.guidance_markdown.too_long")
+      guidance_form.guidance_markdown = "A" * 5001
+      expect(guidance_form).to be_invalid
+      expect(guidance_form.errors.full_messages_for(:guidance_markdown)).to include("Guidance markdown #{error_message}")
     end
   end
 
