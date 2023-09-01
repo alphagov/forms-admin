@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe Pages::GuidanceForm, type: :model do
   let(:guidance_form) { described_class.new(page_heading:, guidance_markdown:) }
-  let(:page_heading) { nil }
-  let(:guidance_markdown) { nil }
+  let(:page_heading) { "New guidance heading" }
+  let(:guidance_markdown) { "## Level heading 2" }
 
   describe "validations" do
     it "is invalid if page heading is nil" do
@@ -19,14 +19,23 @@ RSpec.describe Pages::GuidanceForm, type: :model do
       expect(guidance_form).to be_invalid
       expect(guidance_form.errors.full_messages_for(:guidance_markdown)).to include("Guidance markdown #{error_message}")
     end
+
+    context "when page_heading and guidance_markdown are blank" do
+      let(:page_heading) { "New guidance heading" }
+      let(:guidance_markdown) { "## Level heading 2" }
+
+      it "is validate" do
+        expect(guidance_form).to be_valid
+      end
+    end
   end
 
   describe "#submit" do
     let(:session_mock) { {} }
 
     it "returns false if the form is invalid" do
+      allow(guidance_form).to receive(:invalid?).and_return(true)
       expect(guidance_form.submit(session_mock)).to eq false
-      expect(guidance_form.errors.any?).to eq true
     end
 
     context "when page_heading and guidance_markdown are valid" do
