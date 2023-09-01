@@ -40,7 +40,7 @@ private
   end
 
   def markdown_content
-    safe_join(['<pre class="app-markdown-example-block">'.html_safe, @page.guidance_markdown, "</pre>".html_safe])
+    safe_join(['<pre class="app-markdown-editor__markdown-example-block">'.html_safe, @page.guidance_markdown, "</pre>".html_safe])
   end
 
   def guidance_markdown_options

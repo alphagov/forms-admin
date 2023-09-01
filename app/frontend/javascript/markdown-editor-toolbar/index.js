@@ -69,7 +69,7 @@ const buttonGroupConfiguration = [
 const createToolbarForTextArea = textArea => {
   const toolbar = document.createElement('div')
 
-  toolbar.classList.add('app-markdown-editor-toolbar')
+  toolbar.classList.add('app-markdown-editor__toolbar')
   toolbar.setAttribute('aria-controls', textArea.id)
   toolbar.setAttribute('role', 'toolbar')
   toolbar.setAttribute('aria-label', 'Markdown formatting')
@@ -84,7 +84,7 @@ const getButtonText = (identifier, i18n) => {
 
 const createButtonGroup = (configurationGroup, textArea, i18n) => {
   const buttonGroup = document.createElement('div')
-  buttonGroup.classList.add('app-markdown-editor-toolbar__button-group')
+  buttonGroup.classList.add('app-markdown-editor__toolbar-button-group')
   const buttons = configurationGroup.map(buttonConfig =>
     createButton(
       textArea,
@@ -104,8 +104,8 @@ const createButton = (textArea, linkText, callback, identifier) => {
   button.classList.add(
     'govuk-button',
     'govuk-button--secondary',
-    'app-markdown-editor-toolbar__button',
-    `app-markdown-editor-toolbar__button--${identifier}`
+    'app-markdown-editor__toolbar-button',
+    `app-markdown-editor__toolbar-button--${identifier}`
   )
   button.setAttribute('title', linkText)
   addClickAndKeyboardEventListeners(textArea, button, callback)

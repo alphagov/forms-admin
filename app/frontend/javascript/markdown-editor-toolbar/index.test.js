@@ -61,7 +61,7 @@ describe('Markdown toolbar', () => {
           JSON.parse(element.getAttribute('data-i18n'))
         )
       })
-    toolbar = document.querySelector('.app-markdown-editor-toolbar')
+    toolbar = document.querySelector('.app-markdown-editor__toolbar')
     textArea = document.querySelector('textarea')
   })
 
