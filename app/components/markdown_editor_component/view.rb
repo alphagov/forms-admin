@@ -5,12 +5,12 @@ module MarkdownEditorComponent
     attr_reader :attribute_name, :f, :render_preview_path, :preview_html, :form_model, :label, :hint
 
     def initialize(attribute_name,
-                   render_preview_path:,
                    preview_html:,
                    form_model:,
                    form_builder: nil,
                    label: nil,
                    hint: nil,
+                   render_preview_path: nil,
                    local_translations: {})
       super
       @attribute_name = attribute_name
