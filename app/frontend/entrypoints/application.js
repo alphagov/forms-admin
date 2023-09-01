@@ -18,7 +18,10 @@ document
 document
   .querySelectorAll('[data-module="markdown-editor-toolbar"]')
   .forEach(element => {
-    markdownEditorToolbar(element)
+    markdownEditorToolbar(
+      element,
+      JSON.parse(element.getAttribute('data-i18n'))
+    )
     element.addEventListener('paste', pasteListener)
   })
 
@@ -29,8 +32,7 @@ document
       element.querySelector('[data-ajax-markdown-target]'),
       element.querySelector('[data-ajax-markdown-source]'),
       element.getAttribute('data-ajax-markdown-endpoint'),
-      element.getAttribute('data-ajax-markdown-failure-text'),
-      element.getAttribute('data-ajax-markdown-loading-text')
+      JSON.parse(element.getAttribute('data-i18n'))
     )
   })
 

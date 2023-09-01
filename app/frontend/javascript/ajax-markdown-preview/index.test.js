@@ -16,13 +16,17 @@ let source, target
 const jsonResponse = {
   preview_html: '<h2 class="govuk-heading-m">This is a heading</h2>'
 }
-
 const setupDocument = () => {
+  const i18n = JSON.stringify({
+    preview_loading: 'Loading...',
+    preview_error: 'There was an error'
+  })
+
   const sourceHTML =
     '<textarea data-ajax-markdown-source="true">## This is a markdown heading</textarea>'
   const targetHTML =
     '<div data-ajax-markdown-target><p>Some old preview content</p></div>'
-  document.body.innerHTML = `<div data-module="ajax-markdown-preview" data-ajax-markdown-endpoint="/endpoint" data-ajax-markdown-loading-text="Loading..." data-ajax-markdown-failure-text="There was an error">
+  document.body.innerHTML = `<div data-module="ajax-markdown-preview" data-ajax-markdown-endpoint="/endpoint" data-i18n='${i18n}'>
     ${sourceHTML}
     ${targetHTML}
     </div>
@@ -34,8 +38,7 @@ const setupDocument = () => {
         element.querySelector('[data-ajax-markdown-target]'),
         element.querySelector('[data-ajax-markdown-source]'),
         element.getAttribute('data-ajax-markdown-endpoint'),
-        element.getAttribute('data-ajax-markdown-failure-text'),
-        element.getAttribute('data-ajax-markdown-loading-text')
+        JSON.parse(element.getAttribute('data-i18n'))
       )
     })
 

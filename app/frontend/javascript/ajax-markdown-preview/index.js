@@ -3,20 +3,19 @@ import debounce from '../utils/debounce'
 const store = {
   target: null,
   source: null,
-  failureText: null,
-  loadingText: null,
   authenticityToken: null,
   csrfToken: null,
-  liveRegion: null
+  liveRegion: null,
+  i18n: null
 }
 
 const setLoadingStatus = () => {
   store.liveRegion.setAttribute('aria-busy', 'true')
-  store.target.innerHTML = `<p>${store.loadingText}</p>`
+  store.target.innerHTML = `<p>${store.i18n.preview_loading}</p>`
 }
 
 const setFailureStatus = () => {
-  store.target.innerHTML = `<p>${store.failureText}</p>`
+  store.target.innerHTML = `<p>${store.i18n.preview_error}</p>`
   const retryButton = document.createElement('button')
   retryButton.classList.add('govuk-button', 'govuk-button--secondary')
   retryButton.innerHTML = 'Retry preview'
@@ -53,7 +52,7 @@ const triggerAjaxMarkdownPreview = async () => {
     }
   } catch {
     setFailureStatus()
-    addNotification(store.failureText)
+    addNotification(store.i18n.preview_error)
   }
 }
 
@@ -98,21 +97,13 @@ const addNotification = text => {
  * @param {HTMLElement} target - The element where the markdown preview should be rendered.
  * @param {HTMLElement} source - The element which contains the raw markdown for conversion.
  * @param {string} endpoint - The URL for the endpoint that renders the markdown.
- * @param {string} failureText - The text that should be displayed if the AJAX request returns an error
- * @param {string} loadingText - The text that should be displayed while waiting for the AJAX request to return
+ * @param {Object} i18n - An object containing translations for the component.
  */
-const ajaxMarkdownPreview = (
-  target,
-  source,
-  endpoint,
-  failureText,
-  loadingText
-) => {
+const ajaxMarkdownPreview = (target, source, endpoint, i18n) => {
   store.target = target
   store.source = source
   store.endpoint = endpoint
-  store.failureText = failureText
-  store.loadingText = loadingText
+  store.i18n = i18n
   store.authenticityToken = document.querySelector(
     'input[name="authenticity_token"]'
   )?.value

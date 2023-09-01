@@ -64,7 +64,7 @@ private
   end
 
   def preview_html(guidance_form)
-    return "<p>No guidance added</p>" if guidance_form.guidance_markdown.blank?
+    return t("guidance.no_guidance_added_html") if guidance_form.guidance_markdown.blank?
 
     GovukFormsMarkdown.render(guidance_form.guidance_markdown)
   end

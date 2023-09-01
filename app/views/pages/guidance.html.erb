@@ -21,10 +21,16 @@
         render_preview_path: guidance_render_preview_path(@form),
         preview_html:,
         form_model: guidance_form,
-        label: "Add guidance text",
-        hint: "Use Markdown if you need to format your guidance content. Formatting help can be found below.",
-        write_heading: "Write guidance",
-        preview_heading: "Preview guidance") %>
+        label: t("helpers.label.pages_guidance_form.guidance_markdown"),
+        hint: t("helpers.hint.pages_guidance_form.guidance_markdown"),
+        local_translations: {
+          preview_description: t("guidance.markdown_editor.preview.description"),
+          preview_heading: t("guidance.markdown_editor.preview.heading"),
+          preview_markdown: t("guidance.markdown_editor.preview_markdown"),
+          preview_tab_text: t("guidance.markdown_editor.preview_tab_text"),
+          update_preview: t("guidance.markdown_editor.update_preview"),
+          write_tab_text: t("guidance.markdown_editor.write_tab_text"),
+        }) %>
 
       <%= f.govuk_submit t("continue"), name: "route_to", value: "save_and_continue" %>
 

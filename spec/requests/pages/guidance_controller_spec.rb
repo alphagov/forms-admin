@@ -90,7 +90,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
         end
 
         it "renders the default HTML" do
-          expect(response.body).to include("<p>No guidance added</p>")
+          expect(response.body).to include(I18n.t("guidance.no_guidance_added_html"))
         end
 
         it "returns 200" do
@@ -197,7 +197,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
         end
 
         it "renders the default HTML" do
-          expect(response.body).to include("<p>No guidance added</p>")
+          expect(response.body).to include(I18n.t("guidance.no_guidance_added_html"))
         end
 
         it "returns 200" do
@@ -255,7 +255,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
       let(:guidance_markdown) { "" }
 
       it "returns a JSON object containing the converted HTML" do
-        expect(response.body).to eq({ preview_html: "<p>No guidance added</p>" }.to_json)
+        expect(response.body).to eq({ preview_html: I18n.t("guidance.no_guidance_added_html") }.to_json)
       end
 
       it "returns 200" do
