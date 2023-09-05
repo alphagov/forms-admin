@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Forms::NameSettingsForm, type: :model do
+RSpec.describe Pages::NameSettingsForm, type: :model do
   let(:form) { build :form, id: 1 }
   let(:name_settings_form) { described_class.new }
 
@@ -11,21 +11,21 @@ RSpec.describe Forms::NameSettingsForm, type: :model do
 
   describe "validations" do
     it "is invalid if no input_type is selected" do
-      error_message = I18n.t("activemodel.errors.models.forms/name_settings_form.attributes.input_type.blank")
+      error_message = I18n.t("activemodel.errors.models.pages/name_settings_form.attributes.input_type.blank")
       name_settings_form.input_type = nil
       expect(name_settings_form).to be_invalid
       expect(name_settings_form.errors.full_messages_for(:input_type)).to include("Input type #{error_message}")
     end
 
     it "is invalid if no title_needed is selected" do
-      error_message = I18n.t("activemodel.errors.models.forms/name_settings_form.attributes.title_needed.blank")
+      error_message = I18n.t("activemodel.errors.models.pages/name_settings_form.attributes.title_needed.blank")
       name_settings_form.title_needed = nil
       expect(name_settings_form).to be_invalid
       expect(name_settings_form.errors.full_messages_for(:title_needed)).to include("Title needed #{error_message}")
     end
 
     it "is invalid if input_type is given a value which is not in the list" do
-      error_message = I18n.t("activemodel.errors.models.forms/name_settings_form.attributes.input_type.inclusion")
+      error_message = I18n.t("activemodel.errors.models.pages/name_settings_form.attributes.input_type.inclusion")
 
       name_settings_form.input_type = "username"
       expect(name_settings_form).to be_invalid
@@ -33,7 +33,7 @@ RSpec.describe Forms::NameSettingsForm, type: :model do
     end
 
     it "is invalid if title_needed is given a value which is not in the list" do
-      error_message = I18n.t("activemodel.errors.models.forms/name_settings_form.attributes.title_needed.inclusion")
+      error_message = I18n.t("activemodel.errors.models.pages/name_settings_form.attributes.title_needed.inclusion")
 
       name_settings_form.title_needed = "maybe"
       expect(name_settings_form).to be_invalid
