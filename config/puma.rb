@@ -24,6 +24,10 @@ environment ENV.fetch("RAILS_ENV") { "development" }
 # Specifies the `pidfile` that Puma will use.
 pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 
+# Specifies the persistent timeout to be higher than AWS ALB default of 60
+# this is to prevent 502s
+persistent_timeout ENV.fetch("RAILS_PERSISTENT_TIMEOUT", 75)
+
 # Specifies the number of `workers` to boot in clustered mode.
 # Workers are forked web server processes. If using threads and workers together
 # the concurrency of the application would be max `threads` * `workers`.
