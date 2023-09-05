@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Forms::DateSettingsForm, type: :model do
+RSpec.describe Pages::DateSettingsForm, type: :model do
   let(:form) { build :form, id: 1 }
   let(:date_settings_form) { described_class.new }
 
@@ -11,21 +11,21 @@ RSpec.describe Forms::DateSettingsForm, type: :model do
 
   describe "validations" do
     it "is invalid if not given an input type" do
-      error_message = I18n.t("activemodel.errors.models.forms/date_settings_form.attributes.input_type.blank")
+      error_message = I18n.t("activemodel.errors.models.pages/date_settings_form.attributes.input_type.blank")
       date_settings_form.input_type = nil
       expect(date_settings_form).to be_invalid
       expect(date_settings_form.errors.full_messages_for(:input_type)).to include("Input type #{error_message}")
     end
 
     it "is invalid given an empty string input_type" do
-      error_message = I18n.t("activemodel.errors.models.forms/date_settings_form.attributes.input_type.blank")
+      error_message = I18n.t("activemodel.errors.models.pages/date_settings_form.attributes.input_type.blank")
       date_settings_form.input_type = ""
       expect(date_settings_form).to be_invalid
       expect(date_settings_form.errors.full_messages_for(:input_type)).to include("Input type #{error_message}")
     end
 
     it "is invalid given an input_type which is not in the list" do
-      error_message = I18n.t("activemodel.errors.models.forms/date_settings_form.attributes.input_type.inclusion")
+      error_message = I18n.t("activemodel.errors.models.pages/date_settings_form.attributes.input_type.inclusion")
       date_settings_form.input_type = "some_random_string"
       expect(date_settings_form).to be_invalid
       expect(date_settings_form.errors.full_messages_for(:input_type)).to include("Input type #{error_message}")

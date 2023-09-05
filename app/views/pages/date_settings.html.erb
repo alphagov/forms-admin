@@ -7,7 +7,7 @@
       <%= f.govuk_error_summary %>
       <%= f.govuk_collection_radio_buttons(
             :input_type,
-            Forms::DateSettingsForm::INPUT_TYPES,
+            Pages::DateSettingsForm::INPUT_TYPES,
             ->(option) { option },
             ->(option) { t('helpers.label.page.date_settings_options.names.' + option) },
             legend: { text: t('page_titles.date_settings'), size: 'l', tag: 'h1' },

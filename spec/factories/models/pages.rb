@@ -58,7 +58,7 @@ FactoryBot.define do
 
     trait :with_date_settings do
       transient do
-        input_type { Forms::DateSettingsForm::INPUT_TYPES.sample }
+        input_type { Pages::DateSettingsForm::INPUT_TYPES.sample }
       end
 
       answer_type { "date" }

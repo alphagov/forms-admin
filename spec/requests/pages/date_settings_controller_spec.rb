@@ -58,7 +58,7 @@ RSpec.describe Pages::DateSettingsController, type: :request do
 
     context "when form is invalid" do
       before do
-        post date_settings_create_path form_id: form.id, params: { forms_date_settings_form: { input_type: nil } }
+        post date_settings_create_path form_id: form.id, params: { pages_date_settings_form: { input_type: nil } }
       end
 
       it "renders the date settings view if there are errors" do
@@ -68,7 +68,7 @@ RSpec.describe Pages::DateSettingsController, type: :request do
 
     context "when form is valid and ready to store" do
       before do
-        post date_settings_create_path form_id: form.id, params: { forms_date_settings_form: { input_type: "date_of_birth" } }
+        post date_settings_create_path form_id: form.id, params: { pages_date_settings_form: { input_type: "date_of_birth" } }
       end
 
       let(:date_settings_form) { build :date_settings_form, form: }
@@ -135,7 +135,7 @@ RSpec.describe Pages::DateSettingsController, type: :request do
       let(:input_type) { "date_of_birth" }
 
       before do
-        post date_settings_update_path(form_id: page.form_id, page_id: page.id), params: { forms_date_settings_form: { input_type: "other_date" } }
+        post date_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_date_settings_form: { input_type: "other_date" } }
       end
 
       it "loads the updated input type from the page params" do
@@ -153,7 +153,7 @@ RSpec.describe Pages::DateSettingsController, type: :request do
       let(:input_type) { nil }
 
       before do
-        post date_settings_update_path(form_id: page.form_id, page_id: page.id), params: { forms_date_settings_form: { input_type: } }
+        post date_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_date_settings_form: { input_type: } }
       end
 
       it "renders the date settings view if there are errors" do
