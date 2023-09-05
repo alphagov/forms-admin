@@ -1,11 +1,12 @@
 // Adapted from the [Paste HTML to govspeak](https://github.com/alphagov/paste-html-to-govspeak) package.
 
 import htmlToMarkdown from './html-to-markdown'
+import replaceBulletCharacters from './replace-bullet-characters'
 
 const insertTextAtCursor = (field, contentToInsert) => {
   const selectionStart = field.selectionStart
   const selectionEnd = field.selectionEnd
-  if (selectionStart || selectionStart === '0') {
+  if (selectionStart || selectionStart === '0' || selectionStart === 0) {
     const contentBeforeSelection = field.value.substring(0, selectionStart)
     const contentAfterSelection = field.value.substring(
       selectionEnd,
@@ -34,6 +35,8 @@ const triggerPasteEvent = (element, eventName, detail) => {
 
 const pasteListener = event => {
   if (event.clipboardData) {
+    let contentToPaste
+    event.preventDefault()
     const element = event.target
 
     const html = htmlFromPasteEvent(event)
@@ -46,9 +49,11 @@ const pasteListener = event => {
       const markdown = htmlToMarkdown(html)
       triggerPasteEvent(element, 'markdown', markdown)
 
-      insertTextAtCursor(element, markdown)
-      event.preventDefault()
+      contentToPaste = markdown
+    } else if (text?.length) {
+      contentToPaste = replaceBulletCharacters(text)
     }
+    insertTextAtCursor(element, contentToPaste)
   }
 }
 
