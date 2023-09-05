@@ -9,4 +9,4 @@ en:
         pages/question_text_form:
           attributes:
             question_text:
-              blank: Question text cannot be blank
+              blank: Enter your question
