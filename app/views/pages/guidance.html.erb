@@ -16,48 +16,21 @@
 
       <%= f.govuk_text_field( :page_heading, label: { size: 'm' })  %>
 
-      <div class="app-markdown-editor" data-module="ajax-markdown-preview" data-ajax-markdown-endpoint="<%= guidance_render_preview_path(@form) %>" data-ajax-markdown-loading-text="Loading..." data-ajax-markdown-failure-text="There was an error">
-        <%= f.govuk_text_area( :guidance_markdown,
-                              label: { size: 'm' },
-                              rows: 15,
-                              "data-module": "markdown-editor-toolbar",
-                              "data-ajax-markdown-source": true)  %>
-
-        <%= f.govuk_submit (guidance_form.guidance_markdown.blank? ? t("guidance.preview_guidance") : t("guidance.update_preview")), secondary: true,  name: "route_to", value: "preview", class: "app-markdown-editor__preview-button","data-ajax-markdown-trigger": true %>
-
-        <details class="govuk-details" data-module="govuk-details">
-          <summary class="govuk-details__summary">
-            <h2 class='govuk-details__summary-text govuk-!-font-size-19 govuk-!-margin-0 govuk-!-font-weight-regular'>
-              <%= t("guidance.formatting_help.heading") %>
-            </h2>
-          </summary>
-          <div class="govuk-details__text">
-            <% %w[links second_level_headings third_level_headings bulleted_lists numbered_lists].each do |format_name| %>
-              <h3 class="govuk-heading-m"><%= t("guidance.formatting_help.#{format_name}.heading") %></h3>
-
-              <%= simple_format(t("guidance.formatting_help.#{format_name}.instructions")) %>
-
-              <%= govuk_inset_text do %>
-                <pre class="app-markdown-example-block"><code class="app-markdown-example-block__code"><%= t("guidance.formatting_help.#{format_name}.example") %></code ></pre>
-              <% end %>
-            <% end %>
-          </div>
-        </details>
-
-        <% if preview_html.present? %>
-          <h2 class="govuk-heading-m"><%= t("guidance.preview.heading") %></h2>
-
-          <p><%= t("guidance.preview.description") %></p>
-
-          <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-
-          <div data-ajax-markdown-target>
-            <%= preview_html.html_safe %>
-          </div>
-
-          <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-        <% end %>
-      </div>
+      <%= render MarkdownEditorComponent::View.new(:guidance_markdown,
+        form_builder: f,
+        render_preview_path: guidance_render_preview_path(@form),
+        preview_html:,
+        form_model: guidance_form,
+        label: t("helpers.label.pages_guidance_form.guidance_markdown"),
+        hint: t("helpers.hint.pages_guidance_form.guidance_markdown"),
+        local_translations: {
+          preview_description: t("guidance.markdown_editor.preview.description"),
+          preview_heading: t("guidance.markdown_editor.preview.heading"),
+          preview_markdown: t("guidance.markdown_editor.preview_markdown"),
+          preview_tab_text: t("guidance.markdown_editor.preview_tab_text"),
+          update_preview: t("guidance.markdown_editor.update_preview"),
+          write_tab_text: t("guidance.markdown_editor.write_tab_text"),
+        }) %>
 
       <%= f.govuk_submit t("continue"), name: "route_to", value: "save_and_continue" %>
 

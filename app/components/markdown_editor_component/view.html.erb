@@ -1,0 +1,58 @@
+<div class="app-markdown-editor" data-module="ajax-markdown-preview" data-ajax-markdown-endpoint="<%= render_preview_path %>" data-i18n="<%= translations.to_json() %>">
+  <label class="govuk-label govuk-label--m" for='<%= form_field_id_prefix %>-textarea'>
+    <h2 class="govuk-heading-m"><%= label %></h2>
+  </label>
+  <div class="govuk-hint" id="<%= form_field_id_prefix %>-hint"><%= hint %></div>
+  <%= govuk_tabs(title: nil) do |component| %>
+    <% component.with_tab(label: translations[:write_tab_text]) do %>
+      <%= f.govuk_text_area(attribute_name,
+                        label: nil,
+                        hint: nil,
+                        rows: 15,
+                        id: "#{form_field_id_prefix}-textarea",
+                        "aria-describedby": "#{form_field_id_prefix}-hint",
+                        "data-module": "markdown-editor-toolbar",
+                        "data-ajax-markdown-source": true,
+                        "data-i18n": translations[:toolbar].to_json())  %>
+
+      <%= f.govuk_submit preview_button_translation, secondary: true,  name: "route_to", value: "preview", class: "app-markdown-editor__preview-button","data-ajax-markdown-trigger": true %>
+
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+          <h2 class='govuk-details__summary-text govuk-!-font-size-19 govuk-!-margin-0 govuk-!-font-weight-regular'>
+            <%= t("markdown_editor.formatting_help.heading") %>
+          </h2>
+        </summary>
+        <div class="govuk-details__text">
+          <% %w[links second_level_headings third_level_headings bulleted_lists numbered_lists].each do |format_name| %>
+            <h3 class="govuk-heading-m"><%= t("markdown_editor.formatting_help.#{format_name}.heading") %></h3>
+
+            <%= simple_format(t("markdown_editor.formatting_help.#{format_name}.instructions")) %>
+
+            <%= govuk_inset_text do %>
+              <pre class="app-markdown-editor__markdown-example-block"><code class="app-markdown-editor__markdown-example-block-code"><%= t("markdown_editor.formatting_help.#{format_name}.example") %></code ></pre>
+            <% end %>
+          <% end %>
+        </div>
+      </details>
+    <% end %>
+
+    <% component.with_tab(label: translations[:preview_tab_text]) do %>
+      <% if preview_html.present? %>
+        <div class="app-markdown-editor__preview-intro">
+          <h2 class="govuk-heading-m"><%= translations[:preview_heading] %></h2>
+
+          <p><%= translations[:preview_description] %></p>
+        </div>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible app-markdown-editor__preview-line-break">
+
+        <div class="app-markdown-editor__preview-area" data-ajax-markdown-target>
+          <%= preview_html.html_safe %>
+        </div>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible app-markdown-editor__preview-line-break">
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

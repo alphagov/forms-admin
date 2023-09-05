@@ -38,16 +38,30 @@ describe('Markdown toolbar', () => {
 
 
     `
+
+    const i18n = JSON.stringify({
+      h2: 'Add a second-level heading',
+      h3: 'Add a third-level heading',
+      link: 'Add a link',
+      bullet_list: 'Add a bulleted list',
+      numbered_list: 'Add a numbered list'
+    })
+
     document.body.innerHTML = `
-      <textarea data-module="markdown-editor">${textAreaContent}</textarea>
+      <textarea data-module="markdown-editor" data-i18n='${i18n}'>${textAreaContent}</textarea>
     `
+
+    console.log(document.body.innerHTML)
 
     document
       .querySelectorAll('[data-module="markdown-editor"]')
       .forEach(element => {
-        markdownEditorToolbar(element)
+        markdownEditorToolbar(
+          element,
+          JSON.parse(element.getAttribute('data-i18n'))
+        )
       })
-    toolbar = document.querySelector('.app-markdown-editor-toolbar')
+    toolbar = document.querySelector('.app-markdown-editor__toolbar')
     textArea = document.querySelector('textarea')
   })
 

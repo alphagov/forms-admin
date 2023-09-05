@@ -1,4 +1,28 @@
-.app-markdown-editor-toolbar {
+.app-markdown-editor__notification-area {
+  @include govuk-visually-hidden;
+}
+
+.app-markdown-editor__preview-area :last-child {
+  margin-bottom: 0;
+}
+
+.js-enabled .app-markdown-editor__preview-button {
+  display: none;
+}
+
+.js-enabled .app-markdown-editor__preview-intro {
+  @include govuk-media-query($from: tablet) {
+    display: none;
+  }
+}
+
+.js-enabled .app-markdown-editor__preview-line-break {
+  @include govuk-media-query($from: tablet) {
+    display: none;
+  }
+}
+
+.app-markdown-editor__toolbar {
   display: flex;
   gap: 5px;
   flex-flow: row wrap;
@@ -11,12 +35,12 @@
   }
 }
 
-.app-markdown-editor-toolbar__button-group {
+.app-markdown-editor__toolbar-button-group {
   display: flex;
   gap: 0 govuk-px-to-rem(1);
 }
 
-.app-markdown-editor-toolbar__button {
+.app-markdown-editor__toolbar-button {
   width: govuk-px-to-rem(40);
   height: govuk-px-to-rem(40);
   background-position: 50% 50%;
@@ -42,5 +66,16 @@
 
   &--link {
     background-image: url("../../assets/icons/markdown-editor-link.svg");
+  }
+}
+
+.app-markdown-editor__markdown-example-block {
+  white-space: pre-wrap;
+  font-size: inherit;
+  font-family: inherit;
+
+  &-code {
+    font-size: inherit;
+    font-family: inherit;
   }
 }

@@ -182,47 +182,17 @@ en:
     confirm_deletion_page: Are you sure you want to delete this page?
   guidance:
     add_guidance: Add guidance
-    formatting_help:
-      bulleted_lists:
-        example: |
-          * First bullet point
-          * Second bullet point
-          * Third bullet point
-        heading: Bulleted lists
-        instructions: |
-          To add bullet points, start each item with * (asterisk) or - (dash). Use one space after the asterisk or dash.
-
-          You need one empty line space before the bullets start, and one at the end. For example:
-      heading: Formatting help
-      links:
-        example: "[Link text](https://www.gov.uk/link-text-url)"
-        heading: Links and URLs
-        instructions: 'To add a link, use square brackets [ ] around the link text, and round brackets ( ) around the full URL. For example:'
-      numbered_lists:
-        example: |
-          1. First item
-          2. Second item
-          3. Third item
-        heading: Numbered lists
-        instructions: |
-          Use numbers for each list item, followed by a full stop. Make sure there is one space after the full stop.
-
-          You need one empty line space before the numbers start, and one at the end. For example:
-      second_level_headings:
-        example: "## This is a second-level heading"
-        heading: Second-level headings
-        instructions: 'To add a second-level heading, use 2 hashtags followed by a space. For example:'
-      third_level_headings:
-        example: "## This is a third-level heading"
-        heading: Third-level headings
-        instructions: 'To add a third-level heading, use 3 hashtags followed by a space. For example:'
     guidance: Guidance
     instructions: Only add guidance if you need to give a longer explanation of how to answer the question, or to format your content. For example, you can use paragraphs, links or lists.
-    preview:
-      description: Below is a preview of how your guidance content will be shown to the person completing your form.
-      heading: Preview your guidance below
-    preview_guidance: Preview guidance
-    update_preview: Update preview
+    markdown_editor:
+      preview:
+        description: Below is a preview of how your guidance content will be shown to the person completing your form.
+        heading: Preview your guidance below
+      preview_markdown: Preview guidance
+      preview_tab_text: Preview guidance
+      update_preview: Update preview
+      write_tab_text: Write guidance
+    no_guidance_added_html: "<p>No guidance added</p>"
     when_to_use_guidance_html: |
       <p>
         Use guidance if you need to:
@@ -411,6 +381,56 @@ en:
     hint: Selecting ‘Yes’ will mark this task as complete. You’ll still be able to make changes if you need to.
     legend: Do you want to mark this task as complete?
     'true': 'Yes'
+  markdown_editor:
+    formatting_help:
+      bulleted_lists:
+        example: |
+          * First bullet point
+          * Second bullet point
+          * Third bullet point
+        heading: Bulleted lists
+        instructions: |
+          To add bullet points, start each item with * (asterisk) or - (dash). Use one space after the asterisk or dash.
+
+          You need one empty line space before the bullets start, and one at the end. For example:
+      heading: Formatting help
+      links:
+        example: "[Link text](https://www.gov.uk/link-text-url)"
+        heading: Links and URLs
+        instructions: 'To add a link, use square brackets [ ] around the link text, and round brackets ( ) around the full URL. For example:'
+      numbered_lists:
+        example: |
+          1. First item
+          2. Second item
+          3. Third item
+        heading: Numbered lists
+        instructions: |
+          Use numbers for each list item, followed by a full stop. Make sure there is one space after the full stop.
+
+          You need one empty line space before the numbers start, and one at the end. For example:
+      second_level_headings:
+        example: "## This is a second-level heading"
+        heading: Second-level headings
+        instructions: 'To add a second-level heading, use 2 hashtags followed by a space. For example:'
+      third_level_headings:
+        example: "## This is a third-level heading"
+        heading: Third-level headings
+        instructions: 'To add a third-level heading, use 3 hashtags followed by a space. For example:'
+    preview:
+      description: Below is a preview of how your markdown content will be shown to the person completing your form.
+      heading: Preview your markdown below
+    preview_error: Sorry, there is a problem with the service. Try again later.
+    preview_loading: Preview loading
+    preview_markdown: Preview markdown
+    preview_tab_text: Preview
+    toolbar:
+      bullet_list: Add a bulleted list
+      h2: Add a second-level heading
+      h3: Add a third-level heading
+      link: Add a link
+      numbered_list: Add a numbered list
+    update_preview: Update preview
+    write_tab_text: Write
   new_condition:
     routing_page_text: If the question
   not_found:

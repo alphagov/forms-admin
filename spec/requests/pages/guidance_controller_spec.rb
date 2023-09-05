@@ -77,6 +77,26 @@ RSpec.describe Pages::GuidanceController, type: :request do
       it "renders the guidance markdown as html" do
         expect(response.body).to include('<h2 class="govuk-heading-m">Heading level 2</h2>')
       end
+
+      context "when markdown is blank" do
+        let(:guidance_markdown) { "" }
+
+        it "reads the existing form" do
+          expect(form).to have_been_read
+        end
+
+        it "renders the template" do
+          expect(response).to have_rendered("pages/guidance")
+        end
+
+        it "renders the default HTML" do
+          expect(response.body).to include(I18n.t("guidance.no_guidance_added_html"))
+        end
+
+        it "returns 200" do
+          expect(response).to have_http_status(:ok)
+        end
+      end
     end
 
     context "when saving markdown" do
@@ -164,6 +184,26 @@ RSpec.describe Pages::GuidanceController, type: :request do
       it "renders the guidance markdown as html" do
         expect(response.body).to include('<h2 class="govuk-heading-m">Heading level 2</h2>')
       end
+
+      context "when markdown is blank" do
+        let(:guidance_markdown) { "" }
+
+        it "reads the existing form" do
+          expect(form).to have_been_read
+        end
+
+        it "renders the template" do
+          expect(response).to have_rendered("pages/guidance")
+        end
+
+        it "renders the default HTML" do
+          expect(response.body).to include(I18n.t("guidance.no_guidance_added_html"))
+        end
+
+        it "returns 200" do
+          expect(response).to have_http_status(:ok)
+        end
+      end
     end
 
     context "when saving markdown" do
@@ -209,6 +249,18 @@ RSpec.describe Pages::GuidanceController, type: :request do
 
     it "returns 200" do
       expect(response).to have_http_status(:ok)
+    end
+
+    context "when markdown is blank" do
+      let(:guidance_markdown) { "" }
+
+      it "returns a JSON object containing the converted HTML" do
+        expect(response.body).to eq({ preview_html: I18n.t("guidance.no_guidance_added_html") }.to_json)
+      end
+
+      it "returns 200" do
+        expect(response).to have_http_status(:ok)
+      end
     end
   end
 end

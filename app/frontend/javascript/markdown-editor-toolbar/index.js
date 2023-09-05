@@ -45,25 +45,21 @@ const addUnorderedList = addBlockElement(
 const buttonGroupConfiguration = [
   [
     {
-      buttonText: 'Add a second-level heading',
       identifier: 'h2',
       callback: addH2
     },
     {
-      buttonText: 'Add a third-level heading',
       identifier: 'h3',
       callback: addH3
     }
   ],
-  [{ buttonText: 'Add a link', identifier: 'link', callback: addLink }],
+  [{ identifier: 'link', callback: addLink }],
   [
     {
-      buttonText: 'Add a bulleted list',
       identifier: 'bullet-list',
       callback: addUnorderedList
     },
     {
-      buttonText: 'Add a numbered list',
       identifier: 'numbered-list',
       callback: addOrderedList
     }
@@ -73,7 +69,7 @@ const buttonGroupConfiguration = [
 const createToolbarForTextArea = textArea => {
   const toolbar = document.createElement('div')
 
-  toolbar.classList.add('app-markdown-editor-toolbar')
+  toolbar.classList.add('app-markdown-editor__toolbar')
   toolbar.setAttribute('aria-controls', textArea.id)
   toolbar.setAttribute('role', 'toolbar')
   toolbar.setAttribute('aria-label', 'Markdown formatting')
@@ -81,13 +77,18 @@ const createToolbarForTextArea = textArea => {
   return toolbar
 }
 
-const createButtonGroup = (configurationGroup, textArea) => {
+const getButtonText = (identifier, i18n) => {
+  const snakeCaseIdentifier = identifier.replaceAll('-', '_')
+  return i18n[snakeCaseIdentifier]
+}
+
+const createButtonGroup = (configurationGroup, textArea, i18n) => {
   const buttonGroup = document.createElement('div')
-  buttonGroup.classList.add('app-markdown-editor-toolbar__button-group')
+  buttonGroup.classList.add('app-markdown-editor__toolbar-button-group')
   const buttons = configurationGroup.map(buttonConfig =>
     createButton(
       textArea,
-      buttonConfig.buttonText,
+      getButtonText(buttonConfig.identifier, i18n),
       buttonConfig.callback,
       buttonConfig.identifier
     )
@@ -103,8 +104,8 @@ const createButton = (textArea, linkText, callback, identifier) => {
   button.classList.add(
     'govuk-button',
     'govuk-button--secondary',
-    'app-markdown-editor-toolbar__button',
-    `app-markdown-editor-toolbar__button--${identifier}`
+    'app-markdown-editor__toolbar-button',
+    `app-markdown-editor__toolbar-button--${identifier}`
   )
   button.setAttribute('title', linkText)
   addClickAndKeyboardEventListeners(textArea, button, callback)
@@ -196,14 +197,15 @@ const addButtonFocusEvents = buttons => {
 /**
  * Adds a copy button to an element.
  * @param {HTMLElement} textArea - The textarea whose contents are being formatted by the toolbar.
+ * @param {Object} i18n - An object containing translations for the toolbar button text.
  */
-const markdownEditorToolbar = textArea => {
+const markdownEditorToolbar = (textArea, i18n) => {
   const toolbar = createToolbarForTextArea(textArea)
   textArea.parentNode.insertBefore(toolbar, textArea)
 
   buttonGroupConfiguration
     .map(buttonConfiguration =>
-      createButtonGroup(buttonConfiguration, textArea)
+      createButtonGroup(buttonConfiguration, textArea, i18n)
     )
     .forEach(buttonGroup => toolbar.appendChild(buttonGroup))
 
