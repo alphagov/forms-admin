@@ -51,8 +51,6 @@ describe('Markdown toolbar', () => {
       <textarea data-module="markdown-editor" data-i18n='${i18n}'>${textAreaContent}</textarea>
     `
 
-    console.log(document.body.innerHTML)
-
     document
       .querySelectorAll('[data-module="markdown-editor"]')
       .forEach(element => {
