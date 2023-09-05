@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Forms::SelectionsSettingsForm, type: :model do
+RSpec.describe Pages::SelectionsSettingsForm, type: :model do
   let(:selections_settings_form) { described_class.new }
 
   it "has a valid factory" do
@@ -11,7 +11,7 @@ RSpec.describe Forms::SelectionsSettingsForm, type: :model do
   describe "validations" do
     it "is invalid if fewer than 2 selection options are provided" do
       selections_settings_form.selection_options = []
-      error_message = I18n.t("activemodel.errors.models.forms/selections_settings_form.attributes.selection_options.minimum")
+      error_message = I18n.t("activemodel.errors.models.pages/selections_settings_form.attributes.selection_options.minimum")
       expect(selections_settings_form).not_to be_valid
 
       expect(selections_settings_form.errors.full_messages_for(:selection_options)).to include("Selection options #{error_message}")
@@ -19,7 +19,7 @@ RSpec.describe Forms::SelectionsSettingsForm, type: :model do
 
     it "is invalid if more than 20 selection options are provided" do
       selections_settings_form.selection_options = (1..21).to_a.map { |i| Pages::SelectionOption.new({ name: i.to_s }) }
-      error_message = I18n.t("activemodel.errors.models.forms/selections_settings_form.attributes.selection_options.maximum")
+      error_message = I18n.t("activemodel.errors.models.pages/selections_settings_form.attributes.selection_options.maximum")
       expect(selections_settings_form).not_to be_valid
 
       expect(selections_settings_form.errors.full_messages_for(:selection_options)).to include("Selection options #{error_message}")
@@ -27,7 +27,7 @@ RSpec.describe Forms::SelectionsSettingsForm, type: :model do
 
     it "is invalid if selection options are not unique" do
       selections_settings_form.selection_options = [Pages::SelectionOption.new({ name: "option 1" }), Pages::SelectionOption.new({ name: "option 2" }), Pages::SelectionOption.new({ name: "option 1" })]
-      error_message = I18n.t("activemodel.errors.models.forms/selections_settings_form.attributes.selection_options.uniqueness")
+      error_message = I18n.t("activemodel.errors.models.pages/selections_settings_form.attributes.selection_options.uniqueness")
       expect(selections_settings_form).not_to be_valid
 
       expect(selections_settings_form.errors.full_messages_for(:selection_options)).to include("Selection options #{error_message}")

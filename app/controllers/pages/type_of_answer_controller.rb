@@ -91,7 +91,7 @@ private
   def default_answer_settings_for_answer_type(answer_type)
     case answer_type
     when "selection"
-      Forms::SelectionsSettingsForm::DEFAULT_OPTIONS
+      Pages::SelectionsSettingsForm::DEFAULT_OPTIONS
     when "text", "date", "address"
       { input_type: nil }
     when "name"

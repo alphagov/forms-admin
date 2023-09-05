@@ -58,7 +58,7 @@ RSpec.describe Pages::SelectionsSettingsController, type: :request do
 
     context "when form is valid and ready to store" do
       before do
-        post selections_settings_create_path form_id: form.id, params: { forms_selections_settings_form: { selection_options: { "0" => { name: "Option 1" }, "1" => { name: "Option 2" } }, only_one_option: true, include_none_of_the_above: false } }
+        post selections_settings_create_path form_id: form.id, params: { pages_selections_settings_form: { selection_options: { "0" => { name: "Option 1" }, "1" => { name: "Option 2" } }, only_one_option: true, include_none_of_the_above: false } }
       end
 
       it "saves the answer type to session" do
@@ -72,7 +72,7 @@ RSpec.describe Pages::SelectionsSettingsController, type: :request do
 
     context "when form is invalid" do
       before do
-        post selections_settings_create_path form_id: form.id, params: { forms_selections_settings_form: { answer_settings: nil } }
+        post selections_settings_create_path form_id: form.id, params: { pages_selections_settings_form: { answer_settings: nil } }
       end
 
       it "renders the type of answer view if there are errors" do
@@ -129,7 +129,7 @@ RSpec.describe Pages::SelectionsSettingsController, type: :request do
 
     context "when form is valid and ready to update in the DB" do
       before do
-        post selections_settings_update_path(form_id: page.form_id, page_id: page.id), params: { forms_selections_settings_form: { selection_options: { "0" => { name: "Option 1" }, "1" => { name: "New option 2" } }, only_one_option: true, include_none_of_the_above: false } }
+        post selections_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_selections_settings_form: { selection_options: { "0" => { name: "Option 1" }, "1" => { name: "New option 2" } }, only_one_option: true, include_none_of_the_above: false } }
       end
 
       it "saves the updated answer settings to DB" do
@@ -145,7 +145,7 @@ RSpec.describe Pages::SelectionsSettingsController, type: :request do
 
     context "when form is invalid" do
       before do
-        post selections_settings_create_path form_id: form.id, params: { forms_selections_settings_form: { answer_settings: nil } }
+        post selections_settings_create_path form_id: form.id, params: { pages_selections_settings_form: { answer_settings: nil } }
       end
 
       it "renders the selections settings view if there are errors" do
