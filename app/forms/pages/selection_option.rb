@@ -1,4 +1,4 @@
-class Forms::SelectionOption < BaseForm
+class Pages::SelectionOption < BaseForm
   attr_accessor :name
 
   def init(name)

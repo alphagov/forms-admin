@@ -133,7 +133,7 @@ RSpec.describe Pages::SelectionsSettingsController, type: :request do
       end
 
       it "saves the updated answer settings to DB" do
-        new_settings = { only_one_option: "true", selection_options: [Forms::SelectionOption.new({ name: "Option 1" }), Forms::SelectionOption.new({ name: "New option 2" })] }
+        new_settings = { only_one_option: "true", selection_options: [Pages::SelectionOption.new({ name: "Option 1" }), Pages::SelectionOption.new({ name: "New option 2" })] }
         form = assigns(:selections_settings_form)
         expect(form.answer_settings.to_json).to eq new_settings.to_json
       end

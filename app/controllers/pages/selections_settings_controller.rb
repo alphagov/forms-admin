@@ -57,7 +57,7 @@ class Pages::SelectionsSettingsController < PagesController
 private
 
   def convert_to_selection_option(hash)
-    Forms::SelectionOption.new(hash)
+    Pages::SelectionOption.new(hash)
   end
 
   def load_answer_settings_from_params(params)
