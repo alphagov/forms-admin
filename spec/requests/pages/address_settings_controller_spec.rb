@@ -58,7 +58,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
     context "when form is invalid" do
       before do
-        post address_settings_create_path form_id: form.id, params: { forms_address_settings_form: { input_type: nil } }
+        post address_settings_create_path form_id: form.id, params: { pages_address_settings_form: { input_type: nil } }
       end
 
       it "renders the address settings view if there are errors" do
@@ -68,7 +68,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
     context "when form is valid and ready to store" do
       before do
-        post address_settings_create_path form_id: form.id, params: { forms_address_settings_form: { uk_address: address_settings_form.uk_address, international_address: address_settings_form.international_address } }
+        post address_settings_create_path form_id: form.id, params: { pages_address_settings_form: { uk_address: address_settings_form.uk_address, international_address: address_settings_form.international_address } }
       end
 
       let(:address_settings_form) { build :address_settings_form, form: }
@@ -138,7 +138,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
       let(:international_address) { page.answer_settings.input_type.international_address }
 
       before do
-        post address_settings_update_path(form_id: page.form_id, page_id: page.id), params: { forms_address_settings_form: { uk_address: "true", international_address: "false" } }
+        post address_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_address_settings_form: { uk_address: "true", international_address: "false" } }
       end
 
       it "loads the updated input type into the session from the page params" do
@@ -157,7 +157,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
       let(:input_type) { nil }
 
       before do
-        post address_settings_update_path(form_id: page.form_id, page_id: page.id), params: { forms_address_settings_form: { input_type: } }
+        post address_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_address_settings_form: { input_type: } }
       end
 
       it "renders the address settings view if there are errors" do
