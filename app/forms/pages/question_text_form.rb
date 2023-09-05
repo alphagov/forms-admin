@@ -1,4 +1,4 @@
-class Forms::QuestionTextForm < BaseForm
+class Pages::QuestionTextForm < BaseForm
   attr_accessor :question_text
 
   validates :question_text, presence: true

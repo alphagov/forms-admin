@@ -58,7 +58,7 @@ RSpec.describe Pages::QuestionTextController, type: :request do
 
     context "when form is invalid" do
       before do
-        post question_text_create_path form_id: form.id, params: { forms_question_text_form: { question_text: nil } }
+        post question_text_create_path form_id: form.id, params: { pages_question_text_form: { question_text: nil } }
       end
 
       it "renders the date settings view if there are errors" do
@@ -68,7 +68,7 @@ RSpec.describe Pages::QuestionTextController, type: :request do
 
     context "when form is valid and ready to store" do
       before do
-        post question_text_create_path form_id: form.id, params: { forms_question_text_form: { question_text: "Are you a higher rate taxpayer?" } }
+        post question_text_create_path form_id: form.id, params: { pages_question_text_form: { question_text: "Are you a higher rate taxpayer?" } }
       end
 
       let(:question_text_form) { build :question_text_form }
