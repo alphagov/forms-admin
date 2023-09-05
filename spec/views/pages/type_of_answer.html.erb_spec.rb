@@ -18,7 +18,7 @@ describe "pages/type_of_answer.html.erb", type: :view do
 
     # mock the path helper
     without_partial_double_verification do
-      allow(view).to receive(:form_forms_type_of_answer_form_path).and_return("/type-of-answer")
+      allow(view).to receive(:form_pages_type_of_answer_form_path).and_return("/type-of-answer")
     end
 
     # setup instance variables
@@ -53,13 +53,13 @@ describe "pages/type_of_answer.html.erb", type: :view do
 
   it "has radio buttons for each answer_type" do
     answer_types.each do |type|
-      expect(rendered).to have_field("forms_type_of_answer_form[answer_type]", with: type)
+      expect(rendered).to have_field("pages_type_of_answer_form[answer_type]", with: type)
     end
   end
 
   it "the answer type from the type_of_answer_form is checked" do
     selected_answer_type = type_of_answer_form.answer_type
-    expect(rendered).to have_checked_field("forms_type_of_answer_form[answer_type]", with: selected_answer_type)
+    expect(rendered).to have_checked_field("pages_type_of_answer_form[answer_type]", with: selected_answer_type)
   end
 
   it "has a submit button with the correct text" do
