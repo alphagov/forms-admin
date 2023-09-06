@@ -129,3 +129,25 @@ describe('markdown event', () => {
     expect(listener).not.toHaveBeenCalled()
   })
 })
+
+describe('input event', () => {
+  it('is sent when the user pastes HTML', () => {
+    const listener = jest.fn()
+    const html = '<h2>Title</h2>'
+
+    textarea.addEventListener('input', listener)
+    textarea.dispatchEvent(createHtmlPasteEvent(html))
+
+    expect(listener).toHaveBeenCalled()
+  })
+
+  it('is sent when the user pastes text', () => {
+    const listener = jest.fn()
+    const text = 'Title'
+
+    textarea.addEventListener('input', listener)
+    textarea.dispatchEvent(createHtmlPasteEvent(null, text))
+
+    expect(listener).toHaveBeenCalled()
+  })
+})
