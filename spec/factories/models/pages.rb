@@ -49,7 +49,7 @@ FactoryBot.define do
 
     trait :with_text_settings do
       transient do
-        input_type { Forms::TextSettingsForm::INPUT_TYPES.sample }
+        input_type { Pages::TextSettingsForm::INPUT_TYPES.sample }
       end
 
       answer_type { "text" }

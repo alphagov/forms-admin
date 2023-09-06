@@ -2,7 +2,7 @@ en:
   activemodel:
     errors:
       models:
-        forms/text_settings_form:
+        pages/text_settings_form:
           attributes:
             input_type:
               blank: Select how much text people will need to provide

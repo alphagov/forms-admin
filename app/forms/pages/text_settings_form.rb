@@ -1,4 +1,4 @@
-class Forms::TextSettingsForm < BaseForm
+class Pages::TextSettingsForm < BaseForm
   attr_accessor :input_type, :form, :page
 
   INPUT_TYPES = %w[single_line long_text].freeze

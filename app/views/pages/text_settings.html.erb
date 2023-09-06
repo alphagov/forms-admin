@@ -7,7 +7,7 @@
       <%= f.govuk_error_summary %>
       <%= f.govuk_collection_radio_buttons(
             :input_type,
-            Forms::TextSettingsForm::INPUT_TYPES,
+            Pages::TextSettingsForm::INPUT_TYPES,
             ->(option) { option },
             ->(option) { t('helpers.label.page.text_settings_options.names.' + option) },
             legend: { text: t('page_titles.text_settings'), size: 'l', tag: 'h1' },
