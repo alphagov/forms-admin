@@ -6,7 +6,7 @@ en:
         page:
           attributes:
             hint_text:
-              too_long: "Hint text must be %{count} characters or less"
+              too_long: Hint text must be %{count} characters or less
             question_text:
               blank: Enter a question
               too_long: Question text must be %{count} characters or less
