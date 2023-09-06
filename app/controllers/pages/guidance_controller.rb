@@ -13,6 +13,7 @@ class Pages::GuidanceController < PagesController
 
     case route_to
     when :preview
+      guidance_form.valid?
       render "pages/guidance", locals: view_locals(nil, guidance_form)
     when :save_and_continue
       if guidance_form.submit(session)
@@ -37,6 +38,7 @@ class Pages::GuidanceController < PagesController
 
     case route_to
     when :preview
+      guidance_form.valid?
       render "pages/guidance", locals: view_locals(page, guidance_form)
     when :save_and_continue
       if guidance_form.submit(session)
