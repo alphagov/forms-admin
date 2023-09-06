@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Condition do
+describe Condition, type: :model do
   let(:validation_errors) { [] }
   let(:condition) { described_class.new(id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3, validation_errors:) }
 

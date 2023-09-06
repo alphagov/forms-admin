@@ -1,7 +1,7 @@
 require "gds-sso/lint/user_spec"
 require "rails_helper"
 
-describe User do
+describe User, type: :model do
   subject(:user) { described_class.new }
 
   it "validates" do

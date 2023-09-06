@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Page do
+describe Page, type: :model do
   describe "#convert_is_optional_to_boolean" do
     context "when a question is optional" do
       it "set the model attribute to true" do
