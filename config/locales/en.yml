@@ -286,8 +286,8 @@ en:
           title: Answer type
         date_settings_options:
           input_types:
-            date_of_birth: Date of birth
-            other_date: Other date
+            date_of_birth: 'Yes'
+            other_date: 'No'
           names:
             date_of_birth: 'Yes'
             other_date: 'No'

@@ -76,7 +76,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
     it "renders the input type" do
       render_inline(described_class.new(page_object, change_answer_type_path:, change_text_settings_path:))
-      expect(page).to have_text "Input type"
+      expect(page).to have_text "Length"
       expect(page).to have_text I18n.t("helpers.label.page.text_settings_options.names.#{page_object.answer_settings.input_type}")
     end
   end
@@ -100,7 +100,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
     it "renders the input type" do
       render_inline(described_class.new(page_object, change_answer_type_path:, change_date_settings_path:))
-      expect(page).to have_text "Input type"
+      expect(page).to have_text "Date of birth"
       expect(page).to have_text I18n.t("helpers.label.page.date_settings_options.input_types.#{page_object.answer_settings.input_type}")
     end
 
@@ -142,7 +142,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
     it "renders the input type" do
       render_inline(described_class.new(page_object, change_answer_type_path:, change_address_settings_path:))
-      expect(page).to have_text "Input type"
+      expect(page).to have_text "Address type"
       expect(page).to have_text I18n.t("helpers.label.page.address_settings_options.names.uk_and_international_addresses")
     end
 
@@ -192,7 +192,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
     it "renders the input type" do
       render_inline(described_class.new(page_object, change_answer_type_path:, change_name_settings_path:))
-      expect(page).to have_text "Input type"
+      expect(page).to have_text "Name fields"
       expect(page).to have_text I18n.t("helpers.label.page.name_settings_options.names.full_name")
     end
 
