@@ -16,6 +16,8 @@ const insertTextAtCursor = (field, contentToInsert) => {
   } else {
     field.value += contentToInsert
   }
+
+  field.dispatchEvent(new window.InputEvent('input'))
 }
 
 const htmlFromPasteEvent = event => {
