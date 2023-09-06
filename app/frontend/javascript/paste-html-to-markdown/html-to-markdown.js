@@ -1,6 +1,7 @@
 // Adapted from the [Paste HTML to govspeak](https://github.com/alphagov/paste-html-to-govspeak) package
 
 import TurndownService from 'turndown'
+import replaceBulletCharacters from './replace-bullet-characters'
 
 const service = new TurndownService({
   bulletListMarker: '*',
@@ -344,7 +345,8 @@ const extractHeadingsFromLists = markdown => {
 
 const postProcess = markdown => {
   const markdownWithExtractedHeadings = extractHeadingsFromLists(markdown)
-  const brsRemoved = removeBrParagraphs(markdownWithExtractedHeadings)
+  const bulletsReplaced = replaceBulletCharacters(markdownWithExtractedHeadings)
+  const brsRemoved = removeBrParagraphs(bulletsReplaced)
   const whitespaceStripped = brsRemoved.trim()
   return whitespaceStripped
 }

@@ -40,6 +40,13 @@ it('converts HTML to govspeak if HTML is pasted', () => {
   expect(textarea.value).toEqual('## Hello')
 })
 
+it('converts bullet characters to markdown bullets if text is pasted', () => {
+  textarea.dispatchEvent(
+    createHtmlPasteEvent(null, '• bullet text\n•bullet text')
+  )
+  expect(textarea.value).toEqual('* bullet text\n* bullet text')
+})
+
 describe('htmlpaste event', () => {
   it('has raw HTML as the detail if HTML is pasted', () => {
     const listener = jest.fn()

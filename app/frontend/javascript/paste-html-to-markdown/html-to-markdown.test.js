@@ -324,6 +324,13 @@ it('Converts a MS Word list that uses msoNormal classes', () => {
   expect(htmlToMarkdown(html)).toEqual('* Item 1\n' + '* Item 2')
 })
 
+it('Converts bullet characters to markdown bullets', () => {
+  const html = `<p>• bullet content</p>
+  <p>•bullet content</p>`
+
+  expect(htmlToMarkdown(html)).toEqual('* bullet content\n\n* bullet content')
+})
+
 it("Doesn't preserve markdown that is only a link with similar text to the link", () => {
   // If you paste the URL from the address bar of chrome this is the HTML created
   const html = `
