@@ -10,3 +10,4 @@ en:
           attributes:
             question_text:
               blank: Enter your question
+              too_long: "Your question must be %{count} characters or less"

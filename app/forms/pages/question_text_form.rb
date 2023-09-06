@@ -1,7 +1,7 @@
 class Pages::QuestionTextForm < BaseForm
-  attr_accessor :question_text
+  include QuestionTextValidation
 
-  validates :question_text, presence: true
+  attr_accessor :question_text
 
   def submit(session)
     return false if invalid?
