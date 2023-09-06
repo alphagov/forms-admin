@@ -1,7 +1,7 @@
-class Forms::DateSettingsForm < BaseForm
+class Pages::TextSettingsForm < BaseForm
   attr_accessor :input_type, :form, :page
 
-  INPUT_TYPES = %w[date_of_birth other_date].freeze
+  INPUT_TYPES = %w[single_line long_text].freeze
 
   validates :input_type, presence: true, inclusion: { in: INPUT_TYPES }
 

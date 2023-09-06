@@ -58,7 +58,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
     context "when form is valid and ready to store" do
       before do
-        post type_of_answer_create_path form_id: form.id, params: { forms_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
+        post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
       end
 
       context "when answer type is not selection" do
@@ -77,7 +77,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "selection", form: }
 
         before do
-          post type_of_answer_create_path form_id: form.id, params: { forms_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
+          post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
         end
 
         it "saves the answer type to session" do
@@ -93,7 +93,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "text", form: }
 
         before do
-          post type_of_answer_create_path form_id: form.id, params: { forms_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
+          post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
         end
 
         it "saves the answer type to session" do
@@ -109,7 +109,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "date", form: }
 
         before do
-          post type_of_answer_create_path form_id: form.id, params: { forms_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
+          post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
         end
 
         it "saves the answer type to session" do
@@ -125,7 +125,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "address", form: }
 
         before do
-          post type_of_answer_create_path form_id: form.id, params: { forms_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
+          post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
         end
 
         it "saves the answer type to session" do
@@ -141,7 +141,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "name", form: }
 
         before do
-          post type_of_answer_create_path form_id: form.id, params: { forms_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
+          post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
         end
 
         it "saves the answer type to session" do
@@ -156,7 +156,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
     context "when form is invalid" do
       before do
-        post type_of_answer_create_path form_id: form.id, params: { forms_type_of_answer_form: { answer_type: nil } }
+        post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_form: { answer_type: nil } }
       end
 
       it "renders the type of answer view if there are errors" do
@@ -210,10 +210,10 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
     end
 
     context "when form is valid and ready to update in the DB" do
-      let(:forms_type_of_answer_form) { { answer_type: "number" } }
+      let(:pages_type_of_answer_form) { { answer_type: "number" } }
 
       before do
-        post type_of_answer_update_path(form_id: page.form_id, page_id: page.id), params: { forms_type_of_answer_form: }
+        post type_of_answer_update_path(form_id: page.form_id, page_id: page.id), params: { pages_type_of_answer_form: }
       end
 
       it "saves the updated answer type to DB" do
@@ -226,7 +226,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       end
 
       context "when answer type is selection" do
-        let(:forms_type_of_answer_form) { { answer_type: "selection" } }
+        let(:pages_type_of_answer_form) { { answer_type: "selection" } }
 
         it "saves the answer type to session" do
           form = assigns(:type_of_answer_form)
@@ -241,7 +241,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
     context "when form is invalid" do
       before do
-        post type_of_answer_create_path form_id: form.id, params: { forms_type_of_answer_form: { answer_type: nil } }
+        post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_form: { answer_type: nil } }
       end
 
       it "renders the type of answer view if there are errors" do

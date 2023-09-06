@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Forms::AddressSettingsForm, type: :model do
+RSpec.describe Pages::AddressSettingsForm, type: :model do
   let(:form) { build :form, id: 1 }
   let(:address_settings_form) { described_class.new }
 
@@ -11,7 +11,7 @@ RSpec.describe Forms::AddressSettingsForm, type: :model do
 
   describe "validations" do
     it "is invalid if no options are selected" do
-      error_message = I18n.t("activemodel.errors.models.forms/address_settings_form.attributes.base.blank")
+      error_message = I18n.t("activemodel.errors.models.pages/address_settings_form.attributes.base.blank")
       address_settings_form.uk_address = "false"
       address_settings_form.international_address = "false"
       expect(address_settings_form).to be_invalid
@@ -19,8 +19,8 @@ RSpec.describe Forms::AddressSettingsForm, type: :model do
     end
 
     it "is invalid given a value which is neither true nor false" do
-      uk_error_message = I18n.t("activemodel.errors.models.forms/address_settings_form.attributes.uk_address.inclusion")
-      international_error_message = I18n.t("activemodel.errors.models.forms/address_settings_form.attributes.international_address.inclusion")
+      uk_error_message = I18n.t("activemodel.errors.models.pages/address_settings_form.attributes.uk_address.inclusion")
+      international_error_message = I18n.t("activemodel.errors.models.pages/address_settings_form.attributes.international_address.inclusion")
       address_settings_form.uk_address = "maybe"
       address_settings_form.international_address = "possibly"
       expect(address_settings_form).to be_invalid

@@ -1,7 +1,7 @@
-class Forms::SelectionsSettingsForm < BaseForm
+class Pages::SelectionsSettingsForm < BaseForm
   include ActiveModel::Validations::Callbacks
 
-  DEFAULT_OPTIONS = { selection_options: [{ name: "" }, { name: "" }].map { |hash| Forms::SelectionOption.new(hash) }, only_one_option: false, include_none_of_the_above: false }.freeze
+  DEFAULT_OPTIONS = { selection_options: [{ name: "" }, { name: "" }].map { |hash| Pages::SelectionOption.new(hash) }, only_one_option: false, include_none_of_the_above: false }.freeze
 
   attr_accessor :selection_options, :only_one_option, :include_none_of_the_above
 
@@ -10,11 +10,11 @@ class Forms::SelectionsSettingsForm < BaseForm
   validate :selection_options, :validate_selection_options
 
   def convert_to_selection_option(hash)
-    Forms::SelectionOption.new(hash)
+    Pages::SelectionOption.new(hash)
   end
 
   def add_another
-    selection_options.append(Forms::SelectionOption.new({ name: "" }))
+    selection_options.append(Pages::SelectionOption.new({ name: "" }))
   end
 
   def remove(index)

@@ -2,7 +2,7 @@ en:
   activemodel:
     errors:
       models:
-        forms/type_of_answer_form:
+        pages/type_of_answer_form:
           attributes:
             answer_type:
               blank: Select the type of answer you need

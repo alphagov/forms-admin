@@ -2,7 +2,7 @@ en:
   activemodel:
     errors:
       models:
-        forms/selections_settings_form:
+        pages/selections_settings_form:
           attributes:
             selection_options:
               blank: Add text for all of your options

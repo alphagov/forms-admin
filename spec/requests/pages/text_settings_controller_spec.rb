@@ -58,7 +58,7 @@ RSpec.describe Pages::TextSettingsController, type: :request do
 
     context "when form is invalid" do
       before do
-        post text_settings_create_path form_id: form.id, params: { forms_text_settings_form: { input_type: nil } }
+        post text_settings_create_path form_id: form.id, params: { pages_text_settings_form: { input_type: nil } }
       end
 
       it "renders the text settings view if there are errors" do
@@ -68,7 +68,7 @@ RSpec.describe Pages::TextSettingsController, type: :request do
 
     context "when form is valid and ready to store" do
       before do
-        post text_settings_create_path form_id: form.id, params: { forms_text_settings_form: { input_type: text_settings_form.input_type } }
+        post text_settings_create_path form_id: form.id, params: { pages_text_settings_form: { input_type: text_settings_form.input_type } }
       end
 
       let(:text_settings_form) { build :text_settings_form, form: }
@@ -131,7 +131,7 @@ RSpec.describe Pages::TextSettingsController, type: :request do
       let(:input_type) { "single_line" }
 
       before do
-        post text_settings_update_path(form_id: page.form_id, page_id: page.id), params: { forms_text_settings_form: { input_type: } }
+        post text_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_text_settings_form: { input_type: } }
       end
 
       it "saves the updated input type to DB" do
@@ -149,7 +149,7 @@ RSpec.describe Pages::TextSettingsController, type: :request do
       let(:input_type) { nil }
 
       before do
-        post text_settings_update_path(form_id: page.form_id, page_id: page.id), params: { forms_text_settings_form: { input_type: } }
+        post text_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_text_settings_form: { input_type: } }
       end
 
       it "renders the text settings view if there are errors" do

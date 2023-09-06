@@ -1,7 +1,7 @@
 class Pages::SelectionsSettingsController < PagesController
   def new
     answer_settings = load_answer_settings_from_session
-    @selections_settings_form = Forms::SelectionsSettingsForm.new(answer_settings)
+    @selections_settings_form = Pages::SelectionsSettingsForm.new(answer_settings)
     @selections_settings_path = selections_settings_create_path(@form)
     @back_link_url = question_text_new_path(@form)
     render selection_settings_view
@@ -9,7 +9,7 @@ class Pages::SelectionsSettingsController < PagesController
 
   def create
     answer_settings = load_answer_settings_from_params(selections_settings_form_params)
-    @selections_settings_form = Forms::SelectionsSettingsForm.new(answer_settings)
+    @selections_settings_form = Pages::SelectionsSettingsForm.new(answer_settings)
     @selections_settings_path = selections_settings_create_path(@form)
     @back_link_url = question_text_new_path(@form)
 
@@ -29,7 +29,7 @@ class Pages::SelectionsSettingsController < PagesController
   def edit
     page.load_from_session(session, %w[answer_type answer_settings is_optional])
     @selections_settings_path = selections_settings_update_path(@form)
-    @selections_settings_form = Forms::SelectionsSettingsForm.new(load_answer_settings_from_page_object(page))
+    @selections_settings_form = Pages::SelectionsSettingsForm.new(load_answer_settings_from_page_object(page))
     @back_link_url = edit_page_path(@form, page)
     render selection_settings_view
   end
@@ -37,7 +37,7 @@ class Pages::SelectionsSettingsController < PagesController
   def update
     @selections_settings_path = selections_settings_update_path(@form)
     answer_settings = load_answer_settings_from_params(selections_settings_form_params)
-    @selections_settings_form = Forms::SelectionsSettingsForm.new(answer_settings)
+    @selections_settings_form = Pages::SelectionsSettingsForm.new(answer_settings)
     @back_link_url = edit_page_path(@form, page)
 
     if params[:add_another]
@@ -57,7 +57,7 @@ class Pages::SelectionsSettingsController < PagesController
 private
 
   def convert_to_selection_option(hash)
-    Forms::SelectionOption.new(hash)
+    Pages::SelectionOption.new(hash)
   end
 
   def load_answer_settings_from_params(params)
@@ -76,7 +76,7 @@ private
 
       { only_one_option:, selection_options:, include_none_of_the_above: }
     else
-      Forms::SelectionsSettingsForm::DEFAULT_OPTIONS
+      Pages::SelectionsSettingsForm::DEFAULT_OPTIONS
     end
   end
 
@@ -89,7 +89,7 @@ private
   end
 
   def selections_settings_form_params
-    params.require(:forms_selections_settings_form).permit(:only_one_option, :include_none_of_the_above, selection_options: [:name])
+    params.require(:pages_selections_settings_form).permit(:only_one_option, :include_none_of_the_above, selection_options: [:name])
   end
 
   def selection_settings_view

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Forms::TypeOfAnswerForm, type: :model do
+RSpec.describe Pages::TypeOfAnswerForm, type: :model do
   let(:form) { build :form, id: 1 }
   let(:type_of_answer_form) { described_class.new }
 

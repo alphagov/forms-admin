@@ -2,7 +2,7 @@ en:
   activemodel:
     errors:
       models:
-        forms/name_settings_form:
+        pages/name_settings_form:
           attributes:
             input_type:
               blank: Select how you need to collect the name

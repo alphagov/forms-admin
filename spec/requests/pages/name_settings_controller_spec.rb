@@ -58,7 +58,7 @@ RSpec.describe Pages::NameSettingsController, type: :request do
 
     context "when form is invalid" do
       before do
-        post name_settings_create_path form_id: form.id, params: { forms_name_settings_form: { input_type: nil } }
+        post name_settings_create_path form_id: form.id, params: { pages_name_settings_form: { input_type: nil } }
       end
 
       it "renders the name settings view if there are errors" do
@@ -68,7 +68,7 @@ RSpec.describe Pages::NameSettingsController, type: :request do
 
     context "when form is valid and ready to store" do
       before do
-        post name_settings_create_path form_id: form.id, params: { forms_name_settings_form: { input_type: "first_and_last_name", title_needed: "false" } }
+        post name_settings_create_path form_id: form.id, params: { pages_name_settings_form: { input_type: "first_and_last_name", title_needed: "false" } }
       end
 
       let(:name_settings_form) { build :name_settings_form, form: }
@@ -136,7 +136,7 @@ RSpec.describe Pages::NameSettingsController, type: :request do
       let(:title_needed) { "true" }
 
       before do
-        post name_settings_update_path(form_id: page.form_id, page_id: page.id), params: { forms_name_settings_form: { input_type:, title_needed: } }
+        post name_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_name_settings_form: { input_type:, title_needed: } }
       end
 
       it "loads the updated input type from the page params" do
@@ -156,7 +156,7 @@ RSpec.describe Pages::NameSettingsController, type: :request do
       let(:title_needed) { nil }
 
       before do
-        post name_settings_update_path(form_id: page.form_id, page_id: page.id), params: { forms_name_settings_form: { input_type:, title_needed: } }
+        post name_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_name_settings_form: { input_type:, title_needed: } }
       end
 
       it "renders the name settings view if there are errors" do

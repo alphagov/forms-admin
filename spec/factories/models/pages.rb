@@ -39,7 +39,7 @@ FactoryBot.define do
     trait :with_selections_settings do
       transient do
         only_one_option { "true" }
-        selection_options { [Forms::SelectionOption.new({ name: "Option 1" }), Forms::SelectionOption.new({ name: "Option 2" })] }
+        selection_options { [Pages::SelectionOption.new({ name: "Option 1" }), Pages::SelectionOption.new({ name: "Option 2" })] }
       end
 
       question_text { Faker::Lorem.question }
@@ -49,7 +49,7 @@ FactoryBot.define do
 
     trait :with_text_settings do
       transient do
-        input_type { Forms::TextSettingsForm::INPUT_TYPES.sample }
+        input_type { Pages::TextSettingsForm::INPUT_TYPES.sample }
       end
 
       answer_type { "text" }
@@ -58,7 +58,7 @@ FactoryBot.define do
 
     trait :with_date_settings do
       transient do
-        input_type { Forms::DateSettingsForm::INPUT_TYPES.sample }
+        input_type { Pages::DateSettingsForm::INPUT_TYPES.sample }
       end
 
       answer_type { "date" }
@@ -77,8 +77,8 @@ FactoryBot.define do
 
     trait :with_name_settings do
       transient do
-        input_type { Forms::NameSettingsForm::INPUT_TYPES.sample }
-        title_needed { Forms::NameSettingsForm::TITLE_NEEDED.sample }
+        input_type { Pages::NameSettingsForm::INPUT_TYPES.sample }
+        title_needed { Pages::NameSettingsForm::TITLE_NEEDED.sample }
       end
 
       answer_type { "name" }

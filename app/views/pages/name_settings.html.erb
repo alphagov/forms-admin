@@ -12,7 +12,7 @@
 
       <%= f.govuk_collection_radio_buttons(
             :input_type,
-            Forms::NameSettingsForm::INPUT_TYPES,
+            Pages::NameSettingsForm::INPUT_TYPES,
             ->(option) { option },
             ->(option) { t('helpers.label.page.name_settings_options.names.' + option) },
             ->(option) { t('helpers.label.page.name_settings_options.hints.' + option) },
@@ -22,7 +22,7 @@
             )  %>
       <%= f.govuk_collection_radio_buttons(
             :title_needed,
-            Forms::NameSettingsForm::TITLE_NEEDED,
+            Pages::NameSettingsForm::TITLE_NEEDED,
             ->(option) { option },
             ->(option) { t('helpers.label.page.name_settings_options.names.' + option) },
             legend: { text: t("helpers.label.page.name_settings_options.legends.title") },

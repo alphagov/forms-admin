@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Forms::TextSettingsForm, type: :model do
+RSpec.describe Pages::TextSettingsForm, type: :model do
   let(:form) { build :form, id: 1 }
   let(:text_settings_form) { described_class.new }
 
@@ -11,21 +11,21 @@ RSpec.describe Forms::TextSettingsForm, type: :model do
 
   describe "validations" do
     it "is invalid if not given an input type" do
-      error_message = I18n.t("activemodel.errors.models.forms/text_settings_form.attributes.input_type.blank")
+      error_message = I18n.t("activemodel.errors.models.pages/text_settings_form.attributes.input_type.blank")
       text_settings_form.input_type = nil
       expect(text_settings_form).to be_invalid
       expect(text_settings_form.errors.full_messages_for(:input_type)).to include("Input type #{error_message}")
     end
 
     it "is invalid given an empty string input_type" do
-      error_message = I18n.t("activemodel.errors.models.forms/text_settings_form.attributes.input_type.blank")
+      error_message = I18n.t("activemodel.errors.models.pages/text_settings_form.attributes.input_type.blank")
       text_settings_form.input_type = ""
       expect(text_settings_form).to be_invalid
       expect(text_settings_form.errors.full_messages_for(:input_type)).to include("Input type #{error_message}")
     end
 
     it "is invalid given an input_type which is not in the list" do
-      error_message = I18n.t("activemodel.errors.models.forms/text_settings_form.attributes.input_type.inclusion")
+      error_message = I18n.t("activemodel.errors.models.pages/text_settings_form.attributes.input_type.inclusion")
       text_settings_form.input_type = "some_random_string"
       expect(text_settings_form).to be_invalid
       expect(text_settings_form.errors.full_messages_for(:input_type)).to include("Input type #{error_message}")
