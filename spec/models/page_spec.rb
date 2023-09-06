@@ -1,6 +1,47 @@
 require "rails_helper"
 
 describe Page, type: :model do
+  describe "validations" do
+    let(:page) { build :page, question_text: }
+    let(:question_text) { "What is your address?" }
+
+    describe "#question_text" do
+      [nil, ""].each do |question_text|
+        it "is invalid given {question_text} question text" do
+          error_message = I18n.t("activemodel.errors.models.page.attributes.question_text.blank")
+          page.question_text = question_text
+          expect(page).not_to be_valid
+          expect(page.errors[:question_text]).to include(error_message)
+        end
+      end
+
+      it "is valid if question text below 200 characters" do
+        expect(page).to be_valid
+      end
+
+      context "when question text 250 characters" do
+        let(:question_text) { "A" * 250 }
+
+        it "is valid" do
+          expect(page).to be_valid
+        end
+      end
+
+      context "when question text more 250 characters" do
+        let(:question_text) { "A" * 251 }
+
+        it "is invalid" do
+          expect(page).not_to be_valid
+        end
+
+        it "has an error message" do
+          page.valid?
+          expect(page.errors[:question_text]).to include(I18n.t("activemodel.errors.models.page.attributes.question_text.too_long", count: 250))
+        end
+      end
+    end
+  end
+
   describe "#convert_is_optional_to_boolean" do
     context "when a question is optional" do
       it "set the model attribute to true" do
