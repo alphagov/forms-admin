@@ -40,6 +40,12 @@ RSpec.describe MarkdownEditorComponent::View, type: :component do
     expect(page).to have_css("div", text: markdown_editor.hint)
   end
 
+  describe "form_field_id" do
+    it "returns the form field id" do
+      expect(markdown_editor.form_field_id).to eq markdown_editor.govuk_field_id(markdown_editor.form_model, :guidance_markdown)
+    end
+  end
+
   describe "translations" do
     context "when there are no local translations present" do
       it "renders the default translations" do
