@@ -1,16 +1,16 @@
 <div class="app-markdown-editor" data-module="ajax-markdown-preview" data-ajax-markdown-endpoint="<%= render_preview_path %>" data-i18n="<%= translations.to_json() %>">
-  <label class="govuk-label govuk-label--m" for='<%= form_field_id_prefix %>-textarea'>
+  <label class="govuk-label govuk-label--m" for='<%= form_field_id %>'>
     <h2 class="govuk-heading-m"><%= label %></h2>
   </label>
-  <div class="govuk-hint" id="<%= form_field_id_prefix %>-hint"><%= hint %></div>
+  <div class="govuk-hint" id="<%= form_field_id %>-hint"><%= hint %></div>
   <%= govuk_tabs(title: nil) do |component| %>
     <% component.with_tab(label: translations[:write_tab_text]) do %>
       <%= f.govuk_text_area(attribute_name,
                         label: nil,
                         hint: nil,
                         rows: 15,
-                        id: "#{form_field_id_prefix}-textarea",
-                        "aria-describedby": "#{form_field_id_prefix}-hint",
+                        id: "#{form_field_id}",
+                        aria: { describedby: "#{form_field_id}-hint" },
                         "data-module": "markdown-editor-toolbar",
                         "data-ajax-markdown-source": true,
                         "data-i18n": translations[:toolbar].to_json())  %>

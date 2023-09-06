@@ -2,6 +2,7 @@
 
 module MarkdownEditorComponent
   class View < ViewComponent::Base
+    include GOVUKDesignSystemFormBuilder::BuilderHelper
     attr_reader :attribute_name, :f, :render_preview_path, :preview_html, :form_model, :label, :hint
 
     def initialize(attribute_name,
@@ -23,8 +24,8 @@ module MarkdownEditorComponent
       @local_translations = local_translations
     end
 
-    def form_field_id_prefix
-      "markdown-editor-#{attribute_name}"
+    def form_field_id
+      govuk_field_id(form_model, attribute_name)
     end
 
     def preview_button_translation
