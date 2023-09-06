@@ -40,6 +40,41 @@ describe Page, type: :model do
         end
       end
     end
+
+    describe "#hint_text" do
+      let(:page) { build :page, hint_text: }
+      let(:hint_text) { "Enter your full name as it appears in your passport" }
+
+      it "is valid if hint text is empty" do
+        page.hint_text = nil
+        expect(page).to be_valid
+      end
+
+      it "is valid if hint text below 500 characters" do
+        expect(page).to be_valid
+      end
+
+      context "when hint text 500 characters" do
+        let(:hint_text) { "A" * 500 }
+
+        it "is valid" do
+          expect(page).to be_valid
+        end
+      end
+
+      context "when hint text more than 500 characters" do
+        let(:hint_text) { "A" * 501 }
+
+        it "is invalid" do
+          expect(page).not_to be_valid
+        end
+
+        it "has an error message" do
+          page.valid?
+          expect(page.errors[:hint_text]).to include(I18n.t("activemodel.errors.models.page.attributes.hint_text.too_long", count: 500))
+        end
+      end
+    end
   end
 
   describe "#convert_is_optional_to_boolean" do

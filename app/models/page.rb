@@ -12,6 +12,8 @@ class Page < ActiveResource::Base
 
   belongs_to :form
 
+  validates :hint_text, length: { maximum: 500 }
+
   validates :answer_type, presence: true, inclusion: { in: ANSWER_TYPES }
   before_validation :convert_is_optional_to_boolean
 
