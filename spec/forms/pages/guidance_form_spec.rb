@@ -42,6 +42,20 @@ RSpec.describe Pages::GuidanceForm, type: :model do
       expect(guidance_form).to be_invalid
       expect(guidance_form.errors.full_messages_for(:guidance_markdown)).to include("Guidance markdown #{error_message}")
     end
+
+    ["A" * 10, "A" * 250].each do |question_text|
+      it "is valid if page_heading is less than or equal to 250 characters" do
+        guidance_form.page_heading = question_text
+        expect(guidance_form).to be_valid
+      end
+    end
+
+    it "is invalid if page heading is more than 250 characters" do
+      guidance_form.page_heading = "A" * 251
+      expect(guidance_form).not_to be_valid
+      error_message = I18n.t("activemodel.errors.models.pages/guidance_form.attributes.page_heading.too_long", count: 250)
+      expect(guidance_form.errors.full_messages_for(:page_heading)).to include("Page heading #{error_message}")
+    end
   end
 
   describe "#submit" do

@@ -15,6 +15,7 @@ en:
           attributes:
             page_heading:
               blank: Enter a page heading
+              too_long: "Page heading must be %{count} characters or less"
             guidance_markdown:
               blank: Enter guidance text
               unsupported_markdown_syntax: Guidance text can only contain formatting for links, subheadings (##), bulleted lists (*), or numbered lists (1.)

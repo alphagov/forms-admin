@@ -2,10 +2,14 @@
 en:
   activemodel:
     errors:
-      page:
-        attributes:
-          question_text:
-            blank: Question text cannot be blank
+      models:
+        page:
+          attributes:
+            hint_text:
+              too_long: Hint text must be %{count} characters or less
+            question_text:
+              blank: Enter a question
+              too_long: Question text must be %{count} characters or less
   activerecord:
     errors:
       models:

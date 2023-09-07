@@ -9,4 +9,5 @@ en:
         pages/question_text_form:
           attributes:
             question_text:
-              blank: Question text cannot be blank
+              blank: Enter your question
+              too_long: "Your question must be %{count} characters or less"

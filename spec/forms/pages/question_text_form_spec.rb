@@ -19,9 +19,18 @@ RSpec.describe Pages::QuestionTextForm, type: :model do
       end
     end
 
-    it "is valid if input type is a valid input type" do
-      question_text_form.question_text = "Do you want to be contacted?"
-      expect(question_text_form).to be_valid
+    ["A" * 10, "A" * 250].each do |question_text|
+      it "is valid if question text is less than or equal to 250 characters" do
+        question_text_form.question_text = question_text
+        expect(question_text_form).to be_valid
+      end
+    end
+
+    it "is invalid if question text is more than 250 characters" do
+      question_text_form.question_text = "A" * 251
+      expect(question_text_form).not_to be_valid
+      error_message = I18n.t("activemodel.errors.models.pages/question_text_form.attributes.question_text.too_long", count: 250)
+      expect(question_text_form.errors.full_messages_for(:question_text)).to include("Question text #{error_message}")
     end
   end
 

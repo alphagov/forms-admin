@@ -1,4 +1,6 @@
 class Page < ActiveResource::Base
+  include QuestionTextValidation
+
   self.site = Settings.forms_api.base_url
   self.prefix = "/api/v1/forms/:form_id/"
   self.include_format_in_path = false
@@ -9,7 +11,9 @@ class Page < ActiveResource::Base
   ANSWER_TYPES_WITH_SETTINGS = %w[selection text date address name].freeze
 
   belongs_to :form
-  validates :question_text, presence: true
+
+  validates :hint_text, length: { maximum: 500 }
+
   validates :answer_type, presence: true, inclusion: { in: ANSWER_TYPES }
   before_validation :convert_is_optional_to_boolean
 
