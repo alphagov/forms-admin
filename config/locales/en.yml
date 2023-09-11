@@ -398,6 +398,12 @@ en:
 
           Leave one empty line before adding the first bullet point and another after the last bullet point. For example:
       formatting_help_section_heading: Formatting help
+      headings:
+        heading: Headings
+        instructions: |
+          Use the headings in sequence - a second-level heading needs to come before a third-level heading.
+
+          Do not use headings to style your text in bold. This can cause issues for people using assistive technology.
       links:
         example: "[Link text](https://www.gov.uk/link-text-url)"
         heading: Links and URLs
