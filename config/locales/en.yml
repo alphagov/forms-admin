@@ -394,14 +394,14 @@ en:
           * Third bullet point
         heading: Bulleted lists
         instructions: |
-          To add bullet points, start each item with * (asterisk) or - (dash). Use one space after the asterisk or dash.
+          To add bullet points, start each item with * (asterisk) or - (dash). Make sure there is one space after the asterisk or dash.
 
-          You need one empty line space before the bullets start, and one at the end. For example:
+          Leave one empty line before adding the first bullet point and another after the last bullet point. For example:
       formatting_help_section_heading: Formatting help
       links:
         example: "[Link text](https://www.gov.uk/link-text-url)"
         heading: Links and URLs
-        instructions: 'To add a link, use square brackets [ ] around the link text, and round brackets ( ) around the full URL. For example:'
+        instructions: 'To add a link, use square brackets [ ] around the link text, and round brackets ( ) around the full URL. Make sure there are no spaces between the two sets of brackets. For example:'
       numbered_lists:
         example: |
           1. First item
@@ -411,15 +411,15 @@ en:
         instructions: |
           Use numbers for each list item, followed by a full stop. Make sure there is one space after the full stop.
 
-          You need one empty line space before the numbers start, and one at the end. For example:
+          Leave one empty line before adding the first list item and another after the last list item. For example:
       second_level_headings:
         example: "## This is a second-level heading"
         heading: Second-level headings
-        instructions: 'To add a second-level heading, use 2 hashtags followed by a space. For example:'
+        instructions: 'To add a second-level heading (H2), use 2 hashtags followed by a space. For example:'
       third_level_headings:
-        example: "## This is a third-level heading"
+        example: "### This is a third-level heading"
         heading: Third-level headings
-        instructions: 'To add a third-level heading, use 3 hashtags followed by a space. For example:'
+        instructions: 'To add a third-level heading (H3), use 3 hashtags followed by a space. For example:'
     preview:
       description: Below is a preview of how your markdown content will be shown to the person completing your form.
       heading: Preview your markdown below
