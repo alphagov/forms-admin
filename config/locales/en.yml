@@ -397,7 +397,7 @@ en:
           To add bullet points, start each item with * (asterisk) or - (dash). Use one space after the asterisk or dash.
 
           You need one empty line space before the bullets start, and one at the end. For example:
-      heading: Formatting help
+      formatting_help_section_heading: Formatting help
       links:
         example: "[Link text](https://www.gov.uk/link-text-url)"
         heading: Links and URLs
