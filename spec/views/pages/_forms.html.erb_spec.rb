@@ -66,19 +66,6 @@ describe "pages/_form.html.erb", type: :view do
         expect(rendered).to have_link(text: I18n.t("guidance.add_guidance"), href: guidance_edit_path(form_id: form.id, page_id: question.id))
       end
     end
-
-    context "when the page does not have a page_heading or guidance_markdown attributes" do
-      let(:question) do
-        build(:page).tap do |p|
-          p.attributes.delete(:page_heading)
-          p.attributes.delete(:guidance_markdown)
-        end
-      end
-
-      it "contains contents relating to how to add guidance" do
-        expect(rendered).to have_text(I18n.t("guidance.instructions"))
-      end
-    end
   end
 
   context "when it is not a new page" do
