@@ -13,9 +13,8 @@
 
   <% if FeatureService.enabled? :detailed_guidance_enabled %>
     <h2 class="govuk-heading-m"><%= t("guidance.guidance") %></h2>
-    <% if page_object.page_heading.present? && page_object.guidance_markdown.present? %>
+    <% if (page_object.respond_to?(:page_heading) && page_object.page_heading.present?) && (page_object.respond_to?(:markdown_guidance) && page_object.guidance_markdown.present?) %>
       <%= govuk_summary_list(**PageSummaryData::GuidanceService.call(form: form_object, page: page_object).build_data) %>
-
     <% else %>
       <p><%= t("guidance.instructions") %></p>
 

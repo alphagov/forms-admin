@@ -252,6 +252,31 @@ describe PageOptionsService do
             value: { text: "<pre class=\"app-markdown-editor__markdown-example-block\">#{page.guidance_markdown}</pre>" } },
         )
       end
+
+      context "when page doesn't have a page_heading or guidance_markdown method defined" do
+        let(:page) do
+          build(:page).tap do |p|
+            p.attributes.delete(:page_heading)
+            p.attributes.delete(:guidance_markdown)
+          end
+        end
+
+        it "does not raise an error" do
+          expect { page_options_service.all_options_for_answer_type }.not_to raise_error
+        end
+
+        it "does not return a page heading key" do
+          expect(page_options_service.all_options_for_answer_type).not_to include(
+            { key: { text: I18n.t("page_options_service.page_heading") } },
+          )
+        end
+
+        it "does not return a guidance markdown key" do
+          expect(page_options_service.all_options_for_answer_type).not_to include(
+            { key: { text: I18n.t("page_options_service.guidance_markdown") } },
+          )
+        end
+      end
     end
   end
 end
