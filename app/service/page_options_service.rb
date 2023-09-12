@@ -15,8 +15,9 @@ class PageOptionsService
 
   def all_options_for_answer_type
     options = []
-    options.concat(page_heading_options) if @page.page_heading.present?
-    options.concat(guidance_markdown_options) if @page.guidance_markdown.present?
+
+    options.concat(page_heading_options) if @page.respond_to?(:page_heading) && @page.page_heading.present?
+    options.concat(guidance_markdown_options) if @page.respond_to?(:guidance_markdown) && @page.guidance_markdown.present?
 
     options.concat(hint_options) if @page.hint_text?.present?
     options.concat(generic_options) if @read_only && %w[address date text selection name].exclude?(@page.answer_type)
