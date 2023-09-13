@@ -118,3 +118,5 @@ group :test do
   # axe-core for running automated accessibility checks
   gem "axe-core-rspec"
 end
+
+gem "activerecord-session_store", "~> 2.1"
