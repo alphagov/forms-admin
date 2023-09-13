@@ -46,6 +46,10 @@ RSpec.describe Pages::GuidanceController, type: :request do
     it "returns 200" do
       expect(response).to have_http_status(:ok)
     end
+
+    it "links back to the previous question page" do
+      expect(Capybara.string(response.body)).to have_link("Back", href: new_page_path(form.id))
+    end
   end
 
   describe "#create" do
@@ -76,6 +80,10 @@ RSpec.describe Pages::GuidanceController, type: :request do
 
       it "renders the guidance markdown as html" do
         expect(response.body).to include('<h2 class="govuk-heading-m">Heading level 2</h2>')
+      end
+
+      it "links back to the previous question page" do
+        expect(Capybara.string(response.body)).to have_link("Back", href: new_page_path(form.id))
       end
 
       context "when markdown is blank" do
@@ -151,6 +159,10 @@ RSpec.describe Pages::GuidanceController, type: :request do
     it "returns 200" do
       expect(response).to have_http_status(:ok)
     end
+
+    it "links back to the previous question page" do
+      expect(Capybara.string(response.body)).to have_link("Back", href: edit_page_path(form.id, page.id))
+    end
   end
 
   describe "#update" do
@@ -183,6 +195,10 @@ RSpec.describe Pages::GuidanceController, type: :request do
 
       it "renders the guidance markdown as html" do
         expect(response.body).to include('<h2 class="govuk-heading-m">Heading level 2</h2>')
+      end
+
+      it "links back to the previous question page" do
+        expect(Capybara.string(response.body)).to have_link("Back", href: edit_page_path(form.id, page.id))
       end
 
       context "when markdown is blank" do
