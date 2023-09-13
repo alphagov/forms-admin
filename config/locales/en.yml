@@ -42,6 +42,7 @@ en:
       route_deleted: Question %{question_position}’s route has been deleted
       route_updated: Question %{question_position}’s route has been updated
       title: Success
+  cancel: Cancel
   contact_details:
     new:
       body_html: |
