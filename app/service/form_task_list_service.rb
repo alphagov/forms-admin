@@ -12,8 +12,8 @@ class FormTaskListService
   def initialize(form:, current_user:)
     @current_user = current_user
     @form = form
-    @task_list_statuses = TaskStatusService.new(form: @form)
-    @task_counts = @task_list_statuses.status_counts(@current_user)
+    @task_statuses = form.task_statuses
+    @task_counts = status_counts
   end
 
   def all_sections
@@ -45,10 +45,10 @@ private
                       type_of_answer_new_path(@form.id)
                     end
     [
-      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_1.name"), path: change_form_name_path(@form.id), status: @task_list_statuses.name_status },
-      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_1.questions"), path: question_path, status: @task_list_statuses.pages_status },
-      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_1.declaration"), path: declaration_path(@form.id), status: @task_list_statuses.declaration_status },
-      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_1.what_happens_next"), path: what_happens_next_path(@form.id), status: @task_list_statuses.what_happens_next_status },
+      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_1.name"), path: change_form_name_path(@form.id), status: @task_statuses[:name_status] },
+      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_1.questions"), path: question_path, status: @task_statuses[:pages_status] },
+      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_1.declaration"), path: declaration_path(@form.id), status: @task_statuses[:declaration_status] },
+      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_1.what_happens_next"), path: what_happens_next_path(@form.id), status: @task_statuses[:what_happens_next_status] },
     ]
   end
 
@@ -71,8 +71,8 @@ private
 
   def section_2_tasks
     hint_text = I18n.t("forms.task_list_#{create_or_edit}.section_2.hint_text_html", submission_email: @form.submission_email) if @form.submission_email.present?
-    [{ task_name: I18n.t("forms.task_list_#{create_or_edit}.section_2.email"), path: submission_email_form_path(@form.id), hint_text:, status: @task_list_statuses.submission_email_status },
-     { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_2.confirm_email"), path: submission_email_code_path(@form.id), status: @task_list_statuses.confirm_submission_email_status, active: @task_list_statuses.can_enter_submission_email_code }]
+    [{ task_name: I18n.t("forms.task_list_#{create_or_edit}.section_2.email"), path: submission_email_form_path(@form.id), hint_text:, status: @task_statuses[:submission_email_status] },
+     { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_2.confirm_email"), path: submission_email_code_path(@form.id), status: @task_statuses[:confirm_submission_email_status], active: can_enter_submission_email_code }]
   end
 
   def section_3
@@ -84,8 +84,8 @@ private
 
   def section_3_tasks
     [
-      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_3.privacy_policy"), path: privacy_policy_path(@form.id), status: @task_list_statuses.privacy_policy_status },
-      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_3.contact_details"), path: contact_details_path(@form.id), status: @task_list_statuses.support_contact_details_status },
+      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_3.privacy_policy"), path: privacy_policy_path(@form.id), status: @task_statuses[:privacy_policy_status] },
+      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_3.contact_details"), path: contact_details_path(@form.id), status: @task_statuses[:support_contact_details_status] },
     ]
   end
 
@@ -107,8 +107,28 @@ private
     [{
       task_name: I18n.t("forms.task_list_#{create_or_edit}.section_4.make_live"),
       path: @form.ready_for_live? ? make_live_path(@form.id) : "",
-      status: @task_list_statuses.make_live_status,
-      active: @task_list_statuses.mandatory_tasks_completed?,
+      status: @task_statuses[:make_live_status],
+      active: @form.ready_for_live?,
     }]
+  end
+
+  def statuses_by_user
+    statuses = @task_statuses
+
+    statuses.delete(:submission_email_status) unless Pundit.policy(@current_user, @form).can_change_form_submission_email?
+    statuses.delete(:confirm_submission_email_status) unless Pundit.policy(@current_user, @form).can_change_form_submission_email?
+    statuses.delete(:make_live_status) unless Pundit.policy(@current_user, @form).can_make_form_live?
+
+    statuses
+  end
+
+  def status_counts
+    filtered_statuses = statuses_by_user.compact
+    { completed: filtered_statuses.count { |_key, value| value == :completed },
+      total: filtered_statuses.count }
+  end
+
+  def can_enter_submission_email_code
+    @form.email_confirmation_status == :sent
   end
 end

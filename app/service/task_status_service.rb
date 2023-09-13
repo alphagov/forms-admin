@@ -3,12 +3,6 @@ class TaskStatusService
     @form = form
   end
 
-  def status_counts(current_user)
-    all_task_status_compact = all_task_status(current_user).compact
-    { completed: all_task_status_compact.count(:completed),
-      total: all_task_status_compact.count }
-  end
-
   def name_status
     :completed
   end
@@ -83,32 +77,28 @@ class TaskStatusService
   end
 
   def mandatory_tasks_completed?
-    [pages_status,
-     what_happens_next_status,
-     submission_email_status,
-     privacy_policy_status,
-     support_contact_details_status].all? { |task| task == :completed }
+    missing_sections.empty?
   end
 
-  def can_enter_submission_email_code
-    @form.email_confirmation_status == :sent
+  def missing_sections
+    { missing_pages: pages_status,
+      missing_what_happens_next: what_happens_next_status,
+      missing_submission_email: submission_email_status,
+      missing_privacy_policy_url: privacy_policy_status,
+      missing_contact_details: support_contact_details_status }.reject { |_k, v| v == :completed }.map { |k, _v| k }
   end
 
-private
-
-  def all_task_status(current_user)
-    status = [
-      name_status,
-      pages_status,
-      declaration_status,
-      what_happens_next_status,
-      privacy_policy_status,
-      support_contact_details_status,
-    ]
-
-    status.push(submission_email_status, confirm_submission_email_status) if Pundit.policy(current_user, @form).can_change_form_submission_email?
-    status.push(make_live_status) if Pundit.policy(current_user, @form).can_make_form_live?
-
-    status
+  def task_statuses
+    {
+      name_status:,
+      pages_status:,
+      declaration_status:,
+      what_happens_next_status:,
+      submission_email_status:,
+      confirm_submission_email_status:,
+      privacy_policy_status:,
+      support_contact_details_status:,
+      make_live_status:,
+    }
   end
 end

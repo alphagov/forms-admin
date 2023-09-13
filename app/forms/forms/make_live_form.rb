@@ -30,28 +30,10 @@ private
     return unless made_live?
     return if form.ready_for_live?
 
-    if form.missing_sections.include?(:missing_pages)
-      errors.add(:confirm_make_live, :missing_pages)
-      return false
+    form.missing_sections.each do |section|
+      errors.add(:confirm_make_live, section)
     end
 
-    if form.missing_sections.include?(:missing_submission_email)
-      errors.add(:confirm_make_live, :missing_submission_email)
-      return false
-    end
-
-    if form.missing_sections.include?(:missing_privacy_policy_url)
-      errors.add(:confirm_make_live, :missing_privacy_policy_url)
-    end
-
-    if form.missing_sections.include?(:missing_contact_details)
-      errors.add(:confirm_make_live, :missing_contact_details)
-      return false
-    end
-
-    if form.missing_sections.include?(:missing_what_happens_next)
-      errors.add(:confirm_make_live, :missing_what_happens_next)
-      false
-    end
+    errors.empty?
   end
 end
