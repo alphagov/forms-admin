@@ -47,25 +47,33 @@ RSpec.describe UsersController, type: :request do
 
         organisations.each_with_index.flat_map do |organisation|
           roles.each_with_index.flat_map do |role|
-            create_list(:user, 5, organisation:, role:)
+            create_list(:user, 5, organisation:, role:) do |user, i|
+              user.has_access = i < 4
+              user.save!
+            end
           end
         end
 
         get users_path
       end
 
-      it "sorts users by organisation, role, and name" do
+      it "sorts users by organisation, access, role, and name " do
+        assigns[:users].each do |user|
+          puts "#{user.organisation.name}:#{user.has_access}:#{user.role}:#{user.name}"
+        end
         assigns[:users].each_cons(2) do |user, next_user|
           if user.organisation.name == next_user.organisation.name
-            if user.role == next_user.role
-              expect(user.name).to be <= next_user.name
-            else
-              case user.role
-              when "super_admin"
-                expect(next_user.role).to eq "editor"
-              when "editor"
-                expect(next_user.role).to eq "trial"
+            if user.has_access == next_user.has_access
+              if user.role == next_user.role
+                expect(user.name).to be <= next_user.name
+              else
+                case user.role
+                when "super_admin" then expect(next_user.role).to eq "editor"
+                when "editor" then expect(next_user.role).to eq "trial"
+                end
               end
+            else
+              expect(next_user.has_access).to be false
             end
           else
             expect(user.organisation.name < next_user.organisation.name)

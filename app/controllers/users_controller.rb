@@ -11,7 +11,12 @@ class UsersController < ApplicationController
 
     roles = User.roles.keys
     @users = policy_scope(User).sort_by do |user|
-      [user.organisation&.name || "", roles.index(user.role), user.name]
+      [
+        user.organisation&.name || "",
+        user.has_access ? 0 : 1,
+        roles.index(user.role),
+        user.name,
+      ]
     end
 
     render template: "users/index", locals: { users: @users }
