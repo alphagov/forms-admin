@@ -33,6 +33,46 @@ RSpec.describe UsersController, type: :request do
         expect(response).to have_http_status(:forbidden)
       end
     end
+
+    context "with many users" do
+      before do
+        login_as_super_admin_user
+
+        organisations = [
+          create(:organisation, slug: "test-org"),
+          create(:organisation, slug: "ministry-of-tests"),
+          create(:organisation, slug: "department-for-testing"),
+        ]
+        roles = User.roles.keys
+
+        organisations.each_with_index.flat_map do |organisation|
+          roles.each_with_index.flat_map do |role|
+            create_list(:user, 5, organisation:, role:)
+          end
+        end
+
+        get users_path
+      end
+
+      it "sorts users by organisation, role, and name" do
+        assigns[:users].each_cons(2) do |user, next_user|
+          if user.organisation.name == next_user.organisation.name
+            if user.role == next_user.role
+              expect(user.name).to be <= next_user.name
+            else
+              case user.role
+              when "super_admin"
+                expect(next_user.role).to eq "editor"
+              when "editor"
+                expect(next_user.role).to eq "trial"
+              end
+            end
+          else
+            expect(user.organisation.name < next_user.organisation.name)
+          end
+        end
+      end
+    end
   end
 
   describe "#edit" do
