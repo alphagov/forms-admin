@@ -36,7 +36,7 @@ jobs:
       # Add or replace dependency steps here
       # The ruby version is taken from the .ruby-version file, no need to specify here.
       - name: Install Ruby and gems
-        uses: ruby/setup-ruby@250fcd6a742febb1123a77a841497ccaa8b9e939
+        uses: ruby/setup-ruby@5311f05890856149502132d25c4a24985a00d426
         with:
           bundler-cache: true
       - name: Install frontend dependencies
