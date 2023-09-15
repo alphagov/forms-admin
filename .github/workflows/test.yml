@@ -6,6 +6,7 @@
 # run tests and linters.
 
 name: "Tests"
+
 on:
   push:
     branches: [main]
@@ -24,21 +25,21 @@ jobs:
         ports:
           - "5432:5432"
         env:
-          POSTGRES_DB: rails_test
-          POSTGRES_USER: rails
-          POSTGRES_PASSWORD: password
+          POSTGRES_DB: forms_admin_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
     env:
-      RAILS_ENV: test
-      DATABASE_URL: "postgres://rails:password@localhost:5432/rails_test"
+      RAILS_ENV: "test"
+      DATABASE_URL: "postgres://postgres:postgres@localhost:5432/forms_admin_test"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
       # Add or replace dependency steps here
-      # The ruby version is taken from the .ruby-version file, no need to specify here.
       - name: Install Ruby and gems
+        # The ruby version is taken from the .ruby-version file, no need to specify here.
         uses: ruby/setup-ruby@5311f05890856149502132d25c4a24985a00d426
         with:
-          bundler-cache: true
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
@@ -60,10 +61,10 @@ jobs:
         run: npm test
       # Add or replace any other lints here
       - name: Security audit dependencies
-        run: bundler exec bundle audit check
+        run: bundle exec bundle-audit check --update
       - name: Security audit application code
-        run: bundler exec brakeman -q -w2
+        run: bundle exec brakeman -q -w2
       - name: Lint Ruby files
-        run: bundler exec rubocop --parallel
+        run: bundle exec rubocop --parallel
       - name: Lint Javascript and Sass files
         run: npm run lint
