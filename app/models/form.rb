@@ -22,13 +22,18 @@ class Form < ActiveResource::Base
     has_live_version ? :live : :draft
   end
 
-  def ready_for_live?
-    task_status_service.mandatory_tasks_completed?
+  def all_ready_for_live?
+    ready_for_live && email_task_status_service.ready_for_live?
   end
 
-  delegate :missing_sections, to: :task_status_service
+  def all_incomplete_tasks
+    incomplete_tasks.concat(email_task_status_service.incomplete_email_tasks)
+  end
 
-  delegate :task_statuses, to: :task_status_service
+  def all_task_statuses
+    converted_task_statuses = task_statuses.attributes.transform_keys(&:to_sym).transform_values(&:to_sym)
+    converted_task_statuses.merge(email_task_status_service.email_task_statuses)
+  end
 
   def make_live!
     post "make-live"
@@ -72,7 +77,7 @@ private
     pages.filter { |p| p.conditions.any? }.any?
   end
 
-  def task_status_service
-    @task_status_service ||= TaskStatusService.new(form: self)
+  def email_task_status_service
+    @email_task_status_service ||= EmailTaskStatusService.new(form: self)
   end
 end

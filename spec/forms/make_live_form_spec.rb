@@ -46,6 +46,8 @@ RSpec.describe Forms::MakeLiveForm, type: :model do
     end
 
     context "when form is being made live" do
+      let(:form) { build(:form, :ready_for_live) }
+
       around do |example|
         Timecop.freeze(Time.zone.local(2021, 1, 1, 4, 30, 0)) do
           example.run
@@ -53,6 +55,7 @@ RSpec.describe Forms::MakeLiveForm, type: :model do
       end
 
       before do
+        make_live_form.form = form
         allow(make_live_form.form).to receive(:make_live!).and_return(:make_live_called)
         make_live_form.confirm_make_live = "made_live"
       end
@@ -71,43 +74,16 @@ RSpec.describe Forms::MakeLiveForm, type: :model do
       let(:make_live_form) { build :make_live_form }
 
       before do
+        make_live_form.form.ready_for_live = false
+
         make_live_form.confirm_make_live = "made_live"
       end
 
-      [
-        {
-          attribute: :pages,
-          attribute_value: [],
-          error_message: I18n.t("activemodel.errors.models.forms/make_live_form.attributes.confirm_make_live.missing_pages"),
-        },
-        {
-          attribute: :what_happens_next_text,
-          attribute_value: nil,
-          error_message: I18n.t("activemodel.errors.models.forms/make_live_form.attributes.confirm_make_live.missing_what_happens_next"),
-        },
-        {
-          attribute: :submission_email,
-          attribute_value: nil,
-          error_message: I18n.t("activemodel.errors.models.forms/make_live_form.attributes.confirm_make_live.missing_submission_email"),
-        },
-        {
-          attribute: :privacy_policy_url,
-          attribute_value: nil,
-          error_message: I18n.t("activemodel.errors.models.forms/make_live_form.attributes.confirm_make_live.missing_privacy_policy_url"),
-        },
-        {
-          attribute: :support_email,
-          attribute_value: nil,
-          error_message: I18n.t("activemodel.errors.models.forms/make_live_form.attributes.confirm_make_live.missing_contact_details"),
-        },
-      ].each do |scenario|
-        it "is invalid if #{scenario[:attribute]} is missing" do
-          # this just sets the attribute to the attribute_value for each test
-          make_live_form.form.send("#{scenario[:attribute]}=", scenario[:attribute_value])
+      it "is invalid if submission_email is missing" do
+        make_live_form.form.submission_email = nil
 
-          expect(make_live_form).not_to be_valid
-          expect(make_live_form.errors.full_messages_for(:confirm_make_live)).to include("Confirm make live #{scenario[:error_message]}")
-        end
+        expect(make_live_form).not_to be_valid
+        expect(make_live_form.errors.full_messages_for(:confirm_make_live)).to include("Confirm make live #{I18n.t('activemodel.errors.models.forms/make_live_form.attributes.confirm_make_live.missing_submission_email')}")
       end
     end
   end

@@ -4,30 +4,24 @@ describe FormTaskListService do
   let(:current_user) { build(:user, role: :editor) }
 
   describe ".task_counts" do
-    let(:form) { build(:form) }
-    let(:task_status_service) { instance_double(TaskStatusService) }
+    let(:statuses) { OpenStruct.new(attributes: { declaration_status: "completed", make_live_status: "not_started", name_status: "completed", pages_status: "completed", privacy_policy_status: "not_started", support_contact_details_status: "not_started", what_happens_next_status: "completed" }) }
+    let(:form) { build(:form, task_statuses: statuses) }
+    let(:email_task_status_service) { instance_double(EmailTaskStatusService) }
 
     before do
-      allow(TaskStatusService).to receive(:new).and_return(task_status_service)
-      allow(task_status_service).to receive(:task_statuses).and_return({
-        name_status: :completed,
-        pages_status: :completed,
-        declaration_status: :completed,
-        what_happens_next_status: :completed,
+      allow(EmailTaskStatusService).to receive(:new).and_return(email_task_status_service)
+      allow(email_task_status_service).to receive(:email_task_statuses).and_return({
         submission_email_status: :completed,
         confirm_submission_email_status: :not_started,
-        privacy_policy_status: :not_started,
-        support_contact_details_status: :not_started,
-        make_live_status: :not_started,
       })
     end
 
     context "when the user has the editor role" do
-      it "returns counts from task status service" do
+      it "returns counts of tasks" do
         result = described_class.new(form:, current_user:)
 
         expected_hash = { completed: 5, total: 9 }
-        expect(TaskStatusService).to have_received(:new)
+        expect(EmailTaskStatusService).to have_received(:new)
         expect(result.task_counts).to eq expected_hash
       end
     end
@@ -39,7 +33,7 @@ describe FormTaskListService do
         result = described_class.new(form:, current_user:)
 
         expected_hash = { completed: 4, total: 6 }
-        expect(TaskStatusService).to have_received(:new)
+        expect(EmailTaskStatusService).to have_received(:new)
 
         expect(result.task_counts).to eq expected_hash
       end

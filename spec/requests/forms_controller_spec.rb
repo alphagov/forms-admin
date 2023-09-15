@@ -15,7 +15,7 @@ RSpec.describe FormsController, type: :request do
     }
   end
 
-  let(:form) { build(:form, id: 2) }
+  let(:form) { build(:form, :with_active_resource, id: 2) }
 
   before do
     login_as_editor_user
@@ -23,7 +23,7 @@ RSpec.describe FormsController, type: :request do
 
   describe "Showing an existing form" do
     describe "Given a live form" do
-      let(:form) { build(:form, :live, id: 2) }
+      let(:form) { build(:form, :live, :with_active_resource, id: 2) }
       let(:params) { {} }
 
       before do
@@ -116,7 +116,7 @@ RSpec.describe FormsController, type: :request do
 
     context "with a user with a trial account" do
       let(:user) { build(:user, :with_trial_role, id: 123) }
-      let(:form) { build(:form, :ready_for_live, id: 2, creator_id: user.id) }
+      let(:form) { build(:form, :ready_for_live, :with_active_resource, id: 2, creator_id: user.id) }
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
