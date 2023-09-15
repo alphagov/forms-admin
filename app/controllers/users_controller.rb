@@ -8,7 +8,18 @@ class UsersController < ApplicationController
 
   def index
     authorize current_user, :can_manage_user?
-    render template: "users/index", locals: { users: policy_scope(User) }
+
+    roles = User.roles.keys
+    @users = policy_scope(User).sort_by do |user|
+      [
+        user.organisation&.name || "",
+        user.has_access ? 0 : 1,
+        roles.index(user.role),
+        user.name,
+      ]
+    end
+
+    render template: "users/index", locals: { users: @users }
   end
 
   def edit
