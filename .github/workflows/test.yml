@@ -39,6 +39,11 @@ jobs:
         uses: ruby/setup-ruby@5311f05890856149502132d25c4a24985a00d426
         with:
           bundler-cache: true
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
       - name: Install frontend dependencies
         run: npm ci
       - name: Run Frontend build
