@@ -9,7 +9,7 @@
       <%= t("pages.heading") %>
     </h1>
 
-    <%= render :partial => 'form', locals: { is_new_page: false,
+    <%= render partial: 'form', locals: { is_new_page: false,
                                              form_object: @form,
                                              page_object: @page,
                                              action_path: update_page_path(@form, @page) ,
