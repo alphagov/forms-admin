@@ -1,6 +1,6 @@
 class Pages::DateSettingsController < PagesController
   def new
-    input_type = session.dig(:page, "answer_settings", "input_type")
+    input_type = session.dig(:page, :answer_settings, :input_type)
     @date_settings_form = Pages::DateSettingsForm.new(input_type:)
     @date_settings_path = date_settings_create_path(@form)
     @back_link_url = type_of_answer_new_path(@form)

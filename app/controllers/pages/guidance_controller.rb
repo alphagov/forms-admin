@@ -2,8 +2,8 @@ require "govuk_forms_markdown"
 
 class Pages::GuidanceController < PagesController
   def new
-    page_heading = session.dig(:page, "page_heading")
-    guidance_markdown = session.dig(:page, "guidance_markdown")
+    page_heading = session.dig(:page, :page_heading)
+    guidance_markdown = session.dig(:page, :guidance_markdown)
     guidance_form = Pages::GuidanceForm.new(page_heading:, guidance_markdown:)
     back_link = new_page_path(@form)
     render "pages/guidance", locals: view_locals(nil, guidance_form, back_link)

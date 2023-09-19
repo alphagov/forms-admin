@@ -45,7 +45,7 @@ class Page < ActiveResource::Base
 
   def load_from_session(session, keys)
     keys.each do |key|
-      self.load(key => session.dig(:page, key) || send(key.to_sym))
+      self.load("#{key}": session.dig(:page, key) || send(key.to_sym))
     end
     self
   end

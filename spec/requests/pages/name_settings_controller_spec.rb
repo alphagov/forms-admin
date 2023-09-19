@@ -74,7 +74,7 @@ RSpec.describe Pages::NameSettingsController, type: :request do
       let(:name_settings_form) { build :name_settings_form, form: }
 
       it "saves the input type to session" do
-        expect(session[:page][:answer_settings]).to eq({ "input_type": "first_and_last_name", title_needed: "false" })
+        expect(session[:page][:answer_settings]).to eq({ input_type: "first_and_last_name", title_needed: "false" })
       end
 
       it "redirects the user to the edit question page" do
@@ -102,7 +102,7 @@ RSpec.describe Pages::NameSettingsController, type: :request do
 
     it "returns the existing page input type" do
       form = assigns(:name_settings_form)
-      expect(form.input_type).to eq page.answer_settings["input_type"]
+      expect(form.input_type).to eq page.answer_settings[:input_type]
     end
 
     it "sets an instance variable for name_settings_path" do

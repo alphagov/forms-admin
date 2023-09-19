@@ -1,6 +1,6 @@
 class Pages::TextSettingsController < PagesController
   def new
-    input_type = session.dig(:page, "answer_settings", "input_type")
+    input_type = session.dig(:page, :answer_settings, :input_type)
     @text_settings_form = Pages::TextSettingsForm.new(input_type:)
     @text_settings_path = text_settings_create_path(@form)
     @back_link_url = type_of_answer_new_path(@form)

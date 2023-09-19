@@ -1,7 +1,7 @@
 class Pages::AddressSettingsController < PagesController
   def new
-    uk_address = session.dig(:page, "answer_settings", "input_type", "uk_address")
-    international_address = session.dig(:page, "answer_settings", "input_type", "international_address")
+    uk_address = session.dig(:page, :answer_settings, :input_type, :uk_address)
+    international_address = session.dig(:page, :answer_settings, :input_type, :international_address)
     @address_settings_form = Pages::AddressSettingsForm.new(uk_address:, international_address:)
     @address_settings_path = address_settings_create_path(@form)
     @back_link_url = type_of_answer_new_path(@form)

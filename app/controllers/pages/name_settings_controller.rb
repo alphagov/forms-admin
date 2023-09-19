@@ -1,7 +1,7 @@
 class Pages::NameSettingsController < PagesController
   def new
-    input_type = session.dig(:page, "answer_settings", "input_type")
-    title_needed = session.dig(:page, "answer_settings", "title_needed")
+    input_type = session.dig(:page, :answer_settings, :input_type)
+    title_needed = session.dig(:page, :answer_settings, :title_needed)
     @name_settings_form = Pages::NameSettingsForm.new(input_type:, title_needed:)
     @name_settings_path = name_settings_create_path(@form)
     @back_link_url = type_of_answer_new_path(@form)

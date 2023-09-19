@@ -1,6 +1,6 @@
 class Pages::QuestionTextController < PagesController
   def new
-    question_text = session.dig(:page, "question_text")
+    question_text = session.dig(:page, :question_text)
     @question_text_form = Pages::QuestionTextForm.new(question_text:)
     @question_text_path = question_text_create_path(@form)
     @back_link_url = type_of_answer_new_path(@form)

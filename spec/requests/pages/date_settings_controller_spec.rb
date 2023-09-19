@@ -74,7 +74,7 @@ RSpec.describe Pages::DateSettingsController, type: :request do
       let(:date_settings_form) { build :date_settings_form, form: }
 
       it "saves the input type to session" do
-        expect(session[:page][:answer_settings]).to eq({ "input_type": "date_of_birth" })
+        expect(session[:page][:answer_settings]).to eq({ input_type: "date_of_birth" })
       end
 
       it "redirects the user to the edit question page" do
@@ -102,7 +102,7 @@ RSpec.describe Pages::DateSettingsController, type: :request do
 
     it "returns the existing page input type" do
       form = assigns(:date_settings_form)
-      expect(form.input_type).to eq page.answer_settings["input_type"]
+      expect(form.input_type).to eq page.answer_settings[:input_type]
     end
 
     it "sets an instance variable for date_settings_path" do
@@ -141,7 +141,7 @@ RSpec.describe Pages::DateSettingsController, type: :request do
       it "loads the updated input type from the page params" do
         form_instance_variable = assigns(:date_settings_form)
         expect(form_instance_variable.input_type).to eq "other_date"
-        expect(session[:page][:answer_settings]).to eq({ "input_type": "other_date" })
+        expect(session[:page][:answer_settings]).to eq({ input_type: "other_date" })
       end
 
       it "redirects the user to the edit question page" do

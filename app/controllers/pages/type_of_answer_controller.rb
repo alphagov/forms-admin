@@ -1,6 +1,6 @@
 class Pages::TypeOfAnswerController < PagesController
   def new
-    answer_type = session.dig(:page, "answer_type")
+    answer_type = session.dig(:page, :answer_type)
     @type_of_answer_form = Pages::TypeOfAnswerForm.new(answer_type:)
     @type_of_answer_path = type_of_answer_create_path(@form)
     render "pages/type-of-answer"
@@ -27,7 +27,7 @@ class Pages::TypeOfAnswerController < PagesController
 
   def update
     page
-    answer_type = session.dig(:page, "answer_type")
+    answer_type = session.dig(:page, :answer_type)
 
     @page.load(answer_type:)
     @type_of_answer_form = Pages::TypeOfAnswerForm.new(answer_type_form_params)
@@ -103,7 +103,7 @@ private
 
   def save_to_session(session)
     if @type_of_answer_form.submit(session)
-      session[:page]["answer_settings"] = default_answer_settings_for_answer_type(@type_of_answer_form.answer_type)
+      session[:page][:answer_settings] = default_answer_settings_for_answer_type(@type_of_answer_form.answer_type)
       redirect_to next_page_path(@form, @type_of_answer_form.answer_type, :update)
     else
       @type_of_answer_path = type_of_answer_update_path(@form)
