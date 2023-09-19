@@ -1,17 +1,17 @@
 <% set_page_title(t("page_titles.home")) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render TrialRoleWarningComponent::View.new(@current_user) %>
+  </div>
+</div>
+
 <h1 class="govuk-heading-l"><%= t("home.main_heading") %></h1>
 
 <% if flash[:message] %>
   <p>
     <%= flash[:message] %>
   </p>
-<% end %>
-
-<% if @current_user.trial?  %>
-  <%= govuk_notification_banner(title_text: t("trial_role_warning.title")) do |banner| %>
-    <% banner.with_heading(text: t("trial_role_warning.heading")) %>
-    <%= t("trial_role_warning.content") %>
-  <% end %>
 <% end %>
 
 <%= govuk_start_button(text: t("home.create_a_form"), href: new_form_path) %>

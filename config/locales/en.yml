@@ -674,7 +674,16 @@ en:
     in_progress: in progress
     not_started: not started
   trial_role_warning:
-    content: You can create a form and test it, but you cannot make a form live.
+    content_html: |
+      <p>
+        You can create a form, preview and test it.
+      </p>
+      <p>
+        You need an editor account to be able to make a form live.
+      </p>
+      <p>
+        <a href="%{link_url}">Find out if you can upgrade to an editor account</a>
+      </p>
     heading: You have a trial account
     title: Important
   type_of_answer:
