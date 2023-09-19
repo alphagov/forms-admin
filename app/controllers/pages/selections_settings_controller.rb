@@ -57,7 +57,12 @@ class Pages::SelectionsSettingsController < PagesController
 private
 
   def convert_to_selection_option(hash)
-    Pages::SelectionOption.new(hash)
+    if hash.is_a? Pages::SelectionOption
+      # TODO: remove this once we using activerecord models instead of form objects
+      hash
+    else
+      Pages::SelectionOption.new(hash)
+    end
   end
 
   def load_answer_settings_from_params(params)
