@@ -58,9 +58,6 @@ RSpec.describe UsersController, type: :request do
       end
 
       it "sorts users by organisation, access, role, and name " do
-        assigns[:users].each do |user|
-          puts "#{user.organisation.name}:#{user.has_access}:#{user.role}:#{user.name}"
-        end
         assigns[:users].each_cons(2) do |user, next_user|
           if user.organisation.name == next_user.organisation.name
             if user.has_access == next_user.has_access
