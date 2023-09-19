@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  before_action :fetch_form, :answer_types
+  before_action :fetch_form, :answer_types, :convert_session_keys_to_symbols
   before_action :check_user_has_permission
   skip_before_action :clear_questions_session_data, except: %i[index move_page]
   after_action :verify_authorized
@@ -116,5 +116,9 @@ private
 
   def answer_types
     @answer_types = Page::ANSWER_TYPES
+  end
+
+  def convert_session_keys_to_symbols
+    session[:page].deep_symbolize_keys! if session[:page].present?
   end
 end
