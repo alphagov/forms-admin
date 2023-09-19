@@ -74,7 +74,7 @@ RSpec.describe Pages::TextSettingsController, type: :request do
       let(:text_settings_form) { build :text_settings_form, form: }
 
       it "saves the input type to session" do
-        expect(session[:page][:answer_settings]).to eq({ "input_type": text_settings_form.input_type })
+        expect(session[:page][:answer_settings]).to eq({ input_type: text_settings_form.input_type })
       end
 
       it "redirects the user to the edit question page" do
@@ -102,7 +102,7 @@ RSpec.describe Pages::TextSettingsController, type: :request do
 
     it "returns the existing page input type" do
       form = assigns(:text_settings_form)
-      expect(form.input_type).to eq page.answer_settings["input_type"]
+      expect(form.input_type).to eq page.answer_settings[:input_type]
     end
 
     it "sets an instance variable for text_settings_path" do

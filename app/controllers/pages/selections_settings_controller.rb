@@ -69,10 +69,10 @@ private
   end
 
   def load_answer_settings_from_session
-    if session[:page].present? && session[:page]["answer_settings"].present?
-      only_one_option = session[:page]["answer_settings"]["only_one_option"]
-      include_none_of_the_above = session[:page]["is_optional"]
-      selection_options = session[:page]["answer_settings"]["selection_options"].map(&method(:convert_to_selection_option))
+    if session[:page].present? && session[:page][:answer_settings].present?
+      only_one_option = session[:page][:answer_settings][:only_one_option]
+      include_none_of_the_above = session[:page][:is_optional]
+      selection_options = session[:page][:answer_settings][:selection_options].map(&method(:convert_to_selection_option))
 
       { only_one_option:, selection_options:, include_none_of_the_above: }
     else

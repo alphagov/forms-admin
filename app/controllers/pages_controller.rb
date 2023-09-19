@@ -10,19 +10,19 @@ class PagesController < ApplicationController
   end
 
   def new
-    answer_type = session.dig(:page, "answer_type")
-    question_text = session.dig(:page, "question_text")
-    answer_settings = session.dig(:page, "answer_settings")
-    is_optional = session.dig(:page, "is_optional") == "true"
-    page_heading = session.dig(:page, "page_heading")
-    guidance_markdown = session.dig(:page, "guidance_markdown")
+    answer_type = session.dig(:page, :answer_type)
+    question_text = session.dig(:page, :question_text)
+    answer_settings = session.dig(:page, :answer_settings)
+    is_optional = session.dig(:page, :is_optional) == "true"
+    page_heading = session.dig(:page, :page_heading)
+    guidance_markdown = session.dig(:page, :guidance_markdown)
     @page = Page.new(form_id: @form.id, question_text:, answer_type:, answer_settings:, is_optional:, page_heading:, guidance_markdown:)
   end
 
   def create
-    answer_settings = session.dig(:page, "answer_settings")
-    page_heading = session.dig(:page, "page_heading")
-    guidance_markdown = session.dig(:page, "guidance_markdown")
+    answer_settings = session.dig(:page, :answer_settings)
+    page_heading = session.dig(:page, :page_heading)
+    guidance_markdown = session.dig(:page, :guidance_markdown)
 
     @page = Page.new(page_params.merge(answer_settings:, page_heading:, guidance_markdown:))
 
@@ -91,8 +91,8 @@ private
   end
 
   def reset_session_if_answer_settings_not_present
-    answer_type = session.dig(:page, "answer_type")
-    answer_settings = session.dig(:page, "answer_settings")
+    answer_type = session.dig(:page, :answer_type)
+    answer_settings = session.dig(:page, :answer_settings)
 
     if (Page::ANSWER_TYPES_WITH_SETTINGS.include? answer_type) && (answer_settings.blank? || answer_settings == {})
       clear_questions_session_data
