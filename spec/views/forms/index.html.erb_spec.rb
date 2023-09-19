@@ -107,7 +107,7 @@ describe "forms/index.html.erb" do
 
         expect(rendered).to have_selector(".govuk-notification-banner__content")
         expect(banner).to have_text(I18n.t("trial_role_warning.heading"))
-        expect(banner).to have_text(I18n.t("trial_role_warning.content"))
+        expect(Capybara.string(banner).text(normalize_ws: true)).to have_text(Capybara.string(I18n.t("trial_role_warning.content_html")).text(normalize_ws: true))
       end
     end
 
