@@ -51,12 +51,12 @@ describe Form, type: :model do
     end
   end
 
-  describe "#missing_sections" do
+  describe "#all_incomplete_tasks" do
     context "when a form is complete and ready to be made live" do
       let(:completed_form) { build :form, :live }
 
       it "returns no missing sections" do
-        expect(completed_form.missing_sections).to be_empty
+        expect(completed_form.all_incomplete_tasks).to be_empty
       end
     end
 
@@ -64,12 +64,12 @@ describe Form, type: :model do
       let(:new_form) { build :form, :new_form }
 
       it "returns a set of keys related to missing fields" do
-        expect(new_form.missing_sections).to match_array(%i[missing_pages missing_submission_email missing_privacy_policy_url missing_contact_details missing_what_happens_next])
+        expect(new_form.all_incomplete_tasks).to match_array(%i[missing_pages missing_submission_email missing_privacy_policy_url missing_contact_details missing_what_happens_next])
       end
     end
   end
 
-  describe "#task_statuses" do
+  describe "#all_task_statuses" do
     let(:completed_form) { build :form, :live }
 
     it "returns a hash with each of the task statuses" do
@@ -82,9 +82,9 @@ describe Form, type: :model do
         confirm_submission_email_status: :completed,
         privacy_policy_status: :completed,
         support_contact_details_status: :completed,
-        make_live_status: nil,
+        make_live_status: :not_started,
       }
-      expect(completed_form.task_statuses).to eq expected_hash
+      expect(completed_form.all_task_statuses).to eq expected_hash
     end
   end
 

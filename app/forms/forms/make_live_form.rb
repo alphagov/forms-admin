@@ -28,9 +28,9 @@ private
   def required_parts_of_form_completed
     # we are valid and didn't need to save
     return unless made_live?
-    return if form.ready_for_live?
+    return if form.all_ready_for_live?
 
-    form.missing_sections.each do |section|
+    form.all_incomplete_tasks.each do |section|
       errors.add(:confirm_make_live, section)
     end
 

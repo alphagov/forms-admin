@@ -1,7 +1,7 @@
 require "rails_helper"
 
 feature "Create or edit a form", type: :feature do
-  let(:form) { build :form, id: 1, name: "Apply for a juggling license" }
+  let(:form) { build :form, :with_active_resource, id: 1, name: "Apply for a juggling license" }
   let(:org_forms) { [] }
 
   let(:req_headers) do

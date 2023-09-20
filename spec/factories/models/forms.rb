@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :form, class: "Form" do
+  factory :form, class: :Form do
     sequence(:name) { |n| "Form #{n}" }
     sequence(:form_slug) { |n| "form-#{n}" }
     has_draft_version { true }
@@ -18,6 +18,13 @@ FactoryBot.define do
     declaration_section_completed { false }
     has_routing_errors { false }
     creator_id { nil }
+    ready_for_live { false }
+    incomplete_tasks { %i[missing_pages missing_privacy_policy_url missing_contact_details missing_what_happens_next] }
+
+    transient do
+      statuses { { declaration_status: "not_started", make_live_status: "cannot_start", name_status: "completed", pages_status: "not_started", privacy_policy_status: "not_started", support_contact_details_status: "not_started", what_happens_next_status: "not_started" } }
+    end
+    task_statuses { OpenStruct.new(attributes: statuses) }
 
     trait :new_form do
       submission_email { "" }
@@ -30,6 +37,12 @@ FactoryBot.define do
       what_happens_next_text { "We usually respond to applications within 10 working days." }
       question_section_completed { true }
       declaration_section_completed { true }
+      ready_for_live { true }
+      incomplete_tasks { [] }
+      transient do
+        statuses { { declaration_status: "completed", make_live_status: "not_started", name_status: "completed", pages_status: "completed", privacy_policy_status: "completed", support_contact_details_status: "completed", what_happens_next_status: "completed" } }
+      end
+      task_statuses { OpenStruct.new(attributes: statuses) }
     end
 
     trait :live do
@@ -37,6 +50,10 @@ FactoryBot.define do
       live_at { Time.zone.now }
       has_draft_version { false }
       has_live_version { true }
+    end
+
+    trait :with_active_resource do
+      task_statuses { statuses }
     end
 
     trait :with_pages do

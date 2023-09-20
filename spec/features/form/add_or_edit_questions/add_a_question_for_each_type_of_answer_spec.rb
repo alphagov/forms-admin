@@ -1,7 +1,7 @@
 require "rails_helper"
 
 feature "Add/editing a single question", type: :feature do
-  let(:form) { build :form, id: 1 }
+  let(:form) { build :form, :with_active_resource, id: 1 }
   let(:req_headers) do
     {
       "X-API-Token" => Settings.forms_api.auth_key,

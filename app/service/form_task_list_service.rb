@@ -12,7 +12,7 @@ class FormTaskListService
   def initialize(form:, current_user:)
     @current_user = current_user
     @form = form
-    @task_statuses = form.task_statuses
+    @task_statuses = form.all_task_statuses
     @task_counts = status_counts
   end
 
@@ -106,9 +106,9 @@ private
   def section_4_tasks
     [{
       task_name: I18n.t("forms.task_list_#{create_or_edit}.section_4.make_live"),
-      path: @form.ready_for_live? ? make_live_path(@form.id) : "",
+      path: @form.all_ready_for_live? ? make_live_path(@form.id) : "",
       status: @task_statuses[:make_live_status],
-      active: @form.ready_for_live?,
+      active: @form.all_ready_for_live?,
     }]
   end
 
