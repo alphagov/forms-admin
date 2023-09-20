@@ -1,0 +1,10 @@
+<% set_page_title(t("user_upgrade_request.show.title")) %>
+<% content_for :back_link, govuk_back_link_to(root_path, t("back_link.forms")) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= govuk_panel(title_text: t("user_upgrade_request.show.panel_title"), classes: "govuk-!-margin-bottom-7") %>
+    <%= t("user_upgrade_request.show.body_html") %>
+    <%= govuk_link_to(t("back_link.forms"), root_path) %>
+  </div>
+</div>

@@ -10,6 +10,10 @@ en:
             question_text:
               blank: Enter a question
               too_long: Question text must be %{count} characters or less
+        user_upgrade_request:
+          attributes:
+            met_requirements:
+              accepted: You must meet the requirements
   activerecord:
     errors:
       models:
@@ -330,6 +334,12 @@ en:
       pages_conditions_form:
         default_answer_value: Select an answer
         default_goto_page_id: Select a question or page
+      user_upgrade_request:
+        met_requirements_options:
+          '1': I meet these requirements
+    legend:
+      user_upgrade_request:
+        met_requirements: Confirm if you meet these requirements
   home:
     create_a_form: Create a form
     form_name_heading: Form name
@@ -675,6 +685,32 @@ en:
   user_missing_organisation:
     body: "%{contact_link} to assign an organisation to your account."
     title: You do not have an organisation set for your account
+  user_upgrade_request:
+    new:
+      body_html: |
+        <p>GOV.UK Forms is in development with selected partners in central government.</p>
+
+        <p>If you’re from a central government organisation you might be able to upgrade to an editor account early. You’ll need to meet some requirements.</p>
+
+        <p>You may be able to upgrade to an editor account if:</p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>you need to make an online form to be published on GOV.UK</li>
+          <li>you believe your form can be created with the features already available — <a href="https://www.forms.service.gov.uk/features" class="govuk-link">read about the features available already</a> and try to make the form to check this</li>
+          <li>your form is expected to get between 250 and 10,000 submissions a year</li>
+          <li>you're happy to be asked to provide feedback and take part in user research</li>
+        </ul>
+
+        <p>If you believe you meet these requirements, we'll get in touch with you to discuss the next steps.</p>
+      heading: Requirements to upgrade to an editor account
+      title: Request upgrade to editor account
+    show:
+      body_html: |
+        <h2 class="govuk-heading-l">What happens next</h2>
+        <p class="govuk-body">Check your email and reply with the information requested.</p>
+        <p class="govuk-body">We'll then get in contact with you to discuss the next steps. It may take up to 2 weeks.</p>
+      panel_title: We've sent you an email to request more information
+      title: Request to upgrade to editor account received
   users:
     cancel: Cancel
     edit:
