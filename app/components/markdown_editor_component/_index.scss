@@ -22,6 +22,12 @@
   }
 }
 
+.js-enabled .app-markdown-editor__edit-link {
+  @include govuk-media-query($from: tablet) {
+    display: none;
+  }
+}
+
 .app-markdown-editor__toolbar {
   display: flex;
   gap: 5px;

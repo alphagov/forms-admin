@@ -190,6 +190,7 @@ en:
     guidance: Guidance
     instructions: Only add guidance if you need to give a longer explanation of how to answer the question, or to format your content with paragraphs, headings, lists or links.
     markdown_editor:
+      edit_markdown_link: Edit guidance text
       preview:
         description: Below is a preview of how your guidance content will be shown to the person completing your form.
         heading: Preview your guidance below
@@ -387,6 +388,7 @@ en:
     legend: Do you want to mark this task as complete?
     'true': 'Yes'
   markdown_editor:
+    edit_markdown_link: Edit markdown
     formatting_help:
       bulleted_lists:
         example: |
