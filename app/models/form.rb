@@ -10,10 +10,6 @@ class Form < ActiveResource::Base
     find(:one, from: "#{prefix}forms/#{id}/live")
   end
 
-  def last_page
-    pages.find { |p| !p.has_next_page? }
-  end
-
   def qualifying_route_pages
     pages.filter { |p| p.answer_type == "selection" && p.answer_settings.only_one_option == "true" && p.position != pages.length && p.conditions.empty? }
   end
@@ -24,21 +20,6 @@ class Form < ActiveResource::Base
 
   def status
     has_live_version ? :live : :draft
-  end
-
-  def save_page(page)
-    page.save && append_page(page)
-  end
-
-  def append_page(page)
-    return true if pages.empty?
-
-    # if there is already a last page, set its next_page value to our new page. This
-    # should probably be done in the API, here we cannot add a page and set
-    # the next_page value atomically
-    current_last_page = last_page
-    current_last_page.next_page = page.id
-    current_last_page.save!
   end
 
   def ready_for_live?
