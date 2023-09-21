@@ -20,7 +20,7 @@ class Pages::TextSettingsController < PagesController
   end
 
   def edit
-    page.load_from_session(session, %w[answer_type answer_settings])
+    page.load_from_session(session, %i[answer_type answer_settings])
     input_type = @page&.answer_settings&.input_type
     @text_settings_form = Pages::TextSettingsForm.new(input_type:, page: @page)
     @text_settings_path = text_settings_update_path(@form)

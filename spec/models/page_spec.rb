@@ -149,7 +149,7 @@ describe Page, type: :model do
 
     context "when the key is not present in the session" do
       it "returns the value from the page" do
-        page.load_from_session(session_mock, %w[answer_type])
+        page.load_from_session(session_mock, %i[answer_type])
         expect(page.answer_type).to eq("date")
       end
     end
@@ -158,13 +158,22 @@ describe Page, type: :model do
       let(:session_mock) { { page: { answer_type: nil } } }
 
       it "returns the value from the page" do
-        page.load_from_session(session_mock, %w[answer_type])
+        page.load_from_session(session_mock, %i[answer_type])
         expect(page.answer_type).to eq("date")
       end
     end
 
     context "when the key is present in the session" do
-      let(:session_mock) { { page: { "answer_type" => "address" } } }
+      let(:session_mock) { { page: { answer_type: "address" } } }
+
+      it "returns the value from the session" do
+        page.load_from_session(session_mock, %i[answer_type])
+        expect(page.answer_type).to eq("address")
+      end
+    end
+
+    context "when the key is a string rather than a symbol" do
+      let(:session_mock) { { page: { answer_type: "address" } } }
 
       it "returns the value from the session" do
         page.load_from_session(session_mock, %w[answer_type])

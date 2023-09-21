@@ -21,7 +21,7 @@ class Pages::NameSettingsController < PagesController
   end
 
   def edit
-    page.load_from_session(session, %w[answer_type answer_settings])
+    page.load_from_session(session, %i[answer_type answer_settings])
     input_type = @page&.answer_settings&.input_type
     title_needed = @page&.answer_settings&.title_needed
     @name_settings_form = Pages::NameSettingsForm.new(input_type:, title_needed:, page: @page)

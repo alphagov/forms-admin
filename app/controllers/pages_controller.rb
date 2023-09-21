@@ -36,11 +36,11 @@ class PagesController < ApplicationController
 
   def edit
     reset_session_if_answer_settings_not_present
-    page.load_from_session(session, %w[answer_settings answer_type is_optional page_heading guidance_markdown])
+    page.load_from_session(session, %i[answer_settings answer_type is_optional page_heading guidance_markdown])
   end
 
   def update
-    page.load_from_session(session, %w[answer_type answer_settings page_heading guidance_markdown]).load(page_params)
+    page.load_from_session(session, %i[answer_type answer_settings page_heading guidance_markdown]).load(page_params)
 
     if page.save
       clear_questions_session_data

@@ -20,7 +20,7 @@ class Pages::DateSettingsController < PagesController
   end
 
   def edit
-    page.load_from_session(session, %w[answer_type answer_settings])
+    page.load_from_session(session, %i[answer_type answer_settings])
     input_type = @page&.answer_settings&.input_type
     @date_settings_form = Pages::DateSettingsForm.new(input_type:, page: @page)
     @date_settings_path = date_settings_update_path(@form)
