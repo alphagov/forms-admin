@@ -180,6 +180,16 @@ describe Page, type: :model do
         expect(page.answer_type).to eq("address")
       end
     end
+
+    context "when the session being passed in contains a mixture of strings and symbols keys" do
+      let(:session_mock) { { page: { question_text: "Can you fill me in?", "answer_type" => "address" } } }
+
+      it "returns the values from the session" do
+        page.load_from_session(session_mock, %i[question_text answer_type])
+        expect(page.question_text).to eq("Can you fill me in?")
+        expect(page.answer_type).to eq("address")
+      end
+    end
   end
 
   describe "#question_with_number" do
