@@ -27,7 +27,7 @@ class Pages::GuidanceController < PagesController
   end
 
   def edit
-    page.load_from_session(session, %w[answer_type page_heading guidance_markdown])
+    page.load_from_session(session, %i[answer_type page_heading guidance_markdown])
 
     guidance_form = Pages::GuidanceForm.new(page_heading: page.page_heading,
                                             guidance_markdown: page.guidance_markdown)

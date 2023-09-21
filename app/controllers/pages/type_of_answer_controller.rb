@@ -18,7 +18,7 @@ class Pages::TypeOfAnswerController < PagesController
   end
 
   def edit
-    page.load_from_session(session, %w[answer_type])
+    page.load_from_session(session, %i[answer_type])
 
     @type_of_answer_form = Pages::TypeOfAnswerForm.new(answer_type: @page.answer_type, page: @page)
     @type_of_answer_path = type_of_answer_update_path(@form)

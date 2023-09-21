@@ -21,7 +21,7 @@ class Pages::AddressSettingsController < PagesController
   end
 
   def edit
-    page.load_from_session(session, %w[answer_type answer_settings])
+    page.load_from_session(session, %i[answer_type answer_settings])
     input_type = @page&.answer_settings&.input_type
     uk_address = input_type&.uk_address
     international_address = input_type&.international_address
