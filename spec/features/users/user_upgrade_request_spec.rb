@@ -24,7 +24,7 @@ private
   end
 
   def submit_request
-    click_button I18n.t('continue')
+    click_button I18n.t("continue")
   end
 
   def then_i_can_see_request_sent_banner
