@@ -40,6 +40,10 @@ RSpec.describe MarkdownEditorComponent::View, type: :component do
     expect(page).to have_css("div", text: markdown_editor.hint)
   end
 
+  it "renders the edit markdown link" do
+    expect(page).to have_link(I18n.t("markdown_editor.edit_markdown_link"), href: "##{markdown_editor.form_field_id}")
+  end
+
   describe "form_field_id" do
     it "returns the form field id" do
       expect(markdown_editor.form_field_id).to eq markdown_editor.govuk_field_id(markdown_editor.form_model, :guidance_markdown)
@@ -59,6 +63,7 @@ RSpec.describe MarkdownEditorComponent::View, type: :component do
             write_tab_text: I18n.t("markdown_editor.write_tab_text"),
             preview_loading: I18n.t("markdown_editor.preview_loading"),
             preview_error: I18n.t("markdown_editor.preview_error"),
+            edit_markdown_link: I18n.t("markdown_editor.edit_markdown_link"),
             toolbar: {
               h2: I18n.t("markdown_editor.toolbar.h2"),
               h3: I18n.t("markdown_editor.toolbar.h3"),
@@ -82,6 +87,7 @@ RSpec.describe MarkdownEditorComponent::View, type: :component do
           write_tab_text: "local write tab text",
           preview_loading: "local preview laoding",
           preview_error: "local preview error",
+          edit_markdown_link: "local edit markdown link",
           toolbar: {
             h2: "local h2",
             h3: "local h3",
@@ -103,6 +109,7 @@ RSpec.describe MarkdownEditorComponent::View, type: :component do
             write_tab_text: local_translations[:write_tab_text],
             preview_loading: local_translations[:preview_loading],
             preview_error: local_translations[:preview_error],
+            edit_markdown_link: local_translations[:edit_markdown_link],
             toolbar: {
               h2: I18n.t("markdown_editor.toolbar.h2"),
               h3: I18n.t("markdown_editor.toolbar.h3"),

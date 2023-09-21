@@ -42,6 +42,7 @@ module MarkdownEditorComponent
         write_tab_text: @local_translations[:write_tab_text] || I18n.t("markdown_editor.write_tab_text"),
         preview_loading: @local_translations[:preview_loading] || I18n.t("markdown_editor.preview_loading"),
         preview_error: @local_translations[:preview_error] || I18n.t("markdown_editor.preview_error"),
+        edit_markdown_link: @local_translations[:edit_markdown_link] || I18n.t("markdown_editor.edit_markdown_link"),
         toolbar: {
           h2: I18n.t("markdown_editor.toolbar.h2"),
           h3: I18n.t("markdown_editor.toolbar.h3"),

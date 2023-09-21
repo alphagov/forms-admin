@@ -67,6 +67,8 @@
         </div>
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible app-markdown-editor__preview-line-break">
+
+        <%= govuk_link_to translations[:edit_markdown_link], "##{form_field_id}", class: "app-markdown-editor__edit-link" %>
       <% end %>
     <% end %>
   <% end %>
