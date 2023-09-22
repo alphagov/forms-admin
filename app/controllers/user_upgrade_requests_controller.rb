@@ -3,7 +3,7 @@ class UserUpgradeRequestsController < ApplicationController
     @user_upgrade_request = UserUpgradeRequest.new
   end
 
-  def show; end
+  def confirmation; end
 
   def create
     @user_upgrade_request = UserUpgradeRequest.new(user_upgrade_request_params)
@@ -11,7 +11,7 @@ class UserUpgradeRequestsController < ApplicationController
     if @user_upgrade_request.valid?
       UserUpgradeRequestService.new(current_user).request_upgrade
 
-      redirect_to user_upgrade_request_sent_path
+      redirect_to confirmation_user_upgrade_request_path
     else
       render :new
     end

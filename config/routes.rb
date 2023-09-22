@@ -113,8 +113,9 @@ Rails.application.routes.draw do
   end
 
   resources :users, only: %i[index edit update]
-  resource :user_upgrade_request, only: %i[new show create], path_names: { new: "/" }, path: "/upgrade"
-  get "/upgrade/requested" => "user_upgrade_requests#show", as: :user_upgrade_request_sent
+  resource :user_upgrade_request, only: %i[new create], path_names: { new: "/" }, path: "/upgrade" do
+    get "/requested", to: "user_upgrade_requests#confirmation", as: :confirmation
+  end
 
   get "/maintenance" => "errors#maintenance", as: :maintenance_page
   match "/403", to: "errors#forbidden", as: :error_403, via: :all
