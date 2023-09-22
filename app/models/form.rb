@@ -11,7 +11,7 @@ class Form < ActiveResource::Base
   end
 
   def qualifying_route_pages
-    pages.filter { |p| p.answer_type == "selection" && p.answer_settings.only_one_option == "true" && p.position != pages.length && p.conditions.empty? }
+    Page.qualifying_route_pages(pages)
   end
 
   def has_no_remaining_routes_available?
