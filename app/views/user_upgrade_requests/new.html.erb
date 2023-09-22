@@ -1,10 +1,10 @@
-<% set_page_title(title_with_error_prefix(t("user_upgrade_request.new.title"), @user_upgrade_request.errors.any?)) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.user_upgrade_request_new"), @user_upgrade_request.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(root_path, t("back_link.forms")) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(model: @user_upgrade_request, url: user_upgrade_request_path) do |f| %>
-      <h1 class="govuk-heading-l"><%= t("user_upgrade_request.new.heading") %></h1>
+      <h1 class="govuk-heading-l"><%= t("page_titles.user_upgrade_request_new") %></h1>
 
       <%= f.govuk_error_summary %>
 

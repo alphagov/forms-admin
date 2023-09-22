@@ -20,7 +20,7 @@ private
 
   def visit_upgrade_page
     visit new_user_upgrade_request_path
-    expect(page).to have_text I18n.t("user_upgrade_request.new.heading")
+    expect(page).to have_text I18n.t("page_titles.user_upgrade_request_new")
   end
 
   def submit_request

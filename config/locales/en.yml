@@ -527,6 +527,8 @@ en:
     text_settings: How much text will people need to provide?
     type_of_answer: What kind of answer do you need to this question?
     user_missing_organisation: You do not have an organisation set for your account
+    user_upgrade_request_confirmation: Request to upgrade to editor account received
+    user_upgrade_request_new: Requirements to upgrade to an editor account
     what_happens_next_form: Form submitted page
     your_changes_are_live: Your changes are live
     your_form_is_live: Your form is live
@@ -702,15 +704,12 @@ en:
         </ul>
 
         <p>If you believe you meet these requirements, we’ll get in touch with you to discuss the next steps.</p>
-      heading: Requirements to upgrade to an editor account
-      title: Request upgrade to editor account
     show:
       body_html: |
         <h2 class="govuk-heading-l">What happens next</h2>
         <p class="govuk-body">Check your email and reply with the information requested.</p>
         <p class="govuk-body">We’ll then get in contact with you to discuss the next steps. It may take up to 2 weeks.</p>
       panel_title: We’ve sent you an email to request more information
-      title: Request to upgrade to editor account received
   users:
     cancel: Cancel
     edit:
