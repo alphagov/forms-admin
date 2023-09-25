@@ -63,6 +63,13 @@ class Page < ActiveResource::Base
     is_optional? && answer_type != "selection"
   end
 
+  def self.qualifying_route_pages(pages)
+    pages.filter do |page|
+      page.answer_type == "selection" && page.answer_settings.only_one_option == "true" &&
+        page.position != pages.length && page.conditions.empty?
+    end
+  end
+
 private
 
   def is_optional_value
