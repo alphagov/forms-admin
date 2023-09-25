@@ -11,7 +11,7 @@ class PagesController < ApplicationController
 
   def new
     answer_type = session.dig(:page, :answer_type)
-    question_text = session.dig(:page, :question_text)
+    question_text = draft_question.question_text
     answer_settings = session.dig(:page, :answer_settings)
     is_optional = session.dig(:page, :is_optional) == "true"
     page_heading = session.dig(:page, :page_heading)
@@ -24,12 +24,16 @@ class PagesController < ApplicationController
     page_heading = session.dig(:page, :page_heading)
     guidance_markdown = session.dig(:page, :guidance_markdown)
 
+    draft_question.assign_attributes(page_params.except(:answer_type))
+
     @page = Page.new(page_params.merge(answer_settings:, page_heading:, guidance_markdown:))
 
-    if @page.save
+    if draft_question.save && @page.save
       clear_questions_session_data
+      draft_question.destroy!
       handle_submit_action
     else
+
       render :new, status: :unprocessable_entity
     end
   end
