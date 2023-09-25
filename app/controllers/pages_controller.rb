@@ -82,6 +82,10 @@ private
     @page ||= Page.find(params[:page_id], params: { form_id: @form.id })
   end
 
+  def draft_question
+    @draft_question ||= DraftQuestion.find_or_initialize_by(form_id: @form.id, user_id: current_user.id)
+  end
+
   def move_params
     form_id = params.require(:form_id)
     p = params.require(:move_direction).permit(%i[up down])

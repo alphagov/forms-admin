@@ -4,7 +4,7 @@ RSpec.describe Pages::QuestionTextController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
 
-  let(:question_text_form) { build :question_text_form, form: }
+  let(:question_text_form) { build :question_text_form }
 
   let(:req_headers) do
     {
@@ -67,14 +67,22 @@ RSpec.describe Pages::QuestionTextController, type: :request do
     end
 
     context "when form is valid and ready to store" do
+      let(:controller_spy) do
+        controller_spy = described_class.new
+        allow(described_class).to receive(:new).and_return(controller_spy)
+        controller_spy
+      end
+      let(:question_text_form) { build :question_text_form, draft_question: }
+      let(:draft_question) { build :draft_question, user:, form_id: form.id }
+      let(:user) { build :user }
+
       before do
+        allow(controller_spy).to receive(:draft_question).and_return(draft_question)
         post question_text_create_path form_id: form.id, params: { pages_question_text_form: { question_text: "Are you a higher rate taxpayer?" } }
       end
 
-      let(:question_text_form) { build :question_text_form }
-
-      it "saves the input type to session" do
-        expect(session[:page][:question_text]).to eq "Are you a higher rate taxpayer?"
+      it "saves the input type to forms page" do
+        expect(question_text_form.draft_question.question_text).to eq "Are you a higher rate taxpayer?"
       end
 
       it "redirects the user to the edit question page" do

@@ -2,7 +2,9 @@ require "rails_helper"
 
 RSpec.describe Pages::QuestionTextForm, type: :model do
   let(:form) { build :form, id: 1 }
-  let(:question_text_form) { described_class.new }
+  let(:question_text_form) { described_class.new(draft_question:) }
+  let(:draft_question) { build :draft_question, user:, form_id: form.id }
+  let(:user) { build :user }
 
   it "has a valid factory" do
     question_text_form = build :question_text_form
@@ -38,13 +40,13 @@ RSpec.describe Pages::QuestionTextForm, type: :model do
     let(:session_mock) { {} }
 
     it "returns false if the form is invalid" do
-      expect(question_text_form.submit(session_mock)).to be_falsey
+      expect(question_text_form.submit).to be_falsey
     end
 
     it "sets a session key called 'page' as a hash with the answer type in it" do
-      question_text_form.question_text = "date_of_birth"
-      question_text_form.submit(session_mock)
-      expect(session_mock[:page][:question_text]).to eq "date_of_birth"
+      question_text_form.question_text = "Can you fill me in?"
+      question_text_form.submit
+      expect(draft_question.question_text).to eq "Can you fill me in?"
     end
   end
 end
