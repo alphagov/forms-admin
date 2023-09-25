@@ -1,17 +1,17 @@
-<% set_page_title(title_with_error_prefix(t("page_titles.new_page_form"), @page.errors.any?)) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.new_page_form"), @draft_question.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_pages_path(@form)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      <span class="govuk-caption-l"><%= t("pages.question") %> <%= @form.page_number(@page) %></span>
+      <span class="govuk-caption-l"><%= t("pages.question") %> <%= @form.page_number(@draft_question) %></span>
       <span class="govuk-visually-hidden"> - </span>
       <%= t("pages.heading") %>
     </h1>
 
     <%= render partial: 'form', locals: { is_new_page: true,
                                              form_object: @form,
-                                             page_object: @page,
+                                             page_object: @draft_question,
                                              action_path: create_page_path(@form),
                                              change_answer_type_path: type_of_answer_new_path(@form),
                                              change_selections_settings_path: selections_settings_new_path(@form),

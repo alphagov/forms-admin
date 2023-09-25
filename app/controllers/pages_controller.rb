@@ -11,12 +11,13 @@ class PagesController < ApplicationController
 
   def new
     answer_type = session.dig(:page, :answer_type)
-    question_text = draft_question.question_text
     answer_settings = session.dig(:page, :answer_settings)
     is_optional = session.dig(:page, :is_optional) == "true"
     page_heading = session.dig(:page, :page_heading)
     guidance_markdown = session.dig(:page, :guidance_markdown)
-    @page = Page.new(form_id: @form.id, question_text:, answer_type:, answer_settings:, is_optional:, page_heading:, guidance_markdown:)
+
+    draft_question.assign_attributes(answer_type:, answer_settings:, is_optional:, page_heading:, guidance_markdown:)
+    @page = Page.new()
   end
 
   def create
