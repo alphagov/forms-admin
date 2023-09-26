@@ -1,10 +1,15 @@
 class UserUpgradeRequestService
+  attr_accessor :user
+
   def initialize(user)
     @user = user
   end
 
   def request_upgrade
-    # send email
-    # log event
+    UserUpgradeRequestMailer.upgrade_request_email(user_email: user.email).deliver_now
+    EventLogger.log({
+      event: "upgrade_request",
+      user_id: user.id,
+    })
   end
 end
