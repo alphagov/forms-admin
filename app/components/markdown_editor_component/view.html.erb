@@ -60,13 +60,9 @@
           <p><%= translations[:preview_description] %></p>
         </div>
 
-        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible app-markdown-editor__preview-line-break">
-
-        <div class="app-markdown-editor__preview-area" data-ajax-markdown-target>
+        <div class="app-markdown-editor__preview-area" role="region" aria-label="<%= translations[:preview_area_label] %>" data-ajax-markdown-target>
           <%= preview_html.html_safe %>
         </div>
-
-        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible app-markdown-editor__preview-line-break">
 
         <%= govuk_link_to translations[:edit_markdown_link], "##{form_field_id}", class: "app-markdown-editor__edit-link" %>
       <% end %>

@@ -64,6 +64,7 @@ RSpec.describe MarkdownEditorComponent::View, type: :component do
             preview_loading: I18n.t("markdown_editor.preview_loading"),
             preview_error: I18n.t("markdown_editor.preview_error"),
             edit_markdown_link: I18n.t("markdown_editor.edit_markdown_link"),
+            preview_area_label: I18n.t("markdown_editor.preview_area_label"),
             toolbar: {
               h2: I18n.t("markdown_editor.toolbar.h2"),
               h3: I18n.t("markdown_editor.toolbar.h3"),
@@ -88,6 +89,7 @@ RSpec.describe MarkdownEditorComponent::View, type: :component do
           preview_loading: "local preview laoding",
           preview_error: "local preview error",
           edit_markdown_link: "local edit markdown link",
+          preview_area_label: "local preview area label",
           toolbar: {
             h2: "local h2",
             h3: "local h3",
@@ -110,6 +112,7 @@ RSpec.describe MarkdownEditorComponent::View, type: :component do
             preview_loading: local_translations[:preview_loading],
             preview_error: local_translations[:preview_error],
             edit_markdown_link: local_translations[:edit_markdown_link],
+            preview_area_label: local_translations[:preview_area_label],
             toolbar: {
               h2: I18n.t("markdown_editor.toolbar.h2"),
               h3: I18n.t("markdown_editor.toolbar.h3"),

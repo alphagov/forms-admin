@@ -2,6 +2,12 @@
   @include govuk-visually-hidden;
 }
 
+.app-markdown-editor__preview-area {
+  border: 2px solid $govuk-border-colour;
+  padding: 30px;
+  margin: 0 0 1em;
+}
+
 .app-markdown-editor__preview-area :last-child {
   margin-bottom: 0;
 }
@@ -16,9 +22,11 @@
   }
 }
 
-.js-enabled .app-markdown-editor__preview-line-break {
+.js-enabled .app-markdown-editor__preview-area {
   @include govuk-media-query($from: tablet) {
-    display: none;
+    border: 0;
+    padding: 0;
+    margin-bottom: 0;
   }
 }
 
