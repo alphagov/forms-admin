@@ -209,9 +209,11 @@ en:
       </p>
       <ul class="govuk-list govuk-list--bullet">
         <li>explain how to answer the question in more detail</li>
-        <li>provide more context</li>
-        <li>format your content - for example, with links, sub-headings or lists</li>
+        <li>format your content with paragraphs, headings, lists or links</li>
       </ul>
+      <p>
+        Guidance will be displayed at the top of the page, above your question.
+      </p>
   header:
     product_name: Forms
     sign_out: Sign out
