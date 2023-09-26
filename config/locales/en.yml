@@ -444,6 +444,7 @@ en:
     preview:
       description: Below is a preview of how your markdown content will be shown to the person completing your form.
       heading: Preview your markdown below
+    preview_area_label: Your preview
     preview_error: Sorry, there is a problem with the service. Try again later.
     preview_loading: Preview loading
     preview_markdown: Preview markdown
