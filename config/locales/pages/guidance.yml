@@ -2,7 +2,7 @@ en:
   helpers:
     hint:
       pages_guidance_form:
-        page_heading: Use a heading that’s a statement rather than a question - for example, ‘Interview needs’. This will be your main page heading.
+        page_heading: When you add guidance your question text will no longer be the main page heading, so you need to use a different one. Use a heading that’s a statement rather than a question - for example, ‘Interview needs’.
         guidance_markdown: Use Markdown if you need to format your guidance content. Formatting help can be found below.
     label:
       pages_guidance_form:
