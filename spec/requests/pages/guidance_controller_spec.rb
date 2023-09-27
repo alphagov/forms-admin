@@ -3,7 +3,10 @@ require "rails_helper"
 RSpec.describe Pages::GuidanceController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
+  let(:draft_question) { create :draft_question, form_id: form.id, answer_settings:, user: editor_user }
+
   let(:page) { pages.first }
+  let(:guidance_form) { build :guidance_form, draft_question:, page_heading:, guidance_markdown: }
   let(:page_heading) { "Page heading" }
   let(:guidance_markdown) { "## Heading level 2" }
 
@@ -122,9 +125,10 @@ RSpec.describe Pages::GuidanceController, type: :request do
         expect(form).to have_been_read
       end
 
-      it "saves the page_heading and guidance_markdown to session" do
-        expect(session[:page][:page_heading]).to eq("Page heading")
-        expect(session[:page][:guidance_markdown]).to eq("## Heading level 2")
+      it "saves the answer settings to db" do
+        form_instance_variable = assigns(:guidance_form)
+        expect(form_instance_variable.draft_question.page_heading).to eq("Page heading")
+        expect(form_instance_variable.draft_question.guidance_markdown).to eq("## Heading level 2")
       end
 
       it "redirects the user to the new question page" do
@@ -180,6 +184,8 @@ RSpec.describe Pages::GuidanceController, type: :request do
   describe "#update" do
     let(:pages) { build_list :page, 5, :with_guidance, form_id: form.id }
     let(:route_to) { "preview" }
+    let(:page_heading) { "Page heading 123" }
+    let(:guidance_markdown) { "### Heading level 3" }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -206,7 +212,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
       end
 
       it "renders the guidance markdown as html" do
-        expect(response.body).to include('<h2 class="govuk-heading-m">Heading level 2</h2>')
+        expect(response.body).to include('<h3 class="govuk-heading-s">Heading level 3</h3>')
       end
 
       it "links back to the previous question page" do
@@ -245,9 +251,10 @@ RSpec.describe Pages::GuidanceController, type: :request do
         expect(form).to have_been_read
       end
 
-      it "saves the page_heading and guidance_markdown to session" do
-        expect(session[:page][:page_heading]).to eq("Page heading")
-        expect(session[:page][:guidance_markdown]).to eq("## Heading level 2")
+      it "saves the answer settings to db" do
+        form_instance_variable = assigns(:guidance_form)
+        expect(form_instance_variable.draft_question.page_heading).to eq("Page heading 123")
+        expect(form_instance_variable.draft_question.guidance_markdown).to eq("### Heading level 3")
       end
 
       it "redirects the user to the edit question page" do

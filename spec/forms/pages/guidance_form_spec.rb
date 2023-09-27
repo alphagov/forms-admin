@@ -1,7 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Pages::GuidanceForm, type: :model do
-  let(:guidance_form) { described_class.new(page_heading:, guidance_markdown:) }
+  let(:guidance_form) { described_class.new(page_heading:, guidance_markdown:, draft_question:) }
+  let(:draft_question) { build :draft_question, user: }
+  let(:user) { build :user }
   let(:page_heading) { "New guidance heading" }
   let(:guidance_markdown) { "## Level heading 2" }
 
@@ -59,25 +61,23 @@ RSpec.describe Pages::GuidanceForm, type: :model do
   end
 
   describe "#submit" do
-    let(:session_mock) { {} }
-
     it "returns false if the form is invalid" do
       allow(guidance_form).to receive(:invalid?).and_return(true)
-      expect(guidance_form.submit(session_mock)).to eq false
+      expect(guidance_form.submit).to eq false
     end
 
     context "when page_heading and guidance_markdown are valid" do
       let(:page_heading) { "My new page heading" }
       let(:guidance_markdown) { "Extra guidance needed to answer this question" }
 
-      it "sets a session key called 'page' as a hash with the page heading in it" do
-        guidance_form.submit(session_mock)
-        expect(session_mock[:page][:page_heading]).to eq page_heading
+      it "sets draft question with the page heading in it" do
+        guidance_form.submit
+        expect(draft_question.page_heading).to eq page_heading
       end
 
-      it "sets a session key called 'page' as a hash with the guidance_markdown in it" do
-        guidance_form.submit(session_mock)
-        expect(session_mock[:page][:guidance_markdown]).to eq guidance_markdown
+      it "sets draft question with the guidance_markdown in it" do
+        guidance_form.submit
+        expect(draft_question.guidance_markdown).to eq guidance_markdown
       end
     end
   end

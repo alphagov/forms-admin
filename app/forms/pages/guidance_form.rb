@@ -3,13 +3,13 @@ require "govuk_forms_markdown"
 class Pages::GuidanceForm < BaseForm
   include GuidanceValidation
 
-  attr_accessor :page_heading, :guidance_markdown
+  attr_accessor :page_heading, :guidance_markdown, :draft_question
 
-  def submit(session)
+  def submit
     return false if invalid?
 
-    session[:page] = {} if session[:page].blank?
-    session[:page][:page_heading] = page_heading
-    session[:page][:guidance_markdown] = guidance_markdown
+    draft_question.page_heading = page_heading
+    draft_question.guidance_markdown = guidance_markdown
+    draft_question.save!(validate: false)
   end
 end
