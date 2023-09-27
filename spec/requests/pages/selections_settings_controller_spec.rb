@@ -4,7 +4,8 @@ RSpec.describe Pages::SelectionsSettingsController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
 
-  let(:selections_settings_form) { build :selections_settings_form }
+  let(:selections_settings_form) { build :selections_settings_form, draft_question: }
+  let(:draft_question) { build :draft_question, form_id: form.id, user: editor_user }
 
   let(:req_headers) do
     {
@@ -61,8 +62,10 @@ RSpec.describe Pages::SelectionsSettingsController, type: :request do
         post selections_settings_create_path form_id: form.id, params: { pages_selections_settings_form: { selection_options: { "0": { name: "Option 1" }, "1": { name: "Option 2" } }, only_one_option: true, include_none_of_the_above: false } }
       end
 
-      it "saves the answer type to session" do
-        expect(session[:page].to_json).to eq({ "answer_settings": selections_settings_form.answer_settings, is_optional: "false" }.to_json)
+      it "saves the answer settings to db" do
+        form_instance_variable = assigns(:selections_settings_form)
+        expect(form_instance_variable.draft_question.answer_settings.to_json).to include(selections_settings_form.answer_settings.to_json)
+        expect(form_instance_variable.draft_question.is_optional).to eq(false)
       end
 
       it "redirects the user to the question details page" do

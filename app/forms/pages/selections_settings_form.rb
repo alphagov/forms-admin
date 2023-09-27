@@ -3,7 +3,7 @@ class Pages::SelectionsSettingsForm < BaseForm
 
   DEFAULT_OPTIONS = { selection_options: [{ name: "" }, { name: "" }].map { |hash| Pages::SelectionOption.new(hash) }, only_one_option: false, include_none_of_the_above: false }.freeze
 
-  attr_accessor :selection_options, :only_one_option, :include_none_of_the_above
+  attr_accessor :selection_options, :only_one_option, :include_none_of_the_above, :draft_question
 
   before_validation :filter_out_blank_options
 
@@ -15,6 +15,11 @@ class Pages::SelectionsSettingsForm < BaseForm
 
   def add_another
     selection_options.append(Pages::SelectionOption.new({ name: "" }))
+
+    draft_question.answer_settings = answer_settings
+    draft_question.is_optional = include_none_of_the_above
+
+    draft_question.save!(validate: false)
   end
 
   def remove(index)
@@ -25,13 +30,13 @@ class Pages::SelectionsSettingsForm < BaseForm
     { only_one_option:, selection_options: }
   end
 
-  def submit(session)
+  def submit
     return false if invalid?
 
-    session[:page] = {} if session[:page].blank?
+    draft_question.answer_settings = answer_settings
+    draft_question.is_optional = include_none_of_the_above
 
-    session[:page][:answer_settings] = answer_settings
-    session[:page][:is_optional] = include_none_of_the_above
+    draft_question.save!(validate: false)
   end
 
   def validate_selection_options

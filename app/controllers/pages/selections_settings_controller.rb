@@ -1,6 +1,6 @@
 class Pages::SelectionsSettingsController < PagesController
   def new
-    answer_settings = load_answer_settings_from_session
+    answer_settings = load_answer_settings_from_draft_question
     @selections_settings_form = Pages::SelectionsSettingsForm.new(answer_settings)
     @selections_settings_path = selections_settings_create_path(@form)
     @back_link_url = question_text_new_path(@form)
@@ -19,7 +19,7 @@ class Pages::SelectionsSettingsController < PagesController
     elsif params[:remove]
       @selections_settings_form.remove(params[:remove].to_i)
       render selection_settings_view
-    elsif @selections_settings_form.valid? && @selections_settings_form.submit(session)
+    elsif @selections_settings_form.valid? && @selections_settings_form.submit
       redirect_to new_page_path(@form)
     else
       render selection_settings_view
@@ -27,9 +27,8 @@ class Pages::SelectionsSettingsController < PagesController
   end
 
   def edit
-    page.load_from_session(session, %i[answer_type answer_settings is_optional])
     @selections_settings_path = selections_settings_update_path(@form)
-    @selections_settings_form = Pages::SelectionsSettingsForm.new(load_answer_settings_from_page_object(page))
+    @selections_settings_form = Pages::SelectionsSettingsForm.new(load_answer_settings_from_draft_question)
     @back_link_url = edit_page_path(@form, page)
     render selection_settings_view
   end
@@ -46,7 +45,7 @@ class Pages::SelectionsSettingsController < PagesController
     elsif params[:remove]
       @selections_settings_form.remove(params[:remove].to_i)
       render selection_settings_view
-    elsif @selections_settings_form.valid? && @selections_settings_form.submit(session)
+    elsif @selections_settings_form.submit
 
       redirect_to edit_page_path(@form)
     else
@@ -70,16 +69,16 @@ private
     only_one_option = params[:only_one_option]
     include_none_of_the_above = params[:include_none_of_the_above]
 
-    { selection_options:, only_one_option:, include_none_of_the_above: }
+    { selection_options:, only_one_option:, include_none_of_the_above:, draft_question: }
   end
 
-  def load_answer_settings_from_session
-    if session[:page].present? && session[:page][:answer_settings].present?
-      only_one_option = session[:page][:answer_settings][:only_one_option]
-      include_none_of_the_above = session[:page][:is_optional]
-      selection_options = session[:page][:answer_settings][:selection_options].map(&method(:convert_to_selection_option))
+  def load_answer_settings_from_draft_question
+    if draft_question.present? && draft_question.answer_settings[:selection_options].present?
+      only_one_option = draft_question.answer_settings[:only_one_option]
+      include_none_of_the_above = draft_question.is_optional
+      selection_options = draft_question.answer_settings[:selection_options].map(&method(:convert_to_selection_option))
 
-      { only_one_option:, selection_options:, include_none_of_the_above: }
+      { only_one_option:, selection_options:, include_none_of_the_above:, draft_question: }
     else
       Pages::SelectionsSettingsForm::DEFAULT_OPTIONS
     end
@@ -94,7 +93,7 @@ private
   end
 
   def selections_settings_form_params
-    params.require(:pages_selections_settings_form).permit(:only_one_option, :include_none_of_the_above, selection_options: [:name])
+    params.require(:pages_selections_settings_form).permit(:only_one_option, :include_none_of_the_above, selection_options: [:name]).merge(draft_question:)
   end
 
   def selection_settings_view
