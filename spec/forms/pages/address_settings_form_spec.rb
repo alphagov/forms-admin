@@ -1,8 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Pages::AddressSettingsForm, type: :model do
-  let(:form) { build :form, id: 1 }
-  let(:address_settings_form) { described_class.new }
+  let(:address_settings_form) { described_class.new(draft_question:) }
+  let(:draft_question) { build :draft_question, form_id: 1, user: }
+  let(:user) { build :user }
 
   it "has a valid factory" do
     address_settings_form = build :address_settings_form
@@ -43,16 +44,15 @@ RSpec.describe Pages::AddressSettingsForm, type: :model do
   end
 
   describe "#submit" do
-    let(:session_mock) { {} }
-
     it "returns false if the form is invalid" do
-      expect(address_settings_form.submit(session_mock)).to be_falsey
+      expect(address_settings_form.submit).to be_falsey
     end
 
-    it "sets a session key called 'page' as a hash with the answer type in it" do
-      address_settings_form = build :address_settings_form
-      address_settings_form.submit(session_mock)
-      expect(session_mock[:page][:answer_settings]).to include(input_type: { international_address: "true", uk_address: "true" })
+    it "sets draft question with the answer settings in it" do
+      address_settings_form.uk_address = "true"
+      address_settings_form.international_address = "true"
+      address_settings_form.submit
+      expect(address_settings_form.draft_question.answer_settings).to include({ input_type: { international_address: "true", uk_address: "true" } })
     end
   end
 end

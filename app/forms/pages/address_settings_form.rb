@@ -1,5 +1,5 @@
 class Pages::AddressSettingsForm < BaseForm
-  attr_accessor :uk_address, :international_address, :form, :page
+  attr_accessor :uk_address, :international_address, :draft_question
 
   INPUT_TYPES = %w[uk_address international_address].freeze
 
@@ -7,11 +7,11 @@ class Pages::AddressSettingsForm < BaseForm
   validates :uk_address, inclusion: { in: %w[true false] }
   validates :international_address, inclusion: { in: %w[true false] }
 
-  def submit(session)
+  def submit
     return false if invalid?
 
-    session[:page] = {} if session[:page].blank?
-    session[:page][:answer_settings] = { input_type: { uk_address:, international_address: } }
+    draft_question.answer_settings[:input_type] = { uk_address:, international_address: }
+    draft_question.save!(validate: false)
   end
 
   def at_least_one_selected?
