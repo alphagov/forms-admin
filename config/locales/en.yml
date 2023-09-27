@@ -310,7 +310,6 @@ en:
           names:
             date_of_birth: 'Yes'
             other_date: 'No'
-        hint_text: Hint text (optional)
         name_settings_options:
           hints:
             first_and_last_name: ''
@@ -335,7 +334,6 @@ en:
             'false': 'No'
             name: Title needed
             'true': 'Yes'
-        question_text: Question text
         text_settings_options:
           names:
             long_text: More than a single line of text
@@ -343,6 +341,9 @@ en:
       pages_conditions_form:
         default_answer_value: Select an answer
         default_goto_page_id: Select a question or page
+      pages_question_form:
+        hint_text: Hint text (optional)
+        question_text: Question text
       user_upgrade_request:
         met_requirements_options:
           '1': I meet these requirements

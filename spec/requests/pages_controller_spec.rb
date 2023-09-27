@@ -193,7 +193,7 @@ RSpec.describe PagesController, type: :request do
           mock.put "/api/v1/forms/2/pages/1", post_headers
         end
 
-        patch update_page_path(form_id: 2, page_id: 1), params: { page: {
+        patch update_page_path(form_id: 2, page_id: 1), params: { pages_question_form: {
           form_id: 2,
           question_text: "What is your home address?",
           hint_text: "This should be the location stated in your contract.",
@@ -263,7 +263,7 @@ RSpec.describe PagesController, type: :request do
           mock.post "/api/v1/forms/2/pages", post_headers
         end
 
-        post create_page_path(2), params: { page: {
+        post create_page_path(2), params: { pages_question_form: {
           question_text: "What is your home address?",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",

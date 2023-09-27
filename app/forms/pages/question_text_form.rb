@@ -7,6 +7,6 @@ class Pages::QuestionTextForm < BaseForm
     return false if invalid?
 
     draft_question.question_text = question_text
-    draft_question.save!
+    draft_question.save!(validate: false)
   end
 end

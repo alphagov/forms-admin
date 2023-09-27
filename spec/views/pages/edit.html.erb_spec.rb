@@ -2,6 +2,8 @@ require "rails_helper"
 
 describe "pages/edit.html.erb" do
   let(:question_text) { nil }
+  let(:question_form) { build :question_form }
+  let(:draft_question) { build :draft_question, answer_type: question_form.answer_type }
 
   before do
     # Initialize models
@@ -22,6 +24,8 @@ describe "pages/edit.html.erb" do
     # Assign instance variables so they can be accessed from views
     assign(:form, form)
     assign(:page, page)
+    assign(:question_form, question_form)
+    assign(:draft_question, draft_question)
     assign(:current_user, current_user)
     assign(:answer_types, [])
 

@@ -47,9 +47,9 @@ module ApplicationHelper
   def translation_key_for_answer_type(answer_type, answer_settings)
     case answer_type
     when "selection"
-      answer_settings.only_one_option == "true" ? "radio" : "checkbox"
+      answer_settings[:only_one_option] == "true" ? "radio" : "checkbox"
     when "text", "date"
-      answer_settings.input_type
+      answer_settings[:input_type]
     else
       answer_type
     end

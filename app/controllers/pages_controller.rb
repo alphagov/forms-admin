@@ -10,46 +10,75 @@ class PagesController < ApplicationController
   end
 
   def new
-    answer_type = session.dig(:page, :answer_type)
-    answer_settings = session.dig(:page, :answer_settings)
-    is_optional = session.dig(:page, :is_optional) == "true"
-    page_heading = session.dig(:page, :page_heading)
-    guidance_markdown = session.dig(:page, :guidance_markdown)
+    @question_form = Pages::QuestionForm.new(question_text: draft_question.question_text,
+                                             hint_text: draft_question.hint_text,
+                                             is_optional: draft_question.is_optional,
+                                             answer_type: draft_question.answer_type)
 
-    draft_question.assign_attributes(answer_type:, answer_settings:, is_optional:, page_heading:, guidance_markdown:)
-    @page = Page.new()
+    @page = Page.new(answer_settings: draft_question.answer_settings,
+                     page_heading: draft_question.page_heading,
+                     guidance_markdown: draft_question.guidance_markdown)
   end
 
   def create
-    answer_settings = session.dig(:page, :answer_settings)
-    page_heading = session.dig(:page, :page_heading)
-    guidance_markdown = session.dig(:page, :guidance_markdown)
+    # Setup Form object
+    @question_form = Pages::QuestionForm.new(page_params)
 
-    draft_question.assign_attributes(page_params.except(:answer_type))
+    if @question_form.submit
+      # Setup new Page instance
+      @page = Page.new(form_id: draft_question.form_id,
+                       question_text: draft_question.question_text,
+                       hint_text: draft_question.hint_text,
+                       answer_type: draft_question.answer_type,
+                       is_optional: draft_question.is_optional,
+                       answer_settings: draft_question.answer_settings,
+                       page_heading: draft_question.page_heading,
+                       guidance_markdown: draft_question.guidance_markdown)
 
-    @page = Page.new(page_params.merge(answer_settings:, page_heading:, guidance_markdown:))
+      # Save to Draft Questions & Save to forms-api
 
-    if draft_question.save && @page.save
-      clear_questions_session_data
-      draft_question.destroy!
-      handle_submit_action
-    else
+      # draft_question.attributes = page_params.except(:draft_question)
 
-      render :new, status: :unprocessable_entity
+      if @page.save
+        draft_question.destroy!
+        handle_submit_action
+      else
+        render :new, status: :unprocessable_entity
+      end
     end
   end
 
   def edit
-    reset_session_if_answer_settings_not_present
-    page.load_from_session(session, %i[answer_settings answer_type is_optional page_heading guidance_markdown])
+    # reset_session_if_answer_settings_not_present
+
+    @question_form = Pages::QuestionForm.new(question_text: draft_question.question_text,
+                                             hint_text: draft_question.hint_text,
+                                             is_optional: draft_question.is_optional,
+                                             answer_type: draft_question.answer_type)
+
+    page
   end
 
   def update
-    page.load_from_session(session, %i[answer_type answer_settings page_heading guidance_markdown]).load(page_params)
+    # Setup Form object
+    @question_form = Pages::QuestionForm.new(page_params)
+    page
 
-    if page.save
-      clear_questions_session_data
-      handle_submit_action
+    if @question_form.submit
+
+      page.attributes = { question_text: draft_question.question_text,
+                          hint_text: draft_question.hint_text,
+                          answer_type: draft_question.answer_type,
+                          is_optional: draft_question.is_optional,
+                          answer_settings: draft_question.answer_settings,
+                          page_heading: draft_question.page_heading,
+                          guidance_markdown: draft_question.guidance_markdown }
+      if page.save
+        draft_question.destroy!
+        handle_submit_action
+      else
+        render :edit, status: :unprocessable_entity
+      end
     else
       render :edit, status: :unprocessable_entity
     end
@@ -76,7 +105,7 @@ private
   end
 
   def page_params
-    params.require(:page).permit(:question_text, :hint_text, :answer_type, :is_optional).merge(form_id: @form.id)
+    params.require(:pages_question_form).permit(:question_text, :hint_text, :is_optional).merge(draft_question:)
   end
 
   def fetch_form
@@ -88,7 +117,11 @@ private
   end
 
   def draft_question
-    @draft_question ||= DraftQuestion.find_or_initialize_by(form_id: @form.id, user_id: current_user.id)
+    @draft_question ||= if params[:page_id].present?
+                          setup_draft_question_for_existing_page
+                        else
+                          DraftQuestion.find_or_initialize_by(form_id: @form.id, user_id: current_user.id)
+                        end
   end
 
   def move_params
@@ -129,5 +162,15 @@ private
 
   def convert_session_keys_to_symbols
     session[:page].deep_symbolize_keys! if session[:page].present?
+  end
+
+  def setup_draft_question_for_existing_page
+    edit_draft_question = DraftQuestion.find_or_initialize_by(form_id: @form.id, user_id: current_user.id, page_id: page.id)
+
+    if edit_draft_question.new_record?
+      edit_draft_question.attributes = page.attributes.except(:position, :next_page, :has_routing_errors, :routing_conditions, :question_with_text)
+      edit_draft_question.save!(validate: false)
+    end
+    edit_draft_question
   end
 end

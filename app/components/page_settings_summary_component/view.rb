@@ -16,10 +16,10 @@ module PageSettingsSummaryComponent
   private
 
     def address_input_type_to_string
-      input_type = @page_object.answer_settings.input_type
-      if input_type.uk_address == "true" && input_type.international_address == "true"
+      input_type = @page_object.answer_settings[:input_type]
+      if input_type[:uk_address] == "true" && input_type[:international_address] == "true"
         "uk_and_international_addresses"
-      elsif input_type.uk_address == "true"
+      elsif input_type[:uk_address] == "true"
         "uk_addresses"
       else
         "international_addresses"

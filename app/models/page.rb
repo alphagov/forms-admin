@@ -36,7 +36,7 @@ class Page < ActiveResource::Base
   end
 
   def show_selection_options
-    answer_settings.selection_options.map(&:name).join(", ")
+    answer_settings[:selection_options].map(&:name).join(", ")
   end
 
   def submit
