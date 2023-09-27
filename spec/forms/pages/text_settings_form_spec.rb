@@ -1,8 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Pages::TextSettingsForm, type: :model do
-  let(:form) { build :form, id: 1 }
-  let(:text_settings_form) { described_class.new }
+  let(:text_settings_form) { described_class.new(draft_question:) }
+  let(:draft_question) { build :draft_question, form_id: 1, user: }
+  let(:user) { build :user }
 
   it "has a valid factory" do
     text_settings_form = build :text_settings_form
@@ -40,16 +41,14 @@ RSpec.describe Pages::TextSettingsForm, type: :model do
   end
 
   describe "#submit" do
-    let(:session_mock) { {} }
-
     it "returns false if the form is invalid" do
-      expect(text_settings_form.submit(session_mock)).to be_falsey
+      expect(text_settings_form.submit).to be_falsey
     end
 
     it "sets a session key called 'page' as a hash with the answer type in it" do
       text_settings_form.input_type = "single_line"
-      text_settings_form.submit(session_mock)
-      expect(session_mock[:page][:answer_settings]).to include(input_type: "single_line")
+      text_settings_form.submit
+      expect(text_settings_form.draft_question.answer_settings).to include(input_type: "single_line")
     end
   end
 end
