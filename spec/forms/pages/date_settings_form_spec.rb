@@ -1,8 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Pages::DateSettingsForm, type: :model do
-  let(:form) { build :form, id: 1 }
-  let(:date_settings_form) { described_class.new }
+  let(:date_settings_form) { described_class.new(draft_question:) }
+  let(:draft_question) { build :draft_question, form_id: 1, user: }
+  let(:user) { build :user }
 
   it "has a valid factory" do
     date_settings_form = build :date_settings_form
@@ -40,16 +41,14 @@ RSpec.describe Pages::DateSettingsForm, type: :model do
   end
 
   describe "#submit" do
-    let(:session_mock) { {} }
-
     it "returns false if the form is invalid" do
-      expect(date_settings_form.submit(session_mock)).to be_falsey
+      expect(date_settings_form.submit).to be_falsey
     end
 
     it "sets a session key called 'page' as a hash with the answer type in it" do
       date_settings_form.input_type = "date_of_birth"
-      date_settings_form.submit(session_mock)
-      expect(session_mock[:page][:answer_settings]).to include(input_type: "date_of_birth")
+      date_settings_form.submit
+      expect(date_settings_form.draft_question.answer_settings).to include(input_type: "date_of_birth")
     end
   end
 end
