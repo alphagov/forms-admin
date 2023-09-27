@@ -2,7 +2,9 @@ require "rails_helper"
 
 RSpec.describe Pages::NameSettingsForm, type: :model do
   let(:form) { build :form, id: 1 }
-  let(:name_settings_form) { described_class.new }
+  let(:name_settings_form) { described_class.new(draft_question:) }
+  let(:draft_question) { build :draft_question, form_id: form.id, user: }
+  let(:user) { build :user }
 
   it "has a valid factory" do
     name_settings_form = build :name_settings_form
@@ -58,17 +60,15 @@ RSpec.describe Pages::NameSettingsForm, type: :model do
   end
 
   describe "#submit" do
-    let(:session_mock) { {} }
-
     it "returns false if the form is invalid" do
-      expect(name_settings_form.submit(session_mock)).to be_falsey
+      expect(name_settings_form.submit).to be_falsey
     end
 
-    it "sets a session key called 'page' as a hash with the answer settings in it" do
-      name_settings_form = build :name_settings_form
-      name_settings_form.submit(session_mock)
-      expect(session_mock[:page][:answer_settings]).to include(input_type: "full_name")
-      expect(session_mock[:page][:answer_settings]).to include(title_needed: "true")
+    it "sets draft question answer settings in it" do
+      name_settings_form = build(:name_settings_form, draft_question:)
+      name_settings_form.submit
+      expect(draft_question.answer_settings).to include(input_type: "full_name")
+      expect(draft_question.answer_settings).to include(title_needed: "true")
     end
   end
 end

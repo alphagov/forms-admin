@@ -3,8 +3,10 @@ require "rails_helper"
 RSpec.describe Pages::NameSettingsController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
+  let(:draft_question) { create :draft_question, form_id: form.id, answer_settings:, user: editor_user }
+  let(:answer_settings) { nil }
 
-  let(:name_settings_form) { build :name_settings_form, form: }
+  let(:name_settings_form) { build :name_settings_form, draft_question: }
 
   let(:req_headers) do
     {
@@ -31,7 +33,7 @@ RSpec.describe Pages::NameSettingsController, type: :request do
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
       end
 
-      get name_settings_new_path(form_id: name_settings_form.form.id)
+      get name_settings_new_path(form_id: form.id)
     end
 
     it "reads the existing form" do
@@ -40,7 +42,7 @@ RSpec.describe Pages::NameSettingsController, type: :request do
 
     it "sets an instance variable for name_settings_path" do
       path = assigns(:name_settings_path)
-      expect(path).to eq name_settings_new_path(name_settings_form.form.id)
+      expect(path).to eq name_settings_new_path(form.id)
     end
 
     it "renders the template" do
@@ -69,12 +71,12 @@ RSpec.describe Pages::NameSettingsController, type: :request do
     context "when form is valid and ready to store" do
       before do
         post name_settings_create_path form_id: form.id, params: { pages_name_settings_form: { input_type: "first_and_last_name", title_needed: "false" } }
+        draft_question.reload
       end
 
-      let(:name_settings_form) { build :name_settings_form, form: }
-
-      it "saves the input type to session" do
-        expect(session[:page][:answer_settings]).to eq({ input_type: "first_and_last_name", title_needed: "false" })
+      it "saves the answer settings to db" do
+        form_instance_variable = assigns(:name_settings_form)
+        expect(form_instance_variable.draft_question.answer_settings).to include(input_type: "first_and_last_name", title_needed: "false")
       end
 
       it "redirects the user to the edit question page" do
@@ -107,7 +109,7 @@ RSpec.describe Pages::NameSettingsController, type: :request do
 
     it "sets an instance variable for name_settings_path" do
       path = assigns(:name_settings_path)
-      expect(path).to eq name_settings_edit_path(name_settings_form.form.id)
+      expect(path).to eq name_settings_edit_path(form.id)
     end
 
     it "renders the template" do
@@ -137,13 +139,6 @@ RSpec.describe Pages::NameSettingsController, type: :request do
 
       before do
         post name_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_name_settings_form: { input_type:, title_needed: } }
-      end
-
-      it "loads the updated input type from the page params" do
-        form_instance_variable = assigns(:name_settings_form)
-        expect(form_instance_variable.input_type).to eq input_type
-        expect(form_instance_variable.title_needed).to eq title_needed
-        expect(session[:page][:answer_settings]).to eq({ input_type:, title_needed: })
       end
 
       it "redirects the user to the edit question page" do

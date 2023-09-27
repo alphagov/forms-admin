@@ -1,8 +1,7 @@
 class Pages::NameSettingsController < PagesController
   def new
-    input_type = session.dig(:page, :answer_settings, :input_type)
-    title_needed = session.dig(:page, :answer_settings, :title_needed)
-    @name_settings_form = Pages::NameSettingsForm.new(input_type:, title_needed:)
+    @name_settings_form = Pages::NameSettingsForm.new(input_type: draft_question.answer_settings[:input_type],
+                                                      title_needed: draft_question.answer_settings[:title_needed])
     @name_settings_path = name_settings_create_path(@form)
     @back_link_url = type_of_answer_new_path(@form)
     render name_settings_view
@@ -13,7 +12,7 @@ class Pages::NameSettingsController < PagesController
     @name_settings_path = name_settings_create_path(@form)
     @back_link_url = type_of_answer_new_path(@form)
 
-    if @name_settings_form.submit(session)
+    if @name_settings_form.submit
       redirect_to new_page_path(@form)
     else
       render name_settings_view
@@ -21,22 +20,19 @@ class Pages::NameSettingsController < PagesController
   end
 
   def edit
-    page.load_from_session(session, %i[answer_type answer_settings])
-    input_type = @page&.answer_settings&.input_type
-    title_needed = @page&.answer_settings&.title_needed
-    @name_settings_form = Pages::NameSettingsForm.new(input_type:, title_needed:, page: @page)
+    @name_settings_form = Pages::NameSettingsForm.new(input_type: draft_question.answer_settings[:input_type],
+                                                      title_needed: draft_question.answer_settings[:title_needed])
     @name_settings_path = name_settings_update_path(@form)
     @back_link_url = type_of_answer_edit_path(@form)
     render name_settings_view
   end
 
   def update
-    page
     @name_settings_form = Pages::NameSettingsForm.new(name_settings_form_params)
     @name_settings_path = name_settings_update_path(@form)
     @back_link_url = type_of_answer_edit_path(@form)
 
-    if @name_settings_form.submit(session)
+    if @name_settings_form.submit
       redirect_to edit_page_path(@form)
     else
       render name_settings_view
@@ -46,8 +42,7 @@ class Pages::NameSettingsController < PagesController
 private
 
   def name_settings_form_params
-    form = Form.find(params[:form_id])
-    params.require(:pages_name_settings_form).permit(:input_type, :title_needed).merge(form:)
+    params.require(:pages_name_settings_form).permit(:input_type, :title_needed).merge(draft_question:)
   end
 
   def name_settings_view
