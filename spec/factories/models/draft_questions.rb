@@ -19,5 +19,9 @@ FactoryBot.define do
       page_heading { Faker::Quote.yoda }
       guidance_markdown { "## List of items \n\n\n #{Faker::Markdown.ordered_list}" }
     end
+
+    trait :with_simple_answer_type do
+      answer_type { Page::ANSWER_TYPES.reject { |item| Page::ANSWER_TYPES_WITH_SETTINGS.include? item }.sample }
+    end
   end
 end
