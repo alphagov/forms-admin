@@ -1,7 +1,6 @@
 class Pages::TypeOfAnswerController < PagesController
   def new
-    answer_type = session.dig(:page, :answer_type)
-    @type_of_answer_form = Pages::TypeOfAnswerForm.new(answer_type:)
+    @type_of_answer_form = Pages::TypeOfAnswerForm.new(answer_type: draft_question.answer_type)
     @type_of_answer_path = type_of_answer_create_path(@form)
     render "pages/type-of-answer"
   end
@@ -9,7 +8,7 @@ class Pages::TypeOfAnswerController < PagesController
   def create
     @type_of_answer_form = Pages::TypeOfAnswerForm.new(answer_type_form_params)
 
-    if @type_of_answer_form.submit(session)
+    if @type_of_answer_form.submit
       redirect_to next_page_path(@form, @type_of_answer_form.answer_type, :create)
     else
       @type_of_answer_path = type_of_answer_create_path(@form)
@@ -18,22 +17,20 @@ class Pages::TypeOfAnswerController < PagesController
   end
 
   def edit
-    page.load_from_session(session, %i[answer_type])
-
-    @type_of_answer_form = Pages::TypeOfAnswerForm.new(answer_type: @page.answer_type, page: @page)
+    @type_of_answer_form = Pages::TypeOfAnswerForm.new(answer_type: draft_question.answer_type)
     @type_of_answer_path = type_of_answer_update_path(@form)
     render "pages/type-of-answer"
   end
 
   def update
-    page
-    answer_type = session.dig(:page, :answer_type)
-
-    @page.load(answer_type:)
     @type_of_answer_form = Pages::TypeOfAnswerForm.new(answer_type_form_params)
-    return redirect_to edit_page_path(@form) unless answer_type_changed?
 
-    save_to_session(session)
+    if @type_of_answer_form.submit
+      redirect_to next_page_path(@form, @type_of_answer_form.answer_type, :update)
+    else
+      @type_of_answer_path = type_of_answer_update_path(@form)
+      render "pages/type-of-answer"
+    end
   end
 
 private
@@ -80,8 +77,7 @@ private
   end
 
   def answer_type_form_params
-    form = Form.find(params[:form_id])
-    params.require(:pages_type_of_answer_form).permit(:answer_type).merge(form:)
+    params.require(:pages_type_of_answer_form).permit(:answer_type).merge(draft_question:)
   end
 
   def answer_type_changed?
@@ -98,16 +94,6 @@ private
       { input_type: nil, title_needed: nil }
     else
       {}
-    end
-  end
-
-  def save_to_session(session)
-    if @type_of_answer_form.submit(session)
-      session[:page][:answer_settings] = default_answer_settings_for_answer_type(@type_of_answer_form.answer_type)
-      redirect_to next_page_path(@form, @type_of_answer_form.answer_type, :update)
-    else
-      @type_of_answer_path = type_of_answer_update_path(@form)
-      render "pages/type-of-answer"
     end
   end
 end

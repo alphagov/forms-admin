@@ -2,7 +2,9 @@ require "rails_helper"
 
 RSpec.describe Pages::TypeOfAnswerForm, type: :model do
   let(:form) { build :form, id: 1 }
-  let(:type_of_answer_form) { described_class.new }
+  let(:type_of_answer_form) { described_class.new(draft_question:) }
+  let(:draft_question) { build :draft_question, form_id: form.id, user: }
+  let(:user) { build :user }
 
   it "has a valid factory" do
     type_of_answer_form = build :type_of_answer_form
@@ -29,16 +31,14 @@ RSpec.describe Pages::TypeOfAnswerForm, type: :model do
   end
 
   describe "#submit" do
-    let(:session_mock) { {} }
-
     it "returns false if the form is invalid" do
-      expect(type_of_answer_form.submit(session_mock)).to be_falsey
+      expect(type_of_answer_form.submit).to be_falsey
     end
 
-    it "sets a session key called 'page' as a hash with the answer type in it" do
+    it "sets the draft question answer type" do
       type_of_answer_form.answer_type = "email"
-      type_of_answer_form.submit(session_mock)
-      expect(session_mock[:page]).to include(answer_type: "email")
+      type_of_answer_form.submit
+      expect(draft_question.answer_type).to eq("email")
     end
   end
 end
