@@ -1,6 +1,6 @@
 <% if @current_user.trial?  %>
   <%= govuk_notification_banner(title_text: t("trial_role_warning.title")) do |banner| %>
     <% banner.with_heading(text: t("trial_role_warning.heading")) %>
-    <%= t("trial_role_warning.content_html", link_url: '/404') %>
+    <%= t("trial_role_warning.content_html", link_url: user_upgrade_request_path) %>
   <% end %>
 <% end %>
