@@ -9,6 +9,7 @@ describe "Set or change a user's role", type: :feature do
     create :organisation, id: 1, slug: "test-org"
     [build(:form, id: 1, creator_id: 1, organisation_id: 1, name: "Org form")]
   end
+
   let(:trial_forms) do
     [build(:form, id: 2, creator_id: 2, organisation_id: nil, name: "Trial form")]
   end
@@ -63,18 +64,6 @@ describe "Set or change a user's role", type: :feature do
     then_i_can_see_the_org_forms
   end
 
-  context "when a trial user views the trial account banner" do
-    it "the trial account banner is visible" do
-      login_as trial_user
-      then_i_can_see_trial_account_banner
-    end
-
-    it "the trial account banner link navigates to the upgrade page" do
-      login_as trial_user
-      then_i_can_navigate_to_the_upgrade_page
-    end
-  end
-
 private
 
   def when_i_change_the_trial_users_role_to_editor
@@ -91,19 +80,6 @@ private
   def then_i_can_see_the_trial_user_forms
     visit root_path
     expect(page).to have_text "Trial form"
-  end
-
-  def then_i_can_see_trial_account_banner
-    visit root_path
-    expect(page).to have_text "You have a trial account"
-  end
-
-  def then_i_can_navigate_to_the_upgrade_page
-    visit root_path
-
-    click_link("Find out if you can upgrade to an editor account")
-
-    expect(page).to have_current_path("/404")
   end
 
   def then_i_cannot_see_the_org_forms
