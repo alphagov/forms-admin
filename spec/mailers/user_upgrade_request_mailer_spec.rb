@@ -4,8 +4,6 @@ describe UserUpgradeRequestMailer do
   describe "sending an email to a user" do
     let(:mail) { described_class.upgrade_request_email(user_email: "test@example.gov.uk") }
 
-    before { mail }
-
     it "sends an email with the correct template" do
       expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.user_upgrade_template_id)
     end
