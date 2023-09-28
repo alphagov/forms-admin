@@ -14,7 +14,8 @@ import {
 let source, target
 
 const jsonResponse = {
-  preview_html: '<h2 class="govuk-heading-m">This is a heading</h2>'
+  preview_html: '<h2 class="govuk-heading-m">This is a heading</h2>',
+  errors: []
 }
 const setupDocument = () => {
   const i18n = JSON.stringify({
