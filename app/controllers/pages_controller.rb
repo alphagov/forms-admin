@@ -1,7 +1,5 @@
 class PagesController < ApplicationController
-  before_action :fetch_form, :answer_types, :convert_session_keys_to_symbols
-  before_action :check_user_has_permission
-  skip_before_action :clear_questions_session_data, except: %i[index move_page]
+  before_action :fetch_form, :answer_types, :check_user_has_permission
   after_action :verify_authorized
 
   def index
@@ -49,8 +47,6 @@ class PagesController < ApplicationController
   end
 
   def edit
-    # reset_session_if_answer_settings_not_present
-
     @question_form = Pages::QuestionForm.new(question_text: draft_question.question_text,
                                              hint_text: draft_question.hint_text,
                                              is_optional: draft_question.is_optional,
@@ -132,16 +128,6 @@ private
     @move_params ||= { form_id:, page_id:, direction: }
   end
 
-  def reset_session_if_answer_settings_not_present
-    answer_type = session.dig(:page, :answer_type)
-    answer_settings = session.dig(:page, :answer_settings)
-
-    if (Page::ANSWER_TYPES_WITH_SETTINGS.include? answer_type) && (answer_settings.blank? || answer_settings == {})
-      clear_questions_session_data
-      redirect_to edit_page_path(params[:form_id], params[:page_id])
-    end
-  end
-
   def handle_submit_action
     # if user chose to save and reload current page
     return redirect_to edit_page_path(@form, @page), success: "Your changes have been saved" if params[:save_preview]
@@ -158,10 +144,6 @@ private
 
   def answer_types
     @answer_types = Page::ANSWER_TYPES
-  end
-
-  def convert_session_keys_to_symbols
-    session[:page].deep_symbolize_keys! if session[:page].present?
   end
 
   def setup_draft_question_for_existing_page

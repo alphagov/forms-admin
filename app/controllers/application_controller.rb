@@ -9,8 +9,6 @@ class ApplicationController < ActionController::Base
 
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
-  before_action :clear_questions_session_data
-
   add_flash_types :success
 
   rescue_from ActiveResource::ResourceNotFound do
@@ -46,10 +44,6 @@ class ApplicationController < ActionController::Base
     payload[:request_id] = request.request_id
     payload[:user_ip] = user_ip(request.env.fetch("HTTP_X_FORWARDED_FOR", ""))
     payload[:form_id] = params[:form_id] if params[:form_id].present?
-  end
-
-  def clear_questions_session_data
-    session.delete(:page) if session[:page].present?
   end
 
   def set_request_id

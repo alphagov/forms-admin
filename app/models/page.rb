@@ -43,14 +43,6 @@ class Page < ActiveResource::Base
     save!
   end
 
-  def load_from_session(session, keys)
-    session_hash = session.to_h.with_indifferent_access
-    keys.each do |key|
-      self.load("#{key}": session_hash.dig(:page, key.to_sym) || send(key.to_sym))
-    end
-    self
-  end
-
   def conditions
     routing_conditions.map { |routing_condition| Condition.new(routing_condition.attributes) }
   end

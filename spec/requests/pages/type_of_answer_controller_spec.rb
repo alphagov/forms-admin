@@ -261,7 +261,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       context "when answer type is selection" do
         let(:pages_type_of_answer_form) { { answer_type: "selection" } }
 
-        it "saves the answer type to session" do
+        it "saves the answer type to db" do
           form = assigns(:type_of_answer_form)
           expect(form.answer_type).to eq "selection"
         end
