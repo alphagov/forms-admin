@@ -35,7 +35,7 @@ describe "Request an upgrade from trial user to editor", type: :feature do
     end
   end
 
-  it "the trial account banner is visible" do
+  it "a trial user can request an upgrade when they declare they meet the requirements" do
     login_as trial_user
     then_i_can_see_trial_account_banner
     then_i_can_navigate_to_the_upgrade_page
@@ -44,15 +44,7 @@ describe "Request an upgrade from trial user to editor", type: :feature do
     then_i_can_see_request_sent_banner
   end
 
-  # it "A trial user can request an upgrade when they declare they meet the requirements" do
-  #   login_as trial_user
-  #   visit_upgrade_page
-  #   check I18n.t("helpers.label.user_upgrade_request.met_requirements_options.1")
-  #   submit_request
-  #   then_i_can_see_request_sent_banner
-  # end
-
-  it "A trial user cannot request an upgrade when they do not declare they meet the requirements" do
+  it "a trial user cannot request an upgrade when they do not declare they meet the requirements" do
     login_as trial_user
     visit_upgrade_page
     submit_request

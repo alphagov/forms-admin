@@ -2,9 +2,11 @@
 
 module TrialRoleWarningComponent
   class View < ViewComponent::Base
-    def initialize(current_user)
+    attr_reader :link_url
+
+    def initialize(link_url:)
       super
-      @current_user = current_user
+      @link_url = link_url
     end
   end
 end

@@ -2,7 +2,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render TrialRoleWarningComponent::View.new(@current_user) %>
+    <%= render TrialRoleWarningComponent::View.new(link_url: user_upgrade_request_path) if @current_user.trial? %>
   </div>
 </div>
 
