@@ -1,16 +1,6 @@
 require "rails_helper"
 
 describe "Request an upgrade from trial user to editor", type: :feature do
-  before do
-    # prevent notify being called
-    mailer = instance_double(ActionMailer::MessageDelivery)
-    allow(mailer).to receive(:deliver_now)
-
-    allow(UserUpgradeRequestMailer).to receive(:upgrade_request_email).with(
-      user_email: trial_user.email,
-    ).and_return(mailer)
-  end
-
   it "A trial user can request an upgrade when they declare they meet the requirements" do
     login_as trial_user
     visit_upgrade_page
