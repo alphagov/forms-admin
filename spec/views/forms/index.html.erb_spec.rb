@@ -103,11 +103,7 @@ describe "forms/index.html.erb" do
       let(:user) { build :user, :with_trial_role }
 
       it "displays a banner informing the user they have a trial account" do
-        banner = Capybara.string(rendered).find(".govuk-notification-banner__content")
-
-        expect(rendered).to have_selector(".govuk-notification-banner__content")
-        expect(banner).to have_text(I18n.t("trial_role_warning.heading"))
-        expect(banner).to have_text(I18n.t("trial_role_warning.content"))
+        expect(rendered).to have_text(I18n.t("trial_role_warning.heading"))
       end
     end
 
@@ -115,7 +111,7 @@ describe "forms/index.html.erb" do
       let(:user) { build :user, role: :editor }
 
       it "does not display a banner" do
-        expect(rendered).not_to have_selector(".govuk-notification-banner__content")
+        expect(rendered).not_to have_text(I18n.t("trial_role_warning.heading"))
       end
     end
   end

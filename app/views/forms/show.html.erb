@@ -4,6 +4,8 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <%= render TrialRoleWarningComponent::View.new(link_url: user_upgrade_request_path) if @current_user.trial? %>
+
     <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
       <span class="govuk-caption-l"><%= @form.name %></span><span class="govuk-visually-hidden"> - </span>
       <%= @form.has_live_version ? t("forms.form_overview.title_edit") : t("forms.form_overview.title_create") %>

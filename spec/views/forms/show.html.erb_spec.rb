@@ -1,10 +1,12 @@
 require "rails_helper"
 
 describe "forms/show.html.erb" do
+  let(:user) { build :user, role: :editor }
   let(:form) { OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft", pages:) }
   let(:pages) { [{ id: 183, question_text: "What is your address?", hint_text: "", answer_type: "address", next_page: nil }] }
 
   before do
+    assign(:current_user, user)
     assign(:form, form)
     assign(:task_status_counts, { completed: 12, total: 20 })
     render template: "forms/show"
@@ -52,6 +54,22 @@ describe "forms/show.html.erb" do
 
     it "does not contain a link to delete the form" do
       expect(rendered).not_to have_link("Delete draft form", href: delete_form_path(2))
+    end
+  end
+
+  context "and a user has the trial role" do
+    let(:user) { build :user, :with_trial_role }
+
+    it "displays a banner informing the user they have a trial account" do
+      expect(rendered).to have_text(I18n.t("trial_role_warning.heading"))
+    end
+  end
+
+  context "and a user does not have the trial role" do
+    let(:user) { build :user, role: :editor }
+
+    it "does not display a banner" do
+      expect(rendered).not_to have_text(I18n.t("trial_role_warning.heading"))
     end
   end
 end

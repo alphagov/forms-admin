@@ -9,6 +9,7 @@ describe "Set or change a user's role", type: :feature do
     create :organisation, id: 1, slug: "test-org"
     [build(:form, id: 1, creator_id: 1, organisation_id: 1, name: "Org form")]
   end
+
   let(:trial_forms) do
     [build(:form, id: 2, creator_id: 2, organisation_id: nil, name: "Trial form")]
   end
