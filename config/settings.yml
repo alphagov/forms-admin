@@ -17,6 +17,8 @@ forms_runner:
 govuk_notify:
   api_key: changeme
   submission_email_confirmation_code_email_template_id: ce2638ab-754c-416d-8df6-c0ccb5e1a688
+  user_upgrade_template_id: 5ec25494-c045-4cf6-9009-2f122e3339f4
+  zendesk_reply_to_id: 0acefa17-04b5-4614-a2ad-6c7f17dd26ab
 
 # When set to true, any capybara tests will run chrome normally rather than in headless mode.
 show_browser_during_tests: false
