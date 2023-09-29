@@ -6,7 +6,8 @@ const store = {
   authenticityToken: null,
   csrfToken: null,
   liveRegion: null,
-  i18n: null
+  i18n: null,
+  errorArea: null
 }
 
 const setLoadingStatus = () => {
@@ -46,6 +47,13 @@ const triggerAjaxMarkdownPreview = async () => {
       // insert the preview into the DOM
       const json = await response.json()
       store.target.innerHTML = json.preview_html
+      if (json.errors.length > 0) {
+        addErrorToField(json.errors[0])
+        addErrorClass()
+      } else {
+        clearErrorsFromField()
+        removeErrorClass()
+      }
       addNotification('Preview updated.')
     } else {
       throw new Error('No endpoint set')
@@ -92,6 +100,56 @@ const addNotification = text => {
   }, 5000)
 }
 
+const createErrorArea = () => {
+  // Use existing error area if there's a server side error present on the field
+  store.errorArea =
+    store.source
+      .closest('.govuk-form-group')
+      ?.querySelector('.govuk-error-message') ?? document.createElement('p')
+  store.errorArea.classList.add(
+    'govuk-error-message',
+    'app-markdown-editor__error-message'
+  )
+  store.source.closest('.govuk-form-group').prepend(store.errorArea)
+  setAriaAttributesForError()
+}
+
+const setAriaAttributesForError = () => {
+  if (!store.errorArea.getAttribute('id')) {
+    const id = `${store.source.getAttribute('id')}-error`
+    store.errorArea.setAttribute('id', id)
+    store.source.setAttribute(
+      'aria-describedby',
+      `${id} ${store.source.getAttribute('aria-describedby')}`
+    )
+  }
+  store.errorArea.setAttribute('aria-live', 'polite')
+}
+
+const addErrorToField = error => {
+  if (!store.errorArea) createErrorArea()
+  store.errorArea.innerHTML = `<span class="govuk-visually-hidden">Error:</span> ${error}`
+}
+
+const clearErrorsFromField = () => {
+  if (!store.errorArea) createErrorArea()
+  store.errorArea.innerHTML = ''
+}
+
+const addErrorClass = () => {
+  store.source
+    .closest('.govuk-form-group')
+    ?.classList.add('govuk-form-group--error')
+  store.source.classList.add('govuk-textarea--error')
+}
+
+const removeErrorClass = () => {
+  store.source
+    .closest('.govuk-form-group--error')
+    ?.classList.remove('govuk-form-group--error')
+  store.source.classList.remove('govuk-textarea--error')
+}
+
 /**
  * Submits markdown held in the source element to the endpoint when the source changes, and replaces the target element's content with the result of the request.
  * @param {HTMLElement} target - The element where the markdown preview should be rendered.
@@ -110,7 +168,9 @@ const ajaxMarkdownPreview = (target, source, endpoint, i18n) => {
   store.csrfToken = document
     .querySelector('meta[name="csrf-token"]')
     ?.getAttribute('content')
+
   addLiveRegion()
+  createErrorArea()
 
   // run on page load
   setLoadingStatus()
