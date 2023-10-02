@@ -10,9 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_02_102230) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_02_063756) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "draft_questions", force: :cascade do |t|
+    t.integer "form_id"
+    t.bigint "user_id", null: false
+    t.integer "page_id"
+    t.text "answer_type"
+    t.text "question_text"
+    t.text "hint_text"
+    t.boolean "is_optional"
+    t.text "page_heading"
+    t.text "guidance_markdown"
+    t.jsonb "answer_settings", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["form_id"], name: "index_draft_questions_on_form_id"
+    t.index ["user_id"], name: "index_draft_questions_on_user_id"
+  end
 
   create_table "form_submission_emails", force: :cascade do |t|
     t.integer "form_id"
@@ -72,5 +89,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_02_102230) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "draft_questions", "users"
   add_foreign_key "users", "organisations"
 end
