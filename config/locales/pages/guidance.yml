@@ -12,7 +12,7 @@ en:
     errors:
       models:
         pages/guidance_form:
-          attributes:
+          attributes: &guidance_validation
             page_heading:
               blank: Enter a page heading
               too_long: "Page heading must be %{count} characters or less"
@@ -20,3 +20,8 @@ en:
               blank: Enter guidance text
               unsupported_markdown_syntax: Guidance text can only contain formatting for links, subheadings (##), bulleted lists (*), or numbered lists (1.)
               too_long: Guidance text must be 5,000 characters or less
+  activerecord:
+    errors:
+      models:
+        draft_question:
+          attributes: *guidance_validation
