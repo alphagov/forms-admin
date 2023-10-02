@@ -64,6 +64,7 @@ module FormsAdmin
         h[:request_id] = event.payload[:request_id]
         h[:user_id] = event.payload[:user_id]
         h[:form_id] = event.payload[:form_id] if event.payload[:form_id]
+        h[:page_id] = event.payload[:page_id] if event.payload[:page_id]
         h[:exception] = event.payload[:exception] if event.payload[:exception]
       end
     end

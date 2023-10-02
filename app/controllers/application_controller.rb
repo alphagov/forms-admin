@@ -46,6 +46,7 @@ class ApplicationController < ActionController::Base
     payload[:request_id] = request.request_id
     payload[:user_ip] = user_ip(request.env.fetch("HTTP_X_FORWARDED_FOR", ""))
     payload[:form_id] = params[:form_id] if params[:form_id].present?
+    payload[:page_id] = params[:page_id] if params[:page_id].present?
   end
 
   def clear_questions_session_data
