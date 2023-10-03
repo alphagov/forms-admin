@@ -24,7 +24,7 @@ feature "Make changes live", type: :feature do
       mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
       mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
       mock.get "/api/v1/forms/1/live", req_headers, form.to_json(include: [:pages]), 200
-      mock.post "/api/v1/forms/1/make-live", post_headers, { success: true }.to_json, 200
+      mock.post "/api/v1/forms/1/make-live", post_headers, form.to_json(include: [:pages]), 200
     end
 
     login_as_editor_user

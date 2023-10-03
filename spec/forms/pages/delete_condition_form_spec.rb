@@ -31,7 +31,7 @@ RSpec.describe Pages::DeleteConditionForm, type: :model do
     context "when validation pass" do
       it "destroys a condition" do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.delete "/api/v1/forms/#{form.id}/pages/#{page.id}/conditions/", delete_headers, { success: true }.to_json, 200
+          mock.delete "/api/v1/forms/#{form.id}/pages/#{page.id}/conditions/", delete_headers, nil, 204
         end
 
         delete_condition_form.confirm_deletion = "true"

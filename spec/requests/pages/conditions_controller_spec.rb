@@ -388,7 +388,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
         mock.get "/api/v1/forms/1/pages/#{selected_page.id}", req_headers, selected_page.to_json, 200
         mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", req_headers, condition.to_json, 200
-        mock.delete "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", req_headers, { success: true }, 200
+        mock.delete "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", req_headers, nil, 204
       end
 
       if expected_to_raise_error

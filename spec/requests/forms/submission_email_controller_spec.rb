@@ -29,7 +29,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms", req_headers, [form].to_json, 200
       mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-      mock.put "/api/v1/forms/1", post_headers, { success: true }.to_json, 200
+      mock.put "/api/v1/forms/1", post_headers, form.to_json, 200
     end
 
     login_as user

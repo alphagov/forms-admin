@@ -68,8 +68,8 @@ RSpec.describe Pages::ConditionsForm, type: :model do
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.post "/api/v1/forms/1/pages/2/conditions", post_headers, { success: true }.to_json, 200
-          mock.put "/api/v1/forms/1/pages/2/conditions/3", post_headers, { success: true }.to_json, 200
+          mock.post "/api/v1/forms/1/pages/2/conditions", post_headers, condition.to_json, 200
+          mock.put "/api/v1/forms/1/pages/2/conditions/3", post_headers, condition.to_json, 200
         end
 
         conditions_form.answer_value = "England"
