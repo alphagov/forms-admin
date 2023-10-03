@@ -276,7 +276,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
     end
 
     it "returns a JSON object containing the converted HTML" do
-      expect(response.body).to eq({ preview_html: "<h3 class=\"govuk-heading-s\">Markdown</h3>" }.to_json)
+      expect(response.body).to eq({ preview_html: "<h3 class=\"govuk-heading-s\">Markdown</h3>", errors: [] }.to_json)
     end
 
     it "returns 200" do
@@ -287,7 +287,19 @@ RSpec.describe Pages::GuidanceController, type: :request do
       let(:guidance_markdown) { "" }
 
       it "returns a JSON object containing the converted HTML" do
-        expect(response.body).to eq({ preview_html: I18n.t("guidance.no_guidance_added_html") }.to_json)
+        expect(response.body).to eq({ preview_html: I18n.t("guidance.no_guidance_added_html"), errors: [] }.to_json)
+      end
+
+      it "returns 200" do
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context "when markdown contains forbidden syntax" do
+      let(:guidance_markdown) { "# A level one heading" }
+
+      it "returns a JSON object containing the converted HTML" do
+        expect(response.body).to eq({ preview_html: "<p class=\"govuk-body\">A level one heading</p>", errors: [I18n.t("activemodel.errors.models.pages/guidance_form.attributes.guidance_markdown.unsupported_markdown_syntax")] }.to_json)
       end
 
       it "returns 200" do
