@@ -6,11 +6,12 @@ describe "pages/edit.html.erb" do
   before do
     # Initialize models
     page = Page.new(id: 1, question_text:, form_id: 1, answer_type: "email", answer_settings: nil)
+    question_form = Pages::QuestionForm.new(page_id: 1, question_text:, form_id: 1, answer_type: "email", answer_settings: nil)
     form = Form.new(id: 1, name: "Form 1", form_id: 1, pages: [page])
     current_user = OpenStruct.new(uid: "123456")
 
     # If models aren't persisted, they won't work with form builders correctly
-    allow(page).to receive(:persisted?).and_return(true)
+    allow(question_form).to receive(:persisted?).and_return(true)
     allow(form).to receive(:persisted?).and_return(true)
     allow(view).to receive(:type_of_answer_edit_path).and_return("/type-of-answer")
     allow(view).to receive(:selections_settings_edit_path).and_return("/selections_settings")
@@ -22,6 +23,7 @@ describe "pages/edit.html.erb" do
     # Assign instance variables so they can be accessed from views
     assign(:form, form)
     assign(:page, page)
+    assign(:question_form, question_form)
     assign(:current_user, current_user)
     assign(:answer_types, [])
 

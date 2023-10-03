@@ -53,7 +53,7 @@ module Forms
         @url = destroy_page_path(@form, @page)
         @confirm_deletion_legend = t("forms_delete_confirmation_form.confirm_deletion_page")
         @item_name = @page.question_text
-        @back_url = edit_page_path(@form, @page)
+        @back_url = edit_question_path(@form, @page)
       else
         @url = destroy_form_path(@form)
         @confirm_deletion_legend = t("forms_delete_confirmation_form.confirm_deletion_form")

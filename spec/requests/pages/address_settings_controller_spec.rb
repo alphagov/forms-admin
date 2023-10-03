@@ -78,7 +78,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
       end
 
       it "redirects the user to the edit question page" do
-        expect(response).to redirect_to new_page_path(form.id)
+        expect(response).to redirect_to new_question_path(form.id)
       end
     end
   end
@@ -149,7 +149,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
       end
 
       it "redirects the user to the edit question page" do
-        expect(response).to redirect_to edit_page_path(form.id, page.id)
+        expect(response).to redirect_to edit_question_path(form.id, page.id)
       end
     end
 

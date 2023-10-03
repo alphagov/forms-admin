@@ -14,7 +14,7 @@ class Pages::AddressSettingsController < PagesController
     @back_link_url = type_of_answer_new_path(@form)
 
     if @address_settings_form.submit(session)
-      redirect_to new_page_path(@form)
+      redirect_to new_question_path(@form)
     else
       render address_settings_view
     end
@@ -38,7 +38,7 @@ class Pages::AddressSettingsController < PagesController
     @back_link_url = type_of_answer_edit_path(@form)
 
     if @address_settings_form.submit(session)
-      redirect_to edit_page_path(@form)
+      redirect_to edit_question_path(@form)
     else
       render address_settings_view
     end
