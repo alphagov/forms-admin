@@ -11,7 +11,7 @@ end
 FactoryBot.define do
   factory :page, class: "Page" do
     sequence(:id) { |n| n }
-    question_text { Faker::Lorem.question }
+    question_text { Faker::Lorem.question.truncate(250) }
     answer_type { Page::ANSWER_TYPES.reject { |item| Page::ANSWER_TYPES_WITH_SETTINGS.include? item }.sample }
     is_optional { nil }
     answer_settings { nil }
@@ -24,11 +24,11 @@ FactoryBot.define do
     guidance_markdown { nil }
 
     trait :with_hints do
-      hint_text { Faker::Quote.yoda }
+      hint_text { Faker::Quote.yoda.truncate(500) }
     end
 
     trait :with_guidance do
-      page_heading { Faker::Quote.yoda }
+      page_heading { Faker::Quote.yoda.truncate(250) }
       guidance_markdown { "## List of items \n\n\n #{Faker::Markdown.ordered_list}" }
     end
 
