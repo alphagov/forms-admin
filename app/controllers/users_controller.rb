@@ -15,7 +15,7 @@ class UsersController < ApplicationController
         user.organisation&.name || "",
         user.has_access ? 0 : 1,
         roles.index(user.role),
-        user.name,
+        user.name || "",
       ]
     end
 

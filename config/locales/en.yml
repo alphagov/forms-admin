@@ -756,6 +756,7 @@ en:
         description: Will be able to use GOV.UK Forms
         name: Permitted
     index:
+      name_blank: No name set
       organisation_blank: No organisation set
       table_headings:
         access: Access
