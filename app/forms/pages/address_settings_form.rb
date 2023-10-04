@@ -1,5 +1,5 @@
 class Pages::AddressSettingsForm < BaseForm
-  attr_accessor :uk_address, :international_address, :form, :page
+  attr_accessor :uk_address, :international_address
 
   INPUT_TYPES = %w[uk_address international_address].freeze
 

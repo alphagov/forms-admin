@@ -4,7 +4,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
 
-  let(:type_of_answer_form) { build :type_of_answer_form, form: }
+  let(:type_of_answer_form) { build :type_of_answer_form }
 
   let(:req_headers) do
     {
@@ -31,7 +31,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
       end
 
-      get type_of_answer_new_path(form_id: type_of_answer_form.form.id)
+      get type_of_answer_new_path(form_id: form.id)
     end
 
     it "reads the existing form" do
@@ -40,7 +40,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
     it "sets an instance variable for type_of_answer_path" do
       path = assigns(:type_of_answer_path)
-      expect(path).to eq type_of_answer_new_path(type_of_answer_form.form.id)
+      expect(path).to eq type_of_answer_new_path(form.id)
     end
 
     it "renders the template" do
@@ -62,7 +62,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       end
 
       context "when answer type is not selection" do
-        let(:type_of_answer_form) { build :type_of_answer_form, :with_simple_answer_type, form: }
+        let(:type_of_answer_form) { build :type_of_answer_form, :with_simple_answer_type }
 
         it "saves the answer type to session" do
           expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
@@ -74,7 +74,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       end
 
       context "when answer type is selection" do
-        let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "selection", form: }
+        let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "selection" }
 
         before do
           post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
@@ -90,7 +90,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       end
 
       context "when answer type is text" do
-        let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "text", form: }
+        let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "text" }
 
         before do
           post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
@@ -106,7 +106,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       end
 
       context "when answer type is date" do
-        let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "date", form: }
+        let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "date" }
 
         before do
           post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
@@ -122,7 +122,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       end
 
       context "when answer type is address" do
-        let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "address", form: }
+        let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "address" }
 
         before do
           post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
@@ -138,7 +138,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       end
 
       context "when answer type is name" do
-        let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "name", form: }
+        let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "name" }
 
         before do
           post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
@@ -189,7 +189,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
     it "sets an instance variable for type_of_answer_path" do
       path = assigns(:type_of_answer_path)
-      expect(path).to eq type_of_answer_edit_path(type_of_answer_form.form.id)
+      expect(path).to eq type_of_answer_edit_path(form.id)
     end
 
     it "renders the template" do

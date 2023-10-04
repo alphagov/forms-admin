@@ -4,7 +4,7 @@ RSpec.describe Pages::TextSettingsController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
 
-  let(:text_settings_form) { build :text_settings_form, form: }
+  let(:text_settings_form) { build :text_settings_form }
 
   let(:req_headers) do
     {
@@ -31,7 +31,7 @@ RSpec.describe Pages::TextSettingsController, type: :request do
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
       end
 
-      get text_settings_new_path(form_id: text_settings_form.form.id)
+      get text_settings_new_path(form_id: form.id)
     end
 
     it "reads the existing form" do
@@ -40,7 +40,7 @@ RSpec.describe Pages::TextSettingsController, type: :request do
 
     it "sets an instance variable for text_settings_path" do
       path = assigns(:text_settings_path)
-      expect(path).to eq text_settings_new_path(text_settings_form.form.id)
+      expect(path).to eq text_settings_new_path(form.id)
     end
 
     it "renders the template" do
@@ -71,7 +71,7 @@ RSpec.describe Pages::TextSettingsController, type: :request do
         post text_settings_create_path form_id: form.id, params: { pages_text_settings_form: { input_type: text_settings_form.input_type } }
       end
 
-      let(:text_settings_form) { build :text_settings_form, form: }
+      let(:text_settings_form) { build :text_settings_form }
 
       it "saves the input type to session" do
         expect(session[:page][:answer_settings]).to eq({ input_type: text_settings_form.input_type })
@@ -107,7 +107,7 @@ RSpec.describe Pages::TextSettingsController, type: :request do
 
     it "sets an instance variable for text_settings_path" do
       path = assigns(:text_settings_path)
-      expect(path).to eq text_settings_edit_path(text_settings_form.form.id)
+      expect(path).to eq text_settings_edit_path(form.id)
     end
 
     it "renders the template" do

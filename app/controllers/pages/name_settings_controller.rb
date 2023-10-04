@@ -24,7 +24,7 @@ class Pages::NameSettingsController < PagesController
     page.load_from_session(session, %i[answer_type answer_settings])
     input_type = @page&.answer_settings&.input_type
     title_needed = @page&.answer_settings&.title_needed
-    @name_settings_form = Pages::NameSettingsForm.new(input_type:, title_needed:, page: @page)
+    @name_settings_form = Pages::NameSettingsForm.new(input_type:, title_needed:)
     @name_settings_path = name_settings_update_path(@form)
     @back_link_url = type_of_answer_edit_path(@form)
     render name_settings_view
@@ -46,8 +46,7 @@ class Pages::NameSettingsController < PagesController
 private
 
   def name_settings_form_params
-    form = Form.find(params[:form_id])
-    params.require(:pages_name_settings_form).permit(:input_type, :title_needed).merge(form:)
+    params.require(:pages_name_settings_form).permit(:input_type, :title_needed)
   end
 
   def name_settings_view

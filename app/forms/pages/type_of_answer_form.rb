@@ -1,5 +1,5 @@
 class Pages::TypeOfAnswerForm < BaseForm
-  attr_accessor :answer_type, :form, :page
+  attr_accessor :answer_type
 
   validates :answer_type, presence: true, inclusion: { in: Page::ANSWER_TYPES }
 

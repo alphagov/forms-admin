@@ -1,5 +1,5 @@
 class Pages::DateSettingsForm < BaseForm
-  attr_accessor :input_type, :form, :page
+  attr_accessor :input_type
 
   INPUT_TYPES = %w[date_of_birth other_date].freeze
 

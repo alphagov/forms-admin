@@ -4,7 +4,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
 
-  let(:address_settings_form) { build :address_settings_form, form: }
+  let(:address_settings_form) { build :address_settings_form }
 
   let(:req_headers) do
     {
@@ -31,7 +31,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
       end
 
-      get address_settings_new_path(form_id: address_settings_form.form.id)
+      get address_settings_new_path(form_id: form.id)
     end
 
     it "reads the existing form" do
@@ -40,7 +40,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
     it "sets an instance variable for address_settings_path" do
       path = assigns(:address_settings_path)
-      expect(path).to eq address_settings_new_path(address_settings_form.form.id)
+      expect(path).to eq address_settings_new_path(form.id)
     end
 
     it "renders the template" do
@@ -71,7 +71,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
         post address_settings_create_path form_id: form.id, params: { pages_address_settings_form: { uk_address: address_settings_form.uk_address, international_address: address_settings_form.international_address } }
       end
 
-      let(:address_settings_form) { build :address_settings_form, form: }
+      let(:address_settings_form) { build :address_settings_form }
 
       it "saves the input type to session" do
         expect(session[:page][:answer_settings]).to eq({ input_type: { uk_address: address_settings_form.uk_address, international_address: address_settings_form.international_address } })
@@ -108,7 +108,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
     it "sets an instance variable for address_settings_path" do
       path = assigns(:address_settings_path)
-      expect(path).to eq address_settings_edit_path(address_settings_form.form.id)
+      expect(path).to eq address_settings_edit_path(form.id)
     end
 
     it "renders the template" do
