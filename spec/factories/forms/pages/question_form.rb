@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :question_form, class: "Pages::QuestionForm" do
-    answer_type { Page::ANSWER_TYPES.reject { |item| Page::ANSWER_TYPES_WITH_SETTINGS.include? item }.sample }
+    answer_type { Page::ANSWER_TYPES_WITHOUT_SETTINGS.sample }
     question_text { Faker::Lorem.question }
     hint_text { nil }
     is_optional { nil }

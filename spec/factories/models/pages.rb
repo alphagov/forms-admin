@@ -12,7 +12,7 @@ FactoryBot.define do
   factory :page, class: "Page" do
     sequence(:id) { |n| n }
     question_text { Faker::Lorem.question.truncate(250) }
-    answer_type { Page::ANSWER_TYPES.reject { |item| Page::ANSWER_TYPES_WITH_SETTINGS.include? item }.sample }
+    answer_type { Page::ANSWER_TYPES_WITHOUT_SETTINGS.sample }
     is_optional { nil }
     answer_settings { nil }
     hint_text { nil }
@@ -33,7 +33,7 @@ FactoryBot.define do
     end
 
     trait :with_simple_answer_type do
-      answer_type { Page::ANSWER_TYPES.reject { |item| Page::ANSWER_TYPES_WITH_SETTINGS.include? item }.sample }
+      answer_type { Page::ANSWER_TYPES_WITHOUT_SETTINGS.sample }
     end
 
     trait :with_selections_settings do
