@@ -4,7 +4,7 @@ FactoryBot.define do
     form { build :form }
 
     trait :with_simple_answer_type do
-      answer_type { Page::ANSWER_TYPES.reject { |item| Page::ANSWER_TYPES_WITH_SETTINGS.include? item }.sample }
+      answer_type { Page::ANSWER_TYPES_WITHOUT_SETTINGS.sample }
     end
   end
 end

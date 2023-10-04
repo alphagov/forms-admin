@@ -10,15 +10,16 @@
     </h1>
 
     <%= render partial: 'form', locals: { is_new_page: false,
-                                             form_object: @form,
-                                             page_object: @page,
-                                             action_path: update_page_path(@form, @page) ,
-                                             change_answer_type_path: type_of_answer_edit_path(@form),
-                                             change_selections_settings_path: selections_settings_edit_path(@form),
-                                             change_text_settings_path: text_settings_edit_path(@form),
-                                             change_date_settings_path: date_settings_edit_path(@form),
-                                             change_address_settings_path: address_settings_edit_path(@form),
-                                             change_name_settings_path: name_settings_edit_path(@form)
+                                          form_object: @form,
+                                          page_object: @page,
+                                          question_form: @question_form,
+                                          action_path: update_question_path(@form.id, @page.id) ,
+                                          change_answer_type_path: type_of_answer_edit_path(@form),
+                                          change_selections_settings_path: selections_settings_edit_path(@form),
+                                          change_text_settings_path: text_settings_edit_path(@form),
+                                          change_date_settings_path: date_settings_edit_path(@form),
+                                          change_address_settings_path: address_settings_edit_path(@form),
+                                          change_name_settings_path: name_settings_edit_path(@form)
     } %>
 
     <p>

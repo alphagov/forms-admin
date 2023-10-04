@@ -68,8 +68,8 @@ Rails.application.routes.draw do
         post "/name-settings" => "pages/name_settings#create", as: :name_settings_create
         get "/question_text" => "pages/question_text#new", as: :question_text_new
         post "/question_text" => "pages/question_text#create", as: :question_text_create
-        get "/" => "pages#new", as: :new_page
-        post "/" => "pages#create", as: :create_page
+        get "/question" => "pages/questions#new", as: :new_question
+        post "/question" => "pages/questions#create", as: :create_question
       end
 
       get "/new-condition" => "pages/conditions#routing_page", as: :routing_page
@@ -98,10 +98,10 @@ Rails.application.routes.draw do
           post "/address-settings" => "pages/address_settings#update", as: :address_settings_update
           get "/name-settings" => "pages/name_settings#edit", as: :name_settings_edit
           post "/name-settings" => "pages/name_settings#update", as: :name_settings_update
-          get "/" => "pages#edit", as: :edit_page
-          patch "/" => "pages#update", as: :update_page
           get "/guidance" => "pages/guidance#edit", as: :guidance_edit
           post "/guidance" => "pages/guidance#update", as: :guidance_update
+          get "/question" => "pages/questions#edit", as: :edit_question
+          post "/question" => "pages/questions#update", as: :update_question
         end
 
         scope "/delete" do

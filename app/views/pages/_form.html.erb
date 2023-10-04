@@ -1,4 +1,4 @@
-<%= form_with model: [form_object, page_object], url: action_path do |f| %>
+<%= form_with model: [form_object, question_form], url: action_path do |f| %>
   <%= f.hidden_field :answer_type if is_new_page %>
 
   <%= f.govuk_error_summary %>
@@ -31,7 +31,7 @@
     <% end %>
   <% end %>
 
-  <% if page_object.answer_type == 'selection' %>
+  <% if question_form.answer_type == 'selection' %>
     <%= f.hidden_field :is_optional %>
   <% else %>
     <%= f.govuk_check_boxes_fieldset :is_optional, multiple: false, legend: { tag: "h2", text: t("pages.add_rules_legend") , size: 'm' } do %>

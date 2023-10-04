@@ -1,14 +1,22 @@
 require "rails_helper"
 
 describe "pages/_form.html.erb", type: :view do
-  let(:question) { build :page, :with_hints, :with_simple_answer_type, id: 1, form_id: 1 }
-  let(:form) { build :form, id: 1, pages: [question] }
+  let(:page) { build :page, :with_hints, :with_simple_answer_type, id: 2, form_id: form.id }
+  let(:question_form) do
+    build :question_form,
+          form_id: form.id,
+          answer_type: page.answer_type,
+          question_text: page.question_text,
+          hint_text: page.hint_text
+  end
+  let(:form) { build :form, id: 1 }
   let(:is_new_page) { true }
 
   before do
     render partial: "pages/form", locals: { is_new_page:,
                                             form_object: form,
-                                            page_object: question,
+                                            page_object: page,
+                                            question_form:,
                                             action_path: "http://example.com",
                                             change_answer_type_path: "http://change-me-please.com",
                                             change_selections_settings_path: "http://change-me-please.com",
@@ -23,19 +31,19 @@ describe "pages/_form.html.erb", type: :view do
   end
 
   it "has a hidden field for the answer type" do
-    expect(rendered).to have_field("page[answer_type]", with: question.answer_type, type: :hidden)
+    expect(rendered).to have_field("pages_question_form[answer_type]", with: question_form.answer_type, type: :hidden)
   end
 
   it "has a field with the question text" do
-    expect(rendered).to have_field(type: "text", with: question.question_text)
+    expect(rendered).to have_field(type: "text", with: question_form.question_text)
   end
 
   it "has a field with the hint text" do
-    expect(rendered).to have_field(type: "textarea", with: question.hint_text)
+    expect(rendered).to have_field(type: "textarea", with: question_form.hint_text)
   end
 
   it "has an unchecked optional checkbox" do
-    expect(rendered).to have_unchecked_field("page[is_optional]")
+    expect(rendered).to have_unchecked_field("pages_question_form[is_optional]")
   end
 
   it "has a link to change the answer type" do
@@ -63,7 +71,7 @@ describe "pages/_form.html.erb", type: :view do
       let(:is_new_page) { false }
 
       it "contains a link to add guidance" do
-        expect(rendered).to have_link(text: I18n.t("guidance.add_guidance"), href: guidance_edit_path(form_id: form.id, page_id: question.id))
+        expect(rendered).to have_link(text: I18n.t("guidance.add_guidance"), href: guidance_edit_path(form_id: form.id, page_id: page.id))
       end
     end
   end
@@ -72,7 +80,7 @@ describe "pages/_form.html.erb", type: :view do
     let(:is_new_page) { false }
 
     it "has no hidden field for the answer type" do
-      expect(rendered).not_to have_field("page[answer_type]", type: :hidden)
+      expect(rendered).not_to have_field("question_form[answer_type]", type: :hidden)
     end
 
     it "has a delete button" do

@@ -48,11 +48,11 @@ RSpec.describe Pages::GuidanceController, type: :request do
     end
 
     it "links back to the previous question page" do
-      expect(Capybara.string(response.body)).to have_link("Back", href: new_page_path(form.id))
+      expect(Capybara.string(response.body)).to have_link("Back", href: new_question_path(form.id))
     end
 
     it "includes a cancel link" do
-      expect(Capybara.string(response.body)).to have_link(I18n.t("cancel"), href: new_page_path(form.id))
+      expect(Capybara.string(response.body)).to have_link(I18n.t("cancel"), href: new_question_path(form.id))
     end
   end
 
@@ -87,11 +87,11 @@ RSpec.describe Pages::GuidanceController, type: :request do
       end
 
       it "links back to the previous question page" do
-        expect(Capybara.string(response.body)).to have_link("Back", href: new_page_path(form.id))
+        expect(Capybara.string(response.body)).to have_link("Back", href: new_question_path(form.id))
       end
 
       it "includes a cancel link" do
-        expect(Capybara.string(response.body)).to have_link(I18n.t("cancel"), href: new_page_path(form.id))
+        expect(Capybara.string(response.body)).to have_link(I18n.t("cancel"), href: new_question_path(form.id))
       end
 
       context "when markdown is blank" do
@@ -128,7 +128,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
       end
 
       it "redirects the user to the new question page" do
-        expect(response).to redirect_to new_page_path(form.id)
+        expect(response).to redirect_to new_question_path(form.id)
       end
 
       context "when data is invalid" do
@@ -169,11 +169,11 @@ RSpec.describe Pages::GuidanceController, type: :request do
     end
 
     it "links back to the previous question page" do
-      expect(Capybara.string(response.body)).to have_link("Back", href: edit_page_path(form.id, page.id))
+      expect(Capybara.string(response.body)).to have_link("Back", href: edit_question_path(form.id, page.id))
     end
 
     it "includes a cancel link" do
-      expect(Capybara.string(response.body)).to have_link(I18n.t("cancel"), href: edit_page_path(form.id, page.id))
+      expect(Capybara.string(response.body)).to have_link(I18n.t("cancel"), href: edit_question_path(form.id, page.id))
     end
   end
 
@@ -210,11 +210,11 @@ RSpec.describe Pages::GuidanceController, type: :request do
       end
 
       it "links back to the previous question page" do
-        expect(Capybara.string(response.body)).to have_link("Back", href: edit_page_path(form.id, page.id))
+        expect(Capybara.string(response.body)).to have_link("Back", href: edit_question_path(form.id, page.id))
       end
 
       it "includes a cancel link" do
-        expect(Capybara.string(response.body)).to have_link(I18n.t("cancel"), href: edit_page_path(form.id, page.id))
+        expect(Capybara.string(response.body)).to have_link(I18n.t("cancel"), href: edit_question_path(form.id, page.id))
       end
 
       context "when markdown is blank" do
@@ -251,7 +251,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
       end
 
       it "redirects the user to the edit question page" do
-        expect(response).to redirect_to edit_page_path(form.id, page.id)
+        expect(response).to redirect_to edit_question_path(form.id, page.id)
       end
 
       context "when data is invalid" do

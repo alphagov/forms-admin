@@ -20,7 +20,7 @@ class Pages::SelectionsSettingsController < PagesController
       @selections_settings_form.remove(params[:remove].to_i)
       render selection_settings_view
     elsif @selections_settings_form.valid? && @selections_settings_form.submit(session)
-      redirect_to new_page_path(@form)
+      redirect_to new_question_path(@form)
     else
       render selection_settings_view
     end
@@ -30,7 +30,7 @@ class Pages::SelectionsSettingsController < PagesController
     page.load_from_session(session, %i[answer_type answer_settings is_optional])
     @selections_settings_path = selections_settings_update_path(@form)
     @selections_settings_form = Pages::SelectionsSettingsForm.new(load_answer_settings_from_page_object(page))
-    @back_link_url = edit_page_path(@form, page)
+    @back_link_url = edit_question_path(@form, page)
     render selection_settings_view
   end
 
@@ -38,7 +38,7 @@ class Pages::SelectionsSettingsController < PagesController
     @selections_settings_path = selections_settings_update_path(@form)
     answer_settings = load_answer_settings_from_params(selections_settings_form_params)
     @selections_settings_form = Pages::SelectionsSettingsForm.new(answer_settings)
-    @back_link_url = edit_page_path(@form, page)
+    @back_link_url = edit_question_path(@form, page)
 
     if params[:add_another]
       @selections_settings_form.add_another
@@ -48,7 +48,7 @@ class Pages::SelectionsSettingsController < PagesController
       render selection_settings_view
     elsif @selections_settings_form.valid? && @selections_settings_form.submit(session)
 
-      redirect_to edit_page_path(@form)
+      redirect_to edit_question_path(@form)
     else
       render selection_settings_view
     end

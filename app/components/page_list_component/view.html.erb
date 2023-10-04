@@ -25,7 +25,7 @@
                 <% end %>
               </div>
 
-              <%= govuk_link_to edit_page_path(@form_id, page.id) do %>
+              <%= govuk_link_to edit_question_path(@form_id, page.id) do %>
                 <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= page.position %></span>
               <% end %>
 

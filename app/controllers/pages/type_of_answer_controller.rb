@@ -31,7 +31,7 @@ class Pages::TypeOfAnswerController < PagesController
 
     @page.load(answer_type:)
     @type_of_answer_form = Pages::TypeOfAnswerForm.new(answer_type_form_params)
-    return redirect_to edit_page_path(@form) unless answer_type_changed?
+    return redirect_to edit_question_path(@form) unless answer_type_changed?
 
     save_to_session(session)
   end
@@ -59,7 +59,7 @@ private
   end
 
   def default_path(form, action)
-    action == :create ? new_page_path(form) : edit_page_path(form)
+    action == :create ? new_question_path(form) : edit_question_path(form)
   end
 
   def next_page_path(form, answer_type, action)

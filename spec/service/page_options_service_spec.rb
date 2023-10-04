@@ -153,7 +153,7 @@ describe PageOptionsService do
       end
     end
 
-    Page::ANSWER_TYPES.reject { |item| Page::ANSWER_TYPES_WITH_SETTINGS.include? item }.each do |answer_type|
+    Page::ANSWER_TYPES_WITHOUT_SETTINGS.each do |answer_type|
       context "with #{answer_type}" do
         let(:page) { build :page, answer_type: }
 

@@ -69,7 +69,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         end
 
         it "redirects the user to the question details page" do
-          expect(response).to redirect_to new_page_path(form.id)
+          expect(response).to redirect_to new_question_path(form.id)
         end
       end
 
@@ -222,7 +222,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       end
 
       it "redirects the user to the question details page " do
-        expect(response).to redirect_to edit_page_path(form.id, page.id)
+        expect(response).to redirect_to edit_question_path(form.id, page.id)
       end
 
       context "when answer type is selection" do
