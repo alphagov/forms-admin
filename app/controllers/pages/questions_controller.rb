@@ -8,8 +8,6 @@ class Pages::QuestionsController < PagesController
     guidance_markdown = session.dig(:page, :guidance_markdown)
     @question_form = Pages::QuestionForm.new(form_id: @form.id, answer_type:, question_text:, answer_settings:, is_optional:)
     @page = Page.new(form_id: @form.id, question_text:, answer_type:, answer_settings:, is_optional:, page_heading:, guidance_markdown:)
-
-    render "pages/new"
   end
 
   def create
@@ -18,8 +16,8 @@ class Pages::QuestionsController < PagesController
     guidance_markdown = session.dig(:page, :guidance_markdown)
 
     @page = Page.new(page_params.merge(answer_settings:, page_heading:, guidance_markdown:))
-
     @question_form = Pages::QuestionForm.new(page_params.merge(answer_settings:, page_heading:, guidance_markdown:))
+
     if @question_form.valid? && @page.save
       clear_questions_session_data
       handle_submit_action
