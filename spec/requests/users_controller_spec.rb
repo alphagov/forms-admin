@@ -130,6 +130,11 @@ RSpec.describe UsersController, type: :request do
         expect(user.reload.super_admin?).to be true
       end
 
+      it "can update the user's name" do
+        patch user_path(user), params: { user: { name: "Fakey McFakeName" } }
+        expect(user.reload.name).to eq "Fakey McFakeName"
+      end
+
       it "can update whether user has access" do
         patch user_path(user), params: { user: { has_access: false } }
         expect(user.reload.has_access).to be false

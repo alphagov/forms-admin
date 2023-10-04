@@ -77,6 +77,13 @@ describe "users/edit.html.erb" do
       expect(rendered).to have_unchecked_field("Trial")
     end
 
+    it "has a name field" do
+      expect(rendered).to have_field("Name") do |field|
+        expect(field[:autocomplete]).to eq "name"
+        expect(field[:spellcheck]).to eq "false"
+      end
+    end
+
     it "has organisation fields" do
       expect(rendered).to have_select(
         "Organisation", selected: "Test Org", with_options: ["Department For Tests", "Ministry Of Testing", "Test Org"]
