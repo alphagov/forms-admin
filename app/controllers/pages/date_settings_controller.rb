@@ -22,7 +22,7 @@ class Pages::DateSettingsController < PagesController
   def edit
     page.load_from_session(session, %i[answer_type answer_settings])
     input_type = @page&.answer_settings&.input_type
-    @date_settings_form = Pages::DateSettingsForm.new(input_type:, page: @page)
+    @date_settings_form = Pages::DateSettingsForm.new(input_type:)
     @date_settings_path = date_settings_update_path(@form)
     @back_link_url = type_of_answer_edit_path(@form)
     render "pages/date_settings"
@@ -44,7 +44,6 @@ class Pages::DateSettingsController < PagesController
 private
 
   def date_settings_form_params
-    form = Form.find(params[:form_id])
-    params.require(:pages_date_settings_form).permit(:input_type).merge(form:)
+    params.require(:pages_date_settings_form).permit(:input_type)
   end
 end

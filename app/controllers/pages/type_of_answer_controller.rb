@@ -20,7 +20,7 @@ class Pages::TypeOfAnswerController < PagesController
   def edit
     page.load_from_session(session, %i[answer_type])
 
-    @type_of_answer_form = Pages::TypeOfAnswerForm.new(answer_type: @page.answer_type, page: @page)
+    @type_of_answer_form = Pages::TypeOfAnswerForm.new(answer_type: @page.answer_type)
     @type_of_answer_path = type_of_answer_update_path(@form)
     render "pages/type-of-answer"
   end
@@ -80,8 +80,7 @@ private
   end
 
   def answer_type_form_params
-    form = Form.find(params[:form_id])
-    params.require(:pages_type_of_answer_form).permit(:answer_type).merge(form:)
+    params.require(:pages_type_of_answer_form).permit(:answer_type)
   end
 
   def answer_type_changed?

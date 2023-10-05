@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "pages/type_of_answer.html.erb", type: :view do
   let(:form) { build :form, id: 1 }
-  let(:type_of_answer_form) { build :type_of_answer_form, form: }
+  let(:type_of_answer_form) { build :type_of_answer_form }
   let(:answer_types) { Page::ANSWER_TYPES }
   let(:page) { OpenStruct.new(conditions: [], answer_type: "number") }
   let(:question_number) { 1 }
