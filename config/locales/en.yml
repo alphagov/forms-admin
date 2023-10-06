@@ -474,6 +474,23 @@ en:
       numbered_list: Add a numbered list
     update_preview: Update preview
     write_tab_text: Write
+  metrics_summary:
+    date_range: "%{start_date} to %{end_date}"
+    description: If you want to track metrics over a longer period you'll need to make a note of these on the same day each week.
+    errors:
+      error_loading_data_html: |
+        <p>Sorry, there's a problem getting your form's metrics.</p>
+        <p>Try again later.</p>
+      new_form_html: |
+        <p>No metrics are available yet as no-one has started or submitted a form since it went live.</p>
+        <p>Once they have, you'll be able to see the following metrics for the past 7 days:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>Number of forms completed</li>
+          <li>Number of forms started but not completed</li>
+          <li>Completion rate</li>
+        </ul>
+    forms_submitted: Forms submitted
+    heading: 'Form metrics for the past 7 days: %{formatted_date_range}'
   new_condition:
     routing_page_text: If the question
   not_found:

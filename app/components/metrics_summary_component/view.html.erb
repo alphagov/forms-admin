@@ -1,0 +1,15 @@
+<div class="app-metrics">
+  <h2 class="govuk-heading-l"><%= t("metrics_summary.heading", formatted_date_range:) %></h2>
+  <% if error_message.present? %>
+    <div class="govuk-inset-text">
+        <%= error_message.html_safe %>
+    </div>
+  <% else %>
+    <p><%= t("metrics_summary.description") %></p>
+    <div class="app-metrics__container">
+      <div class="app-metrics__big-number">
+        <%= t("metrics_summary.forms_submitted") %> <span class="app-metrics__big-number-number"><%= weekly_submissions %></span>
+      </div>
+    </div>
+  <% end %>
+</div>

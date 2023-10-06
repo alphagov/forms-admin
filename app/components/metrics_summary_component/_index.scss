@@ -1,0 +1,36 @@
+.app-metrics__container {
+  margin-bottom: govuk-spacing(6);
+
+  @include govuk-media-query(tablet) {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(govuk-px-to-rem(100), 1fr));
+    gap: $govuk-gutter;
+  }
+}
+
+.app-metrics__big-number {
+  @include govuk-typography-responsive(19);
+  @include govuk-typography-common;
+
+  padding: govuk-spacing(1) govuk-spacing(0);
+  margin-bottom: govuk-spacing(2);
+
+  @include govuk-media-query(tablet) {
+    @supports (display: grid) {
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: space-between;
+
+      border-top: $govuk-border-width solid $govuk-border-colour;
+      border-bottom: $govuk-border-width solid $govuk-border-colour;
+    }
+  }
+}
+
+.app-metrics__big-number-number {
+  @include govuk-typography-responsive(48);
+  @include govuk-typography-weight-bold;
+
+  display: block;
+  margin-top: govuk-spacing(1);
+}

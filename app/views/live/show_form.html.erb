@@ -4,51 +4,53 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
       <%= form.name %>
     </h1>
-
     <%= render FormStatusTagDescriptionComponent::View.new(status: :live) %>
+
+    <%= render MetricsSummaryComponent::View.new(metrics_data) %>
+
+    <h2 class="govuk-heading-l">Your form</h2>
 
     <p>
       <%= render PreviewLinkComponent::View.new(form.pages, link_to_runner(Settings.forms_runner.url, form.id, form.form_slug, mode: :preview_live)) %>
     </p>
 
     <%= render FormUrlComponent::View.new(link_to_runner(Settings.forms_runner.url, form.id, form.form_slug, mode: :live ))%>
-
-    <h2 class="govuk-heading-m"><%= t('show_live_form.questions') %></h2>
+    <h3 class="govuk-heading-m"><%= t('show_live_form.questions') %></h3>
     <p><%= govuk_link_to t('show_live_form.questions_link', count: form.pages.count), live_form_pages_path(form.id) %></p>
 
     <% if form.declaration_text.present? %>
-      <h2 class="govuk-heading-m"><%= t('show_live_form.declaration') %></h2>
+      <h3 class="govuk-heading-m"><%= t('show_live_form.declaration') %></h3>
       <p><%= form.declaration_text %></p>
       <%= govuk_details(summary_text: t('show_live_form.what_is_declaration'), text: t('show_live_form.declaration_description')) %>
     <% end %>
 
-    <h2 class="govuk-heading-m"><%= t('show_live_form.what_happens_next') %></h2>
+    <h3 class="govuk-heading-m"><%= t('show_live_form.what_happens_next') %></h3>
     <p><%= form.what_happens_next_text %></p>
     <%= govuk_details(summary_text: t('show_live_form.what_is_what_happens_next'), text: t('show_live_form.what_happens_next_description')) %>
 
-    <h2 class="govuk-heading-m"><%= t('show_live_form.submission_email') %></h2>
+    <h3 class="govuk-heading-m"><%= t('show_live_form.submission_email') %></h3>
     <p><%= form.submission_email %></p>
 
-    <h2 class="govuk-heading-m"><%= t('show_live_form.privacy_policy_link') %></h2>
+    <h3 class="govuk-heading-m"><%= t('show_live_form.privacy_policy_link') %></h3>
     <p><%= govuk_link_to(form.privacy_policy_url, form.privacy_policy_url) %></p>
 
-    <h2 class="govuk-heading-m"><%= t('show_live_form.contact_details') %></h2>
+    <h3 class="govuk-heading-m"><%= t('show_live_form.contact_details') %></h3>
 
     <% if form.support_email %>
-      <h3 class="govuk-heading-s"><%= t('show_live_form.support_email') %></h3>
+      <h4 class="govuk-heading-s"><%= t('show_live_form.support_email') %></h4>
       <p><%= form.support_email %></p>
     <% end %>
 
     <% if form.support_phone %>
-      <h3 class="govuk-heading-s"><%= t('show_live_form.support_phone') %></h3>
+      <h4 class="govuk-heading-s"><%= t('show_live_form.support_phone') %></h4>
       <p><%= form.support_phone %></p>
     <% end %>
 
     <% if form.support_url %>
-      <h3 class="govuk-heading-s"><%= t('show_live_form.support_url') %></h3>
+      <h4 class="govuk-heading-s"><%= t('show_live_form.support_url') %></h4>
       <p><%= govuk_link_to form.support_url_text, form.support_url %></p>
     <% end %>
 
