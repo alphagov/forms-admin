@@ -2,7 +2,7 @@
   "name": "app",
   "private": "true",
   "browserslist": [
-    ">0.1%",
+    ">0.1% and not dead",
     "last 2 Chrome versions",
     "last 2 Firefox versions",
     "last 2 Edge versions",
