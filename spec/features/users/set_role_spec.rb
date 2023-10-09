@@ -70,11 +70,14 @@ private
     visit edit_user_path(trial_user.id)
 
     expect(page).to have_css "h1.govuk-heading-l", text: "Edit user"
-    expect(page).to have_text trial_user.name
+    expect(page).to have_text trial_user.email
 
+    fill_in "Name", with: "Test Name"
     fill_in "Organisation", with: "Test Org\n"
     choose("Editor")
     click_button "Save"
+
+    expect(page).not_to have_css ".govuk-error-summary"
   end
 
   def then_i_can_see_the_trial_user_forms

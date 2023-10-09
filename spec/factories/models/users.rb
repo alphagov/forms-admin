@@ -10,6 +10,7 @@ FactoryBot.define do
     trait :with_trial_role do
       role { :trial }
       with_no_org
+      with_no_name
     end
 
     organisation { association :organisation, id: 1, slug: "test-org" }
@@ -32,6 +33,10 @@ FactoryBot.define do
       organisation { nil }
       organisation_slug { nil }
       organisation_content_id { nil }
+    end
+
+    trait :with_no_name do
+      name { nil }
     end
   end
 end

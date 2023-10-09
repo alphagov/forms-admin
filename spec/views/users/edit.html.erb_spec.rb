@@ -14,6 +14,28 @@ describe "users/edit.html.erb" do
     render template: "users/edit"
   end
 
+  describe "page title" do
+    it "is the user's name" do
+      expect(view.content_for(:title)).to eq user.name
+    end
+
+    context "with a user with no name set" do
+      let(:user) { build(:user, :with_no_name, role: :editor, id: 1) }
+
+      it "is the users's email address" do
+        expect(view.content_for(:title)).to eq user.email
+      end
+    end
+
+    context "with a user with a blank name" do
+      let(:user) { build(:user, name: "", role: :editor, id: 1) }
+
+      it "is the users's email address" do
+        expect(view.content_for(:title)).to eq user.email
+      end
+    end
+  end
+
   it "contains page heading" do
     expect(rendered).to have_css("h1.govuk-heading-l", text: /Edit user/)
   end
@@ -55,6 +77,13 @@ describe "users/edit.html.erb" do
       expect(rendered).to have_unchecked_field("Trial")
     end
 
+    it "has a name field" do
+      expect(rendered).to have_field("Name") do |field|
+        expect(field[:autocomplete]).to eq "name"
+        expect(field[:spellcheck]).to eq "false"
+      end
+    end
+
     it "has organisation fields" do
       expect(rendered).to have_select(
         "Organisation", selected: "Test Org", with_options: ["Department For Tests", "Ministry Of Testing", "Test Org"]
@@ -64,6 +93,14 @@ describe "users/edit.html.erb" do
     it "has access fields" do
       expect(rendered).to have_checked_field("Permitted")
       expect(rendered).to have_unchecked_field("Denied")
+    end
+  end
+
+  context "with a user with no name set" do
+    let(:user) { build(:user, :with_no_name, role: :editor, id: 1) }
+
+    it "shows no name set" do
+      expect(rendered).to have_text("No name set")
     end
   end
 

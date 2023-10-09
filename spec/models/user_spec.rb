@@ -188,4 +188,30 @@ describe User, type: :model do
       end
     end
   end
+
+  context "when updating name" do
+    it "is valid to leave name unset" do
+      user = create :user, :with_no_name
+      user.name = nil
+      expect(user.valid?).to be true
+    end
+
+    it "is not valid to unset name if it is already set" do
+      user = create :user, name: "Test User"
+      user.name = nil
+      expect(user.valid?).to be false
+    end
+
+    it "is not valid to leave name unset if changing role to editor" do
+      user = create :user, :with_no_name, role: :trial
+      user.role = :editor
+      expect(user.valid?).to be false
+    end
+
+    it "is not valid to leave name unset if changing role to super admin" do
+      user = create :user, :with_no_name, role: :trial
+      user.role = :super_admin
+      expect(user.valid?).to be false
+    end
+  end
 end

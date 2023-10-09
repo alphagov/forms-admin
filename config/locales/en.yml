@@ -33,6 +33,8 @@ en:
               too_long: Question text must be %{count} characters or less
         user:
           attributes:
+            name:
+              blank: You must enter a name for editor or super admin users
             organisation_id:
               blank: Select the user’s organisation
             role:
@@ -756,6 +758,7 @@ en:
         description: Will be able to use GOV.UK Forms
         name: Permitted
     index:
+      name_blank: No name set
       organisation_blank: No organisation set
       table_headings:
         access: Access

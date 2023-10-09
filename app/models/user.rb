@@ -14,6 +14,7 @@ class User < ApplicationRecord
     trial: "trial",
   }
 
+  validates :name, presence: true, if: :requires_name?
   validates :role, presence: true
   validates :organisation_id, presence: true, if: :requires_organisation?
   validates :has_access, inclusion: [true, false]
@@ -65,7 +66,11 @@ class User < ApplicationRecord
 
 private
 
+  def requires_name?
+    name_was.present? || !trial?
+  end
+
   def requires_organisation?
-    organisation_id_was.present? || role_changed?(to: :editor)
+    organisation_id_was.present? || editor?
   end
 end

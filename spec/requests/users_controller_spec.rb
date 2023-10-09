@@ -130,6 +130,11 @@ RSpec.describe UsersController, type: :request do
         expect(user.reload.super_admin?).to be true
       end
 
+      it "can update the user's name" do
+        patch user_path(user), params: { user: { name: "Fakey McFakeName" } }
+        expect(user.reload.name).to eq "Fakey McFakeName"
+      end
+
       it "can update whether user has access" do
         patch user_path(user), params: { user: { has_access: false } }
         expect(user.reload.has_access).to be false
@@ -147,12 +152,37 @@ RSpec.describe UsersController, type: :request do
         expect(user.reload.role).not_to eq(nil)
       end
 
+      context "when user has a name" do
+        it "does not update user if name is cleared" do
+          put user_path(user), params: { user: { name: nil } }
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response.body).to include "You must enter a name for editor or super admin users"
+          expect(user.reload.organisation).not_to eq(nil)
+        end
+      end
+
       context "when user belongs to an organistion" do
         it "does not update user if organisation is not chosen" do
           put user_path(user), params: { user: { organisation_id: nil } }
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response.body).to include "Select the user’s organisation"
           expect(user.reload.organisation).not_to eq(nil)
+        end
+      end
+
+      context "with a trial user with no name set" do
+        let(:user) { create(:user, :with_trial_role) }
+
+        it "does not return error if name is not chosen and role is not changed" do
+          put user_path(user), params: { user: { role: "trial", name: nil } }
+          expect(response).to redirect_to(users_path)
+          expect(user.reload.name).to eq(nil)
+        end
+
+        it "returns an error if name is not chosen and role is changed to editor" do
+          put user_path(user), params: { user: { role: "editor", name: nil } }
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(user.reload.role).to eq("trial")
         end
       end
 
@@ -169,6 +199,16 @@ RSpec.describe UsersController, type: :request do
           put user_path(user), params: { user: { role: "editor", organisation_id: nil } }
           expect(response).to have_http_status(:unprocessable_entity)
           expect(user.reload.role).to eq("trial")
+        end
+      end
+
+      context "with a user with no name set" do
+        let(:user) { create(:user, :with_no_name) }
+
+        it "does not return error if name is not chosen" do
+          put user_path(user), params: { user: { name: nil } }
+          expect(response).to redirect_to(users_path)
+          expect(user.reload.name).to eq(nil)
         end
       end
 

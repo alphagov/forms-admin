@@ -1,4 +1,4 @@
-<% set_page_title(title_with_error_prefix(@user.name, @user.errors.any?)) %>
+<% set_page_title(title_with_error_prefix(@user.name.present? ? @user.name : @user.email, @user.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(users_path) %>
 
 <div class="govuk-grid-row">
@@ -16,7 +16,7 @@
       <%= govuk_summary_list(actions: false) do |summary_list|
         summary_list.with_row do |row|
           row.with_key { t('users.index.table_headings.name') }
-          row.with_value { @user.name }
+          row.with_value { @user.name || t("users.index.name_blank") }
         end
 
         summary_list.with_row do |row|
@@ -44,6 +44,8 @@
           row.with_value { t("users.has_access.#{@user.has_access}.name") }
         end
       end %>
+
+      <%= f.govuk_text_field :name, label: { size: 'm', tag: 'h2' }, autocomplete: :name, spellcheck: false %>
 
       <%= render DfE::Autocomplete::View.new(
         f,
