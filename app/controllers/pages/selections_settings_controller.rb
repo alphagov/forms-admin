@@ -56,12 +56,14 @@ class Pages::SelectionsSettingsController < PagesController
 
 private
 
-  def convert_to_selection_option(hash)
-    if hash.is_a? Pages::SelectionOption
-      # TODO: remove this once we using activerecord models instead of form objects
-      hash
+  def convert_to_selection_option(input)
+    case input
+    when ActionController::Parameters, Hash
+      OpenStruct.new(input)
+    when String
+      OpenStruct.new(name: input)
     else
-      Pages::SelectionOption.new(hash)
+      input
     end
   end
 

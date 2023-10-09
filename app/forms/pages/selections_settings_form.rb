@@ -1,7 +1,9 @@
 class Pages::SelectionsSettingsForm < BaseForm
   include ActiveModel::Validations::Callbacks
 
-  DEFAULT_OPTIONS = { selection_options: [{ name: "" }, { name: "" }].map { |hash| Pages::SelectionOption.new(hash) }, only_one_option: false, include_none_of_the_above: false }.freeze
+  DEFAULT_OPTIONS = { selection_options: [OpenStruct.new(name: ""), OpenStruct.new(name: "")],
+                      only_one_option: false,
+                      include_none_of_the_above: false }.freeze
 
   attr_accessor :selection_options, :only_one_option, :include_none_of_the_above
 
@@ -9,12 +11,8 @@ class Pages::SelectionsSettingsForm < BaseForm
 
   validate :selection_options, :validate_selection_options
 
-  def convert_to_selection_option(hash)
-    Pages::SelectionOption.new(hash)
-  end
-
   def add_another
-    selection_options.append(Pages::SelectionOption.new({ name: "" }))
+    selection_options.append({ name: "" })
   end
 
   def remove(index)
@@ -22,7 +20,7 @@ class Pages::SelectionsSettingsForm < BaseForm
   end
 
   def answer_settings
-    { only_one_option:, selection_options: }
+    { only_one_option:, selection_options: selection_options.map { |option| { name: option[:name] } } }
   end
 
   def submit(session)
@@ -37,10 +35,12 @@ class Pages::SelectionsSettingsForm < BaseForm
   def validate_selection_options
     return errors.add(:selection_options, :minimum) if selection_options.length < 2
     return errors.add(:selection_options, :maximum) if selection_options.length > 20
-    return errors.add(:selection_options, :uniqueness) if selection_options.map(&:name).uniq.length != selection_options.length
+
+    names = selection_options.map { |option| option[:name] }
+    return errors.add(:selection_options, :uniqueness) if names.uniq.length != selection_options.length
   end
 
   def filter_out_blank_options
-    self.selection_options = selection_options.filter { |option| option.name.present? }
+    self.selection_options = selection_options.filter { |option| option[:name].present? }
   end
 end
