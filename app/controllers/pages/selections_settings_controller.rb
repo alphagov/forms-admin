@@ -19,7 +19,7 @@ class Pages::SelectionsSettingsController < PagesController
     elsif params[:remove]
       @selections_settings_form.remove(params[:remove].to_i)
       render selection_settings_view
-    elsif @selections_settings_form.valid? && @selections_settings_form.submit(session)
+    elsif @selections_settings_form.submit(session)
       redirect_to new_question_path(@form)
     else
       render selection_settings_view
@@ -46,8 +46,7 @@ class Pages::SelectionsSettingsController < PagesController
     elsif params[:remove]
       @selections_settings_form.remove(params[:remove].to_i)
       render selection_settings_view
-    elsif @selections_settings_form.valid? && @selections_settings_form.submit(session)
-
+    elsif @selections_settings_form.submit(session)
       redirect_to edit_question_path(@form)
     else
       render selection_settings_view
