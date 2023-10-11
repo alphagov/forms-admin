@@ -18,6 +18,7 @@ RSpec.describe Forms::LiveController, type: :request do
 
   describe "#show_form" do
     before do
+      allow(CloudWatchService).to receive(:week_submissions).and_return(nil)
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/2", headers, form.to_json, 200
         mock.get "/api/v1/forms/2/live", headers, form.to_json, 200

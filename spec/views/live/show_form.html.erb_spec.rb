@@ -1,14 +1,15 @@
 require "rails_helper"
 
-describe "live/show_form.html.erb" do
+describe "live/show_form.html.erb", feature_metrics_for_form_creators_enabled: false do
   let(:declaration) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:what_happens_next) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:form_metadata) { OpenStruct.new(has_draft_version: false) }
   let(:form) { build(:form, :live, id: 2, declaration_text: declaration, what_happens_next_text: what_happens_next) }
+  let(:metrics_data) { nil }
 
   before do
     allow(view).to receive(:live_form_pages_path).and_return("/live-form-pages-path")
-    render(template: "live/show_form", locals: { form_metadata:, form: })
+    render(template: "live/show_form", locals: { form_metadata:, form:, metrics_data: })
   end
 
   it "has the correct title" do
@@ -20,7 +21,7 @@ describe "live/show_form.html.erb" do
   end
 
   it "contains page heading" do
-    expect(rendered).to have_css("h1.govuk-heading-l", text: form.name)
+    expect(rendered).to have_css("h1.govuk-heading-xl", text: form.name)
   end
 
   it "rendered live tag" do
@@ -39,6 +40,10 @@ describe "live/show_form.html.erb" do
     expect(rendered).to have_link("#{form.pages.count} questions", href: "/live-form-pages-path")
   end
 
+  it "does not render the metrics summary component" do
+    expect(rendered).not_to have_text(I18n.t("metrics_summary.description"))
+  end
+
   context "with only a single question" do
     let(:form) { build(:form, :live, id: 2, pages_count: 1) }
 
@@ -48,7 +53,7 @@ describe "live/show_form.html.erb" do
   end
 
   it "contains declaration" do
-    expect(rendered).to have_css("h2", text: "Declaration")
+    expect(rendered).to have_css("h3", text: "Declaration")
     expect(rendered).to have_content(form.declaration_text)
   end
 
@@ -56,7 +61,7 @@ describe "live/show_form.html.erb" do
     let(:declaration) { nil }
 
     it "does not include declaration" do
-      expect(rendered).not_to have_css("h2", text: "Declaration")
+      expect(rendered).not_to have_css("h3", text: "Declaration")
     end
   end
 
@@ -76,7 +81,7 @@ describe "live/show_form.html.erb" do
     let(:form) { build(:form, :live, id: 2, support_email: "support@example.gov.uk") }
 
     it "shows the support email address" do
-      expect(rendered).to have_css("h3", text: "Email")
+      expect(rendered).to have_css("h4", text: "Email")
       expect(rendered).to have_content("support@example.gov.uk")
     end
   end
@@ -85,7 +90,7 @@ describe "live/show_form.html.erb" do
     let(:form) { build(:form, :live, id: 2, support_phone: "phone details") }
 
     it "shows the support email address" do
-      expect(rendered).to have_css("h3", text: "Phone")
+      expect(rendered).to have_css("h4", text: "Phone")
       expect(rendered).to have_content("phone details")
     end
   end
@@ -94,7 +99,7 @@ describe "live/show_form.html.erb" do
     let(:form) { build(:form, :live, id: 2, support_url_text: "website", support_url: "www.example.gov.uk") }
 
     it "shows the support contact online" do
-      expect(rendered).to have_css("h3", text: "Support contact online")
+      expect(rendered).to have_css("h4", text: "Support contact online")
       expect(rendered).to have_link(form.support_url_text, href: form.support_url)
     end
   end
@@ -103,9 +108,9 @@ describe "live/show_form.html.erb" do
     let(:form) { build(:form, :live, id: 2, support_email: nil, support_phone: nil, support_url_text: nil, support_url: nil) }
 
     it "does not include support details if they are not set" do
-      expect(rendered).not_to have_css("h3", text: "Email")
-      expect(rendered).not_to have_css("h3", text: "Phone")
-      expect(rendered).not_to have_css("h3", text: "Support contact online")
+      expect(rendered).not_to have_css("h4", text: "Email")
+      expect(rendered).not_to have_css("h4", text: "Phone")
+      expect(rendered).not_to have_css("h4", text: "Support contact online")
     end
   end
 
@@ -118,6 +123,14 @@ describe "live/show_form.html.erb" do
 
     it "contains a link to edit the draft" do
       expect(rendered).to have_link(t("show_live_form.draft_edit"), href: form_path(form.id))
+    end
+  end
+
+  context "when the metrics feature is enabled", feature_metrics_for_form_creators_enabled: true do
+    let(:metrics_data) { { weekly_submissions: 125, form_is_new: false } }
+
+    it "renders the metrics summary component" do
+      expect(rendered).to have_text(I18n.t("metrics_summary.description"))
     end
   end
 end
