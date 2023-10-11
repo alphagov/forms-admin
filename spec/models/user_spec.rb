@@ -42,9 +42,26 @@ describe User, type: :model do
   context "when updating organisation" do
     let(:user) { create :user, :with_no_org, role: :trial }
 
-    it "is valid to leave organisation unset" do
-      user.organisation_id = nil
-      expect(user).to be_valid
+    context "when user has been created with a trial account" do
+      it "is valid to leave organisation unset" do
+        user.organisation_id = nil
+        expect(user).to be_valid
+      end
+    end
+
+    described_class.roles.each_key do |role|
+      context "when user somehow has no organisation" do
+        let(:user) do
+          user = build(:user, :with_no_org, role:)
+          user.save!(validate: false)
+          user
+        end
+
+        it "is valid to leave organisation unset" do
+          user.organisation_id = nil
+          expect(user).to be_valid
+        end
+      end
     end
 
     it "is not valid to unset organisation if it is already set" do
@@ -194,9 +211,26 @@ describe User, type: :model do
   context "when updating name" do
     let(:user) { create :user, :with_no_name, role: :trial }
 
-    it "is valid to leave name unset" do
-      user.name = nil
-      expect(user).to be_valid
+    context "when user has been created with a trial account" do
+      it "is valid to leave name unset" do
+        user.name = nil
+        expect(user).to be_valid
+      end
+    end
+
+    described_class.roles.each_key do |role|
+      context "when user somehow has no name" do
+        let(:user) do
+          user = build(:user, :with_no_name, role:)
+          user.save!(validate: false)
+          user
+        end
+
+        it "is valid to leave name unset" do
+          user.name = nil
+          expect(user).to be_valid
+        end
+      end
     end
 
     it "is not valid to unset name if it is already set" do
