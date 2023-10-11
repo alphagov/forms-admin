@@ -99,6 +99,18 @@ GEM
     aes_key_wrap (1.1.0)
     ast (2.4.2)
     attr_required (1.0.1)
+    aws-eventstream (1.2.0)
+    aws-partitions (1.834.0)
+    aws-sdk-cloudwatch (1.81.0)
+      aws-sdk-core (~> 3, >= 3.184.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-core (3.185.1)
+      aws-eventstream (~> 1, >= 1.0.2)
+      aws-partitions (~> 1, >= 1.651.0)
+      aws-sigv4 (~> 1.5)
+      jmespath (~> 1, >= 1.6.1)
+    aws-sigv4 (1.6.0)
+      aws-eventstream (~> 1, >= 1.0.2)
     axe-core-api (4.7.0)
       dumb_delegator
       virtus
@@ -245,6 +257,7 @@ GEM
     io-console (0.6.0)
     irb (1.6.4)
       reline (>= 0.3.0)
+    jmespath (1.6.2)
     json (2.6.3)
     json-jwt (1.16.3)
       activesupport (>= 4.2)
@@ -543,6 +556,7 @@ PLATFORMS
 
 DEPENDENCIES
   activeresource (~> 6.0)
+  aws-sdk-cloudwatch (~> 1.81)
   axe-core-rspec
   bootsnap
   brakeman (~> 6.0.1)
