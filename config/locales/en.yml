@@ -475,6 +475,7 @@ en:
     update_preview: Update preview
     write_tab_text: Write
   metrics_summary:
+    completion_rate: Completion rate
     date_range: "%{start_date} to %{end_date}"
     description: If you want to track metrics over a longer period you'll need to make a note of these on the same day each week.
     errors:
@@ -489,9 +490,13 @@ en:
           <li>Number of forms started but not completed</li>
           <li>Completion rate</li>
         </ul>
+      no_submissions_html: |
+        <p>No metrics are available as no-one has started or submitted a form in the past 7 days.</p>
+        <p>This may be because the form is no longer published on GOV.UK.</p>
     forms_started_but_not_completed: Forms started but not completed
     forms_submitted: Forms submitted
     heading: 'Form metrics for the past 7 days: %{formatted_date_range}'
+    percentage: "%{number}%"
   new_condition:
     routing_page_text: If the question
   not_found:

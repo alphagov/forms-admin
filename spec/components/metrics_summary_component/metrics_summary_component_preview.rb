@@ -9,6 +9,11 @@ class MetricsSummaryComponent::MetricsSummaryComponentPreview < ViewComponent::P
     render(MetricsSummaryComponent::View.new(metrics_data))
   end
 
+  def with_no_weekly_starts
+    metrics_data = { weekly_submissions: 0, form_is_new: false, weekly_starts: 0 }
+    render(MetricsSummaryComponent::View.new(metrics_data))
+  end
+
   def with_metrics_available
     metrics_data = { weekly_submissions: 1032, form_is_new: false, weekly_starts: 1568 }
     render(MetricsSummaryComponent::View.new(metrics_data))

@@ -8,6 +8,9 @@
     <p><%= t("metrics_summary.description") %></p>
     <div class="app-metrics__container">
       <div class="app-metrics__big-number">
+        <%= t("metrics_summary.completion_rate") %> <span class="app-metrics__big-number-number"><%= weekly_completion_rate %></span>
+      </div>
+      <div class="app-metrics__big-number">
         <%= t("metrics_summary.forms_submitted") %> <span class="app-metrics__big-number-number"><%= weekly_submissions %></span>
       </div>
       <div class="app-metrics__big-number">

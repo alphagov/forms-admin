@@ -41,13 +41,25 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
     end
   end
 
+  describe "#calculate_percentage" do
+    it "returns nil if the total argument is zero" do
+      expect(metrics_summary.calculate_percentage(168, 0)).to eq(nil)
+    end
+
+    it "returns the percentage rounded to the nearest integer" do
+      expect(metrics_summary.calculate_percentage(168, 1000)).to eq(17)
+      expect(metrics_summary.calculate_percentage(253, 1000)).to eq(25)
+      expect(metrics_summary.calculate_percentage(965, 1000)).to eq(97)
+    end
+  end
+
   context "when metrics_data is null" do
     it "returns the 'error loading data' message" do
       expect(metrics_summary.error_message).to eq(I18n.t("metrics_summary.errors.error_loading_data_html"))
     end
 
     it "renders the error message" do
-      expect(page).to have_text(Nokogiri::HTML(metrics_summary.error_message).text)
+      expect(page).to have_css(".govuk-inset-text", text: Nokogiri::HTML(metrics_summary.error_message).text)
     end
   end
 
@@ -59,13 +71,30 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
     end
 
     it "renders the error message" do
-      expect(page).to have_text(Nokogiri::HTML(metrics_summary.error_message).text)
+      expect(page).to have_css(".govuk-inset-text", text: Nokogiri::HTML(metrics_summary.error_message).text)
     end
   end
 
-  context "when metrics_data has data for weekly submissions and starts" do
-    let(:metrics_data) { { weekly_submissions: 1235, form_is_new: false, weekly_starts: 1991 } }
+  context "when weekly starts is zero" do
+    let(:metrics_data) { { weekly_submissions: 0, form_is_new: false, weekly_starts: 0 } }
+
+    it "returns the 'no starts' message" do
+      expect(metrics_summary.error_message).to eq(I18n.t("metrics_summary.errors.no_submissions_html"))
+    end
+
+    it "renders the error message" do
+      expect(page).to have_css(".govuk-inset-text", text: Nokogiri::HTML(metrics_summary.error_message).text)
+    end
+  end
+
+  context "when weekly starts is not zero" do
+    let(:metrics_data) { { weekly_submissions: 269, form_is_new: false, weekly_starts: 1000 } }
     let(:forms_started_but_not_completed) { metrics_data[:weekly_starts] - metrics_data[:weekly_submissions] }
+    let(:percentage) { metrics_summary.calculate_percentage(metrics_data[:weekly_submissions], metrics_data[:weekly_starts]) }
+
+    it "renders the completion rate percentage" do
+      expect(page).to have_text("#{I18n.t('metrics_summary.completion_rate')} #{percentage}%")
+    end
 
     it "returns the metrics component with the number of submissions" do
       expect(metrics_summary.weekly_submissions).to eq(metrics_data[:weekly_submissions])
