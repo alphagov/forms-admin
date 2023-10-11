@@ -489,6 +489,7 @@ en:
           <li>Number of forms started but not completed</li>
           <li>Completion rate</li>
         </ul>
+    forms_started_but_not_completed: Forms started but not completed
     forms_submitted: Forms submitted
     heading: 'Form metrics for the past 7 days: %{formatted_date_range}'
   new_condition:

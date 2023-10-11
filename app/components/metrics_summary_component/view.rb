@@ -14,6 +14,8 @@ module MetricsSummaryComponent
         @error_message = I18n.t("metrics_summary.errors.new_form_html")
       else
         @weekly_submissions = metrics_data[:weekly_submissions]
+        @weekly_starts = metrics_data[:weekly_starts]
+        @weekly_started_but_not_completed = @weekly_starts - @weekly_submissions
       end
     end
 

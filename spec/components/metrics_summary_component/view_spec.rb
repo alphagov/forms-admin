@@ -63,11 +63,16 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
     end
   end
 
-  context "when metrics_data has a value for weekly submissions" do
-    let(:metrics_data) { { weekly_submissions: 1235, form_is_new: false } }
+  context "when metrics_data has data for weekly submissions and starts" do
+    let(:metrics_data) { { weekly_submissions: 1235, form_is_new: false, weekly_starts: 1991 } }
+    let(:forms_started_but_not_completed) { metrics_data[:weekly_starts] - metrics_data[:weekly_submissions] }
 
     it "returns the metrics component with the number of submissions" do
       expect(metrics_summary.weekly_submissions).to eq(metrics_data[:weekly_submissions])
+    end
+
+    it "returns the metrics component with the number of forms started but not completed" do
+      expect(metrics_summary.weekly_started_but_not_completed).to eq(forms_started_but_not_completed)
     end
 
     it "renders the description text" do
@@ -76,6 +81,10 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
 
     it "renders the weekly submissions figure" do
       expect(page).to have_text("#{I18n.t('metrics_summary.forms_submitted')} #{metrics_data[:weekly_submissions]}")
+    end
+
+    it "renders the forms started but not completed figure" do
+      expect(page).to have_text("#{I18n.t('metrics_summary.forms_started_but_not_completed')} #{forms_started_but_not_completed}")
     end
   end
 end

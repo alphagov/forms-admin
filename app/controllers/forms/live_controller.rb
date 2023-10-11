@@ -16,9 +16,11 @@ class Forms::LiveController < Forms::BaseController
     form_is_new = Time.zone.parse(current_live_form.live_at.to_s) >= today.midnight
 
     weekly_submissions = form_is_new ? 0 : CloudWatchService.week_submissions(form_id: current_live_form.id)
+    weekly_starts = form_is_new ? 0 : CloudWatchService.week_starts(form_id: current_live_form.id)
 
     {
       weekly_submissions:,
+      weekly_starts:,
       form_is_new:,
     }
   rescue Aws::CloudWatch::Errors::ServiceError
