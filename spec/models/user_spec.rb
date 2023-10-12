@@ -5,7 +5,7 @@ describe User, type: :model do
   subject(:user) { described_class.new }
 
   it "validates" do
-    expect(user.valid?).to be true
+    expect(user).to be_valid
   end
 
   describe "versioning", versioning: true do
@@ -27,7 +27,7 @@ describe User, type: :model do
     it "is invalid if blank" do
       user.role = nil
 
-      expect(user.valid?).to be false
+      expect(user).to be_invalid
     end
   end
 
@@ -35,27 +35,46 @@ describe User, type: :model do
     it "is allowed to be nil" do
       user.organisation_id = nil
 
-      expect(user.valid?).to be true
+      expect(user).to be_valid
     end
   end
 
   context "when updating organisation" do
-    it "is valid to leave organisation unset" do
-      user = create :user, :with_no_org
-      user.organisation_id = nil
-      expect(user.valid?).to be true
+    let(:user) { create :user, :with_no_org, role: :trial }
+
+    context "when user has been created with a trial account" do
+      it "is valid to leave organisation unset" do
+        user.organisation_id = nil
+        expect(user).to be_valid
+      end
+    end
+
+    described_class.roles.each_key do |role|
+      context "when user somehow has no organisation" do
+        let(:user) do
+          user = build(:user, :with_no_org, role:)
+          user.save!(validate: false)
+          user
+        end
+
+        it "is valid to leave organisation unset" do
+          user.organisation_id = nil
+          expect(user).to be_valid
+        end
+      end
     end
 
     it "is not valid to unset organisation if it is already set" do
-      user = create(:user, organisation: create(:organisation, slug: "test-org"))
+      user.organisation = create(:organisation, slug: "test-org")
+      user.save!
+
       user.organisation_id = nil
-      expect(user.valid?).to be false
+      expect(user).to be_invalid
     end
 
     it "is not valid to leave organisation unset if changing role to editor" do
-      user = create :user, :with_no_org, role: :trial
       user.role = :editor
-      expect(user.valid?).to be false
+      expect(user).to be_invalid
     end
   end
 
@@ -190,28 +209,44 @@ describe User, type: :model do
   end
 
   context "when updating name" do
-    it "is valid to leave name unset" do
-      user = create :user, :with_no_name
-      user.name = nil
-      expect(user.valid?).to be true
+    let(:user) { create :user, :with_no_name, role: :trial }
+
+    context "when user has been created with a trial account" do
+      it "is valid to leave name unset" do
+        user.name = nil
+        expect(user).to be_valid
+      end
+    end
+
+    described_class.roles.each_key do |role|
+      context "when user somehow has no name" do
+        let(:user) do
+          user = build(:user, :with_no_name, role:)
+          user.save!(validate: false)
+          user
+        end
+
+        it "is valid to leave name unset" do
+          user.name = nil
+          expect(user).to be_valid
+        end
+      end
     end
 
     it "is not valid to unset name if it is already set" do
-      user = create :user, name: "Test User"
+      user.update!(name: "Test User")
       user.name = nil
-      expect(user.valid?).to be false
+      expect(user).to be_invalid
     end
 
     it "is not valid to leave name unset if changing role to editor" do
-      user = create :user, :with_no_name, role: :trial
       user.role = :editor
-      expect(user.valid?).to be false
+      expect(user).to be_invalid
     end
 
     it "is not valid to leave name unset if changing role to super admin" do
-      user = create :user, :with_no_name, role: :trial
       user.role = :super_admin
-      expect(user.valid?).to be false
+      expect(user).to be_invalid
     end
   end
 end
