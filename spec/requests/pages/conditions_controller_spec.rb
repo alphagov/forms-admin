@@ -3,7 +3,17 @@ require "rails_helper"
 RSpec.describe Pages::ConditionsController, type: :request do
   let(:form) { build :form, :ready_for_routing, id: 1 }
   let(:pages) { form.pages }
-  let(:page) { pages.first }
+  let(:page) do
+    pages.first.tap do |first_page|
+      first_page.is_optional = false
+      first_page.answer_type = "selection"
+      first_page.answer_settings = DataStruct.new(
+        only_one_option: true,
+        selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
+                            OpenStruct.new(attributes: { name: "Option 2" })],
+      )
+    end
+  end
   let(:selected_page) { page }
 
   let(:submit_result) { true }

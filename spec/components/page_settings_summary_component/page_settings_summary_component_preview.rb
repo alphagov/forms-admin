@@ -6,8 +6,11 @@ class PageSettingsSummaryComponent::PageSettingsSummaryComponentPreview < ViewCo
   end
 
   def with_selection_answer_type
-    page = FactoryBot.build(:page, :with_selections_settings, id: 1)
-    page.answer_settings = OpenStruct.new(page.answer_settings)
+    page = FactoryBot.build(:page, is_optional: "false",
+                                   answer_type: "selection",
+                                   answer_settings: OpenStruct.new(only_one_option: "true",
+                                                                   selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
+                                                                                       OpenStruct.new(attributes: { name: "Option 2" })]))
     change_answer_type_path = "https://example.com/change_answer_type"
     change_selections_settings_path = "https://example.com/change_selections_settings"
     render(PageSettingsSummaryComponent::View.new(page, change_answer_type_path:, change_selections_settings_path:))

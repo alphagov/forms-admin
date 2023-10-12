@@ -4,8 +4,16 @@ describe "pages/conditions/edit.html.erb" do
   let(:condition_form) { Pages::ConditionsForm.new(form:, page:, record: condition) }
   let(:form) { build :form, :ready_for_routing, id: 1 }
   let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
-  let(:pages) { form.pages }
-  let(:page) { pages.first }
+  let(:pages) { form.pages << page }
+  let(:page) do
+    build :page,
+          form_id: form.id,
+          is_optional: "false",
+          answer_type: "selection",
+          answer_settings: OpenStruct.new(only_one_option: "true",
+                                          selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
+                                                              OpenStruct.new(attributes: { name: "Option 2" })])
+  end
 
   before do
     page.position = 1

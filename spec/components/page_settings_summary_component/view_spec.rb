@@ -31,9 +31,12 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
   context "when the page is a selection page" do
     let(:page_object) do
-      page = FactoryBot.build(:page, :with_selections_settings, id: 1)
-      page.answer_settings = OpenStruct.new(page.answer_settings)
-      page
+      build :page,
+            is_optional: "true",
+            answer_type: "selection",
+            answer_settings: OpenStruct.new(only_one_option: "true",
+                                            selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
+                                                                OpenStruct.new(attributes: { name: "Option 2" })])
     end
 
     it "has a link to change the answer type" do

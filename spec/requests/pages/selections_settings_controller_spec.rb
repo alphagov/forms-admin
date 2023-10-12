@@ -62,7 +62,7 @@ RSpec.describe Pages::SelectionsSettingsController, type: :request do
       end
 
       it "saves the answer type to session" do
-        expect(session[:page].to_json).to eq({ answer_settings: selections_settings_form.answer_settings, is_optional: "false" }.to_json)
+        expect(session[:page]).to include({ answer_settings: selections_settings_form.answer_settings, is_optional: "false" })
       end
 
       it "redirects the user to the question details page" do
@@ -101,7 +101,7 @@ RSpec.describe Pages::SelectionsSettingsController, type: :request do
     it "returns the existing page answer settings" do
       settings_form = assigns(:selections_settings_form)
       expect(settings_form.only_one_option).to eq page.answer_settings[:only_one_option]
-      expect(settings_form.selection_options.map(&:name)).to eq page.answer_settings[:selection_options].map(&:name)
+      expect(settings_form.selection_options.map { |option| { name: option[:name] } }).to eq(page.answer_settings[:selection_options].map { |option| { name: option[:name] } })
       expect(settings_form.include_none_of_the_above).to eq page.is_optional
     end
 

@@ -55,19 +55,8 @@ class Pages::SelectionsSettingsController < PagesController
 
 private
 
-  def convert_to_selection_option(input)
-    case input
-    when ActionController::Parameters, Hash
-      OpenStruct.new(input)
-    when String
-      OpenStruct.new(name: input)
-    else
-      input
-    end
-  end
-
   def load_answer_settings_from_params(params)
-    selection_options = params[:selection_options] ? params[:selection_options].values.map(&method(:convert_to_selection_option)) : []
+    selection_options = params[:selection_options] ? params[:selection_options].values : []
     only_one_option = params[:only_one_option]
     include_none_of_the_above = params[:include_none_of_the_above]
 
@@ -78,7 +67,7 @@ private
     if session[:page].present? && session[:page][:answer_settings].present?
       only_one_option = session[:page][:answer_settings][:only_one_option]
       include_none_of_the_above = session[:page][:is_optional]
-      selection_options = session[:page][:answer_settings][:selection_options].map(&method(:convert_to_selection_option))
+      selection_options = session[:page][:answer_settings][:selection_options]
 
       { only_one_option:, selection_options:, include_none_of_the_above: }
     else
@@ -89,13 +78,14 @@ private
   def load_answer_settings_from_page_object(page)
     only_one_option = page.answer_settings.only_one_option
     include_none_of_the_above = page.is_optional
-    selection_options = page.answer_settings.selection_options
+    selection_options = page.answer_settings.selection_options.map { |option| { name: option.name } }
 
     { only_one_option:, selection_options:, include_none_of_the_above: }
   end
 
   def selections_settings_form_params
-    params.require(:pages_selections_settings_form).permit(:only_one_option, :include_none_of_the_above, selection_options: [:name])
+    params.require(:pages_selections_settings_form)
+          .permit(:only_one_option, :include_none_of_the_above, selection_options: [:name]).to_h.deep_symbolize_keys
   end
 
   def selection_settings_view
