@@ -23,7 +23,8 @@ class Forms::LiveController < Forms::BaseController
       weekly_starts:,
       form_is_new:,
     }
-  rescue Aws::CloudWatch::Errors::ServiceError
+  rescue Aws::CloudWatch::Errors::ServiceError,
+         Aws::Errors::MissingCredentialsError
     nil
   end
 
