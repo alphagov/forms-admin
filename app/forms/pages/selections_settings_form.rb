@@ -1,13 +1,9 @@
 class Pages::SelectionsSettingsForm < BaseForm
-  include ActiveModel::Validations::Callbacks
-
   DEFAULT_OPTIONS = { selection_options: [{ name: "" }, { name: "" }],
                       only_one_option: false,
                       include_none_of_the_above: false }.freeze
 
   attr_accessor :selection_options, :only_one_option, :include_none_of_the_above
-
-  before_validation :filter_out_blank_options
 
   validate :selection_options, :validate_selection_options
 
@@ -33,6 +29,8 @@ class Pages::SelectionsSettingsForm < BaseForm
   end
 
   def validate_selection_options
+    filter_out_blank_options
+
     return errors.add(:selection_options, :minimum) if selection_options.length < 2
     return errors.add(:selection_options, :maximum) if selection_options.length > 20
 
