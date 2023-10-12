@@ -18,7 +18,9 @@ RSpec.describe Forms::LiveController, type: :request do
 
   describe "#show_form" do
     before do
-      allow(CloudWatchService).to receive(:week_submissions).and_return(nil)
+      allow(CloudWatchService).to receive(:week_submissions).and_return(501)
+      allow(CloudWatchService).to receive(:week_starts).and_return(1305)
+
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/2", headers, form.to_json, 200
         mock.get "/api/v1/forms/2/live", headers, form.to_json, 200
@@ -36,6 +38,26 @@ RSpec.describe Forms::LiveController, type: :request do
 
     it "renders the live template and no param" do
       expect(response).to render_template("live/show_form")
+    end
+
+    context "with metrics enabled", feature_metrics_for_form_creators_enabled: true do
+      context "when the form went live today" do
+        it "does not read the Cloudwatch API" do
+          expect(CloudWatchService).not_to have_received(:week_submissions)
+          expect(CloudWatchService).not_to have_received(:week_starts)
+        end
+      end
+
+      context "when the form went live before today" do
+        let(:form) do
+          build(:form, :live, id: 2, live_at: Time.zone.now - 1.day)
+        end
+
+        it "does not read the Cloudwatch API" do
+          expect(CloudWatchService).to have_received(:week_submissions).once
+          expect(CloudWatchService).to have_received(:week_starts).once
+        end
+      end
     end
   end
 

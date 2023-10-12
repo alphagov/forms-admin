@@ -23,8 +23,13 @@ describe Forms::LiveController, type: :controller do
     end
 
     context "when the form was made today" do
+      before do
+        allow(CloudWatchService).to receive(:week_submissions).and_return(0)
+        allow(CloudWatchService).to receive(:week_starts).and_return(0)
+      end
+
       it "returns form_is_new: true and 0 weekly submissions" do
-        expect(live_controller.metrics_data).to eq({ weekly_submissions: 0, form_is_new: true })
+        expect(live_controller.metrics_data).to eq({ weekly_submissions: 0, form_is_new: true, weekly_starts: 0 })
       end
     end
 
@@ -35,10 +40,39 @@ describe Forms::LiveController, type: :controller do
 
       before do
         allow(CloudWatchService).to receive(:week_submissions).and_return(1255)
+        allow(CloudWatchService).to receive(:week_starts).and_return(1991)
       end
 
-      it "returns form_is_new: true and the correct number of weekly submissions" do
-        expect(live_controller.metrics_data).to eq({ weekly_submissions: 1255, form_is_new: false })
+      it "returns form_is_new: true and the correct number of weekly starts and submissions" do
+        expect(live_controller.metrics_data).to eq({ weekly_submissions: 1255, form_is_new: false, weekly_starts: 1991 })
+      end
+    end
+
+    context "when AWS credentials have not been configured" do
+      let(:form) do
+        build(:form, :live, id: 2, live_at: Time.zone.now - 1.day)
+      end
+
+      before do
+        allow(CloudWatchService).to receive(:week_starts).and_raise(Aws::Errors::MissingCredentialsError)
+      end
+
+      it "returns nil" do
+        expect(live_controller.metrics_data).to eq(nil)
+      end
+    end
+
+    context "when CloudWatch returns an error" do
+      let(:form) do
+        build(:form, :live, id: 2, live_at: Time.zone.now - 1.day)
+      end
+
+      before do
+        allow(CloudWatchService).to receive(:week_starts).and_raise(Aws::CloudWatch::Errors::ServiceError)
+      end
+
+      it "returns nil" do
+        expect(live_controller.metrics_data).to eq(nil)
       end
     end
   end

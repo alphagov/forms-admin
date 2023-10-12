@@ -127,7 +127,7 @@ describe "live/show_form.html.erb", feature_metrics_for_form_creators_enabled: f
   end
 
   context "when the metrics feature is enabled", feature_metrics_for_form_creators_enabled: true do
-    let(:metrics_data) { { weekly_submissions: 125, form_is_new: false } }
+    let(:metrics_data) { { weekly_submissions: 125, form_is_new: false, weekly_starts: 256 } }
 
     it "renders the metrics summary component" do
       expect(rendered).to have_text(I18n.t("metrics_summary.description"))
