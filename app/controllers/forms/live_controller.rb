@@ -11,6 +11,8 @@ class Forms::LiveController < Forms::BaseController
   end
 
   def metrics_data
+    return nil unless FeatureService.enabled?(:metrics_for_form_creators_enabled)
+
     # If the form went live today, there won't be any metrics to show
     today = Time.zone.today
     form_is_new = Time.zone.parse(current_live_form.live_at.to_s) >= today.midnight
