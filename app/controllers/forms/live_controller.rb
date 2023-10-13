@@ -24,7 +24,9 @@ class Forms::LiveController < Forms::BaseController
       form_is_new:,
     }
   rescue Aws::CloudWatch::Errors::ServiceError,
-         Aws::Errors::MissingCredentialsError
+         Aws::Errors::MissingCredentialsError => e
+
+    Sentry.capture_exception(e)
     nil
   end
 
