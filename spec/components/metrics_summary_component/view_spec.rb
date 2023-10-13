@@ -14,7 +14,7 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
   end
 
   it "renders the start and end dates" do
-    expect(page).to have_css("h2", text: metrics_summary.formatted_date_range)
+    expect(page).to have_css("h2", text: Nokogiri::HTML(metrics_summary.formatted_date_range).text)
   end
 
   describe "#formatted_date_range" do
@@ -25,7 +25,7 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
       end
 
       it "returns the full start and end dates" do
-        expect(metrics_summary.formatted_date_range).to eq("25 December 2023 to 2 January 2024")
+        expect(metrics_summary.formatted_date_range).to eq("<span class=\"app-metrics__date\">25 December 2023</span> to <span class=\"app-metrics__date\">2 January 2024</span>")
       end
     end
 
@@ -36,7 +36,7 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
       end
 
       it "returns the start date without the year" do
-        expect(metrics_summary.formatted_date_range).to eq("31 October to 8 November 2023")
+        expect(metrics_summary.formatted_date_range).to eq("<span class=\"app-metrics__date\">31 October</span> to <span class=\"app-metrics__date\">8 November 2023</span>")
       end
     end
   end

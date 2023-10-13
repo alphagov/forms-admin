@@ -47,7 +47,7 @@ module MetricsSummaryComponent
     end
 
     def format_date(date)
-      date.strip
+      "<span class=\"app-metrics__date\">#{date.strip}</span>"
     end
   end
 end
