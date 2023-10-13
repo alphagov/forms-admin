@@ -14,7 +14,7 @@ describe Forms::LiveController, type: :controller do
     }
   end
 
-  describe "#metrics_data" do
+  describe "#metrics_data", feature_metrics_for_form_creators_enabled: true do
     before do
       allow(live_controller).to receive(:current_live_form).and_return(form)
       ActiveResource::HttpMock.respond_to(false) do |mock|
@@ -77,6 +77,12 @@ describe Forms::LiveController, type: :controller do
       it "returns nil and logs the exception in Sentry" do
         expect(live_controller.metrics_data).to eq(nil)
         expect(Sentry).to have_received(:capture_exception).once
+      end
+    end
+
+    context "when the metrics feature flag is off", feature_metrics_for_form_creators_enabled: false do
+      it "returns nil" do
+        expect(live_controller.metrics_data).to eq(nil)
       end
     end
   end

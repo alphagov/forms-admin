@@ -53,9 +53,29 @@ RSpec.describe Forms::LiveController, type: :request do
           build(:form, :live, id: 2, live_at: Time.zone.now - 1.day)
         end
 
-        it "does not read the Cloudwatch API" do
+        it "reads the Cloudwatch API" do
           expect(CloudWatchService).to have_received(:week_submissions).once
           expect(CloudWatchService).to have_received(:week_starts).once
+        end
+      end
+    end
+
+    context "when the metrics feature flag is off", feature_metrics_for_form_creators_enabled: false do
+      context "when the form went live today" do
+        it "does not read the Cloudwatch API" do
+          expect(CloudWatchService).not_to have_received(:week_submissions)
+          expect(CloudWatchService).not_to have_received(:week_starts)
+        end
+      end
+
+      context "when the form went live before today" do
+        let(:form) do
+          build(:form, :live, id: 2, live_at: Time.zone.now - 1.day)
+        end
+
+        it "does not read the Cloudwatch API" do
+          expect(CloudWatchService).not_to have_received(:week_submissions)
+          expect(CloudWatchService).not_to have_received(:week_starts)
         end
       end
     end
