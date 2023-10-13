@@ -54,11 +54,13 @@ describe Forms::LiveController, type: :controller do
       end
 
       before do
+        allow(Sentry).to receive(:capture_exception)
         allow(CloudWatchService).to receive(:week_starts).and_raise(Aws::Errors::MissingCredentialsError)
       end
 
-      it "returns nil" do
+      it "returns nil and logs the exception in Sentry" do
         expect(live_controller.metrics_data).to eq(nil)
+        expect(Sentry).to have_received(:capture_exception).once
       end
     end
 
@@ -69,10 +71,12 @@ describe Forms::LiveController, type: :controller do
 
       before do
         allow(CloudWatchService).to receive(:week_starts).and_raise(Aws::CloudWatch::Errors::ServiceError)
+        allow(Sentry).to receive(:capture_exception)
       end
 
-      it "returns nil" do
+      it "returns nil and logs the exception in Sentry" do
         expect(live_controller.metrics_data).to eq(nil)
+        expect(Sentry).to have_received(:capture_exception).once
       end
     end
   end
