@@ -14,7 +14,7 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
   end
 
   it "renders the start and end dates" do
-    expect(page).to have_text(metrics_summary.formatted_date_range)
+    expect(page).to have_css("h2", text: metrics_summary.formatted_date_range)
   end
 
   describe "#formatted_date_range" do
