@@ -64,7 +64,7 @@ module ApplicationHelper
     "/node_modules/govuk-frontend/govuk/assets"
   end
 
-  def header_component_options(user:, can_manage_users:)
+  def header_component_options(user:, can_manage_users:, can_manage_mous: false)
     auth_links = {
       auth0: {
         user_profile_link: nil,
@@ -90,6 +90,7 @@ module ApplicationHelper
       user_name: user&.name.presence,
       user_profile_link: (user.blank? ? nil : links[:user_profile_link]),
       list_of_users_path: (can_manage_users ? users_path : nil),
+      mou_path: (can_manage_mous ? mou_signatures_path : nil),
       signout_link: (user.blank? ? nil : links[:signout_link]) }
   end
 

@@ -231,6 +231,7 @@ en:
         Guidance will be displayed at the top of the page, above your question.
       </p>
   header:
+    mous: MOUs
     product_name: Forms
     sign_out: Sign out
     users: Users

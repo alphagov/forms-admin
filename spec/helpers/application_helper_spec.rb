@@ -158,7 +158,7 @@ RSpec.describe ApplicationHelper, type: :helper do
       let(:user) { nil }
 
       it "returns options" do
-        expect(helper.header_component_options(user:, can_manage_users:)).to eq({ is_signed_in: false, list_of_users_path: nil, signout_link: nil, user_name: nil, user_profile_link: nil })
+        expect(helper.header_component_options(user:, can_manage_users:)).to eq({ is_signed_in: false, list_of_users_path: nil, signout_link: nil, user_name: nil, user_profile_link: nil, mou_path: nil })
       end
     end
 
@@ -170,7 +170,8 @@ RSpec.describe ApplicationHelper, type: :helper do
                                                                                   list_of_users_path: nil,
                                                                                   signout_link: "/auth/gds/sign_out",
                                                                                   user_name: user.name,
-                                                                                  user_profile_link: "http://signon.dev.gov.uk" })
+                                                                                  user_profile_link: "http://signon.dev.gov.uk",
+                                                                                  mou_path: nil })
       end
 
       context "when can manager users" do
@@ -181,7 +182,21 @@ RSpec.describe ApplicationHelper, type: :helper do
                                                                                     list_of_users_path: users_path,
                                                                                     signout_link: "/auth/gds/sign_out",
                                                                                     user_name: user.name,
-                                                                                    user_profile_link: "http://signon.dev.gov.uk" })
+                                                                                    user_profile_link: "http://signon.dev.gov.uk",
+                                                                                    mou_path: nil })
+        end
+      end
+
+      context "when can manage mous" do
+        let(:can_manage_mous) { true }
+
+        it "returns the following options" do
+          expect(helper.header_component_options(user:, can_manage_users: false, can_manage_mous:)).to eq({ is_signed_in: true,
+                                                                                                            list_of_users_path: nil,
+                                                                                                            signout_link: "/auth/gds/sign_out",
+                                                                                                            user_name: user.name,
+                                                                                                            user_profile_link: "http://signon.dev.gov.uk",
+                                                                                                            mou_path: mou_signatures_path })
         end
       end
 
@@ -193,7 +208,8 @@ RSpec.describe ApplicationHelper, type: :helper do
                                                                                     list_of_users_path: nil,
                                                                                     signout_link: nil,
                                                                                     user_name: user.name,
-                                                                                    user_profile_link: nil })
+                                                                                    user_profile_link: nil,
+                                                                                    mou_path: nil })
         end
       end
 
@@ -205,7 +221,8 @@ RSpec.describe ApplicationHelper, type: :helper do
                                                                                     list_of_users_path: nil,
                                                                                     signout_link: "/sign-out",
                                                                                     user_name: nil,
-                                                                                    user_profile_link: nil })
+                                                                                    user_profile_link: nil,
+                                                                                    mou_path: nil })
         end
       end
     end

@@ -9,6 +9,7 @@ RSpec.describe HeaderComponent::View, type: :component do
   let(:hosting_environment) { OpenStruct.new(friendly_environment_name:) }
   let(:local_development) { false }
   let(:friendly_environment_name) { "production" }
+  let(:mou_path) { "https://forms.mous" }
 
   let(:header_component) do
     described_class.new(is_signed_in:,
@@ -16,7 +17,8 @@ RSpec.describe HeaderComponent::View, type: :component do
                         user_name:,
                         user_profile_link:,
                         signout_link:,
-                        hosting_environment:)
+                        hosting_environment:,
+                        mou_path:)
   end
 
   describe "default status" do
@@ -25,6 +27,7 @@ RSpec.describe HeaderComponent::View, type: :component do
     let(:user_name) { nil }
     let(:user_profile_link) { nil }
     let(:signout_link) { nil }
+    let(:mou_path) { nil }
 
     before do
       render_inline(header_component)
@@ -40,6 +43,10 @@ RSpec.describe HeaderComponent::View, type: :component do
 
     it "does not contain the sign out link" do
       expect(page).not_to have_link(I18n.t("header.sign_out"), href: "/auth/gds/sign_out")
+    end
+
+    it "does not contian the mou link" do
+      expect(page).not_to have_link(I18n.t("header.mous"), href: "https://forms.mous")
     end
   end
 
@@ -80,6 +87,13 @@ RSpec.describe HeaderComponent::View, type: :component do
     it "Signout appears without a link" do
       expect(page).not_to have_link(I18n.t("header.sign_out"))
       expect(page).to have_text(I18n.t("header.sign_out"))
+    end
+  end
+
+  context "when a user has permission to view a list of MOUs" do
+    it "contains the link to MOUs pages" do
+      render_inline(header_component)
+      expect(page).to have_link(I18n.t("header.mous"), href: "https://forms.mous")
     end
   end
 

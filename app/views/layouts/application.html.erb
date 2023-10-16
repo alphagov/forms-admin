@@ -5,7 +5,9 @@
 
 <% content_for :header do %>
   <%= render HeaderComponent::View.new(**header_component_options(user:@current_user,
-                                                                      can_manage_users: @current_user && policy(@current_user).can_manage_user? ))%>
+                                                                  can_manage_users: @current_user && policy(:user).can_manage_user?,
+                                                                  can_manage_mous: @current_user && policy(:mouSignature).can_manage_mous?,
+                                                                 ))%>
 <% end %>
 
 <% content_for :before_content do %>

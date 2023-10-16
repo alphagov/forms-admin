@@ -4,6 +4,7 @@ class HeaderComponent::HeaderComponentPreview < ViewComponent::Preview
                                      list_of_users_path: nil,
                                      user_name: nil,
                                      user_profile_link: nil,
+                                     mou_path: nil,
                                      signout_link: nil))
   end
 
@@ -13,6 +14,7 @@ class HeaderComponent::HeaderComponentPreview < ViewComponent::Preview
                                      user_name: "Joe Smith",
                                      user_profile_link: "http://www.example.com/",
                                      signout_link: "http://www.example.com/",
+                                     mou_path: nil,
                                      hosting_environment: OpenStruct.new(friendly_environment_name: "production")))
   end
 
@@ -22,6 +24,7 @@ class HeaderComponent::HeaderComponentPreview < ViewComponent::Preview
                                      user_name: "Joe Smith",
                                      user_profile_link: "http://www.example.com/",
                                      signout_link: "http://www.example.com/",
+                                     mou_path: nil,
                                      hosting_environment: OpenStruct.new(friendly_environment_name: "staging")))
   end
 
@@ -31,6 +34,7 @@ class HeaderComponent::HeaderComponentPreview < ViewComponent::Preview
                                      user_name: "Joe Smith",
                                      user_profile_link: "http://www.example.com/",
                                      signout_link: "http://www.example.com/",
+                                     mou_path: nil,
                                      hosting_environment: OpenStruct.new(friendly_environment_name: "development")))
   end
 
@@ -40,6 +44,7 @@ class HeaderComponent::HeaderComponentPreview < ViewComponent::Preview
                                      user_name: "Joe Smith",
                                      user_profile_link: "http://www.example.com/",
                                      signout_link: "http://www.example.com/",
+                                     mou_path: nil,
                                      hosting_environment: OpenStruct.new(friendly_environment_name: "user research")))
   end
 
@@ -49,6 +54,7 @@ class HeaderComponent::HeaderComponentPreview < ViewComponent::Preview
                                      user_name: "Joe Smith",
                                      user_profile_link: "http://www.example.com/",
                                      signout_link: "http://www.example.com/",
+                                     mou_path: nil,
                                      hosting_environment: OpenStruct.new(friendly_environment_name: "local")))
   end
 
@@ -57,6 +63,7 @@ class HeaderComponent::HeaderComponentPreview < ViewComponent::Preview
                                      list_of_users_path: "/users",
                                      user_name: "Joe Smith",
                                      user_profile_link: nil,
+                                     mou_path: nil,
                                      signout_link: nil))
   end
 
@@ -65,6 +72,16 @@ class HeaderComponent::HeaderComponentPreview < ViewComponent::Preview
                                      list_of_users_path: "/users",
                                      user_name: "Joe Smith",
                                      user_profile_link: nil,
+                                     mou_path: nil,
+                                     signout_link: nil))
+  end
+
+  def with_user_who_can_manage_users_and_mous
+    render(HeaderComponent::View.new(is_signed_in: true,
+                                     list_of_users_path: "/users",
+                                     user_name: "Joe Smith",
+                                     user_profile_link: nil,
+                                     mou_path: "/mous",
                                      signout_link: nil))
   end
 end
