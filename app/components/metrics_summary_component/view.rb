@@ -39,10 +39,18 @@ module MetricsSummaryComponent
       (end_date - start_date).to_i + 1
     end
 
+    def complete_week?
+      number_of_days == 7
+    end
+
     def calculate_percentage(number, total)
       return nil if total.zero?
 
       (number.to_f * 100 / total).round
+    end
+
+    def description
+      complete_week? ? I18n.t("metrics_summary.description.complete_week") : I18n.t("metrics_summary.description.incomplete_week")
     end
 
   private

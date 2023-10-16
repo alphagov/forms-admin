@@ -66,6 +66,22 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
     end
   end
 
+  describe "#description" do
+    context "when there is a week's worth of metrics" do
+      it "returns the complete week description translation" do
+        expect(metrics_summary.description).to eq(I18n.t("metrics_summary.description.complete_week"))
+      end
+    end
+
+    context "when there is less than a week's worth of metrics" do
+      let(:form_live_date) { 3.days.ago.to_date }
+
+      it "returns the incomplete week description translation" do
+        expect(metrics_summary.description).to eq(I18n.t("metrics_summary.description.incomplete_week"))
+      end
+    end
+  end
+
   context "when metrics_data is null" do
     it "returns the 'error loading data' message" do
       expect(metrics_summary.error_message).to eq(I18n.t("metrics_summary.errors.error_loading_data_html"))
@@ -117,8 +133,39 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
       expect(metrics_summary.weekly_started_but_not_completed).to eq(forms_started_but_not_completed)
     end
 
-    it "renders the description text" do
-      expect(page).to have_text(I18n.t("metrics_summary.description"))
+    it "renders the complete week description text" do
+      expect(page).to have_text(I18n.t("metrics_summary.description.complete_week"))
+    end
+
+    it "renders the weekly submissions figure" do
+      expect(page).to have_text("#{I18n.t('metrics_summary.forms_submitted')} #{metrics_data[:weekly_submissions]}")
+    end
+
+    it "renders the forms started but not completed figure" do
+      expect(page).to have_text("#{I18n.t('metrics_summary.forms_started_but_not_completed')} #{forms_started_but_not_completed}")
+    end
+  end
+
+  context "when there are fewer than 7 days worth of data" do
+    let(:metrics_data) { { weekly_submissions: 269, form_is_new: false, weekly_starts: 1000 } }
+    let(:forms_started_but_not_completed) { metrics_data[:weekly_starts] - metrics_data[:weekly_submissions] }
+    let(:percentage) { metrics_summary.calculate_percentage(metrics_data[:weekly_submissions], metrics_data[:weekly_starts]) }
+    let(:start_date) { 3.days.ago.to_date }
+
+    it "renders the completion rate percentage" do
+      expect(page).to have_text("#{I18n.t('metrics_summary.completion_rate')} #{percentage}%")
+    end
+
+    it "returns the metrics component with the number of submissions" do
+      expect(metrics_summary.weekly_submissions).to eq(metrics_data[:weekly_submissions])
+    end
+
+    it "returns the metrics component with the number of forms started but not completed" do
+      expect(metrics_summary.weekly_started_but_not_completed).to eq(forms_started_but_not_completed)
+    end
+
+    it "renders the incomplete week description text" do
+      expect(page).to have_text(I18n.t("metrics_summary.description.incomplete_week"))
     end
 
     it "renders the weekly submissions figure" do
