@@ -495,7 +495,7 @@ en:
         <p>This may be because the form is no longer published on GOV.UK.</p>
     forms_started_but_not_completed: Forms started but not completed
     forms_submitted: Forms submitted
-    heading: 'Form metrics for the past 7 days: %{formatted_date_range}'
+    heading: 'Form metrics for the past %{number_of_days} days: %{formatted_date_range}'
     percentage: "%{number}%"
   new_condition:
     routing_page_text: If the question

@@ -33,6 +33,12 @@ module MetricsSummaryComponent
       I18n.t("metrics_summary.date_range", start_date: formatted_start_date, end_date: formatted_end_date)
     end
 
+    def number_of_days
+      # We add 1 because we're calculating the number of days from the start date
+      # to end date inclusive, not the difference between them
+      (end_date - start_date).to_i + 1
+    end
+
     def calculate_percentage(number, total)
       return nil if total.zero?
 

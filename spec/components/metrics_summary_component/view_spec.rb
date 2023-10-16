@@ -17,6 +17,10 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
     expect(render_inline(metrics_summary).to_html).to include(metrics_summary.formatted_date_range)
   end
 
+  it "renders the number of days spanned" do
+    expect(page).to have_css("h2", text: metrics_summary.number_of_days)
+  end
+
   describe "#formatted_date_range" do
     context "when the start and end dates are in different years" do
       before do
@@ -50,6 +54,15 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
       expect(metrics_summary.calculate_percentage(168, 1000)).to eq(17)
       expect(metrics_summary.calculate_percentage(253, 1000)).to eq(25)
       expect(metrics_summary.calculate_percentage(965, 1000)).to eq(97)
+    end
+  end
+
+  describe "#number_of_days" do
+    it "returns the number of days between the start date and today's date, inclusive" do
+      metrics_summary.start_date = 1.week.ago.to_date
+      metrics_summary.end_date = 1.day.ago.to_date
+
+      expect(metrics_summary.number_of_days).to eq(7)
     end
   end
 
