@@ -498,6 +498,14 @@ en:
     forms_submitted: Forms submitted
     heading: 'Form metrics for the past 7 days: %{formatted_date_range}'
     percentage: "%{number}%"
+  mou_signatures:
+    index:
+      table_caption: Signed MOUs
+      table_headings:
+        agreed_at: Agreed on
+        email: Email address
+        name: Name
+        organisation: Organisation
   new_condition:
     routing_page_text: If the question
   not_found:
@@ -560,6 +568,7 @@ en:
     maintenance: Sorry, the service is unavailable
     make_changes_live_form: Make your changes live
     make_live_form: Make your form live
+    mou_signatures: Memorandum of Understanding agreements
     name_settings: Ask for a person’s name
     new_page_form: Edit question
     not_found: Page not found
