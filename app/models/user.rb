@@ -5,6 +5,7 @@ class User < ApplicationRecord
   class UserAuthenticationException < StandardError; end
 
   belongs_to :organisation, optional: true
+  has_many :mou_signatures
 
   serialize :permissions, Array
 

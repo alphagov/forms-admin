@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_02_063756) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_03_140934) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,6 +42,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_063756) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["form_id"], name: "index_form_submission_emails_on_form_id"
+  end
+
+  create_table "mou_signatures", comment: "User signatures of an MOU for an oragnisation", force: :cascade do |t|
+    t.bigint "user_id", null: false, comment: "User who signed MOU"
+    t.bigint "organisation_id", comment: "Organisation which user signed MOU on behalf of, or null"
+    t.datetime "agreed_at", null: false, comment: "The datetime of the signature"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organisation_id"], name: "index_mou_signatures_on_organisation_id"
+    t.index ["user_id", "organisation_id"], name: "index_mou_signatures_on_user_id_and_organisation_id", unique: true, comment: "Users can only sign an MOU for an Organisation once"
+    t.index ["user_id"], name: "index_mou_signatures_on_user_id"
+    t.index ["user_id"], name: "index_mou_signatures_on_user_id_unique_without_organisation_id", unique: true, where: "(organisation_id IS NULL)", comment: "Users can only sign a single MOU without an organisation"
   end
 
   create_table "organisations", force: :cascade do |t|
@@ -90,5 +102,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_063756) do
   end
 
   add_foreign_key "draft_questions", "users"
+  add_foreign_key "mou_signatures", "organisations"
+  add_foreign_key "mou_signatures", "users"
   add_foreign_key "users", "organisations"
 end
