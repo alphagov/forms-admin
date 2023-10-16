@@ -28,7 +28,9 @@ module MetricsSummaryComponent
 
     def formatted_date_range
       start_date_format_string = start_date.year == end_date.year ? "%e %B" : "%e %B %Y"
-      I18n.t("metrics_summary.date_range", start_date: start_date.strftime(start_date_format_string).strip, end_date: end_date.strftime("%e %B %Y").strip)
+      formatted_start_date = format_date(start_date.strftime(start_date_format_string))
+      formatted_end_date = format_date(end_date.strftime("%e %B %Y"))
+      I18n.t("metrics_summary.date_range", start_date: formatted_start_date, end_date: formatted_end_date)
     end
 
     def calculate_percentage(number, total)
@@ -42,6 +44,10 @@ module MetricsSummaryComponent
     def set_dates
       @start_date = 1.week.ago.to_date
       @end_date = 1.day.ago.to_date
+    end
+
+    def format_date(date)
+      "<span class=\"app-metrics__date\">#{date.strip}</span>"
     end
   end
 end
