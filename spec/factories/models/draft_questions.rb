@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :draft_question do
-    form_id { 1 }
+    sequence(:form_id) { |n| n }
     user { build :user }
     sequence(:page_id) { |n| n }
     question_text { Faker::Lorem.question.truncate(250) }

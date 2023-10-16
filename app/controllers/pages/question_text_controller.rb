@@ -22,6 +22,6 @@ class Pages::QuestionTextController < PagesController
 private
 
   def question_text_form_params
-    params.require(:pages_question_text_form).permit(:question_text)
+    params.require(:pages_question_text_form).permit(:question_text).merge(draft_question:)
   end
 end
