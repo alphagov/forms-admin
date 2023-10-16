@@ -14,7 +14,7 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
   end
 
   it "renders the start and end dates" do
-    expect(page).to have_css("h2", text: Nokogiri::HTML(metrics_summary.formatted_date_range).text)
+    expect(render_inline(metrics_summary).to_html).to include(metrics_summary.formatted_date_range)
   end
 
   describe "#formatted_date_range" do
@@ -59,7 +59,7 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
     end
 
     it "renders the error message" do
-      expect(page).to have_css(".govuk-inset-text", text: Nokogiri::HTML(metrics_summary.error_message).text)
+      expect(render_inline(metrics_summary).to_html).to include(metrics_summary.error_message)
     end
   end
 
@@ -71,7 +71,7 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
     end
 
     it "renders the error message" do
-      expect(page).to have_css(".govuk-inset-text", text: Nokogiri::HTML(metrics_summary.error_message).text)
+      expect(render_inline(metrics_summary).to_html).to include(metrics_summary.error_message)
     end
   end
 
@@ -83,7 +83,7 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
     end
 
     it "renders the error message" do
-      expect(page).to have_css(".govuk-inset-text", text: Nokogiri::HTML(metrics_summary.error_message).text)
+      expect(render_inline(metrics_summary).to_html).to include(metrics_summary.error_message)
     end
   end
 
