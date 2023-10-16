@@ -15,7 +15,8 @@ class Forms::LiveController < Forms::BaseController
 
     # If the form went live today, there won't be any metrics to show
     today = Time.zone.today
-    form_is_new = Time.zone.parse(current_live_form.live_at.to_s) >= today.midnight
+
+    form_is_new = current_live_form.made_live_date == today
 
     weekly_submissions = form_is_new ? 0 : CloudWatchService.week_submissions(form_id: current_live_form.id)
     weekly_starts = form_is_new ? 0 : CloudWatchService.week_starts(form_id: current_live_form.id)

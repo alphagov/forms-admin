@@ -229,4 +229,18 @@ describe Form, type: :model do
       end
     end
   end
+
+  describe "#made_live_date" do
+    it "returns nil" do
+      expect(form.made_live_date).to eq(nil)
+    end
+
+    context "when the form is live" do
+      let(:form) { described_class.new(id: 1, name: "Form 1", organisation:, submission_email: "", live_at: Time.zone.now.to_s) }
+
+      it "returns the date the form went live" do
+        expect(form.made_live_date).to eq(form.live_at.to_date)
+      end
+    end
+  end
 end
