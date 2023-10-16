@@ -1,11 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Pages::NameSettingsForm, type: :model do
-  let(:form) { build :form, id: 1 }
-  let(:name_settings_form) { described_class.new }
+  let(:name_settings_form) { build :name_settings_form, draft_question: }
+  let(:draft_question) { build :draft_question, answer_type: "name", form_id: 1 }
 
   it "has a valid factory" do
-    name_settings_form = build :name_settings_form
     expect(name_settings_form).to be_valid
   end
 
@@ -55,12 +54,21 @@ RSpec.describe Pages::NameSettingsForm, type: :model do
         expect(name_settings_form).to be_valid
       end
     end
+
+    context "when not given a draft_question" do
+      let(:draft_question) { nil }
+
+      it "is invalid" do
+        expect(name_settings_form).to be_invalid
+      end
+    end
   end
 
   describe "#submit" do
     let(:session_mock) { {} }
 
     it "returns false if the form is invalid" do
+      allow(name_settings_form).to receive(:invalid?).and_return(true)
       expect(name_settings_form.submit(session_mock)).to be_falsey
     end
 
@@ -69,6 +77,19 @@ RSpec.describe Pages::NameSettingsForm, type: :model do
       name_settings_form.submit(session_mock)
       expect(session_mock[:page][:answer_settings]).to include(input_type: "full_name")
       expect(session_mock[:page][:answer_settings]).to include(title_needed: "true")
+    end
+
+    it "sets draft_question answer_settings" do
+      name_settings_form.input_type = "full_name"
+      name_settings_form.title_needed = "true"
+      name_settings_form.submit(session_mock)
+
+      expected_settings = {
+        input_type: "full_name",
+        title_needed: "true",
+      }.with_indifferent_access
+
+      expect(name_settings_form.draft_question.answer_settings).to include(expected_settings)
     end
   end
 end

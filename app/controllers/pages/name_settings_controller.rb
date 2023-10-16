@@ -46,7 +46,7 @@ class Pages::NameSettingsController < PagesController
 private
 
   def name_settings_form_params
-    params.require(:pages_name_settings_form).permit(:input_type, :title_needed)
+    params.require(:pages_name_settings_form).permit(:input_type, :title_needed).merge(draft_question:)
   end
 
   def name_settings_view
