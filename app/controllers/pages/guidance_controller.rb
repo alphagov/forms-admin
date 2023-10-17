@@ -63,7 +63,7 @@ class Pages::GuidanceController < PagesController
 private
 
   def guidance_form_params
-    params.require(:pages_guidance_form).permit(:page_heading, :guidance_markdown)
+    params.require(:pages_guidance_form).permit(:page_heading, :guidance_markdown).merge(draft_question:)
   end
 
   def route_to
