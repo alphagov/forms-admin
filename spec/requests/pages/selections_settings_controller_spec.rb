@@ -62,7 +62,7 @@ RSpec.describe Pages::SelectionsSettingsController, type: :request do
       end
 
       it "saves the answer type to session" do
-        expect(session[:page].to_json).to eq({ "answer_settings": selections_settings_form.answer_settings, is_optional: "false" }.to_json)
+        expect(session[:page]).to include({ answer_settings: selections_settings_form.answer_settings, is_optional: "false" })
       end
 
       it "redirects the user to the question details page" do
@@ -99,10 +99,10 @@ RSpec.describe Pages::SelectionsSettingsController, type: :request do
     end
 
     it "returns the existing page answer settings" do
-      form = assigns(:selections_settings_form)
-      expect(form.answer_settings[:only_one_option]).to eq page.answer_settings[:only_one_option]
-      expect(form.answer_settings[:selection_options].map(&:name)).to eq page.answer_settings[:selection_options].map(&:name)
-      expect(form.answer_settings[:include_none_of_the_above]).to eq page.is_optional
+      settings_form = assigns(:selections_settings_form)
+      expect(settings_form.only_one_option).to eq page.answer_settings[:only_one_option]
+      expect(settings_form.selection_options.map { |option| { name: option[:name] } }).to eq(page.answer_settings[:selection_options].map { |option| { name: option[:name] } })
+      expect(settings_form.include_none_of_the_above).to eq page.is_optional
     end
 
     it "sets an instance variable for selections_settings_path" do
@@ -133,9 +133,9 @@ RSpec.describe Pages::SelectionsSettingsController, type: :request do
       end
 
       it "saves the updated answer settings to DB" do
-        new_settings = { only_one_option: "true", selection_options: [Pages::SelectionOption.new({ name: "Option 1" }), Pages::SelectionOption.new({ name: "New option 2" })] }
+        new_settings = { only_one_option: "true", selection_options: [{ name: "Option 1" }, { name: "New option 2" }] }
         form = assigns(:selections_settings_form)
-        expect(form.answer_settings.to_json).to eq new_settings.to_json
+        expect(form.answer_settings).to eq new_settings
       end
 
       it "redirects the user to the question details page " do

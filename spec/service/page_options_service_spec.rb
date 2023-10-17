@@ -99,7 +99,14 @@ describe PageOptionsService do
     end
 
     context "with selection" do
-      let(:page) { build :page, :with_selections_settings }
+      let(:page) do
+        build :page,
+              is_optional: "false",
+              answer_type: "selection",
+              answer_settings: OpenStruct.new(only_one_option: "true",
+                                              selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
+                                                                  OpenStruct.new(attributes: { name: "Option 2" })])
+      end
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
@@ -110,7 +117,14 @@ describe PageOptionsService do
     end
 
     context "with selection not only_one_option " do
-      let(:page) { build :page, :with_selections_settings, only_one_option: "false" }
+      let(:page) do
+        build :page,
+              is_optional: "false",
+              answer_type: "selection",
+              answer_settings: OpenStruct.new(only_one_option: "false",
+                                              selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
+                                                                  OpenStruct.new(attributes: { name: "Option 2" })])
+      end
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([

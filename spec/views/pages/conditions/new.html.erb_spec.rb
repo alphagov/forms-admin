@@ -2,7 +2,11 @@ require "rails_helper"
 
 describe "pages/conditions/new.html.erb" do
   let(:form) { build :form, id: 1 }
-  let(:pages) { build_list :page, 3, :with_selections_settings, form_id: 1 }
+  let(:pages) do
+    build_list :page, 3, answer_settings: OpenStruct.new(only_one_option: "true",
+                                                         selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
+                                                                             OpenStruct.new(attributes: { name: "Option 2" })]), form_id: 1
+  end
   let(:condition_form) { Pages::ConditionsForm.new(form:, page: pages.first) }
 
   before do

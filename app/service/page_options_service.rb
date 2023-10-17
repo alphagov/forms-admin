@@ -81,9 +81,9 @@ private
   end
 
   def selection_list
-    return @page.show_selection_options unless @page.answer_settings.selection_options.map(&:name).length >= 1
+    return @page.show_selection_options unless @page.answer_settings.selection_options.length >= 1
 
-    options = @page.answer_settings.selection_options.map(&:name)
+    options = @page.answer_settings.selection_options.map { |option| option.attributes[:name] }
     options << "#{I18n.t('page_options_service.selection_type.none_of_the_above')}</li>" if @page.is_optional?
     formatted_list = options.join("</li><li>")
 

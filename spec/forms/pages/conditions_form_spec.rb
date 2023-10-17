@@ -4,7 +4,17 @@ RSpec.describe Pages::ConditionsForm, type: :model do
   let(:conditions_form) { described_class.new(form:, page:, record: condition) }
   let(:form) { build :form, :ready_for_routing, id: 1 }
   let(:pages) { form.pages }
-  let(:page) { pages.second }
+  let(:is_optional) { false }
+  let(:page) do
+    pages.second.tap do |second_page|
+      second_page.is_optional = is_optional
+      second_page.answer_type = "selection"
+      second_page.answer_settings = DataStruct.new(
+        only_one_option: true,
+        selection_options: [OpenStruct.new(attributes: { name: "Option 1" }), OpenStruct.new(attributes: { name: "Option 2" })],
+      )
+    end
+  end
   let(:condition) { nil }
 
   let(:post_headers) do
@@ -107,7 +117,7 @@ RSpec.describe Pages::ConditionsForm, type: :model do
     end
 
     context "when selection setting includes 'none of the above'" do
-      let(:page) { build :page, :with_selections_settings, is_optional: "true" }
+      let(:is_optional) { true }
 
       it "adds extra 'None of above' options to the end" do
         result = conditions_form.routing_answer_options
