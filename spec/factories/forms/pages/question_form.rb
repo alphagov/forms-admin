@@ -9,6 +9,7 @@ FactoryBot.define do
     guidance_markdown { nil }
     page_id { nil }
     form_id { nil }
+    draft_question { build :draft_question, question_text: }
 
     trait :with_hints do
       hint_text { Faker::Quote.yoda }

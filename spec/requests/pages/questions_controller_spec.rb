@@ -22,7 +22,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
     login_as_editor_user
   end
 
-  describe "#new" do
+  describe "#create" do
     let(:req_headers) do
       {
         "X-API-Token" => Settings.forms_api.auth_key,
