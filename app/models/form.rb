@@ -71,6 +71,10 @@ class Form < ActiveResource::Base
     (index.nil? ? pages.length : index) + 1
   end
 
+  def made_live_date
+    Time.zone.parse(live_at.to_s).to_date if defined?(live_at)
+  end
+
 private
 
   def has_routing_conditions

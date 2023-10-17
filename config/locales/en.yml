@@ -477,7 +477,9 @@ en:
   metrics_summary:
     completion_rate: Completion rate
     date_range: "%{start_date} to %{end_date}"
-    description: If you want to track metrics over a longer period you'll need to make a note of these on the same day each week.
+    description:
+      complete_week: If you want to track metrics over a longer period you'll need to make a note of these on the same day each week.
+      incomplete_week: The metrics shown here are for less than a week. To see a full week’s metrics, check again when your form’s been live for 7 days.
     errors:
       error_loading_data_html: |
         <p>Sorry, there's a problem getting your form's metrics.</p>
@@ -495,7 +497,9 @@ en:
         <p>This may be because the form is no longer published on GOV.UK.</p>
     forms_started_but_not_completed: Forms started but not completed
     forms_submitted: Forms submitted
-    heading: 'Form metrics for the past 7 days: %{formatted_date_range}'
+    heading_with_dates: 'Form metrics for the past %{number_of_days} days: %{formatted_date_range}'
+    heading_with_single_date: Form metrics for %{date}
+    heading_without_dates: Form metrics
     percentage: "%{number}%"
   new_condition:
     routing_page_text: If the question

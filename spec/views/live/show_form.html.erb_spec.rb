@@ -4,7 +4,7 @@ describe "live/show_form.html.erb", feature_metrics_for_form_creators_enabled: f
   let(:declaration) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:what_happens_next) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:form_metadata) { OpenStruct.new(has_draft_version: false) }
-  let(:form) { build(:form, :live, id: 2, declaration_text: declaration, what_happens_next_text: what_happens_next) }
+  let(:form) { build(:form, :live, id: 2, declaration_text: declaration, what_happens_next_text: what_happens_next, live_at: 1.week.ago) }
   let(:metrics_data) { nil }
 
   before do
@@ -130,7 +130,7 @@ describe "live/show_form.html.erb", feature_metrics_for_form_creators_enabled: f
     let(:metrics_data) { { weekly_submissions: 125, form_is_new: false, weekly_starts: 256 } }
 
     it "renders the metrics summary component" do
-      expect(rendered).to have_text(I18n.t("metrics_summary.description"))
+      expect(rendered).to have_text(I18n.t("metrics_summary.description.complete_week"))
     end
   end
 end
