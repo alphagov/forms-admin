@@ -51,6 +51,8 @@ class ApplicationController < ActionController::Base
 
   def clear_questions_session_data
     session.delete(:page) if session[:page].present?
+
+    current_user.draft_questions.destroy_all if current_user.present?
   end
 
   def set_request_id

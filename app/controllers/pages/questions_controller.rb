@@ -31,6 +31,7 @@ class Pages::QuestionsController < PagesController
     reset_session_if_answer_settings_not_present
     page.load_from_session(session, %i[answer_settings answer_type is_optional page_heading guidance_markdown])
 
+    draft_question
     @question_form = Pages::QuestionForm.new(form_id: @form.id,
                                              answer_type: page.answer_type,
                                              question_text: page.question_text,

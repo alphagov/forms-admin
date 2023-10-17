@@ -65,7 +65,7 @@ private
     edit_draft_question = DraftQuestion.find_or_initialize_by(form_id: @form.id, user_id: current_user.id, page_id: page.id)
 
     if edit_draft_question.new_record?
-      edit_draft_question.attributes = page.attributes.except(:position, :next_page, :has_routing_errors, :routing_conditions, :question_with_text)
+      edit_draft_question.attributes = page.attributes.except(:id, :position, :next_page, :has_routing_errors, :routing_conditions, :question_with_text)
       edit_draft_question.save!(validate: false)
     end
     edit_draft_question
