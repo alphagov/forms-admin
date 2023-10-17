@@ -93,6 +93,7 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
   end
 
   context "when form is too new" do
+    let(:form_live_date) { Time.zone.today }
     let(:metrics_data) { { weekly_submissions: 0, form_is_new: true } }
 
     it "returns the 'new form' message" do
@@ -101,6 +102,45 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
 
     it "renders the error message" do
       expect(render_inline(metrics_summary).to_html).to include(metrics_summary.error_message)
+    end
+
+    it "renders the heading without date information" do
+      expect(page).to have_css("h2", exact_text: I18n.t("metrics_summary.heading_without_dates"))
+    end
+  end
+
+  context "when form went live yesterday" do
+    let(:form_live_date) { 1.day.ago.to_date }
+    let(:metrics_data) { { weekly_submissions: 269, form_is_new: false, weekly_starts: 1000 } }
+    let(:forms_started_but_not_completed) { metrics_data[:weekly_starts] - metrics_data[:weekly_submissions] }
+    let(:percentage) { metrics_summary.calculate_percentage(metrics_data[:weekly_submissions], metrics_data[:weekly_starts]) }
+
+    it "renders the completion rate percentage" do
+      expect(page).to have_text("#{I18n.t('metrics_summary.completion_rate')} #{percentage}%")
+    end
+
+    it "returns the metrics component with the number of submissions" do
+      expect(metrics_summary.weekly_submissions).to eq(metrics_data[:weekly_submissions])
+    end
+
+    it "returns the metrics component with the number of forms started but not completed" do
+      expect(metrics_summary.weekly_started_but_not_completed).to eq(forms_started_but_not_completed)
+    end
+
+    it "renders the incomplete week description text" do
+      expect(page).to have_text(I18n.t("metrics_summary.description.incomplete_week"))
+    end
+
+    it "renders the weekly submissions figure" do
+      expect(page).to have_text("#{I18n.t('metrics_summary.forms_submitted')} #{metrics_data[:weekly_submissions]}")
+    end
+
+    it "renders the forms started but not completed figure" do
+      expect(page).to have_text("#{I18n.t('metrics_summary.forms_started_but_not_completed')} #{forms_started_but_not_completed}")
+    end
+
+    it "renders the heading without date information" do
+      expect(page).to have_css("h2", exact_text: I18n.t("metrics_summary.heading_with_single_date", date: form_live_date.strftime("%e %B %Y").strip))
     end
   end
 

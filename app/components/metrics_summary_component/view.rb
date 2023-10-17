@@ -2,12 +2,13 @@
 
 module MetricsSummaryComponent
   class View < ViewComponent::Base
-    attr_accessor :start_date, :end_date, :weekly_submissions, :weekly_starts, :weekly_started_but_not_completed, :weekly_completion_rate, :form_has_metrics, :error_message
+    attr_accessor :start_date, :end_date, :weekly_submissions, :weekly_starts, :weekly_started_but_not_completed, :weekly_completion_rate, :form_has_metrics, :error_message, :heading
 
     def initialize(form_live_date, metrics_data)
       super
       @start_date = [form_live_date, 7.days.ago.to_date].max
       @end_date = 1.day.ago.to_date
+      @heading = heading_text.html_safe
 
       if metrics_data.nil?
         @error_message = I18n.t("metrics_summary.errors.error_loading_data_html")
@@ -52,6 +53,16 @@ module MetricsSummaryComponent
 
     def description
       complete_week? ? I18n.t("metrics_summary.description.complete_week") : I18n.t("metrics_summary.description.incomplete_week")
+    end
+
+    def heading_text
+      if start_date == Time.zone.today
+        I18n.t("metrics_summary.heading_without_dates")
+      elsif start_date == Time.zone.yesterday
+        I18n.t("metrics_summary.heading_with_single_date", date: format_date(start_date.strftime("%e %B %Y")))
+      else
+        I18n.t("metrics_summary.heading_with_dates", number_of_days:, formatted_date_range:)
+      end
     end
 
   private

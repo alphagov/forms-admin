@@ -6,7 +6,12 @@ class MetricsSummaryComponent::MetricsSummaryComponentPreview < ViewComponent::P
 
   def with_a_new_form
     metrics_data = { weekly_submissions: 0, form_is_new: true, weekly_starts: 0 }
-    render(MetricsSummaryComponent::View.new(20.days.ago.to_date, metrics_data))
+    render(MetricsSummaryComponent::View.new(Time.zone.today.to_date, metrics_data))
+  end
+
+  def with_a_form_that_went_live_yesterday
+    metrics_data = { weekly_submissions: 3, form_is_new: false, weekly_starts: 6 }
+    render(MetricsSummaryComponent::View.new(1.day.ago.to_date, metrics_data))
   end
 
   def with_no_weekly_starts
