@@ -2,6 +2,9 @@ $govuk-images-path: "@govuk/assets/images/";
 $govuk-fonts-path: "@govuk/assets/fonts/";
 $govuk-new-link-styles: true;
 $govuk-global-styles: true;
+$govuk-suppressed-warnings: (
+  ie8
+);
 
 @import "govuk/all";
 @import "dfe-autocomplete/src/dfe-autocomplete";
