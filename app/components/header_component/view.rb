@@ -2,21 +2,12 @@
 
 module HeaderComponent
   class View < ViewComponent::Base
-    attr_accessor :is_signed_in, :user_name, :user_profile_link, :signout_link, :list_of_users_path, :mou_path, :hosting_environment
+    attr_accessor :hosting_environment, :navigation_items
 
-    def initialize(is_signed_in:, user_name:, user_profile_link:, signout_link:, list_of_users_path:, mou_path:, hosting_environment: HostingEnvironment)
+    def initialize(hosting_environment: HostingEnvironment, navigation_items: [])
       super
-      @is_signed_in = is_signed_in
-      @user_name = user_name
-      @user_profile_link = user_profile_link
-      @signout_link = signout_link
-      @mou_path = mou_path
-      @list_of_users_path = list_of_users_path
       @hosting_environment = hosting_environment
-    end
-
-    def is_signed_in?
-      is_signed_in
+      @navigation_items = navigation_items
     end
 
     def environment_name

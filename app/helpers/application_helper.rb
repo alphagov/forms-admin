@@ -64,34 +64,8 @@ module ApplicationHelper
     "/node_modules/govuk-frontend/govuk/assets"
   end
 
-  def header_component_options(user:, can_manage_users:, can_manage_mous: false)
-    auth_links = {
-      auth0: {
-        user_profile_link: nil,
-        signout_link: sign_out_path,
-      },
-      cddo_sso: {
-        user_profile_link: "https://sso.service.security.gov.uk/profile",
-        signout_link: sign_out_path,
-      },
-      gds: {
-        user_profile_link: GDS::SSO::Config.oauth_root_url,
-        signout_link: gds_sign_out_path,
-      },
-      mock_gds_sso: {
-        user_profile_link: nil,
-        signout_link: sign_out_path,
-      },
-    }
-    auth_links.default = {}
-    links = auth_links[user&.provider&.to_sym]
-
-    { is_signed_in: user.present?,
-      user_name: user&.name.presence,
-      user_profile_link: (user.blank? ? nil : links[:user_profile_link]),
-      list_of_users_path: (can_manage_users ? users_path : nil),
-      mou_path: (can_manage_mous ? mou_signatures_path : nil),
-      signout_link: (user.blank? ? nil : links[:signout_link]) }
+  def header_component_options(user:)
+    { navigation_items: NavigationItemsService.call(user:).navigation_items }
   end
 
   def user_role_options(roles = User.roles.keys)
