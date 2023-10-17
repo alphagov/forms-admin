@@ -28,8 +28,8 @@ describe Forms::LiveController, type: :controller do
         allow(CloudWatchService).to receive(:week_starts).and_return(0)
       end
 
-      it "returns form_is_new: true and 0 weekly submissions" do
-        expect(live_controller.metrics_data).to eq({ weekly_submissions: 0, form_is_new: true, weekly_starts: 0 })
+      it "returns 0 weekly submissions" do
+        expect(live_controller.metrics_data).to eq({ weekly_submissions: 0, weekly_starts: 0 })
       end
     end
 
@@ -43,8 +43,8 @@ describe Forms::LiveController, type: :controller do
         allow(CloudWatchService).to receive(:week_starts).and_return(1991)
       end
 
-      it "returns form_is_new: true and the correct number of weekly starts and submissions" do
-        expect(live_controller.metrics_data).to eq({ weekly_submissions: 1255, form_is_new: false, weekly_starts: 1991 })
+      it "returns the correct number of weekly starts and submissions" do
+        expect(live_controller.metrics_data).to eq({ weekly_submissions: 1255, weekly_starts: 1991 })
       end
     end
 

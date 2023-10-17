@@ -94,7 +94,7 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
 
   context "when form is too new" do
     let(:form_live_date) { Time.zone.today }
-    let(:metrics_data) { { weekly_submissions: 0, form_is_new: true } }
+    let(:metrics_data) { { weekly_submissions: 0 } }
 
     it "returns the 'new form' message" do
       expect(metrics_summary.error_message).to eq(I18n.t("metrics_summary.errors.new_form_html"))
@@ -111,7 +111,7 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
 
   context "when form went live yesterday" do
     let(:form_live_date) { 1.day.ago.to_date }
-    let(:metrics_data) { { weekly_submissions: 269, form_is_new: false, weekly_starts: 1000 } }
+    let(:metrics_data) { { weekly_submissions: 269, weekly_starts: 1000 } }
     let(:forms_started_but_not_completed) { metrics_data[:weekly_starts] - metrics_data[:weekly_submissions] }
     let(:percentage) { metrics_summary.calculate_percentage(metrics_data[:weekly_submissions], metrics_data[:weekly_starts]) }
 
@@ -145,7 +145,7 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
   end
 
   context "when weekly starts is zero" do
-    let(:metrics_data) { { weekly_submissions: 0, form_is_new: false, weekly_starts: 0 } }
+    let(:metrics_data) { { weekly_submissions: 0, weekly_starts: 0 } }
 
     it "returns the 'no starts' message" do
       expect(metrics_summary.error_message).to eq(I18n.t("metrics_summary.errors.no_submissions_html"))
@@ -157,7 +157,7 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
   end
 
   context "when weekly starts is not zero" do
-    let(:metrics_data) { { weekly_submissions: 269, form_is_new: false, weekly_starts: 1000 } }
+    let(:metrics_data) { { weekly_submissions: 269, weekly_starts: 1000 } }
     let(:forms_started_but_not_completed) { metrics_data[:weekly_starts] - metrics_data[:weekly_submissions] }
     let(:percentage) { metrics_summary.calculate_percentage(metrics_data[:weekly_submissions], metrics_data[:weekly_starts]) }
 
@@ -187,7 +187,7 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
   end
 
   context "when there are fewer than 7 days worth of data" do
-    let(:metrics_data) { { weekly_submissions: 269, form_is_new: false, weekly_starts: 1000 } }
+    let(:metrics_data) { { weekly_submissions: 269, weekly_starts: 1000 } }
     let(:forms_started_but_not_completed) { metrics_data[:weekly_starts] - metrics_data[:weekly_submissions] }
     let(:percentage) { metrics_summary.calculate_percentage(metrics_data[:weekly_submissions], metrics_data[:weekly_starts]) }
     let(:form_live_date) { 3.days.ago.to_date }

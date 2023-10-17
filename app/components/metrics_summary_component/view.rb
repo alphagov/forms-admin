@@ -12,7 +12,7 @@ module MetricsSummaryComponent
 
       if metrics_data.nil?
         @error_message = I18n.t("metrics_summary.errors.error_loading_data_html")
-      elsif metrics_data[:form_is_new]
+      elsif @start_date == Time.zone.today
         @error_message = I18n.t("metrics_summary.errors.new_form_html")
       elsif metrics_data[:weekly_starts].zero?
         @error_message = I18n.t("metrics_summary.errors.no_submissions_html")
