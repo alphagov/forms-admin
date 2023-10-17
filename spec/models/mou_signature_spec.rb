@@ -14,7 +14,6 @@ RSpec.describe MouSignature, type: :model do
   it "setting user to nil triggers a DB constraint" do
     mou_signature.user = nil
     expect { mou_signature.save(validate: false) }.to raise_error(ActiveRecord::StatementInvalid).with_message(/null value in column "user_id"/)
-    # expect { mou_signature.update_column(:user_id, nil) }.to raise_error(ActiveRecord::StatementInvalid).with_message(/null value in column "user_id"/)
   end
 
   it "creating more than one mou_signature for the same user and organisation triggers a DB constraint" do
