@@ -75,6 +75,28 @@ class Form < ActiveResource::Base
     Time.zone.parse(live_at.to_s).to_date if defined?(live_at)
   end
 
+  def metrics_data
+    return nil unless FeatureService.enabled?(:metrics_for_form_creators_enabled)
+
+    # If the form went live today, there won't be any metrics to show
+    today = Time.zone.today
+
+    form_is_new = made_live_date == today
+
+    weekly_submissions = form_is_new ? 0 : CloudWatchService.week_submissions(form_id: id)
+    weekly_starts = form_is_new ? 0 : CloudWatchService.week_starts(form_id: id)
+
+    {
+      weekly_submissions:,
+      weekly_starts:,
+    }
+  rescue Aws::CloudWatch::Errors::ServiceError,
+         Aws::Errors::MissingCredentialsError => e
+
+    Sentry.capture_exception(e)
+    nil
+  end
+
 private
 
   def has_routing_conditions

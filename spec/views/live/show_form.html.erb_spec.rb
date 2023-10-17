@@ -9,7 +9,8 @@ describe "live/show_form.html.erb", feature_metrics_for_form_creators_enabled: f
 
   before do
     allow(view).to receive(:live_form_pages_path).and_return("/live-form-pages-path")
-    render(template: "live/show_form", locals: { form_metadata:, form:, metrics_data: })
+    allow(form).to receive(:metrics_data).and_return(metrics_data)
+    render(template: "live/show_form", locals: { form_metadata:, form: })
   end
 
   it "has the correct title" do
