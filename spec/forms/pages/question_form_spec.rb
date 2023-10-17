@@ -94,4 +94,32 @@ RSpec.describe Pages::QuestionForm, type: :model do
       end
     end
   end
+
+  describe "#submit" do
+    it "returns false if the form is invalid" do
+      allow(question_form).to receive(:invalid?).and_return(true)
+      expect(question_form.submit).to eq false
+    end
+
+    context "when form is valid valid" do
+      before do
+        question_form.question_text = "How old are you?"
+        question_form.hint_text = "As a number"
+        question_form.is_optional = false
+        question_form.submit
+      end
+
+      it "sets a draft_question question_text" do
+        expect(question_form.draft_question.question_text).to eq question_form.question_text
+      end
+
+      it "sets a draft_question hint_text" do
+        expect(question_form.draft_question.hint_text).to eq question_form.hint_text
+      end
+
+      it "sets a draft_question is_optional" do
+        expect(question_form.draft_question.is_optional).to eq question_form.is_optional
+      end
+    end
+  end
 end

@@ -19,7 +19,7 @@ class Pages::QuestionsController < PagesController
     @question_form = Pages::QuestionForm.new(page_params.merge(answer_settings:, page_heading:, guidance_markdown:, draft_question:))
 
     # TODO: Move Page creation to be part of the form submit method
-    if @question_form.valid? && @page.save
+    if @question_form.submit && @page.save
       clear_questions_session_data
       handle_submit_action
     else
@@ -48,7 +48,7 @@ class Pages::QuestionsController < PagesController
                                                                draft_question:))
 
     # TODO: Move Page creation to be part of the form submit method
-    if @question_form.valid? && page.save
+    if @question_form.submit && page.save
       clear_questions_session_data
       handle_submit_action
     else

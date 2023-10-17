@@ -11,4 +11,14 @@ class Pages::QuestionForm < BaseForm
 
   validates :draft_question, presence: true
   validates :hint_text, length: { maximum: 500 }
+
+  def submit
+    return false if invalid?
+
+    draft_question.question_text = question_text
+    draft_question.hint_text = hint_text
+    draft_question.is_optional = is_optional
+    draft_question.question_text = question_text
+    draft_question.save!(validate: false)
+  end
 end
