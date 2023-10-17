@@ -249,6 +249,10 @@ describe Form, type: :model do
       described_class.new(id: 2, live_at: Time.zone.now - 1.day)
     end
 
+    before do
+      allow(form).to receive(:status).and_return(:live)
+    end
+
     context "when the form was made today" do
       let(:form) do
         described_class.new(id: 2, live_at: Time.zone.now)
@@ -308,6 +312,20 @@ describe Form, type: :model do
       it "returns nil and logs the exception in Sentry" do
         expect(form.metrics_data).to eq(nil)
         expect(Sentry).to have_received(:capture_exception).once
+      end
+    end
+
+    context "when the form is not live" do
+      let(:form) do
+        described_class.new(id: 2)
+      end
+
+      before do
+        allow(form).to receive(:status).and_return(:live)
+      end
+
+      it "returns nil" do
+        expect(form.metrics_data).to eq(nil)
       end
     end
 

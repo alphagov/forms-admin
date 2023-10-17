@@ -77,6 +77,7 @@ class Form < ActiveResource::Base
 
   def metrics_data
     return nil unless FeatureService.enabled?(:metrics_for_form_creators_enabled)
+    return nil unless status == :live
 
     # If the form went live today, there won't be any metrics to show
     today = Time.zone.today
