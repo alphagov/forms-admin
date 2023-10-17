@@ -2,7 +2,8 @@ require "rails_helper"
 
 RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_for_form_creators_enabled: true do
   let(:metrics_data) { nil }
-  let(:metrics_summary) { described_class.new(metrics_data) }
+  let(:form_live_date) { 7.days.ago.to_date }
+  let(:metrics_summary) { described_class.new(form_live_date, metrics_data) }
 
   before do
     render_inline(metrics_summary)
@@ -59,7 +60,6 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
 
   describe "#number_of_days" do
     it "returns the number of days between the start date and today's date, inclusive" do
-      metrics_summary.start_date = 1.week.ago.to_date
       metrics_summary.end_date = 1.day.ago.to_date
 
       expect(metrics_summary.number_of_days).to eq(7)
@@ -150,7 +150,7 @@ RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_
     let(:metrics_data) { { weekly_submissions: 269, form_is_new: false, weekly_starts: 1000 } }
     let(:forms_started_but_not_completed) { metrics_data[:weekly_starts] - metrics_data[:weekly_submissions] }
     let(:percentage) { metrics_summary.calculate_percentage(metrics_data[:weekly_submissions], metrics_data[:weekly_starts]) }
-    let(:start_date) { 3.days.ago.to_date }
+    let(:form_live_date) { 3.days.ago.to_date }
 
     it "renders the completion rate percentage" do
       expect(page).to have_text("#{I18n.t('metrics_summary.completion_rate')} #{percentage}%")

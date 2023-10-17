@@ -4,9 +4,10 @@ module MetricsSummaryComponent
   class View < ViewComponent::Base
     attr_accessor :start_date, :end_date, :weekly_submissions, :weekly_starts, :weekly_started_but_not_completed, :weekly_completion_rate, :form_has_metrics, :error_message
 
-    def initialize(metrics_data)
+    def initialize(form_live_date, metrics_data)
       super
-      set_dates
+      @start_date = [form_live_date, 7.days.ago.to_date].max
+      @end_date = 1.day.ago.to_date
 
       if metrics_data.nil?
         @error_message = I18n.t("metrics_summary.errors.error_loading_data_html")
@@ -54,11 +55,6 @@ module MetricsSummaryComponent
     end
 
   private
-
-    def set_dates
-      @start_date = 1.week.ago.to_date
-      @end_date = 1.day.ago.to_date
-    end
 
     def format_date(date)
       "<span class=\"app-metrics__date\">#{date.strip}</span>"
