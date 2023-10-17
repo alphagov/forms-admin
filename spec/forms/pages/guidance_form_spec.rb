@@ -5,6 +5,11 @@ RSpec.describe Pages::GuidanceForm, type: :model do
   let(:page_heading) { "New guidance heading" }
   let(:guidance_markdown) { "## Level heading 2" }
 
+  it "has a valid factory" do
+    guidance_form = build :guidance_form
+    expect(guidance_form).to be_valid
+  end
+
   describe "validations" do
     it "is invalid if page heading is nil" do
       error_message = I18n.t("activemodel.errors.models.pages/guidance_form.attributes.page_heading.blank")
