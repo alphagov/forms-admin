@@ -1,9 +1,8 @@
 class MouSignaturePolicy
-  attr_reader :user, :record
+  attr_reader :user
 
-  def initialize(user, record)
+  def initialize(user, _record)
     @user = user
-    @record = record
   end
 
   def can_manage_mous?
