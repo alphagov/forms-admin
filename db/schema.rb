@@ -44,10 +44,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_03_140934) do
     t.index ["form_id"], name: "index_form_submission_emails_on_form_id"
   end
 
-  create_table "mou_signatures", comment: "User signatures of an MOU for an oragnisation", force: :cascade do |t|
+  create_table "mou_signatures", comment: "User signatures of a memorandum of understanding (MOU) for an organisation", force: :cascade do |t|
     t.bigint "user_id", null: false, comment: "User who signed MOU"
     t.bigint "organisation_id", comment: "Organisation which user signed MOU on behalf of, or null"
-    t.datetime "agreed_at", null: false, comment: "The datetime of the signature"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organisation_id"], name: "index_mou_signatures_on_organisation_id"
@@ -68,6 +67,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_03_140934) do
 
   create_table "schema_info", id: false, force: :cascade do |t|
     t.integer "version", default: 0, null: false
+  end
+
+  create_table "sessions", force: :cascade do |t|
+    t.string "session_id", null: false
+    t.text "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["session_id"], name: "index_sessions_on_session_id", unique: true
+    t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
 
   create_table "users", force: :cascade do |t|

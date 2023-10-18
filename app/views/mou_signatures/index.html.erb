@@ -22,7 +22,7 @@
           end
           row.with_cell( text: mou_signature.user.email )
           row.with_cell( text: mou_signature.organisation&.name.presence || t("users.index.organisation_blank"))
-          row.with_cell( text: l(mou_signature.agreed_at.to_date, :format => :long) )
+          row.with_cell( text: l(mou_signature.created_at.to_date, :format => :long) )
         end
       end
     end %>

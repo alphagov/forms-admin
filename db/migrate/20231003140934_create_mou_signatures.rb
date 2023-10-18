@@ -10,9 +10,6 @@ class CreateMouSignatures < ActiveRecord::Migration[7.0]
                                   foreign_key: true,
                                   comment: "Organisation which user signed MOU on behalf of, or null"
 
-      t.datetime :agreed_at, null: false,
-                             comment: "The datetime of the signature"
-
       t.timestamps null: false
     end
 

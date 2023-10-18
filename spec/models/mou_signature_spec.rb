@@ -7,7 +7,6 @@ RSpec.describe MouSignature, type: :model do
     described_class.create!(
       user:,
       organisation:,
-      agreed_at: Time.zone.now,
     )
   end
 
@@ -22,7 +21,6 @@ RSpec.describe MouSignature, type: :model do
       described_class.create!(
         user: mou_signature.user,
         organisation: mou_signature.organisation,
-        agreed_at: Time.zone.now,
       )
     }.to raise_error(ActiveRecord::RecordNotUnique).with_message(/duplicate key value violates unique constraint "index_mou_signatures_on_user_id_and_organisation_id"/)
   end
@@ -35,7 +33,6 @@ RSpec.describe MouSignature, type: :model do
       described_class.create!(
         user: another_user,
         organisation: mou_signature.organisation,
-        agreed_at: Time.zone.now,
       )
     }.not_to raise_error
   end
@@ -43,13 +40,11 @@ RSpec.describe MouSignature, type: :model do
   it "creating more than one mou_signature for the same user with no organisation triggers a DB constraint" do
     described_class.create!(
       user: mou_signature.user,
-      agreed_at: Time.zone.now,
     )
 
     expect {
       described_class.create!(
         user: mou_signature.user,
-        agreed_at: Time.zone.now,
       )
     }.to raise_error(ActiveRecord::RecordNotUnique).with_message(/duplicate key value violates unique constraint "index_mou_signatures_on_user_id_unique_without_organisation_id"/)
   end
@@ -62,7 +57,6 @@ RSpec.describe MouSignature, type: :model do
       described_class.create!(
         user: another_user,
         organisation: nil,
-        agreed_at: Time.zone.now,
       )
     }.not_to raise_error
   end
