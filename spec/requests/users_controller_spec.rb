@@ -156,7 +156,7 @@ RSpec.describe UsersController, type: :request do
         it "does not update user if name is cleared" do
           put user_path(user), params: { user: { name: nil } }
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(response.body).to include "You must enter a name for editor or super admin users"
+          expect(response.body).to include "Enter the user’s name"
           expect(user.reload.organisation).not_to eq(nil)
         end
       end

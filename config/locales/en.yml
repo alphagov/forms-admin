@@ -34,7 +34,7 @@ en:
         user:
           attributes:
             name:
-              blank: You must enter a name for editor or super admin users
+              blank: Enter the user’s name
             organisation_id:
               blank: Select the user’s organisation
             role:
