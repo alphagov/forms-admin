@@ -12,7 +12,7 @@ module MetricsSummaryComponent
 
       if metrics_data.nil?
         @error_message = I18n.t("metrics_summary.errors.error_loading_data_html")
-      elsif @start_date == Time.zone.today
+      elsif form_went_live_today?
         @error_message = I18n.t("metrics_summary.errors.new_form_html")
       elsif metrics_data[:weekly_starts].zero?
         @error_message = I18n.t("metrics_summary.errors.no_submissions_html")
@@ -56,9 +56,9 @@ module MetricsSummaryComponent
     end
 
     def heading_text
-      if start_date == Time.zone.today
+      if form_went_live_today?
         I18n.t("metrics_summary.heading_without_dates")
-      elsif start_date == Time.zone.yesterday
+      elsif form_went_live_yesterday?
         I18n.t("metrics_summary.heading_with_single_date", date: format_date(start_date.strftime("%e %B %Y")))
       else
         I18n.t("metrics_summary.heading_with_dates", number_of_days:, formatted_date_range:)
@@ -69,6 +69,14 @@ module MetricsSummaryComponent
 
     def format_date(date)
       "<span class=\"app-metrics__date\">#{date.strip}</span>"
+    end
+
+    def form_went_live_today?
+      start_date == Time.zone.today
+    end
+
+    def form_went_live_yesterday?
+      start_date == Time.zone.yesterday
     end
   end
 end
