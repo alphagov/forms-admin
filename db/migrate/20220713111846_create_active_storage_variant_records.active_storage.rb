@@ -1,4 +1,3 @@
-# rubocop:disable all
 # This migration comes from active_storage (originally 20191206030411)
 class CreateActiveStorageVariantRecords < ActiveRecord::Migration[6.0]
   def change
@@ -27,4 +26,3 @@ private
     pkey_column.bigint? ? :bigint : pkey_column.type
   end
 end
-# rubocop:enable all
