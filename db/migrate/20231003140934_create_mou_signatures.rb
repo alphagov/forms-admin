@@ -1,7 +1,7 @@
 class CreateMouSignatures < ActiveRecord::Migration[7.0]
   def change
     create_table :mou_signatures,
-                 comment: "User signatures of an MOU for an oragnisation" do |t|
+                 comment: "User signatures of a memorandum of understanding (MOU) for an organisation" do |t|
       t.references :user, null: false,
                           foreign_key: true,
                           comment: "User who signed MOU"
