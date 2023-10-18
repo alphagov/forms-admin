@@ -53,8 +53,14 @@ describe "users/edit.html.erb" do
       expect(summary_list).to have_text(user.email)
     end
 
-    it "contains organisation slug from GOV.UK Signon" do
-      expect(summary_list).to have_text(user.organisation_slug)
+    context "with user from GOV.UK Signon" do
+      let(:user) do
+        build :user, :with_unknown_org, role: :editor, id: 1, organisation_slug: "department-for-testing"
+      end
+
+      it "contains organisation slug from GOV.UK Signon" do
+        expect(summary_list).to have_text(user.organisation_slug)
+      end
     end
 
     it "contains organisation name" do
