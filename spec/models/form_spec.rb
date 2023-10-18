@@ -249,10 +249,6 @@ describe Form, type: :model do
       described_class.new(id: 2, live_at: Time.zone.now - 1.day)
     end
 
-    before do
-      allow(form).to receive(:status).and_return(:live)
-    end
-
     context "when the form was made today" do
       let(:form) do
         described_class.new(id: 2, live_at: Time.zone.now)
@@ -318,10 +314,6 @@ describe Form, type: :model do
     context "when the form is not live" do
       let(:form) do
         described_class.new(id: 2)
-      end
-
-      before do
-        allow(form).to receive(:status).and_return(:live)
       end
 
       it "returns nil" do
