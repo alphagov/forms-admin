@@ -243,4 +243,96 @@ describe Form, type: :model do
       end
     end
   end
+
+  describe "#metrics_data", feature_metrics_for_form_creators_enabled: true do
+    let(:form) do
+      described_class.new(id: 2, live_at: Time.zone.now - 1.day)
+    end
+
+    before do
+      allow(form).to receive(:status).and_return(:live)
+    end
+
+    context "when the form was made today" do
+      let(:form) do
+        described_class.new(id: 2, live_at: Time.zone.now)
+      end
+
+      before do
+        allow(CloudWatchService).to receive(:week_submissions).and_return(0)
+        allow(CloudWatchService).to receive(:week_starts).and_return(0)
+      end
+
+      it "returns 0 weekly submissions" do
+        expect(form.metrics_data).to eq({ weekly_submissions: 0, weekly_starts: 0 })
+      end
+
+      it "does not call Cloudwatch" do
+        form.metrics_data
+        expect(CloudWatchService).not_to have_received(:week_submissions)
+        expect(CloudWatchService).not_to have_received(:week_starts)
+      end
+    end
+
+    context "when the form was made before today" do
+      before do
+        allow(CloudWatchService).to receive(:week_submissions).and_return(1255)
+        allow(CloudWatchService).to receive(:week_starts).and_return(1991)
+      end
+
+      it "returns the correct number of weekly starts and submissions" do
+        expect(form.metrics_data).to eq({ weekly_submissions: 1255, weekly_starts: 1991 })
+      end
+
+      it "calls the CloudWatch service" do
+        form.metrics_data
+        expect(CloudWatchService).to have_received(:week_submissions).once
+        expect(CloudWatchService).to have_received(:week_starts).once
+      end
+    end
+
+    context "when AWS credentials have not been configured" do
+      before do
+        allow(Sentry).to receive(:capture_exception)
+        allow(CloudWatchService).to receive(:week_starts).and_raise(Aws::Errors::MissingCredentialsError)
+      end
+
+      it "returns nil and logs the exception in Sentry" do
+        expect(form.metrics_data).to eq(nil)
+        expect(Sentry).to have_received(:capture_exception).once
+      end
+    end
+
+    context "when CloudWatch returns an error" do
+      before do
+        allow(CloudWatchService).to receive(:week_starts).and_raise(Aws::CloudWatch::Errors::ServiceError)
+        allow(Sentry).to receive(:capture_exception)
+      end
+
+      it "returns nil and logs the exception in Sentry" do
+        expect(form.metrics_data).to eq(nil)
+        expect(Sentry).to have_received(:capture_exception).once
+      end
+    end
+
+    context "when the form is not live" do
+      let(:form) do
+        described_class.new(id: 2)
+      end
+
+      before do
+        allow(form).to receive(:status).and_return(:live)
+      end
+
+      it "returns nil" do
+        expect(form.metrics_data).to eq(nil)
+      end
+    end
+
+    context "when the metrics feature flag is off", feature_metrics_for_form_creators_enabled: false do
+      it "returns nil" do
+        expect(form.metrics_data).to eq(nil)
+      end
+    end
+  end
 end
