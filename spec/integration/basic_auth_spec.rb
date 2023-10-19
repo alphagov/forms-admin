@@ -60,6 +60,7 @@ RSpec.describe "using basic auth" do
       expect(assigns[:current_user].name).to eq username
       expect(assigns[:current_user].email).to eq "#{username}@example.com"
       expect(assigns[:current_user].organisation.slug).to eq "test-org"
+      expect(assigns[:current_user].provider).to eq "basic_auth"
     end
   end
 end
