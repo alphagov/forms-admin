@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Pages::QuestionForm, type: :model do
-  let(:question_form) { build(:question_form, question_text:) }
+  let(:question_form) { build :question_form, question_text:, draft_question: }
+  let(:draft_question) { build :draft_question, question_text: }
   let(:question_text) { "What is your full name?" }
 
   it "has a valid factory" do
@@ -82,6 +83,42 @@ RSpec.describe Pages::QuestionForm, type: :model do
           question_form.valid?
           expect(question_form.errors[:hint_text]).to include(I18n.t("activemodel.errors.models.pages/question_form.attributes.hint_text.too_long", count: 500))
         end
+      end
+    end
+
+    context "when not given a draft_question" do
+      let(:draft_question) { nil }
+
+      it "is invalid" do
+        expect(question_form).to be_invalid
+      end
+    end
+  end
+
+  describe "#submit" do
+    it "returns false if the form is invalid" do
+      allow(question_form).to receive(:invalid?).and_return(true)
+      expect(question_form.submit).to eq false
+    end
+
+    context "when form is valid valid" do
+      before do
+        question_form.question_text = "How old are you?"
+        question_form.hint_text = "As a number"
+        question_form.is_optional = false
+        question_form.submit
+      end
+
+      it "sets a draft_question question_text" do
+        expect(question_form.draft_question.question_text).to eq question_form.question_text
+      end
+
+      it "sets a draft_question hint_text" do
+        expect(question_form.draft_question.hint_text).to eq question_form.hint_text
+      end
+
+      it "sets a draft_question is_optional" do
+        expect(question_form.draft_question.is_optional).to eq question_form.is_optional
       end
     end
   end

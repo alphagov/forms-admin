@@ -1,9 +1,14 @@
 require "rails_helper"
 
 RSpec.describe Pages::GuidanceForm, type: :model do
-  let(:guidance_form) { described_class.new(page_heading:, guidance_markdown:) }
+  let(:guidance_form) { build :guidance_form, page_heading:, guidance_markdown:, draft_question: }
+  let(:draft_question) { build :draft_question, page_heading:, guidance_markdown: }
   let(:page_heading) { "New guidance heading" }
   let(:guidance_markdown) { "## Level heading 2" }
+
+  it "has a valid factory" do
+    expect(guidance_form).to be_valid
+  end
 
   describe "validations" do
     it "is invalid if page heading is nil" do
@@ -56,6 +61,14 @@ RSpec.describe Pages::GuidanceForm, type: :model do
       error_message = I18n.t("activemodel.errors.models.pages/guidance_form.attributes.page_heading.too_long", count: 250)
       expect(guidance_form.errors.full_messages_for(:page_heading)).to include("Page heading #{error_message}")
     end
+
+    context "when not given a draft_question" do
+      let(:draft_question) { nil }
+
+      it "is invalid" do
+        expect(guidance_form).to be_invalid
+      end
+    end
   end
 
   describe "#submit" do
@@ -78,6 +91,15 @@ RSpec.describe Pages::GuidanceForm, type: :model do
       it "sets a session key called 'page' as a hash with the guidance_markdown in it" do
         guidance_form.submit(session_mock)
         expect(session_mock[:page][:guidance_markdown]).to eq guidance_markdown
+      end
+
+      it "sets draft_question page_heading and guidance_markdown" do
+        guidance_form.page_heading = "This is my heading"
+        guidance_form.guidance_markdown = "This is markdown guidance"
+        guidance_form.submit(session_mock)
+
+        expect(guidance_form.draft_question.page_heading).to eq("This is my heading")
+        expect(guidance_form.draft_question.guidance_markdown).to eq("This is markdown guidance")
       end
     end
   end

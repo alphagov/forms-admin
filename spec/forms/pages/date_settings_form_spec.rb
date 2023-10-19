@@ -1,11 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Pages::DateSettingsForm, type: :model do
-  let(:form) { build :form, id: 1 }
-  let(:date_settings_form) { described_class.new }
+  let(:date_settings_form) { build :date_settings_form, draft_question: }
+  let(:draft_question) { build :draft_question, answer_type: "date", form_id: 1 }
 
   it "has a valid factory" do
-    date_settings_form = build :date_settings_form
     expect(date_settings_form).to be_valid
   end
 
@@ -37,12 +36,21 @@ RSpec.describe Pages::DateSettingsForm, type: :model do
         expect(date_settings_form).to be_valid "#{input_type} is not an input type"
       end
     end
+
+    context "when not given a draft_question" do
+      let(:draft_question) { nil }
+
+      it "is invalid" do
+        expect(date_settings_form).to be_invalid
+      end
+    end
   end
 
   describe "#submit" do
     let(:session_mock) { {} }
 
     it "returns false if the form is invalid" do
+      allow(date_settings_form).to receive(:invalid?).and_return(true)
       expect(date_settings_form.submit(session_mock)).to be_falsey
     end
 
@@ -50,6 +58,17 @@ RSpec.describe Pages::DateSettingsForm, type: :model do
       date_settings_form.input_type = "date_of_birth"
       date_settings_form.submit(session_mock)
       expect(session_mock[:page][:answer_settings]).to include(input_type: "date_of_birth")
+    end
+
+    it "sets draft_question answer_settings" do
+      date_settings_form.input_type = "date_of_birth"
+      date_settings_form.submit(session_mock)
+
+      expected_settings = {
+        input_type: "date_of_birth",
+      }.with_indifferent_access
+
+      expect(date_settings_form.draft_question.answer_settings).to include(expected_settings)
     end
   end
 end

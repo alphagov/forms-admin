@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
   belongs_to :organisation, optional: true
   has_many :mou_signatures
+  has_many :draft_questions
 
   serialize :permissions, Array
 

@@ -47,7 +47,7 @@ class Pages::AddressSettingsController < PagesController
 private
 
   def address_settings_form_params
-    params.require(:pages_address_settings_form).permit(:uk_address, :international_address)
+    params.require(:pages_address_settings_form).permit(:uk_address, :international_address).merge(draft_question:)
   end
 
   def address_settings_view

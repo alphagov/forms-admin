@@ -3,5 +3,6 @@ FactoryBot.define do
     selection_options { [{ name: "Option 1" }, { name: "Option 2" }] }
     only_one_option { "true" }
     include_none_of_the_above { true }
+    draft_question { build :draft_question, answer_type: "selection" }
   end
 end

@@ -9,7 +9,8 @@ class Pages::SelectionsSettingsController < PagesController
 
   def create
     answer_settings = load_answer_settings_from_params(selections_settings_form_params)
-    @selections_settings_form = Pages::SelectionsSettingsForm.new(answer_settings)
+    # TODO: Can remove the merge once we replaced session storage with ActiveRecord
+    @selections_settings_form = Pages::SelectionsSettingsForm.new(answer_settings.merge(draft_question:))
     @selections_settings_path = selections_settings_create_path(@form)
     @back_link_url = question_text_new_path(@form)
 
@@ -35,9 +36,10 @@ class Pages::SelectionsSettingsController < PagesController
   end
 
   def update
-    @selections_settings_path = selections_settings_update_path(@form)
     answer_settings = load_answer_settings_from_params(selections_settings_form_params)
-    @selections_settings_form = Pages::SelectionsSettingsForm.new(answer_settings)
+    # TODO: Can remove the merge once we replaced session storage with ActiveRecord
+    @selections_settings_form = Pages::SelectionsSettingsForm.new(answer_settings.merge(draft_question:))
+    @selections_settings_path = selections_settings_update_path(@form)
     @back_link_url = edit_question_path(@form, page)
 
     if params[:add_another]

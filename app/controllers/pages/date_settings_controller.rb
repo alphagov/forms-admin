@@ -44,6 +44,6 @@ class Pages::DateSettingsController < PagesController
 private
 
   def date_settings_form_params
-    params.require(:pages_date_settings_form).permit(:input_type)
+    params.require(:pages_date_settings_form).permit(:input_type).merge(draft_question:)
   end
 end

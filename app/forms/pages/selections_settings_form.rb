@@ -3,8 +3,9 @@ class Pages::SelectionsSettingsForm < BaseForm
                       only_one_option: false,
                       include_none_of_the_above: false }.freeze
 
-  attr_accessor :selection_options, :only_one_option, :include_none_of_the_above
+  attr_accessor :selection_options, :only_one_option, :include_none_of_the_above, :draft_question
 
+  validates :draft_question, presence: true
   validate :selection_options, :validate_selection_options
 
   def add_another
@@ -22,6 +23,14 @@ class Pages::SelectionsSettingsForm < BaseForm
   def submit(session)
     return false if invalid?
 
+    # Set answer_settings for the draft_question
+    draft_question
+      .assign_attributes({ answer_settings: answer_settings.with_indifferent_access,
+                           is_optional: include_none_of_the_above })
+
+    draft_question.save!(validate: false)
+
+    # TODO: remove this once we have draft_questions being saved across the whole journey
     session[:page] = {} if session[:page].blank?
 
     session[:page][:answer_settings] = answer_settings.with_indifferent_access

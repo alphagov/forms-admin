@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Pages::SelectionsSettingsForm, type: :model do
-  let(:selections_settings_form) { described_class.new }
+  let(:selections_settings_form) { build :selections_settings_form, draft_question: }
+  let(:draft_question) { build :draft_question, answer_type: "selection" }
 
   it "has a valid factory" do
-    selections_settings_form = build :selections_settings_form
     expect(selections_settings_form).to be_valid
   end
 
@@ -44,6 +44,14 @@ RSpec.describe Pages::SelectionsSettingsForm, type: :model do
       expect(selections_settings_form).to be_valid
       expect(selections_settings_form.errors.full_messages_for(:selection_options)).to be_empty
     end
+
+    context "when not given a draft_question" do
+      let(:draft_question) { nil }
+
+      it "is invalid" do
+        expect(selections_settings_form).to be_invalid
+      end
+    end
   end
 
   describe "#submit" do
@@ -61,6 +69,21 @@ RSpec.describe Pages::SelectionsSettingsForm, type: :model do
       selections_settings_form.submit(session_mock)
       expect(session_mock[:page][:answer_settings].to_json).to eq({ only_one_option: true, selection_options: [{ name: "1" }, { name: "2" }] }.to_json)
       expect(session_mock[:page][:is_optional]).to eq(true)
+    end
+
+    it "sets draft_question answer_settings and is_optional" do
+      selections_settings_form.selection_options = (1..2).to_a.map { |i| { name: i.to_s } }
+      selections_settings_form.only_one_option = true
+      selections_settings_form.include_none_of_the_above = true
+      selections_settings_form.submit(session_mock)
+
+      expected_settings = {
+        only_one_option: true,
+        selection_options: [{ name: "1" }, { name: "2" }],
+      }.with_indifferent_access
+
+      expect(selections_settings_form.draft_question.answer_settings).to include(expected_settings)
+      expect(selections_settings_form.draft_question.is_optional).to eq(true)
     end
   end
 
