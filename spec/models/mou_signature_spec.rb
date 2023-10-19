@@ -11,7 +11,7 @@ RSpec.describe MouSignature, type: :model do
     error_message = I18n.t("errors.messages.required")
 
     mou_signature.user = nil
-    expect(mou_signature).not_to be_valid
+    expect(mou_signature).to be_invalid
     expect(mou_signature.errors[:user]).to include(error_message)
   end
 end
