@@ -3,7 +3,7 @@ require "rails_helper"
 describe NavigationItemsService do
   include Rails.application.routes.url_helpers
 
-  let!(:provider) { nil }
+  let!(:provider) { :gds }
   let!(:user) { build(:user, provider:) }
   let!(:service) { described_class.new(user:) }
 

@@ -30,7 +30,7 @@ private
   attr_reader :user
 
   def user_provider
-    user&.provider&.to_sym
+    user.provider.to_sym
   end
 
   def signout_url
@@ -51,10 +51,10 @@ private
   end
 
   def should_show_user_profile_link?
-    Pundit.policy(user, :user)&.can_manage_user?
+    Pundit.policy(user, :user).can_manage_user?
   end
 
   def should_show_mous_link?
-    Pundit.policy(user, :mou_signature)&.can_manage_mous?
+    Pundit.policy(user, :mou_signature).can_manage_mous?
   end
 end
