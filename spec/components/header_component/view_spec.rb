@@ -1,31 +1,16 @@
 require "rails_helper"
 
 RSpec.describe HeaderComponent::View, type: :component do
-  let(:is_signed_in) { true }
-  let(:list_of_users_path) { "https://forms.users" }
-  let(:user_name) { "Joe Smith" }
-  let(:user_profile_link) { "http://signon.dev.gov.uk" }
-  let(:signout_link) { "/auth/gds/sign_out" }
-  let(:hosting_environment) { OpenStruct.new(friendly_environment_name:) }
+  let(:navigation_items) { [] }
   let(:local_development) { false }
   let(:friendly_environment_name) { "production" }
+  let(:hosting_environment) { OpenStruct.new(friendly_environment_name:) }
 
   let(:header_component) do
-    described_class.new(is_signed_in:,
-                        list_of_users_path:,
-                        user_name:,
-                        user_profile_link:,
-                        signout_link:,
-                        hosting_environment:)
+    described_class.new(navigation_items:, hosting_environment:)
   end
 
   describe "default status" do
-    let(:is_signed_in) { false }
-    let(:list_of_users_path) { nil }
-    let(:user_name) { nil }
-    let(:user_profile_link) { nil }
-    let(:signout_link) { nil }
-
     before do
       render_inline(header_component)
     end
@@ -34,74 +19,23 @@ RSpec.describe HeaderComponent::View, type: :component do
       expect(page).to have_text(I18n.t("header.product_name"))
     end
 
-    it "does not contain the profile link" do
-      expect(page).not_to have_link("Joe Smith", href: "http://signon.dev.gov.uk")
-    end
+    context "when given navigation_items" do
+      let(:navigation_items) do
+        [
+          { text: "Mous", href: "/mous" },
+          { text: "Users", href: "/users" },
+          { text: "Joe Smith", href: "/profile" },
+          { text: "Sign out", href: "/signout" },
+        ]
+      end
 
-    it "does not contain the sign out link" do
-      expect(page).not_to have_link(I18n.t("header.sign_out"), href: "/auth/gds/sign_out")
-    end
-  end
-
-  describe "logged in status" do
-    let(:list_of_users_path) { nil }
-
-    before do
-      render_inline(header_component)
-    end
-
-    it "contains the service name" do
-      expect(page).to have_text(I18n.t("header.product_name"))
-    end
-
-    it "contains the profile link" do
-      expect(page).to have_link("Joe Smith", href: "http://signon.dev.gov.uk")
-    end
-
-    it "contains the sign out link" do
-      expect(page).to have_link(I18n.t("header.sign_out"), href: "/auth/gds/sign_out")
-    end
-  end
-
-  context "when no profile link or signout in passed in" do
-    let(:list_of_users_path) { nil }
-    let(:user_profile_link) { nil }
-    let(:signout_link) { nil }
-
-    before do
-      render_inline(header_component)
-    end
-
-    it "the user name appears without a link" do
-      expect(page).not_to have_link("Joe Smith")
-      expect(page).to have_text("Joe Smith")
-    end
-
-    it "Signout appears without a link" do
-      expect(page).not_to have_link(I18n.t("header.sign_out"))
-      expect(page).to have_text(I18n.t("header.sign_out"))
-    end
-  end
-
-  context "when user has permission to view list of users" do
-    before do
-      render_inline(header_component)
-    end
-
-    it "contains the service name" do
-      expect(page).to have_text(I18n.t("header.product_name"))
-    end
-
-    it "contains the link to users pages" do
-      expect(page).to have_link(I18n.t("header.users"), href: "https://forms.users")
-    end
-
-    it "contains the profile link" do
-      expect(page).to have_link("Joe Smith", href: "http://signon.dev.gov.uk")
-    end
-
-    it "contains the sign out link" do
-      expect(page).to have_link(I18n.t("header.sign_out"), href: "/auth/gds/sign_out")
+      it "displays navigation items" do
+        expect(page).to have_css(".govuk-header__navigation-list li", count: 4)
+        expect(page).to have_link("Mous", href: "/mous")
+        expect(page).to have_link("Users", href: "/users")
+        expect(page).to have_link("Joe Smith", href: "/profile")
+        expect(page).to have_link("Sign out", href: "/signout")
+      end
     end
   end
 

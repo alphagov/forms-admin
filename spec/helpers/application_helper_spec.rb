@@ -150,67 +150,6 @@ RSpec.describe ApplicationHelper, type: :helper do
     end
   end
 
-  describe "#header_component_options" do
-    let(:user) { build :user }
-    let(:can_manage_users) { false }
-
-    context "when a user is not signed in" do
-      let(:user) { nil }
-
-      it "returns options" do
-        expect(helper.header_component_options(user:, can_manage_users:)).to eq({ is_signed_in: false, list_of_users_path: nil, signout_link: nil, user_name: nil, user_profile_link: nil })
-      end
-    end
-
-    context "when a user is signed in with GOV.UK Signon" do
-      let(:user) { build :user, provider: :gds }
-
-      it "returns the following options" do
-        expect(helper.header_component_options(user:, can_manage_users:)).to eq({ is_signed_in: true,
-                                                                                  list_of_users_path: nil,
-                                                                                  signout_link: "/auth/gds/sign_out",
-                                                                                  user_name: user.name,
-                                                                                  user_profile_link: "http://signon.dev.gov.uk" })
-      end
-
-      context "when can manager users" do
-        let(:can_manage_users) { true }
-
-        it "returns the following options" do
-          expect(helper.header_component_options(user:, can_manage_users:)).to eq({ is_signed_in: true,
-                                                                                    list_of_users_path: users_path,
-                                                                                    signout_link: "/auth/gds/sign_out",
-                                                                                    user_name: user.name,
-                                                                                    user_profile_link: "http://signon.dev.gov.uk" })
-        end
-      end
-
-      context "when a user is signed in with http basic auth" do
-        let(:user) { build :user, provider: :basic_auth }
-
-        it "returns the following options" do
-          expect(helper.header_component_options(user:, can_manage_users:)).to eq({ is_signed_in: true,
-                                                                                    list_of_users_path: nil,
-                                                                                    signout_link: nil,
-                                                                                    user_name: user.name,
-                                                                                    user_profile_link: nil })
-        end
-      end
-
-      context "when a user is signed in with auth0" do
-        let(:user) { build :user, provider: :auth0, name: nil }
-
-        it "returns the following options" do
-          expect(helper.header_component_options(user:, can_manage_users:)).to eq({ is_signed_in: true,
-                                                                                    list_of_users_path: nil,
-                                                                                    signout_link: "/sign-out",
-                                                                                    user_name: nil,
-                                                                                    user_profile_link: nil })
-        end
-      end
-    end
-  end
-
   describe "#user_role_options" do
     before do
       allow(I18n).to receive(:translate).with("users.roles.role1.name", any_args).and_return("name1")

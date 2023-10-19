@@ -24,6 +24,7 @@ Warden::Strategies.add(:basic_auth) do
         name: Settings.basic_auth.username,
         email: "#{Settings.basic_auth.username}@example.com",
         role: :editor,
+        provider: "basic_auth",
         organisation: Organisation.find_or_initialize_by(
           name: Settings.basic_auth.organisation.name,
           slug: Settings.basic_auth.organisation.slug,

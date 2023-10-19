@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_02_063756) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_03_140934) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,6 +44,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_063756) do
     t.index ["form_id"], name: "index_form_submission_emails_on_form_id"
   end
 
+  create_table "mou_signatures", comment: "User signatures of a memorandum of understanding (MOU) for an organisation", force: :cascade do |t|
+    t.bigint "user_id", null: false, comment: "User who signed MOU"
+    t.bigint "organisation_id", comment: "Organisation which user signed MOU on behalf of, or null"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organisation_id"], name: "index_mou_signatures_on_organisation_id"
+    t.index ["user_id", "organisation_id"], name: "index_mou_signatures_on_user_id_and_organisation_id", unique: true, comment: "Users can only sign an MOU for an Organisation once"
+    t.index ["user_id"], name: "index_mou_signatures_on_user_id"
+    t.index ["user_id"], name: "index_mou_signatures_on_user_id_unique_without_organisation_id", unique: true, where: "(organisation_id IS NULL)", comment: "Users can only sign a single MOU without an organisation"
+  end
+
   create_table "organisations", force: :cascade do |t|
     t.string "govuk_content_id"
     t.string "slug", null: false
@@ -56,6 +67,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_063756) do
 
   create_table "schema_info", id: false, force: :cascade do |t|
     t.integer "version", default: 0, null: false
+  end
+
+  create_table "sessions", force: :cascade do |t|
+    t.string "session_id", null: false
+    t.text "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["session_id"], name: "index_sessions_on_session_id", unique: true
+    t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
 
   create_table "users", force: :cascade do |t|
@@ -90,5 +110,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_063756) do
   end
 
   add_foreign_key "draft_questions", "users"
+  add_foreign_key "mou_signatures", "organisations"
+  add_foreign_key "mou_signatures", "users"
   add_foreign_key "users", "organisations"
 end
