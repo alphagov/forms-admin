@@ -9,7 +9,9 @@ class Pages::QuestionTextForm < BaseForm
     return false if invalid?
 
     # Set question_text for the draft_question
-    draft_question.question_text = question_text
+    draft_question
+      .assign_attributes(question_text:)
+
     draft_question.save!(validate: false)
 
     # TODO: remove this once we have draft_questions being saved across the whole journey

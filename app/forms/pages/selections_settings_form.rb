@@ -24,8 +24,10 @@ class Pages::SelectionsSettingsForm < BaseForm
     return false if invalid?
 
     # Set answer_settings for the draft_question
-    draft_question.answer_settings = answer_settings.with_indifferent_access
-    draft_question.is_optional = include_none_of_the_above
+    draft_question
+      .assign_attributes({ answer_settings: answer_settings.with_indifferent_access,
+                           is_optional: include_none_of_the_above })
+
     draft_question.save!(validate: false)
 
     # TODO: remove this once we have draft_questions being saved across the whole journey

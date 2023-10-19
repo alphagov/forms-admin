@@ -7,11 +7,12 @@ class Pages::TypeOfAnswerForm < BaseForm
   def submit(session)
     return false if invalid?
 
+    draft_question
+      .assign_attributes({ answer_type:, answer_settings: nil })
+
+    draft_question.save!(validate: false)
+
     # TODO: remove this once we have draft_questions being saved across the whole journey
     session[:page] = { answer_type:, answer_settings: nil }
-
-    draft_question.answer_type = answer_type
-    draft_question.answer_settings = nil
-    draft_question.save!(validate: false)
   end
 end

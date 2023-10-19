@@ -10,8 +10,9 @@ class Pages::GuidanceForm < BaseForm
   def submit(session)
     return false if invalid?
 
-    draft_question.page_heading = page_heading
-    draft_question.guidance_markdown = guidance_markdown
+    draft_question
+      .assign_attributes({ page_heading:, guidance_markdown: })
+
     draft_question.save!(validate: false)
 
     # TODO: remove this once we have draft_questions being saved across the whole journey

@@ -15,10 +15,12 @@ class Pages::QuestionForm < BaseForm
   def submit
     return false if invalid?
 
-    draft_question.question_text = question_text
-    draft_question.hint_text = hint_text
-    draft_question.is_optional = is_optional
-    draft_question.question_text = question_text
+    draft_question.assign_attributes(
+      question_text:,
+      hint_text:,
+      is_optional:,
+    )
+
     draft_question.save!(validate: false)
   end
 end
