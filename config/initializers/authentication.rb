@@ -33,6 +33,8 @@ Rails.application.config.before_initialize do
     warden.default_strategies(Settings.auth_provider.to_sym, :gds_bearer_token)
     warden.failure_app = AuthenticationController
   end
+
+  GDS::SSO::Config.auth_valid_for = Settings.auth_valid_for
 end
 
 # Monkeypatch omniauth_openid_connect
