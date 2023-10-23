@@ -65,10 +65,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_03_140934) do
     t.index ["slug"], name: "index_organisations_on_slug", unique: true
   end
 
-  create_table "schema_info", id: false, force: :cascade do |t|
-    t.integer "version", default: 0, null: false
-  end
-
   create_table "sessions", force: :cascade do |t|
     t.string "session_id", null: false
     t.text "data"
