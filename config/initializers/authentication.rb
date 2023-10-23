@@ -9,6 +9,7 @@ Rails.application.config.before_initialize do
     callback_path: "/auth/auth0/callback",
     authorize_params: {
       scope: "openid email",
+      connection: "email", # default to using the passwordless flow
     },
   )
 
