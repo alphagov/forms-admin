@@ -38,6 +38,8 @@ sentry:
 # How we authenticate users
 auth_provider: # use default auth_provider from environment
 
+auth_valid_for: 86400 # the time after which re-authentication is required, in seconds
+
 auth0:
   client_id: changeme
   client_secret:

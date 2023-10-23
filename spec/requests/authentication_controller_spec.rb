@@ -67,6 +67,36 @@ RSpec.describe AuthenticationController, type: :request do
 
       expect(response).to redirect_to(live_form_pages_path(42))
     end
+
+    context "when the user's session expires" do
+      before do
+        allow(controller_spy).to receive(:redirect_to_omniauth).and_call_original
+
+        # shorten the auth_valid_for time for testing
+        GDS::SSO::Config.auth_valid_for = 1
+
+        logout
+      end
+
+      after do
+        GDS::SSO::Config.auth_valid_for = Settings.auth_valid_for
+      end
+
+      it "re-authenticates after the configured time" do
+        login_as_editor_user
+
+        get root_path
+
+        expect(controller_spy).not_to have_received(:redirect_to_omniauth)
+
+        # wait for the auth_valid_for time to pass
+        sleep(1)
+
+        get root_path
+
+        expect(controller_spy).to have_received(:redirect_to_omniauth).once
+      end
+    end
   end
 
   describe "#callback_from_omniauth" do
