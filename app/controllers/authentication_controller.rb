@@ -9,7 +9,19 @@ class AuthenticationController < ApplicationController
 
   def redirect_to_omniauth
     store_location(attempted_path) if request.get?
-    redirect_to "/auth/#{default_provider}"
+
+    params = {}
+    if default_provider == "auth0" && e2e_user?
+      # the value passed in connection must match the name given in the auth0 terraform
+      params[:connection] = "Username-Password-Authentication"
+    end
+
+    redirect_to ActionDispatch::Http::URL.path_for(path: "/auth/#{default_provider}", params:)
+  end
+
+  def e2e_user?
+    # this should be appended to the first request in the e2e tests to activate the username/password flow
+    request.params[:auth] == "e2e"
   end
 
   def callback_from_omniauth

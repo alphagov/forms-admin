@@ -68,6 +68,28 @@ RSpec.describe AuthenticationController, type: :request do
       expect(response).to redirect_to(live_form_pages_path(42))
     end
 
+    context "when the auth provider is auth0" do
+      context "and the user is the end to end test user" do
+        it "uses the Auth0 username/password flow" do
+          allow(Settings).to receive(:auth_provider).and_return("auth0")
+
+          get root_path, params: { auth: "e2e" }
+
+          expect(response).to redirect_to("/auth/auth0?connection=Username-Password-Authentication")
+        end
+      end
+
+      context "and the user is not the end to end test user" do
+        it "uses the Auth0 passwordless flow" do
+          allow(Settings).to receive(:auth_provider).and_return("auth0")
+
+          get root_path
+
+          expect(response).to redirect_to("/auth/auth0")
+        end
+      end
+    end
+
     context "when the user's session expires" do
       before do
         allow(controller_spy).to receive(:redirect_to_omniauth).and_call_original
