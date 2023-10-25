@@ -1,6 +1,7 @@
 # Used to add feature flags in the app to control access to certain features.
 features:
   detailed_guidance_enabled: true
+  email_confirmations_enabled: true
 
 forms_api:
   # URL to form-api endpoints
