@@ -72,31 +72,19 @@ RSpec.describe Pages::GuidanceForm, type: :model do
   end
 
   describe "#submit" do
-    let(:session_mock) { {} }
-
     it "returns false if the form is invalid" do
       allow(guidance_form).to receive(:invalid?).and_return(true)
-      expect(guidance_form.submit(session_mock)).to eq false
+      expect(guidance_form.submit).to eq false
     end
 
     context "when page_heading and guidance_markdown are valid" do
       let(:page_heading) { "My new page heading" }
       let(:guidance_markdown) { "Extra guidance needed to answer this question" }
 
-      it "sets a session key called 'page' as a hash with the page heading in it" do
-        guidance_form.submit(session_mock)
-        expect(session_mock[:page][:page_heading]).to eq page_heading
-      end
-
-      it "sets a session key called 'page' as a hash with the guidance_markdown in it" do
-        guidance_form.submit(session_mock)
-        expect(session_mock[:page][:guidance_markdown]).to eq guidance_markdown
-      end
-
       it "sets draft_question page_heading and guidance_markdown" do
         guidance_form.page_heading = "This is my heading"
         guidance_form.guidance_markdown = "This is markdown guidance"
-        guidance_form.submit(session_mock)
+        guidance_form.submit
 
         expect(guidance_form.draft_question.page_heading).to eq("This is my heading")
         expect(guidance_form.draft_question.guidance_markdown).to eq("This is markdown guidance")

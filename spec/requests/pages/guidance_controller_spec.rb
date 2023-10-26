@@ -4,8 +4,15 @@ RSpec.describe Pages::GuidanceController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
   let(:page) { pages.first }
+  let(:draft_question) { build :draft_question }
   let(:page_heading) { "Page heading" }
   let(:guidance_markdown) { "## Heading level 2" }
+
+  let(:controller_spy) do
+    controller_spy = described_class.new
+    allow(described_class).to receive(:new).and_return(controller_spy)
+    controller_spy
+  end
 
   let(:req_headers) do
     {
@@ -64,6 +71,8 @@ RSpec.describe Pages::GuidanceController, type: :request do
         mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
       end
+
+      allow(controller_spy).to receive(:draft_question).and_return(draft_question)
       post guidance_new_path(form_id: form.id), params: { pages_guidance_form: { page_heading:, guidance_markdown: }, route_to: }
     end
 
@@ -123,8 +132,8 @@ RSpec.describe Pages::GuidanceController, type: :request do
       end
 
       it "saves the page_heading and guidance_markdown to session" do
-        expect(session[:page][:page_heading]).to eq("Page heading")
-        expect(session[:page][:guidance_markdown]).to eq("## Heading level 2")
+        expect(draft_question.page_heading).to eq("Page heading")
+        expect(draft_question.guidance_markdown).to eq("## Heading level 2")
       end
 
       it "redirects the user to the new question page" do
@@ -187,6 +196,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
         mock.get "/api/v1/forms/1/pages/#{page.id}", req_headers, page.to_json, 200
       end
+      allow(controller_spy).to receive(:draft_question).and_return(draft_question)
       post guidance_update_path(form_id: form.id, page_id: page.id), params: { pages_guidance_form: { page_heading:, guidance_markdown: }, route_to: }
     end
 
@@ -246,8 +256,8 @@ RSpec.describe Pages::GuidanceController, type: :request do
       end
 
       it "saves the page_heading and guidance_markdown to session" do
-        expect(session[:page][:page_heading]).to eq("Page heading")
-        expect(session[:page][:guidance_markdown]).to eq("## Heading level 2")
+        expect(draft_question.page_heading).to eq("Page heading")
+        expect(draft_question.guidance_markdown).to eq("## Heading level 2")
       end
 
       it "redirects the user to the edit question page" do
