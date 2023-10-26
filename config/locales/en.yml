@@ -73,6 +73,7 @@ en:
         <p>
           The contact information will be displayed at the bottom of every page of the form.
         </p>
+      email_confirmation_hint_html: It will also be included in an email confirming that a form's been submitted - if people choose to receive this. The email will include the date and time of submission. It will not contain a copy of someone's answers.
       hint: Select at least one option
       title: How can people get help with filling in this form?
   contact_govuk_forms: contact the GOV.UK Forms team
