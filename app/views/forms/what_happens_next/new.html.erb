@@ -14,22 +14,22 @@
         <%= t("page_titles.what_happens_next_form") %>
       </h1>
 
-      <p>This page will be shown after someone has completed and submitted the form to let them know it's been submitted successfully.</p>
+      <p>This page will be shown after someone has completed and submitted the form to let them know it’s been submitted successfully.</p>
 
       <p>Add some content to let people know what will happen next and when, so they know what to expect.</p>
 
       <h2 class="govuk-heading-s">Example</h2>
 
       <%= govuk_inset_text do %>
-        We'll send you an email to let you know the outcome. You'll usually get a response within 10 working days.
+        We’ll send you an email to let you know the outcome. You’ll usually get a response within 10 working days.
       <% end %>
 
       <% if FeatureService.enabled?(:email_confirmations_enabled) %>
         <p class="govuk-!-margin-bottom-6">
-          This content will also be included in an email confirming that a form's been
-          submitted - if people choose to receive this. The email will include date and
+          This content will also be included in an email confirming that a form’s been
+          submitted - if people choose to receive this. The email will include the date and
           time of submission, and contact details for support. It will not contain
-          a copy of someone's answers.
+          a copy of someone’s answers.
         </p>
       <% end %>
 
