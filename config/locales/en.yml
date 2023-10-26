@@ -387,7 +387,7 @@ en:
       <p>If you need urgent help with your forms you can %{link}.</p>
     title: Sorry, the service is unavailable
   make_changes_live:
-    url_will_remain_same: The URL for the live form will remain the same.
+    url_will_remain_same: Links to the form will still work, even if you’ve changed the form’s name.
     warning: |
       When you make your changes live, there may be an impact on people who are
       filling in the live form at the same time. They may lose any answers they
