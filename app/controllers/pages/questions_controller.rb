@@ -4,16 +4,17 @@ class Pages::QuestionsController < PagesController
     question_text = session.dig(:page, :question_text)
     answer_settings = session.dig(:page, :answer_settings)
     is_optional = session.dig(:page, :is_optional) == "true"
-    page_heading = session.dig(:page, :page_heading)
-    guidance_markdown = session.dig(:page, :guidance_markdown)
+    page_heading = draft_question.page_heading
+    guidance_markdown = draft_question.guidance_markdown
     @question_form = Pages::QuestionForm.new(form_id: @form.id, answer_type:, question_text:, answer_settings:, is_optional:, draft_question:)
+
     @page = Page.new(form_id: @form.id, question_text:, answer_type:, answer_settings:, is_optional:, page_heading:, guidance_markdown:)
   end
 
   def create
     answer_settings = session.dig(:page, :answer_settings)
-    page_heading = session.dig(:page, :page_heading)
-    guidance_markdown = session.dig(:page, :guidance_markdown)
+    page_heading = draft_question.page_heading
+    guidance_markdown = draft_question.guidance_markdown
 
     @page = Page.new(page_params.merge(answer_settings:, page_heading:, guidance_markdown:))
     @question_form = Pages::QuestionForm.new(page_params.merge(answer_settings:, page_heading:, guidance_markdown:, draft_question:))
@@ -29,9 +30,11 @@ class Pages::QuestionsController < PagesController
 
   def edit
     reset_session_if_answer_settings_not_present
-    page.load_from_session(session, %i[answer_settings answer_type is_optional page_heading guidance_markdown])
+    page.load_from_session(session, %i[answer_settings answer_type is_optional])
 
-    draft_question
+    page.page_heading = draft_question.page_heading
+    page.guidance_markdown = draft_question.guidance_markdown
+
     @question_form = Pages::QuestionForm.new(form_id: @form.id,
                                              answer_type: page.answer_type,
                                              question_text: page.question_text,
@@ -41,7 +44,9 @@ class Pages::QuestionsController < PagesController
   end
 
   def update
-    page.load_from_session(session, %i[answer_type answer_settings page_heading guidance_markdown]).load(page_params)
+    page.load_from_session(session, %i[answer_type answer_settings]).load(page_params)
+    page.page_heading = draft_question.page_heading
+    page.guidance_markdown = draft_question.guidance_markdown
 
     @question_form = Pages::QuestionForm.new(page_params.merge(answer_settings: page.answer_settings,
                                                                page_heading: page.page_heading,

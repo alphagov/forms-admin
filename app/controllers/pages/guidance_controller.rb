@@ -2,9 +2,8 @@ require "govuk_forms_markdown"
 
 class Pages::GuidanceController < PagesController
   def new
-    page_heading = session.dig(:page, :page_heading)
-    guidance_markdown = session.dig(:page, :guidance_markdown)
-    guidance_form = Pages::GuidanceForm.new(page_heading:, guidance_markdown:)
+    guidance_form = Pages::GuidanceForm.new(page_heading: draft_question.page_heading,
+                                            guidance_markdown: draft_question.guidance_markdown)
     back_link = new_question_path(@form)
     render "pages/guidance", locals: view_locals(nil, guidance_form, back_link)
   end
@@ -18,7 +17,7 @@ class Pages::GuidanceController < PagesController
       guidance_form.valid?
       render "pages/guidance", locals: view_locals(nil, guidance_form, back_link)
     when :save_and_continue
-      if guidance_form.submit(session)
+      if guidance_form.submit
         redirect_to new_question_path(@form)
       else
         render "pages/guidance", locals: view_locals(nil, guidance_form, back_link), status: :unprocessable_entity
@@ -27,10 +26,8 @@ class Pages::GuidanceController < PagesController
   end
 
   def edit
-    page.load_from_session(session, %i[answer_type page_heading guidance_markdown])
-
-    guidance_form = Pages::GuidanceForm.new(page_heading: page.page_heading,
-                                            guidance_markdown: page.guidance_markdown)
+    guidance_form = Pages::GuidanceForm.new(page_heading: draft_question.page_heading,
+                                            guidance_markdown: draft_question.guidance_markdown)
     back_link = edit_question_path(@form, page)
 
     render "pages/guidance", locals: view_locals(page, guidance_form, back_link)
@@ -45,7 +42,7 @@ class Pages::GuidanceController < PagesController
       guidance_form.valid?
       render "pages/guidance", locals: view_locals(page, guidance_form, back_link)
     when :save_and_continue
-      if guidance_form.submit(session)
+      if guidance_form.submit
         redirect_to edit_question_path(@form.id, page.id)
       else
         render "pages/guidance", locals: view_locals(page, guidance_form, back_link), status: :unprocessable_entity
