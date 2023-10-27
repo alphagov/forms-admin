@@ -360,7 +360,7 @@ en:
           '1': I meet these requirements
     legend:
       user_upgrade_request:
-        met_requirements: Confirm if you meet these requirements
+        met_requirements: Confirm that you meet these requirements
   home:
     create_a_form: Create a form
     form_name_heading: Form name
@@ -757,26 +757,25 @@ en:
   user_upgrade_request:
     new:
       body_html: |
-        <p>GOV.UK Forms is in development with selected partners in central government.</p>
+        <p>GOV.UK Forms is in the early stages of development, so it will not be suitable for all types of form at the moment.</p>
 
-        <p>If you’re from a central government organisation you might be able to upgrade to an editor account early. You’ll need to meet some requirements.</p>
-
-        <p>You may be able to upgrade to an editor account if:</p>
+        <p>Before we process your request for an upgrade, we need to check that you meet these requirements:</p>
 
         <ul class="govuk-list govuk-list--bullet">
-          <li>you need to make an online form to be published on GOV.UK</li>
-          <li>you believe your form can be created with the features already available — <a href="https://www.forms.service.gov.uk/features" class="govuk-link">read about the features available already</a> and try to make the form to check this</li>
-          <li>your form is expected to get between 250 and 10,000 submissions a year</li>
-          <li>you’re happy to be asked to provide feedback and take part in user research</li>
+          <li>you’ve tried out the form builder and you’re confident you can create your forms using <a href="https://www.forms.service.gov.uk/features" class="govuk-link">the limited features available</a> at the moment</li>
+          <li>your organisation is ok with form responses being emailed individually to the team email address you provide (we’re planning to support other ways of receiving form submissions, but they’re not available yet)</li>
+          <li>you’ll only use GOV.UK Forms to make forms to be published on the GOV.UK website - not on other website or for other uses such as internal forms or surveys</li>
+          <li>you do not expect any of the forms you’re planning to make to get more than 10,000 submissions a year</li>
+          <li>you’re happy to be asked for feedback and to take part in user research</li>
         </ul>
 
-        <p>If you believe you meet these requirements, we’ll get in touch with you to discuss the next steps.</p>
+        <p>If you meet these requirements, we’ll email you to ask for a bit more information. We’ll then get in touch to discuss the next steps.</p>
     show:
       body_html: |
         <h2 class="govuk-heading-l">What happens next</h2>
-        <p class="govuk-body">Check your email and reply with the information requested.</p>
-        <p class="govuk-body">We’ll then get in contact with you to discuss the next steps. It may take up to 2 weeks.</p>
-      panel_title: We’ve sent you an email to request more information
+        <p class="govuk-body">Check your email and reply with the information we’ve requested.</p>
+        <p class="govuk-body">We’ll then get in contact with you to discuss the next steps.</p>
+      panel_title: We’ve sent you an email asking for more information
   users:
     cancel: Cancel
     edit:
