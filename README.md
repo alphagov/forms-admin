@@ -7,7 +7,7 @@ GOV.UK Forms is a service for creating forms. GOV.UK Forms Admin is a an applica
 To run the project you will need to install:
 
 - [Ruby](https://www.ruby-lang.org/en/) - we use version 3 of Ruby. Before running the project, double check the [.ruby-version](.ruby-version) file to see the exact version.
-- [Node.js](https://nodejs.org/en/) - the frontend build requires Node.js. We use Node 18 LTS versions.
+- [Node.js](https://nodejs.org/en/) - the frontend build requires Node.js. We use Node 20 LTS versions.
 - a running [PostgreSQL](https://www.postgresql.org/) database
 
 We recommend using a version manager to install and manage these, such as:
