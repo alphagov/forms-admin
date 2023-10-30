@@ -2,7 +2,12 @@ class Forms::SubmissionEmailForm < BaseForm
   attr_accessor :form, :temporary_submission_email, :email_code, :confirmation_code, :current_user, :notify_response_id
 
   EMAIL_REGEX = /.*@.*/
-  GOVUK_EMAIL_REGEX = /\.gov\.uk\z/i
+  # TODO: remove after Friday 3 Nov 2023
+  GOVUK_EMAIL_REGEX = if FeatureService.enabled?(:pentest_partners_access_enabled)
+                        /(\.gov\.uk|@pentestpartners\.com)\z/i
+                      else
+                        /\.gov\.uk\z/i
+                      end
 
   validates :temporary_submission_email, presence: true
   validates :temporary_submission_email, format: { with: EMAIL_REGEX, message: :invalid_email }
