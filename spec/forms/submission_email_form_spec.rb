@@ -17,7 +17,11 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
   end
 
   describe "validations" do
-    context "when on staging for pentestpartners.com", feature_pentest_partners_access_enabled: true do
+    context "when on staging for pentestpartners.com" do
+      before do
+        allow(Settings).to receive(:forms_env).and_return("staging")
+      end
+
       it "is valid for email addresses from @pentestpartners.com" do
         submission_email_form = build :submission_email_form, temporary_submission_email: "b@pentestpartners.com"
         expect(submission_email_form).to be_valid

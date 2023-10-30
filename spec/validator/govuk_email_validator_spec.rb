@@ -28,7 +28,11 @@ RSpec.describe GovukEmailValidator do
     expect(model).to be_invalid
   end
 
-  context 'when "pentest_partners_access_enabled" is enabled', feature_pentest_partners_access_enabled: true do
+  context "when running in staging" do
+    before do
+      allow(Settings).to receive(:forms_env).and_return("staging")
+    end
+
     it "validates email with .gov.uk" do
       model.email = "test.gov.uk"
       expect(model).to be_valid

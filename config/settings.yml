@@ -3,7 +3,6 @@ features:
   detailed_guidance_enabled: false
   email_confirmations_enabled: false
   metrics_for_form_creators_enabled: false
-  pentest_partners_access_enabled: false
 
 forms_api:
   # Authentication key to authenticate forms-runner to forms-api
