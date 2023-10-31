@@ -1,16 +1,16 @@
 <% set_page_title(title_with_error_prefix(t("page_titles.new_page_form"), @type_of_answer_form.errors.any?)) %>
-<% content_for :back_link, govuk_back_link_to(form_pages_path(@form)) %>
+<% content_for :back_link, govuk_back_link_to(form_pages_path(current_form)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <% if @page.present? && @page.conditions.any?  %>
       <%= govuk_notification_banner(title_text: t("type_of_answer.routing_warning_notification_title")) do |banner| %>
         <% banner.with_heading(text: t("type_of_answer.routing_warning_about_change_answer_type_heading")) %>
-        <%= t("type_of_answer.routing_warning_about_change_answer_type_html", pages_link_url: form_pages_path(@form)) %>
+        <%= t("type_of_answer.routing_warning_about_change_answer_type_html", pages_link_url: form_pages_path(current_form)) %>
       <% end %>
     <% end %>
 
-    <%= form_with model: [@form, @type_of_answer_form], url: @type_of_answer_path do |f| %>
+    <%= form_with model: [current_form, @type_of_answer_form], url: @type_of_answer_path do |f| %>
       <%= f.govuk_error_summary %>
 
       <%= f.govuk_collection_radio_buttons(
@@ -20,7 +20,7 @@
             ->(option) { t('helpers.label.page.answer_type_options.names.' + option) },
             ->(option) { t('helpers.label.page.answer_type_options.descriptions.' + option) },
             legend: { text: t('page_titles.type_of_answer'), size: 'l', tag: 'h1' },
-            caption: { text: "#{t("pages.question")} #{@form.page_number(@page)}" , size: 'l' },
+            caption: { text: "#{t("pages.question")} #{current_form.page_number(@page)}" , size: 'l' },
             bold_labels: false,
           )  %>
 
@@ -28,7 +28,7 @@
     <% end %>
 
     <p>
-      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(@form) %>
+      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form) %>
     </p>
   </div>
 </div>

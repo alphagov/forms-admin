@@ -4,10 +4,10 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
 
-    <%= form_with model: [@form, guidance_form], url: post_url do |f| %>
+    <%= form_with model: [current_form, guidance_form], url: post_url do |f| %>
       <%= f.govuk_error_summary %>
       <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l"><%= t("pages.question") %> <%= form.page_number(page) %></span>
+        <span class="govuk-caption-l"><%= t("pages.question") %> <%= current_form.page_number(page) %></span>
         <span class="govuk-visually-hidden"> - </span>
         <%= t("guidance.add_guidance") %>
       </h1>
@@ -18,7 +18,7 @@
 
       <%= render MarkdownEditorComponent::View.new(:guidance_markdown,
         form_builder: f,
-        render_preview_path: guidance_render_preview_path(@form),
+        render_preview_path: guidance_render_preview_path(current_form),
         preview_html:,
         form_model: guidance_form,
         label: t("helpers.label.pages_guidance_form.guidance_markdown"),
@@ -39,7 +39,7 @@
 
     <% end %>
     <p>
-      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(@form) %>
+      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form) %>
     </p>
   </div>
 </div>

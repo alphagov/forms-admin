@@ -7,16 +7,15 @@ class FormsController < ApplicationController
 
   def show
     authorize current_form, :can_view_form?
-    @form = current_form
-    task_service = FormTaskListService.call(form: @form, current_user:)
+    task_service = FormTaskListService.call(form: current_form, current_user:)
     @task_list = task_service.all_sections
     @task_status_counts = task_service.task_counts
+    render :show, locals: { current_form: }
   end
 
   def mark_pages_section_completed
     authorize current_form, :can_view_form?
-    @form = current_form
-    @pages = @form.pages
+    @pages = current_form.pages
     @mark_complete_form = Forms::MarkCompleteForm.new(mark_complete_form_params)
 
     if @mark_complete_form.mark_section
@@ -25,20 +24,17 @@ class FormsController < ApplicationController
                         else
                           t("banner.success.form.pages_saved")
                         end
-      redirect_to form_path(@form), success: success_message
+      redirect_to form_path(current_form), success: success_message
     else
       @mark_complete_form.mark_complete = "false"
-      render "pages/index", status: :unprocessable_entity
+      @forms = policy_scope(Form) || []
+      render "pages/index", locals: { current_form: }, status: :unprocessable_entity
     end
   end
 
 private
 
-  def current_form
-    @current_form ||= Form.find(params[:form_id])
-  end
-
   def mark_complete_form_params
-    params.require(:forms_mark_complete_form).permit(:mark_complete).merge(form: @form)
+    params.require(:forms_mark_complete_form).permit(:mark_complete).merge(form: current_form)
   end
 end

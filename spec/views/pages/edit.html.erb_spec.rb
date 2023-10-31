@@ -11,17 +11,20 @@ describe "pages/edit.html.erb" do
     current_user = OpenStruct.new(uid: "123456")
 
     # If models aren't persisted, they won't work with form builders correctly
-    allow(question_form).to receive(:persisted?).and_return(true)
-    allow(form).to receive(:persisted?).and_return(true)
-    allow(view).to receive(:type_of_answer_edit_path).and_return("/type-of-answer")
-    allow(view).to receive(:selections_settings_edit_path).and_return("/selections_settings")
-    allow(view).to receive(:text_settings_edit_path).and_return("/text-settings")
-    allow(view).to receive(:date_settings_edit_path).and_return("/date-settings")
-    allow(view).to receive(:address_settings_edit_path).and_return("/address-settings")
-    allow(view).to receive(:name_settings_edit_path).and_return("/name-settings")
+
+    without_partial_double_verification do
+      allow(question_form).to receive(:persisted?).and_return(true)
+      allow(form).to receive(:persisted?).and_return(true)
+      allow(view).to receive(:type_of_answer_edit_path).and_return("/type-of-answer")
+      allow(view).to receive(:selections_settings_edit_path).and_return("/selections_settings")
+      allow(view).to receive(:text_settings_edit_path).and_return("/text-settings")
+      allow(view).to receive(:date_settings_edit_path).and_return("/date-settings")
+      allow(view).to receive(:address_settings_edit_path).and_return("/address-settings")
+      allow(view).to receive(:name_settings_edit_path).and_return("/name-settings")
+      allow(view).to receive(:current_form).and_return(form)
+    end
 
     # Assign instance variables so they can be accessed from views
-    assign(:form, form)
     assign(:page, page)
     assign(:question_form, question_form)
     assign(:current_user, current_user)

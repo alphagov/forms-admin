@@ -309,6 +309,7 @@ RSpec.describe FormsController, type: :request do
     context "when the mark completed form is invalid" do
       before do
         ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms?organisation_id=1", headers, [form].to_json, 200
           mock.get "/api/v1/forms/2", headers, form.to_json, 200
           mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
           mock.put "/api/v1/forms/2", post_headers

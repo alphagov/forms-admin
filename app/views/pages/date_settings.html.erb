@@ -3,7 +3,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with model: [@form, @date_settings_form], url: @date_settings_path do |f| %>
+    <%= form_with model: [current_form, @date_settings_form], url: @date_settings_path do |f| %>
       <%= f.govuk_error_summary %>
       <%= f.govuk_collection_radio_buttons(
             :input_type,
@@ -11,13 +11,13 @@
             ->(option) { option },
             ->(option) { t('helpers.label.page.date_settings_options.names.' + option) },
             legend: { text: t('page_titles.date_settings'), size: 'l', tag: 'h1' },
-            caption: { text: "#{t("pages.question")} #{@form.page_number(@page)}" , size: 'l' },
+            caption: { text: "#{t("pages.question")} #{current_form.page_number(@page)}" , size: 'l' },
           )  %>
       <%= f.govuk_submit t('continue') %>
     <% end %>
 
     <p>
-      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(@form) %>
+      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form) %>
     </p>
   </div>
 </div>

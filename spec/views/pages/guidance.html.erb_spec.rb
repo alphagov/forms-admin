@@ -21,10 +21,10 @@ describe "pages/guidance.html.erb", type: :view do
     # mock the path helper
     without_partial_double_verification do
       allow(view).to receive(:form_pages_guidance_form_path).and_return(guidance_form_path)
+      allow(view).to receive(:current_form).and_return(form)
     end
 
     # setup instance variables
-    assign(:form, form)
     assign(:page, page)
     assign(:guidance_form, guidance_form)
 

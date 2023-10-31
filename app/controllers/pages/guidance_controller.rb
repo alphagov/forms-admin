@@ -4,13 +4,13 @@ class Pages::GuidanceController < PagesController
   def new
     guidance_form = Pages::GuidanceForm.new(page_heading: draft_question.page_heading,
                                             guidance_markdown: draft_question.guidance_markdown)
-    back_link = new_question_path(@form)
-    render "pages/guidance", locals: view_locals(nil, guidance_form, back_link)
+    back_link = new_question_path(current_form)
+    render :guidance, locals: view_locals(nil, guidance_form, back_link)
   end
 
   def create
     guidance_form = Pages::GuidanceForm.new(guidance_form_params)
-    back_link = new_question_path(@form)
+    back_link = new_question_path(current_form)
 
     case route_to
     when :preview
@@ -18,7 +18,7 @@ class Pages::GuidanceController < PagesController
       render "pages/guidance", locals: view_locals(nil, guidance_form, back_link)
     when :save_and_continue
       if guidance_form.submit
-        redirect_to new_question_path(@form)
+        redirect_to new_question_path(current_form)
       else
         render "pages/guidance", locals: view_locals(nil, guidance_form, back_link), status: :unprocessable_entity
       end
@@ -28,14 +28,14 @@ class Pages::GuidanceController < PagesController
   def edit
     guidance_form = Pages::GuidanceForm.new(page_heading: draft_question.page_heading,
                                             guidance_markdown: draft_question.guidance_markdown)
-    back_link = edit_question_path(@form, page)
+    back_link = edit_question_path(current_form, page)
 
     render "pages/guidance", locals: view_locals(page, guidance_form, back_link)
   end
 
   def update
     guidance_form = Pages::GuidanceForm.new(guidance_form_params)
-    back_link = edit_question_path(@form, page.id)
+    back_link = edit_question_path(current_form, page.id)
 
     case route_to
     when :preview
@@ -43,7 +43,7 @@ class Pages::GuidanceController < PagesController
       render "pages/guidance", locals: view_locals(page, guidance_form, back_link)
     when :save_and_continue
       if guidance_form.submit
-        redirect_to edit_question_path(@form.id, page.id)
+        redirect_to edit_question_path(current_form.id, page.id)
       else
         render "pages/guidance", locals: view_locals(page, guidance_form, back_link), status: :unprocessable_entity
       end
@@ -75,6 +75,6 @@ private
 
   def view_locals(current_page, guidance_form, back_link)
     post_url = current_page.present? && current_page.id.present? ? guidance_edit_path : guidance_new_path
-    { form: @form, page: @page, guidance_form:, preview_html: preview_html(guidance_form), post_url:, back_link: }
+    { current_form:, page: @page, guidance_form:, preview_html: preview_html(guidance_form), post_url:, back_link: }
   end
 end

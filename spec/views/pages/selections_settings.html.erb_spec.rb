@@ -18,10 +18,10 @@ describe "pages/selections_settings.html.erb", type: :view do
     # # mock the path helper
     without_partial_double_verification do
       allow(view).to receive(:form_pages_path).and_return("/type-of-answer")
+      allow(view).to receive(:current_form).and_return(form)
     end
 
     # # setup instance variables
-    assign(:form, form)
     assign(:page, page)
     assign(:selections_settings_path, selections_settings_path)
     assign(:back_link_url, back_link_url)
