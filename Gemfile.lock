@@ -130,7 +130,6 @@ GEM
       parser (>= 2.4)
       smart_properties
     bindata (2.4.15)
-    bindex (0.8.1)
     bootsnap (1.16.0)
       msgpack (~> 1.2)
     brakeman (6.0.1)
@@ -539,11 +538,6 @@ GEM
       rack (>= 2.0.9)
     warden-oauth2 (0.0.1)
       warden
-    web-console (4.2.0)
-      actionview (>= 6.0.0)
-      activemodel (>= 6.0.0)
-      bindex (>= 0.4.0)
-      railties (>= 6.0.0)
     webfinger (2.1.2)
       activesupport
       faraday (~> 2.0)
@@ -611,7 +605,6 @@ DEPENDENCIES
   validate_url
   vite_rails
   warden
-  web-console
   webmock
 
 RUBY VERSION
