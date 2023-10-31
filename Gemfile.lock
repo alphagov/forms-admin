@@ -130,7 +130,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bindata (2.4.15)
-    bootsnap (1.16.0)
+    bootsnap (1.17.0)
       msgpack (~> 1.2)
     brakeman (6.0.1)
     builder (3.2.4)
@@ -285,7 +285,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.5)
     minitest (5.20.0)
-    msgpack (1.6.0)
+    msgpack (1.7.2)
     multi_xml (0.6.0)
     net-imap (0.4.1)
       date
