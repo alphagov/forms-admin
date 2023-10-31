@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  before_action :fetch_form, :answer_types, :convert_session_keys_to_symbols
+  before_action :fetch_form, :convert_session_keys_to_symbols
   before_action :check_user_has_permission
   skip_before_action :clear_questions_session_data, except: %i[index move_page]
   after_action :verify_authorized
@@ -51,10 +51,6 @@ private
     direction = p[:up] ? :up : :down
     page_id = p[direction]
     @move_params ||= { form_id:, page_id:, direction: }
-  end
-
-  def answer_types
-    @answer_types = Page::ANSWER_TYPES
   end
 
   def convert_session_keys_to_symbols
