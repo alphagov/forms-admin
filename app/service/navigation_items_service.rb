@@ -1,5 +1,9 @@
 class NavigationItemsService
-  NavigationItem = Struct.new(:text, :href, :active, :classes)
+  NavigationItem = Struct.new(:text, :href, :active, :classes) do
+    def initialize(text:, href:, active:, classes: [])
+      super(text, href, active, classes)
+    end
+  end
 
   include Rails.application.routes.url_helpers
 

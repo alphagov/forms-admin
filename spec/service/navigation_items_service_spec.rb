@@ -31,7 +31,7 @@ describe NavigationItemsService do
         let(:can_manage_user) { true }
 
         it "includes users in navigation items" do
-          users_item = NavigationItemsService::NavigationItem.new(I18n.t("header.users"), users_path, false)
+          users_item = NavigationItemsService::NavigationItem.new(text: I18n.t("header.users"), href: users_path, active: false)
           expect(service.navigation_items).to include(users_item)
         end
       end
@@ -40,7 +40,7 @@ describe NavigationItemsService do
         let(:can_manage_mous) { true }
 
         it "includes mous in navigation items" do
-          mous_item = NavigationItemsService::NavigationItem.new(I18n.t("header.mous"), mou_signatures_path, false)
+          mous_item = NavigationItemsService::NavigationItem.new(text: I18n.t("header.mous"), href: mou_signatures_path, active: false)
           expect(service.navigation_items).to include(mous_item)
         end
       end
@@ -49,12 +49,12 @@ describe NavigationItemsService do
         let(:provider) { :gds }
 
         it "includes correct profile in navigation items" do
-          profile_item = NavigationItemsService::NavigationItem.new(user.name, GDS::SSO::Config.oauth_root_url, false)
+          profile_item = NavigationItemsService::NavigationItem.new(text: user.name, href: GDS::SSO::Config.oauth_root_url, active: false)
           expect(service.navigation_items).to include(profile_item)
         end
 
         it "includes correct signout in navigation items" do
-          signout_item = NavigationItemsService::NavigationItem.new(I18n.t("header.sign_out"), gds_sign_out_path, false)
+          signout_item = NavigationItemsService::NavigationItem.new(text: I18n.t("header.sign_out"), href: gds_sign_out_path, active: false)
           expect(service.navigation_items).to include(signout_item)
         end
       end
@@ -67,7 +67,7 @@ describe NavigationItemsService do
         end
 
         it "includes profile with empty href" do
-          profile_item = NavigationItemsService::NavigationItem.new(user.name, nil, false)
+          profile_item = NavigationItemsService::NavigationItem.new(text: user.name, href: nil, active: false)
           expect(service.navigation_items).to include(profile_item)
         end
       end
@@ -76,12 +76,12 @@ describe NavigationItemsService do
         let(:provider) { :auth0 }
 
         it "includes profile with empty href" do
-          profile_item = NavigationItemsService::NavigationItem.new(user.name, nil, false)
+          profile_item = NavigationItemsService::NavigationItem.new(text: user.name, href: nil, active: false)
           expect(service.navigation_items).to include(profile_item)
         end
 
         it "includes correct signout in navigation items" do
-          signout_item = NavigationItemsService::NavigationItem.new(I18n.t("header.sign_out"), sign_out_path, false)
+          signout_item = NavigationItemsService::NavigationItem.new(text: I18n.t("header.sign_out"), href: sign_out_path, active: false)
           expect(service.navigation_items).to include(signout_item)
         end
       end
@@ -90,12 +90,12 @@ describe NavigationItemsService do
         let(:provider) { :cddo_sso }
 
         it "includes profile with empty href" do
-          profile_item = NavigationItemsService::NavigationItem.new(user.name, "https://sso.service.security.gov.uk/profile", false)
+          profile_item = NavigationItemsService::NavigationItem.new(text: user.name, href: "https://sso.service.security.gov.uk/profile", active: false)
           expect(service.navigation_items).to include(profile_item)
         end
 
         it "includes correct signout in navigation items" do
-          signout_item = NavigationItemsService::NavigationItem.new(I18n.t("header.sign_out"), sign_out_path, false)
+          signout_item = NavigationItemsService::NavigationItem.new(text: I18n.t("header.sign_out"), href: sign_out_path, active: false)
           expect(service.navigation_items).to include(signout_item)
         end
       end
@@ -103,7 +103,7 @@ describe NavigationItemsService do
 
     context "when the support URL is configured" do
       it "includes a link to the support page" do
-        support_item = NavigationItemsService::NavigationItem.new(I18n.t("header.support"), support_url, false)
+        support_item = NavigationItemsService::NavigationItem.new(text: I18n.t("header.support"), href: support_url, active: false)
         expect(service.navigation_items).to include(support_item)
       end
     end
@@ -112,7 +112,7 @@ describe NavigationItemsService do
       let(:support_url) { nil }
 
       it "does not include a link to the support page" do
-        support_item = NavigationItemsService::NavigationItem.new(I18n.t("header.support"), support_url, false)
+        support_item = NavigationItemsService::NavigationItem.new(text: I18n.t("header.support"), href: support_url, active: false)
         expect(service.navigation_items).not_to include(support_item)
       end
     end
