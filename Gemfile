@@ -86,7 +86,6 @@ group :development, :test do
   gem "rails-controller-testing"
   gem "rspec-rails", ">= 3.9.0"
   gem "rubocop-govuk", require: false
-  gem "timecop"
 
   # For security auditing gem vulnerabilities. RUN IN CI
   gem "bundler-audit", "~> 0.9.0"

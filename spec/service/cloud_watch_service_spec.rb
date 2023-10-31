@@ -9,7 +9,7 @@ describe CloudWatchService do
   end
 
   around do |example|
-    Timecop.freeze(Time.zone.local(2021, 1, 1, 4, 30, 0)) do
+    travel_to(Time.zone.local(2021, 1, 1, 4, 30, 0)) do
       example.run
     end
   end
