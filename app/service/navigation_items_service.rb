@@ -19,6 +19,7 @@ class NavigationItemsService
     navigation_items = []
     navigation_items << NavigationItem.new(text: I18n.t("header.mous"), href: mou_signatures_path, active: false) if should_show_mous_link?
     navigation_items << NavigationItem.new(text: I18n.t("header.users"), href: users_path, active: false) if should_show_user_profile_link?
+    navigation_items << NavigationItem.new(text: I18n.t("header.support"), href: Settings.forms_product_page.support_url, active: false) if Settings.forms_product_page.support_url.present?
     navigation_items << NavigationItem.new(text: user.name, href: user_profile_url, active: false) if user.name.present?
     navigation_items << NavigationItem.new(text: I18n.t("header.sign_out"), href: signout_url, active: false) if signout_url.present?
 

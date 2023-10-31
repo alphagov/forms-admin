@@ -6,6 +6,7 @@ describe NavigationItemsService do
   let!(:provider) { :gds }
   let!(:user) { build(:user, provider:) }
   let!(:service) { described_class.new(user:) }
+  let(:support_url) { "http://localhost:3002/support" }
 
   describe "#navigation_items" do
     context "when user is not present" do
@@ -23,6 +24,7 @@ describe NavigationItemsService do
       before do
         allow(Pundit).to receive(:policy).with(user, :user).and_return(instance_double(UserPolicy, can_manage_user?: can_manage_user))
         allow(Pundit).to receive(:policy).with(user, :mou_signature).and_return(instance_double(MouSignaturePolicy, can_manage_mous?: can_manage_mous))
+        allow(Settings.forms_product_page).to receive(:support_url).and_return(support_url)
       end
 
       context "when user can manage other users" do
@@ -96,6 +98,22 @@ describe NavigationItemsService do
           signout_item = NavigationItemsService::NavigationItem.new(I18n.t("header.sign_out"), sign_out_path, false)
           expect(service.navigation_items).to include(signout_item)
         end
+      end
+    end
+
+    context "when the support URL is configured" do
+      it "includes a link to the support page" do
+        support_item = NavigationItemsService::NavigationItem.new(I18n.t("header.support"), support_url, false)
+        expect(service.navigation_items).to include(support_item)
+      end
+    end
+
+    context "when the support URL is not configured" do
+      let(:support_url) { nil }
+
+      it "does not include a link to the support page" do
+        support_item = NavigationItemsService::NavigationItem.new(I18n.t("header.support"), support_url, false)
+        expect(service.navigation_items).not_to include(support_item)
       end
     end
   end
