@@ -15,12 +15,12 @@ class Pages::GuidanceController < PagesController
     case route_to
     when :preview
       guidance_form.valid?
-      render "pages/guidance", locals: view_locals(nil, guidance_form, back_link)
+      render :guidance, locals: view_locals(nil, guidance_form, back_link)
     when :save_and_continue
       if guidance_form.submit
         redirect_to new_question_path(current_form)
       else
-        render "pages/guidance", locals: view_locals(nil, guidance_form, back_link), status: :unprocessable_entity
+        render :guidance, locals: view_locals(nil, guidance_form, back_link), status: :unprocessable_entity
       end
     end
   end
@@ -30,7 +30,7 @@ class Pages::GuidanceController < PagesController
                                             guidance_markdown: draft_question.guidance_markdown)
     back_link = edit_question_path(current_form, page)
 
-    render "pages/guidance", locals: view_locals(page, guidance_form, back_link)
+    render :guidance, locals: view_locals(page, guidance_form, back_link)
   end
 
   def update
@@ -40,12 +40,12 @@ class Pages::GuidanceController < PagesController
     case route_to
     when :preview
       guidance_form.valid?
-      render "pages/guidance", locals: view_locals(page, guidance_form, back_link)
+      render :guidance, locals: view_locals(page, guidance_form, back_link)
     when :save_and_continue
       if guidance_form.submit
         redirect_to edit_question_path(current_form.id, page.id)
       else
-        render "pages/guidance", locals: view_locals(page, guidance_form, back_link), status: :unprocessable_entity
+        render :guidance, locals: view_locals(page, guidance_form, back_link), status: :unprocessable_entity
       end
     end
   end

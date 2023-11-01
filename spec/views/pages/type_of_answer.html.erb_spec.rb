@@ -27,7 +27,7 @@ describe "pages/type_of_answer.html.erb", type: :view do
     assign(:type_of_answer_form, type_of_answer_form)
     assign(:answer_types, answer_types)
 
-    render(template: "pages/type-of-answer")
+    render(template: "pages/type_of_answer")
   end
 
   it "has the correct title" do

@@ -44,7 +44,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
     end
 
     it "renders the template" do
-      expect(response).to have_rendered("pages/type-of-answer")
+      expect(response).to have_rendered(:type_of_answer)
     end
   end
 
@@ -160,7 +160,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       end
 
       it "renders the type of answer view if there are errors" do
-        expect(response).to have_rendered("pages/type-of-answer")
+        expect(response).to have_rendered(:type_of_answer)
       end
     end
   end
@@ -193,7 +193,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
     end
 
     it "renders the template" do
-      expect(response).to have_rendered("pages/type-of-answer")
+      expect(response).to have_rendered(:type_of_answer)
     end
   end
 
@@ -245,7 +245,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       end
 
       it "renders the type of answer view if there are errors" do
-        expect(response).to have_rendered("pages/type-of-answer")
+        expect(response).to have_rendered(:type_of_answer)
       end
     end
   end

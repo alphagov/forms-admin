@@ -3,7 +3,7 @@ class Pages::TypeOfAnswerController < PagesController
     answer_type = session.dig(:page, :answer_type)
     @type_of_answer_form = Pages::TypeOfAnswerForm.new(answer_type:)
     @type_of_answer_path = type_of_answer_create_path(current_form)
-    render "pages/type-of-answer", locals: { current_form: }
+    render :type_of_answer, locals: { current_form: }
   end
 
   def create
@@ -13,7 +13,7 @@ class Pages::TypeOfAnswerController < PagesController
       redirect_to next_page_path(current_form, @type_of_answer_form.answer_type, :create)
     else
       @type_of_answer_path = type_of_answer_create_path(current_form)
-      render "pages/type-of-answer", locals: { current_form: }
+      render :type_of_answer, locals: { current_form: }
     end
   end
 
@@ -22,7 +22,7 @@ class Pages::TypeOfAnswerController < PagesController
 
     @type_of_answer_form = Pages::TypeOfAnswerForm.new(answer_type: @page.answer_type)
     @type_of_answer_path = type_of_answer_update_path(current_form)
-    render "pages/type-of-answer", locals: { current_form: }
+    render :type_of_answer, locals: { current_form: }
   end
 
   def update
@@ -106,7 +106,7 @@ private
       redirect_to next_page_path(current_form, @type_of_answer_form.answer_type, :update)
     else
       @type_of_answer_path = type_of_answer_update_path(current_form)
-      render "pages/type-of-answer"
+      render :type_of_answer
     end
   end
 end
