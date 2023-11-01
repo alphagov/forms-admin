@@ -1,22 +1,22 @@
 require "rails_helper"
 
 RSpec.describe "usage of omniauth-auth0 gem" do
+  before do
+    allow(Settings).to receive(:auth_provider).and_return("auth0")
+
+    OmniAuth.config.test_mode = true
+  end
+
+  after do
+    OmniAuth.config.mock_auth[:auth0] = nil
+    OmniAuth.config.test_mode = false
+  end
+
   let(:omniauth_hash) do
     Faker::Omniauth.auth0(
       uid: "123456",
       email: "test@example.com",
     )
-  end
-
-  before do
-    allow(Settings).to receive(:auth_provider).and_return("auth0")
-
-    OmniAuth.config.test_mode = true
-    OmniAuth.config.mock_auth[:auth0] = nil
-  end
-
-  after do
-    OmniAuth.config.test_mode = false
   end
 
   describe "authentication" do
@@ -77,6 +77,30 @@ RSpec.describe "usage of omniauth-auth0 gem" do
         expect(winning_strategy).to be_a Warden::Strategies[:auth0]
         expect(winning_strategy).to be_successful
       end
+    end
+  end
+
+  describe "failure page" do
+    it "is shown if there is an authentication failure with external provider" do
+      OmniAuth.config.mock_auth[:auth0] = :invalid_credentials
+
+      logout
+
+      get root_path
+
+      expect(response).to redirect_to "/auth/auth0"
+      follow_redirect!
+
+      expect(response).to redirect_to "/auth/auth0/callback"
+      follow_redirect!
+
+      expect(response).to redirect_to "/auth/failure?message=invalid_credentials&strategy=auth0"
+    end
+
+    it "has a retry link" do
+      get "/auth/failure?message=invalid_credentials&strategy=auth0"
+
+      expect(response.body).to include '<a href="/auth/auth0">try again</a>'
     end
   end
 end
