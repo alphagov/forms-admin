@@ -27,6 +27,7 @@ class HeaderComponent::HeaderComponentPreview < ViewComponent::Preview
     render(HeaderComponent::View.new(navigation_items: [
       { text: "Mous", href: "/mous" },
       { text: "Users", href: "/users" },
+      { text: "Support", href: "/support" },
       { text: "Joe Smith", href: "/profile" },
       { text: "Sign out", href: "/signout" },
     ]))

@@ -235,6 +235,7 @@ en:
     mous: MOUs
     product_name: Forms
     sign_out: Sign out
+    support: Support
     users: Users
   helpers:
     hint:
