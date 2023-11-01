@@ -1,12 +1,13 @@
 class PagesController < ApplicationController
-  before_action :fetch_form, :convert_session_keys_to_symbols
+  before_action :convert_session_keys_to_symbols
   before_action :check_user_has_permission
   skip_before_action :clear_questions_session_data, except: %i[index move_page]
   after_action :verify_authorized
 
   def index
-    @pages = @form.pages
-    @mark_complete_form = Forms::MarkCompleteForm.new(form: @form).assign_form_values
+    @pages = current_form.pages
+    @mark_complete_form = Forms::MarkCompleteForm.new(form: current_form).assign_form_values
+    render :index, locals: { current_form: }
   end
 
   def move_page
@@ -26,22 +27,18 @@ class PagesController < ApplicationController
 private
 
   def check_user_has_permission
-    authorize @form, :can_view_form?
-  end
-
-  def fetch_form
-    @form = Form.find(params[:form_id])
+    authorize current_form, :can_view_form?
   end
 
   def page
-    @page ||= Page.find(params[:page_id], params: { form_id: @form.id })
+    @page ||= Page.find(params[:page_id], params: { form_id: current_form.id })
   end
 
   def draft_question
     @draft_question ||= if params[:page_id].present?
                           setup_draft_question_for_existing_page
                         else
-                          DraftQuestion.find_or_initialize_by(form_id: @form.id, user_id: current_user.id)
+                          DraftQuestion.find_or_initialize_by(form_id: current_form.id, user_id: current_user.id)
                         end
   end
 
@@ -58,7 +55,7 @@ private
   end
 
   def setup_draft_question_for_existing_page
-    edit_draft_question = DraftQuestion.find_or_initialize_by(form_id: @form.id, user_id: current_user.id, page_id: page.id)
+    edit_draft_question = DraftQuestion.find_or_initialize_by(form_id: current_form.id, user_id: current_user.id, page_id: page.id)
 
     if edit_draft_question.new_record?
       edit_draft_question.attributes = page.attributes.except(:id, :position, :next_page, :has_routing_errors, :routing_conditions, :question_with_text)

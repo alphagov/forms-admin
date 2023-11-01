@@ -32,21 +32,20 @@ module Forms
 
     def render_new
       if current_form.has_live_version
-        render "make_your_changes_live"
+        render "make_your_changes_live", locals: { current_form: }
       else
-        render "make_your_form_live"
+        render "make_your_form_live", locals: { current_form: }
       end
     end
 
     def render_confirmation(made_live)
-      @form = current_form
       @confirmation_page_title = if made_live == :changes
                                    I18n.t("page_titles.your_changes_are_live")
                                  else
                                    I18n.t("page_titles.your_form_is_live")
                                  end
 
-      render "confirmation"
+      render "confirmation", locals: { current_form: }
     end
   end
 end

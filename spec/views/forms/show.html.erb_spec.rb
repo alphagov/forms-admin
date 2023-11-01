@@ -7,8 +7,11 @@ describe "forms/show.html.erb" do
 
   before do
     assign(:current_user, user)
-    assign(:form, form)
     assign(:task_status_counts, { completed: 12, total: 20 })
+    without_partial_double_verification do
+      allow(view).to receive(:current_form).and_return(form)
+    end
+
     render template: "forms/show"
   end
 

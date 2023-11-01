@@ -1,14 +1,14 @@
-<% set_page_title(@form.name) %>
+<% set_page_title(current_form.name) %>
 
-<% content_for :back_link, @form.has_live_version ? govuk_back_link_to(live_form_path(@form.id), t("back_link.form_view")) : govuk_back_link_to(root_path, t("back_link.forms")) %>
+<% content_for :back_link, current_form.has_live_version ? govuk_back_link_to(live_form_path(current_form.id), t("back_link.form_view")) : govuk_back_link_to(root_path, t("back_link.forms")) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= render TrialRoleWarningComponent::View.new(link_url: user_upgrade_request_path) if @current_user.trial? %>
 
     <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
-      <span class="govuk-caption-l"><%= @form.name %></span><span class="govuk-visually-hidden"> - </span>
-      <%= @form.has_live_version ? t("forms.form_overview.title_edit") : t("forms.form_overview.title_create") %>
+      <span class="govuk-caption-l"><%= current_form.name %></span><span class="govuk-visually-hidden"> - </span>
+      <%= current_form.has_live_version ? t("forms.form_overview.title_edit") : t("forms.form_overview.title_create") %>
     </h1>
 
     <%= render FormStatusTagDescriptionComponent::View.new(status: :draft) %>
@@ -17,14 +17,14 @@
       <p><%= flash[:message] %></p>
     <% end %>
 
-    <% preview_link = PreviewLinkComponent::View.new(@form.pages, link_to_runner(Settings.forms_runner.url, @form.id, @form.form_slug)) %>
+    <% preview_link = PreviewLinkComponent::View.new(current_form.pages, link_to_runner(Settings.forms_runner.url, current_form.id, current_form.form_slug)) %>
     <% if preview_link.render? %>
       <p class="govuk-!-margin-bottom-9">
         <%= render preview_link %>
       </p>
     <% end %>
 
-    <% if @form.has_live_version %>
+    <% if current_form.has_live_version %>
       <div class="govuk-inset-text">
         <p><%= t("make_changes_live.warning") %></p>
       </div>
@@ -35,6 +35,6 @@
                                            sections: @task_list)
     %>
 
-    <%= govuk_button_link_to(t("forms.delete_form"), delete_form_path(@form.id), warning: true) unless @form.has_live_version  %>
+    <%= govuk_button_link_to(t("forms.delete_form"), delete_form_path(current_form.id), warning: true) unless current_form.has_live_version  %>
   </div>
 </div>

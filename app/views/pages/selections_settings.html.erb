@@ -7,11 +7,11 @@
     <% if @page.present? && @page.conditions.any? %>
       <%= govuk_notification_banner(title_text: t("selections_settings.routing_warning_notification_title")) do |banner| %>
         <% banner.with_heading(text: t("selections_settings.routing_warning_about_change_only_one_option_heading")) %>
-        <%= t("selections_settings.routing_warning_about_change_only_one_option_html", pages_link_url: form_pages_path(@form)) %>
+        <%= t("selections_settings.routing_warning_about_change_only_one_option_html", pages_link_url: form_pages_path(current_form)) %>
       <% end %>
     <% end %>
 
-    <%= form_with model: [@form, @selections_settings_form], url: @selections_settings_path do |f| %>
+    <%= form_with model: [current_form, @selections_settings_form], url: @selections_settings_path do |f| %>
       <%= f.govuk_error_summary %>
 
       <%#
@@ -20,7 +20,7 @@
       %>
       <%= f.submit t('save_and_continue'), hidden: true  %>
 
-      <span class="govuk-caption-l"><%= t("pages.question") %> <%= @form.page_number(@page) %></span>
+      <span class="govuk-caption-l"><%= t("pages.question") %> <%= current_form.page_number(@page) %></span>
       <h1 class="govuk-heading-l"><%= t("selections_settings.heading") %></h1>
 
       <%= f.govuk_check_boxes_fieldset 'list_settings', multiple: false, legend: { text: t("selections_settings.list_settings") } do %>
@@ -54,7 +54,7 @@
     <% end %>
 
     <p>
-      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(@form) %>
+      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form) %>
     </p>
   </div>
 </div>

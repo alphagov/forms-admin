@@ -110,4 +110,8 @@ private
     bypass_ip_list = bypass_ips.split(",").map { |ip| IPAddr.new ip.strip }
     bypass_ip_list.none? { |ip| ip.include?(user_ip(request.env.fetch("HTTP_X_FORWARDED_FOR", ""))) }
   end
+
+  def current_form
+    @current_form ||= Form.find(params[:form_id])
+  end
 end

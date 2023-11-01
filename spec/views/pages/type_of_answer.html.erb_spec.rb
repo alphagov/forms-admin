@@ -19,15 +19,15 @@ describe "pages/type_of_answer.html.erb", type: :view do
     # mock the path helper
     without_partial_double_verification do
       allow(view).to receive(:form_pages_type_of_answer_form_path).and_return("/type-of-answer")
+      allow(view).to receive(:current_form).and_return(form)
     end
 
     # setup instance variables
-    assign(:form, form)
     assign(:page, page)
     assign(:type_of_answer_form, type_of_answer_form)
     assign(:answer_types, answer_types)
 
-    render(template: "pages/type-of-answer")
+    render(template: "pages/type_of_answer")
   end
 
   it "has the correct title" do

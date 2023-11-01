@@ -11,9 +11,9 @@ module Forms
       if @delete_confirmation_form.valid?
         if @delete_confirmation_form.confirm_deletion == "true"
           if params[:page_id].present?
-            delete_page(@form, @page)
+            delete_page(current_form, @page)
           else
-            delete_form(@form)
+            delete_form(current_form)
           end
         else
           redirect_to @back_url
@@ -40,26 +40,25 @@ module Forms
     end
 
     def previous_page(id)
-      @form.pages.find { |p| p.next_page = id }
+      current_form.pages.find { |p| p.next_page = id }
     end
 
     def load_page_variables
-      @form = Form.find(params[:form_id])
       @confirm_deletion_options = delete_confirmation_options
       @delete_confirmation_form = DeleteConfirmationForm.new
 
       if params[:page_id].present?
-        @page = Page.find(params[:page_id], params: { form_id: @form.id })
-        @url = destroy_page_path(@form, @page)
+        @page = Page.find(params[:page_id], params: { form_id: current_form.id })
+        @url = destroy_page_path(current_form, @page)
         @confirm_deletion_legend = t("forms_delete_confirmation_form.confirm_deletion_page")
         @item_name = @page.question_text
-        @back_url = edit_question_path(@form, @page)
+        @back_url = edit_question_path(current_form, @page)
       else
-        @url = destroy_form_path(@form)
+        @url = destroy_form_path(current_form)
         @confirm_deletion_legend = t("forms_delete_confirmation_form.confirm_deletion_form")
-        @confirm_deletion_live_form = t("forms_delete_confirmation_form.confirm_deletion_form_live_form") if @form.live?
-        @item_name = @form.name
-        @back_url = form_path(@form)
+        @confirm_deletion_live_form = t("forms_delete_confirmation_form.confirm_deletion_form_live_form") if current_form.live?
+        @item_name = current_form.name
+        @back_url = form_path(current_form)
       end
     end
 

@@ -2,56 +2,56 @@ class Pages::SelectionsSettingsController < PagesController
   def new
     answer_settings = load_answer_settings_from_session
     @selections_settings_form = Pages::SelectionsSettingsForm.new(answer_settings)
-    @selections_settings_path = selections_settings_create_path(@form)
-    @back_link_url = question_text_new_path(@form)
-    render selection_settings_view
+    @selections_settings_path = selections_settings_create_path(current_form)
+    @back_link_url = question_text_new_path(current_form)
+    render :selections_settings, locals: { current_form: }
   end
 
   def create
     answer_settings = load_answer_settings_from_params(selections_settings_form_params)
     # TODO: Can remove the merge once we replaced session storage with ActiveRecord
     @selections_settings_form = Pages::SelectionsSettingsForm.new(answer_settings.merge(draft_question:))
-    @selections_settings_path = selections_settings_create_path(@form)
-    @back_link_url = question_text_new_path(@form)
+    @selections_settings_path = selections_settings_create_path(current_form)
+    @back_link_url = question_text_new_path(current_form)
 
     if params[:add_another]
       @selections_settings_form.add_another
-      render selection_settings_view
+      render :selections_settings, locals: { current_form: }
     elsif params[:remove]
       @selections_settings_form.remove(params[:remove].to_i)
-      render selection_settings_view
+      render :selections_settings, locals: { current_form: }
     elsif @selections_settings_form.submit(session)
-      redirect_to new_question_path(@form)
+      redirect_to new_question_path(current_form)
     else
-      render selection_settings_view
+      render :selections_settings, locals: { current_form: }
     end
   end
 
   def edit
     page.load_from_session(session, %i[answer_type answer_settings is_optional])
-    @selections_settings_path = selections_settings_update_path(@form)
+    @selections_settings_path = selections_settings_update_path(current_form)
     @selections_settings_form = Pages::SelectionsSettingsForm.new(load_answer_settings_from_page_object(page))
-    @back_link_url = edit_question_path(@form, page)
-    render selection_settings_view
+    @back_link_url = edit_question_path(current_form, page)
+    render :selections_settings, locals: { current_form: }
   end
 
   def update
     answer_settings = load_answer_settings_from_params(selections_settings_form_params)
     # TODO: Can remove the merge once we replaced session storage with ActiveRecord
     @selections_settings_form = Pages::SelectionsSettingsForm.new(answer_settings.merge(draft_question:))
-    @selections_settings_path = selections_settings_update_path(@form)
-    @back_link_url = edit_question_path(@form, page)
+    @selections_settings_path = selections_settings_update_path(current_form)
+    @back_link_url = edit_question_path(current_form, page)
 
     if params[:add_another]
       @selections_settings_form.add_another
-      render selection_settings_view
+      render :selections_settings, locals: { current_form: }
     elsif params[:remove]
       @selections_settings_form.remove(params[:remove].to_i)
-      render selection_settings_view
+      render :selections_settings, locals: { current_form: }
     elsif @selections_settings_form.submit(session)
-      redirect_to edit_question_path(@form)
+      redirect_to edit_question_path(current_form)
     else
-      render selection_settings_view
+      render :selections_settings, locals: { current_form: }
     end
   end
 
@@ -88,9 +88,5 @@ private
   def selections_settings_form_params
     params.require(:pages_selections_settings_form)
           .permit(:only_one_option, :include_none_of_the_above, selection_options: [:name]).to_h.deep_symbolize_keys
-  end
-
-  def selection_settings_view
-    "pages/selections_settings"
   end
 end
