@@ -146,26 +146,20 @@ describe User, type: :model do
     end
   end
 
-  context "when changing role" do
+  describe "#trial_user_upgraded?" do
     described_class.roles.reject { |role| role == "trial" }.each do |_role_name, role_value|
-      it "updates user's forms' org when changing role from trial to #{role_value}" do
+      it "returns true when changing from trial to #{role_value}" do
         user = create(:user, role: :trial)
 
-        expect(Form).to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)
-
-        user.role = role_value
-        user.save!
-        user.update_user_forms
+        user.update!(role: role_value)
+        expect(user).to be_trial_user_upgraded
       end
 
-      it "does not update user's forms' org when changing role from #{role_value} to editor" do
-        user = create :user, role: role_value
+      it "returns false when changing from editor to #{role_value}" do
+        user = create(:user, role: :editor)
 
-        expect(Form).not_to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)
-
-        user.role = :editor
-        user.save!
-        user.update_user_forms
+        user.update!(role: role_value)
+        expect(user).not_to be_trial_user_upgraded
       end
     end
   end
@@ -173,6 +167,31 @@ describe User, type: :model do
   it "defaults to the trial role" do
     user = described_class.new
     expect(user.role).to eq("trial")
+  end
+
+  describe "#given_organisation?" do
+    it "returns true when organisation_id is set" do
+      user = create(:user, :with_no_org)
+      user.update!(organisation: build(:organisation))
+      expect(user).to be_given_organisation
+    end
+
+    it "returns false when organisation_id is not set" do
+      user = create(:user, :with_no_org)
+      expect(user).not_to be_given_organisation
+    end
+
+    it "returns false when organisation_id is set to nil" do
+      user = create(:user, :with_trial_role, :with_no_org)
+      user.update!(organisation: nil)
+      expect(user).not_to be_given_organisation
+    end
+
+    it "returns false when user had an organisation" do
+      user = create(:user)
+      user.update!(organisation: build(:organisation))
+      expect(user).not_to be_given_organisation
+    end
   end
 
   describe "versioning" do

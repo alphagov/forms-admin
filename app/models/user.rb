@@ -60,10 +60,20 @@ class User < ApplicationRecord
     trial? || organisation.present?
   end
 
-  def update_user_forms
-    if role_previously_changed?(from: :trial, to: :editor) || role_previously_changed?(from: :trial, to: :super_admin)
-      Form.update_organisation_for_creator(id, organisation_id)
-    end
+  def trial_user_upgraded?
+    role_previously_changed?(from: :trial, to: :editor) || role_previously_changed?(from: :trial, to: :super_admin)
+  end
+
+  def given_organisation?
+    organisation_id.present? && organisation_id_previously_changed?(from: nil)
+  end
+
+  def has_signed_current_organisation_mou?
+    mou_signatures.where(organisation: organisation || nil).exists?
+  end
+
+  def current_organisation_mou_signature
+    mou_signatures.find_by(organisation:)
   end
 
 private
