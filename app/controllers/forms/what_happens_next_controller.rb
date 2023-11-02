@@ -1,5 +1,5 @@
 module Forms
-  class WhatHappensNextController < BaseController
+  class WhatHappensNextController < ApplicationController
     after_action :verify_authorized
     def new
       authorize current_form, :can_view_form?

@@ -1,5 +1,5 @@
 module Forms
-  class SubmissionEmailController < BaseController
+  class SubmissionEmailController < ApplicationController
     before_action :submission_email_form, except: %i[create confirm_submission_email_code]
     after_action :verify_authorized
 

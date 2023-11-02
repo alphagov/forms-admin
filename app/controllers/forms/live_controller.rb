@@ -1,4 +1,4 @@
-class Forms::LiveController < Forms::BaseController
+class Forms::LiveController < ApplicationController
   after_action :verify_authorized
   def show_form
     authorize current_form, :can_view_form?
