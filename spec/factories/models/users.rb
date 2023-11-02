@@ -7,6 +7,10 @@ FactoryBot.define do
     role { :trial }
     has_access { true }
 
+    factory :basic_auth_user do
+      provider { "basic_auth" }
+    end
+
     trait :with_trial_role do
       role { :trial }
       with_no_org

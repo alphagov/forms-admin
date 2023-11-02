@@ -22,9 +22,8 @@ Warden::Strategies.add(:basic_auth) do
     if status.nil?
       success! User.find_or_initialize_by(
         name: Settings.basic_auth.username,
-        email: "#{Settings.basic_auth.username}@example.com",
-        role: :editor,
-        provider: "basic_auth",
+        email: "#{Settings.basic_auth.username}@example.gov.uk",
+        provider: :basic_auth,
         organisation: Organisation.find_or_initialize_by(
           name: Settings.basic_auth.organisation.name,
           slug: Settings.basic_auth.organisation.slug,
