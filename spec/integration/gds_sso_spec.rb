@@ -5,6 +5,11 @@ RSpec.describe "usage of gds-sso gem" do
     allow(Settings).to receive(:auth_provider).and_return("gds_sso")
   end
 
+  after do
+    OmniAuth.config.mock_auth[:gds] = nil
+    OmniAuth.config.test_mode = false
+  end
+
   let(:omniauth_hash) do
     OmniAuth::AuthHash.new({
       provider: "gds",
@@ -27,11 +32,6 @@ RSpec.describe "usage of gds-sso gem" do
   describe "authentication" do
     before do
       OmniAuth.config.test_mode = true
-      OmniAuth.config.mock_auth[:gds] = nil
-    end
-
-    after do
-      OmniAuth.config.test_mode = false
     end
 
     it "redirects to OmniAuth when no user is logged in" do
@@ -89,6 +89,31 @@ RSpec.describe "usage of gds-sso gem" do
 
         expect(gds_sso.successful?).to be true
       end
+    end
+  end
+
+  describe "failure page" do
+    it "is shown if there is an authentication failure with external provider" do
+      OmniAuth.config.test_mode = true
+      OmniAuth.config.mock_auth[:gds] = :invalid_credentials
+
+      logout
+
+      get root_path
+
+      expect(response).to redirect_to "/auth/gds"
+      follow_redirect!
+
+      expect(response).to redirect_to "/auth/gds/callback"
+      follow_redirect!
+
+      expect(response).to redirect_to "/auth/failure?message=invalid_credentials&strategy=gds"
+    end
+
+    it "has a retry link" do
+      get "/auth/failure?message=invalid_credentials&strategy=gds"
+
+      expect(response.body).to include '<a href="/auth/gds">try again</a>'
     end
   end
 end

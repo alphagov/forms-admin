@@ -5,6 +5,7 @@ require "validate_url/rspec_matcher"
 require "selenium/webdriver"
 require "axe-rspec"
 
+ENV["RACK_ENV"] ||= "test"
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 # Prevent database truncation if the environment is production
