@@ -31,6 +31,10 @@ en:
             question_text:
               blank: Enter a question
               too_long: Question text must be %{count} characters or less
+        mou_signature:
+          attributes:
+            agreed:
+              accepted: You must agree to the memorandum of understanding
         user:
           attributes:
             name:
@@ -278,6 +282,9 @@ en:
         confirm_make_live: Are you sure you want to make your draft live?
       forms_make_live_form:
         confirm_make_live: Are you sure you want to make your form live?
+      mou_signature:
+        agreed_options:
+          '1': I agree to the MOU on behalf of my organisation
       page:
         address_settings_options:
           input_types:
@@ -360,6 +367,8 @@ en:
         met_requirements_options:
           '1': I meet these requirements
     legend:
+      mou_signature:
+        agreed: Do you agree to the MOU?
       user_upgrade_request:
         met_requirements: Confirm that you meet these requirements
   home:
@@ -504,6 +513,11 @@ en:
     heading_with_single_date: Form metrics for %{date}
     heading_without_dates: Form metrics
     percentage: "%{number}%"
+  mou_signature:
+    confirmation:
+      body_html: |
+        <h2 class="govuk-heading-m">What happens next</h2>
+        <p>We'll email you with any updates to the MOU that are made in the future.</p>
   mou_signatures:
     index:
       table_caption: Signed MOUs
@@ -574,6 +588,8 @@ en:
     maintenance: Sorry, the service is unavailable
     make_changes_live_form: Make your changes live
     make_live_form: Make your form live
+    mou_signature_confirmation: You've agreed to the MOU
+    mou_signature_new: GOV.UK Forms Memorandum of Understanding
     mou_signatures: Memorandum of Understanding agreements
     name_settings: Ask for a person’s name
     new_page_form: Edit question

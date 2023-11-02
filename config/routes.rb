@@ -118,6 +118,11 @@ Rails.application.routes.draw do
   end
 
   resources :mou_signatures, only: %i[index], path: "mous"
+
+  resource :mou_signature, only: %i[new show create], path: "/memorandum-of-understanding" do
+    get "/signed", to: "mou_signatures#confirmation", as: :confirmation
+  end
+
   get "/maintenance" => "errors#maintenance", as: :maintenance_page
   match "/403", to: "errors#forbidden", as: :error_403, via: :all
   match "/404", to: "errors#not_found", as: :error_404, via: :all

@@ -30,8 +30,7 @@ class UsersController < ApplicationController
   def update
     authorize current_user, :can_manage_user?
 
-    if user.update(user_params)
-      user.update_user_forms
+    if UserUpdateService.new(user, user_params).update_user
       redirect_to users_path
     else
       render :edit, status: :unprocessable_entity

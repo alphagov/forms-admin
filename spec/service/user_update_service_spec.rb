@@ -1,0 +1,87 @@
+require "rails_helper"
+
+describe UserUpdateService do
+  subject(:user_update_service) do
+    described_class.new(user, params)
+  end
+
+  describe "#update_user" do
+    let(:user) { build :user }
+    let(:params) { {} }
+
+    it "returns the value of user.update" do
+      allow(user).to receive(:update).and_return(true)
+      expect(user_update_service.update_user).to be true
+    end
+
+    it "does not run add_organisation_to_user_forms if user is not updated" do
+      allow(user).to receive(:update).and_return(false)
+      allow(Form).to receive(:update_organisation_for_creator)
+      user_update_service.update_user
+      expect(Form).not_to have_received(:update_organisation_for_creator)
+    end
+
+    it "does not run add_organisation_to_user_mou if user is not updated" do
+      allow(user).to receive(:update).and_return(false)
+      allow(MouSignature).to receive(:add_mou_signature_organisation)
+      user_update_service.update_user
+      expect(MouSignature).not_to have_received(:add_mou_signature_organisation)
+    end
+
+    context "when changing user role" do
+      let(:user) { create :user, :with_trial_role }
+      let(:params) { { role: :editor } }
+
+      before do
+        allow(Form).to receive(:update_organisation_for_creator)
+        allow(MouSignature).to receive(:add_mou_signature_organisation)
+
+        user_update_service.update_user
+      end
+
+      User.roles.reject { |role| role == "trial" }.each do |_role_name, role_value|
+        context "when the user is a trial user changing to #{role_value}" do
+          let(:organisation) { create(:organisation) }
+          let(:params) { { role: role_value, name: "name required", organisation: } }
+
+          it "updates the user's params" do
+            expect(user.role).to eq(role_value)
+          end
+
+          it "calls update_organisation_for_creator" do
+            expect(Form).to have_received(:update_organisation_for_creator).with(user.id, user.organisation_id)
+          end
+        end
+
+        context "when the user is a #{role_value} changing to editor" do
+          let(:user) { create :user, role: role_value }
+          let(:params) { { role: :editor } }
+
+          it "updates the user's params" do
+            expect(user).to be_editor
+          end
+
+          it "calls update_organisation_for_creator" do
+            expect(Form).not_to have_received(:update_organisation_for_creator).with(user.id, user.organisation_id)
+          end
+        end
+      end
+
+      context "when the user is a given an organisation" do
+        let(:params) { { organisation: build(:organisation) } }
+
+        it "calls add_mou_signature_organisation on MouSignature" do
+          expect(MouSignature).to have_received(:add_mou_signature_organisation).with(user)
+        end
+      end
+
+      context "when a user is not given an organisation" do
+        let(:params) { { name: "blank_name" } }
+
+        it "does not call add_mou_signature_organisation on MouSignature" do
+          expect(MouSignature).not_to have_received(:add_mou_signature_organisation).with(user)
+        end
+      end
+    end
+  end
+end

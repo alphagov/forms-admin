@@ -1,0 +1,20 @@
+<% set_page_title(title_with_error_prefix(t("page_titles.mou_signature_new"), @mou_signature.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(root_path, t("back_link.forms")) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: @mou_signature, url: mou_signature_url) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">GOV.UK Forms Memorandum of Understanding</h1>
+
+      <%= render "mou_version_1" %>
+
+      <%= f.govuk_check_boxes_fieldset :agreed, multiple: false, legend: { tag: 'h2', size: 'm' } do %>
+        <%= f.govuk_check_box :agreed, 1, 0, multiple: false, link_errors: true  %>
+      <% end %>
+
+      <%= f.govuk_submit t('save_and_continue') %>
+    <% end %>
+  </div>
+</div>
