@@ -33,8 +33,6 @@ module FormsAdmin
     config.view_component.show_previews = HostingEnvironment.test_environment?
 
     ### LOGGING CONFIGURATION ###
-    config.log_level = :info
-
     # Use JSON log formatter for better support in Splunk. To use conventional
     # logging use the Logger::Formatter.new.
     config.log_formatter = JsonLogFormatter.new
