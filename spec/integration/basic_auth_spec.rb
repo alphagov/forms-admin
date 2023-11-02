@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "using basic auth" do
   let(:username) { "tester" }
   let(:password) { "password" }
+  let(:basic_auth_user) { create :basic_auth_user, name: username, organisation_id: organisation.id }
 
   let!(:organisation) do
     create :organisation, id: 1, slug: "test-org", name: "Test Org"
@@ -27,7 +28,7 @@ RSpec.describe "using basic auth" do
     }
 
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?organisation_id=1", api_headers, [].to_json, 200
+      mock.get "/api/v1/forms?creator_id=#{basic_auth_user.id}", api_headers, [].to_json, 200
     end
 
     allow(Settings).to receive(:auth_provider).and_return("basic_auth")
@@ -58,9 +59,10 @@ RSpec.describe "using basic auth" do
 
     it "signs in user as defined in settings" do
       expect(assigns[:current_user].name).to eq username
-      expect(assigns[:current_user].email).to eq "#{username}@example.com"
       expect(assigns[:current_user].organisation.slug).to eq "test-org"
       expect(assigns[:current_user].provider).to eq "basic_auth"
+      expect(assigns[:current_user].email).to eq basic_auth_user.email
+      expect(assigns[:current_user].role.to_sym).to eq :trial
     end
   end
 end
