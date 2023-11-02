@@ -5,15 +5,15 @@ RSpec.describe "using basic auth" do
   let(:password) { "password" }
   let(:basic_auth_user) { create :basic_auth_user, name: username, organisation_id: organisation.id }
 
-  let!(:organisation) do
-    create :organisation, id: 1, slug: "test-org", name: "Test Org"
+  let(:organisation) do
+    create :organisation
   end
 
   let(:basic_auth_settings) do
     Config::Options.new(
       organisation: Config::Options.new(
-        slug: "test-org",
-        name: "Test Org",
+        slug: organisation.slug,
+        name: organisation.name,
         govuk_content_id: organisation.govuk_content_id,
       ),
       username:,
@@ -58,11 +58,11 @@ RSpec.describe "using basic auth" do
     end
 
     it "signs in user as defined in settings" do
-      expect(assigns[:current_user].name).to eq username
-      expect(assigns[:current_user].organisation.slug).to eq "test-org"
-      expect(assigns[:current_user].provider).to eq "basic_auth"
+      expect(assigns[:current_user].name).to eq basic_auth_user.name
       expect(assigns[:current_user].email).to eq basic_auth_user.email
       expect(assigns[:current_user].role.to_sym).to eq :trial
+      expect(assigns[:current_user].organisation.slug).to eq basic_auth_user.organisation.slug
+      expect(assigns[:current_user].provider).to eq basic_auth_user.provider
     end
   end
 end
