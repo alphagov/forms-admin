@@ -1,5 +1,5 @@
 module Forms
-  class MakeLiveController < BaseController
+  class MakeLiveController < ApplicationController
     after_action :verify_authorized
     def new
       authorize current_form, :can_make_form_live?

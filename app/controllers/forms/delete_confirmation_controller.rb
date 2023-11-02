@@ -1,5 +1,5 @@
 module Forms
-  class DeleteConfirmationController < BaseController
+  class DeleteConfirmationController < ApplicationController
     def delete
       load_page_variables
     end

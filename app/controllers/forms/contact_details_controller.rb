@@ -1,5 +1,5 @@
 module Forms
-  class ContactDetailsController < BaseController
+  class ContactDetailsController < ApplicationController
     after_action :verify_authorized
     def new
       authorize current_form, :can_view_form?

@@ -1,5 +1,5 @@
 module Forms
-  class ChangeNameController < BaseController
+  class ChangeNameController < ApplicationController
     after_action :verify_authorized, except: :new
 
     def new
