@@ -45,6 +45,11 @@ en:
               blank: Select a role for the user
   address_settings:
     hint: Select all that apply
+  errors:
+    sign_in_failed:
+      body_html: |
+        There was a problem logging you in to the application. Please %{retry_link}.
+      retry_link_text: try again
   back_link:
     form_create: Back to create your form
     form_edit: Back to edit your form
@@ -572,6 +577,7 @@ en:
       only_one_option: Selection from a list, one option only.
   page_titles:
     access_denied: You do not have permission to access GOV.UK Forms
+    sign_in_failed: Error
     add_guidance: Add guidance
     address_settings: What kind of addresses do you expect to receive?
     change_name_form: Name your form

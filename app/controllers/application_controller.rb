@@ -29,6 +29,11 @@ class ApplicationController < ActionController::Base
     render "errors/forbidden", status: :forbidden, formats: :html
   end
 
+  rescue_from OmniAuth::Error, OAuth2::Error, OmniAuth::Strategies::OAuth2::CallbackError do |_exception|
+    provider = env["omniauth.error.strategy"] || Settings.auth_provider
+    render "errors/sign_in_failed", locals: { provider: }, status: :bad_request
+  end
+
   def check_maintenance_mode_is_enabled
     if Settings.maintenance_mode.enabled && non_maintenance_bypass_ip_address?
       redirect_to maintenance_page_path

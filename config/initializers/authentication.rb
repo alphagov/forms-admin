@@ -1,5 +1,8 @@
 Rails.application.config.before_initialize do
   # Configure OmniAuth authentication middleware
+  # Tell OmniAuth to raise failures so that we can treat them like other exceptions
+  OmniAuth.config.failure_raise_out_environments = ENV["RACK_ENV"] if ENV["RACK_ENV"]
+
   # add Auth0 provider
   Rails.application.config.app_middleware.use(
     OmniAuth::Strategies::Auth0,

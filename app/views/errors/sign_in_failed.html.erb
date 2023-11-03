@@ -1,0 +1,8 @@
+<% set_page_title(t("page_titles.sign_in_failed")) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= t("page_titles.sign_in_failed") %></h1>
+    <%= simple_format(t(".body_html", retry_link: link_to(t(".retry_link_text"), "/auth/#{provider}"))) %>
+  </div>
+</div>
