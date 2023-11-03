@@ -24,7 +24,7 @@ class PageSummaryCardDataService
 private
 
   def build_title
-    return @page.question_text unless @page.is_optional? || @page.answer_type == "selection"
+    return @page.question_text unless @page.is_optional? && @page.answer_type != "selection"
 
     "#{@page.question_text} (optional)"
   end
