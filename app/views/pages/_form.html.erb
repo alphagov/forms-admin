@@ -11,24 +11,22 @@
 
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
-  <% if FeatureService.enabled? :detailed_guidance_enabled %>
-    <h2 class="govuk-heading-m"><%= t("guidance.guidance") %></h2>
-    <% if page_object.page_heading.present? && page_object.guidance_markdown.present? %>
-      <%= govuk_summary_list(**PageSummaryData::GuidanceService.call(form: form_object, page: page_object).build_data) %>
+  <h2 class="govuk-heading-m"><%= t("guidance.guidance") %></h2>
+  <% if page_object.page_heading.present? && page_object.guidance_markdown.present? %>
+    <%= govuk_summary_list(**PageSummaryData::GuidanceService.call(form: form_object, page: page_object).build_data) %>
 
-    <% else %>
-      <p><%= t("guidance.instructions") %></p>
+  <% else %>
+    <p><%= t("guidance.instructions") %></p>
 
-      <p>
-        <% guidance_link = unless is_new_page
-                             guidance_edit_path(form_id: form_object.id, page_id: page_object.id)
-                           else
-                             guidance_new_path(form_id: form_object.id)
-                           end%>
-        <%= govuk_button_link_to t("guidance.add_guidance"), guidance_link, {secondary: true} %>
-      </p>
-      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
-    <% end %>
+    <p>
+      <% guidance_link = unless is_new_page
+                            guidance_edit_path(form_id: form_object.id, page_id: page_object.id)
+                          else
+                            guidance_new_path(form_id: form_object.id)
+                          end%>
+      <%= govuk_button_link_to t("guidance.add_guidance"), guidance_link, {secondary: true} %>
+    </p>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <% end %>
 
   <% if question_form.answer_type == 'selection' %>
