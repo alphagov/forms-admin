@@ -60,7 +60,7 @@ RSpec.describe Pages::TypeOfAnswerForm, type: :model do
     it "sets clears the answer_settings for the draft_question" do
       type_of_answer_form.answer_type = "email"
       type_of_answer_form.submit(session_mock)
-      expect(type_of_answer_form.draft_question.answer_settings).to be_nil
+      expect(type_of_answer_form.draft_question.answer_settings).to eq({})
     end
   end
 end

@@ -65,7 +65,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         let(:type_of_answer_form) { build :type_of_answer_form, :with_simple_answer_type }
 
         it "saves the answer type to session" do
-          expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
+          expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: {} })
         end
 
         it "redirects the user to the question details page" do
@@ -81,7 +81,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         end
 
         it "saves the answer type to session" do
-          expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
+          expect(session[:page]).to eq(answer_type: type_of_answer_form.answer_type, answer_settings: {include_none_of_the_above: false, only_one_option: false, selection_options: [{name: ""}, {name: ""}]} )
         end
 
         it "redirects the user to the question text page" do
@@ -97,7 +97,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         end
 
         it "saves the answer type to session" do
-          expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
+          expect(session[:page]).to eq(answer_type: type_of_answer_form.answer_type, answer_settings: {input_type: nil})
         end
 
         it "redirects the user to the text settings page" do
@@ -113,7 +113,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         end
 
         it "saves the answer type to session" do
-          expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
+          expect(session[:page]).to eq(answer_type: type_of_answer_form.answer_type, answer_settings: {input_type: nil} )
         end
 
         it "redirects the user to the date settings page" do
@@ -129,7 +129,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         end
 
         it "saves the answer type to session" do
-          expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
+          expect(session[:page]).to eq(answer_type: type_of_answer_form.answer_type, answer_settings: {input_type: nil})
         end
 
         it "redirects the user to the address settings page" do
@@ -145,7 +145,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         end
 
         it "saves the answer type to session" do
-          expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: nil })
+          expect(session[:page]).to eq( answer_type: type_of_answer_form.answer_type, answer_settings: {input_type:nil, title_needed: nil})
         end
 
         it "redirects the user to the name settings page" do
