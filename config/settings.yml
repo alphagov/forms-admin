@@ -1,6 +1,5 @@
 # Used to add feature flags in the app to control access to certain features.
 features:
-  detailed_guidance_enabled: false
   email_confirmations_enabled: false
   metrics_for_form_creators_enabled: false
 
