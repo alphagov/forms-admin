@@ -1,0 +1,4 @@
+<%= govuk_notification_banner(title_text: t("role_upgrade.title"), success: true) do |banner| %>
+  <% banner.with_heading(text: t("role_upgrade.heading")) %>
+  <%= t("role_upgrade.content_html") %>
+<% end %>
