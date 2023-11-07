@@ -37,28 +37,20 @@ RSpec.describe Pages::TypeOfAnswerForm, type: :model do
   end
 
   describe "#submit" do
-    let(:session_mock) { {} }
-
     it "returns false if the form is invalid" do
       allow(type_of_answer_form).to receive(:invalid?).and_return(true)
-      expect(type_of_answer_form.submit(session_mock)).to be_falsey
-    end
-
-    it "sets a session key called 'page' as a hash with the answer type in it" do
-      type_of_answer_form.answer_type = "email"
-      type_of_answer_form.submit(session_mock)
-      expect(session_mock[:page]).to include(answer_type: "email")
+      expect(type_of_answer_form.submit).to be_falsey
     end
 
     it "sets draft_question to the answer type" do
       type_of_answer_form.answer_type = "email"
-      type_of_answer_form.submit(session_mock)
+      type_of_answer_form.submit
       expect(type_of_answer_form.draft_question.answer_type).to eq("email")
     end
 
     it "sets clears the answer_settings for the draft_question" do
       type_of_answer_form.answer_type = "email"
-      type_of_answer_form.submit(session_mock)
+      type_of_answer_form.submit
       expect(type_of_answer_form.draft_question.answer_settings).to eq({})
     end
 

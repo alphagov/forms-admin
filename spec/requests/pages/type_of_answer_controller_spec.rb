@@ -64,8 +64,8 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       context "when answer type is not selection" do
         let(:type_of_answer_form) { build :type_of_answer_form, :with_simple_answer_type }
 
-        it "saves the answer type to session" do
-          expect(session[:page]).to eq({ answer_type: type_of_answer_form.answer_type, answer_settings: {} })
+        it "saves the answer type to draft question" do
+          expect(type_of_answer_form.draft_question.attributes.with_indifferent_access).to include({ answer_type: type_of_answer_form.answer_type, answer_settings: {} })
         end
 
         it "redirects the user to the question details page" do
@@ -76,12 +76,9 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       context "when answer type is selection" do
         let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "selection" }
 
-        before do
-          post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
-        end
-
-        it "saves the answer type to session" do
-          expect(session[:page]).to eq(answer_type: type_of_answer_form.answer_type, answer_settings: {include_none_of_the_above: false, only_one_option: false, selection_options: [{name: ""}, {name: ""}]} )
+        it "saves the answer type & answer settings to draft question" do
+          form = assigns(:type_of_answer_form)
+          expect(form.draft_question.attributes.with_indifferent_access).to include(answer_type: type_of_answer_form.answer_type, answer_settings: { include_none_of_the_above: false, only_one_option: false, selection_options: [{ name: "" }, { name: "" }] })
         end
 
         it "redirects the user to the question text page" do
@@ -92,12 +89,9 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       context "when answer type is text" do
         let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "text" }
 
-        before do
-          post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
-        end
-
-        it "saves the answer type to session" do
-          expect(session[:page]).to eq(answer_type: type_of_answer_form.answer_type, answer_settings: {input_type: nil})
+        it "saves the answer type to draft question" do
+          form = assigns(:type_of_answer_form)
+          expect(form.draft_question.attributes.with_indifferent_access).to include(answer_type: type_of_answer_form.answer_type, answer_settings: { input_type: nil })
         end
 
         it "redirects the user to the text settings page" do
@@ -108,12 +102,9 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       context "when answer type is date" do
         let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "date" }
 
-        before do
-          post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
-        end
-
-        it "saves the answer type to session" do
-          expect(session[:page]).to eq(answer_type: type_of_answer_form.answer_type, answer_settings: {input_type: nil} )
+        it "saves the answer type to draft question" do
+          form = assigns(:type_of_answer_form)
+          expect(form.draft_question.attributes.with_indifferent_access).to include(answer_settings: { input_type: nil })
         end
 
         it "redirects the user to the date settings page" do
@@ -124,12 +115,9 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       context "when answer type is address" do
         let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "address" }
 
-        before do
-          post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
-        end
-
-        it "saves the answer type to session" do
-          expect(session[:page]).to eq(answer_type: type_of_answer_form.answer_type, answer_settings: {input_type: nil})
+        it "saves the answer type to draft question" do
+          form = assigns(:type_of_answer_form)
+          expect(form.draft_question.attributes.with_indifferent_access).to include(answer_type: type_of_answer_form.answer_type, answer_settings: { input_type: nil })
         end
 
         it "redirects the user to the address settings page" do
@@ -140,12 +128,9 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       context "when answer type is name" do
         let(:type_of_answer_form) { build :type_of_answer_form, answer_type: "name" }
 
-        before do
-          post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_form: { answer_type: type_of_answer_form.answer_type } }
-        end
-
-        it "saves the answer type to session" do
-          expect(session[:page]).to eq( answer_type: type_of_answer_form.answer_type, answer_settings: {input_type:nil, title_needed: nil})
+        it "saves the answer type to draft question" do
+          form = assigns(:type_of_answer_form)
+          expect(form.draft_question.attributes.with_indifferent_access).to include(answer_type: type_of_answer_form.answer_type, answer_settings: { input_type: nil, title_needed: nil })
         end
 
         it "redirects the user to the name settings page" do
@@ -216,9 +201,9 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         post type_of_answer_update_path(form_id: page.form_id, page_id: page.id), params: { pages_type_of_answer_form: }
       end
 
-      it "saves the updated answer type to DB" do
+      it "saves the updated answer type to draft_question" do
         form = assigns(:type_of_answer_form)
-        expect(form.answer_type).to eq "number"
+        expect(form.draft_question.answer_type).to eq "number"
       end
 
       it "redirects the user to the question details page " do
@@ -228,9 +213,9 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       context "when answer type is selection" do
         let(:pages_type_of_answer_form) { { answer_type: "selection" } }
 
-        it "saves the answer type to session" do
+        it "saves the answer type to draft_question" do
           form = assigns(:type_of_answer_form)
-          expect(form.answer_type).to eq "selection"
+          expect(form.draft_question.answer_type).to eq "selection"
         end
 
         it "redirects the user to the question text page" do
