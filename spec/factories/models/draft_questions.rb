@@ -11,6 +11,10 @@ FactoryBot.define do
     guidance_markdown { nil }
     answer_settings { {} }
 
+    factory :draft_question_for_new_page do
+      page_id { nil }
+    end
+
     trait :with_hints do
       hint_text { Faker::Quote.yoda.truncate(500) }
     end

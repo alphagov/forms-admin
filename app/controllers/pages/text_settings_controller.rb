@@ -20,8 +20,8 @@ class Pages::TextSettingsController < PagesController
   end
 
   def edit
-    page.load_from_session(session, %i[answer_type answer_settings])
-    input_type = @page&.answer_settings&.input_type
+    page.load_from_session(session, %i[answer_settings])
+    input_type = @page.answer_settings&.input_type
     @text_settings_form = Pages::TextSettingsForm.new(input_type:)
     @text_settings_path = text_settings_update_path(current_form)
     @back_link_url = type_of_answer_edit_path(current_form)
