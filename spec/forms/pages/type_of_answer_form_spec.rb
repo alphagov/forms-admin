@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Pages::TypeOfAnswerForm, type: :model do
-  let(:form) { build :form, id: 1 }
   let(:type_of_answer_form) { build :type_of_answer_form, draft_question: }
   let(:draft_question) { build :draft_question, form_id: 1 }
 
@@ -61,6 +60,22 @@ RSpec.describe Pages::TypeOfAnswerForm, type: :model do
       type_of_answer_form.answer_type = "email"
       type_of_answer_form.submit(session_mock)
       expect(type_of_answer_form.draft_question.answer_settings).to eq({})
+    end
+
+    context "when data is valid and answer_type_changed is false" do
+      before do
+        allow(type_of_answer_form).to receive(:invalid?).and_return(false)
+        allow(type_of_answer_form).to receive(:answer_type_changed?).and_return(false)
+      end
+
+      it "returns true" do
+        expect(type_of_answer_form.submit).to eq true
+      end
+
+      it "does not call save on draft_question" do
+        expect(draft_question).not_to receive(:save!)
+        type_of_answer_form.submit
+      end
     end
   end
 end

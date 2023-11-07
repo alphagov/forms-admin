@@ -6,6 +6,7 @@ class Pages::TypeOfAnswerForm < BaseForm
 
   def submit(session)
     return false if invalid?
+    return true unless answer_type_changed?
 
     draft_question
       .assign_attributes({ answer_type:, answer_settings: default_answer_settings_for_answer_type })
@@ -16,7 +17,12 @@ class Pages::TypeOfAnswerForm < BaseForm
     session[:page] = { answer_type:, answer_settings: default_answer_settings_for_answer_type }
   end
 
-  private
+private
+
+  def answer_type_changed?
+    answer_type != draft_question.answer_type
+  end
+
   def default_answer_settings_for_answer_type
     case answer_type.to_sym
     when :selection
