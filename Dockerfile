@@ -31,7 +31,7 @@ COPY --chown=ruby:ruby . .
 
 # you can't run rails commands like assets:precompile without a secret key set
 # even though the command doesn't use the value itself
-RUN SECRET_KEY_BASE=dummyvalue rails assets:precompile
+RUN SECRET_KEY_BASE=dummyvalue rails vite:build_all
 
 # Remove devDependencies once assets have been built
 RUN npm ci --ignore-scripts --only=production
