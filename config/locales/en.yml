@@ -174,9 +174,9 @@ en:
         hint_text_html: Completed forms will be sent to:<br> %{submission_email}
         if_not_permitted:
           body_text: |
-            For a trial account, completed draft forms will be sent to your email address: %{submission_email}
+            When a draft form is completed it will be sent to your email address so you can see how form submissions will look.
 
-            Editor accounts can change the email address for completed forms to be sent to.
+            Editor accounts can change the email address completed forms are sent to.
         title: Set email address for completed forms
       section_3:
         contact_details: Provide contact details for support
@@ -184,7 +184,7 @@ en:
         title: Provide privacy and contact details
       section_4:
         if_not_permitted:
-          body_text: You cannot make a form live with a trial account
+          body_text: You cannot make a form live with a trial account.
         make_live: Make your form live
         title: Make your form live
     task_list_edit:
