@@ -85,6 +85,16 @@ RSpec.describe Pages::TextSettingsController, type: :request do
 
   describe "#edit" do
     let(:page) { build :page, :with_text_settings, id: 2, form_id: form.id }
+    let(:draft_question) do
+      create :draft_question,
+             answer_type: "text",
+             user: editor_user,
+             form_id: form.id,
+             page_id: page.id,
+             answer_settings: {
+               input_type: "single_line",
+             }
+    end
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -92,7 +102,7 @@ RSpec.describe Pages::TextSettingsController, type: :request do
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
         mock.get "/api/v1/forms/1/pages/2", req_headers, page.to_json, 200
       end
-
+      draft_question
       get text_settings_edit_path(form_id: page.form_id, page_id: page.id)
     end
 
@@ -102,7 +112,7 @@ RSpec.describe Pages::TextSettingsController, type: :request do
 
     it "returns the existing page input type" do
       form = assigns(:text_settings_form)
-      expect(form.input_type).to eq page.answer_settings[:input_type]
+      expect(form.input_type).to eq draft_question.answer_settings[:input_type]
     end
 
     it "sets an instance variable for text_settings_path" do

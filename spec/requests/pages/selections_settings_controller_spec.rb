@@ -1,10 +1,23 @@
 require "rails_helper"
 
-RSpec.describe Pages::SelectionsSettingsController, type: :request do
+describe Pages::SelectionsSettingsController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
 
   let(:selections_settings_form) { build :selections_settings_form }
+
+  let(:draft_question) do
+    create :draft_question,
+           answer_type: "selection",
+           page_id:,
+           user: editor_user,
+           form_id: form.id,
+           is_optional: false,
+           answer_settings: { selection_options: [{ name: "" }, { name: "" }],
+                              only_one_option: false,
+                              include_none_of_the_above: false }
+  end
+  let(:page_id) { nil }
 
   let(:req_headers) do
     {
@@ -30,7 +43,7 @@ RSpec.describe Pages::SelectionsSettingsController, type: :request do
         mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
       end
-
+      draft_question
       get selections_settings_new_path(form_id: form.id)
     end
 
@@ -83,6 +96,7 @@ RSpec.describe Pages::SelectionsSettingsController, type: :request do
 
   describe "#edit" do
     let(:page) { build :page, :with_selections_settings, id: 2, form_id: form.id }
+    let(:page_id) { page.id }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -90,7 +104,7 @@ RSpec.describe Pages::SelectionsSettingsController, type: :request do
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
         mock.get "/api/v1/forms/1/pages/2", req_headers, page.to_json, 200
       end
-
+      draft_question
       get selections_settings_edit_path(form_id: page.form_id, page_id: page.id)
     end
 
@@ -98,11 +112,12 @@ RSpec.describe Pages::SelectionsSettingsController, type: :request do
       expect(form).to have_been_read
     end
 
-    it "returns the existing page answer settings" do
+    it "returns the existing draft question answer settings" do
       settings_form = assigns(:selections_settings_form)
-      expect(settings_form.only_one_option).to eq page.answer_settings[:only_one_option]
-      expect(settings_form.selection_options.map { |option| { name: option[:name] } }).to eq(page.answer_settings[:selection_options].map { |option| { name: option[:name] } })
-      expect(settings_form.include_none_of_the_above).to eq page.is_optional
+      draft_question_settings = settings_form.draft_question.answer_settings.with_indifferent_access
+      expect(settings_form.only_one_option).to eq draft_question_settings[:only_one_option]
+      expect(settings_form.selection_options.map { |option| { name: option[:name] } }).to eq(draft_question_settings[:selection_options].map { |option| { name: option[:name] } })
+      expect(settings_form.include_none_of_the_above).to eq settings_form.draft_question.is_optional
     end
 
     it "sets an instance variable for selections_settings_path" do
