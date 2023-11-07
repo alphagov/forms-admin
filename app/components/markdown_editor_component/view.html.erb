@@ -17,39 +17,37 @@
 
       <%= f.govuk_submit preview_button_translation, secondary: true,  name: "route_to", value: "preview", class: "app-markdown-editor__preview-button","data-ajax-markdown-trigger": true %>
 
-      <details class="govuk-details" data-module="govuk-details">
-        <summary class="govuk-details__summary">
+      <%= govuk_details do |component| %>
+        <% component.with_summary_html do %>
           <h2 class='govuk-details__summary-text govuk-!-font-size-19 govuk-!-margin-0 govuk-!-font-weight-regular'>
             <%= t("markdown_editor.formatting_help.formatting_help_section_heading") %>
           </h2>
-        </summary>
-        <div class="govuk-details__text">
-          <% %w[links headings bulleted_lists numbered_lists].each do |format_name| %>
-            <h3 class="govuk-heading-m"><%= t("markdown_editor.formatting_help.#{format_name}.heading") %></h3>
+        <% end %>
+        <% %w[links headings bulleted_lists numbered_lists].each do |format_name| %>
+          <h3 class="govuk-heading-m"><%= t("markdown_editor.formatting_help.#{format_name}.heading") %></h3>
 
-            <%= simple_format(t("markdown_editor.formatting_help.#{format_name}.instructions")) %>
+          <%= simple_format(t("markdown_editor.formatting_help.#{format_name}.instructions")) %>
 
-            <% if I18n.exists?("markdown_editor.formatting_help.#{format_name}.example") %>
+          <% if I18n.exists?("markdown_editor.formatting_help.#{format_name}.example") %>
+            <%= govuk_inset_text do %>
+              <pre class="app-markdown-editor__markdown-example-block"><code class="app-markdown-editor__markdown-example-block-code"><%= t("markdown_editor.formatting_help.#{format_name}.example") %></code ></pre>
+            <% end %>
+          <% end %>
+
+          <% if format_name == "headings" %>
+            <% %w[second_level_headings third_level_headings].each do |format_name| %>
+              <h4 class="govuk-heading-s"><%= t("markdown_editor.formatting_help.#{format_name}.heading") %></h4>
+
+              <%= simple_format(t("markdown_editor.formatting_help.#{format_name}.instructions")) %>
+
+
               <%= govuk_inset_text do %>
                 <pre class="app-markdown-editor__markdown-example-block"><code class="app-markdown-editor__markdown-example-block-code"><%= t("markdown_editor.formatting_help.#{format_name}.example") %></code ></pre>
               <% end %>
             <% end %>
-
-            <% if format_name == "headings" %>
-              <% %w[second_level_headings third_level_headings].each do |format_name| %>
-                <h4 class="govuk-heading-s"><%= t("markdown_editor.formatting_help.#{format_name}.heading") %></h4>
-
-                <%= simple_format(t("markdown_editor.formatting_help.#{format_name}.instructions")) %>
-
-
-                <%= govuk_inset_text do %>
-                  <pre class="app-markdown-editor__markdown-example-block"><code class="app-markdown-editor__markdown-example-block-code"><%= t("markdown_editor.formatting_help.#{format_name}.example") %></code ></pre>
-                <% end %>
-              <% end %>
-            <% end %>
           <% end %>
-        </div>
-      </details>
+        <% end %>
+      <% end %>
     <% end %>
 
     <% component.with_tab(label: translations[:preview_tab_text]) do %>
