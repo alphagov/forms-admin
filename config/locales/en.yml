@@ -520,6 +520,7 @@ en:
         <p>We'll email you with any updates to the MOU that are made in the future.</p>
   mou_signatures:
     index:
+      share_mou_link_html: "<p>Allow users to view and agree to the latest Memorandum of Understanding by sharing %{mou_link}.</p>"
       table_caption: Signed MOUs
       table_headings:
         agreed_at: Agreed on

@@ -1,6 +1,8 @@
 <% set_page_title(t("page_titles.mou_signatures")) %>
 <h1 class="govuk-heading-l"><%= t("page_titles.mou_signatures") %></h1>
 
+<%= t("mou_signatures.index.share_mou_link_html", mou_link: link_to(mou_signature_url, mou_signature_url)) %>
+
 <% if mou_signatures.any? %>
   <%= govuk_table do |table| %>
     <%= table.with_caption(size: 'm', text: t("mou_signatures.index.table_caption")) %>
