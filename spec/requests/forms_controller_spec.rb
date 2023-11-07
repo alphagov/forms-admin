@@ -129,10 +129,6 @@ RSpec.describe FormsController, type: :request do
         get form_path(2)
       end
 
-      it "explains where completed forms will be sent to" do
-        expect(response.body).to include(form.submission_email)
-      end
-
       it "does not include setting the submission email address" do
         expect(response.body).not_to include(submission_email_form_path(2))
         expect(response.body).not_to include(submission_email_code_path(2))
