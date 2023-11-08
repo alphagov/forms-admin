@@ -6,7 +6,7 @@ class Pages::DateSettingsForm < BaseForm
   validates :draft_question, presence: true
   validates :input_type, presence: true, inclusion: { in: INPUT_TYPES }
 
-  def submit(session)
+  def submit
     return false if invalid?
 
     # Set the answer_settings hash
@@ -19,9 +19,5 @@ class Pages::DateSettingsForm < BaseForm
       .assign_attributes({ answer_settings: answer_settings.with_indifferent_access })
 
     draft_question.save!(validate: false)
-
-    # TODO: remove this once we have draft_questions being saved across the whole journey
-    session[:page] = {} if session[:page].blank?
-    session[:page][:answer_settings] = answer_settings
   end
 end

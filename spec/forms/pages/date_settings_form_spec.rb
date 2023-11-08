@@ -47,22 +47,14 @@ RSpec.describe Pages::DateSettingsForm, type: :model do
   end
 
   describe "#submit" do
-    let(:session_mock) { {} }
-
     it "returns false if the form is invalid" do
       allow(date_settings_form).to receive(:invalid?).and_return(true)
-      expect(date_settings_form.submit(session_mock)).to be_falsey
-    end
-
-    it "sets a session key called 'page' as a hash with the answer type in it" do
-      date_settings_form.input_type = "date_of_birth"
-      date_settings_form.submit(session_mock)
-      expect(session_mock[:page][:answer_settings]).to include(input_type: "date_of_birth")
+      expect(date_settings_form.submit).to be_falsey
     end
 
     it "sets draft_question answer_settings" do
       date_settings_form.input_type = "date_of_birth"
-      date_settings_form.submit(session_mock)
+      date_settings_form.submit
 
       expected_settings = {
         input_type: "date_of_birth",
