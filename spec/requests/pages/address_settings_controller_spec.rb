@@ -172,7 +172,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
         form_instance_variable = assigns(:address_settings_form)
         expect(form_instance_variable.uk_address).to eq "true"
         expect(form_instance_variable.international_address).to eq "false"
-        expect(form_instance_variable.draft_question.answer_settings.with_indifferent_access).to include( input_type: { uk_address: "true", international_address: "false" })
+        expect(form_instance_variable.draft_question.answer_settings.with_indifferent_access).to include(input_type: { uk_address: "true", international_address: "false" })
       end
 
       it "redirects the user to the edit question page" do

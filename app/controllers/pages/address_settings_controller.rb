@@ -1,8 +1,8 @@
 class Pages::AddressSettingsController < PagesController
   def new
-    uk_address = draft_question.answer_settings.dig(:input_type, :uk_address)
-    international_address = draft_question.answer_settings.dig(:input_type, :international_address)
-    @address_settings_form = Pages::AddressSettingsForm.new(uk_address:, international_address:)
+    settings = draft_question.answer_settings.with_indifferent_access
+    @address_settings_form = Pages::AddressSettingsForm.new(uk_address: settings.dig(:input_type, :uk_address),
+                                                            international_address: settings.dig(:input_type, :international_address))
     @address_settings_path = address_settings_create_path(current_form)
     @back_link_url = type_of_answer_new_path(current_form)
     render :address_settings, locals: { current_form: }
@@ -21,9 +21,9 @@ class Pages::AddressSettingsController < PagesController
   end
 
   def edit
-    uk_address = draft_question.answer_settings.with_indifferent_access.dig(:input_type, :uk_address)
-    international_address = draft_question.answer_settings.with_indifferent_access.dig(:input_type, :international_address)
-    @address_settings_form = Pages::AddressSettingsForm.new(uk_address:, international_address:)
+    settings = draft_question.answer_settings.with_indifferent_access
+    @address_settings_form = Pages::AddressSettingsForm.new(uk_address: settings.dig(:input_type, :uk_address),
+                                                            international_address: settings.dig(:input_type, :international_address))
     @address_settings_path = address_settings_update_path(current_form)
     @back_link_url = type_of_answer_edit_path(current_form)
     render :address_settings, locals: { current_form: }
