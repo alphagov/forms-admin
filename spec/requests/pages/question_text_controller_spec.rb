@@ -46,6 +46,14 @@ RSpec.describe Pages::QuestionTextController, type: :request do
     it "renders the template" do
       expect(response).to have_rendered("pages/question_text")
     end
+
+    context "editing an existing question text" do
+      let!(:draft_question) { create :draft_question, user: editor_user, form_id: form.id }
+
+      it "returns the question text stored in the draft question" do
+        expect(response.body).to include(draft_question.question_text)
+      end
+    end
   end
 
   describe "#create" do
@@ -73,8 +81,9 @@ RSpec.describe Pages::QuestionTextController, type: :request do
 
       let(:question_text_form) { build :question_text_form }
 
-      it "saves the input type to session" do
-        expect(session[:page][:question_text]).to eq "Are you a higher rate taxpayer?"
+      it "calls the #submit method on the question text form" do
+        allow(question_text_form).to receive(:submit).and_return(true)
+        expect(question_text_form).to have_received(:submit)
       end
 
       it "redirects the user to the edit question page" do
