@@ -65,24 +65,15 @@ RSpec.describe Pages::NameSettingsForm, type: :model do
   end
 
   describe "#submit" do
-    let(:session_mock) { {} }
-
     it "returns false if the form is invalid" do
       allow(name_settings_form).to receive(:invalid?).and_return(true)
-      expect(name_settings_form.submit(session_mock)).to be_falsey
-    end
-
-    it "sets a session key called 'page' as a hash with the answer settings in it" do
-      name_settings_form = build :name_settings_form
-      name_settings_form.submit(session_mock)
-      expect(session_mock[:page][:answer_settings]).to include(input_type: "full_name")
-      expect(session_mock[:page][:answer_settings]).to include(title_needed: "true")
+      expect(name_settings_form.submit).to be_falsey
     end
 
     it "sets draft_question answer_settings" do
       name_settings_form.input_type = "full_name"
       name_settings_form.title_needed = "true"
-      name_settings_form.submit(session_mock)
+      name_settings_form.submit
 
       expected_settings = {
         input_type: "full_name",
