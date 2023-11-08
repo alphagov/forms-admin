@@ -2,7 +2,7 @@
 
 Trello card: <!-- link -->
 
-<!-- Add some description here about what the PR is about, even if you have a Trello card to link to -->
+<!-- Add some description here about what the PR is about, even if you have a Trello card to link to. A good example here:  -->
 
 ### Things to consider when reviewing
 
@@ -14,3 +14,8 @@ Trello card: <!-- link -->
 - Do the commit messages explain why the changes were made?
 - Are there all the unit tests needed?
 - Has all relevant documentation been updated?
+
+### Things to include
+
+[ ] Add screenshots or videos
+[ ] Link to prior, related PRs
