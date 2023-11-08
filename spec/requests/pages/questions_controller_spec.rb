@@ -37,7 +37,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
           question_text: "What is your home address?",
           hint_text: "This should be the location stated in your contract.",
           is_optional: nil,
-          answer_settings: nil,
+          answer_settings: {},
           page_heading: nil,
           guidance_markdown: nil,
           answer_type: draft_question.answer_type,
