@@ -30,10 +30,6 @@ describe "pages/_form.html.erb", type: :view do
     expect(rendered).to have_selector('form[action="http://example.com"]')
   end
 
-  it "has a hidden field for the answer type" do
-    expect(rendered).to have_field("pages_question_form[answer_type]", with: question_form.answer_type, type: :hidden)
-  end
-
   it "has a field with the question text" do
     expect(rendered).to have_field(type: "text", with: question_form.question_text)
   end

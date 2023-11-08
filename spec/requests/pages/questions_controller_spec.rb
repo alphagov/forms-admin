@@ -17,6 +17,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
   let(:form_response) do
     (build :form, id: 2)
   end
+  let(:draft_question) { create :draft_question_for_new_page, user: editor_user, form_id: 2 }
 
   before do
     login_as_editor_user
@@ -30,23 +31,16 @@ RSpec.describe Pages::QuestionsController, type: :request do
       }
     end
 
-    let(:post_headers) do
-      {
-        "X-API-Token" => Settings.forms_api.auth_key,
-        "Content-Type" => "application/json",
-      }
-    end
-
     describe "Given a valid page" do
       let(:new_page_data) do
         {
           question_text: "What is your home address?",
           hint_text: "This should be the location stated in your contract.",
-          answer_type: "address",
           is_optional: nil,
-          answer_settings: nil,
+          answer_settings: {},
           page_heading: nil,
           guidance_markdown: nil,
+          answer_type: draft_question.answer_type,
         }
       end
 
@@ -57,10 +51,11 @@ RSpec.describe Pages::QuestionsController, type: :request do
           mock.post "/api/v1/forms/2/pages", post_headers
         end
 
+        draft_question
+
         post create_question_path(2), params: { pages_question_form: {
           question_text: "What is your home address?",
           hint_text: "This should be the location stated in your contract.",
-          answer_type: "address",
           is_optional: false,
         } }
       end
@@ -88,9 +83,9 @@ RSpec.describe Pages::QuestionsController, type: :request do
         [{
           id: 1,
           form_id: 2,
-          question_text: "What is your work address?",
-          hint_text: "This should be the location stated in your contract.",
-          answer_type: "address",
+          question_text: draft_question.question_text,
+          hint_text: draft_question.hint_text,
+          answer_type: draft_question.answer_type,
           answer_settings: nil,
           page_heading: nil,
           guidance_markdown: nil,
@@ -101,9 +96,9 @@ RSpec.describe Pages::QuestionsController, type: :request do
         {
           id: 1,
           form_id: 2,
-          question_text: "What is your work address?",
-          hint_text: "This should be the location stated in your contract.",
-          answer_type: "address",
+          question_text: draft_question.question_text,
+          hint_text: draft_question.hint_text,
+          answer_type: draft_question.answer_type,
           answer_settings: nil,
           is_optional: false,
           page_heading: nil,

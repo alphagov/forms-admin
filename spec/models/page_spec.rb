@@ -143,55 +143,6 @@ describe Page, type: :model do
     end
   end
 
-  describe "#load_from_session" do
-    let(:page) { described_class.new(answer_type: "date") }
-    let(:session_mock) { { page: {} } }
-
-    context "when the key is not present in the session" do
-      it "returns the value from the page" do
-        page.load_from_session(session_mock, %i[answer_type])
-        expect(page.answer_type).to eq("date")
-      end
-    end
-
-    context "when the key is nil in the session" do
-      let(:session_mock) { { page: { answer_type: nil } } }
-
-      it "returns the value from the page" do
-        page.load_from_session(session_mock, %i[answer_type])
-        expect(page.answer_type).to eq("date")
-      end
-    end
-
-    context "when the key is present in the session" do
-      let(:session_mock) { { page: { answer_type: "address" } } }
-
-      it "returns the value from the session" do
-        page.load_from_session(session_mock, %i[answer_type])
-        expect(page.answer_type).to eq("address")
-      end
-    end
-
-    context "when the key is a string rather than a symbol" do
-      let(:session_mock) { { page: { answer_type: "address" } } }
-
-      it "returns the value from the session" do
-        page.load_from_session(session_mock, %w[answer_type])
-        expect(page.answer_type).to eq("address")
-      end
-    end
-
-    context "when the session being passed in contains a mixture of strings and symbols keys" do
-      let(:session_mock) { { page: { question_text: "Can you fill me in?", "answer_type" => "address" } } }
-
-      it "returns the values from the session" do
-        page.load_from_session(session_mock, %i[question_text answer_type])
-        expect(page.question_text).to eq("Can you fill me in?")
-        expect(page.answer_type).to eq("address")
-      end
-    end
-  end
-
   describe "#question_with_number" do
     let(:page) { described_class.new(question_text: "What's your name?", position: 5) }
 

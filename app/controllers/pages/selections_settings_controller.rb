@@ -1,16 +1,16 @@
 class Pages::SelectionsSettingsController < PagesController
   def new
-    answer_settings = load_answer_settings_from_session
-    @selections_settings_form = Pages::SelectionsSettingsForm.new(answer_settings)
+    @selections_settings_form = Pages::SelectionsSettingsForm.new(draft_question.answer_settings)
     @selections_settings_path = selections_settings_create_path(current_form)
     @back_link_url = question_text_new_path(current_form)
     render :selections_settings, locals: { current_form: }
   end
 
   def create
-    answer_settings = load_answer_settings_from_params(selections_settings_form_params)
-    # TODO: Can remove the merge once we replaced session storage with ActiveRecord
-    @selections_settings_form = Pages::SelectionsSettingsForm.new(answer_settings.merge(draft_question:))
+    @selections_settings_form = Pages::SelectionsSettingsForm.new(selection_options: selection_options_param_values,
+                                                                  only_one_option: only_one_option_param_values,
+                                                                  include_none_of_the_above: include_none_of_the_above_param_values,
+                                                                  draft_question:)
     @selections_settings_path = selections_settings_create_path(current_form)
     @back_link_url = question_text_new_path(current_form)
 
@@ -28,17 +28,21 @@ class Pages::SelectionsSettingsController < PagesController
   end
 
   def edit
-    page.load_from_session(session, %i[answer_type answer_settings is_optional])
     @selections_settings_path = selections_settings_update_path(current_form)
-    @selections_settings_form = Pages::SelectionsSettingsForm.new(load_answer_settings_from_page_object(page))
+    @selections_settings_form = Pages::SelectionsSettingsForm.new(only_one_option: draft_question.answer_settings.with_indifferent_access[:only_one_option],
+                                                                  selection_options: draft_question.answer_settings.with_indifferent_access[:selection_options]
+                                                                                                   .map { |option| { name: option[:name] } },
+                                                                  include_none_of_the_above: draft_question.is_optional,
+                                                                  draft_question:)
     @back_link_url = edit_question_path(current_form, page)
     render :selections_settings, locals: { current_form: }
   end
 
   def update
-    answer_settings = load_answer_settings_from_params(selections_settings_form_params)
-    # TODO: Can remove the merge once we replaced session storage with ActiveRecord
-    @selections_settings_form = Pages::SelectionsSettingsForm.new(answer_settings.merge(draft_question:))
+    @selections_settings_form = Pages::SelectionsSettingsForm.new(selection_options: selection_options_param_values,
+                                                                  only_one_option: only_one_option_param_values,
+                                                                  include_none_of_the_above: include_none_of_the_above_param_values,
+                                                                  draft_question:)
     @selections_settings_path = selections_settings_update_path(current_form)
     @back_link_url = edit_question_path(current_form, page)
 
@@ -57,32 +61,16 @@ class Pages::SelectionsSettingsController < PagesController
 
 private
 
-  def load_answer_settings_from_params(params)
-    selection_options = params[:selection_options] ? params[:selection_options].values : []
-    only_one_option = params[:only_one_option]
-    include_none_of_the_above = params[:include_none_of_the_above]
-
-    { selection_options:, only_one_option:, include_none_of_the_above: }
+  def selection_options_param_values
+    selections_settings_form_params[:selection_options] ? selections_settings_form_params[:selection_options].values : []
   end
 
-  def load_answer_settings_from_session
-    if session[:page].present? && session[:page][:answer_settings].present?
-      only_one_option = session[:page][:answer_settings][:only_one_option]
-      include_none_of_the_above = session[:page][:is_optional]
-      selection_options = session[:page][:answer_settings][:selection_options]
-
-      { only_one_option:, selection_options:, include_none_of_the_above: }
-    else
-      Pages::SelectionsSettingsForm::DEFAULT_OPTIONS
-    end
+  def only_one_option_param_values
+    selections_settings_form_params[:only_one_option]
   end
 
-  def load_answer_settings_from_page_object(page)
-    only_one_option = page.answer_settings.only_one_option
-    include_none_of_the_above = page.is_optional
-    selection_options = page.answer_settings.selection_options.map { |option| { name: option.name } }
-
-    { only_one_option:, selection_options:, include_none_of_the_above: }
+  def include_none_of_the_above_param_values
+    selections_settings_form_params[:include_none_of_the_above]
   end
 
   def selections_settings_form_params

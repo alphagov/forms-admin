@@ -85,6 +85,17 @@ RSpec.describe Pages::NameSettingsController, type: :request do
 
   describe "#edit" do
     let(:page) { build :page, :with_name_settings, id: 2, form_id: form.id }
+    let(:draft_question) do
+      create :draft_question,
+             answer_type: "name",
+             user: editor_user,
+             form_id: form.id,
+             page_id: page.id,
+             answer_settings: {
+               input_type: "first_middle_and_last_name",
+               title_needed: "true",
+             }
+    end
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -92,7 +103,7 @@ RSpec.describe Pages::NameSettingsController, type: :request do
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
         mock.get "/api/v1/forms/1/pages/2", req_headers, page.to_json, 200
       end
-
+      draft_question
       get name_settings_edit_path(form_id: page.form_id, page_id: page.id)
     end
 
@@ -100,9 +111,9 @@ RSpec.describe Pages::NameSettingsController, type: :request do
       expect(form).to have_been_read
     end
 
-    it "returns the existing page input type" do
+    it "returns the existing input type" do
       form = assigns(:name_settings_form)
-      expect(form.input_type).to eq page.answer_settings[:input_type]
+      expect(form.input_type).to eq draft_question.answer_settings[:input_type]
     end
 
     it "sets an instance variable for name_settings_path" do

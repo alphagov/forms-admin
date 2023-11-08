@@ -1,9 +1,9 @@
 class Pages::QuestionsController < PagesController
   def new
-    answer_type = session.dig(:page, :answer_type)
+    answer_type = draft_question.answer_type
     question_text = session.dig(:page, :question_text)
-    answer_settings = session.dig(:page, :answer_settings)
-    is_optional = session.dig(:page, :is_optional) == "true"
+    answer_settings = draft_question.answer_settings
+    is_optional = draft_question.is_optional == "true"
     page_heading = draft_question.page_heading
     guidance_markdown = draft_question.guidance_markdown
     @question_form = Pages::QuestionForm.new(form_id: current_form.id, answer_type:, question_text:, answer_settings:, is_optional:, draft_question:)
@@ -13,12 +13,14 @@ class Pages::QuestionsController < PagesController
   end
 
   def create
-    answer_settings = session.dig(:page, :answer_settings)
-    page_heading = draft_question.page_heading
-    guidance_markdown = draft_question.guidance_markdown
-
-    @page = Page.new(page_params.merge(answer_settings:, page_heading:, guidance_markdown:))
-    @question_form = Pages::QuestionForm.new(page_params.merge(answer_settings:, page_heading:, guidance_markdown:, draft_question:))
+    @question_form = Pages::QuestionForm.new(page_params.merge(answer_settings: draft_question.answer_settings,
+                                                               page_heading: draft_question.page_heading,
+                                                               guidance_markdown: draft_question.guidance_markdown,
+                                                               draft_question:))
+    @page = Page.new(page_params.merge(answer_settings: draft_question.answer_settings,
+                                       page_heading: draft_question.page_heading,
+                                       guidance_markdown: draft_question.guidance_markdown,
+                                       answer_type: draft_question.answer_type))
 
     # TODO: Move Page creation to be part of the form submit method
     if @question_form.submit && @page.save
@@ -30,29 +32,25 @@ class Pages::QuestionsController < PagesController
   end
 
   def edit
-    reset_session_if_answer_settings_not_present
-    page.load_from_session(session, %i[answer_settings answer_type is_optional])
-
-    page.page_heading = draft_question.page_heading
-    page.guidance_markdown = draft_question.guidance_markdown
-
     @question_form = Pages::QuestionForm.new(form_id: current_form.id,
-                                             answer_type: page.answer_type,
+                                             answer_type: draft_question.answer_type,
                                              question_text: page.question_text,
-                                             hint_text: page.hint_text,
-                                             is_optional: page.is_optional,
-                                             answer_settings: page.answer_settings)
+                                             hint_text: draft_question.hint_text,
+                                             is_optional: draft_question.is_optional,
+                                             answer_settings: draft_question.answer_settings)
     render :edit, locals: { current_form: }
   end
 
   def update
-    page.load_from_session(session, %i[answer_type answer_settings]).load(page_params)
+    page.load(page_params)
     page.page_heading = draft_question.page_heading
     page.guidance_markdown = draft_question.guidance_markdown
+    page.answer_type = draft_question.answer_type
+    page.answer_settings = draft_question.answer_settings
 
-    @question_form = Pages::QuestionForm.new(page_params.merge(answer_settings: page.answer_settings,
-                                                               page_heading: page.page_heading,
-                                                               guidance_markdown: page.guidance_markdown,
+    @question_form = Pages::QuestionForm.new(page_params.merge(answer_settings: draft_question.answer_settings,
+                                                               page_heading: draft_question.page_heading,
+                                                               guidance_markdown: draft_question.guidance_markdown,
                                                                draft_question:))
 
     # TODO: Move Page creation to be part of the form submit method
@@ -68,17 +66,7 @@ private
 
   def page_params
     # TODO: Remove current_form from merge once we using draft question properly. the question form shouldn't need to know about form id
-    params.require(:pages_question_form).permit(:question_text, :hint_text, :answer_type, :is_optional).merge(form_id: current_form.id)
-  end
-
-  def reset_session_if_answer_settings_not_present
-    answer_type = session.dig(:page, :answer_type)
-    answer_settings = session.dig(:page, :answer_settings)
-
-    if (Page::ANSWER_TYPES_WITH_SETTINGS.include? answer_type) && (answer_settings.blank? || answer_settings == {})
-      clear_questions_session_data
-      redirect_to edit_question_path(params[:form_id], params[:page_id])
-    end
+    params.require(:pages_question_form).permit(:question_text, :hint_text, :is_optional).merge(form_id: current_form.id)
   end
 
   def handle_submit_action

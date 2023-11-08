@@ -2,9 +2,22 @@ require "rails_helper"
 
 RSpec.describe Pages::AddressSettingsController, type: :request do
   let(:form) { build :form, id: 1 }
-  let(:pages) { build_list :page, 5, answer_type: "address", form_id: form.id }
+  let(:pages) { build_list :page, 5, answer_type: "address", form_id: 1 }
 
-  let(:address_settings_form) { build :address_settings_form }
+  let(:draft_question) do
+    create :draft_question_for_new_page,
+           answer_type: "address",
+           user: editor_user,
+           form_id: form.id,
+           answer_settings: {
+             input_type: {
+               uk_address: true.to_s,
+               international_address: false.to_s,
+             },
+           }
+  end
+
+  let(:address_settings_form) { build :address_settings_form, draft_question: }
 
   let(:req_headers) do
     {
@@ -85,6 +98,19 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
   describe "#edit" do
     let(:page) { build :page, :with_address_settings, id: 2, form_id: form.id }
+    let(:draft_question) do
+      create :draft_question,
+             answer_type: "address",
+             user: editor_user,
+             form_id: form.id,
+             page_id: page.id,
+             answer_settings: {
+               input_type: {
+                 uk_address: true.to_s,
+                 international_address: false.to_s,
+               },
+             }
+    end
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -92,7 +118,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
         mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
         mock.get "/api/v1/forms/1/pages/2", req_headers, page.to_json, 200
       end
-
+      draft_question
       get address_settings_edit_path(form_id: page.form_id, page_id: page.id)
     end
 
@@ -102,8 +128,8 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
     it "returns the existing page input type" do
       form = assigns(:address_settings_form)
-      expect(form.uk_address).to eq page.answer_settings[:input_type][:uk_address]
-      expect(form.international_address).to eq page.answer_settings[:input_type][:international_address]
+      expect(form.uk_address).to eq draft_question.answer_settings.deep_symbolize_keys[:input_type][:uk_address]
+      expect(form.international_address).to eq draft_question.answer_settings.deep_symbolize_keys[:input_type][:international_address]
     end
 
     it "sets an instance variable for address_settings_path" do
