@@ -8,7 +8,7 @@ class Pages::AddressSettingsForm < BaseForm
   validates :uk_address, inclusion: { in: %w[true false] }
   validates :international_address, inclusion: { in: %w[true false] }
 
-  def submit(session)
+  def submit
     return false if invalid?
 
     # Set the answer_settings hash
@@ -24,10 +24,6 @@ class Pages::AddressSettingsForm < BaseForm
       .assign_attributes({ answer_settings: answer_settings.with_indifferent_access })
 
     draft_question.save!(validate: false)
-
-    # TODO: remove this once we have draft_questions being saved across the whole journey
-    session[:page] = {} if session[:page].blank?
-    session[:page][:answer_settings] = answer_settings
   end
 
   def at_least_one_selected?

@@ -86,8 +86,9 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
       let(:address_settings_form) { build :address_settings_form }
 
-      it "saves the input type to session" do
-        expect(session[:page][:answer_settings]).to eq({ input_type: { uk_address: address_settings_form.uk_address, international_address: address_settings_form.international_address } })
+      it "saves the input type to draft question" do
+        form = assigns(:address_settings_form)
+        expect(form.draft_question.answer_settings.with_indifferent_access).to include(input_type: { uk_address: address_settings_form.uk_address, international_address: address_settings_form.international_address })
       end
 
       it "redirects the user to the edit question page" do
@@ -167,11 +168,11 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
         post address_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_address_settings_form: { uk_address: "true", international_address: "false" } }
       end
 
-      it "loads the updated input type into the session from the page params" do
+      it "saves the params to draft question" do
         form_instance_variable = assigns(:address_settings_form)
         expect(form_instance_variable.uk_address).to eq "true"
         expect(form_instance_variable.international_address).to eq "false"
-        expect(session[:page][:answer_settings]).to eq({ input_type: { uk_address: "true", international_address: "false" } })
+        expect(form_instance_variable.draft_question.answer_settings.with_indifferent_access).to include(input_type: { uk_address: "true", international_address: "false" })
       end
 
       it "redirects the user to the edit question page" do

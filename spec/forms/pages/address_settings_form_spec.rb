@@ -50,22 +50,15 @@ RSpec.describe Pages::AddressSettingsForm, type: :model do
   end
 
   describe "#submit" do
-    let(:session_mock) { {} }
-
     it "returns false if the form is invalid" do
       allow(address_settings_form).to receive(:invalid?).and_return(true)
-      expect(address_settings_form.submit(session_mock)).to be_falsey
-    end
-
-    it "sets a session key called 'page' as a hash with the answer type in it" do
-      address_settings_form.submit(session_mock)
-      expect(session_mock[:page][:answer_settings]).to include(input_type: { international_address: "true", uk_address: "true" })
+      expect(address_settings_form.submit).to be_falsey
     end
 
     it "sets draft_question answer_settings" do
       address_settings_form.uk_address = "false"
       address_settings_form.international_address = "true"
-      address_settings_form.submit(session_mock)
+      address_settings_form.submit
 
       expected_settings = {
         input_type: {
