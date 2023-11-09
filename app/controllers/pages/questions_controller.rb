@@ -31,7 +31,7 @@ class Pages::QuestionsController < PagesController
 
     # TODO: Move Page creation to be part of the form submit method
     if @question_form.submit && @page.save
-      clear_questions_session_data
+      clear_draft_questions_data
       handle_submit_action
     else
       render :new, locals: { current_form: }, status: :unprocessable_entity
@@ -70,7 +70,7 @@ class Pages::QuestionsController < PagesController
 
     # TODO: Move Page creation to be part of the form submit method
     if @question_form.submit && page.save
-      clear_questions_session_data
+      clear_draft_questions_data
       handle_submit_action
     else
       render :edit, locals: { current_form: }, status: :unprocessable_entity

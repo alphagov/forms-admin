@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
   before_action :convert_session_keys_to_symbols
   before_action :check_user_has_permission
-  skip_before_action :clear_questions_session_data, except: %i[index move_page]
+  skip_before_action :clear_draft_questions_data, except: %i[index move_page]
   after_action :verify_authorized
 
   def index
