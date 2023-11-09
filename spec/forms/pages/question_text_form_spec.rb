@@ -42,23 +42,14 @@ RSpec.describe Pages::QuestionTextForm, type: :model do
   end
 
   describe "#submit" do
-    let(:session_mock) { {} }
-
     it "returns false if the form is invalid" do
       allow(question_text_form).to receive(:invalid?).and_return(true)
-      expect(question_text_form.submit(session_mock)).to be_falsey
-    end
-
-    it "sets a session key called 'page' as a hash with the answer type in it" do
-      question_text_form.question_text = "What is your name?"
-      question_text_form.submit(session_mock)
-
-      expect(session_mock[:page][:question_text]).to eq "What is your name?"
+      expect(question_text_form.submit).to be_falsey
     end
 
     it "sets draft_question question_text" do
       question_text_form.question_text = "What is your name?"
-      question_text_form.submit(session_mock)
+      question_text_form.submit
 
       expect(question_text_form.draft_question.question_text).to eq("What is your name?")
     end

@@ -73,8 +73,9 @@ RSpec.describe Pages::QuestionTextController, type: :request do
 
       let(:question_text_form) { build :question_text_form }
 
-      it "saves the input type to session" do
-        expect(session[:page][:question_text]).to eq "Are you a higher rate taxpayer?"
+      it "saves the question text to the draft question" do
+        form = assigns(:question_text_form)
+        expect(form.draft_question.question_text).to eq "Are you a higher rate taxpayer?"
       end
 
       it "redirects the user to the edit question page" do
