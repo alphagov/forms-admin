@@ -1,5 +1,4 @@
 class PagesController < ApplicationController
-  before_action :convert_session_keys_to_symbols
   before_action :check_user_has_permission
   skip_before_action :clear_draft_questions_data, except: %i[index move_page]
   after_action :verify_authorized
@@ -48,10 +47,6 @@ private
     direction = p[:up] ? :up : :down
     page_id = p[direction]
     @move_params ||= { form_id:, page_id:, direction: }
-  end
-
-  def convert_session_keys_to_symbols
-    session[:page].deep_symbolize_keys! if session[:page].present?
   end
 
   def setup_draft_question_for_existing_page
