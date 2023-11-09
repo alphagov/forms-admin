@@ -1,7 +1,7 @@
 class Pages::QuestionsController < PagesController
   def new
     answer_type = draft_question.answer_type
-    question_text = session.dig(:page, :question_text)
+    question_text = draft_question.question_text
     answer_settings = draft_question.answer_settings
     is_optional = draft_question.is_optional == "true"
     page_heading = draft_question.page_heading
