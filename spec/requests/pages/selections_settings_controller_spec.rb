@@ -74,8 +74,13 @@ describe Pages::SelectionsSettingsController, type: :request do
         post selections_settings_create_path form_id: form.id, params: { pages_selections_settings_form: { selection_options: { "0": { name: "Option 1" }, "1": { name: "Option 2" } }, only_one_option: true, include_none_of_the_above: false } }
       end
 
-      it "saves the answer type to session" do
-        expect(session[:page]).to include({ answer_settings: selections_settings_form.answer_settings, is_optional: "false" })
+      it "saves the the info to draft question" do
+        settings_form = assigns(:selections_settings_form)
+        draft_question_settings = settings_form.draft_question.answer_settings.with_indifferent_access
+
+        expect(draft_question_settings).to include(only_one_option: "true",
+                                                   selection_options: [{ name: "Option 1" }, { name: "Option 2" }])
+        expect(settings_form.draft_question.is_optional).to eq false
       end
 
       it "redirects the user to the question details page" do
