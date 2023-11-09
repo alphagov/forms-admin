@@ -6,7 +6,7 @@ class Pages::QuestionsController < PagesController
     is_optional = draft_question.is_optional == "true"
     page_heading = draft_question.page_heading
     guidance_markdown = draft_question.guidance_markdown
-    @question_form = Pages::QuestionForm.new(form_id: current_form.id, answer_type:, question_text:, answer_settings:, is_optional:, draft_question:)
+    @question_form = Pages::QuestionForm.new(answer_type:, question_text:, answer_settings:, is_optional:, draft_question:)
 
     # TODO: Remove this once we have a check your question view. The new view should also pull data directly from draft_question instead of through page model
     @page = Page.new(form_id: current_form.id,
@@ -20,14 +20,9 @@ class Pages::QuestionsController < PagesController
   end
 
   def create
-    @question_form = Pages::QuestionForm.new(page_params.merge(answer_settings: draft_question.answer_settings,
-                                                               page_heading: draft_question.page_heading,
-                                                               guidance_markdown: draft_question.guidance_markdown,
-                                                               draft_question:))
-    @page = Page.new(page_params.merge(answer_settings: draft_question.answer_settings,
-                                       page_heading: draft_question.page_heading,
-                                       guidance_markdown: draft_question.guidance_markdown,
-                                       answer_type: draft_question.answer_type))
+    @question_form = Pages::QuestionForm.new(page_params.merge(page_params_for_form_object))
+
+    @page = Page.new(page_params_for_forms_api)
 
     # TODO: Move Page creation to be part of the form submit method
     if @question_form.submit && @page.save
@@ -39,8 +34,7 @@ class Pages::QuestionsController < PagesController
   end
 
   def edit
-    @question_form = Pages::QuestionForm.new(form_id: current_form.id,
-                                             answer_type: draft_question.answer_type,
+    @question_form = Pages::QuestionForm.new(answer_type: draft_question.answer_type,
                                              question_text: draft_question.question_text,
                                              hint_text: draft_question.hint_text,
                                              is_optional: draft_question.is_optional,
@@ -57,16 +51,9 @@ class Pages::QuestionsController < PagesController
   end
 
   def update
-    page.load(page_params)
-    page.page_heading = draft_question.page_heading
-    page.guidance_markdown = draft_question.guidance_markdown
-    page.answer_type = draft_question.answer_type
-    page.answer_settings = draft_question.answer_settings
+    page.load(page_params_for_forms_api)
 
-    @question_form = Pages::QuestionForm.new(page_params.merge(answer_settings: draft_question.answer_settings,
-                                                               page_heading: draft_question.page_heading,
-                                                               guidance_markdown: draft_question.guidance_markdown,
-                                                               draft_question:))
+    @question_form = Pages::QuestionForm.new(page_params_for_form_object)
 
     # TODO: Move Page creation to be part of the form submit method
     if @question_form.submit && page.save
@@ -80,8 +67,23 @@ class Pages::QuestionsController < PagesController
 private
 
   def page_params
-    # TODO: Remove current_form from merge once we using draft question properly. the question form shouldn't need to know about form id
-    params.require(:pages_question_form).permit(:question_text, :hint_text, :is_optional).merge(form_id: current_form.id)
+    params.require(:pages_question_form).permit(:question_text, :hint_text, :is_optional)
+  end
+
+  def page_params_for_form_object
+    page_params.merge(draft_question:,
+                      answer_type: draft_question.answer_type,
+                      answer_settings: draft_question.answer_settings,
+                      page_heading: draft_question.page_heading,
+                      guidance_markdown: draft_question.guidance_markdown)
+  end
+
+  def page_params_for_forms_api
+    page_params.merge(form_id: current_form.id,
+                      answer_settings: draft_question.answer_settings,
+                      page_heading: draft_question.page_heading,
+                      guidance_markdown: draft_question.guidance_markdown,
+                      answer_type: draft_question.answer_type)
   end
 
   def handle_submit_action

@@ -6,7 +6,7 @@ describe "pages/edit.html.erb" do
   before do
     # Initialize models
     page = Page.new(id: 1, question_text:, form_id: 1, answer_type: "email", answer_settings: nil, page_heading: "Some detailed guidance", guidance_markdown: "This is example of detailed guidance")
-    question_form = Pages::QuestionForm.new(page_id: 1, question_text:, form_id: 1, answer_type: "email", answer_settings: nil)
+    question_form = Pages::QuestionForm.new(question_text:, answer_type: "email", answer_settings: nil)
     form = Form.new(id: 1, name: "Form 1", form_id: 1, pages: [page])
     current_user = OpenStruct.new(uid: "123456")
 

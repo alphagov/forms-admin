@@ -73,7 +73,7 @@ describe ApplicationController, type: :controller do
       expect(user.draft_questions.count).to eq(0)
     end
 
-    it "does not raise an error when session and user are not present" do
+    it "does not raise an error when draft question and user are not present" do
       expect { controller.send(:clear_draft_questions_data) }.not_to raise_exception
     end
   end
