@@ -64,15 +64,6 @@ describe ApplicationController, type: :controller do
   describe "#clear_draft_questions_data" do
     let(:user) { create(:user) }
 
-    it "clears session data when session is present" do
-      # Simulate a session with some data
-      session[:page] = { question: "What is your name?" }
-
-      controller.send(:clear_draft_questions_data)
-
-      expect(session[:page]).to be_nil
-    end
-
     it "destroys draft questions when user is present" do
       allow(controller).to receive(:current_user).and_return(user)
       create_list(:draft_question, 3, user:)

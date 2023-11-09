@@ -50,8 +50,6 @@ class ApplicationController < ActionController::Base
   end
 
   def clear_draft_questions_data
-    session.delete(:page) if session[:page].present?
-
     current_user.draft_questions.destroy_all if current_user.present?
   end
 
