@@ -664,6 +664,13 @@ en:
       </p>
     heading: Provide a link to privacy information for this form
     submit_button: Save and continue
+  role_upgrade:
+    content_html: |
+      <p>
+        You can create a form and make it live.
+      </p>
+    heading: You now have an editor account
+    title: Your account has been upgraded
   routing_page:
     body_text: "You can send people directly to the question or page you want, based on their previous answer. \nThis means they’ll only see questions that are relevant to them.\n"
     dropdown_default_text: Select a question to start your route from

@@ -114,5 +114,25 @@ describe "forms/index.html.erb" do
         expect(rendered).not_to have_text(I18n.t("trial_role_warning.heading"))
       end
     end
+
+    context "and a user already has the editor role" do
+      let(:user) { build :user, role: :editor }
+
+      it "does not display a banner" do
+        expect(rendered).not_to have_text(I18n.t("role_upgrade.heading"))
+      end
+    end
+
+    context "and a user gets upgraded to the editor role", versioning: true do
+      let(:user) { create :user, role: :trial }
+
+      it "displays a banner informing the user they have now have the editor role" do
+        user.update!(role: :editor)
+
+        render
+
+        expect(rendered).to have_text(I18n.t("role_upgrade.heading"))
+      end
+    end
   end
 end

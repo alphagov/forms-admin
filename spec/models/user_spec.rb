@@ -268,4 +268,53 @@ describe User, type: :model do
       expect(user).to be_invalid
     end
   end
+
+  with_versioning do
+    describe "role_changed_to_editor?" do
+      context "when role is changed to editor" do
+        let(:user) { create :user, role: :trial }
+
+        it "returns true" do
+          user.update!(role: :editor)
+
+          expect(user.role_changed_to_editor?).to eq true
+        end
+
+        it "saves a new version" do
+          user.update!(role: :editor)
+
+          expect { user.role_changed_to_editor? }.to change { user.versions.size }.by(1)
+          expect(user.versions.last.event).to eq "Role upgrade reported"
+        end
+
+        it "does not save new versions and returns false if there are no further changes" do
+          user.update!(role: :editor)
+
+          expect { user.role_changed_to_editor? }.to change { user.versions.size }.by(1)
+
+          return_value = nil
+          expect { return_value = user.role_changed_to_editor? }.not_to(change { user.versions.size })
+          expect(return_value).to eq false
+        end
+      end
+
+      context "when role is changed to a non-editor role" do
+        let(:user) { create :user, role: :trial }
+
+        %i[trial super_admin].each do |new_role|
+          it "returns false" do
+            user.update!(role: new_role)
+
+            expect(user.role_changed_to_editor?).to eq false
+          end
+
+          it "does not save a new version" do
+            user.update!(role: new_role)
+
+            expect { user.role_changed_to_editor? }.not_to(change { user.versions.size })
+          end
+        end
+      end
+    end
+  end
 end

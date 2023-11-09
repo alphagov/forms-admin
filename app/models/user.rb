@@ -76,6 +76,15 @@ class User < ApplicationRecord
     mou_signatures.find_by(organisation:)
   end
 
+  def role_changed_to_editor?
+    role_changed_to_editor = editor? && !versions.empty? && versions.last.reify.role != "editor"
+    if role_changed_to_editor
+      self.paper_trail_event = "Role upgrade reported"
+      paper_trail.save_with_version
+    end
+    role_changed_to_editor
+  end
+
 private
 
   def requires_name?
