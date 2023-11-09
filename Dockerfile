@@ -61,4 +61,4 @@ COPY --chown=ruby:ruby --from=build /app /app
 
 EXPOSE 3000
 
-CMD ["/bin/sh", "-o", "xtrace", "-c", "rake db:migrate && rails s -b 0.0.0.0"]
+CMD ["/bin/sh", "-o", "xtrace", "-c", "rails s -b 0.0.0.0"]
