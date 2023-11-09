@@ -11,7 +11,7 @@ class Pages::TextSettingsController < PagesController
     @text_settings_path = text_settings_create_path(current_form)
     @back_link_url = type_of_answer_new_path(current_form)
 
-    if @text_settings_form.submit(session)
+    if @text_settings_form.submit
       redirect_to new_question_path(current_form)
     else
       render :text_settings, locals: { current_form: }
@@ -30,7 +30,7 @@ class Pages::TextSettingsController < PagesController
     @text_settings_path = text_settings_update_path(current_form)
     @back_link_url = type_of_answer_edit_path(current_form)
 
-    if @text_settings_form.submit(session)
+    if @text_settings_form.submit
       redirect_to edit_question_path(current_form)
     else
       page
