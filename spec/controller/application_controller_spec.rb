@@ -60,14 +60,14 @@ describe ApplicationController, type: :controller do
     end
   end
 
-  describe "#clear_questions_session_data" do
+  describe "#clear_draft_questions_data" do
     let(:user) { create(:user) }
 
     it "clears session data when session is present" do
       # Simulate a session with some data
       session[:page] = { question: "What is your name?" }
 
-      controller.send(:clear_questions_session_data)
+      controller.send(:clear_draft_questions_data)
 
       expect(session[:page]).to be_nil
     end
@@ -76,13 +76,13 @@ describe ApplicationController, type: :controller do
       allow(controller).to receive(:current_user).and_return(user)
       create_list(:draft_question, 3, user:)
 
-      controller.send(:clear_questions_session_data)
+      controller.send(:clear_draft_questions_data)
 
       expect(user.draft_questions.count).to eq(0)
     end
 
     it "does not raise an error when session and user are not present" do
-      expect { controller.send(:clear_questions_session_data) }.not_to raise_exception
+      expect { controller.send(:clear_draft_questions_data) }.not_to raise_exception
     end
   end
 
