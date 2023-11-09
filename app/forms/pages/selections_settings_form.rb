@@ -20,7 +20,7 @@ class Pages::SelectionsSettingsForm < BaseForm
     { only_one_option:, selection_options: }
   end
 
-  def submit(session)
+  def submit
     return false if invalid?
 
     # Set answer_settings for the draft_question
@@ -29,12 +29,6 @@ class Pages::SelectionsSettingsForm < BaseForm
                            is_optional: include_none_of_the_above })
 
     draft_question.save!(validate: false)
-
-    # TODO: remove this once we have draft_questions being saved across the whole journey
-    session[:page] = {} if session[:page].blank?
-
-    session[:page][:answer_settings] = answer_settings.with_indifferent_access
-    session[:page][:is_optional] = include_none_of_the_above
   end
 
   def validate_selection_options

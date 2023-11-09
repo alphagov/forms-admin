@@ -20,7 +20,7 @@ class Pages::SelectionsSettingsController < PagesController
     elsif params[:remove]
       @selections_settings_form.remove(params[:remove].to_i)
       render :selections_settings, locals: { current_form: }
-    elsif @selections_settings_form.submit(session)
+    elsif @selections_settings_form.submit
       redirect_to new_question_path(current_form)
     else
       render :selections_settings, locals: { current_form: }
@@ -52,7 +52,7 @@ class Pages::SelectionsSettingsController < PagesController
     elsif params[:remove]
       @selections_settings_form.remove(params[:remove].to_i)
       render :selections_settings, locals: { current_form: }
-    elsif @selections_settings_form.submit(session)
+    elsif @selections_settings_form.submit
       redirect_to edit_question_path(current_form)
     else
       render :selections_settings, locals: { current_form: }

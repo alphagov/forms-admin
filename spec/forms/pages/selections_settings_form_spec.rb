@@ -55,27 +55,16 @@ RSpec.describe Pages::SelectionsSettingsForm, type: :model do
   end
 
   describe "#submit" do
-    let(:session_mock) { {} }
-
     it "returns false if the form is invalid" do
       selections_settings_form.selection_options = []
-      expect(selections_settings_form.submit(session_mock)).to be_falsey
-    end
-
-    it "sets a session key called 'page' as a hash with the answer type in it" do
-      selections_settings_form.selection_options = (1..2).to_a.map { |i| { name: i.to_s } }
-      selections_settings_form.only_one_option = true
-      selections_settings_form.include_none_of_the_above = true
-      selections_settings_form.submit(session_mock)
-      expect(session_mock[:page][:answer_settings].to_json).to eq({ only_one_option: true, selection_options: [{ name: "1" }, { name: "2" }] }.to_json)
-      expect(session_mock[:page][:is_optional]).to eq(true)
+      expect(selections_settings_form.submit).to be_falsey
     end
 
     it "sets draft_question answer_settings and is_optional" do
       selections_settings_form.selection_options = (1..2).to_a.map { |i| { name: i.to_s } }
       selections_settings_form.only_one_option = true
       selections_settings_form.include_none_of_the_above = true
-      selections_settings_form.submit(session_mock)
+      selections_settings_form.submit
 
       expected_settings = {
         only_one_option: true,
