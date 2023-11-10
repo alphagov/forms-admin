@@ -789,7 +789,7 @@ en:
         <ul class="govuk-list govuk-list--bullet">
           <li>you’ve tried out the form builder and you’re confident you can create your forms using <a href="https://www.forms.service.gov.uk/features" class="govuk-link">the limited features available</a> at the moment</li>
           <li>your organisation is ok with form responses being emailed individually to the team email address you provide (we’re planning to support other ways of receiving form submissions, but they’re not available yet)</li>
-          <li>you’ll only use GOV.UK Forms to make forms to be published on the GOV.UK website - not on other website or for other uses such as internal forms or surveys</li>
+          <li>you’ll only use GOV.UK Forms to make forms to be published on the GOV.UK website - not on other websites or for other uses such as internal forms or surveys</li>
           <li>you do not expect any of the forms you’re planning to make to get more than 10,000 submissions a year</li>
           <li>you’re happy to be asked for feedback and to take part in user research</li>
         </ul>
