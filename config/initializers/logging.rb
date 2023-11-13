@@ -12,7 +12,6 @@ unless Rails.env.development?
     if ENV["RAILS_LOG_TO_STDOUT"].present?
       config.logger = ActiveSupport::Logger.new($stdout)
       config.logger.formatter = config.log_formatter
-
     end
 
     # Lograge is used to format the standard HTTP request logging
@@ -27,7 +26,6 @@ unless Rails.env.development?
     config.lograge.custom_options = lambda do |event|
       {}.tap do |h|
         h[:host] = event.payload[:host]
-        h[:user_id] = event.payload[:user_id]
         h[:user_email] = event.payload[:user_email]
         h[:user_organisation_slug] = event.payload[:user_organisation_slug]
         h[:user_ip] = event.payload[:user_ip]
