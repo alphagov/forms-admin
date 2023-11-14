@@ -8,7 +8,14 @@ class Pages::QuestionsController < PagesController
     guidance_markdown = draft_question.guidance_markdown
     @question_form = Pages::QuestionForm.new(form_id: current_form.id, answer_type:, question_text:, answer_settings:, is_optional:, draft_question:)
 
-    @page = Page.new(form_id: current_form.id, question_text:, answer_type:, answer_settings:, is_optional:, page_heading:, guidance_markdown:)
+    # TODO: Remove this once we have a check your question view. The new view should also pull data directly from draft_question instead of through page model
+    @page = Page.new(form_id: current_form.id,
+                     answer_type:,
+                     answer_settings:,
+                     is_optional:,
+                     page_heading:,
+                     guidance_markdown:)
+
     render :new, locals: { current_form: }
   end
 
