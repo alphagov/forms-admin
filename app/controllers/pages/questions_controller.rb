@@ -41,7 +41,7 @@ class Pages::QuestionsController < PagesController
   def edit
     @question_form = Pages::QuestionForm.new(form_id: current_form.id,
                                              answer_type: draft_question.answer_type,
-                                             question_text: page.question_text,
+                                             question_text: draft_question.question_text,
                                              hint_text: draft_question.hint_text,
                                              is_optional: draft_question.is_optional,
                                              answer_settings: draft_question.answer_settings)
