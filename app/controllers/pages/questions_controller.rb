@@ -38,6 +38,14 @@ class Pages::QuestionsController < PagesController
                                              hint_text: draft_question.hint_text,
                                              is_optional: draft_question.is_optional,
                                              answer_settings: draft_question.answer_settings)
+
+    # TODO: Remove this once we have a check your question view. The new view should also pull data directly from draft_question instead of through page model
+    page.answer_type = draft_question.answer_type
+    page.answer_settings = draft_question.answer_settings
+    page.is_optional = draft_question.is_optional
+    page.page_heading = draft_question.page_heading
+    page.guidance_markdown = draft_question.guidance_markdown
+
     render :edit, locals: { current_form: }
   end
 
