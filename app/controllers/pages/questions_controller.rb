@@ -8,7 +8,14 @@ class Pages::QuestionsController < PagesController
     guidance_markdown = draft_question.guidance_markdown
     @question_form = Pages::QuestionForm.new(form_id: current_form.id, answer_type:, question_text:, answer_settings:, is_optional:, draft_question:)
 
-    @page = Page.new(form_id: current_form.id, question_text:, answer_type:, answer_settings:, is_optional:, page_heading:, guidance_markdown:)
+    # TODO: Remove this once we have a check your question view. The new view should also pull data directly from draft_question instead of through page model
+    @page = Page.new(form_id: current_form.id,
+                     answer_type:,
+                     answer_settings:,
+                     is_optional:,
+                     page_heading:,
+                     guidance_markdown:)
+
     render :new, locals: { current_form: }
   end
 
@@ -34,10 +41,18 @@ class Pages::QuestionsController < PagesController
   def edit
     @question_form = Pages::QuestionForm.new(form_id: current_form.id,
                                              answer_type: draft_question.answer_type,
-                                             question_text: page.question_text,
+                                             question_text: draft_question.question_text,
                                              hint_text: draft_question.hint_text,
                                              is_optional: draft_question.is_optional,
                                              answer_settings: draft_question.answer_settings)
+
+    # TODO: Remove this once we have a check your question view. The new view should also pull data directly from draft_question instead of through page model
+    page.answer_type = draft_question.answer_type
+    page.answer_settings = draft_question.answer_settings
+    page.is_optional = draft_question.is_optional
+    page.page_heading = draft_question.page_heading
+    page.guidance_markdown = draft_question.guidance_markdown
+
     render :edit, locals: { current_form: }
   end
 
