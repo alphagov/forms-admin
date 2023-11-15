@@ -13,6 +13,14 @@ Rails.application.config.before_initialize do
     },
   )
 
+  # add developer provider
+  if Rails.env.development?
+    Rails.application.config.app_middleware.use(
+      OmniAuth::Strategies::Developer,
+      fields: [:email],
+    )
+  end
+
   # Configure Warden session management middleware
   # swap out the Warden::Manager installed by `gds-sso` gem
   Rails.application.config.app_middleware.swap Warden::Manager, Warden::Manager do |warden|

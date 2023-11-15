@@ -1,5 +1,6 @@
 class AuthenticationController < ApplicationController
   skip_before_action :authenticate_and_check_access
+  protect_from_forgery with: :null_session, only: %i[redirect_to_omniauth]
 
   layout false
 

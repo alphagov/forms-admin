@@ -7,9 +7,10 @@ Rails.application.routes.draw do
 
   get "/sign-up" => "authentication#sign_up", as: :sign_up
   get "/sign-out" => "authentication#sign_out", as: :sign_out
+  get "/login" => "authentication#login", as: :login
 
   scope "auth/:provider" do
-    get "/callback" => "authentication#callback_from_omniauth"
+    match "/callback" => "authentication#callback_from_omniauth", via: %i[get post]
   end
 
   get "forms/new" => "forms/change_name#new", as: :new_form
