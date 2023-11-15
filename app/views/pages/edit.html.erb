@@ -12,6 +12,7 @@
     <%= render partial: 'form', locals: { is_new_page: false,
                                           form_object: current_form,
                                           page_object: @page,
+                                          draft_question:,
                                           question_form: @question_form,
                                           action_path: update_question_path(current_form.id, @page.id) ,
                                           change_answer_type_path: type_of_answer_edit_path(current_form),

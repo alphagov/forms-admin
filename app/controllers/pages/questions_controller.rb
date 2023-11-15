@@ -4,12 +4,10 @@ class Pages::QuestionsController < PagesController
     question_text = draft_question.question_text
     answer_settings = draft_question.answer_settings
     is_optional = draft_question.is_optional == "true"
-    page_heading = draft_question.page_heading
-    guidance_markdown = draft_question.guidance_markdown
     @question_form = Pages::QuestionForm.new(form_id: current_form.id, answer_type:, question_text:, answer_settings:, is_optional:, draft_question:)
 
-    @page = Page.new(form_id: current_form.id, question_text:, answer_type:, answer_settings:, is_optional:, page_heading:, guidance_markdown:)
-    render :new, locals: { current_form: }
+    @page = Page.new(form_id: current_form.id, answer_type:, answer_settings:, is_optional:)
+    render :new, locals: { current_form:, draft_question: }
   end
 
   def create
@@ -38,7 +36,7 @@ class Pages::QuestionsController < PagesController
                                              hint_text: draft_question.hint_text,
                                              is_optional: draft_question.is_optional,
                                              answer_settings: draft_question.answer_settings)
-    render :edit, locals: { current_form: }
+    render :edit, locals: { current_form:, draft_question: }
   end
 
   def update
