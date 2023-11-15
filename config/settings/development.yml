@@ -9,4 +9,4 @@ forms_api:
   auth_key: changeme
 
 # Use mock authentication
-auth_provider: mock_gds_sso
+auth_provider: mock_user
