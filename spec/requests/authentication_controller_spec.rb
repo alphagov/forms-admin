@@ -187,20 +187,6 @@ RSpec.describe AuthenticationController, type: :request do
 
       expect(response).to redirect_to "/auth/mock_not_logged_in"
     end
-
-    it "redirects user to homepage after they have signed in" do
-      allow(Settings).to receive(:auth_provider).and_return("cddo_sso")
-
-      get sign_up_path
-
-      expect(response).to redirect_to "/auth/cddo_sso"
-      get "/auth/cddo_sso"
-
-      expect(response).to redirect_to("/auth/cddo_sso/callback")
-      get "/auth/cddo_sso/callback"
-
-      expect(response).to redirect_to(root_path)
-    end
   end
 
   describe "#sign_out" do

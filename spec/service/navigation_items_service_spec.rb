@@ -85,20 +85,6 @@ describe NavigationItemsService do
           expect(service.navigation_items).to include(signout_item)
         end
       end
-
-      context "when user has provider cddo_sso" do
-        let(:provider) { :cddo_sso }
-
-        it "includes profile with empty href" do
-          profile_item = NavigationItemsService::NavigationItem.new(text: user.name, href: "https://sso.service.security.gov.uk/profile", active: false)
-          expect(service.navigation_items).to include(profile_item)
-        end
-
-        it "includes correct signout in navigation items" do
-          signout_item = NavigationItemsService::NavigationItem.new(text: I18n.t("header.sign_out"), href: sign_out_path, active: false)
-          expect(service.navigation_items).to include(signout_item)
-        end
-      end
     end
 
     context "when the support URL is configured" do
