@@ -16,14 +16,24 @@ module PageSettingsSummaryComponent
   private
 
     def address_input_type_to_string
-      input_type = @page_object.answer_settings.input_type
-      if input_type.uk_address == "true" && input_type.international_address == "true"
+      input_type = settings[:input_type]
+      if input_type[:uk_address] == "true" && input_type[:international_address] == "true"
         "uk_and_international_addresses"
-      elsif input_type.uk_address == "true"
+      elsif input_type[:uk_address] == "true"
         "uk_addresses"
       else
         "international_addresses"
       end
+    end
+
+    def settings
+      return [] if @page_object.answer_settings.nil?
+
+      @page_object.answer_settings.with_indifferent_access
+    end
+
+    def show_selection_options
+      settings[:selection_options].map { |option| option[:name] }.join(", ")
     end
   end
 end
