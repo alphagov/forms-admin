@@ -395,6 +395,7 @@ en:
       Any changes you make to a live form will be updated in the form
       immediately.
     notification_title: Important
+  login_button: Login
   maintenance:
     body_html: |
       <p>You’ll be able to use the service later.</p>
@@ -590,6 +591,7 @@ en:
     forbidden: You cannot view this page
     home: Home
     internal_server_error: Sorry, there is a problem with the service
+    login: Login
     maintenance: Sorry, the service is unavailable
     make_changes_live_form: Make your changes live
     make_live_form: Make your form live

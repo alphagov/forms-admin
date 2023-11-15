@@ -30,3 +30,6 @@ Rails.application.config.before_initialize do
 
   GDS::SSO::Config.auth_valid_for = Settings.auth_valid_for
 end
+
+# Need to do this because Signon allows both GET and POST requests
+OmniAuth.config.allowed_request_methods = %i[post]

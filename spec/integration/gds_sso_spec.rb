@@ -34,18 +34,18 @@ RSpec.describe "usage of gds-sso gem" do
       OmniAuth.config.test_mode = true
     end
 
-    it "redirects to OmniAuth when no user is logged in" do
+    it "redirects to login page when no user is logged in" do
       logout
 
       get root_path
 
-      expect(response).to redirect_to("/auth/gds")
+      expect(response).to redirect_to(login_path)
     end
 
     it "authenticates with OmniAuth and Warden" do
       OmniAuth.config.mock_auth[:gds] = omniauth_hash
 
-      get "/auth/gds"
+      post "/auth/gds"
 
       expect(response).to redirect_to(gds_sign_in_path)
 
@@ -99,10 +99,7 @@ RSpec.describe "usage of gds-sso gem" do
 
       logout
 
-      get root_path
-
-      expect(response).to redirect_to "/auth/gds"
-      follow_redirect!
+      post "/auth/gds"
 
       expect(response).to redirect_to "/auth/gds/callback"
       follow_redirect!

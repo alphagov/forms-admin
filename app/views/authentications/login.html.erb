@@ -1,0 +1,7 @@
+<% set_page_title(t("page_titles.login")) %>
+
+<%= govuk_button_to 'Login', omniauth_authorize_path, method: :post %>
+
+<script>
+  document.querySelector('button[type=submit]').click()
+</script>

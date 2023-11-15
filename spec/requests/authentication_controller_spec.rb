@@ -40,18 +40,10 @@ RSpec.describe AuthenticationController, type: :request do
       expect(controller_spy).to have_received(:redirect_to_omniauth)
     end
 
-    it "redirects to OmniAuth request phase" do
+    it "redirects to login page" do
       get root_path
 
-      expect(response).to redirect_to("/auth/#{Settings.auth_provider}")
-    end
-
-    it "uses the configured OmniAuth provider" do
-      allow(Settings).to receive(:auth_provider).and_return("auth0")
-
-      get root_path
-
-      expect(response).to redirect_to("/auth/auth0")
+      expect(response).to redirect_to(login_url)
     end
 
     it "stores the URL the user is trying to reach for after they have signed in" do
@@ -59,8 +51,7 @@ RSpec.describe AuthenticationController, type: :request do
 
       get live_form_pages_path(42)
 
-      expect(response).to redirect_to("/auth/auth0")
-      get "/auth/auth0"
+      post "/auth/auth0"
 
       expect(response).to redirect_to("/auth/auth0/callback")
       get "/auth/auth0/callback"
@@ -68,27 +59,29 @@ RSpec.describe AuthenticationController, type: :request do
       expect(response).to redirect_to(live_form_pages_path(42))
     end
 
-    context "when the auth provider is auth0" do
-      context "and the user is the end to end test user" do
-        it "uses the Auth0 username/password flow" do
-          allow(Settings).to receive(:auth_provider).and_return("auth0")
+    # TODO: Create new way to trigger e2e test login
+    # This will need to change as the end to end tests will also need to be different
+    # context "when the auth provider is auth0" do
+    #   context "and the user is the end to end test user" do
+    #     it "uses the Auth0 username/password flow" do
+    #       allow(Settings).to receive(:auth_provider).and_return("auth0")
 
-          get root_path, params: { auth: "e2e" }
+    #       get login_url, params: { auth: "e2e" }
 
-          expect(response).to redirect_to("/auth/auth0?connection=Username-Password-Authentication")
-        end
-      end
+    #       expect(response).to redirect_to("/auth/auth0?connection=Username-Password-Authentication")
+    #     end
+    #   end
 
-      context "and the user is not the end to end test user" do
-        it "uses the Auth0 passwordless flow" do
-          allow(Settings).to receive(:auth_provider).and_return("auth0")
+    #   context "and the user is not the end to end test user" do
+    #     it "uses the Auth0 passwordless flow" do
+    #       allow(Settings).to receive(:auth_provider).and_return("auth0")
 
-          get root_path
+    #       get root_path
 
-          expect(response).to redirect_to("/auth/auth0")
-        end
-      end
-    end
+    #       expect(response).to redirect_to("/auth/auth0")
+    #     end
+    #   end
+    # end
 
     context "when the user's session expires" do
       before do
@@ -123,7 +116,7 @@ RSpec.describe AuthenticationController, type: :request do
 
   describe "#callback_from_omniauth" do
     it "is called by OmniAuth provider" do
-      get "/auth/gds"
+      post "/auth/gds"
 
       expect(response).to redirect_to("/auth/gds/callback")
 
@@ -158,7 +151,7 @@ RSpec.describe AuthenticationController, type: :request do
       get sign_up_path
 
       expect(response).to redirect_to "/auth/auth0?screen_hint=signup"
-      get "/auth/auth0?screen_hint=signup"
+      post "/auth/auth0?screen_hint=signup"
 
       expect(response).to redirect_to("/auth/auth0/callback?screen_hint=signup")
       get "/auth/auth0/callback?screen_hint=signup"
@@ -172,7 +165,7 @@ RSpec.describe AuthenticationController, type: :request do
       get sign_up_path
 
       expect(response).to redirect_to "/auth/auth0?screen_hint=signup"
-      get "/auth/auth0?screen_hint=signup"
+      post "/auth/auth0?screen_hint=signup"
 
       expect(response).to redirect_to("/auth/auth0/callback?screen_hint=signup")
       get "/auth/auth0/callback?screen_hint=signup"

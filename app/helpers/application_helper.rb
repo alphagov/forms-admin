@@ -79,4 +79,8 @@ module ApplicationHelper
       OpenStruct.new(label: t("users.has_access.#{access}.name"), value: access, description: t("users.has_access.#{access}.description"))
     end
   end
+
+  def omniauth_authorize_path
+    "/auth/#{Settings.auth_provider}/"
+  end
 end

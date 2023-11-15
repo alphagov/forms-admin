@@ -8,6 +8,10 @@ class AuthenticationController < ApplicationController
     action(:redirect_to_omniauth).call(env)
   end
 
+  def login
+    render "authentications/login", layout: "application"
+  end
+
   def redirect_to_omniauth
     store_location(attempted_path) if request.get?
 
@@ -17,7 +21,7 @@ class AuthenticationController < ApplicationController
       params[:connection] = "Username-Password-Authentication"
     end
 
-    redirect_to ActionDispatch::Http::URL.path_for(path: "/auth/#{default_provider}", params:)
+    redirect_to(login_url, params:)
   end
 
   def e2e_user?
