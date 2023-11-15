@@ -2,9 +2,9 @@
 
 module PageSettingsSummaryComponent
   class View < ViewComponent::Base
-    def initialize(page_object, change_answer_type_path: "", change_selections_settings_path: "", change_text_settings_path: "", change_date_settings_path: "", change_address_settings_path: "", change_name_settings_path: "")
+    def initialize(draft_question, change_answer_type_path: "", change_selections_settings_path: "", change_text_settings_path: "", change_date_settings_path: "", change_address_settings_path: "", change_name_settings_path: "")
       super
-      @page_object = page_object
+      @draft_question = draft_question
       @change_answer_type_path = change_answer_type_path
       @change_selections_settings_path = change_selections_settings_path
       @change_text_settings_path = change_text_settings_path
@@ -27,9 +27,9 @@ module PageSettingsSummaryComponent
     end
 
     def answer_settings
-      return [] if @page_object.answer_settings.nil?
+      return [] if @draft_question.answer_settings.nil?
 
-      @page_object.answer_settings.with_indifferent_access
+      @draft_question.answer_settings.with_indifferent_access
     end
 
     def show_selection_options
