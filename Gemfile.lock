@@ -536,7 +536,6 @@ DEPENDENCIES
   govuk_notify_rails
   i18n-tasks (~> 1.0.13)
   lograge
-  omniauth
   omniauth-auth0
   paper_trail
   pg (~> 1.5)
