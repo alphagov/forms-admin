@@ -13,21 +13,6 @@ Rails.application.config.before_initialize do
     },
   )
 
-  # add CDDO SSO provider
-  Rails.application.config.app_middleware.use(
-    OmniAuth::Strategies::OpenIDConnect,
-    name: :cddo_sso,
-    issuer: "https://sso.service.security.gov.uk",
-    discovery: true,
-    require_state: true,
-
-    scope: %i[openid email profile],
-    client_options: {
-      identifier: Settings.cddo_sso.identifier,
-      secret: Settings.cddo_sso.secret,
-    },
-  )
-
   # Configure Warden session management middleware
   # swap out the Warden::Manager installed by `gds-sso` gem
   Rails.application.config.app_middleware.swap Warden::Manager, Warden::Manager do |warden|
@@ -36,11 +21,4 @@ Rails.application.config.before_initialize do
   end
 
   GDS::SSO::Config.auth_valid_for = Settings.auth_valid_for
-end
-
-# Monkeypatch omniauth_openid_connect
-class OmniAuth::Strategies::OpenIDConnect
-  def redirect_uri
-    callback_url
-  end
 end
