@@ -45,20 +45,6 @@ describe NavigationItemsService do
         end
       end
 
-      context "when user has provider gds" do
-        let(:provider) { :gds }
-
-        it "includes correct profile in navigation items" do
-          profile_item = NavigationItemsService::NavigationItem.new(text: user.name, href: GDS::SSO::Config.oauth_root_url, active: false)
-          expect(service.navigation_items).to include(profile_item)
-        end
-
-        it "includes correct signout in navigation items" do
-          signout_item = NavigationItemsService::NavigationItem.new(text: I18n.t("header.sign_out"), href: gds_sign_out_path, active: false)
-          expect(service.navigation_items).to include(signout_item)
-        end
-      end
-
       context "when user has provider basic_auth" do
         let(:provider) { :basic_auth }
 

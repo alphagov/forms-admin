@@ -56,7 +56,7 @@ private
   def profile_navigation_item
     return nil if user.name.blank?
 
-    NavigationItem.new(text: user.name, href: user_profile_url, active: false)
+    NavigationItem.new(text: user.name, href: nil, active: false)
   end
 
   def signout_navigation_item
@@ -70,16 +70,8 @@ private
   end
 
   def signout_url
-    if user_provider == :gds
-      gds_sign_out_path
-    elsif %i[auth0 mock_gds_sso].include? user_provider
+    if %i[auth0 mock_gds_sso].include? user_provider
       sign_out_path
-    end
-  end
-
-  def user_profile_url
-    if user_provider == :gds
-      GDS::SSO::Config.oauth_root_url
     end
   end
 

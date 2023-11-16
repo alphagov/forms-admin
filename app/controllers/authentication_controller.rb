@@ -50,6 +50,10 @@ class AuthenticationController < ApplicationController
     end
   end
 
+  def failure
+    render "authentications/failure", layout: "application"
+  end
+
 private
 
   def attempted_path

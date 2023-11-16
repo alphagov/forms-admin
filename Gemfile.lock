@@ -207,14 +207,6 @@ GEM
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
-    gds-sso (18.1.0)
-      oauth2 (~> 2.0)
-      omniauth (~> 2.1)
-      omniauth-oauth2 (~> 1.8)
-      plek (>= 4, < 6)
-      rails (>= 6)
-      warden (~> 1.2)
-      warden-oauth2 (~> 0.0.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
     govuk-components (4.1.1)
@@ -322,7 +314,6 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.5.4)
-    plek (5.0.0)
     psych (5.1.1.1)
       stringio
     public_suffix (5.0.3)
@@ -493,8 +484,6 @@ GEM
       zeitwerk (~> 2.2)
     warden (1.2.9)
       rack (>= 2.0.9)
-    warden-oauth2 (0.0.1)
-      warden
     webmock (3.19.1)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
@@ -529,7 +518,6 @@ DEPENDENCIES
   dfe-autocomplete!
   factory_bot_rails
   faker
-  gds-sso
   govuk-components (~> 4.1.1)
   govuk-forms-markdown!
   govuk_design_system_formbuilder (~> 4.1.1)

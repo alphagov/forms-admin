@@ -1,5 +1,4 @@
 class User < ApplicationRecord
-  include GDS::SSO::User
   has_paper_trail only: %i[role organisation_id has_access]
 
   class UserAuthenticationException < StandardError; end
@@ -83,6 +82,18 @@ class User < ApplicationRecord
       paper_trail.save_with_version
     end
     role_changed_to_editor
+  end
+
+  def clear_remotely_signed_out!
+    # rubocop:disable Rails/SkipsModelValidations
+    update_attribute(:remotely_signed_out, false)
+    # rubocop:enable Rails/SkipsModelValidations
+  end
+
+  def set_remotely_signed_out!
+    # rubocop:disable Rails/SkipsModelValidations
+    update_attribute(:remotely_signed_out, true)
+    # rubocop:enable Rails/SkipsModelValidations
   end
 
 private
