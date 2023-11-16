@@ -25,15 +25,13 @@ class PageSettingsSummaryComponent::PageSettingsSummaryComponentPreview < ViewCo
     draft_question = DraftQuestion.new(form_id: 1,
                                        answer_type: "date",
                                        answer_settings: { input_type: "date_of_birth" })
-    change_date_settings_path = "https://example.com/change_date_settings"
-    render(PageSettingsSummaryComponent::View.new(draft_question, change_date_settings_path:))
+    render(PageSettingsSummaryComponent::View.new(draft_question))
   end
 
   def with_legacy_date_answer_type
     draft_question = DraftQuestion.new(form_id: 1,
                                        answer_type: "date")
-    change_date_settings_path = "https://example.com/change_date_settings"
-    render(PageSettingsSummaryComponent::View.new(draft_question, change_date_settings_path:))
+    render(PageSettingsSummaryComponent::View.new(draft_question))
   end
 
   def with_address_answer_type

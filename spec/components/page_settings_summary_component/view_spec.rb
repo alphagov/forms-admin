@@ -12,6 +12,8 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
   let(:edit_answer_type_path) { type_of_answer_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
   let(:new_answer_type_path) { type_of_answer_new_path(form_id: draft_question.form_id) }
 
+  let(:edit_date_setting_path) { date_settings_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
+  let(:new_date_setting_path) { date_settings_new_path(form_id: draft_question.form_id) }
   let(:edit_selections_setting_path) { selections_settings_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
   let(:new_selections_setting_path) { selections_settings_new_path(form_id: draft_question.form_id) }
   let(:edit_text_setting_path) { text_settings_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
@@ -155,17 +157,17 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
     let(:draft_question) { build :date_draft_question }
 
     it "has a link to change the answer type" do
-      render_inline(described_class.new(draft_question, change_date_settings_path:))
+      render_inline(described_class.new(draft_question))
       expect(page).to have_link("Change Answer type Date", href: edit_answer_type_path)
     end
 
     it "has a link to change the input type" do
-      render_inline(described_class.new(draft_question, change_date_settings_path:))
-      expect(page).to have_link("Change input type", href: change_date_settings_path)
+      render_inline(described_class.new(draft_question))
+      expect(page).to have_link("Change input type", href: edit_date_setting_path)
     end
 
     it "renders the input type" do
-      render_inline(described_class.new(draft_question, change_date_settings_path:))
+      render_inline(described_class.new(draft_question))
       expect(page).to have_text "Date of birth"
       expect(page).to have_text I18n.t("helpers.label.page.date_settings_options.input_types.#{draft_question.answer_settings.with_indifferent_access[:input_type]}")
     end
@@ -174,8 +176,22 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
       let(:draft_question) { build :date_draft_question, answer_settings: nil }
 
       it "has no link to change the input type" do
-        render_inline(described_class.new(draft_question, change_date_settings_path:))
-        expect(page).not_to have_link("Change input type", href: change_date_settings_path)
+        render_inline(described_class.new(draft_question))
+        expect(page).not_to have_link("Change input type", href: edit_date_setting_path)
+      end
+    end
+
+    context "when draft_question is setup for new question" do
+      let(:draft_question) { build :date_draft_question, page_id: nil }
+
+      it "has a link to change the answer type" do
+        render_inline(described_class.new(draft_question))
+        expect(page).to have_link("Change Answer type Date", href: new_answer_type_path)
+      end
+
+      it "has links to change the text selections" do
+        render_inline(described_class.new(draft_question))
+        expect(page).to have_link("Change input type", href: new_date_setting_path)
       end
     end
   end
