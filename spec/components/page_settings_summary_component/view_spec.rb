@@ -46,10 +46,34 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
     it "renders the selection settings" do
       render_inline(described_class.new(draft_question, change_answer_type_path:, change_selections_settings_path:))
-      expect(page).to have_text "Selection from a list"
-      expect(page).to have_text "Option 1, Option 2"
-      expect(page).to have_text "Yes"
-      expect(page).to have_text "No"
+      rows = page.find_all(".govuk-summary-list__row")
+
+      expect(rows[0].find(".govuk-summary-list__key")).to have_text "Answer type"
+      expect(rows[0].find(".govuk-summary-list__value")).to have_text "Selection from a list"
+      expect(rows[1].find(".govuk-summary-list__key")).to have_text "Options"
+      expect(rows[1].find(".govuk-summary-list__value")).to have_text "Option 1, Option 2"
+      expect(rows[2].find(".govuk-summary-list__key")).to have_text "People can only select one option"
+      expect(rows[2].find(".govuk-summary-list__value")).to have_text "Yes"
+      expect(rows[3].find(".govuk-summary-list__key")).to have_text "Include an option for ‘None of the above’"
+      expect(rows[3].find(".govuk-summary-list__value")).to have_text "No"
+    end
+
+    context "when 'None of the above' is a setting" do
+      let(:draft_question) { build :selection_draft_question, is_optional: true }
+
+      it "renders the selection settings" do
+        render_inline(described_class.new(draft_question, change_answer_type_path:, change_selections_settings_path:))
+        rows = page.find_all(".govuk-summary-list__row")
+
+        expect(rows[0].find(".govuk-summary-list__key")).to have_text "Answer type"
+        expect(rows[0].find(".govuk-summary-list__value")).to have_text "Selection from a list"
+        expect(rows[1].find(".govuk-summary-list__key")).to have_text "Options"
+        expect(rows[1].find(".govuk-summary-list__value")).to have_text "Option 1, Option 2"
+        expect(rows[2].find(".govuk-summary-list__key")).to have_text "People can only select one option"
+        expect(rows[2].find(".govuk-summary-list__value")).to have_text "Yes"
+        expect(rows[3].find(".govuk-summary-list__key")).to have_text "Include an option for ‘None of the above’"
+        expect(rows[3].find(".govuk-summary-list__value")).to have_text "Yes"
+      end
     end
   end
 
