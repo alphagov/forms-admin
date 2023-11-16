@@ -14,13 +14,65 @@ RSpec.describe Pages::QuestionsController, type: :request do
     }
   end
 
-  let(:form_response) do
-    (build :form, id: 2)
-  end
+  let(:form_response) { build :form, id: 2 }
+
   let(:draft_question) { create :draft_question_for_new_page, user: editor_user, form_id: 2 }
 
   before do
     login_as_editor_user
+  end
+
+  describe "#new" do
+    let(:draft_question) do
+      record = create :draft_question_for_new_page, user: editor_user, form_id: 2
+      record.question_text = nil
+      record.save!(validate: false)
+      record.reload
+    end
+
+    let(:form_pages_response) do
+      [{
+        id: 1,
+        form_id: 2,
+        question_text: draft_question.question_text,
+        hint_text: draft_question.hint_text,
+        answer_type: draft_question.answer_type,
+        answer_settings: nil,
+        page_heading: nil,
+        guidance_markdown: nil,
+      }].to_json
+    end
+
+    let(:req_headers) do
+      {
+        "X-API-Token" => Settings.forms_api.auth_key,
+        "Accept" => "application/json",
+      }
+    end
+
+    before do
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
+        mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
+      end
+
+      draft_question
+
+      get new_question_path(form_id: 2)
+    end
+
+    it "Reads the form from the API" do
+      expect(form_response).to have_been_read
+    end
+
+    it "Reads the pages from the API" do
+      form_pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, req_headers)
+      expect(ActiveResource::HttpMock.requests).to include form_pages_request
+    end
+
+    it "returns 200" do
+      expect(response).to have_http_status(:ok)
+    end
   end
 
   describe "#create" do

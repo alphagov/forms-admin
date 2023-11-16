@@ -1,12 +1,13 @@
 class Pages::QuestionsController < PagesController
   def new
-    answer_type = draft_question.answer_type
-    question_text = draft_question.question_text
-    answer_settings = draft_question.answer_settings
-    is_optional = draft_question.is_optional == "true"
-    @question_form = Pages::QuestionForm.new(form_id: current_form.id, answer_type:, question_text:, answer_settings:, is_optional:, draft_question:)
+    @question_form = Pages::QuestionForm.new(form_id: current_form.id,
+                                             answer_type: draft_question.answer_type,
+                                             question_text: draft_question.question_text,
+                                             answer_settings: draft_question.answer_settings,
+                                             is_optional: draft_question.is_optional,
+                                             draft_question:)
 
-    @page = Page.new(form_id: current_form.id, answer_type:, answer_settings:, is_optional:)
+    @page = Page.new(form_id: current_form.id)
     render :new, locals: { current_form:, draft_question: }
   end
 
