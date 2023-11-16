@@ -11,10 +11,6 @@ FactoryBot.define do
     guidance_markdown { nil }
     answer_settings { {} }
 
-    factory :draft_question_for_new_page do
-      page_id { nil }
-    end
-
     trait :with_hints do
       hint_text { Faker::Quote.yoda.truncate(500) }
     end
@@ -22,6 +18,54 @@ FactoryBot.define do
     trait :with_guidance do
       page_heading { Faker::Quote.yoda.truncate(250) }
       guidance_markdown { "## List of items \n\n\n #{Faker::Markdown.ordered_list}" }
+    end
+
+    factory :draft_question_for_new_page do
+      page_id { nil }
+    end
+
+    factory :address_draft_question do
+      transient do
+        uk_address { "true" }
+        international_address { "true" }
+      end
+
+      answer_type { "address" }
+      answer_settings { { input_type: { uk_address:, international_address: } } }
+    end
+
+    factory :date_draft_question do
+      transient do
+        input_type { Pages::DateSettingsForm::INPUT_TYPES.sample }
+      end
+
+      answer_type { "date" }
+      answer_settings { { input_type: } }
+    end
+
+    factory :name_draft_question do
+      transient do
+        input_type { Pages::NameSettingsForm::INPUT_TYPES.sample }
+        title_needed { Pages::NameSettingsForm::TITLE_NEEDED.sample }
+      end
+
+      answer_type { "name" }
+      answer_settings { { input_type:, title_needed: } }
+    end
+
+    factory :selection_draft_question do
+      question_text { Faker::Lorem.question }
+      answer_type { "selection" }
+      answer_settings { { only_one_option: "true", selection_options: [{ name: "Option 1" }, { name: "Option 2" }] } }
+    end
+
+    factory :text_draft_question do
+      transient do
+        input_type { Pages::TextSettingsForm::INPUT_TYPES.sample }
+      end
+
+      answer_type { "text" }
+      answer_settings { { input_type: } }
     end
   end
 end

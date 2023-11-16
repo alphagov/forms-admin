@@ -1,58 +1,53 @@
 class PageSettingsSummaryComponent::PageSettingsSummaryComponentPreview < ViewComponent::Preview
   def with_non_selection_answer_type
-    page = FactoryBot.build(:page, :with_simple_answer_type, id: 1)
+    draft_question = DraftQuestion.new(answer_type: "email")
     change_answer_type_path = "https://example.com/change_answer_type"
-    render(PageSettingsSummaryComponent::View.new(page, change_answer_type_path:))
+    render(PageSettingsSummaryComponent::View.new(draft_question, change_answer_type_path:))
   end
 
   def with_selection_answer_type
-    page = FactoryBot.build(:page, is_optional: "false",
-                                   answer_type: "selection",
-                                   answer_settings: OpenStruct.new(only_one_option: "true",
-                                                                   selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
-                                                                                       OpenStruct.new(attributes: { name: "Option 2" })]))
+    draft_question = DraftQuestion.new(is_optional: "false",
+                                       answer_type: "selection",
+                                       answer_settings: { only_one_option: "true",
+                                                          selection_options: [{ name: "Option 1" },
+                                                                              { name: "Option 2" }] })
     change_answer_type_path = "https://example.com/change_answer_type"
     change_selections_settings_path = "https://example.com/change_selections_settings"
-    render(PageSettingsSummaryComponent::View.new(page, change_answer_type_path:, change_selections_settings_path:))
+    render(PageSettingsSummaryComponent::View.new(draft_question, change_answer_type_path:, change_selections_settings_path:))
   end
 
   def with_text_answer_type
-    page = FactoryBot.build(:page, :with_text_settings, id: 1)
-    page.answer_settings = OpenStruct.new(page.answer_settings)
+    draft_question = DraftQuestion.new(answer_type: "text", answer_settings: { input_type: "long_text" })
     change_answer_type_path = "https://example.com/change_answer_type"
     change_text_settings_path = "https://example.com/change_text_settings"
-    render(PageSettingsSummaryComponent::View.new(page, change_answer_type_path:, change_text_settings_path:))
+    render(PageSettingsSummaryComponent::View.new(draft_question, change_answer_type_path:, change_text_settings_path:))
   end
 
   def with_date_answer_type
-    page = FactoryBot.build(:page, :with_date_settings, id: 1)
-    page.answer_settings = OpenStruct.new(page.answer_settings)
+    draft_question = DraftQuestion.new(answer_type: "date", answer_settings: { input_type: "date_of_birth" })
     change_answer_type_path = "https://example.com/change_answer_type"
     change_date_settings_path = "https://example.com/change_date_settings"
-    render(PageSettingsSummaryComponent::View.new(page, change_answer_type_path:, change_date_settings_path:))
+    render(PageSettingsSummaryComponent::View.new(draft_question, change_answer_type_path:, change_date_settings_path:))
   end
 
   def with_legacy_date_answer_type
-    page = FactoryBot.build(:page, :with_date_settings, id: 1)
-    page.answer_settings = nil
+    draft_question = DraftQuestion.new(answer_type: "date")
     change_answer_type_path = "https://example.com/change_answer_type"
     change_date_settings_path = "https://example.com/change_date_settings"
-    render(PageSettingsSummaryComponent::View.new(page, change_answer_type_path:, change_date_settings_path:))
+    render(PageSettingsSummaryComponent::View.new(draft_question, change_answer_type_path:, change_date_settings_path:))
   end
 
   def with_address_answer_type
-    page = FactoryBot.build(:page, :with_address_settings, id: 1)
-    page.answer_settings = OpenStruct.new(page.answer_settings)
+    draft_question = DraftQuestion.new(answer_type: "address", answer_settings: { input_type: { uk_address: "true", international_address: "true" } })
     change_answer_type_path = "https://example.com/change_answer_type"
     change_address_settings_path = "https://example.com/change_address_settings"
-    render(PageSettingsSummaryComponent::View.new(page, change_answer_type_path:, change_address_settings_path:))
+    render(PageSettingsSummaryComponent::View.new(draft_question, change_answer_type_path:, change_address_settings_path:))
   end
 
   def with_name_answer_type
-    page = FactoryBot.build(:page, :with_name_settings, id: 1)
-    page.answer_settings = OpenStruct.new(page.answer_settings)
+    draft_question = DraftQuestion.new(answer_type: "name", answer_settings: { input_type: "first_middle_and_last_name", title_needed: "true" })
     change_answer_type_path = "https://example.com/change_answer_type"
     change_name_settings_path = "https://example.com/change_name_settings"
-    render(PageSettingsSummaryComponent::View.new(page, change_answer_type_path:, change_name_settings_path:))
+    render(PageSettingsSummaryComponent::View.new(draft_question, change_answer_type_path:, change_name_settings_path:))
   end
 end
