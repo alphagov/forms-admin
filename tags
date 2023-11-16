@@ -1,0 +1,834 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ActiveResourceMock	spec/support/active_resource_mock.rb	/^class ActiveResourceMock$/;"	c
+AddHasAccessToUsers	db/migrate/20230516134034_add_has_access_to_users.rb	/^class AddHasAccessToUsers < ActiveRecord::Migration[7.0]$/;"	c
+AddObjectChangesToVersions	db/migrate/20230802102230_add_object_changes_to_versions.rb	/^class AddObjectChangesToVersions < ActiveRecord::Migration[7.0]$/;"	c
+AddOrganisationRefToUsers	db/migrate/20230426150950_add_organisation_ref_to_users.rb	/^class AddOrganisationRefToUsers < ActiveRecord::Migration[7.0]$/;"	c
+AddProviderToUser	db/migrate/20230531104116_add_provider_to_user.rb	/^class AddProviderToUser < ActiveRecord::Migration[7.0]$/;"	c
+AddRoleToUsers	db/migrate/20230404075703_add_role_to_users.rb	/^class AddRoleToUsers < ActiveRecord::Migration[7.0]$/;"	c
+AddServiceNameToActiveStorageBlobs	db/migrate/20220713111845_add_service_name_to_active_storage_blobs.active_storage.rb	/^class AddServiceNameToActiveStorageBlobs < ActiveRecord::Migration[6.0]$/;"	c
+AdvisoryLock	lib/advisory_lock.rb	/^class AdvisoryLock$/;"	c
+Application	config/application.rb	/^  class Application < Rails::Application$/;"	c	class:FormsAdmin
+ApplicationCable	app/channels/application_cable/channel.rb	/^module ApplicationCable$/;"	m
+ApplicationCable	app/channels/application_cable/connection.rb	/^module ApplicationCable$/;"	m
+ApplicationController	app/controllers/application_controller.rb	/^class ApplicationController < ActionController::Base$/;"	c
+ApplicationHelper	app/helpers/application_helper.rb	/^module ApplicationHelper$/;"	m
+ApplicationJob	app/jobs/application_job.rb	/^class ApplicationJob < ActiveJob::Base$/;"	c
+ApplicationMailer	app/mailers/application_mailer.rb	/^class ApplicationMailer < ActionMailer::Base$/;"	c
+ApplicationRecord	app/models/application_record.rb	/^class ApplicationRecord < ActiveRecord::Base$/;"	c
+AuthenticationController	app/controllers/authentication_controller.rb	/^class AuthenticationController < ApplicationController$/;"	c
+AuthenticationFeatureHelpers	spec/support/authentication_feature_helpers.rb	/^module AuthenticationFeatureHelpers$/;"	m
+AxeFeatureHelpers	spec/support/axe_feature_helpers.rb	/^module AxeFeatureHelpers$/;"	m
+BaseForm	app/forms/base_form.rb	/^class BaseForm$/;"	c
+ChangeNameController	app/controllers/forms/change_name_controller.rb	/^  class ChangeNameController < ApplicationController$/;"	c	class:Forms
+Channel	app/channels/application_cable/channel.rb	/^  class Channel < ActionCable::Channel::Base$/;"	c	class:ApplicationCable
+CloudWatchService	app/service/cloud_watch_service.rb	/^class CloudWatchService$/;"	c
+ComponentPreviewController	app/controllers/component_preview_controller.rb	/^class ComponentPreviewController < ApplicationController$/;"	c
+Condition	app/models/condition.rb	/^class Condition < ActiveResource::Base$/;"	c
+Connection	app/channels/application_cable/connection.rb	/^  class Connection < ActionCable::Connection::Base$/;"	c	class:ApplicationCable
+ContactDetailsController	app/controllers/forms/contact_details_controller.rb	/^  class ContactDetailsController < ApplicationController$/;"	c	class:Forms
+CreateActiveStorageVariantRecords	db/migrate/20220713111846_create_active_storage_variant_records.active_storage.rb	/^class CreateActiveStorageVariantRecords < ActiveRecord::Migration[6.0]$/;"	c
+CreateDraftQuestions	db/migrate/20231002063756_create_draft_questions.rb	/^class CreateDraftQuestions < ActiveRecord::Migration[7.0]$/;"	c
+CreateFormSubmissionEmail	db/migrate/20221103162118_create_form_submission_email.rb	/^class CreateFormSubmissionEmail < ActiveRecord::Migration[7.0]$/;"	c
+CreateMouSignatures	db/migrate/20231003140934_create_mou_signatures.rb	/^class CreateMouSignatures < ActiveRecord::Migration[7.0]$/;"	c
+CreateOrganisations	db/migrate/20230426150134_create_organisations.rb	/^class CreateOrganisations < ActiveRecord::Migration[7.0]$/;"	c
+CreateUsers	db/migrate/20220503113642_create_users.rb	/^class CreateUsers < ActiveRecord::Migration[7.0]$/;"	c
+CreateVersions	db/migrate/20230802102229_create_versions.rb	/^class CreateVersions < ActiveRecord::Migration[7.0]$/;"	c
+DSL	lib/advisory_lock.rb	/^  module DSL$/;"	m	class:AdvisoryLock
+DataStruct	spec/factories/models/pages.rb	/^class DataStruct < OpenStruct$/;"	c
+DeclarationController	app/controllers/forms/declaration_controller.rb	/^  class DeclarationController < ApplicationController$/;"	c	class:Forms
+DeleteConfirmationController	app/controllers/forms/delete_confirmation_controller.rb	/^  class DeleteConfirmationController < ApplicationController$/;"	c	class:Forms
+DraftQuestion	app/models/draft_question.rb	/^class DraftQuestion < ApplicationRecord$/;"	c
+EmailTaskStatusService	app/service/email_task_status_service.rb	/^class EmailTaskStatusService$/;"	c
+ErrorSummary	app/components/page_list_component/error_summary/view.rb	/^  module ErrorSummary$/;"	m	class:PageListComponent
+ErrorSummaryComponent	app/components/error_summary_component/view.rb	/^module ErrorSummaryComponent$/;"	m
+ErrorSummaryComponent	spec/components/error_summary_component/error_summary_component_preview.rb	/^class ErrorSummaryComponent::ErrorSummaryComponentPreview < ViewComponent::Preview$/;"	c
+ErrorsController	app/controllers/errors_controller.rb	/^class ErrorsController < ApplicationController$/;"	c
+EventLogger	app/lib/event_logger.rb	/^class EventLogger$/;"	c
+FeatureService	app/service/feature_service.rb	/^class FeatureService$/;"	c
+Form	app/models/form.rb	/^class Form < ActiveResource::Base$/;"	c
+FormPolicy	app/policies/form_policy.rb	/^class FormPolicy$/;"	c
+FormStatusTagComponent	app/components/form_status_tag_component/view.rb	/^module FormStatusTagComponent$/;"	m
+FormStatusTagComponent	spec/components/form_status_tag_component/form_status_tag_component_preview.rb	/^class FormStatusTagComponent::FormStatusTagComponentPreview < ViewComponent::Preview$/;"	c
+FormStatusTagDescriptionComponent	app/components/form_status_tag_description_component/view.rb	/^module FormStatusTagDescriptionComponent$/;"	m
+FormStatusTagDescriptionComponent	spec/components/form_status_tag_description_component/form_status_tag_component_preview.rb	/^class FormStatusTagDescriptionComponent::FormStatusTagComponentPreview < ViewComponent::Preview$/;"	c
+FormSubmissionEmail	app/models/form_submission_email.rb	/^class FormSubmissionEmail < ApplicationRecord$/;"	c
+FormTaskListService	app/service/form_task_list_service.rb	/^class FormTaskListService$/;"	c
+FormUrlComponent	app/components/form_url_component/view.rb	/^module FormUrlComponent$/;"	m
+FormUrlComponent	spec/components/form_url_component/form_url_component_preview.rb	/^class FormUrlComponent::FormUrlComponentPreview < ViewComponent::Preview$/;"	c
+Forms	app/controllers/forms/change_name_controller.rb	/^module Forms$/;"	m
+Forms	app/controllers/forms/contact_details_controller.rb	/^module Forms$/;"	m
+Forms	app/controllers/forms/declaration_controller.rb	/^module Forms$/;"	m
+Forms	app/controllers/forms/delete_confirmation_controller.rb	/^module Forms$/;"	m
+Forms	app/controllers/forms/live_controller.rb	/^class Forms::LiveController < ApplicationController$/;"	c
+Forms	app/controllers/forms/make_live_controller.rb	/^module Forms$/;"	m
+Forms	app/controllers/forms/privacy_policy_controller.rb	/^module Forms$/;"	m
+Forms	app/controllers/forms/submission_email_controller.rb	/^module Forms$/;"	m
+Forms	app/controllers/forms/what_happens_next_controller.rb	/^module Forms$/;"	m
+Forms	app/forms/forms/change_email_form.rb	/^class Forms::ChangeEmailForm < BaseForm$/;"	c
+Forms	app/forms/forms/change_name_form.rb	/^class Forms::ChangeNameForm < BaseForm$/;"	c
+Forms	app/forms/forms/contact_details_form.rb	/^class Forms::ContactDetailsForm < BaseForm$/;"	c
+Forms	app/forms/forms/declaration_form.rb	/^class Forms::DeclarationForm < BaseForm$/;"	c
+Forms	app/forms/forms/delete_confirmation_form.rb	/^class Forms::DeleteConfirmationForm < BaseForm$/;"	c
+Forms	app/forms/forms/make_live_form.rb	/^class Forms::MakeLiveForm < BaseForm$/;"	c
+Forms	app/forms/forms/mark_complete_form.rb	/^class Forms::MarkCompleteForm < BaseForm$/;"	c
+Forms	app/forms/forms/privacy_policy_form.rb	/^class Forms::PrivacyPolicyForm < BaseForm$/;"	c
+Forms	app/forms/forms/submission_email_form.rb	/^class Forms::SubmissionEmailForm < BaseForm$/;"	c
+Forms	app/forms/forms/what_happens_next_form.rb	/^class Forms::WhatHappensNextForm < BaseForm$/;"	c
+FormsAdmin	config/application.rb	/^module FormsAdmin$/;"	m
+FormsController	app/controllers/forms_controller.rb	/^class FormsController < ApplicationController$/;"	c
+GovukEmailValidator	app/validators/govuk_email_validator.rb	/^class GovukEmailValidator < ActiveModel::EachValidator$/;"	c
+GuidanceService	app/service/page_summary_data/guidance_service.rb	/^  class GuidanceService$/;"	c	class:PageSummaryData
+GuidanceValidation	app/models/concerns/guidance_validation.rb	/^module GuidanceValidation$/;"	m
+HeaderComponent	app/components/header_component/view.rb	/^module HeaderComponent$/;"	m
+HeaderComponent	spec/components/header_component/header_component_preview.rb	/^class HeaderComponent::HeaderComponentPreview < ViewComponent::Preview$/;"	c
+HeartbeatController	app/controllers/heartbeat_controller.rb	/^class HeartbeatController < ApplicationController$/;"	c
+HelperMethods	spec/support/matchers/active_resource/helper_methods.rb	/^class HelperMethods$/;"	c
+HostingEnvironment	app/lib/hosting_environment.rb	/^module HostingEnvironment$/;"	m
+JsonLogFormatter	app/lib/json_log_formatter.rb	/^class JsonLogFormatter < ActiveSupport::Logger::Formatter$/;"	c
+LiveFormWarningComponent	app/components/live_form_warning_component/view.rb	/^module LiveFormWarningComponent$/;"	m
+LiveFormWarningComponent	spec/components/live_form_warning_component/live_form_warning_component_preview.rb	/^class LiveFormWarningComponent::LiveFormWarningComponentPreview < ViewComponent::Preview$/;"	c
+LoggerMock	spec/support/logger_mock.rb	/^class LoggerMock$/;"	c
+MakeLiveController	app/controllers/forms/make_live_controller.rb	/^  class MakeLiveController < ApplicationController$/;"	c	class:Forms
+MakeOrganisationContentIdNullable	db/migrate/20230613133847_make_organisation_content_id_nullable.rb	/^class MakeOrganisationContentIdNullable < ActiveRecord::Migration[7.0]$/;"	c
+MarkCompleteComponent	app/components/mark_complete_component/view.rb	/^module MarkCompleteComponent$/;"	m
+MarkCompleteComponent	spec/components/mark_complete_component/mark_complete_component_preview.rb	/^class MarkCompleteComponent::MarkCompleteComponentPreview < ViewComponent::Preview$/;"	c
+MarkdownEditorComponent	app/components/markdown_editor_component/view.rb	/^module MarkdownEditorComponent$/;"	m
+MarkdownEditorComponent	spec/components/markdown_editor_component/markdown_editor_component_preview.rb	/^class MarkdownEditorComponent::MarkdownEditorComponentPreview < ViewComponent::Preview$/;"	c
+MetricsSummaryComponent	app/components/metrics_summary_component/view.rb	/^module MetricsSummaryComponent$/;"	m
+MetricsSummaryComponent	spec/components/metrics_summary_component/metrics_summary_component_preview.rb	/^class MetricsSummaryComponent::MetricsSummaryComponentPreview < ViewComponent::Preview$/;"	c
+MockBuilder	spec/support/active_resource_mock.rb	/^  class MockBuilder$/;"	c	class:ActiveResourceMock
+ModelWithValidation	spec/validator/govuk_email_validator_spec.rb	/^    class ModelWithValidation$/;"	c
+MouSignature	app/models/mou_signature.rb	/^class MouSignature < ApplicationRecord$/;"	c
+MouSignaturePolicy	app/policies/mou_signature_policy.rb	/^class MouSignaturePolicy$/;"	c
+MouSignaturesController	app/controllers/mou_signatures_controller.rb	/^class MouSignaturesController < ApplicationController$/;"	c
+NavigationItemsService	app/service/navigation_items_service.rb	/^class NavigationItemsService$/;"	c
+OmniAuth	config/initializers/authentication.rb	/^class OmniAuth::Strategies::OpenIDConnect$/;"	c
+OmniAuth	lib/warden/strategies/omniauth.rb	/^  module OmniAuth$/;"	m	class:Warden
+Organisation	app/models/organisation.rb	/^class Organisation < ApplicationRecord$/;"	c
+OrganisationsFetcher	lib/organisations_fetcher.rb	/^class OrganisationsFetcher$/;"	c
+Page	app/models/page.rb	/^class Page < ActiveResource::Base$/;"	c
+PageListComponent	app/components/page_list_component/error_summary/view.rb	/^module PageListComponent$/;"	m
+PageListComponent	app/components/page_list_component/view.rb	/^module PageListComponent$/;"	m
+PageListComponent	spec/components/page_list_component/error_summary/error_summary_component_preview.rb	/^class PageListComponent::ErrorSummary::ErrorSummaryComponentPreview < ViewComponent::Preview$/;"	c
+PageListComponent	spec/components/page_list_component/page_list_component_preview.rb	/^class PageListComponent::PageListComponentPreview < ViewComponent::Preview$/;"	c
+PageOptionsService	app/service/page_options_service.rb	/^class PageOptionsService$/;"	c
+PageSettingsSummaryComponent	app/components/page_settings_summary_component/view.rb	/^module PageSettingsSummaryComponent$/;"	m
+PageSettingsSummaryComponent	spec/components/page_settings_summary_component/page_settings_summary_component_preview.rb	/^class PageSettingsSummaryComponent::PageSettingsSummaryComponentPreview < ViewComponent::Preview$/;"	c
+PageSummaryCardDataService	app/service/page_summary_card_data_service.rb	/^class PageSummaryCardDataService$/;"	c
+PageSummaryData	app/service/page_summary_data/guidance_service.rb	/^module PageSummaryData$/;"	m
+Pages	app/controllers/pages/address_settings_controller.rb	/^class Pages::AddressSettingsController < PagesController$/;"	c
+Pages	app/controllers/pages/conditions_controller.rb	/^class Pages::ConditionsController < PagesController$/;"	c
+Pages	app/controllers/pages/date_settings_controller.rb	/^class Pages::DateSettingsController < PagesController$/;"	c
+Pages	app/controllers/pages/guidance_controller.rb	/^class Pages::GuidanceController < PagesController$/;"	c
+Pages	app/controllers/pages/name_settings_controller.rb	/^class Pages::NameSettingsController < PagesController$/;"	c
+Pages	app/controllers/pages/question_text_controller.rb	/^class Pages::QuestionTextController < PagesController$/;"	c
+Pages	app/controllers/pages/questions_controller.rb	/^class Pages::QuestionsController < PagesController$/;"	c
+Pages	app/controllers/pages/selections_settings_controller.rb	/^class Pages::SelectionsSettingsController < PagesController$/;"	c
+Pages	app/controllers/pages/text_settings_controller.rb	/^class Pages::TextSettingsController < PagesController$/;"	c
+Pages	app/controllers/pages/type_of_answer_controller.rb	/^class Pages::TypeOfAnswerController < PagesController$/;"	c
+Pages	app/forms/pages/address_settings_form.rb	/^class Pages::AddressSettingsForm < BaseForm$/;"	c
+Pages	app/forms/pages/conditions_form.rb	/^class Pages::ConditionsForm < BaseForm$/;"	c
+Pages	app/forms/pages/date_settings_form.rb	/^class Pages::DateSettingsForm < BaseForm$/;"	c
+Pages	app/forms/pages/delete_condition_form.rb	/^class Pages::DeleteConditionForm < BaseForm$/;"	c
+Pages	app/forms/pages/guidance_form.rb	/^class Pages::GuidanceForm < BaseForm$/;"	c
+Pages	app/forms/pages/name_settings_form.rb	/^class Pages::NameSettingsForm < BaseForm$/;"	c
+Pages	app/forms/pages/question_form.rb	/^class Pages::QuestionForm < BaseForm$/;"	c
+Pages	app/forms/pages/question_text_form.rb	/^class Pages::QuestionTextForm < BaseForm$/;"	c
+Pages	app/forms/pages/routing_page_form.rb	/^class Pages::RoutingPageForm < BaseForm$/;"	c
+Pages	app/forms/pages/selections_settings_form.rb	/^class Pages::SelectionsSettingsForm < BaseForm$/;"	c
+Pages	app/forms/pages/text_settings_form.rb	/^class Pages::TextSettingsForm < BaseForm$/;"	c
+Pages	app/forms/pages/type_of_answer_form.rb	/^class Pages::TypeOfAnswerForm < BaseForm$/;"	c
+PagesController	app/controllers/pages_controller.rb	/^class PagesController < ApplicationController$/;"	c
+PreviewLinkComponent	app/components/preview_link_component/view.rb	/^module PreviewLinkComponent$/;"	m
+PreviewLinkComponent	spec/components/preview_link_component/preview_link_component_preview.rb	/^class PreviewLinkComponent::PreviewLinkComponentPreview < ViewComponent::Preview$/;"	c
+PrivacyPolicyController	app/controllers/forms/privacy_policy_controller.rb	/^  class PrivacyPolicyController < ApplicationController$/;"	c	class:Forms
+QuestionTextValidation	app/models/concerns/question_text_validation.rb	/^module QuestionTextValidation$/;"	m
+RemoveNotNullOnActiveStorageBlobsChecksum	db/migrate/20220713111847_remove_not_null_on_active_storage_blobs_checksum.active_storage.rb	/^class RemoveNotNullOnActiveStorageBlobsChecksum < ActiveRecord::Migration[6.0]$/;"	c
+Row	app/components/task_list_component/view.rb	/^  class Row$/;"	c	class:TaskListComponent
+Scope	app/policies/form_policy.rb	/^  class Scope$/;"	c	class:FormPolicy
+Scope	app/policies/user_policy.rb	/^  class Scope$/;"	c	class:UserPolicy
+SubmissionEmailController	app/controllers/forms/submission_email_controller.rb	/^  class SubmissionEmailController < ApplicationController$/;"	c	class:Forms
+SubmissionEmailMailer	app/mailers/submission_email_mailer.rb	/^class SubmissionEmailMailer < GovukNotifyRails::Mailer$/;"	c
+SubmissionEmailMailerPreview	spec/mailers/previews/submission_email_mailer_preview.rb	/^class SubmissionEmailMailerPreview < ActionMailer::Preview$/;"	c
+TaskListComponent	app/components/task_list_component/view.rb	/^module TaskListComponent$/;"	m
+TaskListComponent	spec/components/task_list_component/task_list_component_preview.rb	/^class TaskListComponent::TaskListComponentPreview < ViewComponent::Preview$/;"	c
+ThisShouldBreakWrongName	db/migrate/20231116092200_this_should_break.rb	/^class ThisShouldBreakWrongName < ActiveRecord::Migration[7.0]$/;"	c
+TrialRoleWarningComponent	app/components/trial_role_warning_component/view.rb	/^module TrialRoleWarningComponent$/;"	m
+TrialRoleWarningComponent	spec/components/trial_role_warning_component/trial_role_warning_component_preview.rb	/^class TrialRoleWarningComponent::TrialRoleWarningComponentPreview < ViewComponent::Preview$/;"	c
+UpdateDefaultValueForUserRole	db/migrate/20230626091901_update_default_value_for_user_role.rb	/^class UpdateDefaultValueForUserRole < ActiveRecord::Migration[7.0]$/;"	c
+UpdateOrganisationRefForExistingUsers	db/migrate/20230426150951_update_organisation_ref_for_existing_users.rb	/^class UpdateOrganisationRefForExistingUsers < ActiveRecord::Migration[7.0]$/;"	c
+UpdateOrganisationRefForExistingUsers2	db/migrate/20230511102334_update_organisation_ref_for_existing_users2.rb	/^class UpdateOrganisationRefForExistingUsers2 < ActiveRecord::Migration[7.0]$/;"	c
+UpdateProviderForExistingUsers	db/migrate/20230531131201_update_provider_for_existing_users.rb	/^class UpdateProviderForExistingUsers < ActiveRecord::Migration[7.0]$/;"	c
+User	app/models/user.rb	/^class User < ApplicationRecord$/;"	c
+User	db/migrate/20230531131201_update_provider_for_existing_users.rb	/^  class User < ApplicationRecord; end$/;"	c	class:UpdateProviderForExistingUsers
+UserAuthenticationException	app/models/user.rb	/^  class UserAuthenticationException < StandardError; end$/;"	c	class:User
+UserMissingOrganisationError	app/policies/form_policy.rb	/^  class UserMissingOrganisationError < StandardError; end$/;"	c	class:FormPolicy
+UserPolicy	app/policies/user_policy.rb	/^class UserPolicy$/;"	c
+UserUpdateService	app/service/user_update_service.rb	/^class UserUpdateService$/;"	c
+UserUpgradeRequest	app/models/user_upgrade_request.rb	/^class UserUpgradeRequest$/;"	c
+UserUpgradeRequestMailer	app/mailers/user_upgrade_request_mailer.rb	/^class UserUpgradeRequestMailer < GovukNotifyRails::Mailer$/;"	c
+UserUpgradeRequestService	app/service/user_upgrade_request_service.rb	/^class UserUpgradeRequestService$/;"	c
+UserUpgradeRequestsController	app/controllers/user_upgrade_requests_controller.rb	/^class UserUpgradeRequestsController < ApplicationController$/;"	c
+UsersController	app/controllers/users_controller.rb	/^class UsersController < ApplicationController$/;"	c
+View	app/components/error_summary_component/view.rb	/^  class View < ViewComponent::Base$/;"	c	class:ErrorSummaryComponent
+View	app/components/form_status_tag_component/view.rb	/^  class View < ViewComponent::Base$/;"	c	class:FormStatusTagComponent
+View	app/components/form_status_tag_description_component/view.rb	/^  class View < ViewComponent::Base$/;"	c	class:FormStatusTagDescriptionComponent
+View	app/components/form_url_component/view.rb	/^  class View < ViewComponent::Base$/;"	c	class:FormUrlComponent
+View	app/components/header_component/view.rb	/^  class View < ViewComponent::Base$/;"	c	class:HeaderComponent
+View	app/components/live_form_warning_component/view.rb	/^  class View < ViewComponent::Base$/;"	c	class:LiveFormWarningComponent
+View	app/components/mark_complete_component/view.rb	/^  class View < ViewComponent::Base$/;"	c	class:MarkCompleteComponent
+View	app/components/markdown_editor_component/view.rb	/^  class View < ViewComponent::Base$/;"	c	class:MarkdownEditorComponent
+View	app/components/metrics_summary_component/view.rb	/^  class View < ViewComponent::Base$/;"	c	class:MetricsSummaryComponent
+View	app/components/page_list_component/error_summary/view.rb	/^    class View < ViewComponent::Base$/;"	c	class:PageListComponent.ErrorSummary
+View	app/components/page_list_component/view.rb	/^  class View < ViewComponent::Base$/;"	c	class:PageListComponent
+View	app/components/page_settings_summary_component/view.rb	/^  class View < ViewComponent::Base$/;"	c	class:PageSettingsSummaryComponent
+View	app/components/preview_link_component/view.rb	/^  class View < ViewComponent::Base$/;"	c	class:PreviewLinkComponent
+View	app/components/task_list_component/view.rb	/^  class View < GovukComponent::Base$/;"	c	class:TaskListComponent
+View	app/components/trial_role_warning_component/view.rb	/^  class View < ViewComponent::Base$/;"	c	class:TrialRoleWarningComponent
+Warden	lib/warden/strategies/omniauth.rb	/^module Warden::Strategies$/;"	m
+WhatHappensNextController	app/controllers/forms/what_happens_next_controller.rb	/^  class WhatHappensNextController < ApplicationController$/;"	c	class:Forms
+activate_bundler	bin/bundle	/^  def activate_bundler$/;"	f
+activation_error_handling	bin/bundle	/^  def activation_error_handling$/;"	f
+add_another	app/forms/pages/selections_settings_form.rb	/^  def add_another$/;"	f	class:Pages
+add_mou_signature_organisation	app/models/mou_signature.rb	/^  def self.add_mou_signature_organisation(user)$/;"	F	class:MouSignature
+add_organisation_to_user_forms	app/service/user_update_service.rb	/^  def add_organisation_to_user_forms$/;"	f	class:UserUpdateService
+add_organisation_to_user_mou	app/service/user_update_service.rb	/^  def add_organisation_to_user_mou$/;"	f	class:UserUpdateService
+address_input_type_to_string	app/components/page_settings_summary_component/view.rb	/^    def address_input_type_to_string$/;"	f	class:PageSettingsSummaryComponent.View
+address_input_type_to_string	app/service/page_options_service.rb	/^  def address_input_type_to_string$/;"	f
+address_options	app/service/page_options_service.rb	/^  def address_options$/;"	f
+address_path	app/controllers/pages/type_of_answer_controller.rb	/^  def address_path(form, action)$/;"	f	class:Pages
+address_settings_form_params	app/controllers/pages/address_settings_controller.rb	/^  def address_settings_form_params$/;"	f	class:Pages
+all	spec/support/active_resource_mock.rb	/^    def all(response, status)$/;"	f	class:ActiveResourceMock.MockBuilder
+all_incomplete_tasks	app/models/form.rb	/^  def all_incomplete_tasks$/;"	f	class:Form
+all_options_for_answer_type	app/service/page_options_service.rb	/^  def all_options_for_answer_type$/;"	f
+all_ready_for_live?	app/models/form.rb	/^  def all_ready_for_live?$/;"	f	class:Form
+all_sections	app/service/form_task_list_service.rb	/^  def all_sections$/;"	f
+all_task_statuses	app/models/form.rb	/^  def all_task_statuses$/;"	f	class:Form
+already_signed?	app/controllers/mou_signatures_controller.rb	/^  def already_signed?$/;"	f	class:MouSignaturesController
+and_i_can_see_a_list_of_existing_pages	spec/features/form/add_or_edit_questions/add_a_question_for_each_type_of_answer_spec.rb	/^  def and_i_can_see_a_list_of_existing_pages$/;"	f
+and_i_choose_a_user_to_edit	spec/features/users/set_organisation_spec.rb	/^  def and_i_choose_a_user_to_edit$/;"	f
+and_i_click_create_a_form	spec/features/form/create_or_edit_a_form_spec.rb	/^  def and_i_click_create_a_form$/;"	f
+and_i_fill_in_the_form_name	spec/features/form/create_or_edit_a_form_spec.rb	/^  def and_i_fill_in_the_form_name$/;"	f
+and_i_provide_a_question_text	spec/features/form/add_or_edit_questions/add_a_question_for_each_type_of_answer_spec.rb	/^  def and_i_provide_a_question_text$/;"	f
+and_i_save_and_create_another	spec/features/form/add_or_edit_questions/add_a_question_for_each_type_of_answer_spec.rb	/^  def and_i_save_and_create_another$/;"	f
+and_i_select_a_type_of_answer_option	spec/features/form/add_or_edit_questions/add_a_question_for_each_type_of_answer_spec.rb	/^  def and_i_select_a_type_of_answer_option(answer_type)$/;"	f
+and_i_start_adding_a_new_question	spec/features/form/add_or_edit_questions/add_a_question_for_each_type_of_answer_spec.rb	/^  def and_i_start_adding_a_new_question$/;"	f
+and_i_view_an_existing_form	spec/features/form/create_or_edit_a_form_spec.rb	/^  def and_i_view_an_existing_form$/;"	f
+and_i_want_to_create_or_edit_a_page	spec/features/form/add_or_edit_questions/add_a_question_for_each_type_of_answer_spec.rb	/^  def and_i_want_to_create_or_edit_a_page$/;"	f
+and_the_form_name_is_updated	spec/features/form/create_or_edit_a_form_spec.rb	/^  def and_the_form_name_is_updated$/;"	f
+answer_settings	app/forms/pages/selections_settings_form.rb	/^  def answer_settings$/;"	f	class:Pages
+answer_type_changed?	app/controllers/pages/type_of_answer_controller.rb	/^  def answer_type_changed?$/;"	f	class:Pages
+answer_type_changed?	app/forms/pages/type_of_answer_form.rb	/^  def answer_type_changed?$/;"	f	class:Pages
+answer_type_form_params	app/controllers/pages/type_of_answer_controller.rb	/^  def answer_type_form_params$/;"	f	class:Pages
+answer_value_text_for_condition	app/components/page_list_component/view.rb	/^    def answer_value_text_for_condition(condition)$/;"	f	class:PageListComponent.View
+app_header_class_for_environment	app/components/header_component/view.rb	/^    def app_header_class_for_environment$/;"	f	class:HeaderComponent.View
+append_info_to_payload	app/controllers/application_controller.rb	/^  def append_info_to_payload(payload)$/;"	f	class:ApplicationController
+as_json	spec/factories/models/pages.rb	/^  def as_json(*args)$/;"	f	class:DataStruct
+assign_condition_values	app/forms/pages/conditions_form.rb	/^  def assign_condition_values$/;"	f	class:Pages
+assign_form_values	app/forms/forms/change_email_form.rb	/^  def assign_form_values$/;"	f	class:Forms
+assign_form_values	app/forms/forms/change_name_form.rb	/^  def assign_form_values$/;"	f	class:Forms
+assign_form_values	app/forms/forms/contact_details_form.rb	/^  def assign_form_values$/;"	f	class:Forms
+assign_form_values	app/forms/forms/declaration_form.rb	/^  def assign_form_values$/;"	f	class:Forms
+assign_form_values	app/forms/forms/mark_complete_form.rb	/^  def assign_form_values$/;"	f	class:Forms
+assign_form_values	app/forms/forms/privacy_policy_form.rb	/^  def assign_form_values$/;"	f	class:Forms
+assign_form_values	app/forms/forms/submission_email_form.rb	/^  def assign_form_values$/;"	f
+assign_form_values	app/forms/forms/what_happens_next_form.rb	/^  def assign_form_values$/;"	f	class:Forms
+assign_skip_to_end	app/forms/pages/conditions_form.rb	/^  def assign_skip_to_end$/;"	f	class:Pages
+at_least_one_selected?	app/forms/pages/address_settings_form.rb	/^  def at_least_one_selected?$/;"	f	class:Pages
+attempted_path	app/controllers/authentication_controller.rb	/^  def attempted_path$/;"	f	class:AuthenticationController
+auth0_sign_out_url	app/controllers/authentication_controller.rb	/^  def auth0_sign_out_url$/;"	f	class:AuthenticationController
+authenticate!	config/initializers/warden/strategies/basic_auth.rb	/^  def authenticate!$/;"	f
+authenticate!	lib/warden/strategies/omniauth.rb	/^    def authenticate!$/;"	f	class:Warden.OmniAuth
+authenticate!	spec/requests/authentication_controller_spec.rb	/^      def authenticate!$/;"	f
+authenticate_and_check_access	app/controllers/application_controller.rb	/^  def authenticate_and_check_access$/;"	f	class:ApplicationController
+authenticate_user!	app/controllers/application_controller.rb	/^  def authenticate_user!$/;"	f	class:ApplicationController
+before_render	app/components/mark_complete_component/view.rb	/^    def before_render$/;"	f	class:MarkCompleteComponent.View
+blank	spec/components/task_list_component/task_list_component_preview.rb	/^  def blank$/;"	f	class:TaskListComponent
+blobs_primary_key_type	db/migrate/20220713111846_create_active_storage_variant_records.active_storage.rb	/^  def blobs_primary_key_type$/;"	f	class:CreateActiveStorageVariantRecords
+build_data	app/service/page_summary_card_data_service.rb	/^  def build_data$/;"	f
+build_data	app/service/page_summary_data/guidance_service.rb	/^    def build_data$/;"	f	class:PageSummaryData
+build_rows	app/components/task_list_component/view.rb	/^    def build_rows(rows)$/;"	f	class:TaskListComponent.View
+build_section	app/components/task_list_component/view.rb	/^    def build_section(section_fields)$/;"	f	class:TaskListComponent.View
+build_title	app/service/page_summary_card_data_service.rb	/^  def build_title$/;"	f
+bundler_requirement	bin/bundle	/^  def bundler_requirement$/;"	f
+bundler_requirement_for	bin/bundle	/^  def bundler_requirement_for(version)$/;"	f
+but_i_can_see_the_test_org_forms	spec/features/users/set_organisation_spec.rb	/^  def but_i_can_see_the_test_org_forms$/;"	f
+calculate_percentage	app/components/metrics_summary_component/view.rb	/^    def calculate_percentage(number, total)$/;"	f	class:MetricsSummaryComponent.View
+call	app/controllers/authentication_controller.rb	/^  def self.call(env)$/;"	F	class:AuthenticationController
+call	app/lib/json_log_formatter.rb	/^  def call(severity, timestamp, _progname, message)$/;"	f	class:JsonLogFormatter
+call	app/service/form_task_list_service.rb	/^    def call(**args)$/;"	f	class:FormTaskListService
+call	app/service/navigation_items_service.rb	/^    def call(**args)$/;"	f	class:NavigationItemsService
+call	app/service/page_options_service.rb	/^    def call(**args)$/;"	f	class:PageOptionsService
+call	app/service/page_summary_card_data_service.rb	/^    def call(**args)$/;"	f	class:PageSummaryCardDataService
+call	app/service/page_summary_data/guidance_service.rb	/^      def call(**args)$/;"	f	class:PageSummaryData.GuidanceService
+call	lib/organisations_fetcher.rb	/^  def call$/;"	f	class:OrganisationsFetcher
+callback_from_omniauth	app/controllers/authentication_controller.rb	/^  def callback_from_omniauth$/;"	f	class:AuthenticationController
+can_add_page_routing	app/controllers/pages/conditions_controller.rb	/^  def can_add_page_routing$/;"	f	class:Pages
+can_add_page_routing_conditions?	app/policies/form_policy.rb	/^  def can_add_page_routing_conditions?$/;"	f	class:FormPolicy
+can_change_form_submission_email?	app/policies/form_policy.rb	/^  def can_change_form_submission_email?$/;"	f	class:FormPolicy
+can_enter_submission_email_code	app/service/form_task_list_service.rb	/^  def can_enter_submission_email_code$/;"	f
+can_manage_mous?	app/policies/mou_signature_policy.rb	/^  def can_manage_mous?$/;"	f	class:MouSignaturePolicy
+can_manage_user?	app/policies/user_policy.rb	/^  def can_manage_user?$/;"	f	class:UserPolicy
+can_view_form?	app/policies/form_policy.rb	/^  def can_view_form?$/;"	f	class:FormPolicy
+cddo_sso_sign_out_url	app/controllers/authentication_controller.rb	/^  def cddo_sso_sign_out_url$/;"	f	class:AuthenticationController
+change	db/migrate/20220503113642_create_users.rb	/^  def change$/;"	f	class:CreateUsers
+change	db/migrate/20220713111846_create_active_storage_variant_records.active_storage.rb	/^  def change$/;"	f	class:CreateActiveStorageVariantRecords
+change	db/migrate/20220713111847_remove_not_null_on_active_storage_blobs_checksum.active_storage.rb	/^  def change$/;"	f	class:RemoveNotNullOnActiveStorageBlobsChecksum
+change	db/migrate/20221103162118_create_form_submission_email.rb	/^  def change$/;"	f	class:CreateFormSubmissionEmail
+change	db/migrate/20230404075703_add_role_to_users.rb	/^  def change$/;"	f	class:AddRoleToUsers
+change	db/migrate/20230426150134_create_organisations.rb	/^  def change$/;"	f	class:CreateOrganisations
+change	db/migrate/20230426150950_add_organisation_ref_to_users.rb	/^  def change$/;"	f	class:AddOrganisationRefToUsers
+change	db/migrate/20230516134034_add_has_access_to_users.rb	/^  def change$/;"	f	class:AddHasAccessToUsers
+change	db/migrate/20230531104116_add_provider_to_user.rb	/^  def change$/;"	f	class:AddProviderToUser
+change	db/migrate/20230613133847_make_organisation_content_id_nullable.rb	/^  def change$/;"	f	class:MakeOrganisationContentIdNullable
+change	db/migrate/20230626091901_update_default_value_for_user_role.rb	/^  def change$/;"	f	class:UpdateDefaultValueForUserRole
+change	db/migrate/20230802102229_create_versions.rb	/^  def change$/;"	f	class:CreateVersions
+change	db/migrate/20230802102230_add_object_changes_to_versions.rb	/^  def change$/;"	f	class:AddObjectChangesToVersions
+change	db/migrate/20231002063756_create_draft_questions.rb	/^  def change$/;"	f	class:CreateDraftQuestions
+change	db/migrate/20231003140934_create_mou_signatures.rb	/^  def change$/;"	f	class:CreateMouSignatures
+change	db/migrate/20231116092200_this_should_break.rb	/^  def change$/;"	f	class:ThisShouldBreakWrongName
+change_name_form_params	app/controllers/forms/change_name_controller.rb	/^    def change_name_form_params(form)$/;"	f	class:Forms.ChangeNameController
+change_url	app/service/page_summary_data/guidance_service.rb	/^    def change_url$/;"	f	class:PageSummaryData
+check_email?	app/forms/forms/contact_details_form.rb	/^  def check_email?$/;"	f	class:Forms
+check_errors_from_api	app/forms/pages/conditions_form.rb	/^  def check_errors_from_api$/;"	f	class:Pages
+check_link?	app/forms/forms/contact_details_form.rb	/^  def check_link?$/;"	f	class:Forms
+check_maintenance_mode_is_enabled	app/controllers/application_controller.rb	/^  def check_maintenance_mode_is_enabled$/;"	f	class:ApplicationController
+check_met_requirements	spec/features/users/user_upgrade_request_spec.rb	/^  def check_met_requirements$/;"	f
+check_phone?	app/forms/forms/contact_details_form.rb	/^  def check_phone?$/;"	f	class:Forms
+check_user_has_permission	app/controllers/pages_controller.rb	/^  def check_user_has_permission$/;"	f
+clear_questions_session_data	app/controllers/application_controller.rb	/^  def clear_questions_session_data$/;"	f	class:ApplicationController
+cli_arg_version	bin/bundle	/^  def cli_arg_version$/;"	f
+colour_for_environment	app/components/header_component/view.rb	/^    def colour_for_environment$/;"	f	class:HeaderComponent.View
+complete_week?	app/components/metrics_summary_component/view.rb	/^    def complete_week?$/;"	f	class:MetricsSummaryComponent.View
+component_layout	app/controllers/component_preview_controller.rb	/^  def component_layout$/;"	f	class:ComponentPreviewController
+condition_form_params	app/controllers/pages/conditions_controller.rb	/^  def condition_form_params$/;"	f	class:Pages
+conditions	app/models/page.rb	/^  def conditions$/;"	f	class:Page
+conditions_with_page_indexes	app/components/page_list_component/error_summary/view.rb	/^      def conditions_with_page_indexes$/;"	f	class:PageListComponent.ErrorSummary.View
+confirm_confirmation_code	app/forms/forms/submission_email_form.rb	/^  def confirm_confirmation_code$/;"	f
+confirm_path	app/components/task_list_component/view.rb	/^    def confirm_path$/;"	f	class:TaskListComponent.Row
+confirm_submission_email_code	app/controllers/forms/submission_email_controller.rb	/^    def confirm_submission_email_code$/;"	f	class:Forms.SubmissionEmailController
+confirm_submission_email_status	app/service/email_task_status_service.rb	/^  def confirm_submission_email_status$/;"	f	class:EmailTaskStatusService
+confirmation	app/controllers/mou_signatures_controller.rb	/^  def confirmation$/;"	f	class:MouSignaturesController
+confirmation	app/controllers/user_upgrade_requests_controller.rb	/^  def confirmation; end$/;"	f	class:UserUpgradeRequestsController
+confirmation_code_email	app/mailers/submission_email_mailer.rb	/^  def confirmation_code_email(new_submission_email:, form_name:, confirmation_code:, notify_response_id:, current_user:)$/;"	f	class:SubmissionEmailMailer
+confirmation_code_email	spec/mailers/previews/submission_email_mailer_preview.rb	/^  def confirmation_code_email$/;"	f	class:SubmissionEmailMailerPreview
+confirmed?	app/models/form_submission_email.rb	/^  def confirmed?$/;"	f	class:FormSubmissionEmail
+contact_details_form_params	app/controllers/forms/contact_details_controller.rb	/^    def contact_details_form_params$/;"	f	class:Forms.ContactDetailsController
+contact_link	app/helpers/application_helper.rb	/^  def contact_link(text = t("contact_govuk_forms"))$/;"	f	class:ApplicationHelper
+contact_url	app/helpers/application_helper.rb	/^  def contact_url$/;"	f	class:ApplicationHelper
+convert_is_optional_to_boolean	app/models/page.rb	/^  def convert_is_optional_to_boolean$/;"	f	class:Page
+convert_session_keys_to_symbols	app/controllers/pages_controller.rb	/^  def convert_session_keys_to_symbols$/;"	f
+counter	app/components/task_list_component/view.rb	/^    def counter$/;"	f	class:TaskListComponent.View
+create	app/controllers/forms/change_name_controller.rb	/^    def create$/;"	f	class:Forms.ChangeNameController
+create	app/controllers/forms/contact_details_controller.rb	/^    def create$/;"	f	class:Forms.ContactDetailsController
+create	app/controllers/forms/declaration_controller.rb	/^    def create$/;"	f	class:Forms.DeclarationController
+create	app/controllers/forms/make_live_controller.rb	/^    def create$/;"	f	class:Forms.MakeLiveController
+create	app/controllers/forms/privacy_policy_controller.rb	/^    def create$/;"	f	class:Forms.PrivacyPolicyController
+create	app/controllers/forms/submission_email_controller.rb	/^    def create$/;"	f	class:Forms.SubmissionEmailController
+create	app/controllers/forms/what_happens_next_controller.rb	/^    def create$/;"	f	class:Forms.WhatHappensNextController
+create	app/controllers/mou_signatures_controller.rb	/^  def create$/;"	f	class:MouSignaturesController
+create	app/controllers/pages/address_settings_controller.rb	/^  def create$/;"	f	class:Pages
+create	app/controllers/pages/conditions_controller.rb	/^  def create$/;"	f	class:Pages
+create	app/controllers/pages/date_settings_controller.rb	/^  def create$/;"	f	class:Pages
+create	app/controllers/pages/guidance_controller.rb	/^  def create$/;"	f	class:Pages
+create	app/controllers/pages/name_settings_controller.rb	/^  def create$/;"	f	class:Pages
+create	app/controllers/pages/question_text_controller.rb	/^  def create$/;"	f	class:Pages
+create	app/controllers/pages/questions_controller.rb	/^  def create$/;"	f	class:Pages
+create	app/controllers/pages/selections_settings_controller.rb	/^  def create$/;"	f	class:Pages
+create	app/controllers/pages/text_settings_controller.rb	/^  def create$/;"	f	class:Pages
+create	app/controllers/pages/type_of_answer_controller.rb	/^  def create$/;"	f	class:Pages
+create	app/controllers/user_upgrade_requests_controller.rb	/^  def create$/;"	f	class:UserUpgradeRequestsController
+create	spec/support/active_resource_mock.rb	/^    def create(response, status)$/;"	f	class:ActiveResourceMock.MockBuilder
+create_or_edit	app/service/form_task_list_service.rb	/^  def create_or_edit$/;"	f
+create_submission_email_record	app/forms/forms/submission_email_form.rb	/^  def create_submission_email_record(confirmation_code)$/;"	f
+current_form	app/controllers/application_controller.rb	/^  def current_form$/;"	f	class:ApplicationController
+current_live_form	app/controllers/forms/live_controller.rb	/^  def current_live_form$/;"	f	class:Forms
+current_organisation_mou_signature	app/models/user.rb	/^  def current_organisation_mou_signature$/;"	f	class:User
+current_user	app/controllers/application_controller.rb	/^  def current_user$/;"	f	class:ApplicationController
+date_answer_type_text	app/service/page_options_service.rb	/^  def date_answer_type_text$/;"	f
+date_options	app/service/page_options_service.rb	/^  def date_options$/;"	f
+date_path	app/controllers/pages/type_of_answer_controller.rb	/^  def date_path(form, action)$/;"	f	class:Pages
+date_settings_form_params	app/controllers/pages/date_settings_controller.rb	/^  def date_settings_form_params$/;"	f	class:Pages
+declaration_form_params	app/controllers/forms/declaration_controller.rb	/^    def declaration_form_params$/;"	f	class:Forms
+default	spec/components/error_summary_component/error_summary_component_preview.rb	/^  def default$/;"	f	class:ErrorSummaryComponent
+default	spec/components/form_status_tag_component/form_status_tag_component_preview.rb	/^  def default$/;"	f	class:FormStatusTagComponent
+default	spec/components/form_status_tag_description_component/form_status_tag_component_preview.rb	/^  def default$/;"	f	class:FormStatusTagDescriptionComponent
+default	spec/components/form_url_component/form_url_component_preview.rb	/^  def default$/;"	f	class:FormUrlComponent
+default	spec/components/header_component/header_component_preview.rb	/^  def default$/;"	f	class:HeaderComponent
+default	spec/components/live_form_warning_component/live_form_warning_component_preview.rb	/^  def default$/;"	f	class:LiveFormWarningComponent
+default	spec/components/mark_complete_component/mark_complete_component_preview.rb	/^  def default$/;"	f	class:MarkCompleteComponent
+default	spec/components/markdown_editor_component/markdown_editor_component_preview.rb	/^  def default$/;"	f	class:MarkdownEditorComponent
+default	spec/components/page_list_component/error_summary/error_summary_component_preview.rb	/^  def default$/;"	f	class:PageListComponent
+default	spec/components/page_list_component/page_list_component_preview.rb	/^  def default$/;"	f	class:PageListComponent
+default	spec/components/task_list_component/task_list_component_preview.rb	/^  def default$/;"	f	class:TaskListComponent
+default	spec/components/trial_role_warning_component/trial_role_warning_component_preview.rb	/^  def default$/;"	f	class:TrialRoleWarningComponent
+default_answer_settings_for_answer_type	app/forms/pages/type_of_answer_form.rb	/^  def default_answer_settings_for_answer_type$/;"	f	class:Pages
+default_attributes	app/components/task_list_component/view.rb	/^    def default_attributes$/;"	f	class:TaskListComponent.View
+default_path	app/controllers/pages/type_of_answer_controller.rb	/^  def default_path(form, action)$/;"	f	class:Pages
+default_provider	app/controllers/authentication_controller.rb	/^  def default_provider$/;"	f	class:AuthenticationController
+delete	app/controllers/forms/delete_confirmation_controller.rb	/^    def delete$/;"	f	class:Forms.DeleteConfirmationController
+delete	app/controllers/pages/conditions_controller.rb	/^  def delete$/;"	f	class:Pages
+delete	app/forms/pages/delete_condition_form.rb	/^  def delete$/;"	f	class:Pages
+delete	spec/support/active_resource_mock.rb	/^    def delete(response, status)$/;"	f	class:ActiveResourceMock.MockBuilder
+delete_condition_form_params	app/controllers/pages/conditions_controller.rb	/^  def delete_condition_form_params$/;"	f	class:Pages
+delete_confirmation_form_params	app/controllers/forms/delete_confirmation_controller.rb	/^    def delete_confirmation_form_params$/;"	f	class:Forms.DeleteConfirmationController
+delete_confirmation_options	app/controllers/forms/delete_confirmation_controller.rb	/^    def delete_confirmation_options$/;"	f	class:Forms.DeleteConfirmationController
+delete_form	app/controllers/forms/delete_confirmation_controller.rb	/^    def delete_form(form)$/;"	f	class:Forms.DeleteConfirmationController
+delete_page	app/controllers/forms/delete_confirmation_controller.rb	/^    def delete_page(form, page)$/;"	f	class:Forms.DeleteConfirmationController
+description	app/components/metrics_summary_component/view.rb	/^    def description$/;"	f	class:MetricsSummaryComponent.View
+destroy	app/controllers/forms/delete_confirmation_controller.rb	/^    def destroy$/;"	f	class:Forms.DeleteConfirmationController
+destroy	app/controllers/pages/conditions_controller.rb	/^  def destroy$/;"	f	class:Pages
+dev	app/lib/hosting_environment.rb	/^  def self.dev?$/;"	F	class:HostingEnvironment
+down	db/migrate/20220713111845_add_service_name_to_active_storage_blobs.active_storage.rb	/^  def down$/;"	f	class:AddServiceNameToActiveStorageBlobs
+down	db/migrate/20230511102334_update_organisation_ref_for_existing_users2.rb	/^  def down$/;"	f	class:UpdateOrganisationRefForExistingUsers2
+down	db/migrate/20230531131201_update_provider_for_existing_users.rb	/^  def down$/;"	f	class:UpdateProviderForExistingUsers
+draft_question	app/controllers/pages_controller.rb	/^  def draft_question$/;"	f
+e2e_user?	app/controllers/authentication_controller.rb	/^  def e2e_user?$/;"	f	class:AuthenticationController
+edit	app/controllers/forms/change_name_controller.rb	/^    def edit$/;"	f	class:Forms.ChangeNameController
+edit	app/controllers/pages/address_settings_controller.rb	/^  def edit$/;"	f	class:Pages
+edit	app/controllers/pages/conditions_controller.rb	/^  def edit$/;"	f	class:Pages
+edit	app/controllers/pages/date_settings_controller.rb	/^  def edit$/;"	f	class:Pages
+edit	app/controllers/pages/guidance_controller.rb	/^  def edit$/;"	f	class:Pages
+edit	app/controllers/pages/name_settings_controller.rb	/^  def edit$/;"	f	class:Pages
+edit	app/controllers/pages/questions_controller.rb	/^  def edit$/;"	f	class:Pages
+edit	app/controllers/pages/selections_settings_controller.rb	/^  def edit$/;"	f	class:Pages
+edit	app/controllers/pages/text_settings_controller.rb	/^  def edit$/;"	f	class:Pages
+edit	app/controllers/pages/type_of_answer_controller.rb	/^  def edit$/;"	f	class:Pages
+edit	app/controllers/users_controller.rb	/^  def edit$/;"	f	class:UsersController
+editor_user	spec/support/authentication_feature_helpers.rb	/^  def editor_user$/;"	f	class:AuthenticationFeatureHelpers
+email_code_matches_confirmation_code	app/forms/forms/submission_email_form.rb	/^  def email_code_matches_confirmation_code$/;"	f
+email_confirmation_status	app/models/form.rb	/^  def email_confirmation_status$/;"	f	class:Form
+email_task_status_service	app/models/form.rb	/^  def email_task_status_service$/;"	f	class:Form
+email_task_statuses	app/service/email_task_status_service.rb	/^  def email_task_statuses$/;"	f	class:EmailTaskStatusService
+enabled?	app/service/feature_service.rb	/^    def enabled?(feature_name)$/;"	f	class:FeatureService
+env_var_version	bin/bundle	/^  def env_var_version$/;"	f
+environment_name	app/components/header_component/view.rb	/^    def environment_name$/;"	f	class:HeaderComponent.View
+environment_name	app/lib/hosting_environment.rb	/^  def self.environment_name$/;"	F	class:HostingEnvironment
+environment_tag	app/components/header_component/view.rb	/^    def environment_tag$/;"	f	class:HeaderComponent.View
+error_component_with_errors	spec/components/page_list_component/error_summary/error_summary_component_preview.rb	/^  def error_component_with_errors$/;"	f	class:PageListComponent
+error_component_without_errors	spec/components/page_list_component/error_summary/error_summary_component_preview.rb	/^  def error_component_without_errors$/;"	f	class:PageListComponent
+error_id	app/components/page_list_component/error_summary/view.rb	/^      def self.error_id(number)$/;"	F	class:PageListComponent.ErrorSummary.View
+error_object	app/components/page_list_component/error_summary/view.rb	/^      def error_object(error_name:, condition_id:, page_index:)$/;"	f	class:PageListComponent.ErrorSummary.View
+errors_for_summary	app/components/page_list_component/error_summary/view.rb	/^      def errors_for_summary$/;"	f	class:PageListComponent.ErrorSummary.View
+errors_with_fields	app/models/condition.rb	/^  def errors_with_fields$/;"	f	class:Condition
+excluding_form	spec/components/mark_complete_component/mark_complete_component_preview.rb	/^  def excluding_form$/;"	f	class:MarkCompleteComponent
+expect_component_to_have_no_axe_errors	spec/support/axe_feature_helpers.rb	/^  def expect_component_to_have_no_axe_errors(page)$/;"	f	class:AxeFeatureHelpers
+expect_page_to_have_no_axe_errors	spec/support/axe_feature_helpers.rb	/^  def expect_page_to_have_no_axe_errors(page)$/;"	f	class:AxeFeatureHelpers
+fill_in_address_settings	spec/features/form/add_or_edit_questions/add_a_question_for_each_type_of_answer_spec.rb	/^  def fill_in_address_settings$/;"	f
+fill_in_date_settings	spec/features/form/add_or_edit_questions/add_a_question_for_each_type_of_answer_spec.rb	/^  def fill_in_date_settings$/;"	f
+fill_in_name_settings	spec/features/form/add_or_edit_questions/add_a_question_for_each_type_of_answer_spec.rb	/^  def fill_in_name_settings$/;"	f
+fill_in_question_text	spec/features/form/add_or_edit_questions/add_a_question_for_each_type_of_answer_spec.rb	/^  def fill_in_question_text$/;"	f
+fill_in_selection_settings	spec/features/form/add_or_edit_questions/add_a_question_for_each_type_of_answer_spec.rb	/^  def fill_in_selection_settings$/;"	f
+fill_in_text_settings	spec/features/form/add_or_edit_questions/add_a_question_for_each_type_of_answer_spec.rb	/^  def fill_in_text_settings$/;"	f
+filter_out_blank_options	app/forms/pages/selections_settings_form.rb	/^  def filter_out_blank_options$/;"	f	class:Pages
+find_for_auth	app/models/user.rb	/^  def self.find_for_auth(attributes)$/;"	F	class:User
+find_for_gds_oauth	app/models/user.rb	/^  def self.find_for_gds_oauth(auth_hash)$/;"	F	class:User
+find_live	app/models/form.rb	/^  def self.find_live(id)$/;"	F	class:Form
+forbidden	app/controllers/errors_controller.rb	/^  def forbidden$/;"	f	class:ErrorsController
+form_field_id	app/components/markdown_editor_component/view.rb	/^    def form_field_id$/;"	f	class:MarkdownEditorComponent.View
+form_submission_email	app/models/form.rb	/^  def form_submission_email$/;"	f	class:Form
+form_went_live_today?	app/components/metrics_summary_component/view.rb	/^    def form_went_live_today?$/;"	f	class:MetricsSummaryComponent.View
+form_went_live_yesterday?	app/components/metrics_summary_component/view.rb	/^    def form_went_live_yesterday?$/;"	f	class:MetricsSummaryComponent.View
+format_date	app/components/metrics_summary_component/view.rb	/^    def format_date(date)$/;"	f	class:MetricsSummaryComponent.View
+format_failure_message	spec/support/matchers/active_resource/helper_methods.rb	/^  def self.format_failure_message(resource, expected_request, _requests)$/;"	F	class:HelperMethods
+formatted_date_range	app/components/metrics_summary_component/view.rb	/^    def formatted_date_range$/;"	f	class:MetricsSummaryComponent.View
+friendly_environment_name	app/lib/hosting_environment.rb	/^  def self.friendly_environment_name$/;"	F	class:HostingEnvironment
+gemfile	bin/bundle	/^  def gemfile$/;"	f
+generate_confirmation_code	app/forms/forms/submission_email_form.rb	/^  def generate_confirmation_code$/;"	f
+generate_form_builder	spec/components/mark_complete_component/view_spec.rb	/^def generate_form_builder(model)$/;"	f
+generate_form_builder	spec/components/markdown_editor_component/view_spec.rb	/^def generate_form_builder(model)$/;"	f
+generic_options	app/service/page_options_service.rb	/^  def generic_options$/;"	f
+get_json	lib/organisations_fetcher.rb	/^  def get_json(uri)$/;"	f	class:OrganisationsFetcher
+get_json_with_subsequent_pages	lib/organisations_fetcher.rb	/^  def get_json_with_subsequent_pages(uri)$/;"	f	class:OrganisationsFetcher
+get_path	app/components/task_list_component/view.rb	/^    def get_path$/;"	f	class:TaskListComponent.Row
+get_status_colour	app/components/task_list_component/view.rb	/^    def get_status_colour$/;"	f	class:TaskListComponent.Row
+given_i_am_a_super_admin_in_the_government_digital_service_organisation	spec/features/users/set_organisation_spec.rb	/^  def given_i_am_a_super_admin_in_the_government_digital_service_organisation$/;"	f
+given_i_am_viewing_the_users_page	spec/features/users/set_organisation_spec.rb	/^  def given_i_am_viewing_the_users_page$/;"	f
+given_organisation?	app/models/user.rb	/^  def given_organisation?$/;"	f	class:User
+goto_page_options	app/forms/pages/conditions_form.rb	/^  def goto_page_options$/;"	f	class:Pages
+goto_page_question_text	app/forms/pages/delete_condition_form.rb	/^  def goto_page_question_text$/;"	f	class:Pages
+goto_page_text_for_condition	app/components/page_list_component/view.rb	/^    def goto_page_text_for_condition(condition)$/;"	f	class:PageListComponent.View
+govuk_assets_path	app/helpers/application_helper.rb	/^  def govuk_assets_path$/;"	f	class:ApplicationHelper
+govuk_back_link_to	app/helpers/application_helper.rb	/^  def govuk_back_link_to(url = :back, body = "Back")$/;"	f	class:ApplicationHelper
+guidance_fields_presence	app/models/concerns/guidance_validation.rb	/^  def guidance_fields_presence$/;"	f	class:GuidanceValidation
+guidance_form_params	app/controllers/pages/guidance_controller.rb	/^  def guidance_form_params$/;"	f	class:Pages
+guidance_markdown_options	app/service/page_options_service.rb	/^  def guidance_markdown_options$/;"	f
+handle_submit_action	app/controllers/pages/questions_controller.rb	/^  def handle_submit_action$/;"	f	class:Pages
+has_next_page?	app/models/page.rb	/^  def has_next_page?$/;"	f	class:Page
+has_no_remaining_routes_available?	app/models/form.rb	/^  def has_no_remaining_routes_available?$/;"	f	class:Form
+has_routing_conditions	app/models/form.rb	/^  def has_routing_conditions$/;"	f	class:Form
+has_routing_errors	app/forms/forms/mark_complete_form.rb	/^  def has_routing_errors$/;"	f	class:Forms
+has_signed_current_organisation_mou?	app/models/user.rb	/^  def has_signed_current_organisation_mou?$/;"	f	class:User
+header_component_options	app/helpers/application_helper.rb	/^  def header_component_options(user:)$/;"	f	class:ApplicationHelper
+heading_text	app/components/metrics_summary_component/view.rb	/^    def heading_text$/;"	f	class:MetricsSummaryComponent.View
+hint_for_edit_page_field	app/helpers/application_helper.rb	/^  def hint_for_edit_page_field(field, answer_type, answer_settings)$/;"	f	class:ApplicationHelper
+hint_options	app/service/page_options_service.rb	/^  def hint_options$/;"	f
+html_list_item	app/service/page_options_service.rb	/^  def html_list_item(item)$/;"	f
+html_ordered_list	app/service/page_options_service.rb	/^  def html_ordered_list(list_items)$/;"	f
+http_mock	spec/support/active_resource_mock.rb	/^    def http_mock(&block)$/;"	f	class:ActiveResourceMock.MockBuilder
+include_none_of_the_above_param_values	app/controllers/pages/selections_settings_controller.rb	/^  def include_none_of_the_above_param_values$/;"	f	class:Pages
+incomplete_email_tasks	app/service/email_task_status_service.rb	/^  def incomplete_email_tasks$/;"	f	class:EmailTaskStatusService
+index	app/controllers/forms_controller.rb	/^  def index$/;"	f	class:FormsController
+index	app/controllers/mou_signatures_controller.rb	/^  def index$/;"	f	class:MouSignaturesController
+index	app/controllers/pages_controller.rb	/^  def index$/;"	f	class:PagesController
+index	app/controllers/users_controller.rb	/^  def index$/;"	f	class:UsersController
+index	spec/controller/application_controller_spec.rb	/^    def index$/;"	f
+initialize	app/components/error_summary_component/view.rb	/^    def initialize(errors: [])$/;"	f	class:ErrorSummaryComponent.View
+initialize	app/components/form_status_tag_component/view.rb	/^    def initialize(status: :draft)$/;"	f	class:FormStatusTagComponent.View
+initialize	app/components/form_status_tag_description_component/view.rb	/^    def initialize(status: :draft)$/;"	f	class:FormStatusTagDescriptionComponent.View
+initialize	app/components/form_url_component/view.rb	/^    def initialize(runner_link)$/;"	f	class:FormUrlComponent.View
+initialize	app/components/header_component/view.rb	/^    def initialize(hosting_environment: HostingEnvironment, navigation_items: [])$/;"	f	class:HeaderComponent.View
+initialize	app/components/mark_complete_component/view.rb	/^    def initialize(form_model: nil, generate_form: true, form_builder: nil, path: nil, legend: nil, hint: nil)$/;"	f	class:MarkCompleteComponent.View
+initialize	app/components/markdown_editor_component/view.rb	/^    def initialize(attribute_name,$/;"	f	class:MarkdownEditorComponent.View
+initialize	app/components/metrics_summary_component/view.rb	/^    def initialize(form_live_date, metrics_data)$/;"	f	class:MetricsSummaryComponent.View
+initialize	app/components/page_list_component/error_summary/view.rb	/^      def initialize(pages: [])$/;"	f	class:PageListComponent.ErrorSummary.View
+initialize	app/components/page_list_component/view.rb	/^    def initialize(form_id:, pages: [])$/;"	f	class:PageListComponent.View
+initialize	app/components/page_settings_summary_component/view.rb	/^    def initialize(page_object, change_answer_type_path: "", change_selections_settings_path: "", change_text_settings_path: "", change_date_settings_path: "", change_address_settings_path: "", change_name_settings_path: "")$/;"	f	class:PageSettingsSummaryComponent.View
+initialize	app/components/preview_link_component/view.rb	/^    def initialize(pages, link)$/;"	f	class:PreviewLinkComponent.View
+initialize	app/components/task_list_component/view.rb	/^    def initialize(completed_task_count: nil, total_task_count: nil, sections: [], classes: [], html_attributes: {})$/;"	f	class:TaskListComponent.View
+initialize	app/components/task_list_component/view.rb	/^    def initialize(task_name:, path:, confirm_path: nil, status: nil, hint_text: nil, active: true)$/;"	f	class:TaskListComponent.Row
+initialize	app/components/trial_role_warning_component/view.rb	/^    def initialize(link_url:)$/;"	f	class:TrialRoleWarningComponent.View
+initialize	app/forms/forms/contact_details_form.rb	/^  def initialize(attrs = {})$/;"	f	class:Forms
+initialize	app/policies/form_policy.rb	/^    def initialize(user, scope)$/;"	f	class:FormPolicy.Scope
+initialize	app/policies/form_policy.rb	/^  def initialize(user, form)$/;"	f	class:FormPolicy
+initialize	app/policies/mou_signature_policy.rb	/^  def initialize(user, _record)$/;"	f	class:MouSignaturePolicy
+initialize	app/policies/user_policy.rb	/^    def initialize(user, scope)$/;"	f	class:UserPolicy.Scope
+initialize	app/policies/user_policy.rb	/^  def initialize(user, record)$/;"	f	class:UserPolicy
+initialize	app/service/email_task_status_service.rb	/^  def initialize(form:)$/;"	f	class:EmailTaskStatusService
+initialize	app/service/form_task_list_service.rb	/^  def initialize(form:, current_user:)$/;"	f
+initialize	app/service/navigation_items_service.rb	/^    def initialize(text:, href:, active:, classes: [])$/;"	f	class:NavigationItemsService
+initialize	app/service/navigation_items_service.rb	/^  def initialize(user:)$/;"	f
+initialize	app/service/page_options_service.rb	/^  def initialize(page:, pages:, read_only: true)$/;"	f
+initialize	app/service/page_summary_card_data_service.rb	/^  def initialize(page:, pages:)$/;"	f
+initialize	app/service/page_summary_data/guidance_service.rb	/^    def initialize(form:, page:)$/;"	f	class:PageSummaryData
+initialize	app/service/user_update_service.rb	/^  def initialize(user, params)$/;"	f	class:UserUpdateService
+initialize	app/service/user_upgrade_request_service.rb	/^  def initialize(user)$/;"	f	class:UserUpgradeRequestService
+initialize	spec/support/active_resource_mock.rb	/^    def initialize(resource, mock)$/;"	f	class:ActiveResourceMock.MockBuilder
+initialize	spec/support/logger_mock.rb	/^  def initialize$/;"	f	class:LoggerMock
+internal_server_error	app/controllers/errors_controller.rb	/^  def internal_server_error$/;"	f	class:ErrorsController
+invoked_as_script?	bin/bundle	/^  def invoked_as_script?$/;"	f
+is_json	app/lib/json_log_formatter.rb	/^  def is_json(message)$/;"	f	class:JsonLogFormatter
+is_optional?	app/models/page.rb	/^  def is_optional?$/;"	f	class:Page
+is_optional_value	app/models/page.rb	/^  def is_optional_value$/;"	f	class:Page
+link_to_runner	app/helpers/application_helper.rb	/^  def link_to_runner(runner_url, form_id, form_slug, mode: :preview_draft)$/;"	f	class:ApplicationHelper
+live_status	spec/components/form_status_tag_component/form_status_tag_component_preview.rb	/^  def live_status$/;"	f	class:FormStatusTagComponent
+live_status	spec/components/form_status_tag_description_component/form_status_tag_component_preview.rb	/^  def live_status$/;"	f	class:FormStatusTagDescriptionComponent
+load_bundler!	bin/bundle	/^  def load_bundler!$/;"	f
+load_page_variables	app/controllers/forms/delete_confirmation_controller.rb	/^    def load_page_variables$/;"	f	class:Forms.DeleteConfirmationController
+local_development	app/lib/hosting_environment.rb	/^  def self.local_development?$/;"	F	class:HostingEnvironment
+lockfile	bin/bundle	/^  def lockfile$/;"	f
+lockfile_version	bin/bundle	/^  def lockfile_version$/;"	f
+log	app/lib/event_logger.rb	/^  def self.log(object)$/;"	F	class:EventLogger
+logged	spec/support/logger_mock.rb	/^  def logged(level)$/;"	f	class:LoggerMock
+login_as	spec/support/authentication_feature_helpers.rb	/^  def login_as(user, opts = {})$/;"	f	class:AuthenticationFeatureHelpers
+login_as_editor_user	spec/support/authentication_feature_helpers.rb	/^  def login_as_editor_user$/;"	f	class:AuthenticationFeatureHelpers
+login_as_super_admin_user	spec/support/authentication_feature_helpers.rb	/^  def login_as_super_admin_user$/;"	f	class:AuthenticationFeatureHelpers
+login_as_trial_user	spec/support/authentication_feature_helpers.rb	/^  def login_as_trial_user$/;"	f	class:AuthenticationFeatureHelpers
+logout	spec/support/authentication_feature_helpers.rb	/^  def logout$/;"	f	class:AuthenticationFeatureHelpers
+made_live?	app/forms/forms/make_live_form.rb	/^  def made_live?$/;"	f	class:Forms
+made_live_date	app/models/form.rb	/^  def made_live_date$/;"	f	class:Form
+maintenance	app/controllers/errors_controller.rb	/^  def maintenance$/;"	f	class:ErrorsController
+make_live!	app/models/form.rb	/^  def make_live!$/;"	f	class:Form
+make_live_form_params	app/controllers/forms/make_live_controller.rb	/^    def make_live_form_params$/;"	f	class:Forms.MakeLiveController
+mark_complete_form_params	app/controllers/forms_controller.rb	/^  def mark_complete_form_params$/;"	f
+mark_complete_options	app/components/mark_complete_component/view.rb	/^    def mark_complete_options$/;"	f	class:MarkCompleteComponent.View
+mark_pages_section_completed	app/controllers/forms_controller.rb	/^  def mark_pages_section_completed$/;"	f	class:FormsController
+mark_section	app/forms/forms/mark_complete_form.rb	/^  def mark_section$/;"	f	class:Forms
+mark_submission_email_as_confirmed	app/forms/forms/submission_email_form.rb	/^  def mark_submission_email_as_confirmed$/;"	f
+markdown_content	app/service/page_options_service.rb	/^  def markdown_content$/;"	f
+markdown_content	app/service/page_summary_data/guidance_service.rb	/^    def markdown_content$/;"	f	class:PageSummaryData
+markdown_length_and_tags	app/models/concerns/guidance_validation.rb	/^  def markdown_length_and_tags$/;"	f	class:GuidanceValidation
+marked_complete?	app/forms/forms/mark_complete_form.rb	/^  def marked_complete?$/;"	f	class:Forms
+method_missing	spec/support/logger_mock.rb	/^  def method_missing(level, msg = nil) # rubocop:disable Style\/MissingRespondToMissing$/;"	f	class:LoggerMock
+metric_namespace	app/service/cloud_watch_service.rb	/^  def self.metric_namespace$/;"	F	class:CloudWatchService
+metrics_data	app/models/form.rb	/^  def metrics_data$/;"	f	class:Form
+mock_gds_sso_sign_out_url	app/controllers/authentication_controller.rb	/^  def mock_gds_sso_sign_out_url$/;"	f	class:AuthenticationController
+mock_resource	spec/support/active_resource_mock.rb	/^  def self.mock_resource(resource, methods)$/;"	F	class:ActiveResourceMock
+mou_navigation_item	app/service/navigation_items_service.rb	/^  def mou_navigation_item$/;"	f
+mou_signature_params	app/controllers/mou_signatures_controller.rb	/^  def mou_signature_params$/;"	f	class:MouSignaturesController
+move_page	app/controllers/pages_controller.rb	/^  def move_page$/;"	f	class:PagesController
+move_page	app/models/page.rb	/^  def move_page(direction)$/;"	f	class:Page
+move_params	app/controllers/pages_controller.rb	/^  def move_params$/;"	f
+msoBrowserCheck	app/frontend/javascript/paste-html-to-markdown/__fixtures__/ms-word-2016-comments.html	/^function msoBrowserCheck()$/;"	f
+msoCommentHide	app/frontend/javascript/paste-html-to-markdown/__fixtures__/ms-word-2016-comments.html	/^function msoCommentHide(com_id)$/;"	f
+msoCommentShow	app/frontend/javascript/paste-html-to-markdown/__fixtures__/ms-word-2016-comments.html	/^function msoCommentShow(anchor_id, com_id)$/;"	f
+must_be_supply_contact_details	app/forms/forms/contact_details_form.rb	/^  def must_be_supply_contact_details$/;"	f	class:Forms
+name_answer_type	app/service/page_options_service.rb	/^  def name_answer_type$/;"	f
+name_options	app/service/page_options_service.rb	/^  def name_options$/;"	f
+name_path	app/controllers/pages/type_of_answer_controller.rb	/^  def name_path(form, action)$/;"	f	class:Pages
+name_settings_form_params	app/controllers/pages/name_settings_controller.rb	/^  def name_settings_form_params$/;"	f	class:Pages
+navigation_items	app/service/navigation_items_service.rb	/^  def navigation_items$/;"	f
+new	app/controllers/forms/change_name_controller.rb	/^    def new$/;"	f	class:Forms.ChangeNameController
+new	app/controllers/forms/contact_details_controller.rb	/^    def new$/;"	f	class:Forms.ContactDetailsController
+new	app/controllers/forms/declaration_controller.rb	/^    def new$/;"	f	class:Forms.DeclarationController
+new	app/controllers/forms/make_live_controller.rb	/^    def new$/;"	f	class:Forms.MakeLiveController
+new	app/controllers/forms/privacy_policy_controller.rb	/^    def new$/;"	f	class:Forms.PrivacyPolicyController
+new	app/controllers/forms/submission_email_controller.rb	/^    def new$/;"	f	class:Forms.SubmissionEmailController
+new	app/controllers/forms/what_happens_next_controller.rb	/^    def new$/;"	f	class:Forms.WhatHappensNextController
+new	app/controllers/mou_signatures_controller.rb	/^  def new$/;"	f	class:MouSignaturesController
+new	app/controllers/pages/address_settings_controller.rb	/^  def new$/;"	f	class:Pages
+new	app/controllers/pages/conditions_controller.rb	/^  def new$/;"	f	class:Pages
+new	app/controllers/pages/date_settings_controller.rb	/^  def new$/;"	f	class:Pages
+new	app/controllers/pages/guidance_controller.rb	/^  def new$/;"	f	class:Pages
+new	app/controllers/pages/name_settings_controller.rb	/^  def new$/;"	f	class:Pages
+new	app/controllers/pages/question_text_controller.rb	/^  def new$/;"	f	class:Pages
+new	app/controllers/pages/questions_controller.rb	/^  def new$/;"	f	class:Pages
+new	app/controllers/pages/selections_settings_controller.rb	/^  def new$/;"	f	class:Pages
+new	app/controllers/pages/text_settings_controller.rb	/^  def new$/;"	f	class:Pages
+new	app/controllers/pages/type_of_answer_controller.rb	/^  def new$/;"	f	class:Pages
+new	app/controllers/user_upgrade_requests_controller.rb	/^  def new$/;"	f	class:UserUpgradeRequestsController
+next_page_path	app/controllers/pages/type_of_answer_controller.rb	/^  def next_page_path(form, answer_type, action)$/;"	f	class:Pages
+non_maintenance_bypass_ip_address?	app/controllers/application_controller.rb	/^  def non_maintenance_bypass_ip_address?$/;"	f	class:ApplicationController
+not_found	app/controllers/errors_controller.rb	/^  def not_found$/;"	f	class:ErrorsController
+number_of_days	app/components/metrics_summary_component/view.rb	/^    def number_of_days$/;"	f	class:MetricsSummaryComponent.View
+on_user_update	app/service/user_update_service.rb	/^  def on_user_update$/;"	f	class:UserUpdateService
+only_one_option_param_values	app/controllers/pages/selections_settings_controller.rb	/^  def only_one_option_param_values$/;"	f	class:Pages
+options	app/service/page_summary_data/guidance_service.rb	/^    def options$/;"	f	class:PageSummaryData
+organisation_id_raw	app/controllers/users_controller.rb	/^  def organisation_id_raw$/;"	f	class:UsersController
+organisation_valid?	app/models/user.rb	/^  def organisation_valid?$/;"	f	class:User
+organisations	lib/organisations_fetcher.rb	/^  def organisations$/;"	f	class:OrganisationsFetcher
+page	app/controllers/pages_controller.rb	/^  def page$/;"	f
+page_heading_options	app/service/page_options_service.rb	/^  def page_heading_options$/;"	f
+page_number	app/models/form.rb	/^  def page_number(page)$/;"	f	class:Form
+page_params	app/controllers/pages/questions_controller.rb	/^  def page_params$/;"	f	class:Pages
+page_title	app/helpers/application_helper.rb	/^  def page_title(separator = " – ")$/;"	f	class:ApplicationHelper
+pages_after_current_page	app/forms/pages/conditions_form.rb	/^  def pages_after_current_page(all_pages, current_page)$/;"	f	class:Pages
+path	app/components/task_list_component/view.rb	/^    def path$/;"	f	class:TaskListComponent.Row
+ping	app/controllers/heartbeat_controller.rb	/^  def ping$/;"	f	class:HeartbeatController
+prep_user	config/initializers/warden/strategies/auth0.rb	/^  def prep_user(auth_hash)$/;"	f
+prep_user	config/initializers/warden/strategies/cddo_sso.rb	/^  def prep_user(auth_hash)$/;"	f
+prep_user	lib/warden/strategies/omniauth.rb	/^    def prep_user(auth_hash)$/;"	f	class:Warden.OmniAuth
+preview_button_translation	app/components/markdown_editor_component/view.rb	/^    def preview_button_translation$/;"	f	class:MarkdownEditorComponent.View
+preview_html	app/controllers/pages/guidance_controller.rb	/^  def preview_html(guidance_form)$/;"	f	class:Pages
+previous_page	app/controllers/forms/delete_confirmation_controller.rb	/^    def previous_page(id)$/;"	f	class:Forms.DeleteConfirmationController
+primary_key_type	db/migrate/20220713111846_create_active_storage_variant_records.active_storage.rb	/^  def primary_key_type$/;"	f	class:CreateActiveStorageVariantRecords
+print_route	app/service/page_options_service.rb	/^  def print_route(condition)$/;"	f
+privacy_policy_form_params	app/controllers/forms/privacy_policy_controller.rb	/^    def privacy_policy_form_params$/;"	f	class:Forms.PrivacyPolicyController
+profile_navigation_item	app/service/navigation_items_service.rb	/^  def profile_navigation_item$/;"	f
+qualifying_route_pages	app/models/form.rb	/^  def qualifying_route_pages$/;"	f	class:Form
+qualifying_route_pages	app/models/page.rb	/^  def self.qualifying_route_pages(pages)$/;"	F	class:Page
+question_text_for_page	app/components/page_list_component/view.rb	/^    def question_text_for_page(id)$/;"	f	class:PageListComponent.View
+question_text_form_params	app/controllers/pages/question_text_controller.rb	/^  def question_text_form_params$/;"	f	class:Pages
+question_text_with_optional_suffix	app/helpers/application_helper.rb	/^  def question_text_with_optional_suffix(page)$/;"	f	class:ApplicationHelper
+question_with_number	app/models/page.rb	/^  def question_with_number$/;"	f	class:Page
+read	spec/support/active_resource_mock.rb	/^    def read(response, status)$/;"	f	class:ActiveResourceMock.MockBuilder
+ready_for_live?	app/service/email_task_status_service.rb	/^  def ready_for_live?$/;"	f	class:EmailTaskStatusService
+redirect_to_omniauth	app/controllers/authentication_controller.rb	/^  def redirect_to_omniauth$/;"	f	class:AuthenticationController
+redirect_uri	config/initializers/authentication.rb	/^  def redirect_uri$/;"	f	class:OmniAuth
+remove	app/forms/pages/selections_settings_form.rb	/^  def remove(index)$/;"	f	class:Pages
+render?	app/components/error_summary_component/view.rb	/^    def render?$/;"	f	class:ErrorSummaryComponent.View
+render?	app/components/metrics_summary_component/view.rb	/^    def render?$/;"	f	class:MetricsSummaryComponent.View
+render?	app/components/preview_link_component/view.rb	/^    def render?$/;"	f	class:PreviewLinkComponent.View
+render_confirmation	app/controllers/forms/make_live_controller.rb	/^    def render_confirmation(made_live)$/;"	f	class:Forms.MakeLiveController
+render_counter?	app/components/task_list_component/view.rb	/^    def render_counter?$/;"	f	class:TaskListComponent.View
+render_new	app/controllers/forms/make_live_controller.rb	/^    def render_new$/;"	f	class:Forms.MakeLiveController
+render_preview	app/controllers/pages/guidance_controller.rb	/^  def render_preview$/;"	f	class:Pages
+request	config/initializers/warden/strategies/basic_auth.rb	/^  def request$/;"	f
+request_upgrade	app/service/user_upgrade_request_service.rb	/^  def request_upgrade$/;"	f	class:UserUpgradeRequestService
+required_parts_of_form_completed	app/forms/forms/make_live_form.rb	/^  def required_parts_of_form_completed$/;"	f	class:Forms
+requires_name?	app/models/user.rb	/^  def requires_name?$/;"	f	class:User
+requires_organisation?	app/models/user.rb	/^  def requires_organisation?$/;"	f	class:User
+resolve	app/policies/form_policy.rb	/^    def resolve$/;"	f	class:FormPolicy.Scope
+resolve	app/policies/user_policy.rb	/^    def resolve$/;"	f	class:UserPolicy.Scope
+response_body=	config/initializers/warden/strategies/basic_auth.rb	/^  def response_body=(message)$/;"	f
+route_options	app/service/page_options_service.rb	/^  def route_options$/;"	f
+route_to	app/controllers/pages/guidance_controller.rb	/^  def route_to$/;"	f	class:Pages
+route_value	app/service/page_options_service.rb	/^  def route_value$/;"	f
+routing_answer_options	app/forms/pages/conditions_form.rb	/^  def routing_answer_options$/;"	f	class:Pages
+routing_page	app/controllers/pages/conditions_controller.rb	/^  def routing_page$/;"	f	class:Pages
+section_1	app/service/form_task_list_service.rb	/^  def section_1$/;"	f
+section_1_tasks	app/service/form_task_list_service.rb	/^  def section_1_tasks$/;"	f
+section_2	app/service/form_task_list_service.rb	/^  def section_2$/;"	f
+section_2_tasks	app/service/form_task_list_service.rb	/^  def section_2_tasks$/;"	f
+section_3	app/service/form_task_list_service.rb	/^  def section_3$/;"	f
+section_3_tasks	app/service/form_task_list_service.rb	/^  def section_3_tasks$/;"	f
+section_4	app/service/form_task_list_service.rb	/^  def section_4$/;"	f
+section_4_tasks	app/service/form_task_list_service.rb	/^  def section_4_tasks$/;"	f
+section_with_body_instead_of_rows	spec/components/task_list_component/task_list_component_preview.rb	/^  def section_with_body_instead_of_rows$/;"	f	class:TaskListComponent
+section_without_body_or_rows	spec/components/task_list_component/task_list_component_preview.rb	/^  def section_without_body_or_rows$/;"	f	class:TaskListComponent
+selection_answer_type	app/service/page_options_service.rb	/^  def selection_answer_type$/;"	f
+selection_list	app/service/page_options_service.rb	/^  def selection_list$/;"	f
+selection_options	app/service/page_options_service.rb	/^  def selection_options$/;"	f
+selection_options_form_objects	app/forms/pages/selections_settings_form.rb	/^  def selection_options_form_objects$/;"	f	class:Pages
+selection_options_param_values	app/controllers/pages/selections_settings_controller.rb	/^  def selection_options_param_values$/;"	f	class:Pages
+selection_path	app/controllers/pages/type_of_answer_controller.rb	/^  def selection_path(form, action)$/;"	f	class:Pages
+selections_settings_form_params	app/controllers/pages/selections_settings_controller.rb	/^  def selections_settings_form_params$/;"	f	class:Pages
+set_email_code_form_params	app/controllers/forms/submission_email_controller.rb	/^    def set_email_code_form_params$/;"	f	class:Forms.SubmissionEmailController
+set_email_form_params	app/controllers/forms/submission_email_controller.rb	/^    def set_email_form_params$/;"	f	class:Forms.SubmissionEmailController
+set_page_title	app/helpers/application_helper.rb	/^  def set_page_title(title)$/;"	f	class:ApplicationHelper
+set_request_id	app/controllers/application_controller.rb	/^  def set_request_id$/;"	f	class:ApplicationController
+set_routing_page	app/controllers/pages/conditions_controller.rb	/^  def set_routing_page$/;"	f	class:Pages
+setup_draft_question_for_existing_page	app/controllers/pages_controller.rb	/^  def setup_draft_question_for_existing_page$/;"	f
+should_show_mous_link?	app/service/navigation_items_service.rb	/^  def should_show_mous_link?$/;"	f
+should_show_user_profile_link?	app/service/navigation_items_service.rb	/^  def should_show_user_profile_link?$/;"	f
+show	app/controllers/forms_controller.rb	/^  def show$/;"	f	class:FormsController
+show	app/controllers/mou_signatures_controller.rb	/^  def show$/;"	f	class:MouSignaturesController
+show_down_button	app/components/page_list_component/view.rb	/^    def show_down_button(index)$/;"	f	class:PageListComponent.View
+show_form	app/controllers/forms/live_controller.rb	/^  def show_form$/;"	f	class:Forms
+show_optional_suffix?	app/models/page.rb	/^  def show_optional_suffix?$/;"	f	class:Page
+show_pages	app/controllers/forms/live_controller.rb	/^  def show_pages$/;"	f	class:Forms
+show_selection_options	app/models/page.rb	/^  def show_selection_options$/;"	f	class:Page
+show_up_button	app/components/page_list_component/view.rb	/^    def show_up_button(index)$/;"	f	class:PageListComponent.View
+sign_out	app/controllers/authentication_controller.rb	/^  def sign_out$/;"	f	class:AuthenticationController
+sign_up	app/controllers/authentication_controller.rb	/^  def sign_up$/;"	f	class:AuthenticationController
+signout_navigation_item	app/service/navigation_items_service.rb	/^  def signout_navigation_item$/;"	f
+signout_url	app/service/navigation_items_service.rb	/^  def signout_url$/;"	f
+start_of_today	app/service/cloud_watch_service.rb	/^  def self.start_of_today$/;"	F	class:CloudWatchService
+status	app/models/form.rb	/^  def status$/;"	f	class:Form
+status_colour	app/components/form_status_tag_component/view.rb	/^    def status_colour$/;"	f	class:FormStatusTagComponent.View
+status_counts	app/service/form_task_list_service.rb	/^  def status_counts$/;"	f
+status_id	app/components/task_list_component/view.rb	/^    def status_id$/;"	f	class:TaskListComponent.Row
+status_text	app/components/form_status_tag_component/view.rb	/^    def status_text$/;"	f	class:FormStatusTagComponent.View
+statuses_by_user	app/service/form_task_list_service.rb	/^  def statuses_by_user$/;"	f
+store_location	app/controllers/authentication_controller.rb	/^  def store_location(path)$/;"	f	class:AuthenticationController
+stored_location	app/controllers/authentication_controller.rb	/^  def stored_location$/;"	f	class:AuthenticationController
+submission_email_code	app/controllers/forms/submission_email_controller.rb	/^    def submission_email_code$/;"	f	class:Forms.SubmissionEmailController
+submission_email_code_sent	app/controllers/forms/submission_email_controller.rb	/^    def submission_email_code_sent$/;"	f	class:Forms.SubmissionEmailController
+submission_email_confirmed	app/controllers/forms/submission_email_controller.rb	/^    def submission_email_confirmed$/;"	f	class:Forms.SubmissionEmailController
+submission_email_form	app/controllers/forms/submission_email_controller.rb	/^    def submission_email_form$/;"	f	class:Forms.SubmissionEmailController
+submission_email_status	app/service/email_task_status_service.rb	/^  def submission_email_status$/;"	f	class:EmailTaskStatusService
+submit	app/forms/forms/change_email_form.rb	/^  def submit$/;"	f	class:Forms
+submit	app/forms/forms/change_name_form.rb	/^  def submit$/;"	f	class:Forms
+submit	app/forms/forms/contact_details_form.rb	/^  def submit$/;"	f	class:Forms
+submit	app/forms/forms/declaration_form.rb	/^  def submit$/;"	f	class:Forms
+submit	app/forms/forms/make_live_form.rb	/^  def submit$/;"	f	class:Forms
+submit	app/forms/forms/privacy_policy_form.rb	/^  def submit$/;"	f	class:Forms
+submit	app/forms/forms/submission_email_form.rb	/^  def submit$/;"	f	class:Forms
+submit	app/forms/forms/what_happens_next_form.rb	/^  def submit$/;"	f	class:Forms
+submit	app/forms/pages/address_settings_form.rb	/^  def submit(session)$/;"	f	class:Pages
+submit	app/forms/pages/conditions_form.rb	/^  def submit$/;"	f	class:Pages
+submit	app/forms/pages/date_settings_form.rb	/^  def submit$/;"	f	class:Pages
+submit	app/forms/pages/guidance_form.rb	/^  def submit$/;"	f	class:Pages
+submit	app/forms/pages/name_settings_form.rb	/^  def submit(session)$/;"	f	class:Pages
+submit	app/forms/pages/question_form.rb	/^  def submit$/;"	f	class:Pages
+submit	app/forms/pages/question_text_form.rb	/^  def submit(session)$/;"	f	class:Pages
+submit	app/forms/pages/selections_settings_form.rb	/^  def submit(session)$/;"	f	class:Pages
+submit	app/forms/pages/text_settings_form.rb	/^  def submit(session)$/;"	f	class:Pages
+submit	app/forms/pages/type_of_answer_form.rb	/^  def submit$/;"	f	class:Pages
+submit	app/models/page.rb	/^  def submit$/;"	f	class:Page
+submit_request	spec/features/users/user_upgrade_request_spec.rb	/^  def submit_request$/;"	f
+super_admin_user	spec/support/authentication_feature_helpers.rb	/^  def super_admin_user$/;"	f	class:AuthenticationFeatureHelpers
+supplied	app/forms/forms/contact_details_form.rb	/^  def supplied(field)$/;"	f	class:Forms
+support_navigation_item	app/service/navigation_items_service.rb	/^  def support_navigation_item$/;"	f
+system!	bin/setup	/^def system!(*args)$/;"	f
+test_environment	app/lib/hosting_environment.rb	/^  def self.test_environment?$/;"	F	class:HostingEnvironment
+test_org	spec/support/authentication_feature_helpers.rb	/^  def test_org$/;"	f	class:AuthenticationFeatureHelpers
+text_options	app/service/page_options_service.rb	/^  def text_options$/;"	f
+text_path	app/controllers/pages/type_of_answer_controller.rb	/^  def text_path(form, action)$/;"	f	class:Pages
+text_settings_form_params	app/controllers/pages/text_settings_controller.rb	/^  def text_settings_form_params$/;"	f	class:Pages
+then_i_agree_and_submit_the_mou	spec/features/mou/sign_mou_spec.rb	/^  def then_i_agree_and_submit_the_mou$/;"	f
+then_i_can_navigate_to_the_upgrade_page	spec/features/users/user_upgrade_request_spec.rb	/^  def then_i_can_navigate_to_the_upgrade_page$/;"	f
+then_i_can_see_request_sent_banner	spec/features/users/user_upgrade_request_spec.rb	/^  def then_i_can_see_request_sent_banner$/;"	f
+then_i_can_see_the_mou_confirmation_page	spec/features/mou/sign_mou_spec.rb	/^  def then_i_can_see_the_mou_confirmation_page$/;"	f
+then_i_can_see_the_mou_list	spec/features/mou/view_signed_mous_spec.rb	/^  def then_i_can_see_the_mou_list$/;"	f
+then_i_can_see_the_mou_page	spec/features/mou/upgrade_user_changes_mou_spec.rb	/^  def then_i_can_see_the_mou_page$/;"	f
+then_i_can_see_the_mou_page	spec/features/mou/view_signed_mous_spec.rb	/^  def then_i_can_see_the_mou_page$/;"	f
+then_i_can_see_the_org_forms	spec/features/users/set_role_spec.rb	/^  def then_i_can_see_the_org_forms$/;"	f
+then_i_can_see_the_trial_user_forms	spec/features/users/set_role_spec.rb	/^  def then_i_can_see_the_trial_user_forms$/;"	f
+then_i_can_see_trial_account_banner	spec/features/users/user_upgrade_request_spec.rb	/^  def then_i_can_see_trial_account_banner$/;"	f
+then_i_cannot_see_the_government_digital_service_forms	spec/features/users/set_organisation_spec.rb	/^  def then_i_cannot_see_the_government_digital_service_forms$/;"	f
+then_i_cannot_see_the_org_forms	spec/features/users/set_role_spec.rb	/^  def then_i_cannot_see_the_org_forms$/;"	f
+then_i_click_on_the_mou_link	spec/features/mou/view_signed_mous_spec.rb	/^  def then_i_click_on_the_mou_link$/;"	f
+then_i_edit_the_name_of_the_form	spec/features/form/create_or_edit_a_form_spec.rb	/^  def then_i_edit_the_name_of_the_form$/;"	f
+then_i_see_an_error	spec/features/users/user_upgrade_request_spec.rb	/^  def then_i_see_an_error$/;"	f
+then_i_see_the_mou_with_no_organisation	spec/features/mou/upgrade_user_changes_mou_spec.rb	/^  def then_i_see_the_mou_with_no_organisation$/;"	f
+then_i_see_the_mou_with_organisation	spec/features/mou/upgrade_user_changes_mou_spec.rb	/^  def then_i_see_the_mou_with_organisation$/;"	f
+then_i_should_have_a_draft_form	spec/features/form/create_or_edit_a_form_spec.rb	/^  def then_i_should_have_a_draft_form$/;"	f
+then_i_update_the_user_organisation	spec/features/mou/upgrade_user_changes_mou_spec.rb	/^  def then_i_update_the_user_organisation$/;"	f
+then_i_visit_the_users_page	spec/features/mou/upgrade_user_changes_mou_spec.rb	/^  def then_i_visit_the_users_page$/;"	f
+then_the_users_organisation_name_is_updated	spec/features/users/set_organisation_spec.rb	/^  def then_the_users_organisation_name_is_updated$/;"	f
+title_with_error_prefix	app/helpers/application_helper.rb	/^  def title_with_error_prefix(title, error)$/;"	f	class:ApplicationHelper
+translation_key_for_answer_type	app/helpers/application_helper.rb	/^  def translation_key_for_answer_type(answer_type, answer_settings)$/;"	f	class:ApplicationHelper
+translations	app/components/markdown_editor_component/view.rb	/^    def translations$/;"	f	class:MarkdownEditorComponent.View
+trial_user	spec/support/authentication_feature_helpers.rb	/^  def trial_user$/;"	f	class:AuthenticationFeatureHelpers
+trial_user_upgraded?	app/models/user.rb	/^  def trial_user_upgraded?$/;"	f	class:User
+up	db/migrate/20220713111845_add_service_name_to_active_storage_blobs.active_storage.rb	/^  def up$/;"	f	class:AddServiceNameToActiveStorageBlobs
+up	db/migrate/20230426150951_update_organisation_ref_for_existing_users.rb	/^  def up$/;"	f	class:UpdateOrganisationRefForExistingUsers
+up	db/migrate/20230511102334_update_organisation_ref_for_existing_users2.rb	/^  def up$/;"	f	class:UpdateOrganisationRefForExistingUsers2
+up	db/migrate/20230531131201_update_provider_for_existing_users.rb	/^  def up$/;"	f	class:UpdateProviderForExistingUsers
+update	app/controllers/forms/change_name_controller.rb	/^    def update$/;"	f	class:Forms.ChangeNameController
+update	app/controllers/pages/address_settings_controller.rb	/^  def update$/;"	f	class:Pages
+update	app/controllers/pages/conditions_controller.rb	/^  def update$/;"	f	class:Pages
+update	app/controllers/pages/date_settings_controller.rb	/^  def update$/;"	f	class:Pages
+update	app/controllers/pages/guidance_controller.rb	/^  def update$/;"	f	class:Pages
+update	app/controllers/pages/name_settings_controller.rb	/^  def update$/;"	f	class:Pages
+update	app/controllers/pages/questions_controller.rb	/^  def update$/;"	f	class:Pages
+update	app/controllers/pages/selections_settings_controller.rb	/^  def update$/;"	f	class:Pages
+update	app/controllers/pages/text_settings_controller.rb	/^  def update$/;"	f	class:Pages
+update	app/controllers/pages/type_of_answer_controller.rb	/^  def update$/;"	f	class:Pages
+update	app/controllers/users_controller.rb	/^  def update$/;"	f	class:UsersController
+update	spec/support/active_resource_mock.rb	/^    def update(response, status)$/;"	f	class:ActiveResourceMock.MockBuilder
+update_condition	app/forms/pages/conditions_form.rb	/^  def update_condition$/;"	f	class:Pages
+update_or_create_organisation	lib/organisations_fetcher.rb	/^  def update_or_create_organisation(organisation_data)$/;"	f	class:OrganisationsFetcher
+update_organisation_for_creator	app/models/form.rb	/^  def self.update_organisation_for_creator(creator_id, organisation_id)$/;"	F	class:Form
+update_submission_email_record	app/forms/forms/submission_email_form.rb	/^  def update_submission_email_record(confirmation_code, form)$/;"	f
+update_user	app/service/user_update_service.rb	/^  def update_user$/;"	f	class:UserUpdateService
+upgrade_request_email	app/mailers/user_upgrade_request_mailer.rb	/^  def upgrade_request_email(user_email:)$/;"	f	class:UserUpgradeRequestMailer
+user	app/controllers/users_controller.rb	/^  def user$/;"	f	class:UsersController
+user_access_options	app/helpers/application_helper.rb	/^  def user_access_options(access_options = %w[true false])$/;"	f	class:ApplicationHelper
+user_ip	app/controllers/application_controller.rb	/^  def user_ip(forwarded_for = "")$/;"	f	class:ApplicationController
+user_is_form_creator	app/policies/form_policy.rb	/^  def user_is_form_creator$/;"	f	class:FormPolicy
+user_params	app/controllers/users_controller.rb	/^  def user_params$/;"	f	class:UsersController
+user_profile_url	app/service/navigation_items_service.rb	/^  def user_profile_url$/;"	f
+user_provider	app/service/navigation_items_service.rb	/^  def user_provider$/;"	f
+user_role_options	app/helpers/application_helper.rb	/^  def user_role_options(roles = User.roles.keys)$/;"	f	class:ApplicationHelper
+user_signed_in	app/controllers/application_controller.rb	/^  def user_signed_in$/;"	f	class:ApplicationController
+user_upgrade_request_params	app/controllers/user_upgrade_requests_controller.rb	/^  def user_upgrade_request_params$/;"	f	class:UserUpgradeRequestsController
+users_navigation_item	app/service/navigation_items_service.rb	/^  def users_navigation_item$/;"	f
+users_organisation_owns_form	app/policies/form_policy.rb	/^  def users_organisation_owns_form$/;"	f	class:FormPolicy
+valid?	lib/warden/strategies/omniauth.rb	/^    def valid?$/;"	f	class:Warden.OmniAuth
+valid?	spec/requests/authentication_controller_spec.rb	/^      def valid?$/;"	f
+validate_each	app/validators/govuk_email_validator.rb	/^  def validate_each(record, attribute, value)$/;"	f	class:GovukEmailValidator
+validate_selection_options	app/forms/pages/selections_settings_form.rb	/^  def validate_selection_options$/;"	f	class:Pages
+values	app/forms/forms/make_live_form.rb	/^  def values$/;"	f	class:Forms
+view_locals	app/controllers/pages/guidance_controller.rb	/^  def view_locals(current_page, guidance_form, back_link)$/;"	f	class:Pages
+visit_upgrade_page	spec/features/users/user_upgrade_request_spec.rb	/^  def visit_upgrade_page$/;"	f
+warden	app/controllers/application_controller.rb	/^  def warden$/;"	f	class:ApplicationController
+week_starts	app/service/cloud_watch_service.rb	/^  def self.week_starts(form_id:)$/;"	F	class:CloudWatchService
+week_submissions	app/service/cloud_watch_service.rb	/^  def self.week_submissions(form_id:)$/;"	F	class:CloudWatchService
+what_happens_next_form_params	app/controllers/forms/what_happens_next_controller.rb	/^    def what_happens_next_form_params$/;"	f	class:Forms.WhatHappensNextController
+when_i_am_viewing_home_page	spec/features/form/create_or_edit_a_form_spec.rb	/^  def when_i_am_viewing_home_page$/;"	f
+when_i_change_my_organisation_to_test_org	spec/features/users/set_organisation_spec.rb	/^  def when_i_change_my_organisation_to_test_org$/;"	f
+when_i_change_the_trial_users_role_to_editor	spec/features/users/set_role_spec.rb	/^  def when_i_change_the_trial_users_role_to_editor$/;"	f
+when_i_change_the_users_organisation	spec/features/users/set_organisation_spec.rb	/^  def when_i_change_the_users_organisation$/;"	f
+when_i_viewing_an_existing_form	spec/features/form/add_or_edit_questions/add_a_question_for_each_type_of_answer_spec.rb	/^  def when_i_viewing_an_existing_form$/;"	f
+when_i_visit_the_mou_index_page	spec/features/mou/upgrade_user_changes_mou_spec.rb	/^  def when_i_visit_the_mou_index_page$/;"	f
+when_i_visit_the_mou_page	spec/features/mou/sign_mou_spec.rb	/^  def when_i_visit_the_mou_page$/;"	f
+with_a_form_that_went_live_yesterday	spec/components/metrics_summary_component/metrics_summary_component_preview.rb	/^  def with_a_form_that_went_live_yesterday$/;"	f	class:MetricsSummaryComponent
+with_a_new_form	spec/components/metrics_summary_component/metrics_summary_component_preview.rb	/^  def with_a_new_form$/;"	f	class:MetricsSummaryComponent
+with_address_answer_type	spec/components/page_settings_summary_component/page_settings_summary_component_preview.rb	/^  def with_address_answer_type$/;"	f	class:PageSettingsSummaryComponent
+with_confirm_set	spec/components/task_list_component/task_list_component_preview.rb	/^  def with_confirm_set$/;"	f	class:TaskListComponent
+with_date_answer_type	spec/components/page_settings_summary_component/page_settings_summary_component_preview.rb	/^  def with_date_answer_type$/;"	f	class:PageSettingsSummaryComponent
+with_dev	spec/components/header_component/header_component_preview.rb	/^  def with_dev$/;"	f	class:HeaderComponent
+with_errors	spec/components/error_summary_component/error_summary_component_preview.rb	/^  def with_errors$/;"	f	class:ErrorSummaryComponent
+with_hint	spec/components/task_list_component/task_list_component_preview.rb	/^  def with_hint$/;"	f	class:TaskListComponent
+with_legacy_date_answer_type	spec/components/page_settings_summary_component/page_settings_summary_component_preview.rb	/^  def with_legacy_date_answer_type$/;"	f	class:PageSettingsSummaryComponent
+with_less_than_a_week_worth_of_metrics	spec/components/metrics_summary_component/metrics_summary_component_preview.rb	/^  def with_less_than_a_week_worth_of_metrics$/;"	f	class:MetricsSummaryComponent
+with_local_machine	spec/components/header_component/header_component_preview.rb	/^  def with_local_machine$/;"	f	class:HeaderComponent
+with_local_translations	spec/components/markdown_editor_component/markdown_editor_component_preview.rb	/^  def with_local_translations$/;"	f	class:MarkdownEditorComponent
+with_lock	lib/advisory_lock.rb	/^    def with_lock(key)$/;"	f	class:AdvisoryLock.DSL
+with_metrics_available	spec/components/metrics_summary_component/metrics_summary_component_preview.rb	/^  def with_metrics_available$/;"	f	class:MetricsSummaryComponent
+with_name_answer_type	spec/components/page_settings_summary_component/page_settings_summary_component_preview.rb	/^  def with_name_answer_type$/;"	f	class:PageSettingsSummaryComponent
+with_navigation_links	spec/components/header_component/header_component_preview.rb	/^  def with_navigation_links$/;"	f	class:HeaderComponent
+with_no_metrics_data	spec/components/metrics_summary_component/metrics_summary_component_preview.rb	/^  def with_no_metrics_data$/;"	f	class:MetricsSummaryComponent
+with_no_weekly_starts	spec/components/metrics_summary_component/metrics_summary_component_preview.rb	/^  def with_no_weekly_starts$/;"	f	class:MetricsSummaryComponent
+with_non_selection_answer_type	spec/components/page_settings_summary_component/page_settings_summary_component_preview.rb	/^  def with_non_selection_answer_type$/;"	f	class:PageSettingsSummaryComponent
+with_pages	spec/components/preview_link_component/preview_link_component_preview.rb	/^  def with_pages$/;"	f	class:PreviewLinkComponent
+with_pages_and_conditions_with_errors	spec/components/page_list_component/page_list_component_preview.rb	/^  def with_pages_and_conditions_with_errors$/;"	f	class:PageListComponent
+with_pages_and_multiple_conditions	spec/components/page_list_component/page_list_component_preview.rb	/^  def with_pages_and_multiple_conditions$/;"	f	class:PageListComponent
+with_pages_and_no_conditions	spec/components/page_list_component/page_list_component_preview.rb	/^  def with_pages_and_no_conditions$/;"	f	class:PageListComponent
+with_pages_and_one_condition	spec/components/page_list_component/page_list_component_preview.rb	/^  def with_pages_and_one_condition$/;"	f	class:PageListComponent
+with_production	spec/components/header_component/header_component_preview.rb	/^  def with_production$/;"	f	class:HeaderComponent
+with_selection_answer_type	spec/components/page_settings_summary_component/page_settings_summary_component_preview.rb	/^  def with_selection_answer_type$/;"	f	class:PageSettingsSummaryComponent
+with_staging	spec/components/header_component/header_component_preview.rb	/^  def with_staging$/;"	f	class:HeaderComponent
+with_status_summary	spec/components/task_list_component/task_list_component_preview.rb	/^  def with_status_summary$/;"	f	class:TaskListComponent
+with_status_summary_all_tasks_completed	spec/components/task_list_component/task_list_component_preview.rb	/^  def with_status_summary_all_tasks_completed$/;"	f	class:TaskListComponent
+with_text_answer_type	spec/components/page_settings_summary_component/page_settings_summary_component_preview.rb	/^  def with_text_answer_type$/;"	f	class:PageSettingsSummaryComponent
+with_user_research	spec/components/header_component/header_component_preview.rb	/^  def with_user_research$/;"	f	class:HeaderComponent
+without_pages	spec/components/preview_link_component/preview_link_component_preview.rb	/^  def without_pages$/;"	f	class:PreviewLinkComponent
+without_status	spec/components/task_list_component/task_list_component_preview.rb	/^  def without_status$/;"	f	class:TaskListComponent
