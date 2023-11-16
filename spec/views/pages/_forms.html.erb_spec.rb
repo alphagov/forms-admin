@@ -18,8 +18,7 @@ describe "pages/_form.html.erb", type: :view do
       page_object: page,
       draft_question:,
       question_form:,
-      action_path: "http://example.com",
-      change_name_settings_path: "http://change-me-please.com" }
+      action_path: "http://example.com" }
   end
 
   before do

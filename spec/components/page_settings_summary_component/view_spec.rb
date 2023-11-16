@@ -16,6 +16,8 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
   let(:new_address_setting_path) { address_settings_new_path(form_id: draft_question.form_id) }
   let(:edit_date_setting_path) { date_settings_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
   let(:new_date_setting_path) { date_settings_new_path(form_id: draft_question.form_id) }
+  let(:edit_name_setting_path) { name_settings_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
+  let(:new_name_setting_path) { name_settings_new_path(form_id: draft_question.form_id) }
   let(:edit_selections_setting_path) { selections_settings_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
   let(:new_selections_setting_path) { selections_settings_new_path(form_id: draft_question.form_id) }
   let(:edit_text_setting_path) { text_settings_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
@@ -260,26 +262,40 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
     let(:title_needed) { "true" }
 
     it "has a link to change the answer type" do
-      render_inline(described_class.new(draft_question, change_name_settings_path:))
+      render_inline(described_class.new(draft_question))
       expect(page).to have_link("Change Answer type Person’s name", href: edit_answer_type_path)
     end
 
     it "has links to change the answer settings" do
-      render_inline(described_class.new(draft_question, change_name_settings_path:))
-      expect(page).to have_link("Change input type", href: change_name_settings_path)
-      expect(page).to have_link("Change title needed", href: change_name_settings_path)
+      render_inline(described_class.new(draft_question))
+      expect(page).to have_link("Change input type", href: edit_name_setting_path)
+      expect(page).to have_link("Change title needed", href: edit_name_setting_path)
     end
 
     it "renders the input type" do
-      render_inline(described_class.new(draft_question, change_name_settings_path:))
+      render_inline(described_class.new(draft_question))
       expect(page).to have_text "Name fields"
       expect(page).to have_text I18n.t("helpers.label.page.name_settings_options.names.full_name")
     end
 
     it "renders the title needed" do
-      render_inline(described_class.new(draft_question, change_name_settings_path:))
+      render_inline(described_class.new(draft_question))
       expect(page).to have_text "Title needed"
       expect(page).to have_text I18n.t("helpers.label.page.name_settings_options.names.true")
+    end
+
+    context "when draft_question is setup for new question" do
+      let(:draft_question) { build :name_draft_question, page_id: nil }
+
+      it "has a link to change the answer type" do
+        render_inline(described_class.new(draft_question))
+        expect(page).to have_link("Change Answer type Person’s name", href: new_answer_type_path)
+      end
+
+      it "has links to change the text selections" do
+        render_inline(described_class.new(draft_question))
+        expect(page).to have_link("Change input type", href: new_name_setting_path)
+      end
     end
   end
 end

@@ -53,7 +53,6 @@ class PageSettingsSummaryComponent::PageSettingsSummaryComponentPreview < ViewCo
                                          input_type: "first_middle_and_last_name",
                                          title_needed: "true",
                                        })
-    change_name_settings_path = "https://example.com/change_name_settings"
-    render(PageSettingsSummaryComponent::View.new(draft_question, change_name_settings_path:))
+    render(PageSettingsSummaryComponent::View.new(draft_question))
   end
 end
