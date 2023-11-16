@@ -43,8 +43,7 @@ class PageSettingsSummaryComponent::PageSettingsSummaryComponentPreview < ViewCo
                                            international_address: "true",
                                          },
                                        })
-    change_address_settings_path = "https://example.com/change_address_settings"
-    render(PageSettingsSummaryComponent::View.new(draft_question, change_address_settings_path:))
+    render(PageSettingsSummaryComponent::View.new(draft_question))
   end
 
   def with_name_answer_type

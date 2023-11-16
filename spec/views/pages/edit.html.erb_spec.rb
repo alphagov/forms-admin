@@ -21,7 +21,6 @@ describe "pages/edit.html.erb" do
     # If models aren't persisted, they won't work with form builders correctly
     without_partial_double_verification do
       allow(form).to receive(:persisted?).and_return(true)
-      allow(view).to receive(:address_settings_edit_path).and_return("/address-settings")
       allow(view).to receive(:name_settings_edit_path).and_return("/name-settings")
       allow(view).to receive(:current_form).and_return(form)
       allow(view).to receive(:draft_question).and_return(draft_question)

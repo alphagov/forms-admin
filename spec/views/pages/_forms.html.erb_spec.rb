@@ -19,7 +19,6 @@ describe "pages/_form.html.erb", type: :view do
       draft_question:,
       question_form:,
       action_path: "http://example.com",
-      change_address_settings_path: "http://change-me-please.com",
       change_name_settings_path: "http://change-me-please.com" }
   end
 
