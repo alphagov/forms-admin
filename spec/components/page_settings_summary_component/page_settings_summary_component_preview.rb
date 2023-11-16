@@ -6,14 +6,14 @@ class PageSettingsSummaryComponent::PageSettingsSummaryComponentPreview < ViewCo
   end
 
   def with_selection_answer_type
-    draft_question = DraftQuestion.new(is_optional: "false",
+    draft_question = DraftQuestion.new(form_id: 1,
+                                       is_optional: "false",
                                        answer_type: "selection",
                                        answer_settings: { only_one_option: "true",
                                                           selection_options: [{ name: "Option 1" },
                                                                               { name: "Option 2" }] })
     change_answer_type_path = "https://example.com/change_answer_type"
-    change_selections_settings_path = "https://example.com/change_selections_settings"
-    render(PageSettingsSummaryComponent::View.new(draft_question, change_answer_type_path:, change_selections_settings_path:))
+    render(PageSettingsSummaryComponent::View.new(draft_question, change_answer_type_path:))
   end
 
   def with_text_answer_type

@@ -20,7 +20,6 @@ describe "pages/_form.html.erb", type: :view do
       question_form:,
       action_path: "http://example.com",
       change_answer_type_path: "http://change-me-please.com",
-      change_selections_settings_path: "http://change-me-please.com",
       change_text_settings_path: "http://change-me-please.com",
       change_date_settings_path: "http://change-me-please.com",
       change_address_settings_path: "http://change-me-please.com",
