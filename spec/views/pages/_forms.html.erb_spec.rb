@@ -19,7 +19,6 @@ describe "pages/_form.html.erb", type: :view do
       draft_question:,
       question_form:,
       action_path: "http://example.com",
-      change_answer_type_path: "http://change-me-please.com",
       change_text_settings_path: "http://change-me-please.com",
       change_date_settings_path: "http://change-me-please.com",
       change_address_settings_path: "http://change-me-please.com",
@@ -44,10 +43,6 @@ describe "pages/_form.html.erb", type: :view do
 
   it "has an unchecked optional checkbox" do
     expect(rendered).to have_unchecked_field("pages_question_form[is_optional]")
-  end
-
-  it "has a link to change the answer type" do
-    expect(rendered).to have_link(text: "Change", href: "http://change-me-please.com")
   end
 
   it "has a submit button with the correct text" do

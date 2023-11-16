@@ -41,7 +41,7 @@
   <% end %>
 
   <h2 class="govuk-heading-m"><%= t("pages.answer_settings") %></h2>
-  <%= render PageSettingsSummaryComponent::View.new(draft_question, change_answer_type_path:, change_text_settings_path:, change_date_settings_path:, change_address_settings_path:, change_name_settings_path:) %>
+  <%= render PageSettingsSummaryComponent::View.new(draft_question, change_text_settings_path:, change_date_settings_path:, change_address_settings_path:, change_name_settings_path:) %>
 
   <%= f.govuk_submit page_object.has_next_page? ? t("pages.submit_edit") : t("pages.submit_add") do %>
     <%= f.govuk_submit t('pages.submit_save'), name: :save_preview, secondary: true %>

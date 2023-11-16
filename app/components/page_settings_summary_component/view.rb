@@ -3,10 +3,9 @@
 module PageSettingsSummaryComponent
   class View < ViewComponent::Base
     include Rails.application.routes.url_helpers
-    def initialize(draft_question, change_answer_type_path: "", change_text_settings_path: "", change_date_settings_path: "", change_address_settings_path: "", change_name_settings_path: "")
+    def initialize(draft_question, change_text_settings_path: "", change_date_settings_path: "", change_address_settings_path: "", change_name_settings_path: "")
       super
       @draft_question = draft_question
-      @change_answer_type_path = change_answer_type_path
       @change_text_settings_path = change_text_settings_path
       @change_date_settings_path = change_date_settings_path
       @change_address_settings_path = change_address_settings_path
@@ -15,6 +14,7 @@ module PageSettingsSummaryComponent
 
     def before_render
       super
+      @change_answer_type_path = change_answer_type_path
       @change_selections_settings_path = change_selections_settings_path
     end
 
@@ -39,6 +39,14 @@ module PageSettingsSummaryComponent
 
     def show_selection_options
       answer_settings[:selection_options].map { |option| option[:name] }.join(", ")
+    end
+
+    def change_answer_type_path
+      if is_new_question?
+        type_of_answer_new_path(form_id: @draft_question.form_id)
+      else
+        type_of_answer_edit_path(form_id: @draft_question.form_id, page_id: @draft_question.page_id)
+      end
     end
 
     def change_selections_settings_path
