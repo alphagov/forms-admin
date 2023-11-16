@@ -51,6 +51,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
           mock.post "/api/v1/forms/2/pages", post_headers
         end
 
+        # Setup a draft_question so that create question action doesn't need to create a completely new records
         draft_question
 
         post create_question_path(2), params: { pages_question_form: {
@@ -119,6 +120,9 @@ RSpec.describe Pages::QuestionsController, type: :request do
           mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
           mock.get "/api/v1/forms/2/pages/1", req_headers, page_response, 200
         end
+
+        # Setup a draft_question so that edit question action doesn't need to create a completely new records
+        draft_question
 
         get edit_question_path(form_id: 2, page_id: 1)
       end

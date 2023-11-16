@@ -1,17 +1,17 @@
 <%= form_with model: [form_object, question_form], url: action_path do |f| %>
   <%= f.govuk_error_summary %>
 
-  <%= f.govuk_text_field :question_text, label: { size: 'm' }, hint: { text: hint_for_edit_page_field("question_text", page_object.answer_type, page_object.answer_settings) } %>
+  <%= f.govuk_text_field :question_text, label: { size: 'm' }, hint: { text: hint_for_edit_page_field("question_text", draft_question.answer_type, draft_question.answer_settings) } %>
 
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
-  <%= f.govuk_text_area :hint_text, label: { size: 'm' }, hint: { text: hint_for_edit_page_field("hint_text", page_object.answer_type, page_object.answer_settings) } %>
+  <%= f.govuk_text_area :hint_text, label: { size: 'm' }, hint: { text: hint_for_edit_page_field("hint_text", draft_question.answer_type, draft_question.answer_settings) } %>
 
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
   <h2 class="govuk-heading-m"><%= t("guidance.guidance") %></h2>
-  <% if page_object.page_heading.present? && page_object.guidance_markdown.present? %>
-    <%= govuk_summary_list(**PageSummaryData::GuidanceService.call(form: form_object, page: page_object).build_data) %>
+  <% if draft_question.page_heading.present? && draft_question.guidance_markdown.present? %>
+    <%= govuk_summary_list(**PageSummaryData::GuidanceService.call(form: form_object, page: draft_question).build_data) %>
 
   <% else %>
     <p><%= t("guidance.instructions") %></p>

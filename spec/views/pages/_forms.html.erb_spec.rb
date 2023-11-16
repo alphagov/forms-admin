@@ -2,6 +2,7 @@ require "rails_helper"
 
 describe "pages/_form.html.erb", type: :view do
   let(:page) { build :page, :with_hints, :with_simple_answer_type, id: 2, form_id: form.id }
+  let(:draft_question) { question_form.draft_question }
   let(:question_form) do
     build :question_form,
           form_id: form.id,
@@ -16,6 +17,7 @@ describe "pages/_form.html.erb", type: :view do
     render partial: "pages/form", locals: { is_new_page:,
                                             form_object: form,
                                             page_object: page,
+                                            draft_question:,
                                             question_form:,
                                             action_path: "http://example.com",
                                             change_answer_type_path: "http://change-me-please.com",
