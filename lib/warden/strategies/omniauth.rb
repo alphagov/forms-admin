@@ -17,5 +17,9 @@ module Warden::Strategies
     def prep_user(auth_hash)
       raise NotImplementedError
     end
+
+    def logger
+      Rails.logger || env["rack.logger"]
+    end
   end
 end

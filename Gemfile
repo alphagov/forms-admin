@@ -15,10 +15,8 @@ gem "pg", "~> 1.5"
 gem "puma", "~> 6.4.0"
 
 # Used for handling authentication
-gem "gds-sso"
 gem "omniauth"
 gem "omniauth-auth0"
-gem "omniauth_openid_connect"
 gem "warden"
 
 # Used for handling authorisation policies
