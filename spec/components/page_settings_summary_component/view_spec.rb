@@ -14,6 +14,8 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
   let(:edit_selections_setting_path) { selections_settings_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
   let(:new_selections_setting_path) { selections_settings_new_path(form_id: draft_question.form_id) }
+  let(:edit_text_setting_path) { text_settings_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
+  let(:new_text_setting_path) { text_settings_new_path(form_id: draft_question.form_id) }
 
   context "when the page is not a selection page" do
     it "has a link to change the answer type" do
@@ -104,17 +106,17 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
     let(:input_type) { "single_line" }
 
     it "has a link to change the answer type" do
-      render_inline(described_class.new(draft_question, change_text_settings_path:))
+      render_inline(described_class.new(draft_question))
       expect(page).to have_link("Change Answer type Text", href: edit_answer_type_path)
     end
 
-    it "has links to change the selection options" do
-      render_inline(described_class.new(draft_question, change_text_settings_path:))
-      expect(page).to have_link("Change input type", href: change_text_settings_path)
+    it "has links to change the text selections" do
+      render_inline(described_class.new(draft_question))
+      expect(page).to have_link("Change input type", href: edit_text_setting_path)
     end
 
     it "renders the input type" do
-      render_inline(described_class.new(draft_question, change_text_settings_path:))
+      render_inline(described_class.new(draft_question))
       expect(page).to have_text "Length"
       expect(page).to have_text I18n.t("helpers.label.page.text_settings_options.names.#{draft_question.answer_settings.with_indifferent_access[:input_type]}")
     end
@@ -122,15 +124,29 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
     context "when input_type is long text" do
       let(:input_type) { "long_text" }
 
-      it "has links to change the selection options" do
-        render_inline(described_class.new(draft_question, change_text_settings_path:))
-        expect(page).to have_link("Change input type", href: change_text_settings_path)
+      it "has links to change the text settings" do
+        render_inline(described_class.new(draft_question))
+        expect(page).to have_link("Change input type", href: edit_text_setting_path)
       end
 
       it "renders the input type" do
-        render_inline(described_class.new(draft_question, change_text_settings_path:))
+        render_inline(described_class.new(draft_question))
         expect(page).to have_text "Length"
         expect(page).to have_text I18n.t("helpers.label.page.text_settings_options.names.#{draft_question.answer_settings.with_indifferent_access[:input_type]}")
+      end
+    end
+
+    context "when draft_question is setup for new question" do
+      let(:draft_question) { build :text_draft_question, page_id: nil }
+
+      it "has a link to change the answer type" do
+        render_inline(described_class.new(draft_question))
+        expect(page).to have_link("Change Answer type Text", href: new_answer_type_path)
+      end
+
+      it "has links to change the text selections" do
+        render_inline(described_class.new(draft_question))
+        expect(page).to have_link("Change input type", href: new_text_setting_path)
       end
     end
   end

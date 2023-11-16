@@ -18,8 +18,7 @@ class PageSettingsSummaryComponent::PageSettingsSummaryComponentPreview < ViewCo
     draft_question = DraftQuestion.new(form_id: 1,
                                        answer_type: "text",
                                        answer_settings: { input_type: "long_text" })
-    change_text_settings_path = "https://example.com/change_text_settings"
-    render(PageSettingsSummaryComponent::View.new(draft_question, change_text_settings_path:))
+    render(PageSettingsSummaryComponent::View.new(draft_question))
   end
 
   def with_date_answer_type
