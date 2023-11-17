@@ -246,12 +246,12 @@ describe Form, type: :model do
 
   describe "#metrics_data", feature_metrics_for_form_creators_enabled: true do
     let(:form) do
-      described_class.new(id: 2, live_at: Time.zone.now - 1.day)
+      described_class.new(id: 2, live_at: Time.zone.now - 1.day, has_live_version: true)
     end
 
     context "when the form was made today" do
       let(:form) do
-        described_class.new(id: 2, live_at: Time.zone.now)
+        described_class.new(id: 2, live_at: Time.zone.now, has_live_version: true)
       end
 
       before do
@@ -323,7 +323,7 @@ describe Form, type: :model do
 
     context "when the form is not live" do
       let(:form) do
-        described_class.new(id: 2)
+        described_class.new(id: 2, has_live_version: false)
       end
 
       it "returns nil" do
