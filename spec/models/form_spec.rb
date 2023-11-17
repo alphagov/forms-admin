@@ -313,7 +313,7 @@ describe Form, type: :model do
 
     context "when the form is not live" do
       let(:form) do
-        described_class.new(id: 2)
+        described_class.new(id: 2, made_live_date: nil)
       end
 
       it "returns nil" do
