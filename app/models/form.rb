@@ -95,6 +95,8 @@ class Form < ActiveResource::Base
 
     Sentry.capture_exception(e)
     nil
+  rescue CloudWatchService::MetricsDisabledError
+    nil
   end
 
 private

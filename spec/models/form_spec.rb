@@ -287,10 +287,20 @@ describe Form, type: :model do
       end
     end
 
+    context "when CloudWatch metrics are disabled" do
+      before do
+        allow(CloudWatchService).to receive(:week_submissions).and_raise(CloudWatchService::MetricsDisabledError)
+      end
+
+      it "returns nil" do
+        expect(form.metrics_data).to eq(nil)
+      end
+    end
+
     context "when AWS credentials have not been configured" do
       before do
         allow(Sentry).to receive(:capture_exception)
-        allow(CloudWatchService).to receive(:week_starts).and_raise(Aws::Errors::MissingCredentialsError)
+        allow(CloudWatchService).to receive(:week_submissions).and_raise(Aws::Errors::MissingCredentialsError)
       end
 
       it "returns nil and logs the exception in Sentry" do
@@ -301,8 +311,8 @@ describe Form, type: :model do
 
     context "when CloudWatch returns an error" do
       before do
-        allow(CloudWatchService).to receive(:week_starts).and_raise(Aws::CloudWatch::Errors::ServiceError)
         allow(Sentry).to receive(:capture_exception)
+        allow(CloudWatchService).to receive(:week_submissions).and_raise(Aws::CloudWatch::Errors::ServiceError.new(instance_double(Seahorse::Client::RequestContext), "message"))
       end
 
       it "returns nil and logs the exception in Sentry" do

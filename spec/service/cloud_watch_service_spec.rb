@@ -3,9 +3,11 @@ require "rails_helper"
 describe CloudWatchService do
   let(:forms_env) { "test" }
   let(:form_id) { 3 }
+  let(:cloudwatch_metrics_enabled) { true }
 
   before do
     allow(Settings).to receive(:forms_env).and_return(forms_env)
+    allow(Settings).to receive(:cloudwatch_metrics_enabled).and_return(cloudwatch_metrics_enabled)
   end
 
   around do |example|
@@ -17,6 +19,14 @@ describe CloudWatchService do
   describe "#week_submissions" do
     let(:datapoints) { [{ sum: total_submissions }] }
     let(:total_submissions) { 3.0 }
+
+    context "when CloudWatch metrics are disabled" do
+      let(:cloudwatch_metrics_enabled) { false }
+
+      it "raises a MetricsDisabledError" do
+        expect { described_class.week_submissions(form_id:) }.to raise_error(CloudWatchService::MetricsDisabledError)
+      end
+    end
 
     it "calls the cloudwatch client with get_metric_statistics" do
       cloudwatch_client = Aws::CloudWatch::Client.new(stub_responses: true)
@@ -87,6 +97,14 @@ describe CloudWatchService do
   describe "#week_starts" do
     let(:datapoints) { [{ sum: total_starts }] }
     let(:total_starts) { 5.0 }
+
+    context "when CloudWatch metrics are disabled" do
+      let(:cloudwatch_metrics_enabled) { false }
+
+      it "raises a MetricsDisabledError" do
+        expect { described_class.week_starts(form_id:) }.to raise_error(CloudWatchService::MetricsDisabledError)
+      end
+    end
 
     it "calls the cloudwatch client with get_metric_statistics" do
       cloudwatch_client = Aws::CloudWatch::Client.new(stub_responses: true)
