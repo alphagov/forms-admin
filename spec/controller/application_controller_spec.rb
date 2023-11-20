@@ -37,7 +37,6 @@ describe ApplicationController, type: :controller do
     %w[
       auth0
       basic_auth
-      cddo_sso
       gds_sso
     ].each do |provider|
       context "when #{provider} auth is enabled" do
