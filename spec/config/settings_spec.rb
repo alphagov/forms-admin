@@ -64,12 +64,4 @@ describe "Settings" do
       expect(forms_env).to eq("local")
     end
   end
-
-  describe "cloudwatch_metrics_enabled" do
-    it "has a default value" do
-      cloudwatch_metrics_enabled = settings[:cloudwatch_metrics_enabled]
-
-      expect(cloudwatch_metrics_enabled).to be(false)
-    end
-  end
 end

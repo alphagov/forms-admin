@@ -2,11 +2,7 @@ class CloudWatchService
   REGION = "eu-west-2".freeze
   A_WEEK = 604_800
 
-  class MetricsDisabledError < StandardError; end
-
   def self.week_submissions(form_id:)
-    raise MetricsDisabledError unless Settings.cloudwatch_metrics_enabled
-
     cloudwatch_client = Aws::CloudWatch::Client.new(region: REGION)
 
     response = cloudwatch_client.get_metric_statistics({
@@ -29,8 +25,6 @@ class CloudWatchService
   end
 
   def self.week_starts(form_id:)
-    raise MetricsDisabledError unless Settings.cloudwatch_metrics_enabled
-
     cloudwatch_client = Aws::CloudWatch::Client.new(region: REGION)
 
     response = cloudwatch_client.get_metric_statistics({

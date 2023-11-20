@@ -246,12 +246,12 @@ describe Form, type: :model do
 
   describe "#metrics_data", feature_metrics_for_form_creators_enabled: true do
     let(:form) do
-      described_class.new(id: 2, live_at: Time.zone.now - 1.day, has_live_version: true)
+      described_class.new(id: 2, live_at: Time.zone.now - 1.day)
     end
 
     context "when the form was made today" do
       let(:form) do
-        described_class.new(id: 2, live_at: Time.zone.now, has_live_version: true)
+        described_class.new(id: 2, live_at: Time.zone.now)
       end
 
       before do
@@ -287,20 +287,10 @@ describe Form, type: :model do
       end
     end
 
-    context "when CloudWatch metrics are disabled" do
-      before do
-        allow(CloudWatchService).to receive(:week_submissions).and_raise(CloudWatchService::MetricsDisabledError)
-      end
-
-      it "returns nil" do
-        expect(form.metrics_data).to eq(nil)
-      end
-    end
-
     context "when AWS credentials have not been configured" do
       before do
         allow(Sentry).to receive(:capture_exception)
-        allow(CloudWatchService).to receive(:week_submissions).and_raise(Aws::Errors::MissingCredentialsError)
+        allow(CloudWatchService).to receive(:week_starts).and_raise(Aws::Errors::MissingCredentialsError)
       end
 
       it "returns nil and logs the exception in Sentry" do
@@ -311,8 +301,8 @@ describe Form, type: :model do
 
     context "when CloudWatch returns an error" do
       before do
+        allow(CloudWatchService).to receive(:week_starts).and_raise(Aws::CloudWatch::Errors::ServiceError)
         allow(Sentry).to receive(:capture_exception)
-        allow(CloudWatchService).to receive(:week_submissions).and_raise(Aws::CloudWatch::Errors::ServiceError.new(instance_double(Seahorse::Client::RequestContext), "message"))
       end
 
       it "returns nil and logs the exception in Sentry" do
@@ -323,7 +313,7 @@ describe Form, type: :model do
 
     context "when the form is not live" do
       let(:form) do
-        described_class.new(id: 2, has_live_version: false)
+        described_class.new(id: 2)
       end
 
       it "returns nil" do
