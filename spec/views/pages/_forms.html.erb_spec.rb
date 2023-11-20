@@ -12,20 +12,23 @@ describe "pages/_form.html.erb", type: :view do
   end
   let(:form) { build :form, id: 1 }
   let(:is_new_page) { true }
+  let(:locals) do
+    { is_new_page:,
+      form_object: form,
+      page_object: page,
+      draft_question:,
+      question_form:,
+      action_path: "http://example.com",
+      change_answer_type_path: "http://change-me-please.com",
+      change_selections_settings_path: "http://change-me-please.com",
+      change_text_settings_path: "http://change-me-please.com",
+      change_date_settings_path: "http://change-me-please.com",
+      change_address_settings_path: "http://change-me-please.com",
+      change_name_settings_path: "http://change-me-please.com" }
+  end
 
   before do
-    render partial: "pages/form", locals: { is_new_page:,
-                                            form_object: form,
-                                            page_object: page,
-                                            draft_question:,
-                                            question_form:,
-                                            action_path: "http://example.com",
-                                            change_answer_type_path: "http://change-me-please.com",
-                                            change_selections_settings_path: "http://change-me-please.com",
-                                            change_text_settings_path: "http://change-me-please.com",
-                                            change_date_settings_path: "http://change-me-please.com",
-                                            change_address_settings_path: "http://change-me-please.com",
-                                            change_name_settings_path: "http://change-me-please.com" }
+    render partial: "pages/form", locals:
   end
 
   it "has a form with correct action" do
@@ -73,6 +76,32 @@ describe "pages/_form.html.erb", type: :view do
 
     it "has a delete button" do
       expect(rendered).to have_button("delete")
+    end
+  end
+
+  context "when the page has existing guidance" do
+    let(:draft_question) { build :draft_question, :with_guidance }
+    let(:question_form) do
+      build :question_form,
+            form_id: form.id,
+            draft_question:,
+            answer_type: page.answer_type,
+            question_text: page.question_text,
+            hint_text: page.hint_text
+    end
+
+    let(:guidance_service) { instance_double("PageSummaryData::GuidanceService") }
+    let(:build_data) { {} }
+
+    before do
+      allow(guidance_service).to receive(:build_data).and_return(build_data)
+      allow(PageSummaryData::GuidanceService).to receive(:call).and_return(guidance_service)
+
+      render partial: "pages/form", locals:
+    end
+
+    it "calls the PageSummaryData::GuidanceService with the form and draft_question" do
+      expect(PageSummaryData::GuidanceService).to have_received(:call).with(form:, draft_question:)
     end
   end
 end
