@@ -34,7 +34,7 @@ RSpec.describe PageSummaryData::GuidanceService do
         let(:page_id) { 1 }
 
         it "has an action to take the user back to change the value" do
-          expect(row[:actions].first[:href]).to eq(guidance_edit_path(form_id: form.id, page_id:))
+          expect(row[:actions].first[:href]).to eq(guidance_edit_path(form_id: form.id, page_id: draft_question.page_id))
         end
       end
     end
@@ -58,7 +58,7 @@ RSpec.describe PageSummaryData::GuidanceService do
         let(:page_id) { 1 }
 
         it "has an action to take the user back to change the value" do
-          expect(row[:actions].first[:href]).to eq(guidance_edit_path(form_id: form.id, page_id:))
+          expect(row[:actions].first[:href]).to eq(guidance_edit_path(form_id: form.id, page_id: draft_question.page_id))
         end
       end
     end
