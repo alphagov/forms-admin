@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe PageSummaryData::GuidanceService do
   include Rails.application.routes.url_helpers
 
-  let(:service) { described_class.call(form:, page: draft_question) }
+  let(:service) { described_class.call(form:, draft_question:) }
   let(:form) { build :form, id: 1 }
   let(:draft_question) { build :draft_question, :with_guidance, page_id:, form_id: form.id }
   let(:page_id) { nil }
