@@ -44,8 +44,8 @@ module PageSummaryData
     end
 
     def change_url
-      if page.id.present?
-        guidance_edit_path(form_id: form.id, page_id: page.id)
+      if page.page_id.present?
+        guidance_edit_path(form_id: form.id, page_id: page.page_id)
       else
         guidance_new_path(form_id: form.id)
       end
