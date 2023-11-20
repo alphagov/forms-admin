@@ -63,6 +63,3 @@ cddo_sso:
   secret:
 
 forms_env: local
-
-# When set to true, the CloudWatch service will attempt to retrieve data from CloudWatch
-cloudwatch_metrics_enabled: false
