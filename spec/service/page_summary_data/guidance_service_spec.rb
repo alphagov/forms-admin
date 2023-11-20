@@ -3,9 +3,9 @@ require "rails_helper"
 RSpec.describe PageSummaryData::GuidanceService do
   include Rails.application.routes.url_helpers
 
-  let(:service) { described_class.call(form:, page:) }
+  let(:service) { described_class.call(form:, page: draft_question) }
   let(:form) { build :form, id: 1 }
-  let(:page) { build :page, :with_guidance, id: page_id, form: }
+  let(:draft_question) { build :draft_question, :with_guidance, page_id:, form_id: form.id }
   let(:page_id) { nil }
 
   describe "#build_data" do
@@ -23,7 +23,7 @@ RSpec.describe PageSummaryData::GuidanceService do
       end
 
       it "has a value" do
-        expect(row[:value][:text]).to eq page.page_heading
+        expect(row[:value][:text]).to eq draft_question.page_heading
       end
 
       it "has an action to take the user back to change the value" do
@@ -47,7 +47,7 @@ RSpec.describe PageSummaryData::GuidanceService do
       end
 
       it "has a value" do
-        expect(row[:value][:text]).to eq("<pre class=\"app-markdown-editor__markdown-example-block\">#{page.guidance_markdown}</pre>")
+        expect(row[:value][:text]).to eq("<pre class=\"app-markdown-editor__markdown-example-block\">#{draft_question.guidance_markdown}</pre>")
       end
 
       it "has an action to take the user back to change the value" do
@@ -63,8 +63,8 @@ RSpec.describe PageSummaryData::GuidanceService do
       end
     end
 
-    context "when page doesn't have guidance or page heading" do
-      let(:page) { build :page, form: }
+    context "when draft question doesn't have guidance or page heading" do
+      let(:draft_question) { build :draft_question, form_id: form.id }
 
       it "returns nil" do
         expect(result).to be_nil
