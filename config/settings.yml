@@ -4,8 +4,8 @@ features:
   metrics_for_form_creators_enabled: false
 
 forms_api:
-  # Authentication key to authenticate forms-runner to forms-api
-  auth_key: changeme
+  # Authentication key to authenticate with forms-api
+  auth_key: development_key
   # URL to form-api endpoints
   base_url: http://localhost:9292
 
