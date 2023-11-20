@@ -14,6 +14,13 @@ RSpec.describe Pages::QuestionsController, type: :request do
     }
   end
 
+  let(:req_headers) do
+    {
+      "X-API-Token" => Settings.forms_api.auth_key,
+      "Accept" => "application/json",
+    }
+  end
+
   let(:form_response) { build :form, id: 2 }
 
   let(:draft_question) { create :draft_question_for_new_page, user: editor_user, form_id: 2 }
@@ -128,6 +135,36 @@ RSpec.describe Pages::QuestionsController, type: :request do
         expect(matched_request).to eq expected_request
       end
     end
+
+    context "when question_form has invalid data" do
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
+          mock.get "/api/v1/forms/2/pages", req_headers, [].to_json, 200
+          mock.post "/api/v1/forms/2/pages", post_headers
+        end
+
+        # Setup a draft_question so that create question action doesn't need to create a completely new records
+        draft_question
+
+        post create_question_path(2), params: { pages_question_form: {
+          hint_text: "This should be the location stated in your contract.",
+          is_optional: false,
+        } }
+      end
+
+      it "returns 422" do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "renders new template" do
+        expect(response).to have_rendered(:new)
+      end
+
+      it "outputs error message" do
+        expect(response.body).to include("Enter a question")
+      end
+    end
   end
 
   describe "#edit" do
@@ -193,33 +230,39 @@ RSpec.describe Pages::QuestionsController, type: :request do
   end
 
   describe "#update" do
+    let(:draft_question) do
+      record = create :draft_question, user: editor_user, form_id: 2
+      record.question_text = nil
+      record.save!(validate: false)
+      record.reload
+    end
+
+    let(:form_pages_response) do
+      [{
+        id: 1,
+        form_id: 2,
+        question_text: "What is your work address?",
+        hint_text: "This should be the location stated in your contract.",
+        answer_type: "address",
+        answer_settings: nil,
+        is_optional: false,
+      }].to_json
+    end
+    let(:page_response) do
+      {
+        id: 1,
+        form_id: 2,
+        question_text: "What is your work address?",
+        hint_text: "This should be the location stated in your contract.",
+        answer_type: "address",
+        answer_settings: nil,
+        is_optional: false,
+        page_heading: "New page heading",
+        guidance_markdown: "## Heading level 2",
+      }.to_json
+    end
+
     describe "Given a page" do
-      let(:form_pages_response) do
-        [{
-          id: 1,
-          form_id: 2,
-          question_text: "What is your work address?",
-          hint_text: "This should be the location stated in your contract.",
-          answer_type: "address",
-          answer_settings: nil,
-          is_optional: false,
-        }].to_json
-      end
-
-      let(:page_response) do
-        {
-          id: 1,
-          form_id: 2,
-          question_text: "What is your work address?",
-          hint_text: "This should be the location stated in your contract.",
-          answer_type: "address",
-          answer_settings: nil,
-          is_optional: false,
-          page_heading: "New page heading",
-          guidance_markdown: "## Heading level 2",
-        }.to_json
-      end
-
       let(:updated_page_data) do
         {
           id: 1,
@@ -230,13 +273,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
           is_optional: nil,
           page_heading: "New page heading",
           guidance_markdown: "## Heading level 2",
-        }
-      end
-
-      let(:req_headers) do
-        {
-          "X-API-Token" => Settings.forms_api.auth_key,
-          "Accept" => "application/json",
         }
       end
 
@@ -286,6 +322,38 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
       it "Redirects you to the new type of answer page" do
         expect(response).to redirect_to(type_of_answer_create_path(form_id: 2))
+      end
+    end
+
+    context "when question_form has invalid data" do
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
+          mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
+          mock.get "/api/v1/forms/2/pages/1", req_headers, page_response, 200
+          mock.put "/api/v1/forms/2/pages/1", post_headers
+        end
+
+        post update_question_path(form_id: 2, page_id: 1), params: { pages_question_form: {
+          form_id: 2,
+          question_text: nil,
+          hint_text: "This should be the location stated in your contract.",
+          answer_type: "address",
+          page_heading: "New page heading",
+          guidance_markdown: "## Heading level 2",
+        } }
+      end
+
+      it "returns 422" do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "renders edit template" do
+        expect(response).to have_rendered(:edit)
+      end
+
+      it "outputs error message" do
+        expect(response.body).to include("Enter a question")
       end
     end
   end

@@ -26,7 +26,7 @@ class Pages::QuestionsController < PagesController
       clear_questions_session_data
       handle_submit_action
     else
-      render :new, locals: { current_form: }, status: :unprocessable_entity
+      render :new, locals: { current_form:, draft_question: }, status: :unprocessable_entity
     end
   end
 
@@ -57,7 +57,7 @@ class Pages::QuestionsController < PagesController
       clear_questions_session_data
       handle_submit_action
     else
-      render :edit, locals: { current_form: }, status: :unprocessable_entity
+      render :edit, locals: { current_form:, draft_question: }, status: :unprocessable_entity
     end
   end
 
