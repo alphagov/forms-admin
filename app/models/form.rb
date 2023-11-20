@@ -77,6 +77,7 @@ class Form < ActiveResource::Base
 
   def metrics_data
     return nil unless FeatureService.enabled?(:metrics_for_form_creators_enabled)
+    return nil unless has_live_version
 
     # If the form went live today, there won't be any metrics to show
     today = Time.zone.today
@@ -94,6 +95,8 @@ class Form < ActiveResource::Base
          Aws::Errors::MissingCredentialsError => e
 
     Sentry.capture_exception(e)
+    nil
+  rescue CloudWatchService::MetricsDisabledError
     nil
   end
 
