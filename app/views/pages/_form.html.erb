@@ -11,7 +11,7 @@
 
   <h2 class="govuk-heading-m"><%= t("guidance.guidance") %></h2>
   <% if draft_question.page_heading.present? && draft_question.guidance_markdown.present? %>
-    <%= govuk_summary_list(**PageSummaryData::GuidanceService.call(form: form_object, page: draft_question).build_data) %>
+    <%= govuk_summary_list(**PageSummaryData::GuidanceService.call(form: form_object, draft_question:).build_data) %>
 
   <% else %>
     <p><%= t("guidance.instructions") %></p>
