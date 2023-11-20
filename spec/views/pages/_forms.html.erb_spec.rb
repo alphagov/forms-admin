@@ -103,5 +103,13 @@ describe "pages/_form.html.erb", type: :view do
     it "calls the PageSummaryData::GuidanceService with the form and draft_question" do
       expect(PageSummaryData::GuidanceService).to have_received(:call).with(form:, draft_question:)
     end
+
+    it "renders the draft question guidance page heading" do
+      expect(rendered).to have_text(draft_question.page_heading)
+    end
+
+    it "renders the draft question guidance markdown" do
+      expect(rendered).to have_text(draft_question.guidance_markdown)
+    end
   end
 end
