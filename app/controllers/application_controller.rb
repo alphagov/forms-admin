@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
-  before_action :clear_questions_session_data
+  before_action :clear_draft_questions_data
 
   add_flash_types :success
 
@@ -49,9 +49,7 @@ class ApplicationController < ActionController::Base
     payload[:page_id] = params[:page_id] if params[:page_id].present?
   end
 
-  def clear_questions_session_data
-    session.delete(:page) if session[:page].present?
-
+  def clear_draft_questions_data
     current_user.draft_questions.destroy_all if current_user.present?
   end
 
