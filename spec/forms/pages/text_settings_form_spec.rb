@@ -58,7 +58,7 @@ RSpec.describe Pages::TextSettingsForm, type: :model do
 
       expected_settings = {
         input_type: "single_line",
-      }.with_indifferent_access
+      }
 
       expect(text_settings_form.draft_question.answer_settings).to include(expected_settings)
     end

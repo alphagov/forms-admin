@@ -64,8 +64,9 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       context "when answer type is not selection" do
         let(:type_of_answer_form) { build :type_of_answer_form, :with_simple_answer_type }
 
-        it "saves the answer type to draft question" do
-          expect(type_of_answer_form.draft_question.attributes.with_indifferent_access).to include({ answer_type: type_of_answer_form.answer_type, answer_settings: {} })
+        it "saves the answer type & answer settings to draft question" do
+          expect(type_of_answer_form.draft_question.answer_type).to eq(type_of_answer_form.answer_type)
+          expect(type_of_answer_form.draft_question.answer_settings).to be_empty
         end
 
         it "redirects the user to the question details page" do
@@ -78,7 +79,11 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
         it "saves the answer type & answer settings to draft question" do
           form = assigns(:type_of_answer_form)
-          expect(form.draft_question.attributes.with_indifferent_access).to include(answer_type: type_of_answer_form.answer_type, answer_settings: { include_none_of_the_above: false, only_one_option: false, selection_options: [{ name: "" }, { name: "" }] })
+          expect(form.draft_question.answer_type).to eq(type_of_answer_form.answer_type)
+          expect(form.draft_question.answer_settings).to eq(include_none_of_the_above: false,
+                                                            only_one_option: false,
+                                                            selection_options: [{ name: "" },
+                                                                                { name: "" }])
         end
 
         it "redirects the user to the question text page" do
@@ -91,7 +96,8 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
         it "saves the answer type to draft question" do
           form = assigns(:type_of_answer_form)
-          expect(form.draft_question.attributes.with_indifferent_access).to include(answer_type: type_of_answer_form.answer_type, answer_settings: { input_type: nil })
+          expect(form.draft_question.answer_type).to eq(type_of_answer_form.answer_type)
+          expect(form.draft_question.answer_settings).to eq(input_type: nil)
         end
 
         it "redirects the user to the text settings page" do
@@ -104,7 +110,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
         it "saves the answer type to draft question" do
           form = assigns(:type_of_answer_form)
-          expect(form.draft_question.attributes.with_indifferent_access).to include(answer_settings: { input_type: nil })
+          expect(form.draft_question.answer_settings).to include(input_type: nil)
         end
 
         it "redirects the user to the date settings page" do
@@ -117,7 +123,8 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
         it "saves the answer type to draft question" do
           form = assigns(:type_of_answer_form)
-          expect(form.draft_question.attributes.with_indifferent_access).to include(answer_type: type_of_answer_form.answer_type, answer_settings: { input_type: nil })
+          expect(form.draft_question.answer_type).to eq(type_of_answer_form.answer_type)
+          expect(form.draft_question.answer_settings).to eq(input_type: nil)
         end
 
         it "redirects the user to the address settings page" do
@@ -130,7 +137,8 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
         it "saves the answer type to draft question" do
           form = assigns(:type_of_answer_form)
-          expect(form.draft_question.attributes.with_indifferent_access).to include(answer_type: type_of_answer_form.answer_type, answer_settings: { input_type: nil, title_needed: nil })
+          expect(form.draft_question.answer_type).to eq(type_of_answer_form.answer_type)
+          expect(form.draft_question.answer_settings).to eq(input_type: nil, title_needed: nil)
         end
 
         it "redirects the user to the name settings page" do

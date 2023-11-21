@@ -75,7 +75,7 @@ RSpec.describe Pages::NameSettingsController, type: :request do
 
       it "saves the input type to draft question" do
         form = assigns(:name_settings_form)
-        expect(form.draft_question.answer_settings.with_indifferent_access).to include(input_type: "first_and_last_name", title_needed: "false")
+        expect(form.draft_question.answer_settings).to include(input_type: "first_and_last_name", title_needed: "false")
       end
 
       it "redirects the user to the edit question page" do
@@ -155,7 +155,7 @@ RSpec.describe Pages::NameSettingsController, type: :request do
         form_instance_variable = assigns(:name_settings_form)
         expect(form_instance_variable.input_type).to eq input_type
         expect(form_instance_variable.title_needed).to eq title_needed
-        expect(form_instance_variable.draft_question.answer_settings.with_indifferent_access)
+        expect(form_instance_variable.draft_question.answer_settings)
           .to include(input_type: "full_name", title_needed: "true")
       end
 

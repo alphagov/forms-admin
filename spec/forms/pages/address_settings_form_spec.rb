@@ -65,7 +65,7 @@ RSpec.describe Pages::AddressSettingsForm, type: :model do
           uk_address: "false",
           international_address: "true",
         },
-      }.with_indifferent_access
+      }
 
       expect(address_settings_form.draft_question.answer_settings).to include(expected_settings)
     end

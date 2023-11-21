@@ -149,4 +149,39 @@ RSpec.describe DraftQuestion, type: :model do
       end
     end
   end
+
+  describe "answer_settings" do
+    let(:draft_question) { create :draft_question, answer_settings: }
+    let(:answer_settings) do
+      {
+        "hello" => "I have a string as a key",
+        "nested_attributes" => {
+          "name" => "Joe Bloggs",
+        },
+      }
+    end
+
+    it "returns a hash with all keys as symbols" do
+      expect(draft_question.answer_settings).to eq(hello: "I have a string as a key",
+                                                   nested_attributes: {
+                                                     name: "Joe Bloggs",
+                                                   })
+    end
+
+    context "when answer_settings is empty JSON" do
+      let(:answer_settings) { {} }
+
+      it "returns empty hash" do
+        expect(draft_question.answer_settings).to be_empty
+      end
+    end
+
+    context "when answer_settings is nil" do
+      let(:answer_settings) { nil }
+
+      it "returns empty hash" do
+        expect(draft_question.answer_settings).to be_nil
+      end
+    end
+  end
 end

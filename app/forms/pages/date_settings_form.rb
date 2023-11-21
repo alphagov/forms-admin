@@ -16,7 +16,7 @@ class Pages::DateSettingsForm < BaseForm
 
     # Set answer_settings for the draft_question
     draft_question
-      .assign_attributes({ answer_settings: answer_settings.with_indifferent_access })
+      .assign_attributes({ answer_settings: })
 
     draft_question.save!(validate: false)
   end

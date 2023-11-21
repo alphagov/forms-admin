@@ -29,8 +29,8 @@ class Pages::SelectionsSettingsController < PagesController
 
   def edit
     @selections_settings_path = selections_settings_update_path(current_form)
-    @selections_settings_form = Pages::SelectionsSettingsForm.new(only_one_option: draft_question.answer_settings.with_indifferent_access[:only_one_option],
-                                                                  selection_options: draft_question.answer_settings.with_indifferent_access[:selection_options]
+    @selections_settings_form = Pages::SelectionsSettingsForm.new(only_one_option: draft_question.answer_settings[:only_one_option],
+                                                                  selection_options: draft_question.answer_settings[:selection_options]
                                                                                                    .map { |option| { name: option[:name] } },
                                                                   include_none_of_the_above: draft_question.is_optional,
                                                                   draft_question:)
