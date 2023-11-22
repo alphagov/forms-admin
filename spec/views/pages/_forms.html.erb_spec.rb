@@ -5,7 +5,6 @@ describe "pages/_form.html.erb", type: :view do
   let(:draft_question) { question_form.draft_question }
   let(:question_form) do
     build :question_form,
-          form_id: form.id,
           answer_type: page.answer_type,
           question_text: page.question_text,
           hint_text: page.hint_text
@@ -73,7 +72,6 @@ describe "pages/_form.html.erb", type: :view do
     let(:draft_question) { build :draft_question, :with_guidance }
     let(:question_form) do
       build :question_form,
-            form_id: form.id,
             draft_question:,
             answer_type: page.answer_type,
             question_text: page.question_text,

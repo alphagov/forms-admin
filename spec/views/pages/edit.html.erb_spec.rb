@@ -9,7 +9,6 @@ describe "pages/edit.html.erb" do
   let(:draft_question) { question_form.draft_question }
   let(:question_form) do
     build :question_form,
-          form_id: form.id,
           answer_type: page.answer_type,
           question_text: page.question_text,
           hint_text: page.hint_text
@@ -29,7 +28,6 @@ describe "pages/edit.html.erb" do
     assign(:page, page)
     assign(:question_form, question_form)
     assign(:current_user, current_user)
-    assign(:answer_types, [])
 
     # This is normally done in the ApplicationController, but we aren't using
     # that in this test

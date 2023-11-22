@@ -7,8 +7,6 @@ FactoryBot.define do
     answer_settings { nil }
     page_heading { nil }
     guidance_markdown { nil }
-    page_id { nil }
-    form_id { nil }
     draft_question { build :draft_question, question_text: }
 
     trait :with_hints do
