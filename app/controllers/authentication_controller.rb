@@ -5,28 +5,18 @@ class AuthenticationController < ApplicationController
   layout false
 
   def self.call(env)
-    action(:redirect_to_omniauth).call(env)
+    action(:redirect_to_login).call(env)
+  end
+
+  def redirect_to_login
+    store_location(attempted_path) if request.get?
+
+    redirect_to(login_url(request.query_parameters))
   end
 
   def login
+    @is_e2e_user = e2e_user?
     render "authentications/login", layout: "application"
-  end
-
-  def redirect_to_omniauth
-    store_location(attempted_path) if request.get?
-
-    params = {}
-    if default_provider == "auth0" && e2e_user?
-      # the value passed in connection must match the name given in the auth0 terraform
-      params[:connection] = "Username-Password-Authentication"
-    end
-
-    redirect_to(login_url, params:)
-  end
-
-  def e2e_user?
-    # this should be appended to the first request in the e2e tests to activate the username/password flow
-    request.params[:auth] == "e2e"
   end
 
   def callback_from_omniauth
@@ -90,5 +80,11 @@ private
 
   def mock_gds_sso_sign_out_url
     "https://signon.integration.publishing.service.gov.uk/users/sign_out"
+  end
+
+  def e2e_user?
+    # this should be appended to the first request in the e2e tests to activate
+    # the username/password flow
+    params.permit(:auth)[:auth] == "e2e"
   end
 end

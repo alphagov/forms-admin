@@ -1,7 +1,9 @@
 <% set_page_title(t("page_titles.login")) %>
 
-<%= govuk_button_to 'Login', omniauth_authorize_path, method: :post %>
+<%= login_button(is_e2e_user: @is_e2e_user) %>
 
-<script>
-  document.querySelector('button[type=submit]').click()
-</script>
+<% content_for :body_end do %>
+  <script>
+    document.querySelector('button[type=submit]').click()
+  </script>
+<% end %>
