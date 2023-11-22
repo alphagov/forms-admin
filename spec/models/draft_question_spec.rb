@@ -180,7 +180,7 @@ RSpec.describe DraftQuestion, type: :model do
       let(:answer_settings) { nil }
 
       it "returns empty hash" do
-        expect(draft_question.answer_settings).to be_nil
+        expect(draft_question.answer_settings).to be_empty
       end
     end
   end

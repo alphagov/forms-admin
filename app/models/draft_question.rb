@@ -11,7 +11,7 @@ class DraftQuestion < ApplicationRecord
 
   def answer_settings
     raw_settings = read_attribute(:answer_settings)
-    return raw_settings if raw_settings.blank?
+    return {} if raw_settings.blank?
 
     raw_settings.deep_symbolize_keys
   end

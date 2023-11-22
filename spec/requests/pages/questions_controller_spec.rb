@@ -269,7 +269,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
           question_text: "What is your home address?",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
-          answer_settings: nil,
+          answer_settings: {},
           is_optional: nil,
           page_heading: "New page heading",
           guidance_markdown: "## Heading level 2",
