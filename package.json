@@ -33,7 +33,7 @@
     "stylelint": "^15.11.0",
     "stylelint-config-gds": "^1.1.0",
     "vite": "^5.0.2",
-    "vite-plugin-ruby": "^3.2.2"
+    "vite-plugin-ruby": "^5.0.0"
   },
   "dependencies": {
     "dfe-autocomplete": "github:DFE-Digital/dfe-autocomplete#36d80e6b5bba67c92cd9ec6982a4e536d1889aed",
