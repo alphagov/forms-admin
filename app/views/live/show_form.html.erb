@@ -28,7 +28,11 @@
     <% end %>
 
     <h3 class="govuk-heading-m"><%= t('show_live_form.what_happens_next') %></h3>
-    <p><%= form.what_happens_next_text %></p>
+    <% if form.what_happens_next_markdown.present? %>
+      <%= GovukFormsMarkdown.render(form.what_happens_next_markdown) %>
+    <% else %>
+      <p><%= form.what_happens_next_text %></p>
+    <% end %>
     <%= govuk_details(summary_text: t('show_live_form.what_is_what_happens_next'), text: t('show_live_form.what_happens_next_description')) %>
 
     <h3 class="govuk-heading-m"><%= t('show_live_form.submission_email') %></h3>

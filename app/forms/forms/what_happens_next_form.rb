@@ -1,5 +1,5 @@
 class Forms::WhatHappensNextForm < BaseForm
-  attr_accessor :form, :what_happens_next_text
+  attr_accessor :form, :what_happens_next_text, :what_happens_next_markdown
 
   validates :what_happens_next_text, length: { maximum: 2000 }
 
@@ -7,11 +7,13 @@ class Forms::WhatHappensNextForm < BaseForm
     return false if invalid?
 
     form.what_happens_next_text = what_happens_next_text
+    form.what_happens_next_markdown = what_happens_next_markdown
     form.save!
   end
 
   def assign_form_values
     self.what_happens_next_text = form.what_happens_next_text
+    self.what_happens_next_markdown = form.what_happens_next_markdown
     self
   end
 end

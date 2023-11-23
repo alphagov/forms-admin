@@ -9,6 +9,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       start_page: 1,
       organisation_id: 1,
       what_happens_next_text: "Good things come to those who wait",
+      what_happens_next_markdown: nil,
       live_at: nil,
       has_live_version: false,
     }.to_json
@@ -21,6 +22,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       id: 2,
       organisation_id: 1,
       what_happens_next_text: "",
+      what_happens_next_markdown: nil,
       live_at: nil,
       has_live_version: false,
     )
@@ -33,6 +35,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       id: 2,
       organisation_id: 1,
       what_happens_next_text: "Wait until you get a reply",
+      what_happens_next_markdown: nil,
       live_at: nil,
       has_live_version: false,
     })

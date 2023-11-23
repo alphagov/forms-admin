@@ -37,7 +37,18 @@
         </p>
       <% end %>
 
-      <%= f.govuk_text_area :what_happens_next_text, max_chars: 2000, label: {size: 'm' } %>
+
+      <% if @what_happens_next_form.what_happens_next_markdown.nil? %>
+        <%= f.govuk_text_area :what_happens_next_text, max_chars: 2000, label: {size: 'm' } %>
+      <% else %>
+        <%= render MarkdownEditorComponent::View.new(:what_happens_next_markdown,
+          form_builder: f,
+          render_preview_path: what_happens_next_render_preview_path(@what_happens_next_form.form),
+          preview_html: @preview_html,
+          form_model: @what_happens_next_form,
+          label: "Enter some information to tell people what will happen next",
+          hint: nil) %>
+      <% end %>
 
       <%= f.govuk_submit t("save_and_continue") %>
     <% end %>

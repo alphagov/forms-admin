@@ -40,6 +40,7 @@ Rails.application.routes.draw do
     post "/make-live" => "forms/make_live#create", as: :make_live_create
     get "/what-happens-next" => "forms/what_happens_next#new", as: :what_happens_next
     post "/what-happens-next" => "forms/what_happens_next#create", as: :what_happens_next_create
+    post "/what-happens-next-preview" => "forms/what_happens_next#render_preview", as: :what_happens_next_render_preview
     get "/contact-details" => "forms/contact_details#new", as: :contact_details
     post "/contact-details" => "forms/contact_details#create", as: :contact_details_create
     get "/declaration" => "forms/declaration#new", as: :declaration
