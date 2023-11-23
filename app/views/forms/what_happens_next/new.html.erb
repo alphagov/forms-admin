@@ -47,10 +47,11 @@
           preview_html: @preview_html,
           form_model: @what_happens_next_form,
           label: "Enter some information to tell people what will happen next",
-          hint: nil) %>
+          hint: nil,
+          allow_headings: false) %>
       <% end %>
 
-      <%= f.govuk_submit t("save_and_continue") %>
+      <%= f.govuk_submit t("save_and_continue"), name: "route_to", value: "save_and_continue" %>
     <% end %>
   </div>
 </div>
