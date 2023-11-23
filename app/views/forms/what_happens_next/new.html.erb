@@ -1,4 +1,4 @@
-<% set_page_title(title_with_error_prefix(t('pages_titles.what_happens_next_form'), @what_happens_next_form.errors.present?)) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.what_happens_next_form"), @what_happens_next_form.errors.present?)) %>
 <% content_for :back_link, govuk_back_link_to(form_path(@what_happens_next_form.form), t("back_link.form_create")) %>
 
 
