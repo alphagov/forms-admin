@@ -1,4 +1,4 @@
-<% set_page_title(title_with_error_prefix(t('page_titles.make_live_form'), @what_happens_next_form.errors.present?)) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.what_happens_next_form"), @what_happens_next_form.errors.present?)) %>
 <% content_for :back_link, govuk_back_link_to(form_path(@what_happens_next_form.form), t("back_link.form_create")) %>
 
 
@@ -14,9 +14,7 @@
         <%= t("page_titles.what_happens_next_form") %>
       </h1>
 
-      <p>This page will be shown after someone has completed and submitted the form to let them know it’s been submitted successfully.</p>
-
-      <p>Add some content to let people know what will happen next and when, so they know what to expect.</p>
+      <p>Add some information to tell people what will happen after they've submitted their form, and when - so they know what to expect.</p>
 
       <h2 class="govuk-heading-s">Example</h2>
 
@@ -25,11 +23,17 @@
       <% end %>
 
       <% if FeatureService.enabled?(:email_confirmations_enabled) %>
-        <p class="govuk-!-margin-bottom-6">
-          This content will also be included in an email confirming that a form’s been
-          submitted - if people choose to receive this. The email will include the date and
-          time of submission, and contact details for support. It will not contain
-          a copy of someone’s answers.
+        <p>
+          This content will be:
+        </p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li> shown to people when they've completed and submitted a form
+          <li> included in an email confirmation, if they choose to receive this
+        </ul>
+
+        <p>
+          The optional email confirmation will also include the contact details you provide for the form,
+          and the date and time of submission. It will not include a copy of their answers.
         </p>
       <% end %>
 

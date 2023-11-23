@@ -71,13 +71,17 @@ en:
     new:
       body_html: |
         <p>
-          You need to provide at least one way for people to get help if they get stuck while filling in this form.
+          You need to provide at least one way for people to get help if they get stuck.
         </p>
 
         <p>
-          The contact information will be displayed at the bottom of every page of the form.
+          Contact information will be shown:
         </p>
-      email_confirmation_hint_html: It will also be included in an email confirming that a form’s been submitted - if people choose to receive this. The email will include the date and time of submission. It will not contain a copy of someone’s answers.
+        <ul class="govuk-list govuk-list--bullet">
+          <li>at the bottom of every page of the form</li>
+          <li>in an email confirming the date and time a form was submitted - if someone chooses to receive this</li>
+        </ul>
+      email_confirmation_hint_html: The optional email confirmation will also include the 'what happens next' information you provide. It will not contain a copy of their answers.
       hint: Select at least one option
       title: How can people get help with filling in this form?
   contact_govuk_forms: contact the GOV.UK Forms team
@@ -605,7 +609,7 @@ en:
     user_missing_organisation: You do not have an organisation set for your account
     user_upgrade_request_confirmation: Request to upgrade to editor account received
     user_upgrade_request_new: Requirements to upgrade to an editor account
-    what_happens_next_form: Form submitted page
+    what_happens_next_form: Add information about what happens next
     your_changes_are_live: Your changes are live
     your_form_is_live: Your form is live
   pages:
