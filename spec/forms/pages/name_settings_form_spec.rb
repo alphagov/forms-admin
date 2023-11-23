@@ -78,7 +78,7 @@ RSpec.describe Pages::NameSettingsForm, type: :model do
       expected_settings = {
         input_type: "full_name",
         title_needed: "true",
-      }.with_indifferent_access
+      }
 
       expect(name_settings_form.draft_question.answer_settings).to include(expected_settings)
     end

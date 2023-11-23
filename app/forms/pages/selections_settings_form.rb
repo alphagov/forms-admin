@@ -25,7 +25,7 @@ class Pages::SelectionsSettingsForm < BaseForm
 
     # Set answer_settings for the draft_question
     draft_question
-      .assign_attributes({ answer_settings: answer_settings.with_indifferent_access,
+      .assign_attributes({ answer_settings:,
                            is_optional: include_none_of_the_above })
 
     draft_question.save!(validate: false)

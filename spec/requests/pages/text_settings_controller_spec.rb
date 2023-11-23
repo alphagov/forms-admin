@@ -75,7 +75,7 @@ RSpec.describe Pages::TextSettingsController, type: :request do
 
       it "saves the input type to draft question answers setting" do
         form = assigns(:text_settings_form)
-        expect(form.draft_question.answer_settings.with_indifferent_access).to include(input_type: text_settings_form.input_type)
+        expect(form.draft_question.answer_settings).to include(input_type: text_settings_form.input_type)
       end
 
       it "redirects the user to the edit question page" do
@@ -148,7 +148,7 @@ RSpec.describe Pages::TextSettingsController, type: :request do
       it "saves the updated input type to DB" do
         form_instance_variable = assigns(:text_settings_form)
         expect(form_instance_variable.input_type).to eq input_type
-        expect(form_instance_variable.draft_question.answer_settings.with_indifferent_access)
+        expect(form_instance_variable.draft_question.answer_settings)
           .to include({ input_type: })
       end
 

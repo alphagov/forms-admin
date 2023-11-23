@@ -1,6 +1,6 @@
 class Pages::AddressSettingsController < PagesController
   def new
-    settings = draft_question.answer_settings.with_indifferent_access
+    settings = draft_question.answer_settings
     @address_settings_form = Pages::AddressSettingsForm.new(uk_address: settings.dig(:input_type, :uk_address),
                                                             international_address: settings.dig(:input_type, :international_address))
     @address_settings_path = address_settings_create_path(current_form)
@@ -21,7 +21,7 @@ class Pages::AddressSettingsController < PagesController
   end
 
   def edit
-    settings = draft_question.answer_settings.with_indifferent_access
+    settings = draft_question.answer_settings
     @address_settings_form = Pages::AddressSettingsForm.new(uk_address: settings.dig(:input_type, :uk_address),
                                                             international_address: settings.dig(:input_type, :international_address))
     @address_settings_path = address_settings_update_path(current_form)

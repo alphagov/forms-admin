@@ -34,7 +34,7 @@ module PageSettingsSummaryComponent
     def answer_settings
       return [] if @draft_question.answer_settings.nil?
 
-      @draft_question.answer_settings.with_indifferent_access
+      @draft_question.answer_settings
     end
 
     def show_selection_options

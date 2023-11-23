@@ -88,7 +88,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
       it "saves the input type to draft question" do
         form = assigns(:address_settings_form)
-        expect(form.draft_question.answer_settings.with_indifferent_access).to include(input_type: { uk_address: address_settings_form.uk_address, international_address: address_settings_form.international_address })
+        expect(form.draft_question.answer_settings).to include(input_type: { uk_address: address_settings_form.uk_address, international_address: address_settings_form.international_address })
       end
 
       it "redirects the user to the edit question page" do
@@ -129,8 +129,8 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
     it "returns the existing page input type" do
       form = assigns(:address_settings_form)
-      expect(form.uk_address).to eq draft_question.answer_settings.deep_symbolize_keys[:input_type][:uk_address]
-      expect(form.international_address).to eq draft_question.answer_settings.deep_symbolize_keys[:input_type][:international_address]
+      expect(form.uk_address).to eq draft_question.answer_settings[:input_type][:uk_address]
+      expect(form.international_address).to eq draft_question.answer_settings[:input_type][:international_address]
     end
 
     it "sets an instance variable for address_settings_path" do
@@ -172,7 +172,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
         form_instance_variable = assigns(:address_settings_form)
         expect(form_instance_variable.uk_address).to eq "true"
         expect(form_instance_variable.international_address).to eq "false"
-        expect(form_instance_variable.draft_question.answer_settings.with_indifferent_access).to include(input_type: { uk_address: "true", international_address: "false" })
+        expect(form_instance_variable.draft_question.answer_settings).to include(input_type: { uk_address: "true", international_address: "false" })
       end
 
       it "redirects the user to the edit question page" do

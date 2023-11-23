@@ -75,7 +75,7 @@ RSpec.describe Pages::DateSettingsController, type: :request do
 
       it "saves the input type to Draft Question" do
         form_instance_variable = assigns(:date_settings_form)
-        expect(form_instance_variable.draft_question.answer_settings.with_indifferent_access).to include(input_type: "date_of_birth")
+        expect(form_instance_variable.draft_question.answer_settings).to include(input_type: "date_of_birth")
       end
 
       it "redirects the user to the edit question page" do
@@ -152,7 +152,7 @@ RSpec.describe Pages::DateSettingsController, type: :request do
       it "loads the updated input type from the page params" do
         form_instance_variable = assigns(:date_settings_form)
         expect(form_instance_variable.input_type).to eq "other_date"
-        expect(form_instance_variable.draft_question.answer_settings.with_indifferent_access).to include(input_type: "other_date")
+        expect(form_instance_variable.draft_question.answer_settings).to include(input_type: "other_date")
       end
 
       it "redirects the user to the edit question page" do

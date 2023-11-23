@@ -76,7 +76,7 @@ describe Pages::SelectionsSettingsController, type: :request do
 
       it "saves the the info to draft question" do
         settings_form = assigns(:selections_settings_form)
-        draft_question_settings = settings_form.draft_question.answer_settings.with_indifferent_access
+        draft_question_settings = settings_form.draft_question.answer_settings
 
         expect(draft_question_settings).to include(only_one_option: "true",
                                                    selection_options: [{ name: "Option 1" }, { name: "Option 2" }])
@@ -119,7 +119,7 @@ describe Pages::SelectionsSettingsController, type: :request do
 
     it "returns the existing draft question answer settings" do
       settings_form = assigns(:selections_settings_form)
-      draft_question_settings = settings_form.draft_question.answer_settings.with_indifferent_access
+      draft_question_settings = settings_form.draft_question.answer_settings
       expect(settings_form.only_one_option).to eq draft_question_settings[:only_one_option]
       expect(settings_form.selection_options.map { |option| { name: option[:name] } }).to eq(draft_question_settings[:selection_options].map { |option| { name: option[:name] } })
       expect(settings_form.include_none_of_the_above).to eq settings_form.draft_question.is_optional

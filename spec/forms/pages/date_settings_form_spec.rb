@@ -58,7 +58,7 @@ RSpec.describe Pages::DateSettingsForm, type: :model do
 
       expected_settings = {
         input_type: "date_of_birth",
-      }.with_indifferent_access
+      }
 
       expect(date_settings_form.draft_question.answer_settings).to include(expected_settings)
     end

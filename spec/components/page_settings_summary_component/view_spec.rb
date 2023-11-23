@@ -124,7 +124,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
     it "renders the input type" do
       render_inline(described_class.new(draft_question))
       expect(page).to have_text "Length"
-      expect(page).to have_text I18n.t("helpers.label.page.text_settings_options.names.#{draft_question.answer_settings.with_indifferent_access[:input_type]}")
+      expect(page).to have_text I18n.t("helpers.label.page.text_settings_options.names.#{draft_question.answer_settings[:input_type]}")
     end
 
     context "when input_type is long text" do
@@ -138,7 +138,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
       it "renders the input type" do
         render_inline(described_class.new(draft_question))
         expect(page).to have_text "Length"
-        expect(page).to have_text I18n.t("helpers.label.page.text_settings_options.names.#{draft_question.answer_settings.with_indifferent_access[:input_type]}")
+        expect(page).to have_text I18n.t("helpers.label.page.text_settings_options.names.#{draft_question.answer_settings[:input_type]}")
       end
     end
 
@@ -173,7 +173,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
     it "renders the input type" do
       render_inline(described_class.new(draft_question))
       expect(page).to have_text "Date of birth"
-      expect(page).to have_text I18n.t("helpers.label.page.date_settings_options.input_types.#{draft_question.answer_settings.with_indifferent_access[:input_type]}")
+      expect(page).to have_text I18n.t("helpers.label.page.date_settings_options.input_types.#{draft_question.answer_settings[:input_type]}")
     end
 
     context "when the date has no answer settings" do

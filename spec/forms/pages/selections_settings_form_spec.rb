@@ -69,7 +69,7 @@ RSpec.describe Pages::SelectionsSettingsForm, type: :model do
       expected_settings = {
         only_one_option: true,
         selection_options: [{ name: "1" }, { name: "2" }],
-      }.with_indifferent_access
+      }
 
       expect(selections_settings_form.draft_question.answer_settings).to include(expected_settings)
       expect(selections_settings_form.draft_question.is_optional).to eq(true)
