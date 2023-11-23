@@ -22,6 +22,6 @@ private
   end
 
   def add_organisation_to_user_mou
-    MouSignature.add_mou_signature_organisation(@user)
+    @user.signs_mou_for_organisation
   end
 end

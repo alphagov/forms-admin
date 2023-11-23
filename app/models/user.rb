@@ -85,6 +85,10 @@ class User < ApplicationRecord
     role_changed_to_editor
   end
 
+  def signs_mou_for_organisation
+    mou_signatures.without_organisations.update!(organisation_id: organisation.id)
+  end
+
 private
 
   def requires_name?

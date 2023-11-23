@@ -2,10 +2,7 @@ class MouSignature < ApplicationRecord
   belongs_to :user
   belongs_to :organisation, optional: true
 
-  validates :agreed, acceptance: true
+  scope :without_organisations, -> { where(organisation: nil) }
 
-  def self.add_mou_signature_organisation(user)
-    mous_without_organisations = MouSignature.where(user:, organisation: nil)
-    mous_without_organisations.update!(organisation_id: user.organisation.id)
-  end
+  validates :agreed, acceptance: true
 end
