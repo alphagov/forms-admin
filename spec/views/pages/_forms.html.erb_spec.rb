@@ -56,7 +56,7 @@ describe "pages/_form.html.erb", type: :view do
     let(:is_new_page) { false }
 
     it "contains a link to add guidance" do
-      expect(rendered).to have_link(text: I18n.t("guidance.add_guidance"), href: guidance_edit_path(form_id: form.id, page_id: page.id))
+      expect(rendered).to have_link(text: I18n.t("guidance.add_guidance"), href: guidance_edit_path(form_id: 1, page_id: 2))
     end
 
     it "has no hidden field for the answer type" do
@@ -64,7 +64,7 @@ describe "pages/_form.html.erb", type: :view do
     end
 
     it "has a delete button" do
-      expect(rendered).to have_button("delete")
+      expect(rendered).to have_link(text: I18n.t("pages.delete_question"), href: delete_page_path(form_id: form.id, page_id: page.id))
     end
   end
 
