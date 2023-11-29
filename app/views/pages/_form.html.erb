@@ -47,5 +47,5 @@
     <%= f.govuk_submit t('pages.submit_save'), name: :save_preview, secondary: true %>
   <% end %>
 
-  <%= f.govuk_submit t('pages.delete_question'), name: :delete, warning: true unless is_new_page %>
+  <%= govuk_button_link_to t('pages.delete_question'), delete_page_path(form_id: form_object.id, page_id: page_object.id), warning: true unless is_new_page %>
 <% end %>

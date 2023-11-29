@@ -74,8 +74,6 @@ private
     # if user chose to save and reload current page
     return redirect_to edit_question_path(current_form, @page), success: "Your changes have been saved" if params[:save_preview]
 
-    return redirect_to delete_page_path(current_form, @page) if params[:delete]
-
     # Default: either edit the next page or create a new one
     if @page.has_next_page?
       redirect_to edit_question_path(current_form, @page.next_page)
