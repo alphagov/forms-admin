@@ -279,10 +279,10 @@ RSpec.describe Pages::GuidanceController, type: :request do
   end
 
   describe "#render_preview" do
-    let(:guidance_markdown) { "### Markdown" }
+    let(:markdown) { "### Markdown" }
 
     before do
-      post guidance_render_preview_path(form_id: form.id), params: { guidance_markdown: }
+      post guidance_render_preview_path(form_id: form.id), params: { markdown: }
     end
 
     it "returns a JSON object containing the converted HTML" do
@@ -294,7 +294,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
     end
 
     context "when markdown is blank" do
-      let(:guidance_markdown) { "" }
+      let(:markdown) { "" }
 
       it "returns a JSON object containing the converted HTML" do
         expect(response.body).to eq({ preview_html: I18n.t("guidance.no_guidance_added_html"), errors: [] }.to_json)
@@ -306,7 +306,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
     end
 
     context "when markdown contains forbidden syntax" do
-      let(:guidance_markdown) { "# A level one heading" }
+      let(:markdown) { "# A level one heading" }
 
       it "returns a JSON object containing the converted HTML" do
         expect(response.body).to eq({ preview_html: "<p class=\"govuk-body\">A level one heading</p>", errors: [I18n.t("activemodel.errors.models.pages/guidance_form.attributes.guidance_markdown.unsupported_markdown_syntax")] }.to_json)

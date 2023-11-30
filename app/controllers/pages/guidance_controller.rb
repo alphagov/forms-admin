@@ -51,7 +51,7 @@ class Pages::GuidanceController < PagesController
   end
 
   def render_preview
-    guidance_form = Pages::GuidanceForm.new(guidance_markdown: params[:guidance_markdown])
+    guidance_form = Pages::GuidanceForm.new(guidance_markdown: params[:markdown])
     guidance_form.validate
 
     render json: { preview_html: preview_html(guidance_form), errors: guidance_form.errors[:guidance_markdown] }.to_json
