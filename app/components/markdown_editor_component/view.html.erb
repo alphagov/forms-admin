@@ -13,6 +13,7 @@
                         aria: { describedby: "#{form_field_id}-hint" },
                         "data-module": "markdown-editor-toolbar",
                         "data-ajax-markdown-source": true,
+                        "data-allow-headings": allow_headings,
                         "data-i18n": translations[:toolbar].to_json())  %>
 
       <%= f.govuk_submit preview_button_translation, secondary: true,  name: "route_to", value: "preview", class: "app-markdown-editor__preview-button","data-ajax-markdown-trigger": true %>
@@ -23,7 +24,7 @@
             <%= t("markdown_editor.formatting_help.formatting_help_section_heading") %>
           </h2>
         <% end %>
-        <% %w[links headings bulleted_lists numbered_lists].each do |format_name| %>
+        <% allowed_formats.each do |format_name| %>
           <h3 class="govuk-heading-m"><%= t("markdown_editor.formatting_help.#{format_name}.heading") %></h3>
 
           <%= simple_format(t("markdown_editor.formatting_help.#{format_name}.instructions")) %>

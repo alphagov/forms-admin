@@ -29,4 +29,16 @@ class MarkdownEditorComponent::MarkdownEditorComponentPreview < ViewComponent::P
                                                write_tab_text: "Write guidance",
                                              }))
   end
+
+  def with_headings_disallowed
+    form_builder = GOVUKDesignSystemFormBuilder::FormBuilder.new(:form, Pages::GuidanceForm.new,
+                                                                 ActionView::Base.new(ActionView::LookupContext.new(nil), {}, nil), {})
+
+    render(MarkdownEditorComponent::View.new(:guidance_markdown,
+                                             form_builder:,
+                                             preview_html: "<p>No markdown added</p>",
+                                             form_model: Pages::GuidanceForm.new,
+                                             label: "Add some markdown",
+                                             hint: "Use Markdown to format your content. Formatting help can be found below.", allow_headings: false))
+  end
 end

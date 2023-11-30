@@ -12,7 +12,7 @@ private
   def markdown_length_and_tags
     return true if guidance_markdown.blank?
 
-    markdown_validation = GovukFormsMarkdown.validate(guidance_markdown)
+    markdown_validation = GovukFormsMarkdown.validate(guidance_markdown, allow_headings: true)
 
     return true if markdown_validation[:errors].empty?
 

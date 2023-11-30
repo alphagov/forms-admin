@@ -20,7 +20,8 @@ document
   .forEach(element => {
     markdownEditorToolbar(
       element,
-      JSON.parse(element.getAttribute('data-i18n'))
+      JSON.parse(element.getAttribute('data-i18n')),
+      element.getAttribute('data-allow-headings') === 'true'
     )
     element.addEventListener('paste', pasteListener)
   })

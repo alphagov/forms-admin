@@ -12,6 +12,8 @@ RSpec.describe MarkdownEditorComponent::View, type: :component do
     {}
   end
 
+  let(:allow_headings) { true }
+
   let(:markdown_editor) do
     described_class.new(:guidance_markdown,
                         form_builder:,
@@ -20,7 +22,8 @@ RSpec.describe MarkdownEditorComponent::View, type: :component do
                         form_model: Pages::GuidanceForm.new,
                         label: "Add some markdown",
                         hint: "Use Markdown to format your content. Formatting help can be found below.",
-                        local_translations:)
+                        local_translations:,
+                        allow_headings:)
   end
 
   before do
@@ -122,6 +125,20 @@ RSpec.describe MarkdownEditorComponent::View, type: :component do
             },
           },
         )
+      end
+    end
+  end
+
+  describe "allowed_formats" do
+    it "returns the allowed formats including headings" do
+      expect(markdown_editor.allowed_formats).to eq(%w[links headings bulleted_lists numbered_lists])
+    end
+
+    context "when headings are not allowed" do
+      let(:allow_headings) { false }
+
+      it "returns the allowed formats without headings" do
+        expect(markdown_editor.allowed_formats).to eq(%w[links bulleted_lists numbered_lists])
       end
     end
   end
