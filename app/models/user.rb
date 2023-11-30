@@ -4,6 +4,12 @@ class User < ApplicationRecord
 
   class UserAuthenticationException < StandardError; end
 
+  EMAIL_DOMAIN_DENYLIST = [
+    "dwp.gov.uk",
+    "engineering.dwp.gov.uk",
+    "hse.gov.uk",
+  ].freeze
+
   belongs_to :organisation, optional: true
   has_many :mou_signatures
   has_many :draft_questions
@@ -20,6 +26,10 @@ class User < ApplicationRecord
   validates :role, presence: true
   validates :organisation_id, presence: true, if: :requires_organisation?
   validates :has_access, inclusion: [true, false]
+
+  before_create do
+    self.has_access = false if organisation_restricted_access?
+  end
 
   def self.find_for_gds_oauth(auth_hash)
     find_for_auth(
@@ -70,6 +80,12 @@ class User < ApplicationRecord
 
   def has_signed_current_organisation_mou?
     mou_signatures.where(organisation: organisation || nil).exists?
+  end
+
+  def organisation_restricted_access?
+    email_domain = email.present? ? email.split("@").last : nil
+
+    EMAIL_DOMAIN_DENYLIST.include?(email_domain)
   end
 
   def current_organisation_mou_signature

@@ -89,7 +89,7 @@ describe User, type: :model do
     end
 
     it "avoids uid collisions" do
-      expect(described_class.find_for_auth(provider: "other", uid: "123456"))
+      expect(described_class.find_for_auth(provider: "other", uid: "123456", email: "someone@example.com"))
         .not_to eq user
     end
 
@@ -266,6 +266,31 @@ describe User, type: :model do
     it "is not valid to leave name unset if changing role to super admin" do
       user.role = :super_admin
       expect(user).to be_invalid
+    end
+  end
+
+  describe "creation callbacks" do
+    it "allow access for users with an unrestricted email domain" do
+      user = create(:user)
+
+      expect(user.organisation_restricted_access?).to eq(false)
+      expect(user.has_access).to eq(true)
+    end
+
+    it "allow access for users without an email address" do
+      user = create(:user, email: nil)
+
+      expect(user.organisation_restricted_access?).to eq(false)
+      expect(user.has_access).to eq(true)
+    end
+
+    User::EMAIL_DOMAIN_DENYLIST.each do |email_domain|
+      it "deny access for users with a restricted email domain" do
+        user = create(:user, email: "test@#{email_domain}")
+
+        expect(user.organisation_restricted_access?).to eq(true)
+        expect(user.has_access).to eq(false)
+      end
     end
   end
 

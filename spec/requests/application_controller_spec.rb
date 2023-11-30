@@ -90,6 +90,36 @@ RSpec.describe ApplicationController, type: :request do
 
         it "renders the access denied page" do
           expect(response).to render_template("errors/access_denied")
+          expect(response.body).to include("if you think this is incorrect.")
+        end
+      end
+    end
+
+    context "when a user is logged in from an access restricting organisation" do
+      let(:user) { create :user, :trial, email: User::EMAIL_DOMAIN_DENYLIST.first }
+
+      before do
+        login_as user
+      end
+
+      [
+        "/",
+        "/users",
+        "/forms/1",
+      ].each do |path|
+        context "when accessing #{path}" do
+          before do
+            get path
+          end
+
+          it "returns http code 403 for #{path}" do
+            expect(response).to have_http_status(:forbidden)
+          end
+
+          it "renders the access denied by organisation page" do
+            expect(response).to render_template("errors/access_denied")
+            expect(response.body).to include(I18n.t("forbidden.body_html_org_restricted"))
+          end
         end
       end
     end

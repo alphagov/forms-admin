@@ -1,9 +1,11 @@
 <% set_page_title(t("page_titles.access_denied")) %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l"><%= t('page_titles.access_denied') %></h1>
-    <%= simple_format(t('forbidden.body_html', link: contact_link(t('forbidden.link_text')))) %>
+    <%= simple_format(
+      @current_user.organisation_restricted_access? ?
+        t('forbidden.body_html_org_restricted') :
+        t('forbidden.body_html', link: contact_link(t('forbidden.link_text')))
+    )%>
   </div>
 </div>
-
