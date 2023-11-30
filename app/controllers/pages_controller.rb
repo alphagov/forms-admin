@@ -9,6 +9,11 @@ class PagesController < ApplicationController
     render :index, locals: { current_form: }
   end
 
+  def start_new_question
+    clear_draft_questions_data
+    redirect_to type_of_answer_create_path(form_id: current_form.id)
+  end
+
   def move_page
     page_to_move = Page.find(move_params[:page_id], params: { form_id: move_params[:form_id] })
 

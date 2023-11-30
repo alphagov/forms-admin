@@ -51,6 +51,7 @@ Rails.application.routes.draw do
       post "/move-page" => "pages#move_page", as: :move_page
 
       scope "/new" do
+        get "/start-new-question" => "pages#start_new_question", as: :start_new_question
         get "/guidance" => "pages/guidance#new", as: :guidance_new
         post "/guidance" => "pages/guidance#create", as: :guidance_create
         post "/guidance-preview" => "pages/guidance#render_preview", as: :guidance_render_preview
