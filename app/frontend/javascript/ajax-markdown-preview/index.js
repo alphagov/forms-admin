@@ -39,7 +39,7 @@ const triggerAjaxMarkdownPreview = async () => {
         redirect: 'follow',
         referrerPolicy: 'same-origin',
         body: JSON.stringify({
-          guidance_markdown: store.source.value,
+          markdown: store.source.value,
           authenticity_token: store.authenticityToken
         })
       })

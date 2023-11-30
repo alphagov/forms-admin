@@ -11,6 +11,11 @@ RSpec.describe Pages::GuidanceForm, type: :model do
   end
 
   describe "validations" do
+    it_behaves_like "a markdown field with headings allowed" do
+      let(:model) { guidance_form }
+      let(:attribute) { :guidance_markdown }
+    end
+
     it "is invalid if page heading is nil" do
       error_message = I18n.t("activemodel.errors.models.pages/guidance_form.attributes.page_heading.blank")
       guidance_form.page_heading = nil

@@ -12,6 +12,7 @@ require_relative "support/matchers/active_resource/have_been_updated"
 require_relative "support/matchers/active_resource/have_been_read"
 require_relative "support/matchers/active_resource/have_been_deleted"
 require_relative "support/shared_examples/axe_core"
+require_relative "support/shared_examples/markdown_validation"
 
 require "simplecov"
 

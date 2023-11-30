@@ -93,6 +93,19 @@ describe('AJAX Markdown preview', () => {
     test('preview is called on page load', async () => {
       expect(target.innerHTML).toBe(jsonResponse.preview_html)
 
+      expect(global.fetch).toHaveBeenCalledWith('/endpoint', {
+        body: '{"markdown":"## This is a markdown heading"}',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': undefined
+        },
+        method: 'POST',
+        mode: 'same-origin',
+        redirect: 'follow',
+        referrerPolicy: 'same-origin'
+      })
       expect(global.fetch).toHaveBeenCalledTimes(1)
     })
 

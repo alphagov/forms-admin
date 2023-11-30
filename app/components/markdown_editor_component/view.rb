@@ -3,7 +3,7 @@
 module MarkdownEditorComponent
   class View < ViewComponent::Base
     include GOVUKDesignSystemFormBuilder::BuilderHelper
-    attr_reader :attribute_name, :f, :render_preview_path, :preview_html, :form_model, :label, :hint
+    attr_reader :attribute_name, :f, :render_preview_path, :preview_html, :form_model, :label, :hint, :allow_headings
 
     def initialize(attribute_name,
                    preview_html:,
@@ -12,6 +12,7 @@ module MarkdownEditorComponent
                    label: nil,
                    hint: nil,
                    render_preview_path: nil,
+                   allow_headings: true,
                    local_translations: {})
       super
       @attribute_name = attribute_name
@@ -21,11 +22,16 @@ module MarkdownEditorComponent
       @form_model = form_model
       @label = label
       @hint = hint
+      @allow_headings = allow_headings
       @local_translations = local_translations
     end
 
     def form_field_id
       govuk_field_id(form_model, attribute_name)
+    end
+
+    def allowed_formats
+      ["links", *(%w[headings] if allow_headings), "bulleted_lists", "numbered_lists"]
     end
 
     def preview_button_translation

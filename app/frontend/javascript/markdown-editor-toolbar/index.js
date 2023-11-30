@@ -46,22 +46,26 @@ const buttonGroupConfiguration = [
   [
     {
       identifier: 'h2',
-      callback: addH2
+      callback: addH2,
+      isHeading: true
     },
     {
       identifier: 'h3',
-      callback: addH3
+      callback: addH3,
+      isHeading: true
     }
   ],
-  [{ identifier: 'link', callback: addLink }],
+  [{ identifier: 'link', callback: addLink, isHeading: false }],
   [
     {
       identifier: 'bullet-list',
-      callback: addUnorderedList
+      callback: addUnorderedList,
+      isHeading: false
     },
     {
       identifier: 'numbered-list',
-      callback: addOrderedList
+      callback: addOrderedList,
+      isHeading: false
     }
   ]
 ]
@@ -82,17 +86,24 @@ const getButtonText = (identifier, i18n) => {
   return i18n[snakeCaseIdentifier]
 }
 
-const createButtonGroup = (configurationGroup, textArea, i18n) => {
+const createButtonGroup = (
+  configurationGroup,
+  textArea,
+  i18n,
+  allowHeadings
+) => {
   const buttonGroup = document.createElement('div')
   buttonGroup.classList.add('app-markdown-editor__toolbar-button-group')
-  const buttons = configurationGroup.map(buttonConfig =>
-    createButton(
-      textArea,
-      getButtonText(buttonConfig.identifier, i18n),
-      buttonConfig.callback,
-      buttonConfig.identifier
+  const buttons = configurationGroup
+    .filter(button => allowHeadings || !button.isHeading)
+    .map(buttonConfig =>
+      createButton(
+        textArea,
+        getButtonText(buttonConfig.identifier, i18n),
+        buttonConfig.callback,
+        buttonConfig.identifier
+      )
     )
-  )
 
   buttons.forEach(button => buttonGroup.appendChild(button))
   return buttonGroup
@@ -198,14 +209,15 @@ const addButtonFocusEvents = buttons => {
  * Adds a copy button to an element.
  * @param {HTMLElement} textArea - The textarea whose contents are being formatted by the toolbar.
  * @param {Object} i18n - An object containing translations for the toolbar button text.
+ * @param {Boolean} allowHeadings - whether the markdown field allows headings
  */
-const markdownEditorToolbar = (textArea, i18n) => {
+const markdownEditorToolbar = (textArea, i18n, allowHeadings = true) => {
   const toolbar = createToolbarForTextArea(textArea)
   textArea.parentNode.insertBefore(toolbar, textArea)
 
   buttonGroupConfiguration
     .map(buttonConfiguration =>
-      createButtonGroup(buttonConfiguration, textArea, i18n)
+      createButtonGroup(buttonConfiguration, textArea, i18n, allowHeadings)
     )
     .forEach(buttonGroup => toolbar.appendChild(buttonGroup))
 
