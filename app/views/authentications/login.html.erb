@@ -4,6 +4,11 @@
 
 <% content_for :body_end do %>
   <script>
-    document.querySelector('button[type=submit]').click()
+    (function() {
+      var loginButton = document.querySelector('[data-module="login-button"]');
+      if (loginButton && typeof loginButton.click === 'function') {
+        loginButton.click();
+      }
+    })();
   </script>
 <% end %>

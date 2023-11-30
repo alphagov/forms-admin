@@ -16,4 +16,19 @@ describe "authentications/login.html.erb" do
   it "has login form" do
     expect(rendered).to have_selector("form[action=\"/auth/#{Settings.auth_provider}/\"]")
   end
+
+  it "has login button" do
+    expect(rendered).to have_selector("[data-module=\"login-button\"]")
+  end
+
+  context "when @is_e2e_user is true" do
+    before do
+      assign(:is_e2e_user, true)
+      render template: "authentications/login"
+    end
+
+    it "has e2e login button" do
+      expect(rendered).to have_selector("input[type=\"hidden\"][name=\"connection\"][value=\"Username-Password-Authentication\"]", visible: :all)
+    end
+  end
 end

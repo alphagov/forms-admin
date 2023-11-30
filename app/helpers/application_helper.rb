@@ -85,7 +85,7 @@ module ApplicationHelper
   end
 
   def login_button(is_e2e_user:)
-    govuk_button_to t("login_button"), omniauth_authorize_path, params: login_params(is_e2e_user:)
+    govuk_button_to t("login_button"), omniauth_authorize_path, params: login_params(is_e2e_user:), data: { module: "login-button" }
   end
 
   def login_params(is_e2e_user:)
