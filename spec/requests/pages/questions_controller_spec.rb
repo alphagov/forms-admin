@@ -120,8 +120,8 @@ RSpec.describe Pages::QuestionsController, type: :request do
         } }
       end
 
-      it "Redirects you to a new type of answer page" do
-        expect(response).to redirect_to(type_of_answer_new_path(form_id: 2))
+      it "Redirects you to start new page" do
+        expect(response).to redirect_to(start_new_question_path(form_id: 2))
       end
 
       it "Creates the page on the API" do
@@ -320,8 +320,8 @@ RSpec.describe Pages::QuestionsController, type: :request do
         expect(matched_request).to eq expected_request
       end
 
-      it "Redirects you to the new type of answer page" do
-        expect(response).to redirect_to(type_of_answer_create_path(form_id: 2))
+      it "Redirects you to start new page" do
+        expect(response).to redirect_to(start_new_question_path(form_id: 2))
       end
     end
 

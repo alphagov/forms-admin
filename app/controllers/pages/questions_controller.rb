@@ -78,7 +78,7 @@ private
     if @page.has_next_page?
       redirect_to edit_question_path(current_form, @page.next_page)
     else
-      redirect_to type_of_answer_new_path(current_form)
+      redirect_to start_new_question_path(form_id: current_form.id)
     end
   end
 end
