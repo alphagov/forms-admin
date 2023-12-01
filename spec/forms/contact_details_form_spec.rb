@@ -14,11 +14,11 @@ RSpec.describe Forms::ContactDetailsForm, type: :model do
           expect(contact_details_form).to be_invalid
         end
 
-        it "is invalid if doesn't end with *.gov.uk" do
+        it "is invalid if it is not a government email address" do
           contact_details_form = build :contact_details_form, email: "something@gmail.com"
           expect(contact_details_form).to be_invalid
 
-          expect(contact_details_form.errors).to be_added :email, :non_govuk_email
+          expect(contact_details_form.errors).to be_added :email, :non_government_email
         end
 
         it "is invalid if doesn't have an @ symbol in" do
@@ -32,6 +32,15 @@ RSpec.describe Forms::ContactDetailsForm, type: :model do
         it "is valid if given an email with an @ and ending in .gov.uk" do
           contact_details_form = build :contact_details_form, email: "something@something.gov.uk"
           expect(contact_details_form).to be_valid
+        end
+
+        context "when the user has an email address in an email domain not ending with .gov.uk" do
+          let(:current_user) { build :user, email: "user@non-departmental.example" }
+
+          it "is valid if given an email address in the same domain as the user" do
+            contact_details_form = build(:contact_details_form, email: "something@non-departmental.example", current_user:)
+            expect(contact_details_form).to be_valid
+          end
         end
       end
 

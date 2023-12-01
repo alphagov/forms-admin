@@ -104,7 +104,7 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
       end
     end
 
-    context "when given an email address that does not end in .gov.uk" do
+    context "when given an email address for a non-government inbox" do
       let(:params) { { forms_contact_details_form: { contact_details_supplied: ["", "supply_email"], email: "a@gmail.com", form: } } }
 
       it "reads the form from the API" do
@@ -118,8 +118,34 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
       it "shows the error state" do
         expect(response).to render_template(:new)
         expect(response.body).to include I18n.t("error_summary.heading")
-        expect(response.body).to include I18n.t("errors.messages.non_govuk_email")
+        expect(response.body).to include I18n.t("errors.messages.non_government_email")
         expect(response).to have_http_status :unprocessable_entity
+      end
+    end
+
+    context "when current user has a government email address not ending with .gov.uk" do
+      let(:current_user) do
+        editor_user.update!(email: "user@public-sector-org.example")
+        editor_user
+      end
+
+      let(:params) { { forms_contact_details_form: { contact_details_supplied: ["", "supply_email"], email: "a@public-sector-org.example", form: } } }
+
+      let(:updated_form) do
+        form.tap do |f|
+          f.support_email = "a@public-sector-org.example"
+          f.support_phone = nil
+          f.support_url = nil
+          f.support_url_text = nil
+        end
+      end
+
+      it "updates the form on the API" do
+        expect(updated_form).to have_been_updated
+      end
+
+      it "redirects to the confirmation page" do
+        expect(response).to redirect_to(form_path(form_id: 2))
       end
     end
   end

@@ -91,7 +91,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
 
       it "does not accept the submission email address" do
         expect(response.body).to include I18n.t("error_summary.heading")
-        expect(response.body).to include I18n.t("errors.messages.non_govuk_email")
+        expect(response.body).to include I18n.t("errors.messages.non_government_email")
         expect(response).to have_http_status :unprocessable_entity
       end
     end
@@ -109,6 +109,14 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when current user has a government email address not ending with .gov.uk" do
+      let(:user) { build :user, email: "user@alb.example", role: :editor, id: 1 }
+
+      it "redirects to the email code sent page" do
+        expect(response).to redirect_to(submission_email_code_sent_path(form.id))
       end
     end
   end
