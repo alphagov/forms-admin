@@ -117,6 +117,7 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
         expect(response).to render_template(:new)
         expect(response.body).to include I18n.t("error_summary.heading")
         expect(response.body).to include I18n.t("errors.messages.non_govuk_email")
+        expect(response).to have_http_status :unprocessable_entity
       end
     end
   end

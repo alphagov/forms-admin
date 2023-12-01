@@ -13,7 +13,7 @@ module Forms
       if @contact_details_form.submit
         redirect_to form_path(@contact_details_form.form), success: t("banner.success.form.support_details_saved")
       else
-        render :new
+        render :new, status: :unprocessable_entity
       end
     end
 

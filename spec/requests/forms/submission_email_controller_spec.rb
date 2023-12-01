@@ -92,6 +92,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
       it "does not accept the submission email address" do
         expect(response.body).to include I18n.t("error_summary.heading")
         expect(response.body).to include I18n.t("errors.messages.non_govuk_email")
+        expect(response).to have_http_status :unprocessable_entity
       end
     end
 
@@ -203,6 +204,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
 
       it "responds with an error" do
         expect(response.body).to include I18n.t("error_summary.heading")
+        expect(response).to have_http_status :unprocessable_entity
       end
     end
 
