@@ -1,13 +1,13 @@
 require "rails_helper"
 
-RSpec.describe GovukEmailValidator do
+RSpec.describe AllowedEmailDomainValidator do
   let(:model) do
     # rubocop:disable RSpec/LeakyConstantDeclaration, Lint/ConstantDefinitionInBlock
     class ModelWithValidation
       include ActiveModel::Model
       attr_accessor :email
 
-      validates :email, govuk_email: true
+      validates :email, allowed_email_domain: true
     end
     # rubocop:enable RSpec/LeakyConstantDeclaration, Lint/ConstantDefinitionInBlock
     ModelWithValidation.new
