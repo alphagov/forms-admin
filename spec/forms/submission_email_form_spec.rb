@@ -17,8 +17,13 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
   end
 
   describe "validations" do
-    it "is invalid if not given an email address ending with .gov.uk" do
-      submission_email_form = build :submission_email_form, temporary_submission_email: "a@example.org"
+    it "is valid if given an email address ending with .gov.uk" do
+      submission_email_form = build :submission_email_form, temporary_submission_email: "a@example.gov.uk"
+      expect(submission_email_form).to be_valid
+    end
+
+    it "is invalid if given an email address for a non-government inbox" do
+      submission_email_form = build :submission_email_form, temporary_submission_email: "a@gmail.com"
       expect(submission_email_form).to be_invalid
     end
 

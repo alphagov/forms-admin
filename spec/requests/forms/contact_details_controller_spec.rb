@@ -98,6 +98,24 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
 
       it "shows the error state" do
         expect(response).to render_template(:new)
+        expect(response.body).to include I18n.t("error_summary.heading")
+      end
+    end
+
+    context "when given an email address that does not end in .gov.uk" do
+      let(:params) { { forms_contact_details_form: { contact_details_supplied: ["", "supply_email"], email: "a@gmail.com", form: } } }
+
+      it "reads the form from the API" do
+        expect(form).to have_been_read
+      end
+
+      it "does not update the form on the API" do
+        expect(updated_form).not_to have_been_updated
+      end
+
+      it "shows the error state" do
+        expect(response).to render_template(:new)
+        expect(response.body).to include I18n.t("error_summary.heading")
       end
     end
   end
