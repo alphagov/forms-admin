@@ -80,15 +80,24 @@ module ApplicationHelper
     end
   end
 
-  def omniauth_authorize_path
-    "/auth/#{Settings.auth_provider}/"
-  end
-
   def sign_in_button(is_e2e_user:)
     govuk_button_to t("sign_in_button"), omniauth_authorize_path, params: sign_in_params(is_e2e_user:), data: { module: "sign-in-button" }
   end
 
-  def sign_in_params(is_e2e_user:)
-    is_e2e_user ? { connection: "Username-Password-Authentication" } : {}
+  def sign_up_button(is_e2e_user:)
+    govuk_button_to t("sign_up_button"), omniauth_authorize_path, params: sign_in_params(is_e2e_user:, login_type: :sign_up), data: { module: "sign-in-button" }
+  end
+
+  def omniauth_authorize_path
+    "/auth/#{Settings.auth_provider}/"
+  end
+
+  def sign_in_params(is_e2e_user:, login_type: :sign_in)
+    {}.tap do |params|
+      if Settings.auth_provider == "auth0"
+        params.merge!({ connection: "Username-Password-Authentication" }) if is_e2e_user
+        params.merge!({ screen_hint: "signup" }) if login_type == :sign_up
+      end
+    end
   end
 end

@@ -1,12 +1,12 @@
 require "rails_helper"
 
-describe "authentications/sign_in.html.erb" do
+describe "authentications/sign_up.html.erb" do
   before do
-    render template: "authentications/sign_in"
+    render template: "authentications/sign_up"
   end
 
   it "has the correct title" do
-    expect(view.content_for(:title)).to have_content(t("page_titles.sign_in"))
+    expect(view.content_for(:title)).to have_content(t("page_titles.sign_up"))
   end
 
   it "has javascript" do

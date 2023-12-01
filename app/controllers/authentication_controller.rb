@@ -14,23 +14,20 @@ class AuthenticationController < ApplicationController
     redirect_to(sign_in_url(request.query_parameters))
   end
 
-  def sign_in
-    @is_e2e_user = e2e_user?
-    render "authentications/sign_in", layout: "application"
-  end
-
   def callback_from_omniauth
     authenticate_user!
     redirect_to stored_location || "/"
   end
 
+  def sign_in
+    @is_e2e_user = e2e_user?
+    render "authentications/sign_in", layout: "application"
+  end
+
   def sign_up
     store_location root_path
-    if default_provider == "auth0"
-      redirect_to "/auth/auth0?screen_hint=signup"
-    else
-      redirect_to "/auth/#{default_provider}"
-    end
+    @is_e2e_user = e2e_user?
+    render "authentications/sign_up", layout: "application"
   end
 
   def sign_out

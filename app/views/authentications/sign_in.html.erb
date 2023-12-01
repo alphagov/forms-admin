@@ -2,13 +2,4 @@
 
 <%= sign_in_button(is_e2e_user: @is_e2e_user) %>
 
-<% content_for :body_end do %>
-  <script>
-    (function() {
-      var loginButton = document.querySelector('[data-module="sign-in-button"]');
-      if (loginButton && typeof loginButton.click === 'function') {
-        loginButton.click();
-      }
-    })();
-  </script>
-<% end %>
+<%= render partial: "authentications/auto_click_login_js" %>

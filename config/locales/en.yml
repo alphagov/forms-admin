@@ -605,6 +605,7 @@ en:
     routing_page_edit: Edit question %{question_position}’s route
     set_email_form: Set the email address for completed forms
     sign_in: Sign in
+    sign_up: Sign up
     text_settings: How much text will people need to provide?
     type_of_answer: What kind of answer do you need to this question?
     user_missing_organisation: You do not have an organisation set for your account
@@ -751,6 +752,7 @@ en:
     what_is_declaration: What is a declaration?
     what_is_what_happens_next: What is ‘what happens next information’?
   sign_in_button: Sign in
+  sign_up_button: Sign up
   skip_to_main_content: Skip to main content
   status_tag_description_component:
     status: Status

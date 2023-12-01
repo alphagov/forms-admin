@@ -120,11 +120,9 @@ RSpec.describe AuthenticationController, type: :request do
 
   describe "#sign_up" do
     it "redirects to auth0 sign up page when using auth0" do
-      allow(Settings).to receive(:auth_provider).and_return("auth0")
-
       get sign_up_path
 
-      expect(response).to redirect_to "/auth/auth0?screen_hint=signup"
+      expect(response).to be_successful
     end
 
     it "redirects user to homepage after they have signed up" do
@@ -132,7 +130,6 @@ RSpec.describe AuthenticationController, type: :request do
 
       get sign_up_path
 
-      expect(response).to redirect_to "/auth/auth0?screen_hint=signup"
       post "/auth/auth0?screen_hint=signup"
 
       expect(response).to redirect_to("/auth/auth0/callback?screen_hint=signup")
@@ -144,23 +141,12 @@ RSpec.describe AuthenticationController, type: :request do
     it "signs the user in after they have signed up" do
       allow(Settings).to receive(:auth_provider).and_return("auth0")
 
-      get sign_up_path
-
-      expect(response).to redirect_to "/auth/auth0?screen_hint=signup"
       post "/auth/auth0?screen_hint=signup"
 
       expect(response).to redirect_to("/auth/auth0/callback?screen_hint=signup")
       get "/auth/auth0/callback?screen_hint=signup"
 
       expect(request.env["warden"]).to be_authenticated
-    end
-
-    it "redirects to sign in page when not using auth0" do
-      allow(Settings).to receive(:auth_provider).and_return("mock_not_logged_in")
-
-      get sign_up_path
-
-      expect(response).to redirect_to "/auth/mock_not_logged_in"
     end
   end
 
