@@ -1,11 +1,11 @@
-<% set_page_title(t("page_titles.login")) %>
+<% set_page_title(t("page_titles.sign_in")) %>
 
-<%= login_button(is_e2e_user: @is_e2e_user) %>
+<%= sign_in_button(is_e2e_user: @is_e2e_user) %>
 
 <% content_for :body_end do %>
   <script>
     (function() {
-      var loginButton = document.querySelector('[data-module="login-button"]');
+      var loginButton = document.querySelector('[data-module="sign-in-button"]');
       if (loginButton && typeof loginButton.click === 'function') {
         loginButton.click();
       }

@@ -27,9 +27,9 @@ RSpec.describe AuthenticationController, type: :request do
     controller_spy
   end
 
-  describe "#redirect_to_login" do
+  describe "#redirect_to_sign_in" do
     before do
-      allow(controller_spy).to receive(:redirect_to_login).and_call_original
+      allow(controller_spy).to receive(:redirect_to_sign_in).and_call_original
 
       logout
     end
@@ -37,13 +37,13 @@ RSpec.describe AuthenticationController, type: :request do
     it "is called by Warden if user is not logged in" do
       get root_path
 
-      expect(controller_spy).to have_received(:redirect_to_login)
+      expect(controller_spy).to have_received(:redirect_to_sign_in)
     end
 
     it "redirects to login page" do
       get root_path
 
-      expect(response).to redirect_to(login_url)
+      expect(response).to redirect_to(sign_in_url)
     end
 
     it "stores the URL the user is trying to reach for after they have signed in" do
@@ -62,12 +62,12 @@ RSpec.describe AuthenticationController, type: :request do
     it "keeps the query string when redirecting to login page" do
       get root_path, params: { example_param: "value", another_param: "another_value" }
 
-      expect(response).to redirect_to(login_url(example_param: "value", another_param: "another_value"))
+      expect(response).to redirect_to(sign_in_url(example_param: "value", another_param: "another_value"))
     end
 
     context "when the user's session expires" do
       before do
-        allow(controller_spy).to receive(:redirect_to_login).and_call_original
+        allow(controller_spy).to receive(:redirect_to_sign_in).and_call_original
 
         # shorten the auth_valid_for time for testing
         GDS::SSO::Config.auth_valid_for = 1
@@ -84,14 +84,14 @@ RSpec.describe AuthenticationController, type: :request do
 
         get root_path
 
-        expect(controller_spy).not_to have_received(:redirect_to_login)
+        expect(controller_spy).not_to have_received(:redirect_to_sign_in)
 
         # wait for the auth_valid_for time to pass
         sleep(1)
 
         get root_path
 
-        expect(controller_spy).to have_received(:redirect_to_login).once
+        expect(controller_spy).to have_received(:redirect_to_sign_in).once
       end
     end
   end
@@ -216,7 +216,7 @@ RSpec.describe AuthenticationController, type: :request do
 
   describe "#login" do
     it "returns success" do
-      get login_path
+      get sign_in_path
 
       expect(response).to have_http_status(:success)
     end

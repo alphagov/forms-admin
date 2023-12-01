@@ -5,18 +5,18 @@ class AuthenticationController < ApplicationController
   layout false
 
   def self.call(env)
-    action(:redirect_to_login).call(env)
+    action(:redirect_to_sign_in).call(env)
   end
 
-  def redirect_to_login
+  def redirect_to_sign_in
     store_location(attempted_path) if request.get?
 
-    redirect_to(login_url(request.query_parameters))
+    redirect_to(sign_in_url(request.query_parameters))
   end
 
-  def login
+  def sign_in
     @is_e2e_user = e2e_user?
-    render "authentications/login", layout: "application"
+    render "authentications/sign_in", layout: "application"
   end
 
   def callback_from_omniauth

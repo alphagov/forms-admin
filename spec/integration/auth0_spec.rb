@@ -25,7 +25,7 @@ RSpec.describe "usage of omniauth-auth0 gem" do
 
       get root_path
 
-      expect(response).to redirect_to(login_path)
+      expect(response).to redirect_to(sign_in_path)
     end
 
     it "authenticates with OmniAuth and Warden" do

@@ -395,7 +395,6 @@ en:
       Any changes you make to a live form will be updated in the form
       immediately.
     notification_title: Important
-  login_button: Login
   maintenance:
     body_html: |
       <p>You’ll be able to use the service later.</p>
@@ -591,7 +590,6 @@ en:
     forbidden: You cannot view this page
     home: Home
     internal_server_error: Sorry, there is a problem with the service
-    login: Login
     maintenance: Sorry, the service is unavailable
     make_changes_live_form: Make your changes live
     make_live_form: Make your form live
@@ -606,6 +604,7 @@ en:
     routing_page_delete: Delete question %{question_position}’s route
     routing_page_edit: Edit question %{question_position}’s route
     set_email_form: Set the email address for completed forms
+    sign_in: Sign in
     text_settings: How much text will people need to provide?
     type_of_answer: What kind of answer do you need to this question?
     user_missing_organisation: You do not have an organisation set for your account
@@ -751,6 +750,7 @@ en:
     what_happens_next_description: Information about what happens next is shown to people when they have completed and submitted a form.
     what_is_declaration: What is a declaration?
     what_is_what_happens_next: What is ‘what happens next information’?
+  sign_in_button: Sign in
   skip_to_main_content: Skip to main content
   status_tag_description_component:
     status: Status
