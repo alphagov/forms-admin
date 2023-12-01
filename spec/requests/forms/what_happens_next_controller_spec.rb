@@ -76,7 +76,12 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
         mock.put "/api/v1/forms/2", post_headers
         mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
       end
+      allow(Pundit).to receive(:authorize).and_return(true)
       get what_happens_next_path(form_id: 2)
+    end
+
+    it "checks the user is authorised to view the form" do
+      expect(Pundit).to have_received(:authorize)
     end
 
     it "Reads the form from the API" do
@@ -94,7 +99,12 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
         mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
         mock.put "/api/v1/forms/2", post_headers
       end
+      allow(Pundit).to receive(:authorize).and_return(true)
       post what_happens_next_path(form_id: 2), params: { forms_what_happens_next_form: { what_happens_next_text:, what_happens_next_markdown: }, route_to: }
+    end
+
+    it "checks the user is authorised to view the form" do
+      expect(Pundit).to have_received(:authorize)
     end
 
     it "Reads the form from the API" do
@@ -176,7 +186,12 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
     let(:markdown) { "- Markdown" }
 
     before do
+      allow(Pundit).to receive(:authorize).and_return(true)
       post what_happens_next_render_preview_path(form_id: form.id), params: { markdown: }
+    end
+
+    it "checks the user is authorised to view the form" do
+      expect(Pundit).to have_received(:authorize)
     end
 
     it "returns a JSON object containing the converted HTML" do
