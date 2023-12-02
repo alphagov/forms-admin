@@ -15,11 +15,10 @@ RSpec.describe Forms::ContactDetailsForm, type: :model do
         end
 
         it "is invalid if doesn't end with *.gov.uk" do
-          error_message = I18n.t("activemodel.errors.models.forms/contact_details_form.attributes.email.non_govuk_email")
           contact_details_form = build :contact_details_form, email: "something@gmail.com"
           expect(contact_details_form).to be_invalid
 
-          expect(contact_details_form.errors.full_messages_for(:email)).to include "Email #{error_message}"
+          expect(contact_details_form.errors).to be_added :email, :non_govuk_email
         end
 
         it "is invalid if doesn't have an @ symbol in" do

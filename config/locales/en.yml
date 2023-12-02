@@ -137,6 +137,9 @@ en:
     user-research: user research
   error_summary:
     heading: There is a problem
+  errors:
+    messages:
+      non_govuk_email: Enter an email address ending in .gov.uk
   footer:
     accessibility_statement: Accessibility statement
     cookies: Cookies

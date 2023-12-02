@@ -116,6 +116,7 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
       it "shows the error state" do
         expect(response).to render_template(:new)
         expect(response.body).to include I18n.t("error_summary.heading")
+        expect(response.body).to include I18n.t("errors.messages.non_govuk_email")
       end
     end
   end

@@ -91,6 +91,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
 
       it "does not accept the submission email address" do
         expect(response.body).to include I18n.t("error_summary.heading")
+        expect(response.body).to include I18n.t("errors.messages.non_govuk_email")
       end
     end
 

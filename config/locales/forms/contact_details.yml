@@ -23,7 +23,6 @@ en:
             email:
               blank: Enter an email address
               invalid_email: Enter an email address in the correct format, like name@example.com
-              non_govuk_email: Enter an email address ending in .gov.uk
             phone:
               blank: Enter a phone number and opening hours
               too_long: The phone number information cannot be longer than 500 characters
