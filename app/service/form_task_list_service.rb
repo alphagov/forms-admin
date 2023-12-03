@@ -42,7 +42,7 @@ private
     question_path = if @form.pages.any?
                       form_pages_path(@form.id)
                     else
-                      type_of_answer_new_path(@form.id)
+                      start_new_question_path(@form.id)
                     end
     [
       { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_1.name"), path: change_form_name_path(@form.id), status: @task_statuses[:name_status] },
