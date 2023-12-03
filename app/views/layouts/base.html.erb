@@ -43,6 +43,7 @@
             <div class="govuk-grid-column-two-thirds">
               <%= govuk_notification_banner(title_text: t("banner.success.title"), success: true) do |nb| %>
                 <% nb.with_heading(text: success) %>
+                <%= yield :notification_banner_content %>
               <% end %>
             </div>
           </div>
