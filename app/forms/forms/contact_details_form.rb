@@ -1,5 +1,5 @@
 class Forms::ContactDetailsForm < BaseForm
-  attr_accessor :form, :email, :phone, :link_text, :link_href, :contact_details_supplied
+  attr_accessor :form, :email, :phone, :link_text, :link_href, :contact_details_supplied, :current_user
 
   EMAIL_REGEX = /.*@.*/
 

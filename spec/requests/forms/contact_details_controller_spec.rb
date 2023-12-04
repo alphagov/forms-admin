@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Forms::ContactDetailsController, type: :request do
+  let(:current_user) { editor_user }
+
   let(:req_headers) do
     {
       "X-API-Token" => Settings.forms_api.auth_key,
@@ -16,7 +18,7 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
   end
 
   before do
-    login_as_editor_user
+    login_as current_user
   end
 
   describe "#new" do
