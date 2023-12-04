@@ -182,7 +182,7 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
     end
 
-    context "when  auth_provider is not auth0" do
+    context "when auth_provider is not auth0" do
       before do
         allow(Settings).to receive(:auth_provider).and_return("developer")
       end
@@ -210,7 +210,7 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
     end
 
-    context "when  auth_provider is not auth0" do
+    context "when auth_provider is not auth0" do
       before do
         allow(Settings).to receive(:auth_provider).and_return("developer")
       end
