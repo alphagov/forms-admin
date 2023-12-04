@@ -20,7 +20,7 @@ describe "pages/index.html.erb" do
 
   describe "when there are no pages to display" do
     it "allows the user to add a page" do
-      expect(rendered).to have_link(I18n.t("pages.index.add_question"), href: type_of_answer_create_path(form.id))
+      expect(rendered).to have_link(I18n.t("pages.index.add_question"), href: start_new_question_path(form.id))
     end
 
     it "does not contain a link to add page routing" do
@@ -37,7 +37,7 @@ describe "pages/index.html.erb" do
     let(:pages) { [(build :page, id: 1, position: 1, form_id: 1), (build :page, id: 2, position: 2, form_id: 1), (build :page, id: 3, position: 3, form_id: 1)] }
 
     it "allows the user to add a page" do
-      expect(rendered).to have_link(I18n.t("pages.index.add_question"), href: type_of_answer_create_path(form.id))
+      expect(rendered).to have_link(I18n.t("pages.index.add_question"), href: start_new_question_path(form.id))
     end
 
     it "does contain a summary list entry each page" do

@@ -19,7 +19,7 @@
       <p><%= flash[:message] %></p>
     <% end %>
     <div class="govuk-button-group">
-      <%= govuk_button_link_to t("pages.index.add_question"), type_of_answer_new_path(current_form), class:"govuk-!-margin-bottom-3 govuk-!-margin-top-3" %>
+      <%= govuk_button_link_to t("pages.index.add_question"), start_new_question_path(form_id: current_form.id), class:"govuk-!-margin-bottom-3 govuk-!-margin-top-3" %>
       <%= govuk_button_link_to t("pages.index.add_a_question_route"), routing_page_path(current_form), secondary: true, class:"govuk-!-margin-bottom-3 govuk-!-margin-top-3" %>
 
       <%= render PreviewLinkComponent::View.new(@pages, link_to_runner(Settings.forms_runner.url, current_form.id, current_form.form_slug)) %>

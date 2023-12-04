@@ -14,9 +14,7 @@ RSpec.describe PagesController, type: :request do
     }
   end
 
-  let(:form_response) do
-    (build :form, id: 2)
-  end
+  let(:form_response) { build :form, id: 2 }
 
   before do
     login_as_editor_user
@@ -68,6 +66,29 @@ RSpec.describe PagesController, type: :request do
       it "Returns a 403 status" do
         expect(response.status).to eq(403)
       end
+    end
+  end
+
+  describe "#start_new_question" do
+    let(:current_form) { build :form, id: 1 }
+    let(:original_draft_question) { create :draft_question, form_id: 1, user: editor_user }
+
+    before do
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get "/api/v1/forms/1", headers, current_form.to_json, 200
+      end
+    end
+
+    it "clears draft questions data for current_user" do
+      original_draft_question # Setup initial draft question which will clear
+      expect {
+        get start_new_question_path(form_id: current_form.id)
+      }.to change { DraftQuestion.exists?({ user: editor_user }) }.from(true).to(false)
+    end
+
+    it "redirects to type_of_answer_create_path" do
+      get start_new_question_path(form_id: current_form.id)
+      expect(response).to redirect_to(type_of_answer_create_path(form_id: current_form.id))
     end
   end
 
