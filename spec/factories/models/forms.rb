@@ -13,6 +13,7 @@ FactoryBot.define do
     support_url { nil }
     support_url_text { nil }
     what_happens_next_text { nil }
+    what_happens_next_markdown { nil }
     declaration_text { nil }
     question_section_completed { false }
     declaration_section_completed { false }
