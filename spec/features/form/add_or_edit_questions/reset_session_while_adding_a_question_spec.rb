@@ -25,6 +25,8 @@ feature "Reset session while adding a question", type: :feature do
       mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
     end
 
+    allow(Settings).to receive(:auth_provider).and_return("auth0")
+
     login_as_editor_user
   end
 
@@ -42,20 +44,22 @@ feature "Reset session while adding a question", type: :feature do
     visit new_question_path(form_id: form.id)
     expect(page.find("h1")).to have_text "Edit question"
   end
-  
+
   def when_the_session_is_expired
-    logout
+    reset_session!
+    visit new_question_path(form_id: form.id)
   end
-  
+
   def and_i_log_back_in
     login_as_editor_user
   end
 
   def and_go_to_the_last_visited_page
     visit new_question_path(form_id: form.id)
+    expect(page.find("h1")).to have_text "Edit question"
   end
-  
+
   def then_i_should_see_my_draft_question
-  
+
   end
 end
