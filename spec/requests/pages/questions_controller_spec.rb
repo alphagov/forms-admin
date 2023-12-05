@@ -50,13 +50,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
       }].to_json
     end
 
-    let(:req_headers) do
-      {
-        "X-API-Token" => Settings.forms_api.auth_key,
-        "Accept" => "application/json",
-      }
-    end
-
     before do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
@@ -83,13 +76,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
   end
 
   describe "#create" do
-    let(:req_headers) do
-      {
-        "X-API-Token" => Settings.forms_api.auth_key,
-        "Accept" => "application/json",
-      }
-    end
-
     describe "Given a valid page" do
       let(:new_page_data) do
         {
@@ -194,13 +180,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
           page_heading: nil,
           guidance_markdown: nil,
         }.to_json
-      end
-
-      let(:req_headers) do
-        {
-          "X-API-Token" => Settings.forms_api.auth_key,
-          "Accept" => "application/json",
-        }
       end
 
       before do
