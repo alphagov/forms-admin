@@ -26,25 +26,35 @@ describe FormPolicy do
   end
 
   describe "#can_view_form?" do
-    (User.roles.keys - %w[trial]).each do |role|
-      context "with a form #{role}" do
-        let(:user) { build :user, role:, organisation: }
+    context "with an editor role" do
+      let(:user) { build :user, role: :editor, organisation: }
+
+      it { is_expected.to permit_actions(%i[can_view_form]) }
+
+      context "but from another organisation" do
+        let(:organisation) { build :organisation, id: 2, slug: "non-gds" }
+
+        it { is_expected.to forbid_actions(%i[can_view_form]) }
+      end
+
+      context "with an organisation not in the organisation table" do
+        let(:user) { build :user, :with_unknown_org, role: :editor, organisation_slug: "gds" }
+
+        it "raises an error" do
+          expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+        end
+      end
+    end
+
+    context "with a super_admin" do
+      let(:user) { build :user, role: :super_admin, organisation: }
+
+      it { is_expected.to permit_actions(%i[can_view_form]) }
+
+      context "and a form from another organisation" do
+        let(:organisation) { build :organisation, id: 2, slug: "non-gds" }
 
         it { is_expected.to permit_actions(%i[can_view_form]) }
-
-        context "but from another organisation" do
-          let(:organisation) { build :organisation, id: 2, slug: "non-gds" }
-
-          it { is_expected.to forbid_actions(%i[can_view_form]) }
-        end
-
-        context "with an organisation not in the organisation table" do
-          let(:user) { build :user, :with_unknown_org, role:, organisation_slug: "gds" }
-
-          it "raises an error" do
-            expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
-          end
-        end
       end
     end
 
@@ -166,18 +176,29 @@ describe FormPolicy do
         end
       end
 
-      (User.roles.keys - %w[trial]).each do |role|
-        context "when user is not a trial user but a #{role}" do
-          let(:user) { build(:user, role:) }
+      context "when user is an editor" do
+        let(:user) { build(:user, role: :editor) }
 
-          before do
-            allow(scope).to receive(:where).with(organisation_id: user.organisation.id)
-          end
+        before do
+          allow(scope).to receive(:where).with(organisation_id: user.organisation.id)
+        end
 
-          it "returns only their organisation records" do
-            policy_scope.resolve
-            expect(scope).to have_received(:where).with(organisation_id: user.organisation.id)
-          end
+        it "returns only their organisation records" do
+          policy_scope.resolve
+          expect(scope).to have_received(:where).with(organisation_id: user.organisation.id)
+        end
+      end
+
+      context "when user is a super_admin user" do
+        let(:user) { build(:user, role: :super_admin) }
+
+        before do
+          allow(scope).to receive(:all)
+        end
+
+        it "returns all forms" do
+          policy_scope.resolve
+          expect(scope).to have_received(:all)
         end
       end
     end

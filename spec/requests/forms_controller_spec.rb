@@ -257,6 +257,30 @@ RSpec.describe FormsController, type: :request do
         expect(ActiveResource::HttpMock.requests).to be_empty
       end
     end
+
+    context "with a user with a super_admin account" do
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms", headers, forms_response.to_json, 200
+        end
+
+        login_as_super_admin_user
+        get root_path
+      end
+
+      it "returns 200 OK" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the index page" do
+        expect(response).to render_template("forms/index")
+      end
+
+      it "makes a call to the API" do
+        forms_request = ActiveResource::Request.new(:get, "/api/v1/forms", {}, headers)
+        expect(ActiveResource::HttpMock.requests).to include forms_request
+      end
+    end
   end
 
   describe "#mark_pages_section_completed" do

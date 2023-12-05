@@ -23,7 +23,7 @@ describe "Check which MOUs have been signed", type: :feature do
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?organisation_id=#{user.organisation.id}", req_headers, [].to_json, 200
+      mock.get "/api/v1/forms", req_headers, [].to_json, 200
       mock.get "/api/v1/forms?creator_id=#{user.id}", req_headers, [].to_json, 200
     end
 
