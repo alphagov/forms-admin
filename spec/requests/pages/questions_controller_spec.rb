@@ -1,12 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Pages::QuestionsController, type: :request do
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
   let(:post_headers) do
     {
       "X-API-Token" => Settings.forms_api.auth_key,
@@ -25,7 +19,33 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
   let(:draft_question) { create :draft_question_for_new_page, user: editor_user, form_id: 2 }
 
+  let(:page_response) do
+    {
+      id: 1,
+      form_id: 2,
+      question_text: draft_question.question_text,
+      hint_text: draft_question.hint_text,
+      answer_type: draft_question.answer_type,
+      answer_settings: nil,
+      is_optional: false,
+      page_heading: nil,
+      guidance_markdown: nil,
+    }
+  end
+
+  let(:form_pages_response) do
+    [page_response].to_json
+  end
+
   before do
+    ActiveResource::HttpMock.respond_to do |mock|
+      mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
+      mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
+      mock.get "/api/v1/forms/2/pages/1", req_headers, page_response.to_json, 200
+      mock.post "/api/v1/forms/2/pages", post_headers
+      mock.put "/api/v1/forms/2/pages/1", post_headers
+    end
+
     login_as_editor_user
   end
 
@@ -37,32 +57,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
       record.reload
     end
 
-    let(:form_pages_response) do
-      [{
-        id: 1,
-        form_id: 2,
-        question_text: draft_question.question_text,
-        hint_text: draft_question.hint_text,
-        answer_type: draft_question.answer_type,
-        answer_settings: nil,
-        page_heading: nil,
-        guidance_markdown: nil,
-      }].to_json
-    end
-
-    let(:req_headers) do
-      {
-        "X-API-Token" => Settings.forms_api.auth_key,
-        "Accept" => "application/json",
-      }
-    end
-
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
-        mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
-      end
-
       draft_question
 
       get new_question_path(form_id: 2)
@@ -83,13 +78,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
   end
 
   describe "#create" do
-    let(:req_headers) do
-      {
-        "X-API-Token" => Settings.forms_api.auth_key,
-        "Accept" => "application/json",
-      }
-    end
-
     describe "Given a valid page" do
       let(:new_page_data) do
         {
@@ -104,12 +92,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
       end
 
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
-          mock.get "/api/v1/forms/2/pages", req_headers, [].to_json, 200
-          mock.post "/api/v1/forms/2/pages", post_headers
-        end
-
         # Setup a draft_question so that create question action doesn't need to create a completely new records
         draft_question
 
@@ -138,12 +120,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
     context "when question_form has invalid data" do
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
-          mock.get "/api/v1/forms/2/pages", req_headers, [].to_json, 200
-          mock.post "/api/v1/forms/2/pages", post_headers
-        end
-
         # Setup a draft_question so that create question action doesn't need to create a completely new records
         draft_question
 
@@ -169,47 +145,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
   describe "#edit" do
     describe "Given a page" do
-      let(:form_pages_response) do
-        [{
-          id: 1,
-          form_id: 2,
-          question_text: draft_question.question_text,
-          hint_text: draft_question.hint_text,
-          answer_type: draft_question.answer_type,
-          answer_settings: nil,
-          page_heading: nil,
-          guidance_markdown: nil,
-        }].to_json
-      end
-
-      let(:page_response) do
-        {
-          id: 1,
-          form_id: 2,
-          question_text: draft_question.question_text,
-          hint_text: draft_question.hint_text,
-          answer_type: draft_question.answer_type,
-          answer_settings: nil,
-          is_optional: false,
-          page_heading: nil,
-          guidance_markdown: nil,
-        }.to_json
-      end
-
-      let(:req_headers) do
-        {
-          "X-API-Token" => Settings.forms_api.auth_key,
-          "Accept" => "application/json",
-        }
-      end
-
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
-          mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
-          mock.get "/api/v1/forms/2/pages/1", req_headers, page_response, 200
-        end
-
         # Setup a draft_question so that edit question action doesn't need to create a completely new records
         draft_question
 
@@ -237,17 +173,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
       record.reload
     end
 
-    let(:form_pages_response) do
-      [{
-        id: 1,
-        form_id: 2,
-        question_text: "What is your work address?",
-        hint_text: "This should be the location stated in your contract.",
-        answer_type: "address",
-        answer_settings: nil,
-        is_optional: false,
-      }].to_json
-    end
     let(:page_response) do
       {
         id: 1,
@@ -259,7 +184,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
         is_optional: false,
         page_heading: "New page heading",
         guidance_markdown: "## Heading level 2",
-      }.to_json
+      }
     end
 
     describe "Given a page" do
@@ -276,21 +201,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
         }
       end
 
-      let(:post_headers) do
-        {
-          "X-API-Token" => Settings.forms_api.auth_key,
-          "Content-Type" => "application/json",
-        }
-      end
-
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
-          mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
-          mock.get "/api/v1/forms/2/pages/1", req_headers, page_response, 200
-          mock.put "/api/v1/forms/2/pages/1", post_headers
-        end
-
         post update_question_path(form_id: 2, page_id: 1), params: { pages_question_form: {
           form_id: 2,
           question_text: "What is your home address?",
@@ -327,13 +238,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
     context "when question_form has invalid data" do
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
-          mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
-          mock.get "/api/v1/forms/2/pages/1", req_headers, page_response, 200
-          mock.put "/api/v1/forms/2/pages/1", post_headers
-        end
-
         post update_question_path(form_id: 2, page_id: 1), params: { pages_question_form: {
           form_id: 2,
           question_text: nil,
