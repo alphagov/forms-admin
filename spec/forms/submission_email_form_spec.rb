@@ -17,24 +17,27 @@ RSpec.describe Forms::SubmissionEmailForm, type: :model do
   end
 
   describe "validations" do
-    context "when on staging for pentestpartners.com" do
+    it "is valid if given an email address ending with .gov.uk" do
+      submission_email_form = build :submission_email_form, temporary_submission_email: "a@example.gov.uk"
+      expect(submission_email_form).to be_valid
+    end
+
+    context "when the user has an email address in an email domain not ending with .gov.uk" do
       before do
-        allow(Settings).to receive(:forms_env).and_return("staging")
+        submission_email_form_with_user.current_user = OpenStruct.new(
+          name: "Arms Length Body User",
+          email: "user@alb.example",
+        )
       end
 
-      it "is valid for email addresses from @pentestpartners.com" do
-        submission_email_form = build :submission_email_form, temporary_submission_email: "b@pentestpartners.com"
-        expect(submission_email_form).to be_valid
-      end
-
-      it "is invalid if the email address is spoofing a pentestpartners.com address" do
-        submission_email_form = build :submission_email_form, temporary_submission_email: "c@notpentestpartners.com"
-        expect(submission_email_form).to be_invalid
+      it "is valid if given an email address in the same domain as the user" do
+        submission_email_form_with_user.temporary_submission_email = "submissions@alb.example"
+        expect(submission_email_form_with_user).to be_valid
       end
     end
 
-    it "is invalid if not given an email address ending with .gov.uk" do
-      submission_email_form = build :submission_email_form, temporary_submission_email: "a@example.org"
+    it "is invalid if given an email address for a non-government inbox" do
+      submission_email_form = build :submission_email_form, temporary_submission_email: "a@gmail.com"
       expect(submission_email_form).to be_invalid
     end
 

@@ -137,6 +137,9 @@ en:
     user-research: user research
   error_summary:
     heading: There is a problem
+  errors:
+    messages:
+      non_government_email: Enter a government email address
   footer:
     accessibility_statement: Accessibility statement
     cookies: Cookies

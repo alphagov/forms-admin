@@ -66,6 +66,8 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
   end
 
   describe "#create" do
+    let(:temporary_submission_email) { user.email }
+
     before do
       allow(submission_email_mailer_spy).to receive(:confirmation_code_email)
 
@@ -73,7 +75,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
         submission_email_path(form.id),
         params: {
           forms_submission_email_form: {
-            temporary_submission_email: user.email,
+            temporary_submission_email:,
             notify_response_id: Faker::Internet.uuid,
           },
         },
@@ -82,6 +84,16 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
 
     it "redirects to the email code sent page" do
       expect(response).to redirect_to(submission_email_code_sent_path(form.id))
+    end
+
+    context "when user submits an invalid email address" do
+      let(:temporary_submission_email) { "a@gmail.com" }
+
+      it "does not accept the submission email address" do
+        expect(response.body).to include I18n.t("error_summary.heading")
+        expect(response.body).to include I18n.t("errors.messages.non_government_email")
+        expect(response).to have_http_status :unprocessable_entity
+      end
     end
 
     context "when current user does not own form" do
@@ -97,6 +109,14 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when current user has a government email address not ending with .gov.uk" do
+      let(:user) { build :user, email: "user@alb.example", role: :editor, id: 1 }
+
+      it "redirects to the email code sent page" do
+        expect(response).to redirect_to(submission_email_code_sent_path(form.id))
       end
     end
   end
@@ -162,19 +182,22 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
   end
 
   describe "#confirm_submission_email_code" do
+    let(:confirmation_code) { "123456" }
+    let(:submitted_code) { confirmation_code }
+
     before do
       allow(FormSubmissionEmail).to receive(:find_by_form_id).and_return(build(
                                                                            :form_submission_email,
                                                                            form_id: 1,
                                                                            temporary_submission_email: user.email,
-                                                                           confirmation_code: "123456",
+                                                                           confirmation_code:,
                                                                          ))
 
       post(
         confirm_submission_email_code_path(form.id),
         params: {
           forms_submission_email_form: {
-            email_code: "123456",
+            email_code: submitted_code,
           },
         },
       )
@@ -182,6 +205,15 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
 
     it "redirects to the confirmation page" do
       expect(response).to redirect_to(submission_email_confirmed_path(form.id))
+    end
+
+    context "when user submits the wrong confirmation code" do
+      let(:submitted_code) { "123455" }
+
+      it "responds with an error" do
+        expect(response.body).to include I18n.t("error_summary.heading")
+        expect(response).to have_http_status :unprocessable_entity
+      end
     end
 
     context "when current user does not own form" do

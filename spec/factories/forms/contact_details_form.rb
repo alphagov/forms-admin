@@ -6,5 +6,9 @@ FactoryBot.define do
     link_href { "https://contact.gov.uk" }
     link_text { "contact" }
     form { build_stubbed :form, :with_pages }
+
+    trait :with_user do
+      current_user { OpenStruct.new(name: "User", email: "user@gov.uk") }
+    end
   end
 end

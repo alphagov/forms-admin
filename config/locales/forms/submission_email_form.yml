@@ -12,7 +12,6 @@ en:
             temporary_submission_email:
               blank: Enter an email address
               invalid_email: Enter an email address in the correct format, like name@example.gov.uk
-              non_govuk_email: Enter an email address ending in .gov.uk
             email_code:
               invalid_email_code: The code should be 6 numbers - double check the code or set the email address again to send a new one
               email_code_mismatch: This code is not correct - double check the code or set the email address again to send a new one

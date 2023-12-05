@@ -5,7 +5,7 @@ class Forms::SubmissionEmailForm < BaseForm
 
   validates :temporary_submission_email, presence: true
   validates :temporary_submission_email, format: { with: EMAIL_REGEX, message: :invalid_email }
-  validates :temporary_submission_email, govuk_email: true
+  validates :temporary_submission_email, allowed_email_domain: true
 
   EMAIL_CODE_REGEX = /[0-9]{6}/
   validates :email_code, format: { with: EMAIL_CODE_REGEX, message: :invalid_email_code }, if: -> { email_code.present? }
