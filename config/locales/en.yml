@@ -147,6 +147,7 @@ en:
       You do not have permission to view this page.
 
       %{link} if you think this is incorrect.
+    body_html_org_restricted: Your GOV.UK publishing team is managing the creation of forms for your department. Please contact them to discuss your form needs.
     link_text: Contact the GOV⁠.⁠UK Forms team
     title: You cannot view this page
   form_statuses:
