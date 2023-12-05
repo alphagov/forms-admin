@@ -38,6 +38,14 @@ RSpec.describe Pages::QuestionsController, type: :request do
   end
 
   before do
+    ActiveResource::HttpMock.respond_to do |mock|
+      mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
+      mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
+      mock.get "/api/v1/forms/2/pages/1", req_headers, page_response.to_json, 200
+      mock.post "/api/v1/forms/2/pages", post_headers
+      mock.put "/api/v1/forms/2/pages/1", post_headers
+    end
+
     login_as_editor_user
   end
 
@@ -50,11 +58,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
     end
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
-        mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
-      end
-
       draft_question
 
       get new_question_path(form_id: 2)
@@ -89,12 +92,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
       end
 
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
-          mock.get "/api/v1/forms/2/pages", req_headers, [].to_json, 200
-          mock.post "/api/v1/forms/2/pages", post_headers
-        end
-
         # Setup a draft_question so that create question action doesn't need to create a completely new records
         draft_question
 
@@ -123,12 +120,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
     context "when question_form has invalid data" do
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
-          mock.get "/api/v1/forms/2/pages", req_headers, [].to_json, 200
-          mock.post "/api/v1/forms/2/pages", post_headers
-        end
-
         # Setup a draft_question so that create question action doesn't need to create a completely new records
         draft_question
 
@@ -155,12 +146,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
   describe "#edit" do
     describe "Given a page" do
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
-          mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
-          mock.get "/api/v1/forms/2/pages/1", req_headers, page_response.to_json, 200
-        end
-
         # Setup a draft_question so that edit question action doesn't need to create a completely new records
         draft_question
 
@@ -217,13 +202,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
       end
 
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
-          mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
-          mock.get "/api/v1/forms/2/pages/1", req_headers, page_response.to_json, 200
-          mock.put "/api/v1/forms/2/pages/1", post_headers
-        end
-
         post update_question_path(form_id: 2, page_id: 1), params: { pages_question_form: {
           form_id: 2,
           question_text: "What is your home address?",
@@ -260,13 +238,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
     context "when question_form has invalid data" do
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
-          mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
-          mock.get "/api/v1/forms/2/pages/1", req_headers, page_response.to_json, 200
-          mock.put "/api/v1/forms/2/pages/1", post_headers
-        end
-
         post update_question_path(form_id: 2, page_id: 1), params: { pages_question_form: {
           form_id: 2,
           question_text: nil,
