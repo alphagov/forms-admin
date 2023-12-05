@@ -249,13 +249,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
         }
       end
 
-      let(:post_headers) do
-        {
-          "X-API-Token" => Settings.forms_api.auth_key,
-          "Content-Type" => "application/json",
-        }
-      end
-
       before do
         ActiveResource::HttpMock.respond_to do |mock|
           mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
