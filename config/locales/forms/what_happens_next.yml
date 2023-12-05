@@ -1,16 +1,9 @@
 en:
-  helpers:
-    label:
-      forms_what_happens_next_form:
-        what_happens_next_text: Enter some information to tell people what will happen next
   activemodel:
     errors:
       models:
         forms/what_happens_next_form:
           attributes:
-            what_happens_next_text:
-              too_long: The information about what happens next cannot be longer than 2,000 characters
-              blank: Enter information about what happens next
             what_happens_next_markdown:
               unsupported_markdown_syntax: The information about what happens next can only contain formatting for links, bulleted lists (*), or numbered lists (1.)
               too_long: The information about what happens next cannot be longer than 5,000 characters
