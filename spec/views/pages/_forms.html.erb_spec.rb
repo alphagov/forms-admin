@@ -41,7 +41,7 @@ describe "pages/_form.html.erb", type: :view do
   end
 
   it "has a submit button with the correct text" do
-    expect(rendered).to have_button("Save and add next question")
+    expect(rendered).to have_button(I18n.t("pages.submit_save"))
   end
 
   it "does not have a delete button" do

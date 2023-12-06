@@ -43,9 +43,12 @@
   <h2 class="govuk-heading-m"><%= t("pages.answer_settings") %></h2>
   <%= render PageSettingsSummaryComponent::View.new(draft_question) %>
 
-  <%= f.govuk_submit page_object.has_next_page? ? t("pages.submit_edit") : t("pages.submit_add") do %>
-    <%= f.govuk_submit t('pages.submit_save'), name: :save_preview, secondary: true %>
-  <% end %>
-
-  <%= govuk_button_link_to t('pages.delete_question'), delete_page_path(form_id: form_object.id, page_id: page_object.id), warning: true unless is_new_page %>
+  <ul class="govuk-list govuk-list--spaced">
+    <li>
+      <%= f.govuk_submit t('pages.submit_save'), name: :save_preview, class: "govuk-!-margin-bottom-3" %>
+    </li>
+    <li>
+      <%= govuk_button_link_to t('pages.delete_question'), delete_page_path(form_id: form_object.id, page_id: page_object.id), warning: true unless is_new_page %>
+    </li>
+  </ul>
 <% end %>
