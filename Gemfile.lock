@@ -129,7 +129,7 @@ GEM
       smart_properties
     bootsnap (1.17.0)
       msgpack (~> 1.2)
-    brakeman (6.0.1)
+    brakeman (6.1.0)
     builder (3.2.4)
     bundler-audit (0.9.1)
       bundler (>= 1.2.0, < 3)
@@ -521,7 +521,7 @@ DEPENDENCIES
   aws-sdk-cloudwatch (~> 1.83)
   axe-core-rspec
   bootsnap
-  brakeman (~> 6.0.1)
+  brakeman (~> 6.1.0)
   bundler-audit (~> 0.9.0)
   capybara
   config
