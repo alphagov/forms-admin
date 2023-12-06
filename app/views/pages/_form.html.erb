@@ -45,7 +45,7 @@
 
   <ul class="govuk-list govuk-list--spaced">
     <li>
-      <%= f.govuk_submit t('pages.submit_save'), name: :save_preview, class: "govuk-!-margin-bottom-3" %>
+      <%= f.govuk_submit t('pages.submit_save'), class: "govuk-!-margin-bottom-3" %>
     </li>
     <li>
       <%= govuk_button_link_to t('pages.delete_question'), delete_page_path(form_id: form_object.id, page_id: page_object.id), warning: true unless is_new_page %>
