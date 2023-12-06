@@ -25,7 +25,7 @@
     "cssnano": "^6.0.1",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "postcss": "^8.4.31",
+    "postcss": "^8.4.32",
     "regenerator-runtime": "^0.14.0",
     "sass": "^1.69.5",
     "snazzy": "^9.0.0",
