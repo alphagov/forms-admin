@@ -166,4 +166,58 @@ RSpec.describe ApplicationHelper, type: :helper do
       )
     end
   end
+
+  describe "#sign_in_button" do
+    context "when user is an e2e user and auth_provider is auth0" do
+      before do
+        allow(Settings).to receive(:auth_provider).and_return("auth0")
+      end
+
+      it "returns a string representing the sign-in button" do
+        expect(helper.sign_in_button(is_e2e_user: true)).to include("Username-Password-Authentication")
+      end
+
+      it "does not include auth0 connection string when sign-in button" do
+        expect(helper.sign_in_button(is_e2e_user: false)).not_to include("Username-Password-Authentication")
+      end
+    end
+
+    context "when auth_provider is not auth0" do
+      before do
+        allow(Settings).to receive(:auth_provider).and_return("developer")
+      end
+
+      it "does not include auth0 connection string when sign-in button" do
+        expect(helper.sign_in_button(is_e2e_user: true)).not_to include("Username-Password-Authentication")
+      end
+    end
+  end
+
+  describe "#sign_up_button" do
+    context "when user is an e2e user and auth_provider is auth0" do
+      before do
+        allow(Settings).to receive(:auth_provider).and_return("auth0")
+      end
+
+      it "returns a string representing the sign-up button" do
+        expect(helper.sign_up_button(is_e2e_user: true)).to include("Username-Password-Authentication", "signup")
+      end
+
+      context "when user is not an e2e user" do
+        it "returns a string representing the sign-up button" do
+          expect(helper.sign_up_button(is_e2e_user: false)).not_to include("Username-Password-Authentication")
+        end
+      end
+    end
+
+    context "when auth_provider is not auth0" do
+      before do
+        allow(Settings).to receive(:auth_provider).and_return("developer")
+      end
+
+      it "returns a string representing the sign-up button" do
+        expect(helper.sign_up_button(is_e2e_user: true)).not_to include("signup")
+      end
+    end
+  end
 end

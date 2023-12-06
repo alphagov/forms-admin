@@ -13,6 +13,14 @@ Rails.application.config.before_initialize do
     },
   )
 
+  # add developer provider
+  if Rails.env.development? || Rails.env.test?
+    Rails.application.config.app_middleware.use(
+      OmniAuth::Strategies::Developer,
+      fields: [:email],
+    )
+  end
+
   # Configure Warden session management middleware
   # swap out the Warden::Manager installed by `gds-sso` gem
   Rails.application.config.app_middleware.swap Warden::Manager, Warden::Manager do |warden|
@@ -22,3 +30,6 @@ Rails.application.config.before_initialize do
 
   GDS::SSO::Config.auth_valid_for = Settings.auth_valid_for
 end
+
+# Need to do this because Signon allows both GET and POST requests
+OmniAuth.config.allowed_request_methods = %i[post]

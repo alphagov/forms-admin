@@ -25,13 +25,13 @@ RSpec.describe "usage of omniauth-auth0 gem" do
 
       get root_path
 
-      expect(response).to redirect_to("/auth/auth0")
+      expect(response).to redirect_to(sign_in_path)
     end
 
     it "authenticates with OmniAuth and Warden" do
       OmniAuth.config.mock_auth[:auth0] = omniauth_hash
 
-      get "/auth/auth0"
+      post "/auth/auth0"
 
       expect(response).to redirect_to("/auth/auth0/callback")
 
@@ -44,7 +44,7 @@ RSpec.describe "usage of omniauth-auth0 gem" do
   describe "signing out" do
     before do
       OmniAuth.config.mock_auth[:auth0] = omniauth_hash
-      get "/auth/auth0"
+      post "/auth/auth0"
       get "/auth/auth0/callback"
     end
 
@@ -64,7 +64,7 @@ RSpec.describe "usage of omniauth-auth0 gem" do
         allow(described_class).to receive(:find_for_auth).and_call_original
 
         OmniAuth.config.mock_auth[:auth0] = omniauth_hash
-        get "/auth/auth0"
+        post "/auth/auth0"
         get "/auth/auth0/callback"
 
         expect(described_class).to have_received(:find_for_auth).with(
@@ -86,10 +86,7 @@ RSpec.describe "usage of omniauth-auth0 gem" do
 
       logout
 
-      get root_path
-
-      expect(response).to redirect_to "/auth/auth0"
-      follow_redirect!
+      post "/auth/auth0"
 
       expect(response).to redirect_to "/auth/auth0/callback"
       follow_redirect!
