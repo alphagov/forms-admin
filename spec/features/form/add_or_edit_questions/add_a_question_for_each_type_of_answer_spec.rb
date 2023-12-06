@@ -96,7 +96,9 @@ private
   def and_i_save_and_create_another
     click_button I18n.t("pages.submit_save")
     expect(page.find(".govuk-notification-banner__title")).to have_text("Success")
-    click_on "Add a question"
+    within(page.find(".govuk-notification-banner__content")) do
+      click_on "Add a question"
+    end
     expect(page.find("h1")).to have_text "What kind of answer do you need to this question?"
     expect(page).not_to have_selector("main input:checked", visible: :hidden), "Type of answer page should not have any preselected radio buttons"
     expect_page_to_have_no_axe_errors(page)
