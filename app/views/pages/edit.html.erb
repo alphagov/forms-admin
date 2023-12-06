@@ -1,5 +1,21 @@
 <% set_page_title(title_with_error_prefix(@question_form.question_text, @question_form.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_pages_path(current_form)) %>
+<% content_for :notification_banner_content do %>
+  <ul class="govuk-list govuk-list--spaced">
+    <% if @page.has_next_page? %>
+      <li>
+        <%= govuk_link_to "Edit next question", edit_question_path(current_form.id, @page.next_page) %>
+      </li>
+    <% else %>
+      <li>
+        <%= govuk_button_link_to t("pages.index.add_question"), start_new_question_path(current_form), class: "govuk-!-margin-bottom-0" %>
+      </li>
+    <% end %>
+    <li>
+      <%= govuk_link_to t("pages.go_to_your_questions"), form_pages_path(current_form) %>
+    </li>
+  </ul>
+<% end%>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
