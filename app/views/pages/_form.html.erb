@@ -47,8 +47,13 @@
     <li>
       <%= f.govuk_submit t('pages.submit_save'), class: "govuk-!-margin-bottom-3" %>
     </li>
+    <% unless is_new_page %>
+      <li>
+        <%= govuk_button_link_to t('pages.delete_question'), delete_page_path(form_id: form_object.id, page_id: page_object.id), warning: true %>
+      </li>
+    <% end %>
     <li>
-      <%= govuk_button_link_to t('pages.delete_question'), delete_page_path(form_id: form_object.id, page_id: page_object.id), warning: true unless is_new_page %>
+      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form) %>
     </li>
   </ul>
 <% end %>
