@@ -40,7 +40,7 @@ module Forms
   private
 
     def what_happens_next_form_params
-      params.require(:forms_what_happens_next_form).permit(:what_happens_next_text, :what_happens_next_markdown).merge(form: current_form)
+      params.require(:forms_what_happens_next_form).permit(:what_happens_next_markdown).merge(form: current_form)
     end
 
     def preview_html(what_happens_next_form)

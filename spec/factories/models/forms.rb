@@ -12,7 +12,6 @@ FactoryBot.define do
     support_phone { nil }
     support_url { nil }
     support_url_text { nil }
-    what_happens_next_text { nil }
     what_happens_next_markdown { nil }
     declaration_text { nil }
     question_section_completed { false }
@@ -35,7 +34,7 @@ FactoryBot.define do
     trait :ready_for_live do
       with_pages
       support_email { Faker::Internet.email(domain: "example.gov.uk") }
-      what_happens_next_text { "We usually respond to applications within 10 working days." }
+      what_happens_next_markdown { "We usually respond to applications within 10 working days." }
       question_section_completed { true }
       declaration_section_completed { true }
       ready_for_live { true }

@@ -8,8 +8,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       submission_email: "submission@email.com",
       start_page: 1,
       organisation_id: 1,
-      what_happens_next_text: "Good things come to those who wait",
-      what_happens_next_markdown: nil,
+      what_happens_next_markdown: "Good things come to those who wait",
       live_at: nil,
       has_live_version: false,
     }.to_json
@@ -21,8 +20,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       submission_email: "submission@email.com",
       id: 2,
       organisation_id: 1,
-      what_happens_next_text: "",
-      what_happens_next_markdown: nil,
+      what_happens_next_markdown: "",
       live_at: nil,
       has_live_version: false,
     )
@@ -34,8 +32,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       submission_email: "submission@email.com",
       id: 2,
       organisation_id: 1,
-      what_happens_next_text: "Wait until you get a reply",
-      what_happens_next_markdown: nil,
+      what_happens_next_markdown: "Wait until you get a reply",
       live_at: nil,
       has_live_version: false,
     })
@@ -90,8 +87,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
   end
 
   describe "#create" do
-    let(:what_happens_next_text) { "Wait until you get a reply" }
-    let(:what_happens_next_markdown) { nil }
+    let(:what_happens_next_markdown) { "Wait until you get a reply" }
     let(:route_to) { "save_and_continue" }
 
     before do
@@ -100,7 +96,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
         mock.put "/api/v1/forms/2", post_headers
       end
       allow(Pundit).to receive(:authorize).and_return(true)
-      post what_happens_next_path(form_id: 2), params: { forms_what_happens_next_form: { what_happens_next_text:, what_happens_next_markdown: }, route_to: }
+      post what_happens_next_path(form_id: 2), params: { forms_what_happens_next_form: { what_happens_next_markdown: }, route_to: }
     end
 
     it "checks the user is authorised to view the form" do
@@ -121,7 +117,6 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
 
     context "when previewing markdown" do
       let(:route_to) { "preview" }
-      let(:what_happens_next_text) { nil }
       let(:what_happens_next_markdown) { "[a link](https://example.com)" }
 
       it "reads the existing form" do

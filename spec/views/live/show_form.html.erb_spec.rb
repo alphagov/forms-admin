@@ -4,7 +4,7 @@ describe "live/show_form.html.erb", feature_metrics_for_form_creators_enabled: f
   let(:declaration) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:what_happens_next) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:form_metadata) { OpenStruct.new(has_draft_version: false) }
-  let(:form) { build(:form, :live, id: 2, declaration_text: declaration, what_happens_next_text: what_happens_next, live_at: 1.week.ago) }
+  let(:form) { build(:form, :live, id: 2, declaration_text: declaration, what_happens_next_markdown: what_happens_next, live_at: 1.week.ago) }
   let(:metrics_data) { nil }
 
   before do
@@ -67,7 +67,7 @@ describe "live/show_form.html.erb", feature_metrics_for_form_creators_enabled: f
   end
 
   it "contains what happens next text" do
-    expect(rendered).to have_content(form.what_happens_next_text)
+    expect(rendered).to have_content(form.what_happens_next_markdown)
   end
 
   it "contains the submission email" do
