@@ -22,7 +22,6 @@ describe "Settings" do
     features = settings[:features]
 
     include_examples expected_value_test, :metrics_for_form_creators_enabled, features, false
-    include_examples expected_value_test, :email_confirmations_enabled, features, false
   end
 
   describe "forms_api" do
