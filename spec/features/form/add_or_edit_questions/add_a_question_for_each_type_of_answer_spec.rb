@@ -2,6 +2,7 @@ require "rails_helper"
 
 feature "Add/editing a single question", type: :feature do
   let(:form) { build :form, :with_active_resource, id: 1 }
+  let(:fake_page) { build :page, form_id: 1, id: 2 }
   let(:req_headers) do
     {
       "X-API-Token" => Settings.forms_api.auth_key,
@@ -19,7 +20,8 @@ feature "Add/editing a single question", type: :feature do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
       mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
-      mock.post "/api/v1/forms/1/pages", post_headers
+      mock.get "/api/v1/forms/1/pages/2", req_headers, fake_page.to_json, 200
+      mock.post "/api/v1/forms/1/pages", post_headers, fake_page.to_json, 200
     end
 
     login_as_editor_user
@@ -92,7 +94,11 @@ private
   end
 
   def and_i_save_and_create_another
-    click_button "Save and add next question"
+    click_button I18n.t("pages.submit_save")
+    expect(page.find(".govuk-notification-banner__title")).to have_text("Success")
+    within(page.find(".govuk-notification-banner__content")) do
+      click_on "Add a question"
+    end
     expect(page.find("h1")).to have_text "What kind of answer do you need to this question?"
     expect(page).not_to have_selector("main input:checked", visible: :hidden), "Type of answer page should not have any preselected radio buttons"
     expect_page_to_have_no_axe_errors(page)

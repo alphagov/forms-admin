@@ -634,8 +634,6 @@ en:
     make_optional_text: Make this question optional so people can leave it blank
     optional: "%{question_text} (optional)"
     question: Question
-    submit_add: Save and add next question
-    submit_edit: Save and edit next question
     submit_save: Save question
   phase_banner:
     after_link: will help us improve it.

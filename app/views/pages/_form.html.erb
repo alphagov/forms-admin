@@ -43,9 +43,26 @@
   <h2 class="govuk-heading-m"><%= t("pages.answer_settings") %></h2>
   <%= render PageSettingsSummaryComponent::View.new(draft_question) %>
 
-  <%= f.govuk_submit page_object.has_next_page? ? t("pages.submit_edit") : t("pages.submit_add") do %>
-    <%= f.govuk_submit t('pages.submit_save'), name: :save_preview, secondary: true %>
-  <% end %>
-
-  <%= govuk_button_link_to t('pages.delete_question'), delete_page_path(form_id: form_object.id, page_id: page_object.id), warning: true unless is_new_page %>
+  <ul class="govuk-list govuk-list--spaced">
+    <li>
+      <%= f.govuk_submit t('pages.submit_save'), class: "govuk-!-margin-bottom-3" %>
+    </li>
+    <% unless is_new_page %>
+      <li>
+        <%= govuk_button_link_to t('pages.delete_question'), delete_page_path(form_id: form_object.id, page_id: page_object.id), warning: true %>
+      </li>
+      <% if page_object.has_next_page? %>
+        <li>
+          <%= govuk_link_to "Edit next question", edit_question_path(form_object.id, page_object.next_page) %>
+        </li>
+      <% else %>
+        <li>
+          <%= govuk_link_to t("pages.index.add_question"), start_new_question_path(form_object.id) %>
+        </li>
+      <% end %>
+    <% end %>
+    <li>
+      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(form_object.id) %>
+    </li>
+  </ul>
 <% end %>

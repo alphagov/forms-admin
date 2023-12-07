@@ -19,7 +19,7 @@ class Pages::QuestionsController < PagesController
     # TODO: Move Page creation to be part of the form submit method
     if @question_form.submit && @page.save
       clear_draft_questions_data
-      handle_submit_action
+      redirect_to edit_question_path(current_form, @page), success: "Your changes have been saved"
     else
       render :new, locals: { current_form:, draft_question: }, status: :unprocessable_entity
     end
@@ -42,7 +42,7 @@ class Pages::QuestionsController < PagesController
     # TODO: Move Page creation to be part of the form submit method
     if @question_form.submit && page.save
       clear_draft_questions_data
-      handle_submit_action
+      redirect_to edit_question_path(current_form, @page), success: "Your changes have been saved"
     else
       render :edit, locals: { current_form:, draft_question: }, status: :unprocessable_entity
     end
@@ -68,17 +68,5 @@ private
                       page_heading: draft_question.page_heading,
                       guidance_markdown: draft_question.guidance_markdown,
                       answer_type: draft_question.answer_type)
-  end
-
-  def handle_submit_action
-    # if user chose to save and reload current page
-    return redirect_to edit_question_path(current_form, @page), success: "Your changes have been saved" if params[:save_preview]
-
-    # Default: either edit the next page or create a new one
-    if @page.has_next_page?
-      redirect_to edit_question_path(current_form, @page.next_page)
-    else
-      redirect_to start_new_question_path(form_id: current_form.id)
-    end
   end
 end

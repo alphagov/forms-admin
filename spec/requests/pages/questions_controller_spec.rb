@@ -122,8 +122,8 @@ RSpec.describe Pages::QuestionsController, type: :request do
         post create_question_path(2), params:
       end
 
-      it "Redirects you to start new page" do
-        expect(response).to redirect_to(start_new_question_path(form_id: 2))
+      it "Redirects you to edit page for new question" do
+        expect(response).to redirect_to(edit_question_path(form_id: 2, page_id: 1))
       end
 
       it "Creates the page on the API" do
@@ -137,39 +137,13 @@ RSpec.describe Pages::QuestionsController, type: :request do
         expect(matched_request).to eq expected_request
       end
 
-      context "when 'save question' button is submitted" do
-        let(:params) do
-          { pages_question_form: {
-              question_text: "What is your home address?",
-              hint_text: "This should be the location stated in your contract.",
-              is_optional: false,
-            },
-            save_preview: "true" }
-        end
+      it "displays a notification banner with call to action links" do
+        follow_redirect!
+        results = Capybara.string(response.body)
+        banner_contents = results.find(".govuk-notification-banner .govuk-notification-banner__content")
 
-        it "Redirects you to edit page for new question" do
-          expect(response).to redirect_to(edit_question_path(form_id: 2, page_id: 1))
-        end
-
-        it "displays a notification banner with call to action links" do
-          follow_redirect!
-          results = Capybara.string(response.body)
-          banner_contents = results.find(".govuk-notification-banner .govuk-notification-banner__content")
-
-          expect(banner_contents).to have_link(text: "Add a question", href: start_new_question_path(form_id: 2))
-          expect(banner_contents).to have_link(text: "Go to your questions", href: form_pages_path(form_id: 2))
-        end
-
-        it "Creates the page on the API" do
-          expected_request = ActiveResource::Request.new(:post, "/api/v1/forms/2/pages", new_page_data.to_json, post_headers)
-          matched_request = ActiveResource::HttpMock.requests.find do |request|
-            request.method == expected_request.method &&
-              request.path == expected_request.path &&
-              request.body == expected_request.body
-          end
-
-          expect(matched_request).to eq expected_request
-        end
+        expect(banner_contents).to have_link(text: "Add a question", href: start_new_question_path(form_id: 2))
+        expect(banner_contents).to have_link(text: "Go to your questions", href: form_pages_path(form_id: 2))
       end
     end
 
@@ -278,54 +252,17 @@ RSpec.describe Pages::QuestionsController, type: :request do
         expect(matched_request).to eq expected_request
       end
 
-      it "Redirects you to start new page" do
-        expect(response).to redirect_to(start_new_question_path(form_id: 2))
+      it "Redirects you to edit page for question that was updated" do
+        expect(response).to redirect_to(edit_question_path(form_id: 2, page_id: 1))
       end
 
-      context "when 'save question' button is submitted" do
-        let(:params) do
-          { pages_question_form: {
-              form_id: 2,
-              question_text: "What is your home address?",
-              hint_text: "This should be the location stated in your contract.",
-              answer_type: "address",
-              page_heading: "New page heading",
-              guidance_markdown: "## Heading level 2",
-            },
-            save_preview: "true" }
-        end
+      it "displays a notification banner with call to action links" do
+        follow_redirect!
+        results = Capybara.string(response.body)
+        banner_contents = results.find(".govuk-notification-banner .govuk-notification-banner__content")
 
-        it "Reads the page from the API" do
-          form_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, req_headers)
-          expect(ActiveResource::HttpMock.requests).to include form_request
-
-          page_request = ActiveResource::Request.new(:put, "/api/v1/forms/2/pages/1", {}, post_headers)
-          expect(ActiveResource::HttpMock.requests).to include page_request
-        end
-
-        it "Updates the page on the API" do
-          expected_request = ActiveResource::Request.new(:put, "/api/v1/forms/2/pages/1", updated_page_data.to_json, post_headers)
-          matched_request = ActiveResource::HttpMock.requests.find do |request|
-            request.method == expected_request.method &&
-              request.path == expected_request.path &&
-              request.body == expected_request.body
-          end
-
-          expect(matched_request).to eq expected_request
-        end
-
-        it "Redirects you to edit page for new question" do
-          expect(response).to redirect_to(edit_question_path(form_id: 2, page_id: 1))
-        end
-
-        it "displays a notification banner with call to action links" do
-          follow_redirect!
-          results = Capybara.string(response.body)
-          banner_contents = results.find(".govuk-notification-banner .govuk-notification-banner__content")
-
-          expect(banner_contents).to have_link(text: "Add a question", href: start_new_question_path(form_id: 2))
-          expect(banner_contents).to have_link(text: "Go to your questions", href: form_pages_path(form_id: 2))
-        end
+        expect(banner_contents).to have_link(text: "Add a question", href: start_new_question_path(form_id: 2))
+        expect(banner_contents).to have_link(text: "Go to your questions", href: form_pages_path(form_id: 2))
       end
 
       context "when question being updated has a question after it" do
@@ -333,15 +270,14 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
         let(:params) do
           { pages_question_form: {
-              page_id: 1,
-              form_id: 2,
-              question_text: "What is your home address?",
-              hint_text: "This should be the location stated in your contract.",
-              answer_type: "address",
-              page_heading: "New page heading",
-              guidance_markdown: "## Heading level 2",
-            },
-            save_preview: "true" }
+            page_id: 1,
+            form_id: 2,
+            question_text: "What is your home address?",
+            hint_text: "This should be the location stated in your contract.",
+            answer_type: "address",
+            page_heading: "New page heading",
+            guidance_markdown: "## Heading level 2",
+          } }
         end
 
         it "Reads the page from the API" do
