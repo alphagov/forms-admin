@@ -16,11 +16,9 @@
 
       <%= t("contact_details.new.body_html") %>
 
-      <% if FeatureService.enabled?(:email_confirmations_enabled) %>
-        <p class="govuk-!-margin-bottom-6">
-          <%= t("contact_details.new.email_confirmation_hint_html") %>
-        </p>
-      <% end %>
+      <p class="govuk-!-margin-bottom-6">
+        <%= t("contact_details.new.email_confirmation_hint_html") %>
+      </p>
 
       <%= f.govuk_check_boxes_fieldset :contact_details_supplied, legend: { text: t('contact_details.new.title') }, hint: { text: t('contact_details.new.hint') } do %>
         <%= f.govuk_check_box :contact_details_supplied, :supply_email, checked: @contact_details_form.check_email? do %>

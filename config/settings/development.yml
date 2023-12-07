@@ -1,7 +1,3 @@
-# Used to add feature flags in the app to control access to certain features.
-features:
-  email_confirmations_enabled: true
-
 forms_api:
   # URL to form-api endpoints
   base_url: http://localhost:9292

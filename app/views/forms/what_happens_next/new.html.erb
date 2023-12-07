@@ -22,20 +22,18 @@
         We’ll send you an email to let you know the outcome. You’ll usually get a response within 10 working days.
       <% end %>
 
-      <% if FeatureService.enabled?(:email_confirmations_enabled) %>
-        <p>
-          This content will be:
-        </p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li> shown to people when they've completed and submitted a form
-          <li> included in an email confirmation, if they choose to receive this
-        </ul>
+      <p>
+        This content will be:
+      </p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li> shown to people when they've completed and submitted a form
+        <li> included in an email confirmation, if they choose to receive this
+      </ul>
 
-        <p>
-          The optional email confirmation will also include the contact details you provide for the form,
-          and the date and time of submission. It will not include a copy of their answers.
-        </p>
-      <% end %>
+      <p>
+        The optional email confirmation will also include the contact details you provide for the form,
+        and the date and time of submission. It will not include a copy of their answers.
+      </p>
 
       <%= render MarkdownEditorComponent::View.new(:what_happens_next_markdown,
         form_builder: f,
