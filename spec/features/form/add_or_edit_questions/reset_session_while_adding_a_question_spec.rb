@@ -25,9 +25,27 @@ feature "Reset session while adding a question", type: :feature do
       mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
     end
 
-    allow(Settings).to receive(:auth_provider).and_return("auth0")
+    # OmniAuth.config.test_mode = true
+    # OmniAuth.config.mock_auth[:fake_signin] = OmniAuth::AuthHash.new({
+    #   'provider' => 'strategy',
+    #   'uid' => '123545',
+    #   'info' => {
+    #     'name' => 'mockuser',
+    #     # etc.
+    #   },
+    #   'credentials' => {
+    #     'token' => 'mock_token',
+    #     'secret' => 'mock_secret'
+    #   }
+    # })
 
-    login_as_editor_user
+    # allow(Settings).to receive(:auth_provider).and_return("fake_signin")
+
+    allow(Settings).to receive(:auth_provider).and_return("developer")
+
+    visit new_question_path(form_id: form.id)
+    fill_in "email", with: editor_user.email
+    click_on "Sign In"
   end
 
   scenario "While drafting a new question the session expires" do
@@ -51,7 +69,8 @@ feature "Reset session while adding a question", type: :feature do
   end
 
   def and_i_log_back_in
-    login_as_editor_user
+    fill_in "email", with: editor_user.email
+    click_on "Sign In"
   end
 
   def and_go_to_the_last_visited_page
