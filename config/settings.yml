@@ -37,6 +37,7 @@ maintenance_mode:
 sentry:
   dsn:
   environment: local
+  filter_mask: "[Filtered (client-side)]"
 
 # How we authenticate users
 auth_provider: # use default auth_provider from environment
