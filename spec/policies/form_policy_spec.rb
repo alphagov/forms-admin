@@ -26,20 +26,24 @@ describe FormPolicy do
   end
 
   describe "#can_view_form?" do
-    context "with a form editor" do
-      it { is_expected.to permit_actions(%i[can_view_form]) }
+    (User.roles.keys - %w[trial]).each do |role|
+      context "with a form #{role}" do
+        let(:user) { build :user, role:, organisation: }
 
-      context "but from another organisation" do
-        let(:organisation) { build :organisation, id: 2, slug: "non-gds" }
+        it { is_expected.to permit_actions(%i[can_view_form]) }
 
-        it { is_expected.to forbid_actions(%i[can_view_form]) }
-      end
+        context "but from another organisation" do
+          let(:organisation) { build :organisation, id: 2, slug: "non-gds" }
 
-      context "with an organisation not in the organisation table" do
-        let(:user) { build :user, :with_unknown_org, role: :editor, organisation_slug: "gds" }
+          it { is_expected.to forbid_actions(%i[can_view_form]) }
+        end
 
-        it "raises an error" do
-          expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+        context "with an organisation not in the organisation table" do
+          let(:user) { build :user, :with_unknown_org, role:, organisation_slug: "gds" }
+
+          it "raises an error" do
+            expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+          end
         end
       end
     end
@@ -146,104 +150,53 @@ describe FormPolicy do
   end
 
   describe FormPolicy::Scope do
-    subject(:policy_scope) { described_class.new(user, Form) }
+    let(:policy_scope) { described_class.new(user, scope) }
+    let(:scope) { class_double(Form) }
+    let(:user) { build(:user, :with_trial_role) }
 
-    let(:headers) do
-      {
-        "X-API-Token" => Settings.forms_api.auth_key,
-        "Accept" => "application/json",
-      }
-    end
+    describe "#resolve" do
+      context "when user is on trial" do
+        before do
+          allow(scope).to receive(:where).with(creator_id: user.id)
+        end
 
-    let(:gds_forms) { build_list :form, 2, organisation_id: 1 }
-
-    it "uses organisation id to scope what forms a user can see" do
-      organisation_id = instance_double(Integer, "organisation_id")
-      scope = class_spy(Form)
-
-      allow(user).to receive_message_chain(:organisation, :id) { organisation_id } # rubocop:disable RSpec/MessageChain
-
-      described_class.new(user, scope).resolve
-
-      expect(scope).to have_received(:where).with(organisation_id:)
-    end
-
-    context "with a trial user role" do
-      let(:user) { build :user, :with_trial_role, id: 123 }
-      let(:form) { build(:form, creator_id: 123, organisation_id: nil) }
-
-      before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms?creator_id=123", headers, [form].to_json, 200
+        it "returns only their records" do
+          policy_scope.resolve
+          expect(scope).to have_received(:where).with(creator_id: user.id)
         end
       end
 
-      it "only shows forms the user created" do
-        expect(policy_scope.resolve).to eq [form]
-      end
-    end
+      (User.roles.keys - %w[trial]).each do |role|
+        context "when user is not a trial user but a #{role}" do
+          let(:user) { build(:user, role:) }
 
-    context "with a non-trial user role" do
-      let(:organisation) { build :organisation, id: 1, slug: "test-org" }
-      let(:form) { build(:form, organisation_id: 1, creator_id: 1234) }
-      let(:user) { build :user, role: :editor, organisation:, id: 123 }
+          before do
+            allow(scope).to receive(:where).with(organisation_id: user.organisation.id)
+          end
 
-      before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms?organisation_id=1", headers, [form].to_json, 200
-        end
-      end
-
-      it "only shows forms belonging to the user's organisation" do
-        expect(policy_scope.resolve).to eq [form]
-      end
-    end
-
-    context "with no organisation set" do
-      context "with editor role" do
-        let(:user) { build :user, :with_no_org, role: :editor }
-
-        it "raises an error" do
-          expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
-        end
-      end
-
-      context "with trial role" do
-        let(:user) { build :user, :with_trial_role }
-
-        it "does not an error" do
-          expect { policy }.not_to raise_error
+          it "returns only their organisation records" do
+            policy_scope.resolve
+            expect(scope).to have_received(:where).with(organisation_id: user.organisation.id)
+          end
         end
       end
     end
 
-    context "with a form editor" do
-      before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms?organisation_id=1", headers, gds_forms.to_json, 200
-        end
-        policy_scope.resolve
-      end
+    describe "#initialize" do
+      context "when user belongs to an organisation" do
+        before { allow(user).to receive(:organisation_valid?).and_return(true) }
 
-      it "Reads the forms from the API" do
-        forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?organisation_id=1", {}, headers)
-        expect(ActiveResource::HttpMock.requests).to include forms_request
-      end
-    end
-
-    context "with a user with no organisation" do
-      let(:user) { build :user, :with_no_org, role: :editor }
-
-      before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms?organisation_id=", headers, gds_forms.to_json, 200
+        it "does not throw an exception" do
+          expect { policy_scope }.not_to raise_error
         end
       end
 
-      it "raises an error" do
-        expect { policy_scope.resolve }.to raise_error(FormPolicy::UserMissingOrganisationError)
-        forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?org=", {}, headers)
-        expect(ActiveResource::HttpMock.requests).not_to include forms_request
+      context "when user does not belong to an organisation" do
+        before { allow(user).to receive(:organisation_valid?).and_return(false) }
+
+        it "throws a FormPolicy::UserMissingOrganisationError exception" do
+          expect { policy_scope }.to raise_error(FormPolicy::UserMissingOrganisationError, "Missing required attribute organisation_id")
+        end
       end
     end
   end
