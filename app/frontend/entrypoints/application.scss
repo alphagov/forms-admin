@@ -6,7 +6,7 @@ $govuk-suppressed-warnings: (
   ie8
 );
 
-@import "govuk/all";
+@import "@govuk/all";
 @import "dfe-autocomplete/src/dfe-autocomplete";
 @import "../styles/app_select_options";
 @import "../styles/app_summary_card";
