@@ -26,6 +26,7 @@ feature "Set or change a user's organisation", type: :feature do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms", req_headers, test_org_forms.to_json, 200
       mock.get "/api/v1/forms", req_headers, gds_forms.to_json, 200
+      mock.get "/api/v1/forms?organisation_id=#{gds_forms.first.organisation_id}", req_headers, gds_forms.to_json, 200
     end
 
     create_list :user, 6, organisation: test_org

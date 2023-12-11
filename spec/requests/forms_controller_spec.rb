@@ -262,6 +262,7 @@ RSpec.describe FormsController, type: :request do
       before do
         ActiveResource::HttpMock.respond_to do |mock|
           mock.get "/api/v1/forms", headers, forms_response.to_json, 200
+          mock.get "/api/v1/forms?organisation_id=#{super_admin_user.organisation.id}", headers, forms_response.to_json, 200
         end
 
         login_as_super_admin_user
