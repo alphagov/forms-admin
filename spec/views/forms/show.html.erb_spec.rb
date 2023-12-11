@@ -36,7 +36,7 @@ describe "forms/show.html.erb" do
     let(:form) { OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft", pages: []) }
 
     it "rendered draft tag " do
-      expect(rendered).to have_css(".govuk-tag.govuk-tag--purple", text: "DRAFT")
+      expect(rendered).to have_css(".govuk-tag.govuk-tag--purple", text: "Draft")
     end
 
     it "has a back link to the forms page" do
@@ -52,7 +52,7 @@ describe "forms/show.html.erb" do
     end
 
     it "rendered draft tag" do
-      expect(rendered).to have_css(".govuk-tag.govuk-tag--purple", text: "DRAFT")
+      expect(rendered).to have_css(".govuk-tag.govuk-tag--purple", text: "Draft")
     end
 
     it "does not contain a link to delete the form" do

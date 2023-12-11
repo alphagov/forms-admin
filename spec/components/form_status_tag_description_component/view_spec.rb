@@ -7,7 +7,7 @@ RSpec.describe FormStatusTagDescriptionComponent::View, type: :component do
     end
 
     it "renders the draft status by default" do
-      expect(page).to have_text("DRAFT")
+      expect(page).to have_text("Draft")
     end
   end
 
@@ -17,7 +17,7 @@ RSpec.describe FormStatusTagDescriptionComponent::View, type: :component do
     end
 
     it "renders the status text" do
-      expect(page).to have_text("LIVE")
+      expect(page).to have_text("Live")
     end
   end
 end
