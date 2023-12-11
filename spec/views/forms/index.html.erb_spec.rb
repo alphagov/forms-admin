@@ -7,6 +7,7 @@ describe "forms/index.html.erb" do
   before do
     assign(:current_user, user)
     assign(:forms, forms)
+    assign(:search_form, OpenStruct.new(forms:))
     render template: "forms/index"
   end
 
