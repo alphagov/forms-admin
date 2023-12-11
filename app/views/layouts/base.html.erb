@@ -10,12 +10,11 @@
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <link rel="shortcut icon" type="image/x-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/favicon.ico"%>" sizes="16x16 32x32 48x48" />
-    <link rel="mask-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-mask-icon.svg"%>" color="#0b0c0c" />
-    <link rel="apple-touch-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-apple-touch-icon-180x180.png"%>" sizes="180x180" />
-    <link rel="apple-touch-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-apple-touch-icon-167x167.png"%>" sizes="167x167" />
-    <link rel="apple-touch-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-apple-touch-icon-152x152.png"%>" sizes="152x152" />
-    <link rel="apple-touch-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-apple-touch-icon.png"%>" />
+    <link rel="icon" sizes="48x48" href="<%= vite_asset_path "#{govuk_assets_path}/images/favicon.ico" %>">
+    <link rel="icon" sizes="any" href="<%= vite_asset_path "#{govuk_assets_path}/images/favicon.svg" %>" type="image/svg+xml">
+    <link rel="mask-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-icon-mask.svg" %>" color="#0b0c0c">
+    <link rel="apple-touch-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-icon-180.png"%>">
+    <link rel="manifest" href="<%= vite_asset_path "#{govuk_assets_path}/manifest.json" %>">
     <meta property="og:image" content="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-opengraph-image.png" %>">
 
     <%= vite_stylesheet_tag 'application.scss' %>
