@@ -130,11 +130,11 @@ en:
     body_html: "<p>Completed forms will be sent to %{submission_email}.</p>\n"
     continue: Continue creating a form
   environment_names:
-    dev: development
-    local: local
-    production: production
-    staging: staging
-    user-research: user research
+    dev: Development
+    local: Local
+    production: Production
+    staging: Staging
+    user-research: User research
   error_summary:
     heading: There is a problem
   errors:
@@ -154,8 +154,8 @@ en:
     link_text: Contact the GOV⁠.⁠UK Forms team
     title: You cannot view this page
   form_statuses:
-    draft: DRAFT
-    live: LIVE
+    draft: Draft
+    live: Live
   form_url_component:
     copy_to_clipboard: Copy URL to clipboard
     form_url: Form URL
@@ -759,10 +759,10 @@ en:
   status_tag_description_component:
     status: Status
   task_statuses:
-    cannot_start: cannot start yet
-    completed: completed
-    in_progress: in progress
-    not_started: not started
+    cannot_start: Cannot start yet
+    completed: Completed
+    in_progress: In progress
+    not_started: Not started
   trial_role_warning:
     content_html: |
       <p>
