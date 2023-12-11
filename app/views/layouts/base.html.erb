@@ -22,12 +22,7 @@
   </head>
 
   <body class="govuk-template__body ">
-    <script>
-      if ('noModule' in HTMLScriptElement.prototype) {
-        document.body.classList
-          .add('js-enabled')
-      }
-    </script>
+    <script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
 
     <%= yield :skip_link %>
 
