@@ -146,7 +146,7 @@ RSpec.describe ApplicationHelper, type: :helper do
 
   describe "#govuk_assets_path" do
     it "returns the full node_modules asset path" do
-      expect(helper.govuk_assets_path).to eq "/node_modules/govuk-frontend/govuk/assets"
+      expect(helper.govuk_assets_path).to eq "/node_modules/govuk-frontend/dist/govuk/assets"
     end
   end
 
