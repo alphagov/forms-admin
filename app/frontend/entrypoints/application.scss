@@ -3,10 +3,12 @@ $govuk-fonts-path: "@govuk/assets/fonts/";
 $govuk-global-styles: true;
 
 // TODO: Remove this when dfe-autocomplete stops relying on the mixin
-// FIXME: This causes a sass error
 // Add empty mixin to stop dfe-autocomplete breaking
-// stylelint-disable-next-line block-no-empty
-@mixin govuk-if-ie8 {}
+@mixin govuk-if-ie8 {
+  @if false {
+    @content;
+  }
+}
 
 @import "@govuk/all";
 @import "dfe-autocomplete/src/dfe-autocomplete";
