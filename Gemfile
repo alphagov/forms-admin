@@ -72,7 +72,7 @@ gem "validate_url"
 gem "paper_trail"
 
 # For obtaining CloudWatch metrics
-gem "aws-sdk-cloudwatch", "~> 1.83"
+gem "aws-sdk-cloudwatch", "~> 1.84"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
