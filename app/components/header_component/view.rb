@@ -33,7 +33,7 @@ module HeaderComponent
 
     def environment_tag
       # Don't render a tag if this is the production environment
-      return { body: nil } if environment_name == "production"
+      return { body: nil } if environment_name == I18n.t("environment_names.production")
 
       GovukComponent::TagComponent.new(text: environment_name, colour: colour_for_environment)
     end

@@ -109,8 +109,8 @@ RSpec.describe HeaderComponent::View, type: :component do
   end
 
   describe "#environment_tag" do
-    context "when environment_name is production" do
-      let(:friendly_environment_name) { "production" }
+    context "when environment_name is Production" do
+      let(:friendly_environment_name) { I18n.t("environment_names.production") }
 
       it "returns a govuk tag component with the appropriate text and colour" do
         expect(header_component.environment_tag).to eq({ body: nil })
