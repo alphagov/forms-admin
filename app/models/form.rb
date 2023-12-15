@@ -4,6 +4,8 @@ class Form < ActiveResource::Base
   headers["X-API-Token"] = Settings.forms_api.auth_key
 
   belongs_to :organisation
+  belongs_to :creator, class_name: "User"
+
   has_many :pages
 
   def self.find_live(id)
@@ -96,6 +98,13 @@ class Form < ActiveResource::Base
 
     Sentry.capture_exception(e)
     nil
+  end
+
+  # ActiveResource doesn't support belongs_to optional: true
+  # Because not all forms returned by the API with have a creator_id
+  # we need to check if the attribute exists before trying to access it
+  def creator_id
+    attributes.include?("creator_id") && attributes["creator_id"] || nil
   end
 
 private
