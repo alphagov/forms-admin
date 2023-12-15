@@ -6,5 +6,5 @@ class Organisation < ApplicationRecord
 
   has_many :mou_signatures
 
-  scope :with_users, -> { joins(:users).distinct }
+  scope :with_users, -> { where(User.where("organisation_id = organisations.id").arel.exists) }
 end
