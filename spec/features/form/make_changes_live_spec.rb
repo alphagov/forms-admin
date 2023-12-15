@@ -37,13 +37,13 @@ feature "Make changes live", type: :feature do
 
     click_link form.name
     expect(page.find("h1")).to have_text form.name
-    expect(page).to have_css ".govuk-tag.govuk-tag--blue", text: "Live"
+    expect(page).to have_css ".govuk-tag.govuk-tag--turquoise", text: "Live"
     expect_page_to_have_no_axe_errors(page)
 
     click_link_or_button "Create a draft to edit"
     expect(page.find("h1")).to have_text "Edit your form"
     expect(page.find("h1")).to have_text form.name
-    expect(page).to have_css ".govuk-tag.govuk-tag--purple", text: "Draft"
+    expect(page).to have_css ".govuk-tag.govuk-tag--yellow", text: "Draft"
     expect_page_to_have_no_axe_errors(page)
 
     click_link "Make your changes live"

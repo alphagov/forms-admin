@@ -60,9 +60,9 @@ describe "forms/index.html.erb" do
       end
 
       expect(status_tags).to eq [
-        [{ text: "Draft", colour: "purple" }],
-        [{ text: "Live", colour: "blue" }],
-        [{ text: "Draft", colour: "purple" }, { text: "Live", colour: "blue" }],
+        [{ text: "Draft", colour: "yellow" }],
+        [{ text: "Live", colour: "turquoise" }],
+        [{ text: "Draft", colour: "yellow" }, { text: "Live", colour: "turquoise" }],
       ]
     end
 

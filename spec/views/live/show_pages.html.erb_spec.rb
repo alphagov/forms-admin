@@ -21,6 +21,6 @@ describe "live/show_pages.html.erb" do
   end
 
   it "rendered live tag" do
-    expect(rendered).to have_css(".govuk-tag.govuk-tag--blue", text: "Live")
+    expect(rendered).to have_css(".govuk-tag.govuk-tag--turquoise", text: "Live")
   end
 end

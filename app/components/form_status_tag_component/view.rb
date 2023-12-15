@@ -7,8 +7,8 @@ module FormStatusTagComponent
 
     def status_colour
       {
-        draft: "purple",
-        live: "blue",
+        draft: "yellow",
+        live: "turquoise",
       }[@status]
     end
 
