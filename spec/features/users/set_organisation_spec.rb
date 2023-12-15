@@ -24,9 +24,8 @@ feature "Set or change a user's organisation", type: :feature do
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms", req_headers, test_org_forms.to_json, 200
-      mock.get "/api/v1/forms", req_headers, gds_forms.to_json, 200
-      mock.get "/api/v1/forms?organisation_id=#{gds_forms.first.organisation_id}", req_headers, gds_forms.to_json, 200
+      mock.get "/api/v1/forms?organisation_id=1", req_headers, test_org_forms.to_json, 200
+      mock.get "/api/v1/forms?organisation_id=2", req_headers, gds_forms.to_json, 200
     end
 
     create_list :user, 6, organisation: test_org
@@ -44,7 +43,8 @@ feature "Set or change a user's organisation", type: :feature do
   scenario "Super admin can change their own organisation" do
     given_i_am_a_super_admin_in_the_government_digital_service_organisation
     when_i_change_my_organisation_to_test_org
-    then_the_current_users_organisation_name_is_updated
+    then_i_cannot_see_the_government_digital_service_forms
+    but_i_can_see_the_test_org_forms
   end
 
 private
@@ -95,9 +95,13 @@ private
     click_button "Save"
   end
 
-  def then_the_current_users_organisation_name_is_updated
-    user_table_row = page.find(".govuk-table tr", text: super_admin_user.name)
-    expect(user_table_row).to have_text "Test Org"
-    expect(user_table_row).not_to have_text gds_org
+  def then_i_cannot_see_the_government_digital_service_forms
+    visit root_path
+    expect(page).not_to have_text "Test GDS Form"
+  end
+
+  def but_i_can_see_the_test_org_forms
+    visit root_path
+    expect(page).to have_text "Test Org Form"
   end
 end

@@ -27,23 +27,4 @@ RSpec.describe Organisation, type: :model do
       expect(described_class.new).to be_versioned
     end
   end
-
-  describe "scopes" do
-    describe ".with_users" do
-      it "returns organisations with distinct users" do
-        organisation1 = FactoryBot.create(:organisation, slug: "org_1")
-        organisation2 = FactoryBot.create(:organisation, slug: "org_2")
-
-        FactoryBot.create(:user, organisation: organisation1)
-        FactoryBot.create(:user, organisation: organisation1)
-        FactoryBot.create(:user, organisation: organisation2)
-
-        organisations_with_users = described_class.with_users
-
-        expect(organisations_with_users).to include(organisation1)
-        expect(organisations_with_users).to include(organisation2)
-        expect(organisations_with_users.size).to eq(2)
-      end
-    end
-  end
 end
