@@ -16,10 +16,9 @@ class FormPolicy
     def resolve
       if user.trial?
         scope.where(creator_id: user.id)
-      elsif user.super_admin?
-        scope.all
       else
-        scope.where(organisation_id: user.organisation.id)
+        scope
+          .where(organisation_id: user.organisation.id)
       end
     end
   end
@@ -32,8 +31,6 @@ class FormPolicy
   end
 
   def can_view_form?
-    return true if user.super_admin?
-
     if user.trial?
       user_is_form_creator
     else

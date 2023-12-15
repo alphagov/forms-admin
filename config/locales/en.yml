@@ -380,18 +380,12 @@ en:
       user_upgrade_request:
         met_requirements: Confirm that you meet these requirements
   home:
-    change_filter: Change
     create_a_form: Create a form
-    form_creator_heading: Created by
     form_name_heading: Form name
     form_status_heading: Status
     form_table_caption: "%{organisation_name} forms"
     main_heading: GOV.UK Forms
-    no_form_creator: Unknown
-    organisation_hint: Change which organisation’s forms you’re viewing
-    organisation_prompt: Select an organisation
     preview: Preview this form
-    search_form_label: You’re viewing %{organisation_name} forms
     your_forms: Your forms
   internal_server_error:
     body: Please try again later.
