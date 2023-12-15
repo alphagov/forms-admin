@@ -26,7 +26,7 @@ describe "live/show_form.html.erb", feature_metrics_for_form_creators_enabled: f
   end
 
   it "rendered live tag" do
-    expect(rendered).to have_css(".govuk-tag.govuk-tag--blue", text: "Live")
+    expect(rendered).to have_css(".govuk-tag.govuk-tag--turquoise", text: "Live")
   end
 
   it "contains a link to preview the form" do
