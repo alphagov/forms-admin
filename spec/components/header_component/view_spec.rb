@@ -92,11 +92,11 @@ RSpec.describe HeaderComponent::View, type: :component do
 
   describe "#colour_for_environment" do
     [
-      { friendly_environment_name: "local", expected_result: "pink" },
-      { friendly_environment_name: "development", expected_result: "green" },
-      { friendly_environment_name: "staging", expected_result: "yellow" },
-      { friendly_environment_name: "production", expected_result: "blue" },
-      { friendly_environment_name: "user research", expected_result: "blue" },
+      { friendly_environment_name: "Local", expected_result: "pink" },
+      { friendly_environment_name: "Development", expected_result: "green" },
+      { friendly_environment_name: "Staging", expected_result: "yellow" },
+      { friendly_environment_name: "Production", expected_result: "blue" },
+      { friendly_environment_name: "User research", expected_result: "blue" },
     ].each do |scenario|
       context "when environment_name is #{scenario[:friendly_environment_name]}" do
         let(:friendly_environment_name) { scenario[:friendly_environment_name] }
@@ -109,8 +109,8 @@ RSpec.describe HeaderComponent::View, type: :component do
   end
 
   describe "#environment_tag" do
-    context "when environment_name is production" do
-      let(:friendly_environment_name) { "production" }
+    context "when environment_name is Production" do
+      let(:friendly_environment_name) { I18n.t("environment_names.production") }
 
       it "returns a govuk tag component with the appropriate text and colour" do
         expect(header_component.environment_tag).to eq({ body: nil })
@@ -118,10 +118,10 @@ RSpec.describe HeaderComponent::View, type: :component do
     end
 
     [
-      { friendly_environment_name: "local", colour_for_environment: "pink" },
-      { friendly_environment_name: "development", colour_for_environment: "green" },
-      { friendly_environment_name: "staging", colour_for_environment: "yellow" },
-      { friendly_environment_name: "user-research", colour_for_environment: "blue" },
+      { friendly_environment_name: "Local", colour_for_environment: "pink" },
+      { friendly_environment_name: "Development", colour_for_environment: "green" },
+      { friendly_environment_name: "Staging", colour_for_environment: "yellow" },
+      { friendly_environment_name: "User research", colour_for_environment: "blue" },
     ].each do |scenario|
       context "when environment_name is #{scenario[:friendly_environment_name]}" do
         let(:friendly_environment_name) { scenario[:friendly_environment_name] }

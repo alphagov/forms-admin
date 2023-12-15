@@ -91,7 +91,7 @@ private
   def then_i_should_have_a_draft_form
     expect(page.find("h1")).to have_text "Create a form"
     expect(page.find("h1")).to have_text form.name
-    expect(page.find(".govuk-tag.govuk-tag--purple")).to have_text "DRAFT"
+    expect(page.find(".govuk-tag.govuk-tag--purple")).to have_text "Draft"
     expect_page_to_have_no_axe_errors(page)
   end
 

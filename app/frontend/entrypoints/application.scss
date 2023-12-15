@@ -1,19 +1,23 @@
 $govuk-images-path: "@govuk/assets/images/";
 $govuk-fonts-path: "@govuk/assets/fonts/";
-$govuk-new-link-styles: true;
 $govuk-global-styles: true;
-$govuk-suppressed-warnings: (
-  ie8
-);
 
-@import "govuk/all";
+// TODO: Remove this when dfe-autocomplete stops relying on the mixin
+// Add empty mixin to stop dfe-autocomplete breaking
+@mixin govuk-if-ie8 {
+  @if false {
+    @content;
+  }
+}
+
+@import "@govuk/all";
 @import "dfe-autocomplete/src/dfe-autocomplete";
+@import "../styles/app_memorandum_of_understanding";
+@import "../styles/app_preview_area";
 @import "../styles/app_select_options";
 @import "../styles/app_summary_card";
-@import "../styles/app_memorandum_of_understanding";
 @import "../../components/task_list_component/";
 @import "../../components/page_list_component/";
 @import "../../components/header_component/";
 @import "../../components/markdown_editor_component";
 @import "../../components/metrics_summary_component";
-@import "../styles/app_preview_area";
