@@ -14,18 +14,10 @@ module Forms
 
       return redirect_to form_path(@make_live_form.form) unless user_wants_to_make_form_live
 
-      already_live = @make_live_form.form.has_live_version
-
       @make_form_live_service = MakeFormLiveService.call(draft_form: current_form)
 
       if make_form_live
-        confirmation_page_title = if already_live
-                                    I18n.t("page_titles.your_changes_are_live")
-                                  else
-                                    I18n.t("page_titles.your_form_is_live")
-                                  end
-
-        render "confirmation", locals: { current_form:, confirmation_page_title: }
+        render "confirmation", locals: { current_form:, confirmation_page_title: @make_form_live_service.page_title }
       else
         render_new
       end
