@@ -1,5 +1,7 @@
-class Organisation < ApplicationRecord
-  has_paper_trail
+class Organisation < ActiveYaml::Base
+  include ActiveHash::Associations
+
+  set_root_path "../forms-deploy/config"
 
   has_many :forms
   has_many :users
