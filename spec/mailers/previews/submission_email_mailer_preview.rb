@@ -8,4 +8,12 @@ class SubmissionEmailMailerPreview < ActionMailer::Preview
       current_user: OpenStruct.new(name: "Joe Bloggs", email: "example@example.com"),
     )
   end
+
+  def notify_submission_email_has_changed
+    SubmissionEmailMailer.notify_submission_email_has_changed(
+      live_email: "testing@example.com",
+      form_name: "My fantastic form",
+      current_user: OpenStruct.new(name: "Joe Bloggs", email: "example@example.com"),
+    )
+  end
 end

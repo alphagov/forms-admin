@@ -21,6 +21,7 @@ forms_product_page:
 govuk_notify:
   api_key: changeme
   submission_email_confirmation_code_email_template_id: ce2638ab-754c-416d-8df6-c0ccb5e1a688
+  live_submission_email_of_no_further_form_submissions: a8c43931-af3d-48ff-b5b2-dbc444796dec
   user_upgrade_template_id: 5ec25494-c045-4cf6-9009-2f122e3339f4
   zendesk_reply_to_id: 0acefa17-04b5-4614-a2ad-6c7f17dd26ab
 
