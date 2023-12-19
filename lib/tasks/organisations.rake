@@ -11,6 +11,23 @@ namespace :organisations do
     end
   end
 
+  desc "Dump organisations in format usable by ActiveHash"
+  task dump: :environment do
+    include AdvisoryLock::DSL
+
+    with_lock("forms-admin:organisations:fetch") do
+      File.open("tmp/organisations.yml", "w") do |f|
+        organisations = Organisation.all
+          .as_json(only: %i[govuk_content_id slug name])
+          .map(&:compact)
+
+        f.write(organisations.to_yaml)
+
+        puts "wrote #{organisations.length} records into #{f.path}"
+      end
+    end
+  end
+
   desc "Add organisation that is not in GOV.UK organisation database"
   task :create, %i[name] => :environment do |_, args|
     usage_message = "usage: rails organisations:create[<name>]".freeze
