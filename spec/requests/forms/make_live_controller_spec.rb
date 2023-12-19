@@ -124,7 +124,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
 
       context "and that form has not been made live before" do
         it "has the page title 'Your form is live'" do
-          expect(assigns(:confirmation_page_title)).to eq "Your form is live"
+          expect(response.body).to include "Your form is live"
         end
       end
 
@@ -136,7 +136,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
         end
 
         it "has the page title 'Your changes are live'" do
-          expect(assigns(:confirmation_page_title)).to eq "Your changes are live"
+          expect(response.body).to include "Your changes are live"
         end
       end
     end

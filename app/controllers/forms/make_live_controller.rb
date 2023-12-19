@@ -19,7 +19,13 @@ module Forms
       @make_form_live_service = MakeFormLiveService.call(draft_form: current_form)
 
       if make_form_live
-        render_confirmation(already_live ? :changes : :form)
+        confirmation_page_title = if already_live
+                                    I18n.t("page_titles.your_changes_are_live")
+                                  else
+                                    I18n.t("page_titles.your_form_is_live")
+                                  end
+
+        render "confirmation", locals: { current_form:, confirmation_page_title: }
       else
         render_new
       end
@@ -37,16 +43,6 @@ module Forms
       else
         render "make_your_form_live", locals: { current_form: }
       end
-    end
-
-    def render_confirmation(made_live)
-      @confirmation_page_title = if made_live == :changes
-                                   I18n.t("page_titles.your_changes_are_live")
-                                 else
-                                   I18n.t("page_titles.your_form_is_live")
-                                 end
-
-      render "confirmation", locals: { current_form: }
     end
 
     def user_wants_to_make_form_live
