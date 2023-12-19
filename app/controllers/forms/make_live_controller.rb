@@ -16,7 +16,9 @@ module Forms
 
       already_live = @make_live_form.form.has_live_version
 
-      if @make_live_form.submit
+      @make_form_live_service = MakeFormLiveService.call(draft_form: current_form)
+
+      if make_form_live
         render_confirmation(already_live ? :changes : :form)
       else
         render_new
@@ -49,6 +51,10 @@ module Forms
 
     def user_wants_to_make_form_live
       @make_live_form.valid? && @make_live_form.made_live?
+    end
+
+    def make_form_live
+      @make_live_form.valid? && @make_form_live_service.make_live
     end
   end
 end

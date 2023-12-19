@@ -12,63 +12,6 @@ RSpec.describe Forms::MakeLiveForm, type: :model do
         "Confirm make live #{error_message}",
       )
     end
-  end
-
-  describe "#submit" do
-    let(:make_live_form) { described_class.new(form: build(:form, :with_pages, :with_support, what_happens_next_markdown: "We usually respond to applications within 10 working days.")) }
-
-    context "when form is invalid" do
-      it "returns false" do
-        expect(make_live_form.submit).to eq false
-      end
-
-      it "sets error messages" do
-        make_live_form.submit
-        expect(make_live_form.errors.full_messages_for(:confirm_make_live)).to include(
-          "Confirm make live #{error_message}",
-        )
-      end
-    end
-
-    context "when admin user decides not to make form live" do
-      before do
-        make_live_form.confirm_make_live = "not_made_live"
-      end
-
-      it "returns true" do
-        expect(make_live_form.submit).to eq true
-      end
-
-      it "sets no error messages" do
-        make_live_form.submit
-        expect(make_live_form.errors).to be_empty
-      end
-    end
-
-    context "when form is being made live" do
-      let(:form) { build(:form, :ready_for_live) }
-
-      around do |example|
-        travel_to(Time.zone.local(2021, 1, 1, 4, 30, 0)) do
-          example.run
-        end
-      end
-
-      before do
-        make_live_form.form = form
-        allow(make_live_form.form).to receive(:make_live!).and_return(:make_live_called)
-        make_live_form.confirm_make_live = "made_live"
-      end
-
-      it "makes form live" do
-        expect(make_live_form.submit).to eq :make_live_called
-      end
-
-      it "sets no error messages" do
-        make_live_form.submit
-        expect(make_live_form.errors).to be_empty
-      end
-    end
 
     context "when form is being made live but not all the required sections have been completed" do
       let(:make_live_form) { build :make_live_form }
