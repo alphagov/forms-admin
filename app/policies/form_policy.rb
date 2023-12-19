@@ -31,6 +31,8 @@ class FormPolicy
   end
 
   def can_view_form?
+    return true if user.super_admin?
+
     if user.trial?
       user_is_form_creator
     else
