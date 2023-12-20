@@ -11,14 +11,13 @@ module Forms
       authorize current_form, :can_make_form_live?
 
       @make_live_form = MakeLiveForm.new(**make_live_form_params)
-      already_live = @make_live_form.form.has_live_version
 
-      if @make_live_form.submit
-        if @make_live_form.made_live?
-          render_confirmation(already_live ? :changes : :form)
-        else
-          redirect_to form_path(@make_live_form.form)
-        end
+      return redirect_to form_path(@make_live_form.form) unless user_wants_to_make_form_live
+
+      @make_form_live_service = MakeFormLiveService.call(draft_form: current_form)
+
+      if make_form_live
+        render "confirmation", locals: { current_form:, confirmation_page_title: @make_form_live_service.page_title }
       else
         render_new
       end
@@ -38,14 +37,12 @@ module Forms
       end
     end
 
-    def render_confirmation(made_live)
-      @confirmation_page_title = if made_live == :changes
-                                   I18n.t("page_titles.your_changes_are_live")
-                                 else
-                                   I18n.t("page_titles.your_form_is_live")
-                                 end
+    def user_wants_to_make_form_live
+      @make_live_form.valid? && @make_live_form.made_live?
+    end
 
-      render "confirmation", locals: { current_form: }
+    def make_form_live
+      @make_live_form.valid? && @make_form_live_service.make_live
     end
   end
 end

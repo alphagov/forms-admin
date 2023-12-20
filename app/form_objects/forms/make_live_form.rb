@@ -6,15 +6,6 @@ class Forms::MakeLiveForm < BaseForm
   validates :confirm_make_live, presence: true, inclusion: { in: CONFIRM_LIVE_VALUES.values }
 
   validate :required_parts_of_form_completed
-
-  def submit
-    return false if invalid?
-    # we are valid and didn't need to save
-    return true unless made_live?
-
-    form.make_live!
-  end
-
   def made_live?
     confirm_make_live == CONFIRM_LIVE_VALUES[:made_live]
   end

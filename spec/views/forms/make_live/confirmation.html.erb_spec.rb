@@ -1,12 +1,10 @@
 require "rails_helper"
 
 describe "forms/make_live/confirmation.html.erb" do
+  let(:current_form) { OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1") }
+
   before do
-    without_partial_double_verification do
-      allow(view).to receive(:current_form).and_return(OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1"))
-    end
-    assign(:confirmation_page_title, "Your form is live")
-    render template: "forms/make_live/confirmation"
+    render template: "forms/make_live/confirmation", locals: { current_form:, confirmation_page_title: "Your form is live" }
   end
 
   it "contains a confirmation panel with a title" do
