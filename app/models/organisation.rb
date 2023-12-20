@@ -1,7 +1,7 @@
 class Organisation < ActiveYaml::Base
   include ActiveHash::Associations
 
-  set_root_path "../forms-deploy/config"
+  set_root_path Settings.config_data.path
 
   field :has_access, default: true
 

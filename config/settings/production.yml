@@ -1,2 +1,6 @@
 # Use real authentication
 auth_provider: gds_sso
+
+# config data should have been copied into container image by build pipeline
+config_data:
+  path: config/data
