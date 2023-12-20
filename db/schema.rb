@@ -10,9 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_03_140934) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_20_065158) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "domains", force: :cascade do |t|
+    t.string "domain"
+    t.bigint "organisation_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organisation_id"], name: "index_domains_on_organisation_id"
+  end
 
   create_table "draft_questions", force: :cascade do |t|
     t.integer "form_id"
@@ -96,6 +104,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_03_140934) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "domains", "organisations"
   add_foreign_key "draft_questions", "users"
   add_foreign_key "mou_signatures", "organisations"
   add_foreign_key "mou_signatures", "users"
