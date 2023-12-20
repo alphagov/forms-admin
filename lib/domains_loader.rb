@@ -11,7 +11,10 @@ class DomainsLoader
 private
 
   def domains
-    @domains ||= YAML.load(File.read("../forms-deploy/config/domains.yml"), symbolize_names: true)
+    @domains ||= YAML.load(
+      File.read(File.join(Settings.config_data.path, "domains.yml")),
+      symbolize_names: true,
+    )
   end
 
   def create_domain(domain_data)

@@ -1,3 +1,6 @@
+config_data:
+  path: "../forms-deploy/config/data"
+
 # Used to add feature flags in the app to control access to certain features.
 features:
   metrics_for_form_creators_enabled: false
