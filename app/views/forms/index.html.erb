@@ -22,7 +22,7 @@
 
 <% if @forms.any? %>
   <%= govuk_table do |table| %>
-    <%= table.with_caption(size: 'm', text: @current_user.trial? || @current_user.organisation.blank? ? t("home.your_forms") : t("home.form_table_caption", organisation_name: @current_user.organisation.name)) %>
+    <%= table.with_caption(size: 'm', text: forms_table_caption(@current_user.super_admin? ? @search_form.organisation.name : user_organisation_name(@current_user))) %>
 
     <%= table.with_head do |head|
        head.with_row do |row|

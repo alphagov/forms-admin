@@ -1,8 +1,15 @@
 class FormsController < ApplicationController
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
+
   def index
-    @forms = policy_scope(Form) || []
+    if @current_user.super_admin?
+      @search_form = Forms::SearchForm.new({ organisation_id: @current_user.organisation_id }.merge(search_params))
+
+      @forms = policy_scope(Form).where(organisation_id: @search_form.organisation_id) || []
+    else
+      @forms = policy_scope(Form) || []
+    end
   end
 
   def show
@@ -36,5 +43,9 @@ private
 
   def mark_complete_form_params
     params.require(:forms_mark_complete_form).permit(:mark_complete).merge(form: current_form)
+  end
+
+  def search_params
+    params.permit(:organisation_id)
   end
 end

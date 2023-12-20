@@ -176,18 +176,29 @@ describe FormPolicy do
         end
       end
 
-      (User.roles.keys - %w[trial]).each do |role|
-        context "when user is not a trial user but a #{role}" do
-          let(:user) { build(:user, role:) }
+      context "when user has an editor role" do
+        let(:user) { build(:user, role: :editor) }
 
-          before do
-            allow(scope).to receive(:where).with(organisation_id: user.organisation.id)
-          end
+        before do
+          allow(scope).to receive(:where).with(organisation_id: user.organisation.id)
+        end
 
-          it "returns only their organisation records" do
-            policy_scope.resolve
-            expect(scope).to have_received(:where).with(organisation_id: user.organisation.id)
-          end
+        it "returns only their organisation records" do
+          policy_scope.resolve
+          expect(scope).to have_received(:where).with(organisation_id: user.organisation.id)
+        end
+      end
+
+      context "when user has an super_admin role" do
+        let(:user) { build(:user, role: :super_admin) }
+
+        before do
+          allow(scope).to receive(:where)
+        end
+
+        it "is not scoped" do
+          policy_scope.resolve
+          expect(scope).not_to have_received(:where)
         end
       end
     end
