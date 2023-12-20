@@ -10,5 +10,5 @@ class Organisation < ActiveYaml::Base
 
   has_many :mou_signatures
 
-  has_many :domains, primary_key: :govuk_content_id, foreign_key: :govuk_content_id
+  has_many :domains, primary_key: :govuk_content_id, foreign_key: :organisation_content_id
 end
