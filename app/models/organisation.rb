@@ -3,6 +3,8 @@ class Organisation < ActiveYaml::Base
 
   set_root_path "../forms-deploy/config"
 
+  field :has_access, default: true
+
   has_many :forms
   has_many :users
 
