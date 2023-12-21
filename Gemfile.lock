@@ -217,10 +217,10 @@ GEM
       warden-oauth2 (~> 0.0.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    govuk-components (5.0.0)
+    govuk-components (5.0.1)
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (~> 6.0)
-      view_component (>= 3.3, < 3.8)
+      view_component (>= 3.3, < 3.9)
     govuk_design_system_formbuilder (5.0.0)
       actionview (>= 6.1)
       activemodel (>= 6.1)
@@ -479,7 +479,7 @@ GEM
       activemodel (>= 3.0.0)
       public_suffix
     version_gem (1.1.3)
-    view_component (3.6.0)
+    view_component (3.8.0)
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
@@ -533,7 +533,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   gds-sso
-  govuk-components (~> 5.0.0)
+  govuk-components (~> 5.0.1)
   govuk-forms-markdown!
   govuk_design_system_formbuilder (~> 5.0.0)
   govuk_notify_rails
