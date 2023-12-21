@@ -57,7 +57,7 @@ gem "govuk_design_system_formbuilder", "~> 5.0.0"
 gem "dfe-autocomplete", require: "dfe/autocomplete", github: "DFE-Digital/dfe-autocomplete", ref: "36d80e6b5bba67c92cd9ec6982a4e536d1889aed"
 
 # Our own custom markdown renderer
-gem "govuk-forms-markdown", github: "alphagov/govuk-forms-markdown", tag: "0.4.0"
+gem "govuk-forms-markdown", github: "alphagov/govuk-forms-markdown", tag: "0.5.0"
 
 # For structured logging
 gem "lograge"
