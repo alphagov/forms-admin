@@ -31,8 +31,8 @@ RSpec.describe Organisation, type: :model do
   describe "scopes" do
     describe ".with_users" do
       it "returns organisations with distinct users" do
-        organisation1 = FactoryBot.create(:organisation, slug: "org_1")
         organisation2 = FactoryBot.create(:organisation, slug: "org_2")
+        organisation1 = FactoryBot.create(:organisation, slug: "org_1")
 
         FactoryBot.create(:user, organisation: organisation1)
         FactoryBot.create(:user, organisation: organisation1)
