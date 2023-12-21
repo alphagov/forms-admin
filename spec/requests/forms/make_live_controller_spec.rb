@@ -99,6 +99,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.post "/api/v1/forms/2/make-live", post_headers
         mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
+        mock.get "/api/v1/forms/2/live", req_headers, form.to_json, 200
       end
 
       login_as user
