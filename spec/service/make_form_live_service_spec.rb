@@ -52,14 +52,22 @@ describe MakeFormLiveService do
           draft_form.submission_email = "i-have-changed@example.com"
         end
 
-        it "calls the SubmissionEmailMailer" do
-          expect(SubmissionEmailMailer).to receive(:notify_submission_email_has_changed).with(
-            live_email: live_form.submission_email,
-            form_name: live_form.name,
-            current_user:,
-          ).and_call_original
+        it "does not call the SubmissionEmailMailer" do
+          expect(SubmissionEmailMailer).not_to receive(:notify_submission_email_has_changed)
 
           make_form_live_service.make_live
+        end
+
+        context "when notify_original_submission_email_of_change feature is enabled", feature_notify_original_submission_email_of_change: true do
+          it "calls the SubmissionEmailMailer" do
+            expect(SubmissionEmailMailer).to receive(:notify_submission_email_has_changed).with(
+              live_email: live_form.submission_email,
+              form_name: live_form.name,
+              current_user:,
+            ).and_call_original
+
+            make_form_live_service.make_live
+          end
         end
       end
     end
