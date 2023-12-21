@@ -40,8 +40,8 @@ RSpec.describe Organisation, type: :model do
 
         organisations_with_users = described_class.with_users
 
-        expect(organisations_with_users).to include(organisation1)
-        expect(organisations_with_users).to include(organisation2)
+        expect(organisations_with_users.first).to eq(organisation1)
+        expect(organisations_with_users.last).to eq(organisation2)
         expect(organisations_with_users.size).to eq(2)
       end
     end
