@@ -37,7 +37,7 @@ class Pages::SelectionsSettingsForm < BaseForm
     return errors.add(:selection_options, :minimum) if selection_options.length < 2
     return errors.add(:selection_options, :maximum) if selection_options.length > 20
 
-    return errors.add(:selection_options, :uniqueness) if selection_options.uniq.length != selection_options.length
+    errors.add(:selection_options, :uniqueness) if selection_options.uniq.length != selection_options.length
   end
 
   def filter_out_blank_options

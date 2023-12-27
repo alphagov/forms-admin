@@ -147,7 +147,7 @@ describe User, type: :model do
   end
 
   describe "#trial_user_upgraded?" do
-    described_class.roles.reject { |role| role == "trial" }.each do |_role_name, role_value|
+    described_class.roles.reject { |role| role == "trial" }.each_value do |role_value|
       it "returns true when changing from trial to #{role_value}" do
         user = create(:user, role: :trial)
 
