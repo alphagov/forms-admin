@@ -1,4 +1,4 @@
-FROM ruby:3.2.2-alpine3.18@sha256:198e97ccb12cd0297c274d10e504138f412f90bed50c36ebde0a466ab89cf526 AS build
+FROM ruby:3.3.0-alpine3.19@sha256:203b3087530e9cb117d8aab9b49bb766253fd8a6606a0d7520a591c7a3d992f7 AS build
 
 WORKDIR /app
 
@@ -36,7 +36,7 @@ RUN SECRET_KEY_BASE=dummyvalue rails vite:build_all
 # Remove devDependencies once assets have been built
 RUN npm ci --ignore-scripts --only=production
 
-FROM ruby:3.2.2-alpine3.18@sha256:198e97ccb12cd0297c274d10e504138f412f90bed50c36ebde0a466ab89cf526 AS app
+FROM ruby:3.3.0-alpine3.19@sha256:203b3087530e9cb117d8aab9b49bb766253fd8a6606a0d7520a591c7a3d992f7 AS app
 
 ENV RAILS_ENV="${RAILS_ENV:-production}" \
     PATH="${PATH}:/home/ruby/.local/bin" \
