@@ -132,7 +132,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       end
 
       it "renders the guidance markdown as html" do
-        expect(response.body).to include('<a href="https://example.com" class="govuk-link" rel="noreferrer noopener" target="_blank">a link</a>')
+        expect(response.body).to include('<a href="https://example.com" class="govuk-link" rel="noreferrer noopener" target="_blank">a link (opens in new tab)</a>')
       end
 
       context "when markdown is invalid" do
