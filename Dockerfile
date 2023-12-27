@@ -4,7 +4,7 @@ WORKDIR /app
 
 RUN apk update
 RUN apk upgrade --available
-RUN apk add libc6-compat openssl-dev build-base libpq-dev nodejs=~18 npm git python3
+RUN apk add libc6-compat openssl-dev build-base libpq-dev nodejs=~20 npm git python3
 RUN adduser -D ruby
 RUN mkdir /node_modules && chown ruby:ruby -R /node_modules /app
 
