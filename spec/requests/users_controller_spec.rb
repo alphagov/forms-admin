@@ -249,7 +249,7 @@ RSpec.describe UsersController, type: :request do
         login_as_super_admin_user
       end
 
-      User.roles.reject { |role| role == "trial" }.each do |_role_name, role_value|
+      User.roles.reject { |role| role == "trial" }.each_value do |role_value|
         it "updates user's forms' org when changing role from trial to #{role_value}" do
           user = create(:user, role: :trial)
           expect(Form).to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)

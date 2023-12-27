@@ -39,7 +39,7 @@ describe UserUpdateService do
         user_update_service.update_user
       end
 
-      User.roles.reject { |role| role == "trial" }.each do |_role_name, role_value|
+      User.roles.reject { |role| role == "trial" }.each_value do |role_value|
         context "when the user is a trial user changing to #{role_value}" do
           let(:organisation) { create(:organisation) }
           let(:params) { { role: role_value, name: "name required", organisation: } }
