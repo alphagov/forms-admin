@@ -94,6 +94,10 @@ class ApplicationController < ActionController::Base
     @current_form ||= Form.find(params[:form_id])
   end
 
+  def current_live_form
+    @current_live_form ||= Form.find_live(params[:form_id])
+  end
+
 private
 
   def authenticate_and_check_access
