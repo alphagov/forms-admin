@@ -127,8 +127,12 @@ en:
     sub_heading: What you need to do next
     what_happens_next_body_html: "<p>The recipient will be asked to give you the code. You need to enter the code to confirm the email address.</p>\n"
   email_code_success:
-    body_html: "<p>Completed forms will be sent to %{submission_email}.</p>\n"
+    body_html: Completed forms will be sent to %{submission_email}.
     continue: Continue creating a form
+    live_submission_email_changed_body_html: |
+      When you make this draft form live, completed forms will be sent to %{new_submission_email}.
+
+      When you make the form live, we’ll send an email to the previous email address to let them know they’ll no longer receive completed forms.
   environment_names:
     dev: Development
     local: Local

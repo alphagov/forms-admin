@@ -1,9 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Forms::SubmissionEmailController, type: :request do
+  include ActionView::Helpers::TextHelper
+
   let(:organisation) { build :organisation, id: 1, slug: "test-org" }
   let(:user) { build :user, role: :editor, id: 1, organisation: }
-  let(:form) { build :form, id: 1, creator_id: 1, organisation_id: 1 }
+  let(:form) { build :form, id: 1, creator_id: 1, organisation_id: 1, has_live_version: }
+  let(:live_form) { form.clone }
+  let(:has_live_version) { false }
 
   let(:submission_email_mailer_spy) do
     submission_email_mailer = instance_spy(SubmissionEmailMailer)
@@ -29,6 +33,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms", req_headers, [form].to_json, 200
       mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
+      mock.get "/api/v1/forms/1/live", req_headers, live_form.to_json, 200
       mock.put "/api/v1/forms/1", post_headers, form.to_json, 200
     end
 
@@ -234,7 +239,18 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
   end
 
   describe "#submission_email_confirmed" do
+    let(:has_live_version) { false }
+
     before do
+      if has_live_version
+        live_form
+        form.submission_email = Faker::Internet.email(domain: "example.gov.uk")
+
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
+          mock.get "/api/v1/forms/1/live", req_headers, live_form.to_json, 200
+        end
+      end
       get submission_email_confirmed_path(form.id)
     end
 
@@ -259,6 +275,20 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when draft version submission email is different from live version" do
+      let(:has_live_version) { true }
+
+      it "displays the default text" do
+        expect(response.body).to include(I18n.t("email_code_success.body_html", submission_email: form.submission_email))
+      end
+
+      context "when live_submission_email_changed_body_html is enabled", feature_notify_original_submission_email_of_change: true do
+        it "displays the default text and tells users we will email form processing team" do
+          expect(response.body).to include(simple_format(I18n.t("email_code_success.live_submission_email_changed_body_html", new_submission_email: form.submission_email)))
+        end
       end
     end
   end
