@@ -27,7 +27,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "postcss": "^8.4.32",
     "regenerator-runtime": "^0.14.1",
-    "sass": "^1.69.5",
+    "sass": "^1.69.6",
     "snazzy": "^9.0.0",
     "standard": "^17.1.0",
     "stylelint": "^15.11.0",
