@@ -36,7 +36,7 @@
     "vite-plugin-ruby": "^5.0.0"
   },
   "dependencies": {
-    "dfe-autocomplete": "github:DFE-Digital/dfe-autocomplete#36d80e6b5bba67c92cd9ec6982a4e536d1889aed",
+    "dfe-autocomplete": "github:DFE-Digital/dfe-autocomplete#11738c0e25778162e26eb7ab5e22a6ffce671b08",
     "govuk-frontend": "~5.0.0",
     "turndown": "^7.1.2"
   },
