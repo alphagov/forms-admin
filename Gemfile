@@ -54,7 +54,7 @@ gem "govuk_design_system_formbuilder", "~> 5.0.0"
 
 # The autocomplete component is not currently published as a gem, if changing
 # the hash, also change in package.json
-gem "dfe-autocomplete", require: "dfe/autocomplete", github: "DFE-Digital/dfe-autocomplete", ref: "36d80e6b5bba67c92cd9ec6982a4e536d1889aed"
+gem "dfe-autocomplete", require: "dfe/autocomplete", github: "DFE-Digital/dfe-autocomplete", ref: "11738c0e25778162e26eb7ab5e22a6ffce671b08"
 
 # Our own custom markdown renderer
 gem "govuk-forms-markdown", github: "alphagov/govuk-forms-markdown", tag: "0.5.0"
