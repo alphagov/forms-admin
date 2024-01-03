@@ -39,6 +39,8 @@ module Forms
 
     def submission_email_confirmed
       authorize current_form, :can_change_form_submission_email?
+
+      render :submission_email_confirmed, locals: { live_submission_email_updated: live_submission_email_updated? }
     end
 
   private
@@ -53,6 +55,12 @@ module Forms
 
     def submission_email_form
       @submission_email_form ||= SubmissionEmailForm.new(form: current_form).assign_form_values
+    end
+
+    def live_submission_email_updated?
+      return false unless FeatureService.enabled?(:notify_original_submission_email_of_change) && current_form.has_live_version
+
+      current_live_form.submission_email != current_form.submission_email
     end
   end
 end
