@@ -2,14 +2,6 @@ $govuk-images-path: "@govuk/assets/images/";
 $govuk-fonts-path: "@govuk/assets/fonts/";
 $govuk-global-styles: true;
 
-// TODO: Remove this when dfe-autocomplete stops relying on the mixin
-// Add empty mixin to stop dfe-autocomplete breaking
-@mixin govuk-if-ie8 {
-  @if false {
-    @content;
-  }
-}
-
 @import "@govuk/all";
 @import "dfe-autocomplete/src/dfe-autocomplete";
 @import "../styles/app_memorandum_of_understanding";
