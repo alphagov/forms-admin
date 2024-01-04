@@ -1,17 +1,3 @@
-require "pundit/matchers"
-require_relative "support/active_resource_mock"
-require_relative "support/logger_mock"
-require_relative "support/factorybot"
-require_relative "support/features"
-require_relative "support/authentication_feature_helpers"
-require_relative "support/axe_feature_helpers"
-require_relative "support/matchers/active_resource/have_been_created"
-require_relative "support/matchers/active_resource/have_been_updated"
-require_relative "support/matchers/active_resource/have_been_read"
-require_relative "support/matchers/active_resource/have_been_deleted"
-require_relative "support/shared_examples/axe_core"
-require_relative "support/shared_examples/markdown_validation"
-
 require "simplecov"
 
 SimpleCov.coverage_dir("coverage/backend")
