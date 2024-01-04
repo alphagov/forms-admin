@@ -48,7 +48,7 @@ describe "forms/index.html.erb" do
     end
 
     it "has status tags for each form" do
-      page = Capybara.string(rendered)
+      page = Capybara.string(rendered.html)
       table_rows = page.find_all("tbody .govuk-table__row")
       status_tags = table_rows.map do |row|
         row.find_all(".govuk-tag").map do |status_tag|

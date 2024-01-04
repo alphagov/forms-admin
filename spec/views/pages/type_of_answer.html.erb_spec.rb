@@ -76,7 +76,7 @@ describe "pages/type_of_answer.html.erb", type: :view do
     let(:conditions) { [(build :condition)] }
 
     it "displays a warning about routes being deleted if answer type changes" do
-      expect(Capybara.string(rendered).find(".govuk-notification-banner__content").text(normalize_ws: true))
+      expect(Capybara.string(rendered.html).find(".govuk-notification-banner__content").text(normalize_ws: true))
         .to include(Capybara.string(I18n.t("type_of_answer.routing_warning_about_change_answer_type_html", pages_link_url: form_pages_path(form)))
                         .text(normalize_ws: true))
     end
