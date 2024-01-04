@@ -1,6 +1,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require "spec_helper"
 require "view_component/test_helpers"
+require "capybara/rspec"
 require "validate_url/rspec_matcher"
 require "selenium/webdriver"
 require "axe-rspec"
