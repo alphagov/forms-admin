@@ -1,5 +1,3 @@
-require_relative "helper_methods"
-
 RSpec::Matchers.define :have_been_updated do
   match do |resource|
     expected_request_path = resource.class.element_path(resource.id, resource.prefix_options)
