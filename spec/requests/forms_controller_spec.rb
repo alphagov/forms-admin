@@ -292,7 +292,7 @@ RSpec.describe FormsController, type: :request do
           end
 
           login_as_super_admin_user
-          get root_path, params: { organisation_id: organisation.id }
+          get root_path, params: { search: { organisation_id: organisation.id } }
         end
 
         it "makes a call to the API with the search query" do

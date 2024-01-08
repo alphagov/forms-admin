@@ -46,6 +46,6 @@ private
   end
 
   def search_params
-    params.permit(:organisation_id)
+    params[:search]&.permit(:organisation_id) || {}
   end
 end
