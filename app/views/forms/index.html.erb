@@ -21,20 +21,27 @@
 <%= govuk_start_button(text: t("home.create_a_form"), href: new_form_path) %>
 
 <% if @current_user.super_admin? %>
-  <%= form_with(model: @search_form, scope: '', url: root_path, method: 'get', local: true) do |f| %>
-    <%= f.govuk_collection_select(:organisation_id,
-                                  Organisation.with_users.order(:slug),
-                                  :id,
-                                  :name,
-                                  class: ['govuk-!-width-three-quarters'],
-                                  options: { prompt: t('home.organisation_prompt') },
-                                  label: { text: t('home.search_form_label', organisation_name: @search_form.organisation.name), size: 'm', tag: 'h2' },
-                                  hint: { text: t('home.organisation_hint') })
-                                %>
-                              <%= f.govuk_submit(t("home.change_filter"), secondary: true) %>
-                            <% end %>
-                            <%= govuk_section_break(visible: true, size: 'l') %>
-                          <% end %>
+
+  <%= form_with(model: @search_form, scope: :search, url: root_path, method: 'get', local: true) do |f| %>
+    <%= render DfE::Autocomplete::View.new(
+      f,
+      attribute_name: :organisation_id,
+      form_field: f.govuk_collection_select(:organisation_id,
+                                            Organisation.with_users.order(:slug),
+                                            :id,
+                                            :name,
+                                            class: ['govuk-!-width-three-quarters'],
+                                            options: { prompt: t('home.organisation_prompt') },
+                                            label: { text: t('home.search_form_label', organisation_name: @search_form.organisation.name), size: 'm', tag: 'h2' },
+                                            hint: { text: t('home.organisation_hint') },
+                                           ),
+    html_attributes: { 'data-show-all-values' => 'true'},
+    )%>
+  <%= f.govuk_submit(t("home.change_filter"), secondary: true) %>
+  <% end %>
+
+  <%= govuk_section_break(visible: true, size: 'l') %>
+<% end %>
 
 <% if @forms.any? %>
   <%= govuk_table do |table| %>
@@ -68,3 +75,5 @@
     end %>
   <% end %>
 <% end %>
+
+<%= init_autocomplete_script(show_all_values: true, raw_attribute: false, source: false) %>

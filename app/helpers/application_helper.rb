@@ -100,4 +100,22 @@ module ApplicationHelper
       end
     end
   end
+
+  def init_autocomplete_script(show_all_values: false, raw_attribute: false, source: false)
+    content_for(:body_end) do
+      javascript_tag defer: true do
+        "
+      document.addEventListener('DOMContentLoaded', function(event) {
+        if(window.dfeAutocomplete !== undefined && typeof window.dfeAutocomplete === 'function') {
+          dfeAutocomplete({
+            showAllValues: #{show_all_values},
+            rawAttribute: #{raw_attribute},
+            source: #{source}
+          })
+        }
+      });
+        ".html_safe
+      end
+    end
+  end
 end

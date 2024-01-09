@@ -48,9 +48,9 @@
 
     <%= yield :footer %>
 
-    <%= yield :body_end %>
-
     <%= vite_client_tag %>
     <%= vite_javascript_tag 'application' %>
+
+    <%= yield :body_end %>
   </body>
 </html>
