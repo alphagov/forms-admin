@@ -14,7 +14,7 @@ class User < ApplicationRecord
   has_many :mou_signatures
   has_many :draft_questions
 
-  serialize :permissions, Array
+  serialize :permissions, type: Array
 
   enum :role, {
     super_admin: "super_admin",

@@ -42,7 +42,7 @@ describe "users/edit.html.erb" do
 
   describe "summary list" do
     let(:summary_list) do
-      Capybara.string(rendered).find(".govuk-summary-list")
+      Capybara.string(rendered.html).find(".govuk-summary-list")
     end
 
     it "contains name" do

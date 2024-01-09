@@ -86,15 +86,15 @@ describe "pages/conditions/routing_page.html.erb" do
 
     it "explains to the user what is required for them to be able to add a new routes" do
       guidance = Capybara.string(I18n.t("routing_page.routing_requirements_not_met_html")).text(normalize_ws: true)
-      expect(Capybara.string(rendered).text(normalize_ws: true)).to have_text(guidance)
+      expect(rendered).to have_text(guidance, normalize_ws: true)
     end
 
     context "when all qualifying questions have a route" do
       let(:all_routes_created) { true }
 
       it "explains to the user that they have created all available routes" do
-        guidance = Capybara.string(I18n.t("routing_page.no_remaining_routes")).text(normalize_ws: true)
-        expect(Capybara.string(rendered).text(normalize_ws: true)).to have_text(guidance)
+        guidance = Capybara.string(I18n.t("routing_page.no_remaining_routes").to_s).text(normalize_ws: true)
+        expect(rendered).to have_text(guidance, normalize_ws: true)
       end
     end
   end
