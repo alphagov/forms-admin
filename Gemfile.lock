@@ -345,7 +345,7 @@ GEM
     psych (5.1.2)
       stringio
     public_suffix (5.0.3)
-    puma (6.4.1)
+    puma (6.4.2)
       nio4r (~> 2.0)
     pundit (2.3.1)
       activesupport (>= 3.0.0)
@@ -569,7 +569,7 @@ DEPENDENCIES
   omniauth-rails_csrf_protection
   paper_trail
   pg (~> 1.5)
-  puma (~> 6.4.1)
+  puma (~> 6.4.2)
   pundit
   pundit-matchers
   rails (= 7.1.2)
