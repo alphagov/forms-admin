@@ -5,7 +5,6 @@ feature "View forms", type: :feature do
   let(:other_org) { create :organisation, id: 2, slug: "Other org" }
   let(:other_org_user) { create :user, organisation: other_org }
   let(:other_org_forms) { [build(:form, id: 2, organisation_id: other_org.id, name: "Other org form")] }
-  # let(:other_org_forms) { [build (:form, id: 1, name: "Apply for a juggling license", organisation_id: other_org.id)] }
 
   let(:req_headers) do
     {
