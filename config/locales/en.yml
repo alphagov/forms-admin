@@ -630,7 +630,7 @@ en:
     add_rules_legend: Question settings
     answer_settings: Answer settings
     delete_question: Delete question
-    go_to_your_questions: Go to your questions
+    go_to_your_questions: Back to your questions
     heading: Edit question
     index:
       add_a_question_route: Add a question route

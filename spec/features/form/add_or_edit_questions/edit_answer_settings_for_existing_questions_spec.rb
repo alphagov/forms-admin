@@ -107,7 +107,7 @@ private
   end
 
   def then_go_back_to_list_of_questions
-    click_on "Go to your questions"
+    click_on "Back to your questions"
   end
 
   def check_address_answer_settings

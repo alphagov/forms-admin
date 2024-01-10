@@ -143,7 +143,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
         banner_contents = results.find(".govuk-notification-banner .govuk-notification-banner__content")
 
         expect(banner_contents).to have_link(text: "Add a question", href: start_new_question_path(form_id: 2))
-        expect(banner_contents).to have_link(text: "Go to your questions", href: form_pages_path(form_id: 2))
+        expect(banner_contents).to have_link(text: "Back to your questions", href: form_pages_path(form_id: 2))
       end
     end
 
@@ -262,7 +262,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
         banner_contents = results.find(".govuk-notification-banner .govuk-notification-banner__content")
 
         expect(banner_contents).to have_link(text: "Add a question", href: start_new_question_path(form_id: 2))
-        expect(banner_contents).to have_link(text: "Go to your questions", href: form_pages_path(form_id: 2))
+        expect(banner_contents).to have_link(text: "Back to your questions", href: form_pages_path(form_id: 2))
       end
 
       context "when question being updated has a question after it" do
@@ -309,7 +309,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
           banner_contents = results.find(".govuk-notification-banner .govuk-notification-banner__content")
 
           expect(banner_contents).to have_link(text: "Edit next question", href: edit_question_path(form_id: 2, page_id: 4))
-          expect(banner_contents).to have_link(text: "Go to your questions", href: form_pages_path(form_id: 2))
+          expect(banner_contents).to have_link(text: "Back to your questions", href: form_pages_path(form_id: 2))
         end
       end
     end
