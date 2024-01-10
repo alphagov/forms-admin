@@ -78,6 +78,7 @@ Rails.application.routes.draw do
         post "/question_text" => "pages/question_text#create", as: :question_text_create
         get "/question" => "pages/questions#new", as: :new_question
         post "/question" => "pages/questions#create", as: :create_question
+        get "/check-your-question" => "pages/check_your_question#show", as: :new_check_your_question
       end
 
       get "/new-condition" => "pages/conditions#routing_page", as: :routing_page

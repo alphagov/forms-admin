@@ -629,6 +629,7 @@ en:
   pages:
     add_rules_legend: Question settings
     answer_settings: Answer settings
+    check_your_question: Check your question
     delete_question: Delete question
     go_to_your_questions: Back to your questions
     heading: Edit question
