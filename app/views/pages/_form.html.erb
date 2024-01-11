@@ -29,6 +29,17 @@
     <% end %>
   <% end %>
 
+  <% if FeatureService.enabled?(:check_your_question_enabled) %>
+    <%= f.govuk_collection_radio_buttons :add_guidance,
+                                         [OpenStruct.new(value: "Yes", name: "Yes"), OpenStruct.new(value: "No", name: "No")],
+                                         :value,
+                                         :name,
+                                         legend: { text: "Do you need to add guidance to help people answer the question?", size: 'm' },
+                                         hint:{ text: "Only add guidance if you need to give a longer explanation of how to answer the question, or to format your content. For example, you can use paragraphs, links or lists." },
+                                         inline: true %>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <% end %>
+
   <% if question_form.answer_type == 'selection' %>
     <%= f.hidden_field :is_optional %>
   <% else %>
@@ -39,16 +50,20 @@
                             hint: { text: t("pages.make_optional_hint") } %>
 
     <% end %>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <% unless FeatureService.enabled?(:check_your_question_enabled) %>
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <% end %>
   <% end %>
 
   <% unless FeatureService.enabled?(:check_your_question_enabled) %>
     <h2 class="govuk-heading-m"><%= t("pages.answer_settings") %></h2>
     <%= render PageSettingsSummaryComponent::View.new(draft_question) %>
   <% end %>
+
   <ul class="govuk-list govuk-list--spaced">
     <li>
-      <%= f.govuk_submit t('pages.submit_save'), class: "govuk-!-margin-bottom-3" %>
+      <%= f.govuk_submit (FeatureService.enabled?(:check_your_question_enabled)?  "Continue" : t('pages.submit_save')),
+                         class: "govuk-!-margin-bottom-3" %>
     </li>
     <% unless FeatureService.enabled?(:check_your_question_enabled) && is_new_page %>
       <li>
@@ -60,7 +75,8 @@
         </li>
       <% else %>
         <li>
-          <%= govuk_link_to t("pages.index.add_question"), start_new_question_path(form_object.id) %>
+          <%= govuk_link_to t("pages.index.add_question"),
+                            start_new_question_path(form_object.id) %>
         </li>
       <% end %>
     <% end %>
