@@ -9,17 +9,20 @@
       <%= t("pages.check_your_question") %>
     </h1>
   </div>
-
+</div>
+<div class="govuk-grid-row govuk-!-margin-bottom-5">
   <div class="govuk-grid-column-two-thirds">
     <h2 class="govuk-heading-m"><%= t("pages.answer_settings") %></h2>
     <%= render PageSettingsSummaryComponent::View.new(draft_question) %>
   </div>
-
+</div>
+<div class="govuk-grid-row govuk-!-margin-bottom-5">
   <div class="govuk-grid-column-two-thirds">
     <h2 class="govuk-heading-m"><%= t("pages.your_question") %></h2>
     <%= govuk_summary_list(**PageSummaryData::QuestionService.call(form: current_form, draft_question:).build_data) %>
   </div>
-
+</div>
+<div class="govuk-grid-row govuk-!-margin-bottom-5">
   <% if draft_question.page_heading.present? && draft_question.guidance_markdown.present? %>
     <div class="govuk-grid-column-two-thirds">
       <h2 class="govuk-heading-m"><%= t("guidance.guidance") %></h2>
