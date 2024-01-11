@@ -34,7 +34,9 @@
         }) %>
       <div class="govuk-button-group">
         <%= f.govuk_submit t("continue"), name: "route_to", value: "save_and_continue" %>
-        <%= govuk_link_to t('cancel'), back_link %>
+        <% unless FeatureService.enabled?(:check_your_question_enabled) %>
+          <%= govuk_link_to t('cancel'), back_link %>
+        <% end %>
       </div>
 
     <% end %>
