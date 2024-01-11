@@ -16,12 +16,20 @@ class Pages::QuestionsController < PagesController
 
     @page = Page.new(page_params_for_forms_api)
 
-    # TODO: Move Page creation to be part of the form submit method
-    if @question_form.submit && @page.save
-      clear_draft_questions_data
-      redirect_to edit_question_path(current_form, @page), success: "Your changes have been saved"
+    if FeatureService.enabled?(:check_your_question_enabled)
+      if @question_form.submit
+        redirect_to new_check_your_question_path(current_form)
+      else
+        render :new, locals: { current_form:, draft_question: }, status: :unprocessable_entity
+      end
     else
-      render :new, locals: { current_form:, draft_question: }, status: :unprocessable_entity
+      # TODO: Move Page creation to be part of the form submit method
+      if @question_form.submit && @page.save
+        clear_draft_questions_data
+        redirect_to edit_question_path(current_form, @page), success: "Your changes have been saved"
+      else
+        render :new, locals: { current_form:, draft_question: }, status: :unprocessable_entity
+      end
     end
   end
 
