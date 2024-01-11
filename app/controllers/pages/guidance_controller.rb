@@ -18,7 +18,12 @@ class Pages::GuidanceController < PagesController
       render :guidance, locals: view_locals(nil, guidance_form, back_link)
     when :save_and_continue
       if guidance_form.submit
-        redirect_to new_question_path(current_form)
+        if FeatureService.enabled?(:check_your_question_enabled)
+          redirect_to new_check_your_question_path(current_form)
+        else
+          redirect_to new_question_path(current_form)
+        end
+
       else
         render :guidance, locals: view_locals(nil, guidance_form, back_link), status: :unprocessable_entity
       end

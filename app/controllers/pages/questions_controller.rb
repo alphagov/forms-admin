@@ -18,18 +18,21 @@ class Pages::QuestionsController < PagesController
 
     if FeatureService.enabled?(:check_your_question_enabled)
       if @question_form.submit
-        redirect_to new_check_your_question_path(current_form)
+        if params[:pages_question_form][:add_guidance] == "Yes"
+          redirect_to guidance_new_path(current_form)
+        else
+          redirect_to new_check_your_question_path(current_form)
+        end
+
       else
         render :new, locals: { current_form:, draft_question: }, status: :unprocessable_entity
       end
-    else
+    elsif @question_form.submit && @page.save
       # TODO: Move Page creation to be part of the form submit method
-      if @question_form.submit && @page.save
-        clear_draft_questions_data
-        redirect_to edit_question_path(current_form, @page), success: "Your changes have been saved"
-      else
-        render :new, locals: { current_form:, draft_question: }, status: :unprocessable_entity
-      end
+      clear_draft_questions_data
+      redirect_to edit_question_path(current_form, @page), success: "Your changes have been saved"
+    else
+      render :new, locals: { current_form:, draft_question: }, status: :unprocessable_entity
     end
   end
 
