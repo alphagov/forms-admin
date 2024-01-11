@@ -17,6 +17,7 @@
 
   <div class="govuk-grid-column-two-thirds">
     <h2 class="govuk-heading-m"><%= t("pages.your_question") %></h2>
+    <%= govuk_summary_list(**PageSummaryData::QuestionService.call(form: current_form, draft_question:).build_data) %>
   </div>
 
   <% if draft_question.page_heading.present? && draft_question.guidance_markdown.present? %>
