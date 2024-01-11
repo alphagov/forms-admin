@@ -9,22 +9,24 @@
 
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
-  <h2 class="govuk-heading-m"><%= t("guidance.guidance") %></h2>
-  <% if draft_question.page_heading.present? && draft_question.guidance_markdown.present? %>
-    <%= govuk_summary_list(**PageSummaryData::GuidanceService.call(form: form_object, draft_question:).build_data) %>
+  <% unless FeatureService.enabled?(:check_your_question_enabled) %>
+    <h2 class="govuk-heading-m"><%= t("guidance.guidance") %></h2>
+    <% if draft_question.page_heading.present? && draft_question.guidance_markdown.present? %>
+      <%= govuk_summary_list(**PageSummaryData::GuidanceService.call(form: form_object, draft_question:).build_data) %>
 
-  <% else %>
-    <p><%= t("guidance.instructions") %></p>
+    <% else %>
+      <p><%= t("guidance.instructions") %></p>
 
-    <p>
-      <% guidance_link = unless is_new_page
-                            guidance_edit_path(form_id: form_object.id, page_id: page_object.id)
-                          else
-                            guidance_new_path(form_id: form_object.id)
-                          end%>
-      <%= govuk_button_link_to t("guidance.add_guidance"), guidance_link, secondary: true %>
-    </p>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+      <p>
+        <% guidance_link = unless is_new_page
+                              guidance_edit_path(form_id: form_object.id, page_id: page_object.id)
+                            else
+                              guidance_new_path(form_id: form_object.id)
+                            end%>
+        <%= govuk_button_link_to t("guidance.add_guidance"), guidance_link, secondary: true %>
+      </p>
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <% end %>
   <% end %>
 
   <% if question_form.answer_type == 'selection' %>
@@ -40,14 +42,15 @@
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <% end %>
 
-  <h2 class="govuk-heading-m"><%= t("pages.answer_settings") %></h2>
-  <%= render PageSettingsSummaryComponent::View.new(draft_question) %>
-
+  <% unless FeatureService.enabled?(:check_your_question_enabled) %>
+    <h2 class="govuk-heading-m"><%= t("pages.answer_settings") %></h2>
+    <%= render PageSettingsSummaryComponent::View.new(draft_question) %>
+  <% end %>
   <ul class="govuk-list govuk-list--spaced">
     <li>
       <%= f.govuk_submit t('pages.submit_save'), class: "govuk-!-margin-bottom-3" %>
     </li>
-    <% unless is_new_page %>
+    <% unless FeatureService.enabled?(:check_your_question_enabled) && is_new_page %>
       <li>
         <%= govuk_button_link_to t('pages.delete_question'), delete_page_path(form_id: form_object.id, page_id: page_object.id), warning: true %>
       </li>
