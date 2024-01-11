@@ -644,6 +644,7 @@ en:
     optional: "%{question_text} (optional)"
     question: Question
     submit_save: Save question
+    your_question: Your question
   phase_banner:
     after_link: will help us improve it.
     before_link: This is a new service, your
