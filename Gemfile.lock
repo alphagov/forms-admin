@@ -138,7 +138,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bigdecimal (3.1.5)
-    bootsnap (1.17.0)
+    bootsnap (1.17.1)
       msgpack (~> 1.2)
     brakeman (6.1.1)
       racc
