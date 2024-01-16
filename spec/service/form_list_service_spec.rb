@@ -11,7 +11,7 @@ describe FormListService do
         let(:current_user) { create :user, :with_no_org }
 
         it "returns generic caption" do
-          expect(service.data).to include(caption: { text: I18n.t("home.your_forms") })
+          expect(service.data).to include caption: I18n.t("home.your_forms")
         end
       end
 
@@ -19,7 +19,7 @@ describe FormListService do
         let(:current_user) { create :user, :with_trial_role }
 
         it "returns generic caption" do
-          expect(service.data).to include(caption: { text: I18n.t("home.your_forms") })
+          expect(service.data).to include caption: I18n.t("home.your_forms")
         end
       end
 
@@ -28,7 +28,7 @@ describe FormListService do
 
         it "returns specific organisation caption" do
           organisation_name = current_user.organisation.name
-          expect(service.data).to include(caption: { text: I18n.t("home.form_table_caption", organisation_name:) })
+          expect(service.data).to include caption: I18n.t("home.form_table_caption", organisation_name:)
         end
       end
     end

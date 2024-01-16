@@ -22,13 +22,9 @@ class FormListService
 private
 
   def caption
-    text = if organisation_name_for_caption.blank?
-             I18n.t("home.your_forms")
-           else
-             I18n.t("home.form_table_caption", organisation_name: organisation_name_for_caption)
-           end
+    return I18n.t("home.your_forms") if organisation_name_for_caption.blank?
 
-    { text: }
+    I18n.t("home.form_table_caption", organisation_name: organisation_name_for_caption)
   end
 
   def organisation_name_for_caption
