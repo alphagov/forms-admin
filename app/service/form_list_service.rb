@@ -16,6 +16,7 @@ class FormListService
   def data
     {
       caption:,
+      head:,
     }
   end
 
@@ -25,6 +26,11 @@ private
     return I18n.t("home.your_forms") if organisation_name_for_caption.blank?
 
     I18n.t("home.form_table_caption", organisation_name: organisation_name_for_caption)
+  end
+
+  def head
+    [I18n.t("home.form_name_heading"),
+     {text: I18n.t("home.form_status_heading"), numeric: true }]
   end
 
   def organisation_name_for_caption
