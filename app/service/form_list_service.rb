@@ -1,4 +1,9 @@
+# require "helpers/govuk_rails_compatible_link_helper"
 class FormListService
+  include Rails.application.routes.url_helpers
+  include ActionView::Helpers::UrlHelper
+  include GovukRailsCompatibleLinkHelper
+
   attr_accessor :forms, :current_user, :search_form
 
   class << self
@@ -17,6 +22,7 @@ class FormListService
     {
       caption:,
       head:,
+      rows:,
     }
   end
 
@@ -30,7 +36,13 @@ private
 
   def head
     [I18n.t("home.form_name_heading"),
-     {text: I18n.t("home.form_status_heading"), numeric: true }]
+     { text: I18n.t("home.form_status_heading"), numeric: true }]
+  end
+
+  def rows
+    forms.map do |form|
+      [{ text: form_name_link(form) }, { text: form_status_tags(form), numeric: true }]
+    end
   end
 
   def organisation_name_for_caption
@@ -38,5 +50,23 @@ private
     return search_form.organisation.name if current_user.super_admin?
 
     current_user.organisation.name
+  end
+
+  def form_name_link(form)
+    if form.has_live_version
+      govuk_link_to(form.name, live_form_path(form.id))
+    else
+      govuk_link_to(form.name, form_path(form.id))
+    end
+  end
+
+  def form_status_tags(form)
+    # Create an instance of controller. We are using ApplicationController here.
+    view_context = ApplicationController.new.view_context
+
+    html = ""
+    html << FormStatusTagComponent::View.new(status: :draft).render_in(view_context) if form.has_draft_version
+    html << FormStatusTagComponent::View.new(status: :live).render_in(view_context) if form.has_live_version
+    html.html_safe
   end
 end

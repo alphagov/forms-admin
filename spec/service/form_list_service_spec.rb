@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe FormListService do
-  let(:forms) { build_list :form, 5 }
+  let(:forms) { build_list :form, 5, :with_id }
   let(:service) { described_class.call(forms:, current_user:, search_form:) }
   let(:search_form) { build :search_form, organisation_id: 1 }
   let(:current_user) { create :user, :with_no_org }
@@ -41,6 +41,25 @@ describe FormListService do
 
       it "contains 'Status' column heading and is numeric " do
         expect(service.data[:head].last).to eq text: I18n.t("home.form_status_heading"), numeric: true
+      end
+    end
+
+    describe "rows" do
+      it "has a row for each form passed to the service" do
+        expect(service.data[:rows].size).to eq forms.size
+      end
+
+      it "returns the correct data for each form" do
+        service.data[:rows].each_with_index do |row, index|
+          form = forms[index]
+          expect(row).to eq([
+            { text: "<a class=\"govuk-link\" href=\"/forms/#{form.id}\">#{form.name}</a>" },
+            {
+              numeric: true,
+              text: "<strong class=\"govuk-tag govuk-tag--yellow\">Draft</strong>\n",
+            },
+          ])
+        end
       end
     end
   end

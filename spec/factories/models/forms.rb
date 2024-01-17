@@ -31,6 +31,10 @@ FactoryBot.define do
       privacy_policy_url { "" }
     end
 
+    trait :with_id do
+      sequence(:id) { |n| n }
+    end
+
     trait :ready_for_live do
       with_pages
       support_email { Faker::Internet.email(domain: "example.gov.uk") }
