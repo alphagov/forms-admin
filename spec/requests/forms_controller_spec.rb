@@ -213,6 +213,7 @@ RSpec.describe FormsController, type: :request do
         has_draft_version: true,
         has_live_version: false,
         organisation_id: 1,
+        creator_id: nil,
       },
        {
          id: 3,
@@ -223,6 +224,7 @@ RSpec.describe FormsController, type: :request do
          has_draft_version: true,
          has_live_version: false,
          organisation_id: 1,
+         creator_id: nil,
        }]
     end
 

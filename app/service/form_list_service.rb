@@ -1,4 +1,3 @@
-# require "helpers/govuk_rails_compatible_link_helper"
 class FormListService
   include Rails.application.routes.url_helpers
   include ActionView::Helpers::UrlHelper
@@ -16,6 +15,12 @@ class FormListService
     @forms = forms
     @current_user = current_user
     @search_form = search_form
+    if current_user.super_admin?
+      @list_of_creator_id = forms.map(&:creator_id).uniq
+      @list_of_creators = User.where(id: @list_of_creator_id)
+                               .select(:id, :name)
+                               .map { |user| { id: user.id, name: user.name } }
+    end
   end
 
   def data
@@ -35,13 +40,18 @@ private
   end
 
   def head
-    [I18n.t("home.form_name_heading"),
-     { text: I18n.t("home.form_status_heading"), numeric: true }]
+    [
+      I18n.t("home.form_name_heading"),
+      (current_user.super_admin? ? { text: I18n.t("home.created_by") } : nil),
+      { text: I18n.t("home.form_status_heading"), numeric: true },
+    ].compact
   end
 
   def rows
     forms.map do |form|
-      [{ text: form_name_link(form) }, { text: form_status_tags(form), numeric: true }]
+      [{ text: form_name_link(form) },
+       (current_user.super_admin? ? { text: find_creator_name(form) } : nil),
+       { text: form_status_tags(form), numeric: true }].compact
     end
   end
 
@@ -68,5 +78,9 @@ private
     html << FormStatusTagComponent::View.new(status: :draft).render_in(view_context) if form.has_draft_version
     html << FormStatusTagComponent::View.new(status: :live).render_in(view_context) if form.has_live_version
     html.html_safe
+  end
+
+  def find_creator_name(form)
+    @list_of_creators.find { |creator| creator[:id] == form.creator_id }&.fetch(:name, "")
   end
 end
