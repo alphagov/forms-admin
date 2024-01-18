@@ -33,7 +33,7 @@ module AuthenticationFeatureHelpers
   end
 
   def super_admin_user
-    @super_admin_user ||= FactoryBot.create(:user, role: :super_admin, organisation: test_org)
+    @super_admin_user ||= FactoryBot.create(:super_admin_user, organisation: test_org)
   end
 
   def editor_user

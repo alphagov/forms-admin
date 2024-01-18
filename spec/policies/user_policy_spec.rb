@@ -3,7 +3,7 @@ require "rails_helper"
 describe UserPolicy do
   subject(:policy) { described_class.new(user, records) }
 
-  let(:user) { build :user, role: :super_admin }
+  let(:user) { build :super_admin_user }
   let!(:records) { create_list :user, 5 }
 
   context "with super admin" do

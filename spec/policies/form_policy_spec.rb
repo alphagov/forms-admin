@@ -47,7 +47,7 @@ describe FormPolicy do
     end
 
     context "with a super_admin" do
-      let(:user) { build :user, role: :super_admin, organisation: }
+      let(:user) { build :super_admin_user, organisation: }
 
       it { is_expected.to permit_actions(%i[can_view_form]) }
 
@@ -190,7 +190,7 @@ describe FormPolicy do
       end
 
       context "when user has an super_admin role" do
-        let(:user) { build(:user, role: :super_admin) }
+        let(:user) { build(:super_admin_user) }
 
         before do
           allow(scope).to receive(:where)
