@@ -116,7 +116,7 @@ RSpec.describe UsersController, type: :request do
   end
 
   describe "#update" do
-    let(:user) { create(:user, role: :editor) }
+    let(:user) { create(:editor_user) }
     let(:role) { :super_admin }
 
     context "when logged in as a super admin" do

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe FormTaskListService do
-  let(:current_user) { build(:user, role: :editor) }
+  let(:current_user) { build(:editor_user) }
 
   describe ".task_counts" do
     let(:statuses) { OpenStruct.new(attributes: { declaration_status: "completed", make_live_status: "not_started", name_status: "completed", pages_status: "completed", privacy_policy_status: "not_started", support_contact_details_status: "not_started", what_happens_next_status: "completed" }) }

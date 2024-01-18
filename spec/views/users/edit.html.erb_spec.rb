@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "users/edit.html.erb" do
   let(:user) do
-    build :user, role: :editor, id: 1, organisation_id: 1
+    build :editor_user, id: 1, organisation_id: 1
   end
 
   before do
@@ -20,7 +20,7 @@ describe "users/edit.html.erb" do
     end
 
     context "with a user with no name set" do
-      let(:user) { build(:user, :with_no_name, role: :editor, id: 1) }
+      let(:user) { build(:editor_user, :with_no_name, id: 1) }
 
       it "is the users's email address" do
         expect(view.content_for(:title)).to eq user.email
@@ -28,7 +28,7 @@ describe "users/edit.html.erb" do
     end
 
     context "with a user with a blank name" do
-      let(:user) { build(:user, name: "", role: :editor, id: 1) }
+      let(:user) { build(:editor_user, name: "", id: 1) }
 
       it "is the users's email address" do
         expect(view.content_for(:title)).to eq user.email
@@ -55,7 +55,7 @@ describe "users/edit.html.erb" do
 
     context "with user from GOV.UK Signon" do
       let(:user) do
-        build :user, :with_unknown_org, role: :editor, id: 1, organisation_slug: "department-for-testing"
+        build :editor_user, :with_unknown_org, id: 1, organisation_slug: "department-for-testing"
       end
 
       it "contains organisation slug from GOV.UK Signon" do
@@ -103,7 +103,7 @@ describe "users/edit.html.erb" do
   end
 
   context "with a user with no name set" do
-    let(:user) { build(:user, :with_no_name, role: :editor, id: 1) }
+    let(:user) { build(:editor_user, :with_no_name, id: 1) }
 
     it "shows no name set" do
       expect(rendered).to have_text("No name set")
@@ -111,7 +111,7 @@ describe "users/edit.html.erb" do
   end
 
   context "with a user with an unknown organisation" do
-    let(:user) { build(:user, :with_unknown_org, role: :editor, id: 1) }
+    let(:user) { build(:editor_user, :with_unknown_org, id: 1) }
 
     it "shows the organisation slug" do
       expect(rendered).to have_text("unknown-org")
@@ -127,7 +127,7 @@ describe "users/edit.html.erb" do
   end
 
   context "with a user with no organisation set" do
-    let(:user) { build(:user, :with_no_org, role: :editor, id: 1) }
+    let(:user) { build(:editor_user, :with_no_org, id: 1) }
 
     it "shows no organisation set" do
       expect(rendered).to have_text("No organisation set")

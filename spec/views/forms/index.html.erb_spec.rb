@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "forms/index.html.erb" do
-  let(:user) { build :user, role: :editor }
+  let(:user) { build :editor_user }
   let(:forms) { [] }
 
   before do
@@ -67,7 +67,7 @@ describe "forms/index.html.erb" do
     end
 
     context "with a user has no organisation" do
-      let(:user) { build :user, :with_no_org, role: :editor }
+      let(:user) { build :editor_user, :with_no_org }
 
       it "has a table caption without an organisation name" do
         expect(rendered).to have_css(".govuk-table__caption", text: "Your forms")
@@ -108,7 +108,7 @@ describe "forms/index.html.erb" do
     end
 
     context "and a user does not have the trial role" do
-      let(:user) { build :user, role: :editor }
+      let(:user) { build :editor_user }
 
       it "does not display a banner" do
         expect(rendered).not_to have_text(I18n.t("trial_role_warning.heading"))
@@ -116,7 +116,7 @@ describe "forms/index.html.erb" do
     end
 
     context "and a user already has the editor role" do
-      let(:user) { build :user, role: :editor }
+      let(:user) { build :editor_user }
 
       it "does not display a banner" do
         expect(rendered).not_to have_text(I18n.t("role_upgrade.heading"))

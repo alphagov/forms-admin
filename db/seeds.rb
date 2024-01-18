@@ -28,7 +28,7 @@ if HostingEnvironment.local_development? && User.none?
   FactoryBot.create :organisation, slug: "department-for-testing"
 
   # create extra editors
-  FactoryBot.create_list :user, 3, organisation: test_org, role: :editor
+  FactoryBot.create_list :editor_user, 3, organisation: test_org
 
   # create extra super admins
   FactoryBot.create_list :user, 3, organisation: gds, role: :super_admin

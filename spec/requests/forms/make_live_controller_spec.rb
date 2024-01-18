@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Forms::MakeLiveController, type: :request do
-  let(:user) { build :user, role: :editor }
+  let(:user) { build :editor_user }
 
   let(:form) do
     build(:form,

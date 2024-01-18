@@ -37,7 +37,7 @@ module AuthenticationFeatureHelpers
   end
 
   def editor_user
-    @editor_user ||= FactoryBot.create(:user, role: :editor, organisation: test_org)
+    @editor_user ||= FactoryBot.create(:editor_user, organisation: test_org)
   end
 
   def trial_user

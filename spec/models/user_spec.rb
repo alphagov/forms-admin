@@ -156,7 +156,7 @@ describe User, type: :model do
       end
 
       it "returns false when changing from editor to #{role_value}" do
-        user = create(:user, role: :editor)
+        user = create(:editor_user)
 
         user.update!(role: role_value)
         expect(user).not_to be_trial_user_upgraded

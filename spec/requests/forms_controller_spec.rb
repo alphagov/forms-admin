@@ -96,7 +96,7 @@ RSpec.describe FormsController, type: :request do
           mock.get "/api/v1/forms/2/pages", headers, form.pages.to_json, 200
         end
 
-        login_as build(:user, :with_no_org, role: :editor)
+        login_as build(:editor_user, :with_no_org)
 
         get form_path(2)
       end
@@ -240,7 +240,7 @@ RSpec.describe FormsController, type: :request do
       before do
         ActiveResource::HttpMock.reset! # not expecting any API calls
 
-        login_as build(:user, :with_no_org, role: :editor)
+        login_as build(:editor_user, :with_no_org)
 
         get root_path
       end
@@ -391,7 +391,7 @@ RSpec.describe FormsController, type: :request do
 
     context "with a user with no organisation" do
       let(:user) do
-        build :user, :with_no_org, role: :editor
+        build :editor_user, :with_no_org
       end
 
       it "returns 403 Forbidden" do
