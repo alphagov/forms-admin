@@ -20,6 +20,7 @@ RUN bundle install
 COPY --chown=ruby:ruby package.json package-lock.json ./
 RUN npm ci --ignore-scripts
 
+ARG RAILS_ENV
 ENV RAILS_ENV="${RAILS_ENV:-production}" \
     NODE_ENV="${NODE_ENV:-production}" \
     PATH="${PATH}:/home/ruby/.local/bin:/node_modules/.bin" \
