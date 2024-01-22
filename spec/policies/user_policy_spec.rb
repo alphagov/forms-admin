@@ -3,7 +3,7 @@ require "rails_helper"
 describe UserPolicy do
   subject(:policy) { described_class.new(user, records) }
 
-  let(:user) { build :user, role: :super_admin }
+  let(:user) { build :super_admin_user }
   let!(:records) { create_list :user, 5 }
 
   context "with super admin" do
@@ -11,7 +11,7 @@ describe UserPolicy do
   end
 
   context "with editor" do
-    let(:user) { build :user, role: :editor }
+    let(:user) { build :editor_user }
 
     it { is_expected.to forbid_actions(%i[can_manage_user]) }
   end
@@ -26,7 +26,7 @@ describe UserPolicy do
     end
 
     context "with editor" do
-      let(:user) { build :user, role: :editor }
+      let(:user) { build :editor_user }
 
       it "returns nil" do
         expect(policy_scope.resolve).to be_nil

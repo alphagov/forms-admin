@@ -3,7 +3,7 @@ require "rails_helper"
 describe MouSignaturePolicy do
   subject(:policy) { described_class.new(user, :mouSignature) }
 
-  let(:user) { build :user, role: :super_admin }
+  let(:user) { build :super_admin_user }
 
   context "with super admin" do
     it { is_expected.to permit_actions(%i[can_manage_mous]) }

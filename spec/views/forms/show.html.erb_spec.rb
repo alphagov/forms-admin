@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "forms/show.html.erb" do
-  let(:user) { build :user, role: :editor }
+  let(:user) { build :editor_user }
   let(:form) { OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft", pages:) }
   let(:pages) { [{ id: 183, question_text: "What is your address?", hint_text: "", answer_type: "address", next_page: nil }] }
 
@@ -69,7 +69,7 @@ describe "forms/show.html.erb" do
   end
 
   context "and a user does not have the trial role" do
-    let(:user) { build :user, role: :editor }
+    let(:user) { build :editor_user }
 
     it "does not display a banner" do
       expect(rendered).not_to have_text(I18n.t("trial_role_warning.heading"))

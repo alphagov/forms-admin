@@ -4,7 +4,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
   include ActionView::Helpers::TextHelper
 
   let(:organisation) { build :organisation, id: 1, slug: "test-org" }
-  let(:user) { build :user, role: :editor, id: 1, organisation: }
+  let(:user) { build :editor_user, id: 1, organisation: }
   let(:form) { build :form, id: 1, creator_id: 1, organisation_id: 1, has_live_version: }
   let(:live_form) { form.clone }
   let(:has_live_version) { false }
@@ -118,7 +118,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     end
 
     context "when current user has a government email address not ending with .gov.uk" do
-      let(:user) { build :user, email: "user@alb.example", role: :editor, id: 1 }
+      let(:user) { build :editor_user, email: "user@alb.example", id: 1 }
 
       it "redirects to the email code sent page" do
         expect(response).to redirect_to(submission_email_code_sent_path(form.id))

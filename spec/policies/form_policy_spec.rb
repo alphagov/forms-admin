@@ -5,11 +5,11 @@ describe FormPolicy do
 
   let(:organisation) { build :organisation, id: 1, slug: "gds" }
   let(:form) { build :form, organisation_id: 1, creator_id: 123 }
-  let(:user) { build :user, role: :editor, organisation: }
+  let(:user) { build :editor_user, organisation: }
 
   context "with no organisation set" do
     context "with editor role" do
-      let(:user) { build :user, :with_no_org, role: :editor }
+      let(:user) { build :editor_user, :with_no_org }
 
       it "raises an error" do
         expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
@@ -27,7 +27,7 @@ describe FormPolicy do
 
   describe "#can_view_form?" do
     context "with an editor role" do
-      let(:user) { build :user, role: :editor, organisation: }
+      let(:user) { build :editor_user, organisation: }
 
       it { is_expected.to permit_actions(%i[can_view_form]) }
 
@@ -38,7 +38,7 @@ describe FormPolicy do
       end
 
       context "with an organisation not in the organisation table" do
-        let(:user) { build :user, :with_unknown_org, role: :editor, organisation_slug: "gds" }
+        let(:user) { build :editor_user, :with_unknown_org, organisation_slug: "gds" }
 
         it "raises an error" do
           expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
@@ -47,7 +47,7 @@ describe FormPolicy do
     end
 
     context "with a super_admin" do
-      let(:user) { build :user, role: :super_admin, organisation: }
+      let(:user) { build :super_admin_user, organisation: }
 
       it { is_expected.to permit_actions(%i[can_view_form]) }
 
@@ -177,7 +177,7 @@ describe FormPolicy do
       end
 
       context "when user has an editor role" do
-        let(:user) { build(:user, role: :editor) }
+        let(:user) { build(:editor_user) }
 
         before do
           allow(scope).to receive(:where).with(organisation_id: user.organisation.id)
@@ -190,7 +190,7 @@ describe FormPolicy do
       end
 
       context "when user has an super_admin role" do
-        let(:user) { build(:user, role: :super_admin) }
+        let(:user) { build(:super_admin_user) }
 
         before do
           allow(scope).to receive(:where)
