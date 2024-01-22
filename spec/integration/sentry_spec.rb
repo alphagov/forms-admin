@@ -1,23 +1,14 @@
 require "rails_helper"
 
 RSpec.describe "config/initializers/sentry" do
-  attr_accessor :captured_event, :filtered_event
-
   let(:test_dsn) { "https://fake@test-dsn/1".freeze }
 
   before do
     allow(Settings.sentry).to receive(:dsn).and_return(test_dsn)
+
     load "config/initializers/sentry.rb"
 
     setup_sentry_test
-
-    allow(Sentry.configuration).to receive(:before_send).and_wrap_original do |original_method|
-      original_method = original_method.call
-      lambda do |event, hint|
-        @captured_event = event
-        @filtered_event = original_method.nil? ? event : original_method.call(event, hint)
-      end
-    end
   end
 
   after do
@@ -34,15 +25,15 @@ RSpec.describe "config/initializers/sentry" do
     end
 
     it "scrubs email addresses from everywhere in the event" do
-      expect(filtered_event.to_hash.to_s).not_to include "submission-email@test.example"
+      expect(last_sentry_event.to_hash.to_s).not_to include "submission-email@test.example"
     end
 
     it "replaces the email address in the exception with a comment" do
-      expect(filtered_event.to_hash[:exception][:values].first[:value]).to include "[Filtered (client-side)]"
+      expect(last_sentry_event.to_hash[:exception][:values].first[:value]).to include "[Filtered (client-side)]"
     end
 
     it "keeps the rest of the exception message" do
-      expect(filtered_event.to_hash[:exception][:values].first[:value]).to include "undefined method"
+      expect(last_sentry_event.to_hash[:exception][:values].first[:value]).to include "undefined method"
     end
   end
 
@@ -67,11 +58,11 @@ RSpec.describe "config/initializers/sentry" do
     end
 
     it "scrubs email addresses from everywhere in the event" do
-      expect(filtered_event.to_hash.to_s).not_to include "new-submission-email@test.example"
+      expect(last_sentry_event.to_hash.to_s).not_to include "new-submission-email@test.example"
     end
 
     it "replaces the email address in the breadcrumbs with a comment" do
-      expect(filtered_event.to_hash[:breadcrumbs][:values].last[:data]["params"]["forms_submission_form"]["temporary_submission"]).to eq "[Filtered (client-side)]"
+      expect(last_sentry_event.to_hash[:breadcrumbs][:values].last[:data]["params"]["forms_submission_form"]["temporary_submission"]).to eq "[Filtered (client-side)]"
     end
   end
 end

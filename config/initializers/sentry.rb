@@ -10,9 +10,6 @@ if Settings.sentry.dsn.present?
     config.enable_tracing = false
     config.environment = Settings.sentry.environment
 
-    # use synchronous/blocking code for integration tests
-    config.background_worker_threads = 0 if Rails.env.test?
-
     filter = ActiveSupport::ParameterFilter.new(
       [EmailParameterFilterProc.new(mask: Settings.sentry.filter_mask)],
       mask: Settings.sentry.filter_mask,
