@@ -3,25 +3,14 @@ require "rails_helper"
 RSpec.describe "config/initializers/sentry" do
   attr_accessor :captured_event, :filtered_event
 
-  test_dsn = "https://fake@test-dsn/1".freeze
-
-  before :context do # rubocop:disable RSpec/BeforeAfterAll
-    if Settings.sentry.dsn.nil?
-      Settings.sentry.dsn = test_dsn
-
-      load "config/initializers/sentry.rb"
-    end
-  end
-
-  after :context do # rubocop:disable RSpec/BeforeAfterAll
-    if Settings.sentry.dsn == test_dsn
-      Sentry.close
-
-      Settings.sentry.dsn = nil
-    end
-  end
+  let(:test_dsn) { "https://fake@test-dsn/1".freeze }
 
   before do
+    allow(Settings.sentry).to receive(:dsn).and_return(test_dsn)
+    load "config/initializers/sentry.rb"
+
+    setup_sentry_test
+
     allow(Sentry.configuration).to receive(:before_send).and_wrap_original do |original_method|
       original_method = original_method.call
       lambda do |event, hint|
@@ -29,6 +18,10 @@ RSpec.describe "config/initializers/sentry" do
         @filtered_event = original_method.nil? ? event : original_method.call(event, hint)
       end
     end
+  end
+
+  after do
+    teardown_sentry_test
   end
 
   context "when an exception is raised containing personally identifying information" do
