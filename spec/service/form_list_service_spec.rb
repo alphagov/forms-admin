@@ -1,10 +1,14 @@
 require "rails_helper"
 
 describe FormListService do
-  let(:forms) { build_list :form, 5, :with_id }
+  let(:forms) { build_list :form, 5, :with_id, creator_id: current_user.id }
   let(:service) { described_class.call(forms:, current_user:, search_form:) }
   let(:search_form) { build :search_form, organisation_id: 1 }
   let(:current_user) { create :user, :with_no_org }
+
+  before do
+    allow(search_form).to receive(:organisation).and_return(OpenStruct.new(name: "Organisation 1"))
+  end
 
   describe "#data" do
     describe "caption" do
@@ -42,6 +46,14 @@ describe FormListService do
       it "contains 'Status' column heading and is numeric " do
         expect(service.data[:head].last).to eq text: I18n.t("home.form_status_heading"), numeric: true
       end
+
+      context "when user is super admin" do
+        let(:current_user) { build :super_admin_user }
+
+        it "contains a 'Created by' column heading" do
+          expect(service.data[:head].second).to eq text: I18n.t("home.created_by")
+        end
+      end
     end
 
     describe "rows" do
@@ -59,6 +71,28 @@ describe FormListService do
               text: "<strong class=\"govuk-tag govuk-tag--yellow\">Draft</strong>\n",
             },
           ])
+        end
+      end
+
+      context "when user is super admin" do
+        let(:current_user) { create :super_admin_user }
+
+        it "contains 3 columns" do
+          expect(service.data[:rows].first.size).to eq 3
+        end
+
+        it "returns the created by name" do
+          service.data[:rows].each_with_index do |row, index|
+            form = forms[index]
+            expect(row).to eq([
+              { text: "<a class=\"govuk-link\" href=\"/forms/#{form.id}\">#{form.name}</a>" },
+              { text: current_user.name },
+              {
+                numeric: true,
+                text: "<strong class=\"govuk-tag govuk-tag--yellow\">Draft</strong>\n",
+              },
+            ])
+          end
         end
       end
     end
