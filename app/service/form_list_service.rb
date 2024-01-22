@@ -74,9 +74,10 @@ private
     # Create an instance of controller. We are using ApplicationController here.
     view_context = ApplicationController.new.view_context
 
-    html = ""
+    html = "<div class='app-form-states'>"
     html << FormStatusTagComponent::View.new(status: :draft).render_in(view_context) if form.has_draft_version
     html << FormStatusTagComponent::View.new(status: :live).render_in(view_context) if form.has_live_version
+    html << "</div>"
     html.html_safe
   end
 

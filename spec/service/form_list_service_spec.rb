@@ -68,7 +68,7 @@ describe FormListService do
             { text: "<a class=\"govuk-link\" href=\"/forms/#{form.id}\">#{form.name}</a>" },
             {
               numeric: true,
-              text: "<strong class=\"govuk-tag govuk-tag--yellow\">Draft</strong>\n",
+              text: "<div class='app-form-states'><strong class=\"govuk-tag govuk-tag--yellow\">Draft</strong>\n</div>",
             },
           ])
         end
@@ -89,7 +89,7 @@ describe FormListService do
               { text: current_user.name },
               {
                 numeric: true,
-                text: "<strong class=\"govuk-tag govuk-tag--yellow\">Draft</strong>\n",
+                text: "<div class='app-form-states'><strong class=\"govuk-tag govuk-tag--yellow\">Draft</strong>\n</div>",
               },
             ])
           end

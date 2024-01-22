@@ -4,6 +4,7 @@ $govuk-global-styles: true;
 
 @import "@govuk/all";
 @import "dfe-autocomplete/src/dfe-autocomplete";
+@import "../styles/app_form_states";
 @import "../styles/app_memorandum_of_understanding";
 @import "../styles/app_preview_area";
 @import "../styles/app_select_options";
