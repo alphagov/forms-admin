@@ -48,6 +48,7 @@ class ApplicationController < ActionController::Base
     payload[:form_id] = params[:form_id] if params[:form_id].present?
     payload[:page_id] = params[:page_id] if params[:page_id].present?
     payload[:session_id_hash] = Digest::SHA256.hexdigest session.id.to_s if session.exists?
+    payload[:trace_id] = request.env["HTTP_X_AMZN_TRACE_ID"].presence
   end
 
   def clear_draft_questions_data
