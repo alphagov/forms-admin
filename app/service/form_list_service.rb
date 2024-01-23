@@ -15,7 +15,7 @@ class FormListService
     @forms = forms
     @current_user = current_user
     @search_form = search_form
-    if current_user.super_admin?
+    unless current_user.trial?
       @list_of_creator_id = forms.map(&:creator_id).uniq
       @list_of_creators = User.where(id: @list_of_creator_id)
                                .select(:id, :name)
@@ -42,7 +42,7 @@ private
   def head
     [
       I18n.t("home.form_name_heading"),
-      (current_user.super_admin? ? { text: I18n.t("home.created_by") } : nil),
+      (current_user.trial? ? nil : { text: I18n.t("home.created_by") }),
       { text: I18n.t("home.form_status_heading"), numeric: true },
     ].compact
   end
@@ -50,7 +50,7 @@ private
   def rows
     forms.map do |form|
       [{ text: form_name_link(form) },
-       (current_user.super_admin? ? { text: find_creator_name(form) } : nil),
+       (current_user.trial? ? nil : { text: find_creator_name(form) }),
        { text: form_status_tags(form), numeric: true }].compact
     end
   end
