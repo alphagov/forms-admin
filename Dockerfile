@@ -12,8 +12,9 @@ USER ruby
 
 COPY --chown=ruby:ruby Gemfile* ./
 
-RUN bundle config set --local without development:test \
-  && bundle config set --local jobs "$(nproc)"
+ARG BUNDLE_WITHOUT=development:test
+RUN [ -z "$BUNDLE_WITHOUT" ] || bundle config set --local without "$BUNDLE_WITHOUT"
+RUN bundle config set --local jobs "$(nproc)"
 
 RUN bundle install
 
