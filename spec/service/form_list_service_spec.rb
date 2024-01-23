@@ -39,38 +39,76 @@ describe FormListService do
     end
 
     describe "head" do
-      it "contains 'Name' column heading " do
-        expect(service.data[:head].first).to eq I18n.t("home.form_name_heading")
-      end
+      context "when user is editor" do
+        let(:current_user) { create :editor_user }
 
-      it "contains 'Status' column heading and is numeric " do
-        expect(service.data[:head].last).to eq text: I18n.t("home.form_status_heading"), numeric: true
+        it "contains a 'Name', `Created by` and 'Status' column heading" do
+          expect(service.data[:head]).to eq([I18n.t("home.form_name_heading"),
+                                             { text: I18n.t("home.created_by") },
+                                             { text: I18n.t("home.form_status_heading"), numeric: true }])
+        end
       end
 
       context "when user is super admin" do
-        let(:current_user) { build :super_admin_user }
+        let(:current_user) { create :super_admin_user }
 
-        it "contains a 'Created by' column heading" do
-          expect(service.data[:head].second).to eq text: I18n.t("home.created_by")
+        it "contains a 'Name', `Created by` and 'Status' column heading" do
+          expect(service.data[:head]).to eq([I18n.t("home.form_name_heading"),
+                                             { text: I18n.t("home.created_by") },
+                                             { text: I18n.t("home.form_status_heading"), numeric: true }])
+        end
+      end
+
+      context "when user is trial" do
+        let(:current_user) { create :user, :with_trial_role }
+
+        it "contains a 'Name' and 'Status' column heading" do
+          expect(service.data[:head]).to eq([I18n.t("home.form_name_heading"), { text: I18n.t("home.form_status_heading"), numeric: true }])
         end
       end
     end
 
     describe "rows" do
-      it "has a row for each form passed to the service" do
-        expect(service.data[:rows].size).to eq forms.size
+      context "when user is trial user" do
+        let(:current_user) { create :user, :with_trial_role }
+
+        it "has a row for each form passed to the service" do
+          expect(service.data[:rows].size).to eq forms.size
+        end
+
+        it "returns the correct data for each form" do
+          service.data[:rows].each_with_index do |row, index|
+            form = forms[index]
+            expect(row).to eq([
+              { text: "<a class=\"govuk-link\" href=\"/forms/#{form.id}\">#{form.name}</a>" },
+              {
+                numeric: true,
+                text: "<div class='app-form-states'><strong class=\"govuk-tag govuk-tag--yellow\">Draft</strong>\n</div>",
+              },
+            ])
+          end
+        end
       end
 
-      it "returns the correct data for each form" do
-        service.data[:rows].each_with_index do |row, index|
-          form = forms[index]
-          expect(row).to eq([
-            { text: "<a class=\"govuk-link\" href=\"/forms/#{form.id}\">#{form.name}</a>" },
-            {
-              numeric: true,
-              text: "<div class='app-form-states'><strong class=\"govuk-tag govuk-tag--yellow\">Draft</strong>\n</div>",
-            },
-          ])
+      context "when user is editor" do
+        let(:current_user) { create :editor_user }
+
+        it "contains 3 columns" do
+          expect(service.data[:rows].first.size).to eq 3
+        end
+
+        it "returns the created by name" do
+          service.data[:rows].each_with_index do |row, index|
+            form = forms[index]
+            expect(row).to eq([
+              { text: "<a class=\"govuk-link\" href=\"/forms/#{form.id}\">#{form.name}</a>" },
+              { text: current_user.name },
+              {
+                numeric: true,
+                text: "<div class='app-form-states'><strong class=\"govuk-tag govuk-tag--yellow\">Draft</strong>\n</div>",
+              },
+            ])
+          end
         end
       end
 
