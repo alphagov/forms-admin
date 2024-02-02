@@ -16,6 +16,9 @@ class AuthenticationController < ApplicationController
 
   def callback_from_omniauth
     authenticate_user!
+
+    current_user.increment!(:sign_in_count)
+
     redirect_to stored_location || "/"
   end
 

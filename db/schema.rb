@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_03_140934) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_02_114815) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -65,6 +65,19 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_03_140934) do
     t.index ["slug"], name: "index_organisations_on_slug", unique: true
   end
 
+  create_table "schema_info", id: false, force: :cascade do |t|
+    t.integer "version", default: 0, null: false
+  end
+
+  create_table "sessions", force: :cascade do |t|
+    t.string "session_id", null: false
+    t.text "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["session_id"], name: "index_sessions_on_session_id", unique: true
+    t.index ["updated_at"], name: "index_sessions_on_updated_at"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -81,6 +94,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_03_140934) do
     t.bigint "organisation_id"
     t.boolean "has_access", default: true
     t.string "provider"
+    t.integer "sign_in_count", default: 0, null: false
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
   end
