@@ -6,4 +6,8 @@ class FormStatusTagComponent::FormStatusTagComponentPreview < ViewComponent::Pre
   def live_status
     render(FormStatusTagComponent::View.new(status: "live"))
   end
+
+  def archived_status
+    render(FormStatusTagComponent::View.new(status: "archived"))
+  end
 end

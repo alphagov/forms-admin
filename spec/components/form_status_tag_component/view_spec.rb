@@ -29,6 +29,20 @@ RSpec.describe FormStatusTagComponent::View, type: :component do
     end
   end
 
+  describe "archived status" do
+    before do
+      render_inline(described_class.new(status: :archived))
+    end
+
+    it "renders the status text" do
+      expect(page).to have_text("Archived")
+    end
+
+    it "renders status in orange" do
+      expect(page).to have_css(".govuk-tag--orange")
+    end
+  end
+
   describe "string status" do
     it "accepts status as a string" do
       expect(described_class.new(status: "draft").status_colour).to eq "yellow"
