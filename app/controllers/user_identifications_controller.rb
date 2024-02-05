@@ -1,4 +1,5 @@
 class UserIdentificationsController < ApplicationController
+  skip_before_action :run_first_sign_in_flow
 
   def edit
     @user_identification_form = UserIdentificationForm.new(user: current_user).assign_form_values

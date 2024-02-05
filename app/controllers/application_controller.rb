@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   before_action :check_maintenance_mode_is_enabled
   before_action :authenticate_and_check_access
   before_action :set_paper_trail_whodunnit
+  before_action :run_first_sign_in_flow
 
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
@@ -117,5 +118,13 @@ private
 
     bypass_ip_list = bypass_ips.split(",").map { |ip| IPAddr.new ip.strip }
     bypass_ip_list.none? { |ip| ip.include?(user_ip(request.env.fetch("HTTP_X_FORWARDED_FOR", ""))) }
+  end
+
+  def run_first_sign_in_flow
+    return unless current_user&.sign_in_count == 1
+
+    return if current_user.name.present? && current_user.organisation.present?
+
+    redirect_to edit_user_identification_path
   end
 end

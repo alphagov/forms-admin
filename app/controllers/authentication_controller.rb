@@ -1,5 +1,6 @@
 class AuthenticationController < ApplicationController
   skip_before_action :authenticate_and_check_access
+  skip_before_action :run_first_sign_in_flow
   protect_from_forgery with: :null_session, only: %i[redirect_to_sign_in]
 
   layout false
