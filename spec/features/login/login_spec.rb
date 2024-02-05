@@ -27,7 +27,7 @@ describe "Login to the service", type: :feature do
     when_i_visit_the_homepage
     then_i_am_redirected_to_the_developer_login_page
     when_i_enter_an_email_address_and_click_login
-    then_i_am_redirected_back_to_the_homepage
+    then_i_am_redirected_to_the_user_identification_page
   end
 
 private
@@ -46,7 +46,7 @@ private
     click_on "Sign In"
   end
 
-  def then_i_am_redirected_back_to_the_homepage
-    expect(page).to have_current_path(root_path)
+  def then_i_am_redirected_to_the_user_identification_page
+    expect(page).to have_current_path(edit_user_identification_path)
   end
 end

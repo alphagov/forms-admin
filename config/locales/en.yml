@@ -621,6 +621,7 @@ en:
     sign_up: Sign up
     text_settings: How much text will people need to provide?
     type_of_answer: What kind of answer do you need to this question?
+    user_identification: Enter your name and organisation
     user_missing_organisation: You do not have an organisation set for your account
     user_upgrade_request_confirmation: Request to upgrade to editor account received
     user_upgrade_request_new: Requirements to upgrade to an editor account

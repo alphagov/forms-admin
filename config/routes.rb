@@ -120,6 +120,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resource :user_identification, only: %i[edit update]
+
   resources :users, only: %i[index edit update]
   resource :user_upgrade_request, only: %i[new create], path_names: { new: "/" }, path: "/upgrade" do
     get "/requested", to: "user_upgrade_requests#confirmation", as: :confirmation

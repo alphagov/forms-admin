@@ -1,0 +1,29 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.user_identification'), @user_identification_form.errors.any?)) %>
+<h1 class="govuk-heading-xl"><%= t('page_titles.user_identification') %></h1>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: @user_identification_form, url: user_identification_path, method: :patch) do |f| %>
+      <% if @user_identification_form&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+      <%= f.govuk_text_field :name, label: {  tag: 'h2', size: 'm' } %>
+
+      <%= render DfE::Autocomplete::View.new(
+        f,
+        attribute_name: :organisation_id,
+        form_field: f.govuk_collection_select(:organisation_id,
+                                              Organisation.order(:slug),
+                                              :id,
+                                              :name,
+                                              class: ['govuk-!-width-three-quarters'],
+                                              options: { prompt: t('users.edit.organisation_prompt') },
+                                              label: { text: t('users.edit.organisation'), size: 'm', tag: 'h2' },
+                                             ),
+      html_attributes: { 'data-show-all-values' => 'true'},
+      )%>
+      <%= f.govuk_submit t("save_and_continue") %>
+    <% end %>
+  </div>
+</div>
+
+<%= init_autocomplete_script(show_all_values: true, raw_attribute: false, source: false) %>
