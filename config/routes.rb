@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :groups
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -131,6 +130,8 @@ Rails.application.routes.draw do
   resource :mou_signature, only: %i[new show create], path: "/memorandum-of-understanding" do
     get "/signed", to: "mou_signatures#confirmation", as: :confirmation
   end
+
+  resources :groups
 
   get "/maintenance" => "errors#maintenance", as: :maintenance_page
   match "/403", to: "errors#forbidden", as: :error_403, via: :all
