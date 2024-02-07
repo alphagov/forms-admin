@@ -17,11 +17,15 @@ RSpec.describe "/groups", type: :request do
   # Group. As you add validations to Group, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) do
-    skip("Add a hash of attributes valid for your model")
+    { name: "group_name" }
   end
 
   let(:invalid_attributes) do
-    skip("Add a hash of attributes invalid for your model")
+    { name: "" }
+  end
+
+  before do
+    login_as_editor_user
   end
 
   describe "GET /index" do
@@ -86,14 +90,14 @@ RSpec.describe "/groups", type: :request do
   describe "PATCH /update" do
     context "with valid parameters" do
       let(:new_attributes) do
-        skip("Add a hash of attributes valid for your model")
+        { name: "new_group_name" }
       end
 
       it "updates the requested group" do
         group = Group.create! valid_attributes
         patch group_url(group), params: { group: new_attributes }
         group.reload
-        skip("Add assertions for updated state")
+        expect(group.name).to eq("new_group_name")
       end
 
       it "redirects to the group" do
