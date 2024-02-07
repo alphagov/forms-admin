@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @group %>
+
+<div>
+  <%= link_to "Edit this group", edit_group_path(@group) %> |
+  <%= link_to "Back to groups", groups_path %>
+
+  <%= button_to "Destroy this group", @group, method: :delete %>
+</div>
