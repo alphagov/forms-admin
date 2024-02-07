@@ -1,13 +1,13 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "groups/edit", type: :view do
-  let(:group) {
+  let(:group) do
     Group.create!(
-      name: "MyString"
+      name: "MyString",
     )
-  }
+  end
 
-  before(:each) do
+  before do
     assign(:group, group)
   end
 
@@ -15,7 +15,6 @@ RSpec.describe "groups/edit", type: :view do
     render
 
     assert_select "form[action=?][method=?]", group_path(group), "post" do
-
       assert_select "input[name=?]", "group[name]"
     end
   end
