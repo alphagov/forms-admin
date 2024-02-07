@@ -1,10 +1,14 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :back_link, govuk_back_link_to(groups_path, 'Back to groups') %>
 
-<%= render @group %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
 
-<div>
-  <%= link_to "Edit this group", edit_group_path(@group) %> |
-  <%= link_to "Back to groups", groups_path %>
+    <%= render @group %>
 
-  <%= button_to "Destroy this group", @group, method: :delete %>
+    <div>
+      <%= govuk_button_link_to("Edit group", edit_group_path(@group), class: "govuk-!-margin-bottom-3 govuk-!-margin-top-3" ) %>
+      <%= govuk_button_to("Delete group", @group, method: :delete, warning: true, class: "govuk-!-margin-bottom-3 govuk-!-margin-top-3" ) %>
+    </div>
+
+  </div>
 </div>

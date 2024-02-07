@@ -1,22 +1,14 @@
-<%= form_with(model: group) do |form| %>
-  <% if group.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(group.errors.count, "error") %> prohibited this group from being saved:</h2>
+<% set_page_title(title_with_error_prefix('Group', group.errors.any?)) %>
+<%= form_with(model: group) do |f| %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <% if group.errors.any? %>
+      <%= f.govuk_error_summary %>
+    <% end %>
 
-      <ul>
-        <% group.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
+    <%= f.govuk_text_field :name, label: {  tag: 'h2', size: 'm' } %>
+
+    <%= f.govuk_submit t("save_and_continue") %>
   <% end %>
-
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
   </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>
