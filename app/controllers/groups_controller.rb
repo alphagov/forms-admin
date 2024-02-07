@@ -22,7 +22,7 @@ class GroupsController < ApplicationController
     @group = Group.new(group_params)
 
     if @group.save
-      redirect_to @group, notice: "Group was successfully created."
+      redirect_to @group, success: "Group was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -31,7 +31,7 @@ class GroupsController < ApplicationController
   # PATCH/PUT /groups/1
   def update
     if @group.update(group_params)
-      redirect_to @group, notice: "Group was successfully updated.", status: :see_other
+      redirect_to @group, success: "Group was successfully updated.", status: :see_other
     else
       render :edit, status: :unprocessable_entity
     end
@@ -40,7 +40,7 @@ class GroupsController < ApplicationController
   # DELETE /groups/1
   def destroy
     @group.destroy!
-    redirect_to groups_url, notice: "Group was successfully destroyed.", status: :see_other
+    redirect_to groups_url, success: "Group was successfully deleted.", status: :see_other
   end
 
 private
