@@ -3,14 +3,21 @@ Rails.application.config.before_initialize do
   # add Auth0 provider
   Rails.application.config.app_middleware.use(
     OmniAuth::Strategies::Auth0,
-    Settings.auth0.client_id,
-    Settings.auth0.client_secret,
-    Settings.auth0.domain,
-    callback_path: "/auth/auth0/callback",
-    authorize_params: {
-      scope: "openid email",
-      connection: "email", # default to using the passwordless flow
-    },
+    setup: lambda do |env|
+      is_e2e = env["omniauth.strategy"].request.params["auth"] == "e2e"
+
+      # use the e2e client if the request has the auth header is set to "e2e"
+      env["omniauth.strategy"].options[:client_id] = is_e2e ? Settings.auth0.e2e_client_id : Settings.auth0.client_id
+      env["omniauth.strategy"].options[:client_secret] = is_e2e ? Settings.auth0.e2e_client_secret : Settings.auth0.client_secret
+      env["omniauth.strategy"].options[:domain] = Settings.auth0.domain
+      env["omniauth.strategy"].options[:authorize_params] = {
+        scope: "openid email",
+        connection: is_e2e ? "Username-Password-Authentication" : "email",
+      }
+
+      # append the auth query param in e2e tests to ensure the correct client is used in the callback
+      env["omniauth.strategy"].options[:callback_path] = is_e2e ? "/auth/auth0/callback?auth=e2e" : "/auth/auth0/callback"
+    end,
   )
 
   # add developer provider

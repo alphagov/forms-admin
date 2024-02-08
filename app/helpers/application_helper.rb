@@ -95,7 +95,7 @@ module ApplicationHelper
   def sign_in_params(is_e2e_user:, login_type: :sign_in)
     {}.tap do |params|
       if Settings.auth_provider == "auth0"
-        params.merge!({ connection: "Username-Password-Authentication" }) if is_e2e_user
+        params.merge!({ auth: "e2e" }) if is_e2e_user
         params.merge!({ screen_hint: "signup" }) if login_type == :sign_up
       end
     end

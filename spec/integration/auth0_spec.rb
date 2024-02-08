@@ -100,4 +100,41 @@ RSpec.describe "usage of omniauth-auth0 gem" do
       expect(response.body).to include '<a href="/auth/auth0">try again</a>'
     end
   end
+
+  describe "Auth0 client selection" do
+    before do
+      allow(Settings).to receive(:auth0).and_return(
+        OpenStruct.new(
+          client_id: "1234",
+          client_secret: "abcd",
+          e2e_client_id: "4321",
+          e2e_client_secret: "dcba",
+        ),
+      )
+
+      OmniAuth.config.mock_auth[:auth0] = omniauth_hash
+    end
+
+    it "uses e2e client when auth is set to e2e" do
+      get "/auth/auth0/callback", params: { auth: "e2e" }
+
+      strategy = request.env["omniauth.strategy"]
+
+      expect(strategy.options[:client_id]).to eq("4321")
+      expect(strategy.options[:client_secret]).to eq("dcba")
+      expect(strategy.options[:callback_path]).to eq("/auth/auth0/callback?auth=e2e")
+      expect(strategy.options[:authorize_params][:connection]).to eq("Username-Password-Authentication")
+    end
+
+    it "uses default client when auth is not set to e2e" do
+      get "/auth/auth0/callback"
+
+      strategy = request.env["omniauth.strategy"]
+
+      expect(strategy.options[:client_id]).to eq("1234")
+      expect(strategy.options[:client_secret]).to eq("abcd")
+      expect(strategy.options[:callback_path]).to eq("/auth/auth0/callback")
+      expect(strategy.options[:authorize_params][:connection]).to eq("email")
+    end
+  end
 end

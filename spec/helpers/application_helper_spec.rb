@@ -174,11 +174,11 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
 
       it "returns a string representing the sign-in button" do
-        expect(helper.sign_in_button(is_e2e_user: true)).to include("Username-Password-Authentication")
+        expect(helper.sign_in_button(is_e2e_user: true)).to include("e2e")
       end
 
-      it "does not include auth0 connection string when sign-in button" do
-        expect(helper.sign_in_button(is_e2e_user: false)).not_to include("Username-Password-Authentication")
+      it "does not include e2e string when not the e2e user" do
+        expect(helper.sign_in_button(is_e2e_user: false)).not_to include("e2e")
       end
     end
 
@@ -187,8 +187,8 @@ RSpec.describe ApplicationHelper, type: :helper do
         allow(Settings).to receive(:auth_provider).and_return("developer")
       end
 
-      it "does not include auth0 connection string when sign-in button" do
-        expect(helper.sign_in_button(is_e2e_user: true)).not_to include("Username-Password-Authentication")
+      it "does not include e2e string when not the e2e user" do
+        expect(helper.sign_in_button(is_e2e_user: true)).not_to include("e2e")
       end
     end
   end
@@ -200,12 +200,12 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
 
       it "returns a string representing the sign-up button" do
-        expect(helper.sign_up_button(is_e2e_user: true)).to include("Username-Password-Authentication", "signup")
+        expect(helper.sign_up_button(is_e2e_user: true)).to include("e2e", "signup")
       end
 
       context "when user is not an e2e user" do
         it "returns a string representing the sign-up button" do
-          expect(helper.sign_up_button(is_e2e_user: false)).not_to include("Username-Password-Authentication")
+          expect(helper.sign_up_button(is_e2e_user: false)).not_to include("e2e")
         end
       end
     end

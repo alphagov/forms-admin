@@ -50,6 +50,8 @@ auth_valid_for: 86400 # the time after which re-authentication is required, in s
 auth0:
   client_id: changeme
   client_secret:
+  e2e_client_id: changeme
+  e2e_client_secret:
   domain: changeme.uk.auth0.com
 
 basic_auth:
