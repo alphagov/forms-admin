@@ -74,10 +74,18 @@ private
     # Create an instance of controller. We are using ApplicationController here.
     view_context = ApplicationController.new.view_context
 
-    html = "<div class='app-form-states'>"
-    html << FormStatusTagComponent::View.new(status: :draft).render_in(view_context) if form.has_draft_version
-    html << FormStatusTagComponent::View.new(status: :live).render_in(view_context) if form.has_live_version
-    html << "</div>"
+    status_mapping = {
+      draft: -> { form.has_draft_version },
+      live: -> { form.has_live_version && !form.is_archived? },
+      archived: -> { form.is_archived? },
+    }
+
+    html_content = status_mapping.map { |status, condition|
+      FormStatusTagComponent::View.new(status:).render_in(view_context) if condition.call
+    }.compact.join
+
+    html = "<div class='app-form-states'>#{html_content}</div>"
+
     html.html_safe
   end
 

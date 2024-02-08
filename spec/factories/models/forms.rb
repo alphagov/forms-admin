@@ -20,6 +20,7 @@ FactoryBot.define do
     creator_id { nil }
     ready_for_live { false }
     incomplete_tasks { %i[missing_pages missing_privacy_policy_url missing_contact_details missing_what_happens_next] }
+    state { :draft }
 
     transient do
       statuses { { declaration_status: "not_started", make_live_status: "cannot_start", name_status: "completed", pages_status: "not_started", privacy_policy_status: "not_started", support_contact_details_status: "not_started", what_happens_next_status: "not_started" } }
@@ -29,6 +30,7 @@ FactoryBot.define do
     trait :new_form do
       submission_email { "" }
       privacy_policy_url { "" }
+      state { :draft }
     end
 
     trait :with_id do
@@ -54,6 +56,7 @@ FactoryBot.define do
       live_at { Time.zone.now }
       has_draft_version { false }
       has_live_version { true }
+      state { :live }
     end
 
     trait :with_active_resource do
