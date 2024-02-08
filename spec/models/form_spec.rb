@@ -327,4 +327,38 @@ describe Form, type: :model do
       end
     end
   end
+
+  describe "#is_archived?" do
+    it "returns true if state archived" do
+      form.state = :archived
+      expect(form.is_archived?).to be true
+    end
+
+    it "returns true if state archived with draft" do
+      form.state = :archived_with_draft
+      expect(form.is_archived?).to be true
+    end
+
+    it "returns false if state draft" do
+      form.state = :draft
+      expect(form.is_archived?).to be false
+    end
+
+    it "returns false if state live" do
+      form.state = :live
+      expect(form.is_archived?).to be false
+    end
+
+    it "returns false if state live_with_draft" do
+      form.state = :live_with_draft
+      expect(form.is_archived?).to be false
+    end
+
+    context "when state value is a string" do
+      it "returns true if state archived" do
+        form.state = "archived"
+        expect(form.is_archived?).to be true
+      end
+    end
+  end
 end

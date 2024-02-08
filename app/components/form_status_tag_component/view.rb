@@ -9,6 +9,7 @@ module FormStatusTagComponent
       {
         draft: "yellow",
         live: "turquoise",
+        archived: "orange",
       }[@status]
     end
 

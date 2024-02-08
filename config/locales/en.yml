@@ -158,6 +158,7 @@ en:
     link_text: Contact the GOV⁠.⁠UK Forms team
     title: You cannot view this page
   form_statuses:
+    archived: Archived
     draft: Draft
     live: Live
   form_url_component:
