@@ -33,3 +33,9 @@ end
 
 # Need to do this because Signon allows both GET and POST requests
 OmniAuth.config.allowed_request_methods = %i[post]
+
+# Silence the warning about extra tokens - we expect id and access_token from
+# auth0 see https://gitlab.com/oauth-xx/oauth2/#global-configuration
+OAuth2.configure do |config|
+  config.silence_extra_tokens_warning = true
+end
