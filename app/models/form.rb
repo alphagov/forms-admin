@@ -22,6 +22,10 @@ class Form < ActiveResource::Base
     has_live_version ? :live : :draft
   end
 
+  def is_archived?
+    state.to_sym.in?(%i[archived archived_with_draft])
+  end
+
   def all_ready_for_live?
     ready_for_live && email_task_status_service.ready_for_live?
   end
