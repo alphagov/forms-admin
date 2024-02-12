@@ -8,6 +8,14 @@
       <% end %>
       <%= f.govuk_text_field :name, label: {  tag: 'h2', size: 'm' } %>
 
+      <% if @user_identification_form.organisation_from_domain.present? %>
+          <p class="govuk-body">
+            Your organisation has been identified from your email address. If this is incorrect, please contact support.
+          </p>
+          <p class="govuk-body">
+            <%= @user_identification_form.organisation_from_domain.name %>
+          </p>
+        <% else %>
       <%= render DfE::Autocomplete::View.new(
         f,
         attribute_name: :organisation_id,
@@ -21,6 +29,7 @@
                                              ),
       html_attributes: { 'data-show-all-values' => 'true'},
       )%>
+      <% end %>
       <%= f.govuk_submit t("save_and_continue") %>
     <% end %>
   </div>
