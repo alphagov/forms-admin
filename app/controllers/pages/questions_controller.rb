@@ -1,4 +1,8 @@
 class Pages::QuestionsController < PagesController
+  before_action do
+    raise "No answer type set for draft question" if draft_question.answer_type.blank?
+  end
+
   def new
     @question_form = Pages::QuestionForm.new(answer_type: draft_question.answer_type,
                                              question_text: draft_question.question_text,
