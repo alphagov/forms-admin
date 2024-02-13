@@ -7,6 +7,7 @@ class User < ApplicationRecord
   EMAIL_DOMAIN_DENYLIST = [
     "dwp.gov.uk",
     "engineering.dwp.gov.uk",
+    "engineering.digital.dwp.gov.uk",
     "hse.gov.uk",
   ].freeze
 
