@@ -1,0 +1,5 @@
+<% content_for :back_link, govuk_back_link_to(groups_path) %>
+
+<h1 class="govuk-heading-l">New group</h1>
+
+<%= render "form", group: @group %>

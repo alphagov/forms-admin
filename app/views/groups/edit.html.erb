@@ -1,0 +1,5 @@
+<% content_for :back_link, govuk_back_link_to(@group, 'Back to show this group') %>
+
+<h1 class="govuk-heading-l">Edit group</h1>
+
+<%= render "form", group: @group %>
