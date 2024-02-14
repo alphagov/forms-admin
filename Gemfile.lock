@@ -28,6 +28,17 @@ GIT
       pagy (~> 6.0)
       view_component (>= 3.9, < 3.11)
 
+GIT
+  remote: https://github.com/x-govuk/govuk-form-builder.git
+  revision: cbd6b8c3e799da336bca8081ee8d1bef55c4f460
+  ref: cbd6b8c3e799da336bca8081ee8d1bef55c4f460
+  specs:
+    govuk_design_system_formbuilder (5.0.0)
+      actionview (>= 6.1)
+      activemodel (>= 6.1)
+      activesupport (>= 6.1)
+      html-attributes-utils (~> 1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -243,11 +254,6 @@ GEM
       warden-oauth2 (~> 0.0.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    govuk_design_system_formbuilder (5.0.0)
-      actionview (>= 6.1)
-      activemodel (>= 6.1)
-      activesupport (>= 6.1)
-      html-attributes-utils (~> 1)
     govuk_notify_rails (2.2.0)
       notifications-ruby-client (~> 5.1)
       rails (>= 4.1.0)
@@ -573,7 +579,7 @@ DEPENDENCIES
   gds-sso
   govuk-components!
   govuk-forms-markdown!
-  govuk_design_system_formbuilder (~> 5.0.0)
+  govuk_design_system_formbuilder!
   govuk_notify_rails
   i18n-tasks (~> 1.0.13)
   lograge

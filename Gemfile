@@ -50,7 +50,7 @@ gem "vite_rails"
 
 # For GOV.UK branding
 gem "govuk-components", require: "govuk/components", github: "x-govuk/govuk-components", ref: "1136580771a34c373f4a723baa68c3433bcdcd40"
-gem "govuk_design_system_formbuilder", "~> 5.0.0"
+gem "govuk_design_system_formbuilder", require: "govuk_design_system_formbuilder", github: "x-govuk/govuk-form-builder", ref: "cbd6b8c3e799da336bca8081ee8d1bef55c4f460"
 
 # The autocomplete component is not currently published as a gem, if changing
 # the hash, also change in package.json
