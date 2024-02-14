@@ -184,6 +184,9 @@ en:
         title: Create your form
         what_happens_next: Add information about what happens next
       section_2:
+        payment_link: Add a link to a payment page on GOV.UK Pay
+        title: Optional tasks
+      section_3:
         confirm_email: Enter the email address confirmation code
         email: Set the email address completed forms will be sent to
         hint_text_html: Completed forms will be sent to:<br> %{submission_email}
@@ -193,11 +196,11 @@ en:
 
             Editor accounts can change the email address completed forms are sent to.
         title: Set email address for completed forms
-      section_3:
+      section_4:
         contact_details: Provide contact details for support
         privacy_policy: Provide a link to privacy information for this form
         title: Provide privacy and contact details
-      section_4:
+      section_5:
         if_not_permitted:
           body_text: You cannot make a form live with a trial account.
         make_live: Make your form live
@@ -210,15 +213,18 @@ en:
         title: Your form
         what_happens_next: Edit the information about what happens next
       section_2:
+        payment_link: Add a link to a payment page on GOV.UK Pay
+        title: Optional tasks
+      section_3:
         confirm_email: Enter the email address confirmation code
         email: Edit the email address completed forms will be sent to
         hint_text_html: Completed forms will be sent to:<br> %{submission_email}
         title: Email address for completed forms
-      section_3:
+      section_4:
         contact_details: Edit the contact details for support
         privacy_policy: Edit the link to privacy information for this form
         title: Privacy and contact details
-      section_4:
+      section_5:
         make_live: Make your changes live
         title: Make your changes live
   forms_delete_confirmation_form:
@@ -775,6 +781,7 @@ en:
     completed: Completed
     in_progress: In progress
     not_started: Not started
+    optional: Optional
   trial_role_warning:
     content_html: |
       <p>

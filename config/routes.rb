@@ -51,6 +51,8 @@ Rails.application.routes.draw do
     post "/contact-details" => "forms/contact_details#create", as: :contact_details_create
     get "/declaration" => "forms/declaration#new", as: :declaration
     post "/declaration" => "forms/declaration#create", as: :declaration_create
+    get "/payment-link" => "forms/payment_link#new", as: :payment_link
+    post "/payment-link" => "forms/payment_link#create", as: :payment_link_create
 
     scope "/pages" do
       get "/" => "pages#index", as: :form_pages

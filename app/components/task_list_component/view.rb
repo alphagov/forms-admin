@@ -69,6 +69,7 @@ module TaskListComponent
         in_progress: "blue",
         cannot_start: "grey",
         not_started: "grey",
+        optional: "grey",
       }[status.downcase.to_sym]
     end
 
