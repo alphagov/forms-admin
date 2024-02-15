@@ -12,7 +12,6 @@ Rails.application.config.before_initialize do
       env["omniauth.strategy"].options[:domain] = Settings.auth0.domain
       env["omniauth.strategy"].options[:authorize_params] = {
         scope: "openid email",
-        connection: is_e2e ? "Username-Password-Authentication" : "email",
       }
 
       # append the auth query param in e2e tests to ensure the correct client is used in the callback

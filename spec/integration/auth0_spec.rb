@@ -123,7 +123,7 @@ RSpec.describe "usage of omniauth-auth0 gem" do
       expect(strategy.options[:client_id]).to eq("4321")
       expect(strategy.options[:client_secret]).to eq("dcba")
       expect(strategy.options[:callback_path]).to eq("/auth/auth0/callback?auth=e2e")
-      expect(strategy.options[:authorize_params][:connection]).to eq("Username-Password-Authentication")
+      expect(strategy.options[:authorize_params][:connection]).to be_nil
     end
 
     it "uses default client when auth is not set to e2e" do
@@ -134,7 +134,7 @@ RSpec.describe "usage of omniauth-auth0 gem" do
       expect(strategy.options[:client_id]).to eq("1234")
       expect(strategy.options[:client_secret]).to eq("abcd")
       expect(strategy.options[:callback_path]).to eq("/auth/auth0/callback")
-      expect(strategy.options[:authorize_params][:connection]).to eq("email")
+      expect(strategy.options[:authorize_params][:connection]).to be_nil
     end
   end
 end
