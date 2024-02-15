@@ -61,6 +61,7 @@ en:
         page_moved: "‘%{question_text}’ has moved %{direction} to number %{position}"
         pages_saved: Your questions have been saved
         pages_saved_and_section_completed: Your questions have been saved and marked as complete
+        payment_link_saved: Your payment link has been saved
         privacy_details_saved: Your privacy information link has been saved
         support_details_saved: Your contact details for support have been saved
         what_happens_next_saved: Your information about what happens next has been saved
@@ -621,6 +622,7 @@ en:
     name_settings: Ask for a person’s name
     new_page_form: Edit question
     not_found: Page not found
+    payment_link_form: Add a link to a payment page on GOV.UK Pay
     privacy_policy_form: Provide a link to privacy information for this form
     routing_page: Add a question route
     routing_page_delete: Delete question %{question_position}’s route
@@ -653,6 +655,38 @@ en:
     optional: "%{question_text} (optional)"
     question: Question
     submit_save: Save question
+  payment_link_form:
+    body_html: |
+      <p>You can set up a payment page (called a ‘payment link’) on GOV.UK Pay - this lets someone make a payment after submitting their form. </p>
+
+      <p>You’ll first need to create your payment link in GOV.UK Pay. You can then copy and paste its URL in the box below.</p>
+    heading: Add a link to a payment page on GOV.UK Pay
+    how_this_will_work:
+      body_html: |
+        <p>Once someone's submitted their form they'll see a confirmation page showing: </p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>a blue banner saying “You still need to pay”</li>
+          <li>their GOV.UK Forms reference number</li>
+          <li>a green ‘Continue to pay’ button - this will take them to GOV.UK Pay to make their payment</li>
+        </ul>
+
+        <p>The reference number will also be included in a confirmation email,  someone chooses to receive this - along with any 'what happens next' information you've added.</p>
+      heading: How this will work for people filling in your form
+    setting_up_a_payment_link:
+      body_html: |
+        <p>Before you can take payments using a payment link you’ll need to:</p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>set up a GOV.UK Pay account if you don't have one</li>
+          <li>talk to your local finance team to set up a payment service provider (PSP)</li>
+        </ul>
+
+        <p class="govuk-inset-text">It may be up to several months before you’re ready to take payments. This depends on the PSP arrangements for your department.</p>
+
+        <p><a href="https://www.payments.service.gov.uk/govuk-payment-pages/">Find out more about GOV.UK Pay payment links (opens in a new tab)</a></p>
+      heading: Setting up a ‘payment link’ on GOV.UK Pay
+    submit_button: Save and continue
   phase_banner:
     after_link: will help us improve it.
     before_link: This is a new service, your
