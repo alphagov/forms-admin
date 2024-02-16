@@ -12,7 +12,9 @@
     <link rel="icon" sizes="any" href="<%= vite_asset_path "#{govuk_assets_path}/images/favicon.svg" %>" type="image/svg+xml">
     <link rel="mask-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-icon-mask.svg" %>" color="#0b0c0c">
     <link rel="apple-touch-icon" href="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-icon-180.png"%>">
-    <link rel="manifest" href="<%= vite_asset_path "#{govuk_assets_path}/manifest.json" %>">
+    <%# This manifest file and the icons it references are currently being served from the `public` folder. %>
+    <%# TODO: update the build to either generate the manifest with references to fingerprinted assets, or automatically copy the manifest and its dependencies to `public`. %>
+    <link rel="manifest" href="/icons/manifest.json">
     <meta property="og:image" content="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-opengraph-image.png" %>">
 
     <%= vite_stylesheet_tag 'application.scss' %>
