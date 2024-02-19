@@ -18,27 +18,6 @@ GIT
     govuk-forms-markdown (0.5.0)
       redcarpet (~> 3.6)
 
-GIT
-  remote: https://github.com/x-govuk/govuk-components.git
-  revision: 1136580771a34c373f4a723baa68c3433bcdcd40
-  ref: 1136580771a34c373f4a723baa68c3433bcdcd40
-  specs:
-    govuk-components (5.0.2)
-      html-attributes-utils (~> 1.0.0, >= 1.0.0)
-      pagy (~> 6.0)
-      view_component (>= 3.9, < 3.11)
-
-GIT
-  remote: https://github.com/x-govuk/govuk-form-builder.git
-  revision: cbd6b8c3e799da336bca8081ee8d1bef55c4f460
-  ref: cbd6b8c3e799da336bca8081ee8d1bef55c4f460
-  specs:
-    govuk_design_system_formbuilder (5.0.0)
-      actionview (>= 6.1)
-      activemodel (>= 6.1)
-      activesupport (>= 6.1)
-      html-attributes-utils (~> 1)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -254,6 +233,15 @@ GEM
       warden-oauth2 (~> 0.0.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    govuk-components (5.1.0)
+      html-attributes-utils (~> 1.0.0, >= 1.0.0)
+      pagy (~> 6.0)
+      view_component (>= 3.9, < 3.11)
+    govuk_design_system_formbuilder (5.1.0)
+      actionview (>= 6.1)
+      activemodel (>= 6.1)
+      activesupport (>= 6.1)
+      html-attributes-utils (~> 1)
     govuk_notify_rails (2.2.0)
       notifications-ruby-client (~> 5.1)
       rails (>= 4.1.0)
@@ -347,7 +335,7 @@ GEM
     omniauth-rails_csrf_protection (1.0.1)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
-    pagy (6.4.4)
+    pagy (6.5.0)
     paper_trail (15.1.0)
       activerecord (>= 6.1)
       request_store (~> 1.4)
@@ -577,9 +565,9 @@ DEPENDENCIES
   factory_bot_rails
   faker
   gds-sso
-  govuk-components!
+  govuk-components
   govuk-forms-markdown!
-  govuk_design_system_formbuilder!
+  govuk_design_system_formbuilder
   govuk_notify_rails
   i18n-tasks (~> 1.0.13)
   lograge
