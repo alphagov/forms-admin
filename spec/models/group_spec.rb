@@ -10,6 +10,11 @@ RSpec.describe Group, type: :model do
       group = build :group, name: nil
       expect(group).not_to be_valid
     end
+
+    it "is invalid without an organisation" do
+      group = build :group, organisation: nil
+      expect(group).not_to be_valid
+    end
   end
 
   describe "before_create" do

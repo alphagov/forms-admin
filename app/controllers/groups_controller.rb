@@ -20,6 +20,7 @@ class GroupsController < ApplicationController
   # POST /groups
   def create
     @group = Group.new(group_params)
+    @group.organisation = current_user.organisation
 
     if @group.save
       redirect_to @group, success: "Group was successfully created."
