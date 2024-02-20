@@ -1,25 +1,11 @@
-class UserPolicy
-  attr_reader :user, :record
-
-  class Scope
-    attr_reader :user, :record, :scope
-
-    def initialize(user, scope)
-      @user = user
-      @scope = scope
-    end
-
+class UserPolicy < ApplicationPolicy
+  class Scope < ApplicationPolicy::Scope
     def resolve
       if user.super_admin?
         scope
           .all
       end
     end
-  end
-
-  def initialize(user, record)
-    @user = user
-    @record = record
   end
 
   def can_manage_user?

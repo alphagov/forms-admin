@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_08_170628) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_19_085825) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -49,7 +49,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_08_170628) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "external_id", null: false
+    t.bigint "organisation_id"
     t.index ["external_id"], name: "index_groups_on_external_id", unique: true
+    t.index ["organisation_id"], name: "index_groups_on_organisation_id"
   end
 
   create_table "mou_signatures", comment: "User signatures of a memorandum of understanding (MOU) for an organisation", force: :cascade do |t|

@@ -13,6 +13,10 @@ require "rails_helper"
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/groups", type: :request do
+  let(:other_org) do
+    create :organisation, id: 2, slug: "other-org"
+  end
+
   # This should return the minimal set of attributes required to create a valid
   # Group. As you add validations to Group, be sure to
   # adjust the attributes here as well.
@@ -30,17 +34,59 @@ RSpec.describe "/groups", type: :request do
 
   describe "GET /index" do
     it "renders a successful response" do
-      Group.create! valid_attributes
+      create :group
       get groups_url
       expect(response).to be_successful
+    end
+
+    it "shows all groups in the user's organisation" do
+      groups = create_list :group, 3, organisation_id: 1
+
+      create_list :group, 3, organisation: other_org
+
+      get groups_url
+      expect(assigns(:groups)).to eq groups
+    end
+
+    context "when the user is a super-admin" do
+      before do
+        login_as_super_admin_user
+      end
+
+      it "shows all the groups" do
+        create_list :group, 3, organisation_id: 1
+
+        create :organisation, id: 2, slug: "other-org"
+        create_list :group, 3, organisation_id: 2
+
+        get groups_url
+        expect(assigns(:groups)).to eq Group.all
+      end
     end
   end
 
   describe "GET /show" do
     it "renders a successful response" do
-      group = Group.create! valid_attributes
+      group = create :group
       get group_url(group)
       expect(response).to be_successful
+    end
+
+    context "with a group from another organisation" do
+      it "is forbidden" do
+        group = create :group, organisation: other_org
+        get group_url(group)
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      context "when logged in as a super admin" do
+        it "is allowed" do
+          group = create :group, organisation: other_org
+          login_as_super_admin_user
+          get group_url(group)
+          expect(response).to be_successful
+        end
+      end
     end
   end
 
@@ -53,9 +99,26 @@ RSpec.describe "/groups", type: :request do
 
   describe "GET /edit" do
     it "renders a successful response" do
-      group = Group.create! valid_attributes
+      group = create :group
       get edit_group_url(group)
       expect(response).to be_successful
+    end
+
+    context "with a group from another organisation" do
+      it "is forbidden" do
+        group = create :group, organisation: other_org
+        get edit_group_url(group)
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      context "when logged in as a super admin" do
+        it "is allowed" do
+          group = create :group, organisation: other_org
+          login_as_super_admin_user
+          get edit_group_url(group)
+          expect(response).to be_successful
+        end
+      end
     end
   end
 
@@ -94,14 +157,14 @@ RSpec.describe "/groups", type: :request do
       end
 
       it "updates the requested group" do
-        group = Group.create! valid_attributes
+        group = create :group
         patch group_url(group), params: { group: new_attributes }
         group.reload
         expect(group.name).to eq("new_group_name")
       end
 
       it "redirects to the group" do
-        group = Group.create! valid_attributes
+        group = create :group
         patch group_url(group), params: { group: new_attributes }
         group.reload
         expect(response).to redirect_to(group_url(group))
@@ -110,25 +173,59 @@ RSpec.describe "/groups", type: :request do
 
     context "with invalid parameters" do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        group = Group.create! valid_attributes
+        group = create :group
         patch group_url(group), params: { group: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    context "with a group from another organisation" do
+      it "is forbidden" do
+        group = create :group, organisation: other_org
+        patch group_url(group), params: { group: valid_attributes }
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      context "when logged in as a super admin" do
+        it "is allowed" do
+          group = create :group, organisation: other_org
+          login_as_super_admin_user
+          patch group_url(group), params: { group: valid_attributes }
+          expect(response).to be_redirect
+        end
       end
     end
   end
 
   describe "DELETE /destroy" do
     it "destroys the requested group" do
-      group = Group.create! valid_attributes
+      group = create :group
       expect {
         delete group_url(group)
       }.to change(Group, :count).by(-1)
     end
 
     it "redirects to the groups list" do
-      group = Group.create! valid_attributes
+      group = create :group
       delete group_url(group)
       expect(response).to redirect_to(groups_url)
+    end
+
+    context "with a group from another organisation" do
+      it "is forbidden" do
+        group = create :group, organisation: other_org
+        delete group_url(group)
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      context "when logged in as a super admin" do
+        it "is allowed" do
+          group = create :group, organisation: other_org
+          login_as_super_admin_user
+          delete group_url(group)
+          expect(response).to be_redirect
+        end
+      end
     end
   end
 end

@@ -44,4 +44,9 @@ if HostingEnvironment.local_development? && User.none?
 
   # create some trial users
   FactoryBot.create_list :user, 3, :with_trial_role
+
+  # create some test groups
+  FactoryBot.create :group, name: "Test Service", organisation: gds
+  FactoryBot.create :group, name: "Ministry of Tests forms", organisation: test_org
+  FactoryBot.create :group, name: "Ministry of Tests forms - secret!", organisation: test_org
 end

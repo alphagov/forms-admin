@@ -1,4 +1,6 @@
 class Group < ApplicationRecord
+  belongs_to :organisation
+
   validates :name, presence: true
   before_create :set_external_id
 

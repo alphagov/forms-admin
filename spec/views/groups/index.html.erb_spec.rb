@@ -1,15 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "groups/index", type: :view do
+  let(:groups) { create_list :group, 2, name: "Name" }
+
   before do
-    assign(:groups, [
-      Group.create!(
-        name: "Name",
-      ),
-      Group.create!(
-        name: "Name",
-      ),
-    ])
+    assign(:groups, groups)
   end
 
   it "renders a list of groups" do
