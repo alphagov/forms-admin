@@ -2,9 +2,7 @@ require "rails_helper"
 
 RSpec.describe "groups/edit", type: :view do
   let(:group) do
-    Group.create!(
-      name: "MyString",
-    )
+    create :group, name: "Name"
   end
 
   before do
