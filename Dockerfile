@@ -19,6 +19,7 @@ RUN mkdir /node_modules && chown ruby:ruby -R /node_modules /app
 
 USER ruby
 
+COPY --chown=ruby:ruby .ruby-version ./
 COPY --chown=ruby:ruby Gemfile* ./
 
 ARG BUNDLE_WITHOUT=development:test
