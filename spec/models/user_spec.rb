@@ -340,6 +340,16 @@ describe User, type: :model do
           end
         end
       end
+
+      %i[editor super_admin].each do |role|
+        context "when user is created with #{role} role" do
+          let(:user) { create :user, role: }
+
+          it "returns false" do
+            expect(user.role_changed_to_editor?).to be false
+          end
+        end
+      end
     end
   end
 end
