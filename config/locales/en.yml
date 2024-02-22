@@ -50,6 +50,8 @@ en:
     form_edit: Back to edit your form
     form_view: Back to your form
     forms: Back to your forms
+    group_show: Back to your forms
+    groups: Back to your groups
   banner:
     success:
       form:
