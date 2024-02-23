@@ -131,7 +131,7 @@ Rails.application.routes.draw do
     get "/signed", to: "mou_signatures#confirmation", as: :confirmation
   end
 
-  resources :groups, param: :external_id
+  resources :groups, param: :group_id
 
   get "/maintenance" => "errors#maintenance", as: :maintenance_page
   match "/403", to: "errors#forbidden", as: :error_403, via: :all

@@ -11,11 +11,11 @@ RSpec.describe GroupsController, type: :routing do
     end
 
     it "routes to #show" do
-      expect(get: "/groups/1").to route_to("groups#show", external_id: "1")
+      expect(get: "/groups/1").to route_to("groups#show", group_id: "1")
     end
 
     it "routes to #edit" do
-      expect(get: "/groups/1/edit").to route_to("groups#edit", external_id: "1")
+      expect(get: "/groups/1/edit").to route_to("groups#edit", group_id: "1")
     end
 
     it "routes to #create" do
@@ -23,15 +23,22 @@ RSpec.describe GroupsController, type: :routing do
     end
 
     it "routes to #update via PUT" do
-      expect(put: "/groups/1").to route_to("groups#update", external_id: "1")
+      expect(put: "/groups/1").to route_to("groups#update", group_id: "1")
     end
 
     it "routes to #update via PATCH" do
-      expect(patch: "/groups/1").to route_to("groups#update", external_id: "1")
+      expect(patch: "/groups/1").to route_to("groups#update", group_id: "1")
     end
 
     it "routes to #destroy" do
-      expect(delete: "/groups/1").to route_to("groups#destroy", external_id: "1")
+      expect(delete: "/groups/1").to route_to("groups#destroy", group_id: "1")
+    end
+  end
+
+  describe "path helpers" do
+    it "uses the external ID" do
+      group = create :group
+      expect(get: group_path(group)).to route_to("groups#show", group_id: group.external_id)
     end
   end
 end
