@@ -14,7 +14,7 @@ class FormListService
   def initialize(forms:, current_user:, organisation: nil)
     @forms = forms
     @current_user = current_user
-    @organisation = organisation
+    @organisation = organisation || (current_user.trial? ? nil : current_user.organisation)
     unless current_user.trial?
       @list_of_creator_id = forms.map(&:creator_id).uniq
       @list_of_creators = User.where(id: @list_of_creator_id)
@@ -34,9 +34,9 @@ class FormListService
 private
 
   def caption
-    return I18n.t("home.your_forms") if organisation_name_for_caption.blank?
+    return I18n.t("home.your_forms") if organisation.blank?
 
-    I18n.t("home.form_table_caption", organisation_name: organisation_name_for_caption)
+    I18n.t("home.form_table_caption", organisation_name: organisation.name)
   end
 
   def head
@@ -53,13 +53,6 @@ private
        (current_user.trial? ? nil : { text: find_creator_name(form) }),
        { text: form_status_tags(form), numeric: true }].compact
     end
-  end
-
-  def organisation_name_for_caption
-    return nil if current_user.trial? || current_user.organisation.blank?
-    return organisation.name if current_user.super_admin?
-
-    current_user.organisation.name
   end
 
   def form_name_link(form)
