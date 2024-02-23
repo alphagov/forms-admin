@@ -44,7 +44,11 @@
 <% end %>
 
 <% if @forms.any? %>
-  <%= govuk_table(**FormListService.call(forms: @forms, current_user: @current_user, search_form: @search_form).data)%>
+ <% if @current_user.super_admin? %>
+    <%= govuk_table(**FormListService.call(forms: @forms, current_user: @current_user, organisation: @search_form.organisation).data)%>
+  <% else %>
+    <%= govuk_table(**FormListService.call(forms: @forms, current_user: @current_user).data)%>
+  <% end %>
 <% end %>
 
 <%= init_autocomplete_script(show_all_values: true, raw_attribute: false, source: false) %>

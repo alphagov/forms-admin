@@ -1,14 +1,10 @@
 require "rails_helper"
 
 describe FormListService do
-  let(:forms) { build_list :form, 5, :with_id, creator_id: current_user.id }
-  let(:service) { described_class.call(forms:, current_user:, search_form:) }
-  let(:search_form) { build :search_form, organisation_id: 1 }
-  let(:current_user) { create :user, :with_no_org }
+  let(:service) { described_class.call(forms:, current_user:) }
 
-  before do
-    allow(search_form).to receive(:organisation).and_return(OpenStruct.new(name: "Organisation 1"))
-  end
+  let(:forms) { build_list :form, 5, :with_id, creator_id: current_user.id }
+  let(:current_user) { create :user, :with_no_org }
 
   describe "#data" do
     describe "caption" do
@@ -33,6 +29,17 @@ describe FormListService do
 
         it "returns specific organisation caption" do
           organisation_name = current_user.organisation.name
+          expect(service.data).to include caption: I18n.t("home.form_table_caption", organisation_name:)
+        end
+      end
+
+      context "when organisation is given as a keyword argument" do
+        let(:service) { described_class.call(forms:, current_user:, organisation:) }
+
+        let(:organisation) { OpenStruct.new(name: "Organisation 1") }
+
+        it "returns specific organisation caption" do
+          organisation_name = organisation.name
           expect(service.data).to include caption: I18n.t("home.form_table_caption", organisation_name:)
         end
       end
