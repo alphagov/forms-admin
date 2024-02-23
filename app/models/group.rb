@@ -1,6 +1,9 @@
 class Group < ApplicationRecord
   belongs_to :organisation
 
+  has_many :memberships, dependent: :destroy
+  has_many :users, through: :memberships
+
   validates :name, presence: true
   before_create :set_external_id
 

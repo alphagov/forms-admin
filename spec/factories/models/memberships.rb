@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :membership do
-    user { nil }
-    group { nil }
-    creator_id { 1 }
+    user
+    group
+    added_by { association :user }
   end
 end

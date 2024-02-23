@@ -40,4 +40,15 @@ RSpec.describe Group, type: :model do
       expect { group2.save! }.to raise_error(ActiveRecord::RecordNotUnique)
     end
   end
+
+  describe "associations" do
+    it "destroys associated memberships" do
+      group = create :group
+      user = create :user
+      added_by = create :user
+      create(:membership, group:, user:, added_by:)
+
+      expect { group.destroy }.to change(Membership, :count).by(-1)
+    end
+  end
 end
