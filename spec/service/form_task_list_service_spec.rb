@@ -75,7 +75,7 @@ describe FormTaskListService do
       end
     end
 
-    describe "section 1 tasks" do
+    describe "create form section tasks" do
       let(:section) do
         all_sections.first
       end
@@ -130,7 +130,7 @@ describe FormTaskListService do
       end
     end
 
-    describe "section 3 tasks" do
+    describe "email address section tasks" do
       let(:section) do
         all_sections[1]
       end
@@ -153,7 +153,7 @@ describe FormTaskListService do
         end
 
         it "has hint text explaining where completed forms will be sent to" do
-          expect(section_rows.first[:hint_text]).to eq I18n.t("forms.task_list_create.section_3.hint_text_html", submission_email: form.submission_email)
+          expect(section_rows.first[:hint_text]).to eq I18n.t("forms.task_list_create.email_address_section.hint_text_html", submission_email: form.submission_email)
         end
 
         it "has the correct default status" do
@@ -246,14 +246,14 @@ describe FormTaskListService do
         it "has text explaining where completed forms will be sent to" do
           expect(section[:body_text])
             .to eq I18n.t(
-              "forms.task_list_create.section_3.if_not_permitted.body_text",
+              "forms.task_list_create.email_address_section.if_not_permitted.body_text",
               submission_email: form.submission_email,
             )
         end
       end
     end
 
-    describe "section 4 tasks" do
+    describe "privacy and contact details tasks" do
       let(:section) do
         all_sections[2]
       end
@@ -276,7 +276,7 @@ describe FormTaskListService do
       end
     end
 
-    describe "section 5 tasks" do
+    describe "make form live section tasks" do
       let(:section) do
         all_sections[3]
       end
@@ -315,11 +315,11 @@ describe FormTaskListService do
         end
 
         it "describes the section title correctly" do
-          expect(section[:title]).to eq I18n.t("forms.task_list_edit.section_5.make_live")
+          expect(section[:title]).to eq I18n.t("forms.task_list_edit.make_form_live_section.make_live")
         end
 
         it "describes the task correctly" do
-          expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_edit.section_5.make_live")
+          expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_edit.make_form_live_section.make_live")
         end
       end
 
@@ -333,7 +333,7 @@ describe FormTaskListService do
         it "has text explaining that trial users cannot make forms live" do
           expect(section[:body_text])
             .to eq I18n.t(
-              "forms.task_list_create.section_5.if_not_permitted.body_text",
+              "forms.task_list_create.make_form_live_section.if_not_permitted.body_text",
             )
         end
       end

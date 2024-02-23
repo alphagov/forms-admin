@@ -18,10 +18,10 @@ class FormTaskListService
 
   def all_sections
     sections = [
-      section_1,
-      section_3,
-      section_4,
-      section_5,
+      create_form_section,
+      email_address_section,
+      privacy_and_contact_details_section,
+      make_form_live_section,
     ]
 
     sections.insert(1, section_2) if FeatureService.enabled?(:payment_links)
@@ -35,24 +35,24 @@ private
     @form.has_live_version ? "edit" : "create"
   end
 
-  def section_1
+  def create_form_section
     {
-      title: I18n.t("forms.task_list_#{create_or_edit}.section_1.title"),
-      rows: section_1_tasks,
+      title: I18n.t("forms.task_list_#{create_or_edit}.create_form_section.title"),
+      rows: create_form_section_tasks,
     }
   end
 
-  def section_1_tasks
+  def create_form_section_tasks
     question_path = if @form.pages.any?
                       form_pages_path(@form.id)
                     else
                       start_new_question_path(@form.id)
                     end
     [
-      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_1.name"), path: change_form_name_path(@form.id), status: @task_statuses[:name_status] },
-      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_1.questions"), path: question_path, status: @task_statuses[:pages_status] },
-      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_1.declaration"), path: declaration_path(@form.id), status: @task_statuses[:declaration_status] },
-      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_1.what_happens_next"), path: what_happens_next_path(@form.id), status: @task_statuses[:what_happens_next_status] },
+      { task_name: I18n.t("forms.task_list_#{create_or_edit}.create_form_section.name"), path: change_form_name_path(@form.id), status: @task_statuses[:name_status] },
+      { task_name: I18n.t("forms.task_list_#{create_or_edit}.create_form_section.questions"), path: question_path, status: @task_statuses[:pages_status] },
+      { task_name: I18n.t("forms.task_list_#{create_or_edit}.create_form_section.declaration"), path: declaration_path(@form.id), status: @task_statuses[:declaration_status] },
+      { task_name: I18n.t("forms.task_list_#{create_or_edit}.create_form_section.what_happens_next"), path: what_happens_next_path(@form.id), status: @task_statuses[:what_happens_next_status] },
     ]
   end
 
@@ -69,16 +69,16 @@ private
     ]
   end
 
-  def section_3
+  def email_address_section
     section = {
-      title: I18n.t("forms.task_list_#{create_or_edit}.section_3.title"),
+      title: I18n.t("forms.task_list_#{create_or_edit}.email_address_section.title"),
     }
 
     if Pundit.policy(@current_user, @form).can_change_form_submission_email?
-      section[:rows] = section_3_tasks
+      section[:rows] = email_address_section_tasks
     else
       section[:body_text] = I18n.t(
-        "forms.task_list_create.section_3.if_not_permitted.body_text",
+        "forms.task_list_create.email_address_section.if_not_permitted.body_text",
         submission_email: @form.submission_email,
       )
     end
@@ -86,43 +86,43 @@ private
     section
   end
 
-  def section_3_tasks
-    hint_text = I18n.t("forms.task_list_#{create_or_edit}.section_3.hint_text_html", submission_email: @form.submission_email) if @form.submission_email.present?
-    [{ task_name: I18n.t("forms.task_list_#{create_or_edit}.section_3.email"), path: submission_email_form_path(@form.id), hint_text:, status: @task_statuses[:submission_email_status] },
-     { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_3.confirm_email"), path: submission_email_code_path(@form.id), status: @task_statuses[:confirm_submission_email_status], active: can_enter_submission_email_code }]
+  def email_address_section_tasks
+    hint_text = I18n.t("forms.task_list_#{create_or_edit}.email_address_section.hint_text_html", submission_email: @form.submission_email) if @form.submission_email.present?
+    [{ task_name: I18n.t("forms.task_list_#{create_or_edit}.email_address_section.email"), path: submission_email_form_path(@form.id), hint_text:, status: @task_statuses[:submission_email_status] },
+     { task_name: I18n.t("forms.task_list_#{create_or_edit}.email_address_section.confirm_email"), path: submission_email_code_path(@form.id), status: @task_statuses[:confirm_submission_email_status], active: can_enter_submission_email_code }]
   end
 
-  def section_4
+  def privacy_and_contact_details_section
     {
-      title: I18n.t("forms.task_list_#{create_or_edit}.section_4.title"),
-      rows: section_4_tasks,
+      title: I18n.t("forms.task_list_#{create_or_edit}.privacy_and_contact_details_section.title"),
+      rows: privacy_and_contact_details_section_tasks,
     }
   end
 
-  def section_4_tasks
+  def privacy_and_contact_details_section_tasks
     [
-      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_4.privacy_policy"), path: privacy_policy_path(@form.id), status: @task_statuses[:privacy_policy_status] },
-      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_4.contact_details"), path: contact_details_path(@form.id), status: @task_statuses[:support_contact_details_status] },
+      { task_name: I18n.t("forms.task_list_#{create_or_edit}.privacy_and_contact_details_section.privacy_policy"), path: privacy_policy_path(@form.id), status: @task_statuses[:privacy_policy_status] },
+      { task_name: I18n.t("forms.task_list_#{create_or_edit}.privacy_and_contact_details_section.contact_details"), path: contact_details_path(@form.id), status: @task_statuses[:support_contact_details_status] },
     ]
   end
 
-  def section_5
+  def make_form_live_section
     section = {
-      title: I18n.t("forms.task_list_#{create_or_edit}.section_5.title"),
+      title: I18n.t("forms.task_list_#{create_or_edit}.make_form_live_section.title"),
     }
 
     if Pundit.policy(@current_user, @form).can_make_form_live?
-      section[:rows] = section_5_tasks
+      section[:rows] = make_form_live_section_tasks
     else
-      section[:body_text] = I18n.t("forms.task_list_create.section_5.if_not_permitted.body_text")
+      section[:body_text] = I18n.t("forms.task_list_create.make_form_live_section.if_not_permitted.body_text")
     end
 
     section
   end
 
-  def section_5_tasks
+  def make_form_live_section_tasks
     [{
-      task_name: I18n.t("forms.task_list_#{create_or_edit}.section_5.make_live"),
+      task_name: I18n.t("forms.task_list_#{create_or_edit}.make_form_live_section.make_live"),
       path: @form.all_ready_for_live? ? make_live_path(@form.id) : "",
       status: @task_statuses[:make_live_status],
       active: @form.all_ready_for_live?,
