@@ -19,4 +19,13 @@ RSpec.describe Membership, type: :model do
     membership = build :membership, added_by: nil
     expect(membership).not_to be_valid
   end
+
+  it "is invalid if the user and group are not in the same organisation" do
+    org1 = create :organisation, id: 1, slug: "test-org"
+    org2 = create :organisation, id: 2, slug: "ministry-of-testing"
+    user = create :user, organisation: org1
+    group = create :group, organisation: org2
+    membership = build(:membership, user:, group:)
+    expect(membership).not_to be_valid
+  end
 end
