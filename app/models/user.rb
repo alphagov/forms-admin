@@ -13,7 +13,7 @@ class User < ApplicationRecord
 
   belongs_to :organisation, optional: true
 
-  has_many :memberships
+  has_many :memberships, dependent: :destroy
   has_many :groups, through: :memberships
 
   has_many :mou_signatures
