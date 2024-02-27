@@ -44,4 +44,16 @@ RSpec.describe Membership, type: :model do
     membership = build(:membership, user:, group:)
     expect { membership.save(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
   end
+
+  it "removes mismatched memberships" do
+    org1 = create :organisation, id: 1, slug: "test-org"
+    org2 = create :organisation, id: 2, slug: "ministry-of-testing"
+    user = create :user, organisation: org1
+    group = create :group, organisation: org1
+    membership = create(:membership, user:, group:)
+
+    user.organisation = org2
+    described_class.destroy_invalid_organisation_memberships(user)
+    expect(described_class.exists?(membership.id)).to be false
+  end
 end
