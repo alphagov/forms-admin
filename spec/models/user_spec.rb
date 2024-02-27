@@ -23,6 +23,18 @@ describe User, type: :model do
 
   it_behaves_like "a gds-sso user class"
 
+  describe "associations" do
+    it "destroys associated memberships" do
+      user = create(:user)
+      group = create(:group)
+
+      membership = create(:membership, user:, group:)
+      user.destroy!
+
+      expect { membership.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   describe "role" do
     it "is invalid if blank" do
       user.role = nil

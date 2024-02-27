@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_19_085825) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_23_134039) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,6 +52,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_19_085825) do
     t.bigint "organisation_id"
     t.index ["external_id"], name: "index_groups_on_external_id", unique: true
     t.index ["organisation_id"], name: "index_groups_on_organisation_id"
+  end
+
+  create_table "memberships", force: :cascade do |t|
+    t.bigint "user_id", null: false, comment: "The user who is a member of the group"
+    t.bigint "group_id", null: false, comment: "The group that the user is a member of"
+    t.bigint "added_by_id", null: false, comment: "The user who created the membership"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["added_by_id"], name: "index_memberships_on_added_by_id"
+    t.index ["user_id", "group_id"], name: "index_memberships_on_user_id_and_group_id", unique: true, comment: "Ensure that a user can only be a member of a group once"
   end
 
   create_table "mou_signatures", comment: "User signatures of a memorandum of understanding (MOU) for an organisation", force: :cascade do |t|
@@ -107,6 +117,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_19_085825) do
   end
 
   add_foreign_key "draft_questions", "users"
+  add_foreign_key "memberships", "groups"
+  add_foreign_key "memberships", "users"
+  add_foreign_key "memberships", "users", column: "added_by_id"
   add_foreign_key "mou_signatures", "organisations"
   add_foreign_key "mou_signatures", "users"
   add_foreign_key "users", "organisations"
