@@ -14,18 +14,35 @@ describe UserUpdateService do
       expect(user_update_service.update_user).to be true
     end
 
-    it "does not run add_organisation_to_user_forms if user is not updated" do
-      allow(user).to receive(:update).and_return(false)
-      allow(Form).to receive(:update_organisation_for_creator)
+    it "calls remove_membership if user is updated" do
+      allow(user).to receive(:update).and_return(true)
+      allow(Membership).to receive(:destroy_invalid_organisation_memberships)
       user_update_service.update_user
-      expect(Form).not_to have_received(:update_organisation_for_creator)
+      expect(Membership).to have_received(:destroy_invalid_organisation_memberships).with(user)
     end
 
-    it "does not run add_organisation_to_user_mou if user is not updated" do
-      allow(user).to receive(:update).and_return(false)
-      allow(MouSignature).to receive(:add_mou_signature_organisation)
-      user_update_service.update_user
-      expect(MouSignature).not_to have_received(:add_mou_signature_organisation)
+    context "when user is not updated" do
+      before do
+        allow(user).to receive(:update).and_return(false)
+      end
+
+      it "does not run add_organisation_to_user_forms if user is not updated" do
+        allow(Form).to receive(:update_organisation_for_creator)
+        user_update_service.update_user
+        expect(Form).not_to have_received(:update_organisation_for_creator)
+      end
+
+      it "does not run add_organisation_to_user_mou if user is not updated" do
+        allow(MouSignature).to receive(:add_mou_signature_organisation)
+        user_update_service.update_user
+        expect(MouSignature).not_to have_received(:add_mou_signature_organisation)
+      end
+
+      it "does not call remove_membership if user is not updated" do
+        allow(Membership).to receive(:destroy_invalid_organisation_memberships)
+        user_update_service.update_user
+        expect(Membership).not_to have_received(:destroy_invalid_organisation_memberships).with(user)
+      end
     end
 
     context "when changing user role" do
