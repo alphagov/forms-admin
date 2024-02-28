@@ -7,10 +7,13 @@
   <% sections.each do |section| %>
     <% unless section.rows.empty? && section.body_text.blank? %>
       <li>
-        <h2 class="app-task-list__section">
-          <span class="app-task-list__section-number"><%= section.number %>. </span> <%= section.title %>
-        </h2>
-
+        <% if section.subsection %>
+          <h3 class="app-task-list__subsection"><%= section.title %></h3>
+        <% else %>
+          <h2 class="app-task-list__section">
+            <span class="app-task-list__section-number"><%= section.number %>. </span> <%= section.title %>
+          </h2>
+        <% end %>
         <% if section.body_text.present? %>
         <div class="app-task-list__body">
           <%= simple_format(section.body_text) %>

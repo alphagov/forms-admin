@@ -8,11 +8,15 @@ RSpec.describe TaskListComponent::View, type: :component do
     before do
       render_inline(described_class.new(sections: [
         { title: "section a",
+          section_number: 1,
+          subsection: false,
           rows: [
             { task_name: "task a", path: "#", status:, active: },
             { task_name: "task b", path: "#", status:, active: },
           ] },
         { title: "section 2",
+          section_number: 2,
+          subsection: false,
           rows: [
             { task_name: "task c", path: "#", status:, active: },
             { task_name: "task d", path: "#", status:, active: },
@@ -49,7 +53,7 @@ RSpec.describe TaskListComponent::View, type: :component do
   context "when given a section body instead of any rows" do
     before do
       render_inline(described_class.new(sections: [
-        { title: "section title", body_text: "section body" },
+        { title: "section title", body_text: "section body", section_number: 1, subsection: false },
       ]))
     end
 
@@ -64,6 +68,8 @@ RSpec.describe TaskListComponent::View, type: :component do
     it "can render HTML in the section body" do
       render_inline(described_class.new(sections: [{
         title: "section title",
+        section_number: 1,
+        subsection: false,
         body_text: "section\n\nbody",
       }]))
 
@@ -74,7 +80,7 @@ RSpec.describe TaskListComponent::View, type: :component do
   context "when given an empty rows array" do
     before do
       render_inline(described_class.new(sections: [
-        { title: "section title", rows: [] },
+        { title: "section title", rows: [], section_number: 1, subsection: false },
       ]))
     end
 
@@ -83,15 +89,41 @@ RSpec.describe TaskListComponent::View, type: :component do
     end
   end
 
+  context "when given a subsection" do
+    before do
+      render_inline(described_class.new(sections: [
+        { title: "subsection a",
+          section_number: 1,
+          subsection: true,
+          rows: [
+            { task_name: "task a", path: "#", status:, active: },
+            { task_name: "task b", path: "#", status:, active: },
+          ] },
+      ]))
+    end
+
+    it "renders a level 3 heading with the subsection name" do
+      expect(page).to have_css("h3", text: "subsection a")
+    end
+
+    it "does not show the section number" do
+      expect(page).not_to have_text("1")
+    end
+  end
+
   describe "summary text with count of completed tasks and total number of tasks" do
     context "when given no task completion values" do
       before do
         render_inline(described_class.new(sections: [
           { title: "section a",
+            section_number: 1,
+            subsection: false,
             rows: [
               { task_name: "task a", path: "#", status:, active: },
             ] },
           { title: "section 2",
+            section_number: 2,
+            subsection: false,
             rows: [
               { task_name: "task d", path: "#", status:, active: },
             ] },
@@ -107,10 +139,14 @@ RSpec.describe TaskListComponent::View, type: :component do
       before do
         render_inline(described_class.new(completed_task_count: "23", total_task_count: "34", sections: [
           { title: "section a",
+            section_number: 1,
+            subsection: false,
             rows: [
               { task_name: "task a", path: "#", status:, active: },
             ] },
           { title: "section 2",
+            section_number: 2,
+            subsection: false,
             rows: [
               { task_name: "task d", path: "#", status:, active: },
             ] },
@@ -125,10 +161,14 @@ RSpec.describe TaskListComponent::View, type: :component do
         before do
           render_inline(described_class.new(completed_task_count: "34", total_task_count: "34", sections: [
             { title: "section a",
+              section_number: 1,
+              subsection: false,
               rows: [
                 { task_name: "task a", path: "#", status:, active: },
               ] },
             { title: "section 2",
+              section_number: 2,
+              subsection: false,
               rows: [
                 { task_name: "task d", path: "#", status:, active: },
               ] },

@@ -39,6 +39,8 @@ private
     {
       title: I18n.t("forms.task_list_#{create_or_edit}.create_form_section.title"),
       rows: create_form_section_tasks,
+      section_number: 1,
+      subsection: false,
     }
   end
 
@@ -60,6 +62,8 @@ private
     {
       title: I18n.t("forms.task_list_#{create_or_edit}.section_2.title"),
       rows: section_2_tasks,
+      section_number: nil,
+      subsection: true,
     }
   end
 
@@ -72,6 +76,8 @@ private
   def email_address_section
     section = {
       title: I18n.t("forms.task_list_#{create_or_edit}.email_address_section.title"),
+      section_number: 2,
+      subsection: false,
     }
 
     if Pundit.policy(@current_user, @form).can_change_form_submission_email?
@@ -96,6 +102,8 @@ private
     {
       title: I18n.t("forms.task_list_#{create_or_edit}.privacy_and_contact_details_section.title"),
       rows: privacy_and_contact_details_section_tasks,
+      section_number: 3,
+      subsection: false,
     }
   end
 
@@ -109,6 +117,8 @@ private
   def make_form_live_section
     section = {
       title: I18n.t("forms.task_list_#{create_or_edit}.make_form_live_section.title"),
+      section_number: 4,
+      subsection: false,
     }
 
     if Pundit.policy(@current_user, @form).can_make_form_live?
