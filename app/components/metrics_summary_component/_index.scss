@@ -9,7 +9,7 @@
 }
 
 .app-metrics__big-number {
-  @include govuk-typography-responsive(19);
+  @include govuk-font-size(19);
   @include govuk-typography-common;
 
   padding: govuk-spacing(1) govuk-spacing(0);
@@ -28,7 +28,7 @@
 }
 
 .app-metrics__big-number-number {
-  @include govuk-typography-responsive(48);
+  @include govuk-font-size(48);
   @include govuk-typography-weight-bold;
 
   display: block;
