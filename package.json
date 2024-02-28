@@ -1,6 +1,7 @@
 {
   "name": "app",
   "private": "true",
+  "type": "module",
   "browserslist": [
     ">0.1% and not dead",
     "last 2 Chrome versions",
