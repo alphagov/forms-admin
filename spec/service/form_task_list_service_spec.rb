@@ -3,7 +3,7 @@ require "rails_helper"
 describe FormTaskListService do
   let(:current_user) { build(:editor_user) }
 
-  describe ".task_counts" do
+  describe ".task_counts", feature_payment_links: false do
     let(:statuses) { OpenStruct.new(attributes: { declaration_status: "completed", make_live_status: "not_started", name_status: "completed", pages_status: "completed", privacy_policy_status: "not_started", support_contact_details_status: "not_started", what_happens_next_status: "completed" }) }
     let(:form) { build(:form, task_statuses: statuses) }
     let(:email_task_status_service) { instance_double(EmailTaskStatusService) }
@@ -24,6 +24,20 @@ describe FormTaskListService do
         expect(EmailTaskStatusService).to have_received(:new)
         expect(result.task_counts).to eq expected_hash
       end
+
+      context "with payment links enabled", feature_payment_links: true do
+        let(:form_without_payment_link) { build(:form, task_statuses: statuses_without_payment_link) }
+        let(:statuses_without_payment_link) { OpenStruct.new(attributes: { declaration_status: "completed", make_live_status: "not_started", name_status: "completed", pages_status: "completed", privacy_policy_status: "not_started", support_contact_details_status: "not_started", what_happens_next_status: "completed" }) }
+        let(:form_with_payment_link) { build(:form, task_statuses: statuses_with_payment_link) }
+        let(:statuses_with_payment_link) { OpenStruct.new(attributes: { declaration_status: "completed", make_live_status: "not_started", name_status: "completed", pages_status: "completed", privacy_policy_status: "not_started", support_contact_details_status: "not_started", what_happens_next_status: "completed", payment_link_status: "optional" }) }
+
+        it "does not include the payment link status in the task count" do
+          result_without_payment_link = described_class.new(form: form_without_payment_link, current_user:)
+          result_with_payment_link = described_class.new(form: form_with_payment_link, current_user:)
+
+          expect(result_without_payment_link.task_counts).to eq result_with_payment_link.task_counts
+        end
+      end
     end
 
     context "when the user has the trial role" do
@@ -40,7 +54,7 @@ describe FormTaskListService do
     end
   end
 
-  describe "#all_sections" do
+  describe "#all_sections", feature_payment_links: false do
     let(:form) { build(:form, :new_form, id: 1) }
 
     let(:all_sections) { described_class.call(form:, current_user:).all_sections }
@@ -54,7 +68,14 @@ describe FormTaskListService do
       expect(all_sections.count).to eq expected_sections.count
     end
 
-    describe "section 1 tasks" do
+    context "when payment links enabled", feature_payment_links: true do
+      it "returns 5 sections" do
+        expected_sections = [{ title: "Task 1" }, { title: "Task 2" }, { title: "Task 3" }, { title: "Task 4" }, { title: "Task 5" }]
+        expect(all_sections.count).to eq expected_sections.count
+      end
+    end
+
+    describe "create form section tasks" do
       let(:section) do
         all_sections.first
       end
@@ -96,7 +117,20 @@ describe FormTaskListService do
       end
     end
 
-    describe "section 2 tasks" do
+    describe "section 2 tasks", feature_payment_links: true do
+      let(:section) do
+        all_sections[1]
+      end
+
+      let(:section_rows) { section[:rows] }
+
+      it "has link to payment link settings" do
+        expect(section_rows.first[:task_name]).to eq "Add a link to a payment page on GOV.UK Pay"
+        expect(section_rows.first[:path]).to eq "/forms/1/payment-link"
+      end
+    end
+
+    describe "email address section tasks" do
       let(:section) do
         all_sections[1]
       end
@@ -119,7 +153,7 @@ describe FormTaskListService do
         end
 
         it "has hint text explaining where completed forms will be sent to" do
-          expect(section_rows.first[:hint_text]).to eq I18n.t("forms.task_list_create.section_2.hint_text_html", submission_email: form.submission_email)
+          expect(section_rows.first[:hint_text]).to eq I18n.t("forms.task_list_create.email_address_section.hint_text_html", submission_email: form.submission_email)
         end
 
         it "has the correct default status" do
@@ -212,14 +246,14 @@ describe FormTaskListService do
         it "has text explaining where completed forms will be sent to" do
           expect(section[:body_text])
             .to eq I18n.t(
-              "forms.task_list_create.section_2.if_not_permitted.body_text",
+              "forms.task_list_create.email_address_section.if_not_permitted.body_text",
               submission_email: form.submission_email,
             )
         end
       end
     end
 
-    describe "section 3 tasks" do
+    describe "privacy and contact details tasks" do
       let(:section) do
         all_sections[2]
       end
@@ -242,7 +276,7 @@ describe FormTaskListService do
       end
     end
 
-    describe "section 4 tasks" do
+    describe "make form live section tasks" do
       let(:section) do
         all_sections[3]
       end
@@ -281,11 +315,11 @@ describe FormTaskListService do
         end
 
         it "describes the section title correctly" do
-          expect(section[:title]).to eq I18n.t("forms.task_list_edit.section_4.make_live")
+          expect(section[:title]).to eq I18n.t("forms.task_list_edit.make_form_live_section.make_live")
         end
 
         it "describes the task correctly" do
-          expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_edit.section_4.make_live")
+          expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_edit.make_form_live_section.make_live")
         end
       end
 
@@ -299,7 +333,7 @@ describe FormTaskListService do
         it "has text explaining that trial users cannot make forms live" do
           expect(section[:body_text])
             .to eq I18n.t(
-              "forms.task_list_create.section_4.if_not_permitted.body_text",
+              "forms.task_list_create.make_form_live_section.if_not_permitted.body_text",
             )
         end
       end

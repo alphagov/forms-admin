@@ -1,0 +1,35 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.payment_link_form'), @payment_link_form.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(form_path, t("back_link.form_create")) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <%= form_with(model: @payment_link_form, url: payment_link_path) do |f| %>
+      <% if @payment_link_form&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+
+      <span class="govuk-caption-l"><%= @payment_link_form.form.name %></span>
+      <h1 class="govuk-heading-l">
+        <%= t('payment_link_form.heading') %>
+      </h1>
+
+      <%= t('payment_link_form.body_html') %>
+
+      <h2 class="govuk-heading-m">
+        <%= t('payment_link_form.how_this_will_work.heading') %>
+      </h2>
+
+      <%= t('payment_link_form.how_this_will_work.body_html') %>
+
+      <h2 class="govuk-heading-m">
+        <%= t('payment_link_form.setting_up_a_payment_link.heading') %>
+      </h2>
+
+      <%= t('payment_link_form.setting_up_a_payment_link.body_html') %>
+
+      <%= f.govuk_text_field :payment_url, label: {  size: 'm' }, spellcheck: "false"  %>
+      <%= f.govuk_submit t('payment_link_form.submit_button') %>
+    <% end %>
+  </div>
+</div>
