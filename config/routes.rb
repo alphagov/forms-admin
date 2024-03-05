@@ -133,7 +133,9 @@ Rails.application.routes.draw do
     get "/signed", to: "mou_signatures#confirmation", as: :confirmation
   end
 
-  resources :groups
+  resources :groups do
+    resources :forms, controller: :group_forms, only: %i[new create]
+  end
 
   get "/maintenance" => "errors#maintenance", as: :maintenance_page
   match "/403", to: "errors#forbidden", as: :error_403, via: :all
