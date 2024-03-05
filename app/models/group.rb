@@ -4,6 +4,8 @@ class Group < ApplicationRecord
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
 
+  has_many :group_forms, dependent: :restrict_with_exception
+
   validates :name, presence: true
   before_create :set_external_id
 
