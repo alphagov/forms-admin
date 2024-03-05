@@ -15,25 +15,11 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     submission_email_mailer
   end
 
-  let(:req_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms", req_headers, [form].to_json, 200
-      mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-      mock.get "/api/v1/forms/1/live", req_headers, live_form.to_json, 200
+      mock.get "/api/v1/forms", headers, [form].to_json, 200
+      mock.get "/api/v1/forms/1", headers, form.to_json, 200
+      mock.get "/api/v1/forms/1/live", headers, live_form.to_json, 200
       mock.put "/api/v1/forms/1", post_headers, form.to_json, 200
     end
 
@@ -247,8 +233,8 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
         form.submission_email = Faker::Internet.email(domain: "example.gov.uk")
 
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-          mock.get "/api/v1/forms/1/live", req_headers, live_form.to_json, 200
+          mock.get "/api/v1/forms/1", headers, form.to_json, 200
+          mock.get "/api/v1/forms/1/live", headers, live_form.to_json, 200
         end
       end
       get submission_email_confirmed_path(form.id)

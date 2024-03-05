@@ -11,24 +11,10 @@ RSpec.describe Forms::PrivacyPolicyController, type: :request do
     new_form
   end
 
-  let(:req_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
-      mock.put "/api/v1/forms/2", req_headers
+      mock.get "/api/v1/forms/2", headers, form.to_json, 200
+      mock.put "/api/v1/forms/2", headers
     end
 
     ActiveResourceMock.mock_resource(form,
@@ -44,7 +30,7 @@ RSpec.describe Forms::PrivacyPolicyController, type: :request do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.put "/api/v1/forms/2", post_headers
-        mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
+        mock.get "/api/v1/forms/2", headers, form.to_json, 200
       end
       get privacy_policy_path(form_id: 2)
     end
@@ -57,7 +43,7 @@ RSpec.describe Forms::PrivacyPolicyController, type: :request do
   describe "#create" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
+        mock.get "/api/v1/forms/2", headers, form.to_json, 200
         mock.put "/api/v1/forms/2", post_headers
       end
       post privacy_policy_path(form_id: 2), params: { forms_privacy_policy_form: { privacy_policy_url: "https://www.example.gov.uk/privacy-policy" } }

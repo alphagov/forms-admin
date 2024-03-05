@@ -15,17 +15,10 @@ feature "Set or change a user's organisation", type: :feature do
     [build(:form, id: 2, organisation_id: 2, name: "Test GDS Form")]
   end
 
-  let(:req_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?organisation_id=1", req_headers, test_org_forms.to_json, 200
-      mock.get "/api/v1/forms?organisation_id=2", req_headers, gds_forms.to_json, 200
+      mock.get "/api/v1/forms?organisation_id=1", headers, test_org_forms.to_json, 200
+      mock.get "/api/v1/forms?organisation_id=2", headers, gds_forms.to_json, 200
     end
 
     create_list :user, 6, organisation: test_org

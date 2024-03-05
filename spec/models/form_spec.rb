@@ -193,13 +193,6 @@ describe Form, type: :model do
   end
 
   describe "#update_organisation_for_creator" do
-    let(:headers) do
-      {
-        "X-API-Token" => Settings.forms_api.auth_key,
-        "Content-Type" => "application/json",
-      }
-    end
-
     before do
       ActiveResource::HttpMock.reset!
     end
@@ -210,12 +203,12 @@ describe Form, type: :model do
       expected_path = "/api/v1/forms/update-organisation-for-creator?creator_id=123&organisation_id=1"
 
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.patch expected_path, headers, {}.to_json, 200
+        mock.patch expected_path, patch_headers, {}.to_json, 200
       end
 
       described_class.update_organisation_for_creator(creator_id, organisation_id)
 
-      request = ActiveResource::Request.new(:patch, expected_path, {}, headers)
+      request = ActiveResource::Request.new(:patch, expected_path, {}, patch_headers)
       expect(ActiveResource::HttpMock.requests).to include request
     end
 

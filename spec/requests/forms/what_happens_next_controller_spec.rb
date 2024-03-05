@@ -38,24 +38,10 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
     })
   end
 
-  let(:req_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
-      mock.put "/api/v1/forms/2", req_headers
+      mock.get "/api/v1/forms/2", headers, form.to_json, 200
+      mock.put "/api/v1/forms/2", headers
     end
 
     ActiveResourceMock.mock_resource(form,
@@ -71,7 +57,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.put "/api/v1/forms/2", post_headers
-        mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
+        mock.get "/api/v1/forms/2", headers, form.to_json, 200
       end
       allow(Pundit).to receive(:authorize).and_return(true)
       get what_happens_next_path(form_id: 2)
@@ -92,7 +78,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
+        mock.get "/api/v1/forms/2", headers, form.to_json, 200
         mock.put "/api/v1/forms/2", post_headers
       end
       allow(Pundit).to receive(:authorize).and_return(true)

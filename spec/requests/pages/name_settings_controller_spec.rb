@@ -6,20 +6,6 @@ RSpec.describe Pages::NameSettingsController, type: :request do
 
   let(:name_settings_form) { build :name_settings_form }
 
-  let(:req_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   before do
     login_as_editor_user
   end
@@ -27,8 +13,8 @@ RSpec.describe Pages::NameSettingsController, type: :request do
   describe "#new" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
 
       get name_settings_new_path(form_id: form.id)
@@ -51,8 +37,8 @@ RSpec.describe Pages::NameSettingsController, type: :request do
   describe "#create" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
     end
 
@@ -100,9 +86,9 @@ RSpec.describe Pages::NameSettingsController, type: :request do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/2", req_headers, page.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1/pages/2", headers, page.to_json, 200
       end
       draft_question
       get name_settings_edit_path(form_id: page.form_id, page_id: page.id)
@@ -136,9 +122,9 @@ RSpec.describe Pages::NameSettingsController, type: :request do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/2", req_headers, page.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1/pages/2", headers, page.to_json, 200
         mock.put "/api/v1/forms/1/pages/2", post_headers
       end
     end

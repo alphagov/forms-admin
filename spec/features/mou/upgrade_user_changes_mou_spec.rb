@@ -5,23 +5,9 @@ describe "Assign an organisation to a user with a signed MOU", type: :feature do
   let(:mou_signature) { create(:mou_signature, user:, organisation: nil, created_at: Time.zone.parse("September 1, 2023")) }
   let(:organisation) { create :organisation }
 
-  let(:req_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?creator_id=#{super_admin_user.id}", req_headers, [].to_json, 200
+      mock.get "/api/v1/forms?creator_id=#{super_admin_user.id}", headers, [].to_json, 200
     end
 
     mou_signature

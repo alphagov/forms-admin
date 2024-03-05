@@ -18,20 +18,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
   let(:submit_result) { true }
 
-  let(:req_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   let(:expected_to_raise_error) { false }
 
   before do
@@ -41,8 +27,8 @@ RSpec.describe Pages::ConditionsController, type: :request do
   describe "#routing_page" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
 
       get routing_page_path(form_id: form.id)
@@ -63,9 +49,9 @@ RSpec.describe Pages::ConditionsController, type: :request do
     before do
       selected_page.id = 1
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/1", req_headers, selected_page.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1/pages/1", headers, selected_page.to_json, 200
       end
 
       if expected_to_raise_error
@@ -114,9 +100,9 @@ RSpec.describe Pages::ConditionsController, type: :request do
     before do
       selected_page.id = 1
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/1", req_headers, selected_page.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1/pages/1", headers, selected_page.to_json, 200
       end
 
       if expected_to_raise_error
@@ -153,9 +139,9 @@ RSpec.describe Pages::ConditionsController, type: :request do
     before do
       selected_page.id = 1
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/1", req_headers, selected_page.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1/pages/1", headers, selected_page.to_json, 200
       end
 
       if expected_to_raise_error
@@ -219,10 +205,10 @@ RSpec.describe Pages::ConditionsController, type: :request do
       selected_page.routing_conditions = [condition]
       selected_page.position = 1
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}", req_headers, selected_page.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", req_headers, condition.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
+        mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", headers, condition.to_json, 200
       end
 
       if expected_to_raise_error
@@ -274,10 +260,10 @@ RSpec.describe Pages::ConditionsController, type: :request do
       selected_page.routing_conditions = [condition]
       selected_page.position = 1
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}", req_headers, selected_page.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", req_headers, condition.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
+        mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", headers, condition.to_json, 200
       end
 
       if expected_to_raise_error
@@ -343,10 +329,10 @@ RSpec.describe Pages::ConditionsController, type: :request do
       selected_page.routing_conditions = [condition]
       selected_page.position = 1
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}", req_headers, selected_page.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", req_headers, condition.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
+        mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", headers, condition.to_json, 200
       end
 
       if expected_to_raise_error
@@ -394,11 +380,11 @@ RSpec.describe Pages::ConditionsController, type: :request do
       selected_page.routing_conditions = [condition]
       selected_page.position = 1
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}", req_headers, selected_page.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", req_headers, condition.to_json, 200
-        mock.delete "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", req_headers, nil, 204
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
+        mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", headers, condition.to_json, 200
+        mock.delete "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", headers, nil, 204
       end
 
       if expected_to_raise_error

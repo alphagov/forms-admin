@@ -6,17 +6,10 @@ feature "View forms", type: :feature do
   let(:other_org_user) { create :user, organisation: other_org }
   let(:other_org_forms) { [build(:form, id: 2, organisation_id: other_org.id, name: "Other org form")] }
 
-  let(:req_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?organisation_id=#{super_admin_user.organisation_id}", req_headers, org_forms.to_json, 200
-      mock.get "/api/v1/forms?organisation_id=#{other_org.id}", req_headers, other_org_forms.to_json, 200
+      mock.get "/api/v1/forms?organisation_id=#{super_admin_user.organisation_id}", headers, org_forms.to_json, 200
+      mock.get "/api/v1/forms?organisation_id=#{other_org.id}", headers, other_org_forms.to_json, 200
     end
 
     # Orgs only show in the autocomplete if they have at least one user

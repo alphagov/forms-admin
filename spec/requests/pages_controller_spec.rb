@@ -1,19 +1,6 @@
 require "rails_helper"
 
 RSpec.describe PagesController, type: :request do
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   let(:form_response) { build :form, id: 2 }
 
   before do
@@ -106,17 +93,10 @@ RSpec.describe PagesController, type: :request do
         })
       end
 
-      let(:req_headers) do
-        {
-          "X-API-Token" => Settings.forms_api.auth_key,
-          "Accept" => "application/json",
-        }
-      end
-
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
-          mock.get "/api/v1/forms/2/pages/1", req_headers, page.to_json, 200
+          mock.get "/api/v1/forms/2", headers, form_response.to_json, 200
+          mock.get "/api/v1/forms/2/pages/1", headers, page.to_json, 200
         end
 
         get delete_page_path(form_id: 2, page_id: 1)
@@ -149,27 +129,13 @@ RSpec.describe PagesController, type: :request do
         [page].to_json
       end
 
-      let(:req_headers) do
-        {
-          "X-API-Token" => Settings.forms_api.auth_key,
-          "Accept" => "application/json",
-        }
-      end
-
-      let(:post_headers) do
-        {
-          "X-API-Token" => Settings.forms_api.auth_key,
-          "Content-Type" => "application/json",
-        }
-      end
-
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
-          mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
-          mock.get "/api/v1/forms/2/pages/1", req_headers, page.to_json, 200
+          mock.get "/api/v1/forms/2", headers, form_response.to_json, 200
+          mock.get "/api/v1/forms/2/pages", headers, form_pages_response, 200
+          mock.get "/api/v1/forms/2/pages/1", headers, page.to_json, 200
           mock.put "/api/v1/forms/2", post_headers
-          mock.delete "/api/v1/forms/2/pages/1", req_headers, {}, 200
+          mock.delete "/api/v1/forms/2/pages/1", headers, {}, 200
         end
 
         delete destroy_page_path(form_id: 2, page_id: 1, forms_delete_confirmation_form: { confirm_deletion: "true" })

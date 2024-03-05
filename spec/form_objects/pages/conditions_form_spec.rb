@@ -17,13 +17,6 @@ RSpec.describe Pages::ConditionsForm, type: :model do
   end
   let(:condition) { nil }
 
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   describe "validations" do
     it "is invalid if answer_value is nil" do
       error_message = I18n.t("activemodel.errors.models.pages/conditions_form.attributes.answer_value.blank")

@@ -14,20 +14,6 @@ RSpec.describe Pages::GuidanceController, type: :request do
     controller_spy
   end
 
-  let(:req_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   before do
     login_as_editor_user
   end
@@ -35,8 +21,8 @@ RSpec.describe Pages::GuidanceController, type: :request do
   describe "#new" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
 
       get guidance_new_path(form_id: form.id)
@@ -68,8 +54,8 @@ RSpec.describe Pages::GuidanceController, type: :request do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
 
       allow(controller_spy).to receive(:draft_question).and_return(draft_question)
@@ -157,9 +143,9 @@ RSpec.describe Pages::GuidanceController, type: :request do
   describe "#edit" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{page.id}", req_headers, page.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1/pages/#{page.id}", headers, page.to_json, 200
       end
 
       get guidance_edit_path(form_id: form.id, page_id: page.id)
@@ -192,9 +178,9 @@ RSpec.describe Pages::GuidanceController, type: :request do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{page.id}", req_headers, page.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1/pages/#{page.id}", headers, page.to_json, 200
       end
       allow(controller_spy).to receive(:draft_question).and_return(draft_question)
       post guidance_update_path(form_id: form.id, page_id: page.id), params: { pages_guidance_form: { page_heading:, guidance_markdown: }, route_to: }

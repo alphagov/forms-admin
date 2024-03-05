@@ -1,20 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Pages::QuestionsController, type: :request do
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
-  let(:req_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
   let(:form_response) { build :form, id: 2 }
 
   let(:draft_question) { create :draft_question_for_new_page, user: editor_user, form_id: 2 }
@@ -56,9 +42,9 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms/2", req_headers, form_response.to_json, 200
-      mock.get "/api/v1/forms/2/pages", req_headers, form_pages_response, 200
-      mock.get "/api/v1/forms/2/pages/1", req_headers, page_response.to_json, 200
+      mock.get "/api/v1/forms/2", headers, form_response.to_json, 200
+      mock.get "/api/v1/forms/2/pages", headers, form_pages_response, 200
+      mock.get "/api/v1/forms/2/pages/1", headers, page_response.to_json, 200
       mock.post "/api/v1/forms/2/pages", post_headers, page_response.to_json, 200
       mock.put "/api/v1/forms/2/pages/1", post_headers, updated_page_data.to_json, 200
     end
@@ -85,7 +71,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
     end
 
     it "Reads the pages from the API" do
-      form_pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, req_headers)
+      form_pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
       expect(ActiveResource::HttpMock.requests).to include form_pages_request
     end
 
@@ -182,13 +168,13 @@ RSpec.describe Pages::QuestionsController, type: :request do
       end
 
       it "Reads the page from the API" do
-        form_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, req_headers)
+        form_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
         expect(ActiveResource::HttpMock.requests).to include form_request
 
-        form_pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, req_headers)
+        form_pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
         expect(ActiveResource::HttpMock.requests).to include form_pages_request
 
-        page_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, req_headers)
+        page_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
         expect(ActiveResource::HttpMock.requests).to include page_request
       end
     end
@@ -234,7 +220,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
       end
 
       it "Reads the page from the API" do
-        form_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, req_headers)
+        form_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
         expect(ActiveResource::HttpMock.requests).to include form_request
 
         page_request = ActiveResource::Request.new(:put, "/api/v1/forms/2/pages/1", {}, post_headers)
@@ -281,7 +267,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
         end
 
         it "Reads the page from the API" do
-          form_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, req_headers)
+          form_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
           expect(ActiveResource::HttpMock.requests).to include form_request
 
           page_request = ActiveResource::Request.new(:put, "/api/v1/forms/2/pages/1", {}, post_headers)

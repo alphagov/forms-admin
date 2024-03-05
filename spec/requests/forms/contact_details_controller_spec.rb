@@ -3,20 +3,6 @@ require "rails_helper"
 RSpec.describe Forms::ContactDetailsController, type: :request do
   let(:current_user) { editor_user }
 
-  let(:req_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   before do
     login_as current_user
   end
@@ -63,7 +49,7 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.put "/api/v1/forms/2", post_headers
-        mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
+        mock.get "/api/v1/forms/2", headers, form.to_json, 200
       end
 
       allow(Pundit).to receive(:authorize).and_return(true)
