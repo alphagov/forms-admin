@@ -3,7 +3,7 @@ class FormListService
   include ActionView::Helpers::UrlHelper
   include GovukRailsCompatibleLinkHelper
 
-  attr_accessor :forms, :current_user, :organisation
+  attr_accessor :forms, :current_user, :organisation, :group
 
   class << self
     def call(**args)
@@ -11,10 +11,11 @@ class FormListService
     end
   end
 
-  def initialize(forms:, current_user:, organisation: nil)
+  def initialize(forms:, current_user:, organisation: nil, group: nil)
     @forms = forms
     @current_user = current_user
     @organisation = organisation || (current_user.trial? ? nil : current_user.organisation)
+    @group = group
     unless current_user.trial?
       @list_of_creator_id = forms.map(&:creator_id).uniq
       @list_of_creators = User.where(id: @list_of_creator_id)
@@ -34,6 +35,8 @@ class FormListService
 private
 
   def caption
+    return I18n.t("groups.form_table_caption", group_name: group.name) if group.present?
+
     return I18n.t("home.your_forms") if organisation.blank?
 
     I18n.t("home.form_table_caption", organisation_name: organisation.name)

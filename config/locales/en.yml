@@ -232,6 +232,10 @@ en:
     confirm_deletion_form: Are you sure you want to delete this draft?
     confirm_deletion_form_live_form: Deleting this draft will not remove the live form.
     confirm_deletion_page: Are you sure you want to delete this page?
+  groups:
+    form_table_caption: Forms in ‘%{group_name}’
+    show:
+      edit_group_name: Change the name of this group
   guidance:
     add_guidance: Add guidance
     guidance: Guidance

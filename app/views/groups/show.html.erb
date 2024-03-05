@@ -1,14 +1,15 @@
 <% content_for :back_link, govuk_back_link_to(groups_path, t("back_link.groups")) %>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+<%= render @group %>
 
-    <%= render @group %>
+<div class="govuk-button-group">
+  <%= govuk_link_to(t(".edit_group_name"), edit_group_path(@group)) %>
+</div>
 
-    <div>
-      <%= govuk_button_link_to("Edit group", edit_group_path(@group), class: "govuk-!-margin-bottom-3 govuk-!-margin-top-3" ) %>
-      <%= govuk_button_to("Delete group", @group, method: :delete, warning: true, class: "govuk-!-margin-bottom-3 govuk-!-margin-top-3" ) %>
-    </div>
+<% if @forms.any? %>
+  <%= govuk_table(**FormListService.call(forms: @forms, current_user: @current_user, group: @group).data) %>
+<% end %>
 
-  </div>
+<div>
+  <%= govuk_button_to("Delete group", @group, method: :delete, warning: true, class: "govuk-!-margin-bottom-3 govuk-!-margin-top-3" ) %>
 </div>

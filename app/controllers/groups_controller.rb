@@ -11,6 +11,7 @@ class GroupsController < ApplicationController
   # GET /groups/1
   def show
     authorize @group
+    @forms = @group.group_forms.map(&:form)
   end
 
   # GET /groups/new
