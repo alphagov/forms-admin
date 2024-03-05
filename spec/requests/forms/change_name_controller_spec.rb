@@ -10,20 +10,6 @@ RSpec.describe Forms::ChangeNameController, type: :request do
     }.to_json
   end
 
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   let(:organisation) { build :organisation, id: 1, slug: "test-org" }
   let(:user) { build :editor_user, id: 1, organisation: }
 

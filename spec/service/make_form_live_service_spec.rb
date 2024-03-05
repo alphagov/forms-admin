@@ -5,12 +5,6 @@ describe MakeFormLiveService do
   let(:draft_form) { build :form, :ready_for_live, id: 1 }
   let(:live_form) { draft_form }
   let(:current_user) { build :user }
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
 
   describe "#make_live" do
     before do

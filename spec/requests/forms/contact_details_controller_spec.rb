@@ -3,20 +3,6 @@ require "rails_helper"
 RSpec.describe Forms::ContactDetailsController, type: :request do
   let(:current_user) { editor_user }
 
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   before do
     login_as current_user
   end

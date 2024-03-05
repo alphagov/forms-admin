@@ -19,20 +19,6 @@ describe Pages::SelectionsSettingsController, type: :request do
   end
   let(:page_id) { nil }
 
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   before do
     login_as_editor_user
   end

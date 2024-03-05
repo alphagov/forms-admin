@@ -6,20 +6,6 @@ RSpec.describe Pages::DateSettingsController, type: :request do
 
   let(:date_settings_form) { build :date_settings_form }
 
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   before do
     login_as_editor_user
   end

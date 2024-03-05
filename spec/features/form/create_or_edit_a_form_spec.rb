@@ -4,19 +4,6 @@ feature "Create or edit a form", type: :feature do
   let(:form) { build :form, :with_active_resource, id: 1, name: "Apply for a juggling license" }
   let(:org_forms) { [] }
 
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   before do
     login_as_editor_user
   end

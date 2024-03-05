@@ -1,19 +1,6 @@
 require "rails_helper"
 
 RSpec.describe PagesController, type: :request do
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   let(:form_response) { build :form, id: 2 }
 
   before do
@@ -106,13 +93,6 @@ RSpec.describe PagesController, type: :request do
         })
       end
 
-      let(:headers) do
-        {
-          "X-API-Token" => Settings.forms_api.auth_key,
-          "Accept" => "application/json",
-        }
-      end
-
       before do
         ActiveResource::HttpMock.respond_to do |mock|
           mock.get "/api/v1/forms/2", headers, form_response.to_json, 200
@@ -147,20 +127,6 @@ RSpec.describe PagesController, type: :request do
 
       let(:form_pages_response) do
         [page].to_json
-      end
-
-      let(:headers) do
-        {
-          "X-API-Token" => Settings.forms_api.auth_key,
-          "Accept" => "application/json",
-        }
-      end
-
-      let(:post_headers) do
-        {
-          "X-API-Token" => Settings.forms_api.auth_key,
-          "Content-Type" => "application/json",
-        }
       end
 
       before do

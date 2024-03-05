@@ -1,20 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Pages::QuestionsController, type: :request do
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
   let(:form_response) { build :form, id: 2 }
 
   let(:draft_question) { create :draft_question_for_new_page, user: editor_user, form_id: 2 }

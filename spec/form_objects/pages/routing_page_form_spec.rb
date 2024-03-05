@@ -6,13 +6,6 @@ RSpec.describe Pages::RoutingPageForm, type: :model do
   let(:pages) { form.pages }
   let(:routing_page_id) { pages.first.id }
 
-  let(:delete_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
   describe "validations" do
     it "is invalid if routing_page_id is nil" do
       error_message = I18n.t("activemodel.errors.models.pages/routing_page_form.attributes.routing_page_id.blank")

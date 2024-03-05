@@ -14,20 +14,6 @@ describe "Request an upgrade from trial user to editor", type: :feature do
     create(:user, :with_trial_role, id: 2)
   end
 
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   before do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms?organisation_id=1", headers, org_forms.to_json, 200

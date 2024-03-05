@@ -1,13 +1,6 @@
 require "rails_helper"
 
 RSpec.describe ApplicationController, type: :request do
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
   let(:form) { build :form, id: 1 }
 
   before do

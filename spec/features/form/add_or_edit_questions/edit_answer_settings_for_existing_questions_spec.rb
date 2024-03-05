@@ -2,18 +2,6 @@ require "rails_helper"
 
 feature "Editing answer_settings for existing question", type: :feature do
   let(:form) { build :form, :with_active_resource, id: 1, pages: }
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|

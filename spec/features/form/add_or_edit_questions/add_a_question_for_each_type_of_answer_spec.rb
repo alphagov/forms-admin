@@ -3,18 +3,6 @@ require "rails_helper"
 feature "Add/editing a single question", type: :feature do
   let(:form) { build :form, :with_active_resource, id: 1 }
   let(:fake_page) { build :page, form_id: 1, id: 2 }
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|

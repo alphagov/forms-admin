@@ -79,12 +79,6 @@ describe ApplicationController, type: :controller do
 
   describe "#current_form" do
     let(:form) { build :form, id: 1 }
-    let(:headers) do
-      {
-        "X-API-Token" => Settings.forms_api.auth_key,
-        "Accept" => "application/json",
-      }
-    end
 
     before do
       ActiveResource::HttpMock.respond_to(false) do |mock|

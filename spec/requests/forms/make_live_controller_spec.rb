@@ -21,20 +21,6 @@ RSpec.describe Forms::MakeLiveController, type: :request do
           pages: form.pages)
   end
 
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   let(:form_params) { nil }
 
   describe "#new" do

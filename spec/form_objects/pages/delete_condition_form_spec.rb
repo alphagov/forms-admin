@@ -11,13 +11,6 @@ RSpec.describe Pages::DeleteConditionForm, type: :model do
   let(:skip_to_end) { false }
   let(:condition) { Condition.new id: 2, form_id: form.id, page_id: page.id, routing_page_id: page.id, check_page_id: page.id, answer_value:, goto_page_id:, skip_to_end: }
 
-  let(:delete_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
   describe "validations" do
     it "is invalid if confirm_deletion is nil" do
       error_message = I18n.t("activemodel.errors.models.pages/delete_condition_form.attributes.confirm_deletion.blank")

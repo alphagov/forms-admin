@@ -15,20 +15,6 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     submission_email_mailer
   end
 
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   before do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms", headers, [form].to_json, 200

@@ -18,20 +18,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
   let(:submit_result) { true }
 
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   let(:expected_to_raise_error) { false }
 
   before do

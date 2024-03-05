@@ -5,19 +5,6 @@ feature "Make changes live", type: :feature do
   let(:org_forms) { [form] }
   let(:pages) { build_list :page, 5, form_id: form.id }
 
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-  let(:post_headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Content-Type" => "application/json",
-    }
-  end
-
   before do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms?organisation_id=1", headers, org_forms.to_json, 200

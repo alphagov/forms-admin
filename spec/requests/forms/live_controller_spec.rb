@@ -1,13 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Forms::LiveController, type: :request do
-  let(:headers) do
-    {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-  end
-
   let(:form) do
     build(:form, :live, id: 2)
   end

@@ -193,13 +193,6 @@ describe Form, type: :model do
   end
 
   describe "#update_organisation_for_creator" do
-    let(:patch_headers) do
-      {
-        "X-API-Token" => Settings.forms_api.auth_key,
-        "Content-Type" => "application/json",
-      }
-    end
-
     before do
       ActiveResource::HttpMock.reset!
     end
