@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "Login to the service", type: :feature do
   let(:user) { create :user, :with_trial_role, name: "Test User", email: "test@example.gov.uk" }
-  let(:req_headers) do
+  let(:headers) do
     {
       "X-API-Token" => Settings.forms_api.auth_key,
       "Accept" => "application/json",
@@ -18,7 +18,7 @@ describe "Login to the service", type: :feature do
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?creator_id=#{user.id}", req_headers, [].to_json, 200
+      mock.get "/api/v1/forms?creator_id=#{user.id}", headers, [].to_json, 200
     end
     allow(Settings).to receive(:auth_provider).and_return("developer")
   end

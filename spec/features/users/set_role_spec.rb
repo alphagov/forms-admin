@@ -22,7 +22,7 @@ describe "Set or change a user's role", type: :feature do
     create(:user, :with_trial_role, id: 2)
   end
 
-  let(:req_headers) do
+  let(:headers) do
     {
       "X-API-Token" => Settings.forms_api.auth_key,
       "Accept" => "application/json",
@@ -38,8 +38,8 @@ describe "Set or change a user's role", type: :feature do
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?organisation_id=1", req_headers, org_forms.to_json, 200
-      mock.get "/api/v1/forms?creator_id=2", req_headers, trial_forms.to_json, 200
+      mock.get "/api/v1/forms?organisation_id=1", headers, org_forms.to_json, 200
+      mock.get "/api/v1/forms?creator_id=2", headers, trial_forms.to_json, 200
     end
   end
 
@@ -51,7 +51,7 @@ describe "Set or change a user's role", type: :feature do
 
   it "A trial user's forms move to their organisation on role upgrade" do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?organisation_id=1", req_headers, (org_forms + trial_forms).to_json, 200
+      mock.get "/api/v1/forms?organisation_id=1", headers, (org_forms + trial_forms).to_json, 200
       mock.patch "/api/v1/forms/update-organisation-for-creator?creator_id=2&organisation_id=1", post_headers, nil, 204
     end
 

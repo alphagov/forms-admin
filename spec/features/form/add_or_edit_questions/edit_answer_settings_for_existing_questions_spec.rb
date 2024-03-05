@@ -2,7 +2,7 @@ require "rails_helper"
 
 feature "Editing answer_settings for existing question", type: :feature do
   let(:form) { build :form, :with_active_resource, id: 1, pages: }
-  let(:req_headers) do
+  let(:headers) do
     {
       "X-API-Token" => Settings.forms_api.auth_key,
       "Accept" => "application/json",
@@ -17,11 +17,11 @@ feature "Editing answer_settings for existing question", type: :feature do
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-      mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
+      mock.get "/api/v1/forms/1", headers, form.to_json, 200
+      mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       mock.post "/api/v1/forms/1/pages", post_headers
       pages.each do |page|
-        mock.get "/api/v1/forms/1/pages/#{page.id}", req_headers, page.to_json, 200
+        mock.get "/api/v1/forms/1/pages/#{page.id}", headers, page.to_json, 200
       end
     end
 

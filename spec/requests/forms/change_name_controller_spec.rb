@@ -10,7 +10,7 @@ RSpec.describe Forms::ChangeNameController, type: :request do
     }.to_json
   end
 
-  let(:req_headers) do
+  let(:headers) do
     {
       "X-API-Token" => Settings.forms_api.auth_key,
       "Accept" => "application/json",
@@ -29,7 +29,7 @@ RSpec.describe Forms::ChangeNameController, type: :request do
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms/2", req_headers, form_response_data, 200
+      mock.get "/api/v1/forms/2", headers, form_response_data, 200
       mock.post "/api/v1/forms", post_headers, { id: 2 }.to_json, 200
       mock.put "/api/v1/forms/2", post_headers
     end
@@ -51,8 +51,8 @@ RSpec.describe Forms::ChangeNameController, type: :request do
     before do
       ActiveResource::HttpMock.reset!
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/", req_headers, form_response_data, 200
-        mock.get "/api/v1/forms/2", req_headers, form_response_data, 200
+        mock.get "/api/v1/forms/", headers, form_response_data, 200
+        mock.get "/api/v1/forms/2", headers, form_response_data, 200
         mock.put "/api/v1/forms/2", post_headers
         mock.post "/api/v1/forms", post_headers, { id: 2 }.to_json, 200
       end
@@ -91,7 +91,7 @@ RSpec.describe Forms::ChangeNameController, type: :request do
     end
 
     it "fetches the from from the API" do
-      expected_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, req_headers)
+      expected_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
       expect(ActiveResource::HttpMock.requests).to include expected_request
     end
   end

@@ -19,7 +19,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
   let(:address_settings_form) { build :address_settings_form, draft_question: }
 
-  let(:req_headers) do
+  let(:headers) do
     {
       "X-API-Token" => Settings.forms_api.auth_key,
       "Accept" => "application/json",
@@ -40,8 +40,8 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
   describe "#new" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
 
       get address_settings_new_path(form_id: form.id)
@@ -64,8 +64,8 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
   describe "#create" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
     end
 
@@ -115,9 +115,9 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/2", req_headers, page.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1/pages/2", headers, page.to_json, 200
       end
       draft_question
       get address_settings_edit_path(form_id: page.form_id, page_id: page.id)
@@ -152,9 +152,9 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/2", req_headers, page.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1/pages/2", headers, page.to_json, 200
         mock.put "/api/v1/forms/1/pages/2", post_headers
       end
     end

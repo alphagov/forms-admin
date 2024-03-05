@@ -3,7 +3,7 @@ require "rails_helper"
 feature "Add/editing a single question", type: :feature do
   let(:form) { build :form, :with_active_resource, id: 1 }
   let(:fake_page) { build :page, form_id: 1, id: 2 }
-  let(:req_headers) do
+  let(:headers) do
     {
       "X-API-Token" => Settings.forms_api.auth_key,
       "Accept" => "application/json",
@@ -18,9 +18,9 @@ feature "Add/editing a single question", type: :feature do
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-      mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
-      mock.get "/api/v1/forms/1/pages/2", req_headers, fake_page.to_json, 200
+      mock.get "/api/v1/forms/1", headers, form.to_json, 200
+      mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
+      mock.get "/api/v1/forms/1/pages/2", headers, fake_page.to_json, 200
       mock.post "/api/v1/forms/1/pages", post_headers, fake_page.to_json, 200
     end
 

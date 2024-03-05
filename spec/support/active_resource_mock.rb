@@ -32,58 +32,58 @@ class ActiveResourceMock
     end
 
     def all(response, status)
-      req_headers = {
+      headers = {
         "X-API-Token" => Settings.forms_api.auth_key,
         "Accept" => "application/json",
       }
       response = [] if response.nil?
       status = 200 if status.nil?
       request_path = @resource.class.collection_path(@resource.prefix_options)
-      @mock.get request_path, req_headers, response.to_json, status
+      @mock.get request_path, headers, response.to_json, status
     end
 
     def create(response, status)
-      req_headers = {
+      post_headers = {
         "X-API-Token" => Settings.forms_api.auth_key,
         "Accept" => "application/json",
       }
       response = {} if response.nil?
       status = 200 if status.nil?
       request_path = @resource.class.collection_path(@resource.prefix_options)
-      @mock.post request_path, req_headers, response, status
+      @mock.post request_path, post_headers, response, status
     end
 
     def read(response, status)
-      req_headers = {
+      headers = {
         "X-API-Token" => Settings.forms_api.auth_key,
         "Accept" => "application/json",
       }
       response = {} if response.nil?
       status = 200 if status.nil?
       request_path = @resource.class.element_path(@resource.id, @resource.prefix_options)
-      @mock.get request_path, req_headers, response.to_json, status
+      @mock.get request_path, headers, response.to_json, status
     end
 
     def update(response, status)
-      req_headers = {
+      put_headers = {
         "X-API-Token" => Settings.forms_api.auth_key,
         "Accept" => "application/json",
       }
       response = {} if response.nil?
       status = 200 if status.nil?
       request_path = @resource.class.element_path(@resource.id, @resource.prefix_options)
-      @mock.put request_path, req_headers, response.to_json, status
+      @mock.put request_path, put_headers, response.to_json, status
     end
 
     def delete(response, status)
-      req_headers = {
+      delete_headers = {
         "X-API-Token" => Settings.forms_api.auth_key,
         "Accept" => "application/json",
       }
       response = {} if response.nil?
       status = 200 if status.nil?
       request_path = @resource.class.element_path(@resource.id, @resource.prefix_options)
-      @mock.delete request_path, req_headers, response.to_json, status
+      @mock.delete request_path, delete_headers, response.to_json, status
     end
 
   private

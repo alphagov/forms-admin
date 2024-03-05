@@ -6,7 +6,7 @@ RSpec.describe Pages::QuestionTextController, type: :request do
 
   let(:question_text_form) { build :question_text_form, form: }
 
-  let(:req_headers) do
+  let(:headers) do
     {
       "X-API-Token" => Settings.forms_api.auth_key,
       "Accept" => "application/json",
@@ -27,8 +27,8 @@ RSpec.describe Pages::QuestionTextController, type: :request do
   describe "#new" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
 
       get question_text_new_path(form_id: form.id)
@@ -51,8 +51,8 @@ RSpec.describe Pages::QuestionTextController, type: :request do
   describe "#create" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/1/pages", req_headers, pages.to_json, 200
+        mock.get "/api/v1/forms/1", headers, form.to_json, 200
+        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
     end
 

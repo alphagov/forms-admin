@@ -21,7 +21,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
           pages: form.pages)
   end
 
-  let(:req_headers) do
+  let(:headers) do
     {
       "X-API-Token" => Settings.forms_api.auth_key,
       "Accept" => "application/json",
@@ -41,7 +41,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.put "/api/v1/forms/2", post_headers
-        mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
+        mock.get "/api/v1/forms/2", headers, form.to_json, 200
       end
 
       ActiveResourceMock.mock_resource(form,
@@ -98,8 +98,8 @@ RSpec.describe Forms::MakeLiveController, type: :request do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.post "/api/v1/forms/2/make-live", post_headers
-        mock.get "/api/v1/forms/2", req_headers, form.to_json, 200
-        mock.get "/api/v1/forms/2/live", req_headers, form.to_json, 200
+        mock.get "/api/v1/forms/2", headers, form.to_json, 200
+        mock.get "/api/v1/forms/2/live", headers, form.to_json, 200
       end
 
       login_as user

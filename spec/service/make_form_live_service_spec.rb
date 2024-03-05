@@ -5,7 +5,7 @@ describe MakeFormLiveService do
   let(:draft_form) { build :form, :ready_for_live, id: 1 }
   let(:live_form) { draft_form }
   let(:current_user) { build :user }
-  let(:req_headers) do
+  let(:headers) do
     {
       "X-API-Token" => Settings.forms_api.auth_key,
       "Accept" => "application/json",
@@ -35,7 +35,7 @@ describe MakeFormLiveService do
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/#{live_form.id}/live", req_headers, live_form.to_json, 200
+          mock.get "/api/v1/forms/#{live_form.id}/live", headers, live_form.to_json, 200
         end
       end
 
@@ -86,7 +86,7 @@ describe MakeFormLiveService do
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/#{live_form.id}/live", req_headers, live_form.to_json, 200
+          mock.get "/api/v1/forms/#{live_form.id}/live", headers, live_form.to_json, 200
         end
       end
 
