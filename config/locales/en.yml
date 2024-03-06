@@ -905,3 +905,5 @@ en:
         description: Can create forms but cannot make them live
         name: Trial
     save: Save
+  what_happens_next:
+    reference_numbers: GOV.UK Forms adds a unique reference number to the confirmation page and optional email confirmation. This will also be included in submission emails sent to your processing email address.
