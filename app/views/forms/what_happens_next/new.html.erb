@@ -14,26 +14,21 @@
         <%= t("page_titles.what_happens_next_form") %>
       </h1>
 
-      <p>Add some information to tell people what will happen after they've submitted their form, and when - so they know what to expect.</p>
+      <p><%= t("what_happens_next.instructions") %></p>
 
-      <h2 class="govuk-heading-s">Example</h2>
+      <h2 class="govuk-heading-s"> <%= t("what_happens_next.example.heading") %></h2>
 
       <%= govuk_inset_text do %>
-        We’ll send you an email to let you know the outcome. You’ll usually get a response within 10 working days.
+        <%= t("what_happens_next.example.body") %>
       <% end %>
 
-      <p>
-        This content will be:
-      </p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li> shown to people when they've completed and submitted a form
-        <li> included in an email confirmation, if they choose to receive this
-      </ul>
+      <%= t("what_happens_next.how_this_content_is_used_html") %>
 
-      <p>
-        The optional email confirmation will also include the contact details you provide for the form,
-        and the date and time of submission. It will not include a copy of their answers.
-      </p>
+      <% if FeatureService.enabled?(:reference_numbers_enabled) %>
+        <%= govuk_inset_text do %>
+          <%= t("what_happens_next.reference_numbers") %>
+        <% end %>
+      <% end %>
 
       <%= render MarkdownEditorComponent::View.new(:what_happens_next_markdown,
         form_builder: f,
