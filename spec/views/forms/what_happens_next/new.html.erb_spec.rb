@@ -11,6 +11,19 @@ describe "forms/what_happens_next/new.html.erb" do
     render template: "forms/what_happens_next/new"
   end
 
+  it "contains an example" do
+    expect(rendered).to have_text(I18n.t("what_happens_next.example.heading"))
+    expect(rendered).to have_text(I18n.t("what_happens_next.example.body"))
+  end
+
+  it "contains instructions" do
+    expect(rendered).to have_text(I18n.t("what_happens_next.instructions"))
+  end
+
+  it "contains text about how the content is used" do
+    expect(rendered).to include(I18n.t("what_happens_next.how_this_content_is_used_html"))
+  end
+
   context "when reference numbers are not enabled", feature_reference_numbers_enabled: false do
     it "does not contain text about reference numbers" do
       expect(rendered).not_to have_text(I18n.t("what_happens_next.reference_numbers"))

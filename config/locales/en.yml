@@ -906,4 +906,21 @@ en:
         name: Trial
     save: Save
   what_happens_next:
+    example:
+      body: We’ll send you an email to let you know the outcome. You’ll usually get a response within 10 working days.
+      heading: Example
+    how_this_content_is_used_html: |
+      <p>
+        This content will be:
+      </p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>shown to people when they've completed and submitted a form</li>
+        <li>included in an email confirmation, if they choose to receive this</li>
+      </ul>
+
+      <p>
+        The optional email confirmation will also include the contact details you provide for the form,
+        and the date and time of submission. It will not include a copy of their answers.
+      </p>
+    instructions: Add some information to tell people what will happen after they've submitted their form, and when - so they know what to expect.
     reference_numbers: GOV.UK Forms adds a unique reference number to the confirmation page and optional email confirmation. This will also be included in submission emails sent to your processing email address.
