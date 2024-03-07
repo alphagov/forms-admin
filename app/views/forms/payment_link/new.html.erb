@@ -17,16 +17,30 @@
       <%= t('payment_link_form.body_html') %>
 
       <h2 class="govuk-heading-m">
+        <%= t('payment_link_form.setting_up_govuk_pay.heading') %>
+      </h2>
+
+      <%= t('payment_link_form.setting_up_govuk_pay.body_html') %>
+
+      <h2 class="govuk-heading-m">
+        <%= t('payment_link_form.creating_your_payment_link.heading') %>
+      </h2>
+
+      <p><%= t('payment_link_form.creating_your_payment_link.body') %></p>
+
+      <h3 class="govuk-heading-s"><%= t('payment_link_form.set_up_your_payment_link.heading') %></h3>
+
+      <%= t('payment_link_form.set_up_your_payment_link.body_html') %>
+
+      <h3 class="govuk-heading-s"><%= t('payment_link_form.how_this_will_help_processors.heading') %></h3>
+
+      <%= t('payment_link_form.how_this_will_help_processors.body_html') %>
+
+      <h2 class="govuk-heading-m">
         <%= t('payment_link_form.how_this_will_work.heading') %>
       </h2>
 
       <%= t('payment_link_form.how_this_will_work.body_html') %>
-
-      <h2 class="govuk-heading-m">
-        <%= t('payment_link_form.setting_up_a_payment_link.heading') %>
-      </h2>
-
-      <%= t('payment_link_form.setting_up_a_payment_link.body_html') %>
 
       <%= f.govuk_text_field :payment_url, label: {  size: 'm' }, spellcheck: "false"  %>
       <%= f.govuk_submit t('payment_link_form.submit_button') %>
