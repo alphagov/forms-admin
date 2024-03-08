@@ -29,6 +29,7 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     @group.organisation = current_user.organisation
+    @group.memberships.build(user: current_user, added_by: current_user)
 
     authorize @group
 

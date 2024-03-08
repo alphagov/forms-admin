@@ -8,6 +8,7 @@ class GroupPolicy < ApplicationPolicy
     user.super_admin? || user.organisation_id == record.organisation_id
   end
   alias_method :edit?, :show?
+  alias_method :index?, :show?
   alias_method :update?, :edit?
   alias_method :destroy?, :edit?
 
@@ -16,7 +17,7 @@ class GroupPolicy < ApplicationPolicy
       if user.super_admin?
         scope.all
       else
-        scope.where(organisation_id: user.organisation_id)
+        scope.for_user(user)
       end
     end
   end

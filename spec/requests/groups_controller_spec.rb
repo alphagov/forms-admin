@@ -39,9 +39,15 @@ RSpec.describe "/groups", type: :request do
       expect(response).to be_successful
     end
 
-    it "shows all groups in the user's organisation" do
-      groups = create_list :group, 3, organisation_id: 1
+    it "shows all groups the user is a member of" do
+      groups = create_list :group, 3, organisation: editor_user.organisation
+      groups.each do |group|
+        create :membership, user: editor_user, group:
+      end
 
+      # groups outside of organisation or not a member of
+      # should not be shown
+      create :group, organisation: editor_user.organisation
       create_list :group, 3, organisation: other_org
 
       get groups_url
