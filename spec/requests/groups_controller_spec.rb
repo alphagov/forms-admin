@@ -51,7 +51,7 @@ RSpec.describe "/groups", type: :request do
       create_list :group, 3, organisation: other_org
 
       get groups_url
-      expect(assigns(:groups)).to eq groups
+      expect(assigns(:trial_groups)).to eq groups
     end
 
     context "when the user is a super-admin" do
@@ -66,7 +66,7 @@ RSpec.describe "/groups", type: :request do
         create_list :group, 3, organisation_id: 2
 
         get groups_url
-        expect(assigns(:groups)).to eq Group.all
+        expect(assigns(:trial_groups)).to eq Group.trial
       end
     end
   end

@@ -238,6 +238,16 @@ en:
       created_by: Created by
       created_by_unknown: Unknown
       name: Group name
+    index:
+      active_title: Active groups
+      create_group: Create a group
+      group_explainer_body_html: |
+        <p>Each form is created inside a group. People can be invited to a group to create and edit forms in it.</p>
+        <p>If you need access to an existing form or group, ask someone who has access to that group to invite you.</p>
+        <p>When a group is first created it will be a ‘trial’ group. That means you cannot make any forms in the group live. You can request for a group to be upgraded to an ‘active’ group if you need to make forms live.</p>
+        <p>If you’re not sure if you should make a new group, speak with your organisation’s GOV.UK publishing team.</p>
+      group_explainer_title: What is a ‘group’?
+      trial_title: Trial groups
     show:
       edit_group_name: Change the name of this group
   guidance:
@@ -619,6 +629,7 @@ en:
     email_code_sent: Confirmation code sent
     error_prefix: 'Error: '
     forbidden: You cannot view this page
+    group_index: Your groups
     home: Home
     internal_server_error: Sorry, there is a problem with the service
     maintenance: Sorry, the service is unavailable
