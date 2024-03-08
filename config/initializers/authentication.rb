@@ -45,3 +45,10 @@ OmniAuth.config.allowed_request_methods = %i[post]
 OAuth2.configure do |config|
   config.silence_extra_tokens_warning = true
 end
+
+# store the auth0 connection used to login in the warden session
+Warden::Manager.after_authentication do |user, auth, _opts|
+  if user.provider == "auth0"
+    auth.session["auth0_connection_strategy"] = auth.env["omniauth.auth"][:extra][:raw_info][:auth0_connection_strategy]
+  end
+end
