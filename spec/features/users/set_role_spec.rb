@@ -14,10 +14,6 @@ describe "Set or change a user's role", type: :feature do
     [build(:form, id: 2, creator_id: 2, organisation_id: nil, name: "Trial form")]
   end
 
-  let(:super_admin_user) do
-    create(:super_admin_user, id: 1, organisation: gds_org)
-  end
-
   let(:trial_user) do
     create(:user, :with_trial_role, id: 2)
   end
@@ -27,10 +23,12 @@ describe "Set or change a user's role", type: :feature do
       mock.get "/api/v1/forms?organisation_id=1", headers, org_forms.to_json, 200
       mock.get "/api/v1/forms?creator_id=2", headers, trial_forms.to_json, 200
     end
+
+    super_admin_user.organisation = gds_org
   end
 
   it "A trial user sees only forms they have created" do
-    login_as trial_user
+    login_as_trial_user
     then_i_can_see_the_trial_user_forms
     then_i_cannot_see_the_org_forms
   end
@@ -41,11 +39,12 @@ describe "Set or change a user's role", type: :feature do
       mock.patch "/api/v1/forms/update-organisation-for-creator?creator_id=2&organisation_id=1", post_headers, nil, 204
     end
 
-    login_as super_admin_user
+    login_as_super_admin_user
     when_i_change_the_trial_users_role_to_editor
     reset_session!
 
-    login_as trial_user.reload
+    trial_user.reload
+    login_as_trial_user
     then_i_can_see_the_trial_user_forms
     then_i_can_see_the_org_forms
   end

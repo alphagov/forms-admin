@@ -29,6 +29,10 @@ class ApplicationController < ActionController::Base
     render "errors/forbidden", status: :forbidden, formats: :html
   end
 
+  PRIVILEGED_AUTH0_CONNECTION_STRATEGIES = %w[
+    google-apps
+  ].freeze
+
   def check_maintenance_mode_is_enabled
     if Settings.maintenance_mode.enabled && non_maintenance_bypass_ip_address?
       redirect_to maintenance_page_path
@@ -105,7 +109,7 @@ private
     authenticate_user!
 
     # check access
-    unless current_user.has_access?
+    unless @current_user.has_access? && auth_strategy_permitted?
       render "errors/access_denied", status: :forbidden, formats: :html
     end
   end
@@ -117,5 +121,9 @@ private
 
     bypass_ip_list = bypass_ips.split(",").map { |ip| IPAddr.new ip.strip }
     bypass_ip_list.none? { |ip| ip.include?(user_ip(request.env.fetch("HTTP_X_FORWARDED_FOR", ""))) }
+  end
+
+  def auth_strategy_permitted?
+    @current_user.super_admin? ? PRIVILEGED_AUTH0_CONNECTION_STRATEGIES.include?(warden.session["auth0_connection_strategy"]) : true
   end
 end
