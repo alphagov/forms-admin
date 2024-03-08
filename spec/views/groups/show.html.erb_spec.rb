@@ -16,6 +16,10 @@ RSpec.describe "groups/show", type: :view do
     expect(rendered).to have_css "h1.govuk-heading-l", text: "My Group"
   end
 
+  it "renders the status of the group" do
+    expect(rendered).to have_css ".govuk-caption-l", text: t("groups.status_caption.trial")
+  end
+
   it "has a link to the change group name page" do
     expect(rendered).to have_link "Change the name of this group", href: edit_group_path(group)
   end

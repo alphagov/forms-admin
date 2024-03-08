@@ -250,6 +250,9 @@ en:
       trial_title: Trial groups
     show:
       edit_group_name: Change the name of this group
+    status_caption:
+      active: Active group
+      trial: Trial group
   guidance:
     add_guidance: Add guidance
     guidance: Guidance

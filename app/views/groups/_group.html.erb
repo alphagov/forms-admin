@@ -1,1 +1,4 @@
-<h1 class="govuk-heading-l"><%= group.name %></h1>
+<h1 class="govuk-heading-l">
+  <span class="govuk-caption-l"><%= t("groups.status_caption.#{group.status}") %></span><span class="govuk-visually-hidden"> - </span>
+  <%= group.name %>
+</h1>
