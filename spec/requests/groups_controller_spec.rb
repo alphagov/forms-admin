@@ -72,6 +72,24 @@ RSpec.describe "/groups", type: :request do
       expect(response).to be_successful
     end
 
+    it "shows the forms in the group" do
+      group = create :group
+      forms = build_list(:form, 3) { |form, i| form.id = i }
+
+      ActiveResource::HttpMock.respond_to do |mock|
+        headers = { "X-API-Token" => Settings.forms_api.auth_key, "Accept" => "application/json" }
+        forms.each do |form|
+          mock.get "/api/v1/forms/#{form.id}", headers, form.to_json, 200
+        end
+      end
+
+      group.group_forms << forms.map { |form| GroupForm.create! form_id: form.id, group_id: group.id }
+      group.save!
+
+      get group_url(group)
+      expect(assigns[:forms]).to eq forms
+    end
+
     context "with a group from another organisation" do
       it "is forbidden" do
         group = create :group, organisation: other_org
