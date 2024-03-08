@@ -5,12 +5,18 @@ module AuthenticationFeatureHelpers
 
   @cached_gds_sso_mock_invalid = ENV["GDS_SSO_MOCK_INVALID"]
 
+  @run_callbacks = false
+
+  def set_run_callbacks(value)
+    @run_callbacks = value
+  end
+
   def login_as(user, opts = {})
     if %i[gds_sso mock_gds_sso].include? Settings.auth_provider.to_sym
       ENV["GDS_SSO_MOCK_INVALID"] = @cached_gds_sso_mock_invalid
       GDS::SSO.test_user = user
     else
-      opts[:run_callbacks] ||= false # Callbacks are from gds-sso gem
+      opts[:run_callbacks] = @run_callbacks # Callbacks are from gds-sso gem
     end
 
     super user, opts
