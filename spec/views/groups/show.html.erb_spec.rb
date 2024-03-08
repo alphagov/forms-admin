@@ -71,4 +71,28 @@ RSpec.describe "groups/show", type: :view do
       ]
     end
   end
+
+  context "when the group is a trial group" do
+    let(:group) { create :group, :trial, name: "trial group" }
+
+    it "renders the status of the group" do
+      expect(rendered).to have_css ".govuk-caption-l", text: t("groups.status_caption.trial")
+    end
+
+    it "shows a notification banner" do
+      expect(rendered).to have_css ".govuk-notification-banner"
+    end
+  end
+
+  context "when the group is an active group" do
+    let(:group) { create :group, :active, name: "Active group" }
+
+    it "renders the status of the group" do
+      expect(rendered).to have_css ".govuk-caption-l", text: t("groups.status_caption.active")
+    end
+
+    it "does not show a notification banner" do
+      expect(rendered).not_to have_css ".govuk-notification-banner"
+    end
+  end
 end

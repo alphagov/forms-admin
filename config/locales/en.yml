@@ -250,6 +250,11 @@ en:
       trial_title: Trial groups
     show:
       edit_group_name: Change the name of this group
+      trial_banner:
+        body_html: |
+          <h2 class="govuk-heading-m">This is a ‘trial’ group</h2>
+          <p>You can create forms in this group and test them, but you cannot make them live.</p>
+        title: Important
     status_caption:
       active: Active group
       trial: Trial group
