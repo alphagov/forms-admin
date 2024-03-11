@@ -1,5 +1,4 @@
-<% set_page_title("Groups") %>
-<% content_for :back_link, govuk_back_link_to(root_path, t("back_link.forms")) %>
+<% set_page_title(t("page_titles.group_index")) %>
 
 <% content_for :notification_banner_content do %>
   <%= notice %>
@@ -7,19 +6,19 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
-      Groups
+    <h1 class="govuk-heading-l">
+      <%= t("page_titles.group_index") %>
     </h1>
 
-    <%= govuk_summary_list do |summary_list|
-      @groups.each do |group|
-        summary_list.with_row do |row|
-          row.with_value { govuk_link_to(group.name, group) }
-          row.with_action(text: "Change", href:edit_group_path(group), visually_hidden_text: 'name')
-        end
-      end
-    end %>
+    <%= render GroupListComponent::View.new(groups: @active_groups, title: t('groups.index.active_title'), empty_message: "You're not in any active groups.") %>
+    <%= render GroupListComponent::View.new(groups: @trial_groups, title: t('groups.index.trial_title'), empty_message: "You're not in any trial groups.") %>
 
-    <%= govuk_button_link_to "New group", new_group_path, class:"govuk-!-margin-bottom-3 govuk-!-margin-top-3" %>
+    <%= govuk_button_link_to t("groups.index.create_group"), new_group_path, class:"govuk-!-margin-top-3", secondary: true %>
+
+    <div class="govuk-!-margin-top-3">
+      <%= govuk_details(summary_text: t("groups.index.group_explainer_title")) do %>
+        <%= t("groups.index.group_explainer_body_html") %>
+      <% end %>
+    </div>
   </div>
 </div>

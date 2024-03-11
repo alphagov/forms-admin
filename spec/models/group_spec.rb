@@ -15,6 +15,16 @@ RSpec.describe Group, type: :model do
       group = build :group, organisation: nil
       expect(group).not_to be_valid
     end
+
+    it "cannot be set to an invalid status" do
+      group = build :group, status: :invalid
+      expect(group).to be_invalid
+    end
+
+    it "is invalid without a status" do
+      group = build :group, status: nil
+      expect(group).not_to be_valid
+    end
   end
 
   describe "before_create" do
@@ -155,6 +165,18 @@ RSpec.describe Group, type: :model do
 
         expect(described_class.for_user(user)).to eq [group1]
       end
+    end
+  end
+
+  describe "status" do
+    it "has a default status of trial" do
+      group = described_class.build(name: "Test Group")
+      expect(group.status).to eq("trial")
+    end
+
+    it "can be set to active" do
+      group = build :group, status: :active
+      expect(group).to be_valid
     end
   end
 end

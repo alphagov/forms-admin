@@ -16,6 +16,10 @@ RSpec.describe "groups/show", type: :view do
     expect(rendered).to have_css "h1.govuk-heading-l", text: "My Group"
   end
 
+  it "renders the status of the group" do
+    expect(rendered).to have_css ".govuk-caption-l", text: t("groups.status_caption.trial")
+  end
+
   it "has a link to the change group name page" do
     expect(rendered).to have_link "Change the name of this group", href: edit_group_path(group)
   end
@@ -65,6 +69,30 @@ RSpec.describe "groups/show", type: :view do
         [{ text: "Live", colour: "turquoise" }],
         [{ text: "Draft", colour: "yellow" }, { text: "Live", colour: "turquoise" }],
       ]
+    end
+  end
+
+  context "when the group is a trial group" do
+    let(:group) { create :group, :trial, name: "trial group" }
+
+    it "renders the status of the group" do
+      expect(rendered).to have_css ".govuk-caption-l", text: t("groups.status_caption.trial")
+    end
+
+    it "shows a notification banner" do
+      expect(rendered).to have_css ".govuk-notification-banner"
+    end
+  end
+
+  context "when the group is an active group" do
+    let(:group) { create :group, :active, name: "Active group" }
+
+    it "renders the status of the group" do
+      expect(rendered).to have_css ".govuk-caption-l", text: t("groups.status_caption.active")
+    end
+
+    it "does not show a notification banner" do
+      expect(rendered).not_to have_css ".govuk-notification-banner"
     end
   end
 end

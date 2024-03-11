@@ -5,7 +5,8 @@ class GroupsController < ApplicationController
 
   # GET /groups
   def index
-    @groups = policy_scope(Group)
+    @active_groups = policy_scope(Group).active
+    @trial_groups = policy_scope(Group).trial
   end
 
   # GET /groups/1
