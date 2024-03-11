@@ -125,4 +125,36 @@ RSpec.describe Group, type: :model do
       expect { group.destroy! }.to raise_error ActiveRecord::DeleteRestrictionError
     end
   end
+
+  describe "scopes" do
+    describe ".for_user" do
+      it "returns groups that the user is a member of" do
+        user = create :user
+        group1 = create :group
+        group2 = create :group
+        create :group
+        create :membership, user:, group: group1
+        create :membership, user:, group: group2
+
+        expect(described_class.for_user(user)).to eq [group1, group2]
+      end
+
+      it "returns an empty array if the user is not a member of any groups" do
+        user = create :user
+        create :group
+
+        expect(described_class.for_user(user)).to eq []
+      end
+
+      it "does not return groups that the user is not a member of" do
+        user = create :user
+        group1 = create :group
+        create :group
+        create :group
+        create :membership, user:, group: group1
+
+        expect(described_class.for_user(user)).to eq [group1]
+      end
+    end
+  end
 end
