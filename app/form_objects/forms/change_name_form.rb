@@ -14,4 +14,8 @@ class Forms::ChangeNameForm < BaseForm
     self.name = form.name
     self
   end
+
+  def to_partial_path
+    "form_objects/forms/change_name_form"
+  end
 end
