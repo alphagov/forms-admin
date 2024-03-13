@@ -7,19 +7,19 @@
         <%= t("groups.show.trial_banner.body_html") %>
       <% end %>
     <% end %>
-
-    <%= render @group %>
-
-    <div class="govuk-button-group">
-      <%= govuk_link_to(t(".edit_group_name"), edit_group_path(@group)) %>
-    </div>
-
-    <% if @forms.any? %>
-      <%= govuk_table(**FormListService.call(forms: @forms, current_user: @current_user, group: @group).data) %>
-    <% end %>
-
-    <div>
-      <%= govuk_button_to("Delete group", @group, method: :delete, warning: true, class: "govuk-!-margin-bottom-3 govuk-!-margin-top-3" ) %>
-    </div>
   </div>
+</div>
+
+<%= render @group %>
+
+<div class="govuk-button-group">
+  <%= govuk_link_to(t(".edit_group_name"), edit_group_path(@group)) %>
+</div>
+
+<% if @forms.any? %>
+  <%= govuk_table(**FormListService.call(forms: @forms, current_user: @current_user, group: @group).data) %>
+<% end %>
+
+<div>
+  <%= govuk_button_to("Delete group", @group, method: :delete, warning: true, class: "govuk-!-margin-bottom-3 govuk-!-margin-top-3" ) %>
 </div>
