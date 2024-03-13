@@ -5,10 +5,10 @@ class GroupPolicy < ApplicationPolicy
   alias_method :create?, :new?
 
   def show?
-    user.super_admin? || user.organisation_id == record.organisation_id
+    user.super_admin? || user.groups.include?(record)
   end
+
   alias_method :edit?, :show?
-  alias_method :index?, :show?
   alias_method :update?, :edit?
   alias_method :destroy?, :edit?
 
