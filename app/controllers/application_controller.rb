@@ -124,6 +124,8 @@ private
   end
 
   def auth_strategy_permitted?
+    return true if %w[mock_gds_sso developer].include? Settings.auth_provider
+
     @current_user.super_admin? ? PRIVILEGED_AUTH0_CONNECTION_STRATEGIES.include?(warden.session["auth0_connection_strategy"]) : true
   end
 end
