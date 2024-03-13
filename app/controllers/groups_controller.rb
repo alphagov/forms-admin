@@ -62,7 +62,7 @@ private
 
   # Use callbacks to share common setup or constraints between actions.
   def set_group
-    @group = Group.find_by(external_id: params[:group_id])
+    @group = Group.find_by(external_id: params[:id])
   end
 
   # Only allow a list of trusted parameters through.
