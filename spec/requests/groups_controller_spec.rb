@@ -13,8 +13,14 @@ require "rails_helper"
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/groups", type: :request do
-  let(:other_org) do
-    create :organisation, id: 2, slug: "other-org"
+  let(:member_group) do
+    create(:group, organisation: editor_user.organisation).tap do |group|
+      create(:membership, user: editor_user, group:)
+    end
+  end
+
+  let(:non_member_group) do
+    create :group
   end
 
   # This should return the minimal set of attributes required to create a valid
@@ -33,25 +39,27 @@ RSpec.describe "/groups", type: :request do
   end
 
   describe "GET /index" do
+    let(:member_groups) do
+      create_list :group, 3, organisation: editor_user.organisation do |group|
+        create :membership, user: editor_user, group:
+      end
+    end
+    let(:other_org) { create :organisation, id: 2, slug: "other-org" }
+    let(:other_org_groups) { create_list :group, 3, organisation: other_org }
+
     it "renders a successful response" do
-      create :group
       get groups_url
       expect(response).to be_successful
     end
 
     it "shows all groups the user is a member of" do
-      groups = create_list :group, 3, organisation: editor_user.organisation
-      groups.each do |group|
-        create :membership, user: editor_user, group:
-      end
-
       # groups outside of organisation or not a member of
       # should not be shown
-      create :group, organisation: editor_user.organisation
-      create_list :group, 3, organisation: other_org
+      non_member_group
+      other_org_groups
 
       get groups_url
-      expect(assigns(:trial_groups)).to eq groups
+      expect(assigns(:trial_groups)).to eq member_groups
     end
 
     context "when the user is a super-admin" do
@@ -60,54 +68,47 @@ RSpec.describe "/groups", type: :request do
       end
 
       it "shows all the groups" do
-        create_list :group, 3, organisation_id: 1
-
-        create :organisation, id: 2, slug: "other-org"
-        create_list :group, 3, organisation_id: 2
-
         get groups_url
-        expect(assigns(:trial_groups)).to eq Group.trial
+        expect(assigns(:trial_groups)).to eq member_groups + other_org_groups
       end
     end
   end
 
   describe "GET /show" do
-    it "renders a successful response" do
-      group = create :group
-      get group_url(group)
-      expect(response).to be_successful
-    end
-
-    it "shows the forms in the group" do
-      group = create :group
-      forms = build_list(:form, 3) { |form, i| form.id = i }
-
-      ActiveResource::HttpMock.respond_to do |mock|
-        headers = { "X-API-Token" => Settings.forms_api.auth_key, "Accept" => "application/json" }
-        forms.each do |form|
-          mock.get "/api/v1/forms/#{form.id}", headers, form.to_json, 200
-        end
+    context "when the user is a member of the group" do
+      it "renders a successful response" do
+        get group_url(member_group)
+        expect(response).to be_successful
       end
 
-      group.group_forms << forms.map { |form| GroupForm.create! form_id: form.id, group_id: group.id }
-      group.save!
+      it "shows the forms in the group" do
+        forms = build_list(:form, 3) { |form, i| form.id = i }
 
-      get group_url(group)
-      expect(assigns[:forms]).to eq forms
+        ActiveResource::HttpMock.respond_to do |mock|
+          headers = { "X-API-Token" => Settings.forms_api.auth_key, "Accept" => "application/json" }
+          forms.each do |form|
+            mock.get "/api/v1/forms/#{form.id}", headers, form.to_json, 200
+          end
+        end
+
+        member_group.group_forms << forms.map { |form| GroupForm.create! form_id: form.id, group_id: member_group.id }
+        member_group.save!
+
+        get group_url(member_group)
+        expect(assigns[:forms]).to eq forms
+      end
     end
 
-    context "with a group from another organisation" do
+    context "when user is not a member of group" do
       it "is forbidden" do
-        group = create :group, organisation: other_org
-        get group_url(group)
+        get group_url(non_member_group)
         expect(response).to have_http_status(:forbidden)
       end
 
-      context "when logged in as a super admin" do
+      context "and logged in as a super admin" do
         it "is allowed" do
-          group = create :group, organisation: other_org
           login_as_super_admin_user
-          get group_url(group)
+          get group_url(non_member_group)
           expect(response).to be_successful
         end
       end
@@ -122,24 +123,23 @@ RSpec.describe "/groups", type: :request do
   end
 
   describe "GET /edit" do
-    it "renders a successful response" do
-      group = create :group
-      get edit_group_url(group)
-      expect(response).to be_successful
+    context "when user is a member of group" do
+      it "renders a successful response" do
+        get edit_group_url(member_group)
+        expect(response).to be_successful
+      end
     end
 
-    context "with a group from another organisation" do
+    context "when user is not a member of group" do
       it "is forbidden" do
-        group = create :group, organisation: other_org
-        get edit_group_url(group)
+        get edit_group_url(non_member_group)
         expect(response).to have_http_status(:forbidden)
       end
 
       context "when logged in as a super admin" do
         it "is allowed" do
-          group = create :group, organisation: other_org
           login_as_super_admin_user
-          get edit_group_url(group)
+          get edit_group_url(non_member_group)
           expect(response).to be_successful
         end
       end
@@ -180,41 +180,38 @@ RSpec.describe "/groups", type: :request do
         { name: "new_group_name" }
       end
 
-      it "updates the requested group" do
-        group = create :group
-        patch group_url(group), params: { group: new_attributes }
-        group.reload
-        expect(group.name).to eq("new_group_name")
-      end
+      context "when user is a member of group" do
+        it "updates the requested group" do
+          patch group_url(member_group), params: { group: new_attributes }
+          member_group.reload
+          expect(member_group.name).to eq("new_group_name")
+        end
 
-      it "redirects to the group" do
-        group = create :group
-        patch group_url(group), params: { group: new_attributes }
-        group.reload
-        expect(response).to redirect_to(group_url(group))
+        it "redirects to the group" do
+          patch group_url(member_group), params: { group: new_attributes }
+          member_group.reload
+          expect(response).to redirect_to(group_url(member_group))
+        end
       end
     end
 
     context "with invalid parameters" do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        group = create :group
-        patch group_url(group), params: { group: invalid_attributes }
+        patch group_url(member_group), params: { group: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
 
-    context "with a group from another organisation" do
+    context "when user is not a member of the group" do
       it "is forbidden" do
-        group = create :group, organisation: other_org
-        patch group_url(group), params: { group: valid_attributes }
+        patch group_url(non_member_group), params: { group: valid_attributes }
         expect(response).to have_http_status(:forbidden)
       end
 
       context "when logged in as a super admin" do
         it "is allowed" do
-          group = create :group, organisation: other_org
           login_as_super_admin_user
-          patch group_url(group), params: { group: valid_attributes }
+          patch group_url(non_member_group), params: { group: valid_attributes }
           expect(response).to be_redirect
         end
       end
@@ -222,31 +219,30 @@ RSpec.describe "/groups", type: :request do
   end
 
   describe "DELETE /destroy" do
-    it "destroys the requested group" do
-      group = create :group
-      expect {
-        delete group_url(group)
-      }.to change(Group, :count).by(-1)
+    context "when user is a member of group" do
+      it "destroys the requested group" do
+        member_group
+        expect {
+          delete group_url(member_group)
+        }.to change(Group, :count).by(-1)
+      end
+
+      it "redirects to the groups list" do
+        delete group_url(member_group)
+        expect(response).to redirect_to(groups_url)
+      end
     end
 
-    it "redirects to the groups list" do
-      group = create :group
-      delete group_url(group)
-      expect(response).to redirect_to(groups_url)
-    end
-
-    context "with a group from another organisation" do
+    context "when user is not a member of the group" do
       it "is forbidden" do
-        group = create :group, organisation: other_org
-        delete group_url(group)
+        delete group_url(non_member_group)
         expect(response).to have_http_status(:forbidden)
       end
 
       context "when logged in as a super admin" do
         it "is allowed" do
-          group = create :group, organisation: other_org
           login_as_super_admin_user
-          delete group_url(group)
+          delete group_url(non_member_group)
           expect(response).to be_redirect
         end
       end

@@ -9,9 +9,9 @@ RSpec.describe GroupPolicy do
   context "when user is super_admin" do
     let(:user) { build :super_admin_user }
 
-    it { is_expected.to permit_actions(%i[create edit show destroy update index]) }
+    it { is_expected.to permit_actions(%i[create edit show destroy update]) }
 
-    context "and user belongs to a different organisation than the group" do
+    context "and user is not a member of the group" do
       let(:group) { build :group, organisation_id: user.organisation_id + 1 }
 
       it "allows show, edit, update or destroy" do
@@ -25,17 +25,23 @@ RSpec.describe GroupPolicy do
   end
 
   context "when user is editor" do
-    it { is_expected.to permit_actions(%i[create edit show destroy update index]) }
+    it "allow creating new groups" do
+      expect(policy).to permit_actions(%i[new create])
+    end
 
-    context "and user belongs to a different organisation than the group" do
-      let(:group) { build :group, organisation_id: user.organisation_id + 1 }
+    it "cannot view, list or modify group" do
+      expect(policy).to forbid_actions(%i[edit show destroy update])
+    end
 
-      it "does not allow show, edit, update or destroy" do
-        expect(policy).to forbid_actions(%i[show edit update destroy])
+    context "and user belongs to group" do
+      before { user.groups << group }
+
+      it "allows view, list and modify group" do
+        expect(policy).to permit_actions(%i[edit show destroy update])
       end
     end
 
-    it "scope resolves to groups for user in same organisation" do
+    it "scope resolves to only group user is a member of" do
       expect(GroupPolicy::Scope.new(user, Group).resolve).to eq(Group.for_user(user))
     end
   end
