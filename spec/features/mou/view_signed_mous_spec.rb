@@ -14,7 +14,8 @@ describe "Check which MOUs have been signed", type: :feature do
     end
 
     mou_signatures
-    login_as user
+
+    login_as_super_admin_user
   end
 
   it "super_admin's can see the MOUs page" do

@@ -5,6 +5,7 @@ RSpec.describe UsersController, type: :request do
     context "when logged in as a super admin" do
       before do
         login_as_super_admin_user
+
         get users_path
       end
 

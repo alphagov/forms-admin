@@ -71,7 +71,7 @@ private
   end
 
   def given_i_am_a_super_admin_in_the_government_digital_service_organisation
-    @user = create(:user, role: "super_admin", organisation: gds_org)
+    @user = create(:super_admin_user, organisation: gds_org)
     login_as @user
 
     visit edit_user_path(@user.id)
