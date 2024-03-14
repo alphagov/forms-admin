@@ -1,5 +1,3 @@
-require "govuk_forms_markdown"
-
 class DraftQuestion < ApplicationRecord
   include QuestionTextValidation
   include GuidanceValidation
