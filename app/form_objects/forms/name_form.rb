@@ -1,4 +1,4 @@
-class Forms::ChangeNameForm < BaseForm
+class Forms::NameForm < BaseForm
   attr_accessor :form, :name
 
   validates :name, presence: true
@@ -13,5 +13,9 @@ class Forms::ChangeNameForm < BaseForm
   def assign_form_values
     self.name = form.name
     self
+  end
+
+  def to_partial_path
+    "form_objects/forms/name_form"
   end
 end

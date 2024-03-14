@@ -1,13 +1,7 @@
-<% set_page_title(title_with_error_prefix(t('page_titles.change_name_form'), @change_name_form.errors.any?)) %>
+<% set_page_title(title_with_error_prefix(t('page_titles.change_name_form'), @name_form.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(root_path) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with(model: @change_name_form, url: new_form_path) do |f| %>
-      <% if @change_name_form&.errors.any? %>
-        <%= f.govuk_error_summary %>
-      <% end %>
-      <%= f.govuk_text_field :name, label: {  tag: 'h1', size: 'l' } %>
-      <%= f.govuk_submit t("save_and_continue") %>
-    <% end %>
+    <%= render @name_form, url: new_form_path %>
   </div>
 </div>

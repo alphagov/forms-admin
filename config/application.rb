@@ -31,6 +31,9 @@ module FormsAdmin
     # All forms should use GOVUKDesignSystemFormBuilder by default
     config.action_view.default_form_builder = GOVUKDesignSystemFormBuilder::FormBuilder
 
+    # Make it easier to share partials between controllers
+    config.action_view.prefix_partial_path_with_controller_namespace = false
+
     config.view_component.preview_paths = [Rails.root.join("spec/components")]
     config.view_component.preview_route = "/preview"
     config.view_component.preview_controller = "ComponentPreviewController"
