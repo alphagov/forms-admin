@@ -1,5 +1,3 @@
-require "govuk_forms_markdown"
-
 class MarkdownValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     return true if value.blank?

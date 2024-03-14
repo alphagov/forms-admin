@@ -1,5 +1,3 @@
-require "govuk_forms_markdown"
-
 class Pages::GuidanceForm < BaseForm
   include GuidanceValidation
 

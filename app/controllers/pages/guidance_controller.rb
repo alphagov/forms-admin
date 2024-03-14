@@ -1,5 +1,3 @@
-require "govuk_forms_markdown"
-
 class Pages::GuidanceController < PagesController
   def new
     guidance_form = Pages::GuidanceForm.new(page_heading: draft_question.page_heading,
