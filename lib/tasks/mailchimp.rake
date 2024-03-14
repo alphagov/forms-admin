@@ -4,9 +4,9 @@ require "MailchimpMarketing"
 namespace :mailchimp do
   desc "Synchronise Mailchimp audiences with the users in the database"
   task synchronize_audiences: :environment do
-    mailchimp_api_key = ENV["MAILCHIMP_API_KEY"]
-    mailchimp_server_prefix = ENV["MAILCHIMP_SERVER_PREFIX"]
-    mailchimp_lists = ENV["MAILCHIMP_LISTS"]
+    mailchimp_api_key = Settings.mailchimp.api_key
+    mailchimp_server_prefix = Settings.mailchimp.api_prefix
+    mailchimp_lists = Settings.mailchimp.lists
 
     puts "Mailchimp server prefix: #{mailchimp_server_prefix}"
     puts "Mailchimp lists: #{mailchimp_lists}"
@@ -17,14 +17,10 @@ namespace :mailchimp do
       server: mailchimp_server_prefix,
     })
 
-    list_ids = mailchimp_lists
-                  .split(",")
-                  .map(&:strip)
-
     db_email_addresses = User.pluck(:email).to_set
 
-    puts "There are #{list_ids.length} lists to synchronize"
-    list_ids.each do |list_id|
+    puts "There are #{mailchimp_lists.length} lists to synchronize"
+    mailchimp_lists.each do |list_id|
       puts "List id: #{list_id}"
 
       target_list = mailchimp.lists.get_list(list_id)

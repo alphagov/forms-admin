@@ -4,25 +4,24 @@ require "rails_helper"
 
 RSpec.describe "mailchimp.rake" do
   describe "synchronize_audiences" do
-    subject(:task){
+    subject(:task) do
       Rake::Task["mailchimp:synchronize_audiences"]
         .tap(&:reenable)
-    }
+    end
 
-    let(:mailchimp_client){
+    let(:mailchimp_client) do
       instance_double("MailchimpMarketing::Client")
-    }
+    end
 
-    let(:mailchimp_client_lists){
+    let(:mailchimp_client_lists) do
       instance_double("MailchimpMarketing::ListsApi")
-    }
+    end
 
     before do
       # Rake.application.options.trace = true
 
       Rake.application.rake_require "tasks/mailchimp"
       Rake::Task.define_task(:environment)
-
 
       create :user, email: "add@domain.org"
       create :user, email: "keep@domain.org"
@@ -63,23 +62,21 @@ RSpec.describe "mailchimp.rake" do
             "members" => [
               { "email_address" => "keep@domain.org" },
               { "email_address" => "remove@domain.org" },
-            ]
+            ],
           }
         when "list-2"
           {
             "members" => [
               { "email_address" => "keep@domain.org" },
               { "email_address" => "remove@domain.org" },
-            ]
+            ],
           }
         else
           raise "Unknown list id"
         end
       end
 
-      ENV["MAILCHIMP_API_KEY"] = "KEY"
-      ENV["MAILCHIMP_SERVER_PREFIX"] = "PREFIX"
-      ENV["MAILCHIMP_LISTS"] = "list-1,list-2"
+      ENV["SETTINGS__MAILCHIMP__API_KEY"] = "KEY"
     end
 
     it "adds users to MailChimp who appear in the database, but not in the mailing list" do
