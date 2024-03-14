@@ -2,8 +2,7 @@ require "rails_helper"
 
 describe "forms/show.html.erb" do
   let(:user) { build :editor_user }
-  let(:form) { OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft", pages:) }
-  let(:pages) { [{ id: 183, question_text: "What is your address?", hint_text: "", answer_type: "address", next_page: nil }] }
+  let(:form) { build :form, :with_pages, id: 1, name: "Form 1", form_slug: "form-1" }
 
   before do
     assign(:current_user, user)
@@ -32,9 +31,7 @@ describe "forms/show.html.erb" do
     expect(rendered).to have_selector(".app-task-list__summary", text: "You’ve completed 12 of 20 tasks.")
   end
 
-  context "when form states is a draft" do
-    let(:form) { OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft", pages: []) }
-
+  context "when form state is draft" do
     it "rendered draft tag " do
       expect(rendered).to have_css(".govuk-tag.govuk-tag--yellow", text: "Draft")
     end
@@ -44,8 +41,8 @@ describe "forms/show.html.erb" do
     end
   end
 
-  context "when form states is a live" do
-    let(:form) { OpenStruct.new(id: 2, name: "Form 2", form_slug: "form-2", status: "live", has_live_version: true, pages: []) }
+  context "when form state is live or draft_live" do
+    let(:form) { build :form, :live, id: 2 }
 
     it "has a back link to the live form page" do
       expect(view.content_for(:back_link)).to have_link("Back", href: "/forms/2/live")
