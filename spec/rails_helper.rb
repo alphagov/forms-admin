@@ -10,6 +10,8 @@ ENV["RACK_ENV"] ||= "test"
 ENV["RAILS_ENV"] ||= "test"
 
 require_relative "../config/environment"
+# Prevent specs from calling a running forms-api instance
+ActiveResource::HttpMock.disable_net_connection!
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 
