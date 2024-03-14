@@ -3,7 +3,7 @@ module Forms
     after_action :verify_authorized, except: :new
 
     def new
-      @change_name_form = ChangeNameForm.new
+      @name_form = NameForm.new
     end
 
     def create
@@ -19,10 +19,10 @@ module Forms
       form = Form.new(form_args)
 
       authorize form, :can_view_form?
-      @change_name_form = ChangeNameForm.new(change_name_form_params(form))
+      @name_form = NameForm.new(name_form_params(form))
 
-      if @change_name_form.submit
-        redirect_to form_path(@change_name_form.form)
+      if @name_form.submit
+        redirect_to form_path(@name_form.form)
       else
         render :new
       end
@@ -30,15 +30,15 @@ module Forms
 
     def edit
       authorize current_form, :can_view_form?
-      @change_name_form = ChangeNameForm.new(form: current_form).assign_form_values
+      @name_form = NameForm.new(form: current_form).assign_form_values
     end
 
     def update
       authorize current_form, :can_view_form?
-      @change_name_form = ChangeNameForm.new(change_name_form_params(current_form))
+      @name_form = NameForm.new(name_form_params(current_form))
 
-      if @change_name_form.submit
-        redirect_to form_path(@change_name_form.form), success: t("banner.success.form.change_name")
+      if @name_form.submit
+        redirect_to form_path(@name_form.form), success: t("banner.success.form.change_name")
       else
         render :edit
       end
@@ -46,8 +46,8 @@ module Forms
 
   private
 
-    def change_name_form_params(form)
-      params.require(:forms_change_name_form).permit(:name).merge(form:)
+    def name_form_params(form)
+      params.require(:forms_name_form).permit(:name).merge(form:)
     end
   end
 end

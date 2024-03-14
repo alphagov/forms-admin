@@ -1,5 +1,5 @@
-<%= form_with(model: @change_name_form, url:) do |f| %>
-  <% if @change_name_form&.errors.any? %>
+<%= form_with(model: @name_form, url:) do |f| %>
+  <% if @name_form&.errors.any? %>
     <%= f.govuk_error_summary %>
   <% end %>
   <%= f.govuk_text_field :name, label: {  tag: 'h1', size: 'l' } %>
