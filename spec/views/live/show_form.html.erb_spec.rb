@@ -5,11 +5,17 @@ describe "live/show_form.html.erb", feature_metrics_for_form_creators_enabled: f
   let(:what_happens_next) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:form_metadata) { OpenStruct.new(has_draft_version: false) }
   let(:form) { build(:form, :live, id: 2, declaration_text: declaration, what_happens_next_markdown: what_happens_next, live_at: 1.week.ago) }
+  let(:group) { create(:group, name: "Group 1") }
   let(:metrics_data) { nil }
 
   before do
     allow(view).to receive(:live_form_pages_path).and_return("/live-form-pages-path")
     allow(form).to receive(:metrics_data).and_return(metrics_data)
+
+    if group.present?
+      GroupForm.create!(form_id: form.id, group_id: group.id)
+    end
+
     render(template: "live/show_form", locals: { form_metadata:, form: })
   end
 
@@ -17,8 +23,8 @@ describe "live/show_form.html.erb", feature_metrics_for_form_creators_enabled: f
     expect(view.content_for(:title)).to have_content(form.name.to_s)
   end
 
-  it "back link is set to root" do
-    expect(view.content_for(:back_link)).to have_link("Back to your forms", href: "/")
+  it "back link is set to group page" do
+    expect(view.content_for(:back_link)).to have_link("Back to Group 1", href: group_path(group))
   end
 
   it "contains page heading" do
@@ -132,6 +138,14 @@ describe "live/show_form.html.erb", feature_metrics_for_form_creators_enabled: f
 
     it "renders the metrics summary component" do
       expect(rendered).to have_text(I18n.t("metrics_summary.description.complete_week"))
+    end
+  end
+
+  context "when form is not in a group" do
+    let(:group) { nil }
+
+    it "back link is set to root" do
+      expect(view.content_for(:back_link)).to have_link("Back to your forms", href: "/")
     end
   end
 end
