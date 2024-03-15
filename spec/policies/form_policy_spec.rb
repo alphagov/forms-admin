@@ -4,7 +4,7 @@ describe FormPolicy do
   subject(:policy) { described_class.new(user, form) }
 
   let(:organisation) { build :organisation, id: 1, slug: "gds" }
-  let(:form) { build :form, organisation_id: 1, creator_id: 123 }
+  let(:form) { build :form, id: 1, organisation_id: 1, creator_id: 123 }
   let(:user) { build :editor_user, organisation: }
 
   context "with no organisation set" do
@@ -74,6 +74,32 @@ describe FormPolicy do
           let(:user) { build :user, role: :trial, organisation_slug: "gds", id: 321 }
 
           it { is_expected.to forbid_actions(%i[can_view_form]) }
+        end
+      end
+    end
+
+    context "when a form is in a group" do
+      let(:group) { create(:group, name: "Group 1", organisation:) }
+
+      before do
+        GroupForm.create!(form_id: form.id, group_id: group.id)
+      end
+
+      context "and user is in the group" do
+        before do
+          Membership.create!(user:, group:, added_by: user)
+        end
+
+        it { is_expected.to permit_actions(%i[can_view_form]) }
+      end
+
+      context "and user is not in the group" do
+        it { is_expected.to forbid_actions(%i[can_view_form]) }
+
+        context "but user is a super_admin" do
+          let(:user) { build :super_admin_user, organisation: }
+
+          it { is_expected.to permit_actions(%i[can_view_form]) }
         end
       end
     end

@@ -10,6 +10,10 @@ class Form < ActiveResource::Base
     find(:one, from: "#{prefix}forms/#{id}/live")
   end
 
+  def group
+    group_form&.group
+  end
+
   def qualifying_route_pages
     Page.qualifying_route_pages(pages)
   end
@@ -110,5 +114,9 @@ private
 
   def email_task_status_service
     @email_task_status_service ||= EmailTaskStatusService.new(form: self)
+  end
+
+  def group_form
+    GroupForm.find_by_form_id(id)
   end
 end

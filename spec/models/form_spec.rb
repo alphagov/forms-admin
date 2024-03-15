@@ -354,4 +354,16 @@ describe Form, type: :model do
       end
     end
   end
+
+  describe "#group" do
+    it "returns nil if form is not in a group" do
+      expect(form.group).to be_nil
+    end
+
+    it "returns the group if form is in a group" do
+      group = create :group
+      GroupForm.create!(form_id: form.id, group_id: group.id)
+      expect(form.group).to eq group
+    end
+  end
 end
