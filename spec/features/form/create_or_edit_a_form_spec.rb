@@ -2,7 +2,7 @@ require "rails_helper"
 
 feature "Create or edit a form", type: :feature do
   let(:form) { build :form, :with_active_resource, id: 1, name: "Apply for a juggling license" }
-  let(:org_forms) { [] }
+  let(:group) { create :group, name: "Group 1" }
 
   before do
     login_as_editor_user
@@ -13,23 +13,44 @@ feature "Create or edit a form", type: :feature do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms?organisation_id=1", headers, org_forms.to_json, 200
         mock.post "/api/v1/forms", post_headers, { id: 1 }.to_json
         mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
     end
 
-    scenario "As a form creator" do
-      when_i_am_viewing_home_page
-      and_i_click_create_a_form
-      and_i_fill_in_the_form_name
-      then_i_should_have_a_draft_form
+    context "and in a group" do
+      before do
+        create(:membership, user: editor_user, group:)
+      end
+
+      scenario "As a form creator" do
+        when_i_am_viewing_a_group_page
+        and_i_click_create_a_form
+        and_i_fill_in_the_form_name
+        then_i_should_have_a_draft_form
+      end
+    end
+
+    context "and not in a group" do
+      let(:org_forms) { [] }
+
+      before do
+        ActiveResource::HttpMock.respond_to(false) do |mock|
+          mock.get "/api/v1/forms?organisation_id=1", headers, org_forms.to_json, 200
+        end
+      end
+
+      scenario "As a form creator" do
+        when_i_am_viewing_home_page
+        and_i_click_create_a_form
+        and_i_fill_in_the_form_name
+        then_i_should_have_a_draft_form
+      end
     end
   end
 
   context "when editing an existing form" do
-    let(:org_forms) { [form] }
     let(:pages) { build_list :page, 5, form_id: form.id }
     let(:updated_form) do
       updated_form = form
@@ -41,7 +62,6 @@ feature "Create or edit a form", type: :feature do
       form.name = "Another form of juggling"
 
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms?organisation_id=1", headers, org_forms.to_json, 200
         mock.put "/api/v1/forms/1", post_headers
         mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1", headers, updated_form.to_json, 200
@@ -49,11 +69,36 @@ feature "Create or edit a form", type: :feature do
       end
     end
 
-    scenario "As a form creator" do
-      when_i_am_viewing_home_page
-      and_i_view_an_existing_form
-      then_i_edit_the_name_of_the_form
-      and_the_form_name_is_updated
+    context "and in a group" do
+      before do
+        create(:membership, user: editor_user, group:)
+
+        GroupForm.create!(form_id: form.id, group:)
+      end
+
+      scenario "As a form creator" do
+        when_i_am_viewing_a_group_page
+        and_i_view_an_existing_form
+        then_i_edit_the_name_of_the_form
+        and_the_form_name_is_updated
+      end
+    end
+
+    context "and not in a group" do
+      let(:org_forms) { [form] }
+
+      before do
+        ActiveResource::HttpMock.respond_to(false) do |mock|
+          mock.get "/api/v1/forms?organisation_id=1", headers, org_forms.to_json, 200
+        end
+      end
+
+      scenario "As a form creator" do
+        when_i_am_viewing_home_page
+        and_i_view_an_existing_form
+        then_i_edit_the_name_of_the_form
+        and_the_form_name_is_updated
+      end
     end
   end
 
@@ -62,6 +107,12 @@ private
   def when_i_am_viewing_home_page
     visit root_path
     expect(page.find("h1")).to have_text "GOV.UK Forms"
+    expect_page_to_have_no_axe_errors(page)
+  end
+
+  def when_i_am_viewing_a_group_page
+    visit group_path(group)
+    expect(page.find("h1")).to have_text "Group 1"
     expect_page_to_have_no_axe_errors(page)
   end
 

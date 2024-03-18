@@ -95,4 +95,11 @@ RSpec.describe "groups/show", type: :view do
       expect(rendered).not_to have_css ".govuk-notification-banner"
     end
   end
+
+  it "has a start button to create a new form" do
+    render
+    expect(rendered).to have_css ".govuk-button--start", text: "Create a form" do |start_button|
+      expect(start_button).to match_selector :link, href: new_group_form_path(group)
+    end
+  end
 end
