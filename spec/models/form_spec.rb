@@ -16,6 +16,29 @@ describe Form, type: :model do
     end
   end
 
+  describe "#destroy" do
+    context "when form is in a group" do
+      it "destroys the group" do
+        group = create :group
+        GroupForm.create!(group:, form_id: form.id)
+
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.post "/api/v1/forms", post_headers, { id: 1 }.to_json, 200
+          mock.delete "/api/v1/forms/1", delete_headers, nil, 204
+        end
+
+        # form must exist for ActiveResource to delete it
+        form.save!
+
+        expect {
+          form.destroy
+        }.to change(GroupForm, :count).by(-1)
+
+        expect(GroupForm.find_by(form_id: form.id)).to be_nil
+      end
+    end
+  end
+
   describe "#status" do
     context "when form has not been made live" do
       it "returns 'draft'" do

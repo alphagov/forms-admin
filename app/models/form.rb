@@ -106,6 +106,10 @@ class Form < ActiveResource::Base
     nil
   end
 
+  after_destroy do
+    group_form&.destroy
+  end
+
 private
 
   def has_routing_conditions

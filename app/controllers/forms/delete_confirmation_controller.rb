@@ -63,7 +63,7 @@ module Forms
     end
 
     def delete_form(form)
-      success_url = root_path
+      success_url = form.group.present? ? group_path(form.group) : root_path
 
       authorize form, :can_view_form?
       if form.destroy

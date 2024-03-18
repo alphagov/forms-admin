@@ -168,22 +168,33 @@ RSpec.describe FormsController, type: :request do
 
   describe "Destroying an existing form" do
     describe "Given a valid form" do
+      let(:group) { create :group }
+
       before do
         ActiveResourceMock.mock_resource(form,
                                          {
                                            read: { response: form, status: 200 },
                                            delete: { response: {}, status: 200 },
                                          })
+        GroupForm.create!(group:, form_id: form.id) if group.present?
         allow(Pundit).to receive(:authorize).and_return(true)
         delete destroy_form_path(form_id: 2, forms_delete_confirmation_form: { confirm_deletion: "true" })
       end
 
-      it "Redirects you to the home screen" do
-        expect(response).to redirect_to(root_path)
+      it "redirects you to the group page" do
+        expect(response).to redirect_to(group_path(group))
       end
 
-      it "Deletes the form on the API" do
+      it "deletes the form on the API" do
         expect(form).to have_been_deleted
+      end
+
+      context "when the form is not in a group" do
+        let(:group) { nil }
+
+        it "redirects to the home page" do
+          expect(response).to redirect_to(root_path)
+        end
       end
     end
   end
