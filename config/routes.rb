@@ -133,6 +133,7 @@ Rails.application.routes.draw do
   end
 
   namespace :account do
+    resource :name, only: %i[edit update]
     resource :organisation, only: %i[edit update]
   end
 

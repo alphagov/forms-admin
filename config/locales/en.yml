@@ -8,6 +8,10 @@ en:
   activemodel:
     errors:
       models:
+        account/name_form:
+          attributes:
+            name:
+              blank: Enter your name
         account/organisation_form:
           attributes:
             organisation_id:
@@ -340,6 +344,8 @@ en:
           radio: Ask the question the way you would in person. For example, ‘What country do you live in?’
           single_line: Ask the question the way you would in person. For example, ‘What’s your reference number?’
     label:
+      account_name_form:
+        name: Enter your full name
       account_organisation_form:
         organisation_id: Select your organisation
       forms_make_changes_live_form:
@@ -662,6 +668,7 @@ en:
       only_one_option: Selection from a list, one option only.
   page_titles:
     access_denied: You do not have permission to access GOV.UK Forms
+    account_name: Enter your name
     account_organisation: Select your organisation
     add_guidance: Add guidance
     address_settings: What kind of addresses do you expect to receive?
