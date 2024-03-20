@@ -18,10 +18,10 @@
     <%= table.with_body do |body|
       users.each do |user|
         body.with_row do |row|
+          row.with_cell( text: user.name || t("users.index.name_blank"))
           row.with_cell do
-            govuk_link_to(user.name || t("users.index.name_blank"), edit_user_path(user))
+            govuk_link_to(user.email, edit_user_path(user))
           end
-          row.with_cell( text: user.email)
           row.with_cell( text: user.organisation&.name || t("users.index.organisation_blank"))
           row.with_cell( text: t("users.roles.#{user.role}.name"))
           row.with_cell( text: t("users.has_access.#{user.has_access}.name"))
