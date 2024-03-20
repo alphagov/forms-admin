@@ -41,4 +41,20 @@ RSpec.describe OrganisationsFetcher do
 
     expect(organisation.slug).to eq "test-organisation"
   end
+
+  it "updates an existing organisation when it is closed" do
+    organisation = create :organisation, slug: "test-org"
+
+    organisation_details = organisation_details_for_slug("test-organisation", organisation.govuk_content_id)
+    organisation_details[:details][:govuk_status] = "closed"
+
+    stub_organisation_api_has_organisations_with_bodies([
+      organisation_details,
+    ])
+
+    organisations_fetcher.call
+    organisation.reload
+
+    expect(organisation.closed).to be true
+  end
 end
