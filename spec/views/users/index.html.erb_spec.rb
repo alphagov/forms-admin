@@ -16,12 +16,12 @@ describe "users/index.html.erb" do
     expect(rendered).to have_css("h1.govuk-heading-l", text: /Users/)
   end
 
-  it "contains a link to edit with name" do
-    expect(rendered).to have_link(users.first.name, href: edit_user_path(users.first))
+  it "contains the user's name" do
+    expect(rendered).to have_text(users.first.name)
   end
 
-  it "contains email" do
-    expect(rendered).to have_text(users.first.email)
+  it "contains the user's email as a link to the edit page" do
+    expect(rendered).to have_link(users.first.email, href: edit_user_path(users.first))
   end
 
   it "contains organisation name" do
