@@ -44,5 +44,14 @@ RSpec.describe Organisation, type: :model do
         expect(organisations_with_users).to eq([organisation1, organisation2])
       end
     end
+
+    describe ".not_closed" do
+      it "returns organisations which are not closed" do
+        organisation = create :organisation
+        create :organisation, slug: "closed-org", closed: true
+
+        expect(described_class.not_closed).to eq [organisation]
+      end
+    end
   end
 end

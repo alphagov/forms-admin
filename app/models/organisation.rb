@@ -6,5 +6,6 @@ class Organisation < ApplicationRecord
 
   has_many :mou_signatures
 
+  scope :not_closed, -> { where(closed: false) }
   scope :with_users, -> { joins(:users).distinct.order(:name) }
 end
