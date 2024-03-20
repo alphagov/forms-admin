@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   before_action :check_maintenance_mode_is_enabled
   before_action :authenticate_and_check_access
   before_action :set_paper_trail_whodunnit
+  before_action :check_user_account_complete
 
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
@@ -123,5 +124,13 @@ private
     return true if %w[mock_gds_sso developer].include? Settings.auth_provider
 
     @current_user.super_admin? ? PRIVILEGED_AUTH0_CONNECTION_STRATEGIES.include?(warden.session["auth0_connection_strategy"]) : true
+  end
+
+  def check_user_account_complete
+    return unless current_user
+
+    return redirect_to edit_account_organisation_path if current_user.organisation.blank?
+
+    redirect_to edit_account_name_path if current_user.name.blank?
   end
 end

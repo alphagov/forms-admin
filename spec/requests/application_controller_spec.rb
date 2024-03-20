@@ -147,4 +147,46 @@ RSpec.describe ApplicationController, type: :request do
       expect(response).to have_http_status(:ok)
     end
   end
+
+  describe "check_user_account_complete" do
+    before do
+      login_as user
+    end
+
+    context "when the user does not have an organisation or name" do
+      let(:user) { create :user, :with_no_org, name: nil }
+
+      it "redirects to the account organisation page" do
+        get root_path
+        expect(response).to redirect_to(edit_account_organisation_path)
+      end
+    end
+
+    context "when the user has an organisation but no name" do
+      let(:user) { create :user, name: nil }
+
+      it "redirects to the account name page" do
+        get root_path
+        expect(response).to redirect_to(edit_account_name_path)
+      end
+    end
+
+    context "when the user has a name but no organisation" do
+      let(:user) { create :user, :with_no_org }
+
+      it "redirects to the account organisation page" do
+        get root_path
+        expect(response).to redirect_to(edit_account_organisation_path)
+      end
+    end
+
+    context "when the user has an organisation and name" do
+      let(:user) { editor_user }
+
+      it "does not redirect" do
+        get root_path
+        expect(response).to have_http_status(:ok)
+      end
+    end
+  end
 end
