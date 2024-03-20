@@ -52,4 +52,21 @@ RSpec.describe "organisations.rake" do
       end
     end
   end
+
+  describe "organisations:fetch" do
+    subject(:task) do
+      Rake::Task["organisations:fetch"]
+        .tap(&:reenable) # make sure task is invoked every time
+    end
+
+    it "fetches organisations" do
+      organisations_fetcher = instance_double(OrganisationsFetcher)
+      allow(organisations_fetcher).to receive(:call).and_return(nil)
+      allow(OrganisationsFetcher).to receive(:new).and_return(organisations_fetcher)
+
+      task.invoke
+
+      expect(organisations_fetcher).to have_received(:call).once
+    end
+  end
 end
