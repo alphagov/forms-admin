@@ -14,3 +14,9 @@ forms_runner:
 
 # No default strategy as Warden test mode is used
 auth_provider: ""
+
+mailchimp:
+  api_prefix: "prefix"
+  lists:
+    - list-1
+    - list-2

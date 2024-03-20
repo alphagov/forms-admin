@@ -65,3 +65,8 @@ basic_auth:
     govuk_content_id: "00000000-0000-0000-0000-000000000000"
 
 forms_env: local
+
+mailchimp:
+  api_key:
+  api_prefix: changme
+  lists: [changeme]

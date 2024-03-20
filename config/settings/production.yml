@@ -1,2 +1,8 @@
 # Use real authentication
 auth_provider: gds_sso
+
+mailchimp:
+  api_prefix: "us12"
+  lists:
+    - c9cc8511c6
+    - ef5e72c003
