@@ -103,6 +103,10 @@ class ApplicationController < ActionController::Base
     @current_live_form ||= Form.find_live(params[:form_id])
   end
 
+  def current_archived_form
+    @current_archived_form ||= Form.find_archived(params[:form_id])
+  end
+
 private
 
   def authenticate_and_check_access

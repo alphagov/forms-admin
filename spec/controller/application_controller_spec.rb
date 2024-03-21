@@ -3,6 +3,9 @@ require "rails_helper"
 describe ApplicationController, type: :controller do
   subject(:application_controller) { described_class.new }
 
+  let(:id) { 1 }
+  let(:form) { build :form }
+
   describe "#user_ip" do
     [
       ["", nil],
@@ -78,28 +81,56 @@ describe ApplicationController, type: :controller do
   end
 
   describe "#current_form" do
-    let(:form) { build :form, id: 1 }
-
-    before do
-      ActiveResource::HttpMock.respond_to(false) do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
-      end
-    end
-
     it "returns the current form" do
-      params = ActionController::Parameters.new(form_id: 1)
-      allow(Form).to receive(:find).and_return(form)
+      params = ActionController::Parameters.new(form_id: id)
+      allow(Form).to receive(:find).with(id).and_return(form)
       allow(controller).to receive(:params).and_return(params)
       expect(controller.current_form).to eq form
     end
 
     it "memorizes the find form request so it doesn't have to repeat the calls" do
-      params = ActionController::Parameters.new(form_id: 1)
-      allow(Form).to receive(:find).and_return(form)
+      params = ActionController::Parameters.new(form_id: id)
+      allow(Form).to receive(:find).with(id).and_return(form)
       allow(controller).to receive(:params).and_return(params)
       controller.current_form
       controller.current_form
       expect(Form).to have_received(:find).exactly(1).times
+    end
+  end
+
+  describe "#current_live_form" do
+    it "returns the current live form" do
+      params = ActionController::Parameters.new(form_id: id)
+      allow(Form).to receive(:find_live).with(id).and_return(form)
+      allow(controller).to receive(:params).and_return(params)
+      expect(controller.current_live_form).to eq form
+    end
+
+    it "memorizes the find form request so it doesn't have to repeat the calls" do
+      params = ActionController::Parameters.new(form_id: id)
+      allow(Form).to receive(:find_live).with(id).and_return(form)
+      allow(controller).to receive(:params).and_return(params)
+      controller.current_live_form
+      controller.current_live_form
+      expect(Form).to have_received(:find_live).exactly(1).times
+    end
+  end
+
+  describe "#current_archived_form" do
+    it "returns the current live form" do
+      params = ActionController::Parameters.new(form_id: id)
+      allow(Form).to receive(:find_archived).with(id).and_return(form)
+      allow(controller).to receive(:params).and_return(params)
+      expect(controller.current_archived_form).to eq form
+    end
+
+    it "memorizes the find form request so it doesn't have to repeat the calls" do
+      params = ActionController::Parameters.new(form_id: id)
+      allow(Form).to receive(:find_archived).with(id).and_return(form)
+      allow(controller).to receive(:params).and_return(params)
+      controller.current_archived_form
+      controller.current_archived_form
+      expect(Form).to have_received(:find_archived).exactly(1).times
     end
   end
 end
