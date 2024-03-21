@@ -31,6 +31,11 @@ Rails.application.routes.draw do
       get "/pages" => "forms/live#show_pages", as: :live_form_pages
     end
 
+    scope "/archived" do
+      get "/" => "forms/archived#show_form", as: :archived_form
+      get "/pages" => "forms/archived#show_pages", as: :archived_form_pages
+    end
+
     get "/submission-email" => "forms/submission_email#new", as: :submission_email_form
     post "/submission-email" => "forms/submission_email#create"
     get "/confirm-submission-email" => "forms/submission_email#submission_email_code", as: :submission_email_code

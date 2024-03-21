@@ -445,6 +445,26 @@ en:
       Any changes you make to a live form will be updated in the form
       immediately.
     notification_title: Important
+  made_live_form:
+    contact_details: Your form’s contact details for support
+    declaration: Declaration
+    declaration_description: Your form’s declaration is shown to people when they have answered all the questions, just before they submit the form.
+    draft_create: Create a draft to edit
+    draft_edit: Edit the draft of this form
+    previous_form_url: Previous form URL
+    privacy_policy_link: Privacy policy link
+    questions: Questions
+    questions_link:
+      one: View your form’s 1 question
+      other: View your form’s %{count} questions
+    submission_email: Submission email
+    support_email: Email
+    support_phone: Phone
+    support_url: Support contact online
+    what_happens_next: What happens next information
+    what_happens_next_description: Information about what happens next is shown to people when they have completed and submitted a form.
+    what_is_declaration: What is a declaration?
+    what_is_what_happens_next: What is ‘what happens next information’?
   maintenance:
     body_html: |
       <p>You’ll be able to use the service later.</p>

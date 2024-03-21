@@ -59,11 +59,10 @@ private
   end
 
   def form_name_link(form)
-    if form.has_live_version
-      govuk_link_to(form.name, live_form_path(form.id))
-    else
-      govuk_link_to(form.name, form_path(form.id))
-    end
+    return govuk_link_to(form.name, live_form_path(form.id)) if form.has_live_version
+    return govuk_link_to(form.name, archived_form_path(form.id)) if form.is_archived?
+
+    govuk_link_to(form.name, form_path(form.id))
   end
 
   def form_status_tags(form)
