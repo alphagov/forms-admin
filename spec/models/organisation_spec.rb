@@ -54,4 +54,21 @@ RSpec.describe Organisation, type: :model do
       end
     end
   end
+
+  describe "#name_with_abbreviation" do
+    it "uses abbreviation when it is not the same as name" do
+      organisation = build :organisation, name: "An Organisation", abbreviation: "ABBR"
+      expect(organisation.name_with_abbreviation).to eq "An Organisation – ABBR"
+    end
+
+    it "does not use abbreviation when it is not present" do
+      organisation = build :organisation, name: "An Organisation", abbreviation: "   "
+      expect(organisation.name_with_abbreviation).to eq organisation.name
+    end
+
+    it "does not use abbreviation when it is present but the same as name" do
+      organisation = build :organisation, name: "An Organisation", abbreviation: "An Organisation"
+      expect(organisation.name_with_abbreviation).to eq organisation.name
+    end
+  end
 end
