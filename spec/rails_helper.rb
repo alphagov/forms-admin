@@ -14,6 +14,8 @@ require_relative "../config/environment"
 ActiveResource::HttpMock.disable_net_connection!
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
+# Stop Capybara from outputting in test logs
+Capybara.server = :puma, { Silent: true }
 
 require "rspec/rails"
 
