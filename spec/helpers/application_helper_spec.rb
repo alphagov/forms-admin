@@ -15,8 +15,14 @@ RSpec.describe ApplicationHelper, type: :helper do
     end
 
     context "with mode set to preview_live" do
-      it "returns url to the form-runner's live form" do
+      it "returns url to the form-runner's live preview form" do
         expect(helper.link_to_runner("example.com", 2, "garden-form-slug", mode: :preview_live)).to eq "example.com/preview-live/2/garden-form-slug"
+      end
+    end
+
+    context "with mode set to preview_archived" do
+      it "returns url to the form-runner's archived preview form" do
+        expect(helper.link_to_runner("example.com", 2, "garden-form-slug", mode: :preview_archived)).to eq "example.com/preview-archived/2/garden-form-slug"
       end
     end
 
