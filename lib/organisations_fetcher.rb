@@ -31,6 +31,7 @@ private
       govuk_content_id:,
       slug:,
       name: organisation_data[:title],
+      abbreviation: organisation_data[:details][:abbreviation],
       closed: organisation_data[:details][:govuk_status] == "closed",
     }
 
