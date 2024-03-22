@@ -10,5 +10,9 @@ module Forms
       authorize current_form, :can_view_form?
       render template: "live/show_pages", locals: { form: current_live_form }
     end
+
+    def current_live_form
+      @current_live_form ||= Form.find_live(params[:form_id])
+    end
   end
 end
