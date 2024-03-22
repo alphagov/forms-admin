@@ -31,6 +31,7 @@ private
       govuk_content_id:,
       slug:,
       name: organisation_data[:title],
+      closed: organisation_data[:details][:govuk_status] == "closed",
     }
 
     organisation.update!(update_data)

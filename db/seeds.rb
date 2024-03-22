@@ -26,6 +26,7 @@ if HostingEnvironment.local_development? && User.none?
   test_org = FactoryBot.create :organisation, slug: "test-org"
   FactoryBot.create :organisation, slug: "ministry-of-tests"
   FactoryBot.create :organisation, slug: "department-for-testing"
+  FactoryBot.create :organisation, slug: "closed-org", closed: true
 
   # create extra editors
   FactoryBot.create_list :editor_user, 3, organisation: test_org
