@@ -6,15 +6,15 @@ RSpec.describe Forms::ArchivedController, type: :request do
 
   before do
     login_as_editor_user
+
+    ActiveResource::HttpMock.respond_to do |mock|
+      mock.get "/api/v1/forms/#{id}", headers, form.to_json, 200
+      mock.get "/api/v1/forms/#{id}/archived", headers, form.to_json, 200
+    end
   end
 
   describe "#show_form" do
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/#{id}", headers, form.to_json, 200
-        mock.get "/api/v1/forms/#{id}/archived", headers, form.to_json, 200
-      end
-
       get archived_form_path(id)
     end
 
@@ -25,8 +25,18 @@ RSpec.describe Forms::ArchivedController, type: :request do
       expect(ActiveResource::HttpMock.requests).to include pages_request
     end
 
-    it "renders the live template and no param" do
-      expect(response).to render_template("forms/archived/show_form")
+    it "renders the show archived form template" do
+      expect(response).to render_template(:show_form)
+    end
+  end
+
+  describe "#show_pages" do
+    before do
+      get archived_form_pages_path(id)
+    end
+
+    it "renders the show archived form pages template" do
+      expect(response).to render_template(:show_pages)
     end
   end
 end
