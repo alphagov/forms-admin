@@ -50,7 +50,7 @@
       <%= render DfE::Autocomplete::View.new(
         f,
         attribute_name: :organisation_id,
-        form_field: f.govuk_collection_select(:organisation_id, Organisation.order(:slug), :id, :name_with_abbreviation,
+        form_field: f.govuk_collection_select(:organisation_id, Organisation.order(:name), :id, :name_with_abbreviation,
                                               class: ['govuk-!-width-three-quarters'],
                                               options: { prompt: t('users.edit.organisation_prompt') },
                                               label: { text: t('users.edit.organisation'), size: 'm', tag: 'h2' },
