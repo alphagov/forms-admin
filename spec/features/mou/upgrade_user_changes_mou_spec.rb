@@ -37,11 +37,12 @@ private
 
   def then_i_see_the_mou_with_no_organisation
     expect(page).to have_text mou_signature.user.name
+    expect(page).to have_text mou_signature.user.email
     expect(page).to have_text "No organisation"
   end
 
   def then_i_visit_the_users_page
-    click_link mou_signature.user.name
+    click_link mou_signature.user.email
   end
 
   def then_i_update_the_user_organisation
