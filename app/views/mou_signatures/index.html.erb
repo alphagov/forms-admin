@@ -19,10 +19,10 @@
     <%= table.with_body do |body|
       mou_signatures.each do |mou_signature|
         body.with_row do |row|
+          row.with_cell( text: mou_signature.user.name.presence || t("users.index.name_blank") )
           row.with_cell do
-            govuk_link_to(mou_signature.user.name.presence || t("users.index.name_blank"), edit_user_path(mou_signature.user))
+            govuk_link_to(mou_signature.user.email, edit_user_path(mou_signature.user))
           end
-          row.with_cell( text: mou_signature.user.email )
           row.with_cell( text: mou_signature.organisation&.name.presence || t("users.index.organisation_blank"))
           row.with_cell( text: l(mou_signature.created_at.to_date, :format => :long) )
         end
@@ -30,4 +30,3 @@
     end %>
   <% end %>
 <% end %>
-
