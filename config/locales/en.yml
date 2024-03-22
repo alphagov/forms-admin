@@ -858,25 +858,6 @@ en:
         <p>
           The recipient will be asked to tell you the code. You will then need to enter the code to confirm the email address.
         </p>
-  show_live_form:
-    contact_details: Your form’s contact details for support
-    declaration: Declaration
-    declaration_description: Your form’s declaration is shown to people when they have answered all the questions, just before they submit the form.
-    draft_create: Create a draft to edit
-    draft_edit: Edit the draft of this form
-    privacy_policy_link: Privacy policy link
-    questions: Questions
-    questions_link:
-      one: View your form’s 1 question
-      other: View your form’s %{count} questions
-    submission_email: Submission email
-    support_email: Email
-    support_phone: Phone
-    support_url: Support contact online
-    what_happens_next: What happens next information
-    what_happens_next_description: Information about what happens next is shown to people when they have completed and submitted a form.
-    what_is_declaration: What is a declaration?
-    what_is_what_happens_next: What is ‘what happens next information’?
   sign_in_button: Sign in
   sign_up_button: Sign up
   skip_to_main_content: Skip to main content
