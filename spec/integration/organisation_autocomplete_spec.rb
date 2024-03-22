@@ -20,6 +20,12 @@ RSpec.describe "Selecting an organisation using accessible autocomplete", type: 
       organisation_field.fill_in with: "tests\n"
       expect(organisation_field.value).to start_with "Ministry of Tests"
     end
+
+    it "autocompletes the organisation by abbreviation" do
+      organisation_field = find_field "Organisation"
+      organisation_field.fill_in with: "DfT\n"
+      expect(organisation_field.value).to start_with "Department for Testing"
+    end
   end
 
   context "when choosing an organisation to view its forms" do
@@ -42,6 +48,12 @@ RSpec.describe "Selecting an organisation using accessible autocomplete", type: 
       organisation_field = find_field "search[organisation_id]"
       organisation_field.fill_in with: "tests\n"
       expect(organisation_field.value).to start_with "Ministry of Tests"
+    end
+
+    it "autocompletes the organisation by abbreviation" do
+      organisation_field = find_field "search[organisation_id]"
+      organisation_field.fill_in with: "DfT\n"
+      expect(organisation_field.value).to start_with "Department for Testing"
     end
   end
 end

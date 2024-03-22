@@ -29,7 +29,7 @@
       form_field: f.govuk_collection_select(:organisation_id,
                                             Organisation.with_users.order(:slug),
                                             :id,
-                                            :name,
+                                            :name_with_abbreviation,
                                             class: ['govuk-!-width-three-quarters'],
                                             options: { prompt: t('home.organisation_prompt') },
                                             label: { text: t('home.search_form_label', organisation_name: @search_form.organisation.name), size: 'm', tag: 'h2' },

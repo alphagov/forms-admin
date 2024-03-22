@@ -8,7 +8,7 @@ describe "users/edit.html.erb" do
   before do
     create :organisation, id: 1, slug: "test-org"
     create :organisation, id: 2, slug: "ministry-of-testing"
-    create :organisation, id: 3, slug: "department-for-tests"
+    create :organisation, id: 3, slug: "department-for-tests", name: "Department for Tests", abbreviation: "DfT"
 
     assign(:user, user)
     render template: "users/edit"
@@ -90,9 +90,15 @@ describe "users/edit.html.erb" do
       end
     end
 
-    it "has organisation fields" do
+    it "has organisation fields with abbreviations" do
       expect(rendered).to have_select(
-        "Organisation", selected: "Test Org", with_options: ["Department For Tests", "Ministry Of Testing", "Test Org"]
+        "Organisation",
+        selected: "Test Org (TO)",
+        with_options: [
+          "Department for Tests (DfT)",
+          "Ministry Of Testing (MOT)",
+          "Test Org (TO)",
+        ],
       )
     end
 
