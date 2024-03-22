@@ -28,13 +28,13 @@ private
 
   def then_i_can_see_the_mou_list
     expect(page).to have_text mou_signatures.first.organisation.name
-    expect(page).to have_text mou_signatures.first.user.email
-    expect(page).to have_link mou_signatures.first.user.name
+    expect(page).to have_link mou_signatures.first.user.email
+    expect(page).to have_text mou_signatures.first.user.name
     expect(page).to have_text "October 12, 2023"
 
     expect(page).to have_text mou_signatures.second.organisation.name
-    expect(page).to have_text mou_signatures.second.user.email
-    expect(page).to have_link mou_signatures.second.user.name
+    expect(page).to have_link mou_signatures.second.user.email
+    expect(page).to have_text mou_signatures.second.user.name
     expect(page).to have_text "September 01, 2023"
   end
 
