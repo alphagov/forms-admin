@@ -27,7 +27,7 @@ module ApplicationHelper
   end
 
   def link_to_runner(runner_url, form_id, form_slug, mode: :preview_draft)
-    modes = { preview_draft: "preview-draft", live: "form", preview_live: "preview-live" }
+    modes = { preview_draft: "preview-draft", live: "form", preview_live: "preview-live", preview_archived: "preview-archived" }
     mode_segment = modes.fetch(mode, "preview-draft")
     "#{runner_url}/#{mode_segment}/#{form_id}/#{form_slug}"
   end

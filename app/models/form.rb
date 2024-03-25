@@ -10,6 +10,10 @@ class Form < ActiveResource::Base
     find(:one, from: "#{prefix}forms/#{id}/live")
   end
 
+  def self.find_archived(id)
+    find(:one, from: "#{prefix}forms/#{id}/archived")
+  end
+
   def group
     group_form&.group
   end

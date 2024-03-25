@@ -30,7 +30,7 @@ RSpec.describe Forms::LiveController, type: :request do
     end
 
     it "renders the live template and no param" do
-      expect(response).to render_template("live/show_form")
+      expect(response).to render_template("forms/live/show_form")
     end
 
     context "with metrics enabled", feature_metrics_for_form_creators_enabled: true do

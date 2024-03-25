@@ -62,5 +62,9 @@ module Forms
 
       current_live_form.submission_email != current_form.submission_email
     end
+
+    def current_live_form
+      @current_live_form ||= Form.find_live(params[:form_id])
+    end
   end
 end
