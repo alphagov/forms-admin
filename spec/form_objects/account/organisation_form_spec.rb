@@ -33,6 +33,15 @@ describe Account::OrganisationForm do
       it "returns true" do
         expect(organisation_form.submit).to be true
       end
+
+      it "logs the organisation_chosen event" do
+        expect(EventLogger).to receive(:log).with({
+          event: "organisation_chosen",
+          user_id: user.id,
+          organisation_id: organisation.id,
+        })
+        organisation_form.submit
+      end
     end
 
     context "with invalid attributes" do
@@ -46,6 +55,11 @@ describe Account::OrganisationForm do
 
       it "returns false" do
         expect(organisation_form.submit).to be false
+      end
+
+      it "does not log the organisation_chosen event" do
+        expect(EventLogger).not_to receive(:log)
+        organisation_form.submit
       end
     end
   end
