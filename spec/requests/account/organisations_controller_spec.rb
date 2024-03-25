@@ -57,6 +57,7 @@ describe Account::OrganisationsController do
 
       it "re-renders the edit template" do
         put account_organisation_path, params: invalid_params
+        expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template(:edit)
       end
     end

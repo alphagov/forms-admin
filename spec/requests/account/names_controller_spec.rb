@@ -55,6 +55,7 @@ describe Account::NamesController do
 
       it "renders the edit template" do
         put account_name_path, params: invalid_params
+        expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template(:edit)
       end
     end
