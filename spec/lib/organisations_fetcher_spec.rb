@@ -10,7 +10,7 @@ RSpec.describe OrganisationsFetcher do
 
   def organisation_details_for_slug(slug, content_id = Faker::Internet.uuid)
     {
-      details: { content_id:, slug: },
+      details: { content_id:, slug:, abbreviation: slug.titleize.split.collect(&:chr).join },
       title: slug.titleize,
     }
   end
@@ -56,5 +56,18 @@ RSpec.describe OrganisationsFetcher do
     organisation.reload
 
     expect(organisation.closed).to be true
+  end
+
+  it "updates an existing organisation when its abbreviation changes" do
+    organisation = create :organisation, slug: "department-for-testing", abbreviation: nil
+
+    stub_organisation_api_has_organisations_with_bodies([
+      organisation_details_for_slug("department-for-testing", organisation.govuk_content_id).deep_merge({ details: { abbreviation: "DfT" } }),
+    ])
+
+    organisations_fetcher.call
+    organisation.reload
+
+    expect(organisation.abbreviation).to eq "DfT"
   end
 end

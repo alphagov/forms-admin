@@ -8,4 +8,12 @@ class Organisation < ApplicationRecord
 
   scope :not_closed, -> { where(closed: false) }
   scope :with_users, -> { joins(:users).distinct.order(:name) }
+
+  def name_with_abbreviation
+    if abbreviation.present? && abbreviation != name
+      "#{name} (#{abbreviation})"
+    else
+      name
+    end
+  end
 end

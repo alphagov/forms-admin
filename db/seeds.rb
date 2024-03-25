@@ -10,7 +10,12 @@ require "factory_bot"
 
 if HostingEnvironment.local_development? && User.none?
 
-  gds = Organisation.find_or_create_by!(govuk_content_id: "af07d5a5-df63-4ddc-9383-6a666845ebe9", slug: "government-digital-service", name: "Government Digital Service")
+  gds = Organisation.find_or_create_by!(
+    govuk_content_id: "af07d5a5-df63-4ddc-9383-6a666845ebe9",
+    slug: "government-digital-service",
+    name: "Government Digital Service",
+    abbreviation: "GDS",
+  )
 
   # Create default super-admin
   User.create!({ email: "example@example.com",
@@ -25,7 +30,7 @@ if HostingEnvironment.local_development? && User.none?
   # create extra organisations
   test_org = FactoryBot.create :organisation, slug: "test-org"
   FactoryBot.create :organisation, slug: "ministry-of-tests"
-  FactoryBot.create :organisation, slug: "department-for-testing"
+  FactoryBot.create :organisation, slug: "department-for-testing", name: "Department for Testing", abbreviation: "DfT"
   FactoryBot.create :organisation, slug: "closed-org", closed: true
 
   # create extra editors
