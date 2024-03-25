@@ -1,0 +1,30 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.account_organisation'), @organisation_form.errors.any?)) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: @organisation_form , url: account_organisation_path, method: :patch) do |f| %>
+      <% if @organisation_form &.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+
+      <%= render DfE::Autocomplete::View.new(
+        f,
+        attribute_name: :organisation_id,
+        form_field: f.govuk_collection_select(:organisation_id,
+                                              Organisation.order(:slug),
+                                              :id,
+                                              :name,
+                                              class: ['govuk-!-width-three-quarters'],
+                                              options: { prompt: t('users.edit.organisation_prompt') },
+                                              label: { size: 'xl', tag: 'h1' },
+                                             ),
+      html_attributes: { 'data-show-all-values' => 'true'},
+      )%>
+      <%= f.govuk_submit t("save_and_continue") %>
+    <% end %>
+
+  <%= govuk_section_break(visible:true, size: "l") %>
+  <%= govuk_details(summary_text: t('account.organisation_details_summary'), text: t('account.organisation_text_html', contact_link: contact_link)) %>
+  </div>
+</div>
+
+<%= init_autocomplete_script(show_all_values: true, raw_attribute: false, source: false) %>

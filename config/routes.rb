@@ -132,6 +132,11 @@ Rails.application.routes.draw do
     get "/requested", to: "user_upgrade_requests#confirmation", as: :confirmation
   end
 
+  namespace :account do
+    resource :name, only: %i[edit update]
+    resource :organisation, only: %i[edit update]
+  end
+
   resources :mou_signatures, only: %i[index], path: "mous"
 
   resource :mou_signature, only: %i[new show create], path: "/memorandum-of-understanding" do

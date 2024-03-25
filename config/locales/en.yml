@@ -1,8 +1,21 @@
 ---
 en:
+  account:
+    organisation_details_summary: If your organisation is not listed
+    organisation_text_html: |
+      <p>If you’re from a central government organisation that publishes content on the GOV.UK website but your organisation is not listed, please %{contact_link}.</p>
+      <p>If you’re from a public sector organisation that doesn’t publish content on GOV.UK you cannot use GOV.UK Forms yet. You can <a href="https://www.forms.service.gov.uk/forthcoming-features">read about our forthcoming features and sign up to our mailing list</a> for updates.</p>
   activemodel:
     errors:
       models:
+        account/name_form:
+          attributes:
+            name:
+              blank: Enter your name
+        account/organisation_form:
+          attributes:
+            organisation_id:
+              blank: Select your organisation
         page:
           attributes:
             hint_text:
@@ -292,6 +305,10 @@ en:
     users: Users
   helpers:
     hint:
+      account_name_form:
+        name: You do not need to include a title or any middle names.
+      account_organisation_form:
+        organisation_id: Currently, GOV.UK Forms is only available for central government organisations that publish content on the GOV.UK website.
       page:
         answer_type: The answer will be checked to make sure it’s in the selected format.
         hint_text:
@@ -327,6 +344,10 @@ en:
           radio: Ask the question the way you would in person. For example, ‘What country do you live in?’
           single_line: Ask the question the way you would in person. For example, ‘What’s your reference number?’
     label:
+      account_name_form:
+        name: Enter your full name
+      account_organisation_form:
+        organisation_id: Select your organisation
       forms_make_changes_live_form:
         confirm_make_live: Are you sure you want to make your draft live?
       forms_make_live_form:
@@ -647,6 +668,8 @@ en:
       only_one_option: Selection from a list, one option only.
   page_titles:
     access_denied: You do not have permission to access GOV.UK Forms
+    account_name: Enter your name
+    account_organisation: Select your organisation
     add_guidance: Add guidance
     address_settings: What kind of addresses do you expect to receive?
     change_name_form: Name your form
