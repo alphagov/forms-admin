@@ -98,7 +98,7 @@ RSpec.describe "mailchimp.rake" do
         },
       )
 
-      task.invoke
+      expect { task.invoke }.to output.to_stdout
     end
 
     it "removes users from MailChimp who do not appear in the database, but do appear in the mailing list" do
@@ -107,7 +107,7 @@ RSpec.describe "mailchimp.rake" do
       expect(mailchimp_client_lists).to receive(:delete_list_member_permanent).with("list-1", removed_email_hash)
       expect(mailchimp_client_lists).to receive(:delete_list_member_permanent).with("list-2", removed_email_hash)
 
-      task.invoke
+      expect { task.invoke }.to output.to_stdout
     end
   end
 end
