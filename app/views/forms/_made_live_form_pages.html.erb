@@ -1,6 +1,6 @@
 <% set_page_title(form.name) %>
 
-<% content_for :back_link, govuk_back_link_to(live_form_path(form), t("back_link.form_view")) %>
+<% content_for :back_link, govuk_back_link_to(show_form_path, t("back_link.form_view")) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -9,14 +9,14 @@
       <%= t("forms.form_overview.your_questions") %>
     </h1>
 
-    <%= render FormStatusTagDescriptionComponent::View.new(status: :live) %>
+    <%= render FormStatusTagDescriptionComponent::View.new(status: status) %>
 
     <% form.pages.each_with_index do |page, index| %>
       <%= govuk_summary_list(**PageSummaryCardDataService.call(page:, pages: form.pages).build_data)%>
     <% end %>
 
     <p>
-      <%= govuk_link_to t("back_link.form_view"), live_form_path(form) %>
+      <%= govuk_link_to t("back_link.form_view"), show_form_path %>
     </p>
   </div>
 </div>

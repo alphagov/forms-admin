@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "live/show_form.html.erb" do
+describe "forms/live/show_form.html.erb" do
   let(:form_metadata) { OpenStruct.new(has_draft_version: false) }
   let(:form) { build(:form, :live, id: 1) }
 

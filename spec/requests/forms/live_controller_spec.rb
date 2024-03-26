@@ -29,8 +29,8 @@ RSpec.describe Forms::LiveController, type: :request do
       expect(ActiveResource::HttpMock.requests).to include pages_request
     end
 
-    it "renders the live template and no param" do
-      expect(response).to render_template("forms/live/show_form")
+    it "renders the live template" do
+      expect(response).to render_template(:show_form)
     end
 
     context "with metrics enabled", feature_metrics_for_form_creators_enabled: true do
@@ -85,8 +85,8 @@ RSpec.describe Forms::LiveController, type: :request do
         get live_form_pages_path(2)
       end
 
-      it "renders the live template and no param" do
-        expect(response).to render_template("live/show_pages")
+      it "renders the live template" do
+        expect(response).to render_template(:show_pages)
       end
     end
   end
