@@ -28,7 +28,7 @@ class GroupsController < ApplicationController
 
   # POST /groups
   def create
-    @group = Group.new(group_params)
+    @group = Group.new(group_params.merge({ creator: @current_user }))
     @group.organisation = current_user.organisation
     @group.memberships.build(user: current_user, added_by: current_user)
 
