@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_21_074041) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_25_114214) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_21_074041) do
     t.text "external_id", null: false
     t.bigint "organisation_id"
     t.string "status", default: "trial"
+    t.bigint "creator_id"
+    t.index ["creator_id"], name: "index_groups_on_creator_id"
     t.index ["external_id"], name: "index_groups_on_external_id", unique: true
     t.index ["organisation_id"], name: "index_groups_on_organisation_id"
   end
@@ -127,6 +129,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_21_074041) do
   end
 
   add_foreign_key "draft_questions", "users"
+  add_foreign_key "groups", "users", column: "creator_id"
   add_foreign_key "memberships", "groups"
   add_foreign_key "memberships", "users"
   add_foreign_key "memberships", "users", column: "added_by_id"

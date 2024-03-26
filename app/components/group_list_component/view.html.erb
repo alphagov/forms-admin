@@ -21,7 +21,7 @@
       @groups.each do |group|
         body.with_row do |row|
           row.with_cell { govuk_link_to(group.name, group) }
-          row.with_cell(numeric: true) { t('groups.group_list.created_by_unknown') }
+          row.with_cell(numeric: true) { group.creator&.name.presence || t('groups.group_list.created_by_unknown') }
         end
       end
     end %>

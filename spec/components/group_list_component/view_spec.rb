@@ -32,5 +32,22 @@ RSpec.describe GroupListComponent::View, type: :component do
         expect(page).to have_css("h2", text: title)
       end
     end
+
+    context "when the group creator is known" do
+      let(:user) { create :user }
+      let(:groups) { create_list(:group, 3, creator: user) }
+
+      it "renders the creator's name" do
+        expect(page).to have_css("tr", count: 3, text: user.name)
+      end
+    end
+
+    context "when the group creator is unknown" do
+      let(:groups) { create_list(:group, 3, creator: nil) }
+
+      it "renders the creator as unknown" do
+        expect(page).to have_css("tr", count: 3, text: "Unknown")
+      end
+    end
   end
 end

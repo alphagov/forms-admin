@@ -25,6 +25,11 @@ RSpec.describe Group, type: :model do
       group = build :group, status: nil
       expect(group).not_to be_valid
     end
+
+    it "is valid without a creator" do
+      group = build :group, creator: nil
+      expect(group).to be_valid
+    end
   end
 
   describe "before_create" do
@@ -59,6 +64,13 @@ RSpec.describe Group, type: :model do
       create(:membership, group:, user:, added_by:)
 
       expect { group.destroy }.to change(Membership, :count).by(-1)
+    end
+
+    it "does not destroy associated creator" do
+      user = create :user
+      group = create :group, creator: user
+
+      expect { group.destroy }.not_to change(User, :count)
     end
   end
 

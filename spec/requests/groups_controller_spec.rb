@@ -158,6 +158,14 @@ RSpec.describe "/groups", type: :request do
         post groups_url, params: { group: valid_attributes }
         expect(response).to redirect_to(group_url(Group.last))
       end
+
+      it "records the creator" do
+        login_as_editor_user
+
+        post groups_url, params: { group: valid_attributes }
+
+        expect(Group.last.creator).to eq(editor_user)
+      end
     end
 
     context "with invalid parameters" do
