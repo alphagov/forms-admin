@@ -143,7 +143,7 @@ Rails.application.routes.draw do
     get "/signed", to: "mou_signatures#confirmation", as: :confirmation
   end
 
-  resources :groups do
+  resources :groups, except: :destroy do
     resources :forms, controller: :group_forms, only: %i[new create]
   end
 
