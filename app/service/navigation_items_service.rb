@@ -72,7 +72,7 @@ private
   def signout_url
     if user_provider == :gds
       gds_sign_out_path
-    elsif %i[auth0 mock_gds_sso].include? user_provider
+    elsif %i[auth0 developer mock_gds_sso].include? user_provider
       sign_out_path
     end
   end
