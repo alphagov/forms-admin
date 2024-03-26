@@ -18,14 +18,14 @@ if HostingEnvironment.local_development? && User.none?
   )
 
   # Create default super-admin
-  User.create!({ email: "example@example.com",
-                 organisation_slug: "government-digital-service",
-                 organisation_content_id: "af07d5a5-df63-4ddc-9383-6a666845ebe9",
-                 organisation: gds,
-                 name: "A User",
-                 role: :super_admin,
-                 uid: "123456",
-                 provider: :mock_gds_sso })
+  default_user = User.create!({ email: "example@example.com",
+                                organisation_slug: "government-digital-service",
+                                organisation_content_id: "af07d5a5-df63-4ddc-9383-6a666845ebe9",
+                                organisation: gds,
+                                name: "A User",
+                                role: :super_admin,
+                                uid: "123456",
+                                provider: :mock_gds_sso })
 
   # create extra organisations
   test_org = FactoryBot.create :organisation, slug: "test-org"
@@ -52,7 +52,7 @@ if HostingEnvironment.local_development? && User.none?
   FactoryBot.create_list :user, 3, :with_trial_role
 
   # create some test groups
-  FactoryBot.create :group, name: "Test Group", organisation: gds
-  FactoryBot.create :group, name: "Ministry of Tests forms", organisation: test_org
-  FactoryBot.create :group, name: "Ministry of Tests forms - secret!", organisation: test_org
+  FactoryBot.create :group, name: "Test Group", organisation: gds, creator: default_user
+  FactoryBot.create :group, name: "Ministry of Tests forms", organisation: test_org, creator: default_user
+  FactoryBot.create :group, name: "Ministry of Tests forms - secret!", organisation: test_org, creator: default_user
 end

@@ -1,6 +1,8 @@
 class Group < ApplicationRecord
   belongs_to :organisation
 
+  belongs_to :creator, class_name: "User", optional: true
+
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
 
