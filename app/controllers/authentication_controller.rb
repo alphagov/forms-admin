@@ -16,7 +16,7 @@ class AuthenticationController < ApplicationController
 
   def callback_from_omniauth
     authenticate_user!
-    redirect_to stored_location || "/"
+    redirect_to after_sign_in_path
   end
 
   def sign_in
@@ -46,6 +46,10 @@ private
 
   def attempted_path
     request.env["warden.options"][:attempted_path]
+  end
+
+  def after_sign_in_path
+    AfterSignInPathHelper.new(current_user, default_path: stored_location || root_path).next_path
   end
 
   def default_provider
