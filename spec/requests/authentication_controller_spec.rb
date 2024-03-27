@@ -15,6 +15,10 @@ RSpec.describe AuthenticationController, type: :request do
     allow(Settings).to receive(:auth_provider).and_return("mock_not_logged_in")
 
     OmniAuth.config.test_mode = true
+    OmniAuth.config.mock_auth[:auth0] = Faker::Omniauth.auth0(
+      uid: editor_user.uid,
+      email: editor_user.email,
+    )
   end
 
   after do
@@ -71,6 +75,10 @@ RSpec.describe AuthenticationController, type: :request do
 
         # shorten the auth_valid_for time for testing
         GDS::SSO::Config.auth_valid_for = 1
+
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms?organisation_id=#{editor_user.organisation_id}", headers, [].to_json, 200
+        end
 
         logout
       end
