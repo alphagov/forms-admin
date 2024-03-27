@@ -46,7 +46,7 @@ describe FormPolicy do
       end
     end
 
-    context "with a super_admin" do
+    context "with a super_admin role" do
       let(:user) { build :super_admin_user, organisation: }
 
       it { is_expected.to permit_actions(%i[can_view_form]) }
@@ -100,6 +100,22 @@ describe FormPolicy do
           let(:user) { build :super_admin_user, organisation: }
 
           it { is_expected.to permit_actions(%i[can_view_form]) }
+        end
+
+        context "but user is an organisation_admin" do
+          context "and the user is in the same organisation as the group" do
+            let(:user) { build :organisation_admin_user, organisation: }
+
+            it { is_expected.to permit_actions(%i[can_view_form]) }
+          end
+
+          context "and the user is not in the same organisation as the group" do
+            let(:other_organisation) { build :organisation, id: 2, slug: "other" }
+
+            let(:user) { build :organisation_admin_user, organisation: other_organisation }
+
+            it { is_expected.to forbid_actions(%i[can_view_form]) }
+          end
         end
       end
     end
