@@ -34,6 +34,12 @@ describe Account::OrganisationsController do
     context "with valid parameters" do
       let(:organisation) { create(:organisation) }
       let(:valid_params) { { account_organisation_form: { organisation_id: organisation.id } } }
+      let(:after_sign_in_path_helper) { instance_double(AfterSignInPathHelper, next_path: "/next-path") }
+
+      before do
+        allow(AfterSignInPathHelper).to receive(:new).and_return(after_sign_in_path_helper)
+        allow(after_sign_in_path_helper).to receive(:next_path).and_return("/next-path")
+      end
 
       it "updates the user's organisation" do
         put account_organisation_path, params: valid_params
@@ -42,7 +48,7 @@ describe Account::OrganisationsController do
 
       it "redirects to the root path" do
         put account_organisation_path, params: valid_params
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to("/next-path")
       end
     end
 

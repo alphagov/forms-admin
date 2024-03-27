@@ -10,7 +10,7 @@ module Account
       @name_form = NameForm.new(account_name_form_params(current_user))
 
       if @name_form.submit
-        redirect_to root_path
+        redirect_to next_path
       else
         render :edit, status: :unprocessable_entity
       end
@@ -24,6 +24,10 @@ module Account
 
     def redirect_if_name_exists
       redirect_to root_path if current_user.name.present?
+    end
+
+    def next_path
+      AfterSignInPathHelper.new(current_user, default_path: stored_location || root_path).next_path
     end
   end
 end
