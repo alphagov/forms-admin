@@ -3,5 +3,6 @@ FactoryBot.define do
     user
     group
     added_by { association :user }
+    role { :editor }
   end
 end

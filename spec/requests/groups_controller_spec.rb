@@ -166,6 +166,14 @@ RSpec.describe "/groups", type: :request do
 
         expect(Group.last.creator).to eq(editor_user)
       end
+
+      it "gives the creator the group admin role" do
+        login_as_editor_user
+
+        post groups_url, params: { group: valid_attributes }
+
+        expect(Membership.last).to have_attributes user: editor_user, role: "group_admin"
+      end
     end
 
     context "with invalid parameters" do

@@ -30,7 +30,7 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(group_params.merge({ creator: @current_user }))
     @group.organisation = current_user.organisation
-    @group.memberships.build(user: current_user, added_by: current_user)
+    @group.memberships.build(user: current_user, added_by: current_user, role: :group_admin)
 
     authorize @group
 
