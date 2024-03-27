@@ -225,35 +225,4 @@ RSpec.describe "/groups", type: :request do
       end
     end
   end
-
-  describe "DELETE /destroy" do
-    context "when user is a member of group" do
-      it "destroys the requested group" do
-        member_group
-        expect {
-          delete group_url(member_group)
-        }.to change(Group, :count).by(-1)
-      end
-
-      it "redirects to the groups list" do
-        delete group_url(member_group)
-        expect(response).to redirect_to(groups_url)
-      end
-    end
-
-    context "when user is not a member of the group" do
-      it "is forbidden" do
-        delete group_url(non_member_group)
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      context "when logged in as a super admin" do
-        it "is allowed" do
-          login_as_super_admin_user
-          delete group_url(non_member_group)
-          expect(response).to be_redirect
-        end
-      end
-    end
-  end
 end

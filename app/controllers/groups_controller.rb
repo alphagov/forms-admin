@@ -1,5 +1,5 @@
 class GroupsController < ApplicationController
-  before_action :set_group, only: %i[show edit update destroy]
+  before_action :set_group, only: %i[show edit update]
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
 
@@ -49,13 +49,6 @@ class GroupsController < ApplicationController
     else
       render :edit, status: :unprocessable_entity
     end
-  end
-
-  # DELETE /groups/1
-  def destroy
-    authorize @group
-    @group.destroy!
-    redirect_to groups_url, success: "Group was successfully deleted.", status: :see_other
   end
 
 private
