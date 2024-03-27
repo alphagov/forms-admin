@@ -23,6 +23,7 @@ class User < ApplicationRecord
 
   enum :role, {
     super_admin: "super_admin",
+    organisation_admin: "organisation_admin",
     editor: "editor",
     trial: "trial",
   }
@@ -76,7 +77,7 @@ class User < ApplicationRecord
   end
 
   def trial_user_upgraded?
-    role_previously_changed?(from: :trial, to: :editor) || role_previously_changed?(from: :trial, to: :super_admin)
+    role_previously_changed?(from: :trial)
   end
 
   def given_organisation?
@@ -118,6 +119,6 @@ private
   end
 
   def requires_organisation?
-    organisation_id_was.present? || role_changed?(to: :editor)
+    organisation_id_was.present? || role_changed?(to: :editor) || role_changed?(to: :organisation_admin)
   end
 end

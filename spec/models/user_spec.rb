@@ -16,8 +16,8 @@ describe User, type: :model do
 
   describe "role enum" do
     it "returns a list of roles" do
-      expect(described_class.roles.keys).to eq(%w[super_admin editor trial])
-      expect(described_class.roles.values).to eq(%w[super_admin editor trial])
+      expect(described_class.roles.keys).to eq(%w[super_admin organisation_admin editor trial])
+      expect(described_class.roles.values).to eq(%w[super_admin organisation_admin editor trial])
     end
   end
 
@@ -86,6 +86,11 @@ describe User, type: :model do
 
     it "is not valid to leave organisation unset if changing role to editor" do
       user.role = :editor
+      expect(user).to be_invalid
+    end
+
+    it "is not valid to leave organisation unset if changing role to organisation admin" do
+      user.role = :organisation_admin
       expect(user).to be_invalid
     end
   end
