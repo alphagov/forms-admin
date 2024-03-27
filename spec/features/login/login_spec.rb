@@ -1,11 +1,11 @@
 require "rails_helper"
 
 describe "Login to the service", type: :feature do
-  let(:user) { create :user, :with_trial_role, name: "Test User", email: "test@example.gov.uk" }
+  let(:user) { editor_user }
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?creator_id=#{user.id}", headers, [].to_json, 200
+      mock.get "/api/v1/forms?organisation_id=#{user.organisation_id}", headers, [].to_json, 200
     end
     allow(Settings).to receive(:auth_provider).and_return("developer")
   end
