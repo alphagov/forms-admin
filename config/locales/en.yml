@@ -980,6 +980,9 @@ en:
       trial:
         description: Can create forms but cannot make them live
         name: Trial
+      organisation_admin:
+        description: Can manage groups and users in their organisation
+        name: Organisation admin
     save: Save
   what_happens_next:
     example:
