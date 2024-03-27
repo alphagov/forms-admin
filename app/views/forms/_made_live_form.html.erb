@@ -68,10 +68,13 @@
       <p><%= govuk_link_to form.support_url_text, form.support_url %></p>
     <% end %>
 
-    <p>
+    <div class="govuk-button-group">
       <%# i18n-tasks-use t('made_live_form.draft_create') %>
       <%# i18n-tasks-use t('made_live_form.draft_edit') %>
       <%= govuk_button_link_to t("made_live_form.draft_#{ form_metadata.has_draft_version ? 'edit': 'create'}"), form_path(form.id) %>
-    </p>
+      <% if status == :live && FeatureService.enabled?(:archive_enabled) %>
+        <%= govuk_button_link_to t("made_live_form.archive_this_form"), archive_form_path(form.id), warning: true %>
+      <% end %>
+    </div>
   </div>
 </div>

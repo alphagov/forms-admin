@@ -185,6 +185,30 @@ describe "forms/_made_live_form.html.erb", feature_metrics_for_form_creators_ena
     end
   end
 
+  describe "the archive this form button" do
+    context "when the form is live" do
+      context "when the archive feature is enabled", feature_archive_enabled: true do
+        it "contains a link to archive the form" do
+          expect(rendered).to have_link("Archive this form")
+        end
+      end
+
+      context "when the archive feature is enabled", feature_archive_enabled: false do
+        it "does not contain a link to archive the form" do
+          expect(rendered).not_to have_link("Archive this form")
+        end
+      end
+    end
+
+    context "when the form is archived", feature_archive_enabled: true do
+      let(:status) { :archived }
+
+      it "does not contain a link to archive the form" do
+        expect(rendered).not_to have_link("Archive this form")
+      end
+    end
+  end
+
   context "when the metrics feature is enabled", feature_metrics_for_form_creators_enabled: true do
     let(:metrics_data) { { weekly_submissions: 125, weekly_starts: 256 } }
 

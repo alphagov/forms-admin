@@ -482,6 +482,7 @@ en:
       immediately.
     notification_title: Important
   made_live_form:
+    archive_this_form: Archive this form
     contact_details: Your form’s contact details for support
     declaration: Declaration
     declaration_description: Your form’s declaration is shown to people when they have answered all the questions, just before they submit the form.
