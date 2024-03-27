@@ -124,4 +124,14 @@ private
 
     @current_user.super_admin? ? PRIVILEGED_AUTH0_CONNECTION_STRATEGIES.include?(warden.session["auth0_connection_strategy"]) : true
   end
+
+  def store_location(path)
+    # NOTE: If we ever start using Warden scopes, the key of this session
+    # variable should change depending on the scope in warden.options
+    session["user_return_to"] = path
+  end
+
+  def stored_location
+    session["user_return_to"]
+  end
 end

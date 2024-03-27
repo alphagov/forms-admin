@@ -48,16 +48,6 @@ private
     request.env["warden.options"][:attempted_path]
   end
 
-  def store_location(path)
-    # NOTE: If we ever start using Warden scopes, the key of this session
-    # variable should change depending on the scope in warden.options
-    session["user_return_to"] = path
-  end
-
-  def stored_location
-    session["user_return_to"]
-  end
-
   def default_provider
     if Settings.auth_provider == "gds_sso"
       "gds"
