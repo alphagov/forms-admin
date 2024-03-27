@@ -96,5 +96,10 @@ RSpec.describe Membership, type: :model do
       membership = build :membership
       expect(membership.role).to eq("editor")
     end
+
+    it "can be set to group_admin" do
+      membership = build :membership, role: :group_admin
+      expect(membership).to be_valid
+    end
   end
 end

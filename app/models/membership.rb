@@ -4,6 +4,7 @@ class Membership < ApplicationRecord
   belongs_to :added_by, class_name: "User"
 
   enum :role, {
+    group_admin: "group_admin",
     editor: "editor",
   }
 
