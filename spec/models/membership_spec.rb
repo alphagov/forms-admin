@@ -20,6 +20,11 @@ RSpec.describe Membership, type: :model do
     expect(membership).not_to be_valid
   end
 
+  it "is invalid without a role" do
+    membership = build :membership, role: nil
+    expect(membership).not_to be_valid
+  end
+
   it "is invalid if the user and group are not in the same organisation" do
     org1 = create :organisation, id: 1, slug: "test-org"
     org2 = create :organisation, id: 2, slug: "ministry-of-testing"
@@ -83,6 +88,13 @@ RSpec.describe Membership, type: :model do
 
       described_class.destroy_invalid_organisation_memberships(user1)
       expect(described_class.exists?(membership2.id)).to be true
+    end
+  end
+
+  describe "role" do
+    it "has a default role of editor" do
+      membership = build :membership
+      expect(membership.role).to eq("editor")
     end
   end
 end

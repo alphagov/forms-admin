@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_25_114214) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_27_090626) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -70,6 +70,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_25_114214) do
     t.bigint "added_by_id", null: false, comment: "The user who created the membership"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "role", default: "editor"
     t.index ["added_by_id"], name: "index_memberships_on_added_by_id"
     t.index ["user_id", "group_id"], name: "index_memberships_on_user_id_and_group_id", unique: true, comment: "Ensure that a user can only be a member of a group once"
   end
