@@ -75,31 +75,6 @@ RSpec.describe FormsController, type: :request do
       end
     end
 
-    context "with a user with no organisation" do
-      before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", headers, form.to_json, 200
-          mock.get "/api/v1/forms/2/pages", headers, form.pages.to_json, 200
-        end
-
-        login_as build(:editor_user, :with_no_org)
-
-        get form_path(2)
-      end
-
-      after do
-        logout
-      end
-
-      it "returns 403 Forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders organisation missing page" do
-        expect(response).to render_template("errors/user_missing_organisation_error")
-      end
-    end
-
     context "with a user with a trial account" do
       let(:user) { build(:user, :with_trial_role, id: 123) }
       let(:form) { build(:form, :ready_for_live, :with_active_resource, id: 2, creator_id: user.id) }
@@ -237,28 +212,6 @@ RSpec.describe FormsController, type: :request do
       expect(ActiveResource::HttpMock.requests).to include forms_request
     end
 
-    context "with a user with no organisation" do
-      before do
-        ActiveResource::HttpMock.reset! # not expecting any API calls
-
-        login_as build(:editor_user, :with_no_org)
-
-        get root_path
-      end
-
-      it "returns 403 Forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders organisation missing page" do
-        expect(response).to render_template("errors/user_missing_organisation_error")
-      end
-
-      it "does not make a call to the API" do
-        expect(ActiveResource::HttpMock.requests).to be_empty
-      end
-    end
-
     context "with a user with a super_admin account" do
       context "without an orgnisation query" do
         before do
@@ -387,24 +340,6 @@ RSpec.describe FormsController, type: :request do
 
       it "sets mark_complete to false" do
         expect(assigns[:mark_complete_form].mark_complete).to eq("false")
-      end
-    end
-
-    context "with a user with no organisation" do
-      let(:user) do
-        build :editor_user, :with_no_org
-      end
-
-      it "returns 403 Forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders organisation missing page" do
-        expect(response).to render_template("errors/user_missing_organisation_error")
-      end
-
-      it "does not update the form on the API" do
-        expect(updated_form).not_to have_been_updated
       end
     end
   end

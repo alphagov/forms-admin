@@ -46,7 +46,7 @@ describe UserUpdateService do
     end
 
     context "when changing user role" do
-      let(:user) { create :user, :with_trial_role }
+      let(:user) { create :user, :with_trial_role, organisation: nil }
       let(:params) { { role: :editor } }
 
       before do

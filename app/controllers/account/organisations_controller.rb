@@ -1,5 +1,6 @@
 module Account
   class OrganisationsController < ApplicationController
+    skip_before_action :check_user_account_complete
     before_action :redirect_if_organisation_exists
 
     def edit

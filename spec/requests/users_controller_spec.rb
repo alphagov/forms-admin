@@ -172,7 +172,7 @@ RSpec.describe UsersController, type: :request do
       end
 
       context "with a trial user with no name set" do
-        let(:user) { create(:user, :with_trial_role) }
+        let(:user) { create(:user, :with_trial_role, name: nil) }
 
         it "does not return error if name is not chosen and role is not changed" do
           put user_path(user), params: { user: { role: "trial", name: nil } }
@@ -188,7 +188,7 @@ RSpec.describe UsersController, type: :request do
       end
 
       context "with a trial user with no organisation set" do
-        let(:user) { create(:user, :with_trial_role) }
+        let(:user) { create(:user, :with_trial_role, organisation_id: nil) }
 
         it "does not return error if organisation is not chosen and role is not changed" do
           put user_path(user), params: { user: { role: "trial", organisation_id: nil } }

@@ -11,22 +11,22 @@ feature "Add account organisation to user without organisation", type: :feature 
     login_as user
   end
 
-  scenario "when the user does not have an organisation" do
-    when_i_visit_the_account_organisation_page
+  scenario "when the user does not have an organisation or name" do
+    when_i_visit_the_root_path
+    then_i_should_be_redirected_to_the_account_organisation_page
     and_i_select_an_organisation
-    then_i_should_be_redirected_to_the_root_path
-  end
-
-  scenario "when the does not have a name" do
-    when_i_visit_the_account_name_page
+    then_i_should_be_redirected_to_the_account_name_page
     and_i_fill_in_my_name
     then_i_should_be_redirected_to_the_root_path
   end
 
 private
 
-  def when_i_visit_the_account_organisation_page
-    visit edit_account_organisation_path
+  def when_i_visit_the_root_path
+    visit root_path
+  end
+
+  def then_i_should_be_redirected_to_the_account_organisation_page
     expect(page).to have_content("Select your organisation")
   end
 
@@ -35,8 +35,7 @@ private
     click_button "Save and continue"
   end
 
-  def when_i_visit_the_account_name_page
-    visit edit_account_name_path
+  def then_i_should_be_redirected_to_the_account_name_page
     expect(page).to have_content("Enter your full name")
   end
 
