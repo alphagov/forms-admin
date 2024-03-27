@@ -101,6 +101,22 @@ describe FormPolicy do
 
           it { is_expected.to permit_actions(%i[can_view_form]) }
         end
+
+        context "but user is an organisation_admin" do
+          context "and the user is in the same organisation as the group" do
+            let(:user) { build :organisation_admin_user, organisation: }
+
+            it { expect(subject).to permit_actions(%i[can_view_form]) }
+          end
+
+          context "and the user is not in the same organisation as the group" do
+            let(:other_organisation) { build :organisation, id: 2, slug: "other" }
+
+            let(:user) { build :organisation_admin_user, organisation: other_organisation }
+
+            it { is_expected.to forbid_actions(%i[can_view_form]) }
+          end
+        end
       end
     end
   end

@@ -19,6 +19,10 @@ FactoryBot.define do
       role { :super_admin }
     end
 
+    factory :organisation_admin_user do
+      role { :organisation_admin }
+    end
+
     trait :with_trial_role do
       role { :trial }
       with_no_org
