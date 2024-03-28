@@ -45,6 +45,9 @@ Rails.application.routes.draw do
 
     get "/delete" => "forms/delete_confirmation#delete", as: :delete_form
     delete "/delete" => "forms/delete_confirmation#destroy", as: :destroy_form
+    get "/archive" => "forms/archive_form#archive", as: :archive_form
+    post "/archive" => "forms/archive_form#update", as: :archive_form_update
+    get "/archive-success" => "forms/archive_form#confirmation", as: :archive_form_confirmation
     get "/privacy-policy" => "forms/privacy_policy#new", as: :privacy_policy
     post "/privacy-policy" => "forms/privacy_policy#create"
     get "/make-live" => "forms/make_live#new", as: :make_live

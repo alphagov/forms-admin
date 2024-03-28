@@ -55,6 +55,10 @@ class Form < ActiveResource::Base
     post "make-live"
   end
 
+  def archive!
+    post "archive"
+  end
+
   def self.update_organisation_for_creator(creator_id, organisation_id)
     if creator_id.present? && organisation_id.present?
       patch("update-organisation-for-creator", creator_id:, organisation_id:)

@@ -58,6 +58,21 @@ en:
               blank: Select a role for the user
   address_settings:
     hint: Select all that apply
+  archive_form:
+    confirm:
+      body_html: |
+        <p>When you archive this form:<p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>links to the form will no longer work - make sure any links to the form have been removed</li>
+          <li>anyone who is part way through completing the form will lose their progress and get an error page</li>
+        </ul>
+        <p>You will still be able to preview the form and see its information and settings. You can also make a new draft of the form and make it live again if you need to.</p>
+      radios_legend: Are you sure you want to archive this form?
+    confirmation:
+      continue_link: Continue to form details
+      form_name_heading: Form name
+      links_will_no_longer_work_body: People who go to the form’s URL will get an error page. Make sure any links to the form are removed.
+      links_will_no_longer_work_heading: Links to this form will no longer work
   back_link:
     form_create: Back to create your form
     form_edit: Back to edit your form
@@ -673,6 +688,8 @@ en:
     account_organisation: Select your organisation
     add_guidance: Add guidance
     address_settings: What kind of addresses do you expect to receive?
+    archive_form_confirm: Archive this form
+    archive_form_confirmation: Your form has been archived
     change_name_form: Name your form
     confirm_email_form: Enter the confirmation code
     confirm_email_success: Email address confirmed
