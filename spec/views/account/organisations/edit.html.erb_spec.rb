@@ -47,4 +47,25 @@ describe "account/organisations/edit.html.erb" do
       expect(view.content_for(:title)).to eq(title_with_error_prefix(t("page_titles.account_organisation"), true))
     end
   end
+
+  context "when there are closed organisations" do
+    before do
+      create(:organisation, slug: "test-org")
+      create(:organisation, slug: "closed-org", closed: true)
+      create(:organisation, slug: "department-for-testing", name: "Department for Testing")
+
+      render
+    end
+
+    it "only shows the organisations that are not closed" do
+      expect(rendered).to have_select(
+        "Select your organisation",
+        options: [
+          "Select an organisation",
+          "Department for Testing",
+          "Test Org",
+        ],
+      )
+    end
+  end
 end
