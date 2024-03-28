@@ -12,7 +12,7 @@
         form_field: f.govuk_collection_select(:organisation_id,
                                               Organisation.not_closed.order(:slug),
                                               :id,
-                                              :name,
+                                              :name_with_abbreviation,
                                               class: ['govuk-!-width-three-quarters'],
                                               options: { prompt: t('users.edit.organisation_prompt') },
                                               label: { size: 'xl', tag: 'h1' },

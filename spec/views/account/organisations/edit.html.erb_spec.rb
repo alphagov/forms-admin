@@ -2,8 +2,13 @@ require "rails_helper"
 
 describe "account/organisations/edit.html.erb" do
   let(:organisation_form) { Account::OrganisationForm.new }
-  let!(:organisations) { create_list(:organisation, 3) }
   let(:contact_href) { "https://example.com/contact" }
+  let!(:organisations) do
+    [
+      create(:organisation, slug: "test-org"),
+      create(:organisation, slug: "department-for-testing", name: "Department for Testing"),
+    ]
+  end
 
   before do
     assign(:organisation_form, organisation_form)
@@ -26,6 +31,16 @@ describe "account/organisations/edit.html.erb" do
       organisations.each do |organisation|
         expect(rendered).to have_selector("option[value='#{organisation.id}']", text: organisation.name)
       end
+    end
+
+    it "has organisation fields with abbreviations" do
+      expect(rendered).to have_select(
+        "Select your organisation",
+        with_options: [
+          "Department for Testing (DfT)",
+          "Test Org (TO)",
+        ],
+      )
     end
 
     it "sets the page title" do
@@ -62,8 +77,8 @@ describe "account/organisations/edit.html.erb" do
         "Select your organisation",
         options: [
           "Select an organisation",
-          "Department for Testing",
-          "Test Org",
+          "Department for Testing (DfT)",
+          "Test Org (TO)",
         ],
       )
     end
