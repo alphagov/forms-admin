@@ -23,9 +23,9 @@ describe "forms/index.html.erb" do
   describe "when there are one or more forms to display" do
     let(:forms) do
       [
-        OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", has_draft_version: true, has_live_version: false),
-        OpenStruct.new(id: 2, name: "Form 2", form_slug: "form-2", has_draft_version: false, has_live_version: true),
-        OpenStruct.new(id: 3, name: "Form 3", form_slug: "form-3", has_draft_version: true, has_live_version: true),
+        build(:form, id: 1, name: "Form 1", form_slug: "form-1"),
+        build(:form, :live, id: 2, name: "Form 2", form_slug: "form-2"),
+        build(:form, :live_with_draft, id: 3, name: "Form 3", form_slug: "form-3"),
       ]
     end
 
@@ -83,7 +83,12 @@ describe "forms/index.html.erb" do
     end
 
     context "when a form is live renders link to 'live' form readonly view" do
-      let(:forms) { [OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1", status: "draft", has_live_version: false), OpenStruct.new(id: 2, name: "Form 2", form_slug: "form-2", status: "live", has_live_version: true)] }
+      let(:forms) do
+        [
+          build(:form, id: 1, name: "Form 1", form_slug: "form-1"),
+          build(:form, :live, id: 2, name: "Form 2", form_slug: "form-2"),
+        ]
+      end
 
       it "allows the user to create a new form" do
         expect(rendered).to have_link("Create a form", href: forms_new_path)
