@@ -30,6 +30,10 @@ class Form < ActiveResource::Base
     has_live_version ? :live : :draft
   end
 
+  def is_live?
+    state.to_sym.in?(%i[live live_with_draft])
+  end
+
   def is_archived?
     state.to_sym.in?(%i[archived archived_with_draft])
   end
@@ -49,6 +53,10 @@ class Form < ActiveResource::Base
 
   def make_live!
     post "make-live"
+  end
+
+  def archive!
+    post "archive"
   end
 
   def self.update_organisation_for_creator(creator_id, organisation_id)
