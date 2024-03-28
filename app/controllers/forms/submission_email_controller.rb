@@ -58,7 +58,7 @@ module Forms
     end
 
     def live_submission_email_updated?
-      return false unless FeatureService.enabled?(:notify_original_submission_email_of_change) && current_form.has_live_version
+      return false unless FeatureService.enabled?(:notify_original_submission_email_of_change) && current_form.is_live?
 
       current_live_form.submission_email != current_form.submission_email
     end

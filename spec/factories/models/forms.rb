@@ -3,7 +3,6 @@ FactoryBot.define do
     sequence(:name) { |n| "Form #{n}" }
     sequence(:form_slug) { |n| "form-#{n}" }
     has_draft_version { true }
-    has_live_version { false }
     submission_email { Faker::Internet.email(domain: "example.gov.uk") }
     privacy_policy_url { Faker::Internet.url(host: "gov.uk") }
     organisation_id { 1 }
@@ -55,7 +54,6 @@ FactoryBot.define do
       ready_for_live
       live_at { Time.zone.now }
       has_draft_version { false }
-      has_live_version { true }
       state { :live }
     end
 

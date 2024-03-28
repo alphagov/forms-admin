@@ -1,6 +1,6 @@
 <% set_page_title(current_form.name) %>
 
-<% if current_form.has_live_version %>
+<% if current_form.is_live? %>
   <% content_for :back_link, govuk_back_link_to(live_form_path(current_form.id), t("back_link.form_view")) %>
 <% elsif current_form.group.present? %>
   <% content_for :back_link, govuk_back_link_to(group_path(current_form.group), t("back_link.group", group_name: current_form.group.name)) %>
@@ -14,7 +14,7 @@
 
     <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
       <span class="govuk-caption-l"><%= current_form.name %></span><span class="govuk-visually-hidden"> - </span>
-      <%= current_form.has_live_version ? t("forms.form_overview.title_edit") : t("forms.form_overview.title_create") %>
+      <%= current_form.is_live? ? t("forms.form_overview.title_edit") : t("forms.form_overview.title_create") %>
     </h1>
 
     <%= render FormStatusTagDescriptionComponent::View.new(status: :draft) %>
@@ -30,7 +30,7 @@
       </p>
     <% end %>
 
-    <% if current_form.has_live_version %>
+    <% if current_form.is_live? %>
       <div class="govuk-inset-text">
         <p><%= t("make_changes_live.warning") %></p>
       </div>
@@ -41,6 +41,6 @@
                                            sections: @task_list)
     %>
 
-    <%= govuk_button_link_to(t("forms.delete_form"), delete_form_path(current_form.id), warning: true) unless current_form.has_live_version  %>
+    <%= govuk_button_link_to(t("forms.delete_form"), delete_form_path(current_form.id), warning: true) unless current_form.is_live?  %>
   </div>
 </div>

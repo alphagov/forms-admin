@@ -14,7 +14,7 @@ module Forms
 
       return redirect_to form_path(@make_live_form.form) unless @make_live_form.user_wants_to_make_form_live
 
-      @make_form_live_service = MakeFormLiveService.call(draft_form: current_form, current_user:)
+      @make_form_live_service = MakeFormLiveService.call(current_form:, current_user:)
 
       if @make_live_form.make_form_live(@make_form_live_service)
         render "confirmation", locals: { current_form:, confirmation_page_title: @make_form_live_service.page_title }
@@ -30,7 +30,7 @@ module Forms
     end
 
     def render_new
-      if current_form.has_live_version
+      if current_form.is_live?
         render "make_your_changes_live", locals: { current_form: }
       else
         render "make_your_form_live", locals: { current_form: }

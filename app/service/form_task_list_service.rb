@@ -32,7 +32,7 @@ class FormTaskListService
 private
 
   def create_or_edit
-    @form.has_live_version ? "edit" : "create"
+    @form.is_live? ? "edit" : "create"
   end
 
   def create_form_section

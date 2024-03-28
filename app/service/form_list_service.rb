@@ -68,7 +68,7 @@ private
 
     status_mapping = {
       draft: -> { form.has_draft_version },
-      live: -> { form.has_live_version && !form.is_archived? },
+      live: -> { form.is_live? },
       archived: -> { form.is_archived? },
     }
 

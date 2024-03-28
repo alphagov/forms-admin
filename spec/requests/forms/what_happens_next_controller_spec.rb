@@ -10,7 +10,6 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       organisation_id: 1,
       what_happens_next_markdown: "Good things come to those who wait",
       live_at: nil,
-      has_live_version: false,
     }.to_json
   end
 
@@ -22,7 +21,6 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       organisation_id: 1,
       what_happens_next_markdown: "",
       live_at: nil,
-      has_live_version: false,
     )
   end
 
@@ -34,7 +32,6 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       organisation_id: 1,
       what_happens_next_markdown: "Wait until you get a reply",
       live_at: nil,
-      has_live_version: false,
     })
   end
 
