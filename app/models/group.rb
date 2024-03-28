@@ -10,6 +10,8 @@ class Group < ApplicationRecord
 
   scope :for_user, ->(user) { joins(:memberships).where(memberships: { user_id: user.id }) }
 
+  scope :for_organisation, ->(organisation) { where(organisation:) }
+
   validates :name, presence: true
   before_create :set_external_id
 
