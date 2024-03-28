@@ -2,8 +2,13 @@ require "rails_helper"
 
 describe "account/organisations/edit.html.erb" do
   let(:organisation_form) { Account::OrganisationForm.new }
-  let!(:organisations) { create_list(:organisation, 3) }
   let(:contact_href) { "https://example.com/contact" }
+  let!(:organisations) do
+    [
+      create(:organisation, slug: "test-org"),
+      create(:organisation, slug: "department-for-testing", name: "Department for Testing"),
+    ]
+  end
 
   before do
     assign(:organisation_form, organisation_form)
@@ -28,6 +33,16 @@ describe "account/organisations/edit.html.erb" do
       end
     end
 
+    it "has organisation fields with abbreviations" do
+      expect(rendered).to have_select(
+        "Select your organisation",
+        with_options: [
+          "Department for Testing (DfT)",
+          "Test Org (TO)",
+        ],
+      )
+    end
+
     it "sets the page title" do
       expect(view.content_for(:title)).to eq(t("page_titles.account_organisation"))
     end
@@ -45,6 +60,27 @@ describe "account/organisations/edit.html.erb" do
 
     it "sets the page title with error prefix" do
       expect(view.content_for(:title)).to eq(title_with_error_prefix(t("page_titles.account_organisation"), true))
+    end
+  end
+
+  context "when there are closed organisations" do
+    before do
+      create(:organisation, slug: "test-org")
+      create(:organisation, slug: "closed-org", closed: true)
+      create(:organisation, slug: "department-for-testing", name: "Department for Testing")
+
+      render
+    end
+
+    it "only shows the organisations that are not closed" do
+      expect(rendered).to have_select(
+        "Select your organisation",
+        options: [
+          "Select an organisation",
+          "Department for Testing (DfT)",
+          "Test Org (TO)",
+        ],
+      )
     end
   end
 end
