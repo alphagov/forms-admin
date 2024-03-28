@@ -50,7 +50,7 @@ RSpec.describe Forms::UnarchiveController, type: :request do
     end
 
     it "renders the confirmation page" do
-      expect(response).to render_template("forms/make_live/make_your_form_live")
+      expect(response).to render_template("unarchive_form")
     end
 
     context "when current user has a trial account" do

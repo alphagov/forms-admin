@@ -5,7 +5,7 @@ module Forms
     def new
       authorize current_form, :can_make_form_live?
       @make_live_form = MakeLiveForm.new(form: current_form)
-      render "forms/make_live/make_your_form_live", locals: { current_form: }
+      render "unarchive_form", locals: { current_form: }
     end
 
     def create
@@ -20,7 +20,7 @@ module Forms
       if make_form_live
         render "forms/make_live/confirmation", locals: { current_form:, confirmation_page_title: @make_form_live_service.page_title }
       else
-        render "forms/make_live/make_your_form_live", status: :unprocessable_entity, locals: { current_form: }
+        render "unarchive_form", status: :unprocessable_entity, locals: { current_form: }
       end
     end
 
