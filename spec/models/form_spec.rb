@@ -1,8 +1,9 @@
 require "rails_helper"
 
 describe Form, type: :model do
+  let(:id) { 1 }
   let(:organisation) { build :organisation, id: 1 }
-  let(:form) { described_class.new(id: 1, name: "Form 1", organisation:, submission_email: "") }
+  let(:form) { described_class.new(id:, name: "Form 1", organisation:, submission_email: "") }
 
   describe "validations" do
     it "does not require an org" do
@@ -343,6 +344,23 @@ describe Form, type: :model do
       it "returns nil" do
         expect(form.metrics_data).to eq(nil)
       end
+    end
+  end
+
+  describe "#is_live?" do
+    it "returns true if state live" do
+      form.state = :live
+      expect(form.is_live?).to be true
+    end
+
+    it "returns true if state live with draft" do
+      form.state = :live_with_draft
+      expect(form.is_live?).to be true
+    end
+
+    it "returns false if state draft" do
+      form.state = :draft
+      expect(form.is_live?).to be false
     end
   end
 
