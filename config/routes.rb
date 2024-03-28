@@ -49,6 +49,8 @@ Rails.application.routes.draw do
     post "/privacy-policy" => "forms/privacy_policy#create"
     get "/make-live" => "forms/make_live#new", as: :make_live
     post "/make-live" => "forms/make_live#create", as: :make_live_create
+    get "/unarchive" => "forms/unarchive#new", as: :unarchive
+    post "/unarchive" => "forms/unarchive#create", as: :unarchive_create
     get "/what-happens-next" => "forms/what_happens_next#new", as: :what_happens_next
     post "/what-happens-next" => "forms/what_happens_next#create", as: :what_happens_next_create
     post "/what-happens-next-preview" => "forms/what_happens_next#render_preview", as: :what_happens_next_render_preview
