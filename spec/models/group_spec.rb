@@ -178,6 +178,23 @@ RSpec.describe Group, type: :model do
         expect(described_class.for_user(user)).to eq [group1]
       end
     end
+
+    describe ".for_organisation" do
+      it "returns groups that match the given organisation" do
+        org = create(:organisation, slug: "other org")
+
+        group1 = create(:group)
+        create(:group, organisation: org)
+
+        expect(described_class.for_organisation(group1.organisation)).to eq [group1]
+      end
+
+      it "returns no groups for an unused organisation" do
+        org = create(:organisation)
+
+        expect(described_class.for_organisation(org)).to eq []
+      end
+    end
   end
 
   describe "status" do
