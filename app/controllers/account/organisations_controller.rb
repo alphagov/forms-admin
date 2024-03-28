@@ -1,5 +1,7 @@
 module Account
   class OrganisationsController < ApplicationController
+    include AfterSignInPathHelper
+
     before_action :redirect_if_organisation_exists
 
     def edit
@@ -10,7 +12,7 @@ module Account
       @organisation_form = OrganisationForm.new(account_organisation_form_params(current_user))
 
       if @organisation_form.submit
-        redirect_to root_path
+        redirect_to next_path
       else
         render :edit, status: :unprocessable_entity
       end
@@ -24,6 +26,10 @@ module Account
 
     def redirect_if_organisation_exists
       redirect_to root_path if current_user.organisation.present?
+    end
+
+    def next_path
+      after_sign_in_next_path
     end
   end
 end
