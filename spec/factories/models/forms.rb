@@ -64,6 +64,11 @@ FactoryBot.define do
       state { :archived }
     end
 
+    trait :archived_with_draft do
+      live
+      state { :archived_with_draft }
+    end
+
     trait :with_active_resource do
       task_statuses { statuses }
     end
