@@ -1,5 +1,7 @@
 module Account
   class NamesController < ApplicationController
+    include AfterSignInPathHelper
+
     before_action :redirect_if_name_exists
 
     def edit
@@ -27,7 +29,7 @@ module Account
     end
 
     def next_path
-      AfterSignInPathHelper.new(current_user, default_path: stored_location || root_path).next_path
+      after_sign_in_next_path
     end
   end
 end

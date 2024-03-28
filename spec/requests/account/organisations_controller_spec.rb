@@ -34,11 +34,11 @@ describe Account::OrganisationsController do
     context "with valid parameters" do
       let(:organisation) { create(:organisation) }
       let(:valid_params) { { account_organisation_form: { organisation_id: organisation.id } } }
-      let(:after_sign_in_path_helper) { instance_double(AfterSignInPathHelper, next_path: "/next-path") }
 
       before do
-        allow(AfterSignInPathHelper).to receive(:new).and_return(after_sign_in_path_helper)
-        allow(after_sign_in_path_helper).to receive(:next_path).and_return("/next-path")
+        # rubocop:disable RSpec/AnyInstance
+        allow_any_instance_of(AfterSignInPathHelper).to receive(:after_sign_in_next_path).and_return("/next-path")
+        # rubocop:enable RSpec/AnyInstance
       end
 
       it "updates the user's organisation" do

@@ -1,17 +1,31 @@
 require "rails_helper"
 
+class TestController
+  include AfterSignInPathHelper
+  include Rails.application.routes.url_helpers
+
+  attr_reader :current_user, :stored_location
+
+  def initialize(current_user, stored_location)
+    @current_user = current_user
+    @stored_location = stored_location
+  end
+end
+
 describe AfterSignInPathHelper do
   include Rails.application.routes.url_helpers
 
-  subject(:path_helper) { described_class.new(user, default_path:) }
+  subject(:test_controller) do
+    TestController.new(user, location)
+  end
 
   let(:user) { build :user }
-  let(:default_path) { "/default" }
+  let(:location) { "/default" }
 
-  describe "#next_path" do
+  describe "#after_sign_in_next_path" do
     context "when the user has an organisation and name" do
       it "returns the default path" do
-        expect(path_helper.next_path).to eq default_path
+        expect(test_controller.after_sign_in_next_path).to eq location
       end
     end
 
@@ -19,7 +33,7 @@ describe AfterSignInPathHelper do
       let(:user) { build :user, :with_no_org }
 
       it "returns the path to edit the organisation" do
-        expect(path_helper.next_path).to eq edit_account_organisation_path
+        expect(test_controller.after_sign_in_next_path).to eq edit_account_organisation_path
       end
     end
 
@@ -27,7 +41,15 @@ describe AfterSignInPathHelper do
       let(:user) { build :user, name: nil }
 
       it "returns the path to edit the name" do
-        expect(path_helper.next_path).to eq edit_account_name_path
+        expect(test_controller.after_sign_in_next_path).to eq edit_account_name_path
+      end
+    end
+
+    context "when the stored_location is nil" do
+      let(:location) { nil }
+
+      it "returns the root path" do
+        expect(test_controller.after_sign_in_next_path).to eq root_path
       end
     end
   end

@@ -2,6 +2,8 @@ class AuthenticationController < ApplicationController
   skip_before_action :authenticate_and_check_access
   protect_from_forgery with: :null_session, only: %i[redirect_to_sign_in]
 
+  include AfterSignInPathHelper
+
   layout false
 
   def self.call(env)
@@ -16,7 +18,7 @@ class AuthenticationController < ApplicationController
 
   def callback_from_omniauth
     authenticate_user!
-    redirect_to after_sign_in_path
+    redirect_to after_sign_in_next_path
   end
 
   def sign_in
