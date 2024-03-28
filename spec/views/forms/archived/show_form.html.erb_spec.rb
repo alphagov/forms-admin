@@ -23,4 +23,18 @@ describe "archived/show_form.html.erb" do
   it "contains a link to view questions" do
     expect(rendered).to have_link("#{form.pages.count} questions", href: "/forms/#{form.id}/archived/pages")
   end
+
+  context "when the form state is :archived" do
+    it "contains a link to make the form live again" do
+      expect(rendered).to have_link("Make this form live", href: "/forms/#{form.id}/unarchive")
+    end
+  end
+
+  context "when the form state is :archived_with_draft" do
+    let(:form) { build(:form, :archived_with_draft, id: 1) }
+
+    it "does not contain a link to make the form live again" do
+      expect(rendered).to have_link("Make this form live", href: "/forms/#{form.id}/unarchive")
+    end
+  end
 end

@@ -472,6 +472,7 @@ en:
     declaration_description: Your form’s declaration is shown to people when they have answered all the questions, just before they submit the form.
     draft_create: Create a draft to edit
     draft_edit: Edit the draft of this form
+    make_this_form_live: Make this form live
     previous_form_url: Previous form URL
     privacy_policy_link: Privacy policy link
     questions: Questions
@@ -703,6 +704,7 @@ en:
     sign_up: Sign up
     text_settings: How much text will people need to provide?
     type_of_answer: What kind of answer do you need to this question?
+    unarchive_form: Make your form live again
     user_missing_organisation: You do not have an organisation set for your account
     user_upgrade_request_confirmation: Request to upgrade to editor account received
     user_upgrade_request_new: Requirements to upgrade to an editor account
@@ -915,6 +917,19 @@ en:
         If you do not want to lose your question route you can cancel this change by using the back button or <a href="%{pages_link_url}">go to your questions</a>.
       </p>
     routing_warning_notification_title: Important
+  unarchive:
+    new:
+      body_html: |
+        <p>
+          When you make your form live again you’ll get a URL for the form. The form
+          will not be indexed by search engines, so people will not be able to
+          find it easily. Contact your GOV.UK publishing team to publish a link to
+          your form on GOV.UK so people can find it.
+        </p>
+
+        <p>
+          After you have made your form live, completed forms will be sent to %{submission_email}.
+        </p>
   user_missing_organisation:
     body: "%{contact_link} to assign an organisation to your account."
     title: You do not have an organisation set for your account
