@@ -59,6 +59,12 @@ FactoryBot.define do
       state { :live }
     end
 
+    trait :live_with_draft do
+      live
+      state { :live_with_draft }
+      has_draft_version { true }
+    end
+
     trait :archived do
       live
       state { :archived }
