@@ -1,0 +1,19 @@
+<% set_page_title(t("page_titles.archive_form_confirmation")) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= govuk_panel(title_text: t("page_titles.archive_form_confirmation")) %>
+
+    <h2 class="govuk-heading-m"><%= t('archive_form.confirmation.form_name_heading') %></h2>
+
+    <p><%= form.name %></p>
+
+    <h2 class="govuk-heading-m"><%= t("archive_form.confirmation.links_will_no_longer_work_heading") %></h2>
+
+    <p><%= t("archive_form.confirmation.links_will_no_longer_work_body") %></p>
+
+    <p>
+      <%= govuk_link_to t("archive_form.confirmation.continue_link"), archived_form_path(form.id) %>
+    </p>
+  </div>
+</div>
