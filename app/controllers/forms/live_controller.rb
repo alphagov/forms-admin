@@ -1,6 +1,7 @@
 module Forms
   class LiveController < ApplicationController
     after_action :verify_authorized
+
     def show_form
       authorize current_form, :can_view_form?
       render :show_form, locals: { form_metadata: current_form, form: current_live_form }
@@ -10,6 +11,8 @@ module Forms
       authorize current_form, :can_view_form?
       render :show_pages, locals: { form: current_live_form }
     end
+
+  private
 
     def current_live_form
       @current_live_form ||= Form.find_live(params[:form_id])
