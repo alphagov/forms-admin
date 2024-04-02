@@ -4,7 +4,7 @@ en:
     organisation_details_summary: If your organisation is not listed
     organisation_text_html: |
       <p>If you’re from a central government organisation that publishes content on the GOV.UK website but your organisation is not listed, please %{contact_link}.</p>
-      <p>If you’re from a public sector organisation that doesn’t publish content on GOV.UK you cannot use GOV.UK Forms yet. You can <a href="https://www.forms.service.gov.uk/forthcoming-features">read about our forthcoming features and sign up to our mailing list</a> for updates.</p>
+      <p>If you’re from a public sector organisation that does not publish content on GOV.UK you cannot use GOV.UK Forms yet. You can <a href="https://www.forms.service.gov.uk/forthcoming-features">read about our forthcoming features and sign up to our mailing list</a> for updates.</p>
   activemodel:
     errors:
       models:
