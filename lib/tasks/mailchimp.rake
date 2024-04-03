@@ -17,7 +17,7 @@ namespace :mailchimp do
       server: mailchimp_server_prefix,
     })
 
-    db_email_addresses = User.pluck(:email).to_set
+    db_email_addresses = User.where(has_access: true).pluck(:email).to_set
 
     puts "There are #{mailchimp_lists.length} lists to synchronize"
     mailchimp_lists.each do |list_id|
