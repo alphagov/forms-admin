@@ -25,6 +25,8 @@ RSpec.describe "mailchimp.rake" do
 
       create :user, email: "add@domain.org"
       create :user, email: "keep@domain.org"
+      create :user, email: "user.without.access@domain.org", has_access: false
+      create :user, email: "retireduser@domain.org", has_access: false
 
       allow(MailchimpMarketing::Client).to receive(:new).and_return(mailchimp_client)
 
@@ -40,14 +42,14 @@ RSpec.describe "mailchimp.rake" do
           {
             "name" => "List 1",
             "stats" => {
-              "member_count" => 2,
+              "member_count" => 3,
             },
           }
         when "list-2"
           {
             "name" => "List 2",
             "stats" => {
-              "member_count" => 2,
+              "member_count" => 3,
             },
           }
         else
@@ -62,6 +64,7 @@ RSpec.describe "mailchimp.rake" do
             "members" => [
               { "email_address" => "keep@domain.org" },
               { "email_address" => "remove@domain.org" },
+              { "email_address" => "retireduser@domain.org" },
             ],
           }
         when "list-2"
@@ -69,6 +72,7 @@ RSpec.describe "mailchimp.rake" do
             "members" => [
               { "email_address" => "keep@domain.org" },
               { "email_address" => "remove@domain.org" },
+              { "email_address" => "retireduser@domain.org" },
             ],
           }
         else
@@ -101,8 +105,39 @@ RSpec.describe "mailchimp.rake" do
       expect { task.invoke }.to output.to_stdout
     end
 
+    it "does not add users who are into the database but lack access to GOV.UK Forms" do
+      expect(mailchimp_client_lists).not_to receive(:set_list_member).with(
+        "list-1",
+        anything,
+        {
+          "email_address" => "user.without.access@domain.org",
+          "status_if_new" => "subscribed",
+        },
+      )
+
+      expect(mailchimp_client_lists).not_to receive(:set_list_member).with(
+        "list-2",
+        anything,
+        {
+          "email_address" => "user.without.access@domain.org",
+          "status_if_new" => "subscribed",
+        },
+      )
+
+      expect { task.invoke }.to output.to_stdout
+    end
+
     it "removes users from MailChimp who do not appear in the database, but do appear in the mailing list" do
       removed_email_hash = Digest::MD5.hexdigest "remove@domain.org"
+
+      expect(mailchimp_client_lists).to receive(:delete_list_member_permanent).with("list-1", removed_email_hash)
+      expect(mailchimp_client_lists).to receive(:delete_list_member_permanent).with("list-2", removed_email_hash)
+
+      expect { task.invoke }.to output.to_stdout
+    end
+
+    it "removes users from MailChimp who exist in the database, but do not have access" do
+      removed_email_hash = Digest::MD5.hexdigest "retireduser@domain.org"
 
       expect(mailchimp_client_lists).to receive(:delete_list_member_permanent).with("list-1", removed_email_hash)
       expect(mailchimp_client_lists).to receive(:delete_list_member_permanent).with("list-2", removed_email_hash)
