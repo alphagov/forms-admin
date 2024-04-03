@@ -26,10 +26,6 @@ class Form < ActiveResource::Base
     qualifying_route_pages.none? && has_routing_conditions
   end
 
-  def status
-    has_live_version ? :live : :draft
-  end
-
   def is_live?
     state.to_sym.in?(%i[live live_with_draft])
   end

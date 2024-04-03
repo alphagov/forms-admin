@@ -15,7 +15,7 @@ module Forms
 
       return redirect_to archived_form_path(current_form) unless @make_live_form.user_wants_to_make_form_live
 
-      @make_form_live_service = MakeFormLiveService.call(draft_form: current_form, current_user:)
+      @make_form_live_service = MakeFormLiveService.call(current_form:, current_user:)
 
       if @make_live_form.make_form_live(@make_form_live_service)
         render "forms/make_live/confirmation", locals: { current_form:, confirmation_page_title: @make_form_live_service.page_title }

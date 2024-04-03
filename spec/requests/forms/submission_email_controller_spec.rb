@@ -5,9 +5,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
 
   let(:organisation) { build :organisation, id: 1, slug: "test-org" }
   let(:user) { build :editor_user, id: 1, organisation: }
-  let(:form) { build :form, id: 1, creator_id: 1, organisation_id: 1, has_live_version: }
-  let(:live_form) { form.clone }
-  let(:has_live_version) { false }
+  let(:form) { build :form, id: 1, creator_id: 1, organisation_id: 1 }
 
   let(:submission_email_mailer_spy) do
     submission_email_mailer = instance_spy(SubmissionEmailMailer)
@@ -19,7 +17,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms", headers, [form].to_json, 200
       mock.get "/api/v1/forms/1", headers, form.to_json, 200
-      mock.get "/api/v1/forms/1/live", headers, live_form.to_json, 200
+      mock.get "/api/v1/forms/1/live", headers, form.to_json, 200
       mock.put "/api/v1/forms/1", post_headers, form.to_json, 200
     end
 
@@ -225,47 +223,51 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
   end
 
   describe "#submission_email_confirmed" do
-    let(:has_live_version) { false }
+    context "when the form is not live" do
+      before do
+        get submission_email_confirmed_path(form.id)
+      end
 
-    before do
-      if has_live_version
-        live_form
-        form.submission_email = Faker::Internet.email(domain: "example.gov.uk")
+      it "returns HTTP code 200" do
+        expect(response).to have_http_status(:ok)
+      end
 
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/1", headers, form.to_json, 200
-          mock.get "/api/v1/forms/1/live", headers, live_form.to_json, 200
+      it "renders the correct page" do
+        expect(response).to render_template(:submission_email_confirmed)
+      end
+
+      context "when current user does not own form" do
+        let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
+
+        it "is forbidden" do
+          expect(response).to have_http_status(:forbidden)
         end
       end
-      get submission_email_confirmed_path(form.id)
-    end
 
-    it "returns HTTP code 200" do
-      expect(response).to have_http_status(:ok)
-    end
+      context "when current user has a trial account" do
+        let(:user) { build :user, :with_trial_role, id: 1 }
 
-    it "renders the correct page" do
-      expect(response).to render_template(:submission_email_confirmed)
-    end
-
-    context "when current user does not own form" do
-      let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role, id: 1 }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
+        it "is forbidden" do
+          expect(response).to have_http_status(:forbidden)
+        end
       end
     end
 
     context "when draft version submission email is different from live version" do
-      let(:has_live_version) { true }
+      let(:form) { build :form, :live, id: 1, creator_id: 1, organisation_id: 1 }
+      let(:previous_live_version) { form.clone }
+
+      before do
+        previous_live_version
+        form.submission_email = Faker::Internet.email(domain: "example.gov.uk")
+
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/1", headers, form.to_json, 200
+          mock.get "/api/v1/forms/1/live", headers, previous_live_version.to_json, 200
+        end
+
+        get submission_email_confirmed_path(form.id)
+      end
 
       it "displays the default text" do
         expect(response.body).to include(I18n.t("email_code_success.body_html", submission_email: form.submission_email))

@@ -40,22 +40,6 @@ describe Form, type: :model do
     end
   end
 
-  describe "#status" do
-    context "when form has not been made live" do
-      it "returns 'draft'" do
-        form.has_live_version = false
-        expect(form.status).to eq :draft
-      end
-    end
-
-    context "when form has been made live" do
-      it "returns 'live'" do
-        form.has_live_version = true
-        expect(form.status).to eq :live
-      end
-    end
-  end
-
   describe "#ready_for_live?" do
     context "when a form is complete and ready to be made live" do
       let(:completed_form) { build :form, :live }

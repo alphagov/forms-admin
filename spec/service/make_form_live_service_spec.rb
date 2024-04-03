@@ -1,18 +1,18 @@
 require "rails_helper"
 
 describe MakeFormLiveService do
-  let(:make_form_live_service) { described_class.call(draft_form:, current_user:) }
-  let(:draft_form) { build :form, :ready_for_live, id: 1 }
-  let(:live_form) { draft_form }
+  let(:make_form_live_service) { described_class.call(current_form:, current_user:) }
+  let(:current_form) { build :form, :ready_for_live, id: 1 }
+  let(:live_form) { current_form }
   let(:current_user) { build :user }
 
   describe "#make_live" do
     before do
-      allow(draft_form).to receive(:make_live!).and_return(true)
+      allow(current_form).to receive(:make_live!).and_return(true)
     end
 
     it "calls make_live! on the current form" do
-      expect(draft_form).to receive(:make_live!)
+      expect(current_form).to receive(:make_live!)
       make_form_live_service.make_live
     end
 
@@ -23,7 +23,7 @@ describe MakeFormLiveService do
 
     context "when draft form has live version" do
       let(:live_form) { build :form, :live }
-      let(:draft_form) do
+      let(:current_form) do
         live_form.clone
       end
 
@@ -43,7 +43,7 @@ describe MakeFormLiveService do
 
       context "when submission email has changed" do
         before do
-          draft_form.submission_email = "i-have-changed@example.com"
+          current_form.submission_email = "i-have-changed@example.com"
         end
 
         it "does not call the SubmissionEmailMailer" do
@@ -74,7 +74,7 @@ describe MakeFormLiveService do
 
     context "when changes to live form are being made live" do
       let(:live_form) { build :form, :live }
-      let(:draft_form) do
+      let(:current_form) do
         live_form.clone
       end
 

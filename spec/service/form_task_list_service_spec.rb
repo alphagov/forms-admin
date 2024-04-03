@@ -307,7 +307,7 @@ describe FormTaskListService do
 
       context "when form is live" do
         before do
-          allow(form).to receive(:has_live_version).and_return(true)
+          allow(form).to receive(:is_live?).and_return(true)
         end
 
         it "has tasks" do
