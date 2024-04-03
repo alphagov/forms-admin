@@ -1,6 +1,7 @@
 module Forms
   class MakeLiveController < ApplicationController
     after_action :verify_authorized
+
     def new
       authorize current_form, :can_make_form_live?
       @make_live_form = MakeLiveForm.new(form: current_form)
@@ -32,6 +33,8 @@ module Forms
     def render_new
       if current_form.is_live?
         render "make_your_changes_live", locals: { current_form: }
+      elsif current_form.is_archived?
+        render "make_archived_draft_live", locals: { current_form: }
       else
         render "make_your_form_live", locals: { current_form: }
       end

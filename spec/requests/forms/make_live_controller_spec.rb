@@ -71,6 +71,22 @@ RSpec.describe Forms::MakeLiveController, type: :request do
       end
     end
 
+    context "when editing a draft of an archived form" do
+      let(:form) do
+        build(:form,
+              :archived_with_draft,
+              id: 2)
+      end
+
+      it "reads the form from the API" do
+        expect(form).to have_been_read
+      end
+
+      it "renders make your changes live" do
+        expect(response).to render_template("make_archived_draft_live")
+      end
+    end
+
     context "when current user has a trial account" do
       let(:user) { build :user, :with_trial_role }
 
