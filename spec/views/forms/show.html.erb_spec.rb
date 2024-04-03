@@ -78,6 +78,22 @@ describe "forms/show.html.erb" do
     end
   end
 
+  context "when form state is archived" do
+    let(:form) { build :form, :archived, id: 2 }
+
+    it "does not contain a link to delete the form" do
+      expect(rendered).not_to have_link("Delete draft form", href: delete_form_path(2))
+    end
+  end
+
+  context "when form state is archived with draft" do
+    let(:form) { build :form, :archived_with_draft, id: 2 }
+
+    it "does not contain a link to delete the form" do
+      expect(rendered).not_to have_link("Delete draft form", href: delete_form_path(2))
+    end
+  end
+
   context "and a user has the trial role" do
     let(:user) { build :user, :with_trial_role }
 
