@@ -2,6 +2,8 @@
 
 <% if current_form.is_live? %>
   <% content_for :back_link, govuk_back_link_to(live_form_path(current_form.id), t("back_link.form_view")) %>
+<% elsif current_form.is_archived? %>
+  <% content_for :back_link, govuk_back_link_to(archived_form_path(current_form.id), t("back_link.form_view")) %>
 <% elsif current_form.group.present? %>
   <% content_for :back_link, govuk_back_link_to(group_path(current_form.group), t("back_link.group", group_name: current_form.group.name)) %>
 <% else %>
@@ -14,7 +16,7 @@
 
     <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
       <span class="govuk-caption-l"><%= current_form.name %></span><span class="govuk-visually-hidden"> - </span>
-      <%= current_form.is_live? ? t("forms.form_overview.title_edit") : t("forms.form_overview.title_create") %>
+      <%= current_form.state.to_sym == :draft ? t("forms.form_overview.title_create") : t("forms.form_overview.title_edit") %>
     </h1>
 
     <%= render FormStatusTagDescriptionComponent::View.new(status: :draft) %>

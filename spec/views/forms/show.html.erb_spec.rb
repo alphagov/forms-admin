@@ -61,6 +61,10 @@ describe "forms/show.html.erb" do
       expect(view.content_for(:back_link)).to have_link("Back", href: "/forms/2/live")
     end
 
+    it "has the heading 'Edit your form'" do
+      expect(rendered).to have_css("h1.govuk-heading-l", text: /Edit your form/)
+    end
+
     it "rendered draft tag" do
       expect(rendered).to have_css(".govuk-tag.govuk-tag--yellow", text: "Draft")
     end
@@ -80,6 +84,18 @@ describe "forms/show.html.erb" do
 
   context "when form state is archived" do
     let(:form) { build :form, :archived, id: 2 }
+
+    it "has a back link to the archived form page" do
+      expect(view.content_for(:back_link)).to have_link("Back", href: "/forms/2/archived")
+    end
+
+    it "has the heading 'Edit your form'" do
+      expect(rendered).to have_css("h1.govuk-heading-l", text: /Edit your form/)
+    end
+
+    it "rendered draft tag" do
+      expect(rendered).to have_css(".govuk-tag.govuk-tag--yellow", text: "Draft")
+    end
 
     it "does not contain a link to delete the form" do
       expect(rendered).not_to have_link("Delete draft form", href: delete_form_path(2))
