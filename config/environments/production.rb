@@ -84,7 +84,10 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Enable DNS rebinding protection and other `Host` header attacks.
-  config.hosts << /.*\.forms\.service\.gov\.uk/
+  config.hosts = [
+    /.*\.forms\.service\.gov\.uk/,
+    IPAddr.new("10.10.0.0/16"), # for healthchecks in ECS
+  ]
 
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
