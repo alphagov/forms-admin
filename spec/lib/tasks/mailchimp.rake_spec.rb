@@ -17,6 +17,44 @@ RSpec.describe "mailchimp.rake" do
       instance_double("MailchimpMarketing::ListsApi")
     end
 
+    let(:list_1) do
+      {
+        "name" => "List 1",
+        "stats" => {
+          "member_count" => 3,
+        },
+      }
+    end
+
+    let(:list_2) do
+      {
+        "name" => "List 2",
+        "stats" => {
+          "member_count" => 3,
+        },
+      }
+    end
+
+    let(:list_1_members_info) do
+      {
+        "members" => [
+          { "email_address" => "keep@domain.org" },
+          { "email_address" => "remove@domain.org" },
+          { "email_address" => "retireduser@domain.org" },
+        ],
+      }
+    end
+
+    let(:list_2_members_info) do
+      {
+        "members" => [
+          { "email_address" => "keep@domain.org" },
+          { "email_address" => "remove@domain.org" },
+          { "email_address" => "retireduser@domain.org" },
+        ],
+      }
+    end
+
     before do
       # Rake.application.options.trace = true
 
@@ -39,19 +77,9 @@ RSpec.describe "mailchimp.rake" do
       allow(mailchimp_client_lists).to receive(:get_list) do |list_id|
         case list_id
         when "list-1"
-          {
-            "name" => "List 1",
-            "stats" => {
-              "member_count" => 3,
-            },
-          }
+          list_1
         when "list-2"
-          {
-            "name" => "List 2",
-            "stats" => {
-              "member_count" => 3,
-            },
-          }
+          list_2
         else
           raise "Unknown list id"
         end
@@ -60,21 +88,9 @@ RSpec.describe "mailchimp.rake" do
       allow(mailchimp_client_lists).to receive(:get_list_members_info) do |list_id|
         case list_id
         when "list-1"
-          {
-            "members" => [
-              { "email_address" => "keep@domain.org" },
-              { "email_address" => "remove@domain.org" },
-              { "email_address" => "retireduser@domain.org" },
-            ],
-          }
+          list_1_members_info
         when "list-2"
-          {
-            "members" => [
-              { "email_address" => "keep@domain.org" },
-              { "email_address" => "remove@domain.org" },
-              { "email_address" => "retireduser@domain.org" },
-            ],
-          }
+          list_2_members_info
         else
           raise "Unknown list id"
         end
