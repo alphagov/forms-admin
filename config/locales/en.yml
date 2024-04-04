@@ -262,6 +262,25 @@ en:
     confirm_deletion_form: Are you sure you want to delete this draft?
     confirm_deletion_form_live_form: Deleting this draft will not remove the live form.
     confirm_deletion_page: Are you sure you want to delete this page?
+  group_members:
+    index:
+      details:
+        summary_content_html: |
+          <p>An editor can edit forms in a group but cannot make forms live.</p>
+          <p>A group admin can edit forms, make forms live and add editors to a group.</p>
+          <p>Only an organisation admin can add a group admin to a group.</p>
+        summary_text: What can ‘editors’ and ‘group admins’ do?
+      no_members: There are no members in this group.
+      roles:
+        editor:
+          name: Editor
+        group_admin:
+          name: Group Admin
+      table_headings:
+        email: Email
+        name: Name
+        role: Role
+      title: Members of this group
   groups:
     edit:
       title: Edit group
