@@ -11,6 +11,7 @@ class GroupPolicy < ApplicationPolicy
   alias_method :edit?, :show?
   alias_method :update?, :edit?
   alias_method :destroy?, :edit?
+  alias_method :index_users?, :show?
 
   class Scope < ApplicationPolicy::Scope
     def resolve
