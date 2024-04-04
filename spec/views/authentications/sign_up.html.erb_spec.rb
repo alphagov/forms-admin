@@ -18,6 +18,6 @@ describe "authentications/sign_up.html.erb" do
   end
 
   it "has sign_in button" do
-    expect(rendered).to have_selector("[data-module=\"sign-in-button\"]")
+    expect(rendered).to have_selector("#sign-in-button")
   end
 end

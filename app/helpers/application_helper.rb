@@ -81,11 +81,11 @@ module ApplicationHelper
   end
 
   def sign_in_button(is_e2e_user:)
-    govuk_button_to t("sign_in_button"), omniauth_authorize_path, params: sign_in_params(is_e2e_user:), data: { module: "sign-in-button" }
+    govuk_button_to t("sign_in_button"), omniauth_authorize_path, params: sign_in_params(is_e2e_user:), id: "sign-in-button"
   end
 
   def sign_up_button(is_e2e_user:)
-    govuk_button_to t("sign_up_button"), omniauth_authorize_path, params: sign_in_params(is_e2e_user:, login_type: :sign_up), data: { module: "sign-in-button" }
+    govuk_button_to t("sign_up_button"), omniauth_authorize_path, params: sign_in_params(is_e2e_user:, login_type: :sign_up), id: "sign-in-button"
   end
 
   def omniauth_authorize_path

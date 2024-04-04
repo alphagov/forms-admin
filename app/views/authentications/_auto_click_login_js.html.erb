@@ -1,7 +1,7 @@
 <% content_for :body_end do %>
   <script>
     (function() {
-      var loginButton = document.querySelector('[data-module="sign-in-button"]');
+      var loginButton = document.querySelector('#sign-in-button');
       if (loginButton && typeof loginButton.click === 'function') {
         loginButton.click();
       }
