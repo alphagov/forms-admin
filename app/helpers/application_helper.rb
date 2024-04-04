@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# Rubocop ate my lunch
 module ApplicationHelper
   def page_title(separator = " – ")
     [content_for(:title), "GOV.UK Forms"].compact.join(separator)
@@ -33,7 +32,7 @@ module ApplicationHelper
   end
 
   def contact_url
-    "mailto:govuk-forms-support@govuk.zendesk.com"
+    t("contact_url")
   end
 
   def contact_link(text = t("contact_govuk_forms"))

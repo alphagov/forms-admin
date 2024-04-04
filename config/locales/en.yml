@@ -117,6 +117,7 @@ en:
       hint: Select at least one option
       title: How can people get help with filling in this form?
   contact_govuk_forms: contact the GOV.UK Forms team
+  contact_url: mailto:govuk-forms-support@govuk.zendesk.com
   continue: Continue
   declaration_form:
     new:
@@ -809,6 +810,7 @@ en:
   phase_banner:
     after_link: will help us improve it.
     before_link: This is a new service, your
+    feedback_survey_url: https://surveys.publishing.service.gov.uk/s/FormsFeedbackSurvey/
     link: feedback
   privacy_policy_form:
     body_html: |

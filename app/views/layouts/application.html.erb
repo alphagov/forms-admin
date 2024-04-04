@@ -10,7 +10,7 @@
 <% content_for :before_content do %>
     <%= govuk_phase_banner(tag: { text: "Beta" }) do %>
       <%= t("phase_banner.before_link") %>
-      <%= contact_link(t("phase_banner.link")) %>
+      <%= govuk_link_to t("phase_banner.link"), t("phase_banner.feedback_survey_url") %>
       <%= t("phase_banner.after_link") %>
     <% end %>
     <%= yield :back_link %>
