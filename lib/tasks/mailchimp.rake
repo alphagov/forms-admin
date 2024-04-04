@@ -29,9 +29,22 @@ namespace :mailchimp do
       puts "Found Mailchimp list: #{target_list['name']}"
       puts "Mailchimp list has #{target_list['stats']['member_count']} members"
 
-      existing_members = mailchimp.lists.get_list_members_info(list_id)
-      list_email_addresses = existing_members["members"]
-                               .map { |member| member["email_address"] }
+      existing_members = []
+
+      # Set up API pagination
+      total_list_size = target_list["stats"]["member_count"]
+      offset = 0
+      page_size = 1000 # maximum page size is 1000 results, default is 10
+
+      while offset < total_list_size
+        api_response = mailchimp.lists.get_list_members_info(list_id, count: page_size, offset:)
+        api_email_addresses = api_response["members"].map { |member| member["email_address"] }
+        existing_members.concat(api_email_addresses)
+
+        offset += page_size
+      end
+
+      list_email_addresses = existing_members
                                .to_set
 
       deleted_users = list_email_addresses - db_email_addresses

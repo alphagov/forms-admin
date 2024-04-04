@@ -160,5 +160,29 @@ RSpec.describe "mailchimp.rake" do
 
       expect { task.invoke }.to output.to_stdout
     end
+
+    context "when the mailing list has more than 1000 members" do
+      let(:list_1) do
+        {
+          "name" => "List 1",
+          "stats" => {
+            "member_count" => 1001,
+          },
+        }
+      end
+
+      let(:list_1_members_info) do
+        {
+          "members" =>
+          1001.times.map { { "email_address" => Faker::Internet.email } },
+        }
+      end
+
+      it "handles all of the results" do
+        expect(mailchimp_client_lists).to receive(:delete_list_member_permanent).with("list-1", anything).exactly(1001).times
+
+        expect { task.invoke }.to output.to_stdout
+      end
+    end
   end
 end
