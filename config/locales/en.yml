@@ -719,6 +719,7 @@ en:
     not_found: Page not found
     payment_link_form: Add a link to a payment page on GOV.UK Pay
     privacy_policy_form: Provide a link to privacy information for this form
+    question_text: What’s your question?
     routing_page: Add a question route
     routing_page_delete: Delete question %{question_position}’s route
     routing_page_edit: Edit question %{question_position}’s route
