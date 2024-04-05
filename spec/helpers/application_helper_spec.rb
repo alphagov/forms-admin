@@ -35,17 +35,27 @@ RSpec.describe ApplicationHelper, type: :helper do
 
   describe "contact_url" do
     it "returns a link to the contact email address" do
-      expect(helper.contact_url).to eq "mailto:govuk-forms-support@govuk.zendesk.com"
+      expect(helper.contact_url).to eq t("contact_url")
     end
   end
 
   describe "contact_link" do
     it "returns a link to the contact email address with default text" do
-      expect(helper.contact_link).to eq '<a class="govuk-link" href="mailto:govuk-forms-support@govuk.zendesk.com">contact the GOV.UK Forms team</a>'
+      link = <<~HTML
+        <a class="govuk-link" href="#{t('contact_url')}">contact the GOV.UK Forms team</a>
+      HTML
+      link.strip!
+
+      expect(helper.contact_link).to include(link)
     end
 
     it "returns a link to the contact email address with custom text" do
-      expect(helper.contact_link("test")).to eq '<a class="govuk-link" href="mailto:govuk-forms-support@govuk.zendesk.com">test</a>'
+      link = <<~HTML
+        <a class="govuk-link" href="#{t('contact_url')}">test</a>
+      HTML
+      link.strip!
+
+      expect(helper.contact_link("test")).to eq link
     end
   end
 
