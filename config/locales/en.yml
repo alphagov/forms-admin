@@ -281,6 +281,17 @@ en:
         name: Name
         role: Role
       title: Members of this group
+    new:
+      body_html: |
+        <p>You can add someone to create and edit forms in this group. They must:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>be from the same organisation as you</li>
+          <li>already have a GOV.UK Forms account</li>
+        </ul>
+
+        <p>You must use their government email address.</p>
+      submit: Add this person
+      title: Add an editor to this group
   groups:
     edit:
       title: Edit group
