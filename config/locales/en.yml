@@ -302,6 +302,7 @@ en:
     new:
       title: New group
     show:
+      edit_group_members: Edit members of this group
       edit_group_name: Change the name of this group
       trial_banner:
         body_html: |
