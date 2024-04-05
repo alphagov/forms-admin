@@ -277,7 +277,7 @@ en:
         group_admin:
           name: Group Admin
       table_headings:
-        email: Email
+        email: Email address
         name: Name
         role: Role
       title: Members of this group
