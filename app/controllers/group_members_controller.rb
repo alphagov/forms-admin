@@ -4,6 +4,8 @@ class GroupMembersController < ApplicationController
 
   def index; end
 
+  def new; end
+
 private
 
   def set_group
