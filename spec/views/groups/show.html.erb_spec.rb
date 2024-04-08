@@ -24,6 +24,10 @@ RSpec.describe "groups/show", type: :view do
     expect(rendered).to have_link "Change the name of this group", href: edit_group_path(group)
   end
 
+  it "has a link to the edit members page" do
+    expect(rendered).to have_link "Edit members of this group", href: group_members_path(group)
+  end
+
   context "when the group has no forms" do
     let(:forms) { [] }
 
