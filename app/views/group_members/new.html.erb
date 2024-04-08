@@ -10,5 +10,14 @@
     </h1>
 
     <%= t(".body_html") %>
+
+    <%= form_with(model: @group_member_form, url: group_members_path(@group)) do |f| %>
+      <% if @group_member_form&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+
+      <%= f.govuk_text_field :member_email_address, label: {  tag: 'h2', size: 'm' } %>
+      <%= f.govuk_submit t(".submit") %>
+    <% end %>
   </div>
 </div>

@@ -3,9 +3,11 @@ require "rails_helper"
 RSpec.describe "group_members/new", type: :view do
   let(:organisation) { build(:organisation, slug: "Department for testing new group members") }
   let(:group) { create(:group, name: "Group 1", organisation:) }
+  let(:group_member_form) { GroupMemberForm.new }
 
   before do
     assign(:group, group)
+    assign(:group_member_form, group_member_form)
     render
   end
 

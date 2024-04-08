@@ -16,6 +16,14 @@ en:
           attributes:
             organisation_id:
               blank: Select your organisation
+        group_member_form:
+          attributes:
+            member_email_address:
+              blank: Enter an email address
+              invalid_email: Enter an email address in the correct format, like name@example.gov.uk
+              not_forms_user: This person does not have a GOV.UK Forms account
+              taken: This person is already a member of the group
+              user_in_other_org: This person has a different organisation set for their GOV.UK Forms account
         page:
           attributes:
             hint_text:
@@ -404,6 +412,8 @@ en:
         confirm_make_live: Are you sure you want to make your draft live?
       forms_make_live_form:
         confirm_make_live: Are you sure you want to make your form live?
+      group_member_form:
+        member_email_address: Enter the email address of the person you want to add
       mou_signature:
         agreed_options:
           '1': I agree to the MOU on behalf of my organisation

@@ -6,7 +6,9 @@ class GroupMembersController < ApplicationController
     authorize @group, :show?
   end
 
-  def new; end
+  def new
+    @group_member_form = GroupMemberForm.new
+  end
 
 private
 
