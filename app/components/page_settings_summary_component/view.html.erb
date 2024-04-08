@@ -4,7 +4,7 @@
       row.with_value(text: t("helpers.label.page.answer_type_options.names.#{@draft_question.answer_type}"))
       row.with_action(text: t("page_settings_summary.change"),
                  href: @change_answer_type_path,
-                 visually_hidden_text: t("page_settings_summary.answer_type") + " " + t("helpers.label.page.answer_type_options.names.#{@draft_question.answer_type}")
+                 visually_hidden_text: t("page_settings_summary.answer_type")
       ) end %>
 
   <% if @draft_question.answer_type == "selection" %>
