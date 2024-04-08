@@ -7,7 +7,7 @@
                  visually_hidden_text: t("page_settings_summary.answer_type")
       ) end %>
 
-  <% if @draft_question.answer_type == "selection" %>
+  <% if show_selection_settings_summary %>
     <%= summary_list.with_row do |row|
           row.with_key(text: t("page_settings_summary.selection.options"))
           row.with_value(text: show_selection_options)
@@ -28,7 +28,7 @@
                     visually_hidden_text: t("page_settings_summary.selection.include_none_of_the_above")) end %>
   <% end %>
 
-  <% if @draft_question.answer_type == "text" && answer_settings.present? && answer_settings[:input_type] %>
+  <% if show_text_settings_summary %>
     <%= summary_list.with_row do |row|
           row.with_key(text: t("page_settings_summary.text.length"))
           row.with_value(text: t("helpers.label.page.text_settings_options.names.#{answer_settings[:input_type]}"))
@@ -37,7 +37,7 @@
                     visually_hidden_text: t("page_settings_summary.text.length")) end %>
   <% end %>
 
-  <% if @draft_question.answer_type == "date" && answer_settings.present? && answer_settings[:input_type]%>
+  <% if show_date_settings_summary%>
     <%= summary_list.with_row do |row|
           row.with_key(text: t("page_settings_summary.date.date_of_birth"))
           row.with_value(text: t("helpers.label.page.date_settings_options.input_types.#{answer_settings[:input_type]}"))
@@ -46,7 +46,7 @@
                     visually_hidden_text: t("page_settings_summary.date.date_of_birth")) end %>
   <% end %>
 
-  <% if @draft_question.answer_type == "address" && answer_settings.present? && answer_settings[:input_type] %>
+  <% if show_address_settings_summary %>
     <%= summary_list.with_row do |row|
           row.with_key(text: t("page_settings_summary.address.address_type"))
           row.with_value(text: t("helpers.label.page.address_settings_options.names.#{address_input_type_to_string}"))
@@ -55,7 +55,7 @@
                      visually_hidden_text: t("page_settings_summary.address.address_type")) end %>
   <% end %>
 
-  <% if @draft_question.answer_type == "name" && answer_settings.present? && answer_settings[:input_type] %>
+  <% if show_name_settings_summary %>
     <%= summary_list.with_row do |row|
           row.with_key(text: t("page_settings_summary.name.name_fields"))
           row.with_value(text: t("helpers.label.page.name_settings_options.names.#{answer_settings[:input_type]}"))
