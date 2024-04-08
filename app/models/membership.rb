@@ -22,6 +22,6 @@ private
     return if user.nil? || group.nil?
     return if user.organisation == group.organisation
 
-    errors.add :base, "User and group must have the same organisation"
+    errors.add(:base, :user_in_other_org, message: "User and group must have the same organisation")
   end
 end
