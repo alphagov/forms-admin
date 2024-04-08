@@ -10,10 +10,23 @@ class GroupMembersController < ApplicationController
     @group_member_form = GroupMemberForm.new
   end
 
+  def create
+    @group_member_form = GroupMemberForm.new(group_member_params)
+    if @group_member_form.save
+      redirect_to group_members_path(@group.external_id)
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
 private
 
   def set_group
     @group = Group.find_by(external_id: params[:group_id])
+  end
+
+  def group_member_params
+    params.require(:group_member_form).permit(:member_email_address).merge(group: @group, creator: current_user)
   end
 
   def group_member_params
