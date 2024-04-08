@@ -1,4 +1,4 @@
-<% set_page_title(title_with_error_prefix(t('page_titles.routing_page_edit'), condition_form.errors&.any?)) %>
+<% set_page_title(title_with_error_prefix(t('page_titles.routing_page_edit', question_position: condition_form.page.position), condition_form.errors&.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_pages_path(condition_form.form.id)) %>
 
 <div class="govuk-grid-row">
