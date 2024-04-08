@@ -708,6 +708,22 @@ en:
       default: Selection from a list
       none_of_the_above: None of the above
       only_one_option: Selection from a list, one option only.
+  page_settings_summary:
+    address:
+      address_type: Address type
+    answer_type: Answer type
+    change: Change
+    date:
+      date_of_birth: Date of birth
+    name:
+      name_fields: Name fields
+      title_needed: Title needed
+    selection:
+      include_none_of_the_above: Include an option for ‘None of the above’
+      only_one_option: People can only select one option
+      options: Options
+    text:
+      length: Length
   page_titles:
     access_denied: You do not have permission to access GOV.UK Forms
     account_name: Enter your name

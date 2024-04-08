@@ -102,5 +102,25 @@ module PageSettingsSummaryComponent
     def is_new_question?
       @draft_question.page_id.nil?
     end
+
+    def show_selection_settings_summary
+      @draft_question.answer_type == "selection"
+    end
+
+    def show_text_settings_summary
+      @draft_question.answer_type == "text" && answer_settings.present? && answer_settings[:input_type]
+    end
+
+    def show_date_settings_summary
+      @draft_question.answer_type == "date" && answer_settings.present? && answer_settings[:input_type]
+    end
+
+    def show_address_settings_summary
+      @draft_question.answer_type == "address" && answer_settings.present? && answer_settings[:input_type]
+    end
+
+    def show_name_settings_summary
+      @draft_question.answer_type == "name" && answer_settings.present? && answer_settings[:input_type]
+    end
   end
 end
