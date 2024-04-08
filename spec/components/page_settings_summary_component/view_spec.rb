@@ -31,9 +31,9 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
     it "does not have links to change the selection options" do
       render_inline(described_class.new(draft_question))
-      expect(page).not_to have_link("Change Options", href: edit_selections_setting_path)
-      expect(page).not_to have_link("Change People can only select one option", href: edit_selections_setting_path)
-      expect(page).not_to have_link("Change Include an option for ‘None of the above’", href: edit_selections_setting_path)
+      expect(page).not_to have_link("Change #{I18n.t('page_settings_summary.selection.options')}", href: edit_selections_setting_path)
+      expect(page).not_to have_link("Change #{I18n.t('page_settings_summary.selection.only_one_option')}", href: edit_selections_setting_path)
+      expect(page).not_to have_link("Change #{I18n.t('page_settings_summary.selection.include_none_of_the_above')}", href: edit_selections_setting_path)
     end
 
     it "does not render the selection settings" do
@@ -53,9 +53,9 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
     it "has links to change the selection options" do
       render_inline(described_class.new(draft_question))
-      expect(page).to have_link("Change Options", href: edit_selections_setting_path)
-      expect(page).to have_link("Change People can only select one option", href: edit_selections_setting_path)
-      expect(page).to have_link("Change Include an option for ‘None of the above’", href: edit_selections_setting_path)
+      expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.options')}", href: edit_selections_setting_path)
+      expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.only_one_option')}", href: edit_selections_setting_path)
+      expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.include_none_of_the_above')}", href: edit_selections_setting_path)
     end
 
     it "renders the selection settings" do
@@ -100,9 +100,9 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
       it "has links to change the selection options" do
         render_inline(described_class.new(draft_question))
-        expect(page).to have_link("Change Options", href: new_selections_setting_path)
-        expect(page).to have_link("Change People can only select one option", href: new_selections_setting_path)
-        expect(page).to have_link("Change Include an option for ‘None of the above’", href: new_selections_setting_path)
+        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.options')}", href: new_selections_setting_path)
+        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.only_one_option')}", href: new_selections_setting_path)
+        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.include_none_of_the_above')}", href: new_selections_setting_path)
       end
     end
   end
