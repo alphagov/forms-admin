@@ -112,6 +112,10 @@ class User < ApplicationRecord
     role_changed_to_editor
   end
 
+  def is_organisations_admin?(org)
+    organisation_admin? && organisation == org
+  end
+
 private
 
   def requires_name?

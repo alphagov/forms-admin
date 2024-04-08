@@ -211,6 +211,33 @@ describe User, type: :model do
     end
   end
 
+  describe "#is_organisations_admin?" do
+    context "when the user does not have the organisation admin role" do
+      it "returns false" do
+        user = create(:user)
+        expect(user.is_organisations_admin?(user.organisation)).to eq(false)
+      end
+    end
+
+    context "when the user has the organisation admin role" do
+      context "and the user's organisation is the same as given" do
+        it "returns true" do
+          user = create(:organisation_admin_user)
+          expect(user.is_organisations_admin?(user.organisation)).to eq(true)
+        end
+      end
+
+      context "and the user's organisation is not the same as given" do
+        it "returns false" do
+          user = create(:organisation_admin_user)
+          other_org = build(:organisation, id: 2)
+
+          expect(user.is_organisations_admin?(other_org)).to eq(false)
+        end
+      end
+    end
+  end
+
   describe "versioning" do
     with_versioning do
       it "creates a version when role is changed" do
