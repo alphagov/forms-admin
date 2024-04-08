@@ -14,7 +14,7 @@
         <%= t('page_titles.archive_form_confirm') %>
       </h1>
 
-      <%= t('archive_form.confirm.body_html') %>
+      <%= t('archive_form.confirm.body_html', submission_email: @confirm_archive_form.form.submission_email) %>
 
       <%= f.govuk_collection_radio_buttons :confirm,
                                            @confirm_archive_form.values, ->(option) { option }, ->(option) { t('helpers.label.confirm_action_form.options.' + "#{option}") },

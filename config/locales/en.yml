@@ -73,6 +73,7 @@ en:
         <ul class="govuk-list govuk-list--bullet">
           <li>links to the form will no longer work - make sure any links to the form have been removed</li>
           <li>anyone who is part way through completing the form will lose their progress and get an error page</li>
+          <li>we’ll send an email to %{submission_email} to let them know the form has been archived</li>
         </ul>
         <p>You will still be able to preview the form and see its information and settings. You can also make a new draft of the form and make it live again if you need to.</p>
       radios_legend: Are you sure you want to archive this form?
@@ -545,6 +546,17 @@ en:
       <p>You’ll be able to use the service later.</p>
       <p>If you need urgent help with your forms you can %{link}.</p>
     title: Sorry, the service is unavailable
+  make_archived_draft_live:
+    new:
+      body_html: |
+        <p>
+          The form will not be indexed by search engines, so people will not be able to find it easily.
+          Contact your GOV.UK publishing team to publish a link to your form on GOV.UK so people can find it.
+        </p>
+
+        <p>
+          After you have made your form live, completed forms will be sent to %{submission_email}.
+        </p>
   make_changes_live:
     url_will_remain_same: Links to the form will still work, even if you’ve changed the form’s name.
     warning: |
@@ -757,6 +769,7 @@ en:
     home: Home
     internal_server_error: Sorry, there is a problem with the service
     maintenance: Sorry, the service is unavailable
+    make_archived_draft_live: Make your form live again
     make_changes_live_form: Make your changes live
     make_live_form: Make your form live
     mou_signature_confirmation: You've agreed to the MOU
@@ -996,9 +1009,9 @@ en:
     new:
       body_html: |
         <p>
-          When you make your form live again you’ll get a URL for the form. The form
-          will not be indexed by search engines, so people will not be able to
-          find it easily. Contact your GOV.UK publishing team to publish a link to
+          The form will not be indexed by search engines,
+          so people will not be able to find it easily.
+          Contact your GOV.UK publishing team to publish a link to
           your form on GOV.UK so people can find it.
         </p>
 
