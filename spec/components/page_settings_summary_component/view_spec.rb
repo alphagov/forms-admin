@@ -118,7 +118,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
     it "has links to change the text selections" do
       render_inline(described_class.new(draft_question))
-      expect(page).to have_link("Change length", href: edit_text_setting_path)
+      expect(page).to have_link("Change #{I18n.t('page_settings_summary.text.length')}", href: edit_text_setting_path)
     end
 
     it "renders the input type" do
@@ -132,7 +132,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
       it "has links to change the text settings" do
         render_inline(described_class.new(draft_question))
-        expect(page).to have_link("Change length", href: edit_text_setting_path)
+        expect(page).to have_link("Change #{I18n.t('page_settings_summary.text.length')}", href: edit_text_setting_path)
       end
 
       it "renders the input type" do
@@ -152,7 +152,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
       it "has links to change the text selections" do
         render_inline(described_class.new(draft_question))
-        expect(page).to have_link("Change length", href: new_text_setting_path)
+        expect(page).to have_link("Change #{I18n.t('page_settings_summary.text.length')}", href: new_text_setting_path)
       end
     end
   end
@@ -167,7 +167,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
     it "has a link to change the input type" do
       render_inline(described_class.new(draft_question))
-      expect(page).to have_link("Change date of birth", href: edit_date_setting_path)
+      expect(page).to have_link("Change #{I18n.t('page_settings_summary.date.date_of_birth')}", href: edit_date_setting_path)
     end
 
     it "renders the input type" do
@@ -181,7 +181,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
       it "has no link to change the input type" do
         render_inline(described_class.new(draft_question))
-        expect(page).not_to have_link("Change input type", href: edit_date_setting_path)
+        expect(page).not_to have_link("Change #{I18n.t('page_settings_summary.date.date_of_birth')}", href: edit_date_setting_path)
       end
     end
 
@@ -195,7 +195,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
       it "has links to change the date of birth setting" do
         render_inline(described_class.new(draft_question))
-        expect(page).to have_link("Change date of birth", href: new_date_setting_path)
+        expect(page).to have_link("Change #{I18n.t('page_settings_summary.date.date_of_birth')}", href: new_date_setting_path)
       end
     end
   end
@@ -212,7 +212,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
     it "has links to change the answer settings" do
       render_inline(described_class.new(draft_question))
-      expect(page).to have_link("Change address type", href: edit_address_setting_path)
+      expect(page).to have_link("Change #{I18n.t('page_settings_summary.address.address_type')}", href: edit_address_setting_path)
     end
 
     it "renders the input type" do
@@ -251,7 +251,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
       it "has a link to change the address type" do
         render_inline(described_class.new(draft_question))
-        expect(page).to have_link("Change address type", href: new_address_setting_path)
+        expect(page).to have_link("Change #{I18n.t('page_settings_summary.address.address_type')}", href: new_address_setting_path)
       end
     end
   end
@@ -268,8 +268,8 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
     it "has links to change the answer settings" do
       render_inline(described_class.new(draft_question))
-      expect(page).to have_link("Change name fields", href: edit_name_setting_path)
-      expect(page).to have_link("Change title needed", href: edit_name_setting_path)
+      expect(page).to have_link("Change #{I18n.t('page_settings_summary.name.name_fields')}", href: edit_name_setting_path)
+      expect(page).to have_link("Change #{I18n.t('page_settings_summary.name.title_needed')}", href: edit_name_setting_path)
     end
 
     it "renders the input type" do
@@ -294,7 +294,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
       it "has a link to change the name fields" do
         render_inline(described_class.new(draft_question))
-        expect(page).to have_link("Change name fields", href: new_name_setting_path)
+        expect(page).to have_link("Change #{I18n.t('page_settings_summary.name.name_fields')}", href: new_name_setting_path)
       end
     end
   end

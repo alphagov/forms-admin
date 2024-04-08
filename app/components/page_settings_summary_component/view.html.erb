@@ -1,72 +1,73 @@
 <%= govuk_summary_list do |summary_list| %>
   <%= summary_list.with_row do |row|
-      row.with_key(text: "Answer type")
+      row.with_key(text: t("page_settings_summary.answer_type"))
       row.with_value(text: t("helpers.label.page.answer_type_options.names.#{@draft_question.answer_type}"))
-      row.with_action(text: "Change",
+      row.with_action(text: t("page_settings_summary.change"),
                  href: @change_answer_type_path,
-                 visually_hidden_text: "Answer type " + t("helpers.label.page.answer_type_options.names.#{@draft_question.answer_type}")
+                 visually_hidden_text: t("page_settings_summary.answer_type") + " " + t("helpers.label.page.answer_type_options.names.#{@draft_question.answer_type}")
       ) end %>
 
   <% if @draft_question.answer_type == "selection" %>
     <%= summary_list.with_row do |row|
-          row.with_key(text: "Options")
+          row.with_key(text: t("page_settings_summary.selection.options"))
           row.with_value(text: show_selection_options)
-          row.with_action(text: "Change",
+          row.with_action(text: t("page_settings_summary.change"),
                     href: @change_selections_settings_path,
-                    visually_hidden_text: "Options") end %>
+                    visually_hidden_text: t("page_settings_summary.selection.options")) end %>
     <%= summary_list.with_row do |row|
-          row.with_key(text: t("selections_settings.only_one_option"))
+          row.with_key(text: t("page_settings_summary.selection.only_one_option"))
           row.with_value(text: answer_settings[:only_one_option] == "true" ? t("selections_settings.yes") : t("selections_settings.no"))
-          row.with_action(text: "Change",
+          row.with_action(text: t("page_settings_summary.change"),
                     href: @change_selections_settings_path,
-                    visually_hidden_text: t("selections_settings.only_one_option")) end %>
+                    visually_hidden_text: t("page_settings_summary.selection.only_one_option")) end %>
     <%= summary_list.with_row do |row|
-          row.with_key(text: t("selections_settings.include_none_of_the_above"))
+          row.with_key(text: t("page_settings_summary.selection.include_none_of_the_above"))
           row.with_value(text: @draft_question.is_optional ? t("selections_settings.yes") : t("selections_settings.no"))
-          row.with_action(text: "Change",
+          row.with_action(text: t("page_settings_summary.change"),
                     href: @change_selections_settings_path,
-                    visually_hidden_text: t("selections_settings.include_none_of_the_above")) end %>
+                    visually_hidden_text: t("page_settings_summary.selection.include_none_of_the_above")) end %>
   <% end %>
+
   <% if @draft_question.answer_type == "text" && answer_settings.present? && answer_settings[:input_type] %>
     <%= summary_list.with_row do |row|
-          row.with_key(text: "Length")
+          row.with_key(text: t("page_settings_summary.text.length"))
           row.with_value(text: t("helpers.label.page.text_settings_options.names.#{answer_settings[:input_type]}"))
-          row.with_action(text: "Change",
+          row.with_action(text: t("page_settings_summary.change"),
                     href: @change_text_settings_path,
-                    visually_hidden_text: "length") end %>
+                    visually_hidden_text: t("page_settings_summary.text.length")) end %>
   <% end %>
 
   <% if @draft_question.answer_type == "date" && answer_settings.present? && answer_settings[:input_type]%>
     <%= summary_list.with_row do |row|
-          row.with_key(text: "Date of birth")
+          row.with_key(text: t("page_settings_summary.date.date_of_birth"))
           row.with_value(text: t("helpers.label.page.date_settings_options.input_types.#{answer_settings[:input_type]}"))
-          row.with_action(text: "Change",
+          row.with_action(text: t("page_settings_summary.change"),
                     href: @change_date_settings_path,
-                    visually_hidden_text: "date of birth") end %>
+                    visually_hidden_text: t("page_settings_summary.date.date_of_birth")) end %>
   <% end %>
 
   <% if @draft_question.answer_type == "address" && answer_settings.present? && answer_settings[:input_type] %>
     <%= summary_list.with_row do |row|
-          row.with_key(text: "Address type")
+          row.with_key(text: t("page_settings_summary.address.address_type"))
           row.with_value(text: t("helpers.label.page.address_settings_options.names.#{address_input_type_to_string}"))
-          row.with_action(text: "Change",
+          row.with_action(text: t("page_settings_summary.change"),
                      href: @change_address_settings_path,
-                     visually_hidden_text: "address type") end %>
+                     visually_hidden_text: t("page_settings_summary.address.address_type")) end %>
   <% end %>
 
   <% if @draft_question.answer_type == "name" && answer_settings.present? && answer_settings[:input_type] %>
     <%= summary_list.with_row do |row|
-          row.with_key(text: "Name fields")
+          row.with_key(text: t("page_settings_summary.name.name_fields"))
           row.with_value(text: t("helpers.label.page.name_settings_options.names.#{answer_settings[:input_type]}"))
-          row.with_action(text: "Change",
+          row.with_action(text: t("page_settings_summary.change"),
                      href: @change_name_settings_path,
-                     visually_hidden_text: "name fields") end %>
+                     visually_hidden_text: t("page_settings_summary.name.name_fields")) end %>
 
     <%= summary_list.with_row do |row|
-          row.with_key(text: "Title needed")
+          row.with_key(text: t("page_settings_summary.name.title_needed"))
           row.with_value(text: t("helpers.label.page.name_settings_options.names.#{answer_settings[:title_needed]}"))
-          row.with_action(text: "Change",
+          row.with_action(text: t("page_settings_summary.change"),
                      href: @change_name_settings_path,
-                     visually_hidden_text: "title needed") end %>
+                     visually_hidden_text: t("page_settings_summary.name.title_needed")) end %>
   <% end %>
 <% end %>
