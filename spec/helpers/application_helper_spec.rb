@@ -252,15 +252,7 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
 
       it "returns the title and website name separated by an en dash" do
-        expect(helper.page_title).to eq "#{title} – GOV.UK Forms"
-      end
-
-      context "when a custom separator is configured" do
-        let(:separator) { ", " }
-
-        it "returns the website name separated by the custom separator" do
-          expect(helper.page_title(separator)).to eq "#{title}, GOV.UK Forms"
-        end
+        expect(helper.page_title).to eq "#{title}#{I18n.t('page_titles.separator')}GOV.UK Forms"
       end
     end
   end
@@ -286,7 +278,7 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
 
       it "renders the special characters correctly" do
-        expect(helper.page_title).to eq "#{title} – GOV.UK Forms"
+        expect(helper.page_title).to eq "#{title}#{I18n.t('page_titles.separator')}GOV.UK Forms"
       end
     end
   end

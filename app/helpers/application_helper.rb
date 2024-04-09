@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
-  def page_title(separator = " – ")
-    [content_for(:title), "GOV.UK Forms"].compact.join(separator)
+  def page_title
+    [content_for(:title), "GOV.UK Forms"].compact.join(I18n.t("page_titles.separator"))
   end
 
   def set_page_title(title)
