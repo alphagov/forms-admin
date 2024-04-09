@@ -1,4 +1,4 @@
-<% set_page_title(title_with_error_prefix(t('page_titles.routing_page'), condition_form.errors&.any?)) %>
+<% set_page_title(title_with_error_prefix(t('page_titles.routing_page_new'), condition_form.errors&.any?)) %>
 <% content_for :back_link, govuk_back_link_to(routing_page_path(condition_form.form.id, routing_page_id: condition_form.page.id)) %>
 
 <div class="govuk-grid-row">
@@ -10,7 +10,7 @@
 
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= condition_form.form.name %></span>
-        <%= t("page_titles.routing_page") %>
+        <%= t("page_titles.routing_page_new") %>
       </h1>
 
       <%= govuk_summary_list do |summary_list|
