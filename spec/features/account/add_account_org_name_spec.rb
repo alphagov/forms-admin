@@ -26,6 +26,8 @@ feature "Add account organisation to user without organisation", type: :feature 
   scenario "when the user does not have an organisation or name" do
     when_i_visit_a_page_which_requires_sign_in
     then_i_should_be_redirected_to_the_account_organisation_page
+    and_i_try_to_visit_the_homepage
+    then_i_should_be_redirected_to_the_account_organisation_page
     and_i_select_an_organisation
     then_i_should_be_redirected_to_the_account_name_page
     and_i_fill_in_my_name
@@ -40,6 +42,10 @@ private
 
   def then_i_should_be_redirected_to_the_account_organisation_page
     expect(page).to have_content("Select your organisation")
+  end
+
+  def and_i_try_to_visit_the_homepage
+    visit root_path
   end
 
   def and_i_select_an_organisation
