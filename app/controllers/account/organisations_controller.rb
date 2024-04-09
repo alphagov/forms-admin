@@ -3,6 +3,7 @@ module Account
     include AfterSignInPathHelper
 
     before_action :redirect_if_organisation_exists
+    skip_before_action :redirect_if_account_not_completed
 
     def edit
       @organisation_form = OrganisationForm.new(user: current_user).assign_form_values

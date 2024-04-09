@@ -3,6 +3,7 @@ module Account
     include AfterSignInPathHelper
 
     before_action :redirect_if_name_exists
+    skip_before_action :redirect_if_account_not_completed
 
     def edit
       @name_form = NameForm.new(user: current_user).assign_form_values
