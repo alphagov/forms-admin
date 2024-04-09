@@ -236,4 +236,58 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
     end
   end
+
+  describe "#page_title" do
+    context "when no title content is present" do
+      it "returns the website name" do
+        expect(helper.page_title).to eq "GOV.UK Forms"
+      end
+    end
+
+    context "when title content is present" do
+      let(:title) { Faker::Lorem.sentence(word_count: 1, supplemental: true, random_words_to_add: 5) }
+
+      before do
+        helper.content_for(:title, title)
+      end
+
+      it "returns the title and website name separated by an en dash" do
+        expect(helper.page_title).to eq "#{title} – GOV.UK Forms"
+      end
+
+      context "when a custom separator is configured" do
+        let(:separator) { ", " }
+
+        it "returns the website name separated by the custom separator" do
+          expect(helper.page_title(separator)).to eq "#{title}, GOV.UK Forms"
+        end
+      end
+    end
+  end
+
+  describe "#set_page_title" do
+    let(:title) { Faker::Lorem.sentence(word_count: 1, supplemental: true, random_words_to_add: 5) }
+
+    it "sets the content_for for the title" do
+      allow(helper).to receive(:content_for)
+
+      helper.set_page_title(title)
+
+      expect(helper).to have_received(:content_for).with(:title, title.html_safe)
+    end
+  end
+
+  describe "setting and retrieving a page title" do
+    context "when the title contains special characters" do
+      let(:title) { "#{Faker::Lorem.sentence(word_count: 1, supplemental: true, random_words_to_add: 5)} ‘’&<script>alert('this string contains a script tag')</script>" }
+
+      before do
+        helper.set_page_title(title)
+      end
+
+      it "renders the special characters correctly" do
+        expect(helper.page_title).to eq "#{title} – GOV.UK Forms"
+      end
+    end
+  end
 end
