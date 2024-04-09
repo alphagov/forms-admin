@@ -18,6 +18,10 @@ describe "pages/index.html.erb" do
     render template: "pages/index"
   end
 
+  it "has the correct title" do
+    expect(view.content_for(:title)).to eq I18n.t("pages.index.title")
+  end
+
   describe "when there are no pages to display" do
     it "allows the user to add a page" do
       expect(rendered).to have_link(I18n.t("pages.index.add_question"), href: start_new_question_path(form.id))
