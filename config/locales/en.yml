@@ -759,6 +759,7 @@ en:
     routing_page: Add a question route
     routing_page_delete: Delete question %{question_position}’s route
     routing_page_edit: Edit question %{question_position}’s route
+    routing_page_new: 'Add a question route: select answer and destination'
     set_email_form: Set the email address for completed forms
     sign_in: Sign in
     sign_up: Sign up

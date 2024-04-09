@@ -1,4 +1,4 @@
-<% set_page_title(title_with_error_prefix(t('page_titles.routing_page'), delete_condition_form.errors&.any?)) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.routing_page_delete", question_position: delete_condition_form.page.position), delete_condition_form.errors&.any?)) %>
 <% content_for :back_link, govuk_back_link_to(edit_condition_path(delete_condition_form.form.id, delete_condition_form.page.id, delete_condition_form.record.id)) %>
 
 <div class="govuk-grid-row">

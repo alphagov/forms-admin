@@ -26,6 +26,10 @@ describe "pages/conditions/edit.html.erb" do
     render template: "pages/conditions/edit", locals: { condition_form: }
   end
 
+  it "sets the correct title" do
+    expect(view.content_for(:title)).to eq(t("page_titles.routing_page_edit", question_position: page.position))
+  end
+
   it "contains page heading and sub-heading" do
     expect(rendered).to have_css("h1 .govuk-caption-l", text: form.name)
     expect(rendered).to have_css("h1.govuk-heading-l", text: t("page_titles.routing_page_edit", question_position: page.position))
