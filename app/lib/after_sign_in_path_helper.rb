@@ -1,9 +1,12 @@
 module AfterSignInPathHelper
   def after_sign_in_next_path
-    return edit_account_organisation_path if current_user.organisation.blank?
-    return edit_account_name_path if current_user.name.blank?
+    next_account_path || stored_location || root_path
+  end
 
-    stored_location || root_path
+  def next_account_path
+    return edit_account_organisation_path if current_user.organisation.blank?
+
+    edit_account_name_path if current_user.name.blank?
   end
 
   def store_location(path)
