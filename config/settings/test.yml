@@ -4,7 +4,6 @@ forms_api:
   # Authentication key to authenticate forms-runner to forms-api
   auth_key:
 
-
 # When set to true, All pages will render 'Maintenance mode'
 maintenance_mode_enabled: false
 
@@ -17,6 +16,5 @@ auth_provider: ""
 
 mailchimp:
   api_prefix: "prefix"
-  lists:
-    - list-1
-    - list-2
+  active_users_list: list-1
+  mou_signers_list: list-2
