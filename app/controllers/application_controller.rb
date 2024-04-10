@@ -2,10 +2,12 @@ require "resolv"
 
 class ApplicationController < ActionController::Base
   include Pundit::Authorization
+  include AfterSignInPathHelper
   before_action :set_request_id
   before_action :check_maintenance_mode_is_enabled
   before_action :authenticate_and_check_access
   before_action :set_paper_trail_whodunnit
+  before_action :redirect_if_account_not_completed
 
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
@@ -123,5 +125,11 @@ private
     return true if %w[mock_gds_sso developer].include? Settings.auth_provider
 
     @current_user.super_admin? ? PRIVILEGED_AUTH0_CONNECTION_STRATEGIES.include?(warden.session["auth0_connection_strategy"]) : true
+  end
+
+  def redirect_if_account_not_completed
+    return if current_user.blank?
+
+    redirect_to next_account_path if next_account_path.present?
   end
 end

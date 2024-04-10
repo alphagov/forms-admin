@@ -1,6 +1,9 @@
 class AuthenticationController < ApplicationController
   skip_before_action :authenticate_and_check_access
+  skip_before_action :redirect_if_account_not_completed
   protect_from_forgery with: :null_session, only: %i[redirect_to_sign_in]
+
+  include AfterSignInPathHelper
 
   layout false
 
@@ -16,7 +19,7 @@ class AuthenticationController < ApplicationController
 
   def callback_from_omniauth
     authenticate_user!
-    redirect_to stored_location || "/"
+    redirect_to after_sign_in_next_path
   end
 
   def sign_in
@@ -46,16 +49,6 @@ private
 
   def attempted_path
     request.env["warden.options"][:attempted_path]
-  end
-
-  def store_location(path)
-    # NOTE: If we ever start using Warden scopes, the key of this session
-    # variable should change depending on the scope in warden.options
-    session["user_return_to"] = path
-  end
-
-  def stored_location
-    session["user_return_to"]
   end
 
   def default_provider

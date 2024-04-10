@@ -141,6 +141,19 @@ RSpec.describe ApplicationController, type: :request do
     end
   end
 
+  context "when a user is logged in who does not have organisation set" do
+    let(:user) { create :user, :with_no_org, name: nil }
+
+    before do
+      login_as user
+    end
+
+    it "redirects to the account organisation page" do
+      get root_path
+      expect(response).to redirect_to(edit_account_organisation_path)
+    end
+  end
+
   describe "#up" do
     it "returns http code 200" do
       get rails_health_check_path

@@ -1,6 +1,9 @@
 module Account
   class NamesController < ApplicationController
+    include AfterSignInPathHelper
+
     before_action :redirect_if_name_exists
+    skip_before_action :redirect_if_account_not_completed
 
     def edit
       @name_form = NameForm.new(user: current_user).assign_form_values
@@ -10,7 +13,7 @@ module Account
       @name_form = NameForm.new(account_name_form_params(current_user))
 
       if @name_form.submit
-        redirect_to root_path
+        redirect_to next_path
       else
         render :edit, status: :unprocessable_entity
       end
@@ -24,6 +27,10 @@ module Account
 
     def redirect_if_name_exists
       redirect_to root_path if current_user.name.present?
+    end
+
+    def next_path
+      after_sign_in_next_path
     end
   end
 end

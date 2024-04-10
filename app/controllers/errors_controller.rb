@@ -1,6 +1,7 @@
 class ErrorsController < ApplicationController
   skip_before_action :authenticate_and_check_access, except: :forbidden
   skip_before_action :check_maintenance_mode_is_enabled, only: :maintenance
+  skip_before_action :redirect_if_account_not_completed
 
   def not_found
     render status: :not_found

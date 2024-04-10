@@ -35,6 +35,12 @@ describe Account::OrganisationsController do
       let(:organisation) { create(:organisation) }
       let(:valid_params) { { account_organisation_form: { organisation_id: organisation.id } } }
 
+      before do
+        # rubocop:disable RSpec/AnyInstance
+        allow_any_instance_of(AfterSignInPathHelper).to receive(:after_sign_in_next_path).and_return("/next-path")
+        # rubocop:enable RSpec/AnyInstance
+      end
+
       it "updates the user's organisation" do
         put account_organisation_path, params: valid_params
         expect(user.reload.organisation).to eq(organisation)
@@ -42,7 +48,7 @@ describe Account::OrganisationsController do
 
       it "redirects to the root path" do
         put account_organisation_path, params: valid_params
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to("/next-path")
       end
     end
 
