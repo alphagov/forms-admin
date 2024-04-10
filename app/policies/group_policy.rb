@@ -5,7 +5,7 @@ class GroupPolicy < ApplicationPolicy
   alias_method :create?, :new?
 
   def show?
-    user.super_admin? || user.groups.include?(record)
+    user.super_admin? || user.is_organisations_admin?(record.organisation) || user.groups.include?(record)
   end
 
   alias_method :edit?, :show?
@@ -17,6 +17,8 @@ class GroupPolicy < ApplicationPolicy
     def resolve
       if user.super_admin?
         scope.all
+      elsif user.organisation_admin?
+        scope.for_organisation(user.organisation)
       else
         scope.for_user(user)
       end

@@ -34,7 +34,9 @@ class FormPolicy
 
   def can_view_form?
     return true if user.super_admin?
-    return user.groups.include?(form.group) if form.group.present?
+    if form.group.present?
+      return user.groups.include?(form.group) || user.is_organisations_admin?(form.group.organisation)
+    end
 
     if user.trial?
       user_is_form_creator

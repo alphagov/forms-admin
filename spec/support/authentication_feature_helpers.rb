@@ -42,6 +42,10 @@ module AuthenticationFeatureHelpers
     @super_admin_user ||= FactoryBot.create(:super_admin_user, organisation: test_org)
   end
 
+  def organisation_admin_user
+    @organisation_admin_user ||= FactoryBot.create(:organisation_admin_user, organisation: test_org)
+  end
+
   def editor_user
     @editor_user ||= FactoryBot.create(:editor_user, organisation: test_org)
   end
@@ -61,6 +65,10 @@ module AuthenticationFeatureHelpers
 
   def login_as_editor_user
     login_as editor_user
+  end
+
+  def login_as_organisation_admin_user
+    login_as organisation_admin_user
   end
 
   def login_as_trial_user

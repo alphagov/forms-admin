@@ -66,7 +66,8 @@ RSpec.describe UsersController, type: :request do
                 expect(user.name).to be <= next_user.name
               else
                 case user.role
-                when "super_admin" then expect(next_user.role).to eq "editor"
+                when "super_admin" then expect(next_user.role).to eq "organisation_admin"
+                when "organisation_admin" then expect(next_user.role).to eq "editor"
                 when "editor" then expect(next_user.role).to eq "trial"
                 end
               end

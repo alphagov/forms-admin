@@ -1052,6 +1052,9 @@ en:
       editor:
         description: Can create forms
         name: Editor
+      organisation_admin:
+        description: Can manage groups and users in their organisation
+        name: Organisation admin
       super_admin:
         description: Can create forms and manage users
         name: Super admin

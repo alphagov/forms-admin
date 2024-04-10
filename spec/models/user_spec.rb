@@ -16,8 +16,8 @@ describe User, type: :model do
 
   describe "role enum" do
     it "returns a list of roles" do
-      expect(described_class.roles.keys).to eq(%w[super_admin editor trial])
-      expect(described_class.roles.values).to eq(%w[super_admin editor trial])
+      expect(described_class.roles.keys).to eq(%w[super_admin organisation_admin editor trial])
+      expect(described_class.roles.values).to eq(%w[super_admin organisation_admin editor trial])
     end
   end
 
@@ -86,6 +86,11 @@ describe User, type: :model do
 
     it "is not valid to leave organisation unset if changing role to editor" do
       user.role = :editor
+      expect(user).to be_invalid
+    end
+
+    it "is not valid to leave organisation unset if changing role to organisation admin" do
+      user.role = :organisation_admin
       expect(user).to be_invalid
     end
   end
@@ -203,6 +208,33 @@ describe User, type: :model do
       user = create(:user)
       user.update!(organisation: build(:organisation))
       expect(user).not_to be_given_organisation
+    end
+  end
+
+  describe "#is_organisations_admin?" do
+    context "when the user does not have the organisation admin role" do
+      it "returns false" do
+        user = create(:user)
+        expect(user.is_organisations_admin?(user.organisation)).to eq(false)
+      end
+    end
+
+    context "when the user has the organisation admin role" do
+      context "and the user's organisation is the same as given" do
+        it "returns true" do
+          user = create(:organisation_admin_user)
+          expect(user.is_organisations_admin?(user.organisation)).to eq(true)
+        end
+      end
+
+      context "and the user's organisation is not the same as given" do
+        it "returns false" do
+          user = create(:organisation_admin_user)
+          other_org = build(:organisation, id: 2)
+
+          expect(user.is_organisations_admin?(other_org)).to eq(false)
+        end
+      end
     end
   end
 
