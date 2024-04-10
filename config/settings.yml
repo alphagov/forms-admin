@@ -69,5 +69,6 @@ forms_env: local
 
 mailchimp:
   api_key:
-  api_prefix: changme
-  lists: [changeme]
+  api_prefix: changeme
+  active_users_list: changeme
+  mou_signers_list: changeme

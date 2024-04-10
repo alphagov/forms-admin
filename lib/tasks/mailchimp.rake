@@ -1,15 +1,16 @@
 namespace :mailchimp do
   desc "Synchronise Mailchimp audiences with the users in the database"
   task synchronize_audiences: :environment do
-    mailchimp_lists = Settings.mailchimp.lists
+    puts "Synchronizing active users mailing list"
+    active_users_list = Settings.mailchimp.active_users_list
+    active_user_email_addresses = User.where(has_access: true).pluck(:email)
 
-    puts "Mailchimp lists: #{mailchimp_lists}"
+    MailchimpListSynchronizer.synchronize(list_id: active_users_list, users_to_synchronize: active_user_email_addresses)
 
-    db_email_addresses = User.where(has_access: true).pluck(:email)
+    puts "Synchronizing MOU signers mailing list"
+    mou_signers_list = Settings.mailchimp.mou_signers_list
+    mou_signer_email_addresses = MouSignature.all.map(&:user).filter { |user| user.has_access == true }.pluck(:email)
 
-    puts "There are #{mailchimp_lists.length} lists to synchronize"
-    mailchimp_lists.each do |list_id|
-      MailchimpListSynchronizer.synchronize(list_id:, users_to_synchronize: db_email_addresses)
-    end
+    MailchimpListSynchronizer.synchronize(list_id: mou_signers_list, users_to_synchronize: mou_signer_email_addresses)
   end
 end
