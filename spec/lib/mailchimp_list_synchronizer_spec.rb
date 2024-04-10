@@ -121,7 +121,7 @@ RSpec.describe MailchimpListSynchronizer do
       let(:list_1_members_info) do
         {
           "members" =>
-          1001.times.map { { "email_address" => Faker::Internet.email } },
+          1001.times.map { { "email_address" => Faker::Internet.unique.email } },
         }
       end
 
