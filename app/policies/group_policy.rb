@@ -7,11 +7,8 @@ class GroupPolicy < ApplicationPolicy
   def show?
     user.super_admin? || user.is_organisations_admin?(record.organisation) || user.groups.include?(record)
   end
-
   alias_method :edit?, :show?
-  alias_method :update?, :edit?
-  alias_method :destroy?, :edit?
-  alias_method :index_users?, :show?
+  alias_method :update?, :show?
 
   class Scope < ApplicationPolicy::Scope
     def resolve
