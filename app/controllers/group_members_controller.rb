@@ -11,6 +11,6 @@ private
   end
 
   def authorize_group_members
-    authorize @group, :index_users?
+    authorize @group, :show?
   end
 end
