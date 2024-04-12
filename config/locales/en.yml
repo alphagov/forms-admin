@@ -665,6 +665,9 @@ en:
       numbered_list: Add a numbered list
     update_preview: Update preview
     write_tab_text: Write
+  memberships:
+    destroy:
+      success: "%{member_name} has been removed from this group"
   metrics_summary:
     completion_rate: Completion rate
     date_range: "%{start_date} to %{end_date}"
