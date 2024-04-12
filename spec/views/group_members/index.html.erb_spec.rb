@@ -4,14 +4,20 @@ RSpec.describe "group_members/index", type: :view do
   let(:organisation) { build(:organisation, slug: "Department for testing group members") }
   let(:user1) { build(:user, organisation:) }
   let(:user2) { build(:user, organisation:) }
-  let(:group) { build(:group, name: "Group 1", organisation:) }
+  let(:group) { create(:group, name: "Group 1", organisation:) }
+  let(:add_editor) { false }
+
+  before do
+    assign(:group, group)
+
+    allow(Pundit).to receive(:policy).and_return(instance_double(GroupPolicy, add_editor?: add_editor))
+  end
 
   context "when there are members of a group" do
     before do
       create(:membership, user: user1, group:, role: :editor)
       create(:membership, user: user2, group:, role: :group_admin)
 
-      assign(:group, group)
       render
     end
 
@@ -34,11 +40,22 @@ RSpec.describe "group_members/index", type: :view do
     it "has a back link to the group page" do
       expect(view.content_for(:back_link)).to have_link("Back to Group 1", href: group_path(group))
     end
+
+    it "does not display a link to add a member" do
+      expect(rendered).not_to have_link(href: new_group_member_path(group))
+    end
+
+    context "when the current user can add an editor" do
+      let(:add_editor) { true }
+
+      it "displays a link to add a member" do
+        expect(rendered).to have_link(t("group_members.index.add_member"), href: new_group_member_path(group))
+      end
+    end
   end
 
   context "when there are no members of a group" do
     before do
-      assign(:group, group)
       render
     end
 

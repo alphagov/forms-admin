@@ -1,0 +1,23 @@
+<% set_page_title(t(".title")) %>
+<% content_for :back_link, govuk_back_link_to(group_members_path(@group)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 id="heading" class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= @group.name %></span>
+      <span class="govuk-visually-hidden"> - </span>
+      <%= t(".title") %>
+    </h1>
+
+    <%= t(".body_html") %>
+
+    <%= form_with(model: @group_member_form, url: group_members_path(@group)) do |f| %>
+      <% if @group_member_form&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+
+      <%= f.govuk_text_field :member_email_address, label: {  tag: 'h2', size: 'm' } %>
+      <%= f.govuk_submit t(".submit") %>
+    <% end %>
+  </div>
+</div>

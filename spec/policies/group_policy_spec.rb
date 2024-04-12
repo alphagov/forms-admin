@@ -3,8 +3,9 @@ require "rails_helper"
 RSpec.describe GroupPolicy do
   subject(:policy) { described_class.new(user, group) }
 
-  let(:user) { build :editor_user }
-  let(:group) { create :group, organisation_id: user.organisation_id }
+  let(:organisation) { create :organisation, slug: "an organisation" }
+  let(:user) { create :editor_user, organisation: }
+  let(:group) { build :group, organisation: }
 
   context "when user is super_admin" do
     let(:user) { build :super_admin_user }
@@ -19,7 +20,7 @@ RSpec.describe GroupPolicy do
   end
 
   context "when user is organisation_admin" do
-    let(:user) { build :organisation_admin_user }
+    let(:user) { build :organisation_admin_user, organisation: }
 
     context "and in the same organisation as the group" do
       it "permits all actions" do
@@ -35,7 +36,7 @@ RSpec.describe GroupPolicy do
       end
 
       it "forbids show, edit, and update" do
-        expect(policy).to forbid_only_actions(%i[show edit update])
+        expect(policy).to forbid_only_actions(%i[show edit update add_editor])
       end
     end
 
@@ -50,19 +51,35 @@ RSpec.describe GroupPolicy do
     end
 
     it "forbids show, edit, and update" do
-      expect(policy).to forbid_only_actions(%i[show edit update])
+      expect(policy).to forbid_only_actions(%i[show edit update add_editor])
     end
 
-    context "and user belongs to group" do
-      before { user.groups << group }
+    context "and user belongs to group as an editor" do
+      before do
+        create :membership, user:, group:, role: :editor
+      end
 
       it "permits group creation, viewing, and editing" do
         expect(policy).to permit_only_actions(%i[show new edit create update])
+      end
+
+      it "does not allow add_editor" do
+        expect(policy).to forbid_only_actions(%i[add_editor])
       end
     end
 
     it "scope resolves to only group user is a member of" do
       expect(GroupPolicy::Scope.new(user, Group).resolve).to eq(Group.for_user(user))
+    end
+
+    context "and user belongs to group as a group admin" do
+      before do
+        create :membership, user:, group:, role: :group_admin
+      end
+
+      it "allows view, list, modify group and add_editor" do
+        expect(policy).to permit_only_actions(%i[show new edit create update add_editor])
+      end
     end
   end
 end

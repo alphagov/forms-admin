@@ -31,6 +31,10 @@
   <% end %>
 <% end %>
 
+<% if Pundit.policy(@current_user, @group).add_editor? %>
+  <%= govuk_link_to(t(".add_member"), new_group_member_path(@group), class: "govuk-button") %>
+<% end %>
+
 <div class="govuk-!-margin-top-3">
   <%= govuk_details(summary_text: t(".details.summary_text")) do %>
     <%= t(".details.summary_content_html") %>
