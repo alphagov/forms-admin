@@ -323,6 +323,15 @@ describe FormTaskListService do
         end
       end
 
+      context "when the form is archived" do
+        let(:form) { build(:form, :archived, id: 1) }
+
+        it "has link to make the form live" do
+          expect(section_rows.first[:task_name]).to eq "Make your form live"
+          expect(section_rows.first[:path]).to eq "/forms/1/make-live"
+        end
+      end
+
       context "when current user has a trial account" do
         let(:current_user) { build :user, :with_trial_role }
 

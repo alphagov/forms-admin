@@ -32,7 +32,10 @@ class FormTaskListService
 private
 
   def create_or_edit
-    @form.is_live? ? "edit" : "create"
+    return "edit" if @form.is_live?
+    return "edit" if @form.is_archived?
+
+    "create"
   end
 
   def create_form_section
@@ -116,7 +119,7 @@ private
 
   def make_form_live_section
     section = {
-      title: I18n.t("forms.task_list_#{create_or_edit}.make_form_live_section.title"),
+      title: live_title_name,
       section_number: 4,
       subsection: false,
     }
@@ -132,11 +135,29 @@ private
 
   def make_form_live_section_tasks
     [{
-      task_name: I18n.t("forms.task_list_#{create_or_edit}.make_form_live_section.make_live"),
-      path: @form.all_ready_for_live? ? make_live_path(@form.id) : "",
+      task_name: live_task_name,
+      path: live_path,
       status: @task_statuses[:make_live_status],
       active: @form.all_ready_for_live?,
     }]
+  end
+
+  def live_title_name
+    return I18n.t("forms.task_list_create.make_form_live_section.title") if @form.is_archived?
+
+    I18n.t("forms.task_list_#{create_or_edit}.make_form_live_section.title")
+  end
+
+  def live_task_name
+    return I18n.t("forms.task_list_create.make_form_live_section.make_live") if @form.is_archived?
+
+    I18n.t("forms.task_list_#{create_or_edit}.make_form_live_section.make_live")
+  end
+
+  def live_path
+    return "" unless @form.all_ready_for_live?
+
+    make_live_path(@form.id)
   end
 
   def statuses_by_user
