@@ -396,4 +396,24 @@ describe User, type: :model do
       end
     end
   end
+
+  describe "is_group_admin?" do
+    let(:user) { create(:user, organisation:) }
+    let(:organisation) { create(:organisation) }
+    let(:group) { create(:group, organisation:) }
+
+    it "returns falsey when user is not in group" do
+      expect(user).not_to be_is_group_admin(group)
+    end
+
+    it "returns falsey when a user is an editor of the group" do
+      create(:membership, user:, group:, role: :editor)
+      expect(user).not_to be_is_group_admin(group)
+    end
+
+    it "returns true when user is a group admin of the group" do
+      create(:membership, user: user, group: group, role: :group_admin)
+      expect(user.is_group_admin?(group)).to eq(true)
+    end
+  end
 end
