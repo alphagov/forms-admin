@@ -82,4 +82,5 @@ RSpec.configure do |config|
   config.include ViewComponent::TestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
   config.include Sentry::TestHelper
+  config.include Rails.application.routes.url_helpers
 end
