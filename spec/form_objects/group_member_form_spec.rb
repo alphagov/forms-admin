@@ -66,6 +66,27 @@ describe GroupMemberForm do
           expect(group_member_form.errors[:member_email_address]).to include(error_message)
         end
       end
+
+      context "when the new Membership is valid" do
+        let(:group_member_form) { described_class.new }
+
+        before do
+          group_member_form.group = group
+          group_member_form.member_email_address = user.email
+          group_member_form.creator = user
+          group_member_form.host = "example.net"
+
+          delivery = double
+          allow(GroupMemberMailer).to receive(:added_to_group).with(an_instance_of(Membership), group_url: group_url(group, host: "example.net")).and_return(delivery)
+          allow(delivery).to receive(:deliver_now).with(no_args)
+        end
+
+        it "creates a new Membership" do
+          expect(group_member_form.save).to be true
+          expect(group_member_form).to be_valid
+          expect(GroupMemberMailer).to have_received(:added_to_group).with(an_instance_of(Membership), group_url: group_url(group, host: "example.net"))
+        end
+      end
     end
   end
 end

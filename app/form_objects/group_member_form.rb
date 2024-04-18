@@ -1,7 +1,8 @@
 class GroupMemberForm < BaseForm
   include ActiveModel::Validations::Callbacks
+  include Rails.application.routes.url_helpers
 
-  attr_accessor :member_email_address, :group, :creator
+  attr_accessor :member_email_address, :group, :creator, :host
 
   EMAIL_REGEX = /.*@.*/
 
@@ -17,7 +18,10 @@ class GroupMemberForm < BaseForm
       return false
     end
 
-    new_membership.save!
+    if new_membership.save
+      send_notification_email
+      true
+    end
   end
 
 private
@@ -44,5 +48,9 @@ private
 
   def strip_whitespace
     member_email_address&.strip!
+  end
+
+  def send_notification_email
+    GroupMemberMailer.added_to_group(new_membership, group_url: group_url(group, host:)).deliver_now
   end
 end
