@@ -18,10 +18,10 @@ class GroupMemberForm < BaseForm
       return false
     end
 
-    if new_membership.save
-      send_notification_email
-      true
-    end
+    new_membership.save!
+    send_notification_email
+
+    true
   end
 
 private
