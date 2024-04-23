@@ -1,9 +1,9 @@
 require "rails_helper"
 
 describe SubmissionEmailMailer, type: :mailer do
-  describe "#confirmation_code_email" do
+  describe "#send_confirmation_code" do
     let(:mail) do
-      described_class.confirmation_code_email(
+      described_class.send_confirmation_code(
         new_submission_email: "test@example.com",
         form_name: "Testing API",
         confirmation_code: "654321",
@@ -42,9 +42,9 @@ describe SubmissionEmailMailer, type: :mailer do
 
   describe "#notify_submission_email_has_changed" do
     let(:mail) do
-      described_class.notify_submission_email_has_changed(live_email: "test@example.com",
-                                                          form_name: "Testing API",
-                                                          current_user: OpenStruct.new(name: "Joe Bloggs", email: "example@example.com"))
+      described_class.alert_email_change(live_email: "test@example.com",
+                                         form_name: "Testing API",
+                                         current_user: OpenStruct.new(name: "Joe Bloggs", email: "example@example.com"))
     end
 
     describe "sending an email to notify confirmed submission email not to expect future form submissions" do
