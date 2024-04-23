@@ -25,4 +25,16 @@ class SubmissionEmailMailer < GovukNotifyRails::Mailer
 
     mail(to: live_email)
   end
+
+  def alert_processor_form_archive(processor_email:, form_name:, current_user:)
+    set_template(Settings.govuk_notify.alert_processor_form_archive)
+
+    set_personalisation(
+      form_creator_name: current_user.name,
+      form_creator_email: current_user.email,
+      form_name:,
+    )
+
+    mail(to: processor_email)
+  end
 end

@@ -66,4 +66,23 @@ describe SubmissionEmailMailer, type: :mailer do
       end
     end
   end
+
+  describe "#alert_archive" do
+    let(:mail) do
+      described_class.alert_processor_form_archive(processor_email: "test@example.com", form_name: "Testing API",
+                                                   current_user: OpenStruct.new(name: "Joe Bloggs", email: "example@example.com"))
+    end
+
+    it "sends an email with the correct template" do
+      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.alert_processor_form_archive)
+    end
+
+    it "sends an email to the live submission email address" do
+      expect(mail.to).to eq(["test@example.com"])
+    end
+
+    it "includes the form name" do
+      expect(mail.govuk_notify_personalisation[:form_name]).to eq("Testing API")
+    end
+  end
 end
