@@ -40,11 +40,12 @@ describe SubmissionEmailMailer, type: :mailer do
     end
   end
 
-  describe "#notify_submission_email_has_changed" do
+  describe "#alert_email_change" do
     let(:mail) do
       described_class.alert_email_change(live_email: "test@example.com",
                                          form_name: "Testing API",
-                                         current_user: OpenStruct.new(name: "Joe Bloggs", email: "example@example.com"))
+                                         creator_name: "Joe Bloggs",
+                                         creator_email: "example@example.com")
     end
 
     describe "sending an email to notify confirmed submission email not to expect future form submissions" do
@@ -70,7 +71,8 @@ describe SubmissionEmailMailer, type: :mailer do
   describe "#alert_archive" do
     let(:mail) do
       described_class.alert_processor_form_archive(processor_email: "test@example.com", form_name: "Testing API",
-                                                   current_user: OpenStruct.new(name: "Joe Bloggs", email: "example@example.com"))
+                                                   creator_name: "Joe Bloggs",
+                                                   creator_email: "example@example.com")
     end
 
     it "sends an email with the correct template" do
