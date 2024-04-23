@@ -1,6 +1,6 @@
 class SubmissionEmailMailerPreview < ActionMailer::Preview
   def confirmation_code_email
-    SubmissionEmailMailer.confirmation_code_email(
+    SubmissionEmailMailer.send_confirmation_code(
       new_submission_email: "testing@example.com",
       form_name: "My fantastic form",
       confirmation_code: "12345",
@@ -10,7 +10,7 @@ class SubmissionEmailMailerPreview < ActionMailer::Preview
   end
 
   def notify_submission_email_has_changed
-    SubmissionEmailMailer.notify_submission_email_has_changed(
+    SubmissionEmailMailer.alert_email_change(
       live_email: "testing@example.com",
       form_name: "My fantastic form",
       current_user: OpenStruct.new(name: "Joe Bloggs", email: "example@example.com"),

@@ -1,5 +1,5 @@
 class SubmissionEmailMailer < GovukNotifyRails::Mailer
-  def confirmation_code_email(new_submission_email:, form_name:, confirmation_code:, notify_response_id:, current_user:)
+  def send_confirmation_code(new_submission_email:, form_name:, confirmation_code:, notify_response_id:, current_user:)
     set_template(Settings.govuk_notify.submission_email_confirmation_code_email_template_id)
 
     set_personalisation(
@@ -14,7 +14,7 @@ class SubmissionEmailMailer < GovukNotifyRails::Mailer
     mail(to: new_submission_email)
   end
 
-  def notify_submission_email_has_changed(live_email:, form_name:, current_user:)
+  def alert_email_change(live_email:, form_name:, current_user:)
     set_template(Settings.govuk_notify.live_submission_email_of_no_further_form_submissions)
 
     set_personalisation(

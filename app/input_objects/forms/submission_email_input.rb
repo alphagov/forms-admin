@@ -27,7 +27,7 @@ class Forms::SubmissionEmailInput < BaseInput
     if form_processed && temporary_submission_email.present?
       # send notify email?
       Rails.logger.info "Email sent to #{temporary_submission_email} with code #{confirmation_code}"
-      SubmissionEmailMailer.confirmation_code_email(
+      SubmissionEmailMailer.send_confirmation_code(
         new_submission_email: temporary_submission_email,
         form_name: form.name,
         confirmation_code:,

@@ -58,7 +58,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     let(:temporary_submission_email) { user.email }
 
     before do
-      allow(submission_email_mailer_spy).to receive(:confirmation_code_email)
+      allow(submission_email_mailer_spy).to receive(:send_confirmation_code)
 
       post(
         submission_email_path(form.id),
