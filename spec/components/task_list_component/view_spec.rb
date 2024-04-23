@@ -231,50 +231,14 @@ RSpec.describe TaskListComponent::View, type: :component do
       TaskListComponent::Row.new(
         task_name: "some key",
         path:,
-        confirm_path:,
         status:,
       )
     end
 
-    let(:confirm_path) { -> { raise hell } }
     let(:path) { "some_path" }
 
-    context "when the status is not completed" do
-      let(:status) { :not_started }
-
-      context "when the path provided is a string" do
-        it "returns the path" do
-          expect(row.get_path).to eq "some_path"
-        end
-      end
-
-      context "when the path provided is callable" do
-        let(:path) { -> { "some_path" } }
-
-        it "calls the callable and returns the result" do
-          expect(row.get_path).to eq "some_path"
-        end
-      end
-    end
-
-    context "when the status is completed" do
-      let(:status) { :completed }
-
-      context "when the confirm_path provided is a string" do
-        let(:confirm_path) { "confirm_path" }
-
-        it "returns the confirm_path" do
-          expect(row.get_path).to eq "confirm_path"
-        end
-      end
-
-      context "when the confirm_path provided is callable" do
-        let(:confirm_path) { -> { "confirm_path" } }
-
-        it "calls the callable and returns the result" do
-          expect(row.get_path).to eq "confirm_path"
-        end
-      end
+    it "returns the path" do
+      expect(row.get_path).to eq(path)
     end
   end
 
@@ -283,7 +247,6 @@ RSpec.describe TaskListComponent::View, type: :component do
       TaskListComponent::Row.new(
         task_name: "some key",
         path: nil,
-        confirm_path: nil,
         status:,
       )
     end

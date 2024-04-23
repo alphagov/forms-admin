@@ -43,25 +43,16 @@ module TaskListComponent
   class Row
     attr_accessor :task_name, :status, :hint_text, :active
 
-    def initialize(task_name:, path:, confirm_path: nil, status: nil, hint_text: nil, active: true)
+    def initialize(task_name:, path:, status: nil, hint_text: nil, active: true)
       @task_name = task_name
       @path = path
-      @confirm_path = confirm_path
       @status = status
       @hint_text = hint_text
       @active = active
     end
 
     def get_path
-      # allow the caller to set confirm_path, an alternate
-      # url for the link if the status is complete
-      return path unless @confirm_path
-
-      if status != :completed
-        path
-      else
-        confirm_path
-      end
+      @path
     end
 
     def get_status_colour
@@ -78,16 +69,6 @@ module TaskListComponent
 
     def status_id
       "#{task_name.downcase.parameterize}-status" if status
-    end
-
-  private
-
-    def path
-      @path.respond_to?(:call) ? @path.call : @path
-    end
-
-    def confirm_path
-      @confirm_path.respond_to?(:call) ? @confirm_path.call : @confirm_path
     end
   end
 end

@@ -90,20 +90,6 @@ class TaskListComponent::TaskListComponentPreview < ViewComponent::Preview
     ]))
   end
 
-  def with_confirm_set
-    render(TaskListComponent::View.new(sections: [
-      { title: "Make a form",
-        section_number: 1,
-        subsection: false,
-        rows: [
-          { task_name: "Edit the name of your form", path: "#", active: true, status: :completed, hint_text: "Describe your form clearly", confirm_path: "#confirm-path" },
-          { task_name: "Edit the questions of your form", path: "#", status: :not_started, active: true },
-          { task_name: "Edit the email address", path: "#", status: :cannot_start },
-          { task_name: "Confirm the submission email address", path: "#", status: :cannot_start, active: false },
-        ] },
-    ]))
-  end
-
   def with_status_summary
     render(TaskListComponent::View.new(
              completed_task_count: "1",
@@ -113,7 +99,7 @@ class TaskListComponent::TaskListComponentPreview < ViewComponent::Preview
                  section_number: 1,
                  subsection: false,
                  rows: [
-                   { task_name: "Edit the name of your form", path: "#", active: true, status: :completed, hint_text: "Describe your form clearly", confirm_path: "#confirm-path" },
+                   { task_name: "Edit the name of your form", path: "#", active: true, status: :completed, hint_text: "Describe your form clearly" },
                    { task_name: "Edit the questions of your form", path: "#", status: :not_started, active: true },
                    { task_name: "Edit the email address", path: "#", status: :cannot_start },
                    { task_name: "Confirm the submission email address", path: "#", status: :cannot_start, active: false },
@@ -131,7 +117,7 @@ class TaskListComponent::TaskListComponentPreview < ViewComponent::Preview
                  section_number: 1,
                  subsection: false,
                  rows: [
-                   { task_name: "Edit the name of your form", path: "#", active: true, status: :completed, hint_text: "Describe your form clearly", confirm_path: "#confirm-path" },
+                   { task_name: "Edit the name of your form", path: "#", active: true, status: :completed, hint_text: "Describe your form clearly" },
                    { task_name: "Edit the questions of your form", path: "#", status: :completed, active: true },
                    { task_name: "Edit the email address", path: "#", status: :completed },
                    { task_name: "Confirm the submission email address", path: "#", status: :completed, active: false },
