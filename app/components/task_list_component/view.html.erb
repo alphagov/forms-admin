@@ -24,7 +24,7 @@
           <%= govuk_task_list(id_prefix: section.title.gsub(" ", "-").downcase, classes: "app-task-list__items") do |task_list| %>
             <% section.rows.each do |row| %>
               <% task_list.with_item(classes: "app-task-list__item") do |item| %>
-                <% item.with_title(text: row.task_name, href: row.active ? row.get_path : nil, hint: row.hint_text&.html_safe ) %>
+                <% item.with_title(text: row.task_name, href: row.get_path, hint: row.hint_text&.html_safe ) %>
                 <% item.with_status(text: govuk_tag(text: I18n.t("task_statuses.#{row.status}"), colour: row.get_status_colour), cannot_start_yet: row.status == :cannot_start) %>
               <% end %>
             <% end %>

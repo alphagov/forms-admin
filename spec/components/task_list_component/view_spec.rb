@@ -232,13 +232,26 @@ RSpec.describe TaskListComponent::View, type: :component do
         task_name: "some key",
         path:,
         status:,
+        active:,
       )
     end
 
     let(:path) { "some_path" }
 
-    it "returns the path" do
-      expect(row.get_path).to eq(path)
+    context "when the row is active" do
+      let(:active) { true }
+
+      it "returns the path" do
+        expect(row.get_path).to eq(path)
+      end
+    end
+
+    context "when the path is not nil" do
+      let(:active) { false }
+
+      it "returns the path" do
+        expect(row.get_path).to eq(nil)
+      end
     end
   end
 

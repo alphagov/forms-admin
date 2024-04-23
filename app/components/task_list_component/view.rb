@@ -52,6 +52,8 @@ module TaskListComponent
     end
 
     def get_path
+      return nil unless active
+
       @path
     end
 
