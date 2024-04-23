@@ -24,6 +24,7 @@ forms_product_page:
 # Settings for GOV.UK Notify api & email templates
 govuk_notify:
   api_key: changeme
+  alert_processor_form_archive_template_id: 22fe5aae-a695-42a2-81e8-1d9ec4bab7ad
   submission_email_confirmation_code_email_template_id: ce2638ab-754c-416d-8df6-c0ccb5e1a688
   live_submission_email_of_no_further_form_submissions: a8c43931-af3d-48ff-b5b2-dbc444796dec
   user_upgrade_template_id: 5ec25494-c045-4cf6-9009-2f122e3339f4

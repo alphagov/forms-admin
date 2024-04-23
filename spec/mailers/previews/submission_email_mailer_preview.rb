@@ -16,4 +16,13 @@ class SubmissionEmailMailerPreview < ActionMailer::Preview
       current_user: OpenStruct.new(name: "Joe Bloggs", email: "example@example.com"),
     )
   end
+
+  def alert_processor_form_archive
+    SubmissionEmailMailer.alert_processor_form_archive(
+      processor_email: "testing@example.com",
+      form_name: "My fantastic form",
+      creator_name: "Joe Bloggs",
+      creator_email: "example@example.com",
+    )
+  end
 end
