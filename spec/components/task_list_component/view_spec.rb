@@ -46,7 +46,7 @@ RSpec.describe TaskListComponent::View, type: :component do
     end
 
     it "renders empty" do
-      expect(page).to have_css("ol.app-task-list:empty")
+      expect(page).to have_css("div.app-task-list:empty")
     end
   end
 
