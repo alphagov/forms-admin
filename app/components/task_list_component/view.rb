@@ -63,7 +63,7 @@ module TaskListComponent
       {
         completed: nil,
         in_progress: "blue",
-        cannot_start: "grey",
+        cannot_start: nil,
         not_started: "grey",
         optional: "grey",
       }[status.downcase.to_sym]
@@ -83,6 +83,7 @@ module TaskListComponent
 
     def get_status_tag
       return nil if status.blank?
+      return get_status_text if get_status_colour.blank?
 
       GovukComponent::TagComponent.new(text: get_status_text, colour: get_status_colour).call
     end

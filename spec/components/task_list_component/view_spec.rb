@@ -291,8 +291,8 @@ RSpec.describe TaskListComponent::View, type: :component do
     context "when status is cannot_start" do
       let(:status) { :cannot_start }
 
-      it "returns grey" do
-        expect(row.get_status_colour).to eq("grey")
+      it "returns nil" do
+        expect(row.get_status_colour).to eq(nil)
       end
     end
 
@@ -438,17 +438,31 @@ RSpec.describe TaskListComponent::View, type: :component do
       end
     end
 
+    context "when status is completed" do
+      let(:status) { :completed }
+
+      it "returns the status as plain text" do
+        expect(row.get_status_tag).to eq(row.get_status_text)
+      end
+    end
+
+    context "when status is cannot_start" do
+      let(:status) { :cannot_start }
+
+      it "returns the status as plain text" do
+        expect(row.get_status_tag).to eq(row.get_status_text)
+      end
+    end
+
     %i[
-      completed
       in_progress
-      cannot_start
       not_started
       optional
     ].each do |status_name|
       context "when status is #{status_name}" do
         let(:status) { status_name }
 
-        it "returns the correct status tag" do
+        it "returns the status as a tag" do
           expect(row.get_status_tag).to eq(GovukComponent::TagComponent.new(text: row.get_status_text, colour: row.get_status_colour).call)
         end
       end
