@@ -277,4 +277,63 @@ RSpec.describe TaskListComponent::View, type: :component do
       end
     end
   end
+
+  describe "#get_status_colour" do
+    subject(:row) do
+      TaskListComponent::Row.new(
+        task_name: "some key",
+        path: nil,
+        confirm_path: nil,
+        status:,
+      )
+    end
+
+    context "when status is nil" do
+      let(:status) { nil }
+
+      it "returns nil" do
+        expect(row.get_status_colour).to eq(nil)
+      end
+    end
+
+    context "when status is completed" do
+      let(:status) { :completed }
+
+      it "returns nil" do
+        expect(row.get_status_colour).to eq(nil)
+      end
+    end
+
+    context "when status is in_progress" do
+      let(:status) { :in_progress }
+
+      it "returns blue" do
+        expect(row.get_status_colour).to eq("blue")
+      end
+    end
+
+    context "when status is cannot_start" do
+      let(:status) { :cannot_start }
+
+      it "returns grey" do
+        expect(row.get_status_colour).to eq("grey")
+      end
+    end
+
+    context "when status is not_started" do
+      let(:status) { :not_started }
+
+      it "returns grey" do
+        expect(row.get_status_colour).to eq("grey")
+      end
+    end
+
+    context "when status is optional" do
+      let(:status) { :optional }
+
+      it "returns grey" do
+        expect(row.get_status_colour).to eq("grey")
+      end
+    end
+  end
 end

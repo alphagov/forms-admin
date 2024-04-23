@@ -65,6 +65,8 @@ module TaskListComponent
     end
 
     def get_status_colour
+      return nil if status.blank?
+
       {
         completed: nil,
         in_progress: "blue",
