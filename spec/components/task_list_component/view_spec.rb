@@ -420,4 +420,31 @@ RSpec.describe TaskListComponent::View, type: :component do
       end
     end
   end
+
+  describe "#get_status_tag" do
+    subject(:row) do
+      TaskListComponent::Row.new(
+        task_name: "some key",
+        path: nil,
+        status:,
+      )
+    end
+
+    [
+      nil,
+      :completed,
+      :in_progress,
+      :cannot_start,
+      :not_started,
+      :optional,
+    ].each do |status_name|
+      context "when status is #{status_name}" do
+        let(:status) { status_name }
+
+        it "returns the correct status tag" do
+          expect(row.get_status_tag).to eq(GovukComponent::TagComponent.new(text: row.get_status_text, colour: row.get_status_colour).call)
+        end
+      end
+    end
+  end
 end

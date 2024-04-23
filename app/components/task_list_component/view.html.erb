@@ -24,7 +24,7 @@
           <% section.rows.each do |row| %>
             <% task_list.with_item do |item| %>
               <% item.with_title(text: row.task_name, href: row.get_path, hint: row.hint_text&.html_safe ) %>
-              <% item.with_status(text: govuk_tag(text: row.get_status_text, colour: row.get_status_colour), cannot_start_yet: row.cannot_start?) %>
+              <% item.with_status(text: row.get_status_tag, cannot_start_yet: row.cannot_start?) %>
             <% end %>
           <% end %>
         <% end %>

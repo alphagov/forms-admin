@@ -80,5 +80,9 @@ module TaskListComponent
     def get_status_text
       I18n.t("task_statuses.#{status}")
     end
+
+    def get_status_tag
+      GovukComponent::TagComponent.new(text: get_status_text, colour: get_status_colour).call
+    end
   end
 end
