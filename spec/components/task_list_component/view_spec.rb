@@ -430,13 +430,20 @@ RSpec.describe TaskListComponent::View, type: :component do
       )
     end
 
-    [
-      nil,
-      :completed,
-      :in_progress,
-      :cannot_start,
-      :not_started,
-      :optional,
+    context "when status is nil" do
+      let(:status) { nil }
+
+      it "returns nil" do
+        expect(row.get_status_tag).to eq(nil)
+      end
+    end
+
+    %i[
+      completed
+      in_progress
+      cannot_start
+      not_started
+      optional
     ].each do |status_name|
       context "when status is #{status_name}" do
         let(:status) { status_name }

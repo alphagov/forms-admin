@@ -82,6 +82,8 @@ module TaskListComponent
     end
 
     def get_status_tag
+      return nil if status.blank?
+
       GovukComponent::TagComponent.new(text: get_status_text, colour: get_status_colour).call
     end
   end
