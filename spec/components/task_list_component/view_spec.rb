@@ -312,4 +312,62 @@ RSpec.describe TaskListComponent::View, type: :component do
       end
     end
   end
+
+  describe "#cannot_start?" do
+    subject(:row) do
+      TaskListComponent::Row.new(
+        task_name: "some key",
+        path: nil,
+        status:,
+      )
+    end
+
+    context "when status is nil" do
+      let(:status) { nil }
+
+      it "returns false" do
+        expect(row.cannot_start?).to eq(false)
+      end
+    end
+
+    context "when status is completed" do
+      let(:status) { :completed }
+
+      it "returns false" do
+        expect(row.cannot_start?).to eq(false)
+      end
+    end
+
+    context "when status is in_progress" do
+      let(:status) { :in_progress }
+
+      it "returns false" do
+        expect(row.cannot_start?).to eq(false)
+      end
+    end
+
+    context "when status is cannot_start" do
+      let(:status) { :cannot_start }
+
+      it "returns true" do
+        expect(row.cannot_start?).to eq(true)
+      end
+    end
+
+    context "when status is not_started" do
+      let(:status) { :not_started }
+
+      it "returns false" do
+        expect(row.cannot_start?).to eq(false)
+      end
+    end
+
+    context "when status is optional" do
+      let(:status) { :optional }
+
+      it "returns false" do
+        expect(row.cannot_start?).to eq(false)
+      end
+    end
+  end
 end

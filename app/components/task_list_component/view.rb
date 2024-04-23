@@ -72,5 +72,9 @@ module TaskListComponent
     def status_id
       "#{task_name.downcase.parameterize}-status" if status
     end
+
+    def cannot_start?
+      status == :cannot_start
+    end
   end
 end
