@@ -76,5 +76,9 @@ module TaskListComponent
     def cannot_start?
       status == :cannot_start
     end
+
+    def get_status_text
+      I18n.t("task_statuses.#{status}")
+    end
   end
 end

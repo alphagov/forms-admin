@@ -313,6 +313,56 @@ RSpec.describe TaskListComponent::View, type: :component do
     end
   end
 
+  describe "#get_status_text" do
+    subject(:row) do
+      TaskListComponent::Row.new(
+        task_name: "some key",
+        path: nil,
+        status:,
+      )
+    end
+
+    context "when status is completed" do
+      let(:status) { :completed }
+
+      it "returns the translation" do
+        expect(row.get_status_text).to eq(I18n.t("task_statuses.completed"))
+      end
+    end
+
+    context "when status is in_progress" do
+      let(:status) { :in_progress }
+
+      it "returns the translation" do
+        expect(row.get_status_text).to eq(I18n.t("task_statuses.in_progress"))
+      end
+    end
+
+    context "when status is cannot_start" do
+      let(:status) { :cannot_start }
+
+      it "returns the translation" do
+        expect(row.get_status_text).to eq(I18n.t("task_statuses.cannot_start"))
+      end
+    end
+
+    context "when status is not_started" do
+      let(:status) { :not_started }
+
+      it "returns the translation" do
+        expect(row.get_status_text).to eq(I18n.t("task_statuses.not_started"))
+      end
+    end
+
+    context "when status is optional" do
+      let(:status) { :optional }
+
+      it "returns the translation" do
+        expect(row.get_status_text).to eq(I18n.t("task_statuses.optional"))
+      end
+    end
+  end
+
   describe "#cannot_start?" do
     subject(:row) do
       TaskListComponent::Row.new(
