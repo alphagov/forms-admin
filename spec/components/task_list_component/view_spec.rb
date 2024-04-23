@@ -284,7 +284,7 @@ RSpec.describe TaskListComponent::View, type: :component do
       let(:status) { :in_progress }
 
       it "returns blue" do
-        expect(row.get_status_colour).to eq("blue")
+        expect(row.get_status_colour).to eq("light-blue")
       end
     end
 
@@ -300,7 +300,7 @@ RSpec.describe TaskListComponent::View, type: :component do
       let(:status) { :not_started }
 
       it "returns grey" do
-        expect(row.get_status_colour).to eq("grey")
+        expect(row.get_status_colour).to eq("blue")
       end
     end
 
