@@ -21,7 +21,9 @@
   </head>
 
   <body class="govuk-template__body ">
-    <script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
+    <script>
+      document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
+    </script>
 
     <%= yield :skip_link %>
 
@@ -29,14 +31,14 @@
 
     <div class="govuk-width-container ">
 
-    <%= yield :before_content %>
+      <%= yield :before_content %>
 
       <main class="govuk-main-wrapper" id="main-content" role="main">
         <% if success %>
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
               <%= govuk_notification_banner(title_text: t("banner.success.title"), success: true) do |nb| %>
-                <% nb.with_heading(text: success) %>
+                <% nb.with_heading(text: success, tag: yield(:notification_banner_content).present? ? "h3" : "p") %>
                 <%= yield :notification_banner_content %>
               <% end %>
             </div>
@@ -46,7 +48,6 @@
         <%= yield %>
       </main>
     </div>
-
 
     <%= yield :footer %>
 

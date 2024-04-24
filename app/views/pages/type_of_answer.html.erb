@@ -5,7 +5,7 @@
   <div class="govuk-grid-column-two-thirds">
     <% if @page.present? && @page.conditions.any?  %>
       <%= govuk_notification_banner(title_text: t("type_of_answer.routing_warning_notification_title")) do |banner| %>
-        <% banner.with_heading(text: t("type_of_answer.routing_warning_about_change_answer_type_heading")) %>
+        <% banner.with_heading(text: t("type_of_answer.routing_warning_about_change_answer_type_heading"), tag: "h3") %>
         <%= t("type_of_answer.routing_warning_about_change_answer_type_html", pages_link_url: form_pages_path(current_form)) %>
       <% end %>
     <% end %>

@@ -2,7 +2,7 @@
 
 <% if @mou_signature.present? %>
   <%= govuk_notification_banner(title_text: "MOU Signature already complete") do |banner| %>
-    <% banner.with_heading(text: "The MOU was signed on #{@mou_signature.created_at.strftime("%Y-%m-%d")}") %>
+    <% banner.with_heading(text: "The MOU was signed on #{@mou_signature.created_at.strftime("%Y-%m-%d")}", tag: "p") %>
   <% end %>
 <% end %>
 
