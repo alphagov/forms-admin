@@ -46,7 +46,7 @@ RSpec.describe TaskListComponent::View, type: :component do
     end
 
     it "renders empty" do
-      expect(page).to have_css("ol.app-task-list:empty")
+      expect(page).to have_css("div.app-task-list:empty")
     end
   end
 
@@ -231,48 +231,239 @@ RSpec.describe TaskListComponent::View, type: :component do
       TaskListComponent::Row.new(
         task_name: "some key",
         path:,
-        confirm_path:,
+        status:,
+        active:,
+      )
+    end
+
+    let(:path) { "some_path" }
+
+    context "when the row is active" do
+      let(:active) { true }
+
+      it "returns the path" do
+        expect(row.get_path).to eq(path)
+      end
+    end
+
+    context "when the path is not nil" do
+      let(:active) { false }
+
+      it "returns the path" do
+        expect(row.get_path).to eq(nil)
+      end
+    end
+  end
+
+  describe "#get_status_colour" do
+    subject(:row) do
+      TaskListComponent::Row.new(
+        task_name: "some key",
+        path: nil,
         status:,
       )
     end
 
-    let(:confirm_path) { -> { raise hell } }
-    let(:path) { "some_path" }
+    context "when status is nil" do
+      let(:status) { nil }
 
-    context "when the status is not completed" do
-      let(:status) { :not_started }
-
-      context "when the path provided is a string" do
-        it "returns the path" do
-          expect(row.get_path).to eq "some_path"
-        end
-      end
-
-      context "when the path provided is callable" do
-        let(:path) { -> { "some_path" } }
-
-        it "calls the callable and returns the result" do
-          expect(row.get_path).to eq "some_path"
-        end
+      it "returns nil" do
+        expect(row.get_status_colour).to eq(nil)
       end
     end
 
-    context "when the status is completed" do
+    context "when status is completed" do
       let(:status) { :completed }
 
-      context "when the confirm_path provided is a string" do
-        let(:confirm_path) { "confirm_path" }
-
-        it "returns the confirm_path" do
-          expect(row.get_path).to eq "confirm_path"
-        end
+      it "returns nil" do
+        expect(row.get_status_colour).to eq(nil)
       end
+    end
 
-      context "when the confirm_path provided is callable" do
-        let(:confirm_path) { -> { "confirm_path" } }
+    context "when status is in_progress" do
+      let(:status) { :in_progress }
 
-        it "calls the callable and returns the result" do
-          expect(row.get_path).to eq "confirm_path"
+      it "returns blue" do
+        expect(row.get_status_colour).to eq("light-blue")
+      end
+    end
+
+    context "when status is cannot_start" do
+      let(:status) { :cannot_start }
+
+      it "returns nil" do
+        expect(row.get_status_colour).to eq(nil)
+      end
+    end
+
+    context "when status is not_started" do
+      let(:status) { :not_started }
+
+      it "returns grey" do
+        expect(row.get_status_colour).to eq("blue")
+      end
+    end
+
+    context "when status is optional" do
+      let(:status) { :optional }
+
+      it "returns grey" do
+        expect(row.get_status_colour).to eq("grey")
+      end
+    end
+  end
+
+  describe "#get_status_text" do
+    subject(:row) do
+      TaskListComponent::Row.new(
+        task_name: "some key",
+        path: nil,
+        status:,
+      )
+    end
+
+    context "when status is completed" do
+      let(:status) { :completed }
+
+      it "returns the translation" do
+        expect(row.get_status_text).to eq(I18n.t("task_statuses.completed"))
+      end
+    end
+
+    context "when status is in_progress" do
+      let(:status) { :in_progress }
+
+      it "returns the translation" do
+        expect(row.get_status_text).to eq(I18n.t("task_statuses.in_progress"))
+      end
+    end
+
+    context "when status is cannot_start" do
+      let(:status) { :cannot_start }
+
+      it "returns the translation" do
+        expect(row.get_status_text).to eq(I18n.t("task_statuses.cannot_start"))
+      end
+    end
+
+    context "when status is not_started" do
+      let(:status) { :not_started }
+
+      it "returns the translation" do
+        expect(row.get_status_text).to eq(I18n.t("task_statuses.not_started"))
+      end
+    end
+
+    context "when status is optional" do
+      let(:status) { :optional }
+
+      it "returns the translation" do
+        expect(row.get_status_text).to eq(I18n.t("task_statuses.optional"))
+      end
+    end
+  end
+
+  describe "#cannot_start?" do
+    subject(:row) do
+      TaskListComponent::Row.new(
+        task_name: "some key",
+        path: nil,
+        status:,
+      )
+    end
+
+    context "when status is nil" do
+      let(:status) { nil }
+
+      it "returns false" do
+        expect(row.cannot_start?).to eq(false)
+      end
+    end
+
+    context "when status is completed" do
+      let(:status) { :completed }
+
+      it "returns false" do
+        expect(row.cannot_start?).to eq(false)
+      end
+    end
+
+    context "when status is in_progress" do
+      let(:status) { :in_progress }
+
+      it "returns false" do
+        expect(row.cannot_start?).to eq(false)
+      end
+    end
+
+    context "when status is cannot_start" do
+      let(:status) { :cannot_start }
+
+      it "returns true" do
+        expect(row.cannot_start?).to eq(true)
+      end
+    end
+
+    context "when status is not_started" do
+      let(:status) { :not_started }
+
+      it "returns false" do
+        expect(row.cannot_start?).to eq(false)
+      end
+    end
+
+    context "when status is optional" do
+      let(:status) { :optional }
+
+      it "returns false" do
+        expect(row.cannot_start?).to eq(false)
+      end
+    end
+  end
+
+  describe "#get_status_tag" do
+    subject(:row) do
+      TaskListComponent::Row.new(
+        task_name: "some key",
+        path: nil,
+        status:,
+      )
+    end
+
+    context "when status is nil" do
+      let(:status) { nil }
+
+      it "returns nil" do
+        expect(row.get_status_tag).to eq(nil)
+      end
+    end
+
+    context "when status is completed" do
+      let(:status) { :completed }
+
+      it "returns the status as plain text" do
+        expect(row.get_status_tag).to eq(row.get_status_text)
+      end
+    end
+
+    context "when status is cannot_start" do
+      let(:status) { :cannot_start }
+
+      it "returns the status as plain text" do
+        expect(row.get_status_tag).to eq(row.get_status_text)
+      end
+    end
+
+    %i[
+      in_progress
+      not_started
+      optional
+    ].each do |status_name|
+      context "when status is #{status_name}" do
+        let(:status) { status_name }
+
+        it "returns the status as a tag" do
+          expect(row.get_status_tag).to eq(GovukComponent::TagComponent.new(text: row.get_status_text, colour: row.get_status_colour).call)
         end
       end
     end

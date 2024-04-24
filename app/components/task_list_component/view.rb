@@ -43,33 +43,28 @@ module TaskListComponent
   class Row
     attr_accessor :task_name, :status, :hint_text, :active
 
-    def initialize(task_name:, path:, confirm_path: nil, status: nil, hint_text: nil, active: true)
+    def initialize(task_name:, path:, status: nil, hint_text: nil, active: true)
       @task_name = task_name
       @path = path
-      @confirm_path = confirm_path
       @status = status
       @hint_text = hint_text
       @active = active
     end
 
     def get_path
-      # allow the caller to set confirm_path, an alternate
-      # url for the link if the status is complete
-      return path unless @confirm_path
+      return nil unless active
 
-      if status != :completed
-        path
-      else
-        confirm_path
-      end
+      @path
     end
 
     def get_status_colour
+      return nil if status.blank?
+
       {
         completed: nil,
-        in_progress: "blue",
-        cannot_start: "grey",
-        not_started: "grey",
+        in_progress: "light-blue",
+        cannot_start: nil,
+        not_started: "blue",
         optional: "grey",
       }[status.downcase.to_sym]
     end
@@ -78,14 +73,19 @@ module TaskListComponent
       "#{task_name.downcase.parameterize}-status" if status
     end
 
-  private
-
-    def path
-      @path.respond_to?(:call) ? @path.call : @path
+    def cannot_start?
+      status == :cannot_start
     end
 
-    def confirm_path
-      @confirm_path.respond_to?(:call) ? @confirm_path.call : @confirm_path
+    def get_status_text
+      I18n.t("task_statuses.#{status}")
+    end
+
+    def get_status_tag
+      return nil if status.blank?
+      return get_status_text if get_status_colour.blank?
+
+      GovukComponent::TagComponent.new(text: get_status_text, colour: get_status_colour).call
     end
   end
 end
