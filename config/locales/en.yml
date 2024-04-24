@@ -281,12 +281,14 @@ en:
           <p>Only an organisation admin can add a group admin to a group.</p>
         summary_text: What can ‘editors’ and ‘group admins’ do?
       no_members: There are no members in this group.
+      remove_member: Remove
       roles:
         editor:
           name: Editor
         group_admin:
           name: Group Admin
       table_headings:
+        actions: Action
         email: Email address
         name: Name
         role: Role

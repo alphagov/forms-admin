@@ -399,7 +399,7 @@ describe User, type: :model do
 
   describe "is_group_admin?" do
     let(:user) { create(:user, organisation:) }
-    let(:organisation) { create(:organisation) }
+    let(:organisation) { create(:organisation, slug: "org") }
     let(:group) { create(:group, organisation:) }
 
     it "returns falsey when user is not in group" do
@@ -412,7 +412,7 @@ describe User, type: :model do
     end
 
     it "returns true when user is a group admin of the group" do
-      create(:membership, user: user, group: group, role: :group_admin)
+      create(:membership, user:, group:, role: :group_admin)
       expect(user.is_group_admin?(group)).to eq(true)
     end
   end

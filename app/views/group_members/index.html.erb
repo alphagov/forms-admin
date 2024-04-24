@@ -7,28 +7,36 @@
   <%= t(".title") %>
 </h1>
 
-<% if @group.memberships.empty? %>
+<% if @group_member_service.rows.empty? %>
   <p class="govuk-body"><%= t(".no_members") %></p>
 <% else %>
-  <%= govuk_table do |table| %>
-    <%= table.with_head do |head|
+  <%= govuk_table do |table|
+    table.with_head do |head|
       head.with_row do |row|
         row.with_cell(text: t(".table_headings.name"))
         row.with_cell(text: t(".table_headings.email"))
         row.with_cell(text: t(".table_headings.role"))
+        row.with_cell(text: t(".table_headings.actions")) if @group_member_service.show_actions?
       end
-    end %>
+    end
 
-    <%= table.with_body do |body|
-      @group.memberships.each do |membership|
+    table.with_body do |body|
+      @group_member_service.rows.each do |member|
         body.with_row do |row|
-          row.with_cell { membership.user.name }
-          row.with_cell { membership.user.email }
-          row.with_cell { t(".roles.#{membership.role}.name") }
+          row.with_cell { member.name }
+          row.with_cell { member.email }
+          row.with_cell { t("group_members.index.roles.#{member.role}.name") }
+          if @group_member_service.show_actions?
+            row.with_cell do
+              if member.actions.include?(:delete)
+                govuk_button_to(t(".remove_member"), membership_path(member.membership), method: :delete, secondary: true)
+              end
+            end
+          end
         end
       end
-    end %>
-  <% end %>
+    end
+  end %>
 <% end %>
 
 <% if Pundit.policy(@current_user, @group).add_editor? %>
