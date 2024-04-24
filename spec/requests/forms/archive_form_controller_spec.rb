@@ -39,7 +39,7 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
   end
 
   describe "#update" do
-    let(:confirm_archive) { :archive }
+    let(:confirm) { :yes }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -47,7 +47,7 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
         mock.post "/api/v1/forms/#{id}/archive", post_headers
       end
 
-      post archive_form_update_path(id), params: { forms_confirm_archive_form: { confirm_archive:, form: } }
+      post archive_form_update_path(id), params: { forms_confirm_archive_form: { confirm:, form: } }
     end
 
     context "when 'Yes' is selected" do
@@ -62,7 +62,7 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
     end
 
     context "when 'No' is selected" do
-      let(:confirm_archive) { :do_not_archive }
+      let(:confirm) { :no }
 
       it "redirects to live form page" do
         expect(response).to redirect_to(live_form_path(id))
@@ -70,7 +70,7 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
     end
 
     context "when no option is selected" do
-      let(:confirm_archive) { nil }
+      let(:confirm) { nil }
 
       it "returns 200" do
         expect(response).to have_http_status(:ok)
