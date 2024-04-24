@@ -19,7 +19,7 @@ en:
               goto_page_doesnt_exist: Select the question or page you want to take the person to, or delete this route
         pages/delete_condition_form:
           attributes:
-            confirm_deletion:
+            confirm:
               blank: Select yes if you want to delete this route
         pages/routing_page_form:
           attributes:

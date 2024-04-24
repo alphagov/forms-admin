@@ -12,11 +12,10 @@ RSpec.describe Pages::DeleteConditionForm, type: :model do
   let(:condition) { Condition.new id: 2, form_id: form.id, page_id: page.id, routing_page_id: page.id, check_page_id: page.id, answer_value:, goto_page_id:, skip_to_end: }
 
   describe "validations" do
-    it "is invalid if confirm_deletion is nil" do
-      error_message = I18n.t("activemodel.errors.models.pages/delete_condition_form.attributes.confirm_deletion.blank")
-      delete_condition_form.confirm_deletion = nil
+    it "is invalid if confirm is nil" do
+      delete_condition_form.confirm = nil
       expect(delete_condition_form).to be_invalid
-      expect(delete_condition_form.errors.full_messages_for(:confirm_deletion)).to include("Confirm deletion #{error_message}")
+      expect(delete_condition_form.errors.full_messages_for(:confirm)).to include("Confirm Select yes if you want to delete this route")
     end
   end
 
@@ -27,7 +26,7 @@ RSpec.describe Pages::DeleteConditionForm, type: :model do
           mock.delete "/api/v1/forms/#{form.id}/pages/#{page.id}/conditions/", delete_headers, nil, 204
         end
 
-        delete_condition_form.confirm_deletion = "true"
+        delete_condition_form.confirm = "yes"
 
         expect(delete_condition_form.delete).to be_truthy
       end

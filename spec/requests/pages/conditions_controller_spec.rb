@@ -373,7 +373,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
   describe "#destroy" do
     let(:condition) { build :condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Wales", goto_page_id: pages.last.id }
-    let(:confirm_deletion) { "true" }
+    let(:confirm) { "yes" }
     let(:delete_bool) { true }
 
     before do
@@ -393,7 +393,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
         allow(Pundit).to receive(:authorize).and_return(true)
       end
 
-      delete_condition_form = Pages::DeleteConditionForm.new(form:, page: selected_page, record: condition, answer_value: "Wales", goto_page_id: 3, confirm_deletion:)
+      delete_condition_form = Pages::DeleteConditionForm.new(form:, page: selected_page, record: condition, answer_value: "Wales", goto_page_id: 3, confirm:)
 
       allow(delete_condition_form).to receive(:goto_page_question_text).and_return("What is your name?")
 
@@ -404,7 +404,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
       delete destroy_condition_path(form_id: form.id,
                                     page_id: selected_page.id,
                                     condition_id: condition.id,
-                                    params: { pages_delete_condition_form: { confirm_deletion:, goto_page_id: 3, answer_value: "Wales" } })
+                                    params: { pages_delete_condition_form: { confirm:, goto_page_id: 3, answer_value: "Wales" } })
     end
 
     it "Reads the form from the API" do
@@ -421,7 +421,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when confirm deletion is false" do
-      let(:confirm_deletion) { "false" }
+      let(:confirm) { "no" }
 
       it "redirects to edit the condition" do
         expect(response).to redirect_to edit_condition_path(form.id, selected_page.id, condition.id)
@@ -438,7 +438,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
     context "when form submit fails" do
       let(:delete_bool) { false }
-      let(:confirm_deletion) { nil }
+      let(:confirm) { nil }
 
       it "return 422 error code" do
         expect(response).to have_http_status(:unprocessable_entity)

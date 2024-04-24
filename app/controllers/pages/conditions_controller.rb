@@ -73,10 +73,9 @@ class Pages::ConditionsController < PagesController
     delete_condition_form = Pages::DeleteConditionForm.new(form_params)
 
     if delete_condition_form.delete
-      case delete_condition_form.confirm_deletion
-      when "true"
+      if delete_condition_form.confirmed?
         redirect_to form_pages_path(current_form.id, page.id), success: t("banner.success.route_deleted", question_position: delete_condition_form.page.position)
-      when "false"
+      else
         redirect_to edit_condition_path(current_form.id, page.id, condition.id)
       end
     else
@@ -95,6 +94,6 @@ private
   end
 
   def delete_condition_form_params
-    params.require(:pages_delete_condition_form).permit(:answer_value, :goto_page_id, :confirm_deletion).merge(form: current_form, page:)
+    params.require(:pages_delete_condition_form).permit(:answer_value, :goto_page_id, :confirm).merge(form: current_form, page:)
   end
 end
