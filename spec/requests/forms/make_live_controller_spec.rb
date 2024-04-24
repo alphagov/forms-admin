@@ -110,7 +110,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
     end
 
     context "when making a form live" do
-      let(:form_params) { { forms_make_live_form: { confirm_make_live: :made_live, form: } } }
+      let(:form_params) { { forms_make_live_form: { confirm: :yes, form: } } }
 
       it "reads the form from the API" do
         expect(form).to have_been_read
@@ -145,7 +145,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
     end
 
     context "when deciding not to make a form live" do
-      let(:form_params) { { forms_make_live_form: { confirm_make_live: :not_made_live } } }
+      let(:form_params) { { forms_make_live_form: { confirm: :no } } }
 
       it "reads the form from the API" do
         expect(form).to have_been_read

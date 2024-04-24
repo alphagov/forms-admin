@@ -409,9 +409,9 @@ en:
       account_organisation_form:
         organisation_id: Select your organisation
       forms_make_changes_live_form:
-        confirm_make_live: Are you sure you want to make your draft live?
+        confirm: Are you sure you want to make your draft live?
       forms_make_live_form:
-        confirm_make_live: Are you sure you want to make your form live?
+        confirm: Are you sure you want to make your form live?
       group_member_form:
         member_email_address: Enter the email address of the person you want to add
       mou_signature:

@@ -22,9 +22,9 @@
         <%= t("make_changes_live.url_will_remain_same") %>
       </p>
 
-      <%= f.govuk_collection_radio_buttons :confirm_make_live,
-                                           @make_live_form.values, ->(option) { option }, ->(option) { t('helpers.label.forms_make_live_form.options.' + "#{option}") },
-                                           legend: { text: t('helpers.label.forms_make_changes_live_form.confirm_make_live'),
+      <%= f.govuk_collection_radio_buttons :confirm,
+                                           @make_live_form.values, ->(option) { option }, ->(option) { t('helpers.label.confirm_action_form.options.' + "#{option}") },
+                                           legend: { text: t('helpers.label.forms_make_changes_live_form.confirm'),
                                                      size: 'm'}, inline: true %>
       <%= f.govuk_submit t("save_and_continue") %>
     <% end %>
