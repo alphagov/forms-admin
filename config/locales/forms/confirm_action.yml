@@ -1,0 +1,7 @@
+en:
+  helpers:
+    label:
+      confirm_action_form:
+        options:
+          yes: "Yes"
+          no: "No"
