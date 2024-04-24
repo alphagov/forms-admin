@@ -5,6 +5,7 @@
   <div class="govuk-grid-column-two-thirds">
     <% if @group.trial? %>
       <%= govuk_notification_banner(title_text: t("groups.show.trial_banner.title")) do |nb| %>
+        <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
         <%= t("groups.show.trial_banner.body_html") %>
       <% end %>
     <% end %>

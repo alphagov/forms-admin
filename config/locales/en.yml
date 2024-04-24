@@ -325,9 +325,8 @@ en:
       edit_group_members: Edit members of this group
       edit_group_name: Change the name of this group
       trial_banner:
-        body_html: |
-          <h3 class="govuk-heading-m">This is a ‘trial’ group</h3>
-          <p>You can create forms in this group and test them, but you cannot make them live.</p>
+        body_html: "<p>You can create forms in this group and test them, but you cannot make them live.</p>"
+        heading: This is a ‘trial’ group
         title: Important
     status_caption:
       active: Active group
