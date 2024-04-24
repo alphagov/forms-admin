@@ -9,7 +9,7 @@ module Forms
       @delete_confirmation_form = DeleteConfirmationForm.new(delete_confirmation_form_params)
 
       if @delete_confirmation_form.valid?
-        if @delete_confirmation_form.confirm_deletion == "true"
+        if @delete_confirmation_form.confirmed?
           if params[:page_id].present?
             delete_page(current_form, @page)
           else
@@ -36,7 +36,7 @@ module Forms
     end
 
     def delete_confirmation_form_params
-      params.require(:forms_delete_confirmation_form).permit(:confirm_deletion)
+      params.require(:forms_delete_confirmation_form).permit(:confirm)
     end
 
     def previous_page(id)
@@ -44,7 +44,6 @@ module Forms
     end
 
     def load_page_variables
-      @confirm_deletion_options = delete_confirmation_options
       @delete_confirmation_form = DeleteConfirmationForm.new
 
       if params[:page_id].present?
