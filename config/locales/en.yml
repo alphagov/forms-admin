@@ -342,6 +342,7 @@ en:
         body_html: "<p>You can create forms in this group and test them, but you cannot make them live.</p>"
         heading: This is a ‘trial’ group
         title: Important
+        upgrade_group: Upgrade this group
     status_caption:
       active: Active group
       trial: Trial group

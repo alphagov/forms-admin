@@ -4,11 +4,17 @@ RSpec.describe "groups/show", type: :view do
   let(:current_user) { create :user }
   let(:forms) { [] }
   let(:group) { create :group, name: "My Group" }
+  let(:upgrade?) { false }
 
   before do
     assign(:current_user, current_user)
     assign(:group, group)
     assign(:forms, forms)
+
+    without_partial_double_verification do
+      allow(view).to receive(:policy).and_return(instance_double(GroupPolicy, upgrade?: upgrade?))
+    end
+
     render
   end
 
@@ -85,6 +91,23 @@ RSpec.describe "groups/show", type: :view do
 
     it "shows a notification banner" do
       expect(rendered).to have_css ".govuk-notification-banner"
+    end
+
+    context "when the user has permission to upgrade the form" do
+      let(:upgrade?) { true }
+
+      it "shows a link to upgrade the group" do
+        expect(rendered).to have_link("Upgrade this group", href: upgrade_group_path(group))
+      end
+    end
+
+    context "when the user does not have permission to upgrade the form" do
+      let(:upgrade?) { false }
+
+      it "does not show a link to upgrade the group" do
+        # TODO: we will show a different link if the user is a group admin so this test will change
+        expect(rendered).not_to have_link("Upgrade this group", href: upgrade_group_path(group))
+      end
     end
   end
 

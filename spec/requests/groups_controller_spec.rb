@@ -114,6 +114,15 @@ RSpec.describe "/groups", type: :request do
         end
       end
     end
+
+    context "when the user is an admin for the organisation" do
+      let(:current_user) { organisation_admin_user }
+
+      it "has a link to upgrade the trial group" do
+        get group_url(member_group)
+        expect(response.body).to include(I18n.t("groups.show.trial_banner.upgrade_group"))
+      end
+    end
   end
 
   describe "GET /new" do
