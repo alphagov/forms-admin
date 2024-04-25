@@ -325,9 +325,8 @@ en:
       edit_group_members: Edit members of this group
       edit_group_name: Change the name of this group
       trial_banner:
-        body_html: |
-          <h2 class="govuk-heading-m">This is a ‘trial’ group</h2>
-          <p>You can create forms in this group and test them, but you cannot make them live.</p>
+        body_html: "<p>You can create forms in this group and test them, but you cannot make them live.</p>"
+        heading: This is a ‘trial’ group
         title: Important
     status_caption:
       active: Active group
@@ -519,15 +518,6 @@ en:
   internal_server_error:
     body: Please try again later.
     title: Sorry, there is a problem with the service
-  live_form_warning:
-    notification_content: |
-      This could have an impact on people who are filling in the form at
-      the same time. They may lose any answers they have already provided
-      and may need to start again.
-    notification_heading: |
-      Any changes you make to a live form will be updated in the form
-      immediately.
-    notification_title: Important
   made_live_form:
     archive_this_form: Archive this form
     contact_details: Your form’s contact details for support

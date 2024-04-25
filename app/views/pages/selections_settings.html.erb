@@ -6,7 +6,7 @@
   <div class="govuk-grid-column-two-thirds">
     <% if @page.present? && @page.conditions.any? %>
       <%= govuk_notification_banner(title_text: t("selections_settings.routing_warning_notification_title")) do |banner| %>
-        <% banner.with_heading(text: t("selections_settings.routing_warning_about_change_only_one_option_heading")) %>
+        <% banner.with_heading(text: t("selections_settings.routing_warning_about_change_only_one_option_heading"), tag: "h3") %>
         <%= t("selections_settings.routing_warning_about_change_only_one_option_html", pages_link_url: form_pages_path(current_form)) %>
       <% end %>
     <% end %>
@@ -45,7 +45,7 @@
       <div>
         <%if @selections_settings_form.selection_options.length < 20 %>
           <%= f.govuk_submit t("selections_settings.add_another"), name: :add_another, secondary: true  %>
-          <% else %>
+        <% else %>
           <p class="govuk-inset-text"><%= t("selections_settings.cannot_add_more_options") %></p>
         <% end %>
       </div>
