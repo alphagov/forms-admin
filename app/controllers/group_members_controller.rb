@@ -29,6 +29,7 @@ private
   end
 
   def group_member_params
-    params.require(:group_member_form).permit(:member_email_address).merge(group: @group, creator: current_user)
+    ## TODO: We are passing in host here because the admin doesn't know it's own URL to use in emails
+    params.require(:group_member_form).permit(:member_email_address).merge(group: @group, creator: current_user, host: request.host)
   end
 end
