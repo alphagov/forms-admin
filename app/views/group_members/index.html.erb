@@ -28,9 +28,21 @@
           row.with_cell { t("group_members.index.roles.#{member.role}.name") }
           if @group_member_service.show_actions?
             row.with_cell do
+              actions = []
+
               if member.actions.include?(:delete)
-                govuk_button_to(t(".remove_member"), membership_path(member.membership), method: :delete, secondary: true)
+                 actions << govuk_button_to(t(".remove_member"), membership_path(member.membership), method: :delete, secondary: true)
               end
+
+              if member.actions.include?(:make_group_admin)
+                actions << govuk_button_to(t(".make_group_admin"), membership_path(member.membership), method: :patch, params: { membership: { role: Membership.roles[:group_admin] }}, secondary: true)
+              end
+
+              if member.actions.include?(:make_editor)
+                actions << govuk_button_to(t(".make_editor"), membership_path(member.membership), method: :patch, params: { membership: { role: Membership.roles[:editor] }}, secondary: true)
+              end
+
+              safe_join(actions)
             end
           end
         end
