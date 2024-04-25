@@ -157,7 +157,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :memberships, only: %i[destroy]
+  resources :memberships, only: %i[destroy update]
 
   get "/maintenance" => "errors#maintenance", as: :maintenance_page
   match "/403", to: "errors#forbidden", as: :error_403, via: :all
