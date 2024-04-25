@@ -283,6 +283,8 @@ en:
           <p>A group admin can edit forms, make forms live and add editors to a group.</p>
           <p>Only an organisation admin can add a group admin to a group.</p>
         summary_text: What can ‘editors’ and ‘group admins’ do?
+      make_editor: Make editor
+      make_group_admin: Make group admin
       no_members: There are no members in this group.
       remove_member: Remove
       roles:
@@ -705,6 +707,11 @@ en:
   memberships:
     destroy:
       success: "%{member_name} has been removed from this group"
+    update:
+      success:
+        roles:
+          editor: "%{member_name} is now an editor"
+          group_admin: "%{member_name} is now a group admin"
   metrics_summary:
     completion_rate: Completion rate
     date_range: "%{start_date} to %{end_date}"
