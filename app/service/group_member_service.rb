@@ -15,7 +15,7 @@ class GroupMemberService
   end
 
   def show_actions?
-    current_user.super_admin? || current_user.is_organisations_admin?(group.organisation) || current_user.is_group_admin?(group)
+    @show_actions ||= current_user.super_admin? || current_user.is_organisations_admin?(group.organisation) || current_user.is_group_admin?(group)
   end
 
   def rows
