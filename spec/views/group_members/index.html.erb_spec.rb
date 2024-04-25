@@ -1,11 +1,16 @@
 require "rails_helper"
 
-RSpec.describe "group_members/index", type: :view do
+describe "group_members/index", type: :view do
   let(:organisation) { build(:organisation, slug: "Department for testing group members") }
   let(:group) { create(:group, name: "Group 1", organisation:) }
   let(:add_editor) { false }
 
-  let(:rows) { [OpenStruct.new({ name: "user1", email: "user1@gov.uk", role: :editor, actions: [] })] }
+  let(:rows) do
+    [
+      OpenStruct.new({ name: "user1", email: "user1@gov.uk", role: :editor, actions: [], membership: { id: 1 } }),
+      OpenStruct.new({ name: "user2", email: "user2@gov.uk", role: :group_admin, actions: [:delete], membership: { id: 1 } }),
+    ]
+  end
 
   before do
     assign(:group, group)
@@ -26,11 +31,13 @@ RSpec.describe "group_members/index", type: :view do
     end
 
     it "displays a table of group memberships" do
-      rows.each do |membership|
-        expect(rendered).to have_selector("table td", text: membership.name)
-        expect(rendered).to have_selector("table td", text: membership.email)
-        expect(rendered).to have_selector("table td", text: t("group_members.index.roles.#{membership.role}.name"))
+      rows.each do |row|
+        expect(rendered).to have_selector("td", text: row.name)
+        expect(rendered).to have_selector("td", text: row.email)
+        expect(rendered).to have_selector("td", text: t("group_members.index.roles.#{row.role}.name"))
       end
+
+      expect(rendered).to have_button(t("group_members.index.remove_member"), count: 1)
     end
 
     it "has a back link to the group page" do
