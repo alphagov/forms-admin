@@ -35,4 +35,58 @@ describe "/memberships", type: :request do
       end
     end
   end
+
+  describe "PUT #update" do
+    let(:membership) { create(:membership, user:, group:) }
+
+    before do
+      login_as_super_admin_user
+    end
+
+    context "with valid parameters" do
+      let(:new_role) { "group_admin" }
+
+      it "updates the membership role" do
+        expect {
+          put membership_path(membership), params: { membership: { role: new_role } }
+        }.to change { membership.reload.role }.from("editor").to(new_role)
+      end
+
+      it "redirects to the group members page" do
+        put membership_path(membership), params: { membership: { role: new_role } }
+        expect(response).to redirect_to(group_members_path(group))
+      end
+
+      it "sets a success flash message" do
+        put membership_path(membership), params: { membership: { role: new_role } }
+        expect(flash[:success]).to eq(I18n.t("memberships.update.success.roles.#{new_role}", member_name: user.name))
+      end
+    end
+
+    context "with invalid parameters" do
+      let(:invalid_role) { "invalid_role" }
+
+      it "does not update the membership role" do
+        expect {
+          put membership_path(membership), params: { membership: { role: invalid_role } }
+        }.not_to(change { membership.reload.role })
+      end
+
+      it "redirects to the group members page" do
+        put membership_path(membership), params: { membership: { role: invalid_role } }
+        expect(response).to redirect_to(group_members_path(group))
+      end
+    end
+
+    context "when not authorized" do
+      before do
+        allow(Pundit).to receive(:authorize).and_raise(Pundit::NotAuthorizedError)
+      end
+
+      it "redirects to the root path" do
+        put membership_path(membership), params: { membership: { role: "group_admin" } }
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
 end
