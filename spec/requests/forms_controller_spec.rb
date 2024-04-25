@@ -153,7 +153,7 @@ RSpec.describe FormsController, type: :request do
                                          })
         GroupForm.create!(group:, form_id: form.id) if group.present?
         allow(Pundit).to receive(:authorize).and_return(true)
-        delete destroy_form_path(form_id: 2, forms_delete_confirmation_form: { confirm_deletion: "true" })
+        delete destroy_form_path(form_id: 2, forms_delete_confirmation_form: { confirm: "yes" })
       end
 
       it "redirects you to the group page" do

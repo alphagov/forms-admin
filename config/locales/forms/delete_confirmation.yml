@@ -1,10 +1,4 @@
 en:
-  helpers:
-    label:
-      forms_delete_confirmation_form:
-        confirm_deletion_options:
-          true: "Yes"
-          false: "No"
   activemodel:
     errors:
       models:

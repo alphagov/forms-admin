@@ -36,11 +36,11 @@ module Forms
     end
 
     def confirm_archive_form_params
-      params.require(:forms_confirm_archive_form).permit(:confirm_archive).merge(form: current_form)
+      params.require(:forms_confirm_archive_form).permit(:confirm).merge(form: current_form)
     end
 
     def user_wants_to_archive_form
-      @confirm_archive_form.archive?
+      @confirm_archive_form.confirmed?
     end
   end
 end

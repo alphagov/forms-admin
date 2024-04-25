@@ -16,14 +16,14 @@ describe "forms/archive_form/archive.html.erb" do
 
     it "displays the form" do
       expect(rendered).to have_selector("form[action='#{archive_form_update_path(id)}'][method='post']")
-      expect(rendered).to have_field("forms_confirm_archive_form[confirm_archive]")
+      expect(rendered).to have_field("forms_confirm_archive_form[confirm]")
       expect(rendered).to have_button("Save and continue")
     end
   end
 
   context "when there are errors" do
     before do
-      confirm_archive_form.errors.add(:confirm_archive, "is required")
+      confirm_archive_form.errors.add(:confirm, "is required")
       render
     end
 

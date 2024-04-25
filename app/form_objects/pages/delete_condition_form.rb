@@ -1,14 +1,12 @@
-class Pages::DeleteConditionForm < BaseForm
-  attr_accessor :form, :page, :check_page_id, :routing_page_id, :answer_value, :goto_page_id, :record, :confirm_deletion
-
-  validates :confirm_deletion, presence: true, inclusion: { in: %w[true false] }
+class Pages::DeleteConditionForm < ConfirmActionForm
+  attr_accessor :form, :page, :check_page_id, :routing_page_id, :answer_value, :goto_page_id, :record
 
   def delete
     return false if invalid?
 
     result = true
 
-    if confirm_deletion == "true"
+    if confirmed?
       result = record.destroy
     end
 

@@ -27,7 +27,7 @@ module Forms
   private
 
     def unarchive_form_params
-      params.require(:forms_make_live_form).permit(:confirm_make_live).merge(form: current_form)
+      params.require(:forms_make_live_form).permit(:confirm).merge(form: current_form)
     end
   end
 end

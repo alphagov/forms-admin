@@ -138,7 +138,7 @@ RSpec.describe PagesController, type: :request do
           mock.delete "/api/v1/forms/2/pages/1", headers, {}, 200
         end
 
-        delete destroy_page_path(form_id: 2, page_id: 1, forms_delete_confirmation_form: { confirm_deletion: "true" })
+        delete destroy_page_path(form_id: 2, page_id: 1, forms_delete_confirmation_form: { confirm: "yes" })
       end
 
       it "Redirects you to the page index screen" do

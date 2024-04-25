@@ -1,14 +1,8 @@
 en:
-  helpers:
-    label:
-      forms_confirm_archive_form:
-        options:
-          archive: "Yes"
-          do_not_archive: "No"
   activemodel:
     errors:
       models:
         forms/confirm_archive_form:
           attributes:
-            confirm_archive:
+            confirm:
               blank: Select yes if you want to archive this form

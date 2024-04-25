@@ -13,7 +13,7 @@ describe "forms/unarchive/unarchive_form.html.erb" do
   end
 
   it "contains a radio question for choosing whether to make the form live" do
-    expect(rendered).to have_css("fieldset", text: I18n.t("helpers.label.forms_make_live_form.confirm_make_live"))
+    expect(rendered).to have_css("fieldset", text: I18n.t("helpers.label.forms_make_live_form.confirm"))
     expect(rendered).to have_field("Yes", type: "radio")
     expect(rendered).to have_field("No", type: "radio")
   end
