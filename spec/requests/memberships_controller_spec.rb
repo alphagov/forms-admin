@@ -3,10 +3,10 @@ require "rails_helper"
 describe "/memberships", type: :request do
   let(:user) { create(:user) }
   let(:group) { create(:group) }
-  let(:role) { :group_admin }
+  let(:logged_in_user_role) { :group_admin }
 
   before do
-    create(:membership, user: editor_user, group:, role:)
+    create(:membership, user: editor_user, group:, role: logged_in_user_role)
     login_as_editor_user
   end
 
@@ -21,8 +21,8 @@ describe "/memberships", type: :request do
       expect(response).to redirect_to(group_members_path(group.external_id))
     end
 
-    context "when user is not a group admin" do
-      let(:role) { :editor }
+    context "when logged in user is not a group admin" do
+      let(:logged_in_user_role) { :editor }
 
       it "does not delete a membership" do
         membership = create(:membership, user:, group:, added_by: editor_user)
