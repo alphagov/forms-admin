@@ -14,6 +14,10 @@ class GroupPolicy < ApplicationPolicy
     user.super_admin? || user.is_organisations_admin?(record.organisation) || record.memberships.find_by(user:)&.group_admin?
   end
 
+  def upgrade?
+    user.super_admin? || user.is_organisations_admin?(record.organisation)
+  end
+
   class Scope < ApplicationPolicy::Scope
     def resolve
       if user.super_admin?
