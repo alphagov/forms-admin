@@ -14,41 +14,25 @@ describe GroupMemberService do
   end
 
   describe "#show_actions?" do
-    context "when current user is a super admin" do
-      let(:current_user) { create(:user, role: "super_admin") }
+    context "when any row has actions" do
+      let(:row_with_actions) { instance_double(GroupMemberService::Row, actions: [:delete]) }
+      let(:rows) { [row_with_actions] }
 
       it "returns true" do
         service = described_class.new(group:, current_user:)
-        expect(service.show_actions?).to be true
+        allow(service).to receive(:rows).and_return(rows)
+        expect(service.show_actions?).to be(true)
       end
     end
 
-    context "when current user is an organisation admin" do
-      before do
-        allow(current_user).to receive(:is_organisations_admin?).and_return(true)
-      end
+    context "when no rows have actions" do
+      let(:row_without_actions) { instance_double(GroupMemberService::Row, actions: []) }
+      let(:rows) { [row_without_actions] }
 
-      it "returns true" do
-        service = described_class.new(group:, current_user:)
-        expect(service.show_actions?).to be true
-      end
-    end
-
-    context "when current user is a group admin" do
-      before do
-        allow(current_user).to receive(:is_group_admin?).and_return(true)
-      end
-
-      it "returns true" do
-        service = described_class.new(group:, current_user:)
-        expect(service.show_actions?).to be true
-      end
-    end
-
-    context "when current user is a regular user" do
       it "returns false" do
         service = described_class.new(group:, current_user:)
-        expect(service).not_to be_show_actions
+        allow(service).to receive(:rows).and_return(rows)
+        expect(service.show_actions?).to be(false)
       end
     end
   end

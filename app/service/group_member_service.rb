@@ -15,11 +15,11 @@ class GroupMemberService
   end
 
   def show_actions?
-    @show_actions ||= current_user.super_admin? || current_user.is_organisations_admin?(group.organisation) || current_user.is_group_admin?(group)
+    rows.any? { |row| row.actions.any? }
   end
 
   def rows
-    group.memberships.map(&method(:row))
+    @rows ||= group.memberships.map(&method(:row))
   end
 
 private
