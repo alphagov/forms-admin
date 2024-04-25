@@ -1,0 +1,8 @@
+en:
+  activemodel:
+    errors:
+      models:
+        groups/confirm_upgrade_form:
+          attributes:
+            confirm:
+              blank: Select yes if you want to upgrade this group

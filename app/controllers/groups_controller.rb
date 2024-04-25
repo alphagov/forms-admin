@@ -1,5 +1,5 @@
 class GroupsController < ApplicationController
-  before_action :set_group, only: %i[show edit update]
+  before_action :set_group, except: %i[index new create]
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
 
@@ -51,6 +51,11 @@ class GroupsController < ApplicationController
     end
   end
 
+  def confirm_upgrade
+    authorize @group, :upgrade?
+    @confirm_upgrade_form = Groups::ConfirmUpgradeForm.new
+  end
+
 private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -61,5 +66,9 @@ private
   # Only allow a list of trusted parameters through.
   def group_params
     params.require(:group).permit(:name)
+  end
+
+  def confirm_upgrade_form_params
+    params.require(:groups_confirm_upgrade_form).permit(:confirm)
   end
 end

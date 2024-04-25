@@ -151,6 +151,10 @@ Rails.application.routes.draw do
   resources :groups, except: :destroy do
     resources :forms, controller: :group_forms, only: %i[new create]
     resources :members, controller: :group_members, only: %i[index new create]
+    member do
+      get "upgrade", to: "groups#confirm_upgrade"
+      post "upgrade", to: "groups#upgrade"
+    end
   end
 
   get "/maintenance" => "errors#maintenance", as: :maintenance_page

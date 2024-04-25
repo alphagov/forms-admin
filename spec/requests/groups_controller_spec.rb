@@ -13,9 +13,10 @@ require "rails_helper"
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/groups", type: :request do
+  let(:current_user) { editor_user }
   let(:member_group) do
-    create(:group, organisation: editor_user.organisation).tap do |group|
-      create(:membership, user: editor_user, group:)
+    create(:group, organisation: current_user.organisation).tap do |group|
+      create(:membership, user: current_user, group:)
     end
   end
 
@@ -35,7 +36,7 @@ RSpec.describe "/groups", type: :request do
   end
 
   before do
-    login_as_editor_user
+    login_as current_user
   end
 
   describe "GET /index" do
@@ -160,19 +161,15 @@ RSpec.describe "/groups", type: :request do
       end
 
       it "records the creator" do
-        login_as_editor_user
-
         post groups_url, params: { group: valid_attributes }
 
-        expect(Group.last.creator).to eq(editor_user)
+        expect(Group.last.creator).to eq(current_user)
       end
 
       it "gives the creator the group admin role" do
-        login_as_editor_user
-
         post groups_url, params: { group: valid_attributes }
 
-        expect(Membership.last).to have_attributes user: editor_user, role: "group_admin"
+        expect(Membership.last).to have_attributes user: current_user, role: "group_admin"
       end
     end
 
@@ -230,6 +227,31 @@ RSpec.describe "/groups", type: :request do
           patch group_url(non_member_group), params: { group: valid_attributes }
           expect(response).to be_redirect
         end
+      end
+    end
+  end
+
+  describe "GET /upgrade" do
+    context "when user is an organisation admin" do
+      let(:current_user) { organisation_admin_user }
+
+      before do
+        get upgrade_group_url(member_group)
+      end
+
+      it "returns a successful response" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the confirm upgrade view" do
+        expect(response).to render_template(:confirm_upgrade)
+      end
+    end
+
+    context "when user is not an organisation admin" do
+      it "is forbidden" do
+        get upgrade_group_url(member_group)
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
