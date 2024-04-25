@@ -255,4 +255,64 @@ RSpec.describe "/groups", type: :request do
       end
     end
   end
+
+  describe "POST /upgrade" do
+    let(:confirm) { :yes }
+
+    context "when user is an organisation admin" do
+      let(:current_user) { organisation_admin_user }
+
+      context "when 'Yes' is selected" do
+        it "updates the group to active" do
+          expect {
+            post upgrade_group_url(member_group), params: { groups_confirm_upgrade_form: { confirm: } }
+          }.to change { member_group.reload.status }.to("active")
+        end
+
+        it "redirects to the group" do
+          post upgrade_group_url(member_group), params: { groups_confirm_upgrade_form: { confirm: } }
+          expect(response).to redirect_to(group_path(member_group))
+        end
+      end
+
+      context "when 'No' is selected" do
+        let(:confirm) { :no }
+
+        it "does not update the group" do
+          expect {
+            post upgrade_group_url(member_group), params: { groups_confirm_upgrade_form: { confirm: } }
+          }.not_to(change { member_group.reload.status })
+        end
+
+        it "redirects to the group" do
+          post upgrade_group_url(member_group), params: { groups_confirm_upgrade_form: { confirm: } }
+          expect(response).to redirect_to(group_path(member_group))
+        end
+      end
+
+      context "when no option is selected" do
+        let(:confirm) { nil }
+
+        before do
+          post upgrade_group_url(member_group), params: { groups_confirm_upgrade_form: { confirm: } }
+        end
+
+        it "returns 422" do
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it "re-renders the confirm upgrade page with an error" do
+          expect(response).to render_template(:confirm_upgrade)
+          expect(response.body).to include("Select yes if you want to upgrade this group")
+        end
+      end
+    end
+
+    context "when user is not an organisation admin" do
+      it "is forbidden" do
+        post upgrade_group_url(member_group), params: { groups_confirm_upgrade_form: { confirm: } }
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
 end

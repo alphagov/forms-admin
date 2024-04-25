@@ -35,7 +35,7 @@ class GroupsController < ApplicationController
     authorize @group
 
     if @group.save
-      redirect_to @group, success: "Group was successfully created."
+      redirect_to @group, success: t("groups.success_messages.create")
     else
       render :new, status: :unprocessable_entity
     end
@@ -45,7 +45,7 @@ class GroupsController < ApplicationController
   def update
     authorize @group
     if @group.update(group_params)
-      redirect_to @group, success: "Group was successfully updated.", status: :see_other
+      redirect_to @group, success: t("groups.success_messages.update"), status: :see_other
     else
       render :edit, status: :unprocessable_entity
     end
@@ -54,6 +54,18 @@ class GroupsController < ApplicationController
   def confirm_upgrade
     authorize @group, :upgrade?
     @confirm_upgrade_form = Groups::ConfirmUpgradeForm.new
+  end
+
+  def upgrade
+    authorize @group
+
+    @confirm_upgrade_form = Groups::ConfirmUpgradeForm.new(confirm_upgrade_form_params)
+    return render :confirm_upgrade, status: :unprocessable_entity unless @confirm_upgrade_form.valid?
+    return redirect_to @group unless @confirm_upgrade_form.confirmed?
+
+    @confirm_upgrade_form.submit
+
+    redirect_to @group, success: t("groups.success_messages.upgrade"), status: :see_other
   end
 
 private
@@ -69,6 +81,8 @@ private
   end
 
   def confirm_upgrade_form_params
-    params.require(:groups_confirm_upgrade_form).permit(:confirm)
+    params.require(:groups_confirm_upgrade_form)
+          .permit(:confirm)
+          .merge(group: @group, current_user: @current_user, host: request.host)
   end
 end

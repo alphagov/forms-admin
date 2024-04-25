@@ -345,6 +345,10 @@ en:
     status_caption:
       active: Active group
       trial: Trial group
+    success_messages:
+      create: Group was successfully created.
+      update: Group was successfully updated.
+      upgrade: This group is now active
   guidance:
     add_guidance: Add guidance
     guidance: Guidance
