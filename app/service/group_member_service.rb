@@ -37,10 +37,17 @@ private
   def actions(membership)
     actions = []
 
-    if Pundit.policy(current_user, membership).destroy?
-      actions << :delete
-    end
+    actions << :delete if can_destroy_membership?(membership)
+    actions << (membership.editor? ? :make_group_admin : :make_editor) if can_update_membership?(membership)
 
     actions
+  end
+
+  def can_destroy_membership?(membership)
+    Pundit.policy(current_user, membership).destroy?
+  end
+
+  def can_update_membership?(membership)
+    Pundit.policy(current_user, membership).update?
   end
 end

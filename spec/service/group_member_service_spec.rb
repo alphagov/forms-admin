@@ -1,6 +1,8 @@
 require "rails_helper"
 
 describe GroupMemberService do
+  subject(:service) { described_class.new(group:, current_user:) }
+
   let(:group) { create(:group) }
   let(:current_user) { create(:user) }
   let(:membership1) { create(:membership, group:, user: create(:user), role: "editor") }
@@ -8,7 +10,6 @@ describe GroupMemberService do
 
   describe ".call" do
     it "creates a new instance of GroupMemberService" do
-      service = described_class.call(group:, current_user:)
       expect(service).to be_an_instance_of(described_class)
     end
   end
@@ -44,7 +45,6 @@ describe GroupMemberService do
     end
 
     it "returns an array of Row structs" do
-      service = described_class.new(group:, current_user:)
       rows = service.rows
 
       expect(rows).to be_an(Array)
@@ -52,7 +52,6 @@ describe GroupMemberService do
     end
 
     it "includes the correct data in each row" do
-      service = described_class.new(group:, current_user:)
       rows = service.rows
 
       expect(rows.first.name).to eq(membership1.user.name)
@@ -60,32 +59,28 @@ describe GroupMemberService do
       expect(rows.first.role).to eq(membership1.role)
       expect(rows.first.membership).to eq(membership1)
     end
-  end
 
-  describe "#actions" do
-    context "when current user can destroy the membership" do
+    context "when the user is a group admin" do
       before do
-        allow(Pundit).to receive(:policy).and_return(instance_double(MembershipPolicy, destroy?: true))
+        allow(current_user).to receive(:is_group_admin?).and_return(true)
       end
 
-      it "includes the delete action" do
-        service = described_class.new(group:, current_user:)
-        actions = service.send(:actions, membership1)
+      it "includes the correct actions in each row" do
+        rows = service.rows
 
-        expect(actions).to include(:delete)
+        expect(rows.first.actions).to eq([:delete])
+        expect(rows.last.actions).to eq([])
       end
     end
 
-    context "when current user cannot destroy the membership" do
-      before do
-        allow(Pundit).to receive(:policy).and_return(instance_double(MembershipPolicy, destroy?: false))
-      end
+    context "when the user is a super admin" do
+      let(:current_user) { create(:user, :super_admin) }
 
-      it "does not include the delete action" do
-        service = described_class.new(group:, current_user:)
-        actions = service.send(:actions, membership1)
+      it "includes the correct actions in each row" do
+        rows = service.rows
 
-        expect(actions).not_to include(:delete)
+        expect(rows.first.actions).to eq(%i[delete make_group_admin])
+        expect(rows.last.actions).to eq(%i[delete make_editor])
       end
     end
   end
