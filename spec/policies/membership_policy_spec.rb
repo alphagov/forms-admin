@@ -52,7 +52,7 @@ RSpec.describe MembershipPolicy do
       let(:role) { :group_admin }
 
       it "forbids destroy" do
-        expect(policy).to forbid_only_actions(%i[destroy])
+        expect(policy).to forbid_only_actions(%i[destroy update])
       end
     end
   end
