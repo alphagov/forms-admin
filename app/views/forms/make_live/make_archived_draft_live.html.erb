@@ -1,6 +1,5 @@
-<% set_page_title(title_with_error_prefix(t('page_titles.make_changes_live_form'), @make_live_form.errors.any?)) %>
+<% set_page_title(title_with_error_prefix(t('page_titles.unarchive_form'), @make_live_form.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_path, t("back_link.form_edit")) %>
-
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -11,16 +10,10 @@
 
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= @make_live_form.form.name %></span>
-        <%= t("page_titles.make_changes_live_form") %>
+        <%= t("page_titles.make_archived_draft_live") %>
       </h1>
 
-      <p>
-        <%= t("make_changes_live.warning") %>
-      </p>
-
-      <p>
-        <%= t("make_changes_live.url_will_remain_same") %>
-      </p>
+      <%= t("make_archived_draft_live.new.body_html", submission_email: @make_live_form.form.submission_email) %>
 
       <%= f.govuk_collection_radio_buttons :confirm,
                                            @make_live_form.values, ->(option) { option }, ->(option) { t('helpers.label.confirm_action_form.options.' + "#{option}") },
