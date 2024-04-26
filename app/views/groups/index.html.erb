@@ -20,8 +20,12 @@
 
 <div class="govuk-grid-row govuk-!-margin-top-3">
   <div class="govuk-grid-column-two-thirds">
-  <%= govuk_details(summary_text: t("groups.index.group_explainer_title")) do %>
-    <%= t("groups.index.group_explainer_body_html") %>
-  <% end %>
+    <%= govuk_details(summary_text: t("groups.index.group_explainer_title")) do
+      if @current_user.organisation_admin? || @current_user.super_admin?
+        t("groups.index.group_explainer_org_admin_body_html")
+      else 
+        t("groups.index.group_explainer_body_html")
+      end 
+    end %>
   </div>
 </div>
