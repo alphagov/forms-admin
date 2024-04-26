@@ -4,6 +4,7 @@ module Forms
 
     def new
       authorize current_form, :can_make_form_live?
+      # TODO: should we name this MakeLiveScreen instead?
       @make_live_form = MakeLiveForm.new(form: current_form)
       render_new
     end
@@ -11,14 +12,14 @@ module Forms
     def create
       authorize current_form, :can_make_form_live?
 
-      # TODO: should we name this PublishForm instead?
+      # TODO: should we name this MakeLiveScreen instead?
       @make_live_form = MakeLiveForm.new(**make_live_form_params)
 
       return redirect_to form_path(@make_live_form.form) unless @make_live_form.user_wants_to_make_form_live
 
       @make_form_live_service = MakeFormLiveService.call(current_form:, current_user:)
 
-      # TODO: ideally should it be something like `@make_form_live_service.make_live(@new_live_form)`
+      # TODO: ideally should it be something like `@make_form_live_service.make_live(@form)`
       # otherwise doesn't make much sense
       if @make_live_form.make_form_live(@make_form_live_service)
         render "confirmation", locals: { current_form:, confirmation_page_title: @make_form_live_service.page_title }
