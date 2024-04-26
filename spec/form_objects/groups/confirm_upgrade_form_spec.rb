@@ -5,7 +5,7 @@ RSpec.describe Groups::ConfirmUpgradeForm, type: :model do
 
   let(:confirm) { "yes" }
   let(:group) { create :group }
-  let(:current_user) { create :user }
+  let(:current_user) { create :user, email: "current_user@example.gov.uk" }
   let(:host) { "example.net" }
 
   describe "Confirm upgrade form" do
@@ -33,6 +33,7 @@ RSpec.describe Groups::ConfirmUpgradeForm, type: :model do
           create(:membership, user: group_admin_user1, group:, role: :group_admin)
           create(:membership, user: group_admin_user2, group:, role: :group_admin)
           create(:membership, user: editor_user, group:, role: :editor)
+          create(:membership, user: current_user, group:, role: :group_admin)
         end
       end
       let(:delivery) { double }
@@ -52,9 +53,14 @@ RSpec.describe Groups::ConfirmUpgradeForm, type: :model do
 
       it "sends an email to all group admins" do
         confirm_upgrade_form.submit
+        expect(delivery).to have_received(:deliver_now).with(no_args).exactly(2).times
         expect(GroupUpgradedMailer).to have_received(:group_upgraded_email).with(upgraded_by_user: current_user, to_email: "user1@example.gov.uk", group:, group_url: group_url(group, host:))
         expect(GroupUpgradedMailer).to have_received(:group_upgraded_email).with(upgraded_by_user: current_user, to_email: "user2@example.gov.uk", group:, group_url: group_url(group, host:))
-        expect(delivery).to have_received(:deliver_now).with(no_args).exactly(2).times
+      end
+
+      it "does not send an email to the logged in user that performed the upgrade if they are a group admin" do
+        confirm_upgrade_form.submit
+        expect(GroupUpgradedMailer).not_to have_received(:group_upgraded_email).with(upgraded_by_user: current_user, to_email: current_user.email, group:, group_url: group_url(group, host:))
       end
     end
   end

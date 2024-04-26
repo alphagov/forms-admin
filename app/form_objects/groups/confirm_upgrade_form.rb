@@ -13,7 +13,7 @@ module Groups
 
     def send_notification_emails
       group.memberships.each do |membership|
-        send_notification_email(membership.user) if membership.group_admin?
+        send_notification_email(membership.user) if membership.group_admin? && membership.user.id != current_user.id
       end
     end
 
