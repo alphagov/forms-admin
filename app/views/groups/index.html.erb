@@ -11,7 +11,7 @@
 <%= render GroupListComponent::View.new(groups: @active_groups, title: t('groups.index.active_title'), empty_message: "You're not in any active groups.") %>
 <%= render GroupListComponent::View.new(groups: @trial_groups, title: t('groups.index.trial_title'), empty_message: "You're not in any trial groups.") %>
 
-<%= govuk_button_link_to t("groups.index.create_group"), new_group_path, class:"govuk-!-margin-top-3", secondary: true %>
+<%= govuk_button_link_to t("groups.index.create_group"), new_group_path, class:"govuk-!-margin-top-3" %>
 
 <div class="govuk-!-margin-top-3">
   <%= govuk_details(summary_text: t("groups.index.group_explainer_title")) do %>
