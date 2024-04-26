@@ -29,7 +29,7 @@ RSpec.describe "groups/index", type: :view do
   end
 
   it "shows the details text for users who are not org/super admins" do
-    expect(rendered).to have_content("If you need access to an existing form or group, ask someone who has access to that group to invite you.")
+    expect(rendered).to have_content("If you need access to an existing form or group, ask someone who has access to that group to add you.")
   end
 
   context "when the user is an admin" do
