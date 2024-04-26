@@ -1,20 +1,27 @@
 <% set_page_title(t("page_titles.group_index")) %>
 
-<% content_for :notification_banner_content do %>
-  <%= notice %>
-<% end%>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
 
-<h1 class="govuk-heading-l">
-  <%= t("page_titles.group_index") %>
-</h1>
+    <% content_for :notification_banner_content do %>
+      <%= notice %>
+    <% end%>
 
-<%= render GroupListComponent::View.new(groups: @active_groups, title: t('groups.index.active_title'), empty_message: "You're not in any active groups.") %>
-<%= render GroupListComponent::View.new(groups: @trial_groups, title: t('groups.index.trial_title'), empty_message: "You're not in any trial groups.") %>
+    <h1 class="govuk-heading-l">
+      <%= t("page_titles.group_index") %>
+    </h1>
 
-<%= govuk_button_link_to t("groups.index.create_group"), new_group_path, class:"govuk-!-margin-top-3" %>
+    <%= render GroupListComponent::View.new(groups: @active_groups, title: t('groups.index.active_title'), empty_message: "You're not in any active groups.") %>
+    <%= render GroupListComponent::View.new(groups: @trial_groups, title: t('groups.index.trial_title'), empty_message: "You're not in any trial groups.") %>
 
-<div class="govuk-!-margin-top-3">
+    <%= govuk_button_link_to t("groups.index.create_group"), new_group_path, class:"govuk-!-margin-top-3" %>
+  </div>
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-top-3">
+  <div class="govuk-grid-column-two-thirds">
   <%= govuk_details(summary_text: t("groups.index.group_explainer_title")) do %>
     <%= t("groups.index.group_explainer_body_html") %>
   <% end %>
+  </div>
 </div>
