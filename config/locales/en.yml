@@ -432,8 +432,7 @@ en:
       trial: Trial group
       upgrade_requested: Trial group
     success_messages:
-      create: Group was successfully created.
-      update: Group was successfully updated.
+      update: The name of this group has been changed
       upgrade: This group is now active
     upgrade_requested:
       what_happens_next:

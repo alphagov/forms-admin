@@ -9,4 +9,8 @@ FactoryBot.define do
       organisation { association :organisation, :with_org_admin, id: 1, slug: "test-org" }
     end
   end
+
+  trait :active do
+    status { :live }
+  end
 end
