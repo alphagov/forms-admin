@@ -63,7 +63,7 @@ class GroupsController < ApplicationController
     return render :confirm_upgrade, status: :unprocessable_entity unless @confirm_upgrade_form.valid?
     return redirect_to @group unless @confirm_upgrade_form.confirmed?
 
-    @confirm_upgrade_form.submit
+    GroupService.new(group: @group, current_user: @current_user, host: request.host).upgrade_group
 
     redirect_to @group, success: t("groups.success_messages.upgrade"), status: :see_other
   end
@@ -81,8 +81,6 @@ private
   end
 
   def confirm_upgrade_form_params
-    params.require(:groups_confirm_upgrade_form)
-          .permit(:confirm)
-          .merge(group: @group, current_user: @current_user, host: request.host)
+    params.require(:groups_confirm_upgrade_form).permit(:confirm)
   end
 end

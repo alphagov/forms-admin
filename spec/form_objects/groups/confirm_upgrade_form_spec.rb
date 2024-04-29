@@ -1,12 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Groups::ConfirmUpgradeForm, type: :model do
-  subject(:confirm_upgrade_form) { described_class.new(confirm:, group:, current_user:, host:) }
+  subject(:confirm_upgrade_form) { described_class.new(confirm:) }
 
   let(:confirm) { "yes" }
-  let(:group) { create :group }
-  let(:current_user) { create :user, email: "current_user@example.gov.uk" }
-  let(:host) { "example.net" }
 
   describe "Confirm upgrade form" do
     describe("validations") do
@@ -21,46 +18,6 @@ RSpec.describe Groups::ConfirmUpgradeForm, type: :model do
 
         expect(confirm_upgrade_form.errors.full_messages_for(:confirm))
           .to include("Confirm Select yes if you want to upgrade this group")
-      end
-    end
-
-    describe("#submit") do
-      let(:group_admin_user1) { create :user, email: "user1@example.gov.uk" }
-      let(:group_admin_user2) { create :user, email: "user2@example.gov.uk" }
-      let(:editor_user) { create :user, email: "user3@example.gov.uk" }
-      let(:group) do
-        create(:group).tap do |group|
-          create(:membership, user: group_admin_user1, group:, role: :group_admin)
-          create(:membership, user: group_admin_user2, group:, role: :group_admin)
-          create(:membership, user: editor_user, group:, role: :editor)
-          create(:membership, user: current_user, group:, role: :group_admin)
-        end
-      end
-      let(:delivery) { double }
-
-      before do
-        allow(GroupUpgradedMailer).to receive(:group_upgraded_email)
-                                        .with(upgraded_by_user: current_user, to_email: anything, group:, group_url: group_url(group, host:))
-                                        .and_return(delivery)
-        allow(delivery).to receive(:deliver_now).with(no_args)
-      end
-
-      it "upgrades the group to active" do
-        expect {
-          confirm_upgrade_form.submit
-        }.to change(group, :status).to("active")
-      end
-
-      it "sends an email to all group admins" do
-        confirm_upgrade_form.submit
-        expect(delivery).to have_received(:deliver_now).with(no_args).exactly(2).times
-        expect(GroupUpgradedMailer).to have_received(:group_upgraded_email).with(upgraded_by_user: current_user, to_email: "user1@example.gov.uk", group:, group_url: group_url(group, host:))
-        expect(GroupUpgradedMailer).to have_received(:group_upgraded_email).with(upgraded_by_user: current_user, to_email: "user2@example.gov.uk", group:, group_url: group_url(group, host:))
-      end
-
-      it "does not send an email to the logged in user that performed the upgrade if they are a group admin" do
-        confirm_upgrade_form.submit
-        expect(GroupUpgradedMailer).not_to have_received(:group_upgraded_email).with(upgraded_by_user: current_user, to_email: current_user.email, group:, group_url: group_url(group, host:))
       end
     end
   end

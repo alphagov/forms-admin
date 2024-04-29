@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "groups/confirm_upgrade.html.erb" do
   let(:group) { create(:group) }
-  let(:confirm_upgrade_form) { Groups::ConfirmUpgradeForm.new(group:) }
+  let(:confirm_upgrade_form) { Groups::ConfirmUpgradeForm.new }
 
   before do
     assign(:confirm_upgrade_form, confirm_upgrade_form)
