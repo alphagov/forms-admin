@@ -16,6 +16,6 @@ class Forms::NameForm < BaseForm
   end
 
   def to_partial_path
-    "form_objects/forms/name_form"
+    "input_objects/forms/name_form"
   end
 end

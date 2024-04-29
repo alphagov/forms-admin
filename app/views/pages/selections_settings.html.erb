@@ -31,7 +31,7 @@
       <%= f.govuk_fieldset legend: { text: t("selections_settings.add_options") } do %>
         <p class="govuk-hint"><%= t("selections_settings.add_options_hint") %></p>
         <ul class="govuk-list app-select-options">
-          <% @selections_settings_form.selection_options_form_objects.each_with_index do |selection_option, index| %>
+          <% @selections_settings_form.selection_options_input_objects.each_with_index do |selection_option, index| %>
             <%= f.fields_for :selection_options, selection_option, index: index do |selection_options_form| %>
               <li class="app-select-options__list-item">
                 <%= selection_options_form.govuk_text_field :name, id: "forms-selections-settings-form-selection-options-name-field-#{index}", label: { text: t("selections_settings.option", number: index + 1), for: "forms-selections-settings-form-selection-options-name-field-#{index}" }, class: "govuk-input--width-20", form_group: { classes: "app-select-options__form-group" } %>

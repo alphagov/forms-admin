@@ -108,7 +108,7 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
 
         expect(assigns[:name_form]).to be_truthy
         expect(response).to render_template("group_forms/new")
-        expect(response).to render_template("form_objects/forms/_name_form")
+        expect(response).to render_template("input_objects/forms/_name_form")
         expect(response.body).to include I18n.t("error_summary.heading")
       end
     end

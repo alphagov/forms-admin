@@ -44,7 +44,7 @@ class Pages::SelectionsSettingsForm < BaseForm
     self.selection_options = selection_options.filter { |option| option[:name].present? }
   end
 
-  def selection_options_form_objects
+  def selection_options_input_objects
     selection_options.map { |option| OpenStruct.new(name: option[:name]) }
   end
 end
