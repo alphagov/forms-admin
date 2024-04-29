@@ -314,10 +314,15 @@ en:
       active_title: Active groups
       create_group: Create a group
       group_explainer_body_html: |
-        <p>Each form is created inside a group. People can be invited to a group to create and edit forms in it.</p>
-        <p>If you need access to an existing form or group, ask someone who has access to that group to invite you.</p>
+        <p>Each form is created inside a group. People can be added to a group to create and edit forms in it.</p>
+        <p>If you need access to an existing form or group, ask someone who has access to that group to add you.</p>
         <p>When a group is first created it will be a ‘trial’ group. That means you cannot make any forms in the group live. You can request for a group to be upgraded to an ‘active’ group if you need to make forms live.</p>
         <p>If you’re not sure if you should make a new group, speak with your organisation’s GOV.UK publishing team.</p>
+      group_explainer_org_admin_body_html: |
+        <p>Each form is created inside a group. Anyone with a GOV.UK Forms account can make a group. They can add people from their organisation to that group to view, create and edit forms in it.</p>
+        <p>Because you’re an organisation admin, you can access all the groups in your organisation. </p>
+        <p>When a group is first created it will be a ‘trial’ group. That means forms in the group cannot be made live.</p>
+        <p>As an organisation admin, you can upgrade a trial group to an ‘active’ group so forms in that group can be made live. People will be able to send a request to you to ask for their trial group to be upgraded.</p>
       group_explainer_title: What is a ‘group’?
       trial_title: Trial groups
     new:
