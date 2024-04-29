@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "pages/conditions/delete.html.erb" do
-  let(:delete_condition_form) { Pages::DeleteConditionForm.new(form:, page:, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id) }
+  let(:delete_condition_input) { Pages::DeleteConditionInput.new(form:, page:, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id) }
   let(:form) { build :form, :ready_for_routing, id: 1 }
   let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: pages.last.id }
   let(:pages) { form.pages }
@@ -9,7 +9,7 @@ describe "pages/conditions/delete.html.erb" do
 
   before do
     page.position = 1
-    render template: "pages/conditions/delete", locals: { delete_condition_form: }
+    render template: "pages/conditions/delete", locals: { delete_condition_input: }
   end
 
   it "sets the correct title" do
@@ -22,9 +22,9 @@ describe "pages/conditions/delete.html.erb" do
   end
 
   it "contains the condition details" do
-    expect(rendered).to have_css(".govuk-summary-list__value", text: delete_condition_form.page.question_text)
-    expect(rendered).to have_css(".govuk-summary-list__value", text: delete_condition_form.answer_value)
-    expect(rendered).to have_css(".govuk-summary-list__value", text: delete_condition_form.goto_page_question_text)
+    expect(rendered).to have_css(".govuk-summary-list__value", text: delete_condition_input.page.question_text)
+    expect(rendered).to have_css(".govuk-summary-list__value", text: delete_condition_input.answer_value)
+    expect(rendered).to have_css(".govuk-summary-list__value", text: delete_condition_input.goto_page_question_text)
   end
 
   it "has a submit button" do

@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "pages/question_text.html.erb" do
   let(:form) { build :form, id: 1, pages: [] }
-  let(:question_text_form) { build :question_text_form }
+  let(:question_text_input) { build :question_text_input }
   let(:question_text_path) { "/forms/1/pages/new/question_text" }
   let(:form_pages_path) { "/forms/1/pages/new/guidance" }
   let(:back_link_url) { "/forms/1/pages/new/type-of-answer" }
@@ -14,7 +14,7 @@ describe "pages/question_text.html.erb" do
     end
 
     # Assign instance variables so they can be accessed from views
-    assign(:question_text_form, question_text_form)
+    assign(:question_text_input, question_text_input)
     assign(:question_text_path, question_text_path)
     assign(:back_link_url, back_link_url)
 
@@ -30,10 +30,10 @@ describe "pages/question_text.html.erb" do
   end
 
   it "has the correct heading" do
-    expect(rendered).to have_selector("h1", text: I18n.t("helpers.label.pages_question_text_form.question_text"))
+    expect(rendered).to have_selector("h1", text: I18n.t("helpers.label.pages_question_text_input.question_text"))
   end
 
   it "includes a form field for entering your question text" do
-    expect(rendered).to have_field(I18n.t("helpers.label.pages_question_text_form.question_text"))
+    expect(rendered).to have_field(I18n.t("helpers.label.pages_question_text_input.question_text"))
   end
 end

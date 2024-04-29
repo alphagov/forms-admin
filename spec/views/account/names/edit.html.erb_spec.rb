@@ -1,10 +1,10 @@
 require "rails_helper"
 
 describe "account/names/edit.html.erb" do
-  let(:name_form) { Account::NameForm.new(name: "John Smith") }
+  let(:name_input) { Account::NameInput.new(name: "John Smith") }
 
   before do
-    assign(:name_form, name_form)
+    assign(:name_input, name_input)
   end
 
   context "when there are no errors" do
@@ -15,7 +15,7 @@ describe "account/names/edit.html.erb" do
     it "displays the form" do
       expect(rendered).to have_selector('form[action="/account/name"][method="post"]')
       expect(rendered).to have_field("_method", with: "patch", type: :hidden)
-      expect(rendered).to have_field("account_name_form[name]", with: "John Smith")
+      expect(rendered).to have_field("account_name_input[name]", with: "John Smith")
       expect(rendered).to have_button(I18n.t("save_and_continue"))
     end
 
@@ -26,7 +26,7 @@ describe "account/names/edit.html.erb" do
 
   context "when there are errors" do
     before do
-      name_form.errors.add(:name, "is required")
+      name_input.errors.add(:name, "is required")
       render
     end
 

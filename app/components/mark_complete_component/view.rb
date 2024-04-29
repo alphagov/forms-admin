@@ -5,7 +5,7 @@ module MarkCompleteComponent
     def initialize(form_model: nil, generate_form: true, form_builder: nil, path: nil, legend: nil, hint: nil)
       super
       if generate_form
-        @mark_complete_form = form_model
+        @mark_complete_input = form_model
         @path = path
       else
         @form_builder = form_builder

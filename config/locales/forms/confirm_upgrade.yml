@@ -2,7 +2,7 @@ en:
   activemodel:
     errors:
       models:
-        groups/confirm_upgrade_form:
+        groups/confirm_upgrade_input:
           attributes:
             confirm:
               blank: Select yes if you want to upgrade this group

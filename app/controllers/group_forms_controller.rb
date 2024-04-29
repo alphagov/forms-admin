@@ -7,7 +7,7 @@ class GroupFormsController < ApplicationController
     @group_form = GroupForm.new(group: @group)
     authorize @group_form
 
-    @name_form = Forms::NameForm.new
+    @name_input = Forms::NameInput.new
   end
 
   # POST /groups/:group_id/forms
@@ -16,9 +16,9 @@ class GroupFormsController < ApplicationController
     authorize @group_form
 
     @form = Form.new(creator_id: @current_user.id)
-    @name_form = Forms::NameForm.new(name_form_params(@form))
+    @name_input = Forms::NameInput.new(name_input_params(@form))
 
-    if @name_form.submit
+    if @name_input.submit
       @group_form.form_id = @form.id
       @group_form.save!
 
@@ -34,7 +34,7 @@ private
     @group = Group.find_by(external_id: params[:group_id])
   end
 
-  def name_form_params(form)
-    params.require(:forms_name_form).permit(:name).merge(form:)
+  def name_input_params(form)
+    params.require(:forms_name_input).permit(:name).merge(form:)
   end
 end

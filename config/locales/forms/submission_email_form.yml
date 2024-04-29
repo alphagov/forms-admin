@@ -1,13 +1,13 @@
 en:
   helpers:
     label:
-      forms_submission_email_form:
+      forms_submission_email_input:
         temporary_submission_email: What email address should completed forms be sent to?
         email_code: Enter the confirmation code
   activemodel:
     errors:
       models:
-        forms/submission_email_form:
+        forms/submission_email_input:
           attributes:
             temporary_submission_email:
               blank: Enter an email address

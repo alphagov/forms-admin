@@ -17,7 +17,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
            }
   end
 
-  let(:address_settings_form) { build :address_settings_form, draft_question: }
+  let(:address_settings_input) { build :address_settings_input, draft_question: }
 
   before do
     login_as_editor_user
@@ -57,7 +57,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
     context "when form is invalid" do
       before do
-        post address_settings_create_path form_id: form.id, params: { pages_address_settings_form: { input_type: nil } }
+        post address_settings_create_path form_id: form.id, params: { pages_address_settings_input: { input_type: nil } }
       end
 
       it "renders the address settings view if there are errors" do
@@ -67,14 +67,14 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
     context "when form is valid and ready to store" do
       before do
-        post address_settings_create_path form_id: form.id, params: { pages_address_settings_form: { uk_address: address_settings_form.uk_address, international_address: address_settings_form.international_address } }
+        post address_settings_create_path form_id: form.id, params: { pages_address_settings_input: { uk_address: address_settings_input.uk_address, international_address: address_settings_input.international_address } }
       end
 
-      let(:address_settings_form) { build :address_settings_form }
+      let(:address_settings_input) { build :address_settings_input }
 
       it "saves the input type to draft question" do
-        form = assigns(:address_settings_form)
-        expect(form.draft_question.answer_settings).to include(input_type: { uk_address: address_settings_form.uk_address, international_address: address_settings_form.international_address })
+        form = assigns(:address_settings_input)
+        expect(form.draft_question.answer_settings).to include(input_type: { uk_address: address_settings_input.uk_address, international_address: address_settings_input.international_address })
       end
 
       it "redirects the user to the edit question page" do
@@ -114,7 +114,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
     end
 
     it "returns the existing page input type" do
-      form = assigns(:address_settings_form)
+      form = assigns(:address_settings_input)
       expect(form.uk_address).to eq draft_question.answer_settings[:input_type][:uk_address]
       expect(form.international_address).to eq draft_question.answer_settings[:input_type][:international_address]
     end
@@ -151,11 +151,11 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
       let(:international_address) { page.answer_settings.input_type.international_address }
 
       before do
-        post address_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_address_settings_form: { uk_address: "true", international_address: "false" } }
+        post address_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_address_settings_input: { uk_address: "true", international_address: "false" } }
       end
 
       it "saves the params to draft question" do
-        form_instance_variable = assigns(:address_settings_form)
+        form_instance_variable = assigns(:address_settings_input)
         expect(form_instance_variable.uk_address).to eq "true"
         expect(form_instance_variable.international_address).to eq "false"
         expect(form_instance_variable.draft_question.answer_settings).to include(input_type: { uk_address: "true", international_address: "false" })
@@ -170,7 +170,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
       let(:input_type) { nil }
 
       before do
-        post address_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_address_settings_form: { input_type: } }
+        post address_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_address_settings_input: { input_type: } }
       end
 
       it "renders the address settings view if there are errors" do

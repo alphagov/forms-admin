@@ -94,7 +94,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
         }
       end
       let(:params) do
-        { pages_question_form: {
+        { pages_question_input: {
           question_text: "What is your home address?",
           hint_text: "This should be the location stated in your contract.",
           is_optional: false,
@@ -133,12 +133,12 @@ RSpec.describe Pages::QuestionsController, type: :request do
       end
     end
 
-    context "when question_form has invalid data" do
+    context "when question_input has invalid data" do
       before do
         # Setup a draft_question so that create question action doesn't need to create a completely new records
         draft_question
 
-        post create_question_path(2), params: { pages_question_form: {
+        post create_question_path(2), params: { pages_question_input: {
           hint_text: "This should be the location stated in your contract.",
           is_optional: false,
         } }
@@ -205,7 +205,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
     describe "Given a page" do
       let(:params) do
-        { pages_question_form: {
+        { pages_question_input: {
           form_id: 2,
           question_text: "What is your home address?",
           hint_text: "This should be the location stated in your contract.",
@@ -255,7 +255,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
         let(:next_page) { 4 }
 
         let(:params) do
-          { pages_question_form: {
+          { pages_question_input: {
             page_id: 1,
             form_id: 2,
             question_text: "What is your home address?",
@@ -300,9 +300,9 @@ RSpec.describe Pages::QuestionsController, type: :request do
       end
     end
 
-    context "when question_form has invalid data" do
+    context "when question_input has invalid data" do
       before do
-        post update_question_path(form_id: 2, page_id: 1), params: { pages_question_form: {
+        post update_question_path(form_id: 2, page_id: 1), params: { pages_question_input: {
           form_id: 2,
           question_text: nil,
           hint_text: "This should be the location stated in your contract.",

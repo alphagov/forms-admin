@@ -4,7 +4,7 @@ RSpec.describe Pages::NameSettingsController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
 
-  let(:name_settings_form) { build :name_settings_form }
+  let(:name_settings_input) { build :name_settings_input }
 
   before do
     login_as_editor_user
@@ -44,7 +44,7 @@ RSpec.describe Pages::NameSettingsController, type: :request do
 
     context "when form is invalid" do
       before do
-        post name_settings_create_path form_id: form.id, params: { pages_name_settings_form: { input_type: nil } }
+        post name_settings_create_path form_id: form.id, params: { pages_name_settings_input: { input_type: nil } }
       end
 
       it "renders the name settings view if there are errors" do
@@ -54,13 +54,13 @@ RSpec.describe Pages::NameSettingsController, type: :request do
 
     context "when form is valid and ready to store" do
       before do
-        post name_settings_create_path form_id: form.id, params: { pages_name_settings_form: { input_type: "first_and_last_name", title_needed: "false" } }
+        post name_settings_create_path form_id: form.id, params: { pages_name_settings_input: { input_type: "first_and_last_name", title_needed: "false" } }
       end
 
-      let(:name_settings_form) { build :name_settings_form }
+      let(:name_settings_input) { build :name_settings_input }
 
       it "saves the input type to draft question" do
-        form = assigns(:name_settings_form)
+        form = assigns(:name_settings_input)
         expect(form.draft_question.answer_settings).to include(input_type: "first_and_last_name", title_needed: "false")
       end
 
@@ -99,7 +99,7 @@ RSpec.describe Pages::NameSettingsController, type: :request do
     end
 
     it "returns the existing input type" do
-      form = assigns(:name_settings_form)
+      form = assigns(:name_settings_input)
       expect(form.input_type).to eq draft_question.answer_settings[:input_type]
     end
 
@@ -134,11 +134,11 @@ RSpec.describe Pages::NameSettingsController, type: :request do
       let(:title_needed) { "true" }
 
       before do
-        post name_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_name_settings_form: { input_type:, title_needed: } }
+        post name_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_name_settings_input: { input_type:, title_needed: } }
       end
 
       it "loads the updated input type from the page params" do
-        form_instance_variable = assigns(:name_settings_form)
+        form_instance_variable = assigns(:name_settings_input)
         expect(form_instance_variable.input_type).to eq input_type
         expect(form_instance_variable.title_needed).to eq title_needed
         expect(form_instance_variable.draft_question.answer_settings)
@@ -155,7 +155,7 @@ RSpec.describe Pages::NameSettingsController, type: :request do
       let(:title_needed) { nil }
 
       before do
-        post name_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_name_settings_form: { input_type:, title_needed: } }
+        post name_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_name_settings_input: { input_type:, title_needed: } }
       end
 
       it "renders the name settings view if there are errors" do

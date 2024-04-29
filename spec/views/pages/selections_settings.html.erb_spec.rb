@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "pages/selections_settings.html.erb", type: :view do
   let(:form) { build :form, id: 1 }
-  let(:selections_settings_form) { build :selections_settings_form }
+  let(:selections_settings_input) { build :selections_settings_input }
   let(:page) { OpenStruct.new(conditions:, answer_type: "selection", answer_settings:) }
   let(:answer_settings) { OpenStruct.new(only_one_option:) }
   let(:only_one_option) { "true" }
@@ -25,7 +25,7 @@ describe "pages/selections_settings.html.erb", type: :view do
     assign(:page, page)
     assign(:selections_settings_path, selections_settings_path)
     assign(:back_link_url, back_link_url)
-    assign(:selections_settings_form, selections_settings_form)
+    assign(:selections_settings_input, selections_settings_input)
 
     render(template: "pages/selections_settings")
   end

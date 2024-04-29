@@ -46,7 +46,7 @@ RSpec.describe Forms::PrivacyPolicyController, type: :request do
         mock.get "/api/v1/forms/2", headers, form.to_json, 200
         mock.put "/api/v1/forms/2", post_headers
       end
-      post privacy_policy_path(form_id: 2), params: { forms_privacy_policy_form: { privacy_policy_url: "https://www.example.gov.uk/privacy-policy" } }
+      post privacy_policy_path(form_id: 2), params: { forms_privacy_policy_input: { privacy_policy_url: "https://www.example.gov.uk/privacy-policy" } }
     end
 
     it "Reads the form from the API" do

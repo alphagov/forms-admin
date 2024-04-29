@@ -1,10 +1,10 @@
-<% set_page_title(title_with_error_prefix(t('page_titles.routing_page'), routing_page_form.errors&.any?)) %>
+<% set_page_title(title_with_error_prefix(t('page_titles.routing_page'), routing_page_input.errors&.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_pages_path(form.id)) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
     <% if policy(form).can_add_page_routing_conditions? %>
-      <%= render partial: "pages/conditions/routing_options", locals: {form:, routing_page_form:} %>
+      <%= render partial: "pages/conditions/routing_options", locals: {form:, routing_page_input:} %>
     <% else %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= form.name %> </span>

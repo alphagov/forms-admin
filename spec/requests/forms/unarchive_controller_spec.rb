@@ -76,7 +76,7 @@ RSpec.describe Forms::UnarchiveController, type: :request do
     end
 
     context "when making a form live again" do
-      let(:form_params) { { forms_make_live_form: { confirm: :yes, form: } } }
+      let(:form_params) { { forms_make_live_input: { confirm: :yes, form: } } }
 
       it "reads the form from the API" do
         expect(form).to have_been_read
@@ -97,7 +97,7 @@ RSpec.describe Forms::UnarchiveController, type: :request do
     end
 
     context "when deciding not to make a form live again" do
-      let(:form_params) { { forms_make_live_form: { confirm: :no } } }
+      let(:form_params) { { forms_make_live_input: { confirm: :no } } }
 
       it "reads the form from the API" do
         expect(form).to have_been_read

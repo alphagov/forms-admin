@@ -11,8 +11,8 @@
 
     <%= t(".body_html") %>
 
-    <%= form_with(model: @group_member_form, url: group_members_path(@group)) do |f| %>
-      <% if @group_member_form&.errors.any? %>
+    <%= form_with(model: @group_member_input, url: group_members_path(@group)) do |f| %>
+      <% if @group_member_input&.errors.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
 

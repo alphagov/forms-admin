@@ -4,9 +4,9 @@ class FormsController < ApplicationController
 
   def index
     if @current_user.super_admin?
-      @search_form = Forms::SearchForm.new({ organisation_id: @current_user.organisation_id }.merge(search_params))
+      @search_input = Forms::SearchInput.new({ organisation_id: @current_user.organisation_id }.merge(search_params))
 
-      @forms = policy_scope(Form).where(organisation_id: @search_form.organisation_id) || []
+      @forms = policy_scope(Form).where(organisation_id: @search_input.organisation_id) || []
     else
       @forms = policy_scope(Form) || []
     end
@@ -23,17 +23,17 @@ class FormsController < ApplicationController
   def mark_pages_section_completed
     authorize current_form, :can_view_form?
     @pages = current_form.pages
-    @mark_complete_form = Forms::MarkCompleteForm.new(mark_complete_form_params)
+    @mark_complete_input = Forms::MarkCompleteInput.new(mark_complete_input_params)
 
-    if @mark_complete_form.mark_section
-      success_message = if @mark_complete_form.mark_complete == "true"
+    if @mark_complete_input.mark_section
+      success_message = if @mark_complete_input.mark_complete == "true"
                           t("banner.success.form.pages_saved_and_section_completed")
                         else
                           t("banner.success.form.pages_saved")
                         end
       redirect_to form_path(current_form), success: success_message
     else
-      @mark_complete_form.mark_complete = "false"
+      @mark_complete_input.mark_complete = "false"
       @forms = policy_scope(Form) || []
       render "pages/index", locals: { current_form: }, status: :unprocessable_entity
     end
@@ -41,8 +41,8 @@ class FormsController < ApplicationController
 
 private
 
-  def mark_complete_form_params
-    params.require(:forms_mark_complete_form).permit(:mark_complete).merge(form: current_form)
+  def mark_complete_input_params
+    params.require(:forms_mark_complete_input).permit(:mark_complete).merge(form: current_form)
   end
 
   def search_params

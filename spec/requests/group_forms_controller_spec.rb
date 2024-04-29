@@ -26,7 +26,7 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
 
     it "renders the change name form" do
       assert_select "form[action=?][method=?]", group_forms_path, :post do
-        assert_select "input[name=?]", "forms_name_form[name]"
+        assert_select "input[name=?]", "forms_name_input[name]"
       end
     end
 
@@ -65,7 +65,7 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
       end
 
       it "creates a new form" do
-        post group_forms_url(group), params: { forms_name_form: valid_attributes }
+        post group_forms_url(group), params: { forms_name_input: valid_attributes }
 
         expected_request = ActiveResource::Request.new(:post, "/api/v1/forms", nil, post_headers)
         expect(ActiveResource::HttpMock.requests).to include expected_request
@@ -73,14 +73,14 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
 
       it "associates the new form with the group" do
         expect {
-          post group_forms_url(group), params: { forms_name_form: valid_attributes }
+          post group_forms_url(group), params: { forms_name_input: valid_attributes }
         }.to change(GroupForm, :count).by(1)
 
         expect(GroupForm.last).to have_attributes(group_id: group.id, form_id: new_form_id)
       end
 
       it "redirects to the created form" do
-        post group_forms_url(group), params: { forms_name_form: valid_attributes }
+        post group_forms_url(group), params: { forms_name_input: valid_attributes }
         expect(response).to redirect_to(form_url(new_form_id))
       end
     end
@@ -92,23 +92,23 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
 
       it "does not create a new form" do
         expect {
-          post group_forms_url(group), params: { forms_name_form: invalid_attributes }
+          post group_forms_url(group), params: { forms_name_input: invalid_attributes }
         }.to change(GroupForm, :count).by(0)
 
         expect(ActiveResource::HttpMock.requests).to be_empty
       end
 
       it "renders a response with 422 status" do
-        post group_forms_url(group), params: { forms_name_form: invalid_attributes }
+        post group_forms_url(group), params: { forms_name_input: invalid_attributes }
         expect(response).to have_http_status :unprocessable_entity
       end
 
       it "renders the change name form with an error" do
-        post group_forms_url(group), params: { forms_name_form: invalid_attributes }
+        post group_forms_url(group), params: { forms_name_input: invalid_attributes }
 
-        expect(assigns[:name_form]).to be_truthy
+        expect(assigns[:name_input]).to be_truthy
         expect(response).to render_template("group_forms/new")
-        expect(response).to render_template("input_objects/forms/_name_form")
+        expect(response).to render_template("input_objects/forms/_name_input")
         expect(response.body).to include I18n.t("error_summary.heading")
       end
     end
@@ -117,7 +117,7 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
       it "denies access" do
         other_group = create :group
 
-        post group_forms_url(other_group), params: { forms_name_form: valid_attributes }
+        post group_forms_url(other_group), params: { forms_name_input: valid_attributes }
 
         expect(response).to have_http_status :forbidden
       end
@@ -125,7 +125,7 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
 
     context "when the group does not exist" do
       it "returns a forbidden status code" do
-        post group_forms_url("nonsense"), params: { forms_name_form: valid_attributes }
+        post group_forms_url("nonsense"), params: { forms_name_input: valid_attributes }
 
         expect(response).to have_http_status :forbidden
       end

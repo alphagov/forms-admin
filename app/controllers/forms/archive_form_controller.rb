@@ -6,15 +6,15 @@ module Forms
     def archive
       return redirect_to path_to_form unless current_form.is_live?
 
-      @confirm_archive_form = ConfirmArchiveForm.new(form: current_form)
+      @confirm_archive_input = ConfirmArchiveInput.new(form: current_form)
     end
 
     def update
       return redirect_to path_to_form unless current_form.is_live?
 
-      @confirm_archive_form = ConfirmArchiveForm.new(confirm_archive_form_params)
+      @confirm_archive_input = ConfirmArchiveInput.new(confirm_archive_input_params)
 
-      return render :archive unless @confirm_archive_form.valid?
+      return render :archive unless @confirm_archive_input.valid?
       return redirect_to live_form_path(current_form) unless user_wants_to_archive_form
 
       current_form.archive!
@@ -35,12 +35,12 @@ module Forms
       FormService.new(current_form).path_for_state
     end
 
-    def confirm_archive_form_params
-      params.require(:forms_confirm_archive_form).permit(:confirm).merge(form: current_form)
+    def confirm_archive_input_params
+      params.require(:forms_confirm_archive_input).permit(:confirm).merge(form: current_form)
     end
 
     def user_wants_to_archive_form
-      @confirm_archive_form.confirmed?
+      @confirm_archive_input.confirmed?
     end
   end
 end

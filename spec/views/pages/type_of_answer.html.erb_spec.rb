@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "pages/type_of_answer.html.erb", type: :view do
   let(:form) { build :form, id: 1 }
-  let(:type_of_answer_form) { build :type_of_answer_form }
+  let(:type_of_answer_input) { build :type_of_answer_input }
   let(:answer_types) { Page::ANSWER_TYPES }
   let(:page) { OpenStruct.new(conditions: [], answer_type: "number") }
   let(:question_number) { 1 }
@@ -11,20 +11,20 @@ describe "pages/type_of_answer.html.erb", type: :view do
   before do
     # allow objects to use ids in form helper
     allow(form).to receive(:persisted?).and_return(true)
-    allow(type_of_answer_form).to receive(:persisted?).and_return(true)
+    allow(type_of_answer_input).to receive(:persisted?).and_return(true)
 
     # mock the form.page_number method
     allow(form).to receive(:page_number).and_return(question_number)
 
     # mock the path helper
     without_partial_double_verification do
-      allow(view).to receive(:form_pages_type_of_answer_form_path).and_return("/type-of-answer")
+      allow(view).to receive(:form_pages_type_of_answer_input_path).and_return("/type-of-answer")
       allow(view).to receive(:current_form).and_return(form)
     end
 
     # setup instance variables
     assign(:page, page)
-    assign(:type_of_answer_form, type_of_answer_form)
+    assign(:type_of_answer_input, type_of_answer_input)
     assign(:answer_types, answer_types)
 
     render(template: "pages/type_of_answer")
@@ -53,13 +53,13 @@ describe "pages/type_of_answer.html.erb", type: :view do
 
   it "has radio buttons for each answer_type" do
     answer_types.each do |type|
-      expect(rendered).to have_field("pages_type_of_answer_form[answer_type]", with: type)
+      expect(rendered).to have_field("pages_type_of_answer_input[answer_type]", with: type)
     end
   end
 
-  it "the answer type from the type_of_answer_form is checked" do
-    selected_answer_type = type_of_answer_form.answer_type
-    expect(rendered).to have_checked_field("pages_type_of_answer_form[answer_type]", with: selected_answer_type)
+  it "the answer type from the type_of_answer_input is checked" do
+    selected_answer_type = type_of_answer_input.answer_type
+    expect(rendered).to have_checked_field("pages_type_of_answer_input[answer_type]", with: selected_answer_type)
   end
 
   it "has a submit button with the correct text" do

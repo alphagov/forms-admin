@@ -3,32 +3,32 @@ require "rails_helper"
 describe "pages/guidance.html.erb", type: :view do
   let(:form) { build :form, id: 1 }
   let(:page) { OpenStruct.new(conditions: [], answer_type: "number") }
-  let(:guidance_form) { Pages::GuidanceForm.new }
+  let(:guidance_input) { Pages::GuidanceInput.new }
   let(:preview_html) { I18n.t("guidance.no_guidance_added_html") }
   let(:back_link) { "/forms/1/pages/new" }
   let(:question_number) { 1 }
   let(:is_new_page) { true }
-  let(:guidance_form_path) { "/forms/1/pages/new/guidance" }
+  let(:guidance_input_path) { "/forms/1/pages/new/guidance" }
 
   before do
     # allow objects to use ids in form helper
     allow(form).to receive(:persisted?).and_return(true)
-    allow(guidance_form).to receive(:persisted?).and_return(true)
+    allow(guidance_input).to receive(:persisted?).and_return(true)
 
     # mock the form.page_number method
     allow(form).to receive(:page_number).and_return(question_number)
 
     # mock the path helper
     without_partial_double_verification do
-      allow(view).to receive(:form_pages_guidance_form_path).and_return(guidance_form_path)
+      allow(view).to receive(:form_pages_guidance_input_path).and_return(guidance_input_path)
       allow(view).to receive(:current_form).and_return(form)
     end
 
     # setup instance variables
     assign(:page, page)
-    assign(:guidance_form, guidance_form)
+    assign(:guidance_input, guidance_input)
 
-    render(template: "pages/guidance", locals: { guidance_form:, back_link:, post_url: guidance_form_path, form:, page:, preview_html: })
+    render(template: "pages/guidance", locals: { guidance_input:, back_link:, post_url: guidance_input_path, form:, page:, preview_html: })
   end
 
   it "has the correct title" do
@@ -48,7 +48,7 @@ describe "pages/guidance.html.erb", type: :view do
     expect(rendered).to have_selector("h1", text: I18n.t("guidance.add_guidance"))
   end
 
-  it "contains a form which submits to @guidance_form_path" do
-    expect(rendered).to have_selector("form[action=\"#{guidance_form_path}\"]")
+  it "contains a form which submits to @guidance_input_path" do
+    expect(rendered).to have_selector("form[action=\"#{guidance_input_path}\"]")
   end
 end

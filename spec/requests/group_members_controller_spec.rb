@@ -48,7 +48,7 @@ RSpec.describe "/groups/:group_id/members", type: :request do
 
       it "creates a new membership" do
         expect {
-          post group_members_url(group), params: { group_member_form: { member_email_address: user.email } }
+          post group_members_url(group), params: { group_member_input: { member_email_address: user.email } }
         }.to change(Membership, :count).by(1)
 
         expect(response).to have_http_status :redirect
@@ -59,7 +59,7 @@ RSpec.describe "/groups/:group_id/members", type: :request do
 
         it "denies access" do
           expect {
-            post group_members_url(group), params: { group_member_form: { member_email_address: user.email } }
+            post group_members_url(group), params: { group_member_input: { member_email_address: user.email } }
           }.not_to change(Membership, :count)
 
           expect(response).to have_http_status :forbidden
@@ -70,7 +70,7 @@ RSpec.describe "/groups/:group_id/members", type: :request do
     context "with invalid parameters" do
       it "does not create a new membership" do
         expect {
-          post group_members_url(group), params: { group_member_form: { member_email_address: "invalid" } }
+          post group_members_url(group), params: { group_member_input: { member_email_address: "invalid" } }
         }.not_to change(Membership, :count)
 
         expect(response).to have_http_status :unprocessable_entity

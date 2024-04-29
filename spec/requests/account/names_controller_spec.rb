@@ -14,9 +14,9 @@ describe Account::NamesController do
         expect(response).to render_template(:edit)
       end
 
-      it "assigns a new NameForm to @name_form" do
+      it "assigns a new NameInput to @name_input" do
         get edit_account_name_path
-        expect(assigns(:name_form)).to be_a(Account::NameForm)
+        expect(assigns(:name_input)).to be_a(Account::NameInput)
       end
     end
 
@@ -32,7 +32,7 @@ describe Account::NamesController do
 
   describe "PUT #update" do
     context "with valid params" do
-      let(:valid_params) { { account_name_form: { name: "John Doe" } } }
+      let(:valid_params) { { account_name_input: { name: "John Doe" } } }
 
       before do
         # rubocop:disable RSpec/AnyInstance
@@ -52,7 +52,7 @@ describe Account::NamesController do
     end
 
     context "with invalid params" do
-      let(:invalid_params) { { account_name_form: { name: "" } } }
+      let(:invalid_params) { { account_name_input: { name: "" } } }
 
       it "does not update the user's name" do
         put account_name_path, params: invalid_params

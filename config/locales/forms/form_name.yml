@@ -1,10 +1,10 @@
 en:
   helpers:
     label:
-      forms_name_form:
+      forms_name_input:
         name: What’s the name of your form?
     hint:
-      forms_name_form:
+      forms_name_input:
         name: |-
           The form name will be shown at the top of each page of the form. Use a name
           that describes what the form will help people to do. For example ‘Apply for a
@@ -12,7 +12,7 @@ en:
   activemodel:
     errors:
       models:
-        forms/name_form:
+        forms/name_input:
           attributes:
             name:
               blank: Enter a name for the form

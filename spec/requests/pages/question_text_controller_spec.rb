@@ -4,7 +4,7 @@ RSpec.describe Pages::QuestionTextController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
 
-  let(:question_text_form) { build :question_text_form, form: }
+  let(:question_text_input) { build :question_text_input, form: }
 
   before do
     login_as_editor_user
@@ -44,7 +44,7 @@ RSpec.describe Pages::QuestionTextController, type: :request do
 
     context "when form is invalid" do
       before do
-        post question_text_create_path form_id: form.id, params: { pages_question_text_form: { question_text: nil } }
+        post question_text_create_path form_id: form.id, params: { pages_question_text_input: { question_text: nil } }
       end
 
       it "renders the date settings view if there are errors" do
@@ -54,13 +54,13 @@ RSpec.describe Pages::QuestionTextController, type: :request do
 
     context "when form is valid and ready to store" do
       before do
-        post question_text_create_path form_id: form.id, params: { pages_question_text_form: { question_text: "Are you a higher rate taxpayer?" } }
+        post question_text_create_path form_id: form.id, params: { pages_question_text_input: { question_text: "Are you a higher rate taxpayer?" } }
       end
 
-      let(:question_text_form) { build :question_text_form }
+      let(:question_text_input) { build :question_text_input }
 
       it "saves the question text to the draft question" do
-        form = assigns(:question_text_form)
+        form = assigns(:question_text_input)
         expect(form.draft_question.question_text).to eq "Are you a higher rate taxpayer?"
       end
 

@@ -1,4 +1,4 @@
-<% set_page_title(title_with_error_prefix(t("page_titles.new_page_form"), @type_of_answer_form.errors.any?)) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.new_page"), @type_of_answer_input.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_pages_path(current_form)) %>
 
 <div class="govuk-grid-row">
@@ -10,7 +10,7 @@
       <% end %>
     <% end %>
 
-    <%= form_with model: [current_form, @type_of_answer_form], url: @type_of_answer_path do |f| %>
+    <%= form_with model: [current_form, @type_of_answer_input], url: @type_of_answer_path do |f| %>
       <%= f.govuk_error_summary %>
 
       <%= f.govuk_collection_radio_buttons(

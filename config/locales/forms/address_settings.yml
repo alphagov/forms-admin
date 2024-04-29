@@ -2,7 +2,7 @@ en:
   activemodel:
     errors:
       models:
-        pages/address_settings_form:
+        pages/address_settings_input:
           attributes:
             base:
               blank: Select the kind of addresses you expect to receive

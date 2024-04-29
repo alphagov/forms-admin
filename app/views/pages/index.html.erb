@@ -28,7 +28,7 @@
     <% if @pages.any? %>
       <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0"><%= t("forms.form_overview.your_questions") %></h2>
       <%= render PageListComponent::View.new(pages: @pages, form_id: current_form.id) %>
-      <%= render MarkCompleteComponent::View.new(form_model: @mark_complete_form, path: form_pages_path(current_form), legend: t("pages.index.mark_complete.legend")) %>
+      <%= render MarkCompleteComponent::View.new(form_model: @mark_complete_input, path: form_pages_path(current_form), legend: t("pages.index.mark_complete.legend")) %>
     <% end %>
 
   </div>

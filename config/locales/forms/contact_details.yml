@@ -1,7 +1,7 @@
 en:
   helpers:
     label:
-      forms_contact_details_form:
+      forms_contact_details_input:
         contact_details_supplied_options:
           supply_email: Email
           supply_phone: Phone
@@ -12,13 +12,13 @@ en:
         link_text: What text should be used to describe this link?
         submit: wejwihaklsjfkljaslkfj
     hint:
-      forms_contact_details_form:
+      forms_contact_details_input:
         link_href: For example, https://gov.uk/contact-form
         link_text: For example, ‘Online contact form’
   activemodel:
     errors:
       models:
-        forms/contact_details_form:
+        forms/contact_details_input:
           attributes:
             email:
               blank: Enter an email address

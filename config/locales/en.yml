@@ -8,15 +8,15 @@ en:
   activemodel:
     errors:
       models:
-        account/name_form:
+        account/name_input:
           attributes:
             name:
               blank: Enter your name
-        account/organisation_form:
+        account/organisation_input:
           attributes:
             organisation_id:
               blank: Select your organisation
-        group_member_form:
+        group_member_input:
           attributes:
             member_email_address:
               blank: Enter an email address
@@ -31,7 +31,7 @@ en:
             question_text:
               blank: Enter a question
               too_long: Question text must be %{count} characters or less
-        pages/question_form:
+        pages/question_input:
           attributes:
             hint_text:
               too_long: Hint text must be %{count} characters or less
@@ -128,7 +128,7 @@ en:
   contact_govuk_forms: contact the GOV.UK Forms team
   contact_url: mailto:govuk-forms-support@govuk.zendesk.com
   continue: Continue
-  declaration_form:
+  declaration_input:
     new:
       body_html: |
         <p>
@@ -267,9 +267,9 @@ en:
       section_2:
         payment_link: Add a link to a payment page on GOV.UK Pay
         title: Optional tasks
-  forms_delete_confirmation_form:
-    confirm_deletion_form: Are you sure you want to delete this draft?
-    confirm_deletion_form_live_form: Deleting this draft will not remove the live form.
+  forms_delete_confirmation_input:
+    confirm_deletion: Are you sure you want to delete this draft?
+    confirm_deletion_live_form: Deleting this draft will not remove the live form.
     confirm_deletion_page: Are you sure you want to delete this page?
   group_members:
     index:
@@ -383,9 +383,9 @@ en:
     users: Users
   helpers:
     hint:
-      account_name_form:
+      account_name_input:
         name: You do not need to include a title or any middle names.
-      account_organisation_form:
+      account_organisation_input:
         organisation_id: Currently, GOV.UK Forms is only available for central government organisations that publish content on the GOV.UK website.
       page:
         answer_type: The answer will be checked to make sure it’s in the selected format.
@@ -422,15 +422,15 @@ en:
           radio: Ask the question the way you would in person. For example, ‘What country do you live in?’
           single_line: Ask the question the way you would in person. For example, ‘What’s your reference number?’
     label:
-      account_name_form:
+      account_name_input:
         name: Enter your full name
-      account_organisation_form:
+      account_organisation_input:
         organisation_id: Select your organisation
-      forms_make_changes_live_form:
+      forms_make_changes_live:
         confirm: Are you sure you want to make your draft live?
-      forms_make_live_form:
+      forms_make_live_input:
         confirm: Are you sure you want to make your form live?
-      group_member_form:
+      group_member_input:
         member_email_address: Enter the email address of the person you want to add
       mou_signature:
         agreed_options:
@@ -507,10 +507,10 @@ en:
           names:
             long_text: More than a single line of text
             single_line: Single line of text
-      pages_conditions_form:
+      pages_conditions_input:
         default_answer_value: Select an answer
         default_goto_page_id: Select a question or page
-      pages_question_form:
+      pages_question_input:
         hint_text: Hint text (optional)
         question_text: Question text
       user_upgrade_request:
@@ -532,7 +532,7 @@ en:
     organisation_hint: Change which organisation’s forms you’re viewing
     organisation_prompt: Select an organisation
     preview: Preview this form
-    search_form_label: You’re viewing %{organisation_name} forms
+    search_input_label: You’re viewing %{organisation_name} forms
     your_forms: Your forms
   internal_server_error:
     body: Please try again later.
@@ -774,12 +774,12 @@ en:
     address_settings: What kind of addresses do you expect to receive?
     archive_form_confirm: Archive this form
     archive_form_confirmation: Your form has been archived
-    change_name_form: Name your form
-    confirm_email_form: Enter the confirmation code
+    change_name: Name your form
+    confirm_email: Enter the confirmation code
     confirm_email_success: Email address confirmed
-    contact_details_form: Provide contact details for support
+    contact_details: Provide contact details for support
     date_settings: Are you asking for someone’s date of birth?
-    declaration_form: Add a declaration for people to agree to
+    declaration: Add a declaration for people to agree to
     email_code_sent: Confirmation code sent
     error_prefix: 'Error: '
     forbidden: You cannot view this page
@@ -789,23 +789,23 @@ en:
     internal_server_error: Sorry, there is a problem with the service
     maintenance: Sorry, the service is unavailable
     make_archived_draft_live: Make your form live again
-    make_changes_live_form: Make your changes live
-    make_live_form: Make your form live
+    make_changes_live: Make your changes live
+    make_live: Make your form live
     mou_signature_confirmation: You've agreed to the MOU
     mou_signature_new: GOV.UK Forms Memorandum of Understanding
     mou_signatures: Memorandum of Understanding agreements
     name_settings: Ask for a person’s name
-    new_page_form: Edit question
+    new_page: Edit question
     not_found: Page not found
-    payment_link_form: Add a link to a payment page on GOV.UK Pay
-    privacy_policy_form: Provide a link to privacy information for this form
+    payment_link: Add a link to a payment page on GOV.UK Pay
+    privacy_policy: Provide a link to privacy information for this form
     question_text: What’s your question?
     routing_page: Add a question route
     routing_page_delete: Delete question %{question_position}’s route
     routing_page_edit: Edit question %{question_position}’s route
     routing_page_new: 'Add a question route: select answer and destination'
     separator: " – "
-    set_email_form: Set the email address for completed forms
+    set_email: Set the email address for completed forms
     sign_in: Sign in
     sign_up: Sign up
     text_settings: How much text will people need to provide?
@@ -814,7 +814,7 @@ en:
     user_missing_organisation: You do not have an organisation set for your account
     user_upgrade_request_confirmation: Request to upgrade to editor account received
     user_upgrade_request_new: Requirements to upgrade to an editor account
-    what_happens_next_form: Add information about what happens next
+    what_happens_next: Add information about what happens next
     your_changes_are_live: Your changes are live
     your_form_is_live: Your form is live
   pages:
@@ -834,7 +834,7 @@ en:
     optional: "%{question_text} (optional)"
     question: Question
     submit_save: Save question
-  payment_link_form:
+  payment_link_input:
     body_html: |
       <p>You can use <a href="https://payments.service.gov.uk/" target="_blank"" rel="noreferrer noopener"">GOV.UK Pay (opens in a new tab)</a> to set up a payment page (called a ‘payment link’).</p>
 
@@ -895,7 +895,7 @@ en:
     before_link: This is a new service, your
     feedback_survey_url: https://surveys.publishing.service.gov.uk/s/FormsFeedbackSurvey/
     link: feedback
-  privacy_policy_form:
+  privacy_policy_input:
     body_html: |
       <p>
         To comply with the UK General Data Protection Regulation (UK GDPR), you must provide privacy information for the people who will enter their data into your form.
@@ -976,7 +976,7 @@ en:
       </p>
     routing_warning_notification_title: Important
     'yes': 'Yes'
-  set_email_form:
+  set_email:
     new:
       body_html: |
         <p>

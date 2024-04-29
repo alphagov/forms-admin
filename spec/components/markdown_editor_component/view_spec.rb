@@ -6,7 +6,7 @@ def generate_form_builder(model)
 end
 
 RSpec.describe MarkdownEditorComponent::View, type: :component do
-  let(:form_builder) { generate_form_builder(Pages::GuidanceForm.new) }
+  let(:form_builder) { generate_form_builder(Pages::GuidanceInput.new) }
 
   let(:local_translations) do
     {}
@@ -19,7 +19,7 @@ RSpec.describe MarkdownEditorComponent::View, type: :component do
                         form_builder:,
                         render_preview_path: "#",
                         preview_html: "<p>No markdown added</p>",
-                        form_model: Pages::GuidanceForm.new,
+                        form_model: Pages::GuidanceInput.new,
                         label: "Add some markdown",
                         hint: "Use Markdown to format your content. Formatting help can be found below.",
                         local_translations:,

@@ -1,4 +1,4 @@
-<% set_page_title(title_with_error_prefix(@question_form.question_text, @question_form.errors.any?)) %>
+<% set_page_title(title_with_error_prefix(@question_input.question_text, @question_input.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_pages_path(current_form)) %>
 <% content_for :notification_banner_content do %>
   <ul class="govuk-list govuk-list--spaced">
@@ -29,7 +29,7 @@
                                           form_object: current_form,
                                           page_object: @page,
                                           draft_question:,
-                                          question_form: @question_form,
+                                          question_input: @question_input,
                                           action_path: update_question_path(current_form.id, @page.id),
     } %>
   </div>

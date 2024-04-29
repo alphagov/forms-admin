@@ -1,12 +1,12 @@
 en:
   helpers:
     label:
-      pages_question_text_form:
+      pages_question_text_input:
         question_text: What’s your question?
   activemodel:
     errors:
       models:
-        pages/question_text_form:
+        pages/question_text_input:
           attributes:
             question_text:
               blank: Enter your question

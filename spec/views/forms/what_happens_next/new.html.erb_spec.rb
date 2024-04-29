@@ -2,11 +2,11 @@ require "rails_helper"
 
 describe "forms/what_happens_next/new.html.erb" do
   let(:current_form) { OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1") }
-  let(:what_happens_next_form) { Forms::WhatHappensNextForm.new(form: current_form).assign_form_values }
+  let(:what_happens_next_input) { Forms::WhatHappensNextInput.new(form: current_form).assign_form_values }
   let(:preview_html) { "" }
 
   before do
-    assign(:what_happens_next_form, what_happens_next_form)
+    assign(:what_happens_next_input, what_happens_next_input)
     assign(:preview_html, preview_html)
     render template: "forms/what_happens_next/new"
   end

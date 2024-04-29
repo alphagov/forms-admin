@@ -1,4 +1,4 @@
-<%= form_with model: [form_object, question_form], url: action_path do |f| %>
+<%= form_with model: [form_object, question_input], url: action_path do |f| %>
   <%= f.govuk_error_summary %>
 
   <%= f.govuk_text_field :question_text, label: { size: 'm' }, hint: { text: hint_for_edit_page_field("question_text", draft_question.answer_type, draft_question.answer_settings) } %>
@@ -27,7 +27,7 @@
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <% end %>
 
-  <% if question_form.answer_type == 'selection' %>
+  <% if question_input.answer_type == 'selection' %>
     <%= f.hidden_field :is_optional %>
   <% else %>
     <%= f.govuk_check_boxes_fieldset :is_optional, multiple: false, legend: { tag: "h2", text: t("pages.add_rules_legend") , size: 'm' } do %>
