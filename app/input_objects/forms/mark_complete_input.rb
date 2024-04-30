@@ -4,7 +4,7 @@ class Forms::MarkCompleteInput < BaseInput
   validates :mark_complete, presence: true
   validate :has_routing_errors, if: :marked_complete?
 
-  def mark_section
+  def submit
     return false if invalid?
 
     form.question_section_completed = mark_complete
