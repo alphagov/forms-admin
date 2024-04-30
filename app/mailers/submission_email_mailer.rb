@@ -14,12 +14,12 @@ class SubmissionEmailMailer < GovukNotifyRails::Mailer
     mail(to: new_submission_email)
   end
 
-  def alert_email_change(live_email:, form_name:, current_user:)
-    set_template(Settings.govuk_notify.live_submission_email_of_no_further_form_submissions)
+  def alert_email_change(live_email:, form_name:, creator_name:, creator_email:)
+    set_template(Settings.govuk_notify.live_submission_email_of_no_further_form_submissions_template_id)
 
     set_personalisation(
-      form_creator_name: current_user.name,
-      form_creator_email: current_user.email,
+      form_creator_name: creator_name,
+      form_creator_email: creator_email,
       form_name:,
     )
 

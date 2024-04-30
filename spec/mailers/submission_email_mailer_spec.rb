@@ -40,16 +40,17 @@ describe SubmissionEmailMailer, type: :mailer do
     end
   end
 
-  describe "#notify_submission_email_has_changed" do
+  describe "#alert_email_change" do
     let(:mail) do
       described_class.alert_email_change(live_email: "test@example.com",
                                          form_name: "Testing API",
-                                         current_user: OpenStruct.new(name: "Joe Bloggs", email: "example@example.com"))
+                                         creator_name: "Joe Bloggs",
+                                         creator_email: "example@example.com")
     end
 
     describe "sending an email to notify confirmed submission email not to expect future form submissions" do
       it "sends an email with the correct template" do
-        expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.live_submission_email_of_no_further_form_submissions)
+        expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.live_submission_email_of_no_further_form_submissions_template_id)
       end
 
       it "sends an email to the live submission email address" do

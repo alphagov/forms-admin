@@ -57,7 +57,8 @@ describe MakeFormLiveService do
             expect(SubmissionEmailMailer).to receive(:alert_email_change).with(
               live_email: live_form.submission_email,
               form_name: live_form.name,
-              current_user:,
+              creator_name: current_user.name,
+              creator_email: current_user.email,
             ).and_call_original
 
             make_form_live_service.make_live
