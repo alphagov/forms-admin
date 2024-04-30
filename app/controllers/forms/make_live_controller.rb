@@ -4,20 +4,20 @@ module Forms
 
     def new
       authorize current_form, :can_make_form_live?
-      @make_live_form = MakeLiveForm.new(form: current_form)
+      @make_live_input = MakeLiveInput.new(form: current_form)
       render_new
     end
 
     def create
       authorize current_form, :can_make_form_live?
 
-      @make_live_form = MakeLiveForm.new(**make_live_form_params)
+      @make_live_input = MakeLiveInput.new(**make_live_input_params)
 
-      return redirect_to form_path(@make_live_form.form) unless @make_live_form.user_wants_to_make_form_live
+      return redirect_to form_path(@make_live_input.form) unless @make_live_input.user_wants_to_make_form_live
 
       @make_form_live_service = MakeFormLiveService.call(current_form:, current_user:)
 
-      if @make_live_form.make_form_live(@make_form_live_service)
+      if @make_live_input.make_form_live(@make_form_live_service)
         render "confirmation", locals: { current_form:, confirmation_page_title: @make_form_live_service.page_title }
       else
         render_new
@@ -26,8 +26,8 @@ module Forms
 
   private
 
-    def make_live_form_params
-      params.require(:forms_make_live_form).permit(:confirm).merge(form: current_form)
+    def make_live_input_params
+      params.require(:forms_make_live_input).permit(:confirm).merge(form: current_form)
     end
 
     def render_new

@@ -44,7 +44,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
   end
 
   describe "#set_routing_page" do
-    let(:params) { { pages_routing_page_form: { routing_page_id: 1 } } }
+    let(:params) { { pages_routing_page_input: { routing_page_id: 1 } } }
 
     before do
       selected_page.id = 1
@@ -84,7 +84,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when the routing page is not set" do
-      let(:params) { { pages_routing_page_form: { routing_page_id: nil } } }
+      let(:params) { { pages_routing_page_input: { routing_page_id: nil } } }
 
       it "renders the routing page view" do
         expect(response).to render_template("pages/conditions/routing_page")
@@ -150,13 +150,13 @@ RSpec.describe Pages::ConditionsController, type: :request do
         allow(Pundit).to receive(:authorize).and_return(true)
       end
 
-      conditional_form = Pages::ConditionsForm.new(form:, page: selected_page, answer_value: "Yes", goto_page_id: 3)
+      conditional_form = Pages::ConditionsInput.new(form:, page: selected_page, answer_value: "Yes", goto_page_id: 3)
 
       allow(conditional_form).to receive(:submit).and_return(submit_result)
 
-      allow(Pages::ConditionsForm).to receive(:new).and_return(conditional_form)
+      allow(Pages::ConditionsInput).to receive(:new).and_return(conditional_form)
 
-      post create_condition_path(form_id: form.id, page_id: selected_page.id, params: { pages_conditions_form: { routing_page_id: 1, check_page_id: 1, goto_page_id: 3, answer_value: "Wales" } })
+      post create_condition_path(form_id: form.id, page_id: selected_page.id, params: { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: 3, answer_value: "Wales" } })
     end
 
     it "Reads the form from the API" do
@@ -199,7 +199,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
   describe "#edit" do
     let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
-    let(:conditions_form) { Pages::ConditionsForm.new(form:, page: selected_page, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id) }
+    let(:conditions_input) { Pages::ConditionsInput.new(form:, page: selected_page, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id) }
 
     before do
       selected_page.routing_conditions = [condition]
@@ -217,9 +217,9 @@ RSpec.describe Pages::ConditionsController, type: :request do
         allow(Pundit).to receive(:authorize).and_return(true)
       end
 
-      allow(Pages::ConditionsForm).to receive(:new).and_return(conditions_form)
-      allow(conditions_form).to receive(:check_errors_from_api)
-      allow(conditions_form).to receive(:assign_condition_values).and_return(conditions_form)
+      allow(Pages::ConditionsInput).to receive(:new).and_return(conditions_input)
+      allow(conditions_input).to receive(:check_errors_from_api)
+      allow(conditions_input).to receive(:assign_condition_values).and_return(conditions_input)
 
       get edit_condition_path(form_id: 1, page_id: selected_page.id, condition_id: condition.id)
     end
@@ -229,11 +229,11 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     it "Checks the errors from the API response" do
-      expect(conditions_form).to have_received(:check_errors_from_api).exactly(1).times
+      expect(conditions_input).to have_received(:check_errors_from_api).exactly(1).times
     end
 
     it "Calls assign_condition_values" do
-      expect(conditions_form).to have_received(:assign_condition_values).exactly(1).times
+      expect(conditions_input).to have_received(:assign_condition_values).exactly(1).times
     end
 
     it "renders the new condition page template" do
@@ -272,16 +272,16 @@ RSpec.describe Pages::ConditionsController, type: :request do
         allow(Pundit).to receive(:authorize).and_return(true)
       end
 
-      conditional_form = Pages::ConditionsForm.new(form:, page: selected_page, record: condition, answer_value: "Yes", goto_page_id: 3)
+      conditional_form = Pages::ConditionsInput.new(form:, page: selected_page, record: condition, answer_value: "Yes", goto_page_id: 3)
 
       allow(conditional_form).to receive(:update_condition).and_return(submit_result)
 
-      allow(Pages::ConditionsForm).to receive(:new).and_return(conditional_form)
+      allow(Pages::ConditionsInput).to receive(:new).and_return(conditional_form)
 
       put update_condition_path(form_id: form.id,
                                 page_id: selected_page.id,
                                 condition_id: condition.id,
-                                params: { pages_conditions_form: { routing_page_id: 1, check_page_id: 1, goto_page_id: 3, answer_value: "Wales" } })
+                                params: { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: 3, answer_value: "Wales" } })
     end
 
     it "Reads the form from the API" do
@@ -341,11 +341,11 @@ RSpec.describe Pages::ConditionsController, type: :request do
         allow(Pundit).to receive(:authorize).and_return(true)
       end
 
-      delete_condition_form = Pages::DeleteConditionForm.new(form:, page: selected_page, record: condition, answer_value: "Yes", goto_page_id: 3)
+      delete_condition_input = Pages::DeleteConditionInput.new(form:, page: selected_page, record: condition, answer_value: "Yes", goto_page_id: 3)
 
-      allow(delete_condition_form).to receive(:goto_page_question_text).and_return("What is your name?")
+      allow(delete_condition_input).to receive(:goto_page_question_text).and_return("What is your name?")
 
-      allow(Pages::DeleteConditionForm).to receive(:new).and_return(delete_condition_form)
+      allow(Pages::DeleteConditionInput).to receive(:new).and_return(delete_condition_input)
 
       get delete_condition_path(form_id: 1, page_id: selected_page.id, condition_id: condition.id)
     end
@@ -393,18 +393,18 @@ RSpec.describe Pages::ConditionsController, type: :request do
         allow(Pundit).to receive(:authorize).and_return(true)
       end
 
-      delete_condition_form = Pages::DeleteConditionForm.new(form:, page: selected_page, record: condition, answer_value: "Wales", goto_page_id: 3, confirm:)
+      delete_condition_input = Pages::DeleteConditionInput.new(form:, page: selected_page, record: condition, answer_value: "Wales", goto_page_id: 3, confirm:)
 
-      allow(delete_condition_form).to receive(:goto_page_question_text).and_return("What is your name?")
+      allow(delete_condition_input).to receive(:goto_page_question_text).and_return("What is your name?")
 
-      allow(delete_condition_form).to receive(:delete).and_return(delete_bool)
+      allow(delete_condition_input).to receive(:delete).and_return(delete_bool)
 
-      allow(Pages::DeleteConditionForm).to receive(:new).and_return(delete_condition_form)
+      allow(Pages::DeleteConditionInput).to receive(:new).and_return(delete_condition_input)
 
       delete destroy_condition_path(form_id: form.id,
                                     page_id: selected_page.id,
                                     condition_id: condition.id,
-                                    params: { pages_delete_condition_form: { confirm:, goto_page_id: 3, answer_value: "Wales" } })
+                                    params: { pages_delete_condition_input: { confirm:, goto_page_id: 3, answer_value: "Wales" } })
     end
 
     it "Reads the form from the API" do

@@ -59,7 +59,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
       end
 
       allow(controller_spy).to receive(:draft_question).and_return(draft_question)
-      post guidance_new_path(form_id: form.id), params: { pages_guidance_form: { page_heading:, guidance_markdown: }, route_to: }
+      post guidance_new_path(form_id: form.id), params: { pages_guidance_input: { page_heading:, guidance_markdown: }, route_to: }
     end
 
     context "when previewing markdown" do
@@ -183,7 +183,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
         mock.get "/api/v1/forms/1/pages/#{page.id}", headers, page.to_json, 200
       end
       allow(controller_spy).to receive(:draft_question).and_return(draft_question)
-      post guidance_update_path(form_id: form.id, page_id: page.id), params: { pages_guidance_form: { page_heading:, guidance_markdown: }, route_to: }
+      post guidance_update_path(form_id: form.id, page_id: page.id), params: { pages_guidance_input: { page_heading:, guidance_markdown: }, route_to: }
     end
 
     context "when previewing markdown" do
@@ -295,7 +295,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
       let(:markdown) { "# A level one heading" }
 
       it "returns a JSON object containing the converted HTML" do
-        expect(response.body).to eq({ preview_html: "<p class=\"govuk-body\">A level one heading</p>", errors: [I18n.t("activemodel.errors.models.pages/guidance_form.attributes.guidance_markdown.unsupported_markdown_syntax")] }.to_json)
+        expect(response.body).to eq({ preview_html: "<p class=\"govuk-body\">A level one heading</p>", errors: [I18n.t("activemodel.errors.models.pages/guidance_input.attributes.guidance_markdown.unsupported_markdown_syntax")] }.to_json)
       end
 
       it "returns 200" do

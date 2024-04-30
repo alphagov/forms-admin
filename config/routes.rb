@@ -36,7 +36,7 @@ Rails.application.routes.draw do
       get "/pages" => "forms/archived#show_pages", as: :archived_form_pages
     end
 
-    get "/submission-email" => "forms/submission_email#new", as: :submission_email_form
+    get "/submission-email" => "forms/submission_email#new", as: :submission_email_input
     post "/submission-email" => "forms/submission_email#create"
     get "/confirm-submission-email" => "forms/submission_email#submission_email_code", as: :submission_email_code
     post "/confirm-submission-email" => "forms/submission_email#confirm_submission_email_code", as: :confirm_submission_email_code

@@ -47,7 +47,7 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
         mock.post "/api/v1/forms/#{id}/archive", post_headers
       end
 
-      post archive_form_update_path(id), params: { forms_confirm_archive_form: { confirm:, form: } }
+      post archive_form_update_path(id), params: { forms_confirm_archive_input: { confirm:, form: } }
     end
 
     context "when 'Yes' is selected" do

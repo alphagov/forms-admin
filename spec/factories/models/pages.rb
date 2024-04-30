@@ -49,7 +49,7 @@ FactoryBot.define do
 
     trait :with_text_settings do
       transient do
-        input_type { Pages::TextSettingsForm::INPUT_TYPES.sample }
+        input_type { Pages::TextSettingsInput::INPUT_TYPES.sample }
       end
 
       answer_type { "text" }
@@ -58,7 +58,7 @@ FactoryBot.define do
 
     trait :with_date_settings do
       transient do
-        input_type { Pages::DateSettingsForm::INPUT_TYPES.sample }
+        input_type { Pages::DateSettingsInput::INPUT_TYPES.sample }
       end
 
       answer_type { "date" }
@@ -77,8 +77,8 @@ FactoryBot.define do
 
     trait :with_name_settings do
       transient do
-        input_type { Pages::NameSettingsForm::INPUT_TYPES.sample }
-        title_needed { Pages::NameSettingsForm::TITLE_NEEDED.sample }
+        input_type { Pages::NameSettingsInput::INPUT_TYPES.sample }
+        title_needed { Pages::NameSettingsInput::TITLE_NEEDED.sample }
       end
 
       answer_type { "name" }

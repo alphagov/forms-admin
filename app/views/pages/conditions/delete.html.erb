@@ -1,30 +1,30 @@
-<% set_page_title(title_with_error_prefix(t("page_titles.routing_page_delete", question_position: delete_condition_form.page.position), delete_condition_form.errors&.any?)) %>
-<% content_for :back_link, govuk_back_link_to(edit_condition_path(delete_condition_form.form.id, delete_condition_form.page.id, delete_condition_form.record.id)) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.routing_page_delete", question_position: delete_condition_input.page.position), delete_condition_input.errors&.any?)) %>
+<% content_for :back_link, govuk_back_link_to(edit_condition_path(delete_condition_input.form.id, delete_condition_input.page.id, delete_condition_input.record.id)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with(model: delete_condition_form, url: delete_condition_path(delete_condition_form.form.id, delete_condition_form.page.id, delete_condition_form.record.id), method: :delete) do |f| %>
-      <% if delete_condition_form.errors.any? %>
+    <%= form_with(model: delete_condition_input, url: delete_condition_path(delete_condition_input.form.id, delete_condition_input.page.id, delete_condition_input.record.id), method: :delete) do |f| %>
+      <% if delete_condition_input.errors.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
 
       <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l"><%= delete_condition_form.form.name %></span>
-        <%= t("page_titles.routing_page_delete", question_position: delete_condition_form.page.position) %>
+        <span class="govuk-caption-l"><%= delete_condition_input.form.name %></span>
+        <%= t("page_titles.routing_page_delete", question_position: delete_condition_input.page.position) %>
       </h1>
 
       <%= govuk_summary_list(actions: false) do |summary_list|
         summary_list.with_row do |row|
           row.with_key { t("new_condition.routing_page_text") }
-          row.with_value { delete_condition_form.page.question_text }
+          row.with_value { delete_condition_input.page.question_text }
         end;
         summary_list.with_row do |row|
           row.with_key { "is answered as" }
-          row.with_value { delete_condition_form.answer_value }
+          row.with_value { delete_condition_input.answer_value }
         end;
         summary_list.with_row do |row|
           row.with_key { "take the person to" }
-          row.with_value { delete_condition_form.goto_page_question_text }
+          row.with_value { delete_condition_input.goto_page_question_text }
         end;
 
       end %>
@@ -34,11 +34,11 @@
       <% end %>
 
       <%= f.govuk_collection_radio_buttons :confirm,
-                                           delete_condition_form.values, ->(option) { option }, ->(option) { t('helpers.label.confirm_action_form.options.' + "#{option}") },
+                                           delete_condition_input.values, ->(option) { option }, ->(option) { t('helpers.label.confirm_action_input.options.' + "#{option}") },
                                            legend: { text: t("delete_condition.delete_condition_legend")}
       %>
-      <%= f.hidden_field :answer_value, value: delete_condition_form.answer_value %>
-      <%= f.hidden_field :goto_page_id, value: delete_condition_form.goto_page_id %>
+      <%= f.hidden_field :answer_value, value: delete_condition_input.answer_value %>
+      <%= f.hidden_field :goto_page_id, value: delete_condition_input.goto_page_id %>
 
       <%= f.govuk_submit t("save_and_continue") %>
     <% end %>

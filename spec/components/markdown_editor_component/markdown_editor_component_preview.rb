@@ -1,23 +1,23 @@
 class MarkdownEditorComponent::MarkdownEditorComponentPreview < ViewComponent::Preview
   def default
-    form_builder = GOVUKDesignSystemFormBuilder::FormBuilder.new(:form, Pages::GuidanceForm.new,
+    form_builder = GOVUKDesignSystemFormBuilder::FormBuilder.new(:form, Pages::GuidanceInput.new,
                                                                  ActionView::Base.new(ActionView::LookupContext.new(nil), {}, nil), {})
 
     render(MarkdownEditorComponent::View.new(:guidance_markdown,
                                              form_builder:,
                                              preview_html: "<p>No markdown added</p>",
-                                             form_model: Pages::GuidanceForm.new,
+                                             form_model: Pages::GuidanceInput.new,
                                              label: "Add some markdown",
                                              hint: "Use Markdown to format your content. Formatting help can be found below."))
   end
 
   def with_local_translations
-    form_builder = GOVUKDesignSystemFormBuilder::FormBuilder.new(:form, Pages::GuidanceForm.new,
+    form_builder = GOVUKDesignSystemFormBuilder::FormBuilder.new(:form, Pages::GuidanceInput.new,
                                                                  ActionView::Base.new(ActionView::LookupContext.new(nil), {}, nil), {})
     render(MarkdownEditorComponent::View.new(:guidance_markdown,
                                              form_builder:,
                                              preview_html: "<p>No markdown added</p>",
-                                             form_model: Pages::GuidanceForm.new,
+                                             form_model: Pages::GuidanceInput.new,
                                              label: "Add guidance text",
                                              hint: "Use Markdown if you need to format your guidance content. Formatting help can be found below.",
                                              local_translations: {
@@ -31,13 +31,13 @@ class MarkdownEditorComponent::MarkdownEditorComponentPreview < ViewComponent::P
   end
 
   def with_headings_disallowed
-    form_builder = GOVUKDesignSystemFormBuilder::FormBuilder.new(:form, Pages::GuidanceForm.new,
+    form_builder = GOVUKDesignSystemFormBuilder::FormBuilder.new(:form, Pages::GuidanceInput.new,
                                                                  ActionView::Base.new(ActionView::LookupContext.new(nil), {}, nil), {})
 
     render(MarkdownEditorComponent::View.new(:guidance_markdown,
                                              form_builder:,
                                              preview_html: "<p>No markdown added</p>",
-                                             form_model: Pages::GuidanceForm.new,
+                                             form_model: Pages::GuidanceInput.new,
                                              label: "Add some markdown",
                                              hint: "Use Markdown to format your content. Formatting help can be found below.", allow_headings: false))
   end

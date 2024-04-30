@@ -79,7 +79,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
         mock.put "/api/v1/forms/2", post_headers
       end
       allow(Pundit).to receive(:authorize).and_return(true)
-      post what_happens_next_path(form_id: 2), params: { forms_what_happens_next_form: { what_happens_next_markdown: }, route_to: }
+      post what_happens_next_path(form_id: 2), params: { forms_what_happens_next_input: { what_happens_next_markdown: }, route_to: }
     end
 
     it "checks the user is authorised to view the form" do
@@ -196,7 +196,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       let(:markdown) { "# A level one heading" }
 
       it "returns a JSON object containing the converted HTML" do
-        expect(response.body).to eq({ preview_html: "<p class=\"govuk-body\">A level one heading</p>", errors: [I18n.t("activemodel.errors.models.forms/what_happens_next_form.attributes.what_happens_next_markdown.unsupported_markdown_syntax")] }.to_json)
+        expect(response.body).to eq({ preview_html: "<p class=\"govuk-body\">A level one heading</p>", errors: [I18n.t("activemodel.errors.models.forms/what_happens_next_input.attributes.what_happens_next_markdown.unsupported_markdown_syntax")] }.to_json)
       end
 
       it "returns 200" do

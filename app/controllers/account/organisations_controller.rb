@@ -6,21 +6,21 @@ module Account
     skip_before_action :redirect_if_account_not_completed
 
     def edit
-      @organisation_form = OrganisationForm.new(user: current_user).assign_form_values
+      @organisation_input = OrganisationInput.new(user: current_user).assign_form_values
     end
 
     def update
-      @organisation_form = OrganisationForm.new(account_organisation_form_params(current_user))
+      @organisation_input = OrganisationInput.new(account_organisation_input_params(current_user))
 
-      if @organisation_form.submit
+      if @organisation_input.submit
         redirect_to next_path
       else
         render :edit, status: :unprocessable_entity
       end
     end
 
-    def account_organisation_form_params(user)
-      params.require(:account_organisation_form).permit(:organisation_id).merge(user:)
+    def account_organisation_input_params(user)
+      params.require(:account_organisation_input).permit(:organisation_id).merge(user:)
     end
 
   private

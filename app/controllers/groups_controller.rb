@@ -53,15 +53,15 @@ class GroupsController < ApplicationController
 
   def confirm_upgrade
     authorize @group, :upgrade?
-    @confirm_upgrade_form = Groups::ConfirmUpgradeForm.new
+    @confirm_upgrade_input = Groups::ConfirmUpgradeInput.new
   end
 
   def upgrade
     authorize @group
 
-    @confirm_upgrade_form = Groups::ConfirmUpgradeForm.new(confirm_upgrade_form_params)
-    return render :confirm_upgrade, status: :unprocessable_entity unless @confirm_upgrade_form.valid?
-    return redirect_to @group unless @confirm_upgrade_form.confirmed?
+    @confirm_upgrade_input = Groups::ConfirmUpgradeInput.new(confirm_upgrade_input_params)
+    return render :confirm_upgrade, status: :unprocessable_entity unless @confirm_upgrade_input.valid?
+    return redirect_to @group unless @confirm_upgrade_input.confirmed?
 
     GroupService.new(group: @group, current_user: @current_user, host: request.host).upgrade_group
 
@@ -80,7 +80,7 @@ private
     params.require(:group).permit(:name)
   end
 
-  def confirm_upgrade_form_params
-    params.require(:groups_confirm_upgrade_form).permit(:confirm)
+  def confirm_upgrade_input_params
+    params.require(:groups_confirm_upgrade_input).permit(:confirm)
   end
 end

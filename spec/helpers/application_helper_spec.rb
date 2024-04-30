@@ -118,7 +118,7 @@ RSpec.describe ApplicationHelper, type: :helper do
       let(:answer_settings) { OpenStruct.new(input_type:) }
 
       context "and 'input_type' set to a valid value" do
-        let(:input_type) { Pages::TextSettingsForm::INPUT_TYPES.sample }
+        let(:input_type) { Pages::TextSettingsInput::INPUT_TYPES.sample }
 
         it "returns the answer subtype" do
           expect(helper.translation_key_for_answer_type(answer_type, answer_settings)).to eq input_type
@@ -131,7 +131,7 @@ RSpec.describe ApplicationHelper, type: :helper do
       let(:answer_settings) { OpenStruct.new(input_type:) }
 
       context "and 'input_type' set to a valid value" do
-        let(:input_type) { Pages::DateSettingsForm::INPUT_TYPES.sample }
+        let(:input_type) { Pages::DateSettingsInput::INPUT_TYPES.sample }
 
         it "returns the answer subtype" do
           expect(helper.translation_key_for_answer_type(answer_type, answer_settings)).to eq input_type

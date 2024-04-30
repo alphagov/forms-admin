@@ -1,10 +1,10 @@
-<% set_page_title(title_with_error_prefix(t("page_titles.add_guidance"), guidance_form.errors&.any?)) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.add_guidance"), guidance_input.errors&.any?)) %>
 <% content_for :back_link, govuk_back_link_to(back_link) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
 
-    <%= form_with model: [current_form, guidance_form], url: post_url do |f| %>
+    <%= form_with model: [current_form, guidance_input], url: post_url do |f| %>
       <%= f.govuk_error_summary %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= t("pages.question") %> <%= current_form.page_number(page) %></span>
@@ -20,9 +20,9 @@
         form_builder: f,
         render_preview_path: guidance_render_preview_path(current_form),
         preview_html:,
-        form_model: guidance_form,
-        label: t("helpers.label.pages_guidance_form.guidance_markdown"),
-        hint: t("helpers.hint.pages_guidance_form.guidance_markdown"),
+        form_model: guidance_input,
+        label: t("helpers.label.pages_guidance_input.guidance_markdown"),
+        hint: t("helpers.hint.pages_guidance_input.guidance_markdown"),
         local_translations: {
           preview_description: t("guidance.markdown_editor.preview.description"),
           preview_heading: t("guidance.markdown_editor.preview.heading"),

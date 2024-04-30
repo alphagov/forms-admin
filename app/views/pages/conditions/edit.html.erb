@@ -1,29 +1,29 @@
-<% set_page_title(title_with_error_prefix(t('page_titles.routing_page_edit', question_position: condition_form.page.position), condition_form.errors&.any?)) %>
-<% content_for :back_link, govuk_back_link_to(form_pages_path(condition_form.form.id)) %>
+<% set_page_title(title_with_error_prefix(t('page_titles.routing_page_edit', question_position: condition_input.page.position), condition_input.errors&.any?)) %>
+<% content_for :back_link, govuk_back_link_to(form_pages_path(condition_input.form.id)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with(model: condition_form, url: update_condition_path(condition_form.form.id, condition_form.page.id, condition_form.record.id), method: "PUT") do |f| %>
-      <% if condition_form&.errors.any? %>
+    <%= form_with(model: condition_input, url: update_condition_path(condition_input.form.id, condition_input.page.id, condition_input.record.id), method: "PUT") do |f| %>
+      <% if condition_input&.errors.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
 
       <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l"><%= condition_form.form.name %></span>
-        <%= t("page_titles.routing_page_edit", question_position: condition_form.page.position) %>
+        <span class="govuk-caption-l"><%= condition_input.form.name %></span>
+        <%= t("page_titles.routing_page_edit", question_position: condition_input.page.position) %>
       </h1>
 
       <%= govuk_summary_list(actions: false) do |summary_list|
         summary_list.with_row do |row|
           row.with_key { t("new_condition.routing_page_text") }
-          row.with_value { condition_form.page.question_text }
+          row.with_value { condition_input.page.question_text }
         end;
       end %>
 
-      <%= f.govuk_collection_select :answer_value, condition_form.routing_answer_options, :value, :label, options: { include_blank: t("helpers.label.pages_conditions_form.default_answer_value") } %>
-      <%= f.govuk_collection_select :goto_page_id, condition_form.goto_page_options, :id, :question_text, options: { include_blank: t("helpers.label.pages_conditions_form.default_goto_page_id") } %>
+      <%= f.govuk_collection_select :answer_value, condition_input.routing_answer_options, :value, :label, options: { include_blank: t("helpers.label.pages_conditions_input.default_answer_value") } %>
+      <%= f.govuk_collection_select :goto_page_id, condition_input.goto_page_options, :id, :question_text, options: { include_blank: t("helpers.label.pages_conditions_input.default_goto_page_id") } %>
       <%= f.govuk_submit t("save_and_continue") do
-        govuk_button_link_to "Delete question route", delete_condition_path(condition_form.form.id, condition_form.page.id, condition_form.record.id), warning: true
+        govuk_button_link_to "Delete question route", delete_condition_path(condition_input.form.id, condition_input.page.id, condition_input.record.id), warning: true
       end %>
     <% end %>
   </div>

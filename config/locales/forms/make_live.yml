@@ -2,7 +2,7 @@ en:
   activemodel:
     errors:
       models:
-        forms/make_live_form:
+        forms/make_live_input:
           attributes:
             confirm:
               blank: You must choose an option

@@ -1,13 +1,13 @@
 en:
   helpers:
     label:
-      pages_conditions_form:
+      pages_conditions_input:
         answer_value: is answered as
         goto_page_id: take the person to
   activemodel:
     errors:
       models:
-        pages/conditions_form:
+        pages/conditions_input:
           attributes:
             answer_value:
               blank: Select the answer you want to base your route on
@@ -17,11 +17,11 @@ en:
               cannot_have_goto_page_before_routing_page: Select the question or page you want to take the person to, or delete this route
               cannot_route_to_next_page: Select the question or page you want to take the person to, or delete this route
               goto_page_doesnt_exist: Select the question or page you want to take the person to, or delete this route
-        pages/delete_condition_form:
+        pages/delete_condition_input:
           attributes:
             confirm:
               blank: Select yes if you want to delete this route
-        pages/routing_page_form:
+        pages/routing_page_input:
           attributes:
             routing_page_id:
               blank: Select the question you want your route to start from

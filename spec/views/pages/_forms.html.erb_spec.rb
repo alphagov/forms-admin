@@ -2,9 +2,9 @@ require "rails_helper"
 
 describe "pages/_form.html.erb", type: :view do
   let(:page) { build :page, :with_hints, :with_simple_answer_type, id: 2, form_id: form.id }
-  let(:draft_question) { question_form.draft_question }
-  let(:question_form) do
-    build :question_form,
+  let(:draft_question) { question_input.draft_question }
+  let(:question_input) do
+    build :question_input,
           answer_type: page.answer_type,
           question_text: page.question_text,
           hint_text: page.hint_text
@@ -16,7 +16,7 @@ describe "pages/_form.html.erb", type: :view do
       form_object: form,
       page_object: page,
       draft_question:,
-      question_form:,
+      question_input:,
       action_path: "http://example.com" }
   end
 
@@ -29,15 +29,15 @@ describe "pages/_form.html.erb", type: :view do
   end
 
   it "has a field with the question text" do
-    expect(rendered).to have_field(type: "text", with: question_form.question_text)
+    expect(rendered).to have_field(type: "text", with: question_input.question_text)
   end
 
   it "has a field with the hint text" do
-    expect(rendered).to have_field(type: "textarea", with: question_form.hint_text)
+    expect(rendered).to have_field(type: "textarea", with: question_input.hint_text)
   end
 
   it "has an unchecked optional checkbox" do
-    expect(rendered).to have_unchecked_field("pages_question_form[is_optional]")
+    expect(rendered).to have_unchecked_field("pages_question_input[is_optional]")
   end
 
   it "has a submit button with the correct text" do
@@ -60,7 +60,7 @@ describe "pages/_form.html.erb", type: :view do
     end
 
     it "has no hidden field for the answer type" do
-      expect(rendered).not_to have_field("question_form[answer_type]", type: :hidden)
+      expect(rendered).not_to have_field("question_input[answer_type]", type: :hidden)
     end
 
     it "has a delete button" do
@@ -70,8 +70,8 @@ describe "pages/_form.html.erb", type: :view do
 
   context "when the page has existing guidance" do
     let(:draft_question) { build :draft_question, :with_guidance }
-    let(:question_form) do
-      build :question_form,
+    let(:question_input) do
+      build :question_input,
             draft_question:,
             answer_type: page.answer_type,
             question_text: page.question_text,

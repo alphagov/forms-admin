@@ -14,9 +14,9 @@ describe Account::OrganisationsController do
         expect(response).to render_template(:edit)
       end
 
-      it "assigns a new OrganisationForm to @organisation_form" do
+      it "assigns a new OrganisationForm to @organisation_input" do
         get edit_account_organisation_path
-        expect(assigns(:organisation_form)).to be_a(Account::OrganisationForm)
+        expect(assigns(:organisation_input)).to be_a(Account::OrganisationInput)
       end
     end
 
@@ -33,7 +33,7 @@ describe Account::OrganisationsController do
   describe "PUT #update" do
     context "with valid parameters" do
       let(:organisation) { create(:organisation) }
-      let(:valid_params) { { account_organisation_form: { organisation_id: organisation.id } } }
+      let(:valid_params) { { account_organisation_input: { organisation_id: organisation.id } } }
 
       before do
         # rubocop:disable RSpec/AnyInstance
@@ -53,7 +53,7 @@ describe Account::OrganisationsController do
     end
 
     context "with invalid parameters" do
-      let(:invalid_params) { { account_organisation_form: { organisation_id: nil } } }
+      let(:invalid_params) { { account_organisation_input: { organisation_id: nil } } }
 
       it "does not update the user's organisation" do
         expect {

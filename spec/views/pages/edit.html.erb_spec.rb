@@ -6,9 +6,9 @@ describe "pages/edit.html.erb" do
   let(:form) { build :form, id: 1, pages: [page] }
   let(:page) { build :page, id: 1, question_text:, form_id: 1, answer_type: "email", answer_settings: nil, page_heading: nil }
 
-  let(:draft_question) { question_form.draft_question }
-  let(:question_form) do
-    build :question_form,
+  let(:draft_question) { question_input.draft_question }
+  let(:question_input) do
+    build :question_input,
           answer_type: page.answer_type,
           question_text: page.question_text,
           hint_text: page.hint_text
@@ -26,7 +26,7 @@ describe "pages/edit.html.erb" do
 
     # Assign instance variables so they can be accessed from views
     assign(:page, page)
-    assign(:question_form, question_form)
+    assign(:question_input, question_input)
     assign(:current_user, current_user)
 
     # This is normally done in the ApplicationController, but we aren't using

@@ -2,7 +2,7 @@ en:
   activemodel:
     errors:
       models:
-        forms/confirm_archive_form:
+        forms/confirm_archive_input:
           attributes:
             confirm:
               blank: Select yes if you want to archive this form

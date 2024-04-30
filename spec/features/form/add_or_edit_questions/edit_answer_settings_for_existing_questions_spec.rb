@@ -54,7 +54,7 @@ private
   def and_i_want_to_edit(question)
     click_link "Edit", href: edit_question_path(form.id, question.id)
     expect(page.find("h1")).to have_text "Edit question"
-    expect(find_field("pages_question_form[question_text]").value).to eq question.question_text
+    expect(find_field("pages_question_input[question_text]").value).to eq question.question_text
     expect_page_to_have_no_axe_errors(page)
   end
 
@@ -110,7 +110,7 @@ private
   def check_date_answer_settings
     expect(page.find("h1")).to have_text "Are you asking for someone’s date of birth?"
     expect_page_to_have_no_axe_errors(page)
-    expect(page).to have_checked_field("pages_date_settings_form[input_type]", with: "date_of_birth", visible: :all)
+    expect(page).to have_checked_field("pages_date_settings_input[input_type]", with: "date_of_birth", visible: :all)
     click_button "Continue"
     expect(page.find_all(".govuk-summary-list__value")[1]).to have_text "Yes"
   end
@@ -118,8 +118,8 @@ private
   def check_name_answer_settings
     expect(page.find("h1")).to have_text "Ask for a person’s name"
     expect_page_to_have_no_axe_errors(page)
-    expect(page).to have_checked_field("pages_name_settings_form[input_type]", with: "first_middle_and_last_name", visible: :all)
-    expect(page).to have_checked_field("pages_name_settings_form[title_needed]", with: "true", visible: :all)
+    expect(page).to have_checked_field("pages_name_settings_input[input_type]", with: "first_middle_and_last_name", visible: :all)
+    expect(page).to have_checked_field("pages_name_settings_input[title_needed]", with: "true", visible: :all)
     click_button "Continue"
     expect(page.find_all(".govuk-summary-list__value")[1]).to have_text "First, middle and last names in separate boxes"
     expect(page.find_all(".govuk-summary-list__value")[2]).to have_text "Yes"
@@ -141,7 +141,7 @@ private
   def check_text_answer_settings
     expect(page.find("h1")).to have_text "How much text will people need to provide?"
     expect_page_to_have_no_axe_errors(page)
-    expect(page).to have_checked_field("pages_text_settings_form[input_type]", with: "long_text", visible: :all)
+    expect(page).to have_checked_field("pages_text_settings_input[input_type]", with: "long_text", visible: :all)
     click_button "Continue"
     expect(page.find_all(".govuk-summary-list__value")[1]).to have_text "More than a single line of text"
   end

@@ -22,7 +22,7 @@
 
 <% if @current_user.super_admin? %>
 
-  <%= form_with(model: @search_form, scope: :search, url: root_path, method: 'get', local: true) do |f| %>
+  <%= form_with(model: @search_input, scope: :search, url: root_path, method: 'get', local: true) do |f| %>
     <%= render DfE::Autocomplete::View.new(
       f,
       attribute_name: :organisation_id,
@@ -32,7 +32,7 @@
                                             :name_with_abbreviation,
                                             class: ['govuk-!-width-three-quarters'],
                                             options: { prompt: t('home.organisation_prompt') },
-                                            label: { text: t('home.search_form_label', organisation_name: @search_form.organisation.name), size: 'm', tag: 'h2' },
+                                            label: { text: t('home.search_input_label', organisation_name: @search_input.organisation.name), size: 'm', tag: 'h2' },
                                             hint: { text: t('home.organisation_hint') },
                                            ),
     html_attributes: { 'data-show-all-values' => 'true'},
@@ -45,7 +45,7 @@
 
 <% if @forms.any? %>
  <% if @current_user.super_admin? %>
-    <%= govuk_table(**FormListService.call(forms: @forms, current_user: @current_user, organisation: @search_form.organisation).data)%>
+    <%= govuk_table(**FormListService.call(forms: @forms, current_user: @current_user, organisation: @search_input.organisation).data)%>
   <% else %>
     <%= govuk_table(**FormListService.call(forms: @forms, current_user: @current_user).data)%>
   <% end %>

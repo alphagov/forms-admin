@@ -274,12 +274,12 @@ RSpec.describe "/groups", type: :request do
       context "when 'Yes' is selected" do
         it "updates the group to active" do
           expect {
-            post upgrade_group_url(member_group), params: { groups_confirm_upgrade_form: { confirm: } }
+            post upgrade_group_url(member_group), params: { groups_confirm_upgrade_input: { confirm: } }
           }.to change { member_group.reload.status }.to("active")
         end
 
         it "redirects to the group" do
-          post upgrade_group_url(member_group), params: { groups_confirm_upgrade_form: { confirm: } }
+          post upgrade_group_url(member_group), params: { groups_confirm_upgrade_input: { confirm: } }
           expect(response).to redirect_to(group_path(member_group))
         end
       end
@@ -289,12 +289,12 @@ RSpec.describe "/groups", type: :request do
 
         it "does not update the group" do
           expect {
-            post upgrade_group_url(member_group), params: { groups_confirm_upgrade_form: { confirm: } }
+            post upgrade_group_url(member_group), params: { groups_confirm_upgrade_input: { confirm: } }
           }.not_to(change { member_group.reload.status })
         end
 
         it "redirects to the group" do
-          post upgrade_group_url(member_group), params: { groups_confirm_upgrade_form: { confirm: } }
+          post upgrade_group_url(member_group), params: { groups_confirm_upgrade_input: { confirm: } }
           expect(response).to redirect_to(group_path(member_group))
         end
       end
@@ -303,7 +303,7 @@ RSpec.describe "/groups", type: :request do
         let(:confirm) { nil }
 
         before do
-          post upgrade_group_url(member_group), params: { groups_confirm_upgrade_form: { confirm: } }
+          post upgrade_group_url(member_group), params: { groups_confirm_upgrade_input: { confirm: } }
         end
 
         it "returns 422" do
@@ -319,7 +319,7 @@ RSpec.describe "/groups", type: :request do
 
     context "when user is not an organisation admin" do
       it "is forbidden" do
-        post upgrade_group_url(member_group), params: { groups_confirm_upgrade_form: { confirm: } }
+        post upgrade_group_url(member_group), params: { groups_confirm_upgrade_input: { confirm: } }
         expect(response).to have_http_status(:forbidden)
       end
     end

@@ -91,7 +91,7 @@ RSpec.describe FormsController, type: :request do
       end
 
       it "does not include setting the submission email address" do
-        expect(response.body).not_to include(submission_email_form_path(2))
+        expect(response.body).not_to include(submission_email_input_path(2))
         expect(response.body).not_to include(submission_email_code_path(2))
       end
 
@@ -153,7 +153,7 @@ RSpec.describe FormsController, type: :request do
                                          })
         GroupForm.create!(group:, form_id: form.id) if group.present?
         allow(Pundit).to receive(:authorize).and_return(true)
-        delete destroy_form_path(form_id: 2, forms_delete_confirmation_form: { confirm: "yes" })
+        delete destroy_form_path(form_id: 2, forms_delete_confirmation_input: { confirm: "yes" })
       end
 
       it "redirects you to the group page" do
@@ -301,7 +301,7 @@ RSpec.describe FormsController, type: :request do
 
       login_as user
 
-      post form_pages_path(2), params: { forms_mark_complete_form: { mark_complete: "true" } }
+      post form_pages_path(2), params: { forms_mark_complete_input: { mark_complete: "true" } }
     end
 
     it "Reads the form from the API" do
@@ -325,7 +325,7 @@ RSpec.describe FormsController, type: :request do
           mock.put "/api/v1/forms/2", post_headers
         end
 
-        post form_pages_path(2), params: { forms_mark_complete_form: { mark_complete: nil } }
+        post form_pages_path(2), params: { forms_mark_complete_input: { mark_complete: nil } }
       end
 
       it "renders the index page" do
@@ -337,7 +337,7 @@ RSpec.describe FormsController, type: :request do
       end
 
       it "sets mark_complete to false" do
-        expect(assigns[:mark_complete_form].mark_complete).to eq("false")
+        expect(assigns[:mark_complete_input].mark_complete).to eq("false")
       end
     end
   end

@@ -1,17 +1,17 @@
-<% set_page_title(title_with_error_prefix(t("page_titles.what_happens_next_form"), @what_happens_next_form.errors.present?)) %>
-<% content_for :back_link, govuk_back_link_to(form_path(@what_happens_next_form.form), t("back_link.form_create")) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.what_happens_next"), @what_happens_next_input.errors.present?)) %>
+<% content_for :back_link, govuk_back_link_to(form_path(@what_happens_next_input.form), t("back_link.form_create")) %>
 
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with(model: @what_happens_next_form, url: what_happens_next_create_path(@what_happens_next_form.form)) do |f| %>
-      <% if @what_happens_next_form&.errors&.present? %>
+    <%= form_with(model: @what_happens_next_input, url: what_happens_next_create_path(@what_happens_next_input.form)) do |f| %>
+      <% if @what_happens_next_input&.errors&.present? %>
         <%= f.govuk_error_summary %>
       <% end %>
 
       <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l"><%= @what_happens_next_form.form.name %></span>
-        <%= t("page_titles.what_happens_next_form") %>
+        <span class="govuk-caption-l"><%= @what_happens_next_input.form.name %></span>
+        <%= t("page_titles.what_happens_next") %>
       </h1>
 
       <p><%= t("what_happens_next.instructions") %></p>
@@ -32,9 +32,9 @@
 
       <%= render MarkdownEditorComponent::View.new(:what_happens_next_markdown,
         form_builder: f,
-        render_preview_path: what_happens_next_render_preview_path(@what_happens_next_form.form),
+        render_preview_path: what_happens_next_render_preview_path(@what_happens_next_input.form),
         preview_html: @preview_html,
-        form_model: @what_happens_next_form,
+        form_model: @what_happens_next_input,
         label: "Enter some information to tell people what will happen next",
         hint: nil,
         allow_headings: false) %>

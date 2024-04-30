@@ -26,7 +26,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
 
   describe "#new" do
     before do
-      get submission_email_form_path(form.id)
+      get submission_email_input_path(form.id)
     end
 
     it "returns HTTP code 200" do
@@ -63,7 +63,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
       post(
         submission_email_path(form.id),
         params: {
-          forms_submission_email_form: {
+          forms_submission_email_input: {
             temporary_submission_email:,
             notify_response_id: Faker::Internet.uuid,
           },
@@ -185,7 +185,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
       post(
         confirm_submission_email_code_path(form.id),
         params: {
-          forms_submission_email_form: {
+          forms_submission_email_input: {
             email_code: submitted_code,
           },
         },

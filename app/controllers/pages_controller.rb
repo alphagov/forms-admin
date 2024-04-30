@@ -5,7 +5,7 @@ class PagesController < ApplicationController
 
   def index
     @pages = current_form.pages
-    @mark_complete_form = Forms::MarkCompleteForm.new(form: current_form).assign_form_values
+    @mark_complete_input = Forms::MarkCompleteInput.new(form: current_form).assign_form_values
     render :index, locals: { current_form: }
   end
 

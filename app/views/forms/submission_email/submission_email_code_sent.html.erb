@@ -1,13 +1,13 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= govuk_panel(title_text:  t("page_titles.email_code_sent")) %>
-    <%= t('email_code_sent.body_html', temp_email: @submission_email_form.temporary_submission_email) %>
+    <%= t('email_code_sent.body_html', temp_email: @submission_email_input.temporary_submission_email) %>
 
     <h2 class="govuk-heading-m"><%= t("email_code_sent.sub_heading") %></h2>
 
     <%= t("email_code_sent.what_happens_next_body_html") %>
 
-    <p><%= govuk_link_to "Enter the email address confirmation code", submission_email_code_path( @submission_email_form.form) %></p>
+    <p><%= govuk_link_to "Enter the email address confirmation code", submission_email_code_path( @submission_email_input.form) %></p>
 
     <p><%= govuk_link_to(t('email_code_sent.continue'), form_path) %></p>
   </div>

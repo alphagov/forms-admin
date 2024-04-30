@@ -1,23 +1,23 @@
-<% set_page_title(title_with_error_prefix(t('page_titles.archive_form_confirm'), @confirm_archive_form.errors.any?)) %>
+<% set_page_title(title_with_error_prefix(t('page_titles.archive_form_confirm'), @confirm_archive_input.errors.any?)) %>
 
-<% content_for :back_link, govuk_back_link_to(live_form_path(@confirm_archive_form.form.id), t('back_link.form_view')) %>
+<% content_for :back_link, govuk_back_link_to(live_form_path(@confirm_archive_input.form.id), t('back_link.form_view')) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with(model: @confirm_archive_form, url: archive_form_update_path(@confirm_archive_form.form.id)) do |f| %>
-      <% if @confirm_archive_form&.errors.any? %>
+    <%= form_with(model: @confirm_archive_input, url: archive_form_update_path(@confirm_archive_input.form.id)) do |f| %>
+      <% if @confirm_archive_input&.errors.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
 
       <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l"><%= @confirm_archive_form.form.name %></span>
+        <span class="govuk-caption-l"><%= @confirm_archive_input.form.name %></span>
         <%= t('page_titles.archive_form_confirm') %>
       </h1>
 
-      <%= t('archive_form.confirm.body_html', submission_email: @confirm_archive_form.form.submission_email) %>
+      <%= t('archive_form.confirm.body_html', submission_email: @confirm_archive_input.form.submission_email) %>
 
       <%= f.govuk_collection_radio_buttons :confirm,
-                                           @confirm_archive_form.values, ->(option) { option }, ->(option) { t('helpers.label.confirm_action_form.options.' + "#{option}") },
+                                           @confirm_archive_input.values, ->(option) { option }, ->(option) { t('helpers.label.confirm_action_input.options.' + "#{option}") },
                                            legend: { text: t('archive_form.confirm.radios_legend'), size: 'm' },
                                            inline: true %>
 

@@ -1,9 +1,9 @@
-<% set_page_title(title_with_error_prefix(t("page_titles.name_settings"), @name_settings_form.errors.any?)) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.name_settings"), @name_settings_input.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(@back_link_url) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with model: [current_form, @name_settings_form], url: @name_settings_path do |f| %>
+    <%= form_with model: [current_form, @name_settings_input], url: @name_settings_path do |f| %>
       <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l"><span class="govuk-caption-l"><%= "#{t("pages.question")} #{current_form.page_number(@page)}" %></span>
@@ -12,7 +12,7 @@
 
       <%= f.govuk_collection_radio_buttons(
             :input_type,
-            Pages::NameSettingsForm::INPUT_TYPES,
+            Pages::NameSettingsInput::INPUT_TYPES,
             ->(option) { option },
             ->(option) { t('helpers.label.page.name_settings_options.names.' + option) },
             ->(option) { t('helpers.label.page.name_settings_options.hints.' + option) },
@@ -22,7 +22,7 @@
             )  %>
       <%= f.govuk_collection_radio_buttons(
             :title_needed,
-            Pages::NameSettingsForm::TITLE_NEEDED,
+            Pages::NameSettingsInput::TITLE_NEEDED,
             ->(option) { option },
             ->(option) { t('helpers.label.page.name_settings_options.names.' + option) },
             legend: { text: t("helpers.label.page.name_settings_options.legends.title") },

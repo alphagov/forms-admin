@@ -6,10 +6,10 @@ module Forms
 
     def destroy
       load_page_variables
-      @delete_confirmation_form = DeleteConfirmationForm.new(delete_confirmation_form_params)
+      @delete_confirmation_input = DeleteConfirmationInput.new(delete_confirmation_input_params)
 
-      if @delete_confirmation_form.valid?
-        if @delete_confirmation_form.confirmed?
+      if @delete_confirmation_input.valid?
+        if @delete_confirmation_input.confirmed?
           if params[:page_id].present?
             delete_page(current_form, @page)
           else
@@ -35,8 +35,8 @@ module Forms
       ]
     end
 
-    def delete_confirmation_form_params
-      params.require(:forms_delete_confirmation_form).permit(:confirm)
+    def delete_confirmation_input_params
+      params.require(:forms_delete_confirmation_input).permit(:confirm)
     end
 
     def previous_page(id)
@@ -44,18 +44,18 @@ module Forms
     end
 
     def load_page_variables
-      @delete_confirmation_form = DeleteConfirmationForm.new
+      @delete_confirmation_input = DeleteConfirmationInput.new
 
       if params[:page_id].present?
         @page = Page.find(params[:page_id], params: { form_id: current_form.id })
         @url = destroy_page_path(current_form, @page)
-        @confirm_deletion_legend = t("forms_delete_confirmation_form.confirm_deletion_page")
+        @confirm_deletion_legend = t("forms_delete_confirmation_input.confirm_deletion_page")
         @item_name = @page.question_text
         @back_url = edit_question_path(current_form, @page)
       else
         @url = destroy_form_path(current_form)
-        @confirm_deletion_legend = t("forms_delete_confirmation_form.confirm_deletion_form")
-        @confirm_deletion_live_form = t("forms_delete_confirmation_form.confirm_deletion_form_live_form") if current_form.live?
+        @confirm_deletion_legend = t("forms_delete_confirmation_input.confirm_deletion")
+        @confirm_deletion_live_form = t("forms_delete_confirmation_input.confirm_deletion_live_form") if current_form.live?
         @item_name = current_form.name
         @back_url = form_path(current_form)
       end

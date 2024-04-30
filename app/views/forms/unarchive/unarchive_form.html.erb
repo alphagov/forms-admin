@@ -1,23 +1,23 @@
-<% set_page_title(title_with_error_prefix(t('page_titles.unarchive_form'), @make_live_form.errors.any?)) %>
+<% set_page_title(title_with_error_prefix(t('page_titles.unarchive_form'), @make_live_input.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(archived_form_path(current_form.id), t("back_link.form_view")) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with(model: @make_live_form, url: unarchive_create_path(current_form.id)) do |f| %>
-      <% if @make_live_form&.errors&.any? %>
+    <%= form_with(model: @make_live_input, url: unarchive_create_path(current_form.id)) do |f| %>
+      <% if @make_live_input&.errors&.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
 
       <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l"><%= @make_live_form.form.name %></span>
+        <span class="govuk-caption-l"><%= @make_live_input.form.name %></span>
         <%= t("page_titles.unarchive_form") %>
       </h1>
 
-      <%= t("unarchive.new.body_html", submission_email: @make_live_form.form.submission_email) %>
+      <%= t("unarchive.new.body_html", submission_email: @make_live_input.form.submission_email) %>
 
       <%= f.govuk_collection_radio_buttons :confirm,
-                                           @make_live_form.values, ->(option) { option }, ->(option) { t('helpers.label.forms_make_live_form.options.' + "#{option}") },
-                                           legend: { text: t('helpers.label.forms_make_live_form.confirm'),
+                                           @make_live_input.values, ->(option) { option }, ->(option) { t('helpers.label.forms_make_live_input.options.' + "#{option}") },
+                                           legend: { text: t('helpers.label.forms_make_live_input.confirm'),
                                                      size: 'm'}, inline: true %>
       <%= f.govuk_submit t("save_and_continue") %>
     <% end %>

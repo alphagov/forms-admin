@@ -2,7 +2,7 @@ en:
   activemodel:
     errors:
       models:
-        forms/delete_confirmation_form:
+        forms/delete_confirmation_input:
           attributes:
             confirm_deletion:
               blank: You must choose an option

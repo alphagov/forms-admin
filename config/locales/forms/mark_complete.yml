@@ -2,7 +2,7 @@ en:
   activemodel:
     errors:
       models:
-        forms/mark_complete_form:
+        forms/mark_complete_input:
           attributes:
             base:
               has_routing_errors: This form has validation errors

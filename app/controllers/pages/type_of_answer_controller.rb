@@ -1,15 +1,15 @@
 class Pages::TypeOfAnswerController < PagesController
   def new
-    @type_of_answer_form = Pages::TypeOfAnswerForm.new(answer_type: draft_question.answer_type)
+    @type_of_answer_input = Pages::TypeOfAnswerInput.new(answer_type: draft_question.answer_type)
     @type_of_answer_path = type_of_answer_create_path(current_form)
     render :type_of_answer, locals: { current_form: }
   end
 
   def create
-    @type_of_answer_form = Pages::TypeOfAnswerForm.new(answer_type_form_params)
+    @type_of_answer_input = Pages::TypeOfAnswerInput.new(answer_type_form_params)
 
-    if @type_of_answer_form.submit
-      redirect_to next_page_path(current_form, @type_of_answer_form.answer_type, :create)
+    if @type_of_answer_input.submit
+      redirect_to next_page_path(current_form, @type_of_answer_input.answer_type, :create)
     else
       @type_of_answer_path = type_of_answer_create_path(current_form)
       render :type_of_answer, locals: { current_form: }
@@ -17,16 +17,16 @@ class Pages::TypeOfAnswerController < PagesController
   end
 
   def edit
-    @type_of_answer_form = Pages::TypeOfAnswerForm.new(answer_type: draft_question.answer_type)
+    @type_of_answer_input = Pages::TypeOfAnswerInput.new(answer_type: draft_question.answer_type)
     @type_of_answer_path = type_of_answer_update_path(current_form)
     render :type_of_answer, locals: { current_form: }
   end
 
   def update
-    @type_of_answer_form = Pages::TypeOfAnswerForm.new(answer_type_form_params)
+    @type_of_answer_input = Pages::TypeOfAnswerInput.new(answer_type_form_params)
 
-    if @type_of_answer_form.submit
-      redirect_to next_page_path(current_form, @type_of_answer_form.answer_type, :update)
+    if @type_of_answer_input.submit
+      redirect_to next_page_path(current_form, @type_of_answer_input.answer_type, :update)
     else
       @type_of_answer_path = type_of_answer_update_path(current_form)
       render :type_of_answer
@@ -77,10 +77,10 @@ private
   end
 
   def answer_type_form_params
-    params.require(:pages_type_of_answer_form).permit(:answer_type).merge(draft_question:)
+    params.require(:pages_type_of_answer_input).permit(:answer_type).merge(draft_question:)
   end
 
   def answer_type_changed?
-    @type_of_answer_form.answer_type != @type_of_answer_form.draft_question.answer_type
+    @type_of_answer_input.answer_type != @type_of_answer_input.draft_question.answer_type
   end
 end

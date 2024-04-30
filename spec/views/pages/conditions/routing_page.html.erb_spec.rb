@@ -3,7 +3,7 @@ require "rails_helper"
 describe "pages/conditions/routing_page.html.erb" do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 3, :with_selections_settings, form_id: 1 }
-  let(:routing_page_form) { Pages::RoutingPageForm.new }
+  let(:routing_page_input) { Pages::RoutingPageInput.new }
   let(:allowed_to_create_routes) { true }
   let(:all_routes_created) { false }
 
@@ -18,7 +18,7 @@ describe "pages/conditions/routing_page.html.erb" do
     allow(form).to receive(:qualifying_route_pages).and_return(pages)
     allow(form).to receive(:has_no_remaining_routes_available?).and_return(all_routes_created)
 
-    render template: "pages/conditions/routing_page", locals: { form:, routing_page_form: }
+    render template: "pages/conditions/routing_page", locals: { form:, routing_page_input: }
   end
 
   it "contains page heading and sub-heading" do

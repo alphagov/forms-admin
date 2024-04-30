@@ -4,7 +4,7 @@ describe Pages::SelectionsSettingsController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
 
-  let(:selections_settings_form) { build :selections_settings_form }
+  let(:selections_settings_input) { build :selections_settings_input }
 
   let(:draft_question) do
     create :draft_question,
@@ -57,11 +57,11 @@ describe Pages::SelectionsSettingsController, type: :request do
 
     context "when form is valid and ready to store" do
       before do
-        post selections_settings_create_path form_id: form.id, params: { pages_selections_settings_form: { selection_options: { "0": { name: "Option 1" }, "1": { name: "Option 2" } }, only_one_option: true, include_none_of_the_above: false } }
+        post selections_settings_create_path form_id: form.id, params: { pages_selections_settings_input: { selection_options: { "0": { name: "Option 1" }, "1": { name: "Option 2" } }, only_one_option: true, include_none_of_the_above: false } }
       end
 
       it "saves the the info to draft question" do
-        settings_form = assigns(:selections_settings_form)
+        settings_form = assigns(:selections_settings_input)
         draft_question_settings = settings_form.draft_question.answer_settings
 
         expect(draft_question_settings).to include(only_one_option: "true",
@@ -76,7 +76,7 @@ describe Pages::SelectionsSettingsController, type: :request do
 
     context "when form is invalid" do
       before do
-        post selections_settings_create_path form_id: form.id, params: { pages_selections_settings_form: { answer_settings: nil } }
+        post selections_settings_create_path form_id: form.id, params: { pages_selections_settings_input: { answer_settings: nil } }
       end
 
       it "renders the type of answer view if there are errors" do
@@ -104,7 +104,7 @@ describe Pages::SelectionsSettingsController, type: :request do
     end
 
     it "returns the existing draft question answer settings" do
-      settings_form = assigns(:selections_settings_form)
+      settings_form = assigns(:selections_settings_input)
       draft_question_settings = settings_form.draft_question.answer_settings
       expect(settings_form.only_one_option).to eq draft_question_settings[:only_one_option]
       expect(settings_form.selection_options.map { |option| { name: option[:name] } }).to eq(draft_question_settings[:selection_options].map { |option| { name: option[:name] } })
@@ -122,7 +122,7 @@ describe Pages::SelectionsSettingsController, type: :request do
   end
 
   describe "#update" do
-    let(:page) { build :page, id: 2, form_id: form.id, answer_settings: selections_settings_form.answer_settings }
+    let(:page) { build :page, id: 2, form_id: form.id, answer_settings: selections_settings_input.answer_settings }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -135,12 +135,12 @@ describe Pages::SelectionsSettingsController, type: :request do
 
     context "when form is valid and ready to update in the DB" do
       before do
-        post selections_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_selections_settings_form: { selection_options: { "0": { name: "Option 1" }, "1": { name: "New option 2" } }, only_one_option: true, include_none_of_the_above: false } }
+        post selections_settings_update_path(form_id: page.form_id, page_id: page.id), params: { pages_selections_settings_input: { selection_options: { "0": { name: "Option 1" }, "1": { name: "New option 2" } }, only_one_option: true, include_none_of_the_above: false } }
       end
 
       it "saves the updated answer settings to DB" do
         new_settings = { only_one_option: "true", selection_options: [{ name: "Option 1" }, { name: "New option 2" }] }
-        form = assigns(:selections_settings_form)
+        form = assigns(:selections_settings_input)
         expect(form.answer_settings).to eq new_settings
       end
 
@@ -151,7 +151,7 @@ describe Pages::SelectionsSettingsController, type: :request do
 
     context "when form is invalid" do
       before do
-        post selections_settings_create_path form_id: form.id, params: { pages_selections_settings_form: { answer_settings: nil } }
+        post selections_settings_create_path form_id: form.id, params: { pages_selections_settings_input: { answer_settings: nil } }
       end
 
       it "renders the selections settings view if there are errors" do

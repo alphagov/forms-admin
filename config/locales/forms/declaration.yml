@@ -1,12 +1,12 @@
 en:
   helpers:
     label:
-      forms_declaration_form:
+      forms_declaration_input:
         declaration_text: Enter a declaration for people to agree to (optional)
   activemodel:
     errors:
       models:
-        forms/declaration_form:
+        forms/declaration_input:
           attributes:
             declaration_text:
               too_long: The declaration cannot be longer than 2,000 characters

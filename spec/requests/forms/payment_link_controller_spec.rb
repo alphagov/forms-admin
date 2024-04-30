@@ -46,7 +46,7 @@ RSpec.describe Forms::PaymentLinkController, type: :request do
         mock.get "/api/v1/forms/2", headers, form.to_json, 200
         mock.put "/api/v1/forms/2", post_headers
       end
-      post payment_link_path(form_id: 2), params: { forms_payment_link_form: { payment_url: "https://www.gov.uk/payments/organisation/service" } }
+      post payment_link_path(form_id: 2), params: { forms_payment_link_input: { payment_url: "https://www.gov.uk/payments/organisation/service" } }
     end
 
     it "Reads the form from the API" do

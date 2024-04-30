@@ -1,5 +1,5 @@
-<%= form_with(model: routing_page_form, url: set_routing_page_path(form.id), method: 'POST') do |f| %>
-  <% if routing_page_form&.errors.any? %>
+<%= form_with(model: routing_page_input, url: set_routing_page_path(form.id), method: 'POST') do |f| %>
+  <% if routing_page_input&.errors.any? %>
     <%= f.govuk_error_summary %>
   <% end %>
   <h1 class="govuk-heading-l">

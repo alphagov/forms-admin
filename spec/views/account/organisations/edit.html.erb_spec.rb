@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "account/organisations/edit.html.erb" do
-  let(:organisation_form) { Account::OrganisationForm.new }
+  let(:organisation_input) { Account::OrganisationInput.new }
   let(:contact_href) { "https://example.com/contact" }
   let!(:organisations) do
     [
@@ -11,7 +11,7 @@ describe "account/organisations/edit.html.erb" do
   end
 
   before do
-    assign(:organisation_form, organisation_form)
+    assign(:organisation_input, organisation_input)
     allow(view).to receive(:contact_link).and_return(contact_href)
   end
 
@@ -27,7 +27,7 @@ describe "account/organisations/edit.html.erb" do
     end
 
     it "renders the organisation select field for autocomplete" do
-      expect(rendered).to have_selector('select[name="account_organisation_form[organisation_id]"]', visible: :all)
+      expect(rendered).to have_selector('select[name="account_organisation_input[organisation_id]"]', visible: :all)
       organisations.each do |organisation|
         expect(rendered).to have_selector("option[value='#{organisation.id}']", text: organisation.name)
       end
@@ -50,7 +50,7 @@ describe "account/organisations/edit.html.erb" do
 
   context "when there are errors" do
     before do
-      organisation_form.errors.add(:base, "Some error")
+      organisation_input.errors.add(:base, "Some error")
       render
     end
 
