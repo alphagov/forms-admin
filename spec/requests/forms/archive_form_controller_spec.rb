@@ -72,8 +72,8 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
     context "when no option is selected" do
       let(:confirm) { nil }
 
-      it "returns 200" do
-        expect(response).to have_http_status(:ok)
+      it "returns 422" do
+        expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it "re-renders the archive this form page with an error" do
