@@ -4,6 +4,7 @@ class GroupMembersController < ApplicationController
 
   def index
     authorize @group, :show?
+    @group_member_service = GroupMemberService.new(group: @group, current_user: @current_user)
   end
 
   def new

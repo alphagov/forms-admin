@@ -116,6 +116,10 @@ class User < ApplicationRecord
     organisation_admin? && organisation == org
   end
 
+  def is_group_admin?(group)
+    memberships.find_by(group:)&.group_admin?
+  end
+
 private
 
   def requires_name?
