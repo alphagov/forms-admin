@@ -2,12 +2,8 @@ require "rails_helper"
 
 RSpec.describe Forms::MakeLiveController, type: :request do
   let(:user) { build :editor_user }
-
-  let(:form) do
-    build(:form,
-          :ready_for_live,
-          id: 2)
-  end
+  let(:id) { 2 }
+  let(:form) { build(:form, :ready_for_live, id:) }
 
   let(:updated_form) do
     build(:form,
@@ -157,6 +153,24 @@ RSpec.describe Forms::MakeLiveController, type: :request do
 
       it "redirects you to the form page" do
         expect(response).to redirect_to(form_path(2))
+      end
+    end
+
+    context "when all tasks are not complete" do
+      let(:form) { build(:form, :missing_pages, id:) }
+      let(:form_params) { { forms_make_live_input: { confirm: "yes", form: } } }
+
+      it "returns 422" do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "does not update the form on the API" do
+        expect(form).not_to have_been_updated
+      end
+
+      it "re-renders the page with an error" do
+        expect(response).to render_template("make_your_form_live")
+        expect(response.body).to include("You cannot make your form live because you have not finished adding questions.")
       end
     end
 

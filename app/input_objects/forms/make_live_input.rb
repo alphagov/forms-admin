@@ -11,7 +11,7 @@ private
     return if form.all_ready_for_live?
 
     form.all_incomplete_tasks.each do |section|
-      errors.add(:confirm, section)
+      errors.add(:confirm, section.to_sym)
     end
 
     errors.empty?
