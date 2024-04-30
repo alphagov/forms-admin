@@ -1,5 +1,5 @@
 class GroupsController < ApplicationController
-  before_action :set_group, only: %i[show edit update]
+  before_action :set_group, except: %i[index new create]
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
 
@@ -35,7 +35,7 @@ class GroupsController < ApplicationController
     authorize @group
 
     if @group.save
-      redirect_to @group, success: "Group was successfully created."
+      redirect_to @group, success: t("groups.success_messages.create")
     else
       render :new, status: :unprocessable_entity
     end
@@ -45,10 +45,27 @@ class GroupsController < ApplicationController
   def update
     authorize @group
     if @group.update(group_params)
-      redirect_to @group, success: "Group was successfully updated.", status: :see_other
+      redirect_to @group, success: t("groups.success_messages.update"), status: :see_other
     else
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  def confirm_upgrade
+    authorize @group, :upgrade?
+    @confirm_upgrade_form = Groups::ConfirmUpgradeForm.new
+  end
+
+  def upgrade
+    authorize @group
+
+    @confirm_upgrade_form = Groups::ConfirmUpgradeForm.new(confirm_upgrade_form_params)
+    return render :confirm_upgrade, status: :unprocessable_entity unless @confirm_upgrade_form.valid?
+    return redirect_to @group unless @confirm_upgrade_form.confirmed?
+
+    GroupService.new(group: @group, current_user: @current_user, host: request.host).upgrade_group
+
+    redirect_to @group, success: t("groups.success_messages.upgrade"), status: :see_other
   end
 
 private
@@ -61,5 +78,9 @@ private
   # Only allow a list of trusted parameters through.
   def group_params
     params.require(:group).permit(:name)
+  end
+
+  def confirm_upgrade_form_params
+    params.require(:groups_confirm_upgrade_form).permit(:confirm)
   end
 end

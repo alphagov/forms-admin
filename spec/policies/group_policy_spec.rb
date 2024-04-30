@@ -31,12 +31,8 @@ RSpec.describe GroupPolicy do
     context "and not in the same organisation as the group" do
       let(:group) { build :group, organisation_id: user.organisation_id + 1 }
 
-      it "permits new and create" do
+      it "permits new and create only" do
         expect(policy).to permit_only_actions(%i[new create])
-      end
-
-      it "forbids show, edit, and update" do
-        expect(policy).to forbid_only_actions(%i[show edit update add_editor])
       end
     end
 
@@ -46,12 +42,8 @@ RSpec.describe GroupPolicy do
   end
 
   context "when user is editor" do
-    it "permits new and create" do
+    it "permits new and create only" do
       expect(policy).to permit_only_actions(%i[new create])
-    end
-
-    it "forbids show, edit, and update" do
-      expect(policy).to forbid_only_actions(%i[show edit update add_editor])
     end
 
     context "and user belongs to group as an editor" do
@@ -63,8 +55,8 @@ RSpec.describe GroupPolicy do
         expect(policy).to permit_only_actions(%i[show new edit create update])
       end
 
-      it "does not allow add_editor" do
-        expect(policy).to forbid_only_actions(%i[add_editor])
+      it "does not allow add_editor or upgrade" do
+        expect(policy).to forbid_only_actions(%i[add_editor upgrade])
       end
     end
 

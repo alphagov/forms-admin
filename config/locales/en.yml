@@ -303,6 +303,14 @@ en:
       submit: Add this person
       title: Add an editor to this group
   groups:
+    confirm_upgrade:
+      body_html: |
+        <p>If you upgrade this group:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>any group admins in the group will be able to make forms live</li>
+          <li>we’ll send the group admins an email to let them know</li>
+        </ul>
+      radios_legend: Do you want to upgrade this group?
     edit:
       title: Edit group
     form_table_caption: Forms in ‘%{group_name}’
@@ -334,9 +342,14 @@ en:
         body_html: "<p>You can create forms in this group and test them, but you cannot make them live.</p>"
         heading: This is a ‘trial’ group
         title: Important
+        upgrade_group: Upgrade this group
     status_caption:
       active: Active group
       trial: Trial group
+    success_messages:
+      create: Group was successfully created.
+      update: Group was successfully updated.
+      upgrade: This group is now active
   guidance:
     add_guidance: Add guidance
     guidance: Guidance
@@ -771,6 +784,7 @@ en:
     error_prefix: 'Error: '
     forbidden: You cannot view this page
     group_index: Your groups
+    group_upgrade: Upgrade this group
     home: Home
     internal_server_error: Sorry, there is a problem with the service
     maintenance: Sorry, the service is unavailable
