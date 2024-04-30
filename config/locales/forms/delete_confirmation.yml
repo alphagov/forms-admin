@@ -4,5 +4,5 @@ en:
       models:
         forms/delete_confirmation_input:
           attributes:
-            confirm_deletion:
+            confirm:
               blank: You must choose an option
