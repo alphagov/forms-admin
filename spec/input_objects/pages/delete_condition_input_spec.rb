@@ -28,14 +28,14 @@ RSpec.describe Pages::DeleteConditionInput, type: :model do
 
         delete_condition_input.confirm = "yes"
 
-        expect(delete_condition_input.delete).to be_truthy
+        expect(delete_condition_input.submit).to be_truthy
       end
     end
 
     context "when validations fail" do
       it "returns false" do
         invalid_delete_condition_input = described_class.new
-        expect(invalid_delete_condition_input.delete).to be false
+        expect(invalid_delete_condition_input.submit).to be false
         expect(invalid_delete_condition_input.errors.full_messages_for(:confirm)).to include(
           "Confirm Select yes if you want to delete this route",
         )

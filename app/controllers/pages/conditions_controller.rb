@@ -72,7 +72,7 @@ class Pages::ConditionsController < PagesController
 
     delete_condition_input = Pages::DeleteConditionInput.new(form_params)
 
-    if delete_condition_input.delete
+    if delete_condition_input.submit
       if delete_condition_input.confirmed?
         redirect_to form_pages_path(current_form.id, page.id), success: t("banner.success.route_deleted", question_position: delete_condition_input.page.position)
       else

@@ -1,7 +1,7 @@
 class Pages::DeleteConditionInput < ConfirmActionInput
   attr_accessor :form, :page, :check_page_id, :routing_page_id, :answer_value, :goto_page_id, :record
 
-  def delete
+  def submit
     return false if invalid?
 
     result = true
