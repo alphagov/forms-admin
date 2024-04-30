@@ -22,8 +22,6 @@ class MakeFormLiveService
         creator_email: @current_user.email,
       ).deliver_now
     end
-
-    true
   end
 
   def page_title
