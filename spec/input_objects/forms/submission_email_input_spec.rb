@@ -92,7 +92,7 @@ RSpec.describe Forms::SubmissionEmailInput, type: :model do
 
         allow(submission_email_input_with_user).to receive(:generate_confirmation_code).and_return("123456")
 
-        allow(SubmissionEmailMailer).to receive(:confirmation_code_email)
+        allow(SubmissionEmailMailer).to receive(:send_confirmation_code)
                                           .with(
                                             new_submission_email: submission_email_input_with_user.temporary_submission_email,
                                             form_name: form.name,
@@ -121,7 +121,7 @@ RSpec.describe Forms::SubmissionEmailInput, type: :model do
 
         allow(submission_email_input_with_user).to receive(:generate_confirmation_code).and_return("123456")
 
-        allow(SubmissionEmailMailer).to receive(:confirmation_code_email)
+        allow(SubmissionEmailMailer).to receive(:send_confirmation_code)
                                           .with(
                                             new_submission_email: submission_email_input_with_user.temporary_submission_email,
                                             form_name: form.name,
@@ -180,7 +180,7 @@ RSpec.describe Forms::SubmissionEmailInput, type: :model do
 
         allow(submission_email_input_with_user).to receive(:generate_confirmation_code).and_return("123456")
 
-        allow(SubmissionEmailMailer).to receive(:confirmation_code_email)
+        allow(SubmissionEmailMailer).to receive(:send_confirmation_code)
                                           .with(
                                             new_submission_email: submission_email_input_with_user.temporary_submission_email,
                                             form_name: form.name,
@@ -208,7 +208,7 @@ RSpec.describe Forms::SubmissionEmailInput, type: :model do
 
         allow(submission_email_input_with_user).to receive(:generate_confirmation_code).and_return("123456")
 
-        allow(SubmissionEmailMailer).to receive(:confirmation_code_email)
+        allow(SubmissionEmailMailer).to receive(:send_confirmation_code)
                                           .with(
                                             new_submission_email: submission_email_input_with_user.temporary_submission_email,
                                             form_name: form.name,

@@ -14,10 +14,11 @@ module Forms
 
       @confirm_archive_input = ConfirmArchiveInput.new(confirm_archive_input_params)
 
-      return render :archive unless @confirm_archive_input.valid?
+      return render :archive, status: :unprocessable_entity unless @confirm_archive_input.valid?
       return redirect_to live_form_path(current_form) unless user_wants_to_archive_form
 
-      current_form.archive!
+      ArchiveFormService.new(form: current_form, current_user: @current_user).archive
+
       redirect_to archive_form_confirmation_path(current_form)
     end
 
