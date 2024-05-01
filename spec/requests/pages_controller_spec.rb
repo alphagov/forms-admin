@@ -66,11 +66,17 @@ RSpec.describe PagesController, type: :request do
       end
     end
 
-    it "clears draft questions data for current_user" do
+    it "clears draft questions data for current user and form" do
       original_draft_question # Setup initial draft question which will clear
       expect {
         get start_new_question_path(form_id: current_form.id)
-      }.to change { DraftQuestion.exists?({ user: editor_user }) }.from(true).to(false)
+      }.to change { DraftQuestion.exists?({ form_id: current_form.id, user: editor_user }) }.from(true).to(false)
+    end
+
+    it "does not clear draft questions data for a different form" do
+      create :draft_question, form_id: 99, user: editor_user # Setup initial draft question which should not clear
+      get start_new_question_path(form_id: current_form.id)
+      expect(DraftQuestion.exists?({ form_id: 99, user: editor_user })).to be true
     end
 
     it "redirects to type_of_answer_create_path" do

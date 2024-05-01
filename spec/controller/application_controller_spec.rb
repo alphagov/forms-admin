@@ -63,23 +63,6 @@ describe ApplicationController, type: :controller do
     end
   end
 
-  describe "#clear_draft_questions_data" do
-    let(:user) { create(:user) }
-
-    it "destroys draft questions when user is present" do
-      allow(controller).to receive(:current_user).and_return(user)
-      create_list(:draft_question, 3, user:)
-
-      controller.send(:clear_draft_questions_data)
-
-      expect(user.draft_questions.count).to eq(0)
-    end
-
-    it "does not raise an error when draft question and user are not present" do
-      expect { controller.send(:clear_draft_questions_data) }.not_to raise_exception
-    end
-  end
-
   describe "#current_form" do
     it "returns the current form" do
       params = ActionController::Parameters.new(form_id: id)

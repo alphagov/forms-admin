@@ -11,8 +11,6 @@ class ApplicationController < ActionController::Base
 
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
-  before_action :clear_draft_questions_data
-
   add_flash_types :success
 
   rescue_from ActiveResource::ResourceNotFound do
@@ -55,10 +53,6 @@ class ApplicationController < ActionController::Base
     payload[:page_id] = params[:page_id] if params[:page_id].present?
     payload[:session_id_hash] = Digest::SHA256.hexdigest session.id.to_s if session.exists?
     payload[:trace_id] = request.env["HTTP_X_AMZN_TRACE_ID"].presence
-  end
-
-  def clear_draft_questions_data
-    current_user.draft_questions.destroy_all if current_user.present?
   end
 
   def set_request_id
