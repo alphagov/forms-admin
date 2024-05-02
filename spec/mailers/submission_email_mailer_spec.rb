@@ -1,9 +1,9 @@
 require "rails_helper"
 
 describe SubmissionEmailMailer, type: :mailer do
-  describe "#confirmation_code_email" do
+  describe "#send_confirmation_code" do
     let(:mail) do
-      described_class.confirmation_code_email(
+      described_class.send_confirmation_code(
         new_submission_email: "test@example.com",
         form_name: "Testing API",
         confirmation_code: "654321",
@@ -40,16 +40,17 @@ describe SubmissionEmailMailer, type: :mailer do
     end
   end
 
-  describe "#notify_submission_email_has_changed" do
+  describe "#alert_email_change" do
     let(:mail) do
-      described_class.notify_submission_email_has_changed(live_email: "test@example.com",
-                                                          form_name: "Testing API",
-                                                          current_user: OpenStruct.new(name: "Joe Bloggs", email: "example@example.com"))
+      described_class.alert_email_change(live_email: "test@example.com",
+                                         form_name: "Testing API",
+                                         creator_name: "Joe Bloggs",
+                                         creator_email: "example@example.com")
     end
 
     describe "sending an email to notify confirmed submission email not to expect future form submissions" do
       it "sends an email with the correct template" do
-        expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.live_submission_email_of_no_further_form_submissions)
+        expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.live_submission_email_of_no_further_form_submissions_template_id)
       end
 
       it "sends an email to the live submission email address" do
@@ -64,6 +65,27 @@ describe SubmissionEmailMailer, type: :mailer do
       it "includes the form name" do
         expect(mail.govuk_notify_personalisation[:form_name]).to eq("Testing API")
       end
+    end
+  end
+
+  describe "#alert_archive" do
+    let(:mail) do
+      described_class.alert_processor_form_archive(processor_email: "test@example.com",
+                                                   form_name: "Testing API",
+                                                   archived_by_name: "Joe Bloggs",
+                                                   archived_by_email: "example@example.com")
+    end
+
+    it "sends an email with the correct template" do
+      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.alert_processor_form_archive_template_id)
+    end
+
+    it "sends an email to the live submission email address" do
+      expect(mail.to).to eq(["test@example.com"])
+    end
+
+    it "includes the form name" do
+      expect(mail.govuk_notify_personalisation[:form_name]).to eq("Testing API")
     end
   end
 end

@@ -15,10 +15,11 @@ class MakeFormLiveService
     @current_form.make_live!
 
     if FeatureService.enabled?(:notify_original_submission_email_of_change) && live_form_submission_email_has_changed
-      SubmissionEmailMailer.notify_submission_email_has_changed(
+      SubmissionEmailMailer.alert_email_change(
         live_email: @current_live_form.submission_email,
         form_name: @current_live_form.name,
-        current_user: @current_user,
+        creator_name: @current_user.name,
+        creator_email: @current_user.email,
       ).deliver_now
     end
 
