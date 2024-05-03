@@ -72,7 +72,7 @@
       <%# i18n-tasks-use t('made_live_form.draft_create') %>
       <%# i18n-tasks-use t('made_live_form.draft_edit') %>
       <%= govuk_button_link_to t("made_live_form.draft_#{ form_metadata.has_draft_version ? 'edit': 'create'}"), form_path(form.id) %>
-      <% if status == :live && FeatureService.enabled?(:archive_enabled) %>
+      <% if status == :live %>
         <%= govuk_button_link_to t("made_live_form.archive_this_form"), archive_form_path(form.id), warning: true %>
       <% elsif status == :archived %>
         <%= govuk_button_link_to t("made_live_form.make_this_form_live"), unarchive_path(form.id), secondary: true %>
