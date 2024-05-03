@@ -313,6 +313,12 @@ en:
           <li>we’ll send the group admins an email to let them know</li>
         </ul>
       radios_legend: Do you want to upgrade this group?
+    confirm_upgrade_request:
+      body_html: |
+        <p>If you need to be able to make forms live, you can send a request for this group to be upgraded to an ‘active’ group.</p>
+        <p>Your request will be sent to your organisation’s GOV.UK Forms admins.</p>
+      inset_text: Some organisations are restricting who can make forms live in their organisation. Send a request to upgrade to find out if this will affect you.
+      send_request_to_upgrade: Send request to upgrade
     edit:
       title: Edit group
     form_table_caption: Forms in ‘%{group_name}’
@@ -789,6 +795,7 @@ en:
     email_code_sent: Confirmation code sent
     error_prefix: 'Error: '
     forbidden: You cannot view this page
+    group_confirm_upgrade_request: Request to upgrade this trial group
     group_index: Your groups
     group_upgrade: Upgrade this group
     home: Home
