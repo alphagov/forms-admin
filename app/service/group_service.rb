@@ -12,6 +12,10 @@ class GroupService
     send_group_upgraded_emails
   end
 
+  def request_upgrade
+    @group.upgrade_requested!
+  end
+
 private
 
   def send_group_upgraded_emails

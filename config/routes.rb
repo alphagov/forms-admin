@@ -154,6 +154,9 @@ Rails.application.routes.draw do
     member do
       get "upgrade", to: "groups#confirm_upgrade"
       post "upgrade", to: "groups#upgrade"
+
+      get "request_upgrade", to: "groups#confirm_upgrade_request"
+      post "request_upgrade", to: "groups#request_upgrade"
     end
   end
 

@@ -18,6 +18,8 @@ class GroupPolicy < ApplicationPolicy
     user.super_admin? || user.is_organisations_admin?(record.organisation)
   end
 
+  alias_method :request_upgrade?, :add_editor?
+
   class Scope < ApplicationPolicy::Scope
     def resolve
       if user.super_admin?
