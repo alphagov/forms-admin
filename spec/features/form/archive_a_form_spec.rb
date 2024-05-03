@@ -16,7 +16,7 @@ feature "Archive a form", type: :feature do
     login_as_editor_user
   end
 
-  scenario "as a form editor", feature_archive_enabled: true do
+  scenario "as a form editor" do
     visit root_path
     expect(page.find("h1")).to have_text "GOV.UK Forms"
     expect_page_to_have_no_axe_errors(page)
