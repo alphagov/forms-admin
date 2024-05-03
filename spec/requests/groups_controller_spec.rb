@@ -382,8 +382,6 @@ RSpec.describe "/groups", type: :request do
         }.to change { member_group.reload.status }.to("upgrade_requested")
       end
 
-      # TODO: protect against changing status to upgrade requested when status is active already
-
       it "returns a successful response" do
         post request_upgrade_group_url(member_group)
 
