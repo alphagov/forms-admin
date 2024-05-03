@@ -1,5 +1,5 @@
 <% set_page_title(title_with_error_prefix(t(".title"), @group.errors.any?)) %>
-<% content_for :back_link, govuk_back_link_to(@group, t("back_link.group_show")) %>
+<% content_for :back_link, govuk_back_link_to(@group, t("back_link.group", group_name: @group.name)) %>
 
 <h1 class="govuk-heading-l"><%= t(".title") %></h1>
 
