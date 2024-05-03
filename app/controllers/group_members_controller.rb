@@ -16,7 +16,7 @@ class GroupMembersController < ApplicationController
     authorize @group, :add_editor?
 
     @group_member_input = GroupMemberInput.new(group_member_params)
-    if @group_member_input.save
+    if @group_member_input.submit
       redirect_to group_members_path(@group.external_id)
     else
       render :new, status: :unprocessable_entity

@@ -62,11 +62,11 @@ RSpec.describe Forms::MarkCompleteInput, type: :model do
       end
 
       it "returns true if valid and form is updated" do
-        expect(mark_complete_input.mark_section).to eq true
+        expect(mark_complete_input.submit).to eq true
       end
 
       it "sets the forms question section completed" do
-        mark_complete_input.mark_section
+        mark_complete_input.submit
         expect(mark_complete_input.form.question_section_completed).to eq mark_complete_input.mark_complete
       end
     end
@@ -77,11 +77,11 @@ RSpec.describe Forms::MarkCompleteInput, type: :model do
       end
 
       it "returns false if invalid" do
-        expect(mark_complete_input.mark_section).to eq false
+        expect(mark_complete_input.submit).to eq false
       end
 
       it "does not set the forms question section completed" do
-        mark_complete_input.mark_section
+        mark_complete_input.submit
         expect(mark_complete_input.form.question_section_completed).not_to eq mark_complete_input.mark_complete
       end
     end
@@ -90,7 +90,7 @@ RSpec.describe Forms::MarkCompleteInput, type: :model do
       allow(mark_complete_input).to receive(:invalid?).and_return(false)
       allow(form).to receive(:save!).and_return(true)
       allow(mark_complete_input).to receive(:form).and_return(form)
-      expect(mark_complete_input.mark_section).to eq true
+      expect(mark_complete_input.submit).to eq true
     end
 
     context "when mark_complete_input form does not save" do
@@ -101,7 +101,7 @@ RSpec.describe Forms::MarkCompleteInput, type: :model do
       end
 
       it "returns false if invalid" do
-        expect(mark_complete_input.mark_section).to eq false
+        expect(mark_complete_input.submit).to eq false
       end
     end
   end

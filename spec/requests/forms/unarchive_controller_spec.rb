@@ -112,6 +112,23 @@ RSpec.describe Forms::UnarchiveController, type: :request do
       end
     end
 
+    context "when no option is selected" do
+      let(:form_params) { { forms_make_live_input: { confirm: :"" } } }
+
+      it "returns 422" do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "does not update the form on the API" do
+        expect(form).not_to have_been_updated
+      end
+
+      it "re-renders the page with an error" do
+        expect(response).to render_template("unarchive_form")
+        expect(response.body).to include("You must choose an option")
+      end
+    end
+
     context "when current user has a trial account" do
       let(:user) { build :user, :with_trial_role }
 

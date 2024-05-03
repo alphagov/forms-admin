@@ -3,14 +3,6 @@ class Forms::MakeLiveInput < ConfirmActionInput
 
   validate :required_parts_of_form_completed
 
-  def user_wants_to_make_form_live
-    valid? && confirmed?
-  end
-
-  def make_form_live(service)
-    valid? && service.make_live
-  end
-
 private
 
   def required_parts_of_form_completed
@@ -19,7 +11,7 @@ private
     return if form.all_ready_for_live?
 
     form.all_incomplete_tasks.each do |section|
-      errors.add(:confirm, section)
+      errors.add(:confirm, section.to_sym)
     end
 
     errors.empty?

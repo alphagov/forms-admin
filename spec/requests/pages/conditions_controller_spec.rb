@@ -374,7 +374,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
   describe "#destroy" do
     let(:condition) { build :condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Wales", goto_page_id: pages.last.id }
     let(:confirm) { "yes" }
-    let(:delete_bool) { true }
+    let(:submit_bool) { true }
 
     before do
       selected_page.routing_conditions = [condition]
@@ -397,7 +397,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
       allow(delete_condition_input).to receive(:goto_page_question_text).and_return("What is your name?")
 
-      allow(delete_condition_input).to receive(:delete).and_return(delete_bool)
+      allow(delete_condition_input).to receive(:submit).and_return(submit_bool)
 
       allow(Pages::DeleteConditionInput).to receive(:new).and_return(delete_condition_input)
 
@@ -429,7 +429,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when the destroy fails" do
-      let(:delete_bool) { false }
+      let(:submit_bool) { false }
 
       it "return 422 error code" do
         expect(response).to have_http_status(:unprocessable_entity)
@@ -437,7 +437,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when form submit fails" do
-      let(:delete_bool) { false }
+      let(:submit_bool) { false }
       let(:confirm) { nil }
 
       it "return 422 error code" do

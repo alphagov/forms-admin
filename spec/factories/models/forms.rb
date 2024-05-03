@@ -105,5 +105,9 @@ FactoryBot.define do
         Array.new(pages_count) { association(:page, :with_selections_settings) }
       end
     end
+
+    trait :missing_pages do
+      incomplete_tasks { %i[missing_pages] }
+    end
   end
 end

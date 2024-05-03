@@ -25,7 +25,7 @@ class FormsController < ApplicationController
     @pages = current_form.pages
     @mark_complete_input = Forms::MarkCompleteInput.new(mark_complete_input_params)
 
-    if @mark_complete_input.mark_section
+    if @mark_complete_input.submit
       success_message = if @mark_complete_input.mark_complete == "true"
                           t("banner.success.form.pages_saved_and_section_completed")
                         else

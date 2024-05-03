@@ -39,7 +39,7 @@ describe GroupMemberInput do
       expect(group_member_input).to be_valid
     end
 
-    describe "#save" do
+    describe "#submit" do
       context "when the new Membership has errors" do
         let(:group_member_input) { described_class.new }
 
@@ -62,7 +62,7 @@ describe GroupMemberInput do
 
         it "adds the appropriate error message to member_email_address" do
           error_message = I18n.t("activemodel.errors.models.group_member_input.attributes.member_email_address.user_in_other_org")
-          expect(group_member_input.save).to be false
+          expect(group_member_input.submit).to be false
           expect(group_member_input.errors[:member_email_address]).to include(error_message)
         end
       end
@@ -82,7 +82,7 @@ describe GroupMemberInput do
         end
 
         it "creates a new Membership" do
-          expect(group_member_input.save).to be true
+          expect(group_member_input.submit).to be true
           expect(group_member_input).to be_valid
           expect(GroupMemberMailer).to have_received(:added_to_group).with(an_instance_of(Membership), group_url: group_url(group, host: "example.net"))
         end

@@ -12,7 +12,7 @@ class GroupMemberInput < BaseInput
 
   before_validation :strip_whitespace
 
-  def save
+  def submit
     if invalid? || new_membership.invalid?
       copy_membership_errors
       return false
