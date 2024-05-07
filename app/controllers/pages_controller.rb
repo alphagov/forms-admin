@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   before_action :check_user_has_permission
-  skip_before_action :clear_draft_questions_data, except: %i[index move_page]
+  before_action :clear_draft_questions_data, only: %i[index move_page]
   after_action :verify_authorized
 
   def index
@@ -29,6 +29,10 @@ class PagesController < ApplicationController
   end
 
 private
+
+  def clear_draft_questions_data
+    DraftQuestion.destroy_by(form_id: current_form.id, user_id: current_user.id) if current_user.present? && current_form.present?
+  end
 
   def check_user_has_permission
     authorize current_form, :can_view_form?
