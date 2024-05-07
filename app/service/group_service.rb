@@ -14,13 +14,20 @@ class GroupService
 
   def request_upgrade
     @group.upgrade_requested!
+    send_group_upgrade_requested_emails
   end
 
 private
 
   def send_group_upgraded_emails
     @group.memberships.each do |membership|
-      send_group_updated_email(membership.user) if notify_member?(membership)
+      send_group_updated_email(membership.user.email) if notify_member?(membership)
+    end
+  end
+
+  def send_group_upgrade_requested_emails
+    @group.organisation.admin_users.each do |user|
+      send_group_update_requested_email(user.email)
     end
   end
 
@@ -28,12 +35,22 @@ private
     membership.group_admin? && membership.user.id != @current_user.id
   end
 
-  def send_group_updated_email(user)
+  def send_group_updated_email(to_email)
     GroupUpgradeMailer.group_upgraded_email(
       upgraded_by_name: @current_user.name,
-      to_email: user.email,
+      to_email:,
       group_name: @group.name,
       group_url: group_url(@group, host: @host),
+    ).deliver_now
+  end
+
+  def send_group_update_requested_email(to_email)
+    GroupUpgradeMailer.group_upgrade_requested_email(
+      requester_name: @current_user.name,
+      requester_email_address: @current_user.email,
+      to_email:,
+      group_name: @group.name,
+      view_request_url: group_url(@group, host: @host),
     ).deliver_now
   end
 end
