@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe GroupUpgradedMailer, type: :mailer do
+describe GroupUpgradeMailer, type: :mailer do
   describe "sending an email to a group admin when a group is upgraded" do
     subject(:mail) do
       described_class.group_upgraded_email(upgraded_by_user: current_user, to_email:, group:, group_url:)

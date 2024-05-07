@@ -1,4 +1,4 @@
-class GroupUpgradedMailer < GovukNotifyRails::Mailer
+class GroupUpgradeMailer < GovukNotifyRails::Mailer
   def group_upgraded_email(upgraded_by_user:, to_email:, group:, group_url:)
     set_template(Settings.govuk_notify.group_upgraded_template_id)
 

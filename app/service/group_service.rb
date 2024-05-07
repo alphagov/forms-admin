@@ -29,7 +29,7 @@ private
   end
 
   def send_group_updated_email(user)
-    GroupUpgradedMailer.group_upgraded_email(
+    GroupUpgradeMailer.group_upgraded_email(
       upgraded_by_user: @current_user,
       to_email: user.email,
       group: @group,
