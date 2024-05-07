@@ -24,9 +24,7 @@ RSpec.describe GroupService do
     let(:delivery) { double }
 
     before do
-      allow(GroupUpgradeMailer).to receive(:group_upgraded_email)
-                                      .with(upgraded_by_user: current_user, to_email: anything, group:, group_url: group_url(group, host:))
-                                      .and_return(delivery)
+      allow(GroupUpgradeMailer).to receive(:group_upgraded_email).and_return(delivery)
       allow(delivery).to receive(:deliver_now).with(no_args)
     end
 
@@ -39,13 +37,13 @@ RSpec.describe GroupService do
     it "sends an email to all group admins" do
       group_service.upgrade_group
       expect(delivery).to have_received(:deliver_now).with(no_args).exactly(2).times
-      expect(GroupUpgradeMailer).to have_received(:group_upgraded_email).with(upgraded_by_user: current_user, to_email: "user1@example.gov.uk", group:, group_url: group_url(group, host:))
-      expect(GroupUpgradeMailer).to have_received(:group_upgraded_email).with(upgraded_by_user: current_user, to_email: "user2@example.gov.uk", group:, group_url: group_url(group, host:))
+      expect(GroupUpgradeMailer).to have_received(:group_upgraded_email).with(upgraded_by_name: current_user.name, to_email: "user1@example.gov.uk", group_name: group.name, group_url: group_url(group, host:))
+      expect(GroupUpgradeMailer).to have_received(:group_upgraded_email).with(upgraded_by_name: current_user.name, to_email: "user2@example.gov.uk", group_name: group.name, group_url: group_url(group, host:))
     end
 
     it "does not send an email to the logged in user that performed the upgrade if they are a group admin" do
       group_service.upgrade_group
-      expect(GroupUpgradeMailer).not_to have_received(:group_upgraded_email).with(upgraded_by_user: current_user, to_email: current_user.email, group:, group_url: group_url(group, host:))
+      expect(GroupUpgradeMailer).not_to have_received(:group_upgraded_email).with(upgraded_by_name: current_user.name, to_email: current_user.email, group_name: group.name, group_url: group_url(group, host:))
     end
   end
 end

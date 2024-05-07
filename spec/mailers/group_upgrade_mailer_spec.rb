@@ -8,7 +8,12 @@ describe GroupUpgradeMailer, type: :mailer do
 
   describe "#group_upgraded_email" do
     subject(:mail) do
-      described_class.group_upgraded_email(upgraded_by_user: current_user, to_email:, group:, group_url:)
+      described_class.group_upgraded_email(
+        upgraded_by_name: current_user.name,
+        to_email:,
+        group_name: group.name,
+        group_url:,
+      )
     end
 
     it "sends an email with the correct template" do

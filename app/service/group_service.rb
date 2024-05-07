@@ -30,9 +30,9 @@ private
 
   def send_group_updated_email(user)
     GroupUpgradeMailer.group_upgraded_email(
-      upgraded_by_user: @current_user,
+      upgraded_by_name: @current_user.name,
       to_email: user.email,
-      group: @group,
+      group_name: @group.name,
       group_url: group_url(@group, host: @host),
     ).deliver_now
   end
