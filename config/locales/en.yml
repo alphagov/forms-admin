@@ -359,6 +359,12 @@ en:
       create: Group was successfully created.
       update: Group was successfully updated.
       upgrade: This group is now active
+    upgrade_requested:
+      what_happens_next:
+        body_html: |
+          <p>Your request has been sent to your organisation’s GOV.UK Forms admins. They will contact you to discuss your request.</p>
+          <p>We’ll also send you an email when your request is accepted or rejected.</p>
+        heading: What happens next
   guidance:
     add_guidance: Add guidance
     guidance: Guidance
@@ -798,6 +804,7 @@ en:
     group_confirm_upgrade_request: Request to upgrade this trial group
     group_index: Your groups
     group_upgrade: Upgrade this group
+    group_upgrade_requested: Your upgrade request has been sent
     home: Home
     internal_server_error: Sorry, there is a problem with the service
     maintenance: Sorry, the service is unavailable
