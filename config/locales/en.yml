@@ -35,6 +35,8 @@ en:
           attributes:
             hint_text:
               too_long: Hint text must be %{count} characters or less
+            is_optional:
+              inclusion: Select ‘mandatory’ if people have to answer this question
             question_text:
               blank: Enter a question
               too_long: Question text must be %{count} characters or less

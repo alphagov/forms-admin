@@ -8,6 +8,7 @@ class Pages::QuestionInput < BaseInput
 
   validates :draft_question, presence: true
   validates :hint_text, length: { maximum: 500 }
+  validates :is_optional, inclusion: { in: %w[false true] }
 
   def submit
     return false if invalid?

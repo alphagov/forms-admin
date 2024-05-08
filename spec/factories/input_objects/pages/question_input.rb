@@ -3,7 +3,7 @@ FactoryBot.define do
     answer_type { Page::ANSWER_TYPES_WITHOUT_SETTINGS.sample }
     question_text { Faker::Lorem.question }
     hint_text { nil }
-    is_optional { nil }
+    is_optional { "false" }
     answer_settings { nil }
     page_heading { nil }
     guidance_markdown { nil }
