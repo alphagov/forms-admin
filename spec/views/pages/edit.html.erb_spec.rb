@@ -47,9 +47,10 @@ describe "pages/edit.html.erb" do
 
   context "when the page is not a selection question" do
     it "contains the optional/mandatory radio question" do
-      expect(rendered).to have_text(I18n.t("pages.is_optional.legend"))
-      expect(rendered).to have_text(I18n.t("pages.is_optional.options.mandatory"))
-      expect(rendered).to have_text(I18n.t("pages.is_optional.options.optional"))
+      expect(rendered).to have_text(I18n.t("helpers.legend.pages_question_input.is_optional"))
+      expect(rendered).to have_text(I18n.t("helpers.label.pages_question_input.is_optional_options.true"))
+      expect(rendered).to have_text(I18n.t("helpers.label.pages_question_input.is_optional_options.false"))
+      expect(rendered).to have_text(I18n.t("helpers.hint.pages_question_input.is_optional_options.true"))
     end
   end
 
@@ -60,6 +61,7 @@ describe "pages/edit.html.erb" do
       expect(rendered).not_to have_text(I18n.t("pages.is_optional.legend"))
       expect(rendered).not_to have_text(I18n.t("pages.is_optional.options.mandatory"))
       expect(rendered).not_to have_text(I18n.t("pages.is_optional.options.optional"))
+      expect(rendered).not_to have_text(I18n.t("helpers.hint.pages_question_input.is_optional_options.true"))
     end
   end
 end

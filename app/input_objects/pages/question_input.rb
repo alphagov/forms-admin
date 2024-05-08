@@ -21,4 +21,8 @@ class Pages::QuestionInput < BaseInput
 
     draft_question.save!(validate: false)
   end
+
+  def default_options
+    [OpenStruct.new(id: "false"), OpenStruct.new(id: "true")]
+  end
 end
