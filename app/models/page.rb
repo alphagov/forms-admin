@@ -67,6 +67,8 @@ class Page < ActiveResource::Base
 private
 
   def is_optional_value
-    true if is_optional == "true"
+    return true if is_optional == "true"
+
+    false
   end
 end

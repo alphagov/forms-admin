@@ -30,12 +30,10 @@
   <% if question_input.answer_type == 'selection' %>
     <%= f.hidden_field :is_optional %>
   <% else %>
-    <%= f.govuk_check_boxes_fieldset :is_optional, multiple: false, legend: { tag: "h2", text: t("pages.add_rules_legend") , size: 'm' } do %>
-      <%= f.govuk_check_box :is_optional, true,0, multiple: false,
-                            small: true,
-                            label: { text: t("pages.make_optional_text")  },
-                            hint: { text: t("pages.make_optional_hint") } %>
-
+    <h2 class="govuk-heading-m"><%= t("pages.add_rules_legend") %></h2>
+    <%= f.govuk_radio_buttons_fieldset(:is_optional, legend: { text: t("pages.is_optional.legend"), size: "s" } ) do %>
+      <%= f.govuk_radio_button :is_optional, 'false', label: { text: t("pages.is_optional.options.mandatory") }, link_errors: true %>
+      <%= f.govuk_radio_button :is_optional, 'true', label: { text: t("pages.is_optional.options.optional")  }, hint: {text: t("pages.is_optional.hint")} %>
     <% end %>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <% end %>

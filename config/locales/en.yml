@@ -854,8 +854,12 @@ en:
       mark_complete:
         legend: Have you finished editing your questions?
       title: Add and edit your questions
-    make_optional_hint: "‘(optional)’ will be added to the end of the question text"
-    make_optional_text: Make this question optional so people can leave it blank
+    is_optional:
+      hint: If you make this question optional, users will be able to leave it blank. ‘(optional)’ will be added to the end of the question text.
+      legend: Should this question be mandatory or optional?
+      options:
+        mandatory: Mandatory
+        optional: Optional
     optional: "%{question_text} (optional)"
     question: Question
     submit_save: Save question

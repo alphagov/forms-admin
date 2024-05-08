@@ -25,6 +25,7 @@ feature "Add/editing a single question", type: :feature do
         and_i_want_to_create_or_edit_a_page
         and_i_select_a_type_of_answer_option(answer_type)
         and_i_provide_a_question_text
+        and_i_make_the_question_mandatory unless answer_type == "selection"
         and_i_save_and_create_another
       end
     end
@@ -46,6 +47,7 @@ feature "Add/editing a single question", type: :feature do
         and_i_start_adding_a_new_question
         and_i_select_a_type_of_answer_option(answer_type)
         and_i_provide_a_question_text
+        and_i_make_the_question_mandatory unless answer_type == "selection"
         and_i_save_and_create_another
       end
     end
@@ -79,6 +81,10 @@ private
 
   def and_i_provide_a_question_text
     fill_in "Question text", with: "What is your name?"
+  end
+
+  def and_i_make_the_question_mandatory
+    within_fieldset("Should this question be mandatory or optional?") { choose "Mandatory" }
   end
 
   def and_i_save_and_create_another

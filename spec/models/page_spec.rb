@@ -87,22 +87,22 @@ describe Page, type: :model do
     end
 
     context "when a question is required" do
-      it "clears the model attribute is false" do
+      it "returns false if value is false" do
         page = described_class.new(is_optional: "false")
         page.convert_is_optional_to_boolean
-        expect(page.is_optional).to be nil
+        expect(page.is_optional).to be false
       end
 
-      it "clears the model attribute if value is 0" do
+      it "returns false if value is 0" do
         page = described_class.new(is_optional: "0")
         page.convert_is_optional_to_boolean
-        expect(page.is_optional).to be nil
+        expect(page.is_optional).to be false
       end
 
-      it "clears the model attribute if its not set to 'true'" do
+      it "returns false if its not set to 'true'" do
         page = described_class.new(is_optional: "something")
         page.convert_is_optional_to_boolean
-        expect(page.is_optional).to be nil
+        expect(page.is_optional).to be false
       end
     end
   end
