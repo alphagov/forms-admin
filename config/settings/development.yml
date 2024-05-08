@@ -1,3 +1,10 @@
+features:
+  groups:
+    organisations:
+      government_digital_service: true
+      test_org: false
+    trial_users: true
+
 forms_api:
   # URL to form-api endpoints
   base_url: http://localhost:9292

@@ -1,3 +1,6 @@
+features:
+  groups: false
+
 forms_api:
   # URL to form-api endpoints
   base_url: http://localhost:9292

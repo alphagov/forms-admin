@@ -5,10 +5,7 @@ features:
   check_your_question_enabled: false
   payment_links: false
   reference_numbers_enabled: false
-  groups:
-    enabled: false
-    organisations:
-      government_digital_service: true
+  groups: false
 
 forms_api:
   # Authentication key to authenticate with forms-api
