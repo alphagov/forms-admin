@@ -13,6 +13,7 @@ class FormPolicy
       @scope = scope
     end
 
+    # TODO: remove this method when we have migrated to groups
     def resolve
       if user.trial?
         scope.where(creator_id: user.id)
@@ -34,15 +35,13 @@ class FormPolicy
 
   def can_view_form?
     return true if user.super_admin?
-    if form.group.present?
-      return user.groups.include?(form.group) || user.is_organisations_admin?(form.group.organisation)
-    end
+    return user.groups.include?(form.group) || user.is_organisations_admin?(form.group.organisation) if form.group.present?
 
-    if user.trial?
-      user_is_form_creator
-    else
-      users_organisation_owns_form
-    end
+    # TODO: remove these checks once we've moved to groups
+    return user_is_form_creator if user.trial?
+    return users_organisation_owns_form unless FeatureService.new(user).enabled? :groups
+
+    false
   end
 
   def can_change_form_submission_email?
