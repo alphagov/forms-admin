@@ -1,4 +1,10 @@
 class GroupsController < ApplicationController
+  before_action do
+    unless FeatureService.new(current_user).enabled? :groups
+      raise ActionController::RoutingError, "Groups feature is not enabled for this user"
+    end
+  end
+
   before_action :set_group, except: %i[index new create]
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
