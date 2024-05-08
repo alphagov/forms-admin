@@ -19,7 +19,7 @@ feature "Create or edit a form", type: :feature do
       end
     end
 
-    context "and in a group" do
+    context "and the groups feature is enabled", feature_groups: true do
       before do
         create(:membership, user: editor_user, group:)
       end
@@ -32,7 +32,7 @@ feature "Create or edit a form", type: :feature do
       end
     end
 
-    context "and not in a group" do
+    context "and the groups feature is not enabled", feature_groups: false do
       let(:org_forms) { [] }
 
       before do
@@ -69,7 +69,7 @@ feature "Create or edit a form", type: :feature do
       end
     end
 
-    context "and in a group" do
+    context "and the groups feature is enabled", feature_groups: true do
       before do
         create(:membership, user: editor_user, group:)
 
@@ -84,7 +84,7 @@ feature "Create or edit a form", type: :feature do
       end
     end
 
-    context "and not in a group" do
+    context "and the groups feature is not enabled", feature_groups: false do
       let(:org_forms) { [form] }
 
       before do
