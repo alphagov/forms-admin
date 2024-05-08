@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   # TODO: Remove once infrastructure has been updated to use /up
   get :ping, controller: :heartbeat
 
-  root "forms#index"
+  root "homepage#index"
 
   get "/sign-up" => "authentication#sign_up", as: :sign_up
   get "/sign-out" => "authentication#sign_out", as: :sign_out
