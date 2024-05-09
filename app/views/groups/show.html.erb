@@ -4,7 +4,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <% unless @group.active? %>
-      <%= govuk_notification_banner(title_text: t("groups.show.trial_banner.title")) do |nb| %>
+      <%= govuk_notification_banner(title_text: t("banner.default.title")) do |nb| %>
         <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
         <% if policy(@group).upgrade? %>
           <%= t("groups.show.trial_banner.org_admin_body_html") %>

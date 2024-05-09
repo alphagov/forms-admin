@@ -362,7 +362,6 @@ en:
         heading: This is a ‘trial’ group
         org_admin_body_html: "<p>Forms in this group cannot be made live unless the group is upgraded to an ‘active’ group.</p>"
         request_upgrade: Find out how to upgrade this group so you can make forms live
-        title: Important
         upgrade_group: Upgrade this group
     status_caption:
       active: Active group
@@ -1012,7 +1011,6 @@ en:
       <p>
         If you do not want to lose your question route you can cancel this change by using the back button or <a href="%{pages_link_url}">go to your questions</a>.
       </p>
-    routing_warning_notification_title: Important
     'yes': 'Yes'
   set_email:
     new:
@@ -1051,7 +1049,6 @@ en:
         <a href="%{link_url}">Find out if you can upgrade to an editor account</a>
       </p>
     heading: You have a trial account
-    title: Important
   type_of_answer:
     routing_warning_about_change_answer_type_heading: Your existing question route may be deleted
     routing_warning_about_change_answer_type_html: |
@@ -1061,7 +1058,6 @@ en:
       <p>
         If you do not want to lose your question route you can cancel this change by using the back button or <a href="%{pages_link_url}">go to your questions</a>.
       </p>
-    routing_warning_notification_title: Important
   unarchive:
     new:
       body_html: |
