@@ -41,27 +41,43 @@ RSpec.describe "/groups", type: :request do
   end
 
   describe "GET /index" do
-    let(:member_groups) do
-      create_list :group, 3, organisation: editor_user.organisation do |group|
+    let!(:trial_groups) do
+      create_list :group, 3, organisation: editor_user.organisation, status: :trial do |group|
         create :membership, user: editor_user, group:
       end
     end
+    let!(:upgrade_requested_groups) do
+      create_list :group, 3, organisation: editor_user.organisation, status: :upgrade_requested do |group|
+        create :membership, user: editor_user, group:
+      end
+    end
+    let!(:active_groups) do
+      create_list :group, 3, organisation: editor_user.organisation, status: :active do |group|
+        create :membership, user: editor_user, group:
+      end
+    end
+
     let(:other_org) { create :organisation, id: 2, slug: "other-org" }
-    let(:other_org_groups) { create_list :group, 3, organisation: other_org }
+    let!(:other_org_groups) { create_list :group, 3, organisation: other_org, status: :trial }
+
+    before do
+      get groups_url
+    end
 
     it "renders a successful response" do
-      get groups_url
       expect(response).to be_successful
     end
 
-    it "shows all groups the user is a member of" do
-      # groups outside of organisation or not a member of
-      # should not be shown
-      non_member_group
-      other_org_groups
+    it "shows all trial groups the user is a member of" do
+      expect(assigns(:trial_groups)).to eq trial_groups
+    end
 
-      get groups_url
-      expect(assigns(:trial_groups)).to eq member_groups
+    it "shows all upgrade requested groups the user is a member of" do
+      expect(assigns(:upgrade_requested_groups)).to eq upgrade_requested_groups
+    end
+
+    it "shows all active groups the user is a member of" do
+      expect(assigns(:active_groups)).to eq active_groups
     end
 
     context "when the user is a super-admin" do
@@ -69,9 +85,9 @@ RSpec.describe "/groups", type: :request do
         login_as_super_admin_user
       end
 
-      it "shows all the groups" do
+      it "shows all trial groups for all organisations" do
         get groups_url
-        expect(assigns(:trial_groups)).to eq member_groups + other_org_groups
+        expect(assigns(:trial_groups)).to eq trial_groups + other_org_groups
       end
     end
   end
