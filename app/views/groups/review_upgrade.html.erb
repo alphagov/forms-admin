@@ -1,0 +1,26 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.group_review_upgrade'), @confirm_upgrade_input.errors.any?)) %>
+
+<% content_for :back_link, govuk_back_link_to(@group, t("back_link.group", group_name: @group.name)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: @confirm_upgrade_input, url: review_upgrade_group_path(@group)) do |f| %>
+      <% if @confirm_upgrade_input&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+
+      <h1 class="govuk-heading-l">
+        <%= t('page_titles.group_review_upgrade') %>
+      </h1>
+
+      <%= t('groups.review_upgrade.body_html', upgrade_requester_name: @group.upgrade_requester.name) %>
+
+      <%= f.govuk_collection_radio_buttons :confirm,
+                                           @confirm_upgrade_input.values, ->(option) { option }, ->(option) { t('helpers.label.confirm_action_input.options.' + "#{option}") },
+                                           legend: { text: t('groups.review_upgrade.radios_legend'), size: 'm' },
+                                           inline: true %>
+
+      <%= f.govuk_submit t("save_and_continue") %>
+    <% end %>
+  </div>
+</div>

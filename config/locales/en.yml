@@ -358,6 +358,12 @@ en:
       upgrade_requests_title: Upgrade requests
     new:
       title: New group
+    review_upgrade:
+      body_html: |
+        <p>%{upgrade_requester_name} has asked to upgrade this group to an ‘active’ group.</p>
+        <p>If you upgrade this group, any group admins in it will be able to make forms live.</p>
+        <p>We’ll send an email to the group admins to let them know your response to the upgrade request.</p>
+      radios_legend: Do you want to upgrade this group?
     show:
       edit_group_members: Edit members of this group
       edit_group_name: Change the name of this group
@@ -844,6 +850,7 @@ en:
     forbidden: You cannot view this page
     group_confirm_upgrade_request: Request to upgrade this trial group
     group_index: Your groups
+    group_review_upgrade: Upgrade this group
     group_upgrade: Upgrade this group
     group_upgrade_requested: Your upgrade request has been sent
     home: Home
