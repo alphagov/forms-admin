@@ -24,11 +24,11 @@ class Page < ActiveResource::Base
   end
 
   def convert_is_optional_to_boolean
-    self.is_optional = is_optional_value
+    self.is_optional = is_optional?
   end
 
   def is_optional?
-    is_optional_value || is_optional == true
+    ActiveRecord::Type::Boolean.new.cast(is_optional) || false
   end
 
   def move_page(direction)
@@ -62,13 +62,5 @@ class Page < ActiveResource::Base
       page.answer_type == "selection" && page.answer_settings.only_one_option == "true" &&
         page.position != pages.length && page.conditions.empty?
     end
-  end
-
-private
-
-  def is_optional_value
-    return true if is_optional == "true"
-
-    false
   end
 end
