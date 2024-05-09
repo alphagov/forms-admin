@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_27_090626) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_09_160514) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,9 +52,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_27_090626) do
     t.bigint "organisation_id"
     t.string "status", default: "trial"
     t.bigint "creator_id"
+    t.bigint "upgrade_requester_id"
     t.index ["creator_id"], name: "index_groups_on_creator_id"
     t.index ["external_id"], name: "index_groups_on_external_id", unique: true
     t.index ["organisation_id"], name: "index_groups_on_organisation_id"
+    t.index ["upgrade_requester_id"], name: "index_groups_on_upgrade_requester_id"
   end
 
   create_table "groups_form_ids", id: false, force: :cascade do |t|
@@ -131,6 +133,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_27_090626) do
 
   add_foreign_key "draft_questions", "users"
   add_foreign_key "groups", "users", column: "creator_id"
+  add_foreign_key "groups", "users", column: "upgrade_requester_id"
   add_foreign_key "memberships", "groups"
   add_foreign_key "memberships", "users"
   add_foreign_key "memberships", "users", column: "added_by_id"

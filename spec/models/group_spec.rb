@@ -30,6 +30,11 @@ RSpec.describe Group, type: :model do
       group = build :group, creator: nil
       expect(group).to be_valid
     end
+
+    it "is valid without an upgrade requester" do
+      group = build :group, upgrade_requester: nil
+      expect(group).to be_valid
+    end
   end
 
   describe "before_create" do
@@ -69,6 +74,13 @@ RSpec.describe Group, type: :model do
     it "does not destroy associated creator" do
       user = create :user
       group = create :group, creator: user
+
+      expect { group.destroy }.not_to change(User, :count)
+    end
+
+    it "does not destroy associated upgrade requester" do
+      user = create :user
+      group = create :group, upgrade_requester: user
 
       expect { group.destroy }.not_to change(User, :count)
     end
