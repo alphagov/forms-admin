@@ -359,6 +359,7 @@ en:
     status_caption:
       active: Active group
       trial: Trial group
+      upgrade_requested: Trial group
     success_messages:
       create: Group was successfully created.
       update: Group was successfully updated.

@@ -154,6 +154,18 @@ RSpec.describe "groups/show", type: :view do
     end
   end
 
+  context "when the group has an upgrade requested" do
+    let(:group) { create :group, :upgrade_requested }
+
+    it "have the caption trial group" do
+      expect(rendered).to have_css ".govuk-caption-l", text: "Trial group"
+    end
+
+    it "shows a notification banner" do
+      expect(rendered).to have_css ".govuk-notification-banner"
+    end
+  end
+
   context "when the group is an active group" do
     let(:group) { create :group, :active, name: "Active group" }
 
