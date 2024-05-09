@@ -52,11 +52,11 @@ RSpec.describe GroupPolicy do
       end
 
       it "permits group creation, viewing, and editing" do
-        expect(policy).to permit_only_actions(%i[show new edit create update])
+        expect(policy).to permit_only_actions(%i[show new create])
       end
 
-      it "does not allow add_editor or upgrade" do
-        expect(policy).to forbid_only_actions(%i[add_editor upgrade])
+      it "does not allow add_editor, rename or upgrade" do
+        expect(policy).to forbid_only_actions(%i[add_editor edit update upgrade])
       end
     end
 

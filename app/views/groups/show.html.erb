@@ -18,7 +18,9 @@
 <%= render @group %>
 
 <ul class="govuk-list govuk-list--spaced govuk-!-margin-bottom-5">
-  <li><%= govuk_link_to(t(".edit_group_name"), edit_group_path(@group)) %></li>
+  <% if policy(@group).edit? %>
+    <li><%= govuk_link_to(t(".edit_group_name"), edit_group_path(@group)) %></li>
+  <% end %>
   <li><%= govuk_link_to(t(".edit_group_members"), group_members_path(@group)) %></li>
 </ul>
 

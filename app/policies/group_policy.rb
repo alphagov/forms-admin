@@ -7,12 +7,12 @@ class GroupPolicy < ApplicationPolicy
   def show?
     user.super_admin? || user.is_organisations_admin?(record.organisation) || user.groups.include?(record)
   end
-  alias_method :edit?, :show?
-  alias_method :update?, :show?
 
-  def add_editor?
+  def edit?
     user.super_admin? || user.is_organisations_admin?(record.organisation) || record.memberships.find_by(user:)&.group_admin?
   end
+  alias_method :update?, :edit?
+  alias_method :add_editor?, :edit?
 
   def upgrade?
     user.super_admin? || user.is_organisations_admin?(record.organisation)
