@@ -2,11 +2,13 @@ require "rails_helper"
 
 RSpec.describe "groups/index", type: :view do
   let(:trial_groups) { create_list :group, 2 }
+  let(:upgrade_requested_groups) { create_list :group, 2, status: :upgrade_requested }
   let(:active_groups) { create_list :group, 2, status: :active }
   let(:current_user) { build :editor_user }
 
   before do
     assign(:trial_groups, trial_groups)
+    assign(:upgrade_requested_groups, upgrade_requested_groups)
     assign(:active_groups, active_groups)
 
     assign(:current_user, current_user)
@@ -16,6 +18,10 @@ RSpec.describe "groups/index", type: :view do
 
   it "renders a list of groups" do
     trial_groups.each do |group|
+      expect(rendered).to have_link(group.name, href: group_path(group))
+    end
+
+    upgrade_requested_groups.each do |group|
       expect(rendered).to have_link(group.name, href: group_path(group))
     end
 

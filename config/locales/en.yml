@@ -342,6 +342,7 @@ en:
         <p>As an organisation admin, you can upgrade a trial group to an ‘active’ group so forms in that group can be made live. People will be able to send a request to you to ask for their trial group to be upgraded.</p>
       group_explainer_title: What is a ‘group’?
       trial_title: Trial groups
+      upgrade_requests_title: Upgrade requests
     new:
       title: New group
     show:

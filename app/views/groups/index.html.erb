@@ -11,6 +11,7 @@
       <%= t("page_titles.group_index") %>
     </h1>
 
+    <%= render GroupListComponent::View.new(groups: @upgrade_requested_groups, title: t('groups.index.upgrade_requests_title'), show_empty: false) %>
     <%= render GroupListComponent::View.new(groups: @active_groups, title: t('groups.index.active_title'), empty_message: "You're not in any active groups.") %>
     <%= render GroupListComponent::View.new(groups: @trial_groups, title: t('groups.index.trial_title'), empty_message: "You're not in any trial groups.") %>
 
@@ -23,9 +24,9 @@
     <%= govuk_details(summary_text: t("groups.index.group_explainer_title")) do
       if @current_user.organisation_admin? || @current_user.super_admin?
         t("groups.index.group_explainer_org_admin_body_html")
-      else 
+      else
         t("groups.index.group_explainer_body_html")
-      end 
+      end
     end %>
   </div>
 </div>
