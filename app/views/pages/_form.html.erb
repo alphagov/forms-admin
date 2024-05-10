@@ -30,8 +30,7 @@
   <% if question_input.answer_type == 'selection' %>
     <%= f.hidden_field :is_optional %>
   <% else %>
-    <h2 class="govuk-heading-m"><%= t("pages.add_rules_legend") %></h2>
-    <%= f.govuk_collection_radio_buttons :is_optional, question_input.default_options, :id, :name, :description, legend: { size: 's' }, bold_labels: false %>
+    <%= f.govuk_collection_radio_buttons :is_optional, question_input.default_options, :id, :name, :description, legend: { size: 'm', tag: 'h2' }, bold_labels: false %>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <% end %>
 
