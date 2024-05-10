@@ -51,7 +51,7 @@
 <% end %>
 <% end %>
 
-<% if Pundit.policy(@current_user, @group).add_editor? %>
+<% if Pundit.policy(@current_user, @group).edit? %>
   <%= govuk_link_to(t(".add_member"), new_group_member_path(@group), class: "govuk-button") %>
 <% end %>
 

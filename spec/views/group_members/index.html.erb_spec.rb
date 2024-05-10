@@ -7,7 +7,7 @@ describe "group_members/index", type: :view do
   let(:user2) { build(:user, organisation:) }
   let(:memberships) { [create(:membership, user: user1, role: :editor, group:), create(:membership, user: user2, role: :group_admin, group:)] }
   let(:group) { create(:group, name: "Group 1", organisation:) }
-  let(:add_editor) { true }
+  let(:edit) { true }
   let(:show_actions) { true }
 
   context "when there are members of a group" do
@@ -17,7 +17,7 @@ describe "group_members/index", type: :view do
       assign(:current_user, current_user)
       assign(:group, group)
 
-      allow(Pundit).to receive(:policy).with(current_user, group).and_return(instance_double(GroupPolicy, add_editor?: add_editor))
+      allow(Pundit).to receive(:policy).with(current_user, group).and_return(instance_double(GroupPolicy, edit?: edit))
       allow(Pundit).to receive(:policy).with(current_user, Membership).and_return(instance_double(MembershipPolicy, update?: true, destroy?: true))
 
       render locals: { show_actions: }
@@ -71,7 +71,7 @@ describe "group_members/index", type: :view do
     end
 
     context "when the current user cannot add an editor" do
-      let(:add_editor) { false }
+      let(:edit) { false }
 
       it "does not display the add member link" do
         expect(rendered).not_to have_link(t("group_members.index.add_member"), href: new_group_member_path(group))
