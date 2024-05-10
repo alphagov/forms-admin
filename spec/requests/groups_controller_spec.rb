@@ -14,9 +14,10 @@ require "rails_helper"
 
 RSpec.describe "/groups", type: :request do
   let(:current_user) { editor_user }
+  let(:role) { :editor }
   let(:member_group) do
     create(:group, organisation: current_user.organisation).tap do |group|
-      create(:membership, user: current_user, group:)
+      create(:membership, user: current_user, group:, role:)
     end
   end
 
@@ -133,10 +134,21 @@ RSpec.describe "/groups", type: :request do
   end
 
   describe "GET /edit" do
-    context "when user is a member of group" do
+    context "when user is a group admin of group" do
+      let(:role) { :group_admin }
+
       it "renders a successful response" do
         get edit_group_url(member_group)
         expect(response).to be_successful
+      end
+    end
+
+    context "when user is an editor for the group" do
+      let(:role) { :editor }
+
+      it "is forbidden" do
+        get edit_group_url(non_member_group)
+        expect(response).to have_http_status(:forbidden)
       end
     end
 
@@ -197,12 +209,14 @@ RSpec.describe "/groups", type: :request do
   end
 
   describe "PATCH /update" do
-    context "with valid parameters" do
-      let(:new_attributes) do
-        { name: "new_group_name" }
-      end
+    context "when user is a group admin of group" do
+      let(:role) { :group_admin }
 
-      context "when user is a member of group" do
+      context "with valid parameters" do
+        let(:new_attributes) do
+          { name: "new_group_name" }
+        end
+
         it "updates the requested group" do
           patch group_url(member_group), params: { group: new_attributes }
           member_group.reload
@@ -215,12 +229,21 @@ RSpec.describe "/groups", type: :request do
           expect(response).to redirect_to(group_url(member_group))
         end
       end
+
+      context "with invalid parameters" do
+        it "renders a response with 422 status (i.e. to display the 'edit' template)" do
+          patch group_url(member_group), params: { group: invalid_attributes }
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
     end
 
-    context "with invalid parameters" do
-      it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        patch group_url(member_group), params: { group: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+    context "when the user is an editor of the group" do
+      let(:role) { :editor }
+
+      it "is forbidden" do
+        get edit_group_url(non_member_group)
+        expect(response).to have_http_status(:forbidden)
       end
     end
 

@@ -5,6 +5,7 @@ RSpec.describe "groups/show", type: :view do
   let(:forms) { [] }
   let(:group) { create :group, name: "My Group" }
   let(:upgrade?) { false }
+  let(:edit?) { true }
 
   before do
     assign(:current_user, current_user)
@@ -12,7 +13,7 @@ RSpec.describe "groups/show", type: :view do
     assign(:forms, forms)
 
     without_partial_double_verification do
-      allow(view).to receive(:policy).and_return(instance_double(GroupPolicy, upgrade?: upgrade?))
+      allow(view).to receive(:policy).and_return(instance_double(GroupPolicy, upgrade?: upgrade?, edit?: edit?))
     end
 
     render
@@ -32,6 +33,18 @@ RSpec.describe "groups/show", type: :view do
 
   it "has a link to the edit members page" do
     expect(rendered).to have_link "Edit members of this group", href: group_members_path(group)
+  end
+
+  context "when the user does not have permission to edit the group" do
+    let(:edit?) { false }
+
+    it "does not have a link to the change group name page" do
+      expect(rendered).not_to have_link "Change the name of this group", href: edit_group_path(group)
+    end
+
+    it "has a link to the review members page" do
+      expect(rendered).to have_link "Review members of this group", href: group_members_path(group)
+    end
   end
 
   context "when the group has no forms" do

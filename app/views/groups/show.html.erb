@@ -18,8 +18,12 @@
 <%= render @group %>
 
 <ul class="govuk-list govuk-list--spaced govuk-!-margin-bottom-5">
-  <li><%= govuk_link_to(t(".edit_group_name"), edit_group_path(@group)) %></li>
-  <li><%= govuk_link_to(t(".edit_group_members"), group_members_path(@group)) %></li>
+  <% if policy(@group).edit? %>
+    <li><%= govuk_link_to(t(".edit_group_name"), edit_group_path(@group)) %></li>
+    <li><%= govuk_link_to(t(".edit_group_members"), group_members_path(@group)) %></li>
+  <% else %>
+    <li><%= govuk_link_to(t(".review_group_members"), group_members_path(@group)) %></li>
+  <% end %>
 </ul>
 
 <%= govuk_start_button(text: t("home.create_a_form"), href: new_group_form_path(@group)) %>
