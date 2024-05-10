@@ -1,16 +1,16 @@
 class Group < ApplicationRecord
+  belongs_to :creator, class_name: "User", optional: true
   belongs_to :organisation
 
-  belongs_to :creator, class_name: "User", optional: true
+  belongs_to :default_for, polymorphic: true, optional: true
 
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
 
   has_many :group_forms, dependent: :restrict_with_exception
 
-  scope :for_user, ->(user) { joins(:memberships).where(memberships: { user_id: user.id }) }
-
   scope :for_organisation, ->(organisation) { where(organisation:) }
+  scope :for_user, ->(user) { joins(:memberships).where(memberships: { user_id: user.id }) }
 
   validates :name, presence: true
   before_create :set_external_id

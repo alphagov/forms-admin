@@ -19,6 +19,8 @@ class User < ApplicationRecord
   has_many :mou_signatures
   has_many :draft_questions
 
+  has_one :default_group, as: :default_for, class_name: "Group"
+
   serialize :permissions, type: Array
 
   enum :role, {

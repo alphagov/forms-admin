@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_27_090626) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_09_122455) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,7 +52,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_27_090626) do
     t.bigint "organisation_id"
     t.string "status", default: "trial"
     t.bigint "creator_id"
+    t.string "default_for_type"
+    t.bigint "default_for_id"
     t.index ["creator_id"], name: "index_groups_on_creator_id"
+    t.index ["default_for_type", "default_for_id"], name: "index_groups_on_default_for"
     t.index ["external_id"], name: "index_groups_on_external_id", unique: true
     t.index ["organisation_id"], name: "index_groups_on_organisation_id"
   end
