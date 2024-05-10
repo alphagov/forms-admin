@@ -15,8 +15,10 @@ require "rails_helper"
 RSpec.describe "/groups", type: :request do
   let(:current_user) { editor_user }
   let(:role) { :editor }
+  let(:status) { :trial }
+  let(:upgrade_requester) {}
   let(:member_group) do
-    create(:group, organisation: current_user.organisation).tap do |group|
+    create(:group, organisation: current_user.organisation, status:, upgrade_requester:).tap do |group|
       create(:membership, user: current_user, group:, role:)
     end
   end
@@ -417,6 +419,106 @@ RSpec.describe "/groups", type: :request do
       it "is forbidden" do
         post request_upgrade_group_url(member_group)
 
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
+
+  describe "GET /review_upgrade" do
+    let(:status) { :upgrade_requested }
+    let(:upgrade_requester) { create(:user) }
+
+    context "when user is an organisation admin" do
+      let(:current_user) { organisation_admin_user }
+
+      before do
+        get review_upgrade_group_url(member_group)
+      end
+
+      it "returns a successful response" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the review upgrade view" do
+        expect(response).to render_template(:review_upgrade)
+      end
+    end
+
+    context "when user is not an organisation admin" do
+      it "is forbidden" do
+        get review_upgrade_group_url(member_group)
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
+
+  describe "POST /review_upgrade" do
+    let(:status) { :upgrade_requested }
+    let(:confirm) { :yes }
+    let(:upgrade_requester) { create(:user) }
+
+    context "when user is an organisation admin" do
+      let(:current_user) { organisation_admin_user }
+
+      context "when 'Yes' is selected" do
+        it "updates the group to active" do
+          expect {
+            post review_upgrade_group_url(member_group), params: { groups_confirm_upgrade_input: { confirm: } }
+          }.to change { member_group.reload.status }.to("active")
+        end
+
+        it "redirects to the group" do
+          post review_upgrade_group_url(member_group), params: { groups_confirm_upgrade_input: { confirm: } }
+          expect(response).to redirect_to(group_path(member_group))
+        end
+
+        it "returns 303" do
+          post review_upgrade_group_url(member_group), params: { groups_confirm_upgrade_input: { confirm: } }
+          expect(response).to have_http_status(:see_other)
+        end
+      end
+
+      context "when 'No' is selected" do
+        let(:confirm) { :no }
+
+        it "updates the group status to trial" do
+          expect {
+            post review_upgrade_group_url(member_group), params: { groups_confirm_upgrade_input: { confirm: } }
+          }.to change { member_group.reload.status }.to("trial")
+        end
+
+        it "redirects to the group" do
+          post review_upgrade_group_url(member_group), params: { groups_confirm_upgrade_input: { confirm: } }
+          expect(response).to redirect_to(group_path(member_group))
+        end
+
+        it "returns 303" do
+          post review_upgrade_group_url(member_group), params: { groups_confirm_upgrade_input: { confirm: } }
+          expect(response).to have_http_status(:see_other)
+        end
+      end
+
+      context "when no option is selected" do
+        let(:confirm) { nil }
+
+        before do
+          post review_upgrade_group_url(member_group), params: { groups_confirm_upgrade_input: { confirm: } }
+        end
+
+        it "returns 422" do
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it "re-renders the confirm upgrade page with an error" do
+          expect(response).to render_template(:review_upgrade)
+          expect(response.body).to include("Select yes if you want to upgrade this group")
+        end
+      end
+    end
+
+    context "when user is not an organisation admin" do
+      it "is forbidden" do
+        post review_upgrade_group_url(member_group), params: { groups_confirm_upgrade_input: { confirm: } }
         expect(response).to have_http_status(:forbidden)
       end
     end
