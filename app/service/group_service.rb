@@ -37,19 +37,19 @@ private
   end
 
   def send_group_updated_email(to_email)
-    GroupUpgradeMailer.group_upgraded_email(
-      upgraded_by_name: @current_user.name,
+    GroupUpgradeMailer.upgraded_email(
       to_email:,
+      upgraded_by_name: @current_user.name,
       group_name: @group.name,
       group_url: group_url(@group, host: @host),
     ).deliver_now
   end
 
   def send_group_update_requested_email(to_email)
-    GroupUpgradeMailer.group_upgrade_requested_email(
+    GroupUpgradeMailer.requested_email(
+      to_email:,
       requester_name: @current_user.name,
       requester_email_address: @current_user.email,
-      to_email:,
       group_name: @group.name,
       view_request_url: group_url(@group, host: @host),
     ).deliver_now

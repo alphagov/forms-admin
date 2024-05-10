@@ -1,5 +1,5 @@
 class GroupUpgradeMailer < GovukNotifyRails::Mailer
-  def group_upgraded_email(upgraded_by_name:, to_email:, group_name:, group_url:)
+  def upgraded_email(to_email:, upgraded_by_name:, group_name:, group_url:)
     set_template(Settings.govuk_notify.group_upgraded_template_id)
 
     set_email_reply_to(Settings.govuk_notify.zendesk_reply_to_id)
@@ -28,7 +28,7 @@ class GroupUpgradeMailer < GovukNotifyRails::Mailer
     mail(to: to_email)
   end
 
-  def group_upgrade_requested_email(requester_name:, requester_email_address:, to_email:, group_name:, view_request_url:)
+  def requested_email(to_email:, requester_name:, requester_email_address:, group_name:, view_request_url:)
     set_template(Settings.govuk_notify.group_upgrade_requested_template_id)
 
     set_email_reply_to(Settings.govuk_notify.zendesk_reply_to_id)

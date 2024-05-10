@@ -8,9 +8,9 @@ describe GroupUpgradeMailer, type: :mailer do
 
   describe "#group_upgraded_email" do
     subject(:mail) do
-      described_class.group_upgraded_email(
-        upgraded_by_name: current_user.name,
+      described_class.upgraded_email(
         to_email:,
+        upgraded_by_name: current_user.name,
         group_name: group.name,
         group_url:,
       )
@@ -62,11 +62,12 @@ describe GroupUpgradeMailer, type: :mailer do
 
   describe "#group_upgrade_requested_email" do
     subject(:mail) do
-      described_class.group_upgrade_requested_email(
+      described_class.requested_email(
+        to_email:,
         requester_name: current_user.name,
         requester_email_address: current_user.email,
-        to_email:, group_name: group.name,
-        view_request_url: group_url
+        group_name: group.name,
+        view_request_url: group_url,
       )
     end
 
