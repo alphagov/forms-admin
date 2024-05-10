@@ -31,16 +31,20 @@ RSpec.describe "groups/show", type: :view do
     expect(rendered).to have_link "Change the name of this group", href: edit_group_path(group)
   end
 
+  it "has a link to the edit members page" do
+    expect(rendered).to have_link "Edit members of this group", href: group_members_path(group)
+  end
+
   context "when the user does not have permission to edit the group" do
     let(:edit?) { false }
 
     it "does not have a link to the change group name page" do
       expect(rendered).not_to have_link "Change the name of this group", href: edit_group_path(group)
     end
-  end
 
-  it "has a link to the edit members page" do
-    expect(rendered).to have_link "Edit members of this group", href: group_members_path(group)
+    it "has a link to the review members page" do
+      expect(rendered).to have_link "Review members of this group", href: group_members_path(group)
+    end
   end
 
   context "when the group has no forms" do
