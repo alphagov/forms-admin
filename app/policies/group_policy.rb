@@ -5,18 +5,18 @@ class GroupPolicy < ApplicationPolicy
   alias_method :create?, :new?
 
   def show?
-    user.super_admin? || user.is_organisations_admin?(record.organisation) || user.groups.include?(record)
+    organisation_admin_or_super_admin? || user.groups.include?(record)
   end
 
   def edit?
-    user.super_admin? || user.is_organisations_admin?(record.organisation) || group_admin?
+    organisation_admin_or_super_admin? || group_admin?
   end
 
   alias_method :update?, :edit?
   alias_method :add_editor?, :edit?
 
   def upgrade?
-    user.super_admin? || user.is_organisations_admin?(record.organisation)
+    organisation_admin_or_super_admin?
   end
 
   alias_method :add_group_admin?, :upgrade?
@@ -25,7 +25,15 @@ class GroupPolicy < ApplicationPolicy
     group_admin? && !record.active?
   end
 
+  def review_upgrade?
+    organisation_admin_or_super_admin? && record.upgrade_requested?
+  end
+
 private
+
+  def organisation_admin_or_super_admin?
+    user.super_admin? || user.is_organisations_admin?(record.organisation)
+  end
 
   def group_admin?
     record.memberships.find_by(user:)&.group_admin?

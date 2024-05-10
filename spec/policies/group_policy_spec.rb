@@ -10,12 +10,20 @@ RSpec.describe GroupPolicy do
   context "when user is super_admin" do
     let(:user) { build :super_admin_user }
 
-    it "permits all actions" do
-      expect(policy).to forbid_only_actions(%i[request_upgrade])
+    it "forbids only request_upgrade and review_upgrade" do
+      expect(policy).to forbid_only_actions(%i[request_upgrade review_upgrade])
     end
 
     it "scope resolves to all groups" do
       expect(GroupPolicy::Scope.new(user, Group).resolve).to eq(Group.all)
+    end
+
+    context "when the group has status upgrade_requested" do
+      let(:group) { build :group, organisation:, status: :upgrade_requested }
+
+      it "permits review_upgrade" do
+        expect(policy).to permit_action(:review_upgrade)
+      end
     end
   end
 
@@ -23,8 +31,8 @@ RSpec.describe GroupPolicy do
     let(:user) { build :organisation_admin_user, organisation: }
 
     context "and in the same organisation as the group" do
-      it "permits all actions" do
-        expect(policy).to forbid_only_actions(%i[request_upgrade])
+      it "forbids only request_upgrade and review_upgrade" do
+        expect(policy).to forbid_only_actions(%i[request_upgrade review_upgrade])
       end
     end
 
@@ -33,6 +41,14 @@ RSpec.describe GroupPolicy do
 
       it "permits new and create only" do
         expect(policy).to permit_only_actions(%i[new create])
+      end
+    end
+
+    context "when the group has status upgrade_requested" do
+      let(:group) { build :group, organisation:, status: :upgrade_requested }
+
+      it "permits review_upgrade" do
+        expect(policy).to permit_action(:review_upgrade)
       end
     end
 
@@ -65,8 +81,8 @@ RSpec.describe GroupPolicy do
         create :membership, user:, group:, role: :group_admin
       end
 
-      it "forbids upgrade and add_group_admin" do
-        expect(policy).to forbid_only_actions(%i[upgrade add_group_admin])
+      it "forbids upgrade, add_group_admin and review_upgrade" do
+        expect(policy).to forbid_only_actions(%i[upgrade add_group_admin review_upgrade])
       end
 
       context "when the group status is active" do
