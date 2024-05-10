@@ -330,6 +330,7 @@ en:
       created_by_unknown: Unknown
       name: Group name
     index:
+      active_empty_message: You’re not in any active groups.
       active_title: Active groups
       create_group: Create a group
       group_explainer_body_html: |
@@ -343,6 +344,7 @@ en:
         <p>When a group is first created it will be a ‘trial’ group. That means forms in the group cannot be made live.</p>
         <p>As an organisation admin, you can upgrade a trial group to an ‘active’ group so forms in that group can be made live. People will be able to send a request to you to ask for their trial group to be upgraded.</p>
       group_explainer_title: What is a ‘group’?
+      trial_empty_message: You’re not in any trial groups.
       trial_title: Trial groups
       upgrade_requests_banner_heading:
         one: You have one request to upgrade a trial group.

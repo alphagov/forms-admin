@@ -18,8 +18,8 @@
     </h1>
 
     <%= render GroupListComponent::View.new(groups: @upgrade_requested_groups, title: t('groups.index.upgrade_requests_title'), show_empty: false) %>
-    <%= render GroupListComponent::View.new(groups: @active_groups, title: t('groups.index.active_title'), empty_message: "You're not in any active groups.") %>
-    <%= render GroupListComponent::View.new(groups: @trial_groups, title: t('groups.index.trial_title'), empty_message: "You're not in any trial groups.") %>
+    <%= render GroupListComponent::View.new(groups: @active_groups, title: t('groups.index.active_title'), empty_message: t('groups.index.active_empty_message')) %>
+    <%= render GroupListComponent::View.new(groups: @trial_groups, title: t('groups.index.trial_title'), empty_message: t('groups.index.trial_empty_message')) %>
 
     <%= govuk_button_link_to t("groups.index.create_group"), new_group_path, class:"govuk-!-margin-top-3" %>
   </div>
