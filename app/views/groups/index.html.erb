@@ -1,18 +1,25 @@
 <% set_page_title(t("page_titles.group_index")) %>
 
+<% if @upgrade_requested_groups.present? && (@current_user.organisation_admin? || @current_user.super_admin?)  %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= govuk_notification_banner(title_text: t("banner.default.title")) do |banner| %>
+        <% banner.with_heading(text: t("groups.index.upgrade_requests_banner_heading", count: @upgrade_requested_groups.length)) %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-
-    <% content_for :notification_banner_content do %>
-      <%= notice %>
-    <% end%>
 
     <h1 class="govuk-heading-l">
       <%= t("page_titles.group_index") %>
     </h1>
 
-    <%= render GroupListComponent::View.new(groups: @active_groups, title: t('groups.index.active_title'), empty_message: "You're not in any active groups.") %>
-    <%= render GroupListComponent::View.new(groups: @trial_groups, title: t('groups.index.trial_title'), empty_message: "You're not in any trial groups.") %>
+    <%= render GroupListComponent::View.new(groups: @upgrade_requested_groups, title: t('groups.index.upgrade_requests_title'), show_empty: false) %>
+    <%= render GroupListComponent::View.new(groups: @active_groups, title: t('groups.index.active_title'), empty_message: t('groups.index.active_empty_message')) %>
+    <%= render GroupListComponent::View.new(groups: @trial_groups, title: t('groups.index.trial_title'), empty_message: t('groups.index.trial_empty_message')) %>
 
     <%= govuk_button_link_to t("groups.index.create_group"), new_group_path, class:"govuk-!-margin-top-3" %>
   </div>
@@ -23,9 +30,9 @@
     <%= govuk_details(summary_text: t("groups.index.group_explainer_title")) do
       if @current_user.organisation_admin? || @current_user.super_admin?
         t("groups.index.group_explainer_org_admin_body_html")
-      else 
+      else
         t("groups.index.group_explainer_body_html")
-      end 
+      end
     end %>
   </div>
 </div>

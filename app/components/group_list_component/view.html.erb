@@ -1,11 +1,13 @@
 <% if @groups.empty? %>
-  <h2 class="govuk-heading-m">
-    <%= @title %>
-  </h2>
+  <% if @show_empty %>
+    <h2 class="govuk-heading-m">
+      <%= @title %>
+    </h2>
 
-  <p class="govuk-body">
-    <%= @empty_message %>
-  </p>
+    <p class="govuk-body">
+      <%= @empty_message %>
+    </p>
+  <% end %>
 <% else %>
   <%= govuk_table do |table| %>
     <%= table.with_caption(size: 'm', text: @title) %>
