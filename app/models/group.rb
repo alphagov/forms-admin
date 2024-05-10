@@ -15,7 +15,7 @@ class Group < ApplicationRecord
   validates :name, presence: true
   before_create :set_external_id
 
-  enum :status, { trial: "trial", active: "active" }, validate: true
+  enum :status, { trial: "trial", active: "active", upgrade_requested: "upgrade_requested" }, validate: true
 
   def to_param
     external_id

@@ -347,4 +347,62 @@ RSpec.describe "/groups", type: :request do
       end
     end
   end
+
+  describe "GET /request_upgrade" do
+    before do
+      get request_upgrade_group_url(member_group)
+    end
+
+    context "when user is a group admin" do
+      let(:role) { :group_admin }
+
+      it "returns a successful response" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the confirm upgrade request view" do
+        expect(response).to render_template(:confirm_upgrade_request)
+      end
+    end
+
+    context "when the user is not a group admin" do
+      it "is forbidden" do
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
+
+  describe "POST /request_upgrade" do
+    context "when user is a group admin" do
+      let(:role) { :group_admin }
+
+      it "updates the group status to upgrade_requested" do
+        expect {
+          post request_upgrade_group_url(member_group)
+        }.to change { member_group.reload.status }.to("upgrade_requested")
+      end
+
+      it "returns a successful response" do
+        post request_upgrade_group_url(member_group)
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the upgrade requested page" do
+        post request_upgrade_group_url(member_group)
+
+        expect(response).to render_template(:upgrade_requested)
+      end
+    end
+
+    context "when the user is not a group admin" do
+      let(:role) { :editor }
+
+      it "is forbidden" do
+        post request_upgrade_group_url(member_group)
+
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
 end

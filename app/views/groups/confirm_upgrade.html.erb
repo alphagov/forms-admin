@@ -1,6 +1,6 @@
 <% set_page_title(title_with_error_prefix(t('page_titles.group_upgrade'), @confirm_upgrade_input.errors.any?)) %>
 
-<% content_for :back_link, govuk_back_link_to(@group, t("back_link.group_show")) %>
+<% content_for :back_link, govuk_back_link_to(@group, t("back_link.group", group_name: @group.name)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">

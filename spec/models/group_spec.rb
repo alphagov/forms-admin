@@ -207,5 +207,10 @@ RSpec.describe Group, type: :model do
       group = build :group, status: :active
       expect(group).to be_valid
     end
+
+    it "can be set to upgrade_requested" do
+      group = build :group, status: :upgrade_requested
+      expect(group).to be_valid
+    end
   end
 end

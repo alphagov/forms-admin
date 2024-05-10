@@ -3,12 +3,17 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% if @group.trial? %>
+    <% unless @group.active? %>
       <%= govuk_notification_banner(title_text: t("groups.show.trial_banner.title")) do |nb| %>
         <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
-        <%= t("groups.show.trial_banner.body_html") %>
         <% if policy(@group).upgrade? %>
+          <%= t("groups.show.trial_banner.org_admin_body_html") %>
           <%= govuk_link_to t("groups.show.trial_banner.upgrade_group"), upgrade_group_path(@group) %>
+        <% elsif policy(@group).request_upgrade? %>
+          <%= t("groups.show.trial_banner.group_admin_body_html") %>
+          <%= govuk_link_to t("groups.show.trial_banner.request_upgrade"), request_upgrade_group_path(@group) %>
+        <% else %>
+          <%= t("groups.show.trial_banner.editor_body_html") %>
         <% end %>
       <% end %>
     <% end %>

@@ -88,7 +88,6 @@ en:
     form_view: Back to your form
     forms: Back to your forms
     group: Back to %{group_name}
-    group_show: Back to your forms
     groups: Back to your groups
   banner:
     success:
@@ -313,6 +312,12 @@ en:
           <li>we’ll send the group admins an email to let them know</li>
         </ul>
       radios_legend: Do you want to upgrade this group?
+    confirm_upgrade_request:
+      body_html: |
+        <p>If you need to be able to make forms live, you can send a request for this group to be upgraded to an ‘active’ group.</p>
+        <p>Your request will be sent to your organisation’s GOV.UK Forms admins.</p>
+      inset_text: Some organisations are restricting who can make forms live in their organisation. Send a request to upgrade to find out if this will affect you.
+      send_request_to_upgrade: Send request to upgrade
     edit:
       title: Edit group
     form_table_caption: Forms in ‘%{group_name}’
@@ -342,17 +347,29 @@ en:
       edit_group_name: Change the name of this group
       review_group_members: Review members of this group
       trial_banner:
-        body_html: "<p>You can create forms in this group and test them, but you cannot make them live.</p>"
+        editor_body_html: |
+          <p>You can create a form, preview and test it.</p>
+          <p>Forms in this group cannot be made live unless the group is upgraded. Only a group admin can request for a group to be upgraded.</p>
+        group_admin_body_html: "<p>You can create forms in this group and test them, but you cannot make them live.</p>"
         heading: This is a ‘trial’ group
+        org_admin_body_html: "<p>Forms in this group cannot be made live unless the group is upgraded to an ‘active’ group.</p>"
+        request_upgrade: Find out how to upgrade this group so you can make forms live
         title: Important
         upgrade_group: Upgrade this group
     status_caption:
       active: Active group
       trial: Trial group
+      upgrade_requested: Trial group
     success_messages:
       create: Group was successfully created.
       update: Group was successfully updated.
       upgrade: This group is now active
+    upgrade_requested:
+      what_happens_next:
+        body_html: |
+          <p>Your request has been sent to your organisation’s GOV.UK Forms admins. They will contact you to discuss your request.</p>
+          <p>We’ll also send you an email when your request is accepted or rejected.</p>
+        heading: What happens next
   guidance:
     add_guidance: Add guidance
     guidance: Guidance
@@ -789,8 +806,10 @@ en:
     email_code_sent: Confirmation code sent
     error_prefix: 'Error: '
     forbidden: You cannot view this page
+    group_confirm_upgrade_request: Request to upgrade this trial group
     group_index: Your groups
     group_upgrade: Upgrade this group
+    group_upgrade_requested: Your upgrade request has been sent
     home: Home
     internal_server_error: Sorry, there is a problem with the service
     maintenance: Sorry, the service is unavailable

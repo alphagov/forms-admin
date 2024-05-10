@@ -16,4 +16,8 @@ class Organisation < ApplicationRecord
       name
     end
   end
+
+  def admin_users
+    users.organisation_admin
+  end
 end

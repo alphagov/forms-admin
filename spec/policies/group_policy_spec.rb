@@ -11,7 +11,7 @@ RSpec.describe GroupPolicy do
     let(:user) { build :super_admin_user }
 
     it "permits all actions" do
-      expect(policy).to permit_all_actions
+      expect(policy).to forbid_only_actions(%i[request_upgrade])
     end
 
     it "scope resolves to all groups" do
@@ -24,7 +24,7 @@ RSpec.describe GroupPolicy do
 
     context "and in the same organisation as the group" do
       it "permits all actions" do
-        expect(policy).to permit_all_actions
+        expect(policy).to forbid_only_actions(%i[request_upgrade])
       end
     end
 
@@ -54,10 +54,6 @@ RSpec.describe GroupPolicy do
       it "permits group creation, viewing, and editing" do
         expect(policy).to permit_only_actions(%i[show new create])
       end
-
-      it "does not allow add_editor, rename or upgrade" do
-        expect(policy).to forbid_only_actions(%i[add_editor edit update upgrade])
-      end
     end
 
     it "scope resolves to only group user is a member of" do
@@ -69,8 +65,38 @@ RSpec.describe GroupPolicy do
         create :membership, user:, group:, role: :group_admin
       end
 
-      it "allows view, list, modify group and add_editor" do
-        expect(policy).to permit_only_actions(%i[show new edit create update add_editor])
+      it "forbids upgrade" do
+        expect(policy).to forbid_only_actions(%i[upgrade])
+      end
+
+      context "when the group status is active" do
+        before do
+          group.active!
+        end
+
+        it "forbids request_upgrade" do
+          expect(policy).to forbid_action(:request_upgrade)
+        end
+      end
+
+      context "when the group status is upgrade_requested" do
+        before do
+          group.upgrade_requested!
+        end
+
+        it "permits request_upgrade" do
+          expect(policy).to permit_action(:request_upgrade)
+        end
+      end
+
+      context "when the group status is trial" do
+        before do
+          group.trial!
+        end
+
+        it "permits request_upgrade" do
+          expect(policy).to permit_action(:request_upgrade)
+        end
       end
     end
   end

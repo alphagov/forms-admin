@@ -9,13 +9,24 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def edit?
-    user.super_admin? || user.is_organisations_admin?(record.organisation) || record.memberships.find_by(user:)&.group_admin?
+    user.super_admin? || user.is_organisations_admin?(record.organisation) || group_admin?
   end
+
   alias_method :update?, :edit?
   alias_method :add_editor?, :edit?
 
   def upgrade?
     user.super_admin? || user.is_organisations_admin?(record.organisation)
+  end
+
+  def request_upgrade?
+    group_admin? && !record.active?
+  end
+
+private
+
+  def group_admin?
+    record.memberships.find_by(user:)&.group_admin?
   end
 
   class Scope < ApplicationPolicy::Scope

@@ -68,6 +68,18 @@ class GroupsController < ApplicationController
     redirect_to @group, success: t("groups.success_messages.upgrade"), status: :see_other
   end
 
+  def confirm_upgrade_request
+    authorize @group, :request_upgrade?
+  end
+
+  def request_upgrade
+    authorize @group, :request_upgrade?
+
+    GroupService.new(group: @group, current_user: @current_user, host: request.host).request_upgrade
+
+    render :upgrade_requested
+  end
+
 private
 
   # Use callbacks to share common setup or constraints between actions.
