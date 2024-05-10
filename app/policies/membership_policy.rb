@@ -3,6 +3,10 @@ class MembershipPolicy < ApplicationPolicy
     user.super_admin? || organisation_admin? || (group_admin? && record.editor?)
   end
 
+  def update?
+    user.super_admin? || organisation_admin?
+  end
+
 private
 
   def group_admin?
