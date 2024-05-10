@@ -35,6 +35,8 @@ en:
           attributes:
             hint_text:
               too_long: Hint text must be %{count} characters or less
+            is_optional:
+              inclusion: Select ‘mandatory’ if people have to answer this question
             question_text:
               blank: Enter a question
               too_long: Question text must be %{count} characters or less
@@ -441,6 +443,9 @@ en:
           phone_number: Ask the question the way you would in person. For example, ‘What’s your phone number?’
           radio: Ask the question the way you would in person. For example, ‘What country do you live in?’
           single_line: Ask the question the way you would in person. For example, ‘What’s your reference number?’
+      pages_question_input:
+        is_optional_options:
+          'true': We’ll add ‘(optional)’ to the end of the question text.
     label:
       account_name_input:
         name: Enter your full name
@@ -532,6 +537,9 @@ en:
         default_goto_page_id: Select a question or page
       pages_question_input:
         hint_text: Hint text (optional)
+        is_optional_options:
+          'false': Mandatory
+          'true': Optional
         question_text: Question text
       user_upgrade_request:
         met_requirements_options:
@@ -539,6 +547,8 @@ en:
     legend:
       mou_signature:
         agreed: Do you agree to the MOU?
+      pages_question_input:
+        is_optional: Should this question be mandatory or optional?
       user_upgrade_request:
         met_requirements: Confirm that you meet these requirements
   home:
@@ -843,7 +853,6 @@ en:
     your_changes_are_live: Your changes are live
     your_form_is_live: Your form is live
   pages:
-    add_rules_legend: Question settings
     answer_settings: Answer settings
     delete_question: Delete question
     go_to_your_questions: Back to your questions
@@ -854,8 +863,6 @@ en:
       mark_complete:
         legend: Have you finished editing your questions?
       title: Add and edit your questions
-    make_optional_hint: "‘(optional)’ will be added to the end of the question text"
-    make_optional_text: Make this question optional so people can leave it blank
     optional: "%{question_text} (optional)"
     question: Question
     submit_save: Save question

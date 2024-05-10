@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Pages::QuestionInput, type: :model do
-  let(:question_input) { build :question_input, question_text:, draft_question: }
+  let(:question_input) { build :question_input, question_text:, draft_question:, is_optional: }
   let(:draft_question) { build :draft_question, question_text: }
   let(:question_text) { "What is your full name?" }
+  let(:is_optional) { "false" }
 
   it "has a valid factory" do
     expect(build(:question_input)).to be_valid
@@ -86,6 +87,49 @@ RSpec.describe Pages::QuestionInput, type: :model do
       end
     end
 
+    describe "#is_optional" do
+      let(:question_input) { build :question_input, is_optional: }
+
+      context "when is_optional is nil" do
+        let(:is_optional) { nil }
+
+        it "is invalid" do
+          expect(question_input).not_to be_valid
+        end
+
+        it "has an error message" do
+          question_input.valid?
+          expect(question_input.errors[:is_optional]).to include(I18n.t("activemodel.errors.models.pages/question_input.attributes.is_optional.inclusion"))
+        end
+      end
+
+      context "when is_optional is true" do
+        let(:is_optional) { "true" }
+
+        it "is valid" do
+          expect(question_input).to be_valid
+        end
+
+        it "has no error message" do
+          question_input.valid?
+          expect(question_input.errors[:is_optional]).to be_empty
+        end
+      end
+
+      context "when is_optional is false" do
+        let(:is_optional) { "false" }
+
+        it "is valid" do
+          expect(question_input).to be_valid
+        end
+
+        it "has no error message" do
+          question_input.valid?
+          expect(question_input.errors[:is_optional]).to be_empty
+        end
+      end
+    end
+
     context "when not given a draft_question" do
       let(:draft_question) { nil }
 
@@ -105,7 +149,7 @@ RSpec.describe Pages::QuestionInput, type: :model do
       before do
         question_input.question_text = "How old are you?"
         question_input.hint_text = "As a number"
-        question_input.is_optional = false
+        question_input.is_optional = "false"
         question_input.submit
       end
 
@@ -118,7 +162,7 @@ RSpec.describe Pages::QuestionInput, type: :model do
       end
 
       it "sets a draft_question is_optional" do
-        expect(question_input.draft_question.is_optional).to eq question_input.is_optional
+        expect(question_input.draft_question.is_optional.to_s).to eq question_input.is_optional
       end
     end
   end

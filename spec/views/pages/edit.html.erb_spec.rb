@@ -4,7 +4,8 @@ describe "pages/edit.html.erb" do
   let(:question_text) { nil }
 
   let(:form) { build :form, id: 1, pages: [page] }
-  let(:page) { build :page, id: 1, question_text:, form_id: 1, answer_type: "email", answer_settings: nil, page_heading: nil }
+  let(:page) { build :page, id: 1, question_text:, form_id: 1, answer_type:, answer_settings: nil, page_heading: nil }
+  let(:answer_type) { "email" }
 
   let(:draft_question) { question_input.draft_question }
   let(:question_input) do
@@ -41,6 +42,26 @@ describe "pages/edit.html.erb" do
 
     it "has the correct title" do
       expect(view.content_for(:title)).to have_content("Question'<> 1")
+    end
+  end
+
+  context "when the page is not a selection question" do
+    it "contains the optional/mandatory radio question" do
+      expect(rendered).to have_text(I18n.t("helpers.legend.pages_question_input.is_optional"))
+      expect(rendered).to have_text(I18n.t("helpers.label.pages_question_input.is_optional_options.true"))
+      expect(rendered).to have_text(I18n.t("helpers.label.pages_question_input.is_optional_options.false"))
+      expect(rendered).to have_text(I18n.t("helpers.hint.pages_question_input.is_optional_options.true"))
+    end
+  end
+
+  context "when the page is a selection question" do
+    let(:answer_type) { "selection" }
+
+    it "does not contain the optional/mandatory radio question" do
+      expect(rendered).not_to have_text(I18n.t("pages.is_optional.legend"))
+      expect(rendered).not_to have_text(I18n.t("pages.is_optional.options.mandatory"))
+      expect(rendered).not_to have_text(I18n.t("pages.is_optional.options.optional"))
+      expect(rendered).not_to have_text(I18n.t("helpers.hint.pages_question_input.is_optional_options.true"))
     end
   end
 end
