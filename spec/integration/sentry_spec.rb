@@ -19,8 +19,8 @@ RSpec.describe "config/initializers/sentry" do
     let(:form) { build :form, id: 1, submission_email: "submission-email@test.example" }
 
     before do
-      form.not_a_method
-    rescue NameError => e
+      raise "Something went wrong: #{form.inspect}"
+    rescue RuntimeError => e
       Sentry.capture_exception(e)
     end
 
@@ -33,7 +33,7 @@ RSpec.describe "config/initializers/sentry" do
     end
 
     it "keeps the rest of the exception message" do
-      expect(last_sentry_event.to_hash[:exception][:values].first[:value]).to include "undefined method"
+      expect(last_sentry_event.to_hash[:exception][:values].first[:value]).to include "Something went wrong"
     end
   end
 

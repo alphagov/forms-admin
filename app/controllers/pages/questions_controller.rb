@@ -33,7 +33,7 @@ class Pages::QuestionsController < PagesController
     @question_input = Pages::QuestionInput.new(answer_type: draft_question.answer_type,
                                                question_text: draft_question.question_text,
                                                hint_text: draft_question.hint_text,
-                                               is_optional: draft_question.is_optional || false,
+                                               is_optional: draft_question.is_optional,
                                                answer_settings: draft_question.answer_settings)
     render :edit, locals: { current_form:, draft_question: }
   end

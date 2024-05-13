@@ -1,6 +1,6 @@
 class Pages::SelectionsSettingsController < PagesController
   def new
-    @selections_settings_input = Pages::SelectionsSettingsInput.new(draft_question.answer_settings)
+    @selections_settings_input = Pages::SelectionsSettingsInput.new(**draft_question.answer_settings, include_none_of_the_above: draft_question.is_optional)
     @selections_settings_path = selections_settings_create_path(current_form)
     @back_link_url = question_text_new_path(current_form)
     render :selections_settings, locals: { current_form: }
