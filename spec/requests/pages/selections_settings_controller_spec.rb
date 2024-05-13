@@ -14,8 +14,7 @@ describe Pages::SelectionsSettingsController, type: :request do
            form_id: form.id,
            is_optional: false,
            answer_settings: { selection_options: [{ name: "" }, { name: "" }],
-                              only_one_option: false,
-                              include_none_of_the_above: false }
+                              only_one_option: false }
   end
   let(:page_id) { nil }
 
@@ -44,6 +43,27 @@ describe Pages::SelectionsSettingsController, type: :request do
 
     it "renders the template" do
       expect(response).to have_rendered("pages/selections_settings")
+    end
+
+    context "when draft question already contains selection settings" do
+      let(:draft_question) do
+        create :draft_question,
+               answer_type: "selection",
+               page_id:,
+               user: editor_user,
+               form_id: form.id,
+               is_optional: true,
+               answer_settings: { selection_options: [{ name: "Option 1" }, { name: "Option 2" }],
+                                  only_one_option: true }
+      end
+
+      it "returns the existing draft question answer settings" do
+        settings_form = assigns(:selections_settings_input)
+        draft_question_settings = draft_question.answer_settings
+        expect(settings_form.only_one_option).to eq draft_question_settings[:only_one_option]
+        expect(settings_form.selection_options.map { |option| { name: option[:name] } }).to eq(draft_question_settings[:selection_options].map { |option| { name: option[:name] } })
+        expect(settings_form.include_none_of_the_above).to eq draft_question.is_optional
+      end
     end
   end
 
