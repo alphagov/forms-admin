@@ -13,6 +13,7 @@ class GroupService
   end
 
   def request_upgrade
+    @group.upgrade_requester = @current_user
     @group.upgrade_requested!
     send_group_upgrade_requested_emails
   end

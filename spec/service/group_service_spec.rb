@@ -64,7 +64,13 @@ RSpec.describe GroupService do
       allow(delivery).to receive(:deliver_now).with(no_args)
     end
 
-    it "upgrades the group to active" do
+    it "sets the upgrade_requester on the group" do
+      expect {
+        group_service.request_upgrade
+      }.to change(group, :upgrade_requester).to(current_user)
+    end
+
+    it "sets the group status to upgrade_requested" do
       expect {
         group_service.request_upgrade
       }.to change(group, :status).to("upgrade_requested")
