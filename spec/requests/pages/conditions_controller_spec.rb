@@ -1,7 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Pages::ConditionsController, type: :request do
-  let(:form) { build :form, :ready_for_routing, id: 1 }
+  let(:organisation_id) { editor_user.organisation_id }
+  let(:other_organisation_id) { editor_user.organisation_id + 1 }
+  let(:form) { build :form, :ready_for_routing, id: 1, organisation_id: }
   let(:pages) { form.pages }
   let(:page) do
     pages.first.tap do |first_page|
@@ -17,8 +19,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
   let(:selected_page) { page }
 
   let(:submit_result) { true }
-
-  let(:expected_to_raise_error) { false }
 
   before do
     login_as_editor_user
@@ -54,12 +54,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
         mock.get "/api/v1/forms/1/pages/1", headers, selected_page.to_json, 200
       end
 
-      if expected_to_raise_error
-        allow(Pundit).to receive(:authorize).and_raise(Pundit::NotAuthorizedError)
-      else
-        allow(Pundit).to receive(:authorize).and_return(true)
-      end
-
       post routing_page_path(form_id: 1, params:)
     end
 
@@ -72,7 +66,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when user should not be allowed to add routes to pages" do
-      let(:expected_to_raise_error) { true }
+      let(:organisation_id) { other_organisation_id }
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
@@ -105,12 +99,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
         mock.get "/api/v1/forms/1/pages/1", headers, selected_page.to_json, 200
       end
 
-      if expected_to_raise_error
-        allow(Pundit).to receive(:authorize).and_raise(Pundit::NotAuthorizedError)
-      else
-        allow(Pundit).to receive(:authorize).and_return(true)
-      end
-
       get new_condition_path(form_id: 1, page_id: 1)
     end
 
@@ -123,7 +111,8 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when user should not be allowed to add routes to pages" do
-      let(:expected_to_raise_error) { true }
+      let(:form) { build :form, id: 1 }
+      let(:pages) { [build(:page)] }
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
@@ -142,12 +131,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
         mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
         mock.get "/api/v1/forms/1/pages/1", headers, selected_page.to_json, 200
-      end
-
-      if expected_to_raise_error
-        allow(Pundit).to receive(:authorize).and_raise(Pundit::NotAuthorizedError)
-      else
-        allow(Pundit).to receive(:authorize).and_return(true)
       end
 
       conditional_form = Pages::ConditionsInput.new(form:, page: selected_page, answer_value: "Yes", goto_page_id: 3)
@@ -185,7 +168,8 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when user should not be allowed to add routes to pages" do
-      let(:expected_to_raise_error) { true }
+      let(:form) { build :form, id: 1 }
+      let(:pages) { [build(:page)] }
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
@@ -209,12 +193,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
         mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
         mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", headers, condition.to_json, 200
-      end
-
-      if expected_to_raise_error
-        allow(Pundit).to receive(:authorize).and_raise(Pundit::NotAuthorizedError)
-      else
-        allow(Pundit).to receive(:authorize).and_return(true)
       end
 
       allow(Pages::ConditionsInput).to receive(:new).and_return(conditions_input)
@@ -241,7 +219,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when user should not be allowed to add routes to pages" do
-      let(:expected_to_raise_error) { true }
+      let(:organisation_id) { other_organisation_id }
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
@@ -264,12 +242,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
         mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
         mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", headers, condition.to_json, 200
-      end
-
-      if expected_to_raise_error
-        allow(Pundit).to receive(:authorize).and_raise(Pundit::NotAuthorizedError)
-      else
-        allow(Pundit).to receive(:authorize).and_return(true)
       end
 
       conditional_form = Pages::ConditionsInput.new(form:, page: selected_page, record: condition, answer_value: "Yes", goto_page_id: 3)
@@ -310,7 +282,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when user should not be allowed to add routes to pages" do
-      let(:expected_to_raise_error) { true }
+      let(:organisation_id) { other_organisation_id }
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
@@ -335,12 +307,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
         mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", headers, condition.to_json, 200
       end
 
-      if expected_to_raise_error
-        allow(Pundit).to receive(:authorize).and_raise(Pundit::NotAuthorizedError)
-      else
-        allow(Pundit).to receive(:authorize).and_return(true)
-      end
-
       delete_condition_input = Pages::DeleteConditionInput.new(form:, page: selected_page, record: condition, answer_value: "Yes", goto_page_id: 3)
 
       allow(delete_condition_input).to receive(:goto_page_question_text).and_return("What is your name?")
@@ -359,7 +325,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when user should not be allowed to add routes to pages" do
-      let(:expected_to_raise_error) { true }
+      let(:organisation_id) { other_organisation_id }
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
@@ -385,12 +351,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
         mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
         mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", headers, condition.to_json, 200
         mock.delete "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", headers, nil, 204
-      end
-
-      if expected_to_raise_error
-        allow(Pundit).to receive(:authorize).and_raise(Pundit::NotAuthorizedError)
-      else
-        allow(Pundit).to receive(:authorize).and_return(true)
       end
 
       delete_condition_input = Pages::DeleteConditionInput.new(form:, page: selected_page, record: condition, answer_value: "Wales", goto_page_id: 3, confirm:)
@@ -450,7 +410,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when user should not be allowed to add routes to pages" do
-      let(:expected_to_raise_error) { true }
+      let(:organisation_id) { other_organisation_id }
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
