@@ -139,7 +139,7 @@ RSpec.describe "/groups", type: :request do
 
       it "has a link to upgrade the trial group" do
         get group_url(member_group)
-        expect(response.body).to include(I18n.t("groups.show.trial_banner.upgrade_group"))
+        expect(response.body).to include(I18n.t("groups.show.trial_banner.upgrade.link"))
       end
     end
   end

@@ -369,14 +369,21 @@ en:
       edit_group_name: Change the name of this group
       review_group_members: Review members of this group
       trial_banner:
-        editor_body_html: |
-          <p>You can create a form, preview and test it.</p>
-          <p>Forms in this group cannot be made live unless the group is upgraded. Only a group admin can request for a group to be upgraded.</p>
-        group_admin_body_html: "<p>You can create forms in this group and test them, but you cannot make them live.</p>"
+        editor:
+          body_html: |
+            <p>You can create a form, preview and test it.</p>
+            <p>Forms in this group cannot be made live unless the group is upgraded. Only a group admin can request for a group to be upgraded.</p>
         heading: This is a ‘trial’ group
-        org_admin_body_html: "<p>Forms in this group cannot be made live unless the group is upgraded to an ‘active’ group.</p>"
-        request_upgrade: Find out how to upgrade this group so you can make forms live
-        upgrade_group: Upgrade this group
+        request_upgrade:
+          body_html: "<p>You can create forms in this group and test them, but you cannot make them live.</p>"
+          link: Find out how to upgrade this group so you can make forms live
+        review_upgrade:
+          body_html: "<p>%{upgrade_requester_name} has asked to upgrade this group so they can make forms live.</p>"
+          heading: A group admin has asked to upgrade this group
+          link: Accept or reject this upgrade request
+        upgrade:
+          body_html: "<p>Forms in this group cannot be made live unless the group is upgraded to an ‘active’ group.</p>"
+          link: Upgrade this group
     status_caption:
       active: Active group
       trial: Trial group

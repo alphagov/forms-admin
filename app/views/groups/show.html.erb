@@ -1,24 +1,30 @@
 <% set_page_title(@group.name) %>
 <% content_for :back_link, govuk_back_link_to(groups_path, t("back_link.groups")) %>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <% unless @group.active? %>
+<% unless @group.active? %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
       <%= govuk_notification_banner(title_text: t("banner.default.title")) do |nb| %>
-        <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
-        <% if policy(@group).upgrade? %>
-          <%= t("groups.show.trial_banner.org_admin_body_html") %>
-          <%= govuk_link_to t("groups.show.trial_banner.upgrade_group"), upgrade_group_path(@group) %>
+        <% if policy(@group).review_upgrade? %>
+          <% nb.with_heading(text: t("groups.show.trial_banner.review_upgrade.heading"), tag: "h3") %>
+          <%= t("groups.show.trial_banner.review_upgrade.body_html", upgrade_requester_name: @group.upgrade_requester.name) %>
+          <%= govuk_link_to t("groups.show.trial_banner.review_upgrade.link"), review_upgrade_group_path(@group) %>
+        <% elsif policy(@group).upgrade? %>
+          <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
+          <%= t("groups.show.trial_banner.upgrade.body_html") %>
+          <%= govuk_link_to t("groups.show.trial_banner.upgrade.link"), upgrade_group_path(@group) %>
         <% elsif policy(@group).request_upgrade? %>
-          <%= t("groups.show.trial_banner.group_admin_body_html") %>
-          <%= govuk_link_to t("groups.show.trial_banner.request_upgrade"), request_upgrade_group_path(@group) %>
+          <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
+          <%= t("groups.show.trial_banner.request_upgrade.body_html") %>
+          <%= govuk_link_to t("groups.show.trial_banner.request_upgrade.link"), request_upgrade_group_path(@group) %>
         <% else %>
-          <%= t("groups.show.trial_banner.editor_body_html") %>
+          <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
+          <%= t("groups.show.trial_banner.editor.body_html") %>
         <% end %>
       <% end %>
-    <% end %>
+    </div>
   </div>
-</div>
+<% end %>
 
 <%= render @group %>
 
