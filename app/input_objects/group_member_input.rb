@@ -2,11 +2,12 @@ class GroupMemberInput < BaseInput
   include ActiveModel::Validations::Callbacks
   include Rails.application.routes.url_helpers
 
-  attr_accessor :member_email_address, :group, :creator, :host
+  attr_accessor :member_email_address, :group, :creator, :host, :role
 
   EMAIL_REGEX = /.*@.*/
 
   validates :member_email_address, presence: true
+  validates :role, presence: true
   validates :member_email_address, format: { with: EMAIL_REGEX, message: :invalid_email }
   validate :invited_user_has_account, if: -> { member_email_address.present? }
 
@@ -24,6 +25,10 @@ class GroupMemberInput < BaseInput
     true
   end
 
+  def role_options
+    Membership.roles.keys.map { |role| [I18n.t("membership.roles.#{role}"), role] }
+  end
+
 private
 
   def invited_user
@@ -31,7 +36,7 @@ private
   end
 
   def new_membership
-    @new_membership ||= group.memberships.new(user: invited_user, role: :editor, added_by: creator)
+    @new_membership ||= group.memberships.new(user: invited_user, role:, added_by: creator)
   end
 
   def invited_user_has_account

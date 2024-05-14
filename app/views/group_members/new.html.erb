@@ -1,4 +1,8 @@
-<% set_page_title(t(".title")) %>
+<% if show_role_options %>
+  <% set_page_title(t(".title_show_role_options")) %>
+<% else %>
+  <% set_page_title(t(".title")) %>
+<% end %>
 <% content_for :back_link, govuk_back_link_to(group_members_path(@group)) %>
 
 <div class="govuk-grid-row">
@@ -6,7 +10,11 @@
     <h1 id="heading" class="govuk-heading-l">
       <span class="govuk-caption-l"><%= @group.name %></span>
       <span class="govuk-visually-hidden"> - </span>
-      <%= t(".title") %>
+      <% if show_role_options %>
+        <%= t(".title_show_role_options") %>
+      <% else %>
+        <%= t(".title") %>
+      <% end %>
     </h1>
 
     <%= t(".body_html") %>
@@ -17,6 +25,17 @@
       <% end %>
 
       <%= f.govuk_text_field :member_email_address, label: {  tag: 'h2', size: 'm' } %>
+
+      <% if show_role_options %>
+        <%= f.govuk_collection_radio_buttons(
+              :role,
+              Membership.roles.keys.sort,
+              ->(option) { option },
+              ->(option) { t("helpers.label.group_member_input.roles.#{option}.name") },
+              ->(option) { t("helpers.label.group_member_input.roles.#{option}.description") },
+              legend: { text: t('helpers.label.group_member_input.role'), size: 'm', tag: 'h2' },
+            )  %>
+      <% end %>
       <%= f.govuk_submit t(".submit") %>
     <% end %>
   </div>
