@@ -107,50 +107,35 @@ RSpec.describe "groups/show", type: :view do
       expect(rendered).to have_css ".govuk-notification-banner"
     end
 
-    context "when the user has permission to upgrade the form" do
+    context "when the user has permission to upgrade the group" do
       let(:upgrade?) { true }
+      let(:request_upgrade?) { true }
 
-      context "and the user has permission to request an upgrade" do
-        let(:request_upgrade?) { true }
-
-        it "shows content for an organisation admin" do
-          expect(rendered).to have_text "Forms in this group cannot be made live unless the group is upgraded to an ‘active’ group."
-        end
-
-        it "shows a link to upgrade the group" do
-          expect(rendered).to have_link("Upgrade this group", href: upgrade_group_path(group))
-        end
+      it "shows content for an organisation admin" do
+        expect(rendered).to have_text "Forms in this group cannot be made live unless the group is upgraded to an ‘active’ group."
       end
 
-      context "and the user does not have permission to request an upgrade" do
-        it "shows content for an organisation admin" do
-          expect(rendered).to have_text "Forms in this group cannot be made live unless the group is upgraded to an ‘active’ group."
-        end
-
-        it "shows a link to upgrade the group" do
-          expect(rendered).to have_link("Upgrade this group", href: upgrade_group_path(group))
-        end
+      it "shows a link to upgrade the group" do
+        expect(rendered).to have_link("Upgrade this group", href: upgrade_group_path(group))
       end
     end
+  end
 
-    context "when the user does not have permission to upgrade the form" do
-      context "and the user has permission to request an upgrade" do
-        let(:request_upgrade?) { true }
+  context "and the user has permission to request an upgrade" do
+    let(:request_upgrade?) { true }
 
-        it "shows content for a group admin" do
-          expect(rendered).to have_text "You can create forms in this group and test them, but you cannot make them live."
-        end
+    it "shows content for a group admin" do
+      expect(rendered).to have_text "You can create forms in this group and test them, but you cannot make them live."
+    end
 
-        it "shows a link to request an upgrade" do
-          expect(rendered).to have_link("Find out how to upgrade this group so you can make forms live", href: request_upgrade_group_path(group))
-        end
-      end
+    it "shows a link to request an upgrade" do
+      expect(rendered).to have_link("Find out how to upgrade this group so you can make forms live", href: request_upgrade_group_path(group))
+    end
+  end
 
-      context "and the user does not have permission to request an upgrade" do
-        it "shows content for an editor" do
-          expect(rendered).to have_text "You can create a form, preview and test it."
-        end
-      end
+  context "and the user has no permissions relating to upgrading groups" do
+    it "shows content for an editor" do
+      expect(rendered).to have_text "You can create a form, preview and test it."
     end
   end
 
