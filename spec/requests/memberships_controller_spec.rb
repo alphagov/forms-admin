@@ -38,9 +38,10 @@ describe "/memberships", type: :request do
 
   describe "PUT #update" do
     let(:membership) { create(:membership, user:, group:) }
+    let(:current_user) { organisation_admin_user }
 
     before do
-      login_as_super_admin_user
+      login_as current_user
     end
 
     context "with valid parameters" do
@@ -79,9 +80,7 @@ describe "/memberships", type: :request do
     end
 
     context "when not authorized" do
-      before do
-        allow(Pundit).to receive(:authorize).and_raise(Pundit::NotAuthorizedError)
-      end
+      let(:current_user) { editor_user }
 
       it "redirects to the root path" do
         put membership_path(membership), params: { membership: { role: "group_admin" } }
