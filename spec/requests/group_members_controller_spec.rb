@@ -1,12 +1,13 @@
 require "rails_helper"
 
 RSpec.describe "/groups/:group_id/members", type: :request do
-  let(:group) { create :group, organisation: editor_user.organisation }
+  let(:group) { create :group, organisation: current_user.organisation }
   let(:role) { :group_admin }
+  let(:current_user) { editor_user }
 
   before do
-    create(:membership, user: editor_user, group:, role:)
-    login_as_editor_user
+    create(:membership, user: current_user, group:, role:)
+    login_as current_user
   end
 
   describe "GET /groups/:group_id/members" do
@@ -54,6 +55,14 @@ RSpec.describe "/groups/:group_id/members", type: :request do
         expect(response).to have_http_status :redirect
       end
 
+      it "ignores role when group admin adds a member" do
+        expect {
+          post group_members_url(group), params: { group_member_input: { member_email_address: user.email, role: :group_admin } }
+        }.to change(Membership, :count).by(1)
+
+        expect(Membership.last.role).to eq "editor"
+      end
+
       context "and I'm an editor" do
         let(:role) { :editor }
 
@@ -63,6 +72,20 @@ RSpec.describe "/groups/:group_id/members", type: :request do
           }.not_to change(Membership, :count)
 
           expect(response).to have_http_status :forbidden
+        end
+      end
+
+      context "and I'm an organisation admin" do
+        let(:current_user) { organisation_admin_user }
+
+        it "creates a new membership" do
+          expect {
+            post group_members_url(group), params: { group_member_input: { member_email_address: user.email, role: :group_admin } }
+          }.to change(Membership, :count).by(1)
+
+          expect(Membership.last.group_admin?).to be true
+
+          expect(response).to have_http_status :redirect
         end
       end
     end
