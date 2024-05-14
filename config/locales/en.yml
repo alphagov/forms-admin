@@ -278,7 +278,8 @@ en:
     confirm_deletion_page: Are you sure you want to delete this page?
   group_members:
     index:
-      add_member: Add an editor
+      add_editor: Add an editor
+      add_member: Add an editor or group admin
       details:
         summary_content_html: |
           <p>An editor can edit forms in a group but cannot make forms live.</p>
