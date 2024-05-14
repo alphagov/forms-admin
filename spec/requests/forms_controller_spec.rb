@@ -143,7 +143,7 @@ RSpec.describe FormsController, type: :request do
 
   describe "Destroying an existing form" do
     describe "Given a valid form" do
-      let(:group) { create :group }
+      let(:group) { create :group, organisation_id: editor_user.organisation_id }
 
       before do
         ActiveResourceMock.mock_resource(form,
@@ -152,7 +152,11 @@ RSpec.describe FormsController, type: :request do
                                            delete: { response: {}, status: 200 },
                                          })
         GroupForm.create!(group:, form_id: form.id) if group.present?
-        allow(Pundit).to receive(:authorize).and_return(true)
+
+        if group.present?
+          create(:membership, user: editor_user, group:)
+        end
+
         delete destroy_form_path(form_id: 2, forms_delete_confirmation_input: { confirm: "yes" })
       end
 
