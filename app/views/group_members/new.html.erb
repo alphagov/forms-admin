@@ -7,22 +7,23 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 id="heading" class="govuk-heading-l">
-      <span class="govuk-caption-l"><%= @group.name %></span>
-      <span class="govuk-visually-hidden"> - </span>
-      <% if show_role_options %>
-        <%= t(".title_show_role_options") %>
-      <% else %>
-        <%= t(".title") %>
-      <% end %>
-    </h1>
-
-    <%= t(".body_html") %>
 
     <%= form_with(model: @group_member_input, url: group_members_path(@group)) do |f| %>
       <% if @group_member_input&.errors.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
+
+      <h1 id="heading" class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @group.name %></span>
+        <span class="govuk-visually-hidden"> - </span>
+        <% if show_role_options %>
+          <%= t(".title_show_role_options") %>
+        <% else %>
+          <%= t(".title") %>
+        <% end %>
+      </h1>
+
+      <%= t(".body_html") %>
 
       <%= f.govuk_text_field :member_email_address, label: {  tag: 'h2', size: 'm' } %>
 
