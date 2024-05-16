@@ -24,6 +24,8 @@ en:
               not_forms_user: This person does not have a GOV.UK Forms account
               taken: This person is already a member of the group
               user_in_other_org: This person has a different organisation set for their GOV.UK Forms account
+            role:
+              blank: Select the role this person should have
         page:
           attributes:
             hint_text:
@@ -276,7 +278,8 @@ en:
     confirm_deletion_page: Are you sure you want to delete this page?
   group_members:
     index:
-      add_member: Add an editor
+      add_editor: Add an editor
+      add_member: Add an editor or group admin
       details:
         summary_content_html: |
           <p>An editor can edit forms in a group but cannot make forms live.</p>
@@ -309,6 +312,7 @@ en:
         <p>You must use their government email address.</p>
       submit: Add this person
       title: Add an editor to this group
+      title_show_role_options: Add an editor or group admin to this group
   groups:
     confirm_upgrade:
       body_html: |
@@ -466,6 +470,14 @@ en:
         confirm: Are you sure you want to make your form live?
       group_member_input:
         member_email_address: Enter the email address of the person you want to add
+        role: What role should they have in this group?
+        roles:
+          editor:
+            description: They’ll be able to create and edit forms in this group.
+            name: Editor
+          group_admin:
+            description: They’ll be able to create and edit forms, make forms live and add editors to this group.
+            name: Group admin
       mou_signature:
         agreed_options:
           '1': I agree to the MOU on behalf of my organisation

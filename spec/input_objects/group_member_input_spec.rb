@@ -7,9 +7,15 @@ describe GroupMemberInput do
   let(:user) { create(:user, organisation: group.organisation) }
 
   describe "validations" do
-    it "is valid with an email address" do
+    it "is valid with an email address and role" do
       group_member_input.member_email_address = user.email
+      group_member_input.role = :editor
       expect(group_member_input).to be_valid
+    end
+
+    it "is invalid without a role" do
+      group_member_input.member_email_address = user.email
+      expect(group_member_input).not_to be_valid
     end
 
     it "is invalid without an email address" do
@@ -36,6 +42,7 @@ describe GroupMemberInput do
     it "is valid with a email address that is a GOV.UK forms user" do
       user = create(:user)
       group_member_input.member_email_address = user.email
+      group_member_input.role = :editor
       expect(group_member_input).to be_valid
     end
 
@@ -73,6 +80,7 @@ describe GroupMemberInput do
         before do
           group_member_input.group = group
           group_member_input.member_email_address = user.email
+          group_member_input.role = :editor
           group_member_input.creator = user
           group_member_input.host = "example.net"
 

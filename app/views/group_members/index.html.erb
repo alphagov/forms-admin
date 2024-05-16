@@ -51,8 +51,10 @@
 <% end %>
 <% end %>
 
-<% if Pundit.policy(@current_user, @group).edit? %>
+<% if policy(@group).add_group_admin? %>
   <%= govuk_link_to(t(".add_member"), new_group_member_path(@group), class: "govuk-button") %>
+<% elsif policy(@group).add_editor? %>
+  <%= govuk_link_to(t(".add_editor"), new_group_member_path(@group), class: "govuk-button") %>
 <% end %>
 
 <div class="govuk-!-margin-top-3">

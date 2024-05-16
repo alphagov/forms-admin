@@ -19,6 +19,8 @@ class GroupPolicy < ApplicationPolicy
     user.super_admin? || user.is_organisations_admin?(record.organisation)
   end
 
+  alias_method :add_group_admin?, :upgrade?
+
   def request_upgrade?
     group_admin? && !record.active?
   end

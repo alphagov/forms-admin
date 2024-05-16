@@ -65,8 +65,8 @@ RSpec.describe GroupPolicy do
         create :membership, user:, group:, role: :group_admin
       end
 
-      it "forbids upgrade" do
-        expect(policy).to forbid_only_actions(%i[upgrade])
+      it "forbids upgrade and add_group_admin" do
+        expect(policy).to forbid_only_actions(%i[upgrade add_group_admin])
       end
 
       context "when the group status is active" do

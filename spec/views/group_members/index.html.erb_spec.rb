@@ -7,7 +7,8 @@ describe "group_members/index", type: :view do
   let(:user2) { build(:user, organisation:) }
   let(:memberships) { [create(:membership, user: user1, role: :editor, group:), create(:membership, user: user2, role: :group_admin, group:)] }
   let(:group) { create(:group, name: "Group 1", organisation:) }
-  let(:edit) { true }
+  let(:can_add_editor) { true }
+  let(:can_add_group_member) { false }
   let(:show_actions) { true }
 
   context "when there are members of a group" do
@@ -17,8 +18,11 @@ describe "group_members/index", type: :view do
       assign(:current_user, current_user)
       assign(:group, group)
 
-      allow(Pundit).to receive(:policy).with(current_user, group).and_return(instance_double(GroupPolicy, edit?: edit))
       allow(Pundit).to receive(:policy).with(current_user, Membership).and_return(instance_double(MembershipPolicy, update?: true, destroy?: true))
+
+      without_partial_double_verification do
+        allow(view).to receive(:policy).and_return(OpenStruct.new(add_editor?: can_add_editor, add_group_admin?: can_add_group_member))
+      end
 
       render locals: { show_actions: }
     end
@@ -48,7 +52,7 @@ describe "group_members/index", type: :view do
     end
 
     it "has an add member link" do
-      expect(rendered).to have_link(t("group_members.index.add_member"), href: new_group_member_path(group))
+      expect(rendered).to have_link(t("group_members.index.add_editor"), href: new_group_member_path(group))
     end
 
     context "when show_actions is false" do
@@ -71,10 +75,19 @@ describe "group_members/index", type: :view do
     end
 
     context "when the current user cannot add an editor" do
-      let(:edit) { false }
+      let(:can_add_editor) { false }
 
       it "does not display the add member link" do
-        expect(rendered).not_to have_link(t("group_members.index.add_member"), href: new_group_member_path(group))
+        expect(rendered).not_to have_link(href: new_group_member_path(group))
+      end
+    end
+
+    context "when the current_user can add a group_admin" do
+      let(:can_add_editor) { true }
+      let(:can_add_group_member) { true }
+
+      it "displays the link to add group_admin or editor" do
+        expect(rendered).to have_link(t("group_members.index.add_member"), href: new_group_member_path(group))
       end
     end
   end
