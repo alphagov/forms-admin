@@ -24,10 +24,8 @@
 
       <%= t("what_happens_next.how_this_content_is_used_html") %>
 
-      <% if FeatureService.enabled?(:reference_numbers_enabled) %>
-        <%= govuk_inset_text do %>
-          <%= t("what_happens_next.reference_numbers") %>
-        <% end %>
+      <%= govuk_inset_text do %>
+        <%= t("what_happens_next.reference_numbers") %>
       <% end %>
 
       <%= render MarkdownEditorComponent::View.new(:what_happens_next_markdown,
