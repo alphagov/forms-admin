@@ -24,7 +24,6 @@ describe "Settings" do
     include_examples expected_value_test, :check_your_question_enabled, features, false
     include_examples expected_value_test, :metrics_for_form_creators_enabled, features, false
     include_examples expected_value_test, :notify_original_submission_email_of_change, features, false
-    include_examples expected_value_test, :reference_numbers_enabled, features, false
   end
 
   describe "forms_api" do

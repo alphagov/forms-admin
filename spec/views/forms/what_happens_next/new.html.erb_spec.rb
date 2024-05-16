@@ -24,15 +24,7 @@ describe "forms/what_happens_next/new.html.erb" do
     expect(rendered).to include(I18n.t("what_happens_next.how_this_content_is_used_html"))
   end
 
-  context "when reference numbers are not enabled", feature_reference_numbers_enabled: false do
-    it "does not contain text about reference numbers" do
-      expect(rendered).not_to have_text(I18n.t("what_happens_next.reference_numbers"))
-    end
-  end
-
-  context "when reference numbers are enabled", feature_reference_numbers_enabled: true do
-    it "contains text about reference numbers" do
-      expect(rendered).to have_text(I18n.t("what_happens_next.reference_numbers"))
-    end
+  it "contains text about reference numbers" do
+    expect(rendered).to have_text(I18n.t("what_happens_next.reference_numbers"))
   end
 end
