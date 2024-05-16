@@ -20,8 +20,6 @@ RSpec.describe Forms::ChangeNameController, type: :request do
       mock.put "/api/v1/forms/2", post_headers
     end
 
-    allow(Pundit).to receive(:authorize).and_return(true)
-
     login_as user
   end
 

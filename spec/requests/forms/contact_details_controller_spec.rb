@@ -52,8 +52,6 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
         mock.get "/api/v1/forms/2", headers, form.to_json, 200
       end
 
-      allow(Pundit).to receive(:authorize).and_return(true)
-
       post contact_details_create_path(form_id: 2), params:
     end
 

@@ -1,13 +1,14 @@
 require "rails_helper"
 
 RSpec.describe Forms::WhatHappensNextController, type: :request do
+  let(:form_organisation_id) { editor_user.organisation_id }
   let(:form_response_data) do
     {
       id: 2,
       name: "Form name",
       submission_email: "submission@email.com",
       start_page: 1,
-      organisation_id: 1,
+      organisation_id: form_organisation_id,
       what_happens_next_markdown: "Good things come to those who wait",
       live_at: nil,
     }.to_json
@@ -18,7 +19,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       name: "Form name",
       submission_email: "submission@email.com",
       id: 2,
-      organisation_id: 1,
+      organisation_id: form_organisation_id,
       what_happens_next_markdown: "",
       live_at: nil,
     )
@@ -29,7 +30,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       name: "Form name",
       submission_email: "submission@email.com",
       id: 2,
-      organisation_id: 1,
+      organisation_id: form_organisation_id,
       what_happens_next_markdown: "Wait until you get a reply",
       live_at: nil,
     })
@@ -56,16 +57,20 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
         mock.put "/api/v1/forms/2", post_headers
         mock.get "/api/v1/forms/2", headers, form.to_json, 200
       end
-      allow(Pundit).to receive(:authorize).and_return(true)
-      get what_happens_next_path(form_id: 2)
-    end
 
-    it "checks the user is authorised to view the form" do
-      expect(Pundit).to have_received(:authorize)
+      get what_happens_next_path(form_id: 2)
     end
 
     it "Reads the form from the API" do
       expect(form).to have_been_read
+    end
+
+    context "when the user is not authorised to view the form" do
+      let(:form_organisation_id) { 999 }
+
+      it "returns 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
     end
   end
 
@@ -78,12 +83,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
         mock.get "/api/v1/forms/2", headers, form.to_json, 200
         mock.put "/api/v1/forms/2", post_headers
       end
-      allow(Pundit).to receive(:authorize).and_return(true)
       post what_happens_next_path(form_id: 2), params: { forms_what_happens_next_input: { what_happens_next_markdown: }, route_to: }
-    end
-
-    it "checks the user is authorised to view the form" do
-      expect(Pundit).to have_received(:authorize)
     end
 
     it "Reads the form from the API" do
@@ -133,6 +133,14 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
           expect(response).to have_http_status(:unprocessable_entity)
         end
       end
+
+      context "when the user is not authorised to view the form" do
+        let(:form_organisation_id) { 999 }
+
+        it "returns 403" do
+          expect(response).to have_http_status(:forbidden)
+        end
+      end
     end
 
     context "when saving markdown" do
@@ -164,12 +172,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
     let(:markdown) { "- Markdown" }
 
     before do
-      allow(Pundit).to receive(:authorize).and_return(true)
       post what_happens_next_render_preview_path(form_id: form.id), params: { markdown: }
-    end
-
-    it "checks the user is authorised to view the form" do
-      expect(Pundit).to have_received(:authorize)
     end
 
     it "returns a JSON object containing the converted HTML" do
@@ -201,6 +204,14 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
 
       it "returns 200" do
         expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context "when the user is not authorised to view the form" do
+      let(:form_organisation_id) { 999 }
+
+      it "returns 403" do
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
