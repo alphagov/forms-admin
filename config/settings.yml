@@ -3,7 +3,6 @@ features:
   metrics_for_form_creators_enabled: false
   notify_original_submission_email_of_change: false
   check_your_question_enabled: false
-  payment_links: false
   reference_numbers_enabled: false
 
 forms_api:

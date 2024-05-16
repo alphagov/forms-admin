@@ -17,16 +17,13 @@ class FormTaskListService
   end
 
   def all_sections
-    sections = [
+    [
       create_form_section,
+      payment_link_subsection,
       email_address_section,
       privacy_and_contact_details_section,
       make_form_live_section,
     ]
-
-    sections.insert(1, section_2) if FeatureService.enabled?(:payment_links)
-
-    sections
   end
 
 private
@@ -61,18 +58,18 @@ private
     ]
   end
 
-  def section_2
+  def payment_link_subsection
     {
-      title: I18n.t("forms.task_list_#{create_or_edit}.section_2.title"),
-      rows: section_2_tasks,
+      title: I18n.t("forms.task_list_#{create_or_edit}.payment_link_subsection.title"),
+      rows: payment_link_subsection_tasks,
       section_number: nil,
       subsection: true,
     }
   end
 
-  def section_2_tasks
+  def payment_link_subsection_tasks
     [
-      { task_name: I18n.t("forms.task_list_#{create_or_edit}.section_2.payment_link"), path: payment_link_path(@form.id), status: @task_statuses[:payment_link_status] },
+      { task_name: I18n.t("forms.task_list_#{create_or_edit}.payment_link_subsection.payment_link"), path: payment_link_path(@form.id), status: @task_statuses[:payment_link_status] },
     ]
   end
 
