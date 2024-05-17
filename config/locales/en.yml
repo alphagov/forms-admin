@@ -384,6 +384,7 @@ en:
         request_upgrade:
           body_html: "<p>You can create forms in this group and test them, but you cannot make them live.</p>"
           link: Find out how to upgrade this group so you can make forms live
+          without_mou_signature_html: "<p>Speak to your organisation’s GOV.UK publishing team or %{contact_link} to find out how to make live forms.</p>"
         review_upgrade:
           body_html: "<p>%{upgrade_requester_name} has asked to upgrade this group so they can make forms live.</p>"
           heading: A group admin has asked to upgrade this group
