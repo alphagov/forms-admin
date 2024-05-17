@@ -34,17 +34,25 @@ RSpec.describe "groups/index", type: :view do
     expect(rendered).to have_link("Create a group", href: new_group_path)
   end
 
-  context "when the user is not an admin" do
+  context "when the user is an editor" do
     it "shows the details text for users who are not org/super admins" do
       expect(rendered).to have_content("If you need access to an existing form or group, ask someone who has access to that group to add you.")
     end
 
-    it "does not show a notification banner" do
-      expect(rendered).not_to have_css ".govuk-notification-banner"
+    it "shows a notification banner explaining forms cannot be made live" do
+      expect(rendered).to have_css ".govuk-notification-banner", text: "You cannot make any forms live yet"
+    end
+
+    context "and org has signed an MOU" do
+      let(:current_user) { build :editor_user, :org_has_signed_mou }
+
+      it "does not show a banner" do
+        expect(rendered).not_to have_css ".govuk-notification-banner"
+      end
     end
   end
 
-  context "when the user is an admin" do
+  context "when the user is an organisation admin" do
     let(:current_user) { build :organisation_admin_user }
 
     it "shows the details text for admins" do
