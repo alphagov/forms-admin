@@ -157,6 +157,8 @@ Rails.application.routes.draw do
 
       get "request_upgrade", to: "groups#confirm_upgrade_request"
       post "request_upgrade", to: "groups#request_upgrade"
+      get "review_upgrade", to: "groups#review_upgrade"
+      post "review_upgrade", to: "groups#submit_review_upgrade"
     end
   end
 

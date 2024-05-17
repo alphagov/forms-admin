@@ -81,6 +81,28 @@ class GroupsController < ApplicationController
     render :upgrade_requested
   end
 
+  def review_upgrade
+    authorize @group, :review_upgrade?
+    @confirm_upgrade_input = Groups::ConfirmUpgradeInput.new
+  end
+
+  def submit_review_upgrade
+    authorize @group, :review_upgrade?
+
+    @confirm_upgrade_input = Groups::ConfirmUpgradeInput.new(confirm_upgrade_input_params)
+
+    return render :review_upgrade, status: :unprocessable_entity unless @confirm_upgrade_input.valid?
+
+    group_service = GroupService.new(group: @group, current_user: @current_user, host: request.host)
+    if @confirm_upgrade_input.confirmed?
+      group_service.upgrade_group
+      redirect_to @group, success: t("groups.success_messages.upgrade"), status: :see_other
+    else
+      group_service.reject_upgrade
+      redirect_to @group, status: :see_other
+    end
+  end
+
 private
 
   # Use callbacks to share common setup or constraints between actions.

@@ -7,6 +7,7 @@ RSpec.describe "groups/show", type: :view do
   let(:upgrade?) { false }
   let(:edit?) { true }
   let(:request_upgrade?) { false }
+  let(:review_upgrade?) { false }
 
   before do
     assign(:current_user, current_user)
@@ -14,7 +15,12 @@ RSpec.describe "groups/show", type: :view do
     assign(:forms, forms)
 
     without_partial_double_verification do
-      allow(view).to receive(:policy).and_return(instance_double(GroupPolicy, upgrade?: upgrade?, edit?: edit?, request_upgrade?: request_upgrade?))
+      double = instance_double(GroupPolicy,
+                               upgrade?: upgrade?,
+                               edit?: edit?,
+                               request_upgrade?: request_upgrade?,
+                               review_upgrade?: review_upgrade?)
+      allow(view).to receive(:policy).and_return(double)
     end
 
     render
@@ -107,50 +113,47 @@ RSpec.describe "groups/show", type: :view do
       expect(rendered).to have_css ".govuk-notification-banner"
     end
 
-    context "when the user has permission to upgrade the form" do
-      let(:upgrade?) { true }
-
-      context "and the user has permission to request an upgrade" do
-        let(:request_upgrade?) { true }
-
-        it "shows content for an organisation admin" do
-          expect(rendered).to have_text "Forms in this group cannot be made live unless the group is upgraded to an ‘active’ group."
-        end
-
-        it "shows a link to upgrade the group" do
-          expect(rendered).to have_link("Upgrade this group", href: upgrade_group_path(group))
-        end
-      end
-
-      context "and the user does not have permission to request an upgrade" do
-        it "shows content for an organisation admin" do
-          expect(rendered).to have_text "Forms in this group cannot be made live unless the group is upgraded to an ‘active’ group."
-        end
-
-        it "shows a link to upgrade the group" do
-          expect(rendered).to have_link("Upgrade this group", href: upgrade_group_path(group))
-        end
-      end
+    it "has the trial group heading in the notification banner" do
+      expect(rendered).to have_css "h3", text: "This is a ‘trial’ group"
     end
 
-    context "when the user does not have permission to upgrade the form" do
-      context "and the user has permission to request an upgrade" do
-        let(:request_upgrade?) { true }
+    context "when the user has permission to upgrade the group" do
+      let(:upgrade?) { true }
+      let(:request_upgrade?) { true }
 
-        it "shows content for a group admin" do
-          expect(rendered).to have_text "You can create forms in this group and test them, but you cannot make them live."
-        end
-
-        it "shows a link to request an upgrade" do
-          expect(rendered).to have_link("Find out how to upgrade this group so you can make forms live", href: request_upgrade_group_path(group))
-        end
+      it "shows content for an organisation admin" do
+        expect(rendered).to have_text "Forms in this group cannot be made live unless the group is upgraded to an ‘active’ group."
       end
 
-      context "and the user does not have permission to request an upgrade" do
-        it "shows content for an editor" do
-          expect(rendered).to have_text "You can create a form, preview and test it."
-        end
+      it "shows a link to upgrade the group" do
+        expect(rendered).to have_link("Upgrade this group", href: upgrade_group_path(group))
       end
+
+      it "has the trial group heading in the notification banner" do
+        expect(rendered).to have_css "h3", text: "This is a ‘trial’ group"
+      end
+    end
+  end
+
+  context "and the user has permission to request an upgrade" do
+    let(:request_upgrade?) { true }
+
+    it "shows content for a group admin" do
+      expect(rendered).to have_text "You can create forms in this group and test them, but you cannot make them live."
+    end
+
+    it "shows a link to request an upgrade" do
+      expect(rendered).to have_link("Find out how to upgrade this group so you can make forms live", href: request_upgrade_group_path(group))
+    end
+
+    it "has the trial group heading in the notification banner" do
+      expect(rendered).to have_css "h3", text: "This is a ‘trial’ group"
+    end
+  end
+
+  context "and the user has no permissions relating to upgrading groups" do
+    it "shows content for an editor" do
+      expect(rendered).to have_text "You can create a form, preview and test it."
     end
   end
 
@@ -163,6 +166,30 @@ RSpec.describe "groups/show", type: :view do
 
     it "shows a notification banner" do
       expect(rendered).to have_css ".govuk-notification-banner"
+    end
+
+    it "has the trial group heading in the notification banner" do
+      expect(rendered).to have_css "h3", text: "This is a ‘trial’ group"
+    end
+
+    context "when the user has permission to review upgrade requests" do
+      let(:review_upgrade?) { true }
+      let(:upgrade?) { true }
+      let(:request_upgrade?) { true }
+      let(:upgrade_requester) { create :user }
+      let(:group) { create :group, status: :upgrade_requested, upgrade_requester: }
+
+      it "has the heading in the notification banner for reviewing an upgrade request" do
+        expect(rendered).to have_css "h3", text: "A group admin has asked to upgrade this group"
+      end
+
+      it "has the content in the notification banner for reviewing an upgrade request" do
+        expect(rendered).to have_text "#{upgrade_requester.name} has asked to upgrade this group so they can make forms live."
+      end
+
+      it "shows a link to review the upgrade" do
+        expect(rendered).to have_link("Accept or reject this upgrade request", href: review_upgrade_group_path(group))
+      end
     end
   end
 
