@@ -34,10 +34,12 @@ class FormPolicy
 
   def can_view_form?
     return true if user.super_admin?
-    if form.group.present?
+
+    if FeatureService.enabled?(:groups) && form.group.present?
       return user.groups.include?(form.group) || user.is_organisations_admin?(form.group.organisation)
     end
 
+    # TODO: Remove these checks in cleanup after groups feature
     if user.trial?
       user_is_form_creator
     else

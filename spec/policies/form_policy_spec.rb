@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe FormPolicy do
+describe FormPolicy, feature_groups: true do
   subject(:policy) { described_class.new(user, form) }
 
   let(:organisation) { build :organisation, id: 1, slug: "gds" }
@@ -81,9 +81,7 @@ describe FormPolicy do
       end
     end
 
-    context "when form is not in a group" do
-      let(:group) { nil }
-
+    shared_examples "without group" do
       context "with an editor role" do
         let(:user) { build :editor_user, organisation: }
 
@@ -124,13 +122,21 @@ describe FormPolicy do
         end
       end
     end
+
+    context "when a form is not in a group" do
+      let(:group) { nil }
+
+      include_examples "without group"
+    end
+
+    context "when the groups feature is not enabled", feature_groups: false do
+      include_examples "without group"
+    end
   end
 
   %i[can_change_form_submission_email can_make_form_live].each do |permission|
     describe "#{permission}?" do
-      context "when form is not in a group" do
-        let(:group) { nil }
-
+      shared_examples "without group" do
         context "with a form editor" do
           it { is_expected.to permit_actions(permission) }
 
@@ -164,6 +170,16 @@ describe FormPolicy do
             end
           end
         end
+      end
+
+      context "when a form is not in a group" do
+        let(:group) { nil }
+
+        include_examples "without group"
+      end
+
+      context "when the groups feature is not enabled", feature_groups: false do
+        include_examples "without group"
       end
     end
   end
