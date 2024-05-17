@@ -23,7 +23,7 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
     end
   end
 
-  describe "#destroy" do
+  describe "#destroy", feature_groups: true do
     describe "Given a valid form" do
       let(:group) { create :group, organisation_id: editor_user.organisation_id }
 
@@ -53,6 +53,12 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
       context "when the form is not in a group" do
         let(:group) { nil }
 
+        it "redirects to the home page" do
+          expect(response).to redirect_to(root_path)
+        end
+      end
+
+      context "when the groups feature is not enabled", feature_groups: false do
         it "redirects to the home page" do
           expect(response).to redirect_to(root_path)
         end
