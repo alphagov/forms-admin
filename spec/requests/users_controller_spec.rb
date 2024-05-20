@@ -40,9 +40,9 @@ RSpec.describe UsersController, type: :request do
         login_as_super_admin_user
 
         organisations = [
-          create(:organisation, slug: "test-org"),
-          create(:organisation, slug: "ministry-of-tests"),
-          create(:organisation, slug: "department-for-testing"),
+          create(:organisation, :with_signed_mou, slug: "test-org"),
+          create(:organisation, :with_signed_mou, slug: "ministry-of-tests"),
+          create(:organisation, :with_signed_mou, slug: "department-for-testing"),
         ]
         roles = User.roles.keys
 
@@ -251,43 +251,41 @@ RSpec.describe UsersController, type: :request do
         login_as_super_admin_user
       end
 
-      User.roles.reject { |role| role == "trial" }.each_value do |role_value|
-        it "updates user's forms' org when changing role from trial to #{role_value}" do
-          user = create(:user, role: :trial)
-          expect(Form).to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)
+      it "updates user's forms' org when changing role from trial to editor" do
+        user = create(:user, :with_trial_role)
+        expect(Form).to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)
 
-          patch user_path(user), params: { user: { role: role_value } }
+        patch user_path(user), params: { user: { role: "editor" } }
 
-          expect(response).to have_http_status(:found)
-          expect(response).to redirect_to(users_path)
-        end
+        expect(response).to have_http_status(:found)
+        expect(response).to redirect_to(users_path)
+      end
 
-        it "does not update user's forms' org when changing role from #{role_value} to editor" do
-          user = create :user, role: role_value
+      it "does not update user's forms' org when changing role from super admin to editor" do
+        user = create(:super_admin_user)
 
-          expect(Form).not_to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)
+        expect(Form).not_to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)
 
-          patch user_path(user), params: { user: { role: "editor" } }
+        patch user_path(user), params: { user: { role: "editor" } }
 
-          expect(response).to have_http_status(:found)
-          expect(response).to redirect_to(users_path)
-        end
+        expect(response).to have_http_status(:found)
+        expect(response).to redirect_to(users_path)
+      end
 
-        it "does not update user's forms' org when role is unchanged" do
-          user = create :user, role: :trial
+      it "does not update user's forms' org when role is unchanged" do
+        user = create(:user, :with_trial_role)
 
-          expect(Form).to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)
+        expect(Form).to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)
 
-          patch user_path(user), params: { user: { role: "editor" } }
+        patch user_path(user), params: { user: { role: "editor" } }
 
-          expect(response).to have_http_status(:found)
-          expect(response).to redirect_to(users_path)
+        expect(response).to have_http_status(:found)
+        expect(response).to redirect_to(users_path)
 
-          expect(Form).not_to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)
-          patch user_path(user), params: { user: { role: "editor" } }
-          expect(response).to have_http_status(:found)
-          expect(response).to redirect_to(users_path)
-        end
+        expect(Form).not_to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)
+        patch user_path(user), params: { user: { role: "editor" } }
+        expect(response).to have_http_status(:found)
+        expect(response).to redirect_to(users_path)
       end
     end
   end

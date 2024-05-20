@@ -35,7 +35,7 @@ module AuthenticationFeatureHelpers
   end
 
   def test_org
-    @test_org ||= FactoryBot.create(:organisation, id: 1, slug: "test-org")
+    @test_org ||= FactoryBot.create(:organisation, :with_signed_mou, id: 1, slug: "test-org")
   end
 
   def super_admin_user

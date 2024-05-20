@@ -21,6 +21,7 @@ FactoryBot.define do
 
     factory :organisation_admin_user do
       role { :organisation_admin }
+      org_has_signed_mou
     end
 
     trait :with_trial_role do
@@ -28,6 +29,10 @@ FactoryBot.define do
     end
 
     organisation { association :organisation, id: 1, slug: "test-org" }
+
+    trait :org_has_signed_mou do
+      organisation { association :organisation, :with_signed_mou, id: 1, slug: "test-org" }
+    end
 
     after(:build) do |user|
       if user.organisation.present?
