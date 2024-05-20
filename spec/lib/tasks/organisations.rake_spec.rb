@@ -4,8 +4,6 @@ require "rails_helper"
 
 RSpec.describe "organisations.rake" do
   before do
-    # Rake.application.options.trace = true
-
     Rake.application.rake_require "tasks/organisations"
     Rake::Task.define_task(:environment)
   end
