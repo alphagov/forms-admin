@@ -7,20 +7,22 @@ describe FormPolicy do
   let(:form) { build :form, id: 1, organisation_id: 1, creator_id: 123 }
   let(:user) { build :editor_user, organisation: }
 
-  context "with no organisation set" do
-    context "with editor role" do
-      let(:user) { build :editor_user, :with_no_org }
+  describe "#initialize?" do
+    context "when user does not belong to an organisation" do
+      context "with editor role" do
+        let(:user) { build :editor_user, :with_no_org }
 
-      it "raises an error" do
-        expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+        it "raises an error" do
+          expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+        end
       end
-    end
 
-    context "with trial role" do
-      let(:user) { build :user, :with_trial_role }
+      context "with trial role" do
+        let(:user) { build :user, :with_trial_role }
 
-      it "does not raise an error" do
-        expect { policy }.not_to raise_error
+        it "does not raise an error" do
+          expect { policy }.not_to raise_error
+        end
       end
     end
   end
