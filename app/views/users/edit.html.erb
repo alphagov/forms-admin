@@ -8,6 +8,12 @@
         <%= f.govuk_error_summary %>
       <% end %>
 
+      <% unless @user.current_org_has_mou? %>
+        <%= govuk_notification_banner(title_text: t("banner.default.title")) do |banner| %>
+          <%= t('users.edit.mou_banner') %>
+        <% end %>
+      <% end %>
+
       <h1 class="govuk-heading-l">
         <%= t("users.edit.title") %>
       </h1>

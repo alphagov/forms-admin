@@ -143,4 +143,18 @@ describe "users/edit.html.erb" do
       expect(rendered).to have_select("Organisation", with_options: ["Select an organisation"])
     end
   end
+
+  context "with a user where organisation has not signed MOU" do
+    it "shows MOU banner" do
+      expect(rendered).to have_text(I18n.t("users.edit.mou_banner"))
+    end
+  end
+
+  context "with a user where organisation has signed MOU" do
+    let(:user) { build :user, :org_has_signed_mou }
+
+    it "does not show MOU banner" do
+      expect(rendered).not_to have_text(I18n.t("users.edit.mou_banner"))
+    end
+  end
 end
