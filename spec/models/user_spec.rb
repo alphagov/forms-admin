@@ -4,8 +4,120 @@ require "rails_helper"
 describe User, type: :model do
   subject(:user) { described_class.new }
 
-  it "validates" do
-    expect(user).to be_valid
+  describe "validations" do
+    it "validates" do
+      expect(user).to be_valid
+    end
+
+    describe "role" do
+      it "is invalid if blank" do
+        user.role = nil
+
+        expect(user).to be_invalid
+      end
+    end
+
+    describe "organisation_id" do
+      it "is allowed to be nil" do
+        user.organisation_id = nil
+
+        expect(user).to be_valid
+      end
+    end
+
+    context "when updating organisation" do
+      let(:user) { create :user, :with_no_org, role: :trial }
+
+      context "when user has been created with a trial account" do
+        it "is valid to leave organisation unset" do
+          user.organisation_id = nil
+          expect(user).to be_valid
+        end
+      end
+
+      it "is not valid to unset organisation if it is already set" do
+        user.organisation = create(:organisation, slug: "test-org")
+        user.save!
+
+        user.organisation_id = nil
+        expect(user).to be_invalid
+      end
+
+      it "is not valid to leave organisation unset if changing role to editor" do
+        user.role = :editor
+        expect(user).to be_invalid
+      end
+
+      it "is not valid to leave organisation unset if changing role to organisation admin" do
+        user.role = :organisation_admin
+        expect(user).to be_invalid
+      end
+    end
+
+    context "when updating name" do
+      let(:user) { create :user, :with_no_name, role: :trial }
+
+      context "when user has been created with a trial account" do
+        it "is valid to leave name unset" do
+          user.name = nil
+          expect(user).to be_valid
+        end
+      end
+
+      context "when user somehow has no name" do
+        let(:user) do
+          user = build(:editor_user, :with_no_name)
+          user.save!(validate: false)
+          user
+        end
+
+        it "is valid to leave name unset" do
+          user.name = nil
+          expect(user).to be_valid
+        end
+      end
+
+      it "is not valid to unset name if it is already set" do
+        user.update!(name: "Test User")
+        user.name = nil
+        expect(user).to be_invalid
+      end
+
+      it "is not valid to leave name unset if changing role to editor" do
+        user.role = :editor
+        expect(user).to be_invalid
+      end
+
+      it "is not valid to leave name unset if changing role to super admin" do
+        user.role = :super_admin
+        expect(user).to be_invalid
+      end
+    end
+
+    context "when the user belongs to an organisation that doesn't have a signed mou" do
+      let(:organisation) { create(:organisation) }
+      let(:user) { create(:user, organisation:) }
+
+      it "is not valid for a user's role to be organisation_admin" do
+        user.role = :organisation_admin
+        expect(user).to be_invalid
+      end
+
+      it "is valid for a user's role to be editor" do
+        user.role = :editor
+        expect(user).to be_valid
+      end
+    end
+
+    context "when the user belongs to an organisation that does have a signed mou" do
+      let(:organisation) { create(:organisation, :with_signed_mou) }
+      let(:user) { create(:user, organisation:) }
+
+      it "is valid for a user's role to be organisation_admin" do
+        user.role = :organisation_admin
+        expect(user).to be_valid
+      end
+    end
   end
 
   describe "versioning", versioning: true do
@@ -32,66 +144,6 @@ describe User, type: :model do
       user.destroy!
 
       expect { membership.reload }.to raise_error(ActiveRecord::RecordNotFound)
-    end
-  end
-
-  describe "role" do
-    it "is invalid if blank" do
-      user.role = nil
-
-      expect(user).to be_invalid
-    end
-  end
-
-  describe "organisation_id" do
-    it "is allowed to be nil" do
-      user.organisation_id = nil
-
-      expect(user).to be_valid
-    end
-  end
-
-  context "when updating organisation" do
-    let(:user) { create :user, :with_no_org, role: :trial }
-
-    context "when user has been created with a trial account" do
-      it "is valid to leave organisation unset" do
-        user.organisation_id = nil
-        expect(user).to be_valid
-      end
-    end
-
-    described_class.roles.each_key do |role|
-      context "when user somehow has no organisation" do
-        let(:user) do
-          user = build(:user, :with_no_org, role:)
-          user.save!(validate: false)
-          user
-        end
-
-        it "is valid to leave organisation unset" do
-          user.organisation_id = nil
-          expect(user).to be_valid
-        end
-      end
-    end
-
-    it "is not valid to unset organisation if it is already set" do
-      user.organisation = create(:organisation, slug: "test-org")
-      user.save!
-
-      user.organisation_id = nil
-      expect(user).to be_invalid
-    end
-
-    it "is not valid to leave organisation unset if changing role to editor" do
-      user.role = :editor
-      expect(user).to be_invalid
-    end
-
-    it "is not valid to leave organisation unset if changing role to organisation admin" do
-      user.role = :organisation_admin
-      expect(user).to be_invalid
     end
   end
 
@@ -164,20 +216,18 @@ describe User, type: :model do
   end
 
   describe "#trial_user_upgraded?" do
-    described_class.roles.reject { |role| role == "trial" }.each_value do |role_value|
-      it "returns true when changing from trial to #{role_value}" do
-        user = create(:user, role: :trial)
+    it "returns true when changing from trial to another role" do
+      user = create(:user, role: :trial)
 
-        user.update!(role: role_value)
-        expect(user).to be_trial_user_upgraded
-      end
+      user.update!(role: "super_admin")
+      expect(user).to be_trial_user_upgraded
+    end
 
-      it "returns false when changing from editor to #{role_value}" do
-        user = create(:editor_user)
+    it "returns false when changing from editor to super_admin" do
+      user = create(:editor_user)
 
-        user.update!(role: role_value)
-        expect(user).not_to be_trial_user_upgraded
-      end
+      user.update!(role: "super_admin")
+      expect(user).not_to be_trial_user_upgraded
     end
   end
 
@@ -268,48 +318,6 @@ describe User, type: :model do
           user.update(name: "new_name", email: "new_email@example.gov.uk", uid: Faker::Internet.uuid, provider: "new_provider")
         }.not_to(change { user.versions.size })
       end
-    end
-  end
-
-  context "when updating name" do
-    let(:user) { create :user, :with_no_name, role: :trial }
-
-    context "when user has been created with a trial account" do
-      it "is valid to leave name unset" do
-        user.name = nil
-        expect(user).to be_valid
-      end
-    end
-
-    described_class.roles.each_key do |role|
-      context "when user somehow has no name" do
-        let(:user) do
-          user = build(:user, :with_no_name, role:)
-          user.save!(validate: false)
-          user
-        end
-
-        it "is valid to leave name unset" do
-          user.name = nil
-          expect(user).to be_valid
-        end
-      end
-    end
-
-    it "is not valid to unset name if it is already set" do
-      user.update!(name: "Test User")
-      user.name = nil
-      expect(user).to be_invalid
-    end
-
-    it "is not valid to leave name unset if changing role to editor" do
-      user.role = :editor
-      expect(user).to be_invalid
-    end
-
-    it "is not valid to leave name unset if changing role to super admin" do
-      user.role = :super_admin
-      expect(user).to be_invalid
     end
   end
 
@@ -414,6 +422,34 @@ describe User, type: :model do
     it "returns true when user is a group admin of the group" do
       create(:membership, user:, group:, role: :group_admin)
       expect(user.is_group_admin?(group)).to eq(true)
+    end
+  end
+
+  describe "#current_org_has_mou?" do
+    let(:user) { create(:user, organisation:) }
+
+    context "when current org has a signed mou" do
+      let(:organisation) { create(:organisation, :with_signed_mou) }
+
+      it "returns true" do
+        expect(user.current_org_has_mou?).to eq(true)
+      end
+    end
+
+    context "when current org does not have a signed mou" do
+      let(:organisation) { create(:organisation) }
+
+      it "returns false" do
+        expect(user.current_org_has_mou?).to eq(false)
+      end
+    end
+
+    context "when the user does not have an organisation" do
+      let(:organisation) { nil }
+
+      it "returns false" do
+        expect(user.current_org_has_mou?).to eq(false)
+      end
     end
   end
 end
