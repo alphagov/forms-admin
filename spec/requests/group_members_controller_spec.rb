@@ -5,6 +5,8 @@ RSpec.describe "/groups/:group_id/members", type: :request do
   let(:role) { :group_admin }
   let(:current_user) { editor_user }
 
+  let(:nonexistent_group) { "foobar" }
+
   before do
     create(:membership, user: current_user, group:, role:)
     login_as current_user
@@ -25,6 +27,13 @@ RSpec.describe "/groups/:group_id/members", type: :request do
         expect(response).to have_http_status :forbidden
       end
     end
+
+    context "when there is no group with the given ID" do
+      it "renders a 404 not found response" do
+        get group_members_url(nonexistent_group)
+        expect(response).to have_http_status :not_found
+      end
+    end
   end
 
   describe "GET /groups/:group_id/members/new" do
@@ -41,12 +50,19 @@ RSpec.describe "/groups/:group_id/members", type: :request do
         expect(response).to have_http_status :forbidden
       end
     end
+
+    context "when there is no group with the given ID" do
+      it "renders a 404 not found response" do
+        get new_group_member_url(nonexistent_group)
+        expect(response).to have_http_status :not_found
+      end
+    end
   end
 
   describe "POST /groups/:group_id/members" do
-    context "with valid parameters" do
-      let(:user) { create :user, organisation: editor_user.organisation }
+    let(:user) { create :user, organisation: editor_user.organisation }
 
+    context "with valid parameters" do
       it "creates a new membership" do
         expect {
           post group_members_url(group), params: { group_member_input: { member_email_address: user.email } }
@@ -98,6 +114,13 @@ RSpec.describe "/groups/:group_id/members", type: :request do
 
         expect(response).to have_http_status :unprocessable_entity
         expect(response).to render_template :new
+      end
+    end
+
+    context "when there is no group with the given ID" do
+      it "renders a 404 not found response" do
+        post group_members_url(nonexistent_group), params: { group_member_input: { member_email_address: user.email } }
+        expect(response).to have_http_status :not_found
       end
     end
   end
