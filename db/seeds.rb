@@ -52,7 +52,10 @@ if HostingEnvironment.local_development? && User.none?
   FactoryBot.create_list :user, 3, :with_trial_role, :with_no_org, :with_no_name
 
   # create some test groups
-  FactoryBot.create :group, name: "Test Group", organisation: gds, creator: default_user
+  test_group = FactoryBot.create :group, name: "Test Group", organisation: gds, creator: default_user
   FactoryBot.create :group, name: "Ministry of Tests forms", organisation: test_org, creator: default_user
   FactoryBot.create :group, name: "Ministry of Tests forms - secret!", organisation: test_org, creator: default_user
+
+  # add a form to a test group (assumes database seed being used for forms-api)
+  GroupForm.create! group: test_group, form_id: 1
 end
