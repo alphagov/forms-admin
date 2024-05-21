@@ -12,7 +12,7 @@ require "rails_helper"
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/groups", type: :request do
+RSpec.describe "/groups", type: :request, feature_groups: true do
   let(:current_user) { editor_user }
   let(:role) { :editor }
   let(:status) { :trial }
@@ -96,6 +96,12 @@ RSpec.describe "/groups", type: :request do
         expect(assigns(:trial_groups)).to eq trial_groups + other_org_groups
       end
     end
+
+    context "when the groups feature flag is disabled", feature_groups: false do
+      it "returns a 404 response" do
+        expect(response).to have_http_status(:not_found)
+      end
+    end
   end
 
   describe "GET /show" do
@@ -153,12 +159,26 @@ RSpec.describe "/groups", type: :request do
         expect(response).to have_http_status :not_found
       end
     end
+
+    context "when the groups feature flag is disabled", feature_groups: false do
+      it "returns a 404 response" do
+        get group_url(member_group)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
   end
 
   describe "GET /new" do
     it "renders a successful response" do
       get new_group_url
       expect(response).to be_successful
+    end
+
+    context "when the groups feature flag is disabled", feature_groups: false do
+      it "returns a 404 response" do
+        get new_group_url
+        expect(response).to have_http_status(:not_found)
+      end
     end
   end
 
@@ -202,6 +222,13 @@ RSpec.describe "/groups", type: :request do
         expect(response).to have_http_status :not_found
       end
     end
+
+    context "when the groups feature flag is disabled", feature_groups: false do
+      it "returns a 404 response" do
+        get edit_group_url(non_member_group)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
   end
 
   describe "POST /create" do
@@ -240,6 +267,13 @@ RSpec.describe "/groups", type: :request do
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post groups_url, params: { group: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    context "when the groups feature flag is disabled", feature_groups: false do
+      it "returns a 404 response" do
+        post groups_url, params: { group: valid_attributes }
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
@@ -304,15 +338,22 @@ RSpec.describe "/groups", type: :request do
         expect(response).to have_http_status :not_found
       end
     end
+
+    context "when the groups feature flag is disabled", feature_groups: false do
+      it "returns a 404 response" do
+        patch group_url(member_group), params: { group: valid_attributes }
+        expect(response).to have_http_status(:not_found)
+      end
+    end
   end
 
   describe "GET /upgrade" do
+    before do
+      get upgrade_group_url(member_group)
+    end
+
     context "when user is an organisation admin" do
       let(:current_user) { organisation_admin_user }
-
-      before do
-        get upgrade_group_url(member_group)
-      end
 
       it "returns a successful response" do
         expect(response).to have_http_status(:ok)
@@ -325,7 +366,6 @@ RSpec.describe "/groups", type: :request do
 
     context "when user is not an organisation admin" do
       it "is forbidden" do
-        get upgrade_group_url(member_group)
         expect(response).to have_http_status(:forbidden)
       end
     end
@@ -334,6 +374,12 @@ RSpec.describe "/groups", type: :request do
       it "renders a 404 not found response" do
         get upgrade_group_url(nonexistent_group)
         expect(response).to have_http_status :not_found
+      end
+    end
+
+    context "when the groups feature flag is disabled", feature_groups: false do
+      it "returns a 404 response" do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
@@ -403,6 +449,13 @@ RSpec.describe "/groups", type: :request do
         expect(response).to have_http_status :not_found
       end
     end
+
+    context "when the groups feature flag is disabled", feature_groups: false do
+      it "returns a 404 response" do
+        post upgrade_group_url(member_group), params: { groups_confirm_upgrade_input: { confirm: } }
+        expect(response).to have_http_status(:not_found)
+      end
+    end
   end
 
   describe "GET /request_upgrade" do
@@ -433,6 +486,12 @@ RSpec.describe "/groups", type: :request do
 
       it "renders a 404 not found response" do
         expect(response).to have_http_status :not_found
+      end
+    end
+
+    context "when the groups feature flag is disabled", feature_groups: false do
+      it "returns a 404 response" do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
@@ -476,18 +535,25 @@ RSpec.describe "/groups", type: :request do
         expect(response).to have_http_status :not_found
       end
     end
+
+    context "when the groups feature flag is disabled", feature_groups: false do
+      it "returns a 404 response" do
+        post request_upgrade_group_url(member_group)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
   end
 
   describe "GET /review_upgrade" do
     let(:status) { :upgrade_requested }
     let(:upgrade_requester) { create(:user) }
 
+    before do
+      get review_upgrade_group_url(member_group)
+    end
+
     context "when user is an organisation admin" do
       let(:current_user) { organisation_admin_user }
-
-      before do
-        get review_upgrade_group_url(member_group)
-      end
 
       it "returns a successful response" do
         expect(response).to have_http_status(:ok)
@@ -500,7 +566,6 @@ RSpec.describe "/groups", type: :request do
 
     context "when user is not an organisation admin" do
       it "is forbidden" do
-        get review_upgrade_group_url(member_group)
         expect(response).to have_http_status(:forbidden)
       end
     end
@@ -509,6 +574,12 @@ RSpec.describe "/groups", type: :request do
       it "renders a 404 not found response" do
         get review_upgrade_group_url(nonexistent_group)
         expect(response).to have_http_status :not_found
+      end
+    end
+
+    context "when the groups feature flag is disabled", feature_groups: false do
+      it "returns a 404 response" do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
@@ -588,6 +659,13 @@ RSpec.describe "/groups", type: :request do
       it "renders a 404 not found response" do
         post review_upgrade_group_url(nonexistent_group), params: { groups_confirm_upgrade_input: { confirm: } }
         expect(response).to have_http_status :not_found
+      end
+    end
+
+    context "when the groups feature flag is disabled", feature_groups: false do
+      it "returns a 404 response" do
+        post review_upgrade_group_url(member_group), params: { groups_confirm_upgrade_input: { confirm: } }
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
