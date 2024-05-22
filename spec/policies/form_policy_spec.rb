@@ -1,47 +1,70 @@
 require "rails_helper"
 
-describe FormPolicy do
+describe FormPolicy, feature_groups: true do
   subject(:policy) { described_class.new(user, form) }
 
   let(:organisation) { build :organisation, id: 1, slug: "gds" }
   let(:form) { build :form, id: 1, organisation_id: 1, creator_id: 123 }
+  let(:group) { create(:group, name: "Group 1", organisation:) }
   let(:user) { build :editor_user, organisation: }
 
-  context "with no organisation set" do
-    context "with editor role" do
-      let(:user) { build :editor_user, :with_no_org }
-
-      it "raises an error" do
-        expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
-      end
+  before do
+    if group.present?
+      GroupForm.create!(form_id: form.id, group_id: group.id)
     end
+  end
 
-    context "with trial role" do
-      let(:user) { build :user, :with_trial_role }
+  describe "#initialize?" do
+    context "when user does not belong to an organisation" do
+      context "with editor role" do
+        let(:user) { build :editor_user, :with_no_org }
 
-      it "does not raise an error" do
-        expect { policy }.not_to raise_error
+        it "raises an error" do
+          expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+        end
+      end
+
+      context "with trial role" do
+        let(:user) { build :user, :with_trial_role }
+
+        it "does not raise an error" do
+          expect { policy }.not_to raise_error
+        end
       end
     end
   end
 
   describe "#can_view_form?" do
-    context "with an editor role" do
-      let(:user) { build :editor_user, organisation: }
-
-      it { is_expected.to permit_actions(%i[can_view_form]) }
-
-      context "but from another organisation" do
-        let(:organisation) { build :organisation, id: 2, slug: "non-gds" }
-
-        it { is_expected.to forbid_actions(%i[can_view_form]) }
+    context "when user is in the group" do
+      before do
+        Membership.create!(user:, group:, added_by: user)
       end
 
-      context "with an organisation not in the organisation table" do
-        let(:user) { build :editor_user, :with_unknown_org, organisation_slug: "gds" }
+      it { is_expected.to permit_actions(%i[can_view_form]) }
+    end
 
-        it "raises an error" do
-          expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+    context "when user is not in the group" do
+      it { is_expected.to forbid_actions(%i[can_view_form]) }
+
+      context "but user is a super_admin" do
+        let(:user) { build :super_admin_user, organisation: }
+
+        it { is_expected.to permit_actions(%i[can_view_form]) }
+      end
+
+      context "but user is an organisation_admin" do
+        context "and the user is in the same organisation as the group" do
+          let(:user) { build :organisation_admin_user, organisation: }
+
+          it { is_expected.to permit_actions(%i[can_view_form]) }
+        end
+
+        context "and the user is not in the same organisation as the group" do
+          let(:other_organisation) { build :organisation, id: 2, slug: "other" }
+
+          let(:user) { build :organisation_admin_user, organisation: other_organisation }
+
+          it { is_expected.to forbid_actions(%i[can_view_form]) }
         end
       end
     end
@@ -58,109 +81,111 @@ describe FormPolicy do
       end
     end
 
-    context "with a trial role" do
-      let(:user) { build :user, :with_trial_role, id: 123 }
+    shared_examples "without group" do
+      context "with an editor role" do
+        let(:user) { build :editor_user, organisation: }
 
-      context "when the user created the form" do
         it { is_expected.to permit_actions(%i[can_view_form]) }
-      end
 
-      context "when the user didn't create the form" do
-        let(:user) { build :user, :with_trial_role, id: 321 }
-
-        it { is_expected.to forbid_actions(%i[can_view_form]) }
-
-        context "but the user belongs to the organisation that the form belongs to" do
-          let(:user) { build :user, role: :trial, organisation_slug: "gds", id: 321 }
+        context "but from another organisation" do
+          let(:organisation) { build :organisation, id: 2, slug: "non-gds" }
 
           it { is_expected.to forbid_actions(%i[can_view_form]) }
         end
-      end
-    end
 
-    context "when a form is in a group" do
-      let(:group) { create(:group, name: "Group 1", organisation:) }
+        context "with an organisation not in the organisation table" do
+          let(:user) { build :editor_user, :with_unknown_org, organisation_slug: "gds" }
 
-      before do
-        GroupForm.create!(form_id: form.id, group_id: group.id)
-      end
-
-      context "and user is in the group" do
-        before do
-          Membership.create!(user:, group:, added_by: user)
+          it "raises an error" do
+            expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
+          end
         end
-
-        it { is_expected.to permit_actions(%i[can_view_form]) }
       end
 
-      context "and user is not in the group" do
-        it { is_expected.to forbid_actions(%i[can_view_form]) }
+      context "with a trial role" do
+        let(:user) { build :user, :with_trial_role, id: 123 }
 
-        context "but user is a super_admin" do
-          let(:user) { build :super_admin_user, organisation: }
-
+        context "when the user created the form" do
           it { is_expected.to permit_actions(%i[can_view_form]) }
         end
 
-        context "but user is an organisation_admin" do
-          context "and the user is in the same organisation as the group" do
-            let(:user) { build :organisation_admin_user, organisation: }
+        context "when the user didn't create the form" do
+          let(:user) { build :user, :with_trial_role, id: 321 }
 
-            it { is_expected.to permit_actions(%i[can_view_form]) }
-          end
+          it { is_expected.to forbid_actions(%i[can_view_form]) }
 
-          context "and the user is not in the same organisation as the group" do
-            let(:other_organisation) { build :organisation, id: 2, slug: "other" }
-
-            let(:user) { build :organisation_admin_user, organisation: other_organisation }
+          context "but the user belongs to the organisation that the form belongs to" do
+            let(:user) { build :user, role: :trial, organisation_slug: "gds", id: 321 }
 
             it { is_expected.to forbid_actions(%i[can_view_form]) }
           end
         end
       end
     end
+
+    context "when a form is not in a group" do
+      let(:group) { nil }
+
+      include_examples "without group"
+    end
+
+    context "when the groups feature is not enabled", feature_groups: false do
+      include_examples "without group"
+    end
   end
 
   %i[can_change_form_submission_email can_make_form_live].each do |permission|
     describe "#{permission}?" do
-      context "with a form editor" do
-        it { is_expected.to permit_actions(permission) }
+      shared_examples "without group" do
+        context "with a form editor" do
+          it { is_expected.to permit_actions(permission) }
 
-        context "but from another organisation" do
-          let(:organisation) { build :organisation, id: 2, slug: "non-gds" }
+          context "but from another organisation" do
+            let(:organisation) { build :organisation, id: 2, slug: "non-gds" }
 
-          it { is_expected.to forbid_actions(permission) }
+            it { is_expected.to forbid_actions(permission) }
+          end
+        end
+
+        context "with a trial role" do
+          let(:form) { build :form, id: 1, organisation_id: nil, creator_id: 123 }
+
+          context "when the user created the form" do
+            let(:user) { build :user, :with_trial_role, id: 123 }
+
+            it { is_expected.to forbid_actions(permission) }
+          end
+
+          context "when the user didn't create the form" do
+            context "with a different user" do
+              let(:user) { build :user, id: 321 }
+
+              it { is_expected.to forbid_actions(permission) }
+            end
+
+            context "without a form creator" do
+              let(:form) { build :form, id: 1, organisation_id: nil, creator_id: nil }
+
+              it { is_expected.to forbid_actions(permission) }
+            end
+          end
         end
       end
 
-      context "with a trial role" do
-        let(:form) { build :form, organisation_id: nil, creator_id: 123 }
+      context "when a form is not in a group" do
+        let(:group) { nil }
 
-        context "when the user created the form" do
-          let(:user) { build :user, :with_trial_role, id: 123 }
+        include_examples "without group"
+      end
 
-          it { is_expected.to forbid_actions(permission) }
-        end
-
-        context "when the user didn't create the form" do
-          context "with a different user" do
-            let(:user) { build :user, id: 321 }
-
-            it { is_expected.to forbid_actions(permission) }
-          end
-
-          context "without a form creator" do
-            let(:form) { build :form, organisation_id: nil, creator_id: nil }
-
-            it { is_expected.to forbid_actions(permission) }
-          end
-        end
+      context "when the groups feature is not enabled", feature_groups: false do
+        include_examples "without group"
       end
     end
   end
 
   describe "#can_add_page_routing_conditions?" do
-    let(:form) { build :form, pages:, organisation_id: 1 }
+    let(:form) { build :form, id: 1, pages:, organisation_id: 1 }
     let(:pages) { [] }
 
     context "and the form has one page" do

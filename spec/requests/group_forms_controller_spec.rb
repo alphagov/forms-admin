@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/groups/:group_id/forms", type: :request do
+RSpec.describe "/groups/:group_id/forms", type: :request, feature_groups: true do
   let(:group) { create :group }
   let(:nonexistent_group) { "foobar" }
 
@@ -51,6 +51,12 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
         get new_group_form_url(nonexistent_group)
 
         expect(response).to have_http_status :not_found
+      end
+    end
+
+    context "when the groups feature is disabled", feature_groups: false do
+      it "returns a 404 response" do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
@@ -129,6 +135,13 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
         post group_forms_url(nonexistent_group), params: { forms_name_input: valid_attributes }
 
         expect(response).to have_http_status :not_found
+      end
+    end
+
+    context "when the groups feature is disabled", feature_groups: false do
+      it "returns a 404 response" do
+        post group_forms_url(group), params: { forms_name_input: valid_attributes }
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

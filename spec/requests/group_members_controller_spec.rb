@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/groups/:group_id/members", type: :request do
+RSpec.describe "/groups/:group_id/members", type: :request, feature_groups: true do
   let(:group) { create :group, organisation: current_user.organisation }
   let(:role) { :group_admin }
   let(:current_user) { editor_user }
@@ -34,6 +34,13 @@ RSpec.describe "/groups/:group_id/members", type: :request do
         expect(response).to have_http_status :not_found
       end
     end
+
+    context "when the groups feature flag is disabled", feature_groups: false do
+      it "returns a 404 response" do
+        get group_members_url(group)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
   end
 
   describe "GET /groups/:group_id/members/new" do
@@ -55,6 +62,13 @@ RSpec.describe "/groups/:group_id/members", type: :request do
       it "renders a 404 not found response" do
         get new_group_member_url(nonexistent_group)
         expect(response).to have_http_status :not_found
+      end
+    end
+
+    context "when the groups feature flag is disabled", feature_groups: false do
+      it "returns a 404 response" do
+        get new_group_member_url(group)
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
@@ -121,6 +135,13 @@ RSpec.describe "/groups/:group_id/members", type: :request do
       it "renders a 404 not found response" do
         post group_members_url(nonexistent_group), params: { group_member_input: { member_email_address: user.email } }
         expect(response).to have_http_status :not_found
+      end
+    end
+
+    context "when the groups feature flag is disabled", feature_groups: false do
+      it "returns a 404 response" do
+        post group_members_url(group), params: { group_member_input: { member_email_address: user.email } }
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

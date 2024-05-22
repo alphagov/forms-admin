@@ -1,6 +1,6 @@
 <% set_page_title(form.name) %>
 
-<% if form.group.present? %>
+<% if FeatureService.enabled?(:groups) && form.group.present? %>
   <% content_for :back_link, govuk_back_link_to(group_path(form.group), t("back_link.group", group_name: form.group.name)) %>
 <% else %>
   <% content_for :back_link, govuk_back_link_to(root_path, t("back_link.forms")) %>
