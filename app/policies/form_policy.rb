@@ -66,6 +66,10 @@ class FormPolicy
     false
   end
 
+  def can_administer_group?
+    user.super_admin? || user.is_organisations_admin?(form.group.organisation) || user.is_group_admin?(form.group)
+  end
+
 private
 
   def user_is_form_creator
@@ -74,9 +78,5 @@ private
 
   def users_organisation_owns_form
     user.organisation.present? ? user.organisation_id == form.organisation_id : false
-  end
-
-  def can_administer_group?
-    user.super_admin? || user.is_organisations_admin?(form.group.organisation) || user.is_group_admin?(form.group)
   end
 end

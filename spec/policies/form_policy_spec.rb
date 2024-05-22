@@ -3,7 +3,7 @@ require "rails_helper"
 describe FormPolicy, feature_groups: true do
   subject(:policy) { described_class.new(user, form) }
 
-  let(:organisation) { build :organisation, :with_signed_mou, id: 1, slug: "gds" }
+  let(:organisation) { build :organisation, :with_signed_mou, id: 1 }
   let(:form) { build :form, id: 1, organisation_id: 1, creator_id: 123 }
   let(:group) { create(:group, name: "Group 1", organisation:, status: group_status) }
   let(:group_status) { :trial }
@@ -304,6 +304,37 @@ describe FormPolicy, feature_groups: true do
           it { is_expected.to permit_actions(%i[can_add_page_routing_conditions]) }
         end
       end
+    end
+  end
+
+  describe "#can_administer_group?" do
+    let(:group) { create(:group, name: "Group 1", organisation:) }
+    let(:group_role) { :editor }
+
+    before do
+      Membership.create!(user:, group:, added_by: user, role: group_role)
+    end
+
+    context "when the user is a super admin" do
+      let(:user) { build :super_admin_user }
+
+      it { is_expected.to permit_action(:can_administer_group) }
+    end
+
+    context "when the user is an organisation admin" do
+      let(:user) { build :organisation_admin_user }
+
+      it { is_expected.to permit_action(:can_administer_group) }
+    end
+
+    context "when the user is a group admin" do
+      let(:group_role) { :group_admin }
+
+      it { is_expected.to permit_action(:can_administer_group) }
+    end
+
+    context "when the user is an editor" do
+      it { is_expected.to forbid_action(:can_administer_group) }
     end
   end
 
