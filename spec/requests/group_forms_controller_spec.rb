@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe "/groups/:group_id/forms", type: :request do
   let(:group) { create :group }
+  let(:nonexistent_group) { "foobar" }
 
   let(:valid_attributes) do
     { name: "Test form" }
@@ -46,10 +47,10 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
     end
 
     context "when the group does not exist" do
-      it "returns a forbidden status code" do
-        get new_group_form_url("nonsense")
+      it "renders a 404 not found response" do
+        get new_group_form_url(nonexistent_group)
 
-        expect(response).to have_http_status :forbidden
+        expect(response).to have_http_status :not_found
       end
     end
   end
@@ -124,10 +125,10 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
     end
 
     context "when the group does not exist" do
-      it "returns a forbidden status code" do
-        post group_forms_url("nonsense"), params: { forms_name_input: valid_attributes }
+      it "renders a 404 not found response" do
+        post group_forms_url(nonexistent_group), params: { forms_name_input: valid_attributes }
 
-        expect(response).to have_http_status :forbidden
+        expect(response).to have_http_status :not_found
       end
     end
   end

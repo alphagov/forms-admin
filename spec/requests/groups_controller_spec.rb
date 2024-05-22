@@ -27,6 +27,10 @@ RSpec.describe "/groups", type: :request do
     create :group
   end
 
+  let(:nonexistent_group) do
+    "foobar"
+  end
+
   # This should return the minimal set of attributes required to create a valid
   # Group. As you add validations to Group, be sure to
   # adjust the attributes here as well.
@@ -142,6 +146,13 @@ RSpec.describe "/groups", type: :request do
         expect(response.body).to include(I18n.t("groups.show.trial_banner.upgrade.link"))
       end
     end
+
+    context "when there is no group with the given ID" do
+      it "renders a 404 not found response" do
+        get group_url(nonexistent_group)
+        expect(response).to have_http_status :not_found
+      end
+    end
   end
 
   describe "GET /new" do
@@ -182,6 +193,13 @@ RSpec.describe "/groups", type: :request do
           get edit_group_url(non_member_group)
           expect(response).to be_successful
         end
+      end
+    end
+
+    context "when there is no group with the given ID" do
+      it "renders a 404 not found response" do
+        get edit_group_url(nonexistent_group)
+        expect(response).to have_http_status :not_found
       end
     end
   end
@@ -279,6 +297,13 @@ RSpec.describe "/groups", type: :request do
         end
       end
     end
+
+    context "when there is no group with the given ID" do
+      it "renders a 404 not found response" do
+        patch group_url(nonexistent_group), params: { group: valid_attributes }
+        expect(response).to have_http_status :not_found
+      end
+    end
   end
 
   describe "GET /upgrade" do
@@ -302,6 +327,13 @@ RSpec.describe "/groups", type: :request do
       it "is forbidden" do
         get upgrade_group_url(member_group)
         expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when there is no group with the given ID" do
+      it "renders a 404 not found response" do
+        get upgrade_group_url(nonexistent_group)
+        expect(response).to have_http_status :not_found
       end
     end
   end
@@ -364,6 +396,13 @@ RSpec.describe "/groups", type: :request do
         expect(response).to have_http_status(:forbidden)
       end
     end
+
+    context "when there is no group with the given ID" do
+      it "renders a 404 not found response" do
+        post upgrade_group_url(nonexistent_group), params: { groups_confirm_upgrade_input: { confirm: } }
+        expect(response).to have_http_status :not_found
+      end
+    end
   end
 
   describe "GET /request_upgrade" do
@@ -386,6 +425,14 @@ RSpec.describe "/groups", type: :request do
     context "when the user is not a group admin" do
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when there is no group with the given ID" do
+      let(:member_group) { nonexistent_group }
+
+      it "renders a 404 not found response" do
+        expect(response).to have_http_status :not_found
       end
     end
   end
@@ -422,6 +469,13 @@ RSpec.describe "/groups", type: :request do
         expect(response).to have_http_status(:forbidden)
       end
     end
+
+    context "when there is no group with the given ID" do
+      it "renders a 404 not found response" do
+        post request_upgrade_group_url(nonexistent_group)
+        expect(response).to have_http_status :not_found
+      end
+    end
   end
 
   describe "GET /review_upgrade" do
@@ -448,6 +502,13 @@ RSpec.describe "/groups", type: :request do
       it "is forbidden" do
         get review_upgrade_group_url(member_group)
         expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when there is no group with the given ID" do
+      it "renders a 404 not found response" do
+        get review_upgrade_group_url(nonexistent_group)
+        expect(response).to have_http_status :not_found
       end
     end
   end
@@ -520,6 +581,13 @@ RSpec.describe "/groups", type: :request do
       it "is forbidden" do
         post review_upgrade_group_url(member_group), params: { groups_confirm_upgrade_input: { confirm: } }
         expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when there is no group with the given ID" do
+      it "renders a 404 not found response" do
+        post review_upgrade_group_url(nonexistent_group), params: { groups_confirm_upgrade_input: { confirm: } }
+        expect(response).to have_http_status :not_found
       end
     end
   end
