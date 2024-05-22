@@ -1144,10 +1144,10 @@ en:
       title: Edit user
     has_access:
       'false':
-        description: Will not be able to use GOV.UK Forms
+        description: Cannot use GOV.UK Forms
         name: Denied
       'true':
-        description: Will be able to use GOV.UK Forms
+        description: Can use GOV.UK Forms
         name: Permitted
     index:
       name_blank: No name set
@@ -1169,7 +1169,7 @@ en:
         description: Can manage groups and users in their organisation
         name: Organisation admin
       super_admin:
-        description: Can create forms and manage users
+        description: Can manage groups and users in all organisations - GOV.UK Forms team members only
         name: Super admin
       trial:
         description: Can create forms but cannot make them live
