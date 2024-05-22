@@ -1,4 +1,5 @@
 class GroupMembersController < ApplicationController
+  before_action :feature_enabled
   before_action :set_group
   after_action :verify_authorized
 
@@ -25,6 +26,10 @@ class GroupMembersController < ApplicationController
   end
 
 private
+
+  def feature_enabled
+    raise ActionController::RoutingError, "Groups feature not enabled" unless FeatureService.enabled?(:groups)
+  end
 
   def set_group
     @group = Group.find_by!(external_id: params[:group_id])

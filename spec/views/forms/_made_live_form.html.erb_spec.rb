@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "forms/_made_live_form.html.erb", feature_metrics_for_form_creators_enabled: false do
+describe "forms/_made_live_form.html.erb", feature_metrics_for_form_creators_enabled: false, feature_groups: true do
   let(:declaration) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:what_happens_next) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:form_metadata) { OpenStruct.new(has_draft_version: false) }
@@ -212,6 +212,12 @@ describe "forms/_made_live_form.html.erb", feature_metrics_for_form_creators_ena
   context "when form is not in a group" do
     let(:group) { nil }
 
+    it "back link is set to root" do
+      expect(view.content_for(:back_link)).to have_link("Back to your forms", href: "/")
+    end
+  end
+
+  context "when the groups feature is not enabled", feature_groups: false do
     it "back link is set to root" do
       expect(view.content_for(:back_link)).to have_link("Back to your forms", href: "/")
     end
