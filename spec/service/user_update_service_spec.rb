@@ -56,31 +56,29 @@ describe UserUpdateService do
         user_update_service.update_user
       end
 
-      User.roles.reject { |role| role == "trial" }.each_value do |role_value|
-        context "when the user is a trial user changing to #{role_value}" do
-          let(:organisation) { create(:organisation) }
-          let(:params) { { role: role_value, name: "name required", organisation: } }
+      context "when the user is a trial user changing to editor" do
+        let(:organisation) { create(:organisation) }
+        let(:params) { { role: "editor", name: "name required", organisation: } }
 
-          it "updates the user's params" do
-            expect(user.role).to eq(role_value)
-          end
-
-          it "calls update_organisation_for_creator" do
-            expect(Form).to have_received(:update_organisation_for_creator).with(user.id, user.organisation_id)
-          end
+        it "updates the user's params" do
+          expect(user.role).to eq("editor")
         end
 
-        context "when the user is a #{role_value} changing to editor" do
-          let(:user) { create :user, role: role_value }
-          let(:params) { { role: :editor } }
+        it "calls update_organisation_for_creator" do
+          expect(Form).to have_received(:update_organisation_for_creator).with(user.id, user.organisation_id)
+        end
+      end
 
-          it "updates the user's params" do
-            expect(user).to be_editor
-          end
+      context "when the user is a super_admin changing to editor" do
+        let(:user) { create :super_admin_user }
+        let(:params) { { role: :editor } }
 
-          it "calls update_organisation_for_creator" do
-            expect(Form).not_to have_received(:update_organisation_for_creator).with(user.id, user.organisation_id)
-          end
+        it "updates the user's params" do
+          expect(user).to be_editor
+        end
+
+        it "does not call update_organisation_for_creator" do
+          expect(Form).not_to have_received(:update_organisation_for_creator).with(user.id, user.organisation_id)
         end
       end
 

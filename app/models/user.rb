@@ -32,6 +32,7 @@ class User < ApplicationRecord
   validates :role, presence: true
   validates :organisation_id, presence: true, if: :requires_organisation?
   validates :has_access, inclusion: [true, false]
+  validates :role, exclusion: %w[organisation_admin], unless: :current_org_has_mou?
 
   before_create do
     self.has_access = false if organisation_restricted_access?
@@ -118,6 +119,10 @@ class User < ApplicationRecord
 
   def is_group_admin?(group)
     memberships.find_by(group:)&.group_admin?
+  end
+
+  def current_org_has_mou?
+    organisation&.mou_signatures.present?
   end
 
 private

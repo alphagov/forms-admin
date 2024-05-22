@@ -8,5 +8,11 @@ FactoryBot.define do
     initialize_with do
       Organisation.create_with(govuk_content_id:, name:).find_or_initialize_by(slug:)
     end
+
+    trait :with_signed_mou do
+      after(:build) do |organisation|
+        organisation.mou_signatures << (create :mou_signature_for_organisation, organisation:)
+      end
+    end
   end
 end

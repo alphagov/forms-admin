@@ -68,6 +68,7 @@ en:
               blank: Select the user’s organisation
             role:
               blank: Select a role for the user
+              exclusion: You cannot upgrade this user’s role until someone from their organisation agrees to the MOU
   address_settings:
     hint: Select all that apply
   archive_form:
@@ -1137,6 +1138,7 @@ en:
       access: Permission to access GOV.UK Forms
       caption: User details
       has_access: Access to GOV.UK Forms
+      mou_banner: You cannot upgrade this user’s role until someone from their organisation agrees to the MOU
       organisation: Organisation
       organisation_hint: The user will only be able to see their organisation’s forms
       organisation_prompt: Select an organisation
