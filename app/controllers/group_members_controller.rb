@@ -27,7 +27,7 @@ class GroupMembersController < ApplicationController
 private
 
   def set_group
-    @group = Group.find_by(external_id: params[:group_id])
+    @group = Group.find_by!(external_id: params[:group_id])
   end
 
   def group_member_params
