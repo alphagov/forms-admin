@@ -3,9 +3,10 @@ require "rails_helper"
 describe FormPolicy, feature_groups: true do
   subject(:policy) { described_class.new(user, form) }
 
-  let(:organisation) { build :organisation, id: 1, slug: "gds" }
+  let(:organisation) { build :organisation, :with_signed_mou, id: 1, slug: "gds" }
   let(:form) { build :form, id: 1, organisation_id: 1, creator_id: 123 }
-  let(:group) { create(:group, name: "Group 1", organisation:) }
+  let(:group) { create(:group, name: "Group 1", organisation:, status: group_status) }
+  let(:group_status) { :trial }
   let(:user) { build :editor_user, organisation: }
 
   before do
@@ -134,52 +135,132 @@ describe FormPolicy, feature_groups: true do
     end
   end
 
-  %i[can_change_form_submission_email can_make_form_live].each do |permission|
-    describe "#{permission}?" do
-      shared_examples "without group" do
-        context "with a form editor" do
-          it { is_expected.to permit_actions(permission) }
+  describe "can_change_form_submission_email?" do
+    shared_examples "without group" do
+      context "with a form editor" do
+        it { is_expected.to permit_action(:can_change_form_submission_email) }
 
-          context "but from another organisation" do
-            let(:organisation) { build :organisation, id: 2, slug: "non-gds" }
+        context "but from another organisation" do
+          let(:organisation) { build :organisation, id: 2, slug: "non-gds" }
 
-            it { is_expected.to forbid_actions(permission) }
-          end
-        end
-
-        context "with a trial role" do
-          let(:form) { build :form, id: 1, organisation_id: nil, creator_id: 123 }
-
-          context "when the user created the form" do
-            let(:user) { build :user, :with_trial_role, id: 123 }
-
-            it { is_expected.to forbid_actions(permission) }
-          end
-
-          context "when the user didn't create the form" do
-            context "with a different user" do
-              let(:user) { build :user, id: 321 }
-
-              it { is_expected.to forbid_actions(permission) }
-            end
-
-            context "without a form creator" do
-              let(:form) { build :form, id: 1, organisation_id: nil, creator_id: nil }
-
-              it { is_expected.to forbid_actions(permission) }
-            end
-          end
+          it { is_expected.to forbid_action(:can_change_form_submission_email) }
         end
       end
 
-      context "when a form is not in a group" do
-        let(:group) { nil }
+      context "with a trial role" do
+        let(:form) { build :form, id: 1, organisation_id: nil, creator_id: 123 }
 
-        include_examples "without group"
+        context "when the user created the form" do
+          let(:user) { build :user, :with_trial_role, id: 123 }
+
+          it { is_expected.to forbid_action(:can_change_form_submission_email) }
+        end
+
+        context "when the user didn't create the form" do
+          context "with a different user" do
+            let(:user) { build :user, id: 321 }
+
+            it { is_expected.to forbid_action(:can_change_form_submission_email) }
+          end
+
+          context "without a form creator" do
+            let(:form) { build :form, id: 1, organisation_id: nil, creator_id: nil }
+
+            it { is_expected.to forbid_action(:can_change_form_submission_email) }
+          end
+        end
+      end
+    end
+
+    context "when a form is not in a group" do
+      let(:group) { nil }
+
+      include_examples "without group"
+    end
+
+    context "when the groups feature is not enabled", feature_groups: false do
+      include_examples "without group"
+    end
+  end
+
+  describe "#can_make_form_live?" do
+    shared_examples "without group" do
+      context "with a form editor" do
+        it { is_expected.to permit_action(:can_make_form_live) }
+
+        context "but from another organisation" do
+          let(:organisation) { build :organisation, id: 2, slug: "non-gds" }
+
+          it { is_expected.to forbid_action(:can_make_form_live) }
+        end
       end
 
-      context "when the groups feature is not enabled", feature_groups: false do
-        include_examples "without group"
+      context "with a trial role" do
+        let(:form) { build :form, id: 1, organisation_id: nil, creator_id: 123 }
+
+        context "when the user created the form" do
+          let(:user) { build :user, :with_trial_role, id: 123 }
+
+          it { is_expected.to forbid_action(:can_make_form_live) }
+        end
+
+        context "when the user didn't create the form" do
+          context "with a different user" do
+            let(:user) { build :user, id: 321 }
+
+            it { is_expected.to forbid_action(:can_make_form_live) }
+          end
+
+          context "without a form creator" do
+            let(:form) { build :form, id: 1, organisation_id: nil, creator_id: nil }
+
+            it { is_expected.to forbid_action(:can_make_form_live) }
+          end
+        end
+      end
+    end
+
+    context "when the groups feature is not enabled", feature_groups: false do
+      include_examples "without group"
+    end
+
+    context "with the groups feature enabled", feature_groups: true do
+      let(:group_role) { :editor }
+
+      before do
+        Membership.create!(user:, group:, added_by: user, role: group_role)
+      end
+
+      context "and the group status is not active" do
+        let(:group_status) { :trial }
+
+        it { is_expected.to forbid_action(:can_make_form_live) }
+      end
+
+      context "and the group status is active" do
+        let(:group_status) { :active }
+
+        context "and the user's role is super admin" do
+          let(:user) { build :super_admin_user, organisation: }
+
+          it { is_expected.to permit_action(:can_make_form_live) }
+        end
+
+        context "and the user is organisation admin for the group" do
+          let(:user) { build :organisation_admin_user, organisation: }
+
+          it { is_expected.to permit_action(:can_make_form_live) }
+        end
+
+        context "and the user's role within the group is group admin" do
+          let(:group_role) { :group_admin }
+
+          it { is_expected.to permit_action(:can_make_form_live) }
+        end
+
+        context "and the user's role within the group is editor" do
+          it { is_expected.to forbid_action(:can_make_form_live) }
+        end
       end
     end
   end
