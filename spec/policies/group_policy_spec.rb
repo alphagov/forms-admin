@@ -114,6 +114,14 @@ RSpec.describe GroupPolicy do
           expect(policy).to permit_action(:request_upgrade)
         end
       end
+
+      context "when the group belongs to an organisation without an org admin" do
+        let(:group) { build :group }
+
+        it "forbids request_upgrade" do
+          expect(policy).to forbid_action(:request_upgrade)
+        end
+      end
     end
   end
 end

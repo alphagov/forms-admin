@@ -22,7 +22,7 @@ class GroupPolicy < ApplicationPolicy
   alias_method :add_group_admin?, :upgrade?
 
   def request_upgrade?
-    group_admin? && !record.active?
+    group_admin? && !record.active? && record.organisation.admin_users.present?
   end
 
   def review_upgrade?
