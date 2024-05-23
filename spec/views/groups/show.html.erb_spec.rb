@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "groups/show", type: :view do
-  let(:current_user) { create :user }
+  let(:current_user) { create :user, :org_has_signed_mou }
   let(:forms) { [] }
   let(:group) { create :group, name: "My Group" }
   let(:upgrade?) { false }
@@ -148,6 +148,14 @@ RSpec.describe "groups/show", type: :view do
 
     it "has the trial group heading in the notification banner" do
       expect(rendered).to have_css "h3", text: "This is a ‘trial’ group"
+    end
+
+    context "and the org has not signed an MOU" do
+      let(:current_user) { create :user }
+
+      it "tells user to contact support to make forms live" do
+        expect(rendered).to have_text("Speak to your organisation’s GOV.UK publishing team or contact the GOV.UK Forms team to find out how to make live forms.")
+      end
     end
   end
 

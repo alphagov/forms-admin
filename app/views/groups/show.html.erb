@@ -16,7 +16,11 @@
         <% elsif policy(@group).request_upgrade? %>
           <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
           <%= t("groups.show.trial_banner.request_upgrade.body_html") %>
-          <%= govuk_link_to t("groups.show.trial_banner.request_upgrade.link"), request_upgrade_group_path(@group) %>
+          <% if @group.organisation.mou_signatures.present? %>
+            <%= govuk_link_to t("groups.show.trial_banner.request_upgrade.link"), request_upgrade_group_path(@group) %>
+          <% else %>
+            <%= t("groups.show.trial_banner.request_upgrade.without_mou_signature_html", contact_link: contact_link) %>
+          <% end %>
         <% else %>
           <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
           <%= t("groups.show.trial_banner.editor.body_html") %>

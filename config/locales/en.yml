@@ -351,6 +351,12 @@ en:
         <p>When a group is first created it will be a ‘trial’ group. That means forms in the group cannot be made live.</p>
         <p>As an organisation admin, you can upgrade a trial group to an ‘active’ group so forms in that group can be made live. People will be able to send a request to you to ask for their trial group to be upgraded.</p>
       group_explainer_title: What is a ‘group’?
+      no_mou_banner:
+        body_html: |
+          <p>Someone from your organisation needs to agree to a ‘Memorandum of Understanding’ with GOV.UK Forms before your organisation can make any forms live.</p>
+          <p>Speak to your organisation’s GOV.UK publishing team or %{contact_link} to start this process.</p>
+          <p>In the meantime, you can try out making forms in a ‘trial’ group.</p>
+        heading: You cannot make any forms live yet
       trial_empty_message: You’re not in any trial groups.
       trial_title: Trial groups
       upgrade_requests_banner_heading:
@@ -378,6 +384,7 @@ en:
         request_upgrade:
           body_html: "<p>You can create forms in this group and test them, but you cannot make them live.</p>"
           link: Find out how to upgrade this group so you can make forms live
+          without_mou_signature_html: "<p>Speak to your organisation’s GOV.UK publishing team or %{contact_link} to find out how to make live forms.</p>"
         review_upgrade:
           body_html: "<p>%{upgrade_requester_name} has asked to upgrade this group so they can make forms live.</p>"
           heading: A group admin has asked to upgrade this group
