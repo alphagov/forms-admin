@@ -1,9 +1,11 @@
 require "rails_helper"
 
 feature "Make changes live", type: :feature do
-  let(:form) { build :form, :live, :with_active_resource, id: 1, name: "Apply for a juggling license" }
+  let(:form) { build :form, :live, :with_active_resource, id: 1, name: "Apply for a juggling license", organisation_id: 1 }
   let(:org_forms) { [form] }
   let(:pages) { build_list :page, 5, form_id: form.id }
+  let(:organisation) { build :organisation, id: 1 }
+  let(:user) { create :editor_user, organisation: }
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
@@ -14,17 +16,38 @@ feature "Make changes live", type: :feature do
       mock.post "/api/v1/forms/1/make-live", post_headers, form.to_json(include: [:pages]), 200
     end
 
-    login_as_editor_user
+    login_as user
   end
 
-  scenario "Form creator makes changes after making form live" do
-    given_i_am_viewing_a_live_form
-    when_i_click_create_a_draft
-    then_i_see_the_page_to_edit_the_draft
-    when_i_click_make_your_changes_live
-    then_i_see_a_page_to_confirm_making_the_draft_live
-    when_i_choose_yes
-    then_i_see_a_confirmation_that_the_changes_are_live
+  context "when the form is in a group", feature_groups: true do
+    let(:group) { create(:group, name: "Group 1", organisation:, status: "active") }
+
+    before do
+      GroupForm.create!(form_id: form.id, group_id: group.id)
+      Membership.create!(user:, group:, added_by: user, role: :group_admin)
+    end
+
+    scenario "Form creator makes changes after making form live" do
+      given_i_am_viewing_a_live_form
+      when_i_click_create_a_draft
+      then_i_see_the_page_to_edit_the_draft
+      when_i_click_make_your_changes_live
+      then_i_see_a_page_to_confirm_making_the_draft_live
+      when_i_choose_yes
+      then_i_see_a_confirmation_that_the_changes_are_live
+    end
+  end
+
+  context "when the form is not in a group" do
+    scenario "Form creator makes changes after making form live" do
+      given_i_am_viewing_a_live_form
+      when_i_click_create_a_draft
+      then_i_see_the_page_to_edit_the_draft
+      when_i_click_make_your_changes_live
+      then_i_see_a_page_to_confirm_making_the_draft_live
+      when_i_choose_yes
+      then_i_see_a_confirmation_that_the_changes_are_live
+    end
   end
 
   def given_i_am_viewing_a_live_form
