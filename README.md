@@ -167,6 +167,18 @@ features:
 
 And check with `FeatureService.enabled?("some.nested_feature")`.
 
+You can also set a feature for users from a specific organisation:
+
+```yaml
+features:
+  some_feature:
+    enabled: false
+    organisations:
+      some_organisation: true
+```
+
+The `features.some_features.enabled` key sets the default for the flag, and then you can override for an organisation by adding a key for the organisation slug (with underscores instead of dashes). And then check the flag for a user with `FeatureService.new(user).enabled?(:some_feature)`.
+
 ### Testing with features
 
 You can also tag RSpec tests with `feature_{name}: true`. This will turn that feature on just for the duration of that test.
