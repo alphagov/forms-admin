@@ -3,9 +3,8 @@ require "rails_helper"
 RSpec.describe GroupPolicy do
   subject(:policy) { described_class.new(user, group) }
 
-  let(:organisation) { create :organisation, slug: "an organisation" }
-  let(:user) { create :editor_user, organisation: }
-  let(:group) { build :group, organisation: }
+  let(:user) { create :editor_user, organisation: group.organisation }
+  let(:group) { build :group, :org_has_org_admin }
 
   context "when user is super_admin" do
     let(:user) { build :super_admin_user }
@@ -19,7 +18,7 @@ RSpec.describe GroupPolicy do
     end
 
     context "when the group has status upgrade_requested" do
-      let(:group) { build :group, organisation:, status: :upgrade_requested }
+      let(:group) { build :group, status: :upgrade_requested }
 
       it "permits review_upgrade" do
         expect(policy).to permit_action(:review_upgrade)
@@ -29,6 +28,7 @@ RSpec.describe GroupPolicy do
 
   context "when user is organisation_admin" do
     let(:user) { build :organisation_admin_user, organisation: }
+    let(:organisation) { group.organisation }
 
     context "and in the same organisation as the group" do
       it "forbids only request_upgrade and review_upgrade" do
@@ -37,7 +37,7 @@ RSpec.describe GroupPolicy do
     end
 
     context "and not in the same organisation as the group" do
-      let(:group) { build :group, organisation_id: user.organisation_id + 1 }
+      let(:organisation) { create :organisation, slug: "another organisation" }
 
       it "permits new and create only" do
         expect(policy).to permit_only_actions(%i[new create])
@@ -45,7 +45,7 @@ RSpec.describe GroupPolicy do
     end
 
     context "when the group has status upgrade_requested" do
-      let(:group) { build :group, organisation:, status: :upgrade_requested }
+      let(:group) { build :group, status: :upgrade_requested }
 
       it "permits review_upgrade" do
         expect(policy).to permit_action(:review_upgrade)
