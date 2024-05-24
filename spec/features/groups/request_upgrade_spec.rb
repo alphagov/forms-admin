@@ -2,8 +2,9 @@ require "rails_helper"
 
 feature "Request an upgrade for a group", type: :feature, feature_groups: true do
   let!(:group) do
-    create(:group, organisation: editor_user.organisation).tap do |group|
+    create(:group, :org_has_org_admin, organisation: editor_user.organisation).tap do |group|
       create(:membership, user: editor_user, group:, role: :group_admin)
+      create(:organisation_admin_user, organisation: editor_user.organisation)
     end
   end
 
