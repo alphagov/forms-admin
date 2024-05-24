@@ -13,6 +13,9 @@
           <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
           <%= t("groups.show.trial_banner.upgrade.body_html") %>
           <%= govuk_link_to t("groups.show.trial_banner.upgrade.link"), upgrade_group_path(@group) %>
+        <% elsif @current_user.super_admin? %>
+          <% nb.with_heading(text: t("groups.index.no_mou_banner.heading"), tag: "h3") %>
+          <%= t("groups.index.no_mou_banner.body_html", contact_link: contact_link) %>
         <% elsif policy(@group).request_upgrade? %>
           <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
           <%= t("groups.show.trial_banner.request_upgrade.body_html") %>

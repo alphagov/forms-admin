@@ -24,6 +24,14 @@ RSpec.describe GroupPolicy do
         expect(policy).to permit_action(:review_upgrade)
       end
     end
+
+    context "when the group organisation does not have an MOU" do
+      let(:group) { build(:group) }
+
+      it "forbids upgrade" do
+        expect(policy).to forbid_action(:upgrade)
+      end
+    end
   end
 
   context "when user is organisation_admin" do

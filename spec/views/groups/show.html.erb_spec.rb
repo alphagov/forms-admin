@@ -133,6 +133,14 @@ RSpec.describe "groups/show", type: :view do
         expect(rendered).to have_css "h3", text: "This is a ‘trial’ group"
       end
     end
+
+    context "when the user is a super admin" do
+      let(:current_user) { create(:super_admin_user) }
+
+      it "shows content for organisation requiring an MOU" do
+        expect(rendered).to have_text("Someone from your organisation needs to agree to a ‘Memorandum of Understanding’ with GOV.UK Forms before your organisation can make any forms live.")
+      end
+    end
   end
 
   context "and the user has permission to request an upgrade" do
