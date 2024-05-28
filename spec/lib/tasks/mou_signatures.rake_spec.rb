@@ -56,28 +56,28 @@ RSpec.describe "mou_signatures.rake" do
     let(:mou_signature) { create :mou_signature, user:, organisation: current_organisation }
 
     it "aborts when the user is not found" do
-      expect { task.invoke("John Doe", current_organisation.name, target_organisation.name) }
-        .to output(/User with name: John Doe not found/)
+      expect { task.invoke("john.doe@digital.cabinet-office.gov.uk", current_organisation.name, target_organisation.name) }
+        .to output(/User with email address: john.doe@digital.cabinet-office.gov.uk not found/)
               .to_stderr
               .and raise_error(SystemExit) { |e| expect(e).not_to be_success }
     end
 
     it "aborts when the current organisation is not found" do
-      expect { task.invoke(user.name, "GDS", target_organisation.name) }
+      expect { task.invoke(user.email, "GDS", target_organisation.name) }
         .to output(/Organisation with name: GDS not found/)
               .to_stderr
               .and raise_error(SystemExit) { |e| expect(e).not_to be_success }
     end
 
     it "aborts when the target organisation is not found" do
-      expect { task.invoke(user.name, current_organisation.name, "GDS") }
+      expect { task.invoke(user.email, current_organisation.name, "GDS") }
         .to output(/Organisation with name: GDS not found/)
               .to_stderr
               .and raise_error(SystemExit) { |e| expect(e).not_to be_success }
     end
 
     it "aborts when an MOU signature is not found for the user and organisation" do
-      expect { task.invoke(user.name, target_organisation.name, current_organisation.name) }
+      expect { task.invoke(user.email, target_organisation.name, current_organisation.name) }
         .to output(/MOU signature for User:/)
               .to_stderr
               .and raise_error(SystemExit) { |e| expect(e).not_to be_success }
@@ -85,7 +85,7 @@ RSpec.describe "mou_signatures.rake" do
 
     it "updates the organisation for an MOU" do
       mou_signature
-      expect { task.invoke(user.name, current_organisation.name, target_organisation.name) }
+      expect { task.invoke(user.email, current_organisation.name, target_organisation.name) }
         .to change { mou_signature.reload.organisation }.to(target_organisation)
         .and output(/Updated MOU signature/)
               .to_stdout
