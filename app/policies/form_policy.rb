@@ -35,7 +35,7 @@ class FormPolicy
   def can_view_form?
     return true if user.super_admin?
 
-    if FeatureService.enabled?(:groups) && form.group.present?
+    if FeatureService.new(user).enabled?(:groups) && form.group.present?
       return user.groups.include?(form.group) || user.is_organisations_admin?(form.group.organisation)
     end
 

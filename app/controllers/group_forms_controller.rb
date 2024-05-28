@@ -32,7 +32,7 @@ class GroupFormsController < ApplicationController
 private
 
   def feature_enabled
-    raise ActionController::RoutingError, "Groups feature is not enabled" unless FeatureService.enabled?(:groups)
+    raise ActionController::RoutingError, "Groups feature is not enabled" unless groups_enabled
   end
 
   def set_group

@@ -107,7 +107,7 @@ class GroupsController < ApplicationController
 private
 
   def feature_enabled
-    raise ActionController::RoutingError, "Groups feature not enabled" unless FeatureService.enabled?(:groups)
+    raise ActionController::RoutingError, "Groups feature not enabled" unless groups_enabled
   end
 
   # Use callbacks to share common setup or constraints between actions.
