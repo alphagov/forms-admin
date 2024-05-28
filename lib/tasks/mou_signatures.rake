@@ -1,7 +1,21 @@
 namespace :mou_signatures do
+  desc "Add MOU signature that was done offline"
+  task :create, %i[user_email organisation_name agreed_at_date] => :environment do |_, args|
+    usage_message = "usage: rake mou_signatures:create[<user_email>, <organisation_name>, <agreed_at_date>]".freeze
+    abort usage_message if args[:user_email].blank? || args[:organisation_name].blank? || args[:agreed_at_date].blank?
+
+    user = User.find_by!(email: args[:user_email])
+    organisation = Organisation.find_by!(name: args[:organisation_name])
+    agreed_at_date = Date.iso8601(args[:agreed_at_date])
+
+    mou_signature = MouSignature.create!(user:, organisation:, created_at: agreed_at_date)
+
+    puts "Added MOU signature for User: #{mou_signature.user.name} and Organisation: #{mou_signature.organisation.name} signed at: #{mou_signature.created_at}"
+  end
+
   desc "Update the organisation that an MOU was signed for"
   task :update_organisation, %i[user_name current_organisation_name target_organisation_name] => :environment do |_, args|
-    usage_message = "usage: rake mou_signatures:update_organisation[<user_name>, <current_organisation_name>, <target_organisation_name>".freeze
+    usage_message = "usage: rake mou_signatures:update_organisation[<user_name>, <current_organisation_name>, <target_organisation_name>]".freeze
     abort usage_message if args[:user_name].blank? || args[:current_organisation_name].blank? || args[:target_organisation_name].blank?
 
     user = User.find_by(name: args[:user_name])
