@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe MetricsSummaryComponent::View, type: :component, feature_metrics_for_form_creators_enabled: true do
+RSpec.describe MetricsSummaryComponent::View, type: :component do
   let(:metrics_data) { nil }
   let(:form_live_date) { 7.days.ago.to_date }
   let(:metrics_summary) { described_class.new(form_live_date, metrics_data) }
