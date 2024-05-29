@@ -13,7 +13,7 @@
     <div class="govuk-grid-column-two-thirds">
       <%= govuk_notification_banner(title_text: t("banner.default.title")) do |banner| %>
         <% banner.with_heading(text: t("groups.index.no_mou_banner.heading"), tag: "h3") %>
-        <% banner.with_heading(text: t("groups.index.no_mou_banner.body_html", contact_link: contact_link)) %>
+        <% t("groups.index.no_mou_banner.body_html", contact_link: contact_link) %>
       <% end %>
     </div>
   </div>
