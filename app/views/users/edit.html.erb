@@ -10,7 +10,7 @@
 
       <% unless @user.current_org_has_mou? %>
         <%= govuk_notification_banner(title_text: t("banner.default.title")) do |banner| %>
-          <%= t('users.edit.mou_banner') %>
+          <% banner.with_heading(text: t('users.edit.mou_banner'), tag: "p") %>
         <% end %>
       <% end %>
 
