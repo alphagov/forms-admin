@@ -71,8 +71,9 @@ gem "validate_url"
 # For auditing tables
 gem "paper_trail"
 
-# For obtaining CloudWatch metrics
+# For AWS interactions
 gem "aws-sdk-cloudwatch", "~> 1.91"
+gem "aws-sdk-codepipeline", "~> 1.72"
 
 # For Mailchimp audience integration
 gem "MailchimpMarketing", "~> 3.0"
