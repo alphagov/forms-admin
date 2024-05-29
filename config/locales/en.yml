@@ -240,10 +240,26 @@ en:
             Editor accounts can change the email address completed forms are sent to.
         title: Set email address for completed forms
       make_form_live_section:
+        group_not_active:
+          group_admin:
+            body_text: |
+              You cannot make this form live because it’s in a ‘trial’ group.
+
+              <a href="%{upgrade_path}">Find out how to upgrade the group</a> so you can make forms live.
+          group_editor:
+            body_text: |
+              This form cannot be made live because it’s in a ‘trial’ group.
+
+              A group admin can request to upgrade the group so forms can be made live. You can <a href="%{group_members_path}">view the members of the group</a> to find a group admin.
         if_not_permitted:
           body_text: You cannot make a form live with a trial account.
         make_live: Make your form live
         title: Make your form live
+        user_cannot_administer:
+          body_text: |
+            Only a group admin can make a form live.
+
+            <a href="%{group_members_path}">View the members of the group</a> to find a group admin.
       payment_link_subsection:
         payment_link: Add a link to a payment page on GOV.UK Pay
         title: Optional tasks

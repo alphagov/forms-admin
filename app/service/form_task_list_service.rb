@@ -124,10 +124,30 @@ private
     if Pundit.policy(@current_user, @form).can_make_form_live?
       section[:rows] = make_form_live_section_tasks
     else
-      section[:body_text] = I18n.t("forms.task_list_create.make_form_live_section.if_not_permitted.body_text")
+      section[:body_text] = make_form_live_section_body_text
     end
 
     section
+  end
+
+  def make_form_live_section_body_text
+    # TODO: we should remove the check the form is within a group when we remove the feature flag
+    return I18n.t("forms.task_list_create.make_form_live_section.if_not_permitted.body_text") unless FeatureService.new(@current_user).enabled?(:groups) && @form.group.present?
+    return inactive_group_message unless @form.group.active?
+
+    I18n.t("forms.task_list_create.make_form_live_section.user_cannot_administer.body_text", group_members_path: group_members_path(@form.group)) unless Pundit.policy(@current_user, @form).can_administer_group?
+  end
+
+  def inactive_group_message
+    return I18n.t("forms.task_list_create.make_form_live_section.group_not_active.group_admin.body_text", upgrade_path: group_upgrade_url) if Pundit.policy(@current_user, @form).can_administer_group?
+
+    I18n.t("forms.task_list_create.make_form_live_section.group_not_active.group_editor.body_text", group_members_path: group_members_path(@form.group))
+  end
+
+  def group_upgrade_url
+    return request_upgrade_group_path(@form.group) unless Pundit.policy(@current_user, @form.group).upgrade?
+
+    group_path(@form.group)
   end
 
   def make_form_live_section_tasks
