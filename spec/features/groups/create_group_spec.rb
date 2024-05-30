@@ -26,7 +26,7 @@ feature "Create a new group", type: :feature, feature_groups: true do
   end
 
   def and_i_fill_in_the_group_name
-    fill_in "Name", with: "Group 1"
+    fill_in "Enter a name for your new group", with: "Group 1"
     click_button "Save"
   end
 

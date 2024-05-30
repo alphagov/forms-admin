@@ -380,7 +380,21 @@ en:
         other: You have %{count} requests to upgrade a trial group
       upgrade_requests_title: Upgrade requests
     new:
-      title: New group
+      body_html: |
+        <p>Each form needs to be created in a ‘group’. Once you have a group, you can add other people to create and edit forms in it.</p>
+
+        <p class="govuk-inset-text">When a group is first created it will be a ‘trial’ group. That means you cannot make any forms in the group live. You’ll be able to request for a group to be upgraded to an ‘active’ group if you need to make forms live.</p>
+
+        <p>Give your group a meaningful name that will reflect the forms you’ll create in the group, and make sense to the people that will be added to it. For example:</p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>Licensing forms</li>
+          <li>GOV.UK content team</li>
+          <li>Juggling service forms</li>
+        </ul>
+
+        <p>You can change the name later if you need to.</p>
+      title: Create a new group for forms
     review_upgrade:
       body_html: |
         <p>%{upgrade_requester_name} has asked to upgrade this group to an ‘active’ group.</p>
@@ -505,6 +519,8 @@ en:
         confirm: Are you sure you want to make your draft live?
       forms_make_live_input:
         confirm: Are you sure you want to make your form live?
+      group:
+        name: Enter a name for your new group
       group_member_input:
         member_email_address: Enter the email address of the person you want to add
         role: What role should they have in this group?
