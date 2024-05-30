@@ -1,6 +1,5 @@
 # Used to add feature flags in the app to control access to certain features.
 features:
-  check_your_question_enabled: false
   groups: false
 
 forms_api:
