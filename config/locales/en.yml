@@ -56,6 +56,10 @@ en:
             question_text:
               blank: Enter a question
               too_long: Question text must be %{count} characters or less
+        group:
+          attributes:
+            name:
+              blank: Enter a name for the group
         mou_signature:
           attributes:
             agreed:
