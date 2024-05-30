@@ -1,6 +1,16 @@
 <% set_page_title(title_with_error_prefix(t(".title"), @group.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(@group, t("back_link.group", group_name: @group.name)) %>
 
-<h1 class="govuk-heading-l"><%= t(".title") %></h1>
+<%= form_with(model: @group) do |f| %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <% if @group.errors.any? %>
+      <%= f.govuk_error_summary %>
+    <% end %>
 
-<%= render "form", group: @group %>
+    <%= f.govuk_text_field :name, label: {  text: t(".title"), tag: 'h1', size: 'l' }, caption: { text: @group.name, size: 'l' } %>
+
+    <%= f.govuk_submit t("save_and_continue") %>
+  <% end %>
+  </div>
+</div>

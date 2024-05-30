@@ -346,7 +346,7 @@ en:
       inset_text: Some organisations are restricting who can make forms live in their organisation. Send a request to upgrade to find out if this will affect you.
       send_request_to_upgrade: Send request to upgrade
     edit:
-      title: Edit group
+      title: Change the name of this group
     form_table_caption: Forms in ‘%{group_name}’
     group_list:
       created_by: Created by
