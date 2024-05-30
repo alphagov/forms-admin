@@ -27,6 +27,8 @@ if HostingEnvironment.local_development? && User.none?
                                 uid: "123456",
                                 provider: :mock_gds_sso })
 
+  FactoryBot.create :mou_signature_for_organisation, organisation: gds
+
   # create extra organisations
   test_org = FactoryBot.create :organisation, slug: "test-org"
   FactoryBot.create :organisation, slug: "ministry-of-tests"
@@ -55,6 +57,9 @@ if HostingEnvironment.local_development? && User.none?
   test_group = FactoryBot.create :group, name: "Test Group", organisation: gds, creator: default_user
   FactoryBot.create :group, name: "Ministry of Tests forms", organisation: test_org, creator: default_user
   FactoryBot.create :group, name: "Ministry of Tests forms - secret!", organisation: test_org, creator: default_user
+  end_to_end_group = FactoryBot.create :group, name: "End to end tests", organisation: gds, status: :active, creator: default_user
+
+  FactoryBot.create :membership, user: default_user, group: end_to_end_group, added_by: default_user, role: :group_admin
 
   # add a form to a test group (assumes database seed being used for forms-api)
   GroupForm.create! group: test_group, form_id: 1
