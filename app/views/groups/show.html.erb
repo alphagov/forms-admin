@@ -5,25 +5,35 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= govuk_notification_banner(title_text: t("banner.default.title")) do |nb| %>
-        <% if policy(@group).review_upgrade? %>
-          <% nb.with_heading(text: t("groups.show.trial_banner.review_upgrade.heading"), tag: "h3") %>
-          <%= t("groups.show.trial_banner.review_upgrade.body_html", upgrade_requester_name: @group.upgrade_requester.name) %>
-          <%= govuk_link_to t("groups.show.trial_banner.review_upgrade.link"), review_upgrade_group_path(@group) %>
-        <% elsif policy(@group).upgrade? %>
-          <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
-          <%= t("groups.show.trial_banner.upgrade.body_html") %>
-          <%= govuk_link_to t("groups.show.trial_banner.upgrade.link"), upgrade_group_path(@group) %>
-        <% elsif policy(@group).request_upgrade? %>
-          <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
-          <%= t("groups.show.trial_banner.request_upgrade.body_html") %>
-          <% if @group.organisation.mou_signatures.present? %>
+        <% if @group.organisation.mou_signatures.present? %>
+          <% if policy(@group).review_upgrade? %>
+            <% nb.with_heading(text: t("groups.show.trial_banner.review_upgrade.heading"), tag: "h3") %>
+            <%= t("groups.show.trial_banner.review_upgrade.body_html", upgrade_requester_name: @group.upgrade_requester.name) %>
+            <%= govuk_link_to t("groups.show.trial_banner.review_upgrade.link"), review_upgrade_group_path(@group) %>
+          <% elsif policy(@group).upgrade? %>
+            <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
+            <%= t("groups.show.trial_banner.upgrade.body_html") %>
+            <%= govuk_link_to t("groups.show.trial_banner.upgrade.link"), upgrade_group_path(@group) %>
+          <% elsif policy(@group).request_upgrade? %>
+            <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
+            <%= t("groups.show.trial_banner.request_upgrade.body_html") %>
             <%= govuk_link_to t("groups.show.trial_banner.request_upgrade.link"), request_upgrade_group_path(@group) %>
           <% else %>
-            <%= t("groups.show.trial_banner.request_upgrade.without_mou_signature_html", contact_link: contact_link) %>
+            <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
+            <%= t("groups.show.trial_banner.editor.body_html") %>
           <% end %>
         <% else %>
-          <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
-          <%= t("groups.show.trial_banner.editor.body_html") %>
+          <% if @current_user.super_admin? %>
+            <% nb.with_heading(text: t("groups.index.no_mou_banner.heading"), tag: "h3") %>
+            <%= t("groups.index.no_mou_banner.body_html", contact_link: contact_link) %>
+          <% elsif policy(@group).request_upgrade? %>
+            <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
+            <%= t("groups.show.trial_banner.request_upgrade.body_html") %>
+            <%= t("groups.show.trial_banner.request_upgrade.without_mou_signature_html", contact_link: contact_link) %>
+          <% else %>
+            <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
+            <%= t("groups.show.trial_banner.editor.body_html") %>
+          <% end %>
         <% end %>
       <% end %>
     </div>

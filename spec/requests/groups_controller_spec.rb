@@ -459,7 +459,11 @@ RSpec.describe "/groups", type: :request, feature_groups: true do
   end
 
   describe "GET /request_upgrade" do
+    let(:org_has_admin_user) { true }
+
     before do
+      create(:organisation_admin_user, organisation: current_user.organisation) if org_has_admin_user
+
       get request_upgrade_group_url(member_group)
     end
 
@@ -472,6 +476,14 @@ RSpec.describe "/groups", type: :request, feature_groups: true do
 
       it "renders the confirm upgrade request view" do
         expect(response).to render_template(:confirm_upgrade_request)
+      end
+
+      context "and their organisation does not have an admin user" do
+        let(:org_has_admin_user) { false }
+
+        it "is forbidden" do
+          expect(response).to have_http_status(:forbidden)
+        end
       end
     end
 
@@ -497,6 +509,12 @@ RSpec.describe "/groups", type: :request, feature_groups: true do
   end
 
   describe "POST /request_upgrade" do
+    let(:org_has_admin_user) { true }
+
+    before do
+      create(:organisation_admin_user, organisation: current_user.organisation) if org_has_admin_user
+    end
+
     context "when user is a group admin" do
       let(:role) { :group_admin }
 
@@ -516,6 +534,16 @@ RSpec.describe "/groups", type: :request, feature_groups: true do
         post request_upgrade_group_url(member_group)
 
         expect(response).to render_template(:upgrade_requested)
+      end
+
+      context "when the organisation does not have an admin user" do
+        let(:org_has_admin_user) { false }
+
+        it "is forbidden" do
+          post request_upgrade_group_url(member_group)
+
+          expect(response).to have_http_status(:forbidden)
+        end
       end
     end
 

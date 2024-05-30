@@ -16,13 +16,15 @@ class GroupPolicy < ApplicationPolicy
   alias_method :add_editor?, :edit?
 
   def upgrade?
+    organisation_admin_or_super_admin? && record.organisation.mou_signatures.present?
+  end
+
+  def add_group_admin?
     organisation_admin_or_super_admin?
   end
 
-  alias_method :add_group_admin?, :upgrade?
-
   def request_upgrade?
-    group_admin? && !record.active?
+    group_admin? && !record.active? && record.organisation.admin_users.present?
   end
 
   def review_upgrade?

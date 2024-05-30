@@ -14,5 +14,13 @@ FactoryBot.define do
         organisation.mou_signatures << (create :mou_signature_for_organisation, organisation:)
       end
     end
+
+    trait :with_org_admin do
+      with_signed_mou
+
+      after(:build) do |organisation|
+        organisation.users << create(:organisation_admin_user, organisation:)
+      end
+    end
   end
 end
