@@ -14,7 +14,7 @@ class MakeFormLiveService
   def make_live
     @current_form.make_live!
 
-    if FeatureService.enabled?(:notify_original_submission_email_of_change) && live_form_submission_email_has_changed
+    if live_form_submission_email_has_changed
       SubmissionEmailMailer.alert_email_change(
         live_email: @current_live_form.submission_email,
         form_name: @current_live_form.name,

@@ -1,12 +1,12 @@
 require "rails_helper"
 
-describe "forms/_made_live_form.html.erb", feature_metrics_for_form_creators_enabled: false, feature_groups: true do
+describe "forms/_made_live_form.html.erb", feature_groups: true do
   let(:declaration) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
+  let(:metrics_data) { { weekly_submissions: 125, weekly_starts: 256 } }
   let(:what_happens_next) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:form_metadata) { OpenStruct.new(has_draft_version: false) }
   let(:form) { build(:form, :live, id: 2, declaration_text: declaration, what_happens_next_markdown: what_happens_next, live_at: 1.week.ago) }
   let(:group) { create(:group, name: "Group 1") }
-  let(:metrics_data) { nil }
   let(:status) { :live }
   let(:preview_mode) { :preview_live }
   let(:questions_path) { Faker::Internet.url }
@@ -97,10 +97,6 @@ describe "forms/_made_live_form.html.erb", feature_metrics_for_form_creators_ena
 
   it "contains a link to view questions" do
     expect(rendered).to have_link("#{form.pages.count} questions", href: questions_path)
-  end
-
-  it "does not render the metrics summary component" do
-    expect(rendered).not_to have_text(I18n.t("metrics_summary.description"))
   end
 
   context "with only a single question" do
@@ -201,12 +197,8 @@ describe "forms/_made_live_form.html.erb", feature_metrics_for_form_creators_ena
     end
   end
 
-  context "when the metrics feature is enabled", feature_metrics_for_form_creators_enabled: true do
-    let(:metrics_data) { { weekly_submissions: 125, weekly_starts: 256 } }
-
-    it "renders the metrics summary component" do
-      expect(rendered).to have_text("If you want to track metrics over a longer period you'll need to make a note of these on the same day each week.")
-    end
+  it "renders the metrics summary component" do
+    expect(rendered).to have_text("If you want to track metrics over a longer period you'll need to make a note of these on the same day each week.")
   end
 
   context "when form is not in a group" do

@@ -24,10 +24,6 @@ module MetricsSummaryComponent
       end
     end
 
-    def render?
-      FeatureService.enabled?(:metrics_for_form_creators_enabled)
-    end
-
     def formatted_date_range
       start_date_format_string = start_date.year == end_date.year ? "%e %B" : "%e %B %Y"
       formatted_start_date = format_date(start_date.strftime(start_date_format_string))

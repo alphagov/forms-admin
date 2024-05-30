@@ -46,23 +46,15 @@ describe MakeFormLiveService do
           current_form.submission_email = "i-have-changed@example.com"
         end
 
-        it "does not call the SubmissionEmailMailer" do
-          expect(SubmissionEmailMailer).not_to receive(:alert_email_change)
+        it "calls the SubmissionEmailMailer" do
+          expect(SubmissionEmailMailer).to receive(:alert_email_change).with(
+            live_email: live_form.submission_email,
+            form_name: live_form.name,
+            creator_name: current_user.name,
+            creator_email: current_user.email,
+          ).and_call_original
 
           make_form_live_service.make_live
-        end
-
-        context "when notify_original_submission_email_of_change feature is enabled", feature_notify_original_submission_email_of_change: true do
-          it "calls the SubmissionEmailMailer" do
-            expect(SubmissionEmailMailer).to receive(:alert_email_change).with(
-              live_email: live_form.submission_email,
-              form_name: live_form.name,
-              creator_name: current_user.name,
-              creator_email: current_user.email,
-            ).and_call_original
-
-            make_form_live_service.make_live
-          end
         end
       end
     end

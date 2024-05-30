@@ -269,14 +269,8 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
         get submission_email_confirmed_path(form.id)
       end
 
-      it "displays the default text" do
-        expect(response.body).to include(I18n.t("email_code_success.body_html", submission_email: form.submission_email))
-      end
-
-      context "when live_submission_email_changed_body_html is enabled", feature_notify_original_submission_email_of_change: true do
-        it "displays the default text and tells users we will email form processing team" do
-          expect(response.body).to include(simple_format(I18n.t("email_code_success.live_submission_email_changed_body_html", new_submission_email: form.submission_email)))
-        end
+      it "displays the default text and tells users we will email form processing team" do
+        expect(response.body).to include(simple_format(I18n.t("email_code_success.live_submission_email_changed_body_html", new_submission_email: form.submission_email)))
       end
     end
   end

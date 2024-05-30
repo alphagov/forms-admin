@@ -245,7 +245,7 @@ describe Form, type: :model do
     end
   end
 
-  describe "#metrics_data", feature_metrics_for_form_creators_enabled: true do
+  describe "#metrics_data" do
     let(:form) do
       described_class.new(id: 2, live_at: Time.zone.now - 1.day)
     end
@@ -319,12 +319,6 @@ describe Form, type: :model do
         described_class.new(id: 2, made_live_date: nil)
       end
 
-      it "returns nil" do
-        expect(form.metrics_data).to eq(nil)
-      end
-    end
-
-    context "when the metrics feature flag is off", feature_metrics_for_form_creators_enabled: false do
       it "returns nil" do
         expect(form.metrics_data).to eq(nil)
       end
