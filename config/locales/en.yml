@@ -376,8 +376,8 @@ en:
       trial_empty_message: You’re not in any trial groups.
       trial_title: Trial groups
       upgrade_requests_banner_heading:
-        one: You have one request to upgrade a trial group.
-        other: You have %{count} requests to upgrade a trial group.
+        one: You have one request to upgrade a trial group
+        other: You have %{count} requests to upgrade a trial group
       upgrade_requests_title: Upgrade requests
     new:
       title: New group
