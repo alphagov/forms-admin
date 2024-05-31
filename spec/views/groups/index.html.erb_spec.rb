@@ -63,7 +63,7 @@ RSpec.describe "groups/index", type: :view do
       let(:upgrade_requested_groups) { create_list :group, 1, status: :upgrade_requested }
 
       it "shows a notification banner" do
-        expect(rendered).to have_css ".govuk-notification-banner", text: "You have one request to upgrade a trial group."
+        expect(rendered).to have_css ".govuk-notification-banner", text: "You have one request to upgrade a trial group"
       end
     end
 
@@ -71,7 +71,7 @@ RSpec.describe "groups/index", type: :view do
       let(:upgrade_requested_groups) { create_list :group, 2, status: :upgrade_requested }
 
       it "shows a notification banner with pluralized message" do
-        expect(rendered).to have_css ".govuk-notification-banner", text: "You have 2 requests to upgrade a trial group."
+        expect(rendered).to have_css ".govuk-notification-banner", text: "You have 2 requests to upgrade a trial group"
       end
     end
 

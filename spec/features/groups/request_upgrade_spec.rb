@@ -69,7 +69,7 @@ feature "Request an upgrade for a group", type: :feature, feature_groups: true d
   end
 
   def then_i_see_a_notification_banner_stating_there_are_upgrade_requests
-    expect(page).to have_css ".govuk-notification-banner", text: "You have one request to upgrade a trial group."
+    expect(page).to have_css ".govuk-notification-banner", text: "You have one request to upgrade a trial group"
     expect_page_to_have_no_axe_errors(page)
   end
 
