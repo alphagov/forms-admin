@@ -1,8 +1,6 @@
 features:
   groups:
     enabled: false
-    organisations:
-      gov_uk_forms_end_to_end_tests: true
 
 # Use real authentication
 auth_provider: gds_sso
