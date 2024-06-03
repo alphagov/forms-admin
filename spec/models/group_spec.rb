@@ -9,6 +9,7 @@ RSpec.describe Group, type: :model do
     it "is invalid without a name" do
       group = build :group, name: nil
       expect(group).not_to be_valid
+      expect(group.errors.full_messages_for(:name)).to include("Name #{I18n.t('activerecord.errors.models.group.attributes.name.blank')}")
     end
 
     it "is invalid without an organisation" do
