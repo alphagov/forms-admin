@@ -37,7 +37,7 @@ class GroupsController < ApplicationController
     authorize @group
 
     if @group.save
-      redirect_to @group, success: t("groups.success_messages.create")
+      redirect_to @group
     else
       render :new, status: :unprocessable_entity
     end
@@ -47,7 +47,8 @@ class GroupsController < ApplicationController
   def update
     authorize @group
     if @group.update(group_params)
-      redirect_to @group, success: t("groups.success_messages.update"), status: :see_other
+      success_message = @group.active? ? t("groups.success_messages.update") : nil
+      redirect_to @group, success: success_message, status: :see_other
     else
       render :edit, status: :unprocessable_entity
     end

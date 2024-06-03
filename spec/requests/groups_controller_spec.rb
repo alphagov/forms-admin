@@ -287,16 +287,45 @@ RSpec.describe "/groups", type: :request, feature_groups: true do
           { name: "new_group_name" }
         end
 
-        it "updates the requested group" do
+        before do
           patch group_url(member_group), params: { group: new_attributes }
           member_group.reload
-          expect(member_group.name).to eq("new_group_name")
         end
 
-        it "redirects to the group" do
-          patch group_url(member_group), params: { group: new_attributes }
-          member_group.reload
-          expect(response).to redirect_to(group_url(member_group))
+        context "when user is a member of group" do
+          context "when the group is in trial mode" do
+            it "updates the requested group" do
+              expect(member_group.name).to eq("new_group_name")
+            end
+
+            it "redirects to the group" do
+              expect(response).to redirect_to(group_url(member_group))
+            end
+
+            it "does not display a success flash message" do
+              expect(flash[:success]).to be_nil
+            end
+          end
+
+          context "when the group is active" do
+            let(:member_group) do
+              create(:group, :active, organisation: current_user.organisation).tap do |group|
+                create(:membership, user: current_user, group:, role:)
+              end
+            end
+
+            it "updates the requested group" do
+              expect(member_group.name).to eq("new_group_name")
+            end
+
+            it "redirects to the group" do
+              expect(response).to redirect_to(group_url(member_group))
+            end
+
+            it "displays a success flash message" do
+              expect(flash[:success]).to eq("The name of this group has been changed")
+            end
+          end
         end
       end
 
