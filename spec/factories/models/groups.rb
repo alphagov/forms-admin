@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :group do
-    name { "My Group" }
+    sequence(:name) { |n| "Group #{n}" }
     organisation { association :organisation, id: 1, slug: "test-org" }
     creator { association :user, organisation: }
     status { :trial }

@@ -36,6 +36,32 @@ RSpec.describe Group, type: :model do
       group = build :group, upgrade_requester: nil
       expect(group).to be_valid
     end
+
+    it "is invalid when a group already exists with the same name and organisation" do
+      organisation = create :organisation
+      create :group, organisation:, name: "Test group"
+      group = build :group, organisation:, name: "Test group"
+
+      expect(group).to be_invalid
+      expect(group.errors[:name]).to eq([I18n.t("activerecord.errors.models.group.attributes.name.taken")])
+    end
+
+    it "is valid when two groups have the same name but different organisations" do
+      organisation = create :organisation
+      other_organisation = create :organisation, name: "other organisation", slug: "other-organisation"
+      create :group, organisation:, name: "Test group"
+      group = build :group, organisation: other_organisation, name: "Test group"
+
+      expect(group).to be_valid
+    end
+
+    it "is valid when two groups have different names but the same organisation" do
+      organisation = create :organisation
+      create :group, organisation:, name: "Test group"
+      group = build :group, organisation:, name: "Other group"
+
+      expect(group).to be_valid
+    end
   end
 
   describe "before_create" do

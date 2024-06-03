@@ -14,7 +14,7 @@ class Group < ApplicationRecord
 
   scope :for_organisation, ->(organisation) { where(organisation:) }
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: { scope: :organisation_id }
   before_create :set_external_id
 
   enum :status, { trial: "trial", active: "active", upgrade_requested: "upgrade_requested" }, validate: true

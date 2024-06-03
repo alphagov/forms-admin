@@ -60,6 +60,7 @@ en:
           attributes:
             name:
               blank: Enter a name for the group
+              taken: Your organisation already has a group with this name
         mou_signature:
           attributes:
             agreed:
