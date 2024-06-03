@@ -255,6 +255,7 @@ en:
               This form cannot be made live because it’s in a ‘trial’ group.
 
               A group admin can request to upgrade the group so forms can be made live. You can <a href="%{group_members_path}">view the members of the group</a> to find a group admin.
+          no_org_admin: You cannot make this form live because it’s in a ‘trial’ group.
         if_not_permitted:
           body_text: You cannot make a form live with a trial account.
         make_live: Make your form live
