@@ -139,6 +139,7 @@ private
   end
 
   def inactive_group_message
+    return I18n.t("forms.task_list_create.make_form_live_section.group_not_active.no_org_admin") if @form.group.organisation.admin_users.blank?
     return I18n.t("forms.task_list_create.make_form_live_section.group_not_active.group_admin.body_text", upgrade_path: group_upgrade_url) if Pundit.policy(@current_user, @form).can_administer_group?
 
     I18n.t("forms.task_list_create.make_form_live_section.group_not_active.group_editor.body_text", group_members_path: group_members_path(@form.group))

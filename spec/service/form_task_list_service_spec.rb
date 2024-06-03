@@ -343,40 +343,42 @@ describe FormTaskListService do
             expect(section).not_to include(:rows)
           end
 
-          context "when the user is an editor" do
-            let(:group_role) { :editor }
-
-            it "has text explaining that the group must be upgraded, with a link to the group members page" do
+          context "when the organisation has no organisation admins" do
+            it "has text explaining that the form cannot be made live because it is in a trial group, with no link to request an upgrade" do
               expect(section[:body_text])
-                .to eq I18n.t(
-                  "forms.task_list_create.make_form_live_section.group_not_active.group_editor.body_text", group_members_path: group_members_path(group)
-                )
+                .to eq I18n.t("forms.task_list_create.make_form_live_section.group_not_active.no_org_admin")
             end
           end
 
-          context "when the user is a group admin" do
-            let(:group_role) { :group_admin }
-
-            it "has text explaining that the group must be upgraded, with a link to the upgrade request page" do
-              expect(section[:body_text])
-                .to eq I18n.t(
-                  "forms.task_list_create.make_form_live_section.group_not_active.group_admin.body_text", upgrade_path: request_upgrade_group_path(group)
-                )
-            end
-          end
-
-          context "when the user is an organisation admin" do
-            let(:current_user) { create :user, :organisation_admin, organisation: }
-
-            it "has text explaining that forms need to be in an active group to be made live" do
-              expect(section[:body_text])
-                .to eq I18n.t(
-                  "forms.task_list_create.make_form_live_section.group_not_active.group_admin.body_text", upgrade_path: group_path(group)
-                )
+          context "when the organisation has an organisation admin" do
+            before do
+              create(:user, organisation:, role: :organisation_admin)
             end
 
-            context "when the user is also a group admin" do
+            context "when the user is an editor" do
+              let(:group_role) { :editor }
+
+              it "has text explaining that the group must be upgraded, with a link to the group members page" do
+                expect(section[:body_text])
+                  .to eq I18n.t(
+                    "forms.task_list_create.make_form_live_section.group_not_active.group_editor.body_text", group_members_path: group_members_path(group)
+                  )
+              end
+            end
+
+            context "when the user is a group admin" do
               let(:group_role) { :group_admin }
+
+              it "has text explaining that the group must be upgraded, with a link to the upgrade request page" do
+                expect(section[:body_text])
+                  .to eq I18n.t(
+                    "forms.task_list_create.make_form_live_section.group_not_active.group_admin.body_text", upgrade_path: request_upgrade_group_path(group)
+                  )
+              end
+            end
+
+            context "when the user is an organisation admin" do
+              let(:current_user) { create :user, :organisation_admin, organisation: }
 
               it "has text explaining that forms need to be in an active group to be made live" do
                 expect(section[:body_text])
@@ -384,17 +386,28 @@ describe FormTaskListService do
                     "forms.task_list_create.make_form_live_section.group_not_active.group_admin.body_text", upgrade_path: group_path(group)
                   )
               end
+
+              context "when the user is also a group admin" do
+                let(:group_role) { :group_admin }
+
+                it "has text explaining that forms need to be in an active group to be made live" do
+                  expect(section[:body_text])
+                    .to eq I18n.t(
+                      "forms.task_list_create.make_form_live_section.group_not_active.group_admin.body_text", upgrade_path: group_path(group)
+                    )
+                end
+              end
             end
-          end
 
-          context "when the user is a super admin" do
-            let(:current_user) { build :user, :super_admin, organisation: }
+            context "when the user is a super admin" do
+              let(:current_user) { build :user, :super_admin, organisation: }
 
-            it "has text explaining that forms need to be in an active group to be made live" do
-              expect(section[:body_text])
-                .to eq I18n.t(
-                  "forms.task_list_create.make_form_live_section.group_not_active.group_admin.body_text", upgrade_path: group_path(group)
-                )
+              it "has text explaining that forms need to be in an active group to be made live" do
+                expect(section[:body_text])
+                  .to eq I18n.t(
+                    "forms.task_list_create.make_form_live_section.group_not_active.group_admin.body_text", upgrade_path: group_path(group)
+                  )
+              end
             end
           end
         end
