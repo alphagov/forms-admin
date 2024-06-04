@@ -52,6 +52,10 @@ RSpec.describe Forms::ChangeNameController, type: :request do
       expect(form).to have_been_created
     end
 
+    it "associates the new form with the organisations default group" do
+      expect(GroupForm.last).to have_attributes(group_id: user.organisation.default_group.id, form_id: 2)
+    end
+
     context "with a trial user" do
       let(:user) { build(:user, :with_trial_role, id: 1) }
       let(:form_data) do
