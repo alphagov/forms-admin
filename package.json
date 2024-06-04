@@ -13,7 +13,7 @@
     "Safari >= 12"
   ],
   "scripts": {
-    "test": "jest",
+    "test": "vitest",
     "lint": "standard | snazzy && stylelint 'app/**/*.scss'",
     "format": "standard --fix & stylelint 'app/**/*.scss' --fix",
     "ci": "bin/setup && bin/rails server",
@@ -24,8 +24,6 @@
     "@testing-library/dom": "^10.1.0",
     "autoprefixer": "^10.4.19",
     "cssnano": "^7.0.1",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
     "postcss": "^8.4.38",
     "regenerator-runtime": "^0.14.1",
     "sass": "^1.77.4",

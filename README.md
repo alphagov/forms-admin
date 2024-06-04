@@ -60,14 +60,14 @@ The app tests are written with [rspec-rails] and you can run them with:
 bundle exec rspec
 ```
 
-There are also unit tests for JavaScript code (look for files named `*.test.js`), written with [Jest]. You can run those with:
+There are also unit tests for JavaScript code (look for files named `*.test.js`), written with [Vitest]. You can run those with:
 
 ```bash
 npm run test
 ```
 
 [rspec-rails]: https://github.com/rspec/rspec-rails
-[Jest]: https://jest.io
+[Vitest]: https://vitest.dev/
 
 ### Linting
 
