@@ -53,8 +53,8 @@
       "before",
       "after",
       "test",
-      "jest",
-      "expect"
+      "expect",
+      "vi"
     ]
   },
   "stylelint": {

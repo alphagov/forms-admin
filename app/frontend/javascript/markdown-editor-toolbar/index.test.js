@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import markdownEditorToolbar from '.'
 import { getByText } from '@testing-library/dom'

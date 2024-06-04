@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 
 import { pasteListener } from '.'
@@ -29,7 +29,7 @@ const createHtmlPasteEvent = (html = null, text = null) => {
 
 it("maintains browser default behaviour if HTML isn't pasted", () => {
   const event = new window.Event('paste')
-  event.preventDefault = jest.fn()
+  event.preventDefault = vi.fn()
   textarea.dispatchEvent(event)
 
   expect(event.preventDefault).not.toHaveBeenCalled()
@@ -49,7 +49,7 @@ it('converts bullet characters to markdown bullets if text is pasted', () => {
 
 describe('htmlpaste event', () => {
   it('has raw HTML as the detail if HTML is pasted', () => {
-    const listener = jest.fn()
+    const listener = vi.fn()
     const html = '<script>alert("hi")</script>'
 
     textarea.addEventListener('htmlpaste', listener)
@@ -63,7 +63,7 @@ describe('htmlpaste event', () => {
   })
 
   it('has null as the detail if no HTML is pasted', () => {
-    const listener = jest.fn()
+    const listener = vi.fn()
 
     textarea.addEventListener('htmlpaste', listener)
     textarea.dispatchEvent(createHtmlPasteEvent())
@@ -78,7 +78,7 @@ describe('htmlpaste event', () => {
 
 describe('textpaste event', () => {
   it('has text as the detail if text is available is pasted', () => {
-    const listener = jest.fn()
+    const listener = vi.fn()
     const text = 'Hello'
 
     textarea.addEventListener('textpaste', listener)
@@ -92,7 +92,7 @@ describe('textpaste event', () => {
   })
 
   it('has null as the detail if no text is pasted', () => {
-    const listener = jest.fn()
+    const listener = vi.fn()
 
     textarea.addEventListener('textpaste', listener)
     textarea.dispatchEvent(createHtmlPasteEvent())
@@ -107,7 +107,7 @@ describe('textpaste event', () => {
 
 describe('markdown event', () => {
   it('has markdown as the event detail', () => {
-    const listener = jest.fn()
+    const listener = vi.fn()
     const html = '<h2>Title</h2>'
 
     textarea.addEventListener('markdown', listener)
@@ -121,7 +121,7 @@ describe('markdown event', () => {
   })
 
   it("isn't called if no HTML is pasted", () => {
-    const listener = jest.fn()
+    const listener = vi.fn()
 
     textarea.addEventListener('markdown', listener)
     textarea.dispatchEvent(createHtmlPasteEvent(null))
@@ -132,7 +132,7 @@ describe('markdown event', () => {
 
 describe('input event', () => {
   it('is sent when the user pastes HTML', () => {
-    const listener = jest.fn()
+    const listener = vi.fn()
     const html = '<h2>Title</h2>'
 
     textarea.addEventListener('input', listener)
@@ -142,7 +142,7 @@ describe('input event', () => {
   })
 
   it('is sent when the user pastes text', () => {
-    const listener = jest.fn()
+    const listener = vi.fn()
     const text = 'Title'
 
     textarea.addEventListener('input', listener)

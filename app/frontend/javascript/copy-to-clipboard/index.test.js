@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 
 import copyToClipboard from '../copy-to-clipboard'
@@ -34,7 +34,7 @@ describe('Copy to clipboard', () => {
   })
 
   test('text is written to clipboard', () => {
-    jest.spyOn(navigator.clipboard, 'writeText')
+    vi.spyOn(navigator.clipboard, 'writeText')
     copyButton.click()
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith('It worked!')

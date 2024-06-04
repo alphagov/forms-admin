@@ -14,14 +14,16 @@ const delayedFetchStub = (jsonResponse, delayTime) => {
 }
 
 const mockFetch = jsonResponse =>
-  jest.fn().mockImplementation(() => fetchStub(jsonResponse))
+  vi.fn().mockImplementation(() => fetchStub(jsonResponse))
 
 const mockFetchWithDelay = (jsonResponse, delayTime) =>
-  jest.fn().mockImplementation(() => delayedFetchStub(jsonResponse, delayTime))
+  vi.fn().mockImplementation(() => delayedFetchStub(jsonResponse, delayTime))
 
-// jest timers don't work nicely with promises
-const flushPromises = () =>
-  new Promise(jest.requireActual('timers').setImmediate)
+// vitest timers don't work nicely with promises
+const flushPromises = async () => {
+  const timers = await vi.importActual('timers')
+  return timers.setImmediate
+}
 
 export {
   fetchStub,
