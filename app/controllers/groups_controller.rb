@@ -6,9 +6,17 @@ class GroupsController < ApplicationController
 
   # GET /groups
   def index
-    @active_groups = policy_scope(Group).active
-    @upgrade_requested_groups = policy_scope(Group).upgrade_requested
-    @trial_groups = policy_scope(Group).trial
+    if @current_user.super_admin?
+      @search_input = OrganisationSearchInput.new({ organisation_id: @current_user.organisation_id }.merge(search_params))
+
+      @active_groups = policy_scope(Group).where(organisation_id: @search_input.organisation_id).active
+      @upgrade_requested_groups = policy_scope(Group).where(organisation_id: @search_input.organisation_id).upgrade_requested
+      @trial_groups = policy_scope(Group).where(organisation_id: @search_input.organisation_id).trial
+    else
+      @active_groups = policy_scope(Group).active
+      @upgrade_requested_groups = policy_scope(Group).upgrade_requested
+      @trial_groups = policy_scope(Group).trial
+    end
   end
 
   # GET /groups/1
@@ -123,5 +131,9 @@ private
 
   def confirm_upgrade_input_params
     params.require(:groups_confirm_upgrade_input).permit(:confirm)
+  end
+
+  def search_params
+    params[:search]&.permit(:organisation_id) || {}
   end
 end

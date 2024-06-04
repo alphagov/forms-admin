@@ -52,6 +52,9 @@ RSpec.describe "/groups", type: :request, feature_groups: true do
         create :membership, user: editor_user, group:
       end
     end
+    let!(:non_member_trial_groups) do
+      create_list :group, 2, organisation: editor_user.organisation, status: :trial
+    end
     let!(:upgrade_requested_groups) do
       create_list :group, 3, organisation: editor_user.organisation, status: :upgrade_requested do |group|
         create :membership, user: editor_user, group:
@@ -64,26 +67,43 @@ RSpec.describe "/groups", type: :request, feature_groups: true do
     end
 
     let(:other_org) { create :organisation, id: 2, slug: "other-org" }
-    let!(:other_org_groups) { create_list :group, 3, organisation: other_org, status: :trial }
+    let!(:other_org_trial_groups) { create_list :group, 3, organisation: other_org, status: :trial }
 
-    before do
-      get groups_url
-    end
+    context "when the user is not a super-admin" do
+      before do
+        get groups_url
+      end
 
-    it "renders a successful response" do
-      expect(response).to be_successful
-    end
+      it "renders a successful response" do
+        expect(response).to be_successful
+      end
 
-    it "shows all trial groups the user is a member of" do
-      expect(assigns(:trial_groups)).to eq trial_groups
-    end
+      it "shows all trial groups the user is a member of" do
+        expect(assigns(:trial_groups)).to eq trial_groups
+      end
 
-    it "shows all upgrade requested groups the user is a member of" do
-      expect(assigns(:upgrade_requested_groups)).to eq upgrade_requested_groups
-    end
+      it "shows all upgrade requested groups the user is a member of" do
+        expect(assigns(:upgrade_requested_groups)).to eq upgrade_requested_groups
+      end
 
-    it "shows all active groups the user is a member of" do
-      expect(assigns(:active_groups)).to eq active_groups
+      it "shows all active groups the user is a member of" do
+        expect(assigns(:active_groups)).to eq active_groups
+      end
+
+      context "with an organisation search query" do
+        it "ignores the search query and displays the user's groups" do
+          get groups_url, params: { search: { organisation_id: other_org.id } }
+          expect(assigns(:trial_groups)).to eq trial_groups
+          expect(assigns(:active_groups)).to eq active_groups
+          expect(assigns(:upgrade_requested_groups)).to eq upgrade_requested_groups
+        end
+      end
+
+      context "when the groups feature flag is disabled", feature_groups: false do
+        it "returns a 404 response" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
     end
 
     context "when the user is a super-admin" do
@@ -91,15 +111,25 @@ RSpec.describe "/groups", type: :request, feature_groups: true do
         login_as_super_admin_user
       end
 
-      it "shows all trial groups for all organisations" do
-        get groups_url
-        expect(assigns(:trial_groups)).to eq trial_groups + other_org_groups
-      end
-    end
+      context "with an organisation search query" do
+        let!(:other_org_active_groups) { create_list :group, 3, :active, organisation: other_org }
+        let!(:other_org_upgrade_requested_groups) { create_list :group, 3, :upgrade_requested, organisation: other_org }
 
-    context "when the groups feature flag is disabled", feature_groups: false do
-      it "returns a 404 response" do
-        expect(response).to have_http_status(:not_found)
+        it "shows groups for organisation in query" do
+          get groups_url, params: { search: { organisation_id: other_org.id } }
+          expect(assigns(:trial_groups)).to eq other_org_trial_groups
+          expect(assigns(:active_groups)).to eq other_org_active_groups
+          expect(assigns(:upgrade_requested_groups)).to eq other_org_upgrade_requested_groups
+        end
+      end
+
+      context "without a search query" do
+        it "shows the groups for the user's organisation" do
+          get groups_url
+          expect(assigns(:trial_groups)).to eq trial_groups + non_member_trial_groups
+          expect(assigns(:active_groups)).to eq active_groups
+          expect(assigns(:upgrade_requested_groups)).to eq upgrade_requested_groups
+        end
       end
     end
   end

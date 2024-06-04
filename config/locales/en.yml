@@ -379,6 +379,10 @@ en:
           <p>Speak to your organisation’s GOV.UK publishing team or %{contact_link} to start this process.</p>
           <p>In the meantime, you can try out making forms in a ‘trial’ group.</p>
         heading: You cannot make any forms live yet
+      organisation_search:
+        hint: Change which organisation’s groups you’re viewing
+        label: You’re viewing %{organisation_name} groups
+        prompt: Select an organisation
       trial_empty_message: You’re not in any trial groups.
       trial_title: Trial groups
       upgrade_requests_banner_heading:
