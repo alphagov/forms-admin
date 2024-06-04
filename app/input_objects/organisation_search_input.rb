@@ -1,4 +1,4 @@
-class Forms::SearchInput < BaseInput
+class OrganisationSearchInput < BaseInput
   attr_accessor :organisation_id
 
   def organisation

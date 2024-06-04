@@ -26,6 +26,28 @@
       <%= t("page_titles.group_index") %>
     </h1>
 
+    <% if @current_user.super_admin? %>
+      <div class="govuk-!-margin-bottom-4">
+        <%= form_with(model: @search_input, scope: :search, url: groups_path, method: 'get', local: true) do |f| %>
+          <%= render DfE::Autocomplete::View.new(
+            f,
+            attribute_name: :organisation_id,
+            form_field: f.govuk_collection_select(:organisation_id,
+                                                  Organisation.with_users.order(:name),
+                                                  :id,
+                                                  :name_with_abbreviation,
+                                                  class: ['govuk-!-width-three-quarters'],
+                                                  options: { prompt: t('groups.index.organisation_search.prompt') },
+                                                  label: { text: t('groups.index.organisation_search.label', organisation_name: @search_input.organisation.name), size: 'm', tag: 'h2' },
+                                                  hint: { text: t('groups.index.organisation_search.hint') },
+                                                  ),
+            html_attributes: { 'data-show-all-values' => 'true'},
+            )%>
+          <%= f.govuk_submit(t("home.change_filter"), secondary: true) %>
+        <% end %>
+      </div>
+    <% end %>
+
     <%= render GroupListComponent::View.new(groups: @upgrade_requested_groups, title: t('groups.index.upgrade_requests_title'), show_empty: false) %>
     <%= render GroupListComponent::View.new(groups: @active_groups, title: t('groups.index.active_title'), empty_message: t('groups.index.active_empty_message')) %>
     <%= render GroupListComponent::View.new(groups: @trial_groups, title: t('groups.index.trial_title'), empty_message: t('groups.index.trial_empty_message')) %>
@@ -45,3 +67,5 @@
     end %>
   </div>
 </div>
+
+<%= init_autocomplete_script(show_all_values: true, raw_attribute: false, source: false) %>
