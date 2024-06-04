@@ -30,4 +30,12 @@ class FormService
 
     org.default_group.memberships.find_or_create_by!(user: current_user, role: :editor, added_by: current_user)
   end
+
+  def assign_owner!(current_user)
+    if current_user.trial?
+      @form.submission_email = current_user.email
+    else
+      @form.organisation_id = current_user.organisation_id
+    end
+  end
 end

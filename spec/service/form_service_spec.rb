@@ -113,4 +113,36 @@ describe FormService do
       expect(user.organisation.default_group).to be_nil
     end
   end
+
+  describe "#assign_owner!" do
+    let(:form) { build(:form, id:, organisation_id: nil, submission_email: nil) }
+
+    context "with a trial user" do
+      let(:user) { build :user }
+
+      it "does not set the organisation id" do
+        form_service.assign_owner!(user)
+        expect(form.organisation_id).to be_nil
+      end
+
+      it "sets the submission email" do
+        form_service.assign_owner!(user)
+        expect(form.submission_email).to eq(user.email)
+      end
+    end
+
+    context "with an editor user" do
+      let(:user) { build :editor_user }
+
+      it "sets the form's organisation_id" do
+        form_service.assign_owner!(user)
+        expect(form.organisation_id).to eq(user.organisation.id)
+      end
+
+      it "does not set the submission email" do
+        form_service.assign_owner!(user)
+        expect(form.submission_email).to eq(nil)
+      end
+    end
+  end
 end
