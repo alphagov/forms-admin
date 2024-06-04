@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_09_160514) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_03_134957) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -55,6 +55,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_09_160514) do
     t.bigint "upgrade_requester_id"
     t.index ["creator_id"], name: "index_groups_on_creator_id"
     t.index ["external_id"], name: "index_groups_on_external_id", unique: true
+    t.index ["name", "organisation_id"], name: "index_groups_on_name_and_organisation_id", unique: true
     t.index ["organisation_id"], name: "index_groups_on_organisation_id"
     t.index ["upgrade_requester_id"], name: "index_groups_on_upgrade_requester_id"
   end
