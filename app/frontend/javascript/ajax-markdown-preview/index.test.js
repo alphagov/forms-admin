@@ -8,7 +8,7 @@ import ajaxMarkdownPreview from '.'
 import {
   mockFetch,
   mockFetchWithDelay,
-  flushPromises
+  mockFetchWithServerError
 } from '../../test/test-helpers'
 
 let source, target
@@ -125,7 +125,6 @@ describe('AJAX Markdown preview', () => {
       source.dispatchEvent(event)
 
       await vi.runAllTimersAsync()
-      await flushPromises()
 
       expect(target.innerHTML).toBe(jsonResponse.preview_html)
     })
@@ -174,7 +173,6 @@ describe('AJAX Markdown preview', () => {
           updateMarkdown('## This is a level two heading')
 
           await vi.runAllTimersAsync()
-          await flushPromises()
         })
 
         test('the error message is removed', () => {
@@ -221,7 +219,6 @@ describe('AJAX Markdown preview', () => {
           updateMarkdown('## This is a level two heading')
 
           await vi.runAllTimersAsync()
-          await flushPromises()
         })
 
         test('the error message is removed', () => {
@@ -241,9 +238,8 @@ describe('AJAX Markdown preview', () => {
 
   describe('when the AJAX request fails', () => {
     beforeEach(() => {
-      global.fetch = vi.fn(async () => {
-        return Promise.reject(new Error('API is down'))
-      })
+      global.fetch = mockFetchWithServerError()
+
       setupDocument('## This is a markdown heading')
     })
 
@@ -259,7 +255,6 @@ describe('AJAX Markdown preview', () => {
 
     test('the retry button resends the request', () => {
       expect(global.fetch).toHaveBeenCalledTimes(1)
-      expect(await global.fetch).toHaveBeenCalledTimes(1)
 
       const retryButton = target.querySelector('button')
       retryButton.click()
@@ -279,7 +274,6 @@ describe('AJAX Markdown preview', () => {
       expect(target.innerHTML).toBe('<p>Loading...</p>')
 
       await vi.advanceTimersByTimeAsync(500)
-      await flushPromises()
 
       expect(target.innerHTML).toBe(jsonResponse.preview_html)
     })
@@ -291,7 +285,6 @@ describe('AJAX Markdown preview', () => {
       expect(ariaLiveRegion.getAttribute('aria-busy')).toBe('true')
 
       await vi.advanceTimersByTimeAsync(500)
-      await flushPromises()
 
       expect(ariaLiveRegion.getAttribute('aria-busy')).toBe('false')
     })

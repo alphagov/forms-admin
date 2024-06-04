@@ -19,16 +19,15 @@ const mockFetch = jsonResponse =>
 const mockFetchWithDelay = (jsonResponse, delayTime) =>
   vi.fn().mockImplementation(() => delayedFetchStub(jsonResponse, delayTime))
 
-// vitest timers don't work nicely with promises
-const flushPromises = async () => {
-  const timers = await vi.importActual('timers')
-  return timers.setImmediate
-}
+const mockFetchWithServerError = (jsonResponse, delayTime) =>
+  vi.fn().mockImplementation(() => {
+    return Promise.reject(new Error('API is down'))
+  })
 
 export {
   fetchStub,
   delayedFetchStub,
   mockFetch,
   mockFetchWithDelay,
-  flushPromises
+  mockFetchWithServerError
 }
