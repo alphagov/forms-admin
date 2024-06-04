@@ -4,7 +4,7 @@ class FormsController < ApplicationController
 
   def index
     if @current_user.super_admin?
-      @search_input = Forms::SearchInput.new({ organisation_id: @current_user.organisation_id }.merge(search_params))
+      @search_input = OrganisationSearchInput.new({ organisation_id: @current_user.organisation_id }.merge(search_params))
 
       @forms = policy_scope(Form).where(organisation_id: @search_input.organisation_id) || []
     else
