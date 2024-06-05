@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 
 import 'regenerator-runtime/runtime'
@@ -8,7 +8,7 @@ import ajaxMarkdownPreview from '.'
 import {
   mockFetch,
   mockFetchWithDelay,
-  flushPromises
+  mockFetchWithServerError
 } from '../../test/test-helpers'
 
 let source, target
@@ -75,13 +75,13 @@ const setupDocument = (markdownContent, includeServerSideError = false) => {
 
 describe('AJAX Markdown preview', () => {
   beforeEach(() => {
-    jest.useFakeTimers()
+    vi.useFakeTimers()
   })
 
   afterEach(() => {
-    jest.clearAllMocks()
-    jest.runOnlyPendingTimers()
-    jest.useRealTimers()
+    vi.clearAllMocks()
+    vi.runOnlyPendingTimers()
+    vi.useRealTimers()
   })
 
   describe('when the request returns the JSON response with no errors', () => {
@@ -109,12 +109,12 @@ describe('AJAX Markdown preview', () => {
       expect(global.fetch).toHaveBeenCalledTimes(1)
     })
 
-    test('preview event fires if the user makes a change', () => {
+    test('preview event fires if the user makes a change', async () => {
       expect(global.fetch).toHaveBeenCalledTimes(1)
 
       updateMarkdown()
 
-      jest.runAllTimers()
+      await vi.runAllTimersAsync()
 
       expect(global.fetch).toHaveBeenCalledTimes(2)
     })
@@ -124,20 +124,19 @@ describe('AJAX Markdown preview', () => {
       const event = new window.Event('input')
       source.dispatchEvent(event)
 
-      jest.runAllTimers()
-      await flushPromises()
+      await vi.runAllTimersAsync()
 
       expect(target.innerHTML).toBe(jsonResponse.preview_html)
     })
 
-    test('preview event only fires once if the user makes multiple changes in quick succession', () => {
+    test('preview event only fires once if the user makes multiple changes in quick succession', async () => {
       expect(global.fetch).toHaveBeenCalledTimes(1)
       ;[...Array(100)].forEach(() => {
         const event = new window.Event('input')
         source.dispatchEvent(event)
       })
 
-      jest.runAllTimers()
+      await vi.runAllTimersAsync()
 
       expect(global.fetch).toHaveBeenCalledTimes(2)
     })
@@ -173,8 +172,7 @@ describe('AJAX Markdown preview', () => {
           global.fetch = mockFetch(jsonResponse)
           updateMarkdown('## This is a level two heading')
 
-          jest.runAllTimers()
-          await flushPromises()
+          await vi.runAllTimersAsync()
         })
 
         test('the error message is removed', () => {
@@ -220,8 +218,7 @@ describe('AJAX Markdown preview', () => {
           global.fetch = mockFetch(jsonResponse)
           updateMarkdown('## This is a level two heading')
 
-          jest.runAllTimers()
-          await flushPromises()
+          await vi.runAllTimersAsync()
         })
 
         test('the error message is removed', () => {
@@ -241,9 +238,8 @@ describe('AJAX Markdown preview', () => {
 
   describe('when the AJAX request fails', () => {
     beforeEach(() => {
-      global.fetch = jest.fn(async () => {
-        return Promise.reject(new Error('API is down'))
-      })
+      global.fetch = mockFetchWithServerError()
+
       setupDocument('## This is a markdown heading')
     })
 
@@ -277,8 +273,7 @@ describe('AJAX Markdown preview', () => {
     test('Loading text is displayed before the response arrives', async () => {
       expect(target.innerHTML).toBe('<p>Loading...</p>')
 
-      jest.advanceTimersByTime(500)
-      await flushPromises()
+      await vi.advanceTimersByTimeAsync(500)
 
       expect(target.innerHTML).toBe(jsonResponse.preview_html)
     })
@@ -289,8 +284,7 @@ describe('AJAX Markdown preview', () => {
       )
       expect(ariaLiveRegion.getAttribute('aria-busy')).toBe('true')
 
-      jest.advanceTimersByTime(500)
-      await flushPromises()
+      await vi.advanceTimersByTimeAsync(500)
 
       expect(ariaLiveRegion.getAttribute('aria-busy')).toBe('false')
     })

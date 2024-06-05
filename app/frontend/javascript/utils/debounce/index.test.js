@@ -1,14 +1,14 @@
 import debounce from '.'
 
-// Tell Jest to mock all timeout functions
-jest.useFakeTimers()
+// Tell Vitest to mock all timeout functions
+vi.useFakeTimers()
 
 describe('debounce', () => {
   let functionToDebounce
   let debouncedFunc
 
   beforeEach(() => {
-    functionToDebounce = jest.fn()
+    functionToDebounce = vi.fn()
     debouncedFunc = debounce(functionToDebounce, 1000)
   })
 
@@ -16,7 +16,7 @@ describe('debounce', () => {
     debouncedFunc()
 
     // Fast-forward time
-    jest.runAllTimers()
+    vi.runAllTimers()
 
     expect(functionToDebounce).toBeCalledTimes(1)
   })
@@ -27,7 +27,7 @@ describe('debounce', () => {
     })
 
     // Fast-forward time
-    jest.runAllTimers()
+    vi.runAllTimers()
 
     expect(functionToDebounce).toBeCalledTimes(1)
   })

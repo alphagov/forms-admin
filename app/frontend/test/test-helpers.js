@@ -14,19 +14,20 @@ const delayedFetchStub = (jsonResponse, delayTime) => {
 }
 
 const mockFetch = jsonResponse =>
-  jest.fn().mockImplementation(() => fetchStub(jsonResponse))
+  vi.fn().mockImplementation(() => fetchStub(jsonResponse))
 
 const mockFetchWithDelay = (jsonResponse, delayTime) =>
-  jest.fn().mockImplementation(() => delayedFetchStub(jsonResponse, delayTime))
+  vi.fn().mockImplementation(() => delayedFetchStub(jsonResponse, delayTime))
 
-// jest timers don't work nicely with promises
-const flushPromises = () =>
-  new Promise(jest.requireActual('timers').setImmediate)
+const mockFetchWithServerError = (jsonResponse, delayTime) =>
+  vi.fn().mockImplementation(() => {
+    return Promise.reject(new Error('API is down'))
+  })
 
 export {
   fetchStub,
   delayedFetchStub,
   mockFetch,
   mockFetchWithDelay,
-  flushPromises
+  mockFetchWithServerError
 }

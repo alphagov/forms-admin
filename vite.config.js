@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+
 import { defineConfig } from 'vite'
 import RubyPlugin from 'vite-plugin-ruby'
 import * as path from 'node:path'
@@ -23,5 +25,8 @@ export default defineConfig({
       ),
       '@images': path.resolve(__dirname, 'app/frontend/images')
     }
+  },
+  test: {
+    globals: true
   }
 })
