@@ -22,6 +22,7 @@ module Forms
       @name_input = NameInput.new(name_input_params(form))
 
       if @name_input.submit
+        Form_service.new(form).add_to_default_group!(@current_user)
         redirect_to form_path(@name_input.form)
       else
         render :new
