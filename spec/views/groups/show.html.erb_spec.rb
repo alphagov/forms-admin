@@ -4,12 +4,16 @@ RSpec.describe "groups/show", type: :view do
   let(:current_user) { create :user, :org_has_signed_mou }
   let(:forms) { [] }
   let(:group) { create :group, name: "My Group" }
+
+  let(:membership_role) { :editor }
   let(:upgrade?) { false }
   let(:edit?) { true }
   let(:request_upgrade?) { false }
   let(:review_upgrade?) { false }
 
   before do
+    create :membership, group:, user: current_user, role: membership_role, added_by: current_user
+
     assign(:current_user, current_user)
     assign(:group, group)
     assign(:forms, forms)
@@ -171,6 +175,51 @@ RSpec.describe "groups/show", type: :view do
 
           it "shows a link to request an upgrade" do
             expect(rendered).to have_link("Find out how to upgrade this group so you can make forms live", href: request_upgrade_group_path(group))
+          end
+
+          it "has the trial group heading in the notification banner" do
+            expect(rendered).to have_css "h3", text: "This is a ‘trial’ group"
+          end
+        end
+
+        context "and the user has no permissions relating to upgrading groups" do
+          it "shows content for an editor" do
+            expect(rendered).to have_text "You can create a form, preview and test it."
+          end
+        end
+      end
+
+      context "and the organisation does not have an organisation admin" do
+        context "and the user has permission to request an upgrade" do
+          let(:request_upgrade?) { false } # false because GroupPolicy depends on state of group as well as user permissions
+          let(:membership_role) { :group_admin }
+
+          it "shows content for a group admin" do
+            expect(rendered).to have_text "You can create forms in this group and test them, but you cannot make them live."
+          end
+
+          it "does not shows a link to request an upgrade" do
+            expect(rendered).not_to have_link("Find out how to upgrade this group so you can make forms live", href: request_upgrade_group_path(group))
+          end
+
+          it "shows a link to contact the GOV.UK Forms team" do
+            expect(rendered).to have_link("contact the GOV.UK Forms team", href: contact_url)
+          end
+
+          it "has the trial group heading in the notification banner" do
+            expect(rendered).to have_css "h3", text: "This is a ‘trial’ group"
+          end
+        end
+
+        context "when the user has permission to upgrade the group" do
+          let(:upgrade?) { true }
+
+          it "shows content for an organisation admin" do
+            expect(rendered).to have_text "Forms in this group cannot be made live unless the group is upgraded to an ‘active’ group."
+          end
+
+          it "shows a link to upgrade the group" do
+            expect(rendered).to have_link("Upgrade this group", href: upgrade_group_path(group))
           end
 
           it "has the trial group heading in the notification banner" do
