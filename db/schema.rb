@@ -97,6 +97,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_03_134957) do
     t.datetime "updated_at", null: false
     t.boolean "closed", default: false
     t.string "abbreviation"
+    t.bigint "default_group_id"
+    t.index ["default_group_id"], name: "index_organisations_on_default_group_id"
     t.index ["govuk_content_id"], name: "index_organisations_on_govuk_content_id", unique: true
     t.index ["slug"], name: "index_organisations_on_slug", unique: true
   end
@@ -140,5 +142,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_03_134957) do
   add_foreign_key "memberships", "users", column: "added_by_id"
   add_foreign_key "mou_signatures", "organisations"
   add_foreign_key "mou_signatures", "users"
+  add_foreign_key "organisations", "groups", column: "default_group_id"
   add_foreign_key "users", "organisations"
 end
