@@ -356,7 +356,7 @@ en:
     form_table_caption: Forms in ‘%{group_name}’
     group_list:
       created_by: Created by
-      created_by_unknown: Unknown
+      created_by_unknown: GOV.UK Forms team
       name: Group name
     index:
       active_empty_message: You’re not in any active groups.

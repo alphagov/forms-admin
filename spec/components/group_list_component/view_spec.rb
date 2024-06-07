@@ -60,8 +60,8 @@ RSpec.describe GroupListComponent::View, type: :component do
     context "when the group creator is unknown" do
       let(:groups) { create_list(:group, 3, creator: nil) }
 
-      it "renders the creator as unknown" do
-        expect(page).to have_css("tr", count: 3, text: "Unknown")
+      it "renders the creator as GOV.UK Forms team" do
+        expect(page).to have_css("tr", count: 3, text: "GOV.UK Forms team")
       end
     end
   end
