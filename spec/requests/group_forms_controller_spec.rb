@@ -75,7 +75,13 @@ RSpec.describe "/groups/:group_id/forms", type: :request, feature_groups: true d
         post group_forms_url(group), params: { forms_name_input: valid_attributes }
 
         expected_request = ActiveResource::Request.new(:post, "/api/v1/forms", nil, post_headers)
+
         expect(ActiveResource::HttpMock.requests).to include expected_request
+        expect(JSON(ActiveResource::HttpMock.requests.first.body, symbolize_names: true)).to eq({
+          name: "Test form",
+          creator_id: editor_user.id,
+          organisation_id: editor_user.organisation.id,
+        })
       end
 
       it "associates the new form with the group" do

@@ -16,7 +16,8 @@ class GroupFormsController < ApplicationController
     @group_form = GroupForm.new(group: @group)
     authorize @group_form
 
-    @form = Form.new(creator_id: @current_user.id)
+    @form = Form.new(creator_id: @current_user.id, organisation_id: @current_user.organisation_id)
+
     @name_input = Forms::NameInput.new(name_input_params(@form))
 
     if @name_input.submit
