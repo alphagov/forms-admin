@@ -46,11 +46,11 @@ Rails.application.configure do
   config.force_ssl = true
 
   # Log to STDOUT by default
-  # config.logger = ActiveSupport::Logger.new($stdout)
-  #   .tap  { |logger| logger.formatter = ::Logger::Formatter.new }
-  #   .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
-  #
-  # # Prepend all log lines with the following tags.
+  config.logger = ActiveSupport::Logger.new($stdout)
+    .tap { |logger| logger.formatter = config.log_formatter }
+
+  # Do not enable log_tags because it interferes with our JSON log formatting.
+  # The request_id is already being logged by Lograge.
   # config.log_tags = [:request_id]
 
   # "info" includes generic and useful information about system operation, but avoids logging too much
