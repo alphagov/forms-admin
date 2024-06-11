@@ -55,6 +55,7 @@ RSpec.describe "trial_users.rake" do
         total_trial_user_groups: 1,
         total_trial_users_with_org_name_and_forms: 2,
         total_trial_users_with_groups: 1,
+        trial_user_forms_in_groups: [2],
       })
     end
   end

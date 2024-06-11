@@ -18,15 +18,20 @@ class Summarizer
     total_trial_user_groups_to_create = 0
     total_trial_users_with_org_name_and_forms = 0
     total_trial_user_forms_in_groups = 0
+    trial_user_forms_in_groups = Set.new
 
     trial_users_with_org_and_name.find_each do |trial_user|
       forms = Form.where(creator_id: trial_user.id)
-      forms_without_group = Set.new(forms.map(&:id)) - GroupForm.pluck(:form_id)
+      trial_user_form_ids = Set.new(forms.map(&:id))
+      group_form_ids = Set.new(GroupForm.pluck(:form_id))
+
+      forms_without_group = trial_user_form_ids - group_form_ids
 
       total_trial_user_groups_to_create += 1 if forms_without_group.present?
       total_trial_users_with_org_name_and_forms += 1 if forms.present?
       total_forms_to_add_to_groups += forms_without_group.count
-      total_trial_user_forms_in_groups += forms.count - forms_without_group.count
+      total_trial_user_forms_in_groups += (trial_user_form_ids.count - forms_without_group.count)
+      trial_user_forms_in_groups += (trial_user_form_ids - forms_without_group)
 
       total_trial_user_groups += Group.where(creator_id: trial_user.id).count
       total_trial_users_with_groups += 1 if Group.where(creator_id: trial_user.id).present?
@@ -42,6 +47,7 @@ class Summarizer
       total_trial_users_with_org_name_and_forms:,
       total_trial_users_with_groups:,
       total_trial_user_forms_in_groups:,
+      trial_user_forms_in_groups: trial_user_forms_in_groups.to_a,
     }
   end
 end
