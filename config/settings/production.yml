@@ -1,6 +1,8 @@
 features:
   groups:
     enabled: false
+    organisations:
+      government_digital_service: true
 
 # Use real authentication
 auth_provider: gds_sso
