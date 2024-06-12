@@ -72,3 +72,5 @@ mailchimp:
   api_prefix: changeme
   active_users_list: changeme
   mou_signers_list: changeme
+
+analytics_enabled: false
