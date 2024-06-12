@@ -7,9 +7,9 @@ RSpec.describe "default_groups.rake" do
     Rake::Task.define_task(:environment)
   end
 
-  describe "default_groups:create" do
+  describe "default_groups:create_for_organisations" do
     subject(:task) do
-      Rake::Task["default_groups:create"]
+      Rake::Task["default_groups:create_for_organisations"]
         .tap(&:reenable)
     end
 
