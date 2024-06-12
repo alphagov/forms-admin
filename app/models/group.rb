@@ -6,7 +6,11 @@ class Group < ApplicationRecord
   belongs_to :upgrade_requester, class_name: "User", optional: true
 
   has_many :memberships, dependent: :destroy
-  has_many :users, through: :memberships
+  has_many :users, through: :memberships do
+    def group_admins
+      where(memberships: { role: "group_admin" })
+    end
+  end
 
   has_many :group_forms, dependent: :restrict_with_exception
 
