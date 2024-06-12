@@ -15,6 +15,12 @@ class FormService
   def add_to_default_group!(current_user)
     return if current_user.trial?
 
+    add_to_organisation_default_group!(current_user)
+  end
+
+private
+
+  def add_to_organisation_default_group!(current_user)
     org = current_user.organisation
 
     if org.default_group.nil?
