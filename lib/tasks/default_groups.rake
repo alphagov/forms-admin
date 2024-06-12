@@ -4,6 +4,7 @@ namespace :default_groups do
     Rails.logger.info "rake default_groups:create started"
     ActiveRecord::Base.transaction do
       create_organisation_default_groups
+      create_trial_user_default_groups
     end
   end
 
@@ -12,6 +13,7 @@ namespace :default_groups do
     Rails.logger.info "rake default_groups:create_dry_run started"
     ActiveRecord::Base.transaction do
       create_organisation_default_groups
+      create_trial_user_default_groups
       Rails.logger.info "rake default_groups:create_dry_run rollback"
       raise ActiveRecord::Rollback
     end
@@ -31,6 +33,24 @@ namespace :default_groups do
     ActiveRecord::Base.transaction do
       create_organisation_default_groups
       Rails.logger.info "rake default_groups:create_for_organisations_dry_run rollback"
+      raise ActiveRecord::Rollback
+    end
+  end
+
+  desc "Create default groups for trial users"
+  task create_for_trial_users: :environment do
+    Rails.logger.info "rake default_groups:create_for_trial_users started"
+    ActiveRecord::Base.transaction do
+      create_trial_user_default_groups
+    end
+  end
+
+  desc "Create default groups for trial users but don't commit changes"
+  task create_for_trial_users_dry_run: :environment do
+    Rails.logger.info "rake default_groups:create_for_trial_users_dry_run started"
+    ActiveRecord::Base.transaction do
+      create_trial_user_default_groups
+      Rails.logger.info "rake default_groups:create_for_trial_users_dry_run rollback"
       raise ActiveRecord::Rollback
     end
   end
@@ -66,5 +86,48 @@ def create_organisation_default_groups
     # rubocop:enable Rails/FindEach
 
     Rails.logger.info "default_groups: organisation #{org.name} finished"
+  end
+end
+
+def create_trial_user_default_groups
+  trial_users = User.trial.where("organisation_id IS NOT NULL AND name IS NOT NULL")
+  trial_users.find_each do |user|
+    forms = Form.where(creator_id: user.id).to_h { [_1.id, _1] }
+    form_ids = forms.keys
+    group_form_ids = GroupForm.where(form_id: form_ids).pluck(:form_id)
+    not_group_form_ids = form_ids.to_set - group_form_ids
+
+    if not_group_form_ids.blank?
+      Rails.logger.info "default_groups: skipping trial user #{user.name}"
+      next
+    end
+
+    Rails.logger.info "default_groups: trial user #{user.name}"
+
+    default_trial_group = Group.find_or_create_by!(
+      creator_id: user.id,
+      name: "#{user.name}’s trial group",
+      organisation_id: user.organisation_id,
+      status: :trial,
+    ) do |new_group|
+      Rails.logger.info "default_groups: created #{new_group.name}, with creator #{new_group.creator.email}"
+    end
+
+    default_trial_group.memberships.find_or_create_by!(
+      user:,
+      role: :group_admin,
+      added_by: user,
+    ) do |new_membership|
+      Rails.logger.info "default_groups: added user #{new_membership.user.email} with #{new_membership.role} role"
+    end
+
+    not_group_form_ids.each do |form_id|
+      GroupForm.find_or_create_by!(form_id:) do |group_form|
+        Rails.logger.info "default_groups: added form '#{forms[form_id].name}' to default group"
+        group_form.group = default_trial_group
+      end
+    end
+
+    Rails.logger.info "default_groups: trial user #{user.name} finished"
   end
 end
