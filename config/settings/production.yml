@@ -2,6 +2,7 @@ features:
   groups:
     enabled: false
     organisations:
+      driver_and_vehicle_standards_agency: true
       government_digital_service: true
 
 # Use real authentication
