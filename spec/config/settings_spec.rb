@@ -63,4 +63,12 @@ describe "Settings" do
       expect(forms_env).to eq("local")
     end
   end
+
+  describe "analytics_enabled" do
+    it "has a default value" do
+      analytics_enabled = settings[:analytics_enabled]
+
+      expect(analytics_enabled).to eq(false)
+    end
+  end
 end
