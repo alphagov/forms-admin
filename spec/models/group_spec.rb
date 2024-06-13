@@ -111,6 +111,25 @@ RSpec.describe Group, type: :model do
 
       expect { group.destroy }.not_to change(User, :count)
     end
+
+    describe "#users" do
+      describe "#group_admins" do
+        it "returns all users who are group admins for the group" do
+          group = create :group
+          group_admin_users = create_list :user, 3, organisation: group.organisation
+          editor_users = create_list :user, 3, organisation: group.organisation
+
+          group_admin_users.each do |user|
+            Membership.create!(group:, user:, role: :group_admin, added_by: group.creator)
+          end
+          editor_users.each do |user|
+            Membership.create!(group:, user:, role: :editor, added_by: group.creator)
+          end
+
+          expect(group.users.group_admins).to eq group_admin_users
+        end
+      end
+    end
   end
 
   describe "associating forms with groups" do
