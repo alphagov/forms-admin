@@ -4,9 +4,13 @@ feature "Add account organisation to user without organisation", type: :feature 
   let(:user) { create :user, :with_no_org, name: nil }
   let!(:organisation) { create :organisation }
 
+  let(:form) { build :form, :with_active_resource, id: 1, name: "a form I created when I was a trial user" }
+
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?creator_id=#{user.id}", headers, [].to_json, 200
+      mock.get "/api/v1/forms?creator_id=#{user.id}", headers, [form].to_json, 200
+      mock.get "/api/v1/forms/1", headers, form.to_json, 200
+      mock.get "/api/v1/forms/1/pages", headers, [].to_json, 200
     end
 
     OmniAuth.config.test_mode = true
@@ -23,7 +27,7 @@ feature "Add account organisation to user without organisation", type: :feature 
     OmniAuth.config.test_mode = false
   end
 
-  scenario "when the user does not have an organisation or name" do
+  scenario "when the user does not have an organisation or name", type: :feature, feature_groups: true do
     when_i_visit_a_page_which_requires_sign_in
     then_i_should_be_redirected_to_the_account_organisation_page
     and_i_try_to_visit_the_homepage
@@ -32,12 +36,14 @@ feature "Add account organisation to user without organisation", type: :feature 
     then_i_should_be_redirected_to_the_account_name_page
     and_i_fill_in_my_name
     then_i_should_be_redirected_to_my_original_destination
+    and_i_open_my_default_group
+    and_i_can_open_my_form
   end
 
 private
 
   def when_i_visit_a_page_which_requires_sign_in
-    visit new_user_upgrade_request_path
+    visit groups_path
   end
 
   def then_i_should_be_redirected_to_the_account_organisation_page
@@ -63,6 +69,15 @@ private
   end
 
   def then_i_should_be_redirected_to_my_original_destination
-    expect(page).to have_current_path(new_user_upgrade_request_path)
+    expect(page).to have_current_path(groups_path)
+  end
+
+  def and_i_open_my_default_group
+    click_link("John Doe’s trial group")
+  end
+
+  def and_i_can_open_my_form
+    click_link("a form I created when I was a trial user")
+    expect(page.find("h1")).to have_text "a form I created when I was a trial user"
   end
 end
