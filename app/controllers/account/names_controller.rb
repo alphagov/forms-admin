@@ -13,6 +13,7 @@ module Account
       @name_input = NameInput.new(account_name_input_params(current_user))
 
       if @name_input.submit
+        DefaultGroupService.new.create_trial_user_default_group!(current_user)
         redirect_to next_path
       else
         render :edit, status: :unprocessable_entity
