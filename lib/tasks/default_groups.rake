@@ -57,7 +57,7 @@ namespace :default_groups do
 end
 
 def create_organisation_default_groups
-  Organisation.joins(:users).where(users: { role: :editor }).distinct.each do |org|
+  Organisation.joins(:users).where.not(users: { role: :trial }).distinct.each do |org|
     Rails.logger.info "default_groups: organisation #{org.name}"
 
     if org.default_group.nil?
