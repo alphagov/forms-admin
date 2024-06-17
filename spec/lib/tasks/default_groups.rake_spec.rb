@@ -107,6 +107,15 @@ RSpec.describe "default_groups.rake" do
         expect(organisation.reload.default_group.group_forms.map(&:form_id)).not_to include forms_response.first.id
       end
     end
+
+    context "when the organisation has only super admin users" do
+      let(:user) { create :super_admin_user, organisation: }
+
+      it "does create a default group" do
+        task.invoke
+        expect(organisation.reload.default_group).not_to be_nil
+      end
+    end
   end
 
   describe "default_groups:create_for_trial_users" do
