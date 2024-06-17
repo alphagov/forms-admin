@@ -452,4 +452,50 @@ describe User, type: :model do
       end
     end
   end
+
+  describe "#collect_analytics?" do
+    before do
+      allow(Settings).to receive(:analytics_enabled).and_return(analytics_enabled)
+    end
+
+    context "when the analytics settings flag is off" do
+      let(:analytics_enabled) { false }
+
+      context "when the user is a super admin" do
+        let(:user) { create :super_admin_user }
+
+        it "returns false" do
+          expect(user.collect_analytics?).to eq(false)
+        end
+      end
+
+      context "when the user is not a super admin" do
+        let(:user) { create :editor_user }
+
+        it "returns false" do
+          expect(user.collect_analytics?).to eq(false)
+        end
+      end
+    end
+
+    context "when the analytics settings flag is on" do
+      let(:analytics_enabled) { true }
+
+      context "when the user is a super admin" do
+        let(:user) { create :super_admin_user }
+
+        it "returns false" do
+          expect(user.collect_analytics?).to eq(false)
+        end
+      end
+
+      context "when the user is not a super admin" do
+        let(:user) { create :editor_user }
+
+        it "returns true" do
+          expect(user.collect_analytics?).to eq(true)
+        end
+      end
+    end
+  end
 end

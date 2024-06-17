@@ -22,7 +22,7 @@
 
   <%= tag.body(
     class: "govuk-template__body ",
-    data: { "google-analytics-enabled": Settings.analytics_enabled }
+    data: { "google-analytics-enabled": @current_user&.collect_analytics? }
     ) do %>
 
     <script>
