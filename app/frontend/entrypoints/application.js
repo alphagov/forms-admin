@@ -3,6 +3,7 @@ import dfeAutocomplete from 'dfe-autocomplete'
 import copyToClipboard from '../javascript/copy-to-clipboard'
 import markdownEditorToolbar from '../javascript/markdown-editor-toolbar'
 import { pasteListener } from '../javascript/paste-html-to-markdown'
+import { installAnalyticsScript } from '../javascript/google-tag'
 import ajaxMarkdownPreview from '../javascript/ajax-markdown-preview'
 
 document
@@ -36,6 +37,10 @@ document
       JSON.parse(element.getAttribute('data-i18n'))
     )
   })
+
+if (document.body.dataset.googleAnalyticsEnabled === 'true') {
+  installAnalyticsScript(window)
+}
 
 initAll()
 

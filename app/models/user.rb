@@ -125,6 +125,10 @@ class User < ApplicationRecord
     organisation&.mou_signatures.present?
   end
 
+  def collect_analytics?
+    Settings.analytics_enabled && !super_admin?
+  end
+
 private
 
   def requires_name?
