@@ -5,6 +5,7 @@ feature "View forms", type: :feature do
   let(:other_org) { create :organisation, id: 2, slug: "Other org" }
   let(:other_org_user) { create :user, organisation: other_org }
   let(:other_org_forms) { [build(:form, id: 2, organisation_id: other_org.id, name: "Other org form")] }
+  let(:other_org_group) { create :group, organisation_id: other_org.id }
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
@@ -14,13 +15,22 @@ feature "View forms", type: :feature do
 
     # Orgs only show in the autocomplete if they have at least one user
     other_org_user
+    other_org_group
     login_as_super_admin_user
   end
 
-  scenario "Super admin can use autcomplete to view other org's forms" do
+  scenario "Super admin can use autcomplete to view other org's groups" do
     visit root_path
     when_i_change_the_organisation
-    then_i_should_see_the_forms_for_that_organisation
+    then_i_should_see_the_groups_for_that_organisation
+  end
+
+  context "when groups feature is disabled", feature_groups: false do
+    scenario "Super admin can use autcomplete to view other org's forms" do
+      visit root_path
+      when_i_change_the_organisation
+      then_i_should_see_the_forms_for_that_organisation
+    end
   end
 
   def when_i_change_the_organisation
@@ -31,5 +41,9 @@ feature "View forms", type: :feature do
 
   def then_i_should_see_the_forms_for_that_organisation
     expect(page).to have_content(other_org_forms.first.name)
+  end
+
+  def then_i_should_see_the_groups_for_that_organisation
+    expect(page).to have_content(other_org_group.name)
   end
 end

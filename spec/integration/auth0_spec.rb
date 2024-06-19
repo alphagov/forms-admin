@@ -157,7 +157,7 @@ RSpec.describe "usage of omniauth-auth0 gem" do
 
       context "and authenticated via Google" do
         [
-          "/",
+          "/groups",
           "/users",
         ].each do |path|
           it "when accessing #{path}, returns http code 200 for #{path}" do
@@ -217,29 +217,25 @@ RSpec.describe "usage of omniauth-auth0 gem" do
       let(:user) { editor_user }
 
       context "and authenticated via Google" do
-        [
-          "/",
-        ].each do |path|
-          context "when accessing #{path}," do
-            %w[google-apps invalid-connection].each do |connection|
-              context "and using #{connection}," do
-                it "returns http code 200 for #{path}" do
-                  user.provider = "auth0"
-                  omniauth_hash[:info][:email] = user.email
-                  omniauth_hash[:extra][:raw_info][:auth0_connection_strategy] = connection
+        context "when accessing /groups," do
+          %w[google-apps invalid-connection].each do |connection|
+            context "and using #{connection}," do
+              it "returns http code 200" do
+                user.provider = "auth0"
+                omniauth_hash[:info][:email] = user.email
+                omniauth_hash[:extra][:raw_info][:auth0_connection_strategy] = connection
 
-                  OmniAuth.config.mock_auth[:auth0] = omniauth_hash
+                OmniAuth.config.mock_auth[:auth0] = omniauth_hash
 
-                  post "/auth/auth0"
+                post "/auth/auth0"
 
-                  expect(response).to redirect_to("/auth/auth0/callback")
+                expect(response).to redirect_to("/auth/auth0/callback")
 
-                  get "/auth/auth0/callback"
+                get "/auth/auth0/callback"
 
-                  get path
+                get groups_path
 
-                  expect(response).to have_http_status(:ok)
-                end
+                expect(response).to have_http_status(:ok)
               end
             end
           end

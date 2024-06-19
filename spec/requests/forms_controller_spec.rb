@@ -125,101 +125,103 @@ RSpec.describe FormsController, type: :request do
     end
   end
 
-  describe "#index" do
-    let(:forms_response) do
-      [{
-        id: 2,
-        name: "Form",
-        form_slug: "form",
-        submission_email: "submission@email.com",
-        live_at: nil,
-        has_draft_version: true,
-        organisation_id: 1,
-        creator_id: nil,
-        state: :draft,
-      },
-       {
-         id: 3,
-         name: "Another form",
-         form_slug: "another-form",
-         submission_email: "submission@email.com",
-         live_at: nil,
-         has_draft_version: true,
-         organisation_id: 1,
-         creator_id: nil,
-         state: :draft,
-       }]
-    end
-
-    it "Reads the forms from the API" do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms?organisation_id=1", headers, forms_response.to_json, 200
-      end
-      get root_path
-
-      forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?organisation_id=1", {}, headers)
-      expect(ActiveResource::HttpMock.requests).to include forms_request
-    end
-
-    context "with a user with a super_admin account" do
-      context "without an orgnisation query" do
-        before do
-          ActiveResource::HttpMock.respond_to do |mock|
-            mock.get "/api/v1/forms?organisation_id=#{super_admin_user.organisation.id}", headers, forms_response.to_json, 200
-          end
-
-          login_as_super_admin_user
-          get root_path
-        end
-
-        it "returns 200 OK" do
-          expect(response).to have_http_status(:ok)
-        end
-
-        it "renders the index page" do
-          expect(response).to render_template("forms/index")
-        end
-
-        it "makes a call to the API" do
-          forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?organisation_id=#{super_admin_user.organisation.id}", {}, headers)
-          expect(ActiveResource::HttpMock.requests).to include forms_request
-        end
+  context "when the groups feature is not enabled", feature_groups: false do
+    describe "#index" do
+      let(:forms_response) do
+        [{
+          id: 2,
+          name: "Form",
+          form_slug: "form",
+          submission_email: "submission@email.com",
+          live_at: nil,
+          has_draft_version: true,
+          organisation_id: 1,
+          creator_id: nil,
+          state: :draft,
+        },
+         {
+           id: 3,
+           name: "Another form",
+           form_slug: "another-form",
+           submission_email: "submission@email.com",
+           live_at: nil,
+           has_draft_version: true,
+           organisation_id: 1,
+           creator_id: nil,
+           state: :draft,
+         }]
       end
 
-      context "with a search query" do
-        let(:organisation) { create(:organisation, slug: "not_super_admins_org") }
-
-        before do
-          ActiveResource::HttpMock.respond_to do |mock|
-            mock.get "/api/v1/forms?organisation_id=#{organisation.id}", headers, forms_response.to_json, 200
-          end
-
-          login_as_super_admin_user
-          get root_path, params: { search: { organisation_id: organisation.id } }
-        end
-
-        it "makes a call to the API with the search query" do
-          forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?organisation_id=#{organisation.id}", {}, headers)
-          expect(ActiveResource::HttpMock.requests).to include forms_request
-        end
-      end
-    end
-
-    context "with a non-super_admin user organisation_id param" do
-      let(:organisation) { create(:organisation, slug: "not_users_org") }
-
-      before do
+      it "Reads the forms from the API" do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms?organisation_id=#{editor_user.organisation.id}", headers, forms_response.to_json, 200
+          mock.get "/api/v1/forms?organisation_id=1", headers, forms_response.to_json, 200
         end
+        get root_path
 
-        login_as_editor_user
-        get root_path, params: { organisation_id: organisation.id }
+        forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?organisation_id=1", {}, headers)
+        expect(ActiveResource::HttpMock.requests).to include forms_request
       end
 
-      it "makes a call to the API without the search query" do
-        forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?organisation_id=#{editor_user.organisation.id}", {}, headers)
-        expect(ActiveResource::HttpMock.requests).to include forms_request
+      context "with a user with a super_admin account" do
+        context "without an orgnisation query" do
+          before do
+            ActiveResource::HttpMock.respond_to do |mock|
+              mock.get "/api/v1/forms?organisation_id=#{super_admin_user.organisation.id}", headers, forms_response.to_json, 200
+            end
+
+            login_as_super_admin_user
+            get root_path
+          end
+
+          it "returns 200 OK" do
+            expect(response).to have_http_status(:ok)
+          end
+
+          it "renders the index page" do
+            expect(response).to render_template("forms/index")
+          end
+
+          it "makes a call to the API" do
+            forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?organisation_id=#{super_admin_user.organisation.id}", {}, headers)
+            expect(ActiveResource::HttpMock.requests).to include forms_request
+          end
+        end
+
+        context "with a search query" do
+          let(:organisation) { create(:organisation, slug: "not_super_admins_org") }
+
+          before do
+            ActiveResource::HttpMock.respond_to do |mock|
+              mock.get "/api/v1/forms?organisation_id=#{organisation.id}", headers, forms_response.to_json, 200
+            end
+
+            login_as_super_admin_user
+            get root_path, params: { search: { organisation_id: organisation.id } }
+          end
+
+          it "makes a call to the API with the search query" do
+            forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?organisation_id=#{organisation.id}", {}, headers)
+            expect(ActiveResource::HttpMock.requests).to include forms_request
+          end
+        end
+      end
+
+      context "with a non-super_admin user organisation_id param" do
+        let(:organisation) { create(:organisation, slug: "not_users_org") }
+
+        before do
+          ActiveResource::HttpMock.respond_to do |mock|
+            mock.get "/api/v1/forms?organisation_id=#{editor_user.organisation.id}", headers, forms_response.to_json, 200
+          end
+
+          login_as_editor_user
+          get root_path, params: { organisation_id: organisation.id }
+        end
+
+        it "makes a call to the API without the search query" do
+          forms_request = ActiveResource::Request.new(:get, "/api/v1/forms?organisation_id=#{editor_user.organisation.id}", {}, headers)
+          expect(ActiveResource::HttpMock.requests).to include forms_request
+        end
       end
     end
   end
