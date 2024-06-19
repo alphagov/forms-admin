@@ -97,29 +97,43 @@ describe FormPolicy do
         it { is_expected.to forbid_action(:can_make_form_live) }
       end
 
-      context "and the group status is active" do
-        let(:group_status) { :active }
+      context "and the form is in the user's group" do
+        let(:group_role) { :editor }
 
-        context "and the user's role is super admin" do
-          let(:user) { build :super_admin_user, organisation: }
-
-          it { is_expected.to permit_action(:can_make_form_live) }
+        before do
+          Membership.create!(user:, group:, added_by: user, role: group_role)
         end
 
-        context "and the user is organisation admin for the group" do
-          let(:user) { build :organisation_admin_user, organisation: }
+        context "and the group status is not active" do
+          let(:group_status) { :trial }
 
-          it { is_expected.to permit_action(:can_make_form_live) }
-        end
-
-        context "and the user's role within the group is group admin" do
-          let(:group_role) { :group_admin }
-
-          it { is_expected.to permit_action(:can_make_form_live) }
-        end
-
-        context "and the user's role within the group is editor" do
           it { is_expected.to forbid_action(:can_make_form_live) }
+        end
+
+        context "and the group status is active" do
+          let(:group_status) { :active }
+
+          context "and the user's role is super admin" do
+            let(:user) { build :super_admin_user, organisation: }
+
+            it { is_expected.to permit_action(:can_make_form_live) }
+          end
+
+          context "and the user is organisation admin for the group" do
+            let(:user) { build :organisation_admin_user, organisation: }
+
+            it { is_expected.to permit_action(:can_make_form_live) }
+          end
+
+          context "and the user's role within the group is group admin" do
+            let(:group_role) { :group_admin }
+
+            it { is_expected.to permit_action(:can_make_form_live) }
+          end
+
+          context "and the user's role within the group is editor" do
+            it { is_expected.to forbid_action(:can_make_form_live) }
+          end
         end
       end
     end
