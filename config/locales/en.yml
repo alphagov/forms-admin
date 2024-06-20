@@ -317,7 +317,7 @@ en:
         editor:
           name: Editor
         group_admin:
-          name: Group Admin
+          name: Group admin
       table_headings:
         actions: Action
         email: Email address
