@@ -51,6 +51,15 @@ describe "group_members/index", type: :view do
       end
     end
 
+    describe "sorting" do
+      let(:user1) { build :user, organisation:, name: "Bob Blob" }
+      let(:user2) { build :user, organisation:, name: "Alice Square" }
+
+      it "sorts the group memberships by user name" do
+        expect(rendered).to have_table(with_cols: [["Alice Square", "Bob Blob"]])
+      end
+    end
+
     it "has an add member link" do
       expect(rendered).to have_link(t("group_members.index.add_editor"), href: new_group_member_path(group))
     end
