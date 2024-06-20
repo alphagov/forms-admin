@@ -48,7 +48,9 @@ class FormPolicy
   end
 
   def can_change_form_submission_email?
-    can_view_form? && !user.trial?
+    return false if user.trial? && !groups_enabled?
+
+    can_view_form?
   end
 
   def can_add_page_routing_conditions?
