@@ -74,7 +74,7 @@ RSpec.describe "/groups/:group_id/members", type: :request, feature_groups: true
   end
 
   describe "POST /groups/:group_id/members" do
-    let(:user) { create :user, organisation: editor_user.organisation }
+    let(:user) { create :user, name: "A User", organisation: editor_user.organisation }
 
     context "with valid parameters" do
       it "creates a new membership" do
@@ -91,6 +91,11 @@ RSpec.describe "/groups/:group_id/members", type: :request, feature_groups: true
         }.to change(Membership, :count).by(1)
 
         expect(Membership.last.role).to eq "editor"
+      end
+
+      it "shows a success flash message" do
+        post group_members_url(group), params: { group_member_input: { member_email_address: user.email } }
+        expect(flash[:success]).to eq("A User has been added to this group and we’ve sent them an email to let them know")
       end
 
       context "and I'm an editor" do

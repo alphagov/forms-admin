@@ -19,7 +19,8 @@ class GroupMembersController < ApplicationController
 
     @group_member_input = GroupMemberInput.new(group_member_params)
     if @group_member_input.submit
-      redirect_to group_members_path(@group.external_id)
+      redirect_to group_members_path(@group.external_id),
+                  success: t(".success", user_name: @group_member_input.invited_user.name)
     else
       render :new, status: :unprocessable_entity, locals: { show_role_options: show_role_options? }
     end
