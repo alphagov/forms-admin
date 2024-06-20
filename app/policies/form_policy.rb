@@ -35,7 +35,7 @@ class FormPolicy
   def can_view_form?
     return true if user.super_admin?
 
-    if FeatureService.new(user).enabled?(:groups) && form.group.present?
+    if groups_enabled?
       return user.groups.include?(form.group) || user.is_organisations_admin?(form.group.organisation)
     end
 
@@ -60,7 +60,7 @@ class FormPolicy
 
   def can_make_form_live?
     # TODO: we should remove the check the form is within a group when we remove the feature flag
-    return can_change_form_submission_email? unless FeatureService.new(user).enabled?(:groups) && form.group.present?
+    return can_change_form_submission_email? unless groups_enabled?
     return can_change_form_submission_email? if form.group.active? && can_administer_group?
 
     false
@@ -71,6 +71,10 @@ class FormPolicy
   end
 
 private
+
+  def groups_enabled?
+    FeatureService.new(user).enabled?(:groups) && form.group.present?
+  end
 
   def user_is_form_creator
     form.creator_id.present? ? user.id == form.creator_id : false
