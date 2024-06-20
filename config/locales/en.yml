@@ -414,7 +414,7 @@ en:
     show:
       edit_group_members: Edit members of this group
       edit_group_name: Change the name of this group
-      review_group_members: Review members of this group
+      review_group_members: View members of this group
       trial_banner:
         editor:
           body_html: |
