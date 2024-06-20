@@ -41,13 +41,19 @@ RSpec.describe "groups/index", type: :view do
       expect(rendered).not_to have_select "search[organisation_id]"
     end
 
-    context "when the user is an editor" do
-      it "shows the details text for users who are not org/super admins" do
-        expect(rendered).to have_content("If you need access to an existing form or group, ask someone who has access to that group to add you.")
-      end
+    context "when the user has a standard role" do
+      context "and org has not signed an MOU" do
+        let(:current_user) do
+          instance_double User, standard_user?: true, organisation_admin?: false, super_admin?: false, current_org_has_mou?: false
+        end
 
-      it "shows a notification banner explaining forms cannot be made live" do
-        expect(rendered).to have_css ".govuk-notification-banner", text: "You cannot make any forms live yet"
+        it "shows the details text for users who are not org/super admins" do
+          expect(rendered).to have_content("If you need access to an existing form or group, ask someone who has access to that group to add you.")
+        end
+
+        it "shows a notification banner explaining forms cannot be made live" do
+          expect(rendered).to have_css ".govuk-notification-banner", text: "You cannot make any forms live yet"
+        end
       end
 
       context "and org has signed an MOU" do

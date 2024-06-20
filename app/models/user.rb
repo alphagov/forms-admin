@@ -73,6 +73,10 @@ class User < ApplicationRecord
     end
   end
 
+  def standard_user?
+    trial? || editor?
+  end
+
   def organisation_valid?
     trial? || organisation.present?
   end

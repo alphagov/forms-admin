@@ -136,6 +136,32 @@ describe FormPolicy, feature_groups: true do
   end
 
   describe "can_change_form_submission_email?" do
+    shared_examples "standard user" do
+      context "when user is in the group" do
+        before do
+          Membership.create!(user:, group:, added_by: user)
+        end
+
+        it { is_expected.to permit_action(:can_change_form_submission_email) }
+      end
+
+      context "when user is not in the group" do
+        it { is_expected.to forbid_action(:can_change_form_submission_email) }
+      end
+    end
+
+    context "with a form editor" do
+      let(:user) { build :editor_user, organisation: }
+
+      include_examples "standard user"
+    end
+
+    context "with a trial role" do
+      let(:user) { build :user, role: :trial, organisation: }
+
+      include_examples "standard user"
+    end
+
     shared_examples "without group" do
       context "with a form editor" do
         it { is_expected.to permit_action(:can_change_form_submission_email) }
