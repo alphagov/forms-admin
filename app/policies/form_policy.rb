@@ -61,9 +61,10 @@ class FormPolicy
   end
 
   def can_make_form_live?
-    # TODO: we should remove the check the form is within a group when we remove the feature flag
-    return can_change_form_submission_email? unless groups_enabled?
-    return can_change_form_submission_email? if form.group.active? && can_administer_group?
+    # this doesn't use groups_enabled? as we want to prevent a form being made live if the feature is enabled, but the form is not in a group
+    return can_change_form_submission_email? unless FeatureService.new(user).enabled?(:groups)
+
+    return can_change_form_submission_email? if form.group.present? && form.group.active? && can_administer_group?
 
     false
   end
