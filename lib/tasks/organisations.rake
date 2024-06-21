@@ -26,7 +26,7 @@ namespace :organisations do
 
   desc "Output summary data about each organisation as newline-delimited JSON"
   task summary: :environment do
-    Organisation.with_users.find_each do |organisation|
+    Organisation.with_users.unscope(:order).find_each do |organisation|
       forms = Form.where(organisation_id: organisation.id)
 
       puts({
