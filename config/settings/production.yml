@@ -4,6 +4,7 @@ features:
     organisations:
       driver_and_vehicle_standards_agency: true
       government_digital_service: true
+      govuk_forms_adoption_team: true
       insolvency_service: true
 
 # Use real authentication
