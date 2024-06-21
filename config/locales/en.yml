@@ -319,7 +319,7 @@ en:
         editor:
           name: Editor
         group_admin:
-          name: Group Admin
+          name: Group admin
       table_headings:
         actions: Action
         email: Email address
@@ -416,7 +416,7 @@ en:
     show:
       edit_group_members: Edit members of this group
       edit_group_name: Change the name of this group
-      review_group_members: Review members of this group
+      review_group_members: View members of this group
       trial_banner:
         editor:
           body_html: |

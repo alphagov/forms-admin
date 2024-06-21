@@ -54,7 +54,7 @@ RSpec.describe "groups/show", type: :view do
     end
 
     it "has a link to the review members page" do
-      expect(rendered).to have_link "Review members of this group", href: group_members_path(group)
+      expect(rendered).to have_link "View members of this group", href: group_members_path(group)
     end
   end
 
