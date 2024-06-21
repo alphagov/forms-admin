@@ -1,25 +1,21 @@
 require "rails_helper"
 
 describe HomepageController, type: :request do
-  before do
+  it "redirects to the groups index page" do
     login_as_editor_user
-  end
+    get root_path
 
-  context "when the groups feature flag is enabled", feature_groups: true do
-    before do
-      get root_path
-    end
-
-    it "redirects to the groups index page" do
-      expect(response).to redirect_to groups_path
-    end
+    expect(response).to redirect_to groups_path
   end
 
   context "when the groups feature flag is disabled", feature_groups: false do
     before do
+      login_as_editor_user
+
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms?organisation_id=1", headers, {}.to_json, 200
       end
+
       get root_path
     end
 

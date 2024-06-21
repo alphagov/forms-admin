@@ -1,6 +1,6 @@
 require "rails_helper"
 
-feature "View groups", type: :feature, feature_groups: true do
+feature "View groups", type: :feature do
   let!(:org_group) { create :group, organisation: super_admin_user.organisation, name: "Group 1" }
   let!(:other_org) { create :organisation, slug: "other-org" }
   let!(:other_org_group) { create :group, organisation: other_org, name: "Group 2" }

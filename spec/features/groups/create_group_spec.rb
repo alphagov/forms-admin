@@ -1,6 +1,6 @@
 require "rails_helper"
 
-feature "Create a new group", type: :feature, feature_groups: true do
+feature "Create a new group", type: :feature do
   before do
     login_as_editor_user
   end

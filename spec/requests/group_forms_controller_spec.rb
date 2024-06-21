@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/groups/:group_id/forms", type: :request, feature_groups: true do
+RSpec.describe "/groups/:group_id/forms", type: :request do
   let(:group) { create :group }
   let(:nonexistent_group) { "foobar" }
 

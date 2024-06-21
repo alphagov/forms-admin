@@ -326,7 +326,7 @@ describe FormTaskListService do
         end
       end
 
-      context "when the groups feature is enabled", feature_groups: true do
+      context "when the groups feature is enabled" do
         let(:organisation) { build :organisation, :with_signed_mou, id: 1 }
         let(:form) { build(:form, :ready_for_live, id: 1, organisation:) }
         let(:group) { create(:group, name: "Group 1", organisation:, status: group_status) }

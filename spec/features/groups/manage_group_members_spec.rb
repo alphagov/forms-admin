@@ -1,6 +1,6 @@
 require "rails_helper"
 
-feature "Show members of a group", type: :feature, feature_groups: true do
+feature "Show members of a group", type: :feature do
   let(:organisation) { editor_user.organisation }
   let(:group) { create(:group, name: "Group 1", organisation:) }
   let(:user1) { create(:user, organisation:) }

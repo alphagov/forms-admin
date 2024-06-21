@@ -19,7 +19,7 @@ feature "Make changes live", type: :feature do
     login_as user
   end
 
-  context "when the form is in a group", feature_groups: true do
+  context "when the form is in a group" do
     let(:group) { create(:group, name: "Group 1", organisation:, status: "active") }
 
     before do

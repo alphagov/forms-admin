@@ -12,7 +12,7 @@ require "rails_helper"
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/groups", type: :request, feature_groups: true do
+RSpec.describe "/groups", type: :request do
   let(:current_user) { editor_user }
   let(:role) { :editor }
   let(:status) { :trial }

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/groups/:group_id/members", type: :request, feature_groups: true do
+RSpec.describe "/groups/:group_id/members", type: :request do
   let(:group) { create :group, organisation: current_user.organisation }
   let(:role) { :group_admin }
   let(:current_user) { editor_user }

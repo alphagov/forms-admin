@@ -23,7 +23,7 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
     end
   end
 
-  describe "#destroy", feature_groups: true do
+  describe "#destroy" do
     describe "Given a valid form" do
       let(:group) { create :group, organisation_id: editor_user.organisation_id }
 
