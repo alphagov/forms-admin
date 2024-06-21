@@ -29,11 +29,11 @@ class GroupMemberInput < BaseInput
     Membership.roles.keys.map { |role| [I18n.t("membership.roles.#{role}"), role] }
   end
 
-private
-
   def invited_user
     @invited_user ||= User.find_by(email: member_email_address)
   end
+
+private
 
   def new_membership
     @new_membership ||= group.memberships.new(user: invited_user, role:, added_by: creator)

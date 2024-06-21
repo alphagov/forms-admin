@@ -300,6 +300,8 @@ en:
     confirm_deletion_live_form: Deleting this draft will not remove the live form.
     confirm_deletion_page: Are you sure you want to delete this page?
   group_members:
+    create:
+      success: "%{user_name} has been added to this group and we’ve sent them an email to let them know"
     index:
       add_editor: Add an editor
       add_member: Add an editor or group admin
