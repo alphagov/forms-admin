@@ -29,6 +29,17 @@ feature "Request an upgrade for a group", type: :feature do
     and_the_group_is_now_active
   end
 
+  scenario "an organisation admin can upgrade group without a request" do
+    given_i_am_logged_in_as_an_organisation_admin
+    and_i_visit_the_groups_page
+    and_i_click_on_the_group
+    and_i_click_upgrade_this_group
+    then_i_see_the_upgrade_page
+    when_i_choose_yes
+    then_i_see_a_success_message
+    and_the_group_is_now_active
+  end
+
   def given_i_am_logged_in_as_a_group_admin
     login_as_editor_user
   end
@@ -101,5 +112,13 @@ feature "Request an upgrade for a group", type: :feature do
   def and_the_group_is_now_active
     expect(page).to have_css ".govuk-caption-l", text: "Active group"
     expect_page_to_have_no_axe_errors(page)
+  end
+
+  def and_i_click_upgrade_this_group
+    click_link "Upgrade this group"
+  end
+
+  def then_i_see_the_upgrade_page
+    expect(page.find("h1")).to have_text "Upgrade this group"
   end
 end
