@@ -262,71 +262,73 @@ describe FormTaskListService do
 
       let(:section_rows) { section[:rows] }
 
-      it "has text to make the form live (no link)" do
-        expect(section_rows.first[:task_name]).to eq "Make your form live"
-        expect(section_rows.first[:path]).to be_empty
-      end
-
-      it "has the correct default status" do
-        expect(section_rows.first[:status]).to eq :cannot_start
-      end
-
-      context "when form is ready to make live" do
-        let(:form) { build(:form, :ready_for_live, id: 1) }
-
-        it "has link to make the form live" do
+      context "when the groups feature is disabled", feature_groups: false do
+        it "has text to make the form live (no link)" do
           expect(section_rows.first[:task_name]).to eq "Make your form live"
-          expect(section_rows.first[:path]).to eq "/forms/1/make-live"
+          expect(section_rows.first[:path]).to be_empty
         end
 
         it "has the correct default status" do
-          expect(section_rows.first[:status]).to eq :not_started
+          expect(section_rows.first[:status]).to eq :cannot_start
+        end
+
+        context "when form is ready to make live" do
+          let(:form) { build(:form, :ready_for_live, id: 1) }
+
+          it "has link to make the form live" do
+            expect(section_rows.first[:task_name]).to eq "Make your form live"
+            expect(section_rows.first[:path]).to eq "/forms/1/make-live"
+          end
+
+          it "has the correct default status" do
+            expect(section_rows.first[:status]).to eq :not_started
+          end
+        end
+
+        context "when form is live" do
+          before do
+            allow(form).to receive(:is_live?).and_return(true)
+          end
+
+          it "has tasks" do
+            expect(section_rows).not_to be_empty
+          end
+
+          it "describes the section title correctly" do
+            expect(section[:title]).to eq I18n.t("forms.task_list_edit.make_form_live_section.make_live")
+          end
+
+          it "describes the task correctly" do
+            expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_edit.make_form_live_section.make_live")
+          end
+        end
+
+        context "when the form is archived" do
+          let(:form) { build(:form, :archived, id: 1) }
+
+          it "has link to make the form live" do
+            expect(section_rows.first[:task_name]).to eq "Make your form live"
+            expect(section_rows.first[:path]).to eq "/forms/1/make-live"
+          end
+        end
+
+        context "when current user has a trial account" do
+          let(:current_user) { build :user, :with_trial_role }
+
+          it "has no tasks" do
+            expect(section).not_to include(:rows)
+          end
+
+          it "has text explaining that trial users cannot make forms live" do
+            expect(section[:body_text])
+              .to eq I18n.t(
+                "forms.task_list_create.make_form_live_section.if_not_permitted.body_text",
+              )
+          end
         end
       end
 
-      context "when form is live" do
-        before do
-          allow(form).to receive(:is_live?).and_return(true)
-        end
-
-        it "has tasks" do
-          expect(section_rows).not_to be_empty
-        end
-
-        it "describes the section title correctly" do
-          expect(section[:title]).to eq I18n.t("forms.task_list_edit.make_form_live_section.make_live")
-        end
-
-        it "describes the task correctly" do
-          expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_edit.make_form_live_section.make_live")
-        end
-      end
-
-      context "when the form is archived" do
-        let(:form) { build(:form, :archived, id: 1) }
-
-        it "has link to make the form live" do
-          expect(section_rows.first[:task_name]).to eq "Make your form live"
-          expect(section_rows.first[:path]).to eq "/forms/1/make-live"
-        end
-      end
-
-      context "when current user has a trial account" do
-        let(:current_user) { build :user, :with_trial_role }
-
-        it "has no tasks" do
-          expect(section).not_to include(:rows)
-        end
-
-        it "has text explaining that trial users cannot make forms live" do
-          expect(section[:body_text])
-            .to eq I18n.t(
-              "forms.task_list_create.make_form_live_section.if_not_permitted.body_text",
-            )
-        end
-      end
-
-      context "when the groups feature is enabled", feature_groups: true do
+      context "when the groups feature is enabled" do
         let(:organisation) { build :organisation, :with_signed_mou, id: 1 }
         let(:form) { build(:form, :ready_for_live, id: 1, organisation:) }
         let(:group) { create(:group, name: "Group 1", organisation:, status: group_status) }
@@ -421,6 +423,46 @@ describe FormTaskListService do
             it "has link to make the form live" do
               expect(section_rows.first[:task_name]).to eq "Make your form live"
               expect(section_rows.first[:path]).to eq "/forms/1/make-live"
+            end
+
+            context "when form is ready to make live" do
+              let(:form) { build(:form, :ready_for_live, id: 1) }
+
+              it "has link to make the form live" do
+                expect(section_rows.first[:task_name]).to eq "Make your form live"
+                expect(section_rows.first[:path]).to eq "/forms/1/make-live"
+              end
+
+              it "has the correct default status" do
+                expect(section_rows.first[:status]).to eq :not_started
+              end
+            end
+
+            context "when form is live" do
+              before do
+                allow(form).to receive(:is_live?).and_return(true)
+              end
+
+              it "has tasks" do
+                expect(section_rows).not_to be_empty
+              end
+
+              it "describes the section title correctly" do
+                expect(section[:title]).to eq I18n.t("forms.task_list_edit.make_form_live_section.make_live")
+              end
+
+              it "describes the task correctly" do
+                expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_edit.make_form_live_section.make_live")
+              end
+            end
+
+            context "when the form is archived" do
+              let(:form) { build(:form, :archived, id: 1) }
+
+              it "has link to make the form live" do
+                expect(section_rows.first[:task_name]).to eq "Make your form live"
+                expect(section_rows.first[:path]).to eq "/forms/1/make-live"
+              end
             end
           end
 

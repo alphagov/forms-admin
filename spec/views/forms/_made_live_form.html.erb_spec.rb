@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "forms/_made_live_form.html.erb", feature_groups: true do
+describe "forms/_made_live_form.html.erb" do
   let(:declaration) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:metrics_data) { { weekly_submissions: 125, weekly_starts: 256 } }
   let(:what_happens_next) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }

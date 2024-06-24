@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe FormPolicy, feature_groups: true do
+describe FormPolicy do
   subject(:policy) { described_class.new(user, form) }
 
   let(:organisation) { build :organisation, :with_signed_mou, id: 1 }
@@ -250,7 +250,7 @@ describe FormPolicy, feature_groups: true do
       include_examples "without group"
     end
 
-    context "with the groups feature enabled", feature_groups: true do
+    context "with the groups feature enabled" do
       let(:group_role) { :editor }
 
       before do

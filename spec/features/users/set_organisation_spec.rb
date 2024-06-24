@@ -4,25 +4,10 @@ feature "Set or change a user's organisation", type: :feature do
   let!(:test_org) do
     create(:organisation, id: 1, slug: "test-org")
   end
-  let!(:gds_org) do
-    create(:organisation, id: 2, slug: "government-digital-service")
-  end
-
-  let(:test_org_forms) do
-    [build(:form, id: 1, organisation_id: 1, name: "Test Org Form")]
-  end
-  let(:gds_forms) do
-    [build(:form, id: 2, organisation_id: 2, name: "Test GDS Form")]
-  end
 
   before do
-    ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?organisation_id=1", headers, test_org_forms.to_json, 200
-      mock.get "/api/v1/forms?organisation_id=2", headers, gds_forms.to_json, 200
-    end
-
+    create(:organisation, id: 2, slug: "government-digital-service")
     create_list :user, 6, organisation: test_org
-
     login_as_super_admin_user
   end
 
@@ -31,13 +16,6 @@ feature "Set or change a user's organisation", type: :feature do
     and_i_choose_a_user_to_edit
     when_i_change_the_users_organisation
     then_the_users_organisation_name_is_updated
-  end
-
-  scenario "Super admin can change their own organisation" do
-    given_i_am_a_super_admin_in_the_government_digital_service_organisation
-    when_i_change_my_organisation_to_test_org
-    then_i_cannot_see_the_government_digital_service_forms
-    but_i_can_see_the_test_org_forms
   end
 
 private
@@ -68,33 +46,5 @@ private
     user_table_row = page.find(".govuk-table tr", text: @user.name)
     expect(user_table_row).to have_text @new_organisation_name
     expect(user_table_row).not_to have_text @old_organisation_name
-  end
-
-  def given_i_am_a_super_admin_in_the_government_digital_service_organisation
-    @user = create(:super_admin_user, organisation: gds_org)
-    login_as @user
-
-    visit edit_user_path(@user.id)
-    expect(page).to have_text "Government Digital Service"
-
-    visit root_path
-    expect(page).to have_text "Test GDS Form"
-  end
-
-  def when_i_change_my_organisation_to_test_org
-    visit edit_user_path(@user.id)
-    # The \n is important, it "presses enter"
-    fill_in "Organisation", with: "Test Org\n"
-    click_button "Save"
-  end
-
-  def then_i_cannot_see_the_government_digital_service_forms
-    visit root_path
-    expect(page).not_to have_text "Test GDS Form"
-  end
-
-  def but_i_can_see_the_test_org_forms
-    visit root_path
-    expect(page).to have_text "Test Org Form"
   end
 end

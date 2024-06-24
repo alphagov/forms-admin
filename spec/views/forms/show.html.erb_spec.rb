@@ -36,23 +36,21 @@ describe "forms/show.html.erb" do
     expect(rendered).to have_selector(".app-task-list__summary", text: "You’ve completed 12 of 20 tasks.")
   end
 
-  context "when form state is draft", feature_groups: true do
-    it "rendered draft tag " do
-      expect(rendered).to have_css(".govuk-tag.govuk-tag--yellow", text: "Draft")
-    end
+  it "rendered draft tag " do
+    expect(rendered).to have_css(".govuk-tag.govuk-tag--yellow", text: "Draft")
+  end
 
-    it "has a back link to the group page" do
-      expect(view.content_for(:back_link)).to have_link("Back to Group 1", href: group_path(group))
-    end
+  it "has a back link to the group page" do
+    expect(view.content_for(:back_link)).to have_link("Back to Group 1", href: group_path(group))
+  end
 
-    context "when the groups feature is not enabled", feature_groups: false do
-      it "has a back link to the forms page" do
-        expect(view.content_for(:back_link)).to have_link("Back to your forms", href: "/")
-      end
+  context "when the groups feature is not enabled", feature_groups: false do
+    it "has a back link to the forms page" do
+      expect(view.content_for(:back_link)).to have_link("Back to your forms", href: "/")
     end
   end
 
-  context "when a form is not in a group", feature_groups: true do
+  context "when a form is not in a group" do
     let(:group) { nil }
 
     it "has a back link to the forms page" do

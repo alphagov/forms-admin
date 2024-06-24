@@ -45,7 +45,7 @@ RSpec.describe ApplicationController, type: :request do
       allow(Settings.maintenance_mode).to receive(:enabled).and_return(true)
       allow(Settings.maintenance_mode).to receive(:bypass_ips).and_return(bypass_ips)
 
-      get root_path, headers: { "HTTP_X_FORWARDED_FOR": user_ip }
+      get groups_path, headers: { "HTTP_X_FORWARDED_FOR": user_ip }
       follow_redirect! if expect_response_to_redirect
     end
 
@@ -78,7 +78,7 @@ RSpec.describe ApplicationController, type: :request do
       end
 
       it "renders the root page" do
-        expect(response).to render_template("forms/index")
+        expect(response).to render_template("groups/index")
       end
     end
   end
