@@ -23,7 +23,7 @@
     end %>
 
     <%= table.with_body do |body| %>
-      <% @group.memberships.each do |membership| %>
+      <% @group.memberships.ordered.each do |membership| %>
         <%= body.with_row do |row| %>
           <%= row.with_cell { membership.user.name } %>
           <%= row.with_cell { membership.user.email } %>

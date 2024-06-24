@@ -112,6 +112,29 @@ RSpec.describe Group, type: :model do
       expect { group.destroy }.not_to change(User, :count)
     end
 
+    describe "#memberships" do
+      describe "#ordered" do
+        it "orders the membership records by name of the associated user" do
+          group = create :group
+          users = [
+            create(:user, name: "Barbara User"),
+            create(:user, name: "Alfred User"),
+            create(:user, name: "Charlie User"),
+          ]
+
+          users.each do |user|
+            Membership.create!(group:, user:, role: :editor, added_by: group.creator)
+          end
+
+          expect(group.memberships.ordered.map { _1.user.name }).to eq [
+            "Alfred User",
+            "Barbara User",
+            "Charlie User",
+          ]
+        end
+      end
+    end
+
     describe "#users" do
       describe "#group_admins" do
         it "returns all users who are group admins for the group" do

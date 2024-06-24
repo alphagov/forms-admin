@@ -5,7 +5,11 @@ class Group < ApplicationRecord
 
   belongs_to :upgrade_requester, class_name: "User", optional: true
 
-  has_many :memberships, dependent: :destroy
+  has_many :memberships, dependent: :destroy do
+    def ordered
+      joins(:user).order("users.name")
+    end
+  end
   has_many :users, through: :memberships do
     def group_admins
       where(memberships: { role: "group_admin" })
