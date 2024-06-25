@@ -106,6 +106,25 @@ RSpec.describe "/groups", type: :request do
       end
     end
 
+    context "when the user is a organisation admin of the organisation" do
+      before do
+        login_as_organisation_admin_user
+        get groups_url
+      end
+
+      it "shows all trial groups belonging to the organisation" do
+        expect(assigns(:trial_groups)).to eq trial_groups + non_member_trial_groups
+      end
+
+      it "shows all upgrade requested groups belonging to the organisation" do
+        expect(assigns(:upgrade_requested_groups)).to eq upgrade_requested_groups
+      end
+
+      it "shows all active groups the user belonging to the organisation" do
+        expect(assigns(:active_groups)).to eq active_groups
+      end
+    end
+
     context "when the user is a super-admin" do
       before do
         login_as_super_admin_user
