@@ -43,7 +43,7 @@ RSpec.describe MailchimpListSynchronizer do
       allow(mailchimp_client).to receive(:lists).and_return(mailchimp_client_lists)
 
       allow(mailchimp_client_lists).to receive(:set_list_member)
-      allow(mailchimp_client_lists).to receive(:delete_list_member_permanent)
+      allow(mailchimp_client_lists).to receive(:delete_list_member)
 
       allow(mailchimp_client_lists).to receive(:get_list) do |list_id|
         case list_id
@@ -95,7 +95,7 @@ RSpec.describe MailchimpListSynchronizer do
     it "removes users from MailChimp who do not appear in the database, but do appear in the mailing list" do
       removed_email_hash = Digest::MD5.hexdigest "remove@domain.org"
 
-      expect(mailchimp_client_lists).to receive(:delete_list_member_permanent).with("list-1", removed_email_hash)
+      expect(mailchimp_client_lists).to receive(:delete_list_member).with("list-1", removed_email_hash)
 
       described_class.synchronize(list_id: "list-1", users_to_synchronize:)
     end
@@ -103,7 +103,7 @@ RSpec.describe MailchimpListSynchronizer do
     it "removes users from MailChimp who exist in the database, but do not have access" do
       removed_email_hash = Digest::MD5.hexdigest "retireduser@domain.org"
 
-      expect(mailchimp_client_lists).to receive(:delete_list_member_permanent).with("list-1", removed_email_hash)
+      expect(mailchimp_client_lists).to receive(:delete_list_member).with("list-1", removed_email_hash)
 
       described_class.synchronize(list_id: "list-1", users_to_synchronize:)
     end
@@ -126,7 +126,7 @@ RSpec.describe MailchimpListSynchronizer do
       end
 
       it "handles all of the results" do
-        expect(mailchimp_client_lists).to receive(:delete_list_member_permanent).with("list-1", anything).exactly(1001).times
+        expect(mailchimp_client_lists).to receive(:delete_list_member).with("list-1", anything).exactly(1001).times
 
         described_class.synchronize(list_id: "list-1", users_to_synchronize:)
       end

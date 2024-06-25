@@ -64,7 +64,7 @@ class MailchimpListSynchronizer
     puts "Unsubscribing any removed users..."
     deleted_users.each do |email|
       subscriber_hash = Digest::MD5.hexdigest email.downcase
-      mailchimp.lists.delete_list_member_permanent(list_id, subscriber_hash)
+      mailchimp.lists.delete_list_member(list_id, subscriber_hash)
     rescue MailchimpMarketing::ApiError
       warn "Could not unsubscribe user with subscriber hash #{subscriber_hash} from list #{list_id}. Continuing"
     end
