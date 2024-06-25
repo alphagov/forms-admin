@@ -70,7 +70,7 @@ describe FormListService do
         let(:current_user) { create :user, :with_trial_role }
 
         it "contains a 'Name' and 'Status' column heading" do
-          expect(service.data[:head]).to eq([I18n.t("home.form_name_heading"), { text: I18n.t("home.form_status_heading"), numeric: true }])
+          expect(service.data[:head]).to eq([I18n.t("home.form_name_heading"), { text: I18n.t("home.created_by") }, { text: I18n.t("home.form_status_heading"), numeric: true }])
         end
       end
     end
@@ -88,6 +88,7 @@ describe FormListService do
             form = forms[index]
             expect(row).to eq([
               { text: "<a class=\"govuk-link\" href=\"/forms/#{form.id}\">#{form.name}</a>" },
+              { text: current_user.name.to_s },
               {
                 numeric: true,
                 text: "<div class='app-form-states'><strong class=\"govuk-tag govuk-tag--yellow\">Draft</strong>\n</div>",

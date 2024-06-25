@@ -16,12 +16,10 @@ class FormListService
     @current_user = current_user
     @organisation = organisation || (current_user.trial? ? nil : current_user.organisation)
     @group = group
-    unless current_user.trial?
-      @list_of_creator_id = forms.map(&:creator_id).uniq
-      @list_of_creators = User.where(id: @list_of_creator_id)
-                               .select(:id, :name)
-                               .map { |user| { id: user.id, name: user.name } }
-    end
+    @list_of_creator_id = forms.map(&:creator_id).uniq
+    @list_of_creators = User.where(id: @list_of_creator_id)
+                             .select(:id, :name)
+                             .map { |user| { id: user.id, name: user.name } }
   end
 
   def data
@@ -45,7 +43,7 @@ private
   def head
     [
       I18n.t("home.form_name_heading"),
-      (current_user.trial? ? nil : { text: I18n.t("home.created_by") }),
+      { text: I18n.t("home.created_by") },
       { text: I18n.t("home.form_status_heading"), numeric: true },
     ].compact
   end
@@ -53,7 +51,7 @@ private
   def rows
     forms.map do |form|
       [{ text: form_name_link(form) },
-       (current_user.trial? ? nil : { text: find_creator_name(form) }),
+       { text: find_creator_name(form) },
        { text: form_status_tags(form), numeric: true }].compact
     end
   end
