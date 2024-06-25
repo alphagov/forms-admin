@@ -53,10 +53,9 @@ feature "Manage members of group", type: :feature do
 
   def then_i_should_see_the_members_of_the_group
     expect(page.find("h1")).to have_text "Group 1"
-    expect(page).to have_text user1.name
-    expect(page).to have_text user1.email
-    expect(page).to have_text user2.name
-    expect(page).to have_text user2.email
+
+    expect(page).to have_table(with_rows: [[user1.name, user1.email], [user2.name, user2.email]])
+
     expect_page_to_have_no_axe_errors(page)
   end
 
@@ -92,27 +91,18 @@ feature "Manage members of group", type: :feature do
   def then_i_should_see_the_new_group_admin
     expect(page.find("h1")).to have_text "Group 1"
 
-    user_row = page.find("td", text: user3.name).ancestor("tr")
-    within(user_row) do
-      expect(user_row).to have_text user3.name
-      expect(user_row).to have_text user3.email
-      expect(user_row).to have_text "Group admin"
-    end
+    expect(page).to have_table(with_rows: [[user3.email, "Group admin"]])
   end
 
   def then_i_should_see_the_user_as_editor
     expect(page.find("h1")).to have_text "Group 1"
 
-    user_row = page.find("td", text: user3.name).ancestor("tr")
-    within(user_row) do
-      expect(user_row).to have_text user3.name
-      expect(user_row).to have_text user3.email
-      expect(user_row).to have_text "Editor"
-    end
+    expect(page).to have_table(with_rows: [[user3.email, "Editor"]])
   end
 
   def when_i_click_make_editor_for_user
-    user_row = page.find("td", text: user3.name).ancestor("tr")
-    user_row.click_button "Make editor"
+    within(:table_row, [user3.email]) do
+      click_button "Make editor"
+    end
   end
 end
