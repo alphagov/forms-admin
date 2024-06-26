@@ -56,12 +56,11 @@ RSpec.describe Pages::TypeOfAnswerInput, type: :model do
 
     context "when data is valid and answer_type_changed is false" do
       before do
-        allow(type_of_answer_input).to receive(:invalid?).and_return(false)
-        allow(type_of_answer_input).to receive(:answer_type_changed?).and_return(false)
+        allow(type_of_answer_input).to receive_messages(invalid?: false, answer_type_changed?: false)
       end
 
       it "returns true" do
-        expect(type_of_answer_input.submit).to eq true
+        expect(type_of_answer_input.submit).to be true
       end
 
       it "does not call save on draft_question" do

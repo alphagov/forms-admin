@@ -22,7 +22,7 @@ RSpec.describe Organisation, type: :model do
     end
   end
 
-  describe "versioning", versioning: true do
+  describe "versioning", :versioning do
     it "enables paper trail" do
       expect(described_class.new).to be_versioned
     end

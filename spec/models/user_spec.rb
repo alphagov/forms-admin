@@ -120,7 +120,7 @@ describe User, type: :model do
     end
   end
 
-  describe "versioning", versioning: true do
+  describe "versioning", :versioning do
     it "enables paper trail" do
       expect(user).to be_versioned
     end
@@ -261,7 +261,7 @@ describe User, type: :model do
     context "when the user does not have the organisation admin role" do
       it "returns false" do
         user = create(:user)
-        expect(user.is_organisations_admin?(user.organisation)).to eq(false)
+        expect(user.is_organisations_admin?(user.organisation)).to be(false)
       end
     end
 
@@ -269,7 +269,7 @@ describe User, type: :model do
       context "and the user's organisation is the same as given" do
         it "returns true" do
           user = create(:organisation_admin_user)
-          expect(user.is_organisations_admin?(user.organisation)).to eq(true)
+          expect(user.is_organisations_admin?(user.organisation)).to be(true)
         end
       end
 
@@ -278,7 +278,7 @@ describe User, type: :model do
           user = create(:organisation_admin_user)
           other_org = build(:organisation, id: 2)
 
-          expect(user.is_organisations_admin?(other_org)).to eq(false)
+          expect(user.is_organisations_admin?(other_org)).to be(false)
         end
       end
     end
@@ -321,23 +321,23 @@ describe User, type: :model do
     it "allow access for users with an unrestricted email domain" do
       user = create(:user)
 
-      expect(user.organisation_restricted_access?).to eq(false)
-      expect(user.has_access).to eq(true)
+      expect(user.organisation_restricted_access?).to be(false)
+      expect(user.has_access).to be(true)
     end
 
     it "allow access for users without an email address" do
       user = create(:user, email: nil)
 
-      expect(user.organisation_restricted_access?).to eq(false)
-      expect(user.has_access).to eq(true)
+      expect(user.organisation_restricted_access?).to be(false)
+      expect(user.has_access).to be(true)
     end
 
     User::EMAIL_DOMAIN_DENYLIST.each do |email_domain|
       it "deny access for users with a restricted email domain" do
         user = create(:user, email: "test@#{email_domain}")
 
-        expect(user.organisation_restricted_access?).to eq(true)
-        expect(user.has_access).to eq(false)
+        expect(user.organisation_restricted_access?).to be(true)
+        expect(user.has_access).to be(false)
       end
     end
   end
@@ -358,7 +358,7 @@ describe User, type: :model do
 
     it "returns true when user is a group admin of the group" do
       create(:membership, user:, group:, role: :group_admin)
-      expect(user.is_group_admin?(group)).to eq(true)
+      expect(user.is_group_admin?(group)).to be(true)
     end
   end
 
@@ -369,7 +369,7 @@ describe User, type: :model do
       let(:organisation) { create(:organisation, :with_signed_mou) }
 
       it "returns true" do
-        expect(user.current_org_has_mou?).to eq(true)
+        expect(user.current_org_has_mou?).to be(true)
       end
     end
 
@@ -377,7 +377,7 @@ describe User, type: :model do
       let(:organisation) { create(:organisation) }
 
       it "returns false" do
-        expect(user.current_org_has_mou?).to eq(false)
+        expect(user.current_org_has_mou?).to be(false)
       end
     end
 
@@ -385,7 +385,7 @@ describe User, type: :model do
       let(:organisation) { nil }
 
       it "returns false" do
-        expect(user.current_org_has_mou?).to eq(false)
+        expect(user.current_org_has_mou?).to be(false)
       end
     end
   end
@@ -402,7 +402,7 @@ describe User, type: :model do
         let(:user) { create :super_admin_user }
 
         it "returns false" do
-          expect(user.collect_analytics?).to eq(false)
+          expect(user.collect_analytics?).to be(false)
         end
       end
 
@@ -410,7 +410,7 @@ describe User, type: :model do
         let(:user) { create :editor_user }
 
         it "returns false" do
-          expect(user.collect_analytics?).to eq(false)
+          expect(user.collect_analytics?).to be(false)
         end
       end
     end
@@ -422,7 +422,7 @@ describe User, type: :model do
         let(:user) { create :super_admin_user }
 
         it "returns false" do
-          expect(user.collect_analytics?).to eq(false)
+          expect(user.collect_analytics?).to be(false)
         end
       end
 
@@ -430,7 +430,7 @@ describe User, type: :model do
         let(:user) { create :editor_user }
 
         it "returns true" do
-          expect(user.collect_analytics?).to eq(true)
+          expect(user.collect_analytics?).to be(true)
         end
       end
     end

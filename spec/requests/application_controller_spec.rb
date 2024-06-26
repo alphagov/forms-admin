@@ -42,8 +42,7 @@ RSpec.describe ApplicationController, type: :request do
     let(:user_ip) { "192.0.0.2" }
 
     before do
-      allow(Settings.maintenance_mode).to receive(:enabled).and_return(true)
-      allow(Settings.maintenance_mode).to receive(:bypass_ips).and_return(bypass_ips)
+      allow(Settings.maintenance_mode).to receive_messages(enabled: true, bypass_ips:)
 
       get groups_path, headers: { "HTTP_X_FORWARDED_FOR": user_ip }
       follow_redirect! if expect_response_to_redirect
@@ -69,7 +68,7 @@ RSpec.describe ApplicationController, type: :request do
       end
     end
 
-    context "when the  bypass ip range does include the user's ip" do
+    context "when the bypass ip range does include the user's ip" do
       let(:bypass_ips) { "192.0.0.0/29, 123.123.123.123/32" }
       let(:expect_response_to_redirect) { false }
 

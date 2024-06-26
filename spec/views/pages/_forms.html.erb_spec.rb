@@ -78,7 +78,7 @@ describe "pages/_form.html.erb", type: :view do
             hint_text: page.hint_text
     end
 
-    let(:guidance_service) { instance_double("PageSummaryData::GuidanceService") }
+    let(:guidance_service) { instance_double(PageSummaryData::GuidanceService) }
     let(:build_data) { {} }
 
     before do

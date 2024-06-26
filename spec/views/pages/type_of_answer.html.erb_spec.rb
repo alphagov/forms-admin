@@ -10,16 +10,14 @@ describe "pages/type_of_answer.html.erb", type: :view do
 
   before do
     # allow objects to use ids in form helper
-    allow(form).to receive(:persisted?).and_return(true)
     allow(type_of_answer_input).to receive(:persisted?).and_return(true)
 
     # mock the form.page_number method
-    allow(form).to receive(:page_number).and_return(question_number)
+    allow(form).to receive_messages(persisted?: true, page_number: question_number)
 
     # mock the path helper
     without_partial_double_verification do
-      allow(view).to receive(:form_pages_type_of_answer_input_path).and_return("/type-of-answer")
-      allow(view).to receive(:current_form).and_return(form)
+      allow(view).to receive_messages(form_pages_type_of_answer_input_path: "/type-of-answer", current_form: form)
     end
 
     # setup instance variables
