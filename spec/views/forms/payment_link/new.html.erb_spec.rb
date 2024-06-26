@@ -6,8 +6,7 @@ describe "forms/payment_link/new.html.erb" do
 
   before do
     assign(:payment_link_input, payment_link_input)
-    allow(view).to receive(:form_path).and_return("/forms/1")
-    allow(view).to receive(:payment_link_path).and_return("/forms/1/payment-link")
+    allow(view).to receive_messages(form_path: "/forms/1", payment_link_path: "/forms/1/payment-link")
     render template: "forms/payment_link/new"
   end
 

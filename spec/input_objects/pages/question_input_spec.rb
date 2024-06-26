@@ -142,7 +142,7 @@ RSpec.describe Pages::QuestionInput, type: :model do
   describe "#submit" do
     it "returns false if the form is invalid" do
       allow(question_input).to receive(:invalid?).and_return(true)
-      expect(question_input.submit).to eq false
+      expect(question_input.submit).to be false
     end
 
     context "when form is valid valid" do

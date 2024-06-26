@@ -60,7 +60,7 @@ describe FormService do
 
         expect {
           form_service.add_to_default_group!(user)
-        }.to change(Group, :count).by(0)
+        }.not_to change(Group, :count)
       end
 
       it "adds the current user to the default group" do

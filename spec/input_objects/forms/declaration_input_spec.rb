@@ -46,7 +46,7 @@ RSpec.describe Forms::DeclarationInput, type: :model do
   describe "#submit" do
     it "returns false if the data is invalid" do
       form = described_class.new(declaration_text: ("abc" * 2001), form: { declaration_text: "" })
-      expect(form.submit).to eq false
+      expect(form.submit).to be false
     end
 
     it "sets the form's attribute values" do

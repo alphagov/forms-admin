@@ -52,8 +52,7 @@ RSpec.describe "usage of omniauth-auth0 gem" do
     end
 
     it "signs the user out of auth0" do
-      allow(Settings.auth0).to receive(:domain).and_return("test")
-      allow(Settings.auth0).to receive(:client_id).and_return("baz")
+      allow(Settings.auth0).to receive_messages(domain: "test", client_id: "baz")
 
       get sign_out_path
 

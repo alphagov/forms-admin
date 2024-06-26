@@ -12,11 +12,8 @@ describe "pages/conditions/routing_page.html.erb" do
       allow(view).to receive(:policy).and_return(OpenStruct.new(can_add_page_routing_conditions?: allowed_to_create_routes))
     end
 
-    allow(view).to receive(:form_pages_path).and_return("/forms/1/pages")
-    allow(view).to receive(:routing_page_path).and_return("/forms/1/new-condition")
-    allow(view).to receive(:set_routing_page_path).and_return("/forms/1/new-condition")
-    allow(form).to receive(:qualifying_route_pages).and_return(pages)
-    allow(form).to receive(:has_no_remaining_routes_available?).and_return(all_routes_created)
+    allow(view).to receive_messages(form_pages_path: "/forms/1/pages", routing_page_path: "/forms/1/new-condition", set_routing_page_path: "/forms/1/new-condition")
+    allow(form).to receive_messages(qualifying_route_pages: pages, has_no_remaining_routes_available?: all_routes_created)
 
     render template: "pages/conditions/routing_page", locals: { form:, routing_page_input: }
   end

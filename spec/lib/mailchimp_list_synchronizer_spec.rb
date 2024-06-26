@@ -5,11 +5,11 @@ RSpec.describe MailchimpListSynchronizer do
 
   describe "#synchronize" do
     let(:mailchimp_client) do
-      instance_double("MailchimpMarketing::Client")
+      instance_double(MailchimpMarketing::Client)
     end
 
     let(:mailchimp_client_lists) do
-      instance_double("MailchimpMarketing::ListsApi")
+      instance_double(MailchimpMarketing::ListsApi)
     end
 
     let(:list_1) do

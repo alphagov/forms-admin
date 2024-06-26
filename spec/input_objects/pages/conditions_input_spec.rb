@@ -175,7 +175,7 @@ RSpec.describe Pages::ConditionsInput, type: :model do
     context "when goto_page is nil and skip_to_end is set to false" do
       it "sets goto_page_id to 'check_your_answers'" do
         conditions_input.assign_condition_values
-        expect(conditions_input.goto_page_id).to eq nil
+        expect(conditions_input.goto_page_id).to be_nil
       end
     end
 
@@ -200,8 +200,8 @@ RSpec.describe Pages::ConditionsInput, type: :model do
 
       it "sets goto_page_id to nil and skip_to_end to true" do
         conditions_input.assign_skip_to_end
-        expect(conditions_input.goto_page_id).to eq nil
-        expect(conditions_input.skip_to_end).to eq true
+        expect(conditions_input.goto_page_id).to be_nil
+        expect(conditions_input.skip_to_end).to be true
       end
     end
 
@@ -212,7 +212,7 @@ RSpec.describe Pages::ConditionsInput, type: :model do
       it "does not change goto_page_id and sets skip_to_end to false" do
         conditions_input.assign_skip_to_end
         expect(conditions_input.goto_page_id).to eq 3
-        expect(conditions_input.skip_to_end).to eq false
+        expect(conditions_input.skip_to_end).to be false
       end
     end
   end

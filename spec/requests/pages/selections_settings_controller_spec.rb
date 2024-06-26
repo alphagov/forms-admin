@@ -86,7 +86,7 @@ describe Pages::SelectionsSettingsController, type: :request do
 
         expect(draft_question_settings).to include(only_one_option: "true",
                                                    selection_options: [{ name: "Option 1" }, { name: "Option 2" }])
-        expect(settings_form.draft_question.is_optional).to eq false
+        expect(settings_form.draft_question.is_optional).to be false
       end
 
       it "redirects the user to the question details page" do
@@ -164,7 +164,7 @@ describe Pages::SelectionsSettingsController, type: :request do
         expect(form.answer_settings).to eq new_settings
       end
 
-      it "redirects the user to the question details page " do
+      it "redirects the user to the question details page" do
         expect(response).to redirect_to edit_question_path(form.id, page.id)
       end
     end

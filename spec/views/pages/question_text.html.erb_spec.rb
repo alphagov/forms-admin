@@ -9,8 +9,7 @@ describe "pages/question_text.html.erb" do
 
   before do
     without_partial_double_verification do
-      allow(view).to receive(:form_pages_path).and_return(form_pages_path)
-      allow(view).to receive(:current_form).and_return(form)
+      allow(view).to receive_messages(form_pages_path:, current_form: form)
     end
 
     # Assign instance variables so they can be accessed from views
