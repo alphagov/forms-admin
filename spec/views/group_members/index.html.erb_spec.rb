@@ -3,9 +3,9 @@ require "rails_helper"
 describe "group_members/index", type: :view do
   let(:organisation) { build(:organisation, slug: "Department for testing group members") }
   let(:current_user) { create(:user, organisation:) }
-  let(:user1) { build(:user, organisation:) }
-  let(:user2) { build(:user, organisation:) }
-  let(:memberships) { [create(:membership, user: user1, role: :editor, group:), create(:membership, user: user2, role: :group_admin, group:)] }
+  let(:first_user_in_table) { build(:user, organisation:) }
+  let(:second_user_in_table) { build(:user, organisation:) }
+  let(:memberships) { [create(:membership, user: first_user_in_table, role: :editor, group:), create(:membership, user: second_user_in_table, role: :group_admin, group:)] }
   let(:group) { create(:group, name: "Group 1", organisation:) }
   let(:can_add_editor) { true }
   let(:can_add_group_member) { false }
@@ -52,8 +52,8 @@ describe "group_members/index", type: :view do
     end
 
     describe "sorting" do
-      let(:user1) { build :user, organisation:, name: "Bob Blob" }
-      let(:user2) { build :user, organisation:, name: "Alice Square" }
+      let(:first_user_in_table) { build :user, organisation:, name: "Bob Blob" }
+      let(:second_user_in_table) { build :user, organisation:, name: "Alice Square" }
 
       it "sorts the group memberships by user name" do
         expect(rendered).to have_table(with_cols: [["Alice Square", "Bob Blob"]])
