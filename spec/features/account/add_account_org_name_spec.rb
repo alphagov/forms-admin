@@ -27,7 +27,7 @@ feature "Add account organisation to user without organisation", type: :feature 
     OmniAuth.config.test_mode = false
   end
 
-  scenario "when the user does not have an organisation or name", type: :feature do
+  scenario "when the user does not have an organisation or name", type: :feature do # rubocop:disable RSpec/NoExpectationExample
     when_i_visit_a_page_which_requires_sign_in
     then_i_should_be_redirected_to_the_account_organisation_page
     and_i_try_to_visit_the_homepage

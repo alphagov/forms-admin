@@ -12,7 +12,7 @@ feature "View groups", type: :feature do
     other_org_user
   end
 
-  scenario "Super admin can use autocomplete to view other organisation's forms" do
+  scenario "Super admin can use autocomplete to view other organisation's forms" do # rubocop:disable RSpec/NoExpectationExample
     given_i_am_logged_in_as_a_super_admin
     and_i_am_on_the_groups_page
     then_i_should_see_the_groups_for_my_organisation

@@ -12,7 +12,7 @@ feature "Create a new group", type: :feature do
       create(:membership, user: editor_user, group:, role: :group_admin)
     end
 
-    scenario "group admin can change the name of a group" do
+    scenario "group admin can change the name of a group" do # rubocop:disable RSpec/NoExpectationExample
       when_i_visit_the_group_page
       and_i_click_change_name
       then_i_see_the_change_name_page

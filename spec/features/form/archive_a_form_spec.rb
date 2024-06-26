@@ -16,7 +16,7 @@ feature "Archive a form", type: :feature do
     login_as_editor_user
   end
 
-  scenario "as a form editor" do
+  scenario "as a form editor" do # rubocop:disable RSpec/NoExpectationExample
     given_i_am_viewing_a_live_form
     when_i_click_archive_this_form
     then_i_am_shown_the_archive_form_page

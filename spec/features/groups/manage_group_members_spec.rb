@@ -13,7 +13,7 @@ feature "Manage members of group", type: :feature do
     create(:membership, user: existing_group_admin, group:, role: :group_admin)
   end
 
-  scenario "group admin adds a new editor" do
+  scenario "group admin adds a new editor" do # rubocop:disable RSpec/NoExpectationExample
     login_as_editor_user
     when_i_visit_the_groups_page
     and_i_click_the_group_link
@@ -25,7 +25,7 @@ feature "Manage members of group", type: :feature do
     then_i_should_see_the_user_as_editor
   end
 
-  scenario "organisation admin adds a new group_admin and changes them to editor" do
+  scenario "organisation admin adds a new group_admin and changes them to editor" do # rubocop:disable RSpec/NoExpectationExample
     login_as_organisation_admin_user
     when_i_visit_the_groups_page
     and_i_click_the_group_link

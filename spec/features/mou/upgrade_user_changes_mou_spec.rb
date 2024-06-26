@@ -13,7 +13,7 @@ describe "Assign an organisation to a user with a signed MOU", type: :feature do
     mou_signature
   end
 
-  it "a logged in user can sign an MOU" do
+  it "a logged in user can sign an MOU" do # rubocop:disable RSpec/NoExpectationExample
     login_as_super_admin_user
     when_i_visit_the_mou_index_page
     then_i_can_see_the_mou_page

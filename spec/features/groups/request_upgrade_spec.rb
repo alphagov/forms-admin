@@ -8,7 +8,7 @@ feature "Request an upgrade for a group", type: :feature do
     end
   end
 
-  scenario "a group admin requests an upgrade that is approved by an admin user" do
+  scenario "a group admin requests an upgrade that is approved by an admin user" do # rubocop:disable RSpec/NoExpectationExample
     given_i_am_logged_in_as_a_group_admin
     and_i_visit_the_groups_page
     and_i_click_on_the_group
@@ -29,7 +29,7 @@ feature "Request an upgrade for a group", type: :feature do
     and_the_group_is_now_active
   end
 
-  scenario "an organisation admin can upgrade group without a request" do
+  scenario "an organisation admin can upgrade group without a request" do # rubocop:disable RSpec/NoExpectationExample
     given_i_am_logged_in_as_an_organisation_admin
     and_i_visit_the_groups_page
     and_i_click_on_the_group

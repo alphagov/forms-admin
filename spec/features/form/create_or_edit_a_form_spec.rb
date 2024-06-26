@@ -24,7 +24,7 @@ feature "Create or edit a form", type: :feature do
         create(:membership, user: editor_user, group:)
       end
 
-      scenario "As a form creator" do
+      scenario "As a form creator" do # rubocop:disable RSpec/NoExpectationExample
         when_i_am_viewing_a_group_page
         and_i_click_create_a_form
         and_i_fill_in_the_form_name
@@ -41,7 +41,7 @@ feature "Create or edit a form", type: :feature do
         end
       end
 
-      scenario "As a form creator" do
+      scenario "As a form creator" do # rubocop:disable RSpec/NoExpectationExample
         when_i_am_viewing_home_page
         and_i_click_create_a_form
         and_i_fill_in_the_form_name
@@ -76,7 +76,7 @@ feature "Create or edit a form", type: :feature do
         GroupForm.create!(form_id: form.id, group:)
       end
 
-      scenario "As a form creator" do
+      scenario "As a form creator" do # rubocop:disable RSpec/NoExpectationExample
         when_i_am_viewing_a_group_page
         and_i_view_an_existing_form
         then_i_edit_the_name_of_the_form
@@ -93,7 +93,7 @@ feature "Create or edit a form", type: :feature do
         end
       end
 
-      scenario "As a form creator" do
+      scenario "As a form creator" do # rubocop:disable RSpec/NoExpectationExample
         when_i_am_viewing_home_page
         and_i_view_an_existing_form
         then_i_edit_the_name_of_the_form

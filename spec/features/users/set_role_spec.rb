@@ -28,13 +28,13 @@ context "when the groups feature is not enabled", feature_groups: false do
       super_admin_user.organisation = gds_org
     end
 
-    it "A trial user sees only forms they have created" do
+    it "A trial user sees only forms they have created" do # rubocop:disable RSpec/NoExpectationExample
       login_as_trial_user
       then_i_can_see_the_trial_user_forms
       then_i_cannot_see_the_org_forms
     end
 
-    it "A trial user's forms move to their organisation on role upgrade" do
+    it "A trial user's forms move to their organisation on role upgrade" do # rubocop:disable RSpec/NoExpectationExample
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms?organisation_id=1", headers, (org_forms + trial_forms).to_json, 200
         mock.patch "/api/v1/forms/update-organisation-for-creator?creator_id=2&organisation_id=1", post_headers, nil, 204

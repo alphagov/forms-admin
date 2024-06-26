@@ -22,7 +22,7 @@ context "when the groups feature is not enabled", feature_groups: false do
       end
     end
 
-    it "a trial user can request an upgrade when they declare they meet the requirements" do
+    it "a trial user can request an upgrade when they declare they meet the requirements" do # rubocop:disable RSpec/NoExpectationExample
       login_as trial_user
       then_i_can_see_trial_account_banner
       then_i_can_navigate_to_the_upgrade_page
@@ -31,7 +31,7 @@ context "when the groups feature is not enabled", feature_groups: false do
       then_i_can_see_request_sent_banner
     end
 
-    it "a trial user cannot request an upgrade when they do not declare they meet the requirements" do
+    it "a trial user cannot request an upgrade when they do not declare they meet the requirements" do # rubocop:disable RSpec/NoExpectationExample
       login_as trial_user
       visit_upgrade_page
       submit_request

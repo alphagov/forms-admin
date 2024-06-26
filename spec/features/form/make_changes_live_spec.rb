@@ -27,7 +27,7 @@ feature "Make changes live", type: :feature do
       Membership.create!(user:, group:, added_by: user, role: :group_admin)
     end
 
-    scenario "Form creator makes changes after making form live" do
+    scenario "Form creator makes changes after making form live" do # rubocop:disable RSpec/NoExpectationExample
       given_i_am_viewing_a_live_form
       when_i_click_create_a_draft
       then_i_see_the_page_to_edit_the_draft
@@ -39,7 +39,7 @@ feature "Make changes live", type: :feature do
   end
 
   context "when the form is not in a group" do
-    scenario "Form creator makes changes after making form live" do
+    scenario "Form creator makes changes after making form live" do # rubocop:disable RSpec/NoExpectationExample
       given_i_am_viewing_a_live_form
       when_i_click_create_a_draft
       then_i_see_the_page_to_edit_the_draft

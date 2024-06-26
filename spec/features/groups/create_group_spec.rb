@@ -5,7 +5,7 @@ feature "Create a new group", type: :feature do
     login_as_editor_user
   end
 
-  scenario "Form creator creates a new group" do
+  scenario "Form creator creates a new group" do # rubocop:disable RSpec/NoExpectationExample
     when_i_visit_the_groups_page
     and_i_click_create_a_group
     and_i_fill_in_the_group_name

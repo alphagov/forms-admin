@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "Sign an MOU for my organisation", type: :feature do
-  it "a logged in user can sign an MOU" do
+  it "a logged in user can sign an MOU" do # rubocop:disable RSpec/NoExpectationExample
     login_as_trial_user
     when_i_visit_the_mou_page
     then_i_agree_and_submit_the_mou

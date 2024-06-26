@@ -19,14 +19,14 @@ feature "View forms", type: :feature do
     login_as_super_admin_user
   end
 
-  scenario "Super admin can use autcomplete to view other org's groups" do
+  scenario "Super admin can use autcomplete to view other org's groups" do # rubocop:disable RSpec/NoExpectationExample
     visit root_path
     when_i_change_the_organisation
     then_i_should_see_the_groups_for_that_organisation
   end
 
   context "when groups feature is disabled", feature_groups: false do
-    scenario "Super admin can use autcomplete to view other org's forms" do
+    scenario "Super admin can use autcomplete to view other org's forms" do # rubocop:disable RSpec/NoExpectationExample
       visit root_path
       when_i_change_the_organisation
       then_i_should_see_the_forms_for_that_organisation

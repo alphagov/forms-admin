@@ -18,7 +18,7 @@ describe "Check which MOUs have been signed", type: :feature do
     login_as_super_admin_user
   end
 
-  it "super_admin's can see the MOUs page" do
+  it "super_admin's can see the MOUs page" do # rubocop:disable RSpec/NoExpectationExample
     then_i_click_on_the_mou_link
     then_i_can_see_the_mou_page
     then_i_can_see_the_mou_list

@@ -10,7 +10,7 @@ describe "Login to the service", type: :feature do
     allow(Settings).to receive(:auth_provider).and_return("developer")
   end
 
-  scenario "an unauthenticated user gets redirected through the auth journey" do
+  scenario "an unauthenticated user gets redirected through the auth journey" do # rubocop:disable RSpec/NoExpectationExample
     when_i_visit_the_homepage
     then_i_am_redirected_to_the_developer_login_page
     when_i_enter_an_email_address_and_click_login
@@ -18,7 +18,7 @@ describe "Login to the service", type: :feature do
   end
 
   context "when the groups feature is not enabled", feature_groups: false do
-    scenario "an unauthenticated user gets redirected through the auth journey" do
+    scenario "an unauthenticated user gets redirected through the auth journey" do # rubocop:disable RSpec/NoExpectationExample
       when_i_visit_the_homepage
       then_i_am_redirected_to_the_developer_login_page
       when_i_enter_an_email_address_and_click_login

@@ -24,7 +24,7 @@ feature "Editing answer_settings for existing question", type: :feature do
     let(:text_question) { build(:page, :with_text_settings, form_id: 1, input_type: "long_text") }
     let(:pages) { [address_question, date_question, name_question, selection_question, text_question] }
 
-    scenario "view answer_settings for each answer type and check the values are set" do
+    scenario "view answer_settings for each answer type and check the values are set" do # rubocop:disable RSpec/NoExpectationExample
       when_i_viewing_an_existing_form
       and_i_view_a_list_of_existing_questions
 

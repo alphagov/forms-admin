@@ -11,7 +11,7 @@ feature "Set or change a user's organisation", type: :feature do
     login_as_super_admin_user
   end
 
-  scenario "Super admin can change a user's organisation" do
+  scenario "Super admin can change a user's organisation" do # rubocop:disable RSpec/NoExpectationExample
     given_i_am_viewing_the_users_page
     and_i_choose_a_user_to_edit
     when_i_change_the_users_organisation

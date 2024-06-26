@@ -19,7 +19,7 @@ feature "Add/editing a single question", type: :feature do
     let(:pages) { [] }
     let(:answer_types) { %w[organisation_name email phone_number national_insurance_number address date selection number text] }
 
-    scenario "add a question for each type of answer" do
+    scenario "add a question for each type of answer" do # rubocop:disable RSpec/NoExpectationExample
       answer_types.each do |answer_type|
         when_i_viewing_an_existing_form
         and_i_want_to_create_or_edit_a_page
@@ -39,7 +39,7 @@ feature "Add/editing a single question", type: :feature do
     end
     let(:answer_types) { %w[organisation_name email phone_number national_insurance_number address date selection number text] }
 
-    scenario "add a question for each type of answer" do
+    scenario "add a question for each type of answer" do # rubocop:disable RSpec/NoExpectationExample
       answer_types.each do |answer_type|
         when_i_viewing_an_existing_form
         and_i_want_to_create_or_edit_a_page
