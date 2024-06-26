@@ -43,6 +43,13 @@ def move_forms(form_ids, group_id)
     end
 
     group_form.update!(group:)
+
+    next unless form.organisation && form.organisation != group.organisation
+
+    Rails.logger.info "forms:move: updating #{fmt_form(form)} organisation from #{form.organisation.name} to #{group.organisation.name}"
+
+    form.organisation_id = group.organisation_id
+    form.save!
   end
 end
 
