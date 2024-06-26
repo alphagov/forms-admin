@@ -34,14 +34,22 @@ def move_forms(form_ids, group_id)
     group_form = GroupForm.find_or_initialize_by(form_id:)
 
     if group_form.group == group
-      Rails.logger.info "forms:move: keeping form #{form_id} (#{form.name}) in group #{group_id} (#{group.name})"
+      Rails.logger.info "forms:move: keeping form #{fmt_form(form)} in #{fmt_group(group)}"
       next
     elsif group_form.persisted?
-      Rails.logger.info "forms:move: moving form #{form_id} (#{form.name}) to group #{group_id} (#{group.name})"
+      Rails.logger.info "forms:move: moving #{fmt_form(form)} from #{fmt_group(group_form.group)} to #{fmt_group(group)}"
     else
-      Rails.logger.info "forms:move: adding form #{form_id} (#{form.name}) to group #{group_id} (#{group.name})"
+      Rails.logger.info "forms:move: adding #{fmt_form(form)} to #{fmt_group(group)}"
     end
 
     group_form.update!(group:)
   end
+end
+
+def fmt_form(form)
+  "form #{form.id} (\"#{form.name}\")"
+end
+
+def fmt_group(group)
+  "group #{group.id} (\"#{group.name}\", #{group.organisation.name}, #{group.creator.name})"
 end
