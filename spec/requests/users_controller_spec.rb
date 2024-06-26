@@ -58,7 +58,7 @@ RSpec.describe UsersController, type: :request do
         get users_path
       end
 
-      it "sorts users by organisation, access, role, and name " do
+      it "sorts users by organisation, access, role, and name" do
         assigns[:users].each_cons(2) do |user, next_user|
           if user.organisation.name == next_user.organisation.name
             if user.has_access == next_user.has_access
@@ -151,7 +151,7 @@ RSpec.describe UsersController, type: :request do
         put user_path(user), params: { user: { role: nil } }
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to include "Select a role for the user"
-        expect(user.reload.role).not_to eq(nil)
+        expect(user.reload.role).not_to be_nil
       end
 
       context "when user has a name" do
@@ -159,7 +159,7 @@ RSpec.describe UsersController, type: :request do
           put user_path(user), params: { user: { name: nil } }
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response.body).to include "Enter the user’s name"
-          expect(user.reload.organisation).not_to eq(nil)
+          expect(user.reload.organisation).not_to be_nil
         end
       end
 
@@ -168,7 +168,7 @@ RSpec.describe UsersController, type: :request do
           put user_path(user), params: { user: { organisation_id: nil } }
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response.body).to include "Select the user’s organisation"
-          expect(user.reload.organisation).not_to eq(nil)
+          expect(user.reload.organisation).not_to be_nil
         end
       end
 
@@ -178,7 +178,7 @@ RSpec.describe UsersController, type: :request do
         it "does not return error if name is not chosen and role is not changed" do
           put user_path(user), params: { user: { role: "trial", name: nil } }
           expect(response).to redirect_to(users_path)
-          expect(user.reload.name).to eq(nil)
+          expect(user.reload.name).to be_nil
         end
 
         it "returns an error if name is not chosen and role is changed to editor" do
@@ -194,7 +194,7 @@ RSpec.describe UsersController, type: :request do
         it "does not return error if organisation is not chosen and role is not changed" do
           put user_path(user), params: { user: { role: "trial", organisation_id: nil } }
           expect(response).to redirect_to(users_path)
-          expect(user.reload.organisation).to eq(nil)
+          expect(user.reload.organisation).to be_nil
         end
 
         it "returns an error if organisation is not chosen and role is changed to editor" do
@@ -210,7 +210,7 @@ RSpec.describe UsersController, type: :request do
         it "does not return error if name is not chosen" do
           put user_path(user), params: { user: { name: nil } }
           expect(response).to redirect_to(users_path)
-          expect(user.reload.name).to eq(nil)
+          expect(user.reload.name).to be_nil
         end
       end
 
@@ -224,7 +224,7 @@ RSpec.describe UsersController, type: :request do
           it "does not return error if organisation is not chosen" do
             put user_path(user), params: { user: { organisation_id: nil } }
             expect(response).to redirect_to(users_path)
-            expect(user.reload.organisation).to eq(nil)
+            expect(user.reload.organisation).to be_nil
           end
         end
       end

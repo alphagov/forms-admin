@@ -72,7 +72,7 @@ RSpec.describe Pages::SelectionsSettingsInput, type: :model do
       }
 
       expect(selections_settings_input.draft_question.answer_settings).to include(expected_settings)
-      expect(selections_settings_input.draft_question.is_optional).to eq(true)
+      expect(selections_settings_input.draft_question.is_optional).to be(true)
     end
   end
 

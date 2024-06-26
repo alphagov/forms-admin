@@ -116,7 +116,7 @@ describe PageOptionsService do
       end
     end
 
-    context "with selection not only_one_option " do
+    context "with selection not only_one_option" do
       let(:page) do
         build :page,
               is_optional: "false",

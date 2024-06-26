@@ -25,7 +25,7 @@ describe GroupMemberInput do
       expect(group_member_input.errors[:member_email_address]).to include(error_message)
     end
 
-    it "is invalid with a invalid email address " do
+    it "is invalid with a invalid email address" do
       group_member_input.member_email_address = "this isn't an email address"
       error_message = I18n.t("activemodel.errors.models.group_member_input.attributes.member_email_address.invalid_email")
       expect(group_member_input).not_to be_valid

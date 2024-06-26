@@ -106,7 +106,7 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
       it "does not create a new form" do
         expect {
           post group_forms_url(group), params: { forms_name_input: invalid_attributes }
-        }.to change(GroupForm, :count).by(0)
+        }.not_to change(GroupForm, :count)
 
         expect(ActiveResource::HttpMock.requests).to be_empty
       end

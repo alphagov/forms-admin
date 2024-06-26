@@ -36,7 +36,7 @@ describe "forms/show.html.erb" do
     expect(rendered).to have_selector(".app-task-list__summary", text: "You’ve completed 12 of 20 tasks.")
   end
 
-  it "rendered draft tag " do
+  it "rendered draft tag" do
     expect(rendered).to have_css(".govuk-tag.govuk-tag--yellow", text: "Draft")
   end
 
