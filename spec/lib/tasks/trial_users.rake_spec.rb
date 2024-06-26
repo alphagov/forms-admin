@@ -14,7 +14,18 @@ RSpec.describe "trial_users.rake" do
         .tap(&:reenable) # make sure task is invoked every time
     end
 
+    let(:summarizer_double) { instance_double(Summarizer) }
+
     it "runs" do
+      expect { task.invoke }.not_to raise_error
+    end
+
+    it "calls summarize" do
+      allow(Summarizer).to receive(:new).and_return(summarizer_double)
+      allow(summarizer_double).to receive(:summarize)
+
+      task.invoke
+      expect(summarizer_double).to have_received(:summarize).once
     end
   end
 
