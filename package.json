@@ -20,7 +20,7 @@
     "dev": "vite dev"
   },
   "devDependencies": {
-    "@testing-library/dom": "^10.1.0",
+    "@testing-library/dom": "^10.2.0",
     "autoprefixer": "^10.4.19",
     "cssnano": "^7.0.3",
     "postcss": "^8.4.38",
