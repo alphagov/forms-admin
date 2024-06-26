@@ -63,9 +63,9 @@ RSpec.describe "default_groups.rake" do
 
       expect {
         task.invoke
-      }.to change(Group, :count).by(0)
-        .and change(Membership, :count).by(0)
-        .and change(GroupForm, :count).by(0)
+      }.to not_change(Group, :count)
+        .and not_change(Membership, :count)
+        .and not_change(GroupForm, :count)
     end
 
     context "when the organisation has no users" do
@@ -174,9 +174,9 @@ RSpec.describe "default_groups.rake" do
 
       expect {
         task.invoke
-      }.to change(Group, :count).by(0)
-        .and change(Membership, :count).by(0)
-        .and change(GroupForm, :count).by(0)
+      }.to not_change(Group, :count)
+        .and not_change(Membership, :count)
+        .and not_change(GroupForm, :count)
     end
 
     context "when the user has no forms" do
