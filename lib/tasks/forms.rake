@@ -51,5 +51,5 @@ def fmt_form(form)
 end
 
 def fmt_group(group)
-  "group #{group.id} (\"#{group.name}\", #{group.organisation.name}, #{group.creator.name})"
+  "group #{group.id} (\"#{group.name}\", #{group.organisation.name}, #{group.creator&.name || 'GOV.UK Forms Team'})"
 end
