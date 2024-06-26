@@ -10,13 +10,13 @@ RSpec.describe GroupService do
   let(:host) { "example.net" }
 
   describe "#upgrade_group" do
-    let(:group_admin_user1) { create :user }
-    let(:group_admin_user2) { create :user }
+    let(:first_group_admin_user) { create :user }
+    let(:second_group_admin_user) { create :user }
     let(:editor_user) { create :user }
     let(:group) do
       create(:group).tap do |group|
-        create(:membership, user: group_admin_user1, group:, role: :group_admin)
-        create(:membership, user: group_admin_user2, group:, role: :group_admin)
+        create(:membership, user: first_group_admin_user, group:, role: :group_admin)
+        create(:membership, user: second_group_admin_user, group:, role: :group_admin)
         create(:membership, user: editor_user, group:, role: :editor)
         create(:membership, user: current_user, group:, role: :group_admin)
       end
@@ -38,13 +38,13 @@ RSpec.describe GroupService do
       group_service.upgrade_group
       expect(delivery).to have_received(:deliver_now).with(no_args).exactly(2).times
       expect(GroupUpgradeMailer).to have_received(:upgraded_email).with(
-        to_email: group_admin_user1.email,
+        to_email: first_group_admin_user.email,
         upgraded_by_name: current_user.name,
         group_name: group.name,
         group_url: group_url(group, host:),
       )
       expect(GroupUpgradeMailer).to have_received(:upgraded_email).with(
-        to_email: group_admin_user2.email,
+        to_email: second_group_admin_user.email,
         upgraded_by_name: current_user.name,
         group_name: group.name,
         group_url: group_url(group, host:),
@@ -63,13 +63,13 @@ RSpec.describe GroupService do
   end
 
   describe "#reject_upgrade" do
-    let(:group_admin_user1) { create :user }
-    let(:group_admin_user2) { create :user }
+    let(:first_group_admin_user) { create :user }
+    let(:second_group_admin_user) { create :user }
     let(:editor_user) { create :user }
     let(:group) do
       create(:group, status: :upgrade_requested).tap do |group|
-        create(:membership, user: group_admin_user1, group:, role: :group_admin)
-        create(:membership, user: group_admin_user2, group:, role: :group_admin)
+        create(:membership, user: first_group_admin_user, group:, role: :group_admin)
+        create(:membership, user: second_group_admin_user, group:, role: :group_admin)
         create(:membership, user: editor_user, group:, role: :editor)
         create(:membership, user: current_user, group:, role: :group_admin)
       end
@@ -91,14 +91,14 @@ RSpec.describe GroupService do
       group_service.reject_upgrade
       expect(delivery).to have_received(:deliver_now).with(no_args).exactly(2).times
       expect(GroupUpgradeMailer).to have_received(:rejected_email).with(
-        to_email: group_admin_user1.email,
+        to_email: first_group_admin_user.email,
         rejected_by_name: current_user.name,
         rejected_by_email: current_user.email,
         group_name: group.name,
         group_url: group_url(group, host:),
       )
       expect(GroupUpgradeMailer).to have_received(:rejected_email).with(
-        to_email: group_admin_user2.email,
+        to_email: second_group_admin_user.email,
         rejected_by_name: current_user.name,
         rejected_by_email: current_user.email,
         group_name: group.name,
@@ -119,8 +119,8 @@ RSpec.describe GroupService do
   end
 
   describe "#request_upgrade" do
-    let!(:organisation_admin_user1) { create :organisation_admin_user }
-    let!(:organisation_admin_user2) { create :organisation_admin_user }
+    let!(:first_organisation_admin_user) { create :organisation_admin_user }
+    let!(:second_organisation_admin_user) { create :organisation_admin_user }
     let(:editor_user) { create :user }
     let(:group) do
       create(:group).tap do |group|
@@ -149,7 +149,7 @@ RSpec.describe GroupService do
 
     it "sends an email to all organisation admins" do
       expect(GroupUpgradeMailer).to receive(:requested_email).with(
-        to_email: organisation_admin_user1.email,
+        to_email: first_organisation_admin_user.email,
         requester_name: current_user.name,
         requester_email_address: current_user.email,
         group_name: group.name,
@@ -157,7 +157,7 @@ RSpec.describe GroupService do
       )
 
       expect(GroupUpgradeMailer).to receive(:requested_email).with(
-        to_email: organisation_admin_user2.email,
+        to_email: second_organisation_admin_user.email,
         requester_name: current_user.name,
         requester_email_address: current_user.email,
         group_name: group.name,

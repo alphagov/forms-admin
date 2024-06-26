@@ -3,14 +3,14 @@ require "rails_helper"
 feature "Manage members of group", type: :feature do
   let(:organisation) { editor_user.organisation }
   let(:group) { create(:group, name: "Group 1", organisation:) }
-  let(:user1) { create(:user, organisation:) }
-  let(:user2) { create(:user, organisation:) }
-  let(:user3) { create(:user, organisation:) }
+  let(:existing_editor) { create(:user, organisation:) }
+  let(:existing_group_admin) { create(:user, organisation:) }
+  let(:new_user) { create(:user, organisation:) }
 
   before do
     create(:membership, user: editor_user, group:, role: :group_admin)
-    create(:membership, user: user1, group:, role: :editor)
-    create(:membership, user: user2, group:, role: :group_admin)
+    create(:membership, user: existing_editor, group:, role: :editor)
+    create(:membership, user: existing_group_admin, group:, role: :group_admin)
   end
 
   scenario "group admin adds a new editor" do
@@ -54,7 +54,7 @@ feature "Manage members of group", type: :feature do
   def then_i_should_see_the_members_of_the_group
     expect(page.find("h1")).to have_text "Group 1"
 
-    expect(page).to have_table(with_rows: [[user1.name, user1.email], [user2.name, user2.email]])
+    expect(page).to have_table(with_rows: [[existing_editor.name, existing_editor.email], [existing_group_admin.name, existing_group_admin.email]])
 
     expect_page_to_have_no_axe_errors(page)
   end
@@ -78,12 +78,12 @@ feature "Manage members of group", type: :feature do
   end
 
   def when_i_fill_in_the_add_editor_form
-    fill_in "Enter the email address of the person you want to add", with: user3.email
+    fill_in "Enter the email address of the person you want to add", with: new_user.email
     click_button "Add this person"
   end
 
   def when_i_fill_in_the_add_group_admin_form
-    fill_in "Enter the email address of the person you want to add", with: user3.email
+    fill_in "Enter the email address of the person you want to add", with: new_user.email
     choose("Group admin")
     click_button "Add this person"
   end
@@ -91,17 +91,17 @@ feature "Manage members of group", type: :feature do
   def then_i_should_see_the_new_group_admin
     expect(page.find("h1")).to have_text "Group 1"
 
-    expect(page).to have_table(with_rows: [[user3.email, "Group admin"]])
+    expect(page).to have_table(with_rows: [[new_user.email, "Group admin"]])
   end
 
   def then_i_should_see_the_user_as_editor
     expect(page.find("h1")).to have_text "Group 1"
 
-    expect(page).to have_table(with_rows: [[user3.email, "Editor"]])
+    expect(page).to have_table(with_rows: [[new_user.email, "Editor"]])
   end
 
   def when_i_click_make_editor_for_user
-    within(:table_row, [user3.email]) do
+    within(:table_row, [new_user.email]) do
       click_button "Make editor"
     end
   end

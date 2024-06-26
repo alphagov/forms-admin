@@ -12,11 +12,10 @@ RSpec.describe ErrorSummaryComponent::View, type: :component do
   end
 
   context "when given an array of errors" do
-    let(:error1) { OpenStruct.new(message: "You have an error", link: "https://example.gov.uk/error1") }
-    let(:error2) { OpenStruct.new(message: "You have another error", link: "https://example.gov.uk/error2") }
+    let(:errors) { [OpenStruct.new(message: "You have an error", link: "https://example.gov.uk/error1"), OpenStruct.new(message: "You have another error", link: "https://example.gov.uk/error2")] }
 
     before do
-      render_inline(described_class.new(errors: [error1, error2]))
+      render_inline(described_class.new(errors:))
     end
 
     it "renders the heading" do
@@ -24,8 +23,8 @@ RSpec.describe ErrorSummaryComponent::View, type: :component do
     end
 
     it "renders the error links" do
-      expect(page).to have_link(error1.message, href: error1.link)
-      expect(page).to have_link(error2.message, href: error2.link)
+      expect(page).to have_link(errors.first.message, href: errors.first.link)
+      expect(page).to have_link(errors.second.message, href: errors.second.link)
     end
   end
 end
