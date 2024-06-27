@@ -48,7 +48,7 @@ RSpec.describe MetricsSummaryComponent::View, type: :component do
 
   describe "#calculate_percentage" do
     it "returns nil if the total argument is zero" do
-      expect(metrics_summary.calculate_percentage(168, 0)).to eq(nil)
+      expect(metrics_summary.calculate_percentage(168, 0)).to be_nil
     end
 
     it "returns the percentage rounded to the nearest integer" do

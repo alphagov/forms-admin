@@ -18,7 +18,7 @@ describe PageSummaryCardDataService do
       expect(service.build_data[:card][:title]).to eq page.question_text
     end
 
-    it "includes an array of rows " do
+    it "includes an array of rows" do
       expect(service.build_data[:rows]).to eq [1, 2]
     end
 

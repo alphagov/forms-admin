@@ -79,7 +79,7 @@ RSpec.describe Pages::GuidanceInput, type: :model do
   describe "#submit" do
     it "returns false if the form is invalid" do
       allow(guidance_input).to receive(:invalid?).and_return(true)
-      expect(guidance_input.submit).to eq false
+      expect(guidance_input.submit).to be false
     end
 
     context "when page_heading and guidance_markdown are valid" do

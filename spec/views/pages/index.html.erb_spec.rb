@@ -7,12 +7,14 @@ describe "pages/index.html.erb" do
   before do
     # mock the path helper
     without_partial_double_verification do
-      allow(view).to receive(:form_path).and_return("/forms/1")
-      allow(view).to receive(:type_of_answer_new_path).and_return("/forms/1/pages/new/type-of-answer")
-      allow(view).to receive(:edit_question_path).and_return("/forms/1/pages/2/edit/question")
-      allow(view).to receive(:form_pages_path).and_return("/forms/1/pages")
-      allow(view).to receive(:routing_page_path).and_return("/forms/1/new-condition")
-      allow(view).to receive(:current_form).and_return(form)
+      allow(view).to receive_messages(
+        form_path: "/forms/1",
+        type_of_answer_new_path: "/forms/1/pages/new/type-of-answer",
+        edit_question_path: "/forms/1/pages/2/edit/question",
+        form_pages_path: "/forms/1/pages",
+        routing_page_path: "/forms/1/new-condition",
+        current_form: form,
+      )
     end
     assign(:pages, pages)
     render template: "pages/index"

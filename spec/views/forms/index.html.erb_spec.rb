@@ -128,7 +128,7 @@ describe "forms/index.html.erb" do
       end
     end
 
-    context "and a user gets upgraded to the editor role", versioning: true do
+    context "and a user gets upgraded to the editor role", :versioning do
       let(:user) { create :user, role: :trial }
 
       it "displays a banner informing the user they have now have the editor role" do

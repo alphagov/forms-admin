@@ -310,7 +310,7 @@ RSpec.describe "/groups", type: :request do
       it "does not create a new Group" do
         expect {
           post groups_url, params: { group: invalid_attributes }
-        }.to change(Group, :count).by(0)
+        }.not_to change(Group, :count)
       end
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do

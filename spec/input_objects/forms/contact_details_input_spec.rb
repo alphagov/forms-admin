@@ -227,7 +227,7 @@ RSpec.describe Forms::ContactDetailsInput, type: :model do
       end
 
       it "returns false" do
-        expect(contact_details_input.submit).to eq false
+        expect(contact_details_input.submit).to be false
       end
 
       it "does not save form" do
@@ -244,7 +244,7 @@ RSpec.describe Forms::ContactDetailsInput, type: :model do
       end
 
       it "not be false" do
-        expect(contact_details_input.submit).to eq(true)
+        expect(contact_details_input.submit).to be(true)
       end
 
       it "saves the form" do

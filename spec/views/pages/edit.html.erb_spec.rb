@@ -21,8 +21,7 @@ describe "pages/edit.html.erb" do
     # If models aren't persisted, they won't work with form builders correctly
     without_partial_double_verification do
       allow(form).to receive(:persisted?).and_return(true)
-      allow(view).to receive(:current_form).and_return(form)
-      allow(view).to receive(:draft_question).and_return(draft_question)
+      allow(view).to receive_messages(current_form: form, draft_question:)
     end
 
     # Assign instance variables so they can be accessed from views

@@ -17,8 +17,7 @@ describe "pages/selections_settings.html.erb", type: :view do
 
     # # mock the path helper
     without_partial_double_verification do
-      allow(view).to receive(:form_pages_path).and_return("/type-of-answer")
-      allow(view).to receive(:current_form).and_return(form)
+      allow(view).to receive_messages(form_pages_path: "/type-of-answer", current_form: form)
     end
 
     # # setup instance variables

@@ -45,7 +45,7 @@ describe Form, type: :model do
       let(:completed_form) { build :form, :live }
 
       it "returns true" do
-        expect(completed_form.ready_for_live?).to eq true
+        expect(completed_form.ready_for_live?).to be true
       end
     end
 
@@ -54,7 +54,7 @@ describe Form, type: :model do
 
       it "returns false" do
         new_form.pages = []
-        expect(new_form.ready_for_live?).to eq false
+        expect(new_form.ready_for_live?).to be false
       end
     end
   end
@@ -188,14 +188,14 @@ describe Form, type: :model do
     let(:form) { build :form, pages: selection_pages_with_routes }
 
     it "returns true if no available routes" do
-      expect(form.has_no_remaining_routes_available?).to eq true
+      expect(form.has_no_remaining_routes_available?).to be true
     end
 
     context "when there is at least one selection page with no route" do
       let(:form) { build :form, pages: selection_pages_with_routes + selection_pages_without_routes }
 
       it "returns false" do
-        expect(form.has_no_remaining_routes_available?).to eq false
+        expect(form.has_no_remaining_routes_available?).to be false
       end
     end
   end
@@ -226,14 +226,14 @@ describe Form, type: :model do
 
         described_class.update_organisation_for_creator(*params)
 
-        expect(ActiveResource::HttpMock.requests).to match_array([])
+        expect(ActiveResource::HttpMock.requests).to be_empty
       end
     end
   end
 
   describe "#made_live_date" do
     it "returns nil" do
-      expect(form.made_live_date).to eq(nil)
+      expect(form.made_live_date).to be_nil
     end
 
     context "when the form is live" do
@@ -256,8 +256,7 @@ describe Form, type: :model do
       end
 
       before do
-        allow(CloudWatchService).to receive(:week_submissions).and_return(0)
-        allow(CloudWatchService).to receive(:week_starts).and_return(0)
+        allow(CloudWatchService).to receive_messages(week_submissions: 0, week_starts: 0)
       end
 
       it "returns 0 weekly submissions" do
@@ -273,8 +272,7 @@ describe Form, type: :model do
 
     context "when the form was made before today" do
       before do
-        allow(CloudWatchService).to receive(:week_submissions).and_return(1255)
-        allow(CloudWatchService).to receive(:week_starts).and_return(1991)
+        allow(CloudWatchService).to receive_messages(week_submissions: 1255, week_starts: 1991)
       end
 
       it "returns the correct number of weekly starts and submissions" do
@@ -296,7 +294,7 @@ describe Form, type: :model do
       end
 
       it "returns nil and logs the exception in Sentry" do
-        expect(form.metrics_data).to eq(nil)
+        expect(form.metrics_data).to be_nil
         expect(Sentry).to have_received(:capture_exception).once
       end
     end
@@ -309,7 +307,7 @@ describe Form, type: :model do
       end
 
       it "returns nil and logs the exception in Sentry" do
-        expect(form.metrics_data).to eq(nil)
+        expect(form.metrics_data).to be_nil
         expect(Sentry).to have_received(:capture_exception).once
       end
     end
@@ -320,7 +318,7 @@ describe Form, type: :model do
       end
 
       it "returns nil" do
-        expect(form.metrics_data).to eq(nil)
+        expect(form.metrics_data).to be_nil
       end
     end
   end

@@ -12,7 +12,7 @@ describe EmailTaskStatusService do
       let(:form) { build(:form, :new_form) }
 
       it "returns false" do
-        expect(email_task_status_service.ready_for_live?).to eq false
+        expect(email_task_status_service.ready_for_live?).to be false
       end
     end
 
@@ -20,7 +20,7 @@ describe EmailTaskStatusService do
       let(:form) { build(:form, :ready_for_live) }
 
       it "returns true" do
-        expect(email_task_status_service.ready_for_live?).to eq true
+        expect(email_task_status_service.ready_for_live?).to be true
       end
     end
   end

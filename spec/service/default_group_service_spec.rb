@@ -78,7 +78,7 @@ RSpec.describe DefaultGroupService do
 
       context "when the user already has a group" do
         context "and the group status is 'trial'" do
-          it "does not create a group " do
+          it "does not create a group" do
             group = create :group, creator: user, organisation: user.organisation, name: "Batman’s trial group", status: :trial
 
             expect {
