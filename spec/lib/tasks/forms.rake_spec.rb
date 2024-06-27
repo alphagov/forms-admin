@@ -23,6 +23,7 @@ RSpec.describe "forms.rake" do
       ActiveResource::HttpMock.respond_to do |mock|
         forms.each do |form|
           mock.get "/api/v1/forms/#{form.id}", headers, form.to_json, 200
+          mock.put "/api/v1/forms/#{form.id}", put_headers
         end
       end
     end
@@ -75,6 +76,42 @@ RSpec.describe "forms.rake" do
 
           expect(GroupForm.find_by(form_id:))
             .to eq(GroupForm.new(form_id:, group:))
+        end
+      end
+
+      context "with a single form" do
+        let(:form) { build :form, id: 10, organisation_id: form_organisation&.id }
+        let(:forms) { [form] }
+
+        before do
+          task.invoke(form.id, group.external_id)
+        end
+
+        context "and not in an organisation" do
+          let(:form_organisation) { nil }
+
+          it "does not change the form's organisation" do
+            form.organisation_id = group.organisation_id
+            expect(form).not_to have_been_updated
+          end
+        end
+
+        context "and in the same organisation as the group" do
+          let(:form_organisation) { group.organisation }
+
+          it "does not change the form's organisation" do
+            form.organisation_id = group.organisation_id
+            expect(form).not_to have_been_updated
+          end
+        end
+
+        context "and in a different organisation to the group" do
+          let(:form_organisation) { create :organisation, slug: "other-org" }
+
+          it "changes the form's organisation" do
+            form.organisation_id = group.organisation_id
+            expect(form).to have_been_updated
+          end
         end
       end
 
