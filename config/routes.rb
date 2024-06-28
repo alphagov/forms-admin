@@ -137,6 +137,9 @@ Rails.application.routes.draw do
     get "/requested", to: "user_upgrade_requests#confirmation", as: :confirmation
   end
 
+  get '/users/masquerade/:user_id', to: 'masquerades#show', as: :user_masquerade
+  get '/users/masquerade_stop', to: 'masquerades#stop', as: :user_masquerade_stop
+
   namespace :account do
     resource :name, only: %i[edit update]
     resource :organisation, only: %i[edit update]

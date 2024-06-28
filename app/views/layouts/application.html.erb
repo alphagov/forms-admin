@@ -14,6 +14,13 @@
       <%= t("phase_banner.after_link") %>
     <% end %>
     <%= yield :back_link %>
+    <% if @current_user.present? && session[:masquerading_user_id].nil? %>
+      <%= @current_user.name || 'Unnamed user' %> [<%= @current_user.id %>] (<%= @current_user.role %>) is logged on.
+    <% end %>
+    <% if session[:masquerading_user_id].present? %>
+      <%= User.find(session[:original_user_id]).name || 'Unnamed super admin' %> [<%= session[:original_user_id] %>] is masquerading as user <%= User.find(session[:masquerading_user_id]).name %> &lt;<%= User.find(session[:masquerading_user_id]).email %>&gt; (<%= @current_user.role %>) |
+      <%= govuk_link_to 'Stop masquerading', user_masquerade_stop_path %>
+    <% end %>
 <% end %>
 
 <% content_for :footer do %>

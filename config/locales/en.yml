@@ -1206,6 +1206,7 @@ en:
       name_blank: No name set
       organisation_blank: No organisation set
       table_headings:
+        actions: Masquerade
         access: Access
         email: Email address
         name: Name

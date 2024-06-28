@@ -99,7 +99,31 @@ class ApplicationController < ActionController::Base
     @groups_enabled ||= current_user.present? && FeatureService.new(current_user).enabled?(:groups)
   end
 
+
 private
+
+  def masquerade_as(user)
+    warden.set_user(user, scope: :user)
+    session[:masquerading_user_id] = user.id
+    session[:original_user_id] = current_user.id
+    @current_user = user
+    @groups_enabled = FeatureService.new(@current_user).enabled?(:groups)
+    redirect_to root_path
+  end
+
+  def stop_masquerading
+    redirect_to root_path unless session[:masquerading_user_id].present?
+
+    original_user = User.find_by(id: session[:original_user_id])
+    redirect_to root_path unless original_user.present?
+
+    warden.set_user(original_user, scope: :user)
+    @current_user = original_user
+    @groups_enabled = FeatureService.new(@current_user).enabled?(:groups)
+    session[:masquerading_user_id] = nil
+    session[:original_user_id] = nil
+    redirect_to root_path
+  end
 
   def authenticate_and_check_access
     authenticate_user!
@@ -107,6 +131,11 @@ private
     # check access
     unless @current_user.has_access? && auth_strategy_permitted?
       render "errors/access_denied", status: :forbidden, formats: :html
+    end
+
+    # Check if currently masquerading
+    if session[:masquerading_user_id].present?
+      @current_user = User.find(session[:masquerading_user_id])
     end
   end
 
