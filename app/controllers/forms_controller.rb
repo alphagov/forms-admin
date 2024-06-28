@@ -1,16 +1,5 @@
 class FormsController < ApplicationController
-  after_action :verify_authorized, except: :index
-  after_action :verify_policy_scoped, only: :index
-
-  def index
-    if @current_user.super_admin?
-      @search_input = OrganisationSearchInput.new({ organisation_id: @current_user.organisation_id }.merge(search_params))
-
-      @forms = policy_scope(Form).where(organisation_id: @search_input.organisation_id) || []
-    else
-      @forms = policy_scope(Form) || []
-    end
-  end
+  after_action :verify_authorized
 
   def show
     authorize current_form, :can_view_form?

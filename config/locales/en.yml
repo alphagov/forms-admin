@@ -644,11 +644,7 @@ en:
     form_name_heading: Form name
     form_status_heading: Status
     form_table_caption: "%{organisation_name} forms"
-    main_heading: GOV.UK Forms
-    organisation_hint: Change which organisation’s forms you’re viewing
-    organisation_prompt: Select an organisation
     preview: Preview this form
-    search_input_label: You’re viewing %{organisation_name} forms
     your_forms: Your forms
   internal_server_error:
     body: Please try again later.
@@ -912,7 +908,6 @@ en:
     group_review_upgrade: Upgrade this group
     group_upgrade: Upgrade this group
     group_upgrade_requested: Your upgrade request has been sent
-    home: Home
     internal_server_error: Sorry, there is a problem with the service
     maintenance: Sorry, the service is unavailable
     make_archived_draft_live: Make your form live again
