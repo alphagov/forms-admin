@@ -103,20 +103,6 @@ class User < ApplicationRecord
     mou_signatures.find_by(organisation:)
   end
 
-  def role_changed_to_editor?
-    return false unless editor?
-
-    last_version = !versions.empty? && versions.last.reify
-    return false unless last_version
-
-    role_changed_to_editor = last_version.role != "editor"
-    if role_changed_to_editor
-      self.paper_trail_event = "Role upgrade reported"
-      paper_trail.save_with_version
-    end
-    role_changed_to_editor
-  end
-
   def is_organisations_admin?(org)
     organisation_admin? && organisation == org
   end

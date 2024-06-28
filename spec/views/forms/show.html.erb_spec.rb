@@ -113,20 +113,4 @@ describe "forms/show.html.erb" do
       expect(rendered).not_to have_link("Delete draft form", href: delete_form_path(2))
     end
   end
-
-  context "and a user has the trial role" do
-    let(:user) { build :user, :with_trial_role }
-
-    it "displays a banner informing the user they have a trial account" do
-      expect(rendered).to have_text(I18n.t("trial_role_warning.heading"))
-    end
-  end
-
-  context "and a user does not have the trial role" do
-    let(:user) { build :editor_user }
-
-    it "does not display a banner" do
-      expect(rendered).not_to have_text(I18n.t("trial_role_warning.heading"))
-    end
-  end
 end

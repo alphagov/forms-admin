@@ -1,33 +1,6 @@
 module Forms
   class ChangeNameController < ApplicationController
-    after_action :verify_authorized, except: :new
-
-    def new
-      @name_input = NameInput.new
-    end
-
-    def create
-      form_args = { name: params[:name], creator_id: @current_user.id }
-
-      # don't set organisation data for forms created by trial users
-      if @current_user.trial?
-        form_args[:submission_email] = @current_user.email
-      else
-        form_args[:organisation_id] = @current_user.organisation_id
-      end
-
-      form = Form.new(form_args)
-
-      authorize form, :can_view_form?
-      @name_input = NameInput.new(name_input_params(form))
-
-      if @name_input.submit
-        FormService.new(form).add_to_default_group!(@current_user)
-        redirect_to form_path(@name_input.form)
-      else
-        render :new
-      end
-    end
+    after_action :verify_authorized
 
     def edit
       authorize current_form, :can_view_form?

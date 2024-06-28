@@ -12,8 +12,6 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render TrialRoleWarningComponent::View.new(link_url: user_upgrade_request_path) if @current_user.trial? %>
-
     <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
       <span class="govuk-caption-l"><%= current_form.name %></span><span class="govuk-visually-hidden"> - </span>
       <%= current_form.state.to_sym == :draft ? t("forms.form_overview.title_create") : t("forms.form_overview.title_edit") %>
