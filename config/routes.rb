@@ -18,9 +18,6 @@ Rails.application.routes.draw do
     match "/callback" => "authentication#callback_from_omniauth", via: %i[get post]
   end
 
-  get "forms/new" => "forms/change_name#new", as: :new_form
-  post "forms/new" => "forms/change_name#create"
-
   scope "forms/:form_id" do
     get "/" => "forms#show", as: :form
     get "/change-name" => "forms/change_name#edit", as: :change_form_name
