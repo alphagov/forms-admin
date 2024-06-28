@@ -25,14 +25,6 @@ feature "View forms", type: :feature do
     then_i_should_see_the_groups_for_that_organisation
   end
 
-  context "when groups feature is disabled", feature_groups: false do
-    scenario "Super admin can use autcomplete to view other org's forms" do
-      visit root_path
-      when_i_change_the_organisation
-      then_i_should_see_the_forms_for_that_organisation
-    end
-  end
-
   def when_i_change_the_organisation
     fill_in "search-organisation-id-field", with: other_org.name.to_s
     page.send_keys :enter
