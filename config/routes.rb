@@ -5,9 +5,6 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "/up" => "rails/health#show", as: :rails_health_check
 
-  # TODO: Remove once infrastructure has been updated to use /up
-  get :ping, controller: :heartbeat
-
   root "homepage#index"
 
   get "/sign-up" => "authentication#sign_up", as: :sign_up
