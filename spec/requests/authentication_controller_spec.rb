@@ -166,7 +166,7 @@ RSpec.describe AuthenticationController, type: :request do
     before do
       login_as user
 
-      get new_form_path # populate the user session
+      get root_path # populate the user session
     end
 
     it "clears the user session" do
