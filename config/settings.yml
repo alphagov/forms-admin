@@ -1,6 +1,6 @@
 # Used to add feature flags in the app to control access to certain features.
 features:
-  groups: false
+  groups: true # Do not switch off!
 
 forms_api:
   # Authentication key to authenticate with forms-api
