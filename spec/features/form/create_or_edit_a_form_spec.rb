@@ -31,23 +31,6 @@ feature "Create or edit a form", type: :feature do
         then_i_should_have_a_draft_form
       end
     end
-
-    context "when the groups feature is not enabled", feature_groups: false do
-      let(:org_forms) { [] }
-
-      before do
-        ActiveResource::HttpMock.respond_to(false) do |mock|
-          mock.get "/api/v1/forms?organisation_id=1", headers, org_forms.to_json, 200
-        end
-      end
-
-      scenario "As a form creator" do
-        when_i_am_viewing_home_page
-        and_i_click_create_a_form
-        and_i_fill_in_the_form_name
-        then_i_should_have_a_draft_form
-      end
-    end
   end
 
   context "when editing an existing form" do
@@ -83,32 +66,9 @@ feature "Create or edit a form", type: :feature do
         and_the_form_name_is_updated
       end
     end
-
-    context "when the groups feature is not enabled", feature_groups: false do
-      let(:org_forms) { [form] }
-
-      before do
-        ActiveResource::HttpMock.respond_to(false) do |mock|
-          mock.get "/api/v1/forms?organisation_id=1", headers, org_forms.to_json, 200
-        end
-      end
-
-      scenario "As a form creator" do
-        when_i_am_viewing_home_page
-        and_i_view_an_existing_form
-        then_i_edit_the_name_of_the_form
-        and_the_form_name_is_updated
-      end
-    end
   end
 
 private
-
-  def when_i_am_viewing_home_page
-    visit root_path
-    expect(page.find("h1")).to have_text "GOV.UK Forms"
-    expect_page_to_have_no_axe_errors(page)
-  end
 
   def when_i_am_viewing_a_group_page
     visit group_path(group)

@@ -21,7 +21,7 @@ describe "Settings" do
   describe ".features" do
     features = settings[:features]
 
-    include_examples expected_value_test, :groups, features, false
+    include_examples expected_value_test, :groups, features, true
   end
 
   describe "forms_api" do
