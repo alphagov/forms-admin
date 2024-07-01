@@ -20,8 +20,13 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
   let(:submit_result) { true }
 
+  let(:group) { create(:group, organisation: editor_user.organisation) }
+  let(:user) { editor_user }
+
   before do
-    login_as_editor_user
+    Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user)
+    GroupForm.create!(form_id: form.id, group_id: group.id)
+    login_as user
   end
 
   describe "#routing_page" do
@@ -66,7 +71,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when user should not be allowed to add routes to pages" do
-      let(:organisation_id) { other_organisation_id }
+      let(:user) { build :editor_user }
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
@@ -219,7 +224,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when user should not be allowed to add routes to pages" do
-      let(:organisation_id) { other_organisation_id }
+      let(:user) { build :editor_user }
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
@@ -282,7 +287,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when user should not be allowed to add routes to pages" do
-      let(:organisation_id) { other_organisation_id }
+      let(:user) { build :editor_user }
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
@@ -325,7 +330,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when user should not be allowed to add routes to pages" do
-      let(:organisation_id) { other_organisation_id }
+      let(:user) { build :editor_user }
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
@@ -408,7 +413,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when user should not be allowed to add routes to pages" do
-      let(:organisation_id) { other_organisation_id }
+      let(:user) { build :editor_user }
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")

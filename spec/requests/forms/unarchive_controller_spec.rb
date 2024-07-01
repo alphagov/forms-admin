@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Forms::UnarchiveController, type: :request do
-  let(:user) { build :editor_user }
+  let(:user) { editor_user }
 
   let(:form) do
     build(:form,
@@ -21,6 +21,7 @@ RSpec.describe Forms::UnarchiveController, type: :request do
           pages: form.pages)
   end
 
+  let(:group) { create(:group, organisation: user.organisation, status: :active) }
   let(:form_params) { nil }
 
   describe "#new" do
@@ -35,6 +36,9 @@ RSpec.describe Forms::UnarchiveController, type: :request do
                                          read: { response: form, status: 200 },
                                          update: { response: updated_form, status: 200 },
                                        })
+
+      Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user, role: :group_admin)
+      GroupForm.create!(form_id: form.id, group_id: group.id)
 
       login_as user
 
@@ -53,8 +57,8 @@ RSpec.describe Forms::UnarchiveController, type: :request do
       expect(response).to render_template("unarchive_form")
     end
 
-    context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role }
+    context "when current user does not belong to the forms group" do
+      let(:user) { build :user }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
@@ -69,6 +73,9 @@ RSpec.describe Forms::UnarchiveController, type: :request do
         mock.get "/api/v1/forms/2", headers, form.to_json, 200
         mock.get "/api/v1/forms/2/live", headers, form.to_json, 200
       end
+
+      Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user, role: :group_admin)
+      GroupForm.create!(form_id: form.id, group_id: group.id)
 
       login_as user
 
@@ -129,8 +136,8 @@ RSpec.describe Forms::UnarchiveController, type: :request do
       end
     end
 
-    context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role }
+    context "when current user does not belong to the forms group" do
+      let(:user) { build :user }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)

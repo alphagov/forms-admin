@@ -18,7 +18,11 @@ describe Pages::SelectionsSettingsController, type: :request do
   end
   let(:page_id) { nil }
 
+  let(:group) { create(:group, organisation: editor_user.organisation) }
+
   before do
+    Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user)
+    GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_editor_user
   end
 

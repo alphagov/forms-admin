@@ -3,6 +3,7 @@ require "rails_helper"
 feature "Add/editing a single question", type: :feature do
   let(:form) { build :form, :with_active_resource, id: 1 }
   let(:fake_page) { build :page, form_id: 1, id: 2 }
+  let(:group) { create(:group, organisation: editor_user.organisation) }
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
@@ -12,9 +13,8 @@ feature "Add/editing a single question", type: :feature do
       mock.post "/api/v1/forms/1/pages", post_headers, fake_page.to_json, 200
     end
 
-    group = create :group
-    GroupForm.create! group:, form_id: 1
-    create :membership, group:, user: editor_user
+    GroupForm.create!(group:, form_id: form.id)
+    create(:membership, group:, user: editor_user, added_by: editor_user)
 
     login_as editor_user
   end

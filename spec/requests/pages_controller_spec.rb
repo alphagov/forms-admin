@@ -3,7 +3,10 @@ require "rails_helper"
 RSpec.describe PagesController, type: :request do
   let(:form_response) { build :form, id: 2 }
 
+  let(:group) { create(:group, organisation: editor_user.organisation) }
+
   before do
+    Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user)
     login_as_editor_user
   end
 
@@ -64,6 +67,8 @@ RSpec.describe PagesController, type: :request do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/1", headers, current_form.to_json, 200
       end
+
+      GroupForm.create!(form_id: current_form.id, group_id: group.id)
     end
 
     it "clears draft questions data for current user and form" do
@@ -105,6 +110,8 @@ RSpec.describe PagesController, type: :request do
           mock.get "/api/v1/forms/2/pages/1", headers, page.to_json, 200
         end
 
+        GroupForm.create!(form_id: 2, group_id: group.id)
+
         get delete_page_path(form_id: 2, page_id: 1)
       end
 
@@ -144,6 +151,8 @@ RSpec.describe PagesController, type: :request do
           mock.delete "/api/v1/forms/2/pages/1", headers, {}, 200
         end
 
+        GroupForm.create!(form_id: 2, group_id: group.id)
+
         delete destroy_page_path(form_id: 2, page_id: 1, forms_delete_confirmation_input: { confirm: "yes" })
       end
 
@@ -175,6 +184,7 @@ RSpec.describe PagesController, type: :request do
         mock.put "/api/v1/forms/1/pages/100/up", post_headers
       end
 
+      GroupForm.create!(form_id: 2, group_id: group.id)
       post move_page_path({ form_id: 1, move_direction: { up: 100 } })
     end
 
