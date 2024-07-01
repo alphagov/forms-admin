@@ -31,10 +31,6 @@ feature "View forms", type: :feature do
     click_button "Change"
   end
 
-  def then_i_should_see_the_forms_for_that_organisation
-    expect(page).to have_content(other_org_forms.first.name)
-  end
-
   def then_i_should_see_the_groups_for_that_organisation
     expect(page).to have_content(other_org_group.name)
   end
