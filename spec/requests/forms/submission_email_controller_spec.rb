@@ -4,7 +4,9 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
   include ActionView::Helpers::TextHelper
 
   let(:organisation) { build :organisation, id: 1, slug: "test-org" }
-  let(:user) { build :editor_user, id: 1, organisation: }
+  let(:user) { editor_user }
+  let(:user_outside_group) { build :editor_user, id: 2, organisation: }
+
   let(:form) { build :form, id: 1, creator_id: 1, organisation_id: 1 }
 
   let(:submission_email_mailer_spy) do
@@ -13,6 +15,8 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     submission_email_mailer
   end
 
+  let(:group) { create(:group, organisation: editor_user.organisation) }
+
   before do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms", headers, [form].to_json, 200
@@ -20,6 +24,9 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
       mock.get "/api/v1/forms/1/live", headers, form.to_json, 200
       mock.put "/api/v1/forms/1", post_headers, form.to_json, 200
     end
+
+    Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user)
+    GroupForm.create!(form_id: form.id, group_id: group.id)
 
     login_as user
   end
@@ -37,16 +44,8 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
       expect(response).to render_template(:new)
     end
 
-    context "when current user does not own form" do
-      let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role, id: 1 }
+    context "when current user does not belong to the group" do
+      let(:user) { user_outside_group }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
@@ -85,16 +84,8 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
       end
     end
 
-    context "when current user does not own form" do
-      let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role, id: 1 }
+    context "when current user does not belong to group" do
+      let(:user) { user_outside_group }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
@@ -102,7 +93,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     end
 
     context "when current user has a government email address not ending with .gov.uk" do
-      let(:user) { build :editor_user, email: "user@alb.example", id: 1 }
+      let(:user) { editor_user.tap { |editor| editor.email = "user@alb.example" } }
 
       it "redirects to the email code sent page" do
         expect(response).to redirect_to(submission_email_code_sent_path(form.id))
@@ -123,8 +114,8 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
       expect(response).to render_template(:submission_email_code_sent)
     end
 
-    context "when current user does not own form" do
-      let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
+    context "when current user does not belong to the group" do
+      let(:user) { user_outside_group }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
@@ -153,16 +144,8 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
       expect(response).to render_template(:submission_email_code)
     end
 
-    context "when current user does not own form" do
-      let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role, id: 1 }
+    context "when current user does not belong to the group" do
+      let(:user) { user_outside_group }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
@@ -205,8 +188,8 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
       end
     end
 
-    context "when current user does not own form" do
-      let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
+    context "when current user does not belong to the group" do
+      let(:user) { user_outside_group }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)
@@ -236,8 +219,8 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
         expect(response).to render_template(:submission_email_confirmed)
       end
 
-      context "when current user does not own form" do
-        let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
+      context "when current user does not belong to the group" do
+        let(:user) { user_outside_group }
 
         it "is forbidden" do
           expect(response).to have_http_status(:forbidden)
