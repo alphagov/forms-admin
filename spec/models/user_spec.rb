@@ -227,22 +227,6 @@ describe User, type: :model do
     end
   end
 
-  describe "#trial_user_upgraded?" do
-    it "returns true when changing from trial to another role" do
-      user = create(:user, role: :trial)
-
-      user.update!(role: "super_admin")
-      expect(user).to be_trial_user_upgraded
-    end
-
-    it "returns false when changing from editor to super_admin" do
-      user = create(:editor_user)
-
-      user.update!(role: "super_admin")
-      expect(user).not_to be_trial_user_upgraded
-    end
-  end
-
   it "defaults to the trial role" do
     user = described_class.new
     expect(user.role).to eq("trial")

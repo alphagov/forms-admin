@@ -81,10 +81,6 @@ class User < ApplicationRecord
     trial? || organisation.present?
   end
 
-  def trial_user_upgraded?
-    role_previously_changed?(from: :trial)
-  end
-
   def given_organisation?
     organisation_id.present? && organisation_id_previously_changed?(from: nil)
   end

@@ -64,8 +64,8 @@ describe UserUpdateService do
           expect(user.role).to eq("editor")
         end
 
-        it "calls update_organisation_for_creator" do
-          expect(Form).to have_received(:update_organisation_for_creator).with(user.id, user.organisation_id)
+        it "does not call update_organisation_for_creator" do
+          expect(Form).not_to have_received(:update_organisation_for_creator).with(user.id, user.organisation_id)
         end
       end
 

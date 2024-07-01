@@ -251,41 +251,23 @@ RSpec.describe UsersController, type: :request do
         login_as_super_admin_user
       end
 
-      it "updates user's forms' org when changing role from trial to editor" do
+      it "calls UserUpdateService" do
         user = create(:user, :with_trial_role)
-        expect(Form).to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)
+        user_update_service = instance_spy(UserUpdateService)
+
+        allow(UserUpdateService)
+          .to receive(:new)
+          .with(user, ActionController::Parameters.new(role: "editor").permit(:role))
+          .and_return(user_update_service)
 
         patch user_path(user), params: { user: { role: "editor" } }
 
-        expect(response).to have_http_status(:found)
-        expect(response).to redirect_to(users_path)
-      end
+        expect(UserUpdateService)
+          .to have_received(:new)
+          .with(user, ActionController::Parameters.new(role: "editor").permit(:role))
 
-      it "does not update user's forms' org when changing role from super admin to editor" do
-        user = create(:super_admin_user)
-
-        expect(Form).not_to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)
-
-        patch user_path(user), params: { user: { role: "editor" } }
-
-        expect(response).to have_http_status(:found)
-        expect(response).to redirect_to(users_path)
-      end
-
-      it "does not update user's forms' org when role is unchanged" do
-        user = create(:user, :with_trial_role)
-
-        expect(Form).to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)
-
-        patch user_path(user), params: { user: { role: "editor" } }
-
-        expect(response).to have_http_status(:found)
-        expect(response).to redirect_to(users_path)
-
-        expect(Form).not_to receive(:update_organisation_for_creator).with(user.id, user.organisation.id)
-        patch user_path(user), params: { user: { role: "editor" } }
-        expect(response).to have_http_status(:found)
-        expect(response).to redirect_to(users_path)
+        expect(user_update_service)
+          .to have_received(:update_user)
       end
     end
   end
