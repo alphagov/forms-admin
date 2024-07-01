@@ -57,16 +57,20 @@ class MailchimpListSynchronizer
           "status_if_new" => "subscribed",
         },
       )
-    rescue MailchimpMarketing::ApiError
-      warn "Could not subscribe user with subscriber hash #{subscriber_hash} to list #{list_id}. Continuing"
+    rescue MailchimpMarketing::ApiError => e
+      warn "Could not subscribe user with subscriber hash #{subscriber_hash} to list #{list_id}."
+      warn "#{e.title}: #{e.detail}"
+      warn "Continuing"
     end
 
     puts "Unsubscribing any removed users..."
     deleted_users.each do |email|
       subscriber_hash = Digest::MD5.hexdigest email.downcase
       mailchimp.lists.delete_list_member(list_id, subscriber_hash)
-    rescue MailchimpMarketing::ApiError
-      warn "Could not unsubscribe user with subscriber hash #{subscriber_hash} from list #{list_id}. Continuing"
+    rescue MailchimpMarketing::ApiError => e
+      warn "Could not unsubscribe user with subscriber hash #{subscriber_hash} from list #{list_id}"
+      warn "#{e.title}: #{e.detail}"
+      warn "Continuing"
     end
   end
 end
