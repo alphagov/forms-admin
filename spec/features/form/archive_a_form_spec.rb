@@ -13,7 +13,11 @@ feature "Archive a form", type: :feature do
       mock.post "/api/v1/forms/1/archive", post_headers, {}, 200
     end
 
-    login_as_editor_user
+    group = create :group
+    GroupForm.create! group:, form_id: 1
+    create :membership, group:, user: editor_user
+
+    login_as editor_user
   end
 
   scenario "as a form editor" do

@@ -12,7 +12,11 @@ feature "Add/editing a single question", type: :feature do
       mock.post "/api/v1/forms/1/pages", post_headers, fake_page.to_json, 200
     end
 
-    login_as_editor_user
+    group = create :group
+    GroupForm.create! group:, form_id: 1
+    create :membership, group:, user: editor_user
+
+    login_as editor_user
   end
 
   context "when a form has no existing pages" do

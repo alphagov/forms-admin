@@ -13,7 +13,11 @@ feature "Editing answer_settings for existing question", type: :feature do
       end
     end
 
-    login_as_editor_user
+    group = create :group
+    GroupForm.create! group:, form_id: 1
+    create :membership, group:, user: editor_user
+
+    login_as editor_user
   end
 
   context "when a form has existing pages with answer types" do
