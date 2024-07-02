@@ -14,13 +14,10 @@ class FormPolicy
     end
 
     def resolve
-      if user.trial?
-        scope.where(creator_id: user.id)
-      elsif user.super_admin?
+      if user.super_admin?
         scope
       else
-        scope
-          .where(organisation_id: user.organisation.id)
+        scope.where(organisation_id: user.organisation.id)
       end
     end
   end

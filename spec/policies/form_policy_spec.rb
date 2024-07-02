@@ -204,17 +204,6 @@ describe FormPolicy do
     let(:user) { build(:user, :with_trial_role) }
 
     describe "#resolve" do
-      context "when user is on trial" do
-        before do
-          allow(scope).to receive(:where).with(creator_id: user.id)
-        end
-
-        it "returns only their records" do
-          policy_scope.resolve
-          expect(scope).to have_received(:where).with(creator_id: user.id)
-        end
-      end
-
       context "when user has an editor role" do
         let(:user) { build(:editor_user) }
 
