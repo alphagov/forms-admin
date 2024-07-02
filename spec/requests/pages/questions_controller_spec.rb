@@ -40,6 +40,8 @@ RSpec.describe Pages::QuestionsController, type: :request do
     [page_response].to_json
   end
 
+  let(:group) { create(:group, organisation: editor_user.organisation) }
+
   before do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms/2", headers, form_response.to_json, 200
@@ -49,6 +51,8 @@ RSpec.describe Pages::QuestionsController, type: :request do
       mock.put "/api/v1/forms/2/pages/1", post_headers, updated_page_data.to_json, 200
     end
 
+    Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user)
+    GroupForm.create!(form_id: form_response.id, group_id: group.id)
     login_as_editor_user
   end
 
