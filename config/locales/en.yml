@@ -42,10 +42,6 @@ en:
             question_text:
               blank: Enter a question
               too_long: Question text must be %{count} characters or less
-        user_upgrade_request:
-          attributes:
-            met_requirements:
-              accepted: You must meet the requirements
   activerecord:
     errors:
       models:
@@ -627,16 +623,11 @@ en:
           'false': Mandatory
           'true': Optional
         question_text: Question text
-      user_upgrade_request:
-        met_requirements_options:
-          '1': I meet these requirements
     legend:
       mou_signature:
         agreed: Do you agree to the MOU?
       pages_question_input:
         is_optional: Should this question be mandatory or optional?
-      user_upgrade_request:
-        met_requirements: Confirm that you meet these requirements
   home:
     change_filter: Change
     create_a_form: Create a form
@@ -934,8 +925,6 @@ en:
     type_of_answer: What kind of answer do you need to this question?
     unarchive_form: Make your form live again
     user_missing_organisation: You do not have an organisation set for your account
-    user_upgrade_request_confirmation: Request to upgrade to editor account received
-    user_upgrade_request_new: Requirements to upgrade to an editor account
     what_happens_next: Add information about what happens next
     your_changes_are_live: Your changes are live
     your_form_is_live: Your form is live
@@ -1047,13 +1036,6 @@ en:
       </p>
     heading: Provide a link to privacy information for this form
     submit_button: Save and continue
-  role_upgrade:
-    content_html: |
-      <p>
-        You can create a form and make it live.
-      </p>
-    heading: You now have an editor account
-    title: Your account has been upgraded
   routing_page:
     body_text: "You can send people directly to the question or page you want, based on their previous answer. \nThis means they’ll only see questions that are relevant to them.\n"
     dropdown_default_text: Select a question to start your route from
@@ -1144,28 +1126,6 @@ en:
   user_missing_organisation:
     body: "%{contact_link} to assign an organisation to your account."
     title: You do not have an organisation set for your account
-  user_upgrade_request:
-    new:
-      body_html: |
-        <p>GOV.UK Forms is in the early stages of development, so it will not be suitable for all types of form at the moment.</p>
-
-        <p>Before we process your request for an upgrade, we need to check that you meet these requirements:</p>
-
-        <ul class="govuk-list govuk-list--bullet">
-          <li>you’ve tried out the form builder and you’re confident you can create your forms using <a href="https://www.forms.service.gov.uk/features" class="govuk-link">the limited features available</a> at the moment</li>
-          <li>your organisation is ok with form responses being emailed individually to the team email address you provide (we’re planning to support other ways of receiving form submissions, but they’re not available yet)</li>
-          <li>you’ll only use GOV.UK Forms to make forms to be published on the GOV.UK website - not on other websites or for other uses such as internal forms or surveys</li>
-          <li>you do not expect any of the forms you’re planning to make to get more than 10,000 submissions a year</li>
-          <li>you’re happy to be asked for feedback and to take part in user research</li>
-        </ul>
-
-        <p>If you meet these requirements, we’ll email you to ask for a bit more information. We’ll then get in touch to discuss the next steps.</p>
-    show:
-      body_html: |
-        <h2 class="govuk-heading-l">What happens next</h2>
-        <p class="govuk-body">Check your email and reply with the information we’ve requested.</p>
-        <p class="govuk-body">We’ll then get in contact with you to discuss the next steps.</p>
-      panel_title: We’ve sent you an email asking for more information
   users:
     cancel: Cancel
     edit:

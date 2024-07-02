@@ -13,13 +13,8 @@ class UserUpdateService
 private
 
   def on_user_update
-    add_organisation_to_user_forms if @user.trial_user_upgraded?
     add_organisation_to_user_mou if @user.given_organisation?
     update_user_memberships
-  end
-
-  def add_organisation_to_user_forms
-    Form.update_organisation_for_creator(@user.id, @user.organisation_id)
   end
 
   def add_organisation_to_user_mou
