@@ -1209,12 +1209,14 @@ en:
         actions: Masquerade
         access: Access
         email: Email address
+        masquerade: Masquerade
         name: Name
         organisation: Organisation
         role: Role
         signon_organisation: Signon organisation slug
       title: Users
       users_caption: All users
+    masquerade_as: Masquerade as this user
     roles:
       editor:
         description: Can create forms

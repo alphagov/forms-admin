@@ -99,6 +99,9 @@ class ApplicationController < ActionController::Base
     @groups_enabled ||= current_user.present? && FeatureService.new(current_user).enabled?(:groups)
   end
 
+  def masquerading_enabled
+  @masquerading_enabled ||= Settings.masquerading_enabled
+  end
 
 private
 
@@ -117,7 +120,7 @@ private
     original_user = User.find_by(id: session[:original_user_id])
     redirect_to root_path unless original_user.present?
 
-    warden.set_user(original_user, scope: :user)
+    warden.set_user(original_user)
     @current_user = original_user
     @groups_enabled = FeatureService.new(@current_user).enabled?(:groups)
     session[:masquerading_user_id] = nil
@@ -136,6 +139,7 @@ private
     # Check if currently masquerading
     if session[:masquerading_user_id].present?
       @current_user = User.find(session[:masquerading_user_id])
+      warden.set_user(@current_user)
     end
   end
 

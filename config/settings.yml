@@ -74,3 +74,5 @@ mailchimp:
   mou_signers_list: changeme
 
 analytics_enabled: false
+
+masquerading_enabled: false
