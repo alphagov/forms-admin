@@ -5,6 +5,7 @@ require "rails_helper"
 describe "Settings" do
   settings = YAML.load_file(Rails.root.join("config/settings.yml")).with_indifferent_access
   expected_value_test = "expected_value_test"
+  has_a_default_value = "has a default value"
 
   shared_examples expected_value_test do |key, source, expected_value|
     describe ".#{key}" do
@@ -57,7 +58,7 @@ describe "Settings" do
   end
 
   describe "forms_env" do
-    it "has a default value" do
+    it has_a_default_value do
       forms_env = settings[:forms_env]
 
       expect(forms_env).to eq("local")
@@ -65,10 +66,18 @@ describe "Settings" do
   end
 
   describe "analytics_enabled" do
-    it "has a default value" do
+    it has_a_default_value do
       analytics_enabled = settings[:analytics_enabled]
 
       expect(analytics_enabled).to be(false)
+    end
+  end
+
+  describe "act_as_user_enabled" do
+    it has_a_default_value do
+      act_as_user_enabled = settings[:act_as_user_enabled]
+
+      expect(act_as_user_enabled).to be(false)
     end
   end
 end

@@ -12,3 +12,5 @@ forms_api:
 # in development use 'mock_gds_sso' to always be logged in or 'developer' to use a
 # mock flow through omniauth
 auth_provider: mock_gds_sso
+
+act_as_user_enabled: true
