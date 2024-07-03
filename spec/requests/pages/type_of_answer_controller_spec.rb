@@ -200,7 +200,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         expect(form.draft_question.answer_type).to eq "number"
       end
 
-      it "redirects the user to the question details page " do
+      it "redirects the user to the question details page" do
         expect(response).to redirect_to edit_question_path(form.id, page.id)
       end
 

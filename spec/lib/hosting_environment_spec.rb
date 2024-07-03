@@ -18,7 +18,7 @@ RSpec.describe HostingEnvironment do
 
     context "when forms_env is not set" do
       it "returns unknown_environment" do
-        expect(described_class.environment_name).to eq nil
+        expect(described_class.environment_name).to be_nil
       end
     end
   end

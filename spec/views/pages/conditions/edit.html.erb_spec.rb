@@ -17,9 +17,7 @@ describe "pages/conditions/edit.html.erb" do
 
   before do
     page.position = 1
-    allow(view).to receive(:form_pages_path).and_return("/forms/1/pages")
-    allow(view).to receive(:create_condition_path).and_return("/forms/1/pages/1/conditions/new")
-    allow(view).to receive(:delete_condition_path).and_return("/forms/1/pages/1/conditions/2/delete")
+    allow(view).to receive_messages(form_pages_path: "/forms/1/pages", create_condition_path: "/forms/1/pages/1/conditions/new", delete_condition_path: "/forms/1/pages/1/conditions/2/delete")
     allow(form).to receive(:qualifying_route_pages).and_return(pages)
     condition_input.check_errors_from_api
 

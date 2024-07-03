@@ -116,7 +116,7 @@ describe PageOptionsService do
       end
     end
 
-    context "with selection not only_one_option " do
+    context "with selection not only_one_option" do
       let(:page) do
         build :page,
               is_optional: "false",
@@ -181,8 +181,8 @@ describe PageOptionsService do
 
     context "with conditions" do
       let(:page) { build :page, id: 1, answer_type: "email", routing_conditions: }
-      let(:condition_1) { build :condition, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
-      let(:condition_2) { build :condition, routing_page_id: 1, check_page_id: 1, answer_value: "England", goto_page_id: 4 }
+      let(:condition_pointing_to_page_3) { build :condition, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 } # rubocop:disable RSpec/IndexedLet
+      let(:condition_pointing_to_page_4) { build :condition, routing_page_id: 1, check_page_id: 1, answer_value: "England", goto_page_id: 4 } # rubocop:disable RSpec/IndexedLet
       let(:routing_conditions) { nil }
 
       context "with a legacy page that doesn't have routing conditions method" do
@@ -209,26 +209,26 @@ describe PageOptionsService do
       end
 
       context "with a single condition" do
-        let(:routing_conditions) { [condition_1] }
+        let(:routing_conditions) { [condition_pointing_to_page_3] }
 
         it "returns the correct options" do
           expect(page_options_service.all_options_for_answer_type).to include(
             {
               key: { text: I18n.t("page_conditions.route") },
-              value: { text: I18n.t("page_conditions.condition_compact_html", answer_value: condition_1.answer_value, goto_page_number: 3, goto_page_text: pages[2].question_text) },
+              value: { text: I18n.t("page_conditions.condition_compact_html", answer_value: condition_pointing_to_page_3.answer_value, goto_page_number: 3, goto_page_text: pages[2].question_text) },
             },
           )
         end
       end
 
       context "with multiple conditions" do
-        let(:routing_conditions) { [condition_1, condition_2] }
+        let(:routing_conditions) { [condition_pointing_to_page_3, condition_pointing_to_page_4] }
 
         it "returns the correct options" do
           expect(page_options_service.all_options_for_answer_type).to include(
             {
               key: { text: I18n.t("page_conditions.route") },
-              value: { text: "<ol class=\"govuk-list govuk-list--number\"><li>#{I18n.t('page_conditions.condition_compact_html', answer_value: condition_1.answer_value, goto_page_number: 3, goto_page_text: pages[2].question_text)}</li><li>#{I18n.t('page_conditions.condition_compact_html', answer_value: condition_2.answer_value, goto_page_number: 4, goto_page_text: pages[3].question_text)}</li></ol>" },
+              value: { text: "<ol class=\"govuk-list govuk-list--number\"><li>#{I18n.t('page_conditions.condition_compact_html', answer_value: condition_pointing_to_page_3.answer_value, goto_page_number: 3, goto_page_text: pages[2].question_text)}</li><li>#{I18n.t('page_conditions.condition_compact_html', answer_value: condition_pointing_to_page_4.answer_value, goto_page_number: 4, goto_page_text: pages[3].question_text)}</li></ol>" },
             },
           )
         end

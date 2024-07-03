@@ -355,9 +355,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
       delete_condition_input = Pages::DeleteConditionInput.new(form:, page: selected_page, record: condition, answer_value: "Wales", goto_page_id: 3, confirm:)
 
-      allow(delete_condition_input).to receive(:goto_page_question_text).and_return("What is your name?")
-
-      allow(delete_condition_input).to receive(:submit).and_return(submit_bool)
+      allow(delete_condition_input).to receive_messages(goto_page_question_text: "What is your name?", submit: submit_bool)
 
       allow(Pages::DeleteConditionInput).to receive(:new).and_return(delete_condition_input)
 

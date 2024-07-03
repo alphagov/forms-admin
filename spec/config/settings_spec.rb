@@ -68,7 +68,7 @@ describe "Settings" do
     it "has a default value" do
       analytics_enabled = settings[:analytics_enabled]
 
-      expect(analytics_enabled).to eq(false)
+      expect(analytics_enabled).to be(false)
     end
   end
 end

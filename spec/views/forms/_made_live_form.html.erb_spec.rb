@@ -128,7 +128,7 @@ describe "forms/_made_live_form.html.erb" do
     expect(rendered).to have_content(form.submission_email)
   end
 
-  it "contains link to privacy policy " do
+  it "contains link to privacy policy" do
     expect(rendered).to have_link(form.privacy_policy_url, href: form.privacy_policy_url)
   end
 

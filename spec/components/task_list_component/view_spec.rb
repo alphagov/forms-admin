@@ -193,7 +193,7 @@ RSpec.describe TaskListComponent::View, type: :component do
           completed_task_count: scenario[:completed_task_count],
           total_task_count: scenario[:total_task_count],
         )
-        expect(task_list.render_counter?).to eq false
+        expect(task_list.render_counter?).to be false
       end
     end
 
@@ -207,7 +207,7 @@ RSpec.describe TaskListComponent::View, type: :component do
           completed_task_count: scenario[:completed_task_count],
           total_task_count: scenario[:total_task_count],
         )
-        expect(task_list.render_counter?).to eq true
+        expect(task_list.render_counter?).to be true
       end
     end
 
@@ -250,7 +250,7 @@ RSpec.describe TaskListComponent::View, type: :component do
       let(:active) { false }
 
       it "returns the path" do
-        expect(row.get_path).to eq(nil)
+        expect(row.get_path).to be_nil
       end
     end
   end
@@ -268,7 +268,7 @@ RSpec.describe TaskListComponent::View, type: :component do
       let(:status) { nil }
 
       it "returns nil" do
-        expect(row.get_status_colour).to eq(nil)
+        expect(row.get_status_colour).to be_nil
       end
     end
 
@@ -276,7 +276,7 @@ RSpec.describe TaskListComponent::View, type: :component do
       let(:status) { :completed }
 
       it "returns nil" do
-        expect(row.get_status_colour).to eq(nil)
+        expect(row.get_status_colour).to be_nil
       end
     end
 
@@ -292,7 +292,7 @@ RSpec.describe TaskListComponent::View, type: :component do
       let(:status) { :cannot_start }
 
       it "returns nil" do
-        expect(row.get_status_colour).to eq(nil)
+        expect(row.get_status_colour).to be_nil
       end
     end
 
@@ -376,7 +376,7 @@ RSpec.describe TaskListComponent::View, type: :component do
       let(:status) { nil }
 
       it "returns false" do
-        expect(row.cannot_start?).to eq(false)
+        expect(row.cannot_start?).to be(false)
       end
     end
 
@@ -384,7 +384,7 @@ RSpec.describe TaskListComponent::View, type: :component do
       let(:status) { :completed }
 
       it "returns false" do
-        expect(row.cannot_start?).to eq(false)
+        expect(row.cannot_start?).to be(false)
       end
     end
 
@@ -392,7 +392,7 @@ RSpec.describe TaskListComponent::View, type: :component do
       let(:status) { :in_progress }
 
       it "returns false" do
-        expect(row.cannot_start?).to eq(false)
+        expect(row.cannot_start?).to be(false)
       end
     end
 
@@ -400,7 +400,7 @@ RSpec.describe TaskListComponent::View, type: :component do
       let(:status) { :cannot_start }
 
       it "returns true" do
-        expect(row.cannot_start?).to eq(true)
+        expect(row.cannot_start?).to be(true)
       end
     end
 
@@ -408,7 +408,7 @@ RSpec.describe TaskListComponent::View, type: :component do
       let(:status) { :not_started }
 
       it "returns false" do
-        expect(row.cannot_start?).to eq(false)
+        expect(row.cannot_start?).to be(false)
       end
     end
 
@@ -416,7 +416,7 @@ RSpec.describe TaskListComponent::View, type: :component do
       let(:status) { :optional }
 
       it "returns false" do
-        expect(row.cannot_start?).to eq(false)
+        expect(row.cannot_start?).to be(false)
       end
     end
   end
@@ -434,7 +434,7 @@ RSpec.describe TaskListComponent::View, type: :component do
       let(:status) { nil }
 
       it "returns nil" do
-        expect(row.get_status_tag).to eq(nil)
+        expect(row.get_status_tag).to be_nil
       end
     end
 
