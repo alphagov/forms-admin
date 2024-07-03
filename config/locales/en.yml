@@ -1216,7 +1216,7 @@ en:
         signon_organisation: Signon organisation slug
       title: Users
       users_caption: All users
-    masquerade_as: Masquerade as %{user_name}
+    masquerade_as: View as %{user_name}
     roles:
       editor:
         description: Can create forms
