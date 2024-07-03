@@ -48,4 +48,47 @@ RSpec.describe ActAsUserController, type: :request do
       expect(session[:original_user_id]).to eq(super_admin_user.id)
     end
   end
+
+  describe "GET stop" do
+    before do
+      allow(Settings).to receive(:act_as_user_enabled).and_return(act_as_user_enabled)
+      login_as_super_admin_user
+    end
+
+    context "when not acting as a user" do
+      it "does not change the current user" do
+        get act_as_user_stop_path
+
+        expect(request.env["warden"].user.id).to eq(super_admin_user.id)
+        expect(session[:original_user_id]).to be_nil
+      end
+    end
+
+    context "when acting as a user" do
+      let(:controller_spy) do
+        controller_spy = described_class.new
+        allow(described_class).to receive(:new).and_return(controller_spy)
+        controller_spy
+      end
+
+      before do
+        post act_as_user_start_path(trial_user)
+
+        allow(controller_spy).to receive(:redirect_if_account_not_completed).and_call_original
+      end
+
+      it "skips the redirect_if_account_not_completed action" do
+        get act_as_user_stop_path
+
+        expect(controller_spy).not_to have_received(:redirect_if_account_not_completed)
+      end
+
+      it "changes back to the original user" do
+        get act_as_user_stop_path
+
+        expect(request.env["warden"].user.id).to eq(super_admin_user.id)
+        expect(session[:original_user_id]).to be_nil
+      end
+    end
+  end
 end
