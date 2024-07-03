@@ -49,6 +49,11 @@
           row.with_key { t('users.edit.has_access') }
           row.with_value { t("users.has_access.#{@user.has_access}.name") }
         end
+
+        summary_list.with_row do |row|
+          row.with_key { t('users.index.table_headings.masquerade') }
+          row.with_value { govuk_link_to(t("users.masquerade_as", user_name: @user.name || 'this user'), user_masquerade_path(@user.id)) }
+        end if Settings.masquerading_enabled && !@user.super_admin?
       end %>
 
       <%= f.govuk_text_field :name, label: { size: 'm', tag: 'h2' }, autocomplete: :name, spellcheck: false %>
@@ -75,6 +80,7 @@
 
     <% end %>
   </div>
+
 </div>
 
 <%= init_autocomplete_script(show_all_values: false, raw_attribute: true, source: false) %>
