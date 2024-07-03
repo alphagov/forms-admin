@@ -1,5 +1,6 @@
 class MasqueradesController < ApplicationController
   before_action :feature_enabled
+  before_action :check_not_already_masquerading, only: :show
   before_action :check_user_and_set_masquerade_as, only: :show
 
   def show
@@ -18,6 +19,10 @@ class MasqueradesController < ApplicationController
 
   def feature_enabled
     raise ActionController::RoutingError, "Masquerading feature not enabled" unless masquerading_enabled
+  end
+
+  def check_not_already_masquerading
+    return redirect_to root_path if session[:masquerading_user_id].present?
   end
 
   def check_user_and_set_masquerade_as
