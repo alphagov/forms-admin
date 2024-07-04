@@ -35,9 +35,7 @@ describe Account::OrganisationInput do
       end
 
       it "logs the organisation_chosen event" do
-        expect(EventLogger).to receive(:log).with({
-          event: "organisation_chosen",
-          user_id: user.id,
+        expect(Rails.logger).to receive(:info).with("User chose their organisation", {
           organisation_id: organisation.id,
         })
         organisation_input.submit
@@ -58,7 +56,7 @@ describe Account::OrganisationInput do
       end
 
       it "does not log the organisation_chosen event" do
-        expect(EventLogger).not_to receive(:log)
+        expect(Rails.logger).not_to receive(:info)
         organisation_input.submit
       end
     end

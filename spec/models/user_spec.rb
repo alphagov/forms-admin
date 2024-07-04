@@ -217,7 +217,7 @@ describe User, type: :model do
     end
 
     it "logs attributes that will be updated" do
-      allow(EventLogger).to receive(:log)
+      allow(Rails.logger).to receive(:info)
 
       described_class.find_for_auth(
         provider: "test",
@@ -226,16 +226,12 @@ describe User, type: :model do
         email: "test@example.com",
       )
 
-      expect(EventLogger).to have_received(:log).with(
-        {
-          "event": "auth",
-          "user_id": user.id,
-          "user_changes": {
-            uid: %w[123456 111111],
-            name: ["Test User", "Test A. User"],
-          },
+      expect(Rails.logger).to have_received(:info).with("User attributes updated upon authorisation", {
+        "user_changes": {
+          uid: %w[123456 111111],
+          name: ["Test User", "Test A. User"],
         },
-      )
+      })
     end
   end
 

@@ -22,9 +22,7 @@ class Account::OrganisationInput < BaseInput
 private
 
   def log_organisation_chosen_event
-    EventLogger.log({
-      event: "organisation_chosen",
-      user_id: user.id,
+    Rails.logger.info("User chose their organisation", {
       organisation_id:,
     })
   end
