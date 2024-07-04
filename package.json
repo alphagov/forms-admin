@@ -13,7 +13,8 @@
     "Safari >= 12"
   ],
   "scripts": {
-    "test": "vitest",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
     "lint": "standard | snazzy && stylelint 'app/**/*.scss'",
     "format": "standard --fix & stylelint 'app/**/*.scss' --fix",
     "ci": "bin/setup && bin/rails server",
