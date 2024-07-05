@@ -30,7 +30,7 @@ class GroupMemberInput < BaseInput
   end
 
   def invited_user
-    @invited_user ||= User.find_by(email: member_email_address)
+    @invited_user ||= User.find_by("LOWER(email)= ?", member_email_address.downcase)
   end
 
 private
