@@ -47,6 +47,9 @@ class FormPolicy
     end
   end
 
+  alias_method :delete?, :can_view_form?
+  alias_method :destroy?, :delete?
+
   def can_change_form_submission_email?
     return false if user.trial? && !groups_enabled?
 
