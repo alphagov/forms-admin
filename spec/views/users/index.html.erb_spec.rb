@@ -1,6 +1,7 @@
 require "rails_helper"
 
 describe "users/index.html.erb" do
+  let(:act_as_user_enabled) { false }
   let(:users) do
     build_list(:user, 3) do |user, i|
       user.id = i
@@ -9,6 +10,8 @@ describe "users/index.html.erb" do
   end
 
   before do
+    allow(Settings).to receive(:act_as_user_enabled).and_return(act_as_user_enabled)
+
     render template: "users/index", locals: { users: }
   end
 
@@ -57,6 +60,18 @@ describe "users/index.html.erb" do
 
     it "shows no organisation set" do
       expect(rendered).to have_text("No organisation set")
+    end
+  end
+
+  context "when the act_as_user functionality is enabled" do
+    let(:act_as_user_enabled) { true }
+
+    it "contains Act as user" do
+      expect(rendered).to have_text("Act as user")
+    end
+
+    it "contains an 'Act as this user' button" do
+      expect(rendered).to have_button("Act as this user")
     end
   end
 end

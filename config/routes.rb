@@ -131,6 +131,9 @@ Rails.application.routes.draw do
 
   resources :users, only: %i[index edit update]
 
+  post "/act-as/:user_id", to: "act_as_user#start", as: :act_as_user_start
+  get "/act-as-stop", to: "act_as_user#stop", as: :act_as_user_stop
+
   namespace :account do
     resource :name, only: %i[edit update]
     resource :organisation, only: %i[edit update]

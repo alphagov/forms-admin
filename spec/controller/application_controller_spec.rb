@@ -32,6 +32,7 @@ describe ApplicationController, type: :controller do
 
   context "when authenticating a user" do
     let(:user) { build :user }
+    let(:acting_as_user_id) { nil }
 
     let(:warden_spy) do
       request.env["warden"] = instance_double(Warden::Proxy)
@@ -45,9 +46,12 @@ describe ApplicationController, type: :controller do
       context "when #{provider} auth is enabled" do
         before do
           allow(warden_spy).to receive(:authenticate!).and_return(true)
+          allow(warden_spy).to receive(:set_user)
           allow(controller).to receive(:current_user).and_return(user)
 
           allow(Settings).to receive(:auth_provider).and_return(provider)
+
+          session[:acting_as_user_id] = acting_as_user_id
 
           get :index
         end
@@ -58,6 +62,15 @@ describe ApplicationController, type: :controller do
 
         it "sets @current_user" do
           expect(assigns[:current_user]).to eq user
+        end
+
+        context "when acting as a user" do
+          let(:trial_user) { create(:user) }
+          let(:acting_as_user_id) { trial_user.id }
+
+          it "sets @current_user as the acting user taken from the session" do
+            expect(assigns[:current_user]).to eq trial_user
+          end
         end
       end
     end

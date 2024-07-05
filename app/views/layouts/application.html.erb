@@ -8,12 +8,13 @@
 <% end %>
 
 <% content_for :before_content do %>
-    <%= govuk_phase_banner(tag: { text: "Beta" }) do %>
-      <%= t("phase_banner.before_link") %>
-      <%= govuk_link_to t("phase_banner.link"), t("phase_banner.feedback_survey_url") %>
-      <%= t("phase_banner.after_link") %>
-    <% end %>
-    <%= yield :back_link %>
+  <%= govuk_phase_banner(tag: { text: "Beta" }) do %>
+    <%= t("phase_banner.before_link") %>
+    <%= govuk_link_to t("phase_banner.link"), t("phase_banner.feedback_survey_url") %>
+    <%= t("phase_banner.after_link") %>
+  <% end %>
+  <%= yield :back_link %>
+  <%= render ActAsUserBannerComponent::View.new(@current_user, User.find_by(id: session[:original_user_id])) %>
 <% end %>
 
 <% content_for :footer do %>

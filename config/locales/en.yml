@@ -1127,6 +1127,7 @@ en:
     body: "%{contact_link} to assign an organisation to your account."
     title: You do not have an organisation set for your account
   users:
+    act_as_user_html: Act as this user <span class="govuk-visually-hidden">%{user_email}</span>
     cancel: Cancel
     edit:
       access: Permission to access GOV.UK Forms
@@ -1150,6 +1151,7 @@ en:
       organisation_blank: No organisation set
       table_headings:
         access: Access
+        act_as_user: Act as user
         email: Email address
         name: Name
         organisation: Organisation

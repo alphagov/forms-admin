@@ -108,6 +108,12 @@ private
     unless @current_user.has_access? && auth_strategy_permitted?
       render "errors/access_denied", status: :forbidden, formats: :html
     end
+
+    if session[:acting_as_user_id].present?
+      @current_user = User.find(session[:acting_as_user_id])
+
+      warden.set_user(@current_user)
+    end
   end
 
   def non_maintenance_bypass_ip_address?
