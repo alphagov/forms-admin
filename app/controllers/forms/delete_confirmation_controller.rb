@@ -1,5 +1,7 @@
 module Forms
   class DeleteConfirmationController < ApplicationController
+    after_action :verify_authorized
+
     def delete
       load_page_variables
     end
