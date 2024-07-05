@@ -3,6 +3,8 @@ module Forms
     after_action :verify_authorized
 
     def delete
+      authorize current_form, :can_view_form?
+
       load_page_variables
     end
 
