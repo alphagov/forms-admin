@@ -6,7 +6,7 @@ class ActAsUserController < ApplicationController
 
   def start
     target_user = User.find_by(id: params[:user_id])
-    act_as(target_user) unless target_user.super_admin?
+    act_as(target_user) unless target_user.super_admin? || !target_user.has_access?
 
     redirect_to root_path
   end

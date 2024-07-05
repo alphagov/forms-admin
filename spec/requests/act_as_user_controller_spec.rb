@@ -41,6 +41,16 @@ RSpec.describe ActAsUserController, type: :request do
       end
     end
 
+    context "when the target user has been denied access" do
+      let(:access_denied_user) { create(:user, has_access: false) }
+
+      it "returns an unauthorized response" do
+        post act_as_user_start_path(access_denied_user)
+
+        expect(request.env["warden"].user.id).to eq(super_admin_user.id)
+      end
+    end
+
     it "changes the acting user" do
       post act_as_user_start_path(trial_user)
 
