@@ -14,7 +14,7 @@
     <%= t("phase_banner.after_link") %>
   <% end %>
   <%= yield :back_link %>
-  <%= render ActAsUserBannerComponent::View.new(@current_user, User.find_by(id: session[:original_user_id])) %>
+  <%= render ActAsUserBannerComponent::View.new(acting_as_user, actual_user) %>
 <% end %>
 
 <% content_for :footer do %>
