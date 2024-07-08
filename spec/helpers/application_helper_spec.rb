@@ -282,4 +282,51 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
     end
   end
+
+  describe "#acting_as?" do
+    it "returns true when the signed in user is acting as another" do
+      session[:acting_as_user_id] = 1
+
+      expect(helper.acting_as?).to be true
+    end
+
+    it "returns false when the signed in user is not acting as another" do
+      session.delete :acting_as_user_id
+
+      expect(helper.acting_as?).to be false
+    end
+  end
+
+  describe "#actual_user?" do
+    it "returns the original user when the signed in user is acting as another" do
+      user = create :user
+      session[:acting_as_user_id] = 1
+      session[:original_user_id] = user.id
+
+      expect(helper.actual_user).to eq user
+    end
+
+    it "returns nil when the signed in user is not acting as another" do
+      session.delete :acting_as_user_id
+      session.delete :original_user_id
+
+      expect(helper.actual_user).to be_nil
+    end
+  end
+
+  describe "#acting_as_user?" do
+    it "returns the acting as user when the signed in user is acting as another" do
+      user = create :user
+      session[:acting_as_user_id] = user.id
+      request.env["warden"] = OpenStruct.new(user:)
+
+      expect(helper.acting_as_user).to be user
+    end
+
+    it "returns nil when the signed in user is not acting as another" do
+      session.delete :acting_as_user_id
+
+      expect(helper.acting_as_user).to be_nil
+    end
+  end
 end

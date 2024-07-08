@@ -117,4 +117,20 @@ module ApplicationHelper
       end
     end
   end
+
+  def acting_as?
+    session[:acting_as_user_id].present?
+  end
+
+  def actual_user
+    return nil unless acting_as?
+
+    User.find(session[:original_user_id])
+  end
+
+  def acting_as_user
+    return nil unless acting_as?
+
+    request.env["warden"].user
+  end
 end
