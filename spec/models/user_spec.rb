@@ -4,6 +4,8 @@ require "rails_helper"
 describe User, type: :model do
   subject(:user) { described_class.new }
 
+  let(:organisation) { create :organisation }
+
   describe "validations" do
     it "validates" do
       expect(user).to be_valid
@@ -22,6 +24,16 @@ describe User, type: :model do
         user.organisation_id = nil
 
         expect(user).to be_valid
+      end
+    end
+
+    describe "email" do
+      it "does not allow users to be created with the same email with different case" do
+        create(:user, email: "foo.bar@email.gov.uk")
+
+        expect {
+          described_class.create!(name: Faker.name, email: "Foo.Bar@email.gov.uk", role: :editor, organisation_id: organisation.id)
+        }.to raise_error ActiveRecord::RecordInvalid, /Email has already been taken/
       end
     end
 

@@ -46,6 +46,13 @@ describe GroupMemberInput do
       expect(group_member_input).to be_valid
     end
 
+    it "is valid with a email address that is a GOV.UK forms user but case does not match" do
+      create(:user, email: "foo.bar@email.gov.uk")
+      group_member_input.member_email_address = "Foo.Bar@email.gov.uk"
+      group_member_input.role = :editor
+      expect(group_member_input).to be_valid
+    end
+
     describe "#submit" do
       context "when the new Membership has errors" do
         let(:group_member_input) { described_class.new }

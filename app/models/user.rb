@@ -33,6 +33,7 @@ class User < ApplicationRecord
   validates :organisation_id, presence: true, if: :requires_organisation?
   validates :has_access, inclusion: [true, false]
   validates :role, exclusion: %w[organisation_admin], unless: :current_org_has_mou?
+  validates :email, uniqueness: { case_sensitive: false }
 
   before_create do
     self.has_access = false if organisation_restricted_access?
