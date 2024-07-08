@@ -9,7 +9,7 @@ module ActAsUserBannerComponent
     end
 
     def render?
-      @original_user.present?
+      @original_user.present? && @acting_as_user.present?
     end
 
     def acting_as_banner_content
