@@ -12,7 +12,7 @@
         row.with_cell(header: true, text: t("users.index.table_headings.organisation"))
         row.with_cell(header: true, text: t("users.index.table_headings.role"))
         row.with_cell(header: true, text: t("users.index.table_headings.access"))
-        row.with_cell(header: true, text: t("users.index.table_headings.act_as_user")) if Settings.act_as_user_enabled
+        row.with_cell(header: true, text: t("users.index.table_headings.act_as_user"), width: "govuk-!-width-one-quarter") if Settings.act_as_user_enabled
       end
     end %>
 
