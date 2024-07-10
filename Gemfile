@@ -79,6 +79,7 @@ gem "aws-sdk-codepipeline", "~> 1.77"
 gem "MailchimpMarketing", "~> 3.0"
 
 # For clean database dumps
+gem "aws-sdk-s3", require: false
 gem "evil-seed", require: false
 
 group :development, :test do
