@@ -177,6 +177,8 @@ GEM
     dry-cli (1.0.0)
     dumb_delegator (1.0.0)
     erubi (1.13.0)
+    evil-seed (0.6.0)
+      activerecord (>= 5.0)
     excon (0.109.0)
     factory_bot (6.4.5)
       activesupport (>= 5.0.0)
@@ -530,6 +532,7 @@ DEPENDENCIES
   config
   debug
   dfe-autocomplete!
+  evil-seed
   factory_bot_rails
   faker
   gds-sso
