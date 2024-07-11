@@ -23,12 +23,13 @@ namespace :db do
       # upload = Thread.new { s3.upload(key, read_buf) }
       # upload.join
 
-      Tempfile.create(key) do |write_buf|
+      Tempfile.create(key) do |tempfile|
         # read_buf = write_buf.clone
+        write_buf = tempfile
 
         EvilSeed.dump(write_buf)
 
-        read_buf = File.open(write_buf.path, "r")
+        read_buf = File.open(tempfile.path, "r")
 
         s3.upload(key, read_buf)
       end
