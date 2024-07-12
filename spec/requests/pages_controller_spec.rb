@@ -3,7 +3,12 @@ require "rails_helper"
 RSpec.describe PagesController, type: :request do
   let(:form_response) { build :form, id: 2 }
 
+  let(:group) { create :group }
+
   before do
+    create :membership, group:, user: editor_user
+    GroupForm.create! group:, form_id: 2
+
     login_as_editor_user
   end
 
@@ -39,6 +44,8 @@ RSpec.describe PagesController, type: :request do
     let(:original_draft_question) { create :draft_question, form_id: 1, user: editor_user }
 
     before do
+      GroupForm.create! group:, form_id: current_form.id
+
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/1", headers, current_form.to_json, 200
       end

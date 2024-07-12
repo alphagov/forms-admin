@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Forms::MakeLiveController, type: :request do
-  let(:user) { build :editor_user }
+  let(:user) { create :organisation_admin_user }
   let(:id) { 2 }
   let(:form) { build(:form, :ready_for_live, id:) }
 
@@ -18,6 +18,12 @@ RSpec.describe Forms::MakeLiveController, type: :request do
   end
 
   let(:form_params) { nil }
+
+  before do
+    group = create :group, status: :active
+    create(:membership, group:, user:)
+    GroupForm.create! group:, form_id: form.id
+  end
 
   describe "#new" do
     before do

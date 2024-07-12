@@ -15,6 +15,10 @@ RSpec.describe Pages::GuidanceController, type: :request do
   end
 
   before do
+    group = create :group
+    create :membership, group:, user: editor_user
+    GroupForm.create! group:, form_id: form.id
+
     login_as_editor_user
   end
 

@@ -4,6 +4,10 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
   let(:current_user) { editor_user }
 
   before do
+    group = create :group
+    create :membership, group:, user: current_user
+    GroupForm.create! group:, form_id: form.id
+
     login_as current_user
   end
 

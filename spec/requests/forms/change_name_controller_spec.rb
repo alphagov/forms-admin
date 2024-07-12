@@ -14,6 +14,10 @@ RSpec.describe Forms::ChangeNameController, type: :request do
   let(:user) { build :editor_user, id: 1, organisation: }
 
   before do
+    group = create :group
+    create(:membership, group:, user:)
+    GroupForm.create! group:, form_id: 2
+
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms/2", headers, form_response_data, 200
       mock.post "/api/v1/forms", post_headers, { id: 2 }.to_json, 200

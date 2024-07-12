@@ -7,6 +7,10 @@ RSpec.describe Pages::QuestionTextController, type: :request do
   let(:question_text_input) { build :question_text_input, form: }
 
   before do
+    group = create :group
+    create :membership, group:, user: editor_user
+    GroupForm.create! group:, form_id: form.id
+
     login_as_editor_user
   end
 

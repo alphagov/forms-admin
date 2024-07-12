@@ -3,7 +3,14 @@ require "rails_helper"
 RSpec.describe Forms::DeleteConfirmationController, type: :request do
   let(:form) { build(:form, :with_active_resource, id: 2) }
 
+  let(:group) { create :group }
+
   before do
+    if group.present?
+      create :membership, group:, user: editor_user
+      GroupForm.create! group:, form_id: form.id
+    end
+
     login_as_editor_user
   end
 
@@ -25,19 +32,12 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
 
   describe "#destroy" do
     describe "Given a valid form" do
-      let(:group) { create :group, organisation_id: editor_user.organisation_id }
-
       before do
         ActiveResourceMock.mock_resource(form,
                                          {
                                            read: { response: form, status: 200 },
                                            delete: { response: {}, status: 200 },
                                          })
-        GroupForm.create!(group:, form_id: form.id) if group.present?
-
-        if group.present?
-          create(:membership, user: editor_user, group:)
-        end
 
         delete destroy_form_path(form_id: 2, forms_delete_confirmation_input: { confirm: "yes" })
       end

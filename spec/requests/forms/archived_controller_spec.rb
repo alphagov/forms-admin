@@ -5,6 +5,10 @@ RSpec.describe Forms::ArchivedController, type: :request do
   let(:id) { 2 }
 
   before do
+    group = create :group
+    create :membership, group:, user: editor_user
+    GroupForm.create! group:, form_id: form.id
+
     login_as_editor_user
 
     ActiveResource::HttpMock.respond_to do |mock|

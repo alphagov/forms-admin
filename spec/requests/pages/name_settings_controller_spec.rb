@@ -7,6 +7,10 @@ RSpec.describe Pages::NameSettingsController, type: :request do
   let(:name_settings_input) { build :name_settings_input }
 
   before do
+    group = create :group
+    create :membership, group:, user: editor_user
+    GroupForm.create! group:, form_id: form.id
+
     login_as_editor_user
   end
 

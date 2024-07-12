@@ -14,6 +14,10 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
   end
 
   before do
+    group = create :group
+    create(:membership, group:, user:)
+    GroupForm.create! group:, form_id: form.id
+
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms", headers, [form].to_json, 200
       mock.get "/api/v1/forms/1", headers, form.to_json, 200

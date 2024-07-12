@@ -12,6 +12,10 @@ RSpec.describe Forms::PaymentLinkController, type: :request do
   end
 
   before do
+    group = create :group
+    create :membership, group:, user: editor_user
+    GroupForm.create! group:, form_id: form.id
+
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms/2", headers, form.to_json, 200
       mock.put "/api/v1/forms/2", headers

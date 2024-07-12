@@ -41,6 +41,10 @@ RSpec.describe Pages::QuestionsController, type: :request do
   end
 
   before do
+    group = create :group
+    create :membership, group:, user: editor_user
+    GroupForm.create! group:, form_id: 2
+
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms/2", headers, form_response.to_json, 200
       mock.get "/api/v1/forms/2/pages", headers, form_pages_response, 200

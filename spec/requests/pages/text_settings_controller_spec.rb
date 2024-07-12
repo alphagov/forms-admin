@@ -7,6 +7,10 @@ RSpec.describe Pages::TextSettingsController, type: :request do
   let(:text_settings_input) { build :text_settings_input }
 
   before do
+    group = create :group
+    create :membership, group:, user: editor_user
+    GroupForm.create! group:, form_id: form.id
+
     login_as_editor_user
   end
 

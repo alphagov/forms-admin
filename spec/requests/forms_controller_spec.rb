@@ -4,6 +4,10 @@ RSpec.describe FormsController, type: :request do
   let(:form) { build(:form, :with_active_resource, id: 2) }
 
   before do
+    group = create :group
+    create :membership, group:, user: editor_user
+    GroupForm.create! group:, form_id: form.id
+
     login_as_editor_user
   end
 
