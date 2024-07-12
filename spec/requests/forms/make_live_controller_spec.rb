@@ -88,6 +88,14 @@ RSpec.describe Forms::MakeLiveController, type: :request do
         expect(response).to render_template("make_archived_draft_live")
       end
     end
+
+    context "when current user has an editor account" do
+      let(:user) { build :editor_user }
+
+      it "is forbidden" do
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
   end
 
   describe "#create" do

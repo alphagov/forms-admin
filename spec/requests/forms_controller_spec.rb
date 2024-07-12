@@ -55,6 +55,27 @@ RSpec.describe FormsController, type: :request do
         expect(response).to render_template("forms/show")
       end
     end
+
+    context "when current user is not in group for form" do
+      before do
+        other_group = create :group
+        GroupForm.find_by_form_id(form.id).update!(group: other_group)
+
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/2", headers, form.to_json, 200
+        end
+
+        get form_path(2)
+      end
+
+      it "Renders the forbidden page" do
+        expect(response).to render_template("errors/forbidden")
+      end
+
+      it "Returns a 403 status" do
+        expect(response.status).to eq(403)
+      end
+    end
   end
 
   describe "no form found" do

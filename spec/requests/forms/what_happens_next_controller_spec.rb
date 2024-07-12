@@ -36,9 +36,11 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
     })
   end
 
+  let(:group) { create :group }
+  let(:membership) { create :membership, group:, user: editor_user }
+
   before do
-    group = create :group
-    create :membership, group:, user: editor_user
+    membership
     GroupForm.create! group:, form_id: form.id
 
     ActiveResource::HttpMock.respond_to do |mock|
@@ -67,6 +69,14 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
 
     it "Reads the form from the API" do
       expect(form).to have_been_read
+    end
+
+    context "when current user is not in group for form" do
+      let(:membership) { nil }
+
+      it "returns 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
     end
   end
 
@@ -127,6 +137,14 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
 
         it "returns 422" do
           expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
+
+      context "when current user is not in group for form" do
+        let(:membership) { nil }
+
+        it "returns 403" do
+          expect(response).to have_http_status(:forbidden)
         end
       end
     end
@@ -192,6 +210,14 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
 
       it "returns 200" do
         expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context "when current user is not in group for form" do
+      let(:membership) { nil }
+
+      it "returns 403" do
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end

@@ -3,9 +3,11 @@ require "rails_helper"
 RSpec.describe Forms::SubmissionEmailController, type: :request do
   include ActionView::Helpers::TextHelper
 
+  let(:form) { build :form, id: 1, creator_id: 1, organisation_id: 1 }
+  let(:group) { create :group }
+  let(:membership) { create :membership, group:, user: }
   let(:organisation) { build :organisation, id: 1, slug: "test-org" }
   let(:user) { build :editor_user, id: 1, organisation: }
-  let(:form) { build :form, id: 1, creator_id: 1, organisation_id: 1 }
 
   let(:submission_email_mailer_spy) do
     submission_email_mailer = instance_spy(SubmissionEmailMailer)
@@ -14,8 +16,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
   end
 
   before do
-    group = create :group
-    create(:membership, group:, user:)
+    membership
     GroupForm.create! group:, form_id: form.id
 
     ActiveResource::HttpMock.respond_to do |mock|
@@ -39,6 +40,14 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
 
     it "renders the correct page" do
       expect(response).to render_template(:new)
+    end
+
+    context "when current user is not in group for form" do
+      let(:membership) { nil }
+
+      it "is forbidden" do
+        expect(response).to have_http_status(:forbidden)
+      end
     end
   end
 
@@ -73,6 +82,14 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
       end
     end
 
+    context "when current user is not in group for form" do
+      let(:membership) { nil }
+
+      it "is forbidden" do
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
     context "when current user has a government email address not ending with .gov.uk" do
       let(:user) { build :editor_user, email: "user@alb.example", id: 1 }
 
@@ -94,6 +111,14 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     it "renders the correct page" do
       expect(response).to render_template(:submission_email_code_sent)
     end
+
+    context "when current user is not in group for form" do
+      let(:membership) { nil }
+
+      it "is forbidden" do
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
   end
 
   describe "#submission_email_code" do
@@ -107,6 +132,14 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
 
     it "renders the correct page" do
       expect(response).to render_template(:submission_email_code)
+    end
+
+    context "when current user is not in group for form" do
+      let(:membership) { nil }
+
+      it "is forbidden" do
+        expect(response).to have_http_status(:forbidden)
+      end
     end
   end
 
@@ -144,6 +177,14 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
         expect(response).to have_http_status :unprocessable_entity
       end
     end
+
+    context "when current user is not in group for form" do
+      let(:membership) { nil }
+
+      it "is forbidden" do
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
   end
 
   describe "#submission_email_confirmed" do
@@ -158,6 +199,14 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
 
       it "renders the correct page" do
         expect(response).to render_template(:submission_email_confirmed)
+      end
+
+      context "when current user is not in group for form" do
+        let(:membership) { nil }
+
+        it "is forbidden" do
+          expect(response).to have_http_status(:forbidden)
+        end
       end
     end
 

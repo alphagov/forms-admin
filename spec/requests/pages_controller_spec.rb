@@ -4,9 +4,10 @@ RSpec.describe PagesController, type: :request do
   let(:form_response) { build :form, id: 2 }
 
   let(:group) { create :group }
+  let(:membership) { create :membership, group:, user: editor_user }
 
   before do
-    create :membership, group:, user: editor_user
+    membership
     GroupForm.create! group:, form_id: 2
 
     login_as_editor_user
@@ -36,6 +37,18 @@ RSpec.describe PagesController, type: :request do
 
       pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
       expect(ActiveResource::HttpMock.requests).to include pages_request
+    end
+
+    context "when current user is not in group for form" do
+      let(:membership) { nil }
+
+      it "Renders the forbidden page" do
+        expect(response).to render_template("errors/forbidden")
+      end
+
+      it "Returns a 403 status" do
+        expect(response.status).to eq(403)
+      end
     end
   end
 
