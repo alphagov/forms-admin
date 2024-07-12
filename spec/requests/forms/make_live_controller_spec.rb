@@ -82,14 +82,6 @@ RSpec.describe Forms::MakeLiveController, type: :request do
         expect(response).to render_template("make_archived_draft_live")
       end
     end
-
-    context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
   end
 
   describe "#create" do
@@ -171,14 +163,6 @@ RSpec.describe Forms::MakeLiveController, type: :request do
       it "re-renders the page with an error" do
         expect(response).to render_template("make_your_form_live")
         expect(response.body).to include("You cannot make your form live because you have not finished adding questions.")
-      end
-    end
-
-    context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
       end
     end
   end

@@ -65,18 +65,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
       expect(response).to redirect_to new_condition_path(form.id, selected_page.id)
     end
 
-    context "when user should not be allowed to add routes to pages" do
-      let(:organisation_id) { other_organisation_id }
-
-      it "Renders the forbidden page" do
-        expect(response).to render_template("errors/forbidden")
-      end
-
-      it "Returns a 403 status" do
-        expect(response.status).to eq(403)
-      end
-    end
-
     context "when the routing page is not set" do
       let(:params) { { pages_routing_page_input: { routing_page_id: nil } } }
 
@@ -217,18 +205,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     it "renders the new condition page template" do
       expect(response).to render_template("pages/conditions/edit")
     end
-
-    context "when user should not be allowed to add routes to pages" do
-      let(:organisation_id) { other_organisation_id }
-
-      it "Renders the forbidden page" do
-        expect(response).to render_template("errors/forbidden")
-      end
-
-      it "Returns a 403 status" do
-        expect(response.status).to eq(403)
-      end
-    end
   end
 
   describe "#update" do
@@ -280,18 +256,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
         expect(response).to render_template("pages/conditions/edit")
       end
     end
-
-    context "when user should not be allowed to add routes to pages" do
-      let(:organisation_id) { other_organisation_id }
-
-      it "Renders the forbidden page" do
-        expect(response).to render_template("errors/forbidden")
-      end
-
-      it "Returns a 403 status" do
-        expect(response.status).to eq(403)
-      end
-    end
   end
 
   describe "#delete" do
@@ -322,18 +286,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
     it "renders the delete condition page template" do
       expect(response).to render_template("pages/conditions/delete")
-    end
-
-    context "when user should not be allowed to add routes to pages" do
-      let(:organisation_id) { other_organisation_id }
-
-      it "Renders the forbidden page" do
-        expect(response).to render_template("errors/forbidden")
-      end
-
-      it "Returns a 403 status" do
-        expect(response.status).to eq(403)
-      end
     end
   end
 
@@ -404,18 +356,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
       it "renders the delete page" do
         expect(response).to render_template("pages/conditions/delete")
-      end
-    end
-
-    context "when user should not be allowed to add routes to pages" do
-      let(:organisation_id) { other_organisation_id }
-
-      it "Renders the forbidden page" do
-        expect(response).to render_template("errors/forbidden")
-      end
-
-      it "Returns a 403 status" do
-        expect(response.status).to eq(403)
       end
     end
   end

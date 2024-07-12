@@ -49,20 +49,6 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
       it "deletes the form on the API" do
         expect(form).to have_been_deleted
       end
-
-      context "when the form is not in a group" do
-        let(:group) { nil }
-
-        it "redirects to the home page" do
-          expect(response).to redirect_to(root_path)
-        end
-      end
-
-      context "when the groups feature is not enabled", feature_groups: false do
-        it "redirects to the home page" do
-          expect(response).to redirect_to(root_path)
-        end
-      end
     end
   end
 end

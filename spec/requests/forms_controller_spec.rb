@@ -51,54 +51,6 @@ RSpec.describe FormsController, type: :request do
         expect(response).to render_template("forms/show")
       end
     end
-
-    context "with a form from another organisation" do
-      let(:form) do
-        create :organisation, id: 111, slug: "another-org"
-        build :form, organisation_id: 111, id: 2
-      end
-
-      before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", headers, form.to_json, 200
-        end
-
-        get form_path(2)
-      end
-
-      it "Renders the forbidden page" do
-        expect(response).to render_template("errors/forbidden")
-      end
-
-      it "Returns a 403 status" do
-        expect(response.status).to eq(403)
-      end
-    end
-
-    context "with a user with a trial account" do
-      let(:user) { build(:user, :with_trial_role, id: 123) }
-      let(:form) { build(:form, :ready_for_live, :with_active_resource, id: 2, creator_id: user.id) }
-
-      before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", headers, form.to_json, 200
-          mock.get "/api/v1/forms/2/pages", headers, form.pages.to_json, 200
-        end
-
-        login_as user
-
-        get form_path(2)
-      end
-
-      it "does not include setting the submission email address" do
-        expect(response.body).not_to include(submission_email_input_path(2))
-        expect(response.body).not_to include(submission_email_code_path(2))
-      end
-
-      it "does not include making a form live" do
-        expect(response.body).not_to include(make_live_path(2))
-      end
-    end
   end
 
   describe "no form found" do

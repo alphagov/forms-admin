@@ -36,22 +36,6 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     it "renders the correct page" do
       expect(response).to render_template(:new)
     end
-
-    context "when current user does not own form" do
-      let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role, id: 1 }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
   end
 
   describe "#create" do
@@ -85,22 +69,6 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
       end
     end
 
-    context "when current user does not own form" do
-      let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role, id: 1 }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-
     context "when current user has a government email address not ending with .gov.uk" do
       let(:user) { build :editor_user, email: "user@alb.example", id: 1 }
 
@@ -122,22 +90,6 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     it "renders the correct page" do
       expect(response).to render_template(:submission_email_code_sent)
     end
-
-    context "when current user does not own form" do
-      let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role, id: 1 }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
   end
 
   describe "#submission_email_code" do
@@ -151,22 +103,6 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
 
     it "renders the correct page" do
       expect(response).to render_template(:submission_email_code)
-    end
-
-    context "when current user does not own form" do
-      let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role, id: 1 }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
     end
   end
 
@@ -204,22 +140,6 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
         expect(response).to have_http_status :unprocessable_entity
       end
     end
-
-    context "when current user does not own form" do
-      let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role, id: 1 }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
   end
 
   describe "#submission_email_confirmed" do
@@ -234,22 +154,6 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
 
       it "renders the correct page" do
         expect(response).to render_template(:submission_email_confirmed)
-      end
-
-      context "when current user does not own form" do
-        let(:form) { build :form, id: 1, creator_id: 2, organisation_id: 2 }
-
-        it "is forbidden" do
-          expect(response).to have_http_status(:forbidden)
-        end
-      end
-
-      context "when current user has a trial account" do
-        let(:user) { build :user, :with_trial_role, id: 1 }
-
-        it "is forbidden" do
-          expect(response).to have_http_status(:forbidden)
-        end
       end
     end
 

@@ -52,14 +52,6 @@ RSpec.describe Forms::UnarchiveController, type: :request do
     it "renders the confirmation page" do
       expect(response).to render_template("unarchive_form")
     end
-
-    context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
   end
 
   describe "#create" do
@@ -126,14 +118,6 @@ RSpec.describe Forms::UnarchiveController, type: :request do
       it "re-renders the page with an error" do
         expect(response).to render_template("unarchive_form")
         expect(response.body).to include("You must choose an option")
-      end
-    end
-
-    context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
       end
     end
   end

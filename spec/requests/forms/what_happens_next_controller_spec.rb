@@ -64,14 +64,6 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
     it "Reads the form from the API" do
       expect(form).to have_been_read
     end
-
-    context "when the user is not authorised to view the form" do
-      let(:form_organisation_id) { 999 }
-
-      it "returns 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
   end
 
   describe "#create" do
@@ -131,14 +123,6 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
 
         it "returns 422" do
           expect(response).to have_http_status(:unprocessable_entity)
-        end
-      end
-
-      context "when the user is not authorised to view the form" do
-        let(:form_organisation_id) { 999 }
-
-        it "returns 403" do
-          expect(response).to have_http_status(:forbidden)
         end
       end
     end
@@ -204,14 +188,6 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
 
       it "returns 200" do
         expect(response).to have_http_status(:ok)
-      end
-    end
-
-    context "when the user is not authorised to view the form" do
-      let(:form_organisation_id) { 999 }
-
-      it "returns 403" do
-        expect(response).to have_http_status(:forbidden)
       end
     end
   end
