@@ -2,11 +2,11 @@ require "rails_helper"
 require_relative "../../app/lib/json_log_formatter"
 
 RSpec.describe JsonLogFormatter do
-  it "merges the JSON if message is JSON" do
-    input_json_message = { one: 1, two: 2 }.to_json
+  it "merges the hash if message is hash" do
+    input_hash_message = { one: 1, two: 2 }
     expected_output = "{\"level\":\"INFO\",\"time\":\"10:00\",\"one\":1,\"two\":2}\n"
 
-    expect(described_class.new.call("INFO", "10:00", "testing", input_json_message)).to eq(expected_output)
+    expect(described_class.new.call("INFO", "10:00", "testing", input_hash_message)).to eq(expected_output)
   end
 
   it "adds the message as message field if it is a string" do

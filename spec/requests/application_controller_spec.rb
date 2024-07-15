@@ -3,6 +3,9 @@ require "rails_helper"
 RSpec.describe ApplicationController, type: :request do
   let(:form) { build :form, id: 1 }
 
+  let(:output) { StringIO.new }
+  let(:logger) { ActiveSupport::Logger.new(output) }
+
   before do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms?organisation_id=1", headers, [form].to_json, 200
@@ -13,26 +16,42 @@ RSpec.describe ApplicationController, type: :request do
     login_as_editor_user
   end
 
-  context "when there is a application load balancer trace ID" do
-    let(:payloads) { [] }
-    let(:payload) { payloads.last }
-
-    let!(:subscriber) do
-      ActiveSupport::Notifications.subscribe("process_action.action_controller") do |_, _, _, _, payload|
-        payloads << payload
-      end
-    end
+  describe "logging" do
+    let(:trace_id) { "Root=1-63441c4a-abcdef012345678912345678" }
+    let(:request_id) { "a-request-id" }
 
     before do
-      get root_path, headers: { "HTTP_X_AMZN_TRACE_ID": "Root=1-63441c4a-abcdef012345678912345678" }
+      # Intercept the request logs so we can do assertions on them
+      allow(Lograge).to receive(:logger).and_return(logger)
+
+      get root_path, headers: {
+        "HTTP_X_AMZN_TRACE_ID": trace_id,
+        "X-Request-ID": request_id,
+      }
     end
 
-    after do
-      ActiveSupport::Notifications.unsubscribe(subscriber)
+    it "includes the trace ID on log lines" do
+      expect(log_lines[0]["trace_id"]).to eq(trace_id)
     end
 
-    it "adds the trace ID to the instrumentation payload" do
-      expect(payload).to include(trace_id: "Root=1-63441c4a-abcdef012345678912345678")
+    it "includes the request_id on log lines" do
+      expect(log_lines[0]["request_id"]).to eq(request_id)
+    end
+
+    it "includes the host on log lines" do
+      expect(log_lines[0]["host"]).to eq("www.example.com")
+    end
+
+    it "includes the user_id on log lines" do
+      expect(log_lines[0]["user_id"]).to eq(editor_user.id)
+    end
+
+    it "includes the user_email on log lines" do
+      expect(log_lines[0]["user_email"]).to eq(editor_user.email)
+    end
+
+    it "includes the user_organisation_slug on log lines" do
+      expect(log_lines[0]["user_organisation_slug"]).to eq(editor_user.organisation.slug)
     end
   end
 
@@ -158,5 +177,9 @@ RSpec.describe ApplicationController, type: :request do
       get rails_health_check_path
       expect(response).to have_http_status(:ok)
     end
+  end
+
+  def log_lines
+    output.string.split("\n").map { |line| JSON.parse(line) }
   end
 end

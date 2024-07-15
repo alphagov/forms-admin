@@ -3,6 +3,7 @@ require "resolv"
 class ApplicationController < ActionController::Base
   include Pundit::Authorization
   include AfterSignInPathHelper
+  before_action :set_logging_attributes
   before_action :set_request_id
   before_action :check_maintenance_mode_is_enabled
   before_action :authenticate_and_check_access
@@ -39,20 +40,19 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def append_info_to_payload(payload)
-    super
-    payload[:host] = request.host
+  def set_logging_attributes
+    CurrentLoggingAttributes.host = request.host
+    CurrentLoggingAttributes.request_id = request.request_id
+    CurrentLoggingAttributes.session_id_hash = Digest::SHA256.hexdigest session.id.to_s if session.exists?
+    CurrentLoggingAttributes.trace_id = request.env["HTTP_X_AMZN_TRACE_ID"].presence
+    CurrentLoggingAttributes.user_ip = user_ip(request.env.fetch("HTTP_X_FORWARDED_FOR", ""))
     if current_user.present?
-      payload[:user_id] = current_user.id
-      payload[:user_email] = current_user.email
-      payload[:user_organisation_slug] = current_user.organisation&.slug
+      CurrentLoggingAttributes.user_id = current_user.id
+      CurrentLoggingAttributes.user_email = current_user.email
+      CurrentLoggingAttributes.user_organisation_slug = current_user.organisation&.slug
     end
-    payload[:request_id] = request.request_id
-    payload[:user_ip] = user_ip(request.env.fetch("HTTP_X_FORWARDED_FOR", ""))
-    payload[:form_id] = params[:form_id] if params[:form_id].present?
-    payload[:page_id] = params[:page_id] if params[:page_id].present?
-    payload[:session_id_hash] = Digest::SHA256.hexdigest session.id.to_s if session.exists?
-    payload[:trace_id] = request.env["HTTP_X_AMZN_TRACE_ID"].presence
+    CurrentLoggingAttributes.form_id = params[:form_id] if params[:form_id].present?
+    CurrentLoggingAttributes.page_id = params[:page_id] if params[:page_id].present?
   end
 
   def set_request_id
