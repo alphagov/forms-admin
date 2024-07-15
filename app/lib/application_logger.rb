@@ -31,7 +31,12 @@ private
   def as_hash(msg, attribs = {})
     msg = yield if block_given?
 
-    message_to_hash(msg).merge(attribs || {}).merge(CurrentLoggingAttributes.attributes).compact
+    begin
+      message_to_hash(msg).merge(attribs || {}).merge(CurrentLoggingAttributes.attributes).compact
+    rescue NameError
+      # if logs aren't attached to a request, CurrentLoggingAttributes will be uninitialized
+      message_to_hash(msg).merge(attribs || {})
+    end
   end
 
   def message_to_hash(message)
