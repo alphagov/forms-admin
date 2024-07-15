@@ -16,15 +16,21 @@ RSpec.describe "CustomComponentGenerator", type: :generator do
     FileUtils.rm_rf(destination_root)
   end
 
-  context "when no arguments are supplied" do
-    it "creates the component files" do
-      expect(File.read(File.join(destination_root, "app/components/my_component/view.rb"))).to include("module MyComponent")
-      expect(File.read(File.join(destination_root, "app/components/my_component/view.html.erb"))).to include("<%# Add HTML here %>")
-    end
+  it "creates the component files" do
+    expect(File.read(File.join(destination_root, "app/components/my_component/view.rb"))).to include("module MyComponent")
+    expect(File.read(File.join(destination_root, "app/components/my_component/view.html.erb"))).to include("<%# Add HTML here %>")
+  end
 
-    it "creates the spec files" do
-      expect(File.read(File.join(destination_root, "spec/components/my_component/my_component_preview.rb"))).to include("class MyComponent::MyComponentPreview < ViewComponent::Preview")
-      expect(File.read(File.join(destination_root, "spec/components/my_component/view_spec.rb"))).to include("RSpec.describe MyComponent::View, type: :component do")
+  it "creates the spec files" do
+    expect(File.read(File.join(destination_root, "spec/components/my_component/my_component_preview.rb"))).to include("class MyComponent::MyComponentPreview < ViewComponent::Preview")
+    expect(File.read(File.join(destination_root, "spec/components/my_component/view_spec.rb"))).to include("RSpec.describe MyComponent::View, type: :component do")
+  end
+
+  context "when the css argument is supplied" do
+    arguments ["my", "--css"]
+
+    it "creates the sass partial" do
+      expect(File.read(File.join(destination_root, "app/components/my_component/_index.scss"))).to include("// Add styles here")
     end
   end
 end
