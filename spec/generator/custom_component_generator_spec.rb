@@ -33,4 +33,13 @@ RSpec.describe "CustomComponentGenerator", type: :generator do
       expect(File.read(File.join(destination_root, "app/components/my_component/_index.scss"))).to include("// Add styles here")
     end
   end
+
+  context "when the javascript argument is supplied" do
+    arguments ["my", "--javascript"]
+
+    it "creates the js file and test" do
+      expect(File.read(File.join(destination_root, "app/components/my_component/index.js"))).to include("// Add JS here")
+      expect(File.read(File.join(destination_root, "app/components/my_component/index.test.js"))).to include("// Add JS tests here")
+    end
+  end
 end

@@ -1,7 +1,7 @@
 Description:
     Generates a custom ViewComponent in the components directory with a view.rb 
-    and a html template. Also creates a spec file and preview. Optionally adds a
-    sass partial.
+    and a html template. Also creates a spec file and preview. Can be configured
+    to add a ass partial, javascript file and javascript test.
 
 Example:
     bin/rails generate custom_component Thing
@@ -19,5 +19,16 @@ Example:
         app/components/thing_component/view.rb
         app/components/thing_component/view.html.erb
         app/components/thing_component/_index.scss
+        spec/components/thing_component/thing_component_preview.rb
+        spec/components/thing_component/view_spec.rb
+
+
+    bin/rails generate custom_component Thing --javascript
+
+    This will create:
+        app/components/thing_component/view.rb
+        app/components/thing_component/view.html.erb
+        app/components/thing_component/index.js
+        app/components/thing_component/index.test.js
         spec/components/thing_component/thing_component_preview.rb
         spec/components/thing_component/view_spec.rb
