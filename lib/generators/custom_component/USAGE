@@ -21,6 +21,10 @@ Example:
         app/components/thing_component/_index.scss
         spec/components/thing_component/thing_component_preview.rb
         spec/components/thing_component/view_spec.rb
+        
+    If you want your styles to be rendered, you'll need to import the generated 
+    .scss file in `app/frontend/entrypoints/application.scss` or one of the scss
+    files it imports.
 
 
     bin/rails generate custom_component Thing --javascript
@@ -32,3 +36,7 @@ Example:
         app/components/thing_component/index.test.js
         spec/components/thing_component/thing_component_preview.rb
         spec/components/thing_component/view_spec.rb
+        
+    If you want your JavaScript to work, you'll need to import the generated 
+    index.js file in `app/frontend/entrypoints/application.js` or one of the JS
+    files it imports.
