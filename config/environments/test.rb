@@ -1,4 +1,5 @@
 require "active_support/core_ext/integer/time"
+require "./app/lib/application_logger"
 
 # The test environment is used exclusively to run your application's
 # test suite. You never need to work with it otherwise. Remember that
@@ -65,4 +66,8 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # Disable log output for tests
+  config.lograge.logger = ActiveSupport::Logger.new(nil)
+  config.logger = ApplicationLogger.new(nil)
 end

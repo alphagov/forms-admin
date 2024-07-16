@@ -4,6 +4,7 @@ require "rails/all"
 
 require "./app/lib/hosting_environment"
 require "./app/lib/json_log_formatter"
+require "./app/lib/application_logger"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -43,13 +44,10 @@ module FormsAdmin
     ### LOGGING CONFIGURATION ###
     config.log_level = :info
 
-    # Use JSON log formatter for better support in Splunk. To use conventional
-    # logging use the Logger::Formatter.new.
-    config.log_formatter = JsonLogFormatter.new
-
     # Lograge is used to format the standard HTTP request logging
     config.lograge.enabled = true
     config.lograge.formatter = Lograge::Formatters::Json.new
+    config.lograge.logger = ActiveSupport::Logger.new($stdout)
 
     # Lograge suppresses the default Rails request logging. Set this to true to
     #  make lograge output it which includes some extra debugging
@@ -57,20 +55,12 @@ module FormsAdmin
     config.lograge.keep_original_rails_log = false
 
     config.lograge.custom_options = lambda do |event|
-      {}.tap do |h|
-        h[:host] = event.payload[:host]
-        h[:user_id] = event.payload[:user_id]
-        h[:user_email] = event.payload[:user_email]
-        h[:user_organisation_slug] = event.payload[:user_organisation_slug]
-        h[:user_ip] = event.payload[:user_ip]
-        h[:request_id] = event.payload[:request_id]
-        h[:user_id] = event.payload[:user_id]
-        h[:form_id] = event.payload[:form_id] if event.payload[:form_id]
-        h[:page_id] = event.payload[:page_id] if event.payload[:page_id]
-        h[:exception] = event.payload[:exception] if event.payload[:exception]
-        h[:session_id_hash] = event.payload[:session_id_hash] if event.payload[:session_id_hash]
-        h[:trace_id] = event.payload[:trace_id] if event.payload[:trace_id]
-      end
+      CurrentLoggingAttributes.attributes.merge(exception: event.payload[:exception]).compact
     end
+
+    # Use custom logger and formatter to log in JSON with request context fields. To use conventional
+    # logging use ActiveSupport::Logger.new($stdout).
+    config.logger = ApplicationLogger.new($stdout)
+    config.logger.formatter = JsonLogFormatter.new
   end
 end
