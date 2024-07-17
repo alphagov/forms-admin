@@ -47,7 +47,11 @@ sentry:
 # How we authenticate users
 auth_provider: # use default auth_provider from environment
 
-auth_valid_for: 86400 # the time after which re-authentication is required, in seconds
+# The time the user's authorisation session is valid for. After this time, the session with have to be re-authorised
+# with Auth0. If the user's session on Auth0 is still valid, the user will not be required to login again.
+# If we change this value, we should also change the session timeout for the Auth0 tenant (configured in terraform) to
+# match it.
+auth_valid_for: 28800 # 8 hours
 
 auth0:
   client_id: changeme
