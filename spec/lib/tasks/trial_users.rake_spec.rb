@@ -16,6 +16,10 @@ RSpec.describe "trial_users.rake" do
 
     let(:summarizer_double) { instance_double(Summarizer) }
 
+    before do
+      allow($stdout).to receive(:puts)
+    end
+
     it "runs" do
       expect { task.invoke }.not_to raise_error
     end
