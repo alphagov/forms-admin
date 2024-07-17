@@ -71,12 +71,6 @@ Rails.application.configure do
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
 
-  # For development - to prevent logs from being noisy, we use the default rails logger. In application.rb we configure
-  # a custom logger that adds additional context to logs to make them easier to search and manipulate in Splunk.
-  # To test the custom logger that we use in production locally, comment this out.
-  config.logger = ActiveSupport::Logger.new($stdout)
-    .tap { |logger| logger.formatter = config.log_formatter }
-
   # Make request logs less noisy when running locally. To test the additional logging context we add for production,
   # comment this line out.
   config.lograge.custom_options = nil
