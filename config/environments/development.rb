@@ -70,8 +70,4 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
-
-  # Make request logs less noisy when running locally. To test the additional logging context we add for production,
-  # comment this line out.
-  config.lograge.custom_options = nil
 end
