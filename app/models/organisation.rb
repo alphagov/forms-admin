@@ -7,8 +7,6 @@ class Organisation < ApplicationRecord
 
   has_many :mou_signatures
 
-  belongs_to :default_group, class_name: "Group", optional: true
-
   scope :not_closed, -> { where(closed: false) }
   scope :with_users, -> { joins(:users).distinct.order(:name) }
 

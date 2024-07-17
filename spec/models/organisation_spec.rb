@@ -28,22 +28,6 @@ RSpec.describe Organisation, type: :model do
     end
   end
 
-  describe "associations" do
-    describe "default_group" do
-      it "does not have a default group by default" do
-        expect(described_class.new.default_group).to be_nil
-      end
-
-      it "returns the default group when assigned" do
-        organisation = described_class.create!(name: "test org", slug: "test-org")
-        group = create(:group, organisation:)
-        organisation.update!(default_group: group)
-
-        expect(organisation.default_group).to eq(group)
-      end
-    end
-  end
-
   describe "scopes" do
     describe ".with_users" do
       it "returns organisations with distinct users" do
