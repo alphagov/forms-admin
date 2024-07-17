@@ -5,6 +5,7 @@ require "capybara/rspec"
 require "validate_url/rspec_matcher"
 require "selenium/webdriver"
 require "axe-rspec"
+require "rails/generators/testing/behavior"
 
 ENV["RACK_ENV"] ||= "test"
 ENV["RAILS_ENV"] ||= "test"
@@ -83,4 +84,5 @@ RSpec.configure do |config|
   config.include Capybara::RSpecMatchers, type: :component
   config.include Sentry::TestHelper
   config.include Rails.application.routes.url_helpers
+  config.include Rails::Generators::Testing::Behavior, type: :generator
 end

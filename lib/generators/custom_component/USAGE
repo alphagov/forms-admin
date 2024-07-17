@@ -1,0 +1,42 @@
+Description:
+    Generates a custom ViewComponent in the components directory with a view.rb 
+    and a html template. Also creates a spec file and preview. Can be configured
+    to add a ass partial, javascript file and javascript test.
+
+Example:
+    bin/rails generate custom_component Thing
+
+    This will create:
+        app/components/thing_component/view.rb
+        app/components/thing_component/view.html.erb
+        spec/components/thing_component/thing_component_preview.rb
+        spec/components/thing_component/view_spec.rb
+
+
+    bin/rails generate custom_component Thing --css
+
+    This will create:
+        app/components/thing_component/view.rb
+        app/components/thing_component/view.html.erb
+        app/components/thing_component/_index.scss
+        spec/components/thing_component/thing_component_preview.rb
+        spec/components/thing_component/view_spec.rb
+        
+    If you want your styles to be rendered, you'll need to import the generated 
+    .scss file in `app/frontend/entrypoints/application.scss` or one of the scss
+    files it imports.
+
+
+    bin/rails generate custom_component Thing --javascript
+
+    This will create:
+        app/components/thing_component/view.rb
+        app/components/thing_component/view.html.erb
+        app/components/thing_component/index.js
+        app/components/thing_component/index.test.js
+        spec/components/thing_component/thing_component_preview.rb
+        spec/components/thing_component/view_spec.rb
+        
+    If you want your JavaScript to work, you'll need to import the generated 
+    index.js file in `app/frontend/entrypoints/application.js` or one of the JS
+    files it imports.

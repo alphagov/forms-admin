@@ -1,0 +1,5 @@
+require "rails_helper"
+
+RSpec.describe <%= class_name %>Component::View, type: :component do
+  pending "Add tests for this component here"
+end

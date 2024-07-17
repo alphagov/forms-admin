@@ -1,0 +1,6 @@
+# frozen_string_literal: true
+
+module <%= class_name %>Component
+  class View < ViewComponent::Base
+  end
+end
