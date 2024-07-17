@@ -3,6 +3,10 @@ require "rails_helper"
 RSpec.describe MailchimpListSynchronizer do
   subject(:mailchimp_list_synchronizer) { described_class }
 
+  before do
+    allow($stdout).to receive(:puts)
+  end
+
   describe "#synchronize" do
     let(:mailchimp_client) do
       instance_double(MailchimpMarketing::Client)
