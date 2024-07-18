@@ -38,6 +38,6 @@ private
   end
 
   def then_i_am_redirected_back_to_the_groups_page
-    expect(page).to have_current_path(groups_path)
+    expect(page).to have_current_path(root_path)
   end
 end
