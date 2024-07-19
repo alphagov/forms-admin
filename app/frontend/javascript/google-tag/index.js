@@ -1,5 +1,5 @@
 export function installAnalyticsScript (global) {
-  const GTAG_ID = 'GTM-T2SJXKKQ'
+  const GTAG_ID = 'GTM-MFJWJNW'
   if (!window.ga) {
     ;(function (w, d, s, l, i) {
       w[l] = w[l] || []
