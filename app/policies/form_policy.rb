@@ -1,8 +1,6 @@
 class FormPolicy
   attr_reader :user, :form
 
-  class UserMissingOrganisationError < StandardError; end
-
   def initialize(user, form)
     @user = user
     @form = form
