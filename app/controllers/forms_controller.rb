@@ -23,7 +23,6 @@ class FormsController < ApplicationController
       redirect_to form_path(current_form), success: success_message
     else
       @mark_complete_input.mark_complete = "false"
-      @forms = policy_scope(Form) || []
       render "pages/index", locals: { current_form: }, status: :unprocessable_entity
     end
   end
