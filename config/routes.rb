@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get "/security.txt" => redirect("https://vdp.cabinetoffice.gov.uk/.well-known/security.txt")
   get "/.well-known/security.txt" => redirect("https://vdp.cabinetoffice.gov.uk/.well-known/security.txt")
 
-  root "homepage#index"
+  root "groups#index"
 
   get "/sign-up" => "authentication#sign_up", as: :sign_up
   get "/sign-out" => "authentication#sign_out", as: :sign_out
