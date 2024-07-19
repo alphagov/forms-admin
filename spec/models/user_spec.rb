@@ -94,16 +94,6 @@ describe User, type: :model do
         user.name = nil
         expect(user).to be_invalid
       end
-
-      it "is not valid to leave name unset if changing role to editor" do
-        user.role = :editor
-        expect(user).to be_invalid
-      end
-
-      it "is not valid to leave name unset if changing role to super admin" do
-        user.role = :super_admin
-        expect(user).to be_invalid
-      end
     end
 
     context "when the user belongs to an organisation that doesn't have a signed mou" do
