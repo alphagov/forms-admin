@@ -25,6 +25,8 @@ module ActAsUserBannerComponent
 
       user_text = if @acting_as_user.organisation_admin?
                     "an organisation admin"
+                  elsif @acting_as_user.standard?
+                    "a standard user"
                   elsif @acting_as_user.editor?
                     "an editor user"
                   elsif @acting_as_user.trial?

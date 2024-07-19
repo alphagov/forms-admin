@@ -45,6 +45,14 @@ RSpec.describe ActAsUserBannerComponent::View, type: :component do
     end
   end
 
+  context "when the user is an standard user" do
+    let(:acting_as_user) { create :user, role: :standard }
+
+    it renders_the_user_role do
+      expect(page).to have_text(/You are acting as .* a standard user/)
+    end
+  end
+
   context "when the user is an editor user" do
     let(:acting_as_user) { create :user, role: :editor }
 
