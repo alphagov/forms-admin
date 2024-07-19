@@ -40,11 +40,9 @@ describe User, type: :model do
     context "when updating organisation" do
       let(:user) { create :user, :with_no_org, role: :trial }
 
-      context "when user has been created with a trial account" do
-        it "is valid to leave organisation unset" do
-          user.organisation_id = nil
-          expect(user).to be_valid
-        end
+      it "is valid to leave organisation unset" do
+        user.organisation_id = nil
+        expect(user).to be_valid
       end
 
       it "is not valid to unset organisation if it is already set" do
@@ -52,11 +50,6 @@ describe User, type: :model do
         user.save!
 
         user.organisation_id = nil
-        expect(user).to be_invalid
-      end
-
-      it "is not valid to leave organisation unset if changing role to editor" do
-        user.role = :editor
         expect(user).to be_invalid
       end
 

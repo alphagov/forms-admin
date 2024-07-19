@@ -191,8 +191,8 @@ RSpec.describe UsersController, type: :request do
           expect(user.reload.organisation).to be_nil
         end
 
-        it "returns an error if organisation is not chosen and role is changed to editor" do
-          put user_path(user), params: { user: { role: "editor", organisation_id: nil } }
+        it "returns an error if organisation is not chosen and role is changed to organisation_admin" do
+          put user_path(user), params: { user: { role: "organisation_admin", organisation_id: nil } }
           expect(response).to have_http_status(:unprocessable_entity)
           expect(user.reload.role).to eq("trial")
         end
