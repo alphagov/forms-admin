@@ -3,25 +3,6 @@ class FormPolicy
 
   class UserMissingOrganisationError < StandardError; end
 
-  class Scope
-    attr_reader :user, :form, :scope
-
-    def initialize(user, scope)
-      raise UserMissingOrganisationError, "Missing required attribute organisation_id" unless user.organisation_valid?
-
-      @user = user
-      @scope = scope
-    end
-
-    def resolve
-      if user.super_admin?
-        scope
-      else
-        scope.where(organisation_id: user.organisation.id)
-      end
-    end
-  end
-
   def initialize(user, form)
     raise UserMissingOrganisationError, "Missing required attribute organisation_id" unless user.organisation_valid?
 
