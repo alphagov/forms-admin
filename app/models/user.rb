@@ -77,10 +77,6 @@ class User < ApplicationRecord
     trial? || editor? || standard?
   end
 
-  def organisation_valid?
-    trial? || organisation.present?
-  end
-
   def given_organisation?
     organisation_id.present? && organisation_id_previously_changed?(from: nil)
   end
