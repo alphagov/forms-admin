@@ -19,7 +19,11 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
   let(:address_settings_input) { build :address_settings_input, draft_question: }
 
+  let(:group) { create(:group, organisation: editor_user.organisation) }
+
   before do
+    Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user)
+    GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_editor_user
   end
 

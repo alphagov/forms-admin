@@ -11,6 +11,8 @@ RSpec.describe Forms::PaymentLinkController, type: :request do
     new_form
   end
 
+  let(:group) { create(:group, organisation: editor_user.organisation) }
+
   before do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms/2", headers, form.to_json, 200
@@ -22,6 +24,9 @@ RSpec.describe Forms::PaymentLinkController, type: :request do
                                        read: { response: form, status: 200 },
                                        update: { response: updated_form, status: 200 },
                                      })
+
+    Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user)
+    GroupForm.create!(form_id: form.id, group_id: group.id)
 
     login_as_editor_user
   end

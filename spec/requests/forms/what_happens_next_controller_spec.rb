@@ -36,6 +36,9 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
     })
   end
 
+  let(:user) { editor_user }
+  let(:group) { create(:group, organisation: editor_user.organisation) }
+
   before do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms/2", headers, form.to_json, 200
@@ -48,7 +51,10 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
                                        update: { response: updated_form, status: 200 },
                                      })
 
-    login_as_editor_user
+    Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user)
+    GroupForm.create!(form_id: form.id, group_id: group.id)
+
+    login_as user
   end
 
   describe "#new" do
@@ -66,7 +72,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
     end
 
     context "when the user is not authorised to view the form" do
-      let(:form_organisation_id) { 999 }
+      let(:user) { build :user }
 
       it "returns 403" do
         expect(response).to have_http_status(:forbidden)
@@ -135,7 +141,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       end
 
       context "when the user is not authorised to view the form" do
-        let(:form_organisation_id) { 999 }
+        let(:user) { build :user }
 
         it "returns 403" do
           expect(response).to have_http_status(:forbidden)
@@ -208,7 +214,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
     end
 
     context "when the user is not authorised to view the form" do
-      let(:form_organisation_id) { 999 }
+      let(:user) { build :user }
 
       it "returns 403" do
         expect(response).to have_http_status(:forbidden)

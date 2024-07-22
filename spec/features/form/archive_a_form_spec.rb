@@ -3,6 +3,7 @@ require "rails_helper"
 feature "Archive a form", type: :feature do
   let(:form) { build(:form, :live, id: 1) }
   let(:org_forms) { [form] }
+  let(:group) { create(:group, organisation: editor_user.organisation) }
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
@@ -13,9 +14,8 @@ feature "Archive a form", type: :feature do
       mock.post "/api/v1/forms/1/archive", post_headers, {}, 200
     end
 
-    group = create :group
-    GroupForm.create! group:, form_id: 1
-    create :membership, group:, user: editor_user
+    GroupForm.create! group:, form_id: form.id
+    create(:membership, group:, user: editor_user, added_by: editor_user)
 
     login_as editor_user
   end

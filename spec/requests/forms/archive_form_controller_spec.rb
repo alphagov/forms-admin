@@ -4,7 +4,11 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
   let(:id) { 2 }
   let(:form) { build(:form, :live, id:) }
 
+  let(:group) { create(:group, organisation: editor_user.organisation) }
+
   before do
+    Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user)
+    GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_editor_user
   end
 

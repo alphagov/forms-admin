@@ -19,6 +19,9 @@ RSpec.describe Forms::MakeLiveController, type: :request do
 
   let(:form_params) { nil }
 
+  let(:group_role) { :group_admin }
+  let(:group) { create(:group, organisation: editor_user.organisation, status: :active) }
+
   describe "#new" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -31,6 +34,9 @@ RSpec.describe Forms::MakeLiveController, type: :request do
                                          read: { response: form, status: 200 },
                                          update: { response: updated_form, status: 200 },
                                        })
+
+      Membership.create!(group_id: group.id, user:, added_by: user, role: group_role)
+      GroupForm.create!(form_id: form.id, group_id: group.id)
 
       login_as user
 
@@ -82,14 +88,6 @@ RSpec.describe Forms::MakeLiveController, type: :request do
         expect(response).to render_template("make_archived_draft_live")
       end
     end
-
-    context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
   end
 
   describe "#create" do
@@ -99,6 +97,9 @@ RSpec.describe Forms::MakeLiveController, type: :request do
         mock.get "/api/v1/forms/2", headers, form.to_json, 200
         mock.get "/api/v1/forms/2/live", headers, form.to_json, 200
       end
+
+      Membership.create!(group_id: group.id, user:, added_by: user, role: group_role)
+      GroupForm.create!(form_id: form.id, group_id: group.id)
 
       login_as user
 
@@ -175,7 +176,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
     end
 
     context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role }
+      let(:group_role) { :editor }
 
       it "is forbidden" do
         expect(response).to have_http_status(:forbidden)

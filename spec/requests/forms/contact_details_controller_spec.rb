@@ -3,8 +3,12 @@ require "rails_helper"
 RSpec.describe Forms::ContactDetailsController, type: :request do
   let(:current_user) { editor_user }
 
+  let(:group) { create(:group, organisation: editor_user.organisation) }
+
   before do
-    login_as current_user
+    Membership.create!(group_id: group.id, user: current_user, added_by: current_user)
+    GroupForm.create!(form_id: form.id, group_id: group.id)
+    login_as_editor_user
   end
 
   describe "#new" do

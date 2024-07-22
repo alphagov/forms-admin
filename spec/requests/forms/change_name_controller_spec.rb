@@ -12,6 +12,7 @@ RSpec.describe Forms::ChangeNameController, type: :request do
 
   let(:organisation) { build :organisation, id: 1, slug: "test-org" }
   let(:user) { build :editor_user, id: 1, organisation: }
+  let(:group) { create(:group, organisation: editor_user.organisation) }
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
@@ -20,6 +21,8 @@ RSpec.describe Forms::ChangeNameController, type: :request do
       mock.put "/api/v1/forms/2", post_headers
     end
 
+    Membership.create!(group_id: group.id, user:, added_by: user)
+    GroupForm.create!(form_id: 2, group_id: group.id)
     login_as user
   end
 
