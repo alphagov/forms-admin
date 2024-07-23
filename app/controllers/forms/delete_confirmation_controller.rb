@@ -9,6 +9,8 @@ module Forms
     end
 
     def destroy
+      authorize current_form
+
       load_page_variables
       @delete_confirmation_input = DeleteConfirmationInput.new(delete_confirmation_input_params)
 
@@ -68,7 +70,6 @@ module Forms
     def delete_form(form)
       success_url = groups_enabled && form.group.present? ? group_path(form.group) : root_path
 
-      authorize form
       if form.destroy
         redirect_to success_url, status: :see_other, success: "Successfully deleted ‘#{form.name}’"
       else
@@ -79,7 +80,6 @@ module Forms
     def delete_page(form, page)
       success_url = form_pages_path(form)
 
-      authorize form
       if page.destroy
         redirect_to success_url, status: :see_other, success: "Successfully deleted ‘#{page.question_text}’"
       else
