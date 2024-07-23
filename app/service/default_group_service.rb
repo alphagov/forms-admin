@@ -11,11 +11,11 @@ class DefaultGroupService
     not_group_form_ids = form_ids.to_set - group_form_ids
 
     if not_group_form_ids.blank?
-      Rails.logger.info "DefaultGroupService: Trial user '#{user.name}' does not have any forms not in groups, skipping creating default group"
+      Rails.logger.info "DefaultGroupService: User '#{user.name}' does not have any forms not in groups, skipping creating default group"
       return
     end
 
-    Rails.logger.info "DefaultGroupService: Trial user '#{user.name}' default group creation starting"
+    Rails.logger.info "DefaultGroupService: User '#{user.name}' default group creation starting"
 
     default_trial_group = Group.find_or_create_by!(
       creator_id: user.id,
@@ -41,7 +41,7 @@ class DefaultGroupService
       end
     end
 
-    Rails.logger.info "DefaultGroupService: Trial user '#{user.name}' default group creation finished"
+    Rails.logger.info "DefaultGroupService: User '#{user.name}' default group creation finished"
 
     default_trial_group
   end
