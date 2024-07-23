@@ -26,6 +26,7 @@ class User < ApplicationRecord
     organisation_admin: "organisation_admin",
     editor: "editor",
     trial: "trial",
+    standard: "standard",
   }
 
   validates :name, presence: true, if: :requires_name?
@@ -73,7 +74,7 @@ class User < ApplicationRecord
   end
 
   def standard_user?
-    trial? || editor?
+    trial? || editor? || standard?
   end
 
   def organisation_valid?
