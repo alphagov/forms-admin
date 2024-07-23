@@ -175,16 +175,10 @@ RSpec.describe UsersController, type: :request do
       context "with a trial user with no name set" do
         let(:user) { create(:user, :with_trial_role, name: nil) }
 
-        it "does not return error if name is not chosen and role is not changed" do
+        it "successfully updates the user when a name is not set" do
           put user_path(user), params: { user: { role: "trial", name: nil } }
           expect(response).to redirect_to(users_path)
           expect(user.reload.name).to be_nil
-        end
-
-        it "returns an error if name is not chosen and role is changed to editor" do
-          put user_path(user), params: { user: { role: "editor", name: nil } }
-          expect(response).to have_http_status(:unprocessable_entity)
-          expect(user.reload.role).to eq("trial")
         end
       end
 
@@ -197,8 +191,8 @@ RSpec.describe UsersController, type: :request do
           expect(user.reload.organisation).to be_nil
         end
 
-        it "returns an error if organisation is not chosen and role is changed to editor" do
-          put user_path(user), params: { user: { role: "editor", organisation_id: nil } }
+        it "returns an error if organisation is not chosen and role is changed to organisation_admin" do
+          put user_path(user), params: { user: { role: "organisation_admin", organisation_id: nil } }
           expect(response).to have_http_status(:unprocessable_entity)
           expect(user.reload.role).to eq("trial")
         end

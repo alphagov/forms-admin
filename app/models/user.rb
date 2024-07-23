@@ -118,10 +118,10 @@ class User < ApplicationRecord
 private
 
   def requires_name?
-    name_was.present? || role_changed?(from: :trial)
+    name_was.present?
   end
 
   def requires_organisation?
-    organisation_id_was.present? || role_changed?(to: :editor) || role_changed?(to: :organisation_admin)
+    organisation_id_was.present? || role_changed?(to: :organisation_admin)
   end
 end
