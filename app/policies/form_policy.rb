@@ -1,11 +1,7 @@
 class FormPolicy
   attr_reader :user, :form
 
-  class UserMissingOrganisationError < StandardError; end
-
   def initialize(user, form)
-    raise UserMissingOrganisationError, "Missing required attribute organisation_id" unless user.organisation_valid?
-
     @user = user
     @form = form
   end

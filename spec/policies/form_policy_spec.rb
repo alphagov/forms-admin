@@ -15,26 +15,6 @@ describe FormPolicy do
     end
   end
 
-  describe "#initialize?" do
-    context "when user does not belong to an organisation" do
-      context "with editor role" do
-        let(:user) { build :editor_user, :with_no_org }
-
-        it "raises an error" do
-          expect { policy }.to raise_error FormPolicy::UserMissingOrganisationError
-        end
-      end
-
-      context "with trial role" do
-        let(:user) { build :user, :with_trial_role }
-
-        it "does not raise an error" do
-          expect { policy }.not_to raise_error
-        end
-      end
-    end
-  end
-
   describe "#can_view_form?" do
     context "when user is in the group" do
       before do
