@@ -2,7 +2,7 @@ class DefaultGroupService
   # the purpose of this is to create default groups for users that have created forms before groups existed, but were
   # not members of an organisation. Until we are satisfied all forms that should belong in a group are in a group, this
   # code should be retained
-  def create_trial_user_default_group!(user)
+  def create_user_default_trial_group!(user)
     return unless user.trial? && user.name.present? && user.organisation.present?
 
     forms = Form.where(creator_id: user.id).to_h { [_1.id, _1] }

@@ -55,6 +55,6 @@ end
 def create_trial_user_default_groups
   trial_users = User.trial.where("organisation_id IS NOT NULL AND name IS NOT NULL")
   trial_users.find_each do |user|
-    DefaultGroupService.new.create_trial_user_default_group!(user)
+    DefaultGroupService.new.create_user_default_trial_group!(user)
   end
 end

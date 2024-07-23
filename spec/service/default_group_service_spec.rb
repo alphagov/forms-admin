@@ -5,7 +5,7 @@ RSpec.describe DefaultGroupService do
     described_class.new
   end
 
-  describe "#create_trial_user_default_group!" do
+  describe "#create_user_default_trial_group!" do
     let(:user) { create :user, name: "Batman" }
     let(:form) { build :form, id: 1 }
     let(:forms_response) do
@@ -22,7 +22,7 @@ RSpec.describe DefaultGroupService do
       context "when the user does not already have a trial group" do
         it "creates a group" do
           expect {
-            default_group_service.create_trial_user_default_group!(user)
+            default_group_service.create_user_default_trial_group!(user)
           }.to change(Group, :count).by(1)
 
           expect(Group.last).to have_attributes(
@@ -37,7 +37,7 @@ RSpec.describe DefaultGroupService do
 
         it "adds their trial forms to the group" do
           expect {
-            default_group_service.create_trial_user_default_group!(user)
+            default_group_service.create_user_default_trial_group!(user)
           }.to change(GroupForm, :count).by(1)
 
           expect(GroupForm.last).to have_attributes(form_id: form.id)
@@ -48,7 +48,7 @@ RSpec.describe DefaultGroupService do
 
           it "returns nil" do
             expect(
-              default_group_service.create_trial_user_default_group!(user),
+              default_group_service.create_user_default_trial_group!(user),
             ).to be_nil
           end
         end
@@ -58,7 +58,7 @@ RSpec.describe DefaultGroupService do
 
           it "returns nil" do
             expect(
-              default_group_service.create_trial_user_default_group!(user),
+              default_group_service.create_user_default_trial_group!(user),
             ).to be_nil
           end
         end
@@ -70,7 +70,7 @@ RSpec.describe DefaultGroupService do
 
           it "returns nil" do
             expect(
-              default_group_service.create_trial_user_default_group!(user),
+              default_group_service.create_user_default_trial_group!(user),
             ).to be_nil
           end
         end
@@ -82,7 +82,7 @@ RSpec.describe DefaultGroupService do
             group = create :group, creator: user, organisation: user.organisation, name: "Batman’s trial group", status: :trial
 
             expect {
-              default_group_service.create_trial_user_default_group!(user)
+              default_group_service.create_user_default_trial_group!(user)
             }.not_to change(Group, :count)
             expect(group).to be_trial
             expect(group.users).to include user
@@ -95,7 +95,7 @@ RSpec.describe DefaultGroupService do
             create :group, creator: user, organisation: user.organisation, name: "Batman’s trial group", status: :active
 
             expect {
-              default_group_service.create_trial_user_default_group!(user)
+              default_group_service.create_user_default_trial_group!(user)
             }.to raise_error(ActiveRecord::RecordInvalid)
           end
         end
@@ -107,7 +107,7 @@ RSpec.describe DefaultGroupService do
           GroupForm.create!(form_id: form.id, group_id: group.id)
 
           expect(
-            default_group_service.create_trial_user_default_group!(user),
+            default_group_service.create_user_default_trial_group!(user),
           ).to be_nil
         end
       end
@@ -118,7 +118,7 @@ RSpec.describe DefaultGroupService do
 
       it "returns nil" do
         expect(
-          default_group_service.create_trial_user_default_group!(user),
+          default_group_service.create_user_default_trial_group!(user),
         ).to be_nil
       end
     end
