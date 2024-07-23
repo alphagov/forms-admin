@@ -46,5 +46,25 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
         expect(form).to have_been_deleted
       end
     end
+
+    context "when the user has decided not to delete the form" do
+      before do
+        ActiveResourceMock.mock_resource(form,
+                                         {
+                                           read: { response: form, status: 200 },
+                                           delete: { response: {}, status: 200 },
+                                         })
+
+        delete destroy_form_path(form_id: 2, forms_delete_confirmation_input: { confirm: "no" })
+      end
+
+      it "redirects you to the form page" do
+        expect(response).to redirect_to(form_path(2))
+      end
+
+      it "does not delete the form on the API" do
+        expect(form).not_to have_been_deleted
+      end
+    end
   end
 end
