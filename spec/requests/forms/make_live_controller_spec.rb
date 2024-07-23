@@ -88,6 +88,14 @@ RSpec.describe Forms::MakeLiveController, type: :request do
         expect(response).to render_template("make_archived_draft_live")
       end
     end
+
+    context "when current user is not a group admin" do
+      let(:group_role) { :editor }
+
+      it "is forbidden" do
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
   end
 
   describe "#create" do
@@ -175,7 +183,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
       end
     end
 
-    context "when current user has a trial account" do
+    context "when current user is not a group admin" do
       let(:group_role) { :editor }
 
       it "is forbidden" do
