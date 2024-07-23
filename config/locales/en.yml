@@ -632,9 +632,7 @@ en:
     created_by: Created by
     form_name_heading: Form name
     form_status_heading: Status
-    form_table_caption: "%{organisation_name} forms"
     preview: Preview this form
-    your_forms: Your forms
   internal_server_error:
     body: Please try again later.
     title: Sorry, there is a problem with the service
