@@ -3,7 +3,7 @@ class DefaultGroupService
   # not members of an organisation. Until we are satisfied all forms that should belong in a group are in a group, this
   # code should be retained
   def create_user_default_trial_group!(user)
-    return unless user.trial? && user.name.present? && user.organisation.present?
+    return unless user.name.present? && user.organisation.present?
 
     forms = Form.where(creator_id: user.id).to_h { [_1.id, _1] }
     form_ids = forms.keys
