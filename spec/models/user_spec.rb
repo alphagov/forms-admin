@@ -241,7 +241,7 @@ describe User, type: :model do
     end
 
     it "returns false when organisation_id is set to nil" do
-      user = create(:user, :with_trial_role, :with_no_org)
+      user = create(:user, :with_no_org)
       user.update!(organisation: nil)
       expect(user).not_to be_given_organisation
     end

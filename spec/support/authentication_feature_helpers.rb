@@ -51,7 +51,7 @@ module AuthenticationFeatureHelpers
   end
 
   def trial_user
-    @trial_user ||= FactoryBot.create(:user, :with_trial_role)
+    @trial_user ||= FactoryBot.create(:user, :trial)
   end
 
   def login_as_super_admin_user

@@ -50,8 +50,8 @@ if HostingEnvironment.local_development? && User.none?
   # create a user who hasn't been assigned to an organisation yet
   FactoryBot.create :user, :with_no_org
 
-  # create some trial users
-  FactoryBot.create_list :user, 3, :with_trial_role, :with_no_org, :with_no_name
+  # create some standard users without name or organisation
+  FactoryBot.create_list :user, 3, :standard, :with_no_org, :with_no_name
 
   # create some test groups
   test_group = FactoryBot.create :group, name: "Test Group", organisation: gds, creator: default_user
