@@ -74,22 +74,12 @@ private
   end
 
   def email_address_section
-    section = {
+    {
       title: I18n.t("forms.task_list_#{create_or_edit}.email_address_section.title"),
       section_number: 2,
       subsection: false,
+      rows: email_address_section_tasks,
     }
-
-    if Pundit.policy(@current_user, @form).can_view_form?
-      section[:rows] = email_address_section_tasks
-    else
-      section[:body_text] = I18n.t(
-        "forms.task_list_create.email_address_section.if_not_permitted.body_text",
-        submission_email: @form.submission_email,
-      )
-    end
-
-    section
   end
 
   def email_address_section_tasks

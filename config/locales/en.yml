@@ -234,11 +234,6 @@ en:
         confirm_email: Enter the email address confirmation code
         email: Set the email address completed forms will be sent to
         hint_text_html: Completed forms will be sent to:<br> %{submission_email}
-        if_not_permitted:
-          body_text: |
-            When a draft form is completed it will be sent to your email address so you can see how form submissions will look.
-
-            Editor accounts can change the email address completed forms are sent to.
         title: Set email address for completed forms
       make_form_live_section:
         group_not_active:
