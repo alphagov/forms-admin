@@ -223,9 +223,9 @@ describe User, type: :model do
     end
   end
 
-  it "defaults to the trial role" do
+  it "defaults to the standard role" do
     user = described_class.new
-    expect(user.role).to eq("trial")
+    expect(user.role).to eq("standard")
   end
 
   describe "#given_organisation?" do
