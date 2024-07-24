@@ -2,10 +2,12 @@ require "rails_helper"
 
 RSpec.describe Forms::DeleteConfirmationController, type: :request do
   let(:form) { build(:form, :with_active_resource, id: 2) }
+
   let(:group) { create(:group, organisation: editor_user.organisation) }
+  let(:membership) { create :membership, group:, user: editor_user }
 
   before do
-    Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user)
+    membership
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_editor_user
   end
@@ -22,6 +24,14 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
 
       it "reads the form from the API" do
         expect(form).to have_been_read
+      end
+
+      context "when current user is not in group for form" do
+        let(:membership) { nil }
+
+        it "returns an error" do
+          expect(response).to have_http_status :forbidden
+        end
       end
     end
   end
@@ -44,6 +54,38 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
 
       it "deletes the form on the API" do
         expect(form).to have_been_deleted
+      end
+
+      context "when current user is not in group for form" do
+        let(:membership) { nil }
+
+        it "returns an error" do
+          expect(response).to have_http_status :forbidden
+        end
+
+        it "does not delete the form on the API" do
+          expect(form).not_to have_been_deleted
+        end
+      end
+    end
+
+    context "when the user has decided not to delete the form" do
+      before do
+        ActiveResourceMock.mock_resource(form,
+                                         {
+                                           read: { response: form, status: 200 },
+                                           delete: { response: {}, status: 200 },
+                                         })
+
+        delete destroy_form_path(form_id: 2, forms_delete_confirmation_input: { confirm: "no" })
+      end
+
+      it "redirects you to the form page" do
+        expect(response).to redirect_to(form_path(2))
+      end
+
+      it "does not delete the form on the API" do
+        expect(form).not_to have_been_deleted
       end
     end
   end
