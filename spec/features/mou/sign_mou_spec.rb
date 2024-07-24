@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "Sign an MOU for my organisation", type: :feature do
   it "a logged in user can sign an MOU" do
-    login_as_trial_user
+    login_as_standard_user
     when_i_visit_the_mou_page
     then_i_agree_and_submit_the_mou
     then_i_can_see_the_mou_confirmation_page

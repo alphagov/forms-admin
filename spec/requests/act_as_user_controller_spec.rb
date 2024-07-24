@@ -13,7 +13,7 @@ RSpec.describe ActAsUserController, type: :request do
       let(:act_as_user_enabled) { false }
 
       it "raises an error" do
-        post act_as_user_start_path(trial_user)
+        post act_as_user_start_path(standard_user)
 
         expect(response).to have_http_status(404)
       end
@@ -25,7 +25,7 @@ RSpec.describe ActAsUserController, type: :request do
       end
 
       it "redirects to the root page" do
-        post act_as_user_start_path(trial_user)
+        post act_as_user_start_path(standard_user)
 
         expect(response).to have_http_status(403)
       end
@@ -52,9 +52,9 @@ RSpec.describe ActAsUserController, type: :request do
     end
 
     it "changes the acting user" do
-      post act_as_user_start_path(trial_user)
+      post act_as_user_start_path(standard_user)
 
-      expect(request.env["warden"].user.id).to eq(trial_user.id)
+      expect(request.env["warden"].user.id).to eq(standard_user.id)
       expect(session[:original_user_id]).to eq(super_admin_user.id)
     end
   end
@@ -82,7 +82,7 @@ RSpec.describe ActAsUserController, type: :request do
       end
 
       before do
-        post act_as_user_start_path(trial_user)
+        post act_as_user_start_path(standard_user)
 
         allow(controller_spy).to receive(:redirect_if_account_not_completed).and_call_original
       end
