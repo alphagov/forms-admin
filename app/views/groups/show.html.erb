@@ -58,5 +58,5 @@
 <%= govuk_start_button(text: t("home.create_a_form"), href: new_group_form_path(@group)) %>
 
 <% if @forms.any? %>
-  <%= govuk_table(**FormListService.call(forms: @forms, current_user: @current_user, group: @group).data) %>
+  <%= govuk_table(**FormListService.call(forms: @forms, group: @group).data) %>
 <% end %>
