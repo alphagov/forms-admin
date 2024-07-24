@@ -45,57 +45,35 @@ describe UserUpdateService do
       end
     end
 
-    context "when changing user role" do
-      let(:user) { create :user, :with_trial_role, organisation: nil }
-      let(:params) { { role: :editor } }
+    context "when the user is a given an organisation" do
+      let(:user) { build :user, organisation: nil }
+
+      let(:params) { { organisation: build(:organisation) } }
 
       before do
-        allow(Form).to receive(:update_organisation_for_creator)
         allow(MouSignature).to receive(:add_mou_signature_organisation)
 
         user_update_service.update_user
       end
 
-      context "when the user is a trial user changing to editor" do
-        let(:organisation) { create(:organisation) }
-        let(:params) { { role: "editor", name: "name required", organisation: } }
+      it "calls add_mou_signature_organisation on MouSignature" do
+        expect(MouSignature).to have_received(:add_mou_signature_organisation).with(user)
+      end
+    end
 
-        it "updates the user's params" do
-          expect(user.role).to eq("editor")
-        end
+    context "when a user is not given an organisation" do
+      let(:user) { build :user, organisation: nil }
 
-        it "does not call update_organisation_for_creator" do
-          expect(Form).not_to have_received(:update_organisation_for_creator).with(user.id, user.organisation_id)
-        end
+      let(:params) { { name: "blank_name" } }
+
+      before do
+        allow(MouSignature).to receive(:add_mou_signature_organisation)
+
+        user_update_service.update_user
       end
 
-      context "when the user is a super_admin changing to editor" do
-        let(:user) { create :super_admin_user }
-        let(:params) { { role: :editor } }
-
-        it "updates the user's params" do
-          expect(user).to be_editor
-        end
-
-        it "does not call update_organisation_for_creator" do
-          expect(Form).not_to have_received(:update_organisation_for_creator).with(user.id, user.organisation_id)
-        end
-      end
-
-      context "when the user is a given an organisation" do
-        let(:params) { { organisation: build(:organisation) } }
-
-        it "calls add_mou_signature_organisation on MouSignature" do
-          expect(MouSignature).to have_received(:add_mou_signature_organisation).with(user)
-        end
-      end
-
-      context "when a user is not given an organisation" do
-        let(:params) { { name: "blank_name" } }
-
-        it "does not call add_mou_signature_organisation on MouSignature" do
-          expect(MouSignature).not_to have_received(:add_mou_signature_organisation).with(user)
-        end
+      it "does not call add_mou_signature_organisation on MouSignature" do
+        expect(MouSignature).not_to have_received(:add_mou_signature_organisation).with(user)
       end
     end
   end
