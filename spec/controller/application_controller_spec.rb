@@ -31,8 +31,8 @@ describe ApplicationController, type: :controller do
   end
 
   context "when authenticating a user" do
-    let(:user) { build :user }
-    let(:acting_as_user_id) { nil }
+    let(:user) { create :user }
+    let(:acting_as_user) { nil }
 
     let(:warden_spy) do
       request.env["warden"] = instance_double(Warden::Proxy)
@@ -45,13 +45,19 @@ describe ApplicationController, type: :controller do
     ].each do |provider|
       context "when #{provider} auth is enabled" do
         before do
-          allow(warden_spy).to receive(:authenticate!).and_return(true)
-          allow(warden_spy).to receive(:set_user)
-          allow(controller).to receive(:current_user).and_return(user)
+          allow(warden_spy).to receive_messages(
+            authenticate!: true,
+            authenticated?: true,
+            set_user: nil,
+            user: acting_as_user || user,
+          )
 
           allow(Settings).to receive(:auth_provider).and_return(provider)
 
-          session[:acting_as_user_id] = acting_as_user_id
+          if acting_as_user.present?
+            session[:acting_as_user_id] = acting_as_user.id
+            session[:original_user_id] = user.id
+          end
 
           get :index
         end
@@ -65,11 +71,10 @@ describe ApplicationController, type: :controller do
         end
 
         context "when acting as a user" do
-          let(:other_user) { create(:user) }
-          let(:acting_as_user_id) { other_user.id }
+          let(:acting_as_user) { create :user }
 
           it "sets @current_user as the acting user taken from the session" do
-            expect(assigns[:current_user]).to eq other_user
+            expect(assigns[:current_user]).to eq acting_as_user
           end
         end
       end
