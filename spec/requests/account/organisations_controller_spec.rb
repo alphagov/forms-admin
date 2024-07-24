@@ -53,9 +53,9 @@ describe Account::OrganisationsController do
         expect(response).to redirect_to("/next-path")
       end
 
-      it "calls create_trial_user_default_group!" do
+      it "calls create_user_default_trial_group!" do
         put account_organisation_path, params: valid_params
-        expect(default_group_service).to have_received(:create_trial_user_default_group!)
+        expect(default_group_service).to have_received(:create_user_default_trial_group!)
       end
     end
 

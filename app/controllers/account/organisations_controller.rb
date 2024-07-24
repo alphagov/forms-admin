@@ -13,7 +13,7 @@ module Account
       @organisation_input = OrganisationInput.new(account_organisation_input_params(current_user))
 
       if @organisation_input.submit
-        DefaultGroupService.new.create_trial_user_default_group!(current_user)
+        DefaultGroupService.new.create_user_default_trial_group!(current_user)
         redirect_to next_path
       else
         render :edit, status: :unprocessable_entity

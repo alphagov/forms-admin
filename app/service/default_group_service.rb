@@ -1,6 +1,9 @@
 class DefaultGroupService
-  def create_trial_user_default_group!(user)
-    return unless user.trial? && user.name.present? && user.organisation.present?
+  # the purpose of this is to create default groups for users that have created forms before groups existed, but were
+  # not members of an organisation. Until we are satisfied all forms that should belong in a group are in a group, this
+  # code should be retained
+  def create_user_default_trial_group!(user)
+    return unless user.name.present? && user.organisation.present?
 
     forms = Form.where(creator_id: user.id).to_h { [_1.id, _1] }
     form_ids = forms.keys
@@ -8,11 +11,11 @@ class DefaultGroupService
     not_group_form_ids = form_ids.to_set - group_form_ids
 
     if not_group_form_ids.blank?
-      Rails.logger.info "DefaultGroupService: Trial user '#{user.name}' does not have any forms not in groups, skipping creating default group"
+      Rails.logger.info "DefaultGroupService: User '#{user.name}' does not have any forms not in groups, skipping creating default group"
       return
     end
 
-    Rails.logger.info "DefaultGroupService: Trial user '#{user.name}' default group creation starting"
+    Rails.logger.info "DefaultGroupService: User '#{user.name}' default group creation starting"
 
     default_trial_group = Group.find_or_create_by!(
       creator_id: user.id,
@@ -38,7 +41,7 @@ class DefaultGroupService
       end
     end
 
-    Rails.logger.info "DefaultGroupService: Trial user '#{user.name}' default group creation finished"
+    Rails.logger.info "DefaultGroupService: User '#{user.name}' default group creation finished"
 
     default_trial_group
   end
