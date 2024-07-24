@@ -121,14 +121,6 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
         expect(response).to have_http_status(:forbidden)
       end
     end
-
-    context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role, id: 1 }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
   end
 
   describe "#submission_email_code" do
@@ -195,14 +187,6 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
         expect(response).to have_http_status(:forbidden)
       end
     end
-
-    context "when current user has a trial account" do
-      let(:user) { build :user, :with_trial_role, id: 1 }
-
-      it "is forbidden" do
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
   end
 
   describe "#submission_email_confirmed" do
@@ -221,14 +205,6 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
 
       context "when current user does not belong to the group" do
         let(:user) { user_outside_group }
-
-        it "is forbidden" do
-          expect(response).to have_http_status(:forbidden)
-        end
-      end
-
-      context "when current user has a trial account" do
-        let(:user) { build :user, :with_trial_role, id: 1 }
 
         it "is forbidden" do
           expect(response).to have_http_status(:forbidden)
