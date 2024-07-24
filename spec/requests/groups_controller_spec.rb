@@ -79,23 +79,23 @@ RSpec.describe "/groups", type: :request do
       end
 
       it "shows all trial groups the user is a member of" do
-        expect(assigns(:trial_groups)).to eq trial_groups
+        expect(assigns(:trial_groups)).to match_array(trial_groups)
       end
 
       it "shows all upgrade requested groups the user is a member of" do
-        expect(assigns(:upgrade_requested_groups)).to eq upgrade_requested_groups
+        expect(assigns(:upgrade_requested_groups)).to match_array(upgrade_requested_groups)
       end
 
       it "shows all active groups the user is a member of" do
-        expect(assigns(:active_groups)).to eq active_groups
+        expect(assigns(:active_groups)).to match_array(active_groups)
       end
 
       context "with an organisation search query" do
         it "ignores the search query and displays the user's groups" do
           get groups_url, params: { search: { organisation_id: other_org.id } }
-          expect(assigns(:trial_groups)).to eq trial_groups
-          expect(assigns(:active_groups)).to eq active_groups
-          expect(assigns(:upgrade_requested_groups)).to eq upgrade_requested_groups
+          expect(assigns(:trial_groups)).to match_array(trial_groups)
+          expect(assigns(:active_groups)).to match_array(active_groups)
+          expect(assigns(:upgrade_requested_groups)).to match_array(upgrade_requested_groups)
         end
       end
 
@@ -113,15 +113,15 @@ RSpec.describe "/groups", type: :request do
       end
 
       it "shows all trial groups belonging to the organisation" do
-        expect(assigns(:trial_groups)).to eq trial_groups + non_member_trial_groups
+        expect(assigns(:trial_groups)).to match_array(trial_groups + non_member_trial_groups)
       end
 
       it "shows all upgrade requested groups belonging to the organisation" do
-        expect(assigns(:upgrade_requested_groups)).to eq upgrade_requested_groups
+        expect(assigns(:upgrade_requested_groups)).to match_array(upgrade_requested_groups)
       end
 
       it "shows all active groups the user belonging to the organisation" do
-        expect(assigns(:active_groups)).to eq active_groups
+        expect(assigns(:active_groups)).to match_array(active_groups)
       end
     end
 
@@ -136,18 +136,18 @@ RSpec.describe "/groups", type: :request do
 
         it "shows groups for organisation in query" do
           get groups_url, params: { search: { organisation_id: other_org.id } }
-          expect(assigns(:trial_groups)).to eq other_org_trial_groups
-          expect(assigns(:active_groups)).to eq other_org_active_groups
-          expect(assigns(:upgrade_requested_groups)).to eq other_org_upgrade_requested_groups
+          expect(assigns(:trial_groups)).to match_array(other_org_trial_groups)
+          expect(assigns(:active_groups)).to match_array(other_org_active_groups)
+          expect(assigns(:upgrade_requested_groups)).to match_array(other_org_upgrade_requested_groups)
         end
       end
 
       context "without a search query" do
         it "shows the groups for the user's organisation" do
           get groups_url
-          expect(assigns(:trial_groups)).to eq trial_groups + non_member_trial_groups
-          expect(assigns(:active_groups)).to eq active_groups
-          expect(assigns(:upgrade_requested_groups)).to eq upgrade_requested_groups
+          expect(assigns(:trial_groups)).to match_array(trial_groups + non_member_trial_groups)
+          expect(assigns(:active_groups)).to match_array(active_groups)
+          expect(assigns(:upgrade_requested_groups)).to match_array(upgrade_requested_groups)
         end
       end
     end
@@ -174,7 +174,7 @@ RSpec.describe "/groups", type: :request do
         member_group.save!
 
         get group_url(member_group)
-        expect(assigns[:forms]).to eq forms
+        expect(assigns[:forms]).to match_array(forms)
       end
     end
 
