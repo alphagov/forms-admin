@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Pages::QuestionsController, type: :request do
   let(:form_response) { build :form, id: 2 }
 
-  let(:draft_question) { create :draft_question_for_new_page, user: editor_user, form_id: 2 }
+  let(:draft_question) { create :draft_question_for_new_page, user: standard_user, form_id: 2 }
 
   let(:next_page) { nil }
 
@@ -40,7 +40,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
     [page_response].to_json
   end
 
-  let(:group) { create(:group, organisation: editor_user.organisation) }
+  let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
@@ -51,14 +51,14 @@ RSpec.describe Pages::QuestionsController, type: :request do
       mock.put "/api/v1/forms/2/pages/1", post_headers, updated_page_data.to_json, 200
     end
 
-    Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user)
+    Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form_response.id, group_id: group.id)
-    login_as_editor_user
+    login_as_standard_user
   end
 
   describe "#new" do
     let(:draft_question) do
-      record = create :draft_question_for_new_page, user: editor_user, form_id: 2
+      record = create :draft_question_for_new_page, user: standard_user, form_id: 2
       record.question_text = nil
       record.save!(validate: false)
       record.reload
@@ -186,7 +186,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
   describe "#update" do
     let(:draft_question) do
-      record = create :draft_question, user: editor_user, form_id: 2
+      record = create :draft_question, user: standard_user, form_id: 2
       record.question_text = nil
       record.save!(validate: false)
       record.reload

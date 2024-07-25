@@ -2,14 +2,14 @@ require "rails_helper"
 
 feature "Create a new group", type: :feature do
   before do
-    login_as_editor_user
+    login_as_standard_user
   end
 
   describe "changing the name of an existing group" do
-    let(:group) { create(:group, organisation: editor_user.organisation, creator: editor_user) }
+    let(:group) { create(:group, organisation: standard_user.organisation, creator: standard_user) }
 
     before do
-      create(:membership, user: editor_user, group:, role: :group_admin)
+      create(:membership, user: standard_user, group:, role: :group_admin)
     end
 
     scenario "group admin can change the name of a group" do

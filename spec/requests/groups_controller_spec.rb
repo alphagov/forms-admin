@@ -13,7 +13,7 @@ require "rails_helper"
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/groups", type: :request do
-  let(:current_user) { editor_user }
+  let(:current_user) { standard_user }
   let(:role) { :editor }
   let(:status) { :trial }
   let(:upgrade_requester) {}
@@ -48,21 +48,21 @@ RSpec.describe "/groups", type: :request do
 
   describe "GET /index" do
     let!(:trial_groups) do
-      create_list :group, 3, organisation: editor_user.organisation, status: :trial do |group|
-        create :membership, user: editor_user, group:
+      create_list :group, 3, organisation: standard_user.organisation, status: :trial do |group|
+        create :membership, user: standard_user, group:
       end
     end
     let!(:non_member_trial_groups) do
-      create_list :group, 2, organisation: editor_user.organisation, status: :trial
+      create_list :group, 2, organisation: standard_user.organisation, status: :trial
     end
     let!(:upgrade_requested_groups) do
-      create_list :group, 3, organisation: editor_user.organisation, status: :upgrade_requested do |group|
-        create :membership, user: editor_user, group:
+      create_list :group, 3, organisation: standard_user.organisation, status: :upgrade_requested do |group|
+        create :membership, user: standard_user, group:
       end
     end
     let!(:active_groups) do
-      create_list :group, 3, organisation: editor_user.organisation, status: :active do |group|
-        create :membership, user: editor_user, group:
+      create_list :group, 3, organisation: standard_user.organisation, status: :active do |group|
+        create :membership, user: standard_user, group:
       end
     end
 

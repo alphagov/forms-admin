@@ -1,20 +1,20 @@
 require "rails_helper"
 
 feature "Manage members of group", type: :feature do
-  let(:organisation) { editor_user.organisation }
+  let(:organisation) { standard_user.organisation }
   let(:group) { create(:group, name: "Group 1", organisation:) }
   let(:existing_editor) { create(:user, organisation:) }
   let(:existing_group_admin) { create(:user, organisation:) }
   let(:new_user) { create(:user, organisation:) }
 
   before do
-    create(:membership, user: editor_user, group:, role: :group_admin)
+    create(:membership, user: standard_user, group:, role: :group_admin)
     create(:membership, user: existing_editor, group:, role: :editor)
     create(:membership, user: existing_group_admin, group:, role: :group_admin)
   end
 
   scenario "group admin adds a new editor" do
-    login_as_editor_user
+    login_as_standard_user
     when_i_visit_the_groups_page
     and_i_click_the_group_link
     and_i_click_the_edit_group_members_link

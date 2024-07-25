@@ -2,11 +2,11 @@ require "rails_helper"
 
 RSpec.describe FormsController, type: :request do
   let(:form) { build(:form, :with_active_resource, id: 2) }
-  let(:group) { create(:group, organisation: editor_user.organisation) }
-  let(:user) { editor_user }
+  let(:group) { create(:group, organisation: standard_user.organisation) }
+  let(:user) { standard_user }
 
   before do
-    Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user)
+    Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
 
     login_as user
@@ -118,7 +118,7 @@ RSpec.describe FormsController, type: :request do
     end
 
     let(:user) do
-      editor_user
+      standard_user
     end
 
     before do

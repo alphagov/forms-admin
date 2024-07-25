@@ -21,7 +21,7 @@ RSpec.describe ActAsUserController, type: :request do
 
     context "when the user is not a super_admin" do
       before do
-        login_as_editor_user
+        login_as_standard_user
       end
 
       it "redirects to the root page" do

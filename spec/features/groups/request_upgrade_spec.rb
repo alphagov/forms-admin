@@ -2,9 +2,9 @@ require "rails_helper"
 
 feature "Request an upgrade for a group", type: :feature do
   let!(:group) do
-    create(:group, :org_has_org_admin, organisation: editor_user.organisation).tap do |group|
-      create(:membership, user: editor_user, group:, role: :group_admin)
-      create(:organisation_admin_user, organisation: editor_user.organisation)
+    create(:group, :org_has_org_admin, organisation: standard_user.organisation).tap do |group|
+      create(:membership, user: standard_user, group:, role: :group_admin)
+      create(:organisation_admin_user, organisation: standard_user.organisation)
     end
   end
 
@@ -41,7 +41,7 @@ feature "Request an upgrade for a group", type: :feature do
   end
 
   def given_i_am_logged_in_as_a_group_admin
-    login_as_editor_user
+    login_as_standard_user
   end
 
   def and_i_visit_the_groups_page
@@ -86,7 +86,7 @@ feature "Request an upgrade for a group", type: :feature do
 
   def then_i_see_a_notification_banner_for_the_upgrade_request
     expect(page.find("h3")).to have_text "A group admin has asked to upgrade this group"
-    expect(page).to have_css ".govuk-notification-banner", text: "#{editor_user.name} has asked to upgrade this group so they can make forms live."
+    expect(page).to have_css ".govuk-notification-banner", text: "#{standard_user.name} has asked to upgrade this group so they can make forms live."
     expect_page_to_have_no_axe_errors(page)
   end
 
@@ -95,7 +95,7 @@ feature "Request an upgrade for a group", type: :feature do
   end
 
   def then_i_see_a_page_to_accept_or_reject_the_request
-    expect(page).to have_text "#{editor_user.name} has asked to upgrade this group to an ‘active’ group."
+    expect(page).to have_text "#{standard_user.name} has asked to upgrade this group to an ‘active’ group."
     expect(page.find("h1")).to have_text "Upgrade this group"
     expect_page_to_have_no_axe_errors(page)
   end

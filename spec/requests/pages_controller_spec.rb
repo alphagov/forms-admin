@@ -3,11 +3,11 @@ require "rails_helper"
 RSpec.describe PagesController, type: :request do
   let(:form_response) { build :form, id: 2 }
 
-  let(:group) { create(:group, organisation: editor_user.organisation) }
+  let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user)
-    login_as_editor_user
+    Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
+    login_as_standard_user
   end
 
   describe "#index" do
@@ -61,7 +61,7 @@ RSpec.describe PagesController, type: :request do
 
   describe "#start_new_question" do
     let(:current_form) { build :form, id: 1 }
-    let(:original_draft_question) { create :draft_question, form_id: 1, user: editor_user }
+    let(:original_draft_question) { create :draft_question, form_id: 1, user: standard_user }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -75,13 +75,13 @@ RSpec.describe PagesController, type: :request do
       original_draft_question # Setup initial draft question which will clear
       expect {
         get start_new_question_path(form_id: current_form.id)
-      }.to change { DraftQuestion.exists?({ form_id: current_form.id, user: editor_user }) }.from(true).to(false)
+      }.to change { DraftQuestion.exists?({ form_id: current_form.id, user: standard_user }) }.from(true).to(false)
     end
 
     it "does not clear draft questions data for a different form" do
-      create :draft_question, form_id: 99, user: editor_user # Setup initial draft question which should not clear
+      create :draft_question, form_id: 99, user: standard_user # Setup initial draft question which should not clear
       get start_new_question_path(form_id: current_form.id)
-      expect(DraftQuestion.exists?({ form_id: 99, user: editor_user })).to be true
+      expect(DraftQuestion.exists?({ form_id: 99, user: standard_user })).to be true
     end
 
     it "redirects to type_of_answer_create_path" do

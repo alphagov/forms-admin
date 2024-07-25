@@ -1,14 +1,14 @@
 require "rails_helper"
 
 RSpec.describe Forms::ContactDetailsController, type: :request do
-  let(:current_user) { editor_user }
+  let(:current_user) { standard_user }
 
-  let(:group) { create(:group, organisation: editor_user.organisation) }
+  let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
     Membership.create!(group_id: group.id, user: current_user, added_by: current_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
-    login_as_editor_user
+    login_as_standard_user
   end
 
   describe "#new" do
@@ -113,8 +113,8 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
 
     context "when current user has a government email address not ending with .gov.uk" do
       let(:current_user) do
-        editor_user.update!(email: "user@public-sector-org.example")
-        editor_user
+        standard_user.update!(email: "user@public-sector-org.example")
+        standard_user
       end
 
       let(:params) { { forms_contact_details_input: { contact_details_supplied: ["", "supply_email"], email: "a@public-sector-org.example", form: } } }

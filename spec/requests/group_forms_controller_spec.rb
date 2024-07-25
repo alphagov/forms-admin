@@ -12,8 +12,8 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
   end
 
   before do
-    create(:membership, user: editor_user, group:)
-    login_as_editor_user
+    create(:membership, user: standard_user, group:)
+    login_as_standard_user
   end
 
   describe "GET /new" do
@@ -79,8 +79,8 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
         expect(ActiveResource::HttpMock.requests).to include expected_request
         expect(JSON(ActiveResource::HttpMock.requests.first.body, symbolize_names: true)).to eq({
           name: "Test form",
-          creator_id: editor_user.id,
-          organisation_id: editor_user.organisation.id,
+          creator_id: standard_user.id,
+          organisation_id: standard_user.organisation.id,
         })
       end
 

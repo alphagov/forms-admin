@@ -10,7 +10,7 @@ describe Pages::SelectionsSettingsController, type: :request do
     create :draft_question,
            answer_type: "selection",
            page_id:,
-           user: editor_user,
+           user: standard_user,
            form_id: form.id,
            is_optional: false,
            answer_settings: { selection_options: [{ name: "" }, { name: "" }],
@@ -18,12 +18,12 @@ describe Pages::SelectionsSettingsController, type: :request do
   end
   let(:page_id) { nil }
 
-  let(:group) { create(:group, organisation: editor_user.organisation) }
+  let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user)
+    Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
-    login_as_editor_user
+    login_as_standard_user
   end
 
   describe "#new" do
@@ -54,7 +54,7 @@ describe Pages::SelectionsSettingsController, type: :request do
         create :draft_question,
                answer_type: "selection",
                page_id:,
-               user: editor_user,
+               user: standard_user,
                form_id: form.id,
                is_optional: true,
                answer_settings: { selection_options: [{ name: "Option 1" }, { name: "Option 2" }],
