@@ -1153,6 +1153,9 @@ en:
       organisation_admin:
         description: Can manage groups and users in their organisation
         name: Organisation admin
+      standard:
+        description: Can be an editor or a group admin in groups in their organisation
+        name: Standard user
       super_admin:
         description: Can manage groups and users in all organisations - GOV.UK Forms team members only
         name: Super admin
