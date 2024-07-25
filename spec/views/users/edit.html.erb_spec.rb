@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "users/edit.html.erb" do
   let(:user) do
-    build :editor_user, id: 1, organisation_id: 1
+    build :user, id: 1, organisation_id: 1
   end
 
   before do
@@ -20,7 +20,7 @@ describe "users/edit.html.erb" do
     end
 
     context "with a user with no name set" do
-      let(:user) { build(:editor_user, :with_no_name, id: 1) }
+      let(:user) { build(:user, :with_no_name, id: 1) }
 
       it "is the users's email address" do
         expect(view.content_for(:title)).to eq user.email
@@ -28,7 +28,7 @@ describe "users/edit.html.erb" do
     end
 
     context "with a user with a blank name" do
-      let(:user) { build(:editor_user, name: "", id: 1) }
+      let(:user) { build(:user, name: "", id: 1) }
 
       it "is the users's email address" do
         expect(view.content_for(:title)).to eq user.email
@@ -55,7 +55,7 @@ describe "users/edit.html.erb" do
 
     context "with user from GOV.UK Signon" do
       let(:user) do
-        build :editor_user, :with_unknown_org, id: 1, organisation_slug: "department-for-testing"
+        build :user, :with_unknown_org, id: 1, organisation_slug: "department-for-testing"
       end
 
       it "contains organisation slug from GOV.UK Signon" do
@@ -68,7 +68,7 @@ describe "users/edit.html.erb" do
     end
 
     it "contains role" do
-      expect(summary_list).to have_text("Editor")
+      expect(summary_list).to have_text("Standard")
     end
 
     it "contains access" do
@@ -78,11 +78,11 @@ describe "users/edit.html.erb" do
 
   describe "form" do
     it "has role fields" do
-      expect(rendered).to have_checked_field("Editor")
+      expect(rendered).to have_checked_field("Standard user")
       expect(rendered).to have_unchecked_field("Super admin")
       expect(rendered).to have_unchecked_field("Organisation admin")
+      expect(rendered).to have_unchecked_field("Editor")
       expect(rendered).to have_unchecked_field("Trial")
-      expect(rendered).to have_unchecked_field("Standard user")
     end
 
     it "has a name field" do
@@ -111,7 +111,7 @@ describe "users/edit.html.erb" do
   end
 
   context "with a user with no name set" do
-    let(:user) { build(:editor_user, :with_no_name, id: 1) }
+    let(:user) { build(:user, :with_no_name, id: 1) }
 
     it "shows no name set" do
       expect(rendered).to have_text("No name set")
@@ -119,7 +119,7 @@ describe "users/edit.html.erb" do
   end
 
   context "with a user with an unknown organisation" do
-    let(:user) { build(:editor_user, :with_unknown_org, id: 1) }
+    let(:user) { build(:user, :with_unknown_org, id: 1) }
 
     it "shows the organisation slug" do
       expect(rendered).to have_text("unknown-org")
@@ -135,7 +135,7 @@ describe "users/edit.html.erb" do
   end
 
   context "with a user with no organisation set" do
-    let(:user) { build(:editor_user, :with_no_org, id: 1) }
+    let(:user) { build(:user, :with_no_org, id: 1) }
 
     it "shows no organisation set" do
       expect(rendered).to have_text("No organisation set")

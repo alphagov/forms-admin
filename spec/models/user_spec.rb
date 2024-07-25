@@ -71,7 +71,7 @@ describe User, type: :model do
 
       context "when user somehow has no name" do
         let(:user) do
-          user = build(:editor_user, :with_no_name)
+          user = build(:user, :with_no_name)
           user.save!(validate: false)
           user
         end
@@ -403,7 +403,7 @@ describe User, type: :model do
       end
 
       context "when the user is not a super admin" do
-        let(:user) { create :editor_user }
+        let(:user) { create :user }
 
         it "returns false" do
           expect(user.collect_analytics?).to be(false)
@@ -423,7 +423,7 @@ describe User, type: :model do
       end
 
       context "when the user is not a super admin" do
-        let(:user) { create :editor_user }
+        let(:user) { create :user }
 
         it "returns true" do
           expect(user.collect_analytics?).to be(true)

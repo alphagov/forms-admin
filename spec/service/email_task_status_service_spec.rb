@@ -5,7 +5,7 @@ describe EmailTaskStatusService do
     described_class.new(form:)
   end
 
-  let(:current_user) { build(:editor_user) }
+  let(:current_user) { build(:user) }
 
   describe "#ready_for_live?" do
     context "when mandatory tasks have not been completed" do

@@ -11,10 +11,6 @@ FactoryBot.define do
       provider { "basic_auth" }
     end
 
-    factory :editor_user do
-      role { :editor }
-    end
-
     factory :super_admin_user do
       role { :super_admin }
     end

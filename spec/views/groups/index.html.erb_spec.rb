@@ -4,7 +4,7 @@ RSpec.describe "groups/index", type: :view do
   let(:trial_groups) { create_list :group, 2 }
   let(:upgrade_requested_groups) { create_list :group, 2, status: :upgrade_requested }
   let(:active_groups) { create_list :group, 2, status: :active }
-  let(:current_user) { build :editor_user }
+  let(:current_user) { build :user }
 
   before do
     assign(:trial_groups, trial_groups)
@@ -57,7 +57,7 @@ RSpec.describe "groups/index", type: :view do
       end
 
       context "and org has signed an MOU" do
-        let(:current_user) { build :editor_user, :org_has_signed_mou }
+        let(:current_user) { build :user, :org_has_signed_mou }
 
         it "does not show a banner" do
           expect(rendered).not_to have_css ".govuk-notification-banner"

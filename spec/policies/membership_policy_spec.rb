@@ -4,7 +4,7 @@ RSpec.describe MembershipPolicy do
   subject(:policy) { described_class.new(user, membership) }
 
   let(:organisation) { create :organisation, slug: "an organisation" }
-  let(:user) { create :editor_user, organisation: }
+  let(:user) { create :user, organisation: }
   let(:group) { build :group, organisation: }
   let(:membership) { build :membership, user:, group:, role: }
   let(:role) { :editor }

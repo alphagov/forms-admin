@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe GroupPolicy do
   subject(:policy) { described_class.new(user, group) }
 
-  let(:user) { create :editor_user, organisation: group.organisation }
+  let(:user) { create :user, organisation: group.organisation }
   let(:group) { build :group, :org_has_org_admin }
 
   context "when user is super_admin" do
