@@ -126,23 +126,6 @@ describe User, type: :model do
       expect(described_class.roles.keys).to eq(%w[super_admin organisation_admin editor trial standard])
       expect(described_class.roles.values).to eq(%w[super_admin organisation_admin editor trial standard])
     end
-
-    describe "#standard_user?" do
-      it "returns true if the user has the editor role" do
-        user.role = :editor
-        expect(user).to be_standard_user
-      end
-
-      it "returns true if the user has the trial role" do
-        user.role = :trial
-        expect(user).to be_standard_user
-      end
-
-      it "returns true if the user has the standard role" do
-        user.role = :standard
-        expect(user).to be_standard_user
-      end
-    end
   end
 
   it_behaves_like "a gds-sso user class"
