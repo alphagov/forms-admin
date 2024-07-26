@@ -121,8 +121,8 @@ describe User, type: :model do
 
   describe "role enum" do
     it "returns a list of roles" do
-      expect(described_class.roles.keys).to eq(%w[super_admin organisation_admin editor trial standard])
-      expect(described_class.roles.values).to eq(%w[super_admin organisation_admin editor trial standard])
+      expect(described_class.roles.keys).to eq(%w[super_admin organisation_admin standard])
+      expect(described_class.roles.values).to eq(%w[super_admin organisation_admin standard])
     end
   end
 

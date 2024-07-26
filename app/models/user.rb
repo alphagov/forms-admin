@@ -24,8 +24,6 @@ class User < ApplicationRecord
   enum :role, {
     super_admin: "super_admin",
     organisation_admin: "organisation_admin",
-    editor: "editor",
-    trial: "trial",
     standard: "standard",
   }
 
