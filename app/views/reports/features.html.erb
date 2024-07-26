@@ -1,1 +1,18 @@
-<%= data.to_json %>
+<% set_page_title("Feature usage on live forms") %>
+<h1 class="govuk-heading-l">Feature usage on live forms</h1>
+
+<p>Total live forms: <%= data.total_live_forms %></p>
+
+<h2 class="govuk-heading-m">Answer types</h2>
+
+<% Page::ANSWER_TYPES.map(&:to_sym).each do |answer_type| %>
+  <h3 class="govuk-heading-s"><%= answer_type %></h3>
+  <p>Number of forms which ask for this answer type: <%= data.live_forms_with_answer_type.attributes[answer_type] %></p>
+  <p>Number of pages of this answer type: <%= data.live_pages_with_answer_type.attributes[answer_type] %></p>
+<% end %>
+
+<h2 class="govuk-heading-m">Number of live forms with routes</h2>
+<p>Live forms with routes: <%= data.live_forms_with_routing %></p>
+
+<h2 class="govuk-heading-m">Number of live forms with payment URLs</h2>
+<p>Live forms with payments: <%= data.live_forms_with_payment %></p>

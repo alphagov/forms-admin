@@ -47,7 +47,8 @@ RSpec.describe ReportsController, type: :request do
     end
 
     it "includes the report data" do
-      expect(response.body).to include "total_live_forms"
+      expect(response.body).to include "Total live forms"
+      expect(response.body).to include report_data[:total_live_forms].to_s
     end
   end
 end
