@@ -6,13 +6,13 @@ describe "/memberships", type: :request do
   let(:logged_in_user_role) { :group_admin }
 
   before do
-    create(:membership, user: editor_user, group:, role: logged_in_user_role)
-    login_as_editor_user
+    create(:membership, user: standard_user, group:, role: logged_in_user_role)
+    login_as_standard_user
   end
 
   describe "#destroy" do
     it "deletes a membership" do
-      membership = create(:membership, user:, group:, added_by: editor_user)
+      membership = create(:membership, user:, group:, added_by: standard_user)
 
       expect {
         delete membership_path(membership)
@@ -25,7 +25,7 @@ describe "/memberships", type: :request do
       let(:logged_in_user_role) { :editor }
 
       it "does not delete a membership" do
-        membership = create(:membership, user:, group:, added_by: editor_user)
+        membership = create(:membership, user:, group:, added_by: standard_user)
 
         expect {
           delete membership_path(membership)
@@ -80,7 +80,7 @@ describe "/memberships", type: :request do
     end
 
     context "when not authorized" do
-      let(:current_user) { editor_user }
+      let(:current_user) { standard_user }
 
       it "redirects to the root path" do
         put membership_path(membership), params: { membership: { role: "group_admin" } }

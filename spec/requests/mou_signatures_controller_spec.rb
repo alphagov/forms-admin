@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe MouSignaturesController, type: :request do
   before do
-    login_as_editor_user
+    login_as_standard_user
   end
 
   context "when the user has not signed the memorandum of understanding" do
@@ -41,7 +41,7 @@ RSpec.describe MouSignaturesController, type: :request do
 
   context "when the user has already signed the memorandum of understanding" do
     before do
-      create(:mou_signature, user: editor_user, organisation: editor_user.organisation)
+      create(:mou_signature, user: standard_user, organisation: standard_user.organisation)
     end
 
     describe "#show" do

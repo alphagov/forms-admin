@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "forms/show.html.erb" do
-  let(:user) { build :editor_user }
+  let(:user) { build :user }
   let(:form) { build :form, :with_pages, id: 1, name: "Form 1", form_slug: "form-1" }
   let(:group) { create :group, name: "Group 1" }
 

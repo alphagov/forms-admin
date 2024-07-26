@@ -2,7 +2,7 @@ require "rails_helper"
 
 feature "Editing answer_settings for existing question", type: :feature do
   let(:form) { build :form, :with_active_resource, id: 1, pages: }
-  let(:group) { create(:group, organisation: editor_user.organisation) }
+  let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
@@ -15,9 +15,9 @@ feature "Editing answer_settings for existing question", type: :feature do
     end
 
     GroupForm.create! group:, form_id: form.id
-    create(:membership, group:, user: editor_user, added_by: editor_user)
+    create(:membership, group:, user: standard_user, added_by: standard_user)
 
-    login_as editor_user
+    login_as standard_user
   end
 
   context "when a form has existing pages with answer types" do

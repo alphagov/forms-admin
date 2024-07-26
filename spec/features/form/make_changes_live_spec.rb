@@ -5,7 +5,7 @@ feature "Make changes live", type: :feature do
   let(:org_forms) { [form] }
   let(:pages) { build_list :page, 5, form_id: form.id }
   let(:organisation) { build :organisation, id: 1 }
-  let(:user) { create :editor_user, organisation: }
+  let(:user) { create :user, organisation: }
   let(:group) { create(:group, name: "Group 1", organisation:, status: "active") }
 
   before do

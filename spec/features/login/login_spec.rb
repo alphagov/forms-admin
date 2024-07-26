@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "Login to the service", type: :feature do
-  let(:user) { editor_user }
+  let(:user) { standard_user }
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|

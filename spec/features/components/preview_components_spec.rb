@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "Previewing components", type: :feature do
   before do
-    login_as_editor_user
+    login_as_standard_user
   end
 
   it "checks all component previews for axe errors" do

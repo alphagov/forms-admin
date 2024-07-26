@@ -16,8 +16,8 @@ RSpec.describe AuthenticationController, type: :request do
 
     OmniAuth.config.test_mode = true
     OmniAuth.config.mock_auth[:auth0] = Faker::Omniauth.auth0(
-      uid: editor_user.uid,
-      email: editor_user.email,
+      uid: standard_user.uid,
+      email: standard_user.email,
     )
   end
 
@@ -77,7 +77,7 @@ RSpec.describe AuthenticationController, type: :request do
         GDS::SSO::Config.auth_valid_for = 1
 
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms?organisation_id=#{editor_user.organisation_id}", headers, [].to_json, 200
+          mock.get "/api/v1/forms?organisation_id=#{standard_user.organisation_id}", headers, [].to_json, 200
         end
 
         logout
@@ -88,7 +88,7 @@ RSpec.describe AuthenticationController, type: :request do
       end
 
       it "re-authenticates after the configured time" do
-        login_as_editor_user
+        login_as_standard_user
 
         get root_path
 

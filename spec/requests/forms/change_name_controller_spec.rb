@@ -11,8 +11,8 @@ RSpec.describe Forms::ChangeNameController, type: :request do
   end
 
   let(:organisation) { build :organisation, id: 1, slug: "test-org" }
-  let(:user) { build :editor_user, id: 1, organisation: }
-  let(:group) { create(:group, organisation: editor_user.organisation) }
+  let(:user) { build :user, id: 1, organisation: }
+  let(:group) { create(:group, organisation: user.organisation) }
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|

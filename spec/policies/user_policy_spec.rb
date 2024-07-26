@@ -11,7 +11,7 @@ describe UserPolicy do
   end
 
   context "with editor" do
-    let(:user) { build :editor_user }
+    let(:user) { build :user }
 
     it { is_expected.to forbid_actions(%i[can_manage_user]) }
   end
@@ -26,7 +26,7 @@ describe UserPolicy do
     end
 
     context "with editor" do
-      let(:user) { build :editor_user }
+      let(:user) { build :user }
 
       it "returns nil" do
         expect(policy_scope.resolve).to be_nil

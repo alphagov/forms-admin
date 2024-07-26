@@ -13,7 +13,7 @@ RSpec.describe ApplicationController, type: :request do
       mock.get "/api/v1/forms/1/pages", headers, form.pages.to_json, 200
     end
 
-    login_as_editor_user
+    login_as_standard_user
   end
 
   describe "logging" do
@@ -43,15 +43,15 @@ RSpec.describe ApplicationController, type: :request do
     end
 
     it "includes the user_id on log lines" do
-      expect(log_lines[0]["user_id"]).to eq(editor_user.id)
+      expect(log_lines[0]["user_id"]).to eq(standard_user.id)
     end
 
     it "includes the user_email on log lines" do
-      expect(log_lines[0]["user_email"]).to eq(editor_user.email)
+      expect(log_lines[0]["user_email"]).to eq(standard_user.email)
     end
 
     it "includes the user_organisation_slug on log lines" do
-      expect(log_lines[0]["user_organisation_slug"]).to eq(editor_user.organisation.slug)
+      expect(log_lines[0]["user_organisation_slug"]).to eq(standard_user.organisation.slug)
     end
   end
 

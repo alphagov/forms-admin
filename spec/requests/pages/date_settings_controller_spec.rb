@@ -6,12 +6,12 @@ RSpec.describe Pages::DateSettingsController, type: :request do
 
   let(:date_settings_input) { build :date_settings_input }
 
-  let(:group) { create(:group, organisation: editor_user.organisation) }
+  let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user)
+    Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
-    login_as_editor_user
+    login_as_standard_user
   end
 
   describe "#new" do
@@ -79,7 +79,7 @@ RSpec.describe Pages::DateSettingsController, type: :request do
     let(:draft_question) do
       create :draft_question,
              answer_type: "date",
-             user: editor_user,
+             user: standard_user,
              form_id: form.id,
              page_id: page.id,
              answer_settings: {

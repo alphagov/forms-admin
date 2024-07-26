@@ -6,12 +6,12 @@ RSpec.describe Pages::QuestionTextController, type: :request do
 
   let(:question_text_input) { build :question_text_input, form: }
 
-  let(:group) { create(:group, organisation: editor_user.organisation) }
+  let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user)
+    Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
-    login_as_editor_user
+    login_as_standard_user
   end
 
   describe "#new" do

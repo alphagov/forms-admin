@@ -65,11 +65,11 @@ describe ApplicationController, type: :controller do
         end
 
         context "when acting as a user" do
-          let(:trial_user) { create(:user) }
-          let(:acting_as_user_id) { trial_user.id }
+          let(:other_user) { create(:user) }
+          let(:acting_as_user_id) { other_user.id }
 
           it "sets @current_user as the acting user taken from the session" do
-            expect(assigns[:current_user]).to eq trial_user
+            expect(assigns[:current_user]).to eq other_user
           end
         end
       end

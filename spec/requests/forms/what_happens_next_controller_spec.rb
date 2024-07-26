@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Forms::WhatHappensNextController, type: :request do
-  let(:form_organisation_id) { editor_user.organisation_id }
+  let(:form_organisation_id) { standard_user.organisation_id }
   let(:form_response_data) do
     {
       id: 2,
@@ -36,8 +36,8 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
     })
   end
 
-  let(:user) { editor_user }
-  let(:group) { create(:group, organisation: editor_user.organisation) }
+  let(:user) { standard_user }
+  let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
@@ -51,7 +51,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
                                        update: { response: updated_form, status: 200 },
                                      })
 
-    Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user)
+    Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
 
     login_as user

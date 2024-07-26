@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Forms::UnarchiveController, type: :request do
-  let(:user) { editor_user }
+  let(:user) { standard_user }
 
   let(:form) do
     build(:form,
@@ -37,7 +37,7 @@ RSpec.describe Forms::UnarchiveController, type: :request do
                                          update: { response: updated_form, status: 200 },
                                        })
 
-      Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user, role: :group_admin)
+      Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user, role: :group_admin)
       GroupForm.create!(form_id: form.id, group_id: group.id)
 
       login_as user
@@ -74,7 +74,7 @@ RSpec.describe Forms::UnarchiveController, type: :request do
         mock.get "/api/v1/forms/2/live", headers, form.to_json, 200
       end
 
-      Membership.create!(group_id: group.id, user: editor_user, added_by: editor_user, role: :group_admin)
+      Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user, role: :group_admin)
       GroupForm.create!(form_id: form.id, group_id: group.id)
 
       login_as user

@@ -71,7 +71,7 @@ describe User, type: :model do
 
       context "when user somehow has no name" do
         let(:user) do
-          user = build(:editor_user, :with_no_name)
+          user = build(:user, :with_no_name)
           user.save!(validate: false)
           user
         end
@@ -223,9 +223,9 @@ describe User, type: :model do
     end
   end
 
-  it "defaults to the trial role" do
+  it "defaults to the standard role" do
     user = described_class.new
-    expect(user.role).to eq("trial")
+    expect(user.role).to eq("standard")
   end
 
   describe "#given_organisation?" do
@@ -241,7 +241,7 @@ describe User, type: :model do
     end
 
     it "returns false when organisation_id is set to nil" do
-      user = create(:user, :with_trial_role, :with_no_org)
+      user = create(:user, :with_no_org)
       user.update!(organisation: nil)
       expect(user).not_to be_given_organisation
     end
@@ -403,7 +403,7 @@ describe User, type: :model do
       end
 
       context "when the user is not a super admin" do
-        let(:user) { create :editor_user }
+        let(:user) { create :user }
 
         it "returns false" do
           expect(user.collect_analytics?).to be(false)
@@ -423,7 +423,7 @@ describe User, type: :model do
       end
 
       context "when the user is not a super admin" do
-        let(:user) { create :editor_user }
+        let(:user) { create :user }
 
         it "returns true" do
           expect(user.collect_analytics?).to be(true)

@@ -2,7 +2,7 @@ require "rails_helper"
 
 feature "Create a new group", type: :feature do
   before do
-    login_as_editor_user
+    login_as_standard_user
   end
 
   scenario "Form creator creates a new group" do

@@ -35,12 +35,12 @@ RSpec.describe "trial_users.rake" do
 
   describe "summarize" do
     before do
-      user = create :user, name: "A User"
-      another_user_with_forms = create :user
-      user_without_forms = create :user
-      user_with_form_but_no_org_or_name = create :user, :with_no_name, :with_no_org
-      user_with_no_org_and_no_forms = create :user, :with_no_org
-      create :editor_user
+      user = create :user, :trial, name: "A User"
+      another_user_with_forms = create :user, :trial
+      user_without_forms = create :user, :trial
+      user_with_form_but_no_org_or_name = create :user, :trial, :with_no_name, :with_no_org
+      user_with_no_org_and_no_forms = create :user, :trial, :with_no_org
+      create :user, :editor
 
       form = build :form, id: 1, creator_id: user.id
       another_form = build :form, id: 2, creator_id: user.id

@@ -213,7 +213,7 @@ RSpec.describe "usage of omniauth-auth0 gem" do
     end
 
     context "when a non-super-admin user is logged in" do
-      let(:user) { editor_user }
+      let(:user) { standard_user }
 
       context "and authenticated via Google" do
         context "when accessing /groups," do

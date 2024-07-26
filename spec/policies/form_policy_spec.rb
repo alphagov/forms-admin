@@ -7,7 +7,7 @@ describe FormPolicy do
   let(:form) { build :form, id: 1, organisation_id: 1, creator_id: 123 }
   let(:group) { create(:group, name: "Group 1", organisation:, status: group_status) }
   let(:group_status) { :trial }
-  let(:user) { build :editor_user, organisation: }
+  let(:user) { build :user, organisation: }
 
   before do
     if group.present?

@@ -13,7 +13,7 @@ feature "Google analytics", type: :feature do
     let(:analytics_enabled) { false }
 
     before do
-      login_as_editor_user
+      login_as_standard_user
     end
 
     it "does not load in Google Analytics" do
@@ -38,7 +38,7 @@ feature "Google analytics", type: :feature do
 
     context "when the user is not a super admin" do
       before do
-        login_as_editor_user
+        login_as_standard_user
       end
 
       it "loads in Google Analytics" do

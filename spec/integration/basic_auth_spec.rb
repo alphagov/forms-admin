@@ -60,7 +60,7 @@ RSpec.describe "using basic auth" do
     it "signs in user as defined in settings" do
       expect(assigns[:current_user].name).to eq basic_auth_user.name
       expect(assigns[:current_user].email).to eq basic_auth_user.email
-      expect(assigns[:current_user].role.to_sym).to eq :trial
+      expect(assigns[:current_user].role.to_sym).to eq :standard
       expect(assigns[:current_user].organisation.slug).to eq basic_auth_user.organisation.slug
       expect(assigns[:current_user].provider).to eq basic_auth_user.provider
     end

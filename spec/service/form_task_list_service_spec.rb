@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe FormTaskListService do
-  let(:current_user) { build(:editor_user) }
+  let(:current_user) { build(:user) }
 
   let(:organisation) { build :organisation, :with_signed_mou, id: 1 }
   let(:form) { build(:form, :new_form, id: 1) }

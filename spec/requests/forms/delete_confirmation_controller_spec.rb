@@ -3,13 +3,13 @@ require "rails_helper"
 RSpec.describe Forms::DeleteConfirmationController, type: :request do
   let(:form) { build(:form, :with_active_resource, id: 2) }
 
-  let(:group) { create(:group, organisation: editor_user.organisation) }
-  let(:membership) { create :membership, group:, user: editor_user }
+  let(:group) { create(:group, organisation: standard_user.organisation) }
+  let(:membership) { create :membership, group:, user: standard_user }
 
   before do
     membership
     GroupForm.create!(form_id: form.id, group_id: group.id)
-    login_as_editor_user
+    login_as_standard_user
   end
 
   describe "#delete" do

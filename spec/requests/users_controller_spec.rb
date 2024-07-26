@@ -35,6 +35,14 @@ RSpec.describe UsersController, type: :request do
       end
     end
 
+    context "when logged in with standard role" do
+      it "is forbidden" do
+        login_as_standard_user
+        get users_path
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
     context "with many users" do
       before do
         login_as_super_admin_user
@@ -115,10 +123,18 @@ RSpec.describe UsersController, type: :request do
         expect(response).to have_http_status(:forbidden)
       end
     end
+
+    context "when logged in with standard role" do
+      it "is forbidden" do
+        login_as_standard_user
+        get edit_user_path(user)
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
   end
 
   describe "#update" do
-    let(:user) { create(:editor_user) }
+    let(:user) { create(:user) }
     let(:role) { :super_admin }
 
     context "when logged in as a super admin" do
@@ -172,21 +188,21 @@ RSpec.describe UsersController, type: :request do
         end
       end
 
-      context "with a trial user with no name set" do
-        let(:user) { create(:user, :with_trial_role, name: nil) }
+      context "with a user with no name set" do
+        let(:user) { create(:user, name: nil) }
 
         it "successfully updates the user when a name is not set" do
-          put user_path(user), params: { user: { role: "trial", name: nil } }
+          put user_path(user), params: { user: { name: nil } }
           expect(response).to redirect_to(users_path)
           expect(user.reload.name).to be_nil
         end
       end
 
-      context "with a trial user with no organisation set" do
-        let(:user) { create(:user, :with_trial_role, organisation_id: nil) }
+      context "with a user with no organisation set" do
+        let(:user) { create(:user, organisation_id: nil) }
 
         it "does not return error if organisation is not chosen and role is not changed" do
-          put user_path(user), params: { user: { role: "trial", organisation_id: nil } }
+          put user_path(user), params: { user: { organisation_id: nil } }
           expect(response).to redirect_to(users_path)
           expect(user.reload.organisation).to be_nil
         end
@@ -194,17 +210,7 @@ RSpec.describe UsersController, type: :request do
         it "returns an error if organisation is not chosen and role is changed to organisation_admin" do
           put user_path(user), params: { user: { role: "organisation_admin", organisation_id: nil } }
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(user.reload.role).to eq("trial")
-        end
-      end
-
-      context "with a user with no name set" do
-        let(:user) { create(:user, :with_no_name) }
-
-        it "does not return error if name is not chosen" do
-          put user_path(user), params: { user: { name: nil } }
-          expect(response).to redirect_to(users_path)
-          expect(user.reload.name).to be_nil
+          expect(user.reload.role).to eq("standard")
         end
       end
 
@@ -240,25 +246,33 @@ RSpec.describe UsersController, type: :request do
       end
     end
 
+    context "when logged in with standard role" do
+      it "is forbidden" do
+        login_as_standard_user
+        put user_path(user), params: { user: { role: "super_admin" } }
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
     context "when changing role" do
       before do
         login_as_super_admin_user
       end
 
       it "calls UserUpdateService" do
-        user = create(:user, :with_trial_role)
+        user = create(:user)
         user_update_service = instance_spy(UserUpdateService)
 
         allow(UserUpdateService)
           .to receive(:new)
-          .with(user, ActionController::Parameters.new(role: "editor").permit(:role))
+          .with(user, ActionController::Parameters.new(role: "organisation_admin").permit(:role))
           .and_return(user_update_service)
 
-        patch user_path(user), params: { user: { role: "editor" } }
+        patch user_path(user), params: { user: { role: "organisation_admin" } }
 
         expect(UserUpdateService)
           .to have_received(:new)
-          .with(user, ActionController::Parameters.new(role: "editor").permit(:role))
+          .with(user, ActionController::Parameters.new(role: "organisation_admin").permit(:role))
 
         expect(user_update_service)
           .to have_received(:update_user)

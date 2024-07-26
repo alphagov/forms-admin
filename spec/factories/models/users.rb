@@ -4,15 +4,11 @@ FactoryBot.define do
     email { Faker::Internet.email(name:, domain: "example.gov.uk") }
     uid { Faker::Internet.uuid }
     provider { "factory_bot" }
-    role { :trial }
+    role { :standard }
     has_access { true }
 
     factory :basic_auth_user do
       provider { "basic_auth" }
-    end
-
-    factory :editor_user do
-      role { :editor }
     end
 
     factory :super_admin_user do
@@ -22,10 +18,6 @@ FactoryBot.define do
     factory :organisation_admin_user do
       role { :organisation_admin }
       org_has_signed_mou
-    end
-
-    trait :with_trial_role do
-      role { :trial }
     end
 
     organisation { association :organisation, id: 1, slug: "test-org" }

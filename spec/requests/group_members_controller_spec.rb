@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "/groups/:group_id/members", type: :request do
   let(:group) { create :group, organisation: current_user.organisation }
   let(:role) { :group_admin }
-  let(:current_user) { editor_user }
+  let(:current_user) { standard_user }
 
   let(:nonexistent_group) { "foobar" }
 
@@ -74,7 +74,7 @@ RSpec.describe "/groups/:group_id/members", type: :request do
   end
 
   describe "POST /groups/:group_id/members" do
-    let(:user) { create :user, name: "A User", organisation: editor_user.organisation }
+    let(:user) { create :user, name: "A User", organisation: standard_user.organisation }
 
     context "with valid parameters" do
       it "creates a new membership" do

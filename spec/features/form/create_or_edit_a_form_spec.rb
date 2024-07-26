@@ -5,7 +5,7 @@ feature "Create or edit a form", type: :feature do
   let(:group) { create :group, name: "Group 1" }
 
   before do
-    login_as_editor_user
+    login_as_standard_user
   end
 
   context "when creating a form" do
@@ -21,7 +21,7 @@ feature "Create or edit a form", type: :feature do
 
     context "when the user is a member of a group" do
       before do
-        create(:membership, user: editor_user, group:)
+        create(:membership, user: standard_user, group:)
       end
 
       scenario "As a form creator" do
@@ -54,7 +54,7 @@ feature "Create or edit a form", type: :feature do
 
     context "when the user is a member of a group with a form" do
       before do
-        create(:membership, user: editor_user, group:)
+        create(:membership, user: standard_user, group:)
 
         GroupForm.create!(form_id: form.id, group:)
       end
