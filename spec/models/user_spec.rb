@@ -32,13 +32,13 @@ describe User, type: :model do
         create(:user, email: "foo.bar@email.gov.uk")
 
         expect {
-          described_class.create!(name: Faker.name, email: "Foo.Bar@email.gov.uk", role: :editor, organisation_id: organisation.id)
+          described_class.create!(name: Faker.name, email: "Foo.Bar@email.gov.uk", role: :standard, organisation_id: organisation.id)
         }.to raise_error ActiveRecord::RecordInvalid, /Email has already been taken/
       end
     end
 
     context "when updating organisation" do
-      let(:user) { create :user, :with_no_org, role: :trial }
+      let(:user) { create :user, :with_no_org }
 
       it "is valid to leave organisation unset" do
         user.organisation_id = nil
@@ -60,13 +60,11 @@ describe User, type: :model do
     end
 
     context "when updating name" do
-      let(:user) { create :user, :with_no_name, role: :trial }
+      let(:user) { create :user, :with_no_name }
 
-      context "when user has been created with a trial account" do
-        it "is valid to leave name unset" do
-          user.name = nil
-          expect(user).to be_valid
-        end
+      it "is valid to leave name unset" do
+        user.name = nil
+        expect(user).to be_valid
       end
 
       context "when user somehow has no name" do
@@ -98,8 +96,8 @@ describe User, type: :model do
         expect(user).to be_invalid
       end
 
-      it "is valid for a user's role to be editor" do
-        user.role = :editor
+      it "is valid for a user's role to be standard" do
+        user.role = :standard
         expect(user).to be_valid
       end
     end
@@ -268,7 +266,7 @@ describe User, type: :model do
       it "creates a version when role is changed" do
         user = create :user
         expect {
-          user.update!(role: :editor)
+          user.update!(role: :super_admin)
         }.to change { user.versions.size }.by(1)
       end
 
