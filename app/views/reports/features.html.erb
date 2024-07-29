@@ -3,13 +3,28 @@
 
 <p>Total live forms: <%= data.total_live_forms %></p>
 
-<h2 class="govuk-heading-m">Answer types</h2>
+<h2 class="govuk-heading-m govuk-visually-hidden">Answer types</h2>
 
-<% Page::ANSWER_TYPES.map(&:to_sym).each do |answer_type| %>
-  <h3 class="govuk-heading-s"><%= answer_type %></h3>
-  <p>Number of forms which ask for this answer type: <%= data.live_forms_with_answer_type.attributes[answer_type] %></p>
-  <p>Number of pages of this answer type: <%= data.live_pages_with_answer_type.attributes[answer_type] %></p>
-<% end %>
+<%= govuk_table do |table| %>
+  <%= table.with_caption(size: 'm', text: 'Answer types') %>
+
+  <%= table.with_head do |head| %>
+    <%= head.with_row do |row| %>
+      <%= row.with_cell(text: "Answer type") %>
+      <%= row.with_cell(text: "Number of forms which ask for this answer type", numeric: true) %>
+      <%= row.with_cell(text: "Number of pages of this answer type", numeric: true) %>
+    <%end%>
+  <%end%>
+  <%= table.with_body do |body| %>
+    <% Page::ANSWER_TYPES.map(&:to_sym).each do |answer_type| %>
+      <%= body.with_row do |row| %>
+        <%= row.with_cell(header: true, text: answer_type.to_s) %>
+        <%= row.with_cell(text: data.live_forms_with_answer_type.attributes[answer_type] || 0, numeric: true, html_attributes: {data: {"live-forms-with-answer-type-#{answer_type.to_s.dasherize}": true}}) %>
+        <%= row.with_cell(text: data.live_pages_with_answer_type.attributes[answer_type] || 0, numeric: true, html_attributes: {data: {"live-pages-with-answer-type-#{answer_type.to_s.dasherize}": true}}) %>
+      <%end%>
+    <%end%>
+  <%end%>
+<%end%>
 
 <h2 class="govuk-heading-m">Number of live forms with routes</h2>
 <p>Live forms with routes: <%= data.live_forms_with_routing %></p>

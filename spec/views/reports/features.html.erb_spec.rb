@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "users/edit.html.erb" do
+describe "reports/features.html.erb" do
   let(:report) do
     Report.new({ total_live_forms: 3,
                  live_forms_with_answer_type: { address: 1,
@@ -47,15 +47,33 @@ describe "users/edit.html.erb" do
 
   Page::ANSWER_TYPES.map(&:to_sym).each do |answer_type|
     it "contains a heading for #{answer_type}" do
-      expect(rendered).to have_css("h3.govuk-heading-s", text: answer_type)
+      expect(rendered).to have_css("th", text: answer_type)
     end
 
     it "includes the number of live forms with #{answer_type}" do
-      expect(response.body).to include "Number of forms which ask for this answer type: #{report.live_forms_with_answer_type.attributes[answer_type]}"
+      expect(rendered).to have_css("[data-live-forms-with-answer-type-#{answer_type.to_s.dasherize}]", text: report.live_forms_with_answer_type.attributes[answer_type].to_s)
     end
 
     it "includes the number of live pages with #{answer_type}" do
-      expect(response.body).to include "Number of pages of this answer type: #{report.live_pages_with_answer_type.attributes[answer_type]}"
+      expect(rendered).to have_css("[data-live-pages-with-answer-type-#{answer_type.to_s.dasherize}]", text: report.live_pages_with_answer_type.attributes[answer_type].to_s)
+    end
+  end
+
+  context "when an answer type is missing from the data" do
+    let(:report) do
+      Report.new({ total_live_forms: 3,
+                   live_forms_with_answer_type: { address: 1 },
+                   live_pages_with_answer_type: { address: 1 },
+                   live_forms_with_payment: 1,
+                   live_forms_with_routing: 2 })
+    end
+
+    it "displays 0 for live_forms_with_answer_type" do
+      expect(rendered).to have_css("[data-live-forms-with-answer-type-number]", text: "0")
+    end
+
+    it "displays 0 for live_pages_with_answer_type" do
+      expect(rendered).to have_css("[data-live-pages-with-answer-type-number]", text: "0")
     end
   end
 
