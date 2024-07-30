@@ -31,24 +31,60 @@ RSpec.describe ReportsController, type: :request do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/reports/features", headers, report_data.to_json, 200
     end
-
-    login_as_super_admin_user
-
-    get report_features_path
   end
 
   describe "#features" do
-    it "returns http code 200" do
-      expect(response).to have_http_status(:ok)
+    context "when the user is an editor" do
+      before do
+        login_as_standard_user
+
+        get report_features_path
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
     end
 
-    it "renders the features report view" do
-      expect(response).to render_template("reports/features")
+    context "when the user is an organisation admin" do
+      before do
+        login_as_organisation_admin_user
+
+        get report_features_path
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
     end
 
-    it "includes the report data" do
-      expect(response.body).to include "Total live forms"
-      expect(response.body).to include report_data[:total_live_forms].to_s
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+
+        get report_features_path
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the features report view" do
+        expect(response).to render_template("reports/features")
+      end
+
+      it "includes the report data" do
+        expect(response.body).to include "Total live forms"
+        expect(response.body).to include report_data[:total_live_forms].to_s
+      end
     end
   end
 end
