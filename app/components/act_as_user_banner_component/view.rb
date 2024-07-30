@@ -27,10 +27,6 @@ module ActAsUserBannerComponent
                     "an organisation admin"
                   elsif @acting_as_user.standard?
                     "a standard user"
-                  elsif @acting_as_user.editor?
-                    "an editor user"
-                  elsif @acting_as_user.trial?
-                    "a trial user"
                   else
                     "a user with role: #{@acting_as_user.role}"
                   end

@@ -5,7 +5,6 @@ describe "users/index.html.erb" do
   let(:users) do
     build_list(:user, 3) do |user, i|
       user.id = i
-      user.role = :editor
     end
   end
 
@@ -32,7 +31,7 @@ describe "users/index.html.erb" do
   end
 
   it "contains role" do
-    expect(rendered).to have_text("Editor")
+    expect(rendered).to have_text("Standard")
   end
 
   it "contains access" do

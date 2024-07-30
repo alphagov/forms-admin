@@ -130,7 +130,7 @@ RSpec.describe ApplicationController, type: :request do
     end
 
     context "when a user is logged in from an access restricting organisation" do
-      let(:user) { create :user, :trial, email: User::EMAIL_DOMAIN_DENYLIST.first }
+      let(:user) { create :user, email: User::EMAIL_DOMAIN_DENYLIST.first }
 
       before do
         login_as user

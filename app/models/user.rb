@@ -24,8 +24,6 @@ class User < ApplicationRecord
   enum :role, {
     super_admin: "super_admin",
     organisation_admin: "organisation_admin",
-    editor: "editor",
-    trial: "trial",
     standard: "standard",
   }
 
@@ -71,10 +69,6 @@ class User < ApplicationRecord
     else # Create a new user.
       create!(attributes)
     end
-  end
-
-  def standard_user?
-    trial? || editor? || standard?
   end
 
   def given_organisation?
