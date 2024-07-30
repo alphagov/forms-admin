@@ -4,7 +4,7 @@ feature "Add account organisation to user without organisation", type: :feature 
   let(:user) { create :user, :with_no_org, name: nil }
   let!(:organisation) { create :organisation }
 
-  let(:form) { build :form, :with_active_resource, id: 1, name: "a form I created when I didn't have an organisation" }
+  let(:form) { build :form, :with_active_resource, id: 1, name: "a form I created when I was a trial user" }
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
@@ -77,7 +77,7 @@ private
   end
 
   def and_i_can_open_my_form
-    click_link("a form I created when I didn't have an organisation")
-    expect(page.find("h1")).to have_text "a form I created when I didn't have an organisation"
+    click_link("a form I created when I was a trial user")
+    expect(page.find("h1")).to have_text "a form I created when I was a trial user"
   end
 end

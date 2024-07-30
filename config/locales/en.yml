@@ -1147,6 +1147,9 @@ en:
       title: Users
       users_caption: All users
     roles:
+      editor:
+        description: Can create forms
+        name: Editor
       organisation_admin:
         description: Can manage groups and users in their organisation
         name: Organisation admin
@@ -1156,6 +1159,9 @@ en:
       super_admin:
         description: Can manage groups and users in all organisations - GOV.UK Forms team members only
         name: Super admin
+      trial:
+        description: Can create forms but cannot make them live
+        name: Trial
     save: Save
   what_happens_next:
     example:
