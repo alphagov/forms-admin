@@ -32,13 +32,13 @@ describe User, type: :model do
         create(:user, email: "foo.bar@email.gov.uk")
 
         expect {
-          described_class.create!(name: Faker.name, email: "Foo.Bar@email.gov.uk", role: :standard, organisation_id: organisation.id)
+          described_class.create!(name: Faker.name, email: "Foo.Bar@email.gov.uk", role: :editor, organisation_id: organisation.id)
         }.to raise_error ActiveRecord::RecordInvalid, /Email has already been taken/
       end
     end
 
     context "when updating organisation" do
-      let(:user) { create :user, :with_no_org }
+      let(:user) { create :user, :with_no_org, role: :trial }
 
       it "is valid to leave organisation unset" do
         user.organisation_id = nil
@@ -60,11 +60,13 @@ describe User, type: :model do
     end
 
     context "when updating name" do
-      let(:user) { create :user, :with_no_name }
+      let(:user) { create :user, :with_no_name, role: :trial }
 
-      it "is valid to leave name unset" do
-        user.name = nil
-        expect(user).to be_valid
+      context "when user has been created with a trial account" do
+        it "is valid to leave name unset" do
+          user.name = nil
+          expect(user).to be_valid
+        end
       end
 
       context "when user somehow has no name" do
@@ -96,8 +98,8 @@ describe User, type: :model do
         expect(user).to be_invalid
       end
 
-      it "is valid for a user's role to be standard" do
-        user.role = :standard
+      it "is valid for a user's role to be editor" do
+        user.role = :editor
         expect(user).to be_valid
       end
     end
@@ -121,8 +123,25 @@ describe User, type: :model do
 
   describe "role enum" do
     it "returns a list of roles" do
-      expect(described_class.roles.keys).to eq(%w[super_admin organisation_admin standard])
-      expect(described_class.roles.values).to eq(%w[super_admin organisation_admin standard])
+      expect(described_class.roles.keys).to eq(%w[super_admin organisation_admin editor trial standard])
+      expect(described_class.roles.values).to eq(%w[super_admin organisation_admin editor trial standard])
+    end
+
+    describe "#standard_user?" do
+      it "returns true if the user has the editor role" do
+        user.role = :editor
+        expect(user).to be_standard_user
+      end
+
+      it "returns true if the user has the trial role" do
+        user.role = :trial
+        expect(user).to be_standard_user
+      end
+
+      it "returns true if the user has the standard role" do
+        user.role = :standard
+        expect(user).to be_standard_user
+      end
     end
   end
 
@@ -266,7 +285,7 @@ describe User, type: :model do
       it "creates a version when role is changed" do
         user = create :user
         expect {
-          user.update!(role: :super_admin)
+          user.update!(role: :editor)
         }.to change { user.versions.size }.by(1)
       end
 

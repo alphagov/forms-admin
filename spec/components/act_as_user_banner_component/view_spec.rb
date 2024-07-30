@@ -52,4 +52,20 @@ RSpec.describe ActAsUserBannerComponent::View, type: :component do
       expect(page).to have_text(/You are acting as .* a standard user/)
     end
   end
+
+  context "when the user is an editor user" do
+    let(:acting_as_user) { create :user, role: :editor }
+
+    it renders_the_user_role do
+      expect(page).to have_text(/You are acting as .* an editor user/)
+    end
+  end
+
+  context "when the user is a trial user" do
+    let(:acting_as_user) { create :user, role: :trial }
+
+    it renders_the_user_role do
+      expect(page).to have_text(/You are acting as .* a trial user/)
+    end
+  end
 end

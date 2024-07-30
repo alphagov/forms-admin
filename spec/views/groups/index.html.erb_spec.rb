@@ -44,7 +44,7 @@ RSpec.describe "groups/index", type: :view do
     context "when the user has a standard role" do
       context "and org has not signed an MOU" do
         let(:current_user) do
-          instance_double User, standard?: true, organisation_admin?: false, super_admin?: false, current_org_has_mou?: false
+          instance_double User, standard_user?: true, organisation_admin?: false, super_admin?: false, current_org_has_mou?: false
         end
 
         it "shows the details text for users who are not org/super admins" do

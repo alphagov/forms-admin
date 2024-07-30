@@ -93,7 +93,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     end
 
     context "when current user has a government email address not ending with .gov.uk" do
-      let(:user) { standard_user.tap { |user| user.email = "user@alb.example" } }
+      let(:user) { standard_user.tap { |editor| editor.email = "user@alb.example" } }
 
       it "redirects to the email code sent page" do
         expect(response).to redirect_to(submission_email_code_sent_path(form.id))

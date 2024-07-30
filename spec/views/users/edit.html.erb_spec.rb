@@ -81,6 +81,8 @@ describe "users/edit.html.erb" do
       expect(rendered).to have_checked_field("Standard user")
       expect(rendered).to have_unchecked_field("Super admin")
       expect(rendered).to have_unchecked_field("Organisation admin")
+      expect(rendered).to have_unchecked_field("Editor")
+      expect(rendered).to have_unchecked_field("Trial")
     end
 
     it "has a name field" do
