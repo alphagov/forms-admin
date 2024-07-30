@@ -1040,6 +1040,8 @@ en:
         live_forms_with_routes: Live forms with routes
         total_live_forms: Total live forms
       title: Feature usage on live forms
+    index:
+      title: Reports
   routing_page:
     body_text: "You can send people directly to the question or page you want, based on their previous answer. \nThis means they’ll only see questions that are relevant to them.\n"
     dropdown_default_text: Select a question to start your route from

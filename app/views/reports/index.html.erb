@@ -1,9 +1,9 @@
-<% set_page_title("Reports") %>
+<% set_page_title(t(".title")) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Reports</h1>
+    <h1 class="govuk-heading-l"><%= t(".title") %></h1>
     <ul class="govuk-list">
-      <li><%= govuk_link_to "Feature usage on live forms", report_features_path %></li>
+      <li><%= govuk_link_to t("reports.features.title"), report_features_path %></li>
     </ul>
   </div>
 </div>
