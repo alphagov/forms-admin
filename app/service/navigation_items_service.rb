@@ -23,6 +23,7 @@ class NavigationItemsService
     navigation_items = [
       mou_navigation_item,
       users_navigation_item,
+      reports_navigation_item,
       support_navigation_item,
       profile_navigation_item,
       signout_navigation_item,
@@ -45,6 +46,12 @@ private
     return nil unless should_show_user_profile_link?
 
     NavigationItem.new(text: I18n.t("header.users"), href: users_path, active: false)
+  end
+
+  def reports_navigation_item
+    return nil unless should_show_reports_link?
+
+    NavigationItem.new(text: I18n.t("header.reports"), href: reports_path, active: false)
   end
 
   def support_navigation_item
@@ -89,5 +96,9 @@ private
 
   def should_show_mous_link?
     Pundit.policy(user, :mou_signature).can_manage_mous?
+  end
+
+  def should_show_reports_link?
+    Pundit.policy(user, :report).can_view_reports?
   end
 end

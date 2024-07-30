@@ -161,6 +161,11 @@ Rails.application.routes.draw do
 
   resources :memberships, only: %i[destroy update]
 
+  scope :reports do
+    get "/", to: "reports#index", as: :reports
+    get "features", to: "reports#features", as: :report_features
+  end
+
   get "/maintenance" => "errors#maintenance", as: :maintenance_page
   match "/403", to: "errors#forbidden", as: :error_403, via: :all
   match "/404", to: "errors#not_found", as: :error_404, via: :all

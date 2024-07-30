@@ -1,0 +1,45 @@
+<% set_page_title(t(".title")) %>
+<% content_for :back_link, govuk_back_link_to(reports_path, t(".back_link")) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= t(".title") %></h1>
+
+    <h2 class="govuk-heading-m"><%= t(".features.heading") %></h2>
+    <%= govuk_summary_list do |summary_list|%>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".features.total_live_forms")) %>
+        <%= row.with_value(text: data.total_live_forms) %>
+      <%end%>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".features.live_forms_with_routes")) %>
+        <%= row.with_value(text: data.live_forms_with_routing) %>
+      <%end%>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".features.live_forms_with_payments")) %>
+        <%= row.with_value(text: data.live_forms_with_payment) %>
+      <%end%>
+    <%end%>
+
+    <h2 class="govuk-heading-m govuk-visually-hidden"><%= t(".answer_types.heading") %></h2>
+    <%= govuk_table do |table| %>
+      <%= table.with_caption(size: 'm', text: t(".answer_types.heading")) %>
+
+      <%= table.with_head do |head| %>
+        <%= head.with_row do |row| %>
+          <%= row.with_cell(text: t(".answer_types.table_headings.answer_type")) %>
+          <%= row.with_cell(text: t(".answer_types.table_headings.number_of_forms"), numeric: true) %>
+          <%= row.with_cell(text: t(".answer_types.table_headings.number_of_pages"), numeric: true) %>
+        <%end%>
+      <%end%>
+      <%= table.with_body do |body| %>
+        <% Page::ANSWER_TYPES.map(&:to_sym).each do |answer_type| %>
+          <%= body.with_row do |row| %>
+            <%= row.with_cell(header: true, text: t("helpers.label.page.answer_type_options.names.#{answer_type}")) %>
+            <%= row.with_cell(text: data.live_forms_with_answer_type.attributes[answer_type] || 0, numeric: true, html_attributes: {data: {"live-forms-with-answer-type-#{answer_type.to_s.dasherize}": true}}) %>
+            <%= row.with_cell(text: data.live_pages_with_answer_type.attributes[answer_type] || 0, numeric: true, html_attributes: {data: {"live-pages-with-answer-type-#{answer_type.to_s.dasherize}": true}}) %>
+          <%end%>
+        <%end%>
+      <%end%>
+    <%end%>
+  </div>
+</div>
