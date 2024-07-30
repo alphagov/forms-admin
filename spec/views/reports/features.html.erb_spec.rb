@@ -42,12 +42,12 @@ describe "reports/features.html.erb" do
   end
 
   it "includes the number of total live forms" do
-    expect(response.body).to include "Total live forms: #{report.total_live_forms}"
+    expect(rendered).to have_css(".govuk-summary-list__row", text: "Total live forms#{report.total_live_forms}")
   end
 
   Page::ANSWER_TYPES.map(&:to_sym).each do |answer_type|
     it "contains a heading for #{answer_type}" do
-      expect(rendered).to have_css("th", text: answer_type)
+      expect(rendered).to have_css("th", text: I18n.t("helpers.label.page.answer_type_options.names.#{answer_type}"))
     end
 
     it "includes the number of live forms with #{answer_type}" do
@@ -78,10 +78,10 @@ describe "reports/features.html.erb" do
   end
 
   it "includes the number of live forms with routes" do
-    expect(response.body).to include "Live forms with routes: #{report.live_forms_with_routing}"
+    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with routes#{report.live_forms_with_routing}")
   end
 
   it "includes the number of live forms with payments" do
-    expect(response.body).to include "Live forms with payments: #{report.live_forms_with_payment}"
+    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with payments#{report.live_forms_with_payment}")
   end
 end

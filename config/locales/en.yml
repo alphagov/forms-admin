@@ -1026,6 +1026,20 @@ en:
       </p>
     heading: Provide a link to privacy information for this form
     submit_button: Save and continue
+  reports:
+    features:
+      answer_types:
+        heading: Answer types
+        table_headings:
+          answer_type: Answer type
+          number_of_forms: Number of live forms which ask for this answer type
+          number_of_pages: Number of pages of this answer type on live forms
+      features:
+        heading: Features
+        live_forms_with_payments: Live forms with payments
+        live_forms_with_routes: Live forms with routes
+        total_live_forms: Total live forms
+      title: Feature usage on live forms
   routing_page:
     body_text: "You can send people directly to the question or page you want, based on their previous answer. \nThis means they’ll only see questions that are relevant to them.\n"
     dropdown_default_text: Select a question to start your route from
