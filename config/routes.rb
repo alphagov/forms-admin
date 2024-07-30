@@ -162,6 +162,7 @@ Rails.application.routes.draw do
   resources :memberships, only: %i[destroy update]
 
   scope :reports do
+    get "/", to: "reports#index", as: :reports
     get "features", to: "reports#features", as: :report_features
   end
 

@@ -33,6 +33,60 @@ RSpec.describe ReportsController, type: :request do
     end
   end
 
+  describe "#index" do
+    context "when the user is an editor" do
+      before do
+        login_as_standard_user
+
+        get reports_path
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is an organisation admin" do
+      before do
+        login_as_organisation_admin_user
+
+        get reports_path
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+
+        get reports_path
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the features index view" do
+        expect(response).to render_template("reports/index")
+      end
+
+      it "includes the heading text" do
+        expect(response.body).to include "Reports"
+      end
+    end
+  end
+
   describe "#features" do
     context "when the user is an editor" do
       before do
