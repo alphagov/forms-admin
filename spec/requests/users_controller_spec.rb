@@ -19,22 +19,6 @@ RSpec.describe UsersController, type: :request do
       end
     end
 
-    context "when logged in with editor role" do
-      it "is forbidden" do
-        login_as_editor_user
-        get users_path
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context "when logged in with trial role" do
-      it "is forbidden" do
-        login_as_trial_user
-        get users_path
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-
     context "when logged in with standard role" do
       it "is forbidden" do
         login_as_standard_user
@@ -75,8 +59,7 @@ RSpec.describe UsersController, type: :request do
               else
                 case user.role
                 when "super_admin" then expect(next_user.role).to eq "organisation_admin"
-                when "organisation_admin" then expect(next_user.role).to eq "editor"
-                when "editor" then expect(next_user.role).to eq "trial"
+                when "organisation_admin" then expect(next_user.role).to eq "standard"
                 end
               end
             else
@@ -105,22 +88,6 @@ RSpec.describe UsersController, type: :request do
 
       it "renders the correct page" do
         expect(response).to render_template("users/edit")
-      end
-    end
-
-    context "when logged in with editor role" do
-      it "is forbidden" do
-        login_as_editor_user
-        get edit_user_path(user)
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context "when logged in with trial role" do
-      it "is forbidden" do
-        login_as_trial_user
-        get edit_user_path(user)
-        expect(response).to have_http_status(:forbidden)
       end
     end
 
@@ -227,22 +194,6 @@ RSpec.describe UsersController, type: :request do
             expect(user.reload.organisation).to be_nil
           end
         end
-      end
-    end
-
-    context "when logged in with editor role" do
-      it "is forbidden" do
-        login_as_editor_user
-        put user_path(user), params: { user: { role: "super_admin" } }
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context "when logged in with trial role" do
-      it "is forbidden" do
-        login_as_trial_user
-        put user_path(user), params: { user: { role: "super_admin" } }
-        expect(response).to have_http_status(:forbidden)
       end
     end
 
