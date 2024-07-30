@@ -37,6 +37,10 @@ describe "reports/features.html.erb" do
     end
   end
 
+  it "has a back link to the live form page" do
+    expect(view.content_for(:back_link)).to have_link("Back to reports", href: reports_path)
+  end
+
   it "contains page heading" do
     expect(rendered).to have_css("h1.govuk-heading-l", text: "Feature usage on live forms")
   end
