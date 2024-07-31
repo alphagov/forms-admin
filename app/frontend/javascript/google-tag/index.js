@@ -33,3 +33,25 @@ export function sendPageViewEvent () {
     }
   })
 }
+
+export function attachExternalLinkTracker () {
+  const externalLinks = document.querySelectorAll(
+    'a[href^="http"], a[href^="https"]'
+  )
+  externalLinks.forEach(function (externalLink) {
+    externalLink.addEventListener('click', function (event) {
+      const target = event.target
+      window.dataLayer.push({
+        event: 'event_data',
+        event_data: {
+          event_name: 'navigation',
+          external: true,
+          method: 'primary click',
+          text: target.textContent,
+          type: 'generic link',
+          url: target.href
+        }
+      })
+    })
+  })
+}

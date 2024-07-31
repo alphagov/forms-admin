@@ -2,7 +2,11 @@
  * @vitest-environment jsdom
  */
 
-import { installAnalyticsScript, sendPageViewEvent } from '../google-tag'
+import {
+  installAnalyticsScript,
+  sendPageViewEvent,
+  attachExternalLinkTracker
+} from '../google-tag'
 import { describe, afterEach, it, expect, beforeEach } from 'vitest'
 
 describe('google_tag.mjs', () => {
@@ -86,6 +90,42 @@ describe('google_tag.mjs', () => {
             title: ''
           }
         })
+      })
+    })
+  })
+
+  describe('attachExternalLinkTracker()', () => {
+    const targetLinkText = 'A link to example.com'
+    const targetLinkUrl = 'http://example.com/'
+
+    const existingDataLayerObject = {
+      data: 'Some existing data in the dataLayer'
+    }
+
+    beforeEach(() => {
+      window.document.body.innerHTML = `<a href="${targetLinkUrl}">${targetLinkText}</a>`
+      window.dataLayer = [existingDataLayerObject]
+    })
+
+    it('the existing dataLayer content is preserved', function () {
+      attachExternalLinkTracker()
+      document.querySelector('a').click()
+      expect(window.dataLayer).toContainEqual(existingDataLayerObject)
+    })
+
+    it('the pageView event is pushed to the dataLayer', function () {
+      attachExternalLinkTracker()
+      document.querySelector('a').click()
+      expect(window.dataLayer).toContainEqual({
+        event: 'event_data',
+        event_data: {
+          event_name: 'navigation',
+          external: true,
+          method: 'primary click',
+          text: targetLinkText,
+          type: 'generic link',
+          url: targetLinkUrl
+        }
       })
     })
   })

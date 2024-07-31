@@ -45,6 +45,7 @@ document
 if (document.body.dataset.googleAnalyticsEnabled === 'true') {
   installAnalyticsScript(window)
   sendPageViewEvent()
+  attachExternalLinkTracker()
 }
 
 initAll()
