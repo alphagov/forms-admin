@@ -3,7 +3,11 @@ import dfeAutocomplete from 'dfe-autocomplete'
 import copyToClipboard from '../javascript/copy-to-clipboard'
 import markdownEditorToolbar from '../javascript/markdown-editor-toolbar'
 import { pasteListener } from '../javascript/paste-html-to-markdown'
-import { installAnalyticsScript } from '../javascript/google-tag'
+import {
+  installAnalyticsScript,
+  sendPageViewEvent,
+  attachExternalLinkTracker
+} from '../javascript/google-tag'
 import ajaxMarkdownPreview from '../javascript/ajax-markdown-preview'
 
 document
@@ -40,6 +44,8 @@ document
 
 if (document.body.dataset.googleAnalyticsEnabled === 'true') {
   installAnalyticsScript(window)
+  sendPageViewEvent()
+  attachExternalLinkTracker()
 }
 
 initAll()
