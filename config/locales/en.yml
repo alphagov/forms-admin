@@ -1044,6 +1044,11 @@ en:
       title: Feature usage on live forms
     index:
       title: Reports
+    users:
+      heading: Number of users per organisation
+      table_headings:
+        organisation_name: Organisation
+        user_count: User count
   routing_page:
     body_text: "You can send people directly to the question or page you want, based on their previous answer. \nThis means they’ll only see questions that are relevant to them.\n"
     dropdown_default_text: Select a question to start your route from
