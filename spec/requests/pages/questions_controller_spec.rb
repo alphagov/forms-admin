@@ -181,6 +181,28 @@ RSpec.describe Pages::QuestionsController, type: :request do
         page_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
         expect(ActiveResource::HttpMock.requests).to include page_request
       end
+
+      context "when page has unrecognised attributes" do
+        let(:page_response) do
+          {
+            id: 1,
+            form_id: 2,
+            question_text: draft_question.question_text,
+            hint_text: draft_question.hint_text,
+            answer_type: draft_question.answer_type,
+            answer_settings: nil,
+            is_optional: false,
+            page_heading: nil,
+            guidance_markdown: nil,
+            next_page:,
+            newly_added_to_api: "some value",
+          }
+        end
+
+        it "renders successfully" do
+          expect(response).to have_http_status(:ok)
+        end
+      end
     end
   end
 
