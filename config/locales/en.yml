@@ -1028,6 +1028,7 @@ en:
     heading: Provide a link to privacy information for this form
     submit_button: Save and continue
   reports:
+    back_link: Back to reports
     features:
       answer_types:
         heading: Answer types
@@ -1035,7 +1036,6 @@ en:
           answer_type: Answer type
           number_of_forms: Number of live forms which ask for this answer type
           number_of_pages: Number of pages of this answer type on live forms
-      back_link: Back to reports
       features:
         heading: Features
         live_forms_with_payments: Live forms with payments
