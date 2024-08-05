@@ -25,7 +25,7 @@ private
   end
 
   def org_name_user_count
-    User.left_joins(:organisation)
+    User.includes(:organisation)
       .group("organisations.id")
       .select("organisations.name, COUNT(users.id) AS user_count")
       .order(Arel.sql("COUNT(users.id) DESC"))
