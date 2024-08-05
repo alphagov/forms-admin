@@ -9,6 +9,7 @@ describe UsersReportService do
     it "returns the correct format" do
       expect(users_report_service.user_data).to match({
         caption: I18n.t("reports.users.heading"),
+        first_cell_is_header: true,
         head: [
           { text: I18n.t("reports.users.table_headings.organisation_name") },
           { text: I18n.t("reports.users.table_headings.user_count"), numeric: true },

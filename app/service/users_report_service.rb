@@ -7,6 +7,7 @@ class UsersReportService
         { text: I18n.t("reports.users.table_headings.user_count"), numeric: true },
       ],
       rows:,
+      first_cell_is_header: true,
     }
   end
 
