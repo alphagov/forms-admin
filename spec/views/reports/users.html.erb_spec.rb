@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "reports/useres.html.erb" do
+describe "reports/users.html.erb" do
   let(:data) do
     {
       caption: "table caption",
