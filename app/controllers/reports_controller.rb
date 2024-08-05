@@ -12,4 +12,12 @@ class ReportsController < ApplicationController
 
     render template: "reports/features", locals: { data: }
   end
+
+  def users
+    authorize Report, :can_view_reports?
+
+    data = UsersReportService.new.user_data
+
+    render locals: { data: }
+  end
 end

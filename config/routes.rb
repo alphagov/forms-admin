@@ -164,6 +164,7 @@ Rails.application.routes.draw do
   scope :reports do
     get "/", to: "reports#index", as: :reports
     get "features", to: "reports#features", as: :report_features
+    get "users", to: "reports#users", as: :report_users
   end
 
   get "/maintenance" => "errors#maintenance", as: :maintenance_page
