@@ -18,6 +18,18 @@ export function installAnalyticsScript (global) {
   }
 }
 
+export function setDefaultConsent () {
+  window.dataLayer = window.dataLayer || []
+  window.dataLayer.push([
+    'consent',
+    'default',
+    {
+      ad_storage: 'denied',
+      analytics_storage: 'granted'
+    }
+  ])
+}
+
 export function sendPageViewEvent () {
   // Ideally this should be placed above the GTM container snippet and early within the <head> tags
   window.dataLayer = window.dataLayer || []

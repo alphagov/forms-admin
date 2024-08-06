@@ -5,7 +5,8 @@
 import {
   installAnalyticsScript,
   sendPageViewEvent,
-  attachExternalLinkTracker
+  attachExternalLinkTracker,
+  setDefaultConsent
 } from '../google-tag'
 import { describe, afterEach, it, expect, beforeEach } from 'vitest'
 
@@ -40,6 +41,53 @@ describe('google_tag.mjs', () => {
             'script[src^="https://www.googletagmanager.com/gtm.js"]'
           ).length
         ).toBe(0)
+      })
+    })
+  })
+
+  describe('setDefaultConsent()', () => {
+    describe('when the dataLayer array is not already present on the window object', () => {
+      beforeEach(() => {
+        window.dataLayer = undefined
+      })
+
+      it('creates the dataLayer array and sets the default consent to "granted"', function () {
+        setDefaultConsent()
+        expect(window.dataLayer).toContainEqual([
+          'consent',
+          'default',
+          {
+            ad_storage: 'denied',
+            analytics_storage: 'granted'
+          }
+        ])
+      })
+    })
+
+    describe('when the dataLayer array is already present on the window object', () => {
+      const existingDataLayerObject = {
+        data: 'Some existing data in the dataLayer'
+      }
+
+      beforeEach(() => {
+        window.dataLayer = [existingDataLayerObject]
+      })
+
+      it('the existing dataLayer content is preserved', function () {
+        setDefaultConsent()
+        expect(window.dataLayer).toContainEqual(existingDataLayerObject)
+      })
+
+      it('sets the default consent to "granted"', function () {
+        setDefaultConsent()
+        expect(window.dataLayer).toContainEqual([
+          'consent',
+          'default',
+          {
+            ad_storage: 'denied',
+            analytics_storage: 'granted'
+          }
+        ])
       })
     })
   })
