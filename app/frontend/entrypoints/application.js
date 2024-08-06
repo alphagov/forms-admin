@@ -8,6 +8,7 @@ import {
   sendPageViewEvent,
   attachExternalLinkTracker
 } from '../javascript/google-tag'
+import { saveConsentStatus } from '../javascript/utils/cookie-consent'
 import ajaxMarkdownPreview from '../javascript/ajax-markdown-preview'
 
 document
@@ -43,6 +44,7 @@ document
   })
 
 if (document.body.dataset.googleAnalyticsEnabled === 'true') {
+  saveConsentStatus(true)
   installAnalyticsScript(window)
   sendPageViewEvent()
   attachExternalLinkTracker()
