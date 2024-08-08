@@ -29,14 +29,14 @@ RSpec.describe MailchimpListSynchronizer do
       {
         "members" => [
           { "email_address" => "keep@domain.org" },
-          { "email_address" => "remove@domain.org" },
+          { "email_address" => "archive@domain.org" },
           { "email_address" => "retireduser@domain.org" },
         ],
       }
     end
 
     let(:users_to_synchronize) do
-      [(build :user, email: "add@domain.org"),
+      [(build :user, email: "subscribe@domain.org"),
        (build :user, email: "keep@domain.org")].pluck(:email)
     end
 
@@ -70,12 +70,12 @@ RSpec.describe MailchimpListSynchronizer do
       ENV["SETTINGS__MAILCHIMP__API_KEY"] = "KEY"
     end
 
-    it "adds users to MailChimp who appear in the database, but not in the mailing list" do
+    it "subscribes users to MailChimp who appear in the database, but not in the mailing list" do
       expect(mailchimp_client_lists).to receive(:set_list_member).with(
         "list-1",
         anything,
         {
-          "email_address" => "add@domain.org",
+          "email_address" => "subscribe@domain.org",
           "status_if_new" => "subscribed",
         },
       )
@@ -83,7 +83,7 @@ RSpec.describe MailchimpListSynchronizer do
       described_class.synchronize(list_id: "list-1", users_to_synchronize:)
     end
 
-    it "does not add users who are into the database but lack access to GOV.UK Forms" do
+    it "does not subscribe users who are in the database but lack access to GOV.UK Forms" do
       expect(mailchimp_client_lists).not_to receive(:set_list_member).with(
         "list-1",
         anything,
@@ -96,18 +96,18 @@ RSpec.describe MailchimpListSynchronizer do
       described_class.synchronize(list_id: "list-1", users_to_synchronize:)
     end
 
-    it "removes users from MailChimp who do not appear in the database, but do appear in the mailing list" do
-      removed_email_hash = Digest::MD5.hexdigest "remove@domain.org"
+    it "archives users from MailChimp who do not appear in the database, but do appear in the mailing list" do
+      archived_email_hash = Digest::MD5.hexdigest "archive@domain.org"
 
-      expect(mailchimp_client_lists).to receive(:delete_list_member).with("list-1", removed_email_hash)
+      expect(mailchimp_client_lists).to receive(:delete_list_member).with("list-1", archived_email_hash)
 
       described_class.synchronize(list_id: "list-1", users_to_synchronize:)
     end
 
-    it "removes users from MailChimp who exist in the database, but do not have access" do
-      removed_email_hash = Digest::MD5.hexdigest "retireduser@domain.org"
+    it "archives users from MailChimp who exist in the database, but do not have access" do
+      archived_email_hash = Digest::MD5.hexdigest "retireduser@domain.org"
 
-      expect(mailchimp_client_lists).to receive(:delete_list_member).with("list-1", removed_email_hash)
+      expect(mailchimp_client_lists).to receive(:delete_list_member).with("list-1", archived_email_hash)
 
       described_class.synchronize(list_id: "list-1", users_to_synchronize:)
     end

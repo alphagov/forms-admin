@@ -40,14 +40,14 @@ class MailchimpListSynchronizer
     existing_members_set = existing_members
                              .to_set
 
-    deleted_users = existing_members_set - users_to_synchronize_set
-    added_users = users_to_synchronize_set - existing_members_set
+    users_to_archive = existing_members_set - users_to_synchronize_set
+    users_to_subscribe = users_to_synchronize_set - existing_members_set
 
-    puts "There are #{added_users.size} to subscribe"
-    puts "There are #{deleted_users.size} to unsubscribe"
+    puts "There are #{users_to_subscribe.size} to subscribe"
+    puts "There are #{users_to_archive.size} to archive"
 
     puts "Subscribing any new users..."
-    added_users.each do |email|
+    users_to_subscribe.each do |email|
       subscriber_hash = Digest::MD5.hexdigest email.downcase
       mailchimp.lists.set_list_member(
         list_id,
@@ -63,12 +63,12 @@ class MailchimpListSynchronizer
       warn "Continuing"
     end
 
-    puts "Unsubscribing any removed users..."
-    deleted_users.each do |email|
+    puts "Archiving any removed users..."
+    users_to_archive.each do |email|
       subscriber_hash = Digest::MD5.hexdigest email.downcase
       mailchimp.lists.delete_list_member(list_id, subscriber_hash)
     rescue MailchimpMarketing::ApiError => e
-      warn "Could not unsubscribe user with subscriber hash #{subscriber_hash} from list #{list_id}"
+      warn "Could not archive user with subscriber hash #{subscriber_hash} from list #{list_id}"
       warn "#{e.title}: #{e.detail}"
       warn "Continuing"
     end
