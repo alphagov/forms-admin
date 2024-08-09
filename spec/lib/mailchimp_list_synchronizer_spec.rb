@@ -33,6 +33,7 @@ RSpec.describe MailchimpListSynchronizer do
           { "email_address" => "archive@domain.org", "status" => "subscribed" },
           { "email_address" => "retireduser@domain.org", "status" => "subscribed" },
           { "email_address" => "archiveduser@domain.org", "status" => "archived" },
+          { "email_address" => "unsubscribeduser@domain.org", "status" => "unsubscribed" },
         ],
       }
     end
@@ -40,7 +41,8 @@ RSpec.describe MailchimpListSynchronizer do
     let(:users_to_synchronize) do
       [(build :user, email: "subscribe@domain.org"),
        (build :user, email: "keep@domain.org"),
-       (build :user, email: "archiveduser@domain.org")].pluck(:email)
+       (build :user, email: "archiveduser@domain.org"),
+       (build :user, email: "unsubscribeduser@domain.org")].pluck(:email)
     end
 
     before do
@@ -121,6 +123,19 @@ RSpec.describe MailchimpListSynchronizer do
         anything,
         {
           "email_address" => "archiveduser@domain.org",
+          "status" => "subscribed",
+        },
+      )
+
+      described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+    end
+
+    it "does not try to resubscribe users who have manually unsubscribed" do
+      expect(mailchimp_client_lists).not_to receive(:set_list_member).with(
+        "list-1",
+        anything,
+        {
+          "email_address" => "unsubscribeduser@domain.org",
           "status" => "subscribed",
         },
       )
