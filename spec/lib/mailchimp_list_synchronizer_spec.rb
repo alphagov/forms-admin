@@ -20,31 +20,10 @@ RSpec.describe MailchimpListSynchronizer do
       {
         "name" => "List 1",
         "stats" => {
-          "member_count" => 3,
-          "total_contacts" => 3,
+          "member_count" => 1,
+          "total_contacts" => 1,
         },
       }
-    end
-
-    let(:list_1_members_info) do
-      {
-        "members" => [
-          { "email_address" => "keep@domain.org", "status" => "subscribed" },
-          { "email_address" => "archive@domain.org", "status" => "subscribed" },
-          { "email_address" => "retireduser@domain.org", "status" => "subscribed" },
-          { "email_address" => "archiveduser@domain.org", "status" => "archived" },
-          { "email_address" => "unsubscribeduser@domain.org", "status" => "unsubscribed" },
-          { "email_address" => "retiredunsubscribeduser@domain.org", "status" => "unsubscribed" },
-          { "email_address" => "pendinguser@domain.org", "status" => "pending" },
-        ],
-      }
-    end
-
-    let(:users_to_synchronize) do
-      [(build :user, email: "subscribe@domain.org"),
-       (build :user, email: "keep@domain.org"),
-       (build :user, email: "archiveduser@domain.org"),
-       (build :user, email: "unsubscribeduser@domain.org")].pluck(:email)
     end
 
     before do
@@ -77,91 +56,227 @@ RSpec.describe MailchimpListSynchronizer do
       ENV["SETTINGS__MAILCHIMP__API_KEY"] = "KEY"
     end
 
-    it "subscribes users to MailChimp who appear in the database, but not in the mailing list" do
-      expect(mailchimp_client_lists).to receive(:set_list_member).with(
-        "list-1",
-        anything,
-        {
-          "email_address" => "subscribe@domain.org",
-          "status" => "subscribed",
-        },
-      )
+    RSpec.shared_examples "it subscribes the user" do
+      it "subscribes the user" do
+        expect(mailchimp_client_lists).to receive(:set_list_member).with(
+          "list-1",
+          anything,
+          {
+            "email_address" => "user@domain.org",
+            "status" => "subscribed",
+          },
+        )
 
-      described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+        described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+      end
     end
 
-    it "does not subscribe users who are in the database but lack access to GOV.UK Forms" do
-      expect(mailchimp_client_lists).not_to receive(:set_list_member).with(
-        "list-1",
-        anything,
-        {
-          "email_address" => "user.without.access@domain.org",
-          "status" => "subscribed",
-        },
-      )
+    RSpec.shared_examples "it archives the user" do
+      it "archives the user" do
+        archived_email_hash = Digest::MD5.hexdigest "user@domain.org"
 
-      described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+        expect(mailchimp_client_lists).to receive(:delete_list_member).with("list-1", archived_email_hash)
+
+        described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+      end
     end
 
-    it "archives users from MailChimp who do not appear in the database, but do appear in the mailing list" do
-      archived_email_hash = Digest::MD5.hexdigest "archive@domain.org"
+    RSpec.shared_examples "it does not subscribe or archive the user" do
+      it "does not subscribe or archive the user" do
+        archived_email_hash = Digest::MD5.hexdigest "user@domain.org"
 
-      expect(mailchimp_client_lists).to receive(:delete_list_member).with("list-1", archived_email_hash)
+        expect(mailchimp_client_lists).not_to receive(:set_list_member).with(
+          "list-1",
+          anything,
+          {
+            "email_address" => "user@domain.org",
+            "status" => "subscribed",
+          },
+        )
 
-      described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+        expect(mailchimp_client_lists).not_to receive(:delete_list_member).with("list-1", archived_email_hash)
+
+        described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+      end
     end
 
-    it "archives users from MailChimp who exist in the database, but do not have access" do
-      archived_email_hash = Digest::MD5.hexdigest "retireduser@domain.org"
+    context "when the user is in the list of users to synchronize" do
+      let(:users_to_synchronize) { ["user@domain.org"] }
 
-      expect(mailchimp_client_lists).to receive(:delete_list_member).with("list-1", archived_email_hash)
+      context "when the user is not present in the MailChimp list" do
+        let(:list_1_members_info) do
+          {
+            "members" => [],
+          }
+        end
 
-      described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+        include_examples "it subscribes the user"
+      end
+
+      context "when the user is subscribed in MailChimp" do
+        let(:list_1_members_info) do
+          {
+            "members" => [
+              { "email_address" => "user@domain.org", "status" => "subscribed" },
+            ],
+          }
+        end
+
+        include_examples "it does not subscribe or archive the user"
+      end
+
+      context "when the user is unsubscribed in MailChimp" do
+        let(:list_1_members_info) do
+          {
+            "members" => [
+              { "email_address" => "user@domain.org", "status" => "unsubscribed" },
+            ],
+          }
+        end
+
+        include_examples "it does not subscribe or archive the user"
+      end
+
+      context "when the user is archived in MailChimp" do
+        let(:list_1_members_info) do
+          {
+            "members" => [
+              { "email_address" => "user@domain.org", "status" => "archived" },
+            ],
+          }
+        end
+
+        include_examples "it subscribes the user"
+      end
+
+      context "when the user is 'cleaned' in MailChimp" do
+        let(:list_1_members_info) do
+          {
+            "members" => [
+              { "email_address" => "user@domain.org", "status" => "cleaned" },
+            ],
+          }
+        end
+
+        include_examples "it subscribes the user"
+      end
+
+      context "when the user is 'pending' in MailChimp" do
+        let(:list_1_members_info) do
+          {
+            "members" => [
+              { "email_address" => "user@domain.org", "status" => "pending" },
+            ],
+          }
+        end
+
+        include_examples "it subscribes the user"
+      end
+
+      context "when the user is 'transactional' in MailChimp" do
+        let(:list_1_members_info) do
+          {
+            "members" => [
+              { "email_address" => "user@domain.org", "status" => "transactional" },
+            ],
+          }
+        end
+
+        include_examples "it subscribes the user"
+      end
     end
 
-    it "resubscribes users who were previously archived, but have subsequently been readded" do
-      expect(mailchimp_client_lists).to receive(:set_list_member).with(
-        "list-1",
-        anything,
-        {
-          "email_address" => "archiveduser@domain.org",
-          "status" => "subscribed",
-        },
-      )
+    context "when the user is not in the list of users to synchronize" do
+      let(:users_to_synchronize) { ["some_other_user@domain.org"] }
 
-      described_class.synchronize(list_id: "list-1", users_to_synchronize:)
-    end
+      context "when the user is not present in the MailChimp list" do
+        let(:list_1_members_info) do
+          {
+            "members" => [],
+          }
+        end
 
-    it "does not try to resubscribe users who have manually unsubscribed" do
-      expect(mailchimp_client_lists).not_to receive(:set_list_member).with(
-        "list-1",
-        anything,
-        {
-          "email_address" => "unsubscribeduser@domain.org",
-          "status" => "subscribed",
-        },
-      )
+        include_examples "it does not subscribe or archive the user"
+      end
 
-      described_class.synchronize(list_id: "list-1", users_to_synchronize:)
-    end
+      context "when the user is subscribed in MailChimp" do
+        let(:list_1_members_info) do
+          {
+            "members" => [
+              { "email_address" => "user@domain.org", "status" => "subscribed" },
+            ],
+          }
+        end
 
-    it "archives users from MailChimp who are not in the database and have status 'pending'" do
-      pending_email_hash = Digest::MD5.hexdigest "pendinguser@domain.org"
+        include_examples "it archives the user"
+      end
 
-      expect(mailchimp_client_lists).to receive(:delete_list_member).with("list-1", pending_email_hash)
+      context "when the user is unsubscribed in MailChimp" do
+        let(:list_1_members_info) do
+          {
+            "members" => [
+              { "email_address" => "user@domain.org", "status" => "unsubscribed" },
+            ],
+          }
+        end
 
-      described_class.synchronize(list_id: "list-1", users_to_synchronize:)
-    end
+        include_examples "it does not subscribe or archive the user"
+      end
 
-    it "does not archive users from MailChimp who have unsubscribed" do
-      archived_email_hash = Digest::MD5.hexdigest "retiredunsubscribeduser@domain.org"
+      context "when the user is archived in MailChimp" do
+        let(:list_1_members_info) do
+          {
+            "members" => [
+              { "email_address" => "user@domain.org", "status" => "archived" },
+            ],
+          }
+        end
 
-      expect(mailchimp_client_lists).not_to receive(:delete_list_member).with("list-1", archived_email_hash)
+        include_examples "it does not subscribe or archive the user"
+      end
 
-      described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+      context "when the user is 'cleaned' in MailChimp" do
+        let(:list_1_members_info) do
+          {
+            "members" => [
+              { "email_address" => "user@domain.org", "status" => "cleaned" },
+            ],
+          }
+        end
+
+        include_examples "it archives the user"
+      end
+
+      context "when the user is 'pending' in MailChimp" do
+        let(:list_1_members_info) do
+          {
+            "members" => [
+              { "email_address" => "user@domain.org", "status" => "pending" },
+            ],
+          }
+        end
+
+        include_examples "it archives the user"
+      end
+
+      context "when the user is 'transactional' in MailChimp" do
+        let(:list_1_members_info) do
+          {
+            "members" => [
+              { "email_address" => "user@domain.org", "status" => "transactional" },
+            ],
+          }
+        end
+
+        include_examples "it archives the user"
+      end
     end
 
     context "when the mailing list has more than 1000 members" do
+      let(:users_to_synchronize) do
+        ["some_email_address@domain.org"]
+      end
+
       let(:list_1) do
         {
           "name" => "List 1",
