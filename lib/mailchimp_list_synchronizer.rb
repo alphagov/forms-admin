@@ -20,7 +20,7 @@ class MailchimpListSynchronizer
     puts "Mailchimp list has #{target_list['stats']['member_count']} active members"
     puts "Mailchimp list has #{target_list['stats']['total_contacts']} total members"
 
-    existing_members = []
+    currently_subscribed_members = []
 
     # Set up API pagination
     total_list_size = target_list["stats"]["total_contacts"]
@@ -29,8 +29,10 @@ class MailchimpListSynchronizer
 
     while offset < total_list_size
       api_response = mailchimp.lists.get_list_members_info(list_id, count: page_size, offset:)
-      api_email_addresses = api_response["members"].map { |member| member["email_address"] }
-      existing_members.concat(api_email_addresses)
+
+      api_response["members"].each do |member|
+        currently_subscribed_members.push(member["email_address"]) if member["status"] == "subscribed"
+      end
 
       offset += page_size
     end
@@ -38,11 +40,11 @@ class MailchimpListSynchronizer
     users_to_synchronize_set = users_to_synchronize
                              .to_set
 
-    existing_members_set = existing_members
+    currently_subscribed_members_set = currently_subscribed_members
                              .to_set
 
-    users_to_archive = existing_members_set - users_to_synchronize_set
-    users_to_subscribe = users_to_synchronize_set - existing_members_set
+    users_to_archive = currently_subscribed_members_set - users_to_synchronize_set
+    users_to_subscribe = users_to_synchronize_set - currently_subscribed_members_set
 
     puts "There are #{users_to_subscribe.size} to subscribe"
     puts "There are #{users_to_archive.size} to archive"
@@ -55,7 +57,7 @@ class MailchimpListSynchronizer
         subscriber_hash,
         {
           "email_address" => email,
-          "status_if_new" => "subscribed",
+          "status" => "subscribed",
         },
       )
     rescue MailchimpMarketing::ApiError => e

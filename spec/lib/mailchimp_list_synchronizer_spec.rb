@@ -29,16 +29,18 @@ RSpec.describe MailchimpListSynchronizer do
     let(:list_1_members_info) do
       {
         "members" => [
-          { "email_address" => "keep@domain.org" },
-          { "email_address" => "archive@domain.org" },
-          { "email_address" => "retireduser@domain.org" },
+          { "email_address" => "keep@domain.org", "status" => "subscribed" },
+          { "email_address" => "archive@domain.org", "status" => "subscribed" },
+          { "email_address" => "retireduser@domain.org", "status" => "subscribed" },
+          { "email_address" => "archiveduser@domain.org", "status" => "archived" },
         ],
       }
     end
 
     let(:users_to_synchronize) do
       [(build :user, email: "subscribe@domain.org"),
-       (build :user, email: "keep@domain.org")].pluck(:email)
+       (build :user, email: "keep@domain.org"),
+       (build :user, email: "archiveduser@domain.org")].pluck(:email)
     end
 
     before do
@@ -77,7 +79,7 @@ RSpec.describe MailchimpListSynchronizer do
         anything,
         {
           "email_address" => "subscribe@domain.org",
-          "status_if_new" => "subscribed",
+          "status" => "subscribed",
         },
       )
 
@@ -90,7 +92,7 @@ RSpec.describe MailchimpListSynchronizer do
         anything,
         {
           "email_address" => "user.without.access@domain.org",
-          "status_if_new" => "subscribed",
+          "status" => "subscribed",
         },
       )
 
@@ -113,6 +115,19 @@ RSpec.describe MailchimpListSynchronizer do
       described_class.synchronize(list_id: "list-1", users_to_synchronize:)
     end
 
+    it "resubscribes users who were previously archived, but have subsequently been readded" do
+      expect(mailchimp_client_lists).to receive(:set_list_member).with(
+        "list-1",
+        anything,
+        {
+          "email_address" => "archiveduser@domain.org",
+          "status" => "subscribed",
+        },
+      )
+
+      described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+    end
+
     context "when the mailing list has more than 1000 members" do
       let(:list_1) do
         {
@@ -127,7 +142,7 @@ RSpec.describe MailchimpListSynchronizer do
       let(:list_1_members_info) do
         {
           "members" =>
-          1001.times.map { { "email_address" => Faker::Internet.unique.email } },
+          1001.times.map { { "email_address" => Faker::Internet.unique.email, "status" => "subscribed" } },
         }
       end
 
