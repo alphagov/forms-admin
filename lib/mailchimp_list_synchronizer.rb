@@ -21,6 +21,7 @@ class MailchimpListSynchronizer
     puts "Mailchimp list has #{target_list['stats']['total_contacts']} total members"
 
     currently_subscribed_members = []
+    members_who_can_be_archived = []
     unsubscribed_members = []
 
     # Set up API pagination
@@ -33,6 +34,7 @@ class MailchimpListSynchronizer
 
       api_response["members"].each do |member|
         currently_subscribed_members.push(member["email_address"]) if member["status"] == "subscribed"
+        members_who_can_be_archived.push(member["email_address"]) if %w[subscribed cleaned pending transactional].include?(member["status"])
         unsubscribed_members.push(member["email_address"]) if member["status"] == "unsubscribed"
       end
 
@@ -47,8 +49,10 @@ class MailchimpListSynchronizer
 
     unsubscribed_members_set = unsubscribed_members.to_set
 
-    users_to_archive = currently_subscribed_members_set - users_to_synchronize_set
+    members_who_can_be_archived_set = members_who_can_be_archived.to_set
+
     users_to_subscribe = (users_to_synchronize_set - currently_subscribed_members_set) - unsubscribed_members_set
+    users_to_archive = members_who_can_be_archived_set - users_to_synchronize_set
 
     puts "There are #{users_to_subscribe.size} to subscribe"
     puts "There are #{users_to_archive.size} to archive"

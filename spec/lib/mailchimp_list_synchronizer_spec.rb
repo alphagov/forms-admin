@@ -34,6 +34,8 @@ RSpec.describe MailchimpListSynchronizer do
           { "email_address" => "retireduser@domain.org", "status" => "subscribed" },
           { "email_address" => "archiveduser@domain.org", "status" => "archived" },
           { "email_address" => "unsubscribeduser@domain.org", "status" => "unsubscribed" },
+          { "email_address" => "retiredunsubscribeduser@domain.org", "status" => "unsubscribed" },
+          { "email_address" => "pendinguser@domain.org", "status" => "pending" },
         ],
       }
     end
@@ -139,6 +141,22 @@ RSpec.describe MailchimpListSynchronizer do
           "status" => "subscribed",
         },
       )
+
+      described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+    end
+
+    it "archives users from MailChimp who are not in the database and have status 'pending'" do
+      pending_email_hash = Digest::MD5.hexdigest "pendinguser@domain.org"
+
+      expect(mailchimp_client_lists).to receive(:delete_list_member).with("list-1", pending_email_hash)
+
+      described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+    end
+
+    it "does not archive users from MailChimp who have unsubscribed" do
+      archived_email_hash = Digest::MD5.hexdigest "retiredunsubscribeduser@domain.org"
+
+      expect(mailchimp_client_lists).not_to receive(:delete_list_member).with("list-1", archived_email_hash)
 
       described_class.synchronize(list_id: "list-1", users_to_synchronize:)
     end
