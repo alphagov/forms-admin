@@ -21,6 +21,7 @@ RSpec.describe MailchimpListSynchronizer do
         "name" => "List 1",
         "stats" => {
           "member_count" => 3,
+          "total_contacts" => 3,
         },
       }
     end
@@ -117,7 +118,8 @@ RSpec.describe MailchimpListSynchronizer do
         {
           "name" => "List 1",
           "stats" => {
-            "member_count" => 1001,
+            "member_count" => 995,
+            "total_contacts" => 1001,
           },
         }
       end

@@ -13,16 +13,17 @@ class MailchimpListSynchronizer
     })
     puts "List id: #{list_id}"
 
-    target_list = mailchimp.lists.get_list(list_id)
+    target_list = mailchimp.lists.get_list(list_id, include_total_contacts: true)
     target_list or raise
 
     puts "Found Mailchimp list: #{target_list['name']}"
-    puts "Mailchimp list has #{target_list['stats']['member_count']} members"
+    puts "Mailchimp list has #{target_list['stats']['member_count']} active members"
+    puts "Mailchimp list has #{target_list['stats']['total_contacts']} total members"
 
     existing_members = []
 
     # Set up API pagination
-    total_list_size = target_list["stats"]["member_count"]
+    total_list_size = target_list["stats"]["total_contacts"]
     offset = 0
     page_size = 1000 # maximum page size is 1000 results, default is 10
 
