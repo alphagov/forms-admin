@@ -83,18 +83,25 @@ RSpec.describe MailchimpListSynchronizer do
 
     RSpec.shared_examples "it does not subscribe or archive the user" do
       it "does not subscribe or archive the user" do
-        archived_email_hash = Digest::MD5.hexdigest "user@domain.org"
+        expect(mailchimp_client_lists).not_to receive(:set_list_member)
+        expect(mailchimp_client_lists).not_to receive(:delete_list_member)
 
-        expect(mailchimp_client_lists).not_to receive(:set_list_member).with(
-          "list-1",
-          anything,
-          {
-            "email_address" => "user@domain.org",
-            "status" => "subscribed",
-          },
-        )
+        described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+      end
+    end
 
-        expect(mailchimp_client_lists).not_to receive(:delete_list_member).with("list-1", archived_email_hash)
+    RSpec.shared_examples "it does not subscribe or archive the user in question" do
+      it "subscribes other users in the list, but not the current user" do
+        # the API should only receive one subscribe request, for a different email address
+        expect(mailchimp_client_lists).to receive(:set_list_member).once do |_list_id, _subscriber_hash, body|
+          expect(body["email_address"]).to eq("some_other_user@domain.org")
+        end
+
+        described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+      end
+
+      it "does not archive the user" do
+        expect(mailchimp_client_lists).not_to receive(:delete_list_member)
 
         described_class.synchronize(list_id: "list-1", users_to_synchronize:)
       end
@@ -196,7 +203,7 @@ RSpec.describe MailchimpListSynchronizer do
           }
         end
 
-        include_examples "it does not subscribe or archive the user"
+        include_examples "it does not subscribe or archive the user in question"
       end
 
       context "when the user is subscribed in MailChimp" do
@@ -220,7 +227,7 @@ RSpec.describe MailchimpListSynchronizer do
           }
         end
 
-        include_examples "it does not subscribe or archive the user"
+        include_examples "it does not subscribe or archive the user in question"
       end
 
       context "when the user is archived in MailChimp" do
@@ -232,7 +239,7 @@ RSpec.describe MailchimpListSynchronizer do
           }
         end
 
-        include_examples "it does not subscribe or archive the user"
+        include_examples "it does not subscribe or archive the user in question"
       end
 
       context "when the user is 'cleaned' in MailChimp" do
