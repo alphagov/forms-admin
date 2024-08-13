@@ -8,7 +8,7 @@ class ReportsController < ApplicationController
   def features
     authorize Report, :can_view_reports?
 
-    data = Report.find("features")
+    data = FeaturesReportService.new.features_data
 
     render locals: { data: }
   end
