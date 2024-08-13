@@ -2,29 +2,74 @@ require "rails_helper"
 
 describe "reports/features.html.erb" do
   let(:report) do
-    Report.new({ total_live_forms: 3,
-                 live_forms_with_answer_type: { address: 1,
-                                                date: 1,
-                                                email: 1,
-                                                name: 1,
-                                                national_insurance_number: 1,
-                                                number: 1,
-                                                organisation_name: 1,
-                                                phone_number: 1,
-                                                selection: 3,
-                                                text: 3 },
-                 live_pages_with_answer_type: { address: 1,
-                                                date: 1,
-                                                email: 1,
-                                                name: 1,
-                                                national_insurance_number: 1,
-                                                number: 1,
-                                                organisation_name: 2,
-                                                phone_number: 1,
-                                                selection: 4,
-                                                text: 5 },
-                 live_forms_with_payment: 1,
-                 live_forms_with_routing: 2 })
+    {
+      features_rows: [
+        { key: { text: "Total live forms" }, value: { text: 3 } },
+        { key: { text: "Live forms with routes" }, value: { text: 2 } },
+        { key: { text: "Live forms with payments" }, value: { text: 1 } },
+      ],
+      answer_type_table_data: {
+        caption: I18n.t("reports.features.answer_types.heading"),
+        head: [
+          I18n.t("reports.features.answer_types.table_headings.answer_type"),
+          { text: I18n.t("reports.features.answer_types.table_headings.number_of_forms"), numeric: true },
+          { text: I18n.t("reports.features.answer_types.table_headings.number_of_pages"), numeric: true },
+        ],
+        rows: [
+          [
+            { text: I18n.t("helpers.label.page.answer_type_options.names.name") },
+            { text: 1, numeric: true },
+            { text: 1, numeric: true },
+          ],
+          [
+            { text: I18n.t("helpers.label.page.answer_type_options.names.organisation_name") },
+            { text: 1, numeric: true },
+            { text: 2, numeric: true },
+          ],
+          [
+            { text: I18n.t("helpers.label.page.answer_type_options.names.email") },
+            { text: 1, numeric: true },
+            { text: 1, numeric: true },
+          ],
+          [
+            { text: I18n.t("helpers.label.page.answer_type_options.names.phone_number") },
+            { text: 1, numeric: true },
+            { text: 1, numeric: true },
+          ],
+          [
+            { text: I18n.t("helpers.label.page.answer_type_options.names.national_insurance_number") },
+            { text: 1, numeric: true },
+            { text: 1, numeric: true },
+          ],
+          [
+            { text: I18n.t("helpers.label.page.answer_type_options.names.address") },
+            { text: 1, numeric: true },
+            { text: 1, numeric: true },
+          ],
+          [
+            { text: I18n.t("helpers.label.page.answer_type_options.names.date") },
+            { text: 1, numeric: true },
+            { text: 1, numeric: true },
+          ],
+          [
+            { text: I18n.t("helpers.label.page.answer_type_options.names.selection") },
+            { text: 3, numeric: true },
+            { text: 4, numeric: true },
+          ],
+          [
+            { text: I18n.t("helpers.label.page.answer_type_options.names.number") },
+            { text: 1, numeric: true },
+            { text: 1, numeric: true },
+          ],
+          [
+            { text: I18n.t("helpers.label.page.answer_type_options.names.text") },
+            { text: 3, numeric: true },
+            { text: 5, numeric: true },
+          ],
+        ],
+        first_cell_is_header: true,
+      },
+    }
   end
 
   before do
@@ -46,46 +91,24 @@ describe "reports/features.html.erb" do
   end
 
   it "includes the number of total live forms" do
-    expect(rendered).to have_css(".govuk-summary-list__row", text: "Total live forms#{report.total_live_forms}")
+    expect(rendered).to have_css(".govuk-summary-list__row", text: "Total live forms#{report[:features_rows][0][:value][:text]}")
   end
 
-  Page::ANSWER_TYPES.map(&:to_sym).each do |answer_type|
-    it "contains a heading for #{answer_type}" do
-      expect(rendered).to have_css("th", text: I18n.t("helpers.label.page.answer_type_options.names.#{answer_type}"))
-    end
+  it "contains the answer type table data" do
+    report[:answer_type_table_data][:rows].each do |row|
+      # contains a heading for the answer type
+      expect(rendered).to have_css("th", text: row[0][:text])
 
-    it "includes the number of live forms with #{answer_type}" do
-      expect(rendered).to have_css("[data-live-forms-with-answer-type-#{answer_type.to_s.dasherize}]", text: report.live_forms_with_answer_type.attributes[answer_type].to_s)
-    end
-
-    it "includes the number of live pages with #{answer_type}" do
-      expect(rendered).to have_css("[data-live-pages-with-answer-type-#{answer_type.to_s.dasherize}]", text: report.live_pages_with_answer_type.attributes[answer_type].to_s)
-    end
-  end
-
-  context "when an answer type is missing from the data" do
-    let(:report) do
-      Report.new({ total_live_forms: 3,
-                   live_forms_with_answer_type: { address: 1 },
-                   live_pages_with_answer_type: { address: 1 },
-                   live_forms_with_payment: 1,
-                   live_forms_with_routing: 2 })
-    end
-
-    it "displays 0 for live_forms_with_answer_type" do
-      expect(rendered).to have_css("[data-live-forms-with-answer-type-number]", text: "0")
-    end
-
-    it "displays 0 for live_pages_with_answer_type" do
-      expect(rendered).to have_css("[data-live-pages-with-answer-type-number]", text: "0")
+      # includes the number of live forms and pages with the answer type
+      expect(rendered).to have_table(with_rows: [[row[1][:text].to_s, row[2][:text].to_s]])
     end
   end
 
   it "includes the number of live forms with routes" do
-    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with routes#{report.live_forms_with_routing}")
+    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with routes#{report[:features_rows][1][:value][:text]}")
   end
 
   it "includes the number of live forms with payments" do
-    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with payments#{report.live_forms_with_payment}")
+    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with payments#{report[:features_rows][2][:value][:text]}")
   end
 end
