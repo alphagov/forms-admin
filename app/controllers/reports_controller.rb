@@ -10,7 +10,7 @@ class ReportsController < ApplicationController
 
     data = Report.find("features")
 
-    render template: "reports/features", locals: { data: }
+    render locals: { data: }
   end
 
   def users
