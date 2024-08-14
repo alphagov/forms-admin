@@ -18,7 +18,7 @@ RSpec.describe Pages::SelectionsSettingsInput, type: :model do
     end
 
     it "is invalid if more than 20 selection options are provided" do
-      selections_settings_input.selection_options = (1..21).to_a.map { |i| OpenStruct.new(name: i.to_s) }
+      selections_settings_input.selection_options = (1..31).to_a.map { |i| OpenStruct.new(name: i.to_s) }
       error_message = I18n.t("activemodel.errors.models.pages/selections_settings_input.attributes.selection_options.maximum")
       expect(selections_settings_input).not_to be_valid
 

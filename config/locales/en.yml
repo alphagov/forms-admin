@@ -1071,8 +1071,8 @@ en:
   selections_settings:
     add_another: Add another option
     add_options: Add options to your list
-    add_options_hint: You can add up to 20 options
-    cannot_add_more_options: You cannot add any more options as you have reached the maximum of 20 options.
+    add_options_hint: You can add up to 30 options
+    cannot_add_more_options: You cannot add any more options as you have reached the maximum of 30 options.
     heading: Create a list of options
     include_none_of_the_above: Include an option for ‘None of the above’
     list_settings: List settings
