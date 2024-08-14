@@ -43,7 +43,7 @@
       <% end %>
 
       <div>
-        <%if @selections_settings_input.selection_options.length < 20 %>
+        <%if @selections_settings_input.selection_options.length < 30 %>
           <%= f.govuk_submit t("selections_settings.add_another"), name: :add_another, secondary: true  %>
         <% else %>
           <p class="govuk-inset-text"><%= t("selections_settings.cannot_add_more_options") %></p>
