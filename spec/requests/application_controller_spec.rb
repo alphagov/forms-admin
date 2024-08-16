@@ -172,6 +172,30 @@ RSpec.describe ApplicationController, type: :request do
     end
   end
 
+  describe "act as user" do
+    context "when a super admin is acting as another user" do
+      let(:actual_user) { super_admin_user }
+      let(:acting_as_user) { create :user }
+
+      before do
+        allow(Settings).to receive(:act_as_user_enabled).and_return(true)
+
+        login_as_super_admin_user actual_user
+
+        post act_as_user_start_path(acting_as_user.id)
+        follow_redirect!
+      end
+
+      it "adds the super admin user ID to the session" do
+        expect(session["original_user_id"]).to eq actual_user.id
+      end
+
+      it "adds the acting as user ID to the session" do
+        expect(session["acting_as_user_id"]).to eq acting_as_user.id
+      end
+    end
+  end
+
   describe "#up" do
     it "returns http code 200" do
       get rails_health_check_path
