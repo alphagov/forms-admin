@@ -50,8 +50,8 @@ module AuthenticationFeatureHelpers
     @standard_user ||= FactoryBot.create(:user, :standard, organisation: test_org)
   end
 
-  def login_as_super_admin_user
-    login_as super_admin_user
+  def login_as_super_admin_user(user = nil)
+    login_as(user || super_admin_user)
 
     # All super-admins should have logged in via Auth0 with the Google workspace login
     Warden.on_next_request do |proxy|
