@@ -150,9 +150,20 @@ describe('google_tag.mjs', () => {
       data: 'Some existing data in the dataLayer'
     }
 
+    const preventDefault = event => {
+      event.preventDefault()
+    }
+
     beforeEach(() => {
       window.document.body.innerHTML = `<a href="${targetLinkUrl}">${targetLinkText}</a>`
       window.dataLayer = [existingDataLayerObject]
+
+      // stop link clicks from navigating, since jsdom can't do navigation
+      document.querySelector('a').addEventListener('click', preventDefault)
+    })
+
+    afterEach(() => {
+      document.querySelector('a').removeEventListener('click', preventDefault)
     })
 
     it('the existing dataLayer content is preserved', function () {
