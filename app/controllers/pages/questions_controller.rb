@@ -8,6 +8,7 @@ class Pages::QuestionsController < PagesController
                                                question_text: draft_question.question_text,
                                                answer_settings: draft_question.answer_settings,
                                                is_optional: draft_question.is_optional,
+                                               is_repeatable: draft_question.is_repeatable,
                                                draft_question:)
 
     # TODO: Remove this once we have a check your question view. The new view should also pull data directly from draft_question instead of through page model
@@ -34,6 +35,7 @@ class Pages::QuestionsController < PagesController
                                                question_text: draft_question.question_text,
                                                hint_text: draft_question.hint_text,
                                                is_optional: draft_question.is_optional,
+                                               is_repeatable: draft_question.is_repeatable,
                                                answer_settings: draft_question.answer_settings)
     render :edit, locals: { current_form:, draft_question: }
   end
@@ -55,7 +57,7 @@ class Pages::QuestionsController < PagesController
 private
 
   def page_params
-    params.require(:pages_question_input).permit(:question_text, :hint_text, :is_optional)
+    params.require(:pages_question_input).permit(:question_text, :hint_text, :is_optional, :is_repeatable)
   end
 
   def page_params_for_form_object
