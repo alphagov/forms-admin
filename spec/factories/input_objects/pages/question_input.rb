@@ -4,6 +4,7 @@ FactoryBot.define do
     question_text { Faker::Lorem.question }
     hint_text { nil }
     is_optional { "false" }
+    is_repeatable { "false" }
     answer_settings { nil }
     page_heading { nil }
     guidance_markdown { nil }
