@@ -17,18 +17,23 @@ class Page < ActiveResource::Base
   validates :hint_text, length: { maximum: 500 }
 
   validates :answer_type, presence: true, inclusion: { in: ANSWER_TYPES }
-  before_validation :convert_is_optional_to_boolean
+  before_validation :convert_boolean_fields
 
   def has_next_page?
     attributes.include?("next_page") && !attributes["next_page"].nil?
   end
 
-  def convert_is_optional_to_boolean
+  def convert_boolean_fields
     self.is_optional = is_optional?
+    self.is_repeatable = is_repeatable?
   end
 
   def is_optional?
-    ActiveRecord::Type::Boolean.new.cast(is_optional) || false
+    ActiveRecord::Type::Boolean.new.cast(@attributes["is_optional"]) || false
+  end
+
+  def is_repeatable?
+    ActiveRecord::Type::Boolean.new.cast(@attributes["is_repeatable"]) || false
   end
 
   def move_page(direction)
