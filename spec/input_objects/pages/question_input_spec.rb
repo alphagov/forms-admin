@@ -1,10 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Pages::QuestionInput, type: :model do
-  let(:question_input) { build :question_input, question_text:, draft_question:, is_optional: }
+  let(:question_input) { build :question_input, question_text:, draft_question:, is_optional:, is_repeatable: }
   let(:draft_question) { build :draft_question, question_text: }
   let(:question_text) { "What is your full name?" }
   let(:is_optional) { "false" }
+  let(:is_repeatable) { "false" }
 
   it "has a valid factory" do
     expect(build(:question_input)).to be_valid
@@ -130,6 +131,66 @@ RSpec.describe Pages::QuestionInput, type: :model do
       end
     end
 
+    describe "#is_repeatable" do
+      let(:question_input) { build :question_input, is_repeatable: }
+
+      context "when feature repeatable page is not enabled", feature_repeatable_page_enabled: false do
+        context "and is_repeatable is nil" do
+          let(:is_repeatable) { nil }
+
+          it "is valid" do
+            expect(question_input).to be_valid
+          end
+
+          it "has no error message" do
+            question_input.valid?
+            expect(question_input.errors[:is_repeatable]).to be_empty
+          end
+        end
+      end
+
+      context "when feature repeatable page is enabled", :feature_repeatable_page_enabled do
+        context "and is_repeatable is nil" do
+          let(:is_repeatable) { nil }
+
+          it "is invalid" do
+            expect(question_input).not_to be_valid
+          end
+
+          it "has an error message" do
+            question_input.valid?
+            expect(question_input.errors[:is_repeatable]).to include(I18n.t("activemodel.errors.models.pages/question_input.attributes.is_repeatable.inclusion"))
+          end
+        end
+
+        context "and is_repeatable is true" do
+          let(:is_repeatable) { "true" }
+
+          it "is valid" do
+            expect(question_input).to be_valid
+          end
+
+          it "has no error message" do
+            question_input.valid?
+            expect(question_input.errors[:is_repeatable]).to be_empty
+          end
+        end
+
+        context "and is_repeatable is false" do
+          let(:is_repeatable) { "false" }
+
+          it "is valid" do
+            expect(question_input).to be_valid
+          end
+
+          it "has no error message" do
+            question_input.valid?
+            expect(question_input.errors[:is_repeatable]).to be_empty
+          end
+        end
+      end
+    end
+
     context "when not given a draft_question" do
       let(:draft_question) { nil }
 
@@ -150,6 +211,7 @@ RSpec.describe Pages::QuestionInput, type: :model do
         question_input.question_text = "How old are you?"
         question_input.hint_text = "As a number"
         question_input.is_optional = "false"
+        question_input.is_repeatable = "true"
         question_input.submit
       end
 
@@ -163,6 +225,10 @@ RSpec.describe Pages::QuestionInput, type: :model do
 
       it "sets a draft_question is_optional" do
         expect(question_input.draft_question.is_optional.to_s).to eq question_input.is_optional
+      end
+
+      it "sets a draft_question is_repeatable" do
+        expect(question_input.draft_question.is_repeatable.to_s).to eq question_input.is_repeatable
       end
     end
   end

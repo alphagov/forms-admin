@@ -6,6 +6,7 @@ FactoryBot.define do
     question_text { Faker::Lorem.question.truncate(250) }
     hint_text { nil }
     is_optional { false }
+    is_repeatable { false }
     answer_type { Page::ANSWER_TYPES_WITHOUT_SETTINGS.sample }
     page_heading { nil }
     guidance_markdown { nil }

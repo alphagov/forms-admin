@@ -34,6 +34,11 @@
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <% end %>
 
+  <% if Settings.features.repeatable_page_enabled %>
+    <%= f.govuk_collection_radio_buttons :is_repeatable, question_input.repeatable_options, :id, :name, :description, legend: { size: 'm', tag: 'h2' }, bold_labels: false %>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <% end %>
+
   <h2 class="govuk-heading-m"><%= t("pages.answer_settings") %></h2>
   <%= render PageSettingsSummaryComponent::View.new(draft_question) %>
 

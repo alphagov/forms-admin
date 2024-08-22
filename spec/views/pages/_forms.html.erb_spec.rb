@@ -40,6 +40,18 @@ describe "pages/_form.html.erb", type: :view do
     expect(rendered).to have_unchecked_field("pages_question_input[is_optional]")
   end
 
+  context "when feature repeatable page is enabled", :feature_repeatable_page_enabled do
+    it "has a radio input for repeatable" do
+      expect(rendered).to have_field("pages_question_input[is_repeatable]", type: :radio)
+    end
+  end
+
+  context "when feature repeatable page is not enabled", feature_repeatable_page_enabled: false do
+    it "does not have a radio input for repeatable" do
+      expect(rendered).not_to have_field("pages_question_input[is_repeatable]", type: :radio)
+    end
+  end
+
   it "has a submit button with the correct text" do
     expect(rendered).to have_button(I18n.t("pages.submit_save"))
   end

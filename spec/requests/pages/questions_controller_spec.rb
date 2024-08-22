@@ -16,6 +16,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
       answer_type: draft_question.answer_type,
       answer_settings: nil,
       is_optional: false,
+      is_repeatable: false,
       page_heading: nil,
       guidance_markdown: nil,
       next_page:,
@@ -30,6 +31,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
       answer_type: "address",
       answer_settings: {},
       is_optional: false,
+      is_repeatable: false,
       page_heading: "New page heading",
       guidance_markdown: "## Heading level 2",
       next_page:,
@@ -95,6 +97,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
           page_heading: nil,
           guidance_markdown: nil,
           answer_type: draft_question.answer_type,
+          is_repeatable: false,
         }
       end
       let(:params) do
@@ -134,6 +137,25 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
         expect(banner_contents).to have_link(text: "Add a question", href: start_new_question_path(form_id: 2))
         expect(banner_contents).to have_link(text: "Back to your questions", href: form_pages_path(form_id: 2))
+      end
+
+      context "when passing is_repeatable as a param" do
+        let(:params) do
+          { pages_question_input: {
+            question_text: "What is your home address?",
+            hint_text: "This should be the location stated in your contract.",
+            is_optional: false,
+            is_repeatable: true,
+          } }
+        end
+
+        it "creates the page on the API with the correct is_repeatable value" do
+          matched_request = ActiveResource::HttpMock.requests.find do |request|
+            request.method == :post && request.path == "/api/v1/forms/2/pages"
+          end
+
+          expect(JSON.parse(matched_request.body)).to include("is_repeatable" => true)
+        end
       end
     end
 
@@ -223,6 +245,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
         answer_type: "address",
         answer_settings: nil,
         is_optional: false,
+        is_repeatable: false,
         page_heading: "New page heading",
         guidance_markdown: "## Heading level 2",
         next_page:,
@@ -289,6 +312,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
             hint_text: "This should be the location stated in your contract.",
             answer_type: "address",
             is_optional: "false",
+            is_repeatable: "false",
             page_heading: "New page heading",
             guidance_markdown: "## Heading level 2",
           } }
@@ -324,6 +348,63 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
           expect(banner_contents).to have_link(text: "Edit next question", href: edit_question_path(form_id: 2, page_id: 4))
           expect(banner_contents).to have_link(text: "Back to your questions", href: form_pages_path(form_id: 2))
+        end
+      end
+
+      context "when passing is_repeatable as a param" do
+        let(:params) do
+          { pages_question_input: {
+            form_id: 2,
+            question_text: "What is your home address?",
+            hint_text: "This should be the location stated in your contract.",
+            answer_type: "address",
+            is_optional: "false",
+            is_repeatable: "true",
+            page_heading: "New page heading",
+            guidance_markdown: "## Heading level 2",
+          } }
+        end
+
+        it "updates the page on the API with the correct is_repeatable value" do
+          matched_request = ActiveResource::HttpMock.requests.find do |request|
+            request.method == :put && request.path == "/api/v1/forms/2/pages/1"
+          end
+
+          expect(JSON.parse(matched_request.body)).to include("is_repeatable" => true)
+        end
+      end
+
+      context "when given a page with is_repeatable set to true and not passing is_repeatable as a param" do
+        let(:page_response) do
+          {
+            id: 1,
+            form_id: 2,
+            question_text: "What is your work address?",
+            hint_text: "This should be the location stated in your contract.",
+            answer_type: "address",
+            answer_settings: nil,
+            is_optional: false,
+            is_repeatable: true,
+            page_heading: "New page heading",
+            guidance_markdown: "## Heading level 2",
+            next_page:,
+          }
+        end
+
+        let(:params) do
+          { pages_question_input: {
+            form_id: 2,
+            question_text: "What is your home address?",
+            is_optional: "false",
+          } }
+        end
+
+        it "does not set is_repeatable" do
+          matched_request = ActiveResource::HttpMock.requests.find do |request|
+            request.method == :put && request.path == "/api/v1/forms/2/pages/1"
+          end
+
+          expect(JSON.parse(matched_request.body)).to include("is_repeatable" => true)
         end
       end
     end

@@ -77,17 +77,17 @@ describe Page, type: :model do
     end
   end
 
-  describe "#convert_is_optional_to_boolean" do
+  describe "#convert_boolean_fields" do
     context "when a question is optional" do
       it "set the model attribute to true" do
         page = described_class.new(is_optional: "true")
-        page.convert_is_optional_to_boolean
+        page.convert_boolean_fields
         expect(page.is_optional).to be true
       end
 
       it "returns true if it is not set to a falsey value" do
         page = described_class.new(is_optional: "something")
-        page.convert_is_optional_to_boolean
+        page.convert_boolean_fields
         expect(page.is_optional).to be true
       end
     end
@@ -95,14 +95,42 @@ describe Page, type: :model do
     context "when a question is required" do
       it "returns false if value is false" do
         page = described_class.new(is_optional: "false")
-        page.convert_is_optional_to_boolean
+        page.convert_boolean_fields
         expect(page.is_optional).to be false
       end
 
       it "returns false if value is 0" do
         page = described_class.new(is_optional: "0")
-        page.convert_is_optional_to_boolean
+        page.convert_boolean_fields
         expect(page.is_optional).to be false
+      end
+    end
+
+    context "when a question is repeatable" do
+      it "set the model attribute to true" do
+        page = described_class.new(is_repeatable: "true")
+        page.convert_boolean_fields
+        expect(page.is_repeatable).to be true
+      end
+
+      it "returns true if it is not set to a falsey value" do
+        page = described_class.new(is_repeatable: "something")
+        page.convert_boolean_fields
+        expect(page.is_repeatable).to be true
+      end
+    end
+
+    context "when a question is not repeatable" do
+      it "returns false if value is false" do
+        page = described_class.new(is_repeatable: "false")
+        page.convert_boolean_fields
+        expect(page.is_repeatable).to be false
+      end
+
+      it "returns false if value is 0" do
+        page = described_class.new(is_repeatable: "0")
+        page.convert_boolean_fields
+        expect(page.is_repeatable).to be false
       end
     end
   end

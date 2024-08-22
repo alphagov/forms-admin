@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_24_124946) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_20_140813) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -27,6 +27,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_24_124946) do
     t.jsonb "answer_settings", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_repeatable"
     t.index ["form_id"], name: "index_draft_questions_on_form_id"
     t.index ["user_id"], name: "index_draft_questions_on_user_id"
   end
