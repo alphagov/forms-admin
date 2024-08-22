@@ -11,33 +11,11 @@ namespace :groups do
 
   desc "Move all groups in one organisation to another"
   task :move_all_groups_between_organisations, %i[source_organisation_id target_organisation_id] => :environment do |_, args|
+    task_name = "groups:move_all_groups_between_organisations"
     source_organisation_id = args[:source_organisation_id]
     target_organisation_id = args[:target_organisation_id]
 
-    usage_message = "usage: rake groups:move_all_groups_between_organisations[<source_organisation_id>, <target_organisation_id>]".freeze
-    abort usage_message if source_organisation_id.blank? || target_organisation_id.blank?
-
-    ActiveRecord::Base.transaction do
-      source_organisation = Organisation.find_by(id: source_organisation_id)
-      target_organisation = Organisation.find_by(id: target_organisation_id)
-
-      raise ActiveRecord::RecordNotFound, "No organisation associated with source_organisation #{source_organisation_id}" if source_organisation.blank?
-      raise ActiveRecord::RecordNotFound, "No organisation associated with target_organisation_id #{target_organisation_id}" if target_organisation.blank?
-
-      groups = source_organisation.groups
-
-      groups.each do |group|
-        # change group organistion
-        group.organisation = target_organisation
-        group.save!
-
-        # change organisation for each form in the group
-        group.group_forms.map(&:form).each do |form|
-          form.organisation_id = group.organisation_id
-          form.save!
-        end
-      end
-    end
+    run_bulk_task(task_name:, source_organisation_id:, target_organisation_id:, rollback: false)
   end
 end
 
@@ -53,11 +31,29 @@ def run_task(task_name, args, rollback:)
   end
 end
 
+def run_bulk_task(task_name:, source_organisation_id:, target_organisation_id:, rollback:)
+  usage_message = "usage: rake #{task_name}[<source_organisation_id>, <target_organisation_id>]".freeze
+  abort usage_message if source_organisation_id.blank? || target_organisation_id.blank?
+
+  ActiveRecord::Base.transaction do
+    source_organisation = Organisation.find_by(id: source_organisation_id)
+    target_organisation = Organisation.find_by(id: target_organisation_id)
+
+    raise ActiveRecord::RecordNotFound, "No organisation associated with source_organisation #{source_organisation_id}" if source_organisation.blank?
+    raise ActiveRecord::RecordNotFound, "No organisation associated with target_organisation_id #{target_organisation_id}" if target_organisation.blank?
+
+    groups = source_organisation.groups
+
+    update_groups(groups:, target_organisation:, task_name:, rollback:)
+    raise ActiveRecord::Rollback if rollback
+  end
+end
+
 def change_organisation(group_ids, org_id, task_name:, rollback:)
   missing_groups = []
 
   begin
-    organisation = Organisation.find(org_id)
+    target_organisation = Organisation.find(org_id)
   rescue ActiveRecord::RecordNotFound
     abort "Organisation with ID #{org_id} not found!"
   end
@@ -75,15 +71,20 @@ def change_organisation(group_ids, org_id, task_name:, rollback:)
     abort "Groups with external ids #{missing_groups.join(', ')} not found!"
   end
 
-  groups.each do |group|
-    Rails.logger.info "#{task_name}: changing #{fmt_group(group)} from #{fmt_organisation(group.organisation)} to #{fmt_organisation(organisation)}"
+  update_groups(groups:, target_organisation:, task_name:, rollback:)
+end
 
-    group.organisation = organisation
+def update_groups(groups:, target_organisation:, task_name:, rollback:)
+  groups.each do |group|
+    Rails.logger.info "#{task_name}: changing #{fmt_group(group)} from #{fmt_organisation(group.organisation)} to #{fmt_organisation(target_organisation)}"
+
+    group.organisation = target_organisation
     group.save!
 
     # change organisation for each form in the group
     group.group_forms.map(&:form).each do |form|
-      Rails.logger.info "#{task_name}: changing #{fmt_form(form)} from #{fmt_organisation(form.organisation)} to #{fmt_organisation(organisation)}"
+      Rails.logger.info "#{task_name}: changing #{fmt_form(form)} from #{fmt_organisation(form.organisation)} to #{fmt_organisation(target_organisation)}"
+
       form.organisation_id = group.organisation_id
       form.save! unless rollback
     end
