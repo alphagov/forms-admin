@@ -48,12 +48,12 @@ def run_task(task_name, args, rollback:)
   abort usage_message if group_ids.blank? || org_id.blank?
 
   ActiveRecord::Base.transaction do
-    change_organisation(group_ids, org_id, task_name:)
+    change_organisation(group_ids, org_id, task_name:, rollback:)
     raise ActiveRecord::Rollback if rollback
   end
 end
 
-def change_organisation(group_ids, org_id, task_name:)
+def change_organisation(group_ids, org_id, task_name:, rollback:)
   missing_groups = []
 
   begin
@@ -80,6 +80,13 @@ def change_organisation(group_ids, org_id, task_name:)
 
     group.organisation = organisation
     group.save!
+
+    # change organisation for each form in the group
+    group.group_forms.map(&:form).each do |form|
+      Rails.logger.info "#{task_name}: changing #{fmt_form(form)} from #{fmt_organisation(form.organisation)} to #{fmt_organisation(organisation)}"
+      form.organisation_id = group.organisation_id
+      form.save! unless rollback
+    end
   end
 end
 
@@ -89,4 +96,8 @@ end
 
 def fmt_group(group)
   "group #{group.external_id} (#{group.name})"
+end
+
+def fmt_form(form)
+  "form #{form.id} (#{form.name})"
 end
