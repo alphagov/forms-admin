@@ -165,7 +165,7 @@ RSpec.describe "groups.rake" do
           }.not_to(change { single_group.reload.organisation })
         end
 
-        it "makes an API request to update the organisation on each form in the group" do
+        it "does not make an API request to update the organisation on forms in the group" do
           task.invoke(single_group.external_id, target_org.id)
 
           updated_forms = single_group.group_forms.map(&:form).map do |form|
@@ -187,7 +187,7 @@ RSpec.describe "groups.rake" do
           }.not_to(change { groups.map { |g| g.reload.organisation } })
         end
 
-        it "makes an API request to update the organisation on each form in the groups" do
+        it "does not make an API request to update the organisation on forms in the groups" do
           group_ids = groups.map(&:external_id)
 
           task.invoke(*group_ids, target_org.id)
@@ -271,6 +271,102 @@ RSpec.describe "groups.rake" do
             task.invoke(*invalid_args)
           }.to raise_error(SystemExit)
            .and output("usage: rake groups:move_all_groups_between_organisations[<source_organisation_id>, <target_organisation_id>]\n").to_stderr
+        end
+      end
+
+      context "with no arguments" do
+        it_behaves_like "usage error" do
+          let(:invalid_args) { [] }
+        end
+      end
+
+      context "with only one argument" do
+        it_behaves_like "usage error" do
+          let(:invalid_args) { [source_organisation.id] }
+        end
+      end
+
+      context "with invalid source_organisation id" do
+        let(:invalid_args) { ["some_id_that_does_not_exist", target_organisation.id] }
+
+        it "raises an error" do
+          expect {
+            task.invoke(*invalid_args)
+          }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+    end
+
+    context "with invalid target_organisation id" do
+      let(:invalid_args) { [source_organisation.id, "some_id_that_does_not_exist"] }
+
+      it "raises an error" do
+        expect {
+          task.invoke(*invalid_args)
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
+  describe "groups:move_all_groups_between_organisations_dry_run" do
+    subject(:task) do
+      Rake::Task["groups:move_all_groups_between_organisations_dry_run"]
+        .tap(&:reenable)
+    end
+
+    let(:source_organisation) { create :organisation, slug: "source-organisation", id: 1 }
+    let(:target_organisation) { create :organisation, slug: "new-org", id: 2 }
+    let(:group) { create :group, organisation: source_organisation }
+
+    let(:forms) do
+      build_list(:form, 3) do |form, i|
+        form.id = i
+        form.organisation_id = source_organisation.id
+      end
+    end
+
+    before do
+      forms.each do |form|
+        GroupForm.create! form_id: form.id, group:
+      end
+
+      ActiveResource::HttpMock.respond_to do |mock|
+        forms.each do |form|
+          mock.get "/api/v1/forms/#{form.id}", headers, form.to_json, 200
+          mock.put "/api/v1/forms/#{form.id}", put_headers
+        end
+      end
+    end
+
+    context "with valid arguments" do
+      let(:valid_args) { [source_organisation.id, target_organisation.id] }
+
+      it "does not persist the organisation change for the groups" do
+        expect {
+          task.invoke(*valid_args)
+        }.not_to(change { group.reload.organisation })
+      end
+
+      it "does not make an API request to update the organisation on forms" do
+        task.invoke(*valid_args)
+
+        updated_forms = forms.map do |form|
+          form.tap do
+            form.organisation_id = target_organisation.id
+          end
+        end
+
+        expect(updated_forms).to all(not_have_been_updated)
+      end
+    end
+
+    context "with invalid arguments" do
+      shared_examples_for "usage error" do
+        it "aborts with a usage message" do
+          expect {
+            task.invoke(*invalid_args)
+          }.to raise_error(SystemExit)
+           .and output("usage: rake groups:move_all_groups_between_organisations_dry_run[<source_organisation_id>, <target_organisation_id>]\n").to_stderr
         end
       end
 

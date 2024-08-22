@@ -17,6 +17,15 @@ namespace :groups do
 
     run_bulk_task(task_name:, source_organisation_id:, target_organisation_id:, rollback: false)
   end
+
+  desc "Move all groups in one organisation to another (dry run)"
+  task :move_all_groups_between_organisations_dry_run, %i[source_organisation_id target_organisation_id] => :environment do |_, args|
+    task_name = "groups:move_all_groups_between_organisations_dry_run"
+    source_organisation_id = args[:source_organisation_id]
+    target_organisation_id = args[:target_organisation_id]
+
+    run_bulk_task(task_name:, source_organisation_id:, target_organisation_id:, rollback: true)
+  end
 end
 
 def run_task(task_name, args, rollback:)
