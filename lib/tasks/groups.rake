@@ -8,6 +8,37 @@ namespace :groups do
   task :change_organisation_dry_run, [] => :environment do |_, args|
     run_task("groups:change_organisation_dry_run", args, rollback: true)
   end
+
+  desc "Move all groups in one organisation to another"
+  task :move_all_groups_between_organisations, %i[source_organisation_id target_organisation_id] => :environment do |_, args|
+    source_organisation_id = args[:source_organisation_id]
+    target_organisation_id = args[:target_organisation_id]
+
+    usage_message = "usage: rake groups:move_all_groups_between_organisations[<source_organisation_id>, <target_organisation_id>]".freeze
+    abort usage_message if source_organisation_id.blank? || target_organisation_id.blank?
+
+    ActiveRecord::Base.transaction do
+      source_organisation = Organisation.find_by(id: source_organisation_id)
+      target_organisation = Organisation.find_by(id: target_organisation_id)
+
+      raise ActiveRecord::RecordNotFound, "No organisation associated with source_organisation #{source_organisation_id}" if source_organisation.blank?
+      raise ActiveRecord::RecordNotFound, "No organisation associated with target_organisation_id #{target_organisation_id}" if target_organisation.blank?
+
+      groups = source_organisation.groups
+
+      groups.each do |group|
+        # change group organistion
+        group.organisation = target_organisation
+        group.save!
+
+        # change organisation for each form in the group
+        group.group_forms.map(&:form).each do |form|
+          form.organisation_id = group.organisation_id
+          form.save!
+        end
+      end
+    end
+  end
 end
 
 def run_task(task_name, args, rollback:)
