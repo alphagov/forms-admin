@@ -19,44 +19,12 @@ RSpec.describe "groups.rake" do
 
     let(:single_group) { groups.first }
 
-    let(:forms) do
-      build_list(:form, 3) do |form, i|
-        form.id = i
-        form.organisation_id = start_org.id
-      end
-    end
-
-    before do
-      forms.each_with_index do |form, index|
-        GroupForm.create! form_id: form.id, group: groups[index]
-      end
-
-      ActiveResource::HttpMock.respond_to do |mock|
-        forms.each do |form|
-          mock.get "/api/v1/forms/#{form.id}", headers, form.to_json, 200
-          mock.put "/api/v1/forms/#{form.id}", put_headers
-        end
-      end
-    end
-
     context "with valid arguments" do
       context "with a single group" do
         it "changes the group organisation to target organisation" do
           expect {
             task.invoke(single_group.external_id, target_org.id)
           }.to change { single_group.reload.organisation }.from(start_org).to(target_org)
-        end
-
-        it "makes an API request to update the organisation on each form in the group" do
-          task.invoke(single_group.external_id, target_org.id)
-
-          updated_forms = single_group.group_forms.map(&:form).map do |form|
-            form.tap do
-              form.organisation_id = target_org.id
-            end
-          end
-
-          expect(updated_forms).to all(have_been_updated)
         end
       end
 
@@ -67,20 +35,6 @@ RSpec.describe "groups.rake" do
           expect {
             task.invoke(*group_ids, target_org.id)
           }.to change { groups.map { |g| g.reload.organisation } }.to([target_org] * groups.size)
-        end
-
-        it "makes an API request to update the organisation on each form in the groups" do
-          group_ids = groups.map(&:external_id)
-
-          task.invoke(*group_ids, target_org.id)
-
-          updated_forms = forms.map do |form|
-            form.tap do
-              form.organisation_id = target_org.id
-            end
-          end
-
-          expect(updated_forms).to all(have_been_updated)
         end
       end
     end
@@ -137,44 +91,12 @@ RSpec.describe "groups.rake" do
 
     let(:single_group) { groups.first }
 
-    let(:forms) do
-      build_list(:form, 3) do |form, i|
-        form.id = i
-        form.organisation_id = start_org.id
-      end
-    end
-
-    before do
-      forms.each_with_index do |form, index|
-        GroupForm.create! form_id: form.id, group: groups[index]
-      end
-
-      ActiveResource::HttpMock.respond_to do |mock|
-        forms.each do |form|
-          mock.get "/api/v1/forms/#{form.id}", headers, form.to_json, 200
-          mock.put "/api/v1/forms/#{form.id}", put_headers
-        end
-      end
-    end
-
     context "with valid arguments" do
       context "with a single group" do
         it "does not persist the organisation change" do
           expect {
             task.invoke(single_group.external_id, target_org.id)
           }.not_to(change { single_group.reload.organisation })
-        end
-
-        it "does not make an API request to update the organisation on forms in the group" do
-          task.invoke(single_group.external_id, target_org.id)
-
-          updated_forms = single_group.group_forms.map(&:form).map do |form|
-            form.tap do
-              form.organisation_id = target_org.id
-            end
-          end
-
-          expect(updated_forms).to all(not_have_been_updated)
         end
       end
 
@@ -185,20 +107,6 @@ RSpec.describe "groups.rake" do
           expect {
             task.invoke(*group_ids, target_org.id)
           }.not_to(change { groups.map { |g| g.reload.organisation } })
-        end
-
-        it "does not make an API request to update the organisation on forms in the groups" do
-          group_ids = groups.map(&:external_id)
-
-          task.invoke(*group_ids, target_org.id)
-
-          updated_forms = forms.map do |form|
-            form.tap do
-              form.organisation_id = target_org.id
-            end
-          end
-
-          expect(updated_forms).to all(not_have_been_updated)
         end
       end
     end
@@ -222,26 +130,6 @@ RSpec.describe "groups.rake" do
     let(:target_organisation) { create :organisation, slug: "new-org", id: 2 }
     let(:group) { create :group, organisation: source_organisation }
 
-    let(:forms) do
-      build_list(:form, 3) do |form, i|
-        form.id = i
-        form.organisation_id = source_organisation.id
-      end
-    end
-
-    before do
-      forms.each do |form|
-        GroupForm.create! form_id: form.id, group:
-      end
-
-      ActiveResource::HttpMock.respond_to do |mock|
-        forms.each do |form|
-          mock.get "/api/v1/forms/#{form.id}", headers, form.to_json, 200
-          mock.put "/api/v1/forms/#{form.id}", put_headers
-        end
-      end
-    end
-
     context "with valid arguments" do
       let(:valid_args) { [source_organisation.id, target_organisation.id] }
 
@@ -249,18 +137,6 @@ RSpec.describe "groups.rake" do
         expect {
           task.invoke(*valid_args)
         }.to change { group.reload.organisation }.from(source_organisation).to(target_organisation)
-      end
-
-      it "makes an API request to move the form to the new org" do
-        task.invoke(*valid_args)
-
-        updated_forms = forms.map do |form|
-          form.tap do
-            form.organisation_id = target_organisation.id
-          end
-        end
-
-        expect(updated_forms).to all(have_been_updated)
       end
     end
 
@@ -318,26 +194,6 @@ RSpec.describe "groups.rake" do
     let(:target_organisation) { create :organisation, slug: "new-org", id: 2 }
     let(:group) { create :group, organisation: source_organisation }
 
-    let(:forms) do
-      build_list(:form, 3) do |form, i|
-        form.id = i
-        form.organisation_id = source_organisation.id
-      end
-    end
-
-    before do
-      forms.each do |form|
-        GroupForm.create! form_id: form.id, group:
-      end
-
-      ActiveResource::HttpMock.respond_to do |mock|
-        forms.each do |form|
-          mock.get "/api/v1/forms/#{form.id}", headers, form.to_json, 200
-          mock.put "/api/v1/forms/#{form.id}", put_headers
-        end
-      end
-    end
-
     context "with valid arguments" do
       let(:valid_args) { [source_organisation.id, target_organisation.id] }
 
@@ -345,18 +201,6 @@ RSpec.describe "groups.rake" do
         expect {
           task.invoke(*valid_args)
         }.not_to(change { group.reload.organisation })
-      end
-
-      it "does not make an API request to update the organisation on forms" do
-        task.invoke(*valid_args)
-
-        updated_forms = forms.map do |form|
-          form.tap do
-            form.organisation_id = target_organisation.id
-          end
-        end
-
-        expect(updated_forms).to all(not_have_been_updated)
       end
     end
 

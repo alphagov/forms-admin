@@ -35,7 +35,7 @@ def run_task(task_name, args, rollback:)
   abort usage_message if group_ids.blank? || org_id.blank?
 
   ActiveRecord::Base.transaction do
-    change_organisation(group_ids, org_id, task_name:, rollback:)
+    change_organisation(group_ids, org_id, task_name:)
     raise ActiveRecord::Rollback if rollback
   end
 end
@@ -53,12 +53,12 @@ def run_bulk_task(task_name:, source_organisation_id:, target_organisation_id:, 
 
     groups = source_organisation.groups
 
-    update_groups(groups:, target_organisation:, task_name:, rollback:)
+    update_groups(groups:, target_organisation:, task_name:)
     raise ActiveRecord::Rollback if rollback
   end
 end
 
-def change_organisation(group_ids, org_id, task_name:, rollback:)
+def change_organisation(group_ids, org_id, task_name:)
   missing_groups = []
 
   begin
@@ -80,23 +80,15 @@ def change_organisation(group_ids, org_id, task_name:, rollback:)
     abort "Groups with external ids #{missing_groups.join(', ')} not found!"
   end
 
-  update_groups(groups:, target_organisation:, task_name:, rollback:)
+  update_groups(groups:, target_organisation:, task_name:)
 end
 
-def update_groups(groups:, target_organisation:, task_name:, rollback:)
+def update_groups(groups:, target_organisation:, task_name:)
   groups.each do |group|
     Rails.logger.info "#{task_name}: changing #{fmt_group(group)} from #{fmt_organisation(group.organisation)} to #{fmt_organisation(target_organisation)}"
 
     group.organisation = target_organisation
     group.save!
-
-    # change organisation for each form in the group
-    group.group_forms.map(&:form).each do |form|
-      Rails.logger.info "#{task_name}: changing #{fmt_form(form)} from #{fmt_organisation(form.organisation)} to #{fmt_organisation(target_organisation)}"
-
-      form.organisation_id = group.organisation_id
-      form.save! unless rollback
-    end
   end
 end
 
