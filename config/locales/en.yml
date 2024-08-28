@@ -5,6 +5,9 @@ en:
     organisation_text_html: |
       <p>If you’re from a central government organisation that publishes content on the GOV.UK website but your organisation is not listed, please %{contact_link}.</p>
       <p>If you’re from a public sector organisation that does not publish content on GOV.UK you cannot use GOV.UK Forms yet. You can <a href="https://www.forms.service.gov.uk/forthcoming-features">read about our forthcoming features and sign up to our mailing list</a> for updates.</p>
+    terms_of_use_summary_html: |
+      <p>These terms apply to the way you use GOV.UK Forms.</p>
+      <p>You must accept these terms to continue to use GOV.UK Forms.</p>
   activemodel:
     errors:
       models:
@@ -16,6 +19,10 @@ en:
           attributes:
             organisation_id:
               blank: Select your organisation
+        account/terms_of_use_input:
+          attributes:
+            agreed:
+              accepted: You must agree to the terms of use to continue
         group_member_input:
           attributes:
             member_email_address:
@@ -520,6 +527,9 @@ en:
         name: Enter your full name
       account_organisation_input:
         organisation_id: Select your organisation
+      account_terms_of_use_input:
+        agreed_options:
+          '1': I agree to these terms
       forms_make_changes_live:
         confirm: Are you sure you want to make your draft live?
       forms_make_live_input:
@@ -624,6 +634,8 @@ en:
           'true': 'Yes'
         question_text: Question text
     legend:
+      account_terms_of_use_input:
+        agreed: Do you agree to these terms?
       mou_signature:
         agreed: Do you agree to the MOU?
       pages_question_input:
@@ -880,6 +892,7 @@ en:
     access_denied: You do not have permission to access GOV.UK Forms
     account_name: Enter your name
     account_organisation: Select your organisation
+    account_terms_of_use: Terms of use
     add_guidance: Add guidance
     address_settings: What kind of addresses do you expect to receive?
     archive_form_confirm: Archive this form
