@@ -29,7 +29,7 @@ RSpec.describe Forms::PaymentLinkInput, type: :model do
         payment_link_input.validate(:payment_url)
 
         expect(payment_link_input.errors.full_messages_for(:payment_url)).to include(
-          "Payment url Enter a link in the correct format, like https://www.gov.uk/payments/organisation/service",
+          "Payment url Enter a link in the correct format, like https://www.gov.uk/payments/your-payment-link",
         )
       end
     end
@@ -41,7 +41,7 @@ RSpec.describe Forms::PaymentLinkInput, type: :model do
         payment_link_input.validate(:payment_url)
 
         expect(payment_link_input.errors.full_messages_for(:payment_url)).to include(
-          "Payment url Enter a link in the correct format, like https://www.gov.uk/payments/organisation/service",
+          "Payment url Enter a link in the correct format, like https://www.gov.uk/payments/your-payment-link",
         )
       end
     end
