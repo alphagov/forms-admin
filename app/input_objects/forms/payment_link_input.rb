@@ -19,6 +19,6 @@ class Forms::PaymentLinkInput < BaseInput
   end
 
   def is_pay_url?
-    errors.add :payment_url, :url unless payment_url.starts_with?("https://www.gov.uk/payments/")
+    errors.add :payment_url, :url unless payment_url.starts_with?("https://www.gov.uk/payments/", "https://gov.uk/payments/")
   end
 end
