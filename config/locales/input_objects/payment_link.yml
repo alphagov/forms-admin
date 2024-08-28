@@ -6,11 +6,11 @@ en:
     hint:
       forms_payment_link_input:
         payment_url: |-
-          For example, https://gov.uk/payments/your-payment-link
+          For example, https://www.gov.uk/payments/your-payment-link
   activemodel:
     errors:
       models:
         forms/payment_link_input:
           attributes:
             payment_url:
-              url: Enter a link in the correct format, like https://www.gov.uk/payments/organisation/service
+              url: Enter a link in the correct format, like https://www.gov.uk/payments/your-payment-link
