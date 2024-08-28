@@ -14,6 +14,14 @@ RSpec.describe Forms::PaymentLinkInput, type: :model do
       end
     end
 
+    context "when given a Pay URL without 'www' prefix" do
+      it "validates succesfully" do
+        payment_link_input = described_class.new(form:, payment_url: "https://gov.uk/payments/test-org/test-service")
+
+        expect(payment_link_input).to be_valid
+      end
+    end
+
     context "when given a blank payment_url" do
       it "validates successfully" do
         payment_link_input = described_class.new(form:, payment_url: "")
