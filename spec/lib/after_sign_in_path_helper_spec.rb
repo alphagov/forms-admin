@@ -23,7 +23,7 @@ describe AfterSignInPathHelper do
   let(:location) { "/default" }
 
   describe "#after_sign_in_next_path" do
-    context "when the user has an organisation and name" do
+    context "when the user's account is complete" do
       it "returns the default path" do
         expect(test_controller.after_sign_in_next_path).to eq location
       end
@@ -42,6 +42,14 @@ describe AfterSignInPathHelper do
 
       it "returns the path to edit the name" do
         expect(test_controller.after_sign_in_next_path).to eq edit_account_name_path
+      end
+    end
+
+    context "when the user has not agreed to the terms of use" do
+      let(:user) { build :user, terms_agreed_at: nil }
+
+      it "returns the path to agree to the terms of use" do
+        expect(test_controller.after_sign_in_next_path).to eq edit_account_terms_of_use_path
       end
     end
 
