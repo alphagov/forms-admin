@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_20_140813) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_22_145640) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -120,6 +120,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_20_140813) do
     t.bigint "organisation_id"
     t.boolean "has_access", default: true
     t.string "provider"
+    t.datetime "terms_agreed_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true

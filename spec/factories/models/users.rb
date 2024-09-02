@@ -6,6 +6,7 @@ FactoryBot.define do
     provider { "factory_bot" }
     role { :standard }
     has_access { true }
+    terms_agreed_at { Time.zone.now }
 
     factory :basic_auth_user do
       provider { "basic_auth" }

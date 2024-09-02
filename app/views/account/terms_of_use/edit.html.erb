@@ -1,0 +1,23 @@
+<% set_page_title(title_with_error_prefix(t("page_titles.account_terms_of_use"), @terms_of_use_input.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: @terms_of_use_input, url: account_terms_of_use_path, method: :patch) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <%=t("page_titles.account_terms_of_use")%>
+      </h1>
+
+      <%=t("account.terms_of_use_summary_html")%>
+
+      <%# terms of use content here %>
+
+      <%= f.govuk_check_boxes_fieldset :agreed, multiple: false, legend: { tag: 'h2', size: 'm' } do %>
+        <%= f.govuk_check_box :agreed, 1, 0, multiple: false, link_errors: true  %>
+      <% end %>
+
+      <%= f.govuk_submit t('save_and_continue') %>
+    <% end %>
+  </div>
+</div>

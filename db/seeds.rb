@@ -25,7 +25,8 @@ if HostingEnvironment.local_development? && User.none?
                                 name: "A User",
                                 role: :super_admin,
                                 uid: "123456",
-                                provider: :mock_gds_sso })
+                                provider: :mock_gds_sso,
+                                terms_agreed_at: Time.zone.now })
 
   FactoryBot.create :mou_signature_for_organisation, organisation: gds
 
