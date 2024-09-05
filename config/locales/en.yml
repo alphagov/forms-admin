@@ -207,6 +207,7 @@ en:
     cookies: Cookies
     helpful_links: Helpful links
     privacy: Privacy
+    terms_of_use: Terms of use
   forbidden:
     body_html: |
       You do not have permission to view this page.
