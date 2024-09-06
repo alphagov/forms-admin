@@ -55,12 +55,6 @@ class Form < ActiveResource::Base
     post "archive"
   end
 
-  def self.update_organisation_for_creator(creator_id, organisation_id)
-    if creator_id.present? && organisation_id.present?
-      patch("update-organisation-for-creator", creator_id:, organisation_id:)
-    end
-  end
-
   def form_submission_email
     FormSubmissionEmail.find_by_form_id(id)
   end

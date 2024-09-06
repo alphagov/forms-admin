@@ -26,13 +26,7 @@ describe UserUpdateService do
         allow(user).to receive(:update).and_return(false)
       end
 
-      it "does not run add_organisation_to_user_forms if user is not updated" do
-        allow(Form).to receive(:update_organisation_for_creator)
-        user_update_service.update_user
-        expect(Form).not_to have_received(:update_organisation_for_creator)
-      end
-
-      it "does not run add_organisation_to_user_mou if user is not updated" do
+      it "does not run add_mou_signature_organisation if user is not updated" do
         allow(MouSignature).to receive(:add_mou_signature_organisation)
         user_update_service.update_user
         expect(MouSignature).not_to have_received(:add_mou_signature_organisation)
