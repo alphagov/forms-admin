@@ -36,16 +36,12 @@ RSpec.describe PagesController, type: :request do
       expect(ActiveResource::HttpMock.requests).to include pages_request
     end
 
-    context "with a form from another organisation" do
-      let(:form) do
-        build :form, organisation_id: 2, id: 2
-      end
+    context "with a form in a group that the user is not a member of" do
+      let(:form) { build :form, id: 2 }
+      let(:other_group) { create(:group) }
 
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", headers, form.to_json, 200
-        end
-
+        other_group.group_forms.build(form_id: form.id)
         get form_pages_path(2)
       end
 
