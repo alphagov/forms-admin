@@ -35,12 +35,6 @@ RSpec.describe "Selecting an organisation using accessible autocomplete", type: 
       create :user, organisation: Organisation.find_by(slug: "ministry-of-tests")
       create :user, organisation: Organisation.find_by(slug: "department-for-testing")
 
-      ActiveResource::HttpMock.respond_to do |mock|
-        Organisation.pluck(:id).each do |organisation_id|
-          mock.get "/api/v1/forms?organisation_id=#{organisation_id}", headers, [].to_json, 200
-        end
-      end
-
       visit root_path
     end
 

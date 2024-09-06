@@ -4,9 +4,6 @@ describe "Login to the service", type: :feature do
   let(:user) { standard_user }
 
   before do
-    ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?organisation_id=#{user.organisation_id}", headers, [].to_json, 200
-    end
     allow(Settings).to receive(:auth_provider).and_return("developer")
   end
 
