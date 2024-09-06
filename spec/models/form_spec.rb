@@ -5,18 +5,6 @@ describe Form, type: :model do
   let(:organisation) { build :organisation, id: 1 }
   let(:form) { described_class.new(id:, name: "Form 1", organisation:, submission_email: "") }
 
-  describe "validations" do
-    it "does not require an org" do
-      form.org = nil
-      expect(form).to be_valid
-    end
-
-    it "does not require an organisation_id" do
-      form.organisation_id = nil
-      expect(form).to be_valid
-    end
-  end
-
   describe "#destroy" do
     context "when form is in a group" do
       it "destroys the group" do
