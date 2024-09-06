@@ -32,8 +32,4 @@ private
   def mark_complete_input_params
     params.require(:forms_mark_complete_input).permit(:mark_complete).merge(form: current_form)
   end
-
-  def search_params
-    params[:search]&.permit(:organisation_id) || {}
-  end
 end
