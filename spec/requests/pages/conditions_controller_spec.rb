@@ -1,9 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Pages::ConditionsController, type: :request do
-  let(:organisation_id) { standard_user.organisation_id }
-  let(:other_organisation_id) { standard_user.organisation_id + 1 }
-  let(:form) { build :form, :ready_for_routing, id: 1, organisation_id: }
+  let(:form) { build :form, :ready_for_routing, id: 1 }
   let(:pages) { form.pages }
   let(:page) do
     pages.first.tap do |first_page|
