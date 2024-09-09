@@ -3,7 +3,6 @@ class Form < ActiveResource::Base
   self.include_format_in_path = false
   headers["X-API-Token"] = Settings.forms_api.auth_key
 
-  belongs_to :organisation
   has_many :pages
 
   def self.find_live(id)
@@ -53,12 +52,6 @@ class Form < ActiveResource::Base
 
   def archive!
     post "archive"
-  end
-
-  def self.update_organisation_for_creator(creator_id, organisation_id)
-    if creator_id.present? && organisation_id.present?
-      patch("update-organisation-for-creator", creator_id:, organisation_id:)
-    end
   end
 
   def form_submission_email

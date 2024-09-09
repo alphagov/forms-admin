@@ -76,10 +76,6 @@ RSpec.describe AuthenticationController, type: :request do
         # shorten the auth_valid_for time for testing
         GDS::SSO::Config.auth_valid_for = 1
 
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms?organisation_id=#{standard_user.organisation_id}", headers, [].to_json, 200
-        end
-
         logout
       end
 

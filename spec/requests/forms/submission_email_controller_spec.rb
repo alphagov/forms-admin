@@ -7,7 +7,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
   let(:user) { standard_user }
   let(:user_outside_group) { build :user, id: 2, organisation: }
 
-  let(:form) { build :form, id: 1, creator_id: 1, organisation_id: 1 }
+  let(:form) { build :form, id: 1, creator_id: 1 }
 
   let(:submission_email_mailer_spy) do
     submission_email_mailer = instance_spy(SubmissionEmailMailer)
@@ -213,7 +213,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     end
 
     context "when draft version submission email is different from live version" do
-      let(:form) { build :form, :live, id: 1, creator_id: 1, organisation_id: 1 }
+      let(:form) { build :form, :live, id: 1, creator_id: 1 }
       let(:previous_live_version) { form.clone }
 
       before do

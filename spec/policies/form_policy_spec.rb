@@ -4,7 +4,7 @@ describe FormPolicy do
   subject(:policy) { described_class.new(user, form) }
 
   let(:organisation) { build :organisation, :with_signed_mou, id: 1 }
-  let(:form) { build :form, id: 1, organisation_id: 1, creator_id: 123 }
+  let(:form) { build :form, id: 1, creator_id: 123 }
   let(:group) { create(:group, name: "Group 1", organisation:, status: group_status) }
   let(:group_status) { :trial }
   let(:user) { build :user, organisation: }
@@ -106,7 +106,7 @@ describe FormPolicy do
   end
 
   describe "#can_add_page_routing_conditions?" do
-    let(:form) { build :form, id: 1, pages:, organisation_id: 1 }
+    let(:form) { build :form, id: 1, pages: }
     let(:pages) { [] }
 
     context "and the form has one page" do

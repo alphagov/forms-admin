@@ -5,18 +5,6 @@ describe Form, type: :model do
   let(:organisation) { build :organisation, id: 1 }
   let(:form) { described_class.new(id:, name: "Form 1", organisation:, submission_email: "") }
 
-  describe "validations" do
-    it "does not require an org" do
-      form.org = nil
-      expect(form).to be_valid
-    end
-
-    it "does not require an organisation_id" do
-      form.organisation_id = nil
-      expect(form).to be_valid
-    end
-  end
-
   describe "#destroy" do
     context "when form is in a group" do
       it "destroys the group" do
@@ -196,37 +184,6 @@ describe Form, type: :model do
 
       it "returns false" do
         expect(form.has_no_remaining_routes_available?).to be false
-      end
-    end
-  end
-
-  describe "#update_organisation_for_creator" do
-    before do
-      ActiveResource::HttpMock.reset!
-    end
-
-    it "makes patch request to the API" do
-      creator_id = 123
-      organisation_id = 1
-      expected_path = "/api/v1/forms/update-organisation-for-creator?creator_id=123&organisation_id=1"
-
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.patch expected_path, patch_headers, {}.to_json, 200
-      end
-
-      described_class.update_organisation_for_creator(creator_id, organisation_id)
-
-      request = ActiveResource::Request.new(:patch, expected_path, {}, patch_headers)
-      expect(ActiveResource::HttpMock.requests).to include request
-    end
-
-    %w[creator_id organisation].each do |missing_param|
-      it "does not make request to the API with #{missing_param} missing" do
-        params = [missing_param == "creator_id" ? nil : 123, missing_param == "organisation" ? nil : "organisation"]
-
-        described_class.update_organisation_for_creator(*params)
-
-        expect(ActiveResource::HttpMock.requests).to be_empty
       end
     end
   end

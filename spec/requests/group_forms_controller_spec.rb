@@ -80,7 +80,6 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
         expect(JSON(ActiveResource::HttpMock.requests.first.body, symbolize_names: true)).to eq({
           name: "Test form",
           creator_id: standard_user.id,
-          organisation_id: standard_user.organisation.id,
         })
       end
 
