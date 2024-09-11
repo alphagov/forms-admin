@@ -19,8 +19,8 @@ updates:
       interval: "daily"
     open-pull-requests-limit: 10
     allow:
-      - depedency-type: "direct"
-      - dependecy-name: "vite_ruby"
+      - dependency-type: "direct"
+      - dependency-name: "vite_ruby"
 
   # Maintain dependencies for npm
   - package-ecosystem: npm
