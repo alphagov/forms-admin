@@ -522,7 +522,7 @@ en:
       pages_question_input:
         is_optional_options:
           'true': We’ll add ‘(optional)’ to the end of the question text.
-        is_repeatable: Select ‘Yes’ if you want to let someone add more than one answer (up to 10) — for example, listing all their company contacts.
+        is_repeatable: Select ‘Yes’ if you want to let someone add more than one answer (up to 50) — for example, listing all their company contacts.
     label:
       account_name_input:
         name: Enter your full name
