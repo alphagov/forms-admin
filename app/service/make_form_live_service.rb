@@ -31,6 +31,12 @@ class MakeFormLiveService
     I18n.t("page_titles.your_form_is_live")
   end
 
+  def confirmation_page_body
+    return I18n.t("make_changes_live.confirmation.body_html").html_safe if @current_form.is_live?
+
+    I18n.t("make_live.confirmation.body_html").html_safe
+  end
+
 private
 
   def live_form_submission_email_has_changed

@@ -82,4 +82,27 @@ describe MakeFormLiveService do
       end
     end
   end
+
+  describe "#confirmation_page_body" do
+    it "returns a confirmation page body" do
+      expect(make_form_live_service.confirmation_page_body).to eq I18n.t("make_live.confirmation.body_html")
+    end
+
+    context "when changes to live form are being made live" do
+      let(:live_form) { build :form, :live }
+      let(:current_form) do
+        live_form.clone
+      end
+
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/#{live_form.id}/live", headers, live_form.to_json, 200
+        end
+      end
+
+      it "returns different confirmation page body" do
+        expect(make_form_live_service.confirmation_page_body).to eq I18n.t("make_changes_live.confirmation.body_html")
+      end
+    end
+  end
 end

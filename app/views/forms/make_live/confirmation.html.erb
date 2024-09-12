@@ -10,7 +10,7 @@
 
     <%= render FormUrlComponent::View.new(link_to_runner(Settings.forms_runner.url, current_form.id, current_form.form_slug, mode: :live )) %>
 
-    <%= t("make_live.confirmation.body_html") %>
+    <%= confirmation_page_body %>
 
     <p>
       <%= govuk_link_to t("make_live.confirmation.continue_link"), live_form_path(current_form.id) %>

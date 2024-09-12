@@ -690,6 +690,14 @@ en:
           After you have made your form live, completed forms will be sent to %{submission_email}.
         </p>
   make_changes_live:
+    confirmation:
+      body_html: |
+        <p>
+          A link to your form needs to be published on GOV⁠.⁠UK so people can find it.
+        </p>
+        <p>
+          If a link to this form has not been published yet, contact your organisation’s GOV⁠.⁠UK publishing team to do this.
+        </p>
     url_will_remain_same: Links to the form will still work, even if you’ve changed the form’s name.
     warning: |
       When you make your changes live, there may be an impact on people who are
