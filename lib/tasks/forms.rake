@@ -24,6 +24,24 @@ namespace :forms do
       raise ActiveRecord::Rollback
     end
   end
+
+  namespace :submission_email do
+    desc "set the submission email for a form, without validation"
+    task :update, %i[form_id submission_email] => :environment do |_, args|
+      usage_message = "usage: rake forms:submission_email:update[<form_id>, <submission_email>]".freeze
+      abort usage_message if args[:form_id].blank? || args[:submission_email].blank?
+      raise "'#{args[:submission_email]}' is not an email address" unless args[:submission_email].match?(/.*@.*/)
+
+      form = Form.find(args[:form_id])
+      form.submission_email = args[:submission_email]
+
+      Rails.logger.info "forms:submission_email:update: setting #{fmt_form(form)} submission email to \'#{form.submission_email}\'"
+
+      form.save!
+
+      form.form_submission_email&.destroy!
+    end
+  end
 end
 
 def move_forms(form_ids, group_id)
