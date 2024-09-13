@@ -5,9 +5,58 @@ en:
     organisation_text_html: |
       <p>If you’re from a central government organisation that publishes content on the GOV.UK website but your organisation is not listed, please %{contact_link}.</p>
       <p>If you’re from a public sector organisation that does not publish content on GOV.UK you cannot use GOV.UK Forms yet. You can <a href="https://www.forms.service.gov.uk/forthcoming-features">read about our forthcoming features and sign up to our mailing list</a> for updates.</p>
-    terms_of_use_summary_html: |
-      <p>These terms apply to the way you use GOV.UK Forms.</p>
-      <p>You must accept these terms to continue to use GOV.UK Forms.</p>
+    terms_of_use:
+      accessibility:
+        heading: Make forms that are easy to use and accessible
+        publishing:
+          list_item_1: get help with designing, structuring and writing your form and its questions
+          list_item_2: prepare the starting point on GOV.UK to link to the form
+          preamble: 'Speak with your organisation’s GOV.UK publishing or content team to:'
+        section_1: The platform is designed to help you make forms that are easy to use and accessible, but this also depends on the design, structure and content of your questions.
+        section_2: When you create a form, follow government standards and guidance to make sure the form is easy to use and accessible.
+        section_3: Read %{good_forms_link} for information about making forms accessible and links to further guidance.
+        section_3_link_text: how to make a good form using GOV.UK Forms
+      changes:
+        heading: Changes to these terms
+        section_1: We’ll let you know if we make any changes to these terms.
+      data_protection:
+        heading: Data protection
+        section_1: You must make sure your use of GOV.UK Forms to collect personal data complies with data protection legislation and your organisation’s policies for collecting, processing and storing data.
+        section_2: Your organisation is the ‘data controller’ for any data you collect using GOV.UK Forms.
+        section_3: To get help with data protection legislation compliance, speak with your organisation’s data protection officer or data protection team.
+      security:
+        accessing_the_platform:
+          heading: Accessing the platform
+          requirements:
+            list_item_1: a secure work-managed device
+            list_item_2: a secure individual work email address that’s protected with multi-factor authentication (MFA)
+            list_item_3: a trusted internet connection - do not sign in using an untrusted public wifi network
+            preamble: 'You must sign in to GOV.UK Forms using:'
+        heading: Security
+        receiving_completed_form_data:
+          heading: Receiving completed form data
+          section_1: You must only use secure government email addresses for completed forms to be sent to. Make sure they can only be accessed by the relevant people. The email addresses you use must follow the %{securing_government_email_link}. Check with your IT or security team for help with this.
+          section_1_link_text: government secure email policy
+          section_2: Bear in mind that responses to form questions are not validated for accuracy. People can, for example, enter incorrect email addresses or malicious code in their responses. You must check submitted form data looks safe and consider its accuracy before you use it.
+          section_3: If you receive any unexpected or strange messages to an email address that you’ve set for completed forms to be sent to, let the GOV.UK Forms team know.
+        report_any_security_breaches:
+          heading: Report any security breaches
+          section_1: Report any security breaches immediately to Cabinet Office Cyber Security at report@digital.cabinet-office.gov.uk. For example, if you get unexpected emails or security alerts from Auth0 or if you suspect your account might have been compromised.
+        summary:
+          section_1: You and your organisation are responsible for deciding if GOV.UK Forms is suitable to handle the information you wish to collect. Do not use GOV.UK Forms to collect data classified as ‘Secret’ or ‘Top secret’.
+          section_2: You must follow your organisation’s policies for using online tools and platforms. Check with your organisation’s security or IT team for help with this.
+      service_standards:
+        heading: Service standards and assurance
+        section_1: GOV.UK Forms has been assessed against the Service Standard as a platform for making online forms. However, you still need to follow your organisation’s policies and processes for service standards and assurance for the forms you make with it.
+        section_2: In most cases, forms made using GOV.UK Forms do not need a service assessment, but you should %{service_standard_link}.
+        section_2_link_text: check if you need a service assessment
+        section_3: Contact the people in your organisation who are responsible for service assurance for help with this.
+      summary:
+        first_published: 'First published: 13 September 2024'
+        last_updated: 'Last updated: 13 September 2024'
+        section_1: These terms apply to the way you use GOV.UK Forms.
+        section_2: You must accept these terms to continue to use GOV.UK Forms.
+        section_3: If you do not keep to these terms, we may deactivate your account and remove your forms.
   activemodel:
     errors:
       models:

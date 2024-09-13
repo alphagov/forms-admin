@@ -16,6 +16,10 @@ describe "account/terms_of_use/edit.html.erb" do
       expect(view.content_for(:title)).to eq(t("page_titles.account_terms_of_use"))
     end
 
+    it "display the terms of use" do
+      expect(view).to render_template(partial: "_terms_of_use")
+    end
+
     it "displays the form" do
       expect(rendered).to have_selector('form[action="/account/terms_of_use"][method="post"]')
       expect(rendered).to have_field("_method", with: "patch", type: :hidden)
