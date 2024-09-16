@@ -18,7 +18,7 @@
 <% end %>
 
 <% content_for :footer do %>
-    <% meta_links = {t("footer.accessibility_statement") => "https://www.forms.service.gov.uk/accessibility", t("footer.cookies") => "https://www.forms.service.gov.uk/cookies", t("footer.privacy") => "https://www.forms.service.gov.uk/privacy"} %>
+    <% meta_links = {t("footer.accessibility_statement") => "https://www.forms.service.gov.uk/accessibility", t("footer.cookies") => "https://www.forms.service.gov.uk/cookies", t("footer.privacy") => "https://www.forms.service.gov.uk/privacy", t("footer.terms_of_use") => "https://www.forms.service.gov.uk/terms-of-use"} %>
     <%= govuk_footer meta_items_title: t("footer.helpful_links"), meta_items: meta_links %>
 <% end %>
 
