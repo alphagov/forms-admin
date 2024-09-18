@@ -9,9 +9,7 @@
         <%=t("page_titles.account_terms_of_use")%>
       </h1>
 
-      <%=t("account.terms_of_use_summary_html")%>
-
-      <%# terms of use content here %>
+      <%= render "terms_of_use" %>
 
       <%= f.govuk_check_boxes_fieldset :agreed, multiple: false, legend: { tag: 'h2', size: 'm' } do %>
         <%= f.govuk_check_box :agreed, 1, 0, multiple: false, link_errors: true  %>

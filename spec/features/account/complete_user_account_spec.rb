@@ -1,7 +1,7 @@
 require "rails_helper"
 
 feature "Add account organisation to user without organisation", type: :feature do
-  let(:user) { create :user, :with_no_org, name: nil }
+  let(:user) { create :user, :with_no_org, name: nil, terms_agreed_at: nil }
   let!(:organisation) { create :organisation }
 
   let(:form) { build :form, :with_active_resource, id: 1, name: "a form I created when I didn't have an organisation" }
@@ -27,7 +27,7 @@ feature "Add account organisation to user without organisation", type: :feature 
     OmniAuth.config.test_mode = false
   end
 
-  scenario "when the user does not have an organisation or name", type: :feature do
+  scenario "when the user does not have an organisation or name, and hasn't agreed to the terms of use", type: :feature do
     when_i_visit_a_page_which_requires_sign_in
     then_i_should_be_redirected_to_the_account_organisation_page
     and_i_try_to_visit_the_homepage
@@ -35,6 +35,8 @@ feature "Add account organisation to user without organisation", type: :feature 
     and_i_select_an_organisation
     then_i_should_be_redirected_to_the_account_name_page
     and_i_fill_in_my_name
+    then_i_should_be_redirected_to_the_account_terms_of_use_page
+    and_i_agree_to_the_terms_of_use
     then_i_should_be_redirected_to_my_original_destination
     and_i_open_my_default_group
     and_i_can_open_my_form
@@ -61,6 +63,15 @@ private
 
   def then_i_should_be_redirected_to_the_account_name_page
     expect(page).to have_content("Enter your full name")
+  end
+
+  def then_i_should_be_redirected_to_the_account_terms_of_use_page
+    expect(page).to have_content("Do you agree to these terms?")
+  end
+
+  def and_i_agree_to_the_terms_of_use
+    check "I agree to these terms"
+    click_button "Save and continue"
   end
 
   def and_i_fill_in_my_name
