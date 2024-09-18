@@ -60,6 +60,8 @@ Rails.application.routes.draw do
     post "/declaration" => "forms/declaration#create", as: :declaration_create
     get "/payment-link" => "forms/payment_link#new", as: :payment_link
     post "/payment-link" => "forms/payment_link#create", as: :payment_link_create
+    get "/receive-csv" => "forms/receive_csv#new", as: :receive_csv
+    post "/receive-csv" => "forms/receive_csv#create", as: :receive_csv_create
 
     scope "/pages" do
       get "/" => "pages#index", as: :form_pages
