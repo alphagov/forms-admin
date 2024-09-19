@@ -14,7 +14,7 @@ FactoryBot.define do
     question_text { Faker::Lorem.question.truncate(250) }
     answer_type { Page::ANSWER_TYPES_WITHOUT_SETTINGS.sample }
     is_optional { nil }
-    answer_settings { nil }
+    answer_settings { {} }
     hint_text { nil }
     routing_conditions { [] }
     sequence(:position) { |n| n }
