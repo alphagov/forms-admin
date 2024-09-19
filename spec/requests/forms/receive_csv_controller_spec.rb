@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Forms::ReceiveCsvController, type: :request do
   let(:form) do
-    build(:form, :live, id: 2, submission_type: "email")
+    build(:form, :live, id: 2, submission_type: original_submission_type)
   end
 
   let(:updated_form) do
@@ -11,6 +11,8 @@ RSpec.describe Forms::ReceiveCsvController, type: :request do
     new_form
   end
 
+  let(:original_submission_type) { "email" }
+
   let(:submission_type) { nil }
 
   before do
@@ -18,12 +20,6 @@ RSpec.describe Forms::ReceiveCsvController, type: :request do
       mock.put "/api/v1/forms/2", post_headers
       mock.get "/api/v1/forms/2", headers, form.to_json, 200
     end
-
-    ActiveResourceMock.mock_resource(form,
-                                     {
-                                       read: { response: form, status: 200 },
-                                       update: { response: updated_form, status: 200 },
-                                     })
 
     login_as_super_admin_user
   end
@@ -63,6 +59,42 @@ RSpec.describe Forms::ReceiveCsvController, type: :request do
 
       it "Redirects you to the form overview page" do
         expect(response).to redirect_to(form_path(2))
+      end
+
+      context "when submission type has changed from 'email' to 'email_with_csv'" do
+        let(:original_submission_type) { "email" }
+        let(:submission_type) { "email_with_csv" }
+
+        it "displays a success flash message" do
+          expect(flash[:success]).to eq(I18n.t("banner.success.form.receive_csv_enabled"))
+        end
+      end
+
+      context "when submission type has changed from 'email_with_csv' to 'email'" do
+        let(:original_submission_type) { "email_with_csv" }
+        let(:submission_type) { "email" }
+
+        it "displays a success flash message" do
+          expect(flash[:success]).to eq(I18n.t("banner.success.form.receive_csv_disabled"))
+        end
+      end
+
+      context "when submission type has not changed from 'email'" do
+        let(:original_submission_type) { "email" }
+        let(:submission_type) { "email" }
+
+        it "displays a success flash message" do
+          expect(flash[:success]).to be_nil
+        end
+      end
+
+      context "when submission type has not changed from 'email_with_csv'" do
+        let(:original_submission_type) { "email_with_csv" }
+        let(:submission_type) { "email_with_csv" }
+
+        it "displays a success flash message" do
+          expect(flash[:success]).to be_nil
+        end
       end
     end
 
