@@ -2,6 +2,14 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-
+    <%= form_with(model: @receive_csv_input, url: receive_csv_create_path) do |f| %>
+      <% if @receive_csv_input&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+      <%= f.govuk_check_boxes_fieldset :submission_type, multiple: false, legend: { tag: 'h2', size: 'm' } do %>
+        <%= f.govuk_check_box :submission_type, "email_with_csv", "email", multiple: false, link_errors: true  %>
+      <% end %>
+      <%= f.govuk_submit "Save and continue" %>
+    <% end %>
   </div>
 </div>
