@@ -79,7 +79,7 @@ RSpec.describe Forms::ReceiveCsvController, type: :request do
 
       it "re-renders the page with an error" do
         expect(response).to render_template("new")
-        expect(response.body).to include("can&#39;t be blank")
+        expect(response.body).to include(I18n.t("activemodel.errors.models.forms/receive_csv_input.attributes.submission_type.blank"))
       end
     end
   end

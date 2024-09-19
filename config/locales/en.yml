@@ -72,6 +72,10 @@ en:
           attributes:
             agreed:
               accepted: You must agree to the terms of use to continue
+        forms/receive_csv_input:
+          attributes:
+            submission_type:
+              blank: Choose whether you want to get completed forms as CSV files
         group_member_input:
           attributes:
             member_email_address:
@@ -282,6 +286,16 @@ en:
       title_create: Create a form
       title_edit: Edit your form
       your_questions: Your questions
+    receive_csv:
+      new:
+        body_html: |
+          <p>When a form is completed, the answers provided will be sent in the  body of an email to the email address you set up.</p>
+
+          <p>If you wish, you can also get the answers in a comma-separated values (CSV) file. A CSV lists all the answers in plain text, separated by commas. It can be easier to copy and paste, or import into spreadsheets or other applications.</p>
+
+          <p>If you select this option, a link to a CSV file will be added to each completed form email.</p>
+        submit: Save and continue
+        title: Get completed forms as CSV files
     task_list_create:
       create_form_section:
         declaration: Add a declaration for people to agree to
@@ -586,6 +600,9 @@ en:
         confirm: Are you sure you want to make your draft live?
       forms_make_live_input:
         confirm: Are you sure you want to make your form live?
+      forms_receive_csv_input:
+        submission_type_options:
+          email_with_csv: Get CSV files
       group:
         name: Enter a name for your new group
       group_member_input:
@@ -688,6 +705,8 @@ en:
     legend:
       account_terms_of_use_input:
         agreed: Do you agree to these terms?
+      forms_receive_csv_input:
+        submission_type: Do you want to get completed forms as CSV files?
       mou_signature:
         agreed: Do you agree to the MOU?
       pages_question_input:

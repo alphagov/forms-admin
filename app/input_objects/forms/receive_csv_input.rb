@@ -1,7 +1,6 @@
 class Forms::ReceiveCsvInput < BaseInput
   attr_accessor :form, :submission_type
 
-  # TODO: add a validation message
   validates :submission_type, presence: true
 
   def submit

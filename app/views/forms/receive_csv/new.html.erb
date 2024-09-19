@@ -1,3 +1,4 @@
+<% set_page_title(title_with_error_prefix(t(".title"), @receive_csv_input.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_path, t("back_link.form_create")) %>
 
 <div class="govuk-grid-row">
@@ -6,10 +7,18 @@
       <% if @receive_csv_input&.errors.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
+
+      <span class="govuk-caption-l"><%= @receive_csv_input.form.name %></span>
+      <h1 class="govuk-heading-l">
+        <%= t(".title") %>
+      </h1>
+
+      <%= t(".body_html") %>
+
       <%= f.govuk_check_boxes_fieldset :submission_type, multiple: false, legend: { tag: 'h2', size: 'm' } do %>
         <%= f.govuk_check_box :submission_type, "email_with_csv", "email", multiple: false, link_errors: true  %>
       <% end %>
-      <%= f.govuk_submit "Save and continue" %>
+      <%= f.govuk_submit t(".submit") %>
     <% end %>
   </div>
 </div>

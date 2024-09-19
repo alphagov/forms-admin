@@ -30,7 +30,7 @@ RSpec.describe Forms::ReceiveCsvInput, type: :model do
       it "returns a validation error" do
         expect(receive_csv_input).not_to be_valid
         expect(receive_csv_input.errors.full_messages_for(:submission_type)).to include(
-          "Submission type can't be blank",
+          "Submission type #{I18n.t('activemodel.errors.models.forms/receive_csv_input.attributes.submission_type.blank')}",
         )
       end
     end

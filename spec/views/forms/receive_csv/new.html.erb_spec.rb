@@ -14,7 +14,20 @@ describe "forms/receive_csv/new.html.erb" do
     expect(view.content_for(:back_link)).to have_link("Back to create your form", href: form_path(current_form.id))
   end
 
+  it "has a heading" do
+    expect(rendered).to have_css("h1", text: I18n.t("forms.receive_csv.new.title"))
+  end
+
+  it "has body text" do
+    expect(rendered).to include(I18n.t("forms.receive_csv.new.body_html"))
+  end
+
   it "has a checkbox for setting the submission type" do
-    expect(rendered).to have_field("Submission_type", type: :checkbox)
+    expect(rendered).to have_css("fieldset", text: I18n.t("helpers.legend.forms_receive_csv_input.submission_type"))
+    expect(rendered).to have_field(I18n.t("helpers.label.forms_receive_csv_input.submission_type_options.email_with_csv"), type: :checkbox)
+  end
+
+  it "has a submit button" do
+    expect(rendered).to have_button(I18n.t("forms.receive_csv.new.submit"))
   end
 end
