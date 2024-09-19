@@ -7,7 +7,8 @@ describe "pages/_form.html.erb", type: :view do
     build :question_input,
           answer_type: page.answer_type,
           question_text: page.question_text,
-          hint_text: page.hint_text
+          hint_text: page.hint_text,
+          answer_settings: page.answer_settings
   end
   let(:form) { build :form, id: 1 }
   let(:is_new_page) { true }
@@ -43,6 +44,14 @@ describe "pages/_form.html.erb", type: :view do
   context "when feature repeatable page is enabled", :feature_repeatable_page_enabled do
     it "has a radio input for repeatable" do
       expect(rendered).to have_field("pages_question_input[is_repeatable]", type: :radio)
+    end
+
+    context "when the question is an only one option selection" do
+      let(:page) { build :page, :with_selections_settings, id: 2, form_id: form.id }
+
+      it "does not have the radio input for repeatable" do
+        expect(rendered).not_to have_field("pages_question_input[is_repeatable]", type: :radio)
+      end
     end
   end
 
