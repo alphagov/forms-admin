@@ -46,6 +46,10 @@ describe "pages/_form.html.erb", type: :view do
       expect(rendered).to have_field("pages_question_input[is_repeatable]", type: :radio)
     end
 
+    it "has a details about repeatable questions" do
+      expect(rendered).to have_text(I18n.t("repeatable.summary_text"))
+    end
+
     context "when the question is an only one option selection" do
       let(:page) { build :page, :with_selections_settings, id: 2, form_id: form.id }
 
