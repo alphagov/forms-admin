@@ -127,7 +127,7 @@ describe "forms/_made_live_form.html.erb" do
 
   it "contains information about how you get completed forms" do
     expect(rendered).to have_css("h3", text: I18n.t("made_live_form.how_you_get_completed_forms"))
-    expect(rendered).to have_css("h4", text: I18n.t("made_live_form.submission_email"))
+    expect(rendered).to have_xpath("//h3[text()='#{I18n.t('made_live_form.how_you_get_completed_forms')}']/following-sibling::h4", text: "Email")
     expect(rendered).to have_text(form.submission_email)
   end
 
@@ -159,7 +159,7 @@ describe "forms/_made_live_form.html.erb" do
     let(:form) { build(:form, :live, id: 2, support_email: "support@example.gov.uk") }
 
     it "shows the support email address" do
-      expect(rendered).to have_css("h4", text: "Email")
+      expect(rendered).to have_xpath("//h3[text()='#{I18n.t('made_live_form.contact_details')}']/following-sibling::h4", text: "Email")
       expect(rendered).to have_content("support@example.gov.uk")
     end
   end
@@ -167,7 +167,7 @@ describe "forms/_made_live_form.html.erb" do
   context "with a support phone" do
     let(:form) { build(:form, :live, id: 2, support_phone: "phone details") }
 
-    it "shows the support email address" do
+    it "shows the support phone number" do
       expect(rendered).to have_css("h4", text: "Phone")
       expect(rendered).to have_content("phone details")
     end
@@ -186,7 +186,7 @@ describe "forms/_made_live_form.html.erb" do
     let(:form) { build(:form, :live, id: 2, support_email: nil, support_phone: nil, support_url_text: nil, support_url: nil) }
 
     it "does not include support details if they are not set" do
-      expect(rendered).not_to have_css("h4", text: "Email")
+      expect(rendered).not_to have_xpath("//h3[text()='#{I18n.t('made_live_form.contact_details')}']/following-sibling::h4", text: "Email")
       expect(rendered).not_to have_css("h4", text: "Phone")
       expect(rendered).not_to have_css("h4", text: "Support contact online")
     end
