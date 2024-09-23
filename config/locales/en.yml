@@ -733,10 +733,12 @@ en:
   made_live_form:
     archive_this_form: Archive this form
     contact_details: Your form’s contact details for support
+    csv: CSV
     declaration: Declaration
     declaration_description: Your form’s declaration is shown to people when they have answered all the questions, just before they submit the form.
     draft_create: Create a draft to edit
     draft_edit: Edit the draft of this form
+    how_you_get_completed_forms: How you get completed forms
     make_this_form_live: Make this form live
     previous_form_url: Previous form URL
     privacy_policy_link: Privacy policy link
@@ -744,7 +746,10 @@ en:
     questions_link:
       one: View your form’s 1 question
       other: View your form’s %{count} questions
-    submission_email: Submission email
+    submission_email: Email
+    submission_type:
+      email: You have not opted in to receive a link to a CSV file with each completed form email.
+      email_with_csv: A link to a CSV file will be included in each completed form email.
     support_email: Email
     support_phone: Phone
     support_url: Support contact online

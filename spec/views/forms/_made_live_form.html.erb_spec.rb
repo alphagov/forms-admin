@@ -5,11 +5,12 @@ describe "forms/_made_live_form.html.erb" do
   let(:metrics_data) { { weekly_submissions: 125, weekly_starts: 256 } }
   let(:what_happens_next) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:form_metadata) { OpenStruct.new(has_draft_version: false) }
-  let(:form) { build(:form, :live, id: 2, declaration_text: declaration, what_happens_next_markdown: what_happens_next, live_at: 1.week.ago) }
+  let(:form) { build(:form, :live, id: 2, declaration_text: declaration, what_happens_next_markdown: what_happens_next, live_at: 1.week.ago, submission_type:) }
   let(:group) { create(:group, name: "Group 1") }
   let(:status) { :live }
   let(:preview_mode) { :preview_live }
   let(:questions_path) { Faker::Internet.url }
+  let(:submission_type) { "email" }
 
   before do
     allow(form).to receive(:metrics_data).and_return(metrics_data)
@@ -124,8 +125,30 @@ describe "forms/_made_live_form.html.erb" do
     expect(rendered).to have_content(form.what_happens_next_markdown)
   end
 
-  it "contains the submission email" do
-    expect(rendered).to have_content(form.submission_email)
+  it "contains information about how you get completed forms" do
+    expect(rendered).to have_css("h3", text: I18n.t("made_live_form.how_you_get_completed_forms"))
+    expect(rendered).to have_css("h4", text: I18n.t("made_live_form.submission_email"))
+    expect(rendered).to have_text(form.submission_email)
+  end
+
+  context "when CSV submission is enabled" do
+    let(:submission_type) { "email_with_csv" }
+
+    it "tells the user they have CSVs enabled" do
+      expect(rendered).to have_css("h4", text: I18n.t("made_live_form.csv"))
+      expect(rendered).to have_text(I18n.t("made_live_form.submission_type.email_with_csv"))
+      expect(rendered).not_to have_text(I18n.t("made_live_form.submission_type.email"))
+    end
+  end
+
+  context "when CSV submission is not enabled" do
+    let(:submission_type) { "email" }
+
+    it "tells the user they do not have CSVs enabled" do
+      expect(rendered).to have_css("h4", text: I18n.t("made_live_form.csv"))
+      expect(rendered).not_to have_text(I18n.t("made_live_form.submission_type.email_with_csv"))
+      expect(rendered).to have_text(I18n.t("made_live_form.submission_type.email"))
+    end
   end
 
   it "contains link to privacy policy" do
