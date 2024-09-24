@@ -21,6 +21,7 @@ class FormTaskListService
       create_form_section,
       payment_link_subsection,
       email_address_section,
+      receive_csv_subsection,
       privacy_and_contact_details_section,
       make_form_live_section,
     ]
@@ -86,6 +87,21 @@ private
     hint_text = I18n.t("forms.task_list_#{create_or_edit}.email_address_section.hint_text_html", submission_email: @form.submission_email) if @form.submission_email.present?
     [{ task_name: I18n.t("forms.task_list_#{create_or_edit}.email_address_section.email"), path: submission_email_input_path(@form.id), hint_text:, status: @task_statuses[:submission_email_status] },
      { task_name: I18n.t("forms.task_list_#{create_or_edit}.email_address_section.confirm_email"), path: submission_email_code_path(@form.id), status: @task_statuses[:confirm_submission_email_status], active: can_enter_submission_email_code }]
+  end
+
+  def receive_csv_subsection
+    {
+      title: I18n.t("forms.task_list_#{create_or_edit}.receive_csv_subsection.title"),
+      section_number: nil,
+      subsection: true,
+      rows: receive_csv_subsection_tasks,
+    }
+  end
+
+  def receive_csv_subsection_tasks
+    [
+      { task_name: I18n.t("forms.task_list_#{create_or_edit}.receive_csv_subsection.receive_csv"), path: receive_csv_path(@form.id), status: @task_statuses[:receive_csv_status] },
+    ]
   end
 
   def privacy_and_contact_details_section

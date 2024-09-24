@@ -83,7 +83,7 @@ describe FormTaskListService do
     end
 
     it "returns 5 sections" do
-      expected_sections = [{ title: "Task 1" }, { title: "Task 2" }, { title: "Task 3" }, { title: "Task 4" }, { title: "Task 5" }]
+      expected_sections = [{ title: "Task 1" }, { title: "Task 2" }, { title: "Task 3" }, { title: "Task 4" }, { title: "Task 5" }, { title: "Task 6" }]
       expect(all_sections.count).to eq expected_sections.count
     end
 
@@ -245,9 +245,22 @@ describe FormTaskListService do
       end
     end
 
-    describe "privacy and contact details tasks" do
+    describe "receive CSV subsection tasks" do
       let(:section) do
         all_sections[3]
+      end
+
+      let(:section_rows) { section[:rows] }
+
+      it "has link to receive CSV settings" do
+        expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_create.receive_csv_subsection.receive_csv")
+        expect(section_rows.first[:path]).to eq "/forms/1/receive-csv"
+      end
+    end
+
+    describe "privacy and contact details tasks" do
+      let(:section) do
+        all_sections[4]
       end
 
       let(:section_rows) { section[:rows] }
@@ -272,7 +285,7 @@ describe FormTaskListService do
       let(:form) { build(:form, :ready_for_live, id: 1, organisation:) }
 
       let(:section) do
-        all_sections[4]
+        all_sections[5]
       end
 
       let(:section_rows) { section[:rows] }

@@ -72,6 +72,10 @@ en:
           attributes:
             agreed:
               accepted: You must agree to the terms of use to continue
+        forms/receive_csv_input:
+          attributes:
+            submission_type:
+              blank: Choose whether you want to get completed forms as CSV files
         group_member_input:
           attributes:
             member_email_address:
@@ -166,6 +170,8 @@ en:
         pages_saved_and_section_completed: Your questions have been saved and marked as complete
         payment_link_saved: Your payment link has been saved
         privacy_details_saved: Your privacy information link has been saved
+        receive_csv_disabled: Completed form emails will not include links to CSV files
+        receive_csv_enabled: Completed form emails will include links to CSV files
         support_details_saved: Your contact details for support have been saved
         what_happens_next_saved: Your information about what happens next has been saved
       route_created: Question %{question_position}’s route has been created
@@ -282,6 +288,16 @@ en:
       title_create: Create a form
       title_edit: Edit your form
       your_questions: Your questions
+    receive_csv:
+      new:
+        body_html: |
+          <p>When a form is completed, the answers provided will be sent in the  body of an email to the email address you set up.</p>
+
+          <p>If you wish, you can also get the answers in a comma-separated values (CSV) file. A CSV lists all the answers in plain text, separated by commas. It can be easier to copy and paste, or import into spreadsheets or other applications.</p>
+
+          <p>If you select this option, a link to a CSV file will be added to each completed form email.</p>
+        submit: Save and continue
+        title: Get completed forms as CSV files
     task_list_create:
       create_form_section:
         declaration: Add a declaration for people to agree to
@@ -321,6 +337,9 @@ en:
         contact_details: Provide contact details for support
         privacy_policy: Provide a link to privacy information for this form
         title: Provide privacy and contact details
+      receive_csv_subsection:
+        receive_csv: Get completed forms as CSV files
+        title: Optional tasks
     task_list_edit:
       create_form_section:
         declaration: Edit the declaration for people to agree to
@@ -343,6 +362,9 @@ en:
         contact_details: Edit the contact details for support
         privacy_policy: Edit the link to privacy information for this form
         title: Privacy and contact details
+      receive_csv_subsection:
+        receive_csv: Get completed forms as CSV files
+        title: Optional tasks
   forms_delete_confirmation_input:
     confirm_deletion: Are you sure you want to delete this draft?
     confirm_deletion_live_form: Deleting this draft will not remove the live form.
@@ -586,6 +608,9 @@ en:
         confirm: Are you sure you want to make your draft live?
       forms_make_live_input:
         confirm: Are you sure you want to make your form live?
+      forms_receive_csv_input:
+        submission_type_options:
+          email_with_csv: Get CSV files
       group:
         name: Enter a name for your new group
       group_member_input:
@@ -688,6 +713,8 @@ en:
     legend:
       account_terms_of_use_input:
         agreed: Do you agree to these terms?
+      forms_receive_csv_input:
+        submission_type: Do you want to get completed forms as CSV files?
       mou_signature:
         agreed: Do you agree to the MOU?
       pages_question_input:
@@ -706,10 +733,12 @@ en:
   made_live_form:
     archive_this_form: Archive this form
     contact_details: Your form’s contact details for support
+    csv: CSV
     declaration: Declaration
     declaration_description: Your form’s declaration is shown to people when they have answered all the questions, just before they submit the form.
     draft_create: Create a draft to edit
     draft_edit: Edit the draft of this form
+    how_you_get_completed_forms: How you get completed forms
     make_this_form_live: Make this form live
     previous_form_url: Previous form URL
     privacy_policy_link: Privacy policy link
@@ -717,7 +746,10 @@ en:
     questions_link:
       one: View your form’s 1 question
       other: View your form’s %{count} questions
-    submission_email: Submission email
+    submission_email: Email
+    submission_type:
+      email: You have not opted in to receive a link to a CSV file with each completed form email.
+      email_with_csv: A link to a CSV file will be included in each completed form email.
     support_email: Email
     support_phone: Phone
     support_url: Support contact online

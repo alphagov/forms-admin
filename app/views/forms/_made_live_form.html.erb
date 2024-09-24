@@ -45,8 +45,13 @@
     </div>
     <%= govuk_details(summary_text: t('made_live_form.what_is_what_happens_next'), text: t('made_live_form.what_happens_next_description')) %>
 
-    <h3 class="govuk-heading-m"><%= t('made_live_form.submission_email') %></h3>
+    <h3 class="govuk-heading-m"><%= t("made_live_form.how_you_get_completed_forms") %></h3>
+
+    <h4 class="govuk-heading-s"><%= t('made_live_form.submission_email') %></h3>
     <p><%= form.submission_email %></p>
+
+    <h4 class="govuk-heading-s"><%= t("made_live_form.csv") %></h3>
+    <p><%= t("made_live_form.submission_type.#{form.submission_type}") %></p>
 
     <h3 class="govuk-heading-m"><%= t('made_live_form.privacy_policy_link') %></h3>
     <p><%= govuk_link_to(form.privacy_policy_url, form.privacy_policy_url) %></p>
