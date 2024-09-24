@@ -571,7 +571,9 @@ en:
       pages_question_input:
         is_optional_options:
           'true': We’ll add ‘(optional)’ to the end of the question text.
-        is_repeatable: Select ‘Yes’ if you want to let someone add more than one answer (up to 50) — for example, listing all their company contacts.
+        is_repeatable: Select ‘Yes’ if you want to let someone add more than one answer - for example, listing all their current household members.
+        is_repeatable_options:
+          'true': After adding their first answer we’ll ask if they need to add another - up to a maximum of 50
     label:
       account_name_input:
         name: Enter your full name
@@ -680,7 +682,7 @@ en:
           'false': Mandatory
           'true': Optional
         is_repeatable_options:
-          'false': No — this question can only be answered once
+          'false': No - this question can only be answered once
           'true': 'Yes'
         question_text: Question text
     legend:
@@ -1105,6 +1107,16 @@ en:
       </p>
     heading: Provide a link to privacy information for this form
     submit_button: Save and continue
+  repeatable:
+    summary_content_html: |
+      <p>
+        You might want to use hint text to tell someone:
+      </p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>that after adding one answer they'll be asked if they need to add another - up to a maximum of 50</li>
+        <li>who to contact if they need to add more than 50 answers</li>
+      </ul>
+    summary_text: Help people answer this question
   reports:
     back_link: Back to reports
     features:

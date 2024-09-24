@@ -39,6 +39,7 @@
       <%= f.hidden_field :is_repeatable, value: false %>
     <% else %>
       <%= f.govuk_collection_radio_buttons :is_repeatable, question_input.repeatable_options, :id, :name, :description, legend: { size: 'm', tag: 'h2' }, bold_labels: false %>
+      <%= govuk_details(summary_text: t('repeatable.summary_text'), text: t('repeatable.summary_content_html')) %>
       <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
     <% end %>
   <% end %>
