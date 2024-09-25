@@ -309,7 +309,7 @@ en:
         confirm_email: Enter the email address confirmation code
         email: Set the email address completed forms will be sent to
         hint_text_html: Completed forms will be sent to:<br> %{submission_email}
-        title: Set email address for completed forms
+        title: Set up how you get completed forms
       make_form_live_section:
         group_not_active:
           group_admin:
@@ -351,7 +351,7 @@ en:
         confirm_email: Enter the email address confirmation code
         email: Edit the email address completed forms will be sent to
         hint_text_html: Completed forms will be sent to:<br> %{submission_email}
-        title: Email address for completed forms
+        title: Change how you get completed forms
       make_form_live_section:
         make_live: Make your changes live
         title: Make your changes live
