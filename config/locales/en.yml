@@ -332,14 +332,14 @@ en:
             <a href="%{group_members_path}">View the members of the group</a> to find a group admin.
       payment_link_subsection:
         payment_link: Add a link to a payment page on GOV.UK Pay
-        title: Optional tasks
+        title: Optional task
       privacy_and_contact_details_section:
         contact_details: Provide contact details for support
         privacy_policy: Provide a link to privacy information for this form
         title: Provide privacy and contact details
       receive_csv_subsection:
         receive_csv: Get completed forms as CSV files
-        title: Optional tasks
+        title: Optional task
     task_list_edit:
       create_form_section:
         declaration: Edit the declaration for people to agree to
@@ -357,14 +357,14 @@ en:
         title: Make your changes live
       payment_link_subsection:
         payment_link: Add a link to a payment page on GOV.UK Pay
-        title: Optional tasks
+        title: Optional task
       privacy_and_contact_details_section:
         contact_details: Edit the contact details for support
         privacy_policy: Edit the link to privacy information for this form
         title: Privacy and contact details
       receive_csv_subsection:
         receive_csv: Get completed forms as CSV files
-        title: Optional tasks
+        title: Optional task
   forms_delete_confirmation_input:
     confirm_deletion: Are you sure you want to delete this draft?
     confirm_deletion_live_form: Deleting this draft will not remove the live form.
