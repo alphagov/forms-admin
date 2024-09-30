@@ -23,35 +23,85 @@ RSpec.describe ApplicationController, type: :request do
     before do
       # Intercept the request logs so we can do assertions on them
       allow(Lograge).to receive(:logger).and_return(logger)
-
-      get root_path, headers: {
-        "HTTP_X_AMZN_TRACE_ID": trace_id,
-        "X-Request-ID": request_id,
-      }
     end
 
-    it "includes the trace ID on log lines" do
-      expect(log_lines[0]["trace_id"]).to eq(trace_id)
+    context "when the request does not have a form_id parameter" do
+      before do
+        get root_path, headers: {
+          "HTTP_X_AMZN_TRACE_ID": trace_id,
+          "X-Request-ID": request_id,
+        }
+      end
+
+      it "includes the trace ID on log lines" do
+        expect(log_lines[0]["trace_id"]).to eq(trace_id)
+      end
+
+      it "includes the request_id on log lines" do
+        expect(log_lines[0]["request_id"]).to eq(request_id)
+      end
+
+      it "includes the host on log lines" do
+        expect(log_lines[0]["host"]).to eq("www.example.com")
+      end
+
+      it "includes the user_id on log lines" do
+        expect(log_lines[0]["user_id"]).to eq(standard_user.id)
+      end
+
+      it "includes the user_email on log lines" do
+        expect(log_lines[0]["user_email"]).to eq(standard_user.email)
+      end
+
+      it "includes the user_organisation_slug on log lines" do
+        expect(log_lines[0]["user_organisation_slug"]).to eq(standard_user.organisation.slug)
+      end
     end
 
-    it "includes the request_id on log lines" do
-      expect(log_lines[0]["request_id"]).to eq(request_id)
+    context "when the request has a form_id parameter" do
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/#{form.id}", headers, form.to_json, 200
+        end
+      end
+
+      it "includes the form_id on log lines" do
+        get form_path(form.id)
+        expect(log_lines[0]["form_id"]).to eq(form.id.to_s)
+      end
+
+      context "when form is not in a group" do
+        it "does not include the form_organisation_id on log lines" do
+          get form_path(form.id)
+          expect(log_lines[0]["form_organisation_id"]).to be_nil
+        end
+      end
+
+      context "when form is in a group" do
+        let(:organisation) { create(:organisation) }
+        let(:group) { create(:group, id: 11, organisation:) }
+
+        before do
+          GroupForm.create!(form_id: form.id, group:)
+          get form_path(form.id)
+        end
+
+        it "includes the form_organisation_id on log lines" do
+          expect(log_lines[0]["form_organisation_id"]).to eq(organisation.id)
+        end
+      end
     end
 
-    it "includes the host on log lines" do
-      expect(log_lines[0]["host"]).to eq("www.example.com")
-    end
+    context "when the request has a page_id parameter" do
+      let(:page) { build :page, id: 33 }
 
-    it "includes the user_id on log lines" do
-      expect(log_lines[0]["user_id"]).to eq(standard_user.id)
-    end
+      before do
+        get edit_question_path(form.id, page.id)
+      end
 
-    it "includes the user_email on log lines" do
-      expect(log_lines[0]["user_email"]).to eq(standard_user.email)
-    end
-
-    it "includes the user_organisation_slug on log lines" do
-      expect(log_lines[0]["user_organisation_slug"]).to eq(standard_user.organisation.slug)
+      it "includes the page_id on log lines" do
+        expect(log_lines[0]["page_id"]).to eq(page.id.to_s)
+      end
     end
   end
 

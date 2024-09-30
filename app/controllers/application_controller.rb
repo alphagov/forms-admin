@@ -89,6 +89,8 @@ class ApplicationController < ActionController::Base
 
   def current_form
     @current_form ||= Form.find(params[:form_id])
+    CurrentLoggingAttributes.form_organisation_id = @current_form&.group&.organisation&.id if params[:form_id].present?
+    @current_form
   end
 
   def groups_enabled
