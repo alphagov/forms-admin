@@ -24,7 +24,8 @@ describe "reports/features.html.erb" do
                                                 selection: 4,
                                                 text: 5 },
                  live_forms_with_payment: 1,
-                 live_forms_with_routing: 2 })
+                 live_forms_with_routing: 2,
+                 live_forms_with_add_another_answer: 3 })
   end
 
   before do
@@ -69,7 +70,8 @@ describe "reports/features.html.erb" do
                    live_forms_with_answer_type: { address: 1 },
                    live_pages_with_answer_type: { address: 1 },
                    live_forms_with_payment: 1,
-                   live_forms_with_routing: 2 })
+                   live_forms_with_routing: 2,
+                   live_forms_with_add_another_answer: 3 })
     end
 
     it "displays 0 for live_forms_with_answer_type" do
@@ -87,5 +89,9 @@ describe "reports/features.html.erb" do
 
   it "includes the number of live forms with payments" do
     expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with payments#{report.live_forms_with_payment}")
+  end
+
+  it "includes the number of live forms with add another answer" do
+    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with add another answer#{report.live_forms_with_add_another_answer}")
   end
 end
