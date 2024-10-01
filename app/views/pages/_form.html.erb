@@ -55,6 +55,9 @@
       <li>
         <%= govuk_button_link_to t('pages.delete_question'), delete_page_path(form_id: form_object.id, page_id: page_object.id), warning: true %>
       </li>
+      <li>
+          <%= govuk_link_to "Preview question", "#{link_to_runner(Settings.forms_runner.url, form_object.id, form_object.form_slug)}/#{page_object.id}" %>
+      </li>
       <% if page_object.has_next_page? %>
         <li>
           <%= govuk_link_to "Edit next question", edit_question_path(form_object.id, page_object.next_page) %>
