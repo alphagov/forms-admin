@@ -57,7 +57,7 @@ jobs:
       # Add or replace test runners here
       - name: Run Ruby tests
         run: bundle exec rspec
-      - name: Run JS tests & JS/CSS linting
+      - name: Run JS tests
         run: npm test
       # Add or replace any other lints here
       - name: Security audit dependencies
@@ -66,3 +66,5 @@ jobs:
         run: bundle exec brakeman -q -w2
       - name: Lint Ruby files
         run: bundle exec rubocop --parallel
+      - name: Lint JS and CSS files
+        run: npm run lint
