@@ -111,7 +111,7 @@ describe PageOptionsService do
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
           { key:  { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list, one option only." } },
-          { key:  { text: I18n.t("selections_settings.options_title") }, value: { text: "<ul class=\"govuk-list\">\n<li>Option 1</li>\n<li>Option 2</li>\n</ul>" } },
+          { key:  { text: I18n.t("selections_settings.options_title") }, value: { text: "<ul class=\"govuk-list\"><li>Option 1</li><li>Option 2</li></ul>" } },
         ])
       end
     end
@@ -129,7 +129,7 @@ describe PageOptionsService do
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
           { key:  { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list" } },
-          { key:  { text: "Options" }, value: { text: "<ul class=\"govuk-list\">\n<li>Option 1</li>\n<li>Option 2</li>\n</ul>" } },
+          { key:  { text: "Options" }, value: { text: "<ul class=\"govuk-list\"><li>Option 1</li><li>Option 2</li></ul>" } },
         ])
       end
     end
@@ -140,7 +140,7 @@ describe PageOptionsService do
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
           { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
-            value: { text: "<ul class=\"govuk-list\">\n<li>Person’s name</li>\n<li>Full name in a single box</li>\n<li>Title not needed</li>\n</ul>" } },
+            value: { text: "<ul class=\"govuk-list\"><li>Person’s name</li><li>Full name in a single box</li><li>Title not needed</li></ul>" } },
         ])
       end
     end
@@ -151,7 +151,7 @@ describe PageOptionsService do
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
           { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
-            value: { text: "<ul class=\"govuk-list\">\n<li>Person’s name</li>\n<li>First and last names in separate boxes</li>\n<li>Title needed</li>\n</ul>" } },
+            value: { text: "<ul class=\"govuk-list\"><li>Person’s name</li><li>First and last names in separate boxes</li><li>Title needed</li></ul>" } },
         ])
       end
     end
@@ -162,7 +162,7 @@ describe PageOptionsService do
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
           { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
-            value: { text: "<ul class=\"govuk-list\">\n<li>Person’s name</li>\n<li>First, middle and last names in separate boxes</li>\n<li>Title not needed</li>\n</ul>" } },
+            value: { text: "<ul class=\"govuk-list\"><li>Person’s name</li><li>First, middle and last names in separate boxes</li><li>Title not needed</li></ul>" } },
         ])
       end
     end
