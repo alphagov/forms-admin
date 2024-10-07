@@ -37,6 +37,7 @@ describe FormTaskListService do
         what_happens_next_status: "completed",
         payment_link_status: "optional",
         receive_csv_status: "optional",
+        share_preview_status: "completed",
       })
     end
     let(:form) { build(:form, id: 1, task_statuses: statuses) }
