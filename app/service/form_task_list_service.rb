@@ -200,6 +200,7 @@ private
 
   def remove_optional_statuses(statuses)
     statuses.delete(:payment_link_status)
+    statuses.delete(:receive_csv_status)
   end
 
   def can_enter_submission_email_code
