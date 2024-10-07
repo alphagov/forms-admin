@@ -15,7 +15,8 @@
     "autoBuild": false
   },
   "development": {
-    "port": 3036
+    "port": 3036,
+    "autoBuild": true
   },
   "test": {
     "port": 3037,
