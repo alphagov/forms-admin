@@ -1,0 +1,8 @@
+en:
+  activemodel:
+    errors:
+      models:
+        forms/share_preview_input:
+          attributes:
+            mark_complete:
+              blank: You must choose an option
