@@ -130,7 +130,7 @@ RSpec.describe FormsController, type: :request do
 
       login_as user
 
-      post form_pages_path(2), params: { forms_mark_complete_input: { mark_complete: "true" } }
+      post form_pages_path(2), params: { forms_mark_pages_section_complete_input: { mark_complete: "true" } }
     end
 
     it "Reads the form from the API" do
@@ -154,7 +154,7 @@ RSpec.describe FormsController, type: :request do
           mock.put "/api/v1/forms/2", post_headers
         end
 
-        post form_pages_path(2), params: { forms_mark_complete_input: { mark_complete: nil } }
+        post form_pages_path(2), params: { forms_mark_pages_section_complete_input: { mark_complete: nil } }
       end
 
       it "renders the index page" do
