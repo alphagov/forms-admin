@@ -15,6 +15,7 @@ FactoryBot.define do
     declaration_text { nil }
     question_section_completed { false }
     declaration_section_completed { false }
+    share_preview_completed { false }
     has_routing_errors { false }
     creator_id { nil }
     ready_for_live { false }
@@ -42,6 +43,7 @@ FactoryBot.define do
       what_happens_next_markdown { "We usually respond to applications within 10 working days." }
       question_section_completed { true }
       declaration_section_completed { true }
+      share_preview_completed { true }
       ready_for_live { true }
       incomplete_tasks { [] }
       transient do
