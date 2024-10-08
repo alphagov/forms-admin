@@ -1,0 +1,32 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.share_preview'), @share_preview_input.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(form_path(@share_preview_input.form.id), t("back_link.form_create")) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: @share_preview_input, url: share_preview_create_path(@share_preview_input.form.id)) do |f| %>
+      <% if @share_preview_input&.errors&.present? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @share_preview_input.form.name %></span>
+        <%= t("page_titles.share_preview") %>
+      </h1>
+
+      <div class="govuk-!-margin-bottom-8">
+        <%= t("share_preview.body_html") %>
+      </div>
+
+      <div class="govuk-!-margin-bottom-4">
+        <%= render FormUrlComponent::View.new(runner_link: link_to_runner(Settings.forms_runner.url, @share_preview_input.form.id, @share_preview_input.form.form_slug, mode: :preview_draft),
+                                              heading_text: t("share_preview.preview_link_heading"),
+                                              button_text: t("share_preview.preview_link_button")) %>
+      </div>
+
+      <%= render MarkCompleteComponent::View.new(generate_form: false, form_builder: f, form_model: @share_preview_input, legend: t('share_preview.radios.legend'), hint: t('share_preview.radios.hint')) %>
+
+      <%= f.govuk_submit "Save and continue" %>
+    <% end %>
+  </div>
+</div>
+
