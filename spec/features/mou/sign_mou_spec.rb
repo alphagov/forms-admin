@@ -20,6 +20,6 @@ private
   end
 
   def then_i_can_see_the_mou_confirmation_page
-    expect(page).to have_text "You've agreed to the MOU"
+    expect(page).to have_text "You’ve agreed to the MOU"
   end
 end
