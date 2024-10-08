@@ -5,6 +5,8 @@ class Group < ApplicationRecord
 
   belongs_to :upgrade_requester, class_name: "User", optional: true
 
+  default_scope { order("LOWER(name)", :created_at) }
+
   has_many :memberships, dependent: :destroy do
     def ordered
       joins(:user).order("users.name")
