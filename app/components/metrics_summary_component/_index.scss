@@ -9,11 +9,11 @@
 }
 
 .app-metrics__big-number {
-  @include govuk-font-size(19);
-  @include govuk-typography-common;
-
   padding: govuk-spacing(1) govuk-spacing(0);
   margin-bottom: govuk-spacing(2);
+
+  @include govuk-font-size(19);
+  @include govuk-typography-common;
 
   @include govuk-media-query(tablet) {
     @supports (display: grid) {
@@ -28,11 +28,11 @@
 }
 
 .app-metrics__big-number-number {
-  @include govuk-font-size(48);
-  @include govuk-typography-weight-bold;
-
   display: block;
   margin-top: govuk-spacing(1);
+
+  @include govuk-font-size(48);
+  @include govuk-typography-weight-bold;
 }
 
 .app-metrics__date {
