@@ -8,7 +8,7 @@
 
     <p><%= current_form.name %></p>
 
-    <%= render FormUrlComponent::View.new(link_to_runner(Settings.forms_runner.url, current_form.id, current_form.form_slug, mode: :live )) %>
+    <%= render FormUrlComponent::View.new(runner_link: link_to_runner(Settings.forms_runner.url, current_form.id, current_form.form_slug, mode: :live )) %>
 
     <%= confirmation_page_body %>
 
