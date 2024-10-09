@@ -16,6 +16,6 @@ describe "reports/index.html.erb" do
   end
 
   it "includes a link to the features report" do
-    expect(rendered).to have_link("Feature usage on live forms", href: report_features_path)
+    expect(rendered).to have_link("Feature and answer type usage in live forms", href: report_features_path)
   end
 end

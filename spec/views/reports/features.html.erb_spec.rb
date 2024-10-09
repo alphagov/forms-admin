@@ -34,7 +34,7 @@ describe "reports/features.html.erb" do
 
   describe "page title" do
     it "matches the heading" do
-      expect(view.content_for(:title)).to eq "Feature usage on live forms"
+      expect(view.content_for(:title)).to eq "Feature and answer type usage in live forms"
     end
   end
 
@@ -43,7 +43,7 @@ describe "reports/features.html.erb" do
   end
 
   it "contains page heading" do
-    expect(rendered).to have_css("h1.govuk-heading-l", text: "Feature usage on live forms")
+    expect(rendered).to have_css("h1.govuk-heading-l", text: "Feature and answer type usage in live forms")
   end
 
   it "includes the number of total live forms" do
