@@ -294,4 +294,16 @@ RSpec.describe Group, type: :model do
       expect(group).to be_valid
     end
   end
+
+  describe "ordering" do
+    it "orders groups by name" do
+      user = create :user
+      organisation = create :organisation
+      group_c = create :group, organisation:, name: "C", creator: user
+      group_b = create :group, organisation:, name: "b", creator: user
+      group_a = create :group, organisation:, name: "a", creator: user
+
+      expect(described_class.for_organisation(group_c.organisation)).to eq [group_a, group_b, group_c]
+    end
+  end
 end
