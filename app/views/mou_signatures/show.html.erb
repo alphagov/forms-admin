@@ -1,8 +1,8 @@
 <% set_page_title(t("page_titles.mou_signature_new")) %>
 
 <% if @mou_signature.present? %>
-  <%= govuk_notification_banner(title_text: "MOU Signature already complete") do |banner| %>
-    <% banner.with_heading(text: "The MOU was signed on #{@mou_signature.created_at.strftime("%Y-%m-%d")}", tag: "p") %>
+  <%= govuk_notification_banner(title_text: "MOU has been agreed already") do |banner| %>
+    <% banner.with_heading(text: "The Memorandum of Understanding was agreed on #{@mou_signature.created_at.strftime("%-d %B %Y")}", tag: "p") %>
   <% end %>
 <% end %>
 
