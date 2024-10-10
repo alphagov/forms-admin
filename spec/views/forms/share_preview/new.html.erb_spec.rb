@@ -14,10 +14,6 @@ describe "forms/share_preview/new.html.erb" do
       expect(view.content_for(:title)).to eq(t("page_titles.share_preview"))
     end
 
-    it "has a back link to the create form page" do
-      expect(view.content_for(:back_link)).to have_link(t("back_link.form_create"), href: form_path(form.id))
-    end
-
     it "has the correct heading" do
       expect(rendered).to have_css("h1", text: t("page_titles.share_preview"))
     end
@@ -48,6 +44,28 @@ describe "forms/share_preview/new.html.erb" do
 
     it "has a Save an continue button" do
       expect(rendered).to have_button(t("save_and_continue"))
+    end
+
+    context "when the form is not live" do
+      it "has a back link with text `Back to create your form`" do
+        expect(view.content_for(:back_link)).to have_link(t("back_link.form_create"), href: form_path(form.id))
+      end
+    end
+
+    context "when the form is live" do
+      let(:form) { build(:form, :live, id: 1) }
+
+      it "has a back link with text `Back to edit your form`" do
+        expect(view.content_for(:back_link)).to have_link(t("back_link.form_edit"), href: form_path(form.id))
+      end
+    end
+
+    context "when the form is archived" do
+      let(:form) { build(:form, :archived, id: 1) }
+
+      it "has a back link with text `Back to edit your form`" do
+        expect(view.content_for(:back_link)).to have_link(t("back_link.form_edit"), href: form_path(form.id))
+      end
     end
   end
 
