@@ -1,7 +1,7 @@
 require "rails_helper"
 
-describe FormListService do
-  let(:service) { described_class.call(forms:, group:) }
+describe FormListPresenter do
+  let(:presenter) { described_class.call(forms:, group:) }
 
   let(:creator) { create :user }
   let(:forms) { build_list :form, 5, :with_id, creator_id: creator.id }
@@ -10,25 +10,25 @@ describe FormListService do
   describe "#data" do
     describe "caption" do
       it "returns caption containing group name" do
-        expect(service.data).to include caption: I18n.t("groups.form_table_caption", group_name: group.name)
+        expect(presenter.data).to include caption: I18n.t("groups.form_table_caption", group_name: group.name)
       end
     end
 
     describe "head" do
       it "contains a 'Name', `Created by` and 'Status' column heading" do
-        expect(service.data[:head]).to eq([I18n.t("home.form_name_heading"),
-                                           { text: I18n.t("home.created_by") },
-                                           { text: I18n.t("home.form_status_heading"), numeric: true }])
+        expect(presenter.data[:head]).to eq([I18n.t("home.form_name_heading"),
+                                             { text: I18n.t("home.created_by") },
+                                             { text: I18n.t("home.form_status_heading"), numeric: true }])
       end
     end
 
     describe "rows" do
-      it "has a row for each form passed to the service" do
-        expect(service.data[:rows].size).to eq forms.size
+      it "has a row for each form passed to the presenter" do
+        expect(presenter.data[:rows].size).to eq forms.size
       end
 
       it "returns the correct data for each form" do
-        service.data[:rows].each_with_index do |row, index|
+        presenter.data[:rows].each_with_index do |row, index|
           form = forms[index]
           expect(row).to eq([
             { text: "<a class=\"govuk-link\" href=\"/forms/#{form.id}\">#{form.name}</a>" },
