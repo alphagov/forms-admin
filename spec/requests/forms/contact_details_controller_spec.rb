@@ -67,7 +67,7 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
       end
 
       it "updates the form on the API" do
-        expect(updated_form).to have_been_updated
+        expect(form).to have_been_updated_to(updated_form)
       end
 
       it "redirects to the confirmation page" do
@@ -83,7 +83,7 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
       end
 
       it "does not update the form on the API" do
-        expect(updated_form).not_to have_been_updated
+        expect(form).not_to have_been_updated
       end
 
       it "shows the error state" do
@@ -100,7 +100,7 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
       end
 
       it "does not update the form on the API" do
-        expect(updated_form).not_to have_been_updated
+        expect(form).not_to have_been_updated
       end
 
       it "shows the error state" do
@@ -129,7 +129,7 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
       end
 
       it "updates the form on the API" do
-        expect(updated_form).to have_been_updated
+        expect(form).to have_been_updated_to(updated_form)
       end
 
       it "redirects to the confirmation page" do
