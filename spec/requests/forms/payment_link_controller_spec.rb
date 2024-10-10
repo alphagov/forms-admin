@@ -59,7 +59,7 @@ RSpec.describe Forms::PaymentLinkController, type: :request do
     end
 
     it "Updates the form on the API" do
-      expect(updated_form).to have_been_updated
+      expect(form).to have_been_updated_to(updated_form)
     end
 
     it "Redirects you to the form overview page" do
