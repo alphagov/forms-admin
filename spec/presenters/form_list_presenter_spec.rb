@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe FormListService do
+describe FormListPresenter do
   let(:service) { described_class.call(forms:, group:) }
 
   let(:creator) { create :user }
