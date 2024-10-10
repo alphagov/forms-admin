@@ -193,7 +193,7 @@ en:
           <li>at the bottom of every page of the form</li>
           <li>in an email confirming the date and time a form was submitted - if someone chooses to receive this</li>
         </ul>
-      email_confirmation_hint_html: The optional email confirmation will also include the 'what happens next' information you provide. It will not contain a copy of their answers.
+      email_confirmation_hint_html: The optional email confirmation will also include the ‘what happens next’ information you provide. It will not contain a copy of their answers.
       hint: Select at least one option
       title: How can people get help with filling in this form?
   contact_govuk_forms: contact the GOV.UK Forms team
@@ -235,7 +235,7 @@ en:
       </p>
     delete_condition_legend: Are you sure you want to delete this question route?
   email_code_sent:
-    body_html: "<p>We've sent a confirmation code and your email address to %{temp_email}.</p>\n"
+    body_html: "<p>We’ve sent a confirmation code and your email address to %{temp_email}.</p>\n"
     continue: Continue creating a form
     sub_heading: What you need to do next
     what_happens_next_body_html: "<p>The recipient will be asked to give you the code. You need to enter the code to confirm the email address.</p>\n"
@@ -559,7 +559,7 @@ en:
       page:
         answer_type: The answer will be checked to make sure it’s in the selected format.
         hint_text:
-          address: You can add a short hint to help people answer the question. For example, you could tell people how you'll use their address.
+          address: You can add a short hint to help people answer the question. For example, you could tell people how you’ll use their address.
           checkbox: You can add a short hint to help people answer the question. For a question where people can select more than one answer you might want to use ‘Select all that apply’.
           date: You can add a short hint to help people answer the question. For a date question you could use ‘For example, 27 3 2007’.
           date_of_birth: You can add a short hint to help people answer the question. For a date of birth question you could use ‘For example, 27 3 1998’.
@@ -809,7 +809,7 @@ en:
           After you have made your form live, completed forms will be sent to %{submission_email}.
         </p>
   mark_complete:
-    'false': No, I'll come back later
+    'false': No, I’ll come back later
     hint: Selecting ‘Yes’ will mark this task as complete. You’ll still be able to make changes if you need to.
     legend: Do you want to mark this task as complete?
     'true': 'Yes'
@@ -883,15 +883,15 @@ en:
     completion_rate: Completion rate
     date_range: "%{start_date} to %{end_date}"
     description:
-      complete_week: If you want to track metrics over a longer period you'll need to make a note of these on the same day each week.
+      complete_week: If you want to track metrics over a longer period you’ll need to make a note of these on the same day each week.
       incomplete_week: The metrics shown here are for less than a week. To see a full week’s metrics, check again when your form’s been live for 7 days.
     errors:
       error_loading_data_html: |
-        <p>Sorry, there's a problem getting your form's metrics.</p>
+        <p>Sorry, there’s a problem getting your form’s metrics.</p>
         <p>Try again later.</p>
       new_form_html: |
         <p>No metrics are available yet as no-one has started or submitted a form since it went live.</p>
-        <p>Once they have, you'll be able to see the following metrics for the past 7 days:</p>
+        <p>Once they have, you’ll be able to see the following metrics for the past 7 days:</p>
         <ul class="govuk-list govuk-list--bullet">
           <li>Number of forms completed</li>
           <li>Number of forms started but not completed</li>
@@ -910,7 +910,7 @@ en:
     confirmation:
       body_html: |
         <h2 class="govuk-heading-m">What happens next</h2>
-        <p>We'll email you with any updates to the MOU that are made in the future.</p>
+        <p>We’ll email you with any updates to the MOU that are made in the future.</p>
   mou_signatures:
     index:
       share_mou_link_html: "<p>Allow users to view and agree to the latest Memorandum of Understanding by sharing %{mou_link}.</p>"
@@ -1008,7 +1008,7 @@ en:
     make_archived_draft_live: Make your form live again
     make_changes_live: Make your changes live
     make_live: Make your form live
-    mou_signature_confirmation: You've agreed to the MOU
+    mou_signature_confirmation: You’ve agreed to the MOU
     mou_signature_new: GOV.UK Forms Memorandum of Understanding
     mou_signatures: Memorandum of Understanding agreements
     name_settings: Ask for a person’s name
@@ -1145,7 +1145,7 @@ en:
         You might want to use hint text to tell someone:
       </p>
       <ul class="govuk-list govuk-list--bullet">
-        <li>that after adding one answer they'll be asked if they need to add another - up to a maximum of 50</li>
+        <li>that after adding one answer they’ll be asked if they need to add another - up to a maximum of 50</li>
         <li>who to contact if they need to add more than 50 answers</li>
       </ul>
     summary_text: Help people answer this question
@@ -1312,7 +1312,7 @@ en:
         This content will be:
       </p>
       <ul class="govuk-list govuk-list--bullet">
-        <li>shown to people when they've completed and submitted a form</li>
+        <li>shown to people when they’ve completed and submitted a form</li>
         <li>included in an email confirmation, if they choose to receive this</li>
       </ul>
 
@@ -1320,5 +1320,5 @@ en:
         The optional email confirmation will also include the contact details you provide for the form,
         and the date and time of submission. It will not include a copy of their answers.
       </p>
-    instructions: Add some information to tell people what will happen after they've submitted their form, and when - so they know what to expect.
+    instructions: Add some information to tell people what will happen after they’ve submitted their form, and when - so they know what to expect.
     reference_numbers: GOV.UK Forms adds a unique reference number to the confirmation page and optional email confirmation. This will also be included in submission emails sent to your processing email address.
