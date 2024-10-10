@@ -2,9 +2,7 @@ en:
   activemodel:
     errors:
       models:
-        forms/mark_complete_input:
+        forms/share_preview_input:
           attributes:
-            base:
-              has_routing_errors: This form has validation errors
             mark_complete:
               blank: You must choose an option

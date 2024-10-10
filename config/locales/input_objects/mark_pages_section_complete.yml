@@ -1,0 +1,10 @@
+en:
+  activemodel:
+    errors:
+      models:
+        forms/mark_pages_section_complete_input:
+          attributes:
+            base:
+              has_routing_errors: This form has validation errors
+            mark_complete:
+              blank: You must choose an option

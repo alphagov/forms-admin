@@ -1,4 +1,5 @@
 <% if @generate_form %>
+  <!-- TODO: find out which test is passing in nil -->
   <%= form_with model: @mark_complete_input, url: @path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
     <%= f.govuk_collection_radio_buttons :mark_complete, mark_complete_options, :value, :name, legend: { text: @legend, size: 'm' }, hint:{ text: @hint } %>
     <%= f.govuk_submit t("save_and_continue") %>
