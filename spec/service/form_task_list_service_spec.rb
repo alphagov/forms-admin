@@ -284,129 +284,167 @@ describe FormTaskListService do
     end
 
     describe "make form live section tasks" do
-      let(:form) { build(:form, :ready_for_live, id: 1, organisation:) }
-
       let(:section) do
         all_sections[5]
       end
 
       let(:section_rows) { section[:rows] }
 
-      context "when the form is in a trial group" do
-        it "has no tasks" do
-          expect(section).not_to include(:rows)
-        end
+      describe "share preview task" do
+        let(:form) { build(:form, id: 1, organisation:, pages:) }
+        let(:pages) { [] }
 
-        context "when the organisation has no organisation admins" do
-          it "has text explaining that the form cannot be made live because it is in a trial group, with no link to request an upgrade" do
-            expect(section[:body_text])
-              .to eq I18n.t("forms.task_list_create.make_form_live_section.group_not_active.no_org_admin")
-          end
-        end
+        context "when the user can make the form live" do
+          let(:can_make_form_live) { true }
 
-        context "when the organisation has an organisation admin" do
-          before do
-            create(:user, organisation:, role: :organisation_admin)
-          end
+          context "when the form does not have any pages" do
 
-          context "when the user is an editor" do
-            it "has text explaining that the group must be upgraded, with a link to the group members page" do
-              expect(section[:body_text])
-                .to eq I18n.t(
-                  "forms.task_list_create.make_form_live_section.group_not_active.group_editor.body_text", group_members_path: group_members_path(group)
-                )
+            it "has the correct task name" do
+              expect(section_rows.first[:task_name]).to eq(I18n.t("forms.task_list_create.make_form_live_section.share_preview"))
+            end
+
+            it "is not active" do
+              expect(section_rows.first[:active]).to be false
             end
           end
 
-          context "when the user can administer the group" do
-            let(:can_administer_group) { true }
+          context "when the form has at least one page" do
+            let(:pages) { [build(:page)] }
 
-            it "has text explaining that the group must be upgraded, with a link to the upgrade request page" do
-              expect(section[:body_text])
-                .to eq I18n.t(
-                  "forms.task_list_create.make_form_live_section.group_not_active.group_admin.body_text", upgrade_path: request_upgrade_group_path(group)
-                )
+            it "has the correct task name" do
+              expect(section_rows.first[:task_name]).to eq(I18n.t("forms.task_list_create.make_form_live_section.share_preview"))
             end
-          end
 
-          context "when the user can directly upgrade the group" do
-            let(:can_administer_group) { true }
-            let(:upgrade) { true }
+            it "is active" do
+              expect(section_rows.first[:active]).to be true
+            end
 
-            it "has text explaining that forms need to be in an active group to be made live" do
-              expect(section[:body_text])
-                .to eq I18n.t(
-                  "forms.task_list_create.make_form_live_section.group_not_active.group_admin.body_text", upgrade_path: group_path(group)
-                )
+            it "has a link to the share preview task" do
+              expect(section_rows.first[:path]).to eq(share_preview_path(form.id))
             end
           end
         end
       end
 
-      context "when the form is in an active group" do
-        let(:group_status) { :active }
+      describe "make live task" do
+        let(:form) { build(:form, :ready_for_live, id: 1, organisation:) }
 
-        context "and the user can administer the group" do
-          let(:can_make_form_live) { true }
-          let(:can_administer_group) { true }
-
-          it "has link to make the form live" do
-            expect(section_rows.first[:task_name]).to eq "Make your form live"
-            expect(section_rows.first[:path]).to eq "/forms/1/make-live"
-          end
-
-          context "when form is ready to make live" do
-            let(:form) { build(:form, :ready_for_live, id: 1) }
-
-            it "has link to make the form live" do
-              expect(section_rows.first[:task_name]).to eq "Make your form live"
-              expect(section_rows.first[:path]).to eq "/forms/1/make-live"
-            end
-
-            it "has the correct default status" do
-              expect(section_rows.first[:status]).to eq :not_started
-            end
-          end
-
-          context "when form is live" do
-            before do
-              allow(form).to receive(:is_live?).and_return(true)
-            end
-
-            it "has tasks" do
-              expect(section_rows).not_to be_empty
-            end
-
-            it "describes the section title correctly" do
-              expect(section[:title]).to eq I18n.t("forms.task_list_edit.make_form_live_section.make_live")
-            end
-
-            it "describes the task correctly" do
-              expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_edit.make_form_live_section.make_live")
-            end
-          end
-
-          context "when the form is archived" do
-            let(:form) { build(:form, :archived, id: 1) }
-
-            it "has link to make the form live" do
-              expect(section_rows.first[:task_name]).to eq "Make your form live"
-              expect(section_rows.first[:path]).to eq "/forms/1/make-live"
-            end
-          end
-        end
-
-        context "and the user cannot administer the group" do
+        context "when the form is in a trial group" do
           it "has no tasks" do
             expect(section).not_to include(:rows)
           end
 
-          it "has text explaining that group editors cannot make forms live" do
-            expect(section[:body_text])
-              .to eq I18n.t(
-                "forms.task_list_create.make_form_live_section.user_cannot_administer.body_text",
-                group_members_path: group_members_path(group),
-              )
+          context "when the organisation has no organisation admins" do
+            it "has text explaining that the form cannot be made live because it is in a trial group, with no link to request an upgrade" do
+              expect(section[:body_text])
+                .to eq I18n.t("forms.task_list_create.make_form_live_section.group_not_active.no_org_admin")
+            end
+          end
+
+          context "when the organisation has an organisation admin" do
+            before do
+              create(:user, organisation:, role: :organisation_admin)
+            end
+
+            context "when the user is an editor" do
+              it "has text explaining that the group must be upgraded, with a link to the group members page" do
+                expect(section[:body_text])
+                  .to eq I18n.t(
+                    "forms.task_list_create.make_form_live_section.group_not_active.group_editor.body_text", group_members_path: group_members_path(group)
+                  )
+              end
+            end
+
+            context "when the user can administer the group" do
+              let(:can_administer_group) { true }
+
+              it "has text explaining that the group must be upgraded, with a link to the upgrade request page" do
+                expect(section[:body_text])
+                  .to eq I18n.t(
+                    "forms.task_list_create.make_form_live_section.group_not_active.group_admin.body_text", upgrade_path: request_upgrade_group_path(group)
+                  )
+              end
+            end
+
+            context "when the user can directly upgrade the group" do
+              let(:can_administer_group) { true }
+              let(:upgrade) { true }
+
+              it "has text explaining that forms need to be in an active group to be made live" do
+                expect(section[:body_text])
+                  .to eq I18n.t(
+                    "forms.task_list_create.make_form_live_section.group_not_active.group_admin.body_text", upgrade_path: group_path(group)
+                  )
+              end
+            end
+          end
+        end
+
+        context "when the form is in an active group" do
+          let(:group_status) { :active }
+
+          context "and the user can administer the group" do
+            let(:can_make_form_live) { true }
+            let(:can_administer_group) { true }
+
+            it "has link to make the form live" do
+              expect(section_rows.second[:task_name]).to eq "Make your form live"
+              expect(section_rows.second[:path]).to eq "/forms/1/make-live"
+            end
+
+            context "when form is ready to make live" do
+              let(:form) { build(:form, :ready_for_live, id: 1) }
+
+              it "has link to make the form live" do
+                expect(section_rows.second[:task_name]).to eq "Make your form live"
+                expect(section_rows.second[:path]).to eq "/forms/1/make-live"
+              end
+
+              it "has the correct default status" do
+                expect(section_rows.second[:status]).to eq :not_started
+              end
+            end
+
+            context "when form is live" do
+              before do
+                allow(form).to receive(:is_live?).and_return(true)
+              end
+
+              it "has tasks" do
+                expect(section_rows).not_to be_empty
+              end
+
+              it "describes the section title correctly" do
+                expect(section[:title]).to eq I18n.t("forms.task_list_edit.make_form_live_section.make_live")
+              end
+
+              it "describes the task correctly" do
+                expect(section_rows.second[:task_name]).to eq I18n.t("forms.task_list_edit.make_form_live_section.make_live")
+              end
+            end
+
+            context "when the form is archived" do
+              let(:form) { build(:form, :archived, id: 1) }
+
+              it "has link to make the form live" do
+                expect(section_rows.second[:task_name]).to eq "Make your form live"
+                expect(section_rows.second[:path]).to eq "/forms/1/make-live"
+              end
+            end
+          end
+
+          context "and the user cannot administer the group" do
+            it "has no tasks" do
+              expect(section).not_to include(:rows)
+            end
+
+            it "has text explaining that group editors cannot make forms live" do
+              expect(section[:body_text])
+                .to eq I18n.t(
+                  "forms.task_list_create.make_form_live_section.user_cannot_administer.body_text",
+                  group_members_path: group_members_path(group),
+                )
+            end
           end
         end
       end
