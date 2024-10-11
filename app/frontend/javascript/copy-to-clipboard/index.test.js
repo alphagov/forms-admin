@@ -39,4 +39,12 @@ describe('Copy to clipboard', () => {
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith('It worked!')
   })
+
+  test('the click event calls event.preventDefault', () => {
+    const event = new window.Event('click')
+    event.preventDefault = vi.fn()
+    document.querySelector('button').dispatchEvent(event)
+
+    expect(event.preventDefault).toHaveBeenCalled()
+  })
 })
