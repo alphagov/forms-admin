@@ -325,6 +325,7 @@ en:
               A group admin can request to upgrade the group so forms can be made live. You can <a href="%{group_members_path}">view the members of the group</a> to find a group admin.
           no_org_admin: You cannot make this form live because it’s in a ‘trial’ group.
         make_live: Make your form live
+        share_preview: Share a preview of your draft form
         title: Make your form live
         user_cannot_administer:
           body_text: |
@@ -355,6 +356,7 @@ en:
         title: Change how you get completed forms
       make_form_live_section:
         make_live: Make your changes live
+        share_preview: Share a preview of your draft form
         title: Make your changes live
       payment_link_subsection:
         payment_link: Add a link to a payment page on GOV.UK Pay

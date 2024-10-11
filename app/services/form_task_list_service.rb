@@ -156,18 +156,30 @@ private
   end
 
   def make_form_live_section_tasks
-    [{
-      task_name: live_task_name,
-      path: live_path,
-      status: @task_statuses[:make_live_status],
-      active: @form.all_ready_for_live?,
-    }]
+    [
+      {
+        task_name: share_preview_task_name,
+        path: share_preview_path(@form.id),
+        status: @task_statuses[:share_preview_status],
+        active: @form.pages.any?,
+      },
+      {
+        task_name: live_task_name,
+        path: live_path,
+        status: @task_statuses[:make_live_status],
+        active: @form.all_ready_for_live?,
+      },
+    ]
   end
 
   def live_title_name
     return I18n.t("forms.task_list_create.make_form_live_section.title") if @form.is_archived?
 
     I18n.t("forms.task_list_#{create_or_edit}.make_form_live_section.title")
+  end
+
+  def share_preview_task_name
+    I18n.t("forms.task_list_#{create_or_edit}.make_form_live_section.share_preview")
   end
 
   def live_task_name
