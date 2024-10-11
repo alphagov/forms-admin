@@ -31,7 +31,8 @@ feature "Add/editing a single question", type: :feature do
         and_i_select_a_type_of_answer_option(answer_type)
         and_i_provide_a_question_text
         and_i_make_the_question_mandatory unless answer_type == "selection"
-        and_i_save_and_create_another
+        and_i_click_save
+        and_i_add_another_question
       end
     end
   end
@@ -42,20 +43,16 @@ feature "Add/editing a single question", type: :feature do
       5.times { |id| existing_pages.push(build(:page, id:, form_id: 1)) }
       existing_pages
     end
-    let(:answer_types) { %w[organisation_name email phone_number national_insurance_number address date selection number text] }
 
     scenario "add a question for each type of answer" do
-      answer_types.each do |answer_type|
-        when_i_am_viewing_an_existing_form
-        and_i_want_to_create_or_edit_a_page
-        and_i_can_see_a_list_of_existing_pages
-        and_i_start_adding_a_new_question
-        and_i_select_a_type_of_answer_option(answer_type)
-        and_i_provide_a_question_text
-        and_i_make_the_question_mandatory unless answer_type == "selection"
-        and_i_save_and_create_another
-      end
-
+      when_i_am_viewing_an_existing_form
+      and_i_want_to_create_or_edit_a_page
+      and_i_can_see_a_list_of_existing_pages
+      and_i_start_adding_a_new_question
+      and_i_select_a_type_of_answer_option("national_insurance_number")
+      and_i_provide_a_question_text
+      and_i_make_the_question_mandatory
+      and_i_click_save
       and_i_click_back_to_your_questions
       and_i_mark_the_questions_section_as_complete
     end
@@ -95,9 +92,12 @@ private
     within_fieldset("Should this question be mandatory or optional?") { choose "Mandatory" }
   end
 
-  def and_i_save_and_create_another
+  def and_i_click_save
     click_button I18n.t("pages.submit_save")
     expect(page.find(".govuk-notification-banner__title")).to have_text("Success")
+  end
+
+  def and_i_add_another_question
     within(page.find(".govuk-notification-banner__content")) do
       click_on "Add a question"
     end
@@ -107,7 +107,7 @@ private
   end
 
   def and_i_click_back_to_your_questions
-    click_link "Back to your questions"
+    page.find(".govuk-notification-banner ").click_link "Back to your questions"
     expect(page.find("h1")).to have_text("Add and edit your questions")
   end
 
