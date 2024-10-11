@@ -1,6 +1,6 @@
-<%= tag.div "data-module": "copy-to-clipboard", "data-copy-button-text": t("form_url_component.copy_to_clipboard") do %>
+<%= tag.div "data-module": "copy-to-clipboard", "data-copy-button-text": @button_text do %>
   <h2 class="govuk-heading-m">
-    <%= t("form_url_component.form_url") %>
+    <%= @heading_text %>
   </h2>
 
   <p data-copy-target>

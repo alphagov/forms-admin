@@ -62,6 +62,8 @@ Rails.application.routes.draw do
     post "/payment-link" => "forms/payment_link#create", as: :payment_link_create
     get "/receive-csv" => "forms/receive_csv#new", as: :receive_csv
     post "/receive-csv" => "forms/receive_csv#create", as: :receive_csv_create
+    get "/share-preview" => "forms/share_preview#new", as: :share_preview
+    post "/share-preview" => "forms/share_preview#create", as: :share_preview_create
 
     scope "/pages" do
       get "/" => "pages#index", as: :form_pages

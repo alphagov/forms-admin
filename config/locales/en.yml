@@ -172,6 +172,7 @@ en:
         privacy_details_saved: Your privacy information link has been saved
         receive_csv_disabled: Completed form emails will not include links to CSV files
         receive_csv_enabled: Completed form emails will include links to CSV files
+        share_preview_completed: The preview task has been completed
         support_details_saved: Your contact details for support have been saved
         what_happens_next_saved: Your information about what happens next has been saved
       route_created: Question %{question_position}’s route has been created
@@ -1023,6 +1024,7 @@ en:
     routing_page_new: 'Add a question route: select answer and destination'
     separator: " – "
     set_email: Set the email address for completed forms
+    share_preview: Share a preview of your draft form
     sign_in: Sign in
     sign_up: Sign up
     text_settings: How much text will people need to provide?
@@ -1227,6 +1229,20 @@ en:
         <p>
           The recipient will be asked to tell you the code. You will then need to enter the code to confirm the email address.
         </p>
+  share_preview:
+    body_html: |
+      <p>You can share a link to a preview of your draft form so people can try it out and review the content.</p>
+      <p>You may need to share it with your organisation’s GOV.UK publishing team so they can:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>review the content</li>
+        <li>make any necessary changes to related content on GOV.UK</li>
+      </ul>
+      <p>Anyone with the preview link can view the form - no password is needed.</p>
+    preview_link_button: Copy link to clipboard
+    preview_link_heading: Preview link for this draft form
+    radios:
+      hint: You’ll still be able to come back to get the preview link again if you need to.
+      legend: Do you want to mark this task ‘completed’?
   sign_in_button: Sign in
   sign_up_button: Sign up
   skip_to_main_content: Skip to main content
