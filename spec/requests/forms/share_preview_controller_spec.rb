@@ -45,11 +45,6 @@ RSpec.describe Forms::SharePreviewController, type: :request do
 
   describe "#create" do
     let(:mark_complete) { "true" }
-    let(:updated_form) do
-      form.tap do |f|
-        f.share_preview_completed = "true"
-      end
-    end
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -64,12 +59,43 @@ RSpec.describe Forms::SharePreviewController, type: :request do
     end
 
     context "when 'Yes' is selected" do
+      let(:updated_form) do
+        form.tap do |f|
+          f.share_preview_completed = "true"
+        end
+      end
+
       it "updates the form on the API" do
         expect(form).to have_been_updated_to(updated_form)
       end
 
       it "redirects to the form" do
         expect(response).to redirect_to(form_path(id))
+      end
+
+      it "displays a success banner" do
+        expect(flash[:success]).to eq(I18n.t("banner.success.form.share_preview_completed"))
+      end
+    end
+
+    context "when 'No' is selected" do
+      let(:mark_complete) { "false" }
+      let(:updated_form) do
+        form.tap do |f|
+          f.share_preview_completed = "false"
+        end
+      end
+
+      it "updates the form on the API" do
+        expect(form).to have_been_updated_to(updated_form)
+      end
+
+      it "redirects to the form" do
+        expect(response).to redirect_to(form_path(id))
+      end
+
+      it "does not display a success banner" do
+        expect(flash).to be_empty
       end
     end
 

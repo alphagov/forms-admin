@@ -11,7 +11,8 @@ module Forms
       @share_preview_input = Forms::SharePreviewInput.new(mark_complete_input_params)
 
       if @share_preview_input.submit
-        redirect_to form_path(current_form)
+        success_message = @share_preview_input.marked_complete? ? t("banner.success.form.share_preview_completed") : nil
+        redirect_to form_path(current_form), success: success_message
       else
         render "new", status: :unprocessable_entity
       end

@@ -172,6 +172,7 @@ en:
         privacy_details_saved: Your privacy information link has been saved
         receive_csv_disabled: Completed form emails will not include links to CSV files
         receive_csv_enabled: Completed form emails will include links to CSV files
+        share_preview_completed: The preview task has been completed
         support_details_saved: Your contact details for support have been saved
         what_happens_next_saved: Your information about what happens next has been saved
       route_created: Question %{question_position}’s route has been created
