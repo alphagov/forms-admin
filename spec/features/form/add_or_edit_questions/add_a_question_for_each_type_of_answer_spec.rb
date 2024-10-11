@@ -11,6 +11,7 @@ feature "Add/editing a single question", type: :feature do
       mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       mock.get "/api/v1/forms/1/pages/2", headers, fake_page.to_json, 200
       mock.post "/api/v1/forms/1/pages", post_headers, fake_page.to_json, 200
+      mock.put "/api/v1/forms/1", post_headers, form.to_json, 200
     end
 
     GroupForm.create!(group:, form_id: form.id)
@@ -25,7 +26,7 @@ feature "Add/editing a single question", type: :feature do
 
     scenario "add a question for each type of answer" do
       answer_types.each do |answer_type|
-        when_i_viewing_an_existing_form
+        when_i_am_viewing_an_existing_form
         and_i_want_to_create_or_edit_a_page
         and_i_select_a_type_of_answer_option(answer_type)
         and_i_provide_a_question_text
@@ -45,7 +46,7 @@ feature "Add/editing a single question", type: :feature do
 
     scenario "add a question for each type of answer" do
       answer_types.each do |answer_type|
-        when_i_viewing_an_existing_form
+        when_i_am_viewing_an_existing_form
         and_i_want_to_create_or_edit_a_page
         and_i_can_see_a_list_of_existing_pages
         and_i_start_adding_a_new_question
@@ -54,12 +55,15 @@ feature "Add/editing a single question", type: :feature do
         and_i_make_the_question_mandatory unless answer_type == "selection"
         and_i_save_and_create_another
       end
+
+      and_i_click_back_to_your_questions
+      and_i_mark_the_questions_section_as_complete
     end
   end
 
 private
 
-  def when_i_viewing_an_existing_form
+  def when_i_am_viewing_an_existing_form
     visit form_path(form.id)
     expect_page_to_have_no_axe_errors(page)
   end
@@ -100,6 +104,19 @@ private
     expect(page.find("h1")).to have_text "What kind of answer do you need to this question?"
     expect(page).not_to have_selector("main input:checked", visible: :hidden), "Type of answer page should not have any preselected radio buttons"
     expect_page_to_have_no_axe_errors(page)
+  end
+
+  def and_i_click_back_to_your_questions
+    click_link "Back to your questions"
+    expect(page.find("h1")).to have_text("Add and edit your questions")
+  end
+
+  def and_i_mark_the_questions_section_as_complete
+    expect(page.find("h1")).to have_text("Add and edit your questions")
+    choose "Yes"
+    click_button "Save and continue"
+    expect(page.find("h1")).to have_text("Create a form")
+    expect(page.find(".govuk-notification-banner__heading")).to have_text("Your questions have been saved and marked as complete")
   end
 
   def and_i_can_see_a_list_of_existing_pages
