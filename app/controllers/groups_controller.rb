@@ -22,7 +22,8 @@ class GroupsController < ApplicationController
   # GET /groups/1
   def show
     authorize @group
-    @forms = @group.group_forms.map(&:form)
+    forms = @group.group_forms.map(&:form)
+    @form_list_presenter = FormListPresenter.call(forms:, group: @group) unless forms.empty?
   end
 
   # GET /groups/new

@@ -5,6 +5,8 @@ RSpec.describe "groups/show", type: :view do
   let(:forms) { [] }
   let(:group) { create :group, name: "My Group" }
 
+  let(:form_list_presenter) { FormListPresenter.call(forms:, group:) }
+
   let(:membership_role) { :editor }
   let(:upgrade?) { false }
   let(:edit?) { true }
@@ -17,14 +19,16 @@ RSpec.describe "groups/show", type: :view do
     assign(:current_user, current_user)
     assign(:group, group)
     assign(:forms, forms)
+    assign(:form_list_presenter, form_list_presenter)
 
     without_partial_double_verification do
-      double = instance_double(GroupPolicy,
-                               upgrade?: upgrade?,
-                               edit?: edit?,
-                               request_upgrade?: request_upgrade?,
-                               review_upgrade?: review_upgrade?)
-      allow(view).to receive(:policy).and_return(double)
+      policy_double = instance_double(GroupPolicy,
+                                      upgrade?: upgrade?,
+                                      edit?: edit?,
+                                      request_upgrade?: request_upgrade?,
+                                      review_upgrade?: review_upgrade?)
+
+      allow(view).to receive(:policy).and_return(policy_double)
     end
 
     render
@@ -59,7 +63,9 @@ RSpec.describe "groups/show", type: :view do
   end
 
   context "when the group has no forms" do
-    let(:forms) { [] }
+    let(:form_list_presenter) { nil }
+
+    before { assign(:form_list_presenter, form_list_presenter) }
 
     it "does not have a table of forms" do
       expect(rendered).not_to have_table

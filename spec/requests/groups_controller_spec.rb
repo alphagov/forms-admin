@@ -160,9 +160,8 @@ RSpec.describe "/groups", type: :request do
         expect(response).to be_successful
       end
 
-      it "shows the forms in the group" do
+      it "assigns a list of forms in the group to present" do
         forms = build_list(:form, 3) { |form, i| form.id = i }
-
         ActiveResource::HttpMock.respond_to do |mock|
           headers = { "X-API-Token" => Settings.forms_api.auth_key, "Accept" => "application/json" }
           forms.each do |form|
@@ -173,8 +172,10 @@ RSpec.describe "/groups", type: :request do
         member_group.group_forms << forms.map { |form| GroupForm.create! form_id: form.id, group_id: member_group.id }
         member_group.save!
 
+        form_list_presenter = FormListPresenter.call(forms:, group: member_group)
+
         get group_url(member_group)
-        expect(assigns[:forms]).to match_array(forms)
+        expect(assigns[:form_list_presenter].data[:rows]).to match_array(form_list_presenter.data[:rows])
       end
     end
 
