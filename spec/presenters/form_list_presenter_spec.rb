@@ -40,6 +40,24 @@ describe FormListPresenter do
           ])
         end
       end
+
+      context "when forms with names are random" do
+        let(:forms) do
+          [
+            build(:form, id: 1, name: "z"),
+            build(:form, id: 2, name: "b"),
+            build(:form, id: 3, name: "a"),
+          ]
+        end
+        let(:presenter) { described_class.call(forms:, group:) }
+
+        it "sorts alphabetically" do
+          rows = presenter.data[:rows]
+          expect(rows[0][0][:text]).to eq("<a class=\"govuk-link\" href=\"/forms/3\">a</a>")
+          expect(rows[1][0][:text]).to eq("<a class=\"govuk-link\" href=\"/forms/2\">b</a>")
+          expect(rows[2][0][:text]).to eq("<a class=\"govuk-link\" href=\"/forms/1\">z</a>")
+        end
+      end
     end
   end
 end
