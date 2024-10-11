@@ -20,7 +20,8 @@ const copyToClipboard = (element, copyTarget, buttonText) => {
   if (navigator?.clipboard?.writeText) {
     const button = createButton(buttonText)
     try {
-      button.addEventListener('click', () => {
+      button.addEventListener('click', event => {
+        event.preventDefault()
         navigator.clipboard.writeText(copyTarget.textContent.trim())
       })
       element.appendChild(button)
