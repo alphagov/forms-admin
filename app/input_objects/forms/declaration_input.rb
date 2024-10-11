@@ -1,8 +1,7 @@
-class Forms::DeclarationInput < BaseInput
-  attr_accessor :form, :declaration_text, :mark_complete
+class Forms::DeclarationInput < Forms::MarkCompleteInput
+  attr_accessor :declaration_text
 
   validates :declaration_text, length: { maximum: 2000 }
-  validates :mark_complete, presence: true
 
   def submit
     return false if invalid?

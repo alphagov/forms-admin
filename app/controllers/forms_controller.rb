@@ -12,7 +12,7 @@ class FormsController < ApplicationController
   def mark_pages_section_completed
     authorize current_form, :can_view_form?
     @pages = current_form.pages
-    @mark_complete_input = Forms::MarkCompleteInput.new(mark_complete_input_params)
+    @mark_complete_input = Forms::MarkPagesSectionCompleteInput.new(mark_complete_input_params)
 
     if @mark_complete_input.submit
       success_message = if @mark_complete_input.mark_complete == "true"
@@ -30,6 +30,6 @@ class FormsController < ApplicationController
 private
 
   def mark_complete_input_params
-    params.require(:forms_mark_complete_input).permit(:mark_complete).merge(form: current_form)
+    params.require(:forms_mark_pages_section_complete_input).permit(:mark_complete).merge(form: current_form)
   end
 end

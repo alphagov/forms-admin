@@ -7,7 +7,7 @@ end
 
 RSpec.describe MarkCompleteComponent::View, type: :component do
   let(:form) { build(:form, :with_pages, id: 2) }
-  let(:mark_complete_input) { Forms::MarkCompleteInput.new(form:).assign_form_values }
+  let(:mark_complete_input) { Forms::MarkCompleteInput.new(form:, mark_complete: false) }
 
   context "when using the generate_form option" do
     it "renders the form" do
