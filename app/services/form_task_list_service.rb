@@ -197,7 +197,10 @@ private
   def statuses_by_user
     statuses = @task_statuses
 
-    statuses.delete(:make_live_status) unless Pundit.policy(@current_user, @form).can_make_form_live?
+    unless Pundit.policy(@current_user, @form).can_make_form_live?
+      statuses.delete(:share_preview_status)
+      statuses.delete(:make_live_status)
+    end
 
     statuses
   end
@@ -213,7 +216,6 @@ private
   def remove_optional_statuses(statuses)
     statuses.delete(:payment_link_status)
     statuses.delete(:receive_csv_status)
-    statuses.delete(:share_preview_status)
   end
 
   def can_enter_submission_email_code

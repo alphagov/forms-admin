@@ -57,7 +57,7 @@ describe FormTaskListService do
       it "returns counts of tasks" do
         result = described_class.new(form:, current_user:)
 
-        expected_hash = { completed: 5, total: 9 }
+        expected_hash = { completed: 6, total: 10 }
         expect(EmailTaskStatusService).to have_received(:new)
         expect(result.task_counts).to eq expected_hash
       end
