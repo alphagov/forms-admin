@@ -60,7 +60,7 @@ describe Form, type: :model do
       let(:new_form) { build :form, :new_form }
 
       it "returns a set of keys related to missing fields" do
-        expect(new_form.all_incomplete_tasks).to match_array(%i[missing_pages missing_submission_email missing_privacy_policy_url missing_contact_details missing_what_happens_next])
+        expect(new_form.all_incomplete_tasks).to match_array(%i[missing_pages missing_submission_email missing_privacy_policy_url missing_contact_details missing_what_happens_next share_preview_not_completed])
       end
     end
   end

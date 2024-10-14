@@ -19,7 +19,7 @@ FactoryBot.define do
     has_routing_errors { false }
     creator_id { nil }
     ready_for_live { false }
-    incomplete_tasks { %i[missing_pages missing_privacy_policy_url missing_contact_details missing_what_happens_next] }
+    incomplete_tasks { %i[missing_pages missing_privacy_policy_url missing_contact_details missing_what_happens_next share_preview_not_completed] }
     state { :draft }
 
     transient do
