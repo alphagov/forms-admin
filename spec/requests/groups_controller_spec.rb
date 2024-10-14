@@ -161,7 +161,7 @@ RSpec.describe "/groups", type: :request do
       end
 
       it "assigns a list of forms in the group to present" do
-        forms = build_list(:form, 3) { |form, i| form.id = i }
+        forms = build_list(:form, 3, created_at: "2024-10-08T07:31:15.762Z") { |form, i| form.id = i }
         ActiveResource::HttpMock.respond_to do |mock|
           headers = { "X-API-Token" => Settings.forms_api.auth_key, "Accept" => "application/json" }
           forms.each do |form|

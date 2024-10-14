@@ -75,9 +75,9 @@ RSpec.describe "groups/show", type: :view do
   context "when the group has one of more forms" do
     let(:forms) do
       [
-        build(:form, id: 1, name: "Form 1"),
-        build(:form, :live, id: 2, name: "Form 2"),
-        build(:form, :live_with_draft, id: 3, name: "Form 3"),
+        build(:form, id: 1, name: "Form 1", created_at: "2024-10-08T07:31:15.762Z"),
+        build(:form, :live, id: 2, name: "Form 2", created_at: "2024-10-08T07:31:15.762Z"),
+        build(:form, :live_with_draft, id: 3, name: "Form 3", created_at: "2024-10-08T07:31:15.762Z"),
       ]
     end
 

@@ -4,7 +4,7 @@ feature "Add account organisation to user without organisation", type: :feature 
   let(:user) { create :user, :with_no_org, name: nil, terms_agreed_at: nil }
   let!(:organisation) { create :organisation }
 
-  let(:form) { build :form, :with_active_resource, id: 1, name: "a form I created when I didn't have an organisation" }
+  let(:form) { build :form, :with_active_resource, id: 1, name: "a form I created when I didn't have an organisation", created_at: "2024-10-08T07:31:15.762Z" }
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
