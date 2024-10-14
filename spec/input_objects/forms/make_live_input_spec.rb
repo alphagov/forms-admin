@@ -28,6 +28,22 @@ RSpec.describe Forms::MakeLiveInput, type: :model do
         expect(make_live_input).not_to be_valid
         expect(make_live_input.errors.full_messages_for(:confirm)).to include("Confirm #{I18n.t('activemodel.errors.models.forms/make_live_input.attributes.confirm.missing_submission_email')}")
       end
+
+      context "when the API returns incomplete tasks" do
+        let(:incomplete_tasks) { %i[missing_pages missing_privacy_policy_url missing_contact_details missing_what_happens_next share_preview_not_completed] }
+
+        before do
+          make_live_input.form.incomplete_tasks = incomplete_tasks
+        end
+
+        it "shows a validation message for the incomplete task" do
+          expect(make_live_input).not_to be_valid
+
+          incomplete_tasks.each do |incomplete_task_name|
+            expect(make_live_input.errors.full_messages_for(:confirm)).to include("Confirm #{I18n.t("activemodel.errors.models.forms/make_live_input.attributes.confirm.#{incomplete_task_name}")}")
+          end
+        end
+      end
     end
   end
 end
