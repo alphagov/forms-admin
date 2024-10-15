@@ -73,7 +73,7 @@ gem "paper_trail"
 
 # For AWS interactions
 gem "aws-sdk-cloudwatch", "~> 1.103"
-gem "aws-sdk-codepipeline", "~> 1.87"
+gem "aws-sdk-codepipeline", "~> 1.88"
 
 # For Mailchimp audience integration
 gem "MailchimpMarketing", "~> 3.0"
