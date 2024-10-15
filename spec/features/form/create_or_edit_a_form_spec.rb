@@ -1,7 +1,7 @@
 require "rails_helper"
 
 feature "Create or edit a form", type: :feature do
-  let(:form) { build :form, :with_active_resource, id: 1, name: "Apply for a juggling license" }
+  let(:form) { build :form, :with_active_resource, id: 1, name: "Apply for a juggling license", created_at: "2024-10-08T07:31:15.762Z" }
   let(:group) { create :group, name: "Group 1" }
 
   before do

@@ -1,4 +1,4 @@
-class FormListService
+class FormListPresenter
   include Rails.application.routes.url_helpers
   include ActionView::Helpers::UrlHelper
   include GovukRailsCompatibleLinkHelper
@@ -43,7 +43,7 @@ private
   end
 
   def rows
-    forms.map do |form|
+    forms.sort_by { |form| [form.name.downcase, form.created_at] }.map do |form|
       [{ text: form_name_link(form) },
        { text: find_creator_name(form) },
        { text: form_status_tags(form), numeric: true }].compact

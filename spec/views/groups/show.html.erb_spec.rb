@@ -5,6 +5,8 @@ RSpec.describe "groups/show", type: :view do
   let(:forms) { [] }
   let(:group) { create :group, name: "My Group" }
 
+  let(:form_list_presenter) { FormListPresenter.call(forms:, group:) }
+
   let(:membership_role) { :editor }
   let(:upgrade?) { false }
   let(:edit?) { true }
@@ -17,14 +19,16 @@ RSpec.describe "groups/show", type: :view do
     assign(:current_user, current_user)
     assign(:group, group)
     assign(:forms, forms)
+    assign(:form_list_presenter, form_list_presenter)
 
     without_partial_double_verification do
-      double = instance_double(GroupPolicy,
-                               upgrade?: upgrade?,
-                               edit?: edit?,
-                               request_upgrade?: request_upgrade?,
-                               review_upgrade?: review_upgrade?)
-      allow(view).to receive(:policy).and_return(double)
+      policy_double = instance_double(GroupPolicy,
+                                      upgrade?: upgrade?,
+                                      edit?: edit?,
+                                      request_upgrade?: request_upgrade?,
+                                      review_upgrade?: review_upgrade?)
+
+      allow(view).to receive(:policy).and_return(policy_double)
     end
 
     render
@@ -59,7 +63,9 @@ RSpec.describe "groups/show", type: :view do
   end
 
   context "when the group has no forms" do
-    let(:forms) { [] }
+    let(:form_list_presenter) { nil }
+
+    before { assign(:form_list_presenter, form_list_presenter) }
 
     it "does not have a table of forms" do
       expect(rendered).not_to have_table
@@ -69,9 +75,9 @@ RSpec.describe "groups/show", type: :view do
   context "when the group has one of more forms" do
     let(:forms) do
       [
-        build(:form, id: 1, name: "Form 1"),
-        build(:form, :live, id: 2, name: "Form 2"),
-        build(:form, :live_with_draft, id: 3, name: "Form 3"),
+        build(:form, id: 1, name: "Form 1", created_at: "2024-10-08T07:31:15.762Z"),
+        build(:form, :live, id: 2, name: "Form 2", created_at: "2024-10-08T07:31:15.762Z"),
+        build(:form, :live_with_draft, id: 3, name: "Form 3", created_at: "2024-10-08T07:31:15.762Z"),
       ]
     end
 
