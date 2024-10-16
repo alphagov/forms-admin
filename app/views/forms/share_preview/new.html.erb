@@ -22,7 +22,7 @@
         <%= t("share_preview.body_html") %>
       </div>
 
-      <div class="govuk-!-margin-bottom-4">
+      <div class="govuk-!-margin-bottom-8">
         <%= render FormUrlComponent::View.new(runner_link: link_to_runner(Settings.forms_runner.url, @share_preview_input.form.id, @share_preview_input.form.form_slug, mode: :preview_draft),
                                               heading_text: t("share_preview.preview_link_heading"),
                                               button_text: t("share_preview.preview_link_button")) %>
