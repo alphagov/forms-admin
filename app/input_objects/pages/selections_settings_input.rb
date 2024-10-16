@@ -35,7 +35,7 @@ class Pages::SelectionsSettingsInput < BaseInput
     filter_out_blank_options
 
     return errors.add(:selection_options, :minimum) if selection_options.length < 2
-    return errors.add(:selection_options, :maximum) if selection_options.length > 30
+    return errors.add(:selection_options, :maximum) if selection_options.length > 1000
 
     errors.add(:selection_options, :uniqueness) if selection_options.uniq.length != selection_options.length
   end
