@@ -3,7 +3,7 @@ class Pages::SelectionsSettingsInput < BaseInput
                       only_one_option: false,
                       include_none_of_the_above: false }.freeze
 
-  attr_accessor :selection_options, :only_one_option, :include_none_of_the_above, :draft_question
+  attr_accessor :selection_options, :only_one_option, :include_none_of_the_above, :draft_question, :bulk_selection_options
 
   validates :draft_question, presence: true
   validate :selection_options, :validate_selection_options
@@ -21,7 +21,9 @@ class Pages::SelectionsSettingsInput < BaseInput
   end
 
   def submit
+    set_selection_options
     return false if invalid?
+
 
     # Set answer_settings for the draft_question
     draft_question
@@ -46,5 +48,9 @@ class Pages::SelectionsSettingsInput < BaseInput
 
   def selection_options_form_objects
     selection_options.map { |option| OpenStruct.new(name: option[:name]) }
+  end
+
+  def set_selection_options
+    self.selection_options = bulk_selection_options.split(/\n/).compact_blank.uniq.map { |option| { name: option.strip } }
   end
 end
