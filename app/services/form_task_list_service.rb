@@ -156,18 +156,30 @@ private
   end
 
   def make_form_live_section_tasks
-    [{
-      task_name: live_task_name,
-      path: live_path,
-      status: @task_statuses[:make_live_status],
-      active: @form.all_ready_for_live?,
-    }]
+    [
+      {
+        task_name: share_preview_task_name,
+        path: share_preview_path(@form.id),
+        status: @task_statuses[:share_preview_status],
+        active: @form.pages.any?,
+      },
+      {
+        task_name: live_task_name,
+        path: live_path,
+        status: @task_statuses[:make_live_status],
+        active: @form.all_ready_for_live?,
+      },
+    ]
   end
 
   def live_title_name
     return I18n.t("forms.task_list_create.make_form_live_section.title") if @form.is_archived?
 
     I18n.t("forms.task_list_#{create_or_edit}.make_form_live_section.title")
+  end
+
+  def share_preview_task_name
+    I18n.t("forms.task_list_#{create_or_edit}.make_form_live_section.share_preview")
   end
 
   def live_task_name
@@ -185,7 +197,10 @@ private
   def statuses_by_user
     statuses = @task_statuses
 
-    statuses.delete(:make_live_status) unless Pundit.policy(@current_user, @form).can_make_form_live?
+    unless Pundit.policy(@current_user, @form).can_make_form_live?
+      statuses.delete(:share_preview_status)
+      statuses.delete(:make_live_status)
+    end
 
     statuses
   end
@@ -201,7 +216,6 @@ private
   def remove_optional_statuses(statuses)
     statuses.delete(:payment_link_status)
     statuses.delete(:receive_csv_status)
-    statuses.delete(:share_preview_status)
   end
 
   def can_enter_submission_email_code
