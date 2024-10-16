@@ -11,4 +11,4 @@ en:
               missing_submission_email: You cannot make your form live because it does not have an email address to send completed forms to. Answer ‘No’ and add an email address.
               missing_what_happens_next: You cannot make your form live because it does not have information about what happens next. Answer ‘No’ and add information about what happens next.
               missing_contact_details: You cannot make your form live because it does not have contact details. Answer ‘No’ and add contact details.
-              share_preview_not_completed: You cannot make your form live because you have not completed the ‘share a preview of your draft form‘ task. Answer ‘No’ and complete the task.
+              share_preview_not_completed: You cannot make your form live because you have not completed the ‘share a preview of your draft form’ task. Answer ‘No’ and complete the task.
