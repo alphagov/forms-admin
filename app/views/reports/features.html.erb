@@ -22,6 +22,10 @@
         <%= row.with_key(text: t(".features.live_forms_with_add_another_answer")) %>
         <%= row.with_value(text: data.live_forms_with_add_another_answer) %>
       <%end%>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".features.live_forms_with_csv_submission_enabled")) %>
+        <%= row.with_value(text: data.live_forms_with_csv_submission_enabled) %>
+      <%end%>
     <%end%>
 
     <h2 class="govuk-heading-m govuk-visually-hidden"><%= t(".answer_types.heading") %></h2>
