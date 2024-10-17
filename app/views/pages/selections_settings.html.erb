@@ -24,8 +24,8 @@
       <h1 class="govuk-heading-l"><%= t("selections_settings.heading") %></h1>
 
       <%= f.govuk_check_boxes_fieldset 'list_settings', multiple: false, legend: { text: t("selections_settings.list_settings") } do %>
-        <%= f.govuk_check_box 'only_one_option', "true", 0, multiple: false, small: true, label: { text: t("selections_settings.only_one_option") }%>
-        <%= f.govuk_check_box 'include_none_of_the_above', "true", 0, multiple: false, small: true, label: { text: t("selections_settings.include_none_of_the_above") }%>
+        <%= f.hidden_field "only_one_option", value: "true" %>
+        <%= f.hidden_field "include_none_of_the_above", value: "false" %>
       <% end %>
 
       <%= f.govuk_text_area :bulk_selection_options,
