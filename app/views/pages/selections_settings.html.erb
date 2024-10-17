@@ -24,7 +24,8 @@
       <h1 class="govuk-heading-l"><%= t("selections_settings.heading") %></h1>
 
       <%= f.govuk_text_area :bulk_selection_options,
-                                   label: { text: "bulk selection options" },
+                                   label: { text: "Add options to your list", size: "m" },
+                                   hint: { text: "You can add up to 1000 options. Enter each option on a new line." },
                                    rows: 5 %>
 
       <%= f.govuk_check_boxes_fieldset 'list_settings', multiple: false, legend: { text: t("selections_settings.list_settings") } do %>
