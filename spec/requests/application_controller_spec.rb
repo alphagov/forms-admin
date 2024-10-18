@@ -172,6 +172,62 @@ RSpec.describe ApplicationController, type: :request do
     end
   end
 
+  describe "act as user" do
+    context "when a super admin is acting as another user" do
+      let(:actual_user) { super_admin_user }
+      let(:acting_as_user) { create :user }
+
+      before do
+        allow(Settings).to receive(:act_as_user_enabled).and_return(true)
+
+        login_as_super_admin_user actual_user
+
+        post act_as_user_start_path(acting_as_user.id)
+        follow_redirect!
+      end
+
+      it "adds the super admin user ID to the session" do
+        expect(session["original_user_id"]).to eq actual_user.id
+      end
+
+      it "adds the acting as user ID to the session" do
+        expect(session["acting_as_user_id"]).to eq acting_as_user.id
+      end
+
+      describe "logging" do
+        before do
+          allow(Lograge).to receive(:logger).and_return(logger)
+
+          get root_path
+        end
+
+        it "includes the acting as user id on log lines" do
+          expect(log_lines[0]["acting_as_user_id"]).to eq(acting_as_user.id)
+        end
+
+        it "includes the acting as user email on log lines" do
+          expect(log_lines[0]["acting_as_user_email"]).to eq(acting_as_user.email)
+        end
+
+        it "includes the acting as user organisation_slug on log lines" do
+          expect(log_lines[0]["acting_as_user_organisation_slug"]).to eq(acting_as_user.organisation.slug)
+        end
+
+        it "includes the actual user id on log lines" do
+          expect(log_lines[0]["user_id"]).to eq(super_admin_user.id)
+        end
+
+        it "includes the actual user email on log lines" do
+          expect(log_lines[0]["user_email"]).to eq(super_admin_user.email)
+        end
+
+        it "includes the actual user organisation_slug on log lines" do
+          expect(log_lines[0]["user_organisation_slug"]).to eq(super_admin_user.organisation.slug)
+        end
+      end
+    end
+  end
+
   describe "#up" do
     it "returns http code 200" do
       get rails_health_check_path
