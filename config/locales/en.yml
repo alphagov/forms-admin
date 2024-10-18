@@ -181,10 +181,11 @@ en:
       title: Success
   bulk_selection_settings:
     heading: Create a list of options
-    hint: You can add up to 1000 options. Enter each option on a new line.
     include_none_of_the_above: Include an option for ‘None of the above’
     label: Add options to your list
     legend: List settings
+    longer_than_30_options: If your list is longer than 30 options people will be able to search and find the options by typing in an autocomplete box.
+    select_one_option: People will be able to select one option from a list.
   cancel: Cancel
   contact_details:
     new:

@@ -23,9 +23,11 @@
       <span class="govuk-caption-l"><%= t("pages.question") %> <%= current_form.page_number(@page) %></span>
       <h1 class="govuk-heading-l"><%= t("bulk_selection_settings.heading") %></h1>
 
+      <p><%= t("bulk_selection_settings.select_one_option") %></p>
+      <p><%= t("bulk_selection_settings.longer_than_30_options") %></p>
+
       <%= f.govuk_text_area :bulk_selection_options,
                                    label: { text: t("bulk_selection_settings.label"), size: "m" },
-                                   hint: { text: t("bulk_selection_settings.hint") },
                                    rows: 5 %>
 
       <%= f.govuk_check_boxes_fieldset 'list_settings', multiple: false, legend: { text: t("bulk_selection_settings.legend") } do %>
@@ -33,7 +35,7 @@
         <%= f.govuk_check_box 'include_none_of_the_above', "true", 0, multiple: false, small: true, label: { text: t("bulk_selection_settings.include_none_of_the_above") }%>
       <% end %>
 
-      <%= f.govuk_submit t('continue') %>
+      <%= f.govuk_submit t('save_and_continue') %>
     <% end %>
 
     <p>
