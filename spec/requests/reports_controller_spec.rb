@@ -25,7 +25,8 @@ RSpec.describe ReportsController, type: :request do
                                      text: 5 },
       live_forms_with_payment: 1,
       live_forms_with_routing: 2,
-      live_forms_with_add_another_answer: 3 }
+      live_forms_with_add_another_answer: 3,
+      live_forms_with_csv_submission_enabled: 2 }
   end
 
   before do

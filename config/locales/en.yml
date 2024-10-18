@@ -1165,6 +1165,7 @@ en:
       features:
         heading: Feature usage
         live_forms_with_add_another_answer: Live forms with add another answer
+        live_forms_with_csv_submission_enabled: Live forms with CSV submission enabled
         live_forms_with_payments: Live forms with payments
         live_forms_with_routes: Live forms with routes
         total_live_forms: Total live forms
