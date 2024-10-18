@@ -1,0 +1,11 @@
+en:
+  activemodel:
+    errors:
+      models:
+        pages/long_lists_selection/bulk_options_input:
+          attributes:
+            bulk_selection_options:
+              minimum: Enter at least 2 options
+              maximum: You cannot have more than 1000 options
+            include_none_of_the_above:
+              inclusion: Select whether to include an option for ‘None of the above’
