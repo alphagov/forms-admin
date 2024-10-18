@@ -8,17 +8,13 @@ class Pages::BulkSelectionSettingsInput < BaseInput
   validates :draft_question, presence: true
   validate :bulk_selection_options, :validate_selection_options
 
-  def initialize(attrs = {})
-    super(attrs)
-    load_bulk_selection_options if bulk_selection_options.blank?
-  end
-
   def answer_settings
     { only_one_option: "true", selection_options: unique_selection_options.map { |option| { name: option } } }
   end
 
-  def load_bulk_selection_options
+  def assign_form_values
     self.bulk_selection_options = draft_question.answer_settings[:selection_options].map { |option| option[:name] }.join("\n")
+    self.include_none_of_the_above = draft_question.is_optional
   end
 
   def submit

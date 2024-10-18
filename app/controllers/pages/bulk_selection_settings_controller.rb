@@ -1,6 +1,7 @@
 class Pages::BulkSelectionSettingsController < PagesController
   def new
-    @bulk_selection_settings_input = Pages::BulkSelectionSettingsInput.new(draft_question:, include_none_of_the_above: draft_question.is_optional)
+    @bulk_selection_settings_input = Pages::BulkSelectionSettingsInput.new(draft_question:)
+    @bulk_selection_settings_input.assign_form_values
     @bulk_selection_settings_path = bulk_selection_settings_create_path(current_form)
     @back_link_url = question_text_new_path(current_form)
     render :bulk_selection_settings, locals: { current_form: }
@@ -22,8 +23,8 @@ class Pages::BulkSelectionSettingsController < PagesController
 
   def edit
     @bulk_selection_settings_path = bulk_selection_settings_update_path(current_form)
-    @bulk_selection_settings_input = Pages::BulkSelectionSettingsInput.new(include_none_of_the_above: draft_question.is_optional,
-                                                                           draft_question:)
+    @bulk_selection_settings_input = Pages::BulkSelectionSettingsInput.new(draft_question:)
+    @bulk_selection_settings_input.assign_form_values
     @back_link_url = edit_question_path(current_form, page)
     render :bulk_selection_settings, locals: { current_form: }
   end
