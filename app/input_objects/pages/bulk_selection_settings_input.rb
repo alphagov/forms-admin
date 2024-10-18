@@ -13,14 +13,6 @@ class Pages::BulkSelectionSettingsInput < BaseInput
     load_bulk_selection_options if bulk_selection_options.blank?
   end
 
-  def add_another
-    selection_options.append({ name: "" })
-  end
-
-  def remove(index)
-    selection_options.delete_at(index)
-  end
-
   def answer_settings
     { only_one_option: "true", selection_options: unique_selection_options.map { |option| { name: option } } }
   end
@@ -46,10 +38,6 @@ class Pages::BulkSelectionSettingsInput < BaseInput
     return errors.add(:bulk_selection_options, :minimum) if unique_options.length < 2
 
     errors.add(:bulk_selection_options, :maximum) if unique_options.length > 1000
-  end
-
-  def filter_out_blank_options
-    self.selection_options = selection_options.filter { |option| option[:name].present? }
   end
 
   def unique_selection_options
