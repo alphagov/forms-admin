@@ -1,0 +1,9 @@
+en:
+  activemodel:
+    errors:
+      models:
+        pages/bulk_selection_settings_input:
+          attributes:
+            bulk_selection_options:
+              minimum: Enter at least 2 options
+              maximum: You cannot have more than 1000 options
