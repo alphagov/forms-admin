@@ -10,6 +10,7 @@ class Pages::SelectionsSettingsController < PagesController
     @selections_settings_input = Pages::SelectionsSettingsInput.new(selection_options: selection_options_param_values,
                                                                     only_one_option: only_one_option_param_values,
                                                                     include_none_of_the_above: include_none_of_the_above_param_values,
+                                                                    bulk_selection_options: bulk_selection_options_param_values,
                                                                     draft_question:)
     @selections_settings_path = selections_settings_create_path(current_form)
     @back_link_url = question_text_new_path(current_form)
@@ -33,7 +34,6 @@ class Pages::SelectionsSettingsController < PagesController
                                                                     selection_options: draft_question.answer_settings[:selection_options]
                                                                                                    .map { |option| { name: option[:name] } },
                                                                     include_none_of_the_above: draft_question.is_optional,
-                                                                    bulk_selection_options: draft_question.answer_settings[:selection_options].map { |option| option[:name] }.join("\n"),
                                                                     draft_question:)
     @back_link_url = edit_question_path(current_form, page)
     render :selections_settings, locals: { current_form: }

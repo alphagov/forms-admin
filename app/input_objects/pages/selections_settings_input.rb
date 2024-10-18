@@ -8,6 +8,11 @@ class Pages::SelectionsSettingsInput < BaseInput
   validates :draft_question, presence: true
   validate :selection_options, :validate_selection_options
 
+  def initialize(attrs = {})
+    super(attrs)
+    load_bulk_selection_options if bulk_selection_options.blank?
+  end
+
   def add_another
     selection_options.append({ name: "" })
   end
@@ -20,10 +25,13 @@ class Pages::SelectionsSettingsInput < BaseInput
     { only_one_option:, selection_options: }
   end
 
+  def load_bulk_selection_options
+    self.bulk_selection_options = selection_options.map { |option| option[:name] }.join("\n")
+  end
+
   def submit
     set_selection_options
     return false if invalid?
-
 
     # Set answer_settings for the draft_question
     draft_question
