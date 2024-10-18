@@ -3,15 +3,10 @@ class Pages::SelectionsSettingsInput < BaseInput
                       only_one_option: false,
                       include_none_of_the_above: false }.freeze
 
-  attr_accessor :selection_options, :only_one_option, :include_none_of_the_above, :draft_question, :bulk_selection_options
+  attr_accessor :selection_options, :only_one_option, :include_none_of_the_above, :draft_question
 
   validates :draft_question, presence: true
   validate :selection_options, :validate_selection_options
-
-  def initialize(attrs = {})
-    super(attrs)
-    load_bulk_selection_options if bulk_selection_options.blank?
-  end
 
   def add_another
     selection_options.append({ name: "" })
@@ -25,12 +20,7 @@ class Pages::SelectionsSettingsInput < BaseInput
     { only_one_option:, selection_options: }
   end
 
-  def load_bulk_selection_options
-    self.bulk_selection_options = selection_options.map { |option| option[:name] }.join("\n")
-  end
-
   def submit
-    set_selection_options
     return false if invalid?
 
     # Set answer_settings for the draft_question
@@ -45,7 +35,7 @@ class Pages::SelectionsSettingsInput < BaseInput
     filter_out_blank_options
 
     return errors.add(:selection_options, :minimum) if selection_options.length < 2
-    return errors.add(:selection_options, :maximum) if selection_options.length > 1000
+    return errors.add(:selection_options, :maximum) if selection_options.length > 30
 
     errors.add(:selection_options, :uniqueness) if selection_options.uniq.length != selection_options.length
   end
@@ -56,9 +46,5 @@ class Pages::SelectionsSettingsInput < BaseInput
 
   def selection_options_form_objects
     selection_options.map { |option| OpenStruct.new(name: option[:name]) }
-  end
-
-  def set_selection_options
-    self.selection_options = bulk_selection_options.split(/\n/).map(&:strip).compact_blank.uniq.map { |option| { name: option } }
   end
 end

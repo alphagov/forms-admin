@@ -1,0 +1,58 @@
+class Pages::BulkSelectionSettingsInput < BaseInput
+  DEFAULT_OPTIONS = { selection_options: [],
+                      only_one_option: "true",
+                      include_none_of_the_above: false }.freeze
+
+  attr_accessor :include_none_of_the_above, :draft_question, :bulk_selection_options
+
+  validates :draft_question, presence: true
+  validate :bulk_selection_options, :validate_selection_options
+
+  def initialize(attrs = {})
+    super(attrs)
+    load_bulk_selection_options if bulk_selection_options.blank?
+  end
+
+  def add_another
+    selection_options.append({ name: "" })
+  end
+
+  def remove(index)
+    selection_options.delete_at(index)
+  end
+
+  def answer_settings
+    { only_one_option: "true", selection_options: unique_selection_options.map { |option| { name: option } } }
+  end
+
+  def load_bulk_selection_options
+    self.bulk_selection_options = draft_question.answer_settings[:selection_options].map { |option| option[:name] }.join("\n")
+  end
+
+  def submit
+    return false if invalid?
+
+    # Set answer_settings for the draft_question
+    draft_question
+      .assign_attributes({ answer_settings:,
+                           is_optional: include_none_of_the_above })
+
+    draft_question.save!(validate: false)
+  end
+
+  def validate_selection_options
+    unique_options = unique_selection_options
+
+    return errors.add(:bulk_selection_options, :minimum) if unique_options.length < 2
+
+    errors.add(:bulk_selection_options, :maximum) if unique_options.length > 1000
+  end
+
+  def filter_out_blank_options
+    self.selection_options = selection_options.filter { |option| option[:name].present? }
+  end
+
+  def unique_selection_options
+    bulk_selection_options.split(/\n/).map(&:strip).compact_blank.uniq
+  end
+end
