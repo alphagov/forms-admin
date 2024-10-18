@@ -83,9 +83,9 @@ module PageSettingsSummaryComponent
       return unless @draft_question.answer_type == "selection"
 
       if is_new_question?
-        selections_settings_new_path(form_id: @draft_question.form_id)
+        bulk_selection_settings_new_path(form_id: @draft_question.form_id)
       else
-        selections_settings_edit_path(form_id: @draft_question.form_id, page_id: @draft_question.page_id)
+        bulk_selection_settings_edit_path(form_id: @draft_question.form_id, page_id: @draft_question.page_id)
       end
     end
 
