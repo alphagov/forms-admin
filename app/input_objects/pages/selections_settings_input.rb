@@ -59,6 +59,6 @@ class Pages::SelectionsSettingsInput < BaseInput
   end
 
   def set_selection_options
-    self.selection_options = bulk_selection_options.split(/\n/).compact_blank.uniq.map { |option| { name: option.strip } }
+    self.selection_options = bulk_selection_options.split(/\n/).map(&:strip).compact_blank.uniq.map { |option| { name: option } }
   end
 end
