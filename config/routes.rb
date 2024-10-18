@@ -83,6 +83,8 @@ Rails.application.routes.draw do
         post "/date-settings" => "pages/date_settings#create", as: :date_settings_create
         get "/selections-settings" => "pages/selections_settings#new", as: :selections_settings_new
         post "/selections-settings" => "pages/selections_settings#create", as: :selections_settings_create
+        get "/bulk-selection-settings" => "pages/bulk_selection_settings#new", as: :bulk_selection_settings_new
+        post "/bulk-selection-settings" => "pages/bulk_selection_settings#create", as: :bulk_selection_settings_create
         get "/address-settings" => "pages/address_settings#new", as: :address_settings_new
         post "/address-settings" => "pages/address_settings#create", as: :address_settings_create
         get "/name-settings" => "pages/name_settings#new", as: :name_settings_new
@@ -115,6 +117,8 @@ Rails.application.routes.draw do
           post "/date-settings" => "pages/date_settings#update", as: :date_settings_update
           get "/selections-settings" => "pages/selections_settings#edit", as: :selections_settings_edit
           post "/selections-settings" => "pages/selections_settings#update", as: :selections_settings_update
+          get "/bulk-selection-settings" => "pages/bulk_selection_settings#edit", as: :bulk_selection_settings_edit
+          post "/bulk-selection-settings" => "pages/bulk_selection_settings#update", as: :bulk_selection_settings_update
           get "/address-settings" => "pages/address_settings#edit", as: :address_settings_edit
           post "/address-settings" => "pages/address_settings#update", as: :address_settings_update
           get "/name-settings" => "pages/name_settings#edit", as: :name_settings_edit
