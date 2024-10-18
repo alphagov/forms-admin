@@ -1,0 +1,43 @@
+<% set_page_title(title_with_error_prefix(t("page_titles.new_page"), @bulk_selection_settings_input.errors.any?)) %>
+
+<% content_for :back_link, govuk_back_link_to(@back_link_url) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <% if @page.present? && @page.conditions.any? %>
+      <%= govuk_notification_banner(title_text: t("banner.default.title")) do |banner| %>
+        <% banner.with_heading(text: t("bulk_selection_settings.routing_warning_about_change_only_one_option_heading"), tag: "h3") %>
+        <%= t("bulk_selection_settings.routing_warning_about_change_only_one_option_html", pages_link_url: form_pages_path(current_form)) %>
+      <% end %>
+    <% end %>
+
+    <%= form_with model: [current_form, @bulk_selection_settings_input], url: @bulk_selection_settings_path do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%#
+        Browsers use the first submit button in a form when the enter key is pressed, so we have to put this hidden button here,
+        otherwise pressing the enter key will delete the first item in the list instead of submnitting the form.
+      %>
+      <%= f.submit t('save_and_continue'), hidden: true  %>
+
+      <span class="govuk-caption-l"><%= t("pages.question") %> <%= current_form.page_number(@page) %></span>
+      <h1 class="govuk-heading-l"><%= t("bulk_selection_settings.heading") %></h1>
+
+      <%= f.govuk_text_area :bulk_selection_options,
+                                   label: { text: "Add options to your list", size: "m" },
+                                   hint: { text: "You can add up to 1000 options. Enter each option on a new line." },
+                                   rows: 5 %>
+
+      <%= f.govuk_check_boxes_fieldset 'list_settings', multiple: false, legend: { text: t("bulk_selection_settings.list_settings") } do %>
+        <%= f.hidden_field "only_one_option", value: "true" %>
+        <%= f.govuk_check_box 'include_none_of_the_above', "true", 0, multiple: false, small: true, label: { text: t("bulk_selection_settings.include_none_of_the_above") }%>
+      <% end %>
+
+      <%= f.govuk_submit t('continue') %>
+    <% end %>
+
+    <p>
+      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form) %>
+    </p>
+  </div>
+</div>
