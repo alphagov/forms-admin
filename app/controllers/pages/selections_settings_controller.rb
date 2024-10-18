@@ -10,7 +10,6 @@ class Pages::SelectionsSettingsController < PagesController
     @selections_settings_input = Pages::SelectionsSettingsInput.new(selection_options: selection_options_param_values,
                                                                     only_one_option: only_one_option_param_values,
                                                                     include_none_of_the_above: include_none_of_the_above_param_values,
-                                                                    bulk_selection_options: bulk_selection_options_param_values,
                                                                     draft_question:)
     @selections_settings_path = selections_settings_create_path(current_form)
     @back_link_url = question_text_new_path(current_form)
@@ -43,7 +42,6 @@ class Pages::SelectionsSettingsController < PagesController
     @selections_settings_input = Pages::SelectionsSettingsInput.new(selection_options: selection_options_param_values,
                                                                     only_one_option: only_one_option_param_values,
                                                                     include_none_of_the_above: include_none_of_the_above_param_values,
-                                                                    bulk_selection_options: bulk_selection_options_param_values,
                                                                     draft_question:)
     @selections_settings_path = selections_settings_update_path(current_form)
     @back_link_url = edit_question_path(current_form, page)
@@ -75,12 +73,8 @@ private
     selections_settings_input_params[:include_none_of_the_above]
   end
 
-  def bulk_selection_options_param_values
-    selections_settings_input_params[:bulk_selection_options]
-  end
-
   def selections_settings_input_params
     params.require(:pages_selections_settings_input)
-          .permit(:only_one_option, :include_none_of_the_above, :bulk_selection_options, selection_options: [:name]).to_h.deep_symbolize_keys
+          .permit(:only_one_option, :include_none_of_the_above, selection_options: [:name]).to_h.deep_symbolize_keys
   end
 end
