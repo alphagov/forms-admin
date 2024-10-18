@@ -179,6 +179,12 @@ en:
       route_deleted: Question %{question_position}’s route has been deleted
       route_updated: Question %{question_position}’s route has been updated
       title: Success
+  bulk_selection_settings:
+    heading: Create a list of options
+    hint: You can add up to 1000 options. Enter each option on a new line.
+    include_none_of_the_above: Include an option for ‘None of the above’
+    label: Add options to your list
+    legend: List settings
   cancel: Cancel
   contact_details:
     new:
