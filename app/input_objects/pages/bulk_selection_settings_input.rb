@@ -39,4 +39,8 @@ class Pages::BulkSelectionSettingsInput < BaseInput
   def unique_selection_options
     bulk_selection_options.split(/\n/).map(&:strip).compact_blank.uniq
   end
+
+  def default_options
+    [OpenStruct.new(id: "true"), OpenStruct.new(id: "false")]
+  end
 end

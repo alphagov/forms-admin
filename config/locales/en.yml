@@ -599,6 +599,9 @@ en:
           phone_number: Ask the question the way you would in person. For example, ‘What’s your phone number?’
           radio: Ask the question the way you would in person. For example, ‘What country do you live in?’
           single_line: Ask the question the way you would in person. For example, ‘What’s your reference number?’
+      pages_bulk_selection_settings_input:
+        include_none_of_the_above_options:
+          'true': We will add ‘None of the above’ to the end of your list of options
       pages_question_input:
         is_optional_options:
           'true': We’ll add ‘(optional)’ to the end of the question text.
@@ -707,6 +710,10 @@ en:
           names:
             long_text: More than a single line of text
             single_line: Single line of text
+      pages_bulk_selection_settings_input:
+        include_none_of_the_above_options:
+          'false': 'No'
+          'true': 'Yes'
       pages_conditions_input:
         default_answer_value: Select an answer
         default_goto_page_id: Select a question or page
@@ -726,6 +733,8 @@ en:
         submission_type: Do you want to get completed forms as CSV files?
       mou_signature:
         agreed: Do you agree to the MOU?
+      pages_bulk_selection_settings_input:
+        include_none_of_the_above: Should the list of options Include ‘None of the above’?
       pages_question_input:
         is_optional: Should this question be mandatory or optional?
         is_repeatable: Should people be able to answer this question more than once?
