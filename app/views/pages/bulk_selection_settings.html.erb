@@ -28,6 +28,7 @@
 
       <%= f.govuk_text_area :bulk_selection_options,
                                    label: { text: t("bulk_selection_settings.label"), size: "m" },
+                                   hint: { text: t("bulk_selection_settings.hint") }
                                    rows: 5 %>
 
       <%= f.govuk_check_boxes_fieldset 'list_settings', multiple: false, legend: { text: t("bulk_selection_settings.legend") } do %>

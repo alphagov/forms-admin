@@ -181,6 +181,7 @@ en:
       title: Success
   bulk_selection_settings:
     heading: Create a list of options
+    hint: List your options, with each option on a new line.
     include_none_of_the_above: Include an option for ‘None of the above’
     label: Add options to your list
     legend: List settings
