@@ -26,6 +26,24 @@ namespace :groups do
 
     run_bulk_task(task_name:, source_organisation_id:, target_organisation_id:, rollback: true)
   end
+
+  desc "Remove empty group"
+  task :remove_group, %i[group_id] => :environment do |_, args|
+    usage_message = "usage: rake groups:remove_group[<group_external_id>]".freeze
+    abort usage_message if args[:group_id].blank?
+    remove_group("groups:remove_group", args[:group_id])
+  end
+
+  desc "Remove empty group dry run"
+  task :remove_group_dry_run, %i[group_id] => :environment do |_, args|
+    usage_message = "usage: rake groups:remove_group_run[<group_external_id>]".freeze
+    abort usage_message if args[:group_id].blank?
+
+    ActiveRecord::Base.transaction do
+      remove_group("groups:remove_group_dry_run", args[:group_id])
+      raise ActiveRecord::Rollback
+    end
+  end
 end
 
 def run_task(task_name, args, rollback:)
@@ -102,4 +120,18 @@ end
 
 def fmt_form(form)
   "form #{form.id} (#{form.name})"
+end
+
+def remove_group(task_name, group_id)
+  group = Group.find_by!(external_id: group_id)
+
+  Rails.logger.info "#{task_name}: trying to remove #{fmt_group(group)}"
+
+  if group.group_forms.any?
+    Rails.logger.info "#{task_name}: #{fmt_group(group)} contains #{group.group_forms.count} forms. Please remove the forms first."
+    raise SystemExit
+  end
+
+  group.destroy!
+  Rails.logger.info "#{task_name}: removed #{fmt_group(group)}"
 end
