@@ -20,4 +20,12 @@ class ReportsController < ApplicationController
 
     render locals: { data: }
   end
+
+  def add_another_answer
+    authorize Report, :can_view_reports?
+
+    data = Report.find("features")
+
+    render template: "reports/add_another_answer", locals: { data: }
+  end
 end

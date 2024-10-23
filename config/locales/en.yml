@@ -1154,6 +1154,13 @@ en:
       </ul>
     summary_text: Help people answer this question
   reports:
+    add_another_answer:
+      add_another_answer:
+        table_headings:
+          form_name: Form name
+          question_text: Add another answer question
+      heading: All forms with add another answer
+      title: All forms with add another answer
     back_link: Back to reports
     features:
       answer_types:
