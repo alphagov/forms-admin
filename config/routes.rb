@@ -170,6 +170,7 @@ Rails.application.routes.draw do
     get "/", to: "reports#index", as: :reports
     get "features", to: "reports#features", as: :report_features
     get "users", to: "reports#users", as: :report_users
+    get "add_another_answer", to: "reports#add_another_answer", as: :report_add_another_answer
   end
 
   get "/maintenance" => "errors#maintenance", as: :maintenance_page
