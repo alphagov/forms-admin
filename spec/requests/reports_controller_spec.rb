@@ -28,7 +28,7 @@ RSpec.describe ReportsController, type: :request do
       live_forms_with_routing: 2,
       live_forms_with_add_another_answer: 3,
       live_forms_with_csv_submission_enabled: 2,
-      all_forms_with_add_another_answer: [{ form_id: 3, name: "form name", repeatable_pages: [{ page_id: 5, question_text: }] }] }
+      all_forms_with_add_another_answer: [{ form_id: 3, name: "form name", state: "Draft", repeatable_pages: [{ page_id: 5, question_text: }] }] }
   end
 
   before do

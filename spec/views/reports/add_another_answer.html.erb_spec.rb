@@ -4,8 +4,9 @@ describe "reports/add_another_answer.html.erb" do
   let(:form_id) { 3 }
   let(:name) { "Form name" }
   let(:question_text) { "Question text" }
+  let(:state) { "live_with_draft" }
   let(:report) do
-    Report.new({ all_forms_with_add_another_answer: [{ form_id:, name:, repeatable_pages: [{ page_id: 5, question_text: }] }] })
+    Report.new({ all_forms_with_add_another_answer: [{ form_id:, name:, state:, repeatable_pages: [{ page_id: 5, question_text: }] }] })
   end
 
   before do
@@ -28,5 +29,9 @@ describe "reports/add_another_answer.html.erb" do
 
   it "includes the question text" do
     expect(rendered).to have_content(question_text)
+  end
+
+  it "includes the form state with transformations" do
+    expect(rendered).to have_content(state.capitalize.gsub("_", " "))
   end
 end
