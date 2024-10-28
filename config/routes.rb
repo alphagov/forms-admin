@@ -110,6 +110,8 @@ Rails.application.routes.draw do
           delete "/:condition_id/delete" => "pages/conditions#destroy", as: :destroy_condition
         end
 
+        get "/routes" => "pages/routes#show", as: :show_routes
+
         scope "/edit" do
           get "/type-of-answer" => "pages/type_of_answer#edit", as: :type_of_answer_edit
           post "/type-of-answer" => "pages/type_of_answer#update", as: :type_of_answer_update
