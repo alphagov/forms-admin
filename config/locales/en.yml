@@ -980,6 +980,15 @@ en:
       default: Selection from a list
       none_of_the_above: None of the above
       only_one_option: Selection from a list, one option only.
+  page_route_card:
+    check_your_answers: Check your answers before submitting
+    conditional_answer_value: '"%{answer_value}"'
+    conditional_route_title: Route %{index}
+    continue_to: Continue to
+    default_route_title: For any other answer
+    if_answer_is: If the answer is
+    page_name: "%{page_position}. %{page_name}"
+    take_the_person_to: take the person to
   page_settings_summary:
     address:
       address_type: Address type
