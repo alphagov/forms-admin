@@ -1158,6 +1158,7 @@ en:
       add_another_answer:
         table_headings:
           form_name: Form name
+          form_state: Form state
           question_text: Add another answer question
       heading: All forms with add another answer
       title: All forms with add another answer
