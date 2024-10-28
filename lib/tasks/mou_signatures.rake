@@ -33,4 +33,23 @@ namespace :mou_signatures do
 
     puts "Updated MOU signature for User: #{user.email} and Organisation: #{current_organisation.name} to be for #{target_organisation.name}"
   end
+
+  desc "Revoke a user's signature on the MOU for an organisation"
+  task :revoke_user_signature, %i[user_email target_organisation_name] => :environment do |_, args|
+    usage = "usage: rake mou_signatures:revoke_organisation[<user_email>, <target_organisation_name>]".freeze
+    abort usage if args[:target_organisation_name].blank? || args[:user_email].blank?
+
+    user = User.find_by(email: args[:user_email])
+    abort "User with email address: #{args[:user_email]} not found" unless user
+
+    target_organisation = Organisation.find_by(name: args[:target_organisation_name])
+    abort "Organisation with name: #{args[:target_organisation_name]} not found" unless target_organisation
+
+    mou_signature = MouSignature.find_by(user:, organisation: target_organisation)
+    abort "User: #{user.email} has not signed the MOU for organisation: #{target_organisation.name}" unless mou_signature
+
+    mou_signature.delete
+
+    puts "Signature of user: #{user.email} on MOU for organisation: #{target_organisation.name} has been revoked"
+  end
 end

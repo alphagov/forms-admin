@@ -91,4 +91,45 @@ RSpec.describe "mou_signatures.rake" do
               .to_stdout
     end
   end
+
+  describe "mou_signatures:revoke_user_signature" do
+    subject(:task) do
+      Rake::Task["mou_signatures:revoke_user_signature"]
+        .tap(&:reenable) # make sure task is invoked every time
+    end
+
+    let(:user) { create :user }
+    let(:target_organisation) { create :organisation, slug: "cabinet-office" }
+    let(:mou_signature) { create :mou_signature, user:, organisation: target_organisation }
+
+    it "aborts when the user is not found" do
+      expect { task.invoke("not-found@example.org", target_organisation.name) }
+        .to output(/User with email address: not-found@example.org not found/)
+              .to_stderr
+              .and raise_error(SystemExit) { |e| expect(e).not_to be_success }
+    end
+
+    it "aborts when the organisation is not found" do
+      expect { task.invoke(user.email, "not-real") }
+        .to output(/Organisation with name: not-real not found/)
+              .to_stderr
+              .and raise_error(SystemExit) { |e| expect(e).not_to be_success }
+    end
+
+    it "aborts when an MOU signature is not found for the user and organisation" do
+      expect { task.invoke(user.email, target_organisation.name) }
+        .to output(/User: .* has not signed the MOU for organisation: /)
+              .to_stderr
+              .and raise_error(SystemExit) { |e| expect(e).not_to be_success }
+    end
+
+    it "removes the MOU signature for an organisation when it is found" do
+      create :mou_signature, user:, organisation: target_organisation
+
+      expect { task.invoke(user.email, target_organisation.name) }
+        .to change(MouSignature, :count).by(-1)
+        .and output(/Signature of user: .* on MOU for organisation: .* has been revoked/)
+            .to_stdout
+    end
+  end
 end
