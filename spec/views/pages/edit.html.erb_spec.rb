@@ -4,6 +4,7 @@ describe "pages/edit.html.erb" do
   let(:question_text) { nil }
 
   let(:form) { build :form, id: 1, pages: [page] }
+  let(:group) { create :group }
   let(:page) { build :page, id: 1, question_text:, form_id: 1, answer_type:, answer_settings: nil, page_heading: nil }
   let(:answer_type) { "email" }
 
@@ -23,6 +24,8 @@ describe "pages/edit.html.erb" do
       allow(form).to receive(:persisted?).and_return(true)
       allow(view).to receive_messages(current_form: form, draft_question:)
     end
+
+    GroupForm.create!(group:, form_id: form.id)
 
     # Assign instance variables so they can be accessed from views
     assign(:page, page)
