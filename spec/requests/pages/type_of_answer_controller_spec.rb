@@ -70,9 +70,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         it "saves the answer type & answer settings to draft question" do
           form = assigns(:type_of_answer_input)
           expect(form.draft_question.answer_type).to eq(type_of_answer_input.answer_type)
-          expect(form.draft_question.answer_settings).to eq(include_none_of_the_above: false,
-                                                            only_one_option: false,
-                                                            selection_options: [{ name: "" },
+          expect(form.draft_question.answer_settings).to eq(selection_options: [{ name: "" },
                                                                                 { name: "" }])
         end
 
