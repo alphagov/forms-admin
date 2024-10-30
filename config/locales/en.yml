@@ -704,6 +704,10 @@ en:
       pages_conditions_input:
         default_answer_value: Select an answer
         default_goto_page_id: Select a question or page
+      pages_long_lists_selection_type_input:
+        only_one_option_options:
+          'false': People can choose more than one option
+          'true': People can choose only one option
       pages_question_input:
         hint_text: Hint text (optional)
         is_optional_options:
@@ -1024,6 +1028,7 @@ en:
     routing_page_delete: Delete question %{question_position}’s route
     routing_page_edit: Edit question %{question_position}’s route
     routing_page_new: 'Add a question route: select answer and destination'
+    selection_type: How do you need to collect the answer?
     separator: " – "
     set_email: Set the email address for completed forms
     share_preview: Share a preview of your draft form

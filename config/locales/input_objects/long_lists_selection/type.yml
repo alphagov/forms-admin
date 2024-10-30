@@ -1,0 +1,8 @@
+en:
+  activemodel:
+    errors:
+      models:
+        pages/long_lists_selection/type_input:
+          attributes:
+            only_one_option:
+              inclusion: Select ‘People can choose only one option’ or ‘People can choose more than one option’
