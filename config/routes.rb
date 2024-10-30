@@ -85,6 +85,8 @@ Rails.application.routes.draw do
         post "/selections-settings" => "pages/selections_settings#create", as: :selections_settings_create
         get "/selection/type" => "pages/long_lists_selection/type#new", as: :long_lists_selection_type_new
         post "/selection/type" => "pages/long_lists_selection/type#create", as: :long_lists_selection_type_create
+        get "/selection/options" => "pages/long_lists_selection/options#new", as: :long_lists_selection_options_new
+        post "/selection/options" => "pages/long_lists_selection/options#create", as: :long_lists_selection_options_create
         get "/address-settings" => "pages/address_settings#new", as: :address_settings_new
         post "/address-settings" => "pages/address_settings#create", as: :address_settings_create
         get "/name-settings" => "pages/name_settings#new", as: :name_settings_new
@@ -119,6 +121,8 @@ Rails.application.routes.draw do
           post "/selections-settings" => "pages/selections_settings#update", as: :selections_settings_update
           get "/selection/type" => "pages/long_lists_selection/type#edit", as: :long_lists_selection_type_edit
           post "/selection/type" => "pages/long_lists_selection/type#update", as: :long_lists_selection_type_update
+          get "/selection/options" => "pages/long_lists_selection/options#edit", as: :long_lists_selection_options_edit
+          post "/selection/options" => "pages/long_lists_selection/options#update", as: :long_lists_selection_options_update
           get "/address-settings" => "pages/address_settings#edit", as: :address_settings_edit
           post "/address-settings" => "pages/address_settings#update", as: :address_settings_update
           get "/name-settings" => "pages/name_settings#edit", as: :name_settings_edit
