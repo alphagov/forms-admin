@@ -2,6 +2,7 @@
 features:
   groups: true # Do not switch off!
   repeatable_page_enabled: false
+  branch_routing: false
 
 forms_api:
   # Authentication key to authenticate with forms-api
