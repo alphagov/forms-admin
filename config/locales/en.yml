@@ -1219,6 +1219,16 @@ en:
         You can only add one route from each question.
       </p>
   save_and_continue: Save and continue
+  selection_options:
+    add_another: Add another option
+    add_options: Add options to your list
+    add_options_hint: You can add up to %{maximum} options
+    cannot_add_more_options: You cannot add any more options as you have reached the maximum of %{maximum} options.
+    longer_than_30_options: If your list is longer than 30 options people will be able to search and find the options by typing in an autocomplete box.
+    option: Option %{number}
+    remove_html: Remove <span class="govuk-visually-hidden">option %{option_number}</span>
+    select_more_than_one_option: People will be able to select more than one option from your list.
+    select_one_option: People will be able to select one option from your list.
   selections_settings:
     add_another: Add another option
     add_options: Add options to your list

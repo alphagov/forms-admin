@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Pages::LongListsSelection::OptionsInput do
-  let(:draft_question) { build :draft_question, answer_type: "selection" }
+  let(:only_one_option) { "true" }
+  let(:draft_question) { build :draft_question, answer_type: "selection", answer_settings: { only_one_option: } }
   let(:selection_options) { [{ name: "option 1" }, { name: "option 2" }] }
 
   describe "validations" do
@@ -41,15 +42,6 @@ RSpec.describe Pages::LongListsSelection::OptionsInput do
         expect(input.errors.full_messages_for(:selection_options)).to include("Selection options #{error_message}")
       end
 
-      it "is invalid if more than 30 selection options are provided" do
-        selection_options = (1..31).to_a.map { |i| OpenStruct.new(name: i.to_s) }
-        input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
-        error_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/options_input.attributes.selection_options.maximum")
-        expect(input).not_to be_valid
-
-        expect(input.errors.full_messages_for(:selection_options)).to include("Selection options #{error_message}")
-      end
-
       it "is invalid if selection options are not unique" do
         selection_options = [{ name: "option 1" }, { name: "option 2" }, { name: "option 1" }]
         input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
@@ -66,11 +58,42 @@ RSpec.describe Pages::LongListsSelection::OptionsInput do
         expect(input).to be_valid
       end
 
-      it "is valid if there are 30 unique selection values" do
-        selection_options = (1..30).to_a.map { |i| { name: i.to_s } }
-        input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
+      context "when only_one_option is true for the draft_question" do
+        it "is invalid if more than 1000 selection options are provided" do
+          selection_options = (1..1001).to_a.map { |i| OpenStruct.new(name: i.to_s) }
+          input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
+          error_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/options_input.attributes.selection_options.maximum_choose_only_one_option")
+          expect(input).not_to be_valid
 
-        expect(input).to be_valid
+          expect(input.errors.full_messages_for(:selection_options)).to include("Selection options #{error_message}")
+        end
+
+        it "is valid if there are 1000 unique selection values" do
+          selection_options = (1..1000).to_a.map { |i| { name: i.to_s } }
+          input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
+
+          expect(input).to be_valid
+        end
+      end
+
+      context "when only_one_option is false for the draft_question" do
+        let(:only_one_option) { "false" }
+
+        it "is invalid if more than 30 selection options are provided" do
+          selection_options = (1..31).to_a.map { |i| OpenStruct.new(name: i.to_s) }
+          input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
+          error_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/options_input.attributes.selection_options.maximum_choose_more_than_one_option")
+          expect(input).not_to be_valid
+
+          expect(input.errors.full_messages_for(:selection_options)).to include("Selection options #{error_message}")
+        end
+
+        it "is valid if there are 30 unique selection values" do
+          selection_options = (1..30).to_a.map { |i| { name: i.to_s } }
+          input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
+
+          expect(input).to be_valid
+        end
       end
     end
   end
@@ -132,6 +155,24 @@ RSpec.describe Pages::LongListsSelection::OptionsInput do
       input.validate
 
       expect(input.selection_options.to_json).to eq([{ name: "1" }, { name: "2" }].to_json)
+    end
+  end
+
+  describe "#maximum_options" do
+    context "when only_one_option is true for the draft_question" do
+      it "returns 1000" do
+        input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
+        expect(input.maximum_options).to eq 1000
+      end
+    end
+
+    context "when only_one_option is false for the draft_question" do
+      let(:only_one_option) { "false" }
+
+      it "returns 30" do
+        input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
+        expect(input.maximum_options).to eq 30
+      end
     end
   end
 end

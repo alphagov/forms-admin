@@ -8,7 +8,8 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
   let(:selection_options_path) { "/a-path" }
   let(:selection_options) { [{ name: "France" }, { name: "Spain" }, { name: "Italy" }] }
   let(:include_none_of_the_above) { "true" }
-  let(:draft_question) { build :draft_question, answer_type: "selection" }
+  let(:only_one_option) { "true" }
+  let(:draft_question) { build :draft_question, answer_type: "selection", answer_settings: { only_one_option: } }
 
   before do
     # # mock the form.page_number method
@@ -40,25 +41,74 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
       expect(rendered).to have_button("remove", count: 3)
     end
 
-    context "when there are fewer than 30 options" do
-      it "has an add another button" do
-        expect(rendered).to have_button(I18n.t("selections_settings.add_another"))
+    context "when only_one_option is true for the draft question" do
+      it "has paragraph text explaining that only one option can be selected" do
+        expect(rendered).to have_text(I18n.t("selection_options.select_one_option"))
+        expect(rendered).to have_text(I18n.t("selection_options.longer_than_30_options"))
       end
 
-      it "does not have inset text stating you cannot add more options" do
-        expect(rendered).not_to have_css(".govuk-inset-text", text: t("selections_settings.cannot_add_more_options"))
+      it "does not have hint text stating the number of options you can add" do
+        expect(rendered).not_to have_text("You can add up to")
+      end
+
+      context "when there are fewer than 1000 options" do
+        let(:selection_options) { (1..999).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
+
+        it "has an add another button" do
+          expect(rendered).to have_button(I18n.t("selections_settings.add_another"))
+        end
+
+        it "does not have inset text stating you cannot add more options" do
+          expect(rendered).not_to have_css(".govuk-inset-text", text: "You cannot add any more options as you have reached the maximum of 1000 options.")
+        end
+      end
+
+      context "when there are 1000 options" do
+        let(:selection_options) { (1..1000).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
+
+        it "does not have an add another button" do
+          expect(rendered).not_to have_button(I18n.t("selections_settings.add_another"))
+        end
+
+        it "has inset text stating you cannot add more options" do
+          expect(rendered).to have_css(".govuk-inset-text", text: "You cannot add any more options as you have reached the maximum of 1000 options.")
+        end
       end
     end
 
-    context "when there are 30 options" do
-      let(:selection_options) { (1..30).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
+    context "when only_one_option is false for the draft question" do
+      let(:only_one_option) { "false" }
 
-      it "does not have an add another button" do
-        expect(rendered).not_to have_button(I18n.t("selections_settings.add_another"))
+      it "has paragraph text explaining that more than one option can be selected" do
+        expect(rendered).to have_text(I18n.t("selection_options.select_more_than_one_option"))
       end
 
-      it "has inset text stating you cannot add more options" do
-        expect(rendered).to have_css(".govuk-inset-text", text: t("selections_settings.cannot_add_more_options"))
+      it "has hint text stating you can add 30 options" do
+        expect(rendered).to have_text("You can add up to 30 options")
+      end
+
+      context "when there are fewer than 30 options" do
+        let(:selection_options) { (1..29).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
+
+        it "has an add another button" do
+          expect(rendered).to have_button(I18n.t("selections_settings.add_another"))
+        end
+
+        it "has inset text stating you cannot add more options" do
+          expect(rendered).not_to have_css(".govuk-inset-text", text: "You cannot add any more options as you have reached the maximum of 30 options.")
+        end
+      end
+
+      context "when there are 30 options" do
+        let(:selection_options) { (1..30).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
+
+        it "does not have an add another button" do
+          expect(rendered).not_to have_button(I18n.t("selections_settings.add_another"))
+        end
+
+        it "has inset text stating you cannot add more options" do
+          expect(rendered).to have_css(".govuk-inset-text", text: "You cannot add any more options as you have reached the maximum of 30 options.")
+        end
       end
     end
   end

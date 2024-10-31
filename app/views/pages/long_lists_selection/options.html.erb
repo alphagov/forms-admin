@@ -16,14 +16,25 @@
       <span class="govuk-caption-l"><%= t("pages.question") %> <%= current_form.page_number(@page) %></span>
       <h1 class="govuk-heading-l"><%= t("page_titles.selection_options") %></h1>
 
-      <%= f.govuk_fieldset legend: { text: t("selections_settings.add_options") } do %>
-        <p class="govuk-hint"><%= t("selections_settings.add_options_hint") %></p>
+      <div class="govuk-!-margin-bottom-8">
+        <% if @selection_options_input.only_one_option? %>
+          <p><%= t("selection_options.select_one_option") %></p>
+          <p><%= t("selection_options.longer_than_30_options") %></p>
+        <% else %>
+          <p><%= t("selection_options.select_more_than_one_option") %></p>
+        <% end %>
+      </div>
+
+      <%= f.govuk_fieldset legend: { text: t("selection_options.add_options") } do %>
+        <% unless @selection_options_input.only_one_option? %>
+          <p class="govuk-hint"><%= t("selection_options.add_options_hint", maximum: @selection_options_input.maximum_options) %></p>
+        <% end %>
         <ul class="govuk-list app-select-options">
           <% @selection_options_input.selection_options_form_objects.each_with_index do |selection_option, index| %>
             <%= f.fields_for :selection_options, selection_option, index: index do |selection_options_form| %>
               <li class="app-select-options__list-item">
-                <%= selection_options_form.govuk_text_field :name, id: "forms-selections-settings-form-selection-options-name-field-#{index}", label: { text: t("selections_settings.option", number: index + 1), for: "forms-selections-settings-form-selection-options-name-field-#{index}" }, class: "govuk-input--width-20", form_group: { classes: "app-select-options__form-group" } %>
-                <%= f.govuk_submit t("selections_settings.remove_html", option_number: index + 1), class: "app-select-options__button", name: :remove, value: index, secondary: true %>
+                <%= selection_options_form.govuk_text_field :name, id: "forms-selections-settings-form-selection-options-name-field-#{index}", label: { text: t("selection_options.option", number: index + 1), for: "forms-selections-settings-form-selection-options-name-field-#{index}" }, class: "govuk-input--width-20", form_group: { classes: "app-select-options__form-group" } %>
+                <%= f.govuk_submit t("selection_options.remove_html", option_number: index + 1), class: "app-select-options__button", name: :remove, value: index, secondary: true %>
               </li>
             <% end %>
           <% end %>
@@ -31,10 +42,10 @@
       <% end %>
 
       <div class="govuk-!-margin-bottom-8">
-        <% if @selection_options_input.selection_options_form_objects.length < 30 %>
-          <%= f.govuk_submit t("selections_settings.add_another"), name: :add_another, secondary: true %>
+        <% if @selection_options_input.selection_options_form_objects.length < @selection_options_input.maximum_options %>
+          <%= f.govuk_submit t("selection_options.add_another"), name: :add_another, secondary: true %>
         <% else %>
-          <p class="govuk-inset-text"><%= t("selections_settings.cannot_add_more_options") %></p>
+          <p class="govuk-inset-text"><%= t("selection_options.cannot_add_more_options", maximum: @selection_options_input.maximum_options) %></p>
         <% end %>
       </div>
 
