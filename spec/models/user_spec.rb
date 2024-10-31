@@ -412,4 +412,18 @@ describe User, type: :model do
       end
     end
   end
+
+  describe "#signed_in!" do
+    around do |example|
+      freeze_time do
+        example.run
+      end
+    end
+
+    it "updates last_signed_in_at" do
+      expect {
+        user.signed_in!
+      }.to change(user, :last_signed_in_at).to(Time.zone.now)
+    end
+  end
 end

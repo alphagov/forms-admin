@@ -51,4 +51,6 @@ Warden::Manager.after_authentication do |user, auth, _opts|
   if user.provider == "auth0"
     auth.session["auth0_connection_strategy"] = auth.env["omniauth.auth"][:extra][:raw_info][:auth0_connection_strategy]
   end
+
+  user.signed_in!
 end
