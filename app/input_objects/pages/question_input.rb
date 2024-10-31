@@ -11,7 +11,7 @@ class Pages::QuestionInput < BaseInput
   validates :draft_question, presence: true
   validates :hint_text, length: { maximum: 500 }
   validates :is_optional, inclusion: { in: %w[false true] }
-  validates :is_repeatable, inclusion: { in: %w[false true] }, if: -> { Settings.features.repeatable_page_enabled }
+  validates :is_repeatable, inclusion: { in: %w[false true] }
   validate :validate_number_of_selection_options
 
   def submit

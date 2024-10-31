@@ -134,59 +134,42 @@ RSpec.describe Pages::QuestionInput, type: :model do
     describe "#is_repeatable" do
       let(:question_input) { build :question_input, is_repeatable: }
 
-      context "when feature repeatable page is not enabled", feature_repeatable_page_enabled: false do
-        context "and is_repeatable is nil" do
-          let(:is_repeatable) { nil }
+      context "and is_repeatable is nil" do
+        let(:is_repeatable) { nil }
 
-          it "is valid" do
-            expect(question_input).to be_valid
-          end
+        it "is invalid" do
+          expect(question_input).not_to be_valid
+        end
 
-          it "has no error message" do
-            question_input.valid?
-            expect(question_input.errors[:is_repeatable]).to be_empty
-          end
+        it "has an error message" do
+          question_input.valid?
+          expect(question_input.errors[:is_repeatable]).to include(I18n.t("activemodel.errors.models.pages/question_input.attributes.is_repeatable.inclusion"))
         end
       end
 
-      context "when feature repeatable page is enabled", :feature_repeatable_page_enabled do
-        context "and is_repeatable is nil" do
-          let(:is_repeatable) { nil }
+      context "and is_repeatable is true" do
+        let(:is_repeatable) { "true" }
 
-          it "is invalid" do
-            expect(question_input).not_to be_valid
-          end
-
-          it "has an error message" do
-            question_input.valid?
-            expect(question_input.errors[:is_repeatable]).to include(I18n.t("activemodel.errors.models.pages/question_input.attributes.is_repeatable.inclusion"))
-          end
+        it "is valid" do
+          expect(question_input).to be_valid
         end
 
-        context "and is_repeatable is true" do
-          let(:is_repeatable) { "true" }
+        it "has no error message" do
+          question_input.valid?
+          expect(question_input.errors[:is_repeatable]).to be_empty
+        end
+      end
 
-          it "is valid" do
-            expect(question_input).to be_valid
-          end
+      context "and is_repeatable is false" do
+        let(:is_repeatable) { "false" }
 
-          it "has no error message" do
-            question_input.valid?
-            expect(question_input.errors[:is_repeatable]).to be_empty
-          end
+        it "is valid" do
+          expect(question_input).to be_valid
         end
 
-        context "and is_repeatable is false" do
-          let(:is_repeatable) { "false" }
-
-          it "is valid" do
-            expect(question_input).to be_valid
-          end
-
-          it "has no error message" do
-            question_input.valid?
-            expect(question_input.errors[:is_repeatable]).to be_empty
-          end
+        it "has no error message" do
+          question_input.valid?
+          expect(question_input.errors[:is_repeatable]).to be_empty
         end
       end
     end
