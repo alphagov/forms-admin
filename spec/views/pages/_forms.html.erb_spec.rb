@@ -101,6 +101,7 @@ describe "pages/_form.html.erb", type: :view do
       build :question_input,
             draft_question:,
             answer_type: page.answer_type,
+            answer_settings: page.answer_settings,
             question_text: page.question_text,
             hint_text: page.hint_text
     end

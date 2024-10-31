@@ -5,13 +5,14 @@ describe "pages/edit.html.erb" do
 
   let(:form) { build :form, id: 1, pages: [page] }
   let(:group) { create :group }
-  let(:page) { build :page, id: 1, question_text:, form_id: 1, answer_type:, answer_settings: nil, page_heading: nil }
+  let(:page) { build :page, id: 1, question_text:, form_id: 1, answer_type:, answer_settings: {}, page_heading: nil }
   let(:answer_type) { "email" }
 
   let(:draft_question) { question_input.draft_question }
   let(:question_input) do
     build :question_input,
           answer_type: page.answer_type,
+          answer_settings: page.answer_settings,
           question_text: page.question_text,
           hint_text: page.hint_text
   end

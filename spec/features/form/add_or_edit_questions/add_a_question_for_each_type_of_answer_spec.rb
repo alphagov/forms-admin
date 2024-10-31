@@ -30,7 +30,12 @@ feature "Add/editing a single question", type: :feature do
         and_i_want_to_create_or_edit_a_page
         and_i_select_a_type_of_answer_option(answer_type)
         and_i_provide_a_question_text
-        and_i_make_the_question_mandatory unless answer_type == "selection"
+
+        unless answer_type == "selection"
+          and_i_make_the_question_mandatory
+          and_i_make_the_question_not_repeatable
+        end
+
         and_i_click_save
         and_i_add_another_question
       end
@@ -46,6 +51,7 @@ feature "Add/editing a single question", type: :feature do
         and_i_select_selection_type_question
         and_i_select_people_can_choose_one_or_more_options
         and_i_configure_the_selection_options(options)
+        and_i_make_the_question_not_repeatable
         and_i_click_save
         and_i_add_another_question
       end
@@ -77,6 +83,7 @@ feature "Add/editing a single question", type: :feature do
       and_i_select_a_type_of_answer_option("national_insurance_number")
       and_i_provide_a_question_text
       and_i_make_the_question_mandatory
+      and_i_make_the_question_not_repeatable
       and_i_click_save
       and_i_click_back_to_your_questions
       and_i_mark_the_questions_section_as_complete
@@ -115,6 +122,10 @@ private
 
   def and_i_make_the_question_mandatory
     within_fieldset("Should this question be mandatory or optional?") { choose "Mandatory" }
+  end
+
+  def and_i_make_the_question_not_repeatable
+    within_fieldset("Should people be able to answer this question more than once?") { choose "No - this question can only be answered once" }
   end
 
   def and_i_click_save
