@@ -105,6 +105,10 @@ class User < ApplicationRecord
     Settings.analytics_enabled && !super_admin?
   end
 
+  def signed_in!
+    update(last_signed_in_at: Time.zone.now)
+  end
+
 private
 
   def requires_name?
