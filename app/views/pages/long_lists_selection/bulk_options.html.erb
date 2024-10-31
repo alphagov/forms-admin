@@ -1,0 +1,29 @@
+<% set_page_title(title_with_error_prefix(t("page_titles.bulk_options"), @bulk_options_input.errors.any?)) %>
+
+<% content_for :back_link, govuk_back_link_to(@back_link_url) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: [current_form, @bulk_options_input], url: @bulk_options_path do |f| %>
+      <%= f.govuk_error_summary %>
+      <span class="govuk-caption-l"><%= t("pages.question") %> <%= current_form.page_number(@page) %></span>
+      <h1 class="govuk-heading-l"><%= t("page_titles.bulk_options") %></h1>
+
+      <p><%= t("bulk_options.select_one_option") %></p>
+      <p><%= t("bulk_options.longer_than_30_options") %></p>
+
+      <%= f.govuk_text_area :bulk_selection_options,
+                                   label: { text: t("bulk_options.label"), size: "m" },
+                                   hint: { text: t("bulk_options.hint") },
+                                   rows: 5 %>
+
+      <%= f.govuk_collection_radio_buttons :include_none_of_the_above, @bulk_options_input.none_of_the_above_options, :id, legend: { size: 'm', tag: 'h2' }, bold_labels: false %>
+
+      <%= f.govuk_submit t('save_and_continue') %>
+    <% end %>
+
+    <p>
+      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form) %>
+    </p>
+  </div>
+</div>

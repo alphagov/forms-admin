@@ -179,6 +179,11 @@ en:
       route_deleted: Question %{question_position}’s route has been deleted
       route_updated: Question %{question_position}’s route has been updated
       title: Success
+  bulk_options:
+    hint: List your options, with each option on a new line.
+    label: Add options to your list
+    longer_than_30_options: If your list is longer than 30 options people will be able to search and find the options by typing in an autocomplete box.
+    select_one_option: People will be able to select one option from your list.
   cancel: Cancel
   contact_details:
     new:
@@ -593,6 +598,9 @@ en:
           phone_number: Ask the question the way you would in person. For example, ‘What’s your phone number?’
           radio: Ask the question the way you would in person. For example, ‘What country do you live in?’
           single_line: Ask the question the way you would in person. For example, ‘What’s your reference number?’
+      pages_long_lists_selection_bulk_options_input:
+        include_none_of_the_above_options:
+          'true': We will add ‘None of the above’ to the end of your list of options
       pages_long_lists_selection_options_input:
         include_none_of_the_above_options:
           'true': We will add ‘None of the above’ to the end of your list of options
@@ -707,6 +715,10 @@ en:
       pages_conditions_input:
         default_answer_value: Select an answer
         default_goto_page_id: Select a question or page
+      pages_long_lists_selection_bulk_options_input:
+        include_none_of_the_above_options:
+          'false': 'No'
+          'true': 'Yes'
       pages_long_lists_selection_options_input:
         include_none_of_the_above_options:
           'false': 'No'
@@ -731,6 +743,8 @@ en:
         submission_type: Do you want to get completed forms as CSV files?
       mou_signature:
         agreed: Do you agree to the MOU?
+      pages_long_lists_selection_bulk_options_input:
+        include_none_of_the_above: Should the list of options Include ‘None of the above’?
       pages_long_lists_selection_options_input:
         include_none_of_the_above: Should the list of options include ‘None of the above’?
       pages_question_input:
@@ -1015,6 +1029,7 @@ en:
     address_settings: What kind of addresses do you expect to receive?
     archive_form_confirm: Archive this form
     archive_form_confirmation: Your form has been archived
+    bulk_options: Create a list of options
     change_name: Name your form
     confirm_email: Enter the confirmation code
     confirm_email_success: Email address confirmed
