@@ -43,7 +43,7 @@ RSpec.describe "mailchimp.rake" do
     end
 
     it "runs the mailchimp synchronization on each list" do
-      expect(MailchimpListSynchronizer).to receive(:synchronize).with(list_id: Settings.mailchimp.active_users_list, users_to_synchronize: users_with_access).once
+      expect(MailchimpListSynchronizer).to receive(:synchronize).with(list_id: Settings.mailchimp.active_users_list, users_to_synchronize: match_array(users_with_access)).once
       expect(MailchimpListSynchronizer).to receive(:synchronize).with(list_id: Settings.mailchimp.mou_signers_list, users_to_synchronize: [mou_signer_with_access]).once
 
       expect { task.invoke }.to output.to_stdout
