@@ -1,0 +1,34 @@
+<% set_page_title(title_with_error_prefix(t("page_titles.selection_type"), @selection_type_input.errors.any?)) %>
+
+<% content_for :back_link, govuk_back_link_to(@back_link_url) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <% if @page.present? && @page.conditions.any? %>
+      <%= govuk_notification_banner(title_text: t("banner.default.title")) do |banner| %>
+        <% banner.with_heading(text: t("selections_settings.routing_warning_about_change_only_one_option_heading"), tag: "h3") %>
+        <%= t("selections_settings.routing_warning_about_change_only_one_option_html", pages_link_url: form_pages_path(current_form)) %>
+      <% end %>
+    <% end %>
+
+    <%= form_with model: [current_form, @selection_type_input], url: @selection_type_path do |f| %>
+      <%= f.govuk_error_summary %>
+      <%= f.govuk_collection_radio_buttons(
+            :only_one_option,
+            @selection_type_input.only_one_option_options,
+            :id,
+            :name,
+            :description,
+            legend: { text: t('page_titles.selection_type'), size: 'l', tag: 'h1' },
+            caption: { text: "#{t("pages.question")} #{current_form.page_number(@page)}", size: 'l' },
+            bold_labels: false
+          ) %>
+
+      <%= f.govuk_submit t('continue') %>
+    <% end %>
+
+    <p>
+      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form) %>
+    </p>
+  </div>
+</div>

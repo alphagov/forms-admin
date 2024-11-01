@@ -1,0 +1,61 @@
+<% set_page_title(title_with_error_prefix(t("page_titles.selection_options"), @selection_options_input.errors.any?)) %>
+
+<% content_for :back_link, govuk_back_link_to(@back_link_url) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: [current_form, @selection_options_input], url: @selection_options_path do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%#
+        Browsers use the first submit button in a form when the enter key is pressed, so we have to put this hidden button here,
+        otherwise pressing the enter key will delete the first item in the list instead of submnitting the form.
+      %>
+      <%= f.submit t('save_and_continue'), hidden: true %>
+
+      <span class="govuk-caption-l"><%= t("pages.question") %> <%= current_form.page_number(@page) %></span>
+      <h1 class="govuk-heading-l"><%= t("page_titles.selection_options") %></h1>
+
+      <div class="govuk-!-margin-bottom-8">
+        <% if @selection_options_input.only_one_option? %>
+          <p><%= t("selection_options.select_one_option") %></p>
+          <p><%= t("selection_options.longer_than_30_options") %></p>
+        <% else %>
+          <p><%= t("selection_options.select_more_than_one_option") %></p>
+        <% end %>
+      </div>
+
+      <%= f.govuk_fieldset legend: { text: t("selection_options.add_options") } do %>
+        <% unless @selection_options_input.only_one_option? %>
+          <p class="govuk-hint"><%= t("selection_options.add_options_hint", maximum: @selection_options_input.maximum_options) %></p>
+        <% end %>
+        <ul class="govuk-list app-select-options">
+          <% @selection_options_input.selection_options_form_objects.each_with_index do |selection_option, index| %>
+            <%= f.fields_for :selection_options, selection_option, index: index do |selection_options_form| %>
+              <li class="app-select-options__list-item">
+                <%= selection_options_form.govuk_text_field :name, id: "forms-selections-settings-form-selection-options-name-field-#{index}", label: { text: t("selection_options.option", number: index + 1), for: "forms-selections-settings-form-selection-options-name-field-#{index}" }, class: "govuk-input--width-20", form_group: { classes: "app-select-options__form-group" } %>
+                <%= f.govuk_submit t("selection_options.remove_html", option_number: index + 1), class: "app-select-options__button", name: :remove, value: index, secondary: true %>
+              </li>
+            <% end %>
+          <% end %>
+        </ul>
+      <% end %>
+
+      <div class="govuk-!-margin-bottom-8">
+        <% if @selection_options_input.selection_options_form_objects.length < @selection_options_input.maximum_options %>
+          <%= f.govuk_submit t("selection_options.add_another"), name: :add_another, secondary: true %>
+        <% else %>
+          <p class="govuk-inset-text"><%= t("selection_options.cannot_add_more_options", maximum: @selection_options_input.maximum_options) %></p>
+        <% end %>
+      </div>
+
+      <%= f.govuk_collection_radio_buttons :include_none_of_the_above, @selection_options_input.include_none_of_the_above_options, :id, :name, :description, legend: { size: 'm', tag: 'h2' }, bold_labels: false %>
+
+      <%= f.govuk_submit t('continue') %>
+    <% end %>
+
+    <p>
+      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form) %>
+    </p>
+  </div>
+</div>

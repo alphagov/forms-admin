@@ -1,6 +1,8 @@
 class Pages::TypeOfAnswerInput < BaseInput
   attr_accessor :answer_type, :draft_question
 
+  SELECTION_DEFAULT_OPTIONS = { selection_options: [{ name: "" }, { name: "" }] }.freeze
+
   validates :draft_question, presence: true
   validates :answer_type, presence: true, inclusion: { in: Page::ANSWER_TYPES }
 
@@ -23,7 +25,7 @@ private
   def default_answer_settings_for_answer_type
     case answer_type.to_sym
     when :selection
-      Pages::SelectionsSettingsInput::DEFAULT_OPTIONS
+      SELECTION_DEFAULT_OPTIONS
     when :text, :date, :address
       { input_type: nil }
     when :name

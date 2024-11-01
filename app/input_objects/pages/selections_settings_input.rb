@@ -1,8 +1,4 @@
 class Pages::SelectionsSettingsInput < BaseInput
-  DEFAULT_OPTIONS = { selection_options: [{ name: "" }, { name: "" }],
-                      only_one_option: false,
-                      include_none_of_the_above: false }.freeze
-
   attr_accessor :selection_options, :only_one_option, :include_none_of_the_above, :draft_question
 
   validates :draft_question, presence: true

@@ -11,6 +11,7 @@ describe "pages/_form.html.erb", type: :view do
           answer_settings: page.answer_settings
   end
   let(:form) { build :form, id: 1 }
+  let(:group) { create :group }
   let(:is_new_page) { true }
   let(:locals) do
     { is_new_page:,
@@ -22,6 +23,7 @@ describe "pages/_form.html.erb", type: :view do
   end
 
   before do
+    GroupForm.create!(group:, form_id: form.id)
     render partial: "pages/form", locals:
   end
 
