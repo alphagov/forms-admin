@@ -4,6 +4,11 @@ describe Pages::LongListsSelection::TypeController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
 
+  let(:only_one_option) { "true" }
+  let(:answer_settings) do
+    { selection_options: [{ name: "" }, { name: "" }],
+      only_one_option: }
+  end
   let(:draft_question) do
     create :draft_question,
            answer_type: "selection",
@@ -11,8 +16,7 @@ describe Pages::LongListsSelection::TypeController, type: :request do
            user: standard_user,
            form_id: form.id,
            is_optional: false,
-           answer_settings: { selection_options: [{ name: "" }, { name: "" }],
-                              only_one_option: false }
+           answer_settings:
   end
   let(:page_id) { nil }
 
@@ -47,21 +51,19 @@ describe Pages::LongListsSelection::TypeController, type: :request do
       expect(response).to have_rendered("pages/long_lists_selection/type")
     end
 
-    context "when draft question already contains setting for only_one_option" do
-      let(:draft_question) do
-        create :draft_question,
-               answer_type: "selection",
-               page_id:,
-               user: standard_user,
-               form_id: form.id,
-               is_optional: true,
-               answer_settings: { only_one_option: true }
-      end
+    context "when draft question does not contain a setting for only_one_option" do
+      let(:answer_settings) { {} }
 
+      it "returns nil for only_one_option" do
+        selection_type_input = assigns(:selection_type_input)
+        expect(selection_type_input.only_one_option).to be_nil
+      end
+    end
+
+    context "when draft question already contains setting for only_one_option" do
       it "returns the existing draft question answer settings" do
         selection_type_input = assigns(:selection_type_input)
-        draft_question_settings = draft_question.answer_settings
-        expect(selection_type_input.only_one_option).to eq draft_question_settings[:only_one_option]
+        expect(selection_type_input.only_one_option).to eq "true"
       end
     end
   end
@@ -122,8 +124,7 @@ describe Pages::LongListsSelection::TypeController, type: :request do
 
     it "returns the existing draft question answer settings" do
       selection_type_input = assigns(:selection_type_input)
-      draft_question_settings = draft_question.answer_settings
-      expect(selection_type_input.only_one_option).to eq draft_question_settings[:only_one_option]
+      expect(selection_type_input.only_one_option).to eq "true"
     end
 
     it "sets an instance variable for selection_type_path" do
@@ -133,6 +134,17 @@ describe Pages::LongListsSelection::TypeController, type: :request do
 
     it "renders the template" do
       expect(response).to have_rendered("pages/long_lists_selection/type")
+    end
+
+    # This ensures there is backwards compatibility for existing questions as we previously set "only_one_option" to
+    # "0" rather than "false"
+    context "when draft question has a value of '0' for only_one_option" do
+      let(:only_one_option) { "0" }
+
+      it "returns the existing draft question answer settings" do
+        selection_type_input = assigns(:selection_type_input)
+        expect(selection_type_input.only_one_option).to eq "false"
+      end
     end
   end
 

@@ -46,6 +46,11 @@ private
   end
 
   def only_one_option
-    draft_question.answer_settings[:only_one_option]
+    only_one_option = draft_question.answer_settings[:only_one_option]
+    # This ensures there is backwards compatibility for existing questions as we previously set "only_one_option" to
+    # "0" rather than "false"
+    return "false" if only_one_option == "0"
+
+    only_one_option
   end
 end
