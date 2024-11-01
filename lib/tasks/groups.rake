@@ -44,6 +44,24 @@ namespace :groups do
       raise ActiveRecord::Rollback
     end
   end
+
+  desc "Enable long lists feature"
+  task :enable_long_lists, %i[group_id] => :environment do |_, args|
+    usage_message = "usage: rake groups:enable_long_lists[<group_external_id>]".freeze
+    abort usage_message if args[:group_id].blank?
+
+    Group.find_by(external_id: args[:group_id]).update!(long_lists_enabled: true)
+    Rails.logger.info("Updated long_lists_enabled to true for group #{args[:group_id]}")
+  end
+
+  desc "Disable long lists feature"
+  task :disable_long_lists, %i[group_id] => :environment do |_, args|
+    usage_message = "usage: rake groups:disable_long_lists[<group_external_id>]".freeze
+    abort usage_message if args[:group_id].blank?
+
+    Group.find_by(external_id: args[:group_id]).update!(long_lists_enabled: false)
+    Rails.logger.info("Updated long_lists_enabled to false for group #{args[:group_id]}")
+  end
 end
 
 def run_task(task_name, args, rollback:)
