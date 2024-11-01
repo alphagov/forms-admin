@@ -16,11 +16,21 @@
           end;
       end %>
 
-      <% RouteSummaryCardDataService.call(page:, pages:).summary_card_data.each do |card| %>
+      <% RouteSummaryCardDataService.call(form: current_form, page:, pages:).summary_card_data.each do |card| %>
           <%= govuk_summary_list(**card) %>
       <% end %>
 
-      <%= govuk_link_to t("pages.go_to_your_questions"), form_pages_path(current_form.id) %>
+      <% if page.conditions.present? %>
+          <ul class="govuk-list govuk-list--spaced">
+              <li>
+                  <%= govuk_button_link_to t("page_route_card.delete_route"), destroy_condition_path(form_id: current_form.id, page_id: page.id, condition_id: page.conditions.first.id), warning: true %>
+              </li>
+              <li>
+                  <%= govuk_link_to t("pages.go_to_your_questions"), form_pages_path(current_form.id) %>
+              </li>
+          </ul>
+      <% else %>
+          <%= govuk_link_to t("pages.go_to_your_questions"), form_pages_path(current_form.id) %>
+      <% end %>
 
-  </div>
 </div>
