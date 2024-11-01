@@ -1384,7 +1384,9 @@ en:
     edit:
       access: Permission to access GOV.UK Forms
       caption: User details
+      first_signed_in: First signed in
       has_access: Access to GOV.UK Forms
+      last_signed_in: Last signed in
       mou_banner: You cannot upgrade this user’s role until someone from their organisation agrees to the MOU
       organisation: Organisation
       organisation_prompt: Select an organisation
