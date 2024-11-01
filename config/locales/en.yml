@@ -1250,6 +1250,7 @@ en:
     add_options: Add options to your list
     add_options_hint: You can add up to %{maximum} options
     cannot_add_more_options: You cannot add any more options as you have reached the maximum of %{maximum} options.
+    enter_all_options_into_textbox: Enter all options into a textbox
     longer_than_30_options: If your list is longer than 30 options people will be able to search and find the options by typing in an autocomplete box.
     option: Option %{number}
     remove_html: Remove <span class="govuk-visually-hidden">option %{option_number}</span>
