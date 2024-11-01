@@ -22,7 +22,7 @@ describe "pages/long_lists_selection/bulk_options.html.erb", type: :view do
     # # setup instance variables
     bulk_options_input.assign_form_values
     @bulk_options_input = bulk_options_input
-    @bulk_options_path = bulk_options_create_path(form.id)
+    @bulk_options_path = long_lists_selection_bulk_options_create_path(form.id)
     @back_link_url = back_link_url
   end
 
