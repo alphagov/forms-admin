@@ -32,7 +32,7 @@ describe RouteSummaryCardDataService do
 
         # conditional route
         expect(result[0][:card][:title]).to eq("Route 1")
-        expect(result[0][:rows][0][:value][:text]).to eq('"Yes"')
+        expect(result[0][:rows][0][:value][:text]).to eq("Yes")
         expect(result[0][:rows][1][:value][:text]).to eq("2. Next Question")
 
         # default route

@@ -982,9 +982,9 @@ en:
       only_one_option: Selection from a list, one option only.
   page_route_card:
     check_your_answers: Check your answers before submitting
-    conditional_answer_value: '"%{answer_value}"'
+    conditional_answer_value: "%{answer_value}"
     conditional_route_title: Route %{index}
-    continue_to: Continue to
+    continue_to: continue to
     default_route_title: For any other answer
     if_answer_is: If the answer is
     page_name: "%{page_position}. %{page_name}"
@@ -1043,7 +1043,7 @@ en:
     payment_link: Add a link to a payment page on GOV.UK Pay
     privacy_policy: Provide a link to privacy information for this form
     question_text: What’s your question?
-    routes_show: Edit question %{position}'s routes
+    routes_show: Question %{position}’s routes
     routing_page: Add a question route
     routing_page_delete: Delete question %{question_position}’s route
     routing_page_edit: Edit question %{question_position}’s route

@@ -23,7 +23,7 @@ describe "pages/routes/show.html.erb" do
   end
 
   it "has the correct title" do
-    expect(view.content_for(:title)).to have_content("Edit question 1's routes")
+    expect(view.content_for(:title)).to have_content("Question 1’s routes")
   end
 
   it "has the correct back link" do
@@ -37,7 +37,7 @@ describe "pages/routes/show.html.erb" do
 
   it "shows the page title as a summary list" do
     expect(rendered).to have_css(".govuk-summary-list__key", text: "Question #{page.position}")
-    expect(rendered).to have_css(".govuk-summary-list__value", text: "\"#{page.question_text}\"")
+    expect(rendered).to have_css(".govuk-summary-list__value", text: page.question_text)
   end
 
   it "shows the correct route cards" do
