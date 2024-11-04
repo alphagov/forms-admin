@@ -1,3 +1,4 @@
+---
 en:
   activemodel:
     errors:
@@ -5,8 +6,9 @@ en:
         pages/long_lists_selection/bulk_options_input:
           attributes:
             bulk_selection_options:
+              maximum_choose_more_than_one_option: You cannot have more than 30 options
+              maximum_choose_only_one_option: You cannot have more than 1000 options
               minimum: Enter at least 2 options
-              maximum: You cannot have more than 1000 options
               uniqueness: All your options must be unique. ‘%{duplicate}’ currently appears in your list more than once.
             include_none_of_the_above:
               inclusion: Select whether to include an option for ‘None of the above’

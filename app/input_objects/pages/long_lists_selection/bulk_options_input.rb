@@ -1,4 +1,7 @@
 class Pages::LongListsSelection::BulkOptionsInput < BaseInput
+  MAXIMUM_CHOOSE_ONLY_ONE_OPTION = 1000
+  MAXIMUM_CHOOSE_MORE_THAN_ONE_OPTION = 30
+
   attr_accessor :include_none_of_the_above, :draft_question, :bulk_selection_options
 
   validates :draft_question, presence: true
@@ -31,7 +34,7 @@ private
     options = selection_options_without_blanks
 
     return errors.add(:bulk_selection_options, :minimum) if options.length < 2
-    return errors.add(:bulk_selection_options, :maximum) if options.length > 1000
+    return errors.add(:bulk_selection_options, maximum_error_type) if options.length > maximum_options
 
     duplicates = selection_options_without_blanks.filter { |option| selection_options_without_blanks.count(option) > 1 }
     errors.add(:bulk_selection_options, I18n.t("activemodel.errors.models.pages/long_lists_selection/bulk_options_input.attributes.bulk_selection_options.uniqueness", duplicate: duplicates.first)) if duplicates.any?
@@ -47,5 +50,17 @@ private
 
   def answer_settings
     draft_question.answer_settings.merge({ selection_options: })
+  end
+
+  def only_one_option?
+    draft_question.answer_settings[:only_one_option] == "true"
+  end
+
+  def maximum_error_type
+    only_one_option? ? :maximum_choose_only_one_option : :maximum_choose_more_than_one_option
+  end
+
+  def maximum_options
+    only_one_option? ? MAXIMUM_CHOOSE_ONLY_ONE_OPTION : MAXIMUM_CHOOSE_MORE_THAN_ONE_OPTION
   end
 end

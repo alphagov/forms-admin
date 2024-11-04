@@ -18,24 +18,52 @@ RSpec.describe Pages::LongListsSelection::BulkOptionsInput, type: :model do
       expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
     end
 
-    it "is invalid if more than 1000 Bulk selection options are provided" do
-      bulk_options_input.bulk_selection_options = (1..1001).to_a.join("\n")
-      error_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/bulk_options_input.attributes.bulk_selection_options.maximum")
-      expect(bulk_options_input).not_to be_valid
+    context "when only_one_option is true for the draft_question" do
+      let(:only_one_option) { "true" }
 
-      expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
+      it "is valid if there are between 2 and 1000 unique selection values" do
+        bulk_options_input.bulk_selection_options = (1..2).to_a.join("\n")
+
+        expect(bulk_options_input).to be_valid
+        expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to be_empty
+
+        bulk_options_input.bulk_selection_options = (1..1000).to_a.join("\n")
+
+        expect(bulk_options_input).to be_valid
+        expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to be_empty
+      end
+
+      it "is invalid if more than 1000 Bulk selection options are provided" do
+        bulk_options_input.bulk_selection_options = (1..1001).to_a.join("\n")
+        error_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/bulk_options_input.attributes.bulk_selection_options.maximum_choose_only_one_option")
+        expect(bulk_options_input).not_to be_valid
+
+        expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
+      end
     end
 
-    it "is valid if there are between 2 and 1000 unique selection values" do
-      bulk_options_input.bulk_selection_options = (1..2).to_a.join("\n")
+    context "when only_one_option is false for the draft_question" do
+      let(:only_one_option) { "false" }
 
-      expect(bulk_options_input).to be_valid
-      expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to be_empty
+      it "is valid if there are between 2 and 30 unique selection values" do
+        bulk_options_input.bulk_selection_options = (1..2).to_a.join("\n")
 
-      bulk_options_input.bulk_selection_options = (1..1000).to_a.join("\n")
+        expect(bulk_options_input).to be_valid
+        expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to be_empty
 
-      expect(bulk_options_input).to be_valid
-      expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to be_empty
+        bulk_options_input.bulk_selection_options = (1..30).to_a.join("\n")
+
+        expect(bulk_options_input).to be_valid
+        expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to be_empty
+      end
+
+      it "is invalid if more than 30 Bulk selection options are provided" do
+        bulk_options_input.bulk_selection_options = (1..31).to_a.join("\n")
+        error_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/bulk_options_input.attributes.bulk_selection_options.maximum_choose_more_than_one_option")
+        expect(bulk_options_input).not_to be_valid
+
+        expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
+      end
     end
 
     it "is invalid if there are duplicate values" do
@@ -44,14 +72,6 @@ RSpec.describe Pages::LongListsSelection::BulkOptionsInput, type: :model do
       expect(bulk_options_input).not_to be_valid
 
       expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
-    end
-
-    context "when not given a draft_question" do
-      let(:draft_question) { nil }
-
-      it "is invalid" do
-        expect(bulk_options_input).to be_invalid
-      end
     end
 
     context "when include_none_of_the_above is not 'true' or 'false'" do
