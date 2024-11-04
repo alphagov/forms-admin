@@ -183,7 +183,9 @@ en:
     hint: List your options, with each option on a new line.
     label: Add options to your list
     longer_than_30_options: If your list is longer than 30 options people will be able to search and find the options by typing in an autocomplete box.
+    select_more_than_one_option: People will be able to select more than one option from your list.
     select_one_option: People will be able to select one option from your list.
+    up_to_30_options: Your list can have a maximum of 30 options.
   cancel: Cancel
   contact_details:
     new:

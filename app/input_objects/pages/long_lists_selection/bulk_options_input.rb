@@ -28,6 +28,10 @@ class Pages::LongListsSelection::BulkOptionsInput < BaseInput
     [OpenStruct.new(id: "true"), OpenStruct.new(id: "false")]
   end
 
+  def only_one_option?
+    draft_question.answer_settings[:only_one_option] == "true"
+  end
+
 private
 
   def validate_selection_options
@@ -50,10 +54,6 @@ private
 
   def answer_settings
     draft_question.answer_settings.merge({ selection_options: })
-  end
-
-  def only_one_option?
-    draft_question.answer_settings[:only_one_option] == "true"
   end
 
   def maximum_error_type

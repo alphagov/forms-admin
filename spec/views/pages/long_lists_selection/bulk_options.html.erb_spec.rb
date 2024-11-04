@@ -47,9 +47,44 @@ describe "pages/long_lists_selection/bulk_options.html.erb", type: :view do
       expect(rendered).to have_css("h1", text: I18n.t("page_titles.bulk_options"))
     end
 
-    it "has explanatory guidance" do
-      expect(rendered).to have_content(I18n.t("bulk_options.select_one_option"))
-      expect(rendered).to have_content(I18n.t("bulk_options.longer_than_30_options"))
+    context "when only_one_option is set to 'true' for the draft question" do
+      let(:only_one_option) { "true" }
+
+      it "contains guidance about users selecting one option" do
+        expect(rendered).to have_content(I18n.t("bulk_options.select_one_option"))
+      end
+
+      it "contains guidance about what happens if there are more than 30 options" do
+        expect(rendered).to have_content(I18n.t("bulk_options.longer_than_30_options"))
+      end
+
+      it "does not contain guidance about users selecting more than one option" do
+        expect(rendered).not_to have_content(I18n.t("bulk_options.select_more_than_one_option"))
+      end
+
+      it "does not contain guidance about adding up to 30 options" do
+        expect(rendered).not_to have_content(I18n.t("bulk_options.up_to_30_options"))
+      end
+    end
+
+    context "when only_one_option is set to 'false' for the draft question" do
+      let(:only_one_option) { "false" }
+
+      it "contains guidance about users selecting more than one option" do
+        expect(rendered).to have_content(I18n.t("bulk_options.select_more_than_one_option"))
+      end
+
+      it "contains guidance about adding up to 30 options" do
+        expect(rendered).to have_content(I18n.t("bulk_options.up_to_30_options"))
+      end
+
+      it "does not contain guidance about users selecting one option" do
+        expect(rendered).not_to have_content(I18n.t("bulk_options.select_one_option"))
+      end
+
+      it "does not contain guidance about what happens if there are more than 30 options" do
+        expect(rendered).not_to have_content(I18n.t("bulk_options.longer_than_30_options"))
+      end
     end
 
     it "has a textbox for entering options" do

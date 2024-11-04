@@ -9,8 +9,13 @@
       <span class="govuk-caption-l"><%= t("pages.question") %> <%= current_form.page_number(@page) %></span>
       <h1 class="govuk-heading-l"><%= t("page_titles.bulk_options") %></h1>
 
-      <p><%= t("bulk_options.select_one_option") %></p>
-      <p><%= t("bulk_options.longer_than_30_options") %></p>
+      <% if @bulk_options_input.only_one_option? %>
+        <p><%= t("bulk_options.select_one_option") %></p>
+        <p><%= t("bulk_options.longer_than_30_options") %></p>
+      <% else %>
+        <p><%= t("bulk_options.select_more_than_one_option") %></p>
+        <p><%= t("bulk_options.up_to_30_options") %></p>
+      <% end %>
 
       <%= f.govuk_text_area :bulk_selection_options,
                                    label: { text: t("bulk_options.label"), size: "m" },

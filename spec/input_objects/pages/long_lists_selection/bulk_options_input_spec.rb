@@ -141,4 +141,22 @@ RSpec.describe Pages::LongListsSelection::BulkOptionsInput, type: :model do
       expect(bulk_options_input.none_of_the_above_options).to eq [OpenStruct.new(id: "true"), OpenStruct.new(id: "false")]
     end
   end
+
+  describe "#only_one_option?" do
+    context "when only_one_option is set to 'true' for the draft question" do
+      let(:only_one_option) { "true" }
+
+      it "returns true" do
+        expect(bulk_options_input.only_one_option?).to be true
+      end
+    end
+
+    context "when only_one_option is set to 'false' for the draft question" do
+      let(:only_one_option) { "false" }
+
+      it "returns false" do
+        expect(bulk_options_input.only_one_option?).to be false
+      end
+    end
+  end
 end
