@@ -1,12 +1,5 @@
+---
 en:
-  helpers:
-    label:
-      forms_payment_link_input:
-        payment_url: Enter the URL of your GOV.UK Pay payment link 
-    hint:
-      forms_payment_link_input:
-        payment_url: |-
-          For example, https://www.gov.uk/payments/your-payment-link
   activemodel:
     errors:
       models:
@@ -14,3 +7,10 @@ en:
           attributes:
             payment_url:
               url: Enter a link in the correct format, like https://www.gov.uk/payments/your-payment-link
+  helpers:
+    hint:
+      forms_payment_link_input:
+        payment_url: For example, https://www.gov.uk/payments/your-payment-link
+    label:
+      forms_payment_link_input:
+        payment_url: Enter the URL of your GOV.UK Pay payment link 

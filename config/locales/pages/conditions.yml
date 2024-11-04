@@ -1,17 +1,13 @@
+---
 en:
-  helpers:
-    label:
-      pages_conditions_input:
-        answer_value: is answered as
-        goto_page_id: take the person to
   activemodel:
     errors:
       models:
         pages/conditions_input:
           attributes:
             answer_value:
-              blank: Select the answer you want to base your route on
               answer_value_doesnt_exist: Select the answer you want to base your route on, or delete this route
+              blank: Select the answer you want to base your route on
             goto_page_id:
               blank: Select the question or page you want to take the person to
               cannot_have_goto_page_before_routing_page: Select the question or page you want to take the person to, or delete this route
@@ -25,3 +21,8 @@ en:
           attributes:
             routing_page_id:
               blank: Select the question you want your route to start from
+  helpers:
+    label:
+      pages_conditions_input:
+        answer_value: is answered as
+        goto_page_id: take the person to

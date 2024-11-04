@@ -1,15 +1,5 @@
+---
 en:
-  errors:
-    messages:
-      url: Enter a link in the correct format, like https://www.gov.uk/help/privacy-notice
-  helpers:
-    label:
-      forms_privacy_policy_input:
-        privacy_policy_url: Enter a link to privacy information for this form
-    hint:
-      forms_privacy_policy_input:
-        privacy_policy_url: |-
-          For example, https://www.gov.uk/help/privacy-notice
   activemodel:
     errors:
       models:
@@ -17,3 +7,13 @@ en:
           attributes:
             privacy_policy_url:
               blank: Enter a link to privacy information
+  errors:
+    messages:
+      url: Enter a link in the correct format, like https://www.gov.uk/help/privacy-notice
+  helpers:
+    hint:
+      forms_privacy_policy_input:
+        privacy_policy_url: For example, https://www.gov.uk/help/privacy-notice
+    label:
+      forms_privacy_policy_input:
+        privacy_policy_url: Enter a link to privacy information for this form

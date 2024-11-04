@@ -1,8 +1,5 @@
+---
 en:
-  helpers:
-    label:
-      pages_question_text_input:
-        question_text: What’s your question?
   activemodel:
     errors:
       models:
@@ -10,4 +7,8 @@ en:
           attributes:
             question_text:
               blank: Enter your question
-              too_long: "Your question must be %{count} characters or less"
+              too_long: Your question must be %{count} characters or less
+  helpers:
+    label:
+      pages_question_text_input:
+        question_text: What’s your question?

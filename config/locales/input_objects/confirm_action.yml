@@ -1,7 +1,8 @@
+---
 en:
   helpers:
     label:
       confirm_action_input:
         options:
-          yes: "Yes"
-          no: "No"
+          'no': 'No'
+          'yes': 'Yes'
