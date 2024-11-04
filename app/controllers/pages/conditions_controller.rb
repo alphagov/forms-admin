@@ -34,7 +34,7 @@ class Pages::ConditionsController < PagesController
   end
 
   def edit
-    condition = ConditionRepository.find(params[:condition_id], params: { form_id: current_form.id, page_id: page.id })
+    condition = Condition.find(params[:condition_id], params: { form_id: current_form.id, page_id: page.id })
 
     condition_input = Pages::ConditionsInput.new(form: current_form, page:, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id, skip_to_end: condition.skip_to_end).assign_condition_values
 
@@ -44,7 +44,7 @@ class Pages::ConditionsController < PagesController
   end
 
   def update
-    condition = ConditionRepository.find(params[:condition_id], params: { form_id: current_form.id, page_id: page.id })
+    condition = Condition.find(params[:condition_id], params: { form_id: current_form.id, page_id: page.id })
 
     form_params = condition_input_params.merge(record: condition)
 
@@ -58,7 +58,7 @@ class Pages::ConditionsController < PagesController
   end
 
   def delete
-    condition = ConditionRepository.find(params[:condition_id], params: { form_id: current_form.id, page_id: page.id })
+    condition = Condition.find(params[:condition_id], params: { form_id: current_form.id, page_id: page.id })
 
     delete_condition_input = Pages::DeleteConditionInput.new(form: current_form, page:, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id)
 
@@ -66,7 +66,7 @@ class Pages::ConditionsController < PagesController
   end
 
   def destroy
-    condition = ConditionRepository.find(params[:condition_id], params: { form_id: current_form.id, page_id: page.id })
+    condition = Condition.find(params[:condition_id], params: { form_id: current_form.id, page_id: page.id })
 
     form_params = delete_condition_input_params.merge(record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id)
 

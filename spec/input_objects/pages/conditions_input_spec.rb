@@ -36,7 +36,9 @@ RSpec.describe Pages::ConditionsInput, type: :model do
   describe "#submit" do
     context "when validation pass" do
       before do
-        allow(ConditionRepository).to receive(:create!)
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.post "/api/v1/forms/1/pages/2/conditions", post_headers, { id: 2 }.to_json, 200
+        end
 
         page.id = 2
         conditions_input.answer_value = "Rabbit"
@@ -51,9 +53,7 @@ RSpec.describe Pages::ConditionsInput, type: :model do
       end
 
       it "creates a condition" do
-        conditions_input.submit
-
-        expect(ConditionRepository).to have_received(:create!)
+        expect(conditions_input.submit).to be_truthy
       end
     end
 
@@ -70,7 +70,10 @@ RSpec.describe Pages::ConditionsInput, type: :model do
       let(:condition) { Condition.new id: 3, form_id: 1, page_id: 2, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
 
       before do
-        allow(ConditionRepository).to receive(:save!)
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.post "/api/v1/forms/1/pages/2/conditions", post_headers, condition.to_json, 200
+          mock.put "/api/v1/forms/1/pages/2/conditions/3", post_headers, condition.to_json, 200
+        end
 
         conditions_input.answer_value = "England"
         conditions_input.goto_page_id = 4
@@ -85,9 +88,7 @@ RSpec.describe Pages::ConditionsInput, type: :model do
       end
 
       it "updates a condition" do
-        conditions_input.update_condition
-
-        expect(ConditionRepository).to have_received(:save!)
+        expect(conditions_input.update_condition).to be_truthy
       end
     end
 
