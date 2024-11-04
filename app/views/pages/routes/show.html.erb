@@ -1,0 +1,26 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.routes_show', position: page.position), false)) %>
+<% content_for :back_link, govuk_back_link_to(back_link_url, t('pages.go_to_your_questions')) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+      <h1 class="govuk-heading-l">
+          <span class="govuk-caption-l"><%= current_form.name %></span>
+          <%= t("page_titles.routes_show", position: page.position) %>
+      </h1>
+
+      <%= govuk_summary_list(actions: false) do |summary_list|
+          summary_list.with_row do |row|
+              row.with_key { t("page_route_card.question_title", position: page.position) }
+              row.with_value { "#{page.question_text}" }
+          end;
+      end %>
+
+      <% RouteSummaryCardDataService.call(page:, pages:).summary_card_data.each do |card| %>
+          <%= govuk_summary_list(**card) %>
+      <% end %>
+
+      <%= govuk_link_to t("pages.go_to_your_questions"), form_pages_path(current_form.id) %>
+
+  </div>
+</div>
