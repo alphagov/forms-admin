@@ -195,8 +195,9 @@ RSpec.describe Pages::ConditionsController, type: :request do
         mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
         mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", headers, condition.to_json, 200
       end
+
+      allow(ConditionRepository).to receive(:find).and_return(condition)
 
       allow(Pages::ConditionsInput).to receive(:new).and_return(conditions_input)
       allow(conditions_input).to receive(:check_errors_from_api)
@@ -244,10 +245,11 @@ RSpec.describe Pages::ConditionsController, type: :request do
         mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
         mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", headers, condition.to_json, 200
       end
 
       conditions_input = Pages::ConditionsInput.new(form:, page: selected_page, record: condition, answer_value: "Yes", goto_page_id: 3)
+
+      allow(ConditionRepository).to receive(:find).and_return(condition)
 
       allow(conditions_input).to receive(:update_condition).and_return(submit_result)
 
@@ -307,8 +309,9 @@ RSpec.describe Pages::ConditionsController, type: :request do
         mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
         mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", headers, condition.to_json, 200
       end
+
+      allow(ConditionRepository).to receive(:find).and_return(condition)
 
       delete_condition_input = Pages::DeleteConditionInput.new(form:, page: selected_page, record: condition, answer_value: "Yes", goto_page_id: 3)
 
@@ -352,9 +355,10 @@ RSpec.describe Pages::ConditionsController, type: :request do
         mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
         mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", headers, condition.to_json, 200
-        mock.delete "/api/v1/forms/1/pages/#{selected_page.id}/conditions/1", headers, nil, 204
       end
+
+      allow(ConditionRepository).to receive(:find).and_return(condition)
+      allow(ConditionRepository).to receive(:destroy)
 
       delete_condition_input = Pages::DeleteConditionInput.new(form:, page: selected_page, record: condition, answer_value: "Wales", goto_page_id: 3, confirm:)
 
