@@ -1,8 +1,4 @@
 class Pages::LongListsSelection::BulkOptionsInput < BaseInput
-  DEFAULT_OPTIONS = { selection_options: [],
-                      only_one_option: "true",
-                      include_none_of_the_above: false }.freeze
-
   attr_accessor :include_none_of_the_above, :draft_question, :bulk_selection_options
 
   validates :draft_question, presence: true
