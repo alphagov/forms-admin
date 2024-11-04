@@ -5,6 +5,7 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
   let(:page) { build :page }
   let(:page_number) { 1 }
   let(:back_link_url) { "/a-back-link-url" }
+  let(:bulk_options_url) { "/a-link-to-bulk-options-page" }
   let(:selection_options_path) { "/a-path" }
   let(:selection_options) { [{ name: "France" }, { name: "Spain" }, { name: "Italy" }] }
   let(:include_none_of_the_above) { "true" }
@@ -24,6 +25,7 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
     assign(:page, page)
     assign(:selection_options_path, selection_options_path)
     assign(:back_link_url, back_link_url)
+    assign(:bulk_options_url, bulk_options_url)
     assign(:selection_options_input, Pages::LongListsSelection::OptionsInput.new(selection_options:, include_none_of_the_above:, draft_question:))
 
     render(template: "pages/long_lists_selection/options")
@@ -39,6 +41,10 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
 
     it "has a remove button per option" do
       expect(rendered).to have_button("remove", count: 3)
+    end
+
+    it "has a link to the bulk options page" do
+      expect(rendered).to have_link(I18n.t("selection_options.enter_all_options_into_textbox"), href: bulk_options_url)
     end
 
     context "when only_one_option is true for the draft question" do

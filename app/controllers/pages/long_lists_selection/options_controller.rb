@@ -6,6 +6,7 @@ class Pages::LongListsSelection::OptionsController < PagesController
                                                                            draft_question:)
     @selection_options_path = long_lists_selection_options_create_path(current_form)
     @back_link_url = long_lists_selection_type_new_path(current_form)
+    @bulk_options_url = long_lists_selection_bulk_options_new_path(current_form)
     render "pages/long_lists_selection/options", locals: { current_form: }
   end
 
@@ -15,6 +16,7 @@ class Pages::LongListsSelection::OptionsController < PagesController
                                                                            draft_question:)
     @selection_options_path = long_lists_selection_options_create_path(current_form)
     @back_link_url = long_lists_selection_type_new_path(current_form)
+    @bulk_options_url = long_lists_selection_bulk_options_new_path(current_form)
 
     if params[:add_another]
       @selection_options_input.add_another
@@ -36,6 +38,7 @@ class Pages::LongListsSelection::OptionsController < PagesController
                                                                            draft_question:)
     @selection_options_path = long_lists_selection_options_update_path(current_form)
     @back_link_url = edit_question_path(current_form)
+    @bulk_options_url = long_lists_selection_bulk_options_edit_path(current_form)
     render "pages/long_lists_selection/options", locals: { current_form: }
   end
 
@@ -45,6 +48,7 @@ class Pages::LongListsSelection::OptionsController < PagesController
                                                                            draft_question:)
     @selection_options_path = long_lists_selection_options_update_path(current_form)
     @back_link_url = edit_question_path(current_form)
+    @bulk_options_url = long_lists_selection_bulk_options_edit_path(current_form)
 
     if params[:add_another]
       @selection_options_input.add_another

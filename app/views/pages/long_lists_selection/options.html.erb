@@ -43,7 +43,10 @@
 
       <div class="govuk-!-margin-bottom-8">
         <% if @selection_options_input.selection_options_form_objects.length < @selection_options_input.maximum_options %>
-          <%= f.govuk_submit t("selection_options.add_another"), name: :add_another, secondary: true %>
+          <div class="govuk-button-group">
+            <%= f.govuk_submit t("selection_options.add_another"), name: :add_another, secondary: true %>
+            <%= govuk_link_to t("selection_options.enter_all_options_into_textbox"), @bulk_options_url %>
+          </div>
         <% else %>
           <p class="govuk-inset-text"><%= t("selection_options.cannot_add_more_options", maximum: @selection_options_input.maximum_options) %></p>
         <% end %>
