@@ -38,6 +38,14 @@ RSpec.describe Pages::LongListsSelection::BulkOptionsInput, type: :model do
       expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to be_empty
     end
 
+    it "is invalid if there are duplicate values" do
+      bulk_options_input.bulk_selection_options = "1\n2\n2"
+      error_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/bulk_options_input.attributes.bulk_selection_options.uniqueness", duplicate: "2")
+      expect(bulk_options_input).not_to be_valid
+
+      expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
+    end
+
     context "when not given a draft_question" do
       let(:draft_question) { nil }
 
@@ -65,15 +73,6 @@ RSpec.describe Pages::LongListsSelection::BulkOptionsInput, type: :model do
 
     it "filters out blank inputs" do
       bulk_options_input.bulk_selection_options = "1\n\n2"
-      bulk_options_input.include_none_of_the_above = "true"
-      bulk_options_input.submit
-
-      expect(bulk_options_input.draft_question.answer_settings[:selection_options]).to eq([{ name: "1" }, { name: "2" }])
-    end
-
-    it "filters out duplicates" do
-      bulk_options_input.bulk_selection_options = "1\n2\n2"
-
       bulk_options_input.include_none_of_the_above = "true"
       bulk_options_input.submit
 

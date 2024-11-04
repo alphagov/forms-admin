@@ -32,19 +32,21 @@ class Pages::LongListsSelection::BulkOptionsInput < BaseInput
 private
 
   def validate_selection_options
-    unique_options = unique_selection_options
+    options = selection_options_without_blanks
 
-    return errors.add(:bulk_selection_options, :minimum) if unique_options.length < 2
+    return errors.add(:bulk_selection_options, :minimum) if options.length < 2
+    return errors.add(:bulk_selection_options, :maximum) if options.length > 1000
 
-    errors.add(:bulk_selection_options, :maximum) if unique_options.length > 1000
+    duplicates = selection_options_without_blanks.filter { |option| selection_options_without_blanks.count(option) > 1 }
+    errors.add(:bulk_selection_options, I18n.t("activemodel.errors.models.pages/long_lists_selection/bulk_options_input.attributes.bulk_selection_options.uniqueness", duplicate: duplicates.first)) if duplicates.any?
   end
 
-  def unique_selection_options
-    bulk_selection_options.split(/\n/).map(&:strip).compact_blank.uniq
+  def selection_options_without_blanks
+    bulk_selection_options.split(/\n/).map(&:strip).compact_blank
   end
 
   def selection_options
-    unique_selection_options.map { |option| { name: option } }
+    selection_options_without_blanks.map { |option| { name: option } }
   end
 
   def answer_settings
