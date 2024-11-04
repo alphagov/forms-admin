@@ -1,14 +1,5 @@
+---
 en:
-  helpers:
-    label:
-      forms_name_input:
-        name: What’s the name of your form?
-    hint:
-      forms_name_input:
-        name: |-
-          The form name will be shown at the top of each page of the form. Use a name
-          that describes what the form will help people to do. For example ‘Apply for a
-          juggling licence’.
   activemodel:
     errors:
       models:
@@ -16,4 +7,13 @@ en:
           attributes:
             name:
               blank: Enter a name for the form
-
+  helpers:
+    hint:
+      forms_name_input:
+        name: |-
+          The form name will be shown at the top of each page of the form. Use a name
+          that describes what the form will help people to do. For example ‘Apply for a
+          juggling licence’.
+    label:
+      forms_name_input:
+        name: What’s the name of your form?

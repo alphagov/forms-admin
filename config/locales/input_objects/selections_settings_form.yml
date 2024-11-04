@@ -1,3 +1,4 @@
+---
 en:
   activemodel:
     errors:
@@ -6,6 +7,6 @@ en:
           attributes:
             selection_options:
               blank: Add text for all of your options
-              uniqueness: All your options must be unique
-              minimum: Enter at least 2 options
               maximum: You cannot have more than 30 options
+              minimum: Enter at least 2 options
+              uniqueness: All your options must be unique

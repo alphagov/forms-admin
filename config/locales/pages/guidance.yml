@@ -1,27 +1,35 @@
+---
 en:
-  helpers:
-    hint:
-      pages_guidance_input:
-        page_heading: When you add guidance your question text will no longer be the main page heading, so you need to use a different one. Use a heading that’s a statement rather than a question - for example, ‘Interview needs’.
-        guidance_markdown: Use Markdown if you need to format your guidance content. Formatting help can be found below.
-    label:
-      pages_guidance_input:
-        page_heading: Give your page a heading
-        guidance_markdown: Add guidance text
   activemodel:
     errors:
       models:
         pages/guidance_input:
-          attributes: &guidance_validation
-            page_heading:
-              blank: Enter a page heading
-              too_long: "Page heading must be %{count} characters or less"
+          attributes:
             guidance_markdown:
               blank: Enter guidance text
-              unsupported_markdown_syntax: Guidance text can only contain formatting for links, subheadings (##), bulleted lists (*), or numbered lists (1.)
               too_long: Guidance text must be 5,000 characters or less
+              unsupported_markdown_syntax: Guidance text can only contain formatting for links, subheadings (##), bulleted lists (*), or numbered lists (1.)
+            page_heading:
+              blank: Enter a page heading
+              too_long: Page heading must be %{count} characters or less
   activerecord:
     errors:
       models:
         draft_question:
-          attributes: *guidance_validation
+          attributes:
+            guidance_markdown:
+              blank: Enter guidance text
+              too_long: Guidance text must be 5,000 characters or less
+              unsupported_markdown_syntax: Guidance text can only contain formatting for links, subheadings (##), bulleted lists (*), or numbered lists (1.)
+            page_heading:
+              blank: Enter a page heading
+              too_long: Page heading must be %{count} characters or less
+  helpers:
+    hint:
+      pages_guidance_input:
+        guidance_markdown: Use Markdown if you need to format your guidance content. Formatting help can be found below.
+        page_heading: When you add guidance your question text will no longer be the main page heading, so you need to use a different one. Use a heading that’s a statement rather than a question - for example, ‘Interview needs’.
+    label:
+      pages_guidance_input:
+        guidance_markdown: Add guidance text
+        page_heading: Give your page a heading

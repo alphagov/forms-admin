@@ -1,3 +1,4 @@
+---
 en:
   activemodel:
     errors:
@@ -10,4 +11,3 @@ en:
             title_needed:
               blank: Select yes if you need a title
               inclusion: Select ’Yes’ or ’No’
-

@@ -1,8 +1,5 @@
+---
 en:
-  helpers:
-    label:
-      forms_declaration_input:
-        declaration_text: Enter a declaration for people to agree to (optional)
   activemodel:
     errors:
       models:
@@ -12,3 +9,7 @@ en:
               too_long: The declaration cannot be longer than 2,000 characters
             mark_complete:
               blank: You must choose an option
+  helpers:
+    label:
+      forms_declaration_input:
+        declaration_text: Enter a declaration for people to agree to (optional)

@@ -1,3 +1,4 @@
+---
 en:
   activemodel:
     errors:
@@ -5,5 +6,5 @@ en:
         forms/what_happens_next_input:
           attributes:
             what_happens_next_markdown:
-              unsupported_markdown_syntax: The information about what happens next can only contain formatting for links, bulleted lists (*), or numbered lists (1.)
               too_long: The information about what happens next cannot be longer than 5,000 characters
+              unsupported_markdown_syntax: The information about what happens next can only contain formatting for links, bulleted lists (*), or numbered lists (1.)
