@@ -8,13 +8,13 @@ class Pages::ConditionsInput < BaseInput
 
     assign_skip_to_end
 
-    ConditionRepository.create!(form_id: form.id,
-                                page_id: page.id,
-                                check_page_id: page.id,
-                                routing_page_id: page.id,
-                                answer_value:,
-                                goto_page_id:,
-                                skip_to_end:)
+    Condition.create!(form_id: form.id,
+                      page_id: page.id,
+                      check_page_id: page.id,
+                      routing_page_id: page.id,
+                      answer_value:,
+                      goto_page_id:,
+                      skip_to_end:)
   end
 
   def update_condition
@@ -26,7 +26,7 @@ class Pages::ConditionsInput < BaseInput
     record.goto_page_id = goto_page_id
     record.skip_to_end = skip_to_end
 
-    ConditionRepository.save!(record)
+    record.save!
   end
 
   def routing_answer_options
