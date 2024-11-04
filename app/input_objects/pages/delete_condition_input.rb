@@ -7,7 +7,7 @@ class Pages::DeleteConditionInput < ConfirmActionInput
     result = true
 
     if confirmed?
-      result = record.destroy
+      result = ConditionRepository.destroy(record)
     end
 
     result
