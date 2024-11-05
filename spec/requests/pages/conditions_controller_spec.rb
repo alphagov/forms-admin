@@ -266,7 +266,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     it "redirects to the page list" do
-      expect(response).to redirect_to form_pages_path(form.id)
+      expect(response).to redirect_to show_routes_path(form:, page:)
     end
 
     it "displays success message" do
