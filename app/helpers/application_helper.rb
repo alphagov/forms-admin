@@ -133,4 +133,16 @@ module ApplicationHelper
 
     request.env["warden"].user
   end
+
+  def date_last_signed_in_at(user)
+    last_signed_in_at = user.last_signed_in_at
+
+    if last_signed_in_at.present?
+      last_signed_in_at.to_date.to_fs
+    elsif user.provider.to_sym == :gds
+      I18n.t("last_signed_in_at.not_since_auth0_enabled")
+    else
+      I18n.t("last_signed_in_at.not_since_last_signed_in_at_added")
+    end
+  end
 end

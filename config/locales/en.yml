@@ -766,6 +766,9 @@ en:
   internal_server_error:
     body: Please try again later.
     title: Sorry, there is a problem with the service
+  last_signed_in_at:
+    not_since_auth0_enabled: Before 3 November 2023
+    not_since_last_signed_in_at_added: Sometime between 3 November 2023 and 4 November 2024
   made_live_form:
     archive_this_form: Archive this form
     contact_details: Your form’s contact details for support

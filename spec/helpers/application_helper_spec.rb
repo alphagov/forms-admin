@@ -329,4 +329,37 @@ RSpec.describe ApplicationHelper, type: :helper do
       expect(helper.acting_as_user).to be_nil
     end
   end
+
+  describe "#date_last_signed_in_at" do
+    subject(:date_last_signed_in_at) { helper.date_last_signed_in_at(user) }
+
+    let(:user) { build :user, last_signed_in_at:, provider: }
+    let(:provider) { nil }
+
+    context "when user has signed in since last_signed_in_at code was added" do
+      let(:last_signed_in_at) { Time.zone.iso8601 "2024-11-04T15:45:00" }
+
+      it "renders the date" do
+        expect(date_last_signed_in_at).to eq("4 November 2024")
+      end
+    end
+
+    context "when user has signed in since Auth0 was enabled but not since last_signed_in_at code was added" do
+      let(:provider) { :auth0 }
+      let(:last_signed_in_at) { nil }
+
+      it "renders text explaining that we don't know when exact time, but that it was more recent than since Auth0 being enabled" do
+        expect(date_last_signed_in_at).to eq "Sometime between 3 November 2023 and 4 November 2024"
+      end
+    end
+
+    context "when user has not signed in since Auth0 was enabled" do
+      let(:provider) { :gds }
+      let(:last_signed_in_at) { nil }
+
+      it "renders text explaining that we don't know exact time, but that it was less recent than Auth0 being enabled" do
+        expect(date_last_signed_in_at).to eq "Before 3 November 2023"
+      end
+    end
+  end
 end
