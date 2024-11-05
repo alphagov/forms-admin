@@ -21,14 +21,12 @@ RSpec.describe Pages::DeleteConditionInput, type: :model do
 
   describe "#delete" do
     context "when validation pass" do
-      it "destroys a condition" do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.delete "/api/v1/forms/#{form.id}/pages/#{page.id}/conditions/", delete_headers, nil, 204
-        end
-
+      it "destroys the condition" do
+        allow(ConditionRepository).to receive(:destroy).and_return(true)
         delete_condition_input.confirm = "yes"
 
-        expect(delete_condition_input.submit).to be_truthy
+        delete_condition_input.submit
+        expect(ConditionRepository).to have_received(:destroy)
       end
     end
 
