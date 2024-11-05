@@ -727,8 +727,8 @@ en:
           'true': 'Yes'
       pages_long_lists_selection_type_input:
         only_one_option_options:
-          'false': People can choose more than one option
-          'true': People can choose only one option
+          'false': People can select one or more options
+          'true': People can select only one option
       pages_question_input:
         hint_text: Hint text (optional)
         is_optional_options:
@@ -1018,6 +1018,7 @@ en:
       name_fields: Name fields
       title_needed: Title needed
     selection:
+      how_many_selections: How many options can people select
       include_none_of_the_above: Include an option for ‘None of the above’
       only_one_option: People can only select one option
       options: Options
@@ -1067,7 +1068,7 @@ en:
     routing_page_edit: Edit question %{question_position}’s route
     routing_page_new: 'Add a question route: select answer and destination'
     selection_options: Create a list of options
-    selection_type: How do you need to collect the answer?
+    selection_type: How many options should people be able to select?
     separator: " – "
     set_email: Set the email address for completed forms
     share_preview: Share a preview of your draft form

@@ -95,6 +95,57 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
       context "when long_lists_enabled is true for the group" do
         let(:long_lists_enabled) { true }
+        let(:only_one_option) { "false" }
+        let(:draft_question) do
+          build :selection_draft_question,
+                is_optional: false,
+                answer_settings: {
+                  only_one_option:,
+                  selection_options: [{ name: "Option 1" }, { name: "Option 2" }],
+                }
+        end
+
+        it "renders the selection settings" do
+          rows = page.find_all(".govuk-summary-list__row")
+
+          expect(rows[0].find(".govuk-summary-list__key")).to have_text "Answer type"
+          expect(rows[0].find(".govuk-summary-list__value")).to have_text "Selection from a list"
+          expect(rows[1].find(".govuk-summary-list__key")).to have_text "Options"
+          expect(rows[1].find(".govuk-summary-list__value")).to have_text "Option 1, Option 2"
+          expect(rows[2].find(".govuk-summary-list__key")).to have_text I18n.t("page_settings_summary.selection.how_many_selections")
+          expect(rows[2].find(".govuk-summary-list__value")).to have_text I18n.t("helpers.label.pages_long_lists_selection_type_input.only_one_option_options.false")
+          expect(rows[3].find(".govuk-summary-list__key")).to have_text "Include an option for ‘None of the above’"
+          expect(rows[3].find(".govuk-summary-list__value")).to have_text "No"
+        end
+
+        context "when only_one_option is true" do
+          let(:only_one_option) { "true" }
+
+          it "says people can select one or more options in the summary table" do
+            rows = page.find_all(".govuk-summary-list__row")
+            expect(rows[2].find(".govuk-summary-list__value")).to have_text I18n.t("helpers.label.pages_long_lists_selection_type_input.only_one_option_options.true")
+          end
+        end
+
+        # This ensures there is backwards compatibility for existing questions as we previously set "only_one_option" to
+        # "0" rather than "false"
+        context "when only_one_option has value '0'" do
+          let(:only_one_option) { "0" }
+
+          it "says people can select only one option in the summary table" do
+            rows = page.find_all(".govuk-summary-list__row")
+            expect(rows[2].find(".govuk-summary-list__value")).to have_text I18n.t("helpers.label.pages_long_lists_selection_type_input.only_one_option_options.false")
+          end
+        end
+
+        context "when is_optional is true" do
+          let(:only_one_option) { "false" }
+
+          it "says people can select one or more options in the summary table" do
+            rows = page.find_all(".govuk-summary-list__row")
+            expect(rows[2].find(".govuk-summary-list__value")).to have_text I18n.t("helpers.label.pages_long_lists_selection_type_input.only_one_option_options.false")
+          end
+        end
 
         it "the change button for only one option links to the long lists type page" do
           expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.only_one_option')}", href: edit_long_lists_selection_type_path)
