@@ -207,6 +207,10 @@ en:
   contact_govuk_forms: contact the GOV.UK Forms team
   contact_url: mailto:govuk-forms-support@govuk.zendesk.com
   continue: Continue
+  date:
+    formats:
+      default: "%-d %B %Y"
+      short: "%-d %B"
   declaration_input:
     new:
       body_html: |

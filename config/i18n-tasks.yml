@@ -130,6 +130,7 @@ ignore_unused:
 - 'activemodel.errors.*'
 - 'activerecord.errors.*'
 - 'errors.*'
+- 'date.formats.*'
 - 'helpers.*'
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
