@@ -35,6 +35,31 @@ feature "Add/editing a single question", type: :feature do
         and_i_add_another_question
       end
     end
+
+    context "when the form is in a group which has long lists enabled" do
+      let(:group) { create(:group, organisation: standard_user.organisation, long_lists_enabled: true) }
+      let(:options) { 10.times.map { Faker::Name.unique.name } }
+
+      scenario "add a selection question which the user can answer more than once" do
+        when_i_am_viewing_an_existing_form
+        and_i_want_to_create_or_edit_a_page
+        and_i_select_selection_type_question
+        and_i_select_people_can_choose_one_or_more_options
+        and_i_configure_the_selection_options(options)
+        and_i_click_save
+        and_i_add_another_question
+      end
+
+      scenario "add a selection question which the user can answer once" do
+        when_i_am_viewing_an_existing_form
+        and_i_want_to_create_or_edit_a_page
+        and_i_select_selection_type_question
+        and_i_select_people_can_only_choose_one_option
+        and_i_configure_the_selection_options(options)
+        and_i_click_save
+        and_i_add_another_question
+      end
+    end
   end
 
   context "when a form has existing pages" do
@@ -186,5 +211,63 @@ private
     within_fieldset("Do you need the person’s title?") { choose("No") }
     click_button "Continue"
     expect(page.find(".govuk-summary-list")).to have_text "Full name in a single box"
+  end
+
+  def and_i_click_back_to_your_questions
+    page.find(".govuk-notification-banner ").click_link "Back to your questions"
+    expect(page.find("h1")).to have_text("Add and edit your questions")
+  end
+
+  def and_i_select_selection_type_question
+    expect(page.find("h1")).to have_text "What kind of answer do you need to this question?"
+    expect_page_to_have_no_axe_errors(page)
+    choose I18n.t("helpers.label.page.answer_type_options.names.selection")
+    click_button "Continue"
+    fill_in_question_text
+  end
+
+  def and_i_select_people_can_only_choose_one_option
+    expect(page.find("h1")).to have_text "How do you need to collect the answer?"
+    expect_page_to_have_no_axe_errors(page)
+    choose "People can choose only one option"
+    click_button "Continue"
+  end
+
+  def and_i_select_people_can_choose_one_or_more_options
+    expect(page.find("h1")).to have_text "How do you need to collect the answer?"
+    expect_page_to_have_no_axe_errors(page)
+    choose "People can choose more than one option"
+    click_button "Continue"
+  end
+
+  def and_i_configure_the_selection_options(options)
+    fill_in_selection_options(options)
+    fill_in_bulk_options(options)
+  end
+
+  def fill_in_selection_options(options)
+    expect(page.find("h1")).to have_text "Create a list of options"
+    expect_page_to_have_no_axe_errors(page)
+    fill_in "Option 1", with: options[0]
+    fill_in "Option 2", with: options[1]
+    click_button "Add another option"
+    fill_in "Option 3", with: options[2]
+    choose "Yes"
+    click_button "Continue"
+
+    click_link "Change Options"
+    expect(page.find("h1")).to have_text "Create a list of options"
+    expect_page_to_have_no_axe_errors(page)
+    choose "No"
+    click_button "Remove option 3"
+  end
+
+  def fill_in_bulk_options(options)
+    click_link "Enter all options into a textbox"
+    expect(page.find("h1")).to have_text("Create a list of options")
+    expect_page_to_have_no_axe_errors(page)
+    fill_in "Add options to your list", with: options.join("\n")
+    choose "Yes"
+    click_button "Save and continue"
   end
 end
