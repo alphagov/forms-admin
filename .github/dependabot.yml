@@ -21,6 +21,11 @@ updates:
     allow:
       - dependency-type: "direct"
       - dependency-name: "vite_ruby"
+    groups:
+      govuk_frontend:
+        patterns:
+          - "govuk-components"
+          - "govuk_design_system_formbuilder"
 
   # Maintain dependencies for npm
   - package-ecosystem: npm
@@ -28,3 +33,8 @@ updates:
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
+    groups:
+      vite:
+        patterns:
+          - "vite"
+          - "vite-*"
