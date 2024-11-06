@@ -1002,6 +1002,7 @@ en:
     conditional_route_title: Route %{index}
     continue_to: continue to
     default_route_title: For any other answer
+    delete_route: Delete routes
     if_answer_is: If the answer is
     page_name: "%{page_position}. %{page_name}"
     question_title: Question %{position}

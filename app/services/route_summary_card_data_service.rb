@@ -1,5 +1,9 @@
 class RouteSummaryCardDataService
-  attr_reader :page, :pages
+  include Rails.application.routes.url_helpers
+  include ActionView::Helpers::UrlHelper
+  include GovukRailsCompatibleLinkHelper
+
+  attr_reader :form, :page, :pages
 
   class << self
     def call(**args)
@@ -7,9 +11,10 @@ class RouteSummaryCardDataService
     end
   end
 
-  def initialize(page:, pages:)
+  def initialize(form:, page:, pages:)
     @page = page
     @pages = pages
+    @form = form
   end
 
   def summary_card_data
@@ -38,6 +43,9 @@ private
       card: {
         title: I18n.t("page_route_card.conditional_route_title", index:),
         classes: "app-summary-card",
+        actions: [
+          govuk_link_to("Edit", edit_condition_path(form_id: form.id, page_id: page.id, condition_id: routing_condition.id)),
+        ],
       },
       rows: [
         {

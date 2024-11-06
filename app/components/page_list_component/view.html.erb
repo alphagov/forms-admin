@@ -61,7 +61,7 @@
               </dd>
 
               <dd class="govuk-summary-list__actions govuk-!-padding-bottom-6">
-                <%= govuk_link_to edit_condition_path(form_id: @form_id, page_id: page.id, condition_id: condition.id) do %>
+                <%= govuk_link_to show_routes_path(form_id: @form_id, page_id: page.id) do %>
                   <%= t("forms.form_overview.edit_with_visually_hidden_text_html", visually_hidden_text: t("page_conditions.condition_name", page_index: page.position)) %>
                 <% end %>
               </dd>

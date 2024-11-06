@@ -1,7 +1,11 @@
 require "rails_helper"
 
 describe RouteSummaryCardDataService do
-  subject(:service) { described_class.new(page: current_page, pages:) }
+  include Capybara::RSpecMatchers
+
+  subject(:service) { described_class.new(form:, page: current_page, pages:) }
+
+  let(:form) { build :form, id: 99, pages: }
 
   let(:current_page) do
     build(:page, id: 1, position: 1, question_text: "Current Question", next_page: next_page.id, routing_conditions: [routing_condition])
@@ -14,12 +18,12 @@ describe RouteSummaryCardDataService do
   let(:pages) { [current_page, next_page] }
 
   let(:routing_condition) do
-    build(:condition, routing_page_id: 1, check_page_id: 1, answer_value: "Yes", goto_page_id: 2, skip_to_end: false)
+    build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Yes", goto_page_id: 2, skip_to_end: false)
   end
 
   describe ".call" do
     it "instantiates and returns a new instance" do
-      service = described_class.call(page: current_page, pages:)
+      service = described_class.call(form:, page: current_page, pages:)
       expect(service).to be_an_instance_of(described_class)
     end
   end
@@ -32,18 +36,20 @@ describe RouteSummaryCardDataService do
 
         # conditional route
         expect(result[0][:card][:title]).to eq("Route 1")
+        expect(result[0][:card][:actions].first).to have_link("Edit", href: "/forms/99/pages/1/conditions/1")
         expect(result[0][:rows][0][:value][:text]).to eq("Yes")
         expect(result[0][:rows][1][:value][:text]).to eq("2. Next Question")
 
         # default route
         expect(result[1][:card][:title]).to eq("For any other answer")
+        expect(result[1][:card][:actions]).to be_nil
         expect(result[1][:rows][0][:value][:text]).to eq("2. Next Question")
       end
     end
 
     context "with skip to end condition" do
       let(:routing_condition) do
-        build(:condition, routing_page_id: 1, check_page_id: 1, answer_value: "No", goto_page_id: nil, skip_to_end: true)
+        build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "No", goto_page_id: nil, skip_to_end: true)
       end
 
       it 'shows "Check your answers" as destination' do
