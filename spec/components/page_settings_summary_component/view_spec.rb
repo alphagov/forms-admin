@@ -69,7 +69,9 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
         expect(rows[0].find(".govuk-summary-list__key")).to have_text "Answer type"
         expect(rows[0].find(".govuk-summary-list__value")).to have_text "Selection from a list"
         expect(rows[1].find(".govuk-summary-list__key")).to have_text "Options"
-        expect(rows[1].find(".govuk-summary-list__value")).to have_text "Option 1, Option 2"
+        expect(rows[1].find(".govuk-summary-list__value")).to have_text "2 options:"
+        expect(rows[1].find(".govuk-summary-list__value")).to have_css("li", text: "Option 1")
+        expect(rows[1].find(".govuk-summary-list__value")).to have_css("li", text: "Option 2")
         expect(rows[2].find(".govuk-summary-list__key")).to have_text "People can only select one option"
         expect(rows[2].find(".govuk-summary-list__value")).to have_text "Yes"
         expect(rows[3].find(".govuk-summary-list__key")).to have_text "Include an option for ‘None of the above’"
@@ -85,7 +87,9 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
           expect(rows[0].find(".govuk-summary-list__key")).to have_text "Answer type"
           expect(rows[0].find(".govuk-summary-list__value")).to have_text "Selection from a list"
           expect(rows[1].find(".govuk-summary-list__key")).to have_text "Options"
-          expect(rows[1].find(".govuk-summary-list__value")).to have_text "Option 1, Option 2"
+          expect(rows[1].find(".govuk-summary-list__value")).to have_text "2 options:"
+          expect(rows[1].find(".govuk-summary-list__value")).to have_css("li", text: "Option 1")
+          expect(rows[1].find(".govuk-summary-list__value")).to have_css("li", text: "Option 2")
           expect(rows[2].find(".govuk-summary-list__key")).to have_text "People can only select one option"
           expect(rows[2].find(".govuk-summary-list__value")).to have_text "Yes"
           expect(rows[3].find(".govuk-summary-list__key")).to have_text "Include an option for ‘None of the above’"
@@ -111,7 +115,9 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
           expect(rows[0].find(".govuk-summary-list__key")).to have_text "Answer type"
           expect(rows[0].find(".govuk-summary-list__value")).to have_text "Selection from a list"
           expect(rows[1].find(".govuk-summary-list__key")).to have_text "Options"
-          expect(rows[1].find(".govuk-summary-list__value")).to have_text "Option 1, Option 2"
+          expect(rows[1].find(".govuk-summary-list__value")).to have_text "2 options:"
+          expect(rows[1].find(".govuk-summary-list__value")).to have_css("li", text: "Option 1")
+          expect(rows[1].find(".govuk-summary-list__value")).to have_css("li", text: "Option 2")
           expect(rows[2].find(".govuk-summary-list__key")).to have_text I18n.t("page_settings_summary.selection.how_many_selections")
           expect(rows[2].find(".govuk-summary-list__value")).to have_text I18n.t("helpers.label.pages_long_lists_selection_type_input.only_one_option_options.false")
           expect(rows[3].find(".govuk-summary-list__key")).to have_text "Include an option for ‘None of the above’"

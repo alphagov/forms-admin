@@ -10,7 +10,18 @@
   <% if show_selection_settings_summary %>
     <%= summary_list.with_row do |row| %>
       <%= row.with_key(text: t("page_settings_summary.selection.options")) %>
-      <%= row.with_value(text: show_selection_options) %>
+      <%= row.with_value do %>
+        <%= row.with_value do %>
+          <p>
+            <%= t("page_settings_summary.selection.options_count", number_of_options: selection_options.length) %>
+          </p>
+          <ul class="govuk-list govuk-list--bullet">
+            <% selection_options.each do |option| %>
+              <li><%= option[:name] %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      <% end %>
       <%= row.with_action(text: t("page_settings_summary.change"),
                     href: @change_selections_options_path,
                     visually_hidden_text: t("page_settings_summary.selection.options")) %>

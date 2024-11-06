@@ -137,7 +137,9 @@ private
     expect(find_field("Option 1").value).to eq "Option 1"
     expect(find_field("Option 2").value).to eq "Option 2"
     click_button "Continue"
-    expect(page.find_all(".govuk-summary-list__value")[1]).to have_text "Option 1, Option 2"
+    expect(page.find_all(".govuk-summary-list__value")[1]).to have_text "2 options:"
+    expect(page.find_all(".govuk-summary-list__value")[1]).to have_css("li", text: "Option 1")
+    expect(page.find_all(".govuk-summary-list__value")[1]).to have_css("li", text: "Option 2")
     expect(page.find_all(".govuk-summary-list__value")[2]).to have_text "Yes"
     expect(page.find_all(".govuk-summary-list__value")[3]).to have_text "Yes"
   end

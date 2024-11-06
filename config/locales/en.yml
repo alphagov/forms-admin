@@ -1022,6 +1022,7 @@ en:
       include_none_of_the_above: Include an option for ‘None of the above’
       only_one_option: People can only select one option
       options: Options
+      options_count: "%{number_of_options} options:"
     text:
       length: Length
   page_titles:
