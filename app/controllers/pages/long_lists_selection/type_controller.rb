@@ -1,4 +1,5 @@
 class Pages::LongListsSelection::TypeController < PagesController
+  include PagesHelper
   def new
     @selection_type_input = Pages::LongListsSelection::TypeInput.new(only_one_option:, draft_question:)
     @selection_type_path = long_lists_selection_type_create_path(current_form)
@@ -12,7 +13,7 @@ class Pages::LongListsSelection::TypeController < PagesController
     @back_link_url = question_text_new_path(current_form)
 
     if @selection_type_input.submit
-      redirect_to long_lists_selection_options_new_path
+      redirect_to selection_options_new_path_for_draft_question(draft_question)
     else
       render "pages/long_lists_selection/type", locals: { current_form: }
     end
@@ -31,7 +32,7 @@ class Pages::LongListsSelection::TypeController < PagesController
     @back_link_url = edit_question_path(current_form)
 
     if @selection_type_input.submit
-      redirect_to long_lists_selection_options_edit_path
+      redirect_to selection_options_edit_path_for_draft_question(draft_question)
     else
       render "pages/long_lists_selection/type", locals: { current_form: }
     end

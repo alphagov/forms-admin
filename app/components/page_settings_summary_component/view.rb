@@ -3,6 +3,8 @@
 module PageSettingsSummaryComponent
   class View < ViewComponent::Base
     include Rails.application.routes.url_helpers
+    include PagesHelper
+
     def initialize(draft_question:, long_lists_enabled: false)
       super
       @draft_question = draft_question
@@ -105,9 +107,9 @@ module PageSettingsSummaryComponent
 
     def change_selections_options_long_lists_enabled_path
       if is_new_question?
-        long_lists_selection_options_new_path(form_id: @draft_question.form_id)
+        selection_options_new_path_for_draft_question(@draft_question)
       else
-        long_lists_selection_options_edit_path(form_id: @draft_question.form_id, page_id: @draft_question.page_id)
+        selection_options_edit_path_for_draft_question(@draft_question)
       end
     end
 
