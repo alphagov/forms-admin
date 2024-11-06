@@ -16,7 +16,7 @@
           end;
       end %>
 
-      <% RouteSummaryCardDataService.call(form: current_form, page:, pages:).summary_card_data.each do |card| %>
+      <% RouteSummaryCardDataPresenter.call(form: current_form, page:, pages:).summary_card_data.each do |card| %>
           <%= govuk_summary_list(**card) %>
       <% end %>
 
