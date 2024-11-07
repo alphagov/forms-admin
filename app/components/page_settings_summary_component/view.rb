@@ -41,8 +41,8 @@ module PageSettingsSummaryComponent
       @draft_question.answer_settings
     end
 
-    def show_selection_options
-      answer_settings[:selection_options].map { |option| option[:name] }.join(", ")
+    def selection_options
+      answer_settings[:selection_options]
     end
 
     def change_answer_type_path

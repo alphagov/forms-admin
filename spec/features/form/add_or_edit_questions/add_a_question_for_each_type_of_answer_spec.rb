@@ -227,16 +227,16 @@ private
   end
 
   def and_i_select_people_can_only_choose_one_option
-    expect(page.find("h1")).to have_text "How do you need to collect the answer?"
+    expect(page.find("h1")).to have_text "How many options should people be able to select?"
     expect_page_to_have_no_axe_errors(page)
-    choose "People can choose only one option"
+    choose "People can select only one option"
     click_button "Continue"
   end
 
   def and_i_select_people_can_choose_one_or_more_options
-    expect(page.find("h1")).to have_text "How do you need to collect the answer?"
+    expect(page.find("h1")).to have_text "How many options should people be able to select?"
     expect_page_to_have_no_axe_errors(page)
-    choose "People can choose more than one option"
+    choose "People can select one or more options"
     click_button "Continue"
   end
 
