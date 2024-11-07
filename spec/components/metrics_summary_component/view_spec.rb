@@ -24,24 +24,26 @@ RSpec.describe MetricsSummaryComponent::View, type: :component do
 
   describe "#formatted_date_range" do
     context "when the start and end dates are in different years" do
-      before do
-        metrics_summary.start_date = Time.zone.local(2023, 12, 25)
-        metrics_summary.end_date = Time.zone.local(2024, 0o1, 0o2)
+      around do |example|
+        travel_to(Time.zone.local(2024, 1, 3)) do
+          example.run
+        end
       end
 
       it "returns the full start and end dates" do
-        expect(metrics_summary.formatted_date_range).to eq("<span class=\"app-metrics__date\">25 December 2023</span> to <span class=\"app-metrics__date\">2 January 2024</span>")
+        expect(metrics_summary.formatted_date_range).to eq("<span class=\"app-metrics__date\">27 December 2023</span> to <span class=\"app-metrics__date\">2 January 2024</span>")
       end
     end
 
     context "when the start and end dates are in the same year" do
-      before do
-        metrics_summary.start_date = Time.zone.local(2023, 10, 31)
-        metrics_summary.end_date = Time.zone.local(2023, 11, 8)
+      around do |example|
+        travel_to(Time.zone.local(2023, 11, 7)) do
+          example.run
+        end
       end
 
       it "returns the start date without the year" do
-        expect(metrics_summary.formatted_date_range).to eq("<span class=\"app-metrics__date\">31 October</span> to <span class=\"app-metrics__date\">8 November 2023</span>")
+        expect(metrics_summary.formatted_date_range).to eq("<span class=\"app-metrics__date\">31 October</span> to <span class=\"app-metrics__date\">6 November 2023</span>")
       end
     end
   end
@@ -60,8 +62,6 @@ RSpec.describe MetricsSummaryComponent::View, type: :component do
 
   describe "#number_of_days" do
     it "returns the number of days between the start date and today's date, inclusive" do
-      metrics_summary.end_date = 1.day.ago.to_date
-
       expect(metrics_summary.number_of_days).to eq(7)
     end
   end

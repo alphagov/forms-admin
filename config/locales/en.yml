@@ -207,6 +207,10 @@ en:
   contact_govuk_forms: contact the GOV.UK Forms team
   contact_url: mailto:govuk-forms-support@govuk.zendesk.com
   continue: Continue
+  date:
+    formats:
+      default: "%-d %B %Y"
+      short: "%-d %B"
   declaration_input:
     new:
       body_html: |
@@ -762,6 +766,9 @@ en:
   internal_server_error:
     body: Please try again later.
     title: Sorry, there is a problem with the service
+  last_signed_in_at:
+    not_since_auth0_enabled: Before 3 November 2023
+    not_since_last_signed_in_at_added: Sometime between 3 November 2023 and 4 November 2024
   made_live_form:
     archive_this_form: Archive this form
     contact_details: Your form’s contact details for support
@@ -1226,6 +1233,13 @@ en:
       title: Feature and answer type usage in live forms
     index:
       title: Reports
+    last_signed_in_at:
+      heading: When users last signed in
+      no_users: All users have signed in since %{since}.
+      not_since: People who last signed in before %{since}
+      not_since_auth0_enabled: People who last signed in before 3 November 2023
+      not_since_last_signed_in_at_added: People who last signed in sometime between 3 November 2023 and 4 November 2024
+      title: When users last signed in
     users:
       heading: Number of users per organisation
       table_headings:
