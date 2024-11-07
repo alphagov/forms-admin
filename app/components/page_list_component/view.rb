@@ -16,8 +16,17 @@ module PageListComponent
       index != @pages.length - 1
     end
 
-    def question_text_for_page(id)
-      @pages.find { |page| page.id == id }.question_text
+    def condition_description(condition)
+      [
+        condition_check_page_text(condition),
+        answer_value_text_for_condition(condition),
+        goto_page_text_for_condition(condition),
+      ].join(" ")
+    end
+
+    def condition_check_page_text(condition)
+      check_page = @pages.find { |page| page.id == condition.check_page_id }
+      I18n.t("page_conditions.condition_check_page_text", check_page_text: check_page.question_text)
     end
 
     def answer_value_text_for_condition(condition)
@@ -31,12 +40,17 @@ module PageListComponent
 
     def goto_page_text_for_condition(condition)
       if condition.goto_page_id.present?
-        I18n.t("page_conditions.condition_goto_page_text", goto_page_text: question_text_for_page(condition.goto_page_id))
+        goto_page = @pages.find { |page| page.id == condition.goto_page_id }
+        I18n.t("page_conditions.condition_goto_page_text", goto_page_position: goto_page.position, goto_page_text: goto_page.question_text)
       elsif condition.skip_to_end
-        I18n.t("page_conditions.condition_goto_page_text", goto_page_text: I18n.t("page_conditions.check_your_answers"))
+        I18n.t("page_conditions.condition_goto_page_check_your_answers")
       else
         I18n.t("page_conditions.condition_goto_page_text_with_errors")
       end
+    end
+
+    def page_position(page)
+      page.position
     end
   end
 end
