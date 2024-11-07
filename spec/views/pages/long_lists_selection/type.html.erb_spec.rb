@@ -9,6 +9,7 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
   let(:only_one_option) { "true" }
   let(:draft_question) { build :draft_question, answer_type: "selection" }
   let(:routing_conditions) { [] }
+  let(:selection_type_input) { Pages::LongListsSelection::TypeInput.new(only_one_option:, draft_question:) }
 
   before do
     # # mock the form.page_number method
@@ -23,12 +24,14 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
     assign(:page, page)
     assign(:selection_type_path, selection_type_path)
     assign(:back_link_url, back_link_url)
-    assign(:selection_type_input, Pages::LongListsSelection::TypeInput.new(only_one_option:, draft_question:))
-
-    render(template: "pages/long_lists_selection/type")
+    assign(:selection_type_input, selection_type_input)
   end
 
   describe "only one option radios" do
+    before do
+      render(template: "pages/long_lists_selection/type")
+    end
+
     context "when input object has value of true" do
       let(:only_one_option) { "true" }
 
@@ -57,27 +60,73 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
     end
   end
 
-  describe "routing warning" do
-    context "when creating a new question" do
-      it "does not display a warning about routes being deleted if only one option changes" do
-        expect(rendered).not_to have_selector(".govuk-notification-banner__content")
-      end
-    end
-
-    context "when editing an existing question" do
-      let(:form) { build :form, id: 1, pages: [page] }
-
-      context "when no routing conditions set" do
+  describe "warnings" do
+    describe "routing warning" do
+      context "when creating a new question" do
         it "does not display a warning about routes being deleted if only one option changes" do
-          expect(rendered).not_to have_selector(".govuk-notification-banner__content")
+          render(template: "pages/long_lists_selection/type")
+          expect(rendered).not_to have_selector(".govuk-notification-banner")
         end
       end
 
-      context "when a routing condition is set" do
-        let(:routing_conditions) { [(build :condition)] }
+      context "when editing an existing question" do
+        let(:form) { build :form, id: 1, pages: [page] }
 
-        it "displays a warning" do
-          expect(rendered).to have_selector(".govuk-notification-banner__content")
+        context "when no routing conditions set" do
+          it "does not display a warning about routes being deleted" do
+            render(template: "pages/long_lists_selection/type")
+            expect(rendered).not_to have_selector(".govuk-notification-banner__content")
+          end
+        end
+
+        context "when a routing condition is set" do
+          let(:routing_conditions) { [(build :condition)] }
+
+          context "when the options will not need to be reduced" do
+            before do
+              allow(selection_type_input).to receive(:need_to_reduce_options?).and_return false
+              render(template: "pages/long_lists_selection/type")
+            end
+
+            it "displays a warning about routes being deleted" do
+              expect(rendered).to have_selector(".govuk-notification-banner__content", text: I18n.t("selection_type.routing_warning"))
+            end
+          end
+
+          context "when a routing condition is set and the options will need to be reduced" do
+            before do
+              allow(selection_type_input).to receive(:need_to_reduce_options?).and_return true
+              render(template: "pages/long_lists_selection/type")
+            end
+
+            it "displays a combined warning about routes being deleted and needing to reduce the options" do
+              expect(rendered).to have_selector(".govuk-notification-banner__content", text: I18n.t("selection_type.routing_and_reduce_your_options_combined_warning.heading"))
+            end
+          end
+        end
+      end
+    end
+
+    describe "reduce your options warning" do
+      context "when the options will not need to be reduced" do
+        before do
+          allow(selection_type_input).to receive(:need_to_reduce_options?).and_return false
+          render(template: "pages/long_lists_selection/type")
+        end
+
+        it "does not display a warning about reducing the number of options" do
+          expect(rendered).not_to have_selector(".govuk-notification-banner")
+        end
+      end
+
+      context "when the options will need to be reduced" do
+        before do
+          allow(selection_type_input).to receive(:need_to_reduce_options?).and_return true
+          render(template: "pages/long_lists_selection/type")
+        end
+
+        it "does not display a warning about reducing the number of options" do
+          expect(rendered).to have_selector(".govuk-notification-banner__content", text: I18n.t("selection_type.reduce_your_options_warning.heading"))
         end
       end
     end
