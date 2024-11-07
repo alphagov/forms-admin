@@ -2,7 +2,7 @@
 
 module MetricsSummaryComponent
   class View < ViewComponent::Base
-    attr_accessor :start_date, :end_date, :weekly_submissions, :weekly_starts, :weekly_started_but_not_completed, :weekly_completion_rate, :form_has_metrics, :error_message, :heading
+    attr_reader :start_date, :end_date, :weekly_submissions, :weekly_starts, :weekly_started_but_not_completed, :weekly_completion_rate, :form_has_metrics, :error_message, :heading
 
     def initialize(form_live_date, metrics_data)
       super
@@ -25,9 +25,9 @@ module MetricsSummaryComponent
     end
 
     def formatted_date_range
-      start_date_format_string = start_date.year == end_date.year ? "%e %B" : "%e %B %Y"
-      formatted_start_date = format_date(start_date.strftime(start_date_format_string))
-      formatted_end_date = format_date(end_date.strftime("%e %B %Y"))
+      start_date_format = start_date.year == end_date.year ? :short : :default
+      formatted_start_date = format_date(start_date.to_fs(start_date_format))
+      formatted_end_date = format_date(end_date.to_fs)
       I18n.t("metrics_summary.date_range", start_date: formatted_start_date, end_date: formatted_end_date)
     end
 
@@ -55,7 +55,7 @@ module MetricsSummaryComponent
       if form_went_live_today?
         I18n.t("metrics_summary.heading_without_dates")
       elsif form_went_live_yesterday?
-        I18n.t("metrics_summary.heading_with_single_date", date: format_date(start_date.strftime("%e %B %Y")))
+        I18n.t("metrics_summary.heading_with_single_date", date: format_date(start_date.to_fs))
       else
         I18n.t("metrics_summary.heading_with_dates", number_of_days:, formatted_date_range:)
       end
@@ -64,7 +64,7 @@ module MetricsSummaryComponent
   private
 
     def format_date(date)
-      "<span class=\"app-metrics__date\">#{date.strip}</span>"
+      "<span class=\"app-metrics__date\">#{date}</span>"
     end
 
     def form_went_live_today?
