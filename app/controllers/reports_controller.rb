@@ -28,4 +28,8 @@ class ReportsController < ApplicationController
 
     render template: "reports/add_another_answer", locals: { data: }
   end
+
+  def last_signed_in_at
+    authorize Report, :can_view_reports?
+  end
 end
