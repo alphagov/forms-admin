@@ -1002,7 +1002,7 @@ en:
     selection_type:
       default: Selection from a list
       none_of_the_above: None of the above
-      only_one_option: Selection from a list, one option only.
+      only_one_option: Selection from a list, one option only
   page_route_card:
     check_your_answers: Check your answers before submitting
     conditional_answer_value: "%{answer_value}"
