@@ -15,10 +15,10 @@ describe "pages/routes/show.html.erb" do
     ]
   end
 
-  let(:route_summary_card_data_service) { instance_double(RouteSummaryCardDataService, summary_card_data: route_cards) }
+  let(:route_summary_card_data_service) { instance_double(RouteSummaryCardDataPresenter, summary_card_data: route_cards) }
 
   before do
-    allow(RouteSummaryCardDataService).to receive(:call).and_return(route_summary_card_data_service)
+    allow(RouteSummaryCardDataPresenter).to receive(:call).and_return(route_summary_card_data_service)
     render template: "pages/routes/show", locals: { current_form: form, page:, pages: form.pages, back_link_url: "/back" }
   end
 

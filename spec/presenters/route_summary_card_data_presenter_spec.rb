@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe RouteSummaryCardDataService do
+describe RouteSummaryCardDataPresenter do
   include Capybara::RSpecMatchers
 
   subject(:service) { described_class.new(form:, page: current_page, pages:) }
