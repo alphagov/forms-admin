@@ -6,10 +6,13 @@ class Pages::QuestionInput < BaseInput
   # TODO: We could lose these attributes once we have an Check your answers page
   attr_accessor :answer_settings, :page_heading, :guidance_markdown
 
+  attr_reader :selection_options # only used for displaying error
+
   validates :draft_question, presence: true
   validates :hint_text, length: { maximum: 500 }
   validates :is_optional, inclusion: { in: %w[false true] }
   validates :is_repeatable, inclusion: { in: %w[false true] }, if: -> { Settings.features.repeatable_page_enabled }
+  validate :validate_number_of_selection_options
 
   def submit
     return false if invalid?
@@ -30,5 +33,14 @@ class Pages::QuestionInput < BaseInput
 
   def repeatable_options
     [OpenStruct.new(id: "true"), OpenStruct.new(id: "false")]
+  end
+
+  def validate_number_of_selection_options
+    return if draft_question.nil?
+    return unless @draft_question.answer_type == "selection"
+    return unless @draft_question.answer_settings[:only_one_option] == "false" &&
+      @draft_question.answer_settings[:selection_options].length > 30
+
+    errors.add(:selection_options, :too_many_selection_options)
   end
 end

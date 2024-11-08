@@ -5,6 +5,9 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
 
   let(:draft_question) { build :draft_question }
   let(:long_lists_enabled) { false }
+  let(:errors) { instance_double(ActiveModel::Errors) }
+  let(:selection_options_error_messages) { nil }
+  let(:question_input) { Pages::QuestionInput.new(draft_question:, is_optional: "false", is_repeatable: "false") }
   let(:change_text_settings_path) { "https://example.com/change_text_settings" }
   let(:change_date_settings_path) { "https://example.com/change_date_settings" }
   let(:change_address_settings_path) { "https://example.com/change_address_settings" }
@@ -29,7 +32,9 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
   let(:new_long_lists_selection_options_path) { long_lists_selection_options_new_path(form_id: draft_question.form_id) }
 
   before do
-    render_inline(described_class.new(draft_question:, long_lists_enabled:))
+    allow(errors).to receive(:has_key?).with(:selection_options).and_return(selection_options_error_messages.present?)
+    allow(errors).to receive(:messages_for).with(:selection_options).and_return(selection_options_error_messages)
+    render_inline(described_class.new(draft_question:, errors:, long_lists_enabled:))
   end
 
   context "when the page is not a selection page" do
@@ -76,6 +81,24 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
         expect(rows[2].find(".govuk-summary-list__value")).to have_text "Yes"
         expect(rows[3].find(".govuk-summary-list__key")).to have_text "Include an option for ‘None of the above’"
         expect(rows[3].find(".govuk-summary-list__value")).to have_text "No"
+      end
+
+      context "when there is an error for the selection options" do
+        let(:selection_options_error_messages) { ["A selection options error"] }
+
+        it("highlights the summary list row with error formatting") do
+          expect(page).to have_css(".govuk-summary-list__row.govuk-form-group--error", text: "Options")
+        end
+
+        it("displays an inline error message") do
+          expect(page).to have_css("#pages-question-input-selection-options-field-error.govuk-error-message", text: selection_options_error_messages.first)
+        end
+      end
+
+      context "when there is not an error for the selection options" do
+        it("does not highlight the summary list row with error formatting") do
+          expect(page).not_to have_css(".govuk-summary-list__row.govuk-form-group--error")
+        end
       end
 
       context "when 'None of the above' is a setting" do

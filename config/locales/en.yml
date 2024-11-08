@@ -104,6 +104,8 @@ en:
             question_text:
               blank: Enter a question
               too_long: Question text must be %{count} characters or less
+            selection_options:
+              too_many_selection_options: You cannot have more than 30 options in a list when people can select more than one option
   activerecord:
     errors:
       models:
@@ -269,6 +271,7 @@ en:
   errors:
     messages:
       non_government_email: Enter a government email address
+    prefix: 'Error:'
   footer:
     accessibility_statement: Accessibility statement
     cookies: Cookies

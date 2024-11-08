@@ -198,6 +198,48 @@ RSpec.describe Pages::QuestionInput, type: :model do
         expect(question_input).to be_invalid
       end
     end
+
+    describe "selection options" do
+      let(:selection_options) { (1..31).to_a.map { |i| { name: i.to_s } } }
+      let(:only_one_option) { "false" }
+      let(:draft_question) { build :selection_draft_question, answer_settings: { selection_options:, only_one_option: } }
+
+      context "when only_one_option is true" do
+        let(:only_one_option) { "true" }
+
+        context "when there are more than 30 options" do
+          it "is valid" do
+            expect(question_input).to be_valid
+          end
+        end
+      end
+
+      context "when only_one_option is false" do
+        context "when there are 30 options" do
+          let(:selection_options) { (1..30).to_a.map { |i| { name: i.to_s } } }
+
+          it "is valid" do
+            expect(question_input).to be_valid
+          end
+        end
+
+        context "when there are more than 30 options" do
+          it "is invalid" do
+            expect(question_input).to be_invalid
+            expect(question_input.errors[:selection_options])
+              .to include(I18n.t("activemodel.errors.models.pages/question_input.attributes.selection_options.too_many_selection_options"))
+          end
+        end
+      end
+
+      context "when answer type is not selection" do
+        let(:draft_question) { build :name_draft_question, answer_settings: { selection_options:, only_one_option: } }
+
+        it "is valid" do
+          expect(question_input).to be_valid
+        end
+      end
+    end
   end
 
   describe "#submit" do
