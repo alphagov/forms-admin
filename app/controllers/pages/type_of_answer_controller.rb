@@ -36,7 +36,10 @@ class Pages::TypeOfAnswerController < PagesController
 private
 
   def selection_path(form, action)
-    action == :create ? question_text_new_path(form) : selections_settings_edit_path(form)
+    return question_text_new_path(form) if action == :create
+    return long_lists_selection_type_edit_path(form, page) if form.group.long_lists_enabled
+
+    selections_settings_edit_path(form)
   end
 
   def text_path(form, action)
