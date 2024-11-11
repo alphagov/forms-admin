@@ -976,14 +976,15 @@ en:
     title: Page not found
   page_conditions:
     check_your_answers: Check your answers before submitting
-    condition_answer_value_text: is answered as “%{answer_value}”
-    condition_answer_value_text_with_errors: is answered as [Answer not selected]
-    condition_check_page_text: If “%{check_page_text}”
+    condition_answer_value_text: "“%{answer_value}”"
+    condition_answer_value_text_with_errors: "[Answer not selected]"
+    condition_check_page_text: "“%{check_page_text}”"
     condition_compact_html: 'If the answer is “%{answer_value}”<br> then skip to %{goto_page_number}: “%{goto_page_text}”'
     condition_compact_html_end_of_form: If the answer is “%{answer_value}”<br> then skip to “Check your answers before submitting”
-    condition_goto_page_check_your_answers: take the person to “Check your answers before submitting”.
-    condition_goto_page_text: take the person to %{goto_page_position}, “%{goto_page_text}”
-    condition_goto_page_text_with_errors: take the person to [Question not selected]
+    condition_description: If %{check_page_text} is answered as %{answer_value} take the person to %{goto_page_text}
+    condition_goto_page_check_your_answers: "“Check your answers before submitting”."
+    condition_goto_page_text: "%{goto_page_position}, “%{goto_page_text}”"
+    condition_goto_page_text_with_errors: "[Question not selected]"
     condition_name: Question %{page_index}’s route
     errors:
       error_summary:

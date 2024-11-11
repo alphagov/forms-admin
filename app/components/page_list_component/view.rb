@@ -17,11 +17,7 @@ module PageListComponent
     end
 
     def condition_description(condition)
-      [
-        condition_check_page_text(condition),
-        answer_value_text_for_condition(condition),
-        goto_page_text_for_condition(condition),
-      ].join(" ")
+      I18n.t("page_conditions.condition_description", check_page_text: condition_check_page_text(condition), goto_page_text: goto_page_text_for_condition(condition), answer_value: answer_value_text_for_condition(condition))
     end
 
     def condition_check_page_text(condition)
