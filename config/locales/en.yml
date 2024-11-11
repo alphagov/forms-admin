@@ -999,6 +999,7 @@ en:
         goto_page_doesnt_exist: The question you’re taking the person to no longer exists - edit question %{page_index}’s route
     none_of_the_above: None of the above
     route: Route
+    secondary_skip_description: After %{check_page_text} go to %{goto_page_text}
   page_options_service:
     answer_type: Answer type
     date: Date

@@ -17,7 +17,11 @@ module PageListComponent
     end
 
     def condition_description(condition)
-      I18n.t("page_conditions.condition_description", check_page_text: condition_check_page_text(condition), goto_page_text: goto_page_text_for_condition(condition), answer_value: answer_value_text_for_condition(condition))
+      if condition.secondary_skip?
+        I18n.t("page_conditions.secondary_skip_description", check_page_text: condition_check_page_text(condition), goto_page_text: goto_page_text_for_condition(condition))
+      else
+        I18n.t("page_conditions.condition_description", check_page_text: condition_check_page_text(condition), goto_page_text: goto_page_text_for_condition(condition), answer_value: answer_value_text_for_condition(condition))
+      end
     end
 
     def condition_check_page_text(condition)
