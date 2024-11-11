@@ -71,10 +71,31 @@ private
       rows: [
         {
           key: { text: I18n.t("page_route_card.continue_to") },
-          value: { text: continue_to_name  },
+          value: { text: continue_to_name },
         },
+        *secondary_skip_rows,
       ],
     }
+  end
+
+  def secondary_skip_rows
+    secondary_skip = all_routes.find(&:secondary_skip?)
+
+    return [] if secondary_skip.blank?
+
+    goto_page_name = secondary_skip.skip_to_end ? end_page_name : page_name(secondary_skip.goto_page_id)
+    routing_page_name = page_name(secondary_skip.routing_page_id)
+
+    [
+      {
+        key: { text: I18n.t("page_route_card.secondary_skip_after") },
+        value: { text: routing_page_name },
+      },
+      {
+        key: { text: I18n.t("page_route_card.secondary_skip_then") },
+        value: { text: goto_page_name },
+      },
+    ]
   end
 
   def page_name(page_id)

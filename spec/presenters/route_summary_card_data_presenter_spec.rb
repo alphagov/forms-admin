@@ -8,7 +8,7 @@ describe RouteSummaryCardDataPresenter do
   let(:form) { build :form, id: 99, pages: }
 
   let(:current_page) do
-    build(:page, id: 1, position: 1, question_text: "Current Question", next_page: next_page.id, routing_conditions: [routing_condition])
+    build(:page, id: 1, position: 1, question_text: "Current Question", next_page: next_page.id, routing_conditions:)
   end
 
   let(:next_page) do
@@ -20,6 +20,8 @@ describe RouteSummaryCardDataPresenter do
   let(:routing_condition) do
     build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Yes", goto_page_id: 2, skip_to_end: false)
   end
+
+  let(:routing_conditions) { [routing_condition] }
 
   describe ".call" do
     it "instantiates and returns a new instance" do
@@ -58,8 +60,24 @@ describe RouteSummaryCardDataPresenter do
       end
     end
 
+    context "with a route with no answer_value" do
+      let(:routing_conditions) do
+        [
+          build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Yes", goto_page_id: 2, skip_to_end: false),
+          build(:condition, id: 2, routing_page_id: 2, check_page_id: 1, answer_value: nil, goto_page_id: nil, skip_to_end: true),
+        ]
+      end
+
+      it 'shows "Check your answers" as destination' do
+        result = service.summary_card_data
+        expect(result[1][:rows][0][:value][:text]).to eq("2. Next Question")
+        expect(result[1][:rows][1][:value][:text]).to eq("2. Next Question")
+        expect(result[1][:rows][2][:value][:text]).to eq("Check your answers before submitting")
+      end
+    end
+
     context "with no conditional routes" do
-      let(:routing_condition) { nil }
+      let(:routing_conditions) { [] }
 
       it "returns only the default route card" do
         result = service.summary_card_data

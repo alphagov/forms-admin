@@ -1021,6 +1021,8 @@ en:
     if_answer_is: If the answer is
     page_name: "%{page_position}. %{page_name}"
     question_title: Question %{position}
+    secondary_skip_after: Then after the person answers
+    secondary_skip_then: take them to
     take_the_person_to: take the person to
   page_settings_summary:
     address:
