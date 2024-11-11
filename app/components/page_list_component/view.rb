@@ -52,5 +52,10 @@ module PageListComponent
     def page_position(page)
       page.position
     end
+
+    def condition_page_position(condition)
+      check_page = @pages.find { |page| page.id == condition.check_page_id }
+      page_position(check_page)
+    end
   end
 end
