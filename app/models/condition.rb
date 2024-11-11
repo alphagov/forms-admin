@@ -17,4 +17,8 @@ class Condition < ActiveResource::Base
       { name: error.name, field: error_fields[error.name.to_sym] || :answer_value }
     end
   end
+
+  def secondary_skip?
+    answer_value.blank? && check_page_id != routing_page_id
+  end
 end
