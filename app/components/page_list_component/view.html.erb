@@ -48,17 +48,8 @@
                 </ul>
 
                 <p>
-                  <%= t("page_conditions.condition_check_page_text", check_page_text: question_text_for_page(condition.check_page_id)) %>
+                  <%= condition_description(condition) %>
                 </p>
-
-                <p>
-                  <%= answer_value_text_for_condition(condition) %>
-                </p>
-
-                <p>
-                  <%= goto_page_text_for_condition(condition) %>
-                </p>
-              </dd>
 
               <dd class="govuk-summary-list__actions govuk-!-padding-bottom-6">
                 <%= govuk_link_to show_routes_path(form_id: @form_id, page_id: page.id) do %>
