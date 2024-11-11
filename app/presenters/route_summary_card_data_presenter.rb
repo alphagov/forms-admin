@@ -61,7 +61,7 @@ private
   end
 
   def default_route_card
-    goto_page_name = page.has_next_page? ? page_name(page.next_page) : end_page_name
+    continue_to_name = page.has_next_page? ? page_name(page.next_page) : end_page_name
 
     {
       card: {
@@ -71,7 +71,7 @@ private
       rows: [
         {
           key: { text: I18n.t("page_route_card.continue_to") },
-          value: { text: goto_page_name },
+          value: { text: continue_to_name  },
         },
       ],
     }
