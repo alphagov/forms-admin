@@ -21,16 +21,16 @@ class RouteSummaryCardDataPresenter
     conditional_route_cards + [default_route_card]
   end
 
-private
-
   def all_routes
-    all_form_routing_conditions = pages.flat_map(&:routing_conditions).compact_blank
-    all_form_routing_conditions.reject { |rc| rc.routing_page_id != page.id || rc.check_page_id != page.id }
+    all_form_routing_conditions = pages.flat_map(&:conditions).compact_blank
+    all_form_routing_conditions.select { |rc| rc.check_page_id == page.id }
   end
 
   def conditional_routes
     all_routes.select { |rc| rc.answer_value.present? }
   end
+
+private
 
   def conditional_route_cards
     conditional_routes.map.with_index(1) { |routing_condition, index| conditional_route_card(routing_condition, index) }
