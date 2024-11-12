@@ -1,4 +1,4 @@
-<%= govuk_summary_list do |summary_list| %>
+<%= govuk_summary_list(classes: "app-summary-list") do |summary_list| %>
   <%= summary_list.with_row do |row| %>
     <%= row.with_key(text: t("page_settings_summary.answer_type")) %>
     <%= row.with_value(text: t("helpers.label.page.answer_type_options.names.#{@draft_question.answer_type}")) %>
@@ -8,10 +8,14 @@
   <% end %>
 
   <% if show_selection_settings_summary %>
-    <%= summary_list.with_row do |row| %>
+    <%= summary_list.with_row(classes: class_names("govuk-form-group--error": @errors&.has_key?(:selection_options))) do |row| %>
       <%= row.with_key(text: t("page_settings_summary.selection.options")) %>
       <%= row.with_value do %>
-        <%= row.with_value do %>
+          <% if @errors&.has_key?(:selection_options) %>
+            <p id="pages-question-input-selection-options-field-error" class="govuk-error-message">
+              <span class="govuk-visually-hidden"><%= t("errors.prefix") %></span> <%= @errors.messages_for(:selection_options).first %>
+            </p>
+          <% end %>
           <p>
             <%= t("page_settings_summary.selection.options_count", number_of_options: selection_options.length) %>
           </p>
@@ -20,7 +24,6 @@
               <li><%= option[:name] %></li>
             <% end %>
           </ul>
-        <% end %>
       <% end %>
       <%= row.with_action(text: t("page_settings_summary.change"),
                     href: @change_selections_options_path,
