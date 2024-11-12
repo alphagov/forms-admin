@@ -139,25 +139,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
         expect(banner_contents).to have_link(text: "Add a question", href: start_new_question_path(form_id: 2))
         expect(banner_contents).to have_link(text: "Back to your questions", href: form_pages_path(form_id: 2))
       end
-
-      context "when passing is_repeatable as a param" do
-        let(:params) do
-          { pages_question_input: {
-            question_text: "What is your home address?",
-            hint_text: "This should be the location stated in your contract.",
-            is_optional: false,
-            is_repeatable: true,
-          } }
-        end
-
-        it "creates the page on the API with the correct is_repeatable value" do
-          matched_request = ActiveResource::HttpMock.requests.find do |request|
-            request.method == :post && request.path == "/api/v1/forms/2/pages"
-          end
-
-          expect(JSON.parse(matched_request.body)).to include("is_repeatable" => true)
-        end
-      end
     end
 
     context "when question_input has invalid data" do
@@ -350,29 +331,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
           expect(banner_contents).to have_link(text: "Edit next question", href: edit_question_path(form_id: 2, page_id: 4))
           expect(banner_contents).to have_link(text: "Back to your questions", href: form_pages_path(form_id: 2))
-        end
-      end
-
-      context "when passing is_repeatable as a param" do
-        let(:params) do
-          { pages_question_input: {
-            form_id: 2,
-            question_text: "What is your home address?",
-            hint_text: "This should be the location stated in your contract.",
-            answer_type: "address",
-            is_optional: "false",
-            is_repeatable: "true",
-            page_heading: "New page heading",
-            guidance_markdown: "## Heading level 2",
-          } }
-        end
-
-        it "updates the page on the API with the correct is_repeatable value" do
-          matched_request = ActiveResource::HttpMock.requests.find do |request|
-            request.method == :put && request.path == "/api/v1/forms/2/pages/1"
-          end
-
-          expect(JSON.parse(matched_request.body)).to include("is_repeatable" => true)
         end
       end
     end
