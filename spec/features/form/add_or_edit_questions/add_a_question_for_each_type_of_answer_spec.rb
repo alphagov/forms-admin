@@ -263,10 +263,10 @@ private
   end
 
   def fill_in_bulk_options(options)
-    click_link "Enter all options into a textbox"
+    click_link "Enter all the options into one text box"
     expect(page.find("h1")).to have_text("Create a list of options")
     expect_page_to_have_no_axe_errors(page)
-    fill_in "Add options to your list", with: options.join("\n")
+    fill_in "Enter the options for your list", with: options.join("\n")
     choose "Yes"
     click_button "Save and continue"
   end
