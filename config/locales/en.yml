@@ -1016,7 +1016,7 @@ en:
   page_route_card:
     check_your_answers: Check your answers before submitting
     conditional_answer_value: "%{answer_value}"
-    continue_to: continue to
+    continue_to: For any other answer, continue to
     delete_route: Delete routes
     if_answer_is: If the answer is
     page_name: "%{page_position}. %{page_name}"
