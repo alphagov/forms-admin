@@ -1,0 +1,9 @@
+.app-summary-list {
+  // Summary list component overrides
+  .govuk-form-group--error .govuk-summary-list__key {
+    @include govuk-media-query($from: tablet) {
+      padding-left: govuk-spacing(3);
+    }
+  }
+
+}

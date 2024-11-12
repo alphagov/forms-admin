@@ -19,4 +19,9 @@ class Pages::LongListsSelection::TypeInput < BaseInput
   def only_one_option_options
     [OpenStruct.new(id: "true"), OpenStruct.new(id: "false")]
   end
+
+  def need_to_reduce_options?
+    selection_options = draft_question&.answer_settings&.[](:selection_options)
+    selection_options.present? && selection_options.length > 30
+  end
 end

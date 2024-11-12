@@ -104,6 +104,8 @@ en:
             question_text:
               blank: Enter a question
               too_long: Question text must be %{count} characters or less
+            selection_options:
+              too_many_selection_options: You cannot have more than 30 options in a list when people can select more than one option
   activerecord:
     errors:
       models:
@@ -269,6 +271,7 @@ en:
   errors:
     messages:
       non_government_email: Enter a government email address
+    prefix: 'Error:'
   footer:
     accessibility_statement: Accessibility statement
     cookies: Cookies
@@ -1276,6 +1279,14 @@ en:
     remove_html: Remove <span class="govuk-visually-hidden">option %{option_number}</span>
     select_more_than_one_option: People will be able to select one or more options from your list.
     select_one_option: People will be able to select one option from your list.
+  selection_type:
+    reduce_your_options_warning:
+      body: You can only have up to 30 options in a list where people can select one or more options. If you make this change, you’ll be able to edit your list on the next page.
+      heading: If you change this to ‘one or more options’, you’ll need to edit your list
+    routing_and_reduce_your_options_combined_warning:
+      body: You can only have up to 30 options in a list where people can select one or more options. If you make this change, you’ll be able to edit your list on the next page.
+      heading: If you change this to ‘one or more options’, the route from this question will be deleted and you’ll need to edit the list
+    routing_warning: If you change this to ‘one or more options’, the route from this question will be deleted
   selections_settings:
     add_another: Add another option
     add_options: Add options to your list
