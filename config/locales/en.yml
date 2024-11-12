@@ -75,7 +75,7 @@ en:
         forms/receive_csv_input:
           attributes:
             submission_type:
-              blank: Choose whether you want to get completed forms as CSV files
+              blank: Choose if you want to get completed forms as CSV files
         group_member_input:
           attributes:
             member_email_address:
@@ -180,12 +180,12 @@ en:
       route_updated: Question %{question_position}’s route has been updated
       title: Success
   bulk_options:
-    hint: List your options, with each option on a new line.
-    label: Add options to your list
-    longer_than_30_options: If your list is longer than 30 options people will be able to search and find the options by typing in an autocomplete box.
-    select_more_than_one_option: People will be able to select more than one option from your list.
+    hint: Enter each option on a new line
+    label: Enter the options for your list
+    longer_than_30_options: If your list is longer than 30 options, people will be able to search and find the options by typing into an autocomplete box.
+    select_more_than_one_option: People will be able to select one or more options from your list.
     select_one_option: People will be able to select one option from your list.
-    up_to_30_options: Your list can have a maximum of 30 options.
+    up_to_30_options: You can have up to 30 options.
   cancel: Cancel
   contact_details:
     new:
@@ -606,10 +606,10 @@ en:
           single_line: Ask the question the way you would in person. For example, ‘What’s your reference number?’
       pages_long_lists_selection_bulk_options_input:
         include_none_of_the_above_options:
-          'true': We will add ‘None of the above’ to the end of your list of options
+          'true': We’ll add ‘None of the above’ to the end of your list of options
       pages_long_lists_selection_options_input:
         include_none_of_the_above_options:
-          'true': We will add ‘None of the above’ to the end of your list of options
+          'true': We’ll add ‘None of the above’ to the end of your list of options
       pages_question_input:
         is_optional_options:
           'true': We’ll add ‘(optional)’ to the end of the question text.
@@ -750,9 +750,9 @@ en:
       mou_signature:
         agreed: Do you agree to the MOU?
       pages_long_lists_selection_bulk_options_input:
-        include_none_of_the_above: Should the list of options Include ‘None of the above’?
+        include_none_of_the_above: Should the list include an option for ‘None of the above’?
       pages_long_lists_selection_options_input:
-        include_none_of_the_above: Should the list of options include ‘None of the above’?
+        include_none_of_the_above: Should the list include an option for ‘None of the above’?
       pages_question_input:
         is_optional: Should this question be mandatory or optional?
         is_repeatable: Should people be able to answer this question more than once?
@@ -1042,7 +1042,7 @@ en:
     address_settings: What kind of addresses do you expect to receive?
     archive_form_confirm: Archive this form
     archive_form_confirmation: Your form has been archived
-    bulk_options: Create a list of options
+    bulk_options: Enter your list’s options into a text box
     change_name: Name your form
     confirm_email: Enter the confirmation code
     confirm_email_success: Email address confirmed
@@ -1270,11 +1270,11 @@ en:
     add_options: Add options to your list
     add_options_hint: You can add up to %{maximum} options
     cannot_add_more_options: You cannot add any more options as you have reached the maximum of %{maximum} options.
-    enter_all_options_into_textbox: Enter all options into a textbox
+    enter_all_options_into_textbox: Enter all the options into one text box
     longer_than_30_options: If your list is longer than 30 options people will be able to search and find the options by typing in an autocomplete box.
     option: Option %{number}
     remove_html: Remove <span class="govuk-visually-hidden">option %{option_number}</span>
-    select_more_than_one_option: People will be able to select more than one option from your list.
+    select_more_than_one_option: People will be able to select one or more options from your list.
     select_one_option: People will be able to select one option from your list.
   selections_settings:
     add_another: Add another option
