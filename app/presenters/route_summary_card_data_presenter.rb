@@ -18,7 +18,8 @@ class RouteSummaryCardDataPresenter
   end
 
   def summary_card_data
-    conditional_route_cards + [default_route_card]
+    conditional_cards = conditional_route_cards
+    conditional_cards + [default_route_card(conditional_cards.length + 1)]
   end
 
   def all_routes
@@ -41,7 +42,7 @@ private
 
     {
       card: {
-        title: I18n.t("page_route_card.conditional_route_title", index:),
+        title: I18n.t("page_route_card.route_title", index:),
         classes: "app-summary-card",
         actions: [
           govuk_link_to("Edit", edit_condition_path(form_id: form.id, page_id: page.id, condition_id: routing_condition.id)),
@@ -60,12 +61,12 @@ private
     }
   end
 
-  def default_route_card
+  def default_route_card(index)
     continue_to_name = page.has_next_page? ? page_name(page.next_page) : end_page_name
 
     {
       card: {
-        title: I18n.t("page_route_card.default_route_title"),
+        title: I18n.t("page_route_card.route_title", index:),
         classes: "app-summary-card",
       },
       rows: [

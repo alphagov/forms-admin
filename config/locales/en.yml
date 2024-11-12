@@ -1016,13 +1016,12 @@ en:
   page_route_card:
     check_your_answers: Check your answers before submitting
     conditional_answer_value: "%{answer_value}"
-    conditional_route_title: Route %{index}
     continue_to: continue to
-    default_route_title: For any other answer
     delete_route: Delete routes
     if_answer_is: If the answer is
     page_name: "%{page_position}. %{page_name}"
     question_title: Question %{position}
+    route_title: Route %{index}
     secondary_skip_after: Then after the person answers
     secondary_skip_then: take them to
     take_the_person_to: take the person to

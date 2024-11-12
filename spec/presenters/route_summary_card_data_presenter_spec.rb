@@ -43,7 +43,7 @@ describe RouteSummaryCardDataPresenter do
         expect(result[0][:rows][1][:value][:text]).to eq("2. Next Question")
 
         # default route
-        expect(result[1][:card][:title]).to eq("For any other answer")
+        expect(result[1][:card][:title]).to eq("Route 2")
         expect(result[1][:card][:actions]).to be_nil
         expect(result[1][:rows][0][:value][:text]).to eq("2. Next Question")
       end
@@ -82,7 +82,7 @@ describe RouteSummaryCardDataPresenter do
       it "returns only the default route card" do
         result = service.summary_card_data
         expect(result.length).to eq(1)
-        expect(result[0][:card][:title]).to eq("For any other answer")
+        expect(result[0][:card][:title]).to eq("Route 1")
       end
     end
 
