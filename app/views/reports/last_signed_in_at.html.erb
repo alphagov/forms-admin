@@ -9,7 +9,6 @@
     <% _1_year_ago = 1.year.ago.to_date.to_fs %>
     <%= render LastSignedInAtReportComponent::View.new(
       t(".not_since", since: _1_year_ago), User.where("last_signed_in_at <= ?", 1.year.ago),
-      empty_message: t(".no_users", since: _1_year_ago)
     ) %>
 
     <%= render LastSignedInAtReportComponent::View.new(
