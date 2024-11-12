@@ -12,7 +12,7 @@
     ) %>
 
     <%= render LastSignedInAtReportComponent::View.new(
-      t(".not_since_last_signed_in_at_added"), User.where(last_signed_in_at: nil),
+      t(".not_since_last_signed_in_at_added"), User.where.not(provider: :gds).where(last_signed_in_at: nil),
     ) %>
 
     <%= render LastSignedInAtReportComponent::View.new(

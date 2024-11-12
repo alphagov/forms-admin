@@ -250,4 +250,35 @@ RSpec.describe ReportsController, type: :request do
       end
     end
   end
+
+  describe "#last_signed_in_at" do
+    let!(:users) do
+      [
+        create(:user, provider: :auth0, last_signed_in_at: (1.year + 2.months).ago),
+        create(:user, provider: :auth0, last_signed_in_at: nil),
+        create(:user, provider: :gds, last_signed_in_at: nil),
+      ]
+    end
+
+    before do
+      login_as_super_admin_user
+
+      get report_last_signed_in_at_path
+    end
+
+    it "returns http code 200" do
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "renders the last_signed_in_at report view" do
+      expect(response).to render_template("reports/last_signed_in_at")
+    end
+
+    it "includes the report data" do
+      expect(response.body).to include "When users last signed in"
+      expect(response.body).to include users.first.email
+      expect(response.body).to include users.second.email
+      expect(response.body).to include users.third.email
+    end
+  end
 end
