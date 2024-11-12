@@ -64,4 +64,7 @@ if HostingEnvironment.local_development? && User.none?
 
   # add a form to a test group (assumes database seed being used for forms-api)
   GroupForm.create! group: test_group, form_id: 1
+
+  # add form with submission_type of s3 to end to end group (assumes database seed being used for forms-api)
+  GroupForm.create! group: end_to_end_group, form_id: 2
 end
