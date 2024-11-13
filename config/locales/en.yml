@@ -1243,7 +1243,6 @@ en:
       title: Reports
     last_signed_in_at:
       heading: When users last signed in
-      no_users: All users have signed in since %{since}.
       not_since: People who last signed in before %{since}
       not_since_auth0_enabled: People who last signed in before 3 November 2023
       not_since_last_signed_in_at_added: People who last signed in sometime between 3 November 2023 and 4 November 2024
