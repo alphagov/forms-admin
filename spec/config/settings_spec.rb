@@ -23,7 +23,7 @@ describe "Settings" do
     features = settings[:features]
 
     include_examples expected_value_test, :groups, features, true
-    include_examples expected_value_test, :repeatable_page_enabled, features, false
+    include_examples expected_value_test, :branch_routing, features, false
   end
 
   describe "forms_api" do

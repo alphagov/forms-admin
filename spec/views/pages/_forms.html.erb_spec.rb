@@ -43,26 +43,18 @@ describe "pages/_form.html.erb", type: :view do
     expect(rendered).to have_unchecked_field("pages_question_input[is_optional]")
   end
 
-  context "when feature repeatable page is enabled", :feature_repeatable_page_enabled do
-    it "has a radio input for repeatable" do
-      expect(rendered).to have_field("pages_question_input[is_repeatable]", type: :radio)
-    end
-
-    it "has a details about repeatable questions" do
-      expect(rendered).to have_text(I18n.t("repeatable.summary_text"))
-    end
-
-    context "when the question is an only one option selection" do
-      let(:page) { build :page, :with_selections_settings, id: 2, form_id: form.id }
-
-      it "does not have the radio input for repeatable" do
-        expect(rendered).not_to have_field("pages_question_input[is_repeatable]", type: :radio)
-      end
-    end
+  it "has a radio input for repeatable" do
+    expect(rendered).to have_field("pages_question_input[is_repeatable]", type: :radio)
   end
 
-  context "when feature repeatable page is not enabled", feature_repeatable_page_enabled: false do
-    it "does not have a radio input for repeatable" do
+  it "has a details about repeatable questions" do
+    expect(rendered).to have_text(I18n.t("repeatable.summary_text"))
+  end
+
+  context "when the question is an only one option selection" do
+    let(:page) { build :page, :with_selections_settings, id: 2, form_id: form.id }
+
+    it "does not have the radio input for repeatable" do
       expect(rendered).not_to have_field("pages_question_input[is_repeatable]", type: :radio)
     end
   end
@@ -101,6 +93,7 @@ describe "pages/_form.html.erb", type: :view do
       build :question_input,
             draft_question:,
             answer_type: page.answer_type,
+            answer_settings: page.answer_settings,
             question_text: page.question_text,
             hint_text: page.hint_text
     end

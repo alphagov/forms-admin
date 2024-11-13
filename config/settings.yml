@@ -1,7 +1,6 @@
 # Used to add feature flags in the app to control access to certain features.
 features:
   groups: true # Do not switch off!
-  repeatable_page_enabled: false
   branch_routing: false
 
 forms_api:
