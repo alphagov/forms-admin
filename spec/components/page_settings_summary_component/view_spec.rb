@@ -123,9 +123,10 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
       context "when long_lists_enabled is true for the group" do
         let(:long_lists_enabled) { true }
         let(:only_one_option) { "false" }
+        let(:is_optional) { false }
         let(:draft_question) do
           build :selection_draft_question,
-                is_optional: false,
+                is_optional:,
                 answer_settings: {
                   only_one_option:,
                   selection_options: [{ name: "Option 1" }, { name: "Option 2" }],
@@ -168,11 +169,11 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
         end
 
         context "when is_optional is true" do
-          let(:only_one_option) { "false" }
+          let(:is_optional) { "true" }
 
-          it "says people can select one or more options in the summary table" do
+          it "says an option for None of the above will be included" do
             rows = page.find_all(".govuk-summary-list__row")
-            expect(rows[2].find(".govuk-summary-list__value")).to have_text I18n.t("helpers.label.pages_long_lists_selection_type_input.only_one_option_options.false")
+            expect(rows[3].find(".govuk-summary-list__value")).to have_text "Yes"
           end
         end
 
