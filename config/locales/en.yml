@@ -615,8 +615,8 @@ en:
           'true': We’ll add ‘None of the above’ to the end of your list of options
       pages_long_lists_selection_type_input:
         only_one_option_options:
-          'false': Your list can have up to 1,000 options
-          'true': Your list can have up to 30 options
+          'false': Your list can have up to 30 options
+          'true': Your list can have up to 1,000 options
       pages_question_input:
         is_optional_options:
           'true': We’ll add ‘(optional)’ to the end of the question text.
@@ -738,8 +738,8 @@ en:
           'true': 'Yes'
       pages_long_lists_selection_type_input:
         only_one_option_options:
-          'false': One option only
-          'true': One or more options
+          'false': One or more options
+          'true': One option only
       pages_question_input:
         hint_text: Hint text (optional)
         is_optional_options:
