@@ -83,6 +83,42 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
         expect(rows[3].find(".govuk-summary-list__value")).to have_text "No"
       end
 
+      context "when there are 10 or more selection options" do
+        let(:only_one_option) { "false" }
+        let(:draft_question) do
+          build :selection_draft_question,
+                answer_settings: {
+                  only_one_option:,
+                  selection_options: [{ name: "Option 1" },
+                                      { name: "Option 2" },
+                                      { name: "Option 3" },
+                                      { name: "Option 4" },
+                                      { name: "Option 5" },
+                                      { name: "Option 6" },
+                                      { name: "Option 7" },
+                                      { name: "Option 8" },
+                                      { name: "Option 9" },
+                                      { name: "Option 10" }],
+                }
+        end
+
+        it "has a details element containing the selection options" do
+          details = page.find(".govuk-summary-list__row details")
+
+          expect(details).to have_css("summary", text: I18n.t("page_settings_summary.selection.options_summary", number_of_options: "10"))
+          expect(details).to have_css("li", text: "Option 1", visible: :all)
+          expect(details).to have_css("li", text: "Option 2", visible: :all)
+          expect(details).to have_css("li", text: "Option 3", visible: :all)
+          expect(details).to have_css("li", text: "Option 4", visible: :all)
+          expect(details).to have_css("li", text: "Option 5", visible: :all)
+          expect(details).to have_css("li", text: "Option 6", visible: :all)
+          expect(details).to have_css("li", text: "Option 7", visible: :all)
+          expect(details).to have_css("li", text: "Option 8", visible: :all)
+          expect(details).to have_css("li", text: "Option 9", visible: :all)
+          expect(details).to have_css("li", text: "Option 10", visible: :all)
+        end
+      end
+
       context "when there is an error for the selection options" do
         let(:selection_options_error_messages) { ["A selection options error"] }
 

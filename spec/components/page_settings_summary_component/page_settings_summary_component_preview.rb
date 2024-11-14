@@ -14,6 +14,24 @@ class PageSettingsSummaryComponent::PageSettingsSummaryComponentPreview < ViewCo
     render(PageSettingsSummaryComponent::View.new(draft_question:))
   end
 
+  def with_selection_answer_type_and_10_or_more_options
+    draft_question = DraftQuestion.new(form_id: 1,
+                                       is_optional: "false",
+                                       answer_type: "selection",
+                                       answer_settings: { only_one_option: "true",
+                                                          selection_options: [{ name: "Option 1" },
+                                                                              { name: "Option 2" },
+                                                                              { name: "Option 3" },
+                                                                              { name: "Option 4" },
+                                                                              { name: "Option 5" },
+                                                                              { name: "Option 6" },
+                                                                              { name: "Option 7" },
+                                                                              { name: "Option 8" },
+                                                                              { name: "Option 9" },
+                                                                              { name: "Option 10" }] })
+    render(PageSettingsSummaryComponent::View.new(draft_question:))
+  end
+
   def with_text_answer_type
     draft_question = DraftQuestion.new(form_id: 1,
                                        answer_type: "text",
