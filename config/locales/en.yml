@@ -1094,6 +1094,7 @@ en:
     mou_signatures: Memorandum of Understanding agreements
     name_settings: Ask for a person’s name
     new_page: Edit question
+    new_secondary_skip: 'Route %{route_index}: set questions to skip'
     not_found: Page not found
     payment_link: Add a link to a payment page on GOV.UK Pay
     privacy_policy: Provide a link to privacy information for this form
@@ -1322,6 +1323,17 @@ en:
         You can only add one route from each question.
       </p>
   save_and_continue: Save and continue
+  secondary_skip:
+    new:
+      back: Back to question %{page_position}’s routes
+      caption: Question %{page_position}’s routes
+      details_html: |
+        <p>People who select an answer that does not have a route assigned to it will continue to the next question.</p>
+        <p>If you need to, you can make these people skip one or more questions later in the form. For example, you might want them to skip route 1’s questions. This allows you to create 2 different ‘branches’ of questions.</p>
+      details_summary: Why set question to skip?
+      primary_route_answer_key: is not
+      primary_route_continue_key: continue to
+      primary_route_question_key: If the answer to
   selection_options:
     add_another: Add another option
     add_options: Add options to your list

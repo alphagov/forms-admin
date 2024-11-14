@@ -1,0 +1,33 @@
+<%= form_with(model: secondary_skip_input, url: submit_path) do |f| %>
+  <% if  secondary_skip_input&.errors.any? %>
+    <%= f.govuk_error_summary %>
+  <% end %>
+
+  <%= content_for :heading %>
+
+  <%= govuk_summary_list(actions: false, classes: "govuk-summary-list--no-border") do |summary_list|
+    summary_list.with_row do |row|
+      row.with_key { t("secondary_skip.new.primary_route_question_key") }
+      row.with_value { secondary_skip_input.page.question_text }
+    end;
+    summary_list.with_row do |row|
+      row.with_key { t("secondary_skip.new.primary_route_answer_key") }
+      row.with_value { secondary_skip_input.answer_value }
+    end;
+    summary_list.with_row do |row|
+      row.with_key { t("secondary_skip.new.primary_route_continue_key") }
+      row.with_value { secondary_skip_input.continue_to }
+    end;
+  end %>
+
+  <%= f.govuk_collection_select :routing_page_id, secondary_skip_input.routing_page_options, :id, :question_text, options: { include_blank: t("helpers.label.pages_secondary_skip_input.default_routing_page_id") } %>
+  <%= f.govuk_collection_select :goto_page_id, secondary_skip_input.goto_page_options, :id, :question_text, options: { include_blank: t("helpers.label.pages_secondary_skip_input.default_goto_page_id") } %>
+
+  <%= govuk_details(summary_text: t("secondary_skip.new.details_summary")) do
+    t("secondary_skip.new.details_html")
+  end %>
+
+  <%= f.govuk_submit t("save_and_continue") do
+    govuk_link_to(I18n.t("cancel"), show_routes_path(form_id: secondary_skip_input.form.id, page_id: secondary_skip_input.page.id))
+  end %>
+<% end %>

@@ -1,0 +1,19 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.new_secondary_skip', route_index: 2), false)) %>
+<% content_for :back_link, govuk_back_link_to(back_link_url, t('secondary_skip.new.back', page_position: secondary_skip_input.page.position)) %>
+
+<% content_for :heading do %>
+  <h1 class="govuk-heading-l">
+    <span class="govuk-caption-l"><%= t("secondary_skip.new.caption", page_position: secondary_skip_input.page.position) %></span>
+    <%= t("page_titles.new_secondary_skip", route_index: 2) %>
+    <%# TODO: route_index is hardcoded as 2 here because we know there are only two conditions. It will need to change in the future %>
+  </h1>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render partial: 'form', locals: {
+      secondary_skip_input:,
+      submit_path: create_secondary_skip_path(form_id: secondary_skip_input.form.id, page_id: secondary_skip_input.page.id),
+    } %>
+  </div>
+</div>
