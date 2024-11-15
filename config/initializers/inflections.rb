@@ -17,4 +17,7 @@
 
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym "DfE"
+
+  # Needed interally for zeitwerk autoloader
+  inflect.acronym "OmniAuth"
 end

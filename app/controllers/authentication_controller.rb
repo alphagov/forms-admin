@@ -72,6 +72,8 @@ private
     root_path
   end
 
+  alias_method :user_research_sign_out_url, :developer_sign_out_url
+
   def mock_gds_sso_sign_out_url
     "https://signon.integration.publishing.service.gov.uk/users/sign_out"
   end
