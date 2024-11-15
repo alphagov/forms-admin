@@ -1253,6 +1253,22 @@ en:
       not_since_auth0_enabled: People who last signed in before 3 November 2023
       not_since_last_signed_in_at_added: People who last signed in sometime between 3 November 2023 and 4 November 2024
       title: When users last signed in
+    selection_questions:
+      autocomplete:
+        title: Select one only - more than 30 options in live forms
+      checkboxes:
+        title: Select one or more in live forms
+      questions:
+        back_link: Back to selection from a list of options usage
+        none_of_the_above_no: 'No'
+        none_of_the_above_yes: 'Yes'
+        table_headings:
+          form_name: Form name
+          none_of_the_above: "‘None of the above’"
+          number_of_options: Number of options
+          question: Question
+      radios:
+        title: Select one only - 30 options or fewer in live forms
     users:
       heading: Number of users per organisation
       table_headings:

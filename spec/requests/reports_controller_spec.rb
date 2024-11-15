@@ -281,4 +281,93 @@ RSpec.describe ReportsController, type: :request do
       expect(response.body).to include users.third.email
     end
   end
+
+  describe "selection question reports" do
+    let(:data) do
+      {
+        questions: [
+          {
+            form_id: 1,
+            form_name: "A form",
+            question_text: "A question",
+            is_optional: true,
+            selection_options_count: 33,
+          },
+        ],
+        count: 1,
+      }
+    end
+
+    describe "#selection_questions_with_autocomplete" do
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/reports/selection-questions-with-autocomplete", headers, data.to_json, 200
+        end
+
+        login_as_super_admin_user
+        get report_selection_questions_with_autocomplete_path
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the autocomplete questions report view" do
+        expect(response).to render_template("reports/selection_questions/autocomplete")
+      end
+
+      it "includes the report data" do
+        expect(response.body).to include "A form"
+        expect(response.body).to include "A question"
+      end
+    end
+
+    describe "#selection_questions_with_radios" do
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/reports/selection-questions-with-radios", headers, data.to_json, 200
+        end
+
+        login_as_super_admin_user
+        get report_selection_questions_with_radios_path
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the autocomplete questions report view" do
+        expect(response).to render_template("reports/selection_questions/radios")
+      end
+
+      it "includes the report data" do
+        expect(response.body).to include "A form"
+        expect(response.body).to include "A question"
+      end
+    end
+
+    describe "#selection_questions_with_checkboxes" do
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/reports/selection-questions-with-checkboxes", headers, data.to_json, 200
+        end
+
+        login_as_super_admin_user
+        get report_selection_questions_with_checkboxes_path
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the autocomplete questions report view" do
+        expect(response).to render_template("reports/selection_questions/checkboxes")
+      end
+
+      it "includes the report data" do
+        expect(response.body).to include "A form"
+        expect(response.body).to include "A question"
+      end
+    end
+  end
 end
