@@ -18,7 +18,7 @@ module PageListComponent
 
     def condition_description(condition)
       if condition.secondary_skip?
-        I18n.t("page_conditions.secondary_skip_description", check_page_text: condition_check_page_text(condition), goto_page_text: goto_page_text_for_condition(condition))
+        I18n.t("page_conditions.secondary_skip_description", check_page_text: skip_condition_check_page_text(condition), goto_page_text: goto_page_text_for_condition(condition))
       else
         I18n.t("page_conditions.condition_description", check_page_text: condition_check_page_text(condition), goto_page_text: goto_page_text_for_condition(condition), answer_value: answer_value_text_for_condition(condition))
       end
@@ -64,6 +64,11 @@ module PageListComponent
 
     def routing_conditions_with_index
       @routing_conditions_with_index ||= process_routing_conditions
+    end
+
+    def skip_condition_check_page_text(condition)
+      check_page = @pages.find { |page| page.id == condition.check_page_id }
+      I18n.t("page_conditions.skip_condition_check_page_text", check_page_text: check_page.question_text, check_page_position: check_page.position)
     end
 
     # Create hash of page_id => [condition, index]

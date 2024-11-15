@@ -1000,6 +1000,7 @@ en:
     none_of_the_above: None of the above
     route: Route
     secondary_skip_description: After %{check_page_text} go to %{goto_page_text}
+    skip_condition_check_page_text: "%{check_page_position}, “%{check_page_text}”"
   page_options_service:
     answer_type: Answer type
     date: Date
