@@ -106,6 +106,15 @@ en:
               too_long: Question text must be %{count} characters or less
             selection_options:
               too_many_selection_options: You cannot have more than 30 options in a list when people can select more than one option
+        pages/secondary_skip_input:
+          attributes:
+            goto_page_id:
+              already_consecutive: The question you want to skip to is already straight after the question you want to skip from
+              blank: Select the question or page you want to take the person to
+              equal: The question you want to skip from cannot be the same question you want to take them to
+              routing_page_after: The question you want to skip from must be before the question you want to take the person to
+            routing_page_id:
+              blank: Select the question you want to skip from
   activerecord:
     errors:
       models:
@@ -750,6 +759,11 @@ en:
           'false': No - this question can only be answered once
           'true': 'Yes'
         question_text: Question text
+      pages_secondary_skip_input:
+        default_goto_page_id: Select a question or page
+        default_routing_page_id: Select a question
+        goto_page_id: take them to
+        routing_page_id: Then after the person answers
     legend:
       account_terms_of_use_input:
         agreed: Do you agree to these terms?
