@@ -24,6 +24,12 @@ class ReportsController < ApplicationController
 
   def last_signed_in_at; end
 
+  def selection_questions_summary
+    data = Report.find("selection-questions-summary")
+
+    render template: "reports/selection_questions/summary", locals: { data: }
+  end
+
   def selection_questions_with_autocomplete
     data = Report.find("selection-questions-with-autocomplete")
 

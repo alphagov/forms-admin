@@ -1269,6 +1269,21 @@ en:
           question: Question
       radios:
         title: Select one only - 30 options or fewer in live forms
+      summary:
+        autocomplete:
+          heading: Select one only - more than 30 options
+          live_forms: Live forms with more than 30 options
+        back_link: Back to feature usage
+        checkboxes:
+          heading: Select one or more
+          live_forms: Live forms using one or more
+        number_of_questions: Number of questions
+        radios:
+          heading: Select one only - 30 options or fewer
+          live_forms: Live forms with 30 options or fewer
+        title: Selection from a list of options in live forms
+        view_questions: View questions
+        with_none_of_the_above: Questions with ‘None of the above’
     users:
       heading: Number of users per organisation
       table_headings:

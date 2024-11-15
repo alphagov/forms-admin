@@ -1,0 +1,58 @@
+<% set_page_title(t(".title")) %>
+<% content_for :back_link, govuk_back_link_to(report_features_path, t(".back_link")) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= t(".title") %></h1>
+
+    <h2 class="govuk-heading-m"><%= t(".autocomplete.heading") %></h2>
+    <p><%= govuk_link_to t(".view_questions"), report_selection_questions_with_autocomplete_path, no_visited_state: true %></p>
+    <%= govuk_summary_list do |summary_list|%>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".autocomplete.live_forms")) %>
+        <%= row.with_value(text: data.autocomplete.form_count) %>
+      <%end%>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".number_of_questions")) %>
+        <%= row.with_value(text: data.autocomplete.question_count) %>
+      <%end%>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".with_none_of_the_above")) %>
+        <%= row.with_value(text: data.autocomplete.optional_question_count) %>
+      <%end%>
+    <%end%>
+
+    <h2 class="govuk-heading-m"><%= t(".radios.heading") %></h2>
+    <p><%= govuk_link_to t(".view_questions"), report_selection_questions_with_radios_path, no_visited_state: true %></p>
+    <%= govuk_summary_list do |summary_list|%>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".radios.live_forms")) %>
+        <%= row.with_value(text: data.radios.form_count) %>
+      <%end%>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".number_of_questions")) %>
+        <%= row.with_value(text: data.radios.question_count) %>
+      <%end%>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".with_none_of_the_above")) %>
+        <%= row.with_value(text: data.radios.optional_question_count) %>
+      <%end%>
+    <%end%>
+
+    <h2 class="govuk-heading-m"><%= t(".checkboxes.heading") %></h2>
+    <p><%= govuk_link_to t(".view_questions"), report_selection_questions_with_checkboxes_path, no_visited_state: true %></p>
+    <%= govuk_summary_list do |summary_list|%>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".checkboxes.live_forms")) %>
+        <%= row.with_value(text: data.checkboxes.form_count) %>
+      <%end%>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".number_of_questions")) %>
+        <%= row.with_value(text: data.checkboxes.question_count) %>
+      <%end%>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".with_none_of_the_above")) %>
+        <%= row.with_value(text: data.checkboxes.optional_question_count) %>
+      <%end%>
+    <%end%>
+  </div>
+</div>

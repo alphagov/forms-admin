@@ -282,6 +282,45 @@ RSpec.describe ReportsController, type: :request do
     end
   end
 
+  describe "#selection_questions_summary" do
+    let(:summary) do
+      {
+        autocomplete: {
+          form_count: 234,
+          question_count: 432,
+          optional_question_count: 20,
+        },
+        radios: {
+          form_count: 2,
+          question_count: 2,
+          optional_question_count: 1,
+        },
+        checkboxes: {
+          form_count: 1,
+          question_count: 1,
+          optional_question_count: 1,
+        },
+      }
+    end
+
+    before do
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get "/api/v1/reports/selection-questions-summary", headers, summary.to_json, 200
+      end
+
+      login_as_super_admin_user
+      get report_selection_questions_summary_path
+    end
+
+    it "returns http code 200" do
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "renders the selection questions summary report view" do
+      expect(response).to render_template("reports/selection_questions/summary")
+    end
+  end
+
   describe "selection question reports" do
     let(:data) do
       {
