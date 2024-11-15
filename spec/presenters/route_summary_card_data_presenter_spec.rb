@@ -12,7 +12,7 @@ describe RouteSummaryCardDataPresenter do
   end
 
   let(:next_page) do
-    build(:page, id: 2, position: 2, question_text: "Next Question")
+    build(:page, id: 2, position: 2, question_text: "Next Question", routing_conditions: next_page_routing_conditions)
   end
 
   let(:pages) { [current_page, next_page] }
@@ -22,6 +22,8 @@ describe RouteSummaryCardDataPresenter do
   end
 
   let(:routing_conditions) { [routing_condition] }
+
+  let(:next_page_routing_conditions) { [] }
 
   describe ".call" do
     it "instantiates and returns a new instance" do
@@ -62,8 +64,11 @@ describe RouteSummaryCardDataPresenter do
 
     context "with a route with no answer_value" do
       let(:routing_conditions) do
+        [build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Yes", goto_page_id: 2, skip_to_end: false)]
+      end
+
+      let(:next_page_routing_conditions) do
         [
-          build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Yes", goto_page_id: 2, skip_to_end: false),
           build(:condition, id: 2, routing_page_id: 2, check_page_id: 1, answer_value: nil, goto_page_id: nil, skip_to_end: true),
         ]
       end
