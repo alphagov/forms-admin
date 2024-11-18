@@ -100,7 +100,7 @@ RSpec.describe "usage of omniauth-auth0 gem" do
     it "has a retry link" do
       get "/auth/failure?message=invalid_credentials&strategy=auth0"
 
-      expect(response.body).to include '<a href="/auth/auth0">try again</a>'
+      expect(response.body).to include '<a href="/sign-in">try again</a>'
     end
   end
 
