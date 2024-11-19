@@ -1,0 +1,9 @@
+<% set_page_title(t(".title")) %>
+<% content_for :back_link, govuk_back_link_to(report_selection_questions_summary_path, t("reports.selection_questions.questions.back_link")) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l"><%= t(".title") %></h1>
+
+    <%= render partial: 'reports/selection_questions/questions', locals: { data: } %>
+  </div>
+</div>
