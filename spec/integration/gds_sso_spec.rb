@@ -110,7 +110,7 @@ RSpec.describe "usage of gds-sso gem" do
     it "has a retry link" do
       get "/auth/failure?message=invalid_credentials&strategy=gds"
 
-      expect(response.body).to include '<a href="/auth/gds">try again</a>'
+      expect(response.body).to include '<a href="/sign-in">try again</a>'
     end
   end
 end

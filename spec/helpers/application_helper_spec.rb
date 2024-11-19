@@ -237,6 +237,34 @@ RSpec.describe ApplicationHelper, type: :helper do
     end
   end
 
+  describe "omniauth_authorize_path" do
+    subject(:omniauth_authorize_path) { helper.omniauth_authorize_path }
+
+    context "when the auth provider is auth0" do
+      before do
+        allow(Settings).to receive(:auth_provider).and_return("auth0")
+      end
+
+      it { is_expected.to eq "/auth/auth0" }
+    end
+
+    context "when the auth provider is developer" do
+      before do
+        allow(Settings).to receive(:auth_provider).and_return("developer")
+      end
+
+      it { is_expected.to eq "/auth/developer" }
+    end
+
+    context "when the auth provider is user_research" do
+      before do
+        allow(Settings).to receive(:auth_provider).and_return("user_research")
+      end
+
+      it { is_expected.to eq "/auth/user-research" }
+    end
+  end
+
   describe "#page_title" do
     context "when no title content is present" do
       it "returns the website name" do

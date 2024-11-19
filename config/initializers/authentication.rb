@@ -27,6 +27,19 @@ Rails.application.config.before_initialize do
     )
   end
 
+  # add auth provider for user research environment
+  if Settings.auth_provider == "user_research" || Rails.env.test?
+    require "omniauth/strategies/username_and_password"
+
+    Rails.application.config.app_middleware.use(
+      OmniAuth::Strategies::UsernameAndPassword,
+      name: "user-research",
+      username: Settings.user_research.auth.username,
+      password: Settings.user_research.auth.password,
+      email_domain: "example.gov.uk",
+    )
+  end
+
   # Configure Warden session management middleware
   # swap out the Warden::Manager installed by `gds-sso` gem
   Rails.application.config.app_middleware.swap Warden::Manager, Warden::Manager do |warden|

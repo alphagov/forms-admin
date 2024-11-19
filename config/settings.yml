@@ -69,6 +69,15 @@ basic_auth:
     slug: gds-user-research
     govuk_content_id: "00000000-0000-0000-0000-000000000000"
 
+user_research:
+  auth:
+    username: user_research_user
+    password:
+  organisation:
+    name: GDS User Research
+    slug: gds-user-research
+    govuk_content_id: "00000000-0000-0000-0000-000000000000"
+
 forms_env: local
 
 mailchimp:

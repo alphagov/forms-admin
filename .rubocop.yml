@@ -19,4 +19,7 @@ inherit_mode:
 # See https://github.com/alphagov/rubocop-govuk/blob/main/CONTRIBUTING.md
 # **************************************************************
 
+RSpec/SpecFilePathFormat:
+  CustomTransform:
+    OmniAuth: omniauth
 
