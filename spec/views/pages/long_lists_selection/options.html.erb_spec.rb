@@ -50,7 +50,10 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
     context "when only_one_option is true for the draft question" do
       it "has paragraph text explaining that only one option can be selected" do
         expect(rendered).to have_text(I18n.t("selection_options.select_one_option"))
-        expect(rendered).to have_text(I18n.t("selection_options.longer_than_30_options"))
+      end
+
+      it "has paragraph text with a link to enter options in a text box" do
+        expect(rendered).to have_link("enter all the options into one text box", href: bulk_options_url)
       end
 
       it "does not have hint text stating the number of options you can add" do
@@ -89,8 +92,8 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
         expect(rendered).to have_text(I18n.t("selection_options.select_more_than_one_option"))
       end
 
-      it "has hint text stating you can add 30 options" do
-        expect(rendered).to have_text("You can add up to 30 options")
+      it "has paragraph text with a link to enter options in a text box" do
+        expect(rendered).to have_link("enter all the options into one text box", href: bulk_options_url)
       end
 
       context "when there are fewer than 30 options" do

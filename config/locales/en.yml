@@ -187,6 +187,7 @@ en:
     longer_than_30_options: If your list is longer than 30 options, people will be able to search and find the options by typing into an autocomplete box.
     select_more_than_one_option: People will be able to select one or more options from your list.
     select_one_option: People will be able to select one option from your list.
+    up_to_1000_options: You can have up to 1,000 options.
     up_to_30_options: You can have up to 30 options.
   cancel: Cancel
   contact_details:
@@ -1279,14 +1280,15 @@ en:
   selection_options:
     add_another: Add another option
     add_options: Add options to your list
-    add_options_hint: You can add up to %{maximum} options
+    add_options_below_or_in_text_box_html: You can add your options individually below, or you can <a href="%{bulk_options_path}">enter all the options into one text box</a>.
     cannot_add_more_options: You cannot add any more options as you have reached the maximum of %{maximum} options.
     enter_all_options_into_textbox: Enter all the options into one text box
-    longer_than_30_options: If your list is longer than 30 options, people will be able to search and find the options by typing into an autocomplete box.
     option: Option %{number}
     remove_html: Remove <span class="govuk-visually-hidden">option %{option_number}</span>
     select_more_than_one_option: People will be able to select one or more options from your list.
     select_one_option: People will be able to select one option from your list.
+    up_to_1000_options: You can have up to 1,000 options.
+    up_to_30_options: You can have up to 30 options.
   selection_type:
     reduce_your_options_warning:
       body: You can only have up to 30 options in a list where people can select one or more options. If you make this change, you’ll be able to edit your list on the next page.
