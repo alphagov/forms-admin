@@ -54,4 +54,58 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
       end
     end
   end
+
+  describe "#create" do
+    let(:valid_params) do
+      {
+        form_id: "2",
+        page_id: "1",
+        pages_secondary_skip_input: {
+          routing_page_id: "3",
+          goto_page_id: "5",
+        },
+      }
+    end
+
+    context "when the branch_routing feature is not enabled", feature_branch_routing: false do
+      it "returns a 404" do
+        post create_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when the branch_routing feature is enabled", :feature_branch_routing do
+      context "when the submission is successful" do
+        before do
+          ActiveResource::HttpMock.respond_to(false) do |mock|
+            mock.post "/api/v1/forms/2/pages/3/conditions", post_headers, {}.to_json, 200
+          end
+        end
+
+        it "redirects to the show routes page" do
+          post create_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
+          expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
+        end
+      end
+
+      context "when the submission fails" do
+        let(:invalid_params) do
+          {
+            form_id: "2",
+            page_id: "1",
+            pages_secondary_skip_input: {
+              routing_page_id: "3",
+              goto_page_id: "3",
+            },
+          }
+        end
+
+        it "renders the new template" do
+          post create_secondary_skip_path(form_id: 2, page_id: pages.first.id), params: invalid_params
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to render_template("pages/secondary_skip/new")
+        end
+      end
+    end
+  end
 end

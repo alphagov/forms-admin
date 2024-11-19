@@ -115,6 +115,7 @@ Rails.application.routes.draw do
         scope "/routes" do
           get "/" => "pages/routes#show", as: :show_routes
           get "/any-other-answer/questions-to-skip" => "pages/secondary_skip_#new", as: :new_secondary_skip
+          post "/any-other-answer/questions-to-skip" => "pages/secondary_skip_#create", as: :create_secondary_skip
         end
 
         scope "/edit" do
