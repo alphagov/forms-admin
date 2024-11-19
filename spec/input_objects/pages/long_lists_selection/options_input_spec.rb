@@ -117,6 +117,19 @@ RSpec.describe Pages::LongListsSelection::OptionsInput do
       expect { input.submit }.to change(draft_question, :is_optional).to true
     end
 
+    it "logs submission" do
+      allow(Rails.logger).to receive(:info)
+
+      input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
+      input.submit
+
+      expect(Rails.logger).to have_received(:info).with("Submitted selection options for a selection question", {
+        "is_bulk_entry": false,
+        "options_count": 2,
+        "only_one_option": true,
+      })
+    end
+
     context "when there are existing answer settings" do
       before do
         draft_question.answer_settings = { foo: "bar" }

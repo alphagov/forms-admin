@@ -1,4 +1,6 @@
 class Pages::LongListsSelection::OptionsInput < BaseInput
+  include LoggingHelper
+
   DEFAULT_OPTIONS = { selection_options: [{ name: "" }, { name: "" }] }.freeze
   INCLUDE_NONE_OF_THE_ABOVE_OPTIONS = %w[true false].freeze
   MAXIMUM_CHOOSE_ONLY_ONE_OPTION = 1000
@@ -29,7 +31,10 @@ class Pages::LongListsSelection::OptionsInput < BaseInput
       .assign_attributes({ answer_settings:,
                            is_optional: include_none_of_the_above })
 
-    draft_question.save!(validate: false)
+    success = draft_question.save!(validate: false)
+    log_submission if success
+
+    success
   end
 
   def selection_options_form_objects
@@ -65,5 +70,9 @@ private
 
   def maximum_error_type
     draft_question.answer_settings[:only_one_option] == "true" ? :maximum_choose_only_one_option : :maximum_choose_more_than_one_option
+  end
+
+  def log_submission
+    log_selection_question_options_submitted(is_bulk_entry: false, options_count: selection_options.length, only_one_option: only_one_option?)
   end
 end
