@@ -11,11 +11,20 @@
     <%= summary_list.with_row(classes: class_names("govuk-form-group--error": @errors&.has_key?(:selection_options))) do |row| %>
       <%= row.with_key(text: t("page_settings_summary.selection.options")) %>
       <%= row.with_value do %>
-          <% if @errors&.has_key?(:selection_options) %>
-            <p id="pages-question-input-selection-options-field-error" class="govuk-error-message">
-              <span class="govuk-visually-hidden"><%= t("errors.prefix") %></span> <%= @errors.messages_for(:selection_options).first %>
-            </p>
+        <% if @errors&.has_key?(:selection_options) %>
+          <p id="pages-question-input-selection-options-field-error" class="govuk-error-message">
+            <span class="govuk-visually-hidden"><%= t("errors.prefix") %></span> <%= @errors.messages_for(:selection_options).first %>
+          </p>
+        <% end %>
+        <% if selection_options.count > 9 %>
+          <%= govuk_details(summary_text: t("page_settings_summary.selection.options_summary", number_of_options: selection_options.length)) do %>
+            <ul class="govuk-list govuk-list--bullet">
+              <% selection_options.each do |option| %>
+                <li><%= option[:name] %></li>
+              <% end %>
+            </ul>
           <% end %>
+        <% else %>
           <p>
             <%= t("page_settings_summary.selection.options_count", number_of_options: selection_options.length) %>
           </p>
@@ -24,6 +33,7 @@
               <li><%= option[:name] %></li>
             <% end %>
           </ul>
+        <% end %>
       <% end %>
       <%= row.with_action(text: t("page_settings_summary.change"),
                     href: @change_selections_options_path,
