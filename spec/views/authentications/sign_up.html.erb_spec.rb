@@ -14,7 +14,7 @@ describe "authentications/sign_up.html.erb" do
   end
 
   it "has sign_in form" do
-    expect(rendered).to have_selector("form[action=\"/auth/#{Settings.auth_provider}/\"]")
+    expect(rendered).to have_selector("form[action=\"/auth/#{Settings.auth_provider}\"]")
   end
 
   it "has sign_in button" do
