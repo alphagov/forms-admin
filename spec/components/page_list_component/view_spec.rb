@@ -200,7 +200,7 @@ RSpec.describe PageListComponent::View, type: :component do
         end
 
         it "returns complete condition description" do
-          expected_text = "If “What country do you live in?” is answered as “Wales” take the person to 3, “What is your pet's name?”"
+          expected_text = "If “What country do you live in?” is answered as “Wales” go to 3, “What is your pet's name?”"
           expect(page_list_component.condition_description(condition)).to eq(expected_text)
         end
       end
@@ -216,7 +216,7 @@ RSpec.describe PageListComponent::View, type: :component do
         end
 
         it "returns description with 'None of the above' text" do
-          expected_text = "If “What country do you live in?” is answered as “None of the above” take the person to 3, “What is your pet's name?”"
+          expected_text = "If “What country do you live in?” is answered as “None of the above” go to 3, “What is your pet's name?”"
           expect(page_list_component.condition_description(condition)).to eq(expected_text)
         end
       end
@@ -232,7 +232,7 @@ RSpec.describe PageListComponent::View, type: :component do
         end
 
         it "returns description with error text for missing answer" do
-          expected_text = "If “What country do you live in?” is answered as [Answer not selected] take the person to 3, “What is your pet's name?”"
+          expected_text = "If “What country do you live in?” is answered as [Answer not selected] go to 3, “What is your pet's name?”"
           expect(page_list_component.condition_description(condition)).to eq(expected_text)
         end
       end
@@ -249,7 +249,7 @@ RSpec.describe PageListComponent::View, type: :component do
         end
 
         it "returns description with 'Check your answers' text" do
-          expected_text = "If “What country do you live in?” is answered as “Wales” take the person to “Check your answers before submitting”."
+          expected_text = "If “What country do you live in?” is answered as “Wales” go to “Check your answers before submitting”."
           expect(page_list_component.condition_description(condition)).to eq(expected_text)
         end
       end
@@ -266,8 +266,68 @@ RSpec.describe PageListComponent::View, type: :component do
         end
 
         it "returns description with error text for missing goto page" do
-          expected_text = "If “What country do you live in?” is answered as “Wales” take the person to [Question not selected]"
+          expected_text = "If “What country do you live in?” is answered as “Wales” go to [Question not selected]"
           expect(page_list_component.condition_description(condition)).to eq(expected_text)
+        end
+      end
+    end
+
+    describe "#conditions_for_page_with_index" do
+      context "when there are no conditions" do
+        let(:pages) do
+          [(build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:)]
+        end
+        let(:routing_conditions) { [] }
+
+        it "returns an array of conditions for the page" do
+          page_id = 1
+          expect(page_list_component.conditions_for_page_with_index(page_id)).to eq([])
+        end
+      end
+
+      context "when there is one page with one condition" do
+        let(:pages) do
+          [(build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:)]
+        end
+        let(:routing_conditions) { [build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3)] }
+
+        it "returns an array of conditions for the page" do
+          page_id = 1
+          expect(page_list_component.conditions_for_page_with_index(page_id)).to eq([[routing_conditions.first, 1]])
+        end
+      end
+
+      context "when there is one page with multiple conditions" do
+        let(:pages) do
+          [(build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:)]
+        end
+        let(:routing_conditions) do
+          [
+            build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3),
+            build(:condition, id: 2, routing_page_id: 2, check_page_id: 1, answer_value: nil, goto_page_id: 4),
+          ]
+        end
+
+        it "returns the correct condition with index" do
+          page_id = 2
+          expect(page_list_component.conditions_for_page_with_index(page_id)).to eq([[routing_conditions.second, 2]])
+        end
+      end
+
+      context "when there is one page with one condition and a condition for another pages" do
+        let(:pages) do
+          [(build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:)]
+        end
+        let(:routing_conditions) do
+          [
+            build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3),
+            build(:condition, id: 1, routing_page_id: 2, check_page_id: 2, answer_value: "England", goto_page_id: 3),
+          ]
+        end
+
+        it "returns an array of conditions for the page" do
+          page_id = 1
+          expect(page_list_component.conditions_for_page_with_index(page_id)).to eq([[routing_conditions.first, 1]])
         end
       end
     end

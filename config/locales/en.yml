@@ -976,15 +976,16 @@ en:
     title: Page not found
   page_conditions:
     check_your_answers: Check your answers before submitting
-    condition_answer_value_text: is answered as “%{answer_value}”
-    condition_answer_value_text_with_errors: is answered as [Answer not selected]
-    condition_check_page_text: If “%{check_page_text}”
+    condition_answer_value_text: "“%{answer_value}”"
+    condition_answer_value_text_with_errors: "[Answer not selected]"
+    condition_check_page_text: "“%{check_page_text}”"
     condition_compact_html: 'If the answer is “%{answer_value}”<br> then skip to %{goto_page_number}: “%{goto_page_text}”'
     condition_compact_html_end_of_form: If the answer is “%{answer_value}”<br> then skip to “Check your answers before submitting”
-    condition_goto_page_check_your_answers: take the person to “Check your answers before submitting”.
-    condition_goto_page_text: take the person to %{goto_page_position}, “%{goto_page_text}”
-    condition_goto_page_text_with_errors: take the person to [Question not selected]
-    condition_name: Question %{page_index}’s route
+    condition_description: If %{check_page_text} is answered as %{answer_value} go to %{goto_page_text}
+    condition_goto_page_check_your_answers: "“Check your answers before submitting”."
+    condition_goto_page_text: "%{goto_page_position}, “%{goto_page_text}”"
+    condition_goto_page_text_with_errors: "[Question not selected]"
+    condition_name: Route %{route_index} of question %{page_index}’s routes
     errors:
       error_summary:
         answer_value_doesnt_exist: The answer that question %{page_index}’s route is based on no longer exists - edit question %{page_index}’s route
@@ -998,6 +999,8 @@ en:
         goto_page_doesnt_exist: The question you’re taking the person to no longer exists - edit question %{page_index}’s route
     none_of_the_above: None of the above
     route: Route
+    secondary_skip_description: After %{check_page_text} go to %{goto_page_text}
+    skip_condition_check_page_text: "%{check_page_position}, “%{check_page_text}”"
   page_options_service:
     answer_type: Answer type
     date: Date
@@ -1014,13 +1017,14 @@ en:
   page_route_card:
     check_your_answers: Check your answers before submitting
     conditional_answer_value: "%{answer_value}"
-    conditional_route_title: Route %{index}
-    continue_to: continue to
-    default_route_title: For any other answer
+    continue_to: For any other answer, continue to
     delete_route: Delete routes
     if_answer_is: If the answer is
     page_name: "%{page_position}. %{page_name}"
     question_title: Question %{position}
+    route_title: Route %{index}
+    secondary_skip_after: Then after the person answers
+    secondary_skip_then: take them to
     take_the_person_to: take the person to
   page_settings_summary:
     address:

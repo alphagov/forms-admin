@@ -18,19 +18,20 @@ class RouteSummaryCardDataPresenter
   end
 
   def summary_card_data
-    conditional_route_cards + [default_route_card]
+    conditional_cards = conditional_route_cards
+    conditional_cards + [default_route_card(conditional_cards.length + 1)]
   end
 
-private
-
   def all_routes
-    all_form_routing_conditions = pages.flat_map(&:routing_conditions).compact_blank
-    all_form_routing_conditions.reject { |rc| rc.routing_page_id != page.id || rc.check_page_id != page.id }
+    all_form_routing_conditions = pages.flat_map(&:conditions).compact_blank
+    all_form_routing_conditions.select { |rc| rc.check_page_id == page.id }
   end
 
   def conditional_routes
     all_routes.select { |rc| rc.answer_value.present? }
   end
+
+private
 
   def conditional_route_cards
     conditional_routes.map.with_index(1) { |routing_condition, index| conditional_route_card(routing_condition, index) }
@@ -41,7 +42,7 @@ private
 
     {
       card: {
-        title: I18n.t("page_route_card.conditional_route_title", index:),
+        title: I18n.t("page_route_card.route_title", index:),
         classes: "app-summary-card",
         actions: [
           govuk_link_to("Edit", edit_condition_path(form_id: form.id, page_id: page.id, condition_id: routing_condition.id)),
@@ -60,21 +61,42 @@ private
     }
   end
 
-  def default_route_card
-    goto_page_name = page.has_next_page? ? page_name(page.next_page) : end_page_name
+  def default_route_card(index)
+    continue_to_name = page.has_next_page? ? page_name(page.next_page) : end_page_name
 
     {
       card: {
-        title: I18n.t("page_route_card.default_route_title"),
+        title: I18n.t("page_route_card.route_title", index:),
         classes: "app-summary-card",
       },
       rows: [
         {
           key: { text: I18n.t("page_route_card.continue_to") },
-          value: { text: goto_page_name },
+          value: { text: continue_to_name },
         },
+        *secondary_skip_rows,
       ],
     }
+  end
+
+  def secondary_skip_rows
+    secondary_skip = all_routes.find(&:secondary_skip?)
+
+    return [] if secondary_skip.blank?
+
+    goto_page_name = secondary_skip.skip_to_end ? end_page_name : page_name(secondary_skip.goto_page_id)
+    routing_page_name = page_name(secondary_skip.routing_page_id)
+
+    [
+      {
+        key: { text: I18n.t("page_route_card.secondary_skip_after") },
+        value: { text: routing_page_name },
+      },
+      {
+        key: { text: I18n.t("page_route_card.secondary_skip_then") },
+        value: { text: goto_page_name },
+      },
+    ]
   end
 
   def page_name(page_id)

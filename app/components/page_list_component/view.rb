@@ -17,11 +17,11 @@ module PageListComponent
     end
 
     def condition_description(condition)
-      [
-        condition_check_page_text(condition),
-        answer_value_text_for_condition(condition),
-        goto_page_text_for_condition(condition),
-      ].join(" ")
+      if condition.secondary_skip?
+        I18n.t("page_conditions.secondary_skip_description", check_page_text: skip_condition_check_page_text(condition), goto_page_text: goto_page_text_for_condition(condition))
+      else
+        I18n.t("page_conditions.condition_description", check_page_text: condition_check_page_text(condition), goto_page_text: goto_page_text_for_condition(condition), answer_value: answer_value_text_for_condition(condition))
+      end
     end
 
     def condition_check_page_text(condition)
@@ -51,6 +51,42 @@ module PageListComponent
 
     def page_position(page)
       page.position
+    end
+
+    def condition_page_position(condition)
+      check_page = @pages.find { |page| page.id == condition.check_page_id }
+      page_position(check_page)
+    end
+
+    def conditions_for_page_with_index(page_id)
+      routing_conditions_with_index.fetch(page_id, [])
+    end
+
+    def routing_conditions_with_index
+      @routing_conditions_with_index ||= process_routing_conditions
+    end
+
+    def skip_condition_check_page_text(condition)
+      check_page = @pages.find { |page| page.id == condition.check_page_id }
+      I18n.t("page_conditions.skip_condition_check_page_text", check_page_text: check_page.question_text, check_page_position: check_page.position)
+    end
+
+    # Create hash of page_id => [condition, index]
+    # where index is the index of the condition in the array of conditions for
+    # the page referenced by check_page_id
+    def process_routing_conditions
+      all_form_conditions = @pages.flat_map(&:conditions).compact_blank
+
+      all_form_conditions
+        .group_by(&:check_page_id)
+        .values
+        .flat_map { |conditions|
+          conditions.map.with_index(1) do |condition, index|
+            [condition.routing_page_id, [condition, index]] # inclde routing_page_id, so we can group by it
+          end
+        }
+        .group_by(&:first)
+        .transform_values { |pairs| pairs.map(&:last) } # drop routing_page_id from the value of the hash - it is now the key
     end
   end
 end

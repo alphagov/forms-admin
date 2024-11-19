@@ -32,10 +32,10 @@
             </dd>
           </div>
 
-          <% page.conditions.each do |condition| %>
+          <%  conditions_for_page_with_index(page.id).each do |condition, route_index| %>
             <div id="<%= PageListComponent::ErrorSummary::View.error_id(condition.id) %>" class="govuk-summary-list__row app-page-list__row <%= class_names( "govuk-form-group--error": condition.has_routing_errors?) %>">
               <dt class="govuk-summary-list__key govuk-summary-list__key app-page-list__key">
-                <%= t("page_conditions.condition_name", page_index: page.position) %>
+                <%= t("page_conditions.condition_name", page_index: condition_page_position(condition), route_index: route_index) %>
               </dt>
 
               <dd class="govuk-summary-list__value">
@@ -52,8 +52,8 @@
                 </p>
 
               <dd class="govuk-summary-list__actions govuk-!-padding-bottom-6">
-                <%= govuk_link_to show_routes_path(form_id: @form_id, page_id: page.id) do %>
-                  <%= t("forms.form_overview.edit_with_visually_hidden_text_html", visually_hidden_text: t("page_conditions.condition_name", page_index: page.position)) %>
+                <%= govuk_link_to show_routes_path(form_id: @form_id, page_id: condition.check_page_id) do %>
+                  <%= t("forms.form_overview.edit_with_visually_hidden_text_html", visually_hidden_text: t("page_conditions.condition_name", page_index: page.position, route_index: route_index)) %>
                 <% end %>
               </dd>
             </div>
