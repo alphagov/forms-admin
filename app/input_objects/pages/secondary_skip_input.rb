@@ -7,13 +7,41 @@ class Pages::SecondarySkipInput < BaseInput
   def submit
     return false if invalid?
 
-    ConditionRepository.create!(form_id: form.id,
-                                page_id: routing_page_id,
-                                check_page_id: page.id,
-                                routing_page_id:,
-                                answer_value: nil,
-                                goto_page_id: skip_to_end? ? nil : goto_page_id,
-                                skip_to_end: skip_to_end?)
+    # We need to take extra care when updating an exisitng Condition.
+    # Because conditions are accessed from the API with page id, we can only
+    # update a condition if the user hasn't changed the routing_page_id.
+    #
+    # If the user has changed the routing_page_id, we need to remove the old
+    # Condition and create a new one
+    if record.present? && record.routing_page_id == routing_page_id
+      record.routing_page_id = routing_page_id
+      record.goto_page_id = skip_to_end? ? nil : goto_page_id
+      record.skip_to_end = skip_to_end?
+
+      record.prefix_options[:form_id] = form.id
+      record.prefix_options[:page_id] = record.routing_page_id
+
+      return ConditionRepository.save!(record)
+    end
+
+    if record.present?
+      # we need to ensure the prefix options in the condition we are removing
+      # are unchanged as Conditions are accessed through the API with form_id
+      # and page_id
+      record.prefix_options[:form_id] = form.id
+      record.prefix_options[:page_id] = record.routing_page_id
+      ConditionRepository.destroy(record)
+    end
+
+    ConditionRepository.create!(
+      form_id: form.id,
+      page_id: routing_page_id,
+      check_page_id: page.id,
+      routing_page_id:,
+      answer_value: nil,
+      goto_page_id: skip_to_end? ? nil : goto_page_id,
+      skip_to_end: skip_to_end?,
+    )
   end
 
   def goto_page_options
@@ -48,6 +76,12 @@ class Pages::SecondarySkipInput < BaseInput
     page.has_next_page? ? page_name(page.next_page) : end_page_name
   end
 
+  def assign_values
+    self.routing_page_id = record.routing_page_id
+    self.goto_page_id = record.goto_page_id.nil? ? "check_your_answers" : record.goto_page_id
+    self
+  end
+
 private
 
   def pages_after_current_page(all_pages, current_page)
@@ -65,8 +99,8 @@ private
   def pages_in_valid_order
     if routing_page_id.present? && goto_page_id.present?
 
-      routing_page = form.pages.find { |page| page.id.to_s == routing_page_id }
-      goto_page = form.pages.find { |page| page.id.to_s == goto_page_id }
+      routing_page = form.pages.find { |page| page.id.to_s == routing_page_id.to_s }
+      goto_page = form.pages.find { |page| page.id.to_s == goto_page_id.to_s }
 
       if goto_page_id == routing_page_id
         errors.add(:goto_page_id, :equal, message: I18n.t("activemodel.errors.models.pages/secondary_skip_input.attributes.goto_page_id.equal"))
