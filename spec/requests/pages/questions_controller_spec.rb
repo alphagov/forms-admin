@@ -243,6 +243,8 @@ RSpec.describe Pages::QuestionsController, type: :request do
       }
     end
 
+    let(:page) { build(:page, **page_response) }
+
     describe "Given a page" do
       let(:params) do
         { pages_question_input: {
@@ -258,6 +260,8 @@ RSpec.describe Pages::QuestionsController, type: :request do
       end
 
       before do
+        allow(PageRepository).to receive_messages(find: page, save!: page)
+
         post update_question_path(form_id: 2, page_id: 1), params:
       end
 

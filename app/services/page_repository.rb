@@ -4,8 +4,25 @@ class PageRepository
       Page.find(page_id, params: { form_id: })
     end
 
-    def create!(params)
-      Page.create!(params)
+    def create!(form_id:,
+                question_text:,
+                hint_text:,
+                is_optional:,
+                is_repeatable:,
+                answer_settings:,
+                page_heading:,
+                guidance_markdown:,
+                answer_type:)
+
+      Page.create!(form_id:,
+                   question_text:,
+                   hint_text:,
+                   is_optional:,
+                   is_repeatable:,
+                   answer_settings:,
+                   page_heading:,
+                   guidance_markdown:,
+                   answer_type:)
     end
 
     def save!(record)

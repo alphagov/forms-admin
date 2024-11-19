@@ -36,7 +36,7 @@ describe PageRepository do
     end
 
     it "creates a page through ActiveResource" do
-      described_class.create!(page_params)
+      described_class.create!(**page_params)
       expect(Page.new(page_params)).to have_been_created
     end
   end
