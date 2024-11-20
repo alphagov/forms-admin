@@ -53,6 +53,19 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         expect(response).to have_http_status(:success)
       end
     end
+
+    context "when no condition exists on the page" do
+      let(:pages) do
+        build_list(:page, 5).each_with_index do |page, index|
+          page.id = index + 1
+        end
+      end
+
+      it "redirects to the page list" do
+        get new_secondary_skip_path(form_id: 2, page_id: 1)
+        expect(response).to redirect_to(form_pages_path(form.id))
+      end
+    end
   end
 
   describe "#create" do
@@ -85,6 +98,19 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         it "redirects to the show routes page" do
           post create_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
           expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
+        end
+      end
+
+      context "when no condition exists on the page" do
+        let(:pages) do
+          build_list(:page, 5).each_with_index do |page, index|
+            page.id = index + 1
+          end
+        end
+
+        it "redirects to the page list" do
+          post create_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
+          expect(response).to redirect_to(form_pages_path(form.id))
         end
       end
 
@@ -141,6 +167,19 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         get edit_secondary_skip_path(form_id: 2, page_id: 1)
         expect(response).to render_template("pages/secondary_skip/edit")
       end
+
+      context "when no condition exists on the page" do
+        let(:pages) do
+          build_list(:page, 5).each_with_index do |page, index|
+            page.id = index + 1
+          end
+        end
+
+        it "redirects to the page list" do
+          get edit_secondary_skip_path(form_id: 2, page_id: 1)
+          expect(response).to redirect_to(form_pages_path(form.id))
+        end
+      end
     end
   end
 
@@ -194,6 +233,19 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         it "redirects to the show routes page" do
           post update_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
           expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
+        end
+      end
+
+      context "when no condition exists on the page" do
+        let(:pages) do
+          build_list(:page, 5).each_with_index do |page, index|
+            page.id = index + 1
+          end
+        end
+
+        it "redirects to the page list" do
+          post update_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
+          expect(response).to redirect_to(form_pages_path(form.id))
         end
       end
 

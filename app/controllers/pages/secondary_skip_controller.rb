@@ -1,5 +1,5 @@
 class Pages::SecondarySkipController < PagesController
-  before_action :ensure_branch_routing_feature_enabled
+  before_action :ensure_branch_routing_feature_enabled, :ensure_page_has_skip_condition
 
   def new
     secondary_skip_input = Pages::SecondarySkipInput.new(form: current_form, page:)
@@ -52,6 +52,12 @@ private
 
   def ensure_branch_routing_feature_enabled
     raise ActionController::RoutingError, "branch_routing feature not enabled" unless Settings.features.branch_routing
+  end
+
+  def ensure_page_has_skip_condition
+    unless page.conditions.any? { |c| c.answer_value.present? }
+      redirect_to form_pages_path(current_form.id)
+    end
   end
 
   def secondary_skip_condition
