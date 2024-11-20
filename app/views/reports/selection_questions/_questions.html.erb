@@ -1,0 +1,21 @@
+<%= govuk_table do |table| %>
+
+  <%= table.with_head do |head| %>
+    <%= head.with_row do |row| %>
+      <%= row.with_cell(text: t("reports.selection_questions.questions.table_headings.form_name")) %>
+      <%= row.with_cell(text: t("reports.selection_questions.questions.table_headings.question")) %>
+      <%= row.with_cell(text: t("reports.selection_questions.questions.table_headings.number_of_options")) %>
+      <%= row.with_cell(text: t("reports.selection_questions.questions.table_headings.none_of_the_above")) %>
+    <% end %>
+  <% end %>
+  <%= table.with_body do |body| %>
+    <% data.questions.each do |question| %>
+      <%= body.with_row do |row| %>
+        <%= row.with_cell(text: govuk_link_to(question.form_name, form_url(question.form_id))) %>
+        <%= row.with_cell(text: question.question_text) %>
+        <%= row.with_cell(text: question.selection_options_count) %>
+        <%= row.with_cell(text: question.is_optional ? t("reports.selection_questions.questions.none_of_the_above_yes") : t("reports.selection_questions.questions.none_of_the_above_no")) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

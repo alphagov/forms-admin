@@ -19,16 +19,15 @@
       <div class="govuk-!-margin-bottom-8">
         <% if @selection_options_input.only_one_option? %>
           <p><%= t("selection_options.select_one_option") %></p>
-          <p><%= t("selection_options.longer_than_30_options") %></p>
+          <p><%= t("selection_options.up_to_1000_options") %></p>
         <% else %>
           <p><%= t("selection_options.select_more_than_one_option") %></p>
+          <p><%= t("selection_options.up_to_30_options") %></p>
         <% end %>
+        <p><%= t("selection_options.add_options_below_or_in_text_box_html", bulk_options_path: @bulk_options_url) %></p>
       </div>
 
       <%= f.govuk_fieldset legend: { text: t("selection_options.add_options") } do %>
-        <% unless @selection_options_input.only_one_option? %>
-          <p class="govuk-hint"><%= t("selection_options.add_options_hint", maximum: @selection_options_input.maximum_options) %></p>
-        <% end %>
         <ul class="govuk-list app-select-options">
           <% @selection_options_input.selection_options_form_objects.each_with_index do |selection_option, index| %>
             <%= f.fields_for :selection_options, selection_option, index: index do |selection_options_form| %>

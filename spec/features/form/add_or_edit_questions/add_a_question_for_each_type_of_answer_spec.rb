@@ -279,6 +279,6 @@ private
     expect_page_to_have_no_axe_errors(page)
     fill_in "Enter the options for your list", with: options.join("\n")
     choose "Yes"
-    click_button "Save and continue"
+    click_button "Continue"
   end
 end

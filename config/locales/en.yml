@@ -187,6 +187,7 @@ en:
     longer_than_30_options: If your list is longer than 30 options, people will be able to search and find the options by typing into an autocomplete box.
     select_more_than_one_option: People will be able to select one or more options from your list.
     select_one_option: People will be able to select one option from your list.
+    up_to_1000_options: You can have up to 1,000 options.
     up_to_30_options: You can have up to 30 options.
   cancel: Cancel
   contact_details:
@@ -1252,6 +1253,37 @@ en:
       not_since_auth0_enabled: People who last signed in before 3 November 2023
       not_since_last_signed_in_at_added: People who last signed in sometime between 3 November 2023 and 4 November 2024
       title: When users last signed in
+    selection_questions:
+      autocomplete:
+        title: Select one only - more than 30 options in live forms
+      checkboxes:
+        title: Select one or more in live forms
+      questions:
+        back_link: Back to selection from a list of options usage
+        none_of_the_above_no: 'No'
+        none_of_the_above_yes: 'Yes'
+        table_headings:
+          form_name: Form name
+          none_of_the_above: "‘None of the above’"
+          number_of_options: Number of options
+          question: Question
+      radios:
+        title: Select one only - 30 options or fewer in live forms
+      summary:
+        autocomplete:
+          heading: Select one only - more than 30 options
+          live_forms: Live forms with more than 30 options
+        back_link: Back to feature usage
+        checkboxes:
+          heading: Select one or more
+          live_forms: Live forms using one or more
+        number_of_questions: Number of questions
+        radios:
+          heading: Select one only - 30 options or fewer
+          live_forms: Live forms with 30 options or fewer
+        title: Selection from a list of options in live forms
+        view_questions: View questions
+        with_none_of_the_above: Questions with ‘None of the above’
     users:
       heading: Number of users per organisation
       table_headings:
@@ -1279,14 +1311,15 @@ en:
   selection_options:
     add_another: Add another option
     add_options: Add options to your list
-    add_options_hint: You can add up to %{maximum} options
+    add_options_below_or_in_text_box_html: You can add your options individually below, or you can <a href="%{bulk_options_path}">enter all the options into one text box</a>.
     cannot_add_more_options: You cannot add any more options as you have reached the maximum of %{maximum} options.
     enter_all_options_into_textbox: Enter all the options into one text box
-    longer_than_30_options: If your list is longer than 30 options, people will be able to search and find the options by typing into an autocomplete box.
     option: Option %{number}
     remove_html: Remove <span class="govuk-visually-hidden">option %{option_number}</span>
     select_more_than_one_option: People will be able to select one or more options from your list.
     select_one_option: People will be able to select one option from your list.
+    up_to_1000_options: You can have up to 1,000 options.
+    up_to_30_options: You can have up to 30 options.
   selection_type:
     reduce_your_options_warning:
       body: You can only have up to 30 options in a list where people can select one or more options. If you make this change, you’ll be able to edit your list on the next page.
