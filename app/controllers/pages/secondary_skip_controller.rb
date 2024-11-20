@@ -1,5 +1,7 @@
 class Pages::SecondarySkipController < PagesController
   before_action :ensure_branch_routing_feature_enabled, :ensure_page_has_skip_condition
+  before_action :ensure_secondary_skip_blank, only: %i[new create]
+  before_action :ensure_secondary_skip_exists, only: %i[edit update]
 
   def new
     secondary_skip_input = Pages::SecondarySkipInput.new(form: current_form, page:)
@@ -58,6 +60,14 @@ private
     unless page.conditions.any? { |c| c.answer_value.present? }
       redirect_to form_pages_path(current_form.id)
     end
+  end
+
+  def ensure_secondary_skip_exists
+    redirect_to show_routes_path(form_id: current_form.id, page_id: page.id) if secondary_skip_condition.blank?
+  end
+
+  def ensure_secondary_skip_blank
+    redirect_to show_routes_path(form_id: current_form.id, page_id: page.id) if secondary_skip_condition.present?
   end
 
   def secondary_skip_condition

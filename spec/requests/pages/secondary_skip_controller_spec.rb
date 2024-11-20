@@ -66,6 +66,34 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         expect(response).to redirect_to(form_pages_path(form.id))
       end
     end
+
+    context "when a secondary skip condition already exists on the page" do
+      let(:existing_secondary_skip) do
+        build(
+          :condition,
+          id: 2,
+          routing_page_id: pages[2].id,
+          check_page_id: pages[0].id,
+          goto_page_id: pages[4].id,
+          secondary_skip: true,
+        )
+      end
+
+      before do
+        pages[2].routing_conditions = [existing_secondary_skip]
+
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/2", headers, form.to_json, 200
+          mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
+          mock.get "/api/v1/forms/2/pages/1", headers, pages.first.to_json, 200
+        end
+      end
+
+      it "redirects to the show routes page" do
+        get new_secondary_skip_path(form_id: 2, page_id: 1)
+        expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
+      end
+    end
   end
 
   describe "#create" do
@@ -111,6 +139,34 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         it "redirects to the page list" do
           post create_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
           expect(response).to redirect_to(form_pages_path(form.id))
+        end
+      end
+
+      context "when a secondary skip condition already exists on the page" do
+        let(:existing_secondary_skip) do
+          build(
+            :condition,
+            id: 2,
+            routing_page_id: pages[2].id,
+            check_page_id: pages[0].id,
+            goto_page_id: pages[4].id,
+            secondary_skip: true,
+          )
+        end
+
+        before do
+          pages[2].routing_conditions = [existing_secondary_skip]
+
+          ActiveResource::HttpMock.respond_to do |mock|
+            mock.get "/api/v1/forms/2", headers, form.to_json, 200
+            mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
+            mock.get "/api/v1/forms/2/pages/1", headers, pages.first.to_json, 200
+          end
+        end
+
+        it "redirects to the show routes page" do
+          post create_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
+          expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
         end
       end
 
@@ -180,6 +236,23 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
           expect(response).to redirect_to(form_pages_path(form.id))
         end
       end
+
+      context "when no secondary_skip exists on the page" do
+        before do
+          pages[2].routing_conditions = []
+
+          ActiveResource::HttpMock.respond_to do |mock|
+            mock.get "/api/v1/forms/2", headers, form.to_json, 200
+            mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
+            mock.get "/api/v1/forms/2/pages/1", headers, pages.first.to_json, 200
+          end
+        end
+
+        it "redirects to the page list" do
+          get edit_secondary_skip_path(form_id: 2, page_id: 1)
+          expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
+        end
+      end
     end
   end
 
@@ -246,6 +319,23 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         it "redirects to the page list" do
           post update_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
           expect(response).to redirect_to(form_pages_path(form.id))
+        end
+      end
+
+      context "when no secondary_skip exists on the page" do
+        before do
+          pages[2].routing_conditions = []
+
+          ActiveResource::HttpMock.respond_to do |mock|
+            mock.get "/api/v1/forms/2", headers, form.to_json, 200
+            mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
+            mock.get "/api/v1/forms/2/pages/1", headers, pages.first.to_json, 200
+          end
+        end
+
+        it "redirects to the page list" do
+          post update_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
+          expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
         end
       end
 
