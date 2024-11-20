@@ -106,6 +106,15 @@ en:
               too_long: Question text must be %{count} characters or less
             selection_options:
               too_many_selection_options: You cannot have more than 30 options in a list when people can select more than one option
+        pages/secondary_skip_input:
+          attributes:
+            goto_page_id:
+              already_consecutive: The question you want to skip to is already straight after the question you want to skip from
+              blank: Select the question or page you want to take the person to
+              equal: The question you want to skip from cannot be the same question you want to take them to
+              routing_page_after: The question you want to skip from must be before the question you want to take the person to
+            routing_page_id:
+              blank: Select the question you want to skip from
   activerecord:
     errors:
       models:
@@ -750,6 +759,11 @@ en:
           'false': No - this question can only be answered once
           'true': 'Yes'
         question_text: Question text
+      pages_secondary_skip_input:
+        default_goto_page_id: Select a question or page
+        default_routing_page_id: Select a question
+        goto_page_id: take them to
+        routing_page_id: Then after the person answers
     legend:
       account_terms_of_use_input:
         agreed: Do you agree to these terms?
@@ -1080,6 +1094,7 @@ en:
     mou_signatures: Memorandum of Understanding agreements
     name_settings: Ask for a person’s name
     new_page: Edit question
+    new_secondary_skip: 'Route %{route_index}: set questions to skip'
     not_found: Page not found
     payment_link: Add a link to a payment page on GOV.UK Pay
     privacy_policy: Provide a link to privacy information for this form
@@ -1308,6 +1323,17 @@ en:
         You can only add one route from each question.
       </p>
   save_and_continue: Save and continue
+  secondary_skip:
+    new:
+      back: Back to question %{page_position}’s routes
+      caption: Question %{page_position}’s routes
+      details_html: |
+        <p>People who select an answer that does not have a route assigned to it will continue to the next question.</p>
+        <p>If you need to, you can make these people skip one or more questions later in the form. For example, you might want them to skip route 1’s questions. This allows you to create 2 different ‘branches’ of questions.</p>
+      details_summary: Why set question to skip?
+      primary_route_answer_key: is not
+      primary_route_continue_key: continue to
+      primary_route_question_key: If the answer to
   selection_options:
     add_another: Add another option
     add_options: Add options to your list
