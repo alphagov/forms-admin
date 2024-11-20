@@ -6,6 +6,7 @@ FactoryBot.define do
     provider { "factory_bot" }
     role { :standard }
     has_access { true }
+    created_at { Faker::Time.between(from: Time.zone.local(2022, 3, 8), to: Time.zone.now) }
     terms_agreed_at { Time.zone.now }
 
     factory :basic_auth_user do

@@ -46,6 +46,16 @@
         end
 
         summary_list.with_row do |row|
+          row.with_key { t('users.edit.first_signed_in') }
+          row.with_value { @user.created_at.to_date.to_fs }
+        end
+
+        summary_list.with_row do |row|
+          row.with_key { t('users.edit.last_signed_in') }
+          row.with_value { date_last_signed_in_at @user }
+        end
+
+        summary_list.with_row do |row|
           row.with_key { t('users.edit.has_access') }
           row.with_value { t("users.has_access.#{@user.has_access}.name") }
         end

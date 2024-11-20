@@ -2,7 +2,13 @@ require "rails_helper"
 
 describe "users/edit.html.erb" do
   let(:user) do
-    build :user, id: 1, organisation_id: 1
+    build(
+      :user,
+      id: 1,
+      organisation_id: 1,
+      created_at: Time.zone.local(2023, 10, 16, 13, 24),
+      last_signed_in_at: Time.zone.now,
+    )
   end
 
   before do
@@ -10,8 +16,11 @@ describe "users/edit.html.erb" do
     create :organisation, id: 2, slug: "ministry-of-testing"
     create :organisation, id: 3, slug: "department-for-tests", name: "Department for Tests", abbreviation: "DfT"
 
-    assign(:user, user)
-    render template: "users/edit"
+    travel_to(Time.zone.local(2024, 8, 26, 11, 50)) do
+      assign(:user, user)
+
+      render template: "users/edit"
+    end
   end
 
   describe "page title" do
@@ -69,6 +78,20 @@ describe "users/edit.html.erb" do
 
     it "contains role" do
       expect(summary_list).to have_text("Standard")
+    end
+
+    it "contains first signed in at" do
+      expect(summary_list).to have_css(".govuk-summary-list__row") do |row|
+        row.has_selector?(".govuk-summary-list__key", text: "First signed in") &&
+          row.has_selector?(".govuk-summary-list__value", text: "16 October 2023")
+      end
+    end
+
+    it "contains last signed in at" do
+      expect(summary_list).to have_css(".govuk-summary-list__row") do |row|
+        row.has_selector?(".govuk-summary-list__key", text: "Last signed in") &&
+          row.has_selector?(".govuk-summary-list__value", text: "26 August 2024")
+      end
     end
 
     it "contains access" do
