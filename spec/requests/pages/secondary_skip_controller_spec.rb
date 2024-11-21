@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.describe Pages::SecondarySkipController, type: :request do
   let(:form) { build :form, id: 2, pages: }
-  let(:pages) { build_pages_with_skip_condition }
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
@@ -29,6 +28,8 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
 
   describe "#new" do
     subject(:get_new) { get new_secondary_skip_path(form_id: 2, page_id: 1) }
+
+    let(:pages) { build_pages_with_skip_condition }
 
     it_behaves_like "feature flag protected endpoint", :subject
 
@@ -83,6 +84,8 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
 
   describe "#create" do
     subject(:post_create) { post create_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params }
+
+    let(:pages) { build_pages_with_skip_condition }
 
     let(:valid_params) do
       {
@@ -178,6 +181,8 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
   describe "#edit" do
     subject(:get_edit) { get edit_secondary_skip_path(form_id: 2, page_id: 1) }
 
+    let(:pages) { build_pages_with_skip_condition }
+
     let(:condition) do
       build(:condition, id: 2, check_page_id: 1, routing_page_id: pages[2].id, goto_page_id: pages[4].id)
     end
@@ -239,6 +244,8 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
 
   describe "#update" do
     subject(:post_update) { post update_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params }
+
+    let(:pages) { build_pages_with_skip_condition }
 
     let(:condition) do
       build(
