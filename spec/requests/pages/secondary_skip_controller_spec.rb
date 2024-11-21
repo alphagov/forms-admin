@@ -372,24 +372,17 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
     end
   end
 
-  def build_pages_with_skip_condition
-    pages = build_list(:page, 5).each_with_index do |page, index|
+  def build_pages
+    build_list(:page, 5).each_with_index do |page, index|
       page.id = index + 1
     end
+  end
 
-    pages.first.answer_settings =
-      DataStruct.new(
-        only_one_option: true,
-        selection_options: [
-          OpenStruct.new(attributes: { name: "Option 1" }),
-          OpenStruct.new(attributes: { name: "Option 2" }),
-        ],
-      )
-
-    pages.first.routing_conditions = [
-      build(:condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Option 1", goto_page_id: pages[2].id, skip_to_end: false),
-    ]
-
-    pages
+  def build_pages_with_skip_condition
+    build_pages.tap do |pages|
+      pages[0] = build :page, :with_selections_settings, id: 1, routing_conditions: [
+        build(:condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Option 1", goto_page_id: pages[2].id, skip_to_end: false),
+      ]
+    end
   end
 end
