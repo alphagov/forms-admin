@@ -1034,13 +1034,16 @@ en:
     conditional_answer_value: "%{answer_value}"
     continue_to: For any other answer, continue to
     delete_route: Delete routes
+    edit: Edit
     if_answer_is: If the answer is
     page_name: "%{page_position}. %{page_name}"
     question_title: Question %{position}
     route_title: Route %{index}
     secondary_skip_after: Then after the person answers
     secondary_skip_then: take them to
+    set_secondary_skip: Set one or more questions to skip later in the form (optional)
     take_the_person_to: take the person to
+    then: Then
   page_settings_summary:
     address:
       address_type: Address type
