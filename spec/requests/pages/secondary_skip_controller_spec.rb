@@ -38,16 +38,18 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
   end
 
   describe "#new" do
+    subject(:get_new) { get new_secondary_skip_path(form_id: 2, page_id: 1) }
+
     context "when the branch_routing feature is not enabled", feature_branch_routing: false do
       it "returns a 404" do
-        get new_secondary_skip_path(form_id: 2, page_id: 1)
+        get_new
         expect(response).to have_http_status(:not_found)
       end
     end
 
     context "when the branch_routing feature is enabled", :feature_branch_routing do
       it "returns 200" do
-        get new_secondary_skip_path(form_id: 2, page_id: 1)
+        get_new
         expect(response).to have_http_status(:success)
       end
 
@@ -59,7 +61,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         end
 
         it "redirects to the page list" do
-          get new_secondary_skip_path(form_id: 2, page_id: 1)
+          get_new
           expect(response).to redirect_to(form_pages_path(form.id))
         end
       end
@@ -87,7 +89,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         end
 
         it "redirects to the show routes page" do
-          get new_secondary_skip_path(form_id: 2, page_id: 1)
+          get_new
           expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
         end
       end
@@ -95,6 +97,8 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
   end
 
   describe "#create" do
+    subject(:post_create) { post create_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params }
+
     let(:valid_params) do
       {
         form_id: "2",
@@ -108,7 +112,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
 
     context "when the branch_routing feature is not enabled", feature_branch_routing: false do
       it "returns a 404" do
-        post create_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
+        post_create
         expect(response).to have_http_status(:not_found)
       end
     end
@@ -122,7 +126,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         end
 
         it "redirects to the show routes page" do
-          post create_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
+          post_create
           expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
         end
       end
@@ -135,7 +139,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         end
 
         it "redirects to the page list" do
-          post create_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
+          post_create
           expect(response).to redirect_to(form_pages_path(form.id))
         end
       end
@@ -163,12 +167,14 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         end
 
         it "redirects to the show routes page" do
-          post create_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
+          post_create
           expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
         end
       end
 
       context "when the submission fails" do
+        subject(:post_create) { post create_secondary_skip_path(form_id: 2, page_id: 1), params: invalid_params }
+
         let(:invalid_params) do
           {
             form_id: "2",
@@ -181,7 +187,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         end
 
         it "renders the new template" do
-          post create_secondary_skip_path(form_id: 2, page_id: pages.first.id), params: invalid_params
+          post_create
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response).to render_template("pages/secondary_skip/new")
         end
@@ -190,6 +196,8 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
   end
 
   describe "#edit" do
+    subject(:get_edit) { get edit_secondary_skip_path(form_id: 2, page_id: 1) }
+
     let(:condition) do
       build(:condition, id: 2, check_page_id: 1, routing_page_id: pages[2].id, goto_page_id: pages[4].id)
     end
@@ -206,19 +214,19 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
 
     context "when the branch_routing feature is not enabled", feature_branch_routing: false do
       it "returns a 404" do
-        get edit_secondary_skip_path(form_id: 2, page_id: 1)
+        get_edit
         expect(response).to have_http_status(:not_found)
       end
     end
 
     context "when the branch_routing feature is enabled", :feature_branch_routing do
       it "returns 200" do
-        get edit_secondary_skip_path(form_id: 2, page_id: 1)
+        get_edit
         expect(response).to have_http_status(:success)
       end
 
       it "renders the edit template" do
-        get edit_secondary_skip_path(form_id: 2, page_id: 1)
+        get_edit
         expect(response).to render_template("pages/secondary_skip/edit")
       end
 
@@ -230,7 +238,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         end
 
         it "redirects to the page list" do
-          get edit_secondary_skip_path(form_id: 2, page_id: 1)
+          get_edit
           expect(response).to redirect_to(form_pages_path(form.id))
         end
       end
@@ -247,7 +255,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         end
 
         it "redirects to the page list" do
-          get edit_secondary_skip_path(form_id: 2, page_id: 1)
+          get_edit
           expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
         end
       end
@@ -255,6 +263,8 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
   end
 
   describe "#update" do
+    subject(:post_update) { post update_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params }
+
     let(:condition) do
       build(
         :condition,
@@ -288,7 +298,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
 
     context "when the branch_routing feature is not enabled", feature_branch_routing: false do
       it "returns a 404" do
-        patch update_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
+        post_update
         expect(response).to have_http_status(:not_found)
       end
     end
@@ -302,7 +312,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         end
 
         it "redirects to the show routes page" do
-          post update_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
+          post_update
           expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
         end
       end
@@ -315,7 +325,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         end
 
         it "redirects to the page list" do
-          post update_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
+          post_update
           expect(response).to redirect_to(form_pages_path(form.id))
         end
       end
@@ -332,7 +342,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         end
 
         it "redirects to the page list" do
-          post update_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
+          post_update
           expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
         end
       end
@@ -343,7 +353,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
             form_id: "2",
             page_id: "1",
             pages_secondary_skip_input: {
-              routing_page_id: "2",
+              routing_page_id: "3",
               goto_page_id: "5",
             },
           }
@@ -357,12 +367,14 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         end
 
         it "redirects to the show routes page" do
-          post update_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params
+          post_update
           expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
         end
       end
 
       context "when the submission fails" do
+        subject(:post_update) { post update_secondary_skip_path(form_id: 2, page_id: 1), params: invalid_params }
+
         let(:invalid_params) do
           {
             form_id: "2",
@@ -375,7 +387,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         end
 
         it "renders the edit template" do
-          post update_secondary_skip_path(form_id: 2, page_id: 1), params: invalid_params
+          post_update
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response).to render_template("pages/secondary_skip/edit")
         end
