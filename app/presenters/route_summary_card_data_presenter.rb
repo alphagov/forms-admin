@@ -45,7 +45,7 @@ private
         title: I18n.t("page_route_card.route_title", index:),
         classes: "app-summary-card",
         actions: [
-          govuk_link_to("Edit", edit_condition_path(form_id: form.id, page_id: page.id, condition_id: routing_condition.id)),
+          govuk_link_to(I18n.t("page_route_card.edit"), edit_condition_path(form_id: form.id, page_id: page.id, condition_id: routing_condition.id)),
         ],
       },
       rows: [
@@ -68,6 +68,9 @@ private
       card: {
         title: I18n.t("page_route_card.route_title", index:),
         classes: "app-summary-card",
+        actions: [
+          edit_secondary_skip_link,
+        ],
       },
       rows: [
         {
@@ -79,10 +82,27 @@ private
     }
   end
 
+  def edit_secondary_skip_link
+    if FeatureService.enabled?(:branch_routing) && all_routes.find(&:secondary_skip?).present?
+      govuk_link_to(I18n.t("page_route_card.edit"), edit_secondary_skip_path(form_id: form.id, page_id: page.id))
+    end
+  end
+
   def secondary_skip_rows
     secondary_skip = all_routes.find(&:secondary_skip?)
 
-    return [] if secondary_skip.blank?
+    if secondary_skip.blank?
+      if FeatureService.enabled?(:branch_routing)
+        return [
+          {
+            key: { text: I18n.t("page_route_card.then") },
+            value: { text: govuk_link_to(I18n.t("page_route_card.set_secondary_skip"), new_secondary_skip_path(form_id: form.id, page_id: page.id)) },
+          },
+        ]
+      else
+        return []
+      end
+    end
 
     goto_page_name = secondary_skip.skip_to_end ? end_page_name : page_name(secondary_skip.goto_page_id)
     routing_page_name = page_name(secondary_skip.routing_page_id)

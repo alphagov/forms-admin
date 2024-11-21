@@ -46,8 +46,15 @@ describe RouteSummaryCardDataPresenter do
 
         # default route
         expect(result[1][:card][:title]).to eq("Route 2")
-        expect(result[1][:card][:actions]).to be_nil
+        expect(result[1][:card][:actions][0]).to be_nil
         expect(result[1][:rows][0][:value][:text]).to eq("2. Next Question")
+      end
+
+      context "with branch_routing enabled", :feature_branch_routing do
+        it "has the link to create a secondary skip" do
+          result = service.summary_card_data
+          expect(result[1][:rows][1][:value][:text]).to have_link("Set one or more questions to skip later in the form (optional)", href: "/forms/99/pages/1/routes/any-other-answer/questions-to-skip/new")
+        end
       end
     end
 
@@ -78,6 +85,13 @@ describe RouteSummaryCardDataPresenter do
         expect(result[1][:rows][0][:value][:text]).to eq("2. Next Question")
         expect(result[1][:rows][1][:value][:text]).to eq("2. Next Question")
         expect(result[1][:rows][2][:value][:text]).to eq("Check your answers before submitting")
+      end
+
+      context "with branch_routing enabled", :feature_branch_routing do
+        it "shows the edit secondary skip link" do
+          result = service.summary_card_data
+          expect(result[1][:card][:actions].first).to have_link("Edit", href: "/forms/99/pages/1/routes/any-other-answer/questions-to-skip")
+        end
       end
     end
 
