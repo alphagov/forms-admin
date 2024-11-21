@@ -19,12 +19,10 @@ class Pages::QuestionsController < PagesController
   def create
     @question_input = Pages::QuestionInput.new(page_params_for_form_object)
 
-    @page = Page.new(page_params_for_forms_api)
-
-    # TODO: Move Page creation to be part of the form submit method
-    if @question_input.submit && @page.save
+    if @question_input.valid?
+      @page = @question_input.submit
       clear_draft_questions_data
-      redirect_to edit_question_path(current_form, @page), success: "Your changes have been saved"
+      redirect_to edit_question_path(current_form, @page.id), success: "Your changes have been saved"
     else
       render :new, locals: { current_form:, draft_question: }, status: :unprocessable_entity
     end
@@ -45,10 +43,9 @@ class Pages::QuestionsController < PagesController
 
     @question_input = Pages::QuestionInput.new(page_params_for_form_object)
 
-    # TODO: Move Page creation to be part of the form submit method
-    if @question_input.submit && page.save
+    if @question_input.update_page(@page)
       clear_draft_questions_data
-      redirect_to edit_question_path(current_form, @page), success: "Your changes have been saved"
+      redirect_to edit_question_path(current_form, @page.id), success: "Your changes have been saved"
     else
       render :edit, locals: { current_form:, draft_question: }, status: :unprocessable_entity
     end
@@ -62,6 +59,7 @@ private
 
   def page_params_for_form_object
     page_params.merge(draft_question:,
+                      form_id: current_form.id,
                       answer_type: draft_question.answer_type,
                       answer_settings: draft_question.answer_settings,
                       page_heading: draft_question.page_heading,

@@ -1,9 +1,9 @@
 class Pages::QuestionInput < BaseInput
   include QuestionTextValidation
 
-  attr_accessor :question_text, :hint_text, :is_optional, :answer_type, :draft_question, :is_repeatable
+  attr_accessor :question_text, :hint_text, :is_optional, :answer_type, :draft_question, :is_repeatable, :form_id
 
-  # TODO: We could lose these attributes once we have an Check your answers page
+  # TODO: We could lose these attributes once we have a Check your answers page
   attr_accessor :answer_settings, :page_heading, :guidance_markdown
 
   attr_reader :selection_options # only used for displaying error
@@ -25,6 +25,31 @@ class Pages::QuestionInput < BaseInput
     )
 
     draft_question.save!(validate: false)
+
+    PageRepository.create!(form_id:,
+                           question_text:,
+                           hint_text:,
+                           is_optional:,
+                           is_repeatable:,
+                           answer_settings:,
+                           page_heading:,
+                           guidance_markdown:,
+                           answer_type:)
+  end
+
+  def update_page(page)
+    return false if invalid?
+
+    draft_question.assign_attributes(
+      question_text:,
+      hint_text:,
+      is_optional:,
+      is_repeatable:,
+    )
+
+    draft_question.save!(validate: false)
+
+    PageRepository.save!(page)
   end
 
   def default_options

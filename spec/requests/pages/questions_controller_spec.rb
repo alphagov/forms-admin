@@ -23,6 +23,21 @@ RSpec.describe Pages::QuestionsController, type: :request do
     }
   end
 
+  let(:page) do
+    build(:page,
+          id: 1,
+          form_id: 2,
+          question_text: draft_question.question_text,
+          hint_text: draft_question.hint_text,
+          answer_type: draft_question.answer_type,
+          answer_settings: nil,
+          is_optional: false,
+          is_repeatable: false,
+          page_heading: nil,
+          guidance_markdown: nil,
+          next_page:)
+  end
+
   let(:updated_page_data) do
     {
       id: 1,
@@ -38,6 +53,20 @@ RSpec.describe Pages::QuestionsController, type: :request do
     }
   end
 
+  let(:updated_page) do
+    build(:page,
+          id: 1,
+          question_text: "What is your home address?",
+          hint_text: "This should be the location stated in your contract.",
+          answer_type: "address",
+          answer_settings: {},
+          is_optional: false,
+          is_repeatable: false,
+          page_heading: "New page heading",
+          guidance_markdown: "## Heading level 2",
+          next_page:)
+  end
+
   let(:form_pages_response) do
     [page_response].to_json
   end
@@ -48,10 +77,9 @@ RSpec.describe Pages::QuestionsController, type: :request do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms/2", headers, form_response.to_json, 200
       mock.get "/api/v1/forms/2/pages", headers, form_pages_response, 200
-      mock.get "/api/v1/forms/2/pages/1", headers, page_response.to_json, 200
-      mock.post "/api/v1/forms/2/pages", post_headers, page_response.to_json, 200
-      mock.put "/api/v1/forms/2/pages/1", post_headers, updated_page_data.to_json, 200
     end
+
+    allow(PageRepository).to receive_messages(create!: page, find: page, save!: updated_page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form_response.id, group_id: group.id)
@@ -120,17 +148,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
         expect(response).to redirect_to(edit_question_path(form_id: 2, page_id: 1))
       end
 
-      it "Creates the page on the API" do
-        expected_request = ActiveResource::Request.new(:post, "/api/v1/forms/2/pages", new_page_data.to_json, post_headers)
-        matched_request = ActiveResource::HttpMock.requests.find do |request|
-          request.method == expected_request.method &&
-            request.path == expected_request.path &&
-            request.body == expected_request.body
-        end
-
-        expect(matched_request).to eq expected_request
-      end
-
       it "displays a notification banner with call to action links" do
         follow_redirect!
         results = Capybara.string(response.body)
@@ -138,25 +155,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
         expect(banner_contents).to have_link(text: "Add a question", href: start_new_question_path(form_id: 2))
         expect(banner_contents).to have_link(text: "Back to your questions", href: form_pages_path(form_id: 2))
-      end
-
-      context "when passing is_repeatable as a param" do
-        let(:params) do
-          { pages_question_input: {
-            question_text: "What is your home address?",
-            hint_text: "This should be the location stated in your contract.",
-            is_optional: false,
-            is_repeatable: true,
-          } }
-        end
-
-        it "creates the page on the API with the correct is_repeatable value" do
-          matched_request = ActiveResource::HttpMock.requests.find do |request|
-            request.method == :post && request.path == "/api/v1/forms/2/pages"
-          end
-
-          expect(JSON.parse(matched_request.body)).to include("is_repeatable" => true)
-        end
       end
     end
 
@@ -194,32 +192,24 @@ RSpec.describe Pages::QuestionsController, type: :request do
         get edit_question_path(form_id: 2, page_id: 1)
       end
 
-      it "Reads the page from the API" do
-        form_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
-        expect(ActiveResource::HttpMock.requests).to include form_request
-
-        form_pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
-        expect(ActiveResource::HttpMock.requests).to include form_pages_request
-
-        page_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
-        expect(ActiveResource::HttpMock.requests).to include page_request
+      it "Reads the page from the page repository" do
+        expect(PageRepository).to have_received(:find)
       end
 
       context "when page has unrecognised attributes" do
-        let(:page_response) do
-          {
-            id: 1,
-            form_id: 2,
-            question_text: draft_question.question_text,
-            hint_text: draft_question.hint_text,
-            answer_type: draft_question.answer_type,
-            answer_settings: nil,
-            is_optional: false,
-            page_heading: nil,
-            guidance_markdown: nil,
-            next_page:,
-            newly_added_to_api: "some value",
-          }
+        let(:page) do
+          build(:page,
+                id: 1,
+                form_id: 2,
+                question_text: draft_question.question_text,
+                hint_text: draft_question.hint_text,
+                answer_type: draft_question.answer_type,
+                answer_settings: nil,
+                is_optional: false,
+                page_heading: nil,
+                guidance_markdown: nil,
+                next_page:,
+                newly_added_to_api: "some value")
         end
 
         it "renders successfully" do
@@ -253,6 +243,8 @@ RSpec.describe Pages::QuestionsController, type: :request do
       }
     end
 
+    let(:page) { build(:page, **page_response) }
+
     describe "Given a page" do
       let(:params) do
         { pages_question_input: {
@@ -268,26 +260,17 @@ RSpec.describe Pages::QuestionsController, type: :request do
       end
 
       before do
+        allow(PageRepository).to receive_messages(find: page, save!: page)
+
         post update_question_path(form_id: 2, page_id: 1), params:
       end
 
-      it "Reads the page from the API" do
-        form_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
-        expect(ActiveResource::HttpMock.requests).to include form_request
-
-        page_request = ActiveResource::Request.new(:put, "/api/v1/forms/2/pages/1", {}, post_headers)
-        expect(ActiveResource::HttpMock.requests).to include page_request
+      it "Reads the page from the PageRepository" do
+        expect(PageRepository).to have_received(:find)
       end
 
-      it "Updates the page on the API" do
-        expected_request = ActiveResource::Request.new(:put, "/api/v1/forms/2/pages/1", updated_page_data.to_json, post_headers)
-        matched_request = ActiveResource::HttpMock.requests.find do |request|
-          request.method == expected_request.method &&
-            request.path == expected_request.path &&
-            request.body == expected_request.body
-        end
-
-        expect(matched_request).to eq expected_request
+      it "Updates the page through the page repository" do
+        expect(PageRepository).to have_received(:save!)
       end
 
       it "Redirects you to edit page for question that was updated" do
@@ -320,25 +303,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
           } }
         end
 
-        it "Reads the page from the API" do
-          form_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
-          expect(ActiveResource::HttpMock.requests).to include form_request
-
-          page_request = ActiveResource::Request.new(:put, "/api/v1/forms/2/pages/1", {}, post_headers)
-          expect(ActiveResource::HttpMock.requests).to include page_request
-        end
-
-        it "Updates the page on the API" do
-          expected_request = ActiveResource::Request.new(:put, "/api/v1/forms/2/pages/1", updated_page_data.to_json, post_headers)
-          matched_request = ActiveResource::HttpMock.requests.find do |request|
-            request.method == expected_request.method &&
-              request.path == expected_request.path &&
-              request.body == expected_request.body
-          end
-
-          expect(matched_request).to eq expected_request
-        end
-
         it "Redirects you to edit page for new question" do
           expect(response).to redirect_to(edit_question_path(form_id: 2, page_id: 1))
         end
@@ -350,29 +314,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
           expect(banner_contents).to have_link(text: "Edit next question", href: edit_question_path(form_id: 2, page_id: 4))
           expect(banner_contents).to have_link(text: "Back to your questions", href: form_pages_path(form_id: 2))
-        end
-      end
-
-      context "when passing is_repeatable as a param" do
-        let(:params) do
-          { pages_question_input: {
-            form_id: 2,
-            question_text: "What is your home address?",
-            hint_text: "This should be the location stated in your contract.",
-            answer_type: "address",
-            is_optional: "false",
-            is_repeatable: "true",
-            page_heading: "New page heading",
-            guidance_markdown: "## Heading level 2",
-          } }
-        end
-
-        it "updates the page on the API with the correct is_repeatable value" do
-          matched_request = ActiveResource::HttpMock.requests.find do |request|
-            request.method == :put && request.path == "/api/v1/forms/2/pages/1"
-          end
-
-          expect(JSON.parse(matched_request.body)).to include("is_repeatable" => true)
         end
       end
     end

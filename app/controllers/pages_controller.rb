@@ -15,9 +15,9 @@ class PagesController < ApplicationController
   end
 
   def move_page
-    page_to_move = Page.find(move_params[:page_id], params: { form_id: move_params[:form_id] })
+    page_to_move = PageRepository.find(page_id: move_params[:page_id], form_id: move_params[:form_id])
 
-    page_to_move.move_page(move_params[:direction])
+    PageRepository.move_page(page_to_move, move_params[:direction])
 
     position = if move_params[:direction] == :up
                  page_to_move.position - 1
@@ -39,7 +39,7 @@ private
   end
 
   def page
-    @page ||= Page.find(params[:page_id], params: { form_id: current_form.id })
+    @page ||= PageRepository.find(page_id: params[:page_id], form_id: current_form.id)
   end
 
   def draft_question

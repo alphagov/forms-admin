@@ -22,6 +22,7 @@ FactoryBot.define do
     has_routing_errors { false }
     page_heading { nil }
     guidance_markdown { nil }
+    is_repeatable { false }
 
     trait :with_hints do
       hint_text { Faker::Quote.yoda.truncate(500) }

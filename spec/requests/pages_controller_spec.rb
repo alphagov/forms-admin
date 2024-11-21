@@ -103,20 +103,17 @@ RSpec.describe PagesController, type: :request do
       before do
         ActiveResource::HttpMock.respond_to do |mock|
           mock.get "/api/v1/forms/2", headers, form_response.to_json, 200
-          mock.get "/api/v1/forms/2/pages/1", headers, page.to_json, 200
         end
+
+        allow(PageRepository).to receive_messages(find: page, destroy: true)
 
         GroupForm.create!(form_id: 2, group_id: group.id)
 
         get delete_page_path(form_id: 2, page_id: 1)
       end
 
-      it "reads the form from the API" do
-        expect(form_response).to have_been_read
-      end
-
-      it "reads the page from the API" do
-        expect(page).to have_been_read
+      it "renders the delete page template" do
+        expect(response).to render_template("forms/delete_confirmation/delete")
       end
     end
   end
@@ -142,10 +139,10 @@ RSpec.describe PagesController, type: :request do
         ActiveResource::HttpMock.respond_to do |mock|
           mock.get "/api/v1/forms/2", headers, form_response.to_json, 200
           mock.get "/api/v1/forms/2/pages", headers, form_pages_response, 200
-          mock.get "/api/v1/forms/2/pages/1", headers, page.to_json, 200
           mock.put "/api/v1/forms/2", post_headers
-          mock.delete "/api/v1/forms/2/pages/1", headers, {}, 200
         end
+
+        allow(PageRepository).to receive_messages(find: page, destroy: true)
 
         GroupForm.create!(form_id: 2, group_id: group.id)
 
@@ -154,10 +151,6 @@ RSpec.describe PagesController, type: :request do
 
       it "Redirects you to the page index screen" do
         expect(response).to redirect_to(form_pages_path)
-      end
-
-      it "Deletes the form on the API" do
-        expect(page).to have_been_deleted
       end
     end
   end
@@ -176,17 +169,16 @@ RSpec.describe PagesController, type: :request do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/100", headers, pages[1].to_json, 200
-        mock.put "/api/v1/forms/1/pages/100/up", post_headers
       end
+
+      allow(PageRepository).to receive_messages(find: pages[1], move_page: true)
 
       GroupForm.create!(form_id: 2, group_id: group.id)
       post move_page_path({ form_id: 1, move_direction: { up: 100 } })
     end
 
     it "Reads the form from the API" do
-      move_post = ActiveResource::Request.new(:put, "/api/v1/forms/1/pages/100/up", {}, post_headers)
-      expect(ActiveResource::HttpMock.requests).to include move_post
+      expect(PageRepository).to have_received(:move_page)
     end
   end
 end

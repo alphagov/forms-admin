@@ -53,11 +53,11 @@ module Forms
       @delete_confirmation_input = DeleteConfirmationInput.new
 
       if params[:page_id].present?
-        @page = Page.find(params[:page_id], params: { form_id: current_form.id })
-        @url = destroy_page_path(current_form, @page)
+        @page = PageRepository.find(page_id: params[:page_id], form_id: current_form.id)
+        @url = destroy_page_path(current_form, @page.id)
         @confirm_deletion_legend = t("forms_delete_confirmation_input.confirm_deletion_page")
         @item_name = @page.question_text
-        @back_url = edit_question_path(current_form, @page)
+        @back_url = edit_question_path(current_form, @page.id)
       else
         @url = destroy_form_path(current_form)
         @confirm_deletion_legend = t("forms_delete_confirmation_input.confirm_deletion")
@@ -80,7 +80,7 @@ module Forms
     def delete_page(form, page)
       success_url = form_pages_path(form)
 
-      if page.destroy
+      if PageRepository.destroy(page)
         redirect_to success_url, status: :see_other, success: "Successfully deleted ‘#{page.question_text}’"
       else
         raise StandardError, "Deletion unsuccessful"

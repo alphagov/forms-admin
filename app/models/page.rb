@@ -46,10 +46,6 @@ class Page < ActiveResource::Base
     answer_settings.selection_options.map { |option| option.attributes[:name] }.join(", ")
   end
 
-  def submit
-    save!
-  end
-
   def conditions
     routing_conditions.map { |routing_condition| Condition.new(routing_condition.attributes) }
   end

@@ -233,11 +233,50 @@ RSpec.describe Pages::QuestionInput, type: :model do
 
     context "when form is valid valid" do
       before do
+        allow(PageRepository).to receive(:create!)
+
         question_input.question_text = "How old are you?"
         question_input.hint_text = "As a number"
         question_input.is_optional = "false"
         question_input.is_repeatable = "true"
         question_input.submit
+      end
+
+      it "sets a draft_question question_text" do
+        expect(question_input.draft_question.question_text).to eq question_input.question_text
+      end
+
+      it "sets a draft_question hint_text" do
+        expect(question_input.draft_question.hint_text).to eq question_input.hint_text
+      end
+
+      it "sets a draft_question is_optional" do
+        expect(question_input.draft_question.is_optional.to_s).to eq question_input.is_optional
+      end
+
+      it "sets a draft_question is_repeatable" do
+        expect(question_input.draft_question.is_repeatable.to_s).to eq question_input.is_repeatable
+      end
+    end
+  end
+
+  describe "#update_page" do
+    let(:page) { build(:page, form_id: 1) }
+
+    it "returns false if the form is invalid" do
+      allow(question_input).to receive(:invalid?).and_return(true)
+      expect(question_input.update_page(page)).to be false
+    end
+
+    context "when form is valid valid" do
+      before do
+        allow(PageRepository).to receive(:save!).and_return(page)
+
+        question_input.question_text = "How old are you?"
+        question_input.hint_text = "As a number"
+        question_input.is_optional = "false"
+        question_input.is_repeatable = "true"
+        question_input.update_page(page)
       end
 
       it "sets a draft_question question_text" do
