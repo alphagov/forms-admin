@@ -64,13 +64,20 @@ private
   def default_route_card(index)
     continue_to_name = page.has_next_page? ? page_name(page.next_page) : end_page_name
 
+    actions = if FeatureService.enabled?(:branch_routing) && all_routes.find(&:secondary_skip?).present?
+                [
+                  edit_secondary_skip_link,
+                  delete_secondary_skip_link,
+                ]
+              else
+                []
+              end
+
     {
       card: {
         title: I18n.t("page_route_card.route_title", index:),
         classes: "app-summary-card",
-        actions: [
-          edit_secondary_skip_link,
-        ],
+        actions:,
       },
       rows: [
         {
@@ -83,9 +90,11 @@ private
   end
 
   def edit_secondary_skip_link
-    if FeatureService.enabled?(:branch_routing) && all_routes.find(&:secondary_skip?).present?
-      govuk_link_to(I18n.t("page_route_card.edit"), edit_secondary_skip_path(form_id: form.id, page_id: page.id))
-    end
+    govuk_link_to(I18n.t("page_route_card.edit"), edit_secondary_skip_path(form_id: form.id, page_id: page.id))
+  end
+
+  def delete_secondary_skip_link
+    govuk_link_to(I18n.t("page_route_card.delete"), "#")
   end
 
   def secondary_skip_rows
