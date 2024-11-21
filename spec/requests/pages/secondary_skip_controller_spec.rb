@@ -49,26 +49,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
       end
 
       context "when a secondary skip condition already exists on the page" do
-        let(:existing_secondary_skip) do
-          build(
-            :condition,
-            id: 2,
-            routing_page_id: pages[2].id,
-            check_page_id: pages[0].id,
-            goto_page_id: pages[4].id,
-            secondary_skip: true,
-          )
-        end
-
-        before do
-          pages[2].routing_conditions = [existing_secondary_skip]
-
-          ActiveResource::HttpMock.respond_to do |mock|
-            mock.get "/api/v1/forms/2", headers, form.to_json, 200
-            mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
-            mock.get "/api/v1/forms/2/pages/1", headers, pages.first.to_json, 200
-          end
-        end
+        let(:pages) { build_pages_with_existing_secondary_skip }
 
         it "redirects to the show routes page" do
           get_new
@@ -120,26 +101,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
       end
 
       context "when a secondary skip condition already exists on the page" do
-        let(:existing_secondary_skip) do
-          build(
-            :condition,
-            id: 2,
-            routing_page_id: pages[2].id,
-            check_page_id: pages[0].id,
-            goto_page_id: pages[4].id,
-            secondary_skip: true,
-          )
-        end
-
-        before do
-          pages[2].routing_conditions = [existing_secondary_skip]
-
-          ActiveResource::HttpMock.respond_to do |mock|
-            mock.get "/api/v1/forms/2", headers, form.to_json, 200
-            mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
-            mock.get "/api/v1/forms/2/pages/1", headers, pages.first.to_json, 200
-          end
-        end
+        let(:pages) { build_pages_with_existing_secondary_skip }
 
         it "redirects to the show routes page" do
           post_create
@@ -173,21 +135,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
   describe "#edit" do
     subject(:get_edit) { get edit_secondary_skip_path(form_id: 2, page_id: 1) }
 
-    let(:pages) { build_pages_with_skip_condition }
-
-    let(:condition) do
-      build(:condition, id: 2, check_page_id: 1, routing_page_id: pages[2].id, goto_page_id: pages[4].id)
-    end
-
-    before do
-      pages[2].routing_conditions = [condition]
-
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/2", headers, form.to_json, 200
-        mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/2/pages/1", headers, pages.first.to_json, 200
-      end
-    end
+    let(:pages) { build_pages_with_existing_secondary_skip }
 
     it_behaves_like "feature flag protected endpoint", :subject
 
@@ -212,15 +160,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
       end
 
       context "when no secondary_skip exists on the page" do
-        before do
-          pages[2].routing_conditions = []
-
-          ActiveResource::HttpMock.respond_to do |mock|
-            mock.get "/api/v1/forms/2", headers, form.to_json, 200
-            mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
-            mock.get "/api/v1/forms/2/pages/1", headers, pages.first.to_json, 200
-          end
-        end
+        let(:pages) { build_pages_with_skip_condition }
 
         it "redirects to the page list" do
           get_edit
@@ -233,17 +173,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
   describe "#update" do
     subject(:post_update) { post update_secondary_skip_path(form_id: 2, page_id: 1), params: valid_params }
 
-    let(:pages) { build_pages_with_skip_condition }
-
-    let(:condition) do
-      build(
-        :condition,
-        id: 2,
-        check_page_id: 1,
-        routing_page_id: pages[2].id,
-        goto_page_id: pages[4].id,
-      )
-    end
+    let(:pages) { build_pages_with_existing_secondary_skip }
 
     let(:valid_params) do
       {
@@ -254,16 +184,6 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
           goto_page_id: "5",
         },
       }
-    end
-
-    before do
-      pages[2].routing_conditions = [condition]
-
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/2", headers, form.to_json, 200
-        mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/2/pages/1", headers, pages.first.to_json, 200
-      end
     end
 
     it_behaves_like "feature flag protected endpoint", :subject
@@ -292,15 +212,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
       end
 
       context "when no secondary_skip exists on the page" do
-        before do
-          pages[2].routing_conditions = []
-
-          ActiveResource::HttpMock.respond_to do |mock|
-            mock.get "/api/v1/forms/2", headers, form.to_json, 200
-            mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
-            mock.get "/api/v1/forms/2/pages/1", headers, pages.first.to_json, 200
-          end
-        end
+        let(:pages) { build_pages_with_skip_condition }
 
         it "redirects to the page list" do
           post_update
@@ -367,6 +279,54 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
       pages[0] = build :page, :with_selections_settings, id: 1, routing_conditions: [
         build(:condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Option 1", goto_page_id: pages[2].id, skip_to_end: false),
       ]
+    end
+  end
+
+  def build_pages_with_existing_secondary_skip
+    build_pages_with_skip_condition.tap do |pages|
+      existing_secondary_skip = build(
+        :condition,
+        id: 2,
+        routing_page_id: pages[1].id,
+        check_page_id: pages[0].id,
+        goto_page_id: pages[4].id,
+        secondary_skip: true,
+      )
+      pages[1].routing_conditions = [existing_secondary_skip]
+    end
+  end
+
+  def build_pages_with_two_skip_conditions
+    build_pages.tap do |pages|
+      pages[0] = build :page, :with_selections_settings, id: 1, routing_conditions: [
+        build(:condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Option 1", goto_page_id: pages[2].id, skip_to_end: false),
+      ]
+
+      first_secondary_skip = build(
+        :condition,
+        id: 2,
+        routing_page_id: pages[1].id,
+        check_page_id: pages[0].id,
+        goto_page_id: pages[4].id,
+        secondary_skip: true,
+      )
+
+      pages[1].routing_conditions = [first_secondary_skip]
+
+      pages[5] = build :page, :with_selections_settings, id: 6, routing_conditions: [
+        build(:condition, id: 3, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Option 1", goto_page_id: pages[7].id, skip_to_end: false),
+      ]
+
+      second_secondary_skip = build(
+        :condition,
+        id: 4,
+        routing_page_id: pages[6].id,
+        check_page_id: pages[5].id,
+        goto_page_id: nil,
+        skip_to_end: true,
+      )
+
+      pages[6].routing_conditions = [second_secondary_skip]
     end
   end
 end
