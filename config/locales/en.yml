@@ -1033,6 +1033,7 @@ en:
     check_your_answers: Check your answers before submitting
     conditional_answer_value: "%{answer_value}"
     continue_to: For any other answer, continue to
+    delete: Delete
     delete_route: Delete routes
     edit: Edit
     if_answer_is: If the answer is

@@ -70,7 +70,8 @@ private
         classes: "app-summary-card",
         actions: [
           edit_secondary_skip_link,
-        ],
+          delete_secondary_skip_link,
+        ]
       },
       rows: [
         {
@@ -85,6 +86,12 @@ private
   def edit_secondary_skip_link
     if FeatureService.enabled?(:branch_routing) && all_routes.find(&:secondary_skip?).present?
       govuk_link_to(I18n.t("page_route_card.edit"), edit_secondary_skip_path(form_id: form.id, page_id: page.id))
+    end
+  end
+
+  def delete_secondary_skip_link
+    if FeatureService.enabled?(:branch_routing) && all_routes.find(&:secondary_skip?).present?
+      govuk_link_to(I18n.t("page_route_card.delete"), "#")
     end
   end
 

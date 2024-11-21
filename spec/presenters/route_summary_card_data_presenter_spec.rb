@@ -92,6 +92,11 @@ describe RouteSummaryCardDataPresenter do
           result = service.summary_card_data
           expect(result[1][:card][:actions].first).to have_link("Edit", href: "/forms/99/pages/1/routes/any-other-answer/questions-to-skip")
         end
+
+        it "shows the delete secondary skip link" do
+          result = service.summary_card_data
+          expect(result[1][:card][:actions].second).to have_link("Delete", href: "#")
+        end
       end
     end
 
