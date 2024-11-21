@@ -32,7 +32,7 @@ class Pages::SecondarySkipController < PagesController
   end
 
   def update
-    secondary_skip_input = Pages::SecondarySkipInput.new(secondary_skip_input_params.merge(record: secondary_skip_condition)).assign_values
+    secondary_skip_input = Pages::SecondarySkipInput.new(secondary_skip_input_params.merge(record: secondary_skip_condition))
 
     if secondary_skip_input.submit
       redirect_to show_routes_path(form_id: current_form.id, page_id: page.id)
