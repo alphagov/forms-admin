@@ -40,11 +40,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
       end
 
       context "when no condition exists on the page" do
-        let(:pages) do
-          build_list(:page, 5).each_with_index do |page, index|
-            page.id = index + 1
-          end
-        end
+        let(:pages) { build_pages }
 
         it "redirects to the page list" do
           get_new
@@ -115,11 +111,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
       end
 
       context "when no condition exists on the page" do
-        let(:pages) do
-          build_list(:page, 5).each_with_index do |page, index|
-            page.id = index + 1
-          end
-        end
+        let(:pages) { build_pages }
 
         it "redirects to the page list" do
           post_create
@@ -211,11 +203,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
       end
 
       context "when no condition exists on the page" do
-        let(:pages) do
-          build_list(:page, 5).each_with_index do |page, index|
-            page.id = index + 1
-          end
-        end
+        let(:pages) { build_pages }
 
         it "redirects to the page list" do
           get_edit
@@ -295,11 +283,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
       end
 
       context "when no condition exists on the page" do
-        let(:pages) do
-          build_list(:page, 5).each_with_index do |page, index|
-            page.id = index + 1
-          end
-        end
+        let(:pages) { build_pages }
 
         it "redirects to the page list" do
           post_update
