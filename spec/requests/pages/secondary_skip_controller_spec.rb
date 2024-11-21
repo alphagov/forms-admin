@@ -193,7 +193,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
 
   describe "#edit" do
     let(:condition) do
-      build(:condition, id: 2, routing_page_id: pages[2].id, goto_page_id: pages[4].id)
+      build(:condition, id: 2, check_page_id: 1, routing_page_id: pages[2].id, goto_page_id: pages[4].id)
     end
 
     before do
@@ -261,9 +261,9 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
       build(
         :condition,
         id: 2,
+        check_page_id: 1,
         routing_page_id: pages[2].id,
         goto_page_id: pages[4].id,
-        secondary_skip: true,
       )
     end
 

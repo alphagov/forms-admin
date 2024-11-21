@@ -71,6 +71,6 @@ private
   end
 
   def secondary_skip_condition
-    @secondary_skip_condition ||= current_form.pages.flat_map(&:conditions).compact_blank.find(&:secondary_skip?)
+    @secondary_skip_condition ||= current_form.pages.flat_map(&:conditions).compact_blank.find { |c| c.secondary_skip? && c.check_page_id == page.id }
   end
 end
