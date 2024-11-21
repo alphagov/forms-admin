@@ -1,5 +1,4 @@
 class GroupsController < ApplicationController
-  before_action :feature_enabled
   before_action :set_group, except: %i[index new create]
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
@@ -115,10 +114,6 @@ class GroupsController < ApplicationController
   end
 
 private
-
-  def feature_enabled
-    raise ActionController::RoutingError, "Groups feature not enabled" unless groups_enabled
-  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_group
