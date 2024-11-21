@@ -62,9 +62,8 @@ if HostingEnvironment.local_development? && User.none?
 
   FactoryBot.create :membership, user: default_user, group: end_to_end_group, added_by: default_user, role: :group_admin
 
-  # add a form to a test group (assumes database seed being used for forms-api)
-  GroupForm.create! group: test_group, form_id: 1
-
-  # add form with submission_type of s3 to end to end group (assumes database seed being used for forms-api)
-  GroupForm.create! group: end_to_end_group, form_id: 2
+  # add forms to groups (assumes database seed is being used for forms-api)
+  GroupForm.create! group: test_group, form_id: 1 # All question types form
+  GroupForm.create! group: end_to_end_group, form_id: 2 # s3 submission test form
+  GroupForm.create! group: test_group, form_id: 3 # Branch route form
 end
