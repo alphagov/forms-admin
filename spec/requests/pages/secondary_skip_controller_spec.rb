@@ -25,6 +25,15 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
+  RSpec.shared_examples "feature flag protected endpoint" do |action|
+    context "when the branch_routing feature is disabled" do
+      it "returns 404", feature_branch_routing: false do
+        send(action)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
+
   before do
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -40,12 +49,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
   describe "#new" do
     subject(:get_new) { get new_secondary_skip_path(form_id: 2, page_id: 1) }
 
-    context "when the branch_routing feature is not enabled", feature_branch_routing: false do
-      it "returns a 404" do
-        get_new
-        expect(response).to have_http_status(:not_found)
-      end
-    end
+    it_behaves_like "feature flag protected endpoint", :subject
 
     context "when the branch_routing feature is enabled", :feature_branch_routing do
       it "returns 200" do
@@ -110,12 +114,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
       }
     end
 
-    context "when the branch_routing feature is not enabled", feature_branch_routing: false do
-      it "returns a 404" do
-        post_create
-        expect(response).to have_http_status(:not_found)
-      end
-    end
+    it_behaves_like "feature flag protected endpoint", :subject
 
     context "when the branch_routing feature is enabled", :feature_branch_routing do
       context "when the submission is successful" do
@@ -212,12 +211,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
       end
     end
 
-    context "when the branch_routing feature is not enabled", feature_branch_routing: false do
-      it "returns a 404" do
-        get_edit
-        expect(response).to have_http_status(:not_found)
-      end
-    end
+    it_behaves_like "feature flag protected endpoint", :subject
 
     context "when the branch_routing feature is enabled", :feature_branch_routing do
       it "returns 200" do
@@ -296,12 +290,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
       end
     end
 
-    context "when the branch_routing feature is not enabled", feature_branch_routing: false do
-      it "returns a 404" do
-        post_update
-        expect(response).to have_http_status(:not_found)
-      end
-    end
+    it_behaves_like "feature flag protected endpoint", :subject
 
     context "when the branch_routing feature is enabled", :feature_branch_routing do
       context "when the submission is successful without changing the routing_page_id" do
