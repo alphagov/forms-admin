@@ -1,4 +1,6 @@
 class Pages::LongListsSelection::BulkOptionsInput < BaseInput
+  include LoggingHelper
+
   MAXIMUM_CHOOSE_ONLY_ONE_OPTION = 1000
   MAXIMUM_CHOOSE_MORE_THAN_ONE_OPTION = 30
 
@@ -21,7 +23,10 @@ class Pages::LongListsSelection::BulkOptionsInput < BaseInput
       .assign_attributes({ answer_settings:,
                            is_optional: include_none_of_the_above })
 
-    draft_question.save!(validate: false)
+    success = draft_question.save!(validate: false)
+    log_submission if success
+
+    success
   end
 
   def none_of_the_above_options
@@ -62,5 +67,9 @@ private
 
   def maximum_options
     only_one_option? ? MAXIMUM_CHOOSE_ONLY_ONE_OPTION : MAXIMUM_CHOOSE_MORE_THAN_ONE_OPTION
+  end
+
+  def log_submission
+    log_selection_question_options_submitted(is_bulk_entry: true, options_count: selection_options.length, only_one_option: only_one_option?)
   end
 end

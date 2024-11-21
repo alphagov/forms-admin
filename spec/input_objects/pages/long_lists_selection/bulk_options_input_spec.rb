@@ -99,6 +99,20 @@ RSpec.describe Pages::LongListsSelection::BulkOptionsInput, type: :model do
       expect(bulk_options_input.draft_question.answer_settings[:selection_options]).to eq([{ name: "1" }, { name: "2" }])
     end
 
+    it "logs submission" do
+      allow(Rails.logger).to receive(:info)
+
+      bulk_options_input.bulk_selection_options = (1..2).to_a.join("\n")
+      bulk_options_input.include_none_of_the_above = "true"
+      bulk_options_input.submit
+
+      expect(Rails.logger).to have_received(:info).with("Submitted selection options for a selection question", {
+        "is_bulk_entry": true,
+        "options_count": 2,
+        "only_one_option": true,
+      })
+    end
+
     context "when only one option is allowed" do
       let(:only_one_option) { "true" }
 
