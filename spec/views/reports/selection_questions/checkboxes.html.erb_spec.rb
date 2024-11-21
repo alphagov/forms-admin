@@ -29,7 +29,7 @@ describe "reports/selection_questions/checkboxes.html.erb" do
   end
 
   it "includes the form name" do
-    expect(rendered).to have_link("A form", href: form_url(1))
+    expect(rendered).to have_link("A form", href: live_form_pages_path(1))
   end
 
   it "includes the question text" do
