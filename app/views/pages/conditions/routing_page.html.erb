@@ -12,8 +12,14 @@
       </h1>
 
       <p>
-        <%= t("routing_page.body_text") %>
+        <%= t("routing_page.body_routing_text") %>
       </p>
+
+      <% if FeatureService.enabled?(:branch_routing) %>
+      <p>
+        <%= t("routing_page.body_branching_text") %>
+      </p>
+      <% end %>
 
       <% if form.has_no_remaining_routes_available? %>
         <h2 class="govuk-heading-m"><%= t("routing_page.no_remaining_routes_heading") %></h2>

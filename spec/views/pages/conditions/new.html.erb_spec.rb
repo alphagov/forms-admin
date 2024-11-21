@@ -18,12 +18,12 @@ describe "pages/conditions/new.html.erb" do
   end
 
   it "sets the correct title" do
-    expect(view.content_for(:title)).to eq(t("page_titles.routing_page_new"))
+    expect(view.content_for(:title)).to eq "Add a question route: select answer and destination"
   end
 
   it "contains page heading and sub-heading" do
     expect(rendered).to have_css("h1 .govuk-caption-l", text: form.name)
-    expect(rendered).to have_css("h1.govuk-heading-l", text: t("page_titles.routing_page"))
+    expect(rendered).to have_css("h1.govuk-heading-l", text: "Add a question route: select answer and destination")
   end
 
   it "has a submit button" do

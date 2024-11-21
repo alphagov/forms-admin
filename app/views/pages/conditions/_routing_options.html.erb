@@ -8,8 +8,14 @@
   </h1>
 
   <p>
-    <%= t("routing_page.body_text") %>
+    <%= t("routing_page.body_routing_text") %>
   </p>
+
+  <% if FeatureService.enabled?(:branch_routing) %>
+  <p>
+    <%= t("routing_page.body_branching_text") %>
+  </p>
+  <% end %>
 
   <% if form.qualifying_route_pages.length <= 10 %>
     <%= f.govuk_collection_radio_buttons :routing_page_id,
