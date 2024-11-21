@@ -23,8 +23,20 @@ describe "pages/conditions/routing_page.html.erb" do
     expect(rendered).to have_css("h1.govuk-heading-l", text: t("page_titles.routing_page"))
   end
 
-  it "contains body text" do
-    expect(rendered).to have_css("p", text: t("routing_page.body_text"))
+  it "contains content explaining routing" do
+    expect(rendered).to have_text "You can set up a route"
+  end
+
+  context "when branch routing is enabled", :feature_branch_routing do
+    it "contains content explaining branch routing" do
+      expect(rendered).to have_text "you can make them skip one or more questions later in the form"
+    end
+  end
+
+  context "when branch routing is not enabled", feature_branch_routing: false do
+    it "does not contain content explaining branch routing" do
+      expect(rendered).not_to have_text "you can make them skip one or more questions later in the form"
+    end
   end
 
   context "with fewer than 10 options" do
