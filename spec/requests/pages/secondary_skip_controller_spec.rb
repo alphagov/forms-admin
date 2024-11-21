@@ -14,6 +14,15 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
     end
   end
 
+  RSpec.shared_examples "requires condition" do |action|
+    let(:pages) { build_pages }
+
+    it "redirects to the page list" do
+      send(action)
+      expect(response).to redirect_to(form_pages_path(form.id))
+    end
+  end
+
   before do
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -34,18 +43,11 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
     it_behaves_like "feature flag protected endpoint", :subject
 
     context "when the branch_routing feature is enabled", :feature_branch_routing do
+      it_behaves_like "requires condition", :subject
+
       it "returns 200" do
         get_new
         expect(response).to have_http_status(:success)
-      end
-
-      context "when no condition exists on the page" do
-        let(:pages) { build_pages }
-
-        it "redirects to the page list" do
-          get_new
-          expect(response).to redirect_to(form_pages_path(form.id))
-        end
       end
 
       context "when a secondary skip condition already exists on the page" do
@@ -78,6 +80,8 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
     it_behaves_like "feature flag protected endpoint", :subject
 
     context "when the branch_routing feature is enabled", :feature_branch_routing do
+      it_behaves_like "requires condition", :subject
+
       context "when the submission is successful" do
         before do
           ActiveResource::HttpMock.respond_to(false) do |mock|
@@ -88,15 +92,6 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         it "redirects to the show routes page" do
           post_create
           expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
-        end
-      end
-
-      context "when no condition exists on the page" do
-        let(:pages) { build_pages }
-
-        it "redirects to the page list" do
-          post_create
-          expect(response).to redirect_to(form_pages_path(form.id))
         end
       end
 
@@ -140,6 +135,8 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
     it_behaves_like "feature flag protected endpoint", :subject
 
     context "when the branch_routing feature is enabled", :feature_branch_routing do
+      it_behaves_like "requires condition", :subject
+
       it "returns 200" do
         get_edit
         expect(response).to have_http_status(:success)
@@ -148,15 +145,6 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
       it "renders the edit template" do
         get_edit
         expect(response).to render_template("pages/secondary_skip/edit")
-      end
-
-      context "when no condition exists on the page" do
-        let(:pages) { build_pages }
-
-        it "redirects to the page list" do
-          get_edit
-          expect(response).to redirect_to(form_pages_path(form.id))
-        end
       end
 
       context "when no secondary_skip exists on the page" do
@@ -189,6 +177,8 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
     it_behaves_like "feature flag protected endpoint", :subject
 
     context "when the branch_routing feature is enabled", :feature_branch_routing do
+      it_behaves_like "requires condition", :subject
+
       context "when the submission is successful without changing the routing_page_id" do
         before do
           ActiveResource::HttpMock.respond_to(false) do |mock|
@@ -199,15 +189,6 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         it "redirects to the show routes page" do
           post_update
           expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
-        end
-      end
-
-      context "when no condition exists on the page" do
-        let(:pages) { build_pages }
-
-        it "redirects to the page list" do
-          post_update
-          expect(response).to redirect_to(form_pages_path(form.id))
         end
       end
 
