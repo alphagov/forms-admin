@@ -4,7 +4,7 @@ namespace :groups do
     run_task("groups:change_organisation", args, rollback: false)
   end
 
-  desc "move one or more forms into group"
+  desc "change the organisation of one or more groups (dry run)"
   task :change_organisation_dry_run, [] => :environment do |_, args|
     run_task("groups:change_organisation_dry_run", args, rollback: true)
   end
