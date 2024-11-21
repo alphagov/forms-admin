@@ -187,6 +187,7 @@ RSpec.describe PageListComponent::View, type: :component do
           (build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:),
           (build :page, id: 2, position: 2, question_text: "What is your name?", routing_conditions:),
           (build :page, id: 3, position: 3, question_text: "What is your pet's name?", routing_conditions:),
+          (build :page, id: 4, position: 4, question_text: "What is your email address?", routing_conditions:),
         ]
       end
 
@@ -270,6 +271,23 @@ RSpec.describe PageListComponent::View, type: :component do
           expect(page_list_component.condition_description(condition)).to eq(expected_text)
         end
       end
+
+      context "when showing a secondary_skip" do
+        let(:condition) do
+          build(:condition,
+                id: 1,
+                routing_page_id: 2,
+                check_page_id: 1,
+                answer_value: nil,
+                goto_page_id: 4,
+                secondary_skip: true)
+        end
+
+        it "returns correct description" do
+          expected_text = "After 2, “What is your name?” go to 4, “What is your email address?”"
+          expect(page_list_component.condition_description(condition)).to eq(expected_text)
+        end
+      end
     end
 
     describe "#conditions_for_page_with_index" do
@@ -301,6 +319,7 @@ RSpec.describe PageListComponent::View, type: :component do
         let(:pages) do
           [(build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:)]
         end
+
         let(:routing_conditions) do
           [
             build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3),
