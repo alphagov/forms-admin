@@ -87,6 +87,13 @@ describe RouteSummaryCardDataPresenter do
         expect(result[1][:rows][2][:value][:text]).to eq("Check your answers before submitting")
       end
 
+      context "when branch routing is not enabled", feature_branch_routing: false do
+        it "has no actions" do
+          result = service.summary_card_data
+          expect(result[1][:card][:actions]).to be_empty
+        end
+      end
+
       context "with branch_routing enabled", :feature_branch_routing do
         it "shows the edit secondary skip link" do
           result = service.summary_card_data
