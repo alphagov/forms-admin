@@ -13,7 +13,7 @@ class Pages::SecondarySkipInput < BaseInput
     #
     # If the user has changed the routing_page_id, we need to remove the old
     # Condition and create a new one
-    if record.present? && record.routing_page_id == routing_page_id
+    if record.present? && record.routing_page_id.to_s == routing_page_id
       record.routing_page_id = routing_page_id
       record.goto_page_id = skip_to_end? ? nil : goto_page_id
       record.skip_to_end = skip_to_end?
