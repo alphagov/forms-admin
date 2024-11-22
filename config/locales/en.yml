@@ -1058,7 +1058,6 @@ en:
     selection:
       how_many_selections: How many options can people select
       include_none_of_the_above: Include an option for ‘None of the above’
-      only_one_option: People can only select one option
       options: Options
       options_count: "%{number_of_options} options:"
       options_summary: Show %{number_of_options} options

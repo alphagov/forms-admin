@@ -150,7 +150,7 @@ private
     select_people_can_choose_one_or_more_options
     configure_the_selection_options
 
-    click_link "Change People can only select one option"
+    click_link "Change How many options can people select"
 
     select_people_can_only_choose_one_option
     configure_the_selection_options

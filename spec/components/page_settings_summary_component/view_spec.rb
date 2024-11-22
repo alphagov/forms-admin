@@ -188,7 +188,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
       end
 
       it "the change button for only one option links to the long lists type page" do
-        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.only_one_option')}", href: edit_long_lists_selection_type_path)
+        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.how_many_selections')}", href: edit_long_lists_selection_type_path)
       end
 
       it "the change button for the options links to the long lists options page" do
@@ -208,7 +208,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
       end
 
       it "the change button for only one option links to the long lists type page" do
-        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.only_one_option')}", href: new_long_lists_selection_type_path)
+        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.how_many_selections')}", href: new_long_lists_selection_type_path)
       end
 
       it "the change button for the options links to the long lists options page" do
