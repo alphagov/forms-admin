@@ -39,22 +39,12 @@
                     href: @change_selections_options_path,
                     visually_hidden_text: t("page_settings_summary.selection.options")) %>
     <% end %>
-    <% if @long_lists_enabled %>
-      <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: t("page_settings_summary.selection.how_many_selections")) %>
-        <%= row.with_value(text: answer_settings[:only_one_option] == "true" ? t("helpers.label.pages_long_lists_selection_type_input.only_one_option_options.true") : t("helpers.label.pages_long_lists_selection_type_input.only_one_option_options.false")) %>
-        <%= row.with_action(text: t("page_settings_summary.change"),
+    <%= summary_list.with_row do |row| %>
+      <%= row.with_key(text: t("page_settings_summary.selection.how_many_selections")) %>
+      <%= row.with_value(text: answer_settings[:only_one_option] == "true" ? t("helpers.label.pages_long_lists_selection_type_input.only_one_option_options.true") : t("helpers.label.pages_long_lists_selection_type_input.only_one_option_options.false")) %>
+      <%= row.with_action(text: t("page_settings_summary.change"),
                             href: @change_selections_only_one_option_path,
                             visually_hidden_text: t("page_settings_summary.selection.only_one_option")) %>
-      <% end %>
-    <% else %>
-      <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: t("page_settings_summary.selection.only_one_option")) %>
-        <%= row.with_value(text: answer_settings[:only_one_option] == "true" ? t("selections_settings.yes") : t("selections_settings.no")) %>
-        <%= row.with_action(text: t("page_settings_summary.change"),
-                      href: @change_selections_only_one_option_path,
-                      visually_hidden_text: t("page_settings_summary.selection.only_one_option")) %>
-      <% end %>
     <% end %>
     <%= summary_list.with_row do |row| %>
       <%= row.with_key(text: t("page_settings_summary.selection.include_none_of_the_above")) %>

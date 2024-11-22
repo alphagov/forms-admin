@@ -8,7 +8,6 @@ module PageSettingsSummaryComponent
     def initialize(draft_question:, errors: nil, long_lists_enabled: false)
       super
       @draft_question = draft_question
-      @long_lists_enabled = long_lists_enabled
       @errors = errors
     end
 
@@ -86,42 +85,25 @@ module PageSettingsSummaryComponent
 
     def change_selections_only_one_option_path
       return unless @draft_question.answer_type == "selection"
-      return change_selections_options_path unless @long_lists_enabled
+      return long_lists_selection_type_new_path(form_id: @draft_question.form_id) if is_new_question?
 
-      if is_new_question?
-        long_lists_selection_type_new_path(form_id: @draft_question.form_id)
-      else
-        long_lists_selection_type_edit_path(form_id: @draft_question.form_id, page_id: @draft_question.page_id)
-      end
+      long_lists_selection_type_edit_path(form_id: @draft_question.form_id, page_id: @draft_question.page_id)
     end
 
     def change_selections_options_path
       return unless @draft_question.answer_type == "selection"
-      return change_selections_options_long_lists_enabled_path if @long_lists_enabled
 
-      if is_new_question?
-        selections_settings_new_path(form_id: @draft_question.form_id)
-      else
-        selections_settings_edit_path(form_id: @draft_question.form_id, page_id: @draft_question.page_id)
-      end
-    end
+      return selection_options_new_path_for_draft_question(@draft_question) if is_new_question?
 
-    def change_selections_options_long_lists_enabled_path
-      if is_new_question?
-        selection_options_new_path_for_draft_question(@draft_question)
-      else
-        selection_options_edit_path_for_draft_question(@draft_question)
-      end
+      selection_options_edit_path_for_draft_question(@draft_question)
     end
 
     def change_text_settings_path
       return unless @draft_question.answer_type == "text"
 
-      if is_new_question?
-        text_settings_new_path(form_id: @draft_question.form_id)
-      else
-        text_settings_edit_path(form_id: @draft_question.form_id, page_id: @draft_question.page_id)
-      end
+      return text_settings_new_path(form_id: @draft_question.form_id) if is_new_question?
+
+      text_settings_edit_path(form_id: @draft_question.form_id, page_id: @draft_question.page_id)
     end
 
     def is_new_question?
