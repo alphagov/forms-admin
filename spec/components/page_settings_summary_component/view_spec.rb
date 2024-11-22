@@ -4,7 +4,6 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
   include Rails.application.routes.url_helpers
 
   let(:draft_question) { build :draft_question }
-  let(:long_lists_enabled) { false }
   let(:errors) { instance_double(ActiveModel::Errors) }
   let(:selection_options_error_messages) { nil }
   let(:question_input) { Pages::QuestionInput.new(draft_question:, is_optional: "false", is_repeatable: "false") }
@@ -34,7 +33,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
   before do
     allow(errors).to receive(:has_key?).with(:selection_options).and_return(selection_options_error_messages.present?)
     allow(errors).to receive(:messages_for).with(:selection_options).and_return(selection_options_error_messages)
-    render_inline(described_class.new(draft_question:, errors:, long_lists_enabled:))
+    render_inline(described_class.new(draft_question:, errors:))
   end
 
   context "when the page is not a selection page" do
@@ -137,8 +136,8 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
           expect(rows[1].find(".govuk-summary-list__value")).to have_text "2 options:"
           expect(rows[1].find(".govuk-summary-list__value")).to have_css("li", text: "Option 1")
           expect(rows[1].find(".govuk-summary-list__value")).to have_css("li", text: "Option 2")
-          expect(rows[2].find(".govuk-summary-list__key")).to have_text "People can only select one option"
-          expect(rows[2].find(".govuk-summary-list__value")).to have_text "Yes"
+          expect(rows[2].find(".govuk-summary-list__key")).to have_text I18n.t("page_settings_summary.selection.how_many_selections")
+          expect(rows[2].find(".govuk-summary-list__value")).to have_text I18n.t("helpers.label.pages_long_lists_selection_type_input.only_one_option_options.true")
           expect(rows[3].find(".govuk-summary-list__key")).to have_text "Include an option for ‘None of the above’"
           expect(rows[3].find(".govuk-summary-list__value")).to have_text "Yes"
         end

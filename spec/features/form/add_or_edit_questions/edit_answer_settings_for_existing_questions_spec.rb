@@ -77,7 +77,7 @@ private
     when :name
       name_settings_edit_path(form_id: form.id, page_id: question.id)
     when :selection
-      selections_settings_edit_path(form_id: form.id, page_id: question.id)
+      long_lists_selection_options_edit_path(form_id: form.id, page_id: question.id)
     when :text
       text_settings_edit_path(form_id: form.id, page_id: question.id)
     end
@@ -132,15 +132,14 @@ private
   def check_selection_answer_settings
     expect(page.find("h1")).to have_text "Create a list of options"
     expect_page_to_have_no_axe_errors(page)
-    expect(page).to have_checked_field("People can only select one option", visible: :all)
-    expect(page).to have_checked_field("Include an option for ‘None of the above’", visible: :all)
+    expect(page.find("fieldset", text: "Should the list include an option for ‘None of the above’?")).to have_checked_field("Yes", visible: :all)
     expect(find_field("Option 1").value).to eq "Option 1"
     expect(find_field("Option 2").value).to eq "Option 2"
     click_button "Continue"
     expect(page.find_all(".govuk-summary-list__value")[1]).to have_text "2 options:"
     expect(page.find_all(".govuk-summary-list__value")[1]).to have_css("li", text: "Option 1")
     expect(page.find_all(".govuk-summary-list__value")[1]).to have_css("li", text: "Option 2")
-    expect(page.find_all(".govuk-summary-list__value")[2]).to have_text "Yes"
+    expect(page.find_all(".govuk-summary-list__value")[2]).to have_text "One option only"
     expect(page.find_all(".govuk-summary-list__value")[3]).to have_text "Yes"
   end
 

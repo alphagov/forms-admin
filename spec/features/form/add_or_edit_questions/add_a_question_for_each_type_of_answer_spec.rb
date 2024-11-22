@@ -40,32 +40,6 @@ feature "Add/editing a single question", type: :feature do
         and_i_add_another_question
       end
     end
-
-    context "when the form is in a group which has long lists enabled" do
-      let(:group) { create(:group, organisation: standard_user.organisation, long_lists_enabled: true) }
-      let(:options) { 10.times.map { Faker::Name.unique.name } }
-
-      scenario "add a selection question which the user can answer more than once" do
-        when_i_am_viewing_an_existing_form
-        and_i_want_to_create_or_edit_a_page
-        and_i_select_selection_type_question
-        and_i_select_people_can_choose_one_or_more_options
-        and_i_configure_the_selection_options(options)
-        and_i_make_the_question_not_repeatable
-        and_i_click_save
-        and_i_add_another_question
-      end
-
-      scenario "add a selection question which the user can answer once" do
-        when_i_am_viewing_an_existing_form
-        and_i_want_to_create_or_edit_a_page
-        and_i_select_selection_type_question
-        and_i_select_people_can_only_choose_one_option
-        and_i_configure_the_selection_options(options)
-        and_i_click_save
-        and_i_add_another_question
-      end
-    end
   end
 
   context "when a form has existing pages" do
@@ -173,23 +147,13 @@ private
   end
 
   def fill_in_selection_settings
-    expect(page.find("h1")).to have_text "Create a list of options"
-    expect_page_to_have_no_axe_errors(page)
-    check "Include an option for ‘None of the above’"
-    fill_in "Option 1", with: "Checkbox option 1"
-    fill_in "Option 2", with: "Checkbox option 2"
-    click_button "Add another option"
-    fill_in "Option 3", with: "Checkbox option 3"
-    click_button "Continue"
-    click_link "Change Options"
-    expect(page.find("h1")).to have_text "Create a list of options"
-    expect_page_to_have_no_axe_errors(page)
-    check "People can only select one option"
-    uncheck "Include an option for ‘None of the above’"
-    click_button "Remove option 3"
-    fill_in "Option 1", with: "Radio option 1"
-    fill_in "Option 2", with: "Radio option 2"
-    click_button "Continue"
+    select_people_can_choose_one_or_more_options
+    configure_the_selection_options
+
+    click_link "Change People can only select one option"
+
+    select_people_can_only_choose_one_option
+    configure_the_selection_options
   end
 
   def fill_in_text_settings
@@ -237,21 +201,23 @@ private
     fill_in_question_text
   end
 
-  def and_i_select_people_can_only_choose_one_option
+  def select_people_can_only_choose_one_option
     expect(page.find("h1")).to have_text "How many options should people be able to select?"
     expect_page_to_have_no_axe_errors(page)
     choose "One option only"
     click_button "Continue"
   end
 
-  def and_i_select_people_can_choose_one_or_more_options
+  def select_people_can_choose_one_or_more_options
     expect(page.find("h1")).to have_text "How many options should people be able to select?"
     expect_page_to_have_no_axe_errors(page)
     choose "One or more options"
     click_button "Continue"
   end
 
-  def and_i_configure_the_selection_options(options)
+  def configure_the_selection_options
+    options = 10.times.map { Faker::Name.unique.name }
+
     fill_in_selection_options(options)
     fill_in_bulk_options(options)
   end
