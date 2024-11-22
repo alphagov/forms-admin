@@ -3,11 +3,10 @@ require "rails_helper"
 RSpec.describe Pages::TypeOfAnswerController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
-  let(:long_lists_enabled) { false }
 
   let(:type_of_answer_input) { build :type_of_answer_input }
 
-  let(:group) { create(:group, organisation: standard_user.organisation, long_lists_enabled:) }
+  let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
@@ -215,20 +214,8 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
           expect(form.draft_question.answer_type).to eq "selection"
         end
 
-        context "when long_lists_enabled is set to true" do
-          let(:long_lists_enabled) { true }
-
-          it "redirects the user to the selection type page" do
-            expect(response).to redirect_to long_lists_selection_type_edit_path(form.id, page.id)
-          end
-        end
-
-        context "when long_lists_enabled is set to false" do
-          let(:long_lists_enabled) { false }
-
-          it "redirects the user to the selection settings page" do
-            expect(response).to redirect_to selections_settings_edit_path(form.id, page.id)
-          end
+        it "redirects the user to the selection type page" do
+          expect(response).to redirect_to long_lists_selection_type_edit_path(form.id, page.id)
         end
       end
     end

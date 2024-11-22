@@ -5,7 +5,7 @@ module PageSettingsSummaryComponent
     include Rails.application.routes.url_helpers
     include PagesHelper
 
-    def initialize(draft_question:, errors: nil, long_lists_enabled: false)
+    def initialize(draft_question:, errors: nil)
       super
       @draft_question = draft_question
       @errors = errors
