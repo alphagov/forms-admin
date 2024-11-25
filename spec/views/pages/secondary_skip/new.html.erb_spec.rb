@@ -22,7 +22,7 @@ describe "pages/secondary_skip/new.html.erb" do
   let(:secondary_skip_input) { Pages::SecondarySkipInput.new(form:, page:) }
 
   before do
-    render template: "pages/secondary_skip/new", locals: { back_link_url: "/back", secondary_skip_input: }
+    render template: "pages/secondary_skip/new", locals: { secondary_skip_input: }
   end
 
   it "has the correct title" do
@@ -30,7 +30,7 @@ describe "pages/secondary_skip/new.html.erb" do
   end
 
   it "has the correct back link" do
-    expect(view.content_for(:back_link)).to have_link(I18n.t("secondary_skip.new.back", page_position: 1), href: "/back")
+    expect(view.content_for(:back_link)).to have_link(I18n.t("secondary_skip.new.back", page_position: 1), href: show_routes_path(form_id: 1, page_id: 1))
   end
 
   it "has the correct heading and caption" do

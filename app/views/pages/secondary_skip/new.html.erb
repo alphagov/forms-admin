@@ -1,5 +1,5 @@
 <% set_page_title(title_with_error_prefix(t('page_titles.new_secondary_skip', route_index: 2), false)) %>
-<% content_for :back_link, govuk_back_link_to(back_link_url, t('secondary_skip.new.back', page_position: secondary_skip_input.page.position)) %>
+<% content_for :back_link, govuk_back_link_to(show_routes_path(form_id: secondary_skip_input.form.id, page_id: secondary_skip_input.page.id), t('secondary_skip.new.back', page_position: secondary_skip_input.page.position)) %>
 
 <% content_for :heading do %>
   <h1 class="govuk-heading-l">
