@@ -4,33 +4,32 @@ class Pages::SecondarySkipController < PagesController
   before_action :ensure_secondary_skip_exists, only: %i[edit update delete destroy]
 
   def new
-    secondary_skip_input = Pages::SecondarySkipInput.new(form: current_form, page:)
-    render locals: { secondary_skip_input: }
+    @secondary_skip_input = Pages::SecondarySkipInput.new(form: current_form, page:)
   end
 
   def create
-    secondary_skip_input = Pages::SecondarySkipInput.new(secondary_skip_input_params)
+    @secondary_skip_input = Pages::SecondarySkipInput.new(secondary_skip_input_params)
 
-    if secondary_skip_input.submit
+    if @secondary_skip_input.submit
       redirect_to show_routes_path(form_id: current_form.id, page_id: page.id)
     else
-      render template: "pages/secondary_skip/new", locals: { secondary_skip_input: }, status: :unprocessable_entity
+      render template: "pages/secondary_skip/new", status: :unprocessable_entity
     end
   end
 
   def edit
-    secondary_skip_input = Pages::SecondarySkipInput.new(form: current_form, page:, record: secondary_skip_condition).assign_values
+    @secondary_skip_input = Pages::SecondarySkipInput.new(form: current_form, page:, record: secondary_skip_condition).assign_values
 
-    render template: "pages/secondary_skip/edit", locals: { secondary_skip_input: }
+    render template: "pages/secondary_skip/edit"
   end
 
   def update
-    secondary_skip_input = Pages::SecondarySkipInput.new(secondary_skip_input_params.merge(record: secondary_skip_condition))
+    @secondary_skip_input = Pages::SecondarySkipInput.new(secondary_skip_input_params.merge(record: secondary_skip_condition))
 
-    if secondary_skip_input.submit
+    if @secondary_skip_input.submit
       redirect_to show_routes_path(form_id: current_form.id, page_id: page.id)
     else
-      render template: "pages/secondary_skip/edit", locals: { secondary_skip_input: }, status: :unprocessable_entity
+      render template: "pages/secondary_skip/edit", status: :unprocessable_entity
     end
   end
 
