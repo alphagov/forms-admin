@@ -68,16 +68,8 @@ RSpec.describe Pages::QuestionTextController, type: :request do
         expect(form.draft_question.question_text).to eq "Are you a higher rate taxpayer?"
       end
 
-      it "redirects the user to the selection settings page" do
-        expect(response).to redirect_to selections_settings_new_path(form.id)
-      end
-
-      context "when long_lists_enabled is enabled for the group" do
-        let(:group) { create(:group, organisation: standard_user.organisation, long_lists_enabled: true) }
-
-        it "redirects the user to the page to choose whether only one option can be selected" do
-          expect(response).to redirect_to long_lists_selection_type_new_path(form.id)
-        end
+      it "redirects the user to the page to choose whether only one option can be selected" do
+        expect(response).to redirect_to long_lists_selection_type_new_path(form.id)
       end
     end
   end
