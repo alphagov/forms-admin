@@ -22,7 +22,8 @@ describe "pages/secondary_skip/new.html.erb" do
   let(:secondary_skip_input) { Pages::SecondarySkipInput.new(form:, page:) }
 
   before do
-    render template: "pages/secondary_skip/new", locals: { secondary_skip_input: }
+    assign(:secondary_skip_input, secondary_skip_input)
+    render template: "pages/secondary_skip/new"
   end
 
   it "has the correct title" do
