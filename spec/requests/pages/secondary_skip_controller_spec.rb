@@ -164,7 +164,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         form_id: "2",
         page_id: "1",
         pages_secondary_skip_input: {
-          routing_page_id: "3",
+          routing_page_id: "2",
           goto_page_id: "5",
         },
       }
@@ -178,7 +178,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
       context "when the submission is successful without changing the routing_page_id" do
         before do
           ActiveResource::HttpMock.respond_to(false) do |mock|
-            mock.put "/api/v1/forms/2/pages/3/conditions/2", post_headers, {}.to_json, 200
+            mock.put "/api/v1/forms/2/pages/2/conditions/2", post_headers, {}.to_json, 200
           end
         end
 
@@ -211,8 +211,8 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
 
         before do
           ActiveResource::HttpMock.respond_to(false) do |mock|
-            mock.delete "/api/v1/forms/2/pages/3/conditions/2", headers, {}.to_json, 200
-            mock.post "/api/v1/forms/2/pages/2/conditions", post_headers, {}.to_json, 200
+            mock.delete "/api/v1/forms/2/pages/2/conditions/2", headers, {}.to_json, 200
+            mock.post "/api/v1/forms/2/pages/3/conditions", post_headers, {}.to_json, 200
           end
         end
 
@@ -270,40 +270,6 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         secondary_skip: true,
       )
       pages[1].routing_conditions = [existing_secondary_skip]
-    end
-  end
-
-  def build_pages_with_two_skip_conditions
-    build_pages.tap do |pages|
-      pages[0] = build :page, :with_selections_settings, id: 1, routing_conditions: [
-        build(:condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Option 1", goto_page_id: pages[2].id, skip_to_end: false),
-      ]
-
-      first_secondary_skip = build(
-        :condition,
-        id: 2,
-        routing_page_id: pages[1].id,
-        check_page_id: pages[0].id,
-        goto_page_id: pages[4].id,
-        secondary_skip: true,
-      )
-
-      pages[1].routing_conditions = [first_secondary_skip]
-
-      pages[5] = build :page, :with_selections_settings, id: 6, routing_conditions: [
-        build(:condition, id: 3, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Option 1", goto_page_id: pages[7].id, skip_to_end: false),
-      ]
-
-      second_secondary_skip = build(
-        :condition,
-        id: 4,
-        routing_page_id: pages[6].id,
-        check_page_id: pages[5].id,
-        goto_page_id: nil,
-        skip_to_end: true,
-      )
-
-      pages[6].routing_conditions = [second_secondary_skip]
     end
   end
 end
