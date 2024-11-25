@@ -5,10 +5,7 @@ class Pages::SecondarySkipController < PagesController
 
   def new
     secondary_skip_input = Pages::SecondarySkipInput.new(form: current_form, page:)
-    render locals: {
-      secondary_skip_input:,
-      back_link_url: show_routes_path(form_id: current_form.id, page_id: page.id),
-    }
+    render locals: { secondary_skip_input: }
   end
 
   def create
@@ -17,20 +14,14 @@ class Pages::SecondarySkipController < PagesController
     if secondary_skip_input.submit
       redirect_to show_routes_path(form_id: current_form.id, page_id: page.id)
     else
-      render template: "pages/secondary_skip/new", locals: {
-        secondary_skip_input:,
-        back_link_url: show_routes_path(form_id: current_form.id, page_id: page.id),
-      }, status: :unprocessable_entity
+      render template: "pages/secondary_skip/new", locals: { secondary_skip_input: }, status: :unprocessable_entity
     end
   end
 
   def edit
     secondary_skip_input = Pages::SecondarySkipInput.new(form: current_form, page:, record: secondary_skip_condition).assign_values
 
-    render template: "pages/secondary_skip/edit", locals: {
-      secondary_skip_input:,
-      back_link_url: show_routes_path(form_id: current_form.id, page_id: page.id),
-    }
+    render template: "pages/secondary_skip/edit", locals: { secondary_skip_input: }
   end
 
   def update
@@ -39,10 +30,7 @@ class Pages::SecondarySkipController < PagesController
     if secondary_skip_input.submit
       redirect_to show_routes_path(form_id: current_form.id, page_id: page.id)
     else
-      render template: "pages/secondary_skip/edit", locals: {
-        secondary_skip_input:,
-        back_link_url: show_routes_path(form_id: current_form.id, page_id: page.id),
-      }, status: :unprocessable_entity
+      render template: "pages/secondary_skip/edit", locals: { secondary_skip_input: }, status: :unprocessable_entity
     end
   end
 
