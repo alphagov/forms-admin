@@ -137,20 +137,16 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
     context "when the branch_routing feature is enabled", :feature_branch_routing do
       it_behaves_like "requires condition", :subject
 
-      it "returns 200" do
-        get_edit
-        expect(response).to have_http_status(:success)
-      end
-
       it "renders the edit template" do
         get_edit
+        expect(response).to have_http_status(:success)
         expect(response).to render_template("pages/secondary_skip/edit")
       end
 
       context "when no secondary_skip exists on the page" do
         let(:pages) { build_pages_with_skip_condition }
 
-        it "redirects to the page list" do
+        it "redirects to the show routes page" do
           get_edit
           expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
         end
@@ -195,7 +191,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
       context "when no secondary_skip exists on the page" do
         let(:pages) { build_pages_with_skip_condition }
 
-        it "redirects to the page list" do
+        it "redirects to the show routes page" do
           post_update
           expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
         end
