@@ -20,6 +20,9 @@ gem "omniauth-auth0"
 gem "omniauth-rails_csrf_protection"
 gem "warden"
 
+# used for calling auth0 API to delete users
+gem "auth0"
+
 # Used for handling authorisation policies
 gem "pundit"
 

@@ -106,6 +106,12 @@ GEM
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     ast (2.4.2)
+    auth0 (5.17.0)
+      addressable (~> 2.8)
+      jwt (~> 2.7)
+      rest-client (~> 2.1)
+      retryable (~> 3.0)
+      zache (~> 0.12)
     aws-eventstream (1.3.0)
     aws-partitions (1.1013.0)
     aws-sdk-cloudwatch (1.107.0)
@@ -174,6 +180,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.5.1)
     docile (1.4.0)
+    domain_name (0.6.20240107)
     drb (2.2.1)
     dry-cli (1.2.0)
     dumb_delegator (1.0.0)
@@ -217,6 +224,9 @@ GEM
     highline (3.0.1)
     html-attributes-utils (1.0.2)
       activesupport (>= 6.1.4.4)
+    http-accept (1.7.0)
+    http-cookie (1.0.7)
+      domain_name (~> 0.5)
     i18n (1.14.6)
       concurrent-ruby (~> 1.0)
     i18n-tasks (1.0.14)
@@ -256,6 +266,10 @@ GEM
     marcel (1.0.4)
     matrix (0.4.2)
     method_source (1.1.0)
+    mime-types (3.6.0)
+      logger
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2024.1105)
     mini_mime (1.1.5)
     minitest (5.25.1)
     msgpack (1.7.2)
@@ -272,6 +286,7 @@ GEM
       timeout
     net-smtp (0.5.0)
       net-protocol
+    netrc (0.11.0)
     nio4r (2.7.4)
     nokogiri (1.16.7-aarch64-linux)
       racc (~> 1.4)
@@ -385,6 +400,12 @@ GEM
       io-console (~> 0.5)
     request_store (1.7.0)
       rack (>= 1.4)
+    rest-client (2.1.0)
+      http-accept (>= 1.7.0, < 2.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
+    retryable (3.0.5)
     rexml (3.3.9)
     rspec-core (3.13.2)
       rspec-support (~> 3.13.0)
@@ -505,6 +526,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
+    zache (0.13.2)
     zeitwerk (2.7.1)
 
 PLATFORMS
@@ -521,6 +543,7 @@ PLATFORMS
 DEPENDENCIES
   MailchimpMarketing (~> 3.0)
   activeresource (~> 6.1)
+  auth0
   aws-sdk-cloudwatch (~> 1.107)
   aws-sdk-codepipeline (~> 1.91)
   axe-core-rspec
