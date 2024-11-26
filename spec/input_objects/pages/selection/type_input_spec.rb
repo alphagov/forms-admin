@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Pages::LongListsSelection::TypeInput do
+RSpec.describe Pages::Selection::TypeInput do
   subject(:input) { described_class.new(draft_question:, only_one_option:) }
 
   let(:draft_question) { build :draft_question, answer_type: "selection" }
@@ -12,7 +12,7 @@ RSpec.describe Pages::LongListsSelection::TypeInput do
 
       it "is invalid" do
         expect(input).not_to be_valid
-        expected_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/type_input.attributes.only_one_option.inclusion")
+        expected_message = I18n.t("activemodel.errors.models.pages/selection/type_input.attributes.only_one_option.inclusion")
         expect(input.errors.full_messages_for(:only_one_option)).to include("Only one option #{expected_message}")
       end
     end
@@ -22,7 +22,7 @@ RSpec.describe Pages::LongListsSelection::TypeInput do
 
       it "is invalid" do
         expect(input).not_to be_valid
-        expected_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/type_input.attributes.only_one_option.inclusion")
+        expected_message = I18n.t("activemodel.errors.models.pages/selection/type_input.attributes.only_one_option.inclusion")
         expect(input.errors.full_messages_for(:only_one_option)).to include("Only one option #{expected_message}")
       end
     end

@@ -9,7 +9,7 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
   let(:only_one_option) { "true" }
   let(:draft_question) { build :draft_question, answer_type: "selection" }
   let(:routing_conditions) { [] }
-  let(:selection_type_input) { Pages::LongListsSelection::TypeInput.new(only_one_option:, draft_question:) }
+  let(:selection_type_input) { Pages::Selection::TypeInput.new(only_one_option:, draft_question:) }
 
   before do
     # # mock the form.page_number method
@@ -36,8 +36,8 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
       let(:only_one_option) { "true" }
 
       it "has 'Yes' radio selected" do
-        expect(rendered).to have_checked_field("pages_long_lists_selection_type_input[only_one_option]", with: "true")
-        expect(rendered).to have_unchecked_field("pages_long_lists_selection_type_input[only_one_option]", with: "false")
+        expect(rendered).to have_checked_field("pages_selection_type_input[only_one_option]", with: "true")
+        expect(rendered).to have_unchecked_field("pages_selection_type_input[only_one_option]", with: "false")
       end
     end
 
@@ -45,8 +45,8 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
       let(:only_one_option) { "false" }
 
       it "has 'No' radio selected" do
-        expect(rendered).to have_checked_field("pages_long_lists_selection_type_input[only_one_option]", with: "false")
-        expect(rendered).to have_unchecked_field("pages_long_lists_selection_type_input[only_one_option]", with: "true")
+        expect(rendered).to have_checked_field("pages_selection_type_input[only_one_option]", with: "false")
+        expect(rendered).to have_unchecked_field("pages_selection_type_input[only_one_option]", with: "true")
       end
     end
 
@@ -54,8 +54,8 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
       let(:only_one_option) { nil }
 
       it "does not have a radio option selected" do
-        expect(rendered).to have_unchecked_field("pages_long_lists_selection_type_input[only_one_option]", with: "true")
-        expect(rendered).to have_unchecked_field("pages_long_lists_selection_type_input[only_one_option]", with: "false")
+        expect(rendered).to have_unchecked_field("pages_selection_type_input[only_one_option]", with: "true")
+        expect(rendered).to have_unchecked_field("pages_selection_type_input[only_one_option]", with: "false")
       end
     end
   end

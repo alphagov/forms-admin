@@ -1,14 +1,14 @@
 class Pages::LongListsSelection::TypeController < PagesController
   include PagesHelper
   def new
-    @selection_type_input = Pages::LongListsSelection::TypeInput.new(only_one_option:, draft_question:)
+    @selection_type_input = Pages::Selection::TypeInput.new(only_one_option:, draft_question:)
     @selection_type_path = long_lists_selection_type_create_path(current_form)
     @back_link_url = question_text_new_path(current_form)
     render "pages/long_lists_selection/type", locals: { current_form: }
   end
 
   def create
-    @selection_type_input = Pages::LongListsSelection::TypeInput.new(type_params)
+    @selection_type_input = Pages::Selection::TypeInput.new(type_params)
     @selection_type_path = long_lists_selection_type_create_path(current_form)
     @back_link_url = question_text_new_path(current_form)
 
@@ -20,14 +20,14 @@ class Pages::LongListsSelection::TypeController < PagesController
   end
 
   def edit
-    @selection_type_input = Pages::LongListsSelection::TypeInput.new(only_one_option:, draft_question:)
+    @selection_type_input = Pages::Selection::TypeInput.new(only_one_option:, draft_question:)
     @selection_type_path = long_lists_selection_type_update_path(current_form)
     @back_link_url = edit_question_path(current_form)
     render "pages/long_lists_selection/type", locals: { current_form: }
   end
 
   def update
-    @selection_type_input = Pages::LongListsSelection::TypeInput.new(type_params)
+    @selection_type_input = Pages::Selection::TypeInput.new(type_params)
     @selection_type_path = long_lists_selection_type_create_path(current_form)
     @back_link_url = edit_question_path(current_form)
 
@@ -41,7 +41,7 @@ class Pages::LongListsSelection::TypeController < PagesController
 private
 
   def type_params
-    params.require(:pages_long_lists_selection_type_input)
+    params.require(:pages_selection_type_input)
           .permit(:only_one_option)
           .merge(draft_question:)
   end

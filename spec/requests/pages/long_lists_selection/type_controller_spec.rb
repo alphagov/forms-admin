@@ -78,7 +78,7 @@ describe Pages::LongListsSelection::TypeController, type: :request do
 
     context "when form is valid and ready to store" do
       before do
-        post long_lists_selection_type_create_path form_id: form.id, params: { pages_long_lists_selection_type_input: { only_one_option: true } }
+        post long_lists_selection_type_create_path form_id: form.id, params: { pages_selection_type_input: { only_one_option: true } }
       end
 
       it "saves the the info to draft question" do
@@ -95,7 +95,7 @@ describe Pages::LongListsSelection::TypeController, type: :request do
 
     context "when form is invalid" do
       before do
-        post long_lists_selection_type_create_path form_id: form.id, params: { pages_long_lists_selection_type_input: { answer_settings: nil } }
+        post long_lists_selection_type_create_path form_id: form.id, params: { pages_selection_type_input: { answer_settings: nil } }
       end
 
       it "renders the type of answer view if there are errors" do
@@ -162,7 +162,7 @@ describe Pages::LongListsSelection::TypeController, type: :request do
 
     context "when form is valid and ready to update in the DB" do
       before do
-        post long_lists_selection_type_update_path form_id: form.id, page_id: page.id, params: { pages_long_lists_selection_type_input: { only_one_option: true } }
+        post long_lists_selection_type_update_path form_id: form.id, page_id: page.id, params: { pages_selection_type_input: { only_one_option: true } }
       end
 
       it "saves the the info to draft question" do
@@ -179,7 +179,7 @@ describe Pages::LongListsSelection::TypeController, type: :request do
 
     context "when form is invalid" do
       before do
-        post long_lists_selection_type_update_path form_id: form.id, page_id: page.id, params: { pages_long_lists_selection_type_input: { answer_settings: nil } }
+        post long_lists_selection_type_update_path form_id: form.id, page_id: page.id, params: { pages_selection_type_input: { answer_settings: nil } }
       end
 
       it "renders the type of answer view if there are errors" do

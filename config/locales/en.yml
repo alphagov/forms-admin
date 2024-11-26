@@ -627,16 +627,16 @@ en:
       pages_long_lists_selection_options_input:
         include_none_of_the_above_options:
           'true': We’ll add ‘None of the above’ to the end of your list of options
-      pages_long_lists_selection_type_input:
-        only_one_option_options:
-          'false': Your list can have up to 30 options
-          'true': Your list can have up to 1,000 options
       pages_question_input:
         is_optional_options:
           'true': We’ll add ‘(optional)’ to the end of the question text.
         is_repeatable: Select ‘Yes’ if you want to let someone add more than one answer - for example, listing all their current household members.
         is_repeatable_options:
           'true': After adding their first answer we’ll ask if they need to add another - up to a maximum of 50
+      pages_selection_type_input:
+        only_one_option_options:
+          'false': Your list can have up to 30 options
+          'true': Your list can have up to 1,000 options
     label:
       account_name_input:
         name: Enter your full name
@@ -752,10 +752,6 @@ en:
         include_none_of_the_above_options:
           'false': 'No'
           'true': 'Yes'
-      pages_long_lists_selection_type_input:
-        only_one_option_options:
-          'false': One or more options
-          'true': One option only
       pages_question_input:
         hint_text: Hint text (optional)
         is_optional_options:
@@ -770,6 +766,10 @@ en:
         default_routing_page_id: Select a question
         goto_page_id: take them to
         routing_page_id: Then after the person answers
+      pages_selection_type_input:
+        only_one_option_options:
+          'false': One or more options
+          'true': One option only
     legend:
       account_terms_of_use_input:
         agreed: Do you agree to these terms?
