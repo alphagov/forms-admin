@@ -621,15 +621,15 @@ en:
           phone_number: Ask the question the way you would in person. For example, ‘What’s your phone number?’
           radio: Ask the question the way you would in person. For example, ‘What country do you live in?’
           single_line: Ask the question the way you would in person. For example, ‘What’s your reference number?’
-      pages_long_lists_selection_bulk_options_input:
-        include_none_of_the_above_options:
-          'true': We’ll add ‘None of the above’ to the end of your list of options
       pages_question_input:
         is_optional_options:
           'true': We’ll add ‘(optional)’ to the end of the question text.
         is_repeatable: Select ‘Yes’ if you want to let someone add more than one answer - for example, listing all their current household members.
         is_repeatable_options:
           'true': After adding their first answer we’ll ask if they need to add another - up to a maximum of 50
+      pages_selection_bulk_options_input:
+        include_none_of_the_above_options:
+          'true': We’ll add ‘None of the above’ to the end of your list of options
       pages_selection_options_input:
         include_none_of_the_above_options:
           'true': We’ll add ‘None of the above’ to the end of your list of options
@@ -744,10 +744,6 @@ en:
       pages_conditions_input:
         default_answer_value: Select an answer
         default_goto_page_id: Select a question or page
-      pages_long_lists_selection_bulk_options_input:
-        include_none_of_the_above_options:
-          'false': 'No'
-          'true': 'Yes'
       pages_question_input:
         hint_text: Hint text (optional)
         is_optional_options:
@@ -762,6 +758,10 @@ en:
         default_routing_page_id: Select a question
         goto_page_id: take them to
         routing_page_id: Then after the person answers
+      pages_selection_bulk_options_input:
+        include_none_of_the_above_options:
+          'false': 'No'
+          'true': 'Yes'
       pages_selection_options_input:
         include_none_of_the_above_options:
           'false': 'No'
@@ -777,11 +777,11 @@ en:
         submission_type: Do you want to get completed forms as CSV files?
       mou_signature:
         agreed: Do you agree to the MOU?
-      pages_long_lists_selection_bulk_options_input:
-        include_none_of_the_above: Should the list include an option for ‘None of the above’?
       pages_question_input:
         is_optional: Should this question be mandatory or optional?
         is_repeatable: Should people be able to answer this question more than once?
+      pages_selection_bulk_options_input:
+        include_none_of_the_above: Should the list include an option for ‘None of the above’?
       pages_selection_options_input:
         include_none_of_the_above: Should the list include an option for ‘None of the above’?
   home:

@@ -84,7 +84,7 @@ describe Pages::LongListsSelection::BulkOptionsController, type: :request do
 
     context "when form is valid and ready to store" do
       before do
-        post long_lists_selection_bulk_options_create_path form_id: form.id, params: { pages_long_lists_selection_bulk_options_input: { bulk_selection_options: "Option 1\nOption 2", include_none_of_the_above: false } }
+        post long_lists_selection_bulk_options_create_path form_id: form.id, params: { pages_selection_bulk_options_input: { bulk_selection_options: "Option 1\nOption 2", include_none_of_the_above: false } }
       end
 
       it "saves the settings to the draft question" do
@@ -103,7 +103,7 @@ describe Pages::LongListsSelection::BulkOptionsController, type: :request do
 
     context "when form is invalid" do
       before do
-        post long_lists_selection_bulk_options_create_path form_id: form.id, params: { pages_long_lists_selection_bulk_options_input: { bulk_selection_options: "" } }
+        post long_lists_selection_bulk_options_create_path form_id: form.id, params: { pages_selection_bulk_options_input: { bulk_selection_options: "" } }
       end
 
       it "renders the type of answer view if there are errors" do
@@ -170,7 +170,7 @@ describe Pages::LongListsSelection::BulkOptionsController, type: :request do
 
     context "when form is valid and ready to update in the DB" do
       before do
-        post long_lists_selection_bulk_options_update_path(form_id: page.form_id, page_id: page.id), params: { pages_long_lists_selection_bulk_options_input: { bulk_selection_options: "Option 1\nNew option 2", include_none_of_the_above: false } }
+        post long_lists_selection_bulk_options_update_path(form_id: page.form_id, page_id: page.id), params: { pages_selection_bulk_options_input: { bulk_selection_options: "Option 1\nNew option 2", include_none_of_the_above: false } }
       end
 
       it "saves the updated answer settings to DB" do
@@ -188,7 +188,7 @@ describe Pages::LongListsSelection::BulkOptionsController, type: :request do
 
     context "when form is invalid" do
       before do
-        post long_lists_selection_bulk_options_create_path form_id: form.id, params: { pages_long_lists_selection_bulk_options_input: { bulk_selection_options: nil } }
+        post long_lists_selection_bulk_options_create_path form_id: form.id, params: { pages_selection_bulk_options_input: { bulk_selection_options: nil } }
       end
 
       it "renders the bulk selections settings view if there are errors" do

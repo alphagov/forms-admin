@@ -92,7 +92,7 @@ describe "pages/long_lists_selection/bulk_options.html.erb", type: :view do
     end
 
     it "contains a radio question for choosing whether to make the form live" do
-      expect(rendered).to have_css("fieldset", text: I18n.t("helpers.legend.pages_long_lists_selection_bulk_options_input.include_none_of_the_above"))
+      expect(rendered).to have_css("fieldset", text: I18n.t("helpers.legend.pages_selection_bulk_options_input.include_none_of_the_above"))
       expect(rendered).to have_field("Yes", type: "radio")
       expect(rendered).to have_field("No", type: "radio")
     end
