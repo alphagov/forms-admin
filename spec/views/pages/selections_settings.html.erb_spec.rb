@@ -8,7 +8,6 @@ describe "pages/selections_settings.html.erb", type: :view do
   let(:only_one_option) { "true" }
   let(:page_number) { 1 }
   let(:back_link_url) { "type-of-answers" }
-  let(:selections_settings_path) { "edit" }
   let(:conditions) { [] }
 
   before do
@@ -22,7 +21,6 @@ describe "pages/selections_settings.html.erb", type: :view do
 
     # # setup instance variables
     assign(:page, page)
-    assign(:selections_settings_path, selections_settings_path)
     assign(:back_link_url, back_link_url)
     assign(:selections_settings_input, selections_settings_input)
 

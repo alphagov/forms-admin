@@ -21,8 +21,6 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
   let(:new_date_setting_path) { date_settings_new_path(form_id: draft_question.form_id) }
   let(:edit_name_setting_path) { name_settings_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
   let(:new_name_setting_path) { name_settings_new_path(form_id: draft_question.form_id) }
-  let(:edit_selections_setting_path) { selections_settings_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
-  let(:new_selections_setting_path) { selections_settings_new_path(form_id: draft_question.form_id) }
   let(:edit_text_setting_path) { text_settings_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
   let(:new_text_setting_path) { text_settings_new_path(form_id: draft_question.form_id) }
   let(:edit_long_lists_selection_type_path) { long_lists_selection_type_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
@@ -42,9 +40,9 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
     end
 
     it "does not have links to change the selection options" do
-      expect(page).not_to have_link("Change #{I18n.t('page_settings_summary.selection.options')}", href: edit_selections_setting_path)
-      expect(page).not_to have_link("Change #{I18n.t('page_settings_summary.selection.only_one_option')}", href: edit_selections_setting_path)
-      expect(page).not_to have_link("Change #{I18n.t('page_settings_summary.selection.include_none_of_the_above')}", href: edit_selections_setting_path)
+      expect(page).not_to have_link("Change #{I18n.t('page_settings_summary.selection.options')}", href: edit_long_lists_selection_options_path)
+      expect(page).not_to have_link("Change #{I18n.t('page_settings_summary.selection.only_one_option')}", href: edit_long_lists_selection_type_path)
+      expect(page).not_to have_link("Change #{I18n.t('page_settings_summary.selection.include_none_of_the_above')}", href: edit_long_lists_selection_options_path)
     end
 
     it "does not render the selection settings" do

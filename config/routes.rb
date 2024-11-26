@@ -81,8 +81,6 @@ Rails.application.routes.draw do
         post "/text-settings" => "pages/text_settings#create", as: :text_settings_create
         get "/date-settings" => "pages/date_settings#new", as: :date_settings_new
         post "/date-settings" => "pages/date_settings#create", as: :date_settings_create
-        get "/selections-settings" => "pages/selections_settings#new", as: :selections_settings_new
-        post "/selections-settings" => "pages/selections_settings#create", as: :selections_settings_create
         get "/selection/type" => "pages/long_lists_selection/type#new", as: :long_lists_selection_type_new
         post "/selection/type" => "pages/long_lists_selection/type#create", as: :long_lists_selection_type_create
         get "/selection/options" => "pages/long_lists_selection/options#new", as: :long_lists_selection_options_new
@@ -129,8 +127,6 @@ Rails.application.routes.draw do
           post "/text-settings" => "pages/text_settings#update", as: :text_settings_update
           get "/date-settings" => "pages/date_settings#edit", as: :date_settings_edit
           post "/date-settings" => "pages/date_settings#update", as: :date_settings_update
-          get "/selections-settings" => "pages/selections_settings#edit", as: :selections_settings_edit
-          post "/selections-settings" => "pages/selections_settings#update", as: :selections_settings_update
           get "/selection/type" => "pages/long_lists_selection/type#edit", as: :long_lists_selection_type_edit
           post "/selection/type" => "pages/long_lists_selection/type#update", as: :long_lists_selection_type_update
           get "/selection/options" => "pages/long_lists_selection/options#edit", as: :long_lists_selection_options_edit
