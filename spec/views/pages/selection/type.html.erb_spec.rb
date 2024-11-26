@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "pages/long_lists_selection/type.html.erb", type: :view do
+describe "pages/selection/type.html.erb", type: :view do
   let(:form) { build :form, id: 1 }
   let(:page) { build :page, routing_conditions: }
   let(:page_number) { 1 }
@@ -29,7 +29,7 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
 
   describe "only one option radios" do
     before do
-      render(template: "pages/long_lists_selection/type")
+      render(template: "pages/selection/type")
     end
 
     context "when input object has value of true" do
@@ -64,7 +64,7 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
     describe "routing warning" do
       context "when creating a new question" do
         it "does not display a warning about routes being deleted if only one option changes" do
-          render(template: "pages/long_lists_selection/type")
+          render(template: "pages/selection/type")
           expect(rendered).not_to have_selector(".govuk-notification-banner")
         end
       end
@@ -74,7 +74,7 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
 
         context "when no routing conditions set" do
           it "does not display a warning about routes being deleted" do
-            render(template: "pages/long_lists_selection/type")
+            render(template: "pages/selection/type")
             expect(rendered).not_to have_selector(".govuk-notification-banner__content")
           end
         end
@@ -85,7 +85,7 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
           context "when the options will not need to be reduced" do
             before do
               allow(selection_type_input).to receive(:need_to_reduce_options?).and_return false
-              render(template: "pages/long_lists_selection/type")
+              render(template: "pages/selection/type")
             end
 
             it "displays a warning about routes being deleted" do
@@ -96,7 +96,7 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
           context "when a routing condition is set and the options will need to be reduced" do
             before do
               allow(selection_type_input).to receive(:need_to_reduce_options?).and_return true
-              render(template: "pages/long_lists_selection/type")
+              render(template: "pages/selection/type")
             end
 
             it "displays a combined warning about routes being deleted and needing to reduce the options" do
@@ -111,7 +111,7 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
       context "when the options will not need to be reduced" do
         before do
           allow(selection_type_input).to receive(:need_to_reduce_options?).and_return false
-          render(template: "pages/long_lists_selection/type")
+          render(template: "pages/selection/type")
         end
 
         it "does not display a warning about reducing the number of options" do
@@ -122,7 +122,7 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
       context "when the options will need to be reduced" do
         before do
           allow(selection_type_input).to receive(:need_to_reduce_options?).and_return true
-          render(template: "pages/long_lists_selection/type")
+          render(template: "pages/selection/type")
         end
 
         it "does not display a warning about reducing the number of options" do

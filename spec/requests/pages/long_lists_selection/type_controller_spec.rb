@@ -48,7 +48,7 @@ describe Pages::LongListsSelection::TypeController, type: :request do
     end
 
     it "renders the template" do
-      expect(response).to have_rendered("pages/long_lists_selection/type")
+      expect(response).to have_rendered("pages/selection/type")
     end
 
     context "when draft question does not contain a setting for only_one_option" do
@@ -99,7 +99,7 @@ describe Pages::LongListsSelection::TypeController, type: :request do
       end
 
       it "renders the type of answer view if there are errors" do
-        expect(response).to have_rendered("pages/long_lists_selection/type")
+        expect(response).to have_rendered("pages/selection/type")
       end
     end
   end
@@ -133,7 +133,7 @@ describe Pages::LongListsSelection::TypeController, type: :request do
     end
 
     it "renders the template" do
-      expect(response).to have_rendered("pages/long_lists_selection/type")
+      expect(response).to have_rendered("pages/selection/type")
     end
 
     # This ensures there is backwards compatibility for existing questions as we previously set "only_one_option" to
@@ -183,7 +183,7 @@ describe Pages::LongListsSelection::TypeController, type: :request do
       end
 
       it "renders the type of answer view if there are errors" do
-        expect(response).to have_rendered("pages/long_lists_selection/type")
+        expect(response).to have_rendered("pages/selection/type")
       end
     end
   end

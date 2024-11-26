@@ -4,7 +4,7 @@ class Pages::LongListsSelection::TypeController < PagesController
     @selection_type_input = Pages::Selection::TypeInput.new(only_one_option:, draft_question:)
     @selection_type_path = long_lists_selection_type_create_path(current_form)
     @back_link_url = question_text_new_path(current_form)
-    render "pages/long_lists_selection/type", locals: { current_form: }
+    render "pages/selection/type", locals: { current_form: }
   end
 
   def create
@@ -15,7 +15,7 @@ class Pages::LongListsSelection::TypeController < PagesController
     if @selection_type_input.submit
       redirect_to selection_options_new_path_for_draft_question(draft_question)
     else
-      render "pages/long_lists_selection/type", locals: { current_form: }
+      render "pages/selection/type", locals: { current_form: }
     end
   end
 
@@ -23,7 +23,7 @@ class Pages::LongListsSelection::TypeController < PagesController
     @selection_type_input = Pages::Selection::TypeInput.new(only_one_option:, draft_question:)
     @selection_type_path = long_lists_selection_type_update_path(current_form)
     @back_link_url = edit_question_path(current_form)
-    render "pages/long_lists_selection/type", locals: { current_form: }
+    render "pages/selection/type", locals: { current_form: }
   end
 
   def update
@@ -34,7 +34,7 @@ class Pages::LongListsSelection::TypeController < PagesController
     if @selection_type_input.submit
       redirect_to selection_options_edit_path_for_draft_question(draft_question)
     else
-      render "pages/long_lists_selection/type", locals: { current_form: }
+      render "pages/selection/type", locals: { current_form: }
     end
   end
 
