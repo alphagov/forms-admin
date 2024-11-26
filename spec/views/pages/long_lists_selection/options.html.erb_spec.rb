@@ -64,7 +64,7 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
         let(:selection_options) { (1..999).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
 
         it "has an add another button" do
-          expect(rendered).to have_button(I18n.t("selections_settings.add_another"))
+          expect(rendered).to have_button(I18n.t("selection_options.add_another"))
         end
 
         it "does not have inset text stating you cannot add more options" do
@@ -76,7 +76,7 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
         let(:selection_options) { (1..1000).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
 
         it "does not have an add another button" do
-          expect(rendered).not_to have_button(I18n.t("selections_settings.add_another"))
+          expect(rendered).not_to have_button(I18n.t("selection_options.add_another"))
         end
 
         it "has inset text stating you cannot add more options" do
@@ -100,7 +100,7 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
         let(:selection_options) { (1..29).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
 
         it "has an add another button" do
-          expect(rendered).to have_button(I18n.t("selections_settings.add_another"))
+          expect(rendered).to have_button(I18n.t("selection_options.add_another"))
         end
 
         it "has inset text stating you cannot add more options" do
@@ -112,7 +112,7 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
         let(:selection_options) { (1..30).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
 
         it "does not have an add another button" do
-          expect(rendered).not_to have_button(I18n.t("selections_settings.add_another"))
+          expect(rendered).not_to have_button(I18n.t("selection_options.add_another"))
         end
 
         it "has inset text stating you cannot add more options" do

@@ -1030,6 +1030,7 @@ en:
     name_type:
       title_not_selected: Title not needed
       title_selected: Title needed
+    options_title: Options
     page_heading: Page heading
     selection_type:
       default: Selection from a list
@@ -1065,9 +1066,11 @@ en:
     selection:
       how_many_selections: How many options can people select
       include_none_of_the_above: Include an option for ‘None of the above’
+      'no': 'No'
       options: Options
       options_count: "%{number_of_options} options:"
       options_summary: Show %{number_of_options} options
+      'yes': 'Yes'
     text:
       length: Length
   page_titles:
@@ -1366,28 +1369,6 @@ en:
       body: You can only have up to 30 options in a list where people can select one or more options. If you make this change, you’ll be able to edit your list on the next page.
       heading: If you change this to ‘one or more options’, the route from this question will be deleted and you’ll need to edit the list
     routing_warning: If you change this to ‘one or more options’, the route from this question will be deleted
-  selections_settings:
-    add_another: Add another option
-    add_options: Add options to your list
-    add_options_hint: You can add up to 30 options
-    cannot_add_more_options: You cannot add any more options as you have reached the maximum of 30 options.
-    heading: Create a list of options
-    include_none_of_the_above: Include an option for ‘None of the above’
-    list_settings: List settings
-    'no': 'No'
-    only_one_option: People can only select one option
-    option: Option %{number}
-    options_title: Options
-    remove_html: Remove <span class="govuk-visually-hidden">option %{option_number}</span>
-    routing_warning_about_change_only_one_option_heading: Your existing question route may be deleted
-    routing_warning_about_change_only_one_option_html: |
-      <p>
-        Removing the “People can only select one option” setting means your route will no longer work and will be deleted.
-      </p>
-      <p>
-        If you do not want to lose your question route you can cancel this change by using the back button or <a href="%{pages_link_url}">go to your questions</a>.
-      </p>
-    'yes': 'Yes'
   set_email:
     new:
       body_html: |

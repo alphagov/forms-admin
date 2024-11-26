@@ -48,7 +48,7 @@
     <% end %>
     <%= summary_list.with_row do |row| %>
       <%= row.with_key(text: t("page_settings_summary.selection.include_none_of_the_above")) %>
-      <%= row.with_value(text: @draft_question.is_optional ? t("selections_settings.yes") : t("selections_settings.no")) %>
+      <%= row.with_value(text: @draft_question.is_optional ? t("page_settings_summary.selection.yes") : t("page_settings_summary.selection.no")) %>
       <%= row.with_action(text: t("page_settings_summary.change"),
                     href: @change_selections_options_path,
                     visually_hidden_text: t("page_settings_summary.selection.include_none_of_the_above")) %>
