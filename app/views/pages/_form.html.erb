@@ -34,7 +34,7 @@
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <% end %>
 
-  <% if question_input.answer_settings[:only_one_option] == "true" %>
+  <% if question_input.answer_type == "selection" %>
     <%= f.hidden_field :is_repeatable, value: false %>
   <% else %>
     <%= f.govuk_collection_radio_buttons :is_repeatable, question_input.repeatable_options, :id, :name, :description, legend: { size: 'm', tag: 'h2' }, bold_labels: false %>
