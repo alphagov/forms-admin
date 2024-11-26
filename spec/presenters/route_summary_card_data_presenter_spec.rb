@@ -56,6 +56,17 @@ describe RouteSummaryCardDataPresenter do
           expect(result[1][:rows][1][:value][:text]).to have_link("Set one or more questions to skip later in the form (optional)", href: "/forms/99/pages/1/routes/any-other-answer/questions-to-skip/new")
         end
       end
+
+      context "when the goto_page does not exist" do
+        let(:routing_condition) do
+          build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Yes", goto_page_id: 999, skip_to_end: false)
+        end
+
+        it "uses placeholder text instead of question text" do
+          result = service.summary_card_data
+          expect(result[0][:rows][1][:value][:text]).to eq(I18n.t("page_route_card.page_name_not_exist"))
+        end
+      end
     end
 
     context "with skip to end condition" do

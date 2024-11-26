@@ -1038,6 +1038,7 @@ en:
     edit: Edit
     if_answer_is: If the answer is
     page_name: "%{page_position}. %{page_name}"
+    page_name_not_exist: Edit this route to select the question or page you want to take the person to, or delete the route
     question_title: Question %{position}
     route_title: Route %{index}
     secondary_skip_after: Then after the person answers

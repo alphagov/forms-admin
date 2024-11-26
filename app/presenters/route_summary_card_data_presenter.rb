@@ -131,10 +131,14 @@ private
   def page_name(page_id)
     target_page = pages.find { |page| page.id == page_id }
 
-    page_name = target_page.question_text
-    page_position = target_page.position
+    if target_page.present?
+      page_name = target_page.question_text
+      page_position = target_page.position
 
-    I18n.t("page_route_card.page_name", page_position:, page_name:)
+      I18n.t("page_route_card.page_name", page_position:, page_name:)
+    else
+      I18n.t("page_route_card.page_name_not_exist")
+    end
   end
 
   def end_page_name
