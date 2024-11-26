@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "pages/long_lists_selection/options.html.erb", type: :view do
+describe "pages/selection/options.html.erb", type: :view do
   let(:form) { build :form, id: 1 }
   let(:page) { build :page }
   let(:page_number) { 1 }
@@ -28,7 +28,7 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
     assign(:bulk_options_url, bulk_options_url)
     assign(:selection_options_input, Pages::Selection::OptionsInput.new(selection_options:, include_none_of_the_above:, draft_question:))
 
-    render(template: "pages/long_lists_selection/options")
+    render(template: "pages/selection/options")
   end
 
   describe "selection options" do

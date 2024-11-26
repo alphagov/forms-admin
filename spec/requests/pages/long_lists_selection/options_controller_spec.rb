@@ -49,7 +49,7 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
     end
 
     it "renders the template" do
-      expect(response).to have_rendered("pages/long_lists_selection/options")
+      expect(response).to have_rendered("pages/selection/options")
     end
 
     context "when draft question already contains selection settings" do
@@ -125,7 +125,7 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
       end
 
       it "renders the type of answer view if there are errors" do
-        expect(response).to have_rendered("pages/long_lists_selection/options")
+        expect(response).to have_rendered("pages/selection/options")
       end
     end
   end
@@ -166,7 +166,7 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
     end
 
     it "renders the template" do
-      expect(response).to have_rendered("pages/long_lists_selection/options")
+      expect(response).to have_rendered("pages/selection/options")
     end
   end
 
@@ -228,7 +228,7 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
       end
 
       it "renders the selections settings view if there are errors" do
-        expect(response).to have_rendered("pages/long_lists_selection/options")
+        expect(response).to have_rendered("pages/selection/options")
       end
     end
   end

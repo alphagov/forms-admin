@@ -7,7 +7,7 @@ class Pages::LongListsSelection::OptionsController < PagesController
     @selection_options_path = long_lists_selection_options_create_path(current_form)
     @back_link_url = long_lists_selection_type_new_path(current_form)
     @bulk_options_url = long_lists_selection_bulk_options_new_path(current_form)
-    render "pages/long_lists_selection/options", locals: { current_form: }
+    render "pages/selection/options", locals: { current_form: }
   end
 
   def create
@@ -20,14 +20,14 @@ class Pages::LongListsSelection::OptionsController < PagesController
 
     if params[:add_another]
       @selection_options_input.add_another
-      render "pages/long_lists_selection/options", locals: { current_form: }
+      render "pages/selection/options", locals: { current_form: }
     elsif params[:remove]
       @selection_options_input.remove(params[:remove].to_i)
-      render "pages/long_lists_selection/options", locals: { current_form: }
+      render "pages/selection/options", locals: { current_form: }
     elsif @selection_options_input.submit
       redirect_to new_question_path(current_form)
     else
-      render "pages/long_lists_selection/options", locals: { current_form: }
+      render "pages/selection/options", locals: { current_form: }
     end
   end
 
@@ -39,7 +39,7 @@ class Pages::LongListsSelection::OptionsController < PagesController
     @selection_options_path = long_lists_selection_options_update_path(current_form)
     @back_link_url = edit_question_path(current_form)
     @bulk_options_url = long_lists_selection_bulk_options_edit_path(current_form)
-    render "pages/long_lists_selection/options", locals: { current_form: }
+    render "pages/selection/options", locals: { current_form: }
   end
 
   def update
@@ -52,14 +52,14 @@ class Pages::LongListsSelection::OptionsController < PagesController
 
     if params[:add_another]
       @selection_options_input.add_another
-      render "pages/long_lists_selection/options", locals: { current_form: }
+      render "pages/selection/options", locals: { current_form: }
     elsif params[:remove]
       @selection_options_input.remove(params[:remove].to_i)
-      render "pages/long_lists_selection/options", locals: { current_form: }
+      render "pages/selection/options", locals: { current_form: }
     elsif @selection_options_input.submit
       redirect_to edit_question_path(current_form)
     else
-      render "pages/long_lists_selection/options", locals: { current_form: }
+      render "pages/selection/options", locals: { current_form: }
     end
   end
 
