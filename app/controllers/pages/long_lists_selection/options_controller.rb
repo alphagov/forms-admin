@@ -1,9 +1,9 @@
 class Pages::LongListsSelection::OptionsController < PagesController
   def new
-    @selection_options_input = Pages::LongListsSelection::OptionsInput.new(selection_options: draft_question.answer_settings[:selection_options]
+    @selection_options_input = Pages::Selection::OptionsInput.new(selection_options: draft_question.answer_settings[:selection_options]
                                                                                          .map { |option| { name: option[:name] } },
-                                                                           include_none_of_the_above: draft_question.is_optional,
-                                                                           draft_question:)
+                                                                  include_none_of_the_above: draft_question.is_optional,
+                                                                  draft_question:)
     @selection_options_path = long_lists_selection_options_create_path(current_form)
     @back_link_url = long_lists_selection_type_new_path(current_form)
     @bulk_options_url = long_lists_selection_bulk_options_new_path(current_form)
@@ -11,9 +11,9 @@ class Pages::LongListsSelection::OptionsController < PagesController
   end
 
   def create
-    @selection_options_input = Pages::LongListsSelection::OptionsInput.new(selection_options: selection_options_param_values,
-                                                                           include_none_of_the_above: include_none_of_the_above_param_values,
-                                                                           draft_question:)
+    @selection_options_input = Pages::Selection::OptionsInput.new(selection_options: selection_options_param_values,
+                                                                  include_none_of_the_above: include_none_of_the_above_param_values,
+                                                                  draft_question:)
     @selection_options_path = long_lists_selection_options_create_path(current_form)
     @back_link_url = long_lists_selection_type_new_path(current_form)
     @bulk_options_url = long_lists_selection_bulk_options_new_path(current_form)
@@ -32,10 +32,10 @@ class Pages::LongListsSelection::OptionsController < PagesController
   end
 
   def edit
-    @selection_options_input = Pages::LongListsSelection::OptionsInput.new(selection_options: draft_question.answer_settings[:selection_options]
+    @selection_options_input = Pages::Selection::OptionsInput.new(selection_options: draft_question.answer_settings[:selection_options]
                                                                                                   .map { |option| { name: option[:name] } },
-                                                                           include_none_of_the_above: draft_question.is_optional,
-                                                                           draft_question:)
+                                                                  include_none_of_the_above: draft_question.is_optional,
+                                                                  draft_question:)
     @selection_options_path = long_lists_selection_options_update_path(current_form)
     @back_link_url = edit_question_path(current_form)
     @bulk_options_url = long_lists_selection_bulk_options_edit_path(current_form)
@@ -43,9 +43,9 @@ class Pages::LongListsSelection::OptionsController < PagesController
   end
 
   def update
-    @selection_options_input = Pages::LongListsSelection::OptionsInput.new(selection_options: selection_options_param_values,
-                                                                           include_none_of_the_above: include_none_of_the_above_param_values,
-                                                                           draft_question:)
+    @selection_options_input = Pages::Selection::OptionsInput.new(selection_options: selection_options_param_values,
+                                                                  include_none_of_the_above: include_none_of_the_above_param_values,
+                                                                  draft_question:)
     @selection_options_path = long_lists_selection_options_update_path(current_form)
     @back_link_url = edit_question_path(current_form)
     @bulk_options_url = long_lists_selection_bulk_options_edit_path(current_form)
@@ -74,7 +74,7 @@ private
   end
 
   def input_params
-    params.require(:pages_long_lists_selection_options_input)
+    params.require(:pages_selection_options_input)
           .permit(:include_none_of_the_above, selection_options: [:name]).to_h.deep_symbolize_keys
   end
 end

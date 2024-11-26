@@ -26,7 +26,7 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
     assign(:selection_options_path, selection_options_path)
     assign(:back_link_url, back_link_url)
     assign(:bulk_options_url, bulk_options_url)
-    assign(:selection_options_input, Pages::LongListsSelection::OptionsInput.new(selection_options:, include_none_of_the_above:, draft_question:))
+    assign(:selection_options_input, Pages::Selection::OptionsInput.new(selection_options:, include_none_of_the_above:, draft_question:))
 
     render(template: "pages/long_lists_selection/options")
   end
@@ -127,8 +127,8 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
       let(:include_none_of_the_above) { "true" }
 
       it "has 'Yes' radio selected" do
-        expect(rendered).to have_checked_field("pages_long_lists_selection_options_input[include_none_of_the_above]", with: "true")
-        expect(rendered).to have_unchecked_field("pages_long_lists_selection_options_input[include_none_of_the_above]", with: "false")
+        expect(rendered).to have_checked_field("pages_selection_options_input[include_none_of_the_above]", with: "true")
+        expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "false")
       end
     end
 
@@ -136,8 +136,8 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
       let(:include_none_of_the_above) { "false" }
 
       it "has 'No' radio selected" do
-        expect(rendered).to have_checked_field("pages_long_lists_selection_options_input[include_none_of_the_above]", with: "false")
-        expect(rendered).to have_unchecked_field("pages_long_lists_selection_options_input[include_none_of_the_above]", with: "true")
+        expect(rendered).to have_checked_field("pages_selection_options_input[include_none_of_the_above]", with: "false")
+        expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "true")
       end
     end
 
@@ -145,8 +145,8 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
       let(:include_none_of_the_above) { nil }
 
       it "does not have a radio option selected" do
-        expect(rendered).to have_unchecked_field("pages_long_lists_selection_options_input[include_none_of_the_above]", with: "false")
-        expect(rendered).to have_unchecked_field("pages_long_lists_selection_options_input[include_none_of_the_above]", with: "true")
+        expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "false")
+        expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "true")
       end
     end
   end

@@ -83,7 +83,7 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
     end
 
     context "when form is valid and ready to store" do
-      let(:pages_long_lists_selection_options_input) do
+      let(:pages_selection_options_input) do
         {
           selection_options: { "0": { name: "Option 1" }, "1": { name: "Option 2" } },
           include_none_of_the_above: true,
@@ -91,7 +91,7 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
       end
 
       before do
-        post long_lists_selection_options_create_path form_id: form.id, params: { pages_long_lists_selection_options_input: }
+        post long_lists_selection_options_create_path form_id: form.id, params: { pages_selection_options_input: }
       end
 
       it "saves the selection options to the draft question" do
@@ -121,7 +121,7 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
 
     context "when form is invalid" do
       before do
-        post long_lists_selection_options_create_path form_id: form.id, params: { pages_long_lists_selection_options_input: { answer_settings: nil } }
+        post long_lists_selection_options_create_path form_id: form.id, params: { pages_selection_options_input: { answer_settings: nil } }
       end
 
       it "renders the type of answer view if there are errors" do
@@ -185,7 +185,7 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
     end
 
     context "when form is valid and ready to update in the DB" do
-      let(:pages_long_lists_selection_options_input) do
+      let(:pages_selection_options_input) do
         {
           selection_options: { "0": { name: "Option 1" }, "1": { name: "Option 2" } },
           include_none_of_the_above: true,
@@ -194,7 +194,7 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
 
       before do
         post long_lists_selection_options_update_path(form_id: page.form_id, page_id: page.id),
-             params: { pages_long_lists_selection_options_input: }
+             params: { pages_selection_options_input: }
       end
 
       it "saves the selection options to the draft question" do
@@ -224,7 +224,7 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
 
     context "when form is invalid" do
       before do
-        post long_lists_selection_options_update_path form_id: form.id, page_id: page.id, params: { pages_long_lists_selection_options_input: { answer_settings: nil } }
+        post long_lists_selection_options_update_path form_id: form.id, page_id: page.id, params: { pages_selection_options_input: { answer_settings: nil } }
       end
 
       it "renders the selections settings view if there are errors" do
