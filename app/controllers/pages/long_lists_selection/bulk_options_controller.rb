@@ -4,7 +4,7 @@ class Pages::LongListsSelection::BulkOptionsController < PagesController
     @bulk_options_input.assign_form_values
     @bulk_options_path = long_lists_selection_bulk_options_create_path(current_form)
     @back_link_url = long_lists_selection_type_new_path(current_form)
-    render "pages/long_lists_selection/bulk_options", locals: { current_form: }
+    render "pages/selection/bulk_options", locals: { current_form: }
   end
 
   def create
@@ -16,7 +16,7 @@ class Pages::LongListsSelection::BulkOptionsController < PagesController
     if @bulk_options_input.submit
       redirect_to new_question_path(current_form)
     else
-      render "pages/long_lists_selection/bulk_options", locals: { current_form: }
+      render "pages/selection/bulk_options", locals: { current_form: }
     end
   end
 
@@ -25,7 +25,7 @@ class Pages::LongListsSelection::BulkOptionsController < PagesController
     @bulk_options_input = Pages::Selection::BulkOptionsInput.new(draft_question:)
     @bulk_options_input.assign_form_values
     @back_link_url = edit_question_path(current_form, page)
-    render "pages/long_lists_selection/bulk_options", locals: { current_form: }
+    render "pages/selection/bulk_options", locals: { current_form: }
   end
 
   def update
@@ -37,7 +37,7 @@ class Pages::LongListsSelection::BulkOptionsController < PagesController
     if @bulk_options_input.submit
       redirect_to edit_question_path(current_form)
     else
-      render "pages/long_lists_selection/bulk_options", locals: { current_form: }
+      render "pages/selection/bulk_options", locals: { current_form: }
     end
   end
 

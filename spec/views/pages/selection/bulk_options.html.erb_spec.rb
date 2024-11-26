@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "pages/long_lists_selection/bulk_options.html.erb", type: :view do
+describe "pages/selection/bulk_options.html.erb", type: :view do
   let(:form) { build :form, id: 1, pages: [page] }
   let(:bulk_options_input) { build :bulk_options_input, draft_question: page }
   let(:page) { OpenStruct.new(answer_type: "selection", answer_settings:) }
@@ -28,7 +28,7 @@ describe "pages/long_lists_selection/bulk_options.html.erb", type: :view do
 
   context "when there are no errors" do
     before do
-      render(template: "pages/long_lists_selection/bulk_options")
+      render(template: "pages/selection/bulk_options")
     end
 
     it "does not display the error summary" do
@@ -101,7 +101,7 @@ describe "pages/long_lists_selection/bulk_options.html.erb", type: :view do
   context "when there are errors" do
     before do
       bulk_options_input.errors.add(:include_none_of_the_above, "Select ‘Yes’ or ‘No’")
-      render(template: "pages/long_lists_selection/bulk_options")
+      render(template: "pages/selection/bulk_options")
     end
 
     it "displays the error summary" do

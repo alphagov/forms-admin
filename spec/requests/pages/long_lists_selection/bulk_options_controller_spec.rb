@@ -49,7 +49,7 @@ describe Pages::LongListsSelection::BulkOptionsController, type: :request do
     end
 
     it "renders the template" do
-      expect(response).to have_rendered("pages/long_lists_selection/bulk_options")
+      expect(response).to have_rendered("pages/selection/bulk_options")
     end
 
     context "when draft question already contains selection settings" do
@@ -107,7 +107,7 @@ describe Pages::LongListsSelection::BulkOptionsController, type: :request do
       end
 
       it "renders the type of answer view if there are errors" do
-        expect(response).to have_rendered("pages/long_lists_selection/bulk_options")
+        expect(response).to have_rendered("pages/selection/bulk_options")
       end
     end
   end
@@ -150,7 +150,7 @@ describe Pages::LongListsSelection::BulkOptionsController, type: :request do
     end
 
     it "renders the template" do
-      expect(response).to have_rendered("pages/long_lists_selection/bulk_options")
+      expect(response).to have_rendered("pages/selection/bulk_options")
     end
   end
 
@@ -192,7 +192,7 @@ describe Pages::LongListsSelection::BulkOptionsController, type: :request do
       end
 
       it "renders the bulk selections settings view if there are errors" do
-        expect(response).to have_rendered("pages/long_lists_selection/bulk_options")
+        expect(response).to have_rendered("pages/selection/bulk_options")
       end
     end
   end
