@@ -1,4 +1,4 @@
-class Pages::LongListsSelection::TypeController < PagesController
+class Pages::Selection::TypeController < PagesController
   include PagesHelper
   def new
     @selection_type_input = Pages::Selection::TypeInput.new(only_one_option:, draft_question:)

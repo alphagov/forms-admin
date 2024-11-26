@@ -1,4 +1,4 @@
-class Pages::LongListsSelection::OptionsController < PagesController
+class Pages::Selection::OptionsController < PagesController
   def new
     @selection_options_input = Pages::Selection::OptionsInput.new(selection_options: draft_question.answer_settings[:selection_options]
                                                                                          .map { |option| { name: option[:name] } },

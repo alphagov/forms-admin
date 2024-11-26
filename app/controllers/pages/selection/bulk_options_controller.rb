@@ -1,4 +1,4 @@
-class Pages::LongListsSelection::BulkOptionsController < PagesController
+class Pages::Selection::BulkOptionsController < PagesController
   def new
     @bulk_options_input = Pages::Selection::BulkOptionsInput.new(draft_question:)
     @bulk_options_input.assign_form_values

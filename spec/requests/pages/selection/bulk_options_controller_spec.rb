@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Pages::LongListsSelection::BulkOptionsController, type: :request do
+describe Pages::Selection::BulkOptionsController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
 
