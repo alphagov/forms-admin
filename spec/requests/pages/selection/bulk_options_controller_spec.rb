@@ -191,7 +191,7 @@ describe Pages::Selection::BulkOptionsController, type: :request do
         post selection_bulk_options_create_path form_id: form.id, params: { pages_selection_bulk_options_input: { bulk_selection_options: nil } }
       end
 
-      it "renders the bulk selections settings view if there are errors" do
+      it "renders the bulk selection options view if there are errors" do
         expect(response).to have_rendered("pages/selection/bulk_options")
       end
     end

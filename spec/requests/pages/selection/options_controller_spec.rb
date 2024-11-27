@@ -227,7 +227,7 @@ describe Pages::Selection::OptionsController, type: :request do
         post selection_options_update_path form_id: form.id, page_id: page.id, params: { pages_selection_options_input: { answer_settings: nil } }
       end
 
-      it "renders the selections settings view if there are errors" do
+      it "renders the selection options view if there are errors" do
         expect(response).to have_rendered("pages/selection/options")
       end
     end
