@@ -23,10 +23,10 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
   let(:new_name_setting_path) { name_settings_new_path(form_id: draft_question.form_id) }
   let(:edit_text_setting_path) { text_settings_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
   let(:new_text_setting_path) { text_settings_new_path(form_id: draft_question.form_id) }
-  let(:edit_long_lists_selection_type_path) { selection_type_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
-  let(:new_long_lists_selection_type_path) { selection_type_new_path(form_id: draft_question.form_id) }
-  let(:edit_long_lists_selection_options_path) { selection_options_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
-  let(:new_long_lists_selection_options_path) { selection_options_new_path(form_id: draft_question.form_id) }
+  let(:edit_selection_type_path) { selection_type_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
+  let(:new_selection_type_path) { selection_type_new_path(form_id: draft_question.form_id) }
+  let(:edit_selection_options_path) { selection_options_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
+  let(:new_selection_options_path) { selection_options_new_path(form_id: draft_question.form_id) }
 
   before do
     allow(errors).to receive(:has_key?).with(:selection_options).and_return(selection_options_error_messages.present?)
@@ -40,9 +40,9 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
     end
 
     it "does not have links to change the selection options" do
-      expect(page).not_to have_link("Change #{I18n.t('page_settings_summary.selection.options')}", href: edit_long_lists_selection_options_path)
-      expect(page).not_to have_link("Change #{I18n.t('page_settings_summary.selection.only_one_option')}", href: edit_long_lists_selection_type_path)
-      expect(page).not_to have_link("Change #{I18n.t('page_settings_summary.selection.include_none_of_the_above')}", href: edit_long_lists_selection_options_path)
+      expect(page).not_to have_link("Change #{I18n.t('page_settings_summary.selection.options')}", href: edit_selection_options_path)
+      expect(page).not_to have_link("Change #{I18n.t('page_settings_summary.selection.only_one_option')}", href: edit_selection_type_path)
+      expect(page).not_to have_link("Change #{I18n.t('page_settings_summary.selection.include_none_of_the_above')}", href: edit_selection_options_path)
     end
 
     it "does not render the selection settings" do
@@ -186,15 +186,15 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
       end
 
       it "the change button for only one option links to the long lists type page" do
-        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.how_many_selections')}", href: edit_long_lists_selection_type_path)
+        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.how_many_selections')}", href: edit_selection_type_path)
       end
 
       it "the change button for the options links to the long lists options page" do
-        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.options')}", href: edit_long_lists_selection_options_path)
+        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.options')}", href: edit_selection_options_path)
       end
 
       it "the change button for include none of the above links to the longs lists options page" do
-        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.include_none_of_the_above')}", href: edit_long_lists_selection_options_path)
+        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.include_none_of_the_above')}", href: edit_selection_options_path)
       end
     end
 
@@ -206,15 +206,15 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
       end
 
       it "the change button for only one option links to the long lists type page" do
-        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.how_many_selections')}", href: new_long_lists_selection_type_path)
+        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.how_many_selections')}", href: new_selection_type_path)
       end
 
       it "the change button for the options links to the long lists options page" do
-        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.options')}", href: new_long_lists_selection_options_path)
+        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.options')}", href: new_selection_options_path)
       end
 
       it "the change button for include none of the above links to the longs lists options page" do
-        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.include_none_of_the_above')}", href: new_long_lists_selection_options_path)
+        expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.include_none_of_the_above')}", href: new_selection_options_path)
       end
     end
   end
