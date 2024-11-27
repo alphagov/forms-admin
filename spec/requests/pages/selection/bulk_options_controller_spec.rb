@@ -40,7 +40,7 @@ describe Pages::Selection::BulkOptionsController, type: :request do
 
     it "sets an instance variable for back_link_url" do
       path = assigns(:back_link_url)
-      expect(path).to eq long_lists_selection_type_new_path(form.id)
+      expect(path).to eq selection_type_new_path(form.id)
     end
 
     it "sets an instance variable for bulk_options_path" do

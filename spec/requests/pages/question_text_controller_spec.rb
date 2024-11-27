@@ -69,7 +69,7 @@ RSpec.describe Pages::QuestionTextController, type: :request do
       end
 
       it "redirects the user to the page to choose whether only one option can be selected" do
-        expect(response).to redirect_to long_lists_selection_type_new_path(form.id)
+        expect(response).to redirect_to selection_type_new_path(form.id)
       end
     end
   end

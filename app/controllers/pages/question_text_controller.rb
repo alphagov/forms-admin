@@ -12,7 +12,7 @@ class Pages::QuestionTextController < PagesController
     @back_link_url = type_of_answer_new_path(current_form)
 
     if @question_text_input.submit
-      redirect_to long_lists_selection_type_new_path(current_form)
+      redirect_to selection_type_new_path(current_form)
     else
       render :question_text, locals: { current_form: }
     end

@@ -40,7 +40,7 @@ private
   def selection_path(form, action)
     return question_text_new_path(form) if action == :create
 
-    long_lists_selection_type_edit_path(form, page)
+    selection_type_edit_path(form, page)
   end
 
   def text_path(form, action)

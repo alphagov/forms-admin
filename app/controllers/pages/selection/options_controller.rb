@@ -5,7 +5,7 @@ class Pages::Selection::OptionsController < PagesController
                                                                   include_none_of_the_above: draft_question.is_optional,
                                                                   draft_question:)
     @selection_options_path = long_lists_selection_options_create_path(current_form)
-    @back_link_url = long_lists_selection_type_new_path(current_form)
+    @back_link_url = selection_type_new_path(current_form)
     @bulk_options_url = long_lists_selection_bulk_options_new_path(current_form)
     render "pages/selection/options", locals: { current_form: }
   end
@@ -15,7 +15,7 @@ class Pages::Selection::OptionsController < PagesController
                                                                   include_none_of_the_above: include_none_of_the_above_param_values,
                                                                   draft_question:)
     @selection_options_path = long_lists_selection_options_create_path(current_form)
-    @back_link_url = long_lists_selection_type_new_path(current_form)
+    @back_link_url = selection_type_new_path(current_form)
     @bulk_options_url = long_lists_selection_bulk_options_new_path(current_form)
 
     if params[:add_another]
