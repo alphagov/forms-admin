@@ -28,7 +28,7 @@ RSpec.describe PagesHelper, type: :helper do
 
       it "returns bulk options path" do
         expect(helper.selection_options_new_path_for_draft_question(draft_question))
-          .to eq(long_lists_selection_bulk_options_new_path(form_id: draft_question.form_id))
+          .to eq(selection_bulk_options_new_path(form_id: draft_question.form_id))
       end
     end
   end
@@ -57,7 +57,7 @@ RSpec.describe PagesHelper, type: :helper do
 
       it "returns bulk options path" do
         expect(helper.selection_options_edit_path_for_draft_question(draft_question))
-          .to eq(long_lists_selection_bulk_options_edit_path(form_id: draft_question.form_id, page_id:))
+          .to eq(selection_bulk_options_edit_path(form_id: draft_question.form_id, page_id:))
       end
     end
   end

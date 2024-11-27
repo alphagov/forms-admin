@@ -45,7 +45,7 @@ describe Pages::Selection::OptionsController, type: :request do
 
     it "sets an instance variable for bulk_options_url" do
       path = assigns(:bulk_options_url)
-      expect(path).to eq long_lists_selection_bulk_options_new_path(form.id)
+      expect(path).to eq selection_bulk_options_new_path(form.id)
     end
 
     it "renders the template" do
@@ -162,7 +162,7 @@ describe Pages::Selection::OptionsController, type: :request do
 
     it "sets an instance variable for bulk_options_url" do
       path = assigns(:bulk_options_url)
-      expect(path).to eq long_lists_selection_bulk_options_edit_path(form.id)
+      expect(path).to eq selection_bulk_options_edit_path(form.id)
     end
 
     it "renders the template" do
