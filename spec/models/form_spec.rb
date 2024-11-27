@@ -145,12 +145,12 @@ describe Form, type: :model do
     end
     let(:selection_pages_with_routes) do
       (4..5).map do |index|
-        build :page, :with_selections_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, check_page_id: index, goto_page_id: index + 2)]
+        build :page, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, check_page_id: index, goto_page_id: index + 2)]
       end
     end
     let(:selection_pages_without_routes) do
       (6..9).map do |index|
-        build :page, :with_selections_settings, id: index, position: index, routing_conditions: []
+        build :page, :with_selection_settings, id: index, position: index, routing_conditions: []
       end
     end
     let(:form) { build :form, name: "Form 1", organisation:, submission_email: "", pages: non_select_from_list_pages + selection_pages_with_routes + selection_pages_without_routes }
@@ -164,12 +164,12 @@ describe Form, type: :model do
   describe "#has_no_remaining_routes_available?" do
     let(:selection_pages_with_routes) do
       (1..3).map do |index|
-        build :page, :with_selections_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, check_page_id: index, goto_page_id: index + 2)]
+        build :page, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, check_page_id: index, goto_page_id: index + 2)]
       end
     end
     let(:selection_pages_without_routes) do
       (4..5).map do |index|
-        build :page, :with_selections_settings, id: index, position: index, routing_conditions: []
+        build :page, :with_selection_settings, id: index, position: index, routing_conditions: []
       end
     end
 

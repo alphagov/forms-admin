@@ -105,7 +105,7 @@ describe Pages::Selection::TypeController, type: :request do
   end
 
   describe "#edit" do
-    let(:page) { build :page, :with_selections_settings, id: 2, form_id: form.id }
+    let(:page) { build :page, :with_selection_settings, id: 2, form_id: form.id }
     let(:page_id) { page.id }
 
     before do

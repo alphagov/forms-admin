@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "pages/conditions/routing_page.html.erb" do
   let(:form) { build :form, id: 1 }
-  let(:pages) { build_list :page, 3, :with_selections_settings, form_id: 1 }
+  let(:pages) { build_list :page, 3, :with_selection_settings, form_id: 1 }
   let(:routing_page_input) { Pages::RoutingPageInput.new }
   let(:allowed_to_create_routes) { true }
   let(:all_routes_created) { false }
@@ -53,7 +53,7 @@ describe "pages/conditions/routing_page.html.erb" do
   end
 
   context "with 10 options" do
-    let(:pages) { build_list :page, 10, :with_selections_settings, form_id: 1 }
+    let(:pages) { build_list :page, 10, :with_selection_settings, form_id: 1 }
 
     it "contains a fieldset legend asking a user to select a question page" do
       expect(rendered).to have_css(".govuk-fieldset__legend", text: t("routing_page.legend_text"))
@@ -68,7 +68,7 @@ describe "pages/conditions/routing_page.html.erb" do
   end
 
   context "with more than 10 options" do
-    let(:pages) { build_list :page, 11, :with_selections_settings, form_id: 1 }
+    let(:pages) { build_list :page, 11, :with_selection_settings, form_id: 1 }
 
     it "contains a fieldset legend asking a user to select a question page" do
       expect(rendered).to have_css(".govuk-label", text: t("routing_page.legend_text"))

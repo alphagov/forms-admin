@@ -23,7 +23,7 @@ describe PageSummaryCardDataService do
     end
 
     context "when the page is a selection question" do
-      let(:page) { build :page, :with_selections_settings, is_optional: }
+      let(:page) { build :page, :with_selection_settings, is_optional: }
 
       it "includes a title without (optional) added to it" do
         expect(service.build_data[:card][:title]).to eq page.question_text.to_s
@@ -38,7 +38,7 @@ describe PageSummaryCardDataService do
       end
 
       context "when the page is a selection question" do
-        let(:page) { build :page, :with_selections_settings, is_optional: }
+        let(:page) { build :page, :with_selection_settings, is_optional: }
 
         it "includes a title without (optional) added to it" do
           expect(service.build_data[:card][:title]).to eq page.question_text.to_s
@@ -54,7 +54,7 @@ describe PageSummaryCardDataService do
       end
 
       context "when the page is a selection question" do
-        let(:page) { build :page, :with_selections_settings, is_optional: }
+        let(:page) { build :page, :with_selection_settings, is_optional: }
 
         it "includes a title without (optional) added to it" do
           expect(service.build_data[:card][:title]).to eq page.question_text.to_s

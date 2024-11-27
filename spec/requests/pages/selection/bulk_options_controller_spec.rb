@@ -113,7 +113,7 @@ describe Pages::Selection::BulkOptionsController, type: :request do
   end
 
   describe "#edit" do
-    let(:page) { build :page, :with_selections_settings, id: 2, form_id: form.id, answer_settings: }
+    let(:page) { build :page, :with_selection_settings, id: 2, form_id: form.id, answer_settings: }
     let(:answer_settings) { { selection_options: } }
     let(:selection_options) { [{ name: "Option 1" }, { name: "Option 2" }] }
     let(:page_id) { page.id }
@@ -155,7 +155,7 @@ describe Pages::Selection::BulkOptionsController, type: :request do
   end
 
   describe "#update" do
-    let(:page) { build :page, :with_selections_settings, id: 2, form_id: form.id, answer_settings: }
+    let(:page) { build :page, :with_selection_settings, id: 2, form_id: form.id, answer_settings: }
     let(:answer_settings) { { only_one_option: "true", selection_options: } }
     let(:selection_options) { [{ name: "Option 1" }, { name: "Option 2" }] }
 

@@ -24,7 +24,7 @@ feature "Editing answer_settings for existing question", type: :feature do
     let(:address_question) { build(:page, :with_address_settings, form_id: 1) }
     let(:date_question) { build(:page, :with_date_settings, form_id: 1, input_type: "date_of_birth") }
     let(:name_question) { build(:page, :with_name_settings, form_id: 1, input_type: "first_middle_and_last_name", title_needed: "true") }
-    let(:selection_question) { build(:page, :with_selections_settings, form_id: 1, is_optional: true) }
+    let(:selection_question) { build(:page, :with_selection_settings, form_id: 1, is_optional: true) }
     let(:text_question) { build(:page, :with_text_settings, form_id: 1, input_type: "long_text") }
     let(:pages) { [address_question, date_question, name_question, selection_question, text_question] }
 

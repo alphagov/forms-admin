@@ -104,7 +104,7 @@ FactoryBot.define do
       end
 
       pages do
-        Array.new(pages_count) { association(:page, :with_selections_settings) }
+        Array.new(pages_count) { association(:page, :with_selection_settings) }
       end
     end
 
