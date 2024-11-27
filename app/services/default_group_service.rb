@@ -17,13 +17,28 @@ class DefaultGroupService
 
     Rails.logger.info "DefaultGroupService: User '#{user.name}' default group creation starting"
 
-    default_trial_group = Group.find_or_create_by!(
-      creator_id: user.id,
-      name: "#{user.name}’s trial group",
-      organisation_id: user.organisation_id,
-      status: :trial,
-    ) do |new_group|
-      Rails.logger.info "DefaultGroupService: Created default group '#{new_group.name}', with creator '#{new_group.creator.email}'"
+    default_trial_group_name = "#{user.name}’s trial group"
+    begin
+      default_trial_group = Group.find_or_create_by!(
+        creator_id: user.id,
+        name: default_trial_group_name,
+        organisation_id: user.organisation_id,
+        status: :trial,
+      ) do |new_group|
+        Rails.logger.info "DefaultGroupService: Created default group '#{new_group.name}', with creator '#{new_group.creator.email}'"
+      end
+    rescue ActiveRecord::RecordInvalid => e
+      raise unless e.record.errors.added? :name, :taken, value: default_trial_group_name
+      raise if Group.exists?(creator_id: user.id, name: default_trial_group_name, organisation_id: user.organisation_id, status: :active)
+
+      # Make a number to disambiguate, starting at 2, and increasing by one if that is also already taken
+      attempt ||= 1
+      attempt += 1
+      raise "DefaultGroupService: Aborted, possible infinite loop" if attempt > 100
+
+      default_trial_group_name = "#{user.name} #{attempt}’s trial group"
+      Rails.logger.info "DefaultGroupService: Group with name '#{e.record.name}' already exists, trying with '#{default_trial_group_name}"
+      retry
     end
 
     default_trial_group.memberships.find_or_create_by!(

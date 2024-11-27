@@ -110,5 +110,45 @@ RSpec.describe DefaultGroupService do
         ).to be_nil
       end
     end
+
+    context "when the user has the same name as another user in the same organisation who also has a default group" do
+      before do
+        another_user = create :user, name: "Batman", email: "batsignal@example.gov.uk", organisation: user.organisation
+
+        ActiveResource::HttpMock.respond_to(false) do |mock|
+          mock.get "/api/v1/forms?creator_id=#{another_user.id}", headers, [build(:form, id: 10)].to_json, 200
+        end
+
+        default_group_service.create_user_default_trial_group!(another_user)
+      end
+
+      it "does not throw an errr" do
+        expect {
+          default_group_service.create_user_default_trial_group!(user)
+        }.not_to raise_error
+      end
+
+      it "appends a number to the users name in the name of the default trial group" do
+        expect(default_group_service.create_user_default_trial_group!(user))
+          .to have_attributes name: "Batman 2’s trial group"
+      end
+
+      context "and there is yet another user with the same name in the same organisation with a default group" do
+        before do
+          yet_another_user = create :user, name: "Batman", email: "batman@joker.example.com", organisation: user.organisation
+
+          ActiveResource::HttpMock.respond_to(false) do |mock|
+            mock.get "/api/v1/forms?creator_id=#{yet_another_user.id}", headers, [build(:form, id: 100)].to_json, 200
+          end
+
+          default_group_service.create_user_default_trial_group!(yet_another_user)
+        end
+
+        it "appends a number to the users name in the name of the default trial group" do
+          expect(default_group_service.create_user_default_trial_group!(user))
+            .to have_attributes name: "Batman 3’s trial group"
+        end
+      end
+    end
   end
 end
