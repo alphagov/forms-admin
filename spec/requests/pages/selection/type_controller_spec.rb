@@ -89,7 +89,7 @@ describe Pages::Selection::TypeController, type: :request do
       end
 
       it "redirects the user to the selection options page" do
-        expect(response).to redirect_to long_lists_selection_options_new_path(form.id)
+        expect(response).to redirect_to selection_options_new_path(form.id)
       end
     end
 
@@ -173,7 +173,7 @@ describe Pages::Selection::TypeController, type: :request do
       end
 
       it "redirects the user to the selection options page" do
-        expect(response).to redirect_to long_lists_selection_options_edit_path(form.id)
+        expect(response).to redirect_to selection_options_edit_path(form.id)
       end
     end
 

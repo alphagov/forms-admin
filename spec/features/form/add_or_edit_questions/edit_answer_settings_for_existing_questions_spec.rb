@@ -77,7 +77,7 @@ private
     when :name
       name_settings_edit_path(form_id: form.id, page_id: question.id)
     when :selection
-      long_lists_selection_options_edit_path(form_id: form.id, page_id: question.id)
+      selection_options_edit_path(form_id: form.id, page_id: question.id)
     when :text
       text_settings_edit_path(form_id: form.id, page_id: question.id)
     end

@@ -25,8 +25,8 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
   let(:new_text_setting_path) { text_settings_new_path(form_id: draft_question.form_id) }
   let(:edit_long_lists_selection_type_path) { selection_type_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
   let(:new_long_lists_selection_type_path) { selection_type_new_path(form_id: draft_question.form_id) }
-  let(:edit_long_lists_selection_options_path) { long_lists_selection_options_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
-  let(:new_long_lists_selection_options_path) { long_lists_selection_options_new_path(form_id: draft_question.form_id) }
+  let(:edit_long_lists_selection_options_path) { selection_options_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
+  let(:new_long_lists_selection_options_path) { selection_options_new_path(form_id: draft_question.form_id) }
 
   before do
     allow(errors).to receive(:has_key?).with(:selection_options).and_return(selection_options_error_messages.present?)

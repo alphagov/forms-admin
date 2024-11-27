@@ -83,8 +83,8 @@ Rails.application.routes.draw do
         post "/date-settings" => "pages/date_settings#create", as: :date_settings_create
         get "/selection/type" => "pages/selection/type#new", as: :selection_type_new
         post "/selection/type" => "pages/selection/type#create", as: :selection_type_create
-        get "/selection/options" => "pages/selection/options#new", as: :long_lists_selection_options_new
-        post "/selection/options" => "pages/selection/options#create", as: :long_lists_selection_options_create
+        get "/selection/options" => "pages/selection/options#new", as: :selection_options_new
+        post "/selection/options" => "pages/selection/options#create", as: :selection_options_create
         get "/selection/bulk-options" => "pages/selection/bulk_options#new", as: :long_lists_selection_bulk_options_new
         post "/selection/bulk-options" => "pages/selection/bulk_options#create", as: :long_lists_selection_bulk_options_create
         get "/address-settings" => "pages/address_settings#new", as: :address_settings_new
@@ -129,8 +129,8 @@ Rails.application.routes.draw do
           post "/date-settings" => "pages/date_settings#update", as: :date_settings_update
           get "/selection/type" => "pages/selection/type#edit", as: :selection_type_edit
           post "/selection/type" => "pages/selection/type#update", as: :selection_type_update
-          get "/selection/options" => "pages/selection/options#edit", as: :long_lists_selection_options_edit
-          post "/selection/options" => "pages/selection/options#update", as: :long_lists_selection_options_update
+          get "/selection/options" => "pages/selection/options#edit", as: :selection_options_edit
+          post "/selection/options" => "pages/selection/options#update", as: :selection_options_update
           get "/selection/bulk-options" => "pages/selection/bulk_options#edit", as: :long_lists_selection_bulk_options_edit
           post "/selection/bulk-options" => "pages/selection/bulk_options#update", as: :long_lists_selection_bulk_options_update
           get "/address-settings" => "pages/address_settings#edit", as: :address_settings_edit

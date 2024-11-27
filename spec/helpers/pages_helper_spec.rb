@@ -8,7 +8,7 @@ RSpec.describe PagesHelper, type: :helper do
     context "when draft_question has no answer_settings" do
       it "returns options path" do
         expect(helper.selection_options_new_path_for_draft_question(draft_question))
-          .to eq(long_lists_selection_options_new_path(form_id: draft_question.form_id))
+          .to eq(selection_options_new_path(form_id: draft_question.form_id))
       end
     end
 
@@ -18,7 +18,7 @@ RSpec.describe PagesHelper, type: :helper do
 
       it "returns options path" do
         expect(helper.selection_options_new_path_for_draft_question(draft_question))
-          .to eq(long_lists_selection_options_new_path(form_id: draft_question.form_id))
+          .to eq(selection_options_new_path(form_id: draft_question.form_id))
       end
     end
 
@@ -37,7 +37,7 @@ RSpec.describe PagesHelper, type: :helper do
     context "when draft_question has no answer_settings" do
       it "returns options path" do
         expect(helper.selection_options_edit_path_for_draft_question(draft_question))
-          .to eq(long_lists_selection_options_edit_path(form_id: draft_question.form_id, page_id:))
+          .to eq(selection_options_edit_path(form_id: draft_question.form_id, page_id:))
       end
     end
 
@@ -47,7 +47,7 @@ RSpec.describe PagesHelper, type: :helper do
 
       it "returns options path" do
         expect(helper.selection_options_edit_path_for_draft_question(draft_question))
-          .to eq(long_lists_selection_options_edit_path(form_id: draft_question.form_id, page_id:))
+          .to eq(selection_options_edit_path(form_id: draft_question.form_id, page_id:))
       end
     end
 

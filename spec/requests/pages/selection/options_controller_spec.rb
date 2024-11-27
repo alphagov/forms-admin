@@ -31,7 +31,7 @@ describe Pages::Selection::OptionsController, type: :request do
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
       draft_question
-      get long_lists_selection_options_new_path(form_id: form.id)
+      get selection_options_new_path(form_id: form.id)
     end
 
     it "reads the existing form" do
@@ -40,7 +40,7 @@ describe Pages::Selection::OptionsController, type: :request do
 
     it "sets an instance variable for selection_options_path" do
       path = assigns(:selection_options_path)
-      expect(path).to eq long_lists_selection_options_new_path(form.id)
+      expect(path).to eq selection_options_new_path(form.id)
     end
 
     it "sets an instance variable for bulk_options_url" do
@@ -91,7 +91,7 @@ describe Pages::Selection::OptionsController, type: :request do
       end
 
       before do
-        post long_lists_selection_options_create_path form_id: form.id, params: { pages_selection_options_input: }
+        post selection_options_create_path form_id: form.id, params: { pages_selection_options_input: }
       end
 
       it "saves the selection options to the draft question" do
@@ -121,7 +121,7 @@ describe Pages::Selection::OptionsController, type: :request do
 
     context "when form is invalid" do
       before do
-        post long_lists_selection_options_create_path form_id: form.id, params: { pages_selection_options_input: { answer_settings: nil } }
+        post selection_options_create_path form_id: form.id, params: { pages_selection_options_input: { answer_settings: nil } }
       end
 
       it "renders the type of answer view if there are errors" do
@@ -141,7 +141,7 @@ describe Pages::Selection::OptionsController, type: :request do
         mock.get "/api/v1/forms/1/pages/2", headers, page.to_json, 200
       end
       draft_question
-      get long_lists_selection_options_edit_path(form_id: page.form_id, page_id: page.id)
+      get selection_options_edit_path(form_id: page.form_id, page_id: page.id)
     end
 
     it "reads the existing form" do
@@ -157,7 +157,7 @@ describe Pages::Selection::OptionsController, type: :request do
 
     it "sets an instance variable for selections_settings_path" do
       path = assigns(:selection_options_path)
-      expect(path).to eq long_lists_selection_options_edit_path(form.id)
+      expect(path).to eq selection_options_edit_path(form.id)
     end
 
     it "sets an instance variable for bulk_options_url" do
@@ -193,7 +193,7 @@ describe Pages::Selection::OptionsController, type: :request do
       end
 
       before do
-        post long_lists_selection_options_update_path(form_id: page.form_id, page_id: page.id),
+        post selection_options_update_path(form_id: page.form_id, page_id: page.id),
              params: { pages_selection_options_input: }
       end
 
@@ -224,7 +224,7 @@ describe Pages::Selection::OptionsController, type: :request do
 
     context "when form is invalid" do
       before do
-        post long_lists_selection_options_update_path form_id: form.id, page_id: page.id, params: { pages_selection_options_input: { answer_settings: nil } }
+        post selection_options_update_path form_id: form.id, page_id: page.id, params: { pages_selection_options_input: { answer_settings: nil } }
       end
 
       it "renders the selections settings view if there are errors" do
