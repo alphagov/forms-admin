@@ -29,6 +29,7 @@ class DefaultGroupService
       end
     rescue ActiveRecord::RecordInvalid => e
       raise unless e.record.errors.added? :name, :taken, value: default_trial_group_name
+      raise if Group.exists?(creator_id: user.id, name: default_trial_group_name, organisation_id: user.organisation_id, status: :active)
 
       # Make a number to disambiguate, starting at 2, and increasing by one if that is also already taken
       attempt ||= 1
