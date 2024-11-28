@@ -94,7 +94,7 @@ private
   end
 
   def delete_secondary_skip_link
-    govuk_link_to(I18n.t("page_route_card.delete"), "#")
+    govuk_link_to(I18n.t("page_route_card.delete"), delete_secondary_skip_path(form_id: form.id, page_id: page.id))
   end
 
   def secondary_skip_rows

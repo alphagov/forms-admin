@@ -1,0 +1,18 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.delete_secondary_skip'), false)) %>
+<% content_for :back_link, govuk_back_link_to(back_link_url, t('secondary_skip.new.back', page_position: delete_secondary_skip_input.page.position)) %>
+
+<%= form_with(model: delete_secondary_skip_input, url: destroy_secondary_skip_path(form_id: delete_secondary_skip_input.form.id, page_id: delete_secondary_skip_input.page.id), method: :delete) do |f| %>
+  <% if delete_secondary_skip_input.errors.any? %>
+    <%= f.govuk_error_summary %>
+  <% end %>
+
+  <span class="govuk-caption-l"><%= t("secondary_skip.new.caption", page_position: delete_secondary_skip_input.page.position) %></span>
+
+  <%= f.govuk_collection_radio_buttons :confirm,
+    delete_secondary_skip_input.values, ->(option) { option },
+     ->(option) { t('helpers.label.confirm_action_input.options.' + "#{option}") },
+     legend: { text: t("page_titles.delete_secondary_skip"), size: 'l', tag: 'h1' }
+  %>
+
+  <%= f.govuk_submit t("save_and_continue") %>
+<% end %>

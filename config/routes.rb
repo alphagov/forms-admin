@@ -118,6 +118,8 @@ Rails.application.routes.draw do
           post "/any-other-answer/questions-to-skip/new" => "pages/secondary_skip_#create", as: :create_secondary_skip
           get "/any-other-answer/questions-to-skip" => "pages/secondary_skip_#edit", as: :edit_secondary_skip
           post "/any-other-answer/questions-to-skip" => "pages/secondary_skip_#update", as: :update_secondary_skip
+          get "/any-other-answer/questions-to-skip/delete" => "pages/secondary_skip_#delete", as: :delete_secondary_skip
+          delete "/any-other-answer/questions-to-skip/delete" => "pages/secondary_skip_#destroy", as: :destroy_secondary_skip
         end
 
         scope "/edit" do
