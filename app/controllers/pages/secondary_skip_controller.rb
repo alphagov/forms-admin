@@ -1,7 +1,7 @@
 class Pages::SecondarySkipController < PagesController
   before_action :ensure_branch_routing_feature_enabled, :ensure_page_has_skip_condition
   before_action :ensure_secondary_skip_blank, only: %i[new create]
-  before_action :ensure_secondary_skip_exists, only: %i[edit update]
+  before_action :ensure_secondary_skip_exists, only: %i[edit update delete destroy]
 
   def new
     secondary_skip_input = Pages::SecondarySkipInput.new(form: current_form, page:)
@@ -46,10 +46,36 @@ class Pages::SecondarySkipController < PagesController
     end
   end
 
+  def delete
+    delete_secondary_skip_input = Pages::DeleteSecondarySkipInput.new(form: current_form, page:, record: secondary_skip_condition)
+
+    render template: "pages/secondary_skip/delete", locals: {
+      delete_secondary_skip_input:,
+      back_link_url: show_routes_path(form_id: current_form.id, page_id: page.id),
+    }
+  end
+
+  def destroy
+    delete_secondary_skip_input = Pages::DeleteSecondarySkipInput.new(delete_secondary_skip_input_params.merge(record: secondary_skip_condition))
+
+    if delete_secondary_skip_input.submit
+      redirect_to show_routes_path(form_id: current_form.id, page_id: page.id)
+    else
+      render template: "pages/secondary_skip/delete", locals: {
+        delete_secondary_skip_input:,
+        back_link_url: show_routes_path(form_id: current_form.id, page_id: page.id),
+      }, status: :unprocessable_entity
+    end
+  end
+
 private
 
   def secondary_skip_input_params
     params.require(:pages_secondary_skip_input).permit(:routing_page_id, :goto_page_id).merge(form: current_form, page:)
+  end
+
+  def delete_secondary_skip_input_params
+    params.require(:pages_delete_secondary_skip_input).permit(:confirm).merge(form: current_form, page:)
   end
 
   def ensure_branch_routing_feature_enabled
