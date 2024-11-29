@@ -23,7 +23,7 @@ class AddForms < ActiveRecord::Migration[7.2]
       t.string "s3_bucket_name"
       t.string "s3_bucket_aws_account_id"
       t.string "s3_bucket_region"
-      t.index ["external_id"], name: "index_forms_on_external_id", unique: true
+      t.index "external_id", unique: true
     end
 
     create_table "pages" do |t|
