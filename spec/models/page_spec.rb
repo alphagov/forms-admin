@@ -11,7 +11,7 @@ describe Page, type: :model do
 
         it "has many routing conditions" do
           expect(page.routing_conditions.length).to eq 3
-          expect(page.routing_conditions).to all be_a Condition
+          expect(page.routing_conditions).to all be_a Api::V1::ConditionResource
           expect(page.routing_conditions).to all have_attributes(routing_page_id: 10)
         end
 
@@ -26,7 +26,7 @@ describe Page, type: :model do
 
           it "has many routing conditions" do
             expect(page_resource.routing_conditions.length).to eq 3
-            expect(page_resource.routing_conditions).to all be_a Condition
+            expect(page_resource.routing_conditions).to all be_a Api::V1::ConditionResource
             expect(page_resource.routing_conditions).to all have_attributes(routing_page_id: 10)
           end
         end

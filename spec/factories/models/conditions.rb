@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :condition, class: "Condition" do
+  factory :condition, class: "Api::V1::ConditionResource" do
     routing_page_id { nil }
     check_page_id { nil }
     answer_value { nil }

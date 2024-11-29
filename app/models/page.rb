@@ -14,7 +14,7 @@ class Page < ActiveResource::Base
   ANSWER_TYPES_WITH_SETTINGS = %w[selection text date address name].freeze
 
   belongs_to :form
-  has_many :routing_conditions, class_name: :Condition
+  has_many :routing_conditions, class_name: "Api::V1::ConditionResource"
 
   validates :hint_text, length: { maximum: 500 }
 
@@ -52,7 +52,7 @@ class Page < ActiveResource::Base
 
   def conditions
     ActiveSupport::Deprecation.new.warn("Prefer Page#routing_conditions to Page#conditions")
-    routing_conditions.map { |routing_condition| Condition.new(routing_condition.attributes) }
+    routing_conditions.map { |routing_condition| Api::V1::ConditionResource.new(routing_condition.attributes) }
   end
 
   def question_with_number
