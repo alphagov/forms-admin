@@ -12,8 +12,7 @@ class AddForms < ActiveRecord::Migration[7.2]
       t.text "declaration_text"
       t.boolean "question_section_completed", default: false
       t.boolean "declaration_section_completed", default: false
-      t.datetime "created_at", null: false
-      t.datetime "updated_at", null: false
+      t.timestamps
       t.bigint "creator_id"
       t.text "what_happens_next_markdown"
       t.string "state"
@@ -34,8 +33,7 @@ class AddForms < ActiveRecord::Migration[7.2]
       t.integer "next_page"
       t.boolean "is_optional", null: false
       t.jsonb "answer_settings"
-      t.datetime "created_at", null: false
-      t.datetime "updated_at", null: false
+      t.timestamps
       t.bigint "form_id"
       t.integer "position"
       t.text "page_heading"
@@ -49,8 +47,7 @@ class AddForms < ActiveRecord::Migration[7.2]
       t.bigint "routing_page_id", comment: "The question page at which this conditional route takes place"
       t.bigint "goto_page_id", comment: "The question page which this conditions will skip forwards to"
       t.string "answer_value"
-      t.datetime "created_at", null: false
-      t.datetime "updated_at", null: false
+      t.timestamps
       t.boolean "skip_to_end", default: false
       t.index ["check_page_id"], name: "index_conditions_on_check_page_id"
       t.index ["goto_page_id"], name: "index_conditions_on_goto_page_id"
