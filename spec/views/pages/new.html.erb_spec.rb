@@ -3,12 +3,10 @@ require "rails_helper"
 RSpec.describe "pages/new" do
   let(:current_form) { build :form, :with_active_resource, id: 1, pages: [] }
   let(:draft_question) { build :draft_question }
-  let(:page) { Page.new(form_id: current_form.id) }
   let(:question_input) { build :question_input, draft_question:, answer_type: draft_question.answer_type, question_text: draft_question.question_text, answer_settings: draft_question.answer_settings, is_optional: draft_question.is_optional, is_repeatable: draft_question.is_repeatable }
 
   before do
     assign(:question_input, question_input)
-    assign(:page, page)
 
     render locals: { current_form:, draft_question: }
   end

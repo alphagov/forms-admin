@@ -11,8 +11,6 @@ class Pages::QuestionsController < PagesController
                                                is_repeatable: draft_question.is_repeatable,
                                                draft_question:)
 
-    # TODO: Remove this once we have a check your question view. The new view should also pull data directly from draft_question instead of through page model
-    @page = Page.new(form_id: current_form.id)
     render :new, locals: { current_form:, draft_question: }
   end
 
