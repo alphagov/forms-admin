@@ -4,14 +4,13 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      <span class="govuk-caption-l"><%= t("pages.question") %> <%= current_form.page_number(@page) %></span>
+      <span class="govuk-caption-l"><%= t("pages.question") %> <%= current_form.page_number(nil) %></span>
       <span class="govuk-visually-hidden"> - </span>
       <%= t("pages.heading") %>
     </h1>
 
     <%= render partial: 'form', locals: { is_new_page: true,
                                           form_object: current_form,
-                                          page_object: @page,
                                           draft_question:,
                                           question_input: @question_input,
                                           action_path: create_question_path(current_form.id),
