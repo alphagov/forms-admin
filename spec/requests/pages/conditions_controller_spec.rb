@@ -54,8 +54,9 @@ RSpec.describe Pages::ConditionsController, type: :request do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/1", headers, selected_page.to_json, 200
       end
+
+      allow(PageRepository).to receive(:find).with(page_id: "1", form_id: 1).and_return(selected_page)
 
       post routing_page_path(form_id: 1, params:)
     end
