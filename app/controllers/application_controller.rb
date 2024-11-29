@@ -64,7 +64,7 @@ class ApplicationController < ActionController::Base
   def set_request_id
     # Pass the request id to the API to enable tracing
     if Rails.env.production?
-      [Form, Page].each do |active_resource_model|
+      [Form, Api::V1::PageResource].each do |active_resource_model|
         active_resource_model.headers["X-Request-ID"] = request.request_id
       end
     end
