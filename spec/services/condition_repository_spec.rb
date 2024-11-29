@@ -20,7 +20,7 @@ describe ConditionRepository do
 
     it "creates a condition through ActiveResource" do
       described_class.create!(**condition_params)
-      expect(Condition.new(**condition_params)).to have_been_created
+      expect(Api::V1::ConditionResource.new(**condition_params)).to have_been_created
     end
   end
 
@@ -35,7 +35,7 @@ describe ConditionRepository do
 
     it "finds the condition through ActiveResource" do
       described_class.find(condition_id: condition.id, form_id: 1, page_id: 2)
-      expect(Condition.new(id: 4, form_id: 1, page_id: 2)).to have_been_read
+      expect(Api::V1::ConditionResource.new(id: 4, form_id: 1, page_id: 2)).to have_been_read
     end
   end
 
@@ -53,7 +53,7 @@ describe ConditionRepository do
       condition = described_class.find(condition_id: 4, form_id: 1, page_id: 2)
       condition.skip_to_end = true
       described_class.save!(condition)
-      expect(Condition.new(id: 4, skip_to_end: true, form_id: 1, page_id: 2)).to have_been_updated
+      expect(Api::V1::ConditionResource.new(id: 4, skip_to_end: true, form_id: 1, page_id: 2)).to have_been_updated
     end
   end
 
@@ -70,7 +70,7 @@ describe ConditionRepository do
     it "destroys the condition through ActiveResource" do
       condition = described_class.find(condition_id: 4, form_id: 1, page_id: 2)
       described_class.destroy(condition)
-      expect(Condition.new(id: 4, form_id: 1, page_id: 2)).to have_been_deleted
+      expect(Api::V1::ConditionResource.new(id: 4, form_id: 1, page_id: 2)).to have_been_deleted
     end
   end
 end

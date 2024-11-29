@@ -1,4 +1,5 @@
-class Condition < ActiveResource::Base
+class Api::V1::ConditionResource < ActiveResource::Base
+  self.element_name = "condition"
   self.site = Settings.forms_api.base_url
   self.prefix = "/api/v1/forms/:form_id/pages/:page_id/"
   self.include_format_in_path = false
