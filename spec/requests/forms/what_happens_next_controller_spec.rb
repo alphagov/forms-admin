@@ -13,7 +13,8 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
   end
 
   let(:form) do
-    Form.new(
+    build(
+      :form,
       name: "Form name",
       submission_email: "submission@email.com",
       id: 2,
@@ -23,13 +24,9 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
   end
 
   let(:updated_form) do
-    Form.new({
-      name: "Form name",
-      submission_email: "submission@email.com",
-      id: 2,
-      what_happens_next_markdown: "Wait until you get a reply",
-      live_at: nil,
-    })
+    updated_form = form.dup
+    updated_form.what_happens_next_markdown = "Wait until you get a reply"
+    updated_form
   end
 
   let(:user) { standard_user }
