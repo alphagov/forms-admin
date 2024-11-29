@@ -1,5 +1,5 @@
 <% set_page_title(title_with_error_prefix(t("page_titles.new_page"), @question_input.errors.any?)) %>
-<% content_for :back_link, govuk_back_link_to(form_pages_path(current_form)) %>
+<% content_for :back_link, govuk_back_link_to(form_pages_path(current_form.id)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -14,7 +14,7 @@
                                           page_object: @page,
                                           draft_question:,
                                           question_input: @question_input,
-                                          action_path: create_question_path(current_form),
+                                          action_path: create_question_path(current_form.id),
     } %>
   </div>
 </div>
