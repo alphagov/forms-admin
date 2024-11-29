@@ -13,7 +13,7 @@ class AddForms < ActiveRecord::Migration[7.2]
       t.boolean "question_section_completed", default: false
       t.boolean "declaration_section_completed", default: false
       t.timestamps
-      t.bigint "creator_id"
+      t.references :creator, index: false
       t.text "what_happens_next_markdown"
       t.string "state"
       t.string "payment_url"
@@ -34,26 +34,20 @@ class AddForms < ActiveRecord::Migration[7.2]
       t.boolean "is_optional", null: false
       t.jsonb "answer_settings"
       t.timestamps
-      t.bigint "form_id"
+      t.references :form, foreign_key: true
       t.integer "position"
       t.text "page_heading"
       t.text "guidance_markdown"
       t.boolean "is_repeatable", default: false, null: false
-      t.index ["form_id"], name: "index_pages_on_form_id"
     end
 
     create_table "conditions" do |t|
-      t.bigint "check_page_id", comment: "The question page this condition looks at to compare answers"
-      t.bigint "routing_page_id", comment: "The question page at which this conditional route takes place"
-      t.bigint "goto_page_id", comment: "The question page which this conditions will skip forwards to"
+      t.references :check_page, comment: "The question page this condition looks at to compare answers"
+      t.references :routing_page, comment: "The question page at which this conditional route takes place"
+      t.references :goto_page, comment: "The question page which this conditions will skip forwards to"
       t.string "answer_value"
       t.timestamps
       t.boolean "skip_to_end", default: false
-      t.index ["check_page_id"], name: "index_conditions_on_check_page_id"
-      t.index ["goto_page_id"], name: "index_conditions_on_goto_page_id"
-      t.index ["routing_page_id"], name: "index_conditions_on_routing_page_id"
     end
-
-    add_foreign_key "pages", "forms"
   end
 end
