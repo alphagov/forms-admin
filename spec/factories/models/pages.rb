@@ -9,7 +9,7 @@ class DataStruct < OpenStruct
 end
 
 FactoryBot.define do
-  factory :page, class: "Page" do
+  factory :page, class: "Api::V1::PageResource" do
     sequence(:id) { |n| n }
     question_text { Faker::Lorem.question.truncate(250) }
     answer_type { Page::ANSWER_TYPES_WITHOUT_SETTINGS.sample }

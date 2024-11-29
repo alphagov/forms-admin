@@ -48,7 +48,7 @@ RSpec.describe Pages::QuestionInput, type: :model do
 
         it "has an error message" do
           question_input.valid?
-          expect(question_input.errors[:question_text]).to include(I18n.t("activemodel.errors.models.page.attributes.question_text.too_long", count: 250))
+          expect(question_input.errors[:question_text]).to include(I18n.t("activemodel.errors.models.api/v1/page_resource.attributes.question_text.too_long", count: 250))
         end
       end
     end
