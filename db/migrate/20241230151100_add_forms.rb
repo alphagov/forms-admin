@@ -1,6 +1,6 @@
 class AddForms < ActiveRecord::Migration[7.2]
   def change
-    create_table "forms", force: :cascade do |t|
+    create_table "forms" do |t|
       t.text "name"
       t.text "submission_email"
       t.text "privacy_policy_url"
@@ -27,7 +27,7 @@ class AddForms < ActiveRecord::Migration[7.2]
       t.index ["external_id"], name: "index_forms_on_external_id", unique: true
     end
 
-    create_table "pages", force: :cascade do |t|
+    create_table "pages" do |t|
       t.text "question_text"
       t.text "hint_text"
       t.text "answer_type"
@@ -44,7 +44,7 @@ class AddForms < ActiveRecord::Migration[7.2]
       t.index ["form_id"], name: "index_pages_on_form_id"
     end
 
-    create_table "conditions", force: :cascade do |t|
+    create_table "conditions" do |t|
       t.bigint "check_page_id", comment: "The question page this condition looks at to compare answers"
       t.bigint "routing_page_id", comment: "The question page at which this conditional route takes place"
       t.bigint "goto_page_id", comment: "The question page which this conditions will skip forwards to"
