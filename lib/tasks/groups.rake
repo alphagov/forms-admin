@@ -9,6 +9,15 @@ namespace :groups do
     run_task("groups:change_organisation_dry_run", args, rollback: true)
   end
 
+  desc "Create default trial group for user who has forms not in a group"
+  task :create_user_default_trial_group, %i[user_id] => :environment do |_, args|
+    usage_message = "usage: rake create_user_default_trial_group[<user_id>]".freeze
+    abort usage_message if args[:user_id].blank?
+
+    user = User.find(args[:user_id])
+    DefaultGroupService.new.create_user_default_trial_group!(user)
+  end
+
   desc "Move all groups in one organisation to another"
   task :move_all_groups_between_organisations, %i[source_organisation_id target_organisation_id] => :environment do |_, args|
     task_name = "groups:move_all_groups_between_organisations"
