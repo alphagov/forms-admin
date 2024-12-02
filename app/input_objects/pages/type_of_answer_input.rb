@@ -1,10 +1,10 @@
 class Pages::TypeOfAnswerInput < BaseInput
-  attr_accessor :answer_type, :draft_question
+  attr_accessor :answer_type, :draft_question, :answer_types
 
   SELECTION_DEFAULT_OPTIONS = { selection_options: [{ name: "" }, { name: "" }] }.freeze
 
   validates :draft_question, presence: true
-  validates :answer_type, presence: true, inclusion: { in: Page::ANSWER_TYPES }
+  validates :answer_type, presence: true, inclusion: { in: :answer_types }
 
   def submit
     return false if invalid?

@@ -1,6 +1,8 @@
 class Pages::TypeOfAnswerController < PagesController
+  before_action :set_answer_types
+
   def new
-    @type_of_answer_input = Pages::TypeOfAnswerInput.new(answer_type: draft_question.answer_type)
+    @type_of_answer_input = Pages::TypeOfAnswerInput.new(answer_type: draft_question.answer_type, answer_types:)
     @type_of_answer_path = type_of_answer_create_path(current_form)
     render :type_of_answer, locals: { current_form: }
   end
@@ -17,7 +19,7 @@ class Pages::TypeOfAnswerController < PagesController
   end
 
   def edit
-    @type_of_answer_input = Pages::TypeOfAnswerInput.new(answer_type: draft_question.answer_type)
+    @type_of_answer_input = Pages::TypeOfAnswerInput.new(answer_type: draft_question.answer_type, answer_types:)
     @type_of_answer_path = type_of_answer_update_path(current_form)
     render :type_of_answer, locals: { current_form: }
   end
@@ -79,10 +81,24 @@ private
   end
 
   def answer_type_form_params
-    params.require(:pages_type_of_answer_input).permit(:answer_type).merge(draft_question:)
+    params.require(:pages_type_of_answer_input).permit(:answer_type).merge(draft_question:, answer_types:)
   end
 
   def answer_type_changed?
     @type_of_answer_input.answer_type != @type_of_answer_input.draft_question.answer_type
+  end
+
+  def file_upload_enabled
+    current_form.group&.file_upload_enabled
+  end
+
+  def set_answer_types
+    @answer_types = answer_types
+  end
+
+  def answer_types
+    return Page::ANSWER_TYPES_INCLUDING_FILE if file_upload_enabled
+
+    Page::ANSWER_TYPES_EXCLUDING_FILE
   end
 end

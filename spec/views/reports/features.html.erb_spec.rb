@@ -51,7 +51,7 @@ describe "reports/features.html.erb" do
     expect(rendered).to have_css(".govuk-summary-list__row", text: "Total live forms#{report.total_live_forms}")
   end
 
-  Page::ANSWER_TYPES.map(&:to_sym).each do |answer_type|
+  Page::ANSWER_TYPES_INCLUDING_FILE.map(&:to_sym).each do |answer_type|
     it "contains a heading for #{answer_type}" do
       expect(rendered).to have_css("th", text: I18n.t("helpers.label.page.answer_type_options.names.#{answer_type}"))
     end

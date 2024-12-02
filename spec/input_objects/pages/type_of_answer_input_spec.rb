@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Pages::TypeOfAnswerInput, type: :model do
-  let(:type_of_answer_input) { build :type_of_answer_input, draft_question: }
+  let(:type_of_answer_input) { build :type_of_answer_input, draft_question:, answer_types: }
   let(:draft_question) { build :draft_question, form_id: 1 }
+  let(:answer_types) { Page::ANSWER_TYPES_EXCLUDING_FILE }
 
   it "has a valid factory" do
-    type_of_answer_input = build(:type_of_answer_input, draft_question:)
+    type_of_answer_input = build(:type_of_answer_input, draft_question:, answer_types:)
     expect(type_of_answer_input).to be_valid
   end
 
@@ -18,10 +19,11 @@ RSpec.describe Pages::TypeOfAnswerInput, type: :model do
     it "is invalid given an empty string answer_type" do
       type_of_answer_input.answer_type = ""
       expect(type_of_answer_input).to be_invalid
+      expect(type_of_answer_input.errors.full_messages_for(:answer_type)).to include("Answer type Select the type of answer you need")
     end
 
     it "is valid if answer type is a valid page answer type" do
-      Page::ANSWER_TYPES.each do |answer_type|
+      Page::ANSWER_TYPES_EXCLUDING_FILE.each do |answer_type|
         type_of_answer_input.answer_type = answer_type
         expect(type_of_answer_input).to be_valid "#{answer_type} is not a Page answer type"
       end
@@ -32,6 +34,24 @@ RSpec.describe Pages::TypeOfAnswerInput, type: :model do
 
       it "is invalid" do
         expect(type_of_answer_input).to be_invalid
+      end
+    end
+
+    context "when file upload is disabled" do
+      let(:answer_types) { Page::ANSWER_TYPES_EXCLUDING_FILE }
+
+      it "does not allow file answer type" do
+        type_of_answer_input.answer_type = "file"
+        expect(type_of_answer_input).to be_invalid
+      end
+    end
+
+    context "when file upload is enabled" do
+      let(:answer_types) { Page::ANSWER_TYPES_INCLUDING_FILE }
+
+      it "allows file answer type" do
+        type_of_answer_input.answer_type = "file"
+        expect(type_of_answer_input).to be_valid
       end
     end
   end

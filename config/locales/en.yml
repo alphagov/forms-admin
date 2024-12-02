@@ -681,6 +681,7 @@ en:
             address: ''
             date: ''
             email: ''
+            file: ''
             name: ''
             national_insurance_number: ''
             number: People will only be able to enter whole or decimal numbers
@@ -693,6 +694,7 @@ en:
             address: Address
             date: Date
             email: Email address
+            file: File
             name: Person’s name
             national_insurance_number: National Insurance number
             number: Number
