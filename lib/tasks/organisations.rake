@@ -3,9 +3,22 @@ namespace :organisations do
   task fetch: :environment do
     include AdvisoryLock::DSL
 
-    with_lock("forms-admin:organisations:fetch") do
-      OrganisationsFetcher.new.call
-    end
+    Rails.logger.info("Starting organisation fetch")
+
+    run_organisation_fetch(rollback: false)
+
+    Rails.logger.info("Organisation fetch complete")
+  end
+
+  desc "Dry run for update organisations table using data from GOV.UK"
+  task fetch_dry_run: :environment do
+    include AdvisoryLock::DSL
+
+    Rails.logger.info("Starting dry run of organisation fetch")
+
+    run_organisation_fetch(rollback: true)
+
+    Rails.logger.info("Dry run of organisation fetch complete")
   end
 
   desc "Add organisation that is not in GOV.UK organisation database"
@@ -22,5 +35,15 @@ namespace :organisations do
     )
 
     puts "Created #{organisation.inspect}"
+  end
+end
+
+def run_organisation_fetch(rollback:)
+  ActiveRecord::Base.transaction do
+    with_lock("forms-admin:organisations:fetch") do
+      OrganisationsFetcher.new.call
+    end
+
+    raise ActiveRecord::Rollback if rollback
   end
 end
