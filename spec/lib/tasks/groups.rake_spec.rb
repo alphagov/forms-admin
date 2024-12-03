@@ -263,6 +263,7 @@ RSpec.describe "groups.rake" do
       expect {
         task.invoke
       }.to raise_error(SystemExit)
+      .and output(/usage/).to_stderr
     end
 
     it "with invalid group id raises an error" do
