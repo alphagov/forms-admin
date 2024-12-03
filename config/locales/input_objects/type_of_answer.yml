@@ -7,3 +7,4 @@ en:
           attributes:
             answer_type:
               blank: Select the type of answer you need
+              inclusion: Select the type of answer you need

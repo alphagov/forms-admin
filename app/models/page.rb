@@ -6,7 +6,8 @@ class Page < ActiveResource::Base
   self.include_format_in_path = false
   headers["X-API-Token"] = Settings.forms_api.auth_key
 
-  ANSWER_TYPES = %w[name organisation_name email phone_number national_insurance_number address date selection number text].freeze
+  ANSWER_TYPES_EXCLUDING_FILE = %w[name organisation_name email phone_number national_insurance_number address date selection number text].freeze
+  ANSWER_TYPES_INCLUDING_FILE = (ANSWER_TYPES_EXCLUDING_FILE + %w[file]).freeze
 
   ANSWER_TYPES_WITHOUT_SETTINGS = %w[organisation_name email phone_number national_insurance_number number].freeze
 
@@ -16,7 +17,9 @@ class Page < ActiveResource::Base
 
   validates :hint_text, length: { maximum: 500 }
 
-  validates :answer_type, presence: true, inclusion: { in: ANSWER_TYPES }
+  # we validate that users can't choose file if file upload isn't enabled for their group when creating the draft_question
+  validates :answer_type, presence: true, inclusion: { in: ANSWER_TYPES_INCLUDING_FILE }
+
   before_validation :convert_boolean_fields
 
   def has_next_page?

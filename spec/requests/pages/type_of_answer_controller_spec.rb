@@ -6,7 +6,8 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
   let(:type_of_answer_input) { build :type_of_answer_input }
 
-  let(:group) { create(:group, organisation: standard_user.organisation) }
+  let(:file_upload_enabled) { false }
+  let(:group) { create(:group, organisation: standard_user.organisation, file_upload_enabled:) }
 
   before do
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
@@ -35,6 +36,20 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
     it "renders the template" do
       expect(response).to have_rendered(:type_of_answer)
+    end
+
+    context "when file upload is disabled for the group" do
+      it "does not show the file answer type option" do
+        expect(response.body).not_to include("File")
+      end
+    end
+
+    context "when file upload is enabled for the group" do
+      let(:file_upload_enabled) { true }
+
+      it "shows the file answer type option" do
+        expect(response.body).to include("File")
+      end
     end
   end
 
@@ -175,6 +190,20 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
     it "renders the template" do
       expect(response).to have_rendered(:type_of_answer)
+    end
+
+    context "when file upload is disabled for the group" do
+      it "does not show the file answer type option" do
+        expect(response.body).not_to include("File")
+      end
+    end
+
+    context "when file upload is enabled for the group" do
+      let(:file_upload_enabled) { true }
+
+      it "shows the file answer type option" do
+        expect(response.body).to include("File")
+      end
     end
   end
 
