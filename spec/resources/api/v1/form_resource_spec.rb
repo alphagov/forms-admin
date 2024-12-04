@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Form, type: :model do
+describe Api::V1::FormResource, type: :model do
   let(:id) { 1 }
   let(:organisation) { build :organisation, id: 1 }
   let(:form) { described_class.new(id:, name: "Form 1", organisation:, submission_email: "") }

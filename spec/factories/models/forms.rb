@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :form, class: :Form do
+  factory :form, class: "Api::V1::FormResource" do
     sequence(:name) { |n| "Form #{n}" }
     sequence(:form_slug) { |n| "form-#{n}" }
     has_draft_version { true }
