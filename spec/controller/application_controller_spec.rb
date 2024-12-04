@@ -84,7 +84,7 @@ describe ApplicationController, type: :controller do
   describe "#current_form" do
     it "returns the current form" do
       params = ActionController::Parameters.new(form_id: id)
-      allow(Form).to receive(:find).with(id).and_return(form)
+      allow(Api::V1::FormResource).to receive(:find).with(id).and_return(form)
       allow(controller).to receive(:params).and_return(params)
 
       expect(controller.current_form).to eq form
@@ -92,12 +92,12 @@ describe ApplicationController, type: :controller do
 
     it "memorizes the find form request so it doesn't have to repeat the calls" do
       params = ActionController::Parameters.new(form_id: id)
-      allow(Form).to receive(:find).with(id).and_return(form)
+      allow(Api::V1::FormResource).to receive(:find).with(id).and_return(form)
       allow(controller).to receive(:params).and_return(params)
       controller.current_form
       controller.current_form
 
-      expect(Form).to have_received(:find).exactly(1).times
+      expect(Api::V1::FormResource).to have_received(:find).exactly(1).times
     end
   end
 end
