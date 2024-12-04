@@ -5,7 +5,7 @@ namespace :organisations do
 
     Rails.logger.info("Starting organisation fetch")
 
-    run_organisation_fetch(rollback: false)
+    run_organisation_fetch(dry_run: false)
 
     Rails.logger.info("Organisation fetch complete")
   end
@@ -16,7 +16,7 @@ namespace :organisations do
 
     Rails.logger.info("Starting dry run of organisation fetch")
 
-    run_organisation_fetch(rollback: true)
+    run_organisation_fetch(dry_run: true)
 
     Rails.logger.info("Dry run of organisation fetch complete")
   end
@@ -38,12 +38,8 @@ namespace :organisations do
   end
 end
 
-def run_organisation_fetch(rollback:)
-  ActiveRecord::Base.transaction do
-    with_lock("forms-admin:organisations:fetch") do
-      OrganisationsFetcher.new.call
-    end
-
-    raise ActiveRecord::Rollback if rollback
+def run_organisation_fetch(dry_run:)
+  with_lock("forms-admin:organisations:fetch") do
+    OrganisationsFetcher.new.call(dry_run:)
   end
 end
