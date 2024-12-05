@@ -26,7 +26,7 @@ describe "reports/selection_questions/summary.html.erb" do
   end
 
   it "has expected page title" do
-    expect(view.content_for(:title)).to eq "Selection from a list of options in live forms"
+    expect(view.content_for(:title)).to eq "Selection from a list of options answer type usage in live forms"
   end
 
   it "has a back link to the selection from a list of options usage report" do
@@ -43,7 +43,7 @@ describe "reports/selection_questions/summary.html.erb" do
   end
 
   it "has link to questions with autocomplete report" do
-    expect(rendered).to have_link("View questions", href: report_selection_questions_with_autocomplete_path)
+    expect(rendered).to have_link("Questions where you can select one from over 30 options", href: report_selection_questions_with_autocomplete_path)
   end
 
   it "has statistics about questions with radio buttons" do
@@ -56,7 +56,7 @@ describe "reports/selection_questions/summary.html.erb" do
   end
 
   it "has link to questions with radio buttons report" do
-    expect(rendered).to have_link("View questions", href: report_selection_questions_with_radios_path)
+    expect(rendered).to have_link("Questions where you can select one from up to 30 options", href: report_selection_questions_with_radios_path)
   end
 
   it "has statistics about questions with checkboxes buttons" do
@@ -69,6 +69,6 @@ describe "reports/selection_questions/summary.html.erb" do
   end
 
   it "has link to questions with checkboxes report" do
-    expect(rendered).to have_link("View questions", href: report_selection_questions_with_checkboxes_path)
+    expect(rendered).to have_link("Questions where you can select one or more from up to 30 questions", href: report_selection_questions_with_checkboxes_path)
   end
 end
