@@ -70,4 +70,35 @@ RSpec.describe OrganisationsFetcher do
 
     expect(organisation.abbreviation).to eq "DfT"
   end
+
+  context "when doing a dry run" do
+    let(:dry_run) { true }
+
+    it "does not create an organisation" do
+      stub_organisation_api_has_organisations_with_bodies([
+        organisation_details_for_slug("department-for-tests"),
+      ])
+
+      expect(Rails.logger).to receive(:info).with(/Creating/)
+
+      expect {
+        organisations_fetcher.call(dry_run:)
+      }.not_to change(Organisation, :count)
+    end
+
+    it "does not update an existing organisation" do
+      organisation = create :organisation, slug: "department-for-testing", abbreviation: nil
+
+      stub_organisation_api_has_organisations_with_bodies([
+        organisation_details_for_slug("department-for-testing", organisation.govuk_content_id).deep_merge({ details: { abbreviation: "DfT" } }),
+      ])
+
+      expect(Rails.logger).to receive(:info).with(/Updating/)
+
+      organisations_fetcher.call(dry_run:)
+      organisation.reload
+
+      expect(organisation.abbreviation).to be_nil
+    end
+  end
 end
