@@ -100,8 +100,9 @@ RSpec.describe Pages::ConditionsController, type: :request do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/1", headers, selected_page.to_json, 200
       end
+
+      allow(PageRepository).to receive(:find).with(page_id: "1", form_id: 1).and_return(selected_page)
 
       get new_condition_path(form_id: 1, page_id: 1)
     end
@@ -134,8 +135,9 @@ RSpec.describe Pages::ConditionsController, type: :request do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/1", headers, selected_page.to_json, 200
       end
+
+      allow(PageRepository).to receive(:find).with(page_id: "1", form_id: 1).and_return(selected_page)
 
       conditions_input = Pages::ConditionsInput.new(form:, page: selected_page, answer_value: "Yes", goto_page_id: 3)
 
@@ -195,8 +197,9 @@ RSpec.describe Pages::ConditionsController, type: :request do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
       end
+
+      allow(PageRepository).to receive(:find).with(page_id: selected_page.id.to_s, form_id: 1).and_return(selected_page)
 
       allow(ConditionRepository).to receive(:find).and_return(condition)
 
@@ -245,8 +248,9 @@ RSpec.describe Pages::ConditionsController, type: :request do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
       end
+
+      allow(PageRepository).to receive(:find).with(page_id: selected_page.id.to_s, form_id: 1).and_return(selected_page)
 
       conditions_input = Pages::ConditionsInput.new(form:, page: selected_page, record: condition, answer_value: "Yes", goto_page_id: 3)
 
@@ -309,8 +313,9 @@ RSpec.describe Pages::ConditionsController, type: :request do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
       end
+
+      allow(PageRepository).to receive(:find).with(page_id: selected_page.id.to_s, form_id: 1).and_return(selected_page)
 
       allow(ConditionRepository).to receive(:find).and_return(condition)
 
@@ -355,8 +360,9 @@ RSpec.describe Pages::ConditionsController, type: :request do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
       end
+
+      allow(PageRepository).to receive(:find).with(page_id: selected_page.id.to_s, form_id: 1).and_return(selected_page)
 
       allow(ConditionRepository).to receive(:find).and_return(condition)
       allow(ConditionRepository).to receive(:destroy)

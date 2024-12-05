@@ -24,7 +24,7 @@ class Pages::Selection::BulkOptionsController < PagesController
     @bulk_options_path = selection_bulk_options_update_path(current_form)
     @bulk_options_input = Pages::Selection::BulkOptionsInput.new(draft_question:)
     @bulk_options_input.assign_form_values
-    @back_link_url = edit_question_path(current_form, page)
+    @back_link_url = edit_question_path(current_form, page.id)
     render "pages/selection/bulk_options", locals: { current_form: }
   end
 
@@ -32,7 +32,7 @@ class Pages::Selection::BulkOptionsController < PagesController
     @bulk_options_input = Pages::Selection::BulkOptionsInput.new(**bulk_options_input_params,
                                                                            draft_question:)
     @bulk_options_path = selection_bulk_options_update_path(current_form)
-    @back_link_url = edit_question_path(current_form, page)
+    @back_link_url = edit_question_path(current_form, page.id)
 
     if @bulk_options_input.submit
       redirect_to edit_question_path(current_form)
