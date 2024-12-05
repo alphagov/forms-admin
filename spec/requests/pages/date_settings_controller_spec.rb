@@ -91,8 +91,10 @@ RSpec.describe Pages::DateSettingsController, type: :request do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/2", headers, page.to_json, 200
       end
+
+      allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
+
       draft_question
       get date_settings_edit_path(form_id: page.form_id, page_id: page.id)
     end
@@ -127,9 +129,10 @@ RSpec.describe Pages::DateSettingsController, type: :request do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/2", headers, page.to_json, 200
-        mock.put "/api/v1/forms/1/pages/2", post_headers
       end
+
+      allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
+      allow(PageRepository).to receive(:save!).with(hash_including(page_id: "2", form_id: 1))
     end
 
     context "when form is valid and ready to update in the DB" do
