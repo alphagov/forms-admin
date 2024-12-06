@@ -34,7 +34,7 @@ class Pages::SelectionsSettingsController < PagesController
                                                                                                    .map { |option| { name: option[:name] } },
                                                                     include_none_of_the_above: draft_question.is_optional,
                                                                     draft_question:)
-    @back_link_url = edit_question_path(current_form, page)
+    @back_link_url = edit_question_path(current_form, page.id)
     render :selections_settings, locals: { current_form: }
   end
 
@@ -44,7 +44,7 @@ class Pages::SelectionsSettingsController < PagesController
                                                                     include_none_of_the_above: include_none_of_the_above_param_values,
                                                                     draft_question:)
     @selections_settings_path = selections_settings_update_path(current_form)
-    @back_link_url = edit_question_path(current_form, page)
+    @back_link_url = edit_question_path(current_form, page.id)
 
     if params[:add_another]
       @selections_settings_input.add_another

@@ -26,7 +26,7 @@ class Pages::GuidanceController < PagesController
   def edit
     guidance_input = Pages::GuidanceInput.new(page_heading: draft_question.page_heading,
                                               guidance_markdown: draft_question.guidance_markdown)
-    back_link = edit_question_path(current_form, page)
+    back_link = edit_question_path(current_form, page.id)
 
     render :guidance, locals: view_locals(page, guidance_input, back_link)
   end

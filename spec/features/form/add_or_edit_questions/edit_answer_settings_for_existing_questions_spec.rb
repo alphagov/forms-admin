@@ -8,11 +8,12 @@ feature "Editing answer_settings for existing question", type: :feature do
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms/1", headers, form.to_json, 200
       mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      mock.post "/api/v1/forms/1/pages", post_headers
-      pages.each do |page|
-        mock.get "/api/v1/forms/1/pages/#{page.id}", headers, page.to_json, 200
-      end
     end
+
+    pages.each do |page|
+      allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: 1).and_return(page)
+    end
+    allow(PageRepository).to receive(:create!).with(hash_including(form_id: 1))
 
     GroupForm.create! group:, form_id: form.id
     create(:membership, group:, user: standard_user, added_by: standard_user)
