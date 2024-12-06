@@ -1,4 +1,4 @@
-class Pages::LongListsSelection::TypeInput < BaseInput
+class Pages::Selection::TypeInput < BaseInput
   attr_accessor :only_one_option, :draft_question
 
   validates :only_one_option, inclusion: { in: %w[true false] }

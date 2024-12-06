@@ -37,7 +37,7 @@ FactoryBot.define do
       answer_type { Page::ANSWER_TYPES_WITHOUT_SETTINGS.sample }
     end
 
-    trait :with_selections_settings do
+    trait :with_selection_settings do
       transient do
         only_one_option { "true" }
         selection_options { [{ name: "Option 1" }, { name: "Option 2" }] }

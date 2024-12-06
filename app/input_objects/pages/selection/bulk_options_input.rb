@@ -1,4 +1,4 @@
-class Pages::LongListsSelection::BulkOptionsInput < BaseInput
+class Pages::Selection::BulkOptionsInput < BaseInput
   include LoggingHelper
 
   MAXIMUM_CHOOSE_ONLY_ONE_OPTION = 1000
@@ -46,7 +46,7 @@ private
     return errors.add(:bulk_selection_options, maximum_error_type) if options.length > maximum_options
 
     duplicates = selection_options_without_blanks.filter { |option| selection_options_without_blanks.count(option) > 1 }
-    errors.add(:bulk_selection_options, I18n.t("activemodel.errors.models.pages/long_lists_selection/bulk_options_input.attributes.bulk_selection_options.uniqueness", duplicate: duplicates.first)) if duplicates.any?
+    errors.add(:bulk_selection_options, I18n.t("activemodel.errors.models.pages/selection/bulk_options_input.attributes.bulk_selection_options.uniqueness", duplicate: duplicates.first)) if duplicates.any?
   end
 
   def selection_options_without_blanks

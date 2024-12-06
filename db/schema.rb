@@ -54,7 +54,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_29_152103) do
     t.string "status", default: "trial"
     t.bigint "creator_id"
     t.bigint "upgrade_requester_id"
-    t.boolean "long_lists_enabled", default: false
     t.boolean "file_upload_enabled", default: false
     t.index ["creator_id"], name: "index_groups_on_creator_id"
     t.index ["external_id"], name: "index_groups_on_external_id", unique: true
@@ -104,6 +103,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_29_152103) do
     t.index ["default_group_id"], name: "index_organisations_on_default_group_id"
     t.index ["govuk_content_id"], name: "index_organisations_on_govuk_content_id", unique: true
     t.index ["slug"], name: "index_organisations_on_slug", unique: true
+  end
+
+  create_table "schema_info", id: false, force: :cascade do |t|
+    t.integer "version", default: 0, null: false
   end
 
   create_table "users", force: :cascade do |t|

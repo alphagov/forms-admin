@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Pages::LongListsSelection::TypeController, type: :request do
+describe Pages::Selection::TypeController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
 
@@ -35,7 +35,7 @@ describe Pages::LongListsSelection::TypeController, type: :request do
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
       draft_question
-      get long_lists_selection_type_new_path(form_id: form.id)
+      get selection_type_new_path(form_id: form.id)
     end
 
     it "reads the existing form" do
@@ -44,11 +44,11 @@ describe Pages::LongListsSelection::TypeController, type: :request do
 
     it "sets an instance variable for selection_type_path" do
       path = assigns(:selection_type_path)
-      expect(path).to eq long_lists_selection_type_create_path(form.id)
+      expect(path).to eq selection_type_create_path(form.id)
     end
 
     it "renders the template" do
-      expect(response).to have_rendered("pages/long_lists_selection/type")
+      expect(response).to have_rendered("pages/selection/type")
     end
 
     context "when draft question does not contain a setting for only_one_option" do
@@ -78,7 +78,7 @@ describe Pages::LongListsSelection::TypeController, type: :request do
 
     context "when form is valid and ready to store" do
       before do
-        post long_lists_selection_type_create_path form_id: form.id, params: { pages_long_lists_selection_type_input: { only_one_option: true } }
+        post selection_type_create_path form_id: form.id, params: { pages_selection_type_input: { only_one_option: true } }
       end
 
       it "saves the the info to draft question" do
@@ -89,23 +89,23 @@ describe Pages::LongListsSelection::TypeController, type: :request do
       end
 
       it "redirects the user to the selection options page" do
-        expect(response).to redirect_to long_lists_selection_options_new_path(form.id)
+        expect(response).to redirect_to selection_options_new_path(form.id)
       end
     end
 
     context "when form is invalid" do
       before do
-        post long_lists_selection_type_create_path form_id: form.id, params: { pages_long_lists_selection_type_input: { answer_settings: nil } }
+        post selection_type_create_path form_id: form.id, params: { pages_selection_type_input: { answer_settings: nil } }
       end
 
       it "renders the type of answer view if there are errors" do
-        expect(response).to have_rendered("pages/long_lists_selection/type")
+        expect(response).to have_rendered("pages/selection/type")
       end
     end
   end
 
   describe "#edit" do
-    let(:page) { build :page, :with_selections_settings, id: 2, form_id: form.id }
+    let(:page) { build :page, :with_selection_settings, id: 2, form_id: form.id }
     let(:page_id) { page.id }
 
     before do
@@ -115,7 +115,7 @@ describe Pages::LongListsSelection::TypeController, type: :request do
         mock.get "/api/v1/forms/1/pages/2", headers, page.to_json, 200
       end
       draft_question
-      get long_lists_selection_type_edit_path(form_id: page.form_id, page_id: page.id)
+      get selection_type_edit_path(form_id: page.form_id, page_id: page.id)
     end
 
     it "reads the existing form" do
@@ -129,11 +129,11 @@ describe Pages::LongListsSelection::TypeController, type: :request do
 
     it "sets an instance variable for selection_type_path" do
       path = assigns(:selection_type_path)
-      expect(path).to eq long_lists_selection_type_update_path(form.id)
+      expect(path).to eq selection_type_update_path(form.id)
     end
 
     it "renders the template" do
-      expect(response).to have_rendered("pages/long_lists_selection/type")
+      expect(response).to have_rendered("pages/selection/type")
     end
 
     # This ensures there is backwards compatibility for existing questions as we previously set "only_one_option" to
@@ -162,7 +162,7 @@ describe Pages::LongListsSelection::TypeController, type: :request do
 
     context "when form is valid and ready to update in the DB" do
       before do
-        post long_lists_selection_type_update_path form_id: form.id, page_id: page.id, params: { pages_long_lists_selection_type_input: { only_one_option: true } }
+        post selection_type_update_path form_id: form.id, page_id: page.id, params: { pages_selection_type_input: { only_one_option: true } }
       end
 
       it "saves the the info to draft question" do
@@ -173,17 +173,17 @@ describe Pages::LongListsSelection::TypeController, type: :request do
       end
 
       it "redirects the user to the selection options page" do
-        expect(response).to redirect_to long_lists_selection_options_edit_path(form.id)
+        expect(response).to redirect_to selection_options_edit_path(form.id)
       end
     end
 
     context "when form is invalid" do
       before do
-        post long_lists_selection_type_update_path form_id: form.id, page_id: page.id, params: { pages_long_lists_selection_type_input: { answer_settings: nil } }
+        post selection_type_update_path form_id: form.id, page_id: page.id, params: { pages_selection_type_input: { answer_settings: nil } }
       end
 
       it "renders the type of answer view if there are errors" do
-        expect(response).to have_rendered("pages/long_lists_selection/type")
+        expect(response).to have_rendered("pages/selection/type")
       end
     end
   end

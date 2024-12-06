@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Pages::LongListsSelection::OptionsInput do
+RSpec.describe Pages::Selection::OptionsInput do
   let(:only_one_option) { "true" }
   let(:draft_question) { build :draft_question, answer_type: "selection", answer_settings: { only_one_option: } }
   let(:selection_options) { [{ name: "option 1" }, { name: "option 2" }] }
@@ -10,14 +10,14 @@ RSpec.describe Pages::LongListsSelection::OptionsInput do
       it "is invalid if include_none_of_the_above is blank" do
         input = described_class.new(draft_question:, include_none_of_the_above: nil, selection_options:)
         expect(input).not_to be_valid
-        expected_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/options_input.attributes.include_none_of_the_above.inclusion")
+        expected_message = I18n.t("activemodel.errors.models.pages/selection/options_input.attributes.include_none_of_the_above.inclusion")
         expect(input.errors.full_messages_for(:include_none_of_the_above)).to include("Include none of the above #{expected_message}")
       end
 
       it "is invalid if include_none_of_the_above value is not in allowed values" do
         input = described_class.new(draft_question:, include_none_of_the_above: "foo", selection_options:)
         expect(input).not_to be_valid
-        expected_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/options_input.attributes.include_none_of_the_above.inclusion")
+        expected_message = I18n.t("activemodel.errors.models.pages/selection/options_input.attributes.include_none_of_the_above.inclusion")
         expect(input.errors.full_messages_for(:include_none_of_the_above)).to include("Include none of the above #{expected_message}")
       end
 
@@ -36,7 +36,7 @@ RSpec.describe Pages::LongListsSelection::OptionsInput do
       it "is invalid if fewer than 2 selection options are provided" do
         selection_options = []
         input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
-        error_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/options_input.attributes.selection_options.minimum")
+        error_message = I18n.t("activemodel.errors.models.pages/selection/options_input.attributes.selection_options.minimum")
         expect(input).not_to be_valid
 
         expect(input.errors.full_messages_for(:selection_options)).to include("Selection options #{error_message}")
@@ -45,7 +45,7 @@ RSpec.describe Pages::LongListsSelection::OptionsInput do
       it "is invalid if selection options are not unique" do
         selection_options = [{ name: "option 1" }, { name: "option 2" }, { name: "option 1" }]
         input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
-        error_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/options_input.attributes.selection_options.uniqueness")
+        error_message = I18n.t("activemodel.errors.models.pages/selection/options_input.attributes.selection_options.uniqueness")
         expect(input).not_to be_valid
 
         expect(input.errors.full_messages_for(:selection_options)).to include("Selection options #{error_message}")
@@ -62,7 +62,7 @@ RSpec.describe Pages::LongListsSelection::OptionsInput do
         it "is invalid if more than 1000 selection options are provided" do
           selection_options = (1..1001).to_a.map { |i| OpenStruct.new(name: i.to_s) }
           input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
-          error_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/options_input.attributes.selection_options.maximum_choose_only_one_option")
+          error_message = I18n.t("activemodel.errors.models.pages/selection/options_input.attributes.selection_options.maximum_choose_only_one_option")
           expect(input).not_to be_valid
 
           expect(input.errors.full_messages_for(:selection_options)).to include("Selection options #{error_message}")
@@ -82,7 +82,7 @@ RSpec.describe Pages::LongListsSelection::OptionsInput do
         it "is invalid if more than 30 selection options are provided" do
           selection_options = (1..31).to_a.map { |i| OpenStruct.new(name: i.to_s) }
           input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
-          error_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/options_input.attributes.selection_options.maximum_choose_more_than_one_option")
+          error_message = I18n.t("activemodel.errors.models.pages/selection/options_input.attributes.selection_options.maximum_choose_more_than_one_option")
           expect(input).not_to be_valid
 
           expect(input.errors.full_messages_for(:selection_options)).to include("Selection options #{error_message}")

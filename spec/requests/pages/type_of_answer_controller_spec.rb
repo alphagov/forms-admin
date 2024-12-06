@@ -244,7 +244,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         end
 
         it "redirects the user to the selection type page" do
-          expect(response).to redirect_to long_lists_selection_type_edit_path(form.id, page.id)
+          expect(response).to redirect_to selection_type_edit_path(form.id, page.id)
         end
       end
     end

@@ -333,7 +333,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
 
   def build_pages_with_skip_condition
     build_pages.tap do |pages|
-      pages[0] = build :page, :with_selections_settings, id: 1, routing_conditions: [
+      pages[0] = build :page, :with_selection_settings, id: 1, routing_conditions: [
         build(:condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Option 1", goto_page_id: pages[2].id, skip_to_end: false),
       ]
     end

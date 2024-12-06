@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "pages/long_lists_selection/bulk_options.html.erb", type: :view do
+describe "pages/selection/bulk_options.html.erb", type: :view do
   let(:form) { build :form, id: 1, pages: [page] }
   let(:bulk_options_input) { build :bulk_options_input, draft_question: page }
   let(:page) { OpenStruct.new(answer_type: "selection", answer_settings:) }
@@ -22,13 +22,13 @@ describe "pages/long_lists_selection/bulk_options.html.erb", type: :view do
     # # setup instance variables
     bulk_options_input.assign_form_values
     @bulk_options_input = bulk_options_input
-    @bulk_options_path = long_lists_selection_bulk_options_create_path(form.id)
+    @bulk_options_path = selection_bulk_options_create_path(form.id)
     @back_link_url = back_link_url
   end
 
   context "when there are no errors" do
     before do
-      render(template: "pages/long_lists_selection/bulk_options")
+      render(template: "pages/selection/bulk_options")
     end
 
     it "does not display the error summary" do
@@ -92,7 +92,7 @@ describe "pages/long_lists_selection/bulk_options.html.erb", type: :view do
     end
 
     it "contains a radio question for choosing whether to make the form live" do
-      expect(rendered).to have_css("fieldset", text: I18n.t("helpers.legend.pages_long_lists_selection_bulk_options_input.include_none_of_the_above"))
+      expect(rendered).to have_css("fieldset", text: I18n.t("helpers.legend.pages_selection_bulk_options_input.include_none_of_the_above"))
       expect(rendered).to have_field("Yes", type: "radio")
       expect(rendered).to have_field("No", type: "radio")
     end
@@ -101,7 +101,7 @@ describe "pages/long_lists_selection/bulk_options.html.erb", type: :view do
   context "when there are errors" do
     before do
       bulk_options_input.errors.add(:include_none_of_the_above, "Select ‘Yes’ or ‘No’")
-      render(template: "pages/long_lists_selection/bulk_options")
+      render(template: "pages/selection/bulk_options")
     end
 
     it "displays the error summary" do

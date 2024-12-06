@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "pages/long_lists_selection/options.html.erb", type: :view do
+describe "pages/selection/options.html.erb", type: :view do
   let(:form) { build :form, id: 1 }
   let(:page) { build :page }
   let(:page_number) { 1 }
@@ -26,9 +26,9 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
     assign(:selection_options_path, selection_options_path)
     assign(:back_link_url, back_link_url)
     assign(:bulk_options_url, bulk_options_url)
-    assign(:selection_options_input, Pages::LongListsSelection::OptionsInput.new(selection_options:, include_none_of_the_above:, draft_question:))
+    assign(:selection_options_input, Pages::Selection::OptionsInput.new(selection_options:, include_none_of_the_above:, draft_question:))
 
-    render(template: "pages/long_lists_selection/options")
+    render(template: "pages/selection/options")
   end
 
   describe "selection options" do
@@ -64,7 +64,7 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
         let(:selection_options) { (1..999).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
 
         it "has an add another button" do
-          expect(rendered).to have_button(I18n.t("selections_settings.add_another"))
+          expect(rendered).to have_button(I18n.t("selection_options.add_another"))
         end
 
         it "does not have inset text stating you cannot add more options" do
@@ -76,7 +76,7 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
         let(:selection_options) { (1..1000).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
 
         it "does not have an add another button" do
-          expect(rendered).not_to have_button(I18n.t("selections_settings.add_another"))
+          expect(rendered).not_to have_button(I18n.t("selection_options.add_another"))
         end
 
         it "has inset text stating you cannot add more options" do
@@ -100,7 +100,7 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
         let(:selection_options) { (1..29).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
 
         it "has an add another button" do
-          expect(rendered).to have_button(I18n.t("selections_settings.add_another"))
+          expect(rendered).to have_button(I18n.t("selection_options.add_another"))
         end
 
         it "has inset text stating you cannot add more options" do
@@ -112,7 +112,7 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
         let(:selection_options) { (1..30).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
 
         it "does not have an add another button" do
-          expect(rendered).not_to have_button(I18n.t("selections_settings.add_another"))
+          expect(rendered).not_to have_button(I18n.t("selection_options.add_another"))
         end
 
         it "has inset text stating you cannot add more options" do
@@ -127,8 +127,8 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
       let(:include_none_of_the_above) { "true" }
 
       it "has 'Yes' radio selected" do
-        expect(rendered).to have_checked_field("pages_long_lists_selection_options_input[include_none_of_the_above]", with: "true")
-        expect(rendered).to have_unchecked_field("pages_long_lists_selection_options_input[include_none_of_the_above]", with: "false")
+        expect(rendered).to have_checked_field("pages_selection_options_input[include_none_of_the_above]", with: "true")
+        expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "false")
       end
     end
 
@@ -136,8 +136,8 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
       let(:include_none_of_the_above) { "false" }
 
       it "has 'No' radio selected" do
-        expect(rendered).to have_checked_field("pages_long_lists_selection_options_input[include_none_of_the_above]", with: "false")
-        expect(rendered).to have_unchecked_field("pages_long_lists_selection_options_input[include_none_of_the_above]", with: "true")
+        expect(rendered).to have_checked_field("pages_selection_options_input[include_none_of_the_above]", with: "false")
+        expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "true")
       end
     end
 
@@ -145,8 +145,8 @@ describe "pages/long_lists_selection/options.html.erb", type: :view do
       let(:include_none_of_the_above) { nil }
 
       it "does not have a radio option selected" do
-        expect(rendered).to have_unchecked_field("pages_long_lists_selection_options_input[include_none_of_the_above]", with: "false")
-        expect(rendered).to have_unchecked_field("pages_long_lists_selection_options_input[include_none_of_the_above]", with: "true")
+        expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "false")
+        expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "true")
       end
     end
   end

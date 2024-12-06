@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "pages/long_lists_selection/type.html.erb", type: :view do
+describe "pages/selection/type.html.erb", type: :view do
   let(:form) { build :form, id: 1 }
   let(:page) { build :page, routing_conditions: }
   let(:page_number) { 1 }
@@ -9,7 +9,7 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
   let(:only_one_option) { "true" }
   let(:draft_question) { build :draft_question, answer_type: "selection" }
   let(:routing_conditions) { [] }
-  let(:selection_type_input) { Pages::LongListsSelection::TypeInput.new(only_one_option:, draft_question:) }
+  let(:selection_type_input) { Pages::Selection::TypeInput.new(only_one_option:, draft_question:) }
 
   before do
     # # mock the form.page_number method
@@ -29,15 +29,15 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
 
   describe "only one option radios" do
     before do
-      render(template: "pages/long_lists_selection/type")
+      render(template: "pages/selection/type")
     end
 
     context "when input object has value of true" do
       let(:only_one_option) { "true" }
 
       it "has 'Yes' radio selected" do
-        expect(rendered).to have_checked_field("pages_long_lists_selection_type_input[only_one_option]", with: "true")
-        expect(rendered).to have_unchecked_field("pages_long_lists_selection_type_input[only_one_option]", with: "false")
+        expect(rendered).to have_checked_field("pages_selection_type_input[only_one_option]", with: "true")
+        expect(rendered).to have_unchecked_field("pages_selection_type_input[only_one_option]", with: "false")
       end
     end
 
@@ -45,8 +45,8 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
       let(:only_one_option) { "false" }
 
       it "has 'No' radio selected" do
-        expect(rendered).to have_checked_field("pages_long_lists_selection_type_input[only_one_option]", with: "false")
-        expect(rendered).to have_unchecked_field("pages_long_lists_selection_type_input[only_one_option]", with: "true")
+        expect(rendered).to have_checked_field("pages_selection_type_input[only_one_option]", with: "false")
+        expect(rendered).to have_unchecked_field("pages_selection_type_input[only_one_option]", with: "true")
       end
     end
 
@@ -54,8 +54,8 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
       let(:only_one_option) { nil }
 
       it "does not have a radio option selected" do
-        expect(rendered).to have_unchecked_field("pages_long_lists_selection_type_input[only_one_option]", with: "true")
-        expect(rendered).to have_unchecked_field("pages_long_lists_selection_type_input[only_one_option]", with: "false")
+        expect(rendered).to have_unchecked_field("pages_selection_type_input[only_one_option]", with: "true")
+        expect(rendered).to have_unchecked_field("pages_selection_type_input[only_one_option]", with: "false")
       end
     end
   end
@@ -64,7 +64,7 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
     describe "routing warning" do
       context "when creating a new question" do
         it "does not display a warning about routes being deleted if only one option changes" do
-          render(template: "pages/long_lists_selection/type")
+          render(template: "pages/selection/type")
           expect(rendered).not_to have_selector(".govuk-notification-banner")
         end
       end
@@ -74,7 +74,7 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
 
         context "when no routing conditions set" do
           it "does not display a warning about routes being deleted" do
-            render(template: "pages/long_lists_selection/type")
+            render(template: "pages/selection/type")
             expect(rendered).not_to have_selector(".govuk-notification-banner__content")
           end
         end
@@ -85,7 +85,7 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
           context "when the options will not need to be reduced" do
             before do
               allow(selection_type_input).to receive(:need_to_reduce_options?).and_return false
-              render(template: "pages/long_lists_selection/type")
+              render(template: "pages/selection/type")
             end
 
             it "displays a warning about routes being deleted" do
@@ -96,7 +96,7 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
           context "when a routing condition is set and the options will need to be reduced" do
             before do
               allow(selection_type_input).to receive(:need_to_reduce_options?).and_return true
-              render(template: "pages/long_lists_selection/type")
+              render(template: "pages/selection/type")
             end
 
             it "displays a combined warning about routes being deleted and needing to reduce the options" do
@@ -111,7 +111,7 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
       context "when the options will not need to be reduced" do
         before do
           allow(selection_type_input).to receive(:need_to_reduce_options?).and_return false
-          render(template: "pages/long_lists_selection/type")
+          render(template: "pages/selection/type")
         end
 
         it "does not display a warning about reducing the number of options" do
@@ -122,7 +122,7 @@ describe "pages/long_lists_selection/type.html.erb", type: :view do
       context "when the options will need to be reduced" do
         before do
           allow(selection_type_input).to receive(:need_to_reduce_options?).and_return true
-          render(template: "pages/long_lists_selection/type")
+          render(template: "pages/selection/type")
         end
 
         it "does not display a warning about reducing the number of options" do

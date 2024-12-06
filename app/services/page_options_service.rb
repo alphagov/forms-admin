@@ -70,7 +70,7 @@ private
   def selection_options
     [
       { key: { text: I18n.t("page_options_service.answer_type") }, value: { text: selection_answer_type } },
-      { key: { text: I18n.t("selections_settings.options_title") }, value: { text: selection_list } },
+      { key: { text: I18n.t("page_options_service.options_title") }, value: { text: selection_list } },
     ]
   end
 

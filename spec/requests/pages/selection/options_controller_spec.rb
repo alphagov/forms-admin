@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Pages::LongListsSelection::OptionsController, type: :request do
+describe Pages::Selection::OptionsController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
 
@@ -31,7 +31,7 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
       draft_question
-      get long_lists_selection_options_new_path(form_id: form.id)
+      get selection_options_new_path(form_id: form.id)
     end
 
     it "reads the existing form" do
@@ -40,16 +40,16 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
 
     it "sets an instance variable for selection_options_path" do
       path = assigns(:selection_options_path)
-      expect(path).to eq long_lists_selection_options_new_path(form.id)
+      expect(path).to eq selection_options_new_path(form.id)
     end
 
     it "sets an instance variable for bulk_options_url" do
       path = assigns(:bulk_options_url)
-      expect(path).to eq long_lists_selection_bulk_options_new_path(form.id)
+      expect(path).to eq selection_bulk_options_new_path(form.id)
     end
 
     it "renders the template" do
-      expect(response).to have_rendered("pages/long_lists_selection/options")
+      expect(response).to have_rendered("pages/selection/options")
     end
 
     context "when draft question already contains selection settings" do
@@ -83,7 +83,7 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
     end
 
     context "when form is valid and ready to store" do
-      let(:pages_long_lists_selection_options_input) do
+      let(:pages_selection_options_input) do
         {
           selection_options: { "0": { name: "Option 1" }, "1": { name: "Option 2" } },
           include_none_of_the_above: true,
@@ -91,7 +91,7 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
       end
 
       before do
-        post long_lists_selection_options_create_path form_id: form.id, params: { pages_long_lists_selection_options_input: }
+        post selection_options_create_path form_id: form.id, params: { pages_selection_options_input: }
       end
 
       it "saves the selection options to the draft question" do
@@ -121,17 +121,17 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
 
     context "when form is invalid" do
       before do
-        post long_lists_selection_options_create_path form_id: form.id, params: { pages_long_lists_selection_options_input: { answer_settings: nil } }
+        post selection_options_create_path form_id: form.id, params: { pages_selection_options_input: { answer_settings: nil } }
       end
 
       it "renders the type of answer view if there are errors" do
-        expect(response).to have_rendered("pages/long_lists_selection/options")
+        expect(response).to have_rendered("pages/selection/options")
       end
     end
   end
 
   describe "#edit" do
-    let(:page) { build :page, :with_selections_settings, id: 2, form_id: form.id }
+    let(:page) { build :page, :with_selection_settings, id: 2, form_id: form.id }
     let(:page_id) { page.id }
 
     before do
@@ -141,7 +141,7 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
         mock.get "/api/v1/forms/1/pages/2", headers, page.to_json, 200
       end
       draft_question
-      get long_lists_selection_options_edit_path(form_id: page.form_id, page_id: page.id)
+      get selection_options_edit_path(form_id: page.form_id, page_id: page.id)
     end
 
     it "reads the existing form" do
@@ -157,16 +157,16 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
 
     it "sets an instance variable for selections_settings_path" do
       path = assigns(:selection_options_path)
-      expect(path).to eq long_lists_selection_options_edit_path(form.id)
+      expect(path).to eq selection_options_edit_path(form.id)
     end
 
     it "sets an instance variable for bulk_options_url" do
       path = assigns(:bulk_options_url)
-      expect(path).to eq long_lists_selection_bulk_options_edit_path(form.id)
+      expect(path).to eq selection_bulk_options_edit_path(form.id)
     end
 
     it "renders the template" do
-      expect(response).to have_rendered("pages/long_lists_selection/options")
+      expect(response).to have_rendered("pages/selection/options")
     end
   end
 
@@ -185,7 +185,7 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
     end
 
     context "when form is valid and ready to update in the DB" do
-      let(:pages_long_lists_selection_options_input) do
+      let(:pages_selection_options_input) do
         {
           selection_options: { "0": { name: "Option 1" }, "1": { name: "Option 2" } },
           include_none_of_the_above: true,
@@ -193,8 +193,8 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
       end
 
       before do
-        post long_lists_selection_options_update_path(form_id: page.form_id, page_id: page.id),
-             params: { pages_long_lists_selection_options_input: }
+        post selection_options_update_path(form_id: page.form_id, page_id: page.id),
+             params: { pages_selection_options_input: }
       end
 
       it "saves the selection options to the draft question" do
@@ -224,11 +224,11 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
 
     context "when form is invalid" do
       before do
-        post long_lists_selection_options_update_path form_id: form.id, page_id: page.id, params: { pages_long_lists_selection_options_input: { answer_settings: nil } }
+        post selection_options_update_path form_id: form.id, page_id: page.id, params: { pages_selection_options_input: { answer_settings: nil } }
       end
 
-      it "renders the selections settings view if there are errors" do
-        expect(response).to have_rendered("pages/long_lists_selection/options")
+      it "renders the selection options view if there are errors" do
+        expect(response).to have_rendered("pages/selection/options")
       end
     end
   end

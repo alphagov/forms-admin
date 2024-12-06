@@ -1,4 +1,4 @@
-class Pages::LongListsSelection::OptionsInput < BaseInput
+class Pages::Selection::OptionsInput < BaseInput
   include LoggingHelper
 
   DEFAULT_OPTIONS = { selection_options: [{ name: "" }, { name: "" }] }.freeze

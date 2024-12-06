@@ -4,7 +4,7 @@ describe "pages/secondary_skip/new.html.erb" do
   let(:form) { build :form, id: 1, pages: [page] }
   let(:page) do
     build(:page,
-          :with_selections_settings,
+          :with_selection_settings,
           id: 1,
           position: 1,
           answer_settings: DataStruct.new(

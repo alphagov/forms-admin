@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Pages::LongListsSelection::BulkOptionsInput, type: :model do
+RSpec.describe Pages::Selection::BulkOptionsInput, type: :model do
   let(:bulk_options_input) { build :bulk_options_input, draft_question: }
   let(:only_one_option) { "true" }
   let(:draft_question) { build :draft_question, answer_type: "selection", answer_settings: { only_one_option: } }
@@ -12,7 +12,7 @@ RSpec.describe Pages::LongListsSelection::BulkOptionsInput, type: :model do
   describe "validations" do
     it "is invalid if fewer than 2 Bulk selection options are provided" do
       bulk_options_input.bulk_selection_options = "A single option"
-      error_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/bulk_options_input.attributes.bulk_selection_options.minimum")
+      error_message = I18n.t("activemodel.errors.models.pages/selection/bulk_options_input.attributes.bulk_selection_options.minimum")
       expect(bulk_options_input).not_to be_valid
 
       expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
@@ -35,7 +35,7 @@ RSpec.describe Pages::LongListsSelection::BulkOptionsInput, type: :model do
 
       it "is invalid if more than 1000 Bulk selection options are provided" do
         bulk_options_input.bulk_selection_options = (1..1001).to_a.join("\n")
-        error_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/bulk_options_input.attributes.bulk_selection_options.maximum_choose_only_one_option")
+        error_message = I18n.t("activemodel.errors.models.pages/selection/bulk_options_input.attributes.bulk_selection_options.maximum_choose_only_one_option")
         expect(bulk_options_input).not_to be_valid
 
         expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
@@ -59,7 +59,7 @@ RSpec.describe Pages::LongListsSelection::BulkOptionsInput, type: :model do
 
       it "is invalid if more than 30 Bulk selection options are provided" do
         bulk_options_input.bulk_selection_options = (1..31).to_a.join("\n")
-        error_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/bulk_options_input.attributes.bulk_selection_options.maximum_choose_more_than_one_option")
+        error_message = I18n.t("activemodel.errors.models.pages/selection/bulk_options_input.attributes.bulk_selection_options.maximum_choose_more_than_one_option")
         expect(bulk_options_input).not_to be_valid
 
         expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
@@ -68,7 +68,7 @@ RSpec.describe Pages::LongListsSelection::BulkOptionsInput, type: :model do
 
     it "is invalid if there are duplicate values" do
       bulk_options_input.bulk_selection_options = "1\n2\n2"
-      error_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/bulk_options_input.attributes.bulk_selection_options.uniqueness", duplicate: "2")
+      error_message = I18n.t("activemodel.errors.models.pages/selection/bulk_options_input.attributes.bulk_selection_options.uniqueness", duplicate: "2")
       expect(bulk_options_input).not_to be_valid
 
       expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
@@ -78,7 +78,7 @@ RSpec.describe Pages::LongListsSelection::BulkOptionsInput, type: :model do
       let(:bulk_options_input) { build :bulk_options_input, include_none_of_the_above: nil }
 
       it "is invalid" do
-        error_message = I18n.t("activemodel.errors.models.pages/long_lists_selection/bulk_options_input.attributes.include_none_of_the_above.inclusion")
+        error_message = I18n.t("activemodel.errors.models.pages/selection/bulk_options_input.attributes.include_none_of_the_above.inclusion")
         expect(bulk_options_input).to be_invalid
         expect(bulk_options_input.errors.full_messages_for(:include_none_of_the_above)).to include("Include none of the above #{error_message}")
       end

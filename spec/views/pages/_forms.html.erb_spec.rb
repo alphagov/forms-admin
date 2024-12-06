@@ -52,7 +52,7 @@ describe "pages/_form.html.erb", type: :view do
   end
 
   context "when the question is an only one option selection" do
-    let(:page) { build :page, :with_selections_settings, id: 2, form_id: form.id }
+    let(:page) { build :page, :with_selection_settings, id: 2, form_id: form.id }
 
     it "does not have the radio input for repeatable" do
       expect(rendered).not_to have_field("pages_question_input[is_repeatable]", type: :radio)
@@ -60,7 +60,7 @@ describe "pages/_form.html.erb", type: :view do
   end
 
   context "when the question is an only more than one option selection" do
-    let(:page) { build :page, :with_selections_settings, only_one_option: false, id: 2, form_id: form.id }
+    let(:page) { build :page, :with_selection_settings, only_one_option: false, id: 2, form_id: form.id }
 
     it "does not have the radio input for repeatable" do
       expect(rendered).not_to have_field("pages_question_input[is_repeatable]", type: :radio)

@@ -3,7 +3,7 @@ en:
   activemodel:
     errors:
       models:
-        pages/long_lists_selection/options_input:
+        pages/selection/options_input:
           attributes:
             include_none_of_the_above:
               inclusion: Select ‘Yes’ if the list should include an option for ‘None of the above’
