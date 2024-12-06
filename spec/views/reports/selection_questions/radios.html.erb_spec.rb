@@ -21,7 +21,7 @@ describe "reports/selection_questions/radios.html.erb" do
   end
 
   it "has expected page title" do
-    expect(view.content_for(:title)).to eq "Select one only - 30 options or fewer in live forms"
+    expect(view.content_for(:title)).to eq "Questions where you can select one from up to 30 options"
   end
 
   it "has a back link to the selection from a list of options usage report" do
