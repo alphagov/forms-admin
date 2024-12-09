@@ -1,0 +1,12 @@
+<%= form_with(model: delete_confirmation_input, url:, method: 'delete') do |f| %>
+  <% if delete_confirmation_input&.errors.any? %>
+    <%= f.govuk_error_summary %>
+  <% end %>
+  <span class="govuk-caption-l"><%= caption_text %></span>
+  <%= f.govuk_collection_radio_buttons :confirm,
+                                       delete_confirmation_input.values, ->(option) { option }, ->(option) { t('helpers.label.confirm_action_input.options.' + "#{option}") },
+                                       legend: { text: legend_text, size: 'l', tag: 'h1' }
+                                       %>
+
+  <%= f.govuk_submit %>
+<% end %>

@@ -16,11 +16,7 @@ module Forms
 
       if @delete_confirmation_input.valid?
         if @delete_confirmation_input.confirmed?
-          if params[:page_id].present?
-            delete_page(current_form, @page)
-          else
-            delete_form(current_form)
-          end
+          delete_form(current_form)
         else
           redirect_to @back_url
         end
@@ -52,19 +48,10 @@ module Forms
     def load_page_variables
       @delete_confirmation_input = DeleteConfirmationInput.new
 
-      if params[:page_id].present?
-        @page = PageRepository.find(page_id: params[:page_id], form_id: current_form.id)
-        @url = destroy_page_path(current_form, @page.id)
-        @confirm_deletion_legend = t("forms_delete_confirmation_input.confirm_deletion_page")
-        @item_name = @page.question_text
-        @back_url = edit_question_path(current_form, @page.id)
-      else
-        @url = destroy_form_path(current_form)
-        @confirm_deletion_legend = t("forms_delete_confirmation_input.confirm_deletion")
-        @confirm_deletion_live_form = t("forms_delete_confirmation_input.confirm_deletion_live_form") if current_form.live?
-        @item_name = current_form.name
-        @back_url = form_path(current_form)
-      end
+      @url = destroy_form_path(current_form)
+      @confirm_deletion_legend = t("forms_delete_confirmation_input.confirm_deletion")
+      @item_name = current_form.name
+      @back_url = form_path(current_form)
     end
 
     def delete_form(form)
@@ -72,16 +59,6 @@ module Forms
 
       if form.destroy
         redirect_to success_url, status: :see_other, success: "Successfully deleted ‘#{form.name}’"
-      else
-        raise StandardError, "Deletion unsuccessful"
-      end
-    end
-
-    def delete_page(form, page)
-      success_url = form_pages_path(form)
-
-      if PageRepository.destroy(page)
-        redirect_to success_url, status: :see_other, success: "Successfully deleted ‘#{page.question_text}’"
       else
         raise StandardError, "Deletion unsuccessful"
       end

@@ -4,9 +4,10 @@ RSpec.describe PagesController, type: :request do
   let(:form_response) { build :form, id: 2 }
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
+  let(:membership) { create :membership, group:, user: standard_user }
 
   before do
-    Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
+    membership
     login_as_standard_user
   end
 
@@ -86,8 +87,8 @@ RSpec.describe PagesController, type: :request do
     end
   end
 
-  describe "Deleting an existing page" do
-    describe "Given a valid page" do
+  describe "#delete" do
+    describe "given a valid page" do
       let(:page) do
         Page.new({
           id: 1,
@@ -113,13 +114,25 @@ RSpec.describe PagesController, type: :request do
       end
 
       it "renders the delete page template" do
-        expect(response).to render_template("forms/delete_confirmation/delete")
+        expect(response).to render_template("pages/delete")
+      end
+
+      it "reads the form through the page repository" do
+        expect(PageRepository).to have_received(:find)
+      end
+
+      context "when current user is not in group for form the page is in" do
+        let(:membership) { nil }
+
+        it "returns an error" do
+          expect(response).to have_http_status :forbidden
+        end
       end
     end
   end
 
-  describe "Destroying an existing page" do
-    describe "Given a valid page" do
+  describe "#destroy" do
+    describe "given a valid page" do
       let(:page) do
         Page.new({
           id: 1,
@@ -149,8 +162,24 @@ RSpec.describe PagesController, type: :request do
         delete destroy_page_path(form_id: 2, page_id: 1, forms_delete_confirmation_input: { confirm: "yes" })
       end
 
-      it "Redirects you to the page index screen" do
+      it "redirects you to the page index screen" do
         expect(response).to redirect_to(form_pages_path)
+      end
+
+      it "destroys the page through the page repository" do
+        expect(PageRepository).to have_received(:destroy)
+      end
+
+      context "when current user is not in group for form" do
+        let(:membership) { nil }
+
+        it "returns an error" do
+          expect(response).to have_http_status :forbidden
+        end
+
+        it "does not call destroy through the page repository" do
+          expect(PageRepository).not_to have_received(:destroy)
+        end
       end
     end
   end

@@ -144,8 +144,8 @@ Rails.application.routes.draw do
         end
 
         scope "/delete" do
-          get "/" => "forms/delete_confirmation#delete", as: :delete_page
-          delete "/" => "forms/delete_confirmation#destroy", as: :destroy_page
+          get "/" => "pages#delete", as: :delete_page
+          delete "/" => "pages#destroy", as: :destroy_page
         end
       end
     end

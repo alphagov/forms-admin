@@ -12,7 +12,8 @@ class FormPolicy
     user.groups.include?(form.group) || user.is_organisations_admin?(form.group&.organisation)
   end
 
-  alias_method :delete?, :can_view_form?
+  alias_method :can_edit_form?, :can_view_form?
+  alias_method :delete?, :can_edit_form?
   alias_method :destroy?, :delete?
 
   def can_add_page_routing_conditions?
