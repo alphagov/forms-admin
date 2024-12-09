@@ -21,7 +21,7 @@ describe "reports/selection_questions/autocomplete.html.erb" do
   end
 
   it "has expected page title" do
-    expect(view.content_for(:title)).to eq "Select one only - more than 30 options in live forms"
+    expect(view.content_for(:title)).to eq "Questions where you can select one from over 30 options"
   end
 
   it "has a back link to the selection from a list of options usage report" do

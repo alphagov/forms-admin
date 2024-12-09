@@ -1272,6 +1272,8 @@ en:
         live_forms_with_payments: Live forms with payments
         live_forms_with_routes: Live forms with routes
         total_live_forms: Total live forms
+      long_list_usage:
+        title: Selection from a list of options feature usage in live forms
       title: Feature and answer type usage in live forms
     index:
       title: Reports
@@ -1283,9 +1285,9 @@ en:
       title: When users last signed in
     selection_questions:
       autocomplete:
-        title: Select one only - more than 30 options in live forms
+        title: Questions where you can select one from over 30 options
       checkboxes:
-        title: Select one or more in live forms
+        title: Questions where you can select one or more from up to 30 options
       questions:
         back_link: Back to selection from a list of options usage
         none_of_the_above_no: 'No'
@@ -1296,21 +1298,23 @@ en:
           number_of_options: Number of options
           question: Question
       radios:
-        title: Select one only - 30 options or fewer in live forms
+        title: Questions where you can select one from up to 30 options
       summary:
         autocomplete:
-          heading: Select one only - more than 30 options
+          heading: Select one from over 30 options
           live_forms: Live forms with more than 30 options
+          view_questions: Questions where you can select one from over 30 options
         back_link: Back to feature usage
         checkboxes:
           heading: Select one or more
           live_forms: Live forms using one or more
+          view_questions: Questions where you can select one or more from up to 30 questions
         number_of_questions: Number of questions
         radios:
-          heading: Select one only - 30 options or fewer
+          heading: Select one from up to 30 options
           live_forms: Live forms with 30 options or fewer
-        title: Selection from a list of options in live forms
-        view_questions: View questions
+          view_questions: Questions where you can select one from up to 30 options
+        title: Selection from a list of options answer type usage in live forms
         with_none_of_the_above: Questions with ‘None of the above’
     users:
       heading: Number of users per organisation
