@@ -29,22 +29,13 @@ RSpec.describe "forms/delete_confirmation/delete" do
     expect(view.content_for(:back_link)).to have_link "Back", href: "/forms/1"
   end
 
+  it "has a delete confirmation input to confirm deletion of the form" do
+    expect(rendered).to render_template "input_objects/forms/_delete_confirmation_input"
+  end
+
   describe "delete confirmation input" do
     it "posts the confirm value to the destroy action" do
       expect(rendered).to have_element "form", action: "/forms/1/delete", method: "post"
-    end
-
-    it "has radio buttons to set confirmation to yes or no" do
-      expect(rendered).to have_field "Yes", type: "radio", name: "forms_delete_confirmation_input[confirm]"
-      expect(rendered).to have_field "No", type: "radio", name: "forms_delete_confirmation_input[confirm]"
-    end
-
-    it "has a legend for the radio buttons" do
-      expect(rendered).to have_css "fieldset legend:has(~ .govuk-radios)", text: "Are you sure you want to delete this draft?"
-    end
-
-    it "has a submit button" do
-      expect(rendered).to have_button "Continue", class: "govuk-button"
     end
   end
 end
