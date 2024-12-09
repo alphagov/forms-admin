@@ -1,0 +1,10 @@
+<% set_page_title(title_with_error_prefix(@confirm_deletion_legend, @delete_confirmation_input.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(@back_url) %>
+
+<%= render(
+  @delete_confirmation_input,
+  url: @url,
+  caption_text: @item_name,
+  legend_text: @confirm_deletion_legend,
+  hint_text: nil,
+) %>
