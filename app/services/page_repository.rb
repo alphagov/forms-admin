@@ -13,7 +13,6 @@ class PageRepository
                 page_heading:,
                 guidance_markdown:,
                 answer_type:)
-
       Page.create!(form_id:,
                    question_text:,
                    hint_text:,

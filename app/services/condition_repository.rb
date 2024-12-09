@@ -7,7 +7,6 @@ class ConditionRepository
                 answer_value:,
                 goto_page_id:,
                 skip_to_end:)
-
       Condition.create!(form_id:,
                         page_id:,
                         check_page_id:,
