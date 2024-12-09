@@ -13,4 +13,11 @@ describe "Previewing components", type: :feature do
       expect_component_to_have_no_axe_errors(page)
     end
   end
+
+  it "checks GDS Transport font is available" do
+    visit "/preview/"
+    font_loaded = evaluate_script("document.fonts.check('12px GDS Transport')")
+
+    expect(font_loaded).to be true
+  end
 end
