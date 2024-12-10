@@ -200,4 +200,71 @@ RSpec.describe "pages/delete" do
       end
     end
   end
+
+  describe "when page to delete is at the end of a secondary skip route" do
+    let(:check_page) do
+      build(
+        :page,
+        id: 1,
+        form_id: 1,
+        position: 3,
+        routing_conditions: [
+          build(:condition, routing_page_id: 1, check_page_id: 1, goto_page_id: 3),
+        ],
+      )
+    end
+
+    let(:routing_page) do
+      build(
+        :page,
+        id: 12,
+        form_id: 1,
+        position: 7,
+        routing_conditions: [
+          build(:condition, routing_page_id: 12, check_page_id: 1, goto_page_id: 9),
+        ],
+      )
+    end
+
+    let(:page) do
+      build(
+        :page,
+        id: 9,
+        form_id: 1,
+        position: 12,
+      )
+    end
+
+    before do
+      assign(:check_page, check_page)
+      assign(:page_goto_conditions, routing_page.routing_conditions)
+
+      render locals: { current_form: }
+    end
+
+    it "renders a notification banner" do
+      expect(rendered).to have_css ".govuk-notification-banner"
+    end
+
+    describe "notification banner" do
+      subject(:banner) { rendered.html.at_css(".govuk-notification-banner") }
+
+      it { is_expected.to have_text "Important" }
+      it { is_expected.to have_css "h3.govuk-notification-banner__heading", text: "Question 12 is at the end of a route", count: 1 }
+      it { is_expected.to have_link "Question 3’s route", class: "govuk-notification-banner__link", href: show_routes_path(1, 1) }
+      it { is_expected.to have_css "p.govuk-body", text: "Question 3’s route goes to this question. If you delete this question, the route to it will also be deleted.", normalize_ws: true }
+    end
+
+    context "but there was an error in the user's input" do
+      let(:delete_confirmation_input) do
+        delete_confirmation_input = Forms::DeleteConfirmationInput.new(confirm: "")
+        delete_confirmation_input.validate
+        delete_confirmation_input
+      end
+
+      it "does not render the notification banner" do
+        expect(rendered).not_to have_css ".govuk-notification-banner"
+      end
+    end
+  end
 end

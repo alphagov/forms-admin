@@ -21,6 +21,7 @@ class PagesController < ApplicationController
 
     @check_page = PageRepository.find(page_id: @page.routing_conditions.first.check_page_id, form_id: current_form.id) if @page.routing_conditions.first&.secondary_skip?
     @routing_page = PageRepository.find(page_id: @page_goto_conditions.first.routing_page_id, form_id: current_form.id) if @page_goto_conditions.any?
+    @check_page = PageRepository.find(page_id: @page_goto_conditions.first.check_page_id, form_id: current_form.id) if @page_goto_conditions.any?
 
     @delete_confirmation_input = Forms::DeleteConfirmationInput.new
 

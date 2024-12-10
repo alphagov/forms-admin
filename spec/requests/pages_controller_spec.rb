@@ -240,6 +240,52 @@ RSpec.describe PagesController, type: :request do
           end
         end
       end
+
+      context "when page to delete is at the end of a secondary skip route" do
+        let(:pages) do
+          [
+            build(
+              :page,
+              :with_selection_settings,
+              id: 1,
+              form_id: 2,
+              position: 1,
+              question_text: "What is your favourite colour?",
+              selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
+              only_one_option: true,
+              routing_conditions: [
+                build(:condition, routing_page_id: 1, check_page_id: 1, value: "green", goto_page_id: 3),
+              ],
+            ),
+            build(
+              :page,
+              id: 5,
+              form_id: 2,
+              position: 5,
+              routing_conditions: [
+                build(:condition, routing_page_id: 5, check_page_id: 1, value: nil, goto_page_id: 8),
+              ],
+            ),
+            build(
+              :page,
+              id: 8,
+              form_id: 2,
+              position: 8,
+            ),
+          ]
+        end
+
+        let(:page) { pages.last }
+
+        it "renders a warning about deleting this page" do
+          assert_select(".govuk-notification-banner", count: 1) do
+            assert_select "*", "Important"
+            assert_select "h3", "Question 8 is at the end of a route"
+            assert_select "p.govuk-body a", "Question 1’s route"
+            assert_select "p.govuk-body", /Question 1’s route\s*goes to this question. If you delete this question, the route to it will also be deleted./
+          end
+        end
+      end
     end
   end
 

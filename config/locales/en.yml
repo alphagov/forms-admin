@@ -1157,6 +1157,13 @@ en:
               <a class="govuk-notification-banner__link" href="%{routing_page_show_routes_href}">Question %{routing_page_position}’s route</a>
               goes to this question. If you delete this question, question %{routing_page_position}’s routes will also be deleted.
             </p>
+        end_of_secondary_skip_route:
+          heading_text: Question %{goto_page_position} is at the end of a route
+          html: |
+            <p class="govuk-body">
+              <a class="govuk-notification-banner__link" href="%{check_page_show_routes_href}">Question %{check_page_position}’s route</a>
+              goes to this question. If you delete this question, the route to it will also be deleted.
+            </p>
         start_of_route:
           heading_text: Question %{routing_page_position} is the start of a route
           html: |
