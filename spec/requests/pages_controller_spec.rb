@@ -82,7 +82,8 @@ RSpec.describe PagesController, type: :request do
   describe "#delete" do
     describe "given a valid page" do
       let(:page) do
-        Page.new({
+        build(
+          :page,
           id: 1,
           form_id: 2,
           question_text: "What is your work address?",
@@ -90,7 +91,7 @@ RSpec.describe PagesController, type: :request do
           answer_type: "address",
           next_page: nil,
           is_optional: false,
-        })
+        )
       end
 
       before do
