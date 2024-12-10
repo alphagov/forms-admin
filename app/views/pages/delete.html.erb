@@ -17,6 +17,12 @@
 
           t(".notification_banner.start_of_route.html", routing_page_position: @page.position, routing_page_show_routes_href: show_routes_path(current_form.id, @page.id))
         end %>
+      <% elsif @page_goto_conditions.present? %>
+        <%= govuk_notification_banner(title_text: "Important") do |banner|
+          banner.with_heading(text: t(".notification_banner.end_of_route.heading_text", goto_page_position: @page.position), tag: :h3)
+
+          t(".notification_banner.end_of_route.html", routing_page_position: @routing_page.position, routing_page_show_routes_href: show_routes_path(current_form.id, @routing_page.id))
+        end %>
       <% end %>
     <% end %>
 

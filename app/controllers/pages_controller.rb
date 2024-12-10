@@ -11,11 +11,16 @@ class PagesController < ApplicationController
 
   def delete
     @page = PageRepository.find(page_id: params[:page_id], form_id: current_form.id)
-    @check_page = PageRepository.find(page_id: @page.routing_conditions.first.check_page_id, form_id: current_form.id) if @page.routing_conditions.first&.secondary_skip?
     @url = destroy_page_path(current_form.id, @page.id)
     @confirm_deletion_legend = t("forms_delete_confirmation_input.confirm_deletion_page")
     @item_name = @page.question_text
     @back_url = edit_question_path(current_form.id, @page.id)
+
+    all_form_conditions = current_form.pages.flat_map(&:routing_conditions).compact_blank
+    @page_goto_conditions = all_form_conditions.select { |condition| condition.goto_page_id == @page.id }
+
+    @check_page = PageRepository.find(page_id: @page.routing_conditions.first.check_page_id, form_id: current_form.id) if @page.routing_conditions.first&.secondary_skip?
+    @routing_page = PageRepository.find(page_id: @page_goto_conditions.first.routing_page_id, form_id: current_form.id) if @page_goto_conditions.any?
 
     @delete_confirmation_input = Forms::DeleteConfirmationInput.new
 
