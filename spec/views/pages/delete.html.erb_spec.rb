@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "pages/delete" do
+  let(:delete_confirmation_input) { Forms::DeleteConfirmationInput.new }
   let(:page) { build :page, id: 1 }
 
   before do
     assign(:back_url, edit_question_path(form_id: 1, page_id: page.id))
-    assign(:delete_confirmation_input, Forms::DeleteConfirmationInput.new)
+    assign(:delete_confirmation_input, delete_confirmation_input)
     assign(:item_name, "What’s your name?")
     assign(:page, page)
     assign(:url, destroy_page_path(form_id: 1, page_id: page.id))
@@ -65,6 +66,18 @@ RSpec.describe "pages/delete" do
       it { is_expected.to have_css "h3.govuk-notification-banner__heading", text: "Question 2 is the start of a route", count: 1 }
       it { is_expected.to have_css "p.govuk-body", text: "If you delete this question, its routes will also be deleted." }
       it { is_expected.to have_link "View question 2’s routes", class: "govuk-notification-banner__link", href: show_routes_path(1, 1) }
+    end
+
+    context "but there was an error in the user's input" do
+      let(:delete_confirmation_input) do
+        delete_confirmation_input = Forms::DeleteConfirmationInput.new(confirm: "")
+        delete_confirmation_input.validate
+        delete_confirmation_input
+      end
+
+      it "does not render the notification banner" do
+        expect(rendered).not_to have_css ".govuk-notification-banner"
+      end
     end
   end
 end
