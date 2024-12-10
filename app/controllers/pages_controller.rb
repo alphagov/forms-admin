@@ -22,7 +22,6 @@ class PagesController < ApplicationController
   def destroy
     @page = PageRepository.find(page_id: params[:page_id], form_id: current_form.id)
     @url = destroy_page_path(current_form, @page.id)
-    @confirm_deletion_legend = t("forms_delete_confirmation_input.confirm_deletion_page")
     @item_name = @page.question_text
     @back_url = edit_question_path(current_form, @page.id)
 
