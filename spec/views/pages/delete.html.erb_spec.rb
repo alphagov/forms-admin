@@ -1,13 +1,18 @@
 require "rails_helper"
 
 RSpec.describe "pages/delete" do
+  let(:page) { build :page, id: 1 }
+
   before do
-    assign(:back_url, edit_question_path(form_id: 1, page_id: 1))
+    assign(:back_url, edit_question_path(form_id: 1, page_id: page.id))
     assign(:delete_confirmation_input, Forms::DeleteConfirmationInput.new)
     assign(:item_name, "What’s your name?")
-    assign(:url, destroy_page_path(form_id: 1, page_id: 1))
+    assign(:page, page)
+    assign(:url, destroy_page_path(form_id: 1, page_id: page.id))
 
-    render
+    current_form = build :form, id: 1
+
+    render locals: { current_form: }
   end
 
   it "has a page title" do
@@ -37,6 +42,29 @@ RSpec.describe "pages/delete" do
 
     it "does not have a hint" do
       expect(rendered).not_to have_css ".govuk-hint"
+    end
+  end
+
+  describe "when page to delete is not associated with any routes" do
+    it "does not render a notification banner" do
+      expect(rendered).not_to have_css ".govuk-notification-banner"
+    end
+  end
+
+  describe "when page to delete is the start of one or more routes" do
+    let(:page) { build :page, id: 1, form_id: 1, position: 2, routing_conditions: true }
+
+    it "renders a notification banner" do
+      expect(rendered).to have_css ".govuk-notification-banner"
+    end
+
+    describe "notification banner" do
+      subject(:banner) { rendered.html.at_css(".govuk-notification-banner") }
+
+      it { is_expected.to have_text "Important" }
+      it { is_expected.to have_css "h3.govuk-notification-banner__heading", text: "Question 2 is the start of a route", count: 1 }
+      it { is_expected.to have_css "p.govuk-body", text: "If you delete this question, its routes will also be deleted." }
+      it { is_expected.to have_link "View question 2’s routes", class: "govuk-notification-banner__link", href: show_routes_path(1, 1) }
     end
   end
 end

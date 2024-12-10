@@ -100,7 +100,7 @@ RSpec.describe PagesController, type: :request do
 
         GroupForm.create!(form_id: 2, group_id: group.id)
 
-        get delete_page_path(form_id: 2, page_id: 1)
+        get delete_page_path(form_id: 2, page_id: page.id)
       end
 
       it "renders the delete page template" do
@@ -116,6 +116,39 @@ RSpec.describe PagesController, type: :request do
 
         it "returns an error" do
           expect(response).to have_http_status :forbidden
+        end
+      end
+
+      context "when page to delete has no routes" do
+        it "does not render a warning" do
+          expect(response.body).not_to include "Important"
+        end
+      end
+
+      context "when page to delete is start of one or more routes" do
+        let(:page) do
+          build(
+            :page,
+            :with_selection_settings,
+            id: 1,
+            form_id: 2,
+            question_text: "What is your favourite colour?",
+            selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
+            only_one_option: true,
+            routing_conditions: [
+              build(:condition, routing_page_id: 1, check_page_id: 1, value: "red", skip_to_end: true),
+              build(:condition, routing_page_id: 1, check_page_id: 1, value: "green", goto_page_id: 3),
+            ],
+          )
+        end
+
+        it "renders a warning about deleting this page" do
+          assert_select(".govuk-notification-banner", count: 1) do
+            assert_select "*", "Important"
+            assert_select "h3", "Question #{page.position} is the start of a route"
+            assert_select "p.govuk-body", /If you delete this question, its routes will also be deleted/
+            assert_select "p.govuk-body a", "View question #{page.position}’s routes"
+          end
         end
       end
     end

@@ -17,6 +17,8 @@ class PagesController < ApplicationController
     @back_url = edit_question_path(current_form.id, @page.id)
 
     @delete_confirmation_input = Forms::DeleteConfirmationInput.new
+
+    render locals: { current_form: }
   end
 
   def destroy
@@ -35,7 +37,7 @@ class PagesController < ApplicationController
         redirect_to @back_url
       end
     else
-      render :delete
+      render :delete, locals: { current_form: }
     end
   rescue StandardError
     flash[:message] = "Deletion unsuccessful"
