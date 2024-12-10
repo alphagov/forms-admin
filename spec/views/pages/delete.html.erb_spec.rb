@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.describe "pages/delete" do
   before do
     assign(:back_url, edit_question_path(form_id: 1, page_id: 1))
-    assign(:confirm_deletion_legend, "Are you sure you want to delete this page?")
     assign(:delete_confirmation_input, Forms::DeleteConfirmationInput.new)
     assign(:item_name, "What’s your name?")
     assign(:url, destroy_page_path(form_id: 1, page_id: 1))
@@ -12,11 +11,11 @@ RSpec.describe "pages/delete" do
   end
 
   it "has a page title" do
-    expect(view.content_for(:title)).to include "Are you sure you want to delete this page?"
+    expect(view.content_for(:title)).to include "Are you sure you want to delete this question?"
   end
 
   it "has a heading" do
-    expect(rendered).to have_css "h1", text: "Are you sure you want to delete this page?"
+    expect(rendered).to have_css "h1", text: "Are you sure you want to delete this question?"
   end
 
   it "has a heading caption with the question text" do
