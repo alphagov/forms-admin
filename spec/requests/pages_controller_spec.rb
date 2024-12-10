@@ -96,7 +96,8 @@ RSpec.describe PagesController, type: :request do
 
       before do
         allow(FormRepository).to receive(:find).and_return(form_response)
-        allow(PageRepository).to receive_messages(find: page, destroy: true)
+        allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: 2).and_return(page)
+        allow(PageRepository).to receive_messages(destroy: true)
 
         GroupForm.create!(form_id: 2, group_id: group.id)
 
@@ -148,6 +149,51 @@ RSpec.describe PagesController, type: :request do
             assert_select "h3", "Question #{page.position} is the start of a route"
             assert_select "p.govuk-body", /If you delete this question, its routes will also be deleted/
             assert_select "p.govuk-body a", "View question #{page.position}’s routes"
+          end
+        end
+      end
+
+      context "when page to delete is start of a secondary skip route" do
+        let(:check_page) do
+          check_page = build(
+            :page,
+            :with_selection_settings,
+            id: 1,
+            form_id: 2,
+            position: 1,
+            question_text: "What is your favourite colour?",
+            selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
+            only_one_option: true,
+            routing_conditions: [
+              build(:condition, routing_page_id: 1, check_page_id: 1, value: "green", goto_page_id: 3),
+            ],
+          )
+
+          allow(PageRepository).to receive(:find).with(page_id: 1, form_id: 2).and_return(check_page)
+
+          check_page
+        end
+
+        let(:secondary_skip_page) do
+          build(
+            :page,
+            id: 5,
+            form_id: 2,
+            position: 5,
+            routing_conditions: [
+              build(:condition, routing_page_id: 5, check_page_id: check_page.id, value: nil, goto_page_id: 8),
+            ],
+          )
+        end
+
+        let(:page) { secondary_skip_page }
+
+        it "renders a warning about deleting this page" do
+          assert_select(".govuk-notification-banner", count: 1) do
+            assert_select "*", "Important"
+            assert_select "h3", "Question 5 is the start of a route"
+            assert_select "p.govuk-body a", "Question 1’s route"
+            assert_select "p.govuk-body", /Question 1’s route\s*starts at this question. If you delete this question, the route from it will also be deleted./
           end
         end
       end

@@ -53,7 +53,17 @@ RSpec.describe "pages/delete" do
   end
 
   describe "when page to delete is the start of one or more routes" do
-    let(:page) { build :page, id: 1, form_id: 1, position: 2, routing_conditions: true }
+    let(:page) do
+      build(
+        :page,
+        id: 1,
+        form_id: 1,
+        position: 2,
+        routing_conditions: [
+          build(:condition, routing_page_id: 1, check_page_id: 1),
+        ],
+      )
+    end
 
     it "renders a notification banner" do
       expect(rendered).to have_css ".govuk-notification-banner"
@@ -66,6 +76,61 @@ RSpec.describe "pages/delete" do
       it { is_expected.to have_css "h3.govuk-notification-banner__heading", text: "Question 2 is the start of a route", count: 1 }
       it { is_expected.to have_css "p.govuk-body", text: "If you delete this question, its routes will also be deleted." }
       it { is_expected.to have_link "View question 2’s routes", class: "govuk-notification-banner__link", href: show_routes_path(1, 1) }
+    end
+
+    context "but there was an error in the user's input" do
+      let(:delete_confirmation_input) do
+        delete_confirmation_input = Forms::DeleteConfirmationInput.new(confirm: "")
+        delete_confirmation_input.validate
+        delete_confirmation_input
+      end
+
+      it "does not render the notification banner" do
+        expect(rendered).not_to have_css ".govuk-notification-banner"
+      end
+    end
+  end
+
+  describe "when page to delete is start of a secondary skip route" do
+    let(:check_page) do
+      check_page = build(
+        :page,
+        id: 2,
+        form_id: 1,
+        position: 1,
+        routing_conditions: [
+          build(:condition, routing_page_id: 1, check_page_id: 1, goto_page_id: 1),
+        ],
+      )
+
+      assign(:check_page, check_page)
+
+      check_page
+    end
+
+    let(:page) do
+      build(
+        :page,
+        id: 1,
+        form_id: 1,
+        position: 2,
+        routing_conditions: [
+          build(:condition, routing_page_id: 1, check_page_id: check_page.id, value: nil),
+        ],
+      )
+    end
+
+    it "renders a notification banner" do
+      expect(rendered).to have_css ".govuk-notification-banner"
+    end
+
+    describe "notification banner" do
+      subject(:banner) { rendered.html.at_css(".govuk-notification-banner") }
+
+      it { is_expected.to have_text "Important" }
+      it { is_expected.to have_css "h3.govuk-notification-banner__heading", text: "Question 2 is the start of a route", count: 1 }
+      it { is_expected.to have_link "Question 1’s route", class: "govuk-notification-banner__link", href: show_routes_path(1, 2) }
+      it { is_expected.to have_css "p.govuk-body", text: "If you delete this question, the route from it will also be deleted." }
     end
 
     context "but there was an error in the user's input" do
