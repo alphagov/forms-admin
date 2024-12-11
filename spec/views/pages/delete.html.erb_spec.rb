@@ -65,6 +65,13 @@ RSpec.describe "pages/delete" do
       )
     end
 
+    before do
+      assign(:routing, :start_of_route)
+      assign(:route_owner, page)
+
+      render locals: { current_form: }
+    end
+
     it "renders a notification banner" do
       expect(rendered).to have_css ".govuk-notification-banner"
     end
@@ -114,7 +121,9 @@ RSpec.describe "pages/delete" do
     end
 
     before do
-      assign(:routing_page, routing_page)
+      assign(:routing, :end_of_route)
+      assign(:route_owner, routing_page)
+
       assign(:page_goto_conditions, routing_page.routing_conditions)
 
       render locals: { current_form: }
@@ -148,7 +157,7 @@ RSpec.describe "pages/delete" do
 
   describe "when page to delete is start of a secondary skip route" do
     let(:check_page) do
-      check_page = build(
+      build(
         :page,
         id: 2,
         form_id: 1,
@@ -157,10 +166,6 @@ RSpec.describe "pages/delete" do
           build(:condition, routing_page_id: 1, check_page_id: 1, goto_page_id: 1),
         ],
       )
-
-      assign(:check_page, check_page)
-
-      check_page
     end
 
     let(:page) do
@@ -173,6 +178,13 @@ RSpec.describe "pages/delete" do
           build(:condition, routing_page_id: 1, check_page_id: check_page.id, value: nil),
         ],
       )
+    end
+
+    before do
+      assign(:routing, :start_of_secondary_skip_route)
+      assign(:route_owner, check_page)
+
+      render locals: { current_form: }
     end
 
     it "renders a notification banner" do
@@ -236,8 +248,9 @@ RSpec.describe "pages/delete" do
     end
 
     before do
-      assign(:check_page, check_page)
       assign(:page_goto_conditions, routing_page.routing_conditions)
+      assign(:routing, :end_of_secondary_skip_route)
+      assign(:route_owner, check_page)
 
       render locals: { current_form: }
     end
