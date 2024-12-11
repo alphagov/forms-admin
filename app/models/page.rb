@@ -51,6 +51,7 @@ class Page < ActiveResource::Base
   end
 
   def conditions
+    ActiveSupport::Deprecation.new.warn("Prefer Page#routing_conditions to Page#conditions")
     routing_conditions.map { |routing_condition| Condition.new(routing_condition.attributes) }
   end
 
