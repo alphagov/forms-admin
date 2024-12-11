@@ -15,7 +15,7 @@ module PageListComponent
       end
 
       def conditions_with_page_indexes
-        @pages.map { |page| page.conditions.map { |condition| OpenStruct.new(condition:, page_index: page.position) } }
+        @pages.map { |page| page.routing_conditions.map { |condition| OpenStruct.new(condition:, page_index: page.position) } }
           .flatten
       end
 

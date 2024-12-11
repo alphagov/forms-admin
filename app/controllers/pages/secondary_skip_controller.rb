@@ -83,7 +83,7 @@ private
   end
 
   def ensure_page_has_skip_condition
-    unless page.conditions.any? { |c| c.answer_value.present? }
+    unless page.routing_conditions.any? { |c| c.answer_value.present? }
       redirect_to form_pages_path(current_form.id)
     end
   end
@@ -97,6 +97,6 @@ private
   end
 
   def secondary_skip_condition
-    @secondary_skip_condition ||= current_form.pages.flat_map(&:conditions).compact_blank.find { |c| c.secondary_skip? && c.check_page_id == page.id }
+    @secondary_skip_condition ||= current_form.pages.flat_map(&:routing_conditions).compact_blank.find { |c| c.secondary_skip? && c.check_page_id == page.id }
   end
 end

@@ -69,7 +69,7 @@ class Pages::SecondarySkipInput < BaseInput
   end
 
   def answer_value
-    page.conditions.find { |rc| rc.answer_value.present? }.answer_value
+    page.routing_conditions.find { |rc| rc.answer_value.present? }.answer_value
   end
 
   def continue_to

@@ -66,7 +66,7 @@ class Page < ActiveResource::Base
   def self.qualifying_route_pages(pages)
     pages.filter do |page|
       page.answer_type == "selection" && page.answer_settings.only_one_option == "true" &&
-        page.position != pages.length && page.conditions.empty?
+        page.position != pages.length && page.routing_conditions.empty?
     end
   end
 end

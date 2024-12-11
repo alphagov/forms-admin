@@ -113,7 +113,7 @@ class Form < ActiveResource::Base
 private
 
   def has_routing_conditions
-    pages.filter { |p| p.conditions.any? }.any?
+    pages.filter { |p| p.routing_conditions.any? }.any?
   end
 
   def email_task_status_service

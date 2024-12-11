@@ -4,7 +4,7 @@ describe "pages/type_of_answer.html.erb", type: :view do
   let(:form) { build :form, id: 1 }
   let(:type_of_answer_input) { build :type_of_answer_input }
   let(:answer_types) { Page::ANSWER_TYPES_EXCLUDING_FILE }
-  let(:page) { OpenStruct.new(conditions: [], answer_type: "number") }
+  let(:page) { OpenStruct.new(routing_conditions: [], answer_type: "number") }
   let(:question_number) { 1 }
   let(:is_new_page) { true }
 
@@ -69,9 +69,9 @@ describe "pages/type_of_answer.html.erb", type: :view do
   end
 
   context "when editing an existing" do
-    let(:page) { OpenStruct.new(conditions:, answer_type:) }
+    let(:page) { OpenStruct.new(routing_conditions:, answer_type:) }
     let(:answer_type) { "selection" }
-    let(:conditions) { [(build :condition)] }
+    let(:routing_conditions) { [(build :condition)] }
 
     it "displays a warning about routes being deleted if answer type changes" do
       expect(Capybara.string(rendered.html).find(".govuk-notification-banner__content").text(normalize_ws: true))
@@ -80,7 +80,7 @@ describe "pages/type_of_answer.html.erb", type: :view do
     end
 
     context "when no routing conditions set" do
-      let(:conditions) { [] }
+      let(:routing_conditions) { [] }
 
       it "does not display a warning about routes being deleted if answer type changes" do
         expect(rendered).not_to have_selector(".govuk-notification-banner__content")
