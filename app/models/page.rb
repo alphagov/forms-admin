@@ -14,6 +14,7 @@ class Page < ActiveResource::Base
   ANSWER_TYPES_WITH_SETTINGS = %w[selection text date address name].freeze
 
   belongs_to :form
+  has_many :routing_conditions, class_name: :Condition
 
   validates :hint_text, length: { maximum: 500 }
 
