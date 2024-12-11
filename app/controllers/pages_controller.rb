@@ -19,9 +19,27 @@ class PagesController < ApplicationController
     all_form_conditions = current_form.pages.flat_map(&:routing_conditions).compact_blank
     @page_goto_conditions = all_form_conditions.select { |condition| condition.goto_page_id == @page.id }
 
-    @check_page = PageRepository.find(page_id: @page.routing_conditions.first.check_page_id, form_id: current_form.id) if @page.routing_conditions.first&.secondary_skip?
-    @routing_page = PageRepository.find(page_id: @page_goto_conditions.first.routing_page_id, form_id: current_form.id) if @page_goto_conditions.any?
-    @check_page = PageRepository.find(page_id: @page_goto_conditions.first.check_page_id, form_id: current_form.id) if @page_goto_conditions.any?
+    if @page.routing_conditions.any? && @page.routing_conditions.first.secondary_skip?
+      @routing = :start_of_secondary_skip_route
+
+      # route owner is condition check page
+      @route_owner = PageRepository.find(page_id: @page.routing_conditions.first.check_page_id, form_id: current_form.id)
+    elsif @page.routing_conditions.any?
+      @routing = :start_of_route
+
+      # route owner is us
+      @route_owner = @page
+    elsif @page_goto_conditions.any? && @page_goto_conditions.first.secondary_skip?
+      @routing = :end_of_secondary_skip_route
+
+      # route owner is condition check page
+      @route_owner = PageRepository.find(page_id: @page_goto_conditions.first.check_page_id, form_id: current_form.id)
+    elsif @page_goto_conditions.any?
+      @routing = :end_of_route
+
+      # route owner is condition routing page
+      @route_owner = PageRepository.find(page_id: @page_goto_conditions.first.routing_page_id, form_id: current_form.id)
+    end
 
     @delete_confirmation_input = Forms::DeleteConfirmationInput.new
 
