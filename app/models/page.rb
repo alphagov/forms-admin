@@ -14,6 +14,7 @@ class Page < ActiveResource::Base
   ANSWER_TYPES_WITH_SETTINGS = %w[selection text date address name].freeze
 
   belongs_to :form
+  has_many :routing_conditions, class_name: :Condition
 
   validates :hint_text, length: { maximum: 500 }
 
@@ -50,6 +51,7 @@ class Page < ActiveResource::Base
   end
 
   def conditions
+    ActiveSupport::Deprecation.new.warn("Prefer Page#routing_conditions to Page#conditions")
     routing_conditions.map { |routing_condition| Condition.new(routing_condition.attributes) }
   end
 
@@ -64,7 +66,7 @@ class Page < ActiveResource::Base
   def self.qualifying_route_pages(pages)
     pages.filter do |page|
       page.answer_type == "selection" && page.answer_settings.only_one_option == "true" &&
-        page.position != pages.length && page.conditions.empty?
+        page.position != pages.length && page.routing_conditions.empty?
     end
   end
 end

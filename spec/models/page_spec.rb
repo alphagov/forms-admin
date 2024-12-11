@@ -5,6 +5,34 @@ describe Page, type: :model do
     let(:page) { build :page, question_text: }
     let(:question_text) { "What is your address?" }
 
+    describe "associations" do
+      describe "#routing_conditions" do
+        let(:page) { build :page, id: 10, routing_conditions: build_list(:condition, 3, routing_page_id: 10) }
+
+        it "has many routing conditions" do
+          expect(page.routing_conditions.length).to eq 3
+          expect(page.routing_conditions).to all be_a Condition
+          expect(page.routing_conditions).to all have_attributes(routing_page_id: 10)
+        end
+
+        context "when accessing a page through ActiveResource" do
+          let(:page_resource) { described_class.find(10, params: { form_id: 1 }) }
+
+          before do
+            ActiveResource::HttpMock.respond_to do |mock|
+              mock.get "/api/v1/forms/1/pages/10", headers, page.to_json, 200
+            end
+          end
+
+          it "has many routing conditions" do
+            expect(page_resource.routing_conditions.length).to eq 3
+            expect(page_resource.routing_conditions).to all be_a Condition
+            expect(page_resource.routing_conditions).to all have_attributes(routing_page_id: 10)
+          end
+        end
+      end
+    end
+
     describe "#question_text" do
       [nil, ""].each do |question_text|
         it "is invalid given {question_text} question text" do

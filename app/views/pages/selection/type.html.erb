@@ -4,7 +4,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% if @page.present? && @page.conditions.any? %>
+    <% if @page.present? && @page.routing_conditions.any? %>
       <% if @selection_type_input.need_to_reduce_options? %>
         <%= govuk_notification_banner(title_text: t("banner.default.title")) do |banner| %>
           <% banner.with_heading(text: t("selection_type.routing_and_reduce_your_options_combined_warning.heading"), tag: "h3") %>

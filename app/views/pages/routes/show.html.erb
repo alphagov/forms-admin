@@ -20,10 +20,10 @@
           <%= govuk_summary_list(**card) %>
       <% end %>
 
-      <% if page.conditions.present? %>
+      <% if page.routing_conditions.present? %>
           <ul class="govuk-list govuk-list--spaced">
               <li>
-                  <%= govuk_button_link_to t("page_route_card.delete_route"), destroy_condition_path(form_id: current_form.id, page_id: page.id, condition_id: page.conditions.first.id), warning: true %>
+                  <%= govuk_button_link_to t("page_route_card.delete_route"), destroy_condition_path(form_id: current_form.id, page_id: page.id, condition_id: page.routing_conditions.first.id), warning: true %>
               </li>
               <li>
                   <%= govuk_link_to t("pages.go_to_your_questions"), form_pages_path(current_form.id) %>

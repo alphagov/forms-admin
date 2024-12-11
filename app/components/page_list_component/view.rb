@@ -75,7 +75,7 @@ module PageListComponent
     # where index is the index of the condition in the array of conditions for
     # the page referenced by check_page_id
     def process_routing_conditions
-      all_form_conditions = @pages.flat_map(&:conditions).compact_blank
+      all_form_conditions = @pages.flat_map(&:routing_conditions).compact_blank
 
       all_form_conditions
         .group_by(&:check_page_id)
