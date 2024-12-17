@@ -3,6 +3,7 @@ require "rails_helper"
 describe "pages/index.html.erb" do
   let(:form) { build :form, id: 1, pages: }
   let(:pages) { [] }
+  let(:mark_complete_input) { Forms::MarkPagesSectionCompleteInput.new(form:).assign_form_values }
 
   before do
     # mock the path helper
@@ -17,6 +18,7 @@ describe "pages/index.html.erb" do
       )
     end
     assign(:pages, pages)
+    assign(:mark_complete_input, mark_complete_input)
     render template: "pages/index"
   end
 

@@ -2,7 +2,7 @@
 
 module MarkCompleteComponent
   class View < ViewComponent::Base
-    def initialize(form_model: nil, generate_form: true, form_builder: nil, path: nil, legend: nil, hint: nil)
+    def initialize(form_model: false, generate_form: true, form_builder: nil, path: nil, legend: nil, hint: nil)
       super
       if generate_form
         @mark_complete_input = form_model
