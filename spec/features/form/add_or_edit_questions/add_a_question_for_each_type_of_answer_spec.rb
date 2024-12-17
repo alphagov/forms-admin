@@ -1,18 +1,17 @@
 require "rails_helper"
 
 feature "Add/editing a single question", type: :feature do
-  let(:form) { build :form, :with_active_resource, id: 1 }
+  let(:form) { build :form, id: 1, pages: }
   let(:fake_page) { build :page, form_id: 1, id: 2 }
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms/1", headers, form.to_json, 200
       mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      mock.get "/api/v1/forms/1/pages/2", headers, fake_page.to_json, 200
-      mock.post "/api/v1/forms/1/pages", post_headers, fake_page.to_json, 200
-      mock.put "/api/v1/forms/1", post_headers, form.to_json, 200
     end
+
+    allow(FormRepository).to receive_messages(find: form, save!: form)
+    allow(PageRepository).to receive_messages(find: fake_page, create!: fake_page)
 
     GroupForm.create!(group:, form_id: form.id)
     create(:membership, group:, user: standard_user, added_by: standard_user)

@@ -11,7 +11,7 @@ module Forms
       @privacy_policy_input = PrivacyPolicyInput.new(privacy_policy_input_params)
 
       if @privacy_policy_input.submit
-        redirect_to form_path(@privacy_policy_input.form), success: t("banner.success.form.privacy_details_saved")
+        redirect_to form_path(@privacy_policy_input.form.id), success: t("banner.success.form.privacy_details_saved")
       else
         render :new
       end

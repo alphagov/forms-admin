@@ -16,15 +16,14 @@ class GroupFormsController < ApplicationController
     @group_form = GroupForm.new(group: @group)
     authorize @group_form
 
-    @form = Form.new(creator_id: @current_user.id)
+    @name_input = Forms::NameInput.new(name_input_params)
 
-    @name_input = Forms::NameInput.new(name_input_params(@form))
-
-    if @name_input.submit
+    if @name_input.valid?
+      @form = FormRepository.create!(creator_id: @current_user.id, name: @name_input.name)
       @group_form.form_id = @form.id
       @group_form.save!
 
-      redirect_to form_path(@form)
+      redirect_to form_path(@form.id)
     else
       render :new, status: :unprocessable_entity
     end
@@ -40,7 +39,7 @@ private
     @group = Group.find_by!(external_id: params[:group_id])
   end
 
-  def name_input_params(form)
-    params.require(:forms_name_input).permit(:name).merge(form:)
+  def name_input_params
+    params.require(:forms_name_input).permit(:name)
   end
 end

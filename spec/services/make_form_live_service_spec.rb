@@ -8,11 +8,11 @@ describe MakeFormLiveService do
 
   describe "#make_live" do
     before do
-      allow(current_form).to receive(:make_live!).and_return(true)
+      allow(FormRepository).to receive_messages(make_live!: true, find_live: live_form)
     end
 
-    it "calls make_live! on the current form" do
-      expect(current_form).to receive(:make_live!)
+    it "calls make_live! on the Form Repository with the current form" do
+      expect(FormRepository).to receive(:make_live!).with(current_form)
       make_form_live_service.make_live
     end
 
@@ -25,12 +25,6 @@ describe MakeFormLiveService do
       let(:live_form) { build :form, :live }
       let(:current_form) do
         live_form.clone
-      end
-
-      before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/#{live_form.id}/live", headers, live_form.to_json, 200
-        end
       end
 
       context "when submission email has not been changed" do
@@ -72,9 +66,7 @@ describe MakeFormLiveService do
       end
 
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/#{live_form.id}/live", headers, live_form.to_json, 200
-        end
+        allow(FormRepository).to receive(:find_live).and_return(live_form)
       end
 
       it "returns a different page title" do
@@ -95,9 +87,7 @@ describe MakeFormLiveService do
       end
 
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/#{live_form.id}/live", headers, live_form.to_json, 200
-        end
+        allow(FormRepository).to receive(:find_live).and_return(live_form)
       end
 
       it "returns different confirmation page body" do

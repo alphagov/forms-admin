@@ -1,6 +1,6 @@
 <% set_page_title(t("pages.index.title")) %>
 
-<% content_for :back_link, govuk_back_link_to(form_path(current_form), t("back_link.form_create")) %>
+<% content_for :back_link, govuk_back_link_to(form_path(current_form.id), t("back_link.form_create")) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -20,7 +20,7 @@
     <% end %>
     <div class="govuk-button-group">
       <%= govuk_button_link_to t("pages.index.add_question"), start_new_question_path(form_id: current_form.id), class:"govuk-!-margin-bottom-3 govuk-!-margin-top-3" %>
-      <%= govuk_button_link_to t("pages.index.add_a_question_route"), routing_page_path(current_form), secondary: true, class:"govuk-!-margin-bottom-3 govuk-!-margin-top-3" %>
+      <%= govuk_button_link_to t("pages.index.add_a_question_route"), routing_page_path(current_form.id), secondary: true, class:"govuk-!-margin-bottom-3 govuk-!-margin-top-3" %>
 
       <%= render PreviewLinkComponent::View.new(@pages, link_to_runner(Settings.forms_runner.url, current_form.id, current_form.form_slug)) %>
     </div>
@@ -28,7 +28,7 @@
     <% if @pages.any? %>
       <h2 class="govuk-heading-m govuk-!-margin-top-7 govuk-!-margin-bottom-0"><%= t("forms.form_overview.your_questions") %></h2>
       <%= render PageListComponent::View.new(pages: @pages, form_id: current_form.id) %>
-      <%= render MarkCompleteComponent::View.new(form_model: @mark_complete_input, path: form_pages_path(current_form), legend: t("pages.index.mark_complete.legend")) %>
+      <%= render MarkCompleteComponent::View.new(form_model: @mark_complete_input, path: form_pages_path(current_form.id), legend: t("pages.index.mark_complete.legend")) %>
     <% end %>
 
   </div>

@@ -1,8 +1,8 @@
 class Pages::SelectionsSettingsController < PagesController
   def new
     @selections_settings_input = Pages::SelectionsSettingsInput.new(**draft_question.answer_settings, include_none_of_the_above: draft_question.is_optional)
-    @selections_settings_path = selections_settings_create_path(current_form)
-    @back_link_url = question_text_new_path(current_form)
+    @selections_settings_path = selections_settings_create_path(current_form.id)
+    @back_link_url = question_text_new_path(current_form.id)
     render :selections_settings, locals: { current_form: }
   end
 
@@ -11,8 +11,8 @@ class Pages::SelectionsSettingsController < PagesController
                                                                     only_one_option: only_one_option_param_values,
                                                                     include_none_of_the_above: include_none_of_the_above_param_values,
                                                                     draft_question:)
-    @selections_settings_path = selections_settings_create_path(current_form)
-    @back_link_url = question_text_new_path(current_form)
+    @selections_settings_path = selections_settings_create_path(current_form.id)
+    @back_link_url = question_text_new_path(current_form.id)
 
     if params[:add_another]
       @selections_settings_input.add_another
@@ -21,20 +21,20 @@ class Pages::SelectionsSettingsController < PagesController
       @selections_settings_input.remove(params[:remove].to_i)
       render :selections_settings, locals: { current_form: }
     elsif @selections_settings_input.submit
-      redirect_to new_question_path(current_form)
+      redirect_to new_question_path(current_form.id)
     else
       render :selections_settings, locals: { current_form: }
     end
   end
 
   def edit
-    @selections_settings_path = selections_settings_update_path(current_form)
+    @selections_settings_path = selections_settings_update_path(current_form.id)
     @selections_settings_input = Pages::SelectionsSettingsInput.new(only_one_option: draft_question.answer_settings[:only_one_option],
                                                                     selection_options: draft_question.answer_settings[:selection_options]
                                                                                                    .map { |option| { name: option[:name] } },
                                                                     include_none_of_the_above: draft_question.is_optional,
                                                                     draft_question:)
-    @back_link_url = edit_question_path(current_form, page)
+    @back_link_url = edit_question_path(current_form.id, page.id)
     render :selections_settings, locals: { current_form: }
   end
 
@@ -43,8 +43,8 @@ class Pages::SelectionsSettingsController < PagesController
                                                                     only_one_option: only_one_option_param_values,
                                                                     include_none_of_the_above: include_none_of_the_above_param_values,
                                                                     draft_question:)
-    @selections_settings_path = selections_settings_update_path(current_form)
-    @back_link_url = edit_question_path(current_form, page)
+    @selections_settings_path = selections_settings_update_path(current_form.id)
+    @back_link_url = edit_question_path(current_form.id, page.id)
 
     if params[:add_another]
       @selections_settings_input.add_another
@@ -53,7 +53,7 @@ class Pages::SelectionsSettingsController < PagesController
       @selections_settings_input.remove(params[:remove].to_i)
       render :selections_settings, locals: { current_form: }
     elsif @selections_settings_input.submit
-      redirect_to edit_question_path(current_form)
+      redirect_to edit_question_path(current_form.id)
     else
       render :selections_settings, locals: { current_form: }
     end

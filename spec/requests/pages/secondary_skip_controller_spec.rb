@@ -29,10 +29,10 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
     login_as_standard_user
 
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms/2", headers, form.to_json, 200
       mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
     end
 
+    allow(FormRepository).to receive(:find).and_return(form)
     allow(PageRepository).to receive(:find).and_return(pages.first)
     allow(ConditionRepository).to receive_messages(create!: {}, find: {}, save!: {}, destroy: {})
   end

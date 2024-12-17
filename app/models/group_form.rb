@@ -5,6 +5,6 @@ class GroupForm < ApplicationRecord
   belongs_to :group
 
   def form
-    Form.find(form_id)
+    FormRepository.find(form_id: form_id)
   end
 end

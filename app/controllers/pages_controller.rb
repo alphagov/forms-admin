@@ -39,7 +39,7 @@ private
   end
 
   def page
-    @page ||= PageRepository.find(page_id: params[:page_id], form_id: current_form.id)
+    @page ||= PageRepository.find(page_id: params[:page_id].to_i, form_id: current_form.id)
   end
 
   def draft_question

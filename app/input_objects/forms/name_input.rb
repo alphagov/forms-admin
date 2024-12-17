@@ -7,7 +7,7 @@ class Forms::NameInput < BaseInput
     return false if invalid?
 
     form.name = name
-    form.save!
+    FormRepository.save!(form)
   end
 
   def assign_form_values

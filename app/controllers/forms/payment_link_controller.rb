@@ -12,7 +12,7 @@ module Forms
       @payment_link_input = PaymentLinkInput.new(payment_link_input_params)
 
       if @payment_link_input.submit
-        redirect_to form_path(@payment_link_input.form), success: t("banner.success.form.payment_link_saved")
+        redirect_to form_path(@payment_link_input.form.id), success: t("banner.success.form.payment_link_saved")
       else
         render :new, status: :unprocessable_entity
       end

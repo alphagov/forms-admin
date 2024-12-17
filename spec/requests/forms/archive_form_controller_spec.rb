@@ -14,15 +14,13 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
 
   describe "#archive" do
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/#{id}", headers, form.to_json, 200
-      end
+      allow(FormRepository).to receive(:find).and_return(form)
 
       get archive_form_path(id)
     end
 
-    it "reads the form from the APi" do
-      expect(form).to have_been_read
+    it "reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
 
     it "returns 200" do
@@ -46,18 +44,14 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
     let(:confirm) { :yes }
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/#{id}", headers, form.to_json, 200
-        mock.post "/api/v1/forms/#{id}/archive", post_headers
-      end
+      allow(FormRepository).to receive_messages(find: form, archive!: form)
 
       post archive_form_update_path(id), params: { forms_confirm_archive_input: { confirm:, form: } }
     end
 
     context "when 'Yes' is selected" do
       it "archives the form" do
-        archive_post = ActiveResource::Request.new(:post, "/api/v1/forms/#{id}/archive", {}, post_headers)
-        expect(ActiveResource::HttpMock.requests).to include archive_post
+        expect(FormRepository).to have_received(:archive!)
       end
 
       it "redirects to the success page" do
@@ -90,8 +84,7 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
       let(:form) { build(:form, :archived, id:) }
 
       it "doesn't archive the form" do
-        archive_post = ActiveResource::Request.new(:post, "/api/v1/forms/#{id}/archive", {}, post_headers)
-        expect(ActiveResource::HttpMock.requests).not_to include archive_post
+        expect(FormRepository).not_to have_received(:archive!)
       end
 
       it "redirects to archived form page" do
@@ -102,9 +95,7 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
 
   describe "#confirmation" do
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/#{id}", headers, form.to_json, 200
-      end
+      allow(FormRepository).to receive(:find).and_return(form)
 
       get archive_form_confirmation_path(id)
     end

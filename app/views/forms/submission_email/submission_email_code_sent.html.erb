@@ -7,7 +7,7 @@
 
     <%= t("email_code_sent.what_happens_next_body_html") %>
 
-    <p><%= govuk_link_to "Enter the email address confirmation code", submission_email_code_path( @submission_email_input.form) %></p>
+    <p><%= govuk_link_to "Enter the email address confirmation code", submission_email_code_path(@submission_email_input.form.id) %></p>
 
     <p><%= govuk_link_to(t('email_code_sent.continue'), form_path) %></p>
   </div>

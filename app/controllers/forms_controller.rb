@@ -20,7 +20,7 @@ class FormsController < ApplicationController
                         else
                           t("banner.success.form.pages_saved")
                         end
-      redirect_to form_path(current_form), success: success_message
+      redirect_to form_path(current_form.id), success: success_message
     else
       @mark_complete_input.mark_complete = "false"
       render "pages/index", locals: { current_form: }, status: :unprocessable_entity

@@ -12,7 +12,7 @@ module Forms
       @name_input = NameInput.new(name_input_params(current_form))
 
       if @name_input.submit
-        redirect_to form_path(@name_input.form), success: t("banner.success.form.change_name")
+        redirect_to form_path(@name_input.form.id), success: t("banner.success.form.change_name")
       else
         render :edit
       end

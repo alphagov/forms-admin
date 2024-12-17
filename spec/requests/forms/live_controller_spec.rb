@@ -17,19 +17,14 @@ RSpec.describe Forms::LiveController, type: :request do
     before do
       allow(CloudWatchService).to receive_messages(week_submissions: 501, week_starts: 1305)
 
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/2", headers, form.to_json, 200
-        mock.get "/api/v1/forms/2/live", headers, form.to_json, 200
-      end
+      allow(FormRepository).to receive_messages(find: form, find_live: form)
 
       get live_form_path(2)
     end
 
-    it "Reads the form from the API" do
-      expect(form).to have_been_read
-
-      pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
-      expect(ActiveResource::HttpMock.requests).to include pages_request
+    it "Reads the form" do
+      expect(FormRepository).to have_received(:find)
+      expect(FormRepository).to have_received(:find_live)
     end
 
     it "renders the live template" do
@@ -58,10 +53,7 @@ RSpec.describe Forms::LiveController, type: :request do
   describe "#show_pages" do
     context "with a live form" do
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", headers, form.to_json, 200
-          mock.get "/api/v1/forms/2/live", headers, form.to_json, 200
-        end
+        allow(FormRepository).to receive_messages(find: form, find_live: form)
 
         get live_form_pages_path(2)
       end

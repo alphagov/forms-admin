@@ -3,12 +3,16 @@ require "rails_helper"
 RSpec.describe Pages::DateSettingsController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
+  let(:page) { pages.first }
 
   let(:date_settings_input) { build :date_settings_input }
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
+    allow(FormRepository).to receive(:find).and_return(form)
+    allow(PageRepository).to receive_messages(find: page, save!: page)
+
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
@@ -17,15 +21,14 @@ RSpec.describe Pages::DateSettingsController, type: :request do
   describe "#new" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
 
       get date_settings_new_path(form_id: form.id)
     end
 
-    it "reads the existing form" do
-      expect(form).to have_been_read
+    it "reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
 
     it "sets an instance variable for date_settings_path" do
@@ -41,7 +44,6 @@ RSpec.describe Pages::DateSettingsController, type: :request do
   describe "#create" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
     end
@@ -89,16 +91,15 @@ RSpec.describe Pages::DateSettingsController, type: :request do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/2", headers, page.to_json, 200
       end
+
       draft_question
       get date_settings_edit_path(form_id: page.form_id, page_id: page.id)
     end
 
-    it "reads the existing form" do
-      expect(form).to have_been_read
+    it "reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
 
     it "returns the existing page input type" do
@@ -125,10 +126,7 @@ RSpec.describe Pages::DateSettingsController, type: :request do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/2", headers, page.to_json, 200
-        mock.put "/api/v1/forms/1/pages/2", post_headers
       end
     end
 

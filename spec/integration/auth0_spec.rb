@@ -143,13 +143,6 @@ RSpec.describe "usage of omniauth-auth0 gem" do
 
   describe "Google workspace integration" do
     let(:form) { build :form, :with_active_resource, id: 1, name: "Apply for a juggling license" }
-    let(:org_forms) { [] }
-
-    before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms?organisation_id=1", api_get_request_headers, org_forms.to_json, 200
-      end
-    end
 
     context "when a super-admin user is logged in" do
       let(:user) { super_admin_user }

@@ -8,10 +8,10 @@ RSpec.describe ApplicationController, type: :request do
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?organisation_id=1", headers, [form].to_json, 200
-      mock.get "/api/v1/forms/1", headers, form.to_json, 200
       mock.get "/api/v1/forms/1/pages", headers, form.pages.to_json, 200
     end
+
+    allow(FormRepository).to receive(:find).and_return(form)
 
     login_as_standard_user
   end

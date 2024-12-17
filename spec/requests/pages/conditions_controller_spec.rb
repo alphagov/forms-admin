@@ -22,6 +22,8 @@ RSpec.describe Pages::ConditionsController, type: :request do
   let(:user) { standard_user }
 
   before do
+    allow(FormRepository).to receive(:find).and_return(form)
+
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as user
@@ -30,15 +32,14 @@ RSpec.describe Pages::ConditionsController, type: :request do
   describe "#routing_page" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
 
       get routing_page_path(form_id: form.id)
     end
 
-    it "Reads the form from the API" do
-      expect(form).to have_been_read
+    it "reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
 
     it "renders the routing page template" do
@@ -52,7 +53,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     before do
       selected_page.id = 1
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
 
@@ -61,8 +61,8 @@ RSpec.describe Pages::ConditionsController, type: :request do
       post routing_page_path(form_id: 1, params:)
     end
 
-    it "Reads the form from the API" do
-      expect(form).to have_been_read
+    it "reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
 
     it "redirects the user to the new conditions page" do
@@ -98,16 +98,16 @@ RSpec.describe Pages::ConditionsController, type: :request do
     before do
       selected_page.id = 1
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/1", headers, selected_page.to_json, 200
       end
+
+      allow(PageRepository).to receive(:find).and_return(selected_page)
 
       get new_condition_path(form_id: 1, page_id: 1)
     end
 
-    it "Reads the form from the API" do
-      expect(form).to have_been_read
+    it "reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
 
     it "renders the new condition page template" do
@@ -132,10 +132,11 @@ RSpec.describe Pages::ConditionsController, type: :request do
     before do
       selected_page.id = 1
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
         mock.get "/api/v1/forms/1/pages/1", headers, selected_page.to_json, 200
       end
+
+      allow(PageRepository).to receive(:find).and_return(selected_page)
 
       conditions_input = Pages::ConditionsInput.new(form:, page: selected_page, answer_value: "Yes", goto_page_id: 3)
 
@@ -146,8 +147,8 @@ RSpec.describe Pages::ConditionsController, type: :request do
       post create_condition_path(form_id: form.id, page_id: selected_page.id, params: { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: 3, answer_value: "Wales" } })
     end
 
-    it "Reads the form from the API" do
-      expect(form).to have_been_read
+    it "reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
 
     it "redirects to the page list" do
@@ -193,11 +194,10 @@ RSpec.describe Pages::ConditionsController, type: :request do
       selected_page.routing_conditions = [condition]
       selected_page.position = 1
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
       end
 
+      allow(PageRepository).to receive(:find).and_return(selected_page)
       allow(ConditionRepository).to receive(:find).and_return(condition)
 
       allow(Pages::ConditionsInput).to receive(:new).and_return(conditions_input)
@@ -207,8 +207,8 @@ RSpec.describe Pages::ConditionsController, type: :request do
       get edit_condition_path(form_id: 1, page_id: selected_page.id, condition_id: condition.id)
     end
 
-    it "Reads the form from the API" do
-      expect(form).to have_been_read
+    it "reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
 
     it "Checks the errors from the API response" do
@@ -243,14 +243,13 @@ RSpec.describe Pages::ConditionsController, type: :request do
       selected_page.routing_conditions = [condition]
       selected_page.position = 1
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
       end
 
-      conditions_input = Pages::ConditionsInput.new(form:, page: selected_page, record: condition, answer_value: "Yes", goto_page_id: 3)
-
+      allow(PageRepository).to receive(:find).and_return(selected_page)
       allow(ConditionRepository).to receive(:find).and_return(condition)
+
+      conditions_input = Pages::ConditionsInput.new(form:, page: selected_page, record: condition, answer_value: "Yes", goto_page_id: 3)
 
       allow(conditions_input).to receive(:update_condition).and_return(submit_result)
 
@@ -262,8 +261,8 @@ RSpec.describe Pages::ConditionsController, type: :request do
                                 params: { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: 3, answer_value: "Wales" } })
     end
 
-    it "Reads the form from the API" do
-      expect(form).to have_been_read
+    it "reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
 
     it "redirects to the page list" do
@@ -307,10 +306,10 @@ RSpec.describe Pages::ConditionsController, type: :request do
       selected_page.routing_conditions = [condition]
       selected_page.position = 1
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
       end
+
+      allow(PageRepository).to receive(:find).and_return(selected_page)
 
       allow(ConditionRepository).to receive(:find).and_return(condition)
 
@@ -323,8 +322,8 @@ RSpec.describe Pages::ConditionsController, type: :request do
       get delete_condition_path(form_id: 1, page_id: selected_page.id, condition_id: condition.id)
     end
 
-    it "Reads the form from the API" do
-      expect(form).to have_been_read
+    it "reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
 
     it "renders the delete condition page template" do
@@ -353,10 +352,10 @@ RSpec.describe Pages::ConditionsController, type: :request do
       selected_page.routing_conditions = [condition]
       selected_page.position = 1
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/#{selected_page.id}", headers, selected_page.to_json, 200
       end
+
+      allow(PageRepository).to receive(:find).and_return(selected_page)
 
       allow(ConditionRepository).to receive(:find).and_return(condition)
       allow(ConditionRepository).to receive(:destroy)
@@ -373,8 +372,8 @@ RSpec.describe Pages::ConditionsController, type: :request do
                                     params: { pages_delete_condition_input: { confirm:, goto_page_id: 3, answer_value: "Wales" } })
     end
 
-    it "Reads the form from the API" do
-      expect(form).to have_been_read
+    it "reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
 
     it "redirects to the page list" do

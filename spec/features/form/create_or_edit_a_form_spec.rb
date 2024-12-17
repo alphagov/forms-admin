@@ -1,7 +1,7 @@
 require "rails_helper"
 
 feature "Create or edit a form", type: :feature do
-  let(:form) { build :form, :with_active_resource, id: 1, name: "Apply for a juggling license", created_at: "2024-10-08T07:31:15.762Z" }
+  let(:form) { build :form, id: 1, name: "Apply for a juggling license", created_at: "2024-10-08T07:31:15.762Z" }
   let(:group) { create :group, name: "Group 1" }
 
   before do
@@ -13,10 +13,10 @@ feature "Create or edit a form", type: :feature do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.post "/api/v1/forms", post_headers, { id: 1 }.to_json
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
+
+      allow(FormRepository).to receive_messages(create!: form, find: form)
     end
 
     context "when the user is a member of a group" do
@@ -45,11 +45,10 @@ feature "Create or edit a form", type: :feature do
       form.name = "Another form of juggling"
 
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.put "/api/v1/forms/1", post_headers
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
-        mock.get "/api/v1/forms/1", headers, updated_form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
+
+      allow(FormRepository).to receive_messages(save!: form, find: form)
     end
 
     context "when the user is a member of a group with a form" do

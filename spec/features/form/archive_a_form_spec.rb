@@ -2,17 +2,10 @@ require "rails_helper"
 
 feature "Archive a form", type: :feature do
   let(:form) { build(:form, :live, id: 1) }
-  let(:org_forms) { [form] }
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?organisation_id=1", headers, org_forms.to_json, 200
-      mock.get "/api/v1/forms/1", headers, form.to_json, 200
-      mock.get "/api/v1/forms/1/live", headers, form.to_json, 200
-      mock.get "/api/v1/forms/1/archived", headers, form.to_json, 200
-      mock.post "/api/v1/forms/1/archive", post_headers, {}, 200
-    end
+    allow(FormRepository).to receive_messages(find: form, find_live: form, find_archived: form, archive!: {})
 
     GroupForm.create! group:, form_id: form.id
     create(:membership, group:, user: standard_user, added_by: standard_user)

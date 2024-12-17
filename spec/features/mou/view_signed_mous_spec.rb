@@ -2,18 +2,13 @@ require "rails_helper"
 
 describe "Check which MOUs have been signed", type: :feature do
   let(:user) { super_admin_user }
-  let(:mou_signatures) do
+  let!(:mou_signatures) do
     [create(:mou_signature, created_at: Time.zone.parse("October 12, 2023")),
      create(:mou_signature, created_at: Time.zone.parse("September 1, 2023"))]
   end
 
   before do
-    ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?organisation_id=#{user.organisation.id}", headers, [].to_json, 200
-      mock.get "/api/v1/forms?creator_id=#{user.id}", headers, [].to_json, 200
-    end
-
-    mou_signatures
+    allow(FormRepository).to receive(:where).and_return([])
 
     login_as_super_admin_user
   end

@@ -3,6 +3,7 @@ require "rails_helper"
 describe Pages::LongListsSelection::OptionsController, type: :request do
   let(:form) { build :form, id: 1 }
   let(:pages) { build_list :page, 5, form_id: form.id }
+  let(:page) { pages.first }
 
   let(:draft_question) do
     create :draft_question,
@@ -19,6 +20,9 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
+    allow(FormRepository).to receive(:find).and_return(form)
+    allow(PageRepository).to receive_messages(find: page, save!: page)
+
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
@@ -27,7 +31,6 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
   describe "#new" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
       draft_question
@@ -35,7 +38,7 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
     end
 
     it "reads the existing form" do
-      expect(form).to have_been_read
+      expect(FormRepository).to have_received(:find)
     end
 
     it "sets an instance variable for selection_options_path" do
@@ -76,7 +79,6 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
   describe "#create" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
       draft_question
@@ -136,16 +138,14 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/2", headers, page.to_json, 200
       end
       draft_question
       get long_lists_selection_options_edit_path(form_id: page.form_id, page_id: page.id)
     end
 
     it "reads the existing form" do
-      expect(form).to have_been_read
+      expect(FormRepository).to have_received(:find)
     end
 
     it "returns the existing draft question answer settings" do
@@ -176,10 +176,7 @@ describe Pages::LongListsSelection::OptionsController, type: :request do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-        mock.get "/api/v1/forms/1/pages/2", headers, page.to_json, 200
-        mock.put "/api/v1/forms/1/pages/2", post_headers
       end
       draft_question
     end

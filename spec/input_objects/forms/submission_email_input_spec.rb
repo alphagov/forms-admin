@@ -159,7 +159,7 @@ RSpec.describe Forms::SubmissionEmailInput, type: :model do
     end
 
     it "returns true and updates form if confirmation code does not match" do
-      allow(form).to receive(:save!).and_return(true)
+      allow(FormRepository).to receive(:save!).and_return(true)
       create :form_submission_email, form_id: form.id, confirmation_code: "123456", temporary_submission_email: "test@test.gov.uk"
 
       submission_email_input_with_user.assign_form_values

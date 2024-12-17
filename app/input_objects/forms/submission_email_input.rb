@@ -45,7 +45,7 @@ class Forms::SubmissionEmailInput < BaseInput
 
     # Update the submission email in the form
     form.submission_email = temporary_submission_email
-    form.save!
+    FormRepository.save!(form)
     mark_submission_email_as_confirmed
   end
 

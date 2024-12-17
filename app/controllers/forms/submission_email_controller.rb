@@ -12,7 +12,7 @@ module Forms
       @submission_email_input = SubmissionEmailInput.new(set_submission_email_input_params)
 
       if @submission_email_input.submit
-        redirect_to submission_email_code_sent_path(@submission_email_input.form)
+        redirect_to submission_email_code_sent_path(@submission_email_input.form.id)
       else
         render :new, status: :unprocessable_entity
       end
@@ -31,7 +31,7 @@ module Forms
       @submission_email_input = SubmissionEmailInput.new(set_email_code_form_params).assign_form_values
 
       if @submission_email_input.confirm_confirmation_code
-        redirect_to submission_email_confirmed_path(@submission_email_input.form)
+        redirect_to submission_email_confirmed_path(@submission_email_input.form.id)
       else
         render :submission_email_code, status: :unprocessable_entity
       end
@@ -64,7 +64,7 @@ module Forms
     end
 
     def current_live_form
-      @current_live_form ||= Form.find_live(params[:form_id])
+      @current_live_form ||= FormRepository.find_live(form_id: params[:form_id])
     end
   end
 end

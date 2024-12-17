@@ -1,19 +1,11 @@
 require "rails_helper"
 
 feature "Share a preview", type: :feature do
-  let(:form) { build :form, :with_active_resource, id: 1 }
-  let(:fake_page) { build :page, form_id: 1, id: 2 }
-  let(:pages) { [fake_page] }
+  let(:form) { build :form, :with_pages, id: 1 }
   let(:group) { create(:group, organisation: standard_user.organisation, status: "active") }
 
   before do
-    ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms/1", headers, form.to_json, 200
-      mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      mock.get "/api/v1/forms/1/pages/2", headers, fake_page.to_json, 200
-      mock.post "/api/v1/forms/1/pages", post_headers, fake_page.to_json, 200
-      mock.put "/api/v1/forms/1", post_headers, form.to_json, 200
-    end
+    allow(FormRepository).to receive_messages(find: form, save!: form)
 
     GroupForm.create!(group:, form_id: form.id)
     create(:membership, group:, user: standard_user, added_by: standard_user, role: :group_admin)
