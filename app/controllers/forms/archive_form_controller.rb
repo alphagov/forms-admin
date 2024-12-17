@@ -19,7 +19,7 @@ module Forms
 
       ArchiveFormService.new(form: current_form, current_user: @current_user).archive
 
-      redirect_to archive_form_confirmation_path(current_form)
+      redirect_to archive_form_confirmation_path
     end
 
     def confirmation

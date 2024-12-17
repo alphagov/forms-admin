@@ -32,12 +32,12 @@ namespace :forms do
       abort usage_message if args[:form_id].blank? || args[:submission_email].blank?
       raise "'#{args[:submission_email]}' is not an email address" unless args[:submission_email].match?(/.*@.*/)
 
-      form = Form.find(args[:form_id])
+      form = FormRepository.find(form_id: args[:form_id])
       form.submission_email = args[:submission_email]
 
       Rails.logger.info "forms:submission_email:update: setting #{fmt_form(form)} submission email to \'#{form.submission_email}\'"
 
-      form.save!
+      FormRepository.save!(form)
 
       form.form_submission_email&.destroy!
     end
@@ -48,7 +48,7 @@ def move_forms(form_ids, group_id)
   group = Group.find_by! external_id: group_id
 
   form_ids.each do |form_id|
-    form = Form.find(form_id)
+    form = FormRepository.find(form_id: form_id)
     group_form = GroupForm.find_or_initialize_by(form_id:)
 
     if group_form.group == group

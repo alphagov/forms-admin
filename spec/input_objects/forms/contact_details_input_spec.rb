@@ -223,7 +223,7 @@ RSpec.describe Forms::ContactDetailsInput, type: :model do
       subject(:contact_details_input) { build :contact_details_input, contact_details_supplied: [:supply_email], email: "invalid_email" }
 
       before do
-        allow(contact_details_input.form).to receive(:save!)
+        allow(FormRepository).to receive(:save!)
       end
 
       it "returns false" do
@@ -232,7 +232,7 @@ RSpec.describe Forms::ContactDetailsInput, type: :model do
 
       it "does not save form" do
         contact_details_input.submit
-        expect(contact_details_input.form).not_to have_received(:save!)
+        expect(FormRepository).not_to have_received(:save!)
       end
     end
 
@@ -240,7 +240,7 @@ RSpec.describe Forms::ContactDetailsInput, type: :model do
       subject(:contact_details_input) { build :contact_details_input }
 
       before do
-        allow(contact_details_input.form).to receive(:save!).and_return(true)
+        allow(FormRepository).to receive(:save!).and_return(true)
       end
 
       it "not be false" do
@@ -249,7 +249,7 @@ RSpec.describe Forms::ContactDetailsInput, type: :model do
 
       it "saves the form" do
         contact_details_input.submit
-        expect(contact_details_input.form).to have_received(:save!)
+        expect(FormRepository).to have_received(:save!)
       end
 
       it "sets the form values" do

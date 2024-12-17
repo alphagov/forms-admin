@@ -5,7 +5,7 @@ class Forms::MarkPagesSectionCompleteInput < Forms::MarkCompleteInput
     return false if invalid?
 
     form.question_section_completed = mark_complete
-    if form.save!
+    if FormRepository.save!(form)
       true
     else
       false
