@@ -625,7 +625,7 @@ en:
           'true': We’ll add ‘(optional)’ to the end of the question text.
         is_repeatable: Select ‘Yes’ if you want to let someone add more than one answer - for example, listing all their current household members.
         is_repeatable_options:
-          'true': After adding their first answer we’ll ask if they need to add another - up to a maximum of 50
+          'true': After adding their first answer we’ll ask if they need to add another - up to a maximum of 50.
       pages_selection_bulk_options_input:
         include_none_of_the_above_options:
           'true': We’ll add ‘None of the above’ to the end of your list of options
