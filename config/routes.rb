@@ -194,6 +194,7 @@ Rails.application.routes.draw do
     get "selection-questions-with-autocomplete", to: "reports#selection_questions_with_autocomplete", as: :report_selection_questions_with_autocomplete
     get "selection-questions-with-radios", to: "reports#selection_questions_with_radios", as: :report_selection_questions_with_radios
     get "selection-questions-with-checkboxes", to: "reports#selection_questions_with_checkboxes", as: :report_selection_questions_with_checkboxes
+    get "csv-downloads", to: "reports#csv_downloads", as: :report_csv_downloads
     get "live-forms-csv", to: "reports#live_forms_csv", as: :report_live_forms_csv
     get "live-questions-csv", to: "reports#live_questions_csv", as: :report_live_questions_csv
   end

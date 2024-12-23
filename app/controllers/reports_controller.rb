@@ -48,6 +48,8 @@ class ReportsController < ApplicationController
     render template: "reports/selection_questions/checkboxes", locals: { data: }
   end
 
+  def csv_downloads; end
+
   def live_forms_csv
     send_data Reports::CsvReportsService.new.live_forms_csv,
               type: "text/csv; charset=iso-8859-1",
