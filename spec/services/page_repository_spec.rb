@@ -1,6 +1,12 @@
 require "rails_helper"
 
 describe PageRepository do
+  around do |example|
+    Rails.application.deprecators[:forms_api].silence do
+      example.run
+    end
+  end
+
   describe "#find" do
     let(:page) { build(:page, id: 2, form_id: 1) }
 
