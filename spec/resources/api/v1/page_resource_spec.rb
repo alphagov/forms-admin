@@ -1,6 +1,12 @@
 require "rails_helper"
 
 describe Api::V1::PageResource, type: :model do
+  around do |example|
+    Rails.application.deprecators[:forms_api].silence do
+      example.run
+    end
+  end
+
   describe "validations" do
     let(:page) { build :page, question_text: }
     let(:question_text) { "What is your address?" }

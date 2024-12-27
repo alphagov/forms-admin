@@ -3,6 +3,12 @@ require "rake"
 require "rails_helper"
 
 RSpec.describe "users.rake" do
+  around do |example|
+    Rails.application.deprecators[:forms_api].silence do
+      example.run
+    end
+  end
+
   before do
     Rake.application.rake_require "tasks/users"
     Rake::Task.define_task(:environment)
