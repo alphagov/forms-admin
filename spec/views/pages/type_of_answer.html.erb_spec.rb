@@ -15,15 +15,15 @@ describe "pages/type_of_answer.html.erb", type: :view do
     # mock the form.page_number method
     allow(form).to receive_messages(persisted?: true, page_number: question_number)
 
-    # mock the path helper
     without_partial_double_verification do
-      allow(view).to receive_messages(form_pages_type_of_answer_input_path: "/type-of-answer", current_form: form)
+      allow(view).to receive_messages(current_form: form)
     end
 
     # setup instance variables
     assign(:page, page)
     assign(:type_of_answer_input, type_of_answer_input)
     assign(:answer_types, answer_types)
+    assign(:type_of_answer_path, "/type-of-answer")
 
     render(template: "pages/type_of_answer")
   end
