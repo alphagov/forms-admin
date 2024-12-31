@@ -13,8 +13,8 @@ RSpec::Matchers.define :have_been_updated_to do |updated_resource|
 
   failure_message do |resource|
     expected_request_path = resource.class.element_path(resource.id, resource.prefix_options)
-    expected_request = ActiveResource::Request.new(:put, expected_request_path, resource.to_json)
+    expected_request = ActiveResource::Request.new(:put, expected_request_path, updated_resource.to_json)
 
-    HelperMethods.format_failure_message(resource, expected_request, ActiveResource::HttpMock.requests)
+    HelperMethods.format_failure_message(updated_resource, expected_request, ActiveResource::HttpMock.requests)
   end
 end
