@@ -7,7 +7,7 @@ class MakeFormLiveService
 
   def initialize(current_form:, current_user:)
     @current_form = current_form
-    @current_live_form = Form.find_live(current_form.id) if current_form.is_live?
+    @current_live_form = FormRepository.find_live(form_id: current_form.id) if current_form.is_live?
     @current_user = current_user
   end
 

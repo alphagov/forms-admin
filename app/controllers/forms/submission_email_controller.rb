@@ -64,7 +64,7 @@ module Forms
     end
 
     def current_live_form
-      @current_live_form ||= Form.find_live(params[:form_id])
+      @current_live_form ||= FormRepository.find_live(form_id: params[:form_id])
     end
   end
 end
