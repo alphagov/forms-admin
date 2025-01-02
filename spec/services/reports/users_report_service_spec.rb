@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe UsersReportService do
+describe Reports::UsersReportService do
   subject(:users_report_service) do
     described_class.new
   end

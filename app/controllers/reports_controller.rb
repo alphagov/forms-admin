@@ -11,7 +11,7 @@ class ReportsController < ApplicationController
   end
 
   def users
-    data = UsersReportService.new.user_data
+    data = Reports::UsersReportService.new.user_data
 
     render locals: { data: }
   end
