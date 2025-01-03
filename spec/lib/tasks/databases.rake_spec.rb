@@ -3,6 +3,15 @@ require "rake"
 require "rails_helper"
 
 RSpec.describe "databases.rake" do
+  # Because we're using psql outside of ActiveRecord for this feature,
+  # transactional tests don't work as expected. Instead we need to turn them
+  # off temporarily so we can easily clean up after ourselves.
+  self.use_transactional_tests = false
+
+  after do
+    ActiveRecord::Tasks::DatabaseTasks.truncate_all
+  end
+
   before do
     Rake.application.rake_require "tasks/databases"
     Rake::Task.define_task(:environment)
