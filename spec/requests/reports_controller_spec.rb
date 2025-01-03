@@ -408,5 +408,63 @@ RSpec.describe ReportsController, type: :request do
         expect(response.body).to include "A question"
       end
     end
+
+    describe "#live_forms_csv" do
+      let(:csv_reports_service_mock) { instance_double(Reports::CsvReportsService) }
+      let(:dummy_csv) { '"Column 1", "Column 2"\n"Value 1", "Value 2"' }
+
+      before do
+        allow(Reports::CsvReportsService).to receive(:new).and_return(csv_reports_service_mock)
+        allow(csv_reports_service_mock).to receive(:live_forms_csv).and_return(dummy_csv)
+
+        login_as_super_admin_user
+        get report_live_forms_csv_path
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "responds with an attachment content-disposition header" do
+        expect(response.headers["content-disposition"]).to match(/attachment; filename=live_forms_report-.*?\.csv/)
+      end
+
+      it "has content-type text/csv" do
+        expect(response.headers["content-type"]).to eq "text/csv; charset=iso-8859-1"
+      end
+
+      it "has expected response body" do
+        expect(response.body).to eq(dummy_csv)
+      end
+    end
+
+    describe "#live_questions_csv" do
+      let(:csv_reports_service_mock) { instance_double(Reports::CsvReportsService) }
+      let(:dummy_csv) { '"Column 1", "Column 2"\n"Value 1", "Value 2"' }
+
+      before do
+        allow(Reports::CsvReportsService).to receive(:new).and_return(csv_reports_service_mock)
+        allow(csv_reports_service_mock).to receive(:live_questions_csv).and_return(dummy_csv)
+
+        login_as_super_admin_user
+        get report_live_questions_csv_path
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "responds with an attachment content-disposition header" do
+        expect(response.headers["content-disposition"]).to match(/attachment; filename=live_questions_report-.*?\.csv/)
+      end
+
+      it "has content-type text/csv" do
+        expect(response.headers["content-type"]).to eq "text/csv; charset=iso-8859-1"
+      end
+
+      it "has expected response body" do
+        expect(response.body).to eq(dummy_csv)
+      end
+    end
   end
 end

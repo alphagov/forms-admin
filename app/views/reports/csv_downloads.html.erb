@@ -1,0 +1,13 @@
+<% set_page_title(t("reports.csv_downloads.title")) %>
+<% content_for :back_link, govuk_back_link_to(reports_path, t("reports.back_link")) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= t("reports.csv_downloads.title") %></h1>
+
+    <ul class="govuk-list">
+      <li><%= govuk_link_to t("reports.csv_downloads.live_forms"), report_live_forms_csv_path, no_visited_state: true %></li>
+      <li><%= govuk_link_to t("reports.csv_downloads.live_questions"), report_live_questions_csv_path, no_visited_state: true %></li>
+    </ul>
+
+  </div>
+</div>
