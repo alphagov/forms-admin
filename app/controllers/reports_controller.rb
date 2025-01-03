@@ -54,6 +54,12 @@ class ReportsController < ApplicationController
               disposition: "attachment; filename=#{csv_filename('live_forms_report')}"
   end
 
+  def live_questions_csv
+    send_data Reports::CsvReportsService.new.live_questions_csv,
+              type: "text/csv; charset=iso-8859-1",
+              disposition: "attachment; filename=#{csv_filename('live_questions_report')}"
+  end
+
 private
 
   def check_user_has_permission
