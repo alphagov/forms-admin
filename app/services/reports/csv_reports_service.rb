@@ -43,6 +43,43 @@ class Reports::CsvReportsService
     end
   end
 
+  def live_questions_csv
+    CSV.generate do |csv|
+      csv << [
+        "Form ID",
+        "Status",
+        "Form name",
+        "Organisation name",
+        "Organisation ID",
+        "Group name",
+        "Group ID",
+        "Question text",
+        "Answer type",
+        "Hint text",
+        "Page heading",
+        "Guidance markdown",
+        "Is optional?",
+        "Is repeatable?",
+        "Has routes?",
+        "Answer settings - Input type",
+        "Selection settings - Only one option?",
+        "Selection settings - Number of options",
+        "Name settings - Title needed?",
+        "Raw answer settings",
+      ]
+
+      page = 1
+      form_documents_response = get_paginated_form_documents(page)
+      write_form_questions_to_csv(csv, form_documents_response.forms)
+
+      while form_documents_response.has_more_results?
+        page += 1
+        form_documents_response = get_paginated_form_documents(page)
+        write_form_questions_to_csv(csv, form_documents_response.forms)
+      end
+    end
+  end
+
 private
 
   def get_paginated_form_documents(page)
@@ -72,6 +109,14 @@ private
     end
   end
 
+  def write_form_questions_to_csv(csv, forms)
+    forms.each do |form|
+      question_rows(form).each do |question|
+        csv << question
+      end
+    end
+  end
+
   def form_row(form)
     form_id = form["form_id"]
     group = GroupForm.find_by_form_id(form_id)&.group
@@ -97,5 +142,35 @@ private
       form["content"]["what_happens_next_markdown"],
       form["content"]["submission_type"],
     ]
+  end
+
+  def question_rows(form)
+    form_id = form["form_id"]
+    group = GroupForm.find_by_form_id(form_id)&.group
+
+    form["content"]["steps"].map do |step|
+      [
+        form_id,
+        form["tag"],
+        form["content"]["name"],
+        group&.organisation&.name,
+        group&.organisation&.id,
+        group&.name,
+        group&.external_id,
+        step["data"]["question_text"],
+        step["data"]["answer_type"],
+        step["data"]["hint_text"],
+        step["data"]["page_heading"],
+        step["data"]["guidance_markdown"],
+        step["data"]["is_optional"],
+        step["data"]["is_repeatable"],
+        step["routing_conditions"].present?,
+        step.dig("data", "answer_settings", "input_type"),
+        step.dig("data", "answer_settings", "only_one_option").presence.try { |o| o.to_s == "true" },
+        step.dig("data", "answer_settings", "selection_options")&.length,
+        step.dig("data", "answer_settings", "title_needed"),
+        step["data"]["answer_settings"].as_json,
+      ]
+    end
   end
 end
