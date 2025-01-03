@@ -17,6 +17,28 @@ describe CustomDatabaseTasks do
         expect(psql).to have_received(:run).with(file: "data.sql")
       end
     end
+
+    context "with a database config and an S3 URI" do
+      it "pipes the data from s3 to psql" do
+        s3 = Aws::S3::Client.new(stub_responses: {
+          get_object: { body: "foobar" },
+        })
+
+        allow(Aws::S3::Client).to receive(:new).and_return(s3)
+
+        allow(Psql).to receive(:call)
+
+        db_config = instance_double(
+          ActiveRecord::DatabaseConfigurations::HashConfig,
+        )
+
+        described_class.load_data(db_config, "s3://test-bucket/test-object")
+
+        expect(Psql)
+          .to have_received(:call)
+          .with(db_config)
+      end
+    end
   end
 
   describe "#load_data_current" do

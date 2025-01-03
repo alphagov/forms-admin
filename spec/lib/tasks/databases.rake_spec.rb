@@ -61,6 +61,45 @@ RSpec.describe "databases.rake" do
       end
     end
 
+    context "with an S3 URI" do
+      it "loads data from the S3 object into the database" do
+        allow(CustomDatabaseTasks).to receive(:load_data_current)
+
+        task.invoke("s3://test-bucket/backup.dat")
+
+        expect(CustomDatabaseTasks)
+          .to have_received(:load_data_current)
+          .with("s3://test-bucket/backup.dat")
+      end
+
+      context "and object is an SQL script" do
+        it "runs the SQL script" do
+          sql = <<~SQL
+            INSERT
+            INTO users
+            (name, email, provider, created_at, updated_at)
+            VALUES
+            ('Test User', 's3sqltest@example.gov.uk', 'sql', 'now', 'now')
+            ;
+          SQL
+
+          s3 = Aws::S3::Client.new(stub_responses: {
+            get_object: { body: sql },
+          })
+          allow(Aws::S3::Client).to receive(:new).and_return(s3)
+
+          expect {
+            task.invoke("s3://bucket/data.sql")
+          }.to change(User, :count).by(1)
+
+          expect(User.last).to have_attributes(
+            name: "Test User",
+            email: "s3sqltest@example.gov.uk",
+          )
+        end
+      end
+    end
+
     context "with no arguments" do
       it "aborts with a usage message" do
         expect {
