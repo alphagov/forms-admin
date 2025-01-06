@@ -58,7 +58,7 @@ WORKDIR /app
 
 RUN apk update
 RUN apk upgrade --available
-RUN apk add libc6-compat openssl-dev libpq postgresql-client
+RUN apk add libc6-compat openssl-dev libpq
 
 RUN adduser -D ruby
 RUN chown ruby:ruby -R /app
