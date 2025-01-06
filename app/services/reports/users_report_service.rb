@@ -1,4 +1,4 @@
-class UsersReportService
+class Reports::UsersReportService
   def user_data
     {
       caption: I18n.t("reports.users.heading"),

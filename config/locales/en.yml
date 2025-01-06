@@ -1260,6 +1260,10 @@ en:
       heading: All forms with add another answer
       title: All forms with add another answer
     back_link: Back to reports
+    csv_downloads:
+      live_forms: Download data about all live forms as a CSV file
+      live_questions: Download all questions in live forms as a CSV file
+      title: Download form data as a CSV file
     features:
       answer_types:
         heading: Answer type usage
