@@ -1,53 +1,51 @@
 require "rails_helper"
 
-# stub out psql with something that lets us see what is sent to stdin
-def stub_psql(cmd = "cat", method = :spawn)
-  allow(Kernel).to receive(method).and_wrap_original do |spawn, *_args, **kwargs|
-    spawn.call cmd, **kwargs
-  end
-end
-
 RSpec.describe Psql do
+  # Because we're using psql outside of ActiveRecord for this feature,
+  # transactional tests don't work as expected. Instead we need to turn them
+  # off temporarily so we can easily clean up after ourselves.
+  self.use_transactional_tests = false
+
+  before do
+    db.create_table :test_psql do |t|
+      t.column :value, :string
+    end
+  end
+
+  after do
+    db.drop_table :test_psql
+
+    ActiveRecord::Base.release_connection
+  end
+
+  let(:valid_sql) { "INSERT INTO test_psql (value) VALUES ('#{Faker::Alphanumeric.alphanumeric}');\n" }
+  let(:invalid_sql) { "INSERT INTO test_psql (not_a_column) VALUES (#{Faker::Number.number});\n" }
+
+  let(:change_database) { change { db.select_value("SELECT count(*) FROM test_psql;") } }
+
+  let(:db) { ActiveRecord::Base.lease_connection }
+
   describe "#run" do
     subject(:psql) { described_class.new(db_config) }
 
     let(:db_config) do
-      instance_double(
-        ActiveRecord::DatabaseConfigurations::HashConfig,
-        database: "forms-admin",
-        host: "localhost",
-        configuration_hash: {
-          username: "test",
-          password: "secret",
-        },
-      )
+      ActiveRecord::Base.connection_db_config
     end
 
     it "runs psql" do
-      allow(Kernel).to receive(:system)
+      file = Tempfile.create(%w[psql_spec .sql])
 
-      psql.run(file: "script.sql")
+      file.write(valid_sql)
+      file.close
 
-      expect(Kernel)
-        .to have_received(:system)
-        .with(
-          a_hash_including(
-            "PGHOST" => "localhost",
-            "PGPASSWORD" => "secret",
-            "PGUSER" => "test",
-          ),
-          "psql",
-          any_args,
-          "--file",
-          "script.sql",
-          "forms-admin",
-          exception: true,
-        )
+      expect {
+        psql.run(file: file.path)
+      }.to change_database
     end
 
     context "when there is an error connecting to the database" do
-      it "raises an exception" do
-        db_config = instance_double(
+      let(:db_config) do
+        instance_double(
           ActiveRecord::DatabaseConfigurations::HashConfig,
           database: "forms-admin",
           host: "not_a_postgres_server.example.com",
@@ -56,13 +54,41 @@ RSpec.describe Psql do
             password: "secret",
           },
         )
+      end
 
-        psql = described_class.new(db_config)
-
+      it "raises an exception" do
         expect {
           psql.run(file: File::NULL)
-        }.to raise_error(RuntimeError)
+        }.to raise_error(RuntimeError, /psql/)
           .and output(/psql: error: /).to_stderr_from_any_process
+      end
+    end
+
+    context "with a database configuration" do
+      let(:db_config) do
+        instance_double(
+          ActiveRecord::DatabaseConfigurations::HashConfig,
+          database: "my_database",
+          host: "server.example.test",
+          configuration_hash: {
+            username: "test",
+            password: "secret",
+          },
+        )
+      end
+
+      it "connects to the database" do
+        expect(Kernel).to receive(:system) do |env, _cmd, *args, **_options|
+          expect(env).to include(
+            "PGHOST" => "server.example.test",
+            "PGPASSWORD" => "secret",
+            "PGUSER" => "test",
+          )
+
+          expect(args).to end_with "my_database"
+        end
+
+        psql.run(file: "script.sql")
       end
     end
 
@@ -74,110 +100,95 @@ RSpec.describe Psql do
 
         psql.run(file: "test.sql")
       end
+
+      context "when there is an error in the SQL" do
+        let(:file) { Tempfile.create(%w[psql_spec .sql]) }
+
+        before do
+          file.write(valid_sql)
+          file.write(invalid_sql)
+          file.close
+        end
+
+        it "raises an exception" do
+          expect {
+            psql.run(file: file.path)
+          }.to raise_error(RuntimeError, /psql/)
+            .and output.to_stderr_from_any_process
+        end
+
+        it "does not make any changes to the database" do
+          expect {
+            expect {
+              psql.run(file: file.path)
+            }.to raise_error(RuntimeError, /psql/)
+              .and output.to_stderr_from_any_process
+          }.not_to change_database
+        end
+      end
     end
 
     context "with a block" do
       it "allows IO to be sent to psql via stdin" do
-        # stub out psql with something that lets us see what is sent to stdin
-        stub_psql
-
         expect {
           psql.run do |stdin|
-            stdin.write("Hello World\n")
-            stdin.close
+            stdin.write(valid_sql)
           end
-        }.to output("Hello World\n").to_stdout_from_any_process
-      end
-
-      context "when the block does not close stdin" do
-        it "closes stdin before returning" do
-          stub_psql
-
-          # this will hang indefinitely if stdin is not closed
-          expect {
-            psql.run do |stdin|
-              stdin.write("Hello World\n")
-            end
-          }.to output("Hello World\n").to_stdout_from_any_process
-        end
-      end
-
-      context "when there is an error connecting to the database" do
-        it "raises an exception" do
-          db_config = instance_double(
-            ActiveRecord::DatabaseConfigurations::HashConfig,
-            database: "forms-admin",
-            host: "not_a_postgres_server.example.com",
-            configuration_hash: {
-              username: "test",
-              password: "secret",
-            },
-          )
-
-          psql = described_class.new(db_config)
-
-          expect {
-            psql.run do |stdin|
-              # nothing
-            end
-          }.to raise_error(RuntimeError)
-            .and output(/psql: error: /).to_stderr_from_any_process
-        end
+        }.to change_database
       end
 
       context "when the block raises an exception" do
-        it "tells psql to stop what it's doing" do
-          stub_psql
-
-          expect {
-            begin
-              psql.run do |stdin|
-                stdin.write("Hello")
-                raise "Something went wrong"
-              end
-            rescue RuntimeError
-              # we're not interested in the exception for this spec
-            end
-          }.not_to output.to_stdout_from_any_process # cat won't echo if it's interrupted
-        end
-
-        it "sends the interrupt signal" do
-          stub_psql
-
-          begin
-            psql.run do |stdin|
-              raise "Something went wrong"
-            end
-          rescue RuntimeError
-            # we're not interested in the exception for this spec
-          end
-
-          expect(psql.status).to have_attributes termsig: 2
-        end
-
         it "re-raises the exception" do
-          stub_psql
-
           expect {
             psql.run do |stdin|
-              stdin.write("Hello")
+              stdin.write(valid_sql)
               raise "Something went wrong"
             end
           }.to raise_error(RuntimeError, "Something went wrong")
         end
+
+        it "does not make any changes to the database" do
+          expect {
+            expect {
+              psql.run do |stdin|
+                stdin.write(valid_sql)
+                raise "Something went wrong"
+              end
+            }.to raise_error(RuntimeError, "Something went wrong")
+          }.not_to change_database
+        end
+      end
+
+      context "when there is an error in the SQL" do
+        it "raises an exception" do
+          expect {
+            psql.run do |stdin|
+              stdin.write(valid_sql)
+              stdin.write(invalid_sql)
+            end
+          }.to raise_error(RuntimeError, /psql/)
+            .and output.to_stderr_from_any_process
+        end
+
+        it "does not make any changes to the database" do
+          expect {
+            expect {
+              psql.run do |stdin|
+                stdin.write(valid_sql)
+                stdin.write(invalid_sql)
+              end
+            }.to raise_error(RuntimeError, /psql/)
+              .and output.to_stderr_from_any_process
+          }.not_to change_database
+        end
       end
 
       it "waits for psql to exit before returning" do
-        pid = instance_spy(Integer)
-        status = instance_spy(Process::Status)
-        allow(Kernel).to receive(:spawn).and_return(pid)
-        allow(Process::Status).to receive(:wait).and_return(status)
-
         psql.run do |_stdin|
           # nothing
         end
 
-        expect(Process::Status).to have_received(:wait).with(pid)
+        expect(psql.status).to be_exited
       end
     end
   end

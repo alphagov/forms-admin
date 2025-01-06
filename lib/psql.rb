@@ -7,7 +7,7 @@ class Psql
   end
 
   def run(file: nil)
-    args = ["--set", "ON_ERROR_STOP=1", "--quiet", "--no-psqlrc", "--output", File::NULL]
+    args = ["--set", "ON_ERROR_STOP=1", "--single-transaction", "--quiet", "--no-psqlrc", "--output", File::NULL]
     args.concat(["--file", file]) if file
     args << db_config.database
 

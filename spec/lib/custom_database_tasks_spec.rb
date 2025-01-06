@@ -26,17 +26,19 @@ describe CustomDatabaseTasks do
 
         allow(Aws::S3::Client).to receive(:new).and_return(s3)
 
-        allow(Psql).to receive(:call)
-
         db_config = instance_double(
           ActiveRecord::DatabaseConfigurations::HashConfig,
         )
 
-        described_class.load_data(db_config, "s3://test-bucket/test-object")
+        psql = instance_spy(Psql)
+        allow(Psql).to receive(:new).with(db_config).and_return(psql)
+        expect(psql).to receive(:run) do |&block|
+          stdin = instance_spy(IO)
+          block.call(stdin)
+          expect(stdin).to have_received(:write).with("foobar")
+        end
 
-        expect(Psql)
-          .to have_received(:call)
-          .with(db_config)
+        described_class.load_data(db_config, "s3://test-bucket/test-object")
       end
     end
   end
