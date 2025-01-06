@@ -56,6 +56,7 @@ class Reports::CsvReportsService
         "Organisation ID",
         "Group name",
         "Group ID",
+        "Question number in form",
         "Question text",
         "Answer type",
         "Hint text",
@@ -155,7 +156,7 @@ private
     form_id = form["form_id"]
     group = GroupForm.find_by_form_id(form_id)&.group
 
-    form["content"]["steps"].map do |step|
+    form["content"]["steps"].each_with_index.map do |step, index|
       [
         form_id,
         form["tag"],
@@ -164,6 +165,7 @@ private
         group&.organisation&.id,
         group&.name,
         group&.external_id,
+        index + 1,
         step["data"]["question_text"],
         step["data"]["answer_type"],
         step["data"]["hint_text"],
