@@ -69,6 +69,20 @@ RSpec.describe Reports::CsvReportsService do
         "email",
       ])
     end
+
+    context "when forms-api responds with a non-success status code" do
+      before do
+        stub_request(:get, form_documents_url)
+          .with(query: { page: "1", per_page: "3", tag: "live" })
+          .to_return(body: "There was an error", status: 400)
+      end
+
+      it "raises a StandardError" do
+        expect { csv_reports_service.live_forms_csv }.to raise_error(
+          StandardError, "Forms API responded with a non-success HTTP code when retrieving form documents: status 400"
+        )
+      end
+    end
   end
 
   describe "#live_forms_questions" do
@@ -195,6 +209,20 @@ RSpec.describe Reports::CsvReportsService do
         nil,
         "{\"only_one_option\"=>\"true\", \"selection_options\"=>[{\"name\"=>\"Once\"}, {\"name\"=>\"More than once\"}]}",
       ])
+    end
+
+    context "when forms-api responds with a non-success status code" do
+      before do
+        stub_request(:get, form_documents_url)
+          .with(query: { page: "1", per_page: "3", tag: "live" })
+          .to_return(body: "There was an error", status: 400)
+      end
+
+      it "raises a StandardError" do
+        expect { csv_reports_service.live_questions_csv }.to raise_error(
+          StandardError, "Forms API responded with a non-success HTTP code when retrieving form documents: status 400"
+        )
+      end
     end
   end
 
