@@ -2,7 +2,7 @@ forms_api:
   # URL to form-api endpoints
   base_url: http://localhost:9292
   # Authentication key to authenticate forms-runner to forms-api
-  auth_key:
+  auth_key: an-auth-key
 
 # When set to true, All pages will render 'Maintenance mode'
 maintenance_mode_enabled: false
