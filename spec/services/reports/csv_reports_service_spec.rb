@@ -32,9 +32,9 @@ RSpec.describe Reports::CsvReportsService do
   describe "#live_forms_csv" do
     it "makes request to forms-api for each page of results" do
       csv_reports_service.live_forms_csv
-      assert_requested(:get, form_documents_url, query: { page: "1", per_page: "3", tag: "live" }, times: 1)
-      assert_requested(:get, form_documents_url, query: { page: "2", per_page: "3", tag: "live" }, times: 1)
-      assert_requested(:get, form_documents_url, query: { page: "3", per_page: "3", tag: "live" }, times: 1)
+      assert_requested(:get, form_documents_url, query: { page: "1", per_page: "3", tag: "live" }, headers:, times: 1)
+      assert_requested(:get, form_documents_url, query: { page: "2", per_page: "3", tag: "live" }, headers:, times: 1)
+      assert_requested(:get, form_documents_url, query: { page: "3", per_page: "3", tag: "live" }, headers:, times: 1)
     end
 
     it "returns a CSV with 10 rows, including the header row" do
@@ -69,14 +69,28 @@ RSpec.describe Reports::CsvReportsService do
         "email",
       ])
     end
+
+    context "when forms-api responds with a non-success status code" do
+      before do
+        stub_request(:get, form_documents_url)
+          .with(query: { page: "1", per_page: "3", tag: "live" })
+          .to_return(body: "There was an error", status: 400)
+      end
+
+      it "raises a StandardError" do
+        expect { csv_reports_service.live_forms_csv }.to raise_error(
+          StandardError, "Forms API responded with a non-success HTTP code when retrieving form documents: status 400"
+        )
+      end
+    end
   end
 
   describe "#live_forms_questions" do
     it "makes request to forms-api for each page of results" do
       csv_reports_service.live_questions_csv
-      assert_requested(:get, form_documents_url, query: { page: "1", per_page: "3", tag: "live" }, times: 1)
-      assert_requested(:get, form_documents_url, query: { page: "2", per_page: "3", tag: "live" }, times: 1)
-      assert_requested(:get, form_documents_url, query: { page: "3", per_page: "3", tag: "live" }, times: 1)
+      assert_requested(:get, form_documents_url, query: { page: "1", per_page: "3", tag: "live" }, headers:, times: 1)
+      assert_requested(:get, form_documents_url, query: { page: "2", per_page: "3", tag: "live" }, headers:, times: 1)
+      assert_requested(:get, form_documents_url, query: { page: "3", per_page: "3", tag: "live" }, headers:, times: 1)
     end
 
     it "returns a CSV with 46 rows, including the header row" do
@@ -195,6 +209,20 @@ RSpec.describe Reports::CsvReportsService do
         nil,
         "{\"only_one_option\"=>\"true\", \"selection_options\"=>[{\"name\"=>\"Once\"}, {\"name\"=>\"More than once\"}]}",
       ])
+    end
+
+    context "when forms-api responds with a non-success status code" do
+      before do
+        stub_request(:get, form_documents_url)
+          .with(query: { page: "1", per_page: "3", tag: "live" })
+          .to_return(body: "There was an error", status: 400)
+      end
+
+      it "raises a StandardError" do
+        expect { csv_reports_service.live_questions_csv }.to raise_error(
+          StandardError, "Forms API responded with a non-success HTTP code when retrieving form documents: status 400"
+        )
+      end
     end
   end
 

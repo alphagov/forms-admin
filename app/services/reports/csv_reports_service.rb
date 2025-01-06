@@ -1,7 +1,10 @@
 require "csv"
 
 class Reports::CsvReportsService
-  REQUEST_HEADERS = { "X-API-Token" => Settings.forms_api.auth_key }.freeze
+  REQUEST_HEADERS = {
+    "X-API-Token" => Settings.forms_api.auth_key,
+    "Accept" => "application/json",
+  }.freeze
   FORM_DOCUMENTS_URL = "#{Settings.forms_api.base_url}/api/v2/form-documents".freeze
 
   FormDocumentsResponse = Data.define(:forms, :has_more_results?)
@@ -100,7 +103,11 @@ private
     params = { tag: "live", page:, per_page: Settings.reports.forms_api_forms_per_request_page }
     uri.query = URI.encode_www_form(params)
 
-    Net::HTTP.get_response(uri)
+    response = Net::HTTP.get_response(uri, REQUEST_HEADERS)
+
+    return response if response.is_a? Net::HTTPSuccess
+
+    raise StandardError, "Forms API responded with a non-success HTTP code when retrieving form documents: status #{response.code}"
   end
 
   def write_forms_to_csv(csv, forms)
