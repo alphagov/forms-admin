@@ -1,9 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Psql do
-  # Because we're using psql outside of ActiveRecord for this feature,
-  # transactional tests don't work as expected. Instead we need to turn them
-  # off temporarily so we can easily clean up after ourselves.
   self.use_transactional_tests = false
 
   before do
@@ -28,11 +25,9 @@ RSpec.describe Psql do
   describe "#run" do
     subject(:psql) { described_class.new(db_config) }
 
-    let(:db_config) do
-      ActiveRecord::Base.connection_db_config
-    end
+    let(:db_config) { nil }
 
-    it "runs psql" do
+    it "runs sql scripts" do
       file = Tempfile.create(%w[psql_spec .sql])
 
       file.write(valid_sql)
@@ -43,59 +38,10 @@ RSpec.describe Psql do
       }.to change_database
     end
 
-    context "when there is an error connecting to the database" do
-      let(:db_config) do
-        instance_double(
-          ActiveRecord::DatabaseConfigurations::HashConfig,
-          database: "forms-admin",
-          host: "not_a_postgres_server.example.com",
-          configuration_hash: {
-            username: "test",
-            password: "secret",
-          },
-        )
-      end
-
-      it "raises an exception" do
-        expect {
-          psql.run(file: File::NULL)
-        }.to raise_error(RuntimeError, /psql/)
-          .and output(/psql: error: /).to_stderr_from_any_process
-      end
-    end
-
-    context "with a database configuration" do
-      let(:db_config) do
-        instance_double(
-          ActiveRecord::DatabaseConfigurations::HashConfig,
-          database: "my_database",
-          host: "server.example.test",
-          configuration_hash: {
-            username: "test",
-            password: "secret",
-          },
-        )
-      end
-
-      it "connects to the database" do
-        expect(Kernel).to receive(:system) do |env, _cmd, *args, **_options|
-          expect(env).to include(
-            "PGHOST" => "server.example.test",
-            "PGPASSWORD" => "secret",
-            "PGUSER" => "test",
-          )
-
-          expect(args).to end_with "my_database"
-        end
-
-        psql.run(file: "script.sql")
-      end
-    end
-
     context "with a filename" do
       it "runs psql with the file" do
-        expect(Kernel).to receive(:system) do |*args|
-          expect(args).to include "--file", "test.sql"
+        expect(File).to receive(:foreach) do |*args|
+          expect(args).to start_with "test.sql"
         end
 
         psql.run(file: "test.sql")
@@ -113,16 +59,14 @@ RSpec.describe Psql do
         it "raises an exception" do
           expect {
             psql.run(file: file.path)
-          }.to raise_error(RuntimeError, /psql/)
-            .and output.to_stderr_from_any_process
+          }.to raise_error(ActiveRecord::StatementInvalid, /not_a_column/)
         end
 
         it "does not make any changes to the database" do
           expect {
             expect {
               psql.run(file: file.path)
-            }.to raise_error(RuntimeError, /psql/)
-              .and output.to_stderr_from_any_process
+            }.to raise_error(ActiveRecord::StatementInvalid, /not_a_column/)
           }.not_to change_database
         end
       end
@@ -166,8 +110,7 @@ RSpec.describe Psql do
               stdin.write(valid_sql)
               stdin.write(invalid_sql)
             end
-          }.to raise_error(RuntimeError, /psql/)
-            .and output.to_stderr_from_any_process
+          }.to raise_error(ActiveRecord::StatementInvalid, /not_a_column/)
         end
 
         it "does not make any changes to the database" do
@@ -177,18 +120,9 @@ RSpec.describe Psql do
                 stdin.write(valid_sql)
                 stdin.write(invalid_sql)
               end
-            }.to raise_error(RuntimeError, /psql/)
-              .and output.to_stderr_from_any_process
+            }.to raise_error(ActiveRecord::StatementInvalid, /not_a_column/)
           }.not_to change_database
         end
-      end
-
-      it "waits for psql to exit before returning" do
-        psql.run do |_stdin|
-          # nothing
-        end
-
-        expect(psql.status).to be_exited
       end
     end
   end

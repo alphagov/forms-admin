@@ -13,7 +13,7 @@ describe CustomDatabaseTasks do
 
         described_class.load_data(db_config, "data.sql")
 
-        expect(Psql).to have_received(:new).with(db_config)
+        expect(Psql).to have_received(:new)
         expect(psql).to have_received(:run).with(file: "data.sql")
       end
     end
@@ -31,7 +31,7 @@ describe CustomDatabaseTasks do
         )
 
         psql = instance_spy(Psql)
-        allow(Psql).to receive(:new).with(db_config).and_return(psql)
+        allow(Psql).to receive(:new).and_return(psql)
         expect(psql).to receive(:run) do |&block|
           stdin = instance_spy(IO)
           block.call(stdin)

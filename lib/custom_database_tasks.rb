@@ -4,11 +4,11 @@ module CustomDatabaseTasks
       if file.start_with?("s3://")
         load_data_from_s3(db_config, file)
       else
-        Psql.new(db_config).run(file:)
+        Psql.new.run(file:)
       end
     end
 
-    def load_data_from_s3(db_config, s3_uri)
+    def load_data_from_s3(_db_config, s3_uri)
       s3 = Aws::S3::Client.new
       s3_uri = URI(s3_uri)
       s3_object = {
@@ -16,7 +16,7 @@ module CustomDatabaseTasks
         key: s3_uri.path[1..],
       }
 
-      Psql.new(db_config).run do |stdin|
+      Psql.new.run do |stdin|
         s3.get_object(s3_object) do |chunk, _headers|
           stdin.write chunk
         end
