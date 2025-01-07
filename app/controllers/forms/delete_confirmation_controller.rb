@@ -30,19 +30,8 @@ module Forms
 
   private
 
-    def delete_confirmation_options
-      [
-        OpenStruct.new(value: "true"),
-        OpenStruct.new(value: "false"),
-      ]
-    end
-
     def delete_confirmation_input_params
       params.require(:forms_delete_confirmation_input).permit(:confirm)
-    end
-
-    def previous_page(id)
-      current_form.pages.find { |p| p.next_page = id }
     end
 
     def load_page_variables
