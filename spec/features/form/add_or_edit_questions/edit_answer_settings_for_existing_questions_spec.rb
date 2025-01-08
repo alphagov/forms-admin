@@ -1,14 +1,16 @@
 require "rails_helper"
 
 feature "Editing answer_settings for existing question", type: :feature do
-  let(:form) { build :form, :with_active_resource, id: 1, pages: }
+  let(:form) { build :form, id: 1, pages: }
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms/1", headers, form.to_json, 200
       mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
     end
+
+    allow(FormRepository).to receive_messages(find: form)
+    allow(PageRepository).to receive_messages(create!: true)
 
     pages.each do |page|
       allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: 1).and_return(page)

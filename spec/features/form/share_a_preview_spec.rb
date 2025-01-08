@@ -1,18 +1,17 @@
 require "rails_helper"
 
 feature "Share a preview", type: :feature do
-  let(:form) { build :form, :with_active_resource, id: 1 }
-  let(:fake_page) { build :page, form_id: 1, id: 2 }
-  let(:pages) { [fake_page] }
+  let(:form) { build :form, :with_pages, id: 1 }
   let(:group) { create(:group, organisation: standard_user.organisation, status: "active") }
+  let(:fake_page) { build :page, form_id: form.id, id: 2 }
+  let(:pages) { [fake_page] }
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms/1", headers, form.to_json, 200
       mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      mock.put "/api/v1/forms/1", post_headers, form.to_json, 200
     end
 
+    allow(FormRepository).to receive_messages(find: form, save!: form)
     allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(fake_page)
     allow(PageRepository).to receive(:create!).with(hash_including(form_id: 1))
 
