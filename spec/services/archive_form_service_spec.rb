@@ -12,7 +12,7 @@ describe ArchiveFormService do
 
   describe "#archive" do
     before do
-      allow(form).to receive(:archive!)
+      allow(FormRepository).to receive(:archive!)
       allow(SubmissionEmailMailer).to receive(:alert_processor_form_archive)
                                         .with(anything)
                                         .and_return(delivery)
@@ -20,7 +20,7 @@ describe ArchiveFormService do
     end
 
     it "calls archive! on the form" do
-      expect(form).to receive(:archive!)
+      expect(FormRepository).to receive(:archive!)
       archive_form_service.archive
     end
 

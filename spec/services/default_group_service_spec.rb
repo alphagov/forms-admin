@@ -13,9 +13,7 @@ RSpec.describe DefaultGroupService do
     end
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms?creator_id=#{user.id}", headers, forms_response.to_json, 200
-      end
+      allow(FormRepository).to receive(:where).with(creator_id: user.id).and_return(forms_response)
     end
 
     context "when the user does not already have a trial group" do
@@ -115,9 +113,7 @@ RSpec.describe DefaultGroupService do
       before do
         another_user = create :user, name: "Batman", email: "batsignal@example.gov.uk", organisation: user.organisation
 
-        ActiveResource::HttpMock.respond_to(false) do |mock|
-          mock.get "/api/v1/forms?creator_id=#{another_user.id}", headers, [build(:form, id: 10)].to_json, 200
-        end
+        allow(FormRepository).to receive(:where).with(creator_id: another_user.id).and_return([build(:form, id: 10)])
 
         default_group_service.create_user_default_trial_group!(another_user)
       end
@@ -137,9 +133,7 @@ RSpec.describe DefaultGroupService do
         before do
           yet_another_user = create :user, name: "Batman", email: "batman@joker.example.com", organisation: user.organisation
 
-          ActiveResource::HttpMock.respond_to(false) do |mock|
-            mock.get "/api/v1/forms?creator_id=#{yet_another_user.id}", headers, [build(:form, id: 100)].to_json, 200
-          end
+          allow(FormRepository).to receive(:where).with(creator_id: yet_another_user.id).and_return([build(:form, id: 100)])
 
           default_group_service.create_user_default_trial_group!(yet_another_user)
         end
