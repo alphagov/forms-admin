@@ -16,14 +16,13 @@ RSpec.describe Forms::SharePreviewController, type: :request do
 
   describe "#new" do
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/#{id}", headers, form.to_json, 200
-        get share_preview_path(id)
-      end
+      allow(FormRepository).to receive(:find).and_return(form)
+
+      get share_preview_path(id)
     end
 
-    it "reads the form from the API" do
-      expect(form).to have_been_read
+    it "reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
 
     it "returns 200" do
@@ -47,15 +46,13 @@ RSpec.describe Forms::SharePreviewController, type: :request do
     let(:mark_complete) { "true" }
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/#{id}", headers, form.to_json, 200
-        mock.put "/api/v1/forms/#{id}", post_headers
-        post share_preview_create_path(id), params: { forms_share_preview_input: { form:, mark_complete: } }
-      end
+      allow(FormRepository).to receive_messages(find: form, save!: form)
+
+      post share_preview_create_path(id), params: { forms_share_preview_input: { form:, mark_complete: } }
     end
 
-    it "reads the form from the API" do
-      expect(form).to have_been_read
+    it "reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
 
     context "when 'Yes' is selected" do
@@ -65,8 +62,8 @@ RSpec.describe Forms::SharePreviewController, type: :request do
         end
       end
 
-      it "updates the form on the API" do
-        expect(form).to have_been_updated_to(updated_form)
+      it "updates the form" do
+        expect(FormRepository).to have_received(:save!)
       end
 
       it "redirects to the form" do
@@ -86,8 +83,8 @@ RSpec.describe Forms::SharePreviewController, type: :request do
         end
       end
 
-      it "updates the form on the API" do
-        expect(form).to have_been_updated_to(updated_form)
+      it "updates the form" do
+        expect(FormRepository).to have_received(:save!)
       end
 
       it "redirects to the form" do
@@ -102,8 +99,8 @@ RSpec.describe Forms::SharePreviewController, type: :request do
     context "when no value is selected" do
       let(:mark_complete) { "" }
 
-      it "does not update the form on the API" do
-        expect(form).not_to have_been_updated
+      it "does not update the form" do
+        expect(FormRepository).not_to have_received(:save!)
       end
 
       it "returns an 422" do

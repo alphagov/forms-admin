@@ -22,7 +22,7 @@ module Forms
         end
       when :save_and_continue
         if @what_happens_next_input.submit
-          redirect_to form_path(@what_happens_next_input.form), success: t("banner.success.form.what_happens_next_saved")
+          redirect_to form_path(@what_happens_next_input.form.id), success: t("banner.success.form.what_happens_next_saved")
         else
           render :new, status: :unprocessable_entity
         end

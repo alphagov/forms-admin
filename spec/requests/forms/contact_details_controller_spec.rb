@@ -12,18 +12,17 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
   end
 
   describe "#new" do
-    let(:form) do
-      build :form, :with_support, id: 2
-    end
+    let(:form) { build :form, :with_support, id: 2 }
 
     before do
-      ActiveResourceMock.mock_resource(form, { read: { response: form, status: 200 } })
+      allow(FormRepository).to receive(:find).and_return(form)
+
       get contact_details_path(form_id: 2)
     end
 
     context "when the does not have any contact details set" do
-      it "reads the form from the API" do
-        expect(form).to have_been_read
+      it "reads the form" do
+        expect(FormRepository).to have_received(:find)
       end
 
       it "returns 200" do
@@ -51,10 +50,7 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
     end
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.put "/api/v1/forms/2", post_headers
-        mock.get "/api/v1/forms/2", headers, form.to_json, 200
-      end
+      allow(FormRepository).to receive_messages(find: form, save!: form)
 
       post contact_details_create_path(form_id: 2), params:
     end
@@ -62,12 +58,12 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
     context "when given valid params" do
       let(:params) { { forms_contact_details_input: { contact_details_supplied: ["", "supply_email"], email: "test@test.gov.uk", form: } } }
 
-      it "reads the form from the API" do
-        expect(form).to have_been_read
+      it "reads the form" do
+        expect(FormRepository).to have_received(:find)
       end
 
-      it "updates the form on the API" do
-        expect(form).to have_been_updated_to(updated_form)
+      it "updates the form" do
+        expect(FormRepository).to have_received(:save!)
       end
 
       it "redirects to the confirmation page" do
@@ -78,12 +74,12 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
     context "when given invalid parameters" do
       let(:params) { { forms_contact_details_input: { contact_details_supplied: ["", "supply_email"], email: "", form: } } }
 
-      it "reads the form from the API" do
-        expect(form).to have_been_read
+      it "reads the form" do
+        expect(FormRepository).to have_received(:find)
       end
 
-      it "does not update the form on the API" do
-        expect(form).not_to have_been_updated
+      it "does not update the form" do
+        expect(FormRepository).not_to have_received(:save!)
       end
 
       it "shows the error state" do
@@ -95,12 +91,12 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
     context "when given an email address for a non-government inbox" do
       let(:params) { { forms_contact_details_input: { contact_details_supplied: ["", "supply_email"], email: "a@gmail.com", form: } } }
 
-      it "reads the form from the API" do
-        expect(form).to have_been_read
+      it "reads the form" do
+        expect(FormRepository).to have_received(:find)
       end
 
       it "does not update the form on the API" do
-        expect(form).not_to have_been_updated
+        expect(FormRepository).not_to have_received(:save!)
       end
 
       it "shows the error state" do
@@ -128,8 +124,8 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
         end
       end
 
-      it "updates the form on the API" do
-        expect(form).to have_been_updated_to(updated_form)
+      it "does not update the form on the API" do
+        expect(FormRepository).to have_received(:save!)
       end
 
       it "redirects to the confirmation page" do

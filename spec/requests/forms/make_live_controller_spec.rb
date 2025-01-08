@@ -24,16 +24,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
 
   describe "#new" do
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.put "/api/v1/forms/2", post_headers
-        mock.get "/api/v1/forms/2", headers, form.to_json, 200
-      end
-
-      ActiveResourceMock.mock_resource(form,
-                                       {
-                                         read: { response: form, status: 200 },
-                                         update: { response: updated_form, status: 200 },
-                                       })
+      allow(FormRepository).to receive_messages(find: form)
 
       Membership.create!(group_id: group.id, user:, added_by: user, role: group_role)
       GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -43,8 +34,8 @@ RSpec.describe Forms::MakeLiveController, type: :request do
       get make_live_path(form_id: 2)
     end
 
-    it "reads the form from the API" do
-      expect(form).to have_been_read
+    it "reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
 
     it "returns 200" do
@@ -64,8 +55,8 @@ RSpec.describe Forms::MakeLiveController, type: :request do
               id: 2)
       end
 
-      it "reads the form from the API" do
-        expect(form).to have_been_read
+      it "reads the form" do
+        expect(FormRepository).to have_received(:find)
       end
 
       it "renders make your changes live" do
@@ -80,8 +71,8 @@ RSpec.describe Forms::MakeLiveController, type: :request do
               id: 2)
       end
 
-      it "reads the form from the API" do
-        expect(form).to have_been_read
+      it "reads the form" do
+        expect(FormRepository).to have_received(:find)
       end
 
       it "renders make your changes live" do
@@ -100,11 +91,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
 
   describe "#create" do
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.post "/api/v1/forms/2/make-live", post_headers
-        mock.get "/api/v1/forms/2", headers, form.to_json, 200
-        mock.get "/api/v1/forms/2/live", headers, form.to_json, 200
-      end
+      allow(FormRepository).to receive_messages(find: form, find_live: form, make_live!: form)
 
       Membership.create!(group_id: group.id, user:, added_by: user, role: group_role)
       GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -117,13 +104,12 @@ RSpec.describe Forms::MakeLiveController, type: :request do
     context "when making a form live" do
       let(:form_params) { { forms_make_live_input: { confirm: :yes, form: } } }
 
-      it "reads the form from the API" do
-        expect(form).to have_been_read
+      it "reads the form" do
+        expect(FormRepository).to have_received(:find)
       end
 
-      it "makes form live on the API" do
-        make_live_post = ActiveResource::Request.new(:post, "/api/v1/forms/2/make-live", {}, post_headers)
-        expect(ActiveResource::HttpMock.requests).to include make_live_post
+      it "makes the form live" do
+        expect(FormRepository).to have_received(:make_live!)
       end
 
       it "renders the confirmation page" do
@@ -152,12 +138,12 @@ RSpec.describe Forms::MakeLiveController, type: :request do
     context "when deciding not to make a form live" do
       let(:form_params) { { forms_make_live_input: { confirm: :no } } }
 
-      it "reads the form from the API" do
-        expect(form).to have_been_read
+      it "reads the form" do
+        expect(FormRepository).to have_received(:find)
       end
 
-      it "does not update the form on the API" do
-        expect(form).not_to have_been_updated
+      it "does not make the form live" do
+        expect(FormRepository).not_to have_received(:make_live!)
       end
 
       it "redirects you to the form page" do
@@ -173,8 +159,8 @@ RSpec.describe Forms::MakeLiveController, type: :request do
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
-      it "does not update the form on the API" do
-        expect(form).not_to have_been_updated
+      it "does not make the form live" do
+        expect(FormRepository).not_to have_received(:make_live!)
       end
 
       it "re-renders the page with an error" do

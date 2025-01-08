@@ -23,18 +23,12 @@ RSpec.describe PagesController, type: :request do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/2", headers, form.to_json, 200
         mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
       end
 
+      allow(FormRepository).to receive(:find).and_return(form)
+
       get form_pages_path(2)
-    end
-
-    it "Reads the form from the API" do
-      expect(form).to have_been_read
-
-      pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
-      expect(ActiveResource::HttpMock.requests).to include pages_request
     end
 
     context "with a form in a group that the user is not a member of" do
@@ -61,9 +55,7 @@ RSpec.describe PagesController, type: :request do
     let(:original_draft_question) { create :draft_question, form_id: 1, user: standard_user }
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, current_form.to_json, 200
-      end
+      allow(FormRepository).to receive(:find).and_return(current_form)
 
       GroupForm.create!(form_id: current_form.id, group_id: group.id)
     end
@@ -102,10 +94,7 @@ RSpec.describe PagesController, type: :request do
       end
 
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", headers, form_response.to_json, 200
-        end
-
+        allow(FormRepository).to receive(:find).and_return(form_response)
         allow(PageRepository).to receive_messages(find: page, destroy: true)
 
         GroupForm.create!(form_id: 2, group_id: group.id)
@@ -150,11 +139,10 @@ RSpec.describe PagesController, type: :request do
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", headers, form_response.to_json, 200
           mock.get "/api/v1/forms/2/pages", headers, form_pages_response, 200
-          mock.put "/api/v1/forms/2", post_headers
         end
 
+        allow(FormRepository).to receive(:find).and_return(form_response)
         allow(PageRepository).to receive_messages(find: page, destroy: true)
 
         GroupForm.create!(form_id: 2, group_id: group.id)
@@ -196,10 +184,10 @@ RSpec.describe PagesController, type: :request do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
 
+      allow(FormRepository).to receive(:find).and_return(form)
       allow(PageRepository).to receive_messages(find: pages[1], move_page: true)
 
       GroupForm.create!(form_id: 2, group_id: group.id)

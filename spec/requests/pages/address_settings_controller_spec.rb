@@ -22,6 +22,8 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
+    allow(FormRepository).to receive(:find).and_return(form)
+
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
@@ -30,15 +32,14 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
   describe "#new" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
 
       get address_settings_new_path(form_id: form.id)
     end
 
-    it "reads the existing form" do
-      expect(form).to have_been_read
+    it "reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
 
     it "sets an instance variable for address_settings_path" do
@@ -54,7 +55,6 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
   describe "#create" do
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
     end
@@ -105,18 +105,17 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
 
-      allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
+      allow(PageRepository).to receive(:find).and_return(page)
 
       draft_question
       get address_settings_edit_path(form_id: page.form_id, page_id: page.id)
     end
 
-    it "reads the existing form" do
-      expect(form).to have_been_read
+    it "reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
 
     it "returns the existing page input type" do
@@ -144,12 +143,9 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1", headers, form.to_json, 200
         mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
       end
-
-      allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
-      allow(PageRepository).to receive(:save!).with(hash_including(page_id: "2", form_id: 1))
+      allow(PageRepository).to receive_messages(find: page, save!: page)
     end
 
     context "when form is valid and ready to update in the DB" do

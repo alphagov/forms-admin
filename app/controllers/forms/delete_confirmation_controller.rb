@@ -37,16 +37,16 @@ module Forms
     def load_page_variables
       @delete_confirmation_input = DeleteConfirmationInput.new
 
-      @url = destroy_form_path(current_form)
+      @url = destroy_form_path(current_form.id)
       @confirm_deletion_legend = t("forms_delete_confirmation_input.confirm_deletion")
       @item_name = current_form.name
-      @back_url = form_path(current_form)
+      @back_url = form_path(current_form.id)
     end
 
     def delete_form(form)
       success_url = groups_enabled && form.group.present? ? group_path(form.group) : root_path
 
-      if form.destroy
+      if FormRepository.destroy(form)
         redirect_to success_url, status: :see_other, success: "Successfully deleted ‘#{form.name}’"
       else
         raise StandardError, "Deletion unsuccessful"

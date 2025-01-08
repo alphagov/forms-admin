@@ -110,7 +110,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_form
-    @current_form ||= Form.find(params[:form_id])
+    @current_form ||= FormRepository.find(form_id: params[:form_id])
   end
 
   def groups_enabled

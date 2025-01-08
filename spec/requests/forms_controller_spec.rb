@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe FormsController, type: :request do
-  let(:form) { build(:form, :with_active_resource, id: 2) }
+  let(:form) { build(:form, id: 2) }
   let(:group) { create(:group, organisation: standard_user.organisation) }
   let(:user) { standard_user }
 
@@ -14,23 +14,17 @@ RSpec.describe FormsController, type: :request do
 
   describe "Showing an existing form" do
     describe "Given a live form" do
-      let(:form) { build(:form, :live, :with_active_resource, id: 2) }
+      let(:form) { build(:form, :live, id: 2) }
       let(:params) { {} }
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", headers, form.to_json, 200
           mock.get "/api/v1/forms/2/pages", headers, form.pages.to_json, 200
         end
 
+        allow(FormRepository).to receive(:find).and_return(form)
+
         get form_path(2, params)
-      end
-
-      it "Reads the form from the API" do
-        expect(form).to have_been_read
-
-        pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
-        expect(ActiveResource::HttpMock.requests).to include pages_request
       end
 
       it "renders the show template" do
@@ -45,9 +39,10 @@ RSpec.describe FormsController, type: :request do
     context "with a non-live form" do
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", headers, form.to_json, 200
           mock.get "/api/v1/forms/2/pages", headers, form.pages.to_json, 200
         end
+
+        allow(FormRepository).to receive(:find).and_return(form)
 
         get form_path(2)
       end
@@ -61,9 +56,7 @@ RSpec.describe FormsController, type: :request do
       let(:user) { build :user }
 
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", headers, form.to_json, 200
-        end
+        allow(FormRepository).to receive(:find).and_return(form)
 
         get form_path(2)
       end
@@ -85,6 +78,7 @@ RSpec.describe FormsController, type: :request do
       }
     end
 
+    # TODO: will need to change to the activerecord version later
     before do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/999", headers, no_data_found_response, 404
@@ -123,22 +117,14 @@ RSpec.describe FormsController, type: :request do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/2", headers, form.to_json, 200
         mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
-        mock.put "/api/v1/forms/2", post_headers
       end
+
+      allow(FormRepository).to receive_messages(find: form, save!: form)
 
       login_as user
 
       post form_pages_path(2), params: { forms_mark_pages_section_complete_input: { mark_complete: "true" } }
-    end
-
-    it "Reads the form from the API" do
-      expect(form).to have_been_read
-    end
-
-    it "Updates the form on the API" do
-      expect(form).to have_been_updated_to(updated_form)
     end
 
     it "Redirects you to the form overview page" do
@@ -148,11 +134,10 @@ RSpec.describe FormsController, type: :request do
     context "when the mark completed form is invalid" do
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms?organisation_id=1", headers, [form].to_json, 200
-          mock.get "/api/v1/forms/2", headers, form.to_json, 200
           mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
-          mock.put "/api/v1/forms/2", post_headers
         end
+
+        allow(FormRepository).to receive_messages(find: form, save!: nil)
 
         post form_pages_path(2), params: { forms_mark_pages_section_complete_input: { mark_complete: nil } }
       end

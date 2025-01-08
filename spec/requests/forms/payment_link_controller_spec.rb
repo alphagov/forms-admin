@@ -14,16 +14,7 @@ RSpec.describe Forms::PaymentLinkController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms/2", headers, form.to_json, 200
-      mock.put "/api/v1/forms/2", headers
-    end
-
-    ActiveResourceMock.mock_resource(form,
-                                     {
-                                       read: { response: form, status: 200 },
-                                       update: { response: updated_form, status: 200 },
-                                     })
+    allow(FormRepository).to receive_messages(find: form, save!: updated_form)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -33,33 +24,25 @@ RSpec.describe Forms::PaymentLinkController, type: :request do
 
   describe "#new" do
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.put "/api/v1/forms/2", post_headers
-        mock.get "/api/v1/forms/2", headers, form.to_json, 200
-      end
       get payment_link_path(form_id: 2)
     end
 
-    it "Reads the form from the API" do
-      expect(form).to have_been_read
+    it "Reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
   end
 
   describe "#create" do
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/2", headers, form.to_json, 200
-        mock.put "/api/v1/forms/2", post_headers
-      end
       post payment_link_path(form_id: 2), params: { forms_payment_link_input: { payment_url: "https://www.gov.uk/payments/organisation/service" } }
     end
 
-    it "Reads the form from the API" do
-      expect(form).to have_been_read
+    it "Reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
 
-    it "Updates the form on the API" do
-      expect(form).to have_been_updated_to(updated_form)
+    it "Updates the form" do
+      expect(FormRepository).to have_received(:save!)
     end
 
     it "Redirects you to the form overview page" do
