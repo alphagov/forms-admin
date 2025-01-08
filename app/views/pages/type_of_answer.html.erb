@@ -1,12 +1,12 @@
 <% set_page_title(title_with_error_prefix(t("page_titles.new_page"), @type_of_answer_input.errors.any?)) %>
-<% content_for :back_link, govuk_back_link_to(form_pages_path(current_form)) %>
+<% content_for :back_link, govuk_back_link_to(form_pages_path(current_form.id)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <% if @page.present? && @page.routing_conditions.any?  %>
       <%= govuk_notification_banner(title_text: t("banner.default.title")) do |banner| %>
         <% banner.with_heading(text: t("type_of_answer.routing_warning_about_change_answer_type_heading"), tag: "h3") %>
-        <%= t("type_of_answer.routing_warning_about_change_answer_type_html", pages_link_url: form_pages_path(current_form)) %>
+        <%= t("type_of_answer.routing_warning_about_change_answer_type_html", pages_link_url: form_pages_path(current_form.id)) %>
       <% end %>
     <% end %>
 
@@ -28,7 +28,7 @@
     <% end %>
 
     <p>
-      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form) %>
+      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form.id) %>
     </p>
   </div>
 </div>

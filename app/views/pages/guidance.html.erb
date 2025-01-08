@@ -18,7 +18,7 @@
 
       <%= render MarkdownEditorComponent::View.new(:guidance_markdown,
         form_builder: f,
-        render_preview_path: guidance_render_preview_path(current_form),
+        render_preview_path: guidance_render_preview_path(current_form.id),
         preview_html:,
         form_model: guidance_input,
         label: t("helpers.label.pages_guidance_input.guidance_markdown"),
@@ -39,7 +39,7 @@
 
     <% end %>
     <p>
-      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form) %>
+      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form.id) %>
     </p>
   </div>
 </div>
