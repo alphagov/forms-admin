@@ -78,7 +78,7 @@ RSpec.describe FormsController, type: :request do
       }
     end
 
-    # TODO: will need to change to the activerecord version later
+    # TODO: Refactor this when we move from API to ActiveRecord
     before do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/999", headers, no_data_found_response, 404
