@@ -8,7 +8,7 @@ class Forms::DeclarationInput < Forms::MarkCompleteInput
 
     form.declaration_text = declaration_text
     form.declaration_section_completed = mark_complete
-    form.save!
+    FormRepository.save!(form)
   end
 
   def assign_form_values
