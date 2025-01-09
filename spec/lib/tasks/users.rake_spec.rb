@@ -44,7 +44,7 @@ RSpec.describe "users.rake" do
           task.invoke(user_to_delete.id)
 
           user_to_delete.reload
-        }.not_to raise_error(ActiveRecord::RecordNotFound)
+        }.not_to raise_error
       end
 
       it "logs the deletion and the rollback" do
