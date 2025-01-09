@@ -81,7 +81,7 @@ private
   end
 
   def answer_type_form_params
-    params.require(:pages_type_of_answer_input).permit(:answer_type).merge(draft_question:, answer_types:)
+    params.require(:pages_type_of_answer_input).permit(:answer_type).merge(draft_question:, answer_types:, current_form:)
   end
 
   def answer_type_changed?

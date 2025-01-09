@@ -115,7 +115,7 @@ describe Form, type: :model do
     let(:completed_form) { build :form, :live }
 
     context "with an existing page" do
-      let(:page)  { completed_form.pages.first }
+      let(:page) { completed_form.pages.first }
 
       it "returns the page position" do
         expect(completed_form.page_number(page)).to eq(1)
@@ -123,7 +123,7 @@ describe Form, type: :model do
     end
 
     context "with an new page" do
-      let(:page)  { build :page }
+      let(:page) { build :page }
 
       it "returns the position for a new page" do
         expect(completed_form.page_number(page)).to eq(completed_form.pages.count + 1)
@@ -340,6 +340,21 @@ describe Form, type: :model do
       group = create :group
       GroupForm.create!(form_id: form.id, group_id: group.id)
       expect(form.group).to eq group
+    end
+  end
+
+  describe "#file_upload_question_count" do
+    let(:pages) do
+      pages = build_list :page, 3, answer_type: :file
+      Page::ANSWER_TYPES_INCLUDING_FILE.each do |answer_type|
+        pages.push(build(:page, answer_type:))
+      end
+      pages
+    end
+    let(:form) { build :form, pages: }
+
+    it "returns the number of file upload questions" do
+      expect(form.file_upload_question_count).to eq(4)
     end
   end
 end

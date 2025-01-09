@@ -7,4 +7,5 @@ en:
           attributes:
             answer_type:
               blank: Select the type of answer you need
+              cannot_add_more_file_upload_questions: You cannot have more than 5 file upload questions
               inclusion: Select the type of answer you need

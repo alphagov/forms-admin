@@ -106,6 +106,10 @@ class Form < ActiveResource::Base
     nil
   end
 
+  def file_upload_question_count
+    pages.count { |p| p.answer_type.to_sym == :file }
+  end
+
   after_destroy do
     group_form&.destroy
   end
