@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Pages::TypeOfAnswerInput, type: :model do
-  let(:type_of_answer_input) { build :type_of_answer_input, draft_question:, answer_types: }
+  let(:type_of_answer_input) { build :type_of_answer_input, draft_question:, answer_types:, current_form: }
   let(:draft_question) { build :draft_question, form_id: 1 }
   let(:answer_types) { Page::ANSWER_TYPES_EXCLUDING_FILE }
+  let(:current_form) { build :form, id: 1 }
 
   it "has a valid factory" do
     type_of_answer_input = build(:type_of_answer_input, draft_question:, answer_types:)
@@ -37,21 +38,55 @@ RSpec.describe Pages::TypeOfAnswerInput, type: :model do
       end
     end
 
-    context "when file upload is disabled" do
-      let(:answer_types) { Page::ANSWER_TYPES_EXCLUDING_FILE }
-
-      it "does not allow file answer type" do
+    context "when the answer type is file" do
+      before do
         type_of_answer_input.answer_type = "file"
-        expect(type_of_answer_input).to be_invalid
       end
-    end
 
-    context "when file upload is enabled" do
-      let(:answer_types) { Page::ANSWER_TYPES_INCLUDING_FILE }
+      context "when file upload is disabled" do
+        let(:answer_types) { Page::ANSWER_TYPES_EXCLUDING_FILE }
 
-      it "allows file answer type" do
-        type_of_answer_input.answer_type = "file"
-        expect(type_of_answer_input).to be_valid
+        it "is invalid" do
+          expect(type_of_answer_input).to be_invalid
+          expect(type_of_answer_input.errors[:answer_type]).to include "Select the type of answer you need"
+        end
+      end
+
+      context "when file upload is enabled" do
+        let(:answer_types) { Page::ANSWER_TYPES_INCLUDING_FILE }
+
+        context "when there are fewer than 5 existing file upload questions" do
+          let(:pages) do
+            pages = build_list :page, 4, answer_type: :file
+            page_with_another_answer_type = build(:page, answer_type: :text)
+            pages.push(page_with_another_answer_type)
+          end
+          let(:current_form) { build :form, id: 1, pages: }
+
+          it "is valid" do
+            expect(type_of_answer_input).to be_valid
+          end
+        end
+
+        context "when there are already 5 file upload questions" do
+          let(:pages) { build_list :page, 5, answer_type: :file }
+          let(:current_form) { build :form, id: 1, pages: }
+
+          it "is invalid" do
+            expect(type_of_answer_input).to be_invalid
+            expect(type_of_answer_input.errors[:answer_type]).to include "You cannot have more than 5 file upload questions"
+          end
+        end
+
+        context "when there are already more than 5 file upload questions" do
+          let(:pages) { build_list :page, 6, answer_type: :file }
+          let(:current_form) { build :form, id: 1, pages: }
+
+          it "is invalid" do
+            expect(type_of_answer_input).to be_invalid
+            expect(type_of_answer_input.errors[:answer_type]).to include "You cannot have more than 5 file upload questions"
+          end
+        end
       end
     end
   end

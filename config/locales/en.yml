@@ -680,7 +680,7 @@ en:
             address: ''
             date: ''
             email: ''
-            file: ''
+            file: People will be able to upload an image or a document
             name: ''
             national_insurance_number: ''
             number: People will only be able to enter whole or decimal numbers
@@ -693,7 +693,7 @@ en:
             address: Address
             date: Date
             email: Email address
-            file: File
+            file: File upload
             name: Person’s name
             national_insurance_number: National Insurance number
             number: Number
