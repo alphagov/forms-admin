@@ -107,7 +107,8 @@ def delete_users_with_no_name_or_org(dry_run: false)
       if dry_run || form.destroy
         Rails.logger.info "#{task_name}: Deleted form #{form.id} (\"#{form.name}\") created by user #{user.id} (#{user.email})"
       else
-        Rails.logger.info "#{task_name}: Unable to delete form #{form.id} (\"#{form.name}\") created by user #{user.id}"
+        Rails.logger.info "#{task_name}: Unable to delete form #{form.id} (\"#{form.name}\") created by user, skipping deleting user #{user.id} (#{user.email})"
+        next
       end
     end
 
