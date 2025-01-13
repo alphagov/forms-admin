@@ -55,9 +55,9 @@ RSpec.describe Pages::TypeOfAnswerInput, type: :model do
       context "when file upload is enabled" do
         let(:answer_types) { Page::ANSWER_TYPES_INCLUDING_FILE }
 
-        context "when there are fewer than 5 existing file upload questions" do
+        context "when there are fewer than 4 existing file upload questions" do
           let(:pages) do
-            pages = build_list :page, 4, answer_type: :file
+            pages = build_list :page, 3, answer_type: :file
             page_with_another_answer_type = build(:page, answer_type: :text)
             pages.push(page_with_another_answer_type)
           end
@@ -68,23 +68,23 @@ RSpec.describe Pages::TypeOfAnswerInput, type: :model do
           end
         end
 
-        context "when there are already 5 file upload questions" do
+        context "when there are already 4 file upload questions" do
+          let(:pages) { build_list :page, 4, answer_type: :file }
+          let(:current_form) { build :form, id: 1, pages: }
+
+          it "is invalid" do
+            expect(type_of_answer_input).to be_invalid
+            expect(type_of_answer_input.errors[:answer_type]).to include "You cannot have more than 4 file upload questions in a form"
+          end
+        end
+
+        context "when there are already more than 4 file upload questions" do
           let(:pages) { build_list :page, 5, answer_type: :file }
           let(:current_form) { build :form, id: 1, pages: }
 
           it "is invalid" do
             expect(type_of_answer_input).to be_invalid
-            expect(type_of_answer_input.errors[:answer_type]).to include "You cannot have more than 5 file upload questions"
-          end
-        end
-
-        context "when there are already more than 5 file upload questions" do
-          let(:pages) { build_list :page, 6, answer_type: :file }
-          let(:current_form) { build :form, id: 1, pages: }
-
-          it "is invalid" do
-            expect(type_of_answer_input).to be_invalid
-            expect(type_of_answer_input.errors[:answer_type]).to include "You cannot have more than 5 file upload questions"
+            expect(type_of_answer_input.errors[:answer_type]).to include "You cannot have more than 4 file upload questions in a form"
           end
         end
       end

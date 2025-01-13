@@ -5,7 +5,7 @@ class Pages::TypeOfAnswerInput < BaseInput
 
   validates :draft_question, presence: true
   validates :answer_type, presence: true, inclusion: { in: :answer_types }
-  validate :not_more_than_5_file_upload_questions
+  validate :not_more_than_4_file_upload_questions
 
   def submit
     return false if invalid?
@@ -19,8 +19,8 @@ class Pages::TypeOfAnswerInput < BaseInput
 
 private
 
-  def not_more_than_5_file_upload_questions
-    if answer_type.present? && answer_type.to_sym == :file && current_form.file_upload_question_count >= 5
+  def not_more_than_4_file_upload_questions
+    if answer_type.present? && answer_type.to_sym == :file && current_form.file_upload_question_count >= 4
       errors.add(:answer_type, :cannot_add_more_file_upload_questions)
     end
   end
