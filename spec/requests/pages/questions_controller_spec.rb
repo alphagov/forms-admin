@@ -75,10 +75,10 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
   before do
     ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms/2", headers, form_response.to_json, 200
       mock.get "/api/v1/forms/2/pages", headers, form_pages_response, 200
     end
 
+    allow(FormRepository).to receive(:find).and_return(form_response)
     allow(PageRepository).to receive_messages(create!: page, find: page, save!: updated_page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
@@ -100,13 +100,8 @@ RSpec.describe Pages::QuestionsController, type: :request do
       get new_question_path(form_id: 2)
     end
 
-    it "Reads the form from the API" do
-      expect(form_response).to have_been_read
-    end
-
-    it "Reads the pages from the API" do
-      form_pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2", {}, headers)
-      expect(ActiveResource::HttpMock.requests).to include form_pages_request
+    it "Reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
 
     it "returns 200" do

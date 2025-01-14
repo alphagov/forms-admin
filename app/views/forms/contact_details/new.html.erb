@@ -4,7 +4,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <%= form_with(model: @contact_details_input, url: contact_details_create_path(@contact_details_input.form)) do |f| %>
+    <%= form_with(model: @contact_details_input, url: contact_details_create_path(@contact_details_input.form.id)) do |f| %>
       <% if @contact_details_input&.errors.any? %>
         <%= f.govuk_error_summary %>
       <% end %>

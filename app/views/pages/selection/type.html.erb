@@ -8,7 +8,7 @@
       <% if @selection_type_input.need_to_reduce_options? %>
         <%= govuk_notification_banner(title_text: t("banner.default.title")) do |banner| %>
           <% banner.with_heading(text: t("selection_type.routing_and_reduce_your_options_combined_warning.heading"), tag: "h3") %>
-          <p><%= t("selection_type.routing_and_reduce_your_options_combined_warning.body", pages_link_url: form_pages_path(current_form)) %></p>
+          <p><%= t("selection_type.routing_and_reduce_your_options_combined_warning.body", pages_link_url: form_pages_path(current_form.id)) %></p>
         <% end %>
       <% else %>
         <%= govuk_notification_banner(title_text: t("banner.default.title")) do |banner| %>
@@ -18,7 +18,7 @@
     <% elsif @selection_type_input.need_to_reduce_options? %>
       <%= govuk_notification_banner(title_text: t("banner.default.title")) do |banner| %>
         <% banner.with_heading(text: t("selection_type.reduce_your_options_warning.heading"), tag: "h3") %>
-        <p><%= t("selection_type.reduce_your_options_warning.body", pages_link_url: form_pages_path(current_form)) %></p>
+        <p><%= t("selection_type.reduce_your_options_warning.body", pages_link_url: form_pages_path(current_form.id)) %></p>
       <% end %>
     <% end %>
 
@@ -39,7 +39,7 @@
     <% end %>
 
     <p>
-      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form) %>
+      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form.id) %>
     </p>
   </div>
 </div>

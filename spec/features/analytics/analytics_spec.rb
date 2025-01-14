@@ -2,10 +2,6 @@ require "rails_helper"
 
 feature "Google analytics", type: :feature do
   before do
-    ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?organisation_id=1", headers, [].to_json, 200
-    end
-
     allow(Settings).to receive(:analytics_enabled).and_return(analytics_enabled)
   end
 

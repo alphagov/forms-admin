@@ -19,6 +19,7 @@ RSpec.describe "forms.rake" do
     end
     let(:form_ids) { forms.map(&:id) }
 
+    # TODO: Refactor this when we move over from API to ActiveRecord
     before do
       ActiveResource::HttpMock.respond_to do |mock|
         forms.each do |form|

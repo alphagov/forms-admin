@@ -3,7 +3,7 @@ class Forms::SharePreviewInput < Forms::MarkCompleteInput
     return false if invalid?
 
     form.share_preview_completed = mark_complete
-    if form.save!
+    if FormRepository.save!(form)
       true
     else
       false

@@ -10,7 +10,7 @@ class Forms::PaymentLinkInput < BaseInput
     return false if invalid?
 
     form.payment_url = payment_url
-    form.save!
+    FormRepository.save!(form)
   end
 
   def assign_form_values

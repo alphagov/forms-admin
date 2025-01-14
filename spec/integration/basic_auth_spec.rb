@@ -27,6 +27,7 @@ RSpec.describe "using basic auth" do
       "Accept" => "application/json",
     }
 
+    # TODO: Remove this stub when we shift over from API to ActiveRecord
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/api/v1/forms?creator_id=#{basic_auth_user.id}", api_headers, [].to_json, 200
     end

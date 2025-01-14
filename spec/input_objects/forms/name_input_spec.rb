@@ -20,15 +20,11 @@ RSpec.describe Forms::NameInput, type: :model do
         form = build :form
         name_input = described_class.new(form:, name: "New Form")
 
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.post "/api/v1/forms", post_headers, { id: 1, name: "New Form" }.to_json, 200
-        end
+        allow(FormRepository).to receive(:save!).and_return({ id: 1, name: "New Form" })
 
         expect {
           name_input.submit
         }.to change(form, :name).to("New Form")
-
-        expect(form).to be_persisted
       end
     end
 
@@ -40,8 +36,6 @@ RSpec.describe Forms::NameInput, type: :model do
         expect {
           name_input.submit
         }.not_to change(form, :name)
-
-        expect(form).not_to be_persisted
       end
     end
   end

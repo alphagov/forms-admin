@@ -44,6 +44,10 @@ RSpec.describe Forms::DeclarationInput, type: :model do
   end
 
   describe "#submit" do
+    before do
+      allow(FormRepository).to receive(:save!).and_return(true)
+    end
+
     it "returns false if the data is invalid" do
       form = described_class.new(declaration_text: ("abc" * 2001), form: { declaration_text: "" })
       expect(form.submit).to be false

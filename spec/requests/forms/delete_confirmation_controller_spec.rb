@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Forms::DeleteConfirmationController, type: :request do
-  let(:form) { build(:form, :with_active_resource, id: 2) }
+  let(:form) { build(:form, id: 2) }
   let(:page) { build(:page, form_id: form.id) }
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
@@ -16,15 +16,13 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
   describe "#delete" do
     describe "Given a valid form" do
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2", headers, form.to_json, 200
-        end
+        allow(FormRepository).to receive(:find).and_return(form)
 
         get delete_form_path(form_id: 2)
       end
 
       it "reads the form from the API" do
-        expect(form).to have_been_read
+        expect(FormRepository).to have_received(:find)
       end
 
       context "when current user is not in group for form" do
@@ -40,11 +38,7 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
   describe "#destroy" do
     describe "Given a valid form" do
       before do
-        ActiveResourceMock.mock_resource(form,
-                                         {
-                                           read: { response: form, status: 200 },
-                                           delete: { response: {}, status: 200 },
-                                         })
+        allow(FormRepository).to receive_messages(find: form, destroy: true)
 
         delete destroy_form_path(form_id: 2, forms_delete_confirmation_input: { confirm: "yes" })
       end
@@ -53,8 +47,8 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
         expect(response).to redirect_to(group_path(group))
       end
 
-      it "deletes the form on the API" do
-        expect(form).to have_been_deleted
+      it "deletes the form" do
+        expect(FormRepository).to have_received(:destroy)
       end
 
       context "when current user is not in group for form" do
@@ -72,11 +66,7 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
 
     context "when the user has decided not to delete the form" do
       before do
-        ActiveResourceMock.mock_resource(form,
-                                         {
-                                           read: { response: form, status: 200 },
-                                           delete: { response: {}, status: 200 },
-                                         })
+        allow(FormRepository).to receive_messages(find: form, destroy: true)
 
         delete destroy_form_path(form_id: 2, forms_delete_confirmation_input: { confirm: "no" })
       end
@@ -86,7 +76,7 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
       end
 
       it "does not delete the form on the API" do
-        expect(form).not_to have_been_deleted
+        expect(FormRepository).not_to have_received(:destroy)
       end
     end
   end

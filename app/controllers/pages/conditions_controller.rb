@@ -12,7 +12,7 @@ class Pages::ConditionsController < PagesController
 
     if routing_page_input.valid?
       routing_page = PageRepository.find(page_id: routing_page_id, form_id: current_form.id)
-      redirect_to new_condition_path(current_form, routing_page.id)
+      redirect_to new_condition_path(current_form.id, routing_page.id)
     else
       render template: "pages/conditions/routing_page", locals: { form: current_form, routing_page_input: }, status: :unprocessable_entity
     end

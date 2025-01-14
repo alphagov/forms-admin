@@ -2,13 +2,13 @@ class Pages::GuidanceController < PagesController
   def new
     guidance_input = Pages::GuidanceInput.new(page_heading: draft_question.page_heading,
                                               guidance_markdown: draft_question.guidance_markdown)
-    back_link = new_question_path(current_form)
+    back_link = new_question_path(current_form.id)
     render :guidance, locals: view_locals(nil, guidance_input, back_link)
   end
 
   def create
     guidance_input = Pages::GuidanceInput.new(guidance_input_params)
-    back_link = new_question_path(current_form)
+    back_link = new_question_path(current_form.id)
 
     case route_to
     when :preview
@@ -16,7 +16,7 @@ class Pages::GuidanceController < PagesController
       render :guidance, locals: view_locals(nil, guidance_input, back_link)
     when :save_and_continue
       if guidance_input.submit
-        redirect_to new_question_path(current_form)
+        redirect_to new_question_path(current_form.id)
       else
         render :guidance, locals: view_locals(nil, guidance_input, back_link), status: :unprocessable_entity
       end
@@ -26,14 +26,14 @@ class Pages::GuidanceController < PagesController
   def edit
     guidance_input = Pages::GuidanceInput.new(page_heading: draft_question.page_heading,
                                               guidance_markdown: draft_question.guidance_markdown)
-    back_link = edit_question_path(current_form, page.id)
+    back_link = edit_question_path(current_form.id, page.id)
 
     render :guidance, locals: view_locals(page, guidance_input, back_link)
   end
 
   def update
     guidance_input = Pages::GuidanceInput.new(guidance_input_params)
-    back_link = edit_question_path(current_form, page.id)
+    back_link = edit_question_path(current_form.id, page.id)
 
     case route_to
     when :preview

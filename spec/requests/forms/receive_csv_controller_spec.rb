@@ -5,21 +5,12 @@ RSpec.describe Forms::ReceiveCsvController, type: :request do
     build(:form, :live, id: 2, submission_type: original_submission_type)
   end
 
-  let(:updated_form) do
-    new_form = form
-    new_form.submission_type = submission_type
-    new_form
-  end
-
   let(:original_submission_type) { "email" }
 
   let(:submission_type) { nil }
 
   before do
-    ActiveResource::HttpMock.respond_to do |mock|
-      mock.put "/api/v1/forms/2", post_headers
-      mock.get "/api/v1/forms/2", headers, form.to_json, 200
-    end
+    allow(FormRepository).to receive_messages(find: form, save!: form)
 
     login_as_super_admin_user
   end
@@ -29,8 +20,8 @@ RSpec.describe Forms::ReceiveCsvController, type: :request do
       get receive_csv_path(form_id: 2)
     end
 
-    it "Reads the form from the API" do
-      expect(form).to have_been_read
+    it "Reads the form" do
+      expect(FormRepository).to have_received(:find)
     end
   end
 
@@ -38,23 +29,18 @@ RSpec.describe Forms::ReceiveCsvController, type: :request do
     let(:params) { { forms_receive_csv_input: { submission_type: } } }
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/2", headers, form.to_json, 200
-        mock.put "/api/v1/forms/2", post_headers
-      end
-
       post receive_csv_path(form_id: 2), params:
     end
 
     context "when params are valid" do
       let(:submission_type) { "email_with_csv" }
 
-      it "Reads the form from the API" do
-        expect(form).to have_been_read
+      it "Reads the form" do
+        expect(FormRepository).to have_received(:find)
       end
 
-      it "Updates the form on the API" do
-        expect(form).to have_been_updated_to(updated_form)
+      it "Updates the form" do
+        expect(FormRepository).to have_received(:save!)
       end
 
       it "Redirects you to the form overview page" do

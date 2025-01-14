@@ -11,26 +11,26 @@ class PagesController < ApplicationController
 
   def delete
     @page = PageRepository.find(page_id: params[:page_id], form_id: current_form.id)
-    @url = destroy_page_path(current_form, @page.id)
+    @url = destroy_page_path(current_form.id, @page.id)
     @confirm_deletion_legend = t("forms_delete_confirmation_input.confirm_deletion_page")
     @item_name = @page.question_text
-    @back_url = edit_question_path(current_form, @page.id)
+    @back_url = edit_question_path(current_form.id, @page.id)
 
     @delete_confirmation_input = Forms::DeleteConfirmationInput.new
   end
 
   def destroy
     @page = PageRepository.find(page_id: params[:page_id], form_id: current_form.id)
-    @url = destroy_page_path(current_form, @page.id)
+    @url = destroy_page_path(current_form.id, @page.id)
     @item_name = @page.question_text
-    @back_url = edit_question_path(current_form, @page.id)
+    @back_url = edit_question_path(current_form.id, @page.id)
 
     @delete_confirmation_input = Forms::DeleteConfirmationInput.new(
       params.require(:forms_delete_confirmation_input).permit(:confirm),
     )
     if @delete_confirmation_input.valid?
       if @delete_confirmation_input.confirmed?
-        delete_page(current_form, @page)
+        delete_page(current_form.id, @page)
       else
         redirect_to @back_url
       end

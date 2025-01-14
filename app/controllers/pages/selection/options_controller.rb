@@ -4,9 +4,9 @@ class Pages::Selection::OptionsController < PagesController
                                                                                          .map { |option| { name: option[:name] } },
                                                                   include_none_of_the_above: draft_question.is_optional,
                                                                   draft_question:)
-    @selection_options_path = selection_options_create_path(current_form)
-    @back_link_url = selection_type_new_path(current_form)
-    @bulk_options_url = selection_bulk_options_new_path(current_form)
+    @selection_options_path = selection_options_create_path(current_form.id)
+    @back_link_url = selection_type_new_path(current_form.id)
+    @bulk_options_url = selection_bulk_options_new_path(current_form.id)
     render "pages/selection/options", locals: { current_form: }
   end
 
@@ -14,9 +14,9 @@ class Pages::Selection::OptionsController < PagesController
     @selection_options_input = Pages::Selection::OptionsInput.new(selection_options: selection_options_param_values,
                                                                   include_none_of_the_above: include_none_of_the_above_param_values,
                                                                   draft_question:)
-    @selection_options_path = selection_options_create_path(current_form)
-    @back_link_url = selection_type_new_path(current_form)
-    @bulk_options_url = selection_bulk_options_new_path(current_form)
+    @selection_options_path = selection_options_create_path(current_form.id)
+    @back_link_url = selection_type_new_path(current_form.id)
+    @bulk_options_url = selection_bulk_options_new_path(current_form.id)
 
     if params[:add_another]
       @selection_options_input.add_another
@@ -25,7 +25,7 @@ class Pages::Selection::OptionsController < PagesController
       @selection_options_input.remove(params[:remove].to_i)
       render "pages/selection/options", locals: { current_form: }
     elsif @selection_options_input.submit
-      redirect_to new_question_path(current_form)
+      redirect_to new_question_path(current_form.id)
     else
       render "pages/selection/options", locals: { current_form: }
     end
@@ -36,9 +36,9 @@ class Pages::Selection::OptionsController < PagesController
                                                                                                   .map { |option| { name: option[:name] } },
                                                                   include_none_of_the_above: draft_question.is_optional,
                                                                   draft_question:)
-    @selection_options_path = selection_options_update_path(current_form)
-    @back_link_url = edit_question_path(current_form)
-    @bulk_options_url = selection_bulk_options_edit_path(current_form)
+    @selection_options_path = selection_options_update_path(current_form.id)
+    @back_link_url = edit_question_path(current_form.id)
+    @bulk_options_url = selection_bulk_options_edit_path(current_form.id)
     render "pages/selection/options", locals: { current_form: }
   end
 
@@ -46,9 +46,9 @@ class Pages::Selection::OptionsController < PagesController
     @selection_options_input = Pages::Selection::OptionsInput.new(selection_options: selection_options_param_values,
                                                                   include_none_of_the_above: include_none_of_the_above_param_values,
                                                                   draft_question:)
-    @selection_options_path = selection_options_update_path(current_form)
-    @back_link_url = edit_question_path(current_form)
-    @bulk_options_url = selection_bulk_options_edit_path(current_form)
+    @selection_options_path = selection_options_update_path(current_form.id)
+    @back_link_url = edit_question_path(current_form.id)
+    @bulk_options_url = selection_bulk_options_edit_path(current_form.id)
 
     if params[:add_another]
       @selection_options_input.add_another
@@ -57,7 +57,7 @@ class Pages::Selection::OptionsController < PagesController
       @selection_options_input.remove(params[:remove].to_i)
       render "pages/selection/options", locals: { current_form: }
     elsif @selection_options_input.submit
-      redirect_to edit_question_path(current_form)
+      redirect_to edit_question_path(current_form.id)
     else
       render "pages/selection/options", locals: { current_form: }
     end

@@ -189,10 +189,7 @@ RSpec.describe Group, type: :model do
     it "is associated with a form through the form ID" do
       form = build :form, id: 1
 
-      ActiveResource::HttpMock.respond_to do |mock|
-        request_headers = { "Accept" => "application/json", "X-API-Token" => Settings.forms_api.auth_key }
-        mock.get "/api/v1/forms/1", request_headers, form.to_json, 200
-      end
+      allow(FormRepository).to receive(:find).with(form_id: form.id).and_return(form)
 
       group = build(:group, id: 1)
       group.group_forms.build(form_id: 1)

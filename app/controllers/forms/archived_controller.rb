@@ -13,7 +13,7 @@ module Forms
     end
 
     def current_archived_form
-      @current_archived_form ||= Form.find_archived(params[:form_id])
+      @current_archived_form ||= FormRepository.find_archived(form_id: params[:form_id])
     end
   end
 end

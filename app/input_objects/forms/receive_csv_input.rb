@@ -7,7 +7,7 @@ class Forms::ReceiveCsvInput < BaseInput
     return false if invalid?
 
     form.submission_type = submission_type
-    form.save!
+    FormRepository.save!(form)
   end
 
   def assign_form_values

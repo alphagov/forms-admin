@@ -8,7 +8,7 @@ RSpec.describe Forms::SharePreviewInput, type: :model do
   describe "#save" do
     context "when valid" do
       before do
-        allow(form).to receive(:save).and_return(true)
+        allow(FormRepository).to receive(:save!).and_return(true)
         allow(mark_complete_input).to receive_messages(invalid?: false, form:)
       end
 

@@ -18,12 +18,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms", headers, [form].to_json, 200
-      mock.get "/api/v1/forms/1", headers, form.to_json, 200
-      mock.get "/api/v1/forms/1/live", headers, form.to_json, 200
-      mock.put "/api/v1/forms/1", post_headers, form.to_json, 200
-    end
+    allow(FormRepository).to receive_messages(find: form, save!: form, find_live: form)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -220,10 +215,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
         previous_live_version
         form.submission_email = Faker::Internet.email(domain: "example.gov.uk")
 
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/1", headers, form.to_json, 200
-          mock.get "/api/v1/forms/1/live", headers, previous_live_version.to_json, 200
-        end
+        allow(FormRepository).to receive_messages(find: form, find_live: previous_live_version)
 
         get submission_email_confirmed_path(form.id)
       end

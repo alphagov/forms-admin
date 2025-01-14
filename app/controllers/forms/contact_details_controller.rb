@@ -11,7 +11,7 @@ module Forms
       @contact_details_input = ContactDetailsInput.new(**contact_details_input_params)
 
       if @contact_details_input.submit
-        redirect_to form_path(@contact_details_input.form), success: t("banner.success.form.support_details_saved")
+        redirect_to form_path(@contact_details_input.form.id), success: t("banner.success.form.support_details_saved")
       else
         render :new, status: :unprocessable_entity
       end
