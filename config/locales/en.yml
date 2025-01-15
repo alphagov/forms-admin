@@ -110,6 +110,10 @@ en:
               too_long: Question text must be %{count} characters or less
             selection_options:
               too_many_selection_options: You cannot have more than 30 options in a list when people can select more than one option
+        pages/routes/delete_confirmation_input:
+          attributes:
+            confirm:
+              blank: Select ‘Yes’ to delete this question’s routes
         pages/secondary_skip_input:
           attributes:
             goto_page_id:
