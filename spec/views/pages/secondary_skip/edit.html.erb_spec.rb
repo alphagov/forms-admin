@@ -1,10 +1,10 @@
 require "rails_helper"
 
-describe "pages/secondary_skip/new.html.erb" do
+describe "pages/secondary_skip/edit.html.erb" do
   let(:form) { build :form, id: 1, pages: [page] }
   let(:page) do
     build(:page,
-          :with_selection_settings,
+          :with_selections_settings,
           id: 1,
           position: 1,
           answer_settings: DataStruct.new(
@@ -23,7 +23,7 @@ describe "pages/secondary_skip/new.html.erb" do
 
   before do
     assign(:secondary_skip_input, secondary_skip_input)
-    render template: "pages/secondary_skip/new"
+    render template: "pages/secondary_skip/edit"
   end
 
   it "has the correct title" do
