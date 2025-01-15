@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe PagesController, type: :request do
-  let(:form_response) { build :form, id: 2 }
+  let(:form_response) { Form.new(attributes_for(:form, id: 2), true) }
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
   let(:membership) { create :membership, group:, user: standard_user }
