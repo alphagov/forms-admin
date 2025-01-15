@@ -1,8 +1,7 @@
-$govuk-images-path: "@govuk/assets/images/";
-$govuk-fonts-path: "@govuk/assets/fonts/";
+$govuk-assets-path: "@govuk/assets/";
 $govuk-global-styles: true;
 
-@import "@govuk/all";
+@import "pkg:govuk-frontend";
 @import "dfe-autocomplete/src/dfe-autocomplete";
 @import "../styles/app_form_states";
 @import "../styles/app_memorandum_of_understanding";
