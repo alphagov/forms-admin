@@ -52,8 +52,8 @@ describe "pages/routes/show.html.erb" do
   context "when the page has routing conditions" do
     let(:page) { build :page, id: 1, position: 1, routing_conditions: [build(:condition, id: 101)] }
 
-    it "has a delete link" do
-      expect(rendered).to have_link(I18n.t("page_route_card.delete_route", href: destroy_condition_path(form_id: form.id, page_id: page.id, condition_id: page.routing_conditions.first.id)))
+    it "has a link to delete all routes" do
+      expect(rendered).to have_link(I18n.t("page_route_card.delete_route"), href: delete_routes_path(form.id, page.id))
     end
   end
 end
