@@ -3,6 +3,7 @@
 import { defineConfig } from 'vite'
 import RubyPlugin from 'vite-plugin-ruby'
 import * as path from 'node:path'
+import { NodePackageImporter } from 'sass'
 
 export default defineConfig({
   plugins: [RubyPlugin()],
@@ -11,7 +12,7 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         api: 'modern',
-        loadPaths: ['./node_modules/govuk-frontend/'],
+        importers: [new NodePackageImporter()],
         quietDeps: true
       },
       devSourcemaps: true
