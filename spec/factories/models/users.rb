@@ -7,6 +7,8 @@ FactoryBot.define do
     role { :standard }
     has_access { true }
     created_at { Faker::Time.between(from: Time.zone.local(2022, 3, 8), to: Time.zone.now) }
+    updated_at { created_at }
+    last_signed_in_at { created_at }
     terms_agreed_at { Time.zone.now }
 
     factory :basic_auth_user do
@@ -50,6 +52,15 @@ FactoryBot.define do
 
     trait :with_no_name do
       name { nil }
+    end
+
+    trait :old do
+      created_at { Faker::Time.between(from: Time.zone.local(2022, 3, 8), to: Time.zone.local(2022, 4, 11)) }
+      last_signed_in_at { nil }
+    end
+
+    trait :new do
+      created_at { Faker::Time.between(from: 18.hours.ago, to: Time.zone.now) }
     end
   end
 end
