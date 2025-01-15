@@ -10,7 +10,8 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        includePaths: ['./node_modules/govuk-frontend/'],
+        api: 'modern',
+        loadPaths: ['./node_modules/govuk-frontend/'],
         quietDeps: true
       },
       devSourcemaps: true
