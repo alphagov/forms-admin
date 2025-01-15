@@ -1,5 +1,4 @@
-$govuk-images-path: "@govuk/assets/images/";
-$govuk-fonts-path: "@govuk/assets/fonts/";
+$govuk-assets-path: "@govuk/assets/";
 $govuk-global-styles: true;
 
 @import "pkg:govuk-frontend";
