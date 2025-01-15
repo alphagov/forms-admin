@@ -103,6 +103,9 @@ def delete_users_with_no_name_or_org(dry_run: false)
       next
     end
 
+    # we need to delete all draft questions for this user or else PostgreSQL will complain
+    DraftQuestion.destroy_by(user:)
+
     forms.each do |form|
       if dry_run || form.destroy
         Rails.logger.info "#{task_name}: Deleted form #{form.id} (\"#{form.name}\") created by user #{user.id} (#{user.email})"
