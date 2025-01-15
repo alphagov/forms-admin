@@ -259,6 +259,18 @@ RSpec.describe "users.rake" do
         expect(Rails.logger).to have_received(:info).with(/delete_users_with_no_name_or_org: Deleted form 3/)
       end
 
+      context "and there is a draft question for one of those forms" do
+        before do
+          create_list :draft_question, 2, user: users.last
+        end
+
+        it "deletes the draft questions" do
+          expect {
+            task.invoke
+          }.to change(DraftQuestion, :count).by(-2)
+        end
+      end
+
       context "and one or more of the forms have been made live" do
         let(:user_with_live_form) { users.second_to_last }
         let(:forms) do
