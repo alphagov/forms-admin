@@ -158,6 +158,15 @@ RSpec.describe ApplicationHelper, type: :helper do
         expect(helper.hint_for_edit_page_field("hint_text", answer_type, answer_settings)).to eq(I18n.t("helpers.hint.page.hint_text.default"))
       end
     end
+
+    context "with the file answer type" do
+      let(:answer_type) { "file" }
+      let(:answer_settings) { {} }
+
+      it "returns the hint text for the file answer type" do
+        expect(helper.hint_for_edit_page_field("question_text", answer_type, answer_settings)).to eq(I18n.t("helpers.hint.page.question_text.file"))
+      end
+    end
   end
 
   describe "#govuk_assets_path" do

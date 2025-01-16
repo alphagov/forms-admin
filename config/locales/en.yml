@@ -604,6 +604,7 @@ en:
           phone_number: You can add a short hint to help people answer the question. For example, ‘You can provide either a home or mobile phone number.’
           radio: You can add a short hint to help people answer the question. For a question where people can only select one answer you might want to use ‘Select one option’.
           single_line: You can add a short hint to help people answer the question. For example, you could say what format the answer should be in or where to find it.
+          file: You can add a short hint to help people upload the file you need. For example, you might need the file to contain specific information.
         question_text:
           address: Ask the question the way you would in person. For example, ‘What’s your address?’
           checkbox: Ask the question the way you would in person. For example, ‘Which of these countries have you lived in?’
