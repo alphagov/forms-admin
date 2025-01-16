@@ -620,6 +620,7 @@ en:
           phone_number: Ask the question the way you would in person. For example, ‘What’s your phone number?’
           radio: Ask the question the way you would in person. For example, ‘What country do you live in?’
           single_line: Ask the question the way you would in person. For example, ‘What’s your reference number?’
+          file: Be specific about the file you want to receive. For example ’Upload your annual report’.
       pages_question_input:
         is_optional_options:
           'true': We’ll add ‘(optional)’ to the end of the question text.
@@ -747,6 +748,7 @@ en:
         file_body_html: |
           <p>People will be able to upload one image or document up to 7MB in size.</p>
           <p>You can have up to 4 file upload questions in a form.</p>
+        file_question_text: Ask for a file
         hint_text: Hint text (optional)
         is_optional_options:
           'false': Mandatory

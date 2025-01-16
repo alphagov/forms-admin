@@ -33,6 +33,7 @@ describe "pages/_form.html.erb", type: :view do
 
   it "has a field with the question text" do
     expect(rendered).to have_field(type: "text", with: question_input.question_text)
+    expect(rendered).to have_text(I18n.t("helpers.label.pages_question_input.question_text"))
   end
 
   it "has a field with the hint text" do
@@ -138,6 +139,10 @@ describe "pages/_form.html.erb", type: :view do
 
     it "displays the file body text" do
       expect(rendered).to include(I18n.t("helpers.label.pages_question_input.file_body_html"))
+    end
+
+    it "has a field with the file question text" do
+      expect(rendered).to have_text(I18n.t("helpers.label.pages_question_input.file_question_text"))
     end
   end
 end
