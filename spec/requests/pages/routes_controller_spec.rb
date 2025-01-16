@@ -49,4 +49,68 @@ describe Pages::RoutesController, type: :request do
       expect(response).to render_template("pages/routes/show")
     end
   end
+
+  describe "#delete" do
+    before do
+      allow(FormRepository).to receive(:find).and_return(form)
+      allow(PageRepository).to receive(:find).with(page_id: "101", form_id: 1).and_return(selected_page)
+
+      get delete_routes_path(form_id: form.id, page_id: selected_page.id)
+    end
+
+    it "renders the delete confirmation for routes template" do
+      expect(response).to have_http_status(:ok)
+      expect(response).to render_template("pages/routes/delete")
+    end
+  end
+
+  describe "#destroy" do
+    let(:condition) { build :condition, routing_page_id: selected_page.id, check_page_id: selected_page.id, goto_page_id: pages.last.id, answer_value: "Option 1" }
+    let(:secondary_skip_page) { form.pages[2] }
+    let(:secondary_skip) { build :condition, routing_page_id: secondary_skip_page.id, check_page_id: selected_page.id, goto_page_id: pages[3].id }
+
+    before do
+      allow(FormRepository).to receive(:find).and_return(form)
+      allow(PageRepository).to receive(:find).with(page_id: "101", form_id: 1).and_return(selected_page)
+      allow(ConditionRepository).to receive(:find).and_return(condition)
+      allow(ConditionRepository).to receive(:destroy)
+
+      selected_page.routing_conditions = [condition]
+      secondary_skip_page.routing_conditions = [secondary_skip]
+    end
+
+    context "when confirmed" do
+      it "redirects to page list" do
+        delete destroy_routes_path(form_id: form.id, page_id: selected_page.id, pages_routes_delete_confirmation_input: { confirm: "yes" })
+        expect(response).to redirect_to form_pages_path(form_id: form.id)
+      end
+
+      it "calls destroy on conditions" do
+        expect(ConditionRepository).to receive(:destroy).with(have_attributes(id: condition.id))
+        expect(ConditionRepository).to receive(:destroy).with(have_attributes(id: secondary_skip.id))
+        delete destroy_routes_path(form_id: form.id, page_id: selected_page.id, pages_routes_delete_confirmation_input: { confirm: "yes" })
+      end
+    end
+
+    context "when given invalid params" do
+      it "renders the delete page" do
+        delete destroy_routes_path(form_id: form.id, page_id: selected_page.id, pages_routes_delete_confirmation_input: { confirm: nil })
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to render_template("pages/routes/delete")
+      end
+    end
+
+    context "when not confirmed" do
+      it "redirects to routes page" do
+        delete destroy_routes_path(form_id: form.id, page_id: selected_page.id, pages_routes_delete_confirmation_input: { confirm: "no" })
+        expect(response).to redirect_to show_routes_path(form_id: form.id, page_id: selected_page.id)
+      end
+
+      it "does no call destroy on conditions" do
+        expect(ConditionRepository).not_to receive(:destroy)
+        delete destroy_routes_path(form_id: form.id, page_id: selected_page.id, pages_routes_delete_confirmation_input: { confirm: "no" })
+      end
+    end
+  end
 end
