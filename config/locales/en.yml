@@ -744,6 +744,9 @@ en:
         default_answer_value: Select an answer
         default_goto_page_id: Select a question or page
       pages_question_input:
+        file_body_html: |
+          <p>People will be able to upload one image or document up to 7MB in size.</p>
+          <p>You can have up to 4 file upload questions in a form.</p>
         hint_text: Hint text (optional)
         is_optional_options:
           'false': Mandatory
