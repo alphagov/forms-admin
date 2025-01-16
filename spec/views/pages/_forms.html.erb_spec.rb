@@ -140,13 +140,14 @@ describe "pages/_form.html.erb", type: :view do
 
   context "when the answer type is file" do
     let(:page) { build :page, :with_hints, answer_type: "file", id: 2, form_id: form.id }
-    let(:draft_question) { question_input.draft_question }
+    let(:draft_question) { build :draft_question, answer_type: "file" }
     let(:question_input) do
       build :question_input,
             answer_type: page.answer_type,
             question_text: page.question_text,
             hint_text: page.hint_text,
-            answer_settings: page.answer_settings
+            answer_settings: page.answer_settings,
+            draft_question:
     end
 
     it "displays the file body text" do
@@ -159,6 +160,10 @@ describe "pages/_form.html.erb", type: :view do
 
     it "contains a hint for guidance" do
       expect(rendered).to have_text(I18n.t("helpers.hint.page.guidance.file"))
+    end
+
+    it "does not have the radio input for repeatable" do
+      expect(rendered).not_to have_field("pages_question_input[is_repeatable]", type: :radio)
     end
   end
 end
