@@ -18,7 +18,7 @@
     <%= govuk_summary_list(**PageSummaryData::GuidanceService.call(form: form_object, draft_question:).build_data) %>
 
   <% else %>
-    <p><%= t("guidance.instructions") %></p>
+    <p><%= hint_for_edit_page_field("guidance", draft_question.answer_type, draft_question.answer_settings) %></p>
 
     <p>
       <% guidance_link = unless is_new_page

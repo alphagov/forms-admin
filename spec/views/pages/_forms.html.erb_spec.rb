@@ -80,6 +80,10 @@ describe "pages/_form.html.erb", type: :view do
     expect(rendered).to have_link(text: I18n.t("guidance.add_guidance"), href: guidance_new_path(form_id: form.id))
   end
 
+  it "contains a hint for guidance" do
+    expect(rendered).to have_text(I18n.t("helpers.hint.page.guidance.default"))
+  end
+
   context "when it is not a new page" do
     let(:is_new_page) { false }
 
@@ -136,6 +140,14 @@ describe "pages/_form.html.erb", type: :view do
 
   context "when the answer type is file" do
     let(:page) { build :page, :with_hints, answer_type: "file", id: 2, form_id: form.id }
+    let(:draft_question) { question_input.draft_question }
+    let(:question_input) do
+      build :question_input,
+            answer_type: page.answer_type,
+            question_text: page.question_text,
+            hint_text: page.hint_text,
+            answer_settings: page.answer_settings
+    end
 
     it "displays the file body text" do
       expect(rendered).to include(I18n.t("helpers.label.pages_question_input.file_body_html"))
@@ -143,6 +155,10 @@ describe "pages/_form.html.erb", type: :view do
 
     it "has a field with the file question text" do
       expect(rendered).to have_text(I18n.t("helpers.label.pages_question_input.file_question_text"))
+    end
+
+    it "contains a hint for guidance" do
+      expect(rendered).to have_text(I18n.t("helpers.hint.page.guidance.file"))
     end
   end
 end
