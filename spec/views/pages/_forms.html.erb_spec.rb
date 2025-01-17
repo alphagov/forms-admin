@@ -33,6 +33,7 @@ describe "pages/_form.html.erb", type: :view do
 
   it "has a field with the question text" do
     expect(rendered).to have_field(type: "text", with: question_input.question_text)
+    expect(rendered).to have_text(I18n.t("helpers.label.pages_question_input.question_text.default"))
   end
 
   it "has a field with the hint text" do
@@ -77,6 +78,10 @@ describe "pages/_form.html.erb", type: :view do
 
   it "contains a link to add guidance" do
     expect(rendered).to have_link(text: I18n.t("guidance.add_guidance"), href: guidance_new_path(form_id: form.id))
+  end
+
+  it "contains a hint for guidance" do
+    expect(rendered).to have_text(I18n.t("helpers.hint.page.guidance.default"))
   end
 
   context "when it is not a new page" do
@@ -126,6 +131,39 @@ describe "pages/_form.html.erb", type: :view do
 
     it "renders the draft question guidance markdown" do
       expect(rendered).to have_text(draft_question.guidance_markdown)
+    end
+  end
+
+  it "does not display the file body text" do
+    expect(rendered).not_to have_text(I18n.t("helpers.label.pages_question_input.file_body_html"))
+  end
+
+  context "when the answer type is file" do
+    let(:page) { build :page, :with_hints, answer_type: "file", id: 2, form_id: form.id }
+    let(:draft_question) { build :draft_question, answer_type: "file" }
+    let(:question_input) do
+      build :question_input,
+            answer_type: page.answer_type,
+            question_text: page.question_text,
+            hint_text: page.hint_text,
+            answer_settings: page.answer_settings,
+            draft_question:
+    end
+
+    it "displays the file body text" do
+      expect(rendered).to include(I18n.t("helpers.label.pages_question_input.file_body_html"))
+    end
+
+    it "has a field with the file question text" do
+      expect(rendered).to have_text(I18n.t("helpers.label.pages_question_input.question_text.file"))
+    end
+
+    it "contains a hint for guidance" do
+      expect(rendered).to have_text(I18n.t("helpers.hint.page.guidance.file"))
+    end
+
+    it "does not have the radio input for repeatable" do
+      expect(rendered).not_to have_field("pages_question_input[is_repeatable]", type: :radio)
     end
   end
 end

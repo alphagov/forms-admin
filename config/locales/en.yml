@@ -551,7 +551,6 @@ en:
   guidance:
     add_guidance: Add guidance
     guidance: Guidance
-    instructions: Only add guidance if you need to give a longer explanation of how to answer the question, or to format your content with paragraphs, headings, lists or links.
     markdown_editor:
       edit_markdown_link: Edit guidance text
       preview:
@@ -588,6 +587,9 @@ en:
         organisation_id: Currently, GOV.UK Forms is only available for central government organisations that publish content on the GOV.UK website.
       page:
         answer_type: The answer will be checked to make sure it’s in the selected format.
+        guidance:
+          default: Only add guidance if you need to give a longer explanation of how to answer the question, or to format your content with paragraphs, headings, lists or links.
+          file: Only add guidance if you need to give a longer explanation of what the uploaded file needs to contain, or to format your content with paragraphs, headings, lists or links.
         hint_text:
           address: You can add a short hint to help people answer the question. For example, you could tell people how you’ll use their address.
           checkbox: You can add a short hint to help people answer the question. For a question where people can select more than one answer you might want to use ‘Select all that apply’.
@@ -595,6 +597,7 @@ en:
           date_of_birth: You can add a short hint to help people answer the question. For a date of birth question you could use ‘For example, 27 3 1998’.
           default: You can add a short hint to help people answer the question. For example, to explain the format the answer should be in, or where to find the information you’ve asked for.
           email: You could add a short hint to tell people how you’ll use their email address. For example, ‘We’ll only use your email address to contact you about your application.’
+          file: You can add a short hint to help people upload the file you need. For example, you might need the file to contain specific information.
           long_text: You can add a short hint to help people answer the question. For example, you could give a bit more detail about the information you need.
           name: You can add a short hint to help people answer the question. For example, you might need to ask people to enter their name as it’s written on an official document such as a passport or driving licence.
           national_insurance_number: You can add a short hint to help people answer the question. For example, ‘It’s on your National Insurance card, benefit letter, payslip or P60. For example, QQ 12 34 56 C.’
@@ -611,6 +614,7 @@ en:
           date_of_birth: Ask the question the way you would in person. For example, ‘What’s your date of birth?’
           default: Ask a question the way you would in person. For example ‘What is your address?’
           email: Ask the question the way you would in person. For example, ‘What’s your email address?’
+          file: Be specific about the file you want to receive. For example ’Upload your annual report’.
           long_text: Ask the question the way you would in person. For example, ‘Why do you want to apply for this role?’
           name: Ask the question the way you would in person. For example, ‘What’s your name?’
           national_insurance_number: Ask the question the way you would in person. For example, ‘What’s your National Insurance number?’
@@ -744,6 +748,9 @@ en:
         default_answer_value: Select an answer
         default_goto_page_id: Select a question or page
       pages_question_input:
+        file_body_html: |
+          <p>People will be able to upload one image or document up to 7MB in size.</p>
+          <p>You can have up to 4 file upload questions in a form.</p>
         hint_text: Hint text (optional)
         is_optional_options:
           'false': Mandatory
@@ -751,7 +758,9 @@ en:
         is_repeatable_options:
           'false': No - this question can only be answered once
           'true': 'Yes'
-        question_text: Question text
+        question_text:
+          default: Question text
+          file: Ask for a file
       pages_secondary_skip_input:
         default_goto_page_id: Select a question or page
         default_routing_page_id: Select a question
