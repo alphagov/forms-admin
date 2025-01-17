@@ -59,6 +59,12 @@ module ApplicationHelper
     t("helpers.hint.page.#{field}.#{key}", default: t("helpers.hint.page.#{field}.default"))
   end
 
+  def question_text_label(answer_type, answer_settings)
+    key = translation_key_for_answer_type(answer_type, answer_settings)
+    translation_path = "helpers.label.pages_question_input.question_text"
+    t("#{translation_path}.#{key}", default: t("#{translation_path}.default"))
+  end
+
   def govuk_assets_path
     "/node_modules/govuk-frontend/dist/govuk/assets"
   end

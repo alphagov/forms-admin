@@ -140,7 +140,7 @@ RSpec.describe ApplicationHelper, type: :helper do
     end
   end
 
-  describe "hint_for_edit_page_field" do
+  describe "#hint_for_edit_page_field" do
     context "with an answer type that has custom text" do
       let(:answer_type) { "email" }
       let(:answer_settings) { {} }
@@ -165,6 +165,26 @@ RSpec.describe ApplicationHelper, type: :helper do
 
       it "returns the hint text for the file answer type" do
         expect(helper.hint_for_edit_page_field("question_text", answer_type, answer_settings)).to eq(I18n.t("helpers.hint.page.question_text.file"))
+      end
+    end
+  end
+
+  describe "#question_text_label" do
+    context "with an answer type that does not have custom text" do
+      let(:answer_type) { "some_random_string" }
+      let(:answer_settings) { {} }
+
+      it "returns the default question text label" do
+        expect(helper.question_text_label(answer_type, answer_settings)).to eq(I18n.t("helpers.label.pages_question_input.question_text.default"))
+      end
+    end
+
+    context "with the file answer type" do
+      let(:answer_type) { "file" }
+      let(:answer_settings) { {} }
+
+      it "returns the question text label for the file answer type" do
+        expect(helper.question_text_label(answer_type, answer_settings)).to eq(I18n.t("helpers.label.pages_question_input.question_text.file"))
       end
     end
   end

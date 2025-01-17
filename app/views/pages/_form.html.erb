@@ -5,7 +5,10 @@
     <p class="govuk-body"><%=t('helpers.label.pages_question_input.file_body_html')%></p>
   <% end %>
 
-  <%= f.govuk_text_field :question_text , label: { size: 'm', text: question_input.answer_type == "file" ? t('helpers.label.pages_question_input.file_question_text') : t("helpers.label.pages_question_input.question_text") }, hint: { text: hint_for_edit_page_field("question_text", draft_question.answer_type, draft_question.answer_settings) } %>
+  <%= f.govuk_text_field :question_text,
+    label: { size: 'm', text: question_text_label(draft_question.answer_type, draft_question.answer_settings) },
+    hint: { text: hint_for_edit_page_field("question_text", draft_question.answer_type, draft_question.answer_settings) }
+  %>
 
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
