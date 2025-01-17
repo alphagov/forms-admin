@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Pages::QuestionInput, type: :model do
-  let(:question_input) { build :question_input, question_text:, draft_question:, is_optional:, is_repeatable: }
+  let(:question_input) { build :question_input, answer_type:, question_text:, draft_question:, is_optional:, is_repeatable: }
   let(:draft_question) { build :draft_question, question_text: }
   let(:question_text) { "What is your full name?" }
   let(:is_optional) { "false" }
   let(:is_repeatable) { "false" }
+  let(:answer_type) { "email" }
 
   it "has a valid factory" do
     expect(build(:question_input)).to be_valid
@@ -16,22 +17,22 @@ RSpec.describe Pages::QuestionInput, type: :model do
       it "is invalid given nil question text" do
         error_message = I18n.t("activemodel.errors.models.pages/question_input.attributes.question_text.blank")
         question_input.question_text = nil
-        expect(question_input).not_to be_valid
+        expect(question_input).to be_invalid
         expect(question_input.errors[:question_text]).to include(error_message)
       end
 
       it "is invalid given empty string question text" do
         error_message = I18n.t("activemodel.errors.models.pages/question_input.attributes.question_text.blank")
         question_input.question_text = ""
-        expect(question_input).not_to be_valid
+        expect(question_input).to be_invalid
         expect(question_input.errors[:question_text]).to include(error_message)
       end
 
-      it "is valid if question text below 200 characters" do
+      it "is valid if question text below 250 characters" do
         expect(question_input).to be_valid
       end
 
-      context "when question text 250 characters" do
+      context "when question text is 250 characters" do
         let(:question_text) { "A" * 250 }
 
         it "is valid" do
@@ -39,16 +40,39 @@ RSpec.describe Pages::QuestionInput, type: :model do
         end
       end
 
-      context "when question text more 250 characters" do
+      context "when question text more than 250 characters" do
         let(:question_text) { "A" * 251 }
 
         it "is invalid" do
-          expect(question_input).not_to be_valid
+          expect(question_input).to be_invalid
         end
 
         it "has an error message" do
           question_input.valid?
-          expect(question_input.errors[:question_text]).to include(I18n.t("activemodel.errors.models.page.attributes.question_text.too_long", count: 250))
+          expect(question_input.errors[:question_text]).to include("Question text must be 250 characters or less")
+        end
+      end
+
+      context "when the answer type is file" do
+        let(:answer_type) { "file" }
+
+        context "when question text is blank" do
+          let(:question_text) { "" }
+
+          it "has a file answer type specific error message" do
+            expect(question_input).to be_invalid
+            error_message = I18n.t("activemodel.errors.models.pages/question_input.attributes.question_text.blank_file")
+            expect(question_input.errors[:question_text]).to include(error_message)
+          end
+        end
+
+        context "when question text more than 250 characters" do
+          let(:question_text) { "A" * 251 }
+
+          it "has a file answer type specific error message" do
+            expect(question_input).to be_invalid
+            expect(question_input.errors[:question_text]).to include("Your text to ask for a file must be 250 characters or less")
+          end
         end
       end
     end
