@@ -107,7 +107,9 @@ en:
               inclusion: Select ‘Yes’ if someone can add more than one answer
             question_text:
               blank: Enter a question
+              blank_file: Enter text to ask for a file
               too_long: Question text must be %{count} characters or less
+              too_long_file: Your text to ask for a file must be %{count} characters or less
             selection_options:
               too_many_selection_options: You cannot have more than 30 options in a list when people can select more than one option
         pages/routes/delete_confirmation_input:
