@@ -1,0 +1,15 @@
+<% page_number = current_form.page_number(page) %>
+<% set_page_title(title_with_error_prefix(t(".title", page_number: page_number), delete_confirmation_input.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(show_routes_path(form_id: current_form.id, page_id: page.id), t("pages.routes.delete.back", page_number: page_number)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render(
+      delete_confirmation_input,
+      url: destroy_routes_path(current_form.id, page.id),
+      caption_text: t("pages.routes.delete.caption", page_number: page_number),
+      legend_text: t("pages.routes.delete.title", page_number: page_number),
+      hint_text: nil,
+    ) %>
+  </div>
+</div>
