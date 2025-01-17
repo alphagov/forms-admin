@@ -621,7 +621,7 @@ en:
           date_of_birth: Ask the question the way you would in person. For example, ‘What’s your date of birth?’
           default: Ask a question the way you would in person. For example ‘What is your address?’
           email: Ask the question the way you would in person. For example, ‘What’s your email address?’
-          file: Be specific about the file you want to receive. For example ’Upload your annual report’.
+          file: Be specific about the file you want to receive. For example ‘Upload your annual report’.
           long_text: Ask the question the way you would in person. For example, ‘Why do you want to apply for this role?’
           name: Ask the question the way you would in person. For example, ‘What’s your name?’
           national_insurance_number: Ask the question the way you would in person. For example, ‘What’s your National Insurance number?’
