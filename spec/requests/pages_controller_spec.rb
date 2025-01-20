@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe PagesController, type: :request do
-  let(:form_response) { build :form, id: 2 }
+  let(:form_response) { Form.new(attributes_for(:form, id: 2), true) }
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
   let(:membership) { create :membership, group:, user: standard_user }
@@ -82,7 +82,8 @@ RSpec.describe PagesController, type: :request do
   describe "#delete" do
     describe "given a valid page" do
       let(:page) do
-        Page.new({
+        build(
+          :page,
           id: 1,
           form_id: 2,
           question_text: "What is your work address?",
@@ -90,16 +91,28 @@ RSpec.describe PagesController, type: :request do
           answer_type: "address",
           next_page: nil,
           is_optional: false,
-        })
+        )
       end
 
+      let(:pages) { [page] }
+
       before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
+        end
+
         allow(FormRepository).to receive(:find).and_return(form_response)
-        allow(PageRepository).to receive_messages(find: page, destroy: true)
+
+        pages.each do |page|
+          allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: 2).and_return(page)
+          allow(PageRepository).to receive(:find).with(page_id: page.id, form_id: 2).and_return(page)
+        end
+
+        allow(PageRepository).to receive_messages(destroy: true)
 
         GroupForm.create!(form_id: 2, group_id: group.id)
 
-        get delete_page_path(form_id: 2, page_id: 1)
+        get delete_page_path(form_id: 2, page_id: page.id)
       end
 
       it "renders the delete page template" do
@@ -115,6 +128,162 @@ RSpec.describe PagesController, type: :request do
 
         it "returns an error" do
           expect(response).to have_http_status :forbidden
+        end
+      end
+
+      context "when page to delete has no routes" do
+        it "does not render a warning" do
+          expect(response.body).not_to include "Important"
+        end
+      end
+
+      context "when page to delete is start of one or more routes" do
+        let(:page) do
+          build(
+            :page,
+            :with_selection_settings,
+            id: 1,
+            form_id: 2,
+            question_text: "What is your favourite colour?",
+            selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
+            only_one_option: true,
+            routing_conditions: [
+              build(:condition, routing_page_id: 1, check_page_id: 1, value: "red", skip_to_end: true),
+              build(:condition, routing_page_id: 1, check_page_id: 1, value: "green", goto_page_id: 3),
+            ],
+          )
+        end
+
+        it "renders a warning about deleting this page" do
+          assert_select(".govuk-notification-banner", count: 1) do
+            assert_select "*", "Important"
+            assert_select "h3", "Question #{page.position} is the start of a route"
+            assert_select "p.govuk-body", /If you delete this question, its routes will also be deleted/
+            assert_select "p.govuk-body a", "View question #{page.position}’s routes"
+          end
+        end
+      end
+
+      context "when page to delete is at the end of a route" do
+        let(:pages) do
+          [
+            build(
+              :page,
+              :with_selection_settings,
+              id: 1,
+              form_id: 2,
+              position: 1,
+              question_text: "What is your favourite colour?",
+              selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
+              only_one_option: true,
+              routing_conditions: [
+                build(:condition, routing_page_id: 1, check_page_id: 1, value: "green", goto_page_id: 3),
+              ],
+            ),
+            build(
+              :page,
+              id: 3,
+              form_id: 2,
+              position: 3,
+            ),
+          ]
+        end
+
+        let(:page) { pages.last }
+
+        it "renders a warning about deleting this page" do
+          assert_select(".govuk-notification-banner", count: 1) do
+            assert_select "*", "Important"
+            assert_select "h3", "Question 3 is at the end of a route"
+            assert_select "p.govuk-body a", "Question 1’s route"
+            assert_select "p.govuk-body", /Question 1’s route\s*goes to this question. If you delete this question, question 1’s routes will also be deleted./
+          end
+        end
+      end
+
+      context "when page to delete is start of a secondary skip route" do
+        let(:pages) do
+          [
+            build(
+              :page,
+              :with_selection_settings,
+              id: 1,
+              form_id: 2,
+              position: 1,
+              question_text: "What is your favourite colour?",
+              selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
+              only_one_option: true,
+              routing_conditions: [
+                build(:condition, routing_page_id: 1, check_page_id: 1, value: "green", goto_page_id: 3),
+              ],
+            ),
+            build(
+              :page,
+              id: 5,
+              form_id: 2,
+              position: 5,
+              routing_conditions: [
+                build(:condition, routing_page_id: 5, check_page_id: 1, value: nil, goto_page_id: 8),
+              ],
+            ),
+          ]
+        end
+
+        let(:page) { pages.last }
+
+        it "renders a warning about deleting this page" do
+          assert_select(".govuk-notification-banner", count: 1) do
+            assert_select "*", "Important"
+            assert_select "h3", "Question 5 is the start of a route"
+            assert_select "p.govuk-body a", "Question 1’s route"
+            assert_select "p.govuk-body", /Question 1’s route\s*starts at this question. If you delete this question, the route from it will also be deleted./
+          end
+        end
+      end
+
+      context "when page to delete is at the end of a secondary skip route" do
+        let(:pages) do
+          [
+            build(
+              :page,
+              :with_selection_settings,
+              id: 1,
+              form_id: 2,
+              position: 1,
+              question_text: "What is your favourite colour?",
+              selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
+              only_one_option: true,
+              routing_conditions: [
+                build(:condition, routing_page_id: 1, check_page_id: 1, value: "green", goto_page_id: 3),
+              ],
+            ),
+            build(
+              :page,
+              id: 5,
+              form_id: 2,
+              position: 5,
+              routing_conditions: [
+                build(:condition, routing_page_id: 5, check_page_id: 1, value: nil, goto_page_id: 8),
+              ],
+            ),
+            build(
+              :page,
+              id: 8,
+              form_id: 2,
+              position: 8,
+            ),
+          ]
+        end
+
+        let(:page) { pages.last }
+
+        it "renders a warning about deleting this page" do
+          assert_select(".govuk-notification-banner", count: 1) do
+            assert_select "*", "Important"
+            assert_select "h3", "Question 8 is at the end of a route"
+            assert_select "p.govuk-body a", "Question 1’s route"
+            assert_select "p.govuk-body", /Question 1’s route\s*goes to this question. If you delete this question, the route to it will also be deleted./
+          end
         end
       end
     end
