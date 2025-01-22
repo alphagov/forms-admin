@@ -7,11 +7,7 @@ RSpec.describe ApplicationController, type: :request do
   let(:logger) { ActiveSupport::Logger.new(output) }
 
   before do
-    ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms/1/pages", headers, form.pages.to_json, 200
-    end
-
-    allow(FormRepository).to receive(:find).and_return(form)
+    allow(FormRepository).to receive_messages(find: form)
 
     login_as_standard_user
   end

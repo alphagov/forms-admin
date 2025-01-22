@@ -4,7 +4,8 @@ describe FormTaskListService do
   let(:current_user) { build(:user) }
 
   let(:organisation) { build :organisation, :with_signed_mou, id: 1 }
-  let(:form) { build(:form, :new_form, id: 1) }
+  let(:form) { build(:form, :new_form, id: 1, pages:) }
+  let(:pages) { [] }
   let(:group) { create(:group, name: "Group 1", organisation:, status: group_status) }
   let(:group_status) { :trial }
 
@@ -22,6 +23,7 @@ describe FormTaskListService do
     group_policy = instance_double(GroupPolicy,
                                    upgrade?: upgrade)
     allow(Pundit).to receive(:policy).with(current_user, kind_of(Group)).and_return(group_policy)
+    allow(FormRepository).to receive_messages(pages: pages)
     GroupForm.create!(form_id: form.id, group_id: group.id)
   end
 
@@ -106,11 +108,13 @@ describe FormTaskListService do
         expect(section_rows[1][:path]).to eq "/forms/1/pages/new/start-new-question"
       end
 
-      it "has a link to add/edit existing pages (if pages/questions exist)" do
-        page = build :page
-        form.pages = [page]
-        expect(section_rows[1][:task_name]).to eq "Add and edit your questions"
-        expect(section_rows[1][:path]).to eq "/forms/1/pages"
+      context "when a page already exists" do
+        let(:pages) { [build(:page)] }
+
+        it "has a link to add/edit existing pages (if pages/questions exist)" do
+          expect(section_rows[1][:task_name]).to eq "Add and edit your questions"
+          expect(section_rows[1][:path]).to eq "/forms/1/pages"
+        end
       end
 
       it "has a link to add/edit declaration" do
@@ -379,6 +383,8 @@ describe FormTaskListService do
           end
 
           context "when the form has at least one page" do
+            let(:pages) { [build(:page)] }
+
             it "has the correct task name" do
               expect(section_rows.first[:task_name]).to eq(I18n.t("forms.task_list_create.make_form_live_section.share_preview"))
             end

@@ -10,7 +10,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation, file_upload_enabled:) }
 
   before do
-    allow(FormRepository).to receive(:find).and_return(form)
+    allow(FormRepository).to receive_messages(find: form, pages: pages)
     allow(PageRepository).to receive_messages(find: page, save!: page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
@@ -20,10 +20,6 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
   describe "#new" do
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
-
       get type_of_answer_new_path(form_id: form.id)
     end
 
@@ -56,12 +52,6 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
   end
 
   describe "#create" do
-    before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
-    end
-
     context "when form is valid and ready to store" do
       before do
         post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_input: { answer_type: type_of_answer_input.answer_type } }
@@ -166,10 +156,6 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
     let(:page) { build :page, :with_simple_answer_type, id: 2, form_id: form.id }
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
-
       allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
 
       get type_of_answer_edit_path(form_id: page.form_id, page_id: page.id)
@@ -212,10 +198,6 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
     let(:page) { build :page, :with_simple_answer_type, id: 2, form_id: form.id, answer_type: "email" }
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
-
       allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
       allow(PageRepository).to receive(:save!).with(hash_including(page_id: "2", form_id: 1))
     end

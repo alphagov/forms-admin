@@ -68,17 +68,13 @@ RSpec.describe Pages::QuestionsController, type: :request do
   end
 
   let(:form_pages_response) do
-    [page_response].to_json
+    [page_response]
   end
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms/2/pages", headers, form_pages_response, 200
-    end
-
-    allow(FormRepository).to receive(:find).and_return(form_response)
+    allow(FormRepository).to receive_messages(find: form_response, pages: form_pages_response)
     allow(PageRepository).to receive_messages(create!: page, find: page, save!: updated_page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)

@@ -9,7 +9,7 @@ RSpec.describe Pages::QuestionTextController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(FormRepository).to receive(:find).and_return(form)
+    allow(FormRepository).to receive_messages(find: form, pages: pages)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -18,10 +18,6 @@ RSpec.describe Pages::QuestionTextController, type: :request do
 
   describe "#new" do
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
-
       get question_text_new_path(form_id: form.id)
     end
 
@@ -40,12 +36,6 @@ RSpec.describe Pages::QuestionTextController, type: :request do
   end
 
   describe "#create" do
-    before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
-    end
-
     context "when form is invalid" do
       before do
         post question_text_create_path form_id: form.id, params: { pages_question_text_input: { question_text: nil } }

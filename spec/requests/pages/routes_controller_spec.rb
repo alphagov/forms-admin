@@ -22,7 +22,7 @@ describe Pages::RoutesController, type: :request do
   let(:user) { standard_user }
 
   before do
-    allow(FormRepository).to receive(:find).and_return(form)
+    allow(FormRepository).to receive_messages(find: form, pages: pages)
     allow(PageRepository).to receive(:find).and_return(page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
@@ -32,10 +32,6 @@ describe Pages::RoutesController, type: :request do
 
   describe "#show" do
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
-
       allow(PageRepository).to receive(:find).with(page_id: "101", form_id: 1).and_return(selected_page)
 
       get show_routes_path(form_id: form.id, page_id: selected_page.id)
@@ -52,7 +48,6 @@ describe Pages::RoutesController, type: :request do
 
   describe "#delete" do
     before do
-      allow(FormRepository).to receive(:find).and_return(form)
       allow(PageRepository).to receive(:find).with(page_id: "101", form_id: 1).and_return(selected_page)
 
       get delete_routes_path(form_id: form.id, page_id: selected_page.id)
@@ -70,7 +65,6 @@ describe Pages::RoutesController, type: :request do
     let(:secondary_skip) { build :condition, routing_page_id: secondary_skip_page.id, check_page_id: selected_page.id, goto_page_id: pages[3].id }
 
     before do
-      allow(FormRepository).to receive(:find).and_return(form)
       allow(PageRepository).to receive(:find).with(page_id: "101", form_id: 1).and_return(selected_page)
       allow(ConditionRepository).to receive(:find).and_return(condition)
       allow(ConditionRepository).to receive(:destroy)
