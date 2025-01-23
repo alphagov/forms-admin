@@ -145,4 +145,21 @@ describe FormRepository do
       expect(Form.new(id: 2)).to have_been_deleted
     end
   end
+
+  describe "#pages" do
+    let(:form) { build(:form, id: 2) }
+    let(:pages) { build_list(:page, 5) }
+
+    before do
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
+      end
+    end
+
+    it "gets a form's pages through ActiveResource" do
+      pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2/pages", pages, headers)
+      described_class.pages(form)
+      expect(ActiveResource::HttpMock.requests).to include pages_request
+    end
+  end
 end

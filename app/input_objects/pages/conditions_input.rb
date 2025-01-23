@@ -37,7 +37,7 @@ class Pages::ConditionsInput < BaseInput
   end
 
   def goto_page_options
-    page_options = pages_after_current_page(form.pages, page).map { |p| OpenStruct.new(id: p.id, question_text: p.question_with_number) }
+    page_options = pages_after_current_page(FormRepository.pages(form), page).map { |p| OpenStruct.new(id: p.id, question_text: p.question_with_number) }
     page_options << OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers"))
 
     page_options

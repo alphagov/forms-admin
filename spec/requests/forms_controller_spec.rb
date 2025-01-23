@@ -18,10 +18,6 @@ RSpec.describe FormsController, type: :request do
       let(:params) { {} }
 
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2/pages", headers, form.pages.to_json, 200
-        end
-
         allow(FormRepository).to receive(:find).and_return(form)
 
         get form_path(2, params)
@@ -38,11 +34,7 @@ RSpec.describe FormsController, type: :request do
 
     context "with a non-live form" do
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2/pages", headers, form.pages.to_json, 200
-        end
-
-        allow(FormRepository).to receive(:find).and_return(form)
+        allow(FormRepository).to receive_messages(find: form, pages: form.pages)
 
         get form_path(2)
       end
@@ -116,10 +108,6 @@ RSpec.describe FormsController, type: :request do
     end
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
-      end
-
       allow(FormRepository).to receive_messages(find: form, save!: form)
 
       login_as user
@@ -133,10 +121,6 @@ RSpec.describe FormsController, type: :request do
 
     context "when the mark completed form is invalid" do
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
-        end
-
         allow(FormRepository).to receive_messages(find: form, save!: nil)
 
         post form_pages_path(2), params: { forms_mark_pages_section_complete_input: { mark_complete: nil } }

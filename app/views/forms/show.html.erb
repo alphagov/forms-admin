@@ -23,7 +23,7 @@
       <p><%= flash[:message] %></p>
     <% end %>
 
-    <% preview_link = PreviewLinkComponent::View.new(current_form.pages, link_to_runner(Settings.forms_runner.url, current_form.id, current_form.form_slug)) %>
+    <% preview_link = PreviewLinkComponent::View.new(FormRepository.pages(current_form), link_to_runner(Settings.forms_runner.url, current_form.id, current_form.form_slug)) %>
     <% if preview_link.render? %>
       <p class="govuk-!-margin-bottom-9">
         <%= render preview_link %>

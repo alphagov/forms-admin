@@ -8,11 +8,7 @@ feature "Make changes live", type: :feature do
   let(:group) { create(:group, name: "Group 1", organisation:, status: "active") }
 
   before do
-    ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-    end
-
-    allow(FormRepository).to receive_messages(find: form, find_live: form, make_live!: form)
+    allow(FormRepository).to receive_messages(find: form, find_live: form, make_live!: form, pages: pages)
 
     GroupForm.create!(form_id: form.id, group_id: group.id)
     Membership.create!(user:, group:, added_by: user, role: :group_admin)

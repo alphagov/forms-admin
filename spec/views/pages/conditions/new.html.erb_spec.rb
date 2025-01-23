@@ -10,6 +10,7 @@ describe "pages/conditions/new.html.erb" do
   let(:condition_input) { Pages::ConditionsInput.new(form:, page: pages.first) }
 
   before do
+    allow(FormRepository).to receive(:pages).and_return(pages)
     allow(view).to receive(:set_routing_page_path).with(routing_page_id: condition_input.page.id).and_return("/forms/1/new-condition?routing-page_id=#{condition_input.page.id}")
     allow(view).to receive_messages(form_pages_path: "/forms/1/pages", routing_page_path: "/forms/1/new-condition", create_condition_path: "/forms/1/pages/1/conditions/new")
     allow(form).to receive(:qualifying_route_pages).and_return(pages)

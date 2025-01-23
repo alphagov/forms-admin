@@ -12,11 +12,7 @@ feature "Create or edit a form", type: :feature do
     let(:pages) { [] }
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
-
-      allow(FormRepository).to receive_messages(create!: form, find: form)
+      allow(FormRepository).to receive_messages(create!: form, find: form, pages: form.pages)
     end
 
     context "when the user is a member of a group" do
@@ -44,11 +40,7 @@ feature "Create or edit a form", type: :feature do
     before do
       form.name = "Another form of juggling"
 
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
-
-      allow(FormRepository).to receive_messages(save!: form, find: form)
+      allow(FormRepository).to receive_messages(save!: form, find: form, pages: form.pages)
     end
 
     context "when the user is a member of a group with a form" do

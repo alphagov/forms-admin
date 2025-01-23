@@ -22,11 +22,7 @@ RSpec.describe PagesController, type: :request do
     end
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
-      end
-
-      allow(FormRepository).to receive(:find).and_return(form)
+      allow(FormRepository).to receive_messages(find: form, pages: pages)
 
       get form_pages_path(2)
     end
@@ -97,11 +93,7 @@ RSpec.describe PagesController, type: :request do
       let(:pages) { [page] }
 
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
-        end
-
-        allow(FormRepository).to receive(:find).and_return(form_response)
+        allow(FormRepository).to receive_messages(find: form_response, pages: pages)
 
         pages.each do |page|
           allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: 2).and_return(page)
@@ -307,11 +299,7 @@ RSpec.describe PagesController, type: :request do
       end
 
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/forms/2/pages", headers, form_pages_response, 200
-        end
-
-        allow(FormRepository).to receive(:find).and_return(form_response)
+        allow(FormRepository).to receive_messages(find: form_response, pages: form_pages_response)
         allow(PageRepository).to receive_messages(find: page, destroy: true)
 
         GroupForm.create!(form_id: 2, group_id: group.id)
@@ -352,11 +340,7 @@ RSpec.describe PagesController, type: :request do
     end
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
-
-      allow(FormRepository).to receive(:find).and_return(form)
+      allow(FormRepository).to receive_messages(find: form, pages: pages)
       allow(PageRepository).to receive_messages(find: pages[1], move_page: true)
 
       GroupForm.create!(form_id: 2, group_id: group.id)

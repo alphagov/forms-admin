@@ -22,7 +22,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(FormRepository).to receive(:find).and_return(form)
+    allow(FormRepository).to receive_messages(find: form, pages: pages)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -31,10 +31,6 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
   describe "#new" do
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
-
       get address_settings_new_path(form_id: form.id)
     end
 
@@ -53,12 +49,6 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
   end
 
   describe "#create" do
-    before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
-    end
-
     context "when form is invalid" do
       before do
         post address_settings_create_path form_id: form.id, params: { pages_address_settings_input: { input_type: nil } }
@@ -104,10 +94,6 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
     end
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
-
       allow(PageRepository).to receive(:find).and_return(page)
 
       draft_question
@@ -142,9 +128,6 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
     end
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
       allow(PageRepository).to receive_messages(find: page, save!: page)
     end
 

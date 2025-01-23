@@ -10,7 +10,7 @@ RSpec.describe Pages::DateSettingsController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(FormRepository).to receive(:find).and_return(form)
+    allow(FormRepository).to receive_messages(find: form, pages: pages)
     allow(PageRepository).to receive_messages(find: page, save!: page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
@@ -20,10 +20,6 @@ RSpec.describe Pages::DateSettingsController, type: :request do
 
   describe "#new" do
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
-
       get date_settings_new_path(form_id: form.id)
     end
 
@@ -42,12 +38,6 @@ RSpec.describe Pages::DateSettingsController, type: :request do
   end
 
   describe "#create" do
-    before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
-    end
-
     context "when form is invalid" do
       before do
         post date_settings_create_path form_id: form.id, params: { pages_date_settings_input: { input_type: nil } }
@@ -90,10 +80,6 @@ RSpec.describe Pages::DateSettingsController, type: :request do
     end
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
-
       draft_question
       get date_settings_edit_path(form_id: page.form_id, page_id: page.id)
     end
@@ -125,10 +111,6 @@ RSpec.describe Pages::DateSettingsController, type: :request do
     end
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
-
       allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
       allow(PageRepository).to receive(:save!).with(hash_including(page_id: "2", form_id: 1))
     end

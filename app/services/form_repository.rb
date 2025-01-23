@@ -42,5 +42,10 @@ class FormRepository
       form = Form.new(record.attributes, true)
       form.destroy # rubocop:disable Rails/SaveBang
     end
+
+    def pages(record)
+      form = Form.new(record.attributes, true)
+      form.pages
+    end
   end
 end

@@ -22,7 +22,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
   let(:user) { standard_user }
 
   before do
-    allow(FormRepository).to receive(:find).and_return(form)
+    allow(FormRepository).to receive_messages(find: form, pages: pages)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -31,10 +31,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
   describe "#routing_page" do
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
-
       get routing_page_path(form_id: form.id)
     end
 
@@ -52,9 +48,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
     before do
       selected_page.id = 1
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
 
       allow(PageRepository).to receive(:find).with(page_id: "1", form_id: 1).and_return(selected_page)
 
@@ -97,9 +90,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
   describe "#new" do
     before do
       selected_page.id = 1
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
 
       allow(PageRepository).to receive(:find).and_return(selected_page)
 
@@ -131,9 +121,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
   describe "#create" do
     before do
       selected_page.id = 1
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
 
       allow(PageRepository).to receive(:find).and_return(selected_page)
 
@@ -192,9 +179,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     before do
       selected_page.routing_conditions = [condition]
       selected_page.position = 1
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
 
       allow(PageRepository).to receive(:find).and_return(selected_page)
       allow(ConditionRepository).to receive(:find).and_return(condition)
@@ -241,9 +225,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     before do
       selected_page.routing_conditions = [condition]
       selected_page.position = 1
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
 
       allow(PageRepository).to receive(:find).and_return(selected_page)
       allow(ConditionRepository).to receive(:find).and_return(condition)
@@ -304,9 +285,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     before do
       selected_page.routing_conditions = [condition]
       selected_page.position = 1
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
 
       allow(PageRepository).to receive(:find).and_return(selected_page)
 
@@ -350,9 +328,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     before do
       selected_page.routing_conditions = [condition]
       selected_page.position = 1
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-      end
 
       allow(PageRepository).to receive(:find).and_return(selected_page)
       allow(ConditionRepository).to receive_messages(find: condition, destroy: nil)
