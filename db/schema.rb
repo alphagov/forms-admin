@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_29_152103) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_24_094215) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "draft_questions", force: :cascade do |t|
     t.integer "form_id"
@@ -55,6 +55,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_29_152103) do
     t.bigint "creator_id"
     t.bigint "upgrade_requester_id"
     t.boolean "file_upload_enabled", default: false
+    t.boolean "branching_enabled", default: false
     t.index ["creator_id"], name: "index_groups_on_creator_id"
     t.index ["external_id"], name: "index_groups_on_external_id", unique: true
     t.index ["name", "organisation_id"], name: "index_groups_on_name_and_organisation_id", unique: true
