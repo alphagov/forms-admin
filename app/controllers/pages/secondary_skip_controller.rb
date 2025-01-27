@@ -79,7 +79,9 @@ private
   end
 
   def ensure_branch_routing_feature_enabled
-    raise ActionController::RoutingError, "branch_routing feature not enabled" unless Settings.features.branch_routing
+    return if branching_enabled
+
+    raise ActionController::RoutingError, "branch_routing feature not enabled"
   end
 
   def ensure_page_has_skip_condition
