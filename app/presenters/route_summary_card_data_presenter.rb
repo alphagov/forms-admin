@@ -3,7 +3,7 @@ class RouteSummaryCardDataPresenter
   include ActionView::Helpers::UrlHelper
   include GovukRailsCompatibleLinkHelper
 
-  attr_reader :form, :page, :pages
+  attr_reader :form, :page, :pages, :branching_enabled
 
   class << self
     def call(**args)
@@ -11,10 +11,11 @@ class RouteSummaryCardDataPresenter
     end
   end
 
-  def initialize(form:, page:, pages:)
+  def initialize(form:, page:, pages:, branching_enabled:)
     @page = page
     @pages = pages
     @form = form
+    @branching_enabled = branching_enabled
   end
 
   def summary_card_data
@@ -64,7 +65,7 @@ private
   def default_route_card(index)
     continue_to_name = page.has_next_page? ? page_name(page.next_page) : end_page_name
 
-    actions = if FeatureService.enabled?(:branch_routing) && all_routes.find(&:secondary_skip?).present?
+    actions = if branching_enabled && all_routes.find(&:secondary_skip?).present?
                 [
                   edit_secondary_skip_link,
                   delete_secondary_skip_link,
@@ -101,7 +102,7 @@ private
     secondary_skip = all_routes.find(&:secondary_skip?)
 
     if secondary_skip.blank?
-      if FeatureService.enabled?(:branch_routing)
+      if branching_enabled
         return [
           {
             key: { text: I18n.t("page_route_card.then") },

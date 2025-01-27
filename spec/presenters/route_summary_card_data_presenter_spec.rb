@@ -3,7 +3,7 @@ require "rails_helper"
 describe RouteSummaryCardDataPresenter do
   include Capybara::RSpecMatchers
 
-  subject(:service) { described_class.new(form:, page: current_page, pages:) }
+  subject(:service) { described_class.new(form:, page: current_page, pages:, branching_enabled:) }
 
   let(:form) { build :form, id: 99, pages: }
 
@@ -25,9 +25,11 @@ describe RouteSummaryCardDataPresenter do
 
   let(:next_page_routing_conditions) { [] }
 
+  let(:branching_enabled) { false }
+
   describe ".call" do
     it "instantiates and returns a new instance" do
-      service = described_class.call(form:, page: current_page, pages:)
+      service = described_class.call(form:, page: current_page, pages:, branching_enabled:)
       expect(service).to be_an_instance_of(described_class)
     end
   end
@@ -50,7 +52,9 @@ describe RouteSummaryCardDataPresenter do
         expect(result[1][:rows][0][:value][:text]).to eq("2. Next Question")
       end
 
-      context "with branch_routing enabled", :feature_branch_routing do
+      context "with branch_routing enabled" do
+        let(:branching_enabled) { true }
+
         it "has the link to create a secondary skip" do
           result = service.summary_card_data
           expect(result[1][:rows][1][:value][:text]).to have_link("Set one or more questions to skip later in the form (optional)", href: "/forms/99/pages/1/routes/any-other-answer/questions-to-skip/new")
@@ -106,6 +110,8 @@ describe RouteSummaryCardDataPresenter do
       end
 
       context "with branch_routing enabled", :feature_branch_routing do
+        let(:branching_enabled) { true }
+
         it "shows the edit secondary skip link" do
           result = service.summary_card_data
           expect(result[1][:card][:actions].first).to have_link("Edit", href: "/forms/99/pages/1/routes/any-other-answer/questions-to-skip")

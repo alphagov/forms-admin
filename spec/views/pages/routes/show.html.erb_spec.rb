@@ -19,7 +19,7 @@ describe "pages/routes/show.html.erb" do
 
   before do
     allow(RouteSummaryCardDataPresenter).to receive(:call).and_return(route_summary_card_data_service)
-    render template: "pages/routes/show", locals: { current_form: form, page:, pages: form.pages, back_link_url: "/back" }
+    render template: "pages/routes/show", locals: { current_form: form, page:, pages: form.pages, back_link_url: "/back", branching_enabled: true }
   end
 
   it "has the correct title" do
