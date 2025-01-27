@@ -124,7 +124,7 @@ RSpec.describe Reports::CsvReportsService do
         nil,
         nil,
         nil,
-        "{\"input_type\"=>\"single_line\"}",
+        "{\"input_type\" => \"single_line\"}",
       ])
     end
 
@@ -153,7 +153,7 @@ RSpec.describe Reports::CsvReportsService do
         "false",
         "3",
         nil,
-        "{\"only_one_option\"=>\"0\", \"selection_options\"=>[{\"name\"=>\"Option 1\"}, {\"name\"=>\"Option 2\"}, {\"name\"=>\"Option 3\"}]}",
+        "{\"only_one_option\" => \"0\", \"selection_options\" => [{\"name\" => \"Option 1\"}, {\"name\" => \"Option 2\"}, {\"name\" => \"Option 3\"}]}",
       ])
     end
 
@@ -182,7 +182,7 @@ RSpec.describe Reports::CsvReportsService do
         nil,
         nil,
         "false",
-        "{\"input_type\"=>\"full_name\", \"title_needed\"=>false}",
+        "{\"input_type\" => \"full_name\", \"title_needed\" => false}",
       ])
     end
 
@@ -211,7 +211,7 @@ RSpec.describe Reports::CsvReportsService do
         "true",
         "2",
         nil,
-        "{\"only_one_option\"=>\"true\", \"selection_options\"=>[{\"name\"=>\"Once\"}, {\"name\"=>\"More than once\"}]}",
+        "{\"only_one_option\" => \"true\", \"selection_options\" => [{\"name\" => \"Once\"}, {\"name\" => \"More than once\"}]}",
       ])
     end
 
