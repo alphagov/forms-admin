@@ -5,6 +5,12 @@ describe Api::V1::FormResource, type: :model do
   let(:organisation) { build :organisation, id: 1 }
   let(:form) { described_class.new(id:, name: "Form 1", organisation:, submission_email: "") }
 
+  around do |example|
+    Rails.application.deprecators[:forms_api].silence do
+      example.run
+    end
+  end
+
   describe "#destroy" do
     context "when form is in a group" do
       it "destroys the group" do
