@@ -1,6 +1,12 @@
 require "rails_helper"
 
 describe FormRepository do
+  around do |example|
+    Rails.application.deprecators[:forms_api].silence do
+      example.run
+    end
+  end
+
   describe "#create!" do
     let(:form_params) { { creator_id: 1, name: "asdf" } }
 

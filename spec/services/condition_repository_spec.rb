@@ -1,6 +1,12 @@
 require "rails_helper"
 
 describe ConditionRepository do
+  around do |example|
+    Rails.application.deprecators[:forms_api].silence do
+      example.run
+    end
+  end
+
   describe "#create!" do
     let(:condition_params) do
       { form_id: 1,
