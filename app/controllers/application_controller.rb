@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_logging_attributes
-    CurrentLoggingAttributes.host = request.host
+    CurrentLoggingAttributes.request_host = request.host
     CurrentLoggingAttributes.request_id = request.request_id
     CurrentLoggingAttributes.session_id_hash = Digest::SHA256.hexdigest session.id.to_s if session.exists? && session.id.present?
     CurrentLoggingAttributes.trace_id = request.env["HTTP_X_AMZN_TRACE_ID"].presence
