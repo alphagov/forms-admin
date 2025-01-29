@@ -90,7 +90,7 @@ def delete_users_with_no_name_or_org(dry_run: false)
       next
     end
 
-    forms = Form.where(creator_id: user.id).find_all
+    forms = Api::V1::FormResource.where(creator_id: user.id).find_all
 
     if forms.any?(&:is_live?)
       Rails.logger.info "#{task_name}: Found live forms #{forms.select(&:is_live?).map(&:id)} created by user, skipping deleting user #{user.id} (#{user.email})"

@@ -72,6 +72,13 @@ en:
           attributes:
             agreed:
               accepted: You must agree to the terms of use to continue
+        api/v1/page_resource:
+          attributes:
+            hint_text:
+              too_long: Hint text must be %{count} characters or less
+            question_text:
+              blank: Enter a question
+              too_long: Question text must be %{count} characters or less
         forms/receive_csv_input:
           attributes:
             submission_type:
@@ -86,13 +93,6 @@ en:
               user_in_other_org: This person has a different organisation set for their GOV.UK Forms account
             role:
               blank: Select the role this person should have
-        page:
-          attributes:
-            hint_text:
-              too_long: Hint text must be %{count} characters or less
-            question_text:
-              blank: Enter a question
-              too_long: Question text must be %{count} characters or less
         pages/delete_secondary_skip_input:
           attributes:
             confirm:

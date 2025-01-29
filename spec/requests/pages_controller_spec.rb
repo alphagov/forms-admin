@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe PagesController, type: :request do
-  let(:form_response) { Form.new(attributes_for(:form, id: 2), true) }
+  let(:form_response) { Api::V1::FormResource.new(attributes_for(:form, id: 2), true) }
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
   let(:membership) { create :membership, group:, user: standard_user }
@@ -284,14 +284,15 @@ RSpec.describe PagesController, type: :request do
   describe "#destroy" do
     describe "given a valid page" do
       let(:page) do
-        Page.new({
+        build(
+          :page,
           id: 1,
           form_id: 2,
           question_text: "What is your work address?",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
           next_page: nil,
-        })
+        )
       end
 
       let(:form_pages_response) do

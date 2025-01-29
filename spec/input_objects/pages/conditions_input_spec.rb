@@ -67,7 +67,7 @@ RSpec.describe Pages::ConditionsInput, type: :model do
 
   describe "#update_condition" do
     context "when validation pass" do
-      let(:condition) { Condition.new id: 3, form_id: 1, page_id: 2, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
+      let(:condition) { build :condition, id: 3, form_id: 1, page_id: 2, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
 
       before do
         allow(ConditionRepository).to receive(:save!)

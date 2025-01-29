@@ -1,9 +1,10 @@
-class Form < ActiveResource::Base
+class Api::V1::FormResource < ActiveResource::Base
+  self.element_name = "form"
   self.site = "#{Settings.forms_api.base_url}/api/v1"
   self.include_format_in_path = false
   headers["X-API-Token"] = Settings.forms_api.auth_key
 
-  has_many :pages
+  has_many :pages, class_name: "Api::V1::PageResource"
 
   def self.find_live(id)
     find(:one, from: "#{prefix}forms/#{id}/live")
@@ -18,7 +19,7 @@ class Form < ActiveResource::Base
   end
 
   def qualifying_route_pages
-    Page.qualifying_route_pages(pages)
+    Api::V1::PageResource.qualifying_route_pages(pages)
   end
 
   def has_no_remaining_routes_available?

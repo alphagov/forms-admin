@@ -12,7 +12,7 @@ describe PageRepository do
 
     it "finds the page through ActiveResource" do
       described_class.find(page_id: page.id, form_id: 1)
-      expect(Page.new(id: 2, form_id: 1)).to have_been_read
+      expect(Api::V1::PageResource.new(id: 2, form_id: 1)).to have_been_read
     end
   end
 
@@ -31,13 +31,13 @@ describe PageRepository do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.post "/api/v1/forms/1/pages", post_headers, Page.new(page_params).to_json, 200
+        mock.post "/api/v1/forms/1/pages", post_headers, Api::V1::PageResource.new(page_params).to_json, 200
       end
     end
 
     it "creates a page through ActiveResource" do
       described_class.create!(**page_params)
-      expect(Page.new(page_params)).to have_been_created
+      expect(Api::V1::PageResource.new(page_params)).to have_been_created
     end
   end
 
@@ -55,7 +55,7 @@ describe PageRepository do
       page = described_class.find(page_id: 2, form_id: 1)
       page.is_optional = true
       described_class.save!(page)
-      expect(Page.new(id: 2, form_id: 1, is_optional: true)).to have_been_updated
+      expect(Api::V1::PageResource.new(id: 2, form_id: 1, is_optional: true)).to have_been_updated
     end
   end
 
@@ -72,7 +72,7 @@ describe PageRepository do
     it "destroys the page through ActiveResource" do
       page = described_class.find(page_id: 2, form_id: 1)
       described_class.destroy(page)
-      expect(Page.new(id: 2, form_id: 1)).to have_been_deleted
+      expect(Api::V1::PageResource.new(id: 2, form_id: 1)).to have_been_deleted
     end
   end
 

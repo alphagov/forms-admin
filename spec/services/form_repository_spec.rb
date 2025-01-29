@@ -6,13 +6,13 @@ describe FormRepository do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.post "/api/v1/forms", post_headers, Form.new(form_params).to_json, 200
+        mock.post "/api/v1/forms", post_headers, Api::V1::FormResource.new(form_params).to_json, 200
       end
     end
 
     it "creates a form through ActiveResource" do
       described_class.create!(**form_params)
-      expect(Form.new(form_params)).to have_been_created
+      expect(Api::V1::FormResource.new(form_params)).to have_been_created
     end
   end
 
@@ -27,7 +27,7 @@ describe FormRepository do
 
     it "finds the form through ActiveResource" do
       described_class.find(form_id: 2)
-      expect(Form.new(id: 2)).to have_been_read
+      expect(Api::V1::FormResource.new(id: 2)).to have_been_read
     end
   end
 
@@ -93,7 +93,7 @@ describe FormRepository do
       form = described_class.find(form_id: 2)
       form.name = "new name"
       described_class.save!(form)
-      expect(Form.new(id: 2, name: "new name")).to have_been_updated
+      expect(Api::V1::FormResource.new(id: 2, name: "new name")).to have_been_updated
     end
   end
 
@@ -142,7 +142,7 @@ describe FormRepository do
     it "destroys the form through ActiveResource" do
       form = described_class.find(form_id: 2)
       described_class.destroy(form)
-      expect(Form.new(id: 2)).to have_been_deleted
+      expect(Api::V1::FormResource.new(id: 2)).to have_been_deleted
     end
   end
 

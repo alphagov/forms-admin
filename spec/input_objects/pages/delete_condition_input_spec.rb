@@ -9,7 +9,7 @@ RSpec.describe Pages::DeleteConditionInput, type: :model do
   let(:answer_value) { "Wales" }
   let(:goto_page_id) { goto_page.id }
   let(:skip_to_end) { false }
-  let(:condition) { Condition.new id: 2, form_id: form.id, page_id: page.id, routing_page_id: page.id, check_page_id: page.id, answer_value:, goto_page_id:, skip_to_end: }
+  let(:condition) { build :condition, id: 2, form_id: form.id, page_id: page.id, routing_page_id: page.id, check_page_id: page.id, answer_value:, goto_page_id:, skip_to_end: }
 
   describe "validations" do
     it "is invalid if confirm is nil" do

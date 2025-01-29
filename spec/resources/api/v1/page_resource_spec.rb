@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Page, type: :model do
+describe Api::V1::PageResource, type: :model do
   describe "validations" do
     let(:page) { build :page, question_text: }
     let(:question_text) { "What is your address?" }
@@ -11,7 +11,7 @@ describe Page, type: :model do
 
         it "has many routing conditions" do
           expect(page.routing_conditions.length).to eq 3
-          expect(page.routing_conditions).to all be_a Condition
+          expect(page.routing_conditions).to all be_a Api::V1::ConditionResource
           expect(page.routing_conditions).to all have_attributes(routing_page_id: 10)
         end
 
@@ -26,7 +26,7 @@ describe Page, type: :model do
 
           it "has many routing conditions" do
             expect(page_resource.routing_conditions.length).to eq 3
-            expect(page_resource.routing_conditions).to all be_a Condition
+            expect(page_resource.routing_conditions).to all be_a Api::V1::ConditionResource
             expect(page_resource.routing_conditions).to all have_attributes(routing_page_id: 10)
           end
         end
@@ -36,7 +36,7 @@ describe Page, type: :model do
     describe "#question_text" do
       [nil, ""].each do |question_text|
         it "is invalid given {question_text} question text" do
-          error_message = I18n.t("activemodel.errors.models.page.attributes.question_text.blank")
+          error_message = I18n.t("activemodel.errors.models.api/v1/page_resource.attributes.question_text.blank")
           page.question_text = question_text
           expect(page).not_to be_valid
           expect(page.errors[:question_text]).to include(error_message)
@@ -64,7 +64,7 @@ describe Page, type: :model do
 
         it "has an error message" do
           page.valid?
-          expect(page.errors[:question_text]).to include(I18n.t("activemodel.errors.models.page.attributes.question_text.too_long", count: 250))
+          expect(page.errors[:question_text]).to include(I18n.t("activemodel.errors.models.api/v1/page_resource.attributes.question_text.too_long", count: 250))
         end
       end
     end
@@ -99,7 +99,7 @@ describe Page, type: :model do
 
         it "has an error message" do
           page.valid?
-          expect(page.errors[:hint_text]).to include(I18n.t("activemodel.errors.models.page.attributes.hint_text.too_long", count: 500))
+          expect(page.errors[:hint_text]).to include(I18n.t("activemodel.errors.models.api/v1/page_resource.attributes.hint_text.too_long", count: 500))
         end
       end
     end
