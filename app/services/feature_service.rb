@@ -3,11 +3,11 @@ class FeatureService
 
   class << self
     def enabled?(...)
-      FeatureService.new(nil).enabled?(...)
+      FeatureService.new.enabled?(...)
     end
   end
 
-  def initialize(user)
+  def initialize(user: nil)
     @user = user
   end
 

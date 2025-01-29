@@ -3,7 +3,7 @@ require "rails_helper"
 describe FeatureService do
   describe "#enabled?" do
     subject :feature_service do
-      described_class.new(user)
+      described_class.new(user:)
     end
 
     let(:organisation) { build :organisation, id: 1, slug: "a-test-org" }
@@ -103,7 +103,7 @@ describe FeatureService do
       end
 
       context "when a key exists for the organisation overriding the feature and the user has not been provided to the service" do
-        let(:feature_service) { described_class.new(nil) }
+        let(:feature_service) { described_class.new }
 
         before do
           Settings.features[:some_feature] = Config::Options.new(enabled: false, organisations: { a_test_org: true })
