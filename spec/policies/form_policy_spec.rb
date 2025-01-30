@@ -123,16 +123,20 @@ describe FormPolicy do
       end
 
       context "and the form only has a selection question with an existing route" do
-        let(:routing_conditions) { [(build :condition, id: 1, check_page_id: 1, answer_value: "Wales", goto_pageid: 2)] }
-        let(:pages) { [(build :page, :with_selection_settings, position: 1, id: 1, routing_conditions:), (build :page, position: 2, id: 2)] }
+        let(:pages) do
+          [
+            build(:page, :with_selection_settings, position: 1, id: 1, routing_conditions: build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_pageid: 3)),
+            build(:page, :with_simple_answer_type, position: 2, id: 2, routing_conditions: build(:condition, id: 2, routing_page_id: 2, check_page_id: 1, goto_pageid: nil, skip_to_end: true)),
+            build(:page, position: 3, id: 3),
+          ]
+        end
 
         it { is_expected.to forbid_actions(%i[can_add_page_routing_conditions]) }
       end
 
       context "and the form has a selection question without an existing route" do
         context "and the available selection question is the last page in the form" do
-          let(:routing_conditions) { [(build :condition, id: 1, check_page_id: 1, answer_value: "Wales", goto_pageid: 2)] }
-          let(:pages) { [(build :page, :with_selection_settings, position: 1, id: 1, routing_conditions:), (build :page, position: 2, id: 2), (build :page, :with_selection_settings, position: 3, id: 3)] }
+          let(:pages) { [(build :page, position: 1, id: 1), (build :page, position: 2, id: 2), (build :page, :with_selection_settings, position: 3, id: 3)] }
 
           it { is_expected.to forbid_actions(%i[can_add_page_routing_conditions]) }
         end

@@ -1379,15 +1379,35 @@ en:
         user_count: User count
       title: Number of users per organisation
   routing_page:
-    body_branching_text: People who select any other answer will continue to the next question. If you need to, you can make them skip one or more questions later in the form.
-    body_routing_text: You can set up a route so if someone selects a specific answer to a question they’ll skip forward to a later question, or the end of the form.
+    body_html: "<p>You can set up a route so if someone selects a specific answer to a question they’ll skip forward to a later question, or the end of the form.</p>\n"
+    branch_routing:
+      body_html: |
+        <p> You can add a route from a question where people can select only one answer from a list.</p>
+        <p> If someone selects the answer you specify, they’ll skip forward to a later question, or the end of the form.</p>
+        <p> People who select any other answer will continue to the next question. If you need to, you can add a second route so they skip one or more questions later in the form.</p>
+        <p> You can only add a route from a question that does not already have 2 routes. Go back to your questions if you need to edit an existing route.</p>
+      no_remaining_routes_html: |
+        <h2 class="govuk-heading-m">You have no more questions to add a route from</h2>
+        <p>You can only add a route from a question that does not already have 2 routes. If you need to edit an existing route, go back to your questions.</p>
+      routing_requirements_not_met_html: |
+        <h2 class="govuk-heading-m">You cannot add a route yet</h2>
+
+        <p>Before you can add a route, your form needs to have a question that:</p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>asks people to select only one option from a list</li>
+          <li>has at least one question after it</li>
+        </ul>
+
+        <p>It’s usually easiest to create all your form’s questions first, then add the routes you need.</p>
     dropdown_default_text: Select a question to start your route from
     legend_hint_text: A route can only start from a question where people select one item from a list. You can only add one route from each question.
     legend_text: Which question do you want your route to start from?
-    no_remaining_routes: A route can only start from a question where people select one item from a list. You can only add one route from each question.
-    no_remaining_routes_heading: You have no more questions to start a route from
-    routing_requirements_not_met_heading: What you need to create a route
+    no_remaining_routes_html: |
+      <h2 class="govuk-heading-m">You have no more questions to start a route from</h2>
+      <p> A route can only start from a question where people select one item from a list. You can only add one route from each question.</p>
     routing_requirements_not_met_html: |
+      <h2 class="govuk-heading-m">What you need to create a route</h2>
       <p>Before you can add a route you’ll need:</p>
       <ul class="govuk-list govuk-list--bullet">
         <li>2 or more questions</li>

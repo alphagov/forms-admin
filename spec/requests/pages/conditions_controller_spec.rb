@@ -62,6 +62,21 @@ RSpec.describe Pages::ConditionsController, type: :request do
       expect(response).to redirect_to new_condition_path(form.id, selected_page.id)
     end
 
+    context "when the page already has a condition associated with it" do
+      let(:selected_page) do
+        page.routing_conditions = [(build :condition, id: 1, check_page_id: page.id, goto_page_id: 2)]
+        page
+      end
+
+      it "when branch_routing enabled, redirects the user to the new skip condition page", :feature_branch_routing do
+        expect(response).to redirect_to new_secondary_skip_path(form.id, selected_page.id)
+      end
+
+      it "when branch_routing disabled, redirects the user to the new conditions page" do
+        expect(response).to redirect_to new_condition_path(form.id, selected_page.id)
+      end
+    end
+
     context "when user should not be allowed to add routes to pages" do
       let(:user) { build :user }
 

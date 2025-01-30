@@ -2,17 +2,17 @@ class Pages::ConditionsController < PagesController
   before_action :can_add_page_routing, only: %i[new create]
 
   def routing_page
-    routing_page_input = Pages::RoutingPageInput.new(routing_page_id: params[:routing_page_id])
+    routing_page_input = Pages::RoutingPageInput.new({ routing_page_id: params[:routing_page_id] }, branch_routing_enabled:)
     render template: "pages/conditions/routing_page", locals: { form: current_form, routing_page_input: }
   end
 
   def set_routing_page
     routing_page_id = params[:pages_routing_page_input][:routing_page_id]
-    routing_page_input = Pages::RoutingPageInput.new(routing_page_id:)
+    routing_page_input = Pages::RoutingPageInput.new({ routing_page_id: }, branch_routing_enabled:)
 
     if routing_page_input.valid?
       routing_page = PageRepository.find(page_id: routing_page_id, form_id: current_form.id)
-      redirect_to new_condition_path(current_form.id, routing_page.id)
+      redirect_to new_condtion_or_skip_path(routing_page)
     else
       render template: "pages/conditions/routing_page", locals: { form: current_form, routing_page_input: }, status: :unprocessable_entity
     end
@@ -95,5 +95,17 @@ private
 
   def delete_condition_input_params
     params.require(:pages_delete_condition_input).permit(:answer_value, :goto_page_id, :confirm).merge(form: current_form, page:)
+  end
+
+  def new_condtion_or_skip_path(page)
+    if FeatureService.new(group: current_form.group).enabled?(:branch_routing) && page.routing_conditions.present?
+      return new_secondary_skip_path(form_id: current_form.id, page_id: page.id)
+    end
+
+    new_condition_path(current_form.id, page.id)
+  end
+
+  def branch_routing_enabled
+    FeatureService.new(group: current_form.group).enabled?(:branch_routing)
   end
 end

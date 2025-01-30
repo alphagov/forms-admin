@@ -20,7 +20,8 @@ en:
         pages/routing_page_input:
           attributes:
             routing_page_id:
-              blank: Select the question you want your route to start from
+              blank: Select the question you want to add a route from
+              branch_routing_disabled_blank: Select the question you want your route to start from
   helpers:
     label:
       pages_conditions_input:

@@ -30,13 +30,13 @@ describe "pages/conditions/routing_page.html.erb" do
 
   context "when branch routing is enabled", :feature_branch_routing do
     it "contains content explaining branch routing" do
-      expect(rendered).to have_text "you can make them skip one or more questions later in the form"
+      expect(rendered).to have_text "You can add a route from a question where people can select only one answer from a list."
     end
   end
 
   context "when branch routing is not enabled", feature_branch_routing: false do
     it "does not contain content explaining branch routing" do
-      expect(rendered).not_to have_text "you can make them skip one or more questions later in the form"
+      expect(rendered).not_to have_text "You can add a route from a question where people can select only one answer from a list."
     end
   end
 
@@ -103,7 +103,7 @@ describe "pages/conditions/routing_page.html.erb" do
       let(:all_routes_created) { true }
 
       it "explains to the user that they have created all available routes" do
-        guidance = Capybara.string(I18n.t("routing_page.no_remaining_routes").to_s).text(normalize_ws: true)
+        guidance = Capybara.string(I18n.t("routing_page.no_remaining_routes_html").to_s).text(normalize_ws: true)
         expect(rendered).to have_text(guidance, normalize_ws: true)
       end
     end
