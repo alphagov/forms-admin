@@ -2,6 +2,8 @@
 <% content_for :back_link, govuk_back_link_to(form_pages_path(form.id)) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <% branch_routing_enabled = FeatureService.new(group: form.group).enabled?(:branch_routing) %>
+    <% prefix = branch_routing_enabled ? 'branch_routing.' : '' %>
 
     <% if policy(form).can_add_page_routing_conditions? %>
       <%= render partial: "pages/conditions/routing_options", locals: {form:, routing_page_input:} %>
@@ -11,24 +13,11 @@
         <%= t("page_titles.routing_page") %>
       </h1>
 
-      <p>
-        <%= t("routing_page.body_routing_text") %>
-      </p>
+      <%= t("routing_page.#{prefix}body_html") %>
 
-      <% if FeatureService.new(group: form.group).enabled?(:branch_routing) %>
-      <p>
-        <%= t("routing_page.body_branching_text") %>
-      </p>
-      <% end %>
-
-      <% if form.has_no_remaining_routes_available? %>
-        <h2 class="govuk-heading-m"><%= t("routing_page.no_remaining_routes_heading") %></h2>
-        <p><%= t("routing_page.no_remaining_routes") %></p>
-      <% else %>
-        <h2 class="govuk-heading-m"><%= t("routing_page.routing_requirements_not_met_heading") %></h2>
-        <%= t('routing_page.routing_requirements_not_met_html') %>
-      <% end %>
+      <%= t("routing_page.#{prefix}#{form.has_no_remaining_routes_available? ? 'no_remaining_routes' : 'routing_requirements_not_met'}_html") %>
     <% end %>
+
     <p>
       <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(form.id) %>
     </p>
