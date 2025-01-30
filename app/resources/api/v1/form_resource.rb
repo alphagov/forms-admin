@@ -19,7 +19,12 @@ class Api::V1::FormResource < ActiveResource::Base
   end
 
   def qualifying_route_pages
-    Api::V1::PageResource.qualifying_route_pages(pages)
+    max_routes_per_page = 1
+
+    conditions = pages.flat_map(&:routing_conditions).compact_blank
+    condition_counts = conditions.group_by(&:check_page_id).transform_values(&:length)
+
+    Api::V1::PageResource.qualifying_route_pages(pages).filter { |page| condition_counts.fetch(page.id, 0) < max_routes_per_page }
   end
 
   def has_no_remaining_routes_available?
