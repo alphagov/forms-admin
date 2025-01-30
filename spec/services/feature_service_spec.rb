@@ -3,7 +3,7 @@ require "rails_helper"
 describe FeatureService do
   describe "#enabled?" do
     subject :feature_service do
-      described_class.new(user)
+      described_class.new(user:)
     end
 
     let(:organisation) { build :organisation, id: 1, slug: "a-test-org" }
@@ -103,7 +103,7 @@ describe FeatureService do
       end
 
       context "when a key exists for the organisation overriding the feature and the user has not been provided to the service" do
-        let(:feature_service) { described_class.new(nil) }
+        let(:feature_service) { described_class.new }
 
         before do
           Settings.features[:some_feature] = Config::Options.new(enabled: false, organisations: { a_test_org: true })
@@ -142,6 +142,47 @@ describe FeatureService do
 
         it "returns the value of the enabled flag" do
           expect(feature_service).not_to be_enabled(:some_feature)
+        end
+      end
+
+      context "when feature is enabled_by_group" do
+        subject(:feature_service) { described_class.new(group:) }
+
+        let(:group) { double }
+
+        before do
+          Settings.features[:test_feature] = Config::Options.new(enabled_by_group: true)
+        end
+
+        it "raises GroupRequiredError if group is not provided" do
+          service = described_class.new
+
+          expect {
+            service.enabled?(:test_feature)
+          }.to raise_error(
+            described_class::GroupRequiredError,
+            "Feature test_feature requires group to be provided",
+          )
+        end
+
+        it "calls the corresponding enabled? method on the group" do
+          allow(group).to receive(:test_feature_enabled?).and_return(true)
+
+          expect(feature_service.enabled?(:test_feature)).to be true
+        end
+
+        it "returns false when group method returns false" do
+          allow(group).to receive(:test_feature_enabled?).and_return(false)
+
+          expect(feature_service.enabled?(:test_feature)).to be false
+        end
+
+        it "raises NoMethodError when group does not respond to the feature method" do
+          allow(group).to receive(:method_missing).and_raise(NoMethodError)
+
+          expect {
+            feature_service.enabled?(:test_feature)
+          }.to raise_error(NoMethodError)
         end
       end
     end

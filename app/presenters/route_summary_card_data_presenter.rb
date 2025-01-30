@@ -64,7 +64,7 @@ private
   def default_route_card(index)
     continue_to_name = page.has_next_page? ? page_name(page.next_page) : end_page_name
 
-    actions = if FeatureService.enabled?(:branch_routing) && all_routes.find(&:secondary_skip?).present?
+    actions = if FeatureService.new(group: form.group).enabled?(:branch_routing) && all_routes.find(&:secondary_skip?).present?
                 [
                   edit_secondary_skip_link,
                   delete_secondary_skip_link,
@@ -101,7 +101,7 @@ private
     secondary_skip = all_routes.find(&:secondary_skip?)
 
     if secondary_skip.blank?
-      if FeatureService.enabled?(:branch_routing)
+      if FeatureService.new(group: form.group).enabled?(:branch_routing)
         return [
           {
             key: { text: I18n.t("page_route_card.then") },

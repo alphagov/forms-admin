@@ -25,6 +25,10 @@ describe RouteSummaryCardDataPresenter do
 
   let(:next_page_routing_conditions) { [] }
 
+  before do
+    allow(form).to receive(:group).and_return(build(:group))
+  end
+
   describe ".call" do
     it "instantiates and returns a new instance" do
       service = described_class.call(form:, page: current_page, pages:)

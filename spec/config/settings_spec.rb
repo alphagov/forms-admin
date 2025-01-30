@@ -23,7 +23,7 @@ describe "Settings" do
     features = settings[:features]
 
     include_examples expected_value_test, :groups, features, true
-    include_examples expected_value_test, :branch_routing, features, false
+    include_examples expected_value_test, :branch_routing, features, { "enabled_by_group" => true }
   end
 
   describe "forms_api" do

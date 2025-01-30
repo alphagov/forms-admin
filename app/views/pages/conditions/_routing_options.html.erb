@@ -11,7 +11,7 @@
     <%= t("routing_page.body_routing_text") %>
   </p>
 
-  <% if FeatureService.enabled?(:branch_routing) %>
+  <% if FeatureService.new(group: form.group).enabled?(:branch_routing) %>
   <p>
     <%= t("routing_page.body_branching_text") %>
   </p>

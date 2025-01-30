@@ -14,6 +14,7 @@ describe "pages/conditions/routing_page.html.erb" do
 
     allow(view).to receive_messages(form_pages_path: "/forms/1/pages", routing_page_path: "/forms/1/new-condition", set_routing_page_path: "/forms/1/new-condition")
     allow(form).to receive_messages(qualifying_route_pages: pages, has_no_remaining_routes_available?: all_routes_created)
+    allow(form).to receive(:group).and_return(build(:group))
 
     render template: "pages/conditions/routing_page", locals: { form:, routing_page_input: }
   end

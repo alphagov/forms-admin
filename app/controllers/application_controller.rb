@@ -114,7 +114,7 @@ class ApplicationController < ActionController::Base
   end
 
   def groups_enabled
-    @groups_enabled ||= current_user.present? && FeatureService.new(current_user).enabled?(:groups)
+    @groups_enabled ||= current_user.present? && FeatureService.new(user: current_user).enabled?(:groups)
   end
 
 private
