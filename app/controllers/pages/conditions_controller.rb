@@ -2,13 +2,13 @@ class Pages::ConditionsController < PagesController
   before_action :can_add_page_routing, only: %i[new create]
 
   def routing_page
-    routing_page_input = Pages::RoutingPageInput.new(routing_page_id: params[:routing_page_id])
+    routing_page_input = Pages::RoutingPageInput.new({ routing_page_id: params[:routing_page_id] }, branch_routing_enabled:)
     render template: "pages/conditions/routing_page", locals: { form: current_form, routing_page_input: }
   end
 
   def set_routing_page
     routing_page_id = params[:pages_routing_page_input][:routing_page_id]
-    routing_page_input = Pages::RoutingPageInput.new(routing_page_id:)
+    routing_page_input = Pages::RoutingPageInput.new({ routing_page_id: }, branch_routing_enabled:)
 
     if routing_page_input.valid?
       routing_page = PageRepository.find(page_id: routing_page_id, form_id: current_form.id)
@@ -103,5 +103,9 @@ private
     end
 
     new_condition_path(current_form.id, page.id)
+  end
+
+  def branch_routing_enabled
+    FeatureService.new(group: current_form.group).enabled?(:branch_routing)
   end
 end
