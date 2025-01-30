@@ -6,6 +6,7 @@ describe "pages/conditions/routing_page.html.erb" do
   let(:routing_page_input) { Pages::RoutingPageInput.new }
   let(:allowed_to_create_routes) { true }
   let(:all_routes_created) { false }
+  let(:branching_enabled) { false }
 
   before do
     without_partial_double_verification do
@@ -14,6 +15,8 @@ describe "pages/conditions/routing_page.html.erb" do
 
     allow(view).to receive_messages(form_pages_path: "/forms/1/pages", routing_page_path: "/forms/1/new-condition", set_routing_page_path: "/forms/1/new-condition")
     allow(form).to receive_messages(qualifying_route_pages: pages, has_no_remaining_routes_available?: all_routes_created)
+
+    assign(:branching_enabled, branching_enabled)
 
     render template: "pages/conditions/routing_page", locals: { form:, routing_page_input: }
   end
@@ -28,12 +31,14 @@ describe "pages/conditions/routing_page.html.erb" do
   end
 
   context "when branch routing is enabled", :feature_branch_routing do
+    let(:branching_enabled) { true }
+
     it "contains content explaining branch routing" do
       expect(rendered).to have_text "you can make them skip one or more questions later in the form"
     end
   end
 
-  context "when branch routing is not enabled", feature_branch_routing: false do
+  context "when branch routing is not enabled" do
     it "does not contain content explaining branch routing" do
       expect(rendered).not_to have_text "you can make them skip one or more questions later in the form"
     end

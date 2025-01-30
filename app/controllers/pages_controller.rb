@@ -88,6 +88,10 @@ class PagesController < ApplicationController
     redirect_to form_pages_path, success: t("banner.success.form.page_moved", question_text: page_to_move.question_text, direction: move_params[:direction], position:)
   end
 
+  def branching_enabled
+    @branching_enabled ||= Settings.features.branch_routing || current_form.group.branching_enabled?
+  end
+
 private
 
   def clear_draft_questions_data

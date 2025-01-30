@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
 
     <% if policy(form).can_add_page_routing_conditions? %>
-      <%= render partial: "pages/conditions/routing_options", locals: {form:, routing_page_input:} %>
+      <%= render partial: "pages/conditions/routing_options", locals: {form:, routing_page_input:, branching_enabled: @branching_enabled } %>
     <% else %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= form.name %> </span>
@@ -15,7 +15,7 @@
         <%= t("routing_page.body_routing_text") %>
       </p>
 
-      <% if FeatureService.enabled?(:branch_routing) %>
+      <% if @branching_enabled %>
       <p>
         <%= t("routing_page.body_branching_text") %>
       </p>
