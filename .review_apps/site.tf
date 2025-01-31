@@ -24,6 +24,7 @@ provider "aws" {
     tags = {
       Environment = "review"
       Deployment  = "github.com/alphagov/forms-admin/.review_apps"
+      PullRequest = "https://github.com/alphagov/forms-admin/pull/${var.pull_request_number}"
     }
   }
 }
