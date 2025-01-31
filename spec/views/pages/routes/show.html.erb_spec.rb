@@ -2,8 +2,9 @@ require "rails_helper"
 
 describe "pages/routes/show.html.erb" do
   let(:form) { build :form, id: 1, pages: [page] }
-  let(:page) { build :page, id: 1, position: 1 }
-  let(:routes) { [build(:condition)] }
+  let(:pages) { [page] }
+  let(:page) { build :page, id: 1, position: 1, routing_conditions: [build(:condition)] }
+  let(:routes) { PageRoutesService.new(form:, pages:, page:).routes }
 
   let(:route_cards) do
     [
@@ -20,7 +21,7 @@ describe "pages/routes/show.html.erb" do
 
   before do
     allow(RouteSummaryCardDataPresenter).to receive(:new).and_return(route_summary_card_data_service)
-    render template: "pages/routes/show", locals: { current_form: form, page:, pages: form.pages, routes:, back_link_url: "/back" }
+    render template: "pages/routes/show", locals: { current_form: form, page:, pages:, routes:, back_link_url: "/back" }
   end
 
   it "has the correct title" do
@@ -50,8 +51,10 @@ describe "pages/routes/show.html.erb" do
     expect(rendered).to have_link(I18n.t("pages.go_to_your_questions"), href: form_pages_path(form.id))
   end
 
-  context "when the page has routing conditions" do
-    let(:page) { build :page, id: 1, position: 1, routing_conditions: [build(:condition, id: 101)] }
+  context "when the page has a skip and a secondary skip" do
+    include_context "with pages with routing"
+
+    let(:page) { page_with_skip_and_secondary_skip }
 
     it "has a link to delete all routes" do
       expect(rendered).to have_link(I18n.t("page_route_card.delete_route"), href: delete_routes_path(form.id, page.id))
