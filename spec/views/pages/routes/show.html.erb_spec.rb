@@ -51,6 +51,16 @@ describe "pages/routes/show.html.erb" do
     expect(rendered).to have_link(I18n.t("pages.go_to_your_questions"), href: form_pages_path(form.id))
   end
 
+  context "when the page has a skip route" do
+    include_context "with pages with routing"
+
+    let(:page) { page_with_skip_route }
+
+    it "does not have a link to delete all routes" do
+      expect(rendered).not_to have_link(I18n.t("page_route_card.delete_route"), href: delete_routes_path(form.id, page.id))
+    end
+  end
+
   context "when the page has a skip and a secondary skip" do
     include_context "with pages with routing"
 
