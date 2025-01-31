@@ -23,8 +23,7 @@ class RouteSummaryCardDataPresenter
   end
 
   def all_routes
-    all_form_routing_conditions = pages.flat_map(&:routing_conditions).compact_blank
-    all_form_routing_conditions.select { |rc| rc.check_page_id == page.id }
+    PageRoutesService.new(form:, pages:, page:).routes
   end
 
   def conditional_routes
