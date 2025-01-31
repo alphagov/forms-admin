@@ -3,18 +3,12 @@ class RouteSummaryCardDataPresenter
   include ActionView::Helpers::UrlHelper
   include GovukRailsCompatibleLinkHelper
 
-  attr_reader :form, :page, :pages
+  attr_reader :form, :pages, :page
 
-  class << self
-    def call(**args)
-      new(**args)
-    end
-  end
-
-  def initialize(form:, page:, pages:)
-    @page = page
-    @pages = pages
+  def initialize(form:, pages:, page:)
     @form = form
+    @pages = pages
+    @page = page
   end
 
   def summary_card_data
@@ -22,15 +16,19 @@ class RouteSummaryCardDataPresenter
     conditional_cards + [default_route_card(conditional_cards.length + 1)]
   end
 
-  def all_routes
-    PageRoutesService.new(form:, pages:, page:).routes
+private
+
+  def routes
+    @routes ||= PageRoutesService.new(form:, pages:, page:).routes
+  end
+
+  def secondary_skip
+    @secondary_skip ||= routes.find(&:secondary_skip?)
   end
 
   def conditional_routes
-    all_routes.select { |rc| rc.answer_value.present? }
+    routes.select { |rc| rc.answer_value.present? }
   end
-
-private
 
   def conditional_route_cards
     conditional_routes.map.with_index(1) { |routing_condition, index| conditional_route_card(routing_condition, index) }
@@ -63,7 +61,7 @@ private
   def default_route_card(index)
     continue_to_name = page.has_next_page? ? page_name(page.next_page) : end_page_name
 
-    actions = if FeatureService.new(group: form.group).enabled?(:branch_routing) && all_routes.find(&:secondary_skip?).present?
+    actions = if FeatureService.new(group: form.group).enabled?(:branch_routing) && secondary_skip
                 [
                   edit_secondary_skip_link,
                   delete_secondary_skip_link,
@@ -97,9 +95,7 @@ private
   end
 
   def secondary_skip_rows
-    secondary_skip = all_routes.find(&:secondary_skip?)
-
-    if secondary_skip.blank?
+    unless secondary_skip
       if FeatureService.new(group: form.group).enabled?(:branch_routing)
         return [
           {
