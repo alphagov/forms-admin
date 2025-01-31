@@ -51,3 +51,6 @@ config/environments/*.local.yml
 /public/assets
 
 .DS_Store
+
+# Terraform
+.terraform/
