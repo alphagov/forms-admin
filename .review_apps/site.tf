@@ -20,7 +20,7 @@ provider "aws" {
   allowed_account_ids = ["842676007477"]
   region              = "eu-west-2"
 
-  default_tags = {
+  default_tags {
     tags = {
       Environment = "review"
       Deployment  = "github.com/alphagov/forms-admin/.review_apps"

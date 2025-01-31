@@ -17,8 +17,8 @@ data "terraform_remote_state" "review" {
   backend = "s3"
 
   config = {
-    key            = "review.tfstate"
-    bucket         = "gds-forms-integration-tfstate"
-    region         = "eu-west-2"
+    key    = "review.tfstate"
+    bucket = "gds-forms-integration-tfstate"
+    region = "eu-west-2"
   }
 }
