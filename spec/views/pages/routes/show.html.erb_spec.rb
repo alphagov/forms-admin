@@ -3,6 +3,7 @@ require "rails_helper"
 describe "pages/routes/show.html.erb" do
   let(:form) { build :form, id: 1, pages: [page] }
   let(:page) { build :page, id: 1, position: 1 }
+  let(:routes) { [build(:condition)] }
 
   let(:route_cards) do
     [
@@ -18,8 +19,8 @@ describe "pages/routes/show.html.erb" do
   let(:route_summary_card_data_service) { instance_double(RouteSummaryCardDataPresenter, summary_card_data: route_cards) }
 
   before do
-    allow(RouteSummaryCardDataPresenter).to receive(:call).and_return(route_summary_card_data_service)
-    render template: "pages/routes/show", locals: { current_form: form, page:, pages: form.pages, back_link_url: "/back" }
+    allow(RouteSummaryCardDataPresenter).to receive(:new).and_return(route_summary_card_data_service)
+    render template: "pages/routes/show", locals: { current_form: form, page:, pages: form.pages, routes:, back_link_url: "/back" }
   end
 
   it "has the correct title" do

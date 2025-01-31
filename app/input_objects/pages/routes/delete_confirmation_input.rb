@@ -18,8 +18,8 @@ class Pages::Routes::DeleteConfirmationInput < ConfirmActionInput
 private
 
   def delete_routes
-    all_form_routing_conditions = FormRepository.pages(form).flat_map(&:routing_conditions).compact_blank
-    page_routes = all_form_routing_conditions.select { |rc| rc.check_page_id == page.id }
+    pages = FormRepository.pages(form)
+    page_routes = PageRoutesService.new(form:, pages:, page:).routes
     page_routes.each do |rc|
       rc.prefix_options[:form_id] = form.id
       rc.prefix_options[:page_id] = rc.routing_page_id
