@@ -3,12 +3,16 @@ require "rails_helper"
 describe RouteSummaryCardDataPresenter do
   include Capybara::RSpecMatchers
 
-  subject(:service) { described_class.new(form:, pages:, page: current_page) }
+  subject(:service) { described_class.new(form:, pages:, page: current_page, routes:) }
 
   let(:form) { build :form, id: 99, pages: }
 
   let(:current_page) do
     build(:page, id: 1, position: 1, question_text: "Current Question", next_page: next_page.id, routing_conditions:)
+  end
+
+  let(:routes) do
+    PageRoutesService.new(form:, pages:, page: current_page).routes
   end
 
   let(:next_page) do

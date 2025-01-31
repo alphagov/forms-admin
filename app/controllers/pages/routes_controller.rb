@@ -1,7 +1,9 @@
 class Pages::RoutesController < PagesController
   def show
     back_link_url = form_pages_path(current_form.id)
-    render locals: { current_form:, page:, pages: FormRepository.pages(current_form), back_link_url: }
+    pages = FormRepository.pages(current_form)
+    routes = PageRoutesService.new(form: current_form, pages:, page:).routes
+    render locals: { current_form:, page:, pages:, routes:, back_link_url: }
   end
 
   def delete

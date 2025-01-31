@@ -3,12 +3,13 @@ class RouteSummaryCardDataPresenter
   include ActionView::Helpers::UrlHelper
   include GovukRailsCompatibleLinkHelper
 
-  attr_reader :form, :pages, :page
+  attr_reader :form, :pages, :page, :routes
 
-  def initialize(form:, pages:, page:)
+  def initialize(form:, pages:, page:, routes:)
     @form = form
     @pages = pages
     @page = page
+    @routes = routes
   end
 
   def summary_card_data
@@ -17,10 +18,6 @@ class RouteSummaryCardDataPresenter
   end
 
 private
-
-  def routes
-    @routes ||= PageRoutesService.new(form:, pages:, page:).routes
-  end
 
   def secondary_skip
     @secondary_skip ||= routes.find(&:secondary_skip?)
