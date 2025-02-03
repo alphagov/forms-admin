@@ -68,8 +68,8 @@ RSpec.describe Pages::ConditionsController, type: :request do
         page
       end
 
-      it "when branch_routing enabled, redirects the user to the new skip condition page", :feature_branch_routing do
-        expect(response).to redirect_to new_secondary_skip_path(form.id, selected_page.id)
+      it "when branch_routing enabled, redirects the user to the question routes page", :feature_branch_routing do
+        expect(response).to redirect_to show_routes_path(form.id, selected_page.id)
       end
 
       it "when branch_routing disabled, redirects the user to the new conditions page" do
