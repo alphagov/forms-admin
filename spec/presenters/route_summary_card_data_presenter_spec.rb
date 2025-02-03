@@ -20,27 +20,15 @@ describe RouteSummaryCardDataPresenter do
 
   describe "#summary_card_data" do
     context "with conditional routes" do
-      it "returns an array of route cards including conditional and default routes" do
+      it "returns an array of route cards" do
         result = service.summary_card_data
-        expect(result.length).to eq(2) # 1 conditional + 1 default route
+        expect(result.length).to eq(1) # 1 conditional route
 
         # conditional route
         expect(result[0][:card][:title]).to eq("Route 1")
         expect(result[0][:card][:actions].first).to have_link("Edit", href: "/forms/99/pages/10/conditions/3")
         expect(result[0][:rows][0][:value][:text]).to eq("Skip")
         expect(result[0][:rows][1][:value][:text]).to eq("12. Question")
-
-        # default route
-        expect(result[1][:card][:title]).to eq("Route for any other answer")
-        expect(result[1][:card][:actions][0]).to be_nil
-        expect(result[1][:rows][0][:value][:text]).to eq("11. Question to be skipped")
-      end
-
-      context "with branch_routing enabled", :feature_branch_routing do
-        it "has the link to create a secondary skip" do
-          result = service.summary_card_data
-          expect(result[1][:rows][1][:value][:text]).to have_link("Set one or more questions to skip later in the form (optional)", href: "/forms/99/pages/10/routes/any-other-answer/questions-to-skip/new")
-        end
       end
 
       context "when the goto_page does not exist" do
@@ -104,19 +92,9 @@ describe RouteSummaryCardDataPresenter do
     context "with no conditional routes" do
       let(:page) { page_with_no_routes }
 
-      it "returns only the default route card" do
+      it "returns an empty array" do
         result = service.summary_card_data
-        expect(result.length).to eq(1)
-        expect(result[0][:card][:title]).to eq("Route for any other answer")
-      end
-    end
-
-    context "when page is the last page" do
-      let(:page) { pages.last }
-
-      it 'shows "Check your answers" as default destination' do
-        result = service.summary_card_data
-        expect(result[0][:rows][0][:value][:text]).to eq("Check your answers before submitting")
+        expect(result).to eq []
       end
     end
   end
