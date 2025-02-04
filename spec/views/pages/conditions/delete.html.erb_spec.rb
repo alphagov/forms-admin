@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "pages/conditions/delete.html.erb" do
-  let(:delete_condition_input) { Pages::DeleteConditionInput.new(form:, page:, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id) }
+  let(:delete_condition_input) { Pages::DeleteConditionInput.new(form:, page:, record: condition) }
   let(:form) { build :form, :ready_for_routing, id: 1 }
   let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: pages.last.id }
   let(:pages) { form.pages }
@@ -29,5 +29,18 @@ describe "pages/conditions/delete.html.erb" do
 
   it "has a submit button" do
     expect(rendered).to have_css("button[type='submit'].govuk-button", text: I18n.t("save_and_continue"))
+  end
+
+  context "when there is a validation error" do
+    let(:delete_condition_input) do
+      delete_condition_input = Pages::DeleteConditionInput.new(form:, page:, record: condition)
+      delete_condition_input.confirm = nil
+      delete_condition_input.validate
+      delete_condition_input
+    end
+
+    it "renders an error summary" do
+      expect(rendered).to have_css ".govuk-error-summary"
+    end
   end
 end

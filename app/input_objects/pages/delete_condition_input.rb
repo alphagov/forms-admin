@@ -1,5 +1,7 @@
 class Pages::DeleteConditionInput < ConfirmActionInput
-  attr_accessor :form, :page, :check_page_id, :routing_page_id, :answer_value, :goto_page_id, :record
+  attr_accessor :form, :page, :record
+
+  delegate :check_page_id, :routing_page_id, :goto_page_id, :answer_value, to: :record
 
   def submit
     return false if invalid?
