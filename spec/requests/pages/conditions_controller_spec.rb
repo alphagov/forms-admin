@@ -305,12 +305,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
       allow(ConditionRepository).to receive(:find).and_return(condition)
 
-      delete_condition_input = Pages::DeleteConditionInput.new(form:, page: selected_page, record: condition, answer_value: "Yes", goto_page_id: 3)
-
-      allow(delete_condition_input).to receive(:goto_page_question_text).and_return("What is your name?")
-
-      allow(Pages::DeleteConditionInput).to receive(:new).and_return(delete_condition_input)
-
       get delete_condition_path(form_id: 1, page_id: selected_page.id, condition_id: condition.id)
     end
 
@@ -338,25 +332,19 @@ RSpec.describe Pages::ConditionsController, type: :request do
   describe "#destroy" do
     let(:condition) { build :condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Wales", goto_page_id: pages.last.id }
     let(:confirm) { "yes" }
-    let(:submit_bool) { true }
+    let(:destroy_bool) { true }
 
     before do
       selected_page.routing_conditions = [condition]
       selected_page.position = 1
 
       allow(PageRepository).to receive(:find).and_return(selected_page)
-      allow(ConditionRepository).to receive_messages(find: condition, destroy: nil)
-
-      delete_condition_input = Pages::DeleteConditionInput.new(form:, page: selected_page, record: condition, answer_value: "Wales", goto_page_id: 3, confirm:)
-
-      allow(delete_condition_input).to receive_messages(goto_page_question_text: "What is your name?", submit: submit_bool)
-
-      allow(Pages::DeleteConditionInput).to receive(:new).and_return(delete_condition_input)
+      allow(ConditionRepository).to receive_messages(find: condition, destroy: destroy_bool)
 
       delete destroy_condition_path(form_id: form.id,
                                     page_id: selected_page.id,
                                     condition_id: condition.id,
-                                    params: { pages_delete_condition_input: { confirm:, goto_page_id: 3, answer_value: "Wales" } })
+                                    params: { pages_delete_condition_input: { confirm: } })
     end
 
     it "reads the form" do
@@ -381,7 +369,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when the destroy fails" do
-      let(:submit_bool) { false }
+      let(:destroy_bool) { false }
 
       it "return 422 error code" do
         expect(response).to have_http_status(:unprocessable_entity)
@@ -389,7 +377,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when form submit fails" do
-      let(:submit_bool) { false }
       let(:confirm) { nil }
 
       it "return 422 error code" do

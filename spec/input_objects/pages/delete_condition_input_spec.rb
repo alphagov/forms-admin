@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Pages::DeleteConditionInput, type: :model do
-  let(:delete_condition_input) { described_class.new(form:, page:, record: condition, goto_page_id:) }
+  let(:delete_condition_input) { described_class.new(form:, page:, record: condition) }
   let(:form) { build :form, :ready_for_routing, id: 1 }
   let(:pages) { form.pages }
   let(:page) { pages.second }
