@@ -20,6 +20,18 @@
           <%= govuk_summary_list(**card) %>
       <% end %>
 
+      <% if routes.map(&:secondary_skip?).none? %>
+        <h2 class="govuk-heading-m"><%= t(".any_other_answer.heading") %></h2>
+
+        <p class="govuk-body"><%= t(".any_other_answer.will_continue_to", next_page_position: next_page.position) %></p>
+
+        <% if FeatureService.new(group: current_form.group).enabled? :branch_routing %>
+          <p class="govuk-body"><%= t(".any_other_answer.skip_later") %></p>
+
+          <%= govuk_button_link_to t(".any_other_answer.set_questions_to_skip"), new_secondary_skip_path(current_form.id, page.id), secondary: true %>
+        <% end %>
+      <% end %>
+
       <% if routes.many? %>
         <%= govuk_button_link_to t("page_route_card.delete_route"), delete_routes_path(current_form.id, page.id), warning: true %>
       <% end %>
