@@ -1149,6 +1149,9 @@ en:
     your_form_is_live: Your form is live
   pages:
     answer_settings: Answer settings
+    conditions:
+      delete:
+        any_other_answer_warning: If you delete this route, the route for any other answer will also be deleted
     delete:
       notification_banner:
         end_of_route:
