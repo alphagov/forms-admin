@@ -67,4 +67,36 @@ RSpec.describe "organisations.rake" do
       expect(organisations_fetcher).to have_received(:call).once
     end
   end
+
+  describe "organisations:rename" do
+    subject(:task) do
+      Rake::Task["organisations:rename"]
+        .tap(&:reenable) # make sure task is invoked every time
+    end
+
+    it "renames an organisation" do
+      test_org = create :organisation, name: "Department for Testing", slug: "dft"
+      test_org.clear_changes_information
+
+      expect { task.invoke("Department for Testing", "Department for Testing and Validation") }
+        .to output(/Renamed/).to_stdout
+
+      expect(test_org.reload).to have_attributes(name: "Department for Testing and Validation")
+    end
+
+    it "does not rename an org from GOV.UK API" do
+      test_org = create :organisation, name: "Department for Testing", slug: "dft", govuk_content_id: Faker::Internet.uuid
+      test_org.clear_changes_information
+
+      expect { task.invoke("Department for Testing", "Department of Nope") }
+        .to output(/is from the GOV.UK API/).to_stderr
+        .and raise_error(SystemExit) { |e| expect(e).not_to be_success }
+    end
+
+    it "does not rename non-existent organisations" do
+      expect { task.invoke("Department for Testing", "Department for Testing and Validation") }
+        .to output(/not found/).to_stderr
+        .and raise_error(SystemExit) { |e| expect(e).not_to be_success }
+    end
+  end
 end
