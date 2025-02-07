@@ -4,8 +4,7 @@
 <% content_for :heading do %>
   <h1 class="govuk-heading-l">
     <span class="govuk-caption-l"><%= t("secondary_skip.new.caption", page_position: secondary_skip_input.page.position) %></span>
-    <%= t("page_titles.new_secondary_skip", route_index: 2) %>
-    <%# TODO: route_index is hardcoded as 2 here because we know there are only two conditions. It will need to change in the future %>
+    <%= t("page_titles.new_secondary_skip") %>
   </h1>
 <% end %>
 
