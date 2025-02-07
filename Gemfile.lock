@@ -213,7 +213,7 @@ GEM
     govuk_notify_rails (3.0.0)
       notifications-ruby-client (~> 6.2)
       rails (>= 4.1.0)
-    hashdiff (1.1.1)
+    hashdiff (1.1.2)
     hashie (5.0.0)
     highline (3.0.1)
     html-attributes-utils (1.0.2)
@@ -510,7 +510,7 @@ GEM
       rack (>= 2.0.9)
     warden-oauth2 (0.0.1)
       warden
-    webmock (3.24.0)
+    webmock (3.25.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
