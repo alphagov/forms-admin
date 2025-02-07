@@ -53,4 +53,15 @@ if Rails.env.local?
   end
 
   ActiveResource::HttpMock::Responder.prepend(ActiveResourceHttpMockMonkeypatch)
+
+  module FormResourcePagesMonkeypatch
+    def pages(...)
+      FormsApiDeprecations.warn_unless_called_from_repository("Form#pages request made outside repository", caller_locations(1))
+      super
+    end
+  end
+
+  Rails.application.config.after_initialize do
+    Api::V1::FormResource.prepend(FormResourcePagesMonkeypatch)
+  end
 end
