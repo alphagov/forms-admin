@@ -6,6 +6,10 @@
     <%= form_with(model: delete_condition_input, url: delete_condition_path(delete_condition_input.form.id, delete_condition_input.page.id, delete_condition_input.record.id), method: :delete) do |f| %>
       <% if delete_condition_input.errors.any? %>
         <%= f.govuk_error_summary %>
+      <% elsif delete_condition_input.has_secondary_skip? %>
+        <%= govuk_notification_banner(title_text: t("banner.default.title")) do |banner| %>
+          <% banner.with_heading(text: t(".any_other_answer_warning")) %>
+        <% end %>
       <% end %>
 
       <h1 class="govuk-heading-l">

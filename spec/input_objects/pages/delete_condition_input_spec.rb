@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Pages::DeleteConditionInput, type: :model do
-  let(:delete_condition_input) { described_class.new(form:, page:, record: condition, goto_page_id:) }
+  let(:delete_condition_input) { described_class.new(form:, page:, record: condition) }
   let(:form) { build :form, :ready_for_routing, id: 1 }
   let(:pages) { form.pages }
   let(:page) { pages.second }
@@ -66,6 +66,36 @@ RSpec.describe Pages::DeleteConditionInput, type: :model do
       it "returns the check your answers translation" do
         expect(delete_condition_input.goto_page_question_text).to eq I18n.t("page_conditions.check_your_answers")
       end
+    end
+  end
+
+  describe "#has_secondary_skip?" do
+    context "when the condition does not have a secondary skip condition" do
+      subject(:has_secondary_skip?) { delete_condition_input.has_secondary_skip? }
+
+      it { is_expected.to be false }
+    end
+
+    context "when the condition has a secondary skip condition" do
+      subject(:has_secondary_skip?) { delete_condition_input.has_secondary_skip? }
+
+      let(:condition) do
+        condition = build :condition, id: 1, routing_page_id: start_of_branches.id, check_page_id: start_of_branches.id, answer_value: "Wales", goto_page_id: start_of_second_branch.id
+        start_of_branches.routing_conditions << condition
+        condition
+      end
+
+      let(:start_of_branches) { pages.first }
+      let(:end_of_first_branch) { pages.second }
+      let(:start_of_second_branch) { pages.third }
+      let(:end_of_branches) { pages.last }
+
+      before do
+        secondary_skip_condition = build :condition, id: 2, routing_page_id: end_of_first_branch.id, check_page_id: start_of_branches.id, answer_value: nil, goto_page_id: end_of_branches.id
+        end_of_first_branch.routing_conditions << secondary_skip_condition
+      end
+
+      it { is_expected.to be true }
     end
   end
 end
