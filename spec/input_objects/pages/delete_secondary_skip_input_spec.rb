@@ -10,7 +10,7 @@ RSpec.describe Pages::DeleteSecondarySkipInput, type: :model do
     it "is invalid if confirm is nil" do
       delete_secondary_skip_input.confirm = nil
       expect(delete_secondary_skip_input).to be_invalid
-      expect(delete_secondary_skip_input.errors.full_messages_for(:confirm)).to include("Confirm Select ‘Yes’ to delete route 2")
+      expect(delete_secondary_skip_input.errors.full_messages_for(:confirm)).to include("Confirm Select ‘Yes’ to delete the route")
     end
   end
 
