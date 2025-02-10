@@ -20,7 +20,7 @@ Rails.application.config.before_initialize do
   )
 
   # add developer provider
-  if Rails.env.development? || Rails.env.test?
+  if Rails.env.development? || Rails.env.test? || (Settings.forms_env == "review")
     Rails.application.config.app_middleware.use(
       OmniAuth::Strategies::Developer,
       fields: [:email],
