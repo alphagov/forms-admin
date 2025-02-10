@@ -13,8 +13,9 @@ class RouteSummaryCardDataPresenter
   end
 
   def summary_card_data
-    conditional_cards = conditional_route_cards
-    conditional_cards + [default_route_card]
+    cards = conditional_route_cards
+    cards << secondary_skip_card if secondary_skip
+    cards
   end
 
 private
@@ -55,7 +56,7 @@ private
     }
   end
 
-  def default_route_card
+  def secondary_skip_card
     continue_to_name = page.has_next_page? ? page_name(page.next_page) : end_page_name
 
     actions = if FeatureService.new(group: form.group).enabled?(:branch_routing) && secondary_skip
