@@ -131,15 +131,15 @@ RSpec.describe Pages::ConditionsInput, type: :model do
         expect(goto_page_options).to all have_attributes(id: a_value, question_text: a_kind_of(String))
       end
 
-      it "excludes the first page" do
+      it "excludes the first page and the page straight after the first page" do
         expect(goto_page_options).not_to include(
-          *form.pages.take(1).map { |p| OpenStruct.new(id: p.id, question_text: "#{p.position}. #{p.question_text}") },
+          *form.pages.take(2).map { |p| OpenStruct.new(id: p.id, question_text: "#{p.position}. #{p.question_text}") },
         )
       end
 
-      it "includes all pages after the first page" do
+      it "includes all pages after the page straight after the first page" do
         expect(goto_page_options).to start_with(
-          *form.pages.drop(1).map { |p| OpenStruct.new(id: p.id, question_text: "#{p.position}. #{p.question_text}") },
+          *form.pages.drop(2).map { |p| OpenStruct.new(id: p.id, question_text: "#{p.position}. #{p.question_text}") },
         )
       end
 
@@ -159,15 +159,15 @@ RSpec.describe Pages::ConditionsInput, type: :model do
         expect(goto_page_options).to all have_attributes(id: a_value, question_text: a_kind_of(String))
       end
 
-      it "excludes any pages before the given page" do
+      it "excludes any pages before the given page and the page straight after the given page" do
         expect(goto_page_options).not_to include(
-          *form.pages.take(routing_from_page_count).map { |p| OpenStruct.new(id: p.id, question_text: "#{p.position}. #{p.question_text}") },
+          *form.pages.take(routing_from_page_count + 1).map { |p| OpenStruct.new(id: p.id, question_text: "#{p.position}. #{p.question_text}") },
         )
       end
 
-      it "includes all pages after the given page" do
+      it "includes all pages after the page after the given page" do
         expect(goto_page_options).to start_with(
-          *form.pages.drop(routing_from_page_count).map { |p| OpenStruct.new(id: p.id, question_text: "#{p.position}. #{p.question_text}") },
+          *form.pages.drop(routing_from_page_count + 1).map { |p| OpenStruct.new(id: p.id, question_text: "#{p.position}. #{p.question_text}") },
         )
       end
 
