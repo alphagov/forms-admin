@@ -1,6 +1,8 @@
 locals {
   logs_stream_prefix = "${data.terraform_remote_state.review.outputs.review_apps_log_group_name}/pr-${var.pull_request_number}"
 
+  service_timestamp = provider::time::rfc3339_parse(plantimestamp())
+
   forms_admin_startup_commands = [
     "bundle config unset --local without",
     "bundle install",
@@ -63,6 +65,7 @@ resource "aws_ecs_task_definition" "task" {
 
       dockerLabels = {
         "traefik.http.routers.forms-admin-pr-${var.pull_request_number}.rule" : "Host(`pr-${var.pull_request_number}.review.forms.service.gov.uk`)",
+        "traefik.http.routers.forms-admin-pr-${var.pull_request_number}.service" : "forms-admin-pr-${var.pull_request_number}",
         "traefik.http.services.forms-admin-pr-${var.pull_request_number}.loadbalancer.server.port" : "3000",
         "traefik.http.services.forms-admin-pr-${var.pull_request_number}.loadbalancer.healthcheck.path" : "/up",
         "traefik.enable" : "true"
