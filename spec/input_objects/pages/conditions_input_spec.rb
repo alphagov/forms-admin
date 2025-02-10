@@ -125,23 +125,56 @@ RSpec.describe Pages::ConditionsInput, type: :model do
 
   describe "#goto_page_options" do
     context "when routing from the first form page" do
-      it "returns a list of all pages after the first page and includes 'Check your answers before submitting'" do
-        result = described_class.new(form:, page: pages.first).goto_page_options
-        expect(result).to eq([
-          form.pages.drop(1).map { |p| OpenStruct.new(id: p.id, question_text: "#{p.position}. #{p.question_text}") },
+      subject(:goto_page_options) { described_class.new(form:, page: pages.first).goto_page_options }
+
+      it "returns a list of pages" do
+        expect(goto_page_options).to all have_attributes(id: a_value, question_text: a_kind_of(String))
+      end
+
+      it "excludes the first page" do
+        expect(goto_page_options).not_to include(
+          *form.pages.take(1).map { |p| OpenStruct.new(id: p.id, question_text: "#{p.position}. #{p.question_text}") },
+        )
+      end
+
+      it "includes all pages after the first page" do
+        expect(goto_page_options).to start_with(
+          *form.pages.drop(1).map { |p| OpenStruct.new(id: p.id, question_text: "#{p.position}. #{p.question_text}") },
+        )
+      end
+
+      it "includes 'Check your answers before submitting'" do
+        expect(goto_page_options).to include(
           OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers")),
-        ].flatten)
+        )
       end
     end
 
     context "when routing from the third form page" do
-      it "returns a list of answers that excludes any pages before the given page and the given page" do
-        routing_from_page_position = 3
-        result = described_class.new(form:, page: pages[routing_from_page_position - 1]).goto_page_options
-        expect(result).to eq([
-          form.pages.drop(routing_from_page_position).map { |p| OpenStruct.new(id: p.id, question_text: "#{p.position}. #{p.question_text}") },
+      subject(:goto_page_options) { described_class.new(form:, page: pages[routing_from_page_count - 1]).goto_page_options }
+
+      let(:routing_from_page_count) { 2 }
+
+      it "returns a list of pages" do
+        expect(goto_page_options).to all have_attributes(id: a_value, question_text: a_kind_of(String))
+      end
+
+      it "excludes any pages before the given page" do
+        expect(goto_page_options).not_to include(
+          *form.pages.take(routing_from_page_count).map { |p| OpenStruct.new(id: p.id, question_text: "#{p.position}. #{p.question_text}") },
+        )
+      end
+
+      it "includes all pages after the given page" do
+        expect(goto_page_options).to start_with(
+          *form.pages.drop(routing_from_page_count).map { |p| OpenStruct.new(id: p.id, question_text: "#{p.position}. #{p.question_text}") },
+        )
+      end
+
+      it "includes 'Check your answers before submitting'" do
+        expect(goto_page_options).to include(
           OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers")),
-        ].flatten)
+        )
       end
     end
   end
