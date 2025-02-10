@@ -85,7 +85,7 @@ resource "aws_ecs_task_definition" "task" {
       }
 
       healthCheck = {
-        command     = ["CMD-SHELL", "curl -f 'http://localhost:3000/up' || exit 1"]
+        command     = ["CMD-SHELL", "wget -O - 'http://localhost:3000/up' || exit 1"]
         interval    = 30
         retries     = 5
         startPeriod = 180
@@ -119,7 +119,7 @@ resource "aws_ecs_task_definition" "task" {
       }
 
       healthCheck = {
-        command     = ["CMD-SHELL", "curl -f 'http://localhost:9292/up' || exit 1"]
+        command     = ["CMD-SHELL", "wget -O - 'http://localhost:9292/up' || exit 1"]
         interval    = 30
         retries     = 5
         startPeriod = 180
