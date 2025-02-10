@@ -14,7 +14,7 @@ class RouteSummaryCardDataPresenter
 
   def summary_card_data
     conditional_cards = conditional_route_cards
-    conditional_cards + [default_route_card(conditional_cards.length + 1)]
+    conditional_cards + [default_route_card]
   end
 
 private
@@ -55,7 +55,7 @@ private
     }
   end
 
-  def default_route_card(index)
+  def default_route_card
     continue_to_name = page.has_next_page? ? page_name(page.next_page) : end_page_name
 
     actions = if FeatureService.new(group: form.group).enabled?(:branch_routing) && secondary_skip
@@ -69,7 +69,7 @@ private
 
     {
       card: {
-        title: I18n.t("page_route_card.route_title", index:),
+        title: I18n.t("page_route_card.any_other_answer"),
         classes: "app-summary-card",
         actions:,
       },

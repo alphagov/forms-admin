@@ -96,7 +96,7 @@ en:
         pages/delete_secondary_skip_input:
           attributes:
             confirm:
-              blank: Select ‘Yes’ to delete route 2
+              blank: Select ‘Yes’ to delete the route
         pages/question_input:
           attributes:
             hint_text:
@@ -1052,6 +1052,7 @@ en:
       none_of_the_above: None of the above
       only_one_option: Selection from a list, one option only
   page_route_card:
+    any_other_answer: Route for any other answer
     check_your_answers: Check your answers before submitting
     conditional_answer_value: "%{answer_value}"
     continue_to: For any other answer, continue to
@@ -1104,7 +1105,7 @@ en:
     contact_details: Provide contact details for support
     date_settings: Are you asking for someone’s date of birth?
     declaration: Add a declaration for people to agree to
-    delete_secondary_skip: Are you sure you want to delete route 2?
+    delete_secondary_skip: Are you sure you want to delete the route for any other answer?
     email_code_sent: Confirmation code sent
     error_prefix: 'Error: '
     forbidden: You cannot view this page
@@ -1123,7 +1124,7 @@ en:
     mou_signatures: Memorandum of Understanding agreements
     name_settings: Ask for a person’s name
     new_page: Edit question
-    new_secondary_skip: 'Route %{route_index}: set questions to skip'
+    new_secondary_skip: Set questions to skip
     not_found: Page not found
     payment_link: Add a link to a payment page on GOV.UK Pay
     privacy_policy: Provide a link to privacy information for this form
