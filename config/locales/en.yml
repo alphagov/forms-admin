@@ -1021,7 +1021,7 @@ en:
     condition_goto_page_check_your_answers: "“Check your answers before submitting”."
     condition_goto_page_text: "%{goto_page_position}, “%{goto_page_text}”"
     condition_goto_page_text_with_errors: "[Question not selected]"
-    condition_name: Route %{route_index} of question %{page_index}’s routes
+    condition_name: Question %{page_index}’s routes
     errors:
       error_summary:
         answer_value_doesnt_exist: The answer that question %{page_index}’s route is based on no longer exists - edit question %{page_index}’s route
