@@ -60,7 +60,7 @@ class Pages::ConditionsController < PagesController
   def delete
     condition = ConditionRepository.find(condition_id: params[:condition_id], form_id: current_form.id, page_id: page.id)
 
-    delete_condition_input = Pages::DeleteConditionInput.new(form: current_form, page:, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id)
+    delete_condition_input = Pages::DeleteConditionInput.new(form: current_form, page:, record: condition)
 
     render template: "pages/conditions/delete", locals: { delete_condition_input: }
   end
@@ -68,7 +68,7 @@ class Pages::ConditionsController < PagesController
   def destroy
     condition = ConditionRepository.find(condition_id: params[:condition_id], form_id: current_form.id, page_id: page.id)
 
-    form_params = delete_condition_input_params.merge(record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id)
+    form_params = delete_condition_input_params.merge(record: condition)
 
     delete_condition_input = Pages::DeleteConditionInput.new(form_params)
 
@@ -94,7 +94,7 @@ private
   end
 
   def delete_condition_input_params
-    params.require(:pages_delete_condition_input).permit(:answer_value, :goto_page_id, :confirm).merge(form: current_form, page:)
+    params.require(:pages_delete_condition_input).permit(:confirm).merge(form: current_form, page:)
   end
 
   def new_condition_or_show_routes_path(page)
