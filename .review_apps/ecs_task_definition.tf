@@ -64,6 +64,7 @@ resource "aws_ecs_task_definition" "task" {
       dockerLabels = {
         "traefik.http.routers.forms-admin-pr-${var.pull_request_number}.rule" : "Host(`pr-${var.pull_request_number}.review.forms.service.gov.uk`)",
         "traefik.http.services.forms-admin-pr-${var.pull_request_number}.loadbalancer.server.port" : "3000",
+        "traefik.http.services.forms-admin-pr-${var.pull_request_number}.loadbalancer.healthcheck.path" : "/up",
         "traefik.enable" : "true"
       },
 
