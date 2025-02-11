@@ -15,6 +15,10 @@ module HostingEnvironment
     environment_name == "dev"
   end
 
+  def self.review?
+    environment_name == "review"
+  end
+
   def self.test_environment?
     dev? || local_development?
   end
