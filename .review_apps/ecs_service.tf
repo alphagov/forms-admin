@@ -1,4 +1,5 @@
 resource "aws_ecs_service" "app" {
+  #checkov:skip=CKV_AWS_332:We don't want to target "LATEST" and get a surprise when a new version is released.
   name = "forms-admin-pr-${var.pull_request_number}"
 
   cluster         = data.terraform_remote_state.review.outputs.ecs_cluster_id
