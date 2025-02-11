@@ -36,7 +36,7 @@
     "vitest": "^3.0.5"
   },
   "dependencies": {
-    "dfe-autocomplete": "github:DFE-Digital/dfe-autocomplete#8e7389ff62a38bc8880323f6c58eed9c8d10f080",
+    "dfe-autocomplete": "github:DFE-Digital/dfe-autocomplete#1d4cc65039e11cc3ba9e7217a719b8128d0e4d53",
     "govuk-frontend": "^5.8.0",
     "turndown": "^7.2.0"
   },
