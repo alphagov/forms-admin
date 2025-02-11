@@ -6,8 +6,6 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-require "factory_bot"
-
 if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User.none?
 
   gds = Organisation.find_or_create_by!(
@@ -28,39 +26,106 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
                                 provider: :mock_gds_sso,
                                 terms_agreed_at: Time.zone.now })
 
-  FactoryBot.create :mou_signature_for_organisation, organisation: gds
+  MouSignature.create! user: default_user, organisation: gds
 
   # create extra organisations
-  test_org = FactoryBot.create :organisation, slug: "test-org"
-  FactoryBot.create :organisation, slug: "ministry-of-tests"
-  FactoryBot.create :organisation, slug: "department-for-testing", name: "Department for Testing", abbreviation: "DfT"
-  FactoryBot.create :organisation, slug: "closed-org", closed: true
+  test_org = Organisation.create! slug: "test-org", name: "Test Org", abbreviation: "TO"
+  Organisation.create! slug: "ministry-of-tests", name: "Ministry Of Tests", abbreviation: "MOT"
+  Organisation.create! slug: "department-for-testing", name: "Department for Testing", abbreviation: "DfT"
+  Organisation.create! slug: "closed-org", name: "Closed Org", abbreviation: "CO", closed: true
 
   # create extra standard users
-  FactoryBot.create_list :user, 3, :standard, organisation: test_org
+  User.create!(
+    email: "phil@example.gov.uk",
+    name: "Phil Mein",
+    role: :standard,
+    organisation: test_org,
+    provider: :seed,
+  )
+  User.create!(
+    email: "subo@example.gov.uk",
+    name: "Subo Mitt",
+    role: :standard,
+    organisation: test_org,
+    provider: :seed,
+  )
+  User.create!(
+    email: "otto@example.gov.uk",
+    name: "Otto Komplit",
+    role: :standard,
+    organisation: test_org,
+    provider: :seed,
+  )
 
   # create extra super admins
-  FactoryBot.create_list :super_admin_user, 3, organisation: gds
+  User.create!(
+    email: "craig@example.gov.uk",
+    name: "Craig",
+    role: :super_admin,
+    organisation: gds,
+    created_at: Time.utc(2022, 3, 3, 9),
+    last_signed_in_at: Time.utc(2022, 3, 3, 9),
+    terms_agreed_at: Time.utc(2022, 3, 3, 9),
+    provider: :seed,
+  )
+  User.create!(
+    email: "bey@example.gov.uk",
+    name: "Bey",
+    role: :super_admin,
+    organisation: gds,
+    created_at: Time.utc(2023, 3, 11, 6, 26),
+    last_signed_in_at: Time.utc(2023, 3, 11, 6, 26),
+    terms_agreed_at: Time.utc(2023, 3, 11, 6, 26),
+    provider: :seed,
+  )
+  User.create!(
+    email: "taylor@example.gov.uk",
+    name: "Taylor",
+    role: :super_admin,
+    organisation: gds,
+    created_at: Time.utc(2024, 4, 22, 9, 30),
+    last_signed_in_at: Time.utc(2024, 4, 22, 9, 30),
+    terms_agreed_at: Time.utc(2024, 4, 22, 9, 30),
+    provider: :seed,
+  )
 
   # while we're using Signon it is possible to have users who aren't linked to
   # the same organisation as in Signon, or who have an organisation that isn't
   # in the organisation table
-  FactoryBot.create :user, :with_unknown_org, organisation_slug: test_org.slug, organisation_content_id: test_org.govuk_content_id
-  FactoryBot.create :user, :with_unknown_org
+  User.create!(
+    email: "bakbert@example.gov.uk",
+    name: "Bakber Tan",
+    organisation_slug: test_org.slug,
+    organisation_content_id: test_org.govuk_content_id,
+    provider: :seed,
+  )
+  User.create!(
+    email: "ckboxes@example.gov.uk",
+    name: "Che K Boxes",
+    organisation_slug: "unknown-org",
+    organisation_content_id: "fb48187d-6a62-42e1-ab8e-cbb4205075ad",
+    provider: :seed,
+  )
 
   # create a user who hasn't been assigned to an organisation yet
-  FactoryBot.create :user, :with_no_org
+  User.create!(
+    email: "lez.philmore@example.gov.uk",
+    name: "Lez Philmore",
+    provider: :seed,
+  )
 
   # create some standard users without name or organisation
-  FactoryBot.create_list :user, 3, :standard, :with_no_org, :with_no_name
+  User.create!(email: "kezz.strel101@example.gov.uk", role: :standard, provider: :seed)
+  User.create!(email: "lauramipsum@example.gov.uk", role: :standard, provider: :seed)
+  User.create!(email: "chidi.anagonye@example.gov.uk", role: :standard, provider: :seed)
 
   # create some test groups
-  test_group = FactoryBot.create :group, name: "Test Group", organisation: gds, creator: default_user
-  FactoryBot.create :group, name: "Ministry of Tests forms", organisation: test_org, creator: default_user
-  FactoryBot.create :group, name: "Ministry of Tests forms - secret!", organisation: test_org, creator: default_user
-  end_to_end_group = FactoryBot.create :group, name: "End to end tests", organisation: gds, status: :active, creator: default_user
+  test_group = Group.create! name: "Test Group", organisation: gds, creator: default_user
+  Group.create! name: "Ministry of Tests forms", organisation: test_org, creator: default_user
+  Group.create! name: "Ministry of Tests forms - secret!", organisation: test_org, creator: default_user
+  end_to_end_group = Group.create! name: "End to end tests", organisation: gds, status: :active, creator: default_user
 
-  FactoryBot.create :membership, user: default_user, group: end_to_end_group, added_by: default_user, role: :group_admin
+  Membership.create! user: default_user, group: end_to_end_group, added_by: default_user, role: :group_admin
 
   # add forms to groups (assumes database seed is being used for forms-api)
   GroupForm.create! group: test_group, form_id: 1 # All question types form
