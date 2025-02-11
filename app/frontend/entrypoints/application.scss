@@ -2,7 +2,7 @@ $govuk-assets-path: "@govuk/assets/";
 $govuk-global-styles: true;
 
 @import "pkg:govuk-frontend";
-@import "dfe-autocomplete/src/dfe-autocomplete";
+@import "pkg:dfe-autocomplete";
 @import "../styles/app_form_states";
 @import "../styles/app_memorandum_of_understanding";
 @import "../styles/app_preview_area";
