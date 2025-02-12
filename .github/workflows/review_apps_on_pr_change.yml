@@ -1,0 +1,28 @@
+name: "Review apps: on PR change"
+on:
+  pull_request: {}
+jobs:
+  update-review-app:
+    # this references a codebuild project configured in forms-deploy
+    # see: https://docs.aws.amazon.com/codebuild/latest/userguide/action-runner.html
+    runs-on: codebuild-review-forms-admin-gha-runner-${{github.run_id}}-${{github.run_attempt}}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build and push container
+        id: build-container
+        run: |
+          aws ecr get-login-password --region eu-west-2 \
+          | docker login --username AWS --password-stdin 842676007477.dkr.ecr.eu-west-2.amazonaws.com
+
+          IMAGE_TAG="842676007477.dkr.ecr.eu-west-2.amazonaws.com/forms-admin:pr-${{github.event.pull_request.number}}-${{github.event.pull_request.head.ref}}"
+
+          echo "Building and pushing container image"
+          echo "${IMAGE_TAG}"
+
+          docker build -t "${IMAGE_TAG}" .
+          docker push "${IMAGE_TAG}"
+
+          echo "FORMS_ADMIN_IMAGE=${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
