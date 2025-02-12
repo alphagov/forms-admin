@@ -134,18 +134,15 @@ RSpec.describe Pages::ConditionsController, type: :request do
   end
 
   describe "#create" do
+    let(:params) { { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: 3, answer_value: "Wales" } } }
+
     before do
       selected_page.id = 1
 
       allow(PageRepository).to receive(:find).and_return(selected_page)
+      allow(ConditionRepository).to receive(:create!).and_invoke(->(**attributes) { build :condition, **attributes })
 
-      conditions_input = Pages::ConditionsInput.new(form:, page: selected_page, answer_value: "Yes", goto_page_id: 3)
-
-      allow(conditions_input).to receive(:submit).and_return(submit_result)
-
-      allow(Pages::ConditionsInput).to receive(:new).and_return(conditions_input)
-
-      post create_condition_path(form_id: form.id, page_id: selected_page.id, params: { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: 3, answer_value: "Wales" } })
+      post create_condition_path(form_id: form.id, page_id: selected_page.id, params:)
     end
 
     it "reads the form" do
@@ -162,7 +159,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when form submit fails" do
-      let(:submit_result) { false }
+      let(:params) { { pages_conditions_input: { routing_page_id: nil, check_page_id: nil, goto_page_id: nil, answer_value: nil } } }
 
       it "return 422 error code" do
         expect(response).to have_http_status(:unprocessable_entity)
@@ -189,7 +186,9 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
   describe "#edit" do
     let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
-    let(:conditions_input) { Pages::ConditionsInput.new(form:, page: selected_page, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id) }
+
+    # Use instance variable to allow asserting instance receives method
+    let(:conditions_input) { @conditions_input } # rubocop:disable RSpec/InstanceVariable
 
     before do
       selected_page.routing_conditions = [condition]
@@ -198,9 +197,12 @@ RSpec.describe Pages::ConditionsController, type: :request do
       allow(PageRepository).to receive(:find).and_return(selected_page)
       allow(ConditionRepository).to receive(:find).and_return(condition)
 
-      allow(Pages::ConditionsInput).to receive(:new).and_return(conditions_input)
-      allow(conditions_input).to receive(:check_errors_from_api)
-      allow(conditions_input).to receive(:assign_condition_values).and_return(conditions_input)
+      allow(Pages::ConditionsInput).to receive(:new).and_wrap_original do |original_method, *args, **kwargs|
+        @conditions_input = original_method.call(*args, **kwargs)
+        allow(conditions_input).to receive(:check_errors_from_api).and_call_original
+        allow(conditions_input).to receive(:assign_condition_values).and_call_original
+        conditions_input
+      end
 
       get edit_condition_path(form_id: 1, page_id: selected_page.id, condition_id: condition.id)
     end
@@ -235,6 +237,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
   end
 
   describe "#update" do
+    let(:params) { { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: 3, answer_value: "Wales" } } }
     let(:condition) { build :condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Wales", goto_page_id: pages.last.id }
 
     before do
@@ -243,17 +246,12 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
       allow(PageRepository).to receive(:find).and_return(selected_page)
       allow(ConditionRepository).to receive(:find).and_return(condition)
-
-      conditions_input = Pages::ConditionsInput.new(form:, page: selected_page, record: condition, answer_value: "Yes", goto_page_id: 3)
-
-      allow(conditions_input).to receive(:update_condition).and_return(submit_result)
-
-      allow(Pages::ConditionsInput).to receive(:new).and_return(conditions_input)
+      allow(ConditionRepository).to receive(:save!).and_invoke(->(condition) { condition })
 
       put update_condition_path(form_id: form.id,
                                 page_id: selected_page.id,
                                 condition_id: condition.id,
-                                params: { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: 3, answer_value: "Wales" } })
+                                params:)
     end
 
     it "reads the form" do
@@ -270,7 +268,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when form submit fails" do
-      let(:submit_result) { false }
+      let(:params) { { pages_conditions_input: { routing_page_id: nil, check_page_id: nil, goto_page_id: nil, answer_value: nil } } }
 
       it "return 422 error code" do
         expect(response).to have_http_status(:unprocessable_entity)
