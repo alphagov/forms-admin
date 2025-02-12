@@ -36,6 +36,21 @@ namespace :organisations do
 
     puts "Created #{organisation.inspect}"
   end
+
+  desc "Change name of an organisation"
+  task :rename, %i[old_name new_name] => :environment do |_, args|
+    old_name = args[:old_name]
+    new_name = args[:new_name]
+    usage = "usage: rails organisations:rename[<old_name>,<new_name>]".freeze
+    abort usage if old_name.blank? || new_name.blank?
+
+    org = Organisation.find_by(name: old_name)
+    abort "#{old_name} not found" if org.blank?
+    abort "#{old_name} is from the GOV.UK API and should not be renamed by us" if org.govuk_content_id.present?
+
+    org.name = new_name
+    puts "Renamed org #{old_name} to #{new_name}" if org.save!
+  end
 end
 
 def run_organisation_fetch(dry_run:)
