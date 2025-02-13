@@ -1,31 +1,60 @@
 name: "Review apps: on PR change"
 on:
   pull_request: {}
+env:
+  IMAGE_TAG: "842676007477.dkr.ecr.eu-west-2.amazonaws.com/forms-admin:pr-${{github.event.pull_request.number}}-${{github.event.pull_request.head.ref}}"
 jobs:
+  # Build the container in a separate step that does not run on CodeBuild in order
+  # to take advantage of GitHub Actions' image caches
+  build-pr-container:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build container
+        run: |
+          docker buildx build \
+            --output "type=tar,dest=${{runner.temp}}/forms-admin-image.tar" \
+            --tag "${{env.IMAGE_TAG}}" \
+            .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: forms-admin-image
+          path: "${{runner.temp}}/forms-admin-image.tar"
+
   update-review-app:
     # this references a codebuild project configured in forms-deploy
     # see: https://docs.aws.amazon.com/codebuild/latest/userguide/action-runner.html
     runs-on: codebuild-review-forms-admin-gha-runner-${{github.run_id}}-${{github.run_attempt}}
+    needs: [build-pr-container]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build and push container
+      - name: Fetch artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: forms-admin-image
+          path: "${{runner.temp}}"
+
+      - name: Load image
+        run: |
+          docker import "${{runner.temp}}/forms-admin-image.tar" "${{env.IMAGE_TAG}}"
+
+      - name: Push container
         id: build-container
         run: |
           aws ecr get-login-password --region eu-west-2 \
           | docker login --username AWS --password-stdin 842676007477.dkr.ecr.eu-west-2.amazonaws.com
 
-          IMAGE_TAG="842676007477.dkr.ecr.eu-west-2.amazonaws.com/forms-admin:pr-${{github.event.pull_request.number}}-${{github.event.pull_request.head.ref}}"
+          echo "Pushing container image"
+          echo "${{env.IMAGE_TAG}}"
 
-          echo "Building and pushing container image"
-          echo "${IMAGE_TAG}"
-
-          docker build -t "${IMAGE_TAG}" .
           docker push "${IMAGE_TAG}"
-
-          echo "FORMS_ADMIN_IMAGE=${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
 
       - name: Determine Terraform version
         id: terraform-version
@@ -44,6 +73,6 @@ jobs:
 
           terraform apply \
             -var "pull_request_number=${{github.event.pull_request.number}}" \
-            -var "forms_admin_container_image=${{steps.build-container.outputs.FORMS_ADMIN_IMAGE}}" \
+            -var "forms_admin_container_image=${{env.IMAGE_TAG}}" \
             -no-color \
             -auto-approve
