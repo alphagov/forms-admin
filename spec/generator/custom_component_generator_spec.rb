@@ -27,7 +27,7 @@ RSpec.describe "CustomComponentGenerator", type: :generator do
   end
 
   context "when the css argument is supplied" do
-    arguments ["my", "--css"]
+    arguments [ "my", "--css" ]
 
     it "creates the sass partial" do
       expect(File.read(File.join(destination_root, "app/components/my_component/_index.scss"))).to include("// Add styles here")
@@ -35,7 +35,7 @@ RSpec.describe "CustomComponentGenerator", type: :generator do
   end
 
   context "when the javascript argument is supplied" do
-    arguments ["my", "--javascript"]
+    arguments [ "my", "--javascript" ]
 
     it "creates the js file and test" do
       expect(File.read(File.join(destination_root, "app/components/my_component/index.js"))).to include("// Add JS here")

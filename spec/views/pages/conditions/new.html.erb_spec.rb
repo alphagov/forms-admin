@@ -4,8 +4,8 @@ describe "pages/conditions/new.html.erb" do
   let(:form) { build :form, id: 1 }
   let(:pages) do
     build_list :page, 3, answer_settings: OpenStruct.new(only_one_option: "true",
-                                                         selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
-                                                                             OpenStruct.new(attributes: { name: "Option 2" })]), form_id: 1
+                                                         selection_options: [ OpenStruct.new(attributes: { name: "Option 1" }),
+                                                                             OpenStruct.new(attributes: { name: "Option 2" }) ]), form_id: 1
   end
   let(:condition_input) { Pages::ConditionsInput.new(form:, page: pages.first) }
 

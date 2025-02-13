@@ -13,9 +13,9 @@ RSpec.describe PagesController, type: :request do
 
   describe "#index" do
     let(:pages) do
-      [build(:page, id: 99),
+      [ build(:page, id: 99),
        build(:page, id: 100),
-       build(:page, id: 101)]
+       build(:page, id: 101) ]
     end
     let(:form) do
       build(:form, id: 2, pages:)
@@ -90,7 +90,7 @@ RSpec.describe PagesController, type: :request do
         )
       end
 
-      let(:pages) { [page] }
+      let(:pages) { [ page ] }
 
       before do
         allow(FormRepository).to receive_messages(find: form_response, pages: pages)
@@ -137,7 +137,7 @@ RSpec.describe PagesController, type: :request do
             id: 1,
             form_id: 2,
             question_text: "What is your favourite colour?",
-            selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
+            selection_options: [ { name: "Red" }, { name: "Green" }, { name: "Blue" } ],
             only_one_option: true,
             routing_conditions: [
               build(:condition, routing_page_id: 1, check_page_id: 1, value: "red", skip_to_end: true),
@@ -166,7 +166,7 @@ RSpec.describe PagesController, type: :request do
               form_id: 2,
               position: 1,
               question_text: "What is your favourite colour?",
-              selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
+              selection_options: [ { name: "Red" }, { name: "Green" }, { name: "Blue" } ],
               only_one_option: true,
               routing_conditions: [
                 build(:condition, routing_page_id: 1, check_page_id: 1, value: "green", goto_page_id: 3),
@@ -203,7 +203,7 @@ RSpec.describe PagesController, type: :request do
               form_id: 2,
               position: 1,
               question_text: "What is your favourite colour?",
-              selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
+              selection_options: [ { name: "Red" }, { name: "Green" }, { name: "Blue" } ],
               only_one_option: true,
               routing_conditions: [
                 build(:condition, routing_page_id: 1, check_page_id: 1, value: "green", goto_page_id: 3),
@@ -243,7 +243,7 @@ RSpec.describe PagesController, type: :request do
               form_id: 2,
               position: 1,
               question_text: "What is your favourite colour?",
-              selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
+              selection_options: [ { name: "Red" }, { name: "Green" }, { name: "Blue" } ],
               only_one_option: true,
               routing_conditions: [
                 build(:condition, routing_page_id: 1, check_page_id: 1, value: "green", goto_page_id: 3),
@@ -296,7 +296,7 @@ RSpec.describe PagesController, type: :request do
       end
 
       let(:form_pages_response) do
-        [page].to_json
+        [ page ].to_json
       end
 
       before do
@@ -332,9 +332,9 @@ RSpec.describe PagesController, type: :request do
 
   describe "#move_page" do
     let(:pages) do
-      [build(:page, id: 99),
+      [ build(:page, id: 99),
        build(:page, id: 100),
-       build(:page, id: 101)]
+       build(:page, id: 101) ]
     end
     let(:form) do
       build(:form, id: 2, pages:)

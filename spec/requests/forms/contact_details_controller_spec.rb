@@ -56,7 +56,7 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
     end
 
     context "when given valid params" do
-      let(:params) { { forms_contact_details_input: { contact_details_supplied: ["", "supply_email"], email: "test@test.gov.uk", form: } } }
+      let(:params) { { forms_contact_details_input: { contact_details_supplied: [ "", "supply_email" ], email: "test@test.gov.uk", form: } } }
 
       it "reads the form" do
         expect(FormRepository).to have_received(:find)
@@ -72,7 +72,7 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
     end
 
     context "when given invalid parameters" do
-      let(:params) { { forms_contact_details_input: { contact_details_supplied: ["", "supply_email"], email: "", form: } } }
+      let(:params) { { forms_contact_details_input: { contact_details_supplied: [ "", "supply_email" ], email: "", form: } } }
 
       it "reads the form" do
         expect(FormRepository).to have_received(:find)
@@ -89,7 +89,7 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
     end
 
     context "when given an email address for a non-government inbox" do
-      let(:params) { { forms_contact_details_input: { contact_details_supplied: ["", "supply_email"], email: "a@gmail.com", form: } } }
+      let(:params) { { forms_contact_details_input: { contact_details_supplied: [ "", "supply_email" ], email: "a@gmail.com", form: } } }
 
       it "reads the form" do
         expect(FormRepository).to have_received(:find)
@@ -113,7 +113,7 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
         standard_user
       end
 
-      let(:params) { { forms_contact_details_input: { contact_details_supplied: ["", "supply_email"], email: "a@public-sector-org.example", form: } } }
+      let(:params) { { forms_contact_details_input: { contact_details_supplied: [ "", "supply_email" ], email: "a@public-sector-org.example", form: } } }
 
       let(:updated_form) do
         form.tap do |f|

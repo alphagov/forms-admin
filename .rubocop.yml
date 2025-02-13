@@ -1,25 +1,21 @@
-# .rubocop.yml
+require:
+  rubocop-rspec
+
+# Omakase Ruby styling for Rails
 inherit_gem:
-  rubocop-govuk:
-    - config/default.yml
-    - config/rails.yml
-    - config/rspec.yml
+  rubocop-rails-omakase: rubocop.yml
 
 inherit_mode:
   merge:
     - Exclude
 
-# **************************************************************
-# TRY NOT TO ADD OVERRIDES IN THIS FILE
-#
-# This repo is configured to follow the RuboCop GOV.UK styleguide.
-# Any rules you override here will cause this repo to diverge from
-# the way we write code in all other GOV.UK repos.
-#
-# See https://github.com/alphagov/rubocop-govuk/blob/main/CONTRIBUTING.md
-# **************************************************************
-
 RSpec/SpecFilePathFormat:
   CustomTransform:
     OmniAuth: omniauth
 
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma

@@ -182,8 +182,8 @@ RSpec.describe UsersController, type: :request do
       end
 
       [
-        ["with an unknown organisation", :with_unknown_org],
-        ["with no organisation set", :with_no_org],
+        [ "with an unknown organisation", :with_unknown_org ],
+        [ "with no organisation set", :with_no_org ],
       ].each do |(title, trait)|
         context "with a user #{title}" do
           let(:user) { create(:user, trait) }

@@ -66,12 +66,12 @@ RSpec.describe TaskListComponent::View, type: :component do
     end
 
     it "can render HTML in the section body" do
-      render_inline(described_class.new(sections: [{
+      render_inline(described_class.new(sections: [ {
         title: "section title",
         section_number: 1,
         subsection: false,
         body_text: "section\n\nbody",
-      }]))
+      } ]))
 
       expect(page).to have_css("p", exact_text: "body")
     end

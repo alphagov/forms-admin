@@ -43,7 +43,7 @@ RSpec.describe Group, type: :model do
       group = build :group, organisation:, name: "Test group"
 
       expect(group).to be_invalid
-      expect(group.errors[:name]).to eq([I18n.t("activerecord.errors.models.group.attributes.name.taken")])
+      expect(group.errors[:name]).to eq([ I18n.t("activerecord.errors.models.group.attributes.name.taken") ])
     end
 
     it "is valid when two groups have the same name but different organisations" do
@@ -236,7 +236,7 @@ RSpec.describe Group, type: :model do
         create :membership, user:, group: group1
         create :membership, user:, group: group2
 
-        expect(described_class.for_user(user)).to eq [group1, group2]
+        expect(described_class.for_user(user)).to eq [ group1, group2 ]
       end
 
       it "returns an empty array if the user is not a member of any groups" do
@@ -253,7 +253,7 @@ RSpec.describe Group, type: :model do
         create :group
         create :membership, user:, group: group1
 
-        expect(described_class.for_user(user)).to eq [group1]
+        expect(described_class.for_user(user)).to eq [ group1 ]
       end
     end
 
@@ -264,7 +264,7 @@ RSpec.describe Group, type: :model do
         group1 = create(:group)
         create(:group, organisation: org)
 
-        expect(described_class.for_organisation(group1.organisation)).to eq [group1]
+        expect(described_class.for_organisation(group1.organisation)).to eq [ group1 ]
       end
 
       it "returns no groups for an unused organisation" do
@@ -300,7 +300,7 @@ RSpec.describe Group, type: :model do
       group_b = create :group, organisation:, name: "b", creator: user
       group_a = create :group, organisation:, name: "a", creator: user
 
-      expect(described_class.for_organisation(group_c.organisation)).to eq [group_a, group_b, group_c]
+      expect(described_class.for_organisation(group_c.organisation)).to eq [ group_a, group_b, group_c ]
     end
   end
 end

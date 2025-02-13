@@ -13,9 +13,9 @@ module Forms
       if @declaration_input.submit
         success_message = if @declaration_input.mark_complete == "true"
                             t("banner.success.form.declaration_saved_and_completed")
-                          else
+        else
                             t("banner.success.form.declaration_saved")
-                          end
+        end
 
         redirect_to form_path(@declaration_input.form), success: success_message
       else

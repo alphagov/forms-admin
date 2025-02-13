@@ -151,7 +151,7 @@ describe "users/edit.html.erb" do
     end
 
     it "prompts super admin to choose organisation" do
-      expect(rendered).to have_select("Organisation", with_options: ["Select an organisation"])
+      expect(rendered).to have_select("Organisation", with_options: [ "Select an organisation" ])
     end
   end
 
@@ -163,7 +163,7 @@ describe "users/edit.html.erb" do
     end
 
     it "prompts super admin to choose organisation" do
-      expect(rendered).to have_select("Organisation", with_options: ["Select an organisation"])
+      expect(rendered).to have_select("Organisation", with_options: [ "Select an organisation" ])
     end
   end
 

@@ -60,7 +60,7 @@ describe GroupMemberInput do
         before do
           membership_errors = instance_double(ActiveModel::Errors)
           error = instance_double(ActiveModel::Error, type: :user_in_other_org)
-          allow(membership_errors).to receive(:[]).with(:user_in_other_org).and_return(["User is already a member of another organization"])
+          allow(membership_errors).to receive(:[]).with(:user_in_other_org).and_return([ "User is already a member of another organization" ])
           allow(membership_errors).to receive(:each).and_yield(error)
 
           new_membership = instance_double(Membership, invalid?: true, errors: membership_errors)

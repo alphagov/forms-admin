@@ -3,7 +3,7 @@ require "rails_helper"
 describe "pages/edit.html.erb" do
   let(:question_text) { nil }
 
-  let(:form) { build :form, id: 1, pages: [page] }
+  let(:form) { build :form, id: 1, pages: [ page ] }
   let(:group) { create :group }
   let(:page) { build :page, id: 1, question_text:, form_id: 1, answer_type:, answer_settings: {}, page_heading: nil }
   let(:answer_type) { "email" }

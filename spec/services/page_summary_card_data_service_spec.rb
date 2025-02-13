@@ -11,7 +11,7 @@ describe PageSummaryCardDataService do
 
   describe "#build_data" do
     before do
-      allow(PageOptionsService).to receive(:call).and_return(OpenStruct.new(all_options_for_answer_type: [1, 2]))
+      allow(PageOptionsService).to receive(:call).and_return(OpenStruct.new(all_options_for_answer_type: [ 1, 2 ]))
     end
 
     it "includes a title" do
@@ -19,7 +19,7 @@ describe PageSummaryCardDataService do
     end
 
     it "includes an array of rows" do
-      expect(service.build_data[:rows]).to eq [1, 2]
+      expect(service.build_data[:rows]).to eq [ 1, 2 ]
     end
 
     context "when the page is a selection question" do

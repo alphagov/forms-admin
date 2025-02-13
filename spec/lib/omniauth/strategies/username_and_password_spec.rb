@@ -13,9 +13,9 @@ RSpec.describe OmniAuth::Strategies::UsernameAndPassword, type: :request do
       end
       b.run do |env|
         if !env.include?("omniauth.strategy")
-          [404, {}, ["Not Found"]]
+          [ 404, {}, [ "Not Found" ] ]
         else
-          [200, {}, %w[OK]]
+          [ 200, {}, %w[OK] ]
         end
       end
     }.to_app

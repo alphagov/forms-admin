@@ -68,7 +68,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
   end
 
   let(:form_pages_response) do
-    [page_response]
+    [ page_response ]
   end
 
   let(:group) { create(:group, organisation: standard_user.organisation) }

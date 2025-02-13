@@ -31,7 +31,7 @@ module MarkdownEditorComponent
     end
 
     def allowed_formats
-      ["links", *(%w[headings] if allow_headings), "bulleted_lists", "numbered_lists"]
+      [ "links", *(%w[headings] if allow_headings), "bulleted_lists", "numbered_lists" ]
     end
 
     def preview_button_translation

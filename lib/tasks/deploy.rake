@@ -76,6 +76,6 @@ def push_commit_to_dev(git_hash)
 end
 
 def sh_aws(*cmd)
-  all_args = ["gds", "aws", "forms-deploy-support", "--", *cmd]
+  all_args = [ "gds", "aws", "forms-deploy-support", "--", *cmd ]
   system({ **ENV, "AWS_VAULT" => nil }, *all_args, exception: true)
 end

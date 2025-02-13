@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "pages/secondary_skip/new.html.erb" do
-  let(:form) { build :form, id: 1, pages: [page] }
+  let(:form) { build :form, id: 1, pages: [ page ] }
   let(:page) do
     build(:page,
           :with_selection_settings,

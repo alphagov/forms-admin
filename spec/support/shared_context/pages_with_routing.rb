@@ -15,7 +15,7 @@ RSpec.shared_context "with pages with routing" do
         position: 2,
         next_page: 3,
         question_text: "Branch question (start of a route)",
-        selection_options: [{ name: "First branch" }, { name: "Second branch" }],
+        selection_options: [ { name: "First branch" }, { name: "Second branch" } ],
         routing_conditions: [
           build(
             :condition,
@@ -93,7 +93,7 @@ RSpec.shared_context "with pages with routing" do
         position: 10,
         next_page: 11,
         question_text: "Skip question",
-        selection_options: [{ name: "Skip" }, { name: "Don't skip" }],
+        selection_options: [ { name: "Skip" }, { name: "Don't skip" } ],
         routing_conditions: [
           build(
             :condition,

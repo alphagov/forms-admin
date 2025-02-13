@@ -7,7 +7,7 @@ describe GroupFormPolicy do
   let(:group_form) { GroupForm.new(group:) }
 
   context "when user can access group" do
-    let(:user) { build :user, groups: [group] }
+    let(:user) { build :user, groups: [ group ] }
 
     it { is_expected.to permit_all_actions }
   end
