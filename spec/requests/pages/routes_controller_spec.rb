@@ -60,9 +60,9 @@ describe Pages::RoutesController, type: :request do
   end
 
   describe "#destroy" do
-    let(:condition) { build :condition, routing_page_id: selected_page.id, check_page_id: selected_page.id, goto_page_id: pages.last.id, answer_value: "Option 1" }
+    let(:condition) { build :condition, id: 1, routing_page_id: selected_page.id, check_page_id: selected_page.id, goto_page_id: pages.last.id, answer_value: "Option 1" }
     let(:secondary_skip_page) { form.pages[2] }
-    let(:secondary_skip) { build :condition, routing_page_id: secondary_skip_page.id, check_page_id: selected_page.id, goto_page_id: pages[3].id }
+    let(:secondary_skip) { build :condition, id: 2, routing_page_id: secondary_skip_page.id, check_page_id: selected_page.id, goto_page_id: pages[3].id }
 
     before do
       allow(PageRepository).to receive(:find).with(page_id: "101", form_id: 1).and_return(selected_page)
