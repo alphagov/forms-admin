@@ -144,6 +144,37 @@ describe FormRepository do
       described_class.destroy(form)
       expect(Api::V1::FormResource.new(id: 2)).to have_been_deleted
     end
+
+    it "returns the deleted form" do
+      form = described_class.find(form_id: 2)
+      expect(described_class.destroy(form)).to eq form
+    end
+
+    context "when the form has already been deleted" do
+      it "does not raise an error" do
+        form = described_class.find(form_id: 2)
+        described_class.destroy(form)
+
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.delete "/api/v1/forms/2", delete_headers, nil, 404
+        end
+
+        expect {
+          described_class.destroy(form)
+        }.not_to raise_error
+      end
+
+      it "returns the deleted form" do
+        form = described_class.find(form_id: 2)
+        described_class.destroy(form)
+
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.delete "/api/v1/forms/2", delete_headers, nil, 404
+        end
+
+        expect(described_class.destroy(form)).to eq form
+      end
+    end
   end
 
   describe "#pages" do

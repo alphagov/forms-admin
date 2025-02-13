@@ -60,9 +60,9 @@ describe Pages::RoutesController, type: :request do
   end
 
   describe "#destroy" do
-    let(:condition) { build :condition, routing_page_id: selected_page.id, check_page_id: selected_page.id, goto_page_id: pages.last.id, answer_value: "Option 1" }
+    let(:condition) { build :condition, id: 1, routing_page_id: selected_page.id, check_page_id: selected_page.id, goto_page_id: pages.last.id, answer_value: "Option 1" }
     let(:secondary_skip_page) { form.pages[2] }
-    let(:secondary_skip) { build :condition, routing_page_id: secondary_skip_page.id, check_page_id: selected_page.id, goto_page_id: pages[3].id }
+    let(:secondary_skip) { build :condition, id: 2, routing_page_id: secondary_skip_page.id, check_page_id: selected_page.id, goto_page_id: pages[3].id }
 
     before do
       allow(PageRepository).to receive(:find).with(page_id: "101", form_id: 1).and_return(selected_page)
@@ -83,6 +83,22 @@ describe Pages::RoutesController, type: :request do
         expect(ConditionRepository).to receive(:destroy).with(have_attributes(id: condition.id))
         expect(ConditionRepository).to receive(:destroy).with(have_attributes(id: secondary_skip.id))
         delete destroy_routes_path(form_id: form.id, page_id: selected_page.id, pages_routes_delete_confirmation_input: { confirm: "yes" })
+      end
+
+      context "but one of the routes is already deleted" do
+        before do
+          # forms-api may choose to delete the secondary skip when the condition is deleted
+          allow(ConditionRepository).to receive(:destroy).and_call_original
+          ActiveResource::HttpMock.respond_to do |mock|
+            mock.delete "/api/v1/forms/#{form.id}/pages/#{selected_page.id}/conditions/#{condition.id}", delete_headers, nil, 204
+            mock.delete "/api/v1/forms/#{form.id}/pages/#{secondary_skip_page.id}/conditions/#{secondary_skip.id}", delete_headers, nil, 404
+          end
+        end
+
+        it "does not render an error page" do
+          delete destroy_routes_path(form_id: form.id, page_id: selected_page.id, pages_routes_delete_confirmation_input: { confirm: "yes" })
+          expect(response).not_to be_client_error
+        end
       end
     end
 
