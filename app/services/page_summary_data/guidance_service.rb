@@ -25,22 +25,22 @@ module PageSummaryData
   private
 
     def options
-      [{
+      [ {
         key: { text: "Page heading" },
         value: { text: draft_question.page_heading },
-        actions: [{ href: change_url, visually_hidden_text: "page heading" }],
+        actions: [ { href: change_url, visually_hidden_text: "page heading" } ],
       },
        {
          key: { text: "Guidance text" },
          value: {
            text: markdown_content,
          },
-         actions: [{ href: change_url, visually_hidden_text: "guidance text" }],
-       }]
+         actions: [ { href: change_url, visually_hidden_text: "guidance text" } ],
+       } ]
     end
 
     def markdown_content
-      safe_join(['<pre class="app-markdown-editor__markdown-example-block">'.html_safe, draft_question.guidance_markdown, "</pre>".html_safe])
+      safe_join([ '<pre class="app-markdown-editor__markdown-example-block">'.html_safe, draft_question.guidance_markdown, "</pre>".html_safe ])
     end
 
     def change_url

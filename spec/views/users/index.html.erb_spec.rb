@@ -39,7 +39,7 @@ describe "users/index.html.erb" do
   end
 
   context "with a user with no name set" do
-    let(:users) { [build(:user, :with_no_name, id: 1)] }
+    let(:users) { [ build(:user, :with_no_name, id: 1) ] }
 
     it "shows no name set" do
       expect(rendered).to have_text("No name set")
@@ -47,7 +47,7 @@ describe "users/index.html.erb" do
   end
 
   context "with a user with an unknown organisation" do
-    let(:users) { [build(:user, :with_unknown_org, id: 1)] }
+    let(:users) { [ build(:user, :with_unknown_org, id: 1) ] }
 
     it "shows no organisation set" do
       expect(rendered).to have_text("No organisation set")
@@ -55,7 +55,7 @@ describe "users/index.html.erb" do
   end
 
   context "with a user with no organisation set" do
-    let(:users) { [build(:user, :with_no_org, id: 1)] }
+    let(:users) { [ build(:user, :with_no_org, id: 1) ] }
 
     it "shows no organisation set" do
       expect(rendered).to have_text("No organisation set")

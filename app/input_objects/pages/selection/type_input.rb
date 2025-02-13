@@ -17,7 +17,7 @@ class Pages::Selection::TypeInput < BaseInput
   end
 
   def only_one_option_options
-    [OpenStruct.new(id: "true"), OpenStruct.new(id: "false")]
+    [ OpenStruct.new(id: "true"), OpenStruct.new(id: "false") ]
   end
 
   def need_to_reduce_options?

@@ -25,11 +25,11 @@ module ActAsUserBannerComponent
 
       user_text = if @acting_as_user.organisation_admin?
                     "an organisation admin"
-                  elsif @acting_as_user.standard?
+      elsif @acting_as_user.standard?
                     "a standard user"
-                  else
+      else
                     "a user with role: #{@acting_as_user.role}"
-                  end
+      end
 
       "#{user_text} #{organisation_text}"
     end

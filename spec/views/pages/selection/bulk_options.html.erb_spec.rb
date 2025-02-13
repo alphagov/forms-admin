@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "pages/selection/bulk_options.html.erb", type: :view do
-  let(:form) { build :form, id: 1, pages: [page] }
+  let(:form) { build :form, id: 1, pages: [ page ] }
   let(:bulk_options_input) { build :bulk_options_input, draft_question: page }
   let(:page) { OpenStruct.new(answer_type: "selection", answer_settings:) }
   let(:answer_settings) { OpenStruct.new(only_one_option:, selection_options:) }

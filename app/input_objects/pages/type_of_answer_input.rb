@@ -1,7 +1,7 @@
 class Pages::TypeOfAnswerInput < BaseInput
   attr_accessor :answer_type, :draft_question, :answer_types, :current_form
 
-  SELECTION_DEFAULT_OPTIONS = { selection_options: [{ name: "" }, { name: "" }] }.freeze
+  SELECTION_DEFAULT_OPTIONS = { selection_options: [ { name: "" }, { name: "" } ] }.freeze
 
   validates :draft_question, presence: true
   validates :answer_type, presence: true, inclusion: { in: :answer_types }

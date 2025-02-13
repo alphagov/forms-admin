@@ -43,10 +43,10 @@ private
   end
 
   def rows
-    forms.sort_by { |form| [form.name.downcase, form.created_at] }.map do |form|
-      [{ text: form_name_link(form) },
+    forms.sort_by { |form| [ form.name.downcase, form.created_at ] }.map do |form|
+      [ { text: form_name_link(form) },
        { text: find_creator_name(form) },
-       { text: form_status_tags(form), numeric: true }].compact
+       { text: form_status_tags(form), numeric: true } ].compact
     end
   end
 

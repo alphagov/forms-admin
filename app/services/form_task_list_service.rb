@@ -48,9 +48,9 @@ private
   def create_form_section_tasks
     question_path = if FormRepository.pages(@form).any?
                       form_pages_path(@form.id)
-                    else
+    else
                       start_new_question_path(@form.id)
-                    end
+    end
     [
       { task_name: I18n.t("forms.task_list_#{create_or_edit}.create_form_section.name"), path: change_form_name_path(@form.id), status: @task_statuses[:name_status] },
       { task_name: I18n.t("forms.task_list_#{create_or_edit}.create_form_section.questions"), path: question_path, status: @task_statuses[:pages_status] },
@@ -85,8 +85,8 @@ private
 
   def email_address_section_tasks
     hint_text = I18n.t("forms.task_list_#{create_or_edit}.email_address_section.hint_text_html", submission_email: @form.submission_email) if @form.submission_email.present?
-    [{ task_name: I18n.t("forms.task_list_#{create_or_edit}.email_address_section.email"), path: submission_email_input_path(@form.id), hint_text:, status: @task_statuses[:submission_email_status] },
-     { task_name: I18n.t("forms.task_list_#{create_or_edit}.email_address_section.confirm_email"), path: submission_email_code_path(@form.id), status: @task_statuses[:confirm_submission_email_status], active: can_enter_submission_email_code }]
+    [ { task_name: I18n.t("forms.task_list_#{create_or_edit}.email_address_section.email"), path: submission_email_input_path(@form.id), hint_text:, status: @task_statuses[:submission_email_status] },
+     { task_name: I18n.t("forms.task_list_#{create_or_edit}.email_address_section.confirm_email"), path: submission_email_code_path(@form.id), status: @task_statuses[:confirm_submission_email_status], active: can_enter_submission_email_code } ]
   end
 
   def receive_csv_subsection

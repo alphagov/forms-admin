@@ -16,7 +16,7 @@ module MarkCompleteComponent
     end
 
     def mark_complete_options
-      [OpenStruct.new(value: "true", name: t("mark_complete.true")), OpenStruct.new(value: "false", name: t("mark_complete.false"))]
+      [ OpenStruct.new(value: "true", name: t("mark_complete.true")), OpenStruct.new(value: "false", name: t("mark_complete.false")) ]
     end
 
     def before_render

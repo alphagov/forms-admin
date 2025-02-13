@@ -25,7 +25,7 @@ describe GroupUpgradeMailer, type: :mailer do
     end
 
     it "sends an email to the correct email address" do
-      expect(mail.to).to eq([to_email])
+      expect(mail.to).to eq([ to_email ])
     end
   end
 
@@ -49,7 +49,7 @@ describe GroupUpgradeMailer, type: :mailer do
     end
 
     it "sends an email to the correct email address" do
-      expect(mail.to).to eq([to_email])
+      expect(mail.to).to eq([ to_email ])
     end
 
     it "includes the personalisation" do
@@ -80,7 +80,7 @@ describe GroupUpgradeMailer, type: :mailer do
     end
 
     it "sends an email to the correct email address" do
-      expect(mail.to).to eq([to_email])
+      expect(mail.to).to eq([ to_email ])
     end
 
     it "includes the personalisation" do

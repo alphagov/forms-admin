@@ -30,7 +30,7 @@ class User < ApplicationRecord
   validates :name, presence: true, if: :requires_name?
   validates :role, presence: true
   validates :organisation_id, presence: true, if: :requires_organisation?
-  validates :has_access, inclusion: [true, false]
+  validates :has_access, inclusion: [ true, false ]
   validates :role, exclusion: %w[organisation_admin], unless: :current_org_has_mou?
   validates :email, uniqueness: { case_sensitive: false }
 

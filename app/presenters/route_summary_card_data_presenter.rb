@@ -64,9 +64,9 @@ private
                   edit_secondary_skip_link,
                   delete_secondary_skip_link,
                 ]
-              else
+    else
                 []
-              end
+    end
 
     {
       card: {

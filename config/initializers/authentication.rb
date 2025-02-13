@@ -23,7 +23,7 @@ Rails.application.config.before_initialize do
   if Rails.env.development? || Rails.env.test? || (Settings.forms_env == "review")
     Rails.application.config.app_middleware.use(
       OmniAuth::Strategies::Developer,
-      fields: [:email],
+      fields: [ :email ],
     )
   end
 

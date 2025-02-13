@@ -17,7 +17,7 @@ RSpec.describe PageListComponent::View, type: :component do
     end
 
     context "when the form has a single page" do
-      let(:pages) { [(build :page, id: 1, position: 1, question_text: "Enter your name?")] }
+      let(:pages) { [ (build :page, id: 1, position: 1, question_text: "Enter your name?") ] }
 
       it "renders the question number" do
         expect(page).to have_css("dt.govuk-summary-list__key", text: "1")
@@ -38,7 +38,7 @@ RSpec.describe PageListComponent::View, type: :component do
     end
 
     context "when the form has multiple pages" do
-      let(:pages) { [(build :page, id: 1, position: 1, question_text: "Enter your name?"), (build :page, id: 2, position: 2, question_text: "What is you pet's name?")] }
+      let(:pages) { [ (build :page, id: 1, position: 1, question_text: "Enter your name?"), (build :page, id: 2, position: 2, question_text: "What is you pet's name?") ] }
 
       it "renders the question numbers" do
         expect(page).to have_css("dt.govuk-summary-list__key", text: "1")
@@ -55,9 +55,9 @@ RSpec.describe PageListComponent::View, type: :component do
 
       context "when the form has conditions" do
         let(:pages) do
-          [(build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:),
+          [ (build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:),
            (build :page, id: 2, position: 2, question_text: "What is your name?", routing_conditions:),
-           (build :page, id: 3, position: 3, question_text: "What is your pet's name?", routing_conditions:)]
+           (build :page, id: 3, position: 3, question_text: "What is your pet's name?", routing_conditions:) ]
         end
         let(:edit_condition_path) { "/forms/0/pages/1/conditions/1" }
 
@@ -68,7 +68,7 @@ RSpec.describe PageListComponent::View, type: :component do
         end
 
         context "when the page has a single condition" do
-          let(:routing_conditions) { [(build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3)] }
+          let(:routing_conditions) { [ (build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3) ] }
 
           it "does not render any errors" do
             expect(page).not_to have_css(".app-page_list__route-text--error")
@@ -93,7 +93,7 @@ RSpec.describe PageListComponent::View, type: :component do
         end
 
         context "when the page has a condition with no answer_value" do
-          let(:routing_conditions) { [(build :condition, :with_answer_value_missing, id: 1, routing_page_id: 1, check_page_id: 1, goto_page_id: 3)] }
+          let(:routing_conditions) { [ (build :condition, :with_answer_value_missing, id: 1, routing_page_id: 1, check_page_id: 1, goto_page_id: 3) ] }
 
           it "renders the errors in an unordered list" do
             condition_answer_value_error = I18n.t("page_conditions.errors.page_list.answer_value_doesnt_exist", page_index: 1)
@@ -112,7 +112,7 @@ RSpec.describe PageListComponent::View, type: :component do
         end
 
         context "when the page has a condition with no goto_page set" do
-          let(:routing_conditions) { [(build :condition, :with_goto_page_missing, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales")] }
+          let(:routing_conditions) { [ (build :condition, :with_goto_page_missing, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales") ] }
 
           it "renders the errors in an unordered list" do
             condition_goto_page_error = I18n.t("page_conditions.errors.page_list.goto_page_doesnt_exist", page_index: 1)
@@ -131,7 +131,7 @@ RSpec.describe PageListComponent::View, type: :component do
         end
 
         context "when the page has a condition with multiple errors" do
-          let(:routing_conditions) { [(build :condition, :with_answer_value_and_goto_page_missing, id: 1, routing_page_id: 1, check_page_id: 1)] }
+          let(:routing_conditions) { [ (build :condition, :with_answer_value_and_goto_page_missing, id: 1, routing_page_id: 1, check_page_id: 1) ] }
 
           it "renders the errors in an unordered list" do
             condition_answer_value_error = I18n.t("page_conditions.errors.page_list.answer_value_doesnt_exist", page_index: 1)
@@ -150,9 +150,9 @@ RSpec.describe PageListComponent::View, type: :component do
 
   describe "class methods" do
     let(:pages) do
-      [(build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:),
+      [ (build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:),
        (build :page, id: 2, position: 2, question_text: "What is your name?", routing_conditions:),
-       (build :page, id: 3, position: 3, question_text: "What is your pet's name?", routing_conditions:)]
+       (build :page, id: 3, position: 3, question_text: "What is your pet's name?", routing_conditions:) ]
     end
 
     describe "show_up_button" do
@@ -293,7 +293,7 @@ RSpec.describe PageListComponent::View, type: :component do
     describe "#conditions_for_page_with_index" do
       context "when there are no conditions" do
         let(:pages) do
-          [(build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:)]
+          [ (build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:) ]
         end
         let(:routing_conditions) { [] }
 
@@ -305,19 +305,19 @@ RSpec.describe PageListComponent::View, type: :component do
 
       context "when there is one page with one condition" do
         let(:pages) do
-          [(build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:)]
+          [ (build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:) ]
         end
-        let(:routing_conditions) { [build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3)] }
+        let(:routing_conditions) { [ build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3) ] }
 
         it "returns an array of conditions for the page" do
           page_id = 1
-          expect(page_list_component.conditions_for_page_with_index(page_id)).to eq([[routing_conditions.first, 1]])
+          expect(page_list_component.conditions_for_page_with_index(page_id)).to eq([ [ routing_conditions.first, 1 ] ])
         end
       end
 
       context "when there is one page with multiple conditions" do
         let(:pages) do
-          [(build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:)]
+          [ (build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:) ]
         end
 
         let(:routing_conditions) do
@@ -329,13 +329,13 @@ RSpec.describe PageListComponent::View, type: :component do
 
         it "returns the correct condition with index" do
           page_id = 2
-          expect(page_list_component.conditions_for_page_with_index(page_id)).to eq([[routing_conditions.second, 2]])
+          expect(page_list_component.conditions_for_page_with_index(page_id)).to eq([ [ routing_conditions.second, 2 ] ])
         end
       end
 
       context "when there is one page with one condition and a condition for another pages" do
         let(:pages) do
-          [(build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:)]
+          [ (build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:) ]
         end
         let(:routing_conditions) do
           [
@@ -346,7 +346,7 @@ RSpec.describe PageListComponent::View, type: :component do
 
         it "returns an array of conditions for the page" do
           page_id = 1
-          expect(page_list_component.conditions_for_page_with_index(page_id)).to eq([[routing_conditions.first, 1]])
+          expect(page_list_component.conditions_for_page_with_index(page_id)).to eq([ [ routing_conditions.first, 1 ] ])
         end
       end
     end

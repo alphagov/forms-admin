@@ -6,7 +6,7 @@ module MetricsSummaryComponent
 
     def initialize(form_live_date, metrics_data)
       super
-      @start_date = [form_live_date, 7.days.ago.to_date].max
+      @start_date = [ form_live_date, 7.days.ago.to_date ].max
       @end_date = 1.day.ago.to_date
       @heading = heading_text.html_safe
 

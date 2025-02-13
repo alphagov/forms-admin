@@ -53,11 +53,11 @@ class Pages::QuestionInput < BaseInput
   end
 
   def default_options
-    [OpenStruct.new(id: "false"), OpenStruct.new(id: "true")]
+    [ OpenStruct.new(id: "false"), OpenStruct.new(id: "true") ]
   end
 
   def repeatable_options
-    [OpenStruct.new(id: "true"), OpenStruct.new(id: "false")]
+    [ OpenStruct.new(id: "true"), OpenStruct.new(id: "false") ]
   end
 
   def validate_number_of_selection_options

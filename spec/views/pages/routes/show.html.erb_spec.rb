@@ -1,9 +1,9 @@
 require "rails_helper"
 
 describe "pages/routes/show.html.erb" do
-  let(:form) { build :form, id: 1, pages: [page] }
-  let(:pages) { [page, next_page] }
-  let(:page) { build :page, id: 1, position: 1, next_page: 2, routing_conditions: [build(:condition)] }
+  let(:form) { build :form, id: 1, pages: [ page ] }
+  let(:pages) { [ page, next_page ] }
+  let(:page) { build :page, id: 1, position: 1, next_page: 2, routing_conditions: [ build(:condition) ] }
   let(:next_page) { build :page, id: 2 }
   let(:routes) { PageRoutesService.new(form:, pages:, page:).routes }
 

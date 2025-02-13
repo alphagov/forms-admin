@@ -9,8 +9,8 @@ RSpec.describe Pages::ConditionsController, type: :request do
       first_page.answer_type = "selection"
       first_page.answer_settings = DataStruct.new(
         only_one_option: true,
-        selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
-                            OpenStruct.new(attributes: { name: "Option 2" })],
+        selection_options: [ OpenStruct.new(attributes: { name: "Option 1" }),
+                            OpenStruct.new(attributes: { name: "Option 2" }) ],
       )
     end
   end
@@ -64,7 +64,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
     context "when the page already has a condition associated with it" do
       let(:selected_page) do
-        page.routing_conditions = [(build :condition, id: 1, check_page_id: page.id, goto_page_id: 2)]
+        page.routing_conditions = [ (build :condition, id: 1, check_page_id: page.id, goto_page_id: 2) ]
         page
       end
 
@@ -121,7 +121,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
     context "when user should not be allowed to add routes to pages" do
       let(:form) { build :form, id: 1 }
-      let(:pages) { [build(:page)] }
+      let(:pages) { [ build(:page) ] }
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
@@ -172,7 +172,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
     context "when user should not be allowed to add routes to pages" do
       let(:form) { build :form, id: 1 }
-      let(:pages) { [build(:page)] }
+      let(:pages) { [ build(:page) ] }
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
@@ -191,7 +191,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     let(:conditions_input) { @conditions_input } # rubocop:disable RSpec/InstanceVariable
 
     before do
-      selected_page.routing_conditions = [condition]
+      selected_page.routing_conditions = [ condition ]
       selected_page.position = 1
 
       allow(PageRepository).to receive(:find).and_return(selected_page)
@@ -241,7 +241,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     let(:condition) { build :condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Wales", goto_page_id: pages.last.id }
 
     before do
-      selected_page.routing_conditions = [condition]
+      selected_page.routing_conditions = [ condition ]
       selected_page.position = 1
 
       allow(PageRepository).to receive(:find).and_return(selected_page)
@@ -296,7 +296,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     let(:condition) { build :condition, id: 1, routing_page_id: selected_page.id, check_page_id: selected_page.id, answer_value: "Wales", goto_page_id: 3 }
 
     before do
-      selected_page.routing_conditions = [condition]
+      selected_page.routing_conditions = [ condition ]
       selected_page.position = 1
 
       allow(PageRepository).to receive(:find).and_return(selected_page)
@@ -333,7 +333,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     let(:destroy_bool) { true }
 
     before do
-      selected_page.routing_conditions = [condition]
+      selected_page.routing_conditions = [ condition ]
       selected_page.position = 1
 
       allow(PageRepository).to receive(:find).and_return(selected_page)

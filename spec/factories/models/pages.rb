@@ -40,7 +40,7 @@ FactoryBot.define do
     trait :with_selection_settings do
       transient do
         only_one_option { "true" }
-        selection_options { [{ name: "Option 1" }, { name: "Option 2" }] }
+        selection_options { [ { name: "Option 1" }, { name: "Option 2" } ] }
       end
 
       question_text { Faker::Lorem.question }

@@ -11,8 +11,8 @@ describe "pages/conditions/edit.html.erb" do
           is_optional: "false",
           answer_type: "selection",
           answer_settings: OpenStruct.new(only_one_option: "true",
-                                          selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
-                                                              OpenStruct.new(attributes: { name: "Option 2" })])
+                                          selection_options: [ OpenStruct.new(attributes: { name: "Option 1" }),
+                                                              OpenStruct.new(attributes: { name: "Option 2" }) ])
   end
 
   before do

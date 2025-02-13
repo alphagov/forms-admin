@@ -163,10 +163,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_30_150000) do
     t.index ["form_id"], name: "index_pages_on_form_id"
   end
 
-  create_table "schema_info", id: false, force: :cascade do |t|
-    t.integer "version", default: 0, null: false
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"

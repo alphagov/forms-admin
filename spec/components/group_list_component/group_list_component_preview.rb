@@ -6,6 +6,6 @@ class GroupListComponent::GroupListComponentPreview < ViewComponent::Preview
   end
 
   def with_groups
-    render(GroupListComponent::View.new(groups: [build(:group), build(:group)], title: "Your active groups", empty_message: "There are no active groups to display"))
+    render(GroupListComponent::View.new(groups: [ build(:group), build(:group) ], title: "Your active groups", empty_message: "There are no active groups to display"))
   end
 end

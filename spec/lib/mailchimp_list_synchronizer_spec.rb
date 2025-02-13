@@ -108,7 +108,7 @@ RSpec.describe MailchimpListSynchronizer do
     end
 
     context "when the user is in the list of users to synchronize" do
-      let(:users_to_synchronize) { ["user@domain.org"] }
+      let(:users_to_synchronize) { [ "user@domain.org" ] }
 
       context "when the user is not present in the MailChimp list" do
         let(:list_1_members_info) do
@@ -194,7 +194,7 @@ RSpec.describe MailchimpListSynchronizer do
     end
 
     context "when the user is not in the list of users to synchronize" do
-      let(:users_to_synchronize) { ["some_other_user@domain.org"] }
+      let(:users_to_synchronize) { [ "some_other_user@domain.org" ] }
 
       context "when the user is not present in the MailChimp list" do
         let(:list_1_members_info) do
@@ -281,7 +281,7 @@ RSpec.describe MailchimpListSynchronizer do
 
     context "when the mailing list has more than 1000 members" do
       let(:users_to_synchronize) do
-        ["some_email_address@domain.org"]
+        [ "some_email_address@domain.org" ]
       end
 
       let(:list_1) do

@@ -30,7 +30,7 @@ class Pages::Selection::BulkOptionsInput < BaseInput
   end
 
   def none_of_the_above_options
-    [OpenStruct.new(id: "true"), OpenStruct.new(id: "false")]
+    [ OpenStruct.new(id: "true"), OpenStruct.new(id: "false") ]
   end
 
   def only_one_option?

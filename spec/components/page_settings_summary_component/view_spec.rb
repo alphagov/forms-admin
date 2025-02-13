@@ -60,7 +60,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
               is_optional:,
               answer_settings: {
                 only_one_option:,
-                selection_options: [{ name: "Option 1" }, { name: "Option 2" }],
+                selection_options: [ { name: "Option 1" }, { name: "Option 2" } ],
               }
       end
 
@@ -74,7 +74,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
           build :selection_draft_question,
                 answer_settings: {
                   only_one_option:,
-                  selection_options: [{ name: "Option 1" },
+                  selection_options: [ { name: "Option 1" },
                                       { name: "Option 2" },
                                       { name: "Option 3" },
                                       { name: "Option 4" },
@@ -83,7 +83,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
                                       { name: "Option 7" },
                                       { name: "Option 8" },
                                       { name: "Option 9" },
-                                      { name: "Option 10" }],
+                                      { name: "Option 10" } ],
                 }
         end
 
@@ -105,7 +105,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
       end
 
       context "when there is an error for the selection options" do
-        let(:selection_options_error_messages) { ["A selection options error"] }
+        let(:selection_options_error_messages) { [ "A selection options error" ] }
 
         it("highlights the summary list row with error formatting") do
           expect(page).to have_css(".govuk-summary-list__row.govuk-form-group--error", text: "Options")

@@ -11,7 +11,7 @@ if Settings.sentry.dsn.present?
     config.environment = Settings.sentry.environment
 
     filter = ActiveSupport::ParameterFilter.new(
-      [EmailParameterFilterProc.new(mask: Settings.sentry.filter_mask)],
+      [ EmailParameterFilterProc.new(mask: Settings.sentry.filter_mask) ],
       mask: Settings.sentry.filter_mask,
     )
     config.before_send = lambda do |event, _hint|

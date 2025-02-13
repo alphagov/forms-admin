@@ -96,7 +96,7 @@ RSpec.describe Pages::Selection::BulkOptionsInput, type: :model do
       bulk_options_input.include_none_of_the_above = "true"
       bulk_options_input.submit
 
-      expect(bulk_options_input.draft_question.answer_settings[:selection_options]).to eq([{ name: "1" }, { name: "2" }])
+      expect(bulk_options_input.draft_question.answer_settings[:selection_options]).to eq([ { name: "1" }, { name: "2" } ])
     end
 
     it "logs submission" do
@@ -123,7 +123,7 @@ RSpec.describe Pages::Selection::BulkOptionsInput, type: :model do
 
         expected_settings = {
           only_one_option:,
-          selection_options: [{ name: "1" }, { name: "2" }],
+          selection_options: [ { name: "1" }, { name: "2" } ],
         }
 
         expect(bulk_options_input.draft_question.answer_settings).to include(expected_settings)
@@ -141,7 +141,7 @@ RSpec.describe Pages::Selection::BulkOptionsInput, type: :model do
 
         expected_settings = {
           only_one_option:,
-          selection_options: [{ name: "1" }, { name: "2" }],
+          selection_options: [ { name: "1" }, { name: "2" } ],
         }
 
         expect(bulk_options_input.draft_question.answer_settings).to include(expected_settings)
@@ -152,7 +152,7 @@ RSpec.describe Pages::Selection::BulkOptionsInput, type: :model do
 
   describe "#none_of_the_above_options" do
     it "returns true and false as options" do
-      expect(bulk_options_input.none_of_the_above_options).to eq [OpenStruct.new(id: "true"), OpenStruct.new(id: "false")]
+      expect(bulk_options_input.none_of_the_above_options).to eq [ OpenStruct.new(id: "true"), OpenStruct.new(id: "false") ]
     end
   end
 

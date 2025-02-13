@@ -15,7 +15,7 @@ describe CloudWatchService do
   end
 
   describe "#week_submissions" do
-    let(:datapoints) { [{ sum: total_submissions }] }
+    let(:datapoints) { [ { sum: total_submissions } ] }
     let(:total_submissions) { 3.0 }
 
     it "calls the cloudwatch client with get_metric_statistics" do
@@ -85,7 +85,7 @@ describe CloudWatchService do
   end
 
   describe "#week_starts" do
-    let(:datapoints) { [{ sum: total_starts }] }
+    let(:datapoints) { [ { sum: total_starts } ] }
     let(:total_starts) { 5.0 }
 
     it "calls the cloudwatch client with get_metric_statistics" do

@@ -70,7 +70,7 @@ describe "pages/selection/type.html.erb", type: :view do
       end
 
       context "when editing an existing question" do
-        let(:form) { build :form, id: 1, pages: [page] }
+        let(:form) { build :form, id: 1, pages: [ page ] }
 
         context "when no routing conditions set" do
           it "does not display a warning about routes being deleted" do
@@ -80,7 +80,7 @@ describe "pages/selection/type.html.erb", type: :view do
         end
 
         context "when a routing condition is set" do
-          let(:routing_conditions) { [(build :condition)] }
+          let(:routing_conditions) { [ (build :condition) ] }
 
           context "when the options will not need to be reduced" do
             before do

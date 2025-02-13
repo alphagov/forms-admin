@@ -41,7 +41,7 @@ RSpec.describe Organisation, type: :model do
 
         organisations_with_users = described_class.with_users
 
-        expect(organisations_with_users).to eq([organisation1, organisation2])
+        expect(organisations_with_users).to eq([ organisation1, organisation2 ])
       end
     end
 
@@ -50,7 +50,7 @@ RSpec.describe Organisation, type: :model do
         organisation = create :organisation
         create :organisation, slug: "closed-org", closed: true
 
-        expect(described_class.not_closed).to eq [organisation]
+        expect(described_class.not_closed).to eq [ organisation ]
       end
     end
   end

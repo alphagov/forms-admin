@@ -32,7 +32,7 @@ RSpec.describe "forms.rake" do
     context "with valid arguments" do
       context "with a single form not in a group" do
         let(:form_id) { form_ids.first }
-        let(:valid_args) { [form_id, group.external_id] }
+        let(:valid_args) { [ form_id, group.external_id ] }
 
         it "adds the form to the group" do
           expect {
@@ -46,7 +46,7 @@ RSpec.describe "forms.rake" do
       context "with a single form already in a group" do
         let(:form_id) { form_ids.first }
         let(:old_group) { create :group }
-        let(:valid_args) { [form_id, group.external_id] }
+        let(:valid_args) { [ form_id, group.external_id ] }
 
         before do
           GroupForm.create! form_id:, group: old_group
@@ -64,7 +64,7 @@ RSpec.describe "forms.rake" do
 
       context "with a single form already in the target group" do
         let(:form_id) { form_ids.first }
-        let(:valid_args) { [form_id, group.external_id] }
+        let(:valid_args) { [ form_id, group.external_id ] }
 
         before do
           GroupForm.create! form_id:, group:
@@ -81,7 +81,7 @@ RSpec.describe "forms.rake" do
       end
 
       context "with a multiple forms" do
-        let(:valid_args) { [*form_ids, group.external_id] }
+        let(:valid_args) { [ *form_ids, group.external_id ] }
 
         it "adds each form to the group" do
           task.invoke(*valid_args)
@@ -112,12 +112,12 @@ RSpec.describe "forms.rake" do
 
       context "with only one argument" do
         it_behaves_like "usage error" do
-          let(:invalid_args) { [form_ids.first] }
+          let(:invalid_args) { [ form_ids.first ] }
         end
       end
 
       context "with invalid group_id" do
-        let(:invalid_args) { [*form_ids, "not_a_group_id"] }
+        let(:invalid_args) { [ *form_ids, "not_a_group_id" ] }
 
         it "raises an error" do
           expect {
@@ -127,7 +127,7 @@ RSpec.describe "forms.rake" do
       end
 
       context "with invalid form_id" do
-        let(:invalid_args) { ["99", group.external_id] }
+        let(:invalid_args) { [ "99", group.external_id ] }
 
         before do
           ActiveResource::HttpMock.respond_to do |mock|
@@ -163,7 +163,7 @@ RSpec.describe "forms.rake" do
 
     context "with valid arguments" do
       let(:submission_email) { "test@example.gov.uk" }
-      let(:valid_args) { [form.id, submission_email] }
+      let(:valid_args) { [ form.id, submission_email ] }
 
       let(:request) do
         ActiveResource::HttpMock.requests.find do |request|
@@ -238,12 +238,12 @@ RSpec.describe "forms.rake" do
 
       context "with only one argument" do
         it_behaves_like "usage error" do
-          let(:invalid_args) { [form.id] }
+          let(:invalid_args) { [ form.id ] }
         end
       end
 
       context "with invalid form_id" do
-        let(:invalid_args) { ["99", "test@example.com"] }
+        let(:invalid_args) { [ "99", "test@example.com" ] }
 
         before do
           ActiveResource::HttpMock.respond_to do |mock|

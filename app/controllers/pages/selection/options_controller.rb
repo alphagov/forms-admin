@@ -75,6 +75,6 @@ private
 
   def input_params
     params.require(:pages_selection_options_input)
-          .permit(:include_none_of_the_above, selection_options: [:name]).to_h.deep_symbolize_keys
+          .permit(:include_none_of_the_above, selection_options: [ :name ]).to_h.deep_symbolize_keys
   end
 end

@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Pages::Selection::OptionsInput do
   let(:only_one_option) { "true" }
   let(:draft_question) { build :draft_question, answer_type: "selection", answer_settings: { only_one_option: } }
-  let(:selection_options) { [{ name: "option 1" }, { name: "option 2" }] }
+  let(:selection_options) { [ { name: "option 1" }, { name: "option 2" } ] }
 
   describe "validations" do
     describe "include_none_of_the_above" do
@@ -43,7 +43,7 @@ RSpec.describe Pages::Selection::OptionsInput do
       end
 
       it "is invalid if selection options are not unique" do
-        selection_options = [{ name: "option 1" }, { name: "option 2" }, { name: "option 1" }]
+        selection_options = [ { name: "option 1" }, { name: "option 2" }, { name: "option 1" } ]
         input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
         error_message = I18n.t("activemodel.errors.models.pages/selection/options_input.attributes.selection_options.uniqueness")
         expect(input).not_to be_valid
@@ -148,7 +148,7 @@ RSpec.describe Pages::Selection::OptionsInput do
       input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
       input.add_another
 
-      expect(input.selection_options).to eq([{ name: "option 1" }, { name: "option 2" }, { name: "" }])
+      expect(input.selection_options).to eq([ { name: "option 1" }, { name: "option 2" }, { name: "" } ])
     end
   end
 
@@ -157,17 +157,17 @@ RSpec.describe Pages::Selection::OptionsInput do
       input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
       input.remove(1)
 
-      expect(input.selection_options.to_json).to eq([{ name: "option 1" }].to_json)
+      expect(input.selection_options.to_json).to eq([ { name: "option 1" } ].to_json)
     end
   end
 
   describe "#filter_out_blank_options" do
     it "filters out blank inputs" do
-      selection_options = [{ name: "1" }, { name: "" }, { name: "2" }]
+      selection_options = [ { name: "1" }, { name: "" }, { name: "2" } ]
       input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
       input.validate
 
-      expect(input.selection_options.to_json).to eq([{ name: "1" }, { name: "2" }].to_json)
+      expect(input.selection_options.to_json).to eq([ { name: "1" }, { name: "2" } ].to_json)
     end
   end
 
