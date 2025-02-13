@@ -41,6 +41,7 @@ class FormRepository
     def destroy(record)
       form = Api::V1::FormResource.new(record.attributes, true)
       form.destroy # rubocop:disable Rails/SaveBang
+      record
     end
 
     def pages(record)

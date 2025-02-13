@@ -74,6 +74,11 @@ describe PageRepository do
       described_class.destroy(page)
       expect(Api::V1::PageResource.new(id: 2, form_id: 1)).to have_been_deleted
     end
+
+    it "returns the deleted page" do
+      page = described_class.find(page_id: 2, form_id: 1)
+      expect(described_class.destroy(page)).to eq page
+    end
   end
 
   describe "#move_page" do

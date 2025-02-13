@@ -35,6 +35,7 @@ class PageRepository
       page = Api::V1::PageResource.new(record.attributes, true)
       page.prefix_options = record.prefix_options
       page.destroy # rubocop:disable Rails/SaveBang
+      record
     end
 
     def move_page(record, direction)

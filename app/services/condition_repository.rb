@@ -30,6 +30,7 @@ class ConditionRepository
       condition = Api::V1::ConditionResource.new(record.attributes, true)
       condition.prefix_options = record.prefix_options
       condition.destroy # rubocop:disable Rails/SaveBang
+      record
     end
   end
 end

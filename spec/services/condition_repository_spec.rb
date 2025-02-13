@@ -72,5 +72,10 @@ describe ConditionRepository do
       described_class.destroy(condition)
       expect(Api::V1::ConditionResource.new(id: 4, form_id: 1, page_id: 2)).to have_been_deleted
     end
+
+    it "returns the deleted condition" do
+      condition = described_class.find(condition_id: 4, form_id: 1, page_id: 2)
+      expect(described_class.destroy(condition)).to eq condition
+    end
   end
 end

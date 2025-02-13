@@ -144,6 +144,11 @@ describe FormRepository do
       described_class.destroy(form)
       expect(Api::V1::FormResource.new(id: 2)).to have_been_deleted
     end
+
+    it "returns the deleted form" do
+      form = described_class.find(form_id: 2)
+      expect(described_class.destroy(form)).to eq form
+    end
   end
 
   describe "#pages" do
