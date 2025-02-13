@@ -34,7 +34,14 @@ class PageRepository
     def destroy(record)
       page = Api::V1::PageResource.new(record.attributes, true)
       page.prefix_options = record.prefix_options
-      page.destroy # rubocop:disable Rails/SaveBang
+
+      begin
+        page.destroy # rubocop:disable Rails/SaveBang
+      rescue ActiveResource::ResourceNotFound
+        # ActiveRecord::Persistence#destroy doesn't raise an error
+        # if record has already been destroyed, let's emulate that
+      end
+
       record
     end
 

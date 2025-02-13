@@ -77,5 +77,31 @@ describe ConditionRepository do
       condition = described_class.find(condition_id: 4, form_id: 1, page_id: 2)
       expect(described_class.destroy(condition)).to eq condition
     end
+
+    context "when the condition has already been deleted" do
+      it "does not raise an error" do
+        condition = described_class.find(condition_id: 4, form_id: 1, page_id: 2)
+        described_class.destroy(condition)
+
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.delete "/api/v1/forms/1/pages/2/conditions/4", delete_headers, nil, 404
+        end
+
+        expect {
+          described_class.destroy(condition)
+        }.not_to raise_error
+      end
+
+      it "returns the deleted condition" do
+        condition = described_class.find(condition_id: 4, form_id: 1, page_id: 2)
+        described_class.destroy(condition)
+
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.delete "/api/v1/forms/1/pages/2/conditions/4", delete_headers, nil, 404
+        end
+
+        expect(described_class.destroy(condition)).to eq condition
+      end
+    end
   end
 end

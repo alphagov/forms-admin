@@ -40,7 +40,14 @@ class FormRepository
 
     def destroy(record)
       form = Api::V1::FormResource.new(record.attributes, true)
-      form.destroy # rubocop:disable Rails/SaveBang
+
+      begin
+        form.destroy # rubocop:disable Rails/SaveBang
+      rescue ActiveResource::ResourceNotFound
+        # ActiveRecord::Persistence#destroy doesn't raise an error
+        # if record has already been destroyed, let's emulate that
+      end
+
       record
     end
 
