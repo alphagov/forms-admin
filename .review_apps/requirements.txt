@@ -1,0 +1,3 @@
+# This is here exclusively to inform the version of Checkov we use.
+# We do not write anything in Python.
+checkov==3.2.369

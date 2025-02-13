@@ -1,0 +1,37 @@
+name: "Terraform"
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".review_apps/**"
+  merge_group:
+    types: [checks_requested]
+env:
+  TERRAFORM_VERSION: "1.9.8"
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{env.TERRAFORM_VERSION}}
+
+      - name: Check Terraform style
+        id: tf_fmt
+        working-directory: ".review_apps/"
+        run: |
+          terraform fmt -write=false -diff=true -list=true -recursive -check
+
+      - name: Lint Terraform
+        run: |
+          pip install -r .review_apps/requirements.txt
+          checkov -d .review_apps/ --framework terraform --quiet
+
+      - name: Validate Terraform syntax
+        working-directory: ".review_apps/"
+        run : |
+          terraform init -backend=false || exit
+          terraform validate
