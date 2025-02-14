@@ -57,7 +57,7 @@ FactoryBot.define do
     factory :selection_draft_question do
       question_text { Faker::Lorem.question }
       answer_type { "selection" }
-      answer_settings { { only_one_option: "true", selection_options: [{ name: "Option 1" }, { name: "Option 2" }] } }
+      answer_settings { { only_one_option: "true", selection_options: [ { name: "Option 1" }, { name: "Option 2" } ] } }
     end
 
     factory :text_draft_question do

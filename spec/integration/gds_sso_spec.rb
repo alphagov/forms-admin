@@ -20,7 +20,7 @@ RSpec.describe "usage of gds-sso gem" do
       },
       extra: {
         user: {
-          permissions: ["---"],
+          permissions: [ "---" ],
           organisation_slug: "test-org",
           organisation_content_id: "00000000-0000-0000-0000-000000000000",
           disabled: false,
@@ -81,7 +81,7 @@ RSpec.describe "usage of gds-sso gem" do
           uid: "123456",
           email: "test@example.com",
           name: "Test User",
-          permissions: ["---"],
+          permissions: [ "---" ],
           organisation_slug: "test-org",
           organisation_content_id: "00000000-0000-0000-0000-000000000000",
           disabled: false,

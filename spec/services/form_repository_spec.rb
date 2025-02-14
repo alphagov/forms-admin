@@ -68,12 +68,12 @@ describe FormRepository do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms?creator_id=3", headers, [form].to_json, 200
+        mock.get "/api/v1/forms?creator_id=3", headers, [ form ].to_json, 200
       end
     end
 
     it "calls the where endpoint through ActiveResource" do
-      where_request = ActiveResource::Request.new(:get, "/api/v1/forms?creator_id=3", [form], headers)
+      where_request = ActiveResource::Request.new(:get, "/api/v1/forms?creator_id=3", [ form ], headers)
       described_class.where(creator_id: 3)
       expect(ActiveResource::HttpMock.requests).to include where_request
     end

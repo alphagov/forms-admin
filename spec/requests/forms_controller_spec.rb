@@ -90,7 +90,7 @@ RSpec.describe FormsController, type: :request do
 
   describe "#mark_pages_section_completed" do
     let(:pages) do
-      [build(:page, page_id: 99)]
+      [ build(:page, page_id: 99) ]
     end
 
     let(:form) do

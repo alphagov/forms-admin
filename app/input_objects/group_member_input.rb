@@ -26,7 +26,7 @@ class GroupMemberInput < BaseInput
   end
 
   def role_options
-    Membership.roles.keys.map { |role| [I18n.t("membership.roles.#{role}"), role] }
+    Membership.roles.keys.map { |role| [ I18n.t("membership.roles.#{role}"), role ] }
   end
 
   def invited_user

@@ -9,8 +9,8 @@ describe "reports/users.html.erb" do
         { text: "user count", numeric: true },
       ],
       rows: [
-        [{ text: "org 1" }, { text: 2, numeric: true }],
-        [{ text: "org 2" }, { text: 1, numeric: true }],
+        [ { text: "org 1" }, { text: 2, numeric: true } ],
+        [ { text: "org 2" }, { text: 1, numeric: true } ],
       ],
     }
   end
@@ -34,6 +34,6 @@ describe "reports/users.html.erb" do
   end
 
   it "contains the table" do
-    expect(rendered).to have_table(with_rows: [["org 1", "2"], ["org 2", "1"]])
+    expect(rendered).to have_table(with_rows: [ [ "org 1", "2" ], [ "org 2", "1" ] ])
   end
 end

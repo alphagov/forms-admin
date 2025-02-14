@@ -345,7 +345,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         goto_page_id: pages[4].id,
         secondary_skip: true,
       )
-      pages[1].routing_conditions = [existing_secondary_skip]
+      pages[1].routing_conditions = [ existing_secondary_skip ]
     end
   end
 end

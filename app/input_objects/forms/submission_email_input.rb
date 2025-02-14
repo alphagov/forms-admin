@@ -20,9 +20,9 @@ class Forms::SubmissionEmailInput < BaseInput
 
     form_processed = if form_submission_email.nil?
                        create_submission_email_record(confirmation_code)
-                     else
+    else
                        update_submission_email_record(confirmation_code, form_submission_email)
-                     end
+    end
 
     if form_processed && temporary_submission_email.present?
       # send notify email?

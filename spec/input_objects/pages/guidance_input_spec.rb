@@ -53,7 +53,7 @@ RSpec.describe Pages::GuidanceInput, type: :model do
       expect(guidance_input.errors.full_messages_for(:guidance_markdown)).to include("Guidance markdown #{error_message}")
     end
 
-    ["A" * 10, "A" * 250].each do |question_text|
+    [ "A" * 10, "A" * 250 ].each do |question_text|
       it "is valid if page_heading is less than or equal to 250 characters" do
         guidance_input.page_heading = question_text
         expect(guidance_input).to be_valid

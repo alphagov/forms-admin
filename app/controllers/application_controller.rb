@@ -64,7 +64,7 @@ class ApplicationController < ActionController::Base
   def set_request_id
     # Pass the request id to the API to enable tracing
     if Rails.env.production?
-      [Api::V1::FormResource, Api::V1::PageResource].each do |active_resource_model|
+      [ Api::V1::FormResource, Api::V1::PageResource ].each do |active_resource_model|
         active_resource_model.headers["X-Request-ID"] = request.request_id
       end
     end
@@ -75,7 +75,7 @@ class ApplicationController < ActionController::Base
   # enough for our basic monitoring
   def user_ip(forwarded_for = "")
     first_ip_string = forwarded_for.split(",").first
-    Regexp.union([Resolv::IPv4::Regex, Resolv::IPv6::Regex]).match(first_ip_string) && first_ip_string
+    Regexp.union([ Resolv::IPv4::Regex, Resolv::IPv6::Regex ]).match(first_ip_string) && first_ip_string
   end
 
   def warden

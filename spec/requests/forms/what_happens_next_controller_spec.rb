@@ -180,7 +180,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       let(:markdown) { "# A level one heading" }
 
       it "returns a JSON object containing the converted HTML" do
-        expect(response.body).to eq({ preview_html: "<p class=\"govuk-body\">A level one heading</p>", errors: [I18n.t("activemodel.errors.models.forms/what_happens_next_input.attributes.what_happens_next_markdown.unsupported_markdown_syntax")] }.to_json)
+        expect(response.body).to eq({ preview_html: "<p class=\"govuk-body\">A level one heading</p>", errors: [ I18n.t("activemodel.errors.models.forms/what_happens_next_input.attributes.what_happens_next_markdown.unsupported_markdown_syntax") ] }.to_json)
       end
 
       it "returns 200" do
