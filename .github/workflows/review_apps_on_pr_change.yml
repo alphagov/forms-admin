@@ -1,0 +1,101 @@
+name: "Review apps: on PR change"
+on:
+  pull_request:
+    # being explicit about what to trigger on.
+    # matches the docs for the default types
+    # https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#pull_request
+    types: [opened, reopened, synchronize]
+env:
+  IMAGE_TAG: "842676007477.dkr.ecr.eu-west-2.amazonaws.com/forms-admin:pr-${{github.event.pull_request.number}}-${{github.event.pull_request.head.ref}}"
+jobs:
+  # Build the container in a separate step that does not run on CodeBuild in order
+  # to take advantage of GitHub Actions' image caches
+  build-pr-container:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build container
+        run: |
+          docker buildx build \
+            --output "type=tar,dest=${{runner.temp}}/forms-admin-image.tar" \
+            --tag "${{env.IMAGE_TAG}}" \
+            .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: forms-admin-image
+          path: "${{runner.temp}}/forms-admin-image.tar"
+
+  update-review-app:
+    # this references a codebuild project configured in forms-deploy
+    # see: https://docs.aws.amazon.com/codebuild/latest/userguide/action-runner.html
+    runs-on: codebuild-review-forms-admin-gha-runner-${{github.run_id}}-${{github.run_attempt}}
+    needs: [build-pr-container]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Fetch artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: forms-admin-image
+          path: "${{runner.temp}}"
+
+      - name: Load image
+        run: |
+          docker import "${{runner.temp}}/forms-admin-image.tar" "${{env.IMAGE_TAG}}"
+
+      - name: Push container
+        id: build-container
+        run: |
+          aws ecr get-login-password --region eu-west-2 \
+          | docker login --username AWS --password-stdin 842676007477.dkr.ecr.eu-west-2.amazonaws.com
+
+          echo "Pushing container image"
+          echo "${{env.IMAGE_TAG}}"
+
+          docker push "${IMAGE_TAG}"
+
+      - name: Determine Terraform version
+        id: terraform-version
+        run: |
+          cat .review_apps/.terraform-version | xargs printf "TF_VERSION=%s" >> "$GITHUB_OUTPUT"
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{steps.terraform-version.outputs.TF_VERSION}}
+
+      - name: Deploy review app
+        id: deploy
+        run: |
+          cd .review_apps/
+
+          terraform init -backend-config="key=review-apps/forms-admin/pr-${{github.event.pull_request.number}}.tfstate"
+
+          terraform apply \
+            -var "pull_request_number=${{github.event.pull_request.number}}" \
+            -var "forms_admin_container_image=${{env.IMAGE_TAG}}" \
+            -no-color \
+            -auto-approve
+
+          echo "REVIEW_APP_URL=$(terraform output -raw review_app_url)" >> "$GITHUB_OUTPUT"
+
+      - name: Comment on PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+
+          cat <<EOF > "${{runner.temp}}/pr-comment.md"
+          :tada: A review copy of this PR has been deployed! You can reach it at <question whether we want to share the URL>.
+
+          It may take 5 minutes or so for the application to be fully deployed and working. If it still isn't ready
+          after 5 minutes, there may be something wrong with it. You will need to go to the integration AWS account
+          to debug, or otherwise ask an infrastructure person.
+          EOF
+
+          gh pr comment "${{github.event.pull_request.url}}" --body-file "${{runner.temp}}/pr-comment.md"
+
