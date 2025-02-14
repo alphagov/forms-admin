@@ -4,8 +4,6 @@ locals {
   service_timestamp = provider::time::rfc3339_parse(plantimestamp())
 
   forms_admin_startup_commands = [
-    "bundle config unset --local without",
-    "bundle install",
     "rails db:prepare",
     "rails s -b 0.0.0.0"
   ]
