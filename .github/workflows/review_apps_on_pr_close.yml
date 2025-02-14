@@ -1,0 +1,36 @@
+name: "Review apps: on PR close"
+on:
+  pull_request:
+    # only run when a PR is closed or merged
+    types: [closed]
+env:
+  IMAGE_TAG: "842676007477.dkr.ecr.eu-west-2.amazonaws.com/forms-admin:pr-${{github.event.pull_request.number}}-${{github.event.pull_request.head.ref}}"
+jobs:
+  delete-review-app:
+    # this references a codebuild project configured in forms-deploy
+    # see: https://docs.aws.amazon.com/codebuild/latest/userguide/action-runner.html
+    runs-on: codebuild-review-forms-admin-gha-runner-${{github.run_id}}-${{github.run_attempt}}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Determine Terraform version
+        id: terraform-version
+        run: |
+          cat .review_apps/.terraform-version | xargs printf "TF_VERSION=%s" >> "$GITHUB_OUTPUT"
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{steps.terraform-version.outputs.TF_VERSION}}
+
+      - name: Delete review app
+        run: |
+          cd .review_apps/
+
+          terraform init -backend-config="key=review-apps/forms-admin/pr-${{github.event.pull_request.number}}.tfstate"
+          terraform destroy \
+            -var "pull_request_number=${{github.event.pull_request.number}}" \
+            -var "forms_admin_container_image=${{env.IMAGE_TAG}}" \
+            -no-color \
+            -auto-approve
