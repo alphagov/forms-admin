@@ -771,7 +771,7 @@ en:
       pages_secondary_skip_input:
         default_goto_page_id: Select a question or page
         default_routing_page_id: Select a question
-        goto_page_id: take them to
+        goto_page_id: skip them to
         routing_page_id: Then after the person answers
       pages_selection_bulk_options_input:
         include_none_of_the_above_options:
