@@ -3,6 +3,8 @@ locals {
 
   service_timestamp = provider::time::rfc3339_parse(plantimestamp())
 
+  review_app_hostname = "pr-${var.pull_request_number}.review.forms.service.gov.uk"
+
   forms_admin_startup_commands = [
     "rails db:prepare",
     "rails s -b 0.0.0.0"
@@ -62,7 +64,7 @@ resource "aws_ecs_task_definition" "task" {
       environment = local.forms_admin_env_vars
 
       dockerLabels = {
-        "traefik.http.routers.forms-admin-pr-${var.pull_request_number}.rule" : "Host(`pr-${var.pull_request_number}.review.forms.service.gov.uk`)",
+        "traefik.http.routers.forms-admin-pr-${var.pull_request_number}.rule" : "Host(`${local.review_app_hostname}`)",
         "traefik.http.routers.forms-admin-pr-${var.pull_request_number}.service" : "forms-admin-pr-${var.pull_request_number}",
         "traefik.http.services.forms-admin-pr-${var.pull_request_number}.loadbalancer.server.port" : "3000",
         "traefik.http.services.forms-admin-pr-${var.pull_request_number}.loadbalancer.healthcheck.path" : "/up",

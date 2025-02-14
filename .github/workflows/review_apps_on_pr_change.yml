@@ -70,6 +70,7 @@ jobs:
           terraform_version: ${{steps.terraform-version.outputs.TF_VERSION}}
 
       - name: Deploy review app
+        id: deploy
         run: |
           cd .review_apps/
 
@@ -80,3 +81,21 @@ jobs:
             -var "forms_admin_container_image=${{env.IMAGE_TAG}}" \
             -no-color \
             -auto-approve
+
+          echo "REVIEW_APP_URL=$(terraform output -raw review_app_url)" >> "$GITHUB_OUTPUT"
+
+      - name: Comment on PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+
+          cat <<EOF > "${{runner.temp}}/pr-comment.md"
+          :tada: A review copy of this PR has been deployed! You can reach it at <question whether we want to share the URL>.
+
+          It may take 5 minutes or so for the application to be fully deployed and working. If it still isn't ready
+          after 5 minutes, there may be something wrong with it. You will need to go to the integration AWS account
+          to debug, or otherwise ask an infrastructure person.
+          EOF
+
+          gh pr comment "${{github.event.pull_request.url}}" --body-file "${{runner.temp}}/pr-comment.md"
+
