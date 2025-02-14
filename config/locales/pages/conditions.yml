@@ -26,4 +26,4 @@ en:
     label:
       pages_conditions_input:
         answer_value: is answered as
-        goto_page_id: take the person to
+        goto_page_id: skip the person to
