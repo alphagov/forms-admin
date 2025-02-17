@@ -139,7 +139,7 @@ resource "aws_ecs_task_definition" "task" {
     # postgres
     {
       name      = "postgres"
-      image     = "postgres:13.12"
+      image     = "public.ecr.aws/docker/library/postgres:13.12"
       command   = []
       essential = true
 
