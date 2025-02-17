@@ -1,8 +1,6 @@
 locals {
   logs_stream_prefix = "${data.terraform_remote_state.review.outputs.review_apps_log_group_name}/pr-${var.pull_request_number}"
 
-  service_timestamp = provider::time::rfc3339_parse(plantimestamp())
-
   forms_admin_startup_commands = [
     "bundle config unset --local without",
     "bundle install",
@@ -68,7 +66,8 @@ resource "aws_ecs_task_definition" "task" {
         "traefik.http.routers.forms-admin-pr-${var.pull_request_number}.service" : "forms-admin-pr-${var.pull_request_number}",
         "traefik.http.services.forms-admin-pr-${var.pull_request_number}.loadbalancer.server.port" : "3000",
         "traefik.http.services.forms-admin-pr-${var.pull_request_number}.loadbalancer.healthcheck.path" : "/up",
-        "traefik.enable" : "true"
+        "traefik.http.middlewares.forms-admin-pr-${var.pull_request_number}.basicauth.users": data.terraform_remote_state.review.outputs.traefik_basic_auth_credentials
+        "traefik.enable" : "true",
       },
 
       portMappings = [
