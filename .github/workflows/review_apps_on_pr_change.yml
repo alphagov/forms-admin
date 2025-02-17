@@ -6,48 +6,25 @@ on:
     # https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#pull_request
     types: [opened, reopened, synchronize]
 env:
-  IMAGE_TAG: "842676007477.dkr.ecr.eu-west-2.amazonaws.com/forms-admin:pr-${{github.event.pull_request.number}}-${{github.event.pull_request.head.ref}}"
+  CONTAINER_IMAGE_URI: "842676007477.dkr.ecr.eu-west-2.amazonaws.com/forms-admin:pr-${{github.event.pull_request.number}}-${{github.event.pull_request.head.ref}}"
 jobs:
-  # Build the container in a separate step that does not run on CodeBuild in order
-  # to take advantage of GitHub Actions' image caches
-  build-pr-container:
-    runs-on: ubuntu-24.04-arm
+  update-review-app:
+    # this references a codebuild project configured in forms-deploy
+    # see: https://docs.aws.amazon.com/codebuild/latest/userguide/action-runner.html
+    runs-on: codebuild-review-forms-admin-gha-runner-${{github.run_id}}-${{github.run_attempt}}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Build container
         run: |
-          docker buildx build \
-            --output "type=tar,dest=${{runner.temp}}/forms-admin-image.tar" \
-            --tag "${{env.IMAGE_TAG}}" \
+          # Docker credentials are configured in CodeBuild
+          # CodeBuild retrieves the credentials from ParameterStore
+          echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+          docker build \
+            --tag "${{env.CONTAINER_IMAGE_URI}}" \
             .
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: forms-admin-image
-          path: "${{runner.temp}}/forms-admin-image.tar"
-
-  update-review-app:
-    # this references a codebuild project configured in forms-deploy
-    # see: https://docs.aws.amazon.com/codebuild/latest/userguide/action-runner.html
-    runs-on: codebuild-review-forms-admin-gha-runner-${{github.run_id}}-${{github.run_attempt}}
-    needs: [build-pr-container]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Fetch artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: forms-admin-image
-          path: "${{runner.temp}}"
-
-      - name: Load image
-        run: |
-          docker import "${{runner.temp}}/forms-admin-image.tar" "${{env.IMAGE_TAG}}"
 
       - name: Push container
         id: build-container
@@ -56,9 +33,9 @@ jobs:
           | docker login --username AWS --password-stdin 842676007477.dkr.ecr.eu-west-2.amazonaws.com
 
           echo "Pushing container image"
-          echo "${{env.IMAGE_TAG}}"
+          echo "${{env.CONTAINER_IMAGE_URI}}"
 
-          docker push "${IMAGE_TAG}"
+          docker push "${CONTAINER_IMAGE_URI}"
 
       - name: Determine Terraform version
         id: terraform-version
@@ -78,7 +55,7 @@ jobs:
 
           terraform apply \
             -var "pull_request_number=${{github.event.pull_request.number}}" \
-            -var "forms_admin_container_image=${{env.IMAGE_TAG}}" \
+            -var "forms_admin_container_image=${{env.CONTAINER_IMAGE_URI}}" \
             -no-color \
             -auto-approve
 

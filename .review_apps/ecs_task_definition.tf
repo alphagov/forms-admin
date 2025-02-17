@@ -4,8 +4,11 @@ locals {
   review_app_hostname = "pr-${var.pull_request_number}.review.forms.service.gov.uk"
 
   forms_admin_startup_commands = [
-    "rails db:prepare",
-    "rails s -b 0.0.0.0"
+    "echo $PATH",
+    "bundle install",
+    "echo $PATH",
+    "bin/rails db:prepare",
+    "bin/rails s -b 0.0.0.0"
   ]
 
   forms_admin_shell_script = join(" && ", local.forms_admin_startup_commands)
@@ -53,11 +56,12 @@ resource "aws_ecs_task_definition" "task" {
   execution_role_arn = data.terraform_remote_state.review.outputs.ecs_task_execution_role_arn
 
   container_definitions = jsonencode([
+
     # forms-admin
     {
       name        = "forms-admin"
       image       = var.forms_admin_container_image
-      command     = ["sh", "-c", local.forms_admin_shell_script]
+      command     = []
       essential   = true
       environment = local.forms_admin_env_vars
 
@@ -74,7 +78,7 @@ resource "aws_ecs_task_definition" "task" {
         {
           containerPort = 3000
           protocol      = "tcp"
-          appProtocl    = "http"
+          appProtocol   = "http"
         }
       ]
 
@@ -161,6 +165,31 @@ resource "aws_ecs_task_definition" "task" {
       healthCheck = {
         command = ["CMD-SHELL", "psql -h localhost -p 5432 -U postgres -c \"SELECT current_timestamp - pg_postmaster_start_time();\""]
       }
+    },
+
+    # forms-admin-seeding
+    {
+      name        = "forms-admin-seeding"
+      image       = var.forms_admin_container_image
+      command     = ["rake", "db:setup"]
+      essential   = false
+      environment = local.forms_admin_env_vars
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = data.terraform_remote_state.review.outputs.review_apps_log_group_name
+          awslogs-region        = "eu-west-2"
+          awslogs-stream-prefix = "${local.logs_stream_prefix}/forms-admin-seeding"
+        }
+      }
+
+      dependsOn = [
+        {
+          containerName = "postgres"
+          condition     = "HEALTHY"
+        }
+      ]
     },
 
     # forms-api-seeding
