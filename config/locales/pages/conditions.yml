@@ -6,12 +6,12 @@ en:
         pages/conditions_input:
           attributes:
             answer_value:
-              answer_value_doesnt_exist: Select the answer you want to base your route on, or delete this route
-              blank: Select the answer you want to base your route on
+              answer_value_doesnt_exist: Select the answer to base this route on, or delete this route
+              blank: Select the answer to base this route on
             goto_page_id:
-              blank: Select the question or page you want to take the person to
-              cannot_have_goto_page_before_routing_page: Select the question or page you want to take the person to, or delete this route
-              cannot_route_to_next_page: Select the question or page you want to take the person to, or delete this route
+              blank: Select the question or page to skip to
+              cannot_have_goto_page_before_routing_page: Select the question or page to skip to, or delete this route
+              cannot_route_to_next_page: Select the question or page to skip to, or delete this route
               goto_page_doesnt_exist: Select the question or page you want to take the person to, or delete this route
         pages/delete_condition_input:
           attributes:
