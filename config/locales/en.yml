@@ -119,12 +119,12 @@ en:
         pages/secondary_skip_input:
           attributes:
             goto_page_id:
-              already_consecutive: The question you want to skip to is already straight after the question you want to skip from
-              blank: Select the question or page you want to take the person to
-              equal: The question you want to skip from cannot be the same question you want to take them to
-              routing_page_after: The question you want to skip from must be before the question you want to take the person to
+              already_consecutive: The question or page to skip to cannot be straight after the question to skip from
+              blank: Select the question or page to skip to
+              equal: The question to skip to cannot be the same as the question to skip from
+              routing_page_after: The question to skip to cannot be before the question to skip from
             routing_page_id:
-              blank: Select the question you want to skip from
+              blank: Select the question to skip from
   activerecord:
     errors:
       models:
