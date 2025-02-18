@@ -105,7 +105,7 @@ RSpec.describe PageListComponent::View, type: :component do
           let(:routing_conditions) { [(build :condition, :with_answer_value_missing, id: 1, routing_page_id: 1, check_page_id: 1, goto_page_id: 3)] }
 
           it "renders the errors in an unordered list" do
-            condition_answer_value_error = I18n.t("page_conditions.errors.page_list.answer_value_doesnt_exist", page_index: 1)
+            condition_answer_value_error = I18n.t("page_conditions.errors.answer_value_doesnt_exist", page_index: 1)
             expect(page).to have_css("ul > li", text: condition_answer_value_error)
           end
 
@@ -124,7 +124,7 @@ RSpec.describe PageListComponent::View, type: :component do
           let(:routing_conditions) { [(build :condition, :with_goto_page_missing, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales")] }
 
           it "renders the errors in an unordered list" do
-            condition_goto_page_error = I18n.t("page_conditions.errors.page_list.goto_page_doesnt_exist", page_index: 1)
+            condition_goto_page_error = I18n.t("page_conditions.errors.goto_page_doesnt_exist", page_index: 1)
             expect(page).to have_css("ul > li", text: condition_goto_page_error)
           end
 
@@ -143,8 +143,8 @@ RSpec.describe PageListComponent::View, type: :component do
           let(:routing_conditions) { [(build :condition, :with_answer_value_and_goto_page_missing, id: 1, routing_page_id: 1, check_page_id: 1)] }
 
           it "renders the errors in an unordered list" do
-            condition_answer_value_error = I18n.t("page_conditions.errors.page_list.answer_value_doesnt_exist", page_index: 1)
-            condition_goto_page_error = I18n.t("page_conditions.errors.page_list.goto_page_doesnt_exist", page_index: 1)
+            condition_answer_value_error = I18n.t("page_conditions.errors.answer_value_doesnt_exist", page_index: 1)
+            condition_goto_page_error = I18n.t("page_conditions.errors.goto_page_doesnt_exist", page_index: 1)
             expect(page).to have_css("ul > li", text: condition_answer_value_error)
             expect(page).to have_css("ul > li", text: condition_goto_page_error)
           end

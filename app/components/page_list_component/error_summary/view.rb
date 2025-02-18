@@ -11,7 +11,7 @@ module PageListComponent
       end
 
       def error_object(error_name:, condition_id:, page_index:)
-        OpenStruct.new(message: I18n.t("page_conditions.errors.error_summary.#{error_name}", page_index:), link: "##{self.class.error_id(condition_id)}")
+        OpenStruct.new(message: I18n.t("page_conditions.errors.#{error_name}", page_index:), link: "##{self.class.error_id(condition_id)}")
       end
 
       def conditions_with_page_indexes

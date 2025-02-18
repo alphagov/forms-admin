@@ -42,7 +42,7 @@
                 <ul class="govuk-list govuk-!-margin-0">
                   <% condition.validation_errors.each do |error| %>
                     <li class="app-page_list__route-text--error">
-                      <%= t("page_conditions.errors.page_list.#{error.name}", page_index: page.position) %>
+                      <%= t("page_conditions.errors.#{error.name}", page_index: page.position) %>
                     </li>
                   <% end %>
                 </ul>
