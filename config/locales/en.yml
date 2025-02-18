@@ -1132,8 +1132,8 @@ en:
     routes_show: Question %{position}’s routes
     routing_page: Add a route from a question
     routing_page_delete: Delete question %{question_position}’s route
-    routing_page_edit: Edit question %{question_position}’s route
-    routing_page_new: 'Add a question route: select answer and destination'
+    routing_page_edit: Edit route %{route_position}
+    routing_page_new: Add route %{route_position}
     selection_options: Create a list of options
     selection_type: How many options should people be able to select?
     separator: " – "

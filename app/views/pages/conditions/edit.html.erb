@@ -1,4 +1,5 @@
-<% set_page_title(title_with_error_prefix(t('page_titles.routing_page_edit', question_position: condition_input.page.position), condition_input.errors&.any?)) %>
+<%# TODO: route_position is hardcoded as 1 here because we know there are only two conditions. It will need to change in the future %>
+<% set_page_title(title_with_error_prefix(t('page_titles.routing_page_edit', question_position: condition_input.page.position, route_position: 1), condition_input.errors&.any?)) %>
 <% content_for :back_link, govuk_back_link_to(show_routes_path(condition_input.form.id, page_id: condition_input.page.id)) %>
 
 <div class="govuk-grid-row">
@@ -10,7 +11,7 @@
 
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= condition_input.form.name %></span>
-        <%= t("page_titles.routing_page_edit", question_position: condition_input.page.position) %>
+        <%= t("page_titles.routing_page_edit", question_position: condition_input.page.position, route_position: 1) %>
       </h1>
 
       <%= govuk_summary_list(actions: false) do |summary_list|
