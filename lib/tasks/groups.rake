@@ -65,7 +65,7 @@ namespace :groups do
         name: group.name,
         organisation: group.organisation.name,
         **group.slice(feature_flags),
-      })
+      }.to_json)
     end
   end
 
