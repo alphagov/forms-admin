@@ -25,12 +25,12 @@ describe "pages/conditions/edit.html.erb" do
   end
 
   it "sets the correct title" do
-    expect(view.content_for(:title)).to eq(t("page_titles.routing_page_edit", question_position: page.position))
+    expect(view.content_for(:title)).to eq("Edit route 1")
   end
 
   it "contains page heading and sub-heading" do
-    expect(rendered).to have_css("h1 .govuk-caption-l", text: form.name)
-    expect(rendered).to have_css("h1.govuk-heading-l", text: t("page_titles.routing_page_edit", question_position: page.position))
+    expect(rendered).to have_css("h1 .govuk-caption-l", text: "Question 1’s routes")
+    expect(rendered).to have_css("h1.govuk-heading-l", text: "Edit route 1")
   end
 
   it "does not contain a change action for editing the question of the route" do
