@@ -1131,6 +1131,7 @@ en:
     question_text: What’s your question?
     routes_show: Question %{position}’s routes
     routing_page: Add a route from a question
+    routing_page_caption: Question %{question_position}’s routes
     routing_page_delete: Delete question %{question_position}’s route
     routing_page_edit: Edit route %{route_position}
     routing_page_new: Add route %{route_position}

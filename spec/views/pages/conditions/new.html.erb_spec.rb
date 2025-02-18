@@ -10,6 +10,7 @@ describe "pages/conditions/new.html.erb" do
   let(:condition_input) { Pages::ConditionsInput.new(form:, page: pages.first) }
 
   before do
+    pages.first.position = 1
     allow(FormRepository).to receive(:pages).and_return(pages)
     allow(view).to receive(:set_routing_page_path).with(routing_page_id: condition_input.page.id).and_return("/forms/1/new-condition?routing-page_id=#{condition_input.page.id}")
     allow(view).to receive_messages(form_pages_path: "/forms/1/pages", routing_page_path: "/forms/1/new-condition", create_condition_path: "/forms/1/pages/1/conditions/new")
@@ -23,7 +24,7 @@ describe "pages/conditions/new.html.erb" do
   end
 
   it "contains page heading and sub-heading" do
-    expect(rendered).to have_css("h1 .govuk-caption-l", text: form.name)
+    expect(rendered).to have_css("h1 .govuk-caption-l", text: "Question 1’s routes")
     expect(rendered).to have_css("h1.govuk-heading-l", text: "Add route 1")
   end
 
