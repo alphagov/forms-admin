@@ -66,11 +66,14 @@ resource "aws_ecs_task_definition" "task" {
       environment = local.forms_admin_env_vars
 
       dockerLabels = {
+        "traefik.http.middlewares.forms-admin-pr-${var.pull_request_number}.basicauth.users" : data.terraform_remote_state.review.outputs.traefik_basic_auth_credentials
+
         "traefik.http.routers.forms-admin-pr-${var.pull_request_number}.rule" : "Host(`${local.review_app_hostname}`)",
         "traefik.http.routers.forms-admin-pr-${var.pull_request_number}.service" : "forms-admin-pr-${var.pull_request_number}",
+        "traefik.http.routers.forms-admin-pr-${var.pull_request_number}.middlewares" : "forms-admin-pr-${var.pull_request_number}@ecs"
+
         "traefik.http.services.forms-admin-pr-${var.pull_request_number}.loadbalancer.server.port" : "3000",
         "traefik.http.services.forms-admin-pr-${var.pull_request_number}.loadbalancer.healthcheck.path" : "/up",
-        "traefik.http.middlewares.forms-admin-pr-${var.pull_request_number}.basicauth.users": data.terraform_remote_state.review.outputs.traefik_basic_auth_credentials
         "traefik.enable" : "true",
       },
 
