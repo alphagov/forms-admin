@@ -69,12 +69,11 @@ jobs:
         run: |
 
           cat <<EOF > "${{runner.temp}}/pr-comment.md"
-          :tada: A review copy of this PR has been deployed! You can reach it at <question whether we want to share the URL>.
+          :tada: A review copy of this PR has been deployed! You can reach it at ${{steps.deploy.outputs.REVIEW_APP_URL}}.
 
           It may take 5 minutes or so for the application to be fully deployed and working. If it still isn't ready
-          after 5 minutes, there may be something wrong with it. You will need to go to the integration AWS account
+          after 5 minutes, there may be something wrong with the ECS task. You will need to go to the integration AWS account
           to debug, or otherwise ask an infrastructure person.
           EOF
 
-          gh pr comment "${{github.event.pull_request.url}}" --body-file "${{runner.temp}}/pr-comment.md"
-
+          gh pr comment "${{github.event.pull_request.html_url}}" --body-file "${{runner.temp}}/pr-comment.md"
