@@ -16,7 +16,7 @@ describe GroupMemberMailer, type: :mailer do
       end
 
       it "sends an email to the new member" do
-        expect(mail.to).to eq([membership.user.email])
+        expect(mail.to).to eq([ membership.user.email ])
       end
 
       it "includes the group path" do
@@ -43,7 +43,7 @@ describe GroupMemberMailer, type: :mailer do
             expect(mail.govuk_notify_personalisation[role.to_sym]).to eq("yes")
           end
 
-          (Membership.roles.keys - [role]).each do |other_role|
+          (Membership.roles.keys - [ role ]).each do |other_role|
             it "#{other_role} are all set to no" do
               expect(mail.govuk_notify_personalisation[other_role.to_sym]).to eq("no")
             end

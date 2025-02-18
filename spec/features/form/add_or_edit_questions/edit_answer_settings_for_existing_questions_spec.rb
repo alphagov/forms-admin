@@ -29,7 +29,7 @@ feature "Editing answer_settings for existing question", type: :feature do
     let(:name_question) { build(:page, :with_name_settings, form_id: 1, input_type: "first_middle_and_last_name", title_needed: "true") }
     let(:selection_question) { build(:page, :with_selection_settings, form_id: 1, is_optional: true) }
     let(:text_question) { build(:page, :with_text_settings, form_id: 1, input_type: "long_text") }
-    let(:pages) { [address_question, date_question, name_question, selection_question, text_question] }
+    let(:pages) { [ address_question, date_question, name_question, selection_question, text_question ] }
 
     scenario "view answer_settings for each answer type and check the values are set" do
       when_i_viewing_an_existing_form

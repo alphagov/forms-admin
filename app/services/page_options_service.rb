@@ -34,28 +34,28 @@ class PageOptionsService
 private
 
   def page_heading_options
-    [{
+    [ {
       key: { text: I18n.t("page_options_service.page_heading") },
       value: { text: @page.page_heading },
-    }]
+    } ]
   end
 
   def markdown_content
-    safe_join(['<pre class="app-markdown-editor__markdown-example-block">'.html_safe, @page.guidance_markdown, "</pre>".html_safe])
+    safe_join([ '<pre class="app-markdown-editor__markdown-example-block">'.html_safe, @page.guidance_markdown, "</pre>".html_safe ])
   end
 
   def guidance_markdown_options
-    [{
+    [ {
       key: { text: I18n.t("page_options_service.guidance_markdown") },
       value: { text: markdown_content },
-    }]
+    } ]
   end
 
   def hint_options
-    [{
+    [ {
       key: { text: I18n.t("page_options_service.hint_text") },
       value: { text: @page.hint_text },
-    }]
+    } ]
   end
 
   def generic_options
@@ -91,11 +91,11 @@ private
   end
 
   def text_options
-    [{ key:  { text: I18n.t("page_options_service.answer_type") }, value:  { text: I18n.t("helpers.label.page.text_settings_options.names.#{@page.answer_settings.input_type}") } }]
+    [ { key:  { text: I18n.t("page_options_service.answer_type") }, value:  { text: I18n.t("helpers.label.page.text_settings_options.names.#{@page.answer_settings.input_type}") } } ]
   end
 
   def date_options
-    [{ key:  { text: I18n.t("page_options_service.answer_type") }, value:  { text: date_answer_type_text } }]
+    [ { key:  { text: I18n.t("page_options_service.answer_type") }, value:  { text: date_answer_type_text } } ]
   end
 
   def date_answer_type_text
@@ -105,22 +105,22 @@ private
   end
 
   def address_options
-    [{ key:  { text: I18n.t("page_options_service.answer_type") }, value:  { text: I18n.t("helpers.label.page.address_settings_options.names.#{address_input_type_to_string}") } }]
+    [ { key:  { text: I18n.t("page_options_service.answer_type") }, value:  { text: I18n.t("helpers.label.page.address_settings_options.names.#{address_input_type_to_string}") } } ]
   end
 
   def name_options
-    [{ key:  { text: I18n.t("page_options_service.answer_type") }, value:  { text: name_answer_type } }]
+    [ { key:  { text: I18n.t("page_options_service.answer_type") }, value:  { text: name_answer_type } } ]
   end
 
   def name_answer_type
     title_needed = if @page.answer_settings.title_needed == "true"
                      I18n.t("page_options_service.name_type.title_selected")
-                   else
+    else
                      I18n.t("page_options_service.name_type.title_not_selected")
-                   end
+    end
 
-    settings = [I18n.t("helpers.label.page.answer_type_options.names.#{@page.answer_type}"),
-                I18n.t("helpers.label.page.name_settings_options.names.#{@page.answer_settings.input_type}")]
+    settings = [ I18n.t("helpers.label.page.answer_type_options.names.#{@page.answer_type}"),
+                I18n.t("helpers.label.page.name_settings_options.names.#{@page.answer_settings.input_type}") ]
     settings << title_needed
 
     formatted_list = html_list_item(settings)
@@ -140,7 +140,7 @@ private
   end
 
   def route_options
-    [{ key: { text: I18n.t("page_conditions.route") }, value: { text: route_value.html_safe } }]
+    [ { key: { text: I18n.t("page_conditions.route") }, value: { text: route_value.html_safe } } ]
   end
 
   def route_value
@@ -166,7 +166,7 @@ private
   end
 
   def html_ordered_list(list_items)
-    content_tag(:ol, html_list_item(list_items), class: ["govuk-list", "govuk-list--number"])
+    content_tag(:ol, html_list_item(list_items), class: [ "govuk-list", "govuk-list--number" ])
   end
 
   def html_list_item(item)

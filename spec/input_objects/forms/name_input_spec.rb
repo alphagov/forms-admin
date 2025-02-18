@@ -9,7 +9,7 @@ RSpec.describe Forms::NameInput, type: :model do
       name_input.validate(:name)
 
       expect(name_input.errors.full_messages_for(:name)).to eq(
-        ["Name #{error_message}"],
+        [ "Name #{error_message}" ],
       )
     end
   end

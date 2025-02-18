@@ -71,7 +71,7 @@ namespace :pipeline do
 
         paused_transitions = pipeline_definition.stage_states.filter_map do |stage|
           unless stage.inbound_transition_state.enabled
-            [stage.stage_name, "inbound", stage.inbound_transition_state.disabled_reason]
+            [ stage.stage_name, "inbound", stage.inbound_transition_state.disabled_reason ]
           end
         end
 

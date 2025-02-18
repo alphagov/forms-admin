@@ -82,7 +82,7 @@ module PageListComponent
         .values
         .flat_map { |conditions|
           conditions.map.with_index(1) do |condition, index|
-            [condition.routing_page_id, [condition, index]] # inclde routing_page_id, so we can group by it
+            [ condition.routing_page_id, [ condition, index ] ] # inclde routing_page_id, so we can group by it
           end
         }
         .group_by(&:first)

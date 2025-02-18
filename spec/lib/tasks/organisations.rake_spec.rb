@@ -36,9 +36,9 @@ RSpec.describe "organisations.rake" do
     end
 
     [
-      ["Global Test Organisation", "global-test-organisation"],
-      ["Testing, Validating and Verifying Service", "testing-validating-and-verifying-service"],
-      ["Head Tester’s Department", "head-tester-s-department"],
+      [ "Global Test Organisation", "global-test-organisation" ],
+      [ "Testing, Validating and Verifying Service", "testing-validating-and-verifying-service" ],
+      [ "Head Tester’s Department", "head-tester-s-department" ],
     ].each do |name, slug|
       describe "given organisation name \"#{name}\"" do
         it "generates the organisation slug \"#{slug}\"" do

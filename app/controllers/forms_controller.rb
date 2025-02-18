@@ -17,9 +17,9 @@ class FormsController < ApplicationController
     if @mark_complete_input.submit
       success_message = if @mark_complete_input.mark_complete == "true"
                           t("banner.success.form.pages_saved_and_section_completed")
-                        else
+      else
                           t("banner.success.form.pages_saved")
-                        end
+      end
       redirect_to form_path(current_form.id), success: success_message
     else
       @mark_complete_input.mark_complete = "false"

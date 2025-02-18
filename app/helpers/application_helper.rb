@@ -2,7 +2,7 @@
 
 module ApplicationHelper
   def page_title
-    [content_for(:title), "GOV.UK Forms"].compact.join(I18n.t("page_titles.separator"))
+    [ content_for(:title), "GOV.UK Forms" ].compact.join(I18n.t("page_titles.separator"))
   end
 
   def set_page_title(title)

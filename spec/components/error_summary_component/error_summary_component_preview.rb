@@ -4,7 +4,7 @@ class ErrorSummaryComponent::ErrorSummaryComponentPreview < ViewComponent::Previ
   end
 
   def with_errors
-    errors = [OpenStruct.new(message: "You have an error", link: "https://example.gov.uk/error1"), OpenStruct.new(message: "You have another error", link: "https://example.gov.uk/error2")]
+    errors = [ OpenStruct.new(message: "You have an error", link: "https://example.gov.uk/error1"), OpenStruct.new(message: "You have another error", link: "https://example.gov.uk/error2") ]
     render(ErrorSummaryComponent::View.new(errors:))
   end
 end

@@ -19,8 +19,8 @@ private
 
   def as_data_rows(raw_data)
     raw_data.map do |org_name, count|
-      [{ text: org_name || I18n.t("users.index.organisation_blank") },
-       { text: count, numeric: true }]
+      [ { text: org_name || I18n.t("users.index.organisation_blank") },
+       { text: count, numeric: true } ]
     end
   end
 

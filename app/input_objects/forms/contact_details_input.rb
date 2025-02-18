@@ -41,9 +41,9 @@ class Forms::ContactDetailsInput < BaseInput
   end
 
   def assign_form_values
-    self.contact_details_supplied |= [:supply_email] if form.support_email.present?
-    self.contact_details_supplied |= [:supply_phone] if form.support_phone.present?
-    self.contact_details_supplied |= [:supply_link] if form.support_url.present?
+    self.contact_details_supplied |= [ :supply_email ] if form.support_email.present?
+    self.contact_details_supplied |= [ :supply_phone ] if form.support_phone.present?
+    self.contact_details_supplied |= [ :supply_link ] if form.support_url.present?
 
     self.email = form.support_email
     self.phone = form.support_phone

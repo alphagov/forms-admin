@@ -87,7 +87,7 @@ describe FormTaskListService do
     end
 
     it "returns 5 sections" do
-      expected_sections = [{ title: "Task 1" }, { title: "Task 2" }, { title: "Task 3" }, { title: "Task 4" }, { title: "Task 5" }, { title: "Task 6" }]
+      expected_sections = [ { title: "Task 1" }, { title: "Task 2" }, { title: "Task 3" }, { title: "Task 4" }, { title: "Task 5" }, { title: "Task 6" } ]
       expect(all_sections.count).to eq expected_sections.count
     end
 
@@ -109,7 +109,7 @@ describe FormTaskListService do
       end
 
       context "when a page already exists" do
-        let(:pages) { [build(:page)] }
+        let(:pages) { [ build(:page) ] }
 
         it "has a link to add/edit existing pages (if pages/questions exist)" do
           expect(section_rows[1][:task_name]).to eq "Add and edit your questions"
@@ -383,7 +383,7 @@ describe FormTaskListService do
           end
 
           context "when the form has at least one page" do
-            let(:pages) { [build(:page)] }
+            let(:pages) { [ build(:page) ] }
 
             it "has the correct task name" do
               expect(section_rows.first[:task_name]).to eq(I18n.t("forms.task_list_create.make_form_live_section.share_preview"))

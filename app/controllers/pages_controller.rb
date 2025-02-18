@@ -81,9 +81,9 @@ class PagesController < ApplicationController
 
     position = if move_params[:direction] == :up
                  page_to_move.position - 1
-               else
+    else
                  page_to_move.position + 1
-               end
+    end
 
     redirect_to form_pages_path, success: t("banner.success.form.page_moved", question_text: page_to_move.question_text, direction: move_params[:direction], position:)
   end
@@ -105,9 +105,9 @@ private
   def draft_question
     @draft_question ||= if params[:page_id].present?
                           setup_draft_question_for_existing_page
-                        else
+    else
                           DraftQuestion.find_or_initialize_by(form_id: current_form.id, user_id: current_user.id)
-                        end
+    end
   end
 
   def move_params

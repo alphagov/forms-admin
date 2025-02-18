@@ -7,7 +7,7 @@ describe "pages/selection/options.html.erb", type: :view do
   let(:back_link_url) { "/a-back-link-url" }
   let(:bulk_options_url) { "/a-link-to-bulk-options-page" }
   let(:selection_options_path) { "/a-path" }
-  let(:selection_options) { [{ name: "France" }, { name: "Spain" }, { name: "Italy" }] }
+  let(:selection_options) { [ { name: "France" }, { name: "Spain" }, { name: "Italy" } ] }
   let(:include_none_of_the_above) { "true" }
   let(:only_one_option) { "true" }
   let(:draft_question) { build :draft_question, answer_type: "selection", answer_settings: { only_one_option: } }
