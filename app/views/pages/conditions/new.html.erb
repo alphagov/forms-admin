@@ -10,8 +10,8 @@
       <% end %>
 
       <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l"><%= condition_input.form.name %></span>
-        <%= t("page_titles.routing_page_new", routing_position: 1) %>
+        <span class="govuk-caption-l"><%= t("page_titles.routing_page_caption", question_position: condition_input.page.position) %></span>
+        <%= t("page_titles.routing_page_new", route_position: 1) %>
       </h1>
 
       <%= govuk_summary_list do |summary_list|

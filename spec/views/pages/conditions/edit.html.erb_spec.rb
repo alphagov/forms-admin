@@ -29,7 +29,7 @@ describe "pages/conditions/edit.html.erb" do
   end
 
   it "contains page heading and sub-heading" do
-    expect(rendered).to have_css("h1 .govuk-caption-l", text: form.name)
+    expect(rendered).to have_css("h1 .govuk-caption-l", text: "Question 1’s routes")
     expect(rendered).to have_css("h1.govuk-heading-l", text: "Edit route 1")
   end
 
