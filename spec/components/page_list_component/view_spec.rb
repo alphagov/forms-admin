@@ -313,8 +313,8 @@ RSpec.describe PageListComponent::View, type: :component do
         let(:routing_conditions) { [] }
 
         it "returns an array of conditions for the page" do
-          page_id = 1
-          expect(page_list_component.conditions_for_page_with_index(page_id)).to eq([])
+          page = pages.first
+          expect(page_list_component.conditions_for_page_with_index(page)).to eq([])
         end
       end
 
@@ -325,8 +325,8 @@ RSpec.describe PageListComponent::View, type: :component do
         let(:routing_conditions) { [build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3)] }
 
         it "returns an array of conditions for the page" do
-          page_id = 1
-          expect(page_list_component.conditions_for_page_with_index(page_id)).to eq([[routing_conditions.first, 1]])
+          page = pages.first
+          expect(page_list_component.conditions_for_page_with_index(page)).to eq([[routing_conditions.first, 1]])
         end
       end
 
@@ -343,8 +343,8 @@ RSpec.describe PageListComponent::View, type: :component do
         end
 
         it "returns the correct condition with index" do
-          page_id = 2
-          expect(page_list_component.conditions_for_page_with_index(page_id)).to eq([[routing_conditions.second, 2]])
+          page = build(:page, id: 2)
+          expect(page_list_component.conditions_for_page_with_index(page)).to eq([[routing_conditions.second, 2]])
         end
       end
 
@@ -360,8 +360,8 @@ RSpec.describe PageListComponent::View, type: :component do
         end
 
         it "returns an array of conditions for the page" do
-          page_id = 1
-          expect(page_list_component.conditions_for_page_with_index(page_id)).to eq([[routing_conditions.first, 1]])
+          page = pages.first
+          expect(page_list_component.conditions_for_page_with_index(page)).to eq([[routing_conditions.first, 1]])
         end
       end
     end

@@ -62,8 +62,8 @@ module PageListComponent
       page_position(check_page)
     end
 
-    def conditions_for_page_with_index(page_id)
-      routing_conditions_with_index.fetch(page_id, [])
+    def conditions_for_page_with_index(page)
+      routing_conditions_with_index.fetch(page.id, [])
     end
 
     def routing_conditions_with_index
