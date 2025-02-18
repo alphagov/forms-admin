@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe PageListComponent::View, type: :component do
+  let(:form) { build :form, id: 1 }
   let(:pages) { [] }
   let(:routing_conditions) { [] }
-  let(:page_list_component) { described_class.new(pages:, form_id: 0) }
+  let(:page_list_component) { described_class.new(pages:, form:) }
 
   describe "rendering component" do
     before do

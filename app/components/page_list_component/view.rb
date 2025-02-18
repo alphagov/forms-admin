@@ -2,10 +2,10 @@ module PageListComponent
   class View < ViewComponent::Base
     delegate :question_text_with_optional_suffix, to: :helpers
 
-    def initialize(form_id:, pages: [])
+    def initialize(form:, pages: [])
       super
+      @form = form
       @pages = pages
-      @form_id = form_id
     end
 
     def show_up_button(index)

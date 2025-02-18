@@ -1,7 +1,7 @@
 
 <%if @pages.present?  %>
   <div class="app-page-list">
-    <%= form_with url: move_page_url(@form_id), method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+    <%= form_with url: move_page_url(@form.id), method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
       <dl class="govuk-summary-list">
         <% @pages.each_with_index do |page, index| %>
           <div id="<%= page_row_id(page) %>" class="govuk-summary-list__row">
@@ -25,7 +25,7 @@
                 <% end %>
               </div>
 
-              <%= govuk_link_to edit_question_path(@form_id, page.id) do %>
+              <%= govuk_link_to edit_question_path(@form.id, page.id) do %>
                 <%= t("forms.form_overview.edit") %> <span class="govuk-visually-hidden"><%= page.position %></span>
               <% end %>
 
@@ -52,7 +52,7 @@
                 </p>
 
               <dd class="govuk-summary-list__actions govuk-!-padding-bottom-6">
-                <%= govuk_link_to show_routes_path(form_id: @form_id, page_id: condition.check_page_id) do %>
+                <%= govuk_link_to show_routes_path(form_id: @form.id, page_id: condition.check_page_id) do %>
                   <%= t("forms.form_overview.edit_with_visually_hidden_text_html", visually_hidden_text: t("page_conditions.condition_name", question_number: page.position)) %>
                 <% end %>
               </dd>
