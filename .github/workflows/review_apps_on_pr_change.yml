@@ -5,8 +5,6 @@ on:
     # matches the docs for the default types
     # https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#pull_request
     types: [opened, reopened, synchronize]
-env:
-  CONTAINER_IMAGE_URI: "842676007477.dkr.ecr.eu-west-2.amazonaws.com/forms-admin:pr-${{github.event.pull_request.number}}-${{github.event.pull_request.head.ref}}"
 jobs:
   update-review-app:
     # this references a codebuild project configured in forms-deploy
@@ -14,6 +12,10 @@ jobs:
     runs-on: codebuild-review-forms-admin-gha-runner-${{github.run_id}}-${{github.run_attempt}}
 
     steps:
+      - name: Generate container image URI
+        run: |
+          echo "CONTAINER_IMAGE_URI=842676007477.dkr.ecr.eu-west-2.amazonaws.com/forms-admin:pr-${{github.event.pull_request.number}}-${{github.event.pull_request.head.sha}}-$(date +%s)" >> "$GITHUB_ENV"
+
       - name: Checkout code
         uses: actions/checkout@v4
 
