@@ -23,7 +23,7 @@ locals {
     { name = "SETTINGS__ACT_AS_USER_ENABLED", value = "true" },
     { name = "SETTINGS__AUTH_PROVIDER", value = "developer" },
     { name = "SETTINGS__FORMS_API__AUTH_KEY", value = "unsecured_api_key_for_review_apps_only" },
-    { name = "SETTINGS__FORMS_API__BASE_URL", value = "pr-${var.pull_request_number}.review.forms.service.gov.uk" },
+    { name = "SETTINGS__FORMS_API__BASE_URL", value = "http://localhost:9292" },
     { name = "SETTINGS__FORMS_ENV", value = "review" },
     { name = "SETTINGS__FORMS_RUNNER__URL", value = "https://forms.service.gov.uk/" },
   ]
@@ -31,7 +31,7 @@ locals {
   forms_api_env_vars = [
     { name = "DATABASE_URL", value = "postgres://postgres:postgres@127.0.0.1:5432" },
     { name = "EMAIL", value = "review-app-submissions@review.forms.service.gov.uk" },
-    { name = "RAILS_DEVELOPMENT_HOSTS", value = "pr-${var.pull_request_number}.review.forms.service.gov.uk" },
+    { name = "RAILS_DEVELOPMENT_HOSTS", value = "localhost:9292" },
     { name = "RAILS_ENV", value = "production" },
     { name = "SECRET_KEY_BASE", value = "unsecured_secret_key_material" },
     { name = "SETTINGS__FORMS_API__AUTH_KEY", value = "unsecured_api_key_for_review_apps_only" },
