@@ -341,7 +341,7 @@ GEM
       rspec-mocks (~> 3.12)
       rspec-support (~> 3.12)
     racc (1.8.1)
-    rack (3.1.9)
+    rack (3.1.10)
     rack-protection (4.0.0)
       base64 (>= 0.1.0)
       rack (>= 3.0.0, < 4)

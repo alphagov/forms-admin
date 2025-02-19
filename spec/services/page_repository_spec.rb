@@ -74,6 +74,37 @@ describe PageRepository do
       described_class.destroy(page)
       expect(Api::V1::PageResource.new(id: 2, form_id: 1)).to have_been_deleted
     end
+
+    it "returns the deleted page" do
+      page = described_class.find(page_id: 2, form_id: 1)
+      expect(described_class.destroy(page)).to eq page
+    end
+
+    context "when the page has already been deleted" do
+      it "does not raise an error" do
+        page = described_class.find(page_id: 2, form_id: 1)
+        described_class.destroy(page)
+
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.delete "/api/v1/forms/1/pages/2", delete_headers, nil, 404
+        end
+
+        expect {
+          described_class.destroy(page)
+        }.not_to raise_error
+      end
+
+      it "returns the deleted page" do
+        page = described_class.find(page_id: 2, form_id: 1)
+        described_class.destroy(page)
+
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.delete "/api/v1/forms/1/pages/2", delete_headers, nil, 404
+        end
+
+        expect(described_class.destroy(page)).to eq page
+      end
+    end
   end
 
   describe "#move_page" do

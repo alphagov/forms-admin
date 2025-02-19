@@ -30,7 +30,7 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
 
   # create extra organisations
   test_org = Organisation.create! slug: "test-org", name: "Test Org", abbreviation: "TO"
-  Organisation.create! slug: "ministry-of-tests", name: "Ministry Of Tests", abbreviation: "MOT"
+  mot_org = Organisation.create! slug: "ministry-of-tests", name: "Ministry of Tests", abbreviation: "MOT"
   Organisation.create! slug: "department-for-testing", name: "Department for Testing", abbreviation: "DfT"
   Organisation.create! slug: "closed-org", name: "Closed Org", abbreviation: "CO", closed: true
 
@@ -42,11 +42,11 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
     organisation: test_org,
     provider: :seed,
   )
-  User.create!(
+  mot_user = User.create!(
     email: "subo@example.gov.uk",
     name: "Subo Mitt",
     role: :standard,
-    organisation: test_org,
+    organisation: mot_org,
     provider: :seed,
   )
   User.create!(
@@ -120,15 +120,17 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
   User.create!(email: "chidi.anagonye@example.gov.uk", role: :standard, provider: :seed)
 
   # create some test groups
-  test_group = Group.create! name: "Test Group", organisation: gds, creator: default_user
-  Group.create! name: "Ministry of Tests forms", organisation: test_org, creator: default_user
-  Group.create! name: "Ministry of Tests forms - secret!", organisation: test_org, creator: default_user
-  end_to_end_group = Group.create! name: "End to end tests", organisation: gds, status: :active, creator: default_user
+  end_to_end_group = Group.create! name: "End to end tests", organisation: gds, status: :active
+  Group.create! name: "Test Group", organisation: gds, creator: default_user
+  Group.create! name: "Ministry of Tests forms", organisation: mot_org
+  Group.create! name: "Ministry of Tests forms - secret!", organisation: mot_org, creator: mot_user
+  branch_routing_enabled_group = Group.create! name: "Branching enabled", organisation: gds, branch_routing_enabled: true
+  Group.create! name: "File upload enabled", organisation: gds, file_upload_enabled: true
 
   Membership.create! user: default_user, group: end_to_end_group, added_by: default_user, role: :group_admin
 
   # add forms to groups (assumes database seed is being used for forms-api)
-  GroupForm.create! group: test_group, form_id: 1 # All question types form
+  GroupForm.create! group: end_to_end_group, form_id: 1 # All question types form
   GroupForm.create! group: end_to_end_group, form_id: 2 # s3 submission test form
-  GroupForm.create! group: test_group, form_id: 3 # Branch route form
+  GroupForm.create! group: branch_routing_enabled_group, form_id: 3 # Branch route form
 end

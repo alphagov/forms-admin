@@ -54,6 +54,21 @@ namespace :groups do
     end
   end
 
+  desc "List enabled features for groups"
+  task features: :environment do
+    feature_flags = %i[branch_routing_enabled file_upload_enabled]
+    query = feature_flags.map { "#{it} IS TRUE" }.join(" OR ")
+
+    Group.where(query).find_each do |group|
+      puts({
+        id: group.external_id,
+        name: group.name,
+        organisation: group.organisation.name,
+        **group.slice(feature_flags),
+      }.to_json)
+    end
+  end
+
   desc "Enable file upload feature"
   task :enable_file_upload, %i[group_id] => :environment do |_, args|
     usage_message = "usage: rake groups:enable_file_upload[<group_external_id>]".freeze

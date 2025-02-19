@@ -29,7 +29,15 @@ class ConditionRepository
     def destroy(record)
       condition = Api::V1::ConditionResource.new(record.attributes, true)
       condition.prefix_options = record.prefix_options
-      condition.destroy # rubocop:disable Rails/SaveBang
+
+      begin
+        condition.destroy # rubocop:disable Rails/SaveBang
+      rescue ActiveResource::ResourceNotFound
+        # ActiveRecord::Persistence#destroy doesn't raise an error
+        # if record has already been destroyed, let's emulate that
+      end
+
+      record
     end
   end
 end
