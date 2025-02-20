@@ -77,6 +77,8 @@ jobs:
           It may take 5 minutes or so for the application to be fully deployed and working. If it still isn't ready
           after 5 minutes, there may be something wrong with the ECS task. You will need to go to the integration AWS account
           to debug, or otherwise ask an infrastructure person.
+
+          For more details please see the [review app wiki page](https://github.com/alphagov/forms-team/wiki/Review-apps)
           EOF
 
           gh pr comment "${{github.event.pull_request.html_url}}" --body-file "${{runner.temp}}/pr-comment.md"
