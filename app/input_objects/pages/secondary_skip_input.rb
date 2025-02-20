@@ -55,13 +55,13 @@ class Pages::SecondarySkipInput < BaseInput
     pages_after_current_page(FormRepository.pages(form), page).map { |p| OpenStruct.new(id: p.id, question_text: p.question_with_number) }
   end
 
-  def page_name(page_id)
+  def question_name(page_id)
     target_page = FormRepository.pages(form).find { |page| page.id == page_id }
 
-    page_name = target_page.question_text
+    question_text = target_page.question_text
     page_position = target_page.position
 
-    I18n.t("page_route_card.page_name", page_position:, page_name:)
+    I18n.t("page_route_card.question_name_long", page_position:, question_text:)
   end
 
   def end_page_name
@@ -73,7 +73,7 @@ class Pages::SecondarySkipInput < BaseInput
   end
 
   def continue_to
-    page.has_next_page? ? page_name(page.next_page) : end_page_name
+    page.has_next_page? ? question_name(page.next_page) : end_page_name
   end
 
   def assign_values
