@@ -65,6 +65,14 @@ jobs:
             -auto-approve
 
           echo "REVIEW_APP_URL=$(terraform output -raw review_app_url)" >> "$GITHUB_OUTPUT"
+          echo "ECS_CLUSTER_ID=$(terraform output -raw review_app_ecs_cluster_id)" >> "$GITHUB_OUTPUT"
+          echo "ECS_SERVICE_NAME=$(terraform output -raw review_app_ecs_service_name)" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for AWS ECS deployments to finish
+        run: |
+          aws ecs wait services-stable \
+            --cluster "${{steps.deploy.outputs.ECS_CLUSTER_ID}}" \
+            --services "${{steps.deploy.outputs.ECS_SERVICE_NAME}}"
 
       - name: Comment on PR
         env:
