@@ -1,13 +1,14 @@
 locals {
   logs_stream_prefix = "${data.terraform_remote_state.review.outputs.review_apps_log_group_name}/pr-${var.pull_request_number}"
 
-  service_timestamp = provider::time::rfc3339_parse(plantimestamp())
+  review_app_hostname = "pr-${var.pull_request_number}.review.forms.service.gov.uk"
 
   forms_admin_startup_commands = [
-    "bundle config unset --local without",
+    "echo $PATH",
     "bundle install",
-    "rails db:prepare",
-    "rails s -b 0.0.0.0"
+    "echo $PATH",
+    "bin/rails db:prepare",
+    "bin/rails s -b 0.0.0.0"
   ]
 
   forms_admin_shell_script = join(" && ", local.forms_admin_startup_commands)
@@ -22,7 +23,7 @@ locals {
     { name = "SETTINGS__ACT_AS_USER_ENABLED", value = "true" },
     { name = "SETTINGS__AUTH_PROVIDER", value = "developer" },
     { name = "SETTINGS__FORMS_API__AUTH_KEY", value = "unsecured_api_key_for_review_apps_only" },
-    { name = "SETTINGS__FORMS_API__BASE_URL", value = "pr-${var.pull_request_number}.review.forms.service.gov.uk" },
+    { name = "SETTINGS__FORMS_API__BASE_URL", value = "http://localhost:9292" },
     { name = "SETTINGS__FORMS_ENV", value = "review" },
     { name = "SETTINGS__FORMS_RUNNER__URL", value = "https://forms.service.gov.uk/" },
   ]
@@ -30,7 +31,7 @@ locals {
   forms_api_env_vars = [
     { name = "DATABASE_URL", value = "postgres://postgres:postgres@127.0.0.1:5432" },
     { name = "EMAIL", value = "review-app-submissions@review.forms.service.gov.uk" },
-    { name = "RAILS_DEVELOPMENT_HOSTS", value = "pr-${var.pull_request_number}.review.forms.service.gov.uk" },
+    { name = "RAILS_DEVELOPMENT_HOSTS", value = "localhost:9292" },
     { name = "RAILS_ENV", value = "production" },
     { name = "SECRET_KEY_BASE", value = "unsecured_secret_key_material" },
     { name = "SETTINGS__FORMS_API__AUTH_KEY", value = "unsecured_api_key_for_review_apps_only" },
@@ -55,27 +56,32 @@ resource "aws_ecs_task_definition" "task" {
   execution_role_arn = data.terraform_remote_state.review.outputs.ecs_task_execution_role_arn
 
   container_definitions = jsonencode([
+
     # forms-admin
     {
       name        = "forms-admin"
       image       = var.forms_admin_container_image
-      command     = ["sh", "-c", local.forms_admin_shell_script]
+      command     = []
       essential   = true
       environment = local.forms_admin_env_vars
 
       dockerLabels = {
-        "traefik.http.routers.forms-admin-pr-${var.pull_request_number}.rule" : "Host(`pr-${var.pull_request_number}.review.forms.service.gov.uk`)",
+        "traefik.http.middlewares.forms-admin-pr-${var.pull_request_number}.basicauth.users" : data.terraform_remote_state.review.outputs.traefik_basic_auth_credentials
+
+        "traefik.http.routers.forms-admin-pr-${var.pull_request_number}.rule" : "Host(`${local.review_app_hostname}`)",
         "traefik.http.routers.forms-admin-pr-${var.pull_request_number}.service" : "forms-admin-pr-${var.pull_request_number}",
+        "traefik.http.routers.forms-admin-pr-${var.pull_request_number}.middlewares" : "forms-admin-pr-${var.pull_request_number}@ecs"
+
         "traefik.http.services.forms-admin-pr-${var.pull_request_number}.loadbalancer.server.port" : "3000",
         "traefik.http.services.forms-admin-pr-${var.pull_request_number}.loadbalancer.healthcheck.path" : "/up",
-        "traefik.enable" : "true"
+        "traefik.enable" : "true",
       },
 
       portMappings = [
         {
           containerPort = 3000
           protocol      = "tcp"
-          appProtocl    = "http"
+          appProtocol   = "http"
         }
       ]
 
@@ -140,7 +146,7 @@ resource "aws_ecs_task_definition" "task" {
     # postgres
     {
       name      = "postgres"
-      image     = "postgres:13.12"
+      image     = "public.ecr.aws/docker/library/postgres:13.12"
       command   = []
       essential = true
 
@@ -162,6 +168,31 @@ resource "aws_ecs_task_definition" "task" {
       healthCheck = {
         command = ["CMD-SHELL", "psql -h localhost -p 5432 -U postgres -c \"SELECT current_timestamp - pg_postmaster_start_time();\""]
       }
+    },
+
+    # forms-admin-seeding
+    {
+      name        = "forms-admin-seeding"
+      image       = var.forms_admin_container_image
+      command     = ["rake", "db:setup"]
+      essential   = false
+      environment = local.forms_admin_env_vars
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = data.terraform_remote_state.review.outputs.review_apps_log_group_name
+          awslogs-region        = "eu-west-2"
+          awslogs-stream-prefix = "${local.logs_stream_prefix}/forms-admin-seeding"
+        }
+      }
+
+      dependsOn = [
+        {
+          containerName = "postgres"
+          condition     = "HEALTHY"
+        }
+      ]
     },
 
     # forms-api-seeding
