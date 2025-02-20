@@ -100,13 +100,15 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
 
     describe "#error_object" do
       it "returns an error object in the correct format" do
-        expect(error_summary_component.error_object(error_name: "answer_value_doesnt_exist", condition_id: 1, page_index: 1)).to eq OpenStruct.new(message: I18n.t("page_conditions.errors.answer_value_doesnt_exist", page_index: 1), link: "##{described_class.error_id(1)}")
+        condition = build :condition, id: 1
+        page = build :page, position: 1
+        expect(error_summary_component.error_object(error_name: "answer_value_doesnt_exist", condition:, page:)).to eq OpenStruct.new(message: I18n.t("page_conditions.errors.answer_value_doesnt_exist", page_index: 1), link: "##{described_class.error_id(1)}")
       end
     end
 
-    describe "#conditions_with_page_indexes" do
-      it "returns all of the conditions for a form with their respective conditions and page positions" do
-        expect(error_summary_component.conditions_with_page_indexes).to eq [OpenStruct.new(condition: routing_conditions_page_with_answer_value_missing[0], page_index: 1), OpenStruct.new(condition: routing_conditions_page_with_goto_page_missing[0], page_index: 2)]
+    describe "#conditions_with_routing_pages" do
+      it "returns all of the conditions for a form with their respective conditions and routing pages" do
+        expect(error_summary_component.conditions_with_routing_pages).to eq [OpenStruct.new(condition: routing_conditions_page_with_answer_value_missing[0], routing_page: pages.first), OpenStruct.new(condition: routing_conditions_page_with_goto_page_missing[0], routing_page: pages.second)]
       end
     end
 
