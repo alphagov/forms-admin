@@ -5,7 +5,7 @@ describe "group_members/index", type: :view do
   let(:current_user) { create(:user, organisation:) }
   let(:first_user_in_table) { build(:user, organisation:) }
   let(:second_user_in_table) { build(:user, organisation:) }
-  let(:memberships) { [create(:membership, user: first_user_in_table, role: :editor, group:), create(:membership, user: second_user_in_table, role: :group_admin, group:)] }
+  let(:memberships) { [ create(:membership, user: first_user_in_table, role: :editor, group:), create(:membership, user: second_user_in_table, role: :group_admin, group:) ] }
   let(:group) { create(:group, name: "Group 1", organisation:) }
   let(:can_add_editor) { true }
   let(:can_add_group_member) { false }
@@ -56,7 +56,7 @@ describe "group_members/index", type: :view do
       let(:second_user_in_table) { build :user, organisation:, name: "Alice Square" }
 
       it "sorts the group memberships by user name" do
-        expect(rendered).to have_table(with_cols: [["Alice Square", "Bob Blob"]])
+        expect(rendered).to have_table(with_cols: [ [ "Alice Square", "Bob Blob" ] ])
       end
     end
 

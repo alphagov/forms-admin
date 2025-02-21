@@ -39,12 +39,12 @@ RSpec.describe Pages::Routes::DeleteConfirmationInput, type: :model do
         end
 
         # primary route
-        pages[0].routing_conditions = [build(:condition, routing_page_id: 0, check_page_id: 0, goto_page_id: 4)]
+        pages[0].routing_conditions = [ build(:condition, routing_page_id: 0, check_page_id: 0, goto_page_id: 4) ]
         # secondary skip
-        pages[3].routing_conditions = [build(:condition, routing_page_id: 3, check_page_id: 0, goto_page_id: 4)]
+        pages[3].routing_conditions = [ build(:condition, routing_page_id: 3, check_page_id: 0, goto_page_id: 4) ]
 
         # unrelated condition
-        pages[2].routing_conditions = [build(:condition, routing_page_id: 2, check_page_id: 2, goto_page_id: 5)]
+        pages[2].routing_conditions = [ build(:condition, routing_page_id: 2, check_page_id: 2, goto_page_id: 5) ]
 
         pages
       end

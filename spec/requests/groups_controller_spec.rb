@@ -16,7 +16,7 @@ RSpec.describe "/groups", type: :request do
   let(:current_user) { standard_user }
   let(:role) { :editor }
   let(:status) { :trial }
-  let(:upgrade_requester) {}
+  let(:upgrade_requester) { }
   let(:member_group) do
     create(:group, organisation: current_user.organisation, status:, upgrade_requester:).tap do |group|
       create(:membership, user: current_user, group:, role:)

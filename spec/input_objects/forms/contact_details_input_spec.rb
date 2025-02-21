@@ -220,7 +220,7 @@ RSpec.describe Forms::ContactDetailsInput, type: :model do
 
   describe "#submit" do
     context "when invalid" do
-      subject(:contact_details_input) { build :contact_details_input, contact_details_supplied: [:supply_email], email: "invalid_email" }
+      subject(:contact_details_input) { build :contact_details_input, contact_details_supplied: [ :supply_email ], email: "invalid_email" }
 
       before do
         allow(FormRepository).to receive(:save!)

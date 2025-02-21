@@ -12,7 +12,7 @@ describe Pages::Selection::BulkOptionsController, type: :request do
            user: standard_user,
            form_id: form.id,
            is_optional: false,
-           answer_settings: { selection_options: [{ name: "" }, { name: "" }],
+           answer_settings: { selection_options: [ { name: "" }, { name: "" } ],
                               only_one_option: "true" }
   end
   let(:page_id) { nil }
@@ -60,7 +60,7 @@ describe Pages::Selection::BulkOptionsController, type: :request do
                user: standard_user,
                form_id: form.id,
                is_optional: true,
-               answer_settings: { selection_options: [{ name: "Option 1" }, { name: "Option 2" }],
+               answer_settings: { selection_options: [ { name: "Option 1" }, { name: "Option 2" } ],
                                   only_one_option: "true" }
       end
 
@@ -88,7 +88,7 @@ describe Pages::Selection::BulkOptionsController, type: :request do
         draft_question_settings = settings_form.draft_question.answer_settings
 
         expect(draft_question_settings).to include(only_one_option: "true",
-                                                   selection_options: [{ name: "Option 1" }, { name: "Option 2" }])
+                                                   selection_options: [ { name: "Option 1" }, { name: "Option 2" } ])
         expect(settings_form.draft_question.is_optional).to be false
       end
 
@@ -111,7 +111,7 @@ describe Pages::Selection::BulkOptionsController, type: :request do
   describe "#edit" do
     let(:page) { build :page, :with_selection_settings, id: 2, form_id: form.id, answer_settings: }
     let(:answer_settings) { { selection_options: } }
-    let(:selection_options) { [{ name: "Option 1" }, { name: "Option 2" }] }
+    let(:selection_options) { [ { name: "Option 1" }, { name: "Option 2" } ] }
     let(:page_id) { page.id }
 
     before do
@@ -149,7 +149,7 @@ describe Pages::Selection::BulkOptionsController, type: :request do
   describe "#update" do
     let(:page) { build :page, :with_selection_settings, id: 2, form_id: form.id, answer_settings: }
     let(:answer_settings) { { only_one_option: "true", selection_options: } }
-    let(:selection_options) { [{ name: "Option 1" }, { name: "Option 2" }] }
+    let(:selection_options) { [ { name: "Option 1" }, { name: "Option 2" } ] }
 
     before do
       allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
@@ -162,7 +162,7 @@ describe Pages::Selection::BulkOptionsController, type: :request do
       end
 
       it "saves the updated answer settings to DB" do
-        new_settings = { only_one_option: "true", selection_options: [{ name: "Option 1" }, { name: "New option 2" }] }
+        new_settings = { only_one_option: "true", selection_options: [ { name: "Option 1" }, { name: "New option 2" } ] }
         settings_form = assigns(:bulk_options_input)
         draft_question_settings = settings_form.draft_question.answer_settings
 

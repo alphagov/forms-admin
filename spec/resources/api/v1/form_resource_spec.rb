@@ -146,7 +146,7 @@ describe Api::V1::FormResource, type: :model do
       end
       let(:selection_pages_with_routes) do
         (4..5).map do |index|
-          build :page, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, check_page_id: index, goto_page_id: index + 2)]
+          build :page, :with_selection_settings, id: index, position: index, routing_conditions: [ (build :condition, id: index, check_page_id: index, goto_page_id: index + 2) ]
         end
       end
       let(:selection_pages_without_routes) do
@@ -175,7 +175,7 @@ describe Api::V1::FormResource, type: :model do
 
       let(:selection_pages_with_routes) do
         (4..5).map do |index|
-          build :page, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, check_page_id: index, goto_page_id: index + 2)]
+          build :page, :with_selection_settings, id: index, position: index, routing_conditions: [ (build :condition, id: index, check_page_id: index, goto_page_id: index + 2) ]
         end
       end
 
@@ -187,13 +187,13 @@ describe Api::V1::FormResource, type: :model do
 
       let(:selection_pages_with_secondary_skips) do
         (10..12).map do |index|
-          build :page, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, check_page_id: index, goto_page_id: index + 2)]
+          build :page, :with_selection_settings, id: index, position: index, routing_conditions: [ (build :condition, id: index, check_page_id: index, goto_page_id: index + 2) ]
         end
       end
 
       let!(:secondary_skip_pages) do
         (13..16).map do |index|
-          build :page, :with_simple_answer_type, id: index, position: index, routing_conditions: [(build :condition, id: index, routing_page_id: index, check_page_id: index - 3, goto_page_id: index + 2)]
+          build :page, :with_simple_answer_type, id: index, position: index, routing_conditions: [ (build :condition, id: index, routing_page_id: index, check_page_id: index - 3, goto_page_id: index + 2) ]
         end
       end
 
@@ -214,7 +214,7 @@ describe Api::V1::FormResource, type: :model do
   describe "#has_no_remaining_routes_available?" do
     let(:selection_pages_with_routes) do
       (1..3).map do |index|
-        build :page, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, check_page_id: index, goto_page_id: index + 2)]
+        build :page, :with_selection_settings, id: index, position: index, routing_conditions: [ (build :condition, id: index, check_page_id: index, goto_page_id: index + 2) ]
       end
     end
     let(:selection_pages_without_routes) do

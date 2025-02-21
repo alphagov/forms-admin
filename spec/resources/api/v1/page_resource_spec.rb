@@ -34,7 +34,7 @@ describe Api::V1::PageResource, type: :model do
     end
 
     describe "#question_text" do
-      [nil, ""].each do |question_text|
+      [ nil, "" ].each do |question_text|
         it "is invalid given {question_text} question text" do
           error_message = I18n.t("activemodel.errors.models.api/v1/page_resource.attributes.question_text.blank")
           page.question_text = question_text

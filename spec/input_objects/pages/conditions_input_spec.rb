@@ -11,7 +11,7 @@ RSpec.describe Pages::ConditionsInput, type: :model do
       second_page.answer_type = "selection"
       second_page.answer_settings = DataStruct.new(
         only_one_option: true,
-        selection_options: [OpenStruct.new(attributes: { name: "Option 1" }), OpenStruct.new(attributes: { name: "Option 2" })],
+        selection_options: [ OpenStruct.new(attributes: { name: "Option 1" }), OpenStruct.new(attributes: { name: "Option 2" }) ],
       )
     end
   end

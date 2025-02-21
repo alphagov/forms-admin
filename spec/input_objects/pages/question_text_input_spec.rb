@@ -9,7 +9,7 @@ RSpec.describe Pages::QuestionTextInput, type: :model do
   end
 
   describe "validations" do
-    [nil, ""].each do |question_text|
+    [ nil, "" ].each do |question_text|
       it "is invalid given {question_text} question text" do
         error_message = I18n.t("activemodel.errors.models.pages/question_text_input.attributes.question_text.blank")
         question_text_input.question_text = question_text
@@ -18,7 +18,7 @@ RSpec.describe Pages::QuestionTextInput, type: :model do
       end
     end
 
-    ["A" * 10, "A" * 250].each do |question_text|
+    [ "A" * 10, "A" * 250 ].each do |question_text|
       it "is valid if question text is less than or equal to 250 characters" do
         question_text_input.question_text = question_text
         expect(question_text_input).to be_valid

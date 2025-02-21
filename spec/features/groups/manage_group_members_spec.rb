@@ -54,7 +54,7 @@ feature "Manage members of group", type: :feature do
   def then_i_should_see_the_members_of_the_group
     expect(page.find("h1")).to have_text "Group 1"
 
-    expect(page).to have_table(with_rows: [[existing_editor.name, existing_editor.email], [existing_group_admin.name, existing_group_admin.email]])
+    expect(page).to have_table(with_rows: [ [ existing_editor.name, existing_editor.email ], [ existing_group_admin.name, existing_group_admin.email ] ])
 
     expect_page_to_have_no_axe_errors(page)
   end
@@ -91,17 +91,17 @@ feature "Manage members of group", type: :feature do
   def then_i_should_see_the_new_group_admin
     expect(page.find("h1")).to have_text "Group 1"
 
-    expect(page).to have_table(with_rows: [[new_user.email, "Group admin"]])
+    expect(page).to have_table(with_rows: [ [ new_user.email, "Group admin" ] ])
   end
 
   def then_i_should_see_the_user_as_editor
     expect(page.find("h1")).to have_text "Group 1"
 
-    expect(page).to have_table(with_rows: [[new_user.email, "Editor"]])
+    expect(page).to have_table(with_rows: [ [ new_user.email, "Editor" ] ])
   end
 
   def when_i_click_make_editor_for_user
-    within(:table_row, [new_user.email]) do
+    within(:table_row, [ new_user.email ]) do
       click_button "Make editor"
     end
   end

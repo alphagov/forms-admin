@@ -36,12 +36,12 @@ class TaskListComponent::TaskListComponentPreview < ViewComponent::Preview
   end
 
   def section_with_body_instead_of_rows
-    render(TaskListComponent::View.new(sections: [{
+    render(TaskListComponent::View.new(sections: [ {
       title: "Section with body instead of rows",
       body_text: "There are no tasks for you to do yet.\n\nMaybe there will be some later.",
       section_number: 1,
       subsection: false,
-    }]))
+    } ]))
   end
 
   def section_without_body_or_rows

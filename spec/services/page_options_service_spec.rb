@@ -6,7 +6,7 @@ describe PageOptionsService do
   end
 
   let(:pages) do
-    [page, (build :page, id: 2), (build :page, id: 3), (build :page, id: 4)]
+    [ page, (build :page, id: 2), (build :page, id: 3), (build :page, id: 4) ]
   end
 
   describe "#all_options_for_answer_type" do
@@ -15,8 +15,8 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq(
-          [{ key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
-             value: { text: I18n.t("helpers.label.page.address_settings_options.names.uk_and_international_addresses") } }],
+          [ { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
+             value: { text: I18n.t("helpers.label.page.address_settings_options.names.uk_and_international_addresses") } } ],
         )
       end
     end
@@ -26,8 +26,8 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq(
-          [{ key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
-             value: { text: I18n.t("helpers.label.page.address_settings_options.names.international_addresses") } }],
+          [ { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
+             value: { text: I18n.t("helpers.label.page.address_settings_options.names.international_addresses") } } ],
         )
       end
     end
@@ -37,8 +37,8 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq(
-          [{ key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
-             value: { text: I18n.t("helpers.label.page.address_settings_options.names.uk_addresses") } }],
+          [ { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
+             value: { text: I18n.t("helpers.label.page.address_settings_options.names.uk_addresses") } } ],
         )
       end
     end
@@ -48,8 +48,8 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq(
-          [{ key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
-             value: { text: I18n.t("helpers.label.page.address_settings_options.names.international_addresses") } }],
+          [ { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
+             value: { text: I18n.t("helpers.label.page.address_settings_options.names.international_addresses") } } ],
         )
       end
     end
@@ -104,8 +104,8 @@ describe PageOptionsService do
               is_optional: "false",
               answer_type: "selection",
               answer_settings: OpenStruct.new(only_one_option: "true",
-                                              selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
-                                                                  OpenStruct.new(attributes: { name: "Option 2" })])
+                                              selection_options: [ OpenStruct.new(attributes: { name: "Option 1" }),
+                                                                  OpenStruct.new(attributes: { name: "Option 2" }) ])
       end
 
       it "returns the correct options" do
@@ -122,8 +122,8 @@ describe PageOptionsService do
               is_optional: "false",
               answer_type: "selection",
               answer_settings: OpenStruct.new(only_one_option: "false",
-                                              selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
-                                                                  OpenStruct.new(attributes: { name: "Option 2" })])
+                                              selection_options: [ OpenStruct.new(attributes: { name: "Option 1" }),
+                                                                  OpenStruct.new(attributes: { name: "Option 2" }) ])
       end
 
       it "returns the correct options" do
@@ -209,7 +209,7 @@ describe PageOptionsService do
       end
 
       context "with a single condition" do
-        let(:routing_conditions) { [condition_pointing_to_page_3] }
+        let(:routing_conditions) { [ condition_pointing_to_page_3 ] }
 
         it "returns the correct options" do
           expect(page_options_service.all_options_for_answer_type).to include(
@@ -222,7 +222,7 @@ describe PageOptionsService do
       end
 
       context "with multiple conditions" do
-        let(:routing_conditions) { [condition_pointing_to_page_3, condition_pointing_to_page_4] }
+        let(:routing_conditions) { [ condition_pointing_to_page_3, condition_pointing_to_page_4 ] }
 
         it "returns the correct options" do
           expect(page_options_service.all_options_for_answer_type).to include(
@@ -235,7 +235,7 @@ describe PageOptionsService do
       end
 
       context "with a condition that points to the end of the form" do
-        let(:routing_conditions) { [condition] }
+        let(:routing_conditions) { [ condition ] }
         let(:answer_value) { "Wales" }
         let(:condition) { build :condition, answer_value:, goto_page_id: nil, skip_to_end: true }
 

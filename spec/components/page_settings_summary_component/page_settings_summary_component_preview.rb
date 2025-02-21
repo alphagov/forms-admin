@@ -9,8 +9,8 @@ class PageSettingsSummaryComponent::PageSettingsSummaryComponentPreview < ViewCo
                                        is_optional: "false",
                                        answer_type: "selection",
                                        answer_settings: { only_one_option: "true",
-                                                          selection_options: [{ name: "Option 1" },
-                                                                              { name: "Option 2" }] })
+                                                          selection_options: [ { name: "Option 1" },
+                                                                              { name: "Option 2" } ] })
     render(PageSettingsSummaryComponent::View.new(draft_question:))
   end
 
@@ -19,7 +19,7 @@ class PageSettingsSummaryComponent::PageSettingsSummaryComponentPreview < ViewCo
                                        is_optional: "false",
                                        answer_type: "selection",
                                        answer_settings: { only_one_option: "true",
-                                                          selection_options: [{ name: "Option 1" },
+                                                          selection_options: [ { name: "Option 1" },
                                                                               { name: "Option 2" },
                                                                               { name: "Option 3" },
                                                                               { name: "Option 4" },
@@ -28,7 +28,7 @@ class PageSettingsSummaryComponent::PageSettingsSummaryComponentPreview < ViewCo
                                                                               { name: "Option 7" },
                                                                               { name: "Option 8" },
                                                                               { name: "Option 9" },
-                                                                              { name: "Option 10" }] })
+                                                                              { name: "Option 10" } ] })
     render(PageSettingsSummaryComponent::View.new(draft_question:))
   end
 

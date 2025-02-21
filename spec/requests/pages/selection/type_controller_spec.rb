@@ -7,7 +7,7 @@ describe Pages::Selection::TypeController, type: :request do
 
   let(:only_one_option) { "true" }
   let(:answer_settings) do
-    { selection_options: [{ name: "" }, { name: "" }],
+    { selection_options: [ { name: "" }, { name: "" } ],
       only_one_option: }
   end
   let(:draft_question) do

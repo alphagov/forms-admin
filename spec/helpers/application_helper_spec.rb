@@ -206,8 +206,8 @@ RSpec.describe ApplicationHelper, type: :helper do
 
     it "returns the correct options" do
       expect(helper.user_role_options(%i[role1 role2])).to eq(
-        [OpenStruct.new(label: "name1", value: :role1, description: "description1"),
-         OpenStruct.new(label: "name2", value: :role2, description: "description2")],
+        [ OpenStruct.new(label: "name1", value: :role1, description: "description1"),
+         OpenStruct.new(label: "name2", value: :role2, description: "description2") ],
       )
     end
   end

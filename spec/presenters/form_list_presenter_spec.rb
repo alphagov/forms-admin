@@ -16,9 +16,9 @@ describe FormListPresenter do
 
     describe "head" do
       it "contains a 'Name', `Created by` and 'Status' column heading" do
-        expect(presenter.data[:head]).to eq([I18n.t("home.form_name_heading"),
+        expect(presenter.data[:head]).to eq([ I18n.t("home.form_name_heading"),
                                              { text: I18n.t("home.created_by") },
-                                             { text: I18n.t("home.form_status_heading"), numeric: true }])
+                                             { text: I18n.t("home.form_status_heading"), numeric: true } ])
       end
     end
 

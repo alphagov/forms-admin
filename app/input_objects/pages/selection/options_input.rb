@@ -1,7 +1,7 @@
 class Pages::Selection::OptionsInput < BaseInput
   include LoggingHelper
 
-  DEFAULT_OPTIONS = { selection_options: [{ name: "" }, { name: "" }] }.freeze
+  DEFAULT_OPTIONS = { selection_options: [ { name: "" }, { name: "" } ] }.freeze
   INCLUDE_NONE_OF_THE_ABOVE_OPTIONS = %w[true false].freeze
   MAXIMUM_CHOOSE_ONLY_ONE_OPTION = 1000
   MAXIMUM_CHOOSE_MORE_THAN_ONE_OPTION = 30
@@ -42,7 +42,7 @@ class Pages::Selection::OptionsInput < BaseInput
   end
 
   def include_none_of_the_above_options
-    [OpenStruct.new(id: "true"), OpenStruct.new(id: "false")]
+    [ OpenStruct.new(id: "true"), OpenStruct.new(id: "false") ]
   end
 
   def maximum_options

@@ -10,8 +10,8 @@ describe Pages::RoutesController, type: :request do
       first_page.answer_type = "selection"
       first_page.answer_settings = DataStruct.new(
         only_one_option: true,
-        selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
-                            OpenStruct.new(attributes: { name: "Option 2" })],
+        selection_options: [ OpenStruct.new(attributes: { name: "Option 1" }),
+                            OpenStruct.new(attributes: { name: "Option 2" }) ],
       )
     end
   end
@@ -69,8 +69,8 @@ describe Pages::RoutesController, type: :request do
       allow(ConditionRepository).to receive(:find).and_return(condition)
       allow(ConditionRepository).to receive(:destroy)
 
-      selected_page.routing_conditions = [condition]
-      secondary_skip_page.routing_conditions = [secondary_skip]
+      selected_page.routing_conditions = [ condition ]
+      secondary_skip_page.routing_conditions = [ secondary_skip ]
     end
 
     context "when confirmed" do

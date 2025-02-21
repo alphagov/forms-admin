@@ -198,7 +198,7 @@ describe User, type: :model do
       expect(Rails.logger).to have_received(:info).with("User attributes updated upon authorisation", {
         "user_changes": {
           uid: %w[123456 111111],
-          name: ["Test User", "Test A. User"],
+          name: [ "Test User", "Test A. User" ],
         },
       })
     end

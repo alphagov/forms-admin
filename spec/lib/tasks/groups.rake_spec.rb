@@ -34,7 +34,7 @@ RSpec.describe "groups.rake" do
 
           expect {
             task.invoke(*group_ids, target_org.id)
-          }.to change { groups.map { |g| g.reload.organisation } }.to([target_org] * groups.size)
+          }.to change { groups.map { |g| g.reload.organisation } }.to([ target_org ] * groups.size)
         end
       end
     end
@@ -61,7 +61,7 @@ RSpec.describe "groups.rake" do
       end
 
       it "aborts when any groups are not found" do
-        non_existent_group_ids = [999_998, 999_999]
+        non_existent_group_ids = [ 999_998, 999_999 ]
 
         expect {
           task.invoke(*non_existent_group_ids, target_org.id)
@@ -131,7 +131,7 @@ RSpec.describe "groups.rake" do
     let(:group) { create :group, organisation: source_organisation }
 
     context "with valid arguments" do
-      let(:valid_args) { [source_organisation.id, target_organisation.id] }
+      let(:valid_args) { [ source_organisation.id, target_organisation.id ] }
 
       it "moves the group to the new org" do
         expect {
@@ -158,12 +158,12 @@ RSpec.describe "groups.rake" do
 
       context "with only one argument" do
         it_behaves_like "usage error" do
-          let(:invalid_args) { [source_organisation.id] }
+          let(:invalid_args) { [ source_organisation.id ] }
         end
       end
 
       context "with invalid source_organisation id" do
-        let(:invalid_args) { ["some_id_that_does_not_exist", target_organisation.id] }
+        let(:invalid_args) { [ "some_id_that_does_not_exist", target_organisation.id ] }
 
         it "raises an error" do
           expect {
@@ -174,7 +174,7 @@ RSpec.describe "groups.rake" do
     end
 
     context "with invalid target_organisation id" do
-      let(:invalid_args) { [source_organisation.id, "some_id_that_does_not_exist"] }
+      let(:invalid_args) { [ source_organisation.id, "some_id_that_does_not_exist" ] }
 
       it "raises an error" do
         expect {
@@ -195,7 +195,7 @@ RSpec.describe "groups.rake" do
     let(:group) { create :group, organisation: source_organisation }
 
     context "with valid arguments" do
-      let(:valid_args) { [source_organisation.id, target_organisation.id] }
+      let(:valid_args) { [ source_organisation.id, target_organisation.id ] }
 
       it "does not persist the organisation change for the groups" do
         expect {
@@ -222,12 +222,12 @@ RSpec.describe "groups.rake" do
 
       context "with only one argument" do
         it_behaves_like "usage error" do
-          let(:invalid_args) { [source_organisation.id] }
+          let(:invalid_args) { [ source_organisation.id ] }
         end
       end
 
       context "with invalid source_organisation id" do
-        let(:invalid_args) { ["some_id_that_does_not_exist", target_organisation.id] }
+        let(:invalid_args) { [ "some_id_that_does_not_exist", target_organisation.id ] }
 
         it "raises an error" do
           expect {
@@ -238,7 +238,7 @@ RSpec.describe "groups.rake" do
     end
 
     context "with invalid target_organisation id" do
-      let(:invalid_args) { [source_organisation.id, "some_id_that_does_not_exist"] }
+      let(:invalid_args) { [ source_organisation.id, "some_id_that_does_not_exist" ] }
 
       it "raises an error" do
         expect {

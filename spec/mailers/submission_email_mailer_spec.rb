@@ -18,7 +18,7 @@ describe SubmissionEmailMailer, type: :mailer do
       end
 
       it "sends an email to the temporary submission email address" do
-        expect(mail.to).to eq(["test@example.com"])
+        expect(mail.to).to eq([ "test@example.com" ])
       end
 
       it "includes the confirmation code" do
@@ -54,7 +54,7 @@ describe SubmissionEmailMailer, type: :mailer do
       end
 
       it "sends an email to the live submission email address" do
-        expect(mail.to).to eq(["test@example.com"])
+        expect(mail.to).to eq([ "test@example.com" ])
       end
 
       it "includes the form creators details" do
@@ -81,7 +81,7 @@ describe SubmissionEmailMailer, type: :mailer do
     end
 
     it "sends an email to the live submission email address" do
-      expect(mail.to).to eq(["test@example.com"])
+      expect(mail.to).to eq([ "test@example.com" ])
     end
 
     it "includes the form name" do

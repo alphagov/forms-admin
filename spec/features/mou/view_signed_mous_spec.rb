@@ -3,8 +3,8 @@ require "rails_helper"
 describe "Check which MOUs have been signed", type: :feature do
   let(:user) { super_admin_user }
   let!(:mou_signatures) do
-    [create(:mou_signature, created_at: Time.zone.parse("October 12, 2023")),
-     create(:mou_signature, created_at: Time.zone.parse("September 1, 2023"))]
+    [ create(:mou_signature, created_at: Time.zone.parse("October 12, 2023")),
+     create(:mou_signature, created_at: Time.zone.parse("September 1, 2023")) ]
   end
 
   before do

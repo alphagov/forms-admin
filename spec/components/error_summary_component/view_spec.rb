@@ -12,7 +12,7 @@ RSpec.describe ErrorSummaryComponent::View, type: :component do
   end
 
   context "when given an array of errors" do
-    let(:errors) { [OpenStruct.new(message: "You have an error", link: "https://example.gov.uk/error1"), OpenStruct.new(message: "You have another error", link: "https://example.gov.uk/error2")] }
+    let(:errors) { [ OpenStruct.new(message: "You have an error", link: "https://example.gov.uk/error1"), OpenStruct.new(message: "You have another error", link: "https://example.gov.uk/error2") ] }
 
     before do
       render_inline(described_class.new(errors:))

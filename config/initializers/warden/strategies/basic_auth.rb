@@ -31,7 +31,7 @@ Warden::Strategies.add(:basic_auth) do
         ),
       )
     else
-      custom! [@status, headers, [@message]]
+      custom! [ @status, headers, [ @message ] ]
     end
   end
 end
