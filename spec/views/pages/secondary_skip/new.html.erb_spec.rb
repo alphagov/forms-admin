@@ -30,7 +30,7 @@ describe "pages/secondary_skip/new.html.erb" do
   end
 
   it "has the correct back link" do
-    expect(view.content_for(:back_link)).to have_link(I18n.t("secondary_skip.new.back", page_position: 1), href: "/back")
+    expect(view.content_for(:back_link)).to have_link(I18n.t("secondary_skip.new.back", question_number: 1), href: "/back")
   end
 
   it "has the correct heading and caption" do

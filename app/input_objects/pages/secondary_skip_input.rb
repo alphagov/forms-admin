@@ -59,9 +59,9 @@ class Pages::SecondarySkipInput < BaseInput
     target_page = FormRepository.pages(form).find { |page| page.id == page_id }
 
     question_text = target_page.question_text
-    page_position = target_page.position
+    question_number = target_page.position
 
-    I18n.t("page_route_card.question_name_long", page_position:, question_text:)
+    I18n.t("page_route_card.question_name_long", question_number:, question_text:)
   end
 
   def end_page_name

@@ -1,11 +1,11 @@
 <% set_page_title(title_with_error_prefix(t('page_titles.new_secondary_skip', route_index: 2), false)) %>
-<% content_for :back_link, govuk_back_link_to(back_link_url, t('secondary_skip.new.back', page_position: secondary_skip_input.page.position)) %>
+<% content_for :back_link, govuk_back_link_to(back_link_url, t('secondary_skip.new.back', question_number: secondary_skip_input.page.position)) %>
 
 <% content_for :heading do %>
   <h1 class="govuk-heading-l">
-    <span class="govuk-caption-l"><%= t("secondary_skip.new.caption", page_position: secondary_skip_input.page.position) %></span>
+    <span class="govuk-caption-l"><%= t("secondary_skip.new.caption", question_number: secondary_skip_input.page.position) %></span>
     <%= t("page_titles.new_secondary_skip", route_index: 2) %>
-    <%# TODO: route_index is hardcoded as 2 here because we know there are only two conditions. It will need to change in the future %>
+    <%# TODO: route_number is hardcoded as 2 here because we know there can be only two conditions. It will need to change in the future %>
   </h1>
 <% end %>
 

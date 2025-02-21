@@ -15,12 +15,12 @@ describe "pages/conditions/delete.html.erb" do
   end
 
   it "sets the correct title" do
-    expect(view.content_for(:title)).to eq(t("page_titles.routing_page_delete", question_position: page.position))
+    expect(view.content_for(:title)).to eq(t("page_titles.routing_page_delete", question_number: page.position))
   end
 
   it "contains page heading and sub-heading" do
     expect(rendered).to have_css("h1 .govuk-caption-l", text: form.name)
-    expect(rendered).to have_css("h1.govuk-heading-l", text: t("page_titles.routing_page_delete", question_position: page.position))
+    expect(rendered).to have_css("h1.govuk-heading-l", text: t("page_titles.routing_page_delete", question_number: page.position))
   end
 
   it "contains the condition details" do

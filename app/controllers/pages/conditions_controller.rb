@@ -27,7 +27,7 @@ class Pages::ConditionsController < PagesController
     condition_input = Pages::ConditionsInput.new(condition_input_params)
 
     if condition_input.submit
-      redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.route_created", question_position: condition_input.page.position)
+      redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.route_created", question_number: condition_input.page.position)
     else
       render template: "pages/conditions/new", locals: { condition_input: }, status: :unprocessable_entity
     end
@@ -51,7 +51,7 @@ class Pages::ConditionsController < PagesController
     condition_input = Pages::ConditionsInput.new(form_params)
 
     if condition_input.update_condition
-      redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.route_updated", question_position: condition_input.page.position)
+      redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.route_updated", question_number: condition_input.page.position)
     else
       render template: "pages/conditions/edit", locals: { condition_input: }, status: :unprocessable_entity
     end
@@ -74,7 +74,7 @@ class Pages::ConditionsController < PagesController
 
     if delete_condition_input.submit
       if delete_condition_input.confirmed?
-        redirect_to form_pages_path(current_form.id, page.id), success: t("banner.success.route_deleted", question_position: delete_condition_input.page.position)
+        redirect_to form_pages_path(current_form.id, page.id), success: t("banner.success.route_deleted", question_number: delete_condition_input.page.position)
       else
         redirect_to edit_condition_path(current_form.id, page.id, condition.id)
       end

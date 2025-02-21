@@ -186,7 +186,7 @@ en:
         change_name: Your form name has been saved
         declaration_saved: Your declaration has been saved
         declaration_saved_and_completed: Your declaration has been saved and marked as complete
-        page_moved: "‘%{question_text}’ has moved %{direction} to number %{position}"
+        page_moved: "‘%{question_text}’ has moved %{direction} to number %{question_number}"
         pages_saved: Your questions have been saved
         pages_saved_and_section_completed: Your questions have been saved and marked as complete
         payment_link_saved: Your payment link has been saved
@@ -196,10 +196,10 @@ en:
         share_preview_completed: The preview task has been completed
         support_details_saved: Your contact details for support have been saved
         what_happens_next_saved: Your information about what happens next has been saved
-      page_routes_deleted: Question %{question_position}’s routes have been deleted
-      route_created: Question %{question_position}’s route has been created
-      route_deleted: Question %{question_position}’s route has been deleted
-      route_updated: Question %{question_position}’s route has been updated
+      page_routes_deleted: Question %{question_number}’s routes have been deleted
+      route_created: Question %{question_number}’s route has been created
+      route_deleted: Question %{question_number}’s route has been deleted
+      route_updated: Question %{question_number}’s route has been updated
       title: Success
   bulk_options:
     hint: Enter each option on a new line
@@ -1014,23 +1014,23 @@ en:
     check_your_answers: Check your answers before submitting
     condition_answer_value_text: "“%{answer_value}”"
     condition_answer_value_text_with_errors: "[Answer not selected]"
-    condition_check_page_text: "“%{check_page_text}”"
-    condition_compact_html: 'If the answer is “%{answer_value}”<br> then skip to %{goto_page_number}: “%{goto_page_text}”'
+    condition_check_page_text: "“%{check_page_question_text}”"
+    condition_compact_html: 'If the answer is “%{answer_value}”<br> then skip to %{goto_page_question_number}: “%{goto_page_question_text}”'
     condition_compact_html_end_of_form: If the answer is “%{answer_value}”<br> then skip to “Check your answers before submitting”
-    condition_description: If %{check_page_text} is answered as %{answer_value} go to %{goto_page_text}
+    condition_description: If %{check_page_question_text} is answered as %{answer_value} go to %{goto_page_question_text}
     condition_goto_page_check_your_answers: "“Check your answers before submitting”."
-    condition_goto_page_text: "%{goto_page_position}, “%{goto_page_text}”"
+    condition_goto_page_text: "%{goto_page_question_number}, “%{goto_page_question_text}”"
     condition_goto_page_text_with_errors: "[Question not selected]"
-    condition_name: Question %{page_index}’s routes
+    condition_name: Question %{question_number}’s routes
     errors:
-      answer_value_doesnt_exist: The answer that question %{page_index}’s route is based on no longer exists - edit question %{page_index}’s route
-      cannot_have_goto_page_before_routing_page: The question you’re taking the person to is now above the route - edit question %{page_index}’s route
-      cannot_route_to_next_page: Question %{page_index}’s route is now next to the route’s end question - this makes the route unnecessary. Edit question %{page_index}’s route.
-      goto_page_doesnt_exist: The question you’re taking the person to no longer exists - edit question %{page_index}’s route
+      answer_value_doesnt_exist: The answer that question %{question_number}’s route is based on no longer exists - edit question %{question_number}’s route
+      cannot_have_goto_page_before_routing_page: The question you’re taking the person to is now above the route - edit question %{question_number}’s route
+      cannot_route_to_next_page: Question %{question_number}’s route is now next to the route’s end question - this makes the route unnecessary. Edit question %{question_number}’s route.
+      goto_page_doesnt_exist: The question you’re taking the person to no longer exists - edit question %{question_number}’s route
     none_of_the_above: None of the above
     route: Route
-    secondary_skip_description: After %{check_page_text} go to %{goto_page_text}
-    skip_condition_route_page_text: "%{route_page_position}, “%{route_page_text}”"
+    secondary_skip_description: After %{check_page_question_text} go to %{goto_page_question_text}
+    skip_condition_route_page_text: "%{route_page_question_number}, “%{route_page_question_text}”"
   page_options_service:
     answer_type: Answer type
     date: Date
@@ -1055,9 +1055,9 @@ en:
     edit: Edit
     goto_page_invalid: Edit this route to select the question or page you want to take the person to, or delete the route
     if_answer_is: If the answer is
-    question_name_long: "%{page_position}. %{question_text}"
-    question_name_short: Question %{position}
-    route_title: Route %{index}
+    question_name_long: "%{question_number}. %{question_text}"
+    question_name_short: Question %{question_number}
+    route_title: Route %{route_number}
     secondary_skip_after: Then after the person answers
     secondary_skip_then: take them to
     set_secondary_skip: Set one or more questions to skip later in the form (optional)
@@ -1123,12 +1123,12 @@ en:
     payment_link: Add a link to a payment page on GOV.UK Pay
     privacy_policy: Provide a link to privacy information for this form
     question_text: What’s your question?
-    routes_show: Question %{position}’s routes
+    routes_show: Question %{question_number}’s routes
     routing_page: Add a route from a question
-    routing_page_caption: Question %{question_position}’s routes
-    routing_page_delete: Delete question %{question_position}’s route
-    routing_page_edit: Edit route %{route_position}
-    routing_page_new: Add route %{route_position}
+    routing_page_caption: Question %{question_number}’s routes
+    routing_page_delete: Delete question %{question_number}’s route
+    routing_page_edit: Edit route %{route_number}
+    routing_page_new: Add route %{route_number}
     selection_options: Create a list of options
     selection_type: How many options should people be able to select?
     separator: " – "
@@ -1152,31 +1152,31 @@ en:
     delete:
       notification_banner:
         end_of_route:
-          heading_text: Question %{page_position} is at the end of a route
+          heading_text: Question %{question_number} is at the end of a route
           html: |
             <p class="govuk-body">
-              <a class="govuk-notification-banner__link" href="%{show_routes_href}">Question %{route_page_position}’s route</a>
-              goes to this question. If you delete this question, question %{route_page_position}’s routes will also be deleted.
+              <a class="govuk-notification-banner__link" href="%{show_routes_href}">Question %{route_page_question_number}’s route</a>
+              goes to this question. If you delete this question, question %{route_page_question_number}’s routes will also be deleted.
             </p>
         end_of_secondary_skip_route:
-          heading_text: Question %{page_position} is at the end of a route
+          heading_text: Question %{question_number} is at the end of a route
           html: |
             <p class="govuk-body">
-              <a class="govuk-notification-banner__link" href="%{show_routes_href}">Question %{route_page_position}’s route</a>
+              <a class="govuk-notification-banner__link" href="%{show_routes_href}">Question %{route_page_question_number}’s route</a>
               goes to this question. If you delete this question, the route to it will also be deleted.
             </p>
         start_of_route:
-          heading_text: Question %{page_position} is the start of a route
+          heading_text: Question %{question_number} is the start of a route
           html: |
             <p class="govuk-body">
               If you delete this question, its routes will also be deleted.
-              <a class="govuk-notification-banner__link" href="%{show_routes_href}">View question %{route_page_position}’s routes</a>.
+              <a class="govuk-notification-banner__link" href="%{show_routes_href}">View question %{route_page_question_number}’s routes</a>.
             </p>
         start_of_secondary_skip_route:
-          heading_text: Question %{page_position} is the start of a route
+          heading_text: Question %{question_number} is the start of a route
           html: |
             <p class="govuk-body">
-              <a class="govuk-notification-banner__link" href="%{show_routes_href}">Question %{route_page_position}’s route</a>
+              <a class="govuk-notification-banner__link" href="%{show_routes_href}">Question %{route_page_question_number}’s route</a>
               starts at this question. If you delete this question, the route from it will also be deleted.
             </p>
       title: Are you sure you want to delete this question?
@@ -1193,15 +1193,15 @@ en:
     question: Question
     routes:
       delete:
-        back: Back to question %{page_number}’s routes
-        caption: Question %{page_number}’s routes
-        title: Are you sure you want to delete all question %{page_number}’s routes?
+        back: Back to question %{question_number}’s routes
+        caption: Question %{question_number}’s routes
+        title: Are you sure you want to delete all question %{question_number}’s routes?
       show:
         any_other_answer:
           heading: Any other answer
           set_questions_to_skip: Set questions to skip
           skip_later: If you need to, you can make these people skip one or more questions later in the form. For example, you might want them to skip route 1’s questions to create 2 different ‘branches’ of questions.
-          will_continue_to: People who select any other answer will continue to question %{next_page_position}.
+          will_continue_to: People who select any other answer will continue to question %{next_question_number}.
     submit_save: Save question
   payment_link_input:
     body_html: |
@@ -1426,8 +1426,8 @@ en:
   save_and_continue: Save and continue
   secondary_skip:
     new:
-      back: Back to question %{page_position}’s routes
-      caption: Question %{page_position}’s routes
+      back: Back to question %{question_number}’s routes
+      caption: Question %{question_number}’s routes
       details_html: |
         <p>People who select an answer that does not have a route assigned to it will continue to the next question.</p>
         <p>If you need to, you can make these people skip one or more questions later in the form. For example, you might want them to skip route 1’s questions. This allows you to create 2 different ‘branches’ of questions.</p>
@@ -1441,7 +1441,7 @@ en:
     add_options_below_or_in_text_box_html: You can add your options individually below, or you can <a href="%{bulk_options_path}">enter all the options into one text box</a>.
     cannot_add_more_options: You cannot add any more options as you have reached the maximum of %{maximum} options.
     enter_all_options_into_textbox: Enter all the options into one text box
-    option: Option %{number}
+    option: Option %{option_number}
     remove_html: Remove <span class="govuk-visually-hidden">option %{option_number}</span>
     select_more_than_one_option: People will be able to select one or more options from your list.
     select_one_option: People will be able to select one option from your list.

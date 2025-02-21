@@ -32,12 +32,12 @@ private
     conditional_routes.map.with_index(1) { |routing_condition, index| conditional_route_card(routing_condition, index) }
   end
 
-  def conditional_route_card(routing_condition, index)
+  def conditional_route_card(routing_condition, route_number)
     goto_page_name = routing_condition.skip_to_end ? end_page_name : goto_question_name(routing_condition.goto_page_id)
 
     {
       card: {
-        title: I18n.t("page_route_card.route_title", index:),
+        title: I18n.t("page_route_card.route_title", route_number:),
         classes: "app-summary-card",
         actions: [
           govuk_link_to(I18n.t("page_route_card.edit"), edit_condition_path(form_id: form.id, page_id: page.id, condition_id: routing_condition.id)),
@@ -127,9 +127,9 @@ private
     return if target_page.blank?
 
     question_text = target_page.question_text
-    page_position = target_page.position
+    question_number = target_page.position
 
-    I18n.t("page_route_card.question_name_long", page_position:, question_text:)
+    I18n.t("page_route_card.question_name_long", question_number:, question_text:)
   end
 
   def goto_question_name(page_id)

@@ -35,14 +35,14 @@
           <%  conditions_for_page_with_index(page.id).each do |condition, _route_index| %>
             <div id="<%= PageListComponent::ErrorSummary::View.error_id(condition.id) %>" class="govuk-summary-list__row app-page-list__row <%= class_names( "govuk-form-group--error": condition.has_routing_errors?) %>">
               <dt class="govuk-summary-list__key govuk-summary-list__key app-page-list__key">
-                <%= t("page_conditions.condition_name", page_index: condition_page_position(condition)) %>
+                <%= t("page_conditions.condition_name", question_number: condition_page_position(condition)) %>
               </dt>
 
               <dd class="govuk-summary-list__value">
                 <ul class="govuk-list govuk-!-margin-0">
                   <% condition.validation_errors.each do |error| %>
                     <li class="app-page_list__route-text--error">
-                      <%= t("page_conditions.errors.#{error.name}", page_index: page.position) %>
+                      <%= t("page_conditions.errors.#{error.name}", question_number: page.position) %>
                     </li>
                   <% end %>
                 </ul>
@@ -53,7 +53,7 @@
 
               <dd class="govuk-summary-list__actions govuk-!-padding-bottom-6">
                 <%= govuk_link_to show_routes_path(form_id: @form_id, page_id: condition.check_page_id) do %>
-                  <%= t("forms.form_overview.edit_with_visually_hidden_text_html", visually_hidden_text: t("page_conditions.condition_name", page_index: page.position)) %>
+                  <%= t("forms.form_overview.edit_with_visually_hidden_text_html", visually_hidden_text: t("page_conditions.condition_name", question_number: page.position)) %>
                 <% end %>
               </dd>
             </div>

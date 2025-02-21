@@ -85,7 +85,7 @@ class PagesController < ApplicationController
                  page_to_move.position + 1
                end
 
-    redirect_to form_pages_path, success: t("banner.success.form.page_moved", question_text: page_to_move.question_text, direction: move_params[:direction], position:)
+    redirect_to form_pages_path, success: t("banner.success.form.page_moved", question_text: page_to_move.question_text, direction: move_params[:direction], question_number: position)
   end
 
 private

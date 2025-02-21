@@ -215,7 +215,7 @@ describe PageOptionsService do
           expect(page_options_service.all_options_for_answer_type).to include(
             {
               key: { text: I18n.t("page_conditions.route") },
-              value: { text: I18n.t("page_conditions.condition_compact_html", answer_value: condition_pointing_to_page_3.answer_value, goto_page_number: 3, goto_page_text: pages[2].question_text) },
+              value: { text: I18n.t("page_conditions.condition_compact_html", answer_value: condition_pointing_to_page_3.answer_value, goto_page_question_number: 3, goto_page_question_text: pages[2].question_text) },
             },
           )
         end
@@ -228,7 +228,7 @@ describe PageOptionsService do
           expect(page_options_service.all_options_for_answer_type).to include(
             {
               key: { text: I18n.t("page_conditions.route") },
-              value: { text: "<ol class=\"govuk-list govuk-list--number\"><li>#{I18n.t('page_conditions.condition_compact_html', answer_value: condition_pointing_to_page_3.answer_value, goto_page_number: 3, goto_page_text: pages[2].question_text)}</li><li>#{I18n.t('page_conditions.condition_compact_html', answer_value: condition_pointing_to_page_4.answer_value, goto_page_number: 4, goto_page_text: pages[3].question_text)}</li></ol>" },
+              value: { text: "<ol class=\"govuk-list govuk-list--number\"><li>#{I18n.t('page_conditions.condition_compact_html', answer_value: condition_pointing_to_page_3.answer_value, goto_page_question_number: 3, goto_page_question_text: pages[2].question_text)}</li><li>#{I18n.t('page_conditions.condition_compact_html', answer_value: condition_pointing_to_page_4.answer_value, goto_page_question_number: 4, goto_page_question_text: pages[3].question_text)}</li></ol>" },
             },
           )
         end

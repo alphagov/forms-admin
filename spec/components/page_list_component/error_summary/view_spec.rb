@@ -48,7 +48,7 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
       end
 
       it "renders the error link" do
-        condition_answer_value_error = I18n.t("page_conditions.errors.answer_value_doesnt_exist", page_index: 1)
+        condition_answer_value_error = I18n.t("page_conditions.errors.answer_value_doesnt_exist", question_number: 1)
         expect(page).to have_link(condition_answer_value_error, href: "##{described_class.error_id(routing_conditions[0].id)}")
       end
     end
@@ -71,8 +71,8 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
       end
 
       it "renders both error links" do
-        condition_answer_value_error = I18n.t("page_conditions.errors.answer_value_doesnt_exist", page_index: 1)
-        condition_goto_page_error = I18n.t("page_conditions.errors.goto_page_doesnt_exist", page_index: 2)
+        condition_answer_value_error = I18n.t("page_conditions.errors.answer_value_doesnt_exist", question_number: 1)
+        condition_goto_page_error = I18n.t("page_conditions.errors.goto_page_doesnt_exist", question_number: 2)
         expect(page).to have_link(condition_answer_value_error, href: "##{described_class.error_id(routing_conditions_page_with_answer_value_missing[0].id)}")
         expect(page).to have_link(condition_goto_page_error, href: "##{described_class.error_id(routing_conditions_page_with_goto_page_missing[0].id)}")
       end
@@ -102,7 +102,7 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
       it "returns an error object in the correct format" do
         condition = build :condition, id: 1
         page = build :page, position: 1
-        expect(error_summary_component.error_object(error_name: "answer_value_doesnt_exist", condition:, page:)).to eq OpenStruct.new(message: I18n.t("page_conditions.errors.answer_value_doesnt_exist", page_index: 1), link: "##{described_class.error_id(1)}")
+        expect(error_summary_component.error_object(error_name: "answer_value_doesnt_exist", condition:, page:)).to eq OpenStruct.new(message: I18n.t("page_conditions.errors.answer_value_doesnt_exist", question_number: 1), link: "##{described_class.error_id(1)}")
       end
     end
 
@@ -115,8 +115,8 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
     describe "#errors_for_summary" do
       it "returns all of the routing errors for a form with their respective positions and links" do
         expect(error_summary_component.errors_for_summary).to eq [
-          OpenStruct.new(message: I18n.t("page_conditions.errors.answer_value_doesnt_exist", page_index: 1), link: "##{described_class.error_id(1)}"),
-          OpenStruct.new(message: I18n.t("page_conditions.errors.goto_page_doesnt_exist", page_index: 2), link: "##{described_class.error_id(2)}"),
+          OpenStruct.new(message: I18n.t("page_conditions.errors.answer_value_doesnt_exist", question_number: 1), link: "##{described_class.error_id(1)}"),
+          OpenStruct.new(message: I18n.t("page_conditions.errors.goto_page_doesnt_exist", question_number: 2), link: "##{described_class.error_id(2)}"),
         ]
       end
     end
