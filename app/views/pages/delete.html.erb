@@ -11,8 +11,8 @@
 
           t(
             ".notification_banner.#{@routing}.html",
-            route_owner_position: @route_owner.position,
-            show_routes_href: show_routes_path(current_form.id, @route_owner.id),
+            route_page_position: @route_page.position,
+            show_routes_href: show_routes_path(current_form.id, @route_page.id),
           )
         end %>
       <% end %>

@@ -22,23 +22,23 @@ class PagesController < ApplicationController
     if @page.routing_conditions.any? && @page.routing_conditions.first.secondary_skip?
       @routing = :start_of_secondary_skip_route
 
-      # route owner is condition check page
-      @route_owner = PageRepository.find(page_id: @page.routing_conditions.first.check_page_id, form_id: current_form.id)
+      # route page is condition check page
+      @route_page = PageRepository.find(page_id: @page.routing_conditions.first.check_page_id, form_id: current_form.id)
     elsif @page.routing_conditions.any?
       @routing = :start_of_route
 
-      # route owner is us
-      @route_owner = @page
+      # route page is us
+      @route_page = @page
     elsif @page_goto_conditions.any? && @page_goto_conditions.first.secondary_skip?
       @routing = :end_of_secondary_skip_route
 
-      # route owner is condition check page
-      @route_owner = PageRepository.find(page_id: @page_goto_conditions.first.check_page_id, form_id: current_form.id)
+      # route page is condition check page
+      @route_page = PageRepository.find(page_id: @page_goto_conditions.first.check_page_id, form_id: current_form.id)
     elsif @page_goto_conditions.any?
       @routing = :end_of_route
 
-      # route owner is condition routing page
-      @route_owner = PageRepository.find(page_id: @page_goto_conditions.first.routing_page_id, form_id: current_form.id)
+      # route page is condition routing page
+      @route_page = PageRepository.find(page_id: @page_goto_conditions.first.routing_page_id, form_id: current_form.id)
     end
 
     @delete_confirmation_input = Forms::DeleteConfirmationInput.new

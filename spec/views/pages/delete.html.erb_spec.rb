@@ -67,7 +67,7 @@ RSpec.describe "pages/delete" do
 
     before do
       assign(:routing, :start_of_route)
-      assign(:route_owner, page)
+      assign(:route_page, page)
 
       render locals: { current_form: }
     end
@@ -122,7 +122,7 @@ RSpec.describe "pages/delete" do
 
     before do
       assign(:routing, :end_of_route)
-      assign(:route_owner, routing_page)
+      assign(:route_page, routing_page)
 
       assign(:page_goto_conditions, routing_page.routing_conditions)
 
@@ -182,7 +182,7 @@ RSpec.describe "pages/delete" do
 
     before do
       assign(:routing, :start_of_secondary_skip_route)
-      assign(:route_owner, check_page)
+      assign(:route_page, check_page)
 
       render locals: { current_form: }
     end
@@ -250,7 +250,7 @@ RSpec.describe "pages/delete" do
     before do
       assign(:page_goto_conditions, routing_page.routing_conditions)
       assign(:routing, :end_of_secondary_skip_route)
-      assign(:route_owner, check_page)
+      assign(:route_page, check_page)
 
       render locals: { current_form: }
     end
