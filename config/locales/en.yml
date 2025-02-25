@@ -1153,6 +1153,8 @@ en:
     conditions:
       delete:
         any_other_answer_warning: If you delete this route, the route for any other answer will also be deleted
+      edit:
+        back_link: Back to question %{question_number}’s routes
     delete:
       notification_banner:
         end_of_route:
