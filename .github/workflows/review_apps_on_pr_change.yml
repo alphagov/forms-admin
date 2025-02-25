@@ -76,9 +76,9 @@ jobs:
 
       - name: Comment on PR
         env:
+          COMMENT_MARKER: <!-- review apps on pr change -->
           GH_TOKEN: ${{ github.token }}
         run: |
-
           cat <<EOF > "${{runner.temp}}/pr-comment.md"
           :tada: A review copy of this PR has been deployed! You can reach it at ${{steps.deploy.outputs.REVIEW_APP_URL}}.
 
@@ -87,6 +87,13 @@ jobs:
           to debug, or otherwise ask an infrastructure person.
 
           For more details please see the [review app wiki page](https://github.com/alphagov/forms-team/wiki/Review-apps)
+
+          $COMMENT_MARKER
           EOF
+
+          old_comment_ids=$(gh api "repos/{owner}/{repo}/issues/${{github.event.pull_request.number}}/comments" --jq 'map(select((.user.login == "github-actions[bot]") and (.body | endswith($ENV.COMMENT_MARKER + "\n")))) | .[].id')
+          for comment_id in $old_comment_ids; do
+            gh api -X DELETE "repos/{owner}/{repo}/issues/comments/${comment_id}"
+          done
 
           gh pr comment "${{github.event.pull_request.html_url}}" --body-file "${{runner.temp}}/pr-comment.md"
