@@ -20,8 +20,8 @@
     end;
   end %>
 
-  <%= f.govuk_collection_select :routing_page_id, secondary_skip_input.routing_page_options, :id, :question_text, options: { include_blank: t("helpers.label.pages_secondary_skip_input.default_routing_page_id") } %>
-  <%= f.govuk_collection_select :goto_page_id, secondary_skip_input.goto_page_options, :id, :question_text, options: { include_blank: t("helpers.label.pages_secondary_skip_input.default_goto_page_id") } %>
+  <%= f.govuk_collection_select :routing_page_id, secondary_skip_input.routing_page_options, :id, :question_text, label: { class: "govuk-!-font-weight-bold" }, options: { include_blank: t("helpers.label.pages_secondary_skip_input.default_routing_page_id") } %>
+  <%= f.govuk_collection_select :goto_page_id, secondary_skip_input.goto_page_options, :id, :question_text, label: { class: "govuk-!-font-weight-bold" }, options: { include_blank: t("helpers.label.pages_secondary_skip_input.default_goto_page_id") } %>
 
   <%= govuk_details(summary_text: t("secondary_skip.new.details_summary")) do
     t("secondary_skip.new.details_html")
