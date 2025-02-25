@@ -21,8 +21,9 @@ Rails.application.config.before_initialize do
 
   # add developer provider
   if Rails.env.development? || Rails.env.test? || (Settings.forms_env == "review")
+    require "omniauth/strategies/forms_developer"
     Rails.application.config.app_middleware.use(
-      OmniAuth::Strategies::Developer,
+      OmniAuth::Strategies::FormsDeveloper,
       fields: [:email],
     )
   end
