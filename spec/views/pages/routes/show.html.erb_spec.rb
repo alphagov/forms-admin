@@ -36,7 +36,7 @@ describe "pages/routes/show.html.erb" do
 
   it "has the correct heading and caption" do
     expect(rendered).to have_selector("h1", text: form.name)
-    expect(rendered).to have_selector("h1", text: I18n.t("page_titles.routes_show", position: page.position))
+    expect(rendered).to have_selector("h1", text: I18n.t("page_titles.routes_show", question_number: page.position))
   end
 
   it "shows the page title as a summary list" do

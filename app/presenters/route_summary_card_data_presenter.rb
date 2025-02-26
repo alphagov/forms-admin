@@ -32,12 +32,12 @@ private
     conditional_routes.map.with_index(1) { |routing_condition, index| conditional_route_card(routing_condition, index) }
   end
 
-  def conditional_route_card(routing_condition, index)
-    goto_page_name = routing_condition.skip_to_end ? end_page_name : page_name(routing_condition.goto_page_id)
+  def conditional_route_card(routing_condition, route_number)
+    goto_page_name = routing_condition.skip_to_end ? end_page_name : goto_question_name(routing_condition.goto_page_id)
 
     {
       card: {
-        title: I18n.t("page_route_card.route_title", index:),
+        title: I18n.t("page_route_card.route_title", route_number:),
         classes: "app-summary-card",
         actions: [
           govuk_link_to(I18n.t("page_route_card.edit"), edit_condition_path(form_id: form.id, page_id: page.id, condition_id: routing_condition.id)),
@@ -57,7 +57,7 @@ private
   end
 
   def secondary_skip_card
-    continue_to_name = page.has_next_page? ? page_name(page.next_page) : end_page_name
+    continue_to_name = page.has_next_page? ? question_name(page.next_page) : end_page_name
 
     actions = if FeatureService.new(group: form.group).enabled?(:branch_routing) && secondary_skip
                 [
@@ -106,8 +106,8 @@ private
       end
     end
 
-    goto_page_name = secondary_skip.skip_to_end ? end_page_name : page_name(secondary_skip.goto_page_id)
-    routing_page_name = page_name(secondary_skip.routing_page_id)
+    goto_page_name = secondary_skip.skip_to_end ? end_page_name : goto_question_name(secondary_skip.goto_page_id)
+    routing_page_name = question_name(secondary_skip.routing_page_id)
 
     [
       {
@@ -121,17 +121,19 @@ private
     ]
   end
 
-  def page_name(page_id)
+  def question_name(page_id)
     target_page = pages.find { |page| page.id == page_id }
 
-    if target_page.present?
-      page_name = target_page.question_text
-      page_position = target_page.position
+    return if target_page.blank?
 
-      I18n.t("page_route_card.page_name", page_position:, page_name:)
-    else
-      I18n.t("page_route_card.page_name_not_exist")
-    end
+    question_text = target_page.question_text
+    question_number = target_page.position
+
+    I18n.t("page_route_card.question_name_long", question_number:, question_text:)
+  end
+
+  def goto_question_name(page_id)
+    question_name(page_id) || I18n.t("page_route_card.goto_page_invalid")
   end
 
   def end_page_name

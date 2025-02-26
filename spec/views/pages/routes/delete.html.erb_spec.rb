@@ -9,15 +9,15 @@ describe "pages/routes/delete.html.erb" do
   end
 
   it "has the correct title" do
-    expect(view.content_for(:title)).to have_content(I18n.t("pages.routes.delete.title", page_number: 1))
+    expect(view.content_for(:title)).to have_content(I18n.t("pages.routes.delete.title", question_number: 1))
   end
 
   it "has the correct back link" do
-    expect(view.content_for(:back_link)).to have_link(I18n.t("pages.routes.delete.back", page_number: form.page_number(page)), href: show_routes_path(form_id: form.id, page_id: page.id))
+    expect(view.content_for(:back_link)).to have_link(I18n.t("pages.routes.delete.back", question_number: form.page_number(page)), href: show_routes_path(form_id: form.id, page_id: page.id))
   end
 
   it "has the correct heading" do
-    expect(rendered).to have_selector("h1", text: I18n.t("pages.routes.delete.title", page_number: 1))
+    expect(rendered).to have_selector("h1", text: I18n.t("pages.routes.delete.title", question_number: 1))
   end
 
   it "posts the confirm value to the destroy action" do
@@ -30,7 +30,7 @@ describe "pages/routes/delete.html.erb" do
   end
 
   it "has a legend for the radio buttons" do
-    expect(rendered).to have_css "fieldset legend:has(~ .govuk-radios)", text: I18n.t("pages.routes.delete.title", page_number: 1)
+    expect(rendered).to have_css "fieldset legend:has(~ .govuk-radios)", text: I18n.t("pages.routes.delete.title", question_number: 1)
   end
 
   it "has a submit button" do

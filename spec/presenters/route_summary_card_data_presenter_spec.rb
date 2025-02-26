@@ -40,7 +40,7 @@ describe RouteSummaryCardDataPresenter do
 
         it "uses placeholder text instead of question text" do
           result = service.summary_card_data
-          expect(result[0][:rows][1][:value][:text]).to eq(I18n.t("page_route_card.page_name_not_exist"))
+          expect(result[0][:rows][1][:value][:text]).to eq(I18n.t("page_route_card.goto_page_invalid"))
         end
       end
     end

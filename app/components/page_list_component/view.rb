@@ -22,15 +22,15 @@ module PageListComponent
 
     def condition_description(condition)
       if condition.secondary_skip?
-        I18n.t("page_conditions.secondary_skip_description", check_page_text: skip_condition_route_page_text(condition), goto_page_text: goto_page_text_for_condition(condition))
+        I18n.t("page_conditions.secondary_skip_description", check_page_question_text: skip_condition_route_page_text(condition), goto_page_question_text: goto_page_text_for_condition(condition))
       else
-        I18n.t("page_conditions.condition_description", check_page_text: condition_check_page_text(condition), goto_page_text: goto_page_text_for_condition(condition), answer_value: answer_value_text_for_condition(condition))
+        I18n.t("page_conditions.condition_description", check_page_question_text: condition_check_page_text(condition), goto_page_question_text: goto_page_text_for_condition(condition), answer_value: answer_value_text_for_condition(condition))
       end
     end
 
     def condition_check_page_text(condition)
       check_page = @pages.find { |page| page.id == condition.check_page_id }
-      I18n.t("page_conditions.condition_check_page_text", check_page_text: check_page.question_text)
+      I18n.t("page_conditions.condition_check_page_text", check_page_question_text: check_page.question_text)
     end
 
     def answer_value_text_for_condition(condition)
@@ -45,7 +45,7 @@ module PageListComponent
     def goto_page_text_for_condition(condition)
       if condition.goto_page_id.present?
         goto_page = @pages.find { |page| page.id == condition.goto_page_id }
-        I18n.t("page_conditions.condition_goto_page_text", goto_page_position: goto_page.position, goto_page_text: goto_page.question_text)
+        I18n.t("page_conditions.condition_goto_page_text", goto_page_question_number: goto_page.position, goto_page_question_text: goto_page.question_text)
       elsif condition.skip_to_end
         I18n.t("page_conditions.condition_goto_page_check_your_answers")
       else
@@ -72,7 +72,7 @@ module PageListComponent
 
     def skip_condition_route_page_text(condition)
       routing_page = @pages.find { |page| page.id == condition.routing_page_id }
-      I18n.t("page_conditions.skip_condition_route_page_text", route_page_text: routing_page.question_text, route_page_position: routing_page.position)
+      I18n.t("page_conditions.skip_condition_route_page_text", route_page_question_text: routing_page.question_text, route_page_question_number: routing_page.position)
     end
 
     # Create hash of page_id => [condition, index]

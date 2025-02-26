@@ -7,12 +7,12 @@
     <% unless @delete_confirmation_input.errors.any? %>
       <% if @routing.present? %>
         <%= govuk_notification_banner(title_text: "Important") do |banner|
-          banner.with_heading(text: t(".notification_banner.#{@routing}.heading_text", page_position: @page.position), tag: :h3)
+          banner.with_heading(text: t(".notification_banner.#{@routing}.heading_text", question_number: @page.position), tag: :h3)
 
           t(
             ".notification_banner.#{@routing}.html",
-            route_owner_position: @route_owner.position,
-            show_routes_href: show_routes_path(current_form.id, @route_owner.id),
+            route_page_question_number: @route_page.position,
+            show_routes_href: show_routes_path(current_form.id, @route_page.id),
           )
         end %>
       <% end %>

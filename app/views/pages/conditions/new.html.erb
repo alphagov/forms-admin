@@ -1,5 +1,5 @@
-<%# TODO: route_position is hardcoded as 1 here because we know there are only two conditions. It will need to change in the future %>
-<% set_page_title(title_with_error_prefix(t('page_titles.routing_page_new', route_position: 1), condition_input.errors&.any?)) %>
+<%# TODO: route_number is hardcoded as 1 here because we know there can be only two conditions. It will need to change in the future %>
+<% set_page_title(title_with_error_prefix(t('page_titles.routing_page_new', route_number: 1), condition_input.errors&.any?)) %>
 <% content_for :back_link, govuk_back_link_to(routing_page_path(condition_input.form.id, routing_page_id: condition_input.page.id)) %>
 
 <div class="govuk-grid-row">
@@ -10,8 +10,8 @@
       <% end %>
 
       <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l"><%= t("page_titles.routing_page_caption", question_position: condition_input.page.position) %></span>
-        <%= t("page_titles.routing_page_new", route_position: 1) %>
+        <span class="govuk-caption-l"><%= t("page_titles.routing_page_caption", question_number: condition_input.page.position) %></span>
+        <%= t("page_titles.routing_page_new", route_number: 1) %>
       </h1>
 
       <%= govuk_summary_list do |summary_list|

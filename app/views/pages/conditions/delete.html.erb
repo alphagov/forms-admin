@@ -1,4 +1,4 @@
-<% set_page_title(title_with_error_prefix(t("page_titles.routing_page_delete", question_position: delete_condition_input.page.position), delete_condition_input.errors&.any?)) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.routing_page_delete", question_number: delete_condition_input.page.position), delete_condition_input.errors&.any?)) %>
 <% content_for :back_link, govuk_back_link_to(edit_condition_path(delete_condition_input.form.id, delete_condition_input.page.id, delete_condition_input.record.id)) %>
 
 <div class="govuk-grid-row">
@@ -14,7 +14,7 @@
 
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= delete_condition_input.form.name %></span>
-        <%= t("page_titles.routing_page_delete", question_position: delete_condition_input.page.position) %>
+        <%= t("page_titles.routing_page_delete", question_number: delete_condition_input.page.position) %>
       </h1>
 
       <%= govuk_summary_list(actions: false) do |summary_list|
