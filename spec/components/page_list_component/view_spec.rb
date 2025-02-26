@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe PageListComponent::View, type: :component do
+  let(:form) { build :form, id: 1 }
   let(:pages) { [] }
   let(:routing_conditions) { [] }
-  let(:page_list_component) { described_class.new(pages:, form_id: 0) }
+  let(:page_list_component) { described_class.new(pages:, form:) }
 
   describe "rendering component" do
     before do
@@ -301,67 +302,6 @@ RSpec.describe PageListComponent::View, type: :component do
         it "returns correct description" do
           expected_text = "After 2, “What is your name?” go to 4, “What is your email address?”"
           expect(page_list_component.condition_description(condition)).to eq(expected_text)
-        end
-      end
-    end
-
-    describe "#conditions_for_page_with_index" do
-      context "when there are no conditions" do
-        let(:pages) do
-          [(build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:)]
-        end
-        let(:routing_conditions) { [] }
-
-        it "returns an array of conditions for the page" do
-          page_id = 1
-          expect(page_list_component.conditions_for_page_with_index(page_id)).to eq([])
-        end
-      end
-
-      context "when there is one page with one condition" do
-        let(:pages) do
-          [(build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:)]
-        end
-        let(:routing_conditions) { [build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3)] }
-
-        it "returns an array of conditions for the page" do
-          page_id = 1
-          expect(page_list_component.conditions_for_page_with_index(page_id)).to eq([[routing_conditions.first, 1]])
-        end
-      end
-
-      context "when there is one page with multiple conditions" do
-        let(:pages) do
-          [(build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:)]
-        end
-
-        let(:routing_conditions) do
-          [
-            build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3),
-            build(:condition, id: 2, routing_page_id: 2, check_page_id: 1, answer_value: nil, goto_page_id: 4),
-          ]
-        end
-
-        it "returns the correct condition with index" do
-          page_id = 2
-          expect(page_list_component.conditions_for_page_with_index(page_id)).to eq([[routing_conditions.second, 2]])
-        end
-      end
-
-      context "when there is one page with one condition and a condition for another pages" do
-        let(:pages) do
-          [(build :page, id: 1, position: 1, question_text: "What country do you live in?", routing_conditions:)]
-        end
-        let(:routing_conditions) do
-          [
-            build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3),
-            build(:condition, id: 1, routing_page_id: 2, check_page_id: 2, answer_value: "England", goto_page_id: 3),
-          ]
-        end
-
-        it "returns an array of conditions for the page" do
-          page_id = 1
-          expect(page_list_component.conditions_for_page_with_index(page_id)).to eq([[routing_conditions.first, 1]])
         end
       end
     end
