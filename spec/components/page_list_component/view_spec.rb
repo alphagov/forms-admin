@@ -35,6 +35,10 @@ RSpec.describe PageListComponent::View, type: :component do
         expect(page).not_to have_button("Move up")
         expect(page).not_to have_button("Move down")
       end
+
+      it "includes the page id in the id for the row" do
+        expect(page).to have_css "#page_1.govuk-summary-list__row"
+      end
     end
 
     context "when the form has multiple pages" do
@@ -51,6 +55,11 @@ RSpec.describe PageListComponent::View, type: :component do
 
       it "renders a move down link" do
         expect(page).to have_button("Move down")
+      end
+
+      it "includes the page id in the id for each row" do
+        expect(page).to have_css "#page_1.govuk-summary-list__row"
+        expect(page).to have_css "#page_2.govuk-summary-list__row"
       end
 
       context "when the form has conditions" do
@@ -172,6 +181,12 @@ RSpec.describe PageListComponent::View, type: :component do
 
       it "returns true for other pages" do
         expect(page_list_component.show_down_button(pages.length - 2)).to be true
+      end
+    end
+
+    describe "#page_row_id" do
+      it "returns the corrrect id text for a given page" do
+        expect(page_list_component.page_row_id(pages.second)).to eq "page_2"
       end
     end
 

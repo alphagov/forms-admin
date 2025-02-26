@@ -4,7 +4,7 @@
     <%= form_with url: move_page_url(@form_id), method: :post, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
       <dl class="govuk-summary-list">
         <% @pages.each_with_index do |page, index| %>
-          <div class="govuk-summary-list__row">
+          <div id="<%= page_row_id(page) %>" class="govuk-summary-list__row">
 
             <dt class="govuk-summary-list__key app-page-list__key">
               <%= page.position %>

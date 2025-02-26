@@ -16,6 +16,10 @@ module PageListComponent
       index != @pages.length - 1
     end
 
+    def page_row_id(record)
+      "page_#{record.id}"
+    end
+
     def condition_description(condition)
       if condition.secondary_skip?
         I18n.t("page_conditions.secondary_skip_description", check_page_text: skip_condition_route_page_text(condition), goto_page_text: goto_page_text_for_condition(condition))
