@@ -43,7 +43,9 @@
                 <ul class="govuk-list govuk-!-margin-0">
                   <% condition.validation_errors.each do |error| %>
                     <li class="app-page_list__route-text--error">
-                      <%= t("page_conditions.errors.#{error.name}", question_number: condition_page_position) %>
+                      <%# TODO: route_number is hardcoded as 1 here because we know there can be only two conditions. It will need to change in future %>
+                      <% route_number = condition.secondary_skip? ? t("page_conditions.errors.route_number_for_any_other_answer") : 1 %>
+                      <%= t("page_conditions.errors.#{error.name}", question_number: condition_page_position, route_number:) %>
                     </li>
                   <% end %>
                 </ul>

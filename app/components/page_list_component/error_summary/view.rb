@@ -11,7 +11,9 @@ module PageListComponent
       end
 
       def error_object(error_name:, condition:, page:)
-        OpenStruct.new(message: I18n.t("page_conditions.errors.#{error_name}", question_number: page.position), link: "##{self.class.error_id(condition.id)}")
+        # TODO: route_number is hardcoded as 1 here because we know there can be only two conditions. It will need to change in future
+        route_number = condition.secondary_skip? ? I18n.t("page_conditions.errors.route_number_for_any_other_answer") : 1
+        OpenStruct.new(message: I18n.t("page_conditions.errors.#{error_name}", question_number: page.position, route_number:), link: "##{self.class.error_id(condition.id)}")
       end
 
       def conditions_with_check_pages
