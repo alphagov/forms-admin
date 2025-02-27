@@ -48,7 +48,7 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
       end
 
       it "renders the error link" do
-        condition_answer_value_error = I18n.t("page_conditions.errors.answer_value_doesnt_exist", question_number: 1, route_number: 1)
+        condition_answer_value_error = I18n.t("errors.page_conditions.answer_value_doesnt_exist", question_number: 1, route_number: 1)
         expect(page).to have_link(condition_answer_value_error, href: "##{described_class.error_id(routing_conditions[0].id)}")
       end
     end
@@ -71,8 +71,8 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
       end
 
       it "renders both error links" do
-        condition_answer_value_error = I18n.t("page_conditions.errors.answer_value_doesnt_exist", question_number: 1, route_number: 1)
-        condition_goto_page_error = I18n.t("page_conditions.errors.goto_page_doesnt_exist", question_number: 2, route_number: 1)
+        condition_answer_value_error = I18n.t("errors.page_conditions.answer_value_doesnt_exist", question_number: 1, route_number: 1)
+        condition_goto_page_error = I18n.t("errors.page_conditions.goto_page_doesnt_exist", question_number: 2, route_number: 1)
         expect(page).to have_link(condition_answer_value_error, href: "##{described_class.error_id(routing_conditions_page_with_answer_value_missing[0].id)}")
         expect(page).to have_link(condition_goto_page_error, href: "##{described_class.error_id(routing_conditions_page_with_goto_page_missing[0].id)}")
       end
@@ -90,7 +90,22 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
         end
 
         it "renders the error summary" do
-          error_message = I18n.t("page_conditions.errors.cannot_route_to_next_page", question_number: 2, route_number: "for any other answer")
+          error_message = I18n.t("errors.page_conditions.cannot_route_to_next_page", question_number: 2, route_number: "for any other answer")
+          expect(page).to have_css ".govuk-error-summary", text: error_message
+          expect(page).to have_link error_message, href: "#condition_#{branch_any_other_answer_route.id}"
+        end
+      end
+
+      context "and the any other answer route skip to question has been moved to before the skip from question" do
+        before do
+          branch_any_other_answer_route.has_routing_errors = true
+          branch_any_other_answer_route.validation_errors = [OpenStruct.new(name: "cannot_have_goto_page_before_routing_page")]
+
+          render_inline(error_summary_component)
+        end
+
+        it "renders an error message" do
+          error_message = I18n.t("errors.page_conditions.any_other_answer_route.cannot_have_goto_page_before_routing_page", question_number: 2, route_number: "for any other answer")
           expect(page).to have_css ".govuk-error-summary", text: error_message
           expect(page).to have_link error_message, href: "#condition_#{branch_any_other_answer_route.id}"
         end
@@ -121,7 +136,7 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
       it "returns an error object in the correct format" do
         condition = build :condition, id: 1
         page = build :page, position: 1
-        expect(error_summary_component.error_object(error_name: "answer_value_doesnt_exist", condition:, page:)).to eq OpenStruct.new(message: I18n.t("page_conditions.errors.answer_value_doesnt_exist", question_number: 1, route_number: 1), link: "##{described_class.error_id(1)}")
+        expect(error_summary_component.error_object(error_name: "answer_value_doesnt_exist", condition:, page:)).to eq OpenStruct.new(message: I18n.t("errors.page_conditions.answer_value_doesnt_exist", question_number: 1, route_number: 1), link: "##{described_class.error_id(1)}")
       end
     end
 
@@ -149,8 +164,8 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
     describe "#errors_for_summary" do
       it "returns all of the routing errors for a form with their respective positions and links" do
         expect(error_summary_component.errors_for_summary).to eq [
-          OpenStruct.new(message: I18n.t("page_conditions.errors.answer_value_doesnt_exist", question_number: 1, route_number: 1), link: "##{described_class.error_id(1)}"),
-          OpenStruct.new(message: I18n.t("page_conditions.errors.goto_page_doesnt_exist", question_number: 2, route_number: 1), link: "##{described_class.error_id(2)}"),
+          OpenStruct.new(message: I18n.t("errors.page_conditions.answer_value_doesnt_exist", question_number: 1, route_number: 1), link: "##{described_class.error_id(1)}"),
+          OpenStruct.new(message: I18n.t("errors.page_conditions.goto_page_doesnt_exist", question_number: 2, route_number: 1), link: "##{described_class.error_id(2)}"),
         ]
       end
     end
