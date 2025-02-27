@@ -1,18 +1,10 @@
 class MailchimpListSyncService
   def synchronize_lists
     Rails.logger.debug "Synchronizing active users mailing list"
-
-    MailchimpListSynchronizer.synchronize(
-      list_id: Settings.mailchimp.active_users_list,
-      users_to_synchronize: active_users.pluck(:email),
-    )
+    MailchimpListSynchronizer.new(list_id: Settings.mailchimp.active_users_list).synchronize(users_to_synchronize: active_users.pluck(:email))
 
     Rails.logger.debug "Synchronizing MOU signers mailing list"
-
-    MailchimpListSynchronizer.synchronize(
-      list_id: Settings.mailchimp.mou_signers_list,
-      users_to_synchronize: mou_signers.pluck(:email),
-    )
+    MailchimpListSynchronizer.new(list_id: Settings.mailchimp.mou_signers_list).synchronize(users_to_synchronize: mou_signers.pluck(:email))
   end
 
   def active_users

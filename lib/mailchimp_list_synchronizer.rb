@@ -2,7 +2,13 @@ require "digest"
 require "MailchimpMarketing"
 
 class MailchimpListSynchronizer
-  def self.synchronize(list_id:, users_to_synchronize:)
+  attr_reader :list_id
+
+  def initialize(list_id:)
+    @list_id = list_id
+  end
+
+  def synchronize(users_to_synchronize:)
     mailchimp_api_key = Settings.mailchimp.api_key
     mailchimp_server_prefix = Settings.mailchimp.api_prefix
     puts "Mailchimp server prefix: #{mailchimp_server_prefix}"

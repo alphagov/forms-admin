@@ -35,8 +35,12 @@ RSpec.describe MailchimpListSyncService do
     end
 
     it "runs the mailchimp synchronization on each list" do
-      expect(MailchimpListSynchronizer).to receive(:synchronize).with(list_id: Settings.mailchimp.active_users_list, users_to_synchronize: match_array(users_with_access)).once
-      expect(MailchimpListSynchronizer).to receive(:synchronize).with(list_id: Settings.mailchimp.mou_signers_list, users_to_synchronize: [mou_signer_with_access]).once
+      list_synchronizer = instance_double(MailchimpListSynchronizer)
+      allow(MailchimpListSynchronizer).to receive(:new).with(list_id: Settings.mailchimp.active_users_list).and_return(list_synchronizer)
+      allow(MailchimpListSynchronizer).to receive(:new).with(list_id: Settings.mailchimp.mou_signers_list).and_return(list_synchronizer)
+
+      expect(list_synchronizer).to receive(:synchronize).with(users_to_synchronize: match_array(users_with_access)).once
+      expect(list_synchronizer).to receive(:synchronize).with(users_to_synchronize: [mou_signer_with_access]).once
 
       expect(Rails.logger).to receive(:debug).with("Synchronizing active users mailing list").once
       expect(Rails.logger).to receive(:debug).with("Synchronizing MOU signers mailing list").once

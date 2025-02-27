@@ -67,7 +67,7 @@ RSpec.describe MailchimpListSynchronizer do
           },
         )
 
-        described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+        described_class.new(list_id: "list-1").synchronize(users_to_synchronize:)
       end
     end
 
@@ -77,7 +77,7 @@ RSpec.describe MailchimpListSynchronizer do
 
         expect(mailchimp_client_lists).to receive(:delete_list_member).with("list-1", archived_email_hash)
 
-        described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+        described_class.new(list_id: "list-1").synchronize(users_to_synchronize:)
       end
     end
 
@@ -86,7 +86,7 @@ RSpec.describe MailchimpListSynchronizer do
         expect(mailchimp_client_lists).not_to receive(:set_list_member)
         expect(mailchimp_client_lists).not_to receive(:delete_list_member)
 
-        described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+        described_class.new(list_id: "list-1").synchronize(users_to_synchronize:)
       end
     end
 
@@ -97,13 +97,13 @@ RSpec.describe MailchimpListSynchronizer do
           expect(body["email_address"]).to eq("some_other_user@domain.org")
         end
 
-        described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+        described_class.new(list_id: "list-1").synchronize(users_to_synchronize:)
       end
 
       it "does not archive the user" do
         expect(mailchimp_client_lists).not_to receive(:delete_list_member)
 
-        described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+        described_class.new(list_id: "list-1").synchronize(users_to_synchronize:)
       end
     end
 
@@ -304,7 +304,7 @@ RSpec.describe MailchimpListSynchronizer do
       it "handles all of the results" do
         expect(mailchimp_client_lists).to receive(:delete_list_member).with("list-1", anything).exactly(1001).times
 
-        described_class.synchronize(list_id: "list-1", users_to_synchronize:)
+        described_class.new(list_id: "list-1").synchronize(users_to_synchronize:)
       end
     end
   end
