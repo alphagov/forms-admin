@@ -33,6 +33,7 @@
           </div>
 
           <%  page.routing_conditions.each do |condition| %>
+            <% condition_page = self.condition_page(condition) %>
             <% condition_page_position = self.condition_page_position(condition) %>
             <div id="<%= PageListComponent::ErrorSummary::View.error_id(condition.id) %>" class="govuk-summary-list__row app-page-list__row <%= class_names( "govuk-form-group--error": condition.has_routing_errors?) %>">
               <dt class="govuk-summary-list__key govuk-summary-list__key app-page-list__key">
@@ -43,9 +44,7 @@
                 <ul class="govuk-list govuk-!-margin-0">
                   <% condition.validation_errors.each do |error| %>
                     <li class="app-page_list__route-text--error">
-                      <%# TODO: route_number is hardcoded as 1 here because we know there can be only two conditions. It will need to change in future %>
-                      <% route_number = condition.secondary_skip? ? t("page_conditions.errors.route_number_for_any_other_answer") : 1 %>
-                      <%= t("page_conditions.errors.#{error.name}", question_number: condition_page_position, route_number:) %>
+                      <%= PageListComponent::ErrorSummary::View.generate_error_message(error.name, condition:, page: condition_page) %>
                     </li>
                   <% end %>
                 </ul>
