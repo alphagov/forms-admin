@@ -121,6 +121,18 @@ RSpec.shared_context "with pages with routing" do
     ]
   end
 
+  let(:branch_route_1) do
+    page_with_skip_and_secondary_skip.routing_conditions.first
+  end
+
+  let(:branch_any_other_answer_route) do
+    start_of_a_secondary_skip.routing_conditions.first
+  end
+
+  let(:skip_route) do
+    page_with_skip_route.routing_conditions.first
+  end
+
   let(:page_with_no_routes) do
     pages[0]
   end
