@@ -15,22 +15,22 @@ module PageListComponent
       end
 
       def conditions_with_check_pages
-        @pages.map { |page|
+        @pages.flat_map do |page|
           page.routing_conditions.map do |condition|
-            check_page = @pages.find { it.id == condition.check_page_id }
-            OpenStruct.new(condition:, check_page:)
+            condition.attributes[:check_page] ||= @pages.find { it.id == condition.check_page_id }
+            condition
           end
-        }.flatten
+        end
       end
 
       def errors_for_summary
         conditions_with_check_pages
           .map { |condition_with_check_page|
-            condition_with_check_page.condition.validation_errors.map do |error|
+            condition_with_check_page.validation_errors.map do |error|
               error_object(
                 error_name: error.name,
                 page: condition_with_check_page.check_page,
-                condition: condition_with_check_page.condition,
+                condition: condition_with_check_page,
               )
             end
           }

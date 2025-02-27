@@ -127,9 +127,9 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
 
     describe "#conditions_with_check_pages" do
       it "returns all of the conditions for a form with their respective conditions and check pages" do
-        expect(error_summary_component.conditions_with_check_pages).to eq [
-          OpenStruct.new(condition: routing_conditions_page_with_answer_value_missing[0], check_page: pages.first),
-          OpenStruct.new(condition: routing_conditions_page_with_goto_page_missing[0], check_page: pages.second),
+        expect(error_summary_component.conditions_with_check_pages).to match [
+          an_object_having_attributes(id: routing_conditions_page_with_answer_value_missing[0].id, check_page: pages.first),
+          an_object_having_attributes(id: routing_conditions_page_with_goto_page_missing[0].id, check_page: pages.second),
         ]
       end
 
@@ -137,10 +137,10 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
         include_context "with pages with routing"
 
         it "returns all of the conditions for a form with their respective conditions and check pages" do
-          expect(error_summary_component.conditions_with_check_pages).to eq [
-            OpenStruct.new(condition: branch_route_1, check_page: page_with_skip_and_secondary_skip),
-            OpenStruct.new(condition: branch_any_other_answer_route, check_page: page_with_skip_and_secondary_skip),
-            OpenStruct.new(condition: skip_route, check_page: page_with_skip_route),
+          expect(error_summary_component.conditions_with_check_pages).to match [
+            an_object_having_attributes(id: branch_route_1.id, check_page: page_with_skip_and_secondary_skip),
+            an_object_having_attributes(id: branch_any_other_answer_route.id, check_page: page_with_skip_and_secondary_skip),
+            an_object_having_attributes(id: skip_route.id, check_page: page_with_skip_route),
           ]
         end
       end
