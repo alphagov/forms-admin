@@ -155,6 +155,32 @@ RSpec.describe PageListComponent::View, type: :component do
           end
         end
       end
+
+      context "when the form has a branch route" do
+        include_examples "with pages with routing"
+
+        it "renders a summary list row for the any other answer route" do
+          expect(page).to have_css("#condition_2.govuk-summary-list__row", text: "Question 2’s routes") do |summary_list_row|
+            expect(summary_list_row).to have_link(href: show_routes_path(form_id: 1, page_id: 2)) do |link|
+              expect(link).to have_content("Edit Question 2’s routes")
+            end
+          end
+        end
+
+        context "and there is an error with the any other answer route" do
+          before do
+            branch_any_other_answer_route.has_routing_errors = true
+            branch_any_other_answer_route.validation_errors = [OpenStruct.new(name: "cannot_route_to_next_page")]
+
+            render_inline(page_list_component)
+          end
+
+          it "renders an error message" do
+            error_message = I18n.t("page_conditions.errors.cannot_route_to_next_page", question_number: 2)
+            expect(page).to have_css ".app-page_list__route-text--error", text: error_message
+          end
+        end
+      end
     end
   end
 

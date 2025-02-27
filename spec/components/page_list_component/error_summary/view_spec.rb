@@ -77,6 +77,25 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
         expect(page).to have_link(condition_goto_page_error, href: "##{described_class.error_id(routing_conditions_page_with_goto_page_missing[0].id)}")
       end
     end
+
+    context "when the form has a branch route" do
+      include_examples "with pages with routing"
+
+      context "and there is an error with the any other answer route" do
+        before do
+          branch_any_other_answer_route.has_routing_errors = true
+          branch_any_other_answer_route.validation_errors = [OpenStruct.new(name: "cannot_route_to_next_page")]
+
+          render_inline(error_summary_component)
+        end
+
+        it "renders the error summary" do
+          error_message = I18n.t("page_conditions.errors.cannot_route_to_next_page", question_number: 2)
+          expect(page).to have_css ".govuk-error-summary", text: error_message
+          expect(page).to have_link error_message, href: "#condition_#{branch_any_other_answer_route.id}"
+        end
+      end
+    end
   end
 
   describe "class methods" do
@@ -106,9 +125,24 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
       end
     end
 
-    describe "#conditions_with_routing_pages" do
-      it "returns all of the conditions for a form with their respective conditions and routing pages" do
-        expect(error_summary_component.conditions_with_routing_pages).to eq [OpenStruct.new(condition: routing_conditions_page_with_answer_value_missing[0], routing_page: pages.first), OpenStruct.new(condition: routing_conditions_page_with_goto_page_missing[0], routing_page: pages.second)]
+    describe "#conditions_with_check_pages" do
+      it "returns all of the conditions for a form with their respective conditions and check pages" do
+        expect(error_summary_component.conditions_with_check_pages).to eq [
+          OpenStruct.new(condition: routing_conditions_page_with_answer_value_missing[0], check_page: pages.first),
+          OpenStruct.new(condition: routing_conditions_page_with_goto_page_missing[0], check_page: pages.second),
+        ]
+      end
+
+      context "when the form has branch routing" do
+        include_context "with pages with routing"
+
+        it "returns all of the conditions for a form with their respective conditions and check pages" do
+          expect(error_summary_component.conditions_with_check_pages).to eq [
+            OpenStruct.new(condition: branch_route_1, check_page: page_with_skip_and_secondary_skip),
+            OpenStruct.new(condition: branch_any_other_answer_route, check_page: page_with_skip_and_secondary_skip),
+            OpenStruct.new(condition: skip_route, check_page: page_with_skip_route),
+          ]
+        end
       end
     end
 
