@@ -39,8 +39,8 @@ RSpec.describe MailchimpListSyncService do
       allow(MailchimpListSynchronizer).to receive(:new).with(list_id: Settings.mailchimp.active_users_list).and_return(list_synchronizer)
       allow(MailchimpListSynchronizer).to receive(:new).with(list_id: Settings.mailchimp.mou_signers_list).and_return(list_synchronizer)
 
-      expect(list_synchronizer).to receive(:synchronize).with(users_to_synchronize: match_array(users_with_access)).once
-      expect(list_synchronizer).to receive(:synchronize).with(users_to_synchronize: [mou_signer_with_access]).once
+      expect(list_synchronizer).to receive(:synchronize).with(desired_members: match_array(users_with_access.map { |email| MailchimpMember.new(email: email, status: "subscribed") })).once
+      expect(list_synchronizer).to receive(:synchronize).with(desired_members: [MailchimpMember.new(email: mou_signer_with_access, status: "subscribed")]).once
 
       expect(Rails.logger).to receive(:debug).with("Synchronizing active users mailing list").once
       expect(Rails.logger).to receive(:debug).with("Synchronizing MOU signers mailing list").once

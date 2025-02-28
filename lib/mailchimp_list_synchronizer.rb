@@ -34,12 +34,7 @@ class MailchimpListSynchronizer
     end
   end
 
-  def synchronize(users_to_synchronize:)
-    desired_members = users_to_synchronize.map { |email| MailchimpMember.new(email: email, status: "subscribed") }
-
-    Rails.logger.debug "Mailchimp server prefix: #{Settings.mailchimp.api_prefix}"
-    Rails.logger.debug "List id: #{list_id}"
-
+  def synchronize(desired_members:)
     desired_members_hash = desired_members.index_by(&:subscriber_hash)
     existing_members_hash = fetch_all_members.index_by(&:subscriber_hash)
 

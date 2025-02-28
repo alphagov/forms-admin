@@ -67,7 +67,7 @@ RSpec.describe MailchimpListSynchronizer do
           },
         )
 
-        described_class.new(list_id: "list-1").synchronize(users_to_synchronize:)
+        described_class.new(list_id: "list-1").synchronize(desired_members:)
       end
     end
 
@@ -77,7 +77,7 @@ RSpec.describe MailchimpListSynchronizer do
 
         expect(mailchimp_client_lists).to receive(:delete_list_member).with("list-1", archived_email_hash)
 
-        described_class.new(list_id: "list-1").synchronize(users_to_synchronize:)
+        described_class.new(list_id: "list-1").synchronize(desired_members:)
       end
     end
 
@@ -86,7 +86,7 @@ RSpec.describe MailchimpListSynchronizer do
         expect(mailchimp_client_lists).not_to receive(:set_list_member)
         expect(mailchimp_client_lists).not_to receive(:delete_list_member)
 
-        described_class.new(list_id: "list-1").synchronize(users_to_synchronize:)
+        described_class.new(list_id: "list-1").synchronize(desired_members:)
       end
     end
 
@@ -97,18 +97,18 @@ RSpec.describe MailchimpListSynchronizer do
           expect(body["email_address"]).to eq("some_other_user@domain.org")
         end
 
-        described_class.new(list_id: "list-1").synchronize(users_to_synchronize:)
+        described_class.new(list_id: "list-1").synchronize(desired_members:)
       end
 
       it "does not archive the user" do
         expect(mailchimp_client_lists).not_to receive(:delete_list_member)
 
-        described_class.new(list_id: "list-1").synchronize(users_to_synchronize:)
+        described_class.new(list_id: "list-1").synchronize(desired_members:)
       end
     end
 
     context "when the user is in the list of users to synchronize" do
-      let(:users_to_synchronize) { ["user@domain.org"] }
+      let(:desired_members) { [MailchimpMember.new(email: "user@domain.org", status: "subscribed")] }
 
       context "when the user is not present in the MailChimp list" do
         let(:list_1_members_info) do
@@ -194,7 +194,7 @@ RSpec.describe MailchimpListSynchronizer do
     end
 
     context "when the user is not in the list of users to synchronize" do
-      let(:users_to_synchronize) { ["some_other_user@domain.org"] }
+      let(:desired_members) { [MailchimpMember.new(email: "some_other_user@domain.org", status: "subscribed")] }
 
       context "when the user is not present in the MailChimp list" do
         let(:list_1_members_info) do
@@ -280,9 +280,7 @@ RSpec.describe MailchimpListSynchronizer do
     end
 
     context "when the mailing list has more than 1000 members" do
-      let(:users_to_synchronize) do
-        ["some_email_address@domain.org"]
-      end
+      let(:desired_members) { [MailchimpMember.new(email: "some_email_address@domain.org", status: "subscribed")] }
 
       let(:list_1) do
         {
@@ -304,7 +302,7 @@ RSpec.describe MailchimpListSynchronizer do
       it "handles all of the results" do
         expect(mailchimp_client_lists).to receive(:delete_list_member).with("list-1", anything).exactly(1001).times
 
-        described_class.new(list_id: "list-1").synchronize(users_to_synchronize:)
+        described_class.new(list_id: "list-1").synchronize(desired_members:)
       end
     end
   end
