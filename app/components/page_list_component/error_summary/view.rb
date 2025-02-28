@@ -10,8 +10,24 @@ module PageListComponent
         "condition_#{number}"
       end
 
+      def self.generate_error_message(error_name, condition:, page:)
+        # TODO: route_number is hardcoded as 1 here because we know there can be only two conditions. It will need to change in future
+        route_number = condition.secondary_skip? ? I18n.t("errors.page_conditions.route_number_for_any_other_answer") : 1
+
+        interpolation_variables = { question_number: page.position, route_number: }
+
+        scope = "errors.page_conditions"
+        defaults = [:"#{error_name}"]
+        defaults.prepend(:"any_other_answer_route.#{error_name}") if condition.secondary_skip?
+
+        I18n.t(defaults.first, default: defaults.drop(1), scope:, **interpolation_variables)
+      end
+
       def error_object(error_name:, condition:, page:)
-        OpenStruct.new(message: I18n.t("page_conditions.errors.#{error_name}", question_number: page.position), link: "##{self.class.error_id(condition.id)}")
+        OpenStruct.new(
+          message: self.class.generate_error_message(error_name, condition:, page:),
+          link: "##{self.class.error_id(condition.id)}",
+        )
       end
 
       def conditions_with_check_pages
