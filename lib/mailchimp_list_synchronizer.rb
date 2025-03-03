@@ -55,7 +55,7 @@ class MailchimpListSynchronizer
       members_to_update << desired_member
     end
 
-    Rails.logger.debug "There are #{members_to_update} to subscribe"
+    Rails.logger.debug "There are #{members_to_update.count} to subscribe"
 
     members_to_update.each do |member|
       update_member(member)
@@ -126,8 +126,8 @@ class MailchimpListSynchronizer
   end
 
   def log_mailchimp_error(action, subscriber_hash, error)
-    warn "Could not #{action} user with subscriber hash #{subscriber_hash} from list #{list_id}"
-    warn "#{error.title}: #{error.detail}"
-    warn "Continuing"
+    Rails.logger.warn "Could not #{action} user with subscriber hash #{subscriber_hash} from list #{list_id}"
+    Rails.logger.warn "#{error.title}: #{error.detail}"
+    Rails.logger.warn "Continuing"
   end
 end
