@@ -37,16 +37,32 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
     end
 
     context "when file upload is disabled for the group" do
-      it "does not show the file answer type option" do
-        expect(response.body).not_to include("File")
+      context "when the file upload feature is not enabled globally", feature_file_upload: false do
+        it "does not show the file answer type option" do
+          expect(response.body).not_to include("File")
+        end
+      end
+
+      context "when the file upload feature is enabled globally", :feature_file_upload do
+        it "shows the file answer type option" do
+          expect(response.body).to include("File")
+        end
       end
     end
 
     context "when file upload is enabled for the group" do
       let(:file_upload_enabled) { true }
 
-      it "shows the file answer type option" do
-        expect(response.body).to include("File")
+      context "when the file upload feature is not enabled globally", feature_file_upload: false do
+        it "shows the file answer type option" do
+          expect(response.body).to include("File")
+        end
+      end
+
+      context "when the file upload feature is enabled globally", :feature_file_upload do
+        it "shows the file answer type option" do
+          expect(response.body).to include("File")
+        end
       end
     end
   end
