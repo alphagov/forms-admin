@@ -305,5 +305,66 @@ RSpec.describe MailchimpListSynchronizer do
         described_class.new(list_id: "list-1").synchronize(desired_members:)
       end
     end
+
+    context "when there is a MailChimp API error" do
+      let(:desired_members) { [MailchimpMember.new(email: "user@domain.org", status: "subscribed")] }
+
+      let(:list_1_members_info) do
+        {
+          "members" => [],
+        }
+      end
+
+      before do
+        allow(Rails.logger).to receive(:warn)
+      end
+
+      it "logs the issue when the response_body is available" do
+        response_body = <<~HEREDOC
+          {
+            "title": "Member In Compliance State",
+            "status": 400,
+            "detail": "user@domain.org is in a compliance state due to unsubscribe, bounce, or compliance review and cannot be subscribed.",
+            "instance": "ecc64220-55ff-d413-6c81-583a656331db"
+          }
+        HEREDOC
+        error = MailchimpMarketing::ApiError.new(status: 400, response_body: response_body)
+        allow(mailchimp_client_lists).to receive(:set_list_member).and_raise(error)
+
+        expected_log_message = {
+          mailchimp_action: "subscribe",
+          detail: "[FILTERED] is in a compliance state due to unsubscribe, bounce, or compliance review and cannot be subscribed.",
+          instance: "ecc64220-55ff-d413-6c81-583a656331db",
+          status: 400,
+          subscriber_hash: "640f8c96cd7de424a8248a15d8b19b4d",
+          task: "MailchimpListSynchronizer#synchronize",
+          title: "Member In Compliance State",
+        }
+
+        described_class.new(list_id: "list-1").synchronize(desired_members:)
+        expect(Rails.logger).to have_received(:warn).with(expected_log_message)
+      end
+
+      it "logs the issue when the response_body is not available" do
+        response_body = <<~HEREDOC
+          this is not valid json
+        HEREDOC
+        error = MailchimpMarketing::ApiError.new(status: 400, response_body: response_body)
+        allow(mailchimp_client_lists).to receive(:set_list_member).and_raise(error)
+
+        expected_log_message = {
+          mailchimp_action: "subscribe",
+          detail: "Unparseable or empty response_body",
+          instance: "unknown",
+          status: 400,
+          subscriber_hash: "640f8c96cd7de424a8248a15d8b19b4d",
+          task: "MailchimpListSynchronizer#synchronize",
+          title: "Unknown error",
+        }
+
+        described_class.new(list_id: "list-1").synchronize(desired_members:)
+        expect(Rails.logger).to have_received(:warn).with(expected_log_message)
+      end
+    end
   end
 end
