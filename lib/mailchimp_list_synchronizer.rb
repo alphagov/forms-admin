@@ -126,8 +126,6 @@ class MailchimpListSynchronizer
   end
 
   def log_mailchimp_error(action, subscriber_hash, error)
-    Rails.logger.warn "Could not #{action} user with subscriber hash #{subscriber_hash} from list #{list_id}"
-    Rails.logger.warn "#{error.title}: #{error.detail}"
-    Rails.logger.warn "Continuing"
+    Rails.logger.warn "Could not #{action} user with subscriber hash #{subscriber_hash} from list #{list_id}. HTTP status: #{error.status}, response body: #{error.response_body}"
   end
 end
