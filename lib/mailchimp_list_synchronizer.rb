@@ -126,6 +126,34 @@ class MailchimpListSynchronizer
   end
 
   def log_mailchimp_error(action, subscriber_hash, error)
-    Rails.logger.warn "Could not #{action} user with subscriber hash #{subscriber_hash} from list #{list_id}. HTTP status: #{error.status}, response body: #{error.response_body}"
+    error_details = {}
+
+    response_body = error.instance_variable_get("@response_body")
+
+    begin
+      if response_body
+        parsed_body = JSON.parse(response_body)
+        error_details = parsed_body.is_a?(Hash) ? parsed_body : {}
+      end
+    rescue JSON::ParserError
+      error_details = {}
+    end
+
+    error_details["title"] ||= "Unknown error"
+    error_details["status"] ||= error.respond_to?(:status) ? error.status : "Unknown status"
+    error_details["detail"] ||= "Unparseable or empty response_body"
+    error_details["instance"] ||= "unknown"
+
+    EmailParameterFilterProc.new.call(nil, error_details["detail"].to_s)
+
+    Rails.logger.warn(
+      task: "MailchimpListSynchronizer#synchronize",
+      mailchimp_action: action,
+      subscriber_hash: subscriber_hash,
+      title: error_details["title"],
+      detail: error_details["detail"],
+      status: error_details["status"],
+      instance: error_details["instance"],
+    )
   end
 end
