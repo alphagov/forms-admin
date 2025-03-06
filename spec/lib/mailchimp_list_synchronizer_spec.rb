@@ -366,5 +366,75 @@ RSpec.describe MailchimpListSynchronizer do
         expect(Rails.logger).to have_received(:warn).with(expected_log_message)
       end
     end
+
+    context "when member is new and role is set" do
+      let(:list_1_members_info) { { "members" => [] } }
+      let(:desired_members) { [MailchimpMember.new(email: "user@domain.org", status: "subscribed", role: "AGREED_MOU")] }
+
+      it "updates the role" do
+        expect(mailchimp_client_lists).to receive(:set_list_member).with(
+          "list-1",
+          anything,
+          {
+            "email_address" => "user@domain.org",
+            "status" => "subscribed",
+            "merge_fields" => {
+              "ROLE" => "AGREED_MOU",
+            },
+          },
+        )
+
+        described_class.new(list_id: "list-1").synchronize(desired_members:)
+      end
+    end
+
+    context "when member has different role and role is set" do
+      let(:list_1_members_info) do
+        { "members" => [{
+          "email_address" => "user@domain.org",
+          "status" => "subscribed",
+          "merge_fields" => {
+            "ROLE" => "ORGANISATION_ADMIN",
+          },
+        }] }
+      end
+
+      let(:desired_members) { [MailchimpMember.new(email: "user@domain.org", status: "subscribed", role: "AGREED_MOU")] }
+
+      it "updates the role" do
+        expect(mailchimp_client_lists).to receive(:set_list_member).with(
+          "list-1",
+          anything,
+          {
+            "email_address" => "user@domain.org",
+            "status" => "subscribed",
+            "merge_fields" => {
+              "ROLE" => "AGREED_MOU",
+            },
+          },
+        )
+
+        described_class.new(list_id: "list-1").synchronize(desired_members:)
+      end
+    end
+
+    context "when member has same role" do
+      let(:list_1_members_info) do
+        { "members" => [{
+          "email_address" => "user@domain.org",
+          "status" => "subscribed",
+          "merge_fields" => {
+            "ROLE" => "AGREED_MOU",
+          },
+        }] }
+      end
+
+      let(:desired_members) { [MailchimpMember.new(email: "user@domain.org", status: "subscribed", role: "AGREED_MOU")] }
+
+      it "does not update role" do
+        expect(mailchimp_client_lists).not_to receive(:set_list_member)
+        described_class.new(list_id: "list-1").synchronize(desired_members:)
+      end
+    end
   end
 end
