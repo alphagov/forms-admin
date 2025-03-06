@@ -1,7 +1,9 @@
 require "digest"
 require "MailchimpMarketing"
 
-MailchimpMember = Data.define(:email, :status) do
+MailchimpMember = Data.define(:email, :status, :role) do
+  def initialize(email:, status:, role: nil) = super
+
   def unsubscribed?
     status == "unsubscribed"
   end
@@ -97,6 +99,7 @@ class MailchimpListSynchronizer
         yield MailchimpMember.new(
           email: member_data["email_address"],
           status: member_data["status"],
+          role: member_data.dig("merge_fields", "ROLE"),
         )
       end
 
@@ -109,6 +112,8 @@ class MailchimpListSynchronizer
       "email_address" => member.email,
       "status" => member.status,
     }
+
+    member_data["merge_fields"] = { "ROLE" => member.role } if member.role
 
     client.lists.set_list_member(
       list_id,
