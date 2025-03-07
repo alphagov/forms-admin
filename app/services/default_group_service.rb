@@ -5,7 +5,7 @@ class DefaultGroupService
   def create_user_default_trial_group!(user)
     return unless user.name.present? && user.organisation.present?
 
-    forms = FormRepository.where(creator_id: user.id).to_h { [_1.id, _1] }
+    forms = FormRepository.where(creator_id: user.id).index_by(&:id)
     form_ids = forms.keys
     group_form_ids = GroupForm.where(form_id: form_ids).pluck(:form_id)
     not_group_form_ids = form_ids.to_set - group_form_ids
