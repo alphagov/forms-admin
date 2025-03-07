@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_30_150000) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_06_171025) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -22,6 +22,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_30_150000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "skip_to_end", default: false
+    t.text "exit_page_markdown", comment: "When not nil this condition should be treated as an exit page. When set it contains the markdown for the body of the exit page"
+    t.text "exit_page_heading", comment: "Text for the heading of the exit page"
     t.index ["check_page_id"], name: "index_conditions_on_check_page_id"
     t.index ["goto_page_id"], name: "index_conditions_on_goto_page_id"
     t.index ["routing_page_id"], name: "index_conditions_on_routing_page_id"
