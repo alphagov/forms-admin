@@ -89,7 +89,7 @@ private
   end
 
   def file_upload_enabled
-    current_form.group&.file_upload_enabled
+    Settings.features.file_upload || current_form.group&.file_upload_enabled
   end
 
   def set_answer_types
