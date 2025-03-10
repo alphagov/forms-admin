@@ -216,12 +216,13 @@ GEM
       rails (>= 4.1.0)
     hashdiff (1.1.2)
     hashie (5.0.0)
-    highline (3.0.1)
+    highline (3.1.2)
+      reline
     html-attributes-utils (1.0.2)
       activesupport (>= 6.1.4.4)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
-    i18n-tasks (1.0.14)
+    i18n-tasks (1.0.15)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
       erubi
@@ -230,6 +231,7 @@ GEM
       parser (>= 3.2.2.1)
       rails-i18n
       rainbow (>= 2.2.2, < 4.0)
+      ruby-progressbar (~> 1.8, >= 1.8.1)
       terminal-table (>= 1.5.1)
     ice_nine (0.11.2)
     io-console (0.8.0)
@@ -478,9 +480,9 @@ GEM
     snaky_hash (2.0.1)
       hashie
       version_gem (~> 1.1, >= 1.1.1)
-    stringio (3.1.2)
-    terminal-table (3.0.2)
-      unicode-display_width (>= 1.1.1, < 3)
+    stringio (3.1.5)
+    terminal-table (4.0.0)
+      unicode-display_width (>= 1.1.1, < 4)
     thor (1.3.2)
     thread_safe (0.3.6)
     timeout (0.4.3)
@@ -488,7 +490,9 @@ GEM
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2025.1)
       tzinfo (>= 1.0.0)
-    unicode-display_width (2.6.0)
+    unicode-display_width (3.1.4)
+      unicode-emoji (~> 4.0, >= 4.0.4)
+    unicode-emoji (4.0.4)
     uri (1.0.3)
     useragent (0.16.11)
     validate_url (1.0.15)
@@ -526,7 +530,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.7.1)
+    zeitwerk (2.7.2)
 
 PLATFORMS
   aarch64-linux-gnu
@@ -559,7 +563,7 @@ DEPENDENCIES
   govuk-forms-markdown!
   govuk_design_system_formbuilder
   govuk_notify_rails
-  i18n-tasks (~> 1.0.14)
+  i18n-tasks (~> 1.0.15)
   lograge
   omniauth-auth0
   omniauth-rails_csrf_protection
