@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
-    "autoprefixer": "^10.4.20",
+    "autoprefixer": "^10.4.21",
     "cssnano": "^7.0.6",
     "postcss": "^8.5.3",
     "regenerator-runtime": "^0.14.1",
