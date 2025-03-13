@@ -15,11 +15,23 @@ class MailchimpListSyncService
   end
 
   def mou_signers
-    MouSignature
-      .all
-      .map(&:user)
-      .filter { |user| user.has_access == true }
-      .pluck(:email)
-      .map { |email| MailchimpMember.new(email: email, status: "subscribed") }
+    User
+      .left_outer_joins(:mou_signatures)
+      .where(has_access: true)
+      .where("mou_signatures.id IS NOT NULL OR users.role = ?", "organisation_admin")
+      .distinct
+      .map { |user| MailchimpMember.new(email: user.email, status: "subscribed", role: mou_role(user)) }
+  end
+
+private
+
+  def mou_role(user)
+    if user.mou_signatures.present? && user.organisation_admin?
+      "Organisation admin agreed MOU"
+    elsif user.mou_signatures.present?
+      "Agreed MOU"
+    elsif user.organisation_admin?
+      "Organisation admin"
+    end
   end
 end
