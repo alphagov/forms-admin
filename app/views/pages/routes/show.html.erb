@@ -3,15 +3,16 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+      <%= render ErrorSummaryComponent::View.new(errors:) %>
 
       <h1 class="govuk-heading-l">
           <span class="govuk-caption-l"><%= current_form.name %></span>
           <%= t("page_titles.routes_show", question_number: page.position) %>
       </h1>
 
-      <%= govuk_summary_list(actions: false) do |summary_list|
+      <%= govuk_summary_list(actions: false, html_attributes: { id: "routing-question" }) do |summary_list|
           summary_list.with_row do |row|
-              row.with_key { t("page_route_card.question_name_short", question_number: page.position) }
+              row.with_key(text: t("page_route_card.question_name_short", question_number: page.position))
               row.with_value { "#{page.question_text}" }
           end;
       end %>
@@ -23,7 +24,7 @@
       <% if routes.map(&:secondary_skip?).none? %>
         <h2 class="govuk-heading-m"><%= t(".any_other_answer.heading") %></h2>
 
-        <p class="govuk-body"><%= t(".any_other_answer.will_continue_to", next_question_number: next_page.position) %></p>
+        <p class="govuk-body"><%= t(".any_other_answer.will_continue_to", next_question_number: next_page&.position || "check your answers") %></p>
 
         <% if FeatureService.new(group: current_form.group).enabled? :branch_routing %>
           <p class="govuk-body"><%= t(".any_other_answer.skip_later") %></p>

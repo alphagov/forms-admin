@@ -34,6 +34,9 @@ private
 
   def conditional_route_card(routing_condition, route_number)
     goto_page_name = routing_condition.skip_to_end ? end_page_name : goto_question_name(routing_condition.goto_page_id)
+    check_value_error = format_error(I18n.t("page_route_card.errors.answer_value_doesnt_exist")) if routing_condition.validation_errors.any? { |error| error.name == "answer_value_doesnt_exist" }
+    goto_page_next_error = format_error(I18n.t("page_route_card.errors.cannot_route_to_next_page")) if routing_condition.validation_errors.any? { |error| error.name == "cannot_route_to_next_page" }
+    goto_page_before_error = format_error(I18n.t("page_route_card.errors.cannot_have_goto_page_before_routing_page", question_number: question_number(routing_condition.check_page_id) )) if routing_condition.validation_errors.any? { |error| error.name == "cannot_have_goto_page_before_routing_page" }
 
     {
       card: {
@@ -46,11 +49,13 @@ private
       rows: [
         {
           key: { text: I18n.t("page_route_card.if_answer_is") },
-          value: { text: I18n.t("page_route_card.conditional_answer_value", answer_value: routing_condition.answer_value) },
+          html_attributes: { id: "check-#{routing_condition.id}", class: check_value_error ? "govuk-summary-list__row--error" : "" },
+          value: { text: safe_join([check_value_error, I18n.t("page_route_card.conditional_answer_value", answer_value: routing_condition.answer_value)]) },
         },
         {
           key: { text: I18n.t("page_route_card.take_the_person_to") },
-          value: { text: goto_page_name },
+          html_attributes: { id: "goto-#{routing_condition.id}", class: goto_page_next_error || goto_page_before_error ? "govuk-summary-list__row--error" : "" },
+          value: { text: safe_join([goto_page_next_error, goto_page_before_error, goto_page_name]) },
         },
       ],
     }
@@ -108,6 +113,8 @@ private
 
     goto_page_name = secondary_skip.skip_to_end ? end_page_name : goto_question_name(secondary_skip.goto_page_id)
     routing_page_name = question_name(secondary_skip.routing_page_id)
+    goto_page_next_error = format_error(I18n.t("page_route_card.errors.cannot_route_to_next_page_secondary_skip")) if secondary_skip.validation_errors.any? { |error| error.name == "cannot_route_to_next_page" }
+    goto_page_before_error = format_error(I18n.t("page_route_card.errors.cannot_have_goto_page_before_routing_page_secondary_skip")) if secondary_skip.validation_errors.any? { |error| error.name == "cannot_have_goto_page_before_routing_page" }
 
     [
       {
@@ -116,7 +123,8 @@ private
       },
       {
         key: { text: I18n.t("page_route_card.secondary_skip_then") },
-        value: { text: goto_page_name },
+        html_attributes: { id: "goto-#{secondary_skip.id}", class: goto_page_next_error || goto_page_before_error ? "govuk-summary-list__row--error" : "" },
+        value: { text: safe_join([goto_page_next_error, goto_page_before_error, goto_page_name]) },
       },
     ]
   end
@@ -138,5 +146,13 @@ private
 
   def end_page_name
     I18n.t("page_route_card.check_your_answers")
+  end
+
+  def question_number(page_id)
+    pages.find { |page| page.id == page_id }.position
+  end
+
+  def format_error(message)
+    "<div class=\"govuk-summary-list__value--error\">#{message}</div>".html_safe
   end
 end
