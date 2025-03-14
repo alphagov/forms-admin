@@ -3,6 +3,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+      <%= render ErrorSummaryComponent::View.new(errors:) %>
 
       <h1 class="govuk-heading-l">
           <span class="govuk-caption-l"><%= current_form.name %></span>
@@ -23,7 +24,7 @@
       <% if routes.map(&:secondary_skip?).none? %>
         <h2 class="govuk-heading-m"><%= t(".any_other_answer.heading") %></h2>
 
-        <p class="govuk-body"><%= t(".any_other_answer.will_continue_to", next_question_number: next_page.position) %></p>
+        <p class="govuk-body"><%= t(".any_other_answer.will_continue_to", next_question_number: next_page&.position || "check your answers") %></p>
 
         <% if FeatureService.new(group: current_form.group).enabled? :branch_routing %>
           <p class="govuk-body"><%= t(".any_other_answer.skip_later") %></p>
