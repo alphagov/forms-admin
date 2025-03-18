@@ -23,7 +23,7 @@ describe "pages/routes/show.html.erb" do
   before do
     allow(RouteSummaryCardDataPresenter).to receive(:new).and_return(route_summary_card_data_service)
     allow(form).to receive(:group).and_return(build(:group))
-    render template: "pages/routes/show", locals: { current_form: form, page:, pages:, next_page:, routes:, back_link_url: "/back" }
+    render template: "pages/routes/show", locals: { current_form: form, page:, pages:, next_page:, routes:, back_link_url: "/back", errors: [] }
   end
 
   it "has the correct title" do

@@ -3,6 +3,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+      <%= render ErrorSummaryComponent::View.new(errors:) %>
 
       <h1 class="govuk-heading-l">
           <span class="govuk-caption-l"><%= current_form.name %></span>
