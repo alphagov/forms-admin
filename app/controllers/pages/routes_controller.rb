@@ -40,7 +40,9 @@ private
     when "answer_value_doesnt_exist"
       OpenStruct.new(link: "#check-#{route.id}", message: I18n.t("page_route_card.errors.answer_value_doesnt_exist"))
     when "cannot_route_to_next_page"
-      if route.secondary_skip?
+      if !page.has_next_page?
+        OpenStruct.new(link: "#routing-question", message: I18n.t("page_route_card.errors.cannot_route_to_next_page_no_next_page"))
+      elsif route.secondary_skip?
         OpenStruct.new(link: "#goto-#{route.id}", message: I18n.t("page_route_card.errors.cannot_route_to_next_page_secondary_skip"))
       else
         OpenStruct.new(link: "#goto-#{route.id}", message: I18n.t("page_route_card.errors.cannot_route_to_next_page"))

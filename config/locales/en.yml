@@ -1061,6 +1061,7 @@ en:
       cannot_have_goto_page_before_routing_page: The question route 1 skips to cannot be before question %{question_number} - edit or delete this route
       cannot_have_goto_page_before_routing_page_secondary_skip: The question the route for any other answer skips to cannot be before the question it skips from - edit or delete this route
       cannot_route_to_next_page: Route 1 is not skipping any questions - edit or delete this route
+      cannot_route_to_next_page_no_next_page: Route 1 cannot skip any questions because question X is at the end of the form - delete this route
       cannot_route_to_next_page_secondary_skip: The route for any other answer is not skipping any questions - edit or delete this route
     goto_page_invalid: Edit this route to select the question or page you want to take the person to, or delete the route
     if_answer_is: If the answer is
