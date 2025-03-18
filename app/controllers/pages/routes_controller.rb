@@ -5,7 +5,7 @@ class Pages::RoutesController < PagesController
     routes = PageRoutesService.new(form: current_form, pages:, page:).routes
 
     # to be eligible for route question has to have one question after it, so should always have next_page
-    next_page = pages.find(proc { raise "Cannot find page with id #{page.next_page.inspect}" }) { _1.id == page.next_page }
+    next_page = pages.find { _1.id == page.next_page }
 
     render locals: { current_form:, page:, pages:, next_page:, routes:, back_link_url: }
   end
