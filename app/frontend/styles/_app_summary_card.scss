@@ -21,4 +21,28 @@
   .govuk-summary-list__row:last-child > * {
     border-bottom: 0;
   }
+
+  .govuk-summary-list__row--error {
+    border-left: 5px solid $govuk-error-colour;
+
+    padding-left: govuk-spacing(2);
+
+    @include govuk-media-query($from: tablet) {
+      padding-left: 0;
+    }
+
+  }
+
+  .govuk-summary-list__row--error .govuk-summary-list__key {
+    @include govuk-media-query($from: tablet) {
+      padding-left: govuk-spacing(2);
+    }
+  }
+
+  .govuk-summary-list__value--error {
+    @include govuk-responsive-margin(1, "bottom");
+    color: $govuk-error-colour;
+    font-weight: 700;
+  }
+
 }
