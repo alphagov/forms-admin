@@ -17,11 +17,11 @@ class RouteSummaryCardDataPresenter
   end
 
   def routes
-    PageRoutesService.new(form:, pages:, page:).routes
+    @routes ||= PageRoutesService.new(form:, pages:, page:).routes
   end
 
   def pages
-    FormRepository.pages(form)
+    @pages ||= FormRepository.pages(form)
   end
 
   def next_page
@@ -32,26 +32,26 @@ class RouteSummaryCardDataPresenter
     routes.flat_map { |route| route.validation_errors.map { |validation_error| error_construct(route: route, validation_error: validation_error) } }
   end
 
+private
+
   def error_construct(route:, validation_error:)
     case validation_error.name
     when "answer_value_doesnt_exist"
-      OpenStruct.new(link: "#check-#{route.id}", message: I18n.t("page_route_card.errors.answer_value_doesnt_exist"))
+      OpenStruct.new(link: check_id(route), message: I18n.t("page_route_card.errors.answer_value_doesnt_exist"))
     when "cannot_route_to_next_page"
       if route.secondary_skip?
-        OpenStruct.new(link: "#goto-#{route.id}", message: I18n.t("page_route_card.errors.cannot_route_to_next_page_secondary_skip"))
+        OpenStruct.new(link: goto_id(route), message: I18n.t("page_route_card.errors.cannot_route_to_next_page_secondary_skip"))
       else
-        OpenStruct.new(link: "#goto-#{route.id}", message: I18n.t("page_route_card.errors.cannot_route_to_next_page"))
+        OpenStruct.new(link: goto_id(route), message: I18n.t("page_route_card.errors.cannot_route_to_next_page"))
       end
     when "cannot_have_goto_page_before_routing_page"
       if route.secondary_skip?
-        OpenStruct.new(link: "#goto-#{route.id}", message: I18n.t("page_route_card.errors.cannot_have_goto_page_before_routing_page_secondary_skip"))
+        OpenStruct.new(link: goto_id(route), message: I18n.t("page_route_card.errors.cannot_have_goto_page_before_routing_page_secondary_skip"))
       else
-        OpenStruct.new(link: "#goto-#{route.id}", message: I18n.t("page_route_card.errors.cannot_have_goto_page_before_routing_page", question_number: question_number(route.check_page_id)))
+        OpenStruct.new(link: goto_id(route), message: I18n.t("page_route_card.errors.cannot_have_goto_page_before_routing_page", question_number: question_number(route.check_page_id)))
       end
     end
   end
-
-private
 
   def secondary_skip
     @secondary_skip ||= routes.find(&:secondary_skip?)
@@ -82,12 +82,12 @@ private
       rows: [
         {
           key: { text: I18n.t("page_route_card.if_answer_is") },
-          html_attributes: { id: "check-#{routing_condition.id}", class: check_value_error ? "govuk-summary-list__row--error" : "" },
+          html_attributes: { id: check_id(routing_condition), class: check_value_error ? "govuk-summary-list__row--error" : "" },
           value: { text: safe_join([check_value_error, I18n.t("page_route_card.conditional_answer_value", answer_value: routing_condition.answer_value)]) },
         },
         {
           key: { text: I18n.t("page_route_card.take_the_person_to") },
-          html_attributes: { id: "goto-#{routing_condition.id}", class: goto_page_next_error || goto_page_before_error ? "govuk-summary-list__row--error" : "" },
+          html_attributes: { id: goto_id(routing_condition), class: goto_page_next_error || goto_page_before_error ? "govuk-summary-list__row--error" : "" },
           value: { text: safe_join([goto_page_next_error, goto_page_before_error, goto_page_name]) },
         },
       ],
@@ -156,7 +156,7 @@ private
       },
       {
         key: { text: I18n.t("page_route_card.secondary_skip_then") },
-        html_attributes: { id: "goto-#{secondary_skip.id}", class: goto_page_next_error || goto_page_before_error ? "govuk-summary-list__row--error" : "" },
+        html_attributes: { id: goto_id(secondary_skip), class: goto_page_next_error || goto_page_before_error ? "govuk-summary-list__row--error" : "" },
         value: { text: safe_join([goto_page_next_error, goto_page_before_error, goto_page_name]) },
       },
     ]
@@ -187,5 +187,13 @@ private
 
   def format_error(message)
     "<div class=\"govuk-summary-list__value--error\">#{message}</div>".html_safe
+  end
+
+  def goto_id(route)
+    "#goto-#{route.id}"
+  end
+
+  def check_id(route)
+    "#check-#{route.id}"
   end
 end
