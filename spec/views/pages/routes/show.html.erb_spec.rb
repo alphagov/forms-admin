@@ -6,6 +6,7 @@ describe "pages/routes/show.html.erb" do
   let(:page) { build :page, id: 1, position: 1, next_page: 2, routing_conditions: [build(:condition)] }
   let(:next_page) { build :page, id: 2 }
   let(:routes) { PageRoutesService.new(form:, pages:, page:).routes }
+  let(:errors) { [] }
 
   let(:route_cards) do
     [
@@ -18,12 +19,11 @@ describe "pages/routes/show.html.erb" do
     ]
   end
 
-  let(:route_summary_card_data_service) { instance_double(RouteSummaryCardDataPresenter, summary_card_data: route_cards) }
+  let(:route_summary_card_data_service) { instance_double(RouteSummaryCardDataPresenter, summary_card_data: route_cards, errors:, routes:, next_page:, pages:, page:, form:) }
 
   before do
-    allow(RouteSummaryCardDataPresenter).to receive(:new).and_return(route_summary_card_data_service)
     allow(form).to receive(:group).and_return(build(:group))
-    render template: "pages/routes/show", locals: { current_form: form, page:, back_link_url: "/back", route_summary_card_data_presenter: OpenStruct.new(page:, pages:, next_page:, routes:, errors: [], summary_card_data: route_cards) }
+    render template: "pages/routes/show", locals: { current_form: form, page:, back_link_url: "/back", route_summary_card_data_presenter: route_summary_card_data_service }
   end
 
   it "has the correct title" do
@@ -108,6 +108,14 @@ describe "pages/routes/show.html.erb" do
     it "does not have an any other answer section" do
       expect(rendered).not_to have_css "h2", text: "Any other answer"
       expect(rendered).not_to have_link "Set questions to skip"
+    end
+  end
+
+  context "when there is an error" do
+    let(:errors) { [OpenStruct.new(link: "goto-1", message: "Error text")] }
+
+    it "shows the error message" do
+      expect(rendered).to have_text("Error text")
     end
   end
 end
