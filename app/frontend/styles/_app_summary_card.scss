@@ -28,13 +28,14 @@
     padding-left: govuk-spacing(2);
 
     @include govuk-media-query($from: tablet) {
-      padding-left: 0px;
+      padding-left: 0;
     }
-    
-    .govuk-summary-list__key {
-      @include govuk-media-query($from: tablet) {
-        padding-left: govuk-spacing(2);
-      }
+
+  }
+
+  .govuk-summary-list__row--error .govuk-summary-list__key {
+    @include govuk-media-query($from: tablet) {
+      padding-left: govuk-spacing(2);
     }
   }
 
