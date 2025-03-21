@@ -51,10 +51,62 @@ namespace :organisations do
     org.name = new_name
     puts "Renamed org #{old_name} to #{new_name}" if org.save!
   end
+
+  desc "Merge an organisation into another"
+  task :merge, %i[source_organisation_slug target_organisation_slug] => :environment do |task, args|
+    merge_organisations(**args, task:, dry_run: false)
+  end
+
+  namespace :merge do
+    desc "Merge an organisation into another - dry run"
+    task :dry_run, %i[source_organisation_slug target_organisation_slug] => :environment do |task, args|
+      merge_organisations(**args, task:, dry_run: true)
+    end
+  end
 end
 
 def run_organisation_fetch(dry_run:)
   with_lock("forms-admin:organisations:fetch") do
     OrganisationsFetcher.new.call(dry_run:)
+  end
+end
+
+def merge_organisations(task:, source_organisation_slug: nil, target_organisation_slug: nil, dry_run: false)
+  usage = "usage: rails #{task.name}[<source_organisation_slug>, <target_organisation_slug>]".freeze
+  abort usage if source_organisation_slug.blank? || target_organisation_slug.blank?
+
+  source_organisation = Organisation.find_by_slug!(source_organisation_slug)
+  target_organisation = Organisation.find_by_slug!(target_organisation_slug)
+
+  if source_organisation.mou_signatures.any? != target_organisation.mou_signatures.any?
+    abort "Can not merge organisations, as #{source_organisation.name} #{source_organisation.mou_signatures.any? ? 'has' : 'has not'} signed MOU but #{target_organisation.name} #{target_organisation.mou_signatures.any? ? 'has' : 'has not'}"
+  end
+
+  unless source_organisation.closed
+    abort "Can not merge organisations as #{source_organisation.name} is not yet closed"
+  end
+
+  ActiveRecord::Base.transaction do
+    users = User.where(organisation: source_organisation)
+    groups = Group.where(organisation: source_organisation)
+
+    users.lock.load
+    groups.lock.load
+
+    if groups.pluck(:name).to_set.intersect?(Group.where(organisation: target_organisation).pluck(:name))
+      abort "Can not merge #{source_organisation.name} into #{target_organisation.name}, as there are some duplicate group names"
+    end
+
+    if dry_run
+      Rails.logger.info("#{task.name}: Would move #{users.count} users and #{groups.count} groups from #{source_organisation.name} to #{target_organisation.name}")
+      return
+    end
+
+    Rails.logger.info("#{task.name}: Moving #{users.count} users and #{groups.count} groups from #{source_organisation.name} to #{target_organisation.name}")
+
+    users.update_all(organisation_id: target_organisation.id)
+    users.touch_all
+    groups.update_all(organisation_id: target_organisation.id)
+    groups.touch_all
   end
 end
