@@ -1398,10 +1398,17 @@ en:
     body_html: "<p>You can set up a route so if someone selects a specific answer to a question they’ll skip forward to a later question, or the end of the form.</p>\n"
     branch_routing:
       body_html: |
-        <p> You can add a route from a question where people can select only one answer from a list.</p>
-        <p> If someone selects the answer you specify, they’ll skip forward to a later question, or the end of the form.</p>
-        <p> People who select any other answer will continue to the next question. If you need to, you can add a second route so they skip one or more questions later in the form.</p>
-        <p> You can only add a route from a question that does not already have 2 routes. Go back to your questions if you need to edit an existing route.</p>
+        <p>You can add a route to a question so if someone selects one specific
+        answer, they’ll be skipped forward to a later question, or the end of
+        the form.</p>
+
+        <p>People who select any other answer will continue to the next question
+        and through the rest of the form. If you need to, you can add a second
+        route to make them skip some of the questions you sent the first route
+        to.</p>
+
+        <p>These two routes can only start from a question where people select
+        one option from a list.</p>
       no_remaining_routes_html: |
         <h2 class="govuk-heading-m">You have no more questions to add a route from</h2>
         <p>You can only add a route from a question that does not already have 2 routes. If you need to edit an existing route, go back to your questions.</p>
