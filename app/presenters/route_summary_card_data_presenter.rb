@@ -3,19 +3,52 @@ class RouteSummaryCardDataPresenter
   include ActionView::Helpers::UrlHelper
   include GovukRailsCompatibleLinkHelper
 
-  attr_reader :form, :pages, :page, :routes
+  attr_reader :form, :page
 
-  def initialize(form:, pages:, page:, routes:)
+  def initialize(form:, page:)
     @form = form
-    @pages = pages
     @page = page
-    @routes = routes
   end
 
   def summary_card_data
     cards = conditional_route_cards
     cards << secondary_skip_card if secondary_skip
     cards
+  end
+
+  def routes
+    PageRoutesService.new(form:, pages:, page:).routes
+  end
+
+  def pages
+    FormRepository.pages(form)
+  end
+
+  def next_page
+    pages.find(proc { raise "Cannot find page with id #{page.next_page.inspect}" }) { _1.id == page.next_page }
+  end
+
+  def errors
+    routes.flat_map { |route| route.validation_errors.map { |validation_error| error_construct(route: route, validation_error: validation_error) } }
+  end
+
+  def error_construct(route:, validation_error:)
+    case validation_error.name
+    when "answer_value_doesnt_exist"
+      OpenStruct.new(link: "#check-#{route.id}", message: I18n.t("page_route_card.errors.answer_value_doesnt_exist"))
+    when "cannot_route_to_next_page"
+      if route.secondary_skip?
+        OpenStruct.new(link: "#goto-#{route.id}", message: I18n.t("page_route_card.errors.cannot_route_to_next_page_secondary_skip"))
+      else
+        OpenStruct.new(link: "#goto-#{route.id}", message: I18n.t("page_route_card.errors.cannot_route_to_next_page"))
+      end
+    when "cannot_have_goto_page_before_routing_page"
+      if route.secondary_skip?
+        OpenStruct.new(link: "#goto-#{route.id}", message: I18n.t("page_route_card.errors.cannot_have_goto_page_before_routing_page_secondary_skip"))
+      else
+        OpenStruct.new(link: "#goto-#{route.id}", message: I18n.t("page_route_card.errors.cannot_have_goto_page_before_routing_page", question_number: question_number(route.check_page_id)))
+      end
+    end
   end
 
 private

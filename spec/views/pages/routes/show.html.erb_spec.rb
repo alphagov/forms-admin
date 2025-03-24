@@ -23,7 +23,7 @@ describe "pages/routes/show.html.erb" do
   before do
     allow(RouteSummaryCardDataPresenter).to receive(:new).and_return(route_summary_card_data_service)
     allow(form).to receive(:group).and_return(build(:group))
-    render template: "pages/routes/show", locals: { current_form: form, page:, pages:, next_page:, routes:, back_link_url: "/back", errors: [] }
+    render template: "pages/routes/show", locals: { current_form: form, page:, back_link_url: "/back", route_summary_card_data_presenter: OpenStruct.new(page:, pages:, next_page:, routes:, errors: [], summary_card_data: route_cards) }
   end
 
   it "has the correct title" do

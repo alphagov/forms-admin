@@ -3,7 +3,7 @@ require "rails_helper"
 describe RouteSummaryCardDataPresenter do
   include Capybara::RSpecMatchers
 
-  subject(:service) { described_class.new(form:, pages:, page:, routes:) }
+  subject(:service) { described_class.new(form:, page:) }
 
   include_context "with pages with routing"
 

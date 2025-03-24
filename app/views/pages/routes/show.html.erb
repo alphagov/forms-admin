@@ -1,9 +1,9 @@
-<% set_page_title(title_with_error_prefix(t('page_titles.routes_show', question_number: page.position), false)) %>
+<% set_page_title(title_with_error_prefix(t('page_titles.routes_show', question_number: route_summary_card_data_presenter.page.position), false)) %>
 <% content_for :back_link, govuk_back_link_to(back_link_url, t('pages.go_to_your_questions')) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-      <%= render ErrorSummaryComponent::View.new(errors:) %>
+      <%= render ErrorSummaryComponent::View.new(errors: route_summary_card_data_presenter.errors) %>
 
       <h1 class="govuk-heading-l">
           <span class="govuk-caption-l"><%= current_form.name %></span>
@@ -17,14 +17,14 @@
           end;
       end %>
 
-      <% RouteSummaryCardDataPresenter.new(form: current_form, page:, pages:, routes:).summary_card_data.each do |card| %>
+      <% route_summary_card_data_presenter.summary_card_data.each do |card| %>
           <%= govuk_summary_list(**card) %>
       <% end %>
 
-      <% if routes.map(&:secondary_skip?).none? %>
+      <% if route_summary_card_data_presenter.routes.map(&:secondary_skip?).none? %>
         <h2 class="govuk-heading-m"><%= t(".any_other_answer.heading") %></h2>
 
-        <p class="govuk-body"><%= t(".any_other_answer.will_continue_to", next_question_number: next_page.position) %></p>
+        <p class="govuk-body"><%= t(".any_other_answer.will_continue_to", next_question_number: route_summary_card_data_presenter.next_page&.position) %></p>
 
         <% if FeatureService.new(group: current_form.group).enabled? :branch_routing %>
           <p class="govuk-body"><%= t(".any_other_answer.skip_later") %></p>
@@ -33,7 +33,7 @@
         <% end %>
       <% end %>
 
-      <% if routes.many? %>
+      <% if route_summary_card_data_presenter.routes.many? %>
         <%= govuk_button_link_to t("page_route_card.delete_route"), delete_routes_path(current_form.id, page.id), warning: true %>
       <% end %>
 
