@@ -1128,7 +1128,7 @@ en:
     mou_signatures: Memorandum of Understanding agreements
     name_settings: Ask for a person’s name
     new_page: Edit question
-    new_secondary_skip: Set questions to skip
+    new_secondary_skip: 'Route for any other answer: set questions to skip'
     not_found: Page not found
     payment_link: Add a link to a payment page on GOV.UK Pay
     privacy_policy: Provide a link to privacy information for this form
