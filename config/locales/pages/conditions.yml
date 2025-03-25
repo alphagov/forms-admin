@@ -25,5 +25,5 @@ en:
   helpers:
     label:
       pages_conditions_input:
-        answer_value: is answered as
+        answer_value: If the answer selected is
         goto_page_id: skip the person to

@@ -200,6 +200,7 @@ en:
       route_created: Question %{question_number}’s route has been created
       route_deleted: Question %{question_number}’s route has been deleted
       route_updated: Question %{question_number}’s route has been updated
+      secondary_skip_created: Route for any other answer has been added
       title: Success
   bulk_options:
     hint: Enter each option on a new line
@@ -1137,7 +1138,7 @@ en:
     routing_page_caption: Question %{question_number}’s routes
     routing_page_delete: Delete question %{question_number}’s route
     routing_page_edit: Edit route %{route_number}
-    routing_page_new: Add route %{route_number}
+    routing_page_new: 'Add route %{route_number}: Select an answer and where to skip to'
     selection_options: Create a list of options
     selection_type: How many options should people be able to select?
     separator: " – "
@@ -1158,6 +1159,8 @@ en:
         any_other_answer_warning: If you delete this route, the route for any other answer will also be deleted
       edit:
         back_link: Back to question %{question_number}’s routes
+      new:
+        body_html: "<p>You can skip people who select one specific answer to question %{question_number} to a later question or page. People who select any other answer will continue to question %{continue_to_question_number}.<p>"
     delete:
       notification_banner:
         end_of_route:
