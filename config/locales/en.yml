@@ -1409,6 +1409,7 @@ en:
 
         <p>These two routes can only start from a question where people select
         one option from a list.</p>
+      legend_hint_text: You can only add a route from a question that does not already have two routes. Go back to your questions if you need to edit an existing route.
       no_remaining_routes_html: |
         <h2 class="govuk-heading-m">You have no more questions to add a route from</h2>
         <p>You can only add a route from a question that does not already have 2 routes. If you need to edit an existing route, go back to your questions.</p>
