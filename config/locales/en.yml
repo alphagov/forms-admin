@@ -261,15 +261,6 @@ en:
           By submitting this form you’re confirming that, to the best of your
           knowledge, the answers you’re providing are correct.
         </div>
-  delete_condition:
-    delete_condition_inset_html: |
-      <p>
-        By deleting this question route the person filling in the form will have to complete every question, even if you do not need them to.
-      </p>
-      <p>
-        Do you want this to happen? If you do, select yes.
-      </p>
-    delete_condition_legend: Are you sure you want to delete this question route?
   email_code_sent:
     body_html: "<p>We’ve sent a confirmation code and your email address to %{temp_email}.</p>\n"
     continue: Continue creating a form
@@ -1156,7 +1147,17 @@ en:
     answer_settings: Answer settings
     conditions:
       delete:
+        answered_as_key: is answered as
         any_other_answer_warning: If you delete this route, the route for any other answer will also be deleted
+        delete_condition_inset_html: |
+          <p>
+            By deleting this question route the person filling in the form will have to complete every question, even if you do not need them to.
+          </p>
+          <p>
+            Do you want this to happen? If you do, select yes.
+          </p>
+        delete_condition_legend: Are you sure you want to delete this question route?
+        skip_to_key: skip the person to
       edit:
         back_link: Back to question %{question_number}’s routes
       new:
