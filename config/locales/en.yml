@@ -1044,7 +1044,7 @@ en:
     any_other_answer: Route for any other answer
     check_your_answers: Check your answers before submitting
     conditional_answer_value: "%{answer_value}"
-    continue_to: For any other answer, continue to
+    continue_to: Continue to
     delete: Delete
     delete_route: Delete routes
     edit: Edit
@@ -1059,8 +1059,8 @@ en:
     question_name_long: "%{question_number}. %{question_text}"
     question_name_short: Question %{question_number}
     route_title: Route %{route_number}
-    secondary_skip_after: Then after the person answers
-    secondary_skip_then: take them to
+    secondary_skip_after: Then after
+    secondary_skip_then: skip the person to
     set_secondary_skip: Set one or more questions to skip later in the form (optional)
     take_the_person_to: skip the person to
     then: Then
