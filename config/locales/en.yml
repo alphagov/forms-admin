@@ -1062,7 +1062,7 @@ en:
     secondary_skip_after: Then after the person answers
     secondary_skip_then: take them to
     set_secondary_skip: Set one or more questions to skip later in the form (optional)
-    take_the_person_to: take the person to
+    take_the_person_to: skip the person to
     then: Then
   page_settings_summary:
     address:
