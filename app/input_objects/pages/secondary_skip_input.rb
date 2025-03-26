@@ -55,15 +55,6 @@ class Pages::SecondarySkipInput < BaseInput
     pages_after_current_page(FormRepository.pages(form), page).map { |p| OpenStruct.new(id: p.id, question_text: p.question_with_number) }
   end
 
-  def question_name(page_id)
-    target_page = FormRepository.pages(form).find { |page| page.id == page_id }
-
-    question_text = target_page.question_text
-    question_number = target_page.position
-
-    I18n.t("page_route_card.question_name_long", question_number:, question_text:)
-  end
-
   def end_page_name
     I18n.t("page_route_card.check_your_answers")
   end
@@ -72,8 +63,35 @@ class Pages::SecondarySkipInput < BaseInput
     page.routing_conditions.find { |rc| rc.answer_value.present? }.answer_value
   end
 
-  def continue_to
-    page.has_next_page? ? question_name(page.next_page) : end_page_name
+  def primary_route_goto_page_name
+    primary_route = page.routing_conditions.find { |rc| rc.answer_value.present? }
+
+    if primary_route.skip_to_end?
+      return I18n.t("page_route_card.check_your_answers")
+    end
+
+    question_name(primary_route.goto_page_id) || I18n.t("page_route_card.goto_page_invalid")
+  end
+
+  def question_name(page_id)
+    target_page = FormRepository.pages(form).find { |page| page.id == page_id }
+
+    return if target_page.blank?
+
+    question_text = target_page.question_text
+    question_number = target_page.position
+
+    I18n.t("page_route_card.question_name_long", question_number:, question_text:)
+  end
+
+  def next_page_number
+    if page.has_next_page?
+      target_page = FormRepository.pages(form).find { it.id == page.next_page }
+      question_number = target_page.position
+      return question_number
+    end
+
+    end_page_name
   end
 
   def assign_values

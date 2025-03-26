@@ -1452,9 +1452,12 @@ en:
         <p>People who select an answer that does not have a route assigned to it will continue to the next question.</p>
         <p>If you need to, you can make these people skip one or more questions later in the form. For example, you might want them to skip route 1’s questions. This allows you to create 2 different ‘branches’ of questions.</p>
       details_summary: Why set questions to skip?
-      primary_route_answer_key: is not
-      primary_route_continue_key: continue to
-      primary_route_question_key: If the answer to
+      explanation_html: |
+        <h2 class="govuk-heading-m">If people select any other answer</h2>
+        <p>People who select any other answer will continue to question %{question_number} and through the rest of the form. </p>
+        <p>If you need to, you can make them skip one or more consecutive questions that only people on route %{route_number} need to answer.</p>
+      primary_route_answer_key: If the answer is
+      primary_route_continue_key: skip the person to
   selection_options:
     add_another: Add another option
     add_options: Add options to your list
