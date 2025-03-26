@@ -1046,7 +1046,7 @@ en:
     conditional_answer_value: "%{answer_value}"
     continue_to: Continue to
     delete: Delete
-    delete_route: Delete routes
+    delete_route: Delete all routes
     edit: Edit
     errors:
       answer_value_doesnt_exist: The answer that route 1 is based on no longer exists - edit or delete this route
