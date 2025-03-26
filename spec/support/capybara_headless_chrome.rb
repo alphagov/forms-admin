@@ -1,3 +1,4 @@
+require "capybara/cuprite"
 require "selenium/webdriver"
 
 options = Selenium::WebDriver::Chrome::Options.new
@@ -37,6 +38,14 @@ Capybara.register_driver :headless_chrome do |app|
 end
 
 Capybara.default_driver = Settings.show_browser_during_tests ? :chrome : :headless_chrome
+
+Capybara.register_driver(:cuprite) do |app|
+  Capybara::Cuprite::Driver.new(app, headless: false, browser_options: { "no-sandbox": nil })
+end
+
+Capybara.register_driver(:cuprite_headless) do |app|
+  Capybara::Cuprite::Driver.new(app, headless: true, browser_options: { "no-sandbox": nil })
+end
 
 Capybara.configure do |config|
   config.automatic_label_click = true
