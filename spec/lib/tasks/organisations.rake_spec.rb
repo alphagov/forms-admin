@@ -99,4 +99,111 @@ RSpec.describe "organisations.rake" do
         .and raise_error(SystemExit) { |e| expect(e).not_to be_success }
     end
   end
+
+  describe "organisations:merge" do
+    subject(:task) do
+      Rake::Task["organisations:merge"]
+        .tap(&:reenable) # make sure task is invoked every time
+    end
+
+    let!(:source_org) { create :organisation, slug: "old-organisation", closed: true }
+    let!(:target_org) { create :organisation, slug: "shiny-new-organisation" }
+
+    it "moves users from one organisation to another" do
+      create_list :user, 5, organisation: source_org
+
+      expect {
+        task.invoke("old-organisation", "shiny-new-organisation")
+      }.to change(User.where(organisation: target_org), :count).by(5)
+        .and change(User.where(organisation: source_org), :count).from(5).to(0)
+    end
+
+    it "moves groups from one organisation to another" do
+      create_list :group, 5, organisation: source_org
+
+      expect {
+        task.invoke("old-organisation", "shiny-new-organisation")
+      }.to change(Group.where(organisation: target_org), :count).by(5)
+        .and change(Group.where(organisation: source_org), :count).from(5).to(0)
+    end
+
+    shared_examples "it does not move users or groups" do
+      RSpec::Matchers.define_negated_matcher :not_change, :change
+
+      it "does not move users from one organisation to another" do
+        create_list :user, 5, organisation: source_org
+
+        expect {
+          invoked_task
+        }.to not_change(User.where(organisation: target_org), :count)
+          .and not_change(User.where(organisation: source_org), :count)
+      end
+
+      it "does not move groups from one organisation to another" do
+        create_list :group, 5, organisation: source_org
+
+        expect {
+          invoked_task
+        }.to not_change(Group.where(organisation: target_org), :count)
+          .and not_change(Group.where(organisation: source_org), :count)
+      end
+    end
+
+    context "when organisation to move users and groups from is not closed" do
+      let!(:source_org) { create :organisation, slug: "old-organisation", closed: false }
+
+      let(:invoked_task) do
+        expect { # rubocop:disable RSpec/ExpectInLet
+          task.invoke(source_org.slug, target_org.slug)
+        }.to raise_error(SystemExit)
+          .and output(/Old Organisation is not yet closed/).to_stderr
+      end
+
+      include_examples "it does not move users or groups"
+    end
+
+    context "when old organisation has signed mou but new organisation has not" do
+      before do
+        create :mou_signature_for_organisation, organisation: source_org
+      end
+
+      let(:invoked_task) do
+        expect { # rubocop:disable RSpec/ExpectInLet
+          task.invoke(source_org.slug, target_org.slug)
+        }.to raise_error(SystemExit)
+          .and output(/Old Organisation has signed MOU but Shiny New Organisation has not/).to_stderr
+      end
+
+      include_examples "it does not move users or groups"
+    end
+
+    context "when old organisation and new organisation have groups with the same name" do
+      before do
+        create :group, organisation: source_org, name: "Test group"
+        create :group, organisation: target_org, name: "Test group"
+      end
+
+      let(:invoked_task) do
+        expect { # rubocop:disable RSpec/ExpectInLet
+          task.invoke(source_org.slug, target_org.slug)
+        }.to raise_error(SystemExit)
+          .and output(/there are some duplicate group names/).to_stderr
+      end
+
+      include_examples "it does not move users or groups"
+    end
+
+    describe ":dry_run" do
+      subject(:task) do
+        Rake::Task["organisations:merge:dry_run"]
+          .tap(&:reenable) # make sure task is invoked every time
+      end
+
+      let(:invoked_task) do
+        task.invoke(source_org.slug, target_org.slug)
+      end
+
+      include_examples "it does not move users or groups"
+    end
+  end
 end
