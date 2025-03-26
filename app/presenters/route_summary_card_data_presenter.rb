@@ -77,6 +77,7 @@ private
         classes: "app-summary-card",
         actions: [
           govuk_link_to(I18n.t("page_route_card.edit"), edit_condition_path(form_id: form.id, page_id: page.id, condition_id: routing_condition.id)),
+          govuk_link_to(I18n.t("page_route_card.delete"), delete_condition_path(form_id: form.id, page_id: page.id, condition_id: routing_condition.id)),
         ],
       },
       rows: [
