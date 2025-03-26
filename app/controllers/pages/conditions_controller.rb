@@ -27,7 +27,8 @@ class Pages::ConditionsController < PagesController
     condition_input = Pages::ConditionsInput.new(condition_input_params)
 
     if condition_input.submit
-      redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.route_created", question_number: condition_input.page.position)
+      # TODO: Route number is hardcoded whilst we can only have one value for it
+      redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.route_created", route_number: 1)
     else
       render template: "pages/conditions/new", locals: { condition_input: }, status: :unprocessable_entity
     end
