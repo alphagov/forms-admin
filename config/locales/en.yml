@@ -1449,10 +1449,6 @@ en:
     new:
       back: Back to question %{question_number}’s routes
       caption: Question %{question_number}’s routes
-      details_html: |
-        <p>People who select an answer that does not have a route assigned to it will continue to the next question.</p>
-        <p>If you need to, you can make these people skip one or more questions later in the form. For example, you might want them to skip route 1’s questions. This allows you to create 2 different ‘branches’ of questions.</p>
-      details_summary: Why set questions to skip?
       explanation_html: |
         <h2 class="govuk-heading-m">If people select any other answer</h2>
         <p>People who select any other answer will continue to question %{question_number} and through the rest of the form. </p>

@@ -29,10 +29,6 @@
   <%= f.govuk_collection_select :routing_page_id, secondary_skip_input.routing_page_options, :id, :question_text, label: { class: "govuk-!-font-weight-bold" }, options: { include_blank: t("helpers.label.pages_secondary_skip_input.default_routing_page_id") } %>
   <%= f.govuk_collection_select :goto_page_id, secondary_skip_input.goto_page_options, :id, :question_text, label: { class: "govuk-!-font-weight-bold" }, options: { include_blank: t("helpers.label.pages_secondary_skip_input.default_goto_page_id") } %>
 
-  <%= govuk_details(summary_text: t("secondary_skip.new.details_summary")) do
-    t("secondary_skip.new.details_html")
-  end %>
-
   <%= f.govuk_submit t("save_and_continue") do
     govuk_link_to(I18n.t("cancel"), show_routes_path(form_id: secondary_skip_input.form.id, page_id: secondary_skip_input.page.id))
   end %>
