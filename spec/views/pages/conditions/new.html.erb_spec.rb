@@ -23,7 +23,7 @@ describe "pages/conditions/new.html.erb" do
   end
 
   it "sets the correct title" do
-    expect(view.content_for(:title)).to eq "Add route 1: Select an answer and where to skip to"
+    expect(view.content_for(:title)).to eq "Add route 1: select an answer and where to skip to"
   end
 
   it "contains page heading and sub-heading" do

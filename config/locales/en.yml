@@ -1129,7 +1129,7 @@ en:
     routing_page_caption: Question %{question_number}’s routes
     routing_page_delete: Delete question %{question_number}’s route
     routing_page_edit: Edit route %{route_number}
-    routing_page_new: 'Add route %{route_number}: Select an answer and where to skip to'
+    routing_page_new: 'Add route %{route_number}: select an answer and where to skip to'
     selection_options: Create a list of options
     selection_type: How many options should people be able to select?
     separator: " – "
