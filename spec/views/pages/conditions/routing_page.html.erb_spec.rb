@@ -30,7 +30,7 @@ describe "pages/conditions/routing_page.html.erb" do
 
   context "when branch routing is enabled", :feature_branch_routing do
     it "contains content explaining branch routing" do
-      expect(rendered).to have_text "You can add a route from a question where people can select only one answer from a list."
+      expect(rendered).to have_text "You can add a route to a question so if someone selects one specific answer, they’ll be skipped forward to a later question, or the end of the form.", normalize_ws: true
     end
   end
 

@@ -70,17 +70,17 @@ describe "pages/routes/show.html.erb" do
     let(:next_page) { pages.find { _1.id == page_with_skip_route.next_page } }
 
     it "has an any other answer section" do
-      expect(rendered).to have_css "h2.govuk-heading-m", text: "Any other answer"
+      expect(rendered).to have_css "h2.govuk-heading-m", text: "If people select any other answer"
     end
 
     describe "any other answer section" do
       it "shows the number of the next question in the form" do
-        expect(rendered).to have_text "People who select any other answer will continue to question 11."
+        expect(rendered).to have_text "People who select any other answer will continue to question 11 and through the rest of the form"
       end
 
       context "when the page is the last question" do
         it "shows the check your answers page as the next question in the form" do
-          expect(rendered).to have_text "People who select any other answer will continue to question 11."
+          expect(rendered).to have_text "People who select any other answer will continue to question 11 and through the rest of the form"
         end
       end
 

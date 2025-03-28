@@ -5,27 +5,29 @@
 
   <%= content_for :heading %>
 
-  <%= govuk_summary_list(actions: false, classes: "govuk-summary-list--no-border") do |summary_list|
+  <%= govuk_summary_list(actions: false) do |summary_list|
     summary_list.with_row do |row|
-      row.with_key { t("secondary_skip.new.primary_route_question_key") }
-      row.with_value { secondary_skip_input.page.question_text }
+      row.with_key { t("page_route_card.question_name_short", question_number:  secondary_skip_input.page.position) }
+      row.with_value { "#{secondary_skip_input.page.question_text}" }
     end;
-    summary_list.with_row do |row|
+  end %>
+
+  <h2 class="govuk-heading-m"><%= "Route 1" %> <h2>
+  <%= govuk_summary_list(actions: false) do |summary_list|
+    summary_list.with_row(classes: "govuk-summary-list__row--no-border") do |row|
       row.with_key { t("secondary_skip.new.primary_route_answer_key") }
       row.with_value { secondary_skip_input.answer_value }
     end;
     summary_list.with_row do |row|
       row.with_key { t("secondary_skip.new.primary_route_continue_key") }
-      row.with_value { secondary_skip_input.continue_to }
+      row.with_value { secondary_skip_input.primary_route_goto_page_name }
     end;
   end %>
 
+  <%= t('secondary_skip.new.explanation_html', route_number: 1, question_number: secondary_skip_input.next_page_number) %>
+
   <%= f.govuk_collection_select :routing_page_id, secondary_skip_input.routing_page_options, :id, :question_text, label: { class: "govuk-!-font-weight-bold" }, options: { include_blank: t("helpers.label.pages_secondary_skip_input.default_routing_page_id") } %>
   <%= f.govuk_collection_select :goto_page_id, secondary_skip_input.goto_page_options, :id, :question_text, label: { class: "govuk-!-font-weight-bold" }, options: { include_blank: t("helpers.label.pages_secondary_skip_input.default_goto_page_id") } %>
-
-  <%= govuk_details(summary_text: t("secondary_skip.new.details_summary")) do
-    t("secondary_skip.new.details_html")
-  end %>
 
   <%= f.govuk_submit t("save_and_continue") do
     govuk_link_to(I18n.t("cancel"), show_routes_path(form_id: secondary_skip_input.form.id, page_id: secondary_skip_input.page.id))

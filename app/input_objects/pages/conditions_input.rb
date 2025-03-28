@@ -65,6 +65,13 @@ class Pages::ConditionsInput < BaseInput
     end
   end
 
+  def next_page_number
+    if page.has_next_page?
+      target_page = FormRepository.pages(form).find { it.id == page.next_page }
+      target_page.position
+    end
+  end
+
 private
 
   def pages_after_position(position)

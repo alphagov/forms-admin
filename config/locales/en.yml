@@ -197,9 +197,10 @@ en:
         support_details_saved: Your contact details for support have been saved
         what_happens_next_saved: Your information about what happens next has been saved
       page_routes_deleted: Question %{question_number}’s routes have been deleted
-      route_created: Question %{question_number}’s route has been created
+      route_created: Route %{route_number} has been added
       route_deleted: Question %{question_number}’s route has been deleted
       route_updated: Question %{question_number}’s route has been updated
+      secondary_skip_created: Route for any other answer has been added
       title: Success
   bulk_options:
     hint: Enter each option on a new line
@@ -260,15 +261,6 @@ en:
           By submitting this form you’re confirming that, to the best of your
           knowledge, the answers you’re providing are correct.
         </div>
-  delete_condition:
-    delete_condition_inset_html: |
-      <p>
-        By deleting this question route the person filling in the form will have to complete every question, even if you do not need them to.
-      </p>
-      <p>
-        Do you want this to happen? If you do, select yes.
-      </p>
-    delete_condition_legend: Are you sure you want to delete this question route?
   email_code_sent:
     body_html: "<p>We’ve sent a confirmation code and your email address to %{temp_email}.</p>\n"
     continue: Continue creating a form
@@ -779,8 +771,8 @@ en:
       pages_secondary_skip_input:
         default_goto_page_id: Select a question or page
         default_routing_page_id: Select a question
-        goto_page_id: skip them to
-        routing_page_id: Then after the person answers
+        goto_page_id: Select the question to skip them to
+        routing_page_id: Select the last question you want them to answer before they skip
       pages_selection_bulk_options_input:
         include_none_of_the_above_options:
           'false': 'No'
@@ -1052,9 +1044,9 @@ en:
     any_other_answer: Route for any other answer
     check_your_answers: Check your answers before submitting
     conditional_answer_value: "%{answer_value}"
-    continue_to: For any other answer, continue to
+    continue_to: Continue to
     delete: Delete
-    delete_route: Delete routes
+    delete_route: Delete all routes
     edit: Edit
     errors:
       answer_value_doesnt_exist: The answer that route 1 is based on no longer exists - edit or delete this route
@@ -1067,10 +1059,10 @@ en:
     question_name_long: "%{question_number}. %{question_text}"
     question_name_short: Question %{question_number}
     route_title: Route %{route_number}
-    secondary_skip_after: Then after the person answers
-    secondary_skip_then: take them to
+    secondary_skip_after: Then after
+    secondary_skip_then: skip the person to
     set_secondary_skip: Set one or more questions to skip later in the form (optional)
-    take_the_person_to: take the person to
+    take_the_person_to: skip the person to
     then: Then
   page_settings_summary:
     address:
@@ -1127,7 +1119,7 @@ en:
     mou_signatures: Memorandum of Understanding agreements
     name_settings: Ask for a person’s name
     new_page: Edit question
-    new_secondary_skip: Set questions to skip
+    new_secondary_skip: 'Route for any other answer: set questions to skip'
     not_found: Page not found
     payment_link: Add a link to a payment page on GOV.UK Pay
     privacy_policy: Provide a link to privacy information for this form
@@ -1137,7 +1129,7 @@ en:
     routing_page_caption: Question %{question_number}’s routes
     routing_page_delete: Delete question %{question_number}’s route
     routing_page_edit: Edit route %{route_number}
-    routing_page_new: Add route %{route_number}
+    routing_page_new: 'Add route %{route_number}: select an answer and where to skip to'
     selection_options: Create a list of options
     selection_type: How many options should people be able to select?
     separator: " – "
@@ -1155,9 +1147,21 @@ en:
     answer_settings: Answer settings
     conditions:
       delete:
+        answered_as_key: is answered as
         any_other_answer_warning: If you delete this route, the route for any other answer will also be deleted
+        delete_condition_inset_html: |
+          <p>
+            By deleting this question route the person filling in the form will have to complete every question, even if you do not need them to.
+          </p>
+          <p>
+            Do you want this to happen? If you do, select yes.
+          </p>
+        delete_condition_legend: Are you sure you want to delete this question route?
+        skip_to_key: skip the person to
       edit:
         back_link: Back to question %{question_number}’s routes
+      new:
+        body_html: "<p>You can skip people who select one specific answer to question %{question_number} to a later question or page. People who select any other answer will continue to question %{continue_to_question_number}.<p>"
     delete:
       notification_banner:
         end_of_route:
@@ -1207,10 +1211,10 @@ en:
         title: Are you sure you want to delete all question %{question_number}’s routes?
       show:
         any_other_answer:
-          heading: Any other answer
+          heading: If people select any other answer
           set_questions_to_skip: Set questions to skip
-          skip_later: If you need to, you can make these people skip one or more questions later in the form. For example, you might want them to skip route 1’s questions to create 2 different ‘branches’ of questions.
-          will_continue_to: People who select any other answer will continue to question %{next_question_number}.
+          skip_later: If you need to, you can make them skip one or more questions that only people on route 1 need to answer.
+          will_continue_to: People who select any other answer will continue to question %{next_question_number} and through the rest of the form.
     submit_save: Save question
   payment_link_input:
     body_html: |
@@ -1398,10 +1402,18 @@ en:
     body_html: "<p>You can set up a route so if someone selects a specific answer to a question they’ll skip forward to a later question, or the end of the form.</p>\n"
     branch_routing:
       body_html: |
-        <p> You can add a route from a question where people can select only one answer from a list.</p>
-        <p> If someone selects the answer you specify, they’ll skip forward to a later question, or the end of the form.</p>
-        <p> People who select any other answer will continue to the next question. If you need to, you can add a second route so they skip one or more questions later in the form.</p>
-        <p> You can only add a route from a question that does not already have 2 routes. Go back to your questions if you need to edit an existing route.</p>
+        <p>You can add a route to a question so if someone selects one specific
+        answer, they’ll be skipped forward to a later question, or the end of
+        the form.</p>
+
+        <p>People who select any other answer will continue to the next question
+        and through the rest of the form. If you need to, you can add a second
+        route to make them skip some of the questions you sent the first route
+        to.</p>
+
+        <p>These two routes can only start from a question where people select
+        one option from a list.</p>
+      legend_hint_text: You can only add a route from a question that does not already have two routes. Go back to your questions if you need to edit an existing route.
       no_remaining_routes_html: |
         <h2 class="govuk-heading-m">You have no more questions to add a route from</h2>
         <p>You can only add a route from a question that does not already have 2 routes. If you need to edit an existing route, go back to your questions.</p>
@@ -1437,13 +1449,12 @@ en:
     new:
       back: Back to question %{question_number}’s routes
       caption: Question %{question_number}’s routes
-      details_html: |
-        <p>People who select an answer that does not have a route assigned to it will continue to the next question.</p>
-        <p>If you need to, you can make these people skip one or more questions later in the form. For example, you might want them to skip route 1’s questions. This allows you to create 2 different ‘branches’ of questions.</p>
-      details_summary: Why set questions to skip?
-      primary_route_answer_key: is not
-      primary_route_continue_key: continue to
-      primary_route_question_key: If the answer to
+      explanation_html: |
+        <h2 class="govuk-heading-m">If people select any other answer</h2>
+        <p>People who select any other answer will continue to question %{question_number} and through the rest of the form. </p>
+        <p>If you need to, you can make them skip one or more consecutive questions that only people on route %{route_number} need to answer.</p>
+      primary_route_answer_key: If the answer is
+      primary_route_continue_key: skip the person to
   selection_options:
     add_another: Add another option
     add_options: Add options to your list

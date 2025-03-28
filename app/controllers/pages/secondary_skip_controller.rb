@@ -15,7 +15,7 @@ class Pages::SecondarySkipController < PagesController
     secondary_skip_input = Pages::SecondarySkipInput.new(secondary_skip_input_params)
 
     if secondary_skip_input.submit
-      redirect_to show_routes_path(form_id: current_form.id, page_id: page.id)
+      redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.secondary_skip_created")
     else
       render template: "pages/secondary_skip/new", locals: {
         secondary_skip_input:,
