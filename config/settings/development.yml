@@ -14,3 +14,6 @@ forms_api:
 auth_provider: mock_gds_sso
 
 act_as_user_enabled: true
+
+reports:
+  organisation_to_exclude_from_live_report: 1
