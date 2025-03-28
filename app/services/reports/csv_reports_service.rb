@@ -112,13 +112,15 @@ private
   end
 
   def write_forms_to_csv(csv, forms)
-    forms.each do |form|
+    filtered_forms = remove_test_forms(forms)
+    filtered_forms.each do |form|
       csv << form_row(form)
     end
   end
 
   def write_form_questions_to_csv(csv, forms)
-    forms.each do |form|
+    filtered_forms = remove_test_forms(forms)
+    filtered_forms.each do |form|
       question_rows(form).each do |question|
         csv << question
       end
@@ -181,5 +183,18 @@ private
         step["data"]["answer_settings"].as_json,
       ]
     end
+  end
+
+  def remove_test_forms(forms)
+    forms.reject { |form| in_excluded_organisation?(form) }
+  end
+
+  def in_excluded_organisation?(form)
+    form_id = form["form_id"]
+    organisation_id = GroupForm.find_by_form_id(form_id)&.group&.organisation&.id
+
+    organisation_to_exclude_from_live_report = Settings.reports.organisation_to_exclude_from_live_report
+
+    organisation_to_exclude_from_live_report == organisation_id
   end
 end
