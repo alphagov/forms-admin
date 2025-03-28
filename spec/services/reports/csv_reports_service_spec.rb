@@ -12,11 +12,14 @@ RSpec.describe Reports::CsvReportsService do
   let(:form_documents_response_json) { file_fixture("form_documents_response.json").read }
 
   let(:group) { create(:group) }
+  let(:form_3_group) { group }
+
+  let(:excluded_org) { create(:organisation, :with_signed_mou, id: Settings.reports.organisation_to_exclude_from_live_report, slug: "excluded-org") }
 
   before do
     GroupForm.create!(form_id: 1, group:)
     GroupForm.create!(form_id: 2, group:)
-    GroupForm.create!(form_id: 3, group:)
+    GroupForm.create!(form_id: 3, group: form_3_group)
 
     stub_request(:get, form_documents_url)
       .with(query: { page: "1", per_page: "3", tag: "live" })
@@ -81,6 +84,19 @@ RSpec.describe Reports::CsvReportsService do
         expect { csv_reports_service.live_forms_csv }.to raise_error(
           StandardError, "Forms API responded with a non-success HTTP code when retrieving form documents: status 400"
         )
+      end
+    end
+
+    context "when a group has been excluded from reports" do
+      let(:form_3_group) { create(:group, organisation: excluded_org) }
+
+      it "does not include the forms from the excluded group" do
+        csv = csv_reports_service.live_forms_csv
+        rows = CSV.parse(csv)
+        expect(rows.count).to eq(7)
+
+        rows_with_excluded_group_id = rows.filter { |row| row.include? form_3_group.external_id }
+        expect(rows_with_excluded_group_id).to be_empty
       end
     end
   end
@@ -226,6 +242,19 @@ RSpec.describe Reports::CsvReportsService do
         expect { csv_reports_service.live_questions_csv }.to raise_error(
           StandardError, "Forms API responded with a non-success HTTP code when retrieving form documents: status 400"
         )
+      end
+    end
+
+    context "when a group has been excluded from reports" do
+      let(:form_3_group) { create(:group, organisation: excluded_org) }
+
+      it "does not include the questions from forms in the excluded group" do
+        csv = csv_reports_service.live_questions_csv
+        rows = CSV.parse(csv)
+        excluded_question_rows = rows.filter { |row| row.include? "How many times have you filled out this form?" }
+
+        expect(rows.count).to eq(31)
+        expect(excluded_question_rows).to be_empty
       end
     end
   end
