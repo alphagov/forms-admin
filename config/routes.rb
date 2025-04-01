@@ -67,6 +67,7 @@ Rails.application.routes.draw do
 
     scope "/pages" do
       get "/" => "pages#index", as: :form_pages
+      get "/branches" => "pages#see_form_branches", as: :see_form_branches
       post "/" => "forms#mark_pages_section_completed"
       post "/move-page" => "pages#move_page", as: :move_page
 

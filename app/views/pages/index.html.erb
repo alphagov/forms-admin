@@ -23,6 +23,7 @@
       <%= govuk_button_link_to t("pages.index.add_a_question_route"), routing_page_path(current_form.id), secondary: true, class:"govuk-!-margin-bottom-3 govuk-!-margin-top-3" %>
 
       <%= render PreviewLinkComponent::View.new(@pages, link_to_runner(Settings.forms_runner.url, current_form.id, current_form.form_slug)) %>
+      <%= govuk_link_to "See the branches of this form", see_form_branches_path(current_form.id) %>
     </div>
 
     <% if @pages.any? %>

@@ -88,6 +88,12 @@ class PagesController < ApplicationController
     redirect_to form_pages_path, success: t("banner.success.form.page_moved", question_text: page_to_move.question_text, direction: move_params[:direction], question_number: position)
   end
 
+  def see_form_branches
+    @pages = FormRepository.pages(current_form)
+    @visualisation = RoutingVisualiserService.generate(current_form)
+    render :see_form_branches, locals: { current_form: }
+  end
+
 private
 
   def clear_draft_questions_data

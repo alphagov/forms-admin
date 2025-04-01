@@ -1,0 +1,20 @@
+<% set_page_title(t("pages.see_form_branches.title")) %>
+<% content_for :back_link, govuk_back_link_to(form_pages_path(current_form.id)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= current_form.name %></span><span class="govuk-visually-hidden"> - </span>
+      <%= t("pages.see_form_branches.heading") %>
+    </h1>
+
+    <style>
+      svg g g.node text {
+        float: left;
+        color: red;
+      }
+    </style>
+
+    <%= raw(@visualisation) %>
+  </div>
+</div>
