@@ -1,5 +1,13 @@
 <% set_page_title(@group.name) %>
-<% content_for :back_link, govuk_back_link_to(groups_path, t("back_link.groups")) %>
+
+<% if @current_user.super_admin? %>
+  <% own_organisation = @current_user.organisation_id == @group.organisation_id %>
+  <% organisations_groups_text = own_organisation ? "Your groups" : "#{@group.organisation.name}’s groups" %>
+  <% search = own_organisation ? nil : { organisation_id: @group.organisation_id } %>
+  <% content_for :back_link, govuk_breadcrumbs(breadcrumbs: { organisations_groups_text => groups_path(search:) } ) %>
+<% else %>
+  <% content_for :back_link, govuk_back_link_to(groups_path, t("back_link.groups")) %>
+<% end %>
 
 <% unless @group.active? %>
   <div class="govuk-grid-row">
