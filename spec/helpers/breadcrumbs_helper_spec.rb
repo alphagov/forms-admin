@@ -3,8 +3,6 @@ require "rails_helper"
 RSpec.describe BreadcrumbsHelper, type: :helper do
   describe "#groups_breadcrumb" do
     it "links to the groups page" do
-      assign(:current_user, build(:user))
-      assign(:group, build(:group))
       expect(helper.groups_breadcrumb).to eq({
         "Your groups" => "/groups",
       })
