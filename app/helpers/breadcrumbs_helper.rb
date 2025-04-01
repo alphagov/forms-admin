@@ -3,11 +3,14 @@
 module BreadcrumbsHelper
   # rubocop: disable Rails/HelperInstanceVariable
   def groups_breadcrumb
-    own_organisation = @current_user.organisation_id == @group.organisation_id
-    organisations_groups_text = own_organisation ? "Your groups" : "#{@group.organisation.name}’s groups"
-    search = own_organisation ? nil : { organisation_id: @group.organisation_id }
-
-    { organisations_groups_text => groups_path(search:) }
+    if @current_user&.organisation_id == @group&.organisation_id
+      { t("page_titles.group_index") => groups_path }
+    else
+      {
+        t("breadcrumbs.organisation_groups", organisation_name: @group.organisation.name) =>
+          groups_path(search: { organisation_id: @group.organisation_id }),
+      }
+    end
   end
   # rubocop: enable Rails/HelperInstanceVariable
 end
