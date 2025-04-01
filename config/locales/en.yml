@@ -1202,6 +1202,9 @@ en:
       mark_complete:
         legend: Have you finished editing your questions?
       title: Add and edit your questions
+    see_form_branches:
+      title: View the branches of your form
+      heading: Form branches
     optional: "%{question_text} (optional)"
     question: Question
     routes:
