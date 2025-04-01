@@ -14,7 +14,7 @@ RSpec.describe "groups/show", type: :view do
   let(:review_upgrade?) { false }
 
   before do
-    create :membership, group:, user: current_user, role: membership_role, added_by: current_user
+    create :membership, group:, user: current_user, role: membership_role, added_by: current_user unless current_user.super_admin?
 
     assign(:current_user, current_user)
     assign(:group, group)
@@ -59,6 +59,27 @@ RSpec.describe "groups/show", type: :view do
 
     it "has a link to the review members page" do
       expect(rendered).to have_link "View members of this group", href: group_members_path(group)
+    end
+  end
+
+  context "when the user is a super admin" do
+    let(:current_user) { build :super_admin_user }
+
+    it "has breadcrumbs" do
+      expect(view.content_for(:back_link)).to have_css ".govuk-breadcrumbs"
+      expect(view.content_for(:back_link)).to have_css ".govuk-breadcrumbs .govuk-breadcrumbs__link", text: "Your groups"
+      expect(view.content_for(:back_link)).to have_link "Your groups", href: "/groups"
+    end
+
+    context "and the group is in a different organisation to the user" do
+      let(:other_organisation) { create :organisation, slug: "other-org" }
+      let(:group) { create :group, organisation: other_organisation }
+
+      it "has a breadcrumb to the groups for that organisation" do
+        expect(view.content_for(:back_link)).to have_css ".govuk-breadcrumbs"
+        expect(view.content_for(:back_link)).to have_css ".govuk-breadcrumbs .govuk-breadcrumbs__link", text: "Other Org’s groups"
+        expect(view.content_for(:back_link)).to have_link "Other Org’s groups", href: "/groups?search%5Borganisation_id%5D=#{other_organisation.id}"
+      end
     end
   end
 
