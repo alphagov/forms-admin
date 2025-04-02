@@ -231,10 +231,4 @@ describe "forms/_made_live_form.html.erb" do
       expect(view.content_for(:back_link)).to have_link("Back to your forms", href: "/")
     end
   end
-
-  context "when the groups feature is not enabled", feature_groups: false do
-    it "back link is set to root" do
-      expect(view.content_for(:back_link)).to have_link("Back to your forms", href: "/")
-    end
-  end
 end

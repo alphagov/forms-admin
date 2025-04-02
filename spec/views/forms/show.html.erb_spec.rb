@@ -44,12 +44,6 @@ describe "forms/show.html.erb" do
     expect(view.content_for(:back_link)).to have_link("Back to Group 1", href: group_path(group))
   end
 
-  context "when the groups feature is not enabled", feature_groups: false do
-    it "has a back link to the forms page" do
-      expect(view.content_for(:back_link)).to have_link("Back to your forms", href: "/")
-    end
-  end
-
   context "when a form is not in a group" do
     let(:group) { nil }
 
