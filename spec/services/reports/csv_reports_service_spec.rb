@@ -40,14 +40,14 @@ RSpec.describe Reports::CsvReportsService do
         "2025-01-02T16:24:31.255Z",
         "9",
         "false",
-        nil,
+        "https://www.gov.uk/payments/your-payment-link",
         nil,
         nil,
         "your.email+fakedata84701@gmail.com.gov.uk",
         "08000800",
         "https://www.gov.uk/help/privacy-notice",
         "Test",
-        "email",
+        "email_with_csv",
       ])
     end
   end
@@ -78,7 +78,7 @@ RSpec.describe Reports::CsvReportsService do
         nil,
         nil,
         "false",
-        "false",
+        "true",
         "false",
         "single_line",
         nil,

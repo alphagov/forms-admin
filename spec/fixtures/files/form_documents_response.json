@@ -13,7 +13,7 @@
             "answer_type": "text",
             "is_optional": false,
             "page_heading": null,
-            "is_repeatable": false,
+            "is_repeatable": true,
             "question_text": "Single line of text",
             "answer_settings": {
               "input_type": "single_line"
@@ -32,7 +32,7 @@
             "answer_type": "number",
             "is_optional": false,
             "page_heading": null,
-            "is_repeatable": false,
+            "is_repeatable": true,
             "question_text": "Number",
             "answer_settings": null,
             "guidance_markdown": null
@@ -191,12 +191,12 @@
       "creator_id": null,
       "start_page": 1,
       "updated_at": "2025-01-02T16:24:31.255Z",
-      "payment_url": null,
+      "payment_url": "https://www.gov.uk/payments/your-payment-link",
       "support_url": null,
       "support_email": "your.email+fakedata84701@gmail.com.gov.uk",
       "support_phone": "08000800",
       "s3_bucket_name": null,
-      "submission_type": "email",
+      "submission_type": "email_with_csv",
       "declaration_text": "",
       "s3_bucket_region": null,
       "submission_email": "submissions@example.com",
