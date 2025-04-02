@@ -5,7 +5,7 @@ class ReportsController < ApplicationController
   def index; end
 
   def features
-    data = Report.find("features")
+    data = Reports::FeatureReportService.report
 
     render template: "reports/features", locals: { data: }
   end

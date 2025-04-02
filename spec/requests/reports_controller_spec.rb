@@ -4,37 +4,7 @@ RSpec.describe ReportsController, type: :request do
   let(:question_text) { "Question text" }
   let(:report_data) do
     { total_live_forms: 3,
-      live_forms_with_answer_type: { address: 1,
-                                     date: 1,
-                                     email: 1,
-                                     name: 1,
-                                     national_insurance_number: 1,
-                                     number: 1,
-                                     organisation_name: 1,
-                                     phone_number: 1,
-                                     selection: 3,
-                                     text: 3 },
-      live_pages_with_answer_type: { address: 1,
-                                     date: 1,
-                                     email: 1,
-                                     name: 1,
-                                     national_insurance_number: 1,
-                                     number: 1,
-                                     organisation_name: 2,
-                                     phone_number: 1,
-                                     selection: 4,
-                                     text: 5 },
-      live_forms_with_payment: 1,
-      live_forms_with_routing: 2,
-      live_forms_with_add_another_answer: 3,
-      live_forms_with_csv_submission_enabled: 2,
       all_forms_with_add_another_answer: [{ form_id: 3, name: "form name", state: "Draft", repeatable_pages: [{ page_id: 5, question_text: }] }] }
-  end
-
-  before do
-    ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/reports/features", headers, report_data.to_json, 200
-    end
   end
 
   describe "#index" do
@@ -92,6 +62,22 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#features" do
+    let(:form_documents_url) { "#{Settings.forms_api.base_url}/api/v2/form-documents".freeze }
+    let(:form_documents_response_json) { file_fixture("form_documents_response.json").read }
+    let(:response_headers) do
+      {
+        "pagination-total" => "3",
+        "pagination-offset" => "0",
+        "pagination-limit" => "3",
+      }
+    end
+
+    before do
+      stub_request(:get, form_documents_url)
+        .with(query: { page: "1", per_page: "3", tag: "live" })
+        .to_return(body: form_documents_response_json, headers: response_headers)
+    end
+
     context "when the user is an editor" do
       before do
         login_as_standard_user
@@ -140,8 +126,11 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "includes the report data" do
-        expect(response.body).to include "Total live forms"
-        expect(response.body).to include report_data[:total_live_forms].to_s
+        page = Capybara.string(response.body)
+        within(page.find_all(".govuk-summary-list").first) do
+          expect(page.find_all(".govuk-summary-list__key")[0]).to have_text "Total live forms"
+          expect(page.find_all(".govuk-summary-list__value")[0]).to have_text "3"
+        end
       end
     end
   end
@@ -197,6 +186,12 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#add_another_answer" do
+    before do
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get "/api/v1/reports/features", headers, report_data.to_json, 200
+      end
+    end
+
     context "when the user is an editor" do
       before do
         login_as_standard_user

@@ -1,14 +1,6 @@
 require "csv"
 
 class Reports::CsvReportsService
-  REQUEST_HEADERS = {
-    "X-API-Token" => Settings.forms_api.auth_key,
-    "Accept" => "application/json",
-  }.freeze
-  FORM_DOCUMENTS_URL = "#{Settings.forms_api.base_url}/api/v2/form-documents".freeze
-
-  FormDocumentsResponse = Data.define(:forms, :has_more_results?)
-
   def live_forms_csv
     CSV.generate do |csv|
       csv << [
@@ -34,14 +26,8 @@ class Reports::CsvReportsService
         "Submission type",
       ]
 
-      page = 1
-      form_documents_response = get_paginated_form_documents(page)
-      write_forms_to_csv(csv, form_documents_response.forms)
-
-      while form_documents_response.has_more_results?
-        page += 1
-        form_documents_response = get_paginated_form_documents(page)
-        write_forms_to_csv(csv, form_documents_response.forms)
+      Reports::FormDocumentsService.live_form_documents.each do |form_document|
+        csv << form_row(form_document)
       end
     end
   end
@@ -72,58 +58,15 @@ class Reports::CsvReportsService
         "Raw answer settings",
       ]
 
-      page = 1
-      form_documents_response = get_paginated_form_documents(page)
-      write_form_questions_to_csv(csv, form_documents_response.forms)
-
-      while form_documents_response.has_more_results?
-        page += 1
-        form_documents_response = get_paginated_form_documents(page)
-        write_form_questions_to_csv(csv, form_documents_response.forms)
+      Reports::FormDocumentsService.live_form_documents.each do |form_document|
+        question_rows(form_document).each do |question|
+          csv << question
+        end
       end
     end
   end
 
 private
-
-  def get_paginated_form_documents(page)
-    response = get_form_documents(page)
-    FormDocumentsResponse.new(forms: JSON.parse(response.body), has_more_results?: has_more_results?(response))
-  end
-
-  def has_more_results?(response)
-    total = response["pagination-total"].to_i
-    offset = response["pagination-offset"].to_i
-    limit = response["pagination-limit"].to_i
-
-    total > offset + limit
-  end
-
-  def get_form_documents(page)
-    uri = URI(FORM_DOCUMENTS_URL)
-    params = { tag: "live", page:, per_page: Settings.reports.forms_api_forms_per_request_page }
-    uri.query = URI.encode_www_form(params)
-
-    response = Net::HTTP.get_response(uri, REQUEST_HEADERS)
-
-    return response if response.is_a? Net::HTTPSuccess
-
-    raise StandardError, "Forms API responded with a non-success HTTP code when retrieving form documents: status #{response.code}"
-  end
-
-  def write_forms_to_csv(csv, forms)
-    forms.each do |form|
-      csv << form_row(form)
-    end
-  end
-
-  def write_form_questions_to_csv(csv, forms)
-    forms.each do |form|
-      question_rows(form).each do |question|
-        csv << question
-      end
-    end
-  end
 
   def form_row(form)
     form_id = form["form_id"]
