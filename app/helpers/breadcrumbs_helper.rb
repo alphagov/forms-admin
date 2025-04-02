@@ -12,5 +12,21 @@ module BreadcrumbsHelper
       }
     end
   end
+
+  def group_breadcrumb
+    { @group.name => group_path(@group) }
+  end
+
+  def form_breadcrumb
+    { @form.name => form_path(@form) }
+  end
+
+  def live_form_breadcrumb
+    { @form.name => live_form_path(@form) }
+  end
+
+  def archived_form_breadcrumb
+    { @form.name => archived_form_path(@form) }
+  end
   # rubocop: enable Rails/HelperInstanceVariable
 end

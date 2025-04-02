@@ -1,11 +1,28 @@
 <% set_page_title(current_form.name) %>
 
 <% if current_form.is_live? %>
-  <% content_for :back_link, govuk_back_link_to(live_form_path(current_form.id), t("back_link.form_view")) %>
+  <% if @current_user.super_admin? %>
+    <% @group = current_form.group %>
+    <% @form = current_form %>
+    <% content_for :back_link, govuk_breadcrumbs(breadcrumbs: { **groups_breadcrumb, **group_breadcrumb, **live_form_breadcrumb }) %>
+  <% else %>
+    <% content_for :back_link, govuk_back_link_to(live_form_path(current_form.id), t("back_link.form_view")) %>
+  <% end %>
 <% elsif current_form.is_archived? %>
-  <% content_for :back_link, govuk_back_link_to(archived_form_path(current_form.id), t("back_link.form_view")) %>
+  <% if @current_user.super_admin? %>
+    <% @group = current_form.group %>
+    <% @form = current_form %>
+    <% content_for :back_link, govuk_breadcrumbs(breadcrumbs: { **groups_breadcrumb, **group_breadcrumb, **archived_form_breadcrumb }) %>
+  <% else %>
+    <% content_for :back_link, govuk_back_link_to(archived_form_path(current_form.id), t("back_link.form_view")) %>
+  <% end %>
 <% elsif current_form.group.present? %>
-  <% content_for :back_link, govuk_back_link_to(group_path(current_form.group), t("back_link.group", group_name: current_form.group.name)) %>
+  <% if @current_user.super_admin? %>
+    <% @group = current_form.group %>
+    <% content_for :back_link, govuk_breadcrumbs(breadcrumbs: { **groups_breadcrumb, **group_breadcrumb }) %>
+  <% else %>
+    <% content_for :back_link, govuk_back_link_to(group_path(current_form.group), t("back_link.group", group_name: current_form.group.name)) %>
+  <% end %>
 <% else %>
   <% content_for :back_link, govuk_back_link_to(root_path, t("back_link.forms")) %>
 <% end %>
