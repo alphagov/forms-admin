@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_07_150217) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_02_115233) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -144,6 +144,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_07_150217) do
     t.boolean "closed", default: false
     t.string "abbreviation"
     t.bigint "default_group_id"
+    t.boolean "internal", default: false
     t.index ["default_group_id"], name: "index_organisations_on_default_group_id"
     t.index ["govuk_content_id"], name: "index_organisations_on_govuk_content_id", unique: true
     t.index ["slug"], name: "index_organisations_on_slug", unique: true
