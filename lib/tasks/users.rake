@@ -1,18 +1,4 @@
 namespace :users do
-  desc "Update all trial and editor users to be standard users - dry run"
-  task update_user_roles_to_standard_dry_run: :environment do
-    ActiveRecord::Base.transaction do
-      update_user_roles
-      Rails.logger.info "users:update_user_roles_to_standard_dry_run rollback"
-      raise ActiveRecord::Rollback
-    end
-  end
-
-  desc "Update all trial and editor users to be standard users"
-  task update_user_roles_to_standard: :environment do
-    update_user_roles
-  end
-
   desc "Delete user (dry run)"
   task :delete_user_dry_run, %i[user_id] => :environment do |_, args|
     run_deletion_task("delete_user_dry_run", args, rollback: true)
