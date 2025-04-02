@@ -8,8 +8,10 @@
       <%= t("pages.see_form_branches.heading") %>
     </h1>
 
+    <p id="ascii-diagram"><%= raw(@visualisation["ascii"].gsub("\n","<br />")) %></p>
+
     <pre class="mermaid">
-      <%= raw(@visualisation) %>
+      <%= raw(@visualisation["mermaid"]) %>
     </pre>
     <script type="module">
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
@@ -17,6 +19,7 @@
         flowchart: { curve: 'linear', htmlLabels: true},
         startOnLoad: true,
       })
+      document.getElementById("ascii-diagram").style.display = "none";
     </script>
   </div>
 </div>

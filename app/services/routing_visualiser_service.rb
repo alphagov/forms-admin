@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative "../helpers/application_helper"
 require "open3"
 
@@ -37,12 +38,64 @@ class RoutingVisualiserService
     def generate(form)
       graph = build_graph(form)
 
+      [
+        ["mermaid", render_as_mermaid(graph)],
+        ["ascii", render_as_ascii(graph)],
+      ].to_h
+    end
+
+  private
+
+    def render_as_ascii(graph)
+      # traverse_infix(graph.root, "", true, [])
+      io = StringIO.new
+      infix(graph.root, "", io)
+      io.rewind
+      io.read
+    end
+
+    def traverse_infix(node, prefix, is_last, result)
+      return result if node.nil?
+
+      # Print the current node
+      result << "#{prefix}#{is_last ? '└── ' : '├── '}#{node.text}"
+
+      prefix += is_last ? "    " : "│   "
+
+      # Traverse children
+      node.children.each_with_index do |child, index|
+        result.push(traverse_infix(child.node, prefix, index == node.children.size - 1, result))
+      end
+    end
+
+    def infix(node, prefix, result)
+      space = "&nbsp"
+
+      text = is_exit_page_node(node) ? "Exit page" : node.text
+
+      result << "#{prefix}#{text}\n"
+
+      prefix = prefix.empty? ? "|#{space * 4}" : "#{prefix}|#{space * 4}"
+
+      node.children.each do |child|
+        descendant_prefix = prefix
+        unless child.reason.nil?
+          result << "#{prefix}└ #{child.reason}\n"
+
+          descendant_prefix = "#{descendant_prefix}#{space * 5}"
+        end
+
+        infix(child.node, descendant_prefix, result)
+      end
+    end
+
+    def render_as_mermaid(graph)
       to_visit = [graph.root]
 
       diagram_lines = [
         "flowchart TD",
       ]
-      visited_node_ids =[]
+      visited_node_ids = []
 
       while to_visit.any?
         node = to_visit.shift
@@ -68,8 +121,6 @@ class RoutingVisualiserService
 
       diagram_lines.join("\n")
     end
-
-  private
 
     def build_graph(form)
       # Page ids and indices in the array are different
@@ -165,7 +216,7 @@ class RoutingVisualiserService
 
     def is_exit_page_node(node)
       if node.id.is_a? String
-        node.id.starts_with? "exit_page_id"
+        return node.id.start_with? "exit_page_id"
       end
 
       false
