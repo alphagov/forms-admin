@@ -17,7 +17,7 @@ class ReportsController < ApplicationController
   end
 
   def add_another_answer
-    data = Report.find("features")
+    data = Report.find("add-another-answer-forms")
 
     render template: "reports/add_another_answer", locals: { data: }
   end
