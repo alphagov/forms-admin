@@ -47,6 +47,29 @@ RSpec.describe Reports::FormDocumentsService do
     end
   end
 
+  context "when there are forms from internal organisations" do
+    let(:organisation) { build :organisation, id: 1, internal: false }
+    let(:internal_organisation) { build :organisation, id: 1, internal: true }
+    let(:group) { build :group, id: 1, organisation: }
+    let(:internal_group) { build :group, id: 1, organisation: internal_organisation }
+    let(:group_form) { GroupForm.new(group:) }
+    let(:internal_group_form) { GroupForm.new(group: internal_group) }
+
+    before do
+      allow(GroupForm).to receive(:find_by_form_id).with(1).and_return(group_form)
+      allow(GroupForm).to receive(:find_by_form_id).with(2).and_return(group_form)
+      allow(GroupForm).to receive(:find_by_form_id).with(3).and_return(internal_group_form)
+    end
+
+    it "does not include these forms in the live_form_documents output" do
+      form_documents = described_class.live_form_documents.to_a
+      expect(form_documents.size).to eq(6)
+
+      form_documents_with_internal_id = form_documents.filter { it["id"] == 3 }
+      expect(form_documents_with_internal_id).to be_empty
+    end
+  end
+
   def response_headers(total, offset, limit)
     {
       "pagination-total" => total.to_s,

@@ -13,7 +13,7 @@ class Reports::FormDocumentsService
         page = 1
         loop do
           form_documents_response = live_form_documents_page(page)
-          form_documents_response.forms.each { |f| yielder << f }
+          form_documents_response.forms.each { |f| yielder << f unless is_in_internal_organisation?(f) }
 
           break unless form_documents_response.has_more_results?
 
@@ -46,6 +46,14 @@ class Reports::FormDocumentsService
       limit = response["pagination-limit"].to_i
 
       total > offset + limit
+    end
+
+    def is_in_internal_organisation?(form)
+      group_form = GroupForm.find_by_form_id(form["form_id"])
+
+      return false if group_form.blank?
+
+      group_form.group.organisation.internal?
     end
   end
 end
