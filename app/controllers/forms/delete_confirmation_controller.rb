@@ -29,7 +29,7 @@ module Forms
         return redirect_to @back_url
       end
 
-      redirect_to success_url, status: :see_other, success: "Successfully deleted ‘#{current_form.name}’"
+      redirect_to success_url, status: :see_other, success: t(".success", form_name: current_form.name)
     end
 
   private

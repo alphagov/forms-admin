@@ -68,7 +68,7 @@ class PagesController < ApplicationController
       return redirect_to @back_url
     end
 
-    redirect_to form_pages_path(form), status: :see_other, success: "Successfully deleted ‘#{page.question_text}’"
+    redirect_to form_pages_path(current_form), status: :see_other, success: t(".success", question_text: page.question_text)
   end
 
   def start_new_question
