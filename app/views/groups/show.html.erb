@@ -67,4 +67,8 @@
 
 <% if @form_list_presenter %>
   <%= govuk_table(**@form_list_presenter.data) %>
+<% elsif policy(@group).delete? %>
+  <div>
+    <%= govuk_button_link_to t(".delete_group"), delete_group_path(@group), warning: true %>
+  </div>
 <% end %>

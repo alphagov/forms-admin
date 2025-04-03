@@ -170,10 +170,12 @@ Rails.application.routes.draw do
     get "/signed", to: "mou_signatures#confirmation", as: :confirmation
   end
 
-  resources :groups, except: :destroy do
+  resources :groups do
     resources :forms, controller: :group_forms, only: %i[new create]
     resources :members, controller: :group_members, only: %i[index new create]
     member do
+      get "delete", to: "groups#delete"
+
       get "upgrade", to: "groups#confirm_upgrade"
       post "upgrade", to: "groups#upgrade"
 
