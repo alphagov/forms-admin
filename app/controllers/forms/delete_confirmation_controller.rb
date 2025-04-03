@@ -38,7 +38,6 @@ module Forms
       @delete_confirmation_input = DeleteConfirmationInput.new
 
       @url = destroy_form_path(current_form.id)
-      @confirm_deletion_legend = t("forms_delete_confirmation_input.confirm_deletion")
       @item_name = current_form.name
       @back_url = form_path(current_form.id)
     end
