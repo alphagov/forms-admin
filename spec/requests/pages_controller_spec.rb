@@ -305,7 +305,7 @@ RSpec.describe PagesController, type: :request do
 
         GroupForm.create!(form_id: 2, group_id: group.id)
 
-        delete destroy_page_path(form_id: 2, page_id: 1, forms_delete_confirmation_input: { confirm: "yes" })
+        delete destroy_page_path(form_id: 2, page_id: 1, pages_delete_confirmation_input: { confirm: "yes" })
       end
 
       it "redirects you to the page index screen" do
