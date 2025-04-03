@@ -1405,6 +1405,13 @@ en:
       title: All forms with add another answer
     back_link: Back to reports
     back_to_feature_usage: Back to feature and answer type usage
+    contact_for_research:
+      heading: Users who have agreed to be contacted for user research
+      table_headings:
+        date_added: Sign up date
+        email: Email
+        name: Name
+      title: Users interested in research
     csv_downloads:
       live_forms: Download data about all live forms as a CSV file
       live_questions: Download all questions in live forms as a CSV file

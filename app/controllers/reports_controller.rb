@@ -132,6 +132,12 @@ class ReportsController < ApplicationController
               disposition: "attachment; filename=#{csv_filename('live_questions_report')}"
   end
 
+  def contact_for_research
+    data = Reports::ContactForResearchService.new.contact_for_research_data
+
+    render locals: { data: }
+  end
+
 private
 
   def questions_feature_report(tag, report, questions)
