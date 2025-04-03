@@ -30,7 +30,7 @@ RSpec.describe "forms/delete_confirmation/delete" do
   end
 
   it "has a delete confirmation input to confirm deletion of the form" do
-    expect(rendered).to render_template "input_objects/forms/_delete_confirmation_input"
+    expect(rendered).to render_template "input_objects/_delete_confirmation_input"
   end
 
   describe "delete confirmation input" do
