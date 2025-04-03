@@ -118,6 +118,12 @@ class ReportsController < ApplicationController
               disposition: "attachment; filename=#{csv_filename('live_questions_with_add_another_answer_report')}"
   end
 
+  def contact_for_research
+    data = Reports::ContactForResearchService.new.contact_for_research_data
+
+    render locals: { data: }
+  end
+
 private
 
   def check_user_has_permission
