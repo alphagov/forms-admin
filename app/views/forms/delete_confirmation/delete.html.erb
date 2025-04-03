@@ -1,4 +1,4 @@
-<% set_page_title(title_with_error_prefix(@confirm_deletion_legend, @delete_confirmation_input.errors.any?)) %>
+<% set_page_title(title_with_error_prefix(t(".title"), @delete_confirmation_input.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(@back_url) %>
 
 <div class="govuk-grid-row">
@@ -7,7 +7,7 @@
       @delete_confirmation_input,
       url: @url,
       caption_text: @item_name,
-      legend_text: @confirm_deletion_legend,
+      legend_text: t(".title"),
     ) %>
   </div>
 </div>

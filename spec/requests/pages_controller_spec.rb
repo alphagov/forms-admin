@@ -76,7 +76,7 @@ RSpec.describe PagesController, type: :request do
   end
 
   describe "#delete" do
-    describe "given a valid page" do
+    context "with a valid page" do
       let(:page) do
         build(
           :page,
@@ -282,7 +282,7 @@ RSpec.describe PagesController, type: :request do
   end
 
   describe "#destroy" do
-    describe "given a valid page" do
+    context "with a valid page" do
       let(:page) do
         build(
           :page,
@@ -304,23 +304,46 @@ RSpec.describe PagesController, type: :request do
         allow(PageRepository).to receive_messages(find: page, destroy: true)
 
         GroupForm.create!(form_id: 2, group_id: group.id)
-
-        delete destroy_page_path(form_id: 2, page_id: 1, pages_delete_confirmation_input: { confirm: "yes" })
       end
 
-      it "redirects you to the page index screen" do
-        expect(response).to redirect_to(form_pages_path)
+      context "when the user has confirmed they want to delete the form" do
+        before do
+          delete destroy_page_path(form_id: 2, page_id: 1, pages_delete_confirmation_input: { confirm: "yes" })
+        end
+
+        it "redirects you to the page index screen" do
+          expect(response).to redirect_to(form_pages_path)
+        end
+
+        it "displays a success flash message" do
+          expect(flash[:success]).to eq "Successfully deleted ‘What is your work address?’"
+        end
+
+        it "destroys the page through the page repository" do
+          expect(PageRepository).to have_received(:destroy)
+        end
+
+        context "when current user is not in group for form" do
+          let(:membership) { nil }
+
+          it "returns an error" do
+            expect(response).to have_http_status :forbidden
+          end
+
+          it "does not call destroy through the page repository" do
+            expect(PageRepository).not_to have_received(:destroy)
+          end
+        end
       end
 
-      it "destroys the page through the page repository" do
-        expect(PageRepository).to have_received(:destroy)
-      end
+      context "when user has not confirmed whether they want to delete the question or not" do
+        before do
+          delete destroy_page_path(form_id: 2, page_id: 1, pages_delete_confirmation_input: { confirm: nil })
+        end
 
-      context "when current user is not in group for form" do
-        let(:membership) { nil }
-
-        it "returns an error" do
-          expect(response).to have_http_status :forbidden
+        it "re-renders the confirm delete view with an error" do
+          expect(response).to render_template(:delete)
+          expect(response.body).to include "Select ‘Yes’ to delete the question"
         end
 
         it "does not call destroy through the page repository" do
