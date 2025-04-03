@@ -5,7 +5,6 @@ RSpec.describe "forms/delete_confirmation/delete" do
 
   before do
     assign(:back_url, form_path(form_id: 1))
-    assign(:confirm_deletion_legend, "Are you sure you want to delete this draft?")
     assign(:delete_confirmation_input, Forms::DeleteConfirmationInput.new)
     assign(:item_name, form.name)
     assign(:url, destroy_form_path(form_id: 1))
