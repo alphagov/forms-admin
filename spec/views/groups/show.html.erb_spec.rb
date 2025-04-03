@@ -10,6 +10,7 @@ RSpec.describe "groups/show", type: :view do
   let(:membership_role) { :editor }
   let(:upgrade?) { false }
   let(:edit?) { true }
+  let(:delete?) { false }
   let(:request_upgrade?) { false }
   let(:review_upgrade?) { false }
 
@@ -25,6 +26,7 @@ RSpec.describe "groups/show", type: :view do
       policy_double = instance_double(GroupPolicy,
                                       upgrade?: upgrade?,
                                       edit?: edit?,
+                                      delete?: delete?,
                                       request_upgrade?: request_upgrade?,
                                       review_upgrade?: review_upgrade?)
 
@@ -300,6 +302,50 @@ RSpec.describe "groups/show", type: :view do
     render
     expect(rendered).to have_css ".govuk-button--start", text: "Create a form" do |start_button|
       expect(start_button).to match_selector :link, href: new_group_form_path(group)
+    end
+  end
+
+  describe "delete button" do
+    shared_examples "deletable" do
+      it "has a button to delete the group" do
+        expect(rendered).to have_link "Delete this group", class: "govuk-button--warning", href: delete_group_path(group)
+      end
+    end
+
+    shared_examples "not deletable" do
+      it "does not have a button to delete the group" do
+        expect(rendered).not_to have_link href: delete_group_path(group)
+      end
+    end
+
+    context "when the group has no forms" do
+      let(:form_list_presenter) { nil }
+
+      context "and the user has permission to delete the group" do
+        let(:delete?) { true }
+
+        it_behaves_like "deletable"
+      end
+
+      context "and the user does not have permission to delete the group" do
+        let(:delete?) { false }
+
+        it_behaves_like "not deletable"
+      end
+    end
+
+    context "and the group has some forms" do
+      context "and the user has permission to delete the group" do
+        let(:delete?) { true }
+
+        it_behaves_like "not deletable"
+      end
+
+      context "and the user does not have permission to delete the group" do
+        let(:delete?) { false }
+
+        it_behaves_like "not deletable"
+      end
     end
   end
 end
