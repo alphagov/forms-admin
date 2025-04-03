@@ -53,12 +53,6 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
         expect(response).to have_http_status :not_found
       end
     end
-
-    context "when the groups feature is disabled", feature_groups: false do
-      it "returns a 404 response" do
-        expect(response).to have_http_status(:not_found)
-      end
-    end
   end
 
   describe "POST /" do
@@ -126,13 +120,6 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
         post group_forms_url(nonexistent_group), params: { forms_name_input: valid_attributes }
 
         expect(response).to have_http_status :not_found
-      end
-    end
-
-    context "when the groups feature is disabled", feature_groups: false do
-      it "returns a 404 response" do
-        post group_forms_url(group), params: { forms_name_input: valid_attributes }
-        expect(response).to have_http_status(:not_found)
       end
     end
   end

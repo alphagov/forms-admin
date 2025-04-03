@@ -113,10 +113,6 @@ class ApplicationController < ActionController::Base
     @current_form ||= FormRepository.find(form_id: params[:form_id])
   end
 
-  def groups_enabled
-    @groups_enabled ||= current_user.present? && FeatureService.new(user: current_user).enabled?(:groups)
-  end
-
 private
 
   def authenticate_and_check_access
