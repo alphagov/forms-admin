@@ -13,4 +13,5 @@ Trello card: <!-- link -->
 - Is it clear what the code is doing?
 - Do the commit messages explain why the changes were made?
 - Are there all the unit tests needed?
+- Do the end to end tests need updating before these changes will pass?
 - Has all relevant documentation been updated?
