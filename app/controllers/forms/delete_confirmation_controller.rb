@@ -46,7 +46,7 @@ module Forms
       success_url = form.group.present? ? group_path(form.group) : root_path
 
       if FormRepository.destroy(form)
-        redirect_to success_url, status: :see_other, success: "Successfully deleted ‘#{form.name}’"
+        redirect_to success_url, status: :see_other, success: t(".success", form_name: form.name)
       else
         raise StandardError, "Deletion unsuccessful"
       end

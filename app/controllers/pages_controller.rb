@@ -134,7 +134,7 @@ private
     success_url = form_pages_path(form)
 
     if PageRepository.destroy(page)
-      redirect_to success_url, status: :see_other, success: "Successfully deleted ‘#{page.question_text}’"
+      redirect_to success_url, status: :see_other, success: t(".success", question_text: page.question_text)
     else
       raise StandardError, "Deletion unsuccessful"
     end
