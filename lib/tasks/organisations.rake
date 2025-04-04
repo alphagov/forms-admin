@@ -63,6 +63,30 @@ namespace :organisations do
       merge_organisations(**args, task:, dry_run: true)
     end
   end
+
+  desc "Make an organisation internal"
+  task :make_internal, %i[organisation_slug] => :environment do |task, args|
+    change_organisation_internal_status(**args, status: true, task:, dry_run: false)
+  end
+
+  namespace :make_internal do
+    desc "Set whether an organisation is internal - dry run"
+    task :dry_run, %i[organisation_slug] => :environment do |task, args|
+      change_organisation_internal_status(**args, status: true, task:, dry_run: true)
+    end
+  end
+
+  desc "Make an organisation external"
+  task :make_external, %i[organisation_slug] => :environment do |task, args|
+    change_organisation_internal_status(**args, status: false, task:, dry_run: false)
+  end
+
+  namespace :make_external do
+    desc "Make an organisation external - dry run"
+    task :dry_run, %i[organisation_slug] => :environment do |task, args|
+      change_organisation_internal_status(**args, status: false, task:, dry_run: true)
+    end
+  end
 end
 
 def run_organisation_fetch(dry_run:)
@@ -108,5 +132,31 @@ def merge_organisations(task:, source_organisation_slug: nil, target_organisatio
     users.touch_all
     groups.update_all(organisation_id: target_organisation.id)
     groups.touch_all
+  end
+end
+
+def change_organisation_internal_status(task:, organisation_slug: nil, status: nil, dry_run: false)
+  usage = "usage: rails #{task.name}[<organisation_slug>]".freeze
+  abort usage if organisation_slug.blank?
+
+  status_string = status ? "internal" : "external"
+
+  organisation = Organisation.find_by_slug(organisation_slug)
+
+  abort "Organisation not found" if organisation.blank?
+  abort "Organisation '#{organisation.name}' is already #{status_string}" if organisation.internal == status
+
+  ActiveRecord::Base.transaction do
+    if dry_run
+      Rails.logger.info("#{task.name}: Would make organisation '#{organisation.name}' #{status_string}")
+      return
+    end
+
+    Rails.logger.info("#{task.name}: Making organisation '#{organisation.name}' #{status_string}")
+
+    organisation.internal = status
+    organisation.save!
+
+    Rails.logger.info("#{task.name}: Made organisation '#{organisation.name}' #{status_string}")
   end
 end

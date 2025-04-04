@@ -4,6 +4,7 @@ FactoryBot.define do
     slug { "test-org" }
     name { slug.titleize }
     abbreviation { name.split.collect(&:chr).join }
+    internal { false }
 
     initialize_with do
       Organisation.create_with(govuk_content_id:, name:).find_or_initialize_by(slug:)

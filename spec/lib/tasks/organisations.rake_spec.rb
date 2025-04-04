@@ -206,4 +206,74 @@ RSpec.describe "organisations.rake" do
       include_examples "it does not move users or groups"
     end
   end
+
+  describe "organisations:make_internal" do
+    subject(:task) do
+      Rake::Task["organisations:make_internal"]
+        .tap(&:reenable) # make sure task is invoked every time
+    end
+
+    it "sets an organisation's internal flag to true" do
+      test_org = create :organisation, name: "Department for Testing", slug: "dft", internal: false
+      test_org.clear_changes_information
+
+      expect {
+        task.invoke("dft")
+        test_org.reload
+      }
+        .to change(test_org, :internal).from(false).to(true)
+    end
+
+    it "aborts if the organisation is already internal" do
+      test_org = create :organisation, name: "Department for Testing", slug: "dft", internal: true
+      test_org.clear_changes_information
+
+      expect { task.invoke("dft") }
+        .to output(/Organisation 'Department for Testing' is already internal/).to_stderr
+        .and raise_error(SystemExit) { |e| expect(e).not_to be_success }
+
+      expect(test_org.previous_changes).to be_empty
+    end
+
+    it "returns an error for non-existent organisations" do
+      expect { task.invoke("dft") }
+        .to output(/not found/).to_stderr
+        .and raise_error(SystemExit) { |e| expect(e).not_to be_success }
+    end
+  end
+
+  describe "organisations:make_external" do
+    subject(:task) do
+      Rake::Task["organisations:make_external"]
+        .tap(&:reenable) # make sure task is invoked every time
+    end
+
+    it "sets an organisation's internal flag to false" do
+      test_org = create :organisation, name: "Department for Testing", slug: "dft", internal: true
+      test_org.clear_changes_information
+
+      expect {
+        task.invoke("dft")
+        test_org.reload
+      }
+        .to change(test_org, :internal).from(true).to(false)
+    end
+
+    it "aborts if the organisation is already external" do
+      test_org = create :organisation, name: "Department for Testing", slug: "dft", internal: false
+      test_org.clear_changes_information
+
+      expect { task.invoke("dft") }
+        .to output(/Organisation 'Department for Testing' is already external/).to_stderr
+        .and raise_error(SystemExit) { |e| expect(e).not_to be_success }
+
+      expect(test_org.previous_changes).to be_empty
+    end
+
+    it "returns an error for non-existent organisations" do
+      expect { task.invoke("dft") }
+        .to output(/not found/).to_stderr
+        .and raise_error(SystemExit) { |e| expect(e).not_to be_success }
+    end
+  end
 end
