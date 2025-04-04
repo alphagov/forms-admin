@@ -198,6 +198,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_09_114819) do
     t.string "provider"
     t.datetime "terms_agreed_at"
     t.datetime "last_signed_in_at"
+    t.string "research_contact_status", default: "not_asked"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
