@@ -12,7 +12,6 @@ class PagesController < ApplicationController
   def delete
     @page = PageRepository.find(page_id: params[:page_id], form_id: current_form.id)
     @url = destroy_page_path(current_form.id, @page.id)
-    @confirm_deletion_legend = t("forms_delete_confirmation_input.confirm_deletion_page")
     @item_name = @page.question_text
     @back_url = edit_question_path(current_form.id, @page.id)
 
@@ -41,7 +40,7 @@ class PagesController < ApplicationController
       @route_page = PageRepository.find(page_id: @page_goto_conditions.first.routing_page_id, form_id: current_form.id)
     end
 
-    @delete_confirmation_input = Forms::DeleteConfirmationInput.new
+    @delete_confirmation_input = Pages::DeleteConfirmationInput.new
 
     render locals: { current_form: }
   end
@@ -52,8 +51,8 @@ class PagesController < ApplicationController
     @item_name = @page.question_text
     @back_url = edit_question_path(current_form.id, @page.id)
 
-    @delete_confirmation_input = Forms::DeleteConfirmationInput.new(
-      params.require(:forms_delete_confirmation_input).permit(:confirm),
+    @delete_confirmation_input = Pages::DeleteConfirmationInput.new(
+      params.require(:pages_delete_confirmation_input).permit(:confirm),
     )
     if @delete_confirmation_input.valid?
       if @delete_confirmation_input.confirmed?
@@ -135,7 +134,7 @@ private
     success_url = form_pages_path(form)
 
     if PageRepository.destroy(page)
-      redirect_to success_url, status: :see_other, success: "Successfully deleted ‘#{page.question_text}’"
+      redirect_to success_url, status: :see_other, success: t(".success", question_text: page.question_text)
     else
       raise StandardError, "Deletion unsuccessful"
     end
