@@ -15,7 +15,7 @@
         <%end%>
       <%end%>
       <%= table.with_body do |body| %>
-        <% data.all_forms_with_add_another_answer.sort_by(&:state).each do |form| %>
+        <% data.forms.sort_by(&:state).each do |form| %>
           <% form.repeatable_pages.each do |question| %>
             <%= body.with_row do |row| %>
               <%= row.with_cell(text: govuk_link_to(form.name, form_url(form.form_id))) %>

@@ -2,10 +2,6 @@ require "rails_helper"
 
 RSpec.describe ReportsController, type: :request do
   let(:question_text) { "Question text" }
-  let(:report_data) do
-    { total_live_forms: 3,
-      all_forms_with_add_another_answer: [{ form_id: 3, name: "form name", state: "Draft", repeatable_pages: [{ page_id: 5, question_text: }] }] }
-  end
 
   describe "#index" do
     context "when the user is an editor" do
@@ -186,9 +182,16 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#add_another_answer" do
+    let(:report_data) do
+      {
+        count: 3,
+        forms: [{ form_id: 3, name: "form name", state: "Draft", repeatable_pages: [{ page_id: 5, question_text: }] }],
+      }
+    end
+
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/reports/features", headers, report_data.to_json, 200
+        mock.get "/api/v1/reports/add-another-answer-forms", headers, report_data.to_json, 200
       end
     end
 
