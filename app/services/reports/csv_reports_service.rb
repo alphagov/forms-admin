@@ -32,7 +32,7 @@ class Reports::CsvReportsService
     end
   end
 
-  def live_questions_csv
+  def live_questions_csv(answer_type: nil)
     CSV.generate do |csv|
       csv << [
         "Form ID",
@@ -59,7 +59,9 @@ class Reports::CsvReportsService
       ]
 
       Reports::FormDocumentsService.live_form_documents.each do |form_document|
-        question_rows(form_document).each do |question|
+        question_rows = question_rows(form_document, answer_type).compact
+
+        question_rows.each do |question|
           csv << question
         end
       end
@@ -95,11 +97,13 @@ private
     ]
   end
 
-  def question_rows(form)
+  def question_rows(form, answer_type)
     form_id = form["form_id"]
     group = GroupForm.find_by_form_id(form_id)&.group
 
     form["content"]["steps"].each_with_index.map do |step, index|
+      next if answer_type.present? && step["data"]["answer_type"] != answer_type
+
       [
         form_id,
         form["tag"],

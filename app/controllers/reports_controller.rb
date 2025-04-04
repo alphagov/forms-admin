@@ -10,6 +10,13 @@ class ReportsController < ApplicationController
     render template: "reports/features", locals: { data: }
   end
 
+  def questions_with_answer_type
+    answer_type = params.require(:answer_type)
+    questions = Reports::FeatureReportService.questions_with_answer_type(answer_type)
+
+    render template: "reports/questions_with_answer_type", locals: { answer_type:, questions: }
+  end
+
   def users
     data = Reports::UsersReportService.new.user_data
 
@@ -57,15 +64,22 @@ class ReportsController < ApplicationController
   end
 
   def live_questions_csv
-    send_data Reports::CsvReportsService.new.live_questions_csv,
+    answer_type = params[:answer_type]
+    send_data Reports::CsvReportsService.new.live_questions_csv(answer_type:),
               type: "text/csv; charset=iso-8859-1",
-              disposition: "attachment; filename=#{csv_filename('live_questions_report')}"
+              disposition: "attachment; filename=#{questions_csv_filename(answer_type)}"
   end
 
 private
 
   def check_user_has_permission
     authorize Report, :can_view_reports?
+  end
+
+  def questions_csv_filename(answer_type)
+    base_name = "live_questions_report"
+    base_name += "_#{answer_type}_answer_type" if answer_type.present?
+    csv_filename(base_name)
   end
 
   def csv_filename(base_name)
