@@ -15,6 +15,12 @@ class GroupPolicy < ApplicationPolicy
   alias_method :update?, :edit?
   alias_method :add_editor?, :edit?
 
+  def delete?
+    user.super_admin?
+  end
+
+  alias_method :destroy?, :delete?
+
   def upgrade?
     organisation_admin_or_super_admin? && record.organisation.mou_signatures.present?
   end
