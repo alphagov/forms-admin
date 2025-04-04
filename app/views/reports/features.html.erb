@@ -50,7 +50,7 @@
             <% else %>
               <%= row.with_cell(text: data[:live_forms_with_answer_type][answer_type] || 0, numeric: true, html_attributes: { data: { "live-forms-with-answer-type-#{answer_type.to_s.dasherize}": true } }) %>
             <% end %>
-            <%= row.with_cell(text: data[:live_steps_with_answer_type][answer_type] || 0, numeric: true, html_attributes: { data: { "live-pages-with-answer-type-#{answer_type.to_s.dasherize}": true } }) %>
+            <%= row.with_cell(text: govuk_link_to(data[:live_steps_with_answer_type][answer_type] || 0, report_questions_with_answer_type_path(answer_type:), no_visited_state: true), numeric: true, html_attributes: { data: { "live-pages-with-answer-type-#{answer_type.to_s.dasherize}": true } }) %>
           <% end %>
         <% end %>
       <% end %>

@@ -189,6 +189,7 @@ Rails.application.routes.draw do
   scope :reports do
     get "/", to: "reports#index", as: :reports
     get "features", to: "reports#features", as: :report_features
+    get "questions-with-answer-type/:answer_type", to: "reports#questions_with_answer_type", as: :report_questions_with_answer_type
     get "users", to: "reports#users", as: :report_users
     get "add_another_answer", to: "reports#add_another_answer", as: :report_add_another_answer
     get "last-signed-in-at", to: "reports#last_signed_in_at", as: :report_last_signed_in_at
