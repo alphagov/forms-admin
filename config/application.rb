@@ -62,5 +62,8 @@ module FormsAdmin
     # logging use ActiveSupport::Logger.new($stdout).
     config.logger = ApplicationLogger.new($stdout)
     config.logger.formatter = JsonLogFormatter.new
+
+    # Prevent ActiveRecord::PreparedStatementCacheExpired errors when adding columns
+    config.active_record.enumerate_columns_in_select_statements = true
   end
 end
