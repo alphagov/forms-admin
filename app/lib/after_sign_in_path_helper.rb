@@ -8,7 +8,9 @@ module AfterSignInPathHelper
 
     return edit_account_name_path if current_user.name.blank?
 
-    edit_account_terms_of_use_path if current_user.terms_agreed_at.blank?
+    return edit_account_terms_of_use_path if current_user.terms_agreed_at.blank?
+
+    edit_account_contact_for_research_path if current_user.research_contact_to_be_asked?
   end
 
   def store_location(path)
