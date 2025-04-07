@@ -1,0 +1,18 @@
+---
+en:
+  activemodel:
+    errors:
+      models:
+        account/contact_for_research_input:
+          attributes:
+            research_contact_status:
+              blank: Choose if you want to sign up to take part in research
+  helpers:
+    label:
+      account_contact_for_research_input:
+        research_contact_status_options:
+          consented: 'Yes'
+          declined: 'No'
+    legend:
+      account_contact_for_research_input:
+        research_contact_status: Do you want to sign up to take part in user research?
