@@ -54,18 +54,21 @@ class PagesController < ApplicationController
     @delete_confirmation_input = Pages::DeleteConfirmationInput.new(
       params.require(:pages_delete_confirmation_input).permit(:confirm),
     )
-    if @delete_confirmation_input.valid?
-      if @delete_confirmation_input.confirmed?
-        delete_page(current_form.id, @page)
-      else
-        redirect_to @back_url
-      end
-    else
-      render :delete, locals: { current_form: }
+
+    unless @delete_confirmation_input.valid?
+      return render :delete, locals: { current_form: }
     end
-  rescue StandardError
-    flash[:message] = "Deletion unsuccessful"
-    redirect_to @back_url
+
+    unless @delete_confirmation_input.confirmed?
+      return redirect_to @back_url
+    end
+
+    unless PageRepository.destroy(page)
+      flash[:message] = "Deletion unsuccessful"
+      return redirect_to @back_url
+    end
+
+    redirect_to form_pages_path(form), status: :see_other, success: "Successfully deleted ‘#{page.question_text}’"
   end
 
   def start_new_question
@@ -128,15 +131,5 @@ private
       edit_draft_question.save!(validate: false)
     end
     edit_draft_question
-  end
-
-  def delete_page(form, page)
-    success_url = form_pages_path(form)
-
-    if PageRepository.destroy(page)
-      redirect_to success_url, status: :see_other, success: "Successfully deleted ‘#{page.question_text}’"
-    else
-      raise StandardError, "Deletion unsuccessful"
-    end
   end
 end
