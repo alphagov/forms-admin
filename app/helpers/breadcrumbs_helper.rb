@@ -1,6 +1,20 @@
 # frozen_string_literal: true
 
 module BreadcrumbsHelper
+  def breadcrumbs(*breadcrumbs, **arguments)
+    {
+      breadcrumbs: {}.merge(
+        *breadcrumbs.map do |breadcrumb|
+          breadcrumb_method = method("#{breadcrumb}_breadcrumb")
+          expected_args = breadcrumb_method.parameters.map(&:last)
+          provided_args = arguments.values_at(*expected_args)
+
+          breadcrumb_method.call(*provided_args)
+        end,
+      ),
+    }
+  end
+
   # rubocop: disable Rails/HelperInstanceVariable
   def groups_breadcrumb(organisation = nil)
     if organisation.nil? || @current_user&.organisation_id == organisation&.id
