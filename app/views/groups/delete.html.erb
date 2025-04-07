@@ -1,0 +1,14 @@
+<% set_page_title(title_with_error_prefix(t(".title"), @delete_confirmation_input.errors.any?)) %>
+
+<% content_for :back_link, govuk_back_link_to(group_path(@group), t("back_link.group", group_name: @group.name)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render(
+      @delete_confirmation_input,
+      url: group_path(@group),
+      caption_text: @group.name,
+      legend_text: t(".title"),
+    ) %>
+  </div>
+</div>

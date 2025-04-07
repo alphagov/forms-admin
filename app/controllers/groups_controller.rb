@@ -62,6 +62,37 @@ class GroupsController < ApplicationController
     end
   end
 
+  # GET /groups/1/delete
+  def delete
+    authorize @group
+
+    @delete_confirmation_input = Groups::DeleteConfirmationInput.new
+  end
+
+  # DELETE /groups/1
+  def destroy
+    authorize @group
+
+    @delete_confirmation_input = Groups::DeleteConfirmationInput.new(delete_confirmation_input_params)
+
+    unless @delete_confirmation_input.valid?
+      return render :delete, status: :unprocessable_entity
+    end
+
+    unless @delete_confirmation_input.confirmed?
+      return redirect_to groups_path, status: :see_other
+    end
+
+    begin
+      @group.destroy!
+    rescue ActiveRecord::DeleteRestrictionError
+      @delete_confirmation_input.errors.add(:confirm, :group_has_forms)
+      return render :delete, status: :unprocessable_entity
+    end
+
+    redirect_to groups_path, success: t(".success", group_name: @group.name), status: :see_other
+  end
+
   def confirm_upgrade
     authorize @group, :upgrade?
     @confirm_upgrade_input = Groups::ConfirmUpgradeInput.new
@@ -127,6 +158,10 @@ private
 
   def confirm_upgrade_input_params
     params.require(:groups_confirm_upgrade_input).permit(:confirm)
+  end
+
+  def delete_confirmation_input_params
+    params.require(:groups_delete_confirmation_input).permit(:confirm)
   end
 
   def search_params
