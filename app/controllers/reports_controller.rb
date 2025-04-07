@@ -10,6 +10,13 @@ class ReportsController < ApplicationController
     render template: "reports/features", locals: { data: }
   end
 
+  def questions_with_answer_type
+    answer_type = params.require(:answer_type)
+    questions = Reports::FeatureReportService.questions_with_answer_type(answer_type)
+
+    render template: "reports/questions_with_answer_type", locals: { answer_type:, questions: }
+  end
+
   def users
     data = Reports::UsersReportService.new.user_data
 
