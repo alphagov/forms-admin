@@ -1,9 +1,7 @@
 <% set_page_title(t("pages.index.title")) %>
 
 <% if @current_user.super_admin? %>
-  <% @group = current_form.group %>
-  <% @form = current_form %>
-  <% content_for :back_link, govuk_breadcrumbs(breadcrumbs: { **groups_breadcrumb, **group_breadcrumb, **form_breadcrumb }) %>
+  <% content_for :back_link, govuk_breadcrumbs(breadcrumbs: { **groups_breadcrumb(current_form.group.organisation), **group_breadcrumb(current_form.group), **form_breadcrumb(current_form) }) %>
 <% else %>
   <% content_for :back_link, govuk_back_link_to(form_path(current_form.id), t("back_link.form_create")) %>
 <% end %>

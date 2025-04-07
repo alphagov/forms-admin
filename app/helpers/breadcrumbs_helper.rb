@@ -2,31 +2,31 @@
 
 module BreadcrumbsHelper
   # rubocop: disable Rails/HelperInstanceVariable
-  def groups_breadcrumb
-    if @current_user&.organisation_id == @group&.organisation_id
+  def groups_breadcrumb(organisation = nil)
+    if organisation.nil? || @current_user&.organisation_id == organisation&.id
       { t("page_titles.group_index") => groups_path }
     else
       {
-        t("breadcrumbs.organisation_groups", organisation_name: @group.organisation.name) =>
-          groups_path(search: { organisation_id: @group.organisation_id }),
+        t("breadcrumbs.organisation_groups", organisation_name: organisation.name) =>
+          groups_path(search: { organisation_id: organisation.id }),
       }
     end
   end
-
-  def group_breadcrumb
-    { @group.name => group_path(@group) }
-  end
-
-  def form_breadcrumb
-    { @form.name => form_path(@form) }
-  end
-
-  def live_form_breadcrumb
-    { @form.name => live_form_path(@form) }
-  end
-
-  def archived_form_breadcrumb
-    { @form.name => archived_form_path(@form) }
-  end
   # rubocop: enable Rails/HelperInstanceVariable
+
+  def group_breadcrumb(group)
+    { group.name => group_path(group) }
+  end
+
+  def form_breadcrumb(form)
+    { form.name => form_path(form) }
+  end
+
+  def live_form_breadcrumb(form)
+    { form.name => live_form_path(form) }
+  end
+
+  def archived_form_breadcrumb(form)
+    { form.name => archived_form_path(form) }
+  end
 end

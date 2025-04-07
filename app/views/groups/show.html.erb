@@ -1,7 +1,7 @@
 <% set_page_title(@group.name) %>
 
 <% if @current_user.super_admin? %>
-  <% content_for :back_link, govuk_breadcrumbs(breadcrumbs: groups_breadcrumb ) %>
+  <% content_for :back_link, govuk_breadcrumbs(breadcrumbs: groups_breadcrumb(@group.organisation) ) %>
 <% else %>
   <% content_for :back_link, govuk_back_link_to(groups_path, t("back_link.groups")) %>
 <% end %>

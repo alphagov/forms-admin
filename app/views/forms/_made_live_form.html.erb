@@ -2,8 +2,7 @@
 
 <% if form.group.present? %>
   <% if @current_user.super_admin? %>
-    <% @group = form.group %>
-    <% content_for :back_link, govuk_breadcrumbs(breadcrumbs: { **groups_breadcrumb, **group_breadcrumb }) %>
+    <% content_for :back_link, govuk_breadcrumbs(breadcrumbs: { **groups_breadcrumb(form.group.organisation), **group_breadcrumb(form.group) }) %>
   <% else %>
     <% content_for :back_link, govuk_back_link_to(group_path(form.group), t("back_link.group", group_name: form.group.name)) %>
   <% end %>
