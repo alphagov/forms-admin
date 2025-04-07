@@ -2,6 +2,21 @@ require "rails_helper"
 
 RSpec.describe ReportsController, type: :request do
   let(:question_text) { "Question text" }
+  let(:form_documents_url) { "#{Settings.forms_api.base_url}/api/v2/form-documents".freeze }
+  let(:form_documents_response_json) { file_fixture("form_documents_response.json").read }
+  let(:response_headers) do
+    {
+      "pagination-total" => "3",
+      "pagination-offset" => "0",
+      "pagination-limit" => "3",
+    }
+  end
+
+  before do
+    stub_request(:get, form_documents_url)
+      .with(query: { page: "1", per_page: "3", tag: "live" })
+      .to_return(body: form_documents_response_json, headers: response_headers)
+  end
 
   describe "#index" do
     context "when the user is an editor" do
@@ -58,22 +73,6 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#features" do
-    let(:form_documents_url) { "#{Settings.forms_api.base_url}/api/v2/form-documents".freeze }
-    let(:form_documents_response_json) { file_fixture("form_documents_response.json").read }
-    let(:response_headers) do
-      {
-        "pagination-total" => "3",
-        "pagination-offset" => "0",
-        "pagination-limit" => "3",
-      }
-    end
-
-    before do
-      stub_request(:get, form_documents_url)
-        .with(query: { page: "1", per_page: "3", tag: "live" })
-        .to_return(body: form_documents_response_json, headers: response_headers)
-    end
-
     context "when the user is an editor" do
       before do
         login_as_standard_user
@@ -126,6 +125,64 @@ RSpec.describe ReportsController, type: :request do
         within(page.find_all(".govuk-summary-list").first) do
           expect(page.find_all(".govuk-summary-list__key")[0]).to have_text "Total live forms"
           expect(page.find_all(".govuk-summary-list__value")[0]).to have_text "3"
+        end
+      end
+    end
+  end
+
+  describe "#questions_with_answer_type" do
+    context "when the user is an editor" do
+      before do
+        login_as_standard_user
+
+        get report_features_path
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is an organisation admin" do
+      before do
+        login_as_organisation_admin_user
+
+        get report_features_path
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+
+        get report_questions_with_answer_type_path(answer_type: "email")
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the features report view" do
+        expect(response).to render_template("reports/questions_with_answer_type")
+      end
+
+      it "includes the report data" do
+        page = Capybara.string(response.body)
+        within(page.find_all(".govuk-summary-list").first) do
+          expect(page.find_all(".govuk-summary-list__key")[2]).to have_text "Question text"
+          expect(page.find_all(".govuk-summary-list__value")[0]).to have_text "Email address"
         end
       end
     end

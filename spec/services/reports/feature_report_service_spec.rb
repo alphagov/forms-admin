@@ -2,8 +2,13 @@ require "rails_helper"
 
 RSpec.describe Reports::FeatureReportService do
   let(:form_documents_response_json) { JSON.parse(file_fixture("form_documents_response.json").read) }
+  let(:group) { create(:group) }
 
   before do
+    GroupForm.create!(form_id: 1, group:)
+    GroupForm.create!(form_id: 2, group:)
+    GroupForm.create!(form_id: 3, group:)
+
     allow(Reports::FormDocumentsService).to receive(:live_form_documents).and_return(form_documents_response_json)
   end
 
@@ -38,6 +43,27 @@ RSpec.describe Reports::FeatureReportService do
           "selection" => 2,
           "text" => 5,
         },
+      })
+    end
+  end
+
+  describe "#questions_with_answer_type" do
+    it "returns questions with the given answer type" do
+      questions = described_class.questions_with_answer_type("email")
+      expect(questions.length).to eq 2
+      expect(questions).to include(
+        {
+          form_name: "All question types form",
+          form_id: 1,
+          organisation_name: group.organisation.name,
+          question_text: "Email address",
+        },
+      )
+      expect(questions).to include({
+        form_name: "Branch route form",
+        form_id: 3,
+        organisation_name: group.organisation.name,
+        question_text: "What’s your email address?",
       })
     end
   end

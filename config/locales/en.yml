@@ -1359,6 +1359,14 @@ en:
       not_since_auth0_enabled: People who last signed in before 3 November 2023
       not_since_last_signed_in_at_added: People who last signed in sometime between 3 November 2023 and 4 November 2024
       title: When users last signed in
+    questions_with_answer_type:
+      back_link: Back to feature and answer type usage
+      download_csv: Download all questions in live forms with this answer type as a CSV file
+      heading: Live questions with %{answer_type} answer type
+      table_headings:
+        form_name: Form name
+        organisation: Organisation
+        question_text: Question
     selection_questions:
       autocomplete:
         title: Questions where you can select one from over 30 options

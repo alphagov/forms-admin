@@ -33,5 +33,28 @@ class Reports::FeatureReportService
 
       report
     end
+
+    def questions_with_answer_type(answer_type)
+      Reports::FormDocumentsService.live_form_documents.flat_map do |form|
+        form["content"]["steps"].select { |step| step["data"]["answer_type"] == answer_type }
+                                .map { |step| questions_details(form, step) }
+      end
+    end
+
+  private
+
+    def questions_details(form, step)
+      form_id = form["form_id"]
+      {
+        form_name: form["content"]["name"],
+        form_id: form_id,
+        organisation_name: organisation_name(form_id),
+        question_text: step["data"]["question_text"],
+      }
+    end
+
+    def organisation_name(form_id)
+      GroupForm.find_by_form_id(form_id)&.group&.organisation&.name
+    end
   end
 end
