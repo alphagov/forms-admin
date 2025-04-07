@@ -175,6 +175,7 @@ Rails.application.routes.draw do
     resource :name, only: %i[edit update]
     resource :organisation, only: %i[edit update]
     resource :terms_of_use, controller: :terms_of_use, only: %i[edit update]
+    resource :contact_for_research, controller: :contact_for_research, only: %i[edit update]
   end
 
   resources :mou_signatures, only: %i[index], path: "mous"
