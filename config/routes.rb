@@ -190,6 +190,9 @@ Rails.application.routes.draw do
     get "/", to: "reports#index", as: :reports
     get "features", to: "reports#features", as: :report_features
     get "questions-with-answer-type/:answer_type", to: "reports#questions_with_answer_type", as: :report_questions_with_answer_type
+    get "forms-with-routes", to: "reports#forms_with_routes", as: :report_forms_with_routes
+    get "forms-with-payments", to: "reports#forms_with_payments", as: :report_forms_with_payments
+    get "forms-with-csv-submission-enabled", to: "reports#forms_with_csv_submission_enabled", as: :report_forms_with_csv_submission_enabled
     get "users", to: "reports#users", as: :report_users
     get "add_another_answer", to: "reports#add_another_answer", as: :report_add_another_answer
     get "last-signed-in-at", to: "reports#last_signed_in_at", as: :report_last_signed_in_at
@@ -199,6 +202,9 @@ Rails.application.routes.draw do
     get "selection-questions-with-checkboxes", to: "reports#selection_questions_with_checkboxes", as: :report_selection_questions_with_checkboxes
     get "csv-downloads", to: "reports#csv_downloads", as: :report_csv_downloads
     get "live-forms-csv", to: "reports#live_forms_csv", as: :report_live_forms_csv
+    get "live-forms-with-routes-csv", to: "reports#live_forms_with_routes_csv", as: :report_live_forms_with_routes_csv
+    get "live-forms-with-payments-csv", to: "reports#live_forms_with_payments_csv", as: :report_live_forms_with_payments_csv
+    get "live-forms-with-csv-submission-enabled-csv", to: "reports#live_forms_with_csv_submission_enabled_csv", as: :report_live_forms_with_csv_submission_enabled_csv
     get "live-questions-csv", to: "reports#live_questions_csv", as: :report_live_questions_csv
   end
 

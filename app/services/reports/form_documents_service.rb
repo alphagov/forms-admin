@@ -22,6 +22,18 @@ class Reports::FormDocumentsService
       end
     end
 
+    def has_routes?(form_document)
+      form_document["content"]["steps"].any? { |step| step["routing_conditions"].present? }
+    end
+
+    def has_payments?(form_document)
+      form_document["content"]["payment_url"].present?
+    end
+
+    def has_csv_submission_enabled?(form_document)
+      form_document["content"]["submission_type"] == "email_with_csv"
+    end
+
   private
 
     def live_form_documents_page(page)

@@ -1323,6 +1323,7 @@ en:
       heading: All forms with add another answer
       title: All forms with add another answer
     back_link: Back to reports
+    back_to_feature_usage: Back to feature and answer type usage
     csv_downloads:
       live_forms: Download data about all live forms as a CSV file
       live_questions: Download all questions in live forms as a CSV file
@@ -1344,6 +1345,21 @@ en:
       long_list_usage:
         title: Selection from a list of options feature usage in live forms
       title: Feature and answer type usage in live forms
+    form_or_questions_list_table:
+      headings:
+        form_name: Form name
+        number_of_routes: Number of routes
+        organisation: Organisation
+        question_text: Question text
+    forms_with_csv_submission_enabled:
+      download_csv: Download data about all live forms with CSV submission enabled as a CSV file
+      heading: Live forms with CSV submission enabled
+    forms_with_payments:
+      download_csv: Download data about all live forms with payments as a CSV file
+      heading: Live forms with payments
+    forms_with_routes:
+      download_csv: Download data about all live forms with routes as a CSV file
+      heading: Live forms with routes
     index:
       title: Reports
     last_signed_in_at:
@@ -1353,13 +1369,8 @@ en:
       not_since_last_signed_in_at_added: People who last signed in sometime between 3 November 2023 and 4 November 2024
       title: When users last signed in
     questions_with_answer_type:
-      back_link: Back to feature and answer type usage
       download_csv: Download all questions in live forms with this answer type as a CSV file
       heading: Live questions with %{answer_type} answer type
-      table_headings:
-        form_name: Form name
-        organisation: Organisation
-        question_text: Question
     selection_questions:
       autocomplete:
         title: Questions where you can select one from over 30 options

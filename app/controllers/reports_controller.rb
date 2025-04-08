@@ -17,6 +17,24 @@ class ReportsController < ApplicationController
     render template: "reports/questions_with_answer_type", locals: { answer_type:, questions: }
   end
 
+  def forms_with_routes
+    forms = Reports::FeatureReportService.live_forms_with_routes
+
+    render template: "reports/forms_with_routes", locals: { forms: forms }
+  end
+
+  def forms_with_payments
+    forms = Reports::FeatureReportService.live_forms_with_payments
+
+    render template: "reports/forms_with_payments", locals: { forms: forms }
+  end
+
+  def forms_with_csv_submission_enabled
+    forms = Reports::FeatureReportService.live_forms_with_csv_submission_enabled
+
+    render template: "reports/forms_with_csv_submission_enabled", locals: { forms: forms }
+  end
+
   def users
     data = Reports::UsersReportService.new.user_data
 
@@ -61,6 +79,24 @@ class ReportsController < ApplicationController
     send_data Reports::CsvReportsService.new.live_forms_csv,
               type: "text/csv; charset=iso-8859-1",
               disposition: "attachment; filename=#{csv_filename('live_forms_report')}"
+  end
+
+  def live_forms_with_routes_csv
+    send_data Reports::CsvReportsService.new.live_forms_with_routes_csv,
+              type: "text/csv; charset=iso-8859-1",
+              disposition: "attachment; filename=#{csv_filename('live_forms_with_routes_report')}"
+  end
+
+  def live_forms_with_payments_csv
+    send_data Reports::CsvReportsService.new.live_forms_with_payments_csv,
+              type: "text/csv; charset=iso-8859-1",
+              disposition: "attachment; filename=#{csv_filename('live_forms_with_payments_report')}"
+  end
+
+  def live_forms_with_csv_submission_enabled_csv
+    send_data Reports::CsvReportsService.new.live_forms_with_csv_submission_enabled_csv,
+              type: "text/csv; charset=iso-8859-1",
+              disposition: "attachment; filename=#{csv_filename('live_forms_with_csv_submission_enabled_report')}"
   end
 
   def live_questions_csv
