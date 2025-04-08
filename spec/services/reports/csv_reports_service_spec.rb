@@ -52,6 +52,51 @@ RSpec.describe Reports::CsvReportsService do
     end
   end
 
+  describe "#live_forms_with_routes_csv" do
+    it "returns a CSV with 2 rows, including the header row" do
+      csv = csv_reports_service.live_forms_with_routes_csv
+      rows = CSV.parse(csv)
+      expect(rows.length).to eq 2
+    end
+
+    it "includes form with routes" do
+      csv = csv_reports_service.live_forms_with_routes_csv
+      rows = CSV.parse(csv)
+      has_routes_column_index = rows[0].find_index("Has routes")
+      expect(rows[1][has_routes_column_index]).to eq "true"
+    end
+  end
+
+  describe "#live_forms_with_payments_csv" do
+    it "returns a CSV with 2 rows, including the header row" do
+      csv = csv_reports_service.live_forms_with_payments_csv
+      rows = CSV.parse(csv)
+      expect(rows.length).to eq 2
+    end
+
+    it "includes form with payments" do
+      csv = csv_reports_service.live_forms_with_payments_csv
+      rows = CSV.parse(csv)
+      payment_url_column_index = rows[0].find_index("Payment URL")
+      expect(rows[1][payment_url_column_index]).to eq "https://www.gov.uk/payments/your-payment-link"
+    end
+  end
+
+  describe "#live_forms_with_csv_submission_enabled_csv" do
+    it "returns a CSV with 2 rows, including the header row" do
+      csv = csv_reports_service.live_forms_with_csv_submission_enabled_csv
+      rows = CSV.parse(csv)
+      expect(rows.length).to eq 2
+    end
+
+    it "includes form with submission type email_with_csv" do
+      csv = csv_reports_service.live_forms_with_csv_submission_enabled_csv
+      rows = CSV.parse(csv)
+      submission_type_column_index = rows[0].find_index("Submission type")
+      expect(rows[1][submission_type_column_index]).to eq "email_with_csv"
+    end
+  end
+
   describe "#live_forms_questions" do
     context "when answer_type is nil" do
       it "returns a CSV with 16 rows, including the header row" do
