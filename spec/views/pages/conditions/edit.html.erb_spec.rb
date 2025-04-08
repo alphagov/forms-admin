@@ -42,7 +42,7 @@ describe "pages/conditions/edit.html.erb" do
   end
 
   it "has a delete route link" do
-    expect(rendered).to have_link(text: "Delete question route", href: "/forms/1/pages/1/conditions/2/delete")
+    expect(rendered).to have_link(text: "Delete route", href: "/forms/1/pages/1/conditions/2/delete")
   end
 
   context "with a validation error" do

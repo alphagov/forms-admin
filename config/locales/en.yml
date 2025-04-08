@@ -1151,12 +1151,12 @@ en:
         any_other_answer_warning: If you delete this route, the route for any other answer will also be deleted
         delete_condition_inset_html: |
           <p>
-            By deleting this question route the person filling in the form will have to complete every question, even if you do not need them to.
+            By deleting this route the person filling in the form will have to complete every question, even if you do not need them to.
           </p>
           <p>
             Do you want this to happen? If you do, select yes.
           </p>
-        delete_condition_legend: Are you sure you want to delete this question route?
+        delete_condition_legend: Are you sure you want to delete this route?
         skip_to_key: skip the person to
       edit:
         back_link: Back to question %{question_number}’s routes
@@ -1523,13 +1523,13 @@ en:
     not_started: Not started
     optional: Optional
   type_of_answer:
-    routing_warning_about_change_answer_type_heading: Your existing question route may be deleted
+    routing_warning_about_change_answer_type_heading: Your existing route may be deleted
     routing_warning_about_change_answer_type_html: |
       <p>
         Changing the answer type from “Selection from a list of options” to a different answer type means your route will no longer work and will be deleted.
       </p>
       <p>
-        If you do not want to lose your question route you can cancel this change by using the back button or <a href="%{pages_link_url}">go to your questions</a>.
+        If you do not want to lose your route you can cancel this change by using the back button or <a href="%{pages_link_url}">go to your questions</a>.
       </p>
   unarchive:
     new:
