@@ -67,4 +67,41 @@ RSpec.describe Reports::FeatureReportService do
       })
     end
   end
+
+  describe "#live_forms_with_routes" do
+    it "returns forms with routes" do
+      forms = described_class.live_forms_with_routes
+      expect(forms.length).to eq 1
+      expect(forms).to include(
+        form_name: "Branch route form",
+        form_id: 3,
+        organisation_name: group.organisation.name,
+        number_of_routes: 2,
+      )
+    end
+  end
+
+  describe "#live_forms_with_payments" do
+    it "returns live forms with payments" do
+      forms = described_class.live_forms_with_payments
+      expect(forms.length).to eq 1
+      expect(forms).to include(
+        form_name: "All question types form",
+        form_id: 1,
+        organisation_name: group.organisation.name,
+      )
+    end
+  end
+
+  describe "#live_forms_with_csv_submission_enabled" do
+    it "returns live forms with csv enabled" do
+      forms = described_class.live_forms_with_csv_submission_enabled
+      expect(forms.length).to eq 1
+      expect(forms).to include(
+        form_name: "All question types form",
+        form_id: 1,
+        organisation_name: group.organisation.name,
+      )
+    end
+  end
 end

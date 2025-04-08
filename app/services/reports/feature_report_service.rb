@@ -13,10 +13,10 @@ class Reports::FeatureReportService
 
       Reports::FormDocumentsService.live_form_documents.each do |form|
         report[:total_live_forms] += 1
-        report[:live_forms_with_payment] += 1 if form["content"]["payment_url"].present?
-        report[:live_forms_with_routing] += 1 if form["content"]["steps"].any? { |step| step["routing_conditions"].present? }
+        report[:live_forms_with_payment] += 1 if Reports::FormDocumentsService.has_payments?(form)
+        report[:live_forms_with_routing] += 1 if Reports::FormDocumentsService.has_routes?(form)
         report[:live_forms_with_add_another_answer] += 1 if form["content"]["steps"].any? { |step| step["data"]["is_repeatable"] }
-        report[:live_forms_with_csv_submission_enabled] += 1 if form["content"]["submission_type"] == "email_with_csv"
+        report[:live_forms_with_csv_submission_enabled] += 1 if Reports::FormDocumentsService.has_csv_submission_enabled?(form)
 
         answer_types_in_form = form["content"]["steps"].map { |step| step["data"]["answer_type"] }
 
@@ -41,6 +41,24 @@ class Reports::FeatureReportService
       end
     end
 
+    def live_forms_with_routes
+      Reports::FormDocumentsService.live_form_documents
+                                   .select { |form| Reports::FormDocumentsService.has_routes?(form) }
+                                   .map { |form| form_with_routes_details(form) }
+    end
+
+    def live_forms_with_payments
+      Reports::FormDocumentsService.live_form_documents
+                                   .select { |form| Reports::FormDocumentsService.has_payments?(form) }
+                                   .map { |form| form_details(form) }
+    end
+
+    def live_forms_with_csv_submission_enabled
+      Reports::FormDocumentsService.live_form_documents
+                                   .select { |form| Reports::FormDocumentsService.has_csv_submission_enabled?(form) }
+                                   .map { |form| form_details(form) }
+    end
+
   private
 
     def questions_details(form, step)
@@ -50,6 +68,21 @@ class Reports::FeatureReportService
         form_id: form_id,
         organisation_name: organisation_name(form_id),
         question_text: step["data"]["question_text"],
+      }
+    end
+
+    def form_with_routes_details(form)
+      form_details = form_details(form)
+      form_details[:number_of_routes] = form["content"]["steps"].count { |step| step["routing_conditions"].present? }
+      form_details
+    end
+
+    def form_details(form)
+      form_id = form["form_id"]
+      {
+        form_name: form["content"]["name"],
+        form_id: form_id,
+        organisation_name: organisation_name(form_id),
       }
     end
 
