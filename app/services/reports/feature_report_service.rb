@@ -41,6 +41,13 @@ class Reports::FeatureReportService
       end
     end
 
+    def live_questions_with_add_another_answer
+      Reports::FormDocumentsService.live_form_documents.flat_map do |form|
+        form["content"]["steps"].select { |step| step["data"]["is_repeatable"] }
+                                .map { |step| questions_details(form, step) }
+      end
+    end
+
     def live_forms_with_routes
       Reports::FormDocumentsService.live_form_documents
                                    .select { |form| Reports::FormDocumentsService.has_routes?(form) }

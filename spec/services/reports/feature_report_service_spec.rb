@@ -68,6 +68,27 @@ RSpec.describe Reports::FeatureReportService do
     end
   end
 
+  describe "#live_questions_with_add_another_answer" do
+    it "returns questions with add another answer" do
+      questions = described_class.live_questions_with_add_another_answer
+      expect(questions.length).to eq 2
+      expect(questions).to include(
+        {
+          form_name: "All question types form",
+          form_id: 1,
+          organisation_name: group.organisation.name,
+          question_text: "Single line of text",
+        },
+      )
+      expect(questions).to include({
+        form_name: "All question types form",
+        form_id: 1,
+        organisation_name: group.organisation.name,
+        question_text: "Number",
+      })
+    end
+  end
+
   describe "#live_forms_with_routes" do
     it "returns forms with routes" do
       forms = described_class.live_forms_with_routes
