@@ -19,7 +19,7 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#index" do
-    context "when the user is an editor" do
+    context "when the user is a standard user" do
       before do
         login_as_standard_user
 
@@ -73,7 +73,7 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#features" do
-    context "when the user is an editor" do
+    context "when the user is a standard user" do
       before do
         login_as_standard_user
 
@@ -131,7 +131,7 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#questions_with_answer_type" do
-    context "when the user is an editor" do
+    context "when the user is a standard user" do
       before do
         login_as_standard_user
 
@@ -189,7 +189,7 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#questions_with_add_another_answer" do
-    context "when the user is an editor" do
+    context "when the user is a standard user" do
       before do
         login_as_standard_user
 
@@ -247,7 +247,7 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#forms_with_routes" do
-    context "when the user is an editor" do
+    context "when the user is a standard user" do
       before do
         login_as_standard_user
 
@@ -305,7 +305,7 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#forms_with_payments" do
-    context "when the user is an editor" do
+    context "when the user is a standard user" do
       before do
         login_as_standard_user
 
@@ -363,7 +363,7 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#forms_with_csv_submission_enabled" do
-    context "when the user is an editor" do
+    context "when the user is a standard user" do
       before do
         login_as_standard_user
 
@@ -421,7 +421,7 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#users" do
-    context "when the user is an editor" do
+    context "when the user is a standard user" do
       before do
         login_as_standard_user
 
@@ -484,7 +484,7 @@ RSpec.describe ReportsController, type: :request do
       end
     end
 
-    context "when the user is an editor" do
+    context "when the user is a standard user" do
       before do
         login_as_standard_user
 
