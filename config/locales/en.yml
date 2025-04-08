@@ -1368,6 +1368,9 @@ en:
       not_since_auth0_enabled: People who last signed in before 3 November 2023
       not_since_last_signed_in_at_added: People who last signed in sometime between 3 November 2023 and 4 November 2024
       title: When users last signed in
+    questions_with_add_another_answer:
+      download_csv: Download all questions with add another answer in live forms as a CSV file
+      heading: Questions with add another answer in live forms
     questions_with_answer_type:
       download_csv: Download all questions in live forms with this answer type as a CSV file
       heading: Live questions with %{answer_type} answer type

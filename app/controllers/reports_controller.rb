@@ -17,6 +17,12 @@ class ReportsController < ApplicationController
     render template: "reports/questions_with_answer_type", locals: { answer_type:, questions: }
   end
 
+  def questions_with_add_another_answer
+    questions = Reports::FeatureReportService.live_questions_with_add_another_answer
+
+    render template: "reports/questions_with_add_another_answer", locals: { questions: }
+  end
+
   def forms_with_routes
     forms = Reports::FeatureReportService.live_forms_with_routes
 
@@ -104,6 +110,12 @@ class ReportsController < ApplicationController
     send_data Reports::CsvReportsService.new.live_questions_csv(answer_type:),
               type: "text/csv; charset=iso-8859-1",
               disposition: "attachment; filename=#{questions_csv_filename(answer_type)}"
+  end
+
+  def live_questions_with_add_another_answer_csv
+    send_data Reports::CsvReportsService.new.live_questions_with_add_another_answer_csv,
+              type: "text/csv; charset=iso-8859-1",
+              disposition: "attachment; filename=#{csv_filename('live_questions_with_add_another_answer_report')}"
   end
 
 private

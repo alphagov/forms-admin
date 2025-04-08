@@ -188,6 +188,64 @@ RSpec.describe ReportsController, type: :request do
     end
   end
 
+  describe "#questions_with_add_another_answer" do
+    context "when the user is an editor" do
+      before do
+        login_as_standard_user
+
+        get report_questions_with_add_another_answer_path
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is an organisation admin" do
+      before do
+        login_as_organisation_admin_user
+
+        get report_questions_with_add_another_answer_path
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+
+        get report_questions_with_add_another_answer_path
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the features report view" do
+        expect(response).to render_template("reports/questions_with_add_another_answer")
+      end
+
+      it "includes the report data" do
+        page = Capybara.string(response.body)
+        within(page.find_all(".govuk-summary-list").first) do
+          expect(page.find_all(".govuk-summary-list__key")[2]).to have_text "Question text"
+          expect(page.find_all(".govuk-summary-list__value")[0]).to have_text "Single line of text"
+        end
+      end
+    end
+  end
+
   describe "#forms_with_routes" do
     context "when the user is an editor" do
       before do

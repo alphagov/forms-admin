@@ -20,7 +20,7 @@
       <% end %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".features.live_forms_with_add_another_answer")) %>
-        <%= row.with_value(text: data[:live_forms_with_add_another_answer]) %>
+        <%= row.with_value(text: govuk_link_to(data[:live_forms_with_add_another_answer], report_questions_with_add_another_answer_path, no_visited_state: true)) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".features.live_forms_with_csv_submission_enabled")) %>
