@@ -33,10 +33,6 @@
 
       end %>
 
-      <%= govuk_inset_text do %>
-        <%= t(".delete_condition_inset_html") %>
-      <% end %>
-
       <%= f.govuk_collection_radio_buttons :confirm,
                                            delete_condition_input.values, ->(option) { option }, ->(option) { t('helpers.label.confirm_action_input.options.' + "#{option}") },
                                            legend: { text: t(".delete_condition_legend")}
