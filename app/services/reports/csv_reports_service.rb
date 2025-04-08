@@ -24,37 +24,33 @@ class Reports::CsvReportsService
     "Submission type",
   ].freeze
 
-      Reports::FormDocumentsService.live_form_documents.each do |form_document|
-        csv << form_row(form_document)
-      end
-    end
-  end
+  IS_REPEATABLE = "Is repeatable?".freeze
+  QUESTIONS_CSV_HEADERS = [
+    "Form ID",
+    "Status",
+    "Form name",
+    "Organisation name",
+    "Organisation ID",
+    "Group name",
+    "Group ID",
+    "Question number in form",
+    "Question text",
+    "Answer type",
+    "Hint text",
+    "Page heading",
+    "Guidance markdown",
+    "Is optional?",
+    IS_REPEATABLE,
+    "Has routes?",
+    "Answer settings - Input type",
+    "Selection settings - Only one option?",
+    "Selection settings - Number of options",
+    "Name settings - Title needed?",
+    "Raw answer settings",
+  ].freeze
 
-  def live_questions_csv(answer_type: nil)
-    CSV.generate do |csv|
-      csv << [
-        "Form ID",
-        "Status",
-        "Form name",
-        "Organisation name",
-        "Organisation ID",
-        "Group name",
-        "Group ID",
-        "Question number in form",
-        "Question text",
-        "Answer type",
-        "Hint text",
-        "Page heading",
-        "Guidance markdown",
-        "Is optional?",
-        "Is repeatable?",
-        "Has routes?",
-        "Answer settings - Input type",
-        "Selection settings - Only one option?",
-        "Selection settings - Number of options",
-        "Name settings - Title needed?",
-        "Raw answer settings",
-      ]
+  IS_REPEATABLE_COLUMN_INDEX = QUESTIONS_CSV_HEADERS.find_index(IS_REPEATABLE)
+
   def live_forms_csv
     CSV.generate do |csv|
       csv << FORM_CSV_HEADERS
@@ -95,12 +91,29 @@ class Reports::CsvReportsService
     end
   end
 
+  def live_questions_csv(answer_type: nil)
+    CSV.generate do |csv|
+      csv << QUESTIONS_CSV_HEADERS
 
       Reports::FormDocumentsService.live_form_documents.each do |form_document|
         question_rows = question_rows(form_document, answer_type).compact
 
         question_rows.each do |question|
           csv << question
+        end
+      end
+    end
+  end
+
+  def live_questions_with_add_another_answer_csv
+    CSV.generate do |csv|
+      csv << QUESTIONS_CSV_HEADERS
+
+      Reports::FormDocumentsService.live_form_documents.each do |form_document|
+        question_rows = question_rows(form_document, nil).compact
+
+        question_rows.each do |question|
+          csv << question if question[IS_REPEATABLE_COLUMN_INDEX]
         end
       end
     end

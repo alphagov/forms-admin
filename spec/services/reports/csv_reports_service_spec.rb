@@ -97,7 +97,7 @@ RSpec.describe Reports::CsvReportsService do
     end
   end
 
-  describe "#live_forms_questions" do
+  describe "#live_questions_csv" do
     context "when answer_type is nil" do
       it "returns a CSV with 16 rows, including the header row" do
         csv = csv_reports_service.live_questions_csv
@@ -236,6 +236,22 @@ RSpec.describe Reports::CsvReportsService do
         expect(rows[1][answer_type_column_index]).to eq "email"
         expect(rows[2][answer_type_column_index]).to eq "email"
       end
+    end
+  end
+
+  describe "#live_questions_with_add_another_answer_csv" do
+    it "returns 3 rows, including the header row" do
+      csv = csv_reports_service.live_questions_with_add_another_answer_csv
+      rows = CSV.parse(csv)
+      expect(rows.length).to eq 3
+    end
+
+    it "only includes questions with add another answer" do
+      csv = csv_reports_service.live_questions_with_add_another_answer_csv
+      rows = CSV.parse(csv)
+      answer_type_column_index = rows[0].find_index("Is repeatable?")
+      expect(rows[1][answer_type_column_index]).to eq "true"
+      expect(rows[2][answer_type_column_index]).to eq "true"
     end
   end
 end
