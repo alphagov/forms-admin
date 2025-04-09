@@ -1,0 +1,25 @@
+<% set_page_title(t("pages.see_form_branches.title")) %>
+<% content_for :back_link, govuk_back_link_to(form_pages_path(current_form.id)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= current_form.name %></span><span class="govuk-visually-hidden"> - </span>
+      <%= t("pages.see_form_branches.heading") %>
+    </h1>
+
+    <p id="ascii-diagram"><%= raw(@visualisation["ascii"].gsub("\n","<br />")) %></p>
+
+    <pre class="mermaid">
+      <%= raw(@visualisation["mermaid"]) %>
+    </pre>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({
+        flowchart: { curve: 'linear', htmlLabels: true},
+        startOnLoad: true,
+      })
+      document.getElementById("ascii-diagram").style.display = "none";
+    </script>
+  </div>
+</div>
