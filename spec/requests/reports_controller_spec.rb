@@ -19,7 +19,7 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#index" do
-    context "when the user is an editor" do
+    context "when the user is a standard user" do
       before do
         login_as_standard_user
 
@@ -73,7 +73,7 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#features" do
-    context "when the user is an editor" do
+    context "when the user is a standard user" do
       before do
         login_as_standard_user
 
@@ -131,11 +131,11 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#questions_with_answer_type" do
-    context "when the user is an editor" do
+    context "when the user is a standard user" do
       before do
         login_as_standard_user
 
-        get report_features_path
+        get report_questions_with_answer_type_path(answer_type: "email")
       end
 
       it "returns http code 403" do
@@ -151,7 +151,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_organisation_admin_user
 
-        get report_features_path
+        get report_questions_with_answer_type_path(answer_type: "email")
       end
 
       it "returns http code 403" do
@@ -188,8 +188,240 @@ RSpec.describe ReportsController, type: :request do
     end
   end
 
+  describe "#questions_with_add_another_answer" do
+    context "when the user is a standard user" do
+      before do
+        login_as_standard_user
+
+        get report_questions_with_add_another_answer_path
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is an organisation admin" do
+      before do
+        login_as_organisation_admin_user
+
+        get report_questions_with_add_another_answer_path
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+
+        get report_questions_with_add_another_answer_path
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the features report view" do
+        expect(response).to render_template("reports/questions_with_add_another_answer")
+      end
+
+      it "includes the report data" do
+        page = Capybara.string(response.body)
+        within(page.find_all(".govuk-summary-list").first) do
+          expect(page.find_all(".govuk-summary-list__key")[2]).to have_text "Question text"
+          expect(page.find_all(".govuk-summary-list__value")[0]).to have_text "Single line of text"
+        end
+      end
+    end
+  end
+
+  describe "#forms_with_routes" do
+    context "when the user is a standard user" do
+      before do
+        login_as_standard_user
+
+        get report_forms_with_routes_path
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is an organisation admin" do
+      before do
+        login_as_organisation_admin_user
+
+        get report_forms_with_routes_path
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+
+        get report_forms_with_routes_path
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the features report view" do
+        expect(response).to render_template("reports/forms_with_routes")
+      end
+
+      it "includes the report data" do
+        page = Capybara.string(response.body)
+        within(page.find_all(".govuk-summary-list").first) do
+          expect(page.find_all(".govuk-summary-list__key")[2]).to have_text "Number of routes"
+          expect(page.find_all(".govuk-summary-list__value")[0]).to have_text "2"
+        end
+      end
+    end
+  end
+
+  describe "#forms_with_payments" do
+    context "when the user is a standard user" do
+      before do
+        login_as_standard_user
+
+        get report_forms_with_payments_path
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is an organisation admin" do
+      before do
+        login_as_organisation_admin_user
+
+        get report_forms_with_payments_path
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+
+        get report_forms_with_payments_path
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the features report view" do
+        expect(response).to render_template("reports/forms_with_payments")
+      end
+
+      it "includes the report data" do
+        page = Capybara.string(response.body)
+        within(page.find_all(".govuk-summary-list").first) do
+          expect(page.find_all(".govuk-summary-list__key")[2]).to have_text "Form name"
+          expect(page.find_all(".govuk-summary-list__value")[0]).to have_text "All question types form"
+        end
+      end
+    end
+  end
+
+  describe "#forms_with_csv_submission_enabled" do
+    context "when the user is a standard user" do
+      before do
+        login_as_standard_user
+
+        get report_forms_with_csv_submission_enabled_path
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is an organisation admin" do
+      before do
+        login_as_organisation_admin_user
+
+        get report_forms_with_csv_submission_enabled_path
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+
+        get report_forms_with_csv_submission_enabled_path
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the features report view" do
+        expect(response).to render_template("reports/forms_with_csv_submission_enabled")
+      end
+
+      it "includes the report data" do
+        page = Capybara.string(response.body)
+        within(page.find_all(".govuk-summary-list").first) do
+          expect(page.find_all(".govuk-summary-list__key")[2]).to have_text "Form name"
+          expect(page.find_all(".govuk-summary-list__value")[0]).to have_text "All question types form"
+        end
+      end
+    end
+  end
+
   describe "#users" do
-    context "when the user is an editor" do
+    context "when the user is a standard user" do
       before do
         login_as_standard_user
 
@@ -252,7 +484,7 @@ RSpec.describe ReportsController, type: :request do
       end
     end
 
-    context "when the user is an editor" do
+    context "when the user is a standard user" do
       before do
         login_as_standard_user
 
