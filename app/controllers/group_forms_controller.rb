@@ -18,9 +18,7 @@ class GroupFormsController < ApplicationController
     @name_input = Forms::NameInput.new(name_input_params)
 
     if @name_input.valid?
-      @form = FormRepository.create!(creator_id: @current_user.id, name: @name_input.name)
-      @group_form.form_id = @form.id
-      @group_form.save!
+      @form = CreateFormService.new.create!(creator: @current_user, group: @group, name: @name_input.name)
 
       redirect_to form_path(@form.id)
     else

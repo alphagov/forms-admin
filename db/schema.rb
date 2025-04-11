@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_02_115233) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_10_160700) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -27,6 +27,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_02_115233) do
     t.index ["check_page_id"], name: "index_conditions_on_check_page_id"
     t.index ["goto_page_id"], name: "index_conditions_on_goto_page_id"
     t.index ["routing_page_id"], name: "index_conditions_on_routing_page_id"
+  end
+
+  create_table "create_form_events", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "group_id", null: false
+    t.string "form_name", null: false
+    t.bigint "form_id"
+    t.integer "dedup_version"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id", "form_name", "dedup_version"], name: "idx_on_group_id_form_name_dedup_version_9b12b4ae60", unique: true
+    t.index ["group_id"], name: "index_create_form_events_on_group_id"
+    t.index ["user_id"], name: "index_create_form_events_on_user_id"
   end
 
   create_table "draft_questions", force: :cascade do |t|
@@ -205,6 +218,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_02_115233) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "create_form_events", "groups"
+  add_foreign_key "create_form_events", "users"
   add_foreign_key "draft_questions", "users"
   add_foreign_key "groups", "users", column: "creator_id"
   add_foreign_key "groups", "users", column: "upgrade_requester_id"
