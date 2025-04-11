@@ -162,6 +162,7 @@ Rails.application.routes.draw do
     resource :name, only: %i[edit update]
     resource :organisation, only: %i[edit update]
     resource :terms_of_use, controller: :terms_of_use, only: %i[edit update]
+    resource :contact_for_research, controller: :contact_for_research, only: %i[edit update]
   end
 
   resources :mou_signatures, only: %i[index], path: "mous"
@@ -208,6 +209,7 @@ Rails.application.routes.draw do
     get "live-forms-with-csv-submission-enabled-csv", to: "reports#live_forms_with_csv_submission_enabled_csv", as: :report_live_forms_with_csv_submission_enabled_csv
     get "live-questions-csv", to: "reports#live_questions_csv", as: :report_live_questions_csv
     get "live-questions-with-add-another-answer-csv", to: "reports#live_questions_with_add_another_answer_csv", as: :report_live_questions_with_add_another_answer_csv
+    get "contact-for-research", to: "reports#contact_for_research", as: :report_contact_for_research
   end
 
   get "/maintenance" => "errors#maintenance", as: :maintenance_page
