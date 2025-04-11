@@ -1015,6 +1015,8 @@ en:
     title: Page not found
   page_conditions:
     check_your_answers: Check your answers before submitting
+    exit_page: Add an exit page
+    exit_page_label: An ‘exit page’ to leave the form
     condition_answer_value_text: "“%{answer_value}”"
     condition_answer_value_text_with_errors: "[Answer not selected]"
     condition_check_page_text: "“%{check_page_question_text}”"
