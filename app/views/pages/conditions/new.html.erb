@@ -25,7 +25,23 @@
       end %>
 
       <%= f.govuk_collection_select :answer_value, condition_input.routing_answer_options, :value, :label, label: { class: "govuk-!-font-weight-bold" }, options: { include_blank: t("helpers.label.pages_conditions_input.default_answer_value") } %>
-      <%= f.govuk_collection_select :goto_page_id, condition_input.goto_page_options, :id, :question_text, label: { class: "govuk-!-font-weight-bold" }, options: { include_blank: t("helpers.label.pages_conditions_input.default_goto_page_id") } %>
+      <% unless FeatureService.new(group: condition_input.form.group).enabled?(:exit_pages) %>
+        <%= f.govuk_collection_select :goto_page_id, condition_input.goto_page_options, :id, :question_text, label: { class: "govuk-!-font-weight-bold" }, options: { include_blank: t("helpers.label.pages_conditions_input.default_goto_page_id") } %> 
+      <% else %>
+        <%= f.govuk_select(:goto_page_id, label: { class: "govuk-!-font-weight-bold" }, options: { include_blank: t("helpers.label.pages_conditions_input.default_goto_page_id") }) do %>
+          <% condition_input.goto_page_options.each do |option| %>
+            <option value=<%= option.id %>>
+              <%= option.question_text %>
+            </option>
+          <% end %>
+          <optgroup label="<%= I18n.t("page_conditions.exit_page_label") %>">
+            <option value="exit_page">
+              <%= I18n.t("page_conditions.exit_page") %>
+            </option>
+          </optgroup>
+        <% end %>
+      <% end %>
+
       <%= f.govuk_submit t("save_and_continue") %>
     <% end %>
   </div>
