@@ -189,6 +189,7 @@ en:
     default:
       title: Important
     success:
+      exit_page_created: Your exit page has been added
       form:
         change_name: Your form name has been saved
         declaration_saved: Your declaration has been saved
@@ -1032,6 +1033,8 @@ en:
         organisation: Organisation
   new_condition:
     routing_page_text: If the question
+  new_exit_page:
+    heading: Add exit page
   not_found:
     body: |
       If you typed the web address, check it is correct.
@@ -1133,6 +1136,7 @@ en:
     delete_secondary_skip: Are you sure you want to delete the route for any other answer?
     email_code_sent: Confirmation code sent
     error_prefix: 'Error: '
+    exit_page_new: Add exit page
     forbidden: You cannot view this page
     group_confirm_upgrade_request: Request to upgrade this trial group
     group_index: Your groups
