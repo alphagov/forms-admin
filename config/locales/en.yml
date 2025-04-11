@@ -198,6 +198,7 @@ en:
         what_happens_next_saved: Your information about what happens next has been saved
       page_routes_deleted: Question %{question_number}’s routes have been deleted
       route_created: Route %{route_number} has been added
+      exit_page_created: Your exit page has been added
       route_deleted: Question %{question_number}’s route has been deleted
       route_updated: Question %{question_number}’s route has been updated
       secondary_skip_created: Route for any other answer has been added
@@ -1004,6 +1005,8 @@ en:
         organisation: Organisation
   new_condition:
     routing_page_text: If the question
+  new_exit_page:
+    heading: Add exit page
   not_found:
     body: |
       If you typed the web address, check it is correct.
@@ -1085,6 +1088,7 @@ en:
     text:
       length: Length
   page_titles:
+    exit_page_new: Add exit page
     access_denied: You do not have permission to access GOV.UK Forms
     account_name: Enter your name
     account_organisation: Select your organisation
