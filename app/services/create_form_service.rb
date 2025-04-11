@@ -13,10 +13,16 @@ class CreateFormService
       # and return the form ID of the previously created form
       previous_event = CreateFormEvent.order(created_at: :desc).find_by(group:, form_name: name)
 
+      # We might need to wait for the form to be created by the previous request
       if previous_event.user == creator && previous_event.created_at > 1.second.ago
-        while previous_event.form_id.blank?
-          sleep(0.01)
-          previous_event.reload
+        timeout_message = "CreateFormService#create! timed out waiting for form to be created by previous invocation: " \
+          "did something go wrong with creating form '#{name}' in group #{group.id} by user #{creator.id}?"
+
+        Timeout.timeout(1, nil, timeout_message) do
+          while previous_event.form_id.blank?
+            sleep(0.01)
+            previous_event.reload
+          end
         end
 
         previous_event
