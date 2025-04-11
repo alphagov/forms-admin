@@ -158,6 +158,15 @@ RSpec.describe Pages::ConditionsController, type: :request do
       expect(response.body).to include(I18n.t("banner.success.route_created", route_number: 1))
     end
 
+    context "when the goto page is an exit page" do
+      let(:params) { { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: "exit_page", answer_value: "Wales" } } }
+      let(:group) { create(:group, organisation: standard_user.organisation, exit_pages_enabled: true) }
+
+      it "redirects to the new exit page" do
+        expect(response).to redirect_to new_exit_page_path(form:, page:, answer_value: "Wales")
+      end
+    end
+
     context "when form submit fails" do
       let(:params) { { pages_conditions_input: { routing_page_id: nil, check_page_id: nil, goto_page_id: nil, answer_value: nil } } }
 

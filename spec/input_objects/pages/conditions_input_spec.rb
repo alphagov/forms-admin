@@ -55,6 +55,13 @@ RSpec.describe Pages::ConditionsInput, type: :model do
 
         expect(ConditionRepository).to have_received(:create!)
       end
+
+      context "when goto_page_id is 'exit_page'" do
+        it "returns true" do
+          conditions_input.goto_page_id = "exit_page"
+          expect(conditions_input.submit).to be true
+        end
+      end
     end
 
     context "when validations fail" do
