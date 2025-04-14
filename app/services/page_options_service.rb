@@ -156,6 +156,12 @@ private
 
     if condition.skip_to_end
       I18n.t("page_conditions.condition_compact_html_end_of_form", answer_value:).html_safe
+    elsif condition.secondary_skip?
+      goto_question = @pages.find { |page| page.id == condition.goto_page_id }
+      goto_page_question_text = ActionController::Base.helpers.sanitize(goto_question.question_text)
+      goto_page_question_number = @pages.find_index(goto_question) + 1
+
+      I18n.t("page_conditions.condition_compact_html_secondary_skip", goto_page_question_number:, goto_page_question_text:).html_safe
     elsif condition.exit_page?
       I18n.t("page_conditions.condition_compact_html_exit_page", answer_value:, exit_page_heading: condition.exit_page_heading).html_safe
     else

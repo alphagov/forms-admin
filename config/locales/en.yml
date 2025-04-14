@@ -1018,6 +1018,7 @@ en:
     condition_compact_html: If the answer is “%{answer_value}” go to %{goto_page_question_number}, “%{goto_page_question_text}”
     condition_compact_html_end_of_form: If the answer is “%{answer_value}”<br> then skip to “Check your answers before submitting”
     condition_compact_html_exit_page: If the answer is “%{answer_value}” go to the exit page, “%{exit_page_heading}”
+    condition_compact_html_secondary_skip: Go to %{goto_page_question_number}, “%{goto_page_question_text}”
     condition_description: If %{check_page_question_text} is answered as %{answer_value} go to %{goto_page_question_text}
     condition_goto_page_check_your_answers: "“Check your answers before submitting”."
     condition_goto_page_text: "%{goto_page_question_number}, “%{goto_page_question_text}”"
