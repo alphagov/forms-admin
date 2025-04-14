@@ -22,4 +22,8 @@ class Api::V1::ConditionResource < ActiveResource::Base
   def secondary_skip?
     answer_value.blank? && check_page_id != routing_page_id
   end
+
+  def exit_page?
+    attributes.include?("exit_page_markdown") && !attributes["exit_page_markdown"].nil?
+  end
 end
