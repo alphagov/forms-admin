@@ -7,7 +7,7 @@ on:
   merge_group:
     types: [checks_requested]
 env:
-  TERRAFORM_VERSION: "1.9.8"
+  TERRAFORM_VERSION: "1.11.0"
 jobs:
   terraform:
     runs-on: ubuntu-latest
