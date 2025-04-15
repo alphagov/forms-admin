@@ -182,6 +182,18 @@ RSpec.describe Pages::ConditionsController, type: :request do
         expect(response.status).to eq(403)
       end
     end
+
+    context "when the page already has a condition associated with it" do
+      let(:selected_page) do
+        page.routing_conditions = [(build :condition, id: 1, routing_page_id: page.id, check_page_id: page.id, goto_page_id: 2)]
+        page
+      end
+
+      it "does not create the condition and redirects the user to the question routes page" do
+        expect(ConditionRepository).not_to have_received(:create!)
+        expect(response).to redirect_to show_routes_path(form.id, selected_page.id)
+      end
+    end
   end
 
   describe "#edit" do
