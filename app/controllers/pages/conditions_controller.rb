@@ -88,6 +88,12 @@ private
 
   def can_add_page_routing
     authorize current_form, :can_add_page_routing_conditions?
+
+    # currently we can only create one primary condition from a page
+    # if there is already a primary condition, redirect to the routes page
+    if page.routing_conditions.present?
+      redirect_to show_routes_path(form_id: current_form.id, page_id: page.id)
+    end
   end
 
   def condition_input_params
