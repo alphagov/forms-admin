@@ -1033,8 +1033,6 @@ en:
         organisation: Organisation
   new_condition:
     routing_page_text: If the question
-  new_exit_page:
-    heading: Add exit page
   not_found:
     body: |
       If you typed the web address, check it is correct.
@@ -1124,6 +1122,7 @@ en:
     account_name: Enter your name
     account_organisation: Select your organisation
     account_terms_of_use: Terms of use
+    add_exit_page: Add exit page
     add_guidance: Add guidance
     address_settings: What kind of addresses do you expect to receive?
     archive_form_confirm: Archive this form

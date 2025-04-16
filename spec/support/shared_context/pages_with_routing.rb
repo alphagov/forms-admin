@@ -24,6 +24,8 @@ RSpec.shared_context "with pages with routing" do
             check_page_id: 2,
             goto_page_id: 5,
             routing_page_id: 2,
+            exit_page_heading: nil,
+            exit_page_markdown: nil,
           ),
         ],
       ),
@@ -48,6 +50,8 @@ RSpec.shared_context "with pages with routing" do
             check_page_id: 2,
             goto_page_id: 8,
             routing_page_id: 4,
+            exit_page_heading: nil,
+            exit_page_markdown: nil,
           ),
         ],
       ),
@@ -102,6 +106,8 @@ RSpec.shared_context "with pages with routing" do
             check_page_id: 10,
             goto_page_id: 12,
             routing_page_id: 10,
+            exit_page_heading: nil,
+            exit_page_markdown: nil,
           ),
         ],
       ),
@@ -116,7 +122,28 @@ RSpec.shared_context "with pages with routing" do
         :page,
         id: 12,
         position: 12,
+        next_page: 13,
         question_text: "Question",
+      ),
+      build(
+        :page,
+        :with_selection_settings,
+        id: 13,
+        position: 13,
+        question_text: "Exit page question",
+        selection_options: [{ name: "Exit" }, { name: "Don't exit" }],
+        routing_conditions: [
+          build(
+            :condition,
+            id: 4,
+            answer_value: "Exit",
+            check_page_id: 13,
+            goto_page_id: nil,
+            routing_page_id: 13,
+            exit_page_heading: "Exit page heading",
+            exit_page_markdown: "Exit page markdown",
+          ),
+        ],
       ),
     ]
   end
@@ -151,5 +178,13 @@ RSpec.shared_context "with pages with routing" do
 
   let(:page_with_skip_route) do
     pages[9]
+  end
+
+  let(:page_with_exit_page) do
+    pages[12]
+  end
+
+  let(:exit_page) do
+    page_with_exit_page.routing_conditions.first
   end
 end

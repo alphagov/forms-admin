@@ -156,6 +156,7 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
             an_object_having_attributes(id: branch_route_1.id, check_page: page_with_skip_and_secondary_skip),
             an_object_having_attributes(id: branch_any_other_answer_route.id, check_page: page_with_skip_and_secondary_skip),
             an_object_having_attributes(id: skip_route.id, check_page: page_with_skip_route),
+            an_object_having_attributes(id: exit_page.id, check_page: page_with_exit_page),
           ]
         end
       end

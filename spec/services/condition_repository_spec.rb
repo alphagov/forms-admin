@@ -9,7 +9,9 @@ describe ConditionRepository do
         routing_page_id: 2,
         answer_value: "Yes",
         goto_page_id: 3,
-        skip_to_end: false }
+        skip_to_end: false,
+        exit_page_heading: nil,
+        exit_page_markdown: nil }
     end
 
     before do

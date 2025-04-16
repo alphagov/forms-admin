@@ -66,7 +66,14 @@ private
   end
 
   def conditional_route_card(routing_condition, route_number)
-    goto_page_name = routing_condition.skip_to_end ? end_page_name : goto_question_name(routing_condition.goto_page_id)
+    goto_page_name = if routing_condition.skip_to_end
+                       end_page_name
+                     elsif routing_condition.exit_page?
+                       routing_condition.exit_page_heading
+                     else
+                       goto_question_name(routing_condition.goto_page_id)
+                     end
+
     check_value_error = format_error(I18n.t("page_route_card.errors.answer_value_doesnt_exist")) if routing_condition.validation_errors.any? { |error| error.name == "answer_value_doesnt_exist" }
     goto_page_next_error = format_error(I18n.t("page_route_card.errors.cannot_route_to_next_page")) if routing_condition.validation_errors.any? { |error| error.name == "cannot_route_to_next_page" }
     goto_page_before_error = format_error(I18n.t("page_route_card.errors.cannot_have_goto_page_before_routing_page", question_number: question_number(routing_condition.check_page_id))) if routing_condition.validation_errors.any? { |error| error.name == "cannot_have_goto_page_before_routing_page" }
