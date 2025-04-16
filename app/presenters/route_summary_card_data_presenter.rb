@@ -25,7 +25,7 @@ class RouteSummaryCardDataPresenter
   end
 
   def next_page
-    pages.find(proc { raise "Cannot find page with id #{page.next_page.inspect}" }) { _1.id == page.next_page }
+    pages.find { _1.id == page.next_page }
   end
 
   def errors
