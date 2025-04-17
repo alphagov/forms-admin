@@ -24,8 +24,12 @@ class PageSummaryCardDataService
 private
 
   def build_title
-    return @page.question_text unless @page.is_optional? && @page.answer_type != "selection"
+    return "#{page_number(@page)}. #{@page.question_text}" unless @page.is_optional? && @page.answer_type != "selection"
 
-    "#{@page.question_text} (optional)"
+    "#{page_number(@page)}. #{@page.question_text} (optional)"
+  end
+
+  def page_number(page)
+    @pages.find_index(page) + 1
   end
 end

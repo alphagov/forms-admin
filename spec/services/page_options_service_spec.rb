@@ -248,6 +248,36 @@ describe PageOptionsService do
           )
         end
       end
+
+      context "with a secondary skip" do
+        let(:page) { build :page, routing_conditions: }
+        let(:skip_condition) { build :condition, routing_page_id: pages.third.id, goto_page_id: pages.fourth.id, check_page_id: page.id, skip_to_end: false }
+
+        it "returns the correct options" do
+          page.routing_conditions = [skip_condition]
+          expect(page_options_service.all_options_for_answer_type).to include(
+            {
+              key: { text: I18n.t("page_conditions.route") },
+              value: { text: I18n.t("page_conditions.condition_compact_html_secondary_skip", goto_page_question_number: 4, goto_page_question_text: pages.fourth.question_text) },
+            },
+          )
+        end
+      end
+
+      context "with an exit page" do
+        let(:page) { build :page, routing_conditions: }
+        let(:exit_page_condition) { build :condition, routing_page_id: page.id, answer_value: "yes", goto_page_id: nil, check_page_id: page.id, exit_page_markdown: "Exit!", exit_page_heading: "You are not eligible" }
+
+        it "returns the correct options" do
+          page.routing_conditions = [exit_page_condition]
+          expect(page_options_service.all_options_for_answer_type).to include(
+            {
+              key: { text: I18n.t("page_conditions.route") },
+              value: { text: I18n.t("page_conditions.condition_compact_html_exit_page", answer_value: "yes", exit_page_heading: "You are not eligible") },
+            },
+          )
+        end
+      end
     end
 
     context "with guidance" do
