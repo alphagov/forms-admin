@@ -86,6 +86,11 @@ RSpec.describe Pages::TypeOfAnswerInput, type: :model do
             expect(type_of_answer_input).to be_invalid
             expect(type_of_answer_input.errors[:answer_type]).to include "You cannot have more than 4 file upload questions in a form"
           end
+
+          it "logs at info level" do
+            expect(Rails.logger).to receive(:info).with("Attempt to add more than 4 file upload questions")
+            type_of_answer_input.validate
+          end
         end
       end
     end
