@@ -8,8 +8,13 @@ RSpec.describe Pages::QuestionTextController, type: :request do
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
+  let(:output) { StringIO.new }
+  let(:logger) { ActiveSupport::Logger.new(output) }
+
   before do
     allow(FormRepository).to receive_messages(find: form, pages: pages)
+
+    allow(Lograge).to receive(:logger).and_return(logger)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -44,6 +49,12 @@ RSpec.describe Pages::QuestionTextController, type: :request do
       it "renders the date settings view if there are errors" do
         expect(response).to have_rendered("pages/question_text")
       end
+
+      # We can't unit test the code that adds the logging attributes because it uses CurrentAttributes, so this test has
+      # just been added to a controller that does some input validation.
+      it "adds validation_errors logging attribute" do
+        expect(log_lines[0]["validation_errors"]).to eq(["question_text: blank"])
+      end
     end
 
     context "when form is valid and ready to store" do
@@ -61,6 +72,14 @@ RSpec.describe Pages::QuestionTextController, type: :request do
       it "redirects the user to the page to choose whether only one option can be selected" do
         expect(response).to redirect_to selection_type_new_path(form.id)
       end
+
+      it "does not add validation_errors logging attribute" do
+        expect(log_lines[0].keys).not_to include("validation_errors")
+      end
     end
+  end
+
+  def log_lines
+    output.string.split("\n").map { |line| JSON.parse(line) }
   end
 end
