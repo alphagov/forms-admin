@@ -1,0 +1,27 @@
+<% set_page_title(title_with_error_prefix(t("page_titles.exit_page_new"), exit_page_input.errors&.any?)) %>
+<% content_for :back_link, govuk_back_link_to(new_condition_path(exit_page_input.form.id, exit_page_input.page.id)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+
+    <%= form_with model: exit_page_input, url: create_exit_page_path(exit_page_input.form.id, exit_page_input.page.id), method: 'POST' do |f| %>
+      <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("page_titles.routing_page_caption", question_number: exit_page_input.page.position) %></span>
+        <span class="govuk-visually-hidden"> - </span>
+        <%= t("page_titles.add_exit_page") %>
+      </h1>
+
+      <%= f.govuk_text_field( :exit_page_heading, label: { size: 'm' })  %>
+
+      <%= f.govuk_text_area( :exit_page_markdown, label: { size: 'm' })  %>
+
+      <%= f.hidden_field :answer_value, value: exit_page_input.answer_value %>
+      
+      <div class="govuk-button-group">
+        <%= f.govuk_submit t("save_and_continue") %>
+        <%= govuk_link_to t('cancel'), new_condition_path(exit_page_input.form.id, exit_page_input.page.id) %>
+      </div>
+    <% end %>
+  </div>
+</div>

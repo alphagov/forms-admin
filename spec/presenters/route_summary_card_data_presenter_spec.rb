@@ -45,6 +45,20 @@ describe RouteSummaryCardDataPresenter do
       end
     end
 
+    context "when the condition has an exit page data" do
+      before do
+        page.routing_conditions.first.tap do |condition|
+          condition.exit_page_heading = "Exit page"
+          condition.exit_page_markdown = "This is the exit page"
+        end
+      end
+
+      it "uses the exit page heading in the summary card" do
+        result = service.summary_card_data
+        expect(result[0][:rows][1][:value][:text]).to eq("Exit page")
+      end
+    end
+
     context "with skip to end condition" do
       before do
         page.routing_conditions.first.tap do |condition|

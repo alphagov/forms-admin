@@ -138,6 +138,14 @@ RSpec.describe PageListComponent::View, type: :component do
           it "renders link" do
             expect(page).to have_link("Edit")
           end
+
+          context "when the condition has an exit page heading" do
+            let(:routing_conditions) { [(build :condition, :with_exit_page, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales")] }
+
+            it "renders the condition description" do
+              expect(page).to have_css("dd.govuk-summary-list__value", text: "If “What country do you live in?” is answered as “Wales” go to exit page, “#{routing_conditions.first.exit_page_heading}”")
+            end
+          end
         end
 
         context "when the page has a condition with multiple errors" do
