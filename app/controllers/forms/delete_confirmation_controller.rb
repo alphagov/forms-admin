@@ -14,18 +14,22 @@ module Forms
       load_page_variables
       @delete_confirmation_input = DeleteConfirmationInput.new(delete_confirmation_input_params)
 
-      if @delete_confirmation_input.valid?
-        if @delete_confirmation_input.confirmed?
-          delete_form(current_form)
-        else
-          redirect_to @back_url
-        end
-      else
-        render :delete
+      unless @delete_confirmation_input.valid?
+        return render :delete
       end
-    rescue StandardError
-      flash[:message] = "Deletion unsuccessful"
-      redirect_to @back_url
+
+      unless @delete_confirmation_input.confirmed?
+        return redirect_to @back_url
+      end
+
+      success_url = current_form.group.present? ? group_path(current_form.group) : root_path
+
+      unless FormRepository.destroy(current_form)
+        flash[:message] = "Deletion unsuccessful"
+        return redirect_to @back_url
+      end
+
+      redirect_to success_url, status: :see_other, success: t(".success", form_name: current_form.name)
     end
 
   private
@@ -38,19 +42,8 @@ module Forms
       @delete_confirmation_input = DeleteConfirmationInput.new
 
       @url = destroy_form_path(current_form.id)
-      @confirm_deletion_legend = t("forms_delete_confirmation_input.confirm_deletion")
       @item_name = current_form.name
       @back_url = form_path(current_form.id)
-    end
-
-    def delete_form(form)
-      success_url = form.group.present? ? group_path(form.group) : root_path
-
-      if FormRepository.destroy(form)
-        redirect_to success_url, status: :see_other, success: "Successfully deleted ‘#{form.name}’"
-      else
-        raise StandardError, "Deletion unsuccessful"
-      end
     end
   end
 end
