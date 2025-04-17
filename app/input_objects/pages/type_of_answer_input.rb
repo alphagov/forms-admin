@@ -22,7 +22,6 @@ private
   def not_more_than_4_file_upload_questions
     if answer_type.present? && answer_type.to_sym == :file && current_form.file_upload_question_count >= 4
       errors.add(:answer_type, :cannot_add_more_file_upload_questions)
-      Rails.logger.info("Attempt to add more than 4 file upload questions")
     end
   end
 
