@@ -27,27 +27,27 @@ RSpec.describe ApplicationController, type: :request do
     end
 
     it "includes the trace ID on log lines" do
-      expect(log_lines[0]["trace_id"]).to eq(trace_id)
+      expect(log_lines(output)[0]["trace_id"]).to eq(trace_id)
     end
 
     it "includes the request_id on log lines" do
-      expect(log_lines[0]["request_id"]).to eq(request_id)
+      expect(log_lines(output)[0]["request_id"]).to eq(request_id)
     end
 
     it "includes the request_host on log lines" do
-      expect(log_lines[0]["request_host"]).to eq("www.example.com")
+      expect(log_lines(output)[0]["request_host"]).to eq("www.example.com")
     end
 
     it "includes the user_id on log lines" do
-      expect(log_lines[0]["user_id"]).to eq(standard_user.id)
+      expect(log_lines(output)[0]["user_id"]).to eq(standard_user.id)
     end
 
     it "includes the user_email on log lines" do
-      expect(log_lines[0]["user_email"]).to eq(standard_user.email)
+      expect(log_lines(output)[0]["user_email"]).to eq(standard_user.email)
     end
 
     it "includes the user_organisation_slug on log lines" do
-      expect(log_lines[0]["user_organisation_slug"]).to eq(standard_user.organisation.slug)
+      expect(log_lines(output)[0]["user_organisation_slug"]).to eq(standard_user.organisation.slug)
     end
   end
 
@@ -198,27 +198,27 @@ RSpec.describe ApplicationController, type: :request do
         end
 
         it "includes the acting as user id on log lines" do
-          expect(log_lines[0]["acting_as_user_id"]).to eq(acting_as_user.id)
+          expect(log_lines(output)[0]["acting_as_user_id"]).to eq(acting_as_user.id)
         end
 
         it "includes the acting as user email on log lines" do
-          expect(log_lines[0]["acting_as_user_email"]).to eq(acting_as_user.email)
+          expect(log_lines(output)[0]["acting_as_user_email"]).to eq(acting_as_user.email)
         end
 
         it "includes the acting as user organisation_slug on log lines" do
-          expect(log_lines[0]["acting_as_user_organisation_slug"]).to eq(acting_as_user.organisation.slug)
+          expect(log_lines(output)[0]["acting_as_user_organisation_slug"]).to eq(acting_as_user.organisation.slug)
         end
 
         it "includes the actual user id on log lines" do
-          expect(log_lines[0]["user_id"]).to eq(super_admin_user.id)
+          expect(log_lines(output)[0]["user_id"]).to eq(super_admin_user.id)
         end
 
         it "includes the actual user email on log lines" do
-          expect(log_lines[0]["user_email"]).to eq(super_admin_user.email)
+          expect(log_lines(output)[0]["user_email"]).to eq(super_admin_user.email)
         end
 
         it "includes the actual user organisation_slug on log lines" do
-          expect(log_lines[0]["user_organisation_slug"]).to eq(super_admin_user.organisation.slug)
+          expect(log_lines(output)[0]["user_organisation_slug"]).to eq(super_admin_user.organisation.slug)
         end
       end
     end
@@ -240,9 +240,5 @@ RSpec.describe ApplicationController, type: :request do
       expect(response.body).to include('<a class="govuk-footer__link" href="https://www.forms.service.gov.uk/privacy">Privacy</a>')
       expect(response.body).to include('<a class="govuk-footer__link" href="https://www.forms.service.gov.uk/terms-of-use">Terms of use</a>')
     end
-  end
-
-  def log_lines
-    output.string.split("\n").map { |line| JSON.parse(line) }
   end
 end

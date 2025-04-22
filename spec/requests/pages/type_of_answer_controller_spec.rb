@@ -92,7 +92,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         end
 
         it "logs the answer type" do
-          expect(log_lines[0]["answer_type"]).to eq(type_of_answer_input.answer_type)
+          expect(log_lines(output)[0]["answer_type"]).to eq(type_of_answer_input.answer_type)
         end
       end
 
@@ -206,7 +206,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
     end
 
     it "logs the answer type" do
-      expect(log_lines[0]["answer_type"]).to eq(page.answer_type)
+      expect(log_lines(output)[0]["answer_type"]).to eq(page.answer_type)
     end
 
     context "when file upload is disabled for the group" do
@@ -250,7 +250,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       end
 
       it "logs the updated answer type" do
-        expect(log_lines[0]["answer_type"]).to eq(answer_type)
+        expect(log_lines(output)[0]["answer_type"]).to eq(answer_type)
       end
 
       context "when answer type is selection" do
@@ -276,9 +276,5 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         expect(response).to have_rendered(:type_of_answer)
       end
     end
-  end
-
-  def log_lines
-    output.string.split("\n").map { |line| JSON.parse(line) }
   end
 end

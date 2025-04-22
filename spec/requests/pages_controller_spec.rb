@@ -19,7 +19,7 @@ RSpec.describe PagesController, type: :request do
 
   shared_examples "logging" do
     it "logs the answer type" do
-      expect(log_lines[0]["answer_type"]).to eq(page.answer_type)
+      expect(log_lines(output)[0]["answer_type"]).to eq(page.answer_type)
     end
   end
 
@@ -390,9 +390,5 @@ RSpec.describe PagesController, type: :request do
     it "Reads the form from the API" do
       expect(PageRepository).to have_received(:move_page)
     end
-  end
-
-  def log_lines
-    output.string.split("\n").map { |line| JSON.parse(line) }
   end
 end

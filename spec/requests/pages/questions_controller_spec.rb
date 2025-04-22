@@ -90,7 +90,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
   shared_examples "logging" do
     it "logs the answer type from the draft question" do
-      expect(log_lines[0]["answer_type"]).to eq(draft_question.answer_type)
+      expect(log_lines(output)[0]["answer_type"]).to eq(draft_question.answer_type)
     end
   end
 
@@ -296,7 +296,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
       end
 
       it "logs the answer type from the page" do
-        expect(log_lines[0]["answer_type"]).to eq(page.answer_type)
+        expect(log_lines(output)[0]["answer_type"]).to eq(page.answer_type)
       end
 
       context "when question being updated has a question after it" do
@@ -355,9 +355,5 @@ RSpec.describe Pages::QuestionsController, type: :request do
         expect(response.body).to include("Enter a question")
       end
     end
-  end
-
-  def log_lines
-    output.string.split("\n").map { |line| JSON.parse(line) }
   end
 end
