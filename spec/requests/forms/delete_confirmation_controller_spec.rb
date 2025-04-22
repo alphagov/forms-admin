@@ -37,6 +37,8 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
 
   describe "#destroy" do
     describe "Given a valid form" do
+      let(:form) { build(:form, id: 2, name: "Form 1") }
+
       before do
         allow(FormRepository).to receive_messages(find: form, destroy: true)
 
@@ -49,6 +51,10 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
 
       it "deletes the form" do
         expect(FormRepository).to have_received(:destroy)
+      end
+
+      it "displays a success flash message" do
+        expect(flash[:success]).to eq "Successfully deleted ‘Form 1’"
       end
 
       context "when current user is not in group for form" do
@@ -73,6 +79,23 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
 
       it "redirects you to the form page" do
         expect(response).to redirect_to(form_path(2))
+      end
+
+      it "does not delete the form on the API" do
+        expect(FormRepository).not_to have_received(:destroy)
+      end
+    end
+
+    context "when user has not confirmed whether they want to delete the form or not" do
+      before do
+        allow(FormRepository).to receive_messages(find: form, destroy: true)
+
+        delete destroy_form_path(form_id: 2, forms_delete_confirmation_input: { confirm: nil })
+      end
+
+      it "re-renders the confirm delete view with an error" do
+        expect(response).to render_template(:delete)
+        expect(response.body).to include "Select ‘Yes’ to delete the draft"
       end
 
       it "does not delete the form on the API" do
