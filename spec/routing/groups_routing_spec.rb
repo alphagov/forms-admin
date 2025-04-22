@@ -29,6 +29,14 @@ RSpec.describe GroupsController, type: :routing do
     it "routes to #update via PATCH" do
       expect(patch: "/groups/1").to route_to("groups#update", id: "1")
     end
+
+    it "routes to #delete" do
+      expect(get: "/groups/1/delete").to route_to("groups#delete", id: "1")
+    end
+
+    it "routes to #destroy via DELETE" do
+      expect(delete: "/groups/1").to route_to("groups#destroy", id: "1")
+    end
   end
 
   describe "path helpers" do

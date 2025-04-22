@@ -95,6 +95,9 @@ en:
               user_in_other_org: This person has a different organisation set for their GOV.UK Forms account
             role:
               blank: Select the role this person should have
+        groups/delete_confirmation_input:
+          blank: Select ‘Yes’ to delete the group
+          group_has_forms: This group cannot be deleted because it has forms in it
         pages/delete_confirmation_input:
           blank: Select ‘Yes’ to delete the question
         pages/delete_secondary_skip_input:
@@ -466,6 +469,10 @@ en:
         <p>Your request will be sent to your organisation’s GOV.UK Forms admins.</p>
       inset_text: Some organisations are restricting who can make forms live in their organisation. Send a request to upgrade to find out if this will affect you.
       send_request_to_upgrade: Send request to upgrade
+    delete:
+      title: Are you sure you want to delete this group?
+    destroy:
+      success: Successfully deleted ‘%{group_name}’
     edit:
       title: Change the name of this group
     form_table_caption: Forms in ‘%{group_name}’
@@ -527,6 +534,7 @@ en:
         <p>We’ll send an email to the group admins to let them know your response to the upgrade request.</p>
       radios_legend: Do you want to upgrade this group?
     show:
+      delete_group: Delete this group
       edit_group_members: Edit members of this group
       edit_group_name: Change the name of this group
       review_group_members: View members of this group
