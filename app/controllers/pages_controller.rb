@@ -10,24 +10,23 @@ class PagesController < ApplicationController
   end
 
   def delete
-    @page = PageRepository.find(page_id: params[:page_id], form_id: current_form.id)
-    @url = destroy_page_path(current_form.id, @page.id)
-    @item_name = @page.question_text
-    @back_url = edit_question_path(current_form.id, @page.id)
+    @url = destroy_page_path(current_form.id, page.id)
+    @item_name = page.question_text
+    @back_url = edit_question_path(current_form.id, page.id)
 
     all_form_conditions = FormRepository.pages(current_form).flat_map(&:routing_conditions).compact_blank
-    @page_goto_conditions = all_form_conditions.select { |condition| condition.goto_page_id == @page.id }
+    @page_goto_conditions = all_form_conditions.select { |condition| condition.goto_page_id == page.id }
 
-    if @page.routing_conditions.any? && @page.routing_conditions.first.secondary_skip?
+    if page.routing_conditions.any? && page.routing_conditions.first.secondary_skip?
       @routing = :start_of_secondary_skip_route
 
       # route page is condition check page
-      @route_page = PageRepository.find(page_id: @page.routing_conditions.first.check_page_id, form_id: current_form.id)
-    elsif @page.routing_conditions.any?
+      @route_page = PageRepository.find(page_id: page.routing_conditions.first.check_page_id, form_id: current_form.id)
+    elsif page.routing_conditions.any?
       @routing = :start_of_route
 
       # route page is us
-      @route_page = @page
+      @route_page = page
     elsif @page_goto_conditions.any? && @page_goto_conditions.first.secondary_skip?
       @routing = :end_of_secondary_skip_route
 
@@ -46,10 +45,9 @@ class PagesController < ApplicationController
   end
 
   def destroy
-    @page = PageRepository.find(page_id: params[:page_id], form_id: current_form.id)
-    @url = destroy_page_path(current_form.id, @page.id)
-    @item_name = @page.question_text
-    @back_url = edit_question_path(current_form.id, @page.id)
+    @url = destroy_page_path(current_form.id, page.id)
+    @item_name = page.question_text
+    @back_url = edit_question_path(current_form.id, page.id)
 
     @delete_confirmation_input = Pages::DeleteConfirmationInput.new(
       params.require(:pages_delete_confirmation_input).permit(:confirm),
