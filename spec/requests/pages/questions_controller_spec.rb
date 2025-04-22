@@ -73,6 +73,9 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
+  let(:output) { StringIO.new }
+  let(:logger) { ActiveSupport::Logger.new(output) }
+
   before do
     allow(FormRepository).to receive_messages(find: form_response, pages: form_pages_response)
     allow(PageRepository).to receive_messages(create!: page, find: page, save!: updated_page)
@@ -80,6 +83,15 @@ RSpec.describe Pages::QuestionsController, type: :request do
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form_response.id, group_id: group.id)
     login_as_standard_user
+
+    # Intercept the request logs so we can do assertions on them
+    allow(Lograge).to receive(:logger).and_return(logger)
+  end
+
+  shared_examples "logging" do
+    it "logs the answer type from the draft question" do
+      expect(log_lines[0]["answer_type"]).to eq(draft_question.answer_type)
+    end
   end
 
   describe "#new" do
@@ -103,6 +115,8 @@ RSpec.describe Pages::QuestionsController, type: :request do
     it "returns 200" do
       expect(response).to have_http_status(:ok)
     end
+
+    include_examples "logging"
   end
 
   describe "#create" do
@@ -147,6 +161,8 @@ RSpec.describe Pages::QuestionsController, type: :request do
         expect(banner_contents).to have_link(text: "Add a question", href: start_new_question_path(form_id: 2))
         expect(banner_contents).to have_link(text: "Back to your questions", href: form_pages_path(form_id: 2))
       end
+
+      include_examples "logging"
     end
 
     context "when question_input has invalid data" do
@@ -206,6 +222,8 @@ RSpec.describe Pages::QuestionsController, type: :request do
         it "renders successfully" do
           expect(response).to have_http_status(:ok)
         end
+
+        include_examples "logging"
       end
     end
   end
@@ -277,6 +295,10 @@ RSpec.describe Pages::QuestionsController, type: :request do
         expect(banner_contents).to have_link(text: "Back to your questions", href: form_pages_path(form_id: 2))
       end
 
+      it "logs the answer type from the page" do
+        expect(log_lines[0]["answer_type"]).to eq(page.answer_type)
+      end
+
       context "when question being updated has a question after it" do
         let(:next_page) { 4 }
 
@@ -333,5 +355,9 @@ RSpec.describe Pages::QuestionsController, type: :request do
         expect(response.body).to include("Enter a question")
       end
     end
+  end
+
+  def log_lines
+    output.string.split("\n").map { |line| JSON.parse(line) }
   end
 end

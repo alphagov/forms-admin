@@ -2,6 +2,7 @@ class PagesController < ApplicationController
   before_action :check_user_has_permission
   before_action :clear_draft_questions_data, only: %i[index move_page]
   after_action :verify_authorized
+  after_action :set_answer_type_logging_attribute
 
   def index
     @pages = FormRepository.pages(current_form)
@@ -129,5 +130,13 @@ private
       edit_draft_question.save!(validate: false)
     end
     edit_draft_question
+  end
+
+  def set_answer_type_logging_attribute
+    if @draft_question.present?
+      CurrentLoggingAttributes.answer_type = @draft_question.answer_type
+    elsif @page.present?
+      CurrentLoggingAttributes.answer_type = @page.answer_type
+    end
   end
 end
