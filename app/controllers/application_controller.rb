@@ -36,31 +36,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def set_logging_attributes
-    CurrentLoggingAttributes.request_host = request.host
-    CurrentLoggingAttributes.request_id = request.request_id
-    CurrentLoggingAttributes.session_id_hash = Digest::SHA256.hexdigest session.id.to_s if session.exists? && session.id.present?
-    CurrentLoggingAttributes.trace_id = request.env["HTTP_X_AMZN_TRACE_ID"].presence
-    CurrentLoggingAttributes.user_ip = user_ip(request.env.fetch("HTTP_X_FORWARDED_FOR", ""))
-    if current_user.present?
-      if acting_as?
-        CurrentLoggingAttributes.user_id = actual_user.id
-        CurrentLoggingAttributes.user_email = actual_user.email
-        CurrentLoggingAttributes.user_organisation_slug = actual_user.organisation&.slug
-
-        CurrentLoggingAttributes.acting_as_user_id = acting_as_user.id
-        CurrentLoggingAttributes.acting_as_user_email = acting_as_user.email
-        CurrentLoggingAttributes.acting_as_user_organisation_slug = acting_as_user.organisation&.slug
-      else
-        CurrentLoggingAttributes.user_id = current_user.id
-        CurrentLoggingAttributes.user_email = current_user.email
-        CurrentLoggingAttributes.user_organisation_slug = current_user.organisation&.slug
-      end
-    end
-    CurrentLoggingAttributes.form_id = params[:form_id] if params[:form_id].present?
-    CurrentLoggingAttributes.page_id = params[:page_id] if params[:page_id].present?
-  end
-
   def set_request_id
     # Pass the request id to the API to enable tracing
     if Rails.env.production?
@@ -149,5 +124,30 @@ private
     return if current_user.blank?
 
     redirect_to next_account_path if next_account_path.present?
+  end
+
+  def set_logging_attributes
+    CurrentLoggingAttributes.request_host = request.host
+    CurrentLoggingAttributes.request_id = request.request_id
+    CurrentLoggingAttributes.session_id_hash = Digest::SHA256.hexdigest session.id.to_s if session.exists? && session.id.present?
+    CurrentLoggingAttributes.trace_id = request.env["HTTP_X_AMZN_TRACE_ID"].presence
+    CurrentLoggingAttributes.user_ip = user_ip(request.env.fetch("HTTP_X_FORWARDED_FOR", ""))
+    if current_user.present?
+      if acting_as?
+        CurrentLoggingAttributes.user_id = actual_user.id
+        CurrentLoggingAttributes.user_email = actual_user.email
+        CurrentLoggingAttributes.user_organisation_slug = actual_user.organisation&.slug
+
+        CurrentLoggingAttributes.acting_as_user_id = acting_as_user.id
+        CurrentLoggingAttributes.acting_as_user_email = acting_as_user.email
+        CurrentLoggingAttributes.acting_as_user_organisation_slug = acting_as_user.organisation&.slug
+      else
+        CurrentLoggingAttributes.user_id = current_user.id
+        CurrentLoggingAttributes.user_email = current_user.email
+        CurrentLoggingAttributes.user_organisation_slug = current_user.organisation&.slug
+      end
+    end
+    CurrentLoggingAttributes.form_id = params[:form_id] if params[:form_id].present?
+    CurrentLoggingAttributes.page_id = params[:page_id] if params[:page_id].present?
   end
 end

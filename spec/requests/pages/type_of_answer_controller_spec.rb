@@ -9,6 +9,9 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
   let(:file_upload_enabled) { false }
   let(:group) { create(:group, organisation: standard_user.organisation, file_upload_enabled:) }
 
+  let(:output) { StringIO.new }
+  let(:logger) { ActiveSupport::Logger.new(output) }
+
   before do
     allow(FormRepository).to receive_messages(find: form, pages: pages)
     allow(PageRepository).to receive_messages(find: page, save!: page)
@@ -16,6 +19,9 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
+
+    # Intercept the request logs so we can do assertions on them
+    allow(Lograge).to receive(:logger).and_return(logger)
   end
 
   describe "#new" do
@@ -83,6 +89,10 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
         it "redirects the user to the question details page" do
           expect(response).to redirect_to new_question_path(form.id)
+        end
+
+        it "logs the answer type" do
+          expect(log_lines(output)[0]["answer_type"]).to eq(type_of_answer_input.answer_type)
         end
       end
 
@@ -195,6 +205,10 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       expect(response).to have_rendered(:type_of_answer)
     end
 
+    it "logs the answer type" do
+      expect(log_lines(output)[0]["answer_type"]).to eq(page.answer_type)
+    end
+
     context "when file upload is disabled for the group" do
       it "does not show the file answer type option" do
         expect(response.body).not_to include("File")
@@ -219,7 +233,8 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
     end
 
     context "when form is valid and ready to update in the DB" do
-      let(:pages_type_of_answer_input) { { answer_type: "number" } }
+      let(:answer_type) { "number" }
+      let(:pages_type_of_answer_input) { { answer_type: } }
 
       before do
         post type_of_answer_update_path(form_id: page.form_id, page_id: page.id), params: { pages_type_of_answer_input: }
@@ -227,15 +242,19 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
       it "saves the updated answer type to draft_question" do
         form = assigns(:type_of_answer_input)
-        expect(form.draft_question.answer_type).to eq "number"
+        expect(form.draft_question.answer_type).to eq answer_type
       end
 
       it "redirects the user to the question details page" do
         expect(response).to redirect_to edit_question_path(form.id, page.id)
       end
 
+      it "logs the updated answer type" do
+        expect(log_lines(output)[0]["answer_type"]).to eq(answer_type)
+      end
+
       context "when answer type is selection" do
-        let(:pages_type_of_answer_input) { { answer_type: "selection" } }
+        let(:answer_type) { "selection" }
 
         it "saves the answer type to draft_question" do
           form = assigns(:type_of_answer_input)

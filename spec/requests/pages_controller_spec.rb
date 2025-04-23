@@ -6,9 +6,21 @@ RSpec.describe PagesController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
   let(:membership) { create :membership, group:, user: standard_user }
 
+  let(:output) { StringIO.new }
+  let(:logger) { ActiveSupport::Logger.new(output) }
+
   before do
     membership
     login_as_standard_user
+
+    # Intercept the request logs so we can do assertions on them
+    allow(Lograge).to receive(:logger).and_return(logger)
+  end
+
+  shared_examples "logging" do
+    it "logs the answer type" do
+      expect(log_lines(output)[0]["answer_type"]).to eq(page.answer_type)
+    end
   end
 
   describe "#index" do
@@ -114,6 +126,8 @@ RSpec.describe PagesController, type: :request do
       it "reads the form through the page repository" do
         expect(PageRepository).to have_received(:find)
       end
+
+      include_examples "logging"
 
       context "when current user is not in group for form the page is in" do
         let(:membership) { nil }
@@ -322,6 +336,8 @@ RSpec.describe PagesController, type: :request do
         it "destroys the page through the page repository" do
           expect(PageRepository).to have_received(:destroy)
         end
+
+        include_examples "logging"
 
         context "when current user is not in group for form" do
           let(:membership) { nil }
