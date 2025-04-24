@@ -705,7 +705,7 @@ en:
             address: ''
             date: ''
             email: ''
-            file: People will be able to upload an image or a document
+            file: People will only be able to upload one file
             name: ''
             national_insurance_number: ''
             number: People will only be able to enter whole or decimal numbers
