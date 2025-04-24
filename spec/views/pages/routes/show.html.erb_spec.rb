@@ -80,8 +80,13 @@ describe "pages/routes/show.html.erb" do
       end
 
       context "when the page is the last question" do
+        let(:page) do
+          page_with_skip_route.next_page = nil
+          page_with_skip_route
+        end
+
         it "shows the check your answers page as the next question in the form" do
-          expect(rendered).to have_text "People who select any other answer will continue to question 11 and through the rest of the form"
+          expect(rendered).to have_text "People who select any other answer will continue to “Check your answers before submitting”."
         end
       end
 

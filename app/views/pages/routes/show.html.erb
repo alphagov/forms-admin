@@ -24,7 +24,11 @@
       <% if route_summary_card_data_presenter.routes.map(&:secondary_skip?).none? %>
         <h2 class="govuk-heading-m"><%= t(".any_other_answer.heading") %></h2>
 
-        <p class="govuk-body"><%= t(".any_other_answer.will_continue_to", next_question_number: route_summary_card_data_presenter.next_page&.position) %></p>
+        <% if page.has_next_page? %>
+          <p class="govuk-body"><%= t(".any_other_answer.will_continue_to", next_question_number: route_summary_card_data_presenter.next_page&.position) %></p>
+        <% else %>
+          <p class="govuk-body"><%= t(".any_other_answer.will_continue_to_check_your_answers") %></p>
+        <% end %>
 
         <% if FeatureService.new(group: current_form.group).enabled? :branch_routing %>
           <p class="govuk-body"><%= t(".any_other_answer.skip_later") %></p>
