@@ -48,7 +48,7 @@ jobs:
       # Add or replace dependency steps here
       - name: Install Ruby and gems
         # The ruby version is taken from the .ruby-version file, no need to specify here.
-        uses: ruby/setup-ruby@354a1ad156761f5ee2b7b13fa8e09943a5e8d252 # v1.229.0
+        uses: ruby/setup-ruby@ca041f971d66735f3e5ff1e21cc13e2d51e7e535 # v1.233.0
         with:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Install Node.js
