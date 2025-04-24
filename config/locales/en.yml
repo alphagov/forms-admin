@@ -772,6 +772,16 @@ en:
         file_body_html: |
           <p>People can only upload one file for each file upload question.</p>
           <p>A form can have up to 4 file upload questions.</p>
+        hint_text: Hint text (optional)
+        is_optional_options:
+          'false': Mandatory
+          'true': Optional
+        is_repeatable_options:
+          'false': No - this question can only be answered once
+          'true': 'Yes'
+        question_text:
+          default: Question text
+          file: Ask for a file
         summary: What files can people upload?
         summary_body_html: |
           <p>People can upload the following file types:</p>
@@ -784,16 +794,6 @@ en:
             <li>text (.json, .odt, .rtf, .txt)</li>
           </ul>
           <p>Each file must be smaller than 7MB.</p>
-        hint_text: Hint text (optional)
-        is_optional_options:
-          'false': Mandatory
-          'true': Optional
-        is_repeatable_options:
-          'false': No - this question can only be answered once
-          'true': 'Yes'
-        question_text:
-          default: Question text
-          file: Ask for a file
       pages_secondary_skip_input:
         default_goto_page_id: Select a question or page
         default_routing_page_id: Select a question
