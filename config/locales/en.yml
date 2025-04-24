@@ -618,7 +618,7 @@ en:
           date_of_birth: You can add a short hint to help people answer the question. For a date of birth question you could use ‘For example, 27 3 1998’.
           default: You can add a short hint to help people answer the question. For example, to explain the format the answer should be in, or where to find the information you’ve asked for.
           email: You could add a short hint to tell people how you’ll use their email address. For example, ‘We’ll only use your email address to contact you about your application.’
-          file: You can add a short hint to help people upload the file you need. For example, you might need the file to contain specific information.
+          file: You can add a short hint to help people upload the file you need. For example, you might need the file to contain specific information. People will be shown the types of file they can upload.
           long_text: You can add a short hint to help people answer the question. For example, you could give a bit more detail about the information you need.
           name: You can add a short hint to help people answer the question. For example, you might need to ask people to enter their name as it’s written on an official document such as a passport or driving licence.
           national_insurance_number: You can add a short hint to help people answer the question. For example, ‘It’s on your National Insurance card, benefit letter, payslip or P60. For example, QQ 12 34 56 C.’
@@ -705,7 +705,7 @@ en:
             address: ''
             date: ''
             email: ''
-            file: People will be able to upload an image or a document
+            file: People will only be able to upload one file
             name: ''
             national_insurance_number: ''
             number: People will only be able to enter whole or decimal numbers
@@ -769,9 +769,22 @@ en:
         default_answer_value: Select an answer
         default_goto_page_id: Select a question or page
       pages_question_input:
-        file_body_html: |
-          <p>People will be able to upload one image or document up to 7MB in size.</p>
-          <p>You can have up to 4 file upload questions in a form.</p>
+        file:
+          body_html: |
+            <p>People can only upload one file for each file upload question.</p>
+            <p>A form can have up to 4 file upload questions.</p>
+          details_body_html: |
+            <p>People can upload the following file types:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>CSV (.csv)</li>
+              <li>image (.jpeg, .jpg, .png)</li>
+              <li>Microsoft Excel Spreadsheet (.xlsx)</li>
+              <li>Microsoft Word Document (.doc, .docx)</li>
+              <li>PDF (.pdf)</li>
+              <li>text (.json, .odt, .rtf, .txt)</li>
+            </ul>
+            <p>Each file must be smaller than 7MB.</p>
+          details_title: What files can people upload?
         hint_text: Hint text (optional)
         is_optional_options:
           'false': Mandatory
