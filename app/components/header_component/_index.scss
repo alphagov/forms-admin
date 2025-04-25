@@ -11,26 +11,20 @@
   }
 }
 
-.app-header--pink {
-  .govuk-header__container {
+.govuk-header {
+  &.app-header--pink {
     border-bottom-color: govuk-colour("pink");
   }
-}
 
-.app-header--green {
-  .govuk-header__container {
+  &.app-header--green {
     border-bottom-color: govuk-colour("green");
   }
-}
 
-.app-header--yellow {
-  .govuk-header__container {
+  &.app-header--yellow {
     border-bottom-color: govuk-colour("yellow");
   }
-}
 
-.app-header--blue {
-  .govuk-header__container {
+  &.app-header--blue {
     border-bottom-color: govuk-colour("blue");
   }
 }

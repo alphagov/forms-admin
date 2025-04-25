@@ -17,6 +17,10 @@ RSpec.describe HeaderComponent::View, type: :component do
     it "contains the service name" do
       expect(page).to have_text(I18n.t("header.product_name"))
     end
+
+    it "has a full width border" do
+      expect(page).to have_css(".govuk-header--full-width-border")
+    end
   end
 
   context "when user is on a non-production environment" do
