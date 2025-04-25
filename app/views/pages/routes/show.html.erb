@@ -26,14 +26,14 @@
 
         <% if page.has_next_page? %>
           <p class="govuk-body"><%= t(".any_other_answer.will_continue_to", next_question_number: route_summary_card_data_presenter.next_page&.position) %></p>
+
+          <% if FeatureService.new(group: current_form.group).enabled? :branch_routing %>
+            <p class="govuk-body"><%= t(".any_other_answer.skip_later") %></p>
+
+            <%= govuk_button_link_to t(".any_other_answer.set_questions_to_skip"), new_secondary_skip_path(current_form.id, page.id), secondary: true %>
+          <% end %>
         <% else %>
           <p class="govuk-body"><%= t(".any_other_answer.will_continue_to_check_your_answers") %></p>
-        <% end %>
-
-        <% if FeatureService.new(group: current_form.group).enabled? :branch_routing %>
-          <p class="govuk-body"><%= t(".any_other_answer.skip_later") %></p>
-
-          <%= govuk_button_link_to t(".any_other_answer.set_questions_to_skip"), new_secondary_skip_path(current_form.id, page.id), secondary: true %>
         <% end %>
       <% end %>
 
