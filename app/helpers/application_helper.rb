@@ -69,7 +69,7 @@ module ApplicationHelper
     "/node_modules/govuk-frontend/dist/govuk/assets"
   end
 
-  def header_component_options(user:)
+  def service_navigation_component_options(user:)
     { navigation_items: NavigationItemsService.call(user:).navigation_items }
   end
 
