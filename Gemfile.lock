@@ -166,7 +166,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
-    csv (3.3.3)
+    csv (3.3.4)
     cuprite (0.15.1)
       capybara (~> 3.0)
       ferrum (~> 0.15.0)
