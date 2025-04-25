@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe ServiceNavigationComponent::View, type: :component do
   let(:navigation_items) do
     [
-      { text: "Your groups", href: "/" },
-      { text: "Support", href: "/support" },
+      NavigationItemsService::NavigationItem.new(text: "Your groups", href: "/", active: false),
+      NavigationItemsService::NavigationItem.new(text: "Support", href: "/support", active: false),
     ]
   end
 

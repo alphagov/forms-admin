@@ -4,7 +4,7 @@ module ServiceNavigationComponent
 
     def initialize(navigation_items: [], featured_link: nil)
       super
-      @navigation_items = navigation_items
+      @navigation_items = navigation_items.map(&:to_h)
       @featured_link = featured_link
     end
 
