@@ -44,6 +44,25 @@ describe Pages::RoutesController, type: :request do
     it "renders the routing page template" do
       expect(response).to render_template("pages/routes/show")
     end
+
+    context "when the page is at the end of the form" do
+      let(:page) do
+        pages.last.tap do |last_page|
+          last_page.id = 101
+          last_page.is_optional = false
+          last_page.answer_type = "selection"
+          last_page.answer_settings = DataStruct.new(
+            only_one_option: true,
+            selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
+                                OpenStruct.new(attributes: { name: "Option 2" })],
+          )
+        end
+      end
+
+      it "renders the routing page template" do
+        expect(response).to render_template("pages/routes/show")
+      end
+    end
   end
 
   describe "#delete" do

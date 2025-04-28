@@ -1226,6 +1226,7 @@ en:
           set_questions_to_skip: Set questions to skip
           skip_later: If you need to, you can make them skip one or more questions that only people on route 1 need to answer.
           will_continue_to: People who select any other answer will continue to question %{next_question_number} and through the rest of the form.
+          will_continue_to_check_your_answers: People who select any other answer will continue to “Check your answers before submitting”.
     submit_save: Save question
   payment_link_input:
     body_html: |
