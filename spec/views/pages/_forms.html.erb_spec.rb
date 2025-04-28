@@ -136,6 +136,7 @@ describe "pages/_form.html.erb", type: :view do
 
   it "does not display the file body text" do
     expect(rendered).not_to have_text(I18n.t("helpers.label.pages_question_input.file_body_html"))
+    expect(rendered).not_to have_text(I18n.t("helpers.label.pages_question_input.summary"))
   end
 
   context "when the answer type is file" do
@@ -151,7 +152,9 @@ describe "pages/_form.html.erb", type: :view do
     end
 
     it "displays the file body text" do
-      expect(rendered).to include(I18n.t("helpers.label.pages_question_input.file_body_html"))
+      expect(rendered).to include(I18n.t("helpers.label.pages_question_input.file.body_html"))
+      expect(rendered).to have_text(I18n.t("helpers.label.pages_question_input.file.details_title"))
+      expect(rendered).to include(I18n.t("helpers.label.pages_question_input.file.details_body_html"))
     end
 
     it "has a field with the file question text" do
