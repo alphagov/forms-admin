@@ -63,7 +63,7 @@ private
   def profile_navigation_item
     return nil if user.name.blank?
 
-    NavigationItem.new(text: user.name, href: user_profile_url, active: false)
+    NavigationItem.new(text: user.name, href: user_profile_url, active: false, classes: ["app-service-navigation__item--featured"])
   end
 
   def signout_navigation_item

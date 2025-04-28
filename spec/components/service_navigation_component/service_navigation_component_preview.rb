@@ -6,7 +6,7 @@ class ServiceNavigationComponent::ServiceNavigationComponentPreview < ViewCompon
   def with_navigation_links
     render(ServiceNavigationComponent::View.new(navigation_items: [
       { text: "Support", href: "/support" },
-      { text: "A User", href: nil },
+      { text: "A User", href: nil, classes: ["app-service-navigation__item--featured"] },
       { text: "Sign out", href: "/sign-out" },
     ]))
   end
@@ -17,7 +17,7 @@ class ServiceNavigationComponent::ServiceNavigationComponentPreview < ViewCompon
       { text: "Users", href: "/users" },
       { text: "Reports", href: "/reports" },
       { text: "Support", href: "/support" },
-      { text: "A User", href: nil },
+      { text: "A User", href: nil, classes: ["app-service-navigation__item--featured"] },
       { text: "Sign out", href: "/sign-out" },
     ]))
   end

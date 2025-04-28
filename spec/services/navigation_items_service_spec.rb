@@ -60,7 +60,7 @@ describe NavigationItemsService do
         let(:provider) { :gds }
 
         it "includes correct profile in navigation items" do
-          profile_item = NavigationItemsService::NavigationItem.new(text: user.name, href: GDS::SSO::Config.oauth_root_url, active: false)
+          profile_item = NavigationItemsService::NavigationItem.new(text: user.name, href: GDS::SSO::Config.oauth_root_url, active: false, classes: ["app-service-navigation__item--featured"])
           expect(service.navigation_items).to include(profile_item)
         end
 
@@ -78,7 +78,7 @@ describe NavigationItemsService do
         end
 
         it "includes profile with empty href" do
-          profile_item = NavigationItemsService::NavigationItem.new(text: user.name, href: nil, active: false)
+          profile_item = NavigationItemsService::NavigationItem.new(text: user.name, href: nil, active: false, classes: ["app-service-navigation__item--featured"])
           expect(service.navigation_items).to include(profile_item)
         end
       end
@@ -87,7 +87,7 @@ describe NavigationItemsService do
         let(:provider) { :auth0 }
 
         it "includes profile with empty href" do
-          profile_item = NavigationItemsService::NavigationItem.new(text: user.name, href: nil, active: false)
+          profile_item = NavigationItemsService::NavigationItem.new(text: user.name, href: nil, active: false, classes: ["app-service-navigation__item--featured"])
           expect(service.navigation_items).to include(profile_item)
         end
 
