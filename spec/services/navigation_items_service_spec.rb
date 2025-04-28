@@ -113,5 +113,10 @@ describe NavigationItemsService do
         expect(service.navigation_items).not_to include(support_item)
       end
     end
+
+    it "includes a link to the Your groups page with custom active_when set" do
+      your_groups_item = NavigationItemsService::NavigationItem.new(text: I18n.t("header.your_groups"), href: "/", active: false)
+      expect(service.navigation_items).to include(your_groups_item)
+    end
   end
 end
