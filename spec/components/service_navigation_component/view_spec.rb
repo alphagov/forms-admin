@@ -25,22 +25,9 @@ RSpec.describe ServiceNavigationComponent::View, type: :component do
       expect(page).to have_css(".app-service-navigation")
     end
 
-    context "when no sign-in link is supplied" do
-      it "has no items with the app-service-navigation__item--featured" do
-        expect(page).not_to have_css(".app-service-navigation__item--featured")
-        expect(page).not_to have_link("Sign in")
-      end
-    end
-
-    context "when a featured link is supplied" do
-      let(:service_navigation_component) do
-        described_class.new(navigation_items:, featured_link: { text: "Sign out", href: "/sign-out" })
-      end
-
-      it "has an item with the app-service-navigation__item--featured" do
-        expect(page).to have_css(".app-service-navigation__item--featured", text: "Sign out")
-        expect(page).to have_link("Sign out", href: "/sign-out")
-      end
+    it "has includes the navigation items passed into it" do
+      expect(page).to have_link("Your groups", href: "/")
+      expect(page).to have_link("Support", href: "/support")
     end
 
     context "when on the 'Your groups' page" do
