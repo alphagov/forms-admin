@@ -50,6 +50,8 @@ RUN npm ci --ignore-scripts --only=production
 
 FROM base AS app
 
+VOLUME "/tmp/" "/app/tmp/sockets/"
+
 ENV RAILS_ENV="${RAILS_ENV:-production}" \
     PATH="${PATH}:/home/ruby/.local/bin" \
     USER="ruby"
