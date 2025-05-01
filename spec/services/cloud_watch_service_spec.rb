@@ -25,11 +25,15 @@ describe CloudWatchService do
       allow(Aws::CloudWatch::Client).to receive(:new).and_return(cloudwatch_client)
 
       allow(cloudwatch_client).to receive(:get_metric_statistics).with({
-        metric_name: "submitted",
-        namespace: "forms/#{forms_env}",
+        metric_name: "Submitted",
+        namespace: "Forms",
         dimensions: [
           {
-            name: "form_id",
+            name: "Environment",
+            value: forms_env,
+          },
+          {
+            name: "FormId",
             value: form_id.to_s,
           },
         ],
@@ -41,11 +45,15 @@ describe CloudWatchService do
       }).and_return(metric_response)
 
       expect(cloudwatch_client).to receive(:get_metric_statistics).with({
-        metric_name: "submitted",
-        namespace: "forms/#{forms_env}",
+        metric_name: "Submitted",
+        namespace: "Forms",
         dimensions: [
           {
-            name: "form_id",
+            name: "Environment",
+            value: forms_env,
+          },
+          {
+            name: "FormId",
             value: form_id.to_s,
           },
         ],
@@ -95,11 +103,15 @@ describe CloudWatchService do
       allow(Aws::CloudWatch::Client).to receive(:new).and_return(cloudwatch_client)
 
       allow(cloudwatch_client).to receive(:get_metric_statistics).with({
-        metric_name: "started",
-        namespace: "forms/#{forms_env}",
+        metric_name: "Started",
+        namespace: "Forms",
         dimensions: [
           {
-            name: "form_id",
+            name: "Environment",
+            value: forms_env,
+          },
+          {
+            name: "FormId",
             value: form_id.to_s,
           },
         ],
@@ -111,11 +123,15 @@ describe CloudWatchService do
       }).and_return(metric_response)
 
       expect(cloudwatch_client).to receive(:get_metric_statistics).with({
-        metric_name: "started",
-        namespace: "forms/#{forms_env}",
+        metric_name: "Started",
+        namespace: "Forms",
         dimensions: [
           {
-            name: "form_id",
+            name: "Environment",
+            value: forms_env,
+          },
+          {
+            name: "FormId",
             value: form_id.to_s,
           },
         ],
