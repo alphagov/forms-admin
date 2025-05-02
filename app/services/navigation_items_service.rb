@@ -21,6 +21,7 @@ class NavigationItemsService
     return [] if user.blank?
 
     navigation_items = [
+      your_groups_navigation_item,
       mou_navigation_item,
       users_navigation_item,
       reports_navigation_item,
@@ -35,6 +36,10 @@ class NavigationItemsService
 private
 
   attr_reader :user
+
+  def your_groups_navigation_item
+    NavigationItem.new(text: I18n.t("header.your_groups"), href: "/", active: false)
+  end
 
   def mou_navigation_item
     return nil unless should_show_mous_link?
@@ -63,7 +68,7 @@ private
   def profile_navigation_item
     return nil if user.name.blank?
 
-    NavigationItem.new(text: user.name, href: user_profile_url, active: false)
+    NavigationItem.new(text: user.name, href: user_profile_url, active: false, classes: ["app-service-navigation__item--featured"])
   end
 
   def signout_navigation_item

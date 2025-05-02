@@ -2,12 +2,11 @@
 
 module HeaderComponent
   class View < ViewComponent::Base
-    attr_accessor :hosting_environment, :navigation_items
+    attr_accessor :hosting_environment
 
-    def initialize(hosting_environment: HostingEnvironment, navigation_items: [])
+    def initialize(hosting_environment: HostingEnvironment)
       super
       @hosting_environment = hosting_environment
-      @navigation_items = navigation_items
     end
 
     def environment_name

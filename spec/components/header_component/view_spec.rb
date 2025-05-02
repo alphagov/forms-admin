@@ -1,13 +1,12 @@
 require "rails_helper"
 
 RSpec.describe HeaderComponent::View, type: :component do
-  let(:navigation_items) { [] }
   let(:local_development) { false }
   let(:friendly_environment_name) { "production" }
   let(:hosting_environment) { OpenStruct.new(friendly_environment_name:) }
 
   let(:header_component) do
-    described_class.new(navigation_items:, hosting_environment:)
+    described_class.new(hosting_environment:)
   end
 
   describe "default status" do
@@ -19,23 +18,8 @@ RSpec.describe HeaderComponent::View, type: :component do
       expect(page).to have_text(I18n.t("header.product_name"))
     end
 
-    context "when given navigation_items" do
-      let(:navigation_items) do
-        [
-          { text: "Mous", href: "/mous" },
-          { text: "Users", href: "/users" },
-          { text: "Joe Smith", href: "/profile" },
-          { text: "Sign out", href: "/signout" },
-        ]
-      end
-
-      it "displays navigation items" do
-        expect(page).to have_css(".govuk-header__navigation-list li", count: 4)
-        expect(page).to have_link("Mous", href: "/mous")
-        expect(page).to have_link("Users", href: "/users")
-        expect(page).to have_link("Joe Smith", href: "/profile")
-        expect(page).to have_link("Sign out", href: "/signout")
-      end
+    it "has a full width border" do
+      expect(page).to have_css(".govuk-header--full-width-border")
     end
   end
 

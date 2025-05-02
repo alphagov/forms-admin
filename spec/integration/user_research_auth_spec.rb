@@ -61,7 +61,7 @@ RSpec.describe "authenticating in user research environment" do
 
       rendered = Capybara.string(response.body)
 
-      expect(rendered.find(".govuk-header")).to have_link href: sign_out_path
+      expect(rendered.find(".govuk-service-navigation")).to have_link href: sign_out_path
     end
 
     specify "signing out redirects to the sign in page" do

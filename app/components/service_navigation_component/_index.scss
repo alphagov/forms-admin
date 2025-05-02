@@ -1,0 +1,10 @@
+.app-service-navigation .govuk-service-navigation__wrapper {
+  width: 100%;
+}
+
+.app-service-navigation__item--featured {
+  @include govuk-media-query($from: tablet) {
+    flex: 1 0 auto;
+    text-align: right;
+  }
+}

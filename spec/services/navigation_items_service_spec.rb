@@ -60,7 +60,7 @@ describe NavigationItemsService do
         let(:provider) { :gds }
 
         it "includes correct profile in navigation items" do
-          profile_item = NavigationItemsService::NavigationItem.new(text: user.name, href: GDS::SSO::Config.oauth_root_url, active: false)
+          profile_item = NavigationItemsService::NavigationItem.new(text: user.name, href: GDS::SSO::Config.oauth_root_url, active: false, classes: ["app-service-navigation__item--featured"])
           expect(service.navigation_items).to include(profile_item)
         end
 
@@ -78,7 +78,7 @@ describe NavigationItemsService do
         end
 
         it "includes profile with empty href" do
-          profile_item = NavigationItemsService::NavigationItem.new(text: user.name, href: nil, active: false)
+          profile_item = NavigationItemsService::NavigationItem.new(text: user.name, href: nil, active: false, classes: ["app-service-navigation__item--featured"])
           expect(service.navigation_items).to include(profile_item)
         end
       end
@@ -87,7 +87,7 @@ describe NavigationItemsService do
         let(:provider) { :auth0 }
 
         it "includes profile with empty href" do
-          profile_item = NavigationItemsService::NavigationItem.new(text: user.name, href: nil, active: false)
+          profile_item = NavigationItemsService::NavigationItem.new(text: user.name, href: nil, active: false, classes: ["app-service-navigation__item--featured"])
           expect(service.navigation_items).to include(profile_item)
         end
 
@@ -112,6 +112,11 @@ describe NavigationItemsService do
         support_item = NavigationItemsService::NavigationItem.new(text: I18n.t("header.support"), href: support_url, active: false)
         expect(service.navigation_items).not_to include(support_item)
       end
+    end
+
+    it "includes a link to the Your groups page with custom active_when set" do
+      your_groups_item = NavigationItemsService::NavigationItem.new(text: I18n.t("header.your_groups"), href: "/", active: false)
+      expect(service.navigation_items).to include(your_groups_item)
     end
   end
 end

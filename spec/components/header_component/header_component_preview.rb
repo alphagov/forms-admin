@@ -22,14 +22,4 @@ class HeaderComponent::HeaderComponentPreview < ViewComponent::Preview
   def with_local_machine
     render(HeaderComponent::View.new(hosting_environment: OpenStruct.new(friendly_environment_name: "local")))
   end
-
-  def with_navigation_links
-    render(HeaderComponent::View.new(navigation_items: [
-      { text: "Mous", href: "/mous" },
-      { text: "Users", href: "/users" },
-      { text: "Support", href: "/support" },
-      { text: "Joe Smith", href: "/profile" },
-      { text: "Sign out", href: "/signout" },
-    ]))
-  end
 end

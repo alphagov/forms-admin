@@ -600,6 +600,7 @@ en:
     sign_out: Sign out
     support: Support
     users: Users
+    your_groups: Your groups
   helpers:
     hint:
       account_name_input:
