@@ -106,20 +106,21 @@ GEM
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     ast (2.4.3)
-    aws-eventstream (1.3.1)
-    aws-partitions (1.1061.0)
-    aws-sdk-cloudwatch (1.112.0)
+    aws-eventstream (1.3.2)
+    aws-partitions (1.1098.0)
+    aws-sdk-cloudwatch (1.113.0)
       aws-sdk-core (~> 3, >= 3.216.0)
       aws-sigv4 (~> 1.5)
     aws-sdk-codepipeline (1.96.0)
       aws-sdk-core (~> 3, >= 3.216.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-core (3.220.0)
+    aws-sdk-core (3.223.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
       base64
       jmespath (~> 1, >= 1.6.1)
+      logger
     aws-sigv4 (1.11.0)
       aws-eventstream (~> 1, >= 1.0.2)
     axe-core-api (4.10.3)
@@ -562,7 +563,7 @@ PLATFORMS
 DEPENDENCIES
   MailchimpMarketing (~> 3.0)
   activeresource (~> 6.1)
-  aws-sdk-cloudwatch (~> 1.112)
+  aws-sdk-cloudwatch (~> 1.113)
   aws-sdk-codepipeline (~> 1.96)
   axe-core-rspec
   bootsnap
