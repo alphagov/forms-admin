@@ -13,15 +13,16 @@ RSpec.describe Reports::CsvReportsService do
     GroupForm.create!(form_id: 1, group:)
     GroupForm.create!(form_id: 2, group:)
     GroupForm.create!(form_id: 3, group:)
+    GroupForm.create!(form_id: 4, group:)
 
     allow(Reports::FormDocumentsService).to receive(:live_form_documents).and_return(form_documents_response_json)
   end
 
   describe "#live_forms_csv" do
-    it "returns a CSV with 4 rows, including the header row" do
+    it "returns a CSV with a header row and a row for each form" do
       csv = csv_reports_service.live_forms_csv
       rows = CSV.parse(csv)
-      expect(rows.length).to eq 4
+      expect(rows.length).to eq 5
     end
 
     it "has expected values" do
@@ -53,10 +54,10 @@ RSpec.describe Reports::CsvReportsService do
   end
 
   describe "#live_forms_with_routes_csv" do
-    it "returns a CSV with 2 rows, including the header row" do
+    it "returns a CSV with a header row and a row for each form with routes" do
       csv = csv_reports_service.live_forms_with_routes_csv
       rows = CSV.parse(csv)
-      expect(rows.length).to eq 2
+      expect(rows.length).to eq 3
     end
 
     it "includes form with routes" do
@@ -99,10 +100,10 @@ RSpec.describe Reports::CsvReportsService do
 
   describe "#live_questions_csv" do
     context "when answer_type is nil" do
-      it "returns a CSV with 16 rows, including the header row" do
+      it "returns a CSV with a header row and a rows for each question" do
         csv = csv_reports_service.live_questions_csv
         rows = CSV.parse(csv)
-        expect(rows.length).to eq 16
+        expect(rows.length).to eq 18
       end
 
       it "has expected values for text question" do

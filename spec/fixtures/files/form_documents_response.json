@@ -425,5 +425,101 @@
     },
     "created_at": "2025-01-02T16:24:31.445Z",
     "updated_at": "2025-01-02T16:24:31.445Z"
+  },
+  {
+    "id": 4,
+    "form_id": 4,
+    "tag": "live",
+    "content": {
+      "name": "Skip route form",
+      "steps": [
+        {
+          "id": 17,
+          "data": {
+            "hint_text": null,
+            "answer_type": "selection",
+            "is_optional": false,
+            "page_heading": null,
+            "is_repeatable": false,
+            "question_text": "Would you like to submit anonymously?",
+            "answer_settings": {
+              "only_one_option": "true",
+              "selection_options": [
+                {
+                  "name": "Yes"
+                },
+                {
+                  "name": "No"
+                }
+              ]
+            },
+            "guidance_markdown": null
+          },
+          "type": "question_page",
+          "position": 1,
+          "next_step_id": 18,
+          "routing_conditions": [
+            {
+              "id": 4,
+              "created_at": "2025-05-07T10:28:31.149Z",
+              "updated_at": "2025-05-07T10:28:31.149Z",
+              "skip_to_end": true,
+              "answer_value": "Yes",
+              "goto_page_id": null,
+              "check_page_id": 17,
+              "routing_page_id": 17,
+              "exit_page_heading": null,
+              "validation_errors": [],
+              "exit_page_markdown": null
+            }
+          ]
+        },
+        {
+          "id": 18,
+          "data": {
+            "hint_text": null,
+            "answer_type": "name",
+            "is_optional": false,
+            "page_heading": null,
+            "is_repeatable": false,
+            "question_text": "What’s your name?",
+            "answer_settings": {
+              "input_type": "full_name",
+              "title_needed": false
+            },
+            "guidance_markdown": null
+          },
+          "type": "question_page",
+          "position": 2,
+          "next_step_id": null,
+          "routing_conditions": []
+        }
+      ],
+      "form_id": "4",
+      "live_at": "2025-05-07T10:28:31.206Z",
+      "form_slug": "skip-route-form",
+      "created_at": "2025-05-07T10:28:31.128Z",
+      "creator_id": null,
+      "start_page": 17,
+      "updated_at": "2025-05-07T10:28:31.206Z",
+      "payment_url": null,
+      "support_url": null,
+      "support_email": "your.email+fakedata84701@gmail.com.gov.uk",
+      "support_phone": null,
+      "s3_bucket_name": null,
+      "submission_type": "email",
+      "declaration_text": "",
+      "s3_bucket_region": null,
+      "submission_email": "",
+      "support_url_text": null,
+      "privacy_policy_url": "https://www.gov.uk/help/privacy-notice",
+      "share_preview_completed": true,
+      "s3_bucket_aws_account_id": null,
+      "question_section_completed": true,
+      "what_happens_next_markdown": "This is a test form",
+      "declaration_section_completed": true
+    },
+    "created_at": "2025-05-07T10:28:31.274Z",
+    "updated_at": "2025-05-07T10:28:31.274Z"
   }
 ]

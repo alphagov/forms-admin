@@ -695,62 +695,158 @@ RSpec.describe ReportsController, type: :request do
         expect(response.body).to include "A question"
       end
     end
+  end
 
-    describe "#live_forms_csv" do
-      let(:csv_reports_service_mock) { instance_double(Reports::CsvReportsService) }
-      let(:dummy_csv) { '"Column 1", "Column 2"\n"Value 1", "Value 2"' }
-
-      before do
-        allow(Reports::CsvReportsService).to receive(:new).and_return(csv_reports_service_mock)
-        allow(csv_reports_service_mock).to receive(:live_forms_csv).and_return(dummy_csv)
-
-        login_as_super_admin_user
-        get report_live_forms_csv_path
-      end
-
+  describe "csv downloads" do
+    shared_examples_for "csv response" do
       it "returns http code 200" do
         expect(response).to have_http_status(:ok)
-      end
-
-      it "responds with an attachment content-disposition header" do
-        expect(response.headers["content-disposition"]).to match(/attachment; filename=live_forms_report-.*?\.csv/)
       end
 
       it "has content-type text/csv" do
         expect(response.headers["content-type"]).to eq "text/csv; charset=iso-8859-1"
       end
+    end
+
+    describe "#live_forms_csv" do
+      before do
+        login_as_super_admin_user
+
+        travel_to Time.utc(2025, 5, 15, 15, 31, 57)
+
+        get report_live_forms_csv_path
+      end
+
+      it_behaves_like "csv response"
+
+      it "responds with an attachment content-disposition header" do
+        expect(response.headers["content-disposition"]).to match("attachment; filename=live_forms_report-2025-05-15 15:31:57 UTC.csv")
+      end
 
       it "has expected response body" do
-        expect(response.body).to eq(dummy_csv)
+        csv = CSV.parse(response.body, headers: true)
+        expect(csv.headers).to eq Reports::CsvReportsService::FORM_CSV_HEADERS
+        expect(csv.length).to eq 4
+      end
+    end
+
+    describe "#live_forms_with_routes_csv" do
+      before do
+        login_as_super_admin_user
+
+        travel_to Time.utc(2025, 5, 15, 15, 31, 57)
+
+        get report_live_forms_with_routes_csv_path
+      end
+
+      it_behaves_like "csv response"
+
+      it "responds with an attachment content-disposition header" do
+        expect(response.headers["content-disposition"]).to match("attachment; filename=live_forms_with_routes_report-2025-05-15 15:31:57 UTC.csv")
+      end
+
+      it "has expected response body" do
+        csv = CSV.parse(response.body, headers: true)
+        expect(csv.headers).to eq Reports::CsvReportsService::FORM_CSV_HEADERS
+        expect(csv.length).to eq 2
+        expect(csv.by_col["Form name"]).to eq [
+          "Branch route form",
+          "Skip route form",
+        ]
+      end
+    end
+
+    describe "#live_forms_with_payments_csv" do
+      before do
+        login_as_super_admin_user
+
+        travel_to Time.utc(2025, 5, 15, 15, 31, 57)
+
+        get report_live_forms_with_payments_csv_path
+      end
+
+      it_behaves_like "csv response"
+
+      it "responds with an attachment content-disposition header" do
+        expect(response.headers["content-disposition"]).to match("attachment; filename=live_forms_with_payments_report-2025-05-15 15:31:57 UTC.csv")
+      end
+
+      it "has expected response body" do
+        csv = CSV.parse(response.body, headers: true)
+        expect(csv.headers).to eq Reports::CsvReportsService::FORM_CSV_HEADERS
+        expect(csv.length).to eq 1
+        expect(csv.by_col["Form name"]).to eq [
+          "All question types form",
+        ]
+      end
+    end
+
+    describe "#live_forms_with_csv_submission_enabled_csv" do
+      before do
+        login_as_super_admin_user
+
+        travel_to Time.utc(2025, 5, 15, 15, 31, 57)
+
+        get report_live_forms_with_csv_submission_enabled_csv_path
+      end
+
+      it_behaves_like "csv response"
+
+      it "responds with an attachment content-disposition header" do
+        expect(response.headers["content-disposition"]).to match("attachment; filename=live_forms_with_csv_submission_enabled_report-2025-05-15 15:31:57 UTC.csv")
+      end
+
+      it "has expected response body" do
+        csv = CSV.parse(response.body, headers: true)
+        expect(csv.headers).to eq Reports::CsvReportsService::FORM_CSV_HEADERS
+        expect(csv.length).to eq 1
+        expect(csv.by_col["Form name"]).to eq [
+          "All question types form",
+        ]
       end
     end
 
     describe "#live_questions_csv" do
-      let(:csv_reports_service_mock) { instance_double(Reports::CsvReportsService) }
-      let(:dummy_csv) { '"Column 1", "Column 2"\n"Value 1", "Value 2"' }
-
       before do
-        allow(Reports::CsvReportsService).to receive(:new).and_return(csv_reports_service_mock)
-        allow(csv_reports_service_mock).to receive(:live_questions_csv).and_return(dummy_csv)
-
         login_as_super_admin_user
+
+        travel_to Time.utc(2025, 5, 15, 15, 31, 57)
+
         get report_live_questions_csv_path
       end
 
-      it "returns http code 200" do
-        expect(response).to have_http_status(:ok)
-      end
+      it_behaves_like "csv response"
 
       it "responds with an attachment content-disposition header" do
-        expect(response.headers["content-disposition"]).to match(/attachment; filename=live_questions_report-.*?\.csv/)
-      end
-
-      it "has content-type text/csv" do
-        expect(response.headers["content-type"]).to eq "text/csv; charset=iso-8859-1"
+        expect(response.headers["content-disposition"]).to match("attachment; filename=live_questions_report-2025-05-15 15:31:57 UTC.csv")
       end
 
       it "has expected response body" do
-        expect(response.body).to eq(dummy_csv)
+        csv = CSV.parse(response.body, headers: true)
+        expect(csv.headers).to eq Reports::CsvReportsService::QUESTIONS_CSV_HEADERS
+        expect(csv.length).to eq 17
+      end
+    end
+
+    describe "#live_questions_with_add_another_answer_csv" do
+      before do
+        login_as_super_admin_user
+
+        travel_to Time.utc(2025, 5, 15, 15, 31, 57)
+
+        get report_live_questions_with_add_another_answer_csv_path
+      end
+
+      it_behaves_like "csv response"
+
+      it "responds with an attachment content-disposition header" do
+        expect(response.headers["content-disposition"]).to match("attachment; filename=live_questions_with_add_another_answer_report-2025-05-15 15:31:57 UTC.csv")
+      end
+
+      it "has expected response body" do
+        csv = CSV.parse(response.body, headers: true)
+        expect(csv.headers).to eq Reports::CsvReportsService::QUESTIONS_CSV_HEADERS
+        expect(csv.length).to eq 2
       end
     end
   end

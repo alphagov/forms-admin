@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "reports/forms_with_routes.html.erb" do
+describe "reports/forms_with_routes" do
   let(:forms) do
     [
       {
@@ -19,7 +19,7 @@ describe "reports/forms_with_routes.html.erb" do
   end
 
   before do
-    render template: "reports/forms_with_routes", locals: { forms: }
+    render locals: { forms: }
   end
 
   describe "page title" do
