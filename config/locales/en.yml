@@ -1189,8 +1189,7 @@ en:
         skip_to_key: skip the person to
       edit:
         back_link: Back to question %{question_number}’s routes
-      new:
-        body_html: "<p>You can skip people who select one specific answer to question %{question_number} to a later question or page. People who select any other answer will continue to question %{continue_to_question_number}.<p>"
+      hint_html: "<p>You can skip people who select one specific answer to question %{question_number} to a later question or page. People who select any other answer will continue to question %{continue_to_question_number}.<p>"
     delete:
       notification_banner:
         end_of_route:
