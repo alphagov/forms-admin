@@ -14,9 +14,11 @@
         <%= t("page_titles.routing_page_edit", question_number: condition_input.page.position, route_number: 1) %>
       </h1>
 
+      <%= t('pages.conditions.hint_html', question_number: condition_input.page.position, continue_to_question_number: condition_input.next_page_number) %>
+
       <%= govuk_summary_list(actions: false) do |summary_list|
         summary_list.with_row do |row|
-          row.with_key { t("new_condition.routing_page_text") }
+          row.with_key { t("page_route_card.question_name_short", question_number: condition_input.page.position) }
           row.with_value { condition_input.page.question_text }
         end;
       end %>

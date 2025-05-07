@@ -14,7 +14,7 @@
         <%= t("page_titles.routing_page_new", route_number: 1) %>
       </h1>
 
-      <%= t('.body_html', question_number: condition_input.page.position, continue_to_question_number: condition_input.next_page_number) %>
+      <%= t('pages.conditions.hint_html', question_number: condition_input.page.position, continue_to_question_number: condition_input.next_page_number) %>
 
       <%= govuk_summary_list do |summary_list|
         summary_list.with_row do |row|
