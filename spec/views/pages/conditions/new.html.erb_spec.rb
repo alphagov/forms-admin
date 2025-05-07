@@ -2,6 +2,7 @@ require "rails_helper"
 
 describe "pages/conditions/new.html.erb" do
   let(:form) { build :form, id: 1 }
+  let(:group) { build :group }
   let(:pages) do
     build_list(:page, 3) do |page, i|
       page.id = i
@@ -17,7 +18,7 @@ describe "pages/conditions/new.html.erb" do
     allow(FormRepository).to receive(:pages).and_return(pages)
     allow(view).to receive(:set_routing_page_path).with(routing_page_id: condition_input.page.id).and_return("/forms/1/new-condition?routing-page_id=#{condition_input.page.id}")
     allow(view).to receive_messages(form_pages_path: "/forms/1/pages", routing_page_path: "/forms/1/new-condition", create_condition_path: "/forms/1/pages/1/conditions/new")
-    allow(form).to receive(:qualifying_route_pages).and_return(pages)
+    allow(form).to receive_messages(group: group, qualifying_route_pages: pages)
 
     render template: "pages/conditions/new", locals: { condition_input: }
   end
@@ -33,5 +34,13 @@ describe "pages/conditions/new.html.erb" do
 
   it "has a submit button" do
     expect(rendered).to have_css("button[type='submit'].govuk-button", text: I18n.t("save_and_continue"))
+  end
+
+  context "when the exit page feature is enabled" do
+    let(:group) { build :group, exit_pages_enabled: true }
+
+    it "has an exit page option" do
+      expect(rendered).to have_css("option[value='exit_page']", text: I18n.t("page_conditions.exit_page"))
+    end
   end
 end

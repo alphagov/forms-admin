@@ -108,6 +108,18 @@ describe "pages/routes/show.html.erb" do
             href: new_secondary_skip_path(form.id, page.id),
           )
         end
+
+        context "when the route leads to an exit page" do
+          let(:page) { page_with_exit_page }
+
+          it "does not show the link to set questions to skip" do
+            expect(rendered).not_to have_link(
+              "Set questions to skip",
+              class: "govuk-button--secondary",
+              href: new_secondary_skip_path(form.id, page.id),
+            )
+          end
+        end
       end
     end
   end

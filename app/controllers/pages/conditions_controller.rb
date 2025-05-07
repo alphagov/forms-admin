@@ -27,8 +27,12 @@ class Pages::ConditionsController < PagesController
     condition_input = Pages::ConditionsInput.new(condition_input_params)
 
     if condition_input.submit
-      # TODO: Route number is hardcoded whilst we can only have one value for it
-      redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.route_created", route_number: 1)
+      if condition_input.create_exit_page? && FeatureService.new(group: current_form.group).enabled?(:exit_pages)
+        redirect_to new_exit_page_path(current_form.id, page.id, answer_value: condition_input.answer_value)
+      else
+        # TODO: Route number is hardcoded whilst we can only have one value for it
+        redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.route_created", route_number: 1)
+      end
     else
       render template: "pages/conditions/new", locals: { condition_input: }, status: :unprocessable_entity
     end

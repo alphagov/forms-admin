@@ -189,6 +189,7 @@ en:
     default:
       title: Important
     success:
+      exit_page_created: Your exit page has been added
       form:
         change_name: Your form name has been saved
         declaration_saved: Your declaration has been saved
@@ -1048,10 +1049,13 @@ en:
     condition_compact_html_exit_page: If the answer is “%{answer_value}” go to the exit page, “%{exit_page_heading}”
     condition_compact_html_secondary_skip: Go to %{goto_page_question_number}, “%{goto_page_question_text}”
     condition_description: If %{check_page_question_text} is answered as %{answer_value} go to %{goto_page_question_text}
+    condition_goto_exit_page: exit page, “%{exit_page_heading}”
     condition_goto_page_check_your_answers: "“Check your answers before submitting”."
     condition_goto_page_text: "%{goto_page_question_number}, “%{goto_page_question_text}”"
     condition_goto_page_text_with_errors: "[Question not selected]"
     condition_name: Question %{question_number}’s routes
+    exit_page: Add an exit page
+    exit_page_label: An ‘exit page’ to leave the form
     none_of_the_above: None of the above
     route: Route
     secondary_skip_description: After %{check_page_question_text} go to %{goto_page_question_text}
@@ -1119,6 +1123,7 @@ en:
     account_name: Enter your name
     account_organisation: Select your organisation
     account_terms_of_use: Terms of use
+    add_exit_page: Add exit page
     add_guidance: Add guidance
     address_settings: What kind of addresses do you expect to receive?
     archive_form_confirm: Archive this form
@@ -1133,6 +1138,7 @@ en:
     delete_secondary_skip: Are you sure you want to delete the route for any other answer?
     email_code_sent: Confirmation code sent
     error_prefix: 'Error: '
+    exit_page_new: Add exit page
     forbidden: You cannot view this page
     group_confirm_upgrade_request: Request to upgrade this trial group
     group_index: Your groups

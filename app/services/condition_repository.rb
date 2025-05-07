@@ -6,14 +6,18 @@ class ConditionRepository
                 routing_page_id:,
                 answer_value:,
                 goto_page_id:,
-                skip_to_end:)
+                skip_to_end:,
+                exit_page_heading: nil,
+                exit_page_markdown: nil)
       Api::V1::ConditionResource.create!(form_id:,
                                          page_id:,
                                          check_page_id:,
                                          routing_page_id:,
                                          answer_value:,
                                          goto_page_id:,
-                                         skip_to_end:)
+                                         skip_to_end:,
+                                         exit_page_heading:,
+                                         exit_page_markdown:)
     end
 
     def find(condition_id:, form_id:, page_id:)

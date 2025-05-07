@@ -6,15 +6,19 @@ class Pages::ConditionsInput < BaseInput
   def submit
     return false if invalid?
 
-    assign_skip_to_end
+    if goto_page_id == "exit_page"
+      true
+    else
+      assign_skip_to_end
 
-    ConditionRepository.create!(form_id: form.id,
-                                page_id: page.id,
-                                check_page_id: page.id,
-                                routing_page_id: page.id,
-                                answer_value:,
-                                goto_page_id:,
-                                skip_to_end:)
+      ConditionRepository.create!(form_id: form.id,
+                                  page_id: page.id,
+                                  check_page_id: page.id,
+                                  routing_page_id: page.id,
+                                  answer_value:,
+                                  goto_page_id:,
+                                  skip_to_end:)
+    end
   end
 
   def update_condition
@@ -70,6 +74,10 @@ class Pages::ConditionsInput < BaseInput
       target_page = FormRepository.pages(form).find { it.id == page.next_page }
       target_page.position
     end
+  end
+
+  def create_exit_page?
+    goto_page_id == "exit_page"
   end
 
 private
