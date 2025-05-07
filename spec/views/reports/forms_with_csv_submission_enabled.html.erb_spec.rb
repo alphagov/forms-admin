@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "reports/forms_with_csv_submission_enabled.html.erb" do
+describe "reports/forms_with_csv_submission_enabled" do
   let(:forms) do
     [
       {
@@ -17,7 +17,7 @@ describe "reports/forms_with_csv_submission_enabled.html.erb" do
   end
 
   before do
-    render template: "reports/forms_with_csv_submission_enabled", locals: { forms: }
+    render locals: { forms: }
   end
 
   describe "page title" do

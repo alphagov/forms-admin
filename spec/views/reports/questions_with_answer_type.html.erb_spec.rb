@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "reports/questions_with_answer_type.html.erb" do
+describe "reports/questions_with_answer_type" do
   let(:questions) do
     [
       {
@@ -19,7 +19,7 @@ describe "reports/questions_with_answer_type.html.erb" do
   end
 
   before do
-    render template: "reports/questions_with_answer_type", locals: { answer_type: "email", questions: }
+    render locals: { answer_type: "email", questions: }
   end
 
   describe "page title" do
