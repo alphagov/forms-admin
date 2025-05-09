@@ -48,6 +48,17 @@ FactoryBot.define do
       answer_settings { DataStruct.new(only_one_option:, selection_options:) }
     end
 
+    trait :with_api_selection_settings do
+      transient do
+        only_one_option { "true" }
+        selection_options { [DataStruct.new(attributes: { name: "Option 1" }), DataStruct.new(attributes: { name: "Option 2" })] }
+      end
+
+      question_text { Faker::Lorem.question }
+      answer_type { "selection" }
+      answer_settings { DataStruct.new(only_one_option:, selection_options:) }
+    end
+
     trait :with_text_settings do
       transient do
         input_type { Pages::TextSettingsInput::INPUT_TYPES.sample }

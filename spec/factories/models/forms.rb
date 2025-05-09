@@ -121,6 +121,29 @@ FactoryBot.define do
       end
     end
 
+    trait :ready_for_api_routing do
+      transient do
+        pages_count { 5 }
+      end
+
+      pages do
+        Array.new(pages_count) { association(:page, :with_api_selection_settings) }
+      end
+
+      after(:build) do |form|
+        if form.pages.present?
+          # assign position and next_page to each page
+          form.pages.each.with_index(1).each_cons(2) do |page_with_index, next_page_with_index|
+            page, page_index = page_with_index
+            next_page, _next_page_index = next_page_with_index
+
+            page.position = page_index
+            page.next_page = next_page&.id
+          end
+        end
+      end
+    end
+
     trait :missing_pages do
       incomplete_tasks { %i[missing_pages] }
     end
