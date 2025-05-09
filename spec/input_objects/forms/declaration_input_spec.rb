@@ -15,6 +15,13 @@ RSpec.describe Forms::DeclarationInput, type: :model do
         expect(declaration_input).to be_valid
       end
 
+      it "is strips carriage returns before calculating the length" do
+        declaration_text = "#{'a' * 1000}\r\n#{'a' * 999}"
+        declaration_input = described_class.new(declaration_text:, mark_complete: true)
+
+        expect(declaration_input).to be_valid
+      end
+
       it "is invalid if more than 2000 characters" do
         declaration_input = described_class.new(declaration_text: "a" * 2001, mark_complete: true)
         error_message = I18n.t("activemodel.errors.models.forms/declaration_input.attributes.declaration_text.too_long")
