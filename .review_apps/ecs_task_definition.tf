@@ -1,7 +1,7 @@
 locals {
   logs_stream_prefix = "${data.terraform_remote_state.review.outputs.review_apps_log_group_name}/pr-${var.pull_request_number}"
 
-  review_app_hostname = "pr-${var.pull_request_number}.review.forms.service.gov.uk"
+  review_app_hostname = "pr-${var.pull_request_number}.admin.review.forms.service.gov.uk"
 
   forms_admin_startup_commands = [
     "echo $PATH",
@@ -17,7 +17,7 @@ locals {
     { name = "DATABASE_URL", value = "postgres://postgres:postgres@127.0.0.1:5432" },
     { name = "GOVUK_APP_DOMAIN", value = "publishing.service.gov.uk" },
     { name = "PORT", value = "3000" },
-    { name = "RAILS_DEVELOPMENT_HOSTS", value = "pr-${var.pull_request_number}.review.forms.service.gov.uk" },
+    { name = "RAILS_DEVELOPMENT_HOSTS", value = "pr-${var.pull_request_number}.admin.review.forms.service.gov.uk" },
     { name = "RAILS_ENV", value = "production" },
     { name = "SECRET_KEY_BASE", value = "unsecured_secret_key_material" },
     { name = "SETTINGS__ACT_AS_USER_ENABLED", value = "true" },

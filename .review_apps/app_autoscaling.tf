@@ -8,7 +8,7 @@ resource "aws_appautoscaling_target" "review_app" {
 }
 
 resource "aws_appautoscaling_scheduled_action" "shutdown_at_night" {
-  name = "pr-${var.pull_request_number}-shutdown-at-night"
+  name = "forms-admin-pr-${var.pull_request_number}-shutdown-at-night"
 
   service_namespace  = aws_appautoscaling_target.review_app.service_namespace
   resource_id        = aws_appautoscaling_target.review_app.resource_id
@@ -23,7 +23,7 @@ resource "aws_appautoscaling_scheduled_action" "shutdown_at_night" {
 }
 
 resource "aws_appautoscaling_scheduled_action" "startup_weekday_mornings" {
-  name = "pr-${var.pull_request_number}-startup-weekday-mornings"
+  name = "forms-admin-pr-${var.pull_request_number}-startup-weekday-mornings"
 
   service_namespace  = aws_appautoscaling_target.review_app.service_namespace
   resource_id        = aws_appautoscaling_target.review_app.resource_id
