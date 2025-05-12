@@ -36,22 +36,22 @@ private
 
   def report_forms_table_row(form)
     [
-      govuk_link_to(form[:form_name], live_form_pages_path(form_id: form[:form_id])),
-      form[:organisation_name],
+      govuk_link_to(form["content"]["name"], live_form_pages_path(form_id: form["form_id"])),
+      form["group"]["organisation"]["name"],
     ]
   end
 
   def report_forms_with_routes_table_row(form)
     [
       *report_forms_table_row(form),
-      form[:number_of_routes].to_s,
+      form["metadata"]["number_of_routes"].to_s,
     ]
   end
 
   def report_questions_table_row(question)
     [
-      *report_forms_table_row(question),
-      question[:question_text],
+      *report_forms_table_row(question["form"]),
+      question["data"]["question_text"],
     ]
   end
 end

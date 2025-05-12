@@ -3,18 +3,8 @@ require "rails_helper"
 describe "reports/forms_with_routes" do
   let(:forms) do
     [
-      {
-        form_name: "All question types form",
-        form_id: 1,
-        organisation_name: "Government Digital Service",
-        number_of_routes: 1,
-      },
-      {
-        form_name: "Branch route form",
-        form_id: 3,
-        organisation_name: "Government Digital Service",
-        number_of_routes: 2,
-      },
+      { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } }, "metadata" => { "number_of_routes" => 1 } },
+      { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } }, "metadata" => { "number_of_routes" => 2 } },
     ]
   end
 
