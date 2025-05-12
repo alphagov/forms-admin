@@ -36,15 +36,17 @@ class Reports::FeatureReportService
 
     def questions_with_answer_type(answer_type)
       Reports::FormDocumentsService.live_form_documents.flat_map do |form|
-        form["content"]["steps"].select { |step| step["data"]["answer_type"] == answer_type }
-                                .map { |step| questions_details(form, step) }
+        form["content"]["steps"]
+          .select { |step| step["data"]["answer_type"] == answer_type }
+          .map { |step| questions_details(form, step) }
       end
     end
 
     def live_questions_with_add_another_answer
       Reports::FormDocumentsService.live_form_documents.flat_map do |form|
-        form["content"]["steps"].select { |step| step["data"]["is_repeatable"] }
-                                .map { |step| questions_details(form, step) }
+        form["content"]["steps"]
+          .select { |step| step["data"]["is_repeatable"] }
+          .map { |step| questions_details(form, step) }
       end
     end
 
@@ -69,28 +71,26 @@ class Reports::FeatureReportService
   private
 
     def questions_details(form, step)
-      form_id = form["form_id"]
-      {
-        form_name: form["content"]["name"],
-        form_id: form_id,
-        organisation_name: organisation_name(form_id),
-        question_text: step["data"]["question_text"],
-      }
+      form = form_details(form)
+      step.dup.merge("form" => form)
     end
 
     def form_with_routes_details(form)
-      form_details = form_details(form)
-      form_details[:number_of_routes] = form["content"]["steps"].count { |step| step["routing_conditions"].present? }
-      form_details
+      form = form_details(form)
+      form["metadata"] = {
+        "number_of_routes" => form["content"]["steps"].count { |step| step["routing_conditions"].present? },
+      }
+      form
     end
 
     def form_details(form)
-      form_id = form["form_id"]
-      {
-        form_name: form["content"]["name"],
-        form_id: form_id,
-        organisation_name: organisation_name(form_id),
+      form = form.dup
+      form["group"] = {
+        "organisation" => {
+          "name" => organisation_name(form["form_id"]),
+        },
       }
+      form
     end
 
     def organisation_name(form_id)

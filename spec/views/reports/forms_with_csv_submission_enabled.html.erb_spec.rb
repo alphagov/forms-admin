@@ -3,16 +3,8 @@ require "rails_helper"
 describe "reports/forms_with_csv_submission_enabled" do
   let(:forms) do
     [
-      {
-        form_name: "All question types form",
-        form_id: 1,
-        organisation_name: "Government Digital Service",
-      },
-      {
-        form_name: "Branch route form",
-        form_id: 3,
-        organisation_name: "Government Digital Service",
-      },
+      { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
+      { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
     ]
   end
 
