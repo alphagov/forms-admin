@@ -17,12 +17,12 @@ RSpec.describe Reports::FeatureReportService do
     it "returns the feature report" do
       report = described_class.report
       expect(report).to eq({
-        total_live_forms: 4,
-        live_forms_with_payment: 1,
-        live_forms_with_routing: 2,
-        live_forms_with_add_another_answer: 1,
-        live_forms_with_csv_submission_enabled: 1,
-        live_forms_with_answer_type: {
+        total_forms: 4,
+        forms_with_payment: 1,
+        forms_with_routing: 2,
+        forms_with_add_another_answer: 1,
+        forms_with_csv_submission_enabled: 1,
+        forms_with_answer_type: {
           "address" => 1,
           "date" => 1,
           "email" => 2,
@@ -33,7 +33,7 @@ RSpec.describe Reports::FeatureReportService do
           "selection" => 3,
           "text" => 3,
         },
-        live_steps_with_answer_type: {
+        steps_with_answer_type: {
           "address" => 1,
           "date" => 1,
           "email" => 2,

@@ -8,23 +8,23 @@
     <%= govuk_summary_list do |summary_list| %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".features.total_live_forms")) %>
-        <%= row.with_value(text: data[:total_live_forms]) %>
+        <%= row.with_value(text: data[:total_forms]) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".features.live_forms_with_routes")) %>
-        <%= row.with_value(text: govuk_link_to(data[:live_forms_with_routing], report_forms_with_routes_path, no_visited_state: true)) %>
+        <%= row.with_value(text: govuk_link_to(data[:forms_with_routing], report_forms_with_routes_path, no_visited_state: true)) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".features.live_forms_with_payments")) %>
-        <%= row.with_value(text: govuk_link_to(data[:live_forms_with_payment], report_forms_with_payments_path, no_visited_state: true)) %>
+        <%= row.with_value(text: govuk_link_to(data[:forms_with_payment], report_forms_with_payments_path, no_visited_state: true)) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".features.live_forms_with_add_another_answer")) %>
-        <%= row.with_value(text: govuk_link_to(data[:live_forms_with_add_another_answer], report_questions_with_add_another_answer_path, no_visited_state: true)) %>
+        <%= row.with_value(text: govuk_link_to(data[:forms_with_add_another_answer], report_questions_with_add_another_answer_path, no_visited_state: true)) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".features.live_forms_with_csv_submission_enabled")) %>
-        <%= row.with_value(text: govuk_link_to(data[:live_forms_with_csv_submission_enabled], report_forms_with_csv_submission_enabled_path, no_visited_state: true)) %>
+        <%= row.with_value(text: govuk_link_to(data[:forms_with_csv_submission_enabled], report_forms_with_csv_submission_enabled_path, no_visited_state: true)) %>
       <% end %>
     <% end %>
 
@@ -46,11 +46,11 @@
           <%= body.with_row do |row| %>
             <%= row.with_cell(header: true, text: t("helpers.label.page.answer_type_options.names.#{answer_type}")) %>
             <% if answer_type_links[answer_type].present? %>
-              <%= row.with_cell(text: govuk_link_to(data[:live_forms_with_answer_type][answer_type] || 0, answer_type_links[answer_type], no_visited_state: true), numeric: true, html_attributes: { data: { "live-forms-with-answer-type-#{answer_type.to_s.dasherize}": true } }) %>
+              <%= row.with_cell(text: govuk_link_to(data[:forms_with_answer_type][answer_type] || 0, answer_type_links[answer_type], no_visited_state: true), numeric: true, html_attributes: { data: { "live-forms-with-answer-type-#{answer_type.to_s.dasherize}": true } }) %>
             <% else %>
-              <%= row.with_cell(text: data[:live_forms_with_answer_type][answer_type] || 0, numeric: true, html_attributes: { data: { "live-forms-with-answer-type-#{answer_type.to_s.dasherize}": true } }) %>
+              <%= row.with_cell(text: data[:forms_with_answer_type][answer_type] || 0, numeric: true, html_attributes: { data: { "live-forms-with-answer-type-#{answer_type.to_s.dasherize}": true } }) %>
             <% end %>
-            <%= row.with_cell(text: govuk_link_to(data[:live_steps_with_answer_type][answer_type] || 0, report_questions_with_answer_type_path(answer_type:), no_visited_state: true), numeric: true, html_attributes: { data: { "live-pages-with-answer-type-#{answer_type.to_s.dasherize}": true } }) %>
+            <%= row.with_cell(text: govuk_link_to(data[:steps_with_answer_type][answer_type] || 0, report_questions_with_answer_type_path(answer_type:), no_visited_state: true), numeric: true, html_attributes: { data: { "live-pages-with-answer-type-#{answer_type.to_s.dasherize}": true } }) %>
           <% end %>
         <% end %>
       <% end %>
