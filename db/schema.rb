@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_10_160700) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_13_065144) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -218,8 +218,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_10_160700) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
-  add_foreign_key "create_form_events", "groups"
-  add_foreign_key "create_form_events", "users"
+  add_foreign_key "create_form_events", "groups", on_delete: :cascade
+  add_foreign_key "create_form_events", "users", on_delete: :cascade
   add_foreign_key "draft_questions", "users"
   add_foreign_key "groups", "users", column: "creator_id"
   add_foreign_key "groups", "users", column: "upgrade_requester_id"

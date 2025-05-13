@@ -60,6 +60,38 @@ RSpec.describe "Create a form", type: :feature do
     end
   end
 
+  describe "deleting a group" do
+    context "when a form has been created and then deleted in that group" do
+      before do
+        login_as_super_admin_user
+
+        visit group_path(group)
+        click_on "Create a form"
+
+        fill_in "What’s the name of your form?", with: form.name
+
+        click_on "Save and continue"
+
+        allow(FormRepository).to receive(:destroy).and_invoke(lambda do |record|
+          GroupForm.find_by_form_id(record.id).destroy!
+          record
+        end)
+
+        click_on "Delete draft form"
+        choose "Yes"
+        click_on "Continue"
+      end
+
+      it "deletes the group" do
+        click_on "Delete this group"
+        choose "Yes"
+        click_on "Continue"
+
+        expect(page).to have_selector ".govuk-notification-banner--success", text: "Successfully deleted"
+      end
+    end
+  end
+
   # Element#double_click isn't working as expected in Ferrum
   # (see https://github.com/rubycdp/ferrum/issues/529),
   # so we need to reimplement it
