@@ -3,8 +3,8 @@ require "rails_helper"
 describe "reports/features.html.erb" do
   let(:report) do
     {
-      total_live_forms: 3,
-      live_forms_with_answer_type: {
+      total_forms: 3,
+      forms_with_answer_type: {
         address: 1,
         date: 1,
         email: 1,
@@ -16,7 +16,7 @@ describe "reports/features.html.erb" do
         selection: 3,
         text: 3,
       }.with_indifferent_access,
-      live_steps_with_answer_type: {
+      steps_with_answer_type: {
         address: 1,
         date: 1,
         email: 1,
@@ -28,10 +28,10 @@ describe "reports/features.html.erb" do
         selection: 4,
         text: 5,
       }.with_indifferent_access,
-      live_forms_with_payment: 1,
-      live_forms_with_routing: 2,
-      live_forms_with_add_another_answer: 3,
-      live_forms_with_csv_submission_enabled: 2,
+      forms_with_payment: 1,
+      forms_with_routing: 2,
+      forms_with_add_another_answer: 3,
+      forms_with_csv_submission_enabled: 2,
     }
   end
 
@@ -54,7 +54,7 @@ describe "reports/features.html.erb" do
   end
 
   it "includes the number of total live forms" do
-    expect(rendered).to have_css(".govuk-summary-list__row", text: "Total live forms#{report[:total_live_forms]}")
+    expect(rendered).to have_css(".govuk-summary-list__row", text: "Total live forms#{report[:total_forms]}")
   end
 
   Page::ANSWER_TYPES.map(&:to_sym).each do |answer_type|
@@ -63,49 +63,49 @@ describe "reports/features.html.erb" do
     end
 
     it "includes the number of live forms with #{answer_type}" do
-      expect(rendered).to have_css("[data-live-forms-with-answer-type-#{answer_type.to_s.dasherize}]", text: report[:live_forms_with_answer_type][answer_type].to_s)
+      expect(rendered).to have_css("[data-live-forms-with-answer-type-#{answer_type.to_s.dasherize}]", text: report[:forms_with_answer_type][answer_type].to_s)
     end
 
     it "includes the number of live pages with #{answer_type}" do
-      expect(rendered).to have_css("[data-live-pages-with-answer-type-#{answer_type.to_s.dasherize}]", text: report[:live_steps_with_answer_type][answer_type].to_s)
+      expect(rendered).to have_css("[data-live-pages-with-answer-type-#{answer_type.to_s.dasherize}]", text: report[:steps_with_answer_type][answer_type].to_s)
     end
   end
 
   context "when an answer type is missing from the data" do
     let(:report) do
       {
-        total_live_forms: 3,
-        live_forms_with_answer_type: { address: 1 },
-        live_steps_with_answer_type: { address: 1 },
-        live_forms_with_payment: 1,
-        live_forms_with_routing: 2,
-        live_forms_with_add_another_answer: 3,
-        live_forms_with_csv_submission_enabled: 2,
+        total_forms: 3,
+        forms_with_answer_type: { address: 1 },
+        steps_with_answer_type: { address: 1 },
+        forms_with_payment: 1,
+        forms_with_routing: 2,
+        forms_with_add_another_answer: 3,
+        forms_with_csv_submission_enabled: 2,
       }
     end
 
-    it "displays 0 for live_forms_with_answer_type" do
+    it "displays 0 for forms_with_answer_type" do
       expect(rendered).to have_css("[data-live-forms-with-answer-type-number]", text: "0")
     end
 
-    it "displays 0 for live_steps_with_answer_type" do
+    it "displays 0 for steps_with_answer_type" do
       expect(rendered).to have_css("[data-live-pages-with-answer-type-number]", text: "0")
     end
   end
 
   it "includes the number of live forms with routes" do
-    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with routes#{report[:live_forms_with_routing]}")
+    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with routes#{report[:forms_with_routing]}")
   end
 
   it "includes the number of live forms with payments" do
-    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with payments#{report[:live_forms_with_payment]}")
+    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with payments#{report[:forms_with_payment]}")
   end
 
   it "includes the number of live forms with add another answer" do
-    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with add another answer#{report[:live_forms_with_add_another_answer]}")
+    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with add another answer#{report[:forms_with_add_another_answer]}")
   end
 
   it "includes the number of live forms with CSV submission enabled" do
-    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with CSV submission enabled#{report[:live_forms_with_csv_submission_enabled]}")
+    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with CSV submission enabled#{report[:forms_with_csv_submission_enabled]}")
   end
 end
