@@ -5,38 +5,44 @@ class ReportsController < ApplicationController
   def index; end
 
   def features
-    data = Reports::FeatureReportService.report
+    forms = Reports::FormDocumentsService.live_form_documents
+    data = Reports::FeatureReportService.new(forms).report
 
     render template: "reports/features", locals: { data: }
   end
 
   def questions_with_answer_type
     answer_type = params.require(:answer_type)
-    questions = Reports::FeatureReportService.questions_with_answer_type(answer_type)
+    forms = Reports::FormDocumentsService.live_form_documents
+    questions = Reports::FeatureReportService.new(forms).questions_with_answer_type(answer_type)
 
     render template: "reports/questions_with_answer_type", locals: { answer_type:, questions: }
   end
 
   def questions_with_add_another_answer
-    questions = Reports::FeatureReportService.live_questions_with_add_another_answer
+    forms = Reports::FormDocumentsService.live_form_documents
+    questions = Reports::FeatureReportService.new(forms).questions_with_add_another_answer
 
     render template: "reports/questions_with_add_another_answer", locals: { questions: }
   end
 
   def forms_with_routes
-    forms = Reports::FeatureReportService.live_forms_with_routes
+    forms = Reports::FormDocumentsService.live_form_documents
+    forms = Reports::FeatureReportService.new(forms).forms_with_routes
 
     render template: "reports/forms_with_routes", locals: { forms: forms }
   end
 
   def forms_with_payments
-    forms = Reports::FeatureReportService.live_forms_with_payments
+    forms = Reports::FormDocumentsService.live_form_documents
+    forms = Reports::FeatureReportService.new(forms).forms_with_payments
 
     render template: "reports/forms_with_payments", locals: { forms: forms }
   end
 
   def forms_with_csv_submission_enabled
-    forms = Reports::FeatureReportService.live_forms_with_csv_submission_enabled
+    forms = Reports::FormDocumentsService.live_form_documents
+    forms = Reports::FeatureReportService.new(forms).forms_with_csv_submission_enabled
 
     render template: "reports/forms_with_csv_submission_enabled", locals: { forms: forms }
   end
