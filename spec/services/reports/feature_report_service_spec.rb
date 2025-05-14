@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Reports::FeatureReportService do
-  let(:form_documents_response_json) { JSON.parse(file_fixture("form_documents_response.json").read) }
+  let(:form_documents) { JSON.parse(file_fixture("form_documents_response.json").read) }
   let(:group) { create(:group) }
 
   before do
@@ -9,13 +9,11 @@ RSpec.describe Reports::FeatureReportService do
     GroupForm.create!(form_id: 2, group:)
     GroupForm.create!(form_id: 3, group:)
     GroupForm.create!(form_id: 4, group:)
-
-    allow(Reports::FormDocumentsService).to receive(:live_form_documents).and_return(form_documents_response_json)
   end
 
   describe "#report" do
     it "returns the feature report" do
-      report = described_class.report
+      report = described_class.new(form_documents).report
       expect(report).to eq({
         total_forms: 4,
         forms_with_payment: 1,
@@ -50,7 +48,7 @@ RSpec.describe Reports::FeatureReportService do
 
   describe "#questions_with_answer_type" do
     it "returns details needed to render report" do
-      questions = described_class.questions_with_answer_type("email")
+      questions = described_class.new(form_documents).questions_with_answer_type("email")
       expect(questions).to match [
         a_hash_including(
           "form" => a_hash_including(
@@ -78,7 +76,7 @@ RSpec.describe Reports::FeatureReportService do
     end
 
     it "returns questions with the given answer type" do
-      questions = described_class.questions_with_answer_type("name")
+      questions = described_class.new(form_documents).questions_with_answer_type("name")
       expect(questions.length).to eq 2
       expect(questions).to all match(
         a_hash_including(
@@ -90,7 +88,7 @@ RSpec.describe Reports::FeatureReportService do
     end
 
     it "includes a reference to the form document" do
-      questions = described_class.questions_with_answer_type("text")
+      questions = described_class.new(form_documents).questions_with_answer_type("text")
       expect(questions).to all include(
         "form" => a_hash_including(
           "form_id",
@@ -102,9 +100,9 @@ RSpec.describe Reports::FeatureReportService do
     end
   end
 
-  describe "#live_questions_with_add_another_answer" do
+  describe "#questions_with_add_another_answer" do
     it "returns details needed to render report" do
-      questions = described_class.live_questions_with_add_another_answer
+      questions = described_class.new(form_documents).questions_with_add_another_answer
       expect(questions).to match [
         a_hash_including(
           "form" => a_hash_including(
@@ -142,7 +140,7 @@ RSpec.describe Reports::FeatureReportService do
     end
 
     it "returns questions with add another answer" do
-      questions = described_class.live_questions_with_add_another_answer
+      questions = described_class.new(form_documents).questions_with_add_another_answer
       expect(questions).to all match(
         a_hash_including(
           "data" => a_hash_including(
@@ -153,7 +151,7 @@ RSpec.describe Reports::FeatureReportService do
     end
 
     it "includes a reference to the form document" do
-      questions = described_class.questions_with_answer_type("text")
+      questions = described_class.new(form_documents).questions_with_answer_type("text")
       expect(questions).to all include(
         "form" => a_hash_including(
           "form_id",
@@ -165,7 +163,7 @@ RSpec.describe Reports::FeatureReportService do
     end
 
     it "includes a reference to the organisation record" do
-      questions = described_class.questions_with_answer_type("text")
+      questions = described_class.new(form_documents).questions_with_answer_type("text")
       expect(questions).to all include(
         "form" => a_hash_including(
           "group" => a_hash_including(
@@ -178,9 +176,9 @@ RSpec.describe Reports::FeatureReportService do
     end
   end
 
-  describe "#live_forms_with_routes" do
+  describe "#forms_with_routes" do
     it "returns details needed to render report" do
-      forms = described_class.live_forms_with_routes
+      forms = described_class.new(form_documents).forms_with_routes
       expect(forms).to match [
         a_hash_including(
           "form_id" => 3,
@@ -214,7 +212,7 @@ RSpec.describe Reports::FeatureReportService do
     end
 
     it "returns forms with routes" do
-      forms = described_class.live_forms_with_routes
+      forms = described_class.new(form_documents).forms_with_routes
       expect(forms).to match [
         a_hash_including(
           "form_id" => 3,
@@ -232,7 +230,7 @@ RSpec.describe Reports::FeatureReportService do
     end
 
     it "includes counts of routes" do
-      forms = described_class.live_forms_with_routes
+      forms = described_class.new(form_documents).forms_with_routes
       expect(forms).to all include(
         "metadata" => a_hash_including(
           "number_of_routes" => an_instance_of(Integer),
@@ -241,7 +239,7 @@ RSpec.describe Reports::FeatureReportService do
     end
 
     it "includes a reference to the organisation record" do
-      forms = described_class.live_forms_with_routes
+      forms = described_class.new(form_documents).forms_with_routes
       expect(forms).to all include(
         "group" => a_hash_including(
           "organisation" => a_hash_including(
@@ -252,9 +250,9 @@ RSpec.describe Reports::FeatureReportService do
     end
   end
 
-  describe "#live_forms_with_payments" do
+  describe "#forms_with_payments" do
     it "returns live forms with payments" do
-      forms = described_class.live_forms_with_payments
+      forms = described_class.new(form_documents).forms_with_payments
       expect(forms).to match [
         a_hash_including(
           "form_id" => 1,
@@ -266,7 +264,7 @@ RSpec.describe Reports::FeatureReportService do
     end
 
     it "includes a reference to the organisation record" do
-      forms = described_class.live_forms_with_routes
+      forms = described_class.new(form_documents).forms_with_routes
       expect(forms).to all include(
         "group" => a_hash_including(
           "organisation" => a_hash_including(
@@ -277,9 +275,9 @@ RSpec.describe Reports::FeatureReportService do
     end
   end
 
-  describe "#live_forms_with_csv_submission_enabled" do
+  describe "#forms_with_csv_submission_enabled" do
     it "returns live forms with csv enabled" do
-      forms = described_class.live_forms_with_csv_submission_enabled
+      forms = described_class.new(form_documents).forms_with_csv_submission_enabled
       expect(forms).to match [
         a_hash_including(
           "form_id" => 1,
@@ -291,7 +289,7 @@ RSpec.describe Reports::FeatureReportService do
     end
 
     it "includes a reference to the organisation record" do
-      forms = described_class.live_forms_with_routes
+      forms = described_class.new(form_documents).forms_with_routes
       expect(forms).to all include(
         "group" => a_hash_including(
           "organisation" => a_hash_including(
