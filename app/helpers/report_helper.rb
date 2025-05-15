@@ -1,4 +1,39 @@
 module ReportHelper
+  def report_table(records)
+    type = records.first.fetch("type", "form")
+
+    if type == "form"
+      with_routes = records.first.dig("metadata", "number_of_routes").present?
+
+      with_routes ? report_forms_with_routes_table(records) : report_forms_table(records)
+    elsif type == "question_page"
+      report_questions_table(records)
+    else
+      raise "type of records '#{type}' is not one of 'forms', 'question_page'"
+    end
+  end
+
+  def report_forms_table(forms)
+    {
+      head: report_forms_table_head,
+      rows: report_forms_table_rows(forms),
+    }
+  end
+
+  def report_forms_with_routes_table(forms)
+    {
+      head: report_forms_with_routes_table_head,
+      rows: report_forms_with_routes_table_rows(forms),
+    }
+  end
+
+  def report_questions_table(questions)
+    {
+      head: report_questions_table_head,
+      rows: report_questions_table_rows(questions),
+    }
+  end
+
   def report_forms_table_head
     [
       I18n.t("reports.form_or_questions_list_table.headings.form_name"),
