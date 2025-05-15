@@ -1,6 +1,99 @@
 require "rails_helper"
 
 RSpec.describe ReportHelper, type: :helper do
+  let(:forms) do
+    [
+      { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
+      { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Ministry of Tests" } } },
+      { "form_id" => 4, "content" => { "name" => "Skip route form" }, "group" => { "organisation" => { "name" => "Department for Testing" } } },
+    ]
+  end
+
+  let(:forms_with_routes) do
+    [
+      { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Ministry of Tests" } }, "metadata" => { "number_of_routes" => 2 } },
+      { "form_id" => 4, "content" => { "name" => "Skip route form" }, "group" => { "organisation" => { "name" => "Department for Testing" } }, "metadata" => { "number_of_routes" => 1 } },
+    ]
+  end
+
+  let(:questions) do
+    [
+      { "type" => "question_page", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } } },
+      { "type" => "question_page", "data" => { "question_text" => "What’s your email address?" }, "form" => { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Ministry of Tests" } } } },
+    ]
+  end
+
+  describe "#report_table" do
+    before do
+      allow(helper).to receive(:report_forms_table).and_call_original
+      allow(helper).to receive(:report_forms_with_routes_table).and_call_original
+      allow(helper).to receive(:report_questions_table).and_call_original
+    end
+
+    context "with list of forms" do
+      it "calls #report_forms_table" do
+        helper.report_table(forms)
+        expect(helper).to have_received(:report_forms_table).with(forms)
+      end
+    end
+
+    context "with list of forms with routes" do
+      it "calls #report_forms_with_routes_table" do
+        helper.report_table(forms_with_routes)
+        expect(helper).to have_received(:report_forms_with_routes_table).with(forms_with_routes)
+      end
+    end
+
+    context "with list of questions" do
+      it "calls #report_questions_table" do
+        helper.report_table(questions)
+        expect(helper).to have_received(:report_questions_table).with(questions)
+      end
+    end
+  end
+
+  describe "#report_forms_table" do
+    it "has table head" do
+      expect(helper.report_forms_table(forms)).to include(
+        head: helper.report_forms_table_head,
+      )
+    end
+
+    it "has table rows" do
+      expect(helper.report_forms_table(forms)).to include(
+        rows: helper.report_forms_table_rows(forms),
+      )
+    end
+  end
+
+  describe "#report_forms_with_routes_table" do
+    it "has table head" do
+      expect(helper.report_forms_with_routes_table(forms_with_routes)).to include(
+        head: helper.report_forms_with_routes_table_head,
+      )
+    end
+
+    it "has table rows" do
+      expect(helper.report_forms_with_routes_table(forms_with_routes)).to include(
+        rows: helper.report_forms_with_routes_table_rows(forms_with_routes),
+      )
+    end
+  end
+
+  describe "#report_questions_table" do
+    it "has table head" do
+      expect(helper.report_questions_table(questions)).to include(
+        head: helper.report_questions_table_head,
+      )
+    end
+
+    it "has table rows" do
+      expect(helper.report_questions_table(questions)).to include(
+        rows: helper.report_questions_table_rows(questions),
+      )
+    end
+  end
+
   describe "#report_forms_table_head" do
     it "returns the column headings for a table of forms" do
       expect(helper.report_forms_table_head).to eq [
@@ -11,14 +104,6 @@ RSpec.describe ReportHelper, type: :helper do
   end
 
   describe "#report_forms_table_rows" do
-    let(:forms) do
-      [
-        { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
-        { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Ministry of Tests" } } },
-        { "form_id" => 4, "content" => { "name" => "Skip route form" }, "group" => { "organisation" => { "name" => "Department for Testing" } } },
-      ]
-    end
-
     it "returns an array of arrays of strings" do
       expect(helper.report_forms_table_rows(forms))
         .to be_an(Array)
@@ -64,12 +149,7 @@ RSpec.describe ReportHelper, type: :helper do
   end
 
   describe "#report_forms_with_routes_table_rows" do
-    let(:forms) do
-      [
-        { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Ministry of Tests" } }, "metadata" => { "number_of_routes" => 2 } },
-        { "form_id" => 4, "content" => { "name" => "Skip route form" }, "group" => { "organisation" => { "name" => "Department for Testing" } }, "metadata" => { "number_of_routes" => 1 } },
-      ]
-    end
+    let(:forms) { forms_with_routes }
 
     it "returns an array of arrays of strings" do
       expect(helper.report_forms_with_routes_table_rows(forms))
@@ -121,13 +201,6 @@ RSpec.describe ReportHelper, type: :helper do
   end
 
   describe "#report_questions_table_rows" do
-    let(:questions) do
-      [
-        { "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } } },
-        { "data" => { "question_text" => "What’s your email address?" }, "form" => { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Ministry of Tests" } } } },
-      ]
-    end
-
     it "returns an array of arrays of strings" do
       expect(helper.report_questions_table_rows(questions))
         .to be_an(Array)

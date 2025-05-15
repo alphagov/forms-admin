@@ -8,9 +8,6 @@
   </div>
 
   <div class="govuk-grid-column-full">
-    <%= govuk_table(
-      head: report_forms_table_head,
-      rows: report_forms_table_rows(forms),
-    ) %>
+    <%= govuk_table(**report_table(forms)) %>
   </div>
 </div>
