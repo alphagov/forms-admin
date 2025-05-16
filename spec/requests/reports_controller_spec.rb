@@ -725,7 +725,7 @@ RSpec.describe ReportsController, type: :request do
 
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
-        expect(csv.headers).to eq Reports::CsvReportsService::FORM_CSV_HEADERS
+        expect(csv.headers).to eq Reports::FormsCsvReportService::FORM_CSV_HEADERS
         expect(csv.length).to eq 4
       end
     end
@@ -747,7 +747,7 @@ RSpec.describe ReportsController, type: :request do
 
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
-        expect(csv.headers).to eq Reports::CsvReportsService::FORM_CSV_HEADERS
+        expect(csv.headers).to eq Reports::FormsCsvReportService::FORM_CSV_HEADERS
         expect(csv.length).to eq 2
         expect(csv.by_col["Form name"]).to eq [
           "Branch route form",
@@ -773,7 +773,7 @@ RSpec.describe ReportsController, type: :request do
 
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
-        expect(csv.headers).to eq Reports::CsvReportsService::FORM_CSV_HEADERS
+        expect(csv.headers).to eq Reports::FormsCsvReportService::FORM_CSV_HEADERS
         expect(csv.length).to eq 1
         expect(csv.by_col["Form name"]).to eq [
           "All question types form",
@@ -798,7 +798,7 @@ RSpec.describe ReportsController, type: :request do
 
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
-        expect(csv.headers).to eq Reports::CsvReportsService::FORM_CSV_HEADERS
+        expect(csv.headers).to eq Reports::FormsCsvReportService::FORM_CSV_HEADERS
         expect(csv.length).to eq 1
         expect(csv.by_col["Form name"]).to eq [
           "All question types form",
@@ -823,7 +823,7 @@ RSpec.describe ReportsController, type: :request do
 
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
-        expect(csv.headers).to eq Reports::CsvReportsService::QUESTIONS_CSV_HEADERS
+        expect(csv.headers).to eq Reports::QuestionsCsvReportService::QUESTIONS_CSV_HEADERS
         expect(csv.length).to eq 17
       end
     end
@@ -845,7 +845,7 @@ RSpec.describe ReportsController, type: :request do
 
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
-        expect(csv.headers).to eq Reports::CsvReportsService::QUESTIONS_CSV_HEADERS
+        expect(csv.headers).to eq Reports::QuestionsCsvReportService::QUESTIONS_CSV_HEADERS
         expect(csv.length).to eq 2
       end
     end
