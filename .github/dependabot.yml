@@ -9,14 +9,16 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      day: "sunday"
     open-pull-requests-limit: 10
 
   # Maintain dependencies for Ruby/Rails bundler
   - package-ecosystem: "bundler"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      day: "sunday"
     open-pull-requests-limit: 10
     allow:
       - dependency-type: "direct"
@@ -26,5 +28,6 @@ updates:
   - package-ecosystem: npm
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      day: "sunday"
     open-pull-requests-limit: 10
