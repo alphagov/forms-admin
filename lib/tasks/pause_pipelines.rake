@@ -38,7 +38,7 @@ namespace :pipeline do
       task unpause: :environment do
         pipeline_name = pipeline_name env_name
 
-        puts "Pausing pipeline #{pipeline_name}"
+        puts "Unpausing pipeline #{pipeline_name}"
 
         codepipeline = Aws::CodePipeline::Client.new
         pipeline_definition = codepipeline.get_pipeline(name: pipeline_name)
