@@ -2,10 +2,10 @@ require "rails_helper"
 
 RSpec.describe Reports::CsvReportsService do
   subject(:csv_reports_service) do
-    described_class.new
+    described_class.new(form_documents)
   end
 
-  let(:form_documents_response_json) { JSON.parse(file_fixture("form_documents_response.json").read) }
+  let(:form_documents) { JSON.parse(file_fixture("form_documents_response.json").read) }
 
   let(:group) { create(:group) }
 
@@ -14,19 +14,17 @@ RSpec.describe Reports::CsvReportsService do
     GroupForm.create!(form_id: 2, group:)
     GroupForm.create!(form_id: 3, group:)
     GroupForm.create!(form_id: 4, group:)
-
-    allow(Reports::FormDocumentsService).to receive(:live_form_documents).and_return(form_documents_response_json)
   end
 
-  describe "#live_forms_csv" do
+  describe "#forms_csv" do
     it "returns a CSV with a header row and a row for each form" do
-      csv = csv_reports_service.live_forms_csv
+      csv = csv_reports_service.forms_csv
       rows = CSV.parse(csv)
       expect(rows.length).to eq 5
     end
 
     it "has expected values" do
-      csv = csv_reports_service.live_forms_csv
+      csv = csv_reports_service.forms_csv
       rows = CSV.parse(csv)
       expect(rows[1]).to eq([
         "1",
@@ -53,61 +51,16 @@ RSpec.describe Reports::CsvReportsService do
     end
   end
 
-  describe "#live_forms_with_routes_csv" do
-    it "returns a CSV with a header row and a row for each form with routes" do
-      csv = csv_reports_service.live_forms_with_routes_csv
-      rows = CSV.parse(csv)
-      expect(rows.length).to eq 3
-    end
-
-    it "includes form with routes" do
-      csv = csv_reports_service.live_forms_with_routes_csv
-      rows = CSV.parse(csv)
-      has_routes_column_index = rows[0].find_index("Has routes")
-      expect(rows[1][has_routes_column_index]).to eq "true"
-    end
-  end
-
-  describe "#live_forms_with_payments_csv" do
-    it "returns a CSV with 2 rows, including the header row" do
-      csv = csv_reports_service.live_forms_with_payments_csv
-      rows = CSV.parse(csv)
-      expect(rows.length).to eq 2
-    end
-
-    it "includes form with payments" do
-      csv = csv_reports_service.live_forms_with_payments_csv
-      rows = CSV.parse(csv)
-      payment_url_column_index = rows[0].find_index("Payment URL")
-      expect(rows[1][payment_url_column_index]).to eq "https://www.gov.uk/payments/your-payment-link"
-    end
-  end
-
-  describe "#live_forms_with_csv_submission_enabled_csv" do
-    it "returns a CSV with 2 rows, including the header row" do
-      csv = csv_reports_service.live_forms_with_csv_submission_enabled_csv
-      rows = CSV.parse(csv)
-      expect(rows.length).to eq 2
-    end
-
-    it "includes form with submission type email_with_csv" do
-      csv = csv_reports_service.live_forms_with_csv_submission_enabled_csv
-      rows = CSV.parse(csv)
-      submission_type_column_index = rows[0].find_index("Submission type")
-      expect(rows[1][submission_type_column_index]).to eq "email_with_csv"
-    end
-  end
-
-  describe "#live_questions_csv" do
+  describe "#questions_csv" do
     context "when answer_type is nil" do
       it "returns a CSV with a header row and a rows for each question" do
-        csv = csv_reports_service.live_questions_csv
+        csv = csv_reports_service.questions_csv
         rows = CSV.parse(csv)
         expect(rows.length).to eq 18
       end
 
       it "has expected values for text question" do
-        csv = csv_reports_service.live_questions_csv
+        csv = csv_reports_service.questions_csv
         rows = CSV.parse(csv)
         text_question_row = rows.detect { |row| row.include? "Single line of text" }
         expect(text_question_row).to eq([
@@ -136,7 +89,7 @@ RSpec.describe Reports::CsvReportsService do
       end
 
       it "has expected values for selection question" do
-        csv = csv_reports_service.live_questions_csv
+        csv = csv_reports_service.questions_csv
         rows = CSV.parse(csv)
         selection_question_row = rows.detect { |row| row.include? "Selection from a list of options" }
         expect(selection_question_row).to eq([
@@ -165,7 +118,7 @@ RSpec.describe Reports::CsvReportsService do
       end
 
       it "has expected values for name question" do
-        csv = csv_reports_service.live_questions_csv
+        csv = csv_reports_service.questions_csv
         rows = CSV.parse(csv)
         name_question_row = rows.detect { |row| row.include? "What’s your name?" }
         expect(name_question_row).to eq([
@@ -194,7 +147,7 @@ RSpec.describe Reports::CsvReportsService do
       end
 
       it "has expected values for question with routing conditions" do
-        csv = csv_reports_service.live_questions_csv
+        csv = csv_reports_service.questions_csv
         rows = CSV.parse(csv)
         routing_question_row = rows.detect { |row| row.include? "How many times have you filled out this form?" }
         expect(routing_question_row).to eq([
@@ -225,13 +178,13 @@ RSpec.describe Reports::CsvReportsService do
 
     context "when answer_type is provided" do
       it "returns 3 rows, including the header row" do
-        csv = csv_reports_service.live_questions_csv(answer_type: "email")
+        csv = csv_reports_service.questions_csv(answer_type: "email")
         rows = CSV.parse(csv)
         expect(rows.length).to eq 3
       end
 
       it "only includes the desired answer_type" do
-        csv = csv_reports_service.live_questions_csv(answer_type: "email")
+        csv = csv_reports_service.questions_csv(answer_type: "email")
         rows = CSV.parse(csv)
         answer_type_column_index = rows[0].find_index("Answer type")
         expect(rows[1][answer_type_column_index]).to eq "email"
@@ -240,15 +193,15 @@ RSpec.describe Reports::CsvReportsService do
     end
   end
 
-  describe "#live_questions_with_add_another_answer_csv" do
+  describe "#questions_with_add_another_answer_csv" do
     it "returns 3 rows, including the header row" do
-      csv = csv_reports_service.live_questions_with_add_another_answer_csv
+      csv = csv_reports_service.questions_with_add_another_answer_csv
       rows = CSV.parse(csv)
       expect(rows.length).to eq 3
     end
 
     it "only includes questions with add another answer" do
-      csv = csv_reports_service.live_questions_with_add_another_answer_csv
+      csv = csv_reports_service.questions_with_add_another_answer_csv
       rows = CSV.parse(csv)
       answer_type_column_index = rows[0].find_index("Is repeatable?")
       expect(rows[1][answer_type_column_index]).to eq "true"

@@ -51,51 +51,27 @@ class Reports::CsvReportsService
 
   IS_REPEATABLE_COLUMN_INDEX = QUESTIONS_CSV_HEADERS.find_index(IS_REPEATABLE)
 
-  def live_forms_csv
+  attr_reader :form_documents
+
+  def initialize(form_documents)
+    @form_documents = form_documents
+  end
+
+  def forms_csv
     CSV.generate do |csv|
       csv << FORM_CSV_HEADERS
 
-      Reports::FormDocumentsService.live_form_documents.each do |form_document|
+      form_documents.each do |form_document|
         csv << form_row(form_document)
       end
     end
   end
 
-  def live_forms_with_routes_csv
-    CSV.generate do |csv|
-      csv << FORM_CSV_HEADERS
-
-      Reports::FormDocumentsService.live_form_documents.each do |form_document|
-        csv << form_row(form_document) if Reports::FormDocumentsService.has_routes?(form_document)
-      end
-    end
-  end
-
-  def live_forms_with_payments_csv
-    CSV.generate do |csv|
-      csv << FORM_CSV_HEADERS
-
-      Reports::FormDocumentsService.live_form_documents.each do |form_document|
-        csv << form_row(form_document) if Reports::FormDocumentsService.has_payments?(form_document)
-      end
-    end
-  end
-
-  def live_forms_with_csv_submission_enabled_csv
-    CSV.generate do |csv|
-      csv << FORM_CSV_HEADERS
-
-      Reports::FormDocumentsService.live_form_documents.each do |form_document|
-        csv << form_row(form_document) if Reports::FormDocumentsService.has_csv_submission_enabled?(form_document)
-      end
-    end
-  end
-
-  def live_questions_csv(answer_type: nil)
+  def questions_csv(answer_type: nil)
     CSV.generate do |csv|
       csv << QUESTIONS_CSV_HEADERS
 
-      Reports::FormDocumentsService.live_form_documents.each do |form_document|
+      form_documents.each do |form_document|
         question_rows = question_rows(form_document, answer_type).compact
 
         question_rows.each do |question|
@@ -105,11 +81,11 @@ class Reports::CsvReportsService
     end
   end
 
-  def live_questions_with_add_another_answer_csv
+  def questions_with_add_another_answer_csv
     CSV.generate do |csv|
       csv << QUESTIONS_CSV_HEADERS
 
-      Reports::FormDocumentsService.live_form_documents.each do |form_document|
+      form_documents.each do |form_document|
         question_rows = question_rows(form_document, nil).compact
 
         question_rows.each do |question|
