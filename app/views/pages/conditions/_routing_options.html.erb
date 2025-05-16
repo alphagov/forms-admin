@@ -1,6 +1,16 @@
 <% branch_routing_enabled = FeatureService.new(group: form.group).enabled?(:branch_routing) %>
-<% body_text = branch_routing_enabled ? t("routing_page.branch_routing.body_html") : t("routing_page.body_html") %>
-<% hint_text = branch_routing_enabled ? t("routing_page.branch_routing.legend_hint_text") : t("routing_page.legend_hint_text") %>
+<% exit_pages_enabled = FeatureService.new(group: form.group).enabled?(:exit_pages) %>
+
+<% if exit_pages_enabled %>
+  <% body_text = t("routing_page.exit_pages.body_html") %>
+  <% hint_text = t("routing_page.exit_pages.legend_hint_text") %>
+<% elsif branch_routing_enabled %>
+  <% body_text = t("routing_page.branch_routing.body_html") %>
+  <% hint_text = t("routing_page.branch_routing.legend_hint_text") %>
+<% else %>
+  <% body_text = t("routing_page.body_html") %>
+  <% hint_text = t("routing_page.legend_hint_text") %>
+<% end %>
 
 <%= form_with(model: routing_page_input, url: set_routing_page_path(form.id), method: 'POST') do |f| %>
   <% if routing_page_input&.errors.any? %>

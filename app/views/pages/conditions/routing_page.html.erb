@@ -3,7 +3,15 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <% branch_routing_enabled = FeatureService.new(group: form.group).enabled?(:branch_routing) %>
-    <% prefix = branch_routing_enabled ? 'branch_routing.' : '' %>
+    <% exit_pages_enabled = FeatureService.new(group: form.group).enabled?(:exit_pages) %>
+
+    <% if exit_pages_enabled %>
+      <% prefix = 'exit_pages.' %>
+    <% elsif branch_routing_enabled %>
+      <% prefix = 'branch_routing.' %>
+    <% else %>
+      <% prefix = '' %>
+    <% end %>
 
     <% if policy(form).can_add_page_routing_conditions? %>
       <%= render partial: "pages/conditions/routing_options", locals: {form:, routing_page_input:} %>
