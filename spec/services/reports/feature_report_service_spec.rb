@@ -46,6 +46,42 @@ RSpec.describe Reports::FeatureReportService do
     end
   end
 
+  describe "#questions" do
+    it "returns all questions in all forms given" do
+      questions = described_class.new(form_documents).questions
+      expect(questions.length).to eq 17
+    end
+
+    it "returns details needed to render report" do
+      questions = described_class.new(form_documents).questions
+      expect(questions).to all match(
+        a_hash_including(
+          "form" => a_hash_including(
+            "form_id" => an_instance_of(Integer),
+            "content" => a_hash_including(
+              "name" => a_kind_of(String),
+            ),
+          ),
+          "data" => a_hash_including(
+            "question_text" => a_kind_of(String),
+          ),
+        ),
+      )
+    end
+
+    it "includes a reference to the form document" do
+      questions = described_class.new(form_documents).questions_with_answer_type("text")
+      expect(questions).to all include(
+        "form" => a_hash_including(
+          "form_id",
+          "content" => a_hash_including(
+            "name",
+          ),
+        ),
+      )
+    end
+  end
+
   describe "#questions_with_answer_type" do
     it "returns details needed to render report" do
       questions = described_class.new(form_documents).questions_with_answer_type("email")

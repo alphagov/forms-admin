@@ -125,16 +125,22 @@ class ReportsController < ApplicationController
   def live_questions_csv
     answer_type = params[:answer_type]
     forms = Reports::FormDocumentsService.live_form_documents
+    questions = if answer_type
+                  Reports::FeatureReportService.new(forms).questions_with_answer_type(answer_type)
+                else
+                  Reports::FeatureReportService.new(forms).questions
+                end
 
-    send_data Reports::QuestionsCsvReportService.new(forms).questions_csv(answer_type:),
+    send_data Reports::QuestionsCsvReportService.new(questions).questions_csv,
               type: "text/csv; charset=iso-8859-1",
               disposition: "attachment; filename=#{questions_csv_filename(answer_type)}"
   end
 
   def live_questions_with_add_another_answer_csv
     forms = Reports::FormDocumentsService.live_form_documents
+    questions = Reports::FeatureReportService.new(forms).questions_with_add_another_answer
 
-    send_data Reports::QuestionsCsvReportService.new(forms).questions_with_add_another_answer_csv,
+    send_data Reports::QuestionsCsvReportService.new(questions).questions_csv,
               type: "text/csv; charset=iso-8859-1",
               disposition: "attachment; filename=#{csv_filename('live_questions_with_add_another_answer_report')}"
   end
