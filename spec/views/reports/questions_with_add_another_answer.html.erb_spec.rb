@@ -1,6 +1,8 @@
 require "rails_helper"
 
 describe "reports/questions_with_add_another_answer" do
+  let(:report) { controller.request.path_parameters[:action] }
+
   let(:questions) do
     [
       { "type" => "question_page", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } } },
@@ -9,7 +11,7 @@ describe "reports/questions_with_add_another_answer" do
   end
 
   before do
-    render locals: { questions: }
+    render locals: { report:, questions: }
   end
 
   describe "page title" do

@@ -1,6 +1,8 @@
 require "rails_helper"
 
 describe "reports/forms_with_csv_submission_enabled" do
+  let(:report) { controller.request.path_parameters[:action] }
+
   let(:forms) do
     [
       { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
@@ -9,7 +11,7 @@ describe "reports/forms_with_csv_submission_enabled" do
   end
 
   before do
-    render locals: { forms: }
+    render locals: { report:, forms: }
   end
 
   describe "page title" do

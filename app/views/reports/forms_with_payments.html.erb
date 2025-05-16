@@ -1,10 +1,10 @@
-<% set_page_title(t(".heading"))%>
+<% set_page_title(t("reports.#{report}.heading"))%>
 <% content_for :back_link, govuk_back_link_to(report_features_path, t("reports.back_to_feature_usage")) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l"><%= t(".heading")%></h1>
+    <h1 class="govuk-heading-l"><%= t("reports.#{report}.heading")%></h1>
 
-    <p><%=govuk_link_to(t(".download_csv"), report_forms_with_payments_path(format: :csv))%></p>
+    <p><%=govuk_link_to(t("reports.#{report}.download_csv"), url_for(format: :csv))%></p>
   </div>
 
   <div class="govuk-grid-column-full">
