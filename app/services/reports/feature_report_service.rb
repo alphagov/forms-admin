@@ -39,6 +39,13 @@ class Reports::FeatureReportService
     report
   end
 
+  def questions
+    form_documents.flat_map do |form|
+      form["content"]["steps"]
+        .map { |step| questions_details(form, step) }
+    end
+  end
+
   def questions_with_answer_type(answer_type)
     form_documents.flat_map do |form|
       form["content"]["steps"]
