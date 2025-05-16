@@ -196,14 +196,10 @@ Rails.application.routes.draw do
     scope "/features" do
       get "/", to: "reports#features", as: :report_features
       get "questions-with-answer-type/:answer_type", to: "reports#questions_with_answer_type", as: :report_questions_with_answer_type
-      get "questions-with-add-another-answer", format: false, to: "reports#questions_with_add_another_answer", as: :report_questions_with_add_another_answer
-      get "questions-with-add-another-answer.csv", format: :csv, to: "reports#live_questions_with_add_another_answer_csv", as: :report_live_questions_with_add_another_answer_csv
-      get "forms-with-routes", format: false, to: "reports#forms_with_routes", as: :report_forms_with_routes
-      get "forms-with-routes.csv", format: :csv, to: "reports#live_forms_with_routes_csv", as: :report_live_forms_with_routes_csv
-      get "forms-with-payments", format: false, to: "reports#forms_with_payments", as: :report_forms_with_payments
-      get "forms-with-payments.csv", format: :csv, to: "reports#live_forms_with_payments_csv", as: :report_live_forms_with_payments_csv
-      get "forms-with-csv-submission-enabled", format: false, to: "reports#forms_with_csv_submission_enabled", as: :report_forms_with_csv_submission_enabled
-      get "forms-with-csv-submission-enabled.csv", format: :csv, to: "reports#live_forms_with_csv_submission_enabled_csv", as: :report_live_forms_with_csv_submission_enabled_csv
+      get "questions-with-add-another-answer", to: "reports#questions_with_add_another_answer", as: :report_questions_with_add_another_answer
+      get "forms-with-routes", to: "reports#forms_with_routes", as: :report_forms_with_routes
+      get "forms-with-payments", to: "reports#forms_with_payments", as: :report_forms_with_payments
+      get "forms-with-csv-submission-enabled", to: "reports#forms_with_csv_submission_enabled", as: :report_forms_with_csv_submission_enabled
     end
 
     get "users", to: "reports#users", as: :report_users

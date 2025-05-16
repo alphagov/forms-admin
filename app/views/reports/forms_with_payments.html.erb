@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l"><%= t(".heading")%></h1>
 
-    <p><%=govuk_link_to(t(".download_csv"), report_live_forms_with_payments_csv_path)%></p>
+    <p><%=govuk_link_to(t(".download_csv"), report_forms_with_payments_path(format: :csv))%></p>
   </div>
 
   <div class="govuk-grid-column-full">

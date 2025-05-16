@@ -730,13 +730,13 @@ RSpec.describe ReportsController, type: :request do
       end
     end
 
-    describe "#live_forms_with_routes_csv" do
+    describe "#forms_with_routes as csv" do
       before do
         login_as_super_admin_user
 
         travel_to Time.utc(2025, 5, 15, 15, 31, 57)
 
-        get report_live_forms_with_routes_csv_path
+        get report_forms_with_routes_path(format: :csv)
       end
 
       it_behaves_like "csv response"
@@ -756,13 +756,13 @@ RSpec.describe ReportsController, type: :request do
       end
     end
 
-    describe "#live_forms_with_payments_csv" do
+    describe "#forms_with_payments as csv" do
       before do
         login_as_super_admin_user
 
         travel_to Time.utc(2025, 5, 15, 15, 31, 57)
 
-        get report_live_forms_with_payments_csv_path
+        get report_forms_with_payments_path(format: :csv)
       end
 
       it_behaves_like "csv response"
@@ -781,13 +781,13 @@ RSpec.describe ReportsController, type: :request do
       end
     end
 
-    describe "#live_forms_with_csv_submission_enabled_csv" do
+    describe "#forms_with_csv_submission_enabled as csv" do
       before do
         login_as_super_admin_user
 
         travel_to Time.utc(2025, 5, 15, 15, 31, 57)
 
-        get report_live_forms_with_csv_submission_enabled_csv_path
+        get report_forms_with_csv_submission_enabled_path(format: :csv)
       end
 
       it_behaves_like "csv response"
@@ -828,13 +828,13 @@ RSpec.describe ReportsController, type: :request do
       end
     end
 
-    describe "#live_questions_with_add_another_answer_csv" do
+    describe "#questions_with_add_another_answer as csv" do
       before do
         login_as_super_admin_user
 
         travel_to Time.utc(2025, 5, 15, 15, 31, 57)
 
-        get report_live_questions_with_add_another_answer_csv_path
+        get report_questions_with_add_another_answer_path(format: :csv)
       end
 
       it_behaves_like "csv response"
