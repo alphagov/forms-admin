@@ -23,28 +23,52 @@ class ReportsController < ApplicationController
     forms = Reports::FormDocumentsService.live_form_documents
     questions = Reports::FeatureReportService.new(forms).questions_with_add_another_answer
 
-    render template: "reports/questions_with_add_another_answer", locals: { questions: }
+    if params[:format] == "csv"
+      send_data Reports::QuestionsCsvReportService.new(questions).questions_csv,
+                type: "text/csv; charset=iso-8859-1",
+                disposition: "attachment; filename=#{csv_filename('live_questions_with_add_another_answer_report')}"
+    else
+      render template: "reports/questions_with_add_another_answer", locals: { questions: }
+    end
   end
 
   def forms_with_routes
     forms = Reports::FormDocumentsService.live_form_documents
     forms = Reports::FeatureReportService.new(forms).forms_with_routes
 
-    render template: "reports/forms_with_routes", locals: { forms: forms }
+    if params[:format] == "csv"
+      send_data Reports::FormsCsvReportService.new(forms).forms_csv,
+                type: "text/csv; charset=iso-8859-1",
+                disposition: "attachment; filename=#{csv_filename('live_forms_with_routes_report')}"
+    else
+      render template: "reports/forms_with_routes", locals: { forms: forms }
+    end
   end
 
   def forms_with_payments
     forms = Reports::FormDocumentsService.live_form_documents
     forms = Reports::FeatureReportService.new(forms).forms_with_payments
 
-    render template: "reports/forms_with_payments", locals: { forms: forms }
+    if params[:format] == "csv"
+      send_data Reports::FormsCsvReportService.new(forms).forms_csv,
+                type: "text/csv; charset=iso-8859-1",
+                disposition: "attachment; filename=#{csv_filename('live_forms_with_payments_report')}"
+    else
+      render template: "reports/forms_with_payments", locals: { forms: forms }
+    end
   end
 
   def forms_with_csv_submission_enabled
     forms = Reports::FormDocumentsService.live_form_documents
     forms = Reports::FeatureReportService.new(forms).forms_with_csv_submission_enabled
 
-    render template: "reports/forms_with_csv_submission_enabled", locals: { forms: forms }
+    if params[:format] == "csv"
+      send_data Reports::FormsCsvReportService.new(forms).forms_csv,
+                type: "text/csv; charset=iso-8859-1",
+                disposition: "attachment; filename=#{csv_filename('live_forms_with_csv_submission_enabled_report')}"
+    else
+      render template: "reports/forms_with_csv_submission_enabled", locals: { forms: forms }
+    end
   end
 
   def users
@@ -95,33 +119,6 @@ class ReportsController < ApplicationController
               disposition: "attachment; filename=#{csv_filename('live_forms_report')}"
   end
 
-  def live_forms_with_routes_csv
-    forms = Reports::FormDocumentsService.live_form_documents
-    forms = Reports::FeatureReportService.new(forms).forms_with_routes
-
-    send_data Reports::FormsCsvReportService.new(forms).forms_csv,
-              type: "text/csv; charset=iso-8859-1",
-              disposition: "attachment; filename=#{csv_filename('live_forms_with_routes_report')}"
-  end
-
-  def live_forms_with_payments_csv
-    forms = Reports::FormDocumentsService.live_form_documents
-    forms = Reports::FeatureReportService.new(forms).forms_with_payments
-
-    send_data Reports::FormsCsvReportService.new(forms).forms_csv,
-              type: "text/csv; charset=iso-8859-1",
-              disposition: "attachment; filename=#{csv_filename('live_forms_with_payments_report')}"
-  end
-
-  def live_forms_with_csv_submission_enabled_csv
-    forms = Reports::FormDocumentsService.live_form_documents
-    forms = Reports::FeatureReportService.new(forms).forms_with_csv_submission_enabled
-
-    send_data Reports::FormsCsvReportService.new(forms).forms_csv,
-              type: "text/csv; charset=iso-8859-1",
-              disposition: "attachment; filename=#{csv_filename('live_forms_with_csv_submission_enabled_report')}"
-  end
-
   def live_questions_csv
     answer_type = params[:answer_type]
     forms = Reports::FormDocumentsService.live_form_documents
@@ -134,15 +131,6 @@ class ReportsController < ApplicationController
     send_data Reports::QuestionsCsvReportService.new(questions).questions_csv,
               type: "text/csv; charset=iso-8859-1",
               disposition: "attachment; filename=#{questions_csv_filename(answer_type)}"
-  end
-
-  def live_questions_with_add_another_answer_csv
-    forms = Reports::FormDocumentsService.live_form_documents
-    questions = Reports::FeatureReportService.new(forms).questions_with_add_another_answer
-
-    send_data Reports::QuestionsCsvReportService.new(questions).questions_csv,
-              type: "text/csv; charset=iso-8859-1",
-              disposition: "attachment; filename=#{csv_filename('live_questions_with_add_another_answer_report')}"
   end
 
 private

@@ -23,7 +23,7 @@ describe "reports/questions_with_add_another_answer" do
   end
 
   it "has a link to download the CSV" do
-    expect(rendered).to have_link("Download all questions with add another answer in live forms as a CSV file", href: report_live_questions_with_add_another_answer_csv_path)
+    expect(rendered).to have_link("Download all questions with add another answer in live forms as a CSV file", href: report_questions_with_add_another_answer_path(format: :csv))
   end
 
   describe "questions table" do
