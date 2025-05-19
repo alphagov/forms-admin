@@ -344,7 +344,7 @@ en:
 
           <p>If you wish, you can also get the answers in a comma-separated values (CSV) file. A CSV lists all the answers in plain text, separated by commas. It can be easier to copy and paste, or import into spreadsheets or other applications.</p>
 
-          <p>If you select this option, a CSV file will be added to each completed form email.</p>
+          <p>If you select this option, a CSV file will be attached to each completed form email.</p>
         submit: Save and continue
         title: Get completed forms as CSV files
     task_list_create:
