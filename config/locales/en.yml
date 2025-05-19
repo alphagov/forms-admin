@@ -199,8 +199,8 @@ en:
         pages_saved_and_section_completed: Your questions have been saved and marked as complete
         payment_link_saved: Your payment link has been saved
         privacy_details_saved: Your privacy information link has been saved
-        receive_csv_disabled: Completed form emails will not include links to CSV files
-        receive_csv_enabled: Completed form emails will include links to CSV files
+        receive_csv_disabled: Completed form emails will not include a CSV file
+        receive_csv_enabled: Completed form emails will include a CSV file
         share_preview_completed: The preview task has been completed
         support_details_saved: Your contact details for support have been saved
         what_happens_next_saved: Your information about what happens next has been saved
@@ -344,7 +344,7 @@ en:
 
           <p>If you wish, you can also get the answers in a comma-separated values (CSV) file. A CSV lists all the answers in plain text, separated by commas. It can be easier to copy and paste, or import into spreadsheets or other applications.</p>
 
-          <p>If you select this option, a link to a CSV file will be added to each completed form email.</p>
+          <p>If you select this option, a CSV file will be attached to each completed form email.</p>
         submit: Save and continue
         title: Get completed forms as CSV files
     task_list_create:
@@ -859,8 +859,8 @@ en:
       other: View your form’s %{count} questions
     submission_email: Email
     submission_type:
-      email: You have not opted in to receive a link to a CSV file with each completed form email.
-      email_with_csv: A link to a CSV file will be included in each completed form email.
+      email: You have not opted in to receive a CSV file with each completed form email.
+      email_with_csv: A CSV file will be attached to each completed form email.
     support_email: Email
     support_phone: Phone
     support_url: Support contact online
