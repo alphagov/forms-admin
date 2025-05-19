@@ -28,7 +28,7 @@ class ReportsController < ApplicationController
                 type: "text/csv; charset=iso-8859-1",
                 disposition: "attachment; filename=#{csv_filename('live_questions_with_add_another_answer_report')}"
     else
-      render template: "reports/questions_with_add_another_answer", locals: { report: params[:action], questions: }
+      render template: "reports/feature_report", locals: { report: params[:action], records: questions }
     end
   end
 
@@ -41,7 +41,7 @@ class ReportsController < ApplicationController
                 type: "text/csv; charset=iso-8859-1",
                 disposition: "attachment; filename=#{csv_filename('live_forms_with_routes_report')}"
     else
-      render template: "reports/forms_with_routes", locals: { report: params[:action], forms: }
+      render template: "reports/feature_report", locals: { report: params[:action], records: forms }
     end
   end
 
@@ -54,7 +54,7 @@ class ReportsController < ApplicationController
                 type: "text/csv; charset=iso-8859-1",
                 disposition: "attachment; filename=#{csv_filename('live_forms_with_payments_report')}"
     else
-      render template: "reports/forms_with_payments", locals: { report: params[:action], forms: }
+      render template: "reports/feature_report", locals: { report: params[:action], records: forms }
     end
   end
 
@@ -67,7 +67,7 @@ class ReportsController < ApplicationController
                 type: "text/csv; charset=iso-8859-1",
                 disposition: "attachment; filename=#{csv_filename('live_forms_with_csv_submission_enabled_report')}"
     else
-      render template: "reports/forms_with_csv_submission_enabled", locals: { report: params[:action], forms: }
+      render template: "reports/feature_report", locals: { report: params[:action], records: forms }
     end
   end
 
