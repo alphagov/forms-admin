@@ -233,7 +233,7 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "renders the features report view" do
-        expect(response).to render_template("reports/questions_with_add_another_answer")
+        expect(response).to render_template("reports/feature_report")
       end
 
       it "includes the report data" do
@@ -291,7 +291,7 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "renders the features report view" do
-        expect(response).to render_template("reports/forms_with_routes")
+        expect(response).to render_template("reports/feature_report")
       end
 
       it "includes the report data" do
@@ -349,7 +349,7 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "renders the features report view" do
-        expect(response).to render_template("reports/forms_with_payments")
+        expect(response).to render_template("reports/feature_report")
       end
 
       it "includes the report data" do
@@ -407,7 +407,7 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "renders the features report view" do
-        expect(response).to render_template("reports/forms_with_csv_submission_enabled")
+        expect(response).to render_template("reports/feature_report")
       end
 
       it "includes the report data" do
