@@ -17,15 +17,15 @@ RSpec.describe Reports::QuestionsCsvReportService do
     GroupForm.create!(form_id: 4, group:)
   end
 
-  describe "#questions_csv" do
+  describe "#csv" do
     it "returns a CSV with a header row and a rows for each question" do
-      csv = csv_reports_service.questions_csv
+      csv = csv_reports_service.csv
       rows = CSV.parse(csv)
       expect(rows.length).to eq 18
     end
 
     it "has expected values for text question" do
-      csv = csv_reports_service.questions_csv
+      csv = csv_reports_service.csv
       rows = CSV.parse(csv)
       text_question_row = rows.detect { |row| row.include? "Single line of text" }
       expect(text_question_row).to eq([
@@ -54,7 +54,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
     end
 
     it "has expected values for selection question" do
-      csv = csv_reports_service.questions_csv
+      csv = csv_reports_service.csv
       rows = CSV.parse(csv)
       selection_question_row = rows.detect { |row| row.include? "Selection from a list of options" }
       expect(selection_question_row).to eq([
@@ -83,7 +83,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
     end
 
     it "has expected values for name question" do
-      csv = csv_reports_service.questions_csv
+      csv = csv_reports_service.csv
       rows = CSV.parse(csv)
       name_question_row = rows.detect { |row| row.include? "What’s your name?" }
       expect(name_question_row).to eq([
@@ -112,7 +112,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
     end
 
     it "has expected values for question with routing conditions" do
-      csv = csv_reports_service.questions_csv
+      csv = csv_reports_service.csv
       rows = CSV.parse(csv)
       routing_question_row = rows.detect { |row| row.include? "How many times have you filled out this form?" }
       expect(routing_question_row).to eq([

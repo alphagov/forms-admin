@@ -34,7 +34,7 @@ class Reports::QuestionsCsvReportService
     @question_page_documents = question_page_documents
   end
 
-  def questions_csv
+  def csv
     CSV.generate do |csv|
       csv << QUESTIONS_CSV_HEADERS
 

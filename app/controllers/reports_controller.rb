@@ -24,7 +24,7 @@ class ReportsController < ApplicationController
     questions = Reports::FeatureReportService.new(forms).questions_with_add_another_answer
 
     if params[:format] == "csv"
-      send_data Reports::QuestionsCsvReportService.new(questions).questions_csv,
+      send_data Reports::QuestionsCsvReportService.new(questions).csv,
                 type: "text/csv; charset=iso-8859-1",
                 disposition: "attachment; filename=#{csv_filename('live_questions_with_add_another_answer_report')}"
     else
@@ -37,7 +37,7 @@ class ReportsController < ApplicationController
     forms = Reports::FeatureReportService.new(forms).forms_with_routes
 
     if params[:format] == "csv"
-      send_data Reports::FormsCsvReportService.new(forms).forms_csv,
+      send_data Reports::FormsCsvReportService.new(forms).csv,
                 type: "text/csv; charset=iso-8859-1",
                 disposition: "attachment; filename=#{csv_filename('live_forms_with_routes_report')}"
     else
@@ -50,7 +50,7 @@ class ReportsController < ApplicationController
     forms = Reports::FeatureReportService.new(forms).forms_with_payments
 
     if params[:format] == "csv"
-      send_data Reports::FormsCsvReportService.new(forms).forms_csv,
+      send_data Reports::FormsCsvReportService.new(forms).csv,
                 type: "text/csv; charset=iso-8859-1",
                 disposition: "attachment; filename=#{csv_filename('live_forms_with_payments_report')}"
     else
@@ -63,7 +63,7 @@ class ReportsController < ApplicationController
     forms = Reports::FeatureReportService.new(forms).forms_with_csv_submission_enabled
 
     if params[:format] == "csv"
-      send_data Reports::FormsCsvReportService.new(forms).forms_csv,
+      send_data Reports::FormsCsvReportService.new(forms).csv,
                 type: "text/csv; charset=iso-8859-1",
                 disposition: "attachment; filename=#{csv_filename('live_forms_with_csv_submission_enabled_report')}"
     else
@@ -114,7 +114,7 @@ class ReportsController < ApplicationController
   def live_forms_csv
     forms = Reports::FormDocumentsService.live_form_documents
 
-    send_data Reports::FormsCsvReportService.new(forms).forms_csv,
+    send_data Reports::FormsCsvReportService.new(forms).csv,
               type: "text/csv; charset=iso-8859-1",
               disposition: "attachment; filename=#{csv_filename('live_forms_report')}"
   end
@@ -128,7 +128,7 @@ class ReportsController < ApplicationController
                   Reports::FeatureReportService.new(forms).questions
                 end
 
-    send_data Reports::QuestionsCsvReportService.new(questions).questions_csv,
+    send_data Reports::QuestionsCsvReportService.new(questions).csv,
               type: "text/csv; charset=iso-8859-1",
               disposition: "attachment; filename=#{questions_csv_filename(answer_type)}"
   end

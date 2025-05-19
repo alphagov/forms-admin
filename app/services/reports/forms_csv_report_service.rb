@@ -30,7 +30,7 @@ class Reports::FormsCsvReportService
     @form_documents = form_documents
   end
 
-  def forms_csv
+  def csv
     CSV.generate do |csv|
       csv << FORM_CSV_HEADERS
 

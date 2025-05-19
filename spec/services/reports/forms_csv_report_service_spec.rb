@@ -16,15 +16,15 @@ RSpec.describe Reports::FormsCsvReportService do
     GroupForm.create!(form_id: 4, group:)
   end
 
-  describe "#forms_csv" do
+  describe "#csv" do
     it "returns a CSV with a header row and a row for each form" do
-      csv = csv_reports_service.forms_csv
+      csv = csv_reports_service.csv
       rows = CSV.parse(csv)
       expect(rows.length).to eq 5
     end
 
     it "has expected values" do
-      csv = csv_reports_service.forms_csv
+      csv = csv_reports_service.csv
       rows = CSV.parse(csv)
       expect(rows[1]).to eq([
         "1",
