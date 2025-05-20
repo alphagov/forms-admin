@@ -209,6 +209,7 @@ RSpec.describe ReportHelper, type: :helper do
         1
         0
       ]
+    end
 
     context "when form is not in a group" do
       let(:forms) do
