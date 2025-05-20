@@ -34,6 +34,14 @@ class Reports::FormDocumentsService
       form_document["content"]["steps"].any? { |step| step["routing_conditions"].present? }
     end
 
+    def has_secondary_skip_routes?(form_document)
+      secondary_skip_conditions(form_document).any?
+    end
+
+    def count_secondary_skip_routes(form_document)
+      secondary_skip_conditions(form_document).count
+    end
+
     def has_payments?(form_document)
       form_document["content"]["payment_url"].present?
     end
@@ -74,6 +82,14 @@ class Reports::FormDocumentsService
       return false if group_form.blank?
 
       group_form.group.organisation.internal?
+    end
+
+    def secondary_skip_conditions(form_document)
+      form_document["content"]["steps"].lazy.flat_map do |step|
+        (step["routing_conditions"]&.lazy || []).reject do |condition|
+          condition["check_page_id"] == condition["routing_page_id"]
+        end
+      end
     end
   end
 end

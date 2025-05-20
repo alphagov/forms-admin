@@ -1400,6 +1400,7 @@ en:
     form_or_questions_list_table:
       headings:
         form_name: Form name
+        number_of_branch_routes: Number of branch routes
         number_of_routes: Number of routes
         organisation: Organisation
         question_text: Question text

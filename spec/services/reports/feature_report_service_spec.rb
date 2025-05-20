@@ -18,6 +18,7 @@ RSpec.describe Reports::FeatureReportService do
         total_forms: 4,
         forms_with_payment: 1,
         forms_with_routing: 2,
+        forms_with_branch_routing: 1,
         forms_with_add_another_answer: 1,
         forms_with_csv_submission_enabled: 1,
         forms_with_answer_type: {
@@ -228,6 +229,7 @@ RSpec.describe Reports::FeatureReportService do
           ),
           "metadata" => {
             "number_of_routes" => 2,
+            "number_of_branch_routes" => 1,
           },
         ),
         a_hash_including(
@@ -242,6 +244,7 @@ RSpec.describe Reports::FeatureReportService do
           ),
           "metadata" => {
             "number_of_routes" => 1,
+            "number_of_branch_routes" => 0,
           },
         ),
       ]
@@ -270,6 +273,7 @@ RSpec.describe Reports::FeatureReportService do
       expect(forms).to all include(
         "metadata" => a_hash_including(
           "number_of_routes" => an_instance_of(Integer),
+          "number_of_branch_routes" => an_instance_of(Integer),
         ),
       )
     end
