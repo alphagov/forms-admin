@@ -130,4 +130,66 @@ RSpec.describe Pages::ExitPageController, type: :request do
       end
     end
   end
+
+  describe "#edit" do
+    let(:condition) { build :condition, :with_exit_page, id: 3, form:, page: selected_page }
+
+    before do
+      allow(ConditionRepository).to receive(:find).and_return(condition)
+
+      get edit_exit_page_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id)
+    end
+
+    it "renders the edit exit page template" do
+      expect(response).to render_template("pages/exit_page/edit")
+    end
+
+    context "when the group the form is in should not be allowed to manipulate exit pages" do
+      let(:exit_pages_enabled) { false }
+
+      it "Returns a 404 status" do
+        expect(response.status).to eq(404)
+      end
+    end
+  end
+
+  describe "#update" do
+    let(:condition) { build :condition, :with_exit_page, id: 3, form:, page: selected_page }
+    let(:params) { { pages_update_exit_page_input: { exit_page_heading: "Exit Page Heading", exit_page_markdown: "Exit Page Markdown" } } }
+
+    before do
+      allow(ConditionRepository).to receive_messages(save!: true, find: condition)
+
+      put update_exit_page_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id, params:)
+    end
+
+    it "redirects to the edit condition page" do
+      expect(response).to redirect_to edit_condition_path(form:, page:, condition:)
+    end
+
+    it "displays success message" do
+      follow_redirect!
+      expect(response.body).to include(I18n.t("banner.success.exit_page_updated"))
+    end
+
+    context "when the group the form is in should not be allowed to manipulate exit pages" do
+      let(:exit_pages_enabled) { false }
+
+      it "Returns a 404 status" do
+        expect(response.status).to eq(404)
+      end
+    end
+
+    context "when form submit fails" do
+      let(:params) { { pages_update_exit_page_input: { exit_page_heading: nil, exit_page_markdown: nil } } }
+
+      it "return 422 error code" do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "renders edit page" do
+        expect(response).to render_template("pages/exit_page/edit")
+      end
+    end
+  end
 end
