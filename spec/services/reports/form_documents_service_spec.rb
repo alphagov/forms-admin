@@ -207,4 +207,35 @@ RSpec.describe Reports::FormDocumentsService do
       it { is_expected.to eq 0 }
     end
   end
+
+  describe ".step_has_secondary_skip_route?" do
+    let(:form_documents) { JSON.load_file file_fixture("form_documents_response.json") }
+
+    context "when step is check page for secondary skip condition" do
+      let(:form_document) { branch_route_form }
+      let(:step) { form_document["content"]["steps"][0] }
+
+      it "returns true" do
+        expect(described_class.step_has_secondary_skip_route?(form_document, step)).to be true
+      end
+    end
+
+    context "when step is not check page for secondary skip condition" do
+      let(:form_document) { branch_route_form }
+      let(:step) { form_document["content"]["steps"][3] }
+
+      it "returns false" do
+        expect(described_class.step_has_secondary_skip_route?(form_document, step)).to be false
+      end
+    end
+
+    context "when form has no secondary skip conditions" do
+      let(:form_document) { skip_route_form }
+      let(:step) { form_document["content"]["steps"][0] }
+
+      it "returns false" do
+        expect(described_class.step_has_secondary_skip_route?(form_document, step)).to be false
+      end
+    end
+  end
 end

@@ -42,6 +42,12 @@ class Reports::FormDocumentsService
       secondary_skip_conditions(form_document).count
     end
 
+    def step_has_secondary_skip_route?(form_document, step)
+      secondary_skip_conditions(form_document).any? do |condition|
+        condition["check_page_id"] == step["id"]
+      end
+    end
+
     def has_payments?(form_document)
       form_document["content"]["payment_url"].present?
     end
