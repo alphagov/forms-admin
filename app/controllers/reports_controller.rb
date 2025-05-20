@@ -22,10 +22,8 @@ class ReportsController < ApplicationController
   def feature_report
     report = params[:report].underscore
 
-    raise ActionController::RoutingError unless Reports::FeatureReportService.method_defined? report
-
     forms = Reports::FormDocumentsService.live_form_documents
-    records = Reports::FeatureReportService.new(forms).send report
+    records = Reports::FeatureReportService.new(forms).report report
 
     if params[:format] == "csv"
       send_data Reports::CsvReportService.new(records).csv,

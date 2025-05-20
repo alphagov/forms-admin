@@ -42,6 +42,10 @@ RSpec.describe ReportsController, type: :routing do
       it "routes to #feature_report with forms_with_csv_submission_enabled and csv format" do
         expect(get: "/reports/features/forms-with-csv-submission-enabled.csv").to route_to("reports#feature_report", report: "forms-with-csv-submission-enabled", format: "csv")
       end
+
+      it "does not route to #feature_report if param does not match defined report" do
+        expect(get: "/reports/features/foobar").not_to route_to("reports#feature_report", report: "foobar")
+      end
     end
 
     describe "path helpers" do

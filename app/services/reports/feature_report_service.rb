@@ -1,11 +1,37 @@
 class Reports::FeatureReportService
+  def self.define_report(name, &block)
+    @reports ||= []
+    @reports << name
+
+    define_method(name, &block)
+  end
+
+  def self.matches_report?(name)
+    @reports.include? name.to_sym
+  end
+
+  class Constraint
+    def self.matches?(request)
+      name = request.params[:report].underscore
+      Reports::FeatureReportService.matches_report? name
+    end
+  end
+
+  private_class_method :define_report
+
   attr_reader :form_documents
 
   def initialize(form_documents)
     @form_documents = form_documents
   end
 
-  def report
+  def report(name = nil)
+    unless name.nil?
+      raise "'#{name}' is not a defined report" unless self.class.matches_report?(name)
+
+      return send(name)
+    end
+
     report = {
       total_forms: 0,
       forms_with_payment: 0,
@@ -54,7 +80,7 @@ class Reports::FeatureReportService
     end
   end
 
-  def questions_with_add_another_answer
+  define_report :questions_with_add_another_answer do
     form_documents.flat_map do |form|
       form["content"]["steps"]
         .select { |step| step["data"]["is_repeatable"] }
@@ -62,19 +88,19 @@ class Reports::FeatureReportService
     end
   end
 
-  def forms_with_routes
+  define_report :forms_with_routes do
     form_documents
       .select { |form| Reports::FormDocumentsService.has_routes?(form) }
       .map { |form| form_with_routes_details(form) }
   end
 
-  def forms_with_payments
+  define_report :forms_with_payments do
     form_documents
       .select { |form| Reports::FormDocumentsService.has_payments?(form) }
       .map { |form| form_details(form) }
   end
 
-  def forms_with_csv_submission_enabled
+  define_report :forms_with_csv_submission_enabled do
     form_documents
       .select { |form| Reports::FormDocumentsService.has_csv_submission_enabled?(form) }
       .map { |form| form_details(form) }

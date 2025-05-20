@@ -198,7 +198,7 @@ Rails.application.routes.draw do
     scope "/features" do
       get "/", to: "reports#features", as: :report_features
       get "/questions-with-answer-type/:answer_type", to: "reports#questions_with_answer_type", as: :report_questions_with_answer_type
-      get "/:report", to: "reports#feature_report", as: :feature_report
+      get "/:report", constraints: Reports::FeatureReportService::Constraint, to: "reports#feature_report", as: :feature_report
     end
 
     get "users", to: "reports#users", as: :report_users
