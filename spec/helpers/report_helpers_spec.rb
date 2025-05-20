@@ -11,8 +11,8 @@ RSpec.describe ReportHelper, type: :helper do
 
   let(:forms_with_routes) do
     [
-      { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Ministry of Tests" } }, "metadata" => { "number_of_routes" => 2 } },
-      { "form_id" => 4, "content" => { "name" => "Skip route form" }, "group" => { "organisation" => { "name" => "Department for Testing" } }, "metadata" => { "number_of_routes" => 1 } },
+      { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Ministry of Tests" } }, "metadata" => { "number_of_routes" => 2, "number_of_branch_routes" => 1 } },
+      { "form_id" => 4, "content" => { "name" => "Skip route form" }, "group" => { "organisation" => { "name" => "Department for Testing" } }, "metadata" => { "number_of_routes" => 1, "number_of_branch_routes" => 0 } },
     ]
   end
 
@@ -158,6 +158,7 @@ RSpec.describe ReportHelper, type: :helper do
         "Form name",
         "Organisation",
         "Number of routes",
+        "Number of branch routes",
       ]
     end
   end
@@ -202,6 +203,12 @@ RSpec.describe ReportHelper, type: :helper do
         1
       ]
     end
+
+    it "includes the number of branch routes in the form" do
+      expect(helper.report_forms_with_routes_table_rows(forms).map(&:fourth)).to eq %w[
+        1
+        0
+      ]
 
     context "when form is not in a group" do
       let(:forms) do

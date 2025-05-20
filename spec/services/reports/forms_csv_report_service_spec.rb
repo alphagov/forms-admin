@@ -39,6 +39,7 @@ RSpec.describe Reports::FormsCsvReportService do
         "2025-01-02T16:24:31.255Z",
         "9",
         "false",
+        "false",
         "https://www.gov.uk/payments/your-payment-link",
         nil,
         nil,
