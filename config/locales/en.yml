@@ -100,6 +100,8 @@ en:
           group_has_forms: This group cannot be deleted because it has forms in it
         pages/delete_confirmation_input:
           blank: Select ‘Yes’ to delete the question
+        pages/delete_exit_page_input:
+          blank: Select ‘Yes’ to delete this exit page
         pages/delete_secondary_skip_input:
           attributes:
             confirm:
@@ -1228,8 +1230,13 @@ en:
     destroy:
       success: Successfully deleted ‘%{question_text}’
     exit_page:
+      delete:
+        back_link: Back to edit exit page
+        banner: If you delete this exit page, the route to it will also be deleted
+        title: Are you sure you want to delete this exit page?
       edit:
         back_link: Back to edit route 1
+        delete_exit_page: Delete exit page
     go_to_your_questions: Back to your questions
     heading: Edit question
     index:
