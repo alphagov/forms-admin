@@ -112,6 +112,8 @@ Rails.application.routes.draw do
           post "/exit_page/new" => "pages/exit_page#create", as: :create_exit_page
           get "/exit_page/:condition_id" => "pages/exit_page#edit", as: :edit_exit_page
           put "/exit_page/:condition_id" => "pages/exit_page#update", as: :update_exit_page
+          get "/exit_page/:condition_id/delete" => "pages/exit_page#delete", as: :delete_exit_page
+          delete "/exit_page/:condition_id" => "pages/exit_page#destroy", as: :destroy_exit_page
         end
 
         scope "/routes" do
