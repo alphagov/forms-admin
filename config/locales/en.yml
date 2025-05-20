@@ -192,6 +192,7 @@ en:
       title: Important
     success:
       exit_page_created: Your exit page has been added
+      exit_page_deleted: Your exit page has been deleted
       exit_page_updated: Your exit page has been saved
       form:
         change_name: Your form name has been saved

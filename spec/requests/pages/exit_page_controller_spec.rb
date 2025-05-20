@@ -21,6 +21,7 @@ RSpec.describe Pages::ExitPageController, type: :request do
 
   let(:group) { create(:group, organisation: standard_user.organisation, exit_pages_enabled:) }
   let(:user) { standard_user }
+  let(:condition) { build(:condition, id: 1, form_id: form.id, page_id: page.id, exit_page_heading: "Exit Page Heading") }
 
   before do
     allow(FormRepository).to receive_messages(find: form, pages: pages)
@@ -189,6 +190,136 @@ RSpec.describe Pages::ExitPageController, type: :request do
 
       it "renders edit page" do
         expect(response).to render_template("pages/exit_page/edit")
+      end
+    end
+  end
+
+  describe "#delete" do
+    before do
+      allow(ConditionRepository).to receive(:find).and_return(condition)
+      allow(condition).to receive(:exit_page?).and_return(true)
+
+      get delete_exit_page_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id)
+    end
+
+    it "renders the delete exit page template" do
+      expect(response).to render_template("pages/exit_page/delete")
+    end
+
+    it "assigns the exit page" do
+      expect(assigns(:exit_page)).to eq(condition)
+    end
+
+    it "assigns a new delete exit page input" do
+      expect(assigns(:delete_exit_page_input)).to be_a(Pages::DeleteExitPageInput)
+    end
+
+    context "when user should not be allowed to add/delete routes to pages" do
+      let(:form) { build :form, id: 1 }
+      let(:pages) { [build(:page)] }
+
+      it "renders the forbidden page" do
+        expect(response).to render_template("errors/forbidden")
+      end
+
+      it "returns a 403 status" do
+        expect(response.status).to eq(403)
+      end
+    end
+
+    context "when group the form is in should not be allowed to add/delete exit pages" do
+      let(:exit_pages_enabled) { false }
+
+      it "returns a 404 status" do
+        expect(response.status).to eq(404)
+      end
+    end
+  end
+
+  describe "#destroy" do
+    let(:params) { { pages_delete_exit_page_input: { confirm: "yes" } } }
+
+    before do
+      allow(condition).to receive(:exit_page?).and_return(true)
+      allow(ConditionRepository).to receive_messages(find: condition, destroy: true)
+
+      delete destroy_exit_page_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id, params:)
+    end
+
+    it "redirects to form pages path" do
+      expect(response).to redirect_to(form_pages_path(form.id))
+    end
+
+    it "displays success message" do
+      follow_redirect!
+
+      expect(response.body).to include(I18n.t("banner.success.exit_page_deleted"))
+    end
+
+    it "deletes the exit page" do
+      expect(ConditionRepository).to have_received(:destroy).with(condition)
+    end
+
+    context "when confirmation is not provided" do
+      let(:params) { { pages_delete_exit_page_input: { confirm: nil } } }
+
+      it "renders the delete template again" do
+        expect(response).to render_template("pages/exit_page/delete")
+      end
+    end
+
+    context "when confirmation is no" do
+      let(:params) { { pages_delete_exit_page_input: { confirm: "no" } } }
+
+      it "redirects to form pages path" do
+        expect(response).to redirect_to(edit_exit_page_path(form.id, page.id, condition.id))
+      end
+
+      it "doesn't delete the exit page" do
+        expect(ConditionRepository).not_to have_received(:destroy)
+      end
+    end
+
+    context "when the condition is not an exit page" do
+      before do
+        allow(condition).to receive(:exit_page?).and_return(false)
+        delete destroy_exit_page_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id, params:)
+      end
+
+      it "redirects to the form pages page" do
+        expect(response).to redirect_to(form_pages_path(form.id))
+      end
+    end
+
+    context "when deletion fails" do
+      before do
+        allow(ConditionRepository).to receive(:destroy).and_return(false)
+        delete destroy_exit_page_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id, params:)
+      end
+
+      it "redirects to form pages path" do
+        expect(response).to redirect_to(form_pages_path(form.id))
+      end
+    end
+
+    context "when user should not be allowed to add/delete routes to pages" do
+      let(:form) { build :form, id: 1 }
+      let(:pages) { [build(:page)] }
+
+      it "renders the forbidden page" do
+        expect(response).to render_template("errors/forbidden")
+      end
+
+      it "returns a 403 status" do
+        expect(response.status).to eq(403)
+      end
+    end
+
+    context "when group the form is in should not be allowed to add/delete exit pages" do
+      let(:exit_pages_enabled) { false }
+
+      it "returns a 404 status" do
+        expect(response.status).to eq(404)
       end
     end
   end
