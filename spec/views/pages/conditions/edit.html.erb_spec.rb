@@ -3,6 +3,7 @@ require "rails_helper"
 describe "pages/conditions/edit.html.erb" do
   let(:condition_input) { Pages::ConditionsInput.new(form:, page:, record: condition) }
   let(:form) { build :form, :ready_for_routing, id: 1 }
+  let(:group) { build :group }
   let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
   let(:pages) { form.pages << page }
   let(:page) do
@@ -18,7 +19,7 @@ describe "pages/conditions/edit.html.erb" do
   before do
     page.position = 1
     allow(view).to receive_messages(form_pages_path: "/forms/1/pages", create_condition_path: "/forms/1/pages/1/conditions/new", delete_condition_path: "/forms/1/pages/1/conditions/2/delete")
-    allow(form).to receive(:qualifying_route_pages).and_return(pages)
+    allow(form).to receive_messages(group: group, qualifying_route_pages: pages)
     condition_input.check_errors_from_api
 
     render template: "pages/conditions/edit", locals: { condition_input: }
@@ -54,6 +55,26 @@ describe "pages/conditions/edit.html.erb" do
       expect(rendered).to have_css(".govuk-error-summary")
       expect(rendered).to have_link(I18n.t("activemodel.errors.models.pages/conditions_input.attributes.answer_value.answer_value_doesnt_exist", href: "##{field_id}"))
       expect(rendered).to have_css("##{field_id}")
+    end
+  end
+
+  context "with exit pages enabled" do
+    let(:group) { build :group, exit_pages_enabled: true }
+
+    context "when the condition does not have an exit page" do
+      let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
+
+      it "has an 'add exit page' option" do
+        expect(rendered).to have_content("Add an exit page")
+      end
+    end
+
+    context "when the condition has an exit page" do
+      let(:condition) { build :condition, :with_exit_page, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales" }
+
+      it "has the exit page heading" do
+        expect(rendered).to have_content(condition.exit_page_heading)
+      end
     end
   end
 end

@@ -56,7 +56,11 @@ class Pages::ConditionsController < PagesController
     condition_input = Pages::ConditionsInput.new(form_params)
 
     if condition_input.update_condition
-      redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.route_updated", question_number: condition_input.page.position)
+      if condition_input.create_exit_page? && FeatureService.new(group: current_form.group).enabled?(:exit_pages)
+        redirect_to edit_exit_page_path(current_form.id, page.id, condition.id)
+      else
+        redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.route_updated", question_number: condition_input.page.position)
+      end
     else
       render template: "pages/conditions/edit", locals: { condition_input: }, status: :unprocessable_entity
     end
