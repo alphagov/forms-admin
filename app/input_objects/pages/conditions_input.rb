@@ -6,7 +6,7 @@ class Pages::ConditionsInput < BaseInput
   def submit
     return false if invalid?
 
-    if goto_page_id == "exit_page"
+    if create_exit_page?
       true
     else
       assign_skip_to_end
@@ -24,11 +24,16 @@ class Pages::ConditionsInput < BaseInput
   def update_condition
     return false if invalid?
 
-    assign_skip_to_end
-
     record.answer_value = answer_value
-    record.goto_page_id = goto_page_id
-    record.skip_to_end = skip_to_end
+
+    unless create_exit_page? || goto_page_id == "exit_page"
+      assign_skip_to_end
+
+      record.skip_to_end = skip_to_end
+      record.goto_page_id = goto_page_id
+      record.exit_page_heading = nil
+      record.exit_page_markdown = nil
+    end
 
     ConditionRepository.save!(record)
   end
@@ -57,6 +62,9 @@ class Pages::ConditionsInput < BaseInput
     if goto_page_id.nil? && skip_to_end
       self.goto_page_id = "check_your_answers"
     end
+    if record.exit_page?
+      self.goto_page_id = "exit_page"
+    end
     self
   end
 
@@ -77,7 +85,7 @@ class Pages::ConditionsInput < BaseInput
   end
 
   def create_exit_page?
-    goto_page_id == "exit_page"
+    goto_page_id == "create_exit_page"
   end
 
 private
