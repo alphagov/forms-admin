@@ -4,7 +4,6 @@ features:
     enabled_by_group: true
   exit_pages:
     enabled_by_group: true
-  file_upload: false
 
 forms_api:
   # Authentication key to authenticate with forms-api
