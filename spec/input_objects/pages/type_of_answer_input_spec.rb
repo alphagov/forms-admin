@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Pages::TypeOfAnswerInput, type: :model do
   let(:type_of_answer_input) { build :type_of_answer_input, draft_question:, answer_types:, current_form: }
   let(:draft_question) { build :draft_question, form_id: 1 }
-  let(:answer_types) { Page::ANSWER_TYPES_INCLUDING_FILE }
+  let(:answer_types) { Page::ANSWER_TYPES }
   let(:current_form) { build :form, id: 1 }
 
   it "has a valid factory" do
@@ -24,7 +24,7 @@ RSpec.describe Pages::TypeOfAnswerInput, type: :model do
     end
 
     it "is valid if answer type is a valid page answer type" do
-      Page::ANSWER_TYPES_INCLUDING_FILE.each do |answer_type|
+      Page::ANSWER_TYPES.each do |answer_type|
         type_of_answer_input.answer_type = answer_type
         expect(type_of_answer_input).to be_valid "#{answer_type} is not a Page answer type"
       end

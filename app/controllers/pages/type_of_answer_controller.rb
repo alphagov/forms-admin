@@ -93,6 +93,6 @@ private
   end
 
   def answer_types
-    Page::ANSWER_TYPES_INCLUDING_FILE
+    Page::ANSWER_TYPES
   end
 end

@@ -12,7 +12,7 @@ class Api::V1::PageResource < ActiveResource::Base
 
   validates :hint_text, length: { maximum: 500 }
 
-  validates :answer_type, presence: true, inclusion: { in: Page::ANSWER_TYPES_INCLUDING_FILE }
+  validates :answer_type, presence: true, inclusion: { in: Page::ANSWER_TYPES }
 
   before_validation :convert_boolean_fields
 
