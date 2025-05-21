@@ -5,52 +5,58 @@ class ReportsController < ApplicationController
   def index; end
 
   def features
-    forms = Reports::FormDocumentsService.live_form_documents
+    tag = params[:tag]
+    forms = Reports::FormDocumentsService.form_documents(tag:)
     data = Reports::FeatureReportService.new(forms).report
 
-    render template: "reports/features", locals: { tag: "live", data: }
+    render template: "reports/features", locals: { tag:, data: }
   end
 
   def questions_with_answer_type
+    tag = params[:tag]
     answer_type = params.require(:answer_type)
-    forms = Reports::FormDocumentsService.live_form_documents
+    forms = Reports::FormDocumentsService.form_documents(tag:)
     questions = Reports::FeatureReportService.new(forms).questions_with_answer_type(answer_type)
 
     if params[:format] == "csv"
       send_data Reports::QuestionsCsvReportService.new(questions).csv,
                 type: "text/csv; charset=iso-8859-1",
-                disposition: "attachment; filename=#{questions_csv_filename(answer_type)}"
+                disposition: "attachment; filename=#{questions_csv_filename(tag, answer_type)}"
     else
-      render template: "reports/questions_with_answer_type", locals: { tag: "live", answer_type:, questions: }
+      render template: "reports/questions_with_answer_type", locals: { tag:, answer_type:, questions: }
     end
   end
 
   def questions_with_add_another_answer
-    forms = Reports::FormDocumentsService.live_form_documents
+    tag = params[:tag]
+    forms = Reports::FormDocumentsService.form_documents(tag:)
     questions = Reports::FeatureReportService.new(forms).questions_with_add_another_answer
 
-    questions_feature_report(params[:action], questions)
+    questions_feature_report(tag, params[:action], questions)
   end
 
   def forms_with_routes
-    forms = Reports::FormDocumentsService.live_form_documents
+    tag = params[:tag]
+    forms = Reports::FormDocumentsService.form_documents(tag:)
     forms = Reports::FeatureReportService.new(forms).forms_with_routes
 
-    forms_feature_report(params[:action], forms)
+    forms_feature_report(tag, params[:action], forms)
   end
 
   def forms_with_payments
-    forms = Reports::FormDocumentsService.live_form_documents
+    tag = params[:tag]
+    forms = Reports::FormDocumentsService.form_documents(tag:)
     forms = Reports::FeatureReportService.new(forms).forms_with_payments
 
-    forms_feature_report(params[:action], forms)
+    forms_feature_report(tag, params[:action], forms)
   end
 
   def forms_with_csv_submission_enabled
-    forms = Reports::FormDocumentsService.live_form_documents
+    tag = params[:tag]
+    forms = Reports::FormDocumentsService.form_documents(tag:)
     forms = Reports::FeatureReportService.new(forms).forms_with_csv_submission_enabled
 
-    forms_feature_report(params[:action], forms)
+    forms_feature_report(tag, params[:action], forms)
   end
 
   def users
@@ -112,23 +118,23 @@ class ReportsController < ApplicationController
 
 private
 
-  def questions_feature_report(report, questions)
+  def questions_feature_report(tag, report, questions)
     if params[:format] == "csv"
       send_data Reports::QuestionsCsvReportService.new(questions).csv,
                 type: "text/csv; charset=iso-8859-1",
-                disposition: "attachment; filename=#{csv_filename("live_#{report}_report")}"
+                disposition: "attachment; filename=#{csv_filename("#{tag}_#{report}_report")}"
     else
-      render template: "reports/feature_report", locals: { tag: "live", report:, records: questions }
+      render template: "reports/feature_report", locals: { tag:, report:, records: questions }
     end
   end
 
-  def forms_feature_report(report, forms)
+  def forms_feature_report(tag, report, forms)
     if params[:format] == "csv"
       send_data Reports::FormsCsvReportService.new(forms).csv,
                 type: "text/csv; charset=iso-8859-1",
-                disposition: "attachment; filename=#{csv_filename("live_#{report}_report")}"
+                disposition: "attachment; filename=#{csv_filename("#{tag}_#{report}_report")}"
     else
-      render template: "reports/feature_report", locals: { tag: "live", report:, records: forms }
+      render template: "reports/feature_report", locals: { tag:, report:, records: forms }
     end
   end
 
@@ -136,8 +142,8 @@ private
     authorize Report, :can_view_reports?
   end
 
-  def questions_csv_filename(answer_type)
-    base_name = "live_questions_report"
+  def questions_csv_filename(tag, answer_type)
+    base_name = "#{tag}_questions_report"
     base_name += "_#{answer_type}_answer_type" if answer_type.present?
     csv_filename(base_name)
   end

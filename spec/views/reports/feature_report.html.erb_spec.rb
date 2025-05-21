@@ -7,6 +7,7 @@ describe "reports/feature_report" do
 
   before do
     controller.request.path_parameters[:action] = report
+    controller.request.path_parameters[:tag] = tag
 
     render locals: { tag:, report:, records: }
   end

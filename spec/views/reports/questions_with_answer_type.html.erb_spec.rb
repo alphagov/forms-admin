@@ -12,6 +12,7 @@ describe "reports/questions_with_answer_type" do
   let(:answer_type) { "email" }
 
   before do
+    controller.request.path_parameters[:tag] = tag
     controller.request.path_parameters[:answer_type] = answer_type
 
     render locals: { tag:, answer_type:, questions: }
