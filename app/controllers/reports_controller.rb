@@ -8,7 +8,7 @@ class ReportsController < ApplicationController
     forms = Reports::FormDocumentsService.live_form_documents
     data = Reports::FeatureReportService.new(forms).report
 
-    render template: "reports/features", locals: { data: }
+    render template: "reports/features", locals: { tag: "live", data: }
   end
 
   def questions_with_answer_type
@@ -16,7 +16,7 @@ class ReportsController < ApplicationController
     forms = Reports::FormDocumentsService.live_form_documents
     questions = Reports::FeatureReportService.new(forms).questions_with_answer_type(answer_type)
 
-    render template: "reports/questions_with_answer_type", locals: { answer_type:, questions: }
+    render template: "reports/questions_with_answer_type", locals: { tag: "live", answer_type:, questions: }
   end
 
   def feature_report
@@ -30,7 +30,7 @@ class ReportsController < ApplicationController
                 type: "text/csv; charset=iso-8859-1",
                 disposition: "attachment; filename=#{csv_filename("live_#{report}_report")}"
     else
-      render template: "reports/feature_report", locals: { report:, records: }
+      render template: "reports/feature_report", locals: { tag: "live", report:, records: }
     end
   end
 

@@ -1,29 +1,29 @@
-<% set_page_title(t(".title")) %>
+<% set_page_title(t(".title", tag:)) %>
 <% content_for :back_link, govuk_back_link_to(reports_path, t("reports.back_link")) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l"><%= t(".title") %></h1>
+    <h1 class="govuk-heading-l"><%= t(".title", tag:) %></h1>
 
     <h2 class="govuk-heading-m"><%= t(".features.heading") %></h2>
     <%= govuk_summary_list do |summary_list| %>
       <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: t(".features.total_live_forms")) %>
+        <%= row.with_key(text: t(".features.total_forms", tag:).upcase_first) %>
         <%= row.with_value(text: data[:total_forms]) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: t(".features.live_forms_with_routes")) %>
+        <%= row.with_key(text: t(".features.forms_with_routes", tag:).upcase_first) %>
         <%= row.with_value(text: govuk_link_to(data[:forms_with_routing], feature_report_path(report: "forms-with-routes"), no_visited_state: true)) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: t(".features.live_forms_with_payments")) %>
+        <%= row.with_key(text: t(".features.forms_with_payments", tag:).upcase_first) %>
         <%= row.with_value(text: govuk_link_to(data[:forms_with_payment], feature_report_path(report: "forms-with-payments"), no_visited_state: true)) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: t(".features.live_forms_with_add_another_answer")) %>
+        <%= row.with_key(text: t(".features.forms_with_add_another_answer", tag:).upcase_first) %>
         <%= row.with_value(text: govuk_link_to(data[:forms_with_add_another_answer], feature_report_path(report: "questions-with-add-another-answer"), no_visited_state: true)) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: t(".features.live_forms_with_csv_submission_enabled")) %>
+        <%= row.with_key(text: t(".features.forms_with_csv_submission_enabled", tag:).upcase_first) %>
         <%= row.with_value(text: govuk_link_to(data[:forms_with_csv_submission_enabled], feature_report_path(report: "forms-with-csv-submission-enabled"), no_visited_state: true)) %>
       <% end %>
     <% end %>
@@ -35,12 +35,14 @@
       <%= table.with_head do |head| %>
         <%= head.with_row do |row| %>
           <%= row.with_cell(text: t(".answer_types.table_headings.answer_type")) %>
-          <%= row.with_cell(text: t(".answer_types.table_headings.number_of_forms"), numeric: true) %>
-          <%= row.with_cell(text: t(".answer_types.table_headings.number_of_pages"), numeric: true) %>
+          <%= row.with_cell(text: t(".answer_types.table_headings.number_of_forms", tag:), numeric: true) %>
+          <%= row.with_cell(text: t(".answer_types.table_headings.number_of_pages", tag:), numeric: true) %>
         <% end %>
       <% end %>
 
-      <% answer_type_links = { "selection" => report_selection_questions_summary_path } %>
+      <% answer_type_links = {
+        "selection" => tag == "live" ? report_selection_questions_summary_path : nil,
+      } %>
       <%= table.with_body do |body| %>
         <% Page::ANSWER_TYPES.each do |answer_type| %>
           <%= body.with_row do |row| %>
