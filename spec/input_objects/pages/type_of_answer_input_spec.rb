@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Pages::TypeOfAnswerInput, type: :model do
   let(:type_of_answer_input) { build :type_of_answer_input, draft_question:, answer_types:, current_form: }
   let(:draft_question) { build :draft_question, form_id: 1 }
-  let(:answer_types) { Page::ANSWER_TYPES_EXCLUDING_FILE }
+  let(:answer_types) { Page::ANSWER_TYPES_INCLUDING_FILE }
   let(:current_form) { build :form, id: 1 }
 
   it "has a valid factory" do
@@ -24,7 +24,7 @@ RSpec.describe Pages::TypeOfAnswerInput, type: :model do
     end
 
     it "is valid if answer type is a valid page answer type" do
-      Page::ANSWER_TYPES_EXCLUDING_FILE.each do |answer_type|
+      Page::ANSWER_TYPES_INCLUDING_FILE.each do |answer_type|
         type_of_answer_input.answer_type = answer_type
         expect(type_of_answer_input).to be_valid "#{answer_type} is not a Page answer type"
       end
@@ -43,49 +43,36 @@ RSpec.describe Pages::TypeOfAnswerInput, type: :model do
         type_of_answer_input.answer_type = "file"
       end
 
-      context "when file upload is disabled" do
-        let(:answer_types) { Page::ANSWER_TYPES_EXCLUDING_FILE }
+      context "when there are fewer than 4 existing file upload questions" do
+        let(:pages) do
+          pages = build_list :page, 3, answer_type: :file
+          page_with_another_answer_type = build(:page, answer_type: :text)
+          pages.push(page_with_another_answer_type)
+        end
+        let(:current_form) { build :form, id: 1, pages: }
 
-        it "is invalid" do
-          expect(type_of_answer_input).to be_invalid
-          expect(type_of_answer_input.errors[:answer_type]).to include "Select the type of answer you need"
+        it "is valid" do
+          expect(type_of_answer_input).to be_valid
         end
       end
 
-      context "when file upload is enabled" do
-        let(:answer_types) { Page::ANSWER_TYPES_INCLUDING_FILE }
+      context "when there are already 4 file upload questions" do
+        let(:pages) { build_list :page, 4, answer_type: :file }
+        let(:current_form) { build :form, id: 1, pages: }
 
-        context "when there are fewer than 4 existing file upload questions" do
-          let(:pages) do
-            pages = build_list :page, 3, answer_type: :file
-            page_with_another_answer_type = build(:page, answer_type: :text)
-            pages.push(page_with_another_answer_type)
-          end
-          let(:current_form) { build :form, id: 1, pages: }
-
-          it "is valid" do
-            expect(type_of_answer_input).to be_valid
-          end
+        it "is invalid" do
+          expect(type_of_answer_input).to be_invalid
+          expect(type_of_answer_input.errors[:answer_type]).to include "You cannot have more than 4 file upload questions in a form"
         end
+      end
 
-        context "when there are already 4 file upload questions" do
-          let(:pages) { build_list :page, 4, answer_type: :file }
-          let(:current_form) { build :form, id: 1, pages: }
+      context "when there are already more than 4 file upload questions" do
+        let(:pages) { build_list :page, 5, answer_type: :file }
+        let(:current_form) { build :form, id: 1, pages: }
 
-          it "is invalid" do
-            expect(type_of_answer_input).to be_invalid
-            expect(type_of_answer_input.errors[:answer_type]).to include "You cannot have more than 4 file upload questions in a form"
-          end
-        end
-
-        context "when there are already more than 4 file upload questions" do
-          let(:pages) { build_list :page, 5, answer_type: :file }
-          let(:current_form) { build :form, id: 1, pages: }
-
-          it "is invalid" do
-            expect(type_of_answer_input).to be_invalid
-            expect(type_of_answer_input.errors[:answer_type]).to include "You cannot have more than 4 file upload questions in a form"
-          end
+        it "is invalid" do
+          expect(type_of_answer_input).to be_invalid
+          expect(type_of_answer_input.errors[:answer_type]).to include "You cannot have more than 4 file upload questions in a form"
         end
       end
     end

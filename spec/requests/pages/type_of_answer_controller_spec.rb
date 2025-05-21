@@ -6,8 +6,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
   let(:page) { pages.first }
   let(:type_of_answer_input) { build :type_of_answer_input }
 
-  let(:file_upload_enabled) { false }
-  let(:group) { create(:group, organisation: standard_user.organisation, file_upload_enabled:) }
+  let(:group) { create(:group, organisation: standard_user.organisation) }
 
   let(:output) { StringIO.new }
   let(:logger) { ActiveSupport::Logger.new(output) }
@@ -42,34 +41,8 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       expect(response).to have_rendered(:type_of_answer)
     end
 
-    context "when file upload is disabled for the group" do
-      context "when the file upload feature is not enabled globally", feature_file_upload: false do
-        it "shows the file answer type option" do
-          expect(response.body).to include("File")
-        end
-      end
-
-      context "when the file upload feature is enabled globally", :feature_file_upload do
-        it "shows the file answer type option" do
-          expect(response.body).to include("File")
-        end
-      end
-    end
-
-    context "when file upload is enabled for the group" do
-      let(:file_upload_enabled) { true }
-
-      context "when the file upload feature is not enabled globally", feature_file_upload: false do
-        it "shows the file answer type option" do
-          expect(response.body).to include("File")
-        end
-      end
-
-      context "when the file upload feature is enabled globally", :feature_file_upload do
-        it "shows the file answer type option" do
-          expect(response.body).to include("File")
-        end
-      end
+    it "shows the file answer type option" do
+      expect(response.body).to include("File")
     end
   end
 
@@ -209,18 +182,8 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       expect(log_lines(output)[0]["answer_type"]).to eq(page.answer_type)
     end
 
-    context "when file upload is disabled for the group" do
-      it "shows the file answer type option" do
-        expect(response.body).to include("File")
-      end
-    end
-
-    context "when file upload is enabled for the group" do
-      let(:file_upload_enabled) { true }
-
-      it "shows the file answer type option" do
-        expect(response.body).to include("File")
-      end
+    it "shows the file answer type option" do
+      expect(response.body).to include("File")
     end
   end
 
