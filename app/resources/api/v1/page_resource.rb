@@ -12,8 +12,7 @@ class Api::V1::PageResource < ActiveResource::Base
 
   validates :hint_text, length: { maximum: 500 }
 
-  # we validate that users can't choose file if file upload isn't enabled for their group when creating the draft_question
-  validates :answer_type, presence: true, inclusion: { in: Page::ANSWER_TYPES_INCLUDING_FILE }
+  validates :answer_type, presence: true, inclusion: { in: Page::ANSWER_TYPES }
 
   before_validation :convert_boolean_fields
 

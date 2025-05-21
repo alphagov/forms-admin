@@ -404,7 +404,7 @@ describe Api::V1::FormResource, type: :model do
   describe "#file_upload_question_count" do
     let(:pages) do
       pages = build_list :page, 3, answer_type: :file
-      Page::ANSWER_TYPES_INCLUDING_FILE.each do |answer_type|
+      Page::ANSWER_TYPES.each do |answer_type|
         pages.push(build(:page, answer_type:))
       end
       pages

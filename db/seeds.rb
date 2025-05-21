@@ -125,7 +125,6 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
   Group.create! name: "Ministry of Tests forms", organisation: mot_org
   Group.create! name: "Ministry of Tests forms - secret!", organisation: mot_org, creator: mot_user
   branch_routing_enabled_group = Group.create! name: "Branching enabled", organisation: gds, branch_routing_enabled: true
-  Group.create! name: "File upload enabled", organisation: gds, file_upload_enabled: true
 
   Membership.create! user: default_user, group: end_to_end_group, added_by: default_user, role: :group_admin
 
