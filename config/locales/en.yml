@@ -1385,18 +1385,18 @@ en:
         heading: Answer type usage
         table_headings:
           answer_type: Answer type
-          number_of_forms: Number of live forms with this answer type
-          number_of_pages: Number of uses of this answer type in live forms
+          number_of_forms: Number of %{tag} forms with this answer type
+          number_of_pages: Number of uses of this answer type in %{tag} forms
       features:
+        forms_with_add_another_answer: "%{tag} forms with add another answer"
+        forms_with_csv_submission_enabled: "%{tag} forms with CSV submission enabled"
+        forms_with_payments: "%{tag} forms with payments"
+        forms_with_routes: "%{tag} forms with routes"
         heading: Feature usage
-        live_forms_with_add_another_answer: Live forms with add another answer
-        live_forms_with_csv_submission_enabled: Live forms with CSV submission enabled
-        live_forms_with_payments: Live forms with payments
-        live_forms_with_routes: Live forms with routes
-        total_live_forms: Total live forms
+        total_forms: Total %{tag} forms
       long_list_usage:
         title: Selection from a list of options feature usage in live forms
-      title: Feature and answer type usage in live forms
+      title: Feature and answer type usage in %{tag} forms
     form_or_questions_list_table:
       headings:
         form_name: Form name
@@ -1404,14 +1404,14 @@ en:
         organisation: Organisation
         question_text: Question text
     forms_with_csv_submission_enabled:
-      download_csv: Download data about all live forms with CSV submission enabled as a CSV file
-      heading: Live forms with CSV submission enabled
+      download_csv: Download data about all %{tag} forms with CSV submission enabled as a CSV file
+      heading: "%{tag} forms with CSV submission enabled"
     forms_with_payments:
-      download_csv: Download data about all live forms with payments as a CSV file
-      heading: Live forms with payments
+      download_csv: Download data about all %{tag} forms with payments as a CSV file
+      heading: "%{tag} forms with payments"
     forms_with_routes:
-      download_csv: Download data about all live forms with routes as a CSV file
-      heading: Live forms with routes
+      download_csv: Download data about all %{tag} forms with routes as a CSV file
+      heading: "%{tag} forms with routes"
     index:
       title: Reports
     last_signed_in_at:
@@ -1421,11 +1421,11 @@ en:
       not_since_last_signed_in_at_added: People who last signed in sometime between 3 November 2023 and 4 November 2024
       title: When users last signed in
     questions_with_add_another_answer:
-      download_csv: Download all questions with add another answer in live forms as a CSV file
-      heading: Questions with add another answer in live forms
+      download_csv: Download all questions with add another answer in %{tag} forms as a CSV file
+      heading: Questions with add another answer in %{tag} forms
     questions_with_answer_type:
-      download_csv: Download all questions in live forms with this answer type as a CSV file
-      heading: Live questions with %{answer_type} answer type
+      download_csv: Download all questions in %{tag} forms with this answer type as a CSV file
+      heading: "%{tag} questions with %{answer_type} answer type"
     selection_questions:
       autocomplete:
         title: Questions where you can select one from over 30 options

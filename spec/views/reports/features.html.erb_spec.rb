@@ -34,9 +34,10 @@ describe "reports/features.html.erb" do
       forms_with_csv_submission_enabled: 2,
     }
   end
+  let(:tag) { "live" }
 
   before do
-    render template: "reports/features", locals: { data: report }
+    render template: "reports/features", locals: { tag:, data: report }
   end
 
   describe "page title" do
@@ -55,6 +56,16 @@ describe "reports/features.html.erb" do
 
   it "includes the number of total live forms" do
     expect(rendered).to have_css(".govuk-summary-list__row", text: "Total live forms#{report[:total_forms]}")
+  end
+
+  it "has a table of answer type usage" do
+    expect(rendered).to have_table "Answer type usage" do |table|
+      expect(table.find_all("thead th").map(&:text)).to eq [
+        "Answer type",
+        "Number of live forms with this answer type",
+        "Number of uses of this answer type in live forms",
+      ]
+    end
   end
 
   Page::ANSWER_TYPES.map(&:to_sym).each do |answer_type|

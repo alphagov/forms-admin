@@ -7,18 +7,20 @@ describe "reports/questions_with_answer_type" do
       { "data" => { "question_text" => "What’s your email address?" }, "form" => { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } } },
     ]
   end
+  let(:tag) { "live" }
 
   let(:answer_type) { "email" }
 
   before do
     controller.request.path_parameters[:answer_type] = answer_type
 
-    render locals: { answer_type:, questions: }
+    render locals: { tag:, answer_type:, questions: }
   end
 
   describe "page title" do
     it "matches the heading" do
       expect(view.content_for(:title)).to eq "Live questions with email address answer type"
+      expect(rendered).to have_css "h1", text: view.content_for(:title)
     end
   end
 

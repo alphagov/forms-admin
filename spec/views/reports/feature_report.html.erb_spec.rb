@@ -3,11 +3,12 @@ require "rails_helper"
 describe "reports/feature_report" do
   let(:report) {}
   let(:records) { [] }
+  let(:tag) { "live" }
 
   before do
     controller.request.path_parameters[:action] = report
 
-    render locals: { report:, records: }
+    render locals: { tag:, report:, records: }
   end
 
   context "with forms_with_csv_submission_enabled report" do
@@ -22,6 +23,7 @@ describe "reports/feature_report" do
     describe "page title" do
       it "matches the heading" do
         expect(view.content_for(:title)).to eq "Live forms with CSV submission enabled"
+        expect(rendered).to have_css "h1", text: view.content_for(:title)
       end
     end
 
@@ -68,6 +70,7 @@ describe "reports/feature_report" do
     describe "page title" do
       it "matches the heading" do
         expect(view.content_for(:title)).to eq "Live forms with payments"
+        expect(rendered).to have_css "h1", text: view.content_for(:title)
       end
     end
 
@@ -114,6 +117,7 @@ describe "reports/feature_report" do
     describe "page title" do
       it "matches the heading" do
         expect(view.content_for(:title)).to eq "Live forms with routes"
+        expect(rendered).to have_css "h1", text: view.content_for(:title)
       end
     end
 
@@ -163,6 +167,7 @@ describe "reports/feature_report" do
     describe "page title" do
       it "matches the heading" do
         expect(view.content_for(:title)).to eq "Questions with add another answer in live forms"
+        expect(rendered).to have_css "h1", text: view.content_for(:title)
       end
     end
 
