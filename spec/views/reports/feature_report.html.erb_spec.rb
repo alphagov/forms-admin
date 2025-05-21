@@ -3,9 +3,11 @@ require "rails_helper"
 describe "reports/feature_report" do
   let(:report) {}
   let(:records) { [] }
+  let(:tag) { "live" }
 
   before do
     controller.request.path_parameters[:report] = report.dasherize
+    controller.request.path_parameters[:tag] = tag
 
     render locals: { tag:, report:, records: }
   end

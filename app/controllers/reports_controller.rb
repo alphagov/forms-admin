@@ -5,32 +5,35 @@ class ReportsController < ApplicationController
   def index; end
 
   def features
-    forms = Reports::FormDocumentsService.live_form_documents
+    tag = params[:tag]
+    forms = Reports::FormDocumentsService.form_documents(tag:)
     data = Reports::FeatureReportService.new(forms).report
 
-    render template: "reports/features", locals: { tag: "live", data: }
+    render template: "reports/features", locals: { tag:, data: }
   end
 
   def questions_with_answer_type
+    tag = params[:tag]
     answer_type = params.require(:answer_type)
-    forms = Reports::FormDocumentsService.live_form_documents
+    forms = Reports::FormDocumentsService.form_documents(tag:)
     questions = Reports::FeatureReportService.new(forms).questions_with_answer_type(answer_type)
 
-    render template: "reports/questions_with_answer_type", locals: { tag: "live", answer_type:, questions: }
+    render template: "reports/questions_with_answer_type", locals: { tag:, answer_type:, questions: }
   end
 
   def feature_report
     report = params[:report].underscore
+    tag = params[:tag]
 
-    forms = Reports::FormDocumentsService.live_form_documents
+    forms = Reports::FormDocumentsService.form_documents(tag:)
     records = Reports::FeatureReportService.new(forms).report report
 
     if params[:format] == "csv"
       send_data Reports::CsvReportService.new(records).csv,
                 type: "text/csv; charset=iso-8859-1",
-                disposition: "attachment; filename=#{csv_filename("live_#{report}_report")}"
+                disposition: "attachment; filename=#{csv_filename("#{tag}_#{report}_report")}"
     else
-      render template: "reports/feature_report", locals: { tag: "live", report:, records: }
+      render template: "reports/feature_report", locals: { tag:, report:, records: }
     end
   end
 
