@@ -56,7 +56,7 @@ namespace :groups do
 
   desc "List enabled features for groups"
   task features: :environment do
-    feature_flags = %i[branch_routing_enabled exit_pages_enabled]
+    feature_flags = %i[branch_routing_enabled exit_pages_enabled welsh_enabled]
     query = feature_flags.map { "#{it} IS TRUE" }.join(" OR ")
 
     Group.where(query).find_each do |group|
@@ -103,6 +103,24 @@ namespace :groups do
 
     Group.find_by(external_id: args[:group_id]).update!(exit_pages_enabled: false)
     Rails.logger.info("Updated exit_pages_enabled to false for group #{args[:group_id]}")
+  end
+
+  desc "Enable welsh feature for group"
+  task :enable_welsh, %i[group_id] => :environment do |_, args|
+    usage_message = "usage: rake groups:enable_welsh[<group_external_id>]".freeze
+    abort usage_message if args[:group_id].blank?
+
+    Group.find_by(external_id: args[:group_id]).update!(welsh_enabled: true)
+    Rails.logger.info("Updated welsh_enabled to true for group #{args[:group_id]}")
+  end
+
+  desc "Disable Welsh feature for group"
+  task :disable_welsh, %i[group_id] => :environment do |_, args|
+    usage_message = "usage: rake groups:disable_welsh[<group_external_id>]".freeze
+    abort usage_message if args[:group_id].blank?
+
+    Group.find_by(external_id: args[:group_id]).update!(welsh_enabled: false)
+    Rails.logger.info("Updated welsh_enabled to false for group #{args[:group_id]}")
   end
 end
 
