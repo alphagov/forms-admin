@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_21_103839) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_22_152016) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -111,6 +111,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_21_103839) do
     t.bigint "upgrade_requester_id"
     t.boolean "branch_routing_enabled", default: false
     t.boolean "exit_pages_enabled", default: false
+    t.boolean "welsh_enabled", default: false
     t.index ["creator_id"], name: "index_groups_on_creator_id"
     t.index ["external_id"], name: "index_groups_on_external_id", unique: true
     t.index ["name", "organisation_id"], name: "index_groups_on_name_and_organisation_id", unique: true
