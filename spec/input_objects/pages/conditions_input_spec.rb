@@ -275,4 +275,18 @@ RSpec.describe Pages::ConditionsInput, type: :model do
       end
     end
   end
+
+  describe "#secondary_skip?" do
+    let(:page_routes_service) { instance_double(PageRoutesService) }
+
+    before do
+      allow(PageRoutesService).to receive(:new).and_return(page_routes_service)
+      allow(page_routes_service).to receive(:routes).and_return([instance_double(Api::V1::ConditionResource, secondary_skip?: true)])
+    end
+
+    it "calls the PageRoutesService" do
+      expect(PageRoutesService).to receive(:new).with(form:, pages: FormRepository.pages(form), page:)
+      conditions_input.secondary_skip?
+    end
+  end
 end

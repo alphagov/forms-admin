@@ -6,6 +6,7 @@ describe "pages/conditions/edit.html.erb" do
   let(:group) { build :group }
   let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
   let(:pages) { form.pages << page }
+  let(:secondary_skip) { false }
   let(:page) do
     build :page,
           form_id: form.id,
@@ -20,6 +21,7 @@ describe "pages/conditions/edit.html.erb" do
     page.position = 1
     allow(view).to receive_messages(form_pages_path: "/forms/1/pages", create_condition_path: "/forms/1/pages/1/conditions/new", delete_condition_path: "/forms/1/pages/1/conditions/2/delete")
     allow(form).to receive_messages(group: group, qualifying_route_pages: pages)
+    allow(condition_input).to receive(:secondary_skip?).and_return(secondary_skip)
     condition_input.check_errors_from_api
 
     render template: "pages/conditions/edit", locals: { condition_input: }
@@ -74,6 +76,14 @@ describe "pages/conditions/edit.html.erb" do
 
       it "has the exit page heading" do
         expect(rendered).to have_content(condition.exit_page_heading)
+      end
+    end
+
+    context "when the page already has a secondary skip route" do
+      let(:secondary_skip) { true }
+
+      it "does not have an 'add exit page' option" do
+        expect(rendered).not_to have_content("Add an exit page")
       end
     end
   end

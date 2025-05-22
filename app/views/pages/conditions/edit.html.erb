@@ -34,7 +34,7 @@
               <%= option.question_text %>
             </option>
           <% end %>
-          <% unless PageRoutesService.new(form: condition_input.form, pages: FormRepository.pages(condition_input.form), page: condition_input.page).routes.find(&:secondary_skip?) %>
+          <% unless condition_input.secondary_skip? %>
             <optgroup label="<%= I18n.t("page_conditions.exit_page_label") %>">
               <% if condition_input.record.exit_page? %>
                 <option value="exit_page" <% if condition_input.record.exit_page? %>selected<% end %>>

@@ -88,6 +88,10 @@ class Pages::ConditionsInput < BaseInput
     goto_page_id == "create_exit_page"
   end
 
+  def secondary_skip?
+    PageRoutesService.new(form:, pages: FormRepository.pages(form), page:).routes.find(&:secondary_skip?)
+  end
+
 private
 
   def pages_after_position(position)
