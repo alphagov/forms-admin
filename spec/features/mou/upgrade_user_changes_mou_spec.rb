@@ -44,6 +44,7 @@ private
   def then_i_update_the_user_organisation
     fill_in "Organisation", with: "#{organisation.name}\n"
     click_button "Save"
+    sleep 1
   end
 
   def then_i_see_the_mou_with_organisation
