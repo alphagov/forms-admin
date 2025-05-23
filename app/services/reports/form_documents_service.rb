@@ -8,11 +8,19 @@ class Reports::FormDocumentsService
 
     FormDocumentsResponse = Data.define(:forms, :has_more_results?)
 
+    def draft_form_documents
+      form_documents(tag: "draft")
+    end
+
     def live_form_documents
+      form_documents(tag: "live")
+    end
+
+    def form_documents(tag:)
       Enumerator.new do |yielder|
         page = 1
         loop do
-          form_documents_response = live_form_documents_page(page)
+          form_documents_response = form_documents_page(tag:, page:)
           form_documents_response.forms.each { |f| yielder << f unless is_in_internal_organisation?(f) }
 
           break unless form_documents_response.has_more_results?
@@ -36,9 +44,9 @@ class Reports::FormDocumentsService
 
   private
 
-    def live_form_documents_page(page)
+    def form_documents_page(tag:, page:)
       uri = URI(FORM_DOCUMENTS_URL)
-      params = { tag: "live", page:, per_page: Settings.reports.forms_api_forms_per_request_page }
+      params = { tag:, page:, per_page: Settings.reports.forms_api_forms_per_request_page }
       uri.query = URI.encode_www_form(params)
 
       response = Net::HTTP.get_response(uri, REQUEST_HEADERS)
