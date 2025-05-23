@@ -3,7 +3,6 @@ require "rails_helper"
 describe "pages/type_of_answer.html.erb", type: :view do
   let(:form) { build :form, id: 1 }
   let(:type_of_answer_input) { build :type_of_answer_input }
-  let(:answer_types) { Page::ANSWER_TYPES }
   let(:page) { OpenStruct.new(routing_conditions: [], answer_type: "number") }
   let(:question_number) { 1 }
   let(:is_new_page) { true }
@@ -22,7 +21,6 @@ describe "pages/type_of_answer.html.erb", type: :view do
     # setup instance variables
     assign(:page, page)
     assign(:type_of_answer_input, type_of_answer_input)
-    assign(:answer_types, answer_types)
     assign(:type_of_answer_path, "/type-of-answer")
 
     render(template: "pages/type_of_answer")
@@ -50,7 +48,7 @@ describe "pages/type_of_answer.html.erb", type: :view do
   end
 
   it "has radio buttons for each answer_type" do
-    answer_types.each do |type|
+    Page::ANSWER_TYPES.each do |type|
       expect(rendered).to have_field("pages_type_of_answer_input[answer_type]", with: type)
     end
   end

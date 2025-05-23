@@ -17,17 +17,19 @@ feature "Add/editing a single question", type: :feature do
 
   context "when a form has no existing pages" do
     let(:pages) { [] }
-    let(:answer_types) { %w[organisation_name email phone_number national_insurance_number address date selection number text] }
 
     scenario "add a question for each type of answer" do
-      answer_types.each do |answer_type|
+      Page::ANSWER_TYPES.each do |answer_type|
         when_i_am_viewing_an_existing_form
         and_i_want_to_create_or_edit_a_page
         and_i_select_a_type_of_answer_option(answer_type)
-        and_i_provide_a_question_text
+        and_i_provide_a_question_text(answer_type)
 
         unless answer_type == "selection"
           and_i_make_the_question_mandatory
+        end
+
+        unless %w[selection file].include?(answer_type)
           and_i_make_the_question_not_repeatable
         end
 
@@ -50,7 +52,7 @@ feature "Add/editing a single question", type: :feature do
       and_i_can_see_a_list_of_existing_pages
       and_i_start_adding_a_new_question
       and_i_select_a_type_of_answer_option("national_insurance_number")
-      and_i_provide_a_question_text
+      and_i_provide_a_question_text("national_insurance_number")
       and_i_make_the_question_mandatory
       and_i_make_the_question_not_repeatable
       and_i_click_save
@@ -85,8 +87,12 @@ private
     expect_page_to_have_no_axe_errors(page)
   end
 
-  def and_i_provide_a_question_text
-    fill_in "Question text", with: "What is your name?"
+  def and_i_provide_a_question_text(answer_type)
+    if answer_type == "file"
+      fill_in "Ask for a file", with: "Upload a file"
+    else
+      fill_in "Question text", with: "What is your name?"
+    end
   end
 
   def and_i_make_the_question_mandatory
