@@ -24,6 +24,7 @@ describe "Settings" do
 
     include_examples expected_value_test, :branch_routing, features, { "enabled_by_group" => true }
     include_examples expected_value_test, :exit_pages, features, { "enabled_by_group" => true }
+    include_examples expected_value_test, :welsh, features, { "enabled_by_group" => true }
   end
 
   describe "forms_api" do

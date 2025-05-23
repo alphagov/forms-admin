@@ -4,6 +4,8 @@ features:
     enabled_by_group: true
   exit_pages:
     enabled_by_group: true
+  welsh:
+    enabled_by_group: true
 
 forms_api:
   # Authentication key to authenticate with forms-api
