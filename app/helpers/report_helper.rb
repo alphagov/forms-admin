@@ -72,7 +72,7 @@ private
   def report_forms_table_row(form)
     [
       govuk_link_to(form["content"]["name"], live_form_pages_path(form_id: form["form_id"])),
-      form["group"]["organisation"]["name"],
+      form.dig("group", "organisation", "name") || "",
     ]
   end
 

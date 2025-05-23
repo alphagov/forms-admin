@@ -136,6 +136,20 @@ RSpec.describe ReportHelper, type: :helper do
         "Department for Testing",
       ]
     end
+
+    context "when form is not in a group" do
+      let(:forms) do
+        [
+          { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => nil },
+        ]
+      end
+
+      it "returns the empty string for the organisation name" do
+        expect(helper.report_forms_table_rows(forms).map(&:second)).to eq [
+          "",
+        ]
+      end
+    end
   end
 
   describe "#report_forms_with_routes_table_head" do
@@ -188,6 +202,20 @@ RSpec.describe ReportHelper, type: :helper do
         1
       ]
     end
+
+    context "when form is not in a group" do
+      let(:forms) do
+        [
+          { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => nil },
+        ]
+      end
+
+      it "returns the empty string for the organisation name" do
+        expect(helper.report_forms_table_rows(forms).map(&:second)).to eq [
+          "",
+        ]
+      end
+    end
   end
 
   describe "#report_questions_table_head" do
@@ -227,6 +255,20 @@ RSpec.describe ReportHelper, type: :helper do
         "Email address",
         "What’s your email address?",
       ]
+    end
+
+    context "when form is not in a group" do
+      let(:questions) do
+        [
+          { "type" => "question_page", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => nil } },
+        ]
+      end
+
+      it "returns the empty string for the organisation name" do
+        expect(helper.report_questions_table_rows(questions).map(&:second)).to eq [
+          "",
+        ]
+      end
     end
   end
 end
