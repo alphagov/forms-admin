@@ -50,6 +50,11 @@ RUN npm ci --ignore-scripts --only=production
 
 FROM base AS app
 
+# Each directory that Rails or our application needs to
+# write to under /app/tmp/ must be added individually
+VOLUME "/tmp/"
+VOLUME "/app/tmp/sockets/"
+
 ENV RAILS_ENV="${RAILS_ENV:-production}" \
     PATH="${PATH}:/home/ruby/.local/bin" \
     USER="ruby"
