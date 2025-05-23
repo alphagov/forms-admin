@@ -36,6 +36,7 @@ class Reports::FeatureReportService
       total_forms: 0,
       forms_with_payment: 0,
       forms_with_routing: 0,
+      forms_with_branch_routing: 0,
       forms_with_add_another_answer: 0,
       forms_with_csv_submission_enabled: 0,
       forms_with_answer_type: HashWithIndifferentAccess.new,
@@ -46,6 +47,7 @@ class Reports::FeatureReportService
       report[:total_forms] += 1
       report[:forms_with_payment] += 1 if Reports::FormDocumentsService.has_payments?(form)
       report[:forms_with_routing] += 1 if Reports::FormDocumentsService.has_routes?(form)
+      report[:forms_with_branch_routing] += 1 if Reports::FormDocumentsService.has_secondary_skip_routes?(form)
       report[:forms_with_add_another_answer] += 1 if form["content"]["steps"].any? { |step| step["data"]["is_repeatable"] }
       report[:forms_with_csv_submission_enabled] += 1 if Reports::FormDocumentsService.has_csv_submission_enabled?(form)
 
@@ -94,6 +96,12 @@ class Reports::FeatureReportService
       .map { |form| form_with_routes_details(form) }
   end
 
+  define_report :forms_with_branch_routes do
+    form_documents
+      .select { |form| Reports::FormDocumentsService.has_secondary_skip_routes?(form) }
+      .map { |form| form_with_routes_details(form) }
+  end
+
   define_report :forms_with_payments do
     form_documents
       .select { |form| Reports::FormDocumentsService.has_payments?(form) }
@@ -117,6 +125,7 @@ private
     form = form_details(form)
     form["metadata"] = {
       "number_of_routes" => form["content"]["steps"].count { |step| step["routing_conditions"].present? },
+      "number_of_branch_routes" => Reports::FormDocumentsService.count_secondary_skip_routes(form),
     }
     form
   end

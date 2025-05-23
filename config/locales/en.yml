@@ -1382,6 +1382,7 @@ en:
       features:
         heading: Feature usage
         live_forms_with_add_another_answer: Live forms with add another answer
+        live_forms_with_branch_routes: Live forms with branch routes
         live_forms_with_csv_submission_enabled: Live forms with CSV submission enabled
         live_forms_with_payments: Live forms with payments
         live_forms_with_routes: Live forms with routes
@@ -1392,9 +1393,13 @@ en:
     form_or_questions_list_table:
       headings:
         form_name: Form name
+        number_of_branch_routes: Number of branch routes
         number_of_routes: Number of routes
         organisation: Organisation
         question_text: Question text
+    forms_with_branch_routes:
+      download_csv: Download data about all live forms with branch routes as a CSV file
+      heading: Live forms with branch routes
     forms_with_csv_submission_enabled:
       download_csv: Download data about all live forms with CSV submission enabled as a CSV file
       heading: Live forms with CSV submission enabled

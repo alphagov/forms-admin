@@ -15,6 +15,10 @@
         <%= row.with_value(text: govuk_link_to(data[:forms_with_routing], feature_report_path(report: "forms-with-routes"), no_visited_state: true)) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".features.live_forms_with_branch_routes")) %>
+        <%= row.with_value(text: govuk_link_to(data[:forms_with_branch_routing], feature_report_path(report: "forms-with-branch-routes"), no_visited_state: true)) %>
+      <% end %>
+      <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".features.live_forms_with_payments")) %>
         <%= row.with_value(text: govuk_link_to(data[:forms_with_payment], feature_report_path(report: "forms-with-payments"), no_visited_state: true)) %>
       <% end %>

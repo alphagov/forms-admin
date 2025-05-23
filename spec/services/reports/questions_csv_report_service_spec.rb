@@ -45,6 +45,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
         "false",
         "true",
         "false",
+        "false",
         "single_line",
         nil,
         nil,
@@ -72,6 +73,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
         nil,
         nil,
         "true",
+        "false",
         "false",
         "false",
         nil,
@@ -103,6 +105,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
         "false",
         "false",
         "false",
+        "false",
         "full_name",
         nil,
         nil,
@@ -112,6 +115,36 @@ RSpec.describe Reports::QuestionsCsvReportService do
     end
 
     it "has expected values for question with routing conditions" do
+      csv = csv_reports_service.csv
+      rows = CSV.parse(csv)
+      routing_question_row = rows.detect { |row| row.include? "Would you like to submit anonymously?" }
+      expect(routing_question_row).to eq([
+        "4",
+        "live",
+        "Skip route form",
+        group.organisation.name,
+        group.organisation.id.to_s,
+        group.name,
+        group.external_id,
+        "1",
+        "Would you like to submit anonymously?",
+        "selection",
+        nil,
+        nil,
+        nil,
+        "false",
+        "false",
+        "true",
+        "false",
+        nil,
+        "true",
+        "2",
+        nil,
+        "{\"only_one_option\" => \"true\", \"selection_options\" => [{\"name\" => \"Yes\"}, {\"name\" => \"No\"}]}",
+      ])
+    end
+
+    it "has expected values for question with branch routing conditions" do
       csv = csv_reports_service.csv
       rows = CSV.parse(csv)
       routing_question_row = rows.detect { |row| row.include? "How many times have you filled out this form?" }
@@ -131,6 +164,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
         nil,
         "false",
         "false",
+        "true",
         "true",
         nil,
         "true",
