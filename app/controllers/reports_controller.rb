@@ -20,7 +20,9 @@ class ReportsController < ApplicationController
   end
 
   def questions_with_add_another_answer
-    questions_feature_report(:questions_with_add_another_answer)
+    forms = Reports::FormDocumentsService.live_form_documents
+    questions = Reports::FeatureReportService.new(forms).questions_with_add_another_answer
+    questions_feature_report(questions)
   end
 
   def forms_with_routes
@@ -99,10 +101,7 @@ class ReportsController < ApplicationController
 
 private
 
-  def questions_feature_report(report)
-    forms = Reports::FormDocumentsService.live_form_documents
-    questions = Reports::FeatureReportService.new(forms).send report
-
+  def questions_feature_report(questions)
     if params[:format] == "csv"
       send_data Reports::QuestionsCsvReportService.new(questions).csv,
                 type: "text/csv; charset=iso-8859-1",
