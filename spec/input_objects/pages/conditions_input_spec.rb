@@ -56,9 +56,9 @@ RSpec.describe Pages::ConditionsInput, type: :model do
         expect(ConditionRepository).to have_received(:create!)
       end
 
-      context "when goto_page_id is 'exit_page'" do
+      context "when goto_page_id is 'create_exit_page'" do
         it "returns true" do
-          conditions_input.goto_page_id = "exit_page"
+          conditions_input.goto_page_id = "create_exit_page"
           expect(conditions_input.submit).to be true
         end
       end
@@ -95,6 +95,17 @@ RSpec.describe Pages::ConditionsInput, type: :model do
         conditions_input.update_condition
 
         expect(ConditionRepository).to have_received(:save!)
+      end
+    end
+
+    context "when going to an exit page" do
+      it "does not call assign_skip_to_end" do
+        allow(conditions_input).to receive(:assign_skip_to_end)
+
+        conditions_input.goto_page_id = "exit_page"
+        conditions_input.update_condition
+
+        expect(conditions_input).not_to have_received(:assign_skip_to_end)
       end
     end
 
@@ -227,6 +238,15 @@ RSpec.describe Pages::ConditionsInput, type: :model do
         expect(conditions_input.goto_page_id).to eq 3
       end
     end
+
+    context "when exit_page? is true" do
+      let(:condition) { build :condition, :with_exit_page }
+
+      it "sets goto_page_id to 'exit_page'" do
+        conditions_input.assign_condition_values
+        expect(conditions_input.goto_page_id).to eq "exit_page"
+      end
+    end
   end
 
   describe "#assign_skip_to_end" do
@@ -253,6 +273,20 @@ RSpec.describe Pages::ConditionsInput, type: :model do
         expect(conditions_input.goto_page_id).to eq 3
         expect(conditions_input.skip_to_end).to be false
       end
+    end
+  end
+
+  describe "#secondary_skip?" do
+    let(:page_routes_service) { instance_double(PageRoutesService) }
+
+    before do
+      allow(PageRoutesService).to receive(:new).and_return(page_routes_service)
+      allow(page_routes_service).to receive(:routes).and_return([instance_double(Api::V1::ConditionResource, secondary_skip?: true)])
+    end
+
+    it "calls the PageRoutesService" do
+      expect(PageRoutesService).to receive(:new).with(form:, pages: FormRepository.pages(form), page:)
+      conditions_input.secondary_skip?
     end
   end
 end

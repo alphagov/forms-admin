@@ -159,7 +159,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when the goto page is an exit page" do
-      let(:params) { { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: "exit_page", answer_value: "Wales" } } }
+      let(:params) { { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: "create_exit_page", answer_value: "Wales" } } }
       let(:group) { create(:group, organisation: standard_user.organisation, exit_pages_enabled: true) }
 
       it "redirects to the new exit page" do
@@ -297,6 +297,15 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
       it "renders new page" do
         expect(response).to render_template("pages/conditions/edit")
+      end
+    end
+
+    context "when the form is submitted creates an exit page" do
+      let(:group) { create(:group, organisation: standard_user.organisation, exit_pages_enabled: true) }
+      let(:params) { { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: "create_exit_page", answer_value: "Wales" } } }
+
+      it "redirects to the edit exit page" do
+        expect(response).to redirect_to edit_exit_page_path(form:, page:, condition:)
       end
     end
 

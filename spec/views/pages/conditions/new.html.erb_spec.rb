@@ -40,7 +40,7 @@ describe "pages/conditions/new.html.erb" do
     let(:group) { build :group, exit_pages_enabled: true }
 
     it "has an exit page option" do
-      expect(rendered).to have_css("option[value='exit_page']", text: I18n.t("page_conditions.exit_page"))
+      expect(rendered).to have_css("option[value='create_exit_page']", text: I18n.t("page_conditions.exit_page"))
     end
   end
 end

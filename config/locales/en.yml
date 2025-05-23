@@ -190,6 +190,7 @@ en:
       title: Important
     success:
       exit_page_created: Your exit page has been added
+      exit_page_updated: Your exit page has been saved
       form:
         change_name: Your form name has been saved
         declaration_saved: Your declaration has been saved
@@ -1054,6 +1055,7 @@ en:
     condition_goto_page_text: "%{goto_page_question_number}, “%{goto_page_question_text}”"
     condition_goto_page_text_with_errors: "[Question not selected]"
     condition_name: Question %{question_number}’s routes
+    edit_exit_page: Edit “%{exit_page_heading}”
     exit_page: Add an exit page
     exit_page_label: An ‘exit page’ to leave the form
     none_of_the_above: None of the above
@@ -1136,6 +1138,7 @@ en:
     date_settings: Are you asking for someone’s date of birth?
     declaration: Add a declaration for people to agree to
     delete_secondary_skip: Are you sure you want to delete the route for any other answer?
+    edit_exit_page: Edit exit page
     email_code_sent: Confirmation code sent
     error_prefix: 'Error: '
     exit_page_new: Add exit page
@@ -1224,6 +1227,9 @@ en:
     delete_question: Delete question
     destroy:
       success: Successfully deleted ‘%{question_text}’
+    exit_page:
+      edit:
+        back_link: Back to edit route 1
     go_to_your_questions: Back to your questions
     heading: Edit question
     index:
