@@ -5,7 +5,7 @@ describe "reports/feature_report" do
   let(:records) { [] }
 
   before do
-    controller.request.path_parameters[:action] = report
+    controller.request.path_parameters[:report] = report.dasherize
 
     render locals: { report:, records: }
   end
@@ -30,7 +30,7 @@ describe "reports/feature_report" do
     end
 
     it "has a link to download the CSV" do
-      expect(rendered).to have_link("Download data about all live forms with CSV submission enabled as a CSV file", href: report_forms_with_csv_submission_enabled_path(format: :csv))
+      expect(rendered).to have_link("Download data about all live forms with CSV submission enabled as a CSV file", href: feature_report_path(report: "forms-with-csv-submission-enabled", format: :csv))
     end
 
     describe "questions table" do
@@ -76,7 +76,7 @@ describe "reports/feature_report" do
     end
 
     it "has a link to download the CSV" do
-      expect(rendered).to have_link("Download data about all live forms with payments as a CSV file", href: report_forms_with_payments_path(format: :csv))
+      expect(rendered).to have_link("Download data about all live forms with payments as a CSV file", href: feature_report_path(report: "forms-with-payments", format: :csv))
     end
 
     describe "questions table" do
@@ -122,7 +122,7 @@ describe "reports/feature_report" do
     end
 
     it "has a link to download the CSV" do
-      expect(rendered).to have_link("Download data about all live forms with routes as a CSV file", href: report_forms_with_routes_path(format: :csv))
+      expect(rendered).to have_link("Download data about all live forms with routes as a CSV file", href: feature_report_path(report: "forms-with-routes", format: :csv))
     end
 
     describe "questions table" do
@@ -171,7 +171,7 @@ describe "reports/feature_report" do
     end
 
     it "has a link to download the CSV" do
-      expect(rendered).to have_link("Download all questions with add another answer in live forms as a CSV file", href: report_questions_with_add_another_answer_path(format: :csv))
+      expect(rendered).to have_link("Download all questions with add another answer in live forms as a CSV file", href: feature_report_path(report: "questions-with-add-another-answer", format: :csv))
     end
 
     describe "questions table" do

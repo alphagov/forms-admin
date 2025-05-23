@@ -19,55 +19,18 @@ class ReportsController < ApplicationController
     render template: "reports/questions_with_answer_type", locals: { answer_type:, questions: }
   end
 
-  def questions_with_add_another_answer
+  def feature_report
+    report = params[:report].underscore
+
     forms = Reports::FormDocumentsService.live_form_documents
-    questions = Reports::FeatureReportService.new(forms).questions_with_add_another_answer
+    records = Reports::FeatureReportService.new(forms).report report
 
     if params[:format] == "csv"
-      send_data Reports::QuestionsCsvReportService.new(questions).csv,
+      send_data Reports::CsvReportService.new(records).csv,
                 type: "text/csv; charset=iso-8859-1",
-                disposition: "attachment; filename=#{csv_filename('live_questions_with_add_another_answer_report')}"
+                disposition: "attachment; filename=#{csv_filename("live_#{report}_report")}"
     else
-      render template: "reports/feature_report", locals: { report: params[:action], records: questions }
-    end
-  end
-
-  def forms_with_routes
-    forms = Reports::FormDocumentsService.live_form_documents
-    forms = Reports::FeatureReportService.new(forms).forms_with_routes
-
-    if params[:format] == "csv"
-      send_data Reports::FormsCsvReportService.new(forms).csv,
-                type: "text/csv; charset=iso-8859-1",
-                disposition: "attachment; filename=#{csv_filename('live_forms_with_routes_report')}"
-    else
-      render template: "reports/feature_report", locals: { report: params[:action], records: forms }
-    end
-  end
-
-  def forms_with_payments
-    forms = Reports::FormDocumentsService.live_form_documents
-    forms = Reports::FeatureReportService.new(forms).forms_with_payments
-
-    if params[:format] == "csv"
-      send_data Reports::FormsCsvReportService.new(forms).csv,
-                type: "text/csv; charset=iso-8859-1",
-                disposition: "attachment; filename=#{csv_filename('live_forms_with_payments_report')}"
-    else
-      render template: "reports/feature_report", locals: { report: params[:action], records: forms }
-    end
-  end
-
-  def forms_with_csv_submission_enabled
-    forms = Reports::FormDocumentsService.live_form_documents
-    forms = Reports::FeatureReportService.new(forms).forms_with_csv_submission_enabled
-
-    if params[:format] == "csv"
-      send_data Reports::FormsCsvReportService.new(forms).csv,
-                type: "text/csv; charset=iso-8859-1",
-                disposition: "attachment; filename=#{csv_filename('live_forms_with_csv_submission_enabled_report')}"
-    else
-      render template: "reports/feature_report", locals: { report: params[:action], records: forms }
+      render template: "reports/feature_report", locals: { report:, records: }
     end
   end
 
