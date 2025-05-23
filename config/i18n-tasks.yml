@@ -132,6 +132,8 @@ ignore_unused:
 - 'errors.*'
 - 'date.formats.*'
 - 'helpers.*'
+- 'reports.*.heading'
+- 'reports.*.download_csv'
 - 'routing_page.{branch_routing,exit_pages}.*'
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:

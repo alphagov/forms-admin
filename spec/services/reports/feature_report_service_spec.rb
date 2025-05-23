@@ -1,127 +1,337 @@
 require "rails_helper"
 
 RSpec.describe Reports::FeatureReportService do
-  let(:form_documents_response_json) { JSON.parse(file_fixture("form_documents_response.json").read) }
+  let(:form_documents) { JSON.parse(file_fixture("form_documents_response.json").read) }
   let(:group) { create(:group) }
 
   before do
     GroupForm.create!(form_id: 1, group:)
     GroupForm.create!(form_id: 2, group:)
     GroupForm.create!(form_id: 3, group:)
-
-    allow(Reports::FormDocumentsService).to receive(:live_form_documents).and_return(form_documents_response_json)
+    GroupForm.create!(form_id: 4, group:)
   end
 
   describe "#report" do
     it "returns the feature report" do
-      report = described_class.report
+      report = described_class.new(form_documents).report
       expect(report).to eq({
-        total_live_forms: 3,
-        live_forms_with_payment: 1,
-        live_forms_with_routing: 1,
-        live_forms_with_add_another_answer: 1,
-        live_forms_with_csv_submission_enabled: 1,
-        live_forms_with_answer_type: {
+        total_forms: 4,
+        forms_with_payment: 1,
+        forms_with_routing: 2,
+        forms_with_add_another_answer: 1,
+        forms_with_csv_submission_enabled: 1,
+        forms_with_answer_type: {
           "address" => 1,
           "date" => 1,
           "email" => 2,
-          "name" => 1,
+          "name" => 2,
           "national_insurance_number" => 1,
           "number" => 1,
           "phone_number" => 1,
-          "selection" => 2,
+          "selection" => 3,
           "text" => 3,
         },
-        live_steps_with_answer_type: {
+        steps_with_answer_type: {
           "address" => 1,
           "date" => 1,
           "email" => 2,
-          "name" => 1,
+          "name" => 2,
           "national_insurance_number" => 1,
           "number" => 1,
           "phone_number" => 1,
-          "selection" => 2,
+          "selection" => 3,
           "text" => 5,
         },
       })
     end
   end
 
+  describe "#questions" do
+    it "returns all questions in all forms given" do
+      questions = described_class.new(form_documents).questions
+      expect(questions.length).to eq 17
+    end
+
+    it "returns details needed to render report" do
+      questions = described_class.new(form_documents).questions
+      expect(questions).to all match(
+        a_hash_including(
+          "form" => a_hash_including(
+            "form_id" => an_instance_of(Integer),
+            "content" => a_hash_including(
+              "name" => a_kind_of(String),
+            ),
+          ),
+          "data" => a_hash_including(
+            "question_text" => a_kind_of(String),
+          ),
+        ),
+      )
+    end
+
+    it "includes a reference to the form document" do
+      questions = described_class.new(form_documents).questions_with_answer_type("text")
+      expect(questions).to all include(
+        "form" => a_hash_including(
+          "form_id",
+          "content" => a_hash_including(
+            "name",
+          ),
+        ),
+      )
+    end
+  end
+
   describe "#questions_with_answer_type" do
+    it "returns details needed to render report" do
+      questions = described_class.new(form_documents).questions_with_answer_type("email")
+      expect(questions).to match [
+        a_hash_including(
+          "form" => a_hash_including(
+            "form_id" => 1,
+            "content" => a_hash_including(
+              "name" => "All question types form",
+            ),
+          ),
+          "data" => a_hash_including(
+            "question_text" => "Email address",
+          ),
+        ),
+        a_hash_including(
+          "form" => a_hash_including(
+            "form_id" => 3,
+            "content" => a_hash_including(
+              "name" => "Branch route form",
+            ),
+          ),
+          "data" => a_hash_including(
+            "question_text" => "What’s your email address?",
+          ),
+        ),
+      ]
+    end
+
     it "returns questions with the given answer type" do
-      questions = described_class.questions_with_answer_type("email")
+      questions = described_class.new(form_documents).questions_with_answer_type("name")
       expect(questions.length).to eq 2
-      expect(questions).to include(
-        {
-          form_name: "All question types form",
-          form_id: 1,
-          organisation_name: group.organisation.name,
-          question_text: "Email address",
-        },
+      expect(questions).to all match(
+        a_hash_including(
+          "data" => a_hash_including(
+            "answer_type" => "name",
+          ),
+        ),
       )
-      expect(questions).to include({
-        form_name: "Branch route form",
-        form_id: 3,
-        organisation_name: group.organisation.name,
-        question_text: "What’s your email address?",
-      })
+    end
+
+    it "includes a reference to the form document" do
+      questions = described_class.new(form_documents).questions_with_answer_type("text")
+      expect(questions).to all include(
+        "form" => a_hash_including(
+          "form_id",
+          "content" => a_hash_including(
+            "name",
+          ),
+        ),
+      )
     end
   end
 
-  describe "#live_questions_with_add_another_answer" do
+  describe "#questions_with_add_another_answer" do
+    it "returns details needed to render report" do
+      questions = described_class.new(form_documents).questions_with_add_another_answer
+      expect(questions).to match [
+        a_hash_including(
+          "form" => a_hash_including(
+            "form_id" => 1,
+            "content" => a_hash_including(
+              "name" => "All question types form",
+            ),
+            "group" => a_hash_including(
+              "organisation" => a_hash_including(
+                "name" => group.organisation.name,
+              ),
+            ),
+          ),
+          "data" => a_hash_including(
+            "question_text" => "Single line of text",
+          ),
+        ),
+        a_hash_including(
+          "form" => a_hash_including(
+            "form_id" => 1,
+            "content" => a_hash_including(
+              "name" => "All question types form",
+            ),
+            "group" => a_hash_including(
+              "organisation" => a_hash_including(
+                "name" => group.organisation.name,
+              ),
+            ),
+          ),
+          "data" => a_hash_including(
+            "question_text" => "Number",
+          ),
+        ),
+      ]
+    end
+
     it "returns questions with add another answer" do
-      questions = described_class.live_questions_with_add_another_answer
-      expect(questions.length).to eq 2
-      expect(questions).to include(
-        {
-          form_name: "All question types form",
-          form_id: 1,
-          organisation_name: group.organisation.name,
-          question_text: "Single line of text",
-        },
+      questions = described_class.new(form_documents).questions_with_add_another_answer
+      expect(questions).to all match(
+        a_hash_including(
+          "data" => a_hash_including(
+            "is_repeatable" => true,
+          ),
+        ),
       )
-      expect(questions).to include({
-        form_name: "All question types form",
-        form_id: 1,
-        organisation_name: group.organisation.name,
-        question_text: "Number",
-      })
+    end
+
+    it "includes a reference to the form document" do
+      questions = described_class.new(form_documents).questions_with_answer_type("text")
+      expect(questions).to all include(
+        "form" => a_hash_including(
+          "form_id",
+          "content" => a_hash_including(
+            "name",
+          ),
+        ),
+      )
+    end
+
+    it "includes a reference to the organisation record" do
+      questions = described_class.new(form_documents).questions_with_answer_type("text")
+      expect(questions).to all include(
+        "form" => a_hash_including(
+          "group" => a_hash_including(
+            "organisation" => a_hash_including(
+              "name",
+            ),
+          ),
+        ),
+      )
     end
   end
 
-  describe "#live_forms_with_routes" do
+  describe "#forms_with_routes" do
+    it "returns details needed to render report" do
+      forms = described_class.new(form_documents).forms_with_routes
+      expect(forms).to match [
+        a_hash_including(
+          "form_id" => 3,
+          "content" => a_hash_including(
+            "name" => "Branch route form",
+          ),
+          "group" => a_hash_including(
+            "organisation" => a_hash_including(
+              "name" => group.organisation.name,
+            ),
+          ),
+          "metadata" => {
+            "number_of_routes" => 2,
+          },
+        ),
+        a_hash_including(
+          "form_id" => 4,
+          "content" => a_hash_including(
+            "name" => "Skip route form",
+          ),
+          "group" => a_hash_including(
+            "organisation" => a_hash_including(
+              "name" => group.organisation.name,
+            ),
+          ),
+          "metadata" => {
+            "number_of_routes" => 1,
+          },
+        ),
+      ]
+    end
+
     it "returns forms with routes" do
-      forms = described_class.live_forms_with_routes
-      expect(forms.length).to eq 1
-      expect(forms).to include(
-        form_name: "Branch route form",
-        form_id: 3,
-        organisation_name: group.organisation.name,
-        number_of_routes: 2,
+      forms = described_class.new(form_documents).forms_with_routes
+      expect(forms).to match [
+        a_hash_including(
+          "form_id" => 3,
+          "content" => a_hash_including(
+            "name" => "Branch route form",
+          ),
+        ),
+        a_hash_including(
+          "form_id" => 4,
+          "content" => a_hash_including(
+            "name" => "Skip route form",
+          ),
+        ),
+      ]
+    end
+
+    it "includes counts of routes" do
+      forms = described_class.new(form_documents).forms_with_routes
+      expect(forms).to all include(
+        "metadata" => a_hash_including(
+          "number_of_routes" => an_instance_of(Integer),
+        ),
+      )
+    end
+
+    it "includes a reference to the organisation record" do
+      forms = described_class.new(form_documents).forms_with_routes
+      expect(forms).to all include(
+        "group" => a_hash_including(
+          "organisation" => a_hash_including(
+            "name",
+          ),
+        ),
       )
     end
   end
 
-  describe "#live_forms_with_payments" do
+  describe "#forms_with_payments" do
     it "returns live forms with payments" do
-      forms = described_class.live_forms_with_payments
-      expect(forms.length).to eq 1
-      expect(forms).to include(
-        form_name: "All question types form",
-        form_id: 1,
-        organisation_name: group.organisation.name,
+      forms = described_class.new(form_documents).forms_with_payments
+      expect(forms).to match [
+        a_hash_including(
+          "form_id" => 1,
+          "content" => a_hash_including(
+            "name" => "All question types form",
+          ),
+        ),
+      ]
+    end
+
+    it "includes a reference to the organisation record" do
+      forms = described_class.new(form_documents).forms_with_routes
+      expect(forms).to all include(
+        "group" => a_hash_including(
+          "organisation" => a_hash_including(
+            "name",
+          ),
+        ),
       )
     end
   end
 
-  describe "#live_forms_with_csv_submission_enabled" do
+  describe "#forms_with_csv_submission_enabled" do
     it "returns live forms with csv enabled" do
-      forms = described_class.live_forms_with_csv_submission_enabled
-      expect(forms.length).to eq 1
-      expect(forms).to include(
-        form_name: "All question types form",
-        form_id: 1,
-        organisation_name: group.organisation.name,
+      forms = described_class.new(form_documents).forms_with_csv_submission_enabled
+      expect(forms).to match [
+        a_hash_including(
+          "form_id" => 1,
+          "content" => a_hash_including(
+            "name" => "All question types form",
+          ),
+        ),
+      ]
+    end
+
+    it "includes a reference to the organisation record" do
+      forms = described_class.new(form_documents).forms_with_routes
+      expect(forms).to all include(
+        "group" => a_hash_including(
+          "organisation" => a_hash_including(
+            "name",
+          ),
+        ),
       )
     end
   end

@@ -1,25 +1,15 @@
 require "rails_helper"
 
-describe "reports/questions_with_answer_type.html.erb" do
+describe "reports/questions_with_answer_type" do
   let(:questions) do
     [
-      {
-        form_name: "All question types form",
-        form_id: 1,
-        organisation_name: "Government Digital Service",
-        question_text: "Email address",
-      },
-      {
-        form_name: "Branch route form",
-        form_id: 3,
-        organisation_name: "Government Digital Service",
-        question_text: "What’s your email address?",
-      },
+      { "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } } },
+      { "data" => { "question_text" => "What’s your email address?" }, "form" => { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } } },
     ]
   end
 
   before do
-    render template: "reports/questions_with_answer_type", locals: { answer_type: "email", questions: }
+    render locals: { answer_type: "email", questions: }
   end
 
   describe "page title" do
