@@ -1237,6 +1237,7 @@ en:
         title: Are you sure you want to delete this exit page?
       edit:
         back_link: Back to edit route 1
+        delete_exit_page: Delete exit page
     go_to_your_questions: Back to your questions
     heading: Edit question
     index:

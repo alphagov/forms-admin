@@ -17,11 +17,12 @@
       <%= f.govuk_text_field( :exit_page_heading, value: update_exit_page_input.exit_page_heading, label: { size: 'm' })  %>
 
       <%= f.govuk_text_area( :exit_page_markdown, value: update_exit_page_input.exit_page_markdown, label: { size: 'm' })  %>
-      
+
       <div class="govuk-button-group">
         <%= f.govuk_submit t("save_and_continue") %>
         <%= govuk_link_to t('cancel'), edit_condition_path(update_exit_page_input.form.id, update_exit_page_input.page.id, update_exit_page_input.record.id) %>
       </div>
+      <%= govuk_button_link_to t('.delete_exit_page'), delete_exit_page_path(update_exit_page_input.form.id, update_exit_page_input.page.id, update_exit_page_input.record.id), warning: true %>
     <% end %>
   </div>
 </div>
