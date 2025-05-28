@@ -59,11 +59,12 @@ resource "aws_ecs_task_definition" "task" {
 
     # forms-admin
     {
-      name        = "forms-admin"
-      image       = var.forms_admin_container_image
-      command     = []
-      essential   = true
-      environment = local.forms_admin_env_vars
+      name                   = "forms-admin"
+      image                  = var.forms_admin_container_image
+      command                = []
+      essential              = true
+      environment            = local.forms_admin_env_vars
+      readonlyRootFilesystem = true
 
       dockerLabels = {
         "traefik.http.middlewares.forms-admin-pr-${var.pull_request_number}.basicauth.users" : data.terraform_remote_state.review.outputs.traefik_basic_auth_credentials
@@ -111,11 +112,12 @@ resource "aws_ecs_task_definition" "task" {
 
     # forms-api
     {
-      name        = "forms-api"
-      image       = "711966560482.dkr.ecr.eu-west-2.amazonaws.com/forms-api-deploy:latest"
-      command     = []
-      essential   = true
-      environment = local.forms_api_env_vars
+      name                   = "forms-api"
+      image                  = "711966560482.dkr.ecr.eu-west-2.amazonaws.com/forms-api-deploy:latest"
+      command                = []
+      essential              = true
+      environment            = local.forms_api_env_vars
+      readonlyRootFilesystem = true
 
       portMappings = [{ containerPort = 9292 }]
 
@@ -172,11 +174,12 @@ resource "aws_ecs_task_definition" "task" {
 
     # forms-admin-seeding
     {
-      name        = "forms-admin-seeding"
-      image       = var.forms_admin_container_image
-      command     = ["rake", "db:setup"]
-      essential   = false
-      environment = local.forms_admin_env_vars
+      name                   = "forms-admin-seeding"
+      image                  = var.forms_admin_container_image
+      command                = ["rake", "db:create", "db:migrate", "db:seed"]
+      essential              = false
+      environment            = local.forms_admin_env_vars
+      readonlyRootFilesystem = true
 
       logConfiguration = {
         logDriver = "awslogs"
@@ -197,11 +200,12 @@ resource "aws_ecs_task_definition" "task" {
 
     # forms-api-seeding
     {
-      name        = "forms-api-seeding"
-      image       = "711966560482.dkr.ecr.eu-west-2.amazonaws.com/forms-api-deploy:latest"
-      command     = ["rake", "db:setup"]
-      essential   = false
-      environment = local.forms_api_env_vars
+      name                   = "forms-api-seeding"
+      image                  = "711966560482.dkr.ecr.eu-west-2.amazonaws.com/forms-api-deploy:latest"
+      command                = ["rake", "db:create", "db:migrate", "db:seed"]
+      essential              = false
+      environment            = local.forms_api_env_vars
+      readonlyRootFilesystem = true
 
       logConfiguration = {
         logDriver = "awslogs"
