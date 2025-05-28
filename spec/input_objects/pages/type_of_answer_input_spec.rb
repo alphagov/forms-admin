@@ -6,7 +6,6 @@ RSpec.describe Pages::TypeOfAnswerInput, type: :model do
   let(:current_form) { build :form, id: 1 }
 
   it "has a valid factory" do
-    type_of_answer_input = build(:type_of_answer_input, draft_question:)
     expect(type_of_answer_input).to be_valid
   end
 
