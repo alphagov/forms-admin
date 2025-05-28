@@ -176,7 +176,7 @@ resource "aws_ecs_task_definition" "task" {
     {
       name                   = "forms-admin-seeding"
       image                  = var.forms_admin_container_image
-      command                = ["rake", "db:setup"]
+      command                = ["rake", "db:create", "db:migrate", "db:seed"]
       essential              = false
       environment            = local.forms_admin_env_vars
       readonlyRootFilesystem = true
@@ -202,7 +202,7 @@ resource "aws_ecs_task_definition" "task" {
     {
       name                   = "forms-api-seeding"
       image                  = "711966560482.dkr.ecr.eu-west-2.amazonaws.com/forms-api-deploy:latest"
-      command                = ["rake", "db:setup"]
+      command                = ["rake", "db:create", "db:migrate", "db:seed"]
       essential              = false
       environment            = local.forms_api_env_vars
       readonlyRootFilesystem = true
