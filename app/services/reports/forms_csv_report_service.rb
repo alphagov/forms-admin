@@ -22,6 +22,7 @@ class Reports::FormsCsvReportService
     "Privacy policy URL",
     "What happens next markdown",
     "Submission type",
+    "Language",
   ].freeze
 
   attr_reader :form_documents
@@ -66,6 +67,7 @@ private
       form["content"]["privacy_policy_url"],
       form["content"]["what_happens_next_markdown"],
       form["content"]["submission_type"],
+      form["content"]["language"],
     ]
   end
 end

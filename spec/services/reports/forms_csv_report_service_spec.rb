@@ -47,6 +47,7 @@ RSpec.describe Reports::FormsCsvReportService do
         "https://www.gov.uk/help/privacy-notice",
         "Test",
         "email_with_csv",
+        "en",
       ])
     end
   end
