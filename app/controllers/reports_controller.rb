@@ -43,6 +43,14 @@ class ReportsController < ApplicationController
     forms_feature_report(tag, params[:action], forms)
   end
 
+  def forms_with_branch_routes
+    tag = params[:tag]
+    forms = Reports::FormDocumentsService.live_form_documents
+    forms = Reports::FeatureReportService.new(forms).forms_with_branch_routes
+
+    forms_feature_report(tag, params[:action], forms)
+  end
+
   def forms_with_payments
     tag = params[:tag]
     forms = Reports::FormDocumentsService.form_documents(tag:)

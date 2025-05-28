@@ -290,6 +290,62 @@ RSpec.describe Reports::FeatureReportService do
     end
   end
 
+  describe "#forms_with_branch_routes" do
+    it "returns details needed to render report" do
+      forms = described_class.new(form_documents).forms_with_branch_routes
+      expect(forms).to match [
+        a_hash_including(
+          "form_id" => 3,
+          "content" => a_hash_including(
+            "name" => "Branch route form",
+          ),
+          "group" => a_hash_including(
+            "organisation" => a_hash_including(
+              "name" => group.organisation.name,
+            ),
+          ),
+          "metadata" => {
+            "number_of_routes" => 2,
+            "number_of_branch_routes" => 1,
+          },
+        ),
+      ]
+    end
+
+    it "returns forms with branch routes" do
+      forms = described_class.new(form_documents).forms_with_branch_routes
+      expect(forms).to match [
+        a_hash_including(
+          "form_id" => 3,
+          "content" => a_hash_including(
+            "name" => "Branch route form",
+          ),
+        ),
+      ]
+    end
+
+    it "includes counts of routes" do
+      forms = described_class.new(form_documents).forms_with_branch_routes
+      expect(forms).to all include(
+        "metadata" => a_hash_including(
+          "number_of_routes" => an_instance_of(Integer),
+          "number_of_branch_routes" => an_instance_of(Integer),
+        ),
+      )
+    end
+
+    it "includes a reference to the organisation record" do
+      forms = described_class.new(form_documents).forms_with_branch_routes
+      expect(forms).to all include(
+        "group" => a_hash_including(
+          "organisation" => a_hash_including(
+            "name",
+          ),
+        ),
+      )
+    end
+  end
+
   describe "#forms_with_payments" do
     it "returns live forms with payments" do
       forms = described_class.new(form_documents).forms_with_payments

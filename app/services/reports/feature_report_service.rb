@@ -70,6 +70,12 @@ class Reports::FeatureReportService
       .map { |form| form_with_routes_details(form) }
   end
 
+  def forms_with_branch_routes
+    form_documents
+      .select { |form| Reports::FormDocumentsService.has_secondary_skip_routes?(form) }
+      .map { |form| form_with_routes_details(form) }
+  end
+
   def forms_with_payments
     form_documents
       .select { |form| Reports::FormDocumentsService.has_payments?(form) }
