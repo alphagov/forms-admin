@@ -206,7 +206,8 @@
       "s3_bucket_aws_account_id": null,
       "question_section_completed": true,
       "what_happens_next_markdown": "Test",
-      "declaration_section_completed": true
+      "declaration_section_completed": true,
+      "language": "en"
     },
     "created_at": "2025-01-02T16:24:31.346Z",
     "updated_at": "2025-01-02T16:24:31.346Z"
@@ -260,7 +261,8 @@
       "s3_bucket_aws_account_id": null,
       "question_section_completed": true,
       "what_happens_next_markdown": "Test",
-      "declaration_section_completed": true
+      "declaration_section_completed": true,
+      "language": "en"
     },
     "created_at": "2025-01-02T16:24:31.364Z",
     "updated_at": "2025-01-02T16:24:31.364Z"
@@ -421,7 +423,8 @@
       "s3_bucket_aws_account_id": null,
       "question_section_completed": true,
       "what_happens_next_markdown": "Test",
-      "declaration_section_completed": true
+      "declaration_section_completed": true,
+      "language": "en"
     },
     "created_at": "2025-01-02T16:24:31.445Z",
     "updated_at": "2025-01-02T16:24:31.445Z"
@@ -517,7 +520,8 @@
       "s3_bucket_aws_account_id": null,
       "question_section_completed": true,
       "what_happens_next_markdown": "This is a test form",
-      "declaration_section_completed": true
+      "declaration_section_completed": true,
+      "language": "en"
     },
     "created_at": "2025-05-07T10:28:31.274Z",
     "updated_at": "2025-05-07T10:28:31.274Z"
