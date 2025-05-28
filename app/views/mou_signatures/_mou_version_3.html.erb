@@ -1,14 +1,19 @@
-<p>Last updated: 22 May 2025</p>
+<p>Last updated: 13 June 2024</p>
 
 <nav aria-labelledby="sections-heading">
   <h2 class="govuk-heading-m" id="sections-heading">Contents</h2>
   <ul class="govuk-list">
     <li><a href="#what-this-document-is">What this document is </a></li>
     <li><a href="#about-gov.uk-forms">About GOV.UK Forms</a></li>
+    <li>
+      <a href="#how-gov.uk-forms-handles-the-personal-data-of-members-of-the-public-and-businesses"
+        >How GOV.UK Forms handles the personal data of members of the public and businesses
+      </a>
+    </li>
     <li><a href="#starting-and-ending-this-agreement">Starting and ending this agreement </a></li>
     <li><a href="#people-involved-in-this-agreement">People involved in this agreement </a></li>
     <li><a href="#gov.uk-forms-pricing">GOV.UK Forms pricing</a></li>
-    <li><a href="#security-responsibilities">Security Responsibilities </a></li>
+    <li><a href="#cyber-security-responsibilities">Cyber Security Responsibilities </a></li>
     <li><a href="#compliance-with-data-protection-legislation">Compliance with Data Protection Legislation </a></li>
     <li><a href="#protection-of-personal-data">Protection of Personal Data </a></li>
     <li>
@@ -53,14 +58,9 @@
 <ol class="govuk-list govuk-list--number" start="4">
   <li>
     <p>
-      <a href="https://www.forms.service.gov.uk/">GOV.UK Forms</a>
-      is a web-based platform owned and operated by GDS, which is used for easily creating online forms on GOV.UK.
-    </p>
-  </li>
-  <li>
-    <p>
-      The GOV.UK Forms team within GDS develops, maintains and runs the GOV.UK Forms platform. Your organisation gets access to the GOV.UK
-      Forms platform, where form creators can create and manage online forms.
+      <a href="https://www.forms.service.gov.uk/">GOV.UK Forms</a> is a web-based platform owned and operated by GDS, which is used for
+      creating more accessible online forms for GOV.UK without needing technical knowledge. As well as the forms being more accessible
+      compared to document-based forms like PDFs, the forms are easier to use and quicker for government teams to process.
     </p>
   </li>
   <li>
@@ -72,14 +72,45 @@
   </li>
   <li>
     <p>
-      When GOV.UK Forms processes completed forms, GDS transfers the Personal Data of members of the public and businesses to your
-      organisation using the delivery method configured for the form. This MOU covers this transfer.
+      When GOV.UK Forms processes completed forms, GDS sends the Personal Data of members of the public and businesses to your organisation.
+      GDS uses GOV.UK Notify to deliver emails with the personal data submissions to your organisation’s Form Processors. This MOU covers
+      this transfer.
+    </p>
+  </li>
+  <li>
+    <p>
+      The online forms are unauthenticated and could be completed by anyone. You are responsible for including identification and
+      authentication mechanisms within your downstream processes if these are required.
     </p>
   </li>
 </ol>
 
-<h2 class="govuk-heading-m" id="starting-and-ending-this-agreement">Starting and ending this agreement</h2>
+<h2 class="govuk-heading-m" id="how-gov.uk-forms-handles-the-personal-data-of-members-of-the-public-and-businesses">
+  How GOV.UK Forms handles the personal data of members of the public and businesses
+</h2>
+<figure role="figure" aria-label="The GOV.UK Forms dataflow">
+  <img
+    src="<%= vite_asset_path 'images/govuk-forms-dataflow.png' %>"
+    alt="A diagram showing the flow of information between different entities in the GOV.UK Forms platform."
+    width="100%"
+  />
+  <figcaption>
+    <p class="govuk-!-text-align-centre">The GOV.UK Forms dataflow</p>
+  </figcaption>
+</figure>
 <ol class="govuk-list govuk-list--number" start="8">
+  <li>
+    <p>
+      The GOV.UK Forms team designs and develops the GOV.UK Forms web platform. Your organisation gets access to and creates online forms
+      using the GOV.UK Forms platform. Your organisation’s form creators create online forms using the GOV.UK Forms platform, which runs on
+      an external cloud service. Members of the public and businesses fill in a form on GOV.UK Forms. GOV.UK Forms collects the Personal
+      Data and uses an API to deliver the Personal Data to GOV.UK Notify. GOV.UK Notify, using an external email provider, delivers the
+      personal data to your organisation’s shared inbox for your Form Processor to use.
+    </p>
+  </li>
+</ol>
+<h2 class="govuk-heading-m" id="starting-and-ending-this-agreement">Starting and ending this agreement</h2>
+<ol class="govuk-list govuk-list--number" start="9">
   <li>
     <p>
       This agreement starts when your organisation has ‘Organisation Admin’ accounts on the GOV.UK Forms platform. Either GDS or your
@@ -105,24 +136,28 @@
   </li>
   <li>
     <p>
-      GDS reserves the right to refuse to host, or to cease hosting forms and to delete them from the platform and remove links from GOV.UK,
+      GDS reserves the right to refuse to host, or to cease hosting forms and to delete them from the platform and remove links from GOV.UK
       where in GDS’s reasonable opinion publishing the forms would:
     </p>
-    <ul class="govuk-list govuk-list--bullet">
+    <ol class="govuk-list govuk-list--bullet">
       <li>risk bringing GDS or GOV.UK into disrepute;</li>
       <li>have an adverse impact on GDS’s ability to handle traffic on the GOV.UK Forms platform; or</li>
       <li>otherwise compromise GDS’s ability to operate GOV.UK or the GOV.UK Forms platform</li>
-    </ul>
+    </ol>
   </li>
 </ol>
 <h2 class="govuk-heading-m" id="people-involved-in-this-agreement">People involved in this agreement</h2>
-<ol class="govuk-list govuk-list--number" start="13">
+<ol class="govuk-list govuk-list--number" start="14">
   <li>
-    <p>
-      For this agreement, the main point of contact for GDS is:<br />
-      <a href="mailto:govuk-forms@digital.cabinet-office.gov.uk">govuk-forms@digital.cabinet-office.gov.uk</a>
-    </p>
+    <p>For this agreement, the main point of contact for GDS is:</p>
   </li>
+</ol>
+
+<p>
+  <a href="mailto:govuk-forms@digital.cabinet-office.gov.uk">govuk-forms@digital.cabinet-office.gov.uk</a>
+</p>
+
+<ol class="govuk-list govuk-list--number" start="15">
   <li>
     <p>
       For your organisation, the main point of contact will be the user who agrees on behalf of your organisation, which may be more than
@@ -141,7 +176,7 @@
   </li>
 </ol>
 <h2 class="govuk-heading-m" id="gov.uk-forms-pricing">GOV.UK Forms pricing</h2>
-<ol class="govuk-list govuk-list--number" start="17">
+<ol class="govuk-list govuk-list--number" start="18">
   <li>
     <p>
       There is currently no cost for using GOV.UK Forms or for the hosting of forms made on the platform. This is intended to help reduce
@@ -156,19 +191,17 @@
     </p>
   </li>
 </ol>
-<h2 class="govuk-heading-m" id="security-responsibilities">Security Responsibilities</h2>
-<ol class="govuk-list govuk-list--number" start="19">
-  <li>
-    <p>You must not use GOV.UK Forms to handle data classified above OFFICIAL.</p>
-  </li>
+<h2 class="govuk-heading-m" id="cyber-security-responsibilities">Cyber Security Responsibilities</h2>
+<ol class="govuk-list govuk-list--number" start="20">
   <li>
     <p>
       You are responsible for deciding whether or not GOV.UK Forms is suitable to handle the information you wish to collect using online
-      forms. A description of the measures GDS has taken to protect data is described in Annex E.
+      forms. A description of the measures GDS has taken to protect data is described in Annex E. GOV.UK Forms must not be used to handle
+      data classified above OFFICIAL.
     </p>
   </li>
   <li>
-    <p>You must ensure that your users of GOV.UK Forms follow good security practices when accessing the service, including:</p>
+    <p>You shall ensure that your users of GOV.UK Forms follow good cyber security practices when accessing the service, including:</p>
     <ul class="govuk-list govuk-list--bullet">
       <li>
         <p>
@@ -188,6 +221,8 @@
       </li>
     </ul>
   </li>
+</ol>
+<ol class="govuk-list govuk-list--number" start="22">
   <li>
     <p>If it is suspected that a user’s GOV.UK Forms account has been compromised you shall immediately notify the GOV.UK Forms team.</p>
   </li>
@@ -231,13 +266,17 @@
         <p>setting up DMARC and TLS reporting (TLS-RPT) and reviewing the data regularly</p>
       </li>
     </ul>
-    <p>
-      Note: The NCSC’s
-      <a href="https://www.ncsc.gov.uk/information/mailcheck">Mail Check</a>
-      service can be used for assessing email security compliance. If your mail server does not support the use of TLS, form response data
-      could be transmitted in plain text across the Internet.
-    </p>
   </li>
+</ol>
+
+<p>
+  Note: The NCSC’s
+  <a href="https://www.ncsc.gov.uk/information/mailcheck">Mail Check</a>
+  service can be used for assessing email security compliance. If your mail server does not support the use of TLS, form response data could
+  be transmitted in plain text across the Internet.
+</p>
+
+<ol class="govuk-list govuk-list--number" start="25">
   <li>
     <p>
       You are responsible for managing the security of the designated mailbox(es) used to receive form response data. Anyone with access to
@@ -246,38 +285,29 @@
   </li>
   <li>
     <p>
-      You may want to implement rules on your mail server to restrict who or what can send emails to the mailbox. For example, you could
-      configure it to only accept messages sent from the GOV.UK Forms service.
+      You may want to consider implementing rules on your mail server to restrict who / what can send emails to the mailbox. For example,
+      you could only allow messages originating from the Notify service to be accepted.
     </p>
   </li>
   <li>
     <p>
       You should also bear in mind that email addresses provided by users (in a submission) have not been validated, so may not be correct
-      addresses.
+      addresses. Notify emails from GOV.UK Forms can also not be replied to.
     </p>
-  </li>
-  <li>
-    <p>Submission emails from GOV.UK Forms can not be replied to.</p>
   </li>
   <li>
     <p>
       Parties should report any messages received by this mailbox that are outside of the email output expected from the GOV.UK Forms
       service (e.g. incorrect content format, incorrect sender or bulk messages sent through the service), to the GOV.UK Forms team (see
-      contact at item 13).
+      contact at item 14).
     </p>
   </li>
   <li>
     <p>You are responsible for checking that form response data received from GOV.UK Forms is safe before you consume it.</p>
   </li>
-  <li>
-    <p>
-      The online forms are unauthenticated and could be completed by anyone. You are responsible for including identification and
-      authentication mechanisms within your downstream processes if these are required.
-    </p>
-  </li>
 </ol>
 <h2 class="govuk-heading-m" id="compliance-with-data-protection-legislation">Compliance with Data Protection Legislation</h2>
-<ol class="govuk-list govuk-list--number" start="32">
+<ol class="govuk-list govuk-list--number" start="30">
   <li>
     <p>
       The parties agree that for GOV.UK Forms User Personal Data and GOV.UK Forms Filler Technical Device Data processed under this MoU, GDS
@@ -321,7 +351,7 @@
   </li>
 </ol>
 <h2 class="govuk-heading-m" id="protection-of-personal-data">Protection of Personal Data</h2>
-<ol class="govuk-list govuk-list--number" start="35">
+<ol class="govuk-list govuk-list--number" start="33">
   <li>
     <p>
       GDS will not disclose GOV.UK Forms User or Filler Personal Data to any outside organisation other than as set out in this MOU unless
@@ -645,16 +675,22 @@
   </li>
   <li>
     <p>GDS has a designated Data Protection Officer as required by the Data Protection Legislation.</p>
-    <p>The contact is:</p>
-    <p>
-      Data Protection Officer<br />
-      Cabinet Office<br />
-      70 Whitehall<br />
-      London<br />
-      SW1A 2AS<br />
-      <a href="mailto:dpo@cabinetoffice.gov.uk">dpo@cabinetoffice.gov.uk</a>
-    </p>
   </li>
+</ol>
+
+<p>The contact is:</p>
+<p>
+  Data Protection Officer<br />
+  Cabinet Office<br />
+  70 Whitehall<br />
+  London<br />
+  SW1A 2AS
+</p>
+<p>
+  <a href="mailto:dpo@cabinetoffice.gov.uk">dpo@cabinetoffice.gov.uk</a>
+</p>
+
+<ol class="govuk-list govuk-list--number" start="44">
   <li>
     <p>Your organisation consents to the use of the Sub-Processors set out in Annex B.</p>
   </li>
@@ -766,7 +802,7 @@
 <h2 class="govuk-heading-m" id="how-gov.uk-forms-deals-with-freedom-of-information-requests">
   How GOV.UK Forms deals with Freedom of Information requests
 </h2>
-<ol class="govuk-list govuk-list--number" start="53">
+<ol class="govuk-list govuk-list--number" start="51">
   <li>
     <p>
       Both GDS and your organisation agree to work with each other in order to comply with Requests For Information in line with the Law.
@@ -898,25 +934,31 @@
 <p><strong>Your organisation</strong> means the organisation that is consuming the GOV.UK Forms service.</p>
 
 <h2 class="govuk-heading-m" id="annex-b-gov.uk-forms-data-sub-processors">Annex B: GOV.UK Forms data sub-processors</h2>
+<p>List complete as at 13 June 2024.</p>
 
-<h3 class="govuk-heading-s" id="infrastructure-provider">Infrastructure provider</h3>
+<h3 class="govuk-heading-s" id="infrastructure-as-a-service-provider-and-email-sub-processor">
+  Infrastructure as a Service provider and email sub-processor
+</h3>
+
 <p>GOV.UK Forms is hosted on Amazon Web Services (AWS) infrastructure in the UK.</p>
+
 <p>
   Amazon Web Services (Company Number: 08650665)<br />
   1 Principal Place<br />
   Worship Street<br />
   London<br />
-  EC2A 2FA
+  EC2A 2FA<br />
 </p>
 
 <h3 class="govuk-heading-s" id="application-logging-and-alerting">Application logging and alerting</h3>
 <p>
-  GDS uses Splunk for application and infrastructure monitoring and alerting to help keep GOV.UK Forms secure and performant. This includes
-  logging user actions and alerting the GOV.UK Forms team about certain types of activity.
+  GDS uses Splunk to help keep GOV.UK Forms secure and performing optimally by monitoring its infrastructure. This includes logging user
+  actions and alerting the GOV.UK Forms team about certain types of activity.
 </p>
+
 <p>
-  Doing so involves processing some GOV.UK Forms User Data and GOV.UK Form Filler Technical Data, including IP address and user agent. This
-  data does not include Form Fillers’ answers to form questions. Logs are transferred to the Spunk Cloud service, hosted in the EU.
+  Doing so involves processing some GOV.UK Forms User Data, including IP address and user agent. This data does not include Form Fillers’
+  answers to form questions. Logs are transferred to the Spunk Cloud service, hosted in the EU.
 </p>
 
 <p>
@@ -941,7 +983,7 @@
   W2 6LA<br />
 </p>
 
-<h3 class="govuk-heading-s" id="authentication-of-form-creators">Authentication of form creators</h3>
+<h3 class="govuk-heading-s" id="user-authentication">Authentication of form creators</h3>
 <p>
   GDS uses Okta’s Auth0 service to help keep the platform secure by authenticating form creators. This involves processing the form
   creator’s email address. It does not involve processing data from Form Fillers’ answers to form questions.
@@ -957,24 +999,21 @@
 </p>
 <h2 class="govuk-heading-m" id="annex-c-gov.uk-forms-data-retention-times">Annex C: GOV.UK Forms data retention times</h2>
 
+<h3 class="govuk-heading-s" id="cabinet-office">GDS (part of Cabinet Office)</h3>
 <p>
-  <strong>GDS (part of Department for Science, Innovation & Technology)</strong><br />
-  Some GOV.UK Forms User Personal Data (name and email address) is held indefinitely to keep form history and audit changes to forms.
+  GOV.UK Forms uses GOV.UK Notify, another GDS service, to send form submissions to the Form Processor. By default, GOV.UK Notify retains
+  form submissions (including Form Filler Personal Data) to 7 days after they are sent to the Form Processor. This is in case of any
+  technical problems delivering the data.
 </p>
+
+<h3 class="govuk-heading-s" id="amazon-web-services">Amazon Web Services</h3>
 <p>
-  Form submissions, including Form Filler Personal Data, are retained during the user’s active session. These sessions automatically expire
-  and are permanently deleted after 20 hours of inactivity.
+  Form submissions, including any Form Filler Personal Data, are retained while the user’s session is active. Sessions expire after 20 hours
+  of inactivity. Non-Personal Data is retained indefinitely.
 </p>
-<p>
-  Data from completed form submissions, including Form Filler Personal Data, are kept for 30 days. This is in case of any technical problems
-  delivering the data.
-</p>
-<p>GOV.UK Forms Filler Technical Data is kept up to a year.</p>
 
 <h3 class="govuk-heading-s" id="zendesk">Zendesk</h3>
-<p>
-  Name and email address of the person making the support request is retained for 1-2 years. Non-Personal Data is retained indefinitely.
-</p>
+<p>Personal Data is retained for 1-2 years. Non-Personal Data is retained indefinitely.</p>
 
 <h3 class="govuk-heading-s" id="co-cyber-security-splunk">CO Cyber Security / Splunk</h3>
 <p>Application logs are retained for 12 months.</p>
@@ -1002,7 +1041,14 @@
 </p>
 
 <h3 class="govuk-heading-s" id="duration-of-the-processing">Duration of the Processing</h3>
-<p>Processing on the GOV.UK Forms infrastructure takes up to 2 working days (to allow for disaster recovery).</p>
+<p>
+  Processing on the GOV.UK Forms infrastructure takes up to 2 days (to allow for disaster recovery). When submitted, Form Data is securely
+  passed to the GOV.UK Notify application, also run by GDS. Processing by GOV.UK Notify is typically completed within 7 days.
+</p>
+<p>
+  Third party suppliers that distribute the notifications for GOV.UK Notify will retain the data for up to 12 months for audit and billing
+  purposes.
+</p>
 
 <h3 class="govuk-heading-s" id="nature-and-purposes-of-the-processing">Nature and purposes of the Processing</h3>
 <p>GOV.UK Forms collects Personal Data for the purposes of Processing forms that are submitted by members of the public and businesses.</p>
@@ -1037,8 +1083,9 @@
   that type of data
 </h3>
 <p>
-  Personal Data is automatically deleted at the end of the data retention period. This is the case as part of routine Processing, and at
-  termination of this Agreement.
+  Personal Data is automatically deleted at the end of the data retention period, which for GOV.UK Forms and its third party providers
+  ranges between 7 days and 2 years (see data retention periods above). This is the case as part of routine Processing, and at termination
+  of this Agreement.
 </p>
 <h2 class="govuk-heading-m" id="annex-e-how-gov.uk-forms-protects-your-data">Annex E: How GOV.UK Forms protects your data</h2>
 <p>
@@ -1046,10 +1093,10 @@
   deciding whether the service is suitable for your needs.
 </p>
 
-<h3 class="govuk-heading-s">Infrastructure</h3>
+<h3 class="govuk-heading-s">Hosting</h3>
 <p>
-  GOV.UK Forms is hosted on <a href="https://aws.amazon.com/">AWS</a> in their London Region. All components have built in redundancy and
-  backups where possible.
+  GOV.UK Forms is hosted on <a href="https://aws.amazon.com/">AWS</a> in their London Region. Data is stored within AWS Relational Database
+  Service with frequent backups. All components have built in redundancy where possible..
 </p>
 
 <h3 class="govuk-heading-s">Service design</h3>
@@ -1070,34 +1117,46 @@
 <h3 class="govuk-heading-s">Separation between customers</h3>
 <p>
   Organisations can only create and edit their own forms, except where an organisation agrees to a member of another organisation creating
-  and editing forms on its behalf.
+  and editing forms on its behalf. For example, a ‘parent’ organisation creating and editing forms on behalf of a ‘child’ organisation.
+  GOV.UK Forms team members have ‘Super Admin’ account access, which means that they (and only they) are able to see, create and edit all
+  forms in all organisations, for the purpose of oversight and support.
+</p>
+
+<h3 class="govuk-heading-s">Use of Notify</h3>
+<p>
+  GOV.UK Forms uses the
+  <a href="https://www.notifications.service.gov.uk/features/security">GOV.UK Notify service</a>
+  to deliver form response data to your organisation via email messages.
 </p>
 
 <h3 class="govuk-heading-s">Protection of data in transit</h3>
-<p>Data will be encrypted in transit as follows:</p>
+<p>Within GOV.UK Forms, form response data will be encrypted in transit as follows:</p>
 <ul class="govuk-list govuk-list--bullet">
   <li>
-    <p>Requests between users’ browsers and GOV.UK Forms applications are encrypted with TLS V1.2</p>
+    <p>Between citizens’ browsers and online forms, by using TLS V1.2</p>
   </li>
   <li>
-    <p>Requests between GOV.UK Forms and its 3rd party processors are encrypted with TLS V1.2</p>
+    <p>Between your users’ browsers and the GOV.UK Forms administration interface, by using TLS V1.2</p>
   </li>
   <li>
-    <p>
-      Requests between 3rd party processors and the designated mail server for receiving submitted form responses are encrypted by using TLS
-      V1.2 if the mail server supports this.
-    </p>
+    <p>Between GOV.UK Forms and its 3rd party processors, by using TLS V1.2</p>
   </li>
   <li>
     <p>
-      Requests between Notify and the mail server for receiving form submission confirmations, by using TLS V1.2 if the mail server supports
-      this.
+      Between Notify and your designated mailbox for receiving submitted form responses, by using TLS V1.2 if your mail server supports this
     </p>
   </li>
 </ul>
 
 <h3 class="govuk-heading-s">Protection of data at rest</h3>
-<p>Form response data will be encrypted at rest.</p>
+<p>
+  Form response data will be encrypted at rest using
+  <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/at-rest-encryption.html"
+    >AWS At-Rest Encryption in ElastiCache for Redis</a
+  >
+  whilst it is being temporarily stored by GOV.UK Forms.
+</p>
+<p>Amazon RDS PostgreSQL is used to store form configuration and user account details.</p>
 
 <h3 class="govuk-heading-s">Vulnerability management</h3>
 <p>
