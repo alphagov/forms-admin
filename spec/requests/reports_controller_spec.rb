@@ -193,7 +193,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_standard_user
 
-        get report_questions_with_add_another_answer_path
+        get feature_report_path(report: "questions-with-add-another-answer")
       end
 
       it "returns http code 403" do
@@ -209,7 +209,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_organisation_admin_user
 
-        get report_questions_with_add_another_answer_path
+        get feature_report_path(report: "questions-with-add-another-answer")
       end
 
       it "returns http code 403" do
@@ -225,7 +225,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_super_admin_user
 
-        get report_questions_with_add_another_answer_path
+        get feature_report_path(report: "questions-with-add-another-answer")
       end
 
       it "returns http code 200" do
@@ -251,7 +251,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_standard_user
 
-        get report_forms_with_routes_path
+        get feature_report_path(report: "forms-with-routes")
       end
 
       it "returns http code 403" do
@@ -267,7 +267,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_organisation_admin_user
 
-        get report_forms_with_routes_path
+        get feature_report_path(report: "forms-with-routes")
       end
 
       it "returns http code 403" do
@@ -283,7 +283,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_super_admin_user
 
-        get report_forms_with_routes_path
+        get feature_report_path(report: "forms-with-routes")
       end
 
       it "returns http code 200" do
@@ -309,7 +309,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_standard_user
 
-        get report_forms_with_payments_path
+        get feature_report_path(report: "forms-with-payments")
       end
 
       it "returns http code 403" do
@@ -325,7 +325,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_organisation_admin_user
 
-        get report_forms_with_payments_path
+        get feature_report_path(report: "forms-with-payments")
       end
 
       it "returns http code 403" do
@@ -341,7 +341,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_super_admin_user
 
-        get report_forms_with_payments_path
+        get feature_report_path(report: "forms-with-payments")
       end
 
       it "returns http code 200" do
@@ -367,7 +367,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_standard_user
 
-        get report_forms_with_csv_submission_enabled_path
+        get feature_report_path(report: "forms-with-csv-submission-enabled")
       end
 
       it "returns http code 403" do
@@ -383,7 +383,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_organisation_admin_user
 
-        get report_forms_with_csv_submission_enabled_path
+        get feature_report_path(report: "forms-with-csv-submission-enabled")
       end
 
       it "returns http code 403" do
@@ -399,7 +399,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_super_admin_user
 
-        get report_forms_with_csv_submission_enabled_path
+        get feature_report_path(report: "forms-with-csv-submission-enabled")
       end
 
       it "returns http code 200" do
@@ -736,7 +736,7 @@ RSpec.describe ReportsController, type: :request do
 
         travel_to Time.utc(2025, 5, 15, 15, 31, 57)
 
-        get report_forms_with_routes_path(format: :csv)
+        get feature_report_path(report: "forms-with-routes", format: :csv)
       end
 
       it_behaves_like "csv response"
@@ -762,7 +762,7 @@ RSpec.describe ReportsController, type: :request do
 
         travel_to Time.utc(2025, 5, 15, 15, 31, 57)
 
-        get report_forms_with_payments_path(format: :csv)
+        get feature_report_path(report: "forms-with-payments", format: :csv)
       end
 
       it_behaves_like "csv response"
@@ -787,7 +787,7 @@ RSpec.describe ReportsController, type: :request do
 
         travel_to Time.utc(2025, 5, 15, 15, 31, 57)
 
-        get report_forms_with_csv_submission_enabled_path(format: :csv)
+        get feature_report_path(report: "forms-with-csv-submission-enabled", format: :csv)
       end
 
       it_behaves_like "csv response"
@@ -834,7 +834,7 @@ RSpec.describe ReportsController, type: :request do
 
         travel_to Time.utc(2025, 5, 15, 15, 31, 57)
 
-        get report_questions_with_add_another_answer_path(format: :csv)
+        get feature_report_path(report: "questions-with-add-another-answer", format: :csv)
       end
 
       it_behaves_like "csv response"

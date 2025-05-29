@@ -12,19 +12,19 @@
       <% end %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".features.live_forms_with_routes")) %>
-        <%= row.with_value(text: govuk_link_to(data[:forms_with_routing], report_forms_with_routes_path, no_visited_state: true)) %>
+        <%= row.with_value(text: govuk_link_to(data[:forms_with_routing], feature_report_path(report: "forms-with-routes"), no_visited_state: true)) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".features.live_forms_with_payments")) %>
-        <%= row.with_value(text: govuk_link_to(data[:forms_with_payment], report_forms_with_payments_path, no_visited_state: true)) %>
+        <%= row.with_value(text: govuk_link_to(data[:forms_with_payment], feature_report_path(report: "forms-with-payments"), no_visited_state: true)) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".features.live_forms_with_add_another_answer")) %>
-        <%= row.with_value(text: govuk_link_to(data[:forms_with_add_another_answer], report_questions_with_add_another_answer_path, no_visited_state: true)) %>
+        <%= row.with_value(text: govuk_link_to(data[:forms_with_add_another_answer], feature_report_path(report: "questions-with-add-another-answer"), no_visited_state: true)) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".features.live_forms_with_csv_submission_enabled")) %>
-        <%= row.with_value(text: govuk_link_to(data[:forms_with_csv_submission_enabled], report_forms_with_csv_submission_enabled_path, no_visited_state: true)) %>
+        <%= row.with_value(text: govuk_link_to(data[:forms_with_csv_submission_enabled], feature_report_path(report: "forms-with-csv-submission-enabled"), no_visited_state: true)) %>
       <% end %>
     <% end %>
 

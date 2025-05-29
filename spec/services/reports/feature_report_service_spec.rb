@@ -11,6 +11,32 @@ RSpec.describe Reports::FeatureReportService do
     GroupForm.create!(form_id: 4, group:)
   end
 
+  describe "Constraint" do
+    it "returns true if given the name of a defined report in slug format" do
+      expect(described_class::Constraint.matches?(OpenStruct.new(params: { report: "forms-with-routes" }))).to be true
+      expect(described_class::Constraint.matches?(OpenStruct.new(params: { report: "questions-with-add-another-answer" }))).to be true
+    end
+
+    it "returns false if names does not match a defined report" do
+      expect(described_class.matches_report?(OpenStruct.new(params: { report: "report" }))).to be false
+      expect(described_class.matches_report?(OpenStruct.new(params: { report: "inspect" }))).to be false
+      expect(described_class.matches_report?(OpenStruct.new(params: { report: "display" }))).to be false
+    end
+  end
+
+  describe ".matches_report?" do
+    it "returns true if given the name of a defined report" do
+      expect(described_class.matches_report?(:forms_with_routes)).to be true
+      expect(described_class.matches_report?(:questions_with_add_another_answer)).to be true
+    end
+
+    it "returns false if names does not match a defined report" do
+      expect(described_class.matches_report?(:report)).to be false
+      expect(described_class.matches_report?(:inspect)).to be false
+      expect(described_class.matches_report?(:display)).to be false
+    end
+  end
+
   describe "#report" do
     it "returns the feature report" do
       report = described_class.new(form_documents).report
@@ -43,6 +69,29 @@ RSpec.describe Reports::FeatureReportService do
           "text" => 5,
         },
       })
+    end
+
+    context "with the name of a feature report" do
+      it "returns that report" do
+        report = []
+        feature_report_service = described_class.new(form_documents)
+        allow(feature_report_service).to receive(:forms_with_routes).and_return report
+
+        expect(feature_report_service.report(:forms_with_routes)).to be report
+
+        expect(feature_report_service).to have_received(:forms_with_routes)
+      end
+    end
+
+    context "with the name of a method that is not a feature report" do
+      it "raises an error" do
+        feature_report_service = described_class.new(form_documents)
+        allow(feature_report_service).to receive(:display)
+
+        expect { feature_report_service.report(:display) }.to raise_error(/not a defined report/)
+
+        expect(feature_report_service).not_to have_received(:display)
+      end
     end
   end
 
