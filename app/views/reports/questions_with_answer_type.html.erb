@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l"><%= t(".heading", answer_type: t("helpers.label.page.answer_type_options.names.#{answer_type}").downcase) %></h1>
 
-    <p><%=govuk_link_to(t(".download_csv"), report_live_questions_csv_path(answer_type:))%></p>
+    <p><%=govuk_link_to(t(".download_csv"), url_for(format: :csv))%></p>
   </div>
 
   <div class="govuk-grid-column-full">

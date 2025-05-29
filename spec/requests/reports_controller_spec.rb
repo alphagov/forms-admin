@@ -828,6 +828,28 @@ RSpec.describe ReportsController, type: :request do
       end
     end
 
+    describe "#questions_with_answer_type as csv" do
+      before do
+        login_as_super_admin_user
+
+        travel_to Time.utc(2025, 5, 15, 15, 31, 57)
+
+        get report_questions_with_answer_type_path(answer_type: "text", format: :csv)
+      end
+
+      it_behaves_like "csv response"
+
+      it "responds with an attachment content-disposition header" do
+        expect(response.headers["content-disposition"]).to match("attachment; filename=live_questions_report_text_answer_type-2025-05-15 15:31:57 UTC.csv")
+      end
+
+      it "has expected response body" do
+        csv = CSV.parse(response.body, headers: true)
+        expect(csv.headers).to eq Reports::QuestionsCsvReportService::QUESTIONS_CSV_HEADERS
+        expect(csv.length).to eq 5
+      end
+    end
+
     describe "#questions_with_add_another_answer as csv" do
       before do
         login_as_super_admin_user

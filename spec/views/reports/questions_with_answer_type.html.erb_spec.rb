@@ -8,8 +8,12 @@ describe "reports/questions_with_answer_type" do
     ]
   end
 
+  let(:answer_type) { "email" }
+
   before do
-    render locals: { answer_type: "email", questions: }
+    controller.request.path_parameters[:answer_type] = answer_type
+
+    render locals: { answer_type:, questions: }
   end
 
   describe "page title" do
@@ -23,7 +27,7 @@ describe "reports/questions_with_answer_type" do
   end
 
   it "has a link to download the CSV" do
-    expect(rendered).to have_link("Download all questions in live forms with this answer type as a CSV file", href: report_live_questions_csv_path(answer_type: "email"))
+    expect(rendered).to have_link("Download all questions in live forms with this answer type as a CSV file", href: report_questions_with_answer_type_path(answer_type: "email", format: :csv))
   end
 
   describe "questions table" do

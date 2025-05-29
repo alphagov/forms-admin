@@ -16,7 +16,13 @@ class ReportsController < ApplicationController
     forms = Reports::FormDocumentsService.live_form_documents
     questions = Reports::FeatureReportService.new(forms).questions_with_answer_type(answer_type)
 
-    render template: "reports/questions_with_answer_type", locals: { answer_type:, questions: }
+    if params[:format] == "csv"
+      send_data Reports::QuestionsCsvReportService.new(questions).csv,
+                type: "text/csv; charset=iso-8859-1",
+                disposition: "attachment; filename=#{questions_csv_filename(answer_type)}"
+    else
+      render template: "reports/questions_with_answer_type", locals: { answer_type:, questions: }
+    end
   end
 
   def questions_with_add_another_answer
@@ -120,17 +126,12 @@ class ReportsController < ApplicationController
   end
 
   def live_questions_csv
-    answer_type = params[:answer_type]
     forms = Reports::FormDocumentsService.live_form_documents
-    questions = if answer_type
-                  Reports::FeatureReportService.new(forms).questions_with_answer_type(answer_type)
-                else
-                  Reports::FeatureReportService.new(forms).questions
-                end
+    questions = Reports::FeatureReportService.new(forms).questions
 
     send_data Reports::QuestionsCsvReportService.new(questions).csv,
               type: "text/csv; charset=iso-8859-1",
-              disposition: "attachment; filename=#{questions_csv_filename(answer_type)}"
+              disposition: "attachment; filename=#{csv_filename('live_questions_report')}"
   end
 
 private
