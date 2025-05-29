@@ -34,9 +34,12 @@ describe "reports/features.html.erb" do
       forms_with_csv_submission_enabled: 2,
     }
   end
+  let(:tag) { "live" }
 
   before do
-    render template: "reports/features", locals: { data: report }
+    controller.request.path_parameters[:tag] = tag
+
+    render template: "reports/features", locals: { tag:, data: report }
   end
 
   describe "page title" do
@@ -55,6 +58,16 @@ describe "reports/features.html.erb" do
 
   it "includes the number of total live forms" do
     expect(rendered).to have_css(".govuk-summary-list__row", text: "Total live forms#{report[:total_forms]}")
+  end
+
+  it "has a table of answer type usage" do
+    expect(rendered).to have_table "Answer type usage" do |table|
+      expect(table.find_all("thead th").map(&:text)).to eq [
+        "Answer type",
+        "Number of live forms with this answer type",
+        "Number of uses of this answer type in live forms",
+      ]
+    end
   end
 
   Page::ANSWER_TYPES.map(&:to_sym).each do |answer_type|
@@ -107,5 +120,19 @@ describe "reports/features.html.erb" do
 
   it "includes the number of live forms with CSV submission enabled" do
     expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with CSV submission enabled#{report[:forms_with_csv_submission_enabled]}")
+  end
+
+  context "with live tag" do
+    it "has a link to the selection questions summary report" do
+      expect(rendered).to have_link href: report_selection_questions_summary_path
+    end
+  end
+
+  context "with draft tag" do
+    let(:tag) { "draft" }
+
+    it "does not have a link to the selection questions summary report" do
+      expect(rendered).not_to have_link href: report_selection_questions_summary_path
+    end
   end
 end

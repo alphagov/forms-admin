@@ -1,13 +1,19 @@
-<% set_page_title(t("reports.#{report}.heading"))%>
+<% set_page_title(t("reports.#{report}.heading", tag:).upcase_first)%>
 <% content_for :back_link, govuk_back_link_to(report_features_path, t("reports.back_to_feature_usage")) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l"><%= t("reports.#{report}.heading")%></h1>
+    <h1 class="govuk-heading-l"><%= t("reports.#{report}.heading", tag:).upcase_first %></h1>
 
-    <p><%=govuk_link_to(t("reports.#{report}.download_csv"), url_for(format: :csv))%></p>
+    <% unless records.empty? %>
+      <p><%=govuk_link_to(t("reports.#{report}.download_csv", tag:).upcase_first, url_for(format: :csv))%></p>
+    <% end %>
   </div>
 
   <div class="govuk-grid-column-full">
-    <%= govuk_table(**report_table(records)) %>
+    <% if records.empty? %>
+      <p class="govuk-body"><%= t("reports.#{report}.empty", tag:) %></p>
+    <% else %>
+      <%= govuk_table(**report_table(records)) %>
+    <% end %>
   </div>
 </div>

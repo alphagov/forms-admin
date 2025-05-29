@@ -30,7 +30,7 @@ describe "reports/selection_questions/summary.html.erb" do
   end
 
   it "has a back link to the selection from a list of options usage report" do
-    expect(view.content_for(:back_link)).to have_link("Back to feature usage", href: report_features_path)
+    expect(view.content_for(:back_link)).to have_link("Back to feature usage", href: report_features_path(tag: :live))
   end
 
   it "has statistics about questions with autocomplete" do

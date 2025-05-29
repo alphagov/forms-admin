@@ -77,7 +77,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_standard_user
 
-        get report_features_path
+        get report_features_path(tag: :live)
       end
 
       it "returns http code 403" do
@@ -93,7 +93,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_organisation_admin_user
 
-        get report_features_path
+        get report_features_path(tag: :live)
       end
 
       it "returns http code 403" do
@@ -109,7 +109,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_super_admin_user
 
-        get report_features_path
+        get report_features_path(tag: :live)
       end
 
       it "returns http code 200" do
@@ -135,7 +135,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_standard_user
 
-        get report_questions_with_answer_type_path(answer_type: "email")
+        get report_questions_with_answer_type_path(tag: :live, answer_type: "email")
       end
 
       it "returns http code 403" do
@@ -151,7 +151,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_organisation_admin_user
 
-        get report_questions_with_answer_type_path(answer_type: "email")
+        get report_questions_with_answer_type_path(tag: :live, answer_type: "email")
       end
 
       it "returns http code 403" do
@@ -167,7 +167,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_super_admin_user
 
-        get report_questions_with_answer_type_path(answer_type: "email")
+        get report_questions_with_answer_type_path(tag: :live, answer_type: "email")
       end
 
       it "returns http code 200" do
@@ -193,7 +193,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_standard_user
 
-        get report_questions_with_add_another_answer_path
+        get report_questions_with_add_another_answer_path(tag: :live)
       end
 
       it "returns http code 403" do
@@ -209,7 +209,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_organisation_admin_user
 
-        get report_questions_with_add_another_answer_path
+        get report_questions_with_add_another_answer_path(tag: :live)
       end
 
       it "returns http code 403" do
@@ -225,7 +225,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_super_admin_user
 
-        get report_questions_with_add_another_answer_path
+        get report_questions_with_add_another_answer_path(tag: :live)
       end
 
       it "returns http code 200" do
@@ -251,7 +251,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_standard_user
 
-        get report_forms_with_routes_path
+        get report_forms_with_routes_path(tag: :live)
       end
 
       it "returns http code 403" do
@@ -267,7 +267,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_organisation_admin_user
 
-        get report_forms_with_routes_path
+        get report_forms_with_routes_path(tag: :live)
       end
 
       it "returns http code 403" do
@@ -283,7 +283,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_super_admin_user
 
-        get report_forms_with_routes_path
+        get report_forms_with_routes_path(tag: :live)
       end
 
       it "returns http code 200" do
@@ -309,7 +309,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_standard_user
 
-        get report_forms_with_payments_path
+        get report_forms_with_payments_path(tag: :live)
       end
 
       it "returns http code 403" do
@@ -325,7 +325,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_organisation_admin_user
 
-        get report_forms_with_payments_path
+        get report_forms_with_payments_path(tag: :live)
       end
 
       it "returns http code 403" do
@@ -341,7 +341,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_super_admin_user
 
-        get report_forms_with_payments_path
+        get report_forms_with_payments_path(tag: :live)
       end
 
       it "returns http code 200" do
@@ -367,7 +367,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_standard_user
 
-        get report_forms_with_csv_submission_enabled_path
+        get report_forms_with_csv_submission_enabled_path(tag: :live)
       end
 
       it "returns http code 403" do
@@ -383,7 +383,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_organisation_admin_user
 
-        get report_forms_with_csv_submission_enabled_path
+        get report_forms_with_csv_submission_enabled_path(tag: :live)
       end
 
       it "returns http code 403" do
@@ -399,7 +399,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_super_admin_user
 
-        get report_forms_with_csv_submission_enabled_path
+        get report_forms_with_csv_submission_enabled_path(tag: :live)
       end
 
       it "returns http code 200" do
@@ -736,7 +736,7 @@ RSpec.describe ReportsController, type: :request do
 
         travel_to Time.utc(2025, 5, 15, 15, 31, 57)
 
-        get report_forms_with_routes_path(format: :csv)
+        get report_forms_with_routes_path(tag: :live, format: :csv)
       end
 
       it_behaves_like "csv response"
@@ -762,7 +762,7 @@ RSpec.describe ReportsController, type: :request do
 
         travel_to Time.utc(2025, 5, 15, 15, 31, 57)
 
-        get report_forms_with_payments_path(format: :csv)
+        get report_forms_with_payments_path(tag: :live, format: :csv)
       end
 
       it_behaves_like "csv response"
@@ -787,7 +787,7 @@ RSpec.describe ReportsController, type: :request do
 
         travel_to Time.utc(2025, 5, 15, 15, 31, 57)
 
-        get report_forms_with_csv_submission_enabled_path(format: :csv)
+        get report_forms_with_csv_submission_enabled_path(tag: :live, format: :csv)
       end
 
       it_behaves_like "csv response"
@@ -828,13 +828,35 @@ RSpec.describe ReportsController, type: :request do
       end
     end
 
+    describe "#questions_with_answer_type as csv" do
+      before do
+        login_as_super_admin_user
+
+        travel_to Time.utc(2025, 5, 15, 15, 31, 57)
+
+        get report_questions_with_answer_type_path(tag: :live, answer_type: "text", format: :csv)
+      end
+
+      it_behaves_like "csv response"
+
+      it "responds with an attachment content-disposition header" do
+        expect(response.headers["content-disposition"]).to match("attachment; filename=live_questions_report_text_answer_type-2025-05-15 15:31:57 UTC.csv")
+      end
+
+      it "has expected response body" do
+        csv = CSV.parse(response.body, headers: true)
+        expect(csv.headers).to eq Reports::QuestionsCsvReportService::QUESTIONS_CSV_HEADERS
+        expect(csv.length).to eq 5
+      end
+    end
+
     describe "#questions_with_add_another_answer as csv" do
       before do
         login_as_super_admin_user
 
         travel_to Time.utc(2025, 5, 15, 15, 31, 57)
 
-        get report_questions_with_add_another_answer_path(format: :csv)
+        get report_questions_with_add_another_answer_path(tag: :live, format: :csv)
       end
 
       it_behaves_like "csv response"

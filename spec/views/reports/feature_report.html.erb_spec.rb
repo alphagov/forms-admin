@@ -3,11 +3,13 @@ require "rails_helper"
 describe "reports/feature_report" do
   let(:report) {}
   let(:records) { [] }
+  let(:tag) { "live" }
 
   before do
     controller.request.path_parameters[:action] = report
+    controller.request.path_parameters[:tag] = tag
 
-    render locals: { report:, records: }
+    render locals: { tag:, report:, records: }
   end
 
   context "with forms_with_csv_submission_enabled report" do
@@ -22,6 +24,7 @@ describe "reports/feature_report" do
     describe "page title" do
       it "matches the heading" do
         expect(view.content_for(:title)).to eq "Live forms with CSV submission enabled"
+        expect(rendered).to have_css "h1", text: view.content_for(:title)
       end
     end
 
@@ -68,6 +71,7 @@ describe "reports/feature_report" do
     describe "page title" do
       it "matches the heading" do
         expect(view.content_for(:title)).to eq "Live forms with payments"
+        expect(rendered).to have_css "h1", text: view.content_for(:title)
       end
     end
 
@@ -114,6 +118,7 @@ describe "reports/feature_report" do
     describe "page title" do
       it "matches the heading" do
         expect(view.content_for(:title)).to eq "Live forms with routes"
+        expect(rendered).to have_css "h1", text: view.content_for(:title)
       end
     end
 
@@ -163,6 +168,7 @@ describe "reports/feature_report" do
     describe "page title" do
       it "matches the heading" do
         expect(view.content_for(:title)).to eq "Questions with add another answer in live forms"
+        expect(rendered).to have_css "h1", text: view.content_for(:title)
       end
     end
 
@@ -197,6 +203,24 @@ describe "reports/feature_report" do
           expect(page.find_all(".govuk-table__cell"[2])).to have_text "What's your email address?"
         end
       end
+    end
+  end
+
+  context "when there are no records to render" do
+    let(:report) { "forms_with_csv_submission_enabled" }
+    let(:records) { [] }
+    let(:tag) { "live" }
+
+    it "does not have a link to download a CSV" do
+      expect(rendered).not_to have_link(href: url_for(format: :csv))
+    end
+
+    it "does not render a table" do
+      expect(rendered).not_to have_table
+    end
+
+    it "renders the empty message" do
+      expect(rendered).to include I18n.t("reports.#{report}.empty", tag:)
     end
   end
 end

@@ -197,7 +197,7 @@ Rails.application.routes.draw do
   scope "/reports" do
     get "/", to: "reports#index", as: :reports
 
-    scope "/features" do
+    scope "/features/:tag", constraints: { tag: /(draft|live)/ } do
       get "/", to: "reports#features", as: :report_features
       get "questions-with-answer-type/:answer_type", to: "reports#questions_with_answer_type", as: :report_questions_with_answer_type
       get "questions-with-add-another-answer", to: "reports#questions_with_add_another_answer", as: :report_questions_with_add_another_answer

@@ -7,14 +7,21 @@ describe "reports/questions_with_answer_type" do
       { "data" => { "question_text" => "What’s your email address?" }, "form" => { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } } },
     ]
   end
+  let(:tag) { "live" }
+
+  let(:answer_type) { "email" }
 
   before do
-    render locals: { answer_type: "email", questions: }
+    controller.request.path_parameters[:tag] = tag
+    controller.request.path_parameters[:answer_type] = answer_type
+
+    render locals: { tag:, answer_type:, questions: }
   end
 
   describe "page title" do
     it "matches the heading" do
       expect(view.content_for(:title)).to eq "Live questions with email address answer type"
+      expect(rendered).to have_css "h1", text: view.content_for(:title)
     end
   end
 
@@ -23,7 +30,7 @@ describe "reports/questions_with_answer_type" do
   end
 
   it "has a link to download the CSV" do
-    expect(rendered).to have_link("Download all questions in live forms with this answer type as a CSV file", href: report_live_questions_csv_path(answer_type: "email"))
+    expect(rendered).to have_link("Download all questions in live forms with this answer type as a CSV file", href: report_questions_with_answer_type_path(answer_type: "email", format: :csv))
   end
 
   describe "questions table" do
@@ -48,6 +55,22 @@ describe "reports/questions_with_answer_type" do
         expect(page.find_all(".govuk-table__cell"[1])).to have_text "Government Digital Service"
         expect(page.find_all(".govuk-table__cell"[2])).to have_text "What's your email address?"
       end
+    end
+  end
+
+  context "when there are no questions to render" do
+    let(:questions) { [] }
+
+    it "does not have a link to download a CSV" do
+      expect(rendered).not_to have_link(href: url_for(format: :csv))
+    end
+
+    it "does not render a table" do
+      expect(rendered).not_to have_table
+    end
+
+    it "renders the empty message" do
+      expect(rendered).to include I18n.t("reports.questions_with_answer_type.empty", tag:, answer_type:)
     end
   end
 end
