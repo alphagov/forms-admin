@@ -205,4 +205,22 @@ describe "reports/feature_report" do
       end
     end
   end
+
+  context "when there are no records to render" do
+    let(:report) { "forms_with_csv_submission_enabled" }
+    let(:records) { [] }
+    let(:tag) { "live" }
+
+    it "does not have a link to download a CSV" do
+      expect(rendered).not_to have_link(href: url_for(format: :csv))
+    end
+
+    it "does not render a table" do
+      expect(rendered).not_to have_table
+    end
+
+    it "renders the empty message" do
+      expect(rendered).to include I18n.t("reports.#{report}.empty", tag:)
+    end
+  end
 end

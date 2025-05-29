@@ -1405,12 +1405,15 @@ en:
         question_text: Question text
     forms_with_csv_submission_enabled:
       download_csv: Download data about all %{tag} forms with CSV submission enabled as a CSV file
+      empty: There are no %{tag} forms with CSV submission enabled
       heading: "%{tag} forms with CSV submission enabled"
     forms_with_payments:
       download_csv: Download data about all %{tag} forms with payments as a CSV file
+      empty: There are no %{tag} forms with payments
       heading: "%{tag} forms with payments"
     forms_with_routes:
       download_csv: Download data about all %{tag} forms with routes as a CSV file
+      empty: There are no %{tag} forms with routes
       heading: "%{tag} forms with routes"
     index:
       title: Reports
@@ -1422,9 +1425,11 @@ en:
       title: When users last signed in
     questions_with_add_another_answer:
       download_csv: Download all questions with add another answer in %{tag} forms as a CSV file
+      empty: There are no questions with add another answer in %{tag} forms
       heading: Questions with add another answer in %{tag} forms
     questions_with_answer_type:
       download_csv: Download all questions in %{tag} forms with this answer type as a CSV file
+      empty: There are no %{tag} questions with %{answer_type} answer type
       heading: "%{tag} questions with %{answer_type} answer type"
     selection_questions:
       autocomplete:

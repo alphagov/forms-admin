@@ -4,13 +4,19 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l"><%= t(".heading", answer_type: t("helpers.label.page.answer_type_options.names.#{answer_type}").downcase, tag:).upcase_first %></h1>
 
-    <p><%=govuk_link_to(t(".download_csv", tag:).upcase_first, url_for(format: :csv))%></p>
+    <% unless questions.empty? %>
+      <p><%=govuk_link_to(t(".download_csv", tag:).upcase_first, url_for(format: :csv))%></p>
+    <% end %>
   </div>
 
   <div class="govuk-grid-column-full">
-    <%= govuk_table(
-      head: report_questions_table_head,
-      rows: report_questions_table_rows(questions),
-    ) %>
+    <% if questions.empty? %>
+      <p class="govuk-body"><%= t(".empty", tag:, answer_type:) %></p>
+    <% else %>
+      <%= govuk_table(
+        head: report_questions_table_head,
+        rows: report_questions_table_rows(questions),
+      ) %>
+    <% end %>
   </div>
 </div>

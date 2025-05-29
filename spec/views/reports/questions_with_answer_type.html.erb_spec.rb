@@ -57,4 +57,20 @@ describe "reports/questions_with_answer_type" do
       end
     end
   end
+
+  context "when there are no questions to render" do
+    let(:questions) { [] }
+
+    it "does not have a link to download a CSV" do
+      expect(rendered).not_to have_link(href: url_for(format: :csv))
+    end
+
+    it "does not render a table" do
+      expect(rendered).not_to have_table
+    end
+
+    it "renders the empty message" do
+      expect(rendered).to include I18n.t("reports.questions_with_answer_type.empty", tag:, answer_type:)
+    end
+  end
 end
