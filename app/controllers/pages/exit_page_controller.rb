@@ -1,5 +1,5 @@
 class Pages::ExitPageController < PagesController
-  before_action :can_add_page_routing, only: %i[new create]
+  before_action :can_add_page_routing, only: %i[new create delete destroy]
   before_action :ensure_exit_pages_enabled
   before_action :ensure_answer_value_present, only: %i[new create]
 
@@ -36,10 +36,38 @@ class Pages::ExitPageController < PagesController
     update_exit_page_input = Pages::UpdateExitPageInput.new(form_params)
 
     if update_exit_page_input.submit
-      redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.exit_page_updated")
+      redirect_to edit_condition_path(form_id: current_form.id, page_id: page.id, condition_id: update_exit_page_input.record.id), success: t("banner.success.exit_page_updated")
     else
       render template: "pages/exit_page/edit", locals: { update_exit_page_input: }, status: :unprocessable_entity
     end
+  end
+
+  def delete
+    @exit_page = ConditionRepository.find(condition_id: params[:condition_id], form_id: current_form.id, page_id: page.id)
+    @delete_exit_page_input = Pages::DeleteExitPageInput.new
+  end
+
+  def destroy
+    condition = ConditionRepository.find(condition_id: params[:condition_id], form_id: current_form.id, page_id: page.id)
+
+    # if this isn't an exit page, maybe because of a multiple tabs, redirect to the form pages page
+    return redirect_to form_pages_path(current_form.id) unless condition.exit_page?
+
+    @exit_page = condition
+
+    @delete_exit_page_input = Pages::DeleteExitPageInput.new(params.require(:pages_delete_exit_page_input).permit(:confirm))
+
+    unless @delete_exit_page_input.valid?
+      return render :delete, status: :unprocessable_entity
+    end
+
+    unless @delete_exit_page_input.confirmed?
+      return redirect_to edit_exit_page_path(@current_form.id, @page.id, @exit_page.id)
+    end
+
+    ConditionRepository.destroy(@exit_page)
+
+    redirect_to new_condition_path(@current_form.id, @page.id), success: t("banner.success.exit_page_deleted")
   end
 
 private

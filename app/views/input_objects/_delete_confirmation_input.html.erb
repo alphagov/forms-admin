@@ -8,5 +8,5 @@
                                        legend: { text: legend_text, size: 'l', tag: 'h1' }
                                        %>
 
-  <%= f.govuk_submit %>
+  <%= f.govuk_submit local_assigns.fetch(:submit_text, t(:continue)) %>
 <% end %>
