@@ -305,6 +305,8 @@ en:
       goto_page_doesnt_exist: The question you’re taking the person to no longer exists - edit question %{question_number}’s route
       route_number_for_any_other_answer: for any other answer
     prefix: 'Error:'
+  exit_page:
+    no_content_added_html: "<p>No content added</p>"
   footer:
     accessibility_statement: Accessibility statement
     cookies: Cookies
