@@ -312,4 +312,45 @@ RSpec.describe Pages::ExitPageController, type: :request do
       end
     end
   end
+
+  describe "#render_preview" do
+    let(:markdown) { "### Markdown" }
+    let(:check_preview_validation) { "true" }
+
+    before do
+      post exit_page_render_preview_path(form_id: form.id, page_id: page.id), params: { markdown:, check_preview_validation: }
+    end
+
+    it "returns a JSON object containing the converted HTML" do
+      expect(response.body).to eq({ preview_html: "<h3 class=\"govuk-heading-s\">Markdown</h3>", errors: [] }.to_json)
+    end
+
+    it "returns 200" do
+      expect(response).to have_http_status(:ok)
+    end
+
+    context "when markdown is blank" do
+      let(:markdown) { "" }
+
+      it "returns a JSON object containing the converted HTML with an error" do
+        expect(response.body).to eq({ preview_html: I18n.t("exit_page.no_content_added_html"), errors: [I18n.t("activemodel.errors.models.pages/exit_page_input.attributes.exit_page_markdown.blank")] }.to_json)
+      end
+
+      it "returns 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      context "when validation is disabled" do
+        let(:check_preview_validation) { "false" }
+
+        it "returns a JSON object containing the converted HTML" do
+          expect(response.body).to eq({ preview_html: I18n.t("exit_page.no_content_added_html"), errors: [] }.to_json)
+        end
+
+        it "returns 200" do
+          expect(response).to have_http_status(:ok)
+        end
+      end
+    end
+  end
 end

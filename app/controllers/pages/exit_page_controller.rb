@@ -70,6 +70,14 @@ class Pages::ExitPageController < PagesController
     redirect_to new_condition_path(@current_form.id, @page.id), success: t("banner.success.exit_page_deleted")
   end
 
+  def render_preview
+    authorize current_form, :can_view_form?
+    exit_page_input = Pages::ExitPageInput.new(exit_page_markdown: params[:markdown])
+    exit_page_input.validate if params[:check_preview_validation] == "true"
+
+    render json: { preview_html: preview_html(exit_page_input), errors: exit_page_input.errors[:exit_page_markdown] }.to_json
+  end
+
 private
 
   def can_add_page_routing
@@ -92,5 +100,11 @@ private
     return if params[:answer_value].present? || params.dig(:pages_exit_page_input, :answer_value).present?
 
     redirect_to new_condition_path(current_form.id, page.id)
+  end
+
+  def preview_html(exit_page_input_object)
+    return t("exit_page.no_content_added_html") if exit_page_input_object.exit_page_markdown.blank?
+
+    GovukFormsMarkdown.render(exit_page_input_object.exit_page_markdown)
   end
 end
