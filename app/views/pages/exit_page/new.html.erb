@@ -14,7 +14,14 @@
 
       <%= f.govuk_text_field( :exit_page_heading, label: { size: 'm' })  %>
 
-      <%= f.govuk_text_area( :exit_page_markdown, label: { size: 'm' })  %>
+      <%= render MarkdownEditorComponent::View.new(:exit_page_markdown,
+        form_builder: f,
+        render_preview_path: exit_page_render_preview_path(form_id: exit_page_input.form.id, page_id: exit_page_input.page.id, check_preview_validation:),
+        preview_html: preview_html,
+        form_model: exit_page_input,
+        label: t("helpers.label.pages_exit_page_input.exit_page_markdown"),
+        hint: t("helpers.hint.pages_exit_page_input.exit_page_markdown"),
+        allow_headings: true) %>
 
       <%= f.hidden_field :answer_value, value: exit_page_input.answer_value %>
       
