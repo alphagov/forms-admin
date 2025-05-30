@@ -1389,6 +1389,7 @@ en:
           number_of_pages: Number of uses of this answer type in %{tag} forms
       features:
         forms_with_add_another_answer: "%{tag} forms with add another answer"
+        forms_with_branch_routes: "%{tag} forms with branch routes"
         forms_with_csv_submission_enabled: "%{tag} forms with CSV submission enabled"
         forms_with_payments: "%{tag} forms with payments"
         forms_with_routes: "%{tag} forms with routes"
@@ -1400,9 +1401,14 @@ en:
     form_or_questions_list_table:
       headings:
         form_name: Form name
+        number_of_branch_routes: Number of branch routes
         number_of_routes: Number of routes
         organisation: Organisation
         question_text: Question text
+    forms_with_branch_routes:
+      download_csv: Download data about all %{tag} forms with branch routes as a CSV file
+      empty: There are no %{tag} forms with branch routes
+      heading: "%{tag} forms with branch routes"
     forms_with_csv_submission_enabled:
       download_csv: Download data about all %{tag} forms with CSV submission enabled as a CSV file
       empty: There are no %{tag} forms with CSV submission enabled

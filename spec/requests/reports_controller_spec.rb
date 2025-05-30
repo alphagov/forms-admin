@@ -304,6 +304,66 @@ RSpec.describe ReportsController, type: :request do
     end
   end
 
+  describe "#forms_with_branch_routes" do
+    context "when the user is a standard user" do
+      before do
+        login_as_standard_user
+
+        get report_forms_with_branch_routes_path(tag: :live)
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is an organisation admin" do
+      before do
+        login_as_organisation_admin_user
+
+        get report_forms_with_branch_routes_path(tag: :live)
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+
+        get report_forms_with_branch_routes_path(tag: :live)
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the features report view" do
+        expect(response).to render_template("reports/feature_report")
+      end
+
+      it "includes the report data" do
+        page = Capybara.string(response.body)
+        within(page.find_all(".govuk-summary-list").first) do
+          expect(page.find_all(".govuk-summary-list__key")[2]).to have_text "Number of routes"
+          expect(page.find_all(".govuk-summary-list__value")[0]).to have_text "2"
+          expect(page.find_all(".govuk-summary-list__key")[2]).to have_text "Number of branch routes"
+          expect(page.find_all(".govuk-summary-list__value")[0]).to have_text "1"
+        end
+      end
+    end
+  end
+
   describe "#forms_with_payments" do
     context "when the user is a standard user" do
       before do
