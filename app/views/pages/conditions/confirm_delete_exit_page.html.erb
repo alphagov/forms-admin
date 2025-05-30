@@ -1,0 +1,26 @@
+<% set_page_title(title_with_error_prefix(t("page_titles.confirm_delete_exit_page"), delete_exit_page_input.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(edit_condition_path(@current_form.id, @page.id, exit_page.id), t(".back_link")) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: delete_exit_page_input, url: update_change_exit_page_path(condition_id: exit_page.id, form_id: @current_form.id, page_id: @page.id, params: { answer_value:, goto_page_id:})) do |f| %>
+      <% if delete_exit_page_input&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t("page_titles.routing_page_caption", question_number: @page.position) %></span>
+        <%= t('page_titles.confirm_delete_exit_page') %>
+      </h1>
+
+      <%= t(".body_html", exit_page_heading: link_to(exit_page.exit_page_heading, edit_exit_page_path(@current_form.id, @page.id, exit_page.id))) %>
+
+      <%= f.govuk_collection_radio_buttons :confirm,
+                                           delete_exit_page_input.values, ->(option) { option }, ->(option) { t('helpers.label.confirm_delete_exit_page_input.options.' + "#{option}") },
+                                           legend: { text: t('.radios_legend'), size: 'm' }
+                                           %>
+
+      <%= f.govuk_submit t("save_and_continue") %>
+    <% end %>
+  </div>
+</div>

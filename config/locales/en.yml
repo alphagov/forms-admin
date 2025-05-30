@@ -1137,6 +1137,7 @@ en:
     archive_form_confirmation: Your form has been archived
     bulk_options: Enter your list’s options into a text box
     change_name: Name your form
+    confirm_delete_exit_page: Your exit page will be deleted
     confirm_email: Enter the confirmation code
     confirm_email_success: Email address confirmed
     contact_details: Provide contact details for support
@@ -1190,6 +1191,12 @@ en:
   pages:
     answer_settings: Answer settings
     conditions:
+      confirm_delete_exit_page:
+        back_link: Back to edit route 1
+        body_html: |
+          <p> Route 1 currently skips to an exit page, “%{exit_page_heading}”. </p>
+          <p> If you change where the route skips to, the exit page will be deleted. </p>
+        radios_legend: Are you sure you want to delete this exit page?
       delete:
         answered_as_key: is answered as
         any_other_answer_warning: If you delete this route, the route for any other answer will also be deleted
