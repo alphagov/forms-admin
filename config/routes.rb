@@ -108,12 +108,13 @@ Rails.application.routes.draw do
           put "/:condition_id" => "pages/conditions#update", as: :update_condition
           get "/:condition_id/delete" => "pages/conditions#delete", as: :delete_condition
           delete "/:condition_id/delete" => "pages/conditions#destroy", as: :destroy_condition
-          get "/exit_page/new" => "pages/exit_page#new", as: :new_exit_page
-          post "/exit_page/new" => "pages/exit_page#create", as: :create_exit_page
-          get "/exit_page/:condition_id" => "pages/exit_page#edit", as: :edit_exit_page
-          put "/exit_page/:condition_id" => "pages/exit_page#update", as: :update_exit_page
-          get "/exit_page/:condition_id/delete" => "pages/exit_page#delete", as: :delete_exit_page
-          delete "/exit_page/:condition_id" => "pages/exit_page#destroy", as: :destroy_exit_page
+          get "/exit-page/new" => "pages/exit_page#new", as: :new_exit_page
+          post "/exit-page/new" => "pages/exit_page#create", as: :create_exit_page
+          post "/exit-page-preview" => "pages/exit_page#render_preview", as: :exit_page_render_preview
+          get "/exit-page/:condition_id" => "pages/exit_page#edit", as: :edit_exit_page
+          put "/exit-page/:condition_id" => "pages/exit_page#update", as: :update_exit_page
+          get "/exit-page/:condition_id/delete" => "pages/exit_page#delete", as: :delete_exit_page
+          delete "/exit-page/:condition_id" => "pages/exit_page#destroy", as: :destroy_exit_page
         end
 
         scope "/routes" do
