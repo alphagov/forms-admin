@@ -1,0 +1,8 @@
+---
+en:
+  helpers:
+    label:
+      confirm_delete_exit_page_input:
+        options:
+          'no': No, return to edit route 1
+          'yes': Yes, delete the exit page

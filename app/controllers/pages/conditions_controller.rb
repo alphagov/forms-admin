@@ -55,6 +55,11 @@ class Pages::ConditionsController < PagesController
 
     condition_input = Pages::ConditionsInput.new(form_params)
 
+    # Check if we are changing an exit page and should warn that the content will be lost
+    if condition.exit_page? && condition_input.goto_page_id != "exit_page"
+      return redirect_to confirm_change_exit_page_path(current_form.id, page.id, condition.id, params: { answer_value: condition_input_params[:answer_value], goto_page_id: condition_input_params[:goto_page_id] })
+    end
+
     if condition_input.update_condition
       if condition_input.create_exit_page? && FeatureService.new(group: current_form.group).enabled?(:exit_pages)
         redirect_to edit_exit_page_path(current_form.id, page.id, condition.id)
@@ -92,6 +97,54 @@ class Pages::ConditionsController < PagesController
     end
   end
 
+  def confirm_delete_exit_page
+    condition = ConditionRepository.find(condition_id: params[:condition_id], form_id: current_form.id, page_id: page.id)
+    delete_exit_page_input = Pages::DeleteExitPageInput.new
+
+    render template: "pages/conditions/confirm_delete_exit_page", locals: {
+      answer_value: params.require(:answer_value),
+      goto_page_id: params.require(:goto_page_id),
+      exit_page: condition,
+      delete_exit_page_input: delete_exit_page_input,
+    }
+  end
+
+  def update_change_exit_page
+    condition = ConditionRepository.find(condition_id: params[:condition_id], form_id: current_form.id, page_id: page.id)
+
+    return redirect_to form_pages_path(current_form.id) unless condition.exit_page?
+
+    delete_exit_page_input = Pages::DeleteExitPageInput.new(delete_exit_page_params)
+
+    unless delete_exit_page_input.valid?
+      return render template: "pages/conditions/confirm_delete_exit_page", locals: {
+        answer_value: params.require(:answer_value),
+        goto_page_id: params.require(:goto_page_id),
+        exit_page: condition,
+        delete_exit_page_input: delete_exit_page_input,
+      }, status: :unprocessable_entity
+    end
+
+    unless delete_exit_page_input.confirmed?
+      return redirect_to edit_condition_path(current_form.id, page.id, condition.id)
+    end
+
+    # prepare to update the condition
+    condition_input = Pages::ConditionsInput.new(
+      answer_value: params.require(:answer_value),
+      goto_page_id: params.require(:goto_page_id),
+      form: current_form,
+      page: page,
+      record: condition,
+    )
+
+    if condition_input.update_condition
+      redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.route_updated", question_number: condition_input.page.position)
+    else
+      render template: "pages/conditions/edit", locals: { condition_input: }, status: :unprocessable_entity
+    end
+  end
+
 private
 
   def can_add_page_routing
@@ -110,6 +163,10 @@ private
 
   def delete_condition_input_params
     params.require(:pages_delete_condition_input).permit(:confirm).merge(form: current_form, page:)
+  end
+
+  def delete_exit_page_params
+    params.require(:pages_delete_exit_page_input).permit(:confirm)
   end
 
   def new_condition_or_show_routes_path(page)
