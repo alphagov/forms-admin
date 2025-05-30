@@ -2,6 +2,7 @@ class Pages::UpdateExitPageInput < BaseInput
   attr_accessor :form, :page, :record, :exit_page_markdown, :exit_page_heading
 
   validates :exit_page_heading, :exit_page_markdown, presence: true
+  validates :exit_page_heading, :exit_page_markdown, length: { maximum: 4999 }
 
   def submit
     return false if invalid?
