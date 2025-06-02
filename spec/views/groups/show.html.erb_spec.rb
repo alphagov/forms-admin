@@ -182,7 +182,7 @@ RSpec.describe "groups/show", type: :view do
           end
 
           it "shows a link to request an upgrade" do
-            expect(rendered).to have_link("Find out how to upgrade this group so you can make forms live", href: request_upgrade_group_path(group))
+            expect(rendered).to have_link("Find out how to make forms live", href: request_upgrade_group_path(group))
           end
 
           it "has the trial group heading in the notification banner" do

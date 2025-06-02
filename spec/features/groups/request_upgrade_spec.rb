@@ -58,7 +58,7 @@ feature "Request an upgrade for a group", type: :feature do
   end
 
   def when_i_click_on_the_link_to_request_to_upgrade_the_group
-    click_link "Find out how to upgrade this group so you can make forms live"
+    click_link "Find out how to make forms live"
   end
 
   def then_i_see_a_page_to_confirm_the_request

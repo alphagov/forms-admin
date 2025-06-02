@@ -553,7 +553,7 @@ en:
         heading: This is a ‘trial’ group
         request_upgrade:
           body_html: "<p>You can create forms in this group and test them, but you cannot make them live.</p>"
-          link: Find out how to upgrade this group so you can make forms live
+          link: Find out how to make forms live
           without_mou_signature_html: "<p>Speak to your organisation’s GOV.UK publishing team or %{contact_link} to find out how to make live forms.</p>"
           without_org_admin_html: "<p>Speak to your organisation’s GOV.UK publishing team or %{contact_link} to find out how to make live forms.</p>"
         review_upgrade:
