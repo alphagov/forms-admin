@@ -20,6 +20,20 @@ RSpec.describe Pages::UpdateExitPageInput, type: :model do
       expect(update_exit_page_input).to be_invalid
       expect(update_exit_page_input.errors.full_messages_for(:exit_page_markdown)).to include("Exit page markdown #{error_message}")
     end
+
+    it "is invalid if exit_page_heading is too long" do
+      error_message = I18n.t("activemodel.errors.models.pages/update_exit_page_input.attributes.exit_page_heading.too_long")
+      update_exit_page_input.exit_page_heading = "a" * 5000
+      expect(update_exit_page_input).to be_invalid
+      expect(update_exit_page_input.errors.full_messages_for(:exit_page_heading)).to include("Exit page heading #{error_message}")
+    end
+
+    it "is invalid if exit_page_markdown is too long" do
+      error_message = I18n.t("activemodel.errors.models.pages/update_exit_page_input.attributes.exit_page_markdown.too_long")
+      update_exit_page_input.exit_page_markdown = "a" * 5000
+      expect(update_exit_page_input).to be_invalid
+      expect(update_exit_page_input.errors.full_messages_for(:exit_page_markdown)).to include("Exit page markdown #{error_message}")
+    end
   end
 
   describe "#submit" do

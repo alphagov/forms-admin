@@ -23,8 +23,10 @@ en:
               blank: Select the answer to base this route on
             exit_page_heading:
               blank: Enter a page heading
+              too_long: The page heading must be shorter than 5,000 characters
             exit_page_markdown:
               blank: Enter page content
+              too_long: The page content must be shorter than 5,000 characters
         pages/routing_page_input:
           attributes:
             routing_page_id:
@@ -34,8 +36,10 @@ en:
           attributes:
             exit_page_heading:
               blank: Enter a page heading
+              too_long: The page heading must be shorter than 5,000 characters
             exit_page_markdown:
               blank: Enter page content
+              too_long: The page content must be shorter than 5,000 characters
   helpers:
     hint:
       pages_exit_page_input:

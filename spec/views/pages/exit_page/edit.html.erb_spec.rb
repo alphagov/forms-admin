@@ -10,7 +10,7 @@ describe "pages/exit_page/edit.html.erb" do
   let(:update_exit_page_input) { Pages::UpdateExitPageInput.new(form:, page: pages.first, record: condition).assign_condition_values }
 
   before do
-    render template: "pages/exit_page/edit", locals: { update_exit_page_input: }
+    render template: "pages/exit_page/edit", locals: { update_exit_page_input:, preview_html: "Preview HTML" }
   end
 
   it "sets the correct title" do
