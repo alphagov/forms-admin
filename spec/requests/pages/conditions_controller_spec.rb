@@ -320,6 +320,48 @@ RSpec.describe Pages::ConditionsController, type: :request do
         expect(response.status).to eq(403)
       end
     end
+
+    context "when the condition is already an exit page" do
+      let(:condition) { build :condition, :with_exit_page, id: 1, check_page_id: selected_page.id }
+
+      before do
+        selected_page.routing_conditions = [condition]
+        selected_page.position = 1
+
+        allow(PageRepository).to receive(:find).and_return(selected_page)
+        allow(ConditionRepository).to receive(:find).and_return(condition)
+        allow(ConditionRepository).to receive(:save!).and_invoke(->(condition) { condition })
+
+        put update_condition_path(form_id: form.id,
+                                  page_id: selected_page.id,
+                                  condition_id: condition.id,
+                                  params:)
+      end
+
+      context "when changing to a non-exit page" do
+        let(:params) { { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: 3, answer_value: "Wales" } } }
+
+        it "reads the form" do
+          expect(FormRepository).to have_received(:find).twice
+        end
+
+        it "redirects to the confirm exit page deletion page" do
+          expect(response).to redirect_to confirm_change_exit_page_path(form.id, selected_page.id, condition.id, params: { answer_value: "Wales", goto_page_id: 3 })
+        end
+
+        it "does not call save! for the condition" do
+          expect(ConditionRepository).not_to have_received(:save!)
+        end
+      end
+
+      context "when changing to an exit page" do
+        let(:params) { { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: "exit_page", answer_value: "Wales" } } }
+
+        it "redirects to the edit exit page" do
+          expect(response).to redirect_to show_routes_path(form:, page:, condition:)
+        end
+      end
+    end
   end
 
   describe "#delete" do
@@ -413,6 +455,143 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
       it "renders the delete page" do
         expect(response).to render_template("pages/conditions/delete")
+      end
+    end
+
+    context "when user should not be allowed to add routes to pages" do
+      let(:user) { build :user }
+
+      it "Renders the forbidden page" do
+        expect(response).to render_template("errors/forbidden")
+      end
+
+      it "Returns a 403 status" do
+        expect(response.status).to eq(403)
+      end
+    end
+  end
+
+  describe "#confirm_delete_exit_page" do
+    let(:condition) { build :condition, :with_exit_page, id: 1, check_page_id: selected_page.id }
+    let(:answer_value) { "Option 1" }
+    let(:goto_page_id) { "2" }
+
+    before do
+      allow(PageRepository).to receive(:find).and_return(selected_page)
+      allow(ConditionRepository).to receive(:find).and_return(condition)
+
+      get confirm_change_exit_page_path(
+        form_id: form.id,
+        page_id: selected_page.id,
+        condition_id: condition.id,
+        answer_value: answer_value,
+        goto_page_id: goto_page_id,
+      )
+    end
+
+    it "reads the form" do
+      expect(FormRepository).to have_received(:find)
+    end
+
+    it "renders the confirm_delete_exit_page template" do
+      expect(response).to render_template("pages/conditions/confirm_delete_exit_page")
+    end
+
+    context "when user should not be allowed to add routes to pages" do
+      let(:user) { build :user }
+
+      it "Renders the forbidden page" do
+        expect(response).to render_template("errors/forbidden")
+      end
+
+      it "Returns a 403 status" do
+        expect(response.status).to eq(403)
+      end
+    end
+  end
+
+  describe "#update_change_exit_page" do
+    let(:condition) { build :condition, :with_exit_page, id: 1, check_page_id: selected_page.id }
+    let(:answer_value) { "Option 1" }
+    let(:goto_page_id) { "2" }
+    let(:confirm) { "yes" }
+    let(:update_condition_result) { nil }
+
+    before do
+      selected_page.routing_conditions = [condition]
+      selected_page.position = 1
+
+      allow(PageRepository).to receive(:find).and_return(selected_page)
+      allow(ConditionRepository).to receive_messages(find: condition, save!: condition)
+
+      allow(Pages::ConditionsInput).to receive(:new).and_wrap_original do |original_method, *args, **kwargs|
+        conditions_input = original_method.call(*args, **kwargs)
+        allow(conditions_input).to receive(:update_condition).and_return(update_condition_result) unless update_condition_result.nil?
+        allow(conditions_input).to receive(:check_errors_from_api).and_call_original
+        allow(conditions_input).to receive(:assign_condition_values).and_call_original
+        conditions_input
+      end
+
+      post update_change_exit_page_path(
+        form_id: form.id,
+        page_id: selected_page.id,
+        condition_id: condition.id,
+        answer_value: answer_value,
+        goto_page_id: goto_page_id,
+        params: { pages_delete_exit_page_input: { confirm: } },
+      )
+    end
+
+    it "reads the form" do
+      expect(FormRepository).to have_received(:find)
+    end
+
+    it "clears the exit page fields" do
+      expect(condition.exit_page_heading).to be_nil
+      expect(condition.exit_page_markdown).to be_nil
+    end
+
+    it "redirects to the question routes page" do
+      expect(response).to redirect_to show_routes_path(form_id: form.id, page_id: selected_page.id)
+    end
+
+    context "when confirm is not 'yes'" do
+      let(:confirm) { "no" }
+
+      it "redirects to the edit condition page" do
+        expect(response).to redirect_to edit_condition_path(form.id, selected_page.id, condition.id)
+      end
+    end
+
+    context "when confirm is missing or invalid" do
+      let(:confirm) { nil }
+
+      it "returns a 422 error code" do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "renders the confirm_delete template" do
+        expect(response).to render_template("pages/conditions/confirm_delete_exit_page")
+      end
+    end
+
+    context "when updating the condition fails" do
+      let(:update_condition_result) { false }
+
+      it "returns a 422 error code" do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "renders the conditions/edit template" do
+        expect(response).to render_template("pages/conditions/edit")
+      end
+    end
+
+    context "when condition is not an exit page" do
+      let(:condition) { build :condition, id: 1, check_page_id: selected_page.id, goto_page_id: 3 }
+
+      it "redirects to the form pages path" do
+        expect(response).to redirect_to form_pages_path(form.id)
       end
     end
 

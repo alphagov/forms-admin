@@ -108,6 +108,8 @@ Rails.application.routes.draw do
           put "/:condition_id" => "pages/conditions#update", as: :update_condition
           get "/:condition_id/delete" => "pages/conditions#delete", as: :delete_condition
           delete "/:condition_id/delete" => "pages/conditions#destroy", as: :destroy_condition
+          get "/:condition_id/confirm-delete-exit-page" => "pages/conditions#confirm_delete_exit_page", as: :confirm_change_exit_page
+          post "/:condition_id/confirm-delete-exit-page" => "pages/conditions#update_change_exit_page", as: :update_change_exit_page
           get "/exit-page/new" => "pages/exit_page#new", as: :new_exit_page
           post "/exit-page/new" => "pages/exit_page#create", as: :create_exit_page
           post "/exit-page-preview" => "pages/exit_page#render_preview", as: :exit_page_render_preview
