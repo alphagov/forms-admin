@@ -151,4 +151,16 @@ module ApplicationHelper
       I18n.t("last_signed_in_at.not_since_last_signed_in_at_added")
     end
   end
+
+  def format_admin_emails_as_html_list(admin_emails)
+    return "" if admin_emails.blank?
+
+    content_tag :ul, class: "govuk-list govuk-list--bullet" do
+      admin_emails.map { |email|
+        content_tag :li do
+          mail_to(email)
+        end
+      }.join.html_safe
+    end
+  end
 end

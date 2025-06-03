@@ -472,9 +472,11 @@ en:
       radios_legend: Do you want to upgrade this group?
     confirm_upgrade_request:
       body_html: |
-        <p>If you need to be able to make forms live, you can send a request for this group to be upgraded to an ‘active’ group.</p>
-        <p>Your request will be sent to your organisation’s GOV.UK Forms admins.</p>
-      inset_text: Some organisations are restricting who can make forms live in their organisation. Send a request to upgrade to find out if this will affect you.
+        <p> If you need to be able to make forms live, you can send a request for this group to be upgraded to an ‘active’ group. </p>
+        <p> Your request will be sent to your organisation’s GOV.UK Forms admins. They can advise you about how they’re managing use of the platform and the creation of forms in your organisation. </p>
+        <p> Your organisation’s GOV.UK Forms admins are: </p>
+        %{organisation_admin_emails}
+      inset_text: Send your request before you spend too much time creating real forms, as your organisation may be restricting who can make forms live.
       send_request_to_upgrade: Send request to upgrade
     delete:
       title: Are you sure you want to delete this group?
@@ -553,7 +555,7 @@ en:
         heading: This is a ‘trial’ group
         request_upgrade:
           body_html: "<p>You can create forms in this group and test them, but you cannot make them live.</p>"
-          link: Find out how to upgrade this group so you can make forms live
+          link: Find out how to make forms live
           without_mou_signature_html: "<p>Speak to your organisation’s GOV.UK publishing team or %{contact_link} to find out how to make live forms.</p>"
           without_org_admin_html: "<p>Speak to your organisation’s GOV.UK publishing team or %{contact_link} to find out how to make live forms.</p>"
         review_upgrade:
