@@ -10,7 +10,7 @@
         <%= t('page_titles.group_confirm_upgrade_request') %>
       </h1>
 
-      <%= t("groups.confirm_upgrade_request.body_html")%>
+      <%= t("groups.confirm_upgrade_request.body_html", organisation_admin_emails:  format_admin_emails_as_html_list(@group.organisation.admin_users.map(&:email))) %>
 
       <%= govuk_inset_text do %>
         <%= t("groups.confirm_upgrade_request.inset_text") %>
