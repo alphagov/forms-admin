@@ -31,7 +31,6 @@ en:
           attributes:
             routing_page_id:
               blank: Select the question you want to add a route from
-              branch_routing_disabled_blank: Select the question you want your route to start from
         pages/update_exit_page_input:
           attributes:
             exit_page_heading:
