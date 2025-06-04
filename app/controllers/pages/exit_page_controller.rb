@@ -25,7 +25,7 @@ class Pages::ExitPageController < PagesController
 
     update_exit_page_input = Pages::UpdateExitPageInput.new(form: current_form, page:, record: condition).assign_condition_values
 
-    render template: "pages/exit_page/edit", locals: { update_exit_page_input:, preview_html: preview_html(update_exit_page_input) }
+    render template: "pages/exit_page/edit", locals: { update_exit_page_input:, preview_html: preview_html(update_exit_page_input), check_preview_validation: false }
   end
 
   def update
@@ -38,7 +38,7 @@ class Pages::ExitPageController < PagesController
     if update_exit_page_input.submit
       redirect_to edit_condition_path(form_id: current_form.id, page_id: page.id, condition_id: update_exit_page_input.record.id), success: t("banner.success.exit_page_updated")
     else
-      render template: "pages/exit_page/edit", locals: { update_exit_page_input:, preview_html: preview_html(update_exit_page_input) }, status: :unprocessable_entity
+      render template: "pages/exit_page/edit", locals: { update_exit_page_input:, preview_html: preview_html(update_exit_page_input), check_preview_validation: true }, status: :unprocessable_entity
     end
   end
 
