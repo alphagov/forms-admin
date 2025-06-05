@@ -69,24 +69,6 @@ namespace :groups do
     end
   end
 
-  desc "Enable branch_routing feature for group"
-  task :enable_branch_routing, %i[group_id] => :environment do |_, args|
-    usage_message = "usage: rake groups:enable_branch_routing[<group_external_id>]".freeze
-    abort usage_message if args[:group_id].blank?
-
-    Group.find_by(external_id: args[:group_id]).update!(branch_routing_enabled: true)
-    Rails.logger.info("Updated branch_routing_enabled to true for group #{args[:group_id]}")
-  end
-
-  desc "Disable branch_routing feature for group"
-  task :disable_branch_routing, %i[group_id] => :environment do |_, args|
-    usage_message = "usage: rake groups:disable_branch_routing[<group_external_id>]".freeze
-    abort usage_message if args[:group_id].blank?
-
-    Group.find_by(external_id: args[:group_id]).update!(branch_routing_enabled: false)
-    Rails.logger.info("Updated branch_routing_enabled to false for group #{args[:group_id]}")
-  end
-
   desc "Enable exit_pages feature for group"
   task :enable_exit_pages, %i[group_id] => :environment do |_, args|
     usage_message = "usage: rake groups:enable_exit_pages[<group_external_id>]".freeze
