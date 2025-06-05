@@ -5,15 +5,6 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
-  RSpec.shared_examples "feature flag protected endpoint" do |action|
-    context "when the branch_routing feature is disabled" do
-      it "returns 404", feature_branch_routing: false do
-        send(action)
-        expect(response).to have_http_status(:not_found)
-      end
-    end
-  end
-
   RSpec.shared_examples "requires condition" do |action|
     let(:pages) { build_pages }
 
@@ -37,8 +28,6 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
     subject(:get_new) { get new_secondary_skip_path(form_id: 2, page_id: 1) }
 
     let(:pages) { build_pages_with_skip_condition }
-
-    it_behaves_like "feature flag protected endpoint", :subject
 
     context "when the branch_routing feature is enabled", :feature_branch_routing do
       it_behaves_like "requires condition", :subject
@@ -74,8 +63,6 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         },
       }
     end
-
-    it_behaves_like "feature flag protected endpoint", :subject
 
     context "when the branch_routing feature is enabled", :feature_branch_routing do
       it_behaves_like "requires condition", :subject
@@ -124,8 +111,6 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
 
     let(:pages) { build_pages_with_existing_secondary_skip }
 
-    it_behaves_like "feature flag protected endpoint", :subject
-
     context "when the branch_routing feature is enabled", :feature_branch_routing do
       it_behaves_like "requires condition", :subject
 
@@ -161,8 +146,6 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         },
       }
     end
-
-    it_behaves_like "feature flag protected endpoint", :subject
 
     context "when the branch_routing feature is enabled", :feature_branch_routing do
       it_behaves_like "requires condition", :subject
@@ -231,12 +214,6 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
 
     let(:pages) { build_pages_with_existing_secondary_skip }
 
-    context "when the branch_routing feature is not enabled", feature_branch_routing: false do
-      it "returns a 404" do
-        get delete_secondary_skip_path(form_id: 2, page_id: 1)
-        expect(response).to have_http_status(:not_found)
-      end
-    end
 
     context "when the branch_routing feature is enabled", :feature_branch_routing do
       it "returns 200" do
@@ -275,13 +252,6 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
     end
 
     let(:pages) { build_pages_with_existing_secondary_skip }
-
-    context "when the branch_routing feature is not enabled", feature_branch_routing: false do
-      it "returns a 404" do
-        post destroy_secondary_skip_path(form_id: 2, page_id: 1)
-        expect(response).to have_http_status(:not_found)
-      end
-    end
 
     context "when the branch_routing feature is enabled", :feature_branch_routing do
       context "when the submission is successful and deletes the secondary skip condition" do
