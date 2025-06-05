@@ -21,7 +21,7 @@ feature "Adding branching to a form", type: :feature do
     login_as standard_user
   end
 
-  scenario "Adding branching to a form", :feature_branch_routing do
+  scenario "Adding branching to a form" do
     when_viewing_a_forms_questions
     and_i_add_a_route
     then_i_should_see_the_add_route_page
