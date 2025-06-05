@@ -19,7 +19,7 @@ class Api::V1::FormResource < ActiveResource::Base
   end
 
   def qualifying_route_pages
-    max_routes_per_page = FeatureService.new(group:).enabled?(:branch_routing) ? 2 : 1
+    max_routes_per_page = 2
 
     conditions = pages.flat_map(&:routing_conditions).compact_blank
     condition_counts = conditions.group_by(&:check_page_id).transform_values(&:length)
