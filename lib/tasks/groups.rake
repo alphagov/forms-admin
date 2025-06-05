@@ -56,7 +56,7 @@ namespace :groups do
 
   desc "List enabled features for groups"
   task features: :environment do
-    feature_flags = %i[branch_routing_enabled exit_pages_enabled welsh_enabled]
+    feature_flags = %i[exit_pages_enabled welsh_enabled]
     query = feature_flags.map { "#{it} IS TRUE" }.join(" OR ")
 
     Group.where(query).find_each do |group|
