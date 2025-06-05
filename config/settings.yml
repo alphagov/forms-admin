@@ -1,6 +1,5 @@
 # Used to add feature flags in the app to control access to certain features.
 features:
-  branch_routing: :true
   exit_pages:
     enabled_by_group: true
   welsh:
