@@ -1,5 +1,4 @@
 features:
-  branch_routing: true
   exit_pages: true
 
 # Use real authentication

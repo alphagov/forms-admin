@@ -2,13 +2,10 @@
 <% content_for :back_link, govuk_back_link_to(form_pages_path(form.id)) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% branch_routing_enabled = FeatureService.new(group: form.group).enabled?(:branch_routing) %>
     <% exit_pages_enabled = FeatureService.new(group: form.group).enabled?(:exit_pages) %>
 
     <% if exit_pages_enabled %>
       <% prefix = 'exit_pages.' %>
-    <% elsif branch_routing_enabled %>
-      <% prefix = 'branch_routing.' %>
     <% else %>
       <% prefix = '' %>
     <% end %>

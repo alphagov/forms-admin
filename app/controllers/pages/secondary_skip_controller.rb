@@ -1,5 +1,5 @@
 class Pages::SecondarySkipController < PagesController
-  before_action :ensure_branch_routing_feature_enabled, :ensure_page_has_skip_condition
+  before_action :ensure_page_has_skip_condition
   before_action :ensure_secondary_skip_blank, only: %i[new create]
   before_action :ensure_secondary_skip_exists, only: %i[edit update delete destroy]
 
@@ -76,10 +76,6 @@ private
 
   def delete_secondary_skip_input_params
     params.require(:pages_delete_secondary_skip_input).permit(:confirm).merge(form: current_form, page:)
-  end
-
-  def ensure_branch_routing_feature_enabled
-    raise ActionController::RoutingError, "branch_routing feature not enabled" unless FeatureService.new(group: current_form.group).enabled?(:branch_routing)
   end
 
   def ensure_page_has_skip_condition

@@ -83,23 +83,14 @@ describe RouteSummaryCardDataPresenter do
         expect(result[1][:rows][2][:value][:text]).to eq("8. Question after a branch route (end of a secondary skip)")
       end
 
-      context "when branch routing is not enabled", feature_branch_routing: false do
-        it "has no actions" do
-          result = service.summary_card_data
-          expect(result[1][:card][:actions]).to be_empty
-        end
+      it "shows the edit secondary skip link" do
+        result = service.summary_card_data
+        expect(result[1][:card][:actions].first).to have_link("Edit", href: "/forms/99/pages/2/routes/any-other-answer/questions-to-skip")
       end
 
-      context "with branch_routing enabled", :feature_branch_routing do
-        it "shows the edit secondary skip link" do
-          result = service.summary_card_data
-          expect(result[1][:card][:actions].first).to have_link("Edit", href: "/forms/99/pages/2/routes/any-other-answer/questions-to-skip")
-        end
-
-        it "shows the delete secondary skip link" do
-          result = service.summary_card_data
-          expect(result[1][:card][:actions].second).to have_link("Delete", href: "/forms/99/pages/2/routes/any-other-answer/questions-to-skip/delete")
-        end
+      it "shows the delete secondary skip link" do
+        result = service.summary_card_data
+        expect(result[1][:card][:actions].second).to have_link("Delete", href: "/forms/99/pages/2/routes/any-other-answer/questions-to-skip/delete")
       end
 
       context "when the route's check answer does not exist" do

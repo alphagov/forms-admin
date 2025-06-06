@@ -138,76 +138,46 @@ describe Api::V1::FormResource, type: :model do
   end
 
   describe "#qualifying_route_pages" do
-    context "when the branching feature flag is not enabled" do
-      let(:non_select_from_list_pages) do
-        (1..3).map do |index|
-          build :page, id: index, position: index
-        end
-      end
-      let(:selection_pages_with_routes) do
-        (4..5).map do |index|
-          build :page, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, check_page_id: index, goto_page_id: index + 2)]
-        end
-      end
-      let(:selection_pages_without_routes) do
-        (6..9).map do |index|
-          build :page, :with_selection_settings, id: index, position: index, routing_conditions: []
-        end
-      end
-      let(:form) { build :form, name: "Form 1", organisation:, submission_email: "", pages: non_select_from_list_pages + selection_pages_with_routes + selection_pages_without_routes }
-
-      before do
-        allow(form).to receive(:group).and_return(build(:group))
-      end
-
-      it "returns a list of pages that can be used as routing pages" do
-        selection_pages_with_routes_excluding_last_page = selection_pages_without_routes.take(selection_pages_without_routes.length - 1)
-        expect(form.qualifying_route_pages).to match_array(selection_pages_with_routes_excluding_last_page)
+    let(:non_select_from_list_pages) do
+      (1..3).map do |index|
+        build :page, id: index, position: index
       end
     end
 
-    context "when the branching feature flag is enabled", :feature_branch_routing do
-      let(:non_select_from_list_pages) do
-        (1..3).map do |index|
-          build :page, id: index, position: index
-        end
+    let(:selection_pages_with_routes) do
+      (4..5).map do |index|
+        build :page, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, check_page_id: index, goto_page_id: index + 2)]
       end
+    end
 
-      let(:selection_pages_with_routes) do
-        (4..5).map do |index|
-          build :page, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, check_page_id: index, goto_page_id: index + 2)]
-        end
+    let(:selection_pages_without_routes) do
+      (6..9).map do |index|
+        build :page, :with_selection_settings, id: index, position: index, routing_conditions: []
       end
+    end
 
-      let(:selection_pages_without_routes) do
-        (6..9).map do |index|
-          build :page, :with_selection_settings, id: index, position: index, routing_conditions: []
-        end
+    let(:selection_pages_with_secondary_skips) do
+      (10..12).map do |index|
+        build :page, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, check_page_id: index, goto_page_id: index + 2)]
       end
+    end
 
-      let(:selection_pages_with_secondary_skips) do
-        (10..12).map do |index|
-          build :page, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, check_page_id: index, goto_page_id: index + 2)]
-        end
+    let!(:secondary_skip_pages) do
+      (13..16).map do |index|
+        build :page, :with_simple_answer_type, id: index, position: index, routing_conditions: [(build :condition, id: index, routing_page_id: index, check_page_id: index - 3, goto_page_id: index + 2)]
       end
+    end
 
-      let!(:secondary_skip_pages) do
-        (13..16).map do |index|
-          build :page, :with_simple_answer_type, id: index, position: index, routing_conditions: [(build :condition, id: index, routing_page_id: index, check_page_id: index - 3, goto_page_id: index + 2)]
-        end
-      end
+    let(:form) { build :form, name: "Form 1", organisation:, submission_email: "", pages: non_select_from_list_pages + selection_pages_with_routes + selection_pages_without_routes + selection_pages_with_secondary_skips + secondary_skip_pages }
 
-      let(:form) { build :form, name: "Form 1", organisation:, submission_email: "", pages: non_select_from_list_pages + selection_pages_with_routes + selection_pages_without_routes + selection_pages_with_secondary_skips + secondary_skip_pages }
+    before do
+      allow(form).to receive(:group).and_return(build(:group))
+    end
 
-      before do
-        allow(form).to receive(:group).and_return(build(:group))
-      end
+    it "returns a list of pages that can be used as routing pages" do
+      selection_pages_excluding_last_page = (selection_pages_with_routes + selection_pages_without_routes)
 
-      it "returns a list of pages that can be used as routing pages" do
-        selection_pages_excluding_last_page = (selection_pages_with_routes + selection_pages_without_routes)
-
-        expect(form.qualifying_route_pages).to match_array(selection_pages_excluding_last_page)
-      end
+      expect(form.qualifying_route_pages).to match_array(selection_pages_excluding_last_page)
     end
   end
 
@@ -217,13 +187,18 @@ describe Api::V1::FormResource, type: :model do
         build :page, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, check_page_id: index, goto_page_id: index + 2)]
       end
     end
+    let(:secondary_skip_pages) do
+      (4..6).map do |index|
+        build :page, :with_simple_answer_type, id: index, position: index, routing_conditions: [(build :condition, id: index, routing_page_id: index, check_page_id: index - 3, goto_page_id: index + 2)]
+      end
+    end
     let(:selection_pages_without_routes) do
-      (4..5).map do |index|
+      (7..8).map do |index|
         build :page, :with_selection_settings, id: index, position: index, routing_conditions: []
       end
     end
 
-    let(:form) { build :form, pages: selection_pages_with_routes }
+    let(:form) { build :form, pages: selection_pages_with_routes + secondary_skip_pages }
 
     before do
       allow(form).to receive(:group).and_return(build(:group))
