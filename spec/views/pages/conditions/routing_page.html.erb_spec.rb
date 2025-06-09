@@ -24,25 +24,13 @@ describe "pages/conditions/routing_page.html.erb" do
     expect(rendered).to have_css("h1.govuk-heading-l", text: t("page_titles.routing_page"))
   end
 
-  it "contains content explaining routing" do
-    expect(rendered).to have_text "You can set up a route"
-  end
-
-  context "when branch routing is enabled", :feature_branch_routing do
-    it "contains content explaining branch routing" do
-      expect(rendered).to have_text "You can add a route to a question so if someone selects one specific answer, they’ll be skipped forward to a later question, or the end of the form.", normalize_ws: true
-    end
+  it "contains content explaining branch routing" do
+    expect(rendered).to have_text "You can add a route to a question so if someone selects one specific answer, they’ll be skipped forward to a later question, or the end of the form.", normalize_ws: true
   end
 
   context "when exit pages are enabled", :feature_exit_pages do
     it "contains content for exit pages" do
       expect(rendered).to have_text "an ‘exit page’ to remove them from the form - for example, because they’re not eligible ", normalize_ws: true
-    end
-  end
-
-  context "when branch routing is not enabled", feature_branch_routing: false do
-    it "does not contain content explaining branch routing" do
-      expect(rendered).not_to have_text "You can add a route from a question where people can select only one answer from a list."
     end
   end
 

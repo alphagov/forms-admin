@@ -134,7 +134,7 @@ ignore_unused:
 - 'helpers.*'
 - 'reports.*.heading'
 - 'reports.*.download_csv'
-- 'routing_page.{branch_routing,exit_pages}.*'
+- 'routing_page.exit_pages.*'
 
 ## Exclude these keys from the `i18n-tasks eq-base' report:
 # ignore_eq_base:

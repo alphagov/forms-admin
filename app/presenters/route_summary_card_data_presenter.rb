@@ -105,7 +105,7 @@ private
   def secondary_skip_card
     continue_to_name = page.has_next_page? ? question_name(page.next_page) : end_page_name
 
-    actions = if FeatureService.new(group: form.group).enabled?(:branch_routing) && secondary_skip
+    actions = if secondary_skip
                 [
                   edit_secondary_skip_link,
                   delete_secondary_skip_link,
@@ -140,16 +140,12 @@ private
 
   def secondary_skip_rows
     unless secondary_skip
-      if FeatureService.new(group: form.group).enabled?(:branch_routing)
-        return [
-          {
-            key: { text: I18n.t("page_route_card.then") },
-            value: { text: govuk_link_to(I18n.t("page_route_card.set_secondary_skip"), new_secondary_skip_path(form_id: form.id, page_id: page.id)) },
-          },
-        ]
-      else
-        return []
-      end
+      return [
+        {
+          key: { text: I18n.t("page_route_card.then") },
+          value: { text: govuk_link_to(I18n.t("page_route_card.set_secondary_skip"), new_secondary_skip_path(form_id: form.id, page_id: page.id)) },
+        },
+      ]
     end
 
     goto_page_name = secondary_skip.skip_to_end ? end_page_name : goto_question_name(secondary_skip.goto_page_id)

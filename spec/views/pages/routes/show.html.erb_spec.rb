@@ -89,36 +89,32 @@ describe "pages/routes/show.html.erb" do
           expect(rendered).to have_text "People who select any other answer will continue to “Check your answers before submitting”."
         end
 
-        context "when branch routing is enabled", :feature_branch_routing do
-          it "does not have a link to set questions to skip" do
-            expect(rendered).not_to have_link(
-              "Set questions to skip",
-              class: "govuk-button--secondary",
-              href: new_secondary_skip_path(form.id, page.id),
-            )
-          end
-        end
-      end
-
-      context "when branch routing is enabled", :feature_branch_routing do
-        it "has a link to set questions to skip" do
-          expect(rendered).to have_link(
+        it "does not have a link to set questions to skip" do
+          expect(rendered).not_to have_link(
             "Set questions to skip",
             class: "govuk-button--secondary",
             href: new_secondary_skip_path(form.id, page.id),
           )
         end
+      end
 
-        context "when the route leads to an exit page" do
-          let(:page) { page_with_exit_page }
+      it "has a link to set questions to skip" do
+        expect(rendered).to have_link(
+          "Set questions to skip",
+          class: "govuk-button--secondary",
+          href: new_secondary_skip_path(form.id, page.id),
+        )
+      end
 
-          it "does not show the link to set questions to skip" do
-            expect(rendered).not_to have_link(
-              "Set questions to skip",
-              class: "govuk-button--secondary",
-              href: new_secondary_skip_path(form.id, page.id),
-            )
-          end
+      context "when the route leads to an exit page" do
+        let(:page) { page_with_exit_page }
+
+        it "does not show the link to set questions to skip" do
+          expect(rendered).not_to have_link(
+            "Set questions to skip",
+            class: "govuk-button--secondary",
+            href: new_secondary_skip_path(form.id, page.id),
+          )
         end
       end
     end
