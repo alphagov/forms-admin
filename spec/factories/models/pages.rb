@@ -37,6 +37,10 @@ FactoryBot.define do
       answer_type { Page::ANSWER_TYPES_WITHOUT_SETTINGS.sample }
     end
 
+    trait :with_file_upload_answer_type do
+      answer_type { "file" }
+    end
+
     trait :with_selection_settings do
       transient do
         only_one_option { "true" }

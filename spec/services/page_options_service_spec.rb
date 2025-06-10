@@ -348,5 +348,36 @@ describe PageOptionsService do
         end
       end
     end
+
+    context "with answer type of file" do
+      context "when file upload question does not contain guidance text" do
+        # this shouldn't be possible as the heading and text for guidance have to be set together
+        let(:page) { build :page, :with_file_upload_answer_type, :with_guidance }
+
+        it "returns the page heading" do
+          expect(page_options_service.all_options_for_answer_type).to include(
+            { key: { text: I18n.t("reports.form_or_questions_list_table.headings.question_text") },
+              value: { text: page.question_text } },
+          )
+        end
+      end
+
+      context "when file upload question contains guidance text" do
+        let(:page) { build :page, :with_guidance, :with_file_upload_answer_type }
+
+        it "returns question text" do
+          expect(page_options_service.all_options_for_answer_type).to include(
+            { key: { text: I18n.t("reports.form_or_questions_list_table.headings.question_text") },
+              value: { text: page.question_text } },
+          )
+        end
+
+        it "does not return page heading" do
+          expect(page_options_service.all_options_for_answer_type).not_to include(
+            { key: { text: I18n.t("page_options_service.page_heading") } },
+          )
+        end
+      end
+    end
   end
 end
