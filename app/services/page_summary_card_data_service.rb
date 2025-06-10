@@ -24,6 +24,9 @@ class PageSummaryCardDataService
 private
 
   def build_title
+    # if a file upload question has guidance text, we want to display the guidance text in the title. Otherwise we display the question text
+    # TODO: what do we do about questions that are optional?
+    return "#{page_number(@page)}. #{@page.page_heading}" if @page.answer_type == "file" && @page.page_heading && @page.guidance_markdown.present?
     return "#{page_number(@page)}. #{@page.question_text}" unless @page.is_optional? && @page.answer_type != "selection"
 
     "#{page_number(@page)}. #{@page.question_text} (optional)"
