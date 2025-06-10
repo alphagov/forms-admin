@@ -111,8 +111,8 @@ GEM
     aws-sdk-cloudwatch (1.116.0)
       aws-sdk-core (~> 3, >= 3.225.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-codepipeline (1.100.0)
-      aws-sdk-core (~> 3, >= 3.216.0)
+    aws-sdk-codepipeline (1.101.0)
+      aws-sdk-core (~> 3, >= 3.225.0)
       aws-sigv4 (~> 1.5)
     aws-sdk-core (3.225.1)
       aws-eventstream (~> 1, >= 1.3.0)
@@ -565,7 +565,7 @@ DEPENDENCIES
   MailchimpMarketing (~> 3.0)
   activeresource (~> 6.1)
   aws-sdk-cloudwatch (~> 1.116)
-  aws-sdk-codepipeline (~> 1.100)
+  aws-sdk-codepipeline (~> 1.101)
   axe-core-rspec
   bootsnap
   brakeman (~> 7.0.2)
