@@ -884,7 +884,7 @@ RSpec.describe ReportsController, type: :request do
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
         expect(csv.headers).to eq Reports::QuestionsCsvReportService::QUESTIONS_CSV_HEADERS
-        expect(csv.length).to eq 17
+        expect(csv.length).to eq 18
       end
     end
 

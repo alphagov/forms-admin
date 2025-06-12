@@ -213,7 +213,7 @@ RSpec.describe Reports::FormDocumentsService do
 
     context "when step is check page for secondary skip condition" do
       let(:form_document) { branch_route_form }
-      let(:step) { form_document["content"]["steps"][0] }
+      let(:step) { form_document["content"]["steps"][1] }
 
       it "returns true" do
         expect(described_class.step_has_secondary_skip_route?(form_document, step)).to be true

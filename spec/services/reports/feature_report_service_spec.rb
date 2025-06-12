@@ -40,7 +40,7 @@ RSpec.describe Reports::FeatureReportService do
           "national_insurance_number" => 1,
           "number" => 1,
           "phone_number" => 1,
-          "selection" => 3,
+          "selection" => 4,
           "text" => 5,
         },
       })
@@ -50,7 +50,7 @@ RSpec.describe Reports::FeatureReportService do
   describe "#questions" do
     it "returns all questions in all forms given" do
       questions = described_class.new(form_documents).questions
-      expect(questions.length).to eq 17
+      expect(questions.length).to eq 18
     end
 
     it "returns details needed to render report" do
@@ -228,7 +228,7 @@ RSpec.describe Reports::FeatureReportService do
             ),
           ),
           "metadata" => {
-            "number_of_routes" => 2,
+            "number_of_routes" => 3,
             "number_of_branch_routes" => 1,
           },
         ),
@@ -305,7 +305,7 @@ RSpec.describe Reports::FeatureReportService do
             ),
           ),
           "metadata" => {
-            "number_of_routes" => 2,
+            "number_of_routes" => 3,
             "number_of_branch_routes" => 1,
           },
         ),
