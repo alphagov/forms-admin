@@ -16,8 +16,8 @@ describe "reports/feature_report" do
     let(:report) { "forms_with_csv_submission_enabled" }
     let(:records) do
       [
-        { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
-        { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
+        { "form_id" => 1, "tag" => tag, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
+        { "form_id" => 3, "tag" => tag, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
       ]
     end
 
@@ -43,6 +43,28 @@ describe "reports/feature_report" do
           { "Form name" => "Branch route form", "Organisation" => "Government Digital Service" },
         ]
       end
+
+      context "with live forms" do
+        let(:tag) { "live" }
+
+        it "has links for each form" do
+          expect(rendered).to have_table do |table|
+            expect(table).to have_link "All question types form", href: live_form_pages_path(1)
+            expect(table).to have_link "Branch route form", href: live_form_pages_path(3)
+          end
+        end
+      end
+
+      context "with draft forms" do
+        let(:tag) { "draft" }
+
+        it "has links for each form" do
+          expect(rendered).to have_table do |table|
+            expect(table).to have_link "All question types form", href: form_pages_path(1)
+            expect(table).to have_link "Branch route form", href: form_pages_path(3)
+          end
+        end
+      end
     end
   end
 
@@ -50,8 +72,8 @@ describe "reports/feature_report" do
     let(:report) { "forms_with_payments" }
     let(:records) do
       [
-        { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
-        { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
+        { "form_id" => 1, "tag" => tag, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
+        { "form_id" => 3, "tag" => tag, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
       ]
     end
 
@@ -77,6 +99,28 @@ describe "reports/feature_report" do
           { "Form name" => "Branch route form", "Organisation" => "Government Digital Service" },
         ]
       end
+
+      context "with live forms" do
+        let(:tag) { "live" }
+
+        it "has links for each form" do
+          expect(rendered).to have_table do |table|
+            expect(table).to have_link "All question types form", href: live_form_pages_path(1)
+            expect(table).to have_link "Branch route form", href: live_form_pages_path(3)
+          end
+        end
+      end
+
+      context "with draft forms" do
+        let(:tag) { "draft" }
+
+        it "has links for each form" do
+          expect(rendered).to have_table do |table|
+            expect(table).to have_link "All question types form", href: form_pages_path(1)
+            expect(table).to have_link "Branch route form", href: form_pages_path(3)
+          end
+        end
+      end
     end
   end
 
@@ -84,8 +128,8 @@ describe "reports/feature_report" do
     let(:report) { "forms_with_routes" }
     let(:records) do
       [
-        { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } }, "metadata" => { "number_of_routes" => 1 } },
-        { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } }, "metadata" => { "number_of_routes" => 2 } },
+        { "form_id" => 1, "tag" => tag, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } }, "metadata" => { "number_of_routes" => 1 } },
+        { "form_id" => 3, "tag" => tag, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } }, "metadata" => { "number_of_routes" => 2 } },
       ]
     end
 
@@ -111,6 +155,28 @@ describe "reports/feature_report" do
           { "Form name" => "Branch route form", "Organisation" => "Government Digital Service", "Number of routes" => "2" },
         ]
       end
+
+      context "with live forms" do
+        let(:tag) { "live" }
+
+        it "has links for each form" do
+          expect(rendered).to have_table do |table|
+            expect(table).to have_link "All question types form", href: live_form_pages_path(1)
+            expect(table).to have_link "Branch route form", href: live_form_pages_path(3)
+          end
+        end
+      end
+
+      context "with draft forms" do
+        let(:tag) { "draft" }
+
+        it "has links for each form" do
+          expect(rendered).to have_table do |table|
+            expect(table).to have_link "All question types form", href: form_pages_path(1)
+            expect(table).to have_link "Branch route form", href: form_pages_path(3)
+          end
+        end
+      end
     end
   end
 
@@ -118,8 +184,8 @@ describe "reports/feature_report" do
     let(:report) { "questions_with_add_another_answer" }
     let(:records) do
       [
-        { "type" => "question_page", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } } },
-        { "type" => "question_page", "data" => { "question_text" => "What’s your email address?" }, "form" => { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } } },
+        { "type" => "question_page", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "tag" => tag, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } } },
+        { "type" => "question_page", "data" => { "question_text" => "What’s your email address?" }, "form" => { "form_id" => 3, "tag" => tag, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } } },
       ]
     end
 
@@ -153,6 +219,28 @@ describe "reports/feature_report" do
           { "Form name" => "All question types form", "Organisation" => "Government Digital Service", "Question text" => "Email address" },
           { "Form name" => "Branch route form", "Organisation" => "Government Digital Service", "Question text" => "What’s your email address?" },
         ]
+      end
+
+      context "with live forms" do
+        let(:tag) { "live" }
+
+        it "has links for each form" do
+          expect(rendered).to have_table do |table|
+            expect(table).to have_link "All question types form", href: live_form_pages_path(1)
+            expect(table).to have_link "Branch route form", href: live_form_pages_path(3)
+          end
+        end
+      end
+
+      context "with draft forms" do
+        let(:tag) { "draft" }
+
+        it "has links for each form" do
+          expect(rendered).to have_table do |table|
+            expect(table).to have_link "All question types form", href: form_pages_path(1)
+            expect(table).to have_link "Branch route form", href: form_pages_path(3)
+          end
+        end
       end
     end
   end
