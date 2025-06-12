@@ -131,4 +131,5 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
   # add forms to groups (assumes database seed is being used for forms-api)
   GroupForm.create! group: end_to_end_group, form_id: 1 # All question types form
   GroupForm.create! group: end_to_end_group, form_id: 2 # s3 submission test form
+  GroupForm.create! group: end_to_end_group, form_id: 3 # Branch routing form
 end
