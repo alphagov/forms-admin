@@ -72,7 +72,7 @@ private
 
   def report_forms_table_row(form)
     [
-      govuk_link_to(form["content"]["name"], live_form_pages_path(form_id: form["form_id"])),
+      form_link(form),
       form.dig("group", "organisation", "name") || "",
     ]
   end
@@ -90,5 +90,20 @@ private
       *report_forms_table_row(question["form"]),
       question["data"]["question_text"],
     ]
+  end
+
+  def form_link(form)
+    form_id = form["form_id"]
+    form_name = form["content"]["name"]
+    pages_path = case form["tag"]
+                 when "draft"
+                   form_pages_path(form_id:)
+                 when "live"
+                   live_form_pages_path(form_id:)
+                 else
+                   raise "tag of form record '#{form['tag']}' is not expected"
+                 end
+
+    govuk_link_to(form_name, pages_path)
   end
 end

@@ -3,23 +3,23 @@ require "rails_helper"
 RSpec.describe ReportHelper, type: :helper do
   let(:forms) do
     [
-      { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
-      { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Ministry of Tests" } } },
-      { "form_id" => 4, "content" => { "name" => "Skip route form" }, "group" => { "organisation" => { "name" => "Department for Testing" } } },
+      { "form_id" => 1, "tag" => "live", "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
+      { "form_id" => 3, "tag" => "live", "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Ministry of Tests" } } },
+      { "form_id" => 4, "tag" => "live", "content" => { "name" => "Skip route form" }, "group" => { "organisation" => { "name" => "Department for Testing" } } },
     ]
   end
 
   let(:forms_with_routes) do
     [
-      { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Ministry of Tests" } }, "metadata" => { "number_of_routes" => 2, "number_of_branch_routes" => 1 } },
-      { "form_id" => 4, "content" => { "name" => "Skip route form" }, "group" => { "organisation" => { "name" => "Department for Testing" } }, "metadata" => { "number_of_routes" => 1, "number_of_branch_routes" => 0 } },
+      { "form_id" => 3, "tag" => "live", "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Ministry of Tests" } }, "metadata" => { "number_of_routes" => 2, "number_of_branch_routes" => 1 } },
+      { "form_id" => 4, "tag" => "live", "content" => { "name" => "Skip route form" }, "group" => { "organisation" => { "name" => "Department for Testing" } }, "metadata" => { "number_of_routes" => 1, "number_of_branch_routes" => 0 } },
     ]
   end
 
   let(:questions) do
     [
-      { "type" => "question_page", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } } },
-      { "type" => "question_page", "data" => { "question_text" => "What’s your email address?" }, "form" => { "form_id" => 3, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Ministry of Tests" } } } },
+      { "type" => "question_page", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "tag" => "live", "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } } },
+      { "type" => "question_page", "data" => { "question_text" => "What’s your email address?" }, "form" => { "form_id" => 3, "tag" => "live", "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Ministry of Tests" } } } },
     ]
   end
 
@@ -129,6 +129,24 @@ RSpec.describe ReportHelper, type: :helper do
       ]
     end
 
+    context "when the form is live" do
+      it "formats a link to the live form pages" do
+        form = forms.first.merge("tag" => "live")
+        expect(helper.report_forms_table_rows([form]).first.first).to eq(
+          "<a class=\"govuk-link\" href=\"/forms/1/live/pages\">All question types form</a>",
+        )
+      end
+    end
+
+    context "when the form is a draft" do
+      it "formats a link to the form pages" do
+        form = forms.first.merge("tag" => "draft")
+        expect(helper.report_forms_table_rows([form]).first.first).to eq(
+          "<a class=\"govuk-link\" href=\"/forms/1/pages\">All question types form</a>",
+        )
+      end
+    end
+
     it "includes the organisation name for each form for the second column of each row" do
       expect(helper.report_forms_table_rows(forms).map(&:second)).to eq [
         "Government Digital Service",
@@ -140,7 +158,7 @@ RSpec.describe ReportHelper, type: :helper do
     context "when form is not in a group" do
       let(:forms) do
         [
-          { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => nil },
+          { "form_id" => 1, "tag" => "live", "content" => { "name" => "All question types form" }, "group" => nil },
         ]
       end
 
@@ -214,7 +232,7 @@ RSpec.describe ReportHelper, type: :helper do
     context "when form is not in a group" do
       let(:forms) do
         [
-          { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => nil },
+          { "form_id" => 1, "tag" => "live", "content" => { "name" => "All question types form" }, "group" => nil },
         ]
       end
 
@@ -268,7 +286,7 @@ RSpec.describe ReportHelper, type: :helper do
     context "when form is not in a group" do
       let(:questions) do
         [
-          { "type" => "question_page", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "content" => { "name" => "All question types form" }, "group" => nil } },
+          { "type" => "question_page", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "tag" => "live", "content" => { "name" => "All question types form" }, "group" => nil } },
         ]
       end
 
