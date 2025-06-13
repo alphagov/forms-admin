@@ -1402,6 +1402,7 @@ en:
         forms_with_add_another_answer: "%{tag} forms with add another answer"
         forms_with_branch_routes: "%{tag} forms with branch routes"
         forms_with_csv_submission_enabled: "%{tag} forms with CSV submission enabled"
+        forms_with_exit_pages: "%{tag} forms with exit pages"
         forms_with_payments: "%{tag} forms with payments"
         forms_with_routes: "%{tag} forms with routes"
         heading: Feature usage
