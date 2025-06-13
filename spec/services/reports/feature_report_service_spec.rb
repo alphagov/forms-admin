@@ -43,6 +43,7 @@ RSpec.describe Reports::FeatureReportService do
           "selection" => 4,
           "text" => 5,
         },
+        forms_with_exit_pages: 1,
       })
     end
   end
@@ -361,6 +362,31 @@ RSpec.describe Reports::FeatureReportService do
 
     it "includes a reference to the organisation record" do
       forms = described_class.new(form_documents).forms_with_routes
+      expect(forms).to all include(
+        "group" => a_hash_including(
+          "organisation" => a_hash_including(
+            "name",
+          ),
+        ),
+      )
+    end
+  end
+
+  describe "#forms_with_exit_pages" do
+    it "returns live forms with payments" do
+      forms = described_class.new(form_documents).forms_with_exit_pages
+      expect(forms).to match [
+        a_hash_including(
+          "form_id" => 3,
+          "content" => a_hash_including(
+            "name",
+          ),
+        ),
+      ]
+    end
+
+    it "includes a reference to the organisation record" do
+      forms = described_class.new(form_documents).forms_with_exit_pages
       expect(forms).to all include(
         "group" => a_hash_including(
           "organisation" => a_hash_including(
