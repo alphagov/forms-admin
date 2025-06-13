@@ -40,9 +40,10 @@ RSpec.describe Reports::FeatureReportService do
           "national_insurance_number" => 1,
           "number" => 1,
           "phone_number" => 1,
-          "selection" => 3,
+          "selection" => 4,
           "text" => 5,
         },
+        forms_with_exit_pages: 1,
       })
     end
   end
@@ -50,7 +51,7 @@ RSpec.describe Reports::FeatureReportService do
   describe "#questions" do
     it "returns all questions in all forms given" do
       questions = described_class.new(form_documents).questions
-      expect(questions.length).to eq 17
+      expect(questions.length).to eq 18
     end
 
     it "returns details needed to render report" do
@@ -228,7 +229,7 @@ RSpec.describe Reports::FeatureReportService do
             ),
           ),
           "metadata" => {
-            "number_of_routes" => 2,
+            "number_of_routes" => 3,
             "number_of_branch_routes" => 1,
           },
         ),
@@ -305,7 +306,7 @@ RSpec.describe Reports::FeatureReportService do
             ),
           ),
           "metadata" => {
-            "number_of_routes" => 2,
+            "number_of_routes" => 3,
             "number_of_branch_routes" => 1,
           },
         ),
@@ -361,6 +362,31 @@ RSpec.describe Reports::FeatureReportService do
 
     it "includes a reference to the organisation record" do
       forms = described_class.new(form_documents).forms_with_routes
+      expect(forms).to all include(
+        "group" => a_hash_including(
+          "organisation" => a_hash_including(
+            "name",
+          ),
+        ),
+      )
+    end
+  end
+
+  describe "#forms_with_exit_pages" do
+    it "returns live forms with payments" do
+      forms = described_class.new(form_documents).forms_with_exit_pages
+      expect(forms).to match [
+        a_hash_including(
+          "form_id" => 3,
+          "content" => a_hash_including(
+            "name",
+          ),
+        ),
+      ]
+    end
+
+    it "includes a reference to the organisation record" do
+      forms = described_class.new(form_documents).forms_with_exit_pages
       expect(forms).to all include(
         "group" => a_hash_including(
           "organisation" => a_hash_including(

@@ -59,6 +59,14 @@ class ReportsController < ApplicationController
     forms_feature_report(tag, params[:action], forms)
   end
 
+  def forms_with_exit_pages
+    tag = params[:tag]
+    forms = Reports::FormDocumentsService.form_documents(tag:)
+    forms = Reports::FeatureReportService.new(forms).forms_with_exit_pages
+
+    forms_feature_report(tag, params[:action], forms)
+  end
+
   def forms_with_csv_submission_enabled
     tag = params[:tag]
     forms = Reports::FormDocumentsService.form_documents(tag:)

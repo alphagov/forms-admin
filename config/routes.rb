@@ -208,6 +208,7 @@ Rails.application.routes.draw do
       get "forms-with-branch-routes", to: "reports#forms_with_branch_routes", as: :report_forms_with_branch_routes
       get "forms-with-payments", to: "reports#forms_with_payments", as: :report_forms_with_payments
       get "forms-with-csv-submission-enabled", to: "reports#forms_with_csv_submission_enabled", as: :report_forms_with_csv_submission_enabled
+      get "forms-with-exit-pages", to: "reports#forms_with_exit_pages", as: :report_forms_with_exit_pages
     end
 
     get "users", to: "reports#users", as: :report_users

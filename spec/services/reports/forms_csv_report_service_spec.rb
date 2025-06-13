@@ -40,6 +40,7 @@ RSpec.describe Reports::FormsCsvReportService do
         "9",
         "false",
         "false",
+        "false",
         "https://www.gov.uk/payments/your-payment-link",
         nil,
         nil,

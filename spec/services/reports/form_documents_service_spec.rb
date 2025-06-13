@@ -213,7 +213,7 @@ RSpec.describe Reports::FormDocumentsService do
 
     context "when step is check page for secondary skip condition" do
       let(:form_document) { branch_route_form }
-      let(:step) { form_document["content"]["steps"][0] }
+      let(:step) { form_document["content"]["steps"][1] }
 
       it "returns true" do
         expect(described_class.step_has_secondary_skip_route?(form_document, step)).to be true
@@ -236,6 +236,24 @@ RSpec.describe Reports::FormDocumentsService do
       it "returns false" do
         expect(described_class.step_has_secondary_skip_route?(form_document, step)).to be false
       end
+    end
+  end
+
+  describe ".has_exit_pages?" do
+    subject(:has_exit_pages?) do
+      described_class.has_exit_pages?(form_document)
+    end
+
+    context "when form has one step with one exit page" do
+      let(:form_document) { branch_route_form }
+
+      it { is_expected.to be true }
+    end
+
+    context "when form has no exit pages" do
+      let(:form_document) { skip_route_form }
+
+      it { is_expected.to be false }
     end
   end
 end
