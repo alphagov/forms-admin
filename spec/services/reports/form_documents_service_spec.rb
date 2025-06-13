@@ -238,4 +238,22 @@ RSpec.describe Reports::FormDocumentsService do
       end
     end
   end
+
+  describe ".has_exit_pages?" do
+    subject(:has_exit_pages?) do
+      described_class.has_exit_pages?(form_document)
+    end
+
+    context "when form has one step with one exit page" do
+      let(:form_document) { branch_route_form }
+
+      it { is_expected.to be true }
+    end
+
+    context "when form has no exit pages" do
+      let(:form_document) { skip_route_form }
+
+      it { is_expected.to be false }
+    end
+  end
 end
