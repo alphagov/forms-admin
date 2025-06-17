@@ -100,4 +100,95 @@ describe ApplicationController, type: :controller do
       expect(Api::V1::FormResource).to have_received(:find).exactly(1).times
     end
   end
+
+  describe "analytics" do
+    let(:user) { create :user }
+
+    let(:warden_spy) do
+      request.env["warden"] = instance_double(Warden::Proxy)
+    end
+
+    before do
+      allow(warden_spy).to receive_messages(
+        authenticate!: true,
+        authenticated?: true,
+        set_user: nil,
+        user: user,
+      )
+    end
+
+    controller do
+      def redirect_action
+        Current.analytics_events = [{ event_name: "test_event", properties: { test: "value" } }]
+        redirect_to "/"
+      end
+
+      def normal_action
+        Current.analytics_events = [{ event_name: "test_event", properties: { test: "value" } }]
+        render plain: "OK"
+      end
+
+      def action_with_flash
+        render plain: "OK"
+      end
+    end
+
+    describe "analytics events handling" do
+      let(:analytics_events) { [{ event_name: "test_event", properties: { test: "value" } }] }
+
+      describe "set_analytics_events" do
+        before do
+          routes.draw do
+            get "redirect_action" => "anonymous#redirect_action"
+            get "normal_action" => "anonymous#normal_action"
+          end
+        end
+
+        context "when response is a redirect" do
+          it "sets analytics events in flash" do
+            get :redirect_action
+            expect(flash[:analytics_events]).to eq([{ event_name: "test_event", properties: { test: "value" } }])
+          end
+        end
+
+        context "when response is not a redirect" do
+          it "does not set analytics events in flash" do
+            get :normal_action
+            expect(flash[:analytics_events]).to be_nil
+          end
+        end
+      end
+
+      describe "prepare_analytics_events" do
+        before do
+          routes.draw do
+            get "action_with_flash" => "anonymous#action_with_flash"
+          end
+
+          # Mock AnalyticsService
+          allow(AnalyticsService).to receive(:add_events_from_flash)
+        end
+
+        context "when flash has analytics events" do
+          it "adds events from flash to analytics service" do
+            # Setup flash in the request
+            request.flash[:analytics_events] = analytics_events
+            request.commit_flash
+
+            get :action_with_flash
+
+            expect(AnalyticsService).to have_received(:add_events_from_flash).with(analytics_events)
+          end
+        end
+
+        context "when flash does not have analytics events" do
+          it "does not call analytics service" do
+            get :action_with_flash
+
+            expect(AnalyticsService).not_to have_received(:add_events_from_flash)
+          end
+        end
+      end
+    end
+  end
 end
