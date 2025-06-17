@@ -56,6 +56,14 @@ class Reports::FormDocumentsService
       form_document["content"]["submission_type"] == "email_with_csv"
     end
 
+    def has_exit_pages?(form_document)
+      form_document["content"]["steps"].any? do |step|
+        step["routing_conditions"].any? do |condition|
+          condition["exit_page_markdown"].present?
+        end
+      end
+    end
+
   private
 
     def form_documents_page(tag:, page:)

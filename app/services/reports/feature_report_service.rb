@@ -15,6 +15,7 @@ class Reports::FeatureReportService
       forms_with_csv_submission_enabled: 0,
       forms_with_answer_type: HashWithIndifferentAccess.new,
       steps_with_answer_type: HashWithIndifferentAccess.new,
+      forms_with_exit_pages: 0,
     }
 
     form_documents.each do |form|
@@ -24,6 +25,7 @@ class Reports::FeatureReportService
       report[:forms_with_branch_routing] += 1 if Reports::FormDocumentsService.has_secondary_skip_routes?(form)
       report[:forms_with_add_another_answer] += 1 if form["content"]["steps"].any? { |step| step["data"]["is_repeatable"] }
       report[:forms_with_csv_submission_enabled] += 1 if Reports::FormDocumentsService.has_csv_submission_enabled?(form)
+      report[:forms_with_exit_pages] += 1 if Reports::FormDocumentsService.has_exit_pages?(form)
 
       answer_types_in_form = form["content"]["steps"].map { |step| step["data"]["answer_type"] }
 
@@ -79,6 +81,12 @@ class Reports::FeatureReportService
   def forms_with_payments
     form_documents
       .select { |form| Reports::FormDocumentsService.has_payments?(form) }
+      .map { |form| form_details(form) }
+  end
+
+  def forms_with_exit_pages
+    form_documents
+      .select { |form| Reports::FormDocumentsService.has_exit_pages?(form) }
       .map { |form| form_details(form) }
   end
 

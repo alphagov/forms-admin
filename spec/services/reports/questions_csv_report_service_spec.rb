@@ -21,7 +21,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
     it "returns a CSV with a header row and a rows for each question" do
       csv = csv_reports_service.csv
       rows = CSV.parse(csv)
-      expect(rows.length).to eq 18
+      expect(rows.length).to eq 19
     end
 
     it "has expected values for text question" do
@@ -96,7 +96,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
         group.organisation.id.to_s,
         group.name,
         group.external_id,
-        "2",
+        "3",
         "What’s your name?",
         "name",
         nil,
@@ -156,7 +156,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
         group.organisation.id.to_s,
         group.name,
         group.external_id,
-        "1",
+        "2",
         "How many times have you filled out this form?",
         "selection",
         nil,

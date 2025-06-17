@@ -52,6 +52,14 @@ RSpec.describe ReportsController, type: :routing do
           it "routes to #forms_with_branch_routes for #{tag} forms with csv format" do
             expect(get: "/reports/features/#{tag}/forms-with-branch-routes.csv").to route_to("reports#forms_with_branch_routes", tag:, format: "csv")
           end
+
+          it "routes to #forms_with_exit_pages for #{tag} forms" do
+            expect(get: "/reports/features/#{tag}/forms-with-exit-pages").to route_to("reports#forms_with_exit_pages", tag:)
+          end
+
+          it "routes to #forms_with_exit_pages for #{tag} forms with csv format" do
+            expect(get: "/reports/features/#{tag}/forms-with-exit-pages.csv").to route_to("reports#forms_with_exit_pages", tag:, format: "csv")
+          end
         end
       end
 

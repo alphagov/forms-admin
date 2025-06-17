@@ -121,7 +121,7 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
 
   # create some test groups
   end_to_end_group = Group.create! name: "End to end tests", organisation: gds, status: :active
-  Group.create! name: "Test Group", organisation: gds, creator: default_user
+  test_group = Group.create! name: "Test Group", organisation: gds, creator: default_user
   Group.create! name: "Ministry of Tests forms", organisation: mot_org
   Group.create! name: "Ministry of Tests forms - secret!", organisation: mot_org, creator: mot_user
   Group.create! name: "Welsh enabled", organisation: gds, welsh_enabled: true
@@ -131,4 +131,5 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
   # add forms to groups (assumes database seed is being used for forms-api)
   GroupForm.create! group: end_to_end_group, form_id: 1 # All question types form
   GroupForm.create! group: end_to_end_group, form_id: 2 # s3 submission test form
+  GroupForm.create! group: test_group, form_id: 3 # Branch routing form
 end

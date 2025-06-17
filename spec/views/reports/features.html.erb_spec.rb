@@ -32,6 +32,7 @@ describe "reports/features.html.erb" do
       forms_with_routing: 2,
       forms_with_add_another_answer: 3,
       forms_with_csv_submission_enabled: 2,
+      forms_with_exit_pages: 1,
     }
   end
   let(:tag) { "live" }
@@ -120,6 +121,10 @@ describe "reports/features.html.erb" do
 
   it "includes the number of live forms with CSV submission enabled" do
     expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with CSV submission enabled#{report[:forms_with_csv_submission_enabled]}")
+  end
+
+  it "includes the number of live forms with exit pages" do
+    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with exit pages#{report[:forms_with_exit_pages]}")
   end
 
   context "with live tag" do
