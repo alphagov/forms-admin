@@ -16,6 +16,12 @@ class Api::V1::PageResource < ActiveResource::Base
 
   before_validation :convert_boolean_fields
 
+  def database_attributes
+    attributes
+      .slice(*Page.attribute_names)
+      .merge(prefix_options)
+  end
+
   def has_next_page?
     attributes.include?("next_page") && !attributes["next_page"].nil?
   end
