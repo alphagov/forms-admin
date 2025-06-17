@@ -48,7 +48,7 @@
     <h3 class="govuk-heading-m"><%= t("made_live_form.how_you_get_completed_forms") %></h3>
 
     <h4 class="govuk-heading-s"><%= t('made_live_form.submission_email') %></h4>
-    <p><%= form.submission_email %></p>
+    <p class="govuk-!-text-break-word"><%= form.submission_email %></p>
 
     <h4 class="govuk-heading-s"><%= t("made_live_form.csv") %></h4>
     <p><%= t("made_live_form.submission_type.#{form.submission_type}") %></p>
@@ -60,7 +60,7 @@
 
     <% if form.support_email %>
       <h4 class="govuk-heading-s"><%= t('made_live_form.support_email') %></h4>
-      <p><%= form.support_email %></p>
+      <p class="govuk-!-text-break-word"><%= form.support_email %></p>
     <% end %>
 
     <% if form.support_phone %>
