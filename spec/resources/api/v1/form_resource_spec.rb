@@ -2,8 +2,7 @@ require "rails_helper"
 
 describe Api::V1::FormResource, type: :model do
   let(:id) { 1 }
-  let(:organisation) { build :organisation, id: 1 }
-  let(:form) { described_class.new(id:, name: "Form 1", organisation:, submission_email: "") }
+  let(:form) { described_class.new(id:, name: "Form 1", submission_email: "") }
 
   describe "#destroy" do
     context "when form is in a group" do
@@ -168,7 +167,7 @@ describe Api::V1::FormResource, type: :model do
       end
     end
 
-    let(:form) { build :form, name: "Form 1", organisation:, submission_email: "", pages: non_select_from_list_pages + selection_pages_with_routes + selection_pages_without_routes + selection_pages_with_secondary_skips + secondary_skip_pages }
+    let(:form) { build :form, name: "Form 1", submission_email: "", pages: non_select_from_list_pages + selection_pages_with_routes + selection_pages_without_routes + selection_pages_with_secondary_skips + secondary_skip_pages }
 
     before do
       allow(form).to receive(:group).and_return(build(:group))
@@ -227,7 +226,7 @@ describe Api::V1::FormResource, type: :model do
     end
 
     context "when the form is live" do
-      let(:form) { described_class.new(id: 1, name: "Form 1", organisation:, submission_email: "", live_at: Time.zone.now.to_s) }
+      let(:form) { described_class.new(id: 1, name: "Form 1", submission_email: "", live_at: Time.zone.now.to_s) }
 
       it "returns the date the form went live" do
         expect(form.made_live_date).to eq(form.live_at.to_date)
