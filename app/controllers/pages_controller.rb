@@ -7,6 +7,7 @@ class PagesController < ApplicationController
   def index
     @pages = FormRepository.pages(current_form)
     @mark_complete_input = Forms::MarkPagesSectionCompleteInput.new(form: current_form).assign_form_values
+    log_validation_errors(@pages)
     render :index, locals: { current_form: }
   end
 
@@ -137,6 +138,21 @@ private
       CurrentLoggingAttributes.answer_type = @draft_question.answer_type
     elsif @page.present?
       CurrentLoggingAttributes.answer_type = @page.answer_type
+    end
+  end
+
+  def log_validation_errors(pages)
+    # these validation errors don't come from an input object, so we log them ourselves
+    errors = pages.flat_map(&:routing_conditions).flat_map(&:validation_errors)
+    CurrentLoggingAttributes.validation_errors = errors.map { |error| "PageList: #{error.name}" } if errors.any?
+
+    pages.each do |page|
+      page.routing_conditions.each do |condition|
+        condition.validation_errors.each do |error|
+          error_type = condition.secondary_skip? ? "any_other_answer_route.#{error.name}" : error.name
+          AnalyticsService.track_validation_errors(input_object_name: "PageList", field: :condition, error_type:)
+        end
+      end
     end
   end
 end
