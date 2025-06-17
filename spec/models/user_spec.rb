@@ -142,7 +142,7 @@ describe User, type: :model do
 
   describe ".find_for_auth" do
     let!(:user) do
-      create :user, provider: "test", uid: "123456", name: "Test User", email: "test@example.com"
+      create :user, provider: "test", uid: "123456", name: "Test User", email: "test.User@example.com"
     end
 
     it "finds a user by uid" do
@@ -155,8 +155,8 @@ describe User, type: :model do
         .not_to eq user
     end
 
-    it "finds a user by email address if no user with uid is found" do
-      expect(described_class.find_for_auth(uid: "111111", email: "test@example.com"))
+    it "finds a user by email address, ignoring the case, when no user is found with uid" do
+      expect(described_class.find_for_auth(uid: "111111", email: "Test.user@example.com"))
         .to eq user
 
       expect(user.reload.uid).to eq "111111"
@@ -192,7 +192,7 @@ describe User, type: :model do
         provider: "test",
         uid: "111111",
         name: "Test A. User",
-        email: "test@example.com",
+        email: "test.User@example.com",
       )
 
       expect(Rails.logger).to have_received(:info).with("User attributes updated upon authorisation", {
