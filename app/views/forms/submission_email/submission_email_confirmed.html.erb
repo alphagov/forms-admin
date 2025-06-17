@@ -5,7 +5,7 @@
     <% if live_submission_email_updated %>
       <%= simple_format(t("email_code_success.live_submission_email_changed_body_html", new_submission_email: @submission_email_input.form.submission_email)) %>
     <% else %>
-      <%= simple_format(t('email_code_success.body_html', submission_email: @submission_email_input.form.submission_email)) %>
+      <%= simple_format(t('email_code_success.body_html', submission_email: @submission_email_input.form.submission_email), class: "govuk-!-text-break-word") %>
     <% end %>
 
     <p><%= govuk_link_to(t('email_code_success.continue'), form_path) %></p>

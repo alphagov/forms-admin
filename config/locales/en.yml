@@ -171,7 +171,7 @@ en:
         <ul class="govuk-list govuk-list--bullet">
           <li>links to the form will no longer work - make sure any links to the form have been removed</li>
           <li>anyone who is part way through completing the form will lose their progress and get an error page</li>
-          <li>we’ll send an email to %{submission_email} to let them know the form has been archived</li>
+          <li>we’ll send an email to <span class="govuk-!-text-break-word">%{submission_email}</span> to let them know the form has been archived</li>
         </ul>
         <p>You will still be able to preview the form and see its information and settings. You can also make a new draft of the form and make it live again if you need to.</p>
       radios_legend: Are you sure you want to archive this form?
@@ -274,15 +274,15 @@ en:
           knowledge, the answers you’re providing are correct.
         </div>
   email_code_sent:
-    body_html: "<p>We’ve sent a confirmation code and your email address to %{temp_email}.</p>\n"
+    body_html: We’ve sent a confirmation code and your email address to <span class="govuk-!-text-break-word">%{temp_email}</span>.
     continue: Continue creating a form
     sub_heading: What you need to do next
-    what_happens_next_body_html: "<p>The recipient will be asked to give you the code. You need to enter the code to confirm the email address.</p>\n"
+    what_happens_next: The recipient will be asked to give you the code. You need to enter the code to confirm the email address.
   email_code_success:
-    body_html: Completed forms will be sent to %{submission_email}.
+    body_html: Completed forms will be sent to <span class="govuk-!-text-break-word">%{submission_email}</span>.
     continue: Continue creating a form
     live_submission_email_changed_body_html: |
-      When you make this draft form live, completed forms will be sent to %{new_submission_email}.
+      When you make this draft form live, completed forms will be sent to <span class="govuk-!-text-break-word">%{new_submission_email}</span>.
 
       When you make the form live, we’ll send an email to the previous email address to let them know they’ll no longer receive completed forms.
   environment_names:
@@ -363,7 +363,7 @@ en:
       email_address_section:
         confirm_email: Enter the email address confirmation code
         email: Set the email address completed forms will be sent to
-        hint_text_html: Completed forms will be sent to:<br> %{submission_email}
+        hint_text_html: Completed forms will be sent to:<br> <span class="govuk-!-text-break-word">%{submission_email}</span>
         title: Set up how you get completed forms
       make_form_live_section:
         group_not_active:
@@ -406,7 +406,7 @@ en:
       email_address_section:
         confirm_email: Enter the email address confirmation code
         email: Edit the email address completed forms will be sent to
-        hint_text_html: Completed forms will be sent to:<br> %{submission_email}
+        hint_text_html: Completed forms will be sent to:<br> <span class="govuk-!-text-break-word">%{submission_email}</span>
         title: Change how you get completed forms
       make_form_live_section:
         make_live: Make your changes live
@@ -890,7 +890,7 @@ en:
         </p>
 
         <p>
-          After you have made your form live, completed forms will be sent to %{submission_email}.
+          After you have made your form live, completed forms will be sent to <span class="govuk-!-text-break-word">%{submission_email}</span>.
         </p>
   make_changes_live:
     confirmation:
@@ -925,7 +925,7 @@ en:
         </p>
 
         <p>
-          After you have made your form live, completed forms will be sent to %{submission_email}.
+          After you have made your form live, completed forms will be sent to <span class="govuk-!-text-break-word">%{submission_email}</span>.
         </p>
   mark_complete:
     'false': No, I’ll come back later
@@ -1638,7 +1638,7 @@ en:
         </p>
 
         <p>
-          After you have made your form live, completed forms will be sent to %{submission_email}.
+          After you have made your form live, completed forms will be sent to <span class="govuk-!-text-break-word">%{submission_email}</span>.
         </p>
   users:
     act_as_user_html: Act as this user <span class="govuk-visually-hidden">%{user_email}</span>

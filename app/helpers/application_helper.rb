@@ -157,7 +157,7 @@ module ApplicationHelper
 
     content_tag :ul, class: "govuk-list govuk-list--bullet" do
       admin_emails.map { |email|
-        content_tag :li do
+        content_tag :li, class: "govuk-!-text-break-word" do
           mail_to(email)
         end
       }.join.html_safe
