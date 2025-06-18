@@ -53,7 +53,7 @@ class User < ApplicationRecord
 
   def self.find_for_auth(attributes)
     user = where(provider: attributes[:provider], uid: attributes[:uid]).first ||
-      where(email: attributes[:email]).first
+      where("lower(email) = ?", attributes[:email].downcase).first
 
     if user
       user.assign_attributes(attributes)
