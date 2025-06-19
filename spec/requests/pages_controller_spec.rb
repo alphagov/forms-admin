@@ -35,8 +35,21 @@ RSpec.describe PagesController, type: :request do
 
     before do
       allow(FormRepository).to receive_messages(find: form, pages: pages)
+    end
 
-      get form_pages_path(2)
+    context "with a form in a group that the user is a member of" do
+      before do
+        group.group_forms.create!(form_id: form.id)
+        get form_pages_path(form.id)
+      end
+
+      it "returns a 200 status code" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the pages#index template" do
+        expect(response).to render_template("pages/index")
+      end
     end
 
     context "with a form in a group that the user is not a member of" do
