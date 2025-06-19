@@ -2,13 +2,6 @@
 <% content_for :back_link, govuk_back_link_to(form_pages_path(form.id)) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% exit_pages_enabled = FeatureService.new(group: form.group).enabled?(:exit_pages) %>
-
-    <% if exit_pages_enabled %>
-      <% prefix = 'exit_pages.' %>
-    <% else %>
-      <% prefix = '' %>
-    <% end %>
 
     <% if policy(form).can_add_page_routing_conditions? %>
       <%= render partial: "pages/conditions/routing_options", locals: {form:, routing_page_input:} %>
@@ -18,9 +11,9 @@
         <%= t("page_titles.routing_page") %>
       </h1>
 
-      <%= t("routing_page.#{prefix}body_html") %>
+      <%= t("routing_page.body_html") %>
 
-      <%= t("routing_page.#{prefix}#{form.has_no_remaining_routes_available? ? 'no_remaining_routes' : 'routing_requirements_not_met'}_html") %>
+      <%= t("routing_page.#{form.has_no_remaining_routes_available? ? 'no_remaining_routes' : 'routing_requirements_not_met'}_html") %>
     <% end %>
 
     <p>
