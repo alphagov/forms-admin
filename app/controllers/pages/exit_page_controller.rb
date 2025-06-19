@@ -1,6 +1,5 @@
 class Pages::ExitPageController < PagesController
   before_action :can_add_page_routing, only: %i[new create delete destroy]
-  before_action :ensure_exit_pages_enabled
   before_action :ensure_answer_value_present, only: %i[new create]
 
   def new
@@ -82,10 +81,6 @@ private
 
   def can_add_page_routing
     authorize current_form, :can_add_page_routing_conditions?
-  end
-
-  def ensure_exit_pages_enabled
-    raise ActionController::RoutingError, "exit_pages feature not enabled" unless FeatureService.new(group: current_form.group).enabled?(:exit_pages)
   end
 
   def exit_page_input_params

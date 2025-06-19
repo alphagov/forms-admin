@@ -17,9 +17,7 @@ RSpec.describe Pages::ExitPageController, type: :request do
   let(:selected_page) { page }
   let(:answer_value) { "Option 1" }
 
-  let(:exit_pages_enabled) { true }
-
-  let(:group) { create(:group, organisation: standard_user.organisation, exit_pages_enabled:) }
+  let(:group) { create(:group, organisation: standard_user.organisation) }
   let(:user) { standard_user }
   let(:condition) { build(:condition, id: 1, form_id: form.id, page_id: page.id, exit_page_heading: "Exit Page Heading") }
 
@@ -51,14 +49,6 @@ RSpec.describe Pages::ExitPageController, type: :request do
 
       it "Returns a 403 status" do
         expect(response.status).to eq(403)
-      end
-    end
-
-    context "when group the form is in should not be allowed to add exit pages" do
-      let(:exit_pages_enabled) { false }
-
-      it "Returns a 404 status" do
-        expect(response.status).to eq(404)
       end
     end
 
@@ -122,14 +112,6 @@ RSpec.describe Pages::ExitPageController, type: :request do
         expect(response.status).to eq(403)
       end
     end
-
-    context "when group the form is in should not be allowed to add exit pages" do
-      let(:exit_pages_enabled) { false }
-
-      it "Returns a 404 status" do
-        expect(response.status).to eq(404)
-      end
-    end
   end
 
   describe "#edit" do
@@ -143,14 +125,6 @@ RSpec.describe Pages::ExitPageController, type: :request do
 
     it "renders the edit exit page template" do
       expect(response).to render_template("pages/exit_page/edit")
-    end
-
-    context "when the group the form is in should not be allowed to manipulate exit pages" do
-      let(:exit_pages_enabled) { false }
-
-      it "Returns a 404 status" do
-        expect(response.status).to eq(404)
-      end
     end
   end
 
@@ -171,14 +145,6 @@ RSpec.describe Pages::ExitPageController, type: :request do
     it "displays success message" do
       follow_redirect!
       expect(response.body).to include(I18n.t("banner.success.exit_page_updated"))
-    end
-
-    context "when the group the form is in should not be allowed to manipulate exit pages" do
-      let(:exit_pages_enabled) { false }
-
-      it "Returns a 404 status" do
-        expect(response.status).to eq(404)
-      end
     end
 
     context "when form submit fails" do
@@ -224,14 +190,6 @@ RSpec.describe Pages::ExitPageController, type: :request do
 
       it "returns a 403 status" do
         expect(response.status).to eq(403)
-      end
-    end
-
-    context "when group the form is in should not be allowed to add/delete exit pages" do
-      let(:exit_pages_enabled) { false }
-
-      it "returns a 404 status" do
-        expect(response.status).to eq(404)
       end
     end
   end
@@ -301,14 +259,6 @@ RSpec.describe Pages::ExitPageController, type: :request do
 
       it "returns a 403 status" do
         expect(response.status).to eq(403)
-      end
-    end
-
-    context "when group the form is in should not be allowed to add/delete exit pages" do
-      let(:exit_pages_enabled) { false }
-
-      it "returns a 404 status" do
-        expect(response.status).to eq(404)
       end
     end
   end
