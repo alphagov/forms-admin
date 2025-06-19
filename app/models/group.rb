@@ -1,4 +1,6 @@
 class Group < ApplicationRecord
+  self.ignored_columns += [:exit_pages_enabled]
+
   belongs_to :organisation
 
   belongs_to :creator, class_name: "User", optional: true
