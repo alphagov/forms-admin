@@ -16,9 +16,19 @@ class PageOptionsService
   def all_options_for_answer_type
     options = []
 
-    options.concat(page_heading_options) if @page.respond_to?(:page_heading) && @page.page_heading.present?
+    # Prioritize guidance markdown for file uploads
     options.concat(guidance_markdown_options) if @page.respond_to?(:guidance_markdown) && @page.guidance_markdown.present?
 
+    # Page heading for non-file types
+    options.concat(page_heading_options) if @page.respond_to?(:page_heading) && @page.page_heading.present? && @page.answer_type != "file"
+
+    # File upload: use page heading if no guidance text
+    options.concat(page_heading_options) if @page.respond_to?(:page_heading) && @page.page_heading.present? && @page.answer_type == "file" && @page.guidance_markdown.blank?
+
+    # File upload: use guidance text if present
+    options.concat(question_text_options) if @page.answer_type == "file" && @page.guidance_markdown.present?
+
+    # Other answer types
     options.concat(hint_options) if @page.hint_text?.present?
     options.concat(generic_options) if @read_only && %w[address date text selection name].exclude?(@page.answer_type)
 
@@ -37,6 +47,13 @@ private
     [{
       key: { text: I18n.t("page_options_service.page_heading") },
       value: { text: @page.page_heading },
+    }]
+  end
+
+  def question_text_options
+    [{
+      key: { text: I18n.t("reports.form_or_questions_list_table.headings.question_text") },
+      value: { text: @page.question_text },
     }]
   end
 
