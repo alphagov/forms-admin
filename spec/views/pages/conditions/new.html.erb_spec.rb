@@ -36,11 +36,7 @@ describe "pages/conditions/new.html.erb" do
     expect(rendered).to have_css("button[type='submit'].govuk-button", text: I18n.t("save_and_continue"))
   end
 
-  context "when the exit page feature is enabled" do
-    let(:group) { build :group, exit_pages_enabled: true }
-
-    it "has an exit page option" do
-      expect(rendered).to have_css("option[value='create_exit_page']", text: I18n.t("page_conditions.exit_page"))
-    end
+  it "has an exit page option" do
+    expect(rendered).to have_css("option[value='create_exit_page']", text: I18n.t("page_conditions.exit_page"))
   end
 end

@@ -27,7 +27,7 @@ class Pages::ConditionsController < PagesController
     condition_input = Pages::ConditionsInput.new(condition_input_params)
 
     if condition_input.submit
-      if condition_input.create_exit_page? && FeatureService.new(group: current_form.group).enabled?(:exit_pages)
+      if condition_input.create_exit_page?
         redirect_to new_exit_page_path(current_form.id, page.id, answer_value: condition_input.answer_value)
       else
         # TODO: Route number is hardcoded whilst we can only have one value for it
@@ -61,7 +61,7 @@ class Pages::ConditionsController < PagesController
     end
 
     if condition_input.update_condition
-      if condition_input.create_exit_page? && FeatureService.new(group: current_form.group).enabled?(:exit_pages)
+      if condition_input.create_exit_page?
         redirect_to edit_exit_page_path(current_form.id, page.id, condition.id)
       else
         redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.route_updated", question_number: condition_input.page.position)

@@ -1,12 +1,4 @@
-<% exit_pages_enabled = FeatureService.new(group: form.group).enabled?(:exit_pages) %>
-
-<% if exit_pages_enabled %>
-  <% body_text = t("routing_page.exit_pages.body_html") %>
-  <% hint_text = t("routing_page.exit_pages.legend_hint_text") %>
-  <% else %>
-  <% body_text = t("routing_page.body_html") %>
-  <% hint_text = t("routing_page.legend_hint_text") %>
-<% end %>
+<% hint_text = t("routing_page.legend_hint_text") %>
 
 <%= form_with(model: routing_page_input, url: set_routing_page_path(form.id), method: 'POST') do |f| %>
   <% if routing_page_input&.errors.any? %>
@@ -18,7 +10,7 @@
     <%= t("page_titles.routing_page") %>
   </h1>
 
-  <%= body_text %>
+  <%= t("routing_page.body_html")  %>
 
   <% if form.qualifying_route_pages.length <= 10 %>
     <%= f.govuk_collection_radio_buttons :routing_page_id,

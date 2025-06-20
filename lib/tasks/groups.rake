@@ -56,7 +56,7 @@ namespace :groups do
 
   desc "List enabled features for groups"
   task features: :environment do
-    feature_flags = %i[exit_pages_enabled welsh_enabled]
+    feature_flags = %i[welsh_enabled]
     query = feature_flags.map { "#{it} IS TRUE" }.join(" OR ")
 
     Group.where(query).find_each do |group|
@@ -67,24 +67,6 @@ namespace :groups do
         **group.slice(feature_flags),
       }.to_json)
     end
-  end
-
-  desc "Enable exit_pages feature for group"
-  task :enable_exit_pages, %i[group_id] => :environment do |_, args|
-    usage_message = "usage: rake groups:enable_exit_pages[<group_external_id>]".freeze
-    abort usage_message if args[:group_id].blank?
-
-    Group.find_by(external_id: args[:group_id]).update!(exit_pages_enabled: true)
-    Rails.logger.info("Updated exit_pages_enabled to true for group #{args[:group_id]}")
-  end
-
-  desc "Disable exit_pages feature for group"
-  task :disable_exit_pages, %i[group_id] => :environment do |_, args|
-    usage_message = "usage: rake groups:disable_exit_pages[<group_external_id>]".freeze
-    abort usage_message if args[:group_id].blank?
-
-    Group.find_by(external_id: args[:group_id]).update!(exit_pages_enabled: false)
-    Rails.logger.info("Updated exit_pages_enabled to false for group #{args[:group_id]}")
   end
 
   desc "Enable welsh feature for group"

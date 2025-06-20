@@ -24,14 +24,12 @@ describe "pages/conditions/routing_page.html.erb" do
     expect(rendered).to have_css("h1.govuk-heading-l", text: t("page_titles.routing_page"))
   end
 
-  it "contains content explaining branch routing" do
-    expect(rendered).to have_text "You can add a route to a question so if someone selects one specific answer, they’ll be skipped forward to a later question, or the end of the form.", normalize_ws: true
+  it "contains content explaining branch routing and exit pages" do
+    expect(rendered).to have_text "You can add a route to a question so if someone selects one specific answer, they’ll be skipped to: ", normalize_ws: true
   end
 
-  context "when exit pages are enabled", :feature_exit_pages do
-    it "contains content for exit pages" do
-      expect(rendered).to have_text "an ‘exit page’ to remove them from the form - for example, because they’re not eligible ", normalize_ws: true
-    end
+  it "contains content for exit pages" do
+    expect(rendered).to have_text "an ‘exit page’ to remove them from the form - for example, because they’re not eligible ", normalize_ws: true
   end
 
   context "with fewer than 10 options" do
@@ -99,22 +97,6 @@ describe "pages/conditions/routing_page.html.erb" do
       it "explains to the user that they have created all available routes" do
         guidance = Capybara.string(I18n.t("routing_page.no_remaining_routes_html").to_s).text(normalize_ws: true)
         expect(rendered).to have_text(guidance, normalize_ws: true)
-      end
-    end
-
-    context "when exit_pages is enabled", :feature_exit_pages do
-      it "explains to the user what is required for them to be able to add a new routes" do
-        guidance = Capybara.string(I18n.t("routing_page.exit_pages.routing_requirements_not_met_html")).text(normalize_ws: true)
-        expect(rendered).to have_text(guidance, normalize_ws: true)
-      end
-
-      context "when all qualifying questions have a route" do
-        let(:all_routes_created) { true }
-
-        it "explains to the user that they have created all available routes" do
-          guidance = Capybara.string(I18n.t("routing_page.exit_pages.no_remaining_routes_html")).text(normalize_ws: true)
-          expect(rendered).to have_text(guidance, normalize_ws: true)
-        end
       end
     end
   end

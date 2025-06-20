@@ -60,31 +60,27 @@ describe "pages/conditions/edit.html.erb" do
     end
   end
 
-  context "with exit pages enabled" do
-    let(:group) { build :group, exit_pages_enabled: true }
+  context "when the condition does not have an exit page" do
+    let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
 
-    context "when the condition does not have an exit page" do
-      let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
-
-      it "has an 'add exit page' option" do
-        expect(rendered).to have_content("Add an exit page")
-      end
+    it "has an 'add exit page' option" do
+      expect(rendered).to have_content("Add an exit page")
     end
+  end
 
-    context "when the condition has an exit page" do
-      let(:condition) { build :condition, :with_exit_page, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales" }
+  context "when the condition has an exit page" do
+    let(:condition) { build :condition, :with_exit_page, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales" }
 
-      it "has the exit page heading" do
-        expect(rendered).to have_content(condition.exit_page_heading)
-      end
+    it "has the exit page heading" do
+      expect(rendered).to have_content(condition.exit_page_heading)
     end
+  end
 
-    context "when the page already has a secondary skip route" do
-      let(:secondary_skip) { true }
+  context "when the page already has a secondary skip route" do
+    let(:secondary_skip) { true }
 
-      it "does not have an 'add exit page' option" do
-        expect(rendered).not_to have_content("Add an exit page")
-      end
+    it "does not have an 'add exit page' option" do
+      expect(rendered).not_to have_content("Add an exit page")
     end
   end
 end
