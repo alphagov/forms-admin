@@ -201,6 +201,7 @@ en:
         page_moved: "‘%{question_text}’ has moved %{direction} to number %{question_number}"
         pages_saved: Your questions have been saved
         pages_saved_and_section_completed: Your questions have been saved and marked as complete
+        payment_link_removed: Your payment link has been removed
         payment_link_saved: Your payment link has been saved
         privacy_details_saved: Your privacy information link has been saved
         receive_csv_disabled: Completed form emails will not include a CSV file
