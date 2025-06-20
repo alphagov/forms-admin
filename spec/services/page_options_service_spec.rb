@@ -110,8 +110,8 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key:  { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list, one option only" } },
-          { key:  { text: I18n.t("page_options_service.options_title") }, value: { text: "<ul class=\"govuk-list\"><li>Option 1</li><li>Option 2</li></ul>" } },
+          { key: { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list, one option only" } },
+          { key: { text: I18n.t("page_options_service.options_title") }, value: { text: "<ul class=\"govuk-list\"><li>Option 1</li><li>Option 2</li></ul>" } },
         ])
       end
     end
@@ -128,8 +128,34 @@ describe PageOptionsService do
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
-          { key:  { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list" } },
-          { key:  { text: "Options" }, value: { text: "<ul class=\"govuk-list\"><li>Option 1</li><li>Option 2</li></ul>" } },
+          { key: { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list" } },
+          { key: { text: "Options" }, value: { text: "<ul class=\"govuk-list\"><li>Option 1</li><li>Option 2</li></ul>" } },
+        ])
+      end
+    end
+
+    context "with selection with more than ten options" do
+      let(:option_names) { Array.new(11).each_with_index.map { |_element, index| "Option #{index}" } }
+      let(:selection_options) { option_names.map { |option| OpenStruct.new(attributes: { name: option }) } }
+      let(:page) do
+        build :page,
+              is_optional: "false",
+              answer_type: "selection",
+              answer_settings: OpenStruct.new(only_one_option: "false", selection_options:)
+      end
+
+      it "returns the options in a details component" do
+        expected_list_items = "<li>#{option_names.join('</li><li>')}</li>"
+
+        expected_options_html = "<details class=\"govuk-details\"><summary class=\"govuk-details__summary\">" \
+          "<span class=\"govuk-details__summary-text\">Show 11 options</span></summary>" \
+          "<div class=\"govuk-details__text\"><ul class=\"govuk-list\">" \
+          "#{expected_list_items}" \
+          "</ul></div></details>"
+
+        expect(page_options_service.all_options_for_answer_type).to eq([
+          { key: { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list" } },
+          { key: { text: "Options" }, value: { text: expected_options_html } },
         ])
       end
     end
@@ -173,7 +199,7 @@ describe PageOptionsService do
 
         it "returns the correct options" do
           expect(page_options_service.all_options_for_answer_type).to eq([
-            { key:  { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: I18n.t("helpers.label.page.answer_type_options.names.#{answer_type}") } },
+            { key: { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: I18n.t("helpers.label.page.answer_type_options.names.#{answer_type}") } },
           ])
         end
       end
@@ -193,7 +219,7 @@ describe PageOptionsService do
 
         it "returns the correct options" do
           expect(page_options_service.all_options_for_answer_type).to include(
-            { key:  { text: "Answer type" }, value: { text: "Email address" } },
+            { key: { text: "Answer type" }, value: { text: "Email address" } },
           )
         end
       end
@@ -203,7 +229,7 @@ describe PageOptionsService do
 
         it "returns the correct options" do
           expect(page_options_service.all_options_for_answer_type).to include(
-            { key:  { text: "Answer type" }, value: { text: "Email address" } },
+            { key: { text: "Answer type" }, value: { text: "Email address" } },
           )
         end
       end
