@@ -86,7 +86,6 @@ Rails.application.configure do
   # Enable DNS rebinding protection and other `Host` header attacks.
   config.hosts = [
     /.*\.forms\.service\.gov\.uk/,
-    IPAddr.new("10.10.0.0/16"), # for healthchecks in ECS
   ]
 
   # Skip DNS rebinding protection for the default health check endpoint.
