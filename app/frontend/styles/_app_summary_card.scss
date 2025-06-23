@@ -12,12 +12,16 @@
     @include govuk-font($size: 16);
   }
 
+  .govuk-summary-list .govuk-details__summary {
+    @include govuk-font($size: 16);
+  }
+
   // Remove last item’s bottom border on mobile
   .govuk-summary-list__row:last-child {
     border-bottom: 0;
   }
 
-  // Remove lsat item’s bottom border on tablet and larger
+  // Remove last item’s bottom border on tablet and larger
   .govuk-summary-list__row:last-child > * {
     border-bottom: 0;
   }

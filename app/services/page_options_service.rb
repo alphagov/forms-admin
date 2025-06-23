@@ -84,18 +84,26 @@ private
     return @page.show_selection_options unless @page.answer_settings.selection_options.length >= 1
 
     options = @page.answer_settings.selection_options.map { |option| option.attributes[:name] }
-    options << "#{I18n.t('page_options_service.selection_type.none_of_the_above')}</li>" if @page.is_optional?
-    formatted_list = options.join("</li><li>")
+    options << I18n.t("page_options_service.selection_type.none_of_the_above") if @page.is_optional?
+    formatted_list = html_unordered_list(options)
 
-    ActionController::Base.helpers.sanitize("<ul class='govuk-list'><li>#{formatted_list}</li></ul>")
+    if options.length > 10
+      details_summary = I18n.t("page_settings_summary.selection.options_summary", number_of_options: options.length)
+      GovukComponent::DetailsComponent.new(summary_text: details_summary)
+                                      .with_content(formatted_list)
+                                      .call
+    else
+      caption = content_tag(:p, I18n.t("page_settings_summary.selection.options_count", number_of_options: options.length), class: "govuk-body-s")
+      safe_join([caption, formatted_list])
+    end
   end
 
   def text_options
-    [{ key:  { text: I18n.t("page_options_service.answer_type") }, value:  { text: I18n.t("helpers.label.page.text_settings_options.names.#{@page.answer_settings.input_type}") } }]
+    [{ key: { text: I18n.t("page_options_service.answer_type") }, value: { text: I18n.t("helpers.label.page.text_settings_options.names.#{@page.answer_settings.input_type}") } }]
   end
 
   def date_options
-    [{ key:  { text: I18n.t("page_options_service.answer_type") }, value:  { text: date_answer_type_text } }]
+    [{ key: { text: I18n.t("page_options_service.answer_type") }, value: { text: date_answer_type_text } }]
   end
 
   def date_answer_type_text
@@ -105,11 +113,11 @@ private
   end
 
   def address_options
-    [{ key:  { text: I18n.t("page_options_service.answer_type") }, value:  { text: I18n.t("helpers.label.page.address_settings_options.names.#{address_input_type_to_string}") } }]
+    [{ key: { text: I18n.t("page_options_service.answer_type") }, value: { text: I18n.t("helpers.label.page.address_settings_options.names.#{address_input_type_to_string}") } }]
   end
 
   def name_options
-    [{ key:  { text: I18n.t("page_options_service.answer_type") }, value:  { text: name_answer_type } }]
+    [{ key: { text: I18n.t("page_options_service.answer_type") }, value: { text: name_answer_type } }]
   end
 
   def name_answer_type
@@ -175,6 +183,10 @@ private
 
   def html_ordered_list(list_items)
     content_tag(:ol, html_list_item(list_items), class: ["govuk-list", "govuk-list--number"])
+  end
+
+  def html_unordered_list(list_items)
+    content_tag(:ul, html_list_item(list_items), class: ["govuk-list", "govuk-list--bullet"])
   end
 
   def html_list_item(item)
