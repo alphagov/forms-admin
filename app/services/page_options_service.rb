@@ -87,12 +87,15 @@ private
     options << I18n.t("page_options_service.selection_type.none_of_the_above") if @page.is_optional?
     formatted_list = html_unordered_list(options)
 
-    return formatted_list if options.length <= 10
-
-    details_summary = I18n.t("page_settings_summary.selection.options_summary", number_of_options: options.length)
-    GovukComponent::DetailsComponent.new(summary_text: details_summary)
-                                    .with_content(formatted_list)
-                                    .call
+    if options.length > 10
+      details_summary = I18n.t("page_settings_summary.selection.options_summary", number_of_options: options.length)
+      GovukComponent::DetailsComponent.new(summary_text: details_summary)
+                                      .with_content(formatted_list)
+                                      .call
+    else
+      caption = content_tag(:p, I18n.t("page_settings_summary.selection.options_count", number_of_options: options.length), class: "govuk-body-s")
+      safe_join([caption, formatted_list])
+    end
   end
 
   def text_options
@@ -183,7 +186,7 @@ private
   end
 
   def html_unordered_list(list_items)
-    content_tag(:ul, html_list_item(list_items), class: "govuk-list")
+    content_tag(:ul, html_list_item(list_items), class: ["govuk-list", "govuk-list--bullet"])
   end
 
   def html_list_item(item)

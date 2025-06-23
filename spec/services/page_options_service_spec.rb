@@ -111,7 +111,7 @@ describe PageOptionsService do
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
           { key: { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list, one option only" } },
-          { key: { text: I18n.t("page_options_service.options_title") }, value: { text: "<ul class=\"govuk-list\"><li>Option 1</li><li>Option 2</li></ul>" } },
+          { key: { text: I18n.t("page_options_service.options_title") }, value: { text: "<p class=\"govuk-body-s\">2 options:</p><ul class=\"govuk-list govuk-list--bullet\"><li>Option 1</li><li>Option 2</li></ul>" } },
         ])
       end
     end
@@ -129,7 +129,7 @@ describe PageOptionsService do
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
           { key: { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list" } },
-          { key: { text: "Options" }, value: { text: "<ul class=\"govuk-list\"><li>Option 1</li><li>Option 2</li></ul>" } },
+          { key: { text: "Options" }, value: { text: "<p class=\"govuk-body-s\">2 options:</p><ul class=\"govuk-list govuk-list--bullet\"><li>Option 1</li><li>Option 2</li></ul>" } },
         ])
       end
     end
@@ -149,7 +149,7 @@ describe PageOptionsService do
 
         expected_options_html = "<details class=\"govuk-details\"><summary class=\"govuk-details__summary\">" \
           "<span class=\"govuk-details__summary-text\">Show 11 options</span></summary>" \
-          "<div class=\"govuk-details__text\"><ul class=\"govuk-list\">" \
+          "<div class=\"govuk-details__text\"><ul class=\"govuk-list govuk-list--bullet\">" \
           "#{expected_list_items}" \
           "</ul></div></details>"
 
