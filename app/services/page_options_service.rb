@@ -22,11 +22,9 @@ class PageOptionsService
     # Page heading for non-file types
     options.concat(page_heading_options) if @page.respond_to?(:page_heading) && @page.page_heading.present? && @page.answer_type != "file"
 
-    # File upload: use page heading if no guidance text
-    options.concat(page_heading_options) if @page.respond_to?(:page_heading) && @page.page_heading.present? && @page.answer_type == "file" && @page.guidance_markdown.blank?
-
-    # File upload: use guidance text if present
-    options.concat(question_text_options) if @page.answer_type == "file" && @page.guidance_markdown.present?
+    # File upload: If a page heading/guidance is present, show the question text in the body of the summary card
+    # as we're using the heading in the title rather than the question text.
+    options.concat(question_text_options) if @page.answer_type == "file" && @page.page_heading.present?
 
     # Other answer types
     options.concat(hint_options) if @page.hint_text?.present?

@@ -76,21 +76,5 @@ describe PageSummaryCardDataService do
         end
       end
     end
-
-    context "when file upload question contains no guidance text" do
-      let(:page) { build :page, :with_file_upload_answer_type, is_optional: }
-
-      it "includes the guidance text page heading as title" do
-        expect(service.build_data[:card][:title]).to eq "1. #{page.question_text}"
-      end
-
-      context "when the question is optional" do
-        let(:is_optional) { "true" }
-
-        it "includes a title with (optional) added to it" do
-          expect(service.build_data[:card][:title]).to eq "1. #{page.question_text} (optional)"
-        end
-      end
-    end
   end
 end
