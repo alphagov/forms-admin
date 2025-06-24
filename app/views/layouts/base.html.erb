@@ -60,6 +60,19 @@
     <%= vite_client_tag %>
     <%= vite_javascript_tag 'application' %>
 
+    <% if AnalyticsService.analytics_events.present? && @current_user&.collect_analytics? %>
+      <script data-analytics-events>
+        window.dataLayer = window.dataLayer || [];
+
+        <% AnalyticsService.analytics_events.each do |event| %>
+            window.dataLayer.push({
+              event: "event_data",
+              event_data: <%= raw event[:properties].to_json %>,
+            });
+      <% end %>
+      </script>
+    <% end %>
+
     <%= yield :body_end %>
   <% end %>
 </html>
