@@ -61,11 +61,13 @@ module PageListComponent
 
     def condition_page(condition)
       condition.attributes["check_page"] ||= @pages.find { |page| page.id == condition.check_page_id }
+      condition.attributes["routing_page"] ||= @pages.find { |page| page.id == condition.routing_page_id }
+      condition.check_page || condition.routing_page
     end
 
     def condition_page_position(condition)
-      check_page = condition_page(condition)
-      page_position(check_page)
+      page = condition_page(condition)
+      page_position(page)
     end
 
     def skip_condition_route_page_text(condition)

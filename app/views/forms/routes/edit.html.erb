@@ -1,0 +1,40 @@
+<% set_page_title("Edit question routes") %>
+<% content_for :back_link, govuk_back_link_to(form_pages_path) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= current_form.name %></span>
+      Edit question routes
+    </h1>
+
+    <%= form_with(method: :post) do |f| %>
+      <% pages.each do |page| %>
+
+        <p><%= page.position %></p>
+        <p><%= page.question_text %></p>
+
+        <% if page.answer_type == "selection" && page.answer_settings.only_one_option == "true" %>
+          <% page.answer_settings.selection_options.each do |answer| %>
+            <% condition = routes.dig(page.id, answer.name) %>
+
+            <%= f.govuk_select "routes[#{page.id}][#{answer.name}]", label: { text: answer.name }, options: { include_blank: "Next question" } do %>
+              <%= options_for_condition_goto_page(pages, page, condition) %>
+              <% if condition&.exit_page? %>
+                <%= options_for_exit_pages_for_select(condition) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% elsif page.next_page %>
+          <% condition = routes.dig(page.id, nil) %>
+          <%= f.govuk_select "routes[#{page.id}][nil]", label: nil, options: { include_blank: "Next question" } do %>
+            <%= options_for_condition_goto_page(pages, page, condition) %>
+          <% end %>
+        <% end %>
+
+      <% end %>
+
+      <%= f.govuk_submit "Save and continue" %>
+    <% end %>
+  </div>
+</div>

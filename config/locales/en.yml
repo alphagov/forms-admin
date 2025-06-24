@@ -299,6 +299,8 @@ en:
       non_government_email: Enter a government email address
     page_conditions:
       answer_value_doesnt_exist: The answer that question %{question_number}’s route %{route_number} is based on no longer exists - edit or delete this route
+      any_answer_route:
+        cannot_have_goto_page_before_routing_page: Question %{question_number}’s route is going to a question that comes before the question it skips from - edit or delete this route
       any_other_answer_route:
         cannot_have_goto_page_before_routing_page: Question %{question_number}’s route for any other answer is going to a question that comes before the question it skips from - edit or delete this route
       cannot_have_goto_page_before_routing_page: Question %{question_number}’s route %{route_number} is going to a question that comes before the start of the route - edit or delete this route

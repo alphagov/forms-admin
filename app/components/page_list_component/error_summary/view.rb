@@ -18,6 +18,7 @@ module PageListComponent
 
         scope = "errors.page_conditions"
         defaults = [:"#{error_name}"]
+        defaults.prepend(:"any__answer_route.#{error_name}") if condition.answer_value.nil?
         defaults.prepend(:"any_other_answer_route.#{error_name}") if condition.secondary_skip?
 
         I18n.t(defaults.first, default: defaults.drop(1), scope:, **interpolation_variables)
@@ -34,6 +35,7 @@ module PageListComponent
         @pages.flat_map do |page|
           page.routing_conditions.map do |condition|
             condition.attributes[:check_page] ||= @pages.find { it.id == condition.check_page_id }
+            condition.attributes[:routing_page] ||= page
             condition
           end
         end
@@ -45,7 +47,7 @@ module PageListComponent
             condition_with_check_page.validation_errors.map do |error|
               error_object(
                 error_name: error.name,
-                page: condition_with_check_page.check_page,
+                page: condition_with_check_page.check_page || condition_with_check_page.routing_page,
                 condition: condition_with_check_page,
               )
             end
