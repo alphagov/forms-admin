@@ -93,4 +93,16 @@ describe "pages/conditions/delete.html.erb" do
       end
     end
   end
+
+  context "when the condition has an exit page" do
+    let(:condition) { build :condition, :with_exit_page, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id }
+
+    it "renders a warning about the exit page" do
+      expect(rendered).to have_css ".govuk-notification-banner", text: "If you delete this route, the exit page it goes to will also be deleted"
+    end
+
+    it "shows the exit page heading in the summary list" do
+      expect(rendered).to have_css(".govuk-summary-list__value", text: condition.exit_page_heading)
+    end
+  end
 end
