@@ -325,10 +325,104 @@ describe FormRepository do
       end
     end
 
-    it "gets a form's pages through ActiveResource" do
-      pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2/pages", pages, headers)
-      described_class.pages(form)
-      expect(ActiveResource::HttpMock.requests).to include pages_request
+    describe "api" do
+      it "gets a form's pages through ActiveResource" do
+        pages_request = ActiveResource::Request.new(:get, "/api/v1/forms/2/pages", pages, headers)
+        described_class.pages(form)
+        expect(ActiveResource::HttpMock.requests).to include pages_request
+      end
+    end
+
+    describe "database" do
+      it "saves the pages to the database" do
+        expect {
+          described_class.pages(form)
+        }.to change(Page, :count).by(5)
+      end
+
+      context "when the form in the database has pages which were deleted in the api" do
+        it "deletes pages from the database" do
+          pages = described_class.pages(form)
+
+          pages = pages.drop(1)
+          ActiveResource::HttpMock.respond_to do |mock|
+            mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
+          end
+
+          expect {
+            described_class.pages(form)
+          }.to change(Page, :count).by(-1)
+        end
+
+        context "and page had routing_conditions" do
+          let(:pages) do
+            [
+              build(:page, id: 1),
+              build(:page, id: 2, routing_conditions:),
+              *build_list(:page, 5),
+            ]
+          end
+
+          let(:routing_conditions) do
+            [
+              build(:condition, id: 1, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Red"),
+              build(:condition, id: 2, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Green"),
+            ]
+          end
+
+          it "deletes conditions from the database" do
+            pages = described_class.pages(form)
+
+            pages = pages.drop(2)
+            ActiveResource::HttpMock.respond_to do |mock|
+              mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
+            end
+
+            expect {
+              described_class.pages(form)
+            }.to change(Page, :count).by(-2)
+              .and change(Condition, :count).by(-2)
+          end
+        end
+      end
+
+      context "when the pages have routing conditions" do
+        let(:pages) do
+          [
+            build(:page, id: 1),
+            build(:page, id: 2, routing_conditions:),
+            *build_list(:page, 5),
+          ]
+        end
+
+        let(:routing_conditions) do
+          [
+            build(:condition, id: 1, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Red"),
+            build(:condition, id: 2, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Green"),
+          ]
+        end
+
+        it "saves the routing conditions to the database" do
+          expect {
+            described_class.pages(form)
+          }.to change(Condition, :count).by(2)
+        end
+
+        context "when the page in the database has conditions which were deleted in the api" do
+          it "deletes conditions from the database" do
+            pages = described_class.pages(form)
+
+            pages.second.routing_conditions = routing_conditions.drop(1)
+            ActiveResource::HttpMock.respond_to do |mock|
+              mock.get "/api/v1/forms/2/pages", headers, pages.to_json, 200
+            end
+
+            expect {
+              described_class.pages(form)
+            }.to change(Condition, :count).by(-1)
+          end
+        end
+      end
     end
   end
 end
