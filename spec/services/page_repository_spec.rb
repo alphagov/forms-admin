@@ -35,6 +35,53 @@ describe PageRepository do
         described_class.find(page_id: page.id, form_id:)
         expect(Page.last).to have_attributes(form_id:)
       end
+
+      context "when the form does not exist in the database" do
+        let(:form_id) { 1 }
+        let(:form) { build(:form, id: form_id) }
+
+        it "gets the form from the api and saves it to the database" do
+          ActiveResource::HttpMock.respond_to(false) do |mock|
+            mock.get "/api/v1/forms/1", headers, form.to_json, 200
+          end
+
+          expect {
+            described_class.find(page_id: page.id, form_id:)
+          }.to change(Form, :count).by(1)
+        end
+      end
+
+      context "when the page has routing conditions" do
+        let(:routing_conditions) do
+          [
+            build(:condition, id: 1, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Red"),
+            build(:condition, id: 2, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Green"),
+          ]
+        end
+
+        let(:page) { build(:page, id: 2, form_id:, routing_conditions:) }
+
+        it "saves the conditions to the database" do
+          expect {
+            described_class.find(page_id: page.id, form_id:)
+          }.to change(Condition, :count).by(2)
+        end
+
+        context "when the page in the database has conditions which were deleted in the api" do
+          it "deletes conditions from the database" do
+            described_class.find(page_id: page.id, form_id:)
+
+            page.routing_conditions = routing_conditions.drop(1)
+            ActiveResource::HttpMock.respond_to do |mock|
+              mock.get "/api/v1/forms/#{form_id}/pages/2", headers, page.to_json, 200
+            end
+
+            expect {
+              described_class.find(page_id: page.id, form_id:)
+            }.to change(Condition, :count).by(-1)
+          end
+        end
+      end
     end
   end
 

@@ -67,9 +67,41 @@ class PageRepository
 
   private
 
+    def find_form_and_save_to_database!(page_record)
+      form_id = page_record.prefix_options[:form_id]
+      FormRepository.find(form_id:)
+    end
+
+    def save_routing_conditions_to_database!(page_record)
+      return if page_record.attributes["routing_conditions"].blank?
+
+      routing_conditions = page_record.routing_conditions.map(&:database_attributes)
+
+      Condition.upsert_all(routing_conditions)
+
+      # delete any routing conditions that may have previously been associated with this page
+      page = Page.find(page_record.id)
+      page.update!(routing_condition_ids: routing_conditions.pluck("id"))
+    end
+
     def save_to_database!(record)
       attributes = record.database_attributes
-      Page.upsert(attributes)
+
+      begin
+        # transaction is required to be able to retry after catching exception
+        ActiveRecord::Base.transaction do
+          Page.upsert(attributes)
+        end
+      # we get an exception if the form does not already exist in the database
+      rescue ActiveRecord::InvalidForeignKey => e
+        raise unless e.message.include? 'table "forms"'
+
+        find_form_and_save_to_database!(record)
+
+        retry
+      end
+
+      save_routing_conditions_to_database!(record)
     end
   end
 end
