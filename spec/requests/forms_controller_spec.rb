@@ -97,12 +97,6 @@ RSpec.describe FormsController, type: :request do
       build(:form, id: 2, pages:, question_section_completed: "false")
     end
 
-    let(:updated_form) do
-      new_form = form
-      new_form.question_section_completed = "true"
-      new_form
-    end
-
     let(:user) do
       standard_user
     end
