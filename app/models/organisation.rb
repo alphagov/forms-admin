@@ -1,6 +1,8 @@
 class Organisation < ApplicationRecord
   has_paper_trail
 
+  self.ignored_columns += [:default_group_id]
+
   has_many :groups
   has_many :users
 
