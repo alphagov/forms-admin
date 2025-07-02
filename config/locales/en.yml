@@ -1204,6 +1204,7 @@ en:
         answered_as_key: is answered as
         any_other_answer_warning: If you delete this route, the route for any other answer will also be deleted
         delete_condition_legend: Are you sure you want to delete this route?
+        exit_page_warning: If you delete this route, the exit page it goes to will also be deleted
         skip_to_key: skip the person to
       edit:
         back_link: Back to question %{question_number}’s routes
