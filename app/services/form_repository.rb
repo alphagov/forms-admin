@@ -52,6 +52,10 @@ class FormRepository
     end
 
     def pages(record)
+      if Rails.env.test? && record.attributes.key?("pages")
+        raise "Form response should not include pages, check the spec factories and mocks, or stub .pages instead"
+      end
+
       form = Api::V1::FormResource.new(record.attributes, true)
       form.pages
     end
