@@ -8,7 +8,7 @@ feature "Adding branching to a form", type: :feature do
   let(:secondary_skip_condition) { build(:condition, id: 2, form_id: 1, page_id: form.pages[3].id, check_page_id: form.pages.first.id, routing_page_id: form.pages[3].id, goto_page_id: nil, skip_to_end: true) }
 
   before do
-    allow(FormRepository).to receive_messages(find: form)
+    allow(FormRepository).to receive_messages(find: form, pages:)
     allow(ConditionRepository).to receive_messages(create!: true)
 
     pages.each do |page|

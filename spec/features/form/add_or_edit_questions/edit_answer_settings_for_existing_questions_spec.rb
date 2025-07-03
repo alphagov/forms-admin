@@ -5,11 +5,7 @@ feature "Editing answer_settings for existing question", type: :feature do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms/1/pages", headers, pages.to_json, 200
-    end
-
-    allow(FormRepository).to receive_messages(find: form)
+    allow(FormRepository).to receive_messages(find: form, pages:)
     allow(PageRepository).to receive_messages(create!: true)
 
     pages.each do |page|

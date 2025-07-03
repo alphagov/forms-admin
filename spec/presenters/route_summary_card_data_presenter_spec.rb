@@ -15,6 +15,7 @@ describe RouteSummaryCardDataPresenter do
   end
 
   before do
+    allow(FormRepository).to receive_messages(pages: form.pages)
     allow(form).to receive(:group).and_return(build(:group))
   end
 

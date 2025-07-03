@@ -22,6 +22,7 @@ describe "pages/secondary_skip/new.html.erb" do
   let(:secondary_skip_input) { Pages::SecondarySkipInput.new(form:, page:) }
 
   before do
+    allow(FormRepository).to receive_messages(pages: form.pages)
     render template: "pages/secondary_skip/new", locals: { back_link_url: "/back", secondary_skip_input: }
   end
 

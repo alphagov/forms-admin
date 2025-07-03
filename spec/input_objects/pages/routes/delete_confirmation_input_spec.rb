@@ -67,6 +67,8 @@ RSpec.describe Pages::Routes::DeleteConfirmationInput, type: :model do
       end
 
       it "deletes routes when confirmed" do
+        allow(FormRepository).to receive_messages(pages: form.pages)
+
         delete_confirmation_input.confirm = "yes"
         delete_confirmation_input.submit
 

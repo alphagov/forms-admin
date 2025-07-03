@@ -18,7 +18,7 @@ RSpec.describe FormsController, type: :request do
       let(:params) { {} }
 
       before do
-        allow(FormRepository).to receive(:find).and_return(form)
+        allow(FormRepository).to receive_messages(find: form, pages: form.pages)
 
         get form_path(2, params)
       end
@@ -102,7 +102,7 @@ RSpec.describe FormsController, type: :request do
     end
 
     before do
-      allow(FormRepository).to receive_messages(find: form, save!: form)
+      allow(FormRepository).to receive_messages(find: form, pages:, save!: form)
 
       login_as user
 
