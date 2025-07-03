@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_23_081911) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_02_152808) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -155,9 +155,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_23_081911) do
     t.datetime "updated_at", null: false
     t.boolean "closed", default: false
     t.string "abbreviation"
-    t.bigint "default_group_id"
     t.boolean "internal", default: false
-    t.index ["default_group_id"], name: "index_organisations_on_default_group_id"
     t.index ["govuk_content_id"], name: "index_organisations_on_govuk_content_id", unique: true
     t.index ["slug"], name: "index_organisations_on_slug", unique: true
   end
@@ -227,7 +225,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_23_081911) do
   add_foreign_key "memberships", "users", column: "added_by_id"
   add_foreign_key "mou_signatures", "organisations"
   add_foreign_key "mou_signatures", "users"
-  add_foreign_key "organisations", "groups", column: "default_group_id"
   add_foreign_key "pages", "forms"
   add_foreign_key "users", "organisations"
 end
