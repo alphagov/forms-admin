@@ -81,6 +81,9 @@ gem "MailchimpMarketing", "~> 3.0"
 # For generating CSV reports
 gem "csv"
 
+# Used for sorting/ordering of pages object
+gem "acts_as_list"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri mingw x64_mingw]
