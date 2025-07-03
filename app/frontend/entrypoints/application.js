@@ -6,7 +6,8 @@ import { pasteListener } from '../javascript/paste-html-to-markdown'
 import {
   installAnalyticsScript,
   sendPageViewEvent,
-  attachExternalLinkTracker
+  attachExternalLinkTracker,
+  attachQuestionXsRoutesTracker
 } from '../javascript/google-tag'
 import { saveConsentStatus } from '../javascript/utils/cookie-consent'
 import ajaxMarkdownPreview from '../javascript/ajax-markdown-preview'
@@ -48,6 +49,7 @@ if (document.body.dataset.googleAnalyticsEnabled === 'true') {
   installAnalyticsScript(window)
   sendPageViewEvent()
   attachExternalLinkTracker()
+  attachQuestionXsRoutesTracker()
 }
 
 initAll()

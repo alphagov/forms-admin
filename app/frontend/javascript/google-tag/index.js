@@ -67,3 +67,20 @@ export function attachExternalLinkTracker () {
     })
   })
 }
+
+export function attachQuestionXsRoutesTracker () {
+  const showRoutesPathRegex = /^\/forms\/\d+\/pages\/\d+\/routes$/
+  const path = window.location.pathname
+
+  if (showRoutesPathRegex.test(path)) {
+    window.dataLayer = window.dataLayer || []
+    window.dataLayer.push({
+      event: 'event_data',
+      event_data: {
+        event_name: 'question_routes_page_viewed',
+        url: window.location,
+        text: 'Question routes page viewed'
+      }
+    })
+  }
+}

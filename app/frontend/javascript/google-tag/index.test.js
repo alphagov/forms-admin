@@ -6,7 +6,8 @@ import {
   installAnalyticsScript,
   sendPageViewEvent,
   attachExternalLinkTracker,
-  setDefaultConsent
+  setDefaultConsent,
+  attachQuestionXsRoutesTracker
 } from '../google-tag'
 import { describe, afterEach, it, expect, beforeEach } from 'vitest'
 
@@ -185,6 +186,60 @@ describe('google_tag.mjs', () => {
           type: 'generic link',
           url: targetLinkUrl
         }
+      })
+    })
+  })
+
+  describe('attachQuestionXsRoutesTracker()', () => {
+    const windowLocation = window.location
+    const existingDataLayerObject = {
+      data: 'Some existing data in the dataLayer'
+    }
+
+    beforeEach(() => {
+      window.dataLayer = [existingDataLayerObject]
+    })
+
+    afterEach(() => {
+      window.location = windowLocation
+    })
+
+    describe('when the path matches the required routes#show regex', () => {
+      const showRoutesPath = '/forms/123/pages/456/routes'
+
+      beforeEach(() => {
+        Object.defineProperty(window, 'location', {
+          value: new URL(`http://example.com${showRoutesPath}`),
+          writable: true
+        })
+      })
+
+      it('creates pushes a routes_page_view event to the datalayer', () => {
+        attachQuestionXsRoutesTracker()
+        expect(window.dataLayer).toContainEqual({
+          event: 'event_data',
+          event_data: {
+            event_name: 'question_routes_page_viewed',
+            url: window.location,
+            text: 'Question routes page viewed'
+          }
+        })
+      })
+
+      describe('when the path does not match the required routes#show regex', () => {
+        const showRoutesPath = '/forms/123/pages/456/routes/delete'
+
+        beforeEach(() => {
+          Object.defineProperty(window, 'location', {
+            value: new URL(`http://example.com${showRoutesPath}`),
+            writable: true
+          })
+        })
+
+        it('the routes_page_view event is not pushed to the dataLayer', () => {
+          attachQuestionXsRoutesTracker()
+          expect(window.dataLayer).toEqual([existingDataLayerObject])
+        })
       })
     })
   })
