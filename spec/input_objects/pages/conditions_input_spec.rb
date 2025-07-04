@@ -142,6 +142,10 @@ RSpec.describe Pages::ConditionsInput, type: :model do
   end
 
   describe "#goto_page_options" do
+    before do
+      allow(FormRepository).to receive_messages(pages:)
+    end
+
     context "when routing from the first form page" do
       subject(:goto_page_options) { described_class.new(form:, page: pages.first).goto_page_options }
 
@@ -280,12 +284,13 @@ RSpec.describe Pages::ConditionsInput, type: :model do
     let(:page_routes_service) { instance_double(PageRoutesService) }
 
     before do
+      allow(FormRepository).to receive_messages(pages:)
       allow(PageRoutesService).to receive(:new).and_return(page_routes_service)
       allow(page_routes_service).to receive(:routes).and_return([instance_double(Api::V1::ConditionResource, secondary_skip?: true)])
     end
 
     it "calls the PageRoutesService" do
-      expect(PageRoutesService).to receive(:new).with(form:, pages: FormRepository.pages(form), page:)
+      expect(PageRoutesService).to receive(:new).with(form:, pages:, page:)
       conditions_input.secondary_skip?
     end
   end

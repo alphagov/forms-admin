@@ -11,8 +11,8 @@
 
     <%= render FormStatusTagDescriptionComponent::View.new(status: status) %>
 
-    <% FormRepository.pages(form).each_with_index do |page, index| %>
-      <%= govuk_summary_list(**PageSummaryCardDataService.call(page:, pages: FormRepository.pages(form)).build_data)%>
+    <% form.pages.each_with_index do |page, index| %>
+      <%= govuk_summary_list(**PageSummaryCardDataService.call(page:, pages: form.pages).build_data)%>
     <% end %>
 
     <p>

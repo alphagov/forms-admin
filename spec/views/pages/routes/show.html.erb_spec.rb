@@ -22,6 +22,7 @@ describe "pages/routes/show.html.erb" do
   let(:route_summary_card_data_service) { instance_double(RouteSummaryCardDataPresenter, summary_card_data: route_cards, errors:, routes:, next_page:, pages:, page:, form:) }
 
   before do
+    allow(FormRepository).to receive_messages(pages:)
     allow(form).to receive(:group).and_return(build(:group))
     render template: "pages/routes/show", locals: { current_form: form, page:, back_link_url: "/back", route_summary_card_data_presenter: route_summary_card_data_service }
   end

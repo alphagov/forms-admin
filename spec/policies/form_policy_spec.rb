@@ -13,6 +13,8 @@ describe FormPolicy do
     if group.present?
       GroupForm.create!(form_id: form.id, group_id: group.id)
     end
+
+    allow(FormRepository).to receive_messages(pages: form.pages)
   end
 
   describe "#can_view_form?" do

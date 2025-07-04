@@ -42,6 +42,10 @@ RSpec.describe Pages::DeleteConditionInput, type: :model do
   end
 
   describe "#goto_page_question_text" do
+    before do
+      allow(FormRepository).to receive_messages(pages:)
+    end
+
     context "when there is a goto_page_id" do
       it "returns the question text for the given page" do
         result = delete_condition_input.goto_page_question_text
@@ -70,6 +74,10 @@ RSpec.describe Pages::DeleteConditionInput, type: :model do
   end
 
   describe "#has_secondary_skip?" do
+    before do
+      allow(FormRepository).to receive_messages(pages:)
+    end
+
     context "when the condition does not have a secondary skip condition" do
       subject(:has_secondary_skip?) { delete_condition_input.has_secondary_skip? }
 

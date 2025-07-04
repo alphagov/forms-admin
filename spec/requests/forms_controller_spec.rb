@@ -18,7 +18,7 @@ RSpec.describe FormsController, type: :request do
       let(:params) { {} }
 
       before do
-        allow(FormRepository).to receive(:find).and_return(form)
+        allow(FormRepository).to receive_messages(find: form, pages: form.pages)
 
         get form_path(2, params)
       end
@@ -97,18 +97,12 @@ RSpec.describe FormsController, type: :request do
       build(:form, id: 2, pages:, question_section_completed: "false")
     end
 
-    let(:updated_form) do
-      new_form = form
-      new_form.question_section_completed = "true"
-      new_form
-    end
-
     let(:user) do
       standard_user
     end
 
     before do
-      allow(FormRepository).to receive_messages(find: form, save!: form)
+      allow(FormRepository).to receive_messages(find: form, pages:, save!: form)
 
       login_as user
 
