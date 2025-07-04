@@ -35,8 +35,21 @@ RSpec.describe PagesController, type: :request do
 
     before do
       allow(FormRepository).to receive_messages(find: form, pages: pages)
+    end
 
-      get form_pages_path(2)
+    context "with a form in a group that the user is a member of" do
+      before do
+        group.group_forms.create!(form_id: form.id)
+        get form_pages_path(form.id)
+      end
+
+      it "returns a 200 status code" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the pages#index template" do
+        expect(response).to render_template("pages/index")
+      end
     end
 
     context "with a form in a group that the user is not a member of" do
@@ -54,6 +67,35 @@ RSpec.describe PagesController, type: :request do
 
       it "Returns a 403 status" do
         expect(response.status).to eq(403)
+      end
+    end
+
+    describe "when there are validation errors" do
+      let(:routing_condition) { [(build :condition, :with_answer_value_missing, id: 1, routing_page_id: 99, check_page_id: 99, goto_page_id: 101)] }
+      let(:collect_analytics) { true }
+
+      before do
+        allow(standard_user).to receive(:collect_analytics?).and_return(collect_analytics)
+
+        pages.first.routing_conditions = routing_condition
+        group.group_forms.create!(form_id: form.id)
+        get form_pages_path(2)
+      end
+
+      context "when analytics is enabled" do
+        it "sends the validation errors to analytics" do
+          page = Capybara.string(response.body)
+          expect(page).to have_css("[data-analytics-events]", text: /answer_value_doesnt_exist/, visible: :all)
+        end
+      end
+
+      context "when analytics is not enabled" do
+        let(:collect_analytics) { false }
+
+        it "does not send the validation errors to analytics" do
+          page = Capybara.string(response.body)
+          expect(page).not_to have_css("[data-analytics-events]", text: /answer_value_doesnt_exist/, visible: :all)
+        end
       end
     end
   end

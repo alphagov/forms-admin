@@ -10,6 +10,9 @@ class ApplicationController < ActionController::Base
   before_action :set_paper_trail_whodunnit
   before_action :redirect_if_account_not_completed
 
+  after_action :set_analytics_events
+  before_action :prepare_analytics_events
+
   default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
   add_flash_types :success
@@ -149,5 +152,15 @@ private
     end
     CurrentLoggingAttributes.form_id = params[:form_id] if params[:form_id].present?
     CurrentLoggingAttributes.page_id = params[:page_id] if params[:page_id].present?
+  end
+
+  def set_analytics_events
+    return unless response.redirect?
+
+    flash[:analytics_events] = Current.analytics_events if Current.analytics_events.present?
+  end
+
+  def prepare_analytics_events
+    AnalyticsService.add_events_from_flash(flash[:analytics_events]) if flash[:analytics_events].present?
   end
 end
