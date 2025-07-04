@@ -37,6 +37,14 @@ FactoryBot.define do
       answer_type { Page::ANSWER_TYPES_WITHOUT_SETTINGS.sample }
     end
 
+    trait :with_file_upload_answer_type do
+      answer_type { "file" }
+    end
+
+    trait :with_page_heading do
+      page_heading { Faker::Quote.yoda.truncate(250) }
+    end
+
     trait :with_selection_settings do
       transient do
         only_one_option { "true" }
