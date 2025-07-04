@@ -13,7 +13,7 @@ FactoryBot.define do
     sequence(:id) { |n| n }
     question_text { Faker::Lorem.question.truncate(250) }
     answer_type { Page::ANSWER_TYPES_WITHOUT_SETTINGS.sample }
-    is_optional { nil }
+    is_optional { false }
     answer_settings { {} }
     hint_text { nil }
     routing_conditions { [] }
