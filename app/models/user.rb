@@ -27,6 +27,14 @@ class User < ApplicationRecord
     standard: "standard",
   }
 
+  scope :for_users_list, lambda {
+    includes(:organisation)
+      .order(Arel.sql("organisation.name ASC NULLS FIRST"))
+      .order({ has_access: :desc })
+      .in_order_of(:role, roles.keys)
+      .order({ name: :asc })
+  }
+
   validates :name, presence: true, if: :requires_name?
   validates :role, presence: true
   validates :organisation_id, presence: true, if: :requires_organisation?
