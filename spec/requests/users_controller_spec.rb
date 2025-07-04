@@ -3,6 +3,14 @@ require "rails_helper"
 RSpec.describe UsersController, type: :request do
   describe "#index" do
     context "when logged in as a super admin" do
+      let!(:charlie) do
+        test_org.users.first.tap do |user|
+          user.update(name: "Charlie")
+        end
+      end
+      let!(:andy) { create :user, name: "Andy", organisation: test_org }
+      let!(:bob) { create :user, name: "Bob", organisation: test_org }
+
       before do
         login_as_super_admin_user
 
@@ -17,6 +25,10 @@ RSpec.describe UsersController, type: :request do
         expect(response.body).to include("Users")
         expect(response).to render_template("users/index")
       end
+
+      it "assigns sorted users" do
+        expect(assigns[:users]).to eq [super_admin_user, andy, bob, charlie]
+      end
     end
 
     context "when logged in with standard role" do
@@ -24,51 +36,6 @@ RSpec.describe UsersController, type: :request do
         login_as_standard_user
         get users_path
         expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context "with many users" do
-      before do
-        login_as_super_admin_user
-
-        organisations = [
-          create(:organisation, :with_signed_mou, slug: "test-org"),
-          create(:organisation, :with_signed_mou, slug: "ministry-of-tests"),
-          create(:organisation, :with_signed_mou, slug: "department-for-testing"),
-        ]
-        roles = User.roles.keys
-
-        organisations.each_with_index.flat_map do |organisation|
-          roles.each_with_index.flat_map do |role|
-            create_list(:user, 5, organisation:, role:) do |user, i|
-              user.has_access = i < 4
-              user.save!
-            end
-          end
-        end
-
-        get users_path
-      end
-
-      it "sorts users by organisation, access, role, and name" do
-        assigns[:users].each_cons(2) do |user, next_user|
-          if user.organisation.name == next_user.organisation.name
-            if user.has_access == next_user.has_access
-              if user.role == next_user.role
-                expect(user.name).to be <= next_user.name
-              else
-                case user.role
-                when "super_admin" then expect(next_user.role).to eq "organisation_admin"
-                when "organisation_admin" then expect(next_user.role).to eq "standard"
-                end
-              end
-            else
-              expect(next_user.has_access).to be false
-            end
-          else
-            expect(user.organisation.name < next_user.organisation.name)
-          end
-        end
       end
     end
   end

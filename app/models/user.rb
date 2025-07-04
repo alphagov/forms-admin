@@ -27,6 +27,14 @@ class User < ApplicationRecord
     standard: "standard",
   }
 
+  scope :for_users_list, lambda {
+    includes(:organisation)
+      .order(Arel.sql("organisation.name ASC NULLS FIRST"))
+      .order({ has_access: :desc })
+      .in_order_of(:role, roles.keys)
+      .order({ name: :asc })
+  }
+
   scope :by_name, lambda { |name|
     if name.present?
       where("lower(users.name) LIKE ?", "%#{sanitize_sql_like(name.downcase)}%")
