@@ -210,6 +210,10 @@ RSpec.describe "groups/show", type: :view do
             expect(rendered).not_to have_link("Find out how to upgrade this group so you can make forms live", href: request_upgrade_group_path(group))
           end
 
+          it "shows the MOU and org admin requirements" do
+            expect(rendered).to include(I18n.t("groups.show.trial_banner.request_upgrade.organisation_requirements_html"))
+          end
+
           it "shows a link to contact the GOV.UK Forms team" do
             expect(rendered).to have_link("contact the GOV.UK Forms team", href: contact_url)
           end
@@ -261,6 +265,10 @@ RSpec.describe "groups/show", type: :view do
           expect(rendered).to have_text "You can create forms in this group and test them, but you cannot make them live."
         end
 
+        it "shows the MOU and org admin requirements" do
+          expect(rendered).to include(I18n.t("groups.show.trial_banner.request_upgrade.organisation_requirements_html"))
+        end
+
         it "does not show a link to request an upgrade" do
           expect(rendered).not_to have_link("Find out how to upgrade this group so you can make forms live", href: request_upgrade_group_path(group))
         end
@@ -282,6 +290,10 @@ RSpec.describe "groups/show", type: :view do
 
           it "shows content for a group admin" do
             expect(rendered).to have_text "You can create forms in this group and test them, but you cannot make them live."
+          end
+
+          it "shows the MOU and org admin requirements" do
+            expect(rendered).to include(I18n.t("groups.show.trial_banner.request_upgrade.organisation_requirements_html"))
           end
 
           it "does not show a link to request an upgrade" do
