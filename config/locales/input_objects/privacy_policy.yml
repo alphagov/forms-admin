@@ -7,6 +7,7 @@ en:
           attributes:
             privacy_policy_url:
               blank: Enter a link to privacy information
+              exclusion: https://www.gov.uk/help/privacy-notice is the privacy notice for the GOV.UK website and cannot be used for your form
   errors:
     messages:
       url: Enter a link in the correct format, like https://www.gov.uk/help/privacy-notice

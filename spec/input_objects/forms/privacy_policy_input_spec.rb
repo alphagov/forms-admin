@@ -18,6 +18,17 @@ RSpec.describe Forms::PrivacyPolicyInput, type: :model do
         )
       end
 
+      it "is invalid if the GOV.UK privacy notice is used" do
+        privacy_policy_input = described_class.new(form:, privacy_policy_url: "https://www.gov.uk/help/privacy-notice")
+        error_message = I18n.t("activemodel.errors.models.forms/privacy_policy_input.attributes.privacy_policy_url.exclusion")
+
+        privacy_policy_input.validate(:privacy_policy_url)
+
+        expect(privacy_policy_input.errors.full_messages_for(:privacy_policy_url)).to include(
+          "Privacy policy url #{error_message}",
+        )
+      end
+
       it "is valid if blank" do
         privacy_policy_input = described_class.new(form:, privacy_policy_url: "")
 
