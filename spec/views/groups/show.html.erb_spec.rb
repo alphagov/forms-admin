@@ -206,7 +206,7 @@ RSpec.describe "groups/show", type: :view do
             expect(rendered).to have_text "You can create forms in this group and test them, but you cannot make them live."
           end
 
-          it "does not shows a link to request an upgrade" do
+          it "does not show a link to request an upgrade" do
             expect(rendered).not_to have_link("Find out how to upgrade this group so you can make forms live", href: request_upgrade_group_path(group))
           end
 
@@ -257,8 +257,44 @@ RSpec.describe "groups/show", type: :view do
       context "and the user has permission to request an upgrade" do
         let(:request_upgrade?) { true }
 
-        it "tells user to contact support to make forms live" do
-          expect(rendered).to have_text("Speak to your organisation’s GOV.UK publishing team or contact the GOV.UK Forms team to find out how to make live forms.")
+        it "shows content for a group admin" do
+          expect(rendered).to have_text "You can create forms in this group and test them, but you cannot make them live."
+        end
+
+        it "does not show a link to request an upgrade" do
+          expect(rendered).not_to have_link("Find out how to upgrade this group so you can make forms live", href: request_upgrade_group_path(group))
+        end
+
+        it "shows a link to contact the GOV.UK Forms team" do
+          expect(rendered).to have_link("contact the GOV.UK Forms team", href: contact_url)
+        end
+
+        it "has the trial group heading in the notification banner" do
+          expect(rendered).to have_css "h3", text: "This is a ‘trial’ group"
+        end
+      end
+
+      context "and the user is a group admin" do
+        let(:membership_role) { :group_admin }
+
+        context "and the organisation has no admin" do
+          let(:request_upgrade?) { false } # false because GroupPolicy depends on state of group as well as user permissions
+
+          it "shows content for a group admin" do
+            expect(rendered).to have_text "You can create forms in this group and test them, but you cannot make them live."
+          end
+
+          it "does not show a link to request an upgrade" do
+            expect(rendered).not_to have_link("Find out how to upgrade this group so you can make forms live", href: request_upgrade_group_path(group))
+          end
+
+          it "shows a link to contact the GOV.UK Forms team" do
+            expect(rendered).to have_link("contact the GOV.UK Forms team", href: contact_url)
+          end
+
+          it "has the trial group heading in the notification banner" do
+            expect(rendered).to have_css "h3", text: "This is a ‘trial’ group"
+          end
         end
       end
 

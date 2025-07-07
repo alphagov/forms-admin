@@ -42,6 +42,10 @@
             <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
             <%= t("groups.show.trial_banner.request_upgrade.body_html") %>
             <%= t("groups.show.trial_banner.request_upgrade.without_mou_signature_html", contact_link: contact_link) %>
+          <% elsif @group.memberships.find_by(user: @current_user)&.group_admin? && !@group.organisation.admin_users.present? %>
+            <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
+            <%= t("groups.show.trial_banner.request_upgrade.body_html") %>
+            <%= t("groups.show.trial_banner.request_upgrade.without_org_admin_html", contact_link: contact_link) %>
           <% else %>
             <% nb.with_heading(text: t("groups.show.trial_banner.heading"), tag: "h3") %>
             <%= t("groups.show.trial_banner.editor.body_html") %>
