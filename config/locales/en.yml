@@ -556,9 +556,14 @@ en:
         heading: This is a ‘trial’ group
         request_upgrade:
           body_html: "<p>You can create forms in this group and test them, but you cannot make them live.</p>"
+          contact_html: "<p>Speak to your organisation’s GOV.UK publishing team or %{contact_link} to find out how to make live forms.</p>"
           link: Find out how to make forms live
-          without_mou_signature_html: "<p>Speak to your organisation’s GOV.UK publishing team or %{contact_link} to find out how to make live forms.</p>"
-          without_org_admin_html: "<p>Speak to your organisation’s GOV.UK publishing team or %{contact_link} to find out how to make live forms.</p>"
+          organisation_requirements_html: |
+            <p>Before anyone from your organisation can make forms live, someone from your organisation needs to:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>agree to a ‘Memorandum of Understanding’ with GOV⁠.⁠UK Forms</li>
+              <li>agree to be the GOV⁠.⁠UK Forms admin for your organisation</li>
+            </ul>
         review_upgrade:
           body_html: "<p>%{upgrade_requester_name} has asked to upgrade this group so they can make forms live.</p>"
           heading: A group admin has asked to upgrade this group
