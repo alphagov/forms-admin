@@ -1,4 +1,6 @@
 class Page < ApplicationRecord
+  self.ignored_columns += %w[next_page]
+
   before_destroy :destroy_secondary_skip_conditions
 
   belongs_to :form
