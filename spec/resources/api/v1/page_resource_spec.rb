@@ -200,22 +200,28 @@ describe Api::V1::PageResource, type: :model do
       end
     end
 
-    it "when given :up calls put(:up)" do
+    it "when given :up calls put(:up) and updates page" do
       page = described_class.find(1, params: { form_id: 1 })
 
-      expect(page.move_page(:up)).to be_truthy
+      expect {
+        expect(page.move_page(:up)).to be_truthy
+      }.to change(page, :position).by(-1)
     end
 
     it "when given :down calls put(:down)" do
       page = described_class.find(1, params: { form_id: 1 })
 
-      expect(page.move_page(:down)).to be_truthy
+      expect {
+        expect(page.move_page(:down)).to be_truthy
+      }.to change(page, :position).by(1)
     end
 
     it "when given anything else returns false and does not call put" do
       page = described_class.find(1, params: { form_id: 1 })
 
-      expect(page.move_page(:invalid_direction)).to be(false)
+      expect {
+        expect(page.move_page(:invalid_direction)).to be(false)
+      }.not_to change(page, :position)
     end
   end
 

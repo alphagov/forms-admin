@@ -57,9 +57,7 @@ class PageRepository
       page = Api::V1::PageResource.new(record.attributes, true)
       page.prefix_options = record.prefix_options
 
-      response = page.move_page(direction)
-      page.from_json(response.body)
-
+      page.move_page(direction)
       save_to_database!(page)
 
       page
