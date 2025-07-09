@@ -188,21 +188,33 @@ describe Api::V1::PageResource, type: :model do
   end
 
   describe "#move_page" do
+    before do
+      page = build :page, id: 1, form_id: 1, position: 2
+      moved_up = build :page, id: 1, form_id: 1, position: 1
+      moved_down = build :page, id: 1, form_id: 1, position: 3
+
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get "/api/v1/forms/1/pages/1", headers, page.to_json, 200
+        mock.put "/api/v1/forms/1/pages/1/up", put_headers, moved_up.to_json, 200
+        mock.put "/api/v1/forms/1/pages/1/down", put_headers, moved_down.to_json, 200
+      end
+    end
+
     it "when given :up calls put(:up)" do
-      page = described_class.new
-      allow(page).to receive(:put).with(:up).and_return(true)
-      expect(page.move_page(:up)).to be(true)
+      page = described_class.find(1, params: { form_id: 1 })
+
+      expect(page.move_page(:up)).to be_truthy
     end
 
     it "when given :down calls put(:down)" do
-      page = described_class.new
-      allow(page).to receive(:put).with(:down).and_return(true)
-      expect(page.move_page(:down)).to be(true)
+      page = described_class.find(1, params: { form_id: 1 })
+
+      expect(page.move_page(:down)).to be_truthy
     end
 
     it "when given anything else returns false and does not call put" do
-      page = described_class.new
-      allow(page).to receive(:put).and_return(true)
+      page = described_class.find(1, params: { form_id: 1 })
+
       expect(page.move_page(:invalid_direction)).to be(false)
     end
   end
