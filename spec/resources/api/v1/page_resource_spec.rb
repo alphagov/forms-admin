@@ -105,30 +105,6 @@ describe Api::V1::PageResource, type: :model do
     end
   end
 
-  describe "#database_attributes" do
-    it "includes attributes for ActiveRecord Page model" do
-      page = described_class.new(id: 1, question_text: "What is your address?")
-      expect(page.database_attributes).to eq({
-        "id" => 1,
-        "question_text" => "What is your address?",
-      })
-    end
-
-    it "includes ID for associated ActiveRecord Form model" do
-      page = described_class.new(id: 2, form_id: 1)
-      expect(page.database_attributes).to include(
-        "form_id" => 1,
-      )
-    end
-
-    it "does not include attributes not in the ActiveRecord Page model" do
-      page = described_class.new(id: 2, form_id: 1, has_routing_errors: true)
-      expect(page.database_attributes).not_to include(
-        :has_routing_errors,
-      )
-    end
-  end
-
   describe "#convert_boolean_fields" do
     context "when a question is optional" do
       it "set the model attribute to true" do

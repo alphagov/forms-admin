@@ -4,24 +4,6 @@ describe Api::V1::FormResource, type: :model do
   let(:id) { 1 }
   let(:form) { described_class.new(id:, name: "Form 1", submission_email: "") }
 
-  describe "#database_attributes" do
-    it "includes attributes for ActiveRecord Form model" do
-      expect(form.database_attributes).to eq({
-        "id" => 1,
-        "external_id" => "1",
-        "name" => "Form 1",
-        "submission_email" => "",
-      })
-    end
-
-    it "does not include attributes not in the ActiveRecord Form model" do
-      form = described_class.new(id:, name: "Form 1", incomplete_tasks: %i[missing_pages missing_privacy_policy])
-      expect(form.database_attributes).not_to include(
-        :incomplete_tasks,
-      )
-    end
-  end
-
   describe "#destroy" do
     context "when form is in a group" do
       it "destroys the group" do

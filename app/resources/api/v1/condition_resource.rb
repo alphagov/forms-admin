@@ -7,11 +7,6 @@ class Api::V1::ConditionResource < ActiveResource::Base
 
   belongs_to :page
 
-  def database_attributes
-    attributes
-      .slice(*Condition.attribute_names)
-  end
-
   def errors_with_fields
     error_fields = {
       answer_value_doesnt_exist: :answer_value,
