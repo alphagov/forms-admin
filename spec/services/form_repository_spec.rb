@@ -40,7 +40,7 @@ describe FormRepository do
     it "has the same external ID in the database as the API ID" do
       api_form = described_class.create!(**form_params)
       database_form = Form.last
-      expect(api_form.id.to_s).to eq database_form.external_id
+      expect(database_form.external_id).to eq api_form.id.to_s
     end
   end
 
@@ -71,6 +71,12 @@ describe FormRepository do
     it "has the same ID in the database and for the API" do
       described_class.find(form_id: 2)
       expect(Form.last.id).to eq 2
+    end
+
+    it "has the same external ID in the database as the API ID" do
+      api_form = described_class.find(form_id: 2)
+      database_form = Form.last
+      expect(database_form.external_id).to eq api_form.id.to_s
     end
   end
 

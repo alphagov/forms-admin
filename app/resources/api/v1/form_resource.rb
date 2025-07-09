@@ -17,6 +17,7 @@ class Api::V1::FormResource < ActiveResource::Base
   def database_attributes
     attributes
       .slice(*Form.attribute_names)
+      .with_defaults(external_id: id.to_s)
   end
 
   def group

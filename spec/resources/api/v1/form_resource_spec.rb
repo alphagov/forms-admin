@@ -8,6 +8,7 @@ describe Api::V1::FormResource, type: :model do
     it "includes attributes for ActiveRecord Form model" do
       expect(form.database_attributes).to eq({
         "id" => 1,
+        "external_id" => "1",
         "name" => "Form 1",
         "submission_email" => "",
       })

@@ -2,7 +2,7 @@ class FormRepository
   class << self
     def create!(creator_id:, name:)
       form = Api::V1::FormResource.create!(creator_id:, name:)
-      Form.create!(form.database_attributes)
+      save_to_database!(form)
       form
     end
 
