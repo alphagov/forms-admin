@@ -61,11 +61,11 @@ class Api::V1::FormResource < ActiveResource::Base
   end
 
   def make_live!
-    post "make-live"
+    load_attributes_from_response(post("make-live"))
   end
 
   def archive!
-    post "archive"
+    load_attributes_from_response(post("archive"))
   end
 
   def form_submission_email
