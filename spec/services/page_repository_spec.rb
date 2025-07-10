@@ -300,6 +300,26 @@ describe PageRepository do
           described_class.move_page(page, :up)
         }.to change { Page.find(2).position }.from(2).to(1)
       end
+
+      context "when the page has routing conditions" do
+        let(:routing_conditions) do
+          [
+            build(:condition, id: 1, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Red"),
+            build(:condition, id: 2, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Green"),
+          ]
+        end
+
+        let(:page) { build(:page, id: 2, form_id:, position: 2, routing_conditions:) }
+        let(:moved_page) { build(:page, id: 2, form_id:, position: 1, routing_conditions:) }
+
+        it "does not raise an error" do
+          page = described_class.find(page_id: 2, form_id:)
+
+          expect {
+            described_class.move_page(page, :up)
+          }.not_to raise_error
+        end
+      end
     end
   end
 end
