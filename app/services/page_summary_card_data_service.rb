@@ -24,9 +24,20 @@ class PageSummaryCardDataService
 private
 
   def build_title
-    return "#{page_number(@page)}. #{@page.question_text}" unless @page.is_optional? && @page.answer_type != "selection"
+    page_number = page_number(@page)
+    heading = @page.page_heading
+    question = @page.question_text
 
-    "#{page_number(@page)}. #{@page.question_text} (optional)"
+    # Use the actual heading instead of the question text for the title on file upload type
+    title = if @page.answer_type == "file" && heading.present?
+              "#{page_number}. #{heading}"
+            else
+              "#{page_number}. #{question}"
+            end
+
+    title += " (optional)" if @page.is_optional? && @page.answer_type != "selection"
+
+    title
   end
 
   def page_number(page)
