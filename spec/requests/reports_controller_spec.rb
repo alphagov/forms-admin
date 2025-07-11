@@ -532,16 +532,16 @@ RSpec.describe ReportsController, type: :request do
 
   describe "#add_another_answer" do
     let(:report_data) do
-      {
+      OpenStruct.new(
         count: 3,
-        forms: [{ form_id: 3, name: "form name", state: "Draft", repeatable_pages: [{ page_id: 5, question_text: }] }],
-      }
+        forms: [OpenStruct.new(form_id: 3, name: "form name", state: "Draft", repeatable_pages: [OpenStruct.new(page_id: 5, question_text:)])],
+      )
     end
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/reports/add-another-answer-forms", headers, report_data.to_json, 200
-      end
+      add_another_answer_usage_service = Reports::AddAnotherAnswerUsageService.new
+      allow(add_another_answer_usage_service).to receive(:add_another_answer_forms).and_return(report_data)
+      allow(Reports::AddAnotherAnswerUsageService).to receive(:new).and_return(add_another_answer_usage_service)
     end
 
     context "when the user is a standard user" do
@@ -631,29 +631,29 @@ RSpec.describe ReportsController, type: :request do
 
   describe "#selection_questions_summary" do
     let(:summary) do
-      {
-        autocomplete: {
+      OpenStruct.new(
+        autocomplete: OpenStruct.new(
           form_count: 234,
           question_count: 432,
           optional_question_count: 20,
-        },
-        radios: {
+        ),
+        radios: OpenStruct.new(
           form_count: 2,
           question_count: 2,
           optional_question_count: 1,
-        },
-        checkboxes: {
+        ),
+        checkboxes: OpenStruct.new(
           form_count: 1,
           question_count: 1,
           optional_question_count: 1,
-        },
-      }
+        ),
+      )
     end
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/reports/selection-questions-summary", headers, summary.to_json, 200
-      end
+      selection_question_service = Reports::SelectionQuestionService.new
+      allow(selection_question_service).to receive(:live_form_statistics).and_return(summary)
+      allow(Reports::SelectionQuestionService).to receive(:new).and_return(selection_question_service)
 
       login_as_super_admin_user
       get report_selection_questions_summary_path
@@ -670,25 +670,25 @@ RSpec.describe ReportsController, type: :request do
 
   describe "selection question reports" do
     let(:data) do
-      {
+      OpenStruct.new(
         questions: [
-          {
+          OpenStruct.new(
             form_id: 1,
             form_name: "A form",
             question_text: "A question",
             is_optional: true,
             selection_options_count: 33,
-          },
+          ),
         ],
         count: 1,
-      }
+      )
     end
 
     describe "#selection_questions_with_autocomplete" do
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/reports/selection-questions-with-autocomplete", headers, data.to_json, 200
-        end
+        selection_question_service = Reports::SelectionQuestionService.new
+        allow(selection_question_service).to receive(:live_form_pages_with_autocomplete).and_return(data)
+        allow(Reports::SelectionQuestionService).to receive(:new).and_return(selection_question_service)
 
         login_as_super_admin_user
         get report_selection_questions_with_autocomplete_path
@@ -710,9 +710,9 @@ RSpec.describe ReportsController, type: :request do
 
     describe "#selection_questions_with_radios" do
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/reports/selection-questions-with-radios", headers, data.to_json, 200
-        end
+        selection_question_service = Reports::SelectionQuestionService.new
+        allow(selection_question_service).to receive(:live_form_pages_with_radios).and_return(data)
+        allow(Reports::SelectionQuestionService).to receive(:new).and_return(selection_question_service)
 
         login_as_super_admin_user
         get report_selection_questions_with_radios_path
@@ -734,9 +734,9 @@ RSpec.describe ReportsController, type: :request do
 
     describe "#selection_questions_with_checkboxes" do
       before do
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.get "/api/v1/reports/selection-questions-with-checkboxes", headers, data.to_json, 200
-        end
+        selection_question_service = Reports::SelectionQuestionService.new
+        allow(selection_question_service).to receive(:live_form_pages_with_checkboxes).and_return(data)
+        allow(Reports::SelectionQuestionService).to receive(:new).and_return(selection_question_service)
 
         login_as_super_admin_user
         get report_selection_questions_with_checkboxes_path

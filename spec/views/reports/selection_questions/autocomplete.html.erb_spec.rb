@@ -2,18 +2,18 @@ require "rails_helper"
 
 describe "reports/selection_questions/autocomplete.html.erb" do
   let(:data) do
-    Report.new({
+    OpenStruct.new(
       questions: [
-        {
+        OpenStruct.new(
           form_id: 1,
           form_name: "A form",
           question_text: "A question",
           is_optional: true,
           selection_options_count: 33,
-        },
+        ),
       ],
       count: 1,
-    })
+    )
   end
 
   before do

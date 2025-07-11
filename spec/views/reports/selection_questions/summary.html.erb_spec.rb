@@ -2,23 +2,23 @@ require "rails_helper"
 
 describe "reports/selection_questions/summary.html.erb" do
   let(:data) do
-    Report.new({
-      autocomplete: {
+    OpenStruct.new(
+      autocomplete: OpenStruct.new(
         form_count: 222,
         question_count: 444,
         optional_question_count: 111,
-      },
-      radios: {
+      ),
+      radios: OpenStruct.new(
         form_count: 33,
         question_count: 77,
         optional_question_count: 44,
-      },
-      checkboxes: {
+      ),
+      checkboxes: OpenStruct.new(
         form_count: 55,
         question_count: 99,
         optional_question_count: 88,
-      },
-    })
+      ),
+    )
   end
 
   before do

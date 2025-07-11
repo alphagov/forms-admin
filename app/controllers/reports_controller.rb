@@ -82,7 +82,7 @@ class ReportsController < ApplicationController
   end
 
   def add_another_answer
-    data = Report.find("add-another-answer-forms")
+    data = Reports::AddAnotherAnswerUsageService.new.add_another_answer_forms
 
     render template: "reports/add_another_answer", locals: { data: }
   end
@@ -90,25 +90,25 @@ class ReportsController < ApplicationController
   def last_signed_in_at; end
 
   def selection_questions_summary
-    data = Report.find("selection-questions-summary")
+    data = Reports::SelectionQuestionService.new.live_form_statistics
 
     render template: "reports/selection_questions/summary", locals: { data: }
   end
 
   def selection_questions_with_autocomplete
-    data = Report.find("selection-questions-with-autocomplete")
+    data = Reports::SelectionQuestionService.new.live_form_pages_with_autocomplete
 
     render template: "reports/selection_questions/autocomplete", locals: { data: }
   end
 
   def selection_questions_with_radios
-    data = Report.find("selection-questions-with-radios")
+    data = Reports::SelectionQuestionService.new.live_form_pages_with_radios
 
     render template: "reports/selection_questions/radios", locals: { data: }
   end
 
   def selection_questions_with_checkboxes
-    data = Report.find("selection-questions-with-checkboxes")
+    data = Reports::SelectionQuestionService.new.live_form_pages_with_checkboxes
 
     render template: "reports/selection_questions/checkboxes", locals: { data: }
   end
@@ -155,7 +155,7 @@ private
   end
 
   def check_user_has_permission
-    authorize Report, :can_view_reports?
+    authorize :report, :can_view_reports?
   end
 
   def questions_csv_filename(tag, answer_type)
