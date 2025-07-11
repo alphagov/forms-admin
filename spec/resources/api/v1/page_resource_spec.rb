@@ -105,6 +105,30 @@ describe Api::V1::PageResource, type: :model do
     end
   end
 
+  describe "#database_attributes" do
+    it "includes attributes for ActiveRecord Page model" do
+      page = described_class.new(id: 1, question_text: "What is your address?")
+      expect(page.database_attributes).to eq({
+        "id" => 1,
+        "question_text" => "What is your address?",
+      })
+    end
+
+    it "includes ID for associated ActiveRecord Form model" do
+      page = described_class.new(id: 2, form_id: 1)
+      expect(page.database_attributes).to include(
+        "form_id" => 1,
+      )
+    end
+
+    it "does not include attributes not in the ActiveRecord Page model" do
+      page = described_class.new(id: 2, form_id: 1, has_routing_errors: true)
+      expect(page.database_attributes).not_to include(
+        :has_routing_errors,
+      )
+    end
+  end
+
   describe "#convert_boolean_fields" do
     context "when a question is optional" do
       it "set the model attribute to true" do
@@ -164,22 +188,40 @@ describe Api::V1::PageResource, type: :model do
   end
 
   describe "#move_page" do
-    it "when given :up calls put(:up)" do
-      page = described_class.new
-      allow(page).to receive(:put).with(:up).and_return(true)
-      expect(page.move_page(:up)).to be(true)
+    before do
+      page = build :page, id: 1, form_id: 1, position: 2
+      moved_up = build :page, id: 1, form_id: 1, position: 1
+      moved_down = build :page, id: 1, form_id: 1, position: 3
+
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.get "/api/v1/forms/1/pages/1", headers, page.to_json, 200
+        mock.put "/api/v1/forms/1/pages/1/up", put_headers, moved_up.to_json, 200
+        mock.put "/api/v1/forms/1/pages/1/down", put_headers, moved_down.to_json, 200
+      end
+    end
+
+    it "when given :up calls put(:up) and updates page" do
+      page = described_class.find(1, params: { form_id: 1 })
+
+      expect {
+        expect(page.move_page(:up)).to be_truthy
+      }.to change(page, :position).by(-1)
     end
 
     it "when given :down calls put(:down)" do
-      page = described_class.new
-      allow(page).to receive(:put).with(:down).and_return(true)
-      expect(page.move_page(:down)).to be(true)
+      page = described_class.find(1, params: { form_id: 1 })
+
+      expect {
+        expect(page.move_page(:down)).to be_truthy
+      }.to change(page, :position).by(1)
     end
 
     it "when given anything else returns false and does not call put" do
-      page = described_class.new
-      allow(page).to receive(:put).and_return(true)
-      expect(page.move_page(:invalid_direction)).to be(false)
+      page = described_class.find(1, params: { form_id: 1 })
+
+      expect {
+        expect(page.move_page(:invalid_direction)).to be(false)
+      }.not_to change(page, :position)
     end
   end
 

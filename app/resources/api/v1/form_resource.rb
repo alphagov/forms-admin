@@ -14,6 +14,12 @@ class Api::V1::FormResource < ActiveResource::Base
     find(:one, from: "#{prefix}forms/#{id}/archived")
   end
 
+  def database_attributes
+    attributes
+      .slice(*Form.attribute_names)
+      .with_defaults(external_id: id.to_s)
+  end
+
   def group
     group_form&.group
   end
