@@ -6,10 +6,10 @@ describe "reports/add_another_answer.html.erb" do
   let(:question_text) { "Question text" }
   let(:state) { "live_with_draft" }
   let(:report) do
-    Report.new({
+    OpenStruct.new(
       count: 1,
-      forms: [{ form_id:, name:, state:, repeatable_pages: [{ page_id: 5, question_text: }] }],
-    })
+      forms: [OpenStruct.new(form_id:, name:, state:, repeatable_pages: [OpenStruct.new(page_id: 5, question_text:)])],
+    )
   end
 
   before do

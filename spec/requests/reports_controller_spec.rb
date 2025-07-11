@@ -532,16 +532,16 @@ RSpec.describe ReportsController, type: :request do
 
   describe "#add_another_answer" do
     let(:report_data) do
-      {
+      OpenStruct.new(
         count: 3,
-        forms: [{ form_id: 3, name: "form name", state: "Draft", repeatable_pages: [{ page_id: 5, question_text: }] }],
-      }
+        forms: [OpenStruct.new(form_id: 3, name: "form name", state: "Draft", repeatable_pages: [OpenStruct.new(page_id: 5, question_text:)])],
+      )
     end
 
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/reports/add-another-answer-forms", headers, report_data.to_json, 200
-      end
+      add_another_answer_usage_service = Reports::AddAnotherAnswerUsageService.new
+      allow(add_another_answer_usage_service).to receive(:add_another_answer_forms).and_return(report_data)
+      allow(Reports::AddAnotherAnswerUsageService).to receive(:new).and_return(add_another_answer_usage_service)
     end
 
     context "when the user is a standard user" do

@@ -82,7 +82,7 @@ class ReportsController < ApplicationController
   end
 
   def add_another_answer
-    data = Report.find("add-another-answer-forms")
+    data = Reports::AddAnotherAnswerUsageService.new.add_another_answer_forms
 
     render template: "reports/add_another_answer", locals: { data: }
   end
