@@ -155,7 +155,7 @@ private
   end
 
   def check_user_has_permission
-    authorize Report, :can_view_reports?
+    authorize :report, :can_view_reports?
   end
 
   def questions_csv_filename(tag, answer_type)
