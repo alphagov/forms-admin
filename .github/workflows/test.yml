@@ -39,7 +39,7 @@ jobs:
           chromeapp: chrome
       - run: |
           sudo apt-get purge google-chrome-stable
-      - uses: browser-actions/setup-chrome@v1
+      - uses: browser-actions/setup-chrome@v2
         with:
           chrome-version: 128
           install-chromedriver: 'false'
