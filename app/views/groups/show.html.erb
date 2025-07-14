@@ -73,7 +73,9 @@
 <%= govuk_start_button(text: t("home.create_a_form"), href: new_group_form_path(@group)) %>
 
 <% if @form_list_presenter %>
-  <%= govuk_table(**@form_list_presenter.data) %>
+  <%= render ScrollingWrapperComponent::View.new(aria_label: @form_list_presenter.data[:caption]) do |table| %>
+    <%= govuk_table(**@form_list_presenter.data) %>
+  <% end %>
 <% elsif policy(@group).delete? %>
   <div>
     <%= govuk_button_link_to t(".delete_group"), delete_group_path(@group), warning: true %>
