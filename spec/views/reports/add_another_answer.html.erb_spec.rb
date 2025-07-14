@@ -26,6 +26,10 @@ describe "reports/add_another_answer.html.erb" do
     expect(view.content_for(:back_link)).to have_link("Back to reports", href: reports_path)
   end
 
+  it "contains a scrollable wrapper with a table in it" do
+    expect(rendered).to have_css(".app-scrolling-wrapper > table")
+  end
+
   it "includes the form name" do
     expect(rendered).to have_link(name, href: form_url(form_id))
   end
