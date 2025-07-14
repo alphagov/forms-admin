@@ -30,6 +30,10 @@ describe "reports/add_another_answer.html.erb" do
     expect(rendered).to have_css(".app-scrolling-wrapper > table")
   end
 
+  it "contains a caption" do
+    expect(rendered).to have_css("caption", text: "All forms with add another answer")
+  end
+
   it "includes the form name" do
     expect(rendered).to have_link(name, href: form_url(form_id))
   end
