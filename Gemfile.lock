@@ -24,6 +24,8 @@ GEM
     MailchimpMarketing (3.0.80)
       excon (>= 0.76.0, < 1)
       json (~> 2.1, >= 2.1.0)
+    aasm (5.5.1)
+      concurrent-ruby (~> 1.0)
     actioncable (8.0.2)
       actionpack (= 8.0.2)
       activesupport (= 8.0.2)
@@ -108,6 +110,9 @@ GEM
       activesupport (>= 6.1)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
+    after_commit_everywhere (1.6.0)
+      activerecord (>= 4.2)
+      activesupport
     ast (2.4.3)
     aws-eventstream (1.4.0)
     aws-partitions (1.1114.0)
@@ -568,8 +573,10 @@ PLATFORMS
 
 DEPENDENCIES
   MailchimpMarketing (~> 3.0)
+  aasm (~> 5.5)
   activeresource (~> 6.1)
   acts_as_list
+  after_commit_everywhere (~> 1.6)
   aws-sdk-cloudwatch (~> 1.116)
   aws-sdk-codepipeline (~> 1.101)
   axe-core-rspec
