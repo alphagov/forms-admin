@@ -179,6 +179,28 @@ describe PageRepository do
           described_class.save!(page)
         }.to change { Page.find(2).is_optional }.to(true)
       end
+
+      context "when there are no changes to save" do
+        let(:form) do
+          form = build(:form, question_section_completed: true)
+          form.id = Form.create!(form.database_attributes).id
+          form
+        end
+
+        fit "does not update the form" do
+          page = described_class.find(page_id: 2, form_id:)
+
+          ActiveResource::HttpMock.respond_to do |mock|
+            mock.put "/api/v1/forms/#{form_id}/pages/2", put_headers, page.to_json
+          end
+
+          expect {
+            described_class.save!(page)
+          }.not_to change(Form.find(form_id), :question_section_completed)
+        end
+      end
+
+      # context "when there are changes to save" do
     end
   end
 
