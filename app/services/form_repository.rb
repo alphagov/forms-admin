@@ -36,11 +36,11 @@ class FormRepository
 
     def make_live!(record)
       form = Api::V1::FormResource.new(record.attributes, true)
-
+      save_to_database!(form)
+      save_pages_to_database!(form, form.pages) if Form.find(record.id).pages.empty?
       response = form.make_live!
       form.from_json(response.body)
-
-      save_to_database!(form)
+      Form.find(record.id).make_live!
 
       form
     end
