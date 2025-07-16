@@ -258,7 +258,7 @@ describe FormRepository do
   end
 
   describe "#archive!" do
-    let(:form) { build(:form_resource, id: 2) }
+    let(:form) { build(:form_resource, :live, id: 2) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|

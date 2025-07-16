@@ -48,10 +48,11 @@ class FormRepository
     def archive!(record)
       form = Api::V1::FormResource.new(record.attributes, true)
 
+      save_to_database!(form)
       response = form.archive!
       form.from_json(response.body)
+      Form.find(record.id).archive_live_form!
 
-      save_to_database!(form)
       form
     end
 
