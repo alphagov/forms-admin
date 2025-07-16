@@ -62,6 +62,12 @@ class GroupsController < ApplicationController
     end
   end
 
+  def move
+    authorize @group
+
+    @search_input = OrganisationSearchInput.new({ organisation_id: @current_user.organisation_id }.merge(search_params))
+  end
+
   # GET /groups/1/delete
   def delete
     authorize @group
