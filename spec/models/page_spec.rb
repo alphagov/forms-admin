@@ -143,4 +143,87 @@ RSpec.describe Page, type: :model do
       end
     end
   end
+
+  describe "#destroy_and_update_form!" do
+    let(:page) { create :page_record }
+    let(:form) { page.form }
+
+    it "sets form.question_section_completed to false" do
+      form.update!(question_section_completed: true)
+
+      page.destroy_and_update_form!
+      expect(form.question_section_completed).to be false
+    end
+  end
+
+  describe "#save_and_update_form" do
+    it "sets form.question_section_completed to false" do
+      page.question_text = "Edited question"
+      page.save_and_update_form
+      expect(form.question_section_completed).to be false
+    end
+
+    context "when the form is live" do
+      let(:form) { create(:form_record, :live) }
+
+      it "updates the form state to live_with_draft" do
+        page.question_text = "Edited question"
+        page.save_and_update_form
+        expect(form.state).to eq("live_with_draft")
+      end
+    end
+
+    context "when the form is archived" do
+      let(:form) { create(:form_record, :archived) }
+
+      it "updates the form state to archived_with_draft" do
+        page.question_text = "Edited question"
+        page.save_and_update_form
+        expect(form.state).to eq("archived_with_draft")
+      end
+    end
+
+    context "when page has routing conditions" do
+      let(:routing_conditions) { [(create :condition_record)] }
+      let(:check_conditions) { routing_conditions }
+
+      it "does not delete existing conditions" do
+        page.save_and_update_form
+        expect(page.reload.routing_conditions.to_a).to eq(routing_conditions)
+        expect(page.reload.check_conditions.to_a).to eq(check_conditions)
+      end
+
+      context "when answer type is updated to one doesn't support routing" do
+        it "deletes any conditions" do
+          page.answer_type = "number"
+          page.save_and_update_form
+          expect(page.reload.check_conditions).to be_empty
+        end
+      end
+
+      context "when the page is saved without changing the answer type" do
+        it "does not delete the conditions" do
+          page.question_text = "test"
+          page.save_and_update_form
+          expect(page.reload.check_conditions).not_to be_empty
+        end
+      end
+
+      context "when the answer settings no longer restrict to only one option" do
+        it "deletes any conditions" do
+          page.answer_settings["only_one_option"] = "0"
+          page.save_and_update_form
+          expect(page.reload.check_conditions).to be_empty
+        end
+      end
+
+      context "when the answer settings change while still restricting to only one option" do
+        it "does not delete any conditions" do
+          page.answer_settings["selection_options"].first["name"] = "New option name"
+          page.save_and_update_form
+          expect(page.reload.check_conditions).not_to be_empty
+        end
+      end
+    end
+  end
 end

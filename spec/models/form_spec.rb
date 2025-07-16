@@ -47,6 +47,13 @@ RSpec.describe Form, type: :model do
       expect(live_form.has_draft_version).to be(true)
     end
 
+    it "returns true if form has been made live and one of its pages has been edited" do
+      live_form.pages[0].question_text = "Edited question"
+      live_form.pages[0].save_and_update_form
+
+      expect(live_form.has_draft_version).to be(true)
+    end
+
     it "returns true if form is archived with a draft" do
       live_form.state = :archived_with_draft
 
