@@ -22,7 +22,7 @@ module HeaderComponent
       when "Local"
         "pink"
       when "Development"
-        "green"
+        "turquoise"
       when "Staging"
         "yellow"
       else
