@@ -26,7 +26,7 @@ class PageRepository
         guidance_markdown:,
         answer_type:,
       )
-      save_to_database!(page)
+      update_and_save_to_database!(page)
       page
     end
 
@@ -34,7 +34,7 @@ class PageRepository
       page = Api::V1::PageResource.new(record.attributes, true)
       page.prefix_options = record.prefix_options
       page.save!
-      save_to_database!(page)
+      update_and_save_to_database!(page)
       page
     end
 
@@ -44,7 +44,7 @@ class PageRepository
 
       begin
         page.destroy # rubocop:disable Rails/SaveBang
-        Page.destroy(record.id)
+        Page.find(record.id).destroy_and_update_form!
       rescue ActiveResource::ResourceNotFound, ActiveRecord::RecordNotFound
         # ActiveRecord::Persistence#destroy doesn't raise an error
         # if record has already been destroyed, let's emulate that
@@ -58,7 +58,7 @@ class PageRepository
       page.prefix_options = record.prefix_options
 
       page.move_page(direction)
-      save_to_database!(page)
+      update_and_save_to_database!(page)
 
       page
     end
@@ -93,6 +93,28 @@ class PageRepository
       # we get an exception if the form does not already exist in the database
       rescue ActiveRecord::InvalidForeignKey => e
         raise unless e.message.include? 'table "forms"'
+
+        find_form_and_save_to_database!(record)
+
+        retry
+      end
+
+      save_routing_conditions_to_database!(record)
+    end
+
+    def update_and_save_to_database!(record)
+      attributes = record.database_attributes
+
+      begin
+        # transaction is required to be able to retry after catching exception
+        ActiveRecord::Base.transaction do
+          page = Page.find_or_initialize_by(id: record.id)
+          page.assign_attributes(**attributes)
+          page.save_and_update_form
+        end
+      # we get an exception if the form does not already exist in the database
+      rescue ActiveRecord::RecordInvalid => e
+        raise unless e.message.include? "Form must exist"
 
         find_form_and_save_to_database!(record)
 
