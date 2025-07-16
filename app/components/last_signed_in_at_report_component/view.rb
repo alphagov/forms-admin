@@ -14,12 +14,14 @@ module LastSignedInAtReportComponent
 
     def call
       if @users.present?
-        govuk_table(
-          rows: rows(@users),
-          head:,
-          caption: @caption,
-          first_cell_is_header: true,
-        )
+        render ScrollingWrapperComponent::View.new(aria_label: @caption) do
+          govuk_table(
+            rows: rows(@users),
+            head:,
+            caption: @caption,
+            first_cell_is_header: true,
+          )
+        end
       else
         tag.h(@caption, class: "govuk-heading-m") +
           tag.p(@empty_message, class: "govuk-body")

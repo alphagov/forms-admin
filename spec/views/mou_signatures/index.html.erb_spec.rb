@@ -15,6 +15,10 @@ describe "mou_signatures/index.html.erb" do
     expect(rendered).to have_css("h1.govuk-heading-l", text: I18n.t("page_titles.mou_signatures"))
   end
 
+  it "contains a scrollable wrapper with a table in it" do
+    expect(rendered).to have_css(".app-scrolling-wrapper > table")
+  end
+
   it "contains the user's name" do
     expect(rendered).to have_text(mou_signatures.first.user.name)
   end

@@ -4,23 +4,26 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l"><%= t(".heading") %></h1>
 
-    <h2 class="govuk-heading-m govuk-visually-hidden"><%= t(".heading") %></h2>
-    <%= govuk_table do |table| %>
+    <%= render ScrollingWrapperComponent::View.new(aria_label: t(".heading")) do |table| %>
 
-      <%= table.with_head do |head| %>
-        <%= head.with_row do |row| %>
-          <%= row.with_cell(text: t(".add_another_answer.table_headings.form_name")) %>
-          <%= row.with_cell(text: t(".add_another_answer.table_headings.question_text")) %>
-          <%= row.with_cell(text: t(".add_another_answer.table_headings.form_state")) %>
+      <%= govuk_table do |table| %>
+
+        <%= table.with_caption(size: 'm', text: t(".heading")) %>
+        <%= table.with_head do |head| %>
+          <%= head.with_row do |row| %>
+            <%= row.with_cell(text: t(".add_another_answer.table_headings.form_name")) %>
+            <%= row.with_cell(text: t(".add_another_answer.table_headings.question_text")) %>
+            <%= row.with_cell(text: t(".add_another_answer.table_headings.form_state")) %>
+          <%end%>
         <%end%>
-      <%end%>
-      <%= table.with_body do |body| %>
-        <% data.forms.sort_by(&:state).each do |form| %>
-          <% form.repeatable_pages.each do |question| %>
-            <%= body.with_row do |row| %>
-              <%= row.with_cell(text: govuk_link_to(form.name, form_url(form.form_id))) %>
-              <%= row.with_cell(text: question.question_text) %>
-              <%= row.with_cell(text: form.state.capitalize.gsub("_", " ")) %>
+        <%= table.with_body do |body| %>
+          <% data.forms.sort_by(&:state).each do |form| %>
+            <% form.repeatable_pages.each do |question| %>
+              <%= body.with_row do |row| %>
+                <%= row.with_cell(text: govuk_link_to(form.name, form_url(form.form_id))) %>
+                <%= row.with_cell(text: question.question_text) %>
+                <%= row.with_cell(text: form.state.capitalize.gsub("_", " ")) %>
+              <%end%>
             <%end%>
           <%end%>
         <%end%>

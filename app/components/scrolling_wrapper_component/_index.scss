@@ -1,0 +1,9 @@
+.app-scrolling-wrapper {
+  overflow-x: auto;
+}
+
+.app-scrolling-wrapper:focus-visible {
+  outline: $govuk-focus-width solid $govuk-focus-colour;
+  outline-offset: $govuk-focus-width;
+  box-shadow: 0 0 0 $govuk-focus-width;
+}

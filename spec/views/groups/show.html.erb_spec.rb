@@ -83,9 +83,10 @@ RSpec.describe "groups/show", type: :view do
       ]
     end
 
-    it "renders a table listing the forms" do
-      expect(rendered).to have_table "Forms in ‘My Group’"
-      expect(rendered).to have_css "tbody .govuk-table__row", count: 3
+    it "renders a table listing the forms in a scrollable wrapper" do
+      wrapper = Capybara.string(rendered.html).find(".app-scrolling-wrapper")
+      expect(wrapper).to have_table "Forms in ‘My Group’"
+      expect(wrapper).to have_css "tbody .govuk-table__row", count: 3
     end
 
     it "renders a link for each form" do

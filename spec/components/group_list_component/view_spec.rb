@@ -17,9 +17,10 @@ RSpec.describe GroupListComponent::View, type: :component do
       expect(page).to have_css("caption", text: title)
     end
 
-    it "renders a table with the groups" do
-      expect(page).to have_css("table")
-      expect(page).to have_css("tr", count: 4)
+    it "renders a table with the groups inside a scrolling wrapper" do
+      scrolling_wrapper_component = page.find(".app-scrolling-wrapper")
+      expect(scrolling_wrapper_component).to have_css("table")
+      expect(scrolling_wrapper_component).to have_css("tr", count: 4)
     end
 
     context "when there are no groups" do
