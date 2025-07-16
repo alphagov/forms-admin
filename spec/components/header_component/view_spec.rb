@@ -60,7 +60,6 @@ RSpec.describe HeaderComponent::View, type: :component do
       { colour: "pink" },
       { colour: "turquoise" },
       { colour: "yellow" },
-      { colour: "blue" },
     ].each do |scenario|
       context "when colour_for_environment is #{scenario[:colour]}" do
         before do
@@ -70,6 +69,16 @@ RSpec.describe HeaderComponent::View, type: :component do
         it "returns 'app-header--#{scenario[:colour]}'" do
           expect(header_component.app_header_class_for_environment).to eq("app-header--#{scenario[:colour]}")
         end
+      end
+    end
+
+    context "when colour_for_environment is blue" do
+      before do
+        allow(header_component).to receive(:colour_for_environment).and_return("blue")
+      end
+
+      it "returns nil because the header is already blue" do
+        expect(header_component.app_header_class_for_environment).to be_nil
       end
     end
   end

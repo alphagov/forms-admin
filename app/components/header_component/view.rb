@@ -14,6 +14,8 @@ module HeaderComponent
     end
 
     def app_header_class_for_environment
+      return nil if colour_for_environment == "blue"
+
       "app-header--#{colour_for_environment}"
     end
 
