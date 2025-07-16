@@ -20,7 +20,7 @@ class ConditionRepository
         exit_page_heading:,
         exit_page_markdown:,
       )
-      save_to_database!(condition)
+      update_and_save_to_database!(condition)
       condition
     end
 
@@ -34,7 +34,7 @@ class ConditionRepository
       condition = Api::V1::ConditionResource.new(record.attributes, true)
       condition.prefix_options = record.prefix_options
       condition.save!
-      save_to_database!(condition)
+      update_and_save_to_database!(condition)
       condition
     end
 
@@ -44,7 +44,7 @@ class ConditionRepository
 
       begin
         condition.destroy # rubocop:disable Rails/SaveBang
-        Condition.destroy(record.id)
+        Condition.find(record.id).destroy_and_update_form!
       rescue ActiveResource::ResourceNotFound, ActiveRecord::RecordNotFound
         # ActiveRecord::Persistence#destroy doesn't raise an error
         # if record has already been destroyed, let's emulate that
@@ -57,6 +57,12 @@ class ConditionRepository
 
     def save_to_database!(record)
       Condition.upsert(record.database_attributes)
+    end
+
+    def update_and_save_to_database!(record)
+      condition = Condition.find_or_initialize_by(id: record.id)
+      condition.assign_attributes(record.database_attributes)
+      condition.save_and_update_form
     end
   end
 end
