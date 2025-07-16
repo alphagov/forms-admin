@@ -190,6 +190,30 @@ describe FormRepository do
           described_class.save!(form)
         }.to change { Form.find(2).name }.to("new name")
       end
+
+      context "when the form is live" do
+        let(:form) { build(:form, :live, id: 2) }
+
+        it "changes the form's state to live_with_draft" do
+          form = described_class.find(form_id: 2)
+
+          expect {
+            described_class.save!(form)
+          }.to change { Form.find(2).state }.to("live_with_draft")
+        end
+      end
+
+      context "when the form is archived" do
+        let(:form) { build(:form, :archived, id: 2) }
+
+        it "changes the form's state to archived_with_draft" do
+          form = described_class.find(form_id: 2)
+
+          expect {
+            described_class.save!(form)
+          }.to change { Form.find(2).state }.to("archived_with_draft")
+        end
+      end
     end
   end
 

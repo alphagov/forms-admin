@@ -28,6 +28,9 @@ class FormRepository
       form = Api::V1::FormResource.new(record.attributes, true)
       form.save!
       save_to_database!(form)
+      db_form = Form.find(record.id)
+      db_form.create_draft_from_live_form! if db_form.live?
+      db_form.create_draft_from_archived_form! if db_form.archived?
       form
     end
 

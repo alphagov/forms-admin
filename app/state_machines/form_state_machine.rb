@@ -17,6 +17,7 @@ module FormStateMachine
       state :draft, initial: true
       state :deleted, :live, :live_with_draft, :archived, :archived_with_draft
 
+      # May be able to remove this as we haven't been using it in the API
       event :delete_form do
         after do
           destroy!
