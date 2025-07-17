@@ -49,17 +49,17 @@ describe Api::V1::ConditionResource, type: :model do
 
   describe "#exit_page?" do
     it "returns true if the exit_page_markdown attribute is present and not nil" do
-      exit_page_condition = build(:condition, exit_page_markdown: "Exit!")
+      exit_page_condition = build(:condition_resource, exit_page_markdown: "Exit!")
       expect(exit_page_condition.exit_page?).to be true
     end
 
     it "returns false if the exit_page_markdown attribute is not present" do
-      not_exit_page_condition = build(:condition)
+      not_exit_page_condition = build(:condition_resource)
       expect(not_exit_page_condition.exit_page?).to be false
     end
 
     it "returns false if the exit_page_markdown attribute is nil" do
-      not_exit_page_condition = build(:condition, exit_page_markdown: nil)
+      not_exit_page_condition = build(:condition_resource, exit_page_markdown: nil)
       expect(not_exit_page_condition.exit_page?).to be false
     end
   end

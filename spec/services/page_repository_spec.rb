@@ -3,13 +3,13 @@ require "rails_helper"
 describe PageRepository do
   let(:form_id) { form.id }
   let(:form) do
-    form = build(:form)
+    form = build(:form_resource)
     form.id = Form.create!(form.database_attributes).id
     form
   end
 
   describe "#find" do
-    let(:page) { build(:page, id: 2, form_id:) }
+    let(:page) { build(:page_resource, id: 2, form_id:) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -38,7 +38,7 @@ describe PageRepository do
 
       context "when the form does not exist in the database" do
         let(:form_id) { 1 }
-        let(:form) { build(:form, id: form_id) }
+        let(:form) { build(:form_resource, id: form_id) }
 
         it "gets the form from the api and saves it to the database" do
           ActiveResource::HttpMock.respond_to(false) do |mock|
@@ -54,12 +54,12 @@ describe PageRepository do
       context "when the page has routing conditions" do
         let(:routing_conditions) do
           [
-            build(:condition, id: 1, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Red"),
-            build(:condition, id: 2, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Green"),
+            build(:condition_resource, id: 1, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Red"),
+            build(:condition_resource, id: 2, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Green"),
           ]
         end
 
-        let(:page) { build(:page, id: 2, form_id:, routing_conditions:) }
+        let(:page) { build(:page_resource, id: 2, form_id:, routing_conditions:) }
 
         it "saves the conditions to the database" do
           expect {
@@ -102,7 +102,7 @@ describe PageRepository do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.post "/api/v1/forms/#{form_id}/pages", post_headers, build(:page, page_params.merge(id: 1)).to_json, 200
+        mock.post "/api/v1/forms/#{form_id}/pages", post_headers, build(:page_resource, page_params.merge(id: 1)).to_json, 200
       end
     end
 
@@ -148,7 +148,7 @@ describe PageRepository do
   end
 
   describe "#save!" do
-    let(:page) { build(:page, id: 2, form_id:, is_optional: false) }
+    let(:page) { build(:page_resource, id: 2, form_id:, is_optional: false) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -183,7 +183,7 @@ describe PageRepository do
   end
 
   describe "#destroy" do
-    let(:page) { build(:page, id: 2, form_id:) }
+    let(:page) { build(:page_resource, id: 2, form_id:) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -227,12 +227,12 @@ describe PageRepository do
       context "when the page has routing conditions" do
         let(:routing_conditions) do
           [
-            build(:condition, id: 1, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Red"),
-            build(:condition, id: 2, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Green"),
+            build(:condition_resource, id: 1, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Red"),
+            build(:condition_resource, id: 2, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Green"),
           ]
         end
 
-        let(:page) { build(:page, id: 2, form_id:, routing_conditions:) }
+        let(:page) { build(:page_resource, id: 2, form_id:, routing_conditions:) }
 
         it "deletes the conditions" do
           page = described_class.find(page_id: 2, form_id:)
@@ -273,8 +273,8 @@ describe PageRepository do
   end
 
   describe "#move_page" do
-    let(:page) { build(:page, id: 2, form_id:, position: 2) }
-    let(:moved_page) { build(:page, id: 2, form_id:, position: 1) }
+    let(:page) { build(:page_resource, id: 2, form_id:, position: 2) }
+    let(:moved_page) { build(:page_resource, id: 2, form_id:, position: 1) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -304,13 +304,13 @@ describe PageRepository do
       context "when the page has routing conditions" do
         let(:routing_conditions) do
           [
-            build(:condition, id: 1, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Red"),
-            build(:condition, id: 2, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Green"),
+            build(:condition_resource, id: 1, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Red"),
+            build(:condition_resource, id: 2, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Green"),
           ]
         end
 
-        let(:page) { build(:page, id: 2, form_id:, position: 2, routing_conditions:) }
-        let(:moved_page) { build(:page, id: 2, form_id:, position: 1, routing_conditions:) }
+        let(:page) { build(:page_resource, id: 2, form_id:, position: 2, routing_conditions:) }
+        let(:moved_page) { build(:page_resource, id: 2, form_id:, position: 1, routing_conditions:) }
 
         it "does not raise an error" do
           page = described_class.find(page_id: 2, form_id:)

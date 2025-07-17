@@ -2,12 +2,12 @@ require "rails_helper"
 
 describe Api::V1::PageResource, type: :model do
   describe "validations" do
-    let(:page) { build :page, question_text: }
+    let(:page) { build :page_resource, question_text: }
     let(:question_text) { "What is your address?" }
 
     describe "associations" do
       describe "#routing_conditions" do
-        let(:page) { build :page, id: 10, routing_conditions: build_list(:condition, 3, routing_page_id: 10) }
+        let(:page) { build :page_resource, id: 10, routing_conditions: build_list(:condition_resource, 3, routing_page_id: 10) }
 
         it "has many routing conditions" do
           expect(page.routing_conditions.length).to eq 3
@@ -70,7 +70,7 @@ describe Api::V1::PageResource, type: :model do
     end
 
     describe "#hint_text" do
-      let(:page) { build :page, hint_text: }
+      let(:page) { build :page_resource, hint_text: }
       let(:hint_text) { "Enter your full name as it appears in your passport" }
 
       it "is valid if hint text is empty" do
@@ -189,9 +189,9 @@ describe Api::V1::PageResource, type: :model do
 
   describe "#move_page" do
     before do
-      page = build :page, id: 1, form_id: 1, position: 2
-      moved_up = build :page, id: 1, form_id: 1, position: 1
-      moved_down = build :page, id: 1, form_id: 1, position: 3
+      page = build :page_resource, id: 1, form_id: 1, position: 2
+      moved_up = build :page_resource, id: 1, form_id: 1, position: 1
+      moved_down = build :page_resource, id: 1, form_id: 1, position: 3
 
       ActiveResource::HttpMock.respond_to do |mock|
         mock.get "/api/v1/forms/1/pages/1", headers, page.to_json, 200

@@ -47,7 +47,7 @@ describe Api::V1::FormResource, type: :model do
 
   describe "#ready_for_live?" do
     context "when a form is complete and ready to be made live" do
-      let(:completed_form) { build :form, :live }
+      let(:completed_form) { build :form_resource, :live }
 
       it "returns true" do
         expect(completed_form.ready_for_live?).to be true
@@ -55,7 +55,7 @@ describe Api::V1::FormResource, type: :model do
     end
 
     context "when a form is incomplete and should still be in draft state" do
-      let(:new_form) { build :form, :new_form }
+      let(:new_form) { build :form_resource, :new_form }
 
       it "returns false" do
         new_form.pages = []
@@ -66,7 +66,7 @@ describe Api::V1::FormResource, type: :model do
 
   describe "#all_incomplete_tasks" do
     context "when a form is complete and ready to be made live" do
-      let(:completed_form) { build :form, :live }
+      let(:completed_form) { build :form_resource, :live }
 
       it "returns no missing sections" do
         expect(completed_form.all_incomplete_tasks).to be_empty
@@ -74,7 +74,7 @@ describe Api::V1::FormResource, type: :model do
     end
 
     context "when a form is incomplete and should still be in draft state" do
-      let(:new_form) { build :form, :new_form }
+      let(:new_form) { build :form_resource, :new_form }
 
       it "returns a set of keys related to missing fields" do
         expect(new_form.all_incomplete_tasks).to match_array(%i[missing_pages missing_submission_email missing_privacy_policy_url missing_contact_details missing_what_happens_next share_preview_not_completed])
@@ -83,7 +83,7 @@ describe Api::V1::FormResource, type: :model do
   end
 
   describe "#all_task_statuses" do
-    let(:completed_form) { build :form, :live }
+    let(:completed_form) { build :form_resource, :live }
 
     it "returns a hash with each of the task statuses" do
       expected_hash = {
@@ -129,7 +129,7 @@ describe Api::V1::FormResource, type: :model do
   end
 
   describe "#page_number" do
-    let(:completed_form) { build :form, :live }
+    let(:completed_form) { build :form_resource, :live }
 
     context "with an existing page" do
       let(:page) { completed_form.pages.first }
@@ -140,7 +140,7 @@ describe Api::V1::FormResource, type: :model do
     end
 
     context "with an new page" do
-      let(:page) { build :page }
+      let(:page) { build :page_resource }
 
       it "returns the position for a new page" do
         expect(completed_form.page_number(page)).to eq(completed_form.pages.count + 1)
@@ -157,35 +157,35 @@ describe Api::V1::FormResource, type: :model do
   describe "#qualifying_route_pages" do
     let(:non_select_from_list_pages) do
       (1..3).map do |index|
-        build :page, id: index, position: index
+        build :page_resource, id: index, position: index
       end
     end
 
     let(:selection_pages_with_routes) do
       (4..5).map do |index|
-        build :page, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, routing_page_id: index, check_page_id: index, goto_page_id: index + 2)]
+        build :page_resource, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition_resource, id: index, routing_page_id: index, check_page_id: index, goto_page_id: index + 2)]
       end
     end
 
     let(:selection_pages_without_routes) do
       (6..9).map do |index|
-        build :page, :with_selection_settings, id: index, position: index, routing_conditions: []
+        build :page_resource, :with_selection_settings, id: index, position: index, routing_conditions: []
       end
     end
 
     let(:selection_pages_with_secondary_skips) do
       (10..12).map do |index|
-        build :page, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, routing_page_id: index, check_page_id: index, goto_page_id: index + 2)]
+        build :page_resource, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition_resource, id: index, routing_page_id: index, check_page_id: index, goto_page_id: index + 2)]
       end
     end
 
     let!(:secondary_skip_pages) do
       (13..16).map do |index|
-        build :page, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, routing_page_id: index, check_page_id: index - 3, goto_page_id: index + 2)]
+        build :page_resource, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition_resource, id: index, routing_page_id: index, check_page_id: index - 3, goto_page_id: index + 2)]
       end
     end
 
-    let(:form) { build :form, name: "Form 1", submission_email: "", pages: non_select_from_list_pages + selection_pages_with_routes + selection_pages_without_routes + selection_pages_with_secondary_skips + secondary_skip_pages }
+    let(:form) { build :form_resource, name: "Form 1", submission_email: "", pages: non_select_from_list_pages + selection_pages_with_routes + selection_pages_without_routes + selection_pages_with_secondary_skips + secondary_skip_pages }
 
     before do
       allow(form).to receive(:group).and_return(build(:group))
@@ -201,21 +201,21 @@ describe Api::V1::FormResource, type: :model do
   describe "#has_no_remaining_routes_available?" do
     let(:selection_pages_with_routes) do
       (1..3).map do |index|
-        build :page, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition, id: index, check_page_id: index, goto_page_id: index + 2)]
+        build :page_resource, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition_resource, id: index, check_page_id: index, goto_page_id: index + 2)]
       end
     end
     let(:secondary_skip_pages) do
       (4..6).map do |index|
-        build :page, :with_simple_answer_type, id: index, position: index, routing_conditions: [(build :condition, id: index, routing_page_id: index, check_page_id: index - 3, goto_page_id: index + 2)]
+        build :page_resource, :with_simple_answer_type, id: index, position: index, routing_conditions: [(build :condition_resource, id: index, routing_page_id: index, check_page_id: index - 3, goto_page_id: index + 2)]
       end
     end
     let(:selection_pages_without_routes) do
       (7..8).map do |index|
-        build :page, :with_selection_settings, id: index, position: index, routing_conditions: []
+        build :page_resource, :with_selection_settings, id: index, position: index, routing_conditions: []
       end
     end
 
-    let(:form) { build :form, pages: selection_pages_with_routes + secondary_skip_pages }
+    let(:form) { build :form_resource, pages: selection_pages_with_routes + secondary_skip_pages }
 
     before do
       allow(form).to receive(:group).and_return(build(:group))
@@ -226,7 +226,7 @@ describe Api::V1::FormResource, type: :model do
     end
 
     context "when there is at least one selection page with no route" do
-      let(:form) { build :form, pages: selection_pages_with_routes + selection_pages_without_routes }
+      let(:form) { build :form_resource, pages: selection_pages_with_routes + selection_pages_without_routes }
 
       before do
         allow(form).to receive(:group).and_return(build(:group))
@@ -395,13 +395,13 @@ describe Api::V1::FormResource, type: :model do
 
   describe "#file_upload_question_count" do
     let(:pages) do
-      pages = build_list :page, 3, answer_type: :file
+      pages = build_list :page_resource, 3, answer_type: :file
       Page::ANSWER_TYPES.each do |answer_type|
-        pages.push(build(:page, answer_type:))
+        pages.push(build(:page_resource, answer_type:))
       end
       pages
     end
-    let(:form) { build :form, pages: }
+    let(:form) { build :form_resource, pages: }
 
     it "returns the number of file upload questions" do
       expect(form.file_upload_question_count).to eq(4)

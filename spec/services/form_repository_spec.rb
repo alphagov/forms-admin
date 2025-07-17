@@ -6,7 +6,7 @@ describe FormRepository do
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.post "/api/v1/forms", post_headers, build(:form, form_params.merge(id: 1)).to_json, 200
+        mock.post "/api/v1/forms", post_headers, build(:form_resource, form_params.merge(id: 1)).to_json, 200
       end
     end
 
@@ -45,7 +45,7 @@ describe FormRepository do
   end
 
   describe "#find" do
-    let(:form) { build(:form, id: 2) }
+    let(:form) { build(:form_resource, id: 2) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -81,7 +81,7 @@ describe FormRepository do
   end
 
   describe "#find_live" do
-    let(:form) { build(:form, id: 2) }
+    let(:form) { build(:form_resource, id: 2) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -107,7 +107,7 @@ describe FormRepository do
   end
 
   describe "#find_archived" do
-    let(:form) { build(:form, id: 2) }
+    let(:form) { build(:form_resource, id: 2) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -133,7 +133,7 @@ describe FormRepository do
   end
 
   describe "#where" do
-    let(:form) { build(:form, id: 2, creator_id: 3) }
+    let(:form) { build(:form_resource, id: 2, creator_id: 3) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -159,7 +159,7 @@ describe FormRepository do
   end
 
   describe "#save!" do
-    let(:form) { build(:form, id: 2, name: "original name") }
+    let(:form) { build(:form_resource, id: 2, name: "original name") }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -194,7 +194,7 @@ describe FormRepository do
   end
 
   describe "#make_live!" do
-    let(:form) { build(:form, id: 2) }
+    let(:form) { build(:form_resource, id: 2) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -222,7 +222,7 @@ describe FormRepository do
   end
 
   describe "#archive!" do
-    let(:form) { build(:form, id: 2) }
+    let(:form) { build(:form_resource, id: 2) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -250,7 +250,7 @@ describe FormRepository do
   end
 
   describe "#destroy" do
-    let(:form) { build(:form, id: 2) }
+    let(:form) { build(:form_resource, :live, id: 2) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -319,11 +319,11 @@ describe FormRepository do
 
   describe "#pages" do
     let(:form) do
-      form = build(:form, id: 2)
+      form = build(:form_resource, id: 2)
       Form.upsert(form.database_attributes)
       form
     end
-    let(:pages) { build_list(:page, 5) }
+    let(:pages) { build_list(:page_resource, 5) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -363,16 +363,16 @@ describe FormRepository do
         context "and page had routing_conditions" do
           let(:pages) do
             [
-              build(:page, id: 1),
-              build(:page, id: 2, routing_conditions:),
-              *build_list(:page, 5),
+              build(:page_resource, id: 1),
+              build(:page_resource, id: 2, routing_conditions:),
+              *build_list(:page_resource, 5),
             ]
           end
 
           let(:routing_conditions) do
             [
-              build(:condition, id: 1, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Red"),
-              build(:condition, id: 2, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Green"),
+              build(:condition_resource, id: 1, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Red"),
+              build(:condition_resource, id: 2, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Green"),
             ]
           end
 
@@ -395,16 +395,16 @@ describe FormRepository do
       context "when the pages have routing conditions" do
         let(:pages) do
           [
-            build(:page, id: 1),
-            build(:page, id: 2, routing_conditions:),
-            *build_list(:page, 5),
+            build(:page_resource, id: 1),
+            build(:page_resource, id: 2, routing_conditions:),
+            *build_list(:page_resource, 5),
           ]
         end
 
         let(:routing_conditions) do
           [
-            build(:condition, id: 1, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Red"),
-            build(:condition, id: 2, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Green"),
+            build(:condition_resource, id: 1, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Red"),
+            build(:condition_resource, id: 2, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Green"),
           ]
         end
 
