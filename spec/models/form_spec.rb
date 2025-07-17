@@ -8,6 +8,73 @@ RSpec.describe Form, type: :model do
     expect(form).to be_valid
   end
 
+  describe "validations" do
+    it "validates" do
+      form.name = "test"
+      expect(form).to be_valid
+    end
+
+    it "requires name" do
+      expect(form).to be_invalid
+      expect(form.errors[:name]).to include("can't be blank")
+    end
+
+    context "when the form has validation errors" do
+      let(:form) { create :form_record, pages: [routing_page, goto_page] }
+      let(:routing_page) do
+        new_routing_page = create :page_record
+        new_routing_page.routing_conditions = [(create :condition_record, routing_page_id: new_routing_page.id, goto_page_id: nil)]
+        new_routing_page
+      end
+      let(:goto_page) { create :page_record }
+      let(:goto_page_id) { goto_page.id }
+
+      context "when the form is marked complete" do
+        it "returns invalid" do
+          form.question_section_completed = true
+
+          expect(form).to be_invalid
+          expect(form.errors[:base]).to include("Form has routing validation errors")
+        end
+      end
+
+      context "when the form is not marked complete" do
+        it "returns valid" do
+          form.question_section_completed = false
+          expect(form).to be_valid
+        end
+      end
+
+      context "when the payment url is not a url" do
+        it "returns invalid" do
+          form.payment_url = "not a url"
+          expect(form).to be_invalid
+        end
+      end
+
+      context "when the payment url is a url" do
+        it "returns valid" do
+          form.payment_url = "https://example.com/"
+          expect(form).to be_valid
+        end
+      end
+
+      context "when there is no payment url" do
+        it "returns valid" do
+          form.payment_url = nil
+          expect(form).to be_valid
+        end
+      end
+
+      context "when there is no submission type" do
+        it "returns invalid" do
+          form.submission_type = nil
+          expect(form).to be_invalid
+        end
+      end
+    end
+  end
+
   describe "external_id" do
     it "intialises a new form with an external id matching its id" do
       form = create :form_record
