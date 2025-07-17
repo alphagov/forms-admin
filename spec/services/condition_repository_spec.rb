@@ -47,7 +47,7 @@ describe ConditionRepository do
   end
 
   describe "#find" do
-    let(:condition) { build(:condition, id: 4, form_id: 1, page_id: 2, routing_page_id: 2, check_page_id: 2, goto_page_id: 3) }
+    let(:condition) { build(:condition_resource, id: 4, form_id: 1, page_id: 2, routing_page_id: 2, check_page_id: 2, goto_page_id: 3) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -77,7 +77,7 @@ describe ConditionRepository do
   end
 
   describe "#save!" do
-    let(:condition) { build(:condition, id: 4, skip_to_end: false, form_id: 1, page_id: 2) }
+    let(:condition) { build(:condition_resource, id: 4, skip_to_end: false, form_id: 1, page_id: 2) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -112,7 +112,7 @@ describe ConditionRepository do
   end
 
   describe "#destroy" do
-    let(:condition) { build(:condition, id: 4, form_id: 1, page_id: 2) }
+    let(:condition) { build(:condition_resource, id: 4, form_id: 1, page_id: 2) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
