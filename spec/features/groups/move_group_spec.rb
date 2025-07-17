@@ -1,22 +1,35 @@
 require "rails_helper"
 
 feature "Move a group", type: :feature do
-  before do
-    login_as_super_admin_user
-  end
-
   describe "changing the name of an existing group" do
     let(:group) { create(:group, organisation: super_admin_user.organisation, creator: super_admin_user) }
+    let!(:other_org) { create :organisation, slug: "other-org" }
 
     before do
       create(:membership, user: super_admin_user, group:, role: :group_admin)
     end
 
     scenario "group admin can change the name of a group" do
+      given_i_am_logged_in_as_a_super_admin
+      and_i_am_on_the_groups_page
+      then_i_see_the_group_in_my_organisation
       when_i_visit_the_group_page
       and_i_click_move_group
       then_i_see_the_move_group_page
+      when_i_change_the_organisation
     end
+  end
+
+  def given_i_am_logged_in_as_a_super_admin
+    login_as_super_admin_user
+  end
+
+  def and_i_am_on_the_groups_page
+    visit groups_path
+  end
+
+  def then_i_see_the_group_in_my_organisation
+    expect(page).to have_content(group.name)
   end
 
   def when_i_visit_the_group_page
@@ -28,6 +41,12 @@ feature "Move a group", type: :feature do
   end
 
   def then_i_see_the_move_group_page
-    expect(page.find("h1")).to have_text("Move this group to another organisation")
+    expect(page.find("h1")).to have_text("Move \"#{group.name}\" to another organisation")
+  end
+
+  def when_i_change_the_organisation
+    fill_in "group-organisation-id-field", with: other_org.name.to_s
+    page.send_keys :enter
+    click_button "Change"
   end
 end
