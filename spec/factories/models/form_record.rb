@@ -29,7 +29,7 @@ FactoryBot.define do
       end
 
       pages do
-        Array.new(pages_count) { association(:page, factory: :page_record) }
+        Array.new(pages_count) { association(:page_record) }
       end
 
       question_section_completed { true }
@@ -37,7 +37,7 @@ FactoryBot.define do
 
     trait :with_text_page do
       pages do
-        Array.new(1) { association(:page, factory: :page_record, answer_type: "text", answer_settings: { input_type: %w[single_line long_text].sample }) }
+        Array.new(1) { association(:page_record, answer_type: "text", answer_settings: { input_type: %w[single_line long_text].sample }) }
       end
 
       question_section_completed { true }
