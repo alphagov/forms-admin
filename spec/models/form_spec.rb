@@ -26,6 +26,24 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "FormStateMachine" do
+    describe "#create_draft_from_live_form!" do
+      let(:form) { create :form_record, :live }
+
+      it "sets share_preview_completed to false" do
+        expect { form.create_draft_from_live_form! }.to change(form, :share_preview_completed).to(false)
+      end
+    end
+
+    describe "#create_draft_from_archived_form!" do
+      let(:form) { create :form_record, :archived }
+
+      it "sets share_preview_completed to false" do
+        expect { form.create_draft_from_archived_form! }.to change(form, :share_preview_completed).to(false)
+      end
+    end
+  end
+
   describe "#has_draft_version" do
     let(:live_form) { create(:form_record, :live) }
     let(:new_form) { create(:form_record) }
@@ -89,6 +107,44 @@ RSpec.describe Form, type: :model do
 
     it "returns true if form has been archived with draft" do
       expect(archived_with_draft_form.has_been_archived).to be(true)
+    end
+  end
+
+  describe "#ready_for_live" do
+    context "when a form is complete and ready to be made live" do
+      let(:completed_form) { create(:form_record, :live) }
+
+      it "returns true" do
+        expect(completed_form.ready_for_live).to be true
+      end
+    end
+
+    context "when a form is incomplete and should still be in draft state" do
+      let(:new_form) { build :form_record, :new_form }
+
+      [
+        {
+          attribute: :pages,
+          attribute_value: [],
+        },
+        {
+          attribute: :what_happens_next_markdown,
+          attribute_value: nil,
+        },
+        {
+          attribute: :privacy_policy_url,
+          attribute_value: nil,
+        },
+        {
+          attribute: :support_email,
+          attribute_value: nil,
+        },
+      ].each do |scenario|
+        it "returns false if #{scenario[:attribute]} is missing" do
+          new_form.send("#{scenario[:attribute]}=", scenario[:attribute_value])
+          expect(new_form.ready_for_live).to be false
+        end
+      end
     end
   end
 
