@@ -26,6 +26,72 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "#has_draft_version" do
+    let(:live_form) { create(:form_record, :live) }
+    let(:new_form) { create(:form_record) }
+
+    it "returns true if form is draft" do
+      new_form.state = :draft
+      expect(new_form.has_draft_version).to be(true)
+    end
+
+    it "returns false if form is live and no edits" do
+      live_form.state = :live
+      expect(live_form.has_draft_version).to be(false)
+    end
+
+    it "returns true if form is live with a draft" do
+      live_form.state = :live_with_draft
+      live_form.update!(name: "Form (edited)")
+
+      expect(live_form.has_draft_version).to be(true)
+    end
+
+    it "returns true if form has been made live and one of its pages has been edited" do
+      live_form.pages[0].question_text = "Edited question"
+      live_form.pages[0].save_and_update_form
+
+      expect(live_form.has_draft_version).to be(true)
+    end
+
+    it "returns true if form is archived with a draft" do
+      live_form.state = :archived_with_draft
+
+      expect(live_form.has_draft_version).to be(true)
+    end
+  end
+
+  describe "#has_live_version" do
+    let(:live_form) { create(:form_record, :live) }
+    let(:new_form) { create(:form_record) }
+
+    it "returns false if form has not been made live before" do
+      expect(new_form.has_live_version).to be(false)
+    end
+
+    it "returns true if form has been made live" do
+      expect(live_form.has_live_version).to be(true)
+    end
+  end
+
+  describe "#has_been_archived" do
+    let(:live_form) { create(:form_record, :live) }
+    let(:archived_form) { create(:form_record, state: :archived) }
+    let(:archived_with_draft_form) { create(:form_record, state: :archived_with_draft) }
+
+    it "returns false if form is live" do
+      expect(live_form.has_been_archived).to be(false)
+    end
+
+    it "returns true if form has been archived" do
+      expect(archived_form.has_been_archived).to be(true)
+    end
+
+    it "returns true if form has been archived with draft" do
+      expect(archived_with_draft_form.has_been_archived).to be(true)
+    end
+  end
+
   describe "submission type" do
     describe "enum" do
       it "returns a list of submission types" do

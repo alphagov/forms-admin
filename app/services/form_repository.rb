@@ -28,16 +28,19 @@ class FormRepository
       form = Api::V1::FormResource.new(record.attributes, true)
       form.save!
       save_to_database!(form)
+      db_form = Form.find(record.id)
+      db_form.create_draft_from_live_form! if db_form.live?
+      db_form.create_draft_from_archived_form! if db_form.archived?
       form
     end
 
     def make_live!(record)
       form = Api::V1::FormResource.new(record.attributes, true)
-
+      save_to_database!(form)
+      save_pages_to_database!(form, form.pages) if Form.find(record.id).pages.empty?
       response = form.make_live!
       form.from_json(response.body)
-
-      save_to_database!(form)
+      Form.find(record.id).make_live!
 
       form
     end
@@ -45,10 +48,11 @@ class FormRepository
     def archive!(record)
       form = Api::V1::FormResource.new(record.attributes, true)
 
+      save_to_database!(form)
       response = form.archive!
       form.from_json(response.body)
+      Form.find(record.id).archive_live_form!
 
-      save_to_database!(form)
       form
     end
 

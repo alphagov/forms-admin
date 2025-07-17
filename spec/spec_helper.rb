@@ -1,4 +1,5 @@
 require "simplecov"
+require "aasm/rspec"
 
 SimpleCov.coverage_dir("coverage/backend")
 SimpleCov.minimum_coverage(83)

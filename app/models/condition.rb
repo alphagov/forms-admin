@@ -7,6 +7,18 @@ class Condition < ApplicationRecord
 
   before_destroy :destroy_postconditions
 
+  def save_and_update_form
+    save!
+    # TODO: https://trello.com/c/dg9CFPgp/1503-user-triggers-state-change-from-live-to-livewithdraft
+    # Will not be needed when users can trigger this event themselves through the UI
+    form.create_draft_from_live_form if form.live?
+    form.update!(question_section_completed: false)
+  end
+
+  def destroy_and_update_form!
+    destroy! && form.update!(question_section_completed: false)
+  end
+
 private
 
   def destroy_postconditions

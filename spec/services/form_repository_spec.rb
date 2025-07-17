@@ -190,11 +190,35 @@ describe FormRepository do
           described_class.save!(form)
         }.to change { Form.find(2).name }.to("new name")
       end
+
+      context "when the form is live" do
+        let(:form) { build(:form, :live, id: 2) }
+
+        it "changes the form's state to live_with_draft" do
+          form = described_class.find(form_id: 2)
+
+          expect {
+            described_class.save!(form)
+          }.to change { Form.find(2).state }.to("live_with_draft")
+        end
+      end
+
+      context "when the form is archived" do
+        let(:form) { build(:form, :archived, id: 2) }
+
+        it "changes the form's state to archived_with_draft" do
+          form = described_class.find(form_id: 2)
+
+          expect {
+            described_class.save!(form)
+          }.to change { Form.find(2).state }.to("archived_with_draft")
+        end
+      end
     end
   end
 
   describe "#make_live!" do
-    let(:form) { build(:form_resource, id: 2) }
+    let(:form) { build(:form_resource, :live_with_draft, id: 2) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
@@ -218,11 +242,23 @@ describe FormRepository do
           described_class.make_live!(form)
         }.to change { Form.find(2).state }.to("live")
       end
+
+      context "when the form has a draft" do
+        let(:form) { build(:form, :live_with_draft, id: 2) }
+
+        it "touches the form" do
+          form = described_class.find(form_id: 2)
+
+          expect {
+            described_class.make_live!(form)
+          }.to(change { Form.find(2).updated_at })
+        end
+      end
     end
   end
 
   describe "#archive!" do
-    let(:form) { build(:form_resource, id: 2) }
+    let(:form) { build(:form_resource, :live, id: 2) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|

@@ -84,6 +84,11 @@ gem "csv"
 # Used for sorting/ordering of pages object
 gem "acts_as_list"
 
+# Add state machine for forms
+gem "aasm", "~> 5.5"
+# Used by AASM to autocommit state changes when even method is used with bang eg. make_live!
+gem "after_commit_everywhere", "~> 1.6"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri mingw x64_mingw]

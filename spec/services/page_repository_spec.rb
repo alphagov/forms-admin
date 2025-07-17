@@ -2,8 +2,9 @@ require "rails_helper"
 
 describe PageRepository do
   let(:form_id) { form.id }
+  let(:form_attributes) { attributes_for(:form) }
   let(:form) do
-    form = build(:form_resource)
+    form = build(:form_resource, **form_attributes)
     form.id = Form.create!(form.database_attributes).id
     form
   end
@@ -125,6 +126,16 @@ describe PageRepository do
         expect(Page.last).to have_attributes(form_id:)
       end
 
+      context "when the form question section is complete" do
+        let(:form_attributes) { attributes_for(:form, question_section_completed: true) }
+
+        it "updates the form to mark the question section as incomplete" do
+          expect {
+            described_class.create!(**page_params)
+          }.to change { Form.find(form_id).question_section_completed }.to(false)
+        end
+      end
+
       context "when the page has answer settings" do
         let(:answer_type) { "selection" }
         let(:answer_settings) { { only_one_option: "true", selection_options: [] } }
@@ -179,6 +190,43 @@ describe PageRepository do
           described_class.save!(page)
         }.to change { Page.find(2).is_optional }.to(true)
       end
+
+      context "when there are no changes to save" do
+        let(:form_attributes) { attributes_for(:form, question_section_completed: true) }
+
+        it "does not update the form" do
+          page = described_class.find(page_id: 2, form_id:)
+
+          ActiveResource::HttpMock.respond_to do |mock|
+            mock.put "/api/v1/forms/#{form_id}/pages/2", put_headers, page.to_json
+          end
+
+          expect {
+            described_class.save!(page)
+          }.not_to(change { Form.find(form_id).question_section_completed })
+        end
+      end
+
+      context "when there are changes to save" do
+        let(:form) do
+          form = build(:form, question_section_completed: true)
+          form.id = Form.create!(form.database_attributes).id
+          form
+        end
+
+        it "does not update the form" do
+          page = described_class.find(page_id: 2, form_id:)
+          page.is_optional = true
+
+          ActiveResource::HttpMock.respond_to do |mock|
+            mock.put "/api/v1/forms/#{form_id}/pages/2", put_headers, page.to_json
+          end
+
+          expect {
+            described_class.save!(page)
+          }.to change { Form.find(form_id).question_section_completed }.to(false)
+        end
+      end
     end
   end
 
@@ -222,6 +270,18 @@ describe PageRepository do
         expect {
           described_class.destroy(page)
         }.to change(Page, :count).by(-1)
+      end
+
+      context "when the form question section is complete" do
+        let(:form_attributes) { attributes_for(:form, question_section_completed: true) }
+
+        it "updates the form to mark the question section as incomplete" do
+          page = described_class.find(page_id: 2, form_id:)
+
+          expect {
+            described_class.destroy(page)
+          }.to change { Form.find(form_id).question_section_completed }.to(false)
+        end
       end
 
       context "when the page has routing conditions" do
@@ -299,6 +359,18 @@ describe PageRepository do
         expect {
           described_class.move_page(page, :up)
         }.to change { Page.find(2).position }.from(2).to(1)
+      end
+
+      context "when the form question section is complete" do
+        let(:form_attributes) { attributes_for(:form, question_section_completed: true) }
+
+        it "updates the form to mark the question section as incomplete" do
+          page = described_class.find(page_id: 2, form_id:)
+
+          expect {
+            described_class.move_page(page, :up)
+          }.to change { Form.find(form_id).question_section_completed }.to(false)
+        end
       end
 
       context "when the page has routing conditions" do
