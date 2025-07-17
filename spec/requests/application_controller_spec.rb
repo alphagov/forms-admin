@@ -232,13 +232,22 @@ RSpec.describe ApplicationController, type: :request do
   end
 
   describe "footer" do
-    it "contains links related to the service" do
+    before do
       get root_path
+    end
 
+    it "contains links related to the service" do
       expect(response.body).to include('<a class="govuk-footer__link" href="https://www.forms.service.gov.uk/accessibility">Accessibility statement</a>')
       expect(response.body).to include('<a class="govuk-footer__link" href="https://www.forms.service.gov.uk/cookies">Cookies</a>')
       expect(response.body).to include('<a class="govuk-footer__link" href="https://www.forms.service.gov.uk/privacy">Privacy</a>')
       expect(response.body).to include('<a class="govuk-footer__link" href="https://www.forms.service.gov.uk/terms-of-use">Terms of use</a>')
+    end
+
+    it "contains the 'built by' statement" do
+      page = Capybara::Node::Simple.new(response.body)
+
+      expect(page).to have_text("Built by the")
+      expect(page).to have_link("Government Digital Service", href: "https://www.gov.uk/government/organisations/government-digital-service")
     end
   end
 end
