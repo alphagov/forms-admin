@@ -23,6 +23,10 @@ class Form < ApplicationRecord
     archived? || archived_with_draft?
   end
 
+  def has_routing_errors
+    pages.filter(&:has_routing_errors).any?
+  end
+
   def ready_for_live
     task_status_service.mandatory_tasks_completed?
   end

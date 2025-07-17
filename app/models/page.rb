@@ -45,6 +45,10 @@ class Page < ApplicationRecord
     from_only_one_option && to_multiple_options
   end
 
+  def has_routing_errors
+    routing_conditions.filter(&:has_routing_errors).any?
+  end
+
 private
 
   def destroy_secondary_skip_conditions

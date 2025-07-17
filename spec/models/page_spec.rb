@@ -226,4 +226,29 @@ RSpec.describe Page, type: :model do
       end
     end
   end
+
+  describe "#has_routing_errors" do
+    subject(:page) { build :page_record, :with_selections_settings, routing_conditions: [condition] }
+
+    let(:condition) { build :condition_record }
+    let(:has_routing_errors) { false }
+
+    before do
+      allow(condition).to receive(:has_routing_errors).and_return(has_routing_errors)
+    end
+
+    context "when there are no validation errors" do
+      it "returns false" do
+        expect(page.has_routing_errors).to be false
+      end
+    end
+
+    context "when there are validation errors" do
+      let(:has_routing_errors) { true }
+
+      it "returns true" do
+        expect(page.has_routing_errors).to be true
+      end
+    end
+  end
 end

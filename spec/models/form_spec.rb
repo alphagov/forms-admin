@@ -110,6 +110,31 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "#has_routing_errors" do
+    let(:form) { create :form_record, pages: [routing_page, goto_page] }
+    let(:routing_page) do
+      new_routing_page = create :page_record
+      new_routing_page.routing_conditions = [(create :condition_record, routing_page_id: new_routing_page.id, goto_page_id:)]
+      new_routing_page
+    end
+    let(:goto_page) { create :page_record }
+    let(:goto_page_id) { goto_page.id }
+
+    context "when there are no validation errors" do
+      it "returns false" do
+        expect(form.has_routing_errors).to be false
+      end
+    end
+
+    context "when there are validation errors" do
+      let(:goto_page_id) { nil }
+
+      it "returns true" do
+        expect(form.has_routing_errors).to be true
+      end
+    end
+  end
+
   describe "#ready_for_live" do
     context "when a form is complete and ready to be made live" do
       let(:completed_form) { create(:form_record, :live) }
