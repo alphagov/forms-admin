@@ -35,6 +35,10 @@ describe ConditionRepository do
       end
     end
 
+    it "returns a condition record" do
+      expect(described_class.create!(**condition_params)).to be_a(Condition)
+    end
+
     describe "api" do
       it "creates a condition through ActiveResource" do
         described_class.create!(**condition_params)

@@ -37,7 +37,7 @@ FactoryBot.define do
 
     trait :with_text_page do
       pages do
-        Array.new(1) { association(:page_record, answer_type: "text", answer_settings: { input_type: %w[single_line long_text].sample }) }
+      Array.new(1) { association(:page_record, answer_type: "text", answer_settings: { input_type: %w[single_line long_text].sample }) }
       end
 
       question_section_completed { true }
@@ -67,6 +67,24 @@ FactoryBot.define do
       support_phone { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
       support_url { Faker::Internet.url(host: "gov.uk") }
       support_url_text { Faker::Lorem.sentence(word_count: 1, random_words_to_add: 4) }
+    end
+
+    trait :ready_for_routing do
+      transient do
+        pages_count { 5 }
+      end
+
+      pages do
+        Array.new(pages_count) { association(:page_record, :with_selection_settings) }
+      end
+
+      after(:build) do |form|
+        if form.pages.present?
+          form.pages.each.with_index(1) do |page, page_index|
+            page.position = page_index
+          end
+        end
+      end
     end
   end
 end

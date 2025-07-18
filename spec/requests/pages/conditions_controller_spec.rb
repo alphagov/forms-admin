@@ -133,10 +133,11 @@ RSpec.describe Pages::ConditionsController, type: :request do
     let(:params) { { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: 3, answer_value: "Wales" } } }
 
     before do
+      condition = build(:condition_record, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3)
       selected_page.id = 1
 
       allow(PageRepository).to receive(:find).and_return(selected_page)
-      allow(ConditionRepository).to receive(:create!).and_invoke(->(**attributes) { build :condition, **attributes })
+      allow(ConditionRepository).to receive(:create!).and_return(condition)
 
       post create_condition_path(form_id: form.id, page_id: selected_page.id, params:)
     end
@@ -202,7 +203,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
   end
 
   describe "#edit" do
-    let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
+    let(:condition) { create :condition, routing_page_id: selected_page.id, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
 
     # Use instance variable to allow asserting instance receives method
     let(:conditions_input) { @conditions_input } # rubocop:disable RSpec/InstanceVariable
@@ -220,7 +221,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
         allow(conditions_input).to receive(:assign_condition_values).and_call_original
         conditions_input
       end
-
+      
       get edit_condition_path(form_id: 1, page_id: selected_page.id, condition_id: condition.id)
     end
 
@@ -255,7 +256,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
   describe "#update" do
     let(:params) { { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: 3, answer_value: "Wales" } } }
-    let(:condition) { build :condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Wales", goto_page_id: pages.last.id }
+    let(:condition) { create :condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Wales", goto_page_id: pages.last.id }
 
     before do
       selected_page.routing_conditions = [condition]
@@ -396,7 +397,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
   end
 
   describe "#destroy" do
-    let(:condition) { build :condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Wales", goto_page_id: pages.last.id }
+    let(:condition) { create :condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Wales", goto_page_id: pages.last.id }
     let(:confirm) { "yes" }
     let(:destroy_bool) { true }
 

@@ -105,7 +105,7 @@ FactoryBot.define do
       end
 
       pages do
-        Array.new(pages_count) { association(:page_resource, :with_selection_settings) }
+        Array.new(pages_count) { association(:πfo, :with_selection_settings) }
       end
 
       after(:build) do |form|

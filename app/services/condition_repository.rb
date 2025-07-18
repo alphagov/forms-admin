@@ -21,13 +21,11 @@ class ConditionRepository
         exit_page_markdown:,
       )
       update_and_save_to_database!(condition)
-      condition
     end
 
     def find(condition_id:, form_id:, page_id:)
       condition = Api::V1::ConditionResource.find(condition_id, params: { form_id:, page_id: })
       save_to_database!(condition)
-      condition
     end
 
     def save!(record)
@@ -63,6 +61,7 @@ class ConditionRepository
       condition = Condition.find_or_initialize_by(id: record.id)
       condition.assign_attributes(record.database_attributes)
       condition.save_and_update_form
+      condition
     end
   end
 end
