@@ -13,18 +13,14 @@
 
 .govuk-header {
   &.app-header--pink {
-    border-bottom-color: govuk-colour("pink");
+    border-top: 10px solid govuk-colour("pink");
   }
 
-  &.app-header--green {
-    border-bottom-color: govuk-colour("green");
+  &.app-header--turquoise {
+    border-top: 10px solid govuk-colour("turquoise");
   }
 
   &.app-header--yellow {
-    border-bottom-color: govuk-colour("yellow");
-  }
-
-  &.app-header--blue {
-    border-bottom-color: govuk-colour("blue");
+    border-top: 10px solid govuk-colour("yellow");
   }
 }

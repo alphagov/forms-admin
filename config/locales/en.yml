@@ -319,6 +319,8 @@ en:
     no_content_added_html: "<p>No content added</p>"
   footer:
     accessibility_statement: Accessibility statement
+    built_by_link: Government Digital Service
+    built_by_statement_html: Built by the %{link}
     cookies: Cookies
     helpful_links: Helpful links
     privacy: Privacy
