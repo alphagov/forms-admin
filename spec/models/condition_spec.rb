@@ -482,4 +482,15 @@ RSpec.describe Condition, type: :model do
       end
     end
   end
+
+  describe "#errors_with_fields" do
+    let(:condition) { create(:condition_record, check_page:, answer_value: nil, goto_page_id: nil) }
+    let(:check_page) { create(:page_record, :with_selections_settings) }
+
+    context "when the error is a known error" do
+      it "returns the correct values for each error type" do
+        expect(condition.errors_with_fields).to match_array [{ field: :answer_value, name: "answer_value_doesnt_exist" }, { field: :goto_page_id, name: "goto_page_doesnt_exist" }]
+      end
+    end
+  end
 end
