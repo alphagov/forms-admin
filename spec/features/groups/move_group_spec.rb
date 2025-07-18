@@ -3,7 +3,7 @@ require "rails_helper"
 feature "Move a group", type: :feature do
   describe "changing the name of an existing group" do
     let(:group) { create(:group, organisation: super_admin_user.organisation, creator: super_admin_user) }
-    let!(:other_org) { create :organisation, slug: "other-org" }
+    let(:other_org) { create :organisation, slug: "other-org" }
 
     before do
       create(:membership, user: super_admin_user, group:, role: :group_admin)
@@ -17,6 +17,7 @@ feature "Move a group", type: :feature do
       and_i_click_move_group
       then_i_see_the_move_group_page
       when_i_change_the_organisation
+      then_i_see_my_new_org_for_this_group
     end
   end
 
@@ -48,5 +49,9 @@ feature "Move a group", type: :feature do
     fill_in "group-organisation-id-field", with: other_org.name.to_s
     page.send_keys :enter
     click_button "Change"
+  end
+
+  def then_i_see_my_new_org_for_this_group
+    expect(page).to have_content(other_org.name)
   end
 end

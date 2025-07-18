@@ -19,9 +19,11 @@
                                                   ),
             html_attributes: { 'data-show-all-values' => 'true'},
             )%>
-          <%= f.govuk_submit(t("home.change_filter"), secondary: true) %>
+          <%= f.govuk_submit(t("home.change_filter")) %>
         <% end %>
       </div>
 <% end %>
   </div>
 </div>
+
+<%= init_autocomplete_script(show_all_values: true, raw_attribute: false, source: false) %>
