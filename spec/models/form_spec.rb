@@ -8,6 +8,73 @@ RSpec.describe Form, type: :model do
     expect(form).to be_valid
   end
 
+  describe "validations" do
+    it "validates" do
+      form.name = "test"
+      expect(form).to be_valid
+    end
+
+    it "requires name" do
+      expect(form).to be_invalid
+      expect(form.errors[:name]).to include("can't be blank")
+    end
+
+    context "when the form has validation errors" do
+      let(:form) { create :form_record, pages: [routing_page, goto_page] }
+      let(:routing_page) do
+        new_routing_page = create :page_record
+        new_routing_page.routing_conditions = [(create :condition_record, routing_page_id: new_routing_page.id, goto_page_id: nil)]
+        new_routing_page
+      end
+      let(:goto_page) { create :page_record }
+      let(:goto_page_id) { goto_page.id }
+
+      context "when the form is marked complete" do
+        it "returns invalid" do
+          form.question_section_completed = true
+
+          expect(form).to be_invalid
+          expect(form.errors[:base]).to include("Form has routing validation errors")
+        end
+      end
+
+      context "when the form is not marked complete" do
+        it "returns valid" do
+          form.question_section_completed = false
+          expect(form).to be_valid
+        end
+      end
+
+      context "when the payment url is not a url" do
+        it "returns invalid" do
+          form.payment_url = "not a url"
+          expect(form).to be_invalid
+        end
+      end
+
+      context "when the payment url is a url" do
+        it "returns valid" do
+          form.payment_url = "https://example.com/"
+          expect(form).to be_valid
+        end
+      end
+
+      context "when there is no payment url" do
+        it "returns valid" do
+          form.payment_url = nil
+          expect(form).to be_valid
+        end
+      end
+
+      context "when there is no submission type" do
+        it "returns invalid" do
+          form.submission_type = nil
+          expect(form).to be_invalid
+        end
+      end
+    end
+  end
+
   describe "external_id" do
     it "intialises a new form with an external id matching its id" do
       form = create :form_record
@@ -23,6 +90,24 @@ RSpec.describe Form, type: :model do
       page_b = create :page_record, form_id: form.id, position: 1
 
       expect(form.pages).to eq([page_b, page_a])
+    end
+  end
+
+  describe "FormStateMachine" do
+    describe "#create_draft_from_live_form!" do
+      let(:form) { create :form_record, :live }
+
+      it "sets share_preview_completed to false" do
+        expect { form.create_draft_from_live_form! }.to change(form, :share_preview_completed).to(false)
+      end
+    end
+
+    describe "#create_draft_from_archived_form!" do
+      let(:form) { create :form_record, :archived }
+
+      it "sets share_preview_completed to false" do
+        expect { form.create_draft_from_archived_form! }.to change(form, :share_preview_completed).to(false)
+      end
     end
   end
 
@@ -89,6 +174,69 @@ RSpec.describe Form, type: :model do
 
     it "returns true if form has been archived with draft" do
       expect(archived_with_draft_form.has_been_archived).to be(true)
+    end
+  end
+
+  describe "#has_routing_errors" do
+    let(:form) { create :form_record, pages: [routing_page, goto_page] }
+    let(:routing_page) do
+      new_routing_page = create :page_record
+      new_routing_page.routing_conditions = [(create :condition_record, routing_page_id: new_routing_page.id, goto_page_id:)]
+      new_routing_page
+    end
+    let(:goto_page) { create :page_record }
+    let(:goto_page_id) { goto_page.id }
+
+    context "when there are no validation errors" do
+      it "returns false" do
+        expect(form.has_routing_errors).to be false
+      end
+    end
+
+    context "when there are validation errors" do
+      let(:goto_page_id) { nil }
+
+      it "returns true" do
+        expect(form.has_routing_errors).to be true
+      end
+    end
+  end
+
+  describe "#ready_for_live" do
+    context "when a form is complete and ready to be made live" do
+      let(:completed_form) { create(:form_record, :live) }
+
+      it "returns true" do
+        expect(completed_form.ready_for_live).to be true
+      end
+    end
+
+    context "when a form is incomplete and should still be in draft state" do
+      let(:new_form) { build :form_record, :new_form }
+
+      [
+        {
+          attribute: :pages,
+          attribute_value: [],
+        },
+        {
+          attribute: :what_happens_next_markdown,
+          attribute_value: nil,
+        },
+        {
+          attribute: :privacy_policy_url,
+          attribute_value: nil,
+        },
+        {
+          attribute: :support_email,
+          attribute_value: nil,
+        },
+      ].each do |scenario|
+        it "returns false if #{scenario[:attribute]} is missing" do
+          new_form.send("#{scenario[:attribute]}=", scenario[:attribute_value])
+          expect(new_form.ready_for_live).to be false
+        end
+      end
     end
   end
 

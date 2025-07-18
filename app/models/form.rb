@@ -9,6 +9,11 @@ class Form < ApplicationRecord
     s3: "s3",
   }
 
+  validates :name, presence: true
+  validates :payment_url, url: true, allow_blank: true
+  validate :marking_complete_with_errors
+  validates :submission_type, presence: true
+
   after_create :set_external_id
 
   def has_draft_version
@@ -21,6 +26,14 @@ class Form < ApplicationRecord
 
   def has_been_archived
     archived? || archived_with_draft?
+  end
+
+  def has_routing_errors
+    pages.filter(&:has_routing_errors).any?
+  end
+
+  def marking_complete_with_errors
+    errors.add(:base, :has_validation_errors, message: "Form has routing validation errors") if question_section_completed && has_routing_errors
   end
 
   def ready_for_live
