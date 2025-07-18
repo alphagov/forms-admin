@@ -73,8 +73,28 @@ class Condition < ApplicationRecord
     !exit_page_markdown.nil?
   end
 
+  alias_method :exit_page?, :is_exit_page?
+
   def has_routing_errors
     validation_errors.any?
+  end
+
+  alias_method :has_routing_errors?, :has_routing_errors
+
+  def secondary_skip?
+    answer_value.blank? && check_page_id != routing_page_id
+  end
+
+  def errors_with_fields
+    error_fields = {
+      answer_value_doesnt_exist: :answer_value,
+      goto_page_doesnt_exist: :goto_page_id,
+      cannot_have_goto_page_before_routing_page: :goto_page_id,
+      cannot_route_to_next_page: :goto_page_id,
+    }
+    validation_errors.map do |error|
+      { name: error[:name], field: error_fields[error[:name].to_sym] || :answer_value }
+    end
   end
 
 private
