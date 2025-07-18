@@ -184,6 +184,7 @@ Rails.application.routes.draw do
     resources :members, controller: :group_members, only: %i[index new create]
     member do
       get "delete", to: "groups#delete"
+      get "move", to: "groups#move"
 
       get "upgrade", to: "groups#confirm_upgrade"
       post "upgrade", to: "groups#upgrade"
