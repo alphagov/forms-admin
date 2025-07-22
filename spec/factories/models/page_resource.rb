@@ -11,13 +11,14 @@ end
 FactoryBot.define do
   factory :page_resource, class: "Api::V1::PageResource" do
     sequence(:id) { |n| n }
+
     question_text { Faker::Lorem.question.truncate(250) }
     answer_type { Page::ANSWER_TYPES_WITHOUT_SETTINGS.sample }
     is_optional { false }
     answer_settings { {} }
     hint_text { nil }
-    routing_conditions { [] }
     sequence(:position) { |n| n }
+    routing_conditions { [] }
     question_with_text { "#{position}. #{question_text}" }
     has_routing_errors { false }
     page_heading { nil }

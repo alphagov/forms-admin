@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Page, type: :model do
-  subject(:page) { create :page_record, :with_selections_settings, form:, routing_conditions:, check_conditions: }
+  subject(:page) { create :page_record, :with_selection_settings, form:, routing_conditions:, check_conditions: }
 
   let(:form) { create :form_record }
   let(:routing_conditions) { [] }
@@ -394,7 +394,7 @@ RSpec.describe Page, type: :model do
   end
 
   describe "#has_routing_errors" do
-    subject(:page) { build :page_record, :with_selections_settings, routing_conditions: [condition] }
+    subject(:page) { build :page_record, :with_selection_settings, routing_conditions: [condition] }
 
     let(:condition) { build :condition_record }
     let(:has_routing_errors) { false }

@@ -2,8 +2,8 @@ FactoryBot.define do
   factory :condition_resource, class: "Api::V1::ConditionResource" do
     routing_page_id { nil }
     check_page_id { nil }
-    answer_value { nil }
     goto_page_id { nil }
+    answer_value { nil }
     skip_to_end { false }
     validation_errors { [] }
     has_routing_errors { false }

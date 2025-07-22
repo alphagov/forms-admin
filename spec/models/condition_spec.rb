@@ -3,9 +3,52 @@ require "rails_helper"
 RSpec.describe Condition, type: :model do
   subject(:condition) { described_class.new }
 
-  it "has a valid factory" do
-    condition = create :condition_record
-    expect(condition).to be_valid
+  describe "factory" do
+    it "has a valid factory" do
+      condition = create :condition_record
+      expect(condition).to be_valid
+    end
+
+    it "has a trait with answer value missing" do
+      condition = create :condition_record, :with_answer_value_missing
+      expect(condition.has_routing_errors).to be true
+      expect(condition.validation_errors).to eq [
+        { name: "answer_value_doesnt_exist" },
+      ]
+    end
+
+    it "has a trait with goto page missing" do
+      condition = create :condition_record, :with_goto_page_missing
+      expect(condition.has_routing_errors).to be true
+      expect(condition.validation_errors).to eq [
+        { name: "goto_page_doesnt_exist" },
+      ]
+    end
+
+    it "has a trait with goto page before check page" do
+      condition = create :condition_record, :with_goto_page_before_check_page
+      expect(condition.has_routing_errors).to be true
+      expect(condition.validation_errors).to eq [
+        { name: "cannot_have_goto_page_before_routing_page" },
+      ]
+    end
+
+    it "has a trait with goto page immediately after check page" do
+      condition = create :condition_record, :with_goto_page_immediately_after_check_page
+      expect(condition.has_routing_errors).to be true
+      expect(condition.validation_errors).to eq [
+        { name: "cannot_route_to_next_page" },
+      ]
+    end
+
+    it "has a trait with answer value and goto page missing" do
+      condition = create :condition_record, :with_answer_value_and_goto_page_missing
+      expect(condition.has_routing_errors).to be true
+      expect(condition.validation_errors).to contain_exactly(
+        { name: "answer_value_doesnt_exist" },
+        { name: "goto_page_doesnt_exist" },
+      )
+    end
   end
 
   describe "destroying" do
@@ -152,7 +195,7 @@ RSpec.describe Condition, type: :model do
 
   describe "#warning_answer_doesnt_exist" do
     let(:form) { create :form_record }
-    let(:check_page) { create :page_record, :with_selections_settings, form: }
+    let(:check_page) { create :page_record, :with_selection_settings, form: }
     let(:goto_page) { create :page_record, form: }
     let(:condition) do
       create(
@@ -184,7 +227,7 @@ RSpec.describe Condition, type: :model do
 
     context "when answer_value is 'None of the above" do
       let(:condition) { create :condition_record, routing_page_id: check_page.id, check_page_id: check_page.id, goto_page_id: goto_page.id, answer_value: :none_of_the_above.to_s }
-      let(:check_page) { create :page_record, :with_selections_settings, form:, is_optional: }
+      let(:check_page) { create :page_record, :with_selection_settings, form:, is_optional: }
 
       context "and routing page has 'None of the above' as an option" do
         let(:is_optional) { true }
@@ -425,7 +468,7 @@ RSpec.describe Condition, type: :model do
 
   describe "#is_check_your_answers?" do
     let(:form) { create :form_record }
-    let(:check_page) { create :page_record, :with_selections_settings, form: }
+    let(:check_page) { create :page_record, :with_selection_settings, form: }
     let(:goto_page) { create :page_record, form: }
 
     context "when goto page is nil and skip_to_end is false" do

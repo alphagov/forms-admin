@@ -38,6 +38,18 @@ FactoryBot.define do
       sequence(:id) { |n| n }
     end
 
+    trait :with_pages do
+      transient do
+        pages_count { 5 }
+      end
+
+      pages do
+        Array.new(pages_count) { association(:page_resource) }
+      end
+
+      question_section_completed { true }
+    end
+
     trait :ready_for_live do
       with_pages
       support_email { Faker::Internet.email(domain: "example.gov.uk") }
@@ -78,18 +90,6 @@ FactoryBot.define do
 
     trait :with_active_resource do
       task_statuses { statuses }
-    end
-
-    trait :with_pages do
-      transient do
-        pages_count { 5 }
-      end
-
-      pages do
-        Array.new(pages_count) { association(:page_resource) }
-      end
-
-      question_section_completed { true }
     end
 
     trait :with_support do
