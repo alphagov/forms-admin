@@ -53,6 +53,14 @@ class Form < ApplicationRecord
 
   delegate :task_statuses, to: :task_status_service
 
+  def group
+    group_form&.group
+  end
+
+  after_destroy do
+    group_form&.destroy
+  end
+
 private
 
   def set_external_id
@@ -61,5 +69,9 @@ private
 
   def task_status_service
     @task_status_service ||= TaskStatusService.new(form: self)
+  end
+
+  def group_form
+    GroupForm.find_by_form_id(id)
   end
 end
