@@ -3,9 +3,57 @@ require "rails_helper"
 RSpec.describe Form, type: :model do
   subject(:form) { described_class.new }
 
-  it "has a valid factory" do
-    form = create :form_record
-    expect(form).to be_valid
+  describe "factory" do
+    it "has a valid factory" do
+      form = create :form_record
+      expect(form).to be_valid
+    end
+
+    it "has a ready for live trait" do
+      form = build :form_record, :ready_for_live
+      expect(form.ready_for_live).to be true
+      expect(form.incomplete_tasks).to be_empty
+      expect(form.task_statuses).to include(
+        declaration_status: :completed,
+        make_live_status: :not_started,
+        name_status: :completed,
+        pages_status: :completed,
+        privacy_policy_status: :completed,
+        support_contact_details_status: :completed,
+        what_happens_next_status: :completed,
+      )
+    end
+
+    it "has a live trait" do
+      form = build :form_record, :live
+      expect(form.state).to eq "live"
+    end
+
+    it "has a live with draft trait" do
+      form = build :form_record, :live_with_draft
+      expect(form.state).to eq "live_with_draft"
+    end
+
+    it "has an archived trait" do
+      form = build :form_record, :archived
+      expect(form.state).to eq "archived"
+    end
+
+    it "has an archived with draft trait" do
+      form = build :form_record, :archived_with_draft
+      expect(form.state).to eq "archived_with_draft"
+    end
+
+    it "has a ready for routing trait" do
+      form = create :form_record, :ready_for_routing
+      expect(form.pages).to be_present
+      expect(form.pages.map(&:position)).to eq [1, 2, 3, 4, 5]
+    end
+
+    it "has a missing pages trait" do
+      form = build :form_record, :missing_pages
+      expect(form.incomplete_tasks).to eq %i[missing_pages]
+    end
   end
 
   describe "validations" do

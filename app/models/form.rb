@@ -40,6 +40,10 @@ class Form < ApplicationRecord
     task_status_service.mandatory_tasks_completed?
   end
 
+  delegate :incomplete_tasks, to: :task_status_service
+
+  delegate :task_statuses, to: :task_status_service
+
 private
 
   def set_external_id

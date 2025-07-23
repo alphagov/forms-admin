@@ -3,7 +3,9 @@ FactoryBot.define do
     sequence(:name) { |n| "Form #{n}" }
     sequence(:form_slug) { |n| "form-#{n}" }
     submission_email { Faker::Internet.email(domain: "example.gov.uk") }
+    submission_type { "email" }
     privacy_policy_url { Faker::Internet.url(host: "gov.uk") }
+    language { "en" }
     support_email { nil }
     support_phone { nil }
     support_url { nil }
@@ -12,6 +14,8 @@ FactoryBot.define do
     declaration_text { nil }
     question_section_completed { false }
     declaration_section_completed { false }
+    share_preview_completed { false }
+    creator_id { nil }
     state { :draft }
     payment_url { nil }
     external_id { nil }
@@ -21,6 +25,10 @@ FactoryBot.define do
       privacy_policy_url { "" }
       pages { [] }
       state { :draft }
+    end
+
+    trait :with_id do
+      sequence(:id) { |n| n }
     end
 
     trait :with_pages do
@@ -54,12 +62,22 @@ FactoryBot.define do
 
     trait :live do
       ready_for_live
-      after(:create, &:make_live!)
+      state { :live }
+    end
+
+    trait :live_with_draft do
+      live
+      state { :live_with_draft }
     end
 
     trait :archived do
       live
-      after(:create, &:archive_live_form!)
+      state { :archived }
+    end
+
+    trait :archived_with_draft do
+      live
+      state { :archived_with_draft }
     end
 
     trait :with_support do
@@ -67,6 +85,30 @@ FactoryBot.define do
       support_phone { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
       support_url { Faker::Internet.url(host: "gov.uk") }
       support_url_text { Faker::Lorem.sentence(word_count: 1, random_words_to_add: 4) }
+    end
+
+    trait :ready_for_routing do
+      transient do
+        pages_count { 5 }
+      end
+
+      pages do
+        Array.new(pages_count) { association(:page_record, :with_selection_settings) }
+      end
+
+      after(:build) do |form|
+        if form.pages.present?
+          # assign position to each page
+          form.pages.each.with_index(1) do |page, page_index|
+            page.position = page_index
+          end
+        end
+      end
+    end
+
+    trait :missing_pages do
+      ready_for_live
+      question_section_completed { false }
     end
   end
 end
