@@ -61,6 +61,10 @@ class Page < ApplicationRecord
     routing_conditions.filter(&:has_routing_errors).any?
   end
 
+  def show_optional_suffix?
+    is_optional? && answer_type != "selection"
+  end
+
 private
 
   def guidance_fields_presence
