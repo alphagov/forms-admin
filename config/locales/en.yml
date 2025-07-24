@@ -532,6 +532,11 @@ en:
         one: You have one request to upgrade a trial group
         other: You have %{count} requests to upgrade a trial group
       upgrade_requests_title: Upgrade requests
+    move:
+      organisation_search:
+        hint: Change which organisation this group belongs to
+        label: Move "%{group_name}" to another organisation
+        prompt: Select an organisation
     new:
       body_html: |
         <p>Each form needs to be created in a ‘group’. Once you have a group, you can add other people to create and edit forms in it.</p>
@@ -587,6 +592,7 @@ en:
       trial: Trial group
       upgrade_requested: Trial group
     success_messages:
+      move: Group's organisation has changed to %{org_name}
       update: The name of this group has been changed
       upgrade: This group is now active
     upgrade_requested:
