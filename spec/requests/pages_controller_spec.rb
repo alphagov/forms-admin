@@ -71,7 +71,7 @@ RSpec.describe PagesController, type: :request do
     end
 
     describe "when there are validation errors" do
-      let(:form) { build_form(id: 2, pages:, conditions: routing_condition) }
+      let(:form) { create_form(id: 2, pages:, conditions: routing_condition) }
       let(:pages) do
         [build(:page, :with_selection_settings, id: 99),
          build(:page, id: 100),
