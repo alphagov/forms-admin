@@ -44,7 +44,7 @@ module PageListComponent
           .map { |condition_with_check_page|
             condition_with_check_page.validation_errors.map do |error|
               error_object(
-                error_name: error.name,
+                error_name: error[:name],
                 page: condition_with_check_page.check_page,
                 condition: condition_with_check_page,
               )
