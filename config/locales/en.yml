@@ -563,6 +563,7 @@ en:
       delete_group: Delete this group
       edit_group_members: Edit members of this group
       edit_group_name: Change the name of this group
+      move: Move this group to another organisation
       review_group_members: View members of this group
       trial_banner:
         editor:
