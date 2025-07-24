@@ -418,6 +418,16 @@ RSpec.describe Page, type: :model do
     end
   end
 
+  describe "#answer_settings" do
+    let(:page) { build :page_record, answer_settings: { "first_key" => "first_keys_value", "second_key" => { "third_key" => "third_keys_value" } } }
+
+    it "returns an OpenStruct with the answer settings" do
+      expect(page.answer_settings).to be_a(OpenStruct)
+      expect(page.answer_settings.first_key).to eq("first_keys_value")
+      expect(page.answer_settings.second_key.third_key).to eq("third_keys_value")
+    end
+  end
+
   describe "#show_optional_suffix?" do
     let(:page) { described_class.new(is_optional:, answer_type:) }
     let(:is_optional) { "true" }
