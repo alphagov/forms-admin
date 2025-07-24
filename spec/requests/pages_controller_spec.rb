@@ -71,13 +71,18 @@ RSpec.describe PagesController, type: :request do
     end
 
     describe "when there are validation errors" do
+      let(:form) { create(id: 2, pages:) }
+      let(:pages) do
+        [build(:page, :with_selection_settings, id: 99, routing_conditions: [routing_condition]),
+         build(:page, id: 100),
+         build(:page, id: 101)]
+      end
       let(:routing_condition) { [(build :condition, :with_answer_value_missing, id: 1, routing_page_id: 99, check_page_id: 99, goto_page_id: 101)] }
       let(:collect_analytics) { true }
 
       before do
         allow(standard_user).to receive(:collect_analytics?).and_return(collect_analytics)
 
-        pages.first.routing_conditions = routing_condition
         group.group_forms.create!(form_id: form.id)
         get form_pages_path(2)
       end
