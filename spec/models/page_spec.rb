@@ -393,6 +393,40 @@ RSpec.describe Page, type: :model do
     end
   end
 
+  describe "next_page" do
+    context "when there is no next page" do
+      it "returns nil" do
+        expect(page.next_page).to be_nil
+      end
+    end
+
+    context "when there is a next page" do
+      let!(:next_page) { create :page_record, form: page.form }
+
+      it "returns the next page" do
+        expect(page.next_page).to eq(next_page.id)
+      end
+    end
+  end
+
+  describe "#has_next_page?" do
+    context "when there is no next page" do
+      it "returns false" do
+        expect(page.has_next_page?).to be false
+      end
+    end
+
+    context "when there is a next page" do
+      before do
+        create :page_record, form: page.form
+      end
+
+      it "returns true" do
+        expect(page.has_next_page?).to be true
+      end
+    end
+  end
+
   describe "#has_routing_errors" do
     subject(:page) { build :page_record, :with_selection_settings, routing_conditions: [condition] }
 
@@ -415,6 +449,16 @@ RSpec.describe Page, type: :model do
       it "returns true" do
         expect(page.has_routing_errors).to be true
       end
+    end
+  end
+
+  describe "#answer_settings" do
+    let(:page) { build :page_record, answer_settings: { "first_key" => "first_keys_value", "second_key" => { "third_key" => "third_keys_value" } } }
+
+    it "returns an OpenStruct with the answer settings" do
+      expect(page.answer_settings).to be_a(OpenStruct)
+      expect(page.answer_settings.first_key).to eq("first_keys_value")
+      expect(page.answer_settings.second_key.third_key).to eq("third_keys_value")
     end
   end
 
