@@ -322,6 +322,32 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "#page_number" do
+    let(:completed_form) { build :form_resource, :live }
+
+    context "with an existing page" do
+      let(:page) { completed_form.pages.first }
+
+      it "returns the page position" do
+        expect(completed_form.page_number(page)).to eq(1)
+      end
+    end
+
+    context "with an new page" do
+      let(:page) { build :page_resource }
+
+      it "returns the position for a new page" do
+        expect(completed_form.page_number(page)).to eq(completed_form.pages.count + 1)
+      end
+    end
+
+    context "with an unspecified page" do
+      it "returns the position for a new page" do
+        expect(completed_form.page_number(nil)).to eq(completed_form.pages.count + 1)
+      end
+    end
+  end
+
   describe "#group" do
     let(:form) { create :form_record }
 

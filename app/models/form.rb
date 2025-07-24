@@ -57,6 +57,13 @@ class Form < ApplicationRecord
     group_form&.group
   end
 
+  def page_number(page)
+    return pages.length + 1 if page.nil?
+
+    index = pages.index { |existing_page| existing_page.attributes == page.attributes }
+    (index.nil? ? pages.length : index) + 1
+  end
+
   after_destroy do
     group_form&.destroy
   end
