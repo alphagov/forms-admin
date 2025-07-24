@@ -35,7 +35,11 @@ def build_form(*form_traits, pages: [], conditions: [], **form_attributes)
 end
 
 def create_form(*form_traits, pages: [], conditions: [], **form_attributes)
-  form = build_form(*form_traits, pages:, conditions:, **form_attributes)
+  form = build_form(*form_traits, **form_attributes)
   form.save!
+  link_form_pages_and_conditions(form, pages)
+  pages.each(&:save!)
+  link_form_pages_and_conditions(form, pages, conditions)
+  conditions.each(&:save!)
   form
 end
