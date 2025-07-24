@@ -41,8 +41,8 @@ RSpec.describe GroupPolicy do
     let(:organisation) { group.organisation }
 
     context "and in the same organisation as the group" do
-      it "forbids only request_upgrade, review_upgrade, delete and destroy" do
-        expect(policy).to forbid_only_actions(%i[request_upgrade review_upgrade delete destroy])
+      it "forbids only request_upgrade and review_upgrade" do
+        expect(policy).to forbid_only_actions(%i[request_upgrade review_upgrade])
       end
     end
 
