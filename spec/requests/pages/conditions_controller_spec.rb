@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Pages::ConditionsController, type: :request do
-  let(:form) { build :form, :ready_for_routing, id: 1 }
+  let(:form) { create :form, :ready_for_routing, id: 1 }
   let(:pages) { form.pages }
   let(:page) do
     pages.first.tap do |first_page|
