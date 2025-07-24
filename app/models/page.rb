@@ -23,6 +23,8 @@ class Page < ApplicationRecord
   validates :page_heading, length: { maximum: 250 }
   validate :guidance_markdown_length_and_tags
 
+  attribute :answer_settings, DataStructType.new
+
   def destroy_and_update_form!
     form = self.form
     destroy! && form.update!(question_section_completed: false)
@@ -42,6 +44,14 @@ class Page < ApplicationRecord
     check_conditions.destroy_all if answer_settings_changed_from_only_one_option
 
     true
+  end
+
+  def next_page
+    lower_item&.id
+  end
+
+  def has_next_page?
+    next_page.present?
   end
 
   def answer_type_changed_from_selection
