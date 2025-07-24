@@ -54,3 +54,4 @@ config/environments/*.local.yml
 
 # Terraform
 .terraform/
+app/frontend/node_modules
