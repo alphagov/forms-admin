@@ -44,7 +44,7 @@
                 <ul class="govuk-list govuk-!-margin-0">
                   <% condition.validation_errors.each do |error| %>
                     <li class="app-page_list__route-text--error">
-                      <%= PageListComponent::ErrorSummary::View.generate_error_message(error.name, condition:, page: condition_page) %>
+                      <%= PageListComponent::ErrorSummary::View.generate_error_message(error[:name], condition:, page: condition_page) %>
                     </li>
                   <% end %>
                 </ul>
