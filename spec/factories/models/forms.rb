@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :form, parent: :form_resource
+  factory :form, parent: :form_record
 end
 
 def build_pages_list(pages)
