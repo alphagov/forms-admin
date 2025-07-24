@@ -5,11 +5,9 @@ feature "View groups", type: :feature do
   let!(:other_org) { create :organisation, slug: "other-org" }
   let!(:other_org_group) { create :group, organisation: other_org, name: "Group 2" }
 
-  let(:other_org_user) { create :user, organisation: other_org }
-
   before do
     # Organisations only show in the autocomplete if they have at least one user
-    other_org_user
+    create :user, organisation: other_org
   end
 
   scenario "Super admin can use autocomplete to view other organisation's forms" do
