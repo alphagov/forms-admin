@@ -534,8 +534,7 @@ en:
       upgrade_requests_title: Upgrade requests
     move:
       organisation_search:
-        hint: Change which organisation this group belongs to
-        label: Move "%{group_name}" to another organisation
+        label: Move this group to another organisation
         prompt: Select an organisation
     new:
       body_html: |

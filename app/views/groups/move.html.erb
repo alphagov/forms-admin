@@ -1,4 +1,5 @@
 <% set_page_title(t('groups.move.organisation_search.label', group_name: @group.name)) %>
+<% content_for :back_link, govuk_back_link_to(@group, t("back_link.group", group_name: @group.name)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -14,13 +15,13 @@
                                                         :id,
                                                         :name_with_abbreviation,
                                                         class: ['govuk-!-width-three-quarters'],
-                                                        label: { text: t('groups.move.organisation_search.label', group_name: @group.name), size: 'l', tag: 'h1' },
+                                                        label: { text: t('groups.move.organisation_search.label'), size: 'l', tag: 'h1' },
+                                                        caption: { text: @group.name, size: 'l' },
                                                         options: { prompt: t('groups.move.organisation_search.prompt') },
-                                                        hint: { text: t('groups.move.organisation_search.hint') },
                                                         ),
                   html_attributes: { 'data-show-all-values' => 'true'},
                   )%>
-                <%= f.govuk_submit(t("home.change_filter")) %>
+                <%= f.govuk_submit(t("save_and_continue")) %>
               <% end %>
             </div>
       <% end %>
