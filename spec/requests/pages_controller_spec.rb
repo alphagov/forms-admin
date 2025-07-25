@@ -196,8 +196,8 @@ RSpec.describe PagesController, type: :request do
             selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
             only_one_option: true,
             routing_conditions: [
-              build(:condition, routing_page_id: 1, check_page_id: 1, value: "red", skip_to_end: true),
-              build(:condition, routing_page_id: 1, check_page_id: 1, value: "green", goto_page_id: 3),
+              build(:condition, routing_page_id: 1, check_page_id: 1, answer_value: "red", skip_to_end: true),
+              build(:condition, routing_page_id: 1, check_page_id: 1, answer_value: "green", goto_page_id: 3),
             ],
           )
         end
@@ -225,7 +225,7 @@ RSpec.describe PagesController, type: :request do
               selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
               only_one_option: true,
               routing_conditions: [
-                build(:condition, routing_page_id: 1, check_page_id: 1, value: "green", goto_page_id: 3),
+                build(:condition, routing_page_id: 1, check_page_id: 1, answer_value: "green", goto_page_id: 3),
               ],
             ),
             build(
@@ -262,7 +262,7 @@ RSpec.describe PagesController, type: :request do
               selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
               only_one_option: true,
               routing_conditions: [
-                build(:condition, routing_page_id: 1, check_page_id: 1, value: "green", goto_page_id: 3),
+                build(:condition, routing_page_id: 1, check_page_id: 1, answer_value: "green", goto_page_id: 3),
               ],
             ),
             build(
@@ -271,7 +271,7 @@ RSpec.describe PagesController, type: :request do
               form_id: 2,
               position: 5,
               routing_conditions: [
-                build(:condition, routing_page_id: 5, check_page_id: 1, value: nil, goto_page_id: 8),
+                build(:condition, routing_page_id: 5, check_page_id: 1, answer_value: nil, goto_page_id: 8),
               ],
             ),
           ]
@@ -302,7 +302,7 @@ RSpec.describe PagesController, type: :request do
               selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
               only_one_option: true,
               routing_conditions: [
-                build(:condition, routing_page_id: 1, check_page_id: 1, value: "green", goto_page_id: 3),
+                build(:condition, routing_page_id: 1, check_page_id: 1, answer_value: "green", goto_page_id: 3),
               ],
             ),
             build(
@@ -311,7 +311,7 @@ RSpec.describe PagesController, type: :request do
               form_id: 2,
               position: 5,
               routing_conditions: [
-                build(:condition, routing_page_id: 5, check_page_id: 1, value: nil, goto_page_id: 8),
+                build(:condition, routing_page_id: 5, check_page_id: 1, answer_value: nil, goto_page_id: 8),
               ],
             ),
             build(
