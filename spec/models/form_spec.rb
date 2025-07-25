@@ -348,6 +348,57 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "#qualifying_route_pages" do
+    let(:form) { create :form_record }
+    let!(:non_selection_page) { create(:page_record, form:, position: 1) }
+    let!(:selection_page_without_routes) { create(:page_record, :with_selection_settings, form:, position: 2) }
+    let!(:selection_page_with_route) { create(:page_record, :with_selection_settings, form:, position: 3) }
+    let!(:selection_page_with_branching) { create(:page_record, :with_selection_settings, form:, position: 4) }
+    let!(:secondary_skip_page) { create(:page_record, :with_selection_settings, form:, position: 5) }
+    let!(:branch_route_go_to_page) { create(:page_record, :with_selection_settings, form:, position: 6) }
+    let!(:last_page) { create(:page_record, :with_selection_settings, form:, position: 7) }
+
+    before do
+      create(:condition_record, routing_page_id: selection_page_with_route.id, check_page_id: selection_page_with_route.id, answer_value: "Option 1", goto_page_id: secondary_skip_page.id)
+
+      create(:condition_record, routing_page_id: selection_page_with_branching.id, check_page_id: selection_page_with_branching.id, answer_value: "Option 1", goto_page_id: branch_route_go_to_page.id)
+      create(:condition_record, routing_page_id: secondary_skip_page.id, check_page_id: selection_page_with_branching.id, goto_page_id: last_page.id)
+
+      form.reload
+      form.pages.each(&:reload)
+
+      allow(form).to receive(:group).and_return(build(:group))
+    end
+
+    it "does not include a question which does not have answer type selection" do
+      expect(form.qualifying_route_pages).not_to include non_selection_page
+    end
+
+    it "includes a question which has answer type selection and no existing conditions" do
+      expect(form.qualifying_route_pages).to include selection_page_without_routes
+    end
+
+    it "includes a question which has answer type selection, an existing condition, and no secondary skip condition" do
+      expect(form.qualifying_route_pages).to include selection_page_with_route
+    end
+
+    it "does not include a question which already has a condition and a secondary skip condition" do
+      expect(form.qualifying_route_pages).not_to include selection_page_with_branching
+    end
+
+    it "does not include a question which is the routing page for a secondary skip condition" do
+      expect(form.qualifying_route_pages).not_to include secondary_skip_page
+    end
+
+    it "includes a page that is the go to page for a condition that is also qualifying page" do
+      expect(form.qualifying_route_pages).to include branch_route_go_to_page
+    end
+
+    it "does not include the final page of the form, which is otherwise a qualifying page" do
+      expect(form.qualifying_route_pages).not_to include last_page
+    end
+  end
+
   describe "#group" do
     let(:form) { create :form_record }
 
