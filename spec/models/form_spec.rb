@@ -348,6 +348,50 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "#qualifying_route_pages" do
+    let(:non_select_from_list_pages) do
+      (1..3).map do |index|
+        build :page_resource, id: index, position: index
+      end
+    end
+
+    let(:selection_pages_with_routes) do
+      (4..5).map do |index|
+        build :page_resource, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition_resource, id: index, routing_page_id: index, check_page_id: index, goto_page_id: index + 2)]
+      end
+    end
+
+    let(:selection_pages_without_routes) do
+      (6..9).map do |index|
+        build :page_resource, :with_selection_settings, id: index, position: index, routing_conditions: []
+      end
+    end
+
+    let(:selection_pages_with_secondary_skips) do
+      (10..12).map do |index|
+        build :page_resource, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition_resource, id: index, routing_page_id: index, check_page_id: index, goto_page_id: index + 2)]
+      end
+    end
+
+    let!(:secondary_skip_pages) do
+      (13..16).map do |index|
+        build :page_resource, :with_selection_settings, id: index, position: index, routing_conditions: [(build :condition_resource, id: index, routing_page_id: index, check_page_id: index - 3, goto_page_id: index + 2)]
+      end
+    end
+
+    let(:form) { build :form_resource, name: "Form 1", submission_email: "", pages: non_select_from_list_pages + selection_pages_with_routes + selection_pages_without_routes + selection_pages_with_secondary_skips + secondary_skip_pages }
+
+    before do
+      allow(form).to receive(:group).and_return(build(:group))
+    end
+
+    it "returns a list of pages that can be used as routing pages" do
+      selection_pages_excluding_last_page = (selection_pages_with_routes + selection_pages_without_routes)
+
+      expect(form.qualifying_route_pages).to match_array(selection_pages_excluding_last_page)
+    end
+  end
+
   describe "#group" do
     let(:form) { create :form_record }
 
