@@ -36,7 +36,7 @@ class Condition < ApplicationRecord
     page = form.pages.find_by(id: goto_page_id)
     return nil if page.present?
 
-    { name: "goto_page_doesnt_exist" }
+    DataStruct.new(name: "goto_page_doesnt_exist")
   end
 
   def warning_answer_doesnt_exist
@@ -45,7 +45,7 @@ class Condition < ApplicationRecord
     answer_options = check_page&.answer_settings&.dig("selection_options")&.pluck("name")
     return nil if answer_options.blank? || answer_options.include?(answer_value) || answer_value == :none_of_the_above.to_s && check_page.is_optional?
 
-    { name: "answer_value_doesnt_exist" }
+    DataStruct.new(name: "answer_value_doesnt_exist")
   end
 
   def warning_routing_to_next_page
@@ -54,14 +54,14 @@ class Condition < ApplicationRecord
     routing_page_position = routing_page.position
     goto_page_position = is_check_your_answers? ? form.pages.last.position + 1 : goto_page.position
 
-    return { name: "cannot_route_to_next_page" } if goto_page_position == (routing_page_position + 1)
+    return DataStruct.new(name: "cannot_route_to_next_page") if goto_page_position == (routing_page_position + 1)
 
     nil
   end
 
   def warning_goto_page_before_routing_page
     if goto_page.present? && (goto_page.position <= routing_page.position)
-      { name: "cannot_have_goto_page_before_routing_page" }
+      DataStruct.new(name: "cannot_have_goto_page_before_routing_page")
     end
   end
 
