@@ -451,6 +451,14 @@ RSpec.describe Page, type: :model do
     end
   end
 
+  describe "#question_with_number" do
+    let(:page) { described_class.new(question_text: "What's your name?", position: 5) }
+
+    it "returns the page number and question text as a string" do
+      expect(page.question_with_number).to eq("#{page.position}. #{page.question_text}")
+    end
+  end
+
   describe "#show_optional_suffix?" do
     let(:page) { described_class.new(is_optional:, answer_type:) }
     let(:is_optional) { "true" }
