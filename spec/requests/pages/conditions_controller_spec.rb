@@ -146,7 +146,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     it "redirects to the page list" do
-      expect(response).to redirect_to show_routes_path(form:, page:)
+      expect(response).to redirect_to show_routes_path(form_id: form.id, page_id: page.id)
     end
 
     it "displays success message" do
@@ -159,7 +159,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
       let(:group) { create(:group, organisation: standard_user.organisation) }
 
       it "redirects to the new exit page" do
-        expect(response).to redirect_to new_exit_page_path(form:, page:, answer_value: "Wales")
+        expect(response).to redirect_to new_exit_page_path(form_id: form.id, page_id: page.id, answer_value: "Wales")
       end
     end
 
@@ -196,7 +196,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
       it "does not create the condition and redirects the user to the question routes page" do
         expect(ConditionRepository).not_to have_received(:create!)
-        expect(response).to redirect_to show_routes_path(form.id, selected_page.id)
+        expect(response).to redirect_to show_routes_path(form_id: form.id, page_id: selected_page.id)
       end
     end
   end
@@ -276,7 +276,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     it "redirects to the page list" do
-      expect(response).to redirect_to show_routes_path(form:, page:)
+      expect(response).to redirect_to show_routes_path(form_id: form.id, page_id: page.id)
     end
 
     it "displays success message" do
@@ -301,7 +301,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
       let(:params) { { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: "create_exit_page", answer_value: "Wales" } } }
 
       it "redirects to the edit exit page" do
-        expect(response).to redirect_to edit_exit_page_path(form:, page:, condition:)
+        expect(response).to redirect_to edit_exit_page_path(form_id: form.id, page_id: page.id, condition_id: condition.id)
       end
     end
 
@@ -342,7 +342,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
         end
 
         it "redirects to the confirm exit page deletion page" do
-          expect(response).to redirect_to confirm_change_exit_page_path(form.id, selected_page.id, condition.id, params: { answer_value: "Wales", goto_page_id: 3 })
+          expect(response).to redirect_to confirm_change_exit_page_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id, params: { answer_value: "Wales", goto_page_id: 3 })
         end
 
         it "does not call save! for the condition" do
@@ -354,7 +354,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
         let(:params) { { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: "exit_page", answer_value: "Wales" } } }
 
         it "redirects to the edit exit page" do
-          expect(response).to redirect_to show_routes_path(form:, page:, condition:)
+          expect(response).to redirect_to show_routes_path(form_id: form.id, page_id: page.id)
         end
       end
     end
@@ -418,7 +418,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     it "redirects to the page list" do
-      expect(response).to redirect_to form_pages_path(form.id, selected_page.id)
+      expect(response).to redirect_to form_pages_path(form_id: form.id)
     end
 
     it "displays success message" do
@@ -430,7 +430,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
       let(:confirm) { "no" }
 
       it "redirects to edit the condition" do
-        expect(response).to redirect_to edit_condition_path(form.id, selected_page.id, condition.id)
+        expect(response).to redirect_to edit_condition_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id)
       end
     end
 
@@ -548,14 +548,14 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     it "redirects to the question routes page" do
-      expect(response).to redirect_to show_routes_path(form_id: form.id, page_id: selected_page.id)
+      expect(response).to redirect_to show_routes_path(form_id: form.id, page_id: page.id)
     end
 
     context "when confirm is not 'yes'" do
       let(:confirm) { "no" }
 
       it "redirects to the edit condition page" do
-        expect(response).to redirect_to edit_condition_path(form.id, selected_page.id, condition.id)
+        expect(response).to redirect_to edit_condition_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id)
       end
     end
 
@@ -587,7 +587,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
       let(:condition) { build :condition, id: 1, check_page_id: selected_page.id, goto_page_id: 3 }
 
       it "redirects to the form pages path" do
-        expect(response).to redirect_to form_pages_path(form.id)
+        expect(response).to redirect_to form_pages_path(form_id: form.id)
       end
     end
 
