@@ -57,6 +57,21 @@ class Form < ApplicationRecord
     group_form&.group
   end
 
+  def qualifying_route_pages
+    max_routes_per_page = 2
+
+    conditions = pages.flat_map(&:routing_conditions).compact_blank
+    condition_counts = conditions.group_by(&:check_page_id).transform_values(&:length)
+
+    pages.filter do |page|
+      page.answer_type == "selection" &&
+        page.answer_settings.only_one_option == "true" &&
+        page.position != pages.length &&
+        condition_counts.fetch(page.id, 0) < max_routes_per_page &&
+        page.routing_conditions.none?(&:secondary_skip?)
+    end
+  end
+
   def page_number(page)
     return pages.length + 1 if page.nil?
 
