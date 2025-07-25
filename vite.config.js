@@ -30,5 +30,6 @@ export default defineConfig({
   test: {
     globals: true,
     setupFiles: ['test/setup.js']
-  }
+  },
+  cacheDir: '../../node_modules/.vite'
 })
