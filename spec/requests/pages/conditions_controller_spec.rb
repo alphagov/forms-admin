@@ -49,9 +49,9 @@ RSpec.describe Pages::ConditionsController, type: :request do
     before do
       selected_page.id = 1
 
-      allow(PageRepository).to receive(:find).with(page_id: "1", form_id: 1).and_return(selected_page)
+      allow(PageRepository).to receive(:find).with(page_id: "1", form_id: form.id).and_return(selected_page)
 
-      post routing_page_path(form_id: 1, params:)
+      post routing_page_path(form_id: form.id, params:)
     end
 
     it "reads the form" do
@@ -104,7 +104,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
       allow(PageRepository).to receive(:find).and_return(selected_page)
 
-      get new_condition_path(form_id: 1, page_id: 1)
+      get new_condition_path(form_id: form.id, page_id: 1)
     end
 
     it "reads the form" do
@@ -117,7 +117,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
     context "when user should not be allowed to add routes to pages" do
       let(:form) { build :form, id: 1 }
-      let(:pages) { [build(:page)] }
+      let(:pages) { [create(:page)] }
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
@@ -177,7 +177,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
     context "when user should not be allowed to add routes to pages" do
       let(:form) { build :form, id: 1 }
-      let(:pages) { [build(:page)] }
+      let(:pages) { [create(:page)] }
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
@@ -221,7 +221,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
         conditions_input
       end
 
-      get edit_condition_path(form_id: 1, page_id: selected_page.id, condition_id: condition.id)
+      get edit_condition_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id)
     end
 
     it "reads the form" do
@@ -371,7 +371,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
       allow(ConditionRepository).to receive(:find).and_return(condition)
 
-      get delete_condition_path(form_id: 1, page_id: selected_page.id, condition_id: condition.id)
+      get delete_condition_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id)
     end
 
     it "reads the form" do
