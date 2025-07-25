@@ -383,6 +383,30 @@ RSpec.describe "/groups", type: :request do
     end
   end
 
+  describe "GET /move" do
+    let(:group) { create(:group) }
+
+    context "when user is basic" do
+      it "is forbidden" do
+        get move_group_path(group)
+
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when user is a super admin" do
+      before do
+        login_as_super_admin_user
+      end
+
+      it "is allowed" do
+        get move_group_path(group)
+
+        expect(response).to have_http_status(:ok)
+      end
+    end
+  end
+
   describe "GET /delete" do
     let!(:group) { create :group }
 
