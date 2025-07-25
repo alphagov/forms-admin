@@ -1,27 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Pages::QuestionsController, type: :request do
-  let(:form_response) { build :form, id: 2 }
+  let(:form) { build :form, id: 2 }
 
   let(:draft_question) { create :draft_question_for_new_page, user: standard_user, form_id: 2 }
 
   let(:next_page) { nil }
-
-  let(:page_response) do
-    {
-      id: 1,
-      form_id: 2,
-      question_text: draft_question.question_text,
-      hint_text: draft_question.hint_text,
-      answer_type: draft_question.answer_type,
-      answer_settings: nil,
-      is_optional: false,
-      is_repeatable: false,
-      page_heading: nil,
-      guidance_markdown: nil,
-      next_page:,
-    }
-  end
 
   let(:page) do
     build(:page,
@@ -38,37 +22,8 @@ RSpec.describe Pages::QuestionsController, type: :request do
           next_page:)
   end
 
-  let(:updated_page_data) do
-    {
-      id: 1,
-      question_text: "What is your home address?",
-      hint_text: "This should be the location stated in your contract.",
-      answer_type: "address",
-      answer_settings: {},
-      is_optional: false,
-      is_repeatable: false,
-      page_heading: "New page heading",
-      guidance_markdown: "## Heading level 2",
-      next_page:,
-    }
-  end
-
-  let(:updated_page) do
-    build(:page,
-          id: 1,
-          question_text: "What is your home address?",
-          hint_text: "This should be the location stated in your contract.",
-          answer_type: "address",
-          answer_settings: {},
-          is_optional: false,
-          is_repeatable: false,
-          page_heading: "New page heading",
-          guidance_markdown: "## Heading level 2",
-          next_page:)
-  end
-
-  let(:form_pages_response) do
-    [page_response]
+  let(:pages) do
+    [page]
   end
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
@@ -77,11 +32,11 @@ RSpec.describe Pages::QuestionsController, type: :request do
   let(:logger) { ActiveSupport::Logger.new(output) }
 
   before do
-    allow(FormRepository).to receive_messages(find: form_response, pages: form_pages_response)
-    allow(PageRepository).to receive_messages(create!: page, find: page, save!: updated_page)
+    allow(FormRepository).to receive_messages(find: form, pages:)
+    allow(PageRepository).to receive_messages(create!: page, find: page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
-    GroupForm.create!(form_id: form_response.id, group_id: group.id)
+    GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
 
     # Intercept the request logs so we can do assertions on them
@@ -121,18 +76,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
   describe "#create" do
     describe "Given a valid page" do
-      let(:new_page_data) do
-        {
-          question_text: "What is your home address?",
-          hint_text: "This should be the location stated in your contract.",
-          is_optional: false,
-          is_repeatable: false,
-          answer_settings: {},
-          page_heading: nil,
-          guidance_markdown: nil,
-          answer_type: draft_question.answer_type,
-        }
-      end
       let(:params) do
         { pages_question_input: {
           question_text: "What is your home address?",
@@ -236,8 +179,9 @@ RSpec.describe Pages::QuestionsController, type: :request do
       record.reload
     end
 
-    let(:page_response) do
-      {
+    let(:page) do
+      build(
+        :page,
         id: 1,
         form_id: 2,
         question_text: "What is your work address?",
@@ -249,10 +193,8 @@ RSpec.describe Pages::QuestionsController, type: :request do
         page_heading: "New page heading",
         guidance_markdown: "## Heading level 2",
         next_page:,
-      }
+      )
     end
-
-    let(:page) { build(:page, **page_response) }
 
     describe "Given a page" do
       let(:params) do
