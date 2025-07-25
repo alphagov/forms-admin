@@ -13,7 +13,7 @@ RSpec.describe Condition, type: :model do
       condition = create :condition_record, :with_answer_value_missing
       expect(condition.has_routing_errors).to be true
       expect(condition.validation_errors).to eq [
-        { name: "answer_value_doesnt_exist" },
+        DataStruct.new(name: "answer_value_doesnt_exist"),
       ]
     end
 
@@ -21,7 +21,7 @@ RSpec.describe Condition, type: :model do
       condition = create :condition_record, :with_goto_page_missing
       expect(condition.has_routing_errors).to be true
       expect(condition.validation_errors).to eq [
-        { name: "goto_page_doesnt_exist" },
+        DataStruct.new(name: "goto_page_doesnt_exist"),
       ]
     end
 
@@ -29,7 +29,7 @@ RSpec.describe Condition, type: :model do
       condition = create :condition_record, :with_goto_page_before_check_page
       expect(condition.has_routing_errors).to be true
       expect(condition.validation_errors).to eq [
-        { name: "cannot_have_goto_page_before_routing_page" },
+        DataStruct.new(name: "cannot_have_goto_page_before_routing_page"),
       ]
     end
 
@@ -37,7 +37,7 @@ RSpec.describe Condition, type: :model do
       condition = create :condition_record, :with_goto_page_immediately_after_check_page
       expect(condition.has_routing_errors).to be true
       expect(condition.validation_errors).to eq [
-        { name: "cannot_route_to_next_page" },
+        DataStruct.new(name: "cannot_route_to_next_page"),
       ]
     end
 
@@ -45,8 +45,8 @@ RSpec.describe Condition, type: :model do
       condition = create :condition_record, :with_answer_value_and_goto_page_missing
       expect(condition.has_routing_errors).to be true
       expect(condition.validation_errors).to contain_exactly(
-        { name: "answer_value_doesnt_exist" },
-        { name: "goto_page_doesnt_exist" },
+        DataStruct.new(name: "answer_value_doesnt_exist"),
+        DataStruct.new(name: "goto_page_doesnt_exist"),
       )
     end
   end
@@ -122,7 +122,7 @@ RSpec.describe Condition, type: :model do
     let(:condition) { create :condition_record, routing_page_id: routing_page.id, goto_page_id: nil }
 
     it "returns array of validation error objects" do
-      expect(condition.validation_errors).to eq([{ name: "goto_page_doesnt_exist" }])
+      expect(condition.validation_errors).to eq([DataStruct.new(name: "goto_page_doesnt_exist")])
     end
 
     it "calls each validation method" do
@@ -172,7 +172,7 @@ RSpec.describe Condition, type: :model do
       let(:condition) { create :condition_record, routing_page_id: routing_page.id, goto_page_id: 999 }
 
       it "returns object with error short name code" do
-        expect(condition.warning_goto_page_doesnt_exist).to eq({ name: "goto_page_doesnt_exist" })
+        expect(condition.warning_goto_page_doesnt_exist).to eq(DataStruct.new(name: "goto_page_doesnt_exist"))
       end
     end
 
@@ -180,7 +180,7 @@ RSpec.describe Condition, type: :model do
       let(:goto_page) { create :page_record }
 
       it "returns object with error short name code" do
-        expect(condition.warning_goto_page_doesnt_exist).to eq({ name: "goto_page_doesnt_exist" })
+        expect(condition.warning_goto_page_doesnt_exist).to eq(DataStruct.new(name: "goto_page_doesnt_exist"))
       end
     end
 
@@ -214,14 +214,14 @@ RSpec.describe Condition, type: :model do
     context "when answer has been deleted from page" do
       it "returns object with error short name code" do
         condition.check_page.answer_settings["selection_options"].shift
-        expect(condition.warning_answer_doesnt_exist).to eq({ name: "answer_value_doesnt_exist" })
+        expect(condition.warning_answer_doesnt_exist).to eq(DataStruct.new(name: "answer_value_doesnt_exist"))
       end
     end
 
     context "when answer on the page has been updated" do
       it "returns object with error short name code" do
         condition.check_page.answer_settings["selection_options"].first["name"] = "Option 1.2"
-        expect(condition.warning_answer_doesnt_exist).to eq({ name: "answer_value_doesnt_exist" })
+        expect(condition.warning_answer_doesnt_exist).to eq(DataStruct.new(name: "answer_value_doesnt_exist"))
       end
     end
 
@@ -241,7 +241,7 @@ RSpec.describe Condition, type: :model do
         let(:is_optional) { false }
 
         it "returns object with error short name code" do
-          expect(condition.warning_answer_doesnt_exist).to eq({ name: "answer_value_doesnt_exist" })
+          expect(condition.warning_answer_doesnt_exist).to eq(DataStruct.new(name: "answer_value_doesnt_exist"))
         end
       end
     end
@@ -279,7 +279,7 @@ RSpec.describe Condition, type: :model do
 
     shared_examples "returns routing warning" do
       it "returns cannot_route_to_next_page warning" do
-        expect(condition.warning_routing_to_next_page).to eq({ name: "cannot_route_to_next_page" })
+        expect(condition.warning_routing_to_next_page).to eq(DataStruct.new(name: "cannot_route_to_next_page"))
       end
     end
 
@@ -386,7 +386,7 @@ RSpec.describe Condition, type: :model do
     shared_examples "returns routing warning" do
       it "returns cannot_have_goto_page_before_routing_page warning" do
         expect(condition.warning_goto_page_before_routing_page).to(
-          eq({ name: "cannot_have_goto_page_before_routing_page" }),
+          eq(DataStruct.new(name: "cannot_have_goto_page_before_routing_page")),
         )
       end
     end
