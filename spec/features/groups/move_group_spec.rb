@@ -49,7 +49,7 @@ feature "Move a group", type: :feature do
   def when_i_change_the_organisation
     fill_in "group-organisation-id-field", with: other_org.name.to_s
     page.send_keys :enter
-    click_button "Change"
+    click_button "Save and continue"
   end
 
   def then_i_see_my_new_org_for_this_group
