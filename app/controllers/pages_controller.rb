@@ -144,12 +144,12 @@ private
   def log_validation_errors(pages)
     # these validation errors don't come from an input object, so we log them ourselves
     errors = pages.flat_map(&:routing_conditions).flat_map(&:validation_errors)
-    CurrentLoggingAttributes.validation_errors = errors.map { |error| "PageList: #{error[:name]}" } if errors.any?
+    CurrentLoggingAttributes.validation_errors = errors.map { |error| "PageList: #{error.name}" } if errors.any?
 
     pages.each do |page|
       page.routing_conditions.each do |condition|
         condition.validation_errors.each do |error|
-          error_type = condition.secondary_skip? ? "any_other_answer_route.#{error[:name]}" : error[:name]
+          error_type = condition.secondary_skip? ? "any_other_answer_route.#{error.name}" : error.name
           AnalyticsService.track_validation_errors(input_object_name: "PageList", field: :condition, error_type:)
         end
       end
