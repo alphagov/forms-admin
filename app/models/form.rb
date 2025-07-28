@@ -24,9 +24,13 @@ class Form < ApplicationRecord
     live? || live_with_draft?
   end
 
+  alias_method :is_live?, :has_live_version
+
   def has_been_archived
     archived? || archived_with_draft?
   end
+
+  alias_method :is_archived?, :has_been_archived
 
   def has_routing_errors
     pages.filter(&:has_routing_errors).any?
