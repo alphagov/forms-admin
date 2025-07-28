@@ -209,7 +209,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
     end
 
     context "when draft version submission email is different from live version" do
-      let(:form) { build :form, :live, id: 1, creator_id: 1 }
+      let(:form) { create :form, :live, creator_id: 1 }
       let(:previous_live_version) { build :made_live_form, creator_id: 1, id: form.id, submission_email: Faker::Internet.email(domain: "test.example.gov.uk") }
 
       before do
