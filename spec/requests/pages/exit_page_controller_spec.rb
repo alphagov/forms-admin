@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Pages::ExitPageController, type: :request do
-  let(:form) { build :form, :ready_for_routing, id: 1 }
+  let(:form) { create :form, :ready_for_routing, id: 1 }
   let(:pages) { form.pages }
   let(:page) do
     pages.first.tap do |first_page|
@@ -19,7 +19,7 @@ RSpec.describe Pages::ExitPageController, type: :request do
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
   let(:user) { standard_user }
-  let(:condition) { build(:condition, id: 1, form_id: form.id, page_id: page.id, exit_page_heading: "Exit Page Heading") }
+  let(:condition) { build(:condition, id: 1, routing_page_id: selected_page.id, exit_page_heading: "Exit Page Heading") }
 
   before do
     allow(FormRepository).to receive_messages(find: form, pages: pages)
@@ -40,8 +40,8 @@ RSpec.describe Pages::ExitPageController, type: :request do
     end
 
     context "when user should not be allowed to add routes to pages" do
-      let(:form) { build :form, id: 1 }
-      let(:pages) { [build(:page)] }
+      let(:form) { create :form, id: 1 }
+      let(:pages) { [create(:page)] }
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
@@ -72,7 +72,7 @@ RSpec.describe Pages::ExitPageController, type: :request do
     end
 
     it "redirects to the show routes page" do
-      expect(response).to redirect_to show_routes_path(form:, page:)
+      expect(response).to redirect_to show_routes_path(form_id: form.id, page_id: selected_page.id)
     end
 
     it "displays success message" do
@@ -101,8 +101,8 @@ RSpec.describe Pages::ExitPageController, type: :request do
     end
 
     context "when user should not be allowed to add routes to pages" do
-      let(:form) { build :form, id: 1 }
-      let(:pages) { [build(:page)] }
+      let(:form) { create :form, id: 1 }
+      let(:pages) { [create(:page)] }
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
@@ -115,7 +115,7 @@ RSpec.describe Pages::ExitPageController, type: :request do
   end
 
   describe "#edit" do
-    let(:condition) { build :condition, :with_exit_page, id: 3, form:, page: selected_page }
+    let(:condition) { create :condition, :with_exit_page, form:, routing_page_id: selected_page.id }
 
     before do
       allow(ConditionRepository).to receive(:find).and_return(condition)
@@ -129,7 +129,7 @@ RSpec.describe Pages::ExitPageController, type: :request do
   end
 
   describe "#update" do
-    let(:condition) { build :condition, :with_exit_page, id: 3, form:, page: selected_page }
+    let(:condition) { create :condition, :with_exit_page, routing_page_id: selected_page.id }
     let(:params) { { pages_update_exit_page_input: { exit_page_heading: "Exit Page Heading", exit_page_markdown: "Exit Page Markdown" } } }
 
     before do
@@ -139,7 +139,7 @@ RSpec.describe Pages::ExitPageController, type: :request do
     end
 
     it "redirects to the edit condition page" do
-      expect(response).to redirect_to edit_condition_path(form:, page:, condition:)
+      expect(response).to redirect_to edit_condition_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id)
     end
 
     it "displays success message" do
@@ -181,8 +181,8 @@ RSpec.describe Pages::ExitPageController, type: :request do
     end
 
     context "when user should not be allowed to add/delete routes to pages" do
-      let(:form) { build :form, id: 1 }
-      let(:pages) { [build(:page)] }
+      let(:form) { create :form, id: 1 }
+      let(:pages) { [create(:page)] }
 
       it "renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
@@ -250,8 +250,8 @@ RSpec.describe Pages::ExitPageController, type: :request do
     end
 
     context "when user should not be allowed to add/delete routes to pages" do
-      let(:form) { build :form, id: 1 }
-      let(:pages) { [build(:page)] }
+      let(:form) { create :form, id: 1 }
+      let(:pages) { [create(:page)] }
 
       it "renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
