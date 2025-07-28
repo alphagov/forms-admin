@@ -288,6 +288,24 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "#all_incomplete_tasks" do
+    context "when a form is complete and ready to be made live" do
+      let(:completed_form) { build :form_record, :live }
+
+      it "returns no missing sections" do
+        expect(completed_form.all_incomplete_tasks).to be_empty
+      end
+    end
+
+    context "when a form is incomplete and should still be in draft state" do
+      let(:new_form) { build :form_record, :new_form }
+
+      it "returns a set of keys related to missing fields" do
+        expect(new_form.all_incomplete_tasks).to match_array(%i[missing_pages missing_submission_email missing_privacy_policy_url missing_contact_details missing_what_happens_next share_preview_not_completed])
+      end
+    end
+  end
+
   describe "submission type" do
     describe "enum" do
       it "returns a list of submission types" do

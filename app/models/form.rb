@@ -83,6 +83,10 @@ class Form < ApplicationRecord
     end
   end
 
+  def all_incomplete_tasks
+    incomplete_tasks.concat(email_task_status_service.incomplete_email_tasks)
+  end
+
   def page_number(page)
     return pages.length + 1 if page.nil?
 
