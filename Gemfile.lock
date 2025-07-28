@@ -116,8 +116,8 @@ GEM
     ast (2.4.3)
     aws-eventstream (1.4.0)
     aws-partitions (1.1135.0)
-    aws-sdk-cloudwatch (1.116.0)
-      aws-sdk-core (~> 3, >= 3.225.0)
+    aws-sdk-cloudwatch (1.117.0)
+      aws-sdk-core (~> 3, >= 3.227.0)
       aws-sigv4 (~> 1.5)
     aws-sdk-codepipeline (1.102.0)
       aws-sdk-core (~> 3, >= 3.227.0)
@@ -577,7 +577,7 @@ DEPENDENCIES
   activeresource (~> 6.1)
   acts_as_list
   after_commit_everywhere (~> 1.6)
-  aws-sdk-cloudwatch (~> 1.116)
+  aws-sdk-cloudwatch (~> 1.117)
   aws-sdk-codepipeline (~> 1.102)
   axe-core-rspec
   bootsnap
