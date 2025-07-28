@@ -58,6 +58,10 @@ class Form < ApplicationRecord
     ready_for_live && email_task_status_service.ready_for_live?
   end
 
+  def all_incomplete_tasks
+    incomplete_tasks.concat(email_task_status_service.incomplete_email_tasks)
+  end
+
   delegate :incomplete_tasks, to: :task_status_service
 
   delegate :task_statuses, to: :task_status_service
