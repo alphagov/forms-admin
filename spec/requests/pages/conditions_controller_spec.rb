@@ -267,8 +267,8 @@ RSpec.describe Pages::ConditionsController, type: :request do
   end
 
   describe "#update" do
-    let(:params) { { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: 3, answer_value: "Wales" } } }
-    let(:condition) { build :condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Wales", goto_page_id: pages.last.id }
+    let(:params) { { pages_conditions_input: { routing_page_id: pages.first.id, check_page_id: pages.first.id, goto_page_id: pages.last.id, answer_value: "England" } } }
+    let(:condition) { build :condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, goto_page_id: pages.last.id, answer_value: "Wales" }
 
     before do
       selected_page.routing_conditions = [condition]
@@ -294,7 +294,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
     it "displays success message" do
       follow_redirect!
-      expect(response.body).to include(I18n.t("banner.success.route_updated", question_number: 1))
+      expect(response.body).to include(I18n.t("banner.success.route_updated", question_number: pages.first.position))
     end
 
     context "when form submit fails" do
