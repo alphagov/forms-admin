@@ -23,6 +23,10 @@ FactoryBot.define do
     incomplete_tasks { %i[missing_pages missing_privacy_policy_url missing_contact_details missing_what_happens_next share_preview_not_completed] }
     state { :draft }
 
+    after(:build) do |form|
+      link_pages_list(form.pages) if form.pages.present?
+    end
+
     transient do
       statuses { { declaration_status: "not_started", make_live_status: "cannot_start", name_status: "completed", pages_status: "not_started", privacy_policy_status: "not_started", support_contact_details_status: "not_started", what_happens_next_status: "not_started" } }
     end
@@ -107,10 +111,6 @@ FactoryBot.define do
       pages do
         Array.new(pages_count) { association(:page_resource, :with_selection_settings) }
       end
-
-      after(:build) do |form|
-        link_pages_list(form.pages) if form.pages.present?
-      end
     end
 
     trait :ready_for_api_routing do
@@ -120,10 +120,6 @@ FactoryBot.define do
 
       pages do
         Array.new(pages_count) { association(:page_resource, :with_api_selection_settings) }
-      end
-
-      after(:build) do |form|
-        link_pages_list(form.pages) if form.pages.present?
       end
     end
 

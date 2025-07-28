@@ -4,6 +4,20 @@ describe Api::V1::FormResource, type: :model do
   let(:id) { 1 }
   let(:form) { described_class.new(id:, name: "Form 1", submission_email: "") }
 
+  describe "factory" do
+    it "has a valid factory" do
+      form = build :form_resource
+      expect(form).to be_valid
+    end
+
+    it "links pages together with the position and next_page attributes" do
+      pages = build_list(:page_resource, 5) { |page, index| page.id = index + 1 }
+      build(:form_resource, pages:)
+      expect(pages.map(&:position)).to eq [1, 2, 3, 4, 5]
+      expect(pages.map(&:next_page)).to eq [2, 3, 4, 5, nil]
+    end
+  end
+
   describe "#database_attributes" do
     it "includes attributes for ActiveRecord Form model" do
       expect(form.database_attributes).to eq({
