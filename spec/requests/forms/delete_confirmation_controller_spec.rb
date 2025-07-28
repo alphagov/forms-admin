@@ -65,7 +65,7 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
         end
 
         it "does not delete the form on the API" do
-          expect(form).not_to have_been_deleted
+          expect(FormRepository).not_to have_received(:destroy)
         end
       end
     end
