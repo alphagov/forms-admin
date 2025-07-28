@@ -131,12 +131,13 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
   describe "#create" do
     let(:params) { { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: 3, answer_value: "Wales" } } }
+    let(:condition) { build :condition }
 
     before do
       selected_page.id = 1
 
       allow(PageRepository).to receive(:find).and_return(selected_page)
-      allow(ConditionRepository).to receive(:create!).and_invoke(->(**attributes) { build :condition, **attributes })
+      allow(ConditionRepository).to receive(:create!).and_return(condition)
 
       post create_condition_path(form_id: form.id, page_id: selected_page.id, params:)
     end
@@ -147,6 +148,18 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
     it "redirects to the page list" do
       expect(response).to redirect_to show_routes_path(form_id: form.id, page_id: page.id)
+    end
+
+    it "creates the condition" do
+      expect(ConditionRepository).to have_received(:create!).with(
+        form_id: form.id,
+        page_id: page.id,
+        check_page_id: 1,
+        routing_page_id: 1,
+        answer_value: "Wales",
+        goto_page_id: "3",
+        skip_to_end: false,
+      )
     end
 
     it "displays success message" do
