@@ -52,6 +52,7 @@ class Pages::ConditionsInput < BaseInput
     page_options
   end
 
+  # TODO: rename this method when we remove the API code
   def check_errors_from_api
     record.errors_with_fields.each do |error|
       errors.add(error[:field], error[:name].to_sym)
