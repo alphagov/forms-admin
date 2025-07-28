@@ -24,13 +24,19 @@ class Form < ApplicationRecord
     live? || live_with_draft?
   end
 
+  alias_method :is_live?, :has_live_version
+
   def has_been_archived
     archived? || archived_with_draft?
   end
 
+  alias_method :is_archived?, :has_been_archived
+
   def has_routing_errors
     pages.filter(&:has_routing_errors).any?
   end
+
+  alias_method :has_routing_errors?, :has_routing_errors
 
   def marking_complete_with_errors
     errors.add(:base, :has_validation_errors, message: "Form has routing validation errors") if question_section_completed && has_routing_errors
