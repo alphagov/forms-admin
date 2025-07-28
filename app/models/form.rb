@@ -2,6 +2,7 @@ class Form < ApplicationRecord
   include FormStateMachine
 
   has_many :pages, -> { order(position: :asc) }, dependent: :destroy
+  has_one :form_submission_email, dependent: :destroy
 
   enum :submission_type, {
     email: "email",
@@ -55,6 +56,10 @@ class Form < ApplicationRecord
     task_status_service.mandatory_tasks_completed?
   end
 
+  def all_ready_for_live?
+    ready_for_live && email_task_status_service.ready_for_live?
+  end
+
   delegate :incomplete_tasks, to: :task_status_service
 
   delegate :task_statuses, to: :task_status_service
@@ -85,6 +90,21 @@ class Form < ApplicationRecord
     (index.nil? ? pages.length : index) + 1
   end
 
+  def email_confirmation_status
+    # Email set before confirmation feature introduced
+    return :email_set_without_confirmation if submission_email.present? && form_submission_email.blank?
+
+    if form_submission_email.present?
+      if form_submission_email.confirmed? || submission_email == form_submission_email.temporary_submission_email
+        :confirmed
+      else
+        :sent
+      end
+    else
+      :not_started
+    end
+  end
+
   after_destroy do
     group_form&.destroy
   end
@@ -101,5 +121,9 @@ private
 
   def group_form
     GroupForm.find_by_form_id(id)
+  end
+
+  def email_task_status_service
+    @email_task_status_service ||= EmailTaskStatusService.new(form: self)
   end
 end

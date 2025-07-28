@@ -322,6 +322,45 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "#all_ready_for_live?" do
+    before do
+      email_task_status_service = instance_double(EmailTaskStatusService)
+      allow(EmailTaskStatusService).to receive(:new).and_return(email_task_status_service)
+      allow(email_task_status_service).to receive(:ready_for_live?).and_return(email_tasks_completed)
+
+      task_status_service = instance_double(TaskStatusService)
+      allow(TaskStatusService).to receive(:new).and_return(task_status_service)
+      allow(task_status_service).to receive(:mandatory_tasks_completed?).and_return(mandatory_tasks_completed)
+    end
+
+    context "when not all mandatory tasks have been completed" do
+      let(:email_tasks_completed) { true }
+      let(:mandatory_tasks_completed) { false }
+
+      it "returns false" do
+        expect(form.all_ready_for_live?).to be false
+      end
+    end
+
+    context "when not all submission emails tasks have been completed" do
+      let(:email_tasks_completed) { false }
+      let(:mandatory_tasks_completed) { true }
+
+      it "returns false" do
+        expect(form.all_ready_for_live?).to be false
+      end
+    end
+
+    context "when all mandatory tasks have been completed" do
+      let(:email_tasks_completed) { true }
+      let(:mandatory_tasks_completed) { true }
+
+      it "returns true" do
+        expect(form.all_ready_for_live?).to be true
+      end
+    end
+  end
+
   describe "#page_number" do
     let(:completed_form) { build :form_resource, :live }
 
@@ -345,6 +384,35 @@ RSpec.describe Form, type: :model do
       it "returns the position for a new page" do
         expect(completed_form.page_number(nil)).to eq(completed_form.pages.count + 1)
       end
+    end
+  end
+
+  describe "#email_confirmation_status" do
+    let(:form) { create :form_record, :new_form }
+
+    it "returns :not_started" do
+      expect(form.email_confirmation_status).to eq(:not_started)
+    end
+
+    it "with submission_email set and no FormSubmissionEmail, returns :email_set_without_confirmation" do
+      form.submission_email = "test@example.gov.uk"
+      expect(form.email_confirmation_status).to eq(:email_set_without_confirmation)
+    end
+
+    it "with FormSubmissionEmail code returns :sent" do
+      create :form_submission_email, form_id: form.id, temporary_submission_email: "test@example.gov.uk", confirmation_code: "123456"
+      expect(form.email_confirmation_status).to eq(:sent)
+    end
+
+    it "with FormSubmissionEmail with no code returns :confirmed" do
+      create :form_submission_email, form_id: form.id, temporary_submission_email: "test@example.gov.uk", confirmation_code: ""
+      expect(form.email_confirmation_status).to eq(:confirmed)
+    end
+
+    it "with FormSubmissionEmail with code and email matches forms returns :confirmed" do
+      form.submission_email = "test@example.gov.uk"
+      create :form_submission_email, form_id: form.id, temporary_submission_email: "test@example.gov.uk", confirmation_code: "123456"
+      expect(form.email_confirmation_status).to eq(:confirmed)
     end
   end
 
