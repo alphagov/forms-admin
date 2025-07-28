@@ -215,7 +215,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
   end
 
   describe "#edit" do
-    let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
+    let(:condition) { build :condition, id: 1, routing_page_id: selected_page.id, check_page_id: selected_page.id, answer_value: "Wales", goto_page_id: pages.third.id }
 
     # Use instance variable to allow asserting instance receives method
     let(:conditions_input) { @conditions_input } # rubocop:disable RSpec/InstanceVariable
