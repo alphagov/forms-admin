@@ -97,12 +97,7 @@ FactoryBot.define do
       end
 
       after(:build) do |form|
-        if form.pages.present?
-          # assign position to each page
-          form.pages.each.with_index(1) do |page, page_index|
-            page.position = page_index
-          end
-        end
+        link_pages_list(form.pages) if form.pages.present?
       end
     end
 

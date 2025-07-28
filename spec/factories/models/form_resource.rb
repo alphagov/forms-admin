@@ -109,16 +109,7 @@ FactoryBot.define do
       end
 
       after(:build) do |form|
-        if form.pages.present?
-          # assign position and next_page to each page
-          form.pages.each.with_index(1).each_cons(2) do |page_with_index, next_page_with_index|
-            page, page_index = page_with_index
-            next_page, _next_page_index = next_page_with_index
-
-            page.position = page_index
-            page.next_page = next_page&.id
-          end
-        end
+        link_pages_list(form.pages) if form.pages.present?
       end
     end
 
@@ -132,16 +123,7 @@ FactoryBot.define do
       end
 
       after(:build) do |form|
-        if form.pages.present?
-          # assign position and next_page to each page
-          form.pages.each.with_index(1).each_cons(2) do |page_with_index, next_page_with_index|
-            page, page_index = page_with_index
-            next_page, _next_page_index = next_page_with_index
-
-            page.position = page_index
-            page.next_page = next_page&.id
-          end
-        end
+        link_pages_list(form.pages) if form.pages.present?
       end
     end
 
