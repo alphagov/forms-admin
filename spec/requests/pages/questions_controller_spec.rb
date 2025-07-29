@@ -50,28 +50,43 @@ RSpec.describe Pages::QuestionsController, type: :request do
   end
 
   describe "#new" do
-    let(:draft_question) do
-      record = create :draft_question_for_new_page, user: standard_user, form_id: 2
-      record.question_text = nil
-      record.save!(validate: false)
-      record.reload
+    context "when the form has a draft question" do
+      let(:draft_question) do
+        record = create :draft_question_for_new_page, user: standard_user, form_id: 2
+        record.question_text = nil
+        record.save!(validate: false)
+        record.reload
+      end
+
+      before do
+        draft_question
+
+        get new_question_path(form_id: 2)
+      end
+
+      it "Reads the form" do
+        expect(FormRepository).to have_received(:find)
+      end
+
+      it "returns 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      include_examples "logging"
     end
 
-    before do
-      draft_question
+    context "when the form has a draft question with no answer type" do
+      let(:draft_question) do
+        record = create :draft_question_for_new_page, user: standard_user, form_id: 2
+        record.answer_type = nil
+        record.save!(validate: false)
+        record.reload
+      end
 
-      get new_question_path(form_id: 2)
+      it "raises an error" do
+        expect { get new_question_path(form_id: 2) }.to raise_error("No answer type set for draft question")
+      end
     end
-
-    it "Reads the form" do
-      expect(FormRepository).to have_received(:find)
-    end
-
-    it "returns 200" do
-      expect(response).to have_http_status(:ok)
-    end
-
-    include_examples "logging"
   end
 
   describe "#create" do
@@ -129,6 +144,24 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
       it "outputs error message" do
         expect(response.body).to include("Enter a question")
+      end
+    end
+
+    context "when the form has a draft question with no answer type" do
+      let(:draft_question) do
+        record = create :draft_question_for_new_page, user: standard_user, form_id: 2
+        record.answer_type = nil
+        record.save!(validate: false)
+        record.reload
+      end
+
+      it "raises an error" do
+        expect {
+          post create_question_path(2), params: { pages_question_input: {
+            hint_text: "This should be the location stated in your contract.",
+            is_optional: false,
+          } }
+        }.to raise_error("No answer type set for draft question")
       end
     end
   end
