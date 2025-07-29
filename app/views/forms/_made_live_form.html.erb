@@ -46,6 +46,11 @@
     </div>
     <%= govuk_details(summary_text: t('made_live_form.what_is_what_happens_next'), text: t('made_live_form.what_happens_next_description')) %>
 
+    <% if form.respond_to?(:payment_url) && form.payment_url.present? %>
+      <h3 class="govuk-heading-m"><%= t("made_live_form.payment_link") %></h3>
+      <p><%= govuk_link_to(form.payment_url, form.payment_url) %></p>
+    <% end %>
+
     <h3 class="govuk-heading-m"><%= t("made_live_form.how_you_get_completed_forms") %></h3>
 
     <h4 class="govuk-heading-s"><%= t('made_live_form.submission_email') %></h4>

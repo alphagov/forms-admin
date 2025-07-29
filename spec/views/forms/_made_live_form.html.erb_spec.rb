@@ -232,4 +232,14 @@ describe "forms/_made_live_form.html.erb" do
       expect(view.content_for(:back_link)).to have_link("Back to your forms", href: "/")
     end
   end
+
+  context "when the form has a payment link" do
+    let(:payment_url) { "https://www.gov.uk/payments/your-payment-link" }
+    let(:form) { build(:form, :live, id: 2, payment_url:) }
+
+    it "contains a link to the payment url" do
+      expect(rendered).to have_css("h3", text: "GOV.UK Pay payment link")
+      expect(rendered).to have_link(payment_url, href: payment_url)
+    end
+  end
 end
