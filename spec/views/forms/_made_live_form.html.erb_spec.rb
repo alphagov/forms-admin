@@ -11,9 +11,10 @@ describe "forms/_made_live_form.html.erb" do
   let(:preview_mode) { :preview_live }
   let(:questions_path) { Faker::Internet.url }
   let(:submission_type) { "email" }
+  let(:cloudwatch_service) { instance_double(CloudWatchService, metrics_data:) }
 
   before do
-    allow(form).to receive(:metrics_data).and_return(metrics_data)
+    allow(CloudWatchService).to receive(:new).and_return(cloudwatch_service)
 
     if group.present?
       GroupForm.create!(form_id: form.id, group_id: group.id)
