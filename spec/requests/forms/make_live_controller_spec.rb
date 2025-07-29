@@ -90,8 +90,10 @@ RSpec.describe Forms::MakeLiveController, type: :request do
   end
 
   describe "#create" do
+    let(:made_live_form) { build(:made_live_form, id: form.id, name: form.name) }
+
     before do
-      allow(FormRepository).to receive_messages(find: form, find_live: form, make_live!: form)
+      allow(FormRepository).to receive_messages(find: form, find_live: made_live_form, make_live!: form)
 
       Membership.create!(group_id: group.id, user:, added_by: user, role: group_role)
       GroupForm.create!(form_id: form.id, group_id: group.id)

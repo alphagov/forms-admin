@@ -3,9 +3,10 @@ require "rails_helper"
 feature "Archive a form", type: :feature do
   let(:form) { build(:form, :live, id: 1) }
   let(:group) { create(:group, organisation: standard_user.organisation) }
+  let(:made_live_form) { build(:made_live_form, id: form.id, name: form.name) }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, pages: form.pages, find_live: form, find_archived: form, archive!: {})
+    allow(FormRepository).to receive_messages(find: form, pages: form.pages, find_live: made_live_form, find_archived: made_live_form, archive!: {})
 
     GroupForm.create! group:, form_id: form.id
     create(:membership, group:, user: standard_user, added_by: standard_user)

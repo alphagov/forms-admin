@@ -3,12 +3,12 @@ require "rails_helper"
 describe MakeFormLiveService do
   let(:make_form_live_service) { described_class.call(current_form:, current_user:) }
   let(:current_form) { build :form, :ready_for_live, id: 1 }
-  let(:live_form) { current_form }
+  let(:made_live_form) { build :made_live_form, id: current_form.id, submission_email: current_form.submission_email }
   let(:current_user) { build :user }
 
   describe "#make_live" do
     before do
-      allow(FormRepository).to receive_messages(make_live!: true, find_live: live_form)
+      allow(FormRepository).to receive_messages(make_live!: current_form, find_live: made_live_form)
     end
 
     it "calls make_live! on the Form Repository with the current form" do
@@ -22,10 +22,7 @@ describe MakeFormLiveService do
     end
 
     context "when draft form has live version" do
-      let(:live_form) { build :form, :live }
-      let(:current_form) do
-        live_form.clone
-      end
+      let(:current_form) { build :form, :live_with_draft, id: 1 }
 
       context "when submission email has not been changed" do
         it "does not call the SubmissionEmailMailer" do
@@ -42,8 +39,8 @@ describe MakeFormLiveService do
 
         it "calls the SubmissionEmailMailer" do
           expect(SubmissionEmailMailer).to receive(:alert_email_change).with(
-            live_email: live_form.submission_email,
-            form_name: live_form.name,
+            live_email: made_live_form.submission_email,
+            form_name: made_live_form.name,
             creator_name: current_user.name,
             creator_email: current_user.email,
           ).and_call_original
@@ -60,13 +57,10 @@ describe MakeFormLiveService do
     end
 
     context "when changes to live form are being made live" do
-      let(:live_form) { build :form, :live }
-      let(:current_form) do
-        live_form.clone
-      end
+      let(:current_form) { build :form, :live_with_draft, id: 1 }
 
       before do
-        allow(FormRepository).to receive(:find_live).and_return(live_form)
+        allow(FormRepository).to receive(:find_live).and_return(made_live_form)
       end
 
       it "returns a different page title" do
@@ -81,13 +75,10 @@ describe MakeFormLiveService do
     end
 
     context "when changes to live form are being made live" do
-      let(:live_form) { build :form, :live }
-      let(:current_form) do
-        live_form.clone
-      end
+      let(:current_form) { build :form, :live_with_draft, id: 1 }
 
       before do
-        allow(FormRepository).to receive(:find_live).and_return(live_form)
+        allow(FormRepository).to receive(:find_live).and_return(made_live_form)
       end
 
       it "returns different confirmation page body" do

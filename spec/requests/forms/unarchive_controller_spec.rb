@@ -3,11 +3,8 @@ require "rails_helper"
 RSpec.describe Forms::UnarchiveController, type: :request do
   let(:user) { standard_user }
 
-  let(:form) do
-    build(:form,
-          :archived,
-          id: 2)
-  end
+  let(:form) { build(:form, :archived, id: 2) }
+  let(:made_live_form) { build(:made_live_form, id: form.id) }
 
   let(:updated_form) do
     build(:form,
@@ -59,7 +56,7 @@ RSpec.describe Forms::UnarchiveController, type: :request do
 
   describe "#create" do
     before do
-      allow(FormRepository).to receive_messages(find: form, make_live!: form, find_live: form)
+      allow(FormRepository).to receive_messages(find: form, make_live!: form, find_live: made_live_form)
 
       Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user, role: :group_admin)
       GroupForm.create!(form_id: form.id, group_id: group.id)

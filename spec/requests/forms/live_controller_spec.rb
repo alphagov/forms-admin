@@ -59,7 +59,7 @@ RSpec.describe Forms::LiveController, type: :request do
   describe "#show_pages" do
     context "with a live form" do
       before do
-        allow(FormRepository).to receive_messages(find: form, find_live: form)
+        allow(FormRepository).to receive_messages(find: form, find_live: made_live_form)
 
         get live_form_pages_path(2)
       end
