@@ -14,11 +14,17 @@
 #
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
-require "simplecov"
+if ENV["COVERAGE"]
+  require "simplecov"
 
-SimpleCov.coverage_dir("coverage/backend")
-SimpleCov.minimum_coverage(83)
-SimpleCov.start("rails")
+  SimpleCov.coverage_dir("coverage/backend")
+  SimpleCov.minimum_coverage(83)
+  SimpleCov.start("rails")
+else
+  at_exit do
+    puts "Coverage report was NOT generated, ./coverage/backend may be out of date. Run RSpec with `COVERAGE=true` to show LOC covered."
+  end
+end
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
