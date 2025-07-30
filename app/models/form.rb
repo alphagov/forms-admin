@@ -37,6 +37,8 @@ class Form < ApplicationRecord
     pages.filter(&:has_routing_errors).any?
   end
 
+  alias_method :has_routing_errors?, :has_routing_errors
+
   def marking_complete_with_errors
     errors.add(:base, :has_validation_errors, message: "Form has routing validation errors") if question_section_completed && has_routing_errors
   end
@@ -56,10 +58,6 @@ class Form < ApplicationRecord
 
   def all_ready_for_live?
     ready_for_live && email_task_status_service.ready_for_live?
-  end
-
-  def all_incomplete_tasks
-    incomplete_tasks.concat(email_task_status_service.incomplete_email_tasks)
   end
 
   delegate :incomplete_tasks, to: :task_status_service
@@ -83,6 +81,14 @@ class Form < ApplicationRecord
         condition_counts.fetch(page.id, 0) < max_routes_per_page &&
         page.routing_conditions.none?(&:secondary_skip?)
     end
+  end
+
+  def all_incomplete_tasks
+    incomplete_tasks.concat(email_task_status_service.incomplete_email_tasks)
+  end
+
+  def all_task_statuses
+    task_statuses.merge(email_task_status_service.email_task_statuses)
   end
 
   def page_number(page)
