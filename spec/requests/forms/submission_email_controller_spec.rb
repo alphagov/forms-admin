@@ -8,6 +8,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
   let(:user_outside_group) { build :user, id: 2, organisation: }
 
   let(:form) { build :form, id: 1, creator_id: 1 }
+  let(:made_live_form) { build(:made_live_form, id: form.id) }
 
   let(:submission_email_mailer_spy) do
     submission_email_mailer = instance_spy(SubmissionEmailMailer)
@@ -18,7 +19,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, save!: form, find_live: form)
+    allow(FormRepository).to receive_messages(find: form, save!: form, find_live: made_live_form)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -209,11 +210,10 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
 
     context "when draft version submission email is different from live version" do
       let(:form) { build :form, :live, id: 1, creator_id: 1 }
-      let(:previous_live_version) { form.clone }
+      let(:previous_live_version) { build :made_live_form, creator_id: 1, id: form.id, submission_email: Faker::Internet.email(domain: "test.example.gov.uk") }
 
       before do
-        previous_live_version
-        form.submission_email = Faker::Internet.email(domain: "example.gov.uk")
+        form.submission_email = Faker::Internet.email(domain: "different.gov.uk")
 
         allow(FormRepository).to receive_messages(find: form, find_live: previous_live_version)
 

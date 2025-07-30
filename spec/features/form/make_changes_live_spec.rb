@@ -6,9 +6,10 @@ feature "Make changes live", type: :feature do
   let(:organisation) { build :organisation, id: 1 }
   let(:user) { create :user, organisation: }
   let(:group) { create(:group, name: "Group 1", organisation:, status: "active") }
+  let(:made_live_form) { build(:made_live_form, id: form.id, name: form.name) }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, find_live: form, make_live!: form, pages: pages)
+    allow(FormRepository).to receive_messages(find: form, find_live: made_live_form, make_live!: form, pages: pages)
 
     GroupForm.create!(form_id: form.id, group_id: group.id)
     Membership.create!(user:, group:, added_by: user, role: :group_admin)
