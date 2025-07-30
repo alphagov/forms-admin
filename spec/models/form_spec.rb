@@ -379,6 +379,28 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "#all_task_statuses" do
+    let(:completed_form) { build :form_record, :live }
+
+    it "returns a hash with each of the task statuses" do
+      expected_hash = {
+        name_status: :completed,
+        pages_status: :completed,
+        declaration_status: :completed,
+        what_happens_next_status: :completed,
+        submission_email_status: :completed,
+        confirm_submission_email_status: :completed,
+        privacy_policy_status: :completed,
+        payment_link_status: :optional,
+        receive_csv_status: :optional,
+        support_contact_details_status: :completed,
+        share_preview_status: :completed,
+        make_live_status: :completed,
+      }
+      expect(completed_form.all_task_statuses).to eq expected_hash
+    end
+  end
+
   describe "#page_number" do
     let(:completed_form) { build :form_resource, :live }
 
