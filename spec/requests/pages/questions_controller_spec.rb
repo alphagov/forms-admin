@@ -73,18 +73,18 @@ RSpec.describe Pages::QuestionsController, type: :request do
       end
 
       include_examples "logging"
-    end
 
-    context "when the form has a draft question with no answer type" do
-      let(:draft_question) do
-        record = create :draft_question_for_new_page, user: standard_user, form_id: 2
-        record.answer_type = nil
-        record.save!(validate: false)
-        record.reload
-      end
+      context "and the draft question has no answer type" do
+        let(:draft_question) do
+          record = create :draft_question_for_new_page, user: standard_user, form_id: 2
+          record.answer_type = nil
+          record.save!(validate: false)
+          record.reload
+        end
 
-      it "raises an error" do
-        expect { get new_question_path(form_id: 2) }.to raise_error("No answer type set for draft question")
+        it "redirects to type of answer" do
+          expect(response).to redirect_to(type_of_answer_new_path(form_id: 2))
+        end
       end
     end
   end
@@ -145,23 +145,18 @@ RSpec.describe Pages::QuestionsController, type: :request do
       it "outputs error message" do
         expect(response.body).to include("Enter a question")
       end
-    end
 
-    context "when the form has a draft question with no answer type" do
-      let(:draft_question) do
-        record = create :draft_question_for_new_page, user: standard_user, form_id: 2
-        record.answer_type = nil
-        record.save!(validate: false)
-        record.reload
-      end
+      context "when the form has a draft question with no answer type" do
+        let(:draft_question) do
+          record = create :draft_question_for_new_page, user: standard_user, form_id: 2
+          record.answer_type = nil
+          record.save!(validate: false)
+          record.reload
+        end
 
-      it "raises an error" do
-        expect {
-          post create_question_path(2), params: { pages_question_input: {
-            hint_text: "This should be the location stated in your contract.",
-            is_optional: false,
-          } }
-        }.to raise_error("No answer type set for draft question")
+        it "redirects to type of answer" do
+          expect(response).to redirect_to(type_of_answer_new_path(form_id: 2))
+        end
       end
     end
   end
