@@ -3,7 +3,7 @@ require "rails_helper"
 describe "pages/routes/show.html.erb" do
   let(:form) { build :form, id: 1, pages: }
   let(:pages) { [page, next_page] }
-  let(:page) { build :page, id: 1, position: 1, next_page: 2, routing_conditions: [build(:condition)] }
+  let(:page) { build :page, id: 1, routing_conditions: [build(:condition)] }
   let(:next_page) { build :page, id: 2 }
   let(:routes) { PageRoutesService.new(form:, pages:, page:).routes }
   let(:errors) { [] }
@@ -81,9 +81,9 @@ describe "pages/routes/show.html.erb" do
       end
 
       context "when the page is the last question" do
-        let(:page) do
-          page_with_skip_route.next_page = nil
-          page_with_skip_route
+        let(:pages) do
+          pages_with_routing.delete(page)
+          pages_with_routing.append(page)
         end
 
         it "shows the check your answers page as the next question in the form" do

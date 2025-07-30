@@ -1,11 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Pages::QuestionsController, type: :request do
-  let(:form) { build :form, id: 2 }
+  let(:form) { build :form, id: 2, pages: }
 
   let(:draft_question) { create :draft_question_for_new_page, user: standard_user, form_id: 2 }
-
-  let(:next_page) { nil }
 
   let(:page) do
     build(:page,
@@ -18,8 +16,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
           is_optional: false,
           is_repeatable: false,
           page_heading: nil,
-          guidance_markdown: nil,
-          next_page:)
+          guidance_markdown: nil)
   end
 
   let(:pages) do
@@ -158,7 +155,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
                 is_optional: false,
                 page_heading: nil,
                 guidance_markdown: nil,
-                next_page:,
                 newly_added_to_api: "some value")
         end
 
@@ -192,7 +188,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
         is_repeatable: false,
         page_heading: "New page heading",
         guidance_markdown: "## Heading level 2",
-        next_page:,
       )
     end
 
@@ -242,7 +237,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
       end
 
       context "when question being updated has a question after it" do
-        let(:next_page) { 4 }
+        let(:pages) { [page, build(:page, id: 4)] }
 
         let(:params) do
           { pages_question_input: {

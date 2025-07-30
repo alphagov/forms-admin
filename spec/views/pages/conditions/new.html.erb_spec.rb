@@ -1,14 +1,13 @@
 require "rails_helper"
 
 describe "pages/conditions/new.html.erb" do
-  let(:form) { build :form, id: 1 }
+  let(:form) { build :form, id: 1, pages: }
   let(:group) { build :group }
   let(:pages) do
     build_list(:page, 3) do |page, i|
       page.id = i
       page.form_id = 1
       page.answer_settings = OpenStruct.new(only_one_option: "true", selection_options: [OpenStruct.new(attributes: { name: "Option 1" }), OpenStruct.new(attributes: { name: "Option 2" })])
-      page.next_page = i + 1 if i < 3
     end
   end
   let(:condition_input) { Pages::ConditionsInput.new(form:, page: pages.first) }

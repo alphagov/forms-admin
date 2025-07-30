@@ -139,7 +139,6 @@ RSpec.describe PagesController, type: :request do
           question_text: "What is your work address?",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
-          next_page: nil,
           is_optional: false,
         )
       end
@@ -347,7 +346,6 @@ RSpec.describe PagesController, type: :request do
           question_text: "What is your work address?",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
-          next_page: nil,
         )
       end
 

@@ -23,6 +23,10 @@ FactoryBot.define do
     incomplete_tasks { %i[missing_pages missing_privacy_policy_url missing_contact_details missing_what_happens_next share_preview_not_completed] }
     state { :draft }
 
+    after(:build) do |form|
+      link_pages_list(form.pages) if form.pages.present?
+    end
+
     transient do
       statuses { { declaration_status: "not_started", make_live_status: "cannot_start", name_status: "completed", pages_status: "not_started", privacy_policy_status: "not_started", support_contact_details_status: "not_started", what_happens_next_status: "not_started" } }
     end
@@ -107,19 +111,6 @@ FactoryBot.define do
       pages do
         Array.new(pages_count) { association(:page_resource, :with_selection_settings) }
       end
-
-      after(:build) do |form|
-        if form.pages.present?
-          # assign position and next_page to each page
-          form.pages.each.with_index(1).each_cons(2) do |page_with_index, next_page_with_index|
-            page, page_index = page_with_index
-            next_page, _next_page_index = next_page_with_index
-
-            page.position = page_index
-            page.next_page = next_page&.id
-          end
-        end
-      end
     end
 
     trait :ready_for_api_routing do
@@ -129,19 +120,6 @@ FactoryBot.define do
 
       pages do
         Array.new(pages_count) { association(:page_resource, :with_api_selection_settings) }
-      end
-
-      after(:build) do |form|
-        if form.pages.present?
-          # assign position and next_page to each page
-          form.pages.each.with_index(1).each_cons(2) do |page_with_index, next_page_with_index|
-            page, page_index = page_with_index
-            next_page, _next_page_index = next_page_with_index
-
-            page.position = page_index
-            page.next_page = next_page&.id
-          end
-        end
       end
     end
 
