@@ -18,7 +18,7 @@ RSpec.describe Forms::SharePreviewInput, type: :model do
 
       it "sets the forms question section completed" do
         mark_complete_input.submit
-        expect(mark_complete_input.form.share_preview_completed).to eq mark_complete_input.mark_complete
+        expect(mark_complete_input.form.share_preview_completed).to be true
       end
     end
 
