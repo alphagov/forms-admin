@@ -1,0 +1,32 @@
+<% set_page_title(t('groups.move.organisation_search.label', group_name: @group.name)) %>
+<% content_for :back_link, govuk_back_link_to(@group, t("back_link.group", group_name: @group.name)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <% if @current_user.super_admin? %>
+      <%= form_with(model: @group) do |f| %>
+            <div class="govuk-!-margin-bottom-4">
+              <%= form_with(model: @search_input, scope: :group, url: move_group_path(@group), method: 'get', local: true) do |f| %>
+                <%= render DfE::Autocomplete::View.new(
+                  f,
+                  attribute_name: :organisation_id,
+                  form_field: f.govuk_collection_select(:organisation_id,
+                                                        Organisation.with_users.order(:name),
+                                                        :id,
+                                                        :name_with_abbreviation,
+                                                        class: ['govuk-!-width-three-quarters'],
+                                                        label: { text: t('groups.move.organisation_search.label'), size: 'l', tag: 'h1' },
+                                                        caption: { text: @group.name, size: 'l' },
+                                                        options: { prompt: t('groups.move.organisation_search.prompt') },
+                                                        ),
+                  html_attributes: { 'data-show-all-values' => 'true'},
+                  )%>
+                <%= f.govuk_submit(t("save_and_continue")) %>
+              <% end %>
+            </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%= init_autocomplete_script(show_all_values: true, raw_attribute: false, source: false) %>

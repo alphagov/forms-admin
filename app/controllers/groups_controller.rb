@@ -54,12 +54,28 @@ class GroupsController < ApplicationController
   # PATCH/PUT /groups/1
   def update
     authorize @group
-    if @group.update(group_params)
-      success_message = @group.active? ? t("groups.success_messages.update") : nil
+
+    @group.assign_attributes(group_params)
+
+    if @group.active?
+      success_message = t("groups.success_messages.update") if @group.changed.include?("name")
+      success_message = t("groups.success_messages.move", org_name: @group.organisation.name) if @group.changed.include?("organisation_id")
+    else
+      success_message = nil
+    end
+
+    if @group.save
       redirect_to @group, success: success_message, status: :see_other
     else
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  def move
+    authorize @group
+
+    @search_input = OrganisationSearchInput.new({ organisation_id: @group.organisation_id }.merge(search_params))
+    render :move
   end
 
   # GET /groups/1/delete
@@ -153,7 +169,7 @@ private
 
   # Only allow a list of trusted parameters through.
   def group_params
-    params.require(:group).permit(:name)
+    params.require(:group).permit(:name, :organisation_id)
   end
 
   def confirm_upgrade_input_params

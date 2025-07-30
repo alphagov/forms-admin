@@ -41,8 +41,8 @@ RSpec.describe GroupPolicy do
     let(:organisation) { group.organisation }
 
     context "and in the same organisation as the group" do
-      it "forbids only request_upgrade and review_upgrade" do
-        expect(policy).to forbid_only_actions(%i[request_upgrade review_upgrade])
+      it "forbids only request_upgrade, review_upgrade and move" do
+        expect(policy).to forbid_only_actions(%i[request_upgrade review_upgrade move])
       end
     end
 
@@ -92,7 +92,7 @@ RSpec.describe GroupPolicy do
       end
 
       it "forbids upgrade, add_group_admin, review_upgrade, delete and destroy" do
-        expect(policy).to forbid_only_actions(%i[upgrade add_group_admin review_upgrade delete destroy])
+        expect(policy).to forbid_only_actions(%i[upgrade add_group_admin review_upgrade delete destroy move])
       end
 
       context "when the group status is active" do

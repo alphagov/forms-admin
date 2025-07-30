@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "groups/delete", type: :view do
+RSpec.describe "groups/delete", type: :view do
   let(:delete_confirmation_input) { Groups::DeleteConfirmationInput.new }
   let(:group) { create :group, name: "Test Group" }
 
