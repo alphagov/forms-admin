@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Pages::ConditionsInput, type: :model do
   let(:conditions_input) { described_class.new(form:, page:, record: condition) }
-  let(:form) { build :form, :ready_for_routing, id: 1 }
+  let(:form) { create :form, :ready_for_routing }
   let(:pages) { form.pages }
   let(:is_optional) { false }
   let(:page) do
@@ -11,7 +11,7 @@ RSpec.describe Pages::ConditionsInput, type: :model do
       second_page.answer_type = "selection"
       second_page.answer_settings = DataStruct.new(
         only_one_option: true,
-        selection_options: [OpenStruct.new(attributes: { name: "Option 1" }), OpenStruct.new(attributes: { name: "Option 2" })],
+        selection_options: [DataStruct.new({ name: "Option 1" }), DataStruct.new({ name: "Option 2" })],
       )
     end
   end
@@ -74,21 +74,13 @@ RSpec.describe Pages::ConditionsInput, type: :model do
 
   describe "#update_condition" do
     context "when validation pass" do
-      let(:condition) { build :condition, id: 3, form_id: 1, page_id: 2, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
+      let(:condition) { create :condition, routing_page_id: page.id, check_page_id: page.id, answer_value: "Wales", goto_page_id: pages.third.id }
 
       before do
         allow(ConditionRepository).to receive(:save!)
 
         conditions_input.answer_value = "England"
-        conditions_input.goto_page_id = 4
-      end
-
-      it "calls assign_skip_to_end" do
-        allow(conditions_input).to receive(:assign_skip_to_end)
-
-        conditions_input.update_condition
-
-        expect(conditions_input).to have_received(:assign_skip_to_end).exactly(1).times
+        conditions_input.goto_page_id = pages.fourth.id
       end
 
       it "updates a condition" do
@@ -202,9 +194,9 @@ RSpec.describe Pages::ConditionsInput, type: :model do
   end
 
   describe "#check_errors_from_api" do
-    let(:condition) { build :condition, :with_answer_value_missing, id: 3, page_id: 2, routing_page_id: 1, answer_value: "England", check_page_id: 1, goto_page_id: 3 }
+    let(:condition) { create :condition, :with_answer_value_missing, routing_page_id: page.id, answer_value: "England", check_page_id: page.id, goto_page_id: pages.third.id }
 
-    it "is invalid if there are API validation errors" do
+    it "is invalid if there are validation errors" do
       error_message = I18n.t("activemodel.errors.models.pages/conditions_input.attributes.answer_value.answer_value_doesnt_exist")
       conditions_input.check_errors_from_api
       expect(conditions_input.errors.full_messages_for(:answer_value)).to include("Answer value #{error_message}")
@@ -213,7 +205,7 @@ RSpec.describe Pages::ConditionsInput, type: :model do
 
   describe "#assign_condition_values" do
     let(:conditions_input) { described_class.new(form:, page:, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id, skip_to_end: condition.skip_to_end) }
-    let(:condition) { build :condition, id: 3, page_id: 2, routing_page_id: 1, answer_value: "England", check_page_id: 1, goto_page_id:, skip_to_end: }
+    let(:condition) { create :condition, routing_page_id: page.id, answer_value: "England", check_page_id: page.id, goto_page_id:, skip_to_end: }
     let(:goto_page_id) { nil }
     let(:skip_to_end) { false }
 
