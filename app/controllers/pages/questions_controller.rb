@@ -37,7 +37,7 @@ class Pages::QuestionsController < PagesController
   end
 
   def update
-    page.load(page_params_for_forms_api)
+    page.assign_attributes(page_params_for_forms_api)
 
     @question_input = Pages::QuestionInput.new(page_params_for_form_object)
 
