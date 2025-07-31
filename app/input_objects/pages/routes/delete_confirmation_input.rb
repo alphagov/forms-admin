@@ -20,10 +20,6 @@ private
   def delete_routes
     pages = FormRepository.pages(form)
     page_routes = PageRoutesService.new(form:, pages:, page:).routes
-    page_routes.each do |rc|
-      rc.prefix_options[:form_id] = form.id
-      rc.prefix_options[:page_id] = rc.routing_page_id
-      ConditionRepository.destroy(rc)
-    end
+    page_routes.each { |condition| ConditionRepository.destroy(condition) }
   end
 end

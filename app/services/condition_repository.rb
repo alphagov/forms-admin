@@ -21,26 +21,25 @@ class ConditionRepository
         exit_page_markdown:,
       )
       update_and_save_to_database!(condition)
-      condition
     end
 
     def find(condition_id:, form_id:, page_id:)
       condition = Api::V1::ConditionResource.find(condition_id, params: { form_id:, page_id: })
       save_to_database!(condition)
-      condition
     end
 
     def save!(record)
       condition = Api::V1::ConditionResource.new(record.attributes, true)
-      condition.prefix_options = record.prefix_options
+      condition.prefix_options[:form_id] = record.form.id
+      condition.prefix_options[:page_id] = record.routing_page_id
       condition.save!
       update_and_save_to_database!(condition)
-      condition
     end
 
     def destroy(record)
       condition = Api::V1::ConditionResource.new(record.attributes, true)
-      condition.prefix_options = record.prefix_options
+      condition.prefix_options[:form_id] = record.form.id
+      condition.prefix_options[:page_id] = record.routing_page_id
 
       begin
         condition.destroy # rubocop:disable Rails/SaveBang
@@ -57,12 +56,14 @@ class ConditionRepository
 
     def save_to_database!(record)
       Condition.upsert(record.database_attributes)
+      Condition.find(record.id)
     end
 
     def update_and_save_to_database!(record)
       condition = Condition.find_or_initialize_by(id: record.id)
       condition.assign_attributes(record.database_attributes)
       condition.save_and_update_form
+      condition
     end
   end
 end
