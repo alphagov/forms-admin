@@ -11,6 +11,8 @@ class DataStructType < ActiveModel::Type::Value
       DataStruct.recursive_new(decoded) unless decoded.nil?
     when Hash
       DataStruct.recursive_new(value)
+    when ActiveResource::Base
+      DataStruct.recursive_new(value.attributes)
     when DataStruct
       value
     end
