@@ -3,7 +3,6 @@ class PageRepository
     def find(page_id:, form_id:)
       page = Api::V1::PageResource.find(page_id, params: { form_id: })
       save_to_database!(page)
-      page
     end
 
     def create!(form_id:,
@@ -27,20 +26,18 @@ class PageRepository
         answer_type:,
       )
       update_and_save_to_database!(page)
-      page
     end
 
     def save!(record)
       page = Api::V1::PageResource.new(record.attributes, true)
-      page.prefix_options = record.prefix_options
+      page.prefix_options[:form_id] = record.form.id
       page.save!
       update_and_save_to_database!(page)
-      page
     end
 
     def destroy(record)
       page = Api::V1::PageResource.new(record.attributes, true)
-      page.prefix_options = record.prefix_options
+      page.prefix_options[:form_id] = record.form.id
 
       begin
         page.destroy # rubocop:disable Rails/SaveBang
@@ -55,12 +52,10 @@ class PageRepository
 
     def move_page(record, direction)
       page = Api::V1::PageResource.new(record.attributes, true)
-      page.prefix_options = record.prefix_options
+      page.prefix_options[:form_id] = record.form.id
 
       page.move_page(direction)
       update_and_save_to_database!(page)
-
-      page
     end
 
   private
@@ -100,17 +95,19 @@ class PageRepository
       end
 
       save_routing_conditions_to_database!(record)
+      Page.find(record.id)
     end
 
     def update_and_save_to_database!(record)
       attributes = record.database_attributes
 
-      begin
+      page_record = begin
         # transaction is required to be able to retry after catching exception
         ActiveRecord::Base.transaction do
           page = Page.find_or_initialize_by(id: record.id)
           page.assign_attributes(**attributes)
           page.save_and_update_form
+          page
         end
       # we get an exception if the form does not already exist in the database
       rescue ActiveRecord::RecordInvalid => e
@@ -122,6 +119,7 @@ class PageRepository
       end
 
       save_routing_conditions_to_database!(record)
+      page_record
     end
   end
 end

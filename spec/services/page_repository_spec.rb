@@ -2,26 +2,23 @@ require "rails_helper"
 
 describe PageRepository do
   let(:form_id) { form.id }
-  let(:form_attributes) { attributes_for(:form) }
-  let(:form) do
-    form = build(:form_resource, **form_attributes)
-    form.id = Form.create!(form.database_attributes).id
-    form
-  end
+  let(:form) { create(:form_record) }
 
   describe "#find" do
-    let(:page) { build(:page_resource, id: 2, form_id:) }
+    let(:page) { build(:page_resource, id: 4, form_id:, answer_type:, answer_settings:) }
+    let(:answer_type) { "text" }
+    let(:answer_settings) { {} }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/#{form_id}/pages/2", headers, page.to_json, 200
+        mock.get "/api/v1/forms/#{form_id}/pages/#{page.id}", headers, page.to_json, 200
       end
     end
 
     describe "api" do
       it "finds the page through ActiveResource" do
         described_class.find(page_id: page.id, form_id:)
-        expect(Api::V1::PageResource.new(id: 2, form_id:)).to have_been_read
+        expect(Api::V1::PageResource.new(id: page.id, form_id:)).to have_been_read
       end
     end
 
@@ -30,6 +27,10 @@ describe PageRepository do
         expect {
           described_class.find(page_id: page.id, form_id:)
         }.to change(Page, :count).by(1)
+      end
+
+      it "returns a page record" do
+        expect(described_class.find(page_id: page.id, form_id:)).to be_a(Page)
       end
 
       it "associates the page with a form" do
@@ -83,6 +84,35 @@ describe PageRepository do
           end
         end
       end
+
+      context "when the page has answer settings" do
+        let(:answer_type) { "selection" }
+        let(:answer_settings) { { only_one_option: "true", selection_options: [{ name: "Option 1" }] } }
+
+        it "saves the answer settings to the database" do
+          described_class.find(page_id: page.id, form_id:)
+          expect(Page.find(page.id)).to have_attributes(
+            "answer_settings" => DataStruct.new({
+              "only_one_option" => "true",
+              "selection_options" => [DataStruct.new({ name: "Option 1" })],
+            }),
+          )
+        end
+      end
+
+      context "when the page is already in the database" do
+        let!(:existing_page) { create(:page_record, id: page.id, form_id:) }
+
+        it "does not create a new page" do
+          expect {
+            described_class.find(page_id: existing_page.id, form_id:)
+          }.not_to change(Page, :count)
+        end
+
+        it "returns the existing page" do
+          expect(described_class.find(page_id: existing_page.id, form_id:)).to eq(existing_page)
+        end
+      end
     end
   end
 
@@ -100,10 +130,11 @@ describe PageRepository do
     end
     let(:answer_type) { "organisation_name" }
     let(:answer_settings) { {} }
+    let(:created_page_id) { 4 }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.post "/api/v1/forms/#{form_id}/pages", post_headers, build(:page_resource, page_params.merge(id: 1)).to_json, 200
+        mock.post "/api/v1/forms/#{form_id}/pages", post_headers, build(:page_resource, page_params.merge(id: created_page_id)).to_json, 200
       end
     end
 
@@ -121,13 +152,17 @@ describe PageRepository do
         }.to change(Page, :count).by(1)
       end
 
+      it "returns a page record" do
+        expect(described_class.create!(**page_params)).to be_a(Page)
+      end
+
       it "associates the page with a form" do
         described_class.create!(**page_params)
         expect(Page.last).to have_attributes(form_id:)
       end
 
       context "when the form question section is complete" do
-        let(:form_attributes) { attributes_for(:form, question_section_completed: true) }
+        let(:form) { create(:form_record, question_section_completed: true) }
 
         it "updates the form to mark the question section as incomplete" do
           expect {
@@ -142,7 +177,7 @@ describe PageRepository do
 
         it "saves the answer settings to the database" do
           described_class.create!(**page_params)
-          expect(Page.last).to have_attributes(
+          expect(Page.find(created_page_id)).to have_attributes(
             "answer_settings" => DataStruct.new({
               "only_one_option" => "true",
               "selection_options" => [],
@@ -153,52 +188,63 @@ describe PageRepository do
     end
 
     it "has the same ID in the database and for the API" do
-      page = described_class.create!(**page_params)
-      expect(Page.last.id).to eq page.id
+      described_class.create!(**page_params)
+      expect(Page.last.id).to eq created_page_id
     end
   end
 
   describe "#save!" do
-    let(:page) { build(:page_resource, id: 2, form_id:, is_optional: false) }
+    let(:page) { create(:page_record, form:, is_optional: false) }
+    let(:updated_page_resource) { build(:page_resource, id: page.id, form_id:, is_optional: true) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/#{form_id}/pages/2", headers, page.to_json, 200
-        mock.put "/api/v1/forms/#{form_id}/pages/2", post_headers
+        mock.put "/api/v1/forms/#{form_id}/pages/#{page.id}", post_headers, updated_page_resource.to_json, 200
       end
     end
 
     describe "api" do
       it "updates the page through ActiveResource" do
-        page = described_class.find(page_id: 2, form_id:)
         page.is_optional = true
         described_class.save!(page)
-        expect(Api::V1::PageResource.new(id: 2, form_id:, is_optional: true)).to have_been_updated
+        expect(Api::V1::PageResource.new(id: page.id, form_id:, is_optional: true)).to have_been_updated
+        expect(JSON.parse(ActiveResource::HttpMock.requests.first.body)).to include("is_optional" => true)
       end
     end
 
     describe "database" do
       it "saves the page to the database" do
-        page = described_class.find(page_id: 2, form_id:)
         page.is_optional = true
 
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.put "/api/v1/forms/#{form_id}/pages/2", put_headers, page.to_json
+          mock.put "/api/v1/forms/#{form_id}/pages/#{page.id}", put_headers, page.to_json
         end
 
         expect {
           described_class.save!(page)
-        }.to change { Page.find(2).is_optional }.to(true)
+        }.to change { Page.find(page.id).is_optional }.to(true)
+      end
+
+      it "returns a page record" do
+        expect(described_class.save!(page)).to be_a(Page)
       end
 
       context "when there are no changes to save" do
-        let(:form_attributes) { attributes_for(:form, question_section_completed: true) }
+        let(:form) { create(:form_record, question_section_completed: true) }
+        let(:page) { create(:page_record, form: form, answer_type: "number", answer_settings: { foo: "bar" }) }
+        let(:updated_page_resource) do
+          build(:page_resource,
+                id: page.id,
+                form_id:,
+                question_text: page.question_text,
+                answer_type: page.answer_type,
+                answer_settings: page.answer_settings,
+                position: page.position)
+        end
 
         it "does not update the form" do
-          page = described_class.find(page_id: 2, form_id:)
-
           ActiveResource::HttpMock.respond_to do |mock|
-            mock.put "/api/v1/forms/#{form_id}/pages/2", put_headers, page.to_json
+            mock.put "/api/v1/forms/#{form_id}/pages/#{page.id}", put_headers, updated_page_resource.to_json
           end
 
           expect {
@@ -208,18 +254,13 @@ describe PageRepository do
       end
 
       context "when there are changes to save" do
-        let(:form) do
-          form = build(:form, question_section_completed: true)
-          form.id = Form.create!(form.database_attributes).id
-          form
-        end
+        let(:form) { create(:form_record, question_section_completed: true) }
 
-        it "does not update the form" do
-          page = described_class.find(page_id: 2, form_id:)
+        it "updates the form" do
           page.is_optional = true
 
           ActiveResource::HttpMock.respond_to do |mock|
-            mock.put "/api/v1/forms/#{form_id}/pages/2", put_headers, page.to_json
+            mock.put "/api/v1/forms/#{form_id}/pages/#{page.id}", put_headers, updated_page_resource.to_json
           end
 
           expect {
@@ -231,29 +272,26 @@ describe PageRepository do
   end
 
   describe "#destroy" do
-    let(:page) { build(:page_resource, id: 2, form_id:) }
+    let(:page) { create(:page_record, form_id:) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/#{form_id}/pages/2", headers, page.to_json, 200
-        mock.delete "/api/v1/forms/#{form_id}/pages/2", delete_headers, nil, 204
+        mock.delete "/api/v1/forms/#{form_id}/pages/#{page.id}", delete_headers, nil, 204
       end
     end
 
     describe "api" do
       it "destroys the page through ActiveResource" do
-        page = described_class.find(page_id: 2, form_id:)
         described_class.destroy(page)
-        expect(Api::V1::PageResource.new(id: 2, form_id:)).to have_been_deleted
+        expect(Api::V1::PageResource.new(id: page.id, form_id:)).to have_been_deleted
       end
 
       context "when the page has already been deleted" do
         it "does not raise an error" do
-          page = described_class.find(page_id: 2, form_id:)
           described_class.destroy(page)
 
           ActiveResource::HttpMock.respond_to do |mock|
-            mock.delete "/api/v1/forms/#{form_id}/pages/2", delete_headers, nil, 404
+            mock.delete "/api/v1/forms/#{form_id}/pages/#{page.id}", delete_headers, nil, 404
           end
 
           expect {
@@ -265,19 +303,19 @@ describe PageRepository do
 
     describe "database" do
       it "removes the page from the database" do
-        page = described_class.find(page_id: 2, form_id:)
-
         expect {
           described_class.destroy(page)
         }.to change(Page, :count).by(-1)
       end
 
+      it "returns a page record" do
+        expect(described_class.destroy(page)).to be_a(Page)
+      end
+
       context "when the form question section is complete" do
-        let(:form_attributes) { attributes_for(:form, question_section_completed: true) }
+        let(:form) { create(:form_record, question_section_completed: true) }
 
         it "updates the form to mark the question section as incomplete" do
-          page = described_class.find(page_id: 2, form_id:)
-
           expect {
             described_class.destroy(page)
           }.to change { Form.find(form_id).question_section_completed }.to(false)
@@ -285,46 +323,30 @@ describe PageRepository do
       end
 
       context "when the page has routing conditions" do
-        let(:routing_conditions) do
-          [
-            build(:condition_resource, id: 1, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Red"),
-            build(:condition_resource, id: 2, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Green"),
-          ]
+        before do
+          create(:condition_record, routing_page_id: page.id, check_page_id: page.id, goto_page_id: nil, skip_to_end: true, answer_value: "Red")
+          create(:condition_record, routing_page_id: page.id, check_page_id: page.id, goto_page_id: nil, skip_to_end: true, answer_value: "Green")
+          page.reload
         end
 
-        let(:page) { build(:page_resource, id: 2, form_id:, routing_conditions:) }
-
         it "deletes the conditions" do
-          page = described_class.find(page_id: 2, form_id:)
-
           expect {
             described_class.destroy(page)
           }.to change(Condition, :count).by(-2)
         end
       end
-
-      context "when the page is not already in the database" do
-        it "does not raise an error" do
-          page = Api::V1::PageResource.new(id: 2, form_id:)
-          expect {
-            described_class.destroy(page)
-          }.not_to raise_error
-        end
-      end
     end
 
     it "returns the deleted page" do
-      page = described_class.find(page_id: 2, form_id:)
       expect(described_class.destroy(page)).to eq page
     end
 
     context "when the page has already been deleted" do
       it "returns the deleted page" do
-        page = described_class.find(page_id: 2, form_id:)
         described_class.destroy(page)
 
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.delete "/api/v1/forms/#{form_id}/pages/2", delete_headers, nil, 404
+          mock.delete "/api/v1/forms/#{form_id}/pages/#{page.id}", delete_headers, nil, 404
         end
 
         expect(described_class.destroy(page)).to eq page
@@ -333,20 +355,18 @@ describe PageRepository do
   end
 
   describe "#move_page" do
-    let(:page) { build(:page_resource, id: 2, form_id:, position: 2) }
-    let(:moved_page) { build(:page_resource, id: 2, form_id:, position: 1) }
+    let(:page) { create(:page_record, form_id:, position: 2) }
+    let(:moved_page_resource) { build(:page_resource, id: page.id, form_id:, position: 1) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/#{form_id}/pages/2", headers, page.to_json, 200
-        mock.put "/api/v1/forms/#{form_id}/pages/2/up", post_headers, moved_page.to_json, 200
+        mock.put "/api/v1/forms/#{form_id}/pages/#{page.id}/up", post_headers, moved_page_resource.to_json, 200
       end
     end
 
     describe "api" do
       it "calls the move endpoint through ActiveResource" do
-        move_request = ActiveResource::Request.new(:put, "/api/v1/forms/#{form_id}/pages/2/up", {}, post_headers)
-        page = described_class.find(page_id: 2, form_id:)
+        move_request = ActiveResource::Request.new(:put, "/api/v1/forms/#{form_id}/pages/#{page.id}/up", {}, post_headers)
         described_class.move_page(page, :up)
         expect(ActiveResource::HttpMock.requests).to include move_request
       end
@@ -354,19 +374,19 @@ describe PageRepository do
 
     describe "database" do
       it "updates the page in the database" do
-        page = described_class.find(page_id: 2, form_id:)
-
         expect {
           described_class.move_page(page, :up)
-        }.to change { Page.find(2).position }.from(2).to(1)
+        }.to change { Page.find(page.id).position }.from(2).to(1)
+      end
+
+      it "returns a page record" do
+        expect(described_class.move_page(page, :up)).to be_a(Page)
       end
 
       context "when the form question section is complete" do
-        let(:form_attributes) { attributes_for(:form, question_section_completed: true) }
+        let(:form) { create(:form_record, question_section_completed: true) }
 
         it "updates the form to mark the question section as incomplete" do
-          page = described_class.find(page_id: 2, form_id:)
-
           expect {
             described_class.move_page(page, :up)
           }.to change { Form.find(form_id).question_section_completed }.to(false)
@@ -374,19 +394,16 @@ describe PageRepository do
       end
 
       context "when the page has routing conditions" do
-        let(:routing_conditions) do
-          [
-            build(:condition_resource, id: 1, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Red"),
-            build(:condition_resource, id: 2, routing_page_id: 2, check_page_id: 2, goto_page_id: nil, skip_to_end: true, answer_value: "Green"),
-          ]
+        before do
+          create(:condition_record, routing_page_id: page.id, check_page_id: page.id, goto_page_id: nil, skip_to_end: true, answer_value: "Red")
+          create(:condition_record, routing_page_id: page.id, check_page_id: page.id, goto_page_id: nil, skip_to_end: true, answer_value: "Green")
+          page.reload
         end
 
-        let(:page) { build(:page_resource, id: 2, form_id:, position: 2, routing_conditions:) }
-        let(:moved_page) { build(:page_resource, id: 2, form_id:, position: 1, routing_conditions:) }
+        let(:page) { create(:page_record, form_id:, position: 2) }
+        let(:moved_page_resource) { build(:page_resource, id: page.id, form_id:, position: 1) }
 
         it "does not raise an error" do
-          page = described_class.find(page_id: 2, form_id:)
-
           expect {
             described_class.move_page(page, :up)
           }.not_to raise_error
