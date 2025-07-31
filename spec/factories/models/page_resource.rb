@@ -75,7 +75,7 @@ FactoryBot.define do
       end
 
       answer_type { "address" }
-      answer_settings { DataStruct.new(input_type: DataStruct.new(uk_address:, international_address:)) }
+      answer_settings { { input_type: DataStruct.new(uk_address:, international_address:) } }
     end
 
     trait :with_name_settings do

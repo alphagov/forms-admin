@@ -60,7 +60,7 @@ describe ConditionRepository do
     end
 
     it "has the same ID in the database and for the API" do
-      condition = described_class.create!(**condition_params)
+      described_class.create!(**condition_params)
       expect(Condition.last.id).to eq created_condition_id
     end
   end
@@ -113,7 +113,7 @@ describe ConditionRepository do
     end
   end
 
- describe "#save!" do
+  describe "#save!" do
     let(:condition) { create(:condition_record, skip_to_end: false, routing_page_id: routing_page.id) }
     let(:updated_condition_resource) { build(:condition_resource, id: condition.id, routing_page_id: routing_page.id, skip_to_end: true) }
 
@@ -158,7 +158,7 @@ describe ConditionRepository do
   end
 
   describe "#destroy" do
-    let(:condition) { create(:condition_record, routing_page_id: routing_page.id ) }
+    let(:condition) { create(:condition_record, routing_page_id: routing_page.id) }
 
     before do
       ActiveResource::HttpMock.respond_to do |mock|
