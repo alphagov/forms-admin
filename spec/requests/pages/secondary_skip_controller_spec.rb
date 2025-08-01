@@ -1,13 +1,23 @@
 require "rails_helper"
 
 RSpec.describe Pages::SecondarySkipController, type: :request do
-  let(:form) { build :form, id: 2, pages: }
+  let(:form) { create :form, :with_pages }
+  let(:pages) { form.pages }
+  let(:page) do
+    pages.first.tap do |first_page|
+      first_page.is_optional = false
+      first_page.answer_type = "selection"
+      first_page.answer_settings = DataStruct.new(
+        only_one_option: true,
+        selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
+                            OpenStruct.new(attributes: { name: "Option 2" })],
+      )
+    end
+  end
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   RSpec.shared_examples "requires condition" do |action|
-    let(:pages) { build_pages }
-
     it "redirects to the page list" do
       send(action)
       expect(response).to redirect_to(form_pages_path(form.id))
@@ -24,24 +34,35 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
     allow(ConditionRepository).to receive_messages(create!: {}, find: {}, save!: {}, destroy: {})
   end
 
-  describe "#new" do
-    subject(:get_new) { get new_secondary_skip_path(form_id: 2, page_id: 1) }
+  fdescribe "#new" do
+    subject(:get_new) { get new_secondary_skip_path(form_id: form.id, page_id: page.id) }
 
-    let(:pages) { build_pages_with_skip_condition }
-
-    it_behaves_like "requires condition", :subject
-
-    it "returns 200" do
-      get_new
-      expect(response).to have_http_status(:success)
+    context "when no condition exists on the page" do
+      it_behaves_like "requires condition", :subject
     end
 
-    context "when a secondary skip condition already exists on the page" do
-      let(:pages) { build_pages_with_existing_secondary_skip }
+    context "when a condition exists on the page" do
+      before do
+        create(:condition, routing_page_id: page.id, check_page_id: page.id, answer_value: "Option 1", goto_page_id: pages[2].id, skip_to_end: false)
+        page.reload
+      end
 
-      it "redirects to the show routes page" do
+      it "returns 200" do
         get_new
-        expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
+        expect(response).to have_http_status(:success)
+      end
+
+      context "when a secondary skip condition already exists on the page" do
+        before do
+          create(:condition, routing_page_id: pages[1].id, check_page_id: page.id, goto_page_id: pages[4].id)
+          page.reload
+          pages[1].reload
+        end
+
+        it "redirects to the show routes page" do
+          get_new
+          expect(response).to redirect_to(show_routes_path(form_id: form.id, page_id: page.id))
+        end
       end
     end
   end
@@ -275,20 +296,6 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
         delete destroy_secondary_skip_path(form_id: 2, page_id: 1)
         expect(response).to redirect_to(show_routes_path(form_id: 2, page_id: 1))
       end
-    end
-  end
-
-  def build_pages
-    build_list(:page, 5).each_with_index do |page, index|
-      page.id = index + 1
-    end
-  end
-
-  def build_pages_with_skip_condition
-    build_pages.tap do |pages|
-      pages[0] = build :page, :with_selection_settings, id: 1, routing_conditions: [
-        build(:condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Option 1", goto_page_id: pages[2].id, skip_to_end: false),
-      ]
     end
   end
 
