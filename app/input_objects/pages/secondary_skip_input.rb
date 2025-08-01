@@ -18,18 +18,10 @@ class Pages::SecondarySkipInput < BaseInput
       record.goto_page_id = skip_to_end? ? nil : goto_page_id
       record.skip_to_end = skip_to_end?
 
-      record.prefix_options[:form_id] = form.id
-      record.prefix_options[:page_id] = record.routing_page_id
-
       return ConditionRepository.save!(record)
     end
 
     if record.present?
-      # we need to ensure the prefix options in the condition we are removing
-      # are unchanged as Conditions are accessed through the API with form_id
-      # and page_id
-      record.prefix_options[:form_id] = form.id
-      record.prefix_options[:page_id] = record.routing_page_id
       ConditionRepository.destroy(record)
     end
 
