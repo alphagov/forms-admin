@@ -3,13 +3,11 @@ class FormRepository
     def create!(creator_id:, name:)
       form = Api::V1::FormResource.create!(creator_id:, name:)
       save_to_database!(form)
-      form
     end
 
     def find(form_id:)
       form = Api::V1::FormResource.find(form_id)
       save_to_database!(form)
-      form
     end
 
     def find_live(form_id:)
@@ -27,11 +25,10 @@ class FormRepository
     def save!(record)
       form = Api::V1::FormResource.new(record.attributes, true)
       form.save!
-      save_to_database!(form)
-      db_form = Form.find(record.id)
+      db_form = save_to_database!(form)
       db_form.create_draft_from_live_form! if db_form.live?
       db_form.create_draft_from_archived_form! if db_form.archived?
-      form
+      db_form
     end
 
     def make_live!(record)
@@ -41,9 +38,9 @@ class FormRepository
 
       form.make_live!
 
-      Form.find(record.id).make_live!
-
-      form
+      db_form = Form.find(record.id)
+      db_form.make_live!
+      db_form
     end
 
     def archive!(record)
@@ -53,9 +50,9 @@ class FormRepository
 
       form.archive!
 
-      Form.find(record.id).archive_live_form!
-
-      form
+      db_form = Form.find(record.id)
+      db_form.archive_live_form!
+      db_form
     end
 
     def destroy(record)
@@ -82,13 +79,14 @@ class FormRepository
       pages = form.pages
       save_pages_to_database!(record, pages)
 
-      pages
+      Form.find(record.id).pages
     end
 
   private
 
     def save_to_database!(record)
       Form.upsert(record.database_attributes)
+      Form.find(record.id)
     end
 
     def save_pages_to_database!(form_record, page_records)
