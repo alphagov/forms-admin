@@ -155,7 +155,7 @@ features:
   some_feature: true
 ```
 
-You can then use the [feature service](app/service/feature_service.rb) to check whether the feature is enabled or not. Eg. `FeatureService.enabled?(:some_feature)`.
+You can then use the [feature service](app/services/feature_service.rb) to check whether the feature is enabled or not. Eg. `FeatureService.enabled?(:some_feature)`.
 
 You can also nest features:
 
@@ -228,7 +228,7 @@ If you want to deliberately raise an exception to test, uncomment out the trigge
 
 The forms-admin app is containerised (see [Dockerfile](Dockerfile)) and can be deployed however you would normally deploy a containerised app.
 
-We host our apps using Amazon Web Services (AWS). You can [read about how deployments happen on our team wiki, if you have access](https://github.com/alphagov/forms-team/wiki/Deploying-code-changes-AWS).
+We host our apps using Amazon Web Services (AWS). You can [read about how deployments happen on our team wiki, if you have access](https://github.com/alphagov/forms-team/wiki/Deploying-code-changes-in-AWS).
 
 ### Logging
 
