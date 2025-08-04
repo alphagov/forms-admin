@@ -17,7 +17,10 @@ FactoryBot.define do
     share_preview_completed { true }
     creator_id { nil }
     start_page { nil }
-    pages { [] }
     live_at { Time.zone.now.to_s }
+
+    pages do
+      Array.new(5) { association(:made_live_page) }
+    end
   end
 end
