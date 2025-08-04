@@ -1,6 +1,5 @@
 class User < ApplicationRecord
   include GDS::SSO::User
-  has_paper_trail only: %i[role organisation_id has_access]
 
   class UserAuthenticationException < StandardError; end
 
@@ -20,6 +19,15 @@ class User < ApplicationRecord
   has_many :draft_questions
 
   serialize :permissions, coder: YAML, type: Array
+
+  enum :research_contact_status, {
+    consented: "consented",
+    declined: "declined",
+    not_asked: "not_asked",
+    to_be_asked: "to_be_asked",
+  }, prefix: "research_contact"
+
+  has_paper_trail only: %i[role organisation_id has_access]
 
   enum :role, {
     super_admin: "super_admin",
