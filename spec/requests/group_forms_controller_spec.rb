@@ -55,6 +55,25 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
     end
   end
 
+  describe "GET /edit" do
+    let(:form) { build(:form_resource, id: 1) }
+
+    before do
+      login_as_organisation_admin_user
+      allow(FormRepository).to receive(:find).and_return(form)
+
+      group = build(:group, id: 1)
+      group.group_forms.build(form_id: 1)
+      group.save!
+    end
+
+    it "returns 200 response" do
+      get edit_group_form_url(group, id: form.id)
+
+      expect(response).to have_http_status :ok
+    end
+  end
+
   describe "POST /" do
     context "with valid parameters" do
       let(:new_form_id) { 1 }
