@@ -9,6 +9,10 @@ class GroupFormPolicy < ApplicationPolicy
     organisation_admin_or_super_admin?
   end
 
+  def update?
+    organisation_admin_or_super_admin?
+  end
+
 private
 
   def organisation_admin_or_super_admin?
