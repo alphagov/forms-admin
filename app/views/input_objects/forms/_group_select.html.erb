@@ -1,0 +1,9 @@
+<%= form_with(model: @group_select, method: :patch, url:) do |f| %>
+  <% if @group_select&.errors.any? %>
+    <%= f.govuk_error_summary %>
+  <% end %>
+
+  <%= f.govuk_collection_radio_buttons(:group, @group_select.groups, :id, ->(option) { option.name }) %>
+  <%= f.govuk_submit %>
+
+<% end %>

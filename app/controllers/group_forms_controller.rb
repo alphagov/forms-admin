@@ -27,16 +27,36 @@ class GroupFormsController < ApplicationController
   end
 
   def edit
-    @group_form = GroupForm.find_by(form_id: 1)
+    @group_form = GroupForm.find_by(form_id: params[:id])
     authorize @group_form
 
-    render :edit
+    form = FormRepository.find(form_id: @group_form.form_id)
+
+    @group_select = Forms::GroupSelect.new(group: @group, form: form)
+  end
+
+  def update
+    @group_form = GroupForm.find_by(form_id: params[:id])
+    authorize @group_form
+
+    form = Form.find(params[:id])
+    @group_select = Forms::GroupSelect.new(group: group_select_params[:group], form: form)
+
+    receiving_group = Group.find(@group_select.group)
+    form.move_to_group(receiving_group.external_id)
+    form.reload
+
+    redirect_to group_path(params[:group_id])
   end
 
 private
 
   def set_group
     @group = Group.find_by!(external_id: params[:group_id])
+  end
+
+  def group_select_params
+    params.require(:forms_group_select).permit(:group)
   end
 
   def name_input_params
