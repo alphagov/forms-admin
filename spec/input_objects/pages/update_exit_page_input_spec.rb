@@ -2,9 +2,9 @@ require "rails_helper"
 
 RSpec.describe Pages::UpdateExitPageInput, type: :model do
   let(:update_exit_page_input) { described_class.new(form:, page:, record: condition) }
-  let(:condition) { build :condition, :with_exit_page, form:, page: }
-  let(:form) { build :form, :ready_for_routing, id: 1 }
+  let(:form) { create :form, :ready_for_routing }
   let(:page) { form.pages.first }
+  let(:condition) { create :condition, :with_exit_page, routing_page_id: page.id, check_page_id: page.id }
 
   describe "validations" do
     it "is invalid if exit_page_heading is nil" do
