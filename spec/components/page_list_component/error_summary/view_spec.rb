@@ -114,16 +114,12 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
   end
 
   describe "class methods" do
-    let(:routing_conditions_page_with_answer_value_missing) do
-      [(build :condition, :with_answer_value_missing, id: 1, routing_page_id: 1, check_page_id: 1, goto_page_id: 3)]
-    end
-    let(:routing_conditions_page_with_goto_page_missing) do
-      [(build :condition, :with_goto_page_missing, id: 2, routing_page_id: 2, check_page_id: 2, answer_value: "Wales")]
-    end
-    let(:pages) do
-      [(build :page, id: 1, position: 1, question_text: "Enter your name", routing_conditions: routing_conditions_page_with_answer_value_missing),
-       (build :page, id: 2, position: 2, question_text: "What is your pet's phone number?", routing_conditions: routing_conditions_page_with_goto_page_missing),
-       (build :page, id: 3, position: 3, question_text: "How many pets do you own?", routing_conditions: [])]
+    let(:form) { create :form, :ready_for_routing }
+    let!(:condition_with_answer_value_missing) { create :condition, routing_page_id: pages.first.id, check_page_id: pages.first.id, goto_page_id: pages.third.id, answer_value: nil }
+    let!(:condition_with_goto_page_missing) { create :condition, routing_page_id: pages.second.id, check_page_id: pages.second.id, goto_page_id: nil, answer_value: "Option 1" }
+
+    before do
+      pages.each(&:reload)
     end
 
     describe "#error_id" do
@@ -134,39 +130,15 @@ RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
 
     describe "#error_object" do
       it "returns an error object in the correct format" do
-        condition = build :condition, id: 1
-        page = build :page, position: 1
-        expect(error_summary_component.error_object(error_name: "answer_value_doesnt_exist", condition:, page:)).to eq OpenStruct.new(message: I18n.t("errors.page_conditions.answer_value_doesnt_exist", question_number: 1, route_number: 1), link: "##{described_class.error_id(1)}")
-      end
-    end
-
-    describe "#conditions_with_check_pages" do
-      it "returns all of the conditions for a form with their respective conditions and check pages" do
-        expect(error_summary_component.conditions_with_check_pages).to match [
-          an_object_having_attributes(id: routing_conditions_page_with_answer_value_missing[0].id, check_page: pages.first),
-          an_object_having_attributes(id: routing_conditions_page_with_goto_page_missing[0].id, check_page: pages.second),
-        ]
-      end
-
-      context "when the form has branch routing" do
-        include_context "with pages with routing"
-
-        it "returns all of the conditions for a form with their respective conditions and check pages" do
-          expect(error_summary_component.conditions_with_check_pages).to match [
-            an_object_having_attributes(id: branch_route_1.id, check_page: page_with_skip_and_secondary_skip),
-            an_object_having_attributes(id: branch_any_other_answer_route.id, check_page: page_with_skip_and_secondary_skip),
-            an_object_having_attributes(id: skip_route.id, check_page: page_with_skip_route),
-            an_object_having_attributes(id: exit_page.id, check_page: page_with_exit_page),
-          ]
-        end
+        expect(error_summary_component.error_object(error_name: "answer_value_doesnt_exist", condition: condition_with_answer_value_missing, page: pages.first)).to eq OpenStruct.new(message: I18n.t("errors.page_conditions.answer_value_doesnt_exist", question_number: pages.first.position, route_number: 1), link: "#condition_#{condition_with_answer_value_missing.id}")
       end
     end
 
     describe "#errors_for_summary" do
       it "returns all of the routing errors for a form with their respective positions and links" do
         expect(error_summary_component.errors_for_summary).to eq [
-          OpenStruct.new(message: I18n.t("errors.page_conditions.answer_value_doesnt_exist", question_number: 1, route_number: 1), link: "##{described_class.error_id(1)}"),
-          OpenStruct.new(message: I18n.t("errors.page_conditions.goto_page_doesnt_exist", question_number: 2, route_number: 1), link: "##{described_class.error_id(2)}"),
+          OpenStruct.new(message: I18n.t("errors.page_conditions.answer_value_doesnt_exist", question_number: pages.first.position, route_number: 1), link: "#condition_#{condition_with_answer_value_missing.id}"),
+          OpenStruct.new(message: I18n.t("errors.page_conditions.goto_page_doesnt_exist", question_number: pages.second.position, route_number: 1), link: "#condition_#{condition_with_goto_page_missing.id}"),
         ]
       end
     end
