@@ -484,4 +484,19 @@ RSpec.describe Form, type: :model do
       end
     end
   end
+
+  describe "#file_upload_question_count" do
+    let(:form) { create :form }
+
+    before do
+      create_list :page, 3, form:, answer_type: :file
+      Page::ANSWER_TYPES.each do |answer_type|
+        create(:page, form:, answer_type:)
+      end
+    end
+
+    it "returns the number of file upload questions" do
+      expect(form.file_upload_question_count).to eq(4)
+    end
+  end
 end
