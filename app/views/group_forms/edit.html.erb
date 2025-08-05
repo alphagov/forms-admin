@@ -1,0 +1,7 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.move_form'), @group_select.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(group_path(@group)) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render @group_select, url: group_form_path %>
+  </div>
+</div>

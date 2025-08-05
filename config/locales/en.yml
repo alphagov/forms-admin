@@ -1174,6 +1174,7 @@ en:
     mou_signature_confirmation: You’ve agreed to the MOU
     mou_signature_new: GOV.UK Forms Memorandum of Understanding
     mou_signatures: Memorandum of Understanding agreements
+    move_form: Move form to a different group
     name_settings: Ask for a person’s name
     new_page: Edit question
     new_secondary_skip: 'Route for any other answer: set questions to skip'
