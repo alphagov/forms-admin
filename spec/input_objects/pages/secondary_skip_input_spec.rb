@@ -3,19 +3,10 @@ require "rails_helper"
 RSpec.describe Pages::SecondarySkipInput, type: :model do
   let(:secondary_skip_input) { described_class.new(form:, page:) }
 
-  let(:form) { build :form, :ready_for_routing, id: 1 }
+  let(:form) { create :form, :ready_for_routing }
   let(:pages) { form.pages }
   let(:is_optional) { false }
-  let(:page) do
-    pages.second.tap do |second_page|
-      second_page.is_optional = is_optional
-      second_page.answer_type = "selection"
-      second_page.answer_settings = DataStruct.new(
-        only_one_option: true,
-        selection_options: [OpenStruct.new(attributes: { name: "Option 1" }), OpenStruct.new(attributes: { name: "Option 2" })],
-      )
-    end
-  end
+  let(:page) { pages.second }
   let(:condition) { nil }
 
   before do
