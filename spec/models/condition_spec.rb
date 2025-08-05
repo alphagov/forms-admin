@@ -13,7 +13,7 @@ RSpec.describe Condition, type: :model do
       condition = create :condition_record, :with_answer_value_missing
       expect(condition.has_routing_errors).to be true
       expect(condition.validation_errors).to eq [
-        DataStruct.new(name: "answer_value_doesnt_exist" ),
+        DataStruct.new(name: "answer_value_doesnt_exist"),
       ]
     end
 
@@ -46,7 +46,7 @@ RSpec.describe Condition, type: :model do
       expect(condition.has_routing_errors).to be true
       expect(condition.validation_errors).to contain_exactly(
         DataStruct.new(name: "answer_value_doesnt_exist"),
-        DataStruct.new(name: "goto_page_doesnt_exist" ),
+        DataStruct.new(name: "goto_page_doesnt_exist"),
       )
     end
   end
