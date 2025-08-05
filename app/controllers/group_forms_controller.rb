@@ -27,7 +27,10 @@ class GroupFormsController < ApplicationController
   end
 
   def edit
+    @group_form = GroupForm.find_by(form_id: 1)
+    authorize @group_form
 
+    render :edit
   end
 
 private
