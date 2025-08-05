@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe Pages::TypeOfAnswerInput, type: :model do
   let(:type_of_answer_input) { build :type_of_answer_input, draft_question:, current_form: }
-  let(:draft_question) { build :draft_question, form_id: 1 }
-  let(:current_form) { build :form, id: 1 }
+  let(:draft_question) { build :draft_question, form_id: current_form.id }
+  let(:current_form) { create :form }
 
   it "has a valid factory" do
     expect(type_of_answer_input).to be_valid
