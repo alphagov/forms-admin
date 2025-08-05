@@ -9,6 +9,10 @@ RSpec.describe GroupFormsController, type: :routing do
     it "routes to #create" do
       expect(post: "/groups/1/forms").to route_to("group_forms#create", group_id: "1")
     end
+
+    it "routes to #edit" do
+      expect(get: "/groups/1/forms/1/edit").to route_to("group_forms#edit", group_id: "1", id: "1")
+    end
   end
 
   describe "path helpers" do

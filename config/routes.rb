@@ -180,7 +180,7 @@ Rails.application.routes.draw do
   end
 
   resources :groups do
-    resources :forms, controller: :group_forms, only: %i[new create]
+    resources :forms, controller: :group_forms, only: %i[new create edit update]
     resources :members, controller: :group_members, only: %i[index new create]
     member do
       get "delete", to: "groups#delete"
