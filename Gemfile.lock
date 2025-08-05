@@ -115,18 +115,19 @@ GEM
       activesupport
     ast (2.4.3)
     aws-eventstream (1.4.0)
-    aws-partitions (1.1135.0)
+    aws-partitions (1.1141.0)
     aws-sdk-cloudwatch (1.117.0)
       aws-sdk-core (~> 3, >= 3.227.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-codepipeline (1.102.0)
-      aws-sdk-core (~> 3, >= 3.227.0)
+    aws-sdk-codepipeline (1.104.0)
+      aws-sdk-core (~> 3, >= 3.228.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-core (3.227.0)
+    aws-sdk-core (3.229.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
       base64
+      bigdecimal
       jmespath (~> 1, >= 1.6.1)
       logger
     aws-sigv4 (1.12.1)
@@ -585,7 +586,7 @@ DEPENDENCIES
   acts_as_list
   after_commit_everywhere (~> 1.6)
   aws-sdk-cloudwatch (~> 1.117)
-  aws-sdk-codepipeline (~> 1.102)
+  aws-sdk-codepipeline (~> 1.104)
   axe-core-rspec
   bootsnap
   brakeman (~> 7.1.0)
