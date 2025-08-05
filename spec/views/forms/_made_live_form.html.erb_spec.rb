@@ -5,7 +5,7 @@ describe "forms/_made_live_form.html.erb" do
   let(:metrics_data) { { weekly_submissions: 125, weekly_starts: 256 } }
   let(:what_happens_next) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:form_metadata) { OpenStruct.new(has_draft_version: false) }
-  let(:form) { build(:form, :live, id: 2, declaration_text: declaration, what_happens_next_markdown: what_happens_next, live_at: 1.week.ago, submission_type:) }
+  let(:form) { build(:made_live_form, id: 2, declaration_text: declaration, what_happens_next_markdown: what_happens_next, live_at: 1.week.ago, submission_type:) }
   let(:group) { create(:group, name: "Group 1") }
   let(:status) { :live }
   let(:preview_mode) { :preview_live }
@@ -102,7 +102,7 @@ describe "forms/_made_live_form.html.erb" do
   end
 
   context "with only a single question" do
-    let(:form) { build(:form, :live, id: 2, pages_count: 1) }
+    let(:form) { build(:made_live_form, :with_one_page, id: 2) }
 
     it "contains a link to view questions with correct pluralization" do
       expect(rendered).to have_link("1 question", href: questions_path)
@@ -157,7 +157,7 @@ describe "forms/_made_live_form.html.erb" do
   end
 
   context "with a support email address" do
-    let(:form) { build(:form, :live, id: 2, support_email: "support@example.gov.uk") }
+    let(:form) { build(:made_live_form, id: 2, support_email: "support@example.gov.uk") }
 
     it "shows the support email address" do
       expect(rendered).to have_xpath("//h3[text()='#{I18n.t('made_live_form.contact_details')}']/following-sibling::h4", text: "Email")
@@ -166,7 +166,7 @@ describe "forms/_made_live_form.html.erb" do
   end
 
   context "with a support phone" do
-    let(:form) { build(:form, :live, id: 2, support_phone: "phone details") }
+    let(:form) { build(:made_live_form, id: 2, support_phone: "phone details") }
 
     it "shows the support phone number" do
       expect(rendered).to have_css("h4", text: "Phone")
@@ -175,7 +175,7 @@ describe "forms/_made_live_form.html.erb" do
   end
 
   context "with a support online" do
-    let(:form) { build(:form, :live, id: 2, support_url_text: "website", support_url: "www.example.gov.uk") }
+    let(:form) { build(:made_live_form, id: 2, support_url_text: "website", support_url: "www.example.gov.uk") }
 
     it "shows the support contact online" do
       expect(rendered).to have_css("h4", text: "Support contact online")
@@ -184,7 +184,7 @@ describe "forms/_made_live_form.html.erb" do
   end
 
   context "with no support information set" do
-    let(:form) { build(:form, :live, id: 2, support_email: nil, support_phone: nil, support_url_text: nil, support_url: nil) }
+    let(:form) { build(:made_live_form, id: 2, support_email: nil, support_phone: nil, support_url_text: nil, support_url: nil) }
 
     it "does not include support details if they are not set" do
       expect(rendered).not_to have_xpath("//h3[text()='#{I18n.t('made_live_form.contact_details')}']/following-sibling::h4", text: "Email")
@@ -235,7 +235,7 @@ describe "forms/_made_live_form.html.erb" do
 
   context "when the form has a payment link" do
     let(:payment_url) { "https://www.gov.uk/payments/your-payment-link" }
-    let(:form) { build(:form, :live, id: 2, payment_url:) }
+    let(:form) { build(:made_live_form, id: 2, payment_url:) }
 
     it "contains a link to the payment url" do
       expect(rendered).to have_css("h3", text: "GOV.UK Pay payment link")
