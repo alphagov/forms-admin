@@ -4,13 +4,6 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
   let(:group) { create :group }
   let(:nonexistent_group) { "foobar" }
 
-  let(:valid_attributes) do
-    { name: "Test form" }
-  end
-  let(:invalid_attributes) do
-    { name: "" }
-  end
-
   before do
     create(:membership, user: standard_user, group:)
     login_as_standard_user
@@ -55,26 +48,45 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
     end
   end
 
-  describe "GET /edit" do
-    let(:form) { build(:form_resource, id: 1) }
+  context "when moving forms" do
+    let(:form) { create(:form_record) }
 
     before do
       login_as_organisation_admin_user
       allow(FormRepository).to receive(:find).and_return(form)
 
-      group = build(:group, id: 1)
-      group.group_forms.build(form_id: 1)
+      group.group_forms.build(form_id: form.id)
+      group.organisation = organisation_admin_user.organisation
       group.save!
     end
 
-    it "returns 200 response" do
-      get edit_group_form_url(group, id: form.id)
+    describe "GET /edit" do
+      it "returns 200 response" do
+        get edit_group_form_url(group, id: form.id)
 
-      expect(response).to have_http_status :ok
+        expect(response).to have_http_status :ok
+      end
+    end
+
+    describe "PATCH /update" do
+      let(:other_group) { create(:group, organisation: organisation_admin_user.organisation) }
+
+      it "redirects to the group" do
+        patch group_form_url(group, id: form.id), params: { forms_group_select: { group: other_group.id } }
+
+        expect(response).to redirect_to(group_url(group))
+      end
     end
   end
 
   describe "POST /" do
+    let(:valid_attributes) do
+      { name: "Test form" }
+    end
+    let(:invalid_attributes) do
+      { name: "" }
+    end
+
     context "with valid parameters" do
       let(:form) { create :form }
 
