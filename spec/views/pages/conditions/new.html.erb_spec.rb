@@ -1,22 +1,16 @@
 require "rails_helper"
 
 describe "pages/conditions/new.html.erb" do
-  let(:form) { build :form, id: 1, pages: }
+  let(:form) { create :form, :ready_for_routing }
   let(:group) { build :group }
-  let(:pages) do
-    build_list(:page, 3) do |page, i|
-      page.id = i
-      page.form_id = 1
-      page.answer_settings = OpenStruct.new(only_one_option: "true", selection_options: [OpenStruct.new(attributes: { name: "Option 1" }), OpenStruct.new(attributes: { name: "Option 2" })])
-    end
-  end
+  let(:pages) { form.pages }
   let(:condition_input) { Pages::ConditionsInput.new(form:, page: pages.first) }
 
   before do
     pages.first.position = 1
     allow(FormRepository).to receive(:pages).and_return(pages)
     allow(view).to receive(:set_routing_page_path).with(routing_page_id: condition_input.page.id).and_return("/forms/1/new-condition?routing-page_id=#{condition_input.page.id}")
-    allow(view).to receive_messages(form_pages_path: "/forms/1/pages", routing_page_path: "/forms/1/new-condition", create_condition_path: "/forms/1/pages/1/conditions/new")
+    allow(view).to receive_messages(form_pages_path: "/forms//pages", routing_page_path: "/forms/1/new-condition", create_condition_path: "/forms/1/pages/1/conditions/new")
     allow(form).to receive_messages(group: group, qualifying_route_pages: pages)
 
     render template: "pages/conditions/new", locals: { condition_input: }
