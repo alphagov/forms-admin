@@ -1,16 +1,18 @@
 require "rails_helper"
 
 describe "pages/selection/bulk_options.html.erb", type: :view do
-  let(:form) { build :form, id: 1, pages: [page] }
+  let(:form) { create :form }
+  let(:page) { create :page, :with_selection_settings, answer_settings: }
   let(:bulk_options_input) { build :bulk_options_input, draft_question: page }
-  let(:page) { OpenStruct.new(answer_type: "selection", answer_settings:) }
-  let(:answer_settings) { OpenStruct.new(only_one_option:, selection_options:) }
+  let(:answer_settings) { DataStruct.new(only_one_option:, selection_options:) }
   let(:only_one_option) { "true" }
   let(:selection_options) { [] }
   let(:page_number) { 1 }
   let(:back_link_url) { "/a-back-link-url" }
 
   before do
+    form.reload
+
     # # mock the form.page_number method
     allow(form).to receive(:page_number).and_return(page_number)
 
