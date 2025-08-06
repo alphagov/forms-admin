@@ -507,6 +507,50 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "#has_no_remaining_routes_available?" do
+    context "when the form has routes" do
+      let(:form) { create :form_record }
+      let(:pages) do
+        [
+          create(:page_record, :with_selection_settings, form:, position: 1),
+          create(:page_record, :with_selection_settings, form:, position: 2),
+          create(:page_record, :with_selection_settings, form:, position: 3),
+        ]
+      end
+
+      before do
+        create :condition_record, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Option 1", skip_to_end: true
+        form.pages.each(&:reload)
+      end
+
+      context "when there is a page that a route can be added to" do
+        it "returns false" do
+          expect(form.has_no_remaining_routes_available?).to be(false)
+        end
+      end
+
+      context "when there are no pages that a route can be added to" do
+        before do
+          create :condition_record, routing_page_id: pages.second.id, check_page_id: pages.first.id, skip_to_end: true
+          form.pages.each(&:reload)
+        end
+
+        it "returns true" do
+          expect(form.has_no_remaining_routes_available?).to be(true)
+        end
+      end
+    end
+
+    context "when the form does not have routes" do
+      let(:form) { create :form_record }
+      let(:pages) { create_list :page_record, 3, :with_selection_settings, form: }
+
+      it "returns false" do
+        expect(form.has_no_remaining_routes_available?).to be(false)
+      end
+    end
+  end
+
   describe "#group" do
     let(:form) { create :form_record }
 

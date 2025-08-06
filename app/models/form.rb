@@ -83,6 +83,10 @@ class Form < ApplicationRecord
     end
   end
 
+  def has_no_remaining_routes_available?
+    qualifying_route_pages.none? && has_routing_conditions
+  end
+
   def all_incomplete_tasks
     incomplete_tasks.concat(email_task_status_service.incomplete_email_tasks)
   end
@@ -129,6 +133,10 @@ private
 
   def task_status_service
     @task_status_service ||= TaskStatusService.new(form: self)
+  end
+
+  def has_routing_conditions
+    pages.filter { |p| p.routing_conditions.any? }.any?
   end
 
   def group_form
