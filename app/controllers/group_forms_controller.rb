@@ -43,10 +43,11 @@ class GroupFormsController < ApplicationController
     @group_select = Forms::GroupSelect.new(group: group_select_params[:group], form: form)
 
     receiving_group = Group.find(@group_select.group)
+
     form.move_to_group(receiving_group.external_id)
     form.reload
 
-    redirect_to group_path(params[:group_id])
+    redirect_to group_path(params[:group_id]) # doesn't set_group already give us the @group?
   end
 
 private
