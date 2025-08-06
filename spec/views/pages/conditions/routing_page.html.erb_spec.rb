@@ -1,20 +1,29 @@
 require "rails_helper"
 
 describe "pages/conditions/routing_page.html.erb" do
-  let(:form) { build :form, id: 1 }
-  let(:pages) { build_list :page, 3, :with_selection_settings, form_id: 1 }
+  let(:form) { create :form, :ready_for_routing }
+  let(:pages) { form.pages }
   let(:routing_page_input) { Pages::RoutingPageInput.new }
   let(:allowed_to_create_routes) { true }
   let(:all_routes_created) { false }
+  let(:group) do
+    create :group.tap do |group|
+      group.group_forms.create!(form_id: form.id)
+      form.reload
+    end
+  end
 
   before do
     without_partial_double_verification do
       allow(view).to receive(:policy).and_return(OpenStruct.new(can_add_page_routing_conditions?: allowed_to_create_routes))
     end
 
-    allow(view).to receive_messages(form_pages_path: "/forms/1/pages", routing_page_path: "/forms/1/new-condition", set_routing_page_path: "/forms/1/new-condition")
+    allow(view).to receive_messages(
+      form_pages_path: "/forms/#{form.id}/pages",
+      routing_page_path: "/forms/#{form.id}/new-condition",
+      set_routing_page_path: "/forms/#{form.id}/new-condition",
+    )
     allow(form).to receive_messages(qualifying_route_pages: pages, has_no_remaining_routes_available?: all_routes_created)
-    allow(form).to receive(:group).and_return(build(:group))
 
     render template: "pages/conditions/routing_page", locals: { form:, routing_page_input: }
   end
@@ -46,7 +55,7 @@ describe "pages/conditions/routing_page.html.erb" do
   end
 
   context "with 10 options" do
-    let(:pages) { build_list :page, 10, :with_selection_settings, form_id: 1 }
+    let(:form) { create :form, :ready_for_routing, pages_count: 10 }
 
     it "contains a fieldset legend asking a user to select a question page" do
       expect(rendered).to have_css(".govuk-fieldset__legend", text: t("routing_page.legend_text"))
@@ -61,7 +70,7 @@ describe "pages/conditions/routing_page.html.erb" do
   end
 
   context "with more than 10 options" do
-    let(:pages) { build_list :page, 11, :with_selection_settings, form_id: 1 }
+    let(:form) { create :form, :ready_for_routing, pages_count: 11 }
 
     it "contains a fieldset legend asking a user to select a question page" do
       expect(rendered).to have_css(".govuk-label", text: t("routing_page.legend_text"))
