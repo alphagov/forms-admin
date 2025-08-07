@@ -57,8 +57,8 @@ class PageListComponent::PageListComponentPreview < ViewComponent::Preview
   end
 
   def with_pages_and_conditions_with_errors
-    routing_conditions_1 = [(build :condition, :with_answer_value_missing, id: 1, routing_page_id: 1, check_page_id: 1, goto_page_id: 3),
-                            (build :condition, :with_goto_page_missing, id: 2, routing_page_id: 1, check_page_id: 1, answer_value: "England"),
+    routing_conditions_1 = [(build :condition, id: 1, routing_page_id: 1, check_page_id: 1, goto_page_id: 3),
+                            (build :condition, id: 2, routing_page_id: 1, check_page_id: 1, answer_value: "England"),
                             (build :condition, id: 3, routing_page_id: 1, check_page_id: 1),
                             (build :condition, id: 5, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 2)]
     routing_conditions_2 = [(build :condition, id: 4, routing_page_id: 2, check_page_id: 2, answer_value: "England", goto_page_id: 1)]

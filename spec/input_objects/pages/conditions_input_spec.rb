@@ -194,7 +194,7 @@ RSpec.describe Pages::ConditionsInput, type: :model do
   end
 
   describe "#check_errors_from_api" do
-    let(:condition) { create :condition, :with_answer_value_missing, routing_page_id: page.id, answer_value: "England", check_page_id: page.id, goto_page_id: pages.third.id }
+    let(:condition) { create :condition, routing_page_id: page.id, answer_value: "England", check_page_id: page.id, goto_page_id: pages.third.id }
 
     it "is invalid if there are validation errors" do
       error_message = I18n.t("activemodel.errors.models.pages/conditions_input.attributes.answer_value.answer_value_doesnt_exist")

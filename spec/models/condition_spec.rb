@@ -8,47 +8,6 @@ RSpec.describe Condition, type: :model do
       condition = create :condition_record
       expect(condition).to be_valid
     end
-
-    it "has a trait with answer value missing" do
-      condition = create :condition_record, :with_answer_value_missing
-      expect(condition.has_routing_errors).to be true
-      expect(condition.validation_errors).to eq [
-        DataStruct.new(name: "answer_value_doesnt_exist"),
-      ]
-    end
-
-    it "has a trait with goto page missing" do
-      condition = create :condition_record, :with_goto_page_missing
-      expect(condition.has_routing_errors).to be true
-      expect(condition.validation_errors).to eq [
-        DataStruct.new(name: "goto_page_doesnt_exist"),
-      ]
-    end
-
-    it "has a trait with goto page before check page" do
-      condition = create :condition_record, :with_goto_page_before_check_page
-      expect(condition.has_routing_errors).to be true
-      expect(condition.validation_errors).to eq [
-        DataStruct.new(name: "cannot_have_goto_page_before_routing_page"),
-      ]
-    end
-
-    it "has a trait with goto page immediately after check page" do
-      condition = create :condition_record, :with_goto_page_immediately_after_check_page
-      expect(condition.has_routing_errors).to be true
-      expect(condition.validation_errors).to eq [
-        DataStruct.new(name: "cannot_route_to_next_page"),
-      ]
-    end
-
-    it "has a trait with answer value and goto page missing" do
-      condition = create :condition_record, :with_answer_value_and_goto_page_missing
-      expect(condition.has_routing_errors).to be true
-      expect(condition.validation_errors).to contain_exactly(
-        DataStruct.new(name: "answer_value_doesnt_exist"),
-        DataStruct.new(name: "goto_page_doesnt_exist"),
-      )
-    end
   end
 
   describe "destroying" do
