@@ -33,10 +33,36 @@ RSpec.describe "group_forms/edit.html.erb", type: :view do
     expect(view.content_for(:back_link)).to match(group_path(group))
   end
 
-  it "renders the group select form" do
-    skip "this is not implemented yet, but should be"
+  context "when there are fewer than 10 groups" do
+    before do
+      allow(group_select).to receive(:groups).and_return(build_list(:group, 9))
+    end
 
-    expect(view).to receive(:render).with(group_select, url: group_form_path)
-    render
+    it "renders radio buttons" do
+      render
+      expect(rendered).to have_css("[data-test-id=\"group-radio\"]")
+    end
+  end
+
+  context "when there are more than 10 groups" do
+    before do
+      allow(group_select).to receive(:groups).and_return(build_list(:group, 11))
+    end
+
+    it "renders the group select form" do
+      render
+      expect(rendered).to have_css("[data-test-id=\"group-select\"]")
+    end
+  end
+
+  context "when there are more than 30 groups" do
+    before do
+      allow(group_select).to receive(:groups).and_return(build_list(:group, 31))
+    end
+
+    it "renders the autocomplete" do
+      render
+      expect(rendered).to have_css("[data-test-id=\"group-autocomplete\"]")
+    end
   end
 end
