@@ -11,6 +11,18 @@ class PageListComponent::ErrorSummary::ErrorSummaryComponentPreview < ViewCompon
     pages = [(build :page, id: 1, position: 1, question_text: "Enter your name", routing_conditions:),
              (build :page, id: 2, position: 2, question_text: "What is your pet's phone number?", routing_conditions: []),
              (build :page, id: 3, position: 3, question_text: "How many pets do you own?", routing_conditions: [])]
+    form = build(:form, id: 0, pages:)
+
+    # We need to build the records rather than create them so that we don't save them to the database when we view the
+    # preview. However, this means that the associations aren't available so we need to manually set the associations
+    # after we've built the conditions
+    routing_conditions.each do |condition|
+      condition.routing_page = pages.select { |page| page.id == condition.routing_page_id }.first
+      condition.check_page = pages.select { |page| page.id == condition.check_page_id }.first
+      condition.goto_page = pages.select { |page| page.id == condition.goto_page_id }.first
+      condition.form = form
+    end
+
     render(PageListComponent::ErrorSummary::View.new(pages:))
   end
 
@@ -21,6 +33,17 @@ class PageListComponent::ErrorSummary::ErrorSummaryComponentPreview < ViewCompon
     pages = [(build :page, id: 1, position: 1, question_text: "Enter your name", routing_conditions: routing_conditions_page_1),
              (build :page, id: 2, position: 2, question_text: "What is your pet's phone number?", routing_conditions: routing_conditions_page_2),
              (build :page, id: 3, position: 3, question_text: "How many pets do you own?", routing_conditions: [])]
+    form = build(:form, id: 0, pages:)
+
+    # We need to build the records rather than create them so that we don't save them to the database when we view the
+    # preview. However, this means that the associations aren't available so we need to manually set the associations
+    # after we've built the conditions
+    (routing_conditions_page_1 + routing_conditions_page_2).each do |condition|
+      condition.routing_page = pages.select { |page| page.id == condition.routing_page_id }.first
+      condition.check_page = pages.select { |page| page.id == condition.check_page_id }.first
+      condition.goto_page = pages.select { |page| page.id == condition.goto_page_id }.first
+      condition.form = form
+    end
 
     render(PageListComponent::ErrorSummary::View.new(pages:))
   end
