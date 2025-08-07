@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "group_form/edit.html.erb", type: :view do
+RSpec.describe "group_forms/edit.html.erb", type: :view do
   let(:group) { create(:group) }
   let(:form) { create :form_record }
   let(:group_select) { Forms::GroupSelect.new(group: group, form: form) }
