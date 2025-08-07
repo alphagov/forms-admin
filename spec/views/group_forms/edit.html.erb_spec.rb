@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "group_form/edit.html.erb", type: :view do
+RSpec.describe "group_forms/edit.html.erb", type: :view do
   let(:group) { create(:group) }
   let(:form) { create :form_record }
   let(:group_select) { Forms::GroupSelect.new(group: group, form: form) }
@@ -17,9 +17,8 @@ RSpec.describe "group_form/edit.html.erb", type: :view do
   end
 
   it "renders the page title" do
-    skip "there is no H1 yet and will be updated"
-    expect(view).to receive(:render).with(group_select, url: group_form_path(group_id: group.id, id: form.id))
-    expect(rendered).to have_css("h1", text: "Move Form")
+    render
+    expect(rendered).to have_css("h1", text: /Move form/)
   end
 
   it "renders the page title with error prefix when form has errors" do
@@ -30,16 +29,40 @@ RSpec.describe "group_form/edit.html.erb", type: :view do
   end
 
   it "sets the back link to the group" do
-    skip "this is not implemented yet, but should be"
-
     render
     expect(view.content_for(:back_link)).to match(group_path(group))
   end
 
-  it "renders the group select form" do
-    skip "this is not implemented yet, but should be"
+  context "when there are fewer than 10 groups" do
+    before do
+      allow(group_select).to receive(:groups).and_return(build_list(:group, 9))
+    end
 
-    expect(view).to receive(:render).with(group_select, url: group_form_path)
-    render
+    it "renders radio buttons" do
+      render
+      expect(rendered).to have_css("[data-test-id=\"group-radio\"]")
+    end
+  end
+
+  context "when there are more than 10 groups" do
+    before do
+      allow(group_select).to receive(:groups).and_return(build_list(:group, 11))
+    end
+
+    it "renders the group select form" do
+      render
+      expect(rendered).to have_css("[data-test-id=\"group-select\"]")
+    end
+  end
+
+  context "when there are more than 30 groups" do
+    before do
+      allow(group_select).to receive(:groups).and_return(build_list(:group, 31))
+    end
+
+    it "renders the autocomplete" do
+      render
+      expect(rendered).to have_css("[data-test-id=\"group-autocomplete\"]")
+    end
   end
 end
