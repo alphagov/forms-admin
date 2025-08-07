@@ -17,9 +17,8 @@ RSpec.describe "group_forms/edit.html.erb", type: :view do
   end
 
   it "renders the page title" do
-    skip "there is no H1 yet and will be updated"
-    expect(view).to receive(:render).with(group_select, url: group_form_path(group_id: group.id, id: form.id))
-    expect(rendered).to have_css("h1", text: "Move Form")
+    render
+    expect(rendered).to have_css("h1", text: /Move form/)
   end
 
   it "renders the page title with error prefix when form has errors" do
@@ -30,8 +29,6 @@ RSpec.describe "group_forms/edit.html.erb", type: :view do
   end
 
   it "sets the back link to the group" do
-    skip "this is not implemented yet, but should be"
-
     render
     expect(view.content_for(:back_link)).to match(group_path(group))
   end
