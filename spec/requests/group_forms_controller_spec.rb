@@ -130,7 +130,7 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
         post group_forms_url(group), params: { forms_name_input: invalid_attributes }
 
         expect(assigns[:name_input]).to be_truthy
-        expect(response).to render_template("group_forms/new")
+        expect(response).to render_template("group_form/new")
         expect(response).to render_template("input_objects/forms/_name_input")
         expect(response.body).to include I18n.t("error_summary.heading")
       end
