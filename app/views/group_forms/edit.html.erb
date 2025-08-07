@@ -1,7 +1,30 @@
 <% set_page_title(title_with_error_prefix(t('page_titles.move_form'), @group_select.errors.any?)) %>
-<% content_for :back_link, govuk_back_link_to(group_path(@group)) %>
+<% content_for :back_link, govuk_back_link_to(group_path(@group), "Back to #{@group_select.group.name}") %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render @group_select, url: group_form_path %>
+
+  <h1 class="govuk-heading-l">
+    <span class="govuk-caption-l"><%= t("groups.status_caption.#{@group_select.group.status}") %></span><span class="govuk-visually-hidden"> - </span>
+    Move form to a different group
+  </h1>
+
+    <%= govuk_summary_list(classes: "govuk-summary-list--no-border") do |summary_list|
+      summary_list.with_row do |row|
+        row.with_key { "Form name" }
+        row.with_value { @group_select.form.name }
+      end;
+      summary_list.with_row do |row|
+        row.with_key { "Group name" }
+        row.with_value { @group_select.group.name }
+      end;
+    end %>
+
+    <p> You can move draft forms into active or trial groups. Live forms can only be moved into active groups. </p>
+    <p> We’ll tell the group admins and editors that this form has been moved and they may no longer have access to it. </p>
+
+    <%= render @group_select, url: group_form_path(group_id: @group_select.group.id, id: @group_select.form.id) %>
   </div>
 </div>
+
+<%= init_autocomplete_script(show_all_values: true, raw_attribute: false, source: false) %>
