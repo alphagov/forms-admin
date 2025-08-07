@@ -27,8 +27,8 @@ class PageListComponent::ErrorSummary::ErrorSummaryComponentPreview < ViewCompon
   end
 
   def error_component_with_errors
-    routing_conditions_page_1 = [(build :condition, :with_answer_value_missing, id: 1, routing_page_id: 1, check_page_id: 1, goto_page_id: 3)]
-    routing_conditions_page_2 = [(build :condition, :with_goto_page_missing, id: 2, routing_page_id: 2, check_page_id: 2, answer_value: "Wales")]
+    routing_conditions_page_1 = [(build :condition, id: 1, routing_page_id: 1, check_page_id: 1, goto_page_id: 3)]
+    routing_conditions_page_2 = [(build :condition, id: 2, routing_page_id: 2, check_page_id: 2, answer_value: "Wales")]
 
     pages = [(build :page, id: 1, position: 1, question_text: "Enter your name", routing_conditions: routing_conditions_page_1),
              (build :page, id: 2, position: 2, question_text: "What is your pet's phone number?", routing_conditions: routing_conditions_page_2),
