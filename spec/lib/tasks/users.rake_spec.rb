@@ -90,20 +90,8 @@ RSpec.describe "users.rake" do
       )
     end
 
-    let(:forms) { [] }
-
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        forms_by_user_id = forms.group_by(&:creator_id)
-        users.each do |user|
-          mock.get "/api/v1/forms?creator_id=#{user.id}", headers, forms_by_user_id.fetch(user.id, []).to_json, 200
-        end
-
-        forms.each do |form|
-          mock.delete "/api/v1/forms/#{form.id}", delete_headers, nil, 204
-        end
-      end
-
+      users
       allow(Rails.logger).to receive(:info)
     end
 
@@ -163,10 +151,6 @@ RSpec.describe "users.rake" do
     context "when user is in one or more groups" do
       let(:user_in_group) { users.fifth }
 
-      let(:forms) do
-        build_list :form, 3, creator_id: user_in_group.id
-      end
-
       before do
         group = create :group, creator: users.first
         create :membership, group:, user: user_in_group, added_by: users.first
@@ -176,16 +160,6 @@ RSpec.describe "users.rake" do
         task.invoke
 
         expect(User.exists?(user_in_group.id)).to be true
-      end
-
-      it "does not delete any of that user's forms" do
-        task.invoke
-
-        forms
-          .select { |form| form.creator_id == user_in_group.id }
-          .each do |form|
-            expect(form).not_to have_been_deleted
-          end
       end
 
       it "deletes other users not in a group" do
@@ -211,156 +185,6 @@ RSpec.describe "users.rake" do
       end
     end
 
-    context "when user has created one or more forms" do
-      let(:forms) do
-        [
-          build(:form, id: 99, creator_id: users.first.id),
-          build(:form, id: 1, creator_id: users.last.id),
-          build(:form, id: 2, creator_id: users.second_to_last.id),
-          build(:form, id: 3, creator_id: users.second_to_last.id),
-        ]
-      end
-
-      it "deletes the forms" do
-        task.invoke
-
-        expect(ActiveResource::HttpMock
-          .requests.count { |request| request.method == :delete })
-          .to eq 3
-      end
-
-      it "logs deleting each form" do
-        task.invoke
-
-        expect(Rails.logger).to have_received(:info).with(/delete_users_with_no_name_or_org: Deleted form 1/)
-        expect(Rails.logger).to have_received(:info).with(/delete_users_with_no_name_or_org: Deleted form 2/)
-        expect(Rails.logger).to have_received(:info).with(/delete_users_with_no_name_or_org: Deleted form 3/)
-      end
-
-      context "and there is a draft question for one of those forms" do
-        before do
-          create_list :draft_question, 2, user: users.last
-        end
-
-        it "deletes the draft questions" do
-          expect {
-            task.invoke
-          }.to change(DraftQuestion, :count).by(-2)
-        end
-      end
-
-      context "and one or more of the forms have been made live" do
-        let(:user_with_live_form) { users.second_to_last }
-        let(:forms) do
-          [
-            build(:form, id: 99, creator_id: users.first.id),
-            build(:form, id: 1, creator_id: users.last.id),
-            build(:form, id: 2, creator_id: user_with_live_form.id),
-            build(:form, :live, id: 3, creator_id: user_with_live_form.id),
-          ]
-        end
-
-        it "does not delete that user" do
-          task.invoke
-
-          expect(User.exists?(user_with_live_form.id)).to be true
-        end
-
-        it "does not delete any of that user's forms" do
-          task.invoke
-
-          forms
-            .select { |form| form.creator_id == user_with_live_form.id }
-            .each do |form|
-              expect(form).not_to have_been_deleted
-            end
-        end
-
-        it "deletes other users without live forms" do
-          expect {
-            task.invoke
-          }.to change(User, :count).to(4)
-        end
-
-        it "logs that the user is being skipped" do
-          task.invoke
-
-          expect(Rails.logger).to have_received(:info).with(
-            /delete_users_with_no_name_or_org: Found live forms \[3\] created by user, skipping deleting user \d+/,
-          )
-        end
-
-        it "counts the user as being skipped" do
-          task.invoke
-
-          expect(Rails.logger).to have_received(:info).with(
-            /delete_users_with_no_name_or_org: Deleted 8 users, skipped deleting 1 users/,
-          )
-        end
-      end
-
-      context "and one or more of the forms are in a group" do
-        let(:user_with_form_in_group) { users.last }
-
-        let(:form_in_group) { forms.last }
-
-        let(:forms) do
-          [
-            build(:form, id: 99, creator_id: users.first.id),
-            build(:form, id: 1, creator_id: user_with_form_in_group.id),
-            build(:form, id: 2, creator_id: users.second_to_last.id),
-            build(:form, id: 3, creator_id: users.second_to_last.id),
-            build(:form, id: 4, creator_id: user_with_form_in_group.id),
-          ]
-        end
-
-        before do
-          GroupForm.create!(
-            form_id: form_in_group.id,
-            group: create(:group, creator: users.first),
-          )
-        end
-
-        it "does not delete that user" do
-          task.invoke
-
-          expect(User.exists?(user_with_form_in_group.id)).to be true
-        end
-
-        it "does not delete any of that user's forms" do
-          task.invoke
-
-          forms
-            .select { |form| form.creator_id == user_with_form_in_group.id }
-            .each do |form|
-              expect(form).not_to have_been_deleted
-            end
-        end
-
-        it "deletes other users without forms in groups" do
-          expect {
-            task.invoke
-          }.to change(User, :count).to(4)
-        end
-
-        it "logs that the user is being skipped" do
-          task.invoke
-
-          expect(Rails.logger).to have_received(:info).with(
-            /delete_users_with_no_name_or_org: Found forms \[4\] created by user in groups, skipping deleting user \d+/,
-          )
-        end
-
-        it "counts the user as being skipped" do
-          task.invoke
-
-          expect(Rails.logger).to have_received(:info).with(
-            /delete_users_with_no_name_or_org: Deleted 8 users, skipped deleting 1 users/,
-          )
-        end
-      end
-    end
-
     describe ":dry_run" do
       subject(:dry_run_task) do
         Rake::Task["users:delete_users_with_no_name_or_org:dry_run"]
@@ -368,31 +192,10 @@ RSpec.describe "users.rake" do
       end
 
       let(:user_in_group) { users.fifth }
-      let(:user_with_live_form) { users.second_to_last }
-      let(:user_with_form_in_group) { users.last }
-
       let(:group_with_user) { create :group, creator: users.first }
-      let(:form_in_group) { forms.last }
-
-      let(:forms) do
-        [
-          build(:form, id: 99, creator_id: users.first.id),
-          build(:form, id: 1, creator_id: user_with_form_in_group.id),
-          build(:form, id: 2, creator_id: user_with_live_form.id),
-          build(:form, :live, id: 3, creator_id: user_with_live_form.id),
-          build(:form, id: 5, creator_id: users[5].id),
-          build(:form, id: 7, creator_id: users[7].id),
-          build(:form, id: 4, creator_id: user_with_form_in_group.id),
-        ]
-      end
 
       before do
         create :membership, group: group_with_user, user: user_in_group, added_by: users.first
-
-        GroupForm.create!(
-          form_id: form_in_group.id,
-          group: create(:group, creator: users.first),
-        )
       end
 
       it "logs the changes that would be made" do
@@ -408,14 +211,12 @@ RSpec.describe "users.rake" do
           "users:delete_users_with_no_name_or_org:dry_run: Found user in groups [#{group_with_user.id}], skipping deleting user #{user_in_group.id} (#{user_in_group.email})",
 
           "users:delete_users_with_no_name_or_org:dry_run: Found user #{users[5].id} (#{users[5].email}) without a name or organisation set",
-          /users:delete_users_with_no_name_or_org:dry_run: Deleted form 5 \(".+"\) created by user #{users[5].id} \(#{users[5].email}\)/,
           "users:delete_users_with_no_name_or_org:dry_run: Deleted user #{users[5].id} (#{users[5].email})",
 
           "users:delete_users_with_no_name_or_org:dry_run: Found user #{users[6].id} (#{users[6].email}) without a name or organisation set",
           "users:delete_users_with_no_name_or_org:dry_run: Deleted user #{users[6].id} (#{users[6].email})",
 
           "users:delete_users_with_no_name_or_org:dry_run: Found user #{users[7].id} (#{users[7].email}) without a name or organisation set",
-          /users:delete_users_with_no_name_or_org:dry_run: Deleted form 7 \(".+"\) created by user #{users[7].id} \(#{users[7].email}\)/,
           "users:delete_users_with_no_name_or_org:dry_run: Deleted user #{users[7].id} (#{users[7].email})",
 
           "users:delete_users_with_no_name_or_org:dry_run: Found user #{users[8].id} (#{users[8].email}) without a name or organisation set",
@@ -424,13 +225,7 @@ RSpec.describe "users.rake" do
           "users:delete_users_with_no_name_or_org:dry_run: Found user #{users[9].id} (#{users[9].email}) without a name or organisation set",
           "users:delete_users_with_no_name_or_org:dry_run: Deleted user #{users[9].id} (#{users[9].email})",
 
-          "users:delete_users_with_no_name_or_org:dry_run: Found user #{user_with_live_form.id} (#{user_with_live_form.email}) without a name or organisation set",
-          "users:delete_users_with_no_name_or_org:dry_run: Found live forms [3] created by user, skipping deleting user #{user_with_live_form.id} (#{user_with_live_form.email})",
-
-          "users:delete_users_with_no_name_or_org:dry_run: Found user #{user_with_form_in_group.id} (#{users[11].email}) without a name or organisation set",
-          "users:delete_users_with_no_name_or_org:dry_run: Found forms [4] created by user in groups, skipping deleting user #{user_with_form_in_group.id} (#{user_with_form_in_group.email})",
-
-          "users:delete_users_with_no_name_or_org:dry_run: Deleted 6 users, skipped deleting 3 users",
+          "users:delete_users_with_no_name_or_org:dry_run: Deleted 8 users, skipped deleting 1 users",
           "users:delete_users_with_no_name_or_org:dry_run: Finished dry run, no changes persisted",
         ].each do |line|
           expect(Rails.logger).to have_received(:info).with(a_string_matching(line))

@@ -76,31 +76,6 @@ def delete_users_with_no_name_or_org(dry_run: false)
       next
     end
 
-    forms = Api::V1::FormResource.where(creator_id: user.id).find_all
-
-    if forms.any?(&:is_live?)
-      Rails.logger.info "#{task_name}: Found live forms #{forms.select(&:is_live?).map(&:id)} created by user, skipping deleting user #{user.id} (#{user.email})"
-      next
-    end
-
-    forms_in_groups = GroupForm.where(form_id: forms.map(&:id)).pluck(:form_id)
-    if forms_in_groups.any?
-      Rails.logger.info "#{task_name}: Found forms #{forms_in_groups} created by user in groups, skipping deleting user #{user.id} (#{user.email})"
-      next
-    end
-
-    # we need to delete all draft questions for this user or else PostgreSQL will complain
-    DraftQuestion.destroy_by(user:)
-
-    forms.each do |form|
-      if dry_run || form.destroy
-        Rails.logger.info "#{task_name}: Deleted form #{form.id} (\"#{form.name}\") created by user #{user.id} (#{user.email})"
-      else
-        Rails.logger.info "#{task_name}: Unable to delete form #{form.id} (\"#{form.name}\") created by user, skipping deleting user #{user.id} (#{user.email})"
-        next
-      end
-    end
-
     if dry_run || user.destroy
       Rails.logger.info "#{task_name}: Deleted user #{user.id} (#{user.email})"
       deleted_count += 1
