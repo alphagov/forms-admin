@@ -87,14 +87,14 @@ describe PageRepository do
 
       context "when the page has answer settings" do
         let(:answer_type) { "selection" }
-        let(:answer_settings) { { only_one_option: "true", selection_options: [] } }
+        let(:answer_settings) { { only_one_option: "true", selection_options: [ { name: "Option 1" } ] } }
 
         it "saves the answer settings to the database" do
           described_class.find(page_id: page.id, form_id:)
           expect(Page.find(page.id)).to have_attributes(
             "answer_settings" => DataStruct.new({
               "only_one_option" => "true",
-              "selection_options" => [],
+              "selection_options" => [ DataStruct.new( { name: "Option 1" })],
             }),
           )
         end

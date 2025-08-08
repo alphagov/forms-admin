@@ -3,7 +3,8 @@
 # is a json hash converted into an object by ActiveResource. Using a plain hash
 # for answer_settings means there is no .access to attributes.
 class DataStruct < OpenStruct
-  def self.recursive_new(hash)
+  def self.recursive_new(object)
+    hash = convert_to_hash(object)
     hash.each_with_object(DataStruct.new) do |(key, value), struct|
       struct[key] = case value
                     when Hash
@@ -18,5 +19,11 @@ class DataStruct < OpenStruct
 
   def as_json(*args)
     super.as_json["table"]
+  end
+
+  def self.convert_to_hash(object)
+    return object.attributes if object.is_a?(ActiveResource::Base)
+
+    object
   end
 end

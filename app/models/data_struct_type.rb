@@ -12,7 +12,7 @@ class DataStructType < ActiveModel::Type::Value
     when Hash
       DataStruct.recursive_new(value)
     when ActiveResource::Base
-      DataStruct.recursive_new(value.attributes)
+      DataStruct.recursive_new(value)
     when DataStruct
       value
     end
