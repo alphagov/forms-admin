@@ -151,41 +151,26 @@ RSpec.describe "forms.rake" do
     end
 
     let(:form) do
-      build :form, id: 1
-    end
-
-    before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/#{form.id}", headers, form.to_json, 200
-        mock.put "/api/v1/forms/#{form.id}", put_headers
-      end
+      create :form
     end
 
     context "with valid arguments" do
       let(:submission_email) { "test@example.gov.uk" }
       let(:valid_args) { [form.id, submission_email] }
 
-      let(:request) do
-        ActiveResource::HttpMock.requests.find do |request|
-          request.method == :put && request.path == "/api/v1/forms/1"
-        end
+      before do
+        allow(FormRepository).to receive_messages(find: form, save!: form)
       end
 
       shared_examples "submission email update" do
         it "changes the form submission email" do
+          expect(FormRepository).to receive(:save!).with(an_object_having_attributes(submission_email:))
           task.invoke(*valid_args)
-
-          form.from_json(request.body)
-
-          expect(form).to have_attributes(submission_email:)
         end
 
         it "updates the email confirmation status" do
+          expect(FormRepository).to receive(:save!).with(an_object_having_attributes(email_confirmation_status: :email_set_without_confirmation))
           task.invoke(*valid_args)
-
-          form.from_json(request.body)
-
-          expect(form).to have_attributes(email_confirmation_status: :email_set_without_confirmation)
         end
       end
 
