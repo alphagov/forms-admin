@@ -1,6 +1,8 @@
 class Pages::QuestionsController < PagesController
   before_action do
-    raise "No answer type set for draft question" if draft_question.answer_type.blank?
+    if draft_question.answer_type.blank?
+      redirect_to type_of_answer_new_path(form_id: current_form.id)
+    end
   end
 
   def new
