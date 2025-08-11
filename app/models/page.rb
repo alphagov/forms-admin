@@ -46,6 +46,14 @@ class Page < ApplicationRecord
     true
   end
 
+  def next_page
+    lower_item&.id
+  end
+
+  def has_next_page?
+    next_page.present?
+  end
+
   def answer_type_changed_from_selection
     answer_type_previously_was&.to_sym == :selection && answer_type&.to_sym != :selection
   end
