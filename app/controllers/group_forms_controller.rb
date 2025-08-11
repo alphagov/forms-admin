@@ -42,6 +42,8 @@ class GroupFormsController < ApplicationController
     form = Form.find(params[:id])
     @group_select = Forms::GroupSelect.new(group: group_select_params[:group], form: form)
 
+    # TODO: compare @group with @group_select.group to check if it's changed
+
     receiving_group = Group.find(@group_select.group)
 
     form.move_to_group(receiving_group.external_id)
