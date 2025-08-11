@@ -40,15 +40,20 @@ class GroupFormsController < ApplicationController
     authorize @group_form
 
     form = Form.find(params[:id])
-    @group_select = Forms::GroupSelect.new(group: group_select_params[:group], form: form)
+
+    receiving_group = Group.find(group_select_params[:group])
+    @group_select = Forms::GroupSelect.new(group: receiving_group, form: form)
 
     # TODO: compare @group with @group_select.group to check if it's changed
+    if @group.external_id == receiving_group.external_id
+      flash[:message] = "Form is already in this group."
+      render :edit
+    else
+      success_message = "Form has been moved to #{receiving_group.name}."
+      form.move_to_group(receiving_group.external_id)
 
-    receiving_group = Group.find(@group_select.group)
-
-    form.move_to_group(receiving_group.external_id)
-
-    redirect_to group_path(@group)
+      redirect_to @group, success: success_message, status: :see_other
+    end
   end
 
 private
