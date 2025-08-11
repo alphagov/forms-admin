@@ -23,7 +23,7 @@
     <p> You can move draft forms into active or trial groups. Live forms can only be moved into active groups. </p>
     <p> We’ll tell the group admins and editors that this form has been moved and they may no longer have access to it. </p>
 
-    <%= render @group_select, url: group_form_path(group_id: @group_select.group.id, id: @group_select.form.id) %>
+    <%= render @group_select, url: group_form_path(group_id: @group_select.group.external_id, id: @group_select.form.id) %>
   </div>
 </div>
 
