@@ -417,4 +417,37 @@ RSpec.describe Page, type: :model do
       end
     end
   end
+
+  describe "#answer_settings" do
+    context "when the answer_settings are a Hash" do
+      let(:page) { build :page_record, answer_settings: { "first_key" => "first_keys_value", "second_key" => { "third_key" => "third_keys_value" } } }
+
+      it "returns an OpenStruct with the answer settings" do
+        expect(page.answer_settings).to be_a(OpenStruct)
+        expect(page.answer_settings.first_key).to eq("first_keys_value")
+        expect(page.answer_settings.second_key.third_key).to eq("third_keys_value")
+      end
+    end
+
+    context "when the answer_settings are from the ActiveResource page object" do
+      let(:page_resource) { build :page_resource, id: 1, answer_settings: { "first_key" => "first_keys_value", "second_key" => { "third_key" => "third_keys_value" } } }
+
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/#{form.id}/pages/#{page_resource.id}", headers, page_resource.to_json, 200
+        end
+      end
+
+      it "returns an DataStruct with the answer settings" do
+        # load the resource as if it's coming from the API to ensure we can handle the answer_settings attribute which
+        # has type Api::V1::PageResource::AnswerSettings
+        retrieved_page_resource = Api::V1::PageResource.find(page_resource.id, params: { form_id: form.id })
+        page = described_class.new(answer_settings: retrieved_page_resource.answer_settings)
+
+        expect(page.answer_settings).to be_a(DataStruct)
+        expect(page.answer_settings.first_key).to eq("first_keys_value")
+        expect(page.answer_settings.second_key.third_key).to eq("third_keys_value")
+      end
+    end
+  end
 end

@@ -23,6 +23,8 @@ class Page < ApplicationRecord
   validates :page_heading, length: { maximum: 250 }
   validate :guidance_markdown_length_and_tags
 
+  attribute :answer_settings, DataStructType.new
+
   def destroy_and_update_form!
     form = self.form
     destroy! && form.update!(question_section_completed: false)

@@ -143,10 +143,10 @@ describe PageRepository do
         it "saves the answer settings to the database" do
           described_class.create!(**page_params)
           expect(Page.last).to have_attributes(
-            "answer_settings" => {
+            "answer_settings" => DataStruct.new({
               "only_one_option" => "true",
               "selection_options" => [],
-            },
+            }),
           )
         end
       end
