@@ -1,11 +1,17 @@
 <% set_page_title(title_with_error_prefix(t('page_titles.move_form'), @group_select.errors.any?)) %>
-<% content_for :back_link, govuk_back_link_to(group_path(@group), "Back to #{@group_select.group.name}") %>
+<% content_for :back_link, govuk_back_link_to(group_path(@group), "Back to #{@group.name}") %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
+    <% if flash[:message] %>
+      <%= govuk_notification_banner(title_text: t("banner.default.title")) do |nb| %>
+        <p><%= flash[:message] %></p>
+        <% end %>
+    <% end %>
+
   <h1 class="govuk-heading-l">
-    <span class="govuk-caption-l"><%= t("groups.status_caption.#{@group_select.group.status}") %></span><span class="govuk-visually-hidden"> - </span>
+    <span class="govuk-caption-l"><%= t("groups.status_caption.#{@group.status}") %></span><span class="govuk-visually-hidden"> - </span>
     Move form to a different group
   </h1>
 
