@@ -60,6 +60,10 @@ FactoryBot.define do
       share_preview_completed { true }
     end
 
+    trait :with_submission_email do
+      association :form_submission_email
+    end
+
     trait :live do
       ready_for_live
       state { :live }

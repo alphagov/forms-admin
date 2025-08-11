@@ -2,16 +2,15 @@ require "rails_helper"
 
 RSpec.describe "pages/delete" do
   let(:delete_confirmation_input) { Forms::DeleteConfirmationInput.new }
-  let(:page) { build :page, id: 1 }
-
-  let(:current_form) { build :form, id: 1 }
+  let(:current_form) { create :form }
+  let(:page) { create :page, form: current_form }
 
   before do
-    assign(:back_url, edit_question_path(form_id: 1, page_id: page.id))
+    assign(:back_url, edit_question_path(form_id: current_form.id, page_id: page.id))
     assign(:delete_confirmation_input, delete_confirmation_input)
     assign(:item_name, "What’s your name?")
     assign(:page, page)
-    assign(:url, destroy_page_path(form_id: 1, page_id: page.id))
+    assign(:url, destroy_page_path(form_id: current_form.id, page_id: page.id))
 
     render locals: { current_form: }
   end
@@ -29,7 +28,7 @@ RSpec.describe "pages/delete" do
   end
 
   it "has a back link to the edit question page" do
-    expect(view.content_for(:back_link)).to have_link "Back", href: "/forms/1/pages/1/edit/question"
+    expect(view.content_for(:back_link)).to have_link "Back", href: "/forms/#{current_form.id}/pages/#{page.id}/edit/question"
   end
 
   it "has a delete confirmation input to confirm deletion of the page" do
@@ -38,7 +37,7 @@ RSpec.describe "pages/delete" do
 
   describe "delete confirmation input" do
     it "posts to the destroy action" do
-      expect(rendered).to have_element "form", action: "/forms/1/pages/1/delete", method: "post"
+      expect(rendered).to have_element "form", action: "/forms/#{current_form.id}/pages/#{page.id}/delete", method: "post"
     end
 
     it "does not have a hint" do
@@ -46,25 +45,13 @@ RSpec.describe "pages/delete" do
     end
   end
 
-  describe "when page to delete is not associated with any routes" do
+  context "when page to delete is not associated with any routes" do
     it "does not render a notification banner" do
       expect(rendered).not_to have_css ".govuk-notification-banner"
     end
   end
 
-  describe "when page to delete is the start of one or more routes" do
-    let(:page) do
-      build(
-        :page,
-        id: 1,
-        form_id: 1,
-        position: 2,
-        routing_conditions: [
-          build(:condition, routing_page_id: 1, check_page_id: 1),
-        ],
-      )
-    end
-
+  context "when page to delete is the start of one or more routes" do
     before do
       assign(:routing, :start_of_route)
       assign(:route_page, page)
@@ -80,9 +67,9 @@ RSpec.describe "pages/delete" do
       subject(:banner) { rendered.html.at_css(".govuk-notification-banner") }
 
       it { is_expected.to have_text "Important" }
-      it { is_expected.to have_css "h3.govuk-notification-banner__heading", text: "Question 2 is the start of a route", count: 1 }
+      it { is_expected.to have_css "h3.govuk-notification-banner__heading", text: "Question #{page.position} is the start of a route", count: 1 }
       it { is_expected.to have_css "p.govuk-body", text: "If you delete this question, its routes will also be deleted." }
-      it { is_expected.to have_link "View question 2’s routes", class: "govuk-notification-banner__link", href: show_routes_path(1, 1) }
+      it { is_expected.to have_link "View question #{page.position}’s routes", class: "govuk-notification-banner__link", href: show_routes_path(current_form.id, page.id) }
     end
 
     context "but there was an error in the user's input" do
@@ -99,32 +86,12 @@ RSpec.describe "pages/delete" do
   end
 
   describe "when page to delete is at the end of one or more routes" do
-    let(:routing_page) do
-      build(
-        :page,
-        id: 1,
-        form_id: 1,
-        position: 2,
-        routing_conditions: [
-          build(:condition, routing_page_id: 1, check_page_id: 1, goto_page_id: 3),
-        ],
-      )
-    end
-
-    let(:page) do
-      build(
-        :page,
-        id: 3,
-        form_id: 1,
-        position: 7,
-      )
-    end
+    let(:routing_page) { build :page, id: 1, position: 2 }
+    let(:page) { build :page, id: 2, position: 7 }
 
     before do
       assign(:routing, :end_of_route)
       assign(:route_page, routing_page)
-
-      assign(:page_goto_conditions, routing_page.routing_conditions)
 
       render locals: { current_form: }
     end
@@ -137,9 +104,9 @@ RSpec.describe "pages/delete" do
       subject(:banner) { rendered.html.at_css(".govuk-notification-banner") }
 
       it { is_expected.to have_text "Important" }
-      it { is_expected.to have_css "h3.govuk-notification-banner__heading", text: "Question 7 is at the end of a route", count: 1 }
-      it { is_expected.to have_link "Question 2’s route", class: "govuk-notification-banner__link", href: show_routes_path(1, 1) }
-      it { is_expected.to have_css "p.govuk-body", text: "Question 2’s route goes to this question. If you delete this question, question 2’s routes will also be deleted.", normalize_ws: true }
+      it { is_expected.to have_css "h3.govuk-notification-banner__heading", text: "Question #{page.position} is at the end of a route", count: 1 }
+      it { is_expected.to have_link "Question #{routing_page.position}’s route", class: "govuk-notification-banner__link", href: show_routes_path(current_form.id, routing_page.id) }
+      it { is_expected.to have_css "p.govuk-body", text: "Question #{routing_page.position}’s route goes to this question. If you delete this question, question #{routing_page.position}’s routes will also be deleted.", normalize_ws: true }
     end
 
     context "but there was an error in the user's input" do
@@ -156,29 +123,8 @@ RSpec.describe "pages/delete" do
   end
 
   describe "when page to delete is start of a secondary skip route" do
-    let(:check_page) do
-      build(
-        :page,
-        id: 2,
-        form_id: 1,
-        position: 1,
-        routing_conditions: [
-          build(:condition, routing_page_id: 1, check_page_id: 1, goto_page_id: 1),
-        ],
-      )
-    end
-
-    let(:page) do
-      build(
-        :page,
-        id: 1,
-        form_id: 1,
-        position: 2,
-        routing_conditions: [
-          build(:condition, routing_page_id: 1, check_page_id: check_page.id, value: nil),
-        ],
-      )
-    end
+    let(:check_page) { build(:page, id: 2, form_id: 1, position: 1) }
+    let(:page) { build(:page, id: 1, form_id: 1, position: 2) }
 
     before do
       assign(:routing, :start_of_secondary_skip_route)
@@ -195,8 +141,8 @@ RSpec.describe "pages/delete" do
       subject(:banner) { rendered.html.at_css(".govuk-notification-banner") }
 
       it { is_expected.to have_text "Important" }
-      it { is_expected.to have_css "h3.govuk-notification-banner__heading", text: "Question 2 is the start of a route", count: 1 }
-      it { is_expected.to have_link "Question 1’s route", class: "govuk-notification-banner__link", href: show_routes_path(1, 2) }
+      it { is_expected.to have_css "h3.govuk-notification-banner__heading", text: "Question #{page.position} is the start of a route", count: 1 }
+      it { is_expected.to have_link "Question #{check_page.position}’s route", class: "govuk-notification-banner__link", href: show_routes_path(current_form.id, check_page.id) }
       it { is_expected.to have_css "p.govuk-body", text: "If you delete this question, the route from it will also be deleted." }
     end
 
@@ -214,41 +160,10 @@ RSpec.describe "pages/delete" do
   end
 
   describe "when page to delete is at the end of a secondary skip route" do
-    let(:check_page) do
-      build(
-        :page,
-        id: 1,
-        form_id: 1,
-        position: 3,
-        routing_conditions: [
-          build(:condition, routing_page_id: 1, check_page_id: 1, goto_page_id: 3),
-        ],
-      )
-    end
-
-    let(:routing_page) do
-      build(
-        :page,
-        id: 12,
-        form_id: 1,
-        position: 7,
-        routing_conditions: [
-          build(:condition, routing_page_id: 12, check_page_id: 1, goto_page_id: 9),
-        ],
-      )
-    end
-
-    let(:page) do
-      build(
-        :page,
-        id: 9,
-        form_id: 1,
-        position: 12,
-      )
-    end
+    let(:check_page) { build(:page, id: 1, form_id: 1, position: 3) }
+    let(:page) { build(:page, id: 9, form_id: 1, position: 12) }
 
     before do
-      assign(:page_goto_conditions, routing_page.routing_conditions)
       assign(:routing, :end_of_secondary_skip_route)
       assign(:route_page, check_page)
 
@@ -263,9 +178,9 @@ RSpec.describe "pages/delete" do
       subject(:banner) { rendered.html.at_css(".govuk-notification-banner") }
 
       it { is_expected.to have_text "Important" }
-      it { is_expected.to have_css "h3.govuk-notification-banner__heading", text: "Question 12 is at the end of a route", count: 1 }
-      it { is_expected.to have_link "Question 3’s route", class: "govuk-notification-banner__link", href: show_routes_path(1, 1) }
-      it { is_expected.to have_css "p.govuk-body", text: "Question 3’s route goes to this question. If you delete this question, the route to it will also be deleted.", normalize_ws: true }
+      it { is_expected.to have_css "h3.govuk-notification-banner__heading", text: "Question #{page.position} is at the end of a route", count: 1 }
+      it { is_expected.to have_link "Question #{check_page.position}’s route", class: "govuk-notification-banner__link", href: show_routes_path(current_form.id, check_page.id) }
+      it { is_expected.to have_css "p.govuk-body", text: "Question #{check_page.position}’s route goes to this question. If you delete this question, the route to it will also be deleted.", normalize_ws: true }
     end
 
     context "but there was an error in the user's input" do

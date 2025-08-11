@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "pages/conditions/delete.html.erb" do
   let(:delete_condition_input) { Pages::DeleteConditionInput.new(form:, page:, record: condition) }
-  let(:form) { build :form, :ready_for_routing, id: 1 }
+  let(:form) { create :form, :ready_for_routing }
   let(:condition) { build :condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Wales", goto_page_id: pages.last.id }
   let(:secondary_skip_condition) { nil }
   let(:pages) { form.pages }
