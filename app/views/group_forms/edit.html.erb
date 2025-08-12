@@ -3,8 +3,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-
-  <%= form_with(model: @group_select, method: :patch, url: group_form_path(group_id: @group_select.group.external_id, id: @group_select.form.id)) do |f| %>
+  <%= form_with(model: @group_select, method: :patch, url: group_form_path(group_id: @group.external_id, id: @group_select.form.id)) do |f| %>
     <% if @group_select&.errors.any? %>
       <%= f.govuk_error_summary %>
     <% end %>
