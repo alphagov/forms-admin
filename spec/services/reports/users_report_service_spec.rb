@@ -14,7 +14,7 @@ describe Reports::UsersReportService do
           { text: I18n.t("reports.users.table_headings.organisation_name") },
           { text: I18n.t("reports.users.table_headings.user_count"), numeric: true },
         ],
-        rows: [],
+        rows: [[{ text: I18n.t("reports.users.table_headings.total_number_of_users") }, { text: 0, numeric: true }]],
       })
     end
 
@@ -28,6 +28,7 @@ describe Reports::UsersReportService do
         create :user, organisation: org2
         create :user, :with_no_org
         expect(users_report_service.user_data[:rows]).to eq([
+          [{ text: I18n.t("reports.users.table_headings.total_number_of_users") }, { text: 4, numeric: true }],
           [{ text: org1.name }, { text: 2, numeric: true }],
           [{ text: org2.name }, { text: 1, numeric: true }],
           [{ text: I18n.t("users.index.organisation_blank") }, { text: 1, numeric: true }],
