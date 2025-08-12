@@ -441,6 +441,7 @@ en:
         <p> We’ll tell the group admins and editors that this form has been moved and they may no longer have access to it. </p>
       form_name_label: Form name
       group_name_label: Group name
+      placeholder: Select a group
   group_members:
     create:
       success: "%{user_name} has been added to this group and we’ve sent them an email to let them know"

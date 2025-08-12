@@ -40,28 +40,34 @@
                                              'data-test-id': 'group-radio'
                                             ) %>
       <% elsif @group_select.groups.length < 31 %>
-        <%= f.govuk_collection_select(:group,
-                                      @group_select.groups,
-                                      :id, ->(option) { option.name },
-                                      class: ['govuk-!-width-three-quarters'],
-                                      options: { prompt: "prompt" },
-                                      label: { text: 'What group do you want to move it to?', size: 'm', tag: 'h2' },
-                                      'data-test-id': 'group-select'
-                                     ) %>
+        <%= render DfE::Autocomplete::View.new(f,
+                                               attribute_name: :group,
+                                               form_field: f.govuk_collection_select(:group,
+                                                                                     @group_select.groups,
+                                                                                     :id,
+                                                                                     ->(option) { option.name },
+                                                                                     class: ['govuk-!-width-three-quarters'],
+                                                                                     label: { size: 'm', tag: 'h2' },
+                                                                                     options: { include_blank: t('.placeholder') }
+                                                                                    ),
+                                                                                    html_attributes: { 'data-test-id': 'group-select' }
+                                              ) %>
+       <%= init_autocomplete_script(show_all_values: true, raw_attribute: false, source: false, autoselect: false, default_value: '', placeholder: t('.placeholder')) %>
       <% else %>
         <%= render DfE::Autocomplete::View.new(f,
-          attribute_name: :group,
-          form_field: f.govuk_collection_select(:group,
-            @group_select.groups,
-            :id,
-            ->(option) { option.name },
-            class: ['govuk-!-width-three-quarters'],
-            options: { prompt: "prompt" },
-            label: { text: 'What group do you want to move it to?', size: 'm', tag: 'h2' },
-          ),
-          html_attributes: { 'data-show-all-values' => 'true', 'data-test-id': 'group-autocomplete' }
-        ) %>
-      <% end %>
+                                               attribute_name: :group,
+                                               form_field: f.govuk_collection_select(:group,
+                                                                                     @group_select.groups,
+                                                                                     :id,
+                                                                                     ->(option) { option.name },
+                                                                                     class: ['govuk-!-width-three-quarters'],
+                                                                                     label: { size: 'm', tag: 'h2' },
+                                                                                     options: { include_blank: t('.placeholder') }
+                                                                                    ),
+                                                                                    html_attributes: { 'data-test-id': 'group-autocomplete' }
+                                              ) %>
+                                            <%= init_autocomplete_script(show_all_values: false, raw_attribute: false, source: false, autoselect: false) %>
+                                          <% end %>
 
     <%= f.govuk_submit %>
 
@@ -69,4 +75,4 @@
   </div>
 </div>
 
-<%= init_autocomplete_script(show_all_values: true, raw_attribute: false, source: false) %>
+
