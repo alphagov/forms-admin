@@ -1,8 +1,12 @@
 class PageRepository
   class << self
     def find(page_id:, form_id:)
-      page = Api::V1::PageResource.find(page_id, params: { form_id: })
-      save_to_database!(page)
+      if Settings.use_database_as_truth
+        Page.find_by!(id: page_id, form_id:)
+      else
+        page = Api::V1::PageResource.find(page_id, params: { form_id: })
+        save_to_database!(page)
+      end
     end
 
     def create!(form_id:,
@@ -14,25 +18,50 @@ class PageRepository
                 page_heading:,
                 guidance_markdown:,
                 answer_type:)
-      page = Api::V1::PageResource.create!(
-        form_id:,
-        question_text:,
-        hint_text:,
-        is_optional:,
-        is_repeatable:,
-        answer_settings:,
-        page_heading:,
-        guidance_markdown:,
-        answer_type:,
-      )
-      update_and_save_to_database!(page)
+      if Settings.use_database_as_truth
+        page = Page.new(
+          form_id:,
+          question_text:,
+          hint_text:,
+          is_optional:,
+          is_repeatable:,
+          answer_settings:,
+          page_heading:,
+          guidance_markdown:,
+          answer_type:,
+        )
+        page.save_and_update_form
+        Api::V1::PageResource.create!(page.attributes)
+        page
+      else
+        page_resource = Api::V1::PageResource.create!(
+          form_id:,
+          question_text:,
+          hint_text:,
+          is_optional:,
+          is_repeatable:,
+          answer_settings:,
+          page_heading:,
+          guidance_markdown:,
+          answer_type:,
+        )
+        update_and_save_to_database!(page_resource)
+      end
     end
 
     def save!(record)
-      page = Api::V1::PageResource.new(record.attributes, true)
-      page.prefix_options[:form_id] = record.form.id
-      page.save!
-      update_and_save_to_database!(page)
+      if Settings.use_database_as_truth
+        record.save_and_update_form
+        page = Api::V1::PageResource.new(record.attributes, true)
+        page.prefix_options[:form_id] = record.form.id
+        page.save!
+        record
+      else
+        page = Api::V1::PageResource.new(record.attributes, true)
+        page.prefix_options[:form_id] = record.form.id
+        page.save!
+        update_and_save_to_database!(page)
+      end
     end
 
     def destroy(record)
@@ -41,21 +70,33 @@ class PageRepository
 
       begin
         page.destroy # rubocop:disable Rails/SaveBang
-        Page.find(record.id).destroy_and_update_form!
-      rescue ActiveResource::ResourceNotFound, ActiveRecord::RecordNotFound
+      rescue ActiveResource::ResourceNotFound
         # ActiveRecord::Persistence#destroy doesn't raise an error
         # if record has already been destroyed, let's emulate that
+      end
+
+      begin
+        Page.find(record.id).destroy_and_update_form!
+      rescue ActiveRecord::RecordNotFound
+        # as above
       end
 
       record
     end
 
     def move_page(record, direction)
-      page = Api::V1::PageResource.new(record.attributes, true)
-      page.prefix_options[:form_id] = record.form.id
-
-      page.move_page(direction)
-      update_and_save_to_database!(page)
+      if Settings.use_database_as_truth
+        record.move_page(direction)
+        page = Api::V1::PageResource.new(record.attributes, true)
+        page.prefix_options[:form_id] = record.form.id
+        page.save!
+        record
+      else
+        page = Api::V1::PageResource.new(record.attributes, true)
+        page.prefix_options[:form_id] = record.form.id
+        page.move_page(direction)
+        update_and_save_to_database!(page)
+      end
     end
 
   private
