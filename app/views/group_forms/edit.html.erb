@@ -16,29 +16,27 @@
 
     <h1 class="govuk-heading-l">
       <span class="govuk-caption-l"><%= t("groups.status_caption.#{@group.status}") %></span><span class="govuk-visually-hidden"> - </span>
-      Move form to a different group
+      <%= t('page_titles.move_form') %>
     </h1>
 
     <%= govuk_summary_list(classes: "govuk-summary-list--no-border") do |summary_list|
       summary_list.with_row do |row|
-        row.with_key { "Form name" }
+        row.with_key { t('.form_name_label') }
         row.with_value { @group_select.form.name }
       end;
       summary_list.with_row do |row|
-        row.with_key { "Group name" }
-        row.with_value { @group_select.group.name }
+        row.with_key { t('.group_name_label') }
+        row.with_value { @group.name }
       end;
     end %>
 
-    <p> You can move draft forms into active or trial groups. Live forms can only be moved into active groups. </p>
-    <p> We’ll tell the group admins and editors that this form has been moved and they may no longer have access to it. </p>
-
+      <%= t('.body_html') %>
 
       <% if @group_select.groups.length < 11 %>
         <%= f.govuk_collection_radio_buttons(:group,
                                              @group_select.groups,
                                              :id, ->(option) { option.name },
-                                             legend: { text: 'What group do you want to move it to?', size: 'm', tag: 'h2' },
+                                             legend: { size: 'm', tag: 'h2' },
                                              'data-test-id': 'group-radio'
                                             ) %>
       <% elsif @group_select.groups.length < 31 %>
