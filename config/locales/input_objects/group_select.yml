@@ -1,5 +1,12 @@
 ---
 en:
+  activemodel:
+    errors:
+      models:
+        forms/group_select:
+          attributes:
+            group:
+              blank: Select the group you want to move this form to
   helpers:
     label:
       forms_group_select:

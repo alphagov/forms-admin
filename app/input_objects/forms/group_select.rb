@@ -1,6 +1,8 @@
 class Forms::GroupSelect < BaseInput
   attr_accessor :form, :group
 
+  validates :group, presence: true
+
   def groups
     # TODO: change this to Groups in the Logged In User's Organisation only
     Group.all
