@@ -5,6 +5,9 @@ features:
   welsh:
     enabled_by_group: true
 
+# Migrating data from Forms API to Forms Admin's database - this flag determines whether we read from Forms API or from Forms Admin's database
+use_database_as_truth: false
+
 forms_api:
   # Authentication key to authenticate with forms-api
   auth_key: development_key
