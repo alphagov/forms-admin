@@ -120,6 +120,8 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
   describe "#edit" do
     describe "Given a page" do
+      let(:page) { create :page, id: 99_999_999, form_id: form.id }
+
       before do
         # Setup a draft_question so that edit question action doesn't need to create a completely new records
         draft_question
@@ -129,6 +131,18 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
       it "Reads the page from the page repository" do
         expect(PageRepository).to have_received(:find)
+      end
+
+      it "creates a draft question in the database" do
+        expect(DraftQuestion.last).to have_attributes(
+          question_text: page.question_text,
+          is_optional: page.is_optional,
+          answer_type: page.answer_type,
+        )
+      end
+
+      it "does not use the page id when assigning attributes to the draft question" do
+        expect(DraftQuestion.last.id).not_to eq(page.id)
       end
     end
   end
