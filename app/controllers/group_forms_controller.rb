@@ -44,11 +44,12 @@ class GroupFormsController < ApplicationController
     receiving_group = Group.find(group_select_params[:group])
     @group_select = Forms::GroupSelect.new(group: receiving_group, form: form)
 
+    # TODO add spec for checking: compare @group with @group_select.group to check if it's changed
     if @group.external_id == receiving_group.external_id
       flash[:message] = "Form is already in this group."
       render :edit
     else
-      success_message = "Form has been moved to #{receiving_group.name}."
+      success_message = "'#{form.name}' has been moved to '#{receiving_group.name}'"
       form.move_to_group(receiving_group.external_id)
 
       redirect_to @group, success: success_message, status: :see_other
