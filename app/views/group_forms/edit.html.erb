@@ -4,16 +4,21 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
+  <%= form_with(model: @group_select, method: :patch, url: group_form_path(group_id: @group_select.group.external_id, id: @group_select.form.id)) do |f| %>
+    <% if @group_select&.errors.any? %>
+      <%= f.govuk_error_summary %>
+    <% end %>
+
     <% if flash[:message] %>
       <%= govuk_notification_banner(title_text: t("banner.default.title")) do |nb| %>
         <p><%= flash[:message] %></p>
         <% end %>
     <% end %>
 
-  <h1 class="govuk-heading-l">
-    <span class="govuk-caption-l"><%= t("groups.status_caption.#{@group.status}") %></span><span class="govuk-visually-hidden"> - </span>
-    Move form to a different group
-  </h1>
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= t("groups.status_caption.#{@group.status}") %></span><span class="govuk-visually-hidden"> - </span>
+      Move form to a different group
+    </h1>
 
     <%= govuk_summary_list(classes: "govuk-summary-list--no-border") do |summary_list|
       summary_list.with_row do |row|
@@ -29,7 +34,41 @@
     <p> You can move draft forms into active or trial groups. Live forms can only be moved into active groups. </p>
     <p> We’ll tell the group admins and editors that this form has been moved and they may no longer have access to it. </p>
 
-    <%= render @group_select, url: group_form_path(group_id: @group_select.group.external_id, id: @group_select.form.id) %>
+
+      <% if @group_select.groups.length < 11 %>
+        <%= f.govuk_collection_radio_buttons(:group,
+                                             @group_select.groups,
+                                             :id, ->(option) { option.name },
+                                             legend: { text: 'What group do you want to move it to?', size: 'm', tag: 'h2' },
+                                             'data-test-id': 'group-radio'
+                                            ) %>
+      <% elsif @group_select.groups.length < 31 %>
+        <%= f.govuk_collection_select(:group,
+                                      @group_select.groups,
+                                      :id, ->(option) { option.name },
+                                      class: ['govuk-!-width-three-quarters'],
+                                      options: { prompt: "prompt" },
+                                      label: { text: 'What group do you want to move it to?', size: 'm', tag: 'h2' },
+                                      'data-test-id': 'group-select'
+                                     ) %>
+      <% else %>
+        <%= render DfE::Autocomplete::View.new(f,
+          attribute_name: :group,
+          form_field: f.govuk_collection_select(:group,
+            @group_select.groups,
+            :id,
+            ->(option) { option.name },
+            class: ['govuk-!-width-three-quarters'],
+            options: { prompt: "prompt" },
+            label: { text: 'What group do you want to move it to?', size: 'm', tag: 'h2' },
+          ),
+          html_attributes: { 'data-show-all-values' => 'true', 'data-test-id': 'group-autocomplete' }
+        ) %>
+      <% end %>
+
+    <%= f.govuk_submit %>
+
+    <% end %>
   </div>
 </div>
 
