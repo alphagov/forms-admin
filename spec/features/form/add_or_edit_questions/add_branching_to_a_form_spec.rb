@@ -1,18 +1,17 @@
 require "rails_helper"
 
 feature "Adding branching to a form", type: :feature do
-  let(:form) { build :form, :ready_for_api_routing, id: 1 }
+  let(:form) { create :form, :ready_for_routing }
   let(:pages) { form.pages }
   let(:group) { create(:group, organisation: standard_user.organisation) }
-  let(:condition) { build(:condition, id: 1, form_id: 1, page_id: form.pages.first.id, check_page_id: form.pages.first.id, routing_page_id: form.pages.first.id, goto_page_id: form.pages.last.id, answer_value: form.pages.first.answer_settings.selection_options.first.attributes[:name]) }
-  let(:secondary_skip_condition) { build(:condition, id: 2, form_id: 1, page_id: form.pages[3].id, check_page_id: form.pages.first.id, routing_page_id: form.pages[3].id, goto_page_id: nil, skip_to_end: true) }
+  let(:first_answer_value) { form.pages.first.answer_settings.selection_options.first[:name] }
 
   before do
     allow(FormRepository).to receive_messages(find: form, pages:)
     allow(ConditionRepository).to receive_messages(create!: true)
 
     pages.each do |page|
-      allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: 1).and_return(page)
+      allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: form.id).and_return(page)
     end
 
     GroupForm.create! group:, form_id: form.id
@@ -64,16 +63,19 @@ private
   end
 
   def and_i_select_an_answer_value_with_goto_page_and_continue
-    select form.pages.first.answer_settings.selection_options.first.attributes[:name], from: "pages_conditions_input[answer_value]"
+    select first_answer_value, from: "pages_conditions_input[answer_value]"
     select form.pages.last.question_text, from: "pages_conditions_input[goto_page_id]"
-    form.pages.first.routing_conditions << condition
+
+    create(:condition, check_page_id: form.pages.first.id, routing_page_id: form.pages.first.id, goto_page_id: form.pages.last.id, answer_value: first_answer_value)
+    form.pages.each(&:reload)
+
     click_on "Save and continue"
   end
 
   def then_i_should_see_the_routes_page
     expect(page.find("h1")).to have_text "Question 1’s routes"
     expect(page).to have_text "Route 1"
-    expect(page).to have_text form.pages.first.answer_settings.selection_options.first.attributes[:name]
+    expect(page).to have_text first_answer_value
     expect(page).to have_text form.pages.last.question_text
     expect_page_to_have_no_axe_errors(page)
   end
@@ -92,7 +94,10 @@ private
   def and_i_select_a_skip_page_and_goto_page
     select form.pages[3].question_text, from: "pages_secondary_skip_input[routing_page_id]"
     select "Check your answers before submitting", from: "pages_secondary_skip_input[goto_page_id]"
-    form.pages[3].routing_conditions << secondary_skip_condition
+
+    create(:condition, id: 2, check_page_id: form.pages.first.id, routing_page_id: form.pages[3].id, goto_page_id: nil, skip_to_end: true)
+    form.pages.each(&:reload)
+
     click_on "Save and continue"
   end
 

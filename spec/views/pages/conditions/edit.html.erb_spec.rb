@@ -2,24 +2,16 @@ require "rails_helper"
 
 describe "pages/conditions/edit.html.erb" do
   let(:condition_input) { Pages::ConditionsInput.new(form:, page:, record: condition) }
-  let(:form) { build :form, :ready_for_routing, id: 1 }
+  let(:form) { create :form, :ready_for_routing }
   let(:group) { build :group }
-  let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
-  let(:pages) { form.pages << page }
+  let(:pages) { form.pages }
+  let(:page) { pages.first }
+  let(:condition) { create :condition, routing_page_id: page.id, check_page_id: page.id, answer_value: "Option 1", goto_page_id: pages.third.id }
   let(:secondary_skip) { false }
-  let(:page) do
-    build :page,
-          form_id: form.id,
-          is_optional: "false",
-          answer_type: "selection",
-          answer_settings: OpenStruct.new(only_one_option: "true",
-                                          selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
-                                                              OpenStruct.new(attributes: { name: "Option 2" })])
-  end
 
   before do
+    pages.each(&:reload)
     page.position = 1
-    allow(view).to receive_messages(form_pages_path: "/forms/1/pages", create_condition_path: "/forms/1/pages/1/conditions/new", delete_condition_path: "/forms/1/pages/1/conditions/2/delete")
     allow(form).to receive_messages(group: group, qualifying_route_pages: pages)
     allow(condition_input).to receive(:secondary_skip?).and_return(secondary_skip)
     allow(FormRepository).to receive_messages(pages:)
@@ -46,11 +38,11 @@ describe "pages/conditions/edit.html.erb" do
   end
 
   it "has a delete route link" do
-    expect(rendered).to have_link(text: "Delete route", href: "/forms/1/pages/1/conditions/2/delete")
+    expect(rendered).to have_link(text: "Delete route", href: "/forms/#{form.id}/pages/#{page.id}/conditions/#{condition.id}/delete")
   end
 
   context "with a validation error" do
-    let(:condition) { build :condition, :with_answer_value_missing, id: 1, routing_page_id: 1, check_page_id: 1, goto_page_id: 3 }
+    let(:condition) { create :condition, routing_page_id: page.id, check_page_id: page.id, goto_page_id: pages.third.id }
 
     it "has an error link that matches the field with errors" do
       field_id = "pages-conditions-input-answer-value-field-error"
@@ -62,15 +54,13 @@ describe "pages/conditions/edit.html.erb" do
   end
 
   context "when the condition does not have an exit page" do
-    let(:condition) { build :condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 }
-
     it "has an 'add exit page' option" do
       expect(rendered).to have_content("Add an exit page")
     end
   end
 
   context "when the condition has an exit page" do
-    let(:condition) { build :condition, :with_exit_page, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales" }
+    let(:condition) { create :condition, :with_exit_page, routing_page_id: page.id, check_page_id: page.id, answer_value: "Option 1" }
 
     it "has the exit page heading" do
       expect(rendered).to have_content(condition.exit_page_heading)

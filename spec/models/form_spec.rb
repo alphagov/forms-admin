@@ -288,12 +288,280 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "#all_incomplete_tasks" do
+    context "when a form is complete and ready to be made live" do
+      let(:completed_form) { build :form_record, :live }
+
+      it "returns no missing sections" do
+        expect(completed_form.all_incomplete_tasks).to be_empty
+      end
+    end
+
+    context "when a form is incomplete and should still be in draft state" do
+      let(:new_form) { build :form_record, :new_form }
+
+      it "returns a set of keys related to missing fields" do
+        expect(new_form.all_incomplete_tasks).to match_array(%i[missing_pages missing_submission_email missing_privacy_policy_url missing_contact_details missing_what_happens_next share_preview_not_completed])
+      end
+    end
+  end
+
   describe "submission type" do
     describe "enum" do
       it "returns a list of submission types" do
         expect(described_class.submission_types.keys).to eq(%w[email email_with_csv s3])
         expect(described_class.submission_types.values).to eq(%w[email email_with_csv s3])
       end
+    end
+  end
+
+  describe "#destroy" do
+    let(:form) { create :form_record }
+
+    context "when form is in a group" do
+      it "destroys the group" do
+        group = create :group
+        GroupForm.create!(group:, form_id: form.id)
+
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.post "/api/v1/forms", post_headers, { id: 1 }.to_json, 200
+          mock.delete "/api/v1/forms/1", delete_headers, nil, 204
+        end
+
+        # form must exist for ActiveResource to delete it
+        form.save!
+
+        expect {
+          form.destroy
+        }.to change(GroupForm, :count).by(-1)
+
+        expect(GroupForm.find_by(form_id: form.id)).to be_nil
+      end
+    end
+  end
+
+  describe "#all_ready_for_live?" do
+    before do
+      email_task_status_service = instance_double(EmailTaskStatusService)
+      allow(EmailTaskStatusService).to receive(:new).and_return(email_task_status_service)
+      allow(email_task_status_service).to receive(:ready_for_live?).and_return(email_tasks_completed)
+
+      task_status_service = instance_double(TaskStatusService)
+      allow(TaskStatusService).to receive(:new).and_return(task_status_service)
+      allow(task_status_service).to receive(:mandatory_tasks_completed?).and_return(mandatory_tasks_completed)
+    end
+
+    context "when not all mandatory tasks have been completed" do
+      let(:email_tasks_completed) { true }
+      let(:mandatory_tasks_completed) { false }
+
+      it "returns false" do
+        expect(form.all_ready_for_live?).to be false
+      end
+    end
+
+    context "when not all submission emails tasks have been completed" do
+      let(:email_tasks_completed) { false }
+      let(:mandatory_tasks_completed) { true }
+
+      it "returns false" do
+        expect(form.all_ready_for_live?).to be false
+      end
+    end
+
+    context "when all mandatory tasks have been completed" do
+      let(:email_tasks_completed) { true }
+      let(:mandatory_tasks_completed) { true }
+
+      it "returns true" do
+        expect(form.all_ready_for_live?).to be true
+      end
+    end
+  end
+
+  describe "#all_task_statuses" do
+    let(:completed_form) { build :form_record, :live }
+
+    it "returns a hash with each of the task statuses" do
+      expected_hash = {
+        name_status: :completed,
+        pages_status: :completed,
+        declaration_status: :completed,
+        what_happens_next_status: :completed,
+        submission_email_status: :completed,
+        confirm_submission_email_status: :completed,
+        privacy_policy_status: :completed,
+        payment_link_status: :optional,
+        receive_csv_status: :optional,
+        support_contact_details_status: :completed,
+        share_preview_status: :completed,
+        make_live_status: :completed,
+      }
+      expect(completed_form.all_task_statuses).to eq expected_hash
+    end
+  end
+
+  describe "#page_number" do
+    let(:completed_form) { build :form_resource, :live }
+
+    context "with an existing page" do
+      let(:page) { completed_form.pages.first }
+
+      it "returns the page position" do
+        expect(completed_form.page_number(page)).to eq(1)
+      end
+    end
+
+    context "with an new page" do
+      let(:page) { build :page_resource }
+
+      it "returns the position for a new page" do
+        expect(completed_form.page_number(page)).to eq(completed_form.pages.count + 1)
+      end
+    end
+
+    context "with an unspecified page" do
+      it "returns the position for a new page" do
+        expect(completed_form.page_number(nil)).to eq(completed_form.pages.count + 1)
+      end
+    end
+  end
+
+  describe "#email_confirmation_status" do
+    let(:form) { create :form_record, :new_form }
+
+    it "returns :not_started" do
+      expect(form.email_confirmation_status).to eq(:not_started)
+    end
+
+    it "with submission_email set and no FormSubmissionEmail, returns :email_set_without_confirmation" do
+      form.submission_email = "test@example.gov.uk"
+      expect(form.email_confirmation_status).to eq(:email_set_without_confirmation)
+    end
+
+    it "with FormSubmissionEmail code returns :sent" do
+      create :form_submission_email, form_id: form.id, temporary_submission_email: "test@example.gov.uk", confirmation_code: "123456"
+      expect(form.email_confirmation_status).to eq(:sent)
+    end
+
+    it "with FormSubmissionEmail with no code returns :confirmed" do
+      create :form_submission_email, form_id: form.id, temporary_submission_email: "test@example.gov.uk", confirmation_code: ""
+      expect(form.email_confirmation_status).to eq(:confirmed)
+    end
+
+    it "with FormSubmissionEmail with code and email matches forms returns :confirmed" do
+      form.submission_email = "test@example.gov.uk"
+      create :form_submission_email, form_id: form.id, temporary_submission_email: "test@example.gov.uk", confirmation_code: "123456"
+      expect(form.email_confirmation_status).to eq(:confirmed)
+    end
+  end
+
+  describe "#qualifying_route_pages" do
+    let(:form) { create :form_record }
+    let!(:non_selection_page) { create(:page_record, form:, position: 1) }
+    let!(:selection_page_without_routes) { create(:page_record, :with_selection_settings, form:, position: 2) }
+    let!(:selection_page_with_route) { create(:page_record, :with_selection_settings, form:, position: 3) }
+    let!(:selection_page_with_branching) { create(:page_record, :with_selection_settings, form:, position: 4) }
+    let!(:secondary_skip_page) { create(:page_record, :with_selection_settings, form:, position: 5) }
+    let!(:branch_route_go_to_page) { create(:page_record, :with_selection_settings, form:, position: 6) }
+    let!(:last_page) { create(:page_record, :with_selection_settings, form:, position: 7) }
+
+    before do
+      create(:condition_record, routing_page_id: selection_page_with_route.id, check_page_id: selection_page_with_route.id, answer_value: "Option 1", goto_page_id: secondary_skip_page.id)
+
+      create(:condition_record, routing_page_id: selection_page_with_branching.id, check_page_id: selection_page_with_branching.id, answer_value: "Option 1", goto_page_id: branch_route_go_to_page.id)
+      create(:condition_record, routing_page_id: secondary_skip_page.id, check_page_id: selection_page_with_branching.id, goto_page_id: last_page.id)
+
+      form.reload
+      form.pages.each(&:reload)
+
+      allow(form).to receive(:group).and_return(build(:group))
+    end
+
+    it "does not include a question which does not have answer type selection" do
+      expect(form.qualifying_route_pages).not_to include non_selection_page
+    end
+
+    it "includes a question which has answer type selection and no existing conditions" do
+      expect(form.qualifying_route_pages).to include selection_page_without_routes
+    end
+
+    it "includes a question which has answer type selection, an existing condition, and no secondary skip condition" do
+      expect(form.qualifying_route_pages).to include selection_page_with_route
+    end
+
+    it "does not include a question which already has a condition and a secondary skip condition" do
+      expect(form.qualifying_route_pages).not_to include selection_page_with_branching
+    end
+
+    it "does not include a question which is the routing page for a secondary skip condition" do
+      expect(form.qualifying_route_pages).not_to include secondary_skip_page
+    end
+
+    it "includes a page that is the go to page for a condition that is also qualifying page" do
+      expect(form.qualifying_route_pages).to include branch_route_go_to_page
+    end
+
+    it "does not include the final page of the form, which is otherwise a qualifying page" do
+      expect(form.qualifying_route_pages).not_to include last_page
+    end
+  end
+
+  describe "#has_no_remaining_routes_available?" do
+    context "when the form has routes" do
+      let(:form) { create :form_record }
+      let(:pages) do
+        [
+          create(:page_record, :with_selection_settings, form:, position: 1),
+          create(:page_record, :with_selection_settings, form:, position: 2),
+          create(:page_record, :with_selection_settings, form:, position: 3),
+        ]
+      end
+
+      before do
+        create :condition_record, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Option 1", skip_to_end: true
+        form.pages.each(&:reload)
+      end
+
+      context "when there is a page that a route can be added to" do
+        it "returns false" do
+          expect(form.has_no_remaining_routes_available?).to be(false)
+        end
+      end
+
+      context "when there are no pages that a route can be added to" do
+        before do
+          create :condition_record, routing_page_id: pages.second.id, check_page_id: pages.first.id, skip_to_end: true
+          form.pages.each(&:reload)
+        end
+
+        it "returns true" do
+          expect(form.has_no_remaining_routes_available?).to be(true)
+        end
+      end
+    end
+
+    context "when the form does not have routes" do
+      let(:form) { create :form_record }
+      let(:pages) { create_list :page_record, 3, :with_selection_settings, form: }
+
+      it "returns false" do
+        expect(form.has_no_remaining_routes_available?).to be(false)
+      end
+    end
+  end
+
+  describe "#group" do
+    let(:form) { create :form_record }
+
+    it "returns nil if form is not in a group" do
+      expect(form.group).to be_nil
+    end
+
+    it "returns the group if form is in a group" do
+      group = create :group
+      GroupForm.create!(form_id: form.id, group_id: group.id)
+      expect(form.group).to eq group
     end
   end
 
@@ -326,6 +594,21 @@ RSpec.describe Form, type: :model do
           expect { form.move_to_group("some_nonexistent_external_id") }.to raise_error(ActiveRecord::RecordNotFound)
         end
       end
+    end
+  end
+
+  describe "#file_upload_question_count" do
+    let(:form) { create :form_record }
+
+    before do
+      create_list :page_record, 3, form:, answer_type: :file
+      Page::ANSWER_TYPES.each do |answer_type|
+        create(:page_record, form:, answer_type:)
+      end
+    end
+
+    it "returns the number of file upload questions" do
+      expect(form.file_upload_question_count).to eq(4)
     end
   end
 end

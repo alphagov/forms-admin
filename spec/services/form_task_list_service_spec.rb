@@ -4,7 +4,7 @@ describe FormTaskListService do
   let(:current_user) { build(:user) }
 
   let(:organisation) { build :organisation, :with_signed_mou, id: 1 }
-  let(:form) { build(:form, :new_form, id: 1, pages:) }
+  let(:form) { create(:form, :new_form, pages:) }
   let(:pages) { [] }
   let(:group) { create(:group, name: "Group 1", organisation:, status: group_status) }
   let(:group_status) { :trial }
@@ -29,28 +29,31 @@ describe FormTaskListService do
 
   describe ".task_counts" do
     let(:statuses) do
-      OpenStruct.new(attributes: {
-        declaration_status: "completed",
-        make_live_status: "not_started",
-        name_status: "completed",
-        pages_status: "completed",
-        privacy_policy_status: "not_started",
-        support_contact_details_status: "not_started",
-        what_happens_next_status: "completed",
-        payment_link_status: "optional",
-        receive_csv_status: "optional",
-        share_preview_status: "completed",
-      })
+      {
+        declaration_status: :completed,
+        make_live_status: :not_started,
+        name_status: :completed,
+        pages_status: :completed,
+        privacy_policy_status: :not_started,
+        support_contact_details_status: :not_started,
+        what_happens_next_status: :completed,
+        payment_link_status: :optional,
+        receive_csv_status: :optional,
+        share_preview_status: :completed,
+      }
     end
-    let(:form) { build(:form, id: 1, task_statuses: statuses) }
+    let(:form) { create(:form) }
     let(:email_task_status_service) { instance_double(EmailTaskStatusService) }
+    let(:task_status_service) { instance_double(TaskStatusService) }
 
     before do
       allow(EmailTaskStatusService).to receive(:new).and_return(email_task_status_service)
+      allow(TaskStatusService).to receive(:new).and_return(task_status_service)
       allow(email_task_status_service).to receive(:email_task_statuses).and_return({
         submission_email_status: :completed,
         confirm_submission_email_status: :not_started,
       })
+      allow(task_status_service).to receive(:task_statuses).and_return(statuses)
     end
 
     context "when the user can make the form live" do
@@ -100,12 +103,12 @@ describe FormTaskListService do
 
       it "has links to edit form name" do
         expect(section_rows.first[:task_name]).to eq "Edit the name of your form"
-        expect(section_rows.first[:path]).to eq "/forms/1/change-name"
+        expect(section_rows.first[:path]).to eq "/forms/#{form.id}/change-name"
       end
 
       it "has a link to add new pages/questions (if no pages/questions exist)" do
         expect(section_rows[1][:task_name]).to eq "Add and edit your questions"
-        expect(section_rows[1][:path]).to eq "/forms/1/pages/new/start-new-question"
+        expect(section_rows[1][:path]).to eq "/forms/#{form.id}/pages/new/start-new-question"
       end
 
       context "when a page already exists" do
@@ -113,18 +116,18 @@ describe FormTaskListService do
 
         it "has a link to add/edit existing pages (if pages/questions exist)" do
           expect(section_rows[1][:task_name]).to eq "Add and edit your questions"
-          expect(section_rows[1][:path]).to eq "/forms/1/pages"
+          expect(section_rows[1][:path]).to eq "/forms/#{form.id}/pages"
         end
       end
 
       it "has a link to add/edit declaration" do
         expect(section_rows[2][:task_name]).to eq "Add a declaration for people to agree to"
-        expect(section_rows[2][:path]).to eq "/forms/1/declaration"
+        expect(section_rows[2][:path]).to eq "/forms/#{form.id}/declaration"
       end
 
       it "has a link to add/edit 'What happens next'" do
         expect(section_rows[3][:task_name]).to eq "Add information about what happens next"
-        expect(section_rows[3][:path]).to eq "/forms/1/what-happens-next"
+        expect(section_rows[3][:path]).to eq "/forms/#{form.id}/what-happens-next"
       end
 
       it "has the correct default statuses" do
@@ -144,7 +147,7 @@ describe FormTaskListService do
 
       it "has link to payment link settings" do
         expect(section_rows.first[:task_name]).to eq "Add a link to a payment page on GOV.UK Pay"
-        expect(section_rows.first[:path]).to eq "/forms/1/payment-link"
+        expect(section_rows.first[:path]).to eq "/forms/#{form.id}/payment-link"
       end
     end
 
@@ -162,12 +165,12 @@ describe FormTaskListService do
 
         it "has link to set submission email" do
           expect(section_rows.first[:task_name]).to eq "Set the email address completed forms will be sent to"
-          expect(section_rows.first[:path]).to eq "/forms/1/submission-email"
+          expect(section_rows.first[:path]).to eq "/forms/#{form.id}/submission-email"
         end
 
         it "has link to confirm submission email" do
           expect(section_rows[1][:task_name]).to eq "Enter the email address confirmation code"
-          expect(section_rows[1][:path]).to eq "/forms/1/confirm-submission-email"
+          expect(section_rows[1][:path]).to eq "/forms/#{form.id}/confirm-submission-email"
         end
 
         it "has hint text explaining where completed forms will be sent to" do
@@ -260,7 +263,7 @@ describe FormTaskListService do
 
       it "has link to receive CSV settings" do
         expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_create.receive_csv_subsection.receive_csv")
-        expect(section_rows.first[:path]).to eq "/forms/1/receive-csv"
+        expect(section_rows.first[:path]).to eq "/forms/#{form.id}/receive-csv"
       end
     end
 
@@ -273,12 +276,12 @@ describe FormTaskListService do
 
       it "has link to set privacy policy url" do
         expect(section_rows.first[:task_name]).to eq "Provide a link to privacy information for this form"
-        expect(section_rows.first[:path]).to eq "/forms/1/privacy-policy"
+        expect(section_rows.first[:path]).to eq "/forms/#{form.id}/privacy-policy"
       end
 
       it "has link to set contact details url" do
         expect(section_rows[1][:task_name]).to eq "Provide contact details for support"
-        expect(section_rows[1][:path]).to eq "/forms/1/contact-details"
+        expect(section_rows[1][:path]).to eq "/forms/#{form.id}/contact-details"
       end
 
       it "has the correct default statuses" do
@@ -293,7 +296,7 @@ describe FormTaskListService do
       end
 
       let(:section_rows) { section[:rows] }
-      let(:form) { build(:form, :ready_for_live, id: 1, organisation:) }
+      let(:form) { create(:form, :ready_for_live) }
 
       context "when the form is in a trial group" do
         it "has no tasks" do
@@ -410,7 +413,7 @@ describe FormTaskListService do
 
             it "has link to make the form live" do
               expect(section_rows.second[:task_name]).to eq "Make your form live"
-              expect(section_rows.second[:path]).to eq "/forms/1/make-live"
+              expect(section_rows.second[:path]).to eq "/forms/#{form.id}/make-live"
             end
 
             context "when form is ready to make live" do
@@ -418,7 +421,7 @@ describe FormTaskListService do
 
               it "has link to make the form live" do
                 expect(section_rows.second[:task_name]).to eq "Make your form live"
-                expect(section_rows.second[:path]).to eq "/forms/1/make-live"
+                expect(section_rows.second[:path]).to eq "/forms/#{form.id}/make-live"
               end
 
               it "has the correct default status" do
@@ -449,7 +452,7 @@ describe FormTaskListService do
 
               it "has link to make the form live" do
                 expect(section_rows.second[:task_name]).to eq "Make your form live"
-                expect(section_rows.second[:path]).to eq "/forms/1/make-live"
+                expect(section_rows.second[:path]).to eq "/forms/#{form.id}/make-live"
               end
             end
           end

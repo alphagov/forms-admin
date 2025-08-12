@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe PagesController, type: :request do
-  let(:form_response) { Api::V1::FormResource.new(attributes_for(:form, id: 2), true) }
+  let(:form) { create(:form) }
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
   let(:membership) { create :membership, group:, user: standard_user }
@@ -24,14 +24,8 @@ RSpec.describe PagesController, type: :request do
   end
 
   describe "#index" do
-    let(:pages) do
-      [build(:page, id: 99),
-       build(:page, id: 100),
-       build(:page, id: 101)]
-    end
-    let(:form) do
-      build(:form, id: 2, pages:)
-    end
+    let(:form) { create(:form, :with_pages) }
+    let(:pages) { form.pages }
 
     before do
       allow(FormRepository).to receive_messages(find: form, pages: pages)
@@ -53,12 +47,12 @@ RSpec.describe PagesController, type: :request do
     end
 
     context "with a form in a group that the user is not a member of" do
-      let(:form) { build :form, id: 2 }
+      let(:form) { create(:form) }
       let(:other_group) { create(:group) }
 
       before do
-        other_group.group_forms.build(form_id: form.id)
-        get form_pages_path(2)
+        other_group.group_forms.create!(form_id: form.id)
+        get form_pages_path(form.id)
       end
 
       it "Renders the forbidden page" do
@@ -71,18 +65,21 @@ RSpec.describe PagesController, type: :request do
     end
 
     describe "when there are validation errors" do
-      let(:routing_condition) { [(build :condition, :with_answer_value_missing, id: 1, routing_page_id: 99, check_page_id: 99, goto_page_id: 101)] }
-      let(:collect_analytics) { true }
+      let(:form) { create(:form, :ready_for_routing) }
 
       before do
+        create(:condition, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: nil, goto_page_id: pages.last.id)
+        pages.first.reload
+
         allow(standard_user).to receive(:collect_analytics?).and_return(collect_analytics)
 
-        pages.first.routing_conditions = routing_condition
         group.group_forms.create!(form_id: form.id)
-        get form_pages_path(2)
+        get form_pages_path(form.id)
       end
 
       context "when analytics is enabled" do
+        let(:collect_analytics) { true }
+
         it "sends the validation errors to analytics" do
           page = Capybara.string(response.body)
           expect(page).to have_css("[data-analytics-events]", text: /answer_value_doesnt_exist/, visible: :all)
@@ -101,41 +98,39 @@ RSpec.describe PagesController, type: :request do
   end
 
   describe "#start_new_question" do
-    let(:current_form) { build :form, id: 1 }
-    let(:original_draft_question) { create :draft_question, form_id: 1, user: standard_user }
+    let(:original_draft_question) { create :draft_question, form_id: form.id, user: standard_user }
 
     before do
-      allow(FormRepository).to receive(:find).and_return(current_form)
+      allow(FormRepository).to receive(:find).and_return(form)
 
-      GroupForm.create!(form_id: current_form.id, group_id: group.id)
+      GroupForm.create!(form_id: form.id, group_id: group.id)
     end
 
     it "clears draft questions data for current user and form" do
       original_draft_question # Setup initial draft question which will clear
       expect {
-        get start_new_question_path(form_id: current_form.id)
-      }.to change { DraftQuestion.exists?({ form_id: current_form.id, user: standard_user }) }.from(true).to(false)
+        get start_new_question_path(form_id: form.id)
+      }.to change { DraftQuestion.exists?({ form_id: form.id, user: standard_user }) }.from(true).to(false)
     end
 
     it "does not clear draft questions data for a different form" do
       create :draft_question, form_id: 99, user: standard_user # Setup initial draft question which should not clear
-      get start_new_question_path(form_id: current_form.id)
+      get start_new_question_path(form_id: form.id)
       expect(DraftQuestion.exists?({ form_id: 99, user: standard_user })).to be true
     end
 
     it "redirects to type_of_answer_create_path" do
-      get start_new_question_path(form_id: current_form.id)
-      expect(response).to redirect_to(type_of_answer_create_path(form_id: current_form.id))
+      get start_new_question_path(form_id: form.id)
+      expect(response).to redirect_to(type_of_answer_create_path(form_id: form.id))
     end
   end
 
   describe "#delete" do
     context "with a valid page" do
       let(:page) do
-        build(
+        create(
           :page,
-          id: 1,
-          form_id: 2,
+          form_id: form.id,
           question_text: "What is your work address?",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
@@ -146,62 +141,69 @@ RSpec.describe PagesController, type: :request do
       let(:pages) { [page] }
 
       before do
-        allow(FormRepository).to receive_messages(find: form_response, pages: pages)
+        allow(FormRepository).to receive_messages(find: form, pages: pages)
 
         pages.each do |page|
-          allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: 2).and_return(page)
-          allow(PageRepository).to receive(:find).with(page_id: page.id, form_id: 2).and_return(page)
+          allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: form.id).and_return(page)
+          allow(PageRepository).to receive(:find).with(page_id: page.id, form_id: form.id).and_return(page)
         end
 
-        allow(PageRepository).to receive_messages(destroy: true)
+        allow(PageRepository).to receive(:destroy)
 
-        GroupForm.create!(form_id: 2, group_id: group.id)
-
-        get delete_page_path(form_id: 2, page_id: page.id)
+        GroupForm.create!(form_id: form.id, group_id: group.id)
       end
 
       it "renders the delete page template" do
+        get delete_page_path(form_id: form.id, page_id: page.id)
+
         expect(response).to render_template("pages/delete")
       end
 
       it "reads the form through the page repository" do
+        get delete_page_path(form_id: form.id, page_id: page.id)
+
         expect(PageRepository).to have_received(:find)
       end
 
-      include_examples "logging"
+      describe "logging" do
+        before do
+          get delete_page_path(form_id: form.id, page_id: page.id)
+        end
+
+        include_examples "logging"
+      end
 
       context "when current user is not in group for form the page is in" do
         let(:membership) { nil }
 
         it "returns an error" do
+          get delete_page_path(form_id: form.id, page_id: page.id)
+
           expect(response).to have_http_status :forbidden
         end
       end
 
       context "when page to delete has no routes" do
         it "does not render a warning" do
+          get delete_page_path(form_id: form.id, page_id: page.id)
+
           expect(response.body).not_to include "Important"
         end
       end
 
       context "when page to delete is start of one or more routes" do
-        let(:page) do
-          build(
-            :page,
-            :with_selection_settings,
-            id: 1,
-            form_id: 2,
-            question_text: "What is your favourite colour?",
-            selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
-            only_one_option: true,
-            routing_conditions: [
-              build(:condition, routing_page_id: 1, check_page_id: 1, answer_value: "red", skip_to_end: true),
-              build(:condition, routing_page_id: 1, check_page_id: 1, answer_value: "green", goto_page_id: 3),
-            ],
-          )
+        let(:form) { create(:form, :ready_for_routing) }
+        let(:pages) { form.pages }
+        let(:page) { pages.first }
+
+        before do
+          create(:condition, routing_page_id: page.id, check_page_id: page.id, answer_value: "Red", goto_page_id: pages.last.id)
+          page.reload
         end
 
         it "renders a warning about deleting this page" do
+          get delete_page_path(form_id: form.id, page_id: page.id)
+
           assert_select(".govuk-notification-banner", count: 1) do
             assert_select "*", "Important"
             assert_select "h3", "Question #{page.position} is the start of a route"
@@ -212,36 +214,22 @@ RSpec.describe PagesController, type: :request do
       end
 
       context "when page to delete is at the end of a route" do
-        let(:pages) do
-          [
-            build(
-              :page,
-              :with_selection_settings,
-              id: 1,
-              form_id: 2,
-              position: 1,
-              question_text: "What is your favourite colour?",
-              selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
-              only_one_option: true,
-              routing_conditions: [
-                build(:condition, routing_page_id: 1, check_page_id: 1, answer_value: "green", goto_page_id: 3),
-              ],
-            ),
-            build(
-              :page,
-              id: 3,
-              form_id: 2,
-              position: 3,
-            ),
-          ]
-        end
-
+        let(:form) { create(:form, :ready_for_routing) }
+        let(:pages) { form.pages }
         let(:page) { pages.last }
 
+        before do
+          create(:condition, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Red", goto_page_id: page.id)
+          page.reload
+          pages.first.reload
+        end
+
         it "renders a warning about deleting this page" do
+          get delete_page_path(form_id: form.id, page_id: page.id)
+
           assert_select(".govuk-notification-banner", count: 1) do
             assert_select "*", "Important"
-            assert_select "h3", "Question 3 is at the end of a route"
+            assert_select "h3", "Question 5 is at the end of a route"
             assert_select "p.govuk-body a", "Question 1’s route"
             assert_select "p.govuk-body", /Question 1’s route\s*goes to this question. If you delete this question, question 1’s routes will also be deleted./
           end
@@ -249,39 +237,22 @@ RSpec.describe PagesController, type: :request do
       end
 
       context "when page to delete is start of a secondary skip route" do
-        let(:pages) do
-          [
-            build(
-              :page,
-              :with_selection_settings,
-              id: 1,
-              form_id: 2,
-              position: 1,
-              question_text: "What is your favourite colour?",
-              selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
-              only_one_option: true,
-              routing_conditions: [
-                build(:condition, routing_page_id: 1, check_page_id: 1, answer_value: "green", goto_page_id: 3),
-              ],
-            ),
-            build(
-              :page,
-              id: 5,
-              form_id: 2,
-              position: 5,
-              routing_conditions: [
-                build(:condition, routing_page_id: 5, check_page_id: 1, answer_value: nil, goto_page_id: 8),
-              ],
-            ),
-          ]
+        let(:form) { create(:form, :ready_for_routing) }
+        let(:pages) { form.pages }
+        let(:page) { pages.second }
+
+        before do
+          create(:condition, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Red", goto_page_id: pages.third.id)
+          create(:condition, routing_page_id: page.id, check_page_id: pages.first.id, answer_value: nil, goto_page_id: pages.last.id)
+          page.reload
         end
 
-        let(:page) { pages.last }
-
         it "renders a warning about deleting this page" do
+          get delete_page_path(form_id: form.id, page_id: page.id)
+
           assert_select(".govuk-notification-banner", count: 1) do
             assert_select "*", "Important"
-            assert_select "h3", "Question 5 is the start of a route"
+            assert_select "h3", "Question 2 is the start of a route"
             assert_select "p.govuk-body a", "Question 1’s route"
             assert_select "p.govuk-body", /Question 1’s route\s*starts at this question. If you delete this question, the route from it will also be deleted./
           end
@@ -289,45 +260,22 @@ RSpec.describe PagesController, type: :request do
       end
 
       context "when page to delete is at the end of a secondary skip route" do
-        let(:pages) do
-          [
-            build(
-              :page,
-              :with_selection_settings,
-              id: 1,
-              form_id: 2,
-              position: 1,
-              question_text: "What is your favourite colour?",
-              selection_options: [{ name: "Red" }, { name: "Green" }, { name: "Blue" }],
-              only_one_option: true,
-              routing_conditions: [
-                build(:condition, routing_page_id: 1, check_page_id: 1, answer_value: "green", goto_page_id: 3),
-              ],
-            ),
-            build(
-              :page,
-              id: 5,
-              form_id: 2,
-              position: 5,
-              routing_conditions: [
-                build(:condition, routing_page_id: 5, check_page_id: 1, answer_value: nil, goto_page_id: 8),
-              ],
-            ),
-            build(
-              :page,
-              id: 8,
-              form_id: 2,
-              position: 8,
-            ),
-          ]
-        end
-
+        let(:form) { create(:form, :ready_for_routing) }
+        let(:pages) { form.pages }
         let(:page) { pages.last }
 
+        before do
+          create(:condition, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Red", goto_page_id: pages.third.id)
+          create(:condition, routing_page_id: pages.second.id, check_page_id: pages.first.id, answer_value: nil, goto_page_id: pages.last.id)
+          pages.second.reload
+        end
+
         it "renders a warning about deleting this page" do
+          get delete_page_path(form_id: form.id, page_id: page.id)
+
           assert_select(".govuk-notification-banner", count: 1) do
             assert_select "*", "Important"
-            assert_select "h3", "Question 8 is at the end of a route"
+            assert_select "h3", "Question 5 is at the end of a route"
             assert_select "p.govuk-body a", "Question 1’s route"
             assert_select "p.govuk-body", /Question 1’s route\s*goes to this question. If you delete this question, the route to it will also be deleted./
           end
@@ -337,32 +285,21 @@ RSpec.describe PagesController, type: :request do
   end
 
   describe "#destroy" do
+    let(:form) { create(:form, :with_pages) }
+    let(:pages) { form.pages }
+    let(:page) { pages.first }
+
     context "with a valid page" do
-      let(:page) do
-        build(
-          :page,
-          id: 1,
-          form_id: 2,
-          question_text: "What is your work address?",
-          hint_text: "This should be the location stated in your contract.",
-          answer_type: "address",
-        )
-      end
-
-      let(:form_pages_response) do
-        [page].to_json
-      end
-
       before do
-        allow(FormRepository).to receive_messages(find: form_response, pages: form_pages_response)
+        allow(FormRepository).to receive_messages(find: form, pages: pages)
         allow(PageRepository).to receive_messages(find: page, destroy: true)
 
-        GroupForm.create!(form_id: 2, group_id: group.id)
+        GroupForm.create!(form_id: form.id, group_id: group.id)
       end
 
       context "when the user has confirmed they want to delete the form" do
         before do
-          delete destroy_page_path(form_id: 2, page_id: 1, pages_delete_confirmation_input: { confirm: "yes" })
+          delete destroy_page_path(form_id: form.id, page_id: page.id, pages_delete_confirmation_input: { confirm: "yes" })
         end
 
         it "redirects you to the page index screen" do
@@ -370,7 +307,7 @@ RSpec.describe PagesController, type: :request do
         end
 
         it "displays a success flash message" do
-          expect(flash[:success]).to eq "Successfully deleted ‘What is your work address?’"
+          expect(flash[:success]).to eq "Successfully deleted ‘#{page.question_text}’"
         end
 
         it "destroys the page through the page repository" do
@@ -394,7 +331,7 @@ RSpec.describe PagesController, type: :request do
 
       context "when user has not confirmed whether they want to delete the question or not" do
         before do
-          delete destroy_page_path(form_id: 2, page_id: 1, pages_delete_confirmation_input: { confirm: nil })
+          delete destroy_page_path(form_id: form.id, page_id: page.id, pages_delete_confirmation_input: { confirm: nil })
         end
 
         it "re-renders the confirm delete view with an error" do
@@ -410,25 +347,19 @@ RSpec.describe PagesController, type: :request do
   end
 
   describe "#move_page" do
-    let(:pages) do
-      [build(:page, id: 99),
-       build(:page, id: 100),
-       build(:page, id: 101)]
-    end
-    let(:form) do
-      build(:form, id: 2, pages:)
-    end
+    let(:form) { create(:form, :with_pages) }
+    let(:pages) { form.pages }
 
     before do
       allow(FormRepository).to receive_messages(find: form, pages: pages)
       allow(PageRepository).to receive_messages(find: pages[1], move_page: true)
 
-      GroupForm.create!(form_id: 2, group_id: group.id)
-      post move_page_path({ form_id: 1, move_direction: { up: 100 } })
+      GroupForm.create!(form_id: form.id, group_id: group.id)
+      post move_page_path({ form_id: form.id, move_direction: { up: pages[1].id } })
     end
 
-    it "Reads the form from the API" do
-      expect(PageRepository).to have_received(:move_page)
+    it "Calls the page repository to move the page up" do
+      expect(PageRepository).to have_received(:move_page).with(pages[1], :up)
     end
   end
 end

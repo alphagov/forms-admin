@@ -1,17 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Forms::WhatHappensNextController, type: :request do
-  let(:form_response_data) do
-    {
-      id: 2,
-      name: "Form name",
-      submission_email: "submission@email.com",
-      start_page: 1,
-      what_happens_next_markdown: "Good things come to those who wait",
-      live_at: nil,
-    }.to_json
-  end
-
   let(:form) do
     build(
       :form,
@@ -19,7 +8,6 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       submission_email: "submission@email.com",
       id: 2,
       what_happens_next_markdown: "",
-      live_at: nil,
     )
   end
 

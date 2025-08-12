@@ -23,6 +23,8 @@ class Page < ApplicationRecord
   validates :page_heading, length: { maximum: 250 }
   validate :guidance_markdown_length_and_tags
 
+  attribute :answer_settings, DataStructType.new
+
   def destroy_and_update_form!
     form = self.form
     destroy! && form.update!(question_section_completed: false)
@@ -44,6 +46,14 @@ class Page < ApplicationRecord
     true
   end
 
+  def next_page
+    lower_item&.id
+  end
+
+  def has_next_page?
+    next_page.present?
+  end
+
   def answer_type_changed_from_selection
     answer_type_previously_was&.to_sym == :selection && answer_type&.to_sym != :selection
   end
@@ -57,6 +67,14 @@ class Page < ApplicationRecord
 
   def has_routing_errors
     routing_conditions.filter(&:has_routing_errors).any?
+  end
+
+  def question_with_number
+    "#{position}. #{question_text}"
+  end
+
+  def show_optional_suffix?
+    is_optional? && answer_type != "selection"
   end
 
 private

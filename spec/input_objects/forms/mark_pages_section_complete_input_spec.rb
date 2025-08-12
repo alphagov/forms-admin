@@ -1,18 +1,23 @@
 require "rails_helper"
 
 RSpec.describe Forms::MarkPagesSectionCompleteInput, type: :model do
-  let(:form) { build :form }
+  let(:form) { create :form }
   let(:mark_complete_input) { described_class.new(mark_complete:, form:) }
   let(:mark_complete) { "true" }
 
   describe "validations" do
     context "when form has routing validation errors" do
-      let(:form) { build :form, :ready_for_routing, has_routing_errors: true }
+      let(:form) { create :form, :ready_for_routing }
+
+      before do
+        create :condition, routing_page_id: form.pages.first.id, check_page_id: form.pages.first.id, goto_page_id: form.pages.third.id, answer_value: "Doesn't exist"
+        form.reload
+      end
 
       context "when mark_complete is true" do
         let(:mark_complete) { "true" }
 
-        it "is valid" do
+        it "is not valid" do
           error_message = I18n.t("activemodel.errors.models.forms/mark_pages_section_complete_input.attributes.base.has_routing_errors")
           expect(mark_complete_input).not_to be_valid
           expect(mark_complete_input.errors.full_messages_for(:base)).to include(error_message)
@@ -42,7 +47,7 @@ RSpec.describe Forms::MarkPagesSectionCompleteInput, type: :model do
 
       it "sets the forms question section completed" do
         mark_complete_input.submit
-        expect(mark_complete_input.form.question_section_completed).to eq mark_complete_input.mark_complete
+        expect(mark_complete_input.form.question_section_completed).to be true
       end
     end
 

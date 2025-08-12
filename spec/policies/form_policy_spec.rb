@@ -4,7 +4,7 @@ describe FormPolicy do
   subject(:policy) { described_class.new(user, form) }
 
   let(:organisation) { build :organisation, :with_signed_mou, id: 1 }
-  let(:form) { build :form, id: 1, creator_id: 123 }
+  let(:form) { create :form, creator_id: 123 }
   let(:group) { create(:group, name: "Group 1", organisation:, status: group_status) }
   let(:group_status) { :trial }
   let(:user) { build :user, organisation: }
@@ -108,47 +108,29 @@ describe FormPolicy do
   end
 
   describe "#can_add_page_routing_conditions?" do
-    let(:form) { build :form, id: 1, pages: }
-    let(:pages) { [] }
+    let(:form) { create :form }
 
     context "and the form has one page" do
-      let(:pages) { [(build :page, position: 1, id: 1)] }
+      before do
+        create(:page, form:)
+      end
 
       it { is_expected.to forbid_actions(%i[can_add_page_routing_conditions]) }
     end
 
     context "and the form has two or more pages" do
-      let(:pages) { [(build :page, position: 1, id: 1), (build :page, position: 2, id: 2)] }
+      let(:form) { create :form }
 
-      context "and the form does not have a selection question" do
-        it { is_expected.to forbid_actions(%i[can_add_page_routing_conditions]) }
-      end
-
-      context "and the form only has a selection question with an existing route" do
-        let(:pages) do
-          [
-            build(:page, :with_selection_settings, position: 1, id: 1, routing_conditions: build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_pageid: 3)),
-            build(:page, :with_simple_answer_type, position: 2, id: 2, routing_conditions: build(:condition, id: 2, routing_page_id: 2, check_page_id: 1, goto_pageid: nil, skip_to_end: true)),
-            build(:page, position: 3, id: 3),
-          ]
-        end
+      context "and the form does not have any qualifying pages" do
+        let(:form) { create :form, :with_pages }
 
         it { is_expected.to forbid_actions(%i[can_add_page_routing_conditions]) }
       end
 
-      context "and the form has a selection question without an existing route" do
-        context "and the available selection question is the last page in the form" do
-          let(:pages) { [(build :page, position: 1, id: 1), (build :page, position: 2, id: 2), (build :page, :with_selection_settings, position: 3, id: 3)] }
+      context "and the form has a qualifying pages" do
+        let(:form) { create :form, :ready_for_routing }
 
-          it { is_expected.to forbid_actions(%i[can_add_page_routing_conditions]) }
-        end
-
-        context "and the available selection question is not the last page in the form" do
-          let(:routing_conditions) { [(build :condition, id: 1, check_page_id: 1, answer_value: "Wales", goto_pageid: 2)] }
-          let(:pages) { [(build :page, :with_selection_settings, position: 1, id: 1, routing_conditions:), (build :page, :with_selection_settings, position: 2, id: 2), (build :page, position: 3, id: 3)] }
-
-          it { is_expected.to permit_actions(%i[can_add_page_routing_conditions]) }
-        end
+        it { is_expected.to permit_actions(%i[can_add_page_routing_conditions]) }
       end
     end
   end

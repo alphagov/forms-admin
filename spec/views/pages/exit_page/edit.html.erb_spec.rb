@@ -1,12 +1,10 @@
 require "rails_helper"
 
 describe "pages/exit_page/edit.html.erb" do
-  let(:form) { build :form, id: 1 }
+  let(:form) { create :form, :with_pages }
   let(:group) { build :group }
-  let(:pages) do
-    build_list(:page, 3)
-  end
-  let(:condition) { build :condition, :with_exit_page, id: 3, form:, page: pages.first }
+  let(:pages) { form.pages }
+  let(:condition) { create :condition, :with_exit_page, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Option 1" }
   let(:update_exit_page_input) { Pages::UpdateExitPageInput.new(form:, page: pages.first, record: condition).assign_condition_values }
 
   before do

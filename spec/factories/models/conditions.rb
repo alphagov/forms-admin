@@ -1,3 +1,3 @@
 FactoryBot.define do
-  factory :condition, parent: :condition_resource
+  factory :condition, parent: :condition_record
 end

@@ -13,12 +13,24 @@ RSpec.describe Forms::MakeLiveInput, type: :model do
       )
     end
 
-    context "when form is being made live but not all the required sections have been completed" do
-      let(:make_live_input) { build :make_live_input }
+    context "when all the required sections have been completed" do
+      let(:form) { create :form, :ready_for_live, :with_submission_email }
+      let(:make_live_input) { build :make_live_input, form: }
 
       before do
-        make_live_input.form.ready_for_live = false
+        make_live_input.confirm = "yes"
+      end
 
+      it "is valid" do
+        expect(make_live_input).to be_valid
+      end
+    end
+
+    context "when form is being made live but not all the required sections have been completed" do
+      let(:form) { create :form, :ready_for_live }
+      let(:make_live_input) { build :make_live_input, form: }
+
+      before do
         make_live_input.confirm = "yes"
       end
 
@@ -29,12 +41,9 @@ RSpec.describe Forms::MakeLiveInput, type: :model do
         expect(make_live_input.errors.full_messages_for(:confirm)).to include("Confirm #{I18n.t('activemodel.errors.models.forms/make_live_input.attributes.confirm.missing_submission_email')}")
       end
 
-      context "when the API returns incomplete tasks" do
+      context "when there are incomplete tasks" do
+        let(:form) { create :form, :new_form }
         let(:incomplete_tasks) { %i[missing_pages missing_privacy_policy_url missing_contact_details missing_what_happens_next share_preview_not_completed] }
-
-        before do
-          make_live_input.form.incomplete_tasks = incomplete_tasks
-        end
 
         it "shows a validation message for the incomplete task" do
           expect(make_live_input).not_to be_valid

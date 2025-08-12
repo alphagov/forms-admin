@@ -22,5 +22,9 @@ FactoryBot.define do
     pages do
       Array.new(5) { association(:made_live_page) }
     end
+
+    trait :with_one_page do
+      pages { [association(:made_live_page)] }
+    end
   end
 end

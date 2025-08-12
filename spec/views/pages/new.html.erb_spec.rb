@@ -1,14 +1,14 @@
 require "rails_helper"
 
 RSpec.describe "pages/new" do
-  let(:current_form) { build :form, :with_active_resource, id: 1, pages: [] }
+  let(:form) { create :form }
   let(:draft_question) { build :draft_question }
   let(:question_input) { build :question_input, draft_question:, answer_type: draft_question.answer_type, question_text: draft_question.question_text, answer_settings: draft_question.answer_settings, is_optional: draft_question.is_optional, is_repeatable: draft_question.is_repeatable }
 
   before do
     assign(:question_input, question_input)
 
-    render locals: { current_form:, draft_question: }
+    render locals: { current_form: form, draft_question: }
   end
 
   it "renders" do
@@ -16,7 +16,7 @@ RSpec.describe "pages/new" do
   end
 
   it "has a back link to the add and edit questions page" do
-    expect(view.content_for(:back_link)).to have_link "Back", href: form_pages_path(form_id: 1)
+    expect(view.content_for(:back_link)).to have_link "Back", href: form_pages_path(form_id: form.id)
   end
 
   it "has a page title" do
@@ -34,10 +34,10 @@ RSpec.describe "pages/new" do
 
     describe "question number" do
       context "when the current form already has some pages" do
-        let(:current_form) { build :form, :with_active_resource, id: 1, pages: build_list(:page, 3) }
+        let(:form) { create :form, :with_pages }
 
         it "is one greater than the number of existing pages" do
-          expect(rendered).to have_css "h1.govuk-heading-l .govuk-caption-l", text: "Question 4"
+          expect(rendered).to have_css "h1.govuk-heading-l .govuk-caption-l", text: "Question 6"
         end
       end
     end
@@ -49,11 +49,11 @@ RSpec.describe "pages/new" do
 
   describe "form" do
     it "saves the new question" do
-      expect(rendered).to have_element "form", action: create_question_path(form_id: 1)
+      expect(rendered).to have_element "form", action: create_question_path(form_id: form.id)
     end
 
     it "has a link to add guidance" do
-      expect(rendered).to have_link href: guidance_new_path(form_id: 1)
+      expect(rendered).to have_link href: guidance_new_path(form_id: form.id)
     end
 
     it "does not have a button to delete the question" do
