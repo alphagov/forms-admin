@@ -32,7 +32,7 @@ class GroupFormsController < ApplicationController
 
     form = FormRepository.find(form_id: @group_form.form_id)
 
-    @group_select = Forms::GroupSelect.new(group: @group, form: form)
+    @group_select = Forms::GroupSelect.new(form: form)
   end
 
   def update
@@ -41,18 +41,16 @@ class GroupFormsController < ApplicationController
 
     form = Form.find(params[:id])
 
-    receiving_group = Group.find(group_select_params[:group])
-    @group_select = Forms::GroupSelect.new(group: receiving_group, form: form)
+    @group_select = Forms::GroupSelect.new(group_select_params.merge(form: form))
 
-    # TODO add spec for checking: compare @group with @group_select.group to check if it's changed
-    if @group.external_id == receiving_group.external_id
-      flash[:message] = "Form is already in this group."
-      render :edit
-    else
+    if @group_select.valid?
+      receiving_group = Group.find(@group_select.group)
+
+      @group_form.update!(group: receiving_group)
       success_message = "'#{form.name}' has been moved to '#{receiving_group.name}'"
-      form.move_to_group(receiving_group.external_id)
-
       redirect_to @group, success: success_message, status: :see_other
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
