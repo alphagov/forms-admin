@@ -126,7 +126,7 @@ private
     if edit_draft_question.new_record?
       attributes = page.attributes
         .slice(*edit_draft_question.attribute_names)
-        .except(:id)
+        .except("id")
       edit_draft_question.attributes = attributes
       edit_draft_question.save!(validate: false)
     end
