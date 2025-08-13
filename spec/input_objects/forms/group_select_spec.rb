@@ -1,11 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Forms::GroupSelect, type: :model do
-  let(:group_select) { described_class.new }
-  let(:group) { create(:group, :org_has_org_admin) }
+  let(:form) { build :form, id: 1, name: "Bye bye form", created_at: "2024-10-08T07:31:15.762Z" }
+  let(:group) { build(:group, :org_has_org_admin) }
+  let(:group_select) { described_class.new(group:, form:) }
 
   before do
-    group_select.group = group
+    allow(FormRepository).to receive(:find).and_return(form)
+    create(:form_record, id: form.id, name: form.name)
   end
 
   describe "groups" do
@@ -24,21 +26,42 @@ RSpec.describe Forms::GroupSelect, type: :model do
 
     describe "filtered groups" do
       it "does not include the group that the form is currently in" do
+        create_list(:group, 3) do |g|
+          g.organisation = group.organisation
+          g.save!
+        end
+
+        expect(group_select.groups.count).to be > 0
         expect(group_select.groups).not_to include(group)
       end
 
       context "when the organisation admin user is logged in" do
-        let(:org_admin) { create(:organisation_admin_user) }
+        let(:org_admin) { build(:organisation_admin_user) }
 
         it "returns only groups in the user's organisation" do
           create_list(:group, 3) do |g|
             g.organisation = group.organisation
             g.save!
           end
-          create(:group, organisation: create(:organisation)) # Group 5
+          create(:group, organisation: build(:organisation)) # Group 5
 
           expect(group_select.groups).not_to include(group)
           expect(group_select.groups.count).to eq(4)
+        end
+      end
+
+      context "when the form is live but the target group is draft" do
+        it "returns only groups that are active" do
+          live_form = Form.find(form.id)
+          live_form.live!
+
+          active_group = create(:group, name: "Active", status: :active, organisation: group.organisation)
+          trial_group = create(:group, name: "Trial", status: :trial, organisation: group.organisation)
+
+          group_select = described_class.new(group: group, form:)
+
+          expect(group_select.groups).not_to include(trial_group)
+          expect(group_select.groups).to include(active_group)
         end
       end
     end
