@@ -4,12 +4,17 @@ RSpec.describe Forms::GroupSelect, type: :model do
   let(:group_select) { described_class.new }
   let(:group) { create(:group, :org_has_org_admin) }
 
+  before do
+    group_select.group = group
+  end
+
   describe "groups" do
     it "returns groups" do
       create_list(:group, 3) do |g|
         g.organisation = group.organisation
         g.save!
       end
+
       expect(group_select.groups.count).to eq(3)
     end
 
@@ -18,12 +23,6 @@ RSpec.describe Forms::GroupSelect, type: :model do
     end
 
     describe "filtered groups" do
-      let(:group) { create(:group) }
-
-      before do
-        group_select.group = group
-      end
-
       it "does not include the group that the form is currently in" do
         expect(group_select.groups).not_to include(group)
       end
@@ -32,13 +31,14 @@ RSpec.describe Forms::GroupSelect, type: :model do
         let(:org_admin) { create(:organisation_admin_user) }
 
         it "returns only groups in the user's organisation" do
-          organisation = org_admin.organisation
-          group_select.group.organisation = organisation
-          group1 = create(:group, organisation: organisation)
-          group2 = create(:group, organisation: organisation)
-          create(:group) # Group in another organisation
+          create_list(:group, 3) do |g|
+            g.organisation = group.organisation
+            g.save!
+          end
+          create(:group, organisation: create(:organisation)) # Group 5
 
-          expect(group_select.groups).to contain_exactly(group1, group2)
+          expect(group_select.groups).not_to include(group)
+          expect(group_select.groups.count).to eq(4)
         end
       end
     end
