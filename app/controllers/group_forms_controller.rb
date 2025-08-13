@@ -30,9 +30,9 @@ class GroupFormsController < ApplicationController
     @group_form = GroupForm.find_by(form_id: params[:id])
     authorize @group_form
 
-    form = FormRepository.find(form_id: @group_form.form_id)
+    @form = FormRepository.find(form_id: @group_form.form_id)
 
-    @group_select = Forms::GroupSelect.new(group: @group, form:)
+    @group_select = Forms::GroupSelect.new(group: @group, form: @form)
   end
 
   def update
