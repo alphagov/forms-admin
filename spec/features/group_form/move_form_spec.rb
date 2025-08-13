@@ -10,6 +10,7 @@ feature "Move a form", type: :feature do
 
     before do
       create(:membership, user: organisation_admin_user, group:, role: :group_admin)
+      create(:membership, user: standard_user, group:, role: :editor)
       create(:form_record, id: form.id, name: form.name, created_at: form.created_at)
 
       allow(FormRepository).to receive(:find).and_return(form)
@@ -28,10 +29,22 @@ feature "Move a form", type: :feature do
       then_i_see_the_form_is_gone_from_my_group
       and_the_other_group_has_the_form
     end
+
+    scenario "normal user cannot move a form" do
+      given_i_am_logged_in_as_a_standard_user
+      and_i_am_on_the_group_page
+      then_i_see_the_form_in_my_group
+      but_i_do_not_see_the_move_link
+      and_i_cannot_visit_the_move_form_page
+    end
   end
 
   def given_i_am_logged_in_as_an_organisation_admin
     login_as_organisation_admin_user
+  end
+
+  def given_i_am_logged_in_as_a_standard_user
+    login_as_standard_user
   end
 
   def and_i_am_on_the_group_page
@@ -44,13 +57,22 @@ feature "Move a form", type: :feature do
 
   def and_i_click_move_form
     # TODO: Implement the actual link to move the form, and delete the visit line below
-    # click_link "Move this form to another group"
+    # expect(page).to have_content("Change group")
+    # click_link "Change group"
     visit edit_group_form_path(group, id: form.id)
   end
 
+  def but_i_do_not_see_the_move_link
+    expect(page).not_to have_link("Change group") # This passes anyway as we don't have that link in the UI, but a useful check once we do add it
+  end
+
+  def and_i_cannot_visit_the_move_form_page
+    visit edit_group_form_path(group, id: form.id)
+    expect(page).to have_content("You do not have permission to view this page")
+  end
+
   def then_i_see_the_move_form_page
-    # expect(page.find("h1")).to have_text("Move this form to another group")
-    # expect(page).to have_field("group-form-group-id-field", with: group.name)
+    expect(page.find("h1")).to have_content("#{form.name}\n-\nMove form to a different group")
     expect(page).to have_content(another_group.name)
   end
 
