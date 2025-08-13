@@ -34,16 +34,22 @@ class Page < ApplicationRecord
     return true unless has_changes_to_save?
 
     save!
-    # TODO: https://trello.com/c/dg9CFPgp/1503-user-triggers-state-change-from-live-to-livewithdraft
-    # Will not be needed when users can trigger this event themselves through the UI
-    form.create_draft_from_live_form! if form.live?
-    form.create_draft_from_archived_form! if form.archived?
-
-    form.update!(question_section_completed: false)
+    update_form
     check_conditions.destroy_all if answer_type_changed_from_selection
     check_conditions.destroy_all if answer_settings_changed_from_only_one_option
 
     true
+  end
+
+  def move_page(direction)
+    case direction
+    when :up
+      move_higher
+      update_form
+    when :down
+      move_lower
+      update_form
+    end
   end
 
   def next_page
@@ -78,6 +84,15 @@ class Page < ApplicationRecord
   end
 
 private
+
+  def update_form
+    # TODO: https://trello.com/c/dg9CFPgp/1503-user-triggers-state-change-from-live-to-livewithdraft
+    # Will not be needed when users can trigger this event themselves through the UI
+    form.create_draft_from_live_form! if form.live?
+    form.create_draft_from_archived_form! if form.archived?
+
+    form.update!(question_section_completed: false)
+  end
 
   def guidance_fields_presence
     if page_heading.present? && guidance_markdown.blank?
