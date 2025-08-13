@@ -15,7 +15,6 @@ feature "Move a form", type: :feature do
       allow(FormRepository).to receive(:find).and_return(form)
 
       group.group_forms.create!(form_id: form.id)
-      group.organisation = organisation_admin_user.organisation
       group.save!
     end
 
