@@ -4,8 +4,15 @@ class Forms::GroupSelect < BaseInput
   validates :group, presence: true
 
   def groups
-    # TODO: change this to Groups in the Logged In User's Organisation only
-    Group.where(organisation: group.organisation).excluding(group)
+    form_record = Form.find(form.id)
+
+    groups = Group.for_organisation(group.organisation).excluding(group)
+
+    if form_record.has_live_version
+      groups = groups.where(status: :active)
+    end
+
+    groups
   end
 
   def to_partial_path
