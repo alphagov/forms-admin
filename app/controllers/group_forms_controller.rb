@@ -32,7 +32,7 @@ class GroupFormsController < ApplicationController
 
     form = FormRepository.find(form_id: @group_form.form_id)
 
-    @group_select = Forms::GroupSelect.new(form: form)
+    @group_select = Forms::GroupSelect.new(group: @group, form:)
   end
 
   def update
