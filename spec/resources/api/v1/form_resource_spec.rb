@@ -174,6 +174,14 @@ describe Api::V1::FormResource, type: :model do
         expect(completed_form.page_number(nil)).to eq(completed_form.pages.count + 1)
       end
     end
+
+    context "with a page which has a null id" do
+      let(:page) { build :page_resource, id: nil }
+
+      it "returns the position for a new page" do
+        expect(completed_form.page_number(nil)).to eq(completed_form.pages.count + 1)
+      end
+    end
   end
 
   describe "#qualifying_route_pages" do
