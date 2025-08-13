@@ -151,6 +151,14 @@ describe Api::V1::FormResource, type: :model do
       it "returns the page position" do
         expect(completed_form.page_number(page)).to eq(1)
       end
+
+      context "when the page's attributes have changed but it has the same ID" do
+        let(:page) { build :page_resource, id: completed_form.pages.first.id }
+
+        it "returns the page position" do
+          expect(completed_form.page_number(page)).to eq(1)
+        end
+      end
     end
 
     context "with an new page" do
