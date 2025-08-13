@@ -97,8 +97,9 @@ class Form < ApplicationRecord
 
   def page_number(page)
     return pages.length + 1 if page.nil?
+    return pages.length + 1 if page.id.nil?
 
-    index = pages.index { |existing_page| existing_page.attributes == page.attributes }
+    index = pages.index { |existing_page| existing_page.id == page.id }
     (index.nil? ? pages.length : index) + 1
   end
 

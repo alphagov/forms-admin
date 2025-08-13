@@ -410,6 +410,14 @@ RSpec.describe Form, type: :model do
       it "returns the page position" do
         expect(completed_form.page_number(page)).to eq(1)
       end
+
+      context "when the page's attributes have changed but it has the same ID" do
+        let(:page) { build :page_resource, id: completed_form.pages.first.id }
+
+        it "returns the page position" do
+          expect(completed_form.page_number(page)).to eq(1)
+        end
+      end
     end
 
     context "with an new page" do
@@ -421,6 +429,14 @@ RSpec.describe Form, type: :model do
     end
 
     context "with an unspecified page" do
+      it "returns the position for a new page" do
+        expect(completed_form.page_number(nil)).to eq(completed_form.pages.count + 1)
+      end
+    end
+
+    context "with a page which has a null id" do
+      let(:page) { build :page_resource, id: nil }
+
       it "returns the position for a new page" do
         expect(completed_form.page_number(nil)).to eq(completed_form.pages.count + 1)
       end
