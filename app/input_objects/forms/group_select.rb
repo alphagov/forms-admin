@@ -5,7 +5,7 @@ class Forms::GroupSelect < BaseInput
 
   def groups
     # TODO: change this to Groups in the Logged In User's Organisation only
-    Group.all
+    Group.where(organisation: group.organisation).excluding(group)
   end
 
   def to_partial_path
