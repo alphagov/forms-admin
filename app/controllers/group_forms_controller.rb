@@ -31,6 +31,7 @@ class GroupFormsController < ApplicationController
     authorize @group_form
 
     @form = FormRepository.find(form_id: @group_form.form_id)
+    @form_record = Form.find(@form.id)
 
     @group_select = Forms::GroupSelect.new(group: @group, form: @form)
   end
