@@ -63,6 +63,21 @@ RSpec.describe Forms::GroupSelect, type: :model do
           expect(group_select.groups).not_to include(trial_group)
           expect(group_select.groups).to include(active_group)
         end
+
+        context "when the form is archived but the target group is draft" do
+          it "returns only groups that are active" do
+            live_form = Form.find(form.id)
+            live_form.archived!
+
+            active_group = create(:group, name: "Active", status: :active, organisation: group.organisation)
+            trial_group = create(:group, name: "Trial", status: :trial, organisation: group.organisation)
+
+            group_select = described_class.new(group: group, form:)
+
+            expect(group_select.groups).not_to include(trial_group)
+            expect(group_select.groups).to include(active_group)
+          end
+        end
       end
     end
   end
