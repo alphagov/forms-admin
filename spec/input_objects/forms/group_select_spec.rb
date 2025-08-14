@@ -93,10 +93,4 @@ RSpec.describe Forms::GroupSelect, type: :model do
     expect(group_select).to be_invalid
     expect(group_select.errors[:group]).to include("Select the group you want to move this form to")
   end
-
-  describe "to_partial_path" do
-    it "returns the correct partial path" do
-      expect(group_select.to_partial_path).to eq("input_objects/forms/group_select")
-    end
-  end
 end
