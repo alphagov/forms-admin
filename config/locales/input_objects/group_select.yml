@@ -16,4 +16,5 @@ en:
         group: What group do you want to move it to?
     legend:
       forms_group_select:
+        empty_group: You have no other groups
         group: What group do you want to move it to?
