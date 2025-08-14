@@ -35,6 +35,17 @@ RSpec.describe "group_forms/edit.html.erb", type: :view do
     expect(view.content_for(:back_link)).to match(group_path(group))
   end
 
+  context "when there are no groups" do
+    before do
+      allow(group_select).to receive(:groups).and_return([])
+    end
+
+    it "renders a message indicating no groups are available" do
+      render
+      expect(rendered).to have_content("You have no other groups")
+    end
+  end
+
   context "when there are fewer than 10 groups" do
     before do
       allow(group_select).to receive(:groups).and_return(build_list(:group, 9))

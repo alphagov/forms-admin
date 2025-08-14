@@ -36,7 +36,7 @@
         <%= f.govuk_collection_radio_buttons(:group,
                                              @group_select.groups,
                                              :id, ->(option) { option.name },
-                                             legend: { size: 'm', tag: 'h2' },
+                                             legend: { text: @group_select.groups.size == 0 ? t('helpers.legend.forms_group_select.empty_group') : t('helpers.legend.forms_group_select.group') , size: 'm', tag: 'h2' },
                                              hint: ->{ @form.is_live? || @form.is_archived? ?  t('helpers.hint.forms_group_select.group') : nil },
                                              'data-test-id': 'group-radio'
                                             ) %>
@@ -49,6 +49,7 @@
                                                                                      ->(option) { option.name },
                                                                                      class: ['govuk-!-width-three-quarters'],
                                                                                      label: { size: 'm', tag: 'h2' },
+                                                                                     hint: ->{ @form.is_live? || @form.is_archived? ?  t('helpers.hint.forms_group_select.group') : nil },
                                                                                      options: { include_blank: t('.placeholder') }
                                                                                     ),
                                                                                     html_attributes: { 'data-test-id': 'group-select' }
@@ -63,6 +64,7 @@
                                                                                      ->(option) { option.name },
                                                                                      class: ['govuk-!-width-three-quarters'],
                                                                                      label: { size: 'm', tag: 'h2' },
+                                                                                     hint: ->{ @form.is_live? || @form.is_archived? ?  t('helpers.hint.forms_group_select.group') : nil },
                                                                                      options: { include_blank: t('.placeholder') }
                                                                                     ),
                                                                                     html_attributes: { 'data-test-id': 'group-autocomplete' }
@@ -70,7 +72,9 @@
                                             <%= init_autocomplete_script(show_all_values: false, raw_attribute: false, source: false, autoselect: false) %>
                                           <% end %>
 
-    <%= f.govuk_submit %>
+      <% if @group_select.groups.size > 0 %>
+        <%= f.govuk_submit %>
+      <% end %>
 
     <% end %>
   </div>
