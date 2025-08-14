@@ -2,10 +2,12 @@ require "rails_helper"
 
 RSpec.describe "group_forms/edit.html.erb", type: :view do
   let(:group) { create(:group) }
-  let(:form) { create :form_record }
+  let(:form) { build :form, id: 1 }
   let(:group_select) { Forms::GroupSelect.new(group: group, form: form) }
 
   before do
+    create(:form_record, id: form.id)
+
     group.group_forms.build(form_id: form.id)
     group.save!
 
@@ -63,6 +65,19 @@ RSpec.describe "group_forms/edit.html.erb", type: :view do
     it "renders the autocomplete" do
       render
       expect(rendered).to have_css("[data-test-id=\"group-autocomplete\"]")
+    end
+  end
+
+  context "when the form is live" do
+    before do
+      form = build(:form, :live)
+      assign(:form, form)
+    end
+
+    it "shows the hint text" do
+      render
+
+      expect(rendered).to have_content("A live form cannot be moved to a trial group.")
     end
   end
 end
