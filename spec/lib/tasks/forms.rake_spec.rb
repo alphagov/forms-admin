@@ -15,17 +15,14 @@ RSpec.describe "forms.rake" do
 
     let(:group) { create :group }
     let(:forms) do
-      build_list(:form_resource, 3) { |form, i| form.id = i }
+      build_list(:form, 3) { |form, i| form.id = i }
     end
     let(:form_ids) { forms.map(&:id) }
 
-    # TODO: Refactor this when we move over from API to ActiveRecord
     before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        forms.each do |form|
-          mock.get "/api/v1/forms/#{form.id}", headers, form.to_json, 200
-          mock.put "/api/v1/forms/#{form.id}", put_headers
-        end
+      allow(FormRepository).to receive(:find).and_call_original
+      forms.each do |form|
+        allow(FormRepository).to receive(:find).with(form_id: form.id).and_return(form)
       end
     end
 
@@ -127,18 +124,36 @@ RSpec.describe "forms.rake" do
       end
 
       context "with invalid form_id" do
-        let(:invalid_args) { ["99", group.external_id] }
+        context "when use_database_as_truth if false" do
+          let(:invalid_args) { ["99", group.external_id] }
 
-        before do
-          ActiveResource::HttpMock.respond_to do |mock|
-            mock.get "/api/v1/forms/99", headers, nil, 404
+          before do
+            allow(Settings).to receive(:use_database_as_truth).and_return(false)
+
+            ActiveResource::HttpMock.respond_to do |mock|
+              mock.get "/api/v1/forms/99", headers, nil, 404
+            end
+          end
+
+          it "raises an error" do
+            expect {
+              task.invoke(*invalid_args)
+            }.to raise_error(ActiveResource::ResourceNotFound)
           end
         end
 
-        it "raises an error" do
-          expect {
-            task.invoke(*invalid_args)
-          }.to raise_error(ActiveResource::ResourceNotFound)
+        context "when use_database_as_truth if true" do
+          let(:invalid_args) { ["99", group.external_id] }
+
+          before do
+            allow(Settings).to receive(:use_database_as_truth).and_return(true)
+          end
+
+          it "raises an error" do
+            expect {
+              task.invoke(*invalid_args)
+            }.to raise_error(ActiveRecord::RecordNotFound)
+          end
         end
       end
     end
@@ -228,18 +243,36 @@ RSpec.describe "forms.rake" do
       end
 
       context "with invalid form_id" do
-        let(:invalid_args) { ["99", "test@example.com"] }
+        context "when use_database_as_truth is false" do
+          let(:invalid_args) { ["99", "test@example.com"] }
 
-        before do
-          ActiveResource::HttpMock.respond_to do |mock|
-            mock.get "/api/v1/forms/99", headers, nil, 404
+          before do
+            allow(Settings).to receive(:use_database_as_truth).and_return(false)
+
+            ActiveResource::HttpMock.respond_to do |mock|
+              mock.get "/api/v1/forms/99", headers, nil, 404
+            end
+          end
+
+          it "raises an error" do
+            expect {
+              task.invoke(*invalid_args)
+            }.to raise_error(ActiveResource::ResourceNotFound)
           end
         end
 
-        it "raises an error" do
-          expect {
-            task.invoke(*invalid_args)
-          }.to raise_error(ActiveResource::ResourceNotFound)
+        context "when use_database_as_truth is true" do
+          let(:invalid_args) { ["99", "test@example.com"] }
+
+          before do
+            allow(Settings).to receive(:use_database_as_truth).and_return(true)
+          end
+
+          it "raises an error" do
+            expect {
+              task.invoke(*invalid_args)
+            }.to raise_error(ActiveRecord::RecordNotFound)
+          end
         end
       end
 

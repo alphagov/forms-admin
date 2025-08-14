@@ -7,6 +7,8 @@ class MakeFormLiveService
 
   def initialize(current_form:, current_user:)
     @current_form = current_form
+    @current_form_was_live = current_form.is_live?
+    @current_form_was_archived = current_form.is_archived?
     @current_live_form = FormRepository.find_live(form_id: current_form.id) if current_form.is_live?
     @current_user = current_user
   end
@@ -25,14 +27,14 @@ class MakeFormLiveService
   end
 
   def page_title
-    return I18n.t("page_titles.your_form_is_live") if @current_form.is_archived?
-    return I18n.t("page_titles.your_changes_are_live") if @current_form.is_live?
+    return I18n.t("page_titles.your_form_is_live") if @current_form_was_archived
+    return I18n.t("page_titles.your_changes_are_live") if @current_form_was_live
 
     I18n.t("page_titles.your_form_is_live")
   end
 
   def confirmation_page_body
-    return I18n.t("make_changes_live.confirmation.body_html").html_safe if @current_form.is_live?
+    return I18n.t("make_changes_live.confirmation.body_html").html_safe if @current_form_was_live
 
     I18n.t("make_live.confirmation.body_html").html_safe
   end
@@ -40,6 +42,6 @@ class MakeFormLiveService
 private
 
   def live_form_submission_email_has_changed
-    @current_form.is_live? && @current_live_form.submission_email != @current_form.submission_email
+    @current_form_was_live && @current_live_form.submission_email != @current_form.submission_email
   end
 end

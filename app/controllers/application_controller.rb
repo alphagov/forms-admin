@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
 
   add_flash_types :success
 
-  rescue_from ActiveResource::ResourceNotFound do
+  rescue_from ActiveResource::ResourceNotFound, ActiveRecord::RecordNotFound do
     render template: "errors/not_found", status: :not_found
   end
 
