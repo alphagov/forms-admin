@@ -14,8 +14,4 @@ class Forms::GroupSelect < BaseInput
 
     groups
   end
-
-  def to_partial_path
-    "input_objects/forms/group_select"
-  end
 end
