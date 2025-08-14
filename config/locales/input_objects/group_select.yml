@@ -8,6 +8,9 @@ en:
             group:
               blank: Select the group you want to move this form to
   helpers:
+    hint:
+      forms_group_select:
+        group: A live form cannot be moved to a trial group.
     label:
       forms_group_select:
         group: What group do you want to move it to?

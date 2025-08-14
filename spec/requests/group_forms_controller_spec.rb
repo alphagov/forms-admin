@@ -49,9 +49,10 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
   end
 
   context "when moving forms" do
-    let(:form) { create(:form_record) }
+    let(:form) { build :form, id: 1 }
 
     before do
+      create(:form_record, id: form.id)
       login_as_organisation_admin_user
       allow(FormRepository).to receive(:find).and_return(form)
 

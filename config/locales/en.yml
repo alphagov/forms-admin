@@ -436,9 +436,7 @@ en:
         title: Optional task
   group_forms:
     edit:
-      body_html: |
-        <p> You can move draft forms into active or trial groups. Live forms can only be moved into active groups. </p>
-        <p> We’ll tell the group admins and editors that this form has been moved and they may no longer have access to it. </p>
+      body_html: "<p> We’ll send an email to members of the current group to let them know the form has moved and they may no longer have access to it. </p>\n"
       form_name_label: Form name
       group_name_label: Group name
       placeholder: Select a group
