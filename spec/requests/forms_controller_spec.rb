@@ -64,27 +64,46 @@ RSpec.describe FormsController, type: :request do
   end
 
   describe "no form found" do
-    let(:no_data_found_response) do
-      {
-        "error": "not_found",
-      }
-    end
-
-    # TODO: Refactor this when we move from API to ActiveRecord
-    before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/999", headers, no_data_found_response, 404
+    context "when use_database_as_truth is false" do
+      let(:no_data_found_response) do
+        {
+          "error": "not_found",
+        }
       end
 
-      get form_path(999)
+      before do
+        allow(Settings).to receive(:use_database_as_truth).and_return(false)
+
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/999", headers, no_data_found_response, 404
+        end
+
+        get form_path(999)
+      end
+
+      it "Render the not found page" do
+        expect(response.body).to include(I18n.t("not_found.title"))
+      end
+
+      it "returns 404" do
+        expect(response.status).to eq(404)
+      end
     end
 
-    it "Render the not found page" do
-      expect(response.body).to include(I18n.t("not_found.title"))
-    end
+    context "when use_database_as_truth is true" do
+      before do
+        allow(Settings).to receive(:use_database_as_truth).and_return(true)
 
-    it "returns 404" do
-      expect(response.status).to eq(404)
+        get form_path(999)
+      end
+
+      it "Render the not found page" do
+        expect(response.body).to include(I18n.t("not_found.title"))
+      end
+
+      it "returns 404" do
+        expect(response.status).to eq(404)
+      end
     end
   end
 

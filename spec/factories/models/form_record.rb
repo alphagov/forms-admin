@@ -40,6 +40,10 @@ FactoryBot.define do
         Array.new(pages_count) { association(:page_record) }
       end
 
+      after(:build) do |form|
+        link_pages_list(form.pages) if form.pages.present?
+      end
+
       question_section_completed { true }
     end
 

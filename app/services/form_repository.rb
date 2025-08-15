@@ -1,13 +1,23 @@
 class FormRepository
   class << self
     def create!(creator_id:, name:)
-      form = Api::V1::FormResource.create!(creator_id:, name:)
-      save_to_database!(form)
+      if Settings.use_database_as_truth
+        form = Form.create!(creator_id:, name:)
+        Api::V1::FormResource.create!(form.attributes)
+        form
+      else
+        form = Api::V1::FormResource.create!(creator_id:, name:)
+        save_to_database!(form)
+      end
     end
 
     def find(form_id:)
-      form = Api::V1::FormResource.find(form_id)
-      save_to_database!(form)
+      if Settings.use_database_as_truth
+        Form.find(form_id)
+      else
+        form = Api::V1::FormResource.find(form_id)
+        save_to_database!(form)
+      end
     end
 
     def find_live(form_id:)
@@ -19,40 +29,52 @@ class FormRepository
     end
 
     def where(creator_id:)
-      Api::V1::FormResource.where(creator_id:)
+      if Settings.use_database_as_truth
+        Form.where(creator_id:)
+      else
+        Api::V1::FormResource.where(creator_id:)
+      end
     end
 
     def save!(record)
-      form = Api::V1::FormResource.new(record.attributes, true)
-      form.save!
-      db_form = save_to_database!(form)
-      db_form.create_draft_from_live_form! if db_form.live?
-      db_form.create_draft_from_archived_form! if db_form.archived?
-      db_form
+      if Settings.use_database_as_truth
+        record.save!
+        record.create_draft_from_live_form! if record.live?
+        record.create_draft_from_archived_form! if record.archived?
+        Api::V1::FormResource.new(record.attributes, true).save!
+        record
+      else
+        form = Api::V1::FormResource.new(record.attributes, true)
+        form.save!
+        db_form = save_to_database!(form)
+        db_form.create_draft_from_live_form! if db_form.live?
+        db_form.create_draft_from_archived_form! if db_form.archived?
+        db_form
+      end
     end
 
     def make_live!(record)
-      form = Api::V1::FormResource.new(record.attributes, true)
-      save_to_database!(form)
-      save_pages_to_database!(form, form.pages) if Form.find(record.id).pages.empty?
+      if Settings.use_database_as_truth
+        record.make_live!
+        Api::V1::FormResource.new(record.attributes, true).make_live!
+        record
+      else
+        form = Api::V1::FormResource.new(record.attributes, true)
 
-      form.make_live!
+        save_pages_to_database!(form, form.pages) if Form.find(record.id).pages.empty?
 
-      db_form = Form.find(record.id)
-      db_form.make_live!
-      db_form
+        form.make_live!
+
+        db_form = Form.find(record.id)
+        db_form.make_live!
+        db_form
+      end
     end
 
     def archive!(record)
-      form = Api::V1::FormResource.new(record.attributes, true)
-
-      save_to_database!(form)
-
-      form.archive!
-
-      db_form = Form.find(record.id)
-      db_form.archive_live_form!
-      db_form
+      record.archive_live_form!
+      Api::V1::FormResource.new(record.attributes, true).archive!
+      record
     end
 
     def destroy(record)
@@ -60,24 +82,31 @@ class FormRepository
 
       begin
         form.destroy # rubocop:disable Rails/SaveBang
-        Form.destroy(record.id)
-      rescue ActiveResource::ResourceNotFound, ActiveRecord::RecordNotFound
+      rescue ActiveResource::ResourceNotFound
         # ActiveRecord::Persistence#destroy doesn't raise an error
         # if record has already been destroyed, let's emulate that
+      end
+
+      begin
+        Form.destroy(record.id)
+      rescue ActiveRecord::RecordNotFound
+        # as above
       end
 
       record
     end
 
     def pages(record)
-      if Rails.env.test? && record.attributes.key?("pages")
-        raise "Form response should not include pages, check the spec factories and mocks, or stub .pages instead"
+      unless Settings.use_database_as_truth
+        if Rails.env.test? && record.attributes.key?("pages")
+          raise "Form response should not include pages, check the spec factories and mocks, or stub .pages instead"
+        end
+
+        form = Api::V1::FormResource.new(record.attributes, true)
+
+        pages = form.pages
+        save_pages_to_database!(record, pages)
       end
-
-      form = Api::V1::FormResource.new(record.attributes, true)
-
-      pages = form.pages
-      save_pages_to_database!(record, pages)
 
       Form.find(record.id).pages
     end

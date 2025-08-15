@@ -12,6 +12,24 @@ RSpec.describe Page, type: :model do
     expect(page).to be_valid
   end
 
+  shared_examples "update form state" do
+    context "when the form is live" do
+      let(:form) { create(:form_record, :live) }
+
+      it "updates the form state to live_with_draft" do
+        expect(form.state).to eq("live_with_draft")
+      end
+    end
+
+    context "when the form is archived" do
+      let(:form) { create(:form_record, :archived) }
+
+      it "updates the form state to archived_with_draft" do
+        expect(form.state).to eq("archived_with_draft")
+      end
+    end
+  end
+
   describe "associations" do
     let(:form) { create :form_record }
     let(:page) { create :page_record, form: }
@@ -329,23 +347,10 @@ RSpec.describe Page, type: :model do
       expect(form.question_section_completed).to be false
     end
 
-    context "when the form is live" do
-      let(:form) { create(:form_record, :live) }
-
-      it "updates the form state to live_with_draft" do
+    it_behaves_like "update form state" do
+      before do
         page.question_text = "Edited question"
         page.save_and_update_form
-        expect(form.state).to eq("live_with_draft")
-      end
-    end
-
-    context "when the form is archived" do
-      let(:form) { create(:form_record, :archived) }
-
-      it "updates the form state to archived_with_draft" do
-        page.question_text = "Edited question"
-        page.save_and_update_form
-        expect(form.state).to eq("archived_with_draft")
       end
     end
 
@@ -389,6 +394,92 @@ RSpec.describe Page, type: :model do
           page.save_and_update_form
           expect(page.reload.check_conditions).not_to be_empty
         end
+      end
+    end
+  end
+
+  describe "#move_page" do
+    let(:form) { create :form, :with_pages, question_section_completed: true }
+    let(:page) { form.pages.second }
+
+    context "when direction is up" do
+      it "moves the page towards the front of the form" do
+        expect {
+          page.move_page(:up)
+        }.to change(page, :position).by(-1)
+      end
+
+      it "sets form.question_section_completed to false" do
+        page.move_page(:up)
+        expect(form.question_section_completed).to be false
+      end
+
+      it_behaves_like "update form state" do
+        before do
+          page.move_page(:up)
+        end
+      end
+
+      context "when the page is already the first page in the form" do
+        let(:page) { form.pages.first }
+
+        it "does not change the position of the page" do
+          expect {
+            page.move_page(:up)
+          }.not_to change(page, :position)
+        end
+
+        it "sets form.question_section_completed to false" do
+          page.move_page(:up)
+          expect(form.question_section_completed).to be false
+        end
+      end
+    end
+
+    context "when direction is down" do
+      it "moves the page towards the end of the form" do
+        expect {
+          page.move_page(:down)
+        }.to change(page, :position).by(1)
+      end
+
+      it "sets form.question_section_completed to false" do
+        page.move_page(:down)
+        expect(form.question_section_completed).to be false
+      end
+
+      it_behaves_like "update form state" do
+        before do
+          page.move_page(:down)
+        end
+      end
+
+      context "when the page is already the last page in the form" do
+        let(:page) { form.pages.last }
+
+        it "does not change the position of the page" do
+          expect {
+            page.move_page(:down)
+          }.not_to change(page, :position)
+        end
+
+        it "sets form.question_section_completed to false" do
+          page.move_page(:down)
+          expect(form.question_section_completed).to be false
+        end
+      end
+    end
+
+    context "when direction is neither up nor down" do
+      it "does not move the page" do
+        expect {
+          page.move_page(:left)
+        }.not_to change(page, :position)
+      end
+
+      it "does not set form.question_section_completed to false" do
+        page.move_page(:left)
+        expect(form.question_section_completed).to be true
       end
     end
   end
