@@ -50,7 +50,7 @@ RSpec.describe Forms::GroupSelect, type: :model do
         end
       end
 
-      context "when the form is live but the target group is draft" do
+      context "when the form is live but the target group is trial" do
         it "returns only groups that are active" do
           form = build(:form, :live, id: 1)
 
@@ -63,7 +63,7 @@ RSpec.describe Forms::GroupSelect, type: :model do
           expect(group_select.groups).to include(active_group)
         end
 
-        context "when the form is archived but the target group is draft" do
+        context "when the form is archived but the target group is trial" do
           it "returns only groups that are active" do
             form = build(:form, :archived, id: 1)
 
