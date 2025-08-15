@@ -33,6 +33,7 @@ class GroupFormsController < ApplicationController
     @form = FormRepository.find(form_id: @group_form.form_id)
 
     @group_select = Forms::GroupSelect.new(group: @group, form: @form)
+    @group_select_presenter = Forms::GroupSelectPresenter.call(group: @group, groups: @group_select.groups, form: @form)
   end
 
   def update
