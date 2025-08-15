@@ -123,6 +123,25 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "form_slug" do
+    it "is set when the form is created" do
+      form = described_class.create!(name: "Apply for a license to test forms")
+      expect(form.form_slug).to eq("apply-for-a-license-to-test-forms")
+    end
+
+    it "updates when name is changed" do
+      form.name = "Apply for a license to test forms"
+      expect(form.name).to eq("Apply for a license to test forms")
+      expect(form.form_slug).to eq("apply-for-a-license-to-test-forms")
+    end
+
+    it "setting form slug directly doesn't change it" do
+      form.name = "Apply for a license to test forms"
+      form.form_slug = "something totally different"
+      expect(form.form_slug).to eq("apply-for-a-license-to-test-forms")
+    end
+  end
+
   describe "external_id" do
     it "intialises a new form with an external id matching its id" do
       form = create :form_record
