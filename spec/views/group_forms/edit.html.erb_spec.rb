@@ -4,6 +4,7 @@ RSpec.describe "group_forms/edit.html.erb", type: :view do
   let(:group) { create(:group) }
   let(:form) { build :form, id: 1 }
   let(:group_select) { Forms::GroupSelect.new(group: group, form: form) }
+  let(:group_select_presenter) { Forms::GroupSelectPresenter.new(form: form, group: group, groups: group_select.groups) }
 
   before do
     create(:form_record, id: form.id)
@@ -16,6 +17,7 @@ RSpec.describe "group_forms/edit.html.erb", type: :view do
     assign(:group, group)
     assign(:group_form, group.group_forms.first)
     assign(:group_select, group_select)
+    assign(:group_select_presenter, group_select_presenter)
   end
 
   it "renders the page title" do
@@ -76,19 +78,6 @@ RSpec.describe "group_forms/edit.html.erb", type: :view do
     it "renders the autocomplete" do
       render
       expect(rendered).to have_css("[data-test-id=\"group-autocomplete\"]")
-    end
-  end
-
-  context "when the form is live" do
-    before do
-      form = build(:form, :live)
-      assign(:form, form)
-    end
-
-    it "shows the hint text" do
-      render
-
-      expect(rendered).to have_content("A live form cannot be moved to a trial group.")
     end
   end
 end

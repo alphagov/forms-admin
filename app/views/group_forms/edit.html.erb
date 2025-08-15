@@ -36,8 +36,8 @@
         <%= f.govuk_collection_radio_buttons(:group,
                                              @group_select.groups,
                                              :id, ->(option) { option.name },
-                                             legend: { text: @group_select.groups.size == 0 ? t('helpers.legend.forms_group_select.empty_group') : t('helpers.legend.forms_group_select.group') , size: 'm', tag: 'h2' },
-                                             hint: ->{ @form.is_live? || @form.is_archived? ?  t('helpers.hint.forms_group_select.group') : nil },
+                                             legend: -> { @group_select_presenter.legend },
+                                             hint: ->{ @group_select_presenter.hint },
                                              'data-test-id': 'group-radio'
                                             ) %>
       <% elsif @group_select.groups.length < 31 %>
