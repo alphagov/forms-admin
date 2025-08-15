@@ -33,6 +33,14 @@ class Form < ApplicationRecord
 
   alias_method :is_archived?, :has_been_archived
 
+  def name=(val)
+    super(val)
+    self[:form_slug] = name.parameterize
+  end
+
+  # form_slug is always set based on name
+  def form_slug=(slug); end
+
   def has_routing_errors
     pages.filter(&:has_routing_errors).any?
   end
