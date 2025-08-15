@@ -19,7 +19,7 @@ class Pages::RoutesController < PagesController
         return redirect_to form_pages_path, success: t("banner.success.page_routes_deleted", question_number: current_form.page_number(page))
       end
     else
-      return render :delete, locals: { current_form:, page:, delete_confirmation_input: @delete_confirmation_input }, status: :unprocessable_entity
+      return render :delete, locals: { current_form:, page:, delete_confirmation_input: @delete_confirmation_input }, status: :unprocessable_content
     end
 
     redirect_to show_routes_path(form_id: current_form.id, page_id: page.id)

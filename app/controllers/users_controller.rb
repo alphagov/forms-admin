@@ -33,7 +33,7 @@ class UsersController < ApplicationController
     if UserUpdateService.new(user, user_params).update_user
       redirect_to users_path
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

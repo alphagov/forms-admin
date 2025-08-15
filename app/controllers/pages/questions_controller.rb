@@ -22,7 +22,7 @@ class Pages::QuestionsController < PagesController
       clear_draft_questions_data
       redirect_to edit_question_path(current_form.id, @page.id), success: "Your changes have been saved"
     else
-      render :new, locals: { current_form:, draft_question: }, status: :unprocessable_entity
+      render :new, locals: { current_form:, draft_question: }, status: :unprocessable_content
     end
   end
 
@@ -45,7 +45,7 @@ class Pages::QuestionsController < PagesController
       clear_draft_questions_data
       redirect_to edit_question_path(current_form.id, @page.id), success: "Your changes have been saved"
     else
-      render :edit, locals: { current_form:, draft_question: }, status: :unprocessable_entity
+      render :edit, locals: { current_form:, draft_question: }, status: :unprocessable_content
     end
   end
 

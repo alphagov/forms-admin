@@ -13,7 +13,7 @@ module Forms
 
       @make_live_input = MakeLiveInput.new(**make_live_input_params)
 
-      return render_new(status: :unprocessable_entity) unless @make_live_input.valid?
+      return render_new(status: :unprocessable_content) unless @make_live_input.valid?
       return redirect_to form_path(@make_live_input.form.id) unless @make_live_input.confirmed?
 
       @make_form_live_service = MakeFormLiveService.call(current_form:, current_user:)

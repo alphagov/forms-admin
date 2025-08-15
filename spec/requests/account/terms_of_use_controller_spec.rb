@@ -64,7 +64,7 @@ describe Account::TermsOfUseController do
 
       it "renders the edit template" do
         put account_terms_of_use_path, params: invalid_params
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response).to render_template(:edit)
       end
     end

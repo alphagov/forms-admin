@@ -121,7 +121,7 @@ describe Pages::RoutesController, type: :request do
       it "renders the delete page" do
         delete destroy_routes_path(form_id: form.id, page_id: page.id, pages_routes_delete_confirmation_input: { confirm: nil })
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response).to render_template("pages/routes/delete")
       end
     end

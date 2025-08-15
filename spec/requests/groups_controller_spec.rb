@@ -287,7 +287,7 @@ RSpec.describe "/groups", type: :request do
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post groups_url, params: { group: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
@@ -346,7 +346,7 @@ RSpec.describe "/groups", type: :request do
       context "with invalid parameters" do
         it "renders a response with 422 status (i.e. to display the 'edit' template)" do
           patch group_url(member_group), params: { group: invalid_attributes }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
     end
@@ -503,7 +503,7 @@ RSpec.describe "/groups", type: :request do
 
           it "returns an error" do
             delete(group_url(group), params:)
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
           end
 
           it "re-renders the confirm delete view with an error" do
@@ -541,7 +541,7 @@ RSpec.describe "/groups", type: :request do
 
         it "returns an error" do
           delete(group_url(group), params:)
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "re-renders the confirm delete view with an error" do
@@ -591,7 +591,7 @@ RSpec.describe "/groups", type: :request do
 
           it "returns an error" do
             delete(group_url(group), params:)
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
           end
 
           it "re-renders the confirm delete view with an error" do
@@ -629,7 +629,7 @@ RSpec.describe "/groups", type: :request do
 
         it "returns an error" do
           delete(group_url(group), params:)
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "re-renders the confirm delete view with an error" do
@@ -734,7 +734,7 @@ RSpec.describe "/groups", type: :request do
         end
 
         it "returns 422" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "re-renders the confirm upgrade page with an error" do
@@ -948,7 +948,7 @@ RSpec.describe "/groups", type: :request do
         end
 
         it "returns 422" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "re-renders the confirm upgrade page with an error" do

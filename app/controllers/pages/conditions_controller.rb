@@ -14,7 +14,7 @@ class Pages::ConditionsController < PagesController
       routing_page = PageRepository.find(page_id: routing_page_id, form_id: current_form.id)
       redirect_to new_condition_or_show_routes_path(routing_page)
     else
-      render template: "pages/conditions/routing_page", locals: { form: current_form, routing_page_input: }, status: :unprocessable_entity
+      render template: "pages/conditions/routing_page", locals: { form: current_form, routing_page_input: }, status: :unprocessable_content
     end
   end
 
@@ -34,7 +34,7 @@ class Pages::ConditionsController < PagesController
         redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.route_created", route_number: 1)
       end
     else
-      render template: "pages/conditions/new", locals: { condition_input: }, status: :unprocessable_entity
+      render template: "pages/conditions/new", locals: { condition_input: }, status: :unprocessable_content
     end
   end
 
@@ -67,7 +67,7 @@ class Pages::ConditionsController < PagesController
         redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.route_updated", question_number: condition_input.page.position)
       end
     else
-      render template: "pages/conditions/edit", locals: { condition_input: }, status: :unprocessable_entity
+      render template: "pages/conditions/edit", locals: { condition_input: }, status: :unprocessable_content
     end
   end
 
@@ -93,7 +93,7 @@ class Pages::ConditionsController < PagesController
         redirect_to edit_condition_path(current_form.id, page.id, condition.id)
       end
     else
-      render template: "pages/conditions/delete", locals: { delete_condition_input: }, status: :unprocessable_entity
+      render template: "pages/conditions/delete", locals: { delete_condition_input: }, status: :unprocessable_content
     end
   end
 
@@ -122,7 +122,7 @@ class Pages::ConditionsController < PagesController
         goto_page_id: params.require(:goto_page_id),
         exit_page: condition,
         delete_exit_page_input: delete_exit_page_input,
-      }, status: :unprocessable_entity
+      }, status: :unprocessable_content
     end
 
     unless delete_exit_page_input.confirmed?
@@ -141,7 +141,7 @@ class Pages::ConditionsController < PagesController
     if condition_input.update_condition
       redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.route_updated", question_number: condition_input.page.position)
     else
-      render template: "pages/conditions/edit", locals: { condition_input: }, status: :unprocessable_entity
+      render template: "pages/conditions/edit", locals: { condition_input: }, status: :unprocessable_content
     end
   end
 

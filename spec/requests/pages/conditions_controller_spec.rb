@@ -190,7 +190,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
         let(:params) { { pages_conditions_input: { routing_page_id: nil, check_page_id: nil, goto_page_id: nil, answer_value: nil } } }
 
         it "return 422 error code" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "renders new page" do
@@ -307,7 +307,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
       let(:params) { { pages_conditions_input: { routing_page_id: nil, check_page_id: nil, goto_page_id: nil, answer_value: nil } } }
 
       it "return 422 error code" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "renders new page" do
@@ -448,7 +448,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
       let(:destroy_bool) { false }
 
       it "return 422 error code" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
 
@@ -456,7 +456,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
       let(:confirm) { nil }
 
       it "return 422 error code" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "renders the delete page" do
@@ -570,7 +570,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
       let(:confirm) { nil }
 
       it "returns a 422 error code" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "renders the confirm_delete template" do
@@ -582,7 +582,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
       let(:update_condition_result) { false }
 
       it "returns a 422 error code" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "renders the conditions/edit template" do

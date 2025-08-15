@@ -15,7 +15,7 @@ module Account
       if @terms_of_use_input.submit
         redirect_to next_path
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 

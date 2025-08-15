@@ -127,7 +127,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
 
         it "renders the new template" do
           post_create
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(response).to render_template("pages/secondary_skip/new")
         end
       end
@@ -249,7 +249,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
 
           it "renders the edit template" do
             post_update
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(response).to render_template("pages/secondary_skip/edit")
           end
         end
@@ -356,7 +356,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
 
           it "renders the delete template" do
             delete destroy_secondary_skip_path(form_id: form.id, page_id: page.id), params: invalid_params
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(response).to render_template("pages/secondary_skip/delete")
           end
         end

@@ -132,7 +132,7 @@ RSpec.describe UsersController, type: :request do
 
       it "does not update user if role is invalid" do
         put user_path(user), params: { user: { role: nil } }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include "Select a role for the user"
         expect(user.reload.role).not_to be_nil
       end
@@ -140,7 +140,7 @@ RSpec.describe UsersController, type: :request do
       context "when user has a name" do
         it "does not update user if name is cleared" do
           put user_path(user), params: { user: { name: nil } }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(response.body).to include "Enter the user’s name"
           expect(user.reload.organisation).not_to be_nil
         end
@@ -149,7 +149,7 @@ RSpec.describe UsersController, type: :request do
       context "when user belongs to an organistion" do
         it "does not update user if organisation is not chosen" do
           put user_path(user), params: { user: { organisation_id: nil } }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(response.body).to include "Select the user’s organisation"
           expect(user.reload.organisation).not_to be_nil
         end
@@ -176,7 +176,7 @@ RSpec.describe UsersController, type: :request do
 
         it "returns an error if organisation is not chosen and role is changed to organisation_admin" do
           put user_path(user), params: { user: { role: "organisation_admin", organisation_id: nil } }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(user.reload.role).to eq("standard")
         end
       end

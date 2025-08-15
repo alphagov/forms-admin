@@ -92,7 +92,7 @@ RSpec.describe Pages::ExitPageController, type: :request do
       let(:params) { { pages_exit_page_input: { exit_page_heading: nil, exit_page_markdown: nil, answer_value: } } }
 
       it "return 422 error code" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "renders new page" do
@@ -151,7 +151,7 @@ RSpec.describe Pages::ExitPageController, type: :request do
       let(:params) { { pages_update_exit_page_input: { exit_page_heading: nil, exit_page_markdown: nil } } }
 
       it "return 422 error code" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "renders edit page" do
