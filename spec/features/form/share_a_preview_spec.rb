@@ -1,7 +1,7 @@
 require "rails_helper"
 
 feature "Share a preview", type: :feature do
-  let(:form) { build :form, :with_pages, id: 1 }
+  let(:form) { build :form, :with_pages, id: 1, name: "Test form" }
   let(:group) { create(:group, organisation: standard_user.organisation, status: "active") }
   let(:fake_page) { build :page, form_id: form.id, id: 2 }
 
@@ -48,7 +48,7 @@ feature "Share a preview", type: :feature do
 
   def then_the_preview_url_is_copied_to_my_clipboard
     clipboard_text = get_clipboard_text
-    expect(clipboard_text).to eq("runner-host/preview-draft/#{form.id}/#{form.form_slug}")
+    expect(clipboard_text).to eq("runner-host/preview-draft/1/test-form")
   end
 
   def when_i_mark_the_task_complete
