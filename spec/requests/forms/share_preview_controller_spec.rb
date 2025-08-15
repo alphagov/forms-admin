@@ -104,7 +104,7 @@ RSpec.describe Forms::SharePreviewController, type: :request do
       end
 
       it "returns an 422" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "re-renders the page with an error" do

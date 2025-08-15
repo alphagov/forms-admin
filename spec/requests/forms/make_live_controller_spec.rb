@@ -158,7 +158,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
       let(:form_params) { { forms_make_live_input: { confirm: "yes", form: } } }
 
       it "returns 422" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "does not make the form live" do

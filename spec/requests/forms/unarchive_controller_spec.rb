@@ -106,7 +106,7 @@ RSpec.describe Forms::UnarchiveController, type: :request do
       let(:form_params) { { forms_make_live_input: { confirm: :"" } } }
 
       it "returns 422" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "does not make the form live" do

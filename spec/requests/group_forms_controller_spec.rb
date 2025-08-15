@@ -92,7 +92,7 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
 
       it "renders a response with 422 status" do
         post group_forms_url(group), params: { forms_name_input: invalid_attributes }
-        expect(response).to have_http_status :unprocessable_entity
+        expect(response).to have_http_status :unprocessable_content
       end
 
       it "renders the change name form with an error" do

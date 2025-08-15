@@ -16,7 +16,7 @@ module Account
         DefaultGroupService.new.create_user_default_trial_group!(current_user)
         redirect_to next_path
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 

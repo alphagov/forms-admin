@@ -18,7 +18,7 @@ class Pages::GuidanceController < PagesController
       if guidance_input.submit
         redirect_to new_question_path(current_form.id)
       else
-        render :guidance, locals: view_locals(nil, guidance_input, back_link), status: :unprocessable_entity
+        render :guidance, locals: view_locals(nil, guidance_input, back_link), status: :unprocessable_content
       end
     end
   end
@@ -43,7 +43,7 @@ class Pages::GuidanceController < PagesController
       if guidance_input.submit
         redirect_to edit_question_path(current_form.id, page.id)
       else
-        render :guidance, locals: view_locals(page, guidance_input, back_link), status: :unprocessable_entity
+        render :guidance, locals: view_locals(page, guidance_input, back_link), status: :unprocessable_content
       end
     end
   end

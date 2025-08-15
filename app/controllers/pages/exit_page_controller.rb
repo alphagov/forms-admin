@@ -15,7 +15,7 @@ class Pages::ExitPageController < PagesController
       # TODO: Route number is hardcoded whilst we can only have one value for it
       redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.exit_page_created")
     else
-      render template: "pages/exit_page/new", locals: { exit_page_input:, preview_html: preview_html(exit_page_input), check_preview_validation: true }, status: :unprocessable_entity
+      render template: "pages/exit_page/new", locals: { exit_page_input:, preview_html: preview_html(exit_page_input), check_preview_validation: true }, status: :unprocessable_content
     end
   end
 
@@ -37,7 +37,7 @@ class Pages::ExitPageController < PagesController
     if update_exit_page_input.submit
       redirect_to edit_condition_path(form_id: current_form.id, page_id: page.id, condition_id: update_exit_page_input.record.id), success: t("banner.success.exit_page_updated")
     else
-      render template: "pages/exit_page/edit", locals: { update_exit_page_input:, preview_html: preview_html(update_exit_page_input), check_preview_validation: true }, status: :unprocessable_entity
+      render template: "pages/exit_page/edit", locals: { update_exit_page_input:, preview_html: preview_html(update_exit_page_input), check_preview_validation: true }, status: :unprocessable_content
     end
   end
 
@@ -57,7 +57,7 @@ class Pages::ExitPageController < PagesController
     @delete_exit_page_input = Pages::DeleteExitPageInput.new(params.require(:pages_delete_exit_page_input).permit(:confirm))
 
     unless @delete_exit_page_input.valid?
-      return render :delete, status: :unprocessable_entity
+      return render :delete, status: :unprocessable_content
     end
 
     unless @delete_exit_page_input.confirmed?

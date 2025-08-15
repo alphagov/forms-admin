@@ -127,7 +127,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
         let(:page_heading) { nil }
 
         it "returns 422" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "renders the template" do
@@ -242,7 +242,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
         let(:page_heading) { nil }
 
         it "returns 422" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "renders the template" do
