@@ -4,11 +4,9 @@ class Forms::GroupSelect < BaseInput
   validates :group, presence: true
 
   def groups
-    form_record = Form.find(form.id)
-
     groups = Group.for_organisation(group.organisation).excluding(group)
 
-    if form_record.has_live_version || form_record.has_been_archived
+    if form.is_live? || form.is_archived?
       groups = groups.where(status: :active)
     end
 
