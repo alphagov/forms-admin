@@ -723,14 +723,15 @@ describe PageRepository do
 
       before do
         ActiveResource::HttpMock.respond_to do |mock|
-          mock.put "/api/v1/forms/#{form_id}/pages/#{page.id}", post_headers, {}, 200
+          mock.put "/api/v1/forms/#{form_id}/pages/#{page.id}/up", post_headers, {}, 200
         end
       end
 
       describe "api" do
-        it "sends the new page position to the API" do
+        it "calls the move endpoint through ActiveResource" do
+          move_request = ActiveResource::Request.new(:put, "/api/v1/forms/#{form_id}/pages/#{page.id}/up", {}, post_headers)
           described_class.move_page(page, :up)
-          expect(JSON.parse(ActiveResource::HttpMock.requests.last.body)).to include("position" => 1)
+          expect(ActiveResource::HttpMock.requests).to include move_request
         end
       end
 
