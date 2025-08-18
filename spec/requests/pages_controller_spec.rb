@@ -352,14 +352,47 @@ RSpec.describe PagesController, type: :request do
 
     before do
       allow(FormRepository).to receive_messages(find: form, pages: pages)
-      allow(PageRepository).to receive_messages(find: pages[1], move_page: true)
+      allow(PageRepository).to receive_messages(find: pages[1])
 
       GroupForm.create!(form_id: form.id, group_id: group.id)
-      post move_page_path({ form_id: form.id, move_direction: { up: pages[1].id } })
     end
 
-    it "Calls the page repository to move the page up" do
-      expect(PageRepository).to have_received(:move_page).with(pages[1], :up)
+    context "when moving the page up" do
+      before do
+        allow(PageRepository).to receive(:move_page) do |page, _direction|
+          page.move_higher
+          page
+        end
+
+        post move_page_path({ form_id: form.id, move_direction: { up: pages[1].id } })
+      end
+
+      it "calls the page repository to move the page up" do
+        expect(PageRepository).to have_received(:move_page).with(pages[1], :up)
+      end
+
+      it "renders a success banner with the page's new position" do
+        expect(flash[:success]).to eq("‘#{pages[1].question_text}’ has moved up to number 1")
+      end
+    end
+
+    context "when moving the page down" do
+      before do
+        allow(PageRepository).to receive(:move_page) do |page, _direction|
+          page.move_lower
+          page
+        end
+
+        post move_page_path({ form_id: form.id, move_direction: { down: pages[1].id } })
+      end
+
+      it "calls the page repository to move the page down" do
+        expect(PageRepository).to have_received(:move_page).with(pages[1], :down)
+      end
+
+      it "renders a success banner with the page's new position" do
+        expect(flash[:success]).to eq("‘#{pages[1].question_text}’ has moved down to number 3")
+      end
     end
   end
 end
