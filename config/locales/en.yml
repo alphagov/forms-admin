@@ -1095,7 +1095,9 @@ en:
     skip_condition_route_page_text: "%{route_page_question_number}, “%{route_page_question_text}”"
   page_options_service:
     answer_type: Answer type
-    date: Date
+    date_type:
+      date_of_birth: Date of birth
+      other_date: Date
     guidance_markdown: Guidance
     hint_text: Hint text
     name_type:
