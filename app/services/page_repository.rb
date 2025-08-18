@@ -85,15 +85,14 @@ class PageRepository
     end
 
     def move_page(record, direction)
+      page = Api::V1::PageResource.new(record.attributes, true)
+      page.prefix_options[:form_id] = record.form.id
+
       if Settings.use_database_as_truth
         record.move_page(direction)
-        page = Api::V1::PageResource.new(record.attributes, true)
-        page.prefix_options[:form_id] = record.form.id
-        page.save!
+        page.move_page(direction)
         record
       else
-        page = Api::V1::PageResource.new(record.attributes, true)
-        page.prefix_options[:form_id] = record.form.id
         page.move_page(direction)
         update_and_save_to_database!(page)
       end
