@@ -60,7 +60,7 @@ describe PageOptionsService do
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
           { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
-            value: { text: I18n.t("helpers.label.page.date_settings_options.input_types.date_of_birth") } },
+            value: { text: "Date of birth" } },
         ])
       end
     end
@@ -71,7 +71,7 @@ describe PageOptionsService do
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
           { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
-            value: { text: I18n.t("helpers.label.page.answer_type_options.names.date") } },
+            value: { text: "Date" } },
         ])
       end
     end
