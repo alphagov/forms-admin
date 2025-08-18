@@ -79,15 +79,9 @@ class PagesController < ApplicationController
   def move_page
     page_to_move = PageRepository.find(page_id: move_params[:page_id], form_id: move_params[:form_id])
 
-    PageRepository.move_page(page_to_move, move_params[:direction])
+    moved_page = PageRepository.move_page(page_to_move, move_params[:direction])
 
-    position = if move_params[:direction] == :up
-                 page_to_move.position - 1
-               else
-                 page_to_move.position + 1
-               end
-
-    redirect_to form_pages_path, success: t("banner.success.form.page_moved", question_text: page_to_move.question_text, direction: move_params[:direction], question_number: position)
+    redirect_to form_pages_path, success: t("banner.success.form.page_moved", question_text: page_to_move.question_text, direction: move_params[:direction], question_number: moved_page.position)
   end
 
 private
