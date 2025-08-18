@@ -44,7 +44,7 @@ jobs:
           chrome-version: 128
           install-chromedriver: 'false'
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       # Add or replace dependency steps here
       - name: Install Ruby and gems
         # The ruby version is taken from the .ruby-version file, no need to specify here.
