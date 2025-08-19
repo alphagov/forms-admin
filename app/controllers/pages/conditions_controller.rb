@@ -39,7 +39,7 @@ class Pages::ConditionsController < PagesController
   end
 
   def edit
-    condition = ConditionRepository.find(condition_id: params[:condition_id], form_id: current_form.id, page_id: page.id)
+    condition = ConditionRepository.find(condition_id: params[:condition_id], page_id: page.id)
 
     condition_input = Pages::ConditionsInput.new(form: current_form, page:, record: condition, answer_value: condition.answer_value, goto_page_id: condition.goto_page_id, skip_to_end: condition.skip_to_end).assign_condition_values
 
@@ -49,7 +49,7 @@ class Pages::ConditionsController < PagesController
   end
 
   def update
-    condition = ConditionRepository.find(condition_id: params[:condition_id], form_id: current_form.id, page_id: page.id)
+    condition = ConditionRepository.find(condition_id: params[:condition_id], page_id: page.id)
 
     form_params = condition_input_params.merge(record: condition)
 
@@ -72,7 +72,7 @@ class Pages::ConditionsController < PagesController
   end
 
   def delete
-    condition = ConditionRepository.find(condition_id: params[:condition_id], form_id: current_form.id, page_id: page.id)
+    condition = ConditionRepository.find(condition_id: params[:condition_id], page_id: page.id)
 
     delete_condition_input = Pages::DeleteConditionInput.new(form: current_form, page:, record: condition)
 
@@ -80,7 +80,7 @@ class Pages::ConditionsController < PagesController
   end
 
   def destroy
-    condition = ConditionRepository.find(condition_id: params[:condition_id], form_id: current_form.id, page_id: page.id)
+    condition = ConditionRepository.find(condition_id: params[:condition_id], page_id: page.id)
 
     form_params = delete_condition_input_params.merge(record: condition)
 
@@ -98,7 +98,7 @@ class Pages::ConditionsController < PagesController
   end
 
   def confirm_delete_exit_page
-    condition = ConditionRepository.find(condition_id: params[:condition_id], form_id: current_form.id, page_id: page.id)
+    condition = ConditionRepository.find(condition_id: params[:condition_id], page_id: page.id)
     delete_exit_page_input = Pages::DeleteExitPageInput.new
 
     render template: "pages/conditions/confirm_delete_exit_page", locals: {
@@ -110,7 +110,7 @@ class Pages::ConditionsController < PagesController
   end
 
   def update_change_exit_page
-    condition = ConditionRepository.find(condition_id: params[:condition_id], form_id: current_form.id, page_id: page.id)
+    condition = ConditionRepository.find(condition_id: params[:condition_id], page_id: page.id)
 
     return redirect_to form_pages_path(current_form.id) unless condition.exit_page?
 
