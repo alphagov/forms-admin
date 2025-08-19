@@ -6,7 +6,7 @@ features:
     enabled_by_group: true
 
 # Migrating data from Forms API to Forms Admin's database - this flag determines whether we read from Forms API or from Forms Admin's database
-use_database_as_truth: false
+use_database_as_truth: true
 
 forms_api:
   # Authentication key to authenticate with forms-api
