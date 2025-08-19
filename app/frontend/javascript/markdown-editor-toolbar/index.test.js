@@ -3,6 +3,7 @@
  */
 import markdownEditorToolbar from '.'
 import { getByText } from '@testing-library/dom'
+import { describe, beforeEach, test, expect } from 'vitest'
 
 const selectText = (textArea, text) => {
   textArea.setSelectionRange(
@@ -13,8 +14,25 @@ const selectText = (textArea, text) => {
 
 let toolbar
 let textArea
-
-const prefixes = ['## ', '### ', '* ', '- ', '1. ']
+const blockElements = [
+  {
+    buttonText: 'Add a second-level heading',
+    prefixes: ['## ']
+  },
+  {
+    buttonText: 'Add a third-level heading',
+    prefixes: ['### ']
+  },
+  {
+    buttonText: 'Add a bulleted list',
+    prefixes: ['* ', '- ']
+  },
+  {
+    buttonText: 'Add a numbered list',
+    prefixes: ['1. ']
+  }
+]
+const prefixes = blockElements.flatMap(element => element.prefixes)
 
 describe('Markdown toolbar', () => {
   beforeEach(() => {
@@ -344,6 +362,67 @@ describe('Markdown toolbar', () => {
         ).toBe(
           `${prefix}[This is an item with an existing markdown block style](https://www.gov.uk/link-text-url)`
         )
+      })
+    })
+  })
+
+  describe('Block element line break insertion', () => {
+    blockElements.forEach(element => {
+      describe('when the selection has no empty line before it', () => {
+        beforeEach(() => {
+          textArea.value = `Some other text
+            * This is an item with an existing markdown block style`
+          selectText(
+            textArea,
+            'This is an item with an existing markdown block style'
+          )
+        })
+
+        test('prepends an empty line', () => {
+          getByText(toolbar, element.buttonText).click()
+
+          expect(textArea.value).toBe(`Some other text
+
+${element.prefixes[0]}This is an item with an existing markdown block style`)
+        })
+
+        describe('when the selection already has an empty line before it', () => {
+          beforeEach(() => {
+            textArea.value = `Some other text
+
+        * This is an item with an existing markdown block style`
+            selectText(
+              textArea,
+              'This is an item with an existing markdown block style'
+            )
+          })
+          test('does not prepend an empty line', () => {
+            getByText(toolbar, element.buttonText).click()
+
+            expect(textArea.value).toBe(`Some other text
+
+${element.prefixes[0]}This is an item with an existing markdown block style`)
+          })
+        })
+
+        describe('when the selection has nothing before it', () => {
+          beforeEach(() => {
+            textArea.value =
+              '* This is an item with an existing markdown block style'
+            selectText(
+              textArea,
+              'This is an item with an existing markdown block style'
+            )
+          })
+
+          test('does not prepend an empty line', () => {
+            getByText(toolbar, element.buttonText).click()
+
+            expect(textArea.value).toBe(
+              `${element.prefixes[0]}This is an item with an existing markdown block style`
+            )
+          })
+        })
       })
     })
   })
