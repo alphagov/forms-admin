@@ -71,10 +71,10 @@ npm run test
 
 ### Running the RSpec tests in parallel
 
-You can run the RSpec tests in parallel with the following setup: you will first need to create multiple test databases:
+You can run the RSpec tests in parallel with [parallel_rspec] You will first need to create multiple test databases:
 
 ```bash
-bundle exec rake db:parallel:create db:parallel:prepare
+RAILS_ENV=test bundle exec rake db:parallel:create db:parallel:prepare
 ```
 
 You can then run the tests in parallel:
