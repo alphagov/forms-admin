@@ -338,18 +338,14 @@ RSpec.describe Form, type: :model do
     let(:form) { create :form_record }
 
     context "when form is in a group" do
-      it "destroys the group" do
+      let(:form) { create :form_record }
+
+      before do
         group = create :group
-        GroupForm.create!(group:, form_id: form.id)
+        GroupForm.create!(group:, form:)
+      end
 
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.post "/api/v1/forms", post_headers, { id: 1 }.to_json, 200
-          mock.delete "/api/v1/forms/1", delete_headers, nil, 204
-        end
-
-        # form must exist for ActiveResource to delete it
-        form.save!
-
+      it "destroys the GroupForm" do
         expect {
           form.destroy
         }.to change(GroupForm, :count).by(-1)

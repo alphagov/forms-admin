@@ -155,11 +155,7 @@ RSpec.describe "/groups", type: :request do
       end
 
       it "assigns a list of forms in the group to present" do
-        forms = build_list(:form, 3, created_at: "2024-10-08T07:31:15.762Z") { |form, i| form.id = i }
-
-        forms.each do |form|
-          allow(FormRepository).to receive(:find).with(form_id: form.id).and_return(form)
-        end
+        forms = create_list(:form, 3, created_at: "2024-10-08T07:31:15.762Z")
 
         member_group.group_forms << forms.map { |form| GroupForm.create! form_id: form.id, group_id: member_group.id }
         member_group.save!
@@ -491,8 +487,8 @@ RSpec.describe "/groups", type: :request do
 
         context "but group has forms in it" do
           before do
-            GroupForm.create! group:, form_id: 1
-            GroupForm.create! group:, form_id: 2
+            GroupForm.create! group:, form: create(:form)
+            GroupForm.create! group:, form: create(:form)
           end
 
           it "does not delete the group" do
@@ -579,8 +575,8 @@ RSpec.describe "/groups", type: :request do
 
         context "but group has forms in it" do
           before do
-            GroupForm.create! group:, form_id: 1
-            GroupForm.create! group:, form_id: 2
+            GroupForm.create! group:, form: create(:form)
+            GroupForm.create! group:, form: create(:form)
           end
 
           it "does not delete the group" do

@@ -10,10 +10,11 @@ RSpec.describe Reports::FormsCsvReportService do
   let(:group) { create(:group) }
 
   before do
-    GroupForm.create!(form_id: 1, group:)
-    GroupForm.create!(form_id: 2, group:)
-    GroupForm.create!(form_id: 3, group:)
-    GroupForm.create!(form_id: 4, group:)
+    form_documents.each do |form_document|
+      form = create(:form)
+      GroupForm.create!(form: form, group: group)
+      form_document["form_id"] = form.id
+    end
   end
 
   describe "#csv" do
@@ -27,7 +28,7 @@ RSpec.describe Reports::FormsCsvReportService do
       csv = csv_reports_service.csv
       rows = CSV.parse(csv)
       expect(rows[1]).to eq([
-        "1",
+        form_documents[0]["form_id"].to_s,
         "live",
         "All question types form",
         "all-question-types-form",

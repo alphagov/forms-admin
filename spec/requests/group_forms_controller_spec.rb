@@ -57,10 +57,10 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
 
   describe "POST /" do
     context "with valid parameters" do
-      let(:new_form_id) { 1 }
+      let(:form) { create :form }
 
       before do
-        allow(FormRepository).to receive(:create!).and_return(OpenStruct.new(id: new_form_id))
+        allow(FormRepository).to receive(:create!).and_return(form)
       end
 
       it "associates the new form with the group" do
@@ -68,12 +68,12 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
           post group_forms_url(group), params: { forms_name_input: valid_attributes }
         }.to change(GroupForm, :count).by(1)
 
-        expect(GroupForm.last).to have_attributes(group_id: group.id, form_id: new_form_id)
+        expect(GroupForm.last).to have_attributes(group_id: group.id, form_id: form.id)
       end
 
       it "redirects to the created form" do
         post group_forms_url(group), params: { forms_name_input: valid_attributes }
-        expect(response).to redirect_to(form_url(new_form_id))
+        expect(response).to redirect_to(form_url(form.id))
       end
     end
 

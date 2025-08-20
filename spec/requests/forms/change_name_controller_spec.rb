@@ -10,7 +10,7 @@ RSpec.describe Forms::ChangeNameController, type: :request do
     allow(FormRepository).to receive_messages(find: form, create!: form, save!: form)
 
     Membership.create!(group_id: group.id, user:, added_by: user)
-    GroupForm.create!(form_id: form.id, group_id: group.id)
+    GroupForm.create!(form:, group_id: group.id)
     login_as user
   end
 

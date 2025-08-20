@@ -103,10 +103,6 @@ class Api::V1::FormResource < ActiveResource::Base
     pages.count { |p| p.answer_type.to_sym == :file }
   end
 
-  after_destroy do
-    group_form&.destroy
-  end
-
 private
 
   def has_routing_conditions

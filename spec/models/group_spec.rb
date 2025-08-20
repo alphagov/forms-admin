@@ -156,6 +156,8 @@ RSpec.describe Group, type: :model do
   end
 
   describe "associating forms with groups" do
+    let(:form) { create :form }
+
     it "can have zero forms" do
       group = build :group
 
@@ -164,35 +166,34 @@ RSpec.describe Group, type: :model do
 
     it "can be associated with a form ID" do
       group = build(:group, id: 1)
-      group.group_forms.build(form_id: 1)
+      group.group_forms.build(form:)
       group.save!
 
       expect(described_class.find(1).group_forms).to eq [
-        GroupForm.build(form_id: 1, group_id: 1),
+        GroupForm.build(form: form, group_id: 1),
       ]
     end
 
     it "can be associated with many form IDs" do
       group = build(:group, id: 1)
-      group.group_forms.build(form_id: 2)
-      group.group_forms.build(form_id: 3)
-      group.group_forms.build(form_id: 4)
+      forms = create_list(:form, 3)
+      group.group_forms.build(form: forms.first)
+      group.group_forms.build(form: forms.second)
+      group.group_forms.build(form: forms.third)
       group.save!
 
       expect(described_class.find(1).group_forms).to eq [
-        GroupForm.build(form_id: 2, group_id: 1),
-        GroupForm.build(form_id: 3, group_id: 1),
-        GroupForm.build(form_id: 4, group_id: 1),
+        GroupForm.build(form: forms.first, group_id: 1),
+        GroupForm.build(form: forms.second, group_id: 1),
+        GroupForm.build(form: forms.third, group_id: 1),
       ]
     end
 
     it "is associated with a form through the form ID" do
-      form = build :form, id: 1
-
       allow(FormRepository).to receive(:find).with(form_id: form.id).and_return(form)
 
       group = build(:group, id: 1)
-      group.group_forms.build(form_id: 1)
+      group.group_forms.build(form:)
       group.save!
 
       expect(described_class.find(1).group_forms[0].form).to eq form
@@ -200,26 +201,26 @@ RSpec.describe Group, type: :model do
 
     it "associates forms with groups through the form ID" do
       group = build(:group, id: 1)
-      group.group_forms.build(form_id: 1)
+      group.group_forms.build(form:)
       group.save!
 
-      expect(GroupForm.find_by(form_id: 1).group).to eq group
+      expect(GroupForm.find_by(form:).group).to eq group
     end
 
     it "raises an error if a form already belongs to a group" do
       group = build(:group, id: 1)
-      group.group_forms.build(form_id: 1)
+      group.group_forms.build(form:)
       group.save!
 
       other_group = build(:group, id: 2)
-      other_group.group_forms.build(form_id: 1)
+      other_group.group_forms.build(form:)
 
       expect { other_group.save! }.to raise_error ActiveRecord::RecordNotUnique
     end
 
     it "prevents deleting a group if it associated with one or more forms" do
       group = build(:group, id: 1)
-      group.group_forms.build(form_id: 1)
+      group.group_forms.build(form:)
       group.save!
 
       expect { group.destroy! }.to raise_error ActiveRecord::DeleteRestrictionError
