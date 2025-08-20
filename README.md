@@ -69,6 +69,22 @@ npm run test
 [rspec-rails]: https://github.com/rspec/rspec-rails
 [Vitest]: https://vitest.dev/
 
+### Running the RSpec tests in parallel
+
+You can run the RSpec tests in parallel with the following setup: you will first need to create multiple test databases:
+
+```bash
+bundle exec rake db:parallel:create db:parallel:prepare
+```
+
+You can then run the tests in parallel:
+
+```bash
+bundle exec prspec spec
+```
+
+[parallel_rspec]: https://github.com/willbryant/parallel_rspec
+
 ### Linting
 
 We use [RuboCop GOV.UK] for linting code. To autocorrect issues run:

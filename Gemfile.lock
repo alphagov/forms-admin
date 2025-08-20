@@ -348,6 +348,9 @@ GEM
       activerecord (>= 6.1)
       request_store (~> 1.4)
     parallel (1.27.0)
+    parallel_rspec (2.5.0)
+      rake (> 10.0)
+      rspec
     parser (3.3.9.0)
       ast (~> 2.4.1)
       racc
@@ -439,6 +442,10 @@ GEM
     request_store (1.7.0)
       rack (>= 1.4)
     rexml (3.4.1)
+    rspec (3.13.1)
+      rspec-core (~> 3.13.0)
+      rspec-expectations (~> 3.13.0)
+      rspec-mocks (~> 3.13.0)
     rspec-core (3.13.5)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.5)
@@ -518,6 +525,8 @@ GEM
       version_gem (>= 1.1.8, < 3)
     spring (4.3.0)
     spring-commands-rspec (1.0.4)
+      spring (>= 0.9.1)
+    spring-prspec (1.0.0)
       spring (>= 0.9.1)
     stringio (3.1.7)
     terminal-table (4.0.0)
@@ -613,6 +622,7 @@ DEPENDENCIES
   omniauth-auth0
   omniauth-rails_csrf_protection
   paper_trail
+  parallel_rspec
   pg (~> 1.6)
   puma (~> 6.6.1)
   pundit
@@ -626,6 +636,7 @@ DEPENDENCIES
   sentry-ruby
   simplecov (~> 0.22.0)
   spring-commands-rspec
+  spring-prspec
   tzinfo
   tzinfo-data
   validate_url
