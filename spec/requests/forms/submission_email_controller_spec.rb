@@ -7,7 +7,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
   let(:user) { standard_user }
   let(:user_outside_group) { build :user, id: 2, organisation: }
 
-  let(:form) { build :form, id: 1, creator_id: 1 }
+  let(:form) { create :form, creator_id: 1 }
   let(:made_live_form) { build(:made_live_form, id: form.id) }
 
   let(:submission_email_mailer_spy) do

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "pages/type_of_answer.html.erb", type: :view do
-  let(:form) { build :form, id: 1 }
+  let(:form) { create :form }
   let(:type_of_answer_input) { build :type_of_answer_input }
   let(:page) { OpenStruct.new(routing_conditions: [], answer_type: "number") }
   let(:question_number) { 1 }
@@ -31,7 +31,7 @@ describe "pages/type_of_answer.html.erb", type: :view do
   end
 
   it "has a back link to the live form page" do
-    expect(view.content_for(:back_link)).to have_link("Back", href: "/forms/1/pages")
+    expect(view.content_for(:back_link)).to have_link("Back", href: "/forms/#{form.id}/pages")
   end
 
   it "contains the question number" do

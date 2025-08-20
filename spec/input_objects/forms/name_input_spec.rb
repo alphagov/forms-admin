@@ -17,7 +17,7 @@ RSpec.describe Forms::NameInput, type: :model do
   describe "#submit" do
     context "with valid attributes" do
       it "saves the form" do
-        form = build :form
+        form = create :form
         name_input = described_class.new(form:, name: "New Form")
 
         allow(FormRepository).to receive(:save!).and_return({ id: 1, name: "New Form" })
@@ -30,7 +30,7 @@ RSpec.describe Forms::NameInput, type: :model do
 
     context "with invalid attributes" do
       it "does not save the form" do
-        form = build :form
+        form = create :form
         name_input = described_class.new(form:, name: "")
 
         expect {

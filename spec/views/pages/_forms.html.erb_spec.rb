@@ -10,7 +10,7 @@ describe "pages/_form.html.erb", type: :view do
           hint_text: page.hint_text,
           answer_settings: page.answer_settings
   end
-  let(:form) { build :form, id: 1 }
+  let(:form) { create :form }
   let(:group) { create :group }
   let(:is_new_page) { true }
   let(:locals) do
@@ -88,7 +88,7 @@ describe "pages/_form.html.erb", type: :view do
     let(:is_new_page) { false }
 
     it "contains a link to add guidance" do
-      expect(rendered).to have_link(text: I18n.t("guidance.add_guidance"), href: guidance_edit_path(form_id: 1, page_id: 2))
+      expect(rendered).to have_link(text: I18n.t("guidance.add_guidance"), href: guidance_edit_path(form_id: form.id, page_id: 2))
     end
 
     it "has no hidden field for the answer type" do

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "pages/routes/delete.html.erb" do
-  let(:form) { build :form, id: 1, pages: [page] }
+  let(:form) { create :form, pages: [page] }
   let(:page) { build :page, id: 1, position: 1 }
 
   before do

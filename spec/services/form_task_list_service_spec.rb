@@ -417,7 +417,7 @@ describe FormTaskListService do
             end
 
             context "when form is ready to make live" do
-              let(:form) { build(:form, :ready_for_live, id: 1) }
+              let(:form) { create(:form, :ready_for_live) }
 
               it "has link to make the form live" do
                 expect(section_rows.second[:task_name]).to eq "Make your form live"
@@ -448,7 +448,7 @@ describe FormTaskListService do
             end
 
             context "when the form is archived" do
-              let(:form) { build(:form, :archived, id: 1) }
+              let(:form) { create(:form, :archived) }
 
               it "has link to make the form live" do
                 expect(section_rows.second[:task_name]).to eq "Make your form live"

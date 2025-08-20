@@ -47,7 +47,7 @@ RSpec.describe Pages::TypeOfAnswerInput, type: :model do
           page_with_another_answer_type = build(:page, answer_type: :text)
           pages.push(page_with_another_answer_type)
         end
-        let(:current_form) { build :form, id: 1, pages: }
+        let(:current_form) { create :form, pages: }
 
         it "is valid" do
           expect(type_of_answer_input).to be_valid
@@ -56,7 +56,7 @@ RSpec.describe Pages::TypeOfAnswerInput, type: :model do
 
       context "when there are already 4 file upload questions" do
         let(:pages) { build_list :page, 4, answer_type: :file }
-        let(:current_form) { build :form, id: 1, pages: }
+        let(:current_form) { create :form, pages: }
 
         it "is invalid" do
           expect(type_of_answer_input).to be_invalid
@@ -66,7 +66,7 @@ RSpec.describe Pages::TypeOfAnswerInput, type: :model do
 
       context "when there are already more than 4 file upload questions" do
         let(:pages) { build_list :page, 5, answer_type: :file }
-        let(:current_form) { build :form, id: 1, pages: }
+        let(:current_form) { create :form, pages: }
 
         it "is invalid" do
           expect(type_of_answer_input).to be_invalid

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Pages::DeleteSecondarySkipInput, type: :model do
   let(:delete_secondary_skip_input) { described_class.new(form:, page:, record: condition) }
-  let(:form) { build :form, :ready_for_routing }
+  let(:form) { create :form, :ready_for_routing }
   let(:page) { form.pages.first }
   let(:condition) { build :condition, routing_page_id: page.id }
 

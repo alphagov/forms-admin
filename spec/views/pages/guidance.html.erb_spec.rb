@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "pages/guidance.html.erb", type: :view do
-  let(:form) { build :form, id: 1 }
+  let(:form) { create :form }
   let(:page) { OpenStruct.new(conditions: [], answer_type: "number") }
   let(:guidance_input) { Pages::GuidanceInput.new }
   let(:preview_html) { I18n.t("guidance.no_guidance_added_html") }

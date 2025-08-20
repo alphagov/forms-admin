@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "pages/exit_page/delete.html.erb" do
-  let(:form) { build :form, id: 1 }
+  let(:form) { create :form }
   let(:pages) do
     build_list(:page, 3) do |page, i|
       page.id = i + 1

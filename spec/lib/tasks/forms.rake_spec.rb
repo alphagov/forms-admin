@@ -14,9 +14,7 @@ RSpec.describe "forms.rake" do
     end
 
     let(:group) { create :group }
-    let(:forms) do
-      build_list(:form, 3) { |form, i| form.id = i }
-    end
+    let(:forms) { create_list(:form, 3) }
     let(:form_ids) { forms.map(&:id) }
 
     before do

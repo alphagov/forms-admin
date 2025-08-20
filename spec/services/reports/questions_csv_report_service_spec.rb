@@ -11,10 +11,11 @@ RSpec.describe Reports::QuestionsCsvReportService do
   let(:group) { create(:group) }
 
   before do
-    GroupForm.create!(form_id: 1, group:)
-    GroupForm.create!(form_id: 2, group:)
-    GroupForm.create!(form_id: 3, group:)
-    GroupForm.create!(form_id: 4, group:)
+    form_documents.each do |form_document|
+      form = create(:form)
+      GroupForm.create!(form: form, group: group)
+      form_document["form_id"] = form.id
+    end
   end
 
   describe "#csv" do
@@ -29,7 +30,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
       rows = CSV.parse(csv)
       text_question_row = rows.detect { |row| row.include? "Single line of text" }
       expect(text_question_row).to eq([
-        "1",
+        form_documents[0]["form_id"].to_s,
         "live",
         "All question types form",
         group.organisation.name,
@@ -59,7 +60,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
       rows = CSV.parse(csv)
       selection_question_row = rows.detect { |row| row.include? "Selection from a list of options" }
       expect(selection_question_row).to eq([
-        "1",
+        form_documents[0]["form_id"].to_s,
         "live",
         "All question types form",
         group.organisation.name,
@@ -89,7 +90,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
       rows = CSV.parse(csv)
       name_question_row = rows.detect { |row| row.include? "What’s your name?" }
       expect(name_question_row).to eq([
-        "3",
+        form_documents[2]["form_id"].to_s,
         "live",
         "Branch route form",
         group.organisation.name,
@@ -119,7 +120,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
       rows = CSV.parse(csv)
       routing_question_row = rows.detect { |row| row.include? "Would you like to submit anonymously?" }
       expect(routing_question_row).to eq([
-        "4",
+        form_documents[3]["form_id"].to_s,
         "live",
         "Skip route form",
         group.organisation.name,
@@ -149,7 +150,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
       rows = CSV.parse(csv)
       routing_question_row = rows.detect { |row| row.include? "How many times have you filled out this form?" }
       expect(routing_question_row).to eq([
-        "3",
+        form_documents[2]["form_id"].to_s,
         "live",
         "Branch route form",
         group.organisation.name,

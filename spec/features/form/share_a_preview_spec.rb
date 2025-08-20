@@ -1,13 +1,13 @@
 require "rails_helper"
 
 feature "Share a preview", type: :feature do
-  let(:form) { build :form, :with_pages, id: 1, name: "Test form" }
+  let(:form) { create :form, :with_pages, name: "Test form" }
   let(:group) { create(:group, organisation: standard_user.organisation, status: "active") }
   let(:fake_page) { build :page, form_id: form.id, id: 2 }
 
   before do
     allow(FormRepository).to receive_messages(find: form, save!: form, pages: form.pages)
-    allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(fake_page)
+    allow(PageRepository).to receive(:find).with(page_id: "2", form_id: form.id).and_return(fake_page)
     allow(PageRepository).to receive(:create!).with(hash_including(form_id: 1))
 
     GroupForm.create!(group:, form_id: form.id)
@@ -48,7 +48,7 @@ feature "Share a preview", type: :feature do
 
   def then_the_preview_url_is_copied_to_my_clipboard
     clipboard_text = get_clipboard_text
-    expect(clipboard_text).to eq("runner-host/preview-draft/1/test-form")
+    expect(clipboard_text).to eq("runner-host/preview-draft/#{form.id}/test-form")
   end
 
   def when_i_mark_the_task_complete

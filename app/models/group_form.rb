@@ -3,8 +3,5 @@ class GroupForm < ApplicationRecord
   self.table_name = :groups_form_ids
 
   belongs_to :group
-
-  def form
-    FormRepository.find(form_id: form_id)
-  end
+  belongs_to :form
 end

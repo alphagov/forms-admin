@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Forms::ArchiveFormController, type: :request do
-  let(:id) { 2 }
-  let(:form) { build(:form, :live, id:) }
+  let(:id) { form.id }
+  let(:form) { create(:form, :live) }
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
@@ -32,7 +32,7 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
     end
 
     context "when form is not live" do
-      let(:form) { build(:form, :archived, id:) }
+      let(:form) { create(:form, :archived) }
 
       it "redirects to archived form page" do
         expect(response).to redirect_to(archived_form_path(id))
@@ -81,7 +81,7 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
     end
 
     context "when form is not live" do
-      let(:form) { build(:form, :archived, id:) }
+      let(:form) { create(:form, :archived) }
 
       it "doesn't archive the form" do
         expect(FormRepository).not_to have_received(:archive!)

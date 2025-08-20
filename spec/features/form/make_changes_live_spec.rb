@@ -1,7 +1,7 @@
 require "rails_helper"
 
 feature "Make changes live", type: :feature do
-  let(:form) { build :form, :live, id: 1, name: "Apply for a juggling license" }
+  let(:form) { create :form, :live, name: "Apply for a juggling license" }
   let(:pages) { build_list :page, 5, form_id: form.id }
   let(:organisation) { build :organisation, id: 1 }
   let(:user) { create :user, organisation: }

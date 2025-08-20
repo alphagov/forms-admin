@@ -1,22 +1,25 @@
 require "rails_helper"
 
 describe "pages/secondary_skip/new.html.erb" do
-  let(:form) { build :form, id: 1, pages: [page] }
+  let(:form) { create :form, pages: [page] }
   let(:page) do
-    build(:page,
-          :with_selection_settings,
-          id: 1,
-          position: 1,
-          answer_settings: DataStruct.new(
-            only_one_option: true,
-            selection_options: [
-              OpenStruct.new(attributes: { name: "Option 1" }),
-              OpenStruct.new(attributes: { name: "Option 2" }),
-            ],
-          ),
-          routing_conditions: [
-            build(:condition, id: 1, routing_page_id: 1, check_page_id: 1, answer_value: "Yes", goto_page_id: 2, skip_to_end: false),
-          ])
+    page = build(
+      :page,
+      :with_selection_settings,
+      id: 1,
+      position: 1,
+      answer_settings: DataStruct.new(
+        only_one_option: true,
+        selection_options: [
+          OpenStruct.new(attributes: { name: "Option 1" }),
+          OpenStruct.new(attributes: { name: "Option 2" }),
+        ],
+      ),
+    )
+    page.routing_conditions = [
+      build(:condition, id: 1, routing_page: page, check_page: page, answer_value: "Yes", goto_page_id: 2, skip_to_end: false),
+    ]
+    page
   end
 
   let(:secondary_skip_input) { Pages::SecondarySkipInput.new(form:, page:) }

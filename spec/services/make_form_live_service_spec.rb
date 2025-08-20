@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe MakeFormLiveService do
   let(:make_form_live_service) { described_class.call(current_form:, current_user:) }
-  let(:current_form) { build :form, :ready_for_live, id: 1 }
+  let(:current_form) { create :form, :ready_for_live }
   let(:made_live_form) { build :made_live_form, id: current_form.id, submission_email: current_form.submission_email }
   let(:current_user) { build :user }
 
@@ -26,7 +26,7 @@ describe MakeFormLiveService do
     end
 
     context "when draft form has live version" do
-      let(:current_form) { build :form, :live_with_draft, id: 1 }
+      let(:current_form) { create :form, :live_with_draft }
 
       context "when submission email has not been changed" do
         it "does not call the SubmissionEmailMailer" do
@@ -65,7 +65,7 @@ describe MakeFormLiveService do
     end
 
     context "when changes to live form are being made live" do
-      let(:current_form) { build :form, :live_with_draft, id: 1 }
+      let(:current_form) { create :form, :live_with_draft }
 
       it "returns a different page title" do
         expect(make_form_live_service.page_title).to eq I18n.t("page_titles.your_changes_are_live")
@@ -83,7 +83,7 @@ describe MakeFormLiveService do
     end
 
     context "when changes to live form are being made live" do
-      let(:current_form) { build :form, :live_with_draft, id: 1 }
+      let(:current_form) { create :form, :live_with_draft }
 
       before do
         allow(FormRepository).to receive(:find_live).and_return(made_live_form)

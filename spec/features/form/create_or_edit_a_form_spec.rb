@@ -1,7 +1,7 @@
 require "rails_helper"
 
 feature "Create or edit a form", type: :feature do
-  let(:form) { build :form, id: 1, name: "Apply for a juggling license", created_at: "2024-10-08T07:31:15.762Z" }
+  let(:form) { create :form, name: "Apply for a juggling license", created_at: "2024-10-08T07:31:15.762Z" }
   let(:group) { create :group, name: "Group 1" }
 
   before do
@@ -9,8 +9,6 @@ feature "Create or edit a form", type: :feature do
   end
 
   context "when creating a form" do
-    let(:pages) { [] }
-
     before do
       allow(FormRepository).to receive_messages(create!: form, find: form, pages: form.pages)
     end
@@ -30,17 +28,9 @@ feature "Create or edit a form", type: :feature do
   end
 
   context "when editing an existing form" do
-    let(:pages) { build_list :page, 5, form_id: form.id }
-    let(:updated_form) do
-      updated_form = form
-      updated_form.name = "Another form of juggling"
-      updated_form
-    end
-
     before do
-      form.name = "Another form of juggling"
-
-      allow(FormRepository).to receive_messages(save!: form, find: form, pages: form.pages)
+      allow(FormRepository).to receive_messages(find: form, pages: form.pages)
+      allow(FormRepository).to receive(:save!, &:save!)
     end
 
     context "when the user is a member of a group with a form" do

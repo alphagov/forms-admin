@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe ApplicationController, type: :request do
-  let(:form) { build :form, id: 1 }
+  let(:form) { create :form }
 
   let(:output) { StringIO.new }
   let(:logger) { ActiveSupport::Logger.new(output) }

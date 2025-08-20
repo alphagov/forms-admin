@@ -34,8 +34,8 @@ RSpec.describe "groups.rake" do
 
     it "with group that has forms raises an error" do
       group = create(:group)
-      group.group_forms.create!(form_id: 1)
-      group.save!
+      form = create(:form)
+      group.group_forms.create!(form:)
       expect {
         task.invoke(group.external_id)
       }.to raise_error(SystemExit)

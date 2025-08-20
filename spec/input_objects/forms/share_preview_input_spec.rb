@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Forms::SharePreviewInput, type: :model do
-  let(:form) { build :form }
+  let(:form) { create :form }
   let(:mark_complete_input) { described_class.new(mark_complete:, form:) }
   let(:mark_complete) { "true" }
 
@@ -40,7 +40,7 @@ RSpec.describe Forms::SharePreviewInput, type: :model do
 
   describe("#assign_form_values") do
     context "when task is completed" do
-      let(:form) { build :form, share_preview_completed: true }
+      let(:form) { create :form, share_preview_completed: true }
 
       it "sets mark_complete to true" do
         mark_complete_input.assign_form_values
@@ -49,7 +49,7 @@ RSpec.describe Forms::SharePreviewInput, type: :model do
     end
 
     context "when task is not completed" do
-      let(:form) { build :form, share_preview_completed: false }
+      let(:form) { create :form, share_preview_completed: false }
 
       it "sets mark_complete to false" do
         mark_complete_input.assign_form_values
