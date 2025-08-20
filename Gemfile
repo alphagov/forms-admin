@@ -125,4 +125,8 @@ group :test do
   gem "axe-core-rspec"
 
   gem "spring-commands-rspec"
+
+  # Enable running the specs in parallel (and optionally with Spring)
+  gem "parallel_rspec"
+  gem "spring-prspec"
 end
