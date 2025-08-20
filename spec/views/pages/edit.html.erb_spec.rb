@@ -1,11 +1,11 @@
 require "rails_helper"
 
 describe "pages/edit.html.erb" do
-  let(:question_text) { nil }
+  let(:question_text) { Faker::Lorem.question.truncate(250) }
 
-  let(:form) { build :form, id: 1, pages: [page] }
+  let(:form) { create :form, pages: [page] }
   let(:group) { create :group }
-  let(:page) { build :page, id: 1, question_text:, form_id: 1, answer_type:, answer_settings: {}, page_heading: nil }
+  let(:page) { create :page, question_text:, answer_type:, answer_settings: {}, page_heading: nil }
   let(:answer_type) { "email" }
 
   let(:draft_question) { question_input.draft_question }

@@ -12,7 +12,7 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
   end
 
   describe "#new" do
-    let(:form) { build :form, :with_support, id: 2 }
+    let(:form) { create :form, :with_support }
 
     before do
       allow(FormRepository).to receive(:find).and_return(form)
@@ -37,7 +37,7 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
 
   describe "#create" do
     let(:form) do
-      build :form, id: 2
+      create :form
     end
 
     let(:updated_form) do
@@ -67,7 +67,7 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
       end
 
       it "redirects to the confirmation page" do
-        expect(response).to redirect_to(form_path(form_id: 2))
+        expect(response).to redirect_to(form_path(form_id: form.id))
       end
     end
 
@@ -129,7 +129,7 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
       end
 
       it "redirects to the confirmation page" do
-        expect(response).to redirect_to(form_path(form_id: 2))
+        expect(response).to redirect_to(form_path(form_id: form.id))
       end
     end
   end

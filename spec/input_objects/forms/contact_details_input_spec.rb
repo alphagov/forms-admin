@@ -162,7 +162,7 @@ RSpec.describe Forms::ContactDetailsInput, type: :model do
     context "with all support details set" do
       subject(:contact_details_input) { described_class.new(form:) }
 
-      let(:form) { build :form, :with_support }
+      let(:form) { create :form, :with_support }
 
       before do
         contact_details_input.assign_form_values
@@ -195,7 +195,7 @@ RSpec.describe Forms::ContactDetailsInput, type: :model do
 
     context "without support_email" do
       it "contact_details_supplied contains correct values" do
-        form = build :form, :with_support, support_email: ""
+        form = create :form, :with_support, support_email: ""
         contact_details_input = described_class.new(form:)
         expect(contact_details_input.contact_details_supplied).not_to include(:supply_email)
       end
@@ -203,7 +203,7 @@ RSpec.describe Forms::ContactDetailsInput, type: :model do
 
     context "without support_phone" do
       it "contact_details_supplied does not contains supply_email" do
-        form = build :form, :with_support, support_phone: ""
+        form = create :form, :with_support, support_phone: ""
         contact_details_input = described_class.new(form:)
         expect(contact_details_input.contact_details_supplied).not_to include(:supply_email)
       end
@@ -211,7 +211,7 @@ RSpec.describe Forms::ContactDetailsInput, type: :model do
 
     context "without support_url" do
       it "contact_details_supplied contains correct values" do
-        form = build :form, :with_support, support_url: ""
+        form = create :form, :with_support, support_url: ""
         contact_details_input = described_class.new(form:)
         expect(contact_details_input.contact_details_supplied).not_to include(:supply_link)
       end

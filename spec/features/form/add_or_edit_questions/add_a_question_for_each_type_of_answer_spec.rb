@@ -1,8 +1,8 @@
 require "rails_helper"
 
 feature "Add/editing a single question", type: :feature do
-  let(:form) { build :form, id: 1, pages: }
-  let(:fake_page) { build :page, form_id: 1, id: 2 }
+  let(:form) { create :form, pages: }
+  let(:fake_page) { build :page, form_id: form.id, id: 2 }
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
@@ -42,7 +42,7 @@ feature "Add/editing a single question", type: :feature do
   context "when a form has existing pages" do
     let(:pages) do
       existing_pages = []
-      5.times { |id| existing_pages.push(build(:page, id:, form_id: 1)) }
+      5.times { |id| existing_pages.push(build(:page, id:)) }
       existing_pages
     end
 

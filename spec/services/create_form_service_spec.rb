@@ -10,8 +10,10 @@ RSpec.describe CreateFormService do
   let(:name) { "Test form" }
 
   describe "#create!" do
+    let(:created_form_id) { 999 }
+
     before do
-      allow(FormRepository).to receive(:create!).and_invoke(->(**attributes) { build(:form, id: 1, **attributes) })
+      allow(FormRepository).to receive(:create!).and_invoke(->(**attributes) { create(:form, id: created_form_id, **attributes) })
     end
 
     it "creates a form" do
@@ -23,14 +25,13 @@ RSpec.describe CreateFormService do
     it "creates a group_form record" do
       create_form_service.create!(creator:, group:, name:)
 
-      expect(GroupForm.last).to have_attributes(form_id: 1, group_id: 1000)
+      expect(GroupForm.last).to have_attributes(form_id: created_form_id, group_id: 1000)
     end
 
     context "when a form with that name was already created in that group" do
       before do
-        form_ids = (1..).each
-        allow(FormRepository).to receive(:create!).and_invoke(->(**attributes) { build(:form, id: form_ids.next, **attributes) })
-        allow(FormRepository).to receive(:find).and_invoke(->(form_id:) { build(:form, id: form_id) })
+        allow(FormRepository).to receive(:create!).and_invoke(->(**attributes) { create(:form, **attributes) })
+        allow(FormRepository).to receive(:find).and_invoke(->(form_id:) { Form.find(form_id) })
       end
 
       context "when both forms are created at the same time" do

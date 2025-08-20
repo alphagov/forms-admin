@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "Create a form", type: :feature do
-  let(:form) { build :form, id: 1, name: "Test form", created_at: Faker::Time.backward }
-  let(:unwanted_form) { build :form, id: 2, name: "Test form", created_at: form.created_at + 0.1 }
+  let(:form) { create :form, name: "Test form", created_at: Faker::Time.backward }
+  let(:unwanted_form) { create :form, name: "Test form", created_at: form.created_at + 0.1 }
 
   let(:group) do
     group = create :group, name: "Test group", creator: user
@@ -22,10 +22,10 @@ RSpec.describe "Create a form", type: :feature do
     login_as user
 
     allow(FormRepository).to receive(:create!).and_return form, unwanted_form
-    allow(FormRepository).to receive(:find).with(form_id: 1).and_return form
-    allow(FormRepository).to receive(:find).with(form_id: "1").and_return form
-    allow(FormRepository).to receive(:find).with(form_id: 2).and_return unwanted_form
-    allow(FormRepository).to receive(:find).with(form_id: "2").and_return unwanted_form
+    allow(FormRepository).to receive(:find).with(form_id: form.id).and_return form
+    allow(FormRepository).to receive(:find).with(form_id: form.id.to_s).and_return form
+    allow(FormRepository).to receive(:find).with(form_id: unwanted_form.id).and_return unwanted_form
+    allow(FormRepository).to receive(:find).with(form_id: unwanted_form.id.to_s).and_return unwanted_form
     allow(FormRepository).to receive(:pages).and_return([])
   end
 

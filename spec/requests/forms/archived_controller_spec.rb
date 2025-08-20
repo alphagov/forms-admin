@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Forms::ArchivedController, type: :request do
-  let(:form) { build(:form, :live, id:) }
+  let(:form) { create(:form, :live) }
   let(:archived_form) { build(:made_live_form, id:) }
-  let(:id) { 2 }
+  let(:id) { form.id }
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
 

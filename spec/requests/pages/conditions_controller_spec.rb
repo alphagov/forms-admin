@@ -125,7 +125,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when user should not be allowed to add routes to pages" do
-      let(:form) { build :form, id: 1 }
+      let(:form) { create :form }
       let(:pages) { [create(:page)] }
 
       it "Renders the forbidden page" do

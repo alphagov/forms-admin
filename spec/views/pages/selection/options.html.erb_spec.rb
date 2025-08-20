@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "pages/selection/options.html.erb", type: :view do
-  let(:form) { build :form, id: 1 }
+  let(:form) { create :form }
   let(:page) { build :page }
   let(:page_number) { 1 }
   let(:back_link_url) { "/a-back-link-url" }

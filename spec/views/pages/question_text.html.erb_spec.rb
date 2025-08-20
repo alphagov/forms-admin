@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "pages/question_text.html.erb" do
-  let(:form) { build :form, id: 1, pages: [] }
+  let(:form) { create :form, pages: [] }
   let(:question_text_input) { build :question_text_input }
   let(:question_text_path) { "/forms/1/pages/new/question_text" }
   let(:form_pages_path) { "/forms/1/pages/new/guidance" }

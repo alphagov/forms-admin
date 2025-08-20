@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "forms/show.html.erb" do
   let(:user) { build :user }
-  let(:form) { build :form, :with_pages, id: 1, name: "Form 1", form_slug: "form-1" }
+  let(:form) { create :form, :with_pages, name: "Form 1", form_slug: "form-1" }
   let(:group) { create :group, name: "Group 1" }
 
   before do
@@ -27,11 +27,11 @@ describe "forms/show.html.erb" do
   end
 
   it "contains a link to preview the form" do
-    expect(rendered).to have_link("Preview this form", href: "runner-host/preview-draft/1/form-1", visible: :all)
+    expect(rendered).to have_link("Preview this form", href: "runner-host/preview-draft/#{form.id}/form-1", visible: :all)
   end
 
   it "contains a link to delete the form" do
-    expect(rendered).to have_link("Delete draft form", href: delete_form_path(1))
+    expect(rendered).to have_link("Delete draft form", href: delete_form_path(form.id))
   end
 
   it "contains a summary of completed tasks out of the total tasks" do
@@ -55,10 +55,10 @@ describe "forms/show.html.erb" do
   end
 
   context "when form state is live or draft_live" do
-    let(:form) { build :form, :live, id: 2 }
+    let(:form) { create :form, :live }
 
     it "has a back link to the live form page" do
-      expect(view.content_for(:back_link)).to have_link("Back", href: "/forms/2/live")
+      expect(view.content_for(:back_link)).to have_link("Back", href: "/forms/#{form.id}/live")
     end
 
     it "has the heading 'Edit your form'" do
@@ -77,16 +77,16 @@ describe "forms/show.html.erb" do
       let(:group) { nil }
 
       it "has a back link to the live form page" do
-        expect(view.content_for(:back_link)).to have_link("Back", href: "/forms/2/live")
+        expect(view.content_for(:back_link)).to have_link("Back", href: "/forms/#{form.id}/live")
       end
     end
   end
 
   context "when form state is archived" do
-    let(:form) { build :form, :archived, id: 2 }
+    let(:form) { create :form, :archived }
 
     it "has a back link to the archived form page" do
-      expect(view.content_for(:back_link)).to have_link("Back", href: "/forms/2/archived")
+      expect(view.content_for(:back_link)).to have_link("Back", href: "/forms/#{form.id}/archived")
     end
 
     it "has the heading 'Edit your form'" do
@@ -103,7 +103,7 @@ describe "forms/show.html.erb" do
   end
 
   context "when form state is archived with draft" do
-    let(:form) { build :form, :archived_with_draft, id: 2 }
+    let(:form) { create :form, :archived_with_draft }
 
     it "does not contain a link to delete the form" do
       expect(rendered).not_to have_link("Delete draft form", href: delete_form_path(2))

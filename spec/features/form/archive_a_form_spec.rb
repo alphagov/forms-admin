@@ -1,7 +1,7 @@
 require "rails_helper"
 
 feature "Archive a form", type: :feature do
-  let(:form) { build(:form, :live, id: 1) }
+  let(:form) { create(:form, :live) }
   let(:group) { create(:group, organisation: standard_user.organisation) }
   let(:made_live_form) { build(:made_live_form, id: form.id, name: form.name) }
 

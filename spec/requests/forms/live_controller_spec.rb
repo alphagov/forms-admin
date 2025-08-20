@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Forms::LiveController, type: :request do
-  let(:form) { build(:form, :live, id: 2) }
-  let(:made_live_form) { build(:made_live_form, id: 2, live_at: Time.zone.now - 2.days) }
+  let(:form) { create(:form, :live) }
+  let(:made_live_form) { build(:made_live_form, id: form.id, live_at: Time.zone.now - 2.days) }
   let(:forms_env) { "test" }
   let(:cloud_watch_client) { Aws::CloudWatch::Client.new(stub_responses: true) }
 
@@ -28,7 +28,7 @@ RSpec.describe Forms::LiveController, type: :request do
 
       allow(FormRepository).to receive_messages(find: form, find_live: made_live_form)
 
-      get live_form_path(2)
+      get live_form_path(form.id)
     end
 
     it "Reads the form" do
@@ -61,7 +61,7 @@ RSpec.describe Forms::LiveController, type: :request do
       before do
         allow(FormRepository).to receive_messages(find: form, find_live: made_live_form)
 
-        get live_form_pages_path(2)
+        get live_form_pages_path(form.id)
       end
 
       it "renders the live template" do

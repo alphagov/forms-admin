@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Forms::MarkCompleteInput, type: :model do
-  let(:form) { build :form }
+  let(:form) { create :form }
   let(:mark_complete_input) { described_class.new(mark_complete:, form:) }
   let(:mark_complete) { "true" }
 

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Forms::DeleteConfirmationController, type: :request do
-  let(:form) { build(:form, id: 2) }
+  let(:form) { create(:form) }
   let(:page) { build(:page, form_id: form.id) }
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
@@ -18,7 +18,7 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
       before do
         allow(FormRepository).to receive(:find).and_return(form)
 
-        get delete_form_path(form_id: 2)
+        get delete_form_path(form_id: form.id)
       end
 
       it "reads the form from the API" do
@@ -37,12 +37,12 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
 
   describe "#destroy" do
     describe "Given a valid form" do
-      let(:form) { build(:form, id: 2, name: "Form 1") }
+      let(:form) { create(:form, name: "Form 1") }
 
       before do
         allow(FormRepository).to receive_messages(find: form, destroy: true)
 
-        delete destroy_form_path(form_id: 2, forms_delete_confirmation_input: { confirm: "yes" })
+        delete destroy_form_path(form_id: form.id, forms_delete_confirmation_input: { confirm: "yes" })
       end
 
       it "redirects you to the group page" do
@@ -74,11 +74,11 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
       before do
         allow(FormRepository).to receive_messages(find: form, destroy: true)
 
-        delete destroy_form_path(form_id: 2, forms_delete_confirmation_input: { confirm: "no" })
+        delete destroy_form_path(form_id: form.id, forms_delete_confirmation_input: { confirm: "no" })
       end
 
       it "redirects you to the form page" do
-        expect(response).to redirect_to(form_path(2))
+        expect(response).to redirect_to(form_path(form.id))
       end
 
       it "does not delete the form on the API" do
@@ -90,7 +90,7 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
       before do
         allow(FormRepository).to receive_messages(find: form, destroy: true)
 
-        delete destroy_form_path(form_id: 2, forms_delete_confirmation_input: { confirm: nil })
+        delete destroy_form_path(form_id: form.id, forms_delete_confirmation_input: { confirm: nil })
       end
 
       it "re-renders the confirm delete view with an error" do
