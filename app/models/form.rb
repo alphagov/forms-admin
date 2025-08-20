@@ -134,6 +134,13 @@ class Form < ApplicationRecord
     group_form&.destroy
   end
 
+  def as_form_document
+    as_json(
+      except: %i[state external_id pages question_section_completed declaration_section_completed share_preview_completed],
+      methods: %i[start_page steps],
+    )
+  end
+
 private
 
   def set_external_id
@@ -154,5 +161,13 @@ private
 
   def email_task_status_service
     @email_task_status_service ||= EmailTaskStatusService.new(form: self)
+  end
+
+  def steps
+    pages.map(&:as_form_document_step)
+  end
+
+  def start_page
+    pages&.first&.id
   end
 end

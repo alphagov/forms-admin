@@ -646,4 +646,22 @@ RSpec.describe Form, type: :model do
       expect(form.file_upload_question_count).to eq(4)
     end
   end
+
+  describe "#as_form_document" do
+    let(:form) { create :form, :ready_for_live }
+
+    it "includes all attributes for the form" do
+      form_attributes = described_class.attribute_names - %w[state external_id pages question_section_completed declaration_section_completed share_preview_completed]
+      expect(form.as_form_document).to match a_hash_including(*form_attributes)
+    end
+
+    it "includes start page" do
+      expect(form.as_form_document).to match a_hash_including("start_page" => form.pages.first.id)
+    end
+
+    it "includes steps" do
+      expect(form.as_form_document["steps"].count).to eq(form.pages.count)
+      expect(form.as_form_document["steps"].first).to match a_hash_including("type" => "question_page")
+    end
+  end
 end

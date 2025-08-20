@@ -97,6 +97,12 @@ class Condition < ApplicationRecord
     end
   end
 
+  def as_json(options = {})
+    super(options.reverse_merge(
+      methods: %i[validation_errors has_routing_errors],
+    ))
+  end
+
 private
 
   def has_precondition?
