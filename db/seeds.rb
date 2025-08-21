@@ -24,7 +24,8 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
                                 role: :super_admin,
                                 uid: "123456",
                                 provider: :mock_gds_sso,
-                                terms_agreed_at: Time.zone.now })
+                                terms_agreed_at: Time.zone.now,
+                                research_contact_status: :consented })
 
   MouSignature.create! user: default_user, organisation: gds
 
@@ -55,6 +56,7 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
     role: :standard,
     organisation: test_org,
     provider: :seed,
+    research_contact_status: :consented,
   )
 
   # create extra super admins
@@ -87,6 +89,7 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
     last_signed_in_at: Time.utc(2024, 4, 22, 9, 30),
     terms_agreed_at: Time.utc(2024, 4, 22, 9, 30),
     provider: :seed,
+    research_contact_status: :consented,
   )
 
   # while we're using Signon it is possible to have users who aren't linked to
