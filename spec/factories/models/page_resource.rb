@@ -1,13 +1,3 @@
-# When an OpenStruct is converted to json, it inludes @table.
-# We inherit and overide as_json here to use to contain answer_settings, which
-# is a json hash converted into an object by ActiveResource. Using a plain hash
-# for answer_settings means there is no .access to attributes.
-class DataStruct < OpenStruct
-  def as_json(*args)
-    super.as_json["table"]
-  end
-end
-
 FactoryBot.define do
   factory :page_resource, class: "Api::V1::PageResource" do
     sequence(:id) { |n| n }
@@ -98,4 +88,16 @@ FactoryBot.define do
       answer_settings { DataStruct.new(input_type:, title_needed:) }
     end
   end
+end
+
+def link_pages_list(pages)
+  (pages + [nil]).each.with_index(1).each_cons(2) do |page_with_index, next_page_with_index|
+    page, page_index = page_with_index
+    next_page, _next_page_index = next_page_with_index
+
+    page.position = page_index
+    page.next_page = next_page&.id if page.is_a? Api::V1::PageResource
+  end
+
+  pages
 end

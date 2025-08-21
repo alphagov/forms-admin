@@ -1,7 +1,6 @@
 FactoryBot.define do
   factory :form_record, class: "Form" do
     sequence(:name) { |n| "Form #{n}" }
-    sequence(:form_slug) { |n| "form-#{n}" }
     submission_email { Faker::Internet.email(domain: "example.gov.uk") }
     submission_type { "email" }
     privacy_policy_url { Faker::Internet.url(host: "gov.uk") }
@@ -40,6 +39,10 @@ FactoryBot.define do
         Array.new(pages_count) { association(:page_record) }
       end
 
+      after(:build) do |form|
+        link_pages_list(form.pages) if form.pages.present?
+      end
+
       question_section_completed { true }
     end
 
@@ -58,6 +61,10 @@ FactoryBot.define do
       question_section_completed { true }
       declaration_section_completed { true }
       share_preview_completed { true }
+    end
+
+    trait :with_submission_email do
+      association :form_submission_email
     end
 
     trait :live do
@@ -97,12 +104,7 @@ FactoryBot.define do
       end
 
       after(:build) do |form|
-        if form.pages.present?
-          # assign position to each page
-          form.pages.each.with_index(1) do |page, page_index|
-            page.position = page_index
-          end
-        end
+        link_pages_list(form.pages) if form.pages.present?
       end
     end
 

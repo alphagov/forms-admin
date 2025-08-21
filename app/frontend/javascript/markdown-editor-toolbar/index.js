@@ -10,7 +10,13 @@ const addLink = (event, textArea) => {
   const linkMarkdown = `${blockPrefix}[${
     selectionEnd === selectionStart ? 'Link text' : selectionWithoutPrefix
   }](https://www.gov.uk/link-text-url)`
-  updateSelection(textArea, selectionStart, selectionEnd, linkMarkdown)
+
+  updateSelection({
+    element: textArea,
+    start: selectionStart,
+    end: selectionEnd,
+    updatedText: linkMarkdown
+  })
 }
 
 // You can only have one block style at a time, and it's always applied to the whole line.
@@ -22,7 +28,14 @@ const addBlockElement = transform => {
       getFullLineForSelection(textArea)
     const trimmedSelection = removeBlockPrefix(selection)
     const markdown = transform(trimmedSelection)
-    updateSelection(textArea, selectionStart, selectionEnd, markdown)
+
+    updateSelection({
+      element: textArea,
+      start: selectionStart,
+      end: selectionEnd,
+      updatedText: markdown,
+      isBlock: true
+    })
   }
 }
 
@@ -154,14 +167,29 @@ const getFullLineForSelection = element => {
   return { selection, selectionStart, selectionEnd }
 }
 
-const updateSelection = (element, start, end, updatedText) => {
-  element.value = `${element.value.slice(
-    0,
-    start
-  )}${updatedText}${element.value.slice(end)}`
-  element.setSelectionRange(start, start + updatedText.length)
+const updateSelection = (
+  { element, start, end, updatedText, isBlock } = { isBlock: false }
+) => {
+  let contentBeforeSelection = element.value.slice(0, start)
+
+  if (isBlock && contentBeforeSelection.length > 0) {
+    // remove any existing whitespace before the selection
+    contentBeforeSelection = contentBeforeSelection.trimEnd()
+
+    // add an empty line before the selection
+    contentBeforeSelection += '\n\n'
+  }
+
+  element.value = `${contentBeforeSelection}${updatedText}${element.value.slice(
+    end
+  )}`
+  element.setSelectionRange(
+    contentBeforeSelection.length,
+    contentBeforeSelection.length + updatedText.length
+  )
   element.dispatchEvent(new window.InputEvent('input'))
 }
+
 const removeBlockPrefix = text => text.trim().replace(blockPrefixPattern, '')
 
 const addClickAndKeyboardEventListeners = (textArea, element, callback) => {

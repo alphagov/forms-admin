@@ -15,6 +15,10 @@ class GroupPolicy < ApplicationPolicy
   alias_method :update?, :edit?
   alias_method :add_editor?, :edit?
 
+  def move?
+    user.super_admin?
+  end
+
   def delete?
     organisation_admin_or_super_admin?
   end

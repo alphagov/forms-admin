@@ -4,15 +4,15 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby file: ".ruby-version"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "8.0.2"
+gem "rails", "8.0.2.1"
 
 gem "activeresource", "~> 6.1"
 
 # Use postgresql as the database for Active Record
-gem "pg", "~> 1.5"
+gem "pg", "~> 1.6"
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", "~> 6.6.0"
+gem "puma", "~> 6.6.1"
 
 # Used for handling authentication
 gem "gds-sso"
@@ -72,8 +72,8 @@ gem "validate_url"
 gem "paper_trail"
 
 # For AWS interactions
-gem "aws-sdk-cloudwatch", "~> 1.116"
-gem "aws-sdk-codepipeline", "~> 1.101"
+gem "aws-sdk-cloudwatch", "~> 1.119"
+gem "aws-sdk-codepipeline", "~> 1.104"
 
 # For Mailchimp audience integration
 gem "MailchimpMarketing", "~> 3.0"
@@ -91,7 +91,7 @@ gem "after_commit_everywhere", "~> 1.6"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[mri mingw x64_mingw]
+  gem "debug", platforms: %i[mri windows], require: "debug/prelude"
 
   gem "factory_bot_rails"
   gem "faker"
@@ -123,4 +123,10 @@ group :test do
 
   # axe-core for running automated accessibility checks
   gem "axe-core-rspec"
+
+  gem "spring-commands-rspec"
+
+  # Enable running the specs in parallel (and optionally with Spring)
+  gem "parallel_rspec"
+  gem "spring-prspec"
 end

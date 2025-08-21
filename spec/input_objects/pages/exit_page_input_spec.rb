@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Pages::ExitPageInput, type: :model do
   let(:exit_page_input) { described_class.new(form:, page:, answer_value:) }
-  let(:form) { build :form, :ready_for_routing, id: 1 }
+  let(:form) { create :form, :ready_for_routing }
   let(:pages) { form.pages }
   let(:answer_value) { nil }
   let(:page) do

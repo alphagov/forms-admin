@@ -2,14 +2,14 @@ require "rails_helper"
 
 RSpec.describe Pages::DeleteConditionInput, type: :model do
   let(:delete_condition_input) { described_class.new(form:, page:, record: condition) }
-  let(:form) { build :form, :ready_for_routing, id: 1 }
+  let(:form) { create :form, :ready_for_routing }
   let(:pages) { form.pages }
   let(:page) { pages.second }
   let(:goto_page) { pages.last }
-  let(:answer_value) { "Wales" }
+  let(:answer_value) { "Option 1" }
   let(:goto_page_id) { goto_page.id }
   let(:skip_to_end) { false }
-  let(:condition) { build :condition, id: 2, form_id: form.id, page_id: page.id, routing_page_id: page.id, check_page_id: page.id, answer_value:, goto_page_id:, skip_to_end: }
+  let(:condition) { create :condition, routing_page_id: page.id, check_page_id: page.id, answer_value:, goto_page_id:, skip_to_end: }
 
   describe "validations" do
     it "is invalid if confirm is nil" do

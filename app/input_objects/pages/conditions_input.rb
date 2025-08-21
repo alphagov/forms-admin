@@ -39,7 +39,7 @@ class Pages::ConditionsInput < BaseInput
   end
 
   def routing_answer_options
-    options = page.answer_settings.selection_options.map { |option| OpenStruct.new(value: option.attributes[:name], label: option.attributes[:name]) }
+    options = page.answer_settings.selection_options.map { |option| OpenStruct.new(value: option[:name], label: option[:name]) }
     options << OpenStruct.new(value: :none_of_the_above.to_s, label: I18n.t("page_conditions.none_of_the_above")) if page.is_optional
 
     options

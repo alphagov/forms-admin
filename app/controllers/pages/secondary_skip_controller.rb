@@ -20,7 +20,7 @@ class Pages::SecondarySkipController < PagesController
       render template: "pages/secondary_skip/new", locals: {
         secondary_skip_input:,
         back_link_url: show_routes_path(form_id: current_form.id, page_id: page.id),
-      }, status: :unprocessable_entity
+      }, status: :unprocessable_content
     end
   end
 
@@ -42,7 +42,7 @@ class Pages::SecondarySkipController < PagesController
       render template: "pages/secondary_skip/edit", locals: {
         secondary_skip_input:,
         back_link_url: show_routes_path(form_id: current_form.id, page_id: page.id),
-      }, status: :unprocessable_entity
+      }, status: :unprocessable_content
     end
   end
 
@@ -64,7 +64,7 @@ class Pages::SecondarySkipController < PagesController
       render template: "pages/secondary_skip/delete", locals: {
         delete_secondary_skip_input:,
         back_link_url: show_routes_path(form_id: current_form.id, page_id: page.id),
-      }, status: :unprocessable_entity
+      }, status: :unprocessable_content
     end
   end
 

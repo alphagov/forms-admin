@@ -7,7 +7,7 @@ RSpec.describe DefaultGroupService do
 
   describe "#create_user_default_trial_group!" do
     let(:user) { create :user, name: "Batman" }
-    let(:form) { build :form, id: 1 }
+    let(:form) { create :form }
     let(:forms_response) do
       [form]
     end
@@ -113,7 +113,7 @@ RSpec.describe DefaultGroupService do
       before do
         another_user = create :user, name: "Batman", email: "batsignal@example.gov.uk", organisation: user.organisation
 
-        allow(FormRepository).to receive(:where).with(creator_id: another_user.id).and_return([build(:form, id: 10)])
+        allow(FormRepository).to receive(:where).with(creator_id: another_user.id).and_return([create(:form)])
 
         default_group_service.create_user_default_trial_group!(another_user)
       end
@@ -133,7 +133,7 @@ RSpec.describe DefaultGroupService do
         before do
           yet_another_user = create :user, name: "Batman", email: "batman@joker.example.com", organisation: user.organisation
 
-          allow(FormRepository).to receive(:where).with(creator_id: yet_another_user.id).and_return([build(:form, id: 100)])
+          allow(FormRepository).to receive(:where).with(creator_id: yet_another_user.id).and_return([create(:form)])
 
           default_group_service.create_user_default_trial_group!(yet_another_user)
         end

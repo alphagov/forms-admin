@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "pages/selection/type.html.erb", type: :view do
-  let(:form) { build :form, id: 1 }
+  let(:form) { create :form }
   let(:page) { build :page, routing_conditions: }
   let(:page_number) { 1 }
   let(:back_link_url) { "/a-back-link-url" }
@@ -70,7 +70,7 @@ describe "pages/selection/type.html.erb", type: :view do
       end
 
       context "when editing an existing question" do
-        let(:form) { build :form, id: 1, pages: [page] }
+        let(:form) { create :form, pages: [page] }
 
         context "when no routing conditions set" do
           it "does not display a warning about routes being deleted" do

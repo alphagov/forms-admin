@@ -65,6 +65,7 @@
   <% if policy(@group).edit? %>
     <li><%= govuk_link_to(t(".edit_group_name"), edit_group_path(@group)) %></li>
     <li><%= govuk_link_to(t(".edit_group_members"), group_members_path(@group)) %></li>
+    <% if policy(@group).move? %><li><%= govuk_link_to(t(".move"), move_group_path(@group)) %></li><% end %>
   <% else %>
     <li><%= govuk_link_to(t(".review_group_members"), group_members_path(@group)) %></li>
   <% end %>

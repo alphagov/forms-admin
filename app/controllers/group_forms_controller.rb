@@ -22,7 +22,7 @@ class GroupFormsController < ApplicationController
 
       redirect_to form_path(@form.id)
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 

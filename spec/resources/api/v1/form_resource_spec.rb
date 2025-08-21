@@ -4,6 +4,20 @@ describe Api::V1::FormResource, type: :model do
   let(:id) { 1 }
   let(:form) { described_class.new(id:, name: "Form 1", submission_email: "") }
 
+  describe "factory" do
+    it "has a valid factory" do
+      form = build :form_resource
+      expect(form).to be_valid
+    end
+
+    it "links pages together with the position and next_page attributes" do
+      pages = build_list(:page_resource, 5) { |page, index| page.id = index + 1 }
+      build(:form_resource, pages:)
+      expect(pages.map(&:position)).to eq [1, 2, 3, 4, 5]
+      expect(pages.map(&:next_page)).to eq [2, 3, 4, 5, nil]
+    end
+  end
+
   describe "#database_attributes" do
     it "includes attributes for ActiveRecord Form model" do
       expect(form.database_attributes).to eq({
@@ -19,29 +33,6 @@ describe Api::V1::FormResource, type: :model do
       expect(form.database_attributes).not_to include(
         :incomplete_tasks,
       )
-    end
-  end
-
-  describe "#destroy" do
-    context "when form is in a group" do
-      it "destroys the group" do
-        group = create :group
-        GroupForm.create!(group:, form_id: form.id)
-
-        ActiveResource::HttpMock.respond_to do |mock|
-          mock.post "/api/v1/forms", post_headers, { id: 1 }.to_json, 200
-          mock.delete "/api/v1/forms/1", delete_headers, nil, 204
-        end
-
-        # form must exist for ActiveResource to delete it
-        form.save!
-
-        expect {
-          form.destroy
-        }.to change(GroupForm, :count).by(-1)
-
-        expect(GroupForm.find_by(form_id: form.id)).to be_nil
-      end
     end
   end
 
@@ -137,6 +128,14 @@ describe Api::V1::FormResource, type: :model do
       it "returns the page position" do
         expect(completed_form.page_number(page)).to eq(1)
       end
+
+      context "when the page's attributes have changed but it has the same ID" do
+        let(:page) { build :page_resource, id: completed_form.pages.first.id }
+
+        it "returns the page position" do
+          expect(completed_form.page_number(page)).to eq(1)
+        end
+      end
     end
 
     context "with an new page" do
@@ -148,6 +147,14 @@ describe Api::V1::FormResource, type: :model do
     end
 
     context "with an unspecified page" do
+      it "returns the position for a new page" do
+        expect(completed_form.page_number(nil)).to eq(completed_form.pages.count + 1)
+      end
+    end
+
+    context "with a page which has a null id" do
+      let(:page) { build :page_resource, id: nil }
+
       it "returns the position for a new page" do
         expect(completed_form.page_number(nil)).to eq(completed_form.pages.count + 1)
       end
@@ -252,84 +259,6 @@ describe Api::V1::FormResource, type: :model do
     end
   end
 
-  describe "#metrics_data" do
-    let(:form) do
-      described_class.new(id: 2, live_at: Time.zone.now - 1.day)
-    end
-
-    context "when the form was made today" do
-      let(:form) do
-        described_class.new(id: 2, live_at: Time.zone.now)
-      end
-
-      before do
-        allow(CloudWatchService).to receive_messages(week_submissions: 0, week_starts: 0)
-      end
-
-      it "returns 0 weekly submissions" do
-        expect(form.metrics_data).to eq({ weekly_submissions: 0, weekly_starts: 0 })
-      end
-
-      it "does not call Cloudwatch" do
-        form.metrics_data
-        expect(CloudWatchService).not_to have_received(:week_submissions)
-        expect(CloudWatchService).not_to have_received(:week_starts)
-      end
-    end
-
-    context "when the form was made before today" do
-      before do
-        allow(CloudWatchService).to receive_messages(week_submissions: 1255, week_starts: 1991)
-      end
-
-      it "returns the correct number of weekly starts and submissions" do
-        expect(form.metrics_data).to eq({ weekly_submissions: 1255, weekly_starts: 1991 })
-      end
-
-      it "calls the CloudWatch service" do
-        form.metrics_data
-        expect(CloudWatchService).to have_received(:week_submissions).once
-        expect(CloudWatchService).to have_received(:week_starts).once
-      end
-    end
-
-    context "when AWS credentials have not been configured" do
-      before do
-        allow(Sentry).to receive(:capture_exception)
-        allow(CloudWatchService).to receive(:week_starts).and_raise(Aws::Errors::MissingCredentialsError)
-        allow(CloudWatchService).to receive(:week_submissions).and_raise(Aws::Errors::MissingCredentialsError)
-      end
-
-      it "returns nil and logs the exception in Sentry" do
-        expect(form.metrics_data).to be_nil
-        expect(Sentry).to have_received(:capture_exception).once
-      end
-    end
-
-    context "when CloudWatch returns an error" do
-      before do
-        allow(Sentry).to receive(:capture_exception)
-        allow(CloudWatchService).to receive(:week_starts).and_raise(Aws::CloudWatch::Errors::ServiceError)
-        allow(CloudWatchService).to receive(:week_submissions).and_raise(Aws::Errors::MissingCredentialsError)
-      end
-
-      it "returns nil and logs the exception in Sentry" do
-        expect(form.metrics_data).to be_nil
-        expect(Sentry).to have_received(:capture_exception).once
-      end
-    end
-
-    context "when the form is not live" do
-      let(:form) do
-        described_class.new(id: 2, made_live_date: nil)
-      end
-
-      it "returns nil" do
-        expect(form.metrics_data).to be_nil
-      end
-    end
-  end
-
   describe "#is_live?" do
     it "returns true if state live" do
       form.state = :live
@@ -388,6 +317,8 @@ describe Api::V1::FormResource, type: :model do
 
     it "returns the group if form is in a group" do
       group = create :group
+      form_record = create :form_record
+      form.id = form_record.id
       GroupForm.create!(form_id: form.id, group_id: group.id)
       expect(form.group).to eq group
     end

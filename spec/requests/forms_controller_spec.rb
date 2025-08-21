@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe FormsController, type: :request do
-  let(:form) { build(:form, id: 2) }
+  let(:form) { create(:form) }
   let(:group) { create(:group, organisation: standard_user.organisation) }
   let(:user) { standard_user }
 
@@ -14,13 +14,13 @@ RSpec.describe FormsController, type: :request do
 
   describe "Showing an existing form" do
     describe "Given a live form" do
-      let(:form) { build(:form, :live, id: 2) }
+      let(:form) { create(:form, :live) }
       let(:params) { {} }
 
       before do
         allow(FormRepository).to receive_messages(find: form, pages: form.pages)
 
-        get form_path(2, params)
+        get form_path(form.id, params)
       end
 
       it "renders the show template" do
@@ -36,7 +36,7 @@ RSpec.describe FormsController, type: :request do
       before do
         allow(FormRepository).to receive_messages(find: form, pages: form.pages)
 
-        get form_path(2)
+        get form_path(form.id)
       end
 
       it "renders the show template" do
@@ -50,7 +50,7 @@ RSpec.describe FormsController, type: :request do
       before do
         allow(FormRepository).to receive(:find).and_return(form)
 
-        get form_path(2)
+        get form_path(form.id)
       end
 
       it "Renders the forbidden page" do
@@ -64,38 +64,55 @@ RSpec.describe FormsController, type: :request do
   end
 
   describe "no form found" do
-    let(:no_data_found_response) do
-      {
-        "error": "not_found",
-      }
-    end
-
-    # TODO: Refactor this when we move from API to ActiveRecord
-    before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/999", headers, no_data_found_response, 404
+    context "when use_database_as_truth is false" do
+      let(:no_data_found_response) do
+        {
+          "error": "not_found",
+        }
       end
 
-      get form_path(999)
+      before do
+        allow(Settings).to receive(:use_database_as_truth).and_return(false)
+
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/999", headers, no_data_found_response, 404
+        end
+
+        get form_path(999)
+      end
+
+      it "Render the not found page" do
+        expect(response.body).to include(I18n.t("not_found.title"))
+      end
+
+      it "returns 404" do
+        expect(response.status).to eq(404)
+      end
     end
 
-    it "Render the not found page" do
-      expect(response.body).to include(I18n.t("not_found.title"))
-    end
+    context "when use_database_as_truth is true" do
+      before do
+        allow(Settings).to receive(:use_database_as_truth).and_return(true)
 
-    it "returns 404" do
-      expect(response.status).to eq(404)
+        get form_path(999)
+      end
+
+      it "Render the not found page" do
+        expect(response.body).to include(I18n.t("not_found.title"))
+      end
+
+      it "returns 404" do
+        expect(response.status).to eq(404)
+      end
     end
   end
 
   describe "#mark_pages_section_completed" do
     let(:pages) do
-      [build(:page, page_id: 99)]
+      [build(:page, id: 99)]
     end
 
-    let(:form) do
-      build(:form, id: 2, pages:, question_section_completed: "false")
-    end
+    let(:form) { create(:form, pages:, question_section_completed: "false") }
 
     let(:user) do
       standard_user
@@ -106,18 +123,18 @@ RSpec.describe FormsController, type: :request do
 
       login_as user
 
-      post form_pages_path(2), params: { forms_mark_pages_section_complete_input: { mark_complete: "true" } }
+      post form_pages_path(form.id), params: { forms_mark_pages_section_complete_input: { mark_complete: "true" } }
     end
 
     it "Redirects you to the form overview page" do
-      expect(response).to redirect_to(form_path(2))
+      expect(response).to redirect_to(form_path(form.id))
     end
 
     context "when the mark completed form is invalid" do
       before do
         allow(FormRepository).to receive_messages(find: form, save!: nil)
 
-        post form_pages_path(2), params: { forms_mark_pages_section_complete_input: { mark_complete: nil } }
+        post form_pages_path(form.id), params: { forms_mark_pages_section_complete_input: { mark_complete: nil } }
       end
 
       it "renders the index page" do

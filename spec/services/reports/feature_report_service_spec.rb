@@ -5,10 +5,11 @@ RSpec.describe Reports::FeatureReportService do
   let(:group) { create(:group) }
 
   before do
-    GroupForm.create!(form_id: 1, group:)
-    GroupForm.create!(form_id: 2, group:)
-    GroupForm.create!(form_id: 3, group:)
-    GroupForm.create!(form_id: 4, group:)
+    form_documents.each do |form_document|
+      form = create(:form)
+      GroupForm.create!(form: form, group: group)
+      form_document["form_id"] = form.id
+    end
   end
 
   describe "#report" do
@@ -90,7 +91,7 @@ RSpec.describe Reports::FeatureReportService do
       expect(questions).to match [
         a_hash_including(
           "form" => a_hash_including(
-            "form_id" => 1,
+            "form_id" => form_documents[0]["form_id"],
             "content" => a_hash_including(
               "name" => "All question types form",
             ),
@@ -101,7 +102,7 @@ RSpec.describe Reports::FeatureReportService do
         ),
         a_hash_including(
           "form" => a_hash_including(
-            "form_id" => 3,
+            "form_id" => form_documents[2]["form_id"],
             "content" => a_hash_including(
               "name" => "Branch route form",
             ),
@@ -144,7 +145,7 @@ RSpec.describe Reports::FeatureReportService do
       expect(questions).to match [
         a_hash_including(
           "form" => a_hash_including(
-            "form_id" => 1,
+            "form_id" => form_documents[0]["form_id"],
             "content" => a_hash_including(
               "name" => "All question types form",
             ),
@@ -160,7 +161,7 @@ RSpec.describe Reports::FeatureReportService do
         ),
         a_hash_including(
           "form" => a_hash_including(
-            "form_id" => 1,
+            "form_id" => form_documents[0]["form_id"],
             "content" => a_hash_including(
               "name" => "All question types form",
             ),
@@ -219,7 +220,7 @@ RSpec.describe Reports::FeatureReportService do
       forms = described_class.new(form_documents).forms_with_routes
       expect(forms).to match [
         a_hash_including(
-          "form_id" => 3,
+          "form_id" => form_documents[2]["form_id"],
           "content" => a_hash_including(
             "name" => "Branch route form",
           ),
@@ -234,7 +235,7 @@ RSpec.describe Reports::FeatureReportService do
           },
         ),
         a_hash_including(
-          "form_id" => 4,
+          "form_id" => form_documents[3]["form_id"],
           "content" => a_hash_including(
             "name" => "Skip route form",
           ),
@@ -255,13 +256,13 @@ RSpec.describe Reports::FeatureReportService do
       forms = described_class.new(form_documents).forms_with_routes
       expect(forms).to match [
         a_hash_including(
-          "form_id" => 3,
+          "form_id" => form_documents[2]["form_id"],
           "content" => a_hash_including(
             "name" => "Branch route form",
           ),
         ),
         a_hash_including(
-          "form_id" => 4,
+          "form_id" => form_documents[3]["form_id"],
           "content" => a_hash_including(
             "name" => "Skip route form",
           ),
@@ -296,7 +297,7 @@ RSpec.describe Reports::FeatureReportService do
       forms = described_class.new(form_documents).forms_with_branch_routes
       expect(forms).to match [
         a_hash_including(
-          "form_id" => 3,
+          "form_id" => form_documents[2]["form_id"],
           "content" => a_hash_including(
             "name" => "Branch route form",
           ),
@@ -317,7 +318,7 @@ RSpec.describe Reports::FeatureReportService do
       forms = described_class.new(form_documents).forms_with_branch_routes
       expect(forms).to match [
         a_hash_including(
-          "form_id" => 3,
+          "form_id" => form_documents[2]["form_id"],
           "content" => a_hash_including(
             "name" => "Branch route form",
           ),
@@ -352,7 +353,7 @@ RSpec.describe Reports::FeatureReportService do
       forms = described_class.new(form_documents).forms_with_payments
       expect(forms).to match [
         a_hash_including(
-          "form_id" => 1,
+          "form_id" => form_documents[0]["form_id"],
           "content" => a_hash_including(
             "name" => "All question types form",
           ),
@@ -377,7 +378,7 @@ RSpec.describe Reports::FeatureReportService do
       forms = described_class.new(form_documents).forms_with_exit_pages
       expect(forms).to match [
         a_hash_including(
-          "form_id" => 3,
+          "form_id" => form_documents[2]["form_id"],
           "content" => a_hash_including(
             "name",
           ),
@@ -402,7 +403,7 @@ RSpec.describe Reports::FeatureReportService do
       forms = described_class.new(form_documents).forms_with_csv_submission_enabled
       expect(forms).to match [
         a_hash_including(
-          "form_id" => 1,
+          "form_id" => form_documents[0]["form_id"],
           "content" => a_hash_including(
             "name" => "All question types form",
           ),

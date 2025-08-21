@@ -10,6 +10,7 @@ RSpec.describe "groups/show", type: :view do
   let(:membership_role) { :editor }
   let(:upgrade?) { false }
   let(:edit?) { true }
+  let(:move?) { false }
   let(:delete?) { false }
   let(:request_upgrade?) { false }
   let(:review_upgrade?) { false }
@@ -27,6 +28,7 @@ RSpec.describe "groups/show", type: :view do
                                       upgrade?: upgrade?,
                                       edit?: edit?,
                                       delete?: delete?,
+                                      move?: move?,
                                       request_upgrade?: request_upgrade?,
                                       review_upgrade?: review_upgrade?)
 
@@ -61,6 +63,20 @@ RSpec.describe "groups/show", type: :view do
 
     it "has a link to the review members page" do
       expect(rendered).to have_link "View members of this group", href: group_members_path(group)
+    end
+  end
+
+  context "when the user has permission to move the group" do
+    let(:move?) { true }
+
+    it "has a link to move the group" do
+      expect(rendered).to have_link("Move this group to another organisation")
+    end
+  end
+
+  context "when the user does not have permission to move the group" do
+    it "does not have a link to the move group page" do
+      expect(rendered).not_to have_link("Move this group to another organisation")
     end
   end
 

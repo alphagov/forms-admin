@@ -69,6 +69,22 @@ npm run test
 [rspec-rails]: https://github.com/rspec/rspec-rails
 [Vitest]: https://vitest.dev/
 
+### Running the RSpec tests in parallel
+
+You can run the RSpec tests in parallel with the following setup: you will first need to create multiple test databases:
+
+```bash
+bundle exec rake db:parallel:create db:parallel:prepare
+```
+
+You can then run the tests in parallel:
+
+```bash
+bundle exec prspec spec
+```
+
+[parallel_rspec]: https://github.com/willbryant/parallel_rspec
+
 ### Linting
 
 We use [RuboCop GOV.UK] for linting code. To autocorrect issues run:
@@ -155,7 +171,7 @@ features:
   some_feature: true
 ```
 
-You can then use the [feature service](app/service/feature_service.rb) to check whether the feature is enabled or not. Eg. `FeatureService.enabled?(:some_feature)`.
+You can then use the [feature service](app/services/feature_service.rb) to check whether the feature is enabled or not. Eg. `FeatureService.enabled?(:some_feature)`.
 
 You can also nest features:
 
@@ -228,7 +244,7 @@ If you want to deliberately raise an exception to test, uncomment out the trigge
 
 The forms-admin app is containerised (see [Dockerfile](Dockerfile)) and can be deployed however you would normally deploy a containerised app.
 
-We host our apps using Amazon Web Services (AWS). You can [read about how deployments happen on our team wiki, if you have access](https://github.com/alphagov/forms-team/wiki/Deploying-code-changes-AWS).
+We host our apps using Amazon Web Services (AWS). You can [read about how deployments happen on our team wiki, if you have access](https://github.com/alphagov/forms-team/wiki/Deploying-code-changes-in-AWS).
 
 ### Logging
 

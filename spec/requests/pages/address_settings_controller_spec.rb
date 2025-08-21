@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Pages::AddressSettingsController, type: :request do
-  let(:form) { build :form, id: 1 }
+  let(:form) { create :form }
   let(:pages) { build_list :page, 5, answer_type: "address", form_id: 1 }
 
   let(:draft_question) do

@@ -89,8 +89,9 @@ class Api::V1::FormResource < ActiveResource::Base
 
   def page_number(page)
     return pages.length + 1 if page.nil?
+    return pages.length + 1 if page.id.nil?
 
-    index = pages.index { |existing_page| existing_page.attributes == page.attributes }
+    index = pages.index { |existing_page| existing_page.id == page.id }
     (index.nil? ? pages.length : index) + 1
   end
 
@@ -98,34 +99,8 @@ class Api::V1::FormResource < ActiveResource::Base
     Time.zone.parse(live_at.to_s).to_date if defined?(live_at)
   end
 
-  def metrics_data
-    return nil if made_live_date.nil?
-
-    # If the form went live today, there won't be any metrics to show
-    today = Time.zone.today
-
-    form_is_new = made_live_date == today
-
-    weekly_submissions = form_is_new ? 0 : CloudWatchService.week_submissions(form_id: id)
-    weekly_starts = form_is_new ? 0 : CloudWatchService.week_starts(form_id: id)
-
-    {
-      weekly_submissions:,
-      weekly_starts:,
-    }
-  rescue Aws::CloudWatch::Errors::ServiceError,
-         Aws::Errors::MissingCredentialsError => e
-
-    Sentry.capture_exception(e)
-    nil
-  end
-
   def file_upload_question_count
     pages.count { |p| p.answer_type.to_sym == :file }
-  end
-
-  after_destroy do
-    group_form&.destroy
   end
 
 private

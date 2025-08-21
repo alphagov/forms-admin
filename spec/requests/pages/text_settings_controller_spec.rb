@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Pages::TextSettingsController, type: :request do
-  let(:form) { build :form, id: 1 }
+  let(:form) { create :form }
   let(:pages) { build_list :page, 5, form_id: form.id }
   let(:page) { pages.first }
 

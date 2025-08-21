@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Forms::SubmissionEmailInput, type: :model do
-  let(:form) { build :form, id: 1, submission_email: "curent_value@gds.gov.uk" }
+  let(:form) { create :form, submission_email: "curent_value@gds.gov.uk" }
 
   let(:submission_email_input_with_user) do
     build :submission_email_input, :with_user,
@@ -103,7 +103,7 @@ RSpec.describe Forms::SubmissionEmailInput, type: :model do
 
         result = submission_email_input_with_user.submit
         expect(result).to be_truthy
-        form_submission_email = FormSubmissionEmail.find_by_form_id(1)
+        form_submission_email = FormSubmissionEmail.find_by_form_id(form.id)
         expect(form_submission_email).to be_present
         expect(form_submission_email.temporary_submission_email).to eq("test@test.gov.uk")
         expect(form_submission_email.confirmation_code).not_to be_nil
@@ -132,7 +132,7 @@ RSpec.describe Forms::SubmissionEmailInput, type: :model do
 
         result = submission_email_input_with_user.submit
         expect(result).to be_truthy
-        form_submission_email = FormSubmissionEmail.find_by_form_id(1)
+        form_submission_email = FormSubmissionEmail.find_by_form_id(form.id)
         expect(form_submission_email).to be_present
         expect(form_submission_email.temporary_submission_email).to eq("test@test.gov.uk")
         expect(form_submission_email.confirmation_code).not_to be_nil
@@ -191,7 +191,7 @@ RSpec.describe Forms::SubmissionEmailInput, type: :model do
 
         result = submission_email_input_with_user.submit
         expect(result).to be_truthy
-        form_submission_email = FormSubmissionEmail.find_by_form_id(1)
+        form_submission_email = FormSubmissionEmail.find_by_form_id(form.id)
         expect(form_submission_email).to be_present
         expect(form_submission_email.temporary_submission_email).to eq("test@test.gov.uk")
         expect(form_submission_email.confirmation_code).not_to be_nil
@@ -219,7 +219,7 @@ RSpec.describe Forms::SubmissionEmailInput, type: :model do
 
         result = submission_email_input_with_user.submit
         expect(result).to be_truthy
-        form_submission_email = FormSubmissionEmail.find_by_form_id(1)
+        form_submission_email = FormSubmissionEmail.find_by_form_id(form.id)
         expect(form_submission_email).to be_present
         expect(form_submission_email.temporary_submission_email).to eq("test@test.gov.uk")
         expect(form_submission_email.confirmation_code).not_to be_nil

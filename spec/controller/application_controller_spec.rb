@@ -3,8 +3,7 @@ require "rails_helper"
 describe ApplicationController, type: :controller do
   subject(:application_controller) { described_class.new }
 
-  let(:id) { 1 }
-  let(:form) { build :form }
+  let(:form) { create :form }
 
   describe "#user_ip" do
     [
@@ -82,22 +81,21 @@ describe ApplicationController, type: :controller do
   end
 
   describe "#current_form" do
-    it "returns the current form" do
-      params = ActionController::Parameters.new(form_id: id)
-      allow(Api::V1::FormResource).to receive(:find).with(id).and_return(form)
+    before do
+      allow(FormRepository).to receive(:find).with(form_id: form.id).and_return(form)
+      params = ActionController::Parameters.new(form_id: form.id)
       allow(controller).to receive(:params).and_return(params)
+    end
 
+    it "returns the current form" do
       expect(controller.current_form).to eq form
     end
 
     it "memorizes the find form request so it doesn't have to repeat the calls" do
-      params = ActionController::Parameters.new(form_id: id)
-      allow(Api::V1::FormResource).to receive(:find).with(id).and_return(form)
-      allow(controller).to receive(:params).and_return(params)
       controller.current_form
       controller.current_form
 
-      expect(Api::V1::FormResource).to have_received(:find).exactly(1).times
+      expect(FormRepository).to have_received(:find).exactly(1).times
     end
   end
 

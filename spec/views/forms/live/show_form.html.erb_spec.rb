@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "forms/live/show_form.html.erb" do
   let(:form_metadata) { OpenStruct.new(has_draft_version: false) }
-  let(:form) { build(:form, :live, id: 1) }
+  let(:form) { build(:made_live_form, id: 1) }
 
   before do
     render(template: "forms/live/show_form", locals: { form:, form_metadata: })

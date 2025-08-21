@@ -9,9 +9,6 @@ class Pages::DeleteSecondarySkipInput < ConfirmActionInput
     result = true
 
     if confirmed?
-
-      record.prefix_options[:form_id] = form.id
-      record.prefix_options[:page_id] = record.routing_page_id
       result = ConditionRepository.destroy(record)
     end
 

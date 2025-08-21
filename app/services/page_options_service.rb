@@ -118,13 +118,7 @@ private
   end
 
   def date_options
-    [{ key: { text: I18n.t("page_options_service.answer_type") }, value: { text: date_answer_type_text } }]
-  end
-
-  def date_answer_type_text
-    return I18n.t("helpers.label.page.date_settings_options.input_types.#{@page.answer_settings.input_type}") if @page.answer_settings.input_type.to_sym == :date_of_birth
-
-    I18n.t("page_options_service.date")
+    [{ key: { text: I18n.t("page_options_service.answer_type") }, value: { text: I18n.t("page_options_service.date_type.#{@page.answer_settings.input_type}") } }]
   end
 
   def address_options

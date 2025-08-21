@@ -88,11 +88,11 @@ RSpec.describe Forms::ReceiveCsvController, type: :request do
       let(:submission_type) { nil }
 
       it "returns 422" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
-      it "does not update the form on the API" do
-        expect(form).not_to have_been_updated
+      it "does not update the form" do
+        expect(FormRepository).not_to have_received(:save!)
       end
 
       it "re-renders the page with an error" do

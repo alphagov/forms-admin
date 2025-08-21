@@ -47,19 +47,35 @@ class GroupsController < ApplicationController
     if @group.save
       redirect_to @group
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
   # PATCH/PUT /groups/1
   def update
     authorize @group
-    if @group.update(group_params)
-      success_message = @group.active? ? t("groups.success_messages.update") : nil
+
+    @group.assign_attributes(group_params)
+
+    if @group.active?
+      success_message = t("groups.success_messages.update") if @group.changed.include?("name")
+      success_message = t("groups.success_messages.move", org_name: @group.organisation.name) if @group.changed.include?("organisation_id")
+    else
+      success_message = nil
+    end
+
+    if @group.save
       redirect_to @group, success: success_message, status: :see_other
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
+  end
+
+  def move
+    authorize @group
+
+    @search_input = OrganisationSearchInput.new({ organisation_id: @group.organisation_id }.merge(search_params))
+    render :move
   end
 
   # GET /groups/1/delete
@@ -76,7 +92,7 @@ class GroupsController < ApplicationController
     @delete_confirmation_input = Groups::DeleteConfirmationInput.new(delete_confirmation_input_params)
 
     unless @delete_confirmation_input.valid?
-      return render :delete, status: :unprocessable_entity
+      return render :delete, status: :unprocessable_content
     end
 
     unless @delete_confirmation_input.confirmed?
@@ -87,7 +103,7 @@ class GroupsController < ApplicationController
       @group.destroy!
     rescue ActiveRecord::DeleteRestrictionError
       @delete_confirmation_input.errors.add(:confirm, :group_has_forms)
-      return render :delete, status: :unprocessable_entity
+      return render :delete, status: :unprocessable_content
     end
 
     redirect_to groups_path, success: t(".success", group_name: @group.name), status: :see_other
@@ -102,7 +118,7 @@ class GroupsController < ApplicationController
     authorize @group
 
     @confirm_upgrade_input = Groups::ConfirmUpgradeInput.new(confirm_upgrade_input_params)
-    return render :confirm_upgrade, status: :unprocessable_entity unless @confirm_upgrade_input.valid?
+    return render :confirm_upgrade, status: :unprocessable_content unless @confirm_upgrade_input.valid?
     return redirect_to @group unless @confirm_upgrade_input.confirmed?
 
     GroupService.new(group: @group, current_user: @current_user, host: request.host).upgrade_group
@@ -132,7 +148,7 @@ class GroupsController < ApplicationController
 
     @confirm_upgrade_input = Groups::ConfirmUpgradeInput.new(confirm_upgrade_input_params)
 
-    return render :review_upgrade, status: :unprocessable_entity unless @confirm_upgrade_input.valid?
+    return render :review_upgrade, status: :unprocessable_content unless @confirm_upgrade_input.valid?
 
     group_service = GroupService.new(group: @group, current_user: @current_user, host: request.host)
     if @confirm_upgrade_input.confirmed?
@@ -153,7 +169,7 @@ private
 
   # Only allow a list of trusted parameters through.
   def group_params
-    params.require(:group).permit(:name)
+    params.require(:group).permit(:name, :organisation_id)
   end
 
   def confirm_upgrade_input_params

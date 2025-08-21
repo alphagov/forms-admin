@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Forms::SharePreviewController, type: :request do
-  let(:id) { 2 }
-  let(:form) { build(:form, id:, share_preview_completed: false) }
+  let(:form) { create(:form, share_preview_completed: false) }
+  let(:id) { form.id }
 
   let(:current_user) { standard_user }
   let(:group) { create(:group, organisation: standard_user.organisation) }
@@ -104,7 +104,7 @@ RSpec.describe Forms::SharePreviewController, type: :request do
       end
 
       it "returns an 422" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "re-renders the page with an error" do

@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Pages::GuidanceController, type: :request do
-  let(:form) { build :form, id: 1 }
-  let(:pages) { build_list :page, 5, form_id: form.id }
+  let(:form) { create :form, id: 1 }
+  let(:pages) { create_list :page, 5, form_id: form.id }
   let(:page) { pages.first }
   let(:draft_question) { build :draft_question }
   let(:page_heading) { "Page heading" }
@@ -127,7 +127,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
         let(:page_heading) { nil }
 
         it "returns 422" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "renders the template" do
@@ -166,7 +166,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
   end
 
   describe "#update" do
-    let(:pages) { build_list :page, 5, :with_guidance, form_id: form.id }
+    let(:pages) { create_list :page, 5, :with_guidance, form_id: form.id }
     let(:route_to) { "preview" }
 
     before do
@@ -242,7 +242,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
         let(:page_heading) { nil }
 
         it "returns 422" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "renders the template" do

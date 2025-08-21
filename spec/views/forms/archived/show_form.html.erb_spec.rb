@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "archived/show_form.html.erb" do
   let(:form_metadata) { OpenStruct.new(has_draft_version: false) }
-  let(:form) { build(:form, :archived, id: 1) }
+  let(:form) { build(:made_live_form, id: 1) }
 
   before do
     render(template: "forms/archived/show_form", locals: { form:, form_metadata: })
@@ -24,17 +24,7 @@ describe "archived/show_form.html.erb" do
     expect(rendered).to have_link("#{form.pages.count} questions", href: "/forms/#{form.id}/archived/pages")
   end
 
-  context "when the form state is :archived" do
-    it "contains a link to make the form live again" do
-      expect(rendered).to have_link("Make this form live", href: "/forms/#{form.id}/unarchive")
-    end
-  end
-
-  context "when the form state is :archived_with_draft" do
-    let(:form) { build(:form, :archived_with_draft, id: 1) }
-
-    it "does not contain a link to make the form live again" do
-      expect(rendered).to have_link("Make this form live", href: "/forms/#{form.id}/unarchive")
-    end
+  it "contains a link to make the form live again" do
+    expect(rendered).to have_link("Make this form live", href: "/forms/#{form.id}/unarchive")
   end
 end

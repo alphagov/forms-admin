@@ -13,7 +13,7 @@ module Forms
 
       @make_live_input = MakeLiveInput.new(**unarchive_form_params)
 
-      return render "unarchive_form", status: :unprocessable_entity, locals: { current_form: } unless @make_live_input.valid?
+      return render "unarchive_form", status: :unprocessable_content, locals: { current_form: } unless @make_live_input.valid?
       return redirect_to archived_form_path(current_form.id) unless @make_live_input.confirmed?
 
       @make_form_live_service = MakeFormLiveService.call(current_form:, current_user:)

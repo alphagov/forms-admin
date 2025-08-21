@@ -27,7 +27,7 @@ describe EmailTaskStatusService do
 
   describe "#incomplete_email_tasks" do
     context "when mandatory tasks are complete" do
-      let(:form) { build :form, :live }
+      let(:form) { create :form, :live }
 
       it "returns no incomplete tasks" do
         expect(email_task_status_service.incomplete_email_tasks).to be_empty
@@ -35,7 +35,7 @@ describe EmailTaskStatusService do
     end
 
     context "when a form is incomplete and should still be in draft state" do
-      let(:form) { build :form, :new_form }
+      let(:form) { create :form, :new_form }
 
       it "returns a set of keys related to missing fields" do
         expect(email_task_status_service.incomplete_email_tasks).to match_array(%i[missing_submission_email])
@@ -44,7 +44,7 @@ describe EmailTaskStatusService do
   end
 
   describe "#email_task_statuses" do
-    let(:form) { build :form, :live }
+    let(:form) { create :form, :live }
 
     it "returns a hash with each of the email task statuses" do
       expected_hash = {

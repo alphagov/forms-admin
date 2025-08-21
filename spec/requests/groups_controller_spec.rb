@@ -155,11 +155,7 @@ RSpec.describe "/groups", type: :request do
       end
 
       it "assigns a list of forms in the group to present" do
-        forms = build_list(:form, 3, created_at: "2024-10-08T07:31:15.762Z") { |form, i| form.id = i }
-
-        forms.each do |form|
-          allow(FormRepository).to receive(:find).with(form_id: form.id).and_return(form)
-        end
+        forms = create_list(:form, 3, created_at: "2024-10-08T07:31:15.762Z")
 
         member_group.group_forms << forms.map { |form| GroupForm.create! form_id: form.id, group_id: member_group.id }
         member_group.save!
@@ -287,7 +283,7 @@ RSpec.describe "/groups", type: :request do
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post groups_url, params: { group: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
@@ -346,7 +342,7 @@ RSpec.describe "/groups", type: :request do
       context "with invalid parameters" do
         it "renders a response with 422 status (i.e. to display the 'edit' template)" do
           patch group_url(member_group), params: { group: invalid_attributes }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
     end
@@ -379,6 +375,30 @@ RSpec.describe "/groups", type: :request do
       it "renders a 404 not found response" do
         patch group_url(nonexistent_group), params: { group: valid_attributes }
         expect(response).to have_http_status :not_found
+      end
+    end
+  end
+
+  describe "GET /move" do
+    let(:group) { create(:group) }
+
+    context "when user is basic" do
+      it "is forbidden" do
+        get move_group_path(group)
+
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when user is a super admin" do
+      before do
+        login_as_super_admin_user
+      end
+
+      it "is allowed" do
+        get move_group_path(group)
+
+        expect(response).to have_http_status(:ok)
       end
     end
   end
@@ -467,8 +487,8 @@ RSpec.describe "/groups", type: :request do
 
         context "but group has forms in it" do
           before do
-            GroupForm.create! group:, form_id: 1
-            GroupForm.create! group:, form_id: 2
+            GroupForm.create! group:, form: create(:form)
+            GroupForm.create! group:, form: create(:form)
           end
 
           it "does not delete the group" do
@@ -479,7 +499,7 @@ RSpec.describe "/groups", type: :request do
 
           it "returns an error" do
             delete(group_url(group), params:)
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
           end
 
           it "re-renders the confirm delete view with an error" do
@@ -517,7 +537,7 @@ RSpec.describe "/groups", type: :request do
 
         it "returns an error" do
           delete(group_url(group), params:)
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "re-renders the confirm delete view with an error" do
@@ -555,8 +575,8 @@ RSpec.describe "/groups", type: :request do
 
         context "but group has forms in it" do
           before do
-            GroupForm.create! group:, form_id: 1
-            GroupForm.create! group:, form_id: 2
+            GroupForm.create! group:, form: create(:form)
+            GroupForm.create! group:, form: create(:form)
           end
 
           it "does not delete the group" do
@@ -567,7 +587,7 @@ RSpec.describe "/groups", type: :request do
 
           it "returns an error" do
             delete(group_url(group), params:)
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
           end
 
           it "re-renders the confirm delete view with an error" do
@@ -605,7 +625,7 @@ RSpec.describe "/groups", type: :request do
 
         it "returns an error" do
           delete(group_url(group), params:)
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "re-renders the confirm delete view with an error" do
@@ -710,7 +730,7 @@ RSpec.describe "/groups", type: :request do
         end
 
         it "returns 422" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "re-renders the confirm upgrade page with an error" do
@@ -924,7 +944,7 @@ RSpec.describe "/groups", type: :request do
         end
 
         it "returns 422" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "re-renders the confirm upgrade page with an error" do

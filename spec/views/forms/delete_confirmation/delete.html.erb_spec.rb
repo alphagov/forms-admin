@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "forms/delete_confirmation/delete" do
-  let(:form) { build :form, id: 1, name: "Test form" }
+  let(:form) { create :form, name: "Test form" }
 
   before do
     assign(:back_url, form_path(form_id: 1))

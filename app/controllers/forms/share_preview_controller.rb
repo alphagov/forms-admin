@@ -14,7 +14,7 @@ module Forms
         success_message = @share_preview_input.marked_complete? ? t("banner.success.form.share_preview_completed") : nil
         redirect_to form_path(current_form.id), success: success_message
       else
-        render "new", status: :unprocessable_entity
+        render "new", status: :unprocessable_content
       end
     end
 

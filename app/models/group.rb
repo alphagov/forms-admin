@@ -19,6 +19,7 @@ class Group < ApplicationRecord
   end
 
   has_many :group_forms, dependent: :restrict_with_exception
+  has_many :forms, through: :group_forms, dependent: :restrict_with_exception
 
   scope :for_user, ->(user) { joins(:memberships).where(memberships: { user_id: user.id }) }
 

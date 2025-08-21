@@ -12,6 +12,24 @@ RSpec.describe Page, type: :model do
     expect(page).to be_valid
   end
 
+  shared_examples "update form state" do
+    context "when the form is live" do
+      let(:form) { create(:form_record, :live) }
+
+      it "updates the form state to live_with_draft" do
+        expect(form.state).to eq("live_with_draft")
+      end
+    end
+
+    context "when the form is archived" do
+      let(:form) { create(:form_record, :archived) }
+
+      it "updates the form state to archived_with_draft" do
+        expect(form.state).to eq("archived_with_draft")
+      end
+    end
+  end
+
   describe "associations" do
     let(:form) { create :form_record }
     let(:page) { create :page_record, form: }
@@ -329,23 +347,10 @@ RSpec.describe Page, type: :model do
       expect(form.question_section_completed).to be false
     end
 
-    context "when the form is live" do
-      let(:form) { create(:form_record, :live) }
-
-      it "updates the form state to live_with_draft" do
+    it_behaves_like "update form state" do
+      before do
         page.question_text = "Edited question"
         page.save_and_update_form
-        expect(form.state).to eq("live_with_draft")
-      end
-    end
-
-    context "when the form is archived" do
-      let(:form) { create(:form_record, :archived) }
-
-      it "updates the form state to archived_with_draft" do
-        page.question_text = "Edited question"
-        page.save_and_update_form
-        expect(form.state).to eq("archived_with_draft")
       end
     end
 
@@ -393,6 +398,126 @@ RSpec.describe Page, type: :model do
     end
   end
 
+  describe "#move_page" do
+    let(:form) { create :form, :with_pages, question_section_completed: true }
+    let(:page) { form.pages.second }
+
+    context "when direction is up" do
+      it "moves the page towards the front of the form" do
+        expect {
+          page.move_page(:up)
+        }.to change(page, :position).by(-1)
+      end
+
+      it "sets form.question_section_completed to false" do
+        page.move_page(:up)
+        expect(form.question_section_completed).to be false
+      end
+
+      it_behaves_like "update form state" do
+        before do
+          page.move_page(:up)
+        end
+      end
+
+      context "when the page is already the first page in the form" do
+        let(:page) { form.pages.first }
+
+        it "does not change the position of the page" do
+          expect {
+            page.move_page(:up)
+          }.not_to change(page, :position)
+        end
+
+        it "sets form.question_section_completed to false" do
+          page.move_page(:up)
+          expect(form.question_section_completed).to be false
+        end
+      end
+    end
+
+    context "when direction is down" do
+      it "moves the page towards the end of the form" do
+        expect {
+          page.move_page(:down)
+        }.to change(page, :position).by(1)
+      end
+
+      it "sets form.question_section_completed to false" do
+        page.move_page(:down)
+        expect(form.question_section_completed).to be false
+      end
+
+      it_behaves_like "update form state" do
+        before do
+          page.move_page(:down)
+        end
+      end
+
+      context "when the page is already the last page in the form" do
+        let(:page) { form.pages.last }
+
+        it "does not change the position of the page" do
+          expect {
+            page.move_page(:down)
+          }.not_to change(page, :position)
+        end
+
+        it "sets form.question_section_completed to false" do
+          page.move_page(:down)
+          expect(form.question_section_completed).to be false
+        end
+      end
+    end
+
+    context "when direction is neither up nor down" do
+      it "does not move the page" do
+        expect {
+          page.move_page(:left)
+        }.not_to change(page, :position)
+      end
+
+      it "does not set form.question_section_completed to false" do
+        page.move_page(:left)
+        expect(form.question_section_completed).to be true
+      end
+    end
+  end
+
+  describe "next_page" do
+    context "when there is no next page" do
+      it "returns nil" do
+        expect(page.next_page).to be_nil
+      end
+    end
+
+    context "when there is a next page" do
+      let!(:next_page) { create :page_record, form: page.form }
+
+      it "returns the next page" do
+        expect(page.next_page).to eq(next_page.id)
+      end
+    end
+  end
+
+  describe "#has_next_page?" do
+    context "when there is no next page" do
+      it "returns false" do
+        expect(page.has_next_page?).to be false
+      end
+    end
+
+    context "when there is a next page" do
+      before do
+        create :page_record, form: page.form
+      end
+
+      it "returns true" do
+        expect(page.has_next_page?).to be true
+      end
+    end
+  end
+
   describe "#has_routing_errors" do
     subject(:page) { build :page_record, :with_selection_settings, routing_conditions: [condition] }
 
@@ -414,6 +539,105 @@ RSpec.describe Page, type: :model do
 
       it "returns true" do
         expect(page.has_routing_errors).to be true
+      end
+    end
+  end
+
+  describe "#answer_settings" do
+    context "when the answer_settings are a Hash" do
+      let(:page) { build :page_record, answer_settings: { "first_key" => "first_keys_value", "second_key" => { "third_key" => "third_keys_value" } } }
+
+      it "returns an OpenStruct with the answer settings" do
+        expect(page.answer_settings).to be_a(OpenStruct)
+        expect(page.answer_settings.first_key).to eq("first_keys_value")
+        expect(page.answer_settings.second_key.third_key).to eq("third_keys_value")
+      end
+    end
+
+    context "when the answer_settings are from the ActiveResource page object" do
+      let(:page_resource) { build :page_resource, id: 1, answer_settings: { "first_key" => "first_keys_value", "second_key" => { "third_key" => "third_keys_value" } } }
+
+      before do
+        ActiveResource::HttpMock.respond_to do |mock|
+          mock.get "/api/v1/forms/#{form.id}/pages/#{page_resource.id}", headers, page_resource.to_json, 200
+        end
+      end
+
+      it "returns an DataStruct with the answer settings" do
+        # load the resource as if it's coming from the API to ensure we can handle the answer_settings attribute which
+        # has type Api::V1::PageResource::AnswerSettings
+        retrieved_page_resource = Api::V1::PageResource.find(page_resource.id, params: { form_id: form.id })
+        page = described_class.new(answer_settings: retrieved_page_resource.answer_settings)
+
+        expect(page.answer_settings).to be_a(DataStruct)
+        expect(page.answer_settings.first_key).to eq("first_keys_value")
+        expect(page.answer_settings.second_key.third_key).to eq("third_keys_value")
+      end
+    end
+  end
+
+  describe "#question_with_number" do
+    let(:page) { described_class.new(question_text: "What's your name?", position: 5) }
+
+    it "returns the page number and question text as a string" do
+      expect(page.question_with_number).to eq("#{page.position}. #{page.question_text}")
+    end
+  end
+
+  describe "#show_optional_suffix?" do
+    let(:page) { described_class.new(is_optional:, answer_type:) }
+    let(:is_optional) { "true" }
+    let(:answer_type) { "national_insurance_number" }
+
+    context "when question is optional and answer type is not selection" do
+      it "returns true" do
+        expect(page.show_optional_suffix?).to be true
+      end
+    end
+
+    context "when question is optional and has answer_type selection" do
+      let(:answer_type) { "selection" }
+
+      it "returns false" do
+        expect(page.show_optional_suffix?).to be false
+      end
+    end
+
+    context "when question is not optional and answer type is not selection" do
+      let(:is_optional) { "false" }
+
+      it "returns false" do
+        expect(page.show_optional_suffix?).to be false
+      end
+    end
+  end
+
+  describe "#as_form_document_step" do
+    let!(:page) { create :page, form: }
+    let!(:second_page) { create :page, form: }
+
+    it "has an id" do
+      expect(page.as_form_document_step).to match a_hash_including("id" => page.id)
+    end
+
+    it "has a position" do
+      expect(page.as_form_document_step).to match a_hash_including("position" => page.position)
+    end
+
+    it "has a next_step_id" do
+      expect(page.as_form_document_step).to match a_hash_including("next_step_id" => second_page.id)
+    end
+
+    it "includes all attributes for the page as a step" do
+      page_attributes = described_class.attribute_names - %w[id form_id next_page position created_at updated_at]
+      expect(page.as_form_document_step["data"]).to match a_hash_including(*page_attributes)
+    end
+
+    context "when there are conditions associated with the page" do
+      let!(:condition) { create :condition, routing_page_id: page.id, check_page_id: page.id }
+
+      it "includes the routing conditions" do
+        expect(page.reload.as_form_document_step["routing_conditions"]).to include(condition.as_json)
       end
     end
   end

@@ -21,7 +21,7 @@ class GroupMembersController < ApplicationController
       redirect_to group_members_path(@group.external_id),
                   success: t(".success", user_name: @group_member_input.invited_user.name)
     else
-      render :new, status: :unprocessable_entity, locals: { show_role_options: show_role_options? }
+      render :new, status: :unprocessable_content, locals: { show_role_options: show_role_options? }
     end
   end
 

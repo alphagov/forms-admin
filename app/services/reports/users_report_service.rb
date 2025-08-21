@@ -14,7 +14,10 @@ class Reports::UsersReportService
 private
 
   def rows
-    as_data_rows(org_name_user_count)
+    as_data_rows(org_name_user_count).unshift([
+      { text: I18n.t("reports.users.table_headings.total_number_of_users") },
+      { text: total_user_count, numeric: true },
+    ])
   end
 
   def as_data_rows(raw_data)
@@ -31,5 +34,9 @@ private
       .order(Arel.sql("COUNT(users.id) DESC"))
       .order("organisations.name")
       .pluck("organisations.name", "COUNT(users.id)")
+  end
+
+  def total_user_count
+    User.count
   end
 end

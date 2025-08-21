@@ -142,7 +142,7 @@ RSpec.describe "usage of omniauth-auth0 gem" do
   end
 
   describe "Google workspace integration" do
-    let(:form) { build :form, :with_active_resource, id: 1, name: "Apply for a juggling license" }
+    let(:form) { create :form, :with_active_resource, name: "Apply for a juggling license" }
 
     context "when a super-admin user is logged in" do
       let(:user) { super_admin_user }

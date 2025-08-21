@@ -1,15 +1,22 @@
 require "rails_helper"
 
 feature "Editing answer_settings for existing question", type: :feature do
-  let(:form) { build :form, id: 1, pages: }
+  let(:form) { create :form }
   let(:group) { create(:group, organisation: standard_user.organisation) }
+  let(:pages) { form.reload.pages }
 
   before do
+    create(:page, :with_address_settings, form:)
+    create(:page, :with_date_settings, form:, input_type: "date_of_birth")
+    create(:page, :with_name_settings, form:, input_type: "first_middle_and_last_name", title_needed: "true")
+    create(:page, :with_selection_settings, form:, is_optional: true)
+    create(:page, :with_text_settings, form:, input_type: "long_text")
+
     allow(FormRepository).to receive_messages(find: form, pages:)
     allow(PageRepository).to receive_messages(create!: true)
 
     pages.each do |page|
-      allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: 1).and_return(page)
+      allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: form.id).and_return(page)
     end
     allow(PageRepository).to receive(:create!).with(hash_including(form_id: 1))
 
@@ -20,13 +27,6 @@ feature "Editing answer_settings for existing question", type: :feature do
   end
 
   context "when a form has existing pages with answer types" do
-    let(:address_question) { build(:page, :with_address_settings, form_id: 1) }
-    let(:date_question) { build(:page, :with_date_settings, form_id: 1, input_type: "date_of_birth") }
-    let(:name_question) { build(:page, :with_name_settings, form_id: 1, input_type: "first_middle_and_last_name", title_needed: "true") }
-    let(:selection_question) { build(:page, :with_selection_settings, form_id: 1, is_optional: true) }
-    let(:text_question) { build(:page, :with_text_settings, form_id: 1, input_type: "long_text") }
-    let(:pages) { [address_question, date_question, name_question, selection_question, text_question] }
-
     scenario "view answer_settings for each answer type and check the values are set" do
       when_i_viewing_an_existing_form
       and_i_view_a_list_of_existing_questions

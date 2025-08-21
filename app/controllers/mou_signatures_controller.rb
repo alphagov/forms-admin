@@ -26,10 +26,10 @@ class MouSignaturesController < ApplicationController
     if @mou_signature.save
       redirect_to confirmation_mou_signature_url
     else
-      render(:new, status: :unprocessable_entity)
+      render(:new, status: :unprocessable_content)
     end
   rescue ActiveRecord::RecordNotUnique
-    render(:new, status: :unprocessable_entity)
+    render(:new, status: :unprocessable_content)
   end
 
   def confirmation

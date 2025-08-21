@@ -1,12 +1,20 @@
 require "rails_helper"
 
 describe CloudWatchService do
+  subject(:cloud_watch_service) { described_class.new(form_id, made_live_date) }
+
   let(:forms_env) { "test" }
   let(:form_id) { 3 }
+  let(:made_live_date) { live_at.to_date }
+  let(:live_at) { Time.zone.now - 1.day }
 
-  before do
-    allow(Settings).to receive(:forms_env).and_return(forms_env)
-  end
+  let(:cloud_watch_client) { Aws::CloudWatch::Client.new(stub_responses: true) }
+
+  let(:submitted_datapoints) { [{ sum: total_submissions }] }
+  let(:total_submissions) { 3.0 }
+
+  let(:started_datapoints) { [{ sum: total_starts }] }
+  let(:total_starts) { 5.0 }
 
   around do |example|
     travel_to(Time.zone.local(2021, 1, 1, 4, 30, 0)) do
@@ -14,37 +22,57 @@ describe CloudWatchService do
     end
   end
 
-  describe "#week_submissions" do
-    let(:datapoints) { [{ sum: total_submissions }] }
-    let(:total_submissions) { 3.0 }
+  before do
+    allow(Settings).to receive(:forms_env).and_return(forms_env)
 
-    it "calls the cloudwatch client with get_metric_statistics" do
-      cloudwatch_client = Aws::CloudWatch::Client.new(stub_responses: true)
-      metric_response = cloudwatch_client.stub_data(:get_metric_statistics, datapoints:)
+    allow(Aws::CloudWatch::Client).to receive(:new).and_return(cloud_watch_client)
 
-      allow(Aws::CloudWatch::Client).to receive(:new).and_return(cloudwatch_client)
+    submitted_metric_response = cloud_watch_client.stub_data(:get_metric_statistics, datapoints: submitted_datapoints)
+    allow(cloud_watch_client).to receive(:get_metric_statistics).with({
+      metric_name: "Submitted",
+      namespace: "Forms",
+      dimensions: [
+        {
+          name: "Environment",
+          value: forms_env,
+        },
+        {
+          name: "FormId",
+          value: form_id.to_s,
+        },
+      ],
+      start_time: Time.zone.now.midnight - 7.days,
+      end_time: Time.zone.now.midnight,
+      period: 604_800,
+      statistics: %w[Sum],
+      unit: "Count",
+    }).and_return(submitted_metric_response)
 
-      allow(cloudwatch_client).to receive(:get_metric_statistics).with({
-        metric_name: "Submitted",
-        namespace: "Forms",
-        dimensions: [
-          {
-            name: "Environment",
-            value: forms_env,
-          },
-          {
-            name: "FormId",
-            value: form_id.to_s,
-          },
-        ],
-        start_time: Time.zone.now.midnight - 7.days,
-        end_time: Time.zone.now.midnight,
-        period: 604_800,
-        statistics: %w[Sum],
-        unit: "Count",
-      }).and_return(metric_response)
+    started_metric_response = cloud_watch_client.stub_data(:get_metric_statistics, datapoints: started_datapoints)
+    allow(cloud_watch_client).to receive(:get_metric_statistics).with({
+      metric_name: "Started",
+      namespace: "Forms",
+      dimensions: [
+        {
+          name: "Environment",
+          value: forms_env,
+        },
+        {
+          name: "FormId",
+          value: form_id.to_s,
+        },
+      ],
+      start_time: Time.zone.now.midnight - 7.days,
+      end_time: Time.zone.now.midnight,
+      period: 604_800,
+      statistics: %w[Sum],
+      unit: "Count",
+    }).and_return(started_metric_response)
+  end
 
-      expect(cloudwatch_client).to receive(:get_metric_statistics).with({
+  context "when CloudWatch returns metrics" do
+    it "calls the CloudWatch client to get the submitted metrics" do
+      expect(cloud_watch_client).to receive(:get_metric_statistics).with({
         metric_name: "Submitted",
         namespace: "Forms",
         dimensions: [
@@ -64,109 +92,102 @@ describe CloudWatchService do
         unit: "Count",
       }).once
 
-      described_class.week_submissions(form_id:)
+      cloud_watch_service.metrics_data
     end
 
-    it "returns the sum for the datapoint in the response" do
-      cloudwatch_client = Aws::CloudWatch::Client.new(stub_responses: true)
-      metric_response = cloudwatch_client.stub_data(:get_metric_statistics, datapoints:)
-      cloudwatch_client.stub_responses(:get_metric_statistics, metric_response)
-
-      allow(Aws::CloudWatch::Client).to receive(:new).and_return(cloudwatch_client)
-
-      expect(described_class.week_submissions(form_id:)).to eq(total_submissions)
+    it "returns the week submissions total" do
+      expect(cloud_watch_service.metrics_data[:weekly_submissions]).to eq(total_submissions)
     end
 
-    context "when there is no submission data for the form" do
-      let(:datapoints) { [] }
+    it "calls the CloudWatch client to get the started metrics" do
+      expect(cloud_watch_client).to receive(:get_metric_statistics).with({
+        metric_name: "Started",
+        namespace: "Forms",
+        dimensions: [
+          {
+            name: "Environment",
+            value: forms_env,
+          },
+          {
+            name: "FormId",
+            value: form_id.to_s,
+          },
+        ],
+        start_time: Time.zone.now.midnight - 7.days,
+        end_time: Time.zone.now.midnight,
+        period: 604_800,
+        statistics: %w[Sum],
+        unit: "Count",
+      }).once
 
-      it "returns 0 if there is no data for the form" do
-        cloudwatch_client = Aws::CloudWatch::Client.new(stub_responses: true)
-        metric_response = cloudwatch_client.stub_data(:get_metric_statistics, datapoints:)
-        cloudwatch_client.stub_responses(:get_metric_statistics, metric_response)
+      cloud_watch_service.metrics_data
+    end
 
-        allow(Aws::CloudWatch::Client).to receive(:new).and_return(cloudwatch_client)
-
-        expect(described_class.week_submissions(form_id:)).to eq(0)
-      end
+    it "returns the week starts total" do
+      expect(cloud_watch_service.metrics_data[:weekly_starts]).to eq(total_starts)
     end
   end
 
-  describe "#week_starts" do
-    let(:datapoints) { [{ sum: total_starts }] }
-    let(:total_starts) { 5.0 }
+  context "when there is no data for the submitted metric" do
+    let(:submitted_datapoints) { [] }
 
-    it "calls the cloudwatch client with get_metric_statistics" do
-      cloudwatch_client = Aws::CloudWatch::Client.new(stub_responses: true)
-      metric_response = cloudwatch_client.stub_data(:get_metric_statistics, datapoints:)
+    it "returns 0 for the weekly submissions total" do
+      expect(cloud_watch_service.metrics_data[:weekly_submissions]).to eq(0)
+    end
+  end
 
-      allow(Aws::CloudWatch::Client).to receive(:new).and_return(cloudwatch_client)
+  context "when there is no data for the started metric" do
+    let(:started_datapoints) { [] }
 
-      allow(cloudwatch_client).to receive(:get_metric_statistics).with({
-        metric_name: "Started",
-        namespace: "Forms",
-        dimensions: [
-          {
-            name: "Environment",
-            value: forms_env,
-          },
-          {
-            name: "FormId",
-            value: form_id.to_s,
-          },
-        ],
-        start_time: Time.zone.now.midnight - 7.days,
-        end_time: Time.zone.now.midnight,
-        period: 604_800,
-        statistics: %w[Sum],
-        unit: "Count",
-      }).and_return(metric_response)
+    it "returns 0 for the weekly starts total" do
+      expect(cloud_watch_service.metrics_data[:weekly_starts]).to eq(0)
+    end
+  end
 
-      expect(cloudwatch_client).to receive(:get_metric_statistics).with({
-        metric_name: "Started",
-        namespace: "Forms",
-        dimensions: [
-          {
-            name: "Environment",
-            value: forms_env,
-          },
-          {
-            name: "FormId",
-            value: form_id.to_s,
-          },
-        ],
-        start_time: Time.zone.now.midnight - 7.days,
-        end_time: Time.zone.now.midnight,
-        period: 604_800,
-        statistics: %w[Sum],
-        unit: "Count",
-      }).once
+  context "when the form was made today" do
+    let(:live_at) { Time.zone.now }
 
-      described_class.week_starts(form_id:)
+    it "returns 0 weekly submissions" do
+      expect(cloud_watch_service.metrics_data).to eq({ weekly_submissions: 0, weekly_starts: 0 })
     end
 
-    it "returns the sum for the datapoint in the response" do
-      cloudwatch_client = Aws::CloudWatch::Client.new(stub_responses: true)
-      metric_response = cloudwatch_client.stub_data(:get_metric_statistics, datapoints:)
-      cloudwatch_client.stub_responses(:get_metric_statistics, metric_response)
+    it "does not call CloudWatch" do
+      cloud_watch_service.metrics_data
+      expect(cloud_watch_client).not_to have_received(:get_metric_statistics)
+    end
+  end
 
-      allow(Aws::CloudWatch::Client).to receive(:new).and_return(cloudwatch_client)
-
-      expect(described_class.week_starts(form_id:)).to eq(total_starts)
+  context "when AWS credentials have not been configured" do
+    before do
+      allow(Sentry).to receive(:capture_exception)
+      allow(cloud_watch_client).to receive(:get_metric_statistics).and_raise(Aws::Errors::MissingCredentialsError)
     end
 
-    context "when there is no submission data for the form" do
-      let(:datapoints) { [] }
+    it "returns nil and logs the exception in Sentry" do
+      expect(cloud_watch_service.metrics_data).to be_nil
+      expect(Sentry).to have_received(:capture_exception).once
+    end
+  end
 
-      it "returns 0 if there is no data for the form" do
-        cloudwatch_client = Aws::CloudWatch::Client.new(stub_responses: true)
-        metric_response = cloudwatch_client.stub_data(:get_metric_statistics, datapoints:)
-        cloudwatch_client.stub_responses(:get_metric_statistics, metric_response)
+  context "when CloudWatch returns an error" do
+    before do
+      allow(Sentry).to receive(:capture_exception)
+      allow(cloud_watch_client)
+        .to receive(:get_metric_statistics)
+        .and_raise(Aws::CloudWatch::Errors::ServiceError.new(nil, "CloudWatch error", nil))
+    end
 
-        allow(Aws::CloudWatch::Client).to receive(:new).and_return(cloudwatch_client)
+    it "returns nil and logs the exception in Sentry" do
+      expect(cloud_watch_service.metrics_data).to be_nil
+      expect(Sentry).to have_received(:capture_exception).once
+    end
+  end
 
-        expect(described_class.week_starts(form_id:)).to eq(0)
-      end
+  context "when the made_live_date is nil" do
+    let(:made_live_date) { nil }
+
+    it "returns nil" do
+      expect(cloud_watch_service.metrics_data).to be_nil
     end
   end
 end

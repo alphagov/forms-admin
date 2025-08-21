@@ -16,7 +16,7 @@ module Forms
         success_message = success_message(previous_payment_url, @payment_link_input.payment_url)
         redirect_to form_path(@payment_link_input.form.id), success: success_message
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 

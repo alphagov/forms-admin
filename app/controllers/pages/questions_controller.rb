@@ -22,7 +22,7 @@ class Pages::QuestionsController < PagesController
       clear_draft_questions_data
       redirect_to edit_question_path(current_form.id, @page.id), success: "Your changes have been saved"
     else
-      render :new, locals: { current_form:, draft_question: }, status: :unprocessable_entity
+      render :new, locals: { current_form:, draft_question: }, status: :unprocessable_content
     end
   end
 
@@ -37,7 +37,7 @@ class Pages::QuestionsController < PagesController
   end
 
   def update
-    page.load(page_params_for_forms_api)
+    page.assign_attributes(page_params_for_update)
 
     @question_input = Pages::QuestionInput.new(page_params_for_form_object)
 
@@ -45,7 +45,7 @@ class Pages::QuestionsController < PagesController
       clear_draft_questions_data
       redirect_to edit_question_path(current_form.id, @page.id), success: "Your changes have been saved"
     else
-      render :edit, locals: { current_form:, draft_question: }, status: :unprocessable_entity
+      render :edit, locals: { current_form:, draft_question: }, status: :unprocessable_content
     end
   end
 
@@ -64,7 +64,7 @@ private
                       guidance_markdown: draft_question.guidance_markdown)
   end
 
-  def page_params_for_forms_api
+  def page_params_for_update
     page_params.merge(form_id: current_form.id,
                       answer_settings: draft_question.answer_settings,
                       page_heading: draft_question.page_heading,

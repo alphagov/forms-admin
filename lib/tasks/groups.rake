@@ -1,14 +1,4 @@
 namespace :groups do
-  desc "change the organisation of one or more groups"
-  task :change_organisation, [] => :environment do |_, args|
-    run_task("groups:change_organisation", args, rollback: false)
-  end
-
-  desc "change the organisation of one or more groups (dry run)"
-  task :change_organisation_dry_run, [] => :environment do |_, args|
-    run_task("groups:change_organisation_dry_run", args, rollback: true)
-  end
-
   desc "Create default trial group for user who has forms not in a group"
   task :create_user_default_trial_group, %i[user_id] => :environment do |_, args|
     usage_message = "usage: rake create_user_default_trial_group[<user_id>]".freeze
@@ -116,31 +106,6 @@ def run_bulk_task(task_name:, source_organisation_id:, target_organisation_id:, 
     update_groups(groups:, target_organisation:, task_name:)
     raise ActiveRecord::Rollback if rollback
   end
-end
-
-def change_organisation(group_ids, org_id, task_name:)
-  missing_groups = []
-
-  begin
-    target_organisation = Organisation.find(org_id)
-  rescue ActiveRecord::RecordNotFound
-    abort "Organisation with ID #{org_id} not found!"
-  end
-
-  groups = group_ids.map do |group_id|
-    Group.find_by!(external_id: group_id)
-  rescue ActiveRecord::RecordNotFound
-    missing_groups << group_id
-    nil
-  end
-
-  groups = groups.compact
-
-  unless missing_groups.empty?
-    abort "Groups with external ids #{missing_groups.join(', ')} not found!"
-  end
-
-  update_groups(groups:, target_organisation:, task_name:)
 end
 
 def update_groups(groups:, target_organisation:, task_name:)

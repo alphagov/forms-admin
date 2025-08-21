@@ -16,7 +16,7 @@ RSpec.describe "config/initializers/sentry" do
   end
 
   context "when an exception is raised containing personally identifying information" do
-    let(:form) { build :form, id: 1, submission_email: "submission-email@test.example" }
+    let(:form) { create :form, submission_email: "submission-email@test.example" }
 
     before do
       raise "Something went wrong: #{form.inspect}"

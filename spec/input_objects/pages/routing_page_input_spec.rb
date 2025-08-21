@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Pages::RoutingPageInput, type: :model do
   let(:routing_page_input) { described_class.new({ routing_page_id: }) }
-  let(:form) { build :form, :ready_for_routing, id: 1 }
+  let(:form) { create :form, :ready_for_routing }
   let(:pages) { form.pages }
   let(:routing_page_id) { pages.first.id }
 

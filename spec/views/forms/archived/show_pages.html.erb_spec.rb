@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "forms/archived/show_pages.html.erb" do
-  let(:form) { build :form, :archived, id: 1 }
+  let(:form) { build :made_live_form, id: 1 }
 
   before do
     render(template: "forms/archived/show_pages", locals: { form: })

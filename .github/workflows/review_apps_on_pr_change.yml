@@ -20,7 +20,7 @@ jobs:
           echo "CONTAINER_IMAGE_URI=842676007477.dkr.ecr.eu-west-2.amazonaws.com/forms-admin:pr-${{github.event.pull_request.number}}-${{github.event.pull_request.head.sha}}-$(date +%s)" >> "$GITHUB_ENV"
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Build container
         run: |

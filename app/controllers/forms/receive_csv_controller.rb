@@ -16,7 +16,7 @@ module Forms
       if @receive_csv_input.submit
         redirect_to form_path(@receive_csv_input.form.id), success: success_message(previous_submission_type, new_submission_type)
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 

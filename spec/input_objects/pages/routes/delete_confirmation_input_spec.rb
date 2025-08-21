@@ -31,20 +31,18 @@ RSpec.describe Pages::Routes::DeleteConfirmationInput, type: :model do
     context "when valid" do
       subject(:delete_confirmation_input) { described_class.new(form:, page: form.pages[0]) }
 
-      let(:form) { build :form, id: 1, pages: build_pages }
+      let(:form) { create :form, pages: build_pages }
 
       def build_pages
-        pages = build_list(:page, 5).each_with_index do |page, index|
-          page.id = index
-        end
+        pages = build_list(:page, 5)
 
         # primary route
-        pages[0].routing_conditions = [build(:condition, routing_page_id: 0, check_page_id: 0, goto_page_id: 4)]
+        pages[0].routing_conditions = [build(:condition, routing_page: pages.first, check_page: pages.first, goto_page: pages.last)]
         # secondary skip
-        pages[3].routing_conditions = [build(:condition, routing_page_id: 3, check_page_id: 0, goto_page_id: 4)]
+        pages[3].routing_conditions = [build(:condition, routing_page: pages.fourth, check_page: pages.first, goto_page: pages.last)]
 
         # unrelated condition
-        pages[2].routing_conditions = [build(:condition, routing_page_id: 2, check_page_id: 2, goto_page_id: 5)]
+        pages[2].routing_conditions = [build(:condition, routing_page: pages.third, check_page: pages.third, skip_to_end: true)]
 
         pages
       end

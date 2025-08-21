@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Forms::PrivacyPolicyController, type: :request do
   let(:form) do
-    build(:form, :live, id: 2, privacy_policy_url: "https://www.example.com")
+    create(:form, :live, privacy_policy_url: "https://www.example.com")
   end
 
   let(:updated_form) do
@@ -24,7 +24,7 @@ RSpec.describe Forms::PrivacyPolicyController, type: :request do
 
   describe "#new" do
     before do
-      get privacy_policy_path(form_id: 2)
+      get privacy_policy_path(form_id: form.id)
     end
 
     it "Reads the form" do
@@ -34,7 +34,7 @@ RSpec.describe Forms::PrivacyPolicyController, type: :request do
 
   describe "#create" do
     before do
-      post privacy_policy_path(form_id: 2), params: { forms_privacy_policy_input: { privacy_policy_url: "https://www.example.gov.uk/privacy-policy" } }
+      post privacy_policy_path(form_id: form.id), params: { forms_privacy_policy_input: { privacy_policy_url: "https://www.example.gov.uk/privacy-policy" } }
     end
 
     it "Reads the form" do
@@ -46,7 +46,7 @@ RSpec.describe Forms::PrivacyPolicyController, type: :request do
     end
 
     it "Redirects you to the form overview page" do
-      expect(response).to redirect_to(form_path(2))
+      expect(response).to redirect_to(form_path(form.id))
     end
   end
 end

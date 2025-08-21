@@ -1,25 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Forms::WhatHappensNextController, type: :request do
-  let(:form_response_data) do
-    {
-      id: 2,
-      name: "Form name",
-      submission_email: "submission@email.com",
-      start_page: 1,
-      what_happens_next_markdown: "Good things come to those who wait",
-      live_at: nil,
-    }.to_json
-  end
-
   let(:form) do
-    build(
+    create(
       :form,
       name: "Form name",
       submission_email: "submission@email.com",
-      id: 2,
       what_happens_next_markdown: "",
-      live_at: nil,
     )
   end
 
@@ -43,7 +30,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
 
   describe "#new" do
     before do
-      get what_happens_next_path(form_id: 2)
+      get what_happens_next_path(form_id: form.id)
     end
 
     it "Reads the form" do
@@ -64,7 +51,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
     let(:route_to) { "save_and_continue" }
 
     before do
-      post what_happens_next_path(form_id: 2), params: { forms_what_happens_next_input: { what_happens_next_markdown: }, route_to: }
+      post what_happens_next_path(form_id: form.id), params: { forms_what_happens_next_input: { what_happens_next_markdown: }, route_to: }
     end
 
     it "Reads the form" do
@@ -76,7 +63,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
     end
 
     it "Redirects you to the form overview page" do
-      expect(response).to redirect_to(form_path(2))
+      expect(response).to redirect_to(form_path(form.id))
     end
 
     context "when previewing markdown" do
@@ -111,7 +98,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
         end
 
         it "returns 422" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
 
@@ -132,14 +119,14 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       end
 
       it "redirects the user to the form overview page" do
-        expect(response).to redirect_to(form_path(2))
+        expect(response).to redirect_to(form_path(form.id))
       end
 
       context "when markdown is invalid" do
         let(:what_happens_next_markdown) { "# A level one heading" }
 
         it "returns 422" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "renders the template" do

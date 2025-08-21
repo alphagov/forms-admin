@@ -117,7 +117,7 @@ RSpec.describe "/groups/:group_id/members", type: :request do
           post group_members_url(group), params: { group_member_input: { member_email_address: "invalid" } }
         }.not_to change(Membership, :count)
 
-        expect(response).to have_http_status :unprocessable_entity
+        expect(response).to have_http_status :unprocessable_content
         expect(response).to render_template :new
       end
     end

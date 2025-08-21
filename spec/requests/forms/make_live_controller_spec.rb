@@ -2,13 +2,13 @@ require "rails_helper"
 
 RSpec.describe Forms::MakeLiveController, type: :request do
   let(:user) { build :user }
-  let(:id) { 2 }
-  let(:form) { build(:form, :ready_for_live, id:) }
+  let(:form) { create(:form, :ready_for_live) }
+  let(:id) { form.id }
 
   let(:updated_form) do
     build(:form,
           :live,
-          id: 2,
+          id: form.id,
           name: form.name,
           form_slug: form.form_slug,
           submission_email: form.submission_email,
@@ -31,7 +31,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
 
       login_as user
 
-      get make_live_path(form_id: 2)
+      get make_live_path(form_id: form.id)
     end
 
     it "reads the form" do
@@ -49,11 +49,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
     end
 
     context "when editing a draft of an existing live form" do
-      let(:form) do
-        build(:form,
-              :live,
-              id: 2)
-      end
+      let(:form) { create(:form, :live) }
 
       it "reads the form" do
         expect(FormRepository).to have_received(:find)
@@ -65,11 +61,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
     end
 
     context "when editing a draft of an archived form" do
-      let(:form) do
-        build(:form,
-              :archived_with_draft,
-              id: 2)
-      end
+      let(:form) { create(:form, :archived_with_draft) }
 
       it "reads the form" do
         expect(FormRepository).to have_received(:find)
@@ -90,15 +82,17 @@ RSpec.describe Forms::MakeLiveController, type: :request do
   end
 
   describe "#create" do
+    let(:made_live_form) { build(:made_live_form, id: form.id, name: form.name) }
+
     before do
-      allow(FormRepository).to receive_messages(find: form, find_live: form, make_live!: form)
+      allow(FormRepository).to receive_messages(find: form, find_live: made_live_form, make_live!: form)
 
       Membership.create!(group_id: group.id, user:, added_by: user, role: group_role)
       GroupForm.create!(form_id: form.id, group_id: group.id)
 
       login_as user
 
-      post(make_live_path(form_id: 2), params: form_params)
+      post(make_live_path(form_id: form.id), params: form_params)
     end
 
     context "when making a form live" do
@@ -123,11 +117,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
       end
 
       context "and that form has already been made live before" do
-        let(:form) do
-          build(:form,
-                :live,
-                id: 2)
-        end
+        let(:form) { create(:form, :live) }
 
         it "has the page title 'Your changes are live'" do
           expect(response.body).to include "Your changes are live"
@@ -147,16 +137,16 @@ RSpec.describe Forms::MakeLiveController, type: :request do
       end
 
       it "redirects you to the form page" do
-        expect(response).to redirect_to(form_path(2))
+        expect(response).to redirect_to(form_path(form.id))
       end
     end
 
     context "when all tasks are not complete" do
-      let(:form) { build(:form, :missing_pages, id:) }
+      let(:form) { create(:form, :missing_pages) }
       let(:form_params) { { forms_make_live_input: { confirm: "yes", form: } } }
 
       it "returns 422" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "does not make the form live" do

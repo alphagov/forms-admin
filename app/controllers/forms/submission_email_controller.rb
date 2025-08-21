@@ -14,7 +14,7 @@ module Forms
       if @submission_email_input.submit
         redirect_to submission_email_code_sent_path(@submission_email_input.form.id)
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
@@ -33,7 +33,7 @@ module Forms
       if @submission_email_input.confirm_confirmation_code
         redirect_to submission_email_confirmed_path(@submission_email_input.form.id)
       else
-        render :submission_email_code, status: :unprocessable_entity
+        render :submission_email_code, status: :unprocessable_content
       end
     end
 

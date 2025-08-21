@@ -3,22 +3,18 @@ require "rails_helper"
 RSpec.describe Forms::UnarchiveController, type: :request do
   let(:user) { standard_user }
 
-  let(:form) do
-    build(:form,
-          :archived,
-          id: 2)
-  end
+  let(:form) { create(:form, :archived) }
+  let(:made_live_form) { build(:made_live_form, id: form.id) }
 
   let(:updated_form) do
-    build(:form,
-          :live,
-          id: 2,
-          name: form.name,
-          form_slug: form.form_slug,
-          submission_email: form.submission_email,
-          privacy_policy_url: form.privacy_policy_url,
-          support_email: form.support_email,
-          pages: form.pages)
+    create(:form,
+           :live,
+           name: form.name,
+           form_slug: form.form_slug,
+           submission_email: form.submission_email,
+           privacy_policy_url: form.privacy_policy_url,
+           support_email: form.support_email,
+           pages: form.pages)
   end
 
   let(:group) { create(:group, organisation: user.organisation, status: :active) }
@@ -33,7 +29,7 @@ RSpec.describe Forms::UnarchiveController, type: :request do
 
       login_as user
 
-      get unarchive_path(form_id: 2)
+      get unarchive_path(form_id: form.id)
     end
 
     it "reads the form" do
@@ -59,14 +55,14 @@ RSpec.describe Forms::UnarchiveController, type: :request do
 
   describe "#create" do
     before do
-      allow(FormRepository).to receive_messages(find: form, make_live!: form, find_live: form)
+      allow(FormRepository).to receive_messages(find: form, make_live!: form, find_live: made_live_form)
 
       Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user, role: :group_admin)
       GroupForm.create!(form_id: form.id, group_id: group.id)
 
       login_as user
 
-      post(unarchive_create_path(form_id: 2), params: form_params)
+      post(unarchive_create_path(form_id: form.id), params: form_params)
     end
 
     context "when making a form live again" do
@@ -101,7 +97,7 @@ RSpec.describe Forms::UnarchiveController, type: :request do
       end
 
       it "redirects you to the archived form page" do
-        expect(response).to redirect_to(archived_form_path(2))
+        expect(response).to redirect_to(archived_form_path(form.id))
       end
     end
 
@@ -109,7 +105,7 @@ RSpec.describe Forms::UnarchiveController, type: :request do
       let(:form_params) { { forms_make_live_input: { confirm: :"" } } }
 
       it "returns 422" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "does not make the form live" do
