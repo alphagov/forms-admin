@@ -5,6 +5,7 @@ RSpec.describe "form_documents.rake" do
   before do
     Rake.application.rake_require "tasks/form_documents"
     Rake::Task.define_task(:environment)
+    allow($stdout).to receive(:puts) # to prevent logs printing during tests
   end
 
   describe "form_documents:sync" do
@@ -84,6 +85,32 @@ RSpec.describe "form_documents.rake" do
             task.invoke
           }.not_to(change { FormDocument.exists?(form_id: archived_form.id, tag: "archived") })
         end
+      end
+    end
+  end
+
+  describe "form_documents:sync_dry_run" do
+    subject(:task) do
+      Rake::Task["form_documents:sync_dry_run"]
+        .tap(&:reenable)
+    end
+
+    context "when there is a live form locally" do
+      let(:form) { create :form, :live }
+
+      before do
+        allow(ApiFormDocumentService).to receive(:form_document).with(form_id: form.id, tag: "live").and_return("content")
+      end
+
+      it "calls the ApiFormDocumentService" do
+        task.invoke
+        expect(ApiFormDocumentService).to have_received(:form_document)
+      end
+
+      it "does not add a FormDocument" do
+        expect {
+          task.invoke
+        }.not_to(change(FormDocument, :count))
       end
     end
   end

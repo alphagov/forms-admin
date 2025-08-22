@@ -11,6 +11,20 @@ namespace :form_documents do
 
     puts "Finished with #{FormDocument.count} formdocs"
   end
+
+  desc "dry run retrieve all live and archived form documents from Forms API"
+  task sync_dry_run: :environment do
+    puts "Started with #{FormDocument.count} formdocs"
+
+    ActiveRecord::Base.transaction do
+      sync_live_forms
+
+      sync_archived_forms
+      puts "Finished with #{FormDocument.count} formdocs"
+
+      raise ActiveRecord::Rollback
+    end
+  end
 end
 
 def sync_live_forms
