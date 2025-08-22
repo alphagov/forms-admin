@@ -6,8 +6,10 @@ RSpec.shared_examples "transition to live state" do |form_object, form_state|
   end
 
   it "transitions to live state" do
+    allow(FormDocumentSyncService).to receive(:synchronize_form)
     allow(form).to receive(:touch)
 
     expect(form).to transition_from(form_state).to(:live).on_event(:make_live)
+    expect(FormDocumentSyncService).to have_received(:synchronize_form).with(form)
   end
 end

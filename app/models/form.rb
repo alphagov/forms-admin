@@ -4,6 +4,7 @@ class Form < ApplicationRecord
   has_many :pages, -> { order(position: :asc) }, dependent: :destroy
   has_one :form_submission_email, dependent: :destroy
   has_one :group_form, dependent: :destroy
+  has_many :form_documents, dependent: :destroy
 
   enum :submission_type, {
     email: "email",

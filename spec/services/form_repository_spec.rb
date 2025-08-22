@@ -243,6 +243,8 @@ describe FormRepository do
       ActiveResource::HttpMock.respond_to do |mock|
         mock.post "/api/v1/forms/#{form.id}/archive", post_headers, archived_form_resource.to_json, 200
       end
+
+      create(:form_document, :live, form:)
     end
 
     describe "api" do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_15_135356) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_20_140606) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -58,6 +58,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_15_135356) do
     t.boolean "is_repeatable"
     t.index ["form_id"], name: "index_draft_questions_on_form_id"
     t.index ["user_id"], name: "index_draft_questions_on_user_id"
+  end
+
+  create_table "form_documents", force: :cascade do |t|
+    t.bigint "form_id", comment: "The form this document belongs to"
+    t.text "tag", null: false, comment: "The tag for the form, for example: 'live' or 'draft'"
+    t.jsonb "content", comment: "The JSON which describes the form"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["form_id", "tag"], name: "index_form_documents_on_form_id_and_tag", unique: true
+    t.index ["form_id"], name: "index_form_documents_on_form_id"
   end
 
   create_table "form_submission_emails", force: :cascade do |t|
@@ -217,6 +227,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_15_135356) do
   add_foreign_key "create_form_events", "groups", on_delete: :cascade
   add_foreign_key "create_form_events", "users", on_delete: :cascade
   add_foreign_key "draft_questions", "users"
+  add_foreign_key "form_documents", "forms"
   add_foreign_key "groups", "users", column: "creator_id"
   add_foreign_key "groups", "users", column: "upgrade_requester_id"
   add_foreign_key "memberships", "groups"

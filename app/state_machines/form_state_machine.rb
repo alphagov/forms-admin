@@ -30,6 +30,7 @@ module FormStateMachine
         after do
           live_at ||= Time.zone.now
           touch(time: live_at)
+          FormDocumentSyncService.synchronize_form(self)
         end
 
         transitions from: %i[draft live_with_draft archived archived_with_draft], to: :live, guard: proc { ready_for_live }
@@ -52,6 +53,10 @@ module FormStateMachine
       end
 
       event :archive_live_form do
+        after do
+          FormDocumentSyncService.synchronize_form(self)
+        end
+
         transitions from: :live, to: :archived
         transitions from: :live_with_draft, to: :archived_with_draft
       end
