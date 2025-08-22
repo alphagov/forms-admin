@@ -95,7 +95,7 @@ RSpec.describe "forms.rake" do
           expect {
             task.invoke(*invalid_args)
           }.to raise_error(SystemExit)
-           .and output(/usage: rake forms:move/).to_stderr
+                 .and output(/usage: rake forms:move/).to_stderr
         end
       end
 
@@ -122,36 +122,12 @@ RSpec.describe "forms.rake" do
       end
 
       context "with invalid form_id" do
-        context "when use_database_as_truth if false" do
-          let(:invalid_args) { ["99", group.external_id] }
+        let(:invalid_args) { ["99", group.external_id] }
 
-          before do
-            allow(Settings).to receive(:use_database_as_truth).and_return(false)
-
-            ActiveResource::HttpMock.respond_to do |mock|
-              mock.get "/api/v1/forms/99", headers, nil, 404
-            end
-          end
-
-          it "raises an error" do
-            expect {
-              task.invoke(*invalid_args)
-            }.to raise_error(ActiveResource::ResourceNotFound)
-          end
-        end
-
-        context "when use_database_as_truth if true" do
-          let(:invalid_args) { ["99", group.external_id] }
-
-          before do
-            allow(Settings).to receive(:use_database_as_truth).and_return(true)
-          end
-
-          it "raises an error" do
-            expect {
-              task.invoke(*invalid_args)
-            }.to raise_error(ActiveRecord::RecordNotFound)
-          end
+        it "raises an error" do
+          expect {
+            task.invoke(*invalid_args)
+          }.to raise_error(ActiveRecord::RecordNotFound)
         end
       end
     end
@@ -224,7 +200,7 @@ RSpec.describe "forms.rake" do
           expect {
             task.invoke(*invalid_args)
           }.to raise_error(SystemExit)
-           .and output(/usage: rake forms:submission_email:update/).to_stderr
+                 .and output(/usage: rake forms:submission_email:update/).to_stderr
         end
       end
 
@@ -241,36 +217,12 @@ RSpec.describe "forms.rake" do
       end
 
       context "with invalid form_id" do
-        context "when use_database_as_truth is false" do
-          let(:invalid_args) { ["99", "test@example.com"] }
+        let(:invalid_args) { ["99", "test@example.com"] }
 
-          before do
-            allow(Settings).to receive(:use_database_as_truth).and_return(false)
-
-            ActiveResource::HttpMock.respond_to do |mock|
-              mock.get "/api/v1/forms/99", headers, nil, 404
-            end
-          end
-
-          it "raises an error" do
-            expect {
-              task.invoke(*invalid_args)
-            }.to raise_error(ActiveResource::ResourceNotFound)
-          end
-        end
-
-        context "when use_database_as_truth is true" do
-          let(:invalid_args) { ["99", "test@example.com"] }
-
-          before do
-            allow(Settings).to receive(:use_database_as_truth).and_return(true)
-          end
-
-          it "raises an error" do
-            expect {
-              task.invoke(*invalid_args)
-            }.to raise_error(ActiveRecord::RecordNotFound)
-          end
+        it "raises an error" do
+          expect {
+            task.invoke(*invalid_args)
+          }.to raise_error(ActiveRecord::RecordNotFound)
         end
       end
 

@@ -25,10 +25,6 @@ describe "Settings" do
     include_examples expected_value_test, :welsh, features, { "enabled_by_group" => true }
   end
 
-  describe ".use_database_as_truth" do
-    include_examples expected_value_test, :use_database_as_truth, settings, true
-  end
-
   describe "forms_api" do
     forms_api = settings[:forms_api]
 
