@@ -9,12 +9,18 @@ describe GroupFormPolicy do
   context "when user can access group" do
     let(:user) { build :user, groups: [group] }
 
-    it { is_expected.to permit_all_actions }
+    it { is_expected.to permit_actions(%i[new create]) }
   end
 
   context "when user cannot access group" do
     let(:user) { build :user }
 
     it { is_expected.to forbid_all_actions }
+  end
+
+  context "when user is org admin" do
+    let(:user) { build :organisation_admin_user, organisation: group.organisation }
+
+    it { is_expected.to permit_all_actions }
   end
 end
