@@ -10,7 +10,7 @@ class UsersController < ApplicationController
     authorize current_user, :can_manage_user?
 
     roles = User.roles.keys
-    @users = policy_scope(User).sort_by do |user|
+    @users = policy_scope(User).includes(:organisation).sort_by do |user|
       [
         user.organisation&.name || "",
         user.has_access ? 0 : 1,
