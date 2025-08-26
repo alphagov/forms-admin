@@ -1,21 +1,6 @@
 ---
 en:
   account:
-    contact_for_research:
-      edit:
-        content_html: |
-          <p>GOV.UK Forms needs your help to improve and to make sure our platform works well for the people who use it. You can help by agreeing to take part in user research.</p>
-          <p>If you select yes, you will get a confirmation email with a link to our sign up form. When you’ve completed the form, your name will be added to a list that we’ll use to recruit research participants. Your details will be stored in compliance with GDPR.</p>
-          <p>We’ll only contact you about upcoming research or to verify that your details are up to date.</p>
-          <p>We might invite you to:</p>
-
-          <ul class="govuk-list govuk-list--bullet">
-            <li>try out new things we are working on</li>
-            <li>answer questions by survey or email</li>
-            <li>talk to us about how you work with forms</li>
-          </ul>
-
-          <p>You can always say no to an invite and you can ask to be taken off our list at any time.</p>
     organisation_details_summary: If your organisation is not listed
     organisation_text_html: |
       <p>If you’re from a central government organisation that publishes content on the GOV.UK website but your organisation is not listed, please %{contact_link}.</p>
@@ -1169,7 +1154,7 @@ en:
       length: Length
   page_titles:
     access_denied: You do not have permission to access GOV.UK Forms
-    account_contact_for_research: Choose to take part in user research
+    account_contact_for_research: Can we send you an email with information about taking part in user research to improve GOV.UK Forms?
     account_name: Enter your name
     account_organisation: Select your organisation
     account_terms_of_use: Terms of use
