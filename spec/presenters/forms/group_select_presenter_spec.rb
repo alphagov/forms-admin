@@ -56,8 +56,8 @@ describe Forms::GroupSelectPresenter do
     context "and there are active groups" do
       let(:groups) { build_list(:group, 5, :active) }
 
-      it "provides a hint indicating only active groups can be selected" do
-        expect(presenter.hint).to be_nil
+      it "provides no hint as draft forms can be moved to any group" do
+        expect(presenter.hint).to be_empty
       end
     end
 
