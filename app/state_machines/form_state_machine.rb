@@ -28,8 +28,6 @@ module FormStateMachine
 
       event :make_live do
         after do
-          live_at ||= Time.zone.now
-          touch(time: live_at)
           FormDocumentSyncService.synchronize_form(self)
         end
 

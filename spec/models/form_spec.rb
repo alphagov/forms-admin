@@ -659,5 +659,16 @@ RSpec.describe Form, type: :model do
       expect(form.as_form_document["steps"].count).to eq(form.pages.count)
       expect(form.as_form_document["steps"].first).to match a_hash_including("type" => "question_page")
     end
+
+    it "does not include a live_at date" do
+      expect(form.as_form_document).not_to have_key("live_at")
+    end
+
+    context "when a live_at date is provided" do
+      it "includes the live_at date" do
+        live_at = Time.zone.local(2023, 10, 16, 13, 24)
+        expect(form.as_form_document(live_at:)["live_at"]).to eq("2023-10-16 13:24:00.000000")
+      end
+    end
   end
 end

@@ -7,6 +7,7 @@ RSpec.describe FormDocumentSyncService do
   describe "#synchronize_form" do
     context "when form state is live" do
       let(:form) { create(:form, :live) }
+      let(:expected_live_at) { form.reload.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%LZ") }
 
       context "when there is no existing form document" do
         it "creates a live form document" do
@@ -14,17 +15,24 @@ RSpec.describe FormDocumentSyncService do
             service.synchronize_form(form)
           }.to change(FormDocument, :count).by(1)
 
-          expect(FormDocument.last).to have_attributes(form:, tag: "live", content: form.as_form_document)
+          expect(FormDocument.last).to have_attributes(form:, tag: "live", content: form.as_form_document(live_at: expected_live_at))
         end
       end
 
       context "when there is an existing live form document" do
-        let!(:form_document) { create :form_document, :live, form: }
+        let!(:form_document) { create :form_document, :live, form:, content: form.as_form_document }
 
         it "updates the live form document" do
+          new_name = "new name"
+          form.name = new_name
           expect {
             service.synchronize_form(form)
-          }.to change { form_document.reload.content }.to(form.as_form_document)
+          }.to change { form_document.reload.content["name"] }.to(new_name)
+        end
+
+        it "updates the live_at date in the form document" do
+          service.synchronize_form(form)
+          expect(FormDocument.last["content"]).to include("live_at" => form.reload.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%LZ"))
         end
       end
 
@@ -42,7 +50,7 @@ RSpec.describe FormDocumentSyncService do
         it "creates the live form document" do
           expect {
             service.synchronize_form(form)
-          }.to(change { FormDocument.exists?(form:, tag: "live", content: form.as_form_document) })
+          }.to(change { FormDocument.exists?(form:, tag: "live") })
         end
       end
     end

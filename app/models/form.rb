@@ -136,11 +136,13 @@ class Form < ApplicationRecord
     group_form&.destroy
   end
 
-  def as_form_document
-    as_json(
+  def as_form_document(live_at: nil)
+    content = as_json(
       except: %i[state external_id pages question_section_completed declaration_section_completed share_preview_completed],
       methods: %i[start_page steps],
     )
+    content["live_at"] = live_at if live_at.present?
+    content
   end
 
 private
