@@ -9,9 +9,7 @@
         <%=t("page_titles.account_contact_for_research")%>
       </h1>
 
-      <%= t(".content_html") %>
-
-      <%= f.govuk_collection_radio_buttons :research_contact_status, @contact_for_research_input.values, :itself, nil %>
+      <%= f.govuk_collection_radio_buttons :research_contact_status, @contact_for_research_input.values, :itself, legend: nil, hint:{ text: @hint } %>
 
       <%= f.govuk_submit t('continue') %>
     <% end %>
