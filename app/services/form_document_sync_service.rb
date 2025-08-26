@@ -14,7 +14,7 @@ class FormDocumentSyncService
     def sync_live_form(form)
       live_form_document = FormDocument.find_or_initialize_by(form: form)
       live_form_document.tag = "live"
-      live_form_document.content = form.as_form_document
+      live_form_document.content = form.as_form_document(live_at: form.updated_at)
       live_form_document.save!
     end
 

@@ -85,41 +85,60 @@ RSpec.describe Forms::MakeLiveController, type: :request do
     let(:made_live_form) { build(:made_live_form, id: form.id, name: form.name) }
 
     before do
-      allow(FormRepository).to receive_messages(find: form, find_live: made_live_form, make_live!: form)
+      allow(FormRepository).to receive_messages(find: form, find_live: made_live_form)
+
+      # don't mock out the FormRepository#make_live! method so we can test the FormDocument is created
+      ActiveResource::HttpMock.respond_to do |mock|
+        mock.post "/api/v1/forms/#{form.id}/make-live", post_headers, {}, 200
+      end
 
       Membership.create!(group_id: group.id, user:, added_by: user, role: group_role)
       GroupForm.create!(form_id: form.id, group_id: group.id)
 
       login_as user
-
-      post(make_live_path(form_id: form.id), params: form_params)
     end
 
     context "when making a form live" do
       let(:form_params) { { forms_make_live_input: { confirm: :yes, form: } } }
 
       it "reads the form" do
+        post(make_live_path(form_id: form.id), params: form_params)
         expect(FormRepository).to have_received(:find)
       end
 
       it "makes the form live" do
-        expect(FormRepository).to have_received(:make_live!)
+        post(make_live_path(form_id: form.id), params: form_params)
+        expect(form.live?).to be true
       end
 
       it "renders the confirmation page" do
+        post(make_live_path(form_id: form.id), params: form_params)
         expect(response).to render_template(:confirmation)
       end
 
       context "and that form has not been made live before" do
         it "has the page title 'Your form is live'" do
+          post(make_live_path(form_id: form.id), params: form_params)
           expect(response.body).to include "Your form is live"
+        end
+
+        it "creates a FormDocument" do
+          expect {
+            post(make_live_path(form_id: form.id), params: form_params)
+          }.to change(FormDocument, :count).by(1)
+        end
+
+        it "sets the FormDocument's live_at time to be equal to the form's updated_at time" do
+          post(make_live_path(form_id: form.id), params: form_params)
+          expect(FormDocument.find_by(form_id: form.id, tag: "live")["content"]["live_at"]).to eq form.reload.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%LZ")
         end
       end
 
       context "and that form has already been made live before" do
-        let(:form) { create(:form, :live) }
+        let(:form) { create(:form, :live_with_draft) }
 
         it "has the page title 'Your changes are live'" do
+          post(make_live_path(form_id: form.id), params: form_params)
           expect(response.body).to include "Your changes are live"
         end
       end
@@ -128,12 +147,16 @@ RSpec.describe Forms::MakeLiveController, type: :request do
     context "when deciding not to make a form live" do
       let(:form_params) { { forms_make_live_input: { confirm: :no } } }
 
+      before do
+        post(make_live_path(form_id: form.id), params: form_params)
+      end
+
       it "reads the form" do
         expect(FormRepository).to have_received(:find)
       end
 
       it "does not make the form live" do
-        expect(FormRepository).not_to have_received(:make_live!)
+        expect(form.reload.draft?).to be true
       end
 
       it "redirects you to the form page" do
@@ -145,12 +168,16 @@ RSpec.describe Forms::MakeLiveController, type: :request do
       let(:form) { create(:form, :missing_pages) }
       let(:form_params) { { forms_make_live_input: { confirm: "yes", form: } } }
 
+      before do
+        post(make_live_path(form_id: form.id), params: form_params)
+      end
+
       it "returns 422" do
         expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "does not make the form live" do
-        expect(FormRepository).not_to have_received(:make_live!)
+        expect(form.reload.draft?).to be true
       end
 
       it "re-renders the page with an error" do
@@ -163,6 +190,8 @@ RSpec.describe Forms::MakeLiveController, type: :request do
       let(:group_role) { :editor }
 
       it "is forbidden" do
+        post(make_live_path(form_id: form.id), params: form_params)
+
         expect(response).to have_http_status(:forbidden)
       end
     end
