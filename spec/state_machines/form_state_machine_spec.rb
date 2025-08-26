@@ -125,8 +125,17 @@ RSpec.describe FormStateMachine do
     context "when the form is live" do
       let(:form) { FakeForm.new(state: :live) }
 
+      before do
+        allow(FormDocumentSyncService).to receive(:synchronize_form)
+      end
+
       it "transitions to archived" do
         expect(form).to transition_from(:live).to(:archived).on_event(:archive_live_form)
+      end
+
+      it "calls the FormDocumentSyncService" do
+        form.archive_live_form
+        expect(FormDocumentSyncService).to have_received(:synchronize_form).with(form)
       end
     end
 
