@@ -1,8 +1,7 @@
 module Account
-  class ContactForResearchController < ApplicationController
+  class ContactForResearchController < WebController
     include AfterSignInPathHelper
 
-    # before_action :redirect_contact_for_research_set
     skip_before_action :redirect_if_account_not_completed
 
     def edit

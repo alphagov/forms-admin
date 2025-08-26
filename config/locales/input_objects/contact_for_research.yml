@@ -6,13 +6,13 @@ en:
         account/contact_for_research_input:
           attributes:
             research_contact_status:
-              blank: Choose if you want to sign up to take part in research
+              blank: Select ‘Yes’ if you’re happy for us to send you an email with information about taking part in user research
   helpers:
+    hint:
+      account_contact_for_research_input:
+        research_contact_status: This is not a commitment to take part. If you say ‘yes’ we’ll send you an email with more details about what’s involved and how to sign up.
     label:
       account_contact_for_research_input:
         research_contact_status_options:
           consented: 'Yes'
           declined: 'No'
-    legend:
-      account_contact_for_research_input:
-        research_contact_status: Do you want to sign up to take part in user research?
