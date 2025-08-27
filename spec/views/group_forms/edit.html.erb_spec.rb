@@ -2,13 +2,11 @@ require "rails_helper"
 
 RSpec.describe "group_forms/edit.html.erb", type: :view do
   let(:group) { create(:group) }
-  let(:form) { build :form, id: 1 }
+  let(:form) { create :form, id: 1 }
   let(:group_select) { Forms::GroupSelect.new(group: group, form: form) }
   let(:group_select_presenter) { Forms::GroupSelectPresenter.new(form: form, group: group, groups: group_select.groups) }
 
   before do
-    create(:form_record, id: form.id)
-
     group.group_forms.build(form_id: form.id)
     group.save!
 

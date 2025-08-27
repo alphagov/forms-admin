@@ -6,12 +6,11 @@ feature "Move a form", type: :feature do
     # rubocop:disable RSpec/LetSetup
     let!(:another_group) { create(:group, organisation: organisation_admin_user.organisation) }
     # rubocop:enable RSpec/LetSetup
-    let(:form) { build :form, id: 1, name: "Bye bye form", created_at: "2024-10-08T07:31:15.762Z" }
+    let(:form) { create :form, id: 1, name: "Bye bye form", created_at: "2024-10-08T07:31:15.762Z" }
 
     before do
       create(:membership, user: organisation_admin_user, group:, role: :group_admin)
       create(:membership, user: standard_user, group:, role: :editor)
-      create(:form_record, id: form.id, name: form.name, created_at: form.created_at)
 
       allow(FormRepository).to receive(:find).and_return(form)
 

@@ -1,13 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Forms::GroupSelect, type: :model do
-  let(:form) { build :form, id: 1, name: "Bye bye form", created_at: "2024-10-08T07:31:15.762Z" }
+  let(:form) { create :form, id: 1, name: "Bye bye form", created_at: "2024-10-08T07:31:15.762Z" }
   let(:group) { build(:group, :org_has_org_admin) }
   let(:group_select) { described_class.new(group:, form:) }
 
   before do
     allow(FormRepository).to receive(:find).and_return(form)
-    create(:form_record, id: form.id, name: form.name)
   end
 
   describe "groups" do
