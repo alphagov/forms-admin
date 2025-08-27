@@ -51,7 +51,7 @@ class GroupFormsController < ApplicationController
       success_message = "'#{form.name}' has been moved to '#{receiving_group.name}'"
       redirect_to @group, success: success_message, status: :see_other
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
