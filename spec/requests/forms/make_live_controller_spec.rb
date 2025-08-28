@@ -130,7 +130,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
 
         it "sets the FormDocument's live_at time to be equal to the form's updated_at time" do
           post(make_live_path(form_id: form.id), params: form_params)
-          expect(FormDocument.find_by(form_id: form.id, tag: "live")["content"]["live_at"]).to eq form.reload.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%LZ")
+          expect(FormDocument.find_by(form_id: form.id, tag: "live")["content"]["live_at"]).to eq form.reload.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%6NZ")
         end
       end
 
