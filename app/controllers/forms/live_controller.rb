@@ -15,7 +15,7 @@ module Forms
   private
 
     def current_live_form
-      @current_live_form ||= FormRepository.find_live(form_id: params[:form_id])
+      @current_live_form ||= FormDocument::Content.new(**current_form.live_form_document.content)
     end
   end
 end

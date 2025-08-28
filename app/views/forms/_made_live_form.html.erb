@@ -19,7 +19,7 @@
     <h2 class="govuk-heading-l">Your form</h2>
 
     <p>
-      <%= render PreviewLinkComponent::View.new(form_document.pages, link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: preview_mode)) %>
+      <%= render PreviewLinkComponent::View.new(form_document.steps, link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: preview_mode)) %>
     </p>
 
     <% if status == :live %>
@@ -32,7 +32,7 @@
     <% end %>
 
     <h3 class="govuk-heading-m"><%= t('made_live_form.questions') %></h3>
-    <p><%= govuk_link_to t('made_live_form.questions_link', count: form_document.pages.count), questions_path %></p>
+    <p><%= govuk_link_to t('made_live_form.questions_link', count: form_document.steps.count), questions_path %></p>
 
     <% if form_document.declaration_text.present? %>
       <h3 class="govuk-heading-m"><%= t('made_live_form.declaration') %></h3>

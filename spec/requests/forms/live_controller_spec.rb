@@ -2,13 +2,17 @@ require "rails_helper"
 
 RSpec.describe Forms::LiveController, type: :request do
   let(:form) { create(:form, :live) }
-  let(:made_live_form) { build(:made_live_form, id: form.id, live_at: Time.zone.now - 2.days) }
   let(:forms_env) { "test" }
   let(:cloud_watch_client) { Aws::CloudWatch::Client.new(stub_responses: true) }
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
+    # make the form live 2 days in the past so that metrics are displayed
+    travel_to Time.zone.now - 2.days do
+      form
+    end
+
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
@@ -26,14 +30,7 @@ RSpec.describe Forms::LiveController, type: :request do
       started_metric_response = cloud_watch_client.stub_data(:get_metric_statistics, datapoints: [{ sum: 1306.0 }])
       allow(cloud_watch_client).to receive(:get_metric_statistics).with(cloud_watch_request("Started")).and_return(started_metric_response)
 
-      allow(FormRepository).to receive_messages(find: form, find_live: made_live_form)
-
       get live_form_path(form.id)
-    end
-
-    it "Reads the form" do
-      expect(FormRepository).to have_received(:find)
-      expect(FormRepository).to have_received(:find_live)
     end
 
     it "renders the live template" do
@@ -59,8 +56,6 @@ RSpec.describe Forms::LiveController, type: :request do
   describe "#show_pages" do
     context "with a live form" do
       before do
-        allow(FormRepository).to receive_messages(find: form, find_live: made_live_form)
-
         get live_form_pages_path(form.id)
       end
 
