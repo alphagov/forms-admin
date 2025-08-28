@@ -141,6 +141,7 @@ class Form < ApplicationRecord
       except: %i[state external_id pages question_section_completed declaration_section_completed share_preview_completed],
       methods: %i[start_page steps],
     )
+    content["form_id"] = content.delete("id").to_s
     content["live_at"] = live_at if live_at.present?
     content
   end
