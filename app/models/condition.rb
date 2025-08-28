@@ -1,4 +1,5 @@
 class Condition < ApplicationRecord
+  include ConditionMethods
   belongs_to :routing_page, class_name: "Page"
   belongs_to :check_page, class_name: "Page", optional: true
   belongs_to :goto_page, class_name: "Page", optional: true
@@ -69,21 +70,11 @@ class Condition < ApplicationRecord
     goto_page.nil? && skip_to_end
   end
 
-  def is_exit_page?
-    !exit_page_markdown.nil?
-  end
-
-  alias_method :exit_page?, :is_exit_page?
-
   def has_routing_errors
     validation_errors.any?
   end
 
   alias_method :has_routing_errors?, :has_routing_errors
-
-  def secondary_skip?
-    answer_value.blank? && check_page_id != routing_page_id
-  end
 
   def errors_with_fields
     error_fields = {
