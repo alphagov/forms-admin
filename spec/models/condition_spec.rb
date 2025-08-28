@@ -522,4 +522,31 @@ RSpec.describe Condition, type: :model do
       })
     end
   end
+
+  describe "#as_form_document_condition" do
+    let(:form) { create :form_record }
+    let(:check_page) { create :page_record, :with_selection_settings, form: }
+    let(:goto_page) { create :page_record, form: }
+    let(:condition) { create :condition_record, routing_page_id: check_page.id, check_page_id: check_page.id, goto_page_id: goto_page.id, skip_to_end: false }
+
+    it "returns a json object" do
+      expect(condition.as_form_document_condition).to match({
+        "id" => condition.id,
+        "check_page_id" => check_page.id,
+        "routing_page_id" => check_page.id,
+        "goto_page_id" => goto_page.id,
+        "answer_value" => nil,
+        "created_at" => a_kind_of(String),
+        "updated_at" => a_kind_of(String),
+        "skip_to_end" => false,
+        "exit_page_markdown" => nil,
+        "exit_page_heading" => nil,
+        "validation_errors" => [
+          { "name" => "answer_value_doesnt_exist" },
+          { "name" => "cannot_route_to_next_page" },
+        ],
+        "has_routing_errors" => true,
+      })
+    end
+  end
 end

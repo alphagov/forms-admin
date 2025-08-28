@@ -637,7 +637,7 @@ RSpec.describe Page, type: :model do
       let!(:condition) { create :condition, routing_page_id: page.id, check_page_id: page.id }
 
       it "includes the routing conditions" do
-        expect(page.reload.as_form_document_step["routing_conditions"]).to include(condition.as_json)
+        expect(page.reload.as_form_document_step["routing_conditions"]).to include(condition.as_form_document_condition)
       end
     end
   end
