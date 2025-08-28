@@ -4,7 +4,7 @@ describe "forms/live/show_pages.html.erb" do
   let(:form) { build :made_live_form, id: 1 }
 
   before do
-    render(template: "forms/live/show_pages", locals: { form: })
+    render(template: "forms/live/show_pages", locals: { form_document: form })
   end
 
   it "form name is in the page title" do

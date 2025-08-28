@@ -1,6 +1,6 @@
-<%= render partial: 'forms/made_live_form', locals: { form:,
+<%= render partial: 'forms/made_live_form', locals: { form_document:,
                                              form_metadata:,
                                              status: :live,
                                              preview_mode: :preview_live,
-                                             questions_path: live_form_pages_path(form.id),
+                                             questions_path: live_form_pages_path(form_document.id),
 } %>

@@ -5,7 +5,7 @@ describe "archived/show_form.html.erb" do
   let(:form) { build(:made_live_form, id: 1) }
 
   before do
-    render(template: "forms/archived/show_form", locals: { form:, form_metadata: })
+    render(template: "forms/archived/show_form", locals: { form_document: form, form_metadata: })
   end
 
   it "renders the archived tag" do

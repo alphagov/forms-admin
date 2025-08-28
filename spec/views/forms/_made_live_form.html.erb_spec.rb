@@ -22,7 +22,7 @@ describe "forms/_made_live_form.html.erb" do
 
     render(partial: "forms/made_live_form", locals: {
       form_metadata:,
-      form:,
+      form_document: form,
       status:,
       preview_mode:,
       questions_path:,
