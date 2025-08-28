@@ -545,7 +545,6 @@ RSpec.describe Condition, type: :model do
           { "name" => "answer_value_doesnt_exist" },
           { "name" => "cannot_route_to_next_page" },
         ],
-        "has_routing_errors" => true,
       })
     end
   end
