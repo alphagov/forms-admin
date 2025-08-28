@@ -103,6 +103,10 @@ class Condition < ApplicationRecord
     ))
   end
 
+  def as_form_document_condition
+    as_json(methods: %i[validation_errors])
+  end
+
 private
 
   def has_precondition?

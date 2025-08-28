@@ -90,7 +90,7 @@ class Page < ApplicationRecord
       "next_step_id" => next_page,
       "type" => "question_page",
       "data" => slice(*%w[question_text hint_text answer_type is_optional answer_settings page_heading guidance_markdown is_repeatable]),
-      "routing_conditions" => routing_conditions.map(&:as_json),
+      "routing_conditions" => routing_conditions.map(&:as_form_document_condition),
     }
   end
 
