@@ -1,8 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Forms::ArchivedController, type: :request do
-  let(:form) { create(:form, :live) }
-  let(:archived_form) { build(:made_live_form, id:) }
+  let(:form) { create(:form, :archived) }
   let(:id) { form.id }
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
@@ -11,17 +10,11 @@ RSpec.describe Forms::ArchivedController, type: :request do
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
-
-    allow(FormRepository).to receive_messages(find: form, find_archived: archived_form)
   end
 
   describe "#show_form" do
     before do
       get archived_form_path(id)
-    end
-
-    it "Reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "renders the show archived form template" do

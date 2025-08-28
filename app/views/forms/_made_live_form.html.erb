@@ -1,7 +1,7 @@
 <% set_page_title(form_document.name) %>
 
-<% if form_document.group.present? %>
-  <% content_for :back_link, govuk_back_link_to(group_path(form_document.group), t("back_link.group", group_name: form_document.group.name)) %>
+<% if form_metadata.group.present? %>
+  <% content_for :back_link, govuk_back_link_to(group_path(form_metadata.group), t("back_link.group", group_name: form_metadata.group.name)) %>
 <% else %>
   <% content_for :back_link, govuk_back_link_to(root_path, t("back_link.forms")) %>
 <% end %>
@@ -19,7 +19,7 @@
     <h2 class="govuk-heading-l">Your form</h2>
 
     <p>
-      <%= render PreviewLinkComponent::View.new(form_document.pages, link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: preview_mode)) %>
+      <%= render PreviewLinkComponent::View.new(form_document.steps, link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: preview_mode)) %>
     </p>
 
     <% if status == :live %>
@@ -32,7 +32,7 @@
     <% end %>
 
     <h3 class="govuk-heading-m"><%= t('made_live_form.questions') %></h3>
-    <p><%= govuk_link_to t('made_live_form.questions_link', count: form_document.pages.count), questions_path %></p>
+    <p><%= govuk_link_to t('made_live_form.questions_link', count: form_document.steps.count), questions_path %></p>
 
     <% if form_document.declaration_text.present? %>
       <h3 class="govuk-heading-m"><%= t('made_live_form.declaration') %></h3>

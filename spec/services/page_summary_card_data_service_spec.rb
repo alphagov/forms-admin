@@ -1,10 +1,10 @@
 require "rails_helper"
 
 describe PageSummaryCardDataService do
-  let(:page) { build :made_live_page, is_optional: }
+  let(:page) { build :form_document_step, is_optional: }
   let(:is_optional) { false }
   let(:pages) do
-    [page, *build_list(:made_live_page, 5)]
+    [page, *build_list(:form_document_step, 5)]
   end
   let(:service) { described_class.call(page:, pages:) }
 
@@ -22,7 +22,7 @@ describe PageSummaryCardDataService do
     end
 
     context "when the page is a selection question" do
-      let(:page) { build :made_live_page, :with_selection_settings, is_optional: }
+      let(:page) { build :form_document_step, :with_selection_settings, is_optional: }
 
       it "includes a title without (optional) added to it" do
         expect(service.build_data[:card][:title]).to eq "1. #{page.question_text}"
@@ -37,7 +37,7 @@ describe PageSummaryCardDataService do
       end
 
       context "when the page is a selection question" do
-        let(:page) { build :made_live_page, :with_selection_settings, is_optional: }
+        let(:page) { build :form_document_step, :with_selection_settings, is_optional: }
 
         it "includes a title without (optional) added to it" do
           expect(service.build_data[:card][:title]).to eq "1. #{page.question_text}"
@@ -53,7 +53,7 @@ describe PageSummaryCardDataService do
       end
 
       context "when the page is a selection question" do
-        let(:page) { build :made_live_page, :with_selection_settings, is_optional: }
+        let(:page) { build :form_document_step, :with_selection_settings, is_optional: }
 
         it "includes a title without (optional) added to it" do
           expect(service.build_data[:card][:title]).to eq "1. #{page.question_text}"
@@ -62,7 +62,7 @@ describe PageSummaryCardDataService do
     end
 
     context "when file upload question contains guidance text" do
-      let(:page) { build :made_live_page, :with_guidance, :with_file_upload_answer_type, is_optional: }
+      let(:page) { build :form_document_step, :with_guidance, :with_file_upload_answer_type, is_optional: }
 
       it "includes the guidance text page heading as title" do
         expect(service.build_data[:card][:title]).to eq "1. #{page.page_heading}"
