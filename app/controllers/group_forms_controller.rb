@@ -48,7 +48,7 @@ class GroupFormsController < ApplicationController
       receiving_group = Group.find(@group_select.group)
 
       @group_form.update!(group: receiving_group)
-      success_message = "'#{form.name}' has been moved to '#{receiving_group.name}'"
+      success_message = t(".success", form_name: form.name, receiving_group_name: receiving_group.name)
       redirect_to @group, success: success_message, status: :see_other
     else
       render :edit, status: :unprocessable_content

@@ -440,6 +440,8 @@ en:
       form_name_label: Form name
       group_name_label: Group name
       placeholder: Select a group
+    update:
+      success: "'%{form_name}'  has been moved to '%{receiving_group_name}'"
   group_members:
     create:
       success: "%{user_name} has been added to this group and we’ve sent them an email to let them know"
