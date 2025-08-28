@@ -1,7 +1,7 @@
 <% set_page_title(form_document.name) %>
 
-<% if form_document.group.present? %>
-  <% content_for :back_link, govuk_back_link_to(group_path(form_document.group), t("back_link.group", group_name: form_document.group.name)) %>
+<% if form_metadata.group.present? %>
+  <% content_for :back_link, govuk_back_link_to(group_path(form_metadata.group), t("back_link.group", group_name: form_metadata.group.name)) %>
 <% else %>
   <% content_for :back_link, govuk_back_link_to(root_path, t("back_link.forms")) %>
 <% end %>

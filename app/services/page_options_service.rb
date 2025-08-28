@@ -27,7 +27,7 @@ class PageOptionsService
     options.concat(question_text_options) if @page.answer_type == "file" && @page.page_heading.present?
 
     # Other answer types
-    options.concat(hint_options) if @page.hint_text?.present?
+    options.concat(hint_options) if @page.hint_text.present?
     options.concat(generic_options) if @read_only && %w[address date text selection name].exclude?(@page.answer_type)
 
     options.concat(selection_options) if @page.answer_type == "selection"
@@ -98,7 +98,7 @@ private
   def selection_list
     return @page.show_selection_options unless @page.answer_settings.selection_options.length >= 1
 
-    options = @page.answer_settings.selection_options.map { |option| option.attributes[:name] }
+    options = @page.answer_settings.selection_options.map(&:name)
     options << I18n.t("page_options_service.selection_type.none_of_the_above") if @page.is_optional?
     formatted_list = html_unordered_list(options)
 
