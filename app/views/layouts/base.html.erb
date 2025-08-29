@@ -62,7 +62,7 @@
     <%= vite_javascript_tag 'application' %>
 
     <% if AnalyticsService.analytics_events.present? && @current_user&.collect_analytics? %>
-      <script data-analytics-events>
+      <script data-analytics-events type="module">
         window.dataLayer = window.dataLayer || [];
 
         <% AnalyticsService.analytics_events.each do |event| %>
