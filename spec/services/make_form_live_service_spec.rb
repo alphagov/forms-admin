@@ -3,15 +3,13 @@ require "rails_helper"
 describe MakeFormLiveService do
   let(:make_form_live_service) { described_class.call(current_form:, current_user:) }
   let(:current_form) { create :form, :ready_for_live }
-  let(:made_live_form) { build :made_live_form, id: current_form.id, submission_email: current_form.submission_email }
+  let(:live_form_document) { current_form.live_form_document }
   let(:current_user) { build :user }
 
   before do
     allow(FormRepository).to receive(:make_live!) do |form|
       form.state = "live"
     end
-
-    allow(FormRepository).to receive_messages(find_live: made_live_form)
   end
 
   describe "#make_live" do
@@ -39,12 +37,13 @@ describe MakeFormLiveService do
       context "when submission email has changed" do
         before do
           current_form.submission_email = "i-have-changed@example.com"
+          current_form.name = "a different name"
         end
 
         it "calls the SubmissionEmailMailer" do
           expect(SubmissionEmailMailer).to receive(:alert_email_change).with(
-            live_email: made_live_form.submission_email,
-            form_name: made_live_form.name,
+            live_email: live_form_document.content["submission_email"],
+            form_name: live_form_document.content["name"],
             creator_name: current_user.name,
             creator_email: current_user.email,
           ).and_call_original
@@ -84,10 +83,6 @@ describe MakeFormLiveService do
 
     context "when changes to live form are being made live" do
       let(:current_form) { create :form, :live_with_draft }
-
-      before do
-        allow(FormRepository).to receive(:find_live).and_return(made_live_form)
-      end
 
       it "returns different confirmation page body" do
         expect(make_form_live_service.confirmation_page_body).to eq I18n.t("make_changes_live.confirmation.body_html")

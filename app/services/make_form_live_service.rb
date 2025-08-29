@@ -9,7 +9,7 @@ class MakeFormLiveService
     @current_form = current_form
     @current_form_was_live = current_form.is_live?
     @current_form_was_archived = current_form.is_archived?
-    @current_live_form = FormRepository.find_live(form_id: current_form.id) if current_form.is_live?
+    @current_live_form = FormDocument::Content.new(**current_form.live_form_document.content) if current_form.is_live?
     @current_user = current_user
   end
 
