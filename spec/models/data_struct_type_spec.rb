@@ -40,4 +40,18 @@ RSpec.describe DataStructType do
       )
     end
   end
+
+  context "when converting an array" do
+    it "returns an array of DataStructs" do
+      array = [
+        { a: "b" },
+        { c: [{ d: "e" }] },
+      ]
+
+      expect(described_class.new.cast_value(array)).to eq([
+        DataStruct.new(a: "b"),
+        DataStruct.new(c: [DataStruct.new(d: "e")]),
+      ])
+    end
+  end
 end

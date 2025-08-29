@@ -15,6 +15,8 @@ class DataStructType < ActiveModel::Type::Value
       DataStruct.recursive_new(value)
     when DataStruct
       value
+    when Array
+      value.map { |element| DataStruct.recursive_new(element) }
     end
   end
   # rubocop:enable Style/RescueModifier

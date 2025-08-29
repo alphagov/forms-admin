@@ -49,17 +49,7 @@ RSpec.describe Condition, type: :model do
     end
   end
 
-  describe "#is_exit_page?" do
-    it "returns false when exit_page_markdown is nil" do
-      condition.exit_page_markdown = nil
-      expect(condition.is_exit_page?).to be false
-    end
-
-    it "returns true when exit_page_markdown is not nil" do
-      condition.exit_page_markdown = ""
-      expect(condition.is_exit_page?).to be true
-    end
-  end
+  it_behaves_like "implements condition methods"
 
   describe "validations" do
     it "validates" do

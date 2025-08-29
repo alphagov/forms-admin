@@ -65,5 +65,8 @@ module FormsAdmin
 
     # Prevent ActiveRecord::PreparedStatementCacheExpired errors when adding columns
     config.active_record.enumerate_columns_in_select_statements = true
+
+    # Include full precision of timestamps in JSON responses
+    config.active_support.time_precision = 6
   end
 end
