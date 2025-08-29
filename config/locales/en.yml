@@ -438,7 +438,7 @@ en:
     edit:
       body_html: "<p> We’ll send an email to members of the current group to let them know the form has moved and they may no longer have access to it. </p>\n"
       form_name_label: Form name
-      group_name_label: Group name
+      group_name_label: Current group
       placeholder: Select a group
     update:
       success: "'%{form_name}'  has been moved to '%{receiving_group_name}'"
