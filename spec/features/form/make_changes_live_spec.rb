@@ -6,13 +6,16 @@ feature "Make changes live", type: :feature do
   let(:organisation) { build :organisation, id: 1 }
   let(:user) { create :user, organisation: }
   let(:group) { create(:group, name: "Group 1", organisation:, status: "active") }
-  let(:made_live_form) { build(:made_live_form, id: form.id, name: form.name) }
+  let(:updated_name) { "Another form of juggling" }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, find_live: made_live_form, make_live!: form, pages: pages)
-
     GroupForm.create!(form_id: form.id, group_id: group.id)
     Membership.create!(user:, group:, added_by: user, role: :group_admin)
+
+    ActiveResource::HttpMock.respond_to do |mock|
+      mock.put "/api/v1/forms/#{form.id}", post_headers, {}, 200
+      mock.post "/api/v1/forms/#{form.id}/make-live", post_headers, {}, 200
+    end
 
     login_as user
   end
@@ -21,6 +24,8 @@ feature "Make changes live", type: :feature do
     given_i_am_viewing_a_live_form
     when_i_click_create_a_draft
     then_i_see_the_page_to_edit_the_draft
+    then_i_edit_the_name_of_the_form
+    then_i_mark_the_share_preview_step_as_completed
     when_i_click_make_your_changes_live
     then_i_see_a_page_to_confirm_making_the_draft_live
     when_i_choose_yes
@@ -46,13 +51,25 @@ def then_i_see_the_page_to_edit_the_draft
   expect_page_to_have_no_axe_errors(page)
 end
 
+def then_i_edit_the_name_of_the_form
+  click_link "Edit the name of your form"
+  fill_in "What’s the name of your form?", with: updated_name
+  click_button "Save and continue"
+end
+
+def then_i_mark_the_share_preview_step_as_completed
+  click_link_or_button "Share a preview of your draft form"
+  choose "Yes"
+  click_link_or_button "Save and continue"
+end
+
 def when_i_click_make_your_changes_live
   click_link "Make your changes live"
 end
 
 def then_i_see_a_page_to_confirm_making_the_draft_live
   expect(page.find("h1")).to have_text "Make your changes live"
-  expect(page.find("h1")).to have_text form.name
+  expect(page.find("h1")).to have_text updated_name
   expect(page).to have_text "Are you sure you want to make your draft live?"
   expect_page_to_have_no_axe_errors(page)
 end
