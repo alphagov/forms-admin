@@ -69,7 +69,7 @@ FactoryBot.define do
 
     trait :live do
       ready_for_live
-      state { :live }
+      after(:create, &:make_live!)
     end
 
     trait :live_with_draft do
@@ -79,7 +79,7 @@ FactoryBot.define do
 
     trait :archived do
       live
-      state { :archived }
+      after(:create, &:archive_live_form!)
     end
 
     trait :archived_with_draft do
