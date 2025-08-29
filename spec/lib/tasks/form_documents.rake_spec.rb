@@ -38,17 +38,19 @@ RSpec.describe "form_documents.rake" do
         expect(ApiFormDocumentService).to have_received(:form_document)
       end
 
-      it "creates a FormDocument for the form" do
-        expect {
-          task.invoke
-        }.to(change { FormDocument.exists?(form_id: live_form.id, tag: "live") })
+      context "when there is no FormDocument for the form" do
+        before do
+          live_form.live_form_document.destroy!
+        end
+
+        it "creates a FormDocument for the form" do
+          expect {
+            task.invoke
+          }.to(change { FormDocument.exists?(form_id: live_form.id, tag: "live") })
+        end
       end
 
       context "when there is already a live FormDocument for the form" do
-        before do
-          create :form_document, :live, form: live_form
-        end
-
         it "does not affect the existing FormDocument" do
           expect {
             task.invoke
@@ -69,17 +71,19 @@ RSpec.describe "form_documents.rake" do
         expect(ApiFormDocumentService).to have_received(:form_document)
       end
 
-      it "creates a FormDocument for the form" do
-        expect {
-          task.invoke
-        }.to(change { FormDocument.exists?(form_id: live_form.id, tag: "live") })
+      context "when there is no FormDocument for the form" do
+        before do
+          live_form.live_form_document.destroy!
+        end
+
+        it "creates a FormDocument for the form" do
+          expect {
+            task.invoke
+          }.to(change { FormDocument.exists?(form_id: live_form.id, tag: "live") })
+        end
       end
 
       context "when there is already a live FormDocument for the form" do
-        before do
-          create :form_document, :live, form: live_form
-        end
-
         it "does not affect the existing FormDocument" do
           expect {
             task.invoke
@@ -100,17 +104,19 @@ RSpec.describe "form_documents.rake" do
         expect(ApiFormDocumentService).to have_received(:form_document)
       end
 
-      it "creates a FormDocument for the form" do
-        expect {
-          task.invoke
-        }.to(change { FormDocument.exists?(form_id: archived_form.id, tag: "archived") })
-      end
-
-      context "when there is already a live FormDocument for the form" do
+      context "when there is no FormDocument for the form" do
         before do
-          create :form_document, :archived, form: archived_form
+          archived_form.archived_form_document.destroy!
         end
 
+        it "creates a FormDocument for the form" do
+          expect {
+            task.invoke
+          }.to(change { FormDocument.exists?(form_id: archived_form.id, tag: "archived") })
+        end
+      end
+
+      context "when there is already a archived FormDocument for the form" do
         it "does not affect the existing FormDocument" do
           expect {
             task.invoke
@@ -131,17 +137,19 @@ RSpec.describe "form_documents.rake" do
         expect(ApiFormDocumentService).to have_received(:form_document)
       end
 
-      it "creates a FormDocument for the form" do
-        expect {
-          task.invoke
-        }.to(change { FormDocument.exists?(form_id: archived_form.id, tag: "archived") })
-      end
-
-      context "when there is already a live FormDocument for the form" do
+      context "when there is no FormDocument for the form" do
         before do
-          create :form_document, :archived, form: archived_form
+          archived_form.archived_form_document.destroy!
         end
 
+        it "creates a FormDocument for the form" do
+          expect {
+            task.invoke
+          }.to(change { FormDocument.exists?(form_id: archived_form.id, tag: "archived") })
+        end
+      end
+
+      context "when there is already a archived FormDocument for the form" do
         it "does not affect the existing FormDocument" do
           expect {
             task.invoke
