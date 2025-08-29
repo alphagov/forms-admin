@@ -71,7 +71,7 @@ feature "Move a form", type: :feature do
   end
 
   def then_i_see_the_move_form_page
-    expect(page.find("h1")).to have_content("#{form.name}\n-\nMove form to a different group")
+    expect(page.find("h1")).to have_content("#{form.name}\n-\nMove this form to a different group")
     expect(page).to have_content(another_group.name)
   end
 

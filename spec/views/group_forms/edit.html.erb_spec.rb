@@ -20,7 +20,7 @@ RSpec.describe "group_forms/edit.html.erb", type: :view do
 
   it "renders the page title" do
     render
-    expect(rendered).to have_css("h1", text: /Move form/)
+    expect(rendered).to have_css("h1", text: /Move this form/)
   end
 
   it "renders the page title with error prefix when form has errors" do
