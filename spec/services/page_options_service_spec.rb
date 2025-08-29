@@ -2,16 +2,22 @@ require "rails_helper"
 
 describe PageOptionsService do
   subject(:page_options_service) do
-    described_class.new(page:, pages:)
+    described_class.new(page: form_document_step, pages: form_document_steps)
   end
 
+  let(:form_document_content) { FormDocument::Content.new(form.live_form_document.content) }
+  let(:form_document_steps) { form_document_content.steps }
+  let(:form_document_step) { form_document_steps.first }
+
+  let(:form) { create :form, :live, pages: }
+
   let(:pages) do
-    [page, (build :made_live_page, id: 2), (build :made_live_page, id: 3), (build :made_live_page, id: 4)]
+    [page, (build :page, id: 2), (build :page, id: 3), (build :page, id: 4)]
   end
 
   describe "#all_options_for_answer_type" do
     context "with uk and international address" do
-      let(:page) { build :made_live_page, :with_address_settings, uk_address: "true", international_address: "true", routing_conditions: [] }
+      let(:page) { build :page, :with_address_settings, uk_address: "true", international_address: "true", routing_conditions: [] }
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq(
@@ -22,7 +28,7 @@ describe PageOptionsService do
     end
 
     context "with international address only" do
-      let(:page) { build :made_live_page, :with_address_settings, uk_address: "false", international_address: "true" }
+      let(:page) { build :page, :with_address_settings, uk_address: "false", international_address: "true" }
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq(
@@ -33,7 +39,7 @@ describe PageOptionsService do
     end
 
     context "with uk address" do
-      let(:page) { build :made_live_page, :with_address_settings, international_address: "false" }
+      let(:page) { build :page, :with_address_settings, international_address: "false" }
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq(
@@ -44,7 +50,7 @@ describe PageOptionsService do
     end
 
     context "with address and not international or UK" do
-      let(:page) { build :made_live_page, :with_address_settings, uk_address: "false", international_address: "false" }
+      let(:page) { build :page, :with_address_settings, uk_address: "false", international_address: "false" }
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq(
@@ -55,7 +61,7 @@ describe PageOptionsService do
     end
 
     context "with date of birth" do
-      let(:page) { build :made_live_page, :with_date_settings, input_type: "date_of_birth" }
+      let(:page) { build :page, :with_date_settings, input_type: "date_of_birth" }
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
@@ -66,7 +72,7 @@ describe PageOptionsService do
     end
 
     context "with date other_date" do
-      let(:page) { build :made_live_page, :with_date_settings, input_type: "other_date" }
+      let(:page) { build :page, :with_date_settings, input_type: "other_date" }
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
@@ -77,7 +83,7 @@ describe PageOptionsService do
     end
 
     context "with short text" do
-      let(:page) { build :made_live_page, :with_text_settings, input_type: "single_line" }
+      let(:page) { build :page, :with_text_settings, input_type: "single_line" }
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
@@ -88,7 +94,7 @@ describe PageOptionsService do
     end
 
     context "with long text" do
-      let(:page) { build :made_live_page, :with_text_settings, input_type: "long_text" }
+      let(:page) { build :page, :with_text_settings, input_type: "long_text" }
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
@@ -100,12 +106,12 @@ describe PageOptionsService do
 
     context "with selection" do
       let(:page) do
-        build :made_live_page,
+        build :page,
               is_optional: "false",
               answer_type: "selection",
-              answer_settings: OpenStruct.new(only_one_option: "true",
-                                              selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
-                                                                  OpenStruct.new(attributes: { name: "Option 2" })])
+              answer_settings: DataStruct.new(only_one_option: "true",
+                                              selection_options: [DataStruct.new({ name: "Option 1" }),
+                                                                  DataStruct.new({ name: "Option 2" })])
       end
 
       it "returns the correct options" do
@@ -118,12 +124,12 @@ describe PageOptionsService do
 
     context "with selection not only_one_option" do
       let(:page) do
-        build :made_live_page,
+        build :page,
               is_optional: "false",
               answer_type: "selection",
-              answer_settings: OpenStruct.new(only_one_option: "false",
-                                              selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
-                                                                  OpenStruct.new(attributes: { name: "Option 2" })])
+              answer_settings: DataStruct.new(only_one_option: "false",
+                                              selection_options: [DataStruct.new({ name: "Option 1" }),
+                                                                  DataStruct.new({ name: "Option 2" })])
       end
 
       it "returns the correct options" do
@@ -136,12 +142,12 @@ describe PageOptionsService do
 
     context "with selection with more than ten options" do
       let(:option_names) { Array.new(11).each_with_index.map { |_element, index| "Option #{index}" } }
-      let(:selection_options) { option_names.map { |option| OpenStruct.new(attributes: { name: option }) } }
+      let(:selection_options) { option_names.map { |option| DataStruct.new({ name: option }) } }
       let(:page) do
-        build :made_live_page,
+        build :page,
               is_optional: "false",
               answer_type: "selection",
-              answer_settings: OpenStruct.new(only_one_option: "false", selection_options:)
+              answer_settings: DataStruct.new(only_one_option: "false", selection_options:)
       end
 
       it "returns the options in a details component" do
@@ -161,7 +167,7 @@ describe PageOptionsService do
     end
 
     context "with full name, no title needed" do
-      let(:page) { build :made_live_page, :with_name_settings, input_type: "full_name", title_needed: "false" }
+      let(:page) { build :page, :with_name_settings, input_type: "full_name", title_needed: "false" }
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
@@ -172,7 +178,7 @@ describe PageOptionsService do
     end
 
     context "with first_and_last_name, title needed" do
-      let(:page) { build :made_live_page, :with_name_settings, input_type: "first_and_last_name", title_needed: "true" }
+      let(:page) { build :page, :with_name_settings, input_type: "first_and_last_name", title_needed: "true" }
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
@@ -183,7 +189,7 @@ describe PageOptionsService do
     end
 
     context "with first_middle_and_last_name, title no needed" do
-      let(:page) { build :made_live_page, :with_name_settings, input_type: "first_middle_and_last_name", title_needed: "false" }
+      let(:page) { build :page, :with_name_settings, input_type: "first_middle_and_last_name", title_needed: "false" }
 
       it "returns the correct options" do
         expect(page_options_service.all_options_for_answer_type).to eq([
@@ -195,7 +201,7 @@ describe PageOptionsService do
 
     Page::ANSWER_TYPES_WITHOUT_SETTINGS.each do |answer_type|
       context "with #{answer_type}" do
-        let(:page) { build :made_live_page, answer_type: }
+        let(:page) { build :page, answer_type: }
 
         it "returns the correct options" do
           expect(page_options_service.all_options_for_answer_type).to eq([
@@ -206,14 +212,14 @@ describe PageOptionsService do
     end
 
     context "with conditions" do
-      let(:page) { build :made_live_page, id: 1, answer_type: "email", routing_conditions: }
-      let(:condition_pointing_to_page_3) { build :made_live_condition, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 } # rubocop:disable RSpec/IndexedLet
-      let(:condition_pointing_to_page_4) { build :made_live_condition, routing_page_id: 1, check_page_id: 1, answer_value: "England", goto_page_id: 4 } # rubocop:disable RSpec/IndexedLet
-      let(:routing_conditions) { nil }
+      let(:page) { create :page, id: 1, answer_type: "email", routing_conditions: }
+      let(:condition_pointing_to_page_3) { create :condition, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 3 } # rubocop:disable RSpec/IndexedLet
+      let(:condition_pointing_to_page_4) { create :condition, routing_page_id: 1, check_page_id: 1, answer_value: "England", goto_page_id: 4 } # rubocop:disable RSpec/IndexedLet
+      let(:routing_conditions) { [] }
 
       context "with a legacy page that doesn't have routing conditions method" do
         subject(:page_options_service) do
-          page_without_routing_conditions_method = page.dup.tap { |p| p.routing_conditions = nil }
+          page_without_routing_conditions_method = page.dup.tap { |p| p.routing_conditions = [] }
           described_class.new(page: page_without_routing_conditions_method, pages:)
         end
 
@@ -263,7 +269,7 @@ describe PageOptionsService do
       context "with a condition that points to the end of the form" do
         let(:routing_conditions) { [condition] }
         let(:answer_value) { "Wales" }
-        let(:condition) { build :made_live_condition, answer_value:, goto_page_id: nil, skip_to_end: true }
+        let(:condition) { build :condition, answer_value:, goto_page_id: nil, skip_to_end: true }
 
         it "returns the correct options" do
           expect(page_options_service.all_options_for_answer_type).to include(
@@ -276,8 +282,8 @@ describe PageOptionsService do
       end
 
       context "with a secondary skip" do
-        let(:page) { build :made_live_page, routing_conditions: }
-        let(:skip_condition) { build :made_live_condition, routing_page_id: pages.third.id, goto_page_id: pages.fourth.id, check_page_id: page.id, skip_to_end: false }
+        let(:page) { build :page, routing_conditions: }
+        let(:skip_condition) { build :condition, routing_page_id: pages.third.id, goto_page_id: pages.fourth.id, check_page_id: page.id, skip_to_end: false }
 
         it "returns the correct options" do
           page.routing_conditions = [skip_condition]
@@ -291,8 +297,8 @@ describe PageOptionsService do
       end
 
       context "with an exit page" do
-        let(:page) { build :made_live_page, routing_conditions: }
-        let(:exit_page_condition) { build :made_live_condition, routing_page_id: page.id, answer_value: "yes", goto_page_id: nil, check_page_id: page.id, exit_page_markdown: "Exit!", exit_page_heading: "You are not eligible" }
+        let(:page) { build :page, routing_conditions: }
+        let(:exit_page_condition) { build :condition, routing_page_id: page.id, answer_value: "yes", goto_page_id: nil, check_page_id: page.id, exit_page_markdown: "Exit!", exit_page_heading: "You are not eligible" }
 
         it "returns the correct options" do
           page.routing_conditions = [exit_page_condition]
@@ -307,7 +313,7 @@ describe PageOptionsService do
     end
 
     context "with guidance" do
-      let(:page) { build :made_live_page, :with_guidance }
+      let(:page) { build :page, :with_guidance }
 
       it "returns the correct page heading" do
         expect(page_options_service.all_options_for_answer_type).to include(
@@ -351,7 +357,7 @@ describe PageOptionsService do
 
     context "with answer type of file" do
       context "when file upload question does not have a page heading" do
-        let(:page) { build :made_live_page, :with_file_upload_answer_type }
+        let(:page) { build :page, :with_file_upload_answer_type }
 
         it "does not include the question text" do
           expect(page_options_service.all_options_for_answer_type).not_to include(
@@ -362,7 +368,7 @@ describe PageOptionsService do
       end
 
       context "when file upload question contains guidance text" do
-        let(:page) { build :made_live_page, :with_guidance, :with_file_upload_answer_type }
+        let(:page) { build :page, :with_guidance, :with_file_upload_answer_type }
 
         it "returns question text" do
           expect(page_options_service.all_options_for_answer_type).to include(
