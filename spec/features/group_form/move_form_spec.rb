@@ -81,7 +81,7 @@ feature "Move a form", type: :feature do
   end
 
   def then_i_see_the_form_is_gone_from_my_group
-    expect(page).to have_content("'#{form.name}' has been moved to '#{another_group.name}'")
+    expect(page).to have_content("‘#{form.name}’ has been moved to ‘#{another_group.name}’")
     expect(page).to have_css("h1", text: group.name)
     expect(page).not_to have_css(".govuk-table", text: form.name)
   end
