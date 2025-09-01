@@ -13,6 +13,8 @@ class Pages::QuestionsController < PagesController
                                                is_repeatable: draft_question.is_repeatable,
                                                draft_question:)
 
+    headers["Cache-Control"] = "no-store"
+
     render :new, locals: { current_form:, draft_question: }
   end
 
