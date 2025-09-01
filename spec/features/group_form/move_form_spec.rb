@@ -36,6 +36,13 @@ feature "Move a form", type: :feature do
       but_i_do_not_see_the_move_link
       and_i_cannot_visit_the_move_form_page
     end
+
+    scenario "not choosing a form" do
+      given_i_am_logged_in_as_an_organisation_admin
+      and_i_see_the_move_form_page
+      when_i_do_not_choose_a_group
+      then_i_see_an_error_message
+    end
   end
 
   def given_i_am_logged_in_as_an_organisation_admin
@@ -75,6 +82,8 @@ feature "Move a form", type: :feature do
     expect(page).to have_content(another_group.name)
   end
 
+  alias_method :and_i_see_the_move_form_page, :then_i_see_the_move_form_page
+
   def when_i_change_the_group
     choose(another_group.name)
     click_button "Continue"
@@ -91,5 +100,14 @@ feature "Move a form", type: :feature do
     visit group_path(another_group)
 
     expect(page).to have_content(form.name)
+  end
+
+  def when_i_do_not_choose_a_group
+    click_button "Continue"
+  end
+
+  def then_i_see_an_error_message
+    expect(page).to have_content("There is a problem")
+    expect(page).to have_content("Select a group")
   end
 end

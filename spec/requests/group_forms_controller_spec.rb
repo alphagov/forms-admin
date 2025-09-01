@@ -72,10 +72,20 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
     describe "PATCH /update" do
       let(:other_group) { create(:group, organisation: organisation_admin_user.organisation) }
 
-      it "redirects to the group" do
-        patch group_form_url(group, id: form.id), params: { forms_group_select: { group: other_group.id } }
+      context "with valid parameters" do
+        it "redirects to the group" do
+          patch group_form_url(group, id: form.id), params: { forms_group_select: { group: other_group.id } }
 
-        expect(response).to redirect_to(group_url(group))
+          expect(response).to redirect_to(group_url(group))
+        end
+      end
+
+      context "with missing form group parameter" do
+        it "re-renders the form with an error" do
+          patch group_form_url(group, id: form.id), params: { forms_group_select: { group: nil } }
+
+          expect(response).to have_http_status :see_other
+        end
       end
     end
   end
