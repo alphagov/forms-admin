@@ -1,6 +1,5 @@
 class PagesController < ApplicationController
   before_action :check_user_has_permission
-  before_action :clear_draft_questions_data, only: %i[index move_page]
   after_action :verify_authorized
   after_action :set_answer_type_logging_attribute
 
