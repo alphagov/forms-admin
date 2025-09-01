@@ -84,7 +84,7 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
         it "re-renders the form with an error" do
           patch group_form_url(group, id: form.id), params: { forms_group_select: { group: nil } }
 
-          expect(response).to have_http_status :see_other
+          expect(response).to have_http_status :unprocessable_content
         end
       end
     end

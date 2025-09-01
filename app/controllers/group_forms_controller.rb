@@ -30,7 +30,7 @@ class GroupFormsController < ApplicationController
     @group_form = GroupForm.find_by(form_id: params[:id])
     authorize @group_form
 
-    @form = FormRepository.find(form_id: @group_form.form_id)
+    @form = FormRepository.find(form_id: params[:id])
 
     @group_select = Forms::GroupSelect.new(group: @group, form: @form)
     @group_select_presenter = Forms::GroupSelectPresenter.call(group: @group, groups: @group_select.groups, form: @form)
@@ -40,17 +40,21 @@ class GroupFormsController < ApplicationController
     @group_form = GroupForm.find_by(form_id: params[:id])
     authorize @group_form
 
-    form = Form.find(params[:id])
+    @form = Form.find(params[:id])
 
-    @group_select = Forms::GroupSelect.new(group_select_params.merge(form: form))
+    @group_select = Forms::GroupSelect.new(group_select_params.merge(form: @form))
 
     if @group_select.valid?
       receiving_group = Group.find(@group_select.group)
-
       @group_form.update!(group: receiving_group)
-      success_message = t(".success", form_name: form.name, receiving_group_name: receiving_group.name)
+      success_message = t(".success", form_name: @form.name, receiving_group_name: receiving_group.name)
+
       redirect_to @group, success: success_message, status: :see_other
     else
+      @group_select = Forms::GroupSelect.new(group: @group, form: @form)
+      @group_select_presenter = Forms::GroupSelectPresenter.call(group: @group, groups: @group_select.groups, form: @form)
+      @group_select.errors.add(:group, :blank) if group_select_params[:selected_group].blank?
+
       render :edit, status: :unprocessable_content
     end
   end

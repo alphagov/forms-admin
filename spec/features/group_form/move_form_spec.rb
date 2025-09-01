@@ -82,7 +82,10 @@ feature "Move a form", type: :feature do
     expect(page).to have_content(another_group.name)
   end
 
-  alias_method :and_i_see_the_move_form_page, :then_i_see_the_move_form_page
+  def and_i_see_the_move_form_page
+    visit edit_group_form_path(group, id: form.id)
+    expect(page.find("h1")).to have_content("#{form.name}\n-\nMove this form to a different group")
+  end
 
   def when_i_change_the_group
     choose(another_group.name)
@@ -108,6 +111,6 @@ feature "Move a form", type: :feature do
 
   def then_i_see_an_error_message
     expect(page).to have_content("There is a problem")
-    expect(page).to have_content("Select a group")
+    expect(page).to have_content("Select the group you want to move this form to")
   end
 end
