@@ -50,4 +50,13 @@ RSpec.describe FormDocument::Content, type: :model do
       end
     end
   end
+
+  describe ".from_form_document" do
+    let(:form) { create :form, :live }
+    let(:form_document) { form.live_form_document }
+
+    it "creates a FormDocument::Content" do
+      expect(described_class.from_form_document(form_document)).to be_a(described_class)
+    end
+  end
 end

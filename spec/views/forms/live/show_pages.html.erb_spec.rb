@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "forms/live/show_pages.html.erb" do
   let(:form) { create :form, :live }
-  let(:form_document) { FormDocument::Content.new(form.live_form_document.content) }
+  let(:form_document) { FormDocument::Content.from_form_document(form.live_form_document) }
 
   before do
     render(template: "forms/live/show_pages", locals: { form_document: form_document })

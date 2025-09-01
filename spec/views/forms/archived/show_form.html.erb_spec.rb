@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "archived/show_form.html.erb" do
   let(:form_metadata) { create :form, :archived }
-  let(:form_document) { FormDocument::Content.new(form_metadata.archived_form_document.content) }
+  let(:form_document) { FormDocument::Content.from_form_document(form_metadata.archived_form_document) }
 
   before do
     render(template: "forms/archived/show_form", locals: { form_document:, form_metadata: })

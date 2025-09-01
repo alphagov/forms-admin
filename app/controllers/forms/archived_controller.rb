@@ -13,7 +13,7 @@ module Forms
     end
 
     def current_archived_form
-      @current_archived_form ||= FormDocument::Content.new(**current_form.archived_form_document.content)
+      @current_archived_form ||= FormDocument::Content.from_form_document(current_form.archived_form_document)
     end
   end
 end

@@ -38,4 +38,8 @@ class FormDocument::Content
   def made_live_date
     live_at.to_date if live_at.present?
   end
+
+  def self.from_form_document(form_document)
+    new(**form_document.content)
+  end
 end

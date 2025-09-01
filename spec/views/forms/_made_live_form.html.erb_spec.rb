@@ -6,7 +6,7 @@ describe "forms/_made_live_form.html.erb" do
   let(:what_happens_next_markdown) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:form_metadata) { create :form, :live, declaration_text:, what_happens_next_markdown:, submission_type: }
   let(:form_document) do
-    form_document_content = FormDocument::Content.new(form_metadata.live_form_document.content)
+    form_document_content = FormDocument::Content.from_form_document(form_metadata.live_form_document)
     form_document_content.live_at = 1.week.ago
     form_document_content
   end
@@ -189,7 +189,7 @@ describe "forms/_made_live_form.html.erb" do
 
   context "with no support information set" do
     let(:form_document) do
-      form_document_content = FormDocument::Content.new(form_metadata.live_form_document.content)
+      form_document_content = FormDocument::Content.from_form_document(form_metadata.live_form_document)
       form_document_content.support_email = nil
       form_document_content.support_url_text = nil
       form_document_content.support_url = nil
