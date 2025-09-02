@@ -1,5 +1,5 @@
 module Forms
-  class UnarchiveController < ApplicationController
+  class UnarchiveController < WebController
     after_action :verify_authorized
 
     def new

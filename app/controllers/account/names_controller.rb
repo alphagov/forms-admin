@@ -1,5 +1,5 @@
 module Account
-  class NamesController < ApplicationController
+  class NamesController < WebController
     include AfterSignInPathHelper
 
     before_action :redirect_if_name_exists

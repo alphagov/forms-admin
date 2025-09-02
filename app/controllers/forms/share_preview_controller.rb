@@ -1,5 +1,5 @@
 module Forms
-  class SharePreviewController < ApplicationController
+  class SharePreviewController < WebController
     before_action :check_user_has_permission
     after_action :verify_authorized
 

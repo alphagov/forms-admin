@@ -1,5 +1,5 @@
 module Forms
-  class ArchiveFormController < ApplicationController
+  class ArchiveFormController < WebController
     before_action :check_user_has_permission
     after_action :verify_authorized
 

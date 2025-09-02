@@ -1,4 +1,4 @@
-class FormsController < ApplicationController
+class FormsController < WebController
   after_action :verify_authorized
 
   def show

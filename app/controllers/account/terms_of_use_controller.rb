@@ -1,5 +1,5 @@
 module Account
-  class TermsOfUseController < ApplicationController
+  class TermsOfUseController < WebController
     include AfterSignInPathHelper
 
     before_action :redirect_if_terms_agreed

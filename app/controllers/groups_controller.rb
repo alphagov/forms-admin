@@ -1,4 +1,4 @@
-class GroupsController < ApplicationController
+class GroupsController < WebController
   before_action :set_group, except: %i[index new create]
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index

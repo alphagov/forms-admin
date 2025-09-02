@@ -1,5 +1,5 @@
 module Account
-  class OrganisationsController < ApplicationController
+  class OrganisationsController < WebController
     include AfterSignInPathHelper
 
     before_action :redirect_if_organisation_exists

@@ -1,4 +1,4 @@
-class MouSignaturesController < ApplicationController
+class MouSignaturesController < WebController
   after_action :verify_authorized, only: %i[index]
 
   def index

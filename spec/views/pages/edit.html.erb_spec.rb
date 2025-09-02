@@ -33,7 +33,7 @@ describe "pages/edit.html.erb" do
     assign(:question_input, question_input)
     assign(:current_user, current_user)
 
-    # This is normally done in the ApplicationController, but we aren't using
+    # This is normally done in the WebController, but we aren't using
     # that in this test
     ActionView::Base.default_form_builder = GOVUKDesignSystemFormBuilder::FormBuilder
 

@@ -1,5 +1,5 @@
 module Forms
-  class WhatHappensNextController < ApplicationController
+  class WhatHappensNextController < WebController
     after_action :verify_authorized
 
     def new

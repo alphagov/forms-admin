@@ -1,4 +1,4 @@
-class AuthenticationController < ApplicationController
+class AuthenticationController < WebController
   skip_before_action :authenticate_and_check_access
   skip_before_action :redirect_if_account_not_completed
   protect_from_forgery with: :null_session, only: %i[redirect_to_sign_in]

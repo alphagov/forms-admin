@@ -1,5 +1,5 @@
 module Forms
-  class PaymentLinkController < ApplicationController
+  class PaymentLinkController < WebController
     after_action :verify_authorized
 
     def new

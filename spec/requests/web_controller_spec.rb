@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ApplicationController, type: :request do
+RSpec.describe WebController, type: :request do
   let(:form) { create :form }
 
   let(:output) { StringIO.new }
