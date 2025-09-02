@@ -22,7 +22,7 @@ RSpec.describe Forms::UnarchiveController, type: :request do
 
   describe "#new" do
     before do
-      allow(FormRepository).to receive_messages(find: form, save!: updated_form)
+      allow(FormRepository).to receive_messages(save!: updated_form)
 
       Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user, role: :group_admin)
       GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -30,10 +30,6 @@ RSpec.describe Forms::UnarchiveController, type: :request do
       login_as user
 
       get unarchive_path(form_id: form.id)
-    end
-
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "returns 200" do
@@ -55,7 +51,7 @@ RSpec.describe Forms::UnarchiveController, type: :request do
 
   describe "#create" do
     before do
-      allow(FormRepository).to receive_messages(find: form, make_live!: form, find_live: made_live_form)
+      allow(FormRepository).to receive_messages(make_live!: form)
 
       Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user, role: :group_admin)
       GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -67,10 +63,6 @@ RSpec.describe Forms::UnarchiveController, type: :request do
 
     context "when making a form live again" do
       let(:form_params) { { forms_make_live_input: { confirm: :yes, form: } } }
-
-      it "reads the form" do
-        expect(FormRepository).to have_received(:find)
-      end
 
       it "makes form live" do
         expect(FormRepository).to have_received(:make_live!)
@@ -87,10 +79,6 @@ RSpec.describe Forms::UnarchiveController, type: :request do
 
     context "when deciding not to make a form live again" do
       let(:form_params) { { forms_make_live_input: { confirm: :no } } }
-
-      it "reads the form" do
-        expect(FormRepository).to have_received(:find)
-      end
 
       it "does not make the form live" do
         expect(FormRepository).not_to have_received(:make_live!)

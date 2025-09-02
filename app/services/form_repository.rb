@@ -10,14 +10,6 @@ class FormRepository
       Form.find(form_id)
     end
 
-    def find_live(form_id:)
-      Api::V1::FormResource.find_live(form_id)
-    end
-
-    def find_archived(form_id:)
-      Api::V1::FormResource.find_archived(form_id)
-    end
-
     def where(creator_id:)
       Form.where(creator_id:)
     end

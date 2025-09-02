@@ -64,58 +64,6 @@ describe FormRepository do
     end
   end
 
-  describe "#find_live" do
-    let(:form) { build(:made_live_form, id: 2) }
-
-    before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/#{form.id}/live", headers, form.to_json, 200
-      end
-    end
-
-    describe "api" do
-      it "calls the find_live endpoint through ActiveResource" do
-        find_live_request = ActiveResource::Request.new(:get, "/api/v1/forms/#{form.id}/live", form, headers)
-        described_class.find_live(form_id: form.id)
-        expect(ActiveResource::HttpMock.requests).to include find_live_request
-      end
-    end
-
-    describe "database" do
-      it "does not save anything to the database" do
-        expect {
-          described_class.find_live(form_id: form.id)
-        }.not_to change(Form, :count)
-      end
-    end
-  end
-
-  describe "#find_archived" do
-    let(:form) { build(:made_live_form, id: 2) }
-
-    before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.get "/api/v1/forms/#{form.id}/archived", headers, form.to_json, 200
-      end
-    end
-
-    describe "api" do
-      it "calls the find_archived endpoint through ActiveResource" do
-        find_archived_request = ActiveResource::Request.new(:get, "/api/v1/forms/#{form.id}/archived", form, headers)
-        described_class.find_archived(form_id: form.id)
-        expect(ActiveResource::HttpMock.requests).to include find_archived_request
-      end
-    end
-
-    describe "database" do
-      it "does not save anything to the database" do
-        expect {
-          described_class.find_archived(form_id: form.id)
-        }.not_to change(Form, :count)
-      end
-    end
-  end
-
   describe "#where" do
     let(:form) { create(:form_record, creator_id: 3) }
 
