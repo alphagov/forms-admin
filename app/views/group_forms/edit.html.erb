@@ -69,6 +69,8 @@
 
       <% if @group_select.groups.size > 0 %>
         <%= f.govuk_submit %>
+      <% else %>
+        <p><%= link_to t('back_link.group', group_name: @group.name), group_path(@group) %></p>
       <% end %>
 
     <% end %>
