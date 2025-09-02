@@ -8,12 +8,6 @@
       <%= f.govuk_error_summary %>
     <% end %>
 
-    <% if flash[:message] %>
-      <%= govuk_notification_banner(title_text: t("banner.default.title")) do |nb| %>
-        <p><%= flash[:message] %></p>
-        <% end %>
-    <% end %>
-
     <h1 class="govuk-heading-l">
       <span class="govuk-caption-l"><%= @form.name %></span><span class="govuk-visually-hidden"> - </span>
       <%= t('page_titles.move_form') %>
