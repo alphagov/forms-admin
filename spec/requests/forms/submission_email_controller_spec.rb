@@ -8,7 +8,6 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
   let(:user_outside_group) { build :user, id: 2, organisation: }
 
   let(:form) { create :form, creator_id: 1 }
-  let(:made_live_form) { build(:made_live_form, id: form.id) }
 
   let(:submission_email_mailer_spy) do
     submission_email_mailer = instance_spy(SubmissionEmailMailer)
@@ -19,7 +18,7 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, save!: form, find_live: made_live_form)
+    allow(FormRepository).to receive_messages(save!: form)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -199,6 +198,10 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
         expect(response).to render_template(:submission_email_confirmed)
       end
 
+      it "displays the default confirmation text" do
+        expect(response.body).to include(I18n.t("email_code_success.body_html", submission_email: form.submission_email))
+      end
+
       context "when current user does not belong to the group" do
         let(:user) { user_outside_group }
 
@@ -208,20 +211,30 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
       end
     end
 
-    context "when draft version submission email is different from live version" do
+    context "when the form is live" do
       let(:form) { create :form, :live, creator_id: 1 }
-      let(:previous_live_version) { build :made_live_form, creator_id: 1, id: form.id, submission_email: Faker::Internet.email(domain: "test.example.gov.uk") }
 
-      before do
-        form.submission_email = Faker::Internet.email(domain: "different.gov.uk")
+      context "when the email address is the same as for the live version" do
+        before do
+          get submission_email_confirmed_path(form.id)
+        end
 
-        allow(FormRepository).to receive_messages(find: form, find_live: previous_live_version)
-
-        get submission_email_confirmed_path(form.id)
+        it "displays the default confirmation text" do
+          expect(response.body).to include(I18n.t("email_code_success.body_html", submission_email: form.submission_email))
+        end
       end
 
-      it "displays the default text and tells users we will email form processing team" do
-        expect(response.body).to include(simple_format(I18n.t("email_code_success.live_submission_email_changed_body_html", new_submission_email: form.submission_email)))
+      context "when draft version submission email is different from live version" do
+        before do
+          form.submission_email = Faker::Internet.email(domain: "different.gov.uk")
+          form.save!
+
+          get submission_email_confirmed_path(form.id)
+        end
+
+        it "displays the confirmation text for when the email has changed" do
+          expect(response.body).to include(simple_format(I18n.t("email_code_success.live_submission_email_changed_body_html", new_submission_email: form.submission_email)))
+        end
       end
     end
   end
