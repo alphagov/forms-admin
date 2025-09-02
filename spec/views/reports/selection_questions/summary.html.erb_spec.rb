@@ -34,12 +34,12 @@ describe "reports/selection_questions/summary.html.erb" do
   end
 
   it "has statistics about questions with autocomplete" do
-    page = Capybara.string(rendered.html)
-    within(page.find_all(".govuk-summary-list__row").first) do
-      expect(page.find_all(".govuk-summary-list__value"[0])).to have_text "234"
-      expect(page.find_all(".govuk-summary-list__value"[1])).to have_text "444"
-      expect(page.find_all(".govuk-summary-list__value"[2])).to have_text "111"
-    end
+    expect(rendered).to have_xpath "(//dl)[1]/div[1]/dt", text: "Live forms with more than 30 options"
+    expect(rendered).to have_xpath "(//dl)[1]/div[1]/dd", text: "222"
+    expect(rendered).to have_xpath "(//dl)[1]/div[2]/dt", text: "Number of questions"
+    expect(rendered).to have_xpath "(//dl)[1]/div[2]/dd", text: "444"
+    expect(rendered).to have_xpath "(//dl)[1]/div[3]/dt", text: "Questions with ‘None of the above’"
+    expect(rendered).to have_xpath "(//dl)[1]/div[3]/dd", text: "111"
   end
 
   it "has link to questions with autocomplete report" do
@@ -47,12 +47,12 @@ describe "reports/selection_questions/summary.html.erb" do
   end
 
   it "has statistics about questions with radio buttons" do
-    page = Capybara.string(rendered.html)
-    within(page.find_all(".govuk-summary-list__row")[1]) do
-      expect(page.find_all(".govuk-summary-list__value"[0])).to have_text "33"
-      expect(page.find_all(".govuk-summary-list__value"[1])).to have_text "77"
-      expect(page.find_all(".govuk-summary-list__value"[2])).to have_text "44"
-    end
+    expect(rendered).to have_xpath "(//dl)[2]/div[1]/dt", text: "Live forms with 30 options or fewer"
+    expect(rendered).to have_xpath "(//dl)[2]/div[1]/dd", text: "33"
+    expect(rendered).to have_xpath "(//dl)[2]/div[2]/dt", text: "Number of questions"
+    expect(rendered).to have_xpath "(//dl)[2]/div[2]/dd", text: "77"
+    expect(rendered).to have_xpath "(//dl)[2]/div[3]/dt", text: "Questions with ‘None of the above’"
+    expect(rendered).to have_xpath "(//dl)[2]/div[3]/dd", text: "44"
   end
 
   it "has link to questions with radio buttons report" do
@@ -60,12 +60,12 @@ describe "reports/selection_questions/summary.html.erb" do
   end
 
   it "has statistics about questions with checkboxes buttons" do
-    page = Capybara.string(rendered.html)
-    within(page.find_all(".govuk-summary-list__row")[1]) do
-      expect(page.find_all(".govuk-summary-list__value"[0])).to have_text "55"
-      expect(page.find_all(".govuk-summary-list__value"[1])).to have_text "99"
-      expect(page.find_all(".govuk-summary-list__value"[2])).to have_text "88"
-    end
+    expect(rendered).to have_xpath "(//dl)[3]/div[1]/dt", text: "Live forms using one or more"
+    expect(rendered).to have_xpath "(//dl)[3]/div[1]/dd", text: "55"
+    expect(rendered).to have_xpath "(//dl)[3]/div[2]/dt", text: "Number of questions"
+    expect(rendered).to have_xpath "(//dl)[3]/div[2]/dd", text: "99"
+    expect(rendered).to have_xpath "(//dl)[3]/div[3]/dt", text: "Questions with ‘None of the above’"
+    expect(rendered).to have_xpath "(//dl)[3]/div[3]/dd", text: "88"
   end
 
   it "has link to questions with checkboxes report" do

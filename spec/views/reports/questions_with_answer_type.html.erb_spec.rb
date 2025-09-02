@@ -36,25 +36,16 @@ describe "reports/questions_with_answer_type" do
   describe "questions table" do
     it "has the correct headers" do
       page = Capybara.string(rendered.html)
-      within(page.find(".govuk-table__head")) do
-        expect(page.find_all(".govuk-table__header"[0])).to have_text "Form name"
-        expect(page.find_all(".govuk-table__header"[1])).to have_text "Organisation"
-        expect(page.find_all(".govuk-table__header"[2])).to have_text "Question text"
-      end
+      expect(page.find_all(".govuk-table__header")[0]).to have_text "Form name"
+      expect(page.find_all(".govuk-table__header")[1]).to have_text "Organisation"
+      expect(page.find_all(".govuk-table__header")[2]).to have_text "Question text"
     end
 
     it "has rows for each question" do
-      page = Capybara.string(rendered.html)
-      within(page.find_all(".govuk-table__row")[1]) do
-        expect(page.find_all(".govuk-table__cell"[0])).to have_text "All question types form"
-        expect(page.find_all(".govuk-table__cell"[1])).to have_text "Government Digital Service"
-        expect(page.find_all(".govuk-table__cell"[2])).to have_text "Email address"
-      end
-      within(page.find_all(".govuk-table__row")[2]) do
-        expect(page.find_all(".govuk-table__cell"[0])).to have_text "Branch route form"
-        expect(page.find_all(".govuk-table__cell"[1])).to have_text "Government Digital Service"
-        expect(page.find_all(".govuk-table__cell"[2])).to have_text "What's your email address?"
-      end
+      expect(rendered).to have_table with_rows: [
+        { "Form name" => "All question types form", "Organisation" => "Government Digital Service", "Question text" => "Email address" },
+        { "Form name" => "Branch route form", "Organisation" => "Government Digital Service", "Question text" => "What’s your email address?" },
+      ]
     end
   end
 

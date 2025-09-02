@@ -122,10 +122,8 @@ RSpec.describe ReportsController, type: :request do
 
       it "includes the report data" do
         page = Capybara.string(response.body)
-        within(page.find_all(".govuk-summary-list").first) do
-          expect(page.find_all(".govuk-summary-list__key")[0]).to have_text "Total live forms"
-          expect(page.find_all(".govuk-summary-list__value")[0]).to have_text "3"
-        end
+        expect(page).to have_xpath "//dl/div[1]/dt", text: "Total live forms"
+        expect(page).to have_xpath "//dl/div[1]/dd", text: "4"
       end
     end
   end
@@ -180,10 +178,8 @@ RSpec.describe ReportsController, type: :request do
 
       it "includes the report data" do
         page = Capybara.string(response.body)
-        within(page.find_all(".govuk-summary-list").first) do
-          expect(page.find_all(".govuk-summary-list__key")[2]).to have_text "Question text"
-          expect(page.find_all(".govuk-summary-list__value")[0]).to have_text "Email address"
-        end
+        expect(page).to have_xpath "//thead/tr/th[3]", text: "Question text"
+        expect(page).to have_xpath "//tbody/tr[1]/td[3]", text: "Email address"
       end
     end
   end
@@ -238,10 +234,8 @@ RSpec.describe ReportsController, type: :request do
 
       it "includes the report data" do
         page = Capybara.string(response.body)
-        within(page.find_all(".govuk-summary-list").first) do
-          expect(page.find_all(".govuk-summary-list__key")[2]).to have_text "Question text"
-          expect(page.find_all(".govuk-summary-list__value")[0]).to have_text "Single line of text"
-        end
+        expect(page).to have_xpath "//thead/tr/th[3]", text: "Question text"
+        expect(page).to have_xpath "//tbody/tr/td[3]", text: "Single line of text"
       end
     end
   end
@@ -296,10 +290,8 @@ RSpec.describe ReportsController, type: :request do
 
       it "includes the report data" do
         page = Capybara.string(response.body)
-        within(page.find_all(".govuk-summary-list").first) do
-          expect(page.find_all(".govuk-summary-list__key")[2]).to have_text "Number of routes"
-          expect(page.find_all(".govuk-summary-list__value")[0]).to have_text "2"
-        end
+        expect(page).to have_xpath "//thead/tr/th[3]", text: "Number of routes"
+        expect(page).to have_xpath "//tbody/tr[1]/td[3]", text: "3"
       end
     end
   end
@@ -354,12 +346,10 @@ RSpec.describe ReportsController, type: :request do
 
       it "includes the report data" do
         page = Capybara.string(response.body)
-        within(page.find_all(".govuk-summary-list").first) do
-          expect(page.find_all(".govuk-summary-list__key")[2]).to have_text "Number of routes"
-          expect(page.find_all(".govuk-summary-list__value")[0]).to have_text "2"
-          expect(page.find_all(".govuk-summary-list__key")[2]).to have_text "Number of branch routes"
-          expect(page.find_all(".govuk-summary-list__value")[0]).to have_text "1"
-        end
+        expect(page).to have_xpath "//thead/tr/th[3]", text: "Number of routes"
+        expect(page).to have_xpath "//tbody/tr/td[3]", text: "3"
+        expect(page).to have_xpath "//thead/tr/th[4]", text: "Number of branch routes"
+        expect(page).to have_xpath "//tbody/tr/td[4]", text: "1"
       end
     end
   end
@@ -414,10 +404,8 @@ RSpec.describe ReportsController, type: :request do
 
       it "includes the report data" do
         page = Capybara.string(response.body)
-        within(page.find_all(".govuk-summary-list").first) do
-          expect(page.find_all(".govuk-summary-list__key")[2]).to have_text "Form name"
-          expect(page.find_all(".govuk-summary-list__value")[0]).to have_text "All question types form"
-        end
+        expect(page).to have_xpath "//thead/tr/th[1]", text: "Form name"
+        expect(page).to have_xpath "//tbody/tr[1]/td[1]", text: "All question types form"
       end
     end
   end
@@ -472,10 +460,8 @@ RSpec.describe ReportsController, type: :request do
 
       it "includes the report data" do
         page = Capybara.string(response.body)
-        within(page.find_all(".govuk-summary-list").first) do
-          expect(page.find_all(".govuk-summary-list__key")[2]).to have_text "Form name"
-          expect(page.find_all(".govuk-summary-list__value")[0]).to have_text "All question types form"
-        end
+        expect(page).to have_xpath "//thead/tr/th[1]", text: "Form name"
+        expect(page).to have_xpath "//tbody/tr[1]/td[1]", text: "All question types form"
       end
     end
   end
