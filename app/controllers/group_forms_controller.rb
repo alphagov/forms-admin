@@ -39,13 +39,11 @@ class GroupFormsController < ApplicationController
   def update
     @group_form = GroupForm.find_by(form_id: params[:id])
     authorize @group_form
-
     @form = Form.find(params[:id])
-
     @group_select = Forms::GroupSelect.new(group_select_params.merge(form: @form))
 
     if @group_select.valid?
-      receiving_group = Group.find(@group_select.group)
+      receiving_group = Group.find_by(external_id: @group_select.group)
       @group_form.update!(group: receiving_group)
       success_message = t(".success", form_name: @form.name, receiving_group_name: receiving_group.name)
 

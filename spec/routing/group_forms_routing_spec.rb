@@ -13,6 +13,10 @@ RSpec.describe GroupFormsController, type: :routing do
     it "routes to #edit" do
       expect(get: "/groups/1/forms/1/edit").to route_to("group_forms#edit", group_id: "1", id: "1")
     end
+
+    it "routes to #update" do
+      expect(patch: "/groups/1/forms/1").to route_to("group_forms#update", group_id: "1", id: "1")
+    end
   end
 
   describe "path helpers" do

@@ -74,7 +74,7 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
 
       context "with valid parameters" do
         it "redirects to the group" do
-          patch group_form_url(group, id: form.id), params: { forms_group_select: { group: other_group.id } }
+          patch group_form_url(group, id: form.id), params: { forms_group_select: { group: other_group.external_id } }
 
           expect(response).to redirect_to(group_url(group))
         end
