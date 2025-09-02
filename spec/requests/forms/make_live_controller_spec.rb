@@ -24,18 +24,12 @@ RSpec.describe Forms::MakeLiveController, type: :request do
 
   describe "#new" do
     before do
-      allow(FormRepository).to receive_messages(find: form)
-
       Membership.create!(group_id: group.id, user:, added_by: user, role: group_role)
       GroupForm.create!(form_id: form.id, group_id: group.id)
 
       login_as user
 
       get make_live_path(form_id: form.id)
-    end
-
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "returns 200" do
@@ -51,10 +45,6 @@ RSpec.describe Forms::MakeLiveController, type: :request do
     context "when editing a draft of an existing live form" do
       let(:form) { create(:form, :live) }
 
-      it "reads the form" do
-        expect(FormRepository).to have_received(:find)
-      end
-
       it "renders make your changes live" do
         expect(response).to render_template("make_your_changes_live")
       end
@@ -62,10 +52,6 @@ RSpec.describe Forms::MakeLiveController, type: :request do
 
     context "when editing a draft of an archived form" do
       let(:form) { create(:form, :archived_with_draft) }
-
-      it "reads the form" do
-        expect(FormRepository).to have_received(:find)
-      end
 
       it "renders make your changes live" do
         expect(response).to render_template("make_archived_draft_live")
@@ -82,11 +68,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
   end
 
   describe "#create" do
-    let(:made_live_form) { build(:made_live_form, id: form.id, name: form.name) }
-
     before do
-      allow(FormRepository).to receive_messages(find: form, find_live: made_live_form)
-
       # don't mock out the FormRepository#make_live! method so we can test the FormDocument is created
       ActiveResource::HttpMock.respond_to do |mock|
         mock.post "/api/v1/forms/#{form.id}/make-live", post_headers, {}, 200
@@ -101,14 +83,9 @@ RSpec.describe Forms::MakeLiveController, type: :request do
     context "when making a form live" do
       let(:form_params) { { forms_make_live_input: { confirm: :yes, form: } } }
 
-      it "reads the form" do
-        post(make_live_path(form_id: form.id), params: form_params)
-        expect(FormRepository).to have_received(:find)
-      end
-
       it "makes the form live" do
         post(make_live_path(form_id: form.id), params: form_params)
-        expect(form.live?).to be true
+        expect(form.reload.live?).to be true
       end
 
       it "renders the confirmation page" do
@@ -149,10 +126,6 @@ RSpec.describe Forms::MakeLiveController, type: :request do
 
       before do
         post(make_live_path(form_id: form.id), params: form_params)
-      end
-
-      it "reads the form" do
-        expect(FormRepository).to have_received(:find)
       end
 
       it "does not make the form live" do
