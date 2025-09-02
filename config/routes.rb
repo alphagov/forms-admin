@@ -224,6 +224,12 @@ Rails.application.routes.draw do
     get "live-questions-csv", to: "reports#live_questions_csv", as: :report_live_questions_csv
   end
 
+  scope "api/v2", as: "api_v2" do
+    scope "forms/:form_id" do
+      get "/:tag", to: "api/form_documents#show", as: :form_document, constraints: { tag: /draft|live|archived/ }
+    end
+  end
+
   get "/maintenance" => "errors#maintenance", as: :maintenance_page
   match "/403", to: "errors#forbidden", as: :error_403, via: :all
   match "/404", to: "errors#not_found", as: :error_404, via: :all
