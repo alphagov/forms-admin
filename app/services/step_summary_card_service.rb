@@ -7,35 +7,35 @@ class StepSummaryCardService
     end
   end
 
-  def initialize(page:, pages:, read_only: true)
+  def initialize(step:, steps:, read_only: true)
     @read_only = read_only
-    @page = page
-    @pages = pages
+    @step = step
+    @steps = steps
   end
 
   def all_options_for_answer_type
     options = []
 
     # Prioritize guidance markdown for file uploads
-    options.concat(guidance_markdown_options) if @page.respond_to?(:guidance_markdown) && @page.guidance_markdown.present?
+    options.concat(guidance_markdown_options) if @step.respond_to?(:guidance_markdown) && @step.guidance_markdown.present?
 
     # Page heading for non-file types
-    options.concat(page_heading_options) if @page.respond_to?(:page_heading) && @page.page_heading.present? && @page.answer_type != "file"
+    options.concat(page_heading_options) if @step.respond_to?(:page_heading) && @step.page_heading.present? && @step.answer_type != "file"
 
     # File upload: If a page heading/guidance is present, show the question text in the body of the summary card
     # as we're using the heading in the title rather than the question text.
-    options.concat(question_text_options) if @page.answer_type == "file" && @page.page_heading.present?
+    options.concat(question_text_options) if @step.answer_type == "file" && @step.page_heading.present?
 
     # Other answer types
-    options.concat(hint_options) if @page.hint_text.present?
-    options.concat(generic_options) if @read_only && %w[address date text selection name].exclude?(@page.answer_type)
+    options.concat(hint_options) if @step.hint_text.present?
+    options.concat(generic_options) if @read_only && %w[address date text selection name].exclude?(@step.answer_type)
 
-    options.concat(selection_options) if @page.answer_type == "selection"
-    options.concat(text_options) if @page.answer_type == "text"
-    options.concat(date_options) if @page.answer_type == "date"
-    options.concat(address_options) if @page.answer_type == "address"
-    options.concat(name_options) if @page.answer_type == "name"
-    options.concat(route_options) if @page.respond_to?(:routing_conditions) && @page.routing_conditions.present?
+    options.concat(selection_options) if @step.answer_type == "selection"
+    options.concat(text_options) if @step.answer_type == "text"
+    options.concat(date_options) if @step.answer_type == "date"
+    options.concat(address_options) if @step.answer_type == "address"
+    options.concat(name_options) if @step.answer_type == "name"
+    options.concat(route_options) if @step.respond_to?(:routing_conditions) && @step.routing_conditions.present?
     options
   end
 
@@ -44,19 +44,19 @@ private
   def page_heading_options
     [{
       key: { text: I18n.t("step_summary_card.page_heading") },
-      value: { text: @page.page_heading },
+      value: { text: @step.page_heading },
     }]
   end
 
   def question_text_options
     [{
       key: { text: I18n.t("reports.form_or_questions_list_table.headings.question_text") },
-      value: { text: @page.question_text },
+      value: { text: @step.question_text },
     }]
   end
 
   def markdown_content
-    safe_join(['<pre class="app-markdown-editor__markdown-example-block">'.html_safe, @page.guidance_markdown, "</pre>".html_safe])
+    safe_join(['<pre class="app-markdown-editor__markdown-example-block">'.html_safe, @step.guidance_markdown, "</pre>".html_safe])
   end
 
   def guidance_markdown_options
@@ -69,7 +69,7 @@ private
   def hint_options
     [{
       key: { text: I18n.t("step_summary_card.hint_text") },
-      value: { text: @page.hint_text },
+      value: { text: @step.hint_text },
     }]
   end
 
@@ -77,7 +77,7 @@ private
     [].tap do |options|
       options << {
         key: { text: I18n.t("step_summary_card.answer_type") },
-        value: { text: I18n.t("helpers.label.page.answer_type_options.names.#{@page.answer_type}") },
+        value: { text: I18n.t("helpers.label.page.answer_type_options.names.#{@step.answer_type}") },
       }
     end
   end
@@ -90,16 +90,16 @@ private
   end
 
   def selection_answer_type
-    return I18n.t("step_summary_card.selection_type.default") unless @page.answer_settings.only_one_option == "true"
+    return I18n.t("step_summary_card.selection_type.default") unless @step.answer_settings.only_one_option == "true"
 
     I18n.t("step_summary_card.selection_type.only_one_option")
   end
 
   def selection_list
-    return @page.show_selection_options unless @page.answer_settings.selection_options.length >= 1
+    return @step.show_selection_options unless @step.answer_settings.selection_options.length >= 1
 
-    options = @page.answer_settings.selection_options.map(&:name)
-    options << I18n.t("step_summary_card.selection_type.none_of_the_above") if @page.is_optional?
+    options = @step.answer_settings.selection_options.map(&:name)
+    options << I18n.t("step_summary_card.selection_type.none_of_the_above") if @step.is_optional?
     formatted_list = html_unordered_list(options)
 
     if options.length > 10
@@ -114,11 +114,11 @@ private
   end
 
   def text_options
-    [{ key: { text: I18n.t("step_summary_card.answer_type") }, value: { text: I18n.t("helpers.label.page.text_settings_options.names.#{@page.answer_settings.input_type}") } }]
+    [{ key: { text: I18n.t("step_summary_card.answer_type") }, value: { text: I18n.t("helpers.label.page.text_settings_options.names.#{@step.answer_settings.input_type}") } }]
   end
 
   def date_options
-    [{ key: { text: I18n.t("step_summary_card.answer_type") }, value: { text: I18n.t("step_summary_card.date_type.#{@page.answer_settings.input_type}") } }]
+    [{ key: { text: I18n.t("step_summary_card.answer_type") }, value: { text: I18n.t("step_summary_card.date_type.#{@step.answer_settings.input_type}") } }]
   end
 
   def address_options
@@ -130,14 +130,14 @@ private
   end
 
   def name_answer_type
-    title_needed = if @page.answer_settings.title_needed == "true"
+    title_needed = if @step.answer_settings.title_needed == "true"
                      I18n.t("step_summary_card.name_type.title_selected")
                    else
                      I18n.t("step_summary_card.name_type.title_not_selected")
                    end
 
-    settings = [I18n.t("helpers.label.page.answer_type_options.names.#{@page.answer_type}"),
-                I18n.t("helpers.label.page.name_settings_options.names.#{@page.answer_settings.input_type}")]
+    settings = [I18n.t("helpers.label.page.answer_type_options.names.#{@step.answer_type}"),
+                I18n.t("helpers.label.page.name_settings_options.names.#{@step.answer_settings.input_type}")]
     settings << title_needed
 
     formatted_list = html_list_item(settings)
@@ -146,7 +146,7 @@ private
   end
 
   def address_input_type_to_string
-    input_type = @page.answer_settings.input_type
+    input_type = @step.answer_settings.input_type
     if input_type.uk_address == "true" && input_type.international_address == "true"
       "uk_and_international_addresses"
     elsif input_type.uk_address == "true"
@@ -161,10 +161,10 @@ private
   end
 
   def route_value
-    if @page.routing_conditions.length == 1
-      print_route(@page.routing_conditions.first)
+    if @step.routing_conditions.length == 1
+      print_route(@step.routing_conditions.first)
     else
-      html_ordered_list(@page.routing_conditions.map { |condition| print_route(condition) })
+      html_ordered_list(@step.routing_conditions.map { |condition| print_route(condition) })
     end
   end
 
@@ -174,17 +174,17 @@ private
     if condition.skip_to_end
       I18n.t("page_conditions.condition_compact_html_end_of_form", answer_value:).html_safe
     elsif condition.secondary_skip?
-      goto_question = @pages.find { |page| page.id == condition.goto_page_id }
+      goto_question = @steps.find { |page| page.id == condition.goto_page_id }
       goto_page_question_text = ActionController::Base.helpers.sanitize(goto_question.question_text)
-      goto_page_question_number = @pages.find_index(goto_question) + 1
+      goto_page_question_number = @steps.find_index(goto_question) + 1
 
       I18n.t("page_conditions.condition_compact_html_secondary_skip", goto_page_question_number:, goto_page_question_text:).html_safe
     elsif condition.exit_page?
       I18n.t("page_conditions.condition_compact_html_exit_page", answer_value:, exit_page_heading: condition.exit_page_heading).html_safe
     else
-      goto_question = @pages.find { |page| page.id == condition.goto_page_id }
+      goto_question = @steps.find { |page| page.id == condition.goto_page_id }
       goto_page_question_text = ActionController::Base.helpers.sanitize(goto_question.question_text)
-      goto_page_question_number = @pages.find_index(goto_question) + 1
+      goto_page_question_number = @steps.find_index(goto_question) + 1
 
       I18n.t("page_conditions.condition_compact_html", answer_value:, goto_page_question_number:, goto_page_question_text:).html_safe
     end

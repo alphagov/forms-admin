@@ -5,9 +5,9 @@ class StepSummaryCardPresenter
     end
   end
 
-  def initialize(page:, pages:)
-    @page = page
-    @pages = pages
+  def initialize(step:, steps:)
+    @step = step
+    @steps = steps
   end
 
   def build_data
@@ -16,7 +16,7 @@ class StepSummaryCardPresenter
         title: build_title,
         classes: "app-summary-card",
       },
-      rows: StepSummaryCardService.call(page: @page, pages: @pages).all_options_for_answer_type,
+      rows: StepSummaryCardService.call(step: @step, steps: @steps).all_options_for_answer_type,
 
     }
   end
@@ -24,23 +24,23 @@ class StepSummaryCardPresenter
 private
 
   def build_title
-    page_number = page_number(@page)
-    heading = @page.page_heading
-    question = @page.question_text
+    page_number = page_number(@step)
+    heading = @step.page_heading
+    question = @step.question_text
 
     # Use the actual heading instead of the question text for the title on file upload type
-    title = if @page.answer_type == "file" && heading.present?
+    title = if @step.answer_type == "file" && heading.present?
               "#{page_number}. #{heading}"
             else
               "#{page_number}. #{question}"
             end
 
-    title += " (optional)" if @page.is_optional? && @page.answer_type != "selection"
+    title += " (optional)" if @step.is_optional? && @step.answer_type != "selection"
 
     title
   end
 
-  def page_number(page)
-    @pages.find_index(page) + 1
+  def page_number(step)
+    @steps.find_index(step) + 1
   end
 end

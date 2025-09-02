@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe StepSummaryCardService do
   subject(:step_summary_card_service) do
-    described_class.new(page: form_document_step, pages: form_document_steps)
+    described_class.new(step: form_document_step, steps: form_document_steps)
   end
 
   let(:form_document_content) { FormDocument::Content.from_form_document(form.live_form_document) }
