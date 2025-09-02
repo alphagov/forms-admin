@@ -1,4 +1,4 @@
-class PageSummaryCardDataService
+class StepSummaryCardPresenter
   class << self
     def call(**args)
       new(**args)

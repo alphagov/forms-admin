@@ -12,7 +12,7 @@
     <%= render FormStatusTagDescriptionComponent::View.new(status: status) %>
 
     <% form_document.steps.each_with_index do |page, index| %>
-      <%= govuk_summary_list(**PageSummaryCardDataService.call(page:, pages: form_document.steps).build_data)%>
+      <%= govuk_summary_list(**StepSummaryCardPresenter.call(page:, pages: form_document.steps).build_data)%>
     <% end %>
 
     <p>
