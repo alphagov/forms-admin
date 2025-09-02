@@ -18,12 +18,12 @@ RSpec.describe ReportsController, type: :request do
       .to_return(body: form_documents_response_json, headers: response_headers)
   end
 
-  describe "#index" do
+  shared_examples "unauthorized user is forbidden" do
     context "when the user is a standard user" do
       before do
         login_as_standard_user
 
-        get reports_path
+        get path
       end
 
       it "returns http code 403" do
@@ -39,7 +39,7 @@ RSpec.describe ReportsController, type: :request do
       before do
         login_as_organisation_admin_user
 
-        get reports_path
+        get path
       end
 
       it "returns http code 403" do
@@ -50,12 +50,18 @@ RSpec.describe ReportsController, type: :request do
         expect(response).to render_template("errors/forbidden")
       end
     end
+  end
+
+  describe "#index" do
+    let(:path) { reports_path }
+
+    include_examples "unauthorized user is forbidden"
 
     context "when the user is a super admin" do
       before do
         login_as_super_admin_user
 
-        get reports_path
+        get path
       end
 
       it "returns http code 200" do
@@ -73,43 +79,15 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#features" do
-    context "when the user is a standard user" do
-      before do
-        login_as_standard_user
+    let(:path) { report_features_path(tag: :live) }
 
-        get report_features_path(tag: :live)
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
-
-    context "when the user is an organisation admin" do
-      before do
-        login_as_organisation_admin_user
-
-        get report_features_path(tag: :live)
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
+    include_examples "unauthorized user is forbidden"
 
     context "when the user is a super admin" do
       before do
         login_as_super_admin_user
 
-        get report_features_path(tag: :live)
+        get path
       end
 
       it "returns http code 200" do
@@ -129,43 +107,15 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#questions_with_answer_type" do
-    context "when the user is a standard user" do
-      before do
-        login_as_standard_user
+    let(:path) { report_questions_with_answer_type_path(tag: :live, answer_type: "email") }
 
-        get report_questions_with_answer_type_path(tag: :live, answer_type: "email")
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
-
-    context "when the user is an organisation admin" do
-      before do
-        login_as_organisation_admin_user
-
-        get report_questions_with_answer_type_path(tag: :live, answer_type: "email")
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
+    include_examples "unauthorized user is forbidden"
 
     context "when the user is a super admin" do
       before do
         login_as_super_admin_user
 
-        get report_questions_with_answer_type_path(tag: :live, answer_type: "email")
+        get path
       end
 
       it "returns http code 200" do
@@ -185,43 +135,15 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#questions_with_add_another_answer" do
-    context "when the user is a standard user" do
-      before do
-        login_as_standard_user
+    let(:path) { report_questions_with_add_another_answer_path(tag: :live) }
 
-        get report_questions_with_add_another_answer_path(tag: :live)
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
-
-    context "when the user is an organisation admin" do
-      before do
-        login_as_organisation_admin_user
-
-        get report_questions_with_add_another_answer_path(tag: :live)
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
+    include_examples "unauthorized user is forbidden"
 
     context "when the user is a super admin" do
       before do
         login_as_super_admin_user
 
-        get report_questions_with_add_another_answer_path(tag: :live)
+        get path
       end
 
       it "returns http code 200" do
@@ -241,43 +163,15 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#forms_with_routes" do
-    context "when the user is a standard user" do
-      before do
-        login_as_standard_user
+    let(:path) { report_forms_with_routes_path(tag: :live) }
 
-        get report_forms_with_routes_path(tag: :live)
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
-
-    context "when the user is an organisation admin" do
-      before do
-        login_as_organisation_admin_user
-
-        get report_forms_with_routes_path(tag: :live)
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
+    include_examples "unauthorized user is forbidden"
 
     context "when the user is a super admin" do
       before do
         login_as_super_admin_user
 
-        get report_forms_with_routes_path(tag: :live)
+        get path
       end
 
       it "returns http code 200" do
@@ -297,43 +191,15 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#forms_with_branch_routes" do
-    context "when the user is a standard user" do
-      before do
-        login_as_standard_user
+    let(:path) { report_forms_with_branch_routes_path(tag: :live) }
 
-        get report_forms_with_branch_routes_path(tag: :live)
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
-
-    context "when the user is an organisation admin" do
-      before do
-        login_as_organisation_admin_user
-
-        get report_forms_with_branch_routes_path(tag: :live)
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
+    include_examples "unauthorized user is forbidden"
 
     context "when the user is a super admin" do
       before do
         login_as_super_admin_user
 
-        get report_forms_with_branch_routes_path(tag: :live)
+        get path
       end
 
       it "returns http code 200" do
@@ -355,43 +221,15 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#forms_with_payments" do
-    context "when the user is a standard user" do
-      before do
-        login_as_standard_user
+    let(:path) { report_forms_with_payments_path(tag: :live) }
 
-        get report_forms_with_payments_path(tag: :live)
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
-
-    context "when the user is an organisation admin" do
-      before do
-        login_as_organisation_admin_user
-
-        get report_forms_with_payments_path(tag: :live)
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
+    include_examples "unauthorized user is forbidden"
 
     context "when the user is a super admin" do
       before do
         login_as_super_admin_user
 
-        get report_forms_with_payments_path(tag: :live)
+        get path
       end
 
       it "returns http code 200" do
@@ -411,43 +249,15 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#forms_with_csv_submission_enabled" do
-    context "when the user is a standard user" do
-      before do
-        login_as_standard_user
+    let(:path) { report_forms_with_csv_submission_enabled_path(tag: :live) }
 
-        get report_forms_with_csv_submission_enabled_path(tag: :live)
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
-
-    context "when the user is an organisation admin" do
-      before do
-        login_as_organisation_admin_user
-
-        get report_forms_with_csv_submission_enabled_path(tag: :live)
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
+    include_examples "unauthorized user is forbidden"
 
     context "when the user is a super admin" do
       before do
         login_as_super_admin_user
 
-        get report_forms_with_csv_submission_enabled_path(tag: :live)
+        get path
       end
 
       it "returns http code 200" do
@@ -467,43 +277,15 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#users" do
-    context "when the user is a standard user" do
-      before do
-        login_as_standard_user
+    let(:path) { report_users_path }
 
-        get report_users_path
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
-
-    context "when the user is an organisation admin" do
-      before do
-        login_as_organisation_admin_user
-
-        get report_users_path
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
+    include_examples "unauthorized user is forbidden"
 
     context "when the user is a super admin" do
       before do
         login_as_super_admin_user
 
-        get report_users_path
+        get path
       end
 
       it "returns http code 200" do
@@ -517,6 +299,7 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#add_another_answer" do
+    let(:path) { report_add_another_answer_path }
     let(:report_data) do
       OpenStruct.new(
         count: 3,
@@ -530,43 +313,13 @@ RSpec.describe ReportsController, type: :request do
       allow(Reports::AddAnotherAnswerUsageService).to receive(:new).and_return(add_another_answer_usage_service)
     end
 
-    context "when the user is a standard user" do
-      before do
-        login_as_standard_user
-
-        get report_add_another_answer_path
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
-
-    context "when the user is an organisation admin" do
-      before do
-        login_as_organisation_admin_user
-
-        get report_add_another_answer_path
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
+    include_examples "unauthorized user is forbidden"
 
     context "when the user is a super admin" do
       before do
         login_as_super_admin_user
 
-        get report_add_another_answer_path
+        get path
       end
 
       it "returns http code 200" do
