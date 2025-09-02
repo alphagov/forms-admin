@@ -10,7 +10,7 @@ describe StepSummaryCardPresenter do
 
   describe "#build_data" do
     before do
-      allow(PageOptionsService).to receive(:call).and_return(OpenStruct.new(all_options_for_answer_type: [1, 2]))
+      allow(StepSummaryCardService).to receive(:call).and_return(OpenStruct.new(all_options_for_answer_type: [1, 2]))
     end
 
     it "includes a title" do

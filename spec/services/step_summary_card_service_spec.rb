@@ -1,7 +1,7 @@
 require "rails_helper"
 
-describe PageOptionsService do
-  subject(:page_options_service) do
+describe StepSummaryCardService do
+  subject(:step_summary_card_service) do
     described_class.new(page: form_document_step, pages: form_document_steps)
   end
 
@@ -18,7 +18,7 @@ describe PageOptionsService do
       let(:page) { create :page, :with_address_settings, form:, uk_address: "true", international_address: "true" }
 
       it "returns the correct options" do
-        expect(page_options_service.all_options_for_answer_type).to eq(
+        expect(step_summary_card_service.all_options_for_answer_type).to eq(
           [{ key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
              value: { text: I18n.t("helpers.label.page.address_settings_options.names.uk_and_international_addresses") } }],
         )
@@ -29,7 +29,7 @@ describe PageOptionsService do
       let(:page) { create :page, :with_address_settings, form:, uk_address: "false", international_address: "true" }
 
       it "returns the correct options" do
-        expect(page_options_service.all_options_for_answer_type).to eq(
+        expect(step_summary_card_service.all_options_for_answer_type).to eq(
           [{ key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
              value: { text: I18n.t("helpers.label.page.address_settings_options.names.international_addresses") } }],
         )
@@ -40,7 +40,7 @@ describe PageOptionsService do
       let(:page) { create :page, :with_address_settings, form:, international_address: "false" }
 
       it "returns the correct options" do
-        expect(page_options_service.all_options_for_answer_type).to eq(
+        expect(step_summary_card_service.all_options_for_answer_type).to eq(
           [{ key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
              value: { text: I18n.t("helpers.label.page.address_settings_options.names.uk_addresses") } }],
         )
@@ -51,7 +51,7 @@ describe PageOptionsService do
       let(:page) { create :page, :with_address_settings, form:, uk_address: "false", international_address: "false" }
 
       it "returns the correct options" do
-        expect(page_options_service.all_options_for_answer_type).to eq(
+        expect(step_summary_card_service.all_options_for_answer_type).to eq(
           [{ key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
              value: { text: I18n.t("helpers.label.page.address_settings_options.names.international_addresses") } }],
         )
@@ -62,7 +62,7 @@ describe PageOptionsService do
       let(:page) { create :page, :with_date_settings, form:, input_type: "date_of_birth" }
 
       it "returns the correct options" do
-        expect(page_options_service.all_options_for_answer_type).to eq([
+        expect(step_summary_card_service.all_options_for_answer_type).to eq([
           { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
             value: { text: "Date of birth" } },
         ])
@@ -73,7 +73,7 @@ describe PageOptionsService do
       let(:page) { create :page, :with_date_settings, form:, input_type: "other_date" }
 
       it "returns the correct options" do
-        expect(page_options_service.all_options_for_answer_type).to eq([
+        expect(step_summary_card_service.all_options_for_answer_type).to eq([
           { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
             value: { text: "Date" } },
         ])
@@ -84,7 +84,7 @@ describe PageOptionsService do
       let(:page) { create :page, :with_text_settings, form:, input_type: "single_line" }
 
       it "returns the correct options" do
-        expect(page_options_service.all_options_for_answer_type).to eq([
+        expect(step_summary_card_service.all_options_for_answer_type).to eq([
           { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
             value: { text: I18n.t("helpers.label.page.text_settings_options.names.single_line") } },
         ])
@@ -95,7 +95,7 @@ describe PageOptionsService do
       let(:page) { create :page, :with_text_settings, form:, input_type: "long_text" }
 
       it "returns the correct options" do
-        expect(page_options_service.all_options_for_answer_type).to eq([
+        expect(step_summary_card_service.all_options_for_answer_type).to eq([
           { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
             value: { text: I18n.t("helpers.label.page.text_settings_options.names.long_text") } },
         ])
@@ -114,9 +114,9 @@ describe PageOptionsService do
       end
 
       it "returns the correct options" do
-        expect(page_options_service.all_options_for_answer_type).to eq([
+        expect(step_summary_card_service.all_options_for_answer_type).to eq([
           { key: { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list, one option only" } },
-          { key: { text: I18n.t("page_options_service.options_title") }, value: { text: "<p class=\"govuk-body-s\">2 options:</p><ul class=\"govuk-list govuk-list--bullet\"><li>Option 1</li><li>Option 2</li></ul>" } },
+          { key: { text: I18n.t("step_summary_card.options_title") }, value: { text: "<p class=\"govuk-body-s\">2 options:</p><ul class=\"govuk-list govuk-list--bullet\"><li>Option 1</li><li>Option 2</li></ul>" } },
         ])
       end
     end
@@ -133,7 +133,7 @@ describe PageOptionsService do
       end
 
       it "returns the correct options" do
-        expect(page_options_service.all_options_for_answer_type).to eq([
+        expect(step_summary_card_service.all_options_for_answer_type).to eq([
           { key: { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list" } },
           { key: { text: "Options" }, value: { text: "<p class=\"govuk-body-s\">2 options:</p><ul class=\"govuk-list govuk-list--bullet\"><li>Option 1</li><li>Option 2</li></ul>" } },
         ])
@@ -160,7 +160,7 @@ describe PageOptionsService do
           "#{expected_list_items}" \
           "</ul></div></details>"
 
-        expect(page_options_service.all_options_for_answer_type).to eq([
+        expect(step_summary_card_service.all_options_for_answer_type).to eq([
           { key: { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list" } },
           { key: { text: "Options" }, value: { text: expected_options_html } },
         ])
@@ -171,7 +171,7 @@ describe PageOptionsService do
       let(:page) { create :page, :with_name_settings, form:, input_type: "full_name", title_needed: "false" }
 
       it "returns the correct options" do
-        expect(page_options_service.all_options_for_answer_type).to eq([
+        expect(step_summary_card_service.all_options_for_answer_type).to eq([
           { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
             value: { text: "<ul class=\"govuk-list\"><li>Person’s name</li><li>Full name in a single box</li><li>Title not needed</li></ul>" } },
         ])
@@ -182,7 +182,7 @@ describe PageOptionsService do
       let(:page) { create :page, :with_name_settings, form:, input_type: "first_and_last_name", title_needed: "true" }
 
       it "returns the correct options" do
-        expect(page_options_service.all_options_for_answer_type).to eq([
+        expect(step_summary_card_service.all_options_for_answer_type).to eq([
           { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
             value: { text: "<ul class=\"govuk-list\"><li>Person’s name</li><li>First and last names in separate boxes</li><li>Title needed</li></ul>" } },
         ])
@@ -193,7 +193,7 @@ describe PageOptionsService do
       let(:page) { create :page, :with_name_settings, form:, input_type: "first_middle_and_last_name", title_needed: "false" }
 
       it "returns the correct options" do
-        expect(page_options_service.all_options_for_answer_type).to eq([
+        expect(step_summary_card_service.all_options_for_answer_type).to eq([
           { key: { text: I18n.t("helpers.label.page.answer_type_options.title") },
             value: { text: "<ul class=\"govuk-list\"><li>Person’s name</li><li>First, middle and last names in separate boxes</li><li>Title not needed</li></ul>" } },
         ])
@@ -205,7 +205,7 @@ describe PageOptionsService do
         let(:page) { create :page, form:, answer_type: }
 
         it "returns the correct options" do
-          expect(page_options_service.all_options_for_answer_type).to eq([
+          expect(step_summary_card_service.all_options_for_answer_type).to eq([
             { key: { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: I18n.t("helpers.label.page.answer_type_options.names.#{answer_type}") } },
           ])
         end
@@ -216,7 +216,7 @@ describe PageOptionsService do
       let(:page) { create :page, form:, answer_type: "email" }
 
       it "does not include a route" do
-        expect(page_options_service.all_options_for_answer_type).not_to include(
+        expect(step_summary_card_service.all_options_for_answer_type).not_to include(
           { key: { text: I18n.t("page_conditions.route") } },
         )
       end
@@ -237,7 +237,7 @@ describe PageOptionsService do
         end
 
         it "returns the correct options" do
-          expect(page_options_service.all_options_for_answer_type).to include(
+          expect(step_summary_card_service.all_options_for_answer_type).to include(
             {
               key: { text: I18n.t("page_conditions.route") },
               value: { text: I18n.t("page_conditions.condition_compact_html", answer_value: "Option 1", goto_page_question_number: goto_page.position, goto_page_question_text: goto_page.question_text) },
@@ -262,7 +262,7 @@ describe PageOptionsService do
           first_condition_text = I18n.t("page_conditions.condition_compact_html", answer_value: "Option 1", goto_page_question_number: first_goto_page.position, goto_page_question_text: first_goto_page.question_text)
           second_condition_text = I18n.t("page_conditions.condition_compact_html", answer_value: "Option 2", goto_page_question_number: second_goto_page.position, goto_page_question_text: second_goto_page.question_text)
 
-          expect(page_options_service.all_options_for_answer_type).to include(
+          expect(step_summary_card_service.all_options_for_answer_type).to include(
             {
               key: { text: I18n.t("page_conditions.route") },
               value: { text: "<ol class=\"govuk-list govuk-list--number\"><li>#{first_condition_text}</li><li>#{second_condition_text}</li></ol>" },
@@ -280,7 +280,7 @@ describe PageOptionsService do
         end
 
         it "returns the correct options" do
-          expect(page_options_service.all_options_for_answer_type).to include(
+          expect(step_summary_card_service.all_options_for_answer_type).to include(
             {
               key: { text: I18n.t("page_conditions.route") },
               value: { text: I18n.t("page_conditions.condition_compact_html_end_of_form", answer_value: "Option 1") },
@@ -301,7 +301,7 @@ describe PageOptionsService do
         end
 
         it "returns the correct options" do
-          expect(page_options_service.all_options_for_answer_type).to include(
+          expect(step_summary_card_service.all_options_for_answer_type).to include(
             {
               key: { text: I18n.t("page_conditions.route") },
               value: { text: I18n.t("page_conditions.condition_compact_html_secondary_skip", goto_page_question_number: pages.fourth.position, goto_page_question_text: pages.fourth.question_text) },
@@ -319,7 +319,7 @@ describe PageOptionsService do
         end
 
         it "returns the correct options" do
-          expect(page_options_service.all_options_for_answer_type).to include(
+          expect(step_summary_card_service.all_options_for_answer_type).to include(
             {
               key: { text: I18n.t("page_conditions.route") },
               value: { text: I18n.t("page_conditions.condition_compact_html_exit_page", answer_value: condition.answer_value, exit_page_heading: condition.exit_page_heading) },
@@ -333,15 +333,15 @@ describe PageOptionsService do
       let(:page) { create :page, :with_guidance, form: }
 
       it "returns the correct page heading" do
-        expect(page_options_service.all_options_for_answer_type).to include(
-          { key: { text: I18n.t("page_options_service.page_heading") },
+        expect(step_summary_card_service.all_options_for_answer_type).to include(
+          { key: { text: I18n.t("step_summary_card.page_heading") },
             value: { text: page.page_heading } },
         )
       end
 
       it "returns the correct guidance markdown" do
-        expect(page_options_service.all_options_for_answer_type).to include(
-          { key: { text: I18n.t("page_options_service.guidance_markdown") },
+        expect(step_summary_card_service.all_options_for_answer_type).to include(
+          { key: { text: I18n.t("step_summary_card.guidance_markdown") },
             value: { text: "<pre class=\"app-markdown-editor__markdown-example-block\">#{page.guidance_markdown}</pre>" } },
         )
       end
@@ -353,18 +353,18 @@ describe PageOptionsService do
         end
 
         it "does not raise an error" do
-          expect { page_options_service.all_options_for_answer_type }.not_to raise_error
+          expect { step_summary_card_service.all_options_for_answer_type }.not_to raise_error
         end
 
         it "does not return a page heading key" do
-          expect(page_options_service.all_options_for_answer_type).not_to include(
-            { key: { text: I18n.t("page_options_service.page_heading") } },
+          expect(step_summary_card_service.all_options_for_answer_type).not_to include(
+            { key: { text: I18n.t("step_summary_card.page_heading") } },
           )
         end
 
         it "does not return a guidance markdown key" do
-          expect(page_options_service.all_options_for_answer_type).not_to include(
-            { key: { text: I18n.t("page_options_service.guidance_markdown") } },
+          expect(step_summary_card_service.all_options_for_answer_type).not_to include(
+            { key: { text: I18n.t("step_summary_card.guidance_markdown") } },
           )
         end
       end
@@ -375,7 +375,7 @@ describe PageOptionsService do
         let(:page) { create :page, :with_file_upload_answer_type, form: }
 
         it "does not include the question text" do
-          expect(page_options_service.all_options_for_answer_type).not_to include(
+          expect(step_summary_card_service.all_options_for_answer_type).not_to include(
             { key: { text: I18n.t("reports.form_or_questions_list_table.headings.question_text") },
               value: { text: page.question_text } },
           )
@@ -386,15 +386,15 @@ describe PageOptionsService do
         let(:page) { create :page, :with_guidance, :with_file_upload_answer_type, form: }
 
         it "returns question text" do
-          expect(page_options_service.all_options_for_answer_type).to include(
+          expect(step_summary_card_service.all_options_for_answer_type).to include(
             { key: { text: I18n.t("reports.form_or_questions_list_table.headings.question_text") },
               value: { text: page.question_text } },
           )
         end
 
         it "does not return page heading" do
-          expect(page_options_service.all_options_for_answer_type).not_to include(
-            { key: { text: I18n.t("page_options_service.page_heading") } },
+          expect(step_summary_card_service.all_options_for_answer_type).not_to include(
+            { key: { text: I18n.t("step_summary_card.page_heading") } },
           )
         end
       end

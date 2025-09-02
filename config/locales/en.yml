@@ -1093,22 +1093,6 @@ en:
     route: Route
     secondary_skip_description: After %{check_page_question_text} go to %{goto_page_question_text}
     skip_condition_route_page_text: "%{route_page_question_number}, “%{route_page_question_text}”"
-  page_options_service:
-    answer_type: Answer type
-    date_type:
-      date_of_birth: Date of birth
-      other_date: Date
-    guidance_markdown: Guidance
-    hint_text: Hint text
-    name_type:
-      title_not_selected: Title not needed
-      title_selected: Title needed
-    options_title: Options
-    page_heading: Page heading
-    selection_type:
-      default: Selection from a list
-      none_of_the_above: None of the above
-      only_one_option: Selection from a list, one option only
   page_route_card:
     any_other_answer: Route for any other answer
     check_your_answers: Check your answers before submitting
@@ -1612,6 +1596,22 @@ en:
   skip_to_main_content: Skip to main content
   status_tag_description_component:
     status: Status
+  step_summary_card:
+    answer_type: Answer type
+    date_type:
+      date_of_birth: Date of birth
+      other_date: Date
+    guidance_markdown: Guidance
+    hint_text: Hint text
+    name_type:
+      title_not_selected: Title not needed
+      title_selected: Title needed
+    options_title: Options
+    page_heading: Page heading
+    selection_type:
+      default: Selection from a list
+      none_of_the_above: None of the above
+      only_one_option: Selection from a list, one option only
   task_statuses:
     cannot_start: Cannot start yet
     completed: Completed

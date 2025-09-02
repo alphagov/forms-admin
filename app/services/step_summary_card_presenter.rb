@@ -16,7 +16,7 @@ class StepSummaryCardPresenter
         title: build_title,
         classes: "app-summary-card",
       },
-      rows: PageOptionsService.call(page: @page, pages: @pages).all_options_for_answer_type,
+      rows: StepSummaryCardService.call(page: @page, pages: @pages).all_options_for_answer_type,
 
     }
   end

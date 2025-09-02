@@ -1,4 +1,4 @@
-class PageOptionsService
+class StepSummaryCardService
   include ActionView::Helpers::TagHelper
 
   class << self
@@ -43,7 +43,7 @@ private
 
   def page_heading_options
     [{
-      key: { text: I18n.t("page_options_service.page_heading") },
+      key: { text: I18n.t("step_summary_card.page_heading") },
       value: { text: @page.page_heading },
     }]
   end
@@ -61,14 +61,14 @@ private
 
   def guidance_markdown_options
     [{
-      key: { text: I18n.t("page_options_service.guidance_markdown") },
+      key: { text: I18n.t("step_summary_card.guidance_markdown") },
       value: { text: markdown_content },
     }]
   end
 
   def hint_options
     [{
-      key: { text: I18n.t("page_options_service.hint_text") },
+      key: { text: I18n.t("step_summary_card.hint_text") },
       value: { text: @page.hint_text },
     }]
   end
@@ -76,7 +76,7 @@ private
   def generic_options
     [].tap do |options|
       options << {
-        key: { text: I18n.t("page_options_service.answer_type") },
+        key: { text: I18n.t("step_summary_card.answer_type") },
         value: { text: I18n.t("helpers.label.page.answer_type_options.names.#{@page.answer_type}") },
       }
     end
@@ -84,22 +84,22 @@ private
 
   def selection_options
     [
-      { key: { text: I18n.t("page_options_service.answer_type") }, value: { text: selection_answer_type } },
-      { key: { text: I18n.t("page_options_service.options_title") }, value: { text: selection_list } },
+      { key: { text: I18n.t("step_summary_card.answer_type") }, value: { text: selection_answer_type } },
+      { key: { text: I18n.t("step_summary_card.options_title") }, value: { text: selection_list } },
     ]
   end
 
   def selection_answer_type
-    return I18n.t("page_options_service.selection_type.default") unless @page.answer_settings.only_one_option == "true"
+    return I18n.t("step_summary_card.selection_type.default") unless @page.answer_settings.only_one_option == "true"
 
-    I18n.t("page_options_service.selection_type.only_one_option")
+    I18n.t("step_summary_card.selection_type.only_one_option")
   end
 
   def selection_list
     return @page.show_selection_options unless @page.answer_settings.selection_options.length >= 1
 
     options = @page.answer_settings.selection_options.map(&:name)
-    options << I18n.t("page_options_service.selection_type.none_of_the_above") if @page.is_optional?
+    options << I18n.t("step_summary_card.selection_type.none_of_the_above") if @page.is_optional?
     formatted_list = html_unordered_list(options)
 
     if options.length > 10
@@ -114,26 +114,26 @@ private
   end
 
   def text_options
-    [{ key: { text: I18n.t("page_options_service.answer_type") }, value: { text: I18n.t("helpers.label.page.text_settings_options.names.#{@page.answer_settings.input_type}") } }]
+    [{ key: { text: I18n.t("step_summary_card.answer_type") }, value: { text: I18n.t("helpers.label.page.text_settings_options.names.#{@page.answer_settings.input_type}") } }]
   end
 
   def date_options
-    [{ key: { text: I18n.t("page_options_service.answer_type") }, value: { text: I18n.t("page_options_service.date_type.#{@page.answer_settings.input_type}") } }]
+    [{ key: { text: I18n.t("step_summary_card.answer_type") }, value: { text: I18n.t("step_summary_card.date_type.#{@page.answer_settings.input_type}") } }]
   end
 
   def address_options
-    [{ key: { text: I18n.t("page_options_service.answer_type") }, value: { text: I18n.t("helpers.label.page.address_settings_options.names.#{address_input_type_to_string}") } }]
+    [{ key: { text: I18n.t("step_summary_card.answer_type") }, value: { text: I18n.t("helpers.label.page.address_settings_options.names.#{address_input_type_to_string}") } }]
   end
 
   def name_options
-    [{ key: { text: I18n.t("page_options_service.answer_type") }, value: { text: name_answer_type } }]
+    [{ key: { text: I18n.t("step_summary_card.answer_type") }, value: { text: name_answer_type } }]
   end
 
   def name_answer_type
     title_needed = if @page.answer_settings.title_needed == "true"
-                     I18n.t("page_options_service.name_type.title_selected")
+                     I18n.t("step_summary_card.name_type.title_selected")
                    else
-                     I18n.t("page_options_service.name_type.title_not_selected")
+                     I18n.t("step_summary_card.name_type.title_not_selected")
                    end
 
     settings = [I18n.t("helpers.label.page.answer_type_options.names.#{@page.answer_type}"),
