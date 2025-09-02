@@ -1,7 +1,7 @@
-<% set_page_title(form.name) %>
+<% set_page_title(form_document.name) %>
 
-<% if form.group.present? %>
-  <% content_for :back_link, govuk_back_link_to(group_path(form.group), t("back_link.group", group_name: form.group.name)) %>
+<% if form_metadata.group.present? %>
+  <% content_for :back_link, govuk_back_link_to(group_path(form_metadata.group), t("back_link.group", group_name: form_metadata.group.name)) %>
 <% else %>
   <% content_for :back_link, govuk_back_link_to(root_path, t("back_link.forms")) %>
 <% end %>
@@ -9,84 +9,84 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
-      <%= form.name %>
+      <%= form_document.name %>
     </h1>
     <%= render FormStatusTagDescriptionComponent::View.new(status: status) %>
 
-    <% metrics_data = CloudWatchService.new(form.id, form.made_live_date).metrics_data %>
-    <%= render MetricsSummaryComponent::View.new(form.made_live_date, metrics_data) %>
+    <% metrics_data = CloudWatchService.new(form_document.id, form_document.made_live_date).metrics_data %>
+    <%= render MetricsSummaryComponent::View.new(form_document.made_live_date, metrics_data) %>
 
     <h2 class="govuk-heading-l">Your form</h2>
 
     <p>
-      <%= render PreviewLinkComponent::View.new(form.pages, link_to_runner(Settings.forms_runner.url, form.id, form.form_slug, mode: preview_mode)) %>
+      <%= render PreviewLinkComponent::View.new(form_document.steps, link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: preview_mode)) %>
     </p>
 
     <% if status == :live %>
-      <%= render FormUrlComponent::View.new(runner_link: link_to_runner(Settings.forms_runner.url, form.id, form.form_slug, mode: :live))%>
+      <%= render FormUrlComponent::View.new(runner_link: link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live))%>
     <% else %>
       <h3 class="govuk-heading-m"><%= t('made_live_form.previous_form_url') %></h3>
       <p>
-        <%= link_to_runner(Settings.forms_runner.url, form.id, form.form_slug, mode: :live) %>
+        <%= link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live) %>
       </p>
     <% end %>
 
     <h3 class="govuk-heading-m"><%= t('made_live_form.questions') %></h3>
-    <p><%= govuk_link_to t('made_live_form.questions_link', count: form.pages.count), questions_path %></p>
+    <p><%= govuk_link_to t('made_live_form.questions_link', count: form_document.steps.count), questions_path %></p>
 
-    <% if form.declaration_text.present? %>
+    <% if form_document.declaration_text.present? %>
       <h3 class="govuk-heading-m"><%= t('made_live_form.declaration') %></h3>
-      <p><%= form.declaration_text %></p>
+      <p><%= form_document.declaration_text %></p>
       <%= govuk_details(summary_text: t('made_live_form.what_is_declaration'), text: t('made_live_form.declaration_description')) %>
     <% end %>
 
     <h3 class="govuk-heading-m"><%= t('made_live_form.what_happens_next') %></h3>
     <div class="app-preview-area">
-      <%= GovukFormsMarkdown.render(form.what_happens_next_markdown).html_safe %>
+      <%= GovukFormsMarkdown.render(form_document.what_happens_next_markdown).html_safe %>
     </div>
     <%= govuk_details(summary_text: t('made_live_form.what_is_what_happens_next'), text: t('made_live_form.what_happens_next_description')) %>
 
-    <% if form.respond_to?(:payment_url) && form.payment_url.present? %>
+    <% if form_document.respond_to?(:payment_url) && form_document.payment_url.present? %>
       <h3 class="govuk-heading-m"><%= t("made_live_form.payment_link") %></h3>
-      <p><%= govuk_link_to(form.payment_url, form.payment_url) %></p>
+      <p><%= govuk_link_to(form_document.payment_url, form_document.payment_url) %></p>
     <% end %>
 
     <h3 class="govuk-heading-m"><%= t("made_live_form.how_you_get_completed_forms") %></h3>
 
     <h4 class="govuk-heading-s"><%= t('made_live_form.submission_email') %></h4>
-    <p class="govuk-!-text-break-word"><%= form.submission_email %></p>
+    <p class="govuk-!-text-break-word"><%= form_document.submission_email %></p>
 
     <h4 class="govuk-heading-s"><%= t("made_live_form.csv") %></h4>
-    <p><%= t("made_live_form.submission_type.#{form.submission_type}") %></p>
+    <p><%= t("made_live_form.submission_type.#{form_document.submission_type}") %></p>
 
     <h3 class="govuk-heading-m"><%= t('made_live_form.privacy_policy_link') %></h3>
-    <p><%= govuk_link_to(form.privacy_policy_url, form.privacy_policy_url) %></p>
+    <p><%= govuk_link_to(form_document.privacy_policy_url, form_document.privacy_policy_url) %></p>
 
     <h3 class="govuk-heading-m"><%= t('made_live_form.contact_details') %></h3>
 
-    <% if form.support_email %>
+    <% if form_document.support_email %>
       <h4 class="govuk-heading-s"><%= t('made_live_form.support_email') %></h4>
-      <p class="govuk-!-text-break-word"><%= form.support_email %></p>
+      <p class="govuk-!-text-break-word"><%= form_document.support_email %></p>
     <% end %>
 
-    <% if form.support_phone %>
+    <% if form_document.support_phone %>
       <h4 class="govuk-heading-s"><%= t('made_live_form.support_phone') %></h4>
-      <p><%= form.support_phone %></p>
+      <p><%= form_document.support_phone %></p>
     <% end %>
 
-    <% if form.support_url %>
+    <% if form_document.support_url %>
       <h4 class="govuk-heading-s"><%= t('made_live_form.support_url') %></h4>
-      <p><%= govuk_link_to form.support_url_text, form.support_url %></p>
+      <p><%= govuk_link_to form_document.support_url_text, form_document.support_url %></p>
     <% end %>
 
     <div class="govuk-button-group">
       <%# i18n-tasks-use t('made_live_form.draft_create') %>
       <%# i18n-tasks-use t('made_live_form.draft_edit') %>
-      <%= govuk_button_link_to t("made_live_form.draft_#{ form_metadata.has_draft_version ? 'edit': 'create'}"), form_path(form.id) %>
+      <%= govuk_button_link_to t("made_live_form.draft_#{ form_metadata.has_draft_version ? 'edit': 'create'}"), form_path(form_document.id) %>
       <% if status == :live %>
-        <%= govuk_button_link_to t("made_live_form.archive_this_form"), archive_form_path(form.id), warning: true %>
+        <%= govuk_button_link_to t("made_live_form.archive_this_form"), archive_form_path(form_document.id), warning: true %>
       <% elsif status == :archived %>
-        <%= govuk_button_link_to t("made_live_form.make_this_form_live"), unarchive_path(form.id), secondary: true %>
+        <%= govuk_button_link_to t("made_live_form.make_this_form_live"), unarchive_path(form_document.id), secondary: true %>
       <% end %>
     </div>
   </div>

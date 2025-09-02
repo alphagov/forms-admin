@@ -70,6 +70,9 @@ FactoryBot.define do
     trait :live do
       ready_for_live
       state { :live }
+      after(:create) do |form|
+        FormDocument.create(form:, tag: "live", content: form.as_form_document(live_at: form.updated_at))
+      end
     end
 
     trait :live_with_draft do
@@ -78,12 +81,15 @@ FactoryBot.define do
     end
 
     trait :archived do
-      live
+      ready_for_live
       state { :archived }
+      after(:create) do |form|
+        FormDocument.create(form:, tag: "archived", content: form.as_form_document(live_at: form.updated_at))
+      end
     end
 
     trait :archived_with_draft do
-      live
+      archived
       state { :archived_with_draft }
     end
 

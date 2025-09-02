@@ -1,11 +1,15 @@
 require "rails_helper"
 
 describe "forms/_made_live_form.html.erb" do
-  let(:declaration) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
+  let(:declaration_text) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:metrics_data) { { weekly_submissions: 125, weekly_starts: 256 } }
-  let(:what_happens_next) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
-  let(:form_metadata) { create :form, :live }
-  let(:form) { build(:made_live_form, id: form_metadata.id, declaration_text: declaration, what_happens_next_markdown: what_happens_next, live_at: 1.week.ago, submission_type:) }
+  let(:what_happens_next_markdown) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
+  let(:form_metadata) { create :form, :live, declaration_text:, what_happens_next_markdown:, submission_type: }
+  let(:form_document) do
+    form_document_content = FormDocument::Content.from_form_document(form_metadata.live_form_document)
+    form_document_content.live_at = 1.week.ago
+    form_document_content
+  end
   let(:group) { create(:group, name: "Group 1") }
   let(:status) { :live }
   let(:preview_mode) { :preview_live }
@@ -17,12 +21,12 @@ describe "forms/_made_live_form.html.erb" do
     allow(CloudWatchService).to receive(:new).and_return(cloudwatch_service)
 
     if group.present?
-      GroupForm.create!(form_id: form.id, group_id: group.id)
+      GroupForm.create!(form_id: form_document.id, group_id: group.id)
     end
 
     render(partial: "forms/made_live_form", locals: {
       form_metadata:,
-      form:,
+      form_document:,
       status:,
       preview_mode:,
       questions_path:,
@@ -30,7 +34,7 @@ describe "forms/_made_live_form.html.erb" do
   end
 
   it "has the correct title" do
-    expect(view.content_for(:title)).to have_content(form.name.to_s)
+    expect(view.content_for(:title)).to have_content(form_document.name.to_s)
   end
 
   it "back link is set to group page" do
@@ -38,7 +42,7 @@ describe "forms/_made_live_form.html.erb" do
   end
 
   it "contains page heading" do
-    expect(rendered).to have_css("h1.govuk-heading-xl", text: form.name)
+    expect(rendered).to have_css("h1.govuk-heading-xl", text: form_document.name)
   end
 
   describe "form status tag" do
@@ -60,7 +64,7 @@ describe "forms/_made_live_form.html.erb" do
   describe "the link to the preview form" do
     context "when the form is live" do
       it "contains a link to preview the form" do
-        expect(rendered).to have_link(t("home.preview"), href: "runner-host/preview-live/#{form.id}/#{form.form_slug}", visible: :all)
+        expect(rendered).to have_link(t("home.preview"), href: "runner-host/preview-live/#{form_document.id}/#{form_document.form_slug}", visible: :all)
       end
     end
 
@@ -68,7 +72,7 @@ describe "forms/_made_live_form.html.erb" do
       let(:preview_mode) { :preview_archived }
 
       it "contains a link to preview the archived form" do
-        expect(rendered).to have_link(t("home.preview"), href: "runner-host/preview-archived/#{form.id}/#{form.form_slug}", visible: :all)
+        expect(rendered).to have_link(t("home.preview"), href: "runner-host/preview-archived/#{form_document.id}/#{form_document.form_slug}", visible: :all)
       end
     end
   end
@@ -80,7 +84,7 @@ describe "forms/_made_live_form.html.erb" do
       end
 
       it "contains a link to the form in the runner" do
-        expect(rendered).to have_content("runner-host/form/#{form.id}/#{form.form_slug}")
+        expect(rendered).to have_content("runner-host/form/#{form_document.id}/#{form_document.form_slug}")
       end
     end
 
@@ -92,17 +96,17 @@ describe "forms/_made_live_form.html.erb" do
       end
 
       it "contains a link to the form in the runner" do
-        expect(rendered).to have_content("runner-host/form/#{form.id}/#{form.form_slug}")
+        expect(rendered).to have_content("runner-host/form/#{form_document.id}/#{form_document.form_slug}")
       end
     end
   end
 
   it "contains a link to view questions" do
-    expect(rendered).to have_link("#{form.pages.count} questions", href: questions_path)
+    expect(rendered).to have_link("#{form_document.steps.count} questions", href: questions_path)
   end
 
   context "with only a single question" do
-    let(:form) { build(:made_live_form, :with_one_page, id: form_metadata.id) }
+    let(:form_metadata) { create :form, :live, pages_count: 1 }
 
     it "contains a link to view questions with correct pluralization" do
       expect(rendered).to have_link("1 question", href: questions_path)
@@ -111,11 +115,11 @@ describe "forms/_made_live_form.html.erb" do
 
   it "contains declaration" do
     expect(rendered).to have_css("h3", text: "Declaration")
-    expect(rendered).to have_content(form.declaration_text)
+    expect(rendered).to have_content(declaration_text)
   end
 
   context "with no declaration set" do
-    let(:declaration) { nil }
+    let(:declaration_text) { nil }
 
     it "does not include declaration" do
       expect(rendered).not_to have_css("h3", text: "Declaration")
@@ -123,13 +127,13 @@ describe "forms/_made_live_form.html.erb" do
   end
 
   it "contains what happens next text" do
-    expect(rendered).to have_content(form.what_happens_next_markdown)
+    expect(rendered).to have_content(what_happens_next_markdown)
   end
 
   it "contains information about how you get completed forms" do
     expect(rendered).to have_css("h3", text: I18n.t("made_live_form.how_you_get_completed_forms"))
     expect(rendered).to have_xpath("//h3[text()='#{I18n.t('made_live_form.how_you_get_completed_forms')}']/following-sibling::h4", text: "Email")
-    expect(rendered).to have_text(form.submission_email)
+    expect(rendered).to have_text(form_document.submission_email)
   end
 
   context "when CSV submission is enabled" do
@@ -153,11 +157,11 @@ describe "forms/_made_live_form.html.erb" do
   end
 
   it "contains link to privacy policy" do
-    expect(rendered).to have_link(form.privacy_policy_url, href: form.privacy_policy_url)
+    expect(rendered).to have_link(form_document.privacy_policy_url, href: form_document.privacy_policy_url)
   end
 
   context "with a support email address" do
-    let(:form) { build(:made_live_form, id: form_metadata.id, support_email: "support@example.gov.uk") }
+    let(:form_metadata) { create :form, :live, support_email: "support@example.gov.uk" }
 
     it "shows the support email address" do
       expect(rendered).to have_xpath("//h3[text()='#{I18n.t('made_live_form.contact_details')}']/following-sibling::h4", text: "Email")
@@ -166,7 +170,7 @@ describe "forms/_made_live_form.html.erb" do
   end
 
   context "with a support phone" do
-    let(:form) { build(:made_live_form, id: form_metadata.id, support_phone: "phone details") }
+    let(:form_metadata) { create :form, :live, support_phone: "phone details" }
 
     it "shows the support phone number" do
       expect(rendered).to have_css("h4", text: "Phone")
@@ -175,16 +179,23 @@ describe "forms/_made_live_form.html.erb" do
   end
 
   context "with a support online" do
-    let(:form) { build(:made_live_form, id: form_metadata.id, support_url_text: "website", support_url: "www.example.gov.uk") }
+    let(:form_metadata) { create :form, :live, support_url_text: "website", support_url: "www.example.gov.uk" }
 
     it "shows the support contact online" do
       expect(rendered).to have_css("h4", text: "Support contact online")
-      expect(rendered).to have_link(form.support_url_text, href: form.support_url)
+      expect(rendered).to have_link(form_document.support_url_text, href: form_document.support_url)
     end
   end
 
   context "with no support information set" do
-    let(:form) { build(:made_live_form, id: form_metadata.id, support_email: nil, support_phone: nil, support_url_text: nil, support_url: nil) }
+    let(:form_document) do
+      form_document_content = FormDocument::Content.from_form_document(form_metadata.live_form_document)
+      form_document_content.support_email = nil
+      form_document_content.support_url_text = nil
+      form_document_content.support_url = nil
+      form_document_content.support_phone = nil
+      form_document_content
+    end
 
     it "does not include support details if they are not set" do
       expect(rendered).not_to have_xpath("//h3[text()='#{I18n.t('made_live_form.contact_details')}']/following-sibling::h4", text: "Email")
@@ -194,14 +205,14 @@ describe "forms/_made_live_form.html.erb" do
   end
 
   it "contains a link to create a new draft" do
-    expect(rendered).to have_link("Create a draft to edit", href: form_path(form.id))
+    expect(rendered).to have_link("Create a draft to edit", href: form_path(form_document.id))
   end
 
   context "when form has a draft version already" do
     let(:form_metadata) { create :form, :live_with_draft }
 
     it "contains a link to edit the draft" do
-      expect(rendered).to have_link("Edit the draft of this form", href: form_path(form.id))
+      expect(rendered).to have_link("Edit the draft of this form", href: form_path(form_document.id))
     end
   end
 
@@ -235,7 +246,7 @@ describe "forms/_made_live_form.html.erb" do
 
   context "when the form has a payment link" do
     let(:payment_url) { "https://www.gov.uk/payments/your-payment-link" }
-    let(:form) { build(:made_live_form, id: form_metadata.id, payment_url:) }
+    let(:form_metadata) { create :form, :live, payment_url: }
 
     it "contains a link to the payment url" do
       expect(rendered).to have_css("h3", text: "GOV.UK Pay payment link")

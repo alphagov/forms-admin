@@ -6,7 +6,7 @@ RSpec.describe FormDocumentSyncService do
 
   describe "#synchronize_form" do
     context "when form state is live" do
-      let(:form) { create(:form, :live) }
+      let(:form) { create(:form, state: "live") }
       let(:expected_live_at) { form.reload.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%6NZ") }
 
       context "when there is no existing form document" do
@@ -56,7 +56,7 @@ RSpec.describe FormDocumentSyncService do
     end
 
     context "when form state is archived" do
-      let(:form) { create(:form, :archived) }
+      let(:form) { create(:form, state: "archived") }
 
       context "when there is no existing form document" do
         it "creates an archived form document" do
