@@ -99,9 +99,9 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "includes the report data" do
-        page = Capybara.string(response.body)
-        expect(page).to have_xpath "//dl/div[1]/dt", text: "Total live forms"
-        expect(page).to have_xpath "//dl/div[1]/dd", text: "4"
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//dl/div[1]/dt", text: "Total live forms"
+        expect(node).to have_xpath "//dl/div[1]/dd", text: "4"
       end
     end
   end
@@ -127,9 +127,9 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "includes the report data" do
-        page = Capybara.string(response.body)
-        expect(page).to have_xpath "//thead/tr/th[3]", text: "Question text"
-        expect(page).to have_xpath "//tbody/tr[1]/td[3]", text: "Email address"
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[3]", text: "Question text"
+        expect(node).to have_xpath "//tbody/tr[1]/td[3]", text: "Email address"
       end
     end
   end
@@ -155,9 +155,9 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "includes the report data" do
-        page = Capybara.string(response.body)
-        expect(page).to have_xpath "//thead/tr/th[3]", text: "Question text"
-        expect(page).to have_xpath "//tbody/tr/td[3]", text: "Single line of text"
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[3]", text: "Question text"
+        expect(node).to have_xpath "//tbody/tr/td[3]", text: "Single line of text"
       end
     end
   end
@@ -183,9 +183,9 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "includes the report data" do
-        page = Capybara.string(response.body)
-        expect(page).to have_xpath "//thead/tr/th[3]", text: "Number of routes"
-        expect(page).to have_xpath "//tbody/tr[1]/td[3]", text: "3"
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[3]", text: "Number of routes"
+        expect(node).to have_xpath "//tbody/tr[1]/td[3]", text: "3"
       end
     end
   end
@@ -211,11 +211,11 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "includes the report data" do
-        page = Capybara.string(response.body)
-        expect(page).to have_xpath "//thead/tr/th[3]", text: "Number of routes"
-        expect(page).to have_xpath "//tbody/tr/td[3]", text: "3"
-        expect(page).to have_xpath "//thead/tr/th[4]", text: "Number of branch routes"
-        expect(page).to have_xpath "//tbody/tr/td[4]", text: "1"
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[3]", text: "Number of routes"
+        expect(node).to have_xpath "//tbody/tr/td[3]", text: "3"
+        expect(node).to have_xpath "//thead/tr/th[4]", text: "Number of branch routes"
+        expect(node).to have_xpath "//tbody/tr/td[4]", text: "1"
       end
     end
   end
@@ -241,9 +241,9 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "includes the report data" do
-        page = Capybara.string(response.body)
-        expect(page).to have_xpath "//thead/tr/th[1]", text: "Form name"
-        expect(page).to have_xpath "//tbody/tr[1]/td[1]", text: "All question types form"
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[1]", text: "Form name"
+        expect(node).to have_xpath "//tbody/tr[1]/td[1]", text: "All question types form"
       end
     end
   end
@@ -269,9 +269,9 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "includes the report data" do
-        page = Capybara.string(response.body)
-        expect(page).to have_xpath "//thead/tr/th[1]", text: "Form name"
-        expect(page).to have_xpath "//tbody/tr[1]/td[1]", text: "All question types form"
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[1]", text: "Form name"
+        expect(node).to have_xpath "//tbody/tr[1]/td[1]", text: "All question types form"
       end
     end
   end
