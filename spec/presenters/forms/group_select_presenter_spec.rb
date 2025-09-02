@@ -8,6 +8,30 @@ describe Forms::GroupSelectPresenter do
   let(:groups) { build_list(:group, 5, organisation: group.organisation) }
   let(:group_select) { Forms::GroupSelect.new(group: group, form: form) }
 
+  describe "#formatted_name_for" do
+    context "when the form is draft" do
+      it "returns the group name with its status" do
+        expect(presenter.group_name(group)).to eq("Test Group (Trial)")
+      end
+    end
+
+    context "when the form is live" do
+      let(:form) { build(:form, :live) }
+
+      it "returns just the group name" do
+        expect(presenter.group_name(group)).to eq("Test Group")
+      end
+    end
+
+    context "when the form is archived" do
+      let(:form) { build(:form, :archived) }
+
+      it "returns just the group name" do
+        expect(presenter.group_name(group)).to eq("Test Group")
+      end
+    end
+  end
+
   describe "#legend" do
     let(:groups) { [] }
 

@@ -1,5 +1,5 @@
 <% set_page_title(title_with_error_prefix(t('page_titles.move_form'), @group_select.errors.any?)) %>
-<% content_for :back_link, govuk_back_link_to(group_path(@group), t('back_link.group', group_name: @group_name)) %>
+<% content_for :back_link, govuk_back_link_to(group_path(@group), t('back_link.group', group_name: @group.name)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -30,7 +30,7 @@
         <%= f.govuk_collection_radio_buttons(:group,
                                              @group_select.groups,
                                              :external_id,
-                                             ->(option) { option.name },
+                                             ->(option) { @group_select_presenter.group_name(option) },
                                              legend: { text: @group_select_presenter.legend, tag: 'h2' },
                                              hint: ->{ @group_select_presenter.hint },
                                              'data-test-id': 'group-radio'
@@ -41,7 +41,7 @@
                                                form_field: f.govuk_collection_select(:group,
                                                                                      @group_select.groups,
                                                                                      :external_id,
-                                                                                     ->(option) { option.name },
+                                                                                     ->(option) { @group_select_presenter.group_name(option) },
                                                                                      class: ['govuk-!-width-three-quarters'],
                                                                                      label: { size: 'm', tag: 'h2' },
                                                                                      hint: ->{ @group_select_presenter.hint},
@@ -56,7 +56,7 @@
                                                form_field: f.govuk_collection_select(:group,
                                                                                      @group_select.groups,
                                                                                      :external_id,
-                                                                                     ->(option) { option.name },
+                                                                                     ->(option) { @group_select_presenter.group_name(option) },
                                                                                      class: ['govuk-!-width-three-quarters'],
                                                                                      label: { size: 'm', tag: 'h2' },
                                                                                      hint: ->{ @group_select_presenter.hint },

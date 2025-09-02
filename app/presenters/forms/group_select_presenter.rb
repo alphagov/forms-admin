@@ -11,6 +11,12 @@ class Forms::GroupSelectPresenter
     @groups = groups
   end
 
+  def group_name(group)
+    return group.name if @form.has_live_version || @form.has_been_archived
+
+    "#{group.name} (#{group.status.humanize})"
+  end
+
   def legend
     return I18n.t("helpers.legend.forms_group_select.no_active_groups") if (@form.is_live? || @form.is_archived?) && @groups.empty?
     return I18n.t("helpers.legend.forms_group_select.no_groups") if @groups.empty?
