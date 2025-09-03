@@ -41,7 +41,15 @@ feature "Move a form", type: :feature do
       given_i_am_logged_in_as_an_organisation_admin
       and_i_see_the_move_form_page
       when_i_do_not_choose_a_group
-      then_i_see_an_error_message
+      then_i_see_an_error_message_to_select_a_group
+    end
+
+    scenario "receiving group is deleted before moving form" do
+      given_i_am_logged_in_as_an_organisation_admin
+      and_i_see_the_move_form_page
+      and_the_receiving_group_is_deleted
+      when_i_change_the_group
+      then_i_see_an_error_message_the_group_is_gone
     end
   end
 
@@ -87,6 +95,10 @@ feature "Move a form", type: :feature do
     expect(page.find("h1")).to have_content("#{form.name}\n-\nMove this form to a different group")
   end
 
+  def and_the_receiving_group_is_deleted
+    another_group.destroy!
+  end
+
   def when_i_change_the_group
     choose(another_group.name)
     click_button "Continue"
@@ -109,8 +121,13 @@ feature "Move a form", type: :feature do
     click_button "Continue"
   end
 
-  def then_i_see_an_error_message
+  def then_i_see_an_error_message_to_select_a_group
     expect(page).to have_content("There is a problem")
     expect(page).to have_content("Select the group you want to move this form to")
+  end
+
+  def then_i_see_an_error_message_the_group_is_gone
+    expect(page).to have_content("There is a problem")
+    expect(page).to have_content("The group you selected no longer exists")
   end
 end

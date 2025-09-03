@@ -44,10 +44,20 @@ class GroupFormsController < ApplicationController
 
     if @group_select.valid?
       receiving_group = Group.find_by(external_id: @group_select.group)
-      @group_form.update!(group: receiving_group)
-      success_message = t(".success", form_name: @form.name, receiving_group_name: receiving_group.name)
 
-      redirect_to @group, success: success_message, status: :see_other
+      # In case the receiving group is deleted since the form was loaded
+      if receiving_group
+        @group_form.update!(group: receiving_group)
+        success_message = t(".success", form_name: @form.name, receiving_group_name: receiving_group.name)
+
+        redirect_to @group, success: success_message, status: :see_other
+      else
+        @group_select = Forms::GroupSelect.new(group: @group, form: @form)
+        @group_select_presenter = Forms::GroupSelectPresenter.call(group: @group, groups: @group_select.groups, form: @form)
+        @group_select.errors.add(:group, :gone)
+
+        render :edit, status: :unprocessable_content
+      end
     else
       @group_select = Forms::GroupSelect.new(group: @group, form: @form)
       @group_select_presenter = Forms::GroupSelectPresenter.call(group: @group, groups: @group_select.groups, form: @form)

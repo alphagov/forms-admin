@@ -7,6 +7,7 @@ en:
           attributes:
             group:
               blank: Select the group you want to move this form to
+              gone: The group you selected no longer exists
   helpers:
     hint:
       forms_group_select:
