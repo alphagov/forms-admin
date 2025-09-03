@@ -207,11 +207,9 @@ describe "reports/feature_report" do
     describe "questions table" do
       it "has the correct headers" do
         page = Capybara.string(rendered.html)
-        within(page.find(".govuk-table__head")) do
-          expect(page.find_all(".govuk-table__header")[0]).to have_text "Form name"
-          expect(page.find_all(".govuk-table__header")[1]).to have_text "Organisation"
-          expect(page.find_all(".govuk-table__header")[2]).to have_text "Question text"
-        end
+        expect(page.find_all(".govuk-table__header")[0]).to have_text "Form name"
+        expect(page.find_all(".govuk-table__header")[1]).to have_text "Organisation"
+        expect(page.find_all(".govuk-table__header")[2]).to have_text "Question text"
       end
 
       it "has rows for each question" do
