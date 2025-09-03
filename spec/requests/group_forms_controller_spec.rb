@@ -67,6 +67,15 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
 
         expect(response).to have_http_status :ok
       end
+
+      context "when the url is for a form that doesn't belong to the group" do
+        it "returns 404 response" do
+          other_group = create(:group, organisation: organisation_admin_user.organisation)
+          get edit_group_form_url(other_group, id: form.id)
+
+          expect(response).to have_http_status :not_found
+        end
+      end
     end
 
     describe "PATCH /update" do

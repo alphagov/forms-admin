@@ -27,18 +27,16 @@ class GroupFormsController < ApplicationController
   end
 
   def edit
-    @group_form = GroupForm.find_by(form_id: params[:id])
-    authorize @group_form
+    render template: "errors/not_found", status: :not_found unless set_group_form
 
     @form = FormRepository.find(form_id: params[:id])
-
     @group_select = Forms::GroupSelect.new(group: @group, form: @form)
     @group_select_presenter = Forms::GroupSelectPresenter.call(group: @group, groups: @group_select.groups, form: @form)
   end
 
   def update
-    @group_form = GroupForm.find_by(form_id: params[:id])
-    authorize @group_form
+    render template: "errors/not_found", status: :not_found unless set_group_form
+
     @form = Form.find(params[:id])
     @group_select = Forms::GroupSelect.new(group_select_params.merge(form: @form))
 
@@ -79,5 +77,11 @@ private
 
   def name_input_params
     params.require(:forms_name_input).permit(:name)
+  end
+
+  def set_group_form
+    @group_form = GroupForm.find_by(form_id: params[:id])
+    authorize @group_form
+    @group_form.group_id == @group.id
   end
 end
