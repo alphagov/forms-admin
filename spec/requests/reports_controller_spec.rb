@@ -2,21 +2,11 @@ require "rails_helper"
 
 RSpec.describe ReportsController, type: :request do
   let(:question_text) { "Question text" }
-  let(:form_documents_url) { "#{Settings.forms_api.base_url}/api/v2/form-documents".freeze }
   let(:forms) { create_list(:form, 4, :live) }
-  let(:form_documents) { forms.map(&:live_form_document) }
-  let(:response_headers) do
-    {
-      "pagination-total" => "3",
-      "pagination-offset" => "0",
-      "pagination-limit" => "3",
-    }
-  end
 
   before do
-    stub_request(:get, form_documents_url)
-      .with(query: { page: "1", per_page: "3", tag: "live" })
-      .to_return(body: form_documents.to_json, headers: response_headers)
+    group = create :group
+    forms.each { |form| group.group_forms.create!(form:) }
   end
 
   shared_examples "unauthorized user is forbidden" do
