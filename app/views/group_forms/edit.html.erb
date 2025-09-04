@@ -1,0 +1,80 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.move_form'), @group_select.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(group_path(@group), t('back_link.group', group_name: @group.name)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+  <%= form_with(model: @group_select, method: :patch, url: group_form_path(group_id: @group.external_id, id: @group_select.form.id)) do |f| %>
+    <% if @group_select&.errors.any? %>
+      <%= f.govuk_error_summary %>
+    <% end %>
+
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= @form.name %></span><span class="govuk-visually-hidden"> - </span>
+      <%= t('page_titles.move_form') %>
+    </h1>
+
+    <%= govuk_summary_list(classes: "govuk-summary-list--no-border") do |summary_list|
+      summary_list.with_row do |row|
+        row.with_key { t('.form_name_label') }
+        row.with_value { @group_select.form.name }
+      end;
+      summary_list.with_row do |row|
+        row.with_key { t('.group_name_label') }
+        row.with_value { @group.name }
+      end;
+    end %>
+
+      <%= t('.body_html') %>
+
+      <% if @group_select.groups.length < 11 %>
+        <%= f.govuk_collection_radio_buttons(:group,
+                                             @group_select.groups,
+                                             :external_id,
+                                             ->(option) { @group_select_presenter.group_name(option) },
+                                             legend: { text: @group_select_presenter.legend, tag: 'h2' },
+                                             hint: ->{ @group_select_presenter.hint },
+                                             'data-test-id': 'group-radio'
+                                            ) %>
+      <% elsif @group_select.groups.length < 31 %>
+        <%= render DfE::Autocomplete::View.new(f,
+                                               attribute_name: :group,
+                                               form_field: f.govuk_collection_select(:group,
+                                                                                     @group_select.groups,
+                                                                                     :external_id,
+                                                                                     ->(option) { @group_select_presenter.group_name(option) },
+                                                                                     class: ['govuk-!-width-three-quarters'],
+                                                                                     label: { size: 'm', tag: 'h2' },
+                                                                                     hint: ->{ @group_select_presenter.hint},
+                                                                                     options: { include_blank: t('.placeholder') }
+                                                                                    ),
+                                                                                    html_attributes: { 'data-test-id': 'group-select', 'data-default-value': '' }
+                                              ) %>
+       <%= init_autocomplete_script(show_all_values: true, raw_attribute: false, source: false, autoselect: false, default_value: '', placeholder: t('.placeholder')) %>
+      <% else %>
+        <%= render DfE::Autocomplete::View.new(f,
+                                               attribute_name: :group,
+                                               form_field: f.govuk_collection_select(:group,
+                                                                                     @group_select.groups,
+                                                                                     :external_id,
+                                                                                     ->(option) { @group_select_presenter.group_name(option) },
+                                                                                     class: ['govuk-!-width-three-quarters'],
+                                                                                     label: { size: 'm', tag: 'h2' },
+                                                                                     hint: ->{ @group_select_presenter.hint },
+                                                                                     options: { include_blank: t('.placeholder') }
+                                                                                    ),
+                                                                                    html_attributes: { 'data-test-id': 'group-autocomplete', 'data-default-value': '' }
+                                              ) %>
+                                            <%= init_autocomplete_script(show_all_values: false, raw_attribute: false, source: false, autoselect: false) %>
+                                          <% end %>
+
+      <% if @group_select.groups.size > 0 %>
+        <%= f.govuk_submit %>
+      <% else %>
+        <p><%= link_to t('back_link.group', group_name: @group.name), group_path(@group) %></p>
+      <% end %>
+
+    <% end %>
+  </div>
+</div>
+
+

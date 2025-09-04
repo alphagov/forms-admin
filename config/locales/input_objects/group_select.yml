@@ -1,0 +1,24 @@
+---
+en:
+  activemodel:
+    errors:
+      models:
+        forms/group_select:
+          attributes:
+            group:
+              blank: Select the group you want to move this form to
+              gone: The group you selected no longer exists
+  helpers:
+    hint:
+      forms_group_select:
+        group: A live form cannot be moved to a trial group.
+        no_active_groups: You can only move a live form to another active group. You need to upgrade a trial group to move this form.
+        no_groups: You need to create a new group to move this form into.
+    label:
+      forms_group_select:
+        group: What group do you want to move it to?
+    legend:
+      forms_group_select:
+        group: What group do you want to move it to?
+        no_active_groups: You have no other active groups
+        no_groups: You have no other groups

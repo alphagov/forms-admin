@@ -4,13 +4,6 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
   let(:group) { create :group }
   let(:nonexistent_group) { "foobar" }
 
-  let(:valid_attributes) do
-    { name: "Test form" }
-  end
-  let(:invalid_attributes) do
-    { name: "" }
-  end
-
   before do
     create(:membership, user: standard_user, group:)
     login_as_standard_user
@@ -55,7 +48,65 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
     end
   end
 
+  context "when moving forms" do
+    let(:form) { build :form, id: 1 }
+
+    before do
+      create(:form_record, id: form.id)
+      login_as_organisation_admin_user
+      allow(FormRepository).to receive(:find).and_return(form)
+
+      group.group_forms.create!(form_id: form.id)
+      group.organisation = organisation_admin_user.organisation
+      group.save!
+    end
+
+    describe "GET /edit" do
+      it "returns 200 response" do
+        get edit_group_form_url(group, id: form.id)
+
+        expect(response).to have_http_status :ok
+      end
+
+      context "when the url is for a form that doesn't belong to the group" do
+        it "returns 404 response" do
+          other_group = create(:group, organisation: organisation_admin_user.organisation)
+          get edit_group_form_url(other_group, id: form.id)
+
+          expect(response).to have_http_status :not_found
+        end
+      end
+    end
+
+    describe "PATCH /update" do
+      let(:other_group) { create(:group, organisation: organisation_admin_user.organisation) }
+
+      context "with valid parameters" do
+        it "redirects to the group" do
+          patch group_form_url(group, id: form.id), params: { forms_group_select: { group: other_group.external_id } }
+
+          expect(response).to redirect_to(group_url(group))
+        end
+      end
+
+      context "with missing form group parameter" do
+        it "re-renders the form with an error" do
+          patch group_form_url(group, id: form.id), params: { forms_group_select: { group: nil } }
+
+          expect(response).to have_http_status :unprocessable_content
+        end
+      end
+    end
+  end
+
   describe "POST /" do
+    let(:valid_attributes) do
+      { name: "Test form" }
+    end
+    let(:invalid_attributes) do
+      { name: "" }
+    end
+
     context "with valid parameters" do
       let(:form) { create :form }
 

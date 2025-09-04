@@ -18,3 +18,8 @@ $govuk-new-typography-scale: true;
 @import "../../components/act_as_user_banner_component";
 @import "../../components/service_navigation_component";
 @import "../../components/scrolling_wrapper_component";
+
+// TODO: this should be fixed by https://trello.com/c/FpxolRha/3030-fix-missing-arrow-on-autocomplete-fields
+.autocomplete__dropdown-arrow-down {
+  z-index: auto;
+}

@@ -434,6 +434,14 @@ en:
       receive_csv_subsection:
         receive_csv: Get completed forms as CSV files
         title: Optional task
+  group_forms:
+    edit:
+      body_html: "<p> We’ll send an email to members of the current group to let them know the form has moved and they may no longer have access to it. </p>\n"
+      form_name_label: Form name
+      group_name_label: Current group
+      placeholder: Select a group
+    update:
+      success: "‘%{form_name}’ has been moved to ‘%{receiving_group_name}’"
   group_members:
     create:
       success: "%{user_name} has been added to this group and we’ve sent them an email to let them know"
@@ -1174,6 +1182,7 @@ en:
     mou_signature_confirmation: You’ve agreed to the MOU
     mou_signature_new: GOV.UK Forms Memorandum of Understanding
     mou_signatures: Memorandum of Understanding agreements
+    move_form: Move this form to a different group
     name_settings: Ask for a person’s name
     new_page: Edit question
     new_secondary_skip: 'Route for any other answer: set questions to skip'

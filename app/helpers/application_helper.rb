@@ -106,7 +106,7 @@ module ApplicationHelper
     end
   end
 
-  def init_autocomplete_script(show_all_values: false, raw_attribute: false, source: false)
+  def init_autocomplete_script(show_all_values: false, raw_attribute: false, source: false, autoselect: true, default_value: nil, placeholder: nil, preserve_null_options: false)
     content_for(:body_end) do
       javascript_tag defer: true do
         "
@@ -115,7 +115,11 @@ module ApplicationHelper
           dfeAutocomplete({
             showAllValues: #{show_all_values},
             rawAttribute: #{raw_attribute},
-            source: #{source}
+            source: #{source},
+            autoselect: #{autoselect},
+            preserveNullOptions: #{preserve_null_options},
+            #{"defaultValue: '#{default_value}'," unless default_value.nil?}
+            #{"placeholder: '#{placeholder}'," unless placeholder.nil?}
           })
         }
       });

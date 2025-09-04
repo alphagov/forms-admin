@@ -26,13 +26,62 @@ class GroupFormsController < ApplicationController
     end
   end
 
+  def edit
+    render template: "errors/not_found", status: :not_found unless set_group_form
+
+    @form = FormRepository.find(form_id: params[:id])
+    @group_select = Forms::GroupSelect.new(group: @group, form: @form)
+    @group_select_presenter = Forms::GroupSelectPresenter.call(group: @group, groups: @group_select.groups, form: @form)
+  end
+
+  def update
+    render template: "errors/not_found", status: :not_found unless set_group_form
+
+    @form = Form.find(params[:id])
+    @group_select = Forms::GroupSelect.new(group_select_params.merge(form: @form))
+
+    if @group_select.valid?
+      receiving_group = Group.find_by(external_id: @group_select.group)
+
+      # In case the receiving group is deleted since the form was loaded
+      if receiving_group
+        @group_form.update!(group: receiving_group)
+        success_message = t(".success", form_name: @form.name, receiving_group_name: receiving_group.name)
+
+        redirect_to @group, success: success_message, status: :see_other
+      else
+        @group_select = Forms::GroupSelect.new(group: @group, form: @form)
+        @group_select_presenter = Forms::GroupSelectPresenter.call(group: @group, groups: @group_select.groups, form: @form)
+        @group_select.errors.add(:group, :gone)
+
+        render :edit, status: :unprocessable_content
+      end
+    else
+      @group_select = Forms::GroupSelect.new(group: @group, form: @form)
+      @group_select_presenter = Forms::GroupSelectPresenter.call(group: @group, groups: @group_select.groups, form: @form)
+      @group_select.errors.add(:group, :blank) if group_select_params[:selected_group].blank?
+
+      render :edit, status: :unprocessable_content
+    end
+  end
+
 private
 
   def set_group
     @group = Group.find_by!(external_id: params[:group_id])
   end
 
+  def group_select_params
+    params.require(:forms_group_select).permit(:group)
+  end
+
   def name_input_params
     params.require(:forms_name_input).permit(:name)
+  end
+
+  def set_group_form
+    @group_form = GroupForm.find_by(form_id: params[:id])
+    authorize @group_form
+    @group_form.group_id == @group.id
   end
 end
