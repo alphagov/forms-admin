@@ -6,15 +6,41 @@ RSpec.describe Reports::QuestionsCsvReportService do
   end
 
   let(:question_page_documents) { Reports::FeatureReportService.new(form_documents).questions }
-  let(:form_documents) { JSON.parse(file_fixture("form_documents_response.json").read) }
+  let(:form_documents) { forms.map { |form| form.live_form_document.as_json } }
+  let(:form_with_all_answer_types) do
+    create(:form, :live, :with_support, submission_type: "email_with_csv", payment_url: "https://www.gov.uk/payments/organisation/service", pages: [
+      create(:page, :with_address_settings, is_repeatable: true),
+      create(:page, :with_date_settings),
+      create(:page, answer_type: "email"),
+      create(:page, :with_full_name_settings),
+      create(:page, answer_type: "national_insurance_number"),
+      create(:page, answer_type: "number"),
+      create(:page, answer_type: "phone_number"),
+      create(:page, :with_selection_settings, is_optional: true),
+      create(:page, :with_single_line_text_settings, is_repeatable: true),
+    ])
+  end
+  let(:branch_route_form) do
+    form = create(:form, :live, :ready_for_routing)
+    create(:condition, :with_exit_page, routing_page_id: form.pages[0].id, check_page_id: form.pages[0].id, answer_value: "Option 1")
+    create(:condition, routing_page_id: form.pages[1].id, check_page_id: form.pages[1].id, answer_value: "Option 1", goto_page_id: form.pages[3].id)
+    create(:condition, routing_page_id: form.pages[2].id, check_page_id: form.pages[1].id, goto_page_id: form.pages[4].id)
+    form.live_form_document.update!(content: form.reload.as_form_document(live_at: form.updated_at))
+    form
+  end
+  let(:basic_route_form) do
+    form = create(:form, :live, :ready_for_routing)
+    create(:condition, routing_page_id: form.pages.first.id, check_page_id: form.pages.first.id, answer_value: "Option 1", skip_to_end: true)
+    form.live_form_document.update!(content: form.reload.as_form_document(live_at: form.updated_at))
+    form
+  end
+  let(:forms) { [form_with_all_answer_types, branch_route_form, basic_route_form] }
 
   let(:group) { create(:group) }
 
   before do
-    form_documents.each do |form_document|
-      form = create(:form)
+    forms.each do |form|
       GroupForm.create!(form: form, group: group)
-      form_document["form_id"] = form.id
     end
   end
 
@@ -22,23 +48,23 @@ RSpec.describe Reports::QuestionsCsvReportService do
     it "returns a CSV with a header row and a rows for each question" do
       csv = csv_reports_service.csv
       rows = CSV.parse(csv)
-      expect(rows.length).to eq 19
+      expect(rows.length).to eq 20
     end
 
     it "has expected values for text question" do
       csv = csv_reports_service.csv
       rows = CSV.parse(csv)
-      text_question_row = rows.detect { |row| row.include? "Single line of text" }
-      expect(text_question_row).to eq([
-        form_documents[0]["form_id"].to_s,
+      text_question_row = rows.detect { |row| row.include? form_with_all_answer_types.pages.last.question_text }
+      expect(text_question_row).to contain_exactly(
+        form_with_all_answer_types.id.to_s,
         "live",
-        "All question types form",
+        form_with_all_answer_types.name,
         group.organisation.name,
         group.organisation.id.to_s,
         group.name,
         group.external_id,
-        "1",
-        "Single line of text",
+        form_with_all_answer_types.pages.last.position.to_s,
+        form_with_all_answer_types.pages.last.question_text,
         "text",
         nil,
         nil,
@@ -52,23 +78,23 @@ RSpec.describe Reports::QuestionsCsvReportService do
         nil,
         nil,
         "{\"input_type\" => \"single_line\"}",
-      ])
+      )
     end
 
     it "has expected values for selection question" do
       csv = csv_reports_service.csv
       rows = CSV.parse(csv)
-      selection_question_row = rows.detect { |row| row.include? "Selection from a list of options" }
-      expect(selection_question_row).to eq([
-        form_documents[0]["form_id"].to_s,
+      selection_question_row = rows.detect { |row| row.include? form_with_all_answer_types.pages[7].question_text }
+      expect(selection_question_row).to contain_exactly(
+        form_with_all_answer_types.id.to_s,
         "live",
-        "All question types form",
+        form_with_all_answer_types.name,
         group.organisation.name,
         group.organisation.id.to_s,
         group.name,
         group.external_id,
-        "8",
-        "Selection from a list of options",
+        form_with_all_answer_types.pages[7].position.to_s,
+        form_with_all_answer_types.pages[7].question_text,
         "selection",
         nil,
         nil,
@@ -78,27 +104,27 @@ RSpec.describe Reports::QuestionsCsvReportService do
         "false",
         "false",
         nil,
-        "false",
-        "3",
+        "true",
+        "2",
         nil,
-        "{\"only_one_option\" => \"0\", \"selection_options\" => [{\"name\" => \"Option 1\"}, {\"name\" => \"Option 2\"}, {\"name\" => \"Option 3\"}]}",
-      ])
+        "{\"only_one_option\" => \"true\", \"selection_options\" => [{\"name\" => \"Option 1\"}, {\"name\" => \"Option 2\"}]}",
+      )
     end
 
     it "has expected values for name question" do
       csv = csv_reports_service.csv
       rows = CSV.parse(csv)
-      name_question_row = rows.detect { |row| row.include? "What’s your name?" }
-      expect(name_question_row).to eq([
-        form_documents[2]["form_id"].to_s,
+      name_question_row = rows.detect { |row| row.include? form_with_all_answer_types.pages[3].question_text }
+      expect(name_question_row).to contain_exactly(
+        form_with_all_answer_types.id.to_s,
         "live",
-        "Branch route form",
+        form_with_all_answer_types.name,
         group.organisation.name,
         group.organisation.id.to_s,
         group.name,
         group.external_id,
-        "3",
-        "What’s your name?",
+        form_with_all_answer_types.pages[3].position.to_s,
+        form_with_all_answer_types.pages[3].question_text,
         "name",
         nil,
         nil,
@@ -112,23 +138,23 @@ RSpec.describe Reports::QuestionsCsvReportService do
         nil,
         "false",
         "{\"input_type\" => \"full_name\", \"title_needed\" => false}",
-      ])
+      )
     end
 
     it "has expected values for question with routing conditions" do
       csv = csv_reports_service.csv
       rows = CSV.parse(csv)
-      routing_question_row = rows.detect { |row| row.include? "Would you like to submit anonymously?" }
-      expect(routing_question_row).to eq([
-        form_documents[3]["form_id"].to_s,
+      routing_question_row = rows.detect { |row| row.include? basic_route_form.pages.first.question_text }
+      expect(routing_question_row).to contain_exactly(
+        basic_route_form.id.to_s,
         "live",
-        "Skip route form",
+        basic_route_form.name,
         group.organisation.name,
         group.organisation.id.to_s,
         group.name,
         group.external_id,
-        "1",
-        "Would you like to submit anonymously?",
+        basic_route_form.pages.first.position.to_s,
+        basic_route_form.pages.first.question_text,
         "selection",
         nil,
         nil,
@@ -141,24 +167,24 @@ RSpec.describe Reports::QuestionsCsvReportService do
         "true",
         "2",
         nil,
-        "{\"only_one_option\" => \"true\", \"selection_options\" => [{\"name\" => \"Yes\"}, {\"name\" => \"No\"}]}",
-      ])
+        "{\"only_one_option\" => \"true\", \"selection_options\" => [{\"name\" => \"Option 1\"}, {\"name\" => \"Option 2\"}]}",
+      )
     end
 
     it "has expected values for question with branch routing conditions" do
       csv = csv_reports_service.csv
       rows = CSV.parse(csv)
-      routing_question_row = rows.detect { |row| row.include? "How many times have you filled out this form?" }
-      expect(routing_question_row).to eq([
-        form_documents[2]["form_id"].to_s,
+      routing_question_row = rows.detect { |row| row.include? branch_route_form.pages[1].question_text }
+      expect(routing_question_row).to contain_exactly(
+        branch_route_form.id.to_s,
         "live",
-        "Branch route form",
+        branch_route_form.name.to_s,
         group.organisation.name,
         group.organisation.id.to_s,
         group.name,
         group.external_id,
-        "2",
-        "How many times have you filled out this form?",
+        branch_route_form.pages[1].position.to_s,
+        branch_route_form.pages[1].question_text,
         "selection",
         nil,
         nil,
@@ -171,8 +197,8 @@ RSpec.describe Reports::QuestionsCsvReportService do
         "true",
         "2",
         nil,
-        "{\"only_one_option\" => \"true\", \"selection_options\" => [{\"name\" => \"Once\"}, {\"name\" => \"More than once\"}]}",
-      ])
+        "{\"only_one_option\" => \"true\", \"selection_options\" => [{\"name\" => \"Option 1\"}, {\"name\" => \"Option 2\"}]}",
+      )
     end
   end
 end

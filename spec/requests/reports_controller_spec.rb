@@ -3,7 +3,8 @@ require "rails_helper"
 RSpec.describe ReportsController, type: :request do
   let(:question_text) { "Question text" }
   let(:form_documents_url) { "#{Settings.forms_api.base_url}/api/v2/form-documents".freeze }
-  let(:form_documents_response_json) { file_fixture("form_documents_response.json").read }
+  let(:forms) { create_list(:form, 4, :live) }
+  let(:form_documents) { forms.map(&:live_form_document) }
   let(:response_headers) do
     {
       "pagination-total" => "3",
@@ -15,7 +16,7 @@ RSpec.describe ReportsController, type: :request do
   before do
     stub_request(:get, form_documents_url)
       .with(query: { page: "1", per_page: "3", tag: "live" })
-      .to_return(body: form_documents_response_json, headers: response_headers)
+      .to_return(body: form_documents.to_json, headers: response_headers)
   end
 
   shared_examples "unauthorized user is forbidden" do
@@ -99,9 +100,9 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "includes the report data" do
-        page = Capybara.string(response.body)
-        expect(page).to have_xpath "//dl/div[1]/dt", text: "Total live forms"
-        expect(page).to have_xpath "//dl/div[1]/dd", text: "4"
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//dl/div[1]/dt", text: "Total live forms"
+        expect(node).to have_xpath "//dl/div[1]/dd", text: "4"
       end
     end
   end
@@ -112,6 +113,13 @@ RSpec.describe ReportsController, type: :request do
     include_examples "unauthorized user is forbidden"
 
     context "when the user is a super admin" do
+      let(:form) do
+        create(:form, :live, pages: [
+          create(:page, answer_type: "email"),
+        ])
+      end
+      let(:forms) { [form] }
+
       before do
         login_as_super_admin_user
 
@@ -127,15 +135,21 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "includes the report data" do
-        page = Capybara.string(response.body)
-        expect(page).to have_xpath "//thead/tr/th[3]", text: "Question text"
-        expect(page).to have_xpath "//tbody/tr[1]/td[3]", text: "Email address"
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[3]", text: "Question text"
+        expect(node).to have_xpath "//tbody/tr[1]/td[3]", text: form.pages.first.question_text
       end
     end
   end
 
   describe "#questions_with_add_another_answer" do
     let(:path) { report_questions_with_add_another_answer_path(tag: :live) }
+    let(:form) do
+      create(:form, :live, pages: [
+        create(:page, is_repeatable: true),
+      ])
+    end
+    let(:forms) { [form] }
 
     include_examples "unauthorized user is forbidden"
 
@@ -155,15 +169,22 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "includes the report data" do
-        page = Capybara.string(response.body)
-        expect(page).to have_xpath "//thead/tr/th[3]", text: "Question text"
-        expect(page).to have_xpath "//tbody/tr/td[3]", text: "Single line of text"
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[3]", text: "Question text"
+        expect(node).to have_xpath "//tbody/tr/td[3]", text: form.pages.first.question_text
       end
     end
   end
 
   describe "#forms_with_routes" do
     let(:path) { report_forms_with_routes_path(tag: :live) }
+    let(:form) do
+      form = create(:form, :live, :ready_for_routing)
+      create(:condition, routing_page_id: form.pages.first.id, check_page_id: form.pages.first.id, answer_value: "Option 1", goto_page_id: form.pages.second.id)
+      form.live_form_document.update!(content: form.reload.as_form_document(live_at: form.updated_at))
+      form
+    end
+    let(:forms) { [form] }
 
     include_examples "unauthorized user is forbidden"
 
@@ -183,15 +204,23 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "includes the report data" do
-        page = Capybara.string(response.body)
-        expect(page).to have_xpath "//thead/tr/th[3]", text: "Number of routes"
-        expect(page).to have_xpath "//tbody/tr[1]/td[3]", text: "3"
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[3]", text: "Number of routes"
+        expect(node).to have_xpath "//tbody/tr[1]/td[3]", text: "1"
       end
     end
   end
 
   describe "#forms_with_branch_routes" do
     let(:path) { report_forms_with_branch_routes_path(tag: :live) }
+    let(:form) do
+      form = create(:form, :live, :ready_for_routing)
+      create(:condition, routing_page_id: form.pages.first.id, check_page_id: form.pages.first.id, answer_value: "Option 1", goto_page_id: form.pages.third.id)
+      create(:condition, routing_page_id: form.pages.second.id, check_page_id: form.pages.first.id, goto_page_id: form.pages.fourth.id)
+      form.live_form_document.update!(content: form.reload.as_form_document(live_at: form.updated_at))
+      form
+    end
+    let(:forms) { [form] }
 
     include_examples "unauthorized user is forbidden"
 
@@ -211,17 +240,19 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "includes the report data" do
-        page = Capybara.string(response.body)
-        expect(page).to have_xpath "//thead/tr/th[3]", text: "Number of routes"
-        expect(page).to have_xpath "//tbody/tr/td[3]", text: "3"
-        expect(page).to have_xpath "//thead/tr/th[4]", text: "Number of branch routes"
-        expect(page).to have_xpath "//tbody/tr/td[4]", text: "1"
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[3]", text: "Number of routes"
+        expect(node).to have_xpath "//tbody/tr/td[3]", text: "2"
+        expect(node).to have_xpath "//thead/tr/th[4]", text: "Number of branch routes"
+        expect(node).to have_xpath "//tbody/tr/td[4]", text: "1"
       end
     end
   end
 
   describe "#forms_with_payments" do
     let(:path) { report_forms_with_payments_path(tag: :live) }
+    let(:form) { create(:form, :live, payment_url: "https://www.gov.uk/payments/organisation/service") }
+    let(:forms) { [form] }
 
     include_examples "unauthorized user is forbidden"
 
@@ -241,15 +272,17 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "includes the report data" do
-        page = Capybara.string(response.body)
-        expect(page).to have_xpath "//thead/tr/th[1]", text: "Form name"
-        expect(page).to have_xpath "//tbody/tr[1]/td[1]", text: "All question types form"
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[1]", text: "Form name"
+        expect(node).to have_xpath "//tbody/tr[1]/td[1]", text: form.name
       end
     end
   end
 
   describe "#forms_with_csv_submission_enabled" do
     let(:path) { report_forms_with_csv_submission_enabled_path(tag: :live) }
+    let(:form) { create(:form, :live, submission_type: "email_with_csv") }
+    let(:forms) { [form] }
 
     include_examples "unauthorized user is forbidden"
 
@@ -269,9 +302,9 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it "includes the report data" do
-        page = Capybara.string(response.body)
-        expect(page).to have_xpath "//thead/tr/th[1]", text: "Form name"
-        expect(page).to have_xpath "//tbody/tr[1]/td[1]", text: "All question types form"
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[1]", text: "Form name"
+        expect(node).to have_xpath "//tbody/tr[1]/td[1]", text: form.name
       end
     end
   end
@@ -530,6 +563,14 @@ RSpec.describe ReportsController, type: :request do
     end
 
     describe "#forms_with_routes as csv" do
+      let(:form) do
+        form = create(:form, :live, :ready_for_routing)
+        create(:condition, routing_page_id: form.pages.first.id, check_page_id: form.pages.first.id, answer_value: "Option 1", goto_page_id: form.pages.second.id)
+        form.live_form_document.update!(content: form.reload.as_form_document(live_at: form.updated_at))
+        form
+      end
+      let(:forms) { [form, *create_list(:form, 2, :live)] }
+
       before do
         login_as_super_admin_user
 
@@ -547,15 +588,17 @@ RSpec.describe ReportsController, type: :request do
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
         expect(csv.headers).to eq Reports::FormsCsvReportService::FORM_CSV_HEADERS
-        expect(csv.length).to eq 2
+        expect(csv.length).to eq 1
         expect(csv.by_col["Form name"]).to eq [
-          "Branch route form",
-          "Skip route form",
+          form.name,
         ]
       end
     end
 
     describe "#forms_with_payments as csv" do
+      let(:form) { create(:form, :live, payment_url: "https://www.gov.uk/payments/organisation/service") }
+      let(:forms) { [form, *create_list(:form, 2, :live)] }
+
       before do
         login_as_super_admin_user
 
@@ -575,12 +618,15 @@ RSpec.describe ReportsController, type: :request do
         expect(csv.headers).to eq Reports::FormsCsvReportService::FORM_CSV_HEADERS
         expect(csv.length).to eq 1
         expect(csv.by_col["Form name"]).to eq [
-          "All question types form",
+          form.name,
         ]
       end
     end
 
     describe "#forms_with_csv_submission_enabled as csv" do
+      let(:form) { create(:form, :live, submission_type: "email_with_csv") }
+      let(:forms) { [form, *create_list(:form, 2, :live)] }
+
       before do
         login_as_super_admin_user
 
@@ -600,7 +646,7 @@ RSpec.describe ReportsController, type: :request do
         expect(csv.headers).to eq Reports::FormsCsvReportService::FORM_CSV_HEADERS
         expect(csv.length).to eq 1
         expect(csv.by_col["Form name"]).to eq [
-          "All question types form",
+          form.name,
         ]
       end
     end
@@ -623,11 +669,18 @@ RSpec.describe ReportsController, type: :request do
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
         expect(csv.headers).to eq Reports::QuestionsCsvReportService::QUESTIONS_CSV_HEADERS
-        expect(csv.length).to eq 18
+        expect(csv.length).to eq 20
       end
     end
 
     describe "#questions_with_answer_type as csv" do
+      let(:form) do
+        create(:form, :live, pages: [
+          create(:page, answer_type: "text"),
+        ])
+      end
+      let(:forms) { [form, *create_list(:form, 2, :live)] }
+
       before do
         login_as_super_admin_user
 
@@ -645,11 +698,18 @@ RSpec.describe ReportsController, type: :request do
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
         expect(csv.headers).to eq Reports::QuestionsCsvReportService::QUESTIONS_CSV_HEADERS
-        expect(csv.length).to eq 5
+        expect(csv.length).to eq 1
       end
     end
 
     describe "#questions_with_add_another_answer as csv" do
+      let(:form) do
+        create(:form, :live, pages: [
+          create(:page, is_repeatable: true),
+        ])
+      end
+      let(:forms) { [form, *create_list(:form, 2, :live)] }
+
       before do
         login_as_super_admin_user
 
@@ -667,7 +727,7 @@ RSpec.describe ReportsController, type: :request do
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
         expect(csv.headers).to eq Reports::QuestionsCsvReportService::QUESTIONS_CSV_HEADERS
-        expect(csv.length).to eq 2
+        expect(csv.length).to eq 1
       end
     end
   end

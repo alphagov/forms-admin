@@ -78,6 +78,11 @@ FactoryBot.define do
       answer_settings { DataStruct.new(input_type:) }
     end
 
+    trait :with_single_line_text_settings do
+      answer_type { "text" }
+      answer_settings { DataStruct.new(input_type: "single_line") }
+    end
+
     trait :with_date_settings do
       transient do
         input_type { Pages::DateSettingsInput::INPUT_TYPES.sample }
@@ -105,6 +110,11 @@ FactoryBot.define do
 
       answer_type { "name" }
       answer_settings { DataStruct.new(input_type:, title_needed:) }
+    end
+
+    trait :with_full_name_settings do
+      answer_type { "name" }
+      answer_settings { DataStruct.new(input_type: "full_name", title_needed: false) }
     end
   end
 end
