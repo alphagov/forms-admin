@@ -1,0 +1,9 @@
+<% set_page_title(t("page_titles.missing_draft_question")) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= t("page_titles.missing_draft_question") %></h1>
+    <p><%= t(".expired_data") %></p>
+    <p><%= t(".possible_causes") %></p>
+    <p><%= t(".next_steps_html", add_question_link: start_new_question_path(@current_form.id), questions_link: form_pages_path(@current_form.id)) %></p>
+  </div>
+</div>

@@ -306,6 +306,10 @@ en:
   errors:
     messages:
       non_government_email: Enter a government email address
+    missing_draft_question:
+      expired_data: This page cannot be loaded because it’s trying to use expired data.
+      next_steps_html: <a href="%{add_question_link}">Add a question</a> or <a href="%{questions_link}">go to your list of questions</a> to continue building your form.
+      possible_causes: This can happen if you use the back button or multiple tabs on your browser.
     page_conditions:
       answer_value_doesnt_exist: The answer that question %{question_number}’s route %{route_number} is based on no longer exists - edit or delete this route
       any_other_answer_route:
@@ -1179,6 +1183,7 @@ en:
     make_archived_draft_live: Make your form live again
     make_changes_live: Make your changes live
     make_live: Make your form live
+    missing_draft_question: There’s a problem with this page
     mou_signature_confirmation: You’ve agreed to the MOU
     mou_signature_new: GOV.UK Forms Memorandum of Understanding
     mou_signatures: Memorandum of Understanding agreements

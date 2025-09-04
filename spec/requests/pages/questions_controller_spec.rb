@@ -56,27 +56,39 @@ RSpec.describe Pages::QuestionsController, type: :request do
       expect(response).to have_http_status(:ok)
     end
 
+    context "when the draft question is not present" do
+      let(:draft_question) { nil }
+
+      it "renders the index page" do
+        expect(response).to render_template("errors/missing_draft_question")
+      end
+
+      it "returns a 422 error code" do
+        expect(response.status).to eq(422)
+      end
+    end
+
     include_examples "logging"
   end
 
   describe "#create" do
+    let(:params) do
+      { pages_question_input: {
+        question_text: "What is your home address?",
+        hint_text: "This should be the location stated in your contract.",
+        is_optional: false,
+        is_repeatable: false,
+      } }
+    end
+
+    before do
+      # Setup a draft_question so that create question action doesn't need to create a completely new records
+      draft_question
+
+      post create_question_path(form.id), params:
+    end
+
     describe "Given a valid page" do
-      let(:params) do
-        { pages_question_input: {
-          question_text: "What is your home address?",
-          hint_text: "This should be the location stated in your contract.",
-          is_optional: false,
-          is_repeatable: false,
-        } }
-      end
-
-      before do
-        # Setup a draft_question so that create question action doesn't need to create a completely new records
-        draft_question
-
-        post create_question_path(form.id), params:
-      end
-
       it "Redirects you to edit page for new question" do
         expect(response).to redirect_to(edit_question_path(form_id: form.id, page_id: page.id))
       end
@@ -94,11 +106,8 @@ RSpec.describe Pages::QuestionsController, type: :request do
     end
 
     context "when question_input has invalid data" do
-      before do
-        # Setup a draft_question so that create question action doesn't need to create a completely new records
-        draft_question
-
-        post create_question_path(form.id), params: { pages_question_input: {
+      let(:params) do
+        { pages_question_input: {
           hint_text: "This should be the location stated in your contract.",
           is_optional: false,
         } }
@@ -114,6 +123,18 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
       it "outputs error message" do
         expect(response.body).to include("Enter a question")
+      end
+    end
+
+    context "when the draft question is not present" do
+      let(:draft_question) { nil }
+
+      it "renders the index page" do
+        expect(response).to render_template("errors/missing_draft_question")
+      end
+
+      it "returns a 422 error code" do
+        expect(response.status).to eq(422)
       end
     end
   end

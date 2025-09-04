@@ -1,7 +1,5 @@
 class Pages::QuestionsController < PagesController
-  before_action do
-    raise "No answer type set for draft question" if draft_question.answer_type.blank?
-  end
+  before_action :check_draft_question, only: %i[new create]
 
   def new
     @question_input = Pages::QuestionInput.new(answer_type: draft_question.answer_type,
@@ -70,5 +68,9 @@ private
                       page_heading: draft_question.page_heading,
                       guidance_markdown: draft_question.guidance_markdown,
                       answer_type: draft_question.answer_type)
+  end
+
+  def check_draft_question
+    render "errors/missing_draft_question", status: :unprocessable_content, formats: :html if draft_question.answer_type.blank?
   end
 end
