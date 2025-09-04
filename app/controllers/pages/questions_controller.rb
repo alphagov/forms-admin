@@ -1,6 +1,6 @@
 class Pages::QuestionsController < PagesController
   before_action do
-    raise "No answer type set for draft question" if draft_question.answer_type.blank?
+    render "errors/stale_question", status: :unprocessable_content, formats: :html if draft_question.answer_type.blank?
   end
 
   def new

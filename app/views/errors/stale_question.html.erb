@@ -1,0 +1,9 @@
+<% set_page_title("This page is using data that has expired") %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">This page is using data that has expired</h1>
+    <p>The page you're trying to access relies on old data which has been cleared.</p>
+    <p>This can happen when navigating to the new question page using the browser back button.</p>
+    <p><%= govuk_link_to "Add a new question", start_new_question_path(@current_form.id) %> or <%= govuk_link_to "return to the list of pages", form_pages_path(@current_form.id) %> to continue building your form.</p>
+  </div>
+</div>
