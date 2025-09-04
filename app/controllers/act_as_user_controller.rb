@@ -1,4 +1,4 @@
-class ActAsUserController < ApplicationController
+class ActAsUserController < WebController
   before_action :check_act_as_user_is_enabled
   before_action :check_user_super_admin, only: :start
   before_action :check_currently_acting_as_user, only: :stop

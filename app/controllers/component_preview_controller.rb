@@ -1,4 +1,4 @@
-class ComponentPreviewController < ApplicationController
+class ComponentPreviewController < WebController
   include ViewComponent::PreviewActions
   include Pundit::Authorization
 

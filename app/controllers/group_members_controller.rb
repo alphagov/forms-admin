@@ -1,4 +1,4 @@
-class GroupMembersController < ApplicationController
+class GroupMembersController < WebController
   before_action :set_group
   after_action :verify_authorized
 

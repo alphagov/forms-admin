@@ -1,5 +1,5 @@
 module Forms
-  class LiveController < ApplicationController
+  class LiveController < WebController
     after_action :verify_authorized
 
     def show_form

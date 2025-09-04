@@ -1,5 +1,5 @@
 module Forms
-  class PrivacyPolicyController < ApplicationController
+  class PrivacyPolicyController < WebController
     after_action :verify_authorized
     def new
       authorize current_form, :can_view_form?

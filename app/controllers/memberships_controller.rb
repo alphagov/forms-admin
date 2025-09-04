@@ -1,4 +1,4 @@
-class MembershipsController < ApplicationController
+class MembershipsController < WebController
   before_action :set_membership, only: %i[destroy update]
   after_action :verify_authorized
 

@@ -1,5 +1,5 @@
 module Forms
-  class DeclarationController < ApplicationController
+  class DeclarationController < WebController
     after_action :verify_authorized
     def new
       authorize current_form, :can_view_form?

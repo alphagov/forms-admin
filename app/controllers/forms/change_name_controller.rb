@@ -1,5 +1,5 @@
 module Forms
-  class ChangeNameController < ApplicationController
+  class ChangeNameController < WebController
     after_action :verify_authorized
 
     def edit

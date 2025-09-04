@@ -1,5 +1,5 @@
 module Forms
-  class ReceiveCsvController < ApplicationController
+  class ReceiveCsvController < WebController
     after_action :verify_authorized
 
     def new

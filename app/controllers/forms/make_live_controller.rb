@@ -1,5 +1,5 @@
 module Forms
-  class MakeLiveController < ApplicationController
+  class MakeLiveController < WebController
     after_action :verify_authorized
 
     def new

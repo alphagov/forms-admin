@@ -1,7 +1,7 @@
 require "rails_helper"
 
-describe ApplicationController, type: :controller do
-  subject(:application_controller) { described_class.new }
+describe WebController, type: :controller do
+  subject(:web_controller) { described_class.new }
 
   let(:form) { create :form }
 
@@ -18,7 +18,7 @@ describe ApplicationController, type: :controller do
       [",,,,,,,,,,,,,,,,,,,,,,,,", nil],
     ].each do |value, expected|
       it "returns #{expected.inspect} when given forwarded_for #{value.inspect}" do
-        expect(application_controller.user_ip(value)).to eq(expected)
+        expect(web_controller.user_ip(value)).to eq(expected)
       end
     end
   end
@@ -137,8 +137,8 @@ describe ApplicationController, type: :controller do
       describe "set_analytics_events" do
         before do
           routes.draw do
-            get "redirect_action" => "anonymous#redirect_action"
-            get "normal_action" => "anonymous#normal_action"
+            get "redirect_action" => "web#redirect_action"
+            get "normal_action" => "web#normal_action"
           end
         end
 
@@ -160,7 +160,7 @@ describe ApplicationController, type: :controller do
       describe "prepare_analytics_events" do
         before do
           routes.draw do
-            get "action_with_flash" => "anonymous#action_with_flash"
+            get "action_with_flash" => "web#action_with_flash"
           end
 
           # Mock AnalyticsService

@@ -1,5 +1,5 @@
 module Forms
-  class DeleteConfirmationController < ApplicationController
+  class DeleteConfirmationController < WebController
     after_action :verify_authorized
 
     def delete

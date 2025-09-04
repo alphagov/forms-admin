@@ -1,5 +1,5 @@
 module Forms
-  class ArchivedController < ApplicationController
+  class ArchivedController < WebController
     after_action :verify_authorized
 
     def show_form

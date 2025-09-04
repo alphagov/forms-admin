@@ -1,4 +1,4 @@
-class GroupFormsController < ApplicationController
+class GroupFormsController < WebController
   before_action :set_group
   after_action :verify_authorized
 
