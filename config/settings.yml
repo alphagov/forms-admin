@@ -26,6 +26,8 @@ govuk_notify:
   submission_email_confirmation_code_email_template_id: ce2638ab-754c-416d-8df6-c0ccb5e1a688
   live_submission_email_of_no_further_form_submissions_template_id: a8c43931-af3d-48ff-b5b2-dbc444796dec
   zendesk_reply_to_id: 0acefa17-04b5-4614-a2ad-6c7f17dd26ab
+  group_form_moved_org_admin_template_id: 63c6c6ab-d497-4eb8-b1f8-6a89eab07ed1
+  group_form_moved_group_admin_editor_template_id: a9ddf06c-20f9-4665-a5a8-3ace2b953a76
   group_member_added_to_group_id: d1fc7267-7e27-4e6c-aa30-523b8be3d637
   group_upgraded_template_id: b5d0d3d4-fc24-403e-aba6-b421fdcebd55
   group_upgrade_requested_template_id: e2251c92-9365-429a-9857-56780263718f
