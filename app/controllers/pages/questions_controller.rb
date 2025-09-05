@@ -17,7 +17,6 @@ class Pages::QuestionsController < PagesController
 
     if @question_input.valid?
       @page = @question_input.submit
-      clear_draft_questions_data
       redirect_to edit_question_path(current_form.id, @page.id), success: "Your changes have been saved"
     else
       render :new, locals: { current_form:, draft_question: }, status: :unprocessable_content
@@ -40,7 +39,6 @@ class Pages::QuestionsController < PagesController
     @question_input = Pages::QuestionInput.new(page_params_for_form_object)
 
     if @question_input.update_page(@page)
-      clear_draft_questions_data
       redirect_to edit_question_path(current_form.id, @page.id), success: "Your changes have been saved"
     else
       render :edit, locals: { current_form:, draft_question: }, status: :unprocessable_content
