@@ -83,4 +83,39 @@ RSpec.describe FormDocumentSyncService do
       end
     end
   end
+
+  describe "#update_draft_form_document" do
+    context "when there is no draft form document" do
+      it "creates a draft form document" do
+        expect {
+          service.update_draft_form_document(form)
+        }.to(change { FormDocument.exists?(form:, tag: "draft") }.from(false).to(true))
+      end
+    end
+
+    context "when there is a draft form document" do
+      let!(:form_document) { create :form_document, :draft, form:, content: form.as_form_document }
+      let(:new_name) { "new name" }
+
+      before do
+        form.name = new_name
+      end
+
+      it "updates the draft form document" do
+        expect {
+          service.update_draft_form_document(form)
+        }.to change { form_document.reload.content["name"] }.to(new_name)
+      end
+
+      context "when there is also a live form document" do
+        let!(:live_form_document) { create :form_document, :live, form:, content: "content" }
+
+        it "does not modify the live form document" do
+          expect {
+            service.update_draft_form_document(form)
+          }.not_to(change { live_form_document.reload.content })
+        end
+      end
+    end
+  end
 end

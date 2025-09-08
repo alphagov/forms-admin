@@ -10,5 +10,9 @@ FactoryBot.define do
     trait :archived do
       tag { "archived" }
     end
+
+    trait :draft do
+      tag { "draft" }
+    end
   end
 end

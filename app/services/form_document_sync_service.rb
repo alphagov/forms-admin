@@ -9,6 +9,10 @@ class FormDocumentSyncService
       end
     end
 
+    def update_draft_form_document(form)
+      update_or_create_form_document(form, "draft", form.as_form_document)
+    end
+
   private
 
     def sync_live_form(form)
