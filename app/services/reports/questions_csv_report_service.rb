@@ -50,16 +50,16 @@ private
   def question_row(step)
     form = step["form"]
     form_id = form["form_id"]
-    group = GroupForm.find_by_form_id(form_id)&.group
+    GroupForm.find_by_form_id(form_id)&.group
 
     [
       form_id,
       form["tag"],
       form["content"]["name"],
-      group&.organisation&.name,
-      group&.organisation&.id,
-      group&.name,
-      group&.external_id,
+      form["organisation_name"],
+      form["organisation_id"],
+      form["group_name"],
+      form["group_external_id"],
       step["position"],
       step["data"]["question_text"],
       step["data"]["answer_type"],

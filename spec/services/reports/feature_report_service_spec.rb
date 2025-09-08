@@ -190,11 +190,6 @@ RSpec.describe Reports::FeatureReportService do
             "content" => a_hash_including(
               "name" => form_with_all_answer_types.name,
             ),
-            "group" => a_hash_including(
-              "organisation" => a_hash_including(
-                "name" => group.organisation.name,
-              ),
-            ),
           ),
           "data" => a_hash_including(
             "question_text" => form_with_all_answer_types.pages[0].question_text,
@@ -205,11 +200,6 @@ RSpec.describe Reports::FeatureReportService do
             "form_id" => form_with_all_answer_types.id,
             "content" => a_hash_including(
               "name" => form_with_all_answer_types.name,
-            ),
-            "group" => a_hash_including(
-              "organisation" => a_hash_including(
-                "name" => group.organisation.name,
-              ),
             ),
           ),
           "data" => a_hash_including(
@@ -241,96 +231,6 @@ RSpec.describe Reports::FeatureReportService do
         ),
       )
     end
-
-    it "includes a reference to the organisation record" do
-      questions = described_class.new(form_documents).questions_with_answer_type("text")
-      expect(questions).to all include(
-        "form" => a_hash_including(
-          "group" => a_hash_including(
-            "organisation" => a_hash_including(
-              "name",
-            ),
-          ),
-        ),
-      )
-    end
-  end
-
-  describe "#forms_with_routes" do
-    it "returns details needed to render report" do
-      forms = described_class.new(form_documents).forms_with_routes
-      expect(forms).to match [
-        a_hash_including(
-          "form_id" => branch_route_form.id,
-          "content" => a_hash_including(
-            "name" => branch_route_form.name,
-          ),
-          "group" => a_hash_including(
-            "organisation" => a_hash_including(
-              "name" => group.organisation.name,
-            ),
-          ),
-          "metadata" => {
-            "number_of_routes" => 3,
-            "number_of_branch_routes" => 1,
-          },
-        ),
-        a_hash_including(
-          "form_id" => basic_route_form.id,
-          "content" => a_hash_including(
-            "name" => basic_route_form.name,
-          ),
-          "group" => a_hash_including(
-            "organisation" => a_hash_including(
-              "name" => group.organisation.name,
-            ),
-          ),
-          "metadata" => {
-            "number_of_routes" => 1,
-            "number_of_branch_routes" => 0,
-          },
-        ),
-      ]
-    end
-
-    it "returns forms with routes" do
-      forms = described_class.new(form_documents).forms_with_routes
-      expect(forms).to match [
-        a_hash_including(
-          "form_id" => branch_route_form.id,
-          "content" => a_hash_including(
-            "name" => branch_route_form.name,
-          ),
-        ),
-        a_hash_including(
-          "form_id" => basic_route_form.id,
-          "content" => a_hash_including(
-            "name" =>  basic_route_form.name,
-          ),
-        ),
-      ]
-    end
-
-    it "includes counts of routes" do
-      forms = described_class.new(form_documents).forms_with_routes
-      expect(forms).to all include(
-        "metadata" => a_hash_including(
-          "number_of_routes" => an_instance_of(Integer),
-          "number_of_branch_routes" => an_instance_of(Integer),
-        ),
-      )
-    end
-
-    it "includes a reference to the organisation record" do
-      forms = described_class.new(form_documents).forms_with_routes
-      expect(forms).to all include(
-        "group" => a_hash_including(
-          "organisation" => a_hash_including(
-            "name",
-          ),
-        ),
-      )
-    end
   end
 
   describe "#forms_with_branch_routes" do
@@ -341,11 +241,6 @@ RSpec.describe Reports::FeatureReportService do
           "form_id" => branch_route_form.id,
           "content" => a_hash_including(
             "name" => branch_route_form.name,
-          ),
-          "group" => a_hash_including(
-            "organisation" => a_hash_including(
-              "name" => group.organisation.name,
-            ),
           ),
           "metadata" => {
             "number_of_routes" => 3,
@@ -376,17 +271,6 @@ RSpec.describe Reports::FeatureReportService do
         ),
       )
     end
-
-    it "includes a reference to the organisation record" do
-      forms = described_class.new(form_documents).forms_with_branch_routes
-      expect(forms).to all include(
-        "group" => a_hash_including(
-          "organisation" => a_hash_including(
-            "name",
-          ),
-        ),
-      )
-    end
   end
 
   describe "#forms_with_payments" do
@@ -400,17 +284,6 @@ RSpec.describe Reports::FeatureReportService do
           ),
         ),
       ]
-    end
-
-    it "includes a reference to the organisation record" do
-      forms = described_class.new(form_documents).forms_with_routes
-      expect(forms).to all include(
-        "group" => a_hash_including(
-          "organisation" => a_hash_including(
-            "name",
-          ),
-        ),
-      )
     end
   end
 
@@ -426,17 +299,6 @@ RSpec.describe Reports::FeatureReportService do
         ),
       ]
     end
-
-    it "includes a reference to the organisation record" do
-      forms = described_class.new(form_documents).forms_with_exit_pages
-      expect(forms).to all include(
-        "group" => a_hash_including(
-          "organisation" => a_hash_including(
-            "name",
-          ),
-        ),
-      )
-    end
   end
 
   describe "#forms_with_csv_submission_enabled" do
@@ -450,17 +312,6 @@ RSpec.describe Reports::FeatureReportService do
           ),
         ),
       ]
-    end
-
-    it "includes a reference to the organisation record" do
-      forms = described_class.new(form_documents).forms_with_routes
-      expect(forms).to all include(
-        "group" => a_hash_including(
-          "organisation" => a_hash_including(
-            "name",
-          ),
-        ),
-      )
     end
   end
 end

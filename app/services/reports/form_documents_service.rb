@@ -48,15 +48,33 @@ class Reports::FormDocumentsService
   private
 
     def draft_form_documents
-      draft_forms = Form.joins(group_form: { group: :organisation })
-        .where(state: %w[draft live_with_draft archived_with_draft])
-          .where.not(organisation: { "internal": true })
+      draft_forms = Form
+                      .joins(group_form: { group: :organisation })
+                      .where(state: %w[draft live_with_draft archived_with_draft])
+                      .where.not(organisation: { "internal": true })
+                      .select("forms.*",
+                              "organisation.name AS organisation_name",
+                              "organisation.id AS organisation_id",
+                              "groups.external_id AS group_external_id",
+                              "groups.name AS group_name")
 
-      draft_forms.map { |form| FormDocument.new(form:, tag: "draft", content: form.as_form_document).as_json }
+      draft_forms.map do |form|
+        form_details = FormDocument.new(form:, tag: "draft", content: form.as_form_document).as_json
+        form_details.merge({
+          "organisation_name" => form.organisation_name,
+          "organisation_id" => form.organisation_id,
+          "group_external_id" => form.group_external_id,
+          "group_name" => form.group_name,
+        })
+      end
     end
 
     def live_form_documents
-      FormDocument.joins(form: { group_form: { group: :organisation } }).where(tag: "live").where.not(organisation: { "internal": true }).map(&:as_json)
+      FormDocument.joins(form: { group_form: { group: :organisation } })
+                  .where(tag: "live")
+                  .where.not(organisation: { "internal": true })
+                  .select("form_documents.*", "organisation.name AS organisation_name", "organisation.id AS organisation_id", "groups.external_id AS group_external_id", "groups.name AS group_name")
+                  .map(&:as_json)
     end
 
     def secondary_skip_conditions(form_document)

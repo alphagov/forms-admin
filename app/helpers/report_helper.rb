@@ -73,7 +73,7 @@ private
   def report_forms_table_row(form)
     [
       form_link(form),
-      form.dig("group", "organisation", "name") || "",
+      form["organisation_name"],
     ]
   end
 

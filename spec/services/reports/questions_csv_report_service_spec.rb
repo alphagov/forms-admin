@@ -5,8 +5,24 @@ RSpec.describe Reports::QuestionsCsvReportService do
     described_class.new(question_page_documents)
   end
 
+  let(:organisation_name) { Faker::Company.name }
+  let(:organisation_id) { Faker::Number.number }
+  let(:group_name) { Faker::Lorem.sentence }
+  let(:group_external_id) { Faker::Alphanumeric.alphanumeric(number: 8) }
+
   let(:question_page_documents) { Reports::FeatureReportService.new(form_documents).questions }
-  let(:form_documents) { forms.map { |form| form.live_form_document.as_json } }
+  let(:form_documents) do
+    forms.map do |form|
+      # FormDocumentsService adds in the organisation and group details as part of the database query
+      form.live_form_document.as_json
+          .merge({
+            "organisation_name" => organisation_name,
+            "organisation_id" => organisation_id,
+            "group_name" => group_name,
+            "group_external_id" => group_external_id,
+          })
+    end
+  end
   let(:form_with_all_answer_types) do
     create(:form, :live, :with_support, submission_type: "email_with_csv", payment_url: "https://www.gov.uk/payments/organisation/service", pages: [
       create(:page, :with_address_settings, is_repeatable: true),
@@ -36,14 +52,6 @@ RSpec.describe Reports::QuestionsCsvReportService do
   end
   let(:forms) { [form_with_all_answer_types, branch_route_form, basic_route_form] }
 
-  let(:group) { create(:group) }
-
-  before do
-    forms.each do |form|
-      GroupForm.create!(form: form, group: group)
-    end
-  end
-
   describe "#csv" do
     it "returns a CSV with a header row and a rows for each question" do
       csv = csv_reports_service.csv
@@ -59,10 +67,10 @@ RSpec.describe Reports::QuestionsCsvReportService do
         form_with_all_answer_types.id.to_s,
         "live",
         form_with_all_answer_types.name,
-        group.organisation.name,
-        group.organisation.id.to_s,
-        group.name,
-        group.external_id,
+        organisation_name,
+        organisation_id.to_s,
+        group_name,
+        group_external_id,
         form_with_all_answer_types.pages.last.position.to_s,
         form_with_all_answer_types.pages.last.question_text,
         "text",
@@ -89,10 +97,10 @@ RSpec.describe Reports::QuestionsCsvReportService do
         form_with_all_answer_types.id.to_s,
         "live",
         form_with_all_answer_types.name,
-        group.organisation.name,
-        group.organisation.id.to_s,
-        group.name,
-        group.external_id,
+        organisation_name,
+        organisation_id.to_s,
+        group_name,
+        group_external_id,
         form_with_all_answer_types.pages[7].position.to_s,
         form_with_all_answer_types.pages[7].question_text,
         "selection",
@@ -119,10 +127,10 @@ RSpec.describe Reports::QuestionsCsvReportService do
         form_with_all_answer_types.id.to_s,
         "live",
         form_with_all_answer_types.name,
-        group.organisation.name,
-        group.organisation.id.to_s,
-        group.name,
-        group.external_id,
+        organisation_name,
+        organisation_id.to_s,
+        group_name,
+        group_external_id,
         form_with_all_answer_types.pages[3].position.to_s,
         form_with_all_answer_types.pages[3].question_text,
         "name",
@@ -149,10 +157,10 @@ RSpec.describe Reports::QuestionsCsvReportService do
         basic_route_form.id.to_s,
         "live",
         basic_route_form.name,
-        group.organisation.name,
-        group.organisation.id.to_s,
-        group.name,
-        group.external_id,
+        organisation_name,
+        organisation_id.to_s,
+        group_name,
+        group_external_id,
         basic_route_form.pages.first.position.to_s,
         basic_route_form.pages.first.question_text,
         "selection",
@@ -179,10 +187,10 @@ RSpec.describe Reports::QuestionsCsvReportService do
         branch_route_form.id.to_s,
         "live",
         branch_route_form.name.to_s,
-        group.organisation.name,
-        group.organisation.id.to_s,
-        group.name,
-        group.external_id,
+        organisation_name,
+        organisation_id.to_s,
+        group_name,
+        group_external_id,
         branch_route_form.pages[1].position.to_s,
         branch_route_form.pages[1].question_text,
         "selection",

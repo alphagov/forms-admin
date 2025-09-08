@@ -81,48 +81,29 @@ class Reports::FeatureReportService
   def forms_with_payments
     form_documents
       .select { |form| Reports::FormDocumentsService.has_payments?(form) }
-      .map { |form| form_details(form) }
   end
 
   def forms_with_exit_pages
     form_documents
       .select { |form| Reports::FormDocumentsService.has_exit_pages?(form) }
-      .map { |form| form_details(form) }
   end
 
   def forms_with_csv_submission_enabled
     form_documents
       .select { |form| Reports::FormDocumentsService.has_csv_submission_enabled?(form) }
-      .map { |form| form_details(form) }
   end
 
 private
 
   def questions_details(form, step)
-    form = form_details(form)
     step.dup.merge("form" => form)
   end
 
   def form_with_routes_details(form)
-    form = form_details(form)
     form["metadata"] = {
       "number_of_routes" => form["content"]["steps"].count { |step| step["routing_conditions"].present? },
       "number_of_branch_routes" => Reports::FormDocumentsService.count_secondary_skip_routes(form),
     }
     form
-  end
-
-  def form_details(form)
-    form = form.dup
-    form["group"] = {
-      "organisation" => {
-        "name" => organisation_name(form["form_id"]),
-      },
-    }
-    form
-  end
-
-  def organisation_name(form_id)
-    GroupForm.find_by_form_id(form_id)&.group&.organisation&.name
   end
 end
