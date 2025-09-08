@@ -47,16 +47,15 @@ private
 
   def form_row(form)
     form_id = form["form_id"]
-    group = GroupForm.find_by_form_id(form_id)&.group
     [
       form_id,
       form["tag"],
       form["content"]["name"],
       form["content"]["form_slug"],
-      group&.organisation&.name,
-      group&.organisation&.id,
-      group&.name,
-      group&.external_id,
+      form["organisation_name"],
+      form["organisation_id"],
+      form["group_name"],
+      form["group_external_id"],
       form["content"]["created_at"],
       form["content"]["updated_at"],
       form["content"]["steps"].length,

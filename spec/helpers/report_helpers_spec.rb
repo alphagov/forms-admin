@@ -3,23 +3,23 @@ require "rails_helper"
 RSpec.describe ReportHelper, type: :helper do
   let(:forms) do
     [
-      { "form_id" => 1, "tag" => "live", "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
-      { "form_id" => 3, "tag" => "live", "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Ministry of Tests" } } },
-      { "form_id" => 4, "tag" => "live", "content" => { "name" => "Skip route form" }, "group" => { "organisation" => { "name" => "Department for Testing" } } },
+      { "form_id" => 1, "tag" => "live", "content" => { "name" => "All question types form" }, "organisation_name" => "Government Digital Service" },
+      { "form_id" => 3, "tag" => "live", "content" => { "name" => "Branch route form" }, "organisation_name" => "Ministry of Tests" },
+      { "form_id" => 4, "tag" => "live", "content" => { "name" => "Skip route form" }, "organisation_name" => "Department for Testing" },
     ]
   end
 
   let(:forms_with_routes) do
     [
-      { "form_id" => 3, "tag" => "live", "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Ministry of Tests" } }, "metadata" => { "number_of_routes" => 2, "number_of_branch_routes" => 1 } },
-      { "form_id" => 4, "tag" => "live", "content" => { "name" => "Skip route form" }, "group" => { "organisation" => { "name" => "Department for Testing" } }, "metadata" => { "number_of_routes" => 1, "number_of_branch_routes" => 0 } },
+      { "form_id" => 3, "tag" => "live", "content" => { "name" => "Branch route form" }, "organisation_name" => "Ministry of Tests", "metadata" => { "number_of_routes" => 2, "number_of_branch_routes" => 1 } },
+      { "form_id" => 4, "tag" => "live", "content" => { "name" => "Skip route form" }, "organisation_name" => "Department for Testing", "metadata" => { "number_of_routes" => 1, "number_of_branch_routes" => 0 } },
     ]
   end
 
   let(:questions) do
     [
-      { "type" => "question_page", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "tag" => "live", "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } } },
-      { "type" => "question_page", "data" => { "question_text" => "What’s your email address?" }, "form" => { "form_id" => 3, "tag" => "live", "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Ministry of Tests" } } } },
+      { "type" => "question_page", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "tag" => "live", "content" => { "name" => "All question types form" }, "organisation_name" => "Government Digital Service" } },
+      { "type" => "question_page", "data" => { "question_text" => "What’s your email address?" }, "form" => { "form_id" => 3, "tag" => "live", "content" => { "name" => "Branch route form" }, "organisation_name" => "Ministry of Tests" } },
     ]
   end
 
@@ -154,20 +154,6 @@ RSpec.describe ReportHelper, type: :helper do
         "Department for Testing",
       ]
     end
-
-    context "when form is not in a group" do
-      let(:forms) do
-        [
-          { "form_id" => 1, "tag" => "live", "content" => { "name" => "All question types form" }, "group" => nil },
-        ]
-      end
-
-      it "returns the empty string for the organisation name" do
-        expect(helper.report_forms_table_rows(forms).map(&:second)).to eq [
-          "",
-        ]
-      end
-    end
   end
 
   describe "#report_forms_with_routes_table_head" do
@@ -228,20 +214,6 @@ RSpec.describe ReportHelper, type: :helper do
         0
       ]
     end
-
-    context "when form is not in a group" do
-      let(:forms) do
-        [
-          { "form_id" => 1, "tag" => "live", "content" => { "name" => "All question types form" }, "group" => nil },
-        ]
-      end
-
-      it "returns the empty string for the organisation name" do
-        expect(helper.report_forms_table_rows(forms).map(&:second)).to eq [
-          "",
-        ]
-      end
-    end
   end
 
   describe "#report_questions_table_head" do
@@ -281,20 +253,6 @@ RSpec.describe ReportHelper, type: :helper do
         "Email address",
         "What’s your email address?",
       ]
-    end
-
-    context "when form is not in a group" do
-      let(:questions) do
-        [
-          { "type" => "question_page", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "tag" => "live", "content" => { "name" => "All question types form" }, "group" => nil } },
-        ]
-      end
-
-      it "returns the empty string for the organisation name" do
-        expect(helper.report_questions_table_rows(questions).map(&:second)).to eq [
-          "",
-        ]
-      end
     end
   end
 end

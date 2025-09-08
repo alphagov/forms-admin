@@ -63,9 +63,19 @@ RSpec.describe Reports::FormDocumentsService do
       end
 
       it "only includes draft form documents from external organisations" do
-        form_documents = described_class.form_documents(tag:).to_a
+        form_documents = described_class.form_documents(tag:)
         expect(form_documents.map { |form_document| form_document["form_id"] })
           .to contain_exactly(draft_form.id, live_with_draft_form.id, archived_with_draft_form.id)
+      end
+
+      it "includes the group and organisation details" do
+        form_document = described_class.form_documents(tag:).first
+        expect(form_document).to include(
+          "organisation_name" => group.organisation.name,
+          "organisation_id" => group.organisation.id,
+          "group_name" => group.name,
+          "group_external_id" => group.external_id,
+        )
       end
     end
 
@@ -79,7 +89,7 @@ RSpec.describe Reports::FormDocumentsService do
       end
 
       it "only includes live form documents from external organisations" do
-        form_documents = described_class.form_documents(tag:).to_a
+        form_documents = described_class.form_documents(tag:)
         expect(form_documents.map { |form_document| form_document["form_id"] })
           .to contain_exactly(
             form_with_no_routes.id,
@@ -88,6 +98,16 @@ RSpec.describe Reports::FormDocumentsService do
             basic_route_form.id,
             form_with_2_branch_routes.id,
           )
+      end
+
+      it "includes the group and organisation details" do
+        form_document = described_class.form_documents(tag:).first
+        expect(form_document).to include(
+          "organisation_name" => group.organisation.name,
+          "organisation_id" => group.organisation.id,
+          "group_name" => group.name,
+          "group_external_id" => group.external_id,
+        )
       end
     end
 

@@ -16,8 +16,8 @@ describe "reports/feature_report" do
     let(:report) { "forms_with_csv_submission_enabled" }
     let(:records) do
       [
-        { "form_id" => 1, "tag" => tag, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
-        { "form_id" => 3, "tag" => tag, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
+        { "form_id" => 1, "tag" => tag, "content" => { "name" => "All question types form" }, "organisation_name" => "Government Digital Service" },
+        { "form_id" => 3, "tag" => tag, "content" => { "name" => "Branch route form" }, "organisation_name" => "Government Digital Service" },
       ]
     end
 
@@ -72,8 +72,8 @@ describe "reports/feature_report" do
     let(:report) { "forms_with_payments" }
     let(:records) do
       [
-        { "form_id" => 1, "tag" => tag, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
-        { "form_id" => 3, "tag" => tag, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } },
+        { "form_id" => 1, "tag" => tag, "content" => { "name" => "All question types form" }, "organisation_name" => "Government Digital Service" },
+        { "form_id" => 3, "tag" => tag, "content" => { "name" => "Branch route form" }, "organisation_name" => "Government Digital Service" },
       ]
     end
 
@@ -128,8 +128,8 @@ describe "reports/feature_report" do
     let(:report) { "forms_with_routes" }
     let(:records) do
       [
-        { "form_id" => 1, "tag" => tag, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } }, "metadata" => { "number_of_routes" => 1 } },
-        { "form_id" => 3, "tag" => tag, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } }, "metadata" => { "number_of_routes" => 2 } },
+        { "form_id" => 1, "tag" => tag, "content" => { "name" => "All question types form" }, "organisation_name" => "Government Digital Service", "metadata" => { "number_of_routes" => 1 } },
+        { "form_id" => 3, "tag" => tag, "content" => { "name" => "Branch route form" }, "organisation_name" => "Government Digital Service", "metadata" => { "number_of_routes" => 2 } },
       ]
     end
 
@@ -184,8 +184,8 @@ describe "reports/feature_report" do
     let(:report) { "questions_with_add_another_answer" }
     let(:records) do
       [
-        { "type" => "question_page", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "tag" => tag, "content" => { "name" => "All question types form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } } },
-        { "type" => "question_page", "data" => { "question_text" => "What’s your email address?" }, "form" => { "form_id" => 3, "tag" => tag, "content" => { "name" => "Branch route form" }, "group" => { "organisation" => { "name" => "Government Digital Service" } } } },
+        { "type" => "question_page", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "tag" => tag, "content" => { "name" => "All question types form" }, "organisation_name" => "Government Digital Service" } },
+        { "type" => "question_page", "data" => { "question_text" => "What’s your email address?" }, "form" => { "form_id" => 3, "tag" => tag, "content" => { "name" => "Branch route form" }, "organisation_name" => "Government Digital Service" } },
       ]
     end
 
