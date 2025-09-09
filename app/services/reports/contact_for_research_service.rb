@@ -18,12 +18,12 @@ private
   end
 
   def as_data_rows(raw_data)
-    raw_data.map do |name, email, created_at|
-      [{ text: name }, { text: email }, { text: created_at.to_date.to_formatted_s }]
+    raw_data.map do |name, email, user_research_opted_in_at|
+      [{ text: name }, { text: email }, { text: user_research_opted_in_at.to_formatted_s(:long) }]
     end
   end
 
   def user_contact_for_research
-    User.research_contact_consented.order(created_at: :desc).pluck(:name, :email, :created_at)
+    User.research_contact_consented.order(user_research_opted_in_at: :desc).pluck(:name, :email, :user_research_opted_in_at)
   end
 end

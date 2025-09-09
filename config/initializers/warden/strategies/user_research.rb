@@ -17,6 +17,8 @@ private
       provider: Settings.auth_provider,
       uid: auth_hash[:uid],
       terms_agreed_at: Time.zone.now,
+      research_contact_status: "declined",
+      user_research_opted_in_at: Time.zone.now,
     )
   end
 
