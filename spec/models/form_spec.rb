@@ -217,6 +217,34 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "draft_form_document" do
+    context "when there is no archived form document" do
+      it "returns nil" do
+        expect(form.draft_form_document).to be_nil
+      end
+    end
+
+    context "when there is an draft form document" do
+      subject(:form) { create :form, :draft }
+
+      it "returns nil" do
+        expect(form.draft_form_document).to be_a(FormDocument)
+      end
+    end
+
+    context "when there is only a live form document" do
+      subject(:form) { create :form, :live }
+
+      before do
+        FormDocument.find_by(form:, tag: "draft").destroy
+      end
+
+      it "returns nil" do
+        expect(form.draft_form_document).to be_nil
+      end
+    end
+  end
+
   describe "FormStateMachine" do
     describe "#create_draft_from_live_form!" do
       let(:form) { create :form_record, :live }

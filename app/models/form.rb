@@ -7,6 +7,7 @@ class Form < ApplicationRecord
   has_many :form_documents, dependent: :destroy
   has_one :live_form_document, -> { where tag: "live" }, class_name: "FormDocument"
   has_one :archived_form_document, -> { where tag: "archived" }, class_name: "FormDocument"
+  has_one :draft_form_document, -> { where tag: "draft" }, class_name: "FormDocument"
 
   enum :submission_type, {
     email: "email",

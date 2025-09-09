@@ -87,7 +87,7 @@ RSpec.describe FormDocumentSyncService do
   describe "#update_draft_form_document" do
     context "when there is no draft form document" do
       before do
-        FormDocument.find_by(form:, tag: "draft").destroy
+        form.draft_form_document.destroy
       end
 
       it "creates a draft form document" do
@@ -98,7 +98,7 @@ RSpec.describe FormDocumentSyncService do
     end
 
     context "when there is a draft form document" do
-      let!(:form_document) { FormDocument.find_by(form: form, tag: "draft") }
+      let!(:form_document) { form.draft_form_document }
       let(:new_name) { "new name" }
 
       before do
