@@ -23,11 +23,27 @@ private
       send_move_email_to_org_admin_user(user.email)
     end
 
-    # TODO: send emails to other group admins/editors
+    @old_group.users.each do |user|
+      next if user.id == @current_user.id
+      next if user.organisation.admin_users.exists?(id: user.id)
+
+      send_move_email_to_group_admin_user(user.email)
+    end
   end
 
   def send_move_email_to_org_admin_user(to_email)
     GroupFormsMoveMailer.form_moved_email_org_admin(
+      to_email: to_email,
+      form_name: @form.name,
+      old_group_name: @old_group.name,
+      new_group_name: @group.name,
+      org_admin_email: @current_user.email,
+      org_admin_name: @current_user.name,
+    ).deliver_now
+  end
+
+  def send_move_email_to_group_admin_user(to_email)
+    GroupFormsMoveMailer.form_moved_email_group_admin(
       to_email: to_email,
       form_name: @form.name,
       old_group_name: @old_group.name,
