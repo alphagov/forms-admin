@@ -1581,8 +1581,17 @@ en:
     new:
       body_html: |
         <p>
-          You need to provide an email address for completed forms to be sent to for processing. It should be a shared government email inbox.
+          You need to provide an email address for completed forms to be sent to for processing.
         </p>
+
+        <p>
+          The email address:
+        </p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>should be a shared government email inbox</li>
+          <li>must not send automatic replies</li>
+        </ul>
 
         <p>
           To make sure the email address you provide is correct, we’ll send an email to it with a confirmation code and your email address.
