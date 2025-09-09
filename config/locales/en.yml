@@ -1417,9 +1417,9 @@ en:
     back_link: Back to reports
     back_to_feature_usage: Back to feature and answer type usage
     contact_for_research:
-      heading: Users who have agreed to be contacted for user research
+      heading: Users who’ve agreed to be contacted about user research
       table_headings:
-        date_added: Sign up date
+        date_added: Date agreed
         email: Email
         name: Name
       title: Users interested in research

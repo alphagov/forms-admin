@@ -20,10 +20,9 @@ describe Reports::ContactForResearchService do
 
     context "with users" do
       it "returns the correct rows" do
-        create :user, research_contact_status: :consented, created_at: Time.zone.local(2024, 6, 1), name: "Middle", email: "test@example.gov.uk"
-        create :user, research_contact_status: :consented, created_at: Time.zone.local(2025, 2, 1), name: "Top", email: "ur@another.gov.uk"
-        create :user, research_contact_status: :consented, created_at: Time.zone.local(2023, 4, 1), name: "Bottom", email: "last@example.gov.uk"
-        create :user, research_contact_status: :not_asked
+        create :user, research_contact_status: :consented, user_research_opted_in_at: Time.zone.local(2024, 6, 1), name: "Middle", email: "test@example.gov.uk"
+        create :user, research_contact_status: :consented, user_research_opted_in_at: Time.zone.local(2025, 2, 1), name: "Top", email: "ur@another.gov.uk"
+        create :user, research_contact_status: :consented, user_research_opted_in_at: Time.zone.local(2023, 4, 1), name: "Bottom", email: "last@example.gov.uk"
         create :user, research_contact_status: :to_be_asked
         create :user, research_contact_status: :declined
 

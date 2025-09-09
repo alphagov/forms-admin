@@ -9,6 +9,7 @@ class Account::ContactForResearchInput < BaseInput
     return false if invalid?
 
     user.research_contact_status = research_contact_status
+    user.user_research_opted_in_at = Time.zone.now
     user.save!
   end
 

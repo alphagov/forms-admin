@@ -10,6 +10,8 @@ FactoryBot.define do
     updated_at { created_at }
     last_signed_in_at { created_at }
     terms_agreed_at { Time.zone.now }
+    research_contact_status { "declined" }
+    user_research_opted_in_at { Time.zone.now }
 
     factory :basic_auth_user do
       provider { "basic_auth" }
