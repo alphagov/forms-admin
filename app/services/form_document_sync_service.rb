@@ -19,10 +19,7 @@ class FormDocumentSyncService
     end
 
     def sync_archived_form(form)
-      form_document = FormDocument.find_or_initialize_by(form:)
-      unless form_document.persisted?
-        form_document.content = ApiFormDocumentService.form_document(form_id: form.id, tag: "live")
-      end
+      form_document = FormDocument.find_by!(form:, tag: "live")
       form_document.tag = "archived"
       form_document.save!
     end

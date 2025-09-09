@@ -58,15 +58,11 @@ RSpec.describe FormDocumentSyncService do
     context "when form state is archived" do
       let(:form) { create(:form, state: "archived") }
 
-      context "when there is no existing form document" do
-        it "creates an archived form document" do
-          allow(ApiFormDocumentService).to receive(:form_document).with(form_id: form.id, tag: "live").and_return(form.as_form_document)
-
+      context "when there is no existing live form document" do
+        it "raises an ActiveRecord::RecordNotFound error" do
           expect {
             service.synchronize_form(form)
-          }.to change(FormDocument, :count).by(1)
-
-          expect(FormDocument.last).to have_attributes(form:, tag: "archived", content: form.as_form_document)
+          }.to raise_error(ActiveRecord::RecordNotFound)
         end
       end
 
