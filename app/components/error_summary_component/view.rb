@@ -3,7 +3,7 @@ module ErrorSummaryComponent
     attr_accessor :errors
 
     def initialize(errors: [])
-      super
+      super()
       @errors = errors
     end
 

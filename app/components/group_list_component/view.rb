@@ -1,7 +1,7 @@
 module GroupListComponent
   class View < ApplicationComponent
     def initialize(groups:, title:, empty_message: "", show_empty: true)
-      super
+      super()
       @groups = groups
       @title = title
       @empty_message = empty_message

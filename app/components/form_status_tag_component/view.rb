@@ -1,7 +1,7 @@
 module FormStatusTagComponent
   class View < ApplicationComponent
     def initialize(status: :draft)
-      super
+      super()
       @status = status.to_sym
     end
 

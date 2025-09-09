@@ -3,7 +3,7 @@
 module PreviewLinkComponent
   class View < ApplicationComponent
     def initialize(pages, link)
-      super
+      super()
       @pages = pages
       @link = link
     end

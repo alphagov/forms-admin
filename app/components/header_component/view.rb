@@ -5,7 +5,7 @@ module HeaderComponent
     attr_accessor :hosting_environment
 
     def initialize(hosting_environment: HostingEnvironment)
-      super
+      super()
       @hosting_environment = hosting_environment
     end
 

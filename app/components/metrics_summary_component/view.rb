@@ -5,7 +5,7 @@ module MetricsSummaryComponent
     attr_reader :start_date, :end_date, :weekly_submissions, :weekly_starts, :weekly_started_but_not_completed, :weekly_completion_rate, :form_has_metrics, :error_message, :heading
 
     def initialize(form_live_date, metrics_data)
-      super
+      super()
       @start_date = [form_live_date, 7.days.ago.to_date].max
       @end_date = 1.day.ago.to_date
       @heading = heading_text.html_safe

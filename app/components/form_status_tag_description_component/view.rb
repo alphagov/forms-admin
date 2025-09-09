@@ -3,7 +3,7 @@ module FormStatusTagDescriptionComponent
     attr_accessor :status
 
     def initialize(status: :draft)
-      super
+      super()
       @status = status
     end
   end

@@ -3,7 +3,7 @@
 module MarkCompleteComponent
   class View < ApplicationComponent
     def initialize(form_model: false, generate_form: true, form_builder: nil, path: nil, legend: nil, hint: nil)
-      super
+      super()
       if generate_form
         @mark_complete_input = form_model
         @path = path

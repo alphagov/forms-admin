@@ -6,7 +6,7 @@ module PageSettingsSummaryComponent
     include PagesHelper
 
     def initialize(draft_question:, errors: nil)
-      super
+      super()
       @draft_question = draft_question
       @errors = errors
     end

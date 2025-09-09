@@ -5,7 +5,7 @@ module LastSignedInAtReportComponent
       @users = users
       @empty_message = empty_message
 
-      super
+      super()
     end
 
     def render?

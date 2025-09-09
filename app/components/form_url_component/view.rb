@@ -3,7 +3,7 @@
 module FormUrlComponent
   class View < ApplicationComponent
     def initialize(runner_link:, heading_text: nil, button_text: nil)
-      super
+      super()
       @runner_link = runner_link
       @heading_text = heading_text
       @button_text = button_text

@@ -3,7 +3,7 @@
 module ActAsUserBannerComponent
   class View < ApplicationComponent
     def initialize(acting_as_user, original_user)
-      super
+      super()
       @acting_as_user = acting_as_user
       @original_user = original_user
     end

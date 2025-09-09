@@ -14,7 +14,7 @@ module MarkdownEditorComponent
                    render_preview_path: nil,
                    allow_headings: true,
                    local_translations: {})
-      super
+      super()
       @attribute_name = attribute_name
       @f = form_builder
       @render_preview_path = render_preview_path

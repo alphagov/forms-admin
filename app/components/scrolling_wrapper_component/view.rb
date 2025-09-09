@@ -5,7 +5,7 @@ module ScrollingWrapperComponent
     attr_accessor :aria_label
 
     def initialize(aria_label:)
-      super
+      super()
       @aria_label = aria_label
     end
   end
