@@ -44,13 +44,13 @@ RSpec.describe FormDocumentSyncService do
         it "destroys the archived form document" do
           expect {
             service.synchronize_form(form)
-          }.to(change { FormDocument.exists?(form:, tag: "archived") })
+          }.to(change { FormDocument.exists?(form:, tag: "archived") }.from(true).to(false))
         end
 
         it "creates the live form document" do
           expect {
             service.synchronize_form(form)
-          }.to(change { FormDocument.exists?(form:, tag: "live") })
+          }.to(change { FormDocument.exists?(form:, tag: "live") }.from(false).to(true))
         end
       end
     end
@@ -72,13 +72,13 @@ RSpec.describe FormDocumentSyncService do
         it "destroys the live form document" do
           expect {
             service.synchronize_form(form)
-          }.to(change { FormDocument.exists?(form:, tag: "live") })
+          }.to(change { FormDocument.exists?(form:, tag: "live") }.from(true).to(false))
         end
 
         it "creates the archived form document" do
           expect {
             service.synchronize_form(form)
-          }.to(change { FormDocument.exists?(form:, tag: "archived", content: live_form_document.content) })
+          }.to(change { FormDocument.exists?(form:, tag: "archived", content: live_form_document.content) }.from(false).to(true))
         end
       end
     end
