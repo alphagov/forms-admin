@@ -78,7 +78,7 @@ describe Pages::Selection::OptionsController, type: :request do
       draft_question
     end
 
-    context "when form is valid and ready to store" do
+    context "when form is valid and ready to store", :capture_logging do
       let(:pages_selection_options_input) do
         {
           selection_options: { "0": { name: "Option 1" }, "1": { name: "Option 2" } },
@@ -88,6 +88,17 @@ describe Pages::Selection::OptionsController, type: :request do
 
       before do
         post selection_options_create_path form_id: form.id, params: { pages_selection_options_input: }
+      end
+
+      it "logs the selection options" do
+        expect(log_line).to include(
+          "params" => a_hash_including(
+            "pages_selection_options_input" => {
+              "selection_options" => { "0" => { "name" => "Option 1" }, "1" => { "name" => "Option 2" } },
+              "include_none_of_the_above" => "true",
+            },
+          ),
+        )
       end
 
       it "saves the selection options to the draft question" do

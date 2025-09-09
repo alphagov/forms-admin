@@ -59,6 +59,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         end
 
         it "logs the answer type" do
+          expect(log_line["params"]["pages_type_of_answer_input"]["answer_type"]).to eq(type_of_answer_input.answer_type)
           expect(log_line["answer_type"]).to eq(type_of_answer_input.answer_type)
         end
       end
@@ -207,6 +208,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       end
 
       it "logs the updated answer type" do
+        expect(log_line["params"]["pages_type_of_answer_input"]["answer_type"]).to eq(answer_type)
         expect(log_line["answer_type"]).to eq(answer_type)
       end
 
