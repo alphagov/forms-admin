@@ -23,7 +23,6 @@ class User < ApplicationRecord
   enum :research_contact_status, {
     consented: "consented",
     declined: "declined",
-    not_asked: "not_asked",
     to_be_asked: "to_be_asked",
   }, prefix: "research_contact"
 

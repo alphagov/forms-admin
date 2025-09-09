@@ -1416,7 +1416,7 @@ en:
     contact_for_research:
       heading: Users who have agreed to be contacted for user research
       table_headings:
-        date_added: Sign up date
+        date_added: Date agreed
         email: Email
         name: Name
       title: Users interested in research
