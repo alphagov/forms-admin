@@ -149,6 +149,15 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "update_draft_form_document" do
+    let(:form) { create :form }
+
+    it "calls FormDocumentSyncService to update the draft Form" do
+      expect(FormDocumentSyncService).to receive(:update_draft_form_document).with(form)
+      form.update!(name: "new name")
+    end
+  end
+
   describe "page scope" do
     it "returns pages in position order" do
       form = create :form_record
@@ -156,7 +165,7 @@ RSpec.describe Form, type: :model do
       page_a = create :page_record, form_id: form.id, position: 2
       page_b = create :page_record, form_id: form.id, position: 1
 
-      expect(form.pages).to eq([page_b, page_a])
+      expect(form.reload.pages).to eq([page_b, page_a])
     end
   end
 
@@ -615,7 +624,7 @@ RSpec.describe Form, type: :model do
         end
 
         it "returns true" do
-          expect(form.has_no_remaining_routes_available?).to be(true)
+          expect(form.reload.has_no_remaining_routes_available?).to be(true)
         end
       end
     end
@@ -687,7 +696,7 @@ RSpec.describe Form, type: :model do
     end
 
     it "returns the number of file upload questions" do
-      expect(form.file_upload_question_count).to eq(4)
+      expect(form.reload.file_upload_question_count).to eq(4)
     end
   end
 

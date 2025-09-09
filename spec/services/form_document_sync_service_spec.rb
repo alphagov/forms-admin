@@ -6,7 +6,7 @@ RSpec.describe FormDocumentSyncService do
 
   describe "#synchronize_form" do
     context "when form state is live" do
-      let(:form) { create(:form, state: "live") }
+      let!(:form) { create(:form, state: "live") }
       let(:expected_live_at) { form.reload.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%6NZ") }
 
       context "when there is no existing form document" do
@@ -86,6 +86,10 @@ RSpec.describe FormDocumentSyncService do
 
   describe "#update_draft_form_document" do
     context "when there is no draft form document" do
+      before do
+        FormDocument.find_by(form:, tag: "draft").destroy
+      end
+
       it "creates a draft form document" do
         expect {
           service.update_draft_form_document(form)
@@ -94,7 +98,7 @@ RSpec.describe FormDocumentSyncService do
     end
 
     context "when there is a draft form document" do
-      let!(:form_document) { create :form_document, :draft, form:, content: form.as_form_document }
+      let!(:form_document) { FormDocument.find_by(form: form, tag: "draft") }
       let(:new_name) { "new name" }
 
       before do

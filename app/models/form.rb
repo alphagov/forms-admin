@@ -20,6 +20,7 @@ class Form < ApplicationRecord
   validates :submission_type, presence: true
 
   after_create :set_external_id
+  after_update :update_draft_form_document
 
   def has_draft_version
     draft? || live_with_draft? || archived_with_draft?
@@ -152,6 +153,10 @@ private
 
   def set_external_id
     update(external_id: id)
+  end
+
+  def update_draft_form_document
+    FormDocumentSyncService.update_draft_form_document(self)
   end
 
   def task_status_service

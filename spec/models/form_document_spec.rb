@@ -18,7 +18,7 @@ RSpec.describe FormDocument, type: :model do
 
   it "has a default created_at and updated_at" do
     travel_to Time.zone.local(2023, 10, 1, 10, 0, 0) do
-      form_document = create(:form_document)
+      form_document = create(:form_document, :live)
 
       expect(form_document.created_at).to eq(Time.zone.now)
       expect(form_document.updated_at).to eq(Time.zone.now)
