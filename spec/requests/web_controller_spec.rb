@@ -3,23 +3,17 @@ require "rails_helper"
 RSpec.describe WebController, type: :request do
   let(:form) { create :form }
 
-  let(:output) { StringIO.new }
-  let(:logger) { ActiveSupport::Logger.new(output) }
-
   before do
     allow(FormRepository).to receive_messages(find: form)
 
     login_as_standard_user
   end
 
-  describe "logging" do
+  describe "logging", :capture_logging do
     let(:trace_id) { "Root=1-63441c4a-abcdef012345678912345678" }
     let(:request_id) { "a-request-id" }
 
     before do
-      # Intercept the request logs so we can do assertions on them
-      allow(Lograge).to receive(:logger).and_return(logger)
-
       get root_path, headers: {
         "HTTP_X_AMZN_TRACE_ID": trace_id,
         "X-Request-ID": request_id,
@@ -27,27 +21,27 @@ RSpec.describe WebController, type: :request do
     end
 
     it "includes the trace ID on log lines" do
-      expect(log_lines(output)[0]["trace_id"]).to eq(trace_id)
+      expect(log_line["trace_id"]).to eq(trace_id)
     end
 
     it "includes the request_id on log lines" do
-      expect(log_lines(output)[0]["request_id"]).to eq(request_id)
+      expect(log_line["request_id"]).to eq(request_id)
     end
 
     it "includes the request_host on log lines" do
-      expect(log_lines(output)[0]["request_host"]).to eq("www.example.com")
+      expect(log_line["request_host"]).to eq("www.example.com")
     end
 
     it "includes the user_id on log lines" do
-      expect(log_lines(output)[0]["user_id"]).to eq(standard_user.id)
+      expect(log_line["user_id"]).to eq(standard_user.id)
     end
 
     it "includes the user_email on log lines" do
-      expect(log_lines(output)[0]["user_email"]).to eq(standard_user.email)
+      expect(log_line["user_email"]).to eq(standard_user.email)
     end
 
     it "includes the user_organisation_slug on log lines" do
-      expect(log_lines(output)[0]["user_organisation_slug"]).to eq(standard_user.organisation.slug)
+      expect(log_line["user_organisation_slug"]).to eq(standard_user.organisation.slug)
     end
   end
 
@@ -190,7 +184,7 @@ RSpec.describe WebController, type: :request do
         expect(session["acting_as_user_id"]).to eq acting_as_user.id
       end
 
-      describe "logging" do
+      describe "logging", :capture_logging do
         before do
           allow(Lograge).to receive(:logger).and_return(logger)
 
@@ -198,27 +192,27 @@ RSpec.describe WebController, type: :request do
         end
 
         it "includes the acting as user id on log lines" do
-          expect(log_lines(output)[0]["acting_as_user_id"]).to eq(acting_as_user.id)
+          expect(log_line["acting_as_user_id"]).to eq(acting_as_user.id)
         end
 
         it "includes the acting as user email on log lines" do
-          expect(log_lines(output)[0]["acting_as_user_email"]).to eq(acting_as_user.email)
+          expect(log_line["acting_as_user_email"]).to eq(acting_as_user.email)
         end
 
         it "includes the acting as user organisation_slug on log lines" do
-          expect(log_lines(output)[0]["acting_as_user_organisation_slug"]).to eq(acting_as_user.organisation.slug)
+          expect(log_line["acting_as_user_organisation_slug"]).to eq(acting_as_user.organisation.slug)
         end
 
         it "includes the actual user id on log lines" do
-          expect(log_lines(output)[0]["user_id"]).to eq(super_admin_user.id)
+          expect(log_line["user_id"]).to eq(super_admin_user.id)
         end
 
         it "includes the actual user email on log lines" do
-          expect(log_lines(output)[0]["user_email"]).to eq(super_admin_user.email)
+          expect(log_line["user_email"]).to eq(super_admin_user.email)
         end
 
         it "includes the actual user organisation_slug on log lines" do
-          expect(log_lines(output)[0]["user_organisation_slug"]).to eq(super_admin_user.organisation.slug)
+          expect(log_line["user_organisation_slug"]).to eq(super_admin_user.organisation.slug)
         end
       end
     end

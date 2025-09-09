@@ -28,9 +28,9 @@ RSpec.describe Pages::QuestionsController, type: :request do
     allow(Lograge).to receive(:logger).and_return(logger)
   end
 
-  shared_examples "logging" do
+  shared_examples "logging", :capture_logging do
     it "logs the answer type from the draft question" do
-      expect(log_lines(output)[0]["answer_type"]).to eq(draft_question.answer_type)
+      expect(log_line["answer_type"]).to eq(draft_question.answer_type)
     end
   end
 
@@ -232,8 +232,8 @@ RSpec.describe Pages::QuestionsController, type: :request do
         expect(banner_contents).to have_link(text: "Back to your questions", href: form_pages_path(form_id: form.id))
       end
 
-      it "logs the answer type from the page" do
-        expect(log_lines(output)[0]["answer_type"]).to eq(page.answer_type)
+      it "logs the answer type from the page", :capture_logging do
+        expect(log_line["answer_type"]).to eq(page.answer_type)
       end
 
       context "when question being updated has a question after it" do

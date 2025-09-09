@@ -8,9 +8,6 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
-  let(:output) { StringIO.new }
-  let(:logger) { ActiveSupport::Logger.new(output) }
-
   before do
     allow(FormRepository).to receive_messages(find: form, pages: pages)
     allow(PageRepository).to receive_messages(find: page, save!: page)
@@ -18,9 +15,6 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
-
-    # Intercept the request logs so we can do assertions on them
-    allow(Lograge).to receive(:logger).and_return(logger)
   end
 
   describe "#new" do
@@ -47,7 +41,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
   end
 
   describe "#create" do
-    context "when form is valid and ready to store" do
+    context "when form is valid and ready to store", :capture_logging do
       before do
         post type_of_answer_create_path form_id: form.id, params: { pages_type_of_answer_input: { answer_type: type_of_answer_input.answer_type } }
       end
@@ -65,7 +59,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
         end
 
         it "logs the answer type" do
-          expect(log_lines(output)[0]["answer_type"]).to eq(type_of_answer_input.answer_type)
+          expect(log_line["answer_type"]).to eq(type_of_answer_input.answer_type)
         end
       end
 
@@ -151,7 +145,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
     end
   end
 
-  describe "#edit" do
+  describe "#edit", :capture_logging do
     let(:page) { build :page, :with_simple_answer_type, id: 2, form_id: form.id }
 
     before do
@@ -178,8 +172,8 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       expect(response).to have_rendered(:type_of_answer)
     end
 
-    it "logs the answer type" do
-      expect(log_lines(output)[0]["answer_type"]).to eq(page.answer_type)
+    it "logs the existing answer type" do
+      expect(log_line["answer_type"]).to eq(page.answer_type)
     end
 
     it "shows the file answer type option" do
@@ -195,7 +189,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       allow(PageRepository).to receive(:save!).with(hash_including(page_id: "2", form_id: 1))
     end
 
-    context "when form is valid and ready to update in the DB" do
+    context "when form is valid and ready to update in the DB", :capture_logging do
       let(:answer_type) { "number" }
       let(:pages_type_of_answer_input) { { answer_type: } }
 
@@ -213,7 +207,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       end
 
       it "logs the updated answer type" do
-        expect(log_lines(output)[0]["answer_type"]).to eq(answer_type)
+        expect(log_line["answer_type"]).to eq(answer_type)
       end
 
       context "when answer type is selection" do

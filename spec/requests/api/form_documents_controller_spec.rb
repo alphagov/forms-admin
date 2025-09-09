@@ -115,17 +115,12 @@ RSpec.describe Api::FormDocumentsController, type: :request do
     end
   end
 
-  describe "logging" do
-    let(:output) { StringIO.new }
-    let(:logger) { ActiveSupport::Logger.new(output) }
+  describe "logging", :capture_logging do
     let(:trace_id) { "Root=1-63441c4a-abcdef012345678912345678" }
     let(:request_id) { "a-request-id" }
     let(:form_id) { "a-form-id" }
 
     before do
-      # Intercept the request logs so we can do assertions on them
-      allow(Lograge).to receive(:logger).and_return(logger)
-
       get api_v2_form_document_path(form_id:, tag: "live"), headers: {
         "HTTP_X_AMZN_TRACE_ID": trace_id,
         "X-Request-ID": request_id,
@@ -133,19 +128,19 @@ RSpec.describe Api::FormDocumentsController, type: :request do
     end
 
     it "includes the trace ID on log lines" do
-      expect(log_lines(output)[0]["trace_id"]).to eq(trace_id)
+      expect(log_line["trace_id"]).to eq(trace_id)
     end
 
     it "includes the request_id on log lines" do
-      expect(log_lines(output)[0]["request_id"]).to eq(request_id)
+      expect(log_line["request_id"]).to eq(request_id)
     end
 
     it "includes the request_host on log lines" do
-      expect(log_lines(output)[0]["request_host"]).to eq("www.example.com")
+      expect(log_line["request_host"]).to eq("www.example.com")
     end
 
     it "includes the form_id on log lines" do
-      expect(log_lines(output)[0]["form_id"]).to eq(form_id)
+      expect(log_line["form_id"]).to eq(form_id)
     end
   end
 end
