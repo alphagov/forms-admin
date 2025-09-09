@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module PageSettingsSummaryComponent
-  class View < ViewComponent::Base
+  class View < ApplicationComponent
     include Rails.application.routes.url_helpers
     include PagesHelper
 
     def initialize(draft_question:, errors: nil)
-      super
+      super()
       @draft_question = draft_question
       @errors = errors
     end

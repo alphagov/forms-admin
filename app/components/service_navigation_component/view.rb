@@ -1,9 +1,9 @@
 module ServiceNavigationComponent
-  class View < ViewComponent::Base
+  class View < ApplicationComponent
     attr_accessor :navigation_items
 
     def initialize(navigation_items: [])
-      super
+      super()
       @navigation_items = navigation_items.map(&:to_h)
     end
 

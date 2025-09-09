@@ -1,9 +1,9 @@
 module ErrorSummaryComponent
-  class View < ViewComponent::Base
+  class View < ApplicationComponent
     attr_accessor :errors
 
     def initialize(errors: [])
-      super
+      super()
       @errors = errors
     end
 

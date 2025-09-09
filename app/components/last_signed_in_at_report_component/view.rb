@@ -1,11 +1,11 @@
 module LastSignedInAtReportComponent
-  class View < ViewComponent::Base
+  class View < ApplicationComponent
     def initialize(caption, users, empty_message: nil)
       @caption = caption
       @users = users
       @empty_message = empty_message
 
-      super
+      super()
     end
 
     def render?

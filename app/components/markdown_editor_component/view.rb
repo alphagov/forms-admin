@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module MarkdownEditorComponent
-  class View < ViewComponent::Base
+  class View < ApplicationComponent
     include GOVUKDesignSystemFormBuilder::BuilderHelper
     attr_reader :attribute_name, :f, :render_preview_path, :preview_html, :form_model, :label, :hint, :allow_headings
 
@@ -14,7 +14,7 @@ module MarkdownEditorComponent
                    render_preview_path: nil,
                    allow_headings: true,
                    local_translations: {})
-      super
+      super()
       @attribute_name = attribute_name
       @f = form_builder
       @render_preview_path = render_preview_path

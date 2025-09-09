@@ -1,9 +1,9 @@
 module FormStatusTagDescriptionComponent
-  class View < ViewComponent::Base
+  class View < ApplicationComponent
     attr_accessor :status
 
     def initialize(status: :draft)
-      super
+      super()
       @status = status
     end
   end

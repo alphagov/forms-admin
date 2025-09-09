@@ -1,5 +1,7 @@
 module TaskListComponent
   class View < GovukComponent::Base
+    include GovukComponentsHelper
+
     attr_accessor :sections, :completed_task_count, :total_task_count
 
     Section = Struct.new(:rows, :title, :number, :subsection, :body_text, keyword_init: true)

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module ActAsUserBannerComponent
-  class View < ViewComponent::Base
+  class View < ApplicationComponent
     def initialize(acting_as_user, original_user)
-      super
+      super()
       @acting_as_user = acting_as_user
       @original_user = original_user
     end
