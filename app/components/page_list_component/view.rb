@@ -1,5 +1,5 @@
 module PageListComponent
-  class View < ViewComponent::Base
+  class View < ApplicationComponent
     delegate :question_text_with_optional_suffix, to: :helpers
 
     def initialize(form:, pages: [])

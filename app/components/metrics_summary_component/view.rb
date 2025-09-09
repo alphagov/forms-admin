@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module MetricsSummaryComponent
-  class View < ViewComponent::Base
+  class View < ApplicationComponent
     attr_reader :start_date, :end_date, :weekly_submissions, :weekly_starts, :weekly_started_but_not_completed, :weekly_completion_rate, :form_has_metrics, :error_message, :heading
 
     def initialize(form_live_date, metrics_data)

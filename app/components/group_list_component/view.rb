@@ -1,5 +1,5 @@
 module GroupListComponent
-  class View < ViewComponent::Base
+  class View < ApplicationComponent
     def initialize(groups:, title:, empty_message: "", show_empty: true)
       super
       @groups = groups

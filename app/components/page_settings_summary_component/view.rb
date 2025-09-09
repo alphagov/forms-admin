@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module PageSettingsSummaryComponent
-  class View < ViewComponent::Base
+  class View < ApplicationComponent
     include Rails.application.routes.url_helpers
     include PagesHelper
 

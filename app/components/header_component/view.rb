@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module HeaderComponent
-  class View < ViewComponent::Base
+  class View < ApplicationComponent
     attr_accessor :hosting_environment
 
     def initialize(hosting_environment: HostingEnvironment)

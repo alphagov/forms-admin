@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ScrollingWrapperComponent
-  class View < ViewComponent::Base
+  class View < ApplicationComponent
     attr_accessor :aria_label
 
     def initialize(aria_label:)

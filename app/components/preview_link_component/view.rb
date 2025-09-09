@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module PreviewLinkComponent
-  class View < ViewComponent::Base
+  class View < ApplicationComponent
     def initialize(pages, link)
       super
       @pages = pages

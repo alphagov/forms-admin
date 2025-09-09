@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module FormUrlComponent
-  class View < ViewComponent::Base
+  class View < ApplicationComponent
     def initialize(runner_link:, heading_text: nil, button_text: nil)
       super
       @runner_link = runner_link

@@ -1,6 +1,6 @@
 module PageListComponent
   module ErrorSummary
-    class View < ViewComponent::Base
+    class View < ApplicationComponent
       def initialize(pages: [])
         super
         @pages = pages

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module MarkCompleteComponent
-  class View < ViewComponent::Base
+  class View < ApplicationComponent
     def initialize(form_model: false, generate_form: true, form_builder: nil, path: nil, legend: nil, hint: nil)
       super
       if generate_form

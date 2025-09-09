@@ -1,5 +1,5 @@
 module LastSignedInAtReportComponent
-  class View < ViewComponent::Base
+  class View < ApplicationComponent
     def initialize(caption, users, empty_message: nil)
       @caption = caption
       @users = users
