@@ -153,7 +153,7 @@ private
   end
 
   def params_to_log
-    @params_to_log ||= params.except(:controller, :action, :format, :id).to_unsafe_h
+    @params_to_log ||= params.except(:controller, :action, :format, :id, :authenticity_token).to_unsafe_h
   end
 
   def set_analytics_events

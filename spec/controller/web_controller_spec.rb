@@ -189,4 +189,36 @@ describe WebController, type: :controller do
       end
     end
   end
+
+  describe "#logging", :capture_logging do
+    controller do
+      def new
+        render inline: "<%= button_to 'New', false %>"
+      end
+
+      def create
+        render plain: "OK"
+      end
+    end
+
+    before do
+      request.env["warden"] = instance_double(
+        Warden::Proxy,
+        authenticate!: true,
+        authenticated?: true,
+        set_user: nil,
+        user: create(:user),
+      )
+    end
+
+    it "logs request params" do
+      post :create, params: { foo: :bar }
+      expect(log_line).to include "params" => { "foo" => "bar" }
+    end
+
+    it "does not log the CSRF token" do
+      post :create, params: { authenticity_token: "foobar" }
+      expect(log_output.string).not_to include "authenticity_token"
+    end
+  end
 end
