@@ -56,7 +56,11 @@ RSpec.describe Reports::FormDocumentsService do
     context "when the tag is draft" do
       let(:tag) { "draft" }
 
-      it "returns form documents" do
+      it "returns an Enumerator" do
+        expect(described_class.form_documents(tag:)).to be_a(Enumerator)
+      end
+
+      it "returns form documents when the Enumerator is evaluated" do
         form_document = described_class.form_documents(tag:).first
         expect(form_document).to be_a(Hash)
         expect(form_document).to have_key("form_id")
@@ -82,7 +86,11 @@ RSpec.describe Reports::FormDocumentsService do
     context "when the tag is live" do
       let(:tag) { "live" }
 
-      it "returns form documents" do
+      it "returns an Enumerator" do
+        expect(described_class.form_documents(tag:)).to be_a(Enumerator)
+      end
+
+      it "returns form documents when the Enumerator is evaluated" do
         form_document = described_class.form_documents(tag:).first
         expect(form_document).to be_a(Hash)
         expect(form_document).to have_key("form_id")

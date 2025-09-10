@@ -10,7 +10,7 @@ class Reports::FormDocumentsService
         form_documents = form_documents.where(form: { "state": %w[draft live_with_draft archived_with_draft] })
       end
 
-      form_documents.map(&:as_json)
+      form_documents.find_each(batch_size: 100).lazy.map(&:as_json)
     end
 
     def has_routes?(form_document)
