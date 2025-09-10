@@ -6,7 +6,7 @@ RSpec.describe FormDocumentSyncService do
 
   describe "#synchronize_form" do
     context "when form state is live" do
-      let(:form) { create(:form, state: "live") }
+      let!(:form) { create(:form, state: "live") }
       let(:expected_live_at) { form.reload.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%6NZ") }
 
       context "when there is no existing form document" do
@@ -44,13 +44,13 @@ RSpec.describe FormDocumentSyncService do
         it "destroys the archived form document" do
           expect {
             service.synchronize_form(form)
-          }.to(change { FormDocument.exists?(form:, tag: "archived") })
+          }.to(change { FormDocument.exists?(form:, tag: "archived") }.from(true).to(false))
         end
 
         it "creates the live form document" do
           expect {
             service.synchronize_form(form)
-          }.to(change { FormDocument.exists?(form:, tag: "live") })
+          }.to(change { FormDocument.exists?(form:, tag: "live") }.from(false).to(true))
         end
       end
     end
@@ -58,15 +58,11 @@ RSpec.describe FormDocumentSyncService do
     context "when form state is archived" do
       let(:form) { create(:form, state: "archived") }
 
-      context "when there is no existing form document" do
-        it "creates an archived form document" do
-          allow(ApiFormDocumentService).to receive(:form_document).with(form_id: form.id, tag: "live").and_return(form.as_form_document)
-
+      context "when there is no existing live form document" do
+        it "raises an ActiveRecord::RecordNotFound error" do
           expect {
             service.synchronize_form(form)
-          }.to change(FormDocument, :count).by(1)
-
-          expect(FormDocument.last).to have_attributes(form:, tag: "archived", content: form.as_form_document)
+          }.to raise_error(ActiveRecord::RecordNotFound)
         end
       end
 
@@ -76,13 +72,52 @@ RSpec.describe FormDocumentSyncService do
         it "destroys the live form document" do
           expect {
             service.synchronize_form(form)
-          }.to(change { FormDocument.exists?(form:, tag: "live") })
+          }.to(change { FormDocument.exists?(form:, tag: "live") }.from(true).to(false))
         end
 
         it "creates the archived form document" do
           expect {
             service.synchronize_form(form)
-          }.to(change { FormDocument.exists?(form:, tag: "archived", content: live_form_document.content) })
+          }.to(change { FormDocument.exists?(form:, tag: "archived", content: live_form_document.content) }.from(false).to(true))
+        end
+      end
+    end
+  end
+
+  describe "#update_draft_form_document" do
+    context "when there is no draft form document" do
+      before do
+        form.draft_form_document.destroy
+      end
+
+      it "creates a draft form document" do
+        expect {
+          service.update_draft_form_document(form)
+        }.to(change { FormDocument.exists?(form:, tag: "draft") }.from(false).to(true))
+      end
+    end
+
+    context "when there is a draft form document" do
+      let!(:form_document) { form.draft_form_document }
+      let(:new_name) { "new name" }
+
+      before do
+        form.name = new_name
+      end
+
+      it "updates the draft form document" do
+        expect {
+          service.update_draft_form_document(form)
+        }.to change { form_document.reload.content["name"] }.to(new_name)
+      end
+
+      context "when there is also a live form document" do
+        let!(:live_form_document) { create :form_document, :live, form:, content: "content" }
+
+        it "does not modify the live form document" do
+          expect {
+            service.update_draft_form_document(form)
+          }.not_to(change { live_form_document.reload.content })
         end
       end
     end

@@ -7,6 +7,7 @@ class Form < ApplicationRecord
   has_many :form_documents, dependent: :destroy
   has_one :live_form_document, -> { where tag: "live" }, class_name: "FormDocument"
   has_one :archived_form_document, -> { where tag: "archived" }, class_name: "FormDocument"
+  has_one :draft_form_document, -> { where tag: "draft" }, class_name: "FormDocument"
 
   enum :submission_type, {
     email: "email",
@@ -20,6 +21,7 @@ class Form < ApplicationRecord
   validates :submission_type, presence: true
 
   after_create :set_external_id
+  after_update :update_draft_form_document
 
   def has_draft_version
     draft? || live_with_draft? || archived_with_draft?
@@ -152,6 +154,10 @@ private
 
   def set_external_id
     update(external_id: id)
+  end
+
+  def update_draft_form_document
+    FormDocumentSyncService.update_draft_form_document(self)
   end
 
   def task_status_service
