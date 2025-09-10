@@ -57,15 +57,6 @@ class Form < ApplicationRecord
     errors.add(:base, :has_validation_errors, message: "Form has routing validation errors") if question_section_completed && has_routing_errors
   end
 
-  def move_to_group(group_id)
-    group = Group.find_by!(external_id: group_id)
-    group_form = GroupForm.find_by(form_id: id)
-
-    return if group_form.group == group
-
-    group_form.update!(group:)
-  end
-
   def ready_for_live
     task_status_service.mandatory_tasks_completed?
   end

@@ -45,7 +45,7 @@ class GroupFormsController < WebController
 
       # In case the receiving group is deleted since the form was loaded
       if receiving_group
-        @group_form.update!(group: receiving_group)
+        GroupFormsService.new(group: receiving_group, form: @form, current_user: @current_user, old_group: @group).move_form_to(receiving_group)
         success_message = t(".success", form_name: @form.name, receiving_group_name: receiving_group.name)
 
         redirect_to @group, success: success_message, status: :see_other
