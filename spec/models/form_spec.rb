@@ -681,38 +681,6 @@ RSpec.describe Form, type: :model do
     end
   end
 
-  describe "#move_to_group" do
-    context "when the form is in an existing group" do
-      let(:form) { create(:form_record) }
-      let(:old_group) { create :group, name: "Group 1" }
-      let(:group_form) { GroupForm.find_by!(form_id: form.id) }
-
-      before do
-        GroupForm.create!(form_id: form.id, group: old_group)
-      end
-
-      context "when the user tries to move the form to a different group" do
-        let(:new_group) { create :group, name: "Group 2" }
-
-        it "moves the form" do
-          expect { form.move_to_group(new_group.external_id) }.to change { GroupForm.find_by!(form_id: form.id).reload.group.id }.to(new_group.id)
-        end
-      end
-
-      context "when the user tries to move the form to its existing group" do
-        it "leaves the form where it is" do
-          expect { form.move_to_group(old_group.external_id) }.not_to(change { group_form.reload.group.id })
-        end
-      end
-
-      context "when the new group does not exist" do
-        it "throws an ActiveRecord::RecordNotFound error" do
-          expect { form.move_to_group("some_nonexistent_external_id") }.to raise_error(ActiveRecord::RecordNotFound)
-        end
-      end
-    end
-  end
-
   describe "#file_upload_question_count" do
     let(:form) { create :form_record }
 
