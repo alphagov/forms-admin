@@ -147,7 +147,13 @@ private
         CurrentLoggingAttributes.user_organisation_slug = current_user.organisation&.slug
       end
     end
+
+    CurrentLoggingAttributes.params = params_to_log if params_to_log.present?
     CurrentLoggingAttributes.page_id = params[:page_id] if params[:page_id].present?
+  end
+
+  def params_to_log
+    @params_to_log ||= params.except(:controller, :action, :format, :id, :authenticity_token).to_unsafe_h
   end
 
   def set_analytics_events

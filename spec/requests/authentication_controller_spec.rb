@@ -120,6 +120,16 @@ RSpec.describe AuthenticationController, type: :request do
 
       expect(controller_spy).to have_received(:authenticate_user!)
     end
+
+    describe "logging", :capture_logging do
+      before do
+        get "/auth/test/callback?code=foo&state=bar"
+      end
+
+      it "does not log request params" do
+        expect(log_output.string).not_to include "params"
+      end
+    end
   end
 
   describe "#sign_up" do

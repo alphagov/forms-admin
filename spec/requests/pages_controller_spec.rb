@@ -6,20 +6,14 @@ RSpec.describe PagesController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
   let(:membership) { create :membership, group:, user: standard_user }
 
-  let(:output) { StringIO.new }
-  let(:logger) { ActiveSupport::Logger.new(output) }
-
   before do
     membership
     login_as_standard_user
-
-    # Intercept the request logs so we can do assertions on them
-    allow(Lograge).to receive(:logger).and_return(logger)
   end
 
-  shared_examples "logging" do
+  shared_examples "logging", :capture_logging do
     it "logs the answer type" do
-      expect(log_lines(output)[0]["answer_type"]).to eq(page.answer_type)
+      expect(log_line["answer_type"]).to eq(page.answer_type)
     end
   end
 
@@ -357,7 +351,7 @@ RSpec.describe PagesController, type: :request do
       GroupForm.create!(form_id: form.id, group_id: group.id)
     end
 
-    context "when moving the page up" do
+    context "when moving the page up", :capture_logging do
       before do
         allow(PageRepository).to receive(:move_page) do |page, _direction|
           page.move_higher
@@ -365,6 +359,10 @@ RSpec.describe PagesController, type: :request do
         end
 
         post move_page_path({ form_id: form.id, move_direction: { up: pages[1].id } })
+      end
+
+      it "logs the params" do
+        expect(log_line["params"]).to include "move_direction" => { "up" => pages[1].id.to_s }
       end
 
       it "calls the page repository to move the page up" do
@@ -376,7 +374,7 @@ RSpec.describe PagesController, type: :request do
       end
     end
 
-    context "when moving the page down" do
+    context "when moving the page down", :capture_logging do
       before do
         allow(PageRepository).to receive(:move_page) do |page, _direction|
           page.move_lower
@@ -384,6 +382,10 @@ RSpec.describe PagesController, type: :request do
         end
 
         post move_page_path({ form_id: form.id, move_direction: { down: pages[1].id } })
+      end
+
+      it "logs the params" do
+        expect(log_line["params"]).to include "move_direction" => { "down" => pages[1].id.to_s }
       end
 
       it "calls the page repository to move the page down" do

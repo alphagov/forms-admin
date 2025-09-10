@@ -83,4 +83,8 @@ private
     # the username/password flow
     params.permit(:auth)[:auth] == "e2e"
   end
+
+  def params_to_log
+    nil
+  end
 end
