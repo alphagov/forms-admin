@@ -184,4 +184,41 @@ RSpec.describe "form_documents.rake" do
       end
     end
   end
+
+  describe "form_documents:sync_draft_form_documents" do
+    subject(:task) do
+      Rake::Task["form_documents:sync_draft_form_documents"]
+        .tap(&:reenable)
+    end
+
+    let!(:live_form) { create :form, :live }
+    let!(:live_with_draft_form) { create :form, :live_with_draft }
+    let!(:draft_form) { create :form }
+
+    context "when draft FormDocuments don't exist" do
+      before do
+        live_form.draft_form_document.destroy!
+        live_with_draft_form.draft_form_document.destroy!
+        draft_form.draft_form_document.destroy!
+      end
+
+      it "creates draft FormDocuments for all forms" do
+        expect {
+          task.invoke
+        }.to(change(FormDocument.where(tag: "draft"), :count).by(3))
+      end
+    end
+
+    context "when some draft FormDocuments already exist" do
+      before do
+        draft_form.draft_form_document.destroy!
+      end
+
+      it "only creates draft FormDocuments for forms without" do
+        expect {
+          task.invoke
+        }.to(change(FormDocument.where(tag: "draft"), :count).by(1))
+      end
+    end
+  end
 end

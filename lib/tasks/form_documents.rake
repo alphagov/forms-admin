@@ -25,6 +25,19 @@ namespace :form_documents do
       raise ActiveRecord::Rollback
     end
   end
+
+  desc "create or update draft FormDocuments for all forms"
+  task sync_draft_form_documents: :environment do
+    Rails.logger.info "Started with #{FormDocument.where(tag: 'draft').count} draft FormDocuments"
+
+    ActiveRecord::Base.transaction do
+      Form.find_each do |form|
+        FormDocumentSyncService.update_draft_form_document(form)
+      end
+    end
+
+    Rails.logger.info "Finished with #{FormDocument.where(tag: 'draft').count} draft FormDocuments"
+  end
 end
 
 def sync_live_forms
