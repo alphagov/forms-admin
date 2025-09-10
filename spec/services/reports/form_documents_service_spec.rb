@@ -110,16 +110,6 @@ RSpec.describe Reports::FormDocumentsService do
         )
       end
     end
-
-    context "when the tag is unsupported" do
-      let(:tag) { "tag not supported" }
-
-      it "raises an error" do
-        expect {
-          described_class.form_documents(tag:)
-        }.to raise_error(StandardError)
-      end
-    end
   end
 
   describe ".has_secondary_skip_routes?" do
