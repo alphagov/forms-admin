@@ -30,10 +30,8 @@ namespace :form_documents do
   task sync_draft_form_documents: :environment do
     Rails.logger.info "Started with #{FormDocument.where(tag: 'draft').count} draft FormDocuments"
 
-    ActiveRecord::Base.transaction do
-      Form.find_each do |form|
-        FormDocumentSyncService.update_draft_form_document(form)
-      end
+    Form.find_each do |form|
+      FormDocumentSyncService.update_draft_form_document(form)
     end
 
     Rails.logger.info "Finished with #{FormDocument.where(tag: 'draft').count} draft FormDocuments"
