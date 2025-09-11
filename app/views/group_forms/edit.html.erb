@@ -15,11 +15,11 @@
 
     <%= govuk_summary_list(classes: "govuk-summary-list--no-border") do |summary_list|
       summary_list.with_row do |row|
-        row.with_key { t('.form_name_label') }
+        row.with_key { t('group_forms.edit.form_name_label') }
         row.with_value { @group_select.form.name }
       end;
       summary_list.with_row do |row|
-        row.with_key { t('.group_name_label') }
+        row.with_key { t('group_forms.edit.group_name_label') }
         row.with_value { @group.name }
       end;
     end %>
