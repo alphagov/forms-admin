@@ -1,14 +1,16 @@
 class Reports::FormDocumentsService
   class << self
     def form_documents(tag:)
-      case tag
-      when "draft"
-        draft_form_documents
-      when "live"
-        live_form_documents
-      else
-        raise StandardError "Unsupported tag"
+      form_documents = FormDocument.joins(form: { group_form: { group: :organisation } })
+                  .where(tag:)
+                  .where.not(organisation: { "internal": true })
+                  .select("form_documents.*", "organisation.name AS organisation_name", "organisation.id AS organisation_id", "groups.external_id AS group_external_id", "groups.name AS group_name")
+
+      if tag == "draft"
+        form_documents = form_documents.where(form: { "state": %w[draft live_with_draft archived_with_draft] })
       end
+
+      form_documents.find_each(batch_size: 100).lazy.map(&:as_json)
     end
 
     def has_routes?(form_document)
@@ -46,36 +48,6 @@ class Reports::FormDocumentsService
     end
 
   private
-
-    def draft_form_documents
-      draft_forms = Form
-                      .joins(group_form: { group: :organisation })
-                      .where(state: %w[draft live_with_draft archived_with_draft])
-                      .where.not(organisation: { "internal": true })
-                      .select("forms.*",
-                              "organisation.name AS organisation_name",
-                              "organisation.id AS organisation_id",
-                              "groups.external_id AS group_external_id",
-                              "groups.name AS group_name")
-
-      draft_forms.map do |form|
-        form_details = FormDocument.new(form:, tag: "draft", content: form.as_form_document).as_json
-        form_details.merge({
-          "organisation_name" => form.organisation_name,
-          "organisation_id" => form.organisation_id,
-          "group_external_id" => form.group_external_id,
-          "group_name" => form.group_name,
-        })
-      end
-    end
-
-    def live_form_documents
-      FormDocument.joins(form: { group_form: { group: :organisation } })
-                  .where(tag: "live")
-                  .where.not(organisation: { "internal": true })
-                  .select("form_documents.*", "organisation.name AS organisation_name", "organisation.id AS organisation_id", "groups.external_id AS group_external_id", "groups.name AS group_name")
-                  .map(&:as_json)
-    end
 
     def secondary_skip_conditions(form_document)
       form_document["content"]["steps"].lazy.flat_map do |step|

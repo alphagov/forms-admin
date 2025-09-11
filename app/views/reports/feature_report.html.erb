@@ -4,16 +4,16 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l"><%= t("reports.#{report}.heading", tag:).upcase_first %></h1>
 
-    <% unless records.empty? %>
+    <% if records.any? %>
       <p><%=govuk_link_to(t("reports.#{report}.download_csv", tag:).upcase_first, url_for(format: :csv))%></p>
     <% end %>
   </div>
 
   <div class="govuk-grid-column-full">
-    <% if records.empty? %>
-      <p class="govuk-body"><%= t("reports.#{report}.empty", tag:) %></p>
-    <% else %>
+    <% if records.any? %>
       <%= govuk_table(**report_table(records)) %>
+    <% else %>
+      <p class="govuk-body"><%= t("reports.#{report}.empty", tag:) %></p>
     <% end %>
   </div>
 </div>
