@@ -89,6 +89,11 @@ gem "aasm", "~> 5.5"
 # Used by AASM to autocommit state changes when even method is used with bang eg. make_live!
 gem "after_commit_everywhere", "~> 1.6"
 
+# For profiling requests
+gem "rack-mini-profiler"
+gem "stackprof"
+gem "redis"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"

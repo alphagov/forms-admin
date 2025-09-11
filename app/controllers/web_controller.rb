@@ -8,6 +8,7 @@ class WebController < ApplicationController
   before_action :authenticate_and_check_access
   before_action :set_paper_trail_whodunnit
   before_action :redirect_if_account_not_completed
+  before_action :authorize_profiler
 
   after_action :set_analytics_events
   before_action :prepare_analytics_events
@@ -105,6 +106,10 @@ private
 
       warden.set_user(@current_user)
     end
+  end
+
+  def authorize_profiler
+    Rack::MiniProfiler.authorize_request if @current_user && @current_user.super_admin?
   end
 
   def non_maintenance_bypass_ip_address?

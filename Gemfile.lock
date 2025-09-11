@@ -380,6 +380,8 @@ GEM
       rspec-support (~> 3.12)
     racc (1.8.1)
     rack (3.2.0)
+    rack-mini-profiler (4.0.1)
+      rack (>= 1.2.0)
     rack-protection (4.1.1)
       base64 (>= 0.1.0)
       logger (>= 1.6.0)
@@ -435,6 +437,7 @@ GEM
       erb
       psych (>= 4.0.0)
     redcarpet (3.6.1)
+    redis (4.8.1)
     regexp_parser (2.11.2)
     reline (0.6.2)
       io-console (~> 0.5)
@@ -527,6 +530,7 @@ GEM
       spring (>= 0.9.1)
     spring-prspec (1.0.0)
       spring (>= 0.9.1)
+    stackprof (0.2.27)
     stringio (3.1.7)
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
@@ -625,8 +629,10 @@ DEPENDENCIES
   puma (~> 6.6.1)
   pundit
   pundit-matchers
+  rack-mini-profiler
   rails (= 8.0.2.1)
   rails-controller-testing
+  redis
   rspec-rails (>= 3.9.0)
   rubocop-govuk
   selenium-webdriver
@@ -635,6 +641,7 @@ DEPENDENCIES
   simplecov (~> 0.22.0)
   spring-commands-rspec
   spring-prspec
+  stackprof
   tzinfo
   tzinfo-data
   validate_url
