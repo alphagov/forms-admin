@@ -89,6 +89,10 @@ class User < ApplicationRecord
     mou_signatures.find_by(organisation:)
   end
 
+  def can_admin_org?(org)
+    is_organisations_admin?(org) || super_admin?
+  end
+
   def is_organisations_admin?(org)
     organisation_admin? && organisation == org
   end

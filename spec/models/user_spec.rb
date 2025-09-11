@@ -234,6 +234,32 @@ describe User, type: :model do
     end
   end
 
+  describe "#can_admin_org?" do
+    context "when the user is a super admin" do
+      it "returns true" do
+        user = create(:super_admin_user)
+
+        expect(user.can_admin_org?(organisation)).to be(true)
+      end
+    end
+
+    context "when the user is an organisation admin" do
+      it "returns true" do
+        user = create(:organisation_admin_user)
+
+        expect(user.can_admin_org?(organisation)).to be(true)
+      end
+    end
+
+    context "when the user is a standard user" do
+      it "returns false" do
+        user = create(:user)
+
+        expect(user.can_admin_org?(organisation)).to be(false)
+      end
+    end
+  end
+
   describe "#is_organisations_admin?" do
     context "when the user does not have the organisation admin role" do
       it "returns false" do
