@@ -70,14 +70,12 @@ feature "Move a form", type: :feature do
   end
 
   def and_i_click_move_form
-    # TODO: Implement the actual link to move the form, and delete the visit line below
-    # expect(page).to have_content("Change group")
-    # click_link "Change group"
-    visit edit_group_form_path(group, id: form.id)
+    expect(page).to have_content("Change group")
+    click_link "Change group"
   end
 
   def but_i_do_not_see_the_move_link
-    expect(page).not_to have_link("Change group") # This passes anyway as we don't have that link in the UI, but a useful check once we do add it
+    expect(page).not_to have_link("Change group")
   end
 
   def and_i_cannot_visit_the_move_form_page
