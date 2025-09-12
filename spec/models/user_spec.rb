@@ -234,12 +234,12 @@ describe User, type: :model do
     end
   end
 
-  describe "#can_admin_org?" do
+  describe "#can_administer_org?" do
     context "when the user is a super admin" do
       it "returns true" do
         user = create(:super_admin_user)
 
-        expect(user.can_admin_org?(organisation)).to be(true)
+        expect(user.can_administer_org?(organisation)).to be(true)
       end
     end
 
@@ -247,7 +247,7 @@ describe User, type: :model do
       it "returns true" do
         user = create(:organisation_admin_user)
 
-        expect(user.can_admin_org?(organisation)).to be(true)
+        expect(user.can_administer_org?(organisation)).to be(true)
       end
     end
 
@@ -255,7 +255,7 @@ describe User, type: :model do
       it "returns false" do
         user = create(:user)
 
-        expect(user.can_admin_org?(organisation)).to be(false)
+        expect(user.can_administer_org?(organisation)).to be(false)
       end
     end
   end

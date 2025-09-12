@@ -23,7 +23,7 @@ class GroupsController < WebController
     authorize @group
 
     forms = @group.forms
-    @form_list_presenter = FormListPresenter.call(forms:, group: @group, can_admin: @current_user.can_admin_org?(@group.organisation)) unless forms.empty?
+    @form_list_presenter = FormListPresenter.call(forms:, group: @group, can_admin: @current_user.can_administer_org?(@group.organisation)) unless forms.empty?
   end
 
   # GET /groups/new
