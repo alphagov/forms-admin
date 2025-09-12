@@ -1,7 +1,8 @@
 class FormListPresenter
   include Rails.application.routes.url_helpers
   include ActionView::Helpers::UrlHelper
-  include GovukRailsCompatibleLinkHelper
+  include GovukLinkHelper
+  include GovukVisuallyHiddenHelper
 
   attr_accessor :forms, :group
 
@@ -53,7 +54,7 @@ private
              { text: find_creator_name(form) },
              { text: form_status_tags(form), numeric: true }]
 
-      row << { text: govuk_link_to(I18n.t("home.move_form"), edit_group_form_path(group, id: form.id)), numeric: true } if @can_admin
+      row << { text: change_group_link(form), numeric: true } if @can_admin
 
       row
     end
@@ -63,6 +64,14 @@ private
 
   def form_name_link(form)
     govuk_link_to(form.name, FormService.new(form).path_for_state)
+  end
+
+  def change_group_link(form)
+    govuk_link_to(
+      I18n.t("home.move_form"),
+      edit_group_form_path(group, id: form.id),
+      visually_hidden_suffix: I18n.t("home.for", form_name: form.name),
+    )
   end
 
   def form_status_tags(form)

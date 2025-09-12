@@ -68,7 +68,7 @@ describe FormListPresenter do
               },
               {
                 numeric: true,
-                text: "<a class=\"govuk-link\" href=\"/groups/#{group.external_id}/forms/#{form.id}/edit\">Change group</a>",
+                text: "<a class=\"govuk-link\" href=\"/groups/#{group.external_id}/forms/#{form.id}/edit\">Change group<span class=\"govuk-visually-hidden\"> for #{form.name}</span></a>",
               },
             ])
           end
