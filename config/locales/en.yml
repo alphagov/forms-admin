@@ -876,6 +876,7 @@ en:
     change_filter: Change
     create_a_form: Create a form
     created_by: Created by
+    for: for %{form_name}
     form_name_heading: Form name
     form_status_heading: Status
     move_form: Change group
