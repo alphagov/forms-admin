@@ -65,7 +65,7 @@ private
     }
 
     html_content = status_mapping.map { |status, condition|
-      FormStatusTagComponent::View.new(status:).render_in(view_context) if condition.call
+      tag_html(status) if condition.call
     }.compact.join
 
     html = "<div class='app-form-states'>#{html_content}</div>"
@@ -75,5 +75,26 @@ private
 
   def find_creator_name(form)
     @list_of_creators.find { |creator| creator[:id] == form.creator_id }&.fetch(:name, "")
+  end
+
+  def tag_html(status)
+    status = status.to_sym
+    color = status_colour(status)
+    status_text = status_text(status)
+    "<strong class='govuk-tag govuk-tag--#{color}'>#{status_text}</strong>"
+  end
+
+  def status_colour(status)
+    {
+      draft: "yellow",
+      live: "turquoise",
+      archived: "orange",
+    }[status]
+  end
+
+  def status_text(status)
+    # i18n-tasks-use t('form_statuses.draft')
+    # i18n-tasks-use t('form_statuses.live')
+    I18n.t("form_statuses.#{status}")
   end
 end
