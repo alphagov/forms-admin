@@ -55,31 +55,43 @@ RSpec.describe FormDocumentSyncService do
       end
     end
 
-    context "when form state is archived" do
-      let(:form) { create(:form, state: "archived") }
+    context "when archiving a form" do
+      shared_examples "creates an archived form document" do
+        context "when there is no existing live form document" do
+          it "raises an ActiveRecord::RecordNotFound error" do
+            expect {
+              service.synchronize_form(form)
+            }.to raise_error(ActiveRecord::RecordNotFound)
+          end
+        end
 
-      context "when there is no existing live form document" do
-        it "raises an ActiveRecord::RecordNotFound error" do
-          expect {
-            service.synchronize_form(form)
-          }.to raise_error(ActiveRecord::RecordNotFound)
+        context "when there is an existing live form document" do
+          let!(:live_form_document) { create :form_document, :live, form:, content: "content" }
+
+          it "destroys the live form document" do
+            expect {
+              service.synchronize_form(form)
+            }.to(change { FormDocument.exists?(form:, tag: "live") }.from(true).to(false))
+          end
+
+          it "creates the archived form document" do
+            expect {
+              service.synchronize_form(form)
+            }.to(change { FormDocument.exists?(form:, tag: "archived", content: live_form_document.content) }.from(false).to(true))
+          end
         end
       end
 
-      context "when there is an existing live form document" do
-        let!(:live_form_document) { create :form_document, :live, form:, content: "content" }
+      context "when form state is archived" do
+        let(:form) { create(:form, state: "archived") }
 
-        it "destroys the live form document" do
-          expect {
-            service.synchronize_form(form)
-          }.to(change { FormDocument.exists?(form:, tag: "live") }.from(true).to(false))
-        end
+        include_examples "creates an archived form document"
+      end
 
-        it "creates the archived form document" do
-          expect {
-            service.synchronize_form(form)
-          }.to(change { FormDocument.exists?(form:, tag: "archived", content: live_form_document.content) }.from(false).to(true))
-        end
+      context "when form state is archived_with_draft" do
+        let(:form) { create(:form, state: "archived_with_draft") }
+
+        include_examples "creates an archived form document"
       end
     end
   end

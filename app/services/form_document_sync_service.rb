@@ -4,7 +4,7 @@ class FormDocumentSyncService
       case form.state
       when "live"
         sync_live_form(form)
-      when "archived"
+      when "archived", "archived_with_draft"
         sync_archived_form(form)
       end
     end
