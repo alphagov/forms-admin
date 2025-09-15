@@ -6,7 +6,7 @@ class Forms::GroupSelect < BaseInput
   def groups
     groups = Group.for_organisation(group.organisation).excluding(group)
 
-    if form.is_live? || form.is_archived?
+    if form.is_live?
       groups = groups.where(status: :active)
     end
 
