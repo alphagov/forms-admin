@@ -284,6 +284,7 @@ GEM
       net-smtp
     marcel (1.0.4)
     matrix (0.4.2)
+    memory_profiler (1.1.0)
     mini_mime (1.1.5)
     minitest (5.25.5)
     msgpack (1.8.0)
@@ -621,6 +622,7 @@ DEPENDENCIES
   govuk_notify_rails
   i18n-tasks (~> 1.0.15)
   lograge
+  memory_profiler
   omniauth-auth0
   omniauth-rails_csrf_protection
   paper_trail

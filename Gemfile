@@ -93,6 +93,7 @@ gem "after_commit_everywhere", "~> 1.6"
 gem "rack-mini-profiler"
 gem "stackprof"
 gem "redis"
+gem 'memory_profiler'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
