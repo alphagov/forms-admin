@@ -1,7 +1,8 @@
 class FormListPresenter
   include Rails.application.routes.url_helpers
   include ActionView::Helpers::UrlHelper
-  include GovukRailsCompatibleLinkHelper
+  include GovukLinkHelper
+  include GovukVisuallyHiddenHelper
 
   attr_accessor :forms, :group
 
@@ -11,9 +12,10 @@ class FormListPresenter
     end
   end
 
-  def initialize(forms:, group:)
+  def initialize(forms:, group:, can_admin: false)
     @forms = forms
     @group = group
+    @can_admin = can_admin
     @list_of_creator_id = forms.map(&:creator_id).uniq
     @list_of_creators = User.where(id: @list_of_creator_id)
                              .select(:id, :name)
@@ -35,23 +37,41 @@ private
   end
 
   def head
-    [
+    head = [
       I18n.t("home.form_name_heading"),
       { text: I18n.t("home.created_by") },
       { text: I18n.t("home.form_status_heading"), numeric: true },
-    ].compact
+    ]
+
+    head << { text: I18n.t("home.actions"), numeric: true } if @can_admin
+
+    head.compact
   end
 
   def rows
-    forms.sort_by { |form| [form.name.downcase, form.created_at] }.map do |form|
-      [{ text: form_name_link(form) },
-       { text: find_creator_name(form) },
-       { text: form_status_tags(form), numeric: true }].compact
+    rows = forms.sort_by { |form| [form.name.downcase, form.created_at] }.map do |form|
+      row = [{ text: form_name_link(form) },
+             { text: find_creator_name(form) },
+             { text: form_status_tags(form), numeric: true }]
+
+      row << { text: change_group_link(form), numeric: true } if @can_admin
+
+      row
     end
+
+    rows.compact
   end
 
   def form_name_link(form)
     govuk_link_to(form.name, FormService.new(form).path_for_state)
+  end
+
+  def change_group_link(form)
+    govuk_link_to(
+      I18n.t("home.move_form"),
+      edit_group_form_path(group, id: form.id),
+      visually_hidden_suffix: I18n.t("home.for", form_name: form.name),
+    )
   end
 
   def form_status_tags(form)

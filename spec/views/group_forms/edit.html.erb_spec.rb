@@ -20,14 +20,14 @@ RSpec.describe "group_forms/edit.html.erb", type: :view do
 
   it "renders the page title" do
     render
-    expect(rendered).to have_css("h1", text: /Move this form/)
+    expect(rendered).to have_css("h1", text: /Move this form to a different group/)
   end
 
   it "renders the page title with error prefix when form has errors" do
-    skip "not sure we need this at the moment"
+    group_select.errors.add :group, :blank
 
     render
-    expect(view.content_for(:page_title)).to eq("Error: Move Form")
+    expect(view.content_for(:title)).to eq("Error: Move this form to a different group")
   end
 
   it "sets the back link to the group" do

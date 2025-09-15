@@ -1,11 +1,12 @@
 require "rails_helper"
 
 describe FormListPresenter do
-  let(:presenter) { described_class.call(forms:, group:) }
+  let(:presenter) { described_class.call(forms:, group:, can_admin:) }
 
   let(:creator) { create :user }
   let(:forms) { build_list :form, 5, :with_id, creator_id: creator.id, created_at: "2024-10-08T07:31:15.762Z" }
-  let(:group) { build :group }
+  let(:group) { create :group }
+  let(:can_admin) { false }
 
   describe "#data" do
     describe "caption" do
@@ -19,6 +20,17 @@ describe FormListPresenter do
         expect(presenter.data[:head]).to eq([I18n.t("home.form_name_heading"),
                                              { text: I18n.t("home.created_by") },
                                              { text: I18n.t("home.form_status_heading"), numeric: true }])
+      end
+
+      context "when user is org admin" do
+        let(:can_admin) { true }
+
+        it "contains an additional 'Actions' column heading" do
+          expect(presenter.data[:head]).to eq([I18n.t("home.form_name_heading"),
+                                               { text: I18n.t("home.created_by") },
+                                               { text: I18n.t("home.form_status_heading"), numeric: true },
+                                               { text: I18n.t("home.actions"), numeric: true }])
+        end
       end
     end
 
@@ -41,6 +53,28 @@ describe FormListPresenter do
         end
       end
 
+      context "when user is org admin" do
+        let(:can_admin) { true }
+
+        it "has an additional actions column with links" do
+          presenter.data[:rows].each_with_index do |row, index|
+            form = forms[index]
+            expect(row).to eq([
+              { text: "<a class=\"govuk-link\" href=\"/forms/#{form.id}\">#{form.name}</a>" },
+              { text: creator.name.to_s },
+              {
+                numeric: true,
+                text: "<div class='app-form-states'><strong class=\"govuk-tag govuk-tag--yellow\">Draft</strong>\n</div>",
+              },
+              {
+                numeric: true,
+                text: "<a class=\"govuk-link\" href=\"/groups/#{group.external_id}/forms/#{form.id}/edit\">Change group<span class=\"govuk-visually-hidden\"> for #{form.name}</span></a>",
+              },
+            ])
+          end
+        end
+      end
+
       context "when forms with names are random" do
         let(:forms) do
           [
@@ -50,7 +84,7 @@ describe FormListPresenter do
             build(:form, id: 4, name: "C", created_at: "2024-10-08T07:31:15.762Z"),
           ]
         end
-        let(:presenter) { described_class.call(forms:, group:) }
+        let(:presenter) { described_class.call(forms:, group:, can_admin:) }
 
         it "sorts alphabetically" do
           rows = presenter.data[:rows]
@@ -70,7 +104,7 @@ describe FormListPresenter do
             build(:form, id: 4, name: "a", created_at: "2024-10-08T09:31:15.762Z"),
           ]
         end
-        let(:presenter) { described_class.call(forms:, group:) }
+        let(:presenter) { described_class.call(forms:, group:, can_admin:) }
 
         it "sorts alphabetically first, then by created_at time" do
           rows = presenter.data[:rows]
