@@ -1,31 +1,31 @@
 require "rails_helper"
 
 RSpec.describe ErrorsController, type: :request do
-  describe "Page not found" do
+  describe "Not found" do
     before do
-      get "/404"
+      get "/404", headers: { ACCEPT: "application/json" }
     end
 
     it "returns http code 404" do
       expect(response).to have_http_status(:not_found)
     end
 
-    it "renders the not found template" do
-      expect(response.body).to include(I18n.t("not_found.title"))
+    it "returns a JSON response" do
+      expect(response.headers["Content-Type"]).to eq("application/json; charset=utf-8")
     end
   end
 
   describe "Internal server error" do
     before do
-      get "/500"
+      get "/500", headers: { ACCEPT: "application/json" }
     end
 
     it "returns http code 500" do
       expect(response).to have_http_status(:internal_server_error)
     end
 
-    it "renders the internal server error template" do
-      expect(response.body).to include(I18n.t("internal_server_error.title"))
+    it "returns a JSON response" do
+      expect(response.headers["Content-Type"]).to eq("application/json; charset=utf-8")
     end
   end
 end
