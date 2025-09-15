@@ -1306,7 +1306,7 @@ en:
 
       <p>Once it’s set up, you can copy and paste the payment link URL into the box below. This will add a payment page to the end of your form.</p>
     creating_your_payment_link:
-      body: Once you have a GOV.UK Pay account you can start creating your payment link by selecting **Add a new service**.
+      body: Once you have a GOV.UK Pay account you can start creating your payment link by selecting <strong>Add a new service</strong>.
       heading: Creating your payment link in GOV.UK Pay
     heading: Add a link to a payment page on GOV.UK Pay
     how_this_will_help_processors:
@@ -1336,11 +1336,11 @@ en:
 
         <p>When creating a payment link in GOV.UK Pay, you’ll be asked ‘Do your users already have a payment reference?’</p>
 
-        <p>Select **Yes**.</p>
+        <p>Select <strong>Yes</strong>.</p>
 
         <p>This means the form reference number will automatically be sent through to GOV.UK Pay when someone makes a payment.</p>
 
-        <p>When asked to fill in the **Name of payment reference** field, enter ‘Form reference number’.</p>
+        <p>When asked to fill in the <strong>Name of payment reference</strong> field, enter ‘Form reference number’.</p>
       heading: Set up your payment link to use a form’s unique reference number
     setting_up_govuk_pay:
       body_html: |
