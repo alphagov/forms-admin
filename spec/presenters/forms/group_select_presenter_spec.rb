@@ -26,8 +26,8 @@ describe Forms::GroupSelectPresenter do
     context "when the form is archived" do
       let(:form) { build(:form, :archived) }
 
-      it "returns just the group name" do
-        expect(presenter.group_name(group)).to eq("Test Group")
+      it "returns the group name with its status" do
+        expect(presenter.group_name(group)).to eq("Test Group (Trial)")
       end
     end
   end

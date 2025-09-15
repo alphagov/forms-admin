@@ -63,7 +63,7 @@ RSpec.describe Forms::GroupSelect, type: :model do
         end
 
         context "when the form is archived but the target group is trial" do
-          it "returns only groups that are active" do
+          it "returns groups that are active and trial" do
             form = build(:form, :archived, id: 1)
 
             active_group = create(:group, name: "Active", status: :active, organisation: group.organisation)
@@ -71,7 +71,7 @@ RSpec.describe Forms::GroupSelect, type: :model do
 
             group_select = described_class.new(group: group, form:)
 
-            expect(group_select.groups).not_to include(trial_group)
+            expect(group_select.groups).to include(trial_group)
             expect(group_select.groups).to include(active_group)
           end
         end
