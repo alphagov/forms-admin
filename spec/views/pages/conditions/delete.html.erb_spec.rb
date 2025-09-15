@@ -25,8 +25,11 @@ describe "pages/conditions/delete.html.erb" do
   end
 
   it "contains the condition details" do
+    expect(rendered).to have_css(".govuk-summary-list__key", text: "If the question")
     expect(rendered).to have_css(".govuk-summary-list__value", text: delete_condition_input.page.question_text)
+    expect(rendered).to have_css(".govuk-summary-list__key", text: "is answered as")
     expect(rendered).to have_css(".govuk-summary-list__value", text: delete_condition_input.answer_value)
+    expect(rendered).to have_css(".govuk-summary-list__key", text: "skip the person to")
     expect(rendered).to have_css(".govuk-summary-list__value", text: delete_condition_input.goto_page_question_text)
   end
 
