@@ -23,15 +23,15 @@
 
       <%= govuk_summary_list(actions: false) do |summary_list|
         summary_list.with_row do |row|
-          row.with_key { t("new_condition.routing_page_text") }
+          row.with_key(text: t("new_condition.routing_page_text"))
           row.with_value { delete_condition_input.page.question_text }
         end;
         summary_list.with_row do |row|
-          row.with_key { t(".answered_as_key") }
+          row.with_key(text: t(".answered_as_key"))
           row.with_value { delete_condition_input.answer_value }
         end;
         summary_list.with_row do |row|
-          row.with_key { t(".skip_to_key") }
+          row.with_key(text: t(".skip_to_key"))
           row.with_value { delete_condition_input.record.exit_page? ? delete_condition_input.record.exit_page_heading : delete_condition_input.goto_page_question_text }
         end;
 
