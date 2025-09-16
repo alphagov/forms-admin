@@ -1,4 +1,6 @@
 class UsersController < WebController
+  include Pagy::Backend
+
   after_action :verify_authorized
   after_action :verify_policy_scoped, only: :index
 
@@ -9,9 +11,9 @@ class UsersController < WebController
   def index
     authorize current_user, :can_manage_user?
 
-    @users = policy_scope(User).for_users_list
+    @pagy, @users = pagy(policy_scope(User).for_users_list, limit: 50)
 
-    render template: "users/index", locals: { users: @users }
+    render template: "users/index"
   end
 
   def edit
