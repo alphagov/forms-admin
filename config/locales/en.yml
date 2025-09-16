@@ -1306,7 +1306,7 @@ en:
 
       <p>Once it’s set up, you can copy and paste the payment link URL into the box below. This will add a payment page to the end of your form.</p>
     creating_your_payment_link:
-      body: Once you have a GOV.UK Pay account you can start creating your payment link by selecting <strong>Add a new service</strong>.
+      body_html: Once you have a GOV.UK Pay account you can start creating your payment link by selecting <strong>Add a new service</strong>.
       heading: Creating your payment link in GOV.UK Pay
     heading: Add a link to a payment page on GOV.UK Pay
     how_this_will_help_processors:
