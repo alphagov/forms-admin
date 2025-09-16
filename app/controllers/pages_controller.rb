@@ -144,7 +144,7 @@ private
       page.routing_conditions.each do |condition|
         condition.validation_errors.each do |error|
           error_type = condition.secondary_skip? ? "any_other_answer_route.#{error.name}" : error.name
-          AnalyticsService.track_validation_errors(input_object_name: "PageList", field: :condition, error_type:)
+          AnalyticsService.track_validation_errors(input_object_name: "PageList", field: :condition, error_type:, form_name: current_form.name)
         end
       end
     end
