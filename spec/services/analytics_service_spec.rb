@@ -4,11 +4,13 @@ RSpec.describe AnalyticsService do
   describe ".track_validation_errors" do
     it "adds a validation_error event with correct parameters" do
       input_object_name = "user_form"
+      form_name = "Apply for a juggling licence"
       field = "email"
       error_type = "invalid_format"
       expected_event_name = "validation_error"
       expected_properties = {
-        form_name: input_object_name,
+        input_object_name: input_object_name,
+        form_name:,
         event_name: "validation_error",
         error_field: field,
         error_type: error_type,
@@ -21,6 +23,7 @@ RSpec.describe AnalyticsService do
 
       described_class.track_validation_errors(
         input_object_name: input_object_name,
+        form_name:,
         field: field,
         error_type: error_type,
       )

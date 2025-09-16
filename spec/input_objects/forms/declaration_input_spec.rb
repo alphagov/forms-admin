@@ -56,8 +56,9 @@ RSpec.describe Forms::DeclarationInput, type: :model do
     end
 
     it "returns false if the data is invalid" do
-      form = described_class.new(declaration_text: ("abc" * 2001), form: { declaration_text: "" })
-      expect(form.submit).to be false
+      form = OpenStruct.new(declaration_text: "", name: "Apply for a juggling licence")
+      declaration_input = described_class.new(declaration_text: ("abc" * 2001), form:)
+      expect(declaration_input.submit).to be false
     end
 
     it "sets the form's attribute values" do
