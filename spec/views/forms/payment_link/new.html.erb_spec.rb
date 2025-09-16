@@ -25,7 +25,7 @@ describe "forms/payment_link/new.html.erb" do
 
   it "contains information about creating your payment link" do
     expect(rendered).to have_css("h2", text: I18n.t("payment_link_input.creating_your_payment_link.heading"))
-    expect(rendered).to have_text(I18n.t("payment_link_input.creating_your_payment_link.body"))
+    expect(rendered).to include(I18n.t("payment_link_input.creating_your_payment_link.body_html"))
   end
 
   it "contains information about setting up your payment link with a reference number" do

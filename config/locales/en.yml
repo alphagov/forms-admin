@@ -1306,7 +1306,7 @@ en:
 
       <p>Once it’s set up, you can copy and paste the payment link URL into the box below. This will add a payment page to the end of your form.</p>
     creating_your_payment_link:
-      body: Once you have a GOV.UK Pay account you can “add a new service” and start creating your payment link.
+      body_html: Once you have a GOV.UK Pay account you can start creating your payment link by selecting <strong>Add a new service</strong>.
       heading: Creating your payment link in GOV.UK Pay
     heading: Add a link to a payment page on GOV.UK Pay
     how_this_will_help_processors:
@@ -1322,10 +1322,10 @@ en:
         <p>Once someone’s submitted their form they’ll see a confirmation page showing:</p>
 
         <ul class="govuk-list govuk-list--bullet">
-          <li>a blue banner saying “You still need to pay”</li>
+          <li>a blue banner saying ‘You still need to pay’</li>
           <li>their form’s unique reference number</li>
           <li>the ‘what happens next’ information you’ve added</li>
-          <li>a green “Continue to pay” button - this will take them to GOV.UK Pay to make their payment</li>
+          <li>a green ‘Continue to pay’ button - this will take them to GOV.UK Pay to make their payment</li>
         </ul>
 
         <p>The reference number, payment link and ‘what happens next’ information will also be included in a confirmation email for form fillers - if they choose to receive this.</p>
@@ -1334,13 +1334,13 @@ en:
       body_html: |
         <p>GOV.UK Forms adds a unique 8-character reference to each form submission.</p>
 
-        <p>When creating a payment link in GOV.UK Pay, you’ll be asked “Do your users already have a payment reference?”</p>
+        <p>When creating a payment link in GOV.UK Pay, you’ll be asked ‘Do your users already have a payment reference?’</p>
 
-        <p>Select “Yes”.</p>
+        <p>Select <strong>Yes</strong>.</p>
 
         <p>This means the form reference number will automatically be sent through to GOV.UK Pay when someone makes a payment.</p>
 
-        <p>When asked to fill in the “Name of payment reference” field, enter “Form reference number”.</p>
+        <p>When asked to fill in the <strong>Name of payment reference</strong> field, enter ‘Form reference number’.</p>
       heading: Set up your payment link to use a form’s unique reference number
     setting_up_govuk_pay:
       body_html: |
