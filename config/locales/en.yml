@@ -1699,7 +1699,7 @@ en:
         role: Role
         signon_organisation: Signon organisation slug
       title: Users
-      users_caption: All users
+      wrapper_aria_label: Users
     roles:
       organisation_admin:
         description: Can manage groups and users in their organisation
