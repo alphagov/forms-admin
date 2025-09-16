@@ -1,9 +1,10 @@
 class AnalyticsService
   class << self
-    def track_validation_errors(input_object_name:, field:, error_type:)
+    def track_validation_errors(input_object_name:, field:, error_type:, form_name:)
       add_event("validation_error", {
         event_name: "validation_error",
-        form_name: input_object_name,
+        input_object_name: input_object_name,
+        form_name:,
         error_field: field,
         error_type: error_type,
       })

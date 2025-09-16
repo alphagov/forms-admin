@@ -8,8 +8,10 @@ private
 
   def set_validation_error_logging_attributes
     CurrentLoggingAttributes.validation_errors = errors.map { |error| "#{error.attribute}: #{error.type}" } if errors.any?
+    form_name = form.name if defined?(form) && form.present?
+
     errors.each do |error|
-      AnalyticsService.track_validation_errors(input_object_name: self.class.name, field: error.attribute, error_type: error.type)
+      AnalyticsService.track_validation_errors(input_object_name: self.class.name, field: error.attribute, error_type: error.type, form_name:)
     end
   end
 end
