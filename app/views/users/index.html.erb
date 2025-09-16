@@ -1,7 +1,9 @@
 <% set_page_title(t("users.index.title")) %>
 <h1 class="govuk-heading-l"><%= t("users.index.title") %></h1>
 
-<% if users.any? %>
+<% if @users.any? %>
+  <%= govuk_pagination(pagy: @pagy) %>
+
   <%= render ScrollingWrapperComponent::View.new(aria_label: t("users.index.wrapper_aria_label")) do |table| %>
 
     <%= govuk_table do |table| %>
@@ -17,7 +19,7 @@
       end %>
 
       <%= table.with_body do |body|
-        users.each do |user|
+        @users.each do |user|
           body.with_row do |row|
             row.with_cell( text: user.name || t("users.index.name_blank"))
             row.with_cell do
@@ -33,5 +35,8 @@
         end
       end %>
     <% end %>
+
   <% end %>
+
+  <%= govuk_pagination(pagy: @pagy) %>
 <% end %>
