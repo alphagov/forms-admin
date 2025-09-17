@@ -96,5 +96,19 @@ describe "users/index.html.erb" do
         ],
       )
     end
+
+    context "when there are no filters applied" do
+      it "does not have a link to clear the filters" do
+        expect(rendered).not_to have_link("Clear filter")
+      end
+    end
+
+    context "when there are filters applied" do
+      let(:filter_input) { Users::FilterInput.new(name: "foo") }
+
+      it "has a link to clear the filters" do
+        expect(rendered).to have_link("Clear filter")
+      end
+    end
   end
 end

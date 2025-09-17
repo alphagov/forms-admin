@@ -30,10 +30,15 @@
     </div>
 
     <div class="govuk-grid-column-one-third">
-      <%= f.govuk_submit(t("users.index.filter.submit")) %>
+      <div class="govuk-button-group">
+        <%= f.govuk_submit(t("users.index.filter.submit")) %>
+        <% if @filter_input.has_filters? %>
+          <%= govuk_link_to t('users.index.filter.clear_filter'), users_path, no_visited_state: true %>
+        <% end %>
+      </div>
     </div>
-  </div>
-<% end %>
+  <% end %>
+</div>
 
 <% if @users.any? %>
   <%= govuk_pagination(pagy: @pagy) %>

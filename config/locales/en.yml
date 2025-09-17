@@ -1689,6 +1689,7 @@ en:
         name: Permitted
     index:
       filter:
+        clear_filter: Clear filter
         email:
           hint: Enter full or partial email
           label: Email
