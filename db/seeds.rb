@@ -78,10 +78,12 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
     terms_agreed_at: Time.utc(2023, 3, 11, 6, 26),
     provider: :seed,
   )
+
+  # create organisation admins
   User.create!(
     email: "taylor@example.gov.uk",
     name: "Taylor",
-    role: :super_admin,
+    role: :organisation_admin,
     organisation: gds,
     created_at: Time.utc(2024, 4, 22, 9, 30),
     last_signed_in_at: Time.utc(2024, 4, 22, 9, 30),
@@ -118,6 +120,19 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
   User.create!(email: "kezz.strel101@example.gov.uk", role: :standard, provider: :seed)
   User.create!(email: "lauramipsum@example.gov.uk", role: :standard, provider: :seed)
   User.create!(email: "chidi.anagonye@example.gov.uk", role: :standard, provider: :seed)
+
+  # create extra users to test the pagination on the users page
+  100.times do
+    organisation = [test_org, mot_org, gds].sample
+    name = Faker::Name.unique.name
+    User.create!(
+      name:,
+      email: Faker::Internet.unique.email(name:, domain: "example.gov.uk"),
+      organisation:,
+      role: :standard,
+      provider: :seed,
+    )
+  end
 
   # create some test groups
   end_to_end_group = Group.create! name: "End to end tests", organisation: gds, status: :active
