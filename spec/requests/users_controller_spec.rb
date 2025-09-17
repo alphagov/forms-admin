@@ -5,29 +5,57 @@ RSpec.describe UsersController, type: :request do
     context "when logged in as a super admin" do
       let!(:charlie) do
         test_org.users.first.tap do |user|
-          user.update(name: "Charlie")
+          user.update(name: "Charlie", email: "charlie@example.gov.uk")
         end
       end
-      let!(:andy) { create :user, name: "Andy", organisation: test_org }
-      let!(:bob) { create :user, name: "Bob", organisation: test_org }
+      let!(:andy) { create :user, name: "Andy Test", email: "andy@example.gov.uk", organisation: test_org }
+      let!(:bob) { create :user, name: "Bob Test", email: "bob-123@example.gov.uk", organisation: test_org }
+      let!(:diana) { create :user, name: "Diana Test", email: "diana-123@example.gov.uk", organisation: test_org }
+      let(:params) { {} }
 
       before do
         login_as_super_admin_user
-
-        get users_path
       end
 
-      it "returns http code 200" do
-        expect(response).to have_http_status(:ok)
+      context "when no filters are specified" do
+        before do
+          get users_path, params:
+        end
+
+        it "returns http code 200" do
+          expect(response).to have_http_status(:ok)
+        end
+
+        it "renders the correct page" do
+          expect(response.body).to include("Users")
+          expect(response).to render_template("users/index")
+        end
+
+        it "assigns sorted users" do
+          expect(assigns[:users]).to eq [super_admin_user, andy, bob, charlie, diana]
+        end
       end
 
-      it "renders the correct page" do
-        expect(response.body).to include("Users")
-        expect(response).to render_template("users/index")
-      end
+      context "when filters are specified" do
+        let(:params) do
+          {
+            filter: {
+              name: "Test",
+              email: "123",
+              organisation_id: test_org.id,
+            },
+          }
+        end
 
-      it "assigns sorted users" do
-        expect(assigns[:users]).to eq [super_admin_user, andy, bob, charlie]
+        before do
+          other_org = create(:organisation, slug: "other-org")
+          create(:user, organisation: other_org)
+          get users_path, params:
+        end
+
+        it "only assigns users that match the filters" do
+          expect(assigns[:users]).to eq [bob, diana]
+        end
       end
     end
 
@@ -183,14 +211,14 @@ RSpec.describe UsersController, type: :request do
 
         allow(UserUpdateService)
           .to receive(:new)
-          .with(user, ActionController::Parameters.new(role: "organisation_admin").permit(:role))
-          .and_return(user_update_service)
+                .with(user, ActionController::Parameters.new(role: "organisation_admin").permit(:role))
+                .and_return(user_update_service)
 
         patch user_path(user), params: { user: { role: "organisation_admin" } }
 
         expect(UserUpdateService)
           .to have_received(:new)
-          .with(user, ActionController::Parameters.new(role: "organisation_admin").permit(:role))
+                .with(user, ActionController::Parameters.new(role: "organisation_admin").permit(:role))
 
         expect(user_update_service)
           .to have_received(:update_user)

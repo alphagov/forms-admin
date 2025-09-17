@@ -1,0 +1,15 @@
+.app-filter {
+  form {
+    margin: govuk-spacing(3);
+    padding: govuk-spacing(3) 0;
+    background: govuk-colour("light-grey");
+  }
+
+  .govuk-hint {
+    color: $govuk-text-colour;
+  }
+
+  .autocomplete__input {
+    background: govuk-colour("white");
+  }
+}

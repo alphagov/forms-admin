@@ -4,6 +4,7 @@ $govuk-new-typography-scale: true;
 
 @import "pkg:govuk-frontend";
 @import "pkg:dfe-autocomplete";
+@import "../styles/app_filter";
 @import "../styles/app_form_states";
 @import "../styles/app_memorandum_of_understanding";
 @import "../styles/app_preview_area";
