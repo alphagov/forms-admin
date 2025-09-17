@@ -7,11 +7,18 @@ describe "users/index.html.erb" do
       user.id = i
     end
   end
+  let(:filter_input) { Users::FilterInput.new }
 
   before do
     allow(Settings).to receive(:act_as_user_enabled).and_return(act_as_user_enabled)
 
-    render template: "users/index", locals: { users: }
+    create :organisation, :with_org_admin, slug: "test-org"
+    create :organisation, :with_org_admin, slug: "ministry-of-testing"
+    create :organisation, :with_org_admin, slug: "department-for-tests", name: "Department for Tests", abbreviation: "DfT"
+
+    assign(:users, users)
+    assign(:filter_input, filter_input)
+    render template: "users/index"
   end
 
   it "contains page heading" do
@@ -75,6 +82,19 @@ describe "users/index.html.erb" do
 
     it "contains an 'Act as this user' button" do
       expect(rendered).to have_button("Act as this user")
+    end
+  end
+
+  describe "filter" do
+    it "has organisation select" do
+      expect(rendered).to have_select(
+        "Organisation",
+        with_options: [
+          "Department for Tests (DfT)",
+          "Ministry Of Testing (MOT)",
+          "Test Org (TO)",
+        ],
+      )
     end
   end
 end

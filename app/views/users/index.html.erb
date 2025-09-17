@@ -1,5 +1,39 @@
 <% set_page_title(t("users.index.title")) %>
+
 <h1 class="govuk-heading-l"><%= t("users.index.title") %></h1>
+
+<div class="app-filter govuk-grid-row">
+  <%= form_with(model: @filter_input, scope: :filter, url: users_path, method: 'get', local: true, class: 'govuk-clearfix') do |f| %>
+    <div class="govuk-grid-column-one-third">
+      <%= f.govuk_text_field :name,
+        label: { text: t('users.index.filter.name.label'), size: 's' },
+        hint: { text: t('users.index.filter.name.hint') } %>
+    </div>
+    <div class="govuk-grid-column-one-third">
+      <%= f.govuk_text_field :email,
+        label: { text: t('users.index.filter.email.label'), size: 's' },
+        hint: { text: t('users.index.filter.email.hint') } %>
+    </div>
+    <div class="govuk-grid-column-one-third">
+      <%= render DfE::Autocomplete::View.new(
+        f,
+        attribute_name: :organisation_id,
+        form_field: f.govuk_collection_select(:organisation_id,
+          Organisation.with_users.order(:name),
+          :id,
+          :name_with_abbreviation,
+          options: { prompt: t('users.index.filter.organisation.search_prompt') },
+          label: { text: t('users.index.filter.organisation.label'), size: 's' },
+          hint: { text: t('users.index.filter.organisation.hint') },
+        ),
+      ) %>
+    </div>
+
+    <div class="govuk-grid-column-one-third">
+      <%= f.govuk_submit(t("users.index.filter.submit")) %>
+    </div>
+  </div>
+<% end %>
 
 <% if @users.any? %>
   <%= govuk_pagination(pagy: @pagy) %>
@@ -21,13 +55,13 @@
       <%= table.with_body do |body|
         @users.each do |user|
           body.with_row do |row|
-            row.with_cell( text: user.name || t("users.index.name_blank"))
+            row.with_cell(text: user.name || t("users.index.name_blank"))
             row.with_cell do
               govuk_link_to(user.email, edit_user_path(user))
             end
-            row.with_cell( text: user.organisation&.name || t("users.index.organisation_blank"))
-            row.with_cell( text: t("users.roles.#{user.role}.name"))
-            row.with_cell( text: t("users.has_access.#{user.has_access}.name"))
+            row.with_cell(text: user.organisation&.name || t("users.index.organisation_blank"))
+            row.with_cell(text: t("users.roles.#{user.role}.name"))
+            row.with_cell(text: t("users.has_access.#{user.has_access}.name"))
             row.with_cell do
               govuk_button_to(t("users.act_as_user_html", user_email: user.email), act_as_user_start_path(user.id), method: :post, secondary: true) unless user.super_admin? || !user.has_access?
             end if Settings.act_as_user_enabled
@@ -40,3 +74,5 @@
 
   <%= govuk_pagination(pagy: @pagy) %>
 <% end %>
+
+<%= init_autocomplete_script(show_all_values: false, raw_attribute: true, source: false) %>

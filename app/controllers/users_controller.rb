@@ -11,7 +11,15 @@ class UsersController < WebController
   def index
     authorize current_user, :can_manage_user?
 
-    @pagy, @users = pagy(policy_scope(User).for_users_list, limit: 50)
+    users_query = policy_scope(User)
+                   .by_name(filter_params[:name])
+                   .by_email(filter_params[:email])
+                   .by_organisation_id(filter_params[:organisation_id])
+                   .for_users_list
+
+    @pagy, @users = pagy(users_query, limit: 50)
+
+    @filter_input = Users::FilterInput.new(filter_params)
 
     render template: "users/index"
   end
@@ -52,5 +60,9 @@ private
 
   def organisation_id_raw
     params.dig(:user, :organisation_id_raw)
+  end
+
+  def filter_params
+    params[:filter]&.permit(:name, :email, :organisation_id) || {}
   end
 end

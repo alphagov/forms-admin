@@ -5,16 +5,18 @@ RSpec.describe UsersController, type: :request do
     context "when logged in as a super admin" do
       let!(:charlie) do
         test_org.users.first.tap do |user|
-          user.update(name: "Charlie")
+          user.update(name: "Charlie", email: "charlie@example.gov.uk")
         end
       end
-      let!(:andy) { create :user, name: "Andy", organisation: test_org }
-      let!(:bob) { create :user, name: "Bob", organisation: test_org }
+      let!(:andy) { create :user, name: "Andy Test", email: "andy@example.gov.uk", organisation: test_org }
+      let!(:bob) { create :user, name: "Bob Test", email: "bob-123@example.gov.uk", organisation: test_org }
+      let!(:diana) { create :user, name: "Diana Test", email: "diana-123@example.gov.uk", organisation: test_org }
+      let(:params) { {} }
 
       before do
         login_as_super_admin_user
 
-        get users_path
+        get users_path, params:
       end
 
       it "returns http code 200" do
@@ -27,7 +29,27 @@ RSpec.describe UsersController, type: :request do
       end
 
       it "assigns sorted users" do
-        expect(assigns[:users]).to eq [super_admin_user, andy, bob, charlie]
+        expect(assigns[:users]).to eq [super_admin_user, andy, bob, charlie, diana]
+      end
+
+      context "when filters are specified" do
+        let(:params) do
+          {
+            filter: {
+              name: "Test",
+              email: "123",
+              organisation_id: test_org.id,
+            },
+          }
+        end
+
+        before do
+          create(:organisation, :with_org_admin, slug: "other-org")
+        end
+
+        it "only assigns users that match the filters" do
+          expect(assigns[:users]).to eq [bob, diana]
+        end
       end
     end
 
@@ -183,14 +205,14 @@ RSpec.describe UsersController, type: :request do
 
         allow(UserUpdateService)
           .to receive(:new)
-          .with(user, ActionController::Parameters.new(role: "organisation_admin").permit(:role))
-          .and_return(user_update_service)
+                .with(user, ActionController::Parameters.new(role: "organisation_admin").permit(:role))
+                .and_return(user_update_service)
 
         patch user_path(user), params: { user: { role: "organisation_admin" } }
 
         expect(UserUpdateService)
           .to have_received(:new)
-          .with(user, ActionController::Parameters.new(role: "organisation_admin").permit(:role))
+                .with(user, ActionController::Parameters.new(role: "organisation_admin").permit(:role))
 
         expect(user_update_service)
           .to have_received(:update_user)

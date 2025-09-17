@@ -1688,6 +1688,18 @@ en:
         description: Can use GOV.UK Forms
         name: Permitted
     index:
+      filter:
+        email:
+          hint: Enter full or partial email
+          label: Email
+        name:
+          hint: Enter full or partial name
+          label: Name
+        organisation:
+          hint: Select an organisation
+          label: Organisation
+          search_prompt: Select an organisation
+        submit: Filter
       name_blank: No name set
       organisation_blank: No organisation set
       table_headings:
