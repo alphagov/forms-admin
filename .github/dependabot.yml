@@ -23,11 +23,3 @@ updates:
     allow:
       - dependency-type: "direct"
       - dependency-name: "vite_ruby"
-
-  # Maintain dependencies for npm
-  - package-ecosystem: npm
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "sunday"
-    open-pull-requests-limit: 10
