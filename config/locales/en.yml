@@ -1681,6 +1681,7 @@ en:
       role: Role
       title: Edit user
     has_access:
+      any: Any access
       'false':
         description: Cannot use GOV.UK Forms
         name: Denied
@@ -1693,6 +1694,9 @@ en:
         email:
           hint: Enter full or partial email
           label: Email
+        has_access:
+          hint: Select access permission
+          label: Access
         name:
           hint: Enter full or partial name
           label: Name
@@ -1700,6 +1704,9 @@ en:
           hint: Select an organisation
           label: Organisation
           search_prompt: Select an organisation
+        role:
+          hint: Select a role
+          label: Role
         submit: Filter
       name_blank: No name set
       organisation_blank: No organisation set
@@ -1714,6 +1721,7 @@ en:
       title: Users
       wrapper_aria_label: Users
     roles:
+      all: All roles
       organisation_admin:
         description: Can manage groups and users in their organisation
         name: Organisation admin

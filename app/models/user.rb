@@ -53,6 +53,18 @@ class User < ApplicationRecord
     end
   }
 
+  scope :by_role, lambda { |role|
+    if role.present?
+      where(role:)
+    end
+  }
+
+  scope :by_has_access, lambda { |has_access|
+    if has_access.present?
+      where(has_access:)
+    end
+  }
+
   validates :name, presence: true, if: :requires_name?
   validates :role, presence: true
   validates :organisation_id, presence: true, if: :requires_organisation?

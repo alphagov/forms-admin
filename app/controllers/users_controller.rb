@@ -15,6 +15,8 @@ class UsersController < WebController
                    .by_name(filter_params[:name])
                    .by_email(filter_params[:email])
                    .by_organisation_id(filter_params[:organisation_id])
+                   .by_role(filter_params[:role])
+                   .by_has_access(filter_params[:has_access])
                    .for_users_list
 
     @pagy, @users = pagy(users_query, limit: 50)
@@ -63,6 +65,6 @@ private
   end
 
   def filter_params
-    params[:filter]&.permit(:name, :email, :organisation_id) || {}
+    params[:filter]&.permit(:name, :email, :organisation_id, :role, :has_access) || {}
   end
 end

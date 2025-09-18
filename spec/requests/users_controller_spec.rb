@@ -8,9 +8,8 @@ RSpec.describe UsersController, type: :request do
           user.update(name: "Charlie", email: "charlie@example.gov.uk")
         end
       end
-      let!(:andy) { create :user, name: "Andy Test", email: "andy@example.gov.uk", organisation: test_org }
+      let!(:andy) { create :user, name: "Andy Test", email: "andy-123@example.gov.uk", organisation: test_org }
       let!(:bob) { create :user, name: "Bob Test", email: "bob-123@example.gov.uk", organisation: test_org }
-      let!(:diana) { create :user, name: "Diana Test", email: "diana-123@example.gov.uk", organisation: test_org }
       let(:params) { {} }
 
       before do
@@ -32,7 +31,7 @@ RSpec.describe UsersController, type: :request do
         end
 
         it "assigns sorted users" do
-          expect(assigns[:users]).to eq [super_admin_user, andy, bob, charlie, diana]
+          expect(assigns[:users]).to eq [super_admin_user, andy, bob, charlie]
         end
       end
 
@@ -43,18 +42,26 @@ RSpec.describe UsersController, type: :request do
               name: "Test",
               email: "123",
               organisation_id: test_org.id,
+              role: "standard",
+              has_access: "true",
             },
           }
         end
 
         before do
+          # create users that won't match the filters
+          create :user, name: "Diana Test", email: "diana@example.gov.uk", organisation: test_org
+          create :user, name: "Emily Test", email: "emily-123@example.gov.uk", organisation: test_org, has_access: false
+          create :user, name: "Frank Test", email: "frank-123@example.gov.uk", organisation: test_org, role: :organisation_admin
+
           other_org = create(:organisation, slug: "other-org")
-          create(:user, organisation: other_org)
+          create(:user, name: "Gina Test", email: "gina-123@example.gov.uk", organisation: other_org)
+
           get users_path, params:
         end
 
         it "only assigns users that match the filters" do
-          expect(assigns[:users]).to eq [bob, diana]
+          expect(assigns[:users]).to eq [andy, bob]
         end
       end
     end

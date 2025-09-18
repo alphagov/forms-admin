@@ -239,6 +239,42 @@ describe User, type: :model do
           expect(described_class.by_organisation_id("").size).to eq 3
         end
       end
+
+      describe ".by_role" do
+        let!(:matched_user) { create(:user, role: :super_admin) }
+
+        it "returns users with given role" do
+          expect(described_class.by_role("super_admin")).to contain_exactly(matched_user)
+        end
+
+        it "returns all users when role is nil" do
+          expect(described_class.by_role(nil).size).to eq 3
+        end
+
+        it "returns all users when role is blank" do
+          expect(described_class.by_role("").size).to eq 3
+        end
+      end
+
+      describe ".by_has_access" do
+        let!(:user_without_access) { create(:user, has_access: false) }
+
+        it "returns users without access" do
+          expect(described_class.by_has_access("false")).to contain_exactly(user_without_access)
+        end
+
+        it "returns users with access" do
+          expect(described_class.by_has_access("true").size).to eq 2
+        end
+
+        it "returns all users when has_access is nil" do
+          expect(described_class.by_has_access(nil).size).to eq 3
+        end
+
+        it "returns all users when has_access is blank" do
+          expect(described_class.by_has_access("").size).to eq 3
+        end
+      end
     end
   end
 
