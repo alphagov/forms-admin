@@ -2,7 +2,6 @@ class AllowedEmailDomainValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     if value.present?
       return if value =~ /\.gov\.uk\z/i
-      return if value =~ /@pentestpartners\.com\z/i && Settings.forms_env == "staging"
 
       # TODO: we might not want to check against current user domain
       # when we have a proper allow list?
