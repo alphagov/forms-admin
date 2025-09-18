@@ -73,18 +73,6 @@ module ApplicationHelper
     { navigation_items: NavigationItemsService.call(user:).navigation_items }
   end
 
-  def user_role_options(roles = User.roles.keys)
-    roles.map do |role|
-      OpenStruct.new(label: t("users.roles.#{role}.name"), value: role, description: t("users.roles.#{role}.description"))
-    end
-  end
-
-  def user_access_options(access_options = %w[true false])
-    access_options.map do |access|
-      OpenStruct.new(label: t("users.has_access.#{access}.name"), value: access, description: t("users.has_access.#{access}.description"))
-    end
-  end
-
   def sign_in_button(is_e2e_user:)
     govuk_button_to t("sign_in_button"), omniauth_authorize_path, params: sign_in_params(is_e2e_user:), data: { module: "sign-in-button" }
   end
