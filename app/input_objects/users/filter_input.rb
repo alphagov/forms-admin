@@ -2,10 +2,17 @@ module Users
   class FilterInput < BaseInput
     include UsersHelper
 
+    ALL_ORGANISATIONS_VALUE = "all".freeze
+
     attr_accessor :email, :name, :organisation_id, :role, :has_access
 
     def has_filters?
       [email, name, organisation_id, role, has_access].any?(&:present?)
+    end
+
+    def organisation_options
+      Organisation.with_users.order(:name).to_a
+                  .unshift(OpenStruct.new(name_with_abbreviation: "All organisations", id: ALL_ORGANISATIONS_VALUE))
     end
 
     def access_options

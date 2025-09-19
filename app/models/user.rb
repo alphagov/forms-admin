@@ -48,7 +48,7 @@ class User < ApplicationRecord
   }
 
   scope :by_organisation_id, lambda { |organisation_id|
-    if organisation_id.present?
+    if organisation_id.present? && organisation_id != Users::FilterInput::ALL_ORGANISATIONS_VALUE
       joins(:organisation).where(organisation: { id: organisation_id })
     end
   }

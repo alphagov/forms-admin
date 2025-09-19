@@ -20,7 +20,7 @@
           f,
           attribute_name: :organisation_id,
           form_field: f.govuk_collection_select(:organisation_id,
-            Organisation.with_users.order(:name),
+            @filter_input.organisation_options,
             :id,
             :name_with_abbreviation,
             options: { prompt: t('users.index.filter.organisation.search_prompt') },
