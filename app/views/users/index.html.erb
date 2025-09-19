@@ -65,6 +65,13 @@
 </div>
 
 <% if @users.any? %>
+
+  <% if @filter_input.has_filters? %>
+    <p><%= govuk_link_to t('users.index.download_filtered'), @filtered_download_path, no_visited_state: true %></p>
+  <% else %>
+    <p><%= govuk_link_to t('users.index.download_all'), download_users_path, no_visited_state: true %></p>
+  <% end %>
+
   <%= govuk_pagination(pagy: @pagy) %>
 
   <%= render ScrollingWrapperComponent::View.new(aria_label: t("users.index.wrapper_aria_label")) do |table| %>
