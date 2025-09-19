@@ -162,7 +162,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users, only: %i[index edit update]
+  resources :users, only: %i[index edit update] do
+    collection do
+      get :download
+    end
+  end
 
   post "/act-as/:user_id", to: "act_as_user#start", as: :act_as_user_start
   get "/act-as-stop", to: "act_as_user#stop", as: :act_as_user_stop
