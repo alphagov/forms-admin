@@ -1,15 +1,16 @@
 require "rails_helper"
 
 RSpec.describe UsersController, type: :request do
+  let!(:charlie) do
+    test_org.users.first.tap do |user|
+      user.update(name: "Charlie", email: "charlie@example.gov.uk")
+    end
+  end
+  let!(:andy) { create :user, name: "Andy Test", email: "andy-123@example.gov.uk", organisation: test_org }
+  let!(:bob) { create :user, name: "Bob Test", email: "bob-123@example.gov.uk", organisation: test_org }
+
   describe "#index" do
     context "when logged in as a super admin" do
-      let!(:charlie) do
-        test_org.users.first.tap do |user|
-          user.update(name: "Charlie", email: "charlie@example.gov.uk")
-        end
-      end
-      let!(:andy) { create :user, name: "Andy Test", email: "andy-123@example.gov.uk", organisation: test_org }
-      let!(:bob) { create :user, name: "Bob Test", email: "bob-123@example.gov.uk", organisation: test_org }
       let(:params) { {} }
 
       before do
@@ -63,6 +64,18 @@ RSpec.describe UsersController, type: :request do
         it "only assigns users that match the filters" do
           expect(assigns[:users]).to eq [andy, bob]
         end
+
+        it "assigns filtered download path" do
+          path = assigns[:filtered_download_path]
+          parsed_params = CGI.parse(URI.parse(path).query)
+          expect(parsed_params).to match(
+            "filter[name]" => %w[Test],
+            "filter[email]" => %w[123],
+            "filter[organisation_id]" => [test_org.id.to_s],
+            "filter[role]" => %w[standard],
+            "filter[has_access]" => %w[true],
+          )
+        end
       end
     end
 
@@ -70,6 +83,80 @@ RSpec.describe UsersController, type: :request do
       it "is forbidden" do
         login_as_standard_user
         get users_path
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
+
+  describe "#download" do
+    context "when logged in as a super admin" do
+      before do
+        login_as_super_admin_user
+        travel_to Time.utc(2025, 5, 15, 15, 31, 57)
+      end
+
+      context "when no filters are specified" do
+        before do
+          get download_users_path
+        end
+
+        it "returns http code 200" do
+          expect(response).to have_http_status(:ok)
+        end
+
+        it "has content-type text/csv" do
+          expect(response.headers["content-type"]).to eq "text/csv; charset=iso-8859-1"
+        end
+
+        it "responds with an attachment content-disposition header" do
+          expect(response.headers["content-disposition"]).to match("attachment; filename=govuk_forms_users_2025-05-15 15:31:57 UTC.csv")
+        end
+
+        it "has expected response body" do
+          csv = CSV.parse(response.body, headers: true)
+          expect(csv.headers).to eq Users::CsvService::HEADERS
+          expect(csv.length).to eq 4
+        end
+      end
+
+      context "when filters are specified" do
+        let(:params) do
+          {
+            filter: {
+              name: "Test",
+              email: "123",
+              organisation_id: test_org.id,
+              role: "standard",
+              has_access: "true",
+            },
+          }
+        end
+
+        before do
+          # create users that won't match the filters
+          create :user, name: "Diana Test", email: "diana@example.gov.uk", organisation: test_org
+          create :user, name: "Emily Test", email: "emily-123@example.gov.uk", organisation: test_org, has_access: false
+          create :user, name: "Frank Test", email: "frank-123@example.gov.uk", organisation: test_org, role: :organisation_admin
+
+          other_org = create(:organisation, slug: "other-org")
+          create(:user, name: "Gina Test", email: "gina-123@example.gov.uk", organisation: other_org)
+
+          get download_users_path, params:
+        end
+
+        it "has returns a CSV of the filtered users" do
+          csv = CSV.parse(response.body, headers: true)
+          expect(csv.length).to eq 2
+          expect(csv[0]["Name"]).to eq andy.name
+          expect(csv[1]["Name"]).to eq bob.name
+        end
+      end
+    end
+
+    context "when logged in with standard role" do
+      it "is forbidden" do
+        login_as_standard_user
+        get download_users_path
         expect(response).to have_http_status(:forbidden)
       end
     end
