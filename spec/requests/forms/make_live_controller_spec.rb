@@ -112,11 +112,38 @@ RSpec.describe Forms::MakeLiveController, type: :request do
       end
 
       context "and that form has already been made live before" do
-        let(:form) { create(:form, :live_with_draft) }
+        context "and does not have draft changes" do
+          let(:form) { create(:form, :live) }
 
-        it "has the page title 'Your changes are live'" do
-          post(make_live_path(form_id: form.id), params: form_params)
-          expect(response.body).to include "Your changes are live"
+          it "has the page title 'Your changes are live'" do
+            post(make_live_path(form_id: form.id), params: form_params)
+            expect(response.body).to include "Your changes are live"
+          end
+
+          it "does not change the live form document" do
+            expect {
+              post(make_live_path(form_id: form.id), params: form_params)
+            }.not_to(change { form.reload.live_form_document.updated_at })
+          end
+        end
+
+        context "and has draft changes" do
+          let(:form) do
+            form = create(:form, :live_with_draft)
+            form.update!(name: "Form with changes")
+            form
+          end
+
+          it "has the page title 'Your changes are live'" do
+            post(make_live_path(form_id: form.id), params: form_params)
+            expect(response.body).to include "Your changes are live"
+          end
+
+          it "updates the form document" do
+            expect {
+              post(make_live_path(form_id: form.id), params: form_params)
+            }.to(change { form.reload.live_form_document.updated_at })
+          end
         end
       end
     end
