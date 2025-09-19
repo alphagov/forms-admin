@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Api::FormDocumentsController, type: :request do
+  let(:headers) { { "ACCEPT": "application/json" } }
+
   describe "GET /show" do
     context "when the form exists" do
       context "when the tag is draft" do
@@ -12,7 +14,7 @@ RSpec.describe Api::FormDocumentsController, type: :request do
           form.name = draft_form_name
           form.save!
 
-          get "/api/v2/forms/#{form.id}/draft"
+          get "/api/v2/forms/#{form.id}/draft", headers:
         end
 
         it "returns http success" do
@@ -40,7 +42,7 @@ RSpec.describe Api::FormDocumentsController, type: :request do
           form.name = "Draft form"
           form.save!
 
-          get "/api/v2/forms/#{form.id}/live"
+          get "/api/v2/forms/#{form.id}/live", headers:
         end
 
         it "returns http success" do
@@ -82,11 +84,12 @@ RSpec.describe Api::FormDocumentsController, type: :request do
 
     context "when the form doesn't exist" do
       before do
-        get "/api/v2/forms/non-existent/draft"
+        get "/api/v2/forms/non-existent/draft", headers:
       end
 
       it "returns http not found" do
         expect(response).to have_http_status(:not_found)
+        expect(response.headers["Content-Type"]).to eq("application/json; charset=utf-8")
       end
     end
 
@@ -94,11 +97,12 @@ RSpec.describe Api::FormDocumentsController, type: :request do
       let(:form) { create :form }
 
       before do
-        get "/api/v2/forms/#{form.id}/live"
+        get "/api/v2/forms/#{form.id}/live", headers:
       end
 
       it "returns http not found" do
         expect(response).to have_http_status(:not_found)
+        expect(response.headers["Content-Type"]).to eq("application/json; charset=utf-8")
       end
     end
 
@@ -106,11 +110,12 @@ RSpec.describe Api::FormDocumentsController, type: :request do
       let(:form) { create :form }
 
       before do
-        get "/api/v2/forms/#{form.id}/unknown-tag"
+        get "/api/v2/forms/#{form.id}/unknown-tag", headers:
       end
 
       it "returns http not found" do
         expect(response).to have_http_status(:not_found)
+        expect(response.headers["Content-Type"]).to eq("application/json; charset=utf-8")
       end
     end
   end
@@ -119,12 +124,16 @@ RSpec.describe Api::FormDocumentsController, type: :request do
     let(:trace_id) { "Root=1-63441c4a-abcdef012345678912345678" }
     let(:request_id) { "a-request-id" }
     let(:form_id) { "a-form-id" }
-
-    before do
-      get api_v2_form_document_path(form_id:, tag: "live"), headers: {
+    let(:headers) do
+      {
+        "ACCEPT": "application/json",
         "HTTP_X_AMZN_TRACE_ID": trace_id,
         "X-Request-ID": request_id,
       }
+    end
+
+    before do
+      get api_v2_form_document_path(form_id:, tag: "live"), headers:
     end
 
     it "includes the trace ID on log lines" do
