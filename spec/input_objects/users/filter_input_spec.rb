@@ -51,6 +51,20 @@ RSpec.describe Users::FilterInput, type: :model do
     end
   end
 
+  describe "#organisation_options" do
+    before do
+      create(:organisation, :with_org_admin, slug: "org-1")
+      create(:organisation, :with_org_admin, slug: "org-2")
+      create(:organisation, slug: "org-3")
+    end
+
+    it "returns all organisations with users and an option for all organisations" do
+      options = described_class.new.organisation_options
+      expect(options.size).to eq 3
+      expect(options[0]).to eq OpenStruct.new(name_with_abbreviation: "All organisations", id: "all")
+    end
+  end
+
   describe "#access_options" do
     it "returns the correct options" do
       expect(described_class.new.access_options).to eq([

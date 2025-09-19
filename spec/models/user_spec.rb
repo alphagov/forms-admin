@@ -238,6 +238,10 @@ describe User, type: :model do
         it "returns all users when organisation_id is blank" do
           expect(described_class.by_organisation_id("").size).to eq 3
         end
+
+        it "returns all users when organisation_id is 'all'" do
+          expect(described_class.by_organisation_id(Users::FilterInput::ALL_ORGANISATIONS_VALUE).size).to eq 3
+        end
       end
 
       describe ".by_role" do
