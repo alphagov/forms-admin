@@ -20,6 +20,14 @@ RSpec.describe Forms::ArchivedController, type: :request do
     it "renders the show archived form template" do
       expect(response).to render_template(:show_form)
     end
+
+    context "when the form is not archived" do
+      let(:form) { create(:form, :live) }
+
+      it "returns 404" do
+        expect(response).to have_http_status(:not_found)
+      end
+    end
   end
 
   describe "#show_pages" do
@@ -29,6 +37,14 @@ RSpec.describe Forms::ArchivedController, type: :request do
 
     it "renders the show archived form pages template" do
       expect(response).to render_template(:show_pages)
+    end
+
+    context "when the form is not archived" do
+      let(:form) { create(:form, :live) }
+
+      it "returns 404" do
+        expect(response).to have_http_status(:not_found)
+      end
     end
   end
 end
