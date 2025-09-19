@@ -7,11 +7,18 @@ describe "users/index.html.erb" do
       user.id = i
     end
   end
+  let(:filter_input) { Users::FilterInput.new }
 
   before do
     allow(Settings).to receive(:act_as_user_enabled).and_return(act_as_user_enabled)
 
-    render template: "users/index", locals: { users: }
+    create :organisation, :with_org_admin, slug: "test-org"
+    create :organisation, :with_org_admin, slug: "ministry-of-testing"
+    create :organisation, :with_org_admin, slug: "department-for-tests", name: "Department for Tests", abbreviation: "DfT"
+
+    assign(:users, users)
+    assign(:filter_input, filter_input)
+    render template: "users/index"
   end
 
   it "contains page heading" do
@@ -75,6 +82,33 @@ describe "users/index.html.erb" do
 
     it "contains an 'Act as this user' button" do
       expect(rendered).to have_button("Act as this user")
+    end
+  end
+
+  describe "filter" do
+    it "has organisation select" do
+      expect(rendered).to have_select(
+        "Organisation",
+        with_options: [
+          "Department for Tests (DfT)",
+          "Ministry Of Testing (MOT)",
+          "Test Org (TO)",
+        ],
+      )
+    end
+
+    context "when there are no filters applied" do
+      it "does not have a link to clear the filters" do
+        expect(rendered).not_to have_link("Clear filter")
+      end
+    end
+
+    context "when there are filters applied" do
+      let(:filter_input) { Users::FilterInput.new(name: "foo") }
+
+      it "has a link to clear the filters" do
+        expect(rendered).to have_link("Clear filter")
+      end
     end
   end
 end

@@ -73,18 +73,6 @@ module ApplicationHelper
     { navigation_items: NavigationItemsService.call(user:).navigation_items }
   end
 
-  def user_role_options(roles = User.roles.keys)
-    roles.map do |role|
-      OpenStruct.new(label: t("users.roles.#{role}.name"), value: role, description: t("users.roles.#{role}.description"))
-    end
-  end
-
-  def user_access_options(access_options = %w[true false])
-    access_options.map do |access|
-      OpenStruct.new(label: t("users.has_access.#{access}.name"), value: access, description: t("users.has_access.#{access}.description"))
-    end
-  end
-
   def sign_in_button(is_e2e_user:)
     govuk_button_to t("sign_in_button"), omniauth_authorize_path, params: sign_in_params(is_e2e_user:), data: { module: "sign-in-button" }
   end
@@ -106,7 +94,7 @@ module ApplicationHelper
     end
   end
 
-  def init_autocomplete_script(show_all_values: false, raw_attribute: false, source: false, autoselect: true, default_value: nil, placeholder: nil, preserve_null_options: false)
+  def init_autocomplete_script(show_all_values: false, raw_attribute: false, source: false, autoselect: true, default_value: nil, placeholder: nil, preserve_null_options: false, overlay_menu: false)
     content_for(:body_end) do
       javascript_tag defer: true do
         "
@@ -118,6 +106,7 @@ module ApplicationHelper
             source: #{source},
             autoselect: #{autoselect},
             preserveNullOptions: #{preserve_null_options},
+            displayMenu: #{overlay_menu ? '"overlay"' : '"inline"'},
             #{"defaultValue: '#{default_value}'," unless default_value.nil?}
             #{"placeholder: '#{placeholder}'," unless placeholder.nil?}
           })

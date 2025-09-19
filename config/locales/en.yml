@@ -1681,6 +1681,7 @@ en:
       role: Role
       title: Edit user
     has_access:
+      any: Any access
       'false':
         description: Cannot use GOV.UK Forms
         name: Denied
@@ -1688,6 +1689,25 @@ en:
         description: Can use GOV.UK Forms
         name: Permitted
     index:
+      filter:
+        clear_filter: Clear filter
+        email:
+          hint: Enter full or partial email
+          label: Email
+        has_access:
+          hint: Select access permission
+          label: Access
+        name:
+          hint: Enter full or partial name
+          label: Name
+        organisation:
+          hint: Select an organisation
+          label: Organisation
+          search_prompt: Select an organisation
+        role:
+          hint: Select a role
+          label: Role
+        submit: Filter
       name_blank: No name set
       organisation_blank: No organisation set
       table_headings:
@@ -1699,8 +1719,9 @@ en:
         role: Role
         signon_organisation: Signon organisation slug
       title: Users
-      users_caption: All users
+      wrapper_aria_label: Users
     roles:
+      all: All roles
       organisation_admin:
         description: Can manage groups and users in their organisation
         name: Organisation admin

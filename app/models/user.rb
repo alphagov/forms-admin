@@ -27,6 +27,44 @@ class User < ApplicationRecord
     standard: "standard",
   }
 
+  scope :for_users_list, lambda {
+    includes(:organisation)
+      .order(Arel.sql("organisation.name ASC NULLS FIRST"))
+      .order({ has_access: :desc })
+      .in_order_of(:role, roles.keys)
+      .order({ name: :asc })
+  }
+
+  scope :by_name, lambda { |name|
+    if name.present?
+      where("lower(users.name) LIKE ?", "%#{sanitize_sql_like(name.downcase)}%")
+    end
+  }
+
+  scope :by_email, lambda { |email|
+    if email.present?
+      where("lower(email) LIKE ?", "%#{sanitize_sql_like(email.downcase)}%")
+    end
+  }
+
+  scope :by_organisation_id, lambda { |organisation_id|
+    if organisation_id.present?
+      joins(:organisation).where(organisation: { id: organisation_id })
+    end
+  }
+
+  scope :by_role, lambda { |role|
+    if role.present?
+      where(role:)
+    end
+  }
+
+  scope :by_has_access, lambda { |has_access|
+    if has_access.present?
+      where(has_access:)
+    end
+  }
+
   validates :name, presence: true, if: :requires_name?
   validates :role, presence: true
   validates :organisation_id, presence: true, if: :requires_organisation?
@@ -66,7 +104,8 @@ class User < ApplicationRecord
 
       user.save!
       user
-    else # Create a new user.
+    else
+      # Create a new user.
       create!(attributes)
     end
   end

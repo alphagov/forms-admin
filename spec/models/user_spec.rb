@@ -140,6 +140,144 @@ describe User, type: :model do
     end
   end
 
+  describe "scopes" do
+    describe ".for_users_list" do
+      let(:organisation) { create :organisation, slug: "ministry-of-tests", name: "Ministry of Tests" }
+      let(:other_org) { create(:organisation, slug: "agriculture-department", name: "Agriculture Department") }
+
+      let!(:second_user_alphabetically) { create(:user, name: "Betty Test", organisation:, role: "standard") }
+      let!(:first_user_alphabetically) { create(:user, name: "Aaron Test", organisation:, role: "standard") }
+      let!(:org_admin_user) { create(:user, name: "Wesley Test", organisation:) }
+      let!(:super_admin_user) { create(:user, name: "Yvette Test", organisation:, role: "super_admin") }
+      let!(:without_access_user) { create(:user, name: "Amy Test", organisation:, has_access: false, role: "standard") }
+      let!(:user_with_first_org_alphabetically) { create(:user, name: "Tim Test", organisation: other_org, role: "standard") }
+      let!(:user_with_no_org) { create(:user, organisation: nil, name: "Annie Test") }
+
+      before do
+        create(:mou_signature, organisation:, user: first_user_alphabetically)
+        organisation.reload
+        org_admin_user.organisation_admin!
+      end
+
+      it "returns users ordered by org name, access, role then name" do
+        expect(described_class.for_users_list).to eq [
+          user_with_no_org,
+          user_with_first_org_alphabetically,
+          super_admin_user,
+          org_admin_user,
+          first_user_alphabetically,
+          second_user_alphabetically,
+          without_access_user,
+        ]
+      end
+    end
+
+    describe "filter scopes" do
+      before do
+        other_org = create :organisation, slug: "other-org"
+        create_list(:user, 2, organisation: other_org)
+      end
+
+      describe ".by_name" do
+        let!(:matched_user) { create(:user, name: "Sir John Doe") }
+        let!(:other_matched_user) { create(:user, name: "Lord John Smith") }
+
+        it "returns users with partial match" do
+          expect(described_class.by_name("John")).to contain_exactly(matched_user, other_matched_user)
+        end
+
+        it "returns users with case insensitive match" do
+          expect(described_class.by_name("doe")).to contain_exactly(matched_user)
+        end
+
+        it "returns all users when provided name is nil" do
+          expect(described_class.by_name(nil).size).to eq 4
+        end
+
+        it "returns all users when provided name is blank" do
+          expect(described_class.by_name("").size).to eq 4
+        end
+      end
+
+      describe ".by_email" do
+        let!(:matched_user) { create(:user, email: "sir.john.doe@example.com") }
+        let!(:other_matched_user) { create(:user, email: "lord.john.smith@example.com") }
+
+        it "returns users with partial match" do
+          expect(described_class.by_email(".john")).to contain_exactly(matched_user, other_matched_user)
+        end
+
+        it "returns the user with an exact match" do
+          expect(described_class.by_email("sir.john.doe@example.com")).to contain_exactly(matched_user)
+        end
+
+        it "returns users with case insensitive match" do
+          expect(described_class.by_email("DOE")).to contain_exactly(matched_user)
+        end
+
+        it "returns all users when provided email is nil" do
+          expect(described_class.by_email(nil).size).to eq 4
+        end
+
+        it "returns all users when provided email is blank" do
+          expect(described_class.by_email("").size).to eq 4
+        end
+      end
+
+      describe ".by_organisation_id" do
+        let!(:matched_user) { create(:user, organisation: organisation) }
+
+        it "returns users with given organisation_id" do
+          expect(described_class.by_organisation_id(organisation.id)).to contain_exactly(matched_user)
+        end
+
+        it "returns all users when organisation_id is nil" do
+          expect(described_class.by_organisation_id(nil).size).to eq 3
+        end
+
+        it "returns all users when organisation_id is blank" do
+          expect(described_class.by_organisation_id("").size).to eq 3
+        end
+      end
+
+      describe ".by_role" do
+        let!(:matched_user) { create(:user, role: :super_admin) }
+
+        it "returns users with given role" do
+          expect(described_class.by_role("super_admin")).to contain_exactly(matched_user)
+        end
+
+        it "returns all users when role is nil" do
+          expect(described_class.by_role(nil).size).to eq 3
+        end
+
+        it "returns all users when role is blank" do
+          expect(described_class.by_role("").size).to eq 3
+        end
+      end
+
+      describe ".by_has_access" do
+        let!(:user_without_access) { create(:user, has_access: false) }
+
+        it "returns users without access" do
+          expect(described_class.by_has_access("false")).to contain_exactly(user_without_access)
+        end
+
+        it "returns users with access" do
+          expect(described_class.by_has_access("true").size).to eq 2
+        end
+
+        it "returns all users when has_access is nil" do
+          expect(described_class.by_has_access(nil).size).to eq 3
+        end
+
+        it "returns all users when has_access is blank" do
+          expect(described_class.by_has_access("").size).to eq 3
+        end
+      end
+    end
+  end
+
   describe ".find_for_auth" do
     let!(:user) do
       create :user, provider: "test", uid: "123456", name: "Test User", email: "test.User@example.com"

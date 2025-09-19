@@ -619,6 +619,7 @@ DEPENDENCIES
   lograge
   omniauth-auth0
   omniauth-rails_csrf_protection
+  pagy
   paper_trail
   parallel_rspec
   pg (~> 1.6)

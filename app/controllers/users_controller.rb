@@ -1,4 +1,6 @@
 class UsersController < WebController
+  include Pagy::Backend
+
   after_action :verify_authorized
   after_action :verify_policy_scoped, only: :index
 
@@ -9,17 +11,19 @@ class UsersController < WebController
   def index
     authorize current_user, :can_manage_user?
 
-    roles = User.roles.keys
-    @users = policy_scope(User).includes(:organisation).sort_by do |user|
-      [
-        user.organisation&.name || "",
-        user.has_access ? 0 : 1,
-        roles.index(user.role),
-        user.name || "",
-      ]
-    end
+    users_query = policy_scope(User)
+                   .by_name(filter_params[:name])
+                   .by_email(filter_params[:email])
+                   .by_organisation_id(filter_params[:organisation_id])
+                   .by_role(filter_params[:role])
+                   .by_has_access(filter_params[:has_access])
+                   .for_users_list
 
-    render template: "users/index", locals: { users: @users }
+    @pagy, @users = pagy(users_query, limit: 50)
+
+    @filter_input = Users::FilterInput.new(filter_params)
+
+    render template: "users/index"
   end
 
   def edit
@@ -58,5 +62,9 @@ private
 
   def organisation_id_raw
     params.dig(:user, :organisation_id_raw)
+  end
+
+  def filter_params
+    params[:filter]&.permit(:name, :email, :organisation_id, :role, :has_access) || {}
   end
 end
