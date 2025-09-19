@@ -9,15 +9,7 @@ class UsersController < WebController
   def index
     authorize current_user, :can_manage_user?
 
-    roles = User.roles.keys
-    @users = policy_scope(User).includes(:organisation).sort_by do |user|
-      [
-        user.organisation&.name || "",
-        user.has_access ? 0 : 1,
-        roles.index(user.role),
-        user.name || "",
-      ]
-    end
+    @users = policy_scope(User).for_users_list
 
     render template: "users/index", locals: { users: @users }
   end
