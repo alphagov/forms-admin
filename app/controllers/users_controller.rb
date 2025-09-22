@@ -58,7 +58,7 @@ private
 
   def user_params
     params.require(:user).permit(:has_access, :name, :role, :organisation_id).tap do |p|
-      # We have to take steps to detect when the autocomplete compoenent is
+      # We have to take steps to detect when the autocomplete component is
       # empty. We use the value of rawAttribute, which is the text input when JS
       # is enabled. When it's empty, the user has cleared it. This isn't needed
       # when the no JS select is used but we have to allow organisation_id to be
@@ -78,6 +78,14 @@ private
   end
 
   def filter_params
-    params[:filter]&.permit(:name, :email, :organisation_id, :role, :has_access) || {}
+    filters = params[:filter]&.permit(:name, :email, :organisation_id, :role, :has_access) || {}
+
+    # if the text in the organisation input has been cleared, don't use the last selected organisation_id
+    organisation_id_raw = params.dig(:filter, :organisation_id_raw)
+    if filters.key?(:organisation_id) && organisation_id_raw && organisation_id_raw.empty?
+      filters[:organisation_id] = nil
+    end
+
+    filters
   end
 end

@@ -37,12 +37,14 @@ RSpec.describe UsersController, type: :request do
       end
 
       context "when filters are specified" do
+        let(:organisation_id_raw) { test_org.name }
         let(:params) do
           {
             filter: {
               name: "Test",
               email: "123",
               organisation_id: test_org.id,
+              organisation_id_raw:,
               role: "standard",
               has_access: "true",
             },
@@ -65,6 +67,15 @@ RSpec.describe UsersController, type: :request do
           expect(assigns[:users]).to eq [andy, bob]
         end
 
+        it "populates the filter input object" do
+          filter_input = assigns[:filter_input]
+          expect(filter_input.name).to eq "Test"
+          expect(filter_input.email).to eq "123"
+          expect(filter_input.organisation_id).to eq test_org.id.to_s
+          expect(filter_input.role).to eq "standard"
+          expect(filter_input.has_access).to eq "true"
+        end
+
         it "assigns filtered download path" do
           path = assigns[:filtered_download_path]
           parsed_params = CGI.parse(URI.parse(path).query)
@@ -75,6 +86,31 @@ RSpec.describe UsersController, type: :request do
             "filter[role]" => %w[standard],
             "filter[has_access]" => %w[true],
           )
+        end
+
+        context "when the organisation_id_raw filter is not specified" do
+          let(:organisation_id_raw) { "" }
+
+          it "does not filter using the organisation_id" do
+            expect(assigns[:users].size).to eq 3
+          end
+
+          it "does not set the organisation_id on the input object" do
+            filter_input = assigns[:filter_input]
+            expect(filter_input.organisation_id).to be_nil
+          end
+
+          it "does not include the organisation_id in the filtered download path" do
+            path = assigns[:filtered_download_path]
+            parsed_params = CGI.parse(URI.parse(path).query)
+            expect(parsed_params).to match(
+              "filter[name]" => %w[Test],
+              "filter[email]" => %w[123],
+              "filter[organisation_id]" => [""],
+              "filter[role]" => %w[standard],
+              "filter[has_access]" => %w[true],
+            )
+          end
         end
       end
     end
