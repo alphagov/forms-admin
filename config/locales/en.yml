@@ -1689,6 +1689,8 @@ en:
         description: Can use GOV.UK Forms
         name: Permitted
     index:
+      download_all: Download data about all users as a CSV file
+      download_filtered: Download data about the filtered users as a CSV file
       filter:
         clear_filter: Clear filter
         email:

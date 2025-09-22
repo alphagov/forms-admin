@@ -11,4 +11,6 @@ class UserPolicy < ApplicationPolicy
   def can_manage_user?
     user.super_admin?
   end
+
+  alias_method :can_download_users?, :can_manage_user?
 end

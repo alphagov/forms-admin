@@ -2,7 +2,7 @@ class UsersController < WebController
   include Pagy::Backend
 
   after_action :verify_authorized
-  after_action :verify_policy_scoped, only: :index
+  after_action :verify_policy_scoped, only: %i[index download]
 
   rescue_from ActiveRecord::RecordNotFound do
     render template: "errors/not_found", status: :not_found
@@ -11,19 +11,22 @@ class UsersController < WebController
   def index
     authorize current_user, :can_manage_user?
 
-    users_query = policy_scope(User)
-                   .by_name(filter_params[:name])
-                   .by_email(filter_params[:email])
-                   .by_organisation_id(filter_params[:organisation_id])
-                   .by_role(filter_params[:role])
-                   .by_has_access(filter_params[:has_access])
-                   .for_users_list
+    users_query = filtered_users
 
     @pagy, @users = pagy(users_query, limit: 50)
 
     @filter_input = Users::FilterInput.new(filter_params)
+    @filtered_download_path = download_users_path(params: { filter: filter_params })
 
     render template: "users/index"
+  end
+
+  def download
+    authorize current_user, :can_download_users?
+
+    send_data Users::CsvService.new(filtered_users).csv,
+              type: "text/csv; charset=iso-8859-1",
+              disposition: "attachment; filename=govuk_forms_users_#{Time.zone.now}.csv"
   end
 
   def edit
@@ -42,6 +45,16 @@ class UsersController < WebController
   end
 
 private
+
+  def filtered_users
+    policy_scope(User)
+      .by_name(filter_params[:name])
+      .by_email(filter_params[:email])
+      .by_organisation_id(filter_params[:organisation_id])
+      .by_role(filter_params[:role])
+      .by_has_access(filter_params[:has_access])
+      .for_users_list
+  end
 
   def user_params
     params.require(:user).permit(:has_access, :name, :role, :organisation_id).tap do |p|

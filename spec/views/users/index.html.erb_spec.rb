@@ -8,6 +8,7 @@ describe "users/index.html.erb" do
     end
   end
   let(:filter_input) { Users::FilterInput.new }
+  let(:filtered_download_path) { Faker::Internet.url }
 
   before do
     allow(Settings).to receive(:act_as_user_enabled).and_return(act_as_user_enabled)
@@ -18,6 +19,7 @@ describe "users/index.html.erb" do
 
     assign(:users, users)
     assign(:filter_input, filter_input)
+    assign(:filtered_download_path, filtered_download_path)
     render template: "users/index"
   end
 
@@ -108,6 +110,22 @@ describe "users/index.html.erb" do
 
       it "has a link to clear the filters" do
         expect(rendered).to have_link("Clear filter")
+      end
+    end
+  end
+
+  describe "csv download" do
+    context "when there are no filters applied" do
+      it "has a link to download all users" do
+        expect(rendered).to have_link(t("users.index.download_all"), href: download_users_path)
+      end
+    end
+
+    context "when there are filters applied" do
+      let(:filter_input) { Users::FilterInput.new(name: "foo") }
+
+      it "has a link to download filtered users" do
+        expect(rendered).to have_link(t("users.index.download_filtered"), href: filtered_download_path)
       end
     end
   end
