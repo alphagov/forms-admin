@@ -4,10 +4,6 @@ class UsersController < WebController
   after_action :verify_authorized
   after_action :verify_policy_scoped, only: %i[index download]
 
-  rescue_from ActiveRecord::RecordNotFound do
-    render template: "errors/not_found", status: :not_found
-  end
-
   def index
     authorize current_user, :can_manage_user?
 
