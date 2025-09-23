@@ -235,7 +235,15 @@ Rails.application.routes.draw do
   end
 
   get "/maintenance" => "errors#maintenance", as: :maintenance_page
-  match "/403", to: "errors#forbidden", as: :error_403, via: :all
-  match "/404", to: "errors#not_found", as: :error_404, via: :all
-  match "/500", to: "errors#internal_server_error", as: :error_500, via: :all
+
+  constraints ->(request) { request.format == :json } do
+    match "/404", to: "api/errors#not_found", as: :api_error_404, via: :all
+    match "/500", to: "api/errors#internal_server_error", as: :api_error_500, via: :all
+  end
+
+  constraints ->(request) { request.format == :html } do
+    match "/403", to: "errors#forbidden", as: :error_403, via: :all
+    match "/404", to: "errors#not_found", as: :error_404, via: :all
+    match "/500", to: "errors#internal_server_error", as: :error_500, via: :all
+  end
 end
