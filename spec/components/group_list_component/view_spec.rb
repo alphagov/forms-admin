@@ -51,10 +51,17 @@ RSpec.describe GroupListComponent::View, type: :component do
 
     context "when the group creator is known" do
       let(:user) { create :user }
-      let(:groups) { create_list(:group, 3, creator: user) }
+      let(:other_user) { create :user }
+      let(:groups) do
+        [
+          *create_list(:group, 3, creator: user),
+          create(:group, creator: other_user),
+        ]
+      end
 
       it "renders the creator's name" do
         expect(page).to have_css("tr", count: 3, text: user.name)
+        expect(page).to have_css("tr", count: 1, text: other_user.name)
       end
     end
 
