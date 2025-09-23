@@ -42,6 +42,56 @@ namespace :forms do
       form.form_submission_email&.destroy!
     end
   end
+
+  namespace :submission_type do
+    desc "Set submission_type to email"
+    task :set_to_email, %i[form_id] => :environment do |_, args|
+      usage_message = "usage: rake forms:submission_type:set_to_email[<form_id>]".freeze
+      abort usage_message if args[:form_id].blank?
+
+      set_submission_type("email", args[:form_id])
+    end
+
+    desc "Set submission_type to email_with_csv"
+    task :set_to_email_with_csv, %i[form_id] => :environment do |_, args|
+      usage_message = "usage: rake forms:submission_type:set_to_email_with_csv[<form_id>]".freeze
+      abort usage_message if args[:form_id].blank?
+
+      set_submission_type("email_with_csv", args[:form_id])
+    end
+
+    desc "Set submission_type to s3"
+    task :set_to_s3, %i[form_id s3_bucket_name s3_bucket_aws_account_id s3_bucket_region] => :environment do |_, args|
+      usage_message = "usage: rake forms:submission_type:set_to_s3[<form_id>, <s3_bucket_name>, <s3_bucket_aws_account_id>, <s3_bucket_region>]".freeze
+      abort usage_message if args[:form_id].blank?
+      abort usage_message if args[:s3_bucket_name].blank?
+      abort usage_message if args[:s3_bucket_aws_account_id].blank?
+      abort usage_message if args[:s3_bucket_region].blank?
+      abort "s3_bucket_region must be one of eu-west-1 or eu-west-2" unless %w[eu-west-1 eu-west-2].include? args[:s3_bucket_region]
+
+      Rails.logger.info("Setting submission_type to s3 and s3_bucket_name to #{args[:s3_bucket_name]} for form: #{args[:form_id]}")
+      form = Form.find(args[:form_id])
+      form.submission_type = "s3"
+      form.s3_bucket_name = args[:s3_bucket_name]
+      form.s3_bucket_aws_account_id = args[:s3_bucket_aws_account_id]
+      form.s3_bucket_region = args[:s3_bucket_region]
+      form.save!
+
+      if form.is_live?
+        form_document = form.live_form_document
+        content = form_document.content
+
+        content[:submission_type] = "s3"
+        content[:s3_bucket_name] = args[:s3_bucket_name]
+        content[:s3_bucket_aws_account_id] = args[:s3_bucket_aws_account_id]
+        content[:s3_bucket_region] = args[:s3_bucket_region]
+
+        form_document.save!
+      end
+
+      Rails.logger.info("Set submission_type to s3 and s3_bucket_name to #{args[:s3_bucket_name]} for form: #{args[:form_id]}")
+    end
+  end
 end
 
 def move_forms(form_ids, group_id)
@@ -70,4 +120,23 @@ end
 
 def fmt_group(group)
   "group #{group.external_id} (\"#{group.name}\", #{group.organisation.name}, #{group.creator&.name || 'GOV.UK Forms Team'})"
+end
+
+def set_submission_type(submission_type, form_id)
+  Rails.logger.info("Setting submission_type to #{submission_type} for form: #{form_id}")
+
+  form = Form.find(form_id)
+  form.submission_type = submission_type
+  form.save!
+
+  if form.is_live?
+    form_document = form.live_form_document
+    content = form_document.content
+
+    content[:submission_type] = submission_type
+
+    form_document.save!
+  end
+
+  Rails.logger.info("Set submission_type to #{submission_type} for form: #{form_id}")
 end
