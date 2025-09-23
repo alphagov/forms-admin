@@ -29,6 +29,9 @@ module FormsAdmin
     # config.eager_load_paths << Rails.root.join("extras")
     config.exceptions_app = routes
 
+    config.action_dispatch.rescue_responses["NotFoundError"] = :not_found
+    config.action_dispatch.rescue_responses["ActiveResource::ResourceNotFound"] = :not_found
+
     # All forms should use GOVUKDesignSystemFormBuilder by default
     config.action_view.default_form_builder = GOVUKDesignSystemFormBuilder::FormBuilder
 

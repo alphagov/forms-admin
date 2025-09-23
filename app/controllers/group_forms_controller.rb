@@ -27,7 +27,7 @@ class GroupFormsController < WebController
   end
 
   def edit
-    render template: "errors/not_found", status: :not_found unless set_group_form
+    raise NotFoundError unless set_group_form
 
     @form = FormRepository.find(form_id: params[:id])
     @group_select = Forms::GroupSelect.new(group: @group, form: @form)
@@ -35,7 +35,7 @@ class GroupFormsController < WebController
   end
 
   def update
-    render template: "errors/not_found", status: :not_found unless set_group_form
+    raise NotFoundError unless set_group_form
 
     @form = Form.find(params[:id])
     @group_select = Forms::GroupSelect.new(group_select_params.merge(form: @form))

@@ -16,10 +16,6 @@ class WebController < ApplicationController
 
   add_flash_types :success
 
-  rescue_from ActiveResource::ResourceNotFound, ActiveRecord::RecordNotFound do
-    render template: "errors/not_found", status: :not_found
-  end
-
   rescue_from Pundit::NotAuthorizedError do |_exception|
     # Useful when we start adding more policies that require custom errors
     # policy_name = exception.policy.class.to_s.underscore

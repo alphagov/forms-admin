@@ -51,16 +51,66 @@ RSpec.describe Forms::LiveController, type: :request do
       page = Capybara.string(response.body)
       expect(page.find_all(".app-metrics__big-number-number")[2]).to have_text "805"
     end
+
+    context "when the form is live with draft" do
+      let(:form) { create(:form, :live_with_draft) }
+
+      it "renders the live template" do
+        expect(response).to render_template(:show_form)
+      end
+    end
+
+    context "when the form is archived" do
+      let(:form) { create(:form, :archived) }
+
+      it "redirects to the archived form page" do
+        expect(response).to have_http_status(:found)
+        expect(response).to redirect_to(archived_form_path(form))
+      end
+    end
+
+    context "when the form is draft" do
+      let(:form) { create(:form) }
+
+      it "returns 404" do
+        expect(response).to have_http_status(:not_found)
+      end
+    end
   end
 
   describe "#show_pages" do
+    before do
+      get live_form_pages_path(form.id)
+    end
+
     context "with a live form" do
-      before do
-        get live_form_pages_path(form.id)
+      it "renders the live template" do
+        expect(response).to render_template(:show_pages)
       end
+    end
+
+    context "when the form is live_with_draft" do
+      let(:form) { create(:form, :live_with_draft) }
 
       it "renders the live template" do
         expect(response).to render_template(:show_pages)
+      end
+    end
+
+    context "when the form is archived" do
+      let(:form) { create(:form, :archived) }
+
+      it "redirects to the archived form page" do
+        expect(response).to have_http_status(:found)
+        expect(response).to redirect_to(archived_form_pages_path(form))
+      end
+    end
+
+    context "when the form is draft" do
+      let(:form) { create(:form) }
+
+      it "returns 404" do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
