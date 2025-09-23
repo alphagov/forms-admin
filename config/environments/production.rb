@@ -51,6 +51,7 @@ Rails.application.configure do
 
   # Prevent health checks from clogging up the logs.
   config.silence_healthcheck_path = "/up"
+  config.lograge.ignore_actions = "Rails::HealthController#show"
 
   # Don't log any deprecations.
   config.active_support.report_deprecations = false
