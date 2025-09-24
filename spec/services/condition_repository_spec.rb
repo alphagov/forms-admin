@@ -17,65 +17,35 @@ describe ConditionRepository do
         exit_page_heading: nil,
         exit_page_markdown: nil }
     end
-    let(:ignored_api_condition_id) { 999_999 }
 
-    before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.post "/api/v1/forms/#{form.id}/pages/#{routing_page.id}/conditions", post_headers, { id: ignored_api_condition_id }.to_json, 200
-      end
+    it "saves the condition to the database" do
+      expect {
+        described_class.create!(**condition_params)
+      }.to change(Condition, :count).by(1)
     end
 
-    describe "api" do
-      it "creates a condition through ActiveResource" do
-        condition = described_class.create!(**condition_params)
-        expect(Api::V1::ConditionResource.new(condition.attributes.merge(form_id: form.id, page_id: routing_page.id))).to have_been_created
-      end
+    it "returns a condition record" do
+      expect(described_class.create!(**condition_params)).to be_a(Condition)
     end
 
-    describe "database" do
-      it "saves the condition to the database" do
+    context "when the form question section is complete" do
+      let(:form) { create(:form_record, question_section_completed: true) }
+
+      it "updates the form to mark the question section as incomplete" do
         expect {
           described_class.create!(**condition_params)
-        }.to change(Condition, :count).by(1)
-      end
-
-      it "returns a condition record" do
-        expect(described_class.create!(**condition_params)).to be_a(Condition)
-      end
-
-      it "doesn't use the API response to create the condition" do
-        expect(described_class.create!(**condition_params).id).not_to eq(ignored_api_condition_id)
-      end
-
-      context "when the form question section is complete" do
-        let(:form) { create(:form_record, question_section_completed: true) }
-
-        it "updates the form to mark the question section as incomplete" do
-          expect {
-            described_class.create!(**condition_params)
-          }.to change { Form.find(form.id).question_section_completed }.to(false)
-        end
-      end
-
-      it "associates the condition with pages" do
-        described_class.create!(**condition_params)
-        expect(Condition.last).to have_attributes(routing_page_id: routing_page.id, check_page_id: routing_page.id, goto_page_id: goto_page.id)
+        }.to change { Form.find(form.id).question_section_completed }.to(false)
       end
     end
 
-    it "has the same ID in the database and for the API" do
+    it "associates the condition with pages" do
       described_class.create!(**condition_params)
-      expect(JSON.parse(ActiveResource::HttpMock.requests.first.body)).to include("id" => Condition.last.id)
+      expect(Condition.last).to have_attributes(routing_page_id: routing_page.id, check_page_id: routing_page.id, goto_page_id: goto_page.id)
     end
   end
 
   describe "#find" do
     let(:condition) { create(:condition_record, routing_page_id: routing_page.id, check_page_id: routing_page.id, goto_page_id: goto_page.id) }
-
-    it "does not call the API" do
-      described_class.find(condition_id: condition.id, page_id: routing_page.id)
-      expect(Api::V1::ConditionResource.new(id: condition.id, form_id: form.id, page_id: routing_page.id)).not_to have_been_read
-    end
 
     it "returns the condition" do
       expect(described_class.find(condition_id: condition.id, page_id: routing_page.id)).to eq(condition)
@@ -94,107 +64,50 @@ describe ConditionRepository do
 
   describe "#save!" do
     let(:condition) { create(:condition_record, skip_to_end: false, routing_page_id: routing_page.id, answer_value: "database condition") }
-    let(:updated_condition_resource) { build(:condition_resource, id: condition.id, routing_page_id: routing_page.id, skip_to_end: true, answer_value: "API condition") }
 
-    before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.put "/api/v1/forms/#{form.id}/pages/#{routing_page.id}/conditions/#{condition.id}", post_headers, updated_condition_resource.to_json, 200
-      end
-    end
+    it "saves the condition to the database" do
+      condition.skip_to_end = true
 
-    describe "api" do
-      it "updates the condition through ActiveResource" do
-        condition.skip_to_end = true
+      expect {
         described_class.save!(condition)
-        expect(Api::V1::ConditionResource.new(id: condition.id, skip_to_end: true, form_id: form.id, page_id: routing_page.id)).to have_been_updated
-        expect(JSON.parse(ActiveResource::HttpMock.requests.first.body)).to include("skip_to_end" => true)
-      end
+      }.to change { Condition.find(condition.id).skip_to_end }.to(true)
     end
 
-    describe "database" do
-      it "saves the condition to the database" do
-        condition.skip_to_end = true
+    it "returns the database condition" do
+      expect(described_class.save!(condition)).to eq(condition)
+    end
 
+    context "when the form question section is complete" do
+      let(:form) { create(:form_record, question_section_completed: true) }
+
+      it "updates the form to mark the question section as incomplete" do
         expect {
           described_class.save!(condition)
-        }.to change { Condition.find(condition.id).skip_to_end }.to(true)
-      end
-
-      it "returns the database condition" do
-        expect(described_class.save!(condition)).to eq(condition)
-      end
-
-      it "doesn't use the API response to update the condition" do
-        expect(described_class.save!(condition).answer_value).to eq("database condition")
-      end
-
-      context "when the form question section is complete" do
-        let(:form) { create(:form_record, question_section_completed: true) }
-
-        it "updates the form to mark the question section as incomplete" do
-          expect {
-            described_class.save!(condition)
-          }.to change { Form.find(form.id).question_section_completed }.to(false)
-        end
+        }.to change { Form.find(form.id).question_section_completed }.to(false)
       end
     end
   end
 
   describe "#destroy" do
-    let(:condition) { create(:condition_record, routing_page_id: routing_page.id) }
+    let!(:condition) { create(:condition_record, routing_page_id: routing_page.id) }
 
-    before do
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.delete "/api/v1/forms/#{form.id}/pages/#{routing_page.id}/conditions/#{condition.id}", delete_headers, nil, 204
-      end
-    end
-
-    describe "api" do
-      it "destroys the condition through ActiveResource" do
+    it "removes the condition from the database" do
+      expect {
         described_class.destroy(condition)
-        expect(Api::V1::ConditionResource.new(id: condition.id, form_id: form.id, page_id: routing_page.id)).to have_been_deleted
-      end
-
-      context "when the condition has already been deleted" do
-        before do
-          ActiveResource::HttpMock.respond_to do |mock|
-            mock.delete "/api/v1/forms/#{form.id}/pages/#{routing_page.id}/conditions/#{condition.id}", delete_headers, nil, 404
-          end
-        end
-
-        it "does not raise an error" do
-          expect {
-            described_class.destroy(condition)
-          }.not_to raise_error
-        end
-
-        it "still deletes the condition from the database" do
-          expect {
-            described_class.destroy(condition)
-          }.to change(Condition, :count).by(-1)
-        end
-      end
+      }.to change(Condition, :count).by(-1)
     end
 
-    describe "database" do
-      it "removes the condition from the database" do
+    it "returns a condition record" do
+      expect(described_class.destroy(condition)).to be_a(Condition)
+    end
+
+    context "when the form question section is complete" do
+      let(:form) { create(:form_record, question_section_completed: true) }
+
+      it "updates the form to mark the question section as incomplete" do
         expect {
           described_class.destroy(condition)
-        }.to change(Condition, :count).by(-1)
-      end
-
-      it "returns a condition record" do
-        expect(described_class.destroy(condition)).to be_a(Condition)
-      end
-
-      context "when the form question section is complete" do
-        let(:form) { create(:form_record, question_section_completed: true) }
-
-        it "updates the form to mark the question section as incomplete" do
-          expect {
-            described_class.destroy(condition)
-          }.to change { Form.find(form.id).question_section_completed }.to(false)
-        end
+        }.to change { Form.find(form.id).question_section_completed }.to(false)
       end
     end
 

@@ -19,7 +19,6 @@ class ConditionRepository
         exit_page_markdown:,
       )
       condition.save_and_update_form
-      Api::V1::ConditionResource.create!(condition.attributes.merge(form_id:, page_id:))
       condition
     end
 
@@ -29,29 +28,15 @@ class ConditionRepository
 
     def save!(record)
       record.save_and_update_form
-      condition = Api::V1::ConditionResource.new(record.attributes, true)
-      condition.prefix_options[:form_id] = record.form.id
-      condition.prefix_options[:page_id] = record.routing_page_id
-      condition.save!
       record
     end
 
     def destroy(record)
-      condition = Api::V1::ConditionResource.new(record.attributes, true)
-      condition.prefix_options[:form_id] = record.form.id
-      condition.prefix_options[:page_id] = record.routing_page_id
-
-      begin
-        condition.destroy # rubocop:disable Rails/SaveBang
-      rescue ActiveResource::ResourceNotFound
-        # ActiveRecord::Persistence#destroy doesn't raise an error
-        # if record has already been destroyed, let's emulate that
-      end
-
       begin
         Condition.find(record.id).destroy_and_update_form!
       rescue ActiveRecord::RecordNotFound
-        # as above
+        # ActiveRecord::Persistence#destroy doesn't raise an error
+        # if record has already been destroyed, let's emulate that
       end
 
       record
