@@ -162,8 +162,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
       it "creates the condition" do
         expect(ConditionRepository).to have_received(:create!).with(
-          form_id: form.id,
-          page_id: page.id,
           check_page_id: page.id,
           routing_page_id: page.id,
           answer_value: "Wales",

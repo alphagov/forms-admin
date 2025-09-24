@@ -12,11 +12,6 @@ feature "Make changes live", type: :feature do
     GroupForm.create!(form_id: form.id, group_id: group.id)
     Membership.create!(user:, group:, added_by: user, role: :group_admin)
 
-    ActiveResource::HttpMock.respond_to do |mock|
-      mock.put "/api/v1/forms/#{form.id}", post_headers, {}, 200
-      mock.post "/api/v1/forms/#{form.id}/make-live", post_headers, {}, 200
-    end
-
     login_as user
   end
 

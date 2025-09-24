@@ -129,16 +129,10 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
     end
 
     context "with invalid parameters" do
-      before do
-        ActiveResource::HttpMock.reset! # not expecting any API calls
-      end
-
       it "does not create a new form" do
         expect {
           post group_forms_url(group), params: { forms_name_input: invalid_attributes }
         }.not_to change(GroupForm, :count)
-
-        expect(ActiveResource::HttpMock.requests).to be_empty
       end
 
       it "renders a response with 422 status" do
