@@ -237,4 +237,235 @@ RSpec.describe "forms.rake" do
       end
     end
   end
+
+  describe "forms:submission_type:set_to_email" do
+    subject(:task) do
+      Rake::Task["forms:submission_type:set_to_email"]
+        .tap(&:reenable)
+    end
+
+    let(:form) { create :form, :live, submission_type: "s3" }
+    let!(:other_form) { create :form, :live, submission_type: "s3" }
+
+    context "when the form is live" do
+      it "sets a form's submission_type to email" do
+        expect { task.invoke(form.id) }
+          .to change { form.reload.submission_type }.to("email")
+      end
+
+      it "updates a form's live form document" do
+        task.invoke(form.id)
+        expect(form.live_form_document.reload.content["submission_type"]).to eq("email")
+      end
+
+      it "updates the form's draft form document" do
+        task.invoke(form.id)
+        expect(form.draft_form_document.reload.content["submission_type"]).to eq("email")
+      end
+
+      it "does not update a different form" do
+        expect { task.invoke(form.id) }
+          .not_to(change { other_form.reload.submission_type })
+      end
+    end
+
+    context "when the form is draft" do
+      let(:form) { create :form, submission_type: "s3" }
+
+      it "sets a form's submission_type to email" do
+        expect { task.invoke(form.id) }
+          .to change { form.reload.submission_type }.to("email")
+      end
+
+      it "updates the form's draft form document" do
+        task.invoke(form.id)
+        expect(form.draft_form_document.reload.content["submission_type"]).to eq("email")
+      end
+    end
+
+    context "without arguments" do
+      it "aborts with a usage message" do
+        expect {
+          task.invoke
+        }.to raise_error(SystemExit)
+               .and output("usage: rake forms:submission_type:set_to_email[<form_id>]\n").to_stderr
+      end
+    end
+  end
+
+  describe "forms:submission_type:set_to_email_with_csv" do
+    subject(:task) do
+      Rake::Task["forms:submission_type:set_to_email_with_csv"]
+        .tap(&:reenable)
+    end
+
+    let(:form) { create :form, :live, submission_type: "s3" }
+    let!(:other_form) { create :form, :live, submission_type: "s3" }
+
+    context "when the form is live" do
+      it "sets a form's submission_type to email_with_csv" do
+        expect { task.invoke(form.id) }
+          .to change { form.reload.submission_type }.to("email_with_csv")
+      end
+
+      it "updates a form's live form document" do
+        task.invoke(form.id)
+        expect(form.live_form_document.reload.content["submission_type"]).to eq("email_with_csv")
+      end
+
+      it "updates the form's draft form document" do
+        task.invoke(form.id)
+        expect(form.draft_form_document.reload.content["submission_type"]).to eq("email_with_csv")
+      end
+
+      it "does not update a different form" do
+        expect { task.invoke(form.id) }
+          .not_to(change { other_form.reload.submission_type })
+      end
+    end
+
+    context "when the form is draft" do
+      let(:form) { create :form, submission_type: "s3" }
+
+      it "sets a form's submission_type to email_with_csv" do
+        expect { task.invoke(form.id) }
+          .to change { form.reload.submission_type }.to("email_with_csv")
+      end
+
+      it "updates the form's draft form document" do
+        task.invoke(form.id)
+        expect(form.draft_form_document.reload.content["submission_type"]).to eq("email_with_csv")
+      end
+    end
+
+    context "without arguments" do
+      it "aborts with a usage message" do
+        expect {
+          task.invoke
+        }.to raise_error(SystemExit)
+               .and output("usage: rake forms:submission_type:set_to_email_with_csv[<form_id>]\n").to_stderr
+      end
+    end
+  end
+
+  describe "forms:submission_type:set_to_s3" do
+    subject(:task) do
+      Rake::Task["forms:submission_type:set_to_s3"]
+        .tap(&:reenable)
+    end
+
+    let(:form) { create :form, :live }
+    let!(:other_form) { create :form, :live }
+    let(:s3_bucket_name) { "a-bucket" }
+    let(:s3_bucket_aws_account_id) { "an-aws-account-id" }
+    let(:s3_bucket_region) { "eu-west-1" }
+
+    context "when the form is live" do
+      it "sets a form's submission_type to s3" do
+        expect { task.invoke(form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region) }
+          .to change { form.reload.submission_type }.to("s3")
+      end
+
+      it "sets a form's s3_bucket_name" do
+        expect { task.invoke(form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region) }
+          .to change { form.reload.s3_bucket_name }.to(s3_bucket_name)
+      end
+
+      it "sets a form's s3_bucket_aws_account_id" do
+        expect { task.invoke(form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region) }
+          .to change { form.reload.s3_bucket_aws_account_id }.to(s3_bucket_aws_account_id)
+      end
+
+      it "sets a form's s3_bucket_region" do
+        expect { task.invoke(form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region) }
+          .to change { form.reload.s3_bucket_region }.to(s3_bucket_region)
+      end
+
+      it "updates the live form document" do
+        task.invoke(form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region)
+        form_document = form.live_form_document.reload
+        expect(form_document.content["submission_type"]).to eq("s3")
+        expect(form_document.content["s3_bucket_name"]).to eq(s3_bucket_name)
+        expect(form_document.content["s3_bucket_aws_account_id"]).to eq(s3_bucket_aws_account_id)
+        expect(form_document.content["s3_bucket_region"]).to eq(s3_bucket_region)
+      end
+
+      it "updates the draft form document" do
+        task.invoke(form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region)
+        form_document = form.draft_form_document.reload
+        expect(form_document.content["submission_type"]).to eq("s3")
+        expect(form_document.content["s3_bucket_name"]).to eq(s3_bucket_name)
+        expect(form_document.content["s3_bucket_aws_account_id"]).to eq(s3_bucket_aws_account_id)
+        expect(form_document.content["s3_bucket_region"]).to eq(s3_bucket_region)
+      end
+
+      it "does not update a different form" do
+        expect { task.invoke(form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region) }
+          .not_to(change { other_form.reload.submission_type })
+      end
+    end
+
+    context "when the form is draft" do
+      let(:form) { create :form }
+
+      it "sets a form's submission_type to s3" do
+        expect { task.invoke(form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region) }
+          .to change { form.reload.submission_type }.to("s3")
+      end
+
+      it "updates the draft form document" do
+        task.invoke(form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region)
+        form_document = form.draft_form_document.reload
+        expect(form_document.content["submission_type"]).to eq("s3")
+        expect(form_document.content["s3_bucket_name"]).to eq(s3_bucket_name)
+        expect(form_document.content["s3_bucket_aws_account_id"]).to eq(s3_bucket_aws_account_id)
+        expect(form_document.content["s3_bucket_region"]).to eq(s3_bucket_region)
+      end
+    end
+
+    context "without arguments" do
+      it "aborts with a usage message" do
+        expect {
+          task.invoke
+        }.to raise_error(SystemExit)
+               .and output("usage: rake forms:submission_type:set_to_s3[<form_id>, <s3_bucket_name>, <s3_bucket_aws_account_id>, <s3_bucket_region>]\n").to_stderr
+      end
+    end
+
+    context "without bucket name argument" do
+      it "aborts with a usage message" do
+        expect {
+          task.invoke(1)
+        }.to raise_error(SystemExit)
+               .and output("usage: rake forms:submission_type:set_to_s3[<form_id>, <s3_bucket_name>, <s3_bucket_aws_account_id>, <s3_bucket_region>]\n").to_stderr
+      end
+    end
+
+    context "without AWS account ID argument" do
+      it "aborts with a usage message" do
+        expect {
+          task.invoke(1, s3_bucket_name)
+        }.to raise_error(SystemExit)
+               .and output("usage: rake forms:submission_type:set_to_s3[<form_id>, <s3_bucket_name>, <s3_bucket_aws_account_id>, <s3_bucket_region>]\n").to_stderr
+      end
+    end
+
+    context "without region argument" do
+      it "aborts with a usage message" do
+        expect {
+          task.invoke(1, s3_bucket_name, s3_bucket_aws_account_id)
+        }.to raise_error(SystemExit)
+               .and output("usage: rake forms:submission_type:set_to_s3[<form_id>, <s3_bucket_name>, <s3_bucket_aws_account_id>, <s3_bucket_region>]\n").to_stderr
+      end
+    end
+
+    context "when region is not allowed" do
+      it "aborts with message" do
+        expect {
+          task.invoke(1, s3_bucket_name, s3_bucket_aws_account_id, "eu-west-3")
+        }.to raise_error(SystemExit)
+               .and output("s3_bucket_region must be one of eu-west-1 or eu-west-2\n").to_stderr
+      end
+    end
+  end
 end
