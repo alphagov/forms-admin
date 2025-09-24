@@ -7,9 +7,7 @@ describe ConditionRepository do
 
   describe "#create!" do
     let(:condition_params) do
-      { form_id: form.id,
-        page_id: routing_page.id,
-        check_page_id: routing_page.id,
+      { check_page_id: routing_page.id,
         routing_page_id: routing_page.id,
         answer_value: "Yes",
         goto_page_id: goto_page.id,

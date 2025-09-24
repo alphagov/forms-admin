@@ -1,8 +1,6 @@
 class ConditionRepository
   class << self
-    def create!(form_id:,
-                page_id:,
-                check_page_id:,
+    def create!(check_page_id:,
                 routing_page_id:,
                 answer_value:,
                 goto_page_id:,
