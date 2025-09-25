@@ -23,20 +23,8 @@ locals {
     { name = "SECRET_KEY_BASE", value = "unsecured_secret_key_material" },
     { name = "SETTINGS__ACT_AS_USER_ENABLED", value = "true" },
     { name = "SETTINGS__AUTH_PROVIDER", value = "developer" },
-    { name = "SETTINGS__FORMS_API__AUTH_KEY", value = "unsecured_api_key_for_review_apps_only" },
-    { name = "SETTINGS__FORMS_API__BASE_URL", value = "http://localhost:9292" },
     { name = "SETTINGS__FORMS_ENV", value = "review" },
     { name = "SETTINGS__FORMS_RUNNER__URL", value = "https://forms.service.gov.uk/" },
-  ]
-
-  forms_api_env_vars = [
-    { name = "DATABASE_URL", value = "postgres://postgres:postgres@127.0.0.1:5432" },
-    { name = "EMAIL", value = "review-app-submissions@review.forms.service.gov.uk" },
-    { name = "RAILS_DEVELOPMENT_HOSTS", value = "localhost:9292" },
-    { name = "RAILS_ENV", value = "production" },
-    { name = "SECRET_KEY_BASE", value = "unsecured_secret_key_material" },
-    { name = "SETTINGS__FORMS_API__AUTH_KEY", value = "unsecured_api_key_for_review_apps_only" },
-    { name = "SETTINGS__FORMS_ENV", value = "review" },
   ]
 }
 
@@ -111,41 +99,6 @@ resource "aws_ecs_task_definition" "task" {
       ]
     },
 
-    # forms-api
-    {
-      name                   = "forms-api"
-      image                  = "711966560482.dkr.ecr.eu-west-2.amazonaws.com/forms-api-deploy:latest"
-      command                = []
-      essential              = true
-      environment            = local.forms_api_env_vars
-      readonlyRootFilesystem = true
-
-      portMappings = [{ containerPort = 9292 }]
-
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = data.terraform_remote_state.review.outputs.review_apps_log_group_name
-          awslogs-region        = "eu-west-2"
-          awslogs-stream-prefix = "${local.logs_stream_prefix}/forms-api"
-        }
-      }
-
-      healthCheck = {
-        command     = ["CMD-SHELL", "wget -O - 'http://localhost:9292/up' || exit 1"]
-        interval    = 30
-        retries     = 5
-        startPeriod = 180
-      }
-
-      dependsOn = [
-        {
-          containerName = "postgres"
-          condition     = "HEALTHY"
-        }
-      ]
-    },
-
     # postgres
     {
       name      = "postgres"
@@ -188,32 +141,6 @@ resource "aws_ecs_task_definition" "task" {
           awslogs-group         = data.terraform_remote_state.review.outputs.review_apps_log_group_name
           awslogs-region        = "eu-west-2"
           awslogs-stream-prefix = "${local.logs_stream_prefix}/forms-admin-seeding"
-        }
-      }
-
-      dependsOn = [
-        {
-          containerName = "postgres"
-          condition     = "HEALTHY"
-        }
-      ]
-    },
-
-    # forms-api-seeding
-    {
-      name                   = "forms-api-seeding"
-      image                  = "711966560482.dkr.ecr.eu-west-2.amazonaws.com/forms-api-deploy:latest"
-      command                = ["rake", "db:create", "db:migrate", "db:seed"]
-      essential              = false
-      environment            = local.forms_api_env_vars
-      readonlyRootFilesystem = true
-
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = data.terraform_remote_state.review.outputs.review_apps_log_group_name
-          awslogs-region        = "eu-west-2"
-          awslogs-stream-prefix = "${local.logs_stream_prefix}/forms-api-seeding"
         }
       }
 
