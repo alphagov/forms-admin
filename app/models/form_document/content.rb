@@ -7,6 +7,7 @@ class FormDocument::Content
   attribute :form_id, :integer
   attribute :live_at, :datetime
   attribute :name, :string
+  attribute :available_languages, array: true
   attribute :language, :string
   attribute :form_slug, :string
   attribute :created_at, :datetime
