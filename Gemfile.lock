@@ -82,10 +82,10 @@ GEM
       activemodel (= 8.0.2.1)
       activesupport (= 8.0.2.1)
       timeout (>= 0.4.0)
-    activeresource (6.1.4)
-      activemodel (>= 6.0)
+    activeresource (6.2.0)
+      activemodel (>= 7.0)
       activemodel-serializers-xml (~> 1.0)
-      activesupport (>= 6.0)
+      activesupport (>= 7.0)
     activestorage (8.0.2.1)
       actionpack (= 8.0.2.1)
       activejob (= 8.0.2.1)
@@ -593,7 +593,7 @@ PLATFORMS
 DEPENDENCIES
   MailchimpMarketing (~> 3.0)
   aasm (~> 5.5)
-  activeresource (~> 6.1)
+  activeresource (~> 6.2)
   acts_as_list
   after_commit_everywhere (~> 1.6)
   aws-sdk-cloudwatch (~> 1.122)
