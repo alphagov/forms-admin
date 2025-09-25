@@ -67,6 +67,49 @@ RSpec.describe Form, type: :model do
       expect(form.errors[:name]).to include("can't be blank")
     end
 
+    it "requires available languages" do
+      form.available_languages = ""
+
+      expect(form).to be_invalid
+      expect(form.errors[:available_languages]).to include("can't be blank")
+
+      form.available_languages = []
+
+      expect(form).to be_invalid
+      expect(form.errors[:available_languages]).to include("can't be blank")
+    end
+
+    it "disallows invalid available languages" do
+      form.available_languages = %w[cn jp]
+
+      expect(form).to be_invalid
+      expect(form.errors[:available_languages]).to include("is not included in the list")
+    end
+
+    it "allows en and cy" do
+      form.name = "test"
+      form.available_languages = %w[en cy]
+
+      expect(form).to be_valid
+      expect(form.errors[:available_languages]).to be_empty
+    end
+
+    it "allows cy only" do
+      form.name = "prawf"
+      form.available_languages = %w[cy]
+
+      expect(form).to be_valid
+      expect(form.errors[:available_languages]).to be_empty
+    end
+
+    it "allows en only" do
+      form.name = "test"
+      form.available_languages = %w[en]
+
+      expect(form).to be_valid
+      expect(form.errors[:available_languages]).to be_empty
+    end
+
     context "when the form has validation errors" do
       let(:form) { create :form_record, pages: [routing_page, goto_page] }
       let(:routing_page) do
