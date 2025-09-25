@@ -2,7 +2,7 @@ require_relative "../../lib/host_patterns"
 require "rails_helper"
 
 RSpec.describe "Host Configuration" do
-  let(:host_patterns) { HostPatterns::ALLOWED_HOST_PATTERNS }
+  let(:host_patterns) { HostPatterns.allowed_host_patterns }
 
   # Used only for testing the regex
   def host_allowed?(host)
@@ -49,6 +49,25 @@ RSpec.describe "Host Configuration" do
        "admin.extra.dev.forms.service.gov.uk"].each do |host|
         expect(host_allowed?(host)).to be false
       end
+    end
+  end
+
+  context "with ALLOWED_HOST_PATTERNS environment variable set" do
+    before do
+      allow(ENV).to receive(:fetch).with("ALLOWED_HOST_PATTERNS", "").and_return("localhost:3000, foo.[^.]*.example\.gov\.uk")
+    end
+
+    it "allows the host pattern specified in the environment variable" do
+      expect(host_allowed?("localhost:3000")).to be true
+      expect(host_allowed?("foo.bar.example.gov.uk")).to be true
+    end
+
+    it "allows the default host patterns" do
+      expect(host_allowed?("admin.forms.service.gov.uk")).to be true
+    end
+
+    it "doesn't match not allowed domains" do
+      expect(host_allowed?("example.gov.uk")).to be false
     end
   end
 end
