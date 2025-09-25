@@ -25,33 +25,20 @@ class PageRepository
         answer_type:,
       )
       page.save_and_update_form
-      Api::V1::PageResource.create!(page.attributes)
       page
     end
 
     def save!(record)
       record.save_and_update_form
-      page = Api::V1::PageResource.new(record.attributes, true)
-      page.prefix_options[:form_id] = record.form.id
-      page.save!
       record
     end
 
     def destroy(record)
-      page = Api::V1::PageResource.new(record.attributes, true)
-      page.prefix_options[:form_id] = record.form.id
-
-      begin
-        page.destroy # rubocop:disable Rails/SaveBang
-      rescue ActiveResource::ResourceNotFound
-        # ActiveRecord::Persistence#destroy doesn't raise an error
-        # if record has already been destroyed, let's emulate that
-      end
-
       begin
         Page.find(record.id).destroy_and_update_form!
       rescue ActiveRecord::RecordNotFound
-        # as above
+        # ActiveRecord::Persistence#destroy doesn't raise an error
+        # if record has already been destroyed, let's emulate that
       end
 
       record
@@ -59,10 +46,6 @@ class PageRepository
 
     def move_page(record, direction)
       record.move_page(direction)
-
-      page = Api::V1::PageResource.new(record.attributes, true)
-      page.prefix_options[:form_id] = record.form.id
-      page.move_page(direction)
       record
     end
   end

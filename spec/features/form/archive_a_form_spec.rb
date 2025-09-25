@@ -8,10 +8,6 @@ feature "Archive a form", type: :feature do
     GroupForm.create! group:, form_id: form.id
     create(:membership, group:, user: standard_user, added_by: standard_user)
 
-    ActiveResource::HttpMock.respond_to do |mock|
-      mock.post "/api/v1/forms/#{form.id}/archive", post_headers, {}, 200
-    end
-
     login_as standard_user
   end
 

@@ -26,8 +26,6 @@ class Pages::SecondarySkipInput < BaseInput
     end
 
     ConditionRepository.create!(
-      form_id: form.id,
-      page_id: routing_page_id,
       check_page_id: page.id,
       routing_page_id:,
       answer_value: nil,

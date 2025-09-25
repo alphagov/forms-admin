@@ -237,14 +237,6 @@ RSpec.describe "users.rake" do
           dry_run_task.invoke
         }.not_to change(User, :count)
       end
-
-      it "does not delete any forms" do
-        dry_run_task.invoke
-
-        expect(ActiveResource::HttpMock
-          .requests.select { |request| request.method == :delete })
-          .to be_empty
-      end
     end
   end
 end

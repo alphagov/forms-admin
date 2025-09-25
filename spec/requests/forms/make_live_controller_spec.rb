@@ -69,11 +69,6 @@ RSpec.describe Forms::MakeLiveController, type: :request do
 
   describe "#create" do
     before do
-      # don't mock out the FormRepository#make_live! method so we can test the FormDocument is created
-      ActiveResource::HttpMock.respond_to do |mock|
-        mock.post "/api/v1/forms/#{form.id}/make-live", post_headers, {}, 200
-      end
-
       Membership.create!(group_id: group.id, user:, added_by: user, role: group_role)
       GroupForm.create!(form_id: form.id, group_id: group.id)
 

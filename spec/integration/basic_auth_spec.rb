@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "using basic auth" do
   let(:username) { "tester" }
   let(:password) { "password" }
-  let(:basic_auth_user) { create :basic_auth_user, name: username, organisation_id: organisation.id }
+  let!(:basic_auth_user) { create :basic_auth_user, name: username, organisation_id: organisation.id }
 
   let(:organisation) do
     create :organisation
@@ -22,16 +22,6 @@ RSpec.describe "using basic auth" do
   end
 
   before do
-    api_headers = {
-      "X-API-Token" => Settings.forms_api.auth_key,
-      "Accept" => "application/json",
-    }
-
-    # TODO: Remove this stub when we shift over from API to ActiveRecord
-    ActiveResource::HttpMock.respond_to do |mock|
-      mock.get "/api/v1/forms?creator_id=#{basic_auth_user.id}", api_headers, [].to_json, 200
-    end
-
     allow(Settings).to receive(:auth_provider).and_return("basic_auth")
   end
 

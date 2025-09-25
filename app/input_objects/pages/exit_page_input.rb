@@ -7,9 +7,7 @@ class Pages::ExitPageInput < BaseInput
   def submit
     return false if invalid?
 
-    ConditionRepository.create!(form_id: form.id,
-                                page_id: page.id,
-                                check_page_id: page.id,
+    ConditionRepository.create!(check_page_id: page.id,
                                 routing_page_id: page.id,
                                 answer_value:,
                                 goto_page_id: nil,
