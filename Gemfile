@@ -12,7 +12,7 @@ gem "activeresource", "~> 6.1"
 gem "pg", "~> 1.6"
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", "~> 6.6.1"
+gem "puma", "~> 7.0.4"
 
 # Used for handling authentication
 gem "gds-sso"
