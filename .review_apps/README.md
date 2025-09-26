@@ -5,8 +5,7 @@ The Terraform code in this directory is used to deploy a review copy of `forms-a
 It constructs a minimal, ephemeral version of a GOV.UK Forms environment in AWS ECS that can be used for reviews, then freely destroyed. This includes: 
 
 * a copy of `forms-admin` at the commit in question
-* a copy of the version of `forms-api` currently in production
-* a local PostgreSQL database with seed data for both `forms-api` and `forms-admin`
+* a local PostgreSQL database with seed data for `forms-admin`
 
 Review apps rely on a set of underlying infrastructure managed and deployed in `forms-deploy`. The Terraform will require you to be targeting the `integration` AWS account (where the `review` environment lives), and you should not override this.
 
