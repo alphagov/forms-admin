@@ -1154,6 +1154,7 @@ en:
       length: Length
   page_titles:
     access_denied: You do not have permission to access GOV.UK Forms
+    account_contact_for_research: Can we send you an email with information about taking part in user research to improve GOV.UK Forms?
     account_name: Enter your name
     account_organisation: Select your organisation
     account_terms_of_use: Terms of use
@@ -1415,6 +1416,13 @@ en:
       title: All forms with add another answer
     back_link: Back to reports
     back_to_feature_usage: Back to feature and answer type usage
+    contact_for_research:
+      heading: Users who’ve agreed to be contacted about user research
+      table_headings:
+        date_added: Date agreed
+        email: Email
+        name: Name
+      title: Users interested in research
     csv_downloads:
       live_forms: Download data about all live forms as a CSV file
       live_questions: Download all questions in live forms as a CSV file
