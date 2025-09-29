@@ -9,6 +9,7 @@ if Settings.sentry.dsn.present?
     config.debug = true
     config.enable_tracing = false
     config.environment = Settings.sentry.environment
+    config.excluded_exceptions += %w[NotFoundError]
 
     filter = ActiveSupport::ParameterFilter.new(
       [EmailParameterFilterProc.new(mask: Settings.sentry.filter_mask)],
