@@ -54,7 +54,7 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
       end
 
       it "displays a success flash message" do
-        expect(flash[:success]).to eq "Successfully deleted ‘Form 1’"
+        expect(flash[:success]).to eq "The draft form, ‘Form 1’, has been deleted"
       end
 
       context "when current user is not in group for form" do

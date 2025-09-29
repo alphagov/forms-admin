@@ -482,7 +482,7 @@ RSpec.describe "/groups", type: :request do
 
         it "displays a success flash message" do
           delete(group_url(group), params:)
-          expect(flash[:success]).to eq "Successfully deleted ‘Test Group’"
+          expect(flash[:success]).to eq "The group, ‘Test Group’, has been deleted"
         end
 
         context "but group has forms in it" do
@@ -570,7 +570,7 @@ RSpec.describe "/groups", type: :request do
 
         it "displays a success flash message" do
           delete(group_url(group), params:)
-          expect(flash[:success]).to eq "Successfully deleted ‘Test Group’"
+          expect(flash[:success]).to eq "The group, ‘Test Group’, has been deleted"
         end
 
         context "but group has forms in it" do
