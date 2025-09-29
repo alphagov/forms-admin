@@ -48,8 +48,6 @@ or run the rails server:
 npm run dev
 ```
 
-You will also need to run the [forms-api service](https://github.com/alphagov/forms-api), as this app needs the API to create and access forms.
-
 ## Development tools
 
 ### Running the tests
