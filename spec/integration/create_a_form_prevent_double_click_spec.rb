@@ -87,7 +87,7 @@ RSpec.describe "Create a form", type: :feature do
         choose "Yes"
         click_on "Continue"
 
-        expect(page).to have_selector ".govuk-notification-banner--success", text: "Successfully deleted"
+        expect(page).to have_selector ".govuk-notification-banner--success", text: "The group, ‘Test group’, has been deleted"
       end
     end
   end

@@ -349,7 +349,7 @@ en:
       delete:
         title: Are you sure you want to delete this draft?
       destroy:
-        success: Successfully deleted ‘%{form_name}’
+        success: The draft form, ‘%{form_name}’, has been deleted
     delete_form: Delete draft form
     form_overview:
       edit: Edit
@@ -505,7 +505,7 @@ en:
     delete:
       title: Are you sure you want to delete this group?
     destroy:
-      success: Successfully deleted ‘%{group_name}’
+      success: The group, ‘%{group_name}’, has been deleted
     edit:
       title: Change the name of this group
     form_table_caption: Forms in ‘%{group_name}’
@@ -1269,7 +1269,7 @@ en:
       title: Are you sure you want to delete this question?
     delete_question: Delete question
     destroy:
-      success: Successfully deleted ‘%{question_text}’
+      success: The question, ‘%{question_text}’, has been deleted
     exit_page:
       delete:
         back_link: Back to edit exit page

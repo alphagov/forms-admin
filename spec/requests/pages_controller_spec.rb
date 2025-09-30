@@ -301,7 +301,7 @@ RSpec.describe PagesController, type: :request do
         end
 
         it "displays a success flash message" do
-          expect(flash[:success]).to eq "Successfully deleted ‘#{page.question_text}’"
+          expect(flash[:success]).to eq "The question, ‘#{page.question_text}’, has been deleted"
         end
 
         it "destroys the page through the page repository" do
