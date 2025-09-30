@@ -721,4 +721,54 @@ RSpec.describe ReportsController, type: :request do
       end
     end
   end
+
+  describe "#contact_for_research" do
+    context "when the user is an editor" do
+      before do
+        login_as_standard_user
+
+        get report_contact_for_research_path
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is an organisation admin" do
+      before do
+        login_as_organisation_admin_user
+
+        get report_contact_for_research_path
+      end
+
+      it "returns http code 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "renders the forbidden view" do
+        expect(response).to render_template("errors/forbidden")
+      end
+    end
+
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+
+        get report_contact_for_research_path
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the users report view" do
+        expect(response).to render_template("reports/contact_for_research")
+      end
+    end
+  end
 end
