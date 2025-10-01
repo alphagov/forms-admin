@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_08_155727) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_24_180913) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -108,6 +108,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_08_155727) do
     t.string "s3_bucket_aws_account_id"
     t.string "s3_bucket_region"
     t.string "language", default: "en", null: false
+    t.text "available_languages", default: ["en"], null: false, array: true
     t.index ["external_id"], name: "index_forms_on_external_id", unique: true
   end
 

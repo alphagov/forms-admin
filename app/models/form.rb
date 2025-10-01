@@ -15,10 +15,16 @@ class Form < ApplicationRecord
     s3: "s3",
   }
 
+  enum :language, {
+    en: "en",
+    cy: "cy",
+  }
+
   validates :name, presence: true
   validates :payment_url, url: true, allow_blank: true
   validate :marking_complete_with_errors
   validates :submission_type, presence: true
+  validates :available_languages, presence: true, inclusion: { in: Form.languages }
 
   after_create :set_external_id
   after_update :update_draft_form_document
