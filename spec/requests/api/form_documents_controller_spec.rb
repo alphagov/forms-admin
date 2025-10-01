@@ -118,6 +118,37 @@ RSpec.describe Api::FormDocumentsController, type: :request do
         expect(response.headers["Content-Type"]).to eq("application/json; charset=utf-8")
       end
     end
+
+    describe "language param" do
+      let(:form) { create :form }
+
+      before do
+        create :form_document, form: form, tag: "live", language: "en", content: { form_id: form.id.to_s, language: "en" }
+        create :form_document, form: form, tag: "live", language: "cy", content: { form_id: form.id.to_s, language: "cy" }
+      end
+
+      it "when not given a language, defaults to english returns the live form document in english" do
+        get("/api/v2/forms/#{form.id}/live", headers:)
+        expect(response.parsed_body).to include({
+          form_id: form.id.to_s,
+          language: "en",
+        })
+      end
+
+      it "when given welsh param returns the live form document in welsh" do
+        get("/api/v2/forms/#{form.id}/live?language=cy", headers:)
+        expect(response.parsed_body).to include({
+          form_id: form.id.to_s,
+          language: "cy",
+        })
+      end
+
+      it "when given a language which doesn't exist returns http not found" do
+        get("/api/v2/forms/#{form.id}/live?language=unknown-language", headers:)
+        expect(response).to have_http_status(:not_found)
+        expect(response.headers["Content-Type"]).to eq("application/json; charset=utf-8")
+      end
+    end
   end
 
   describe "logging", :capture_logging do
