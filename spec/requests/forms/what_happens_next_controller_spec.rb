@@ -20,7 +20,7 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, save!: form)
+    allow(FormRepository).to receive_messages(save!: form)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -31,10 +31,6 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
   describe "#new" do
     before do
       get what_happens_next_path(form_id: form.id)
-    end
-
-    it "Reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     context "when the user is not authorised to view the form" do
@@ -54,10 +50,6 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       post what_happens_next_path(form_id: form.id), params: { forms_what_happens_next_input: { what_happens_next_markdown: }, route_to: }
     end
 
-    it "Reads the form" do
-      expect(FormRepository).to have_received(:find)
-    end
-
     it "Updates the form" do
       expect(FormRepository).to have_received(:save!)
     end
@@ -69,10 +61,6 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
     context "when previewing markdown" do
       let(:route_to) { "preview" }
       let(:what_happens_next_markdown) { "[a link](https://example.com)" }
-
-      it "reads the form" do
-        expect(FormRepository).to have_received(:find)
-      end
 
       it "renders the what happens next template" do
         expect(response).to have_rendered("forms/what_happens_next/new")
@@ -88,10 +76,6 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
 
       context "when markdown is invalid" do
         let(:what_happens_next_markdown) { "# A level one heading" }
-
-        it "reads the form" do
-          expect(FormRepository).to have_received(:find)
-        end
 
         it "renders the template" do
           expect(response).to have_rendered("forms/what_happens_next/new")
@@ -113,10 +97,6 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
 
     context "when saving markdown" do
       let(:route_to) { "save_and_continue" }
-
-      it "reads the form" do
-        expect(FormRepository).to have_received(:find)
-      end
 
       it "redirects the user to the form overview page" do
         expect(response).to redirect_to(form_path(form.id))

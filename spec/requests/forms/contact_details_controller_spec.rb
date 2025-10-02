@@ -15,16 +15,10 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
     let(:form) { create :form, :with_support }
 
     before do
-      allow(FormRepository).to receive(:find).and_return(form)
-
-      get contact_details_path(form_id: 2)
+      get contact_details_path(form_id: form.id)
     end
 
     context "when the does not have any contact details set" do
-      it "reads the form" do
-        expect(FormRepository).to have_received(:find)
-      end
-
       it "returns 200" do
         expect(response).to have_http_status(:ok)
       end
@@ -50,17 +44,13 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
     end
 
     before do
-      allow(FormRepository).to receive_messages(find: form, save!: form)
+      allow(FormRepository).to receive_messages(save!: form)
 
-      post contact_details_create_path(form_id: 2), params:
+      post contact_details_create_path(form_id: form.id), params:
     end
 
     context "when given valid params" do
       let(:params) { { forms_contact_details_input: { contact_details_supplied: ["", "supply_email"], email: "test@test.gov.uk", form: } } }
-
-      it "reads the form" do
-        expect(FormRepository).to have_received(:find)
-      end
 
       it "updates the form" do
         expect(FormRepository).to have_received(:save!)
@@ -74,10 +64,6 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
     context "when given invalid parameters" do
       let(:params) { { forms_contact_details_input: { contact_details_supplied: ["", "supply_email"], email: "", form: } } }
 
-      it "reads the form" do
-        expect(FormRepository).to have_received(:find)
-      end
-
       it "does not update the form" do
         expect(FormRepository).not_to have_received(:save!)
       end
@@ -90,10 +76,6 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
 
     context "when given an email address for a non-government inbox" do
       let(:params) { { forms_contact_details_input: { contact_details_supplied: ["", "supply_email"], email: "a@gmail.com", form: } } }
-
-      it "reads the form" do
-        expect(FormRepository).to have_received(:find)
-      end
 
       it "does not update the form on the API" do
         expect(FormRepository).not_to have_received(:save!)

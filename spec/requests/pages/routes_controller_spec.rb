@@ -19,7 +19,7 @@ describe Pages::RoutesController, type: :request do
   let(:user) { standard_user }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, pages: pages)
+    allow(FormRepository).to receive_messages(pages: pages)
     allow(PageRepository).to receive(:find).and_return(page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
@@ -32,10 +32,6 @@ describe Pages::RoutesController, type: :request do
       allow(PageRepository).to receive(:find).with(page_id: page.id, form_id: form.id).and_return(page)
 
       get show_routes_path(form_id: form.id, page_id: page.id)
-    end
-
-    it "Reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "renders the routing page template" do

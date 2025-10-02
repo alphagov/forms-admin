@@ -4,10 +4,6 @@ class FormRepository
       Form.create!(creator_id:, name:)
     end
 
-    def find(form_id:)
-      Form.find(form_id)
-    end
-
     def where(creator_id:)
       Form.where(creator_id:)
     end

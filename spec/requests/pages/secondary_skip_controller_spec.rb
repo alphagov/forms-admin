@@ -29,7 +29,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
 
-    allow(FormRepository).to receive_messages(find: form, pages: pages)
+    allow(FormRepository).to receive_messages(pages: pages)
     allow(PageRepository).to receive(:find).and_return(pages.first)
     allow(ConditionRepository).to receive_messages(create!: {}, find: {}, save!: {}, destroy: {})
   end
@@ -112,7 +112,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
       end
 
       context "when the submission fails" do
-        subject(:post_create) { post create_secondary_skip_path(form_id: 2, page_id: 1), params: invalid_params }
+        subject(:post_create) { post create_secondary_skip_path(form_id: form.id, page_id: 1), params: invalid_params }
 
         let(:invalid_params) do
           {

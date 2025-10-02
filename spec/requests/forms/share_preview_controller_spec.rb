@@ -16,13 +16,7 @@ RSpec.describe Forms::SharePreviewController, type: :request do
 
   describe "#new" do
     before do
-      allow(FormRepository).to receive(:find).and_return(form)
-
       get share_preview_path(id)
-    end
-
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "returns 200" do
@@ -46,13 +40,9 @@ RSpec.describe Forms::SharePreviewController, type: :request do
     let(:mark_complete) { "true" }
 
     before do
-      allow(FormRepository).to receive_messages(find: form, save!: form)
+      allow(FormRepository).to receive_messages(save!: form)
 
       post share_preview_create_path(id), params: { forms_share_preview_input: { form:, mark_complete: } }
-    end
-
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     context "when 'Yes' is selected" do

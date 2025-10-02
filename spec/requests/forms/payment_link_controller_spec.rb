@@ -9,7 +9,7 @@ RSpec.describe Forms::PaymentLinkController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, save!: updated_form)
+    allow(FormRepository).to receive_messages(save!: updated_form)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -17,24 +17,10 @@ RSpec.describe Forms::PaymentLinkController, type: :request do
     login_as_standard_user
   end
 
-  describe "#new" do
-    before do
-      get payment_link_path(form_id: form.id)
-    end
-
-    it "Reads the form" do
-      expect(FormRepository).to have_received(:find)
-    end
-  end
-
   describe "#create" do
     context "when the payment link is changed" do
       before do
         post payment_link_path(form_id: form.id), params: { forms_payment_link_input: { payment_url: } }
-      end
-
-      it "Reads the form" do
-        expect(FormRepository).to have_received(:find)
       end
 
       it "Updates the form" do

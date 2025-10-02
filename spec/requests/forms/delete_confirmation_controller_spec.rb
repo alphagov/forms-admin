@@ -16,13 +16,7 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
   describe "#delete" do
     describe "Given a valid form" do
       before do
-        allow(FormRepository).to receive(:find).and_return(form)
-
         get delete_form_path(form_id: form.id)
-      end
-
-      it "reads the form from the API" do
-        expect(FormRepository).to have_received(:find)
       end
 
       context "when current user is not in group for form" do
@@ -40,7 +34,7 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
       let(:form) { create(:form, name: "Form 1") }
 
       before do
-        allow(FormRepository).to receive_messages(find: form, destroy: true)
+        allow(FormRepository).to receive_messages(destroy: true)
 
         delete destroy_form_path(form_id: form.id, forms_delete_confirmation_input: { confirm: "yes" })
       end
@@ -72,7 +66,7 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
 
     context "when the user has decided not to delete the form" do
       before do
-        allow(FormRepository).to receive_messages(find: form, destroy: true)
+        allow(FormRepository).to receive_messages(destroy: true)
 
         delete destroy_form_path(form_id: form.id, forms_delete_confirmation_input: { confirm: "no" })
       end
@@ -88,7 +82,7 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
 
     context "when user has not confirmed whether they want to delete the form or not" do
       before do
-        allow(FormRepository).to receive_messages(find: form, destroy: true)
+        allow(FormRepository).to receive_messages(destroy: true)
 
         delete destroy_form_path(form_id: form.id, forms_delete_confirmation_input: { confirm: nil })
       end

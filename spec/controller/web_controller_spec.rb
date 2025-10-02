@@ -82,7 +82,6 @@ describe WebController, type: :controller do
 
   describe "#current_form" do
     before do
-      allow(FormRepository).to receive(:find).with(form_id: form.id).and_return(form)
       params = ActionController::Parameters.new(form_id: form.id)
       allow(controller).to receive(:params).and_return(params)
     end
@@ -92,10 +91,12 @@ describe WebController, type: :controller do
     end
 
     it "memorizes the find form request so it doesn't have to repeat the calls" do
+      allow(Form).to receive(:find).with(form.id).and_return(form)
+
       controller.current_form
       controller.current_form
 
-      expect(FormRepository).to have_received(:find).exactly(1).times
+      expect(Form).to have_received(:find).exactly(1).times
     end
   end
 

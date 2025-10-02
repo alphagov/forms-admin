@@ -17,7 +17,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
   let(:logger) { ActiveSupport::Logger.new(output) }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, pages:)
+    allow(FormRepository).to receive_messages(pages:)
     allow(PageRepository).to receive_messages(create!: page, find: page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
@@ -46,10 +46,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
       draft_question
 
       get new_question_path(form_id: form.id)
-    end
-
-    it "Reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "returns 200" do

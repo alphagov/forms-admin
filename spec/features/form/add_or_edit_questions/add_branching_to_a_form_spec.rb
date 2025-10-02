@@ -7,7 +7,7 @@ feature "Adding branching to a form", type: :feature do
   let(:first_answer_value) { form.pages.first.answer_settings.selection_options.first[:name] }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, pages:)
+    allow(FormRepository).to receive_messages(pages:)
     allow(ConditionRepository).to receive_messages(create!: true)
 
     pages.each do |page|

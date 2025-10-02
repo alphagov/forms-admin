@@ -17,13 +17,6 @@ RSpec.describe "forms.rake" do
     let(:forms) { create_list(:form, 3) }
     let(:form_ids) { forms.map(&:id) }
 
-    before do
-      allow(FormRepository).to receive(:find).and_call_original
-      forms.each do |form|
-        allow(FormRepository).to receive(:find).with(form_id: form.id).and_return(form)
-      end
-    end
-
     context "with valid arguments" do
       context "with a single form not in a group" do
         let(:form_id) { form_ids.first }
@@ -148,7 +141,7 @@ RSpec.describe "forms.rake" do
       let(:valid_args) { [form.id, submission_email] }
 
       before do
-        allow(FormRepository).to receive_messages(find: form, save!: form)
+        allow(FormRepository).to receive_messages(save!: form)
       end
 
       shared_examples "submission email update" do

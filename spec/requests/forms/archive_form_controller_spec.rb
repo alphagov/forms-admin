@@ -14,13 +14,7 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
 
   describe "#archive" do
     before do
-      allow(FormRepository).to receive(:find).and_return(form)
-
       get archive_form_path(id)
-    end
-
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "returns 200" do
@@ -44,7 +38,7 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
     let(:confirm) { :yes }
 
     before do
-      allow(FormRepository).to receive_messages(find: form, archive!: form)
+      allow(FormRepository).to receive_messages(archive!: form)
 
       post archive_form_update_path(id), params: { forms_confirm_archive_input: { confirm:, form: } }
     end
@@ -95,8 +89,6 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
 
   describe "#confirmation" do
     before do
-      allow(FormRepository).to receive(:find).and_return(form)
-
       get archive_form_confirmation_path(id)
     end
 

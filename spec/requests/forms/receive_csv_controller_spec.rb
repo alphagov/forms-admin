@@ -1,50 +1,34 @@
 require "rails_helper"
 
 RSpec.describe Forms::ReceiveCsvController, type: :request do
-  let(:form) do
-    build(:form, :live, id: 2, submission_type: original_submission_type)
-  end
+  let(:form) { create(:form, :live, submission_type: original_submission_type) }
 
   let(:original_submission_type) { "email" }
 
   let(:submission_type) { nil }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, save!: form)
+    allow(FormRepository).to receive_messages(save!: form)
 
     login_as_super_admin_user
-  end
-
-  describe "#new" do
-    before do
-      get receive_csv_path(form_id: 2)
-    end
-
-    it "Reads the form" do
-      expect(FormRepository).to have_received(:find)
-    end
   end
 
   describe "#create" do
     let(:params) { { forms_receive_csv_input: { submission_type: } } }
 
     before do
-      post receive_csv_path(form_id: 2), params:
+      post receive_csv_path(form_id: form.id), params:
     end
 
     context "when params are valid" do
       let(:submission_type) { "email_with_csv" }
-
-      it "Reads the form" do
-        expect(FormRepository).to have_received(:find)
-      end
 
       it "Updates the form" do
         expect(FormRepository).to have_received(:save!)
       end
 
       it "Redirects you to the form overview page" do
-        expect(response).to redirect_to(form_path(2))
+        expect(response).to redirect_to(form_path(form.id))
       end
 
       context "when submission type has changed from 'email' to 'email_with_csv'" do

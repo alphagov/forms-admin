@@ -29,7 +29,7 @@ class GroupFormsController < WebController
   def edit
     raise NotFoundError unless set_group_form
 
-    @form = FormRepository.find(form_id: params[:id])
+    @form = Form.find(params[:id])
     @group_select = Forms::GroupSelect.new(group: @group, form: @form)
     @group_select_presenter = Forms::GroupSelectPresenter.call(group: @group, groups: @group_select.groups, form: @form)
   end

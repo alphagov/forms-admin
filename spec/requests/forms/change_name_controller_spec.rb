@@ -7,21 +7,11 @@ RSpec.describe Forms::ChangeNameController, type: :request do
   let(:group) { create(:group, organisation: user.organisation) }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, create!: form, save!: form)
+    allow(FormRepository).to receive_messages(create!: form, save!: form)
 
     Membership.create!(group_id: group.id, user:, added_by: user)
     GroupForm.create!(form:, group_id: group.id)
     login_as user
-  end
-
-  describe "#edit" do
-    before do
-      get change_form_name_path(form_id: form.id)
-    end
-
-    it "fetches the form" do
-      expect(FormRepository).to have_received(:find)
-    end
   end
 
   describe "#update" do

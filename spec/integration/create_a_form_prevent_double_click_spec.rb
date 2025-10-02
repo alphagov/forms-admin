@@ -22,10 +22,6 @@ RSpec.describe "Create a form", type: :feature do
     login_as user
 
     allow(FormRepository).to receive(:create!).and_return form, unwanted_form
-    allow(FormRepository).to receive(:find).with(form_id: form.id).and_return form
-    allow(FormRepository).to receive(:find).with(form_id: form.id.to_s).and_return form
-    allow(FormRepository).to receive(:find).with(form_id: unwanted_form.id).and_return unwanted_form
-    allow(FormRepository).to receive(:find).with(form_id: unwanted_form.id.to_s).and_return unwanted_form
     allow(FormRepository).to receive(:pages).and_return([])
   end
 

@@ -10,7 +10,7 @@ feature "Create or edit a form", type: :feature do
 
   context "when creating a form" do
     before do
-      allow(FormRepository).to receive_messages(create!: form, find: form, pages: form.pages)
+      allow(FormRepository).to receive_messages(create!: form, pages: form.pages)
     end
 
     context "when the user is a member of a group" do
@@ -29,7 +29,7 @@ feature "Create or edit a form", type: :feature do
 
   context "when editing an existing form" do
     before do
-      allow(FormRepository).to receive_messages(find: form, pages: form.pages)
+      allow(FormRepository).to receive_messages(pages: form.pages)
       allow(FormRepository).to receive(:save!, &:save!)
     end
 

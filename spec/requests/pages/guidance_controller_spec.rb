@@ -17,7 +17,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, pages: pages)
+    allow(FormRepository).to receive_messages(pages: pages)
     allow(PageRepository).to receive(:find).and_return(page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
@@ -28,10 +28,6 @@ RSpec.describe Pages::GuidanceController, type: :request do
   describe "#new" do
     before do
       get guidance_new_path(form_id: form.id)
-    end
-
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "renders the template" do
@@ -62,10 +58,6 @@ RSpec.describe Pages::GuidanceController, type: :request do
     context "when previewing markdown" do
       let(:route_to) { "preview" }
 
-      it "reads the form" do
-        expect(FormRepository).to have_received(:find)
-      end
-
       it "renders the template" do
         expect(response).to have_rendered("pages/guidance")
       end
@@ -89,10 +81,6 @@ RSpec.describe Pages::GuidanceController, type: :request do
       context "when markdown is blank" do
         let(:guidance_markdown) { "" }
 
-        it "reads the form" do
-          expect(FormRepository).to have_received(:find)
-        end
-
         it "renders the template" do
           expect(response).to have_rendered("pages/guidance")
         end
@@ -109,10 +97,6 @@ RSpec.describe Pages::GuidanceController, type: :request do
 
     context "when saving markdown" do
       let(:route_to) { "save_and_continue" }
-
-      it "reads the form" do
-        expect(FormRepository).to have_received(:find)
-      end
 
       it "saves the page_heading and guidance_markdown to session" do
         expect(draft_question.page_heading).to eq("Page heading")
@@ -144,10 +128,6 @@ RSpec.describe Pages::GuidanceController, type: :request do
       get guidance_edit_path(form_id: form.id, page_id: page.id)
     end
 
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
-    end
-
     it "renders the template" do
       expect(response).to have_rendered("pages/guidance")
     end
@@ -177,10 +157,6 @@ RSpec.describe Pages::GuidanceController, type: :request do
     context "when previewing markdown" do
       let(:route_to) { "preview" }
 
-      it "reads the form" do
-        expect(FormRepository).to have_received(:find)
-      end
-
       it "renders the template" do
         expect(response).to have_rendered("pages/guidance")
       end
@@ -204,10 +180,6 @@ RSpec.describe Pages::GuidanceController, type: :request do
       context "when markdown is blank" do
         let(:guidance_markdown) { "" }
 
-        it "reads the form" do
-          expect(FormRepository).to have_received(:find)
-        end
-
         it "renders the template" do
           expect(response).to have_rendered("pages/guidance")
         end
@@ -224,10 +196,6 @@ RSpec.describe Pages::GuidanceController, type: :request do
 
     context "when saving markdown" do
       let(:route_to) { "save_and_continue" }
-
-      it "reads the form" do
-        expect(FormRepository).to have_received(:find)
-      end
 
       it "saves the page_heading and guidance_markdown to session" do
         expect(draft_question.page_heading).to eq("Page heading")

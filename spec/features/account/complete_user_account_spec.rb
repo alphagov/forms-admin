@@ -7,7 +7,7 @@ feature "Add account organisation to user without organisation", type: :feature 
   let(:form) { create :form, name: "a form I created when I didn't have an organisation", created_at: "2024-10-08T07:31:15.762Z" }
 
   before do
-    allow(FormRepository).to receive_messages(where: [form], find: form, pages: form.pages)
+    allow(FormRepository).to receive_messages(where: [form], pages: form.pages)
 
     OmniAuth.config.test_mode = true
     OmniAuth.config.mock_auth[:auth0] = Faker::Omniauth.auth0(

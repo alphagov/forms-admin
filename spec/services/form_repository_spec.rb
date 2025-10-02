@@ -20,14 +20,6 @@ describe FormRepository do
     end
   end
 
-  describe "#find" do
-    let(:form) { create(:form_record) }
-
-    it "returns the form" do
-      expect(described_class.find(form_id: form.id)).to eq(form)
-    end
-  end
-
   describe "#where" do
     let(:form) { create(:form_record, creator_id: 3) }
 

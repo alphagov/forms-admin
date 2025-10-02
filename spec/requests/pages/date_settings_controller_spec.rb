@@ -10,7 +10,7 @@ RSpec.describe Pages::DateSettingsController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, pages: pages)
+    allow(FormRepository).to receive_messages(pages: pages)
     allow(PageRepository).to receive_messages(find: page, save!: page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
@@ -21,10 +21,6 @@ RSpec.describe Pages::DateSettingsController, type: :request do
   describe "#new" do
     before do
       get date_settings_new_path(form_id: form.id)
-    end
-
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "sets an instance variable for date_settings_path" do
@@ -82,10 +78,6 @@ RSpec.describe Pages::DateSettingsController, type: :request do
     before do
       draft_question
       get date_settings_edit_path(form_id: page.form_id, page_id: page.id)
-    end
-
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "returns the existing page input type" do

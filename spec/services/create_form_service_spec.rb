@@ -31,7 +31,6 @@ RSpec.describe CreateFormService do
     context "when a form with that name was already created in that group" do
       before do
         allow(FormRepository).to receive(:create!).and_invoke(->(**attributes) { create(:form, **attributes) })
-        allow(FormRepository).to receive(:find).and_invoke(->(form_id:) { Form.find(form_id) })
       end
 
       context "when both forms are created at the same time" do
