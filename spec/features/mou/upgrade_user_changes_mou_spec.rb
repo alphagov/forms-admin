@@ -5,10 +5,6 @@ describe "Assign an organisation to a user with a signed MOU", type: :feature do
   let!(:mou_signature) { create(:mou_signature, user:, organisation: nil, created_at: Time.zone.parse("September 1, 2023")) }
   let(:organisation) { create :organisation }
 
-  before do
-    allow(FormRepository).to receive(:where).and_return([])
-  end
-
   it "a logged in user can sign an MOU" do
     login_as_super_admin_user
     when_i_visit_the_mou_index_page

@@ -7,56 +7,52 @@ RSpec.describe DefaultGroupService do
 
   describe "#create_user_default_trial_group!" do
     let(:user) { create :user, name: "Batman" }
-    let(:form) { create :form }
-    let(:forms_response) do
-      [form]
-    end
-
-    before do
-      allow(FormRepository).to receive(:where).with(creator_id: user.id).and_return(forms_response)
-    end
 
     context "when the user does not already have a trial group" do
-      it "creates a group" do
-        expect {
-          default_group_service.create_user_default_trial_group!(user)
-        }.to change(Group, :count).by(1)
+      context "when the user has created forms" do
+        let!(:form) { create :form, creator_id: user.id }
 
-        expect(Group.last).to have_attributes(
-          creator: user,
-          name: "Batman’s trial group",
-          organisation: user.organisation,
-        )
-        expect(Group.last).to be_trial
-        expect(Group.last.users).to eq [user]
-        expect(Group.last.users.group_admins).to eq [user]
-      end
+        it "creates a group" do
+          expect {
+            default_group_service.create_user_default_trial_group!(user)
+          }.to change(Group, :count).by(1)
 
-      it "adds their trial forms to the group" do
-        expect {
-          default_group_service.create_user_default_trial_group!(user)
-        }.to change(GroupForm, :count).by(1)
-
-        expect(GroupForm.last).to have_attributes(form_id: form.id)
-      end
-
-      context "when the user does not have a name" do
-        let(:user) { create :user, name: "" }
-
-        it "returns nil" do
-          expect(
-            default_group_service.create_user_default_trial_group!(user),
-          ).to be_nil
+          expect(Group.last).to have_attributes(
+            creator: user,
+            name: "Batman’s trial group",
+            organisation: user.organisation,
+          )
+          expect(Group.last).to be_trial
+          expect(Group.last.users).to eq [user]
+          expect(Group.last.users.group_admins).to eq [user]
         end
-      end
 
-      context "when the user does not have an organisation" do
-        let(:user) { create :user, :with_no_org }
+        it "adds their trial forms to the group" do
+          expect {
+            default_group_service.create_user_default_trial_group!(user)
+          }.to change(GroupForm, :count).by(1)
 
-        it "returns nil" do
-          expect(
-            default_group_service.create_user_default_trial_group!(user),
-          ).to be_nil
+          expect(GroupForm.last).to have_attributes(form_id: form.id)
+        end
+
+        context "when the user does not have a name" do
+          let(:user) { create :user, name: "" }
+
+          it "returns nil" do
+            expect(
+              default_group_service.create_user_default_trial_group!(user),
+            ).to be_nil
+          end
+        end
+
+        context "when the user does not have an organisation" do
+          let(:user) { create :user, :with_no_org }
+
+          it "returns nil" do
+            expect(
+              default_group_service.create_user_default_trial_group!(user),
+            ).to be_nil
+          end
         end
       end
 
@@ -74,6 +70,10 @@ RSpec.describe DefaultGroupService do
     end
 
     context "when the user already has a group" do
+      before do
+        create :form, creator_id: user.id
+      end
+
       context "and the group status is 'trial'" do
         it "does not create a group" do
           group = create :group, creator: user, organisation: user.organisation, name: "Batman’s trial group", status: :trial
@@ -99,6 +99,8 @@ RSpec.describe DefaultGroupService do
     end
 
     context "when the user's forms are already in a group" do
+      let!(:form) { create :form, creator_id: user.id }
+
       it "returns nil" do
         group = create :group, creator: user, organisation: user.organisation
         GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -112,13 +114,13 @@ RSpec.describe DefaultGroupService do
     context "when the user has the same name as another user in the same organisation who also has a default group" do
       before do
         another_user = create :user, name: "Batman", email: "batsignal@example.gov.uk", organisation: user.organisation
-
-        allow(FormRepository).to receive(:where).with(creator_id: another_user.id).and_return([create(:form)])
+        create :form, creator_id: user.id
+        create :form, creator_id: another_user.id
 
         default_group_service.create_user_default_trial_group!(another_user)
       end
 
-      it "does not throw an errr" do
+      it "does not throw an error" do
         expect {
           default_group_service.create_user_default_trial_group!(user)
         }.not_to raise_error
@@ -132,8 +134,7 @@ RSpec.describe DefaultGroupService do
       context "and there is yet another user with the same name in the same organisation with a default group" do
         before do
           yet_another_user = create :user, name: "Batman", email: "batman@joker.example.com", organisation: user.organisation
-
-          allow(FormRepository).to receive(:where).with(creator_id: yet_another_user.id).and_return([create(:form)])
+          create :form, creator_id: yet_another_user.id
 
           default_group_service.create_user_default_trial_group!(yet_another_user)
         end

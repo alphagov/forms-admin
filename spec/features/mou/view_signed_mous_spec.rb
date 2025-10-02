@@ -8,8 +8,6 @@ describe "Check which MOUs have been signed", type: :feature do
   end
 
   before do
-    allow(FormRepository).to receive(:where).and_return([])
-
     login_as_super_admin_user
   end
 

@@ -1,9 +1,5 @@
 class FormRepository
   class << self
-    def where(creator_id:)
-      Form.where(creator_id:)
-    end
-
     def save!(record)
       record.save!
       record.create_draft_from_live_form! if record.live?

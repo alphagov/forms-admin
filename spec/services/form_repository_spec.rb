@@ -1,14 +1,6 @@
 require "rails_helper"
 
 describe FormRepository do
-  describe "#where" do
-    let(:form) { create(:form_record, creator_id: 3) }
-
-    it "returns forms with a matching creator id" do
-      expect(described_class.where(creator_id: form.creator_id)).to eq([form])
-    end
-  end
-
   describe "#save!" do
     let(:form) { create(:form_record, name: "database name", creator_id: 3) }
 
