@@ -29,6 +29,13 @@ class Form < ApplicationRecord
   after_create :set_external_id
   after_update :update_draft_form_document
 
+  def save_draft!
+    save!
+    create_draft_from_live_form! if live?
+    create_draft_from_archived_form! if archived?
+    true
+  end
+
   def has_draft_version
     draft? || live_with_draft? || archived_with_draft?
   end
