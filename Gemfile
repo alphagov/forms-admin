@@ -28,6 +28,7 @@ gem "sentry-rails"
 gem "sentry-ruby"
 
 gem "config"
+gem "deep_cloneable", "~> 3.2.1"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"

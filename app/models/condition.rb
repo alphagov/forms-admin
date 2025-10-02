@@ -1,6 +1,6 @@
 class Condition < ApplicationRecord
   include ConditionMethods
-  belongs_to :routing_page, class_name: "Page"
+  belongs_to :routing_page, class_name: "Page", inverse_of: :routing_conditions
   belongs_to :check_page, class_name: "Page", optional: true
   belongs_to :goto_page, class_name: "Page", optional: true
 

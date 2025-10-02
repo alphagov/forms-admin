@@ -773,4 +773,33 @@ RSpec.describe Form, type: :model do
       end
     end
   end
+
+  describe "copying a form" do
+    let(:form) { create :form_record }
+
+    before do
+      form.pages << create_list(:page_record, 1, :with_selection_settings, form:)
+
+      form.pages.each do |page|
+        page.routing_conditions << create(:condition_record, routing_page_id: page.id, check_page_id: page.id, answer_value: "Option 1", goto_page_id: form.pages.last.id)
+        pp page.routing_conditions
+        page.save!
+      end
+
+      form.save!
+    end
+
+    it "creates a copy of the form with a new name" do
+      copied_form = form.deep_clone include: { pages: { include: :routing_conditions } }
+      copied_form.external_id = nil
+      copied_form.save!
+
+      expect(copied_form).to be_persisted
+      expect(copied_form.name).to eq(form.name)
+      expect(copied_form.pages.count).to be > 0
+      expect(copied_form.pages[0].routing_conditions.count).to be > 0
+      expect(copied_form.pages.count).to eq(form.pages.count)
+      expect(copied_form.id).not_to eq(form.id)
+    end
+  end
 end

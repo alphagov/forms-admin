@@ -184,6 +184,8 @@ GEM
     debug (1.11.0)
       irb (~> 1.10)
       reline (>= 0.3.8)
+    deep_cloneable (3.2.1)
+      activerecord (>= 3.1.0, < 9)
     deep_merge (1.2.2)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
@@ -611,6 +613,7 @@ DEPENDENCIES
   csv
   cuprite
   debug
+  deep_cloneable (~> 3.2.1)
   dfe-autocomplete!
   factory_bot_rails
   faker
@@ -694,6 +697,7 @@ CHECKSUMS
   cuprite (0.17) sha256=b140d5dc70d08b97ad54bcf45cd95d0bd430e291e9dffe76fff851fddd57c12b
   date (3.4.1) sha256=bf268e14ef7158009bfeaec40b5fa3c7271906e88b196d958a89d4b408abe64f
   debug (1.11.0) sha256=1425db64cfa0130c952684e3dc974985be201dd62899bf4bbe3f8b5d6cf1aef2
+  deep_cloneable (3.2.1) sha256=35298dd8fc15e507e1b7dbe5cbd409a1b2b9515140b057407aa74474ca3e016d
   deep_merge (1.2.2) sha256=83ced3a3d7f95f67de958d2ce41b1874e83c8d94fe2ddbff50c8b4b82323563a
   descendants_tracker (0.0.4) sha256=e9c41dd4cfbb85829a9301ea7e7c48c2a03b26f09319db230e6479ccdc780897
   dfe-autocomplete (0.2.0)

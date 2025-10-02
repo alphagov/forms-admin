@@ -36,7 +36,7 @@ FactoryBot.define do
       end
 
       pages do
-        Array.new(pages_count) { association(:page_record) }
+        Array.new(pages_count) { association(:page_record, :with_selection_settings) }
       end
 
       after(:build) do |form|
