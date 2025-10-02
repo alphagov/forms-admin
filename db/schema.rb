@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_24_180913) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_26_113735) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -66,7 +66,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_24_180913) do
     t.jsonb "content", comment: "The JSON which describes the form"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["form_id", "tag"], name: "index_form_documents_on_form_id_and_tag", unique: true
+    t.string "language", default: "en", null: false
+    t.index ["form_id", "tag", "language"], name: "index_form_documents_on_form_id_tag_and_language", unique: true
     t.index ["form_id"], name: "index_form_documents_on_form_id"
   end
 

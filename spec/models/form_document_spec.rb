@@ -16,6 +16,21 @@ RSpec.describe FormDocument, type: :model do
     expect(form_document).not_to be_valid
   end
 
+  it "is invalid without langauage" do
+    form_document = build(:form_document, language: nil)
+    expect(form_document).to be_invalid
+  end
+
+  it "is invalid with a language that is not supported" do
+    form_document = build(:form_document, language: "zz")
+    expect(form_document).to be_invalid
+  end
+
+  it "is valid with a supported language" do
+    form_document = build(:form_document, language: "cy")
+    expect(form_document).to be_valid
+  end
+
   it "has a default created_at and updated_at" do
     travel_to Time.zone.local(2023, 10, 1, 10, 0, 0) do
       form_document = create(:form_document, :live)
