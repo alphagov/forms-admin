@@ -68,11 +68,6 @@ RSpec.describe "Create a form", type: :feature do
 
         click_on "Save and continue"
 
-        allow(FormRepository).to receive(:destroy).and_invoke(lambda do |record|
-          GroupForm.find_by_form_id(record.id).destroy!
-          record
-        end)
-
         click_on "Delete draft form"
         choose "Yes"
         click_on "Continue"

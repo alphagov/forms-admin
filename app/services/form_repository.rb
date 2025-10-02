@@ -7,17 +7,6 @@ class FormRepository
       record
     end
 
-    def destroy(record)
-      begin
-        Form.destroy(record.id)
-      rescue ActiveRecord::RecordNotFound
-        # ActiveRecord::Persistence#destroy doesn't raise an error
-        # if record has already been destroyed, let's emulate that
-      end
-
-      record
-    end
-
     def pages(record)
       Form.find(record.id).pages
     end

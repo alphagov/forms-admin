@@ -34,8 +34,6 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
       let(:form) { create(:form, name: "Form 1") }
 
       before do
-        allow(FormRepository).to receive_messages(destroy: true)
-
         delete destroy_form_path(form_id: form.id, forms_delete_confirmation_input: { confirm: "yes" })
       end
 
@@ -44,7 +42,7 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
       end
 
       it "deletes the form" do
-        expect(FormRepository).to have_received(:destroy)
+        expect(Form.exists?(form.id)).to be false
       end
 
       it "displays a success flash message" do
@@ -58,16 +56,14 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
           expect(response).to have_http_status :forbidden
         end
 
-        it "does not delete the form on the API" do
-          expect(FormRepository).not_to have_received(:destroy)
+        it "does not delete the form" do
+          expect(Form.exists?(form.id)).to be true
         end
       end
     end
 
     context "when the user has decided not to delete the form" do
       before do
-        allow(FormRepository).to receive_messages(destroy: true)
-
         delete destroy_form_path(form_id: form.id, forms_delete_confirmation_input: { confirm: "no" })
       end
 
@@ -75,15 +71,13 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
         expect(response).to redirect_to(form_path(form.id))
       end
 
-      it "does not delete the form on the API" do
-        expect(FormRepository).not_to have_received(:destroy)
+      it "does not delete the form" do
+        expect(Form.exists?(form.id)).to be true
       end
     end
 
     context "when user has not confirmed whether they want to delete the form or not" do
       before do
-        allow(FormRepository).to receive_messages(destroy: true)
-
         delete destroy_form_path(form_id: form.id, forms_delete_confirmation_input: { confirm: nil })
       end
 
@@ -93,7 +87,7 @@ RSpec.describe Forms::DeleteConfirmationController, type: :request do
       end
 
       it "does not delete the form on the API" do
-        expect(FormRepository).not_to have_received(:destroy)
+        expect(Form.exists?(form.id)).to be true
       end
     end
   end

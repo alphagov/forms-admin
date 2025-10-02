@@ -24,7 +24,7 @@ module Forms
 
       success_url = current_form.group.present? ? group_path(current_form.group) : root_path
 
-      unless FormRepository.destroy(current_form)
+      unless current_form.destroy
         flash[:message] = "Deletion unsuccessful"
         return redirect_to @back_url
       end

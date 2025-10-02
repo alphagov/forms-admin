@@ -39,34 +39,6 @@ describe FormRepository do
     end
   end
 
-  describe "#destroy" do
-    let!(:form) { create(:form_record) }
-
-    it "removes the form from the database" do
-      expect {
-        described_class.destroy(form)
-      }.to change(Form, :count).by(-1)
-    end
-
-    it "returns a Form object" do
-      expect(described_class.destroy(form)).to be_a(Form)
-    end
-
-    it "returns the deleted form" do
-      expect(described_class.destroy(form)).to eq form
-    end
-
-    context "when the form has already been deleted" do
-      it "does not raise an error" do
-        described_class.destroy(form)
-
-        expect {
-          described_class.destroy(form)
-        }.not_to raise_error
-      end
-    end
-  end
-
   describe "#pages" do
     let(:form) { create(:form_record, :with_pages) }
 
