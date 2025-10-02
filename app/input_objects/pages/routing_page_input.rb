@@ -1,5 +1,5 @@
 class Pages::RoutingPageInput < BaseInput
-  attr_accessor :routing_page_id
+  attr_accessor :routing_page_id, :form
 
   validates :routing_page_id, presence: true
 
