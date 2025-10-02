@@ -1,8 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Pages::AddressSettingsInput, type: :model do
+  let(:form) { create :form }
   let(:address_settings_input) { build :address_settings_input, draft_question: }
-  let(:draft_question) { build :draft_question, answer_type: "address", form_id: 1 }
+  let(:draft_question) { build :draft_question, answer_type: "address", form_id: form.id }
 
   it "has a valid factory" do
     expect(address_settings_input).to be_valid

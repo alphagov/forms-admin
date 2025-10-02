@@ -1,8 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Pages::Selection::OptionsInput do
+  let(:form) { create :form }
   let(:only_one_option) { "true" }
-  let(:draft_question) { build :draft_question, answer_type: "selection", answer_settings: { only_one_option: } }
+  let(:draft_question) { build :draft_question, answer_type: "selection", answer_settings: { only_one_option: }, form_id: form.id }
   let(:selection_options) { [{ name: "option 1" }, { name: "option 2" }] }
 
   describe "validations" do
