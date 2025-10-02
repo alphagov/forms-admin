@@ -18,8 +18,6 @@ RSpec.describe Forms::SubmissionEmailController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(FormRepository).to receive_messages(save!: form)
-
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
 

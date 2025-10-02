@@ -4,13 +4,9 @@ RSpec.describe Forms::PaymentLinkController, type: :request do
   let(:form) { create(:form, :live, payment_url: "https://www.example.com") }
   let(:payment_url) { "https://www.gov.uk/payments/organisation/service" }
 
-  let(:updated_form) { build(:form, :live, id: form.id, payment_url:) }
-
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(FormRepository).to receive_messages(save!: updated_form)
-
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
 
@@ -18,20 +14,22 @@ RSpec.describe Forms::PaymentLinkController, type: :request do
   end
 
   describe "#create" do
-    context "when the payment link is changed" do
-      before do
-        post payment_link_path(form_id: form.id), params: { forms_payment_link_input: { payment_url: } }
-      end
+    let(:params) { { forms_payment_link_input: { payment_url: } } }
 
+    context "when the payment link is changed" do
       it "Updates the form" do
-        expect(FormRepository).to have_received(:save!)
+        expect {
+          post(payment_link_path(form_id: form.id), params:)
+        }.to change { form.reload.payment_url }.to(payment_url)
       end
 
       it "Redirects you to the form overview page" do
+        post(payment_link_path(form_id: form.id), params:)
         expect(response).to redirect_to(form_path(form.id))
       end
 
       it "displays a flash message that the payment link has been saved" do
+        post(payment_link_path(form_id: form.id), params:)
         expect(flash[:success]).to eq(I18n.t("banner.success.form.payment_link_saved"))
       end
     end
@@ -40,7 +38,7 @@ RSpec.describe Forms::PaymentLinkController, type: :request do
       let(:form) { create(:form, :live, payment_url: nil) }
 
       before do
-        post payment_link_path(form_id: form.id), params: { forms_payment_link_input: { payment_url: } }
+        post(payment_link_path(form_id: form.id), params:)
       end
 
       it "displays a flash message that the payment link has been saved" do
@@ -49,8 +47,10 @@ RSpec.describe Forms::PaymentLinkController, type: :request do
     end
 
     context "when a payment link is removed" do
+      let(:payment_url) { "" }
+
       before do
-        post payment_link_path(form_id: form.id), params: { forms_payment_link_input: { payment_url: "" } }
+        post(payment_link_path(form_id: form.id), params:)
       end
 
       it "displays a flash message that the payment link has been removed" do
@@ -62,7 +62,7 @@ RSpec.describe Forms::PaymentLinkController, type: :request do
       let(:form) { create(:form, :live, payment_url:) }
 
       before do
-        post payment_link_path(form_id: form.id), params: { forms_payment_link_input: { payment_url: payment_url } }
+        post(payment_link_path(form_id: form.id), params:)
       end
 
       it "does not display a flash message" do
@@ -72,9 +72,10 @@ RSpec.describe Forms::PaymentLinkController, type: :request do
 
     context "when the payment link was not previously set and no payment link is entered" do
       let(:form) { create(:form, :live, payment_url: nil) }
+      let(:payment_url) { "" }
 
       before do
-        post payment_link_path(form_id: form.id), params: { forms_payment_link_input: { payment_url: "" } }
+        post(payment_link_path(form_id: form.id), params:)
       end
 
       it "does not display a flash message" do

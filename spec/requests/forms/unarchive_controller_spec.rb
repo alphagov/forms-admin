@@ -6,24 +6,11 @@ RSpec.describe Forms::UnarchiveController, type: :request do
   let(:form) { create(:form, :archived) }
   let(:made_live_form) { build(:made_live_form, id: form.id) }
 
-  let(:updated_form) do
-    create(:form,
-           :live,
-           name: form.name,
-           form_slug: form.form_slug,
-           submission_email: form.submission_email,
-           privacy_policy_url: form.privacy_policy_url,
-           support_email: form.support_email,
-           pages: form.pages)
-  end
-
   let(:group) { create(:group, organisation: user.organisation, status: :active) }
   let(:form_params) { nil }
 
   describe "#new" do
     before do
-      allow(FormRepository).to receive_messages(save!: updated_form)
-
       Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user, role: :group_admin)
       GroupForm.create!(form_id: form.id, group_id: group.id)
 

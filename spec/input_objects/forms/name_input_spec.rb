@@ -20,8 +20,6 @@ RSpec.describe Forms::NameInput, type: :model do
         form = create :form
         name_input = described_class.new(form:, name: "New Form")
 
-        allow(FormRepository).to receive(:save!).and_return({ id: 1, name: "New Form" })
-
         expect {
           name_input.submit
         }.to change(form, :name).to("New Form")

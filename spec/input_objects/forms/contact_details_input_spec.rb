@@ -219,45 +219,42 @@ RSpec.describe Forms::ContactDetailsInput, type: :model do
   end
 
   describe "#submit" do
-    context "when invalid" do
-      subject(:contact_details_input) { build :contact_details_input, contact_details_supplied: [:supply_email], email: "invalid_email" }
+    let(:form) { create :form }
 
-      before do
-        allow(FormRepository).to receive(:save!)
-      end
+    context "when invalid" do
+      subject(:contact_details_input) { build :contact_details_input, form:, contact_details_supplied: [:supply_email], email: "invalid_email" }
 
       it "returns false" do
         expect(contact_details_input.submit).to be false
       end
 
       it "does not save form" do
-        contact_details_input.submit
-        expect(FormRepository).not_to have_received(:save!)
+        expect {
+          contact_details_input.submit
+        }.not_to(change { form.reload.support_email })
       end
     end
 
     context "when valid" do
-      subject(:contact_details_input) { build :contact_details_input }
-
-      before do
-        allow(FormRepository).to receive(:save!).and_return(true)
-      end
+      subject(:contact_details_input) { build :contact_details_input, form: }
 
       it "not be false" do
         expect(contact_details_input.submit).to be(true)
       end
 
       it "saves the form" do
-        contact_details_input.submit
-        expect(FormRepository).to have_received(:save!)
+        expect {
+          contact_details_input.submit
+        }.to change { form.reload.support_email }.to(contact_details_input.email)
       end
 
       it "sets the form values" do
+        form.reload
         contact_details_input.submit
-        expect(contact_details_input.form.support_email).to eq(contact_details_input.email)
-        expect(contact_details_input.form.support_phone).to eq(contact_details_input.phone)
-        expect(contact_details_input.form.support_url).to eq(contact_details_input.link_href)
-        expect(contact_details_input.form.support_url_text).to eq(contact_details_input.link_text)
+        expect(form.support_email).to eq(contact_details_input.email)
+        expect(form.support_phone).to eq(contact_details_input.phone)
+        expect(form.support_url).to eq(contact_details_input.link_href)
+        expect(form.support_url_text).to eq(contact_details_input.link_text)
       end
     end
   end

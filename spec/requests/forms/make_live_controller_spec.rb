@@ -5,18 +5,6 @@ RSpec.describe Forms::MakeLiveController, type: :request do
   let(:form) { create(:form, :ready_for_live) }
   let(:id) { form.id }
 
-  let(:updated_form) do
-    build(:form,
-          :live,
-          id: form.id,
-          name: form.name,
-          form_slug: form.form_slug,
-          submission_email: form.submission_email,
-          privacy_policy_url: form.privacy_policy_url,
-          support_email: form.support_email,
-          pages: form.pages)
-  end
-
   let(:form_params) { nil }
 
   let(:group_role) { :group_admin }

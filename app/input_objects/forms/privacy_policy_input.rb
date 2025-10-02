@@ -10,7 +10,7 @@ class Forms::PrivacyPolicyInput < BaseInput
     return false if invalid?
 
     form.privacy_policy_url = privacy_policy_url
-    FormRepository.save!(form)
+    form.save_draft!
   end
 
   def assign_form_values

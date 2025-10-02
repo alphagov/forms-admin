@@ -7,7 +7,7 @@ class Forms::WhatHappensNextInput < BaseInput
     return false if invalid?
 
     form.what_happens_next_markdown = what_happens_next_markdown
-    FormRepository.save!(form)
+    form.save_draft!
   end
 
   def assign_form_values

@@ -34,29 +34,17 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
       create :form
     end
 
-    let(:updated_form) do
-      form.tap do |f|
-        f.support_email = "test@test.gov.uk"
-        f.support_phone = nil
-        f.support_url = nil
-        f.support_url_text = nil
-      end
-    end
-
-    before do
-      allow(FormRepository).to receive_messages(save!: form)
-
-      post contact_details_create_path(form_id: form.id), params:
-    end
-
     context "when given valid params" do
       let(:params) { { forms_contact_details_input: { contact_details_supplied: ["", "supply_email"], email: "test@test.gov.uk", form: } } }
 
       it "updates the form" do
-        expect(FormRepository).to have_received(:save!)
+        expect {
+          post(contact_details_create_path(form_id: form.id), params:)
+        }.to change { form.reload.support_email }.to("test@test.gov.uk")
       end
 
       it "redirects to the confirmation page" do
+        post(contact_details_create_path(form_id: form.id), params:)
         expect(response).to redirect_to(form_path(form_id: form.id))
       end
     end
@@ -65,10 +53,13 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
       let(:params) { { forms_contact_details_input: { contact_details_supplied: ["", "supply_email"], email: "", form: } } }
 
       it "does not update the form" do
-        expect(FormRepository).not_to have_received(:save!)
+        expect {
+          post(contact_details_create_path(form_id: form.id), params:)
+        }.not_to(change { form.reload.support_email })
       end
 
       it "shows the error state" do
+        post(contact_details_create_path(form_id: form.id), params:)
         expect(response).to render_template(:new)
         expect(response.body).to include I18n.t("error_summary.heading")
       end
@@ -77,11 +68,14 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
     context "when given an email address for a non-government inbox" do
       let(:params) { { forms_contact_details_input: { contact_details_supplied: ["", "supply_email"], email: "a@gmail.com", form: } } }
 
-      it "does not update the form on the API" do
-        expect(FormRepository).not_to have_received(:save!)
+      it "does not update the form" do
+        expect {
+          post(contact_details_create_path(form_id: form.id), params:)
+        }.not_to(change { form.reload.support_email })
       end
 
       it "shows the error state" do
+        post(contact_details_create_path(form_id: form.id), params:)
         expect(response).to render_template(:new)
         expect(response.body).to include I18n.t("error_summary.heading")
         expect(response.body).to include I18n.t("errors.messages.non_government_email")
@@ -97,20 +91,14 @@ RSpec.describe Forms::ContactDetailsController, type: :request do
 
       let(:params) { { forms_contact_details_input: { contact_details_supplied: ["", "supply_email"], email: "a@public-sector-org.example", form: } } }
 
-      let(:updated_form) do
-        form.tap do |f|
-          f.support_email = "a@public-sector-org.example"
-          f.support_phone = nil
-          f.support_url = nil
-          f.support_url_text = nil
-        end
-      end
-
-      it "does not update the form on the API" do
-        expect(FormRepository).to have_received(:save!)
+      it "updates the form" do
+        expect {
+          post(contact_details_create_path(form_id: form.id), params:)
+        }.to change { form.reload.support_email }.to("a@public-sector-org.example")
       end
 
       it "redirects to the confirmation page" do
+        post(contact_details_create_path(form_id: form.id), params:)
         expect(response).to redirect_to(form_path(form_id: form.id))
       end
     end

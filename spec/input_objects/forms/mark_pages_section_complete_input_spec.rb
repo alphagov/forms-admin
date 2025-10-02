@@ -37,7 +37,6 @@ RSpec.describe Forms::MarkPagesSectionCompleteInput, type: :model do
   describe "#save" do
     context "when mark_complete_input is valid" do
       before do
-        allow(FormRepository).to receive(:save!).and_return(true)
         allow(mark_complete_input).to receive_messages(invalid?: false, form:)
       end
 
@@ -67,20 +66,8 @@ RSpec.describe Forms::MarkPagesSectionCompleteInput, type: :model do
     end
 
     it "returns true if valid and form is updated" do
-      allow(FormRepository).to receive(:save!).and_return(true)
       allow(mark_complete_input).to receive_messages(invalid?: false, form:)
       expect(mark_complete_input.submit).to be true
-    end
-
-    context "when mark_complete_input form does not save" do
-      before do
-        allow(FormRepository).to receive(:save!).and_return(false)
-        allow(mark_complete_input).to receive_messages(invalid?: false, form:)
-      end
-
-      it "returns false if invalid" do
-        expect(mark_complete_input.submit).to be false
-      end
     end
   end
 end

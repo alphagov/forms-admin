@@ -37,7 +37,7 @@ namespace :forms do
 
       Rails.logger.info "forms:submission_email:update: setting #{fmt_form(form)} submission email to \'#{form.submission_email}\'"
 
-      FormRepository.save!(form)
+      form.save_draft!
 
       form.form_submission_email&.destroy!
     end

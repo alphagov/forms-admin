@@ -94,8 +94,6 @@ RSpec.describe FormsController, type: :request do
 
     context "when the mark completed form is invalid" do
       before do
-        allow(FormRepository).to receive_messages(save!: nil)
-
         post form_pages_path(form.id), params: { forms_mark_pages_section_complete_input: { mark_complete: nil } }
       end
 
