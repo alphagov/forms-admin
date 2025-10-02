@@ -1,8 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Pages::NameSettingsInput, type: :model do
+  let(:form) { create :form }
   let(:name_settings_input) { build :name_settings_input, draft_question: }
-  let(:draft_question) { build :draft_question, answer_type: "name", form_id: 1 }
+  let(:draft_question) { build :draft_question, answer_type: "name", form_id: form.id }
 
   it "has a valid factory" do
     expect(name_settings_input).to be_valid

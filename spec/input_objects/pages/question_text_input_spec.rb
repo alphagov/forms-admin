@@ -1,8 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Pages::QuestionTextInput, type: :model do
+  let(:form) { create :form }
   let(:question_text_input) { build :question_text_input, draft_question: }
-  let(:draft_question) { build :draft_question, answer_type: "selection", form_id: 1 }
+  let(:draft_question) { build :draft_question, answer_type: "selection", form_id: form.id }
 
   it "has a valid factory" do
     expect(question_text_input).to be_valid

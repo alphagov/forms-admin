@@ -1,8 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Pages::DateSettingsInput, type: :model do
+  let(:form) { create :form }
   let(:date_settings_input) { build :date_settings_input, draft_question: }
-  let(:draft_question) { build :draft_question, answer_type: "date", form_id: 1 }
+  let(:draft_question) { build :draft_question, answer_type: "date", form_id: form.id }
 
   it "has a valid factory" do
     expect(date_settings_input).to be_valid
