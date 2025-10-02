@@ -8,7 +8,6 @@ describe "pages/conditions/new.html.erb" do
 
   before do
     pages.first.position = 1
-    allow(FormRepository).to receive(:pages).and_return(pages)
     allow(view).to receive(:set_routing_page_path).with(routing_page_id: condition_input.page.id).and_return("/forms/1/new-condition?routing-page_id=#{condition_input.page.id}")
     allow(view).to receive_messages(form_pages_path: "/forms/1/pages", routing_page_path: "/forms/1/new-condition", create_condition_path: "/forms/1/pages/1/conditions/new")
     allow(form).to receive_messages(group: group, qualifying_route_pages: pages)

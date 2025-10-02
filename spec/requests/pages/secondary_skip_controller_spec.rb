@@ -29,7 +29,6 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
 
-    allow(FormRepository).to receive_messages(pages: pages)
     allow(PageRepository).to receive(:find).and_return(pages.first)
     allow(ConditionRepository).to receive_messages(create!: {}, find: {}, save!: {}, destroy: {})
   end

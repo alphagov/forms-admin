@@ -9,10 +9,6 @@ feature "Create or edit a form", type: :feature do
   end
 
   context "when creating a form" do
-    before do
-      allow(FormRepository).to receive_messages(pages: form.pages)
-    end
-
     context "when the user is a member of a group" do
       before do
         create(:membership, user: standard_user, group:)
@@ -29,7 +25,6 @@ feature "Create or edit a form", type: :feature do
 
   context "when editing an existing form" do
     before do
-      allow(FormRepository).to receive_messages(pages: form.pages)
       allow(FormRepository).to receive(:save!, &:save!)
     end
 

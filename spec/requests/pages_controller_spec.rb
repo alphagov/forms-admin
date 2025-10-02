@@ -21,10 +21,6 @@ RSpec.describe PagesController, type: :request do
     let(:form) { create(:form, :with_pages) }
     let(:pages) { form.pages }
 
-    before do
-      allow(FormRepository).to receive_messages(pages: pages)
-    end
-
     context "with a form in a group that the user is a member of" do
       before do
         group.group_forms.create!(form_id: form.id)
@@ -133,8 +129,6 @@ RSpec.describe PagesController, type: :request do
       let(:pages) { [page] }
 
       before do
-        allow(FormRepository).to receive_messages(pages: pages)
-
         pages.each do |page|
           allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: form.id).and_return(page)
           allow(PageRepository).to receive(:find).with(page_id: page.id, form_id: form.id).and_return(page)
@@ -283,7 +277,6 @@ RSpec.describe PagesController, type: :request do
 
     context "with a valid page" do
       before do
-        allow(FormRepository).to receive_messages(pages: pages)
         allow(PageRepository).to receive_messages(find: page, destroy: true)
 
         GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -343,7 +336,6 @@ RSpec.describe PagesController, type: :request do
     let(:pages) { form.pages }
 
     before do
-      allow(FormRepository).to receive_messages(pages: pages)
       allow(PageRepository).to receive_messages(find: pages[1])
 
       GroupForm.create!(form_id: form.id, group_id: group.id)

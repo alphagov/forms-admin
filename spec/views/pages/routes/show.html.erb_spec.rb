@@ -21,7 +21,6 @@ describe "pages/routes/show.html.erb" do
   let(:route_summary_card_data_service) { instance_double(RouteSummaryCardDataPresenter, summary_card_data: route_cards, errors:, routes:, next_page: pages.second, pages:, page:, form:) }
 
   before do
-    allow(FormRepository).to receive_messages(pages:)
     allow(form).to receive(:group).and_return(build(:group))
   end
 

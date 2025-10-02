@@ -22,7 +22,6 @@ RSpec.describe "Create a form", type: :feature do
     login_as user
 
     allow(Form).to receive(:create!).and_return form, unwanted_form
-    allow(FormRepository).to receive(:pages).and_return([])
   end
 
   after do

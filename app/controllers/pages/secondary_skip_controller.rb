@@ -93,6 +93,6 @@ private
   end
 
   def secondary_skip_condition
-    @secondary_skip_condition ||= FormRepository.pages(current_form).flat_map(&:routing_conditions).compact_blank.find { |c| c.secondary_skip? && c.check_page_id == page.id }
+    @secondary_skip_condition ||= current_form.pages.flat_map(&:routing_conditions).compact_blank.find { |c| c.secondary_skip? && c.check_page_id == page.id }
   end
 end

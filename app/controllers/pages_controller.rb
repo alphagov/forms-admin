@@ -5,7 +5,7 @@ class PagesController < WebController
   after_action :set_answer_type_logging_attribute
 
   def index
-    @pages = FormRepository.pages(current_form)
+    @pages = current_form.pages
     @mark_complete_input = Forms::MarkPagesSectionCompleteInput.new(form: current_form).assign_form_values
     log_validation_errors(@pages)
     render :index, locals: { current_form: }
@@ -16,7 +16,7 @@ class PagesController < WebController
     @item_name = page.question_text
     @back_url = edit_question_path(current_form.id, page.id)
 
-    all_form_conditions = FormRepository.pages(current_form).flat_map(&:routing_conditions).compact_blank
+    all_form_conditions = current_form.pages.flat_map(&:routing_conditions).compact_blank
     @page_goto_conditions = all_form_conditions.select { |condition| condition.goto_page_id == page.id }
 
     if page.routing_conditions.any? && page.routing_conditions.first.secondary_skip?

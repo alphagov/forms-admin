@@ -19,7 +19,6 @@ describe Pages::RoutesController, type: :request do
   let(:user) { standard_user }
 
   before do
-    allow(FormRepository).to receive_messages(pages: pages)
     allow(PageRepository).to receive(:find).and_return(page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)

@@ -21,8 +21,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
   let(:user) { standard_user }
 
   before do
-    allow(FormRepository).to receive_messages(pages: pages)
-
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as user

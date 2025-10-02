@@ -9,7 +9,6 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(FormRepository).to receive_messages(pages: pages)
     allow(PageRepository).to receive_messages(find: page, save!: page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)

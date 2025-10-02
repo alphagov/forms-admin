@@ -17,7 +17,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
   let(:logger) { ActiveSupport::Logger.new(output) }
 
   before do
-    allow(FormRepository).to receive_messages(pages:)
     allow(PageRepository).to receive_messages(create!: page, find: page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)

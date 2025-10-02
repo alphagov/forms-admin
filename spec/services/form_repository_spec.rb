@@ -38,12 +38,4 @@ describe FormRepository do
       end
     end
   end
-
-  describe "#pages" do
-    let(:form) { create(:form_record, :with_pages) }
-
-    it "returns page records" do
-      expect(described_class.pages(form).first).to be_a(Page)
-    end
-  end
 end
