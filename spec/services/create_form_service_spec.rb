@@ -10,27 +10,23 @@ RSpec.describe CreateFormService do
   let(:name) { "Test form" }
 
   describe "#create!" do
-    let(:created_form_id) { 999 }
-
-    before do
-      allow(FormRepository).to receive(:create!).and_invoke(->(**attributes) { create(:form, id: created_form_id, **attributes) })
-    end
-
     it "creates a form" do
-      create_form_service.create!(creator:, group:, name:)
+      expect {
+        create_form_service.create!(creator:, group:, name:)
+      }.to change(Form, :count).by(1)
 
-      expect(FormRepository).to have_received(:create!).with(creator_id: 100, name: "Test form")
+      expect(Form.last).to have_attributes(creator_id: 100, name: "Test form")
     end
 
     it "creates a group_form record" do
       create_form_service.create!(creator:, group:, name:)
 
-      expect(GroupForm.last).to have_attributes(form_id: created_form_id, group_id: 1000)
+      expect(GroupForm.last).to have_attributes(form_id: Form.last.id, group_id: 1000)
     end
 
     context "when a form with that name was already created in that group" do
       before do
-        allow(FormRepository).to receive(:create!).and_invoke(->(**attributes) { create(:form, **attributes) })
+        allow(Form).to receive(:create!).and_call_original
       end
 
       context "when both forms are created at the same time" do
@@ -41,7 +37,7 @@ RSpec.describe CreateFormService do
           first = first.value
           second = second.value
 
-          expect(FormRepository).to have_received(:create!).once
+          expect(Form).to have_received(:create!).once
           expect(second).to eq first
         end
       end
@@ -51,7 +47,7 @@ RSpec.describe CreateFormService do
           first = create_form_service.create!(creator:, group:, name:)
           second = create_form_service.create!(creator:, group:, name:)
 
-          expect(FormRepository).to have_received(:create!).once
+          expect(Form).to have_received(:create!).once
           expect(second).to eq first
         end
       end
@@ -64,7 +60,7 @@ RSpec.describe CreateFormService do
 
           second = create_form_service.create!(creator:, group:, name:)
 
-          expect(FormRepository).to have_received(:create!).twice
+          expect(Form).to have_received(:create!).twice
           expect(second).not_to eq first
         end
       end
@@ -76,7 +72,7 @@ RSpec.describe CreateFormService do
           first = create_form_service.create!(creator: other_creator, group:, name:)
           second = create_form_service.create!(creator:, group:, name:)
 
-          expect(FormRepository).to have_received(:create!).twice
+          expect(Form).to have_received(:create!).twice
           expect(second).not_to eq first
         end
       end

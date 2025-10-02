@@ -1,25 +1,6 @@
 require "rails_helper"
 
 describe FormRepository do
-  describe "#create!" do
-    let(:form_params) { { creator_id: 1, name: "asdf" } }
-
-    it "saves the form to the the database" do
-      expect {
-        described_class.create!(**form_params)
-      }.to change(Form, :count).by(1)
-    end
-
-    it "returns a form record" do
-      expect(described_class.create!(**form_params)).to be_a(Form)
-    end
-
-    it "sets the external ID" do
-      form = described_class.create!(**form_params)
-      expect(form).to have_attributes external_id: form.id.to_s
-    end
-  end
-
   describe "#where" do
     let(:form) { create(:form_record, creator_id: 3) }
 

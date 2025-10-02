@@ -34,7 +34,7 @@ class CreateFormService
     if event.form_id.present?
       form = Form.find(event.form_id)
     else
-      form = FormRepository.create!(creator_id: creator.id, name:)
+      form = Form.create!(creator_id: creator.id, name:)
       GroupForm.create!(group:, form_id: form.id)
       event.update!(form_id: form.id)
     end

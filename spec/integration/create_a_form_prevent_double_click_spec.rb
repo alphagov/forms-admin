@@ -21,7 +21,7 @@ RSpec.describe "Create a form", type: :feature do
 
     login_as user
 
-    allow(FormRepository).to receive(:create!).and_return form, unwanted_form
+    allow(Form).to receive(:create!).and_return form, unwanted_form
     allow(FormRepository).to receive(:pages).and_return([])
   end
 
@@ -41,7 +41,7 @@ RSpec.describe "Create a form", type: :feature do
 
     it "creates only one form" do
       expect(page).to have_title form.name
-      expect(FormRepository).to have_received(:create!).once
+      expect(Form).to have_received(:create!).once
       expect(GroupForm.count).to eq 1
     end
 
@@ -50,7 +50,7 @@ RSpec.describe "Create a form", type: :feature do
 
       it "creates only one form" do
         expect(page).to have_title form.name
-        expect(FormRepository).to have_received(:create!).once
+        expect(Form).to have_received(:create!).once
         expect(GroupForm.count).to eq 1
       end
     end

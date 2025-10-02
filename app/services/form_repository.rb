@@ -1,9 +1,5 @@
 class FormRepository
   class << self
-    def create!(creator_id:, name:)
-      Form.create!(creator_id:, name:)
-    end
-
     def where(creator_id:)
       Form.where(creator_id:)
     end
