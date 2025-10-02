@@ -7,11 +7,6 @@ class FormRepository
       record
     end
 
-    def make_live!(record)
-      record.make_live!
-      record
-    end
-
     def archive!(record)
       record.archive_live_form!
       record

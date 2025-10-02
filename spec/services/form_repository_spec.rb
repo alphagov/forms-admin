@@ -39,24 +39,6 @@ describe FormRepository do
     end
   end
 
-  describe "#make_live!" do
-    let(:form) { create(:form_record, :live_with_draft, name: "database form name") }
-
-    it "returns a form record" do
-      expect(described_class.make_live!(form)).to be_a(Form)
-    end
-
-    context "when the form has a draft" do
-      let(:form) { create(:form, :live_with_draft) }
-
-      it "touches the form" do
-        expect {
-          described_class.make_live!(form)
-        }.to(change { Form.find(form.id).updated_at })
-      end
-    end
-  end
-
   describe "#archive!" do
     let(:form) { create(:form_record, :live) }
 
