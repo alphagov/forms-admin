@@ -3,11 +3,13 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <% hint_text = t(".hint_for_live_draft") if @current_form&.live_with_draft? %>
     <%= render(
       @delete_confirmation_input,
       url: @url,
       caption_text: @item_name,
       legend_text: t(".title"),
+      hint_text: hint_text,
     ) %>
   </div>
 </div>
