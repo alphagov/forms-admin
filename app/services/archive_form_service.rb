@@ -5,7 +5,7 @@ class ArchiveFormService
   end
 
   def archive
-    FormRepository.archive!(@form)
+    @form.archive_live_form!
     SubmissionEmailMailer.alert_processor_form_archive(processor_email: @form.submission_email,
                                                        form_name: @form.name,
                                                        archived_by_name: @current_user.name,

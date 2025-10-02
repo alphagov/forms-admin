@@ -7,11 +7,6 @@ class FormRepository
       record
     end
 
-    def archive!(record)
-      record.archive_live_form!
-      record
-    end
-
     def destroy(record)
       begin
         Form.destroy(record.id)

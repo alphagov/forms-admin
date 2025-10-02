@@ -39,20 +39,6 @@ describe FormRepository do
     end
   end
 
-  describe "#archive!" do
-    let(:form) { create(:form_record, :live) }
-
-    it "archives the form to the database" do
-      expect {
-        described_class.archive!(form)
-      }.to change { Form.find(form.id).state }.to("archived")
-    end
-
-    it "returns a Form object" do
-      expect(described_class.archive!(form)).to be_a(Form)
-    end
-  end
-
   describe "#destroy" do
     let!(:form) { create(:form_record) }
 

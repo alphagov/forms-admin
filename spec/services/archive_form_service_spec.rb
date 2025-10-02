@@ -6,22 +6,22 @@ describe ArchiveFormService do
   end
 
   let(:submission_email) { "submission@example.gov.uk" }
-  let(:form) { build(:form, submission_email:) }
+  let(:form) { create(:form, :live, submission_email:) }
   let(:current_user) { build(:user) }
   let(:delivery) { double }
 
   describe "#archive" do
     before do
-      allow(FormRepository).to receive(:archive!)
       allow(SubmissionEmailMailer).to receive(:alert_processor_form_archive)
                                         .with(anything)
                                         .and_return(delivery)
       allow(delivery).to receive(:deliver_now).with(no_args)
     end
 
-    it "calls archive! on the form" do
-      expect(FormRepository).to receive(:archive!)
-      archive_form_service.archive
+    it "archives the form" do
+      expect {
+        archive_form_service.archive
+      }.to change(form, :state).to("archived")
     end
 
     it "sends an email to the submission email address" do
