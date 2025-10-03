@@ -1,0 +1,124 @@
+# This service reverts a draft form to its last live version,
+# effectively discarding all draft changes.
+class RevertDraftFormService
+  attr_reader :form
+
+  # A list of attributes on the Form model that should be reverted
+  FORM_ATTRIBUTES_TO_REVERT = %w[
+    available_languages
+    declaration_section_completed
+    declaration_text
+    external_id
+    form_slug
+    language
+    name
+    payment_url
+    privacy_policy_url
+    question_section_completed
+    s3_bucket_aws_account_id
+    s3_bucket_name
+    s3_bucket_region
+    share_preview_completed
+    submission_email
+    submission_type
+    support_email
+    support_phone
+    support_url
+    support_url_text
+    what_happens_next_markdown
+  ].freeze
+
+  def initialize(form)
+    @form = form
+  end
+
+  # Discards draft changes by reverting the form and its associations
+  # to the state of the last live version
+  # Returns true on success, false on failure
+  def revert_draft_to_live
+    # Return early if there's no draft to discard
+    return true unless form.live_with_draft?
+
+    live_form_data = form.live_form_document.content
+
+    ActiveRecord::Base.transaction do
+      revert_form_attributes(live_form_data)
+      revert_pages_and_nested_associations(live_form_data["steps"])
+
+      form.delete_draft_from_live_form
+      form.save!
+    end
+
+    true
+  rescue ActiveRecord::RecordInvalid => e
+    Rails.logger.error("Failed to discard draft for form #{form.id}: #{e.message}")
+    false
+  end
+
+private
+
+  # revert the top-level attributes of the Form object
+  def revert_form_attributes(live_data)
+    attributes_to_update = live_data.slice(*FORM_ATTRIBUTES_TO_REVERT)
+    form.assign_attributes(attributes_to_update)
+  end
+
+  # synchronize all pages and their nested routing conditions
+  def revert_pages_and_nested_associations(live_steps_data)
+    # ensure we have the latest version of pages
+    form.pages.reload
+
+    live_step_ids = live_steps_data.pluck("id")
+
+    # delete any pages on the form that are not present in the live version
+    form.pages.where.not(id: live_step_ids).destroy_all
+
+    # iterate through the live data to create or update pages
+    live_steps_data.each do |step_data|
+      page = form.pages.find_or_initialize_by(id: step_data["id"])
+
+      assign_page_attributes(page, step_data)
+      synchronize_routing_conditions_for_page(page, step_data["routing_conditions"] || [])
+
+      page.save!
+    end
+  end
+
+  # steps in a formDocument store the page attributes under "data"
+  def assign_page_attributes(page, step_data)
+    page_data = step_data["data"]
+    page.assign_attributes(
+      position: step_data["position"],
+      question_text: page_data["question_text"],
+      hint_text: page_data["hint_text"],
+      answer_type: page_data["answer_type"],
+      is_optional: page_data["is_optional"],
+      answer_settings: page_data["answer_settings"],
+      page_heading: page_data["page_heading"],
+      guidance_markdown: page_data["guidance_markdown"],
+      is_repeatable: page_data["is_repeatable"],
+    )
+  end
+
+  # synchronize the routing conditions for a single page
+  def synchronize_routing_conditions_for_page(page, live_conditions_data)
+    live_condition_ids = live_conditions_data.pluck("id")
+
+    # remove any conditions which have been added to the draft but are not in the live data
+    page.routing_conditions.where.not(id: live_condition_ids).destroy_all
+
+    # create or update conditions from the live data
+    live_conditions_data.each do |condition_data|
+      condition = Condition.find_by(id: condition_data["id"]) ||
+        page.routing_conditions.build(id: condition_data["id"])
+
+      condition.assign_attributes(
+        answer_value: condition_data["answer_value"],
+        routing_page_id: condition_data["routing_page_id"],
+        check_page_id: condition_data["check_page_id"],
+        goto_page_id: condition_data["goto_page_id"],
+      )
+      condition.save!
+    end
+  end
+end
