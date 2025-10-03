@@ -8,6 +8,12 @@ class Condition < ApplicationRecord
 
   before_destroy :destroy_postconditions
 
+  def self.create_and_update_form!(...)
+    condition = Condition.new(...)
+    condition.save_and_update_form
+    condition
+  end
+
   def save_and_update_form
     save!
     form.question_section_completed = false

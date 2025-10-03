@@ -119,11 +119,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
   describe "#create" do
     let(:params) { { pages_conditions_input: { routing_page_id: page.id, check_page_id: page.id, goto_page_id: pages.last.id, answer_value: "Wales" } } }
-    let(:condition) { build :condition }
-
-    before do
-      allow(ConditionRepository).to receive(:create!).and_return(condition)
-    end
 
     context "when the page doesn't have an existing condition" do
       before do
@@ -135,13 +130,16 @@ RSpec.describe Pages::ConditionsController, type: :request do
       end
 
       it "creates the condition" do
-        expect(ConditionRepository).to have_received(:create!).with(
-          check_page_id: page.id,
-          routing_page_id: page.id,
-          answer_value: "Wales",
-          goto_page_id: pages.last.id.to_s,
-          skip_to_end: false,
-        )
+        expect(page.reload.routing_conditions.count).to eq(1)
+      end
+
+      it "has the expected attributes" do
+        condition = page.reload.routing_conditions.first
+        expect(condition.answer_value).to eq("Wales")
+        expect(condition.check_page_id).to eq(page.id)
+        expect(condition.routing_page_id).to eq(page.id)
+        expect(condition.goto_page_id).to eq(pages.last.id)
+        expect(condition.skip_to_end).to be(false)
       end
 
       it "displays success message" do
@@ -186,13 +184,16 @@ RSpec.describe Pages::ConditionsController, type: :request do
     context "when the page already has a condition associated with it" do
       before do
         create :condition, routing_page_id: page.id, check_page_id: page.id, goto_page_id: pages.last.id
-        page.reload
-
-        post create_condition_path(form_id: form.id, page_id: page.id, params:)
       end
 
       it "does not create the condition and redirects the user to the question routes page" do
-        expect(ConditionRepository).not_to have_received(:create!)
+        expect {
+          post create_condition_path(form_id: form.id, page_id: page.id, params:)
+        }.not_to change(Condition, :count)
+      end
+
+      it "redirects to the question routes page" do
+        post create_condition_path(form_id: form.id, page_id: page.id, params:)
         expect(response).to redirect_to show_routes_path(form_id: form.id, page_id: page.id)
       end
     end

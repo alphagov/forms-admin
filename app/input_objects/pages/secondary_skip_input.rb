@@ -25,7 +25,7 @@ class Pages::SecondarySkipInput < BaseInput
       ConditionRepository.destroy(record)
     end
 
-    ConditionRepository.create!(
+    Condition.create_and_update_form!(
       check_page_id: page.id,
       routing_page_id:,
       answer_value: nil,

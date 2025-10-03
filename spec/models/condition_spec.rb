@@ -64,6 +64,52 @@ RSpec.describe Condition, type: :model do
     end
   end
 
+  describe ".create_and_update_form!" do
+    let(:form) { create(:form) }
+    let(:routing_page) { create(:page, form:) }
+    let(:goto_page) { create(:page, form:) }
+    let(:condition_params) do
+      { check_page_id: routing_page.id,
+        routing_page_id: routing_page.id,
+        answer_value: "Yes",
+        goto_page_id: goto_page.id,
+        skip_to_end: false,
+        exit_page_heading: nil,
+        exit_page_markdown: nil }
+    end
+
+    it "saves the condition to the database" do
+      expect {
+        described_class.create_and_update_form!(**condition_params)
+      }.to change(described_class, :count).by(1)
+    end
+
+    it "creates the condition with the given attributes" do
+      created_condition = described_class.create_and_update_form!(**condition_params)
+      expect(created_condition).to have_attributes(
+        check_page_id: routing_page.id,
+        routing_page_id: routing_page.id,
+        goto_page_id: goto_page.id,
+        answer_value: "Yes",
+        skip_to_end: false,
+      )
+    end
+
+    it "returns a condition record" do
+      expect(described_class.create_and_update_form!(**condition_params)).to be_a(described_class)
+    end
+
+    context "when the form question section is complete" do
+      let(:form) { create(:form_record, question_section_completed: true) }
+
+      it "updates the form to mark the question section as incomplete" do
+        expect {
+          described_class.create_and_update_form!(**condition_params)
+        }.to change { Form.find(form.id).question_section_completed }.to(false)
+      end
+    end
+  end
+
   describe "#save_and_update_form" do
     subject(:condition) { create :condition, :with_exit_page, routing_page: page, check_page: page }
 

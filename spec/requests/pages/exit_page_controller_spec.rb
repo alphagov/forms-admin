@@ -62,8 +62,6 @@ RSpec.describe Pages::ExitPageController, type: :request do
     let(:params) { { pages_exit_page_input: { exit_page_heading: "Exit Page Heading", exit_page_markdown: "Exit Page Markdown", answer_value: } } }
 
     before do
-      allow(ConditionRepository).to receive(:create!).and_return(true)
-
       post create_exit_page_path(form_id: form.id, page_id: selected_page.id, params:)
     end
 
