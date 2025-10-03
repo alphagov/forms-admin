@@ -122,8 +122,6 @@ RSpec.describe Pages::ExitPageController, type: :request do
     let(:params) { { pages_update_exit_page_input: { exit_page_heading: "Exit Page Heading", exit_page_markdown: "Exit Page Markdown" } } }
 
     before do
-      allow(ConditionRepository).to receive_messages(save!: true)
-
       put update_exit_page_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id, params:)
     end
 

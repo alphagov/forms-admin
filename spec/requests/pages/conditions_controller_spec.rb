@@ -246,8 +246,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     let(:condition) { create :condition, routing_page_id: page.id, check_page_id: page.id, goto_page_id: pages.last.id, answer_value: "Wales" }
 
     before do
-      allow(ConditionRepository).to receive(:save!).and_invoke(->(condition) { condition })
-
       put update_condition_path(form_id: form.id,
                                 page_id: page.id,
                                 condition_id: condition.id,
@@ -300,8 +298,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
       let(:condition) { create :condition, :with_exit_page, routing_page_id: page.id, check_page_id: page.id }
 
       before do
-        allow(ConditionRepository).to receive(:save!).and_call_original
-
         put update_condition_path(form_id: form.id,
                                   page_id: page.id,
                                   condition_id: condition.id,
@@ -313,10 +309,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
         it "redirects to the confirm exit page deletion page" do
           expect(response).to redirect_to confirm_change_exit_page_path(form_id: form.id, page_id: page.id, condition_id: condition.id, params: { answer_value: "Wales", goto_page_id: 3 })
-        end
-
-        it "does not call save! for the condition" do
-          expect(ConditionRepository).not_to have_received(:save!)
         end
       end
 
@@ -458,8 +450,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     let(:update_condition_result) { nil }
 
     before do
-      allow(ConditionRepository).to receive(:save!).and_call_original
-
       allow(Pages::ConditionsInput).to receive(:new).and_wrap_original do |original_method, *args, **kwargs|
         conditions_input = original_method.call(*args, **kwargs)
         allow(conditions_input).to receive(:update_condition).and_return(update_condition_result) unless update_condition_result.nil?

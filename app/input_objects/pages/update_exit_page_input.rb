@@ -12,7 +12,7 @@ class Pages::UpdateExitPageInput < BaseInput
     record.goto_page_id = nil
     record.skip_to_end = false
 
-    ConditionRepository.save!(record)
+    record.save_and_update_form
   end
 
   def assign_condition_values

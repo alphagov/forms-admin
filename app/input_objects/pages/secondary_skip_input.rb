@@ -18,7 +18,7 @@ class Pages::SecondarySkipInput < BaseInput
       record.goto_page_id = skip_to_end? ? nil : goto_page_id
       record.skip_to_end = skip_to_end?
 
-      return ConditionRepository.save!(record)
+      return record.save_and_update_form
     end
 
     if record.present?
