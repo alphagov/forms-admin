@@ -22,14 +22,25 @@ module Forms
         return redirect_to @back_url
       end
 
-      success_url = current_form.group.present? ? group_path(current_form.group) : root_path
+      if current_form.draft?
+        success_url = current_form.group.present? ? group_path(current_form.group) : root_path
 
-      unless FormRepository.destroy(current_form)
-        flash[:message] = "Deletion unsuccessful"
-        return redirect_to @back_url
+        unless FormRepository.destroy(current_form)
+          flash[:message] = "Deletion unsuccessful"
+          return redirect_to @back_url
+        end
+
+        redirect_to success_url, status: :see_other, success: t(".success", form_name: current_form.name)
+      elsif current_form.live_with_draft?
+        success_url = live_form_path(current_form.id)
+
+        unless RevertDraftFormService.new(current_form).revert_draft_to_live
+          flash[:message] = "Deletion unsuccessful"
+          return redirect_to @back_url
+        end
+
+        redirect_to success_url, status: :see_other, success: t(".success", form_name: current_form.name)
       end
-
-      redirect_to success_url, status: :see_other, success: t(".success", form_name: current_form.name)
     end
 
   private
