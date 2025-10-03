@@ -17,7 +17,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
   let(:logger) { ActiveSupport::Logger.new(output) }
 
   before do
-    allow(PageRepository).to receive_messages(create!: page, find: page)
+    allow(PageRepository).to receive_messages(create!: page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -145,10 +145,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
         get edit_question_path(form_id: form.id, page_id: page.id)
       end
 
-      it "Reads the page from the page repository" do
-        expect(PageRepository).to have_received(:find)
-      end
-
       it "creates a draft question in the database" do
         expect(DraftQuestion.last).to have_attributes(
           question_text: page.question_text,
@@ -201,13 +197,9 @@ RSpec.describe Pages::QuestionsController, type: :request do
       end
 
       before do
-        allow(PageRepository).to receive_messages(find: page, save!: page)
+        allow(PageRepository).to receive_messages(save!: page)
 
         post update_question_path(form_id: form.id, page_id: page.id), params:
-      end
-
-      it "Reads the page from the PageRepository" do
-        expect(PageRepository).to have_received(:find)
       end
 
       it "Updates the page through the page repository" do

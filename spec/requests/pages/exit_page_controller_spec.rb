@@ -22,8 +22,6 @@ RSpec.describe Pages::ExitPageController, type: :request do
   let(:condition) { build(:condition, id: 1, routing_page_id: selected_page.id, exit_page_heading: "Exit Page Heading") }
 
   before do
-    allow(PageRepository).to receive_messages(find: selected_page)
-
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as user
@@ -64,7 +62,6 @@ RSpec.describe Pages::ExitPageController, type: :request do
     let(:params) { { pages_exit_page_input: { exit_page_heading: "Exit Page Heading", exit_page_markdown: "Exit Page Markdown", answer_value: } } }
 
     before do
-      allow(PageRepository).to receive(:find).and_return(selected_page)
       allow(ConditionRepository).to receive(:create!).and_return(true)
 
       post create_exit_page_path(form_id: form.id, page_id: selected_page.id, params:)

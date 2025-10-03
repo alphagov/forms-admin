@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Pages::DateSettingsController, type: :request do
   let(:form) { create :form }
-  let(:pages) { build_list :page, 5, form_id: form.id }
+  let(:pages) { create_list :page, 5, form: }
   let(:page) { pages.first }
 
   let(:date_settings_input) { build :date_settings_input }
@@ -10,7 +10,7 @@ RSpec.describe Pages::DateSettingsController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(PageRepository).to receive_messages(find: page, save!: page)
+    allow(PageRepository).to receive_messages(save!: page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -62,7 +62,7 @@ RSpec.describe Pages::DateSettingsController, type: :request do
   end
 
   describe "#edit" do
-    let(:page) { build :page, :with_date_settings, id: 2, form_id: form.id }
+    let(:page) { create :page, :with_date_settings, form: }
     let(:draft_question) do
       create :draft_question,
              answer_type: "date",
@@ -96,13 +96,12 @@ RSpec.describe Pages::DateSettingsController, type: :request do
 
   describe "#update" do
     let(:page) do
-      new_page = build :page, :with_date_settings, id: 2, form_id: form.id
+      new_page = create(:page, :with_date_settings, form:)
       new_page.answer_settings = { input_type: { uk_date: "false", international_date: "true" } }
       new_page
     end
 
     before do
-      allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
       allow(PageRepository).to receive(:save!).with(hash_including(page_id: "2", form_id: 1))
     end
 

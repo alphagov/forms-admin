@@ -1,9 +1,5 @@
 class PageRepository
   class << self
-    def find(page_id:, form_id:)
-      Page.find_by!(id: page_id, form_id:)
-    end
-
     def create!(form_id:,
                 question_text:,
                 hint_text:,

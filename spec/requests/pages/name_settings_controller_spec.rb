@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Pages::NameSettingsController, type: :request do
   let(:form) { create :form }
-  let(:pages) { build_list :page, 5, form_id: form.id }
+  let(:pages) { create_list :page, 5, form: }
   let(:page) { pages.first }
 
   let(:name_settings_input) { build :name_settings_input }
@@ -10,7 +10,7 @@ RSpec.describe Pages::NameSettingsController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(PageRepository).to receive_messages(find: page, save!: page)
+    allow(PageRepository).to receive_messages(save!: page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -62,7 +62,7 @@ RSpec.describe Pages::NameSettingsController, type: :request do
   end
 
   describe "#edit" do
-    let(:page) { build :page, :with_name_settings, id: 2, form_id: form.id }
+    let(:page) { create :page, :with_name_settings, form: }
     let(:draft_question) do
       create :draft_question,
              answer_type: "name",
@@ -76,8 +76,6 @@ RSpec.describe Pages::NameSettingsController, type: :request do
     end
 
     before do
-      allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
-
       draft_question
       get name_settings_edit_path(form_id: page.form_id, page_id: page.id)
     end
@@ -99,13 +97,12 @@ RSpec.describe Pages::NameSettingsController, type: :request do
 
   describe "#update" do
     let(:page) do
-      new_page = build :page, :with_name_settings, id: 2, form_id: form.id
+      new_page = create(:page, :with_name_settings, form:)
       new_page.answer_settings = { input_type: "first_middle_and_last_name", title_needed: "false" }
       new_page
     end
 
     before do
-      allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
       allow(PageRepository).to receive(:save!).with(hash_including(page_id: "2", form_id: 1))
     end
 

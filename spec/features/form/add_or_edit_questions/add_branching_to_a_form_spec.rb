@@ -9,10 +9,6 @@ feature "Adding branching to a form", type: :feature do
   before do
     allow(ConditionRepository).to receive_messages(create!: true)
 
-    pages.each do |page|
-      allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: form.id).and_return(page)
-    end
-
     GroupForm.create! group:, form_id: form.id
     create(:membership, group:, user: standard_user, added_by: standard_user)
 

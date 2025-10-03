@@ -14,9 +14,6 @@ feature "Editing answer_settings for existing question", type: :feature do
 
     allow(PageRepository).to receive_messages(create!: true)
 
-    pages.each do |page|
-      allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: form.id).and_return(page)
-    end
     allow(PageRepository).to receive(:create!).with(hash_including(form_id: 1))
 
     GroupForm.create! group:, form_id: form.id

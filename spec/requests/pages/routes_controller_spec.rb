@@ -19,8 +19,6 @@ describe Pages::RoutesController, type: :request do
   let(:user) { standard_user }
 
   before do
-    allow(PageRepository).to receive(:find).and_return(page)
-
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as user
@@ -28,8 +26,6 @@ describe Pages::RoutesController, type: :request do
 
   describe "#show" do
     before do
-      allow(PageRepository).to receive(:find).with(page_id: page.id, form_id: form.id).and_return(page)
-
       get show_routes_path(form_id: form.id, page_id: page.id)
     end
 
@@ -58,8 +54,6 @@ describe Pages::RoutesController, type: :request do
 
   describe "#delete" do
     before do
-      allow(PageRepository).to receive(:find).with(page_id: page.id, form_id: form.id).and_return(page)
-
       get delete_routes_path(form_id: form.id, page_id: page.id)
     end
 
@@ -75,12 +69,8 @@ describe Pages::RoutesController, type: :request do
     let!(:secondary_skip) { create :condition, routing_page_id: secondary_skip_page.id, check_page_id: page.id, goto_page_id: pages[3].id }
 
     before do
-      allow(PageRepository).to receive(:find).with(page_id: page.id, form_id: form.id).and_return(page)
       allow(ConditionRepository).to receive(:find).and_return(condition)
       allow(ConditionRepository).to receive(:destroy)
-
-      page.reload
-      secondary_skip_page.reload
     end
 
     context "when confirmed" do
