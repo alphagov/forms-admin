@@ -73,11 +73,15 @@ class PagesController < WebController
   end
 
   def move_page
-    page_to_move = current_form.pages.find(move_params[:page_id])
+    page = current_form.pages.find(move_params[:page_id])
+    page.move_page(move_params[:direction])
 
-    moved_page = PageRepository.move_page(page_to_move, move_params[:direction])
+    success_message = t("banner.success.form.page_moved",
+                        question_text: page.question_text,
+                        direction: move_params[:direction],
+                        question_number: page.position)
 
-    redirect_to form_pages_path, success: t("banner.success.form.page_moved", question_text: page_to_move.question_text, direction: move_params[:direction], question_number: moved_page.position)
+    redirect_to form_pages_path, success: success_message
   end
 
 private
@@ -115,8 +119,8 @@ private
 
     if edit_draft_question.new_record?
       attributes = page.attributes
-        .slice(*edit_draft_question.attribute_names)
-        .except("id")
+                       .slice(*edit_draft_question.attribute_names)
+                       .except("id")
       edit_draft_question.attributes = attributes
       edit_draft_question.save!(validate: false)
     end

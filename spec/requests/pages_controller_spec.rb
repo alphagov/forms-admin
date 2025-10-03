@@ -313,53 +313,44 @@ RSpec.describe PagesController, type: :request do
   describe "#move_page" do
     let(:form) { create(:form, :with_pages) }
     let(:pages) { form.pages }
+    let(:page) { pages.second }
 
     before do
       GroupForm.create!(form_id: form.id, group_id: group.id)
     end
 
     context "when moving the page up", :capture_logging do
-      before do
-        allow(PageRepository).to receive(:move_page) do |page, _direction|
-          page.move_higher
-          page
-        end
-
-        post move_page_path({ form_id: form.id, move_direction: { up: pages[1].id } })
-      end
-
       it "logs the params" do
-        expect(log_line["params"]).to include "move_direction" => { "up" => pages[1].id.to_s }
+        post move_page_path({ form_id: form.id, move_direction: { up: page.id } })
+        expect(log_line["params"]).to include "move_direction" => { "up" => page.id.to_s }
       end
 
-      it "calls the page repository to move the page up" do
-        expect(PageRepository).to have_received(:move_page).with(pages[1], :up)
+      it "moves the page up" do
+        expect {
+          post move_page_path({ form_id: form.id, move_direction: { up: page.id } })
+        }.to change { page.reload.position }.from(2).to(1)
       end
 
       it "renders a success banner with the page's new position" do
+        post move_page_path({ form_id: form.id, move_direction: { up: page.id } })
         expect(flash[:success]).to eq("‘#{pages[1].question_text}’ has moved up to number 1")
       end
     end
 
     context "when moving the page down", :capture_logging do
-      before do
-        allow(PageRepository).to receive(:move_page) do |page, _direction|
-          page.move_lower
-          page
-        end
-
-        post move_page_path({ form_id: form.id, move_direction: { down: pages[1].id } })
-      end
-
       it "logs the params" do
-        expect(log_line["params"]).to include "move_direction" => { "down" => pages[1].id.to_s }
+        post move_page_path({ form_id: form.id, move_direction: { down: page.id } })
+        expect(log_line["params"]).to include "move_direction" => { "down" => page.id.to_s }
       end
 
-      it "calls the page repository to move the page down" do
-        expect(PageRepository).to have_received(:move_page).with(pages[1], :down)
+      it "moves the page down" do
+        expect {
+          post move_page_path({ form_id: form.id, move_direction: { down: page.id } })
+        }.to change { page.reload.position }.from(2).to(3)
       end
 
       it "renders a success banner with the page's new position" do
+        post move_page_path({ form_id: form.id, move_direction: { down: page.id } })
         expect(flash[:success]).to eq("‘#{pages[1].question_text}’ has moved down to number 3")
       end
     end
