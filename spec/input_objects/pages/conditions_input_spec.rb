@@ -74,16 +74,14 @@ RSpec.describe Pages::ConditionsInput, type: :model do
       let(:condition) { create :condition, routing_page_id: page.id, check_page_id: page.id, answer_value: "Wales", goto_page_id: pages.third.id }
 
       before do
-        allow(ConditionRepository).to receive(:save!)
-
         conditions_input.answer_value = "England"
         conditions_input.goto_page_id = pages.fourth.id
       end
 
-      it "updates a condition" do
-        conditions_input.update_condition
-
-        expect(ConditionRepository).to have_received(:save!)
+      it "updates the condition" do
+        expect {
+          conditions_input.update_condition
+        }.to change { condition.reload.answer_value }.to("England")
       end
     end
 

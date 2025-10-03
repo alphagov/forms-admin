@@ -5,32 +5,6 @@ describe ConditionRepository do
   let(:routing_page) { create(:page_record, form:) }
   let(:goto_page) { create(:page_record, form:) }
 
-  describe "#save!" do
-    let(:condition) { create(:condition_record, skip_to_end: false, routing_page_id: routing_page.id, answer_value: "database condition") }
-
-    it "saves the condition to the database" do
-      condition.skip_to_end = true
-
-      expect {
-        described_class.save!(condition)
-      }.to change { Condition.find(condition.id).skip_to_end }.to(true)
-    end
-
-    it "returns the database condition" do
-      expect(described_class.save!(condition)).to eq(condition)
-    end
-
-    context "when the form question section is complete" do
-      let(:form) { create(:form_record, question_section_completed: true) }
-
-      it "updates the form to mark the question section as incomplete" do
-        expect {
-          described_class.save!(condition)
-        }.to change { Form.find(form.id).question_section_completed }.to(false)
-      end
-    end
-  end
-
   describe "#destroy" do
     let!(:condition) { create(:condition_record, routing_page_id: routing_page.id) }
 

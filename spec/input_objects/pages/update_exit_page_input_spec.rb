@@ -39,16 +39,14 @@ RSpec.describe Pages::UpdateExitPageInput, type: :model do
   describe "#submit" do
     context "when validation pass" do
       before do
-        allow(ConditionRepository).to receive(:save!).and_return(true)
-
-        update_exit_page_input.exit_page_heading = "Exit page heading"
-        update_exit_page_input.exit_page_markdown = "Exit page markdown"
+        update_exit_page_input.exit_page_heading = "New exit page heading"
+        update_exit_page_input.exit_page_markdown = "New exit page markdown"
       end
 
       it "saves the condition" do
-        update_exit_page_input.submit
-
-        expect(ConditionRepository).to have_received(:save!)
+        expect {
+          update_exit_page_input.submit
+        }.to change { condition.reload.exit_page_heading }.to("New exit page heading")
       end
     end
 

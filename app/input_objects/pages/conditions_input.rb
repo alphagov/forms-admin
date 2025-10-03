@@ -35,7 +35,7 @@ class Pages::ConditionsInput < BaseInput
       record.exit_page_markdown = nil
     end
 
-    ConditionRepository.save!(record)
+    record.save_and_update_form
   end
 
   def routing_answer_options

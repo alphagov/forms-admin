@@ -29,7 +29,7 @@ RSpec.describe Pages::SecondarySkipController, type: :request do
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
 
-    allow(ConditionRepository).to receive_messages(save!: {}, destroy: {})
+    allow(ConditionRepository).to receive_messages(destroy: {})
   end
 
   describe "#new" do
