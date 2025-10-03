@@ -63,11 +63,7 @@ class PagesController < WebController
       return redirect_to @back_url
     end
 
-    unless PageRepository.destroy(page)
-      flash[:message] = "Deletion unsuccessful"
-      return redirect_to @back_url
-    end
-
+    page.destroy_and_update_form!
     redirect_to form_pages_path(current_form), status: :see_other, success: t(".success", question_text: page.question_text)
   end
 
