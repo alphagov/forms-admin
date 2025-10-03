@@ -2,11 +2,8 @@ require "rails_helper"
 
 RSpec.describe Pages::QuestionsController, type: :request do
   let(:form) { create :form }
-
   let(:draft_question) { create :draft_question_for_new_page, user: standard_user, form_id: form.id }
-
   let(:page) { create(:page, form_id: form.id) }
-
   let(:pages) do
     [page]
   end
@@ -17,8 +14,6 @@ RSpec.describe Pages::QuestionsController, type: :request do
   let(:logger) { ActiveSupport::Logger.new(output) }
 
   before do
-    allow(PageRepository).to receive_messages(create!: page)
-
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
@@ -79,16 +74,22 @@ RSpec.describe Pages::QuestionsController, type: :request do
     before do
       # Setup a draft_question so that create question action doesn't need to create a completely new records
       draft_question
-
-      post create_question_path(form.id), params:
     end
 
     describe "Given a valid page" do
+      it "creates a page" do
+        expect {
+          post(create_question_path(form.id), params:)
+        }.to change(Page, :count).by(1)
+      end
+
       it "Redirects you to edit page for new question" do
-        expect(response).to redirect_to(edit_question_path(form_id: form.id, page_id: page.id))
+        post(create_question_path(form.id), params:)
+        expect(response).to redirect_to(edit_question_path(form_id: form.id, page_id: Page.last.id))
       end
 
       it "displays a notification banner with call to action links" do
+        post(create_question_path(form.id), params:)
         follow_redirect!
         results = Capybara.string(response.body)
         banner_contents = results.find(".govuk-notification-banner .govuk-notification-banner__content")
@@ -97,7 +98,13 @@ RSpec.describe Pages::QuestionsController, type: :request do
         expect(banner_contents).to have_link(text: "Back to your questions", href: form_pages_path(form_id: form.id))
       end
 
-      include_examples "logging"
+      describe "logging" do
+        before do
+          post(create_question_path(form.id), params:)
+        end
+
+        include_examples "logging"
+      end
     end
 
     context "when question_input has invalid data" do
@@ -106,6 +113,10 @@ RSpec.describe Pages::QuestionsController, type: :request do
           hint_text: "This should be the location stated in your contract.",
           is_optional: false,
         } }
+      end
+
+      before do
+        post(create_question_path(form.id), params:)
       end
 
       it "returns 422" do
@@ -123,6 +134,10 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
     context "when the draft question is not present" do
       let(:draft_question) { nil }
+
+      before do
+        post(create_question_path(form.id), params:)
+      end
 
       it "renders the index page" do
         expect(response).to render_template("errors/missing_draft_question")

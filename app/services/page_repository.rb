@@ -1,29 +1,5 @@
 class PageRepository
   class << self
-    def create!(form_id:,
-                question_text:,
-                hint_text:,
-                is_optional:,
-                is_repeatable:,
-                answer_settings:,
-                page_heading:,
-                guidance_markdown:,
-                answer_type:)
-      page = Page.new(
-        form_id:,
-        question_text:,
-        hint_text:,
-        is_optional:,
-        is_repeatable:,
-        answer_settings:,
-        page_heading:,
-        guidance_markdown:,
-        answer_type:,
-      )
-      page.save_and_update_form
-      page
-    end
-
     def save!(record)
       record.save_and_update_form
       record

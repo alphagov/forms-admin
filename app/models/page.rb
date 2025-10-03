@@ -25,6 +25,30 @@ class Page < ApplicationRecord
 
   attribute :answer_settings, DataStructType.new
 
+  def self.create_and_update_form!(form_id:,
+                                   question_text:,
+                                   hint_text:,
+                                   is_optional:,
+                                   is_repeatable:,
+                                   answer_settings:,
+                                   page_heading:,
+                                   guidance_markdown:,
+                                   answer_type:)
+    page = Page.new(
+      form_id:,
+      question_text:,
+      hint_text:,
+      is_optional:,
+      is_repeatable:,
+      answer_settings:,
+      page_heading:,
+      guidance_markdown:,
+      answer_type:,
+    )
+    page.save_and_update_form
+    page
+  end
+
   def destroy_and_update_form!
     form = self.form
     destroy! && form.update!(question_section_completed: false)

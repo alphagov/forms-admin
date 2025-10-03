@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Pages::QuestionInput, type: :model do
-  let(:question_input) { build :question_input, answer_type:, question_text:, draft_question:, is_optional:, is_repeatable: }
+  let(:question_input) { build :question_input, answer_type:, question_text:, draft_question:, is_optional:, is_repeatable:, form_id: form.id }
+  let(:form) { create(:form) }
   let(:draft_question) { build :draft_question, question_text: }
   let(:question_text) { "What is your full name?" }
   let(:is_optional) { "false" }
@@ -257,8 +258,6 @@ RSpec.describe Pages::QuestionInput, type: :model do
 
     context "when form is valid valid" do
       before do
-        allow(PageRepository).to receive(:create!)
-
         question_input.question_text = "How old are you?"
         question_input.hint_text = "As a number"
         question_input.is_optional = "false"
@@ -285,7 +284,7 @@ RSpec.describe Pages::QuestionInput, type: :model do
   end
 
   describe "#update_page" do
-    let(:page) { build(:page, form_id: 1) }
+    let(:page) { create(:page, form:) }
 
     it "returns false if the form is invalid" do
       allow(question_input).to receive(:invalid?).and_return(true)
