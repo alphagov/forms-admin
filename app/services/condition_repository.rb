@@ -1,9 +1,5 @@
 class ConditionRepository
   class << self
-    def find(condition_id:, page_id:)
-      Condition.find_by!(id: condition_id, routing_page_id: page_id)
-    end
-
     def save!(record)
       record.save_and_update_form
       record
