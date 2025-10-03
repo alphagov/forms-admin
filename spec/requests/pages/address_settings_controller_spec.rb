@@ -115,10 +115,6 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
       new_page
     end
 
-    before do
-      allow(PageRepository).to receive_messages(save!: page)
-    end
-
     context "when form is valid and ready to update in the DB" do
       let(:input_type) { { uk_address:, international_address: } }
       let(:uk_address) { page.answer_settings.input_type.uk_address }

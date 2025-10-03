@@ -293,8 +293,6 @@ RSpec.describe Pages::QuestionInput, type: :model do
 
     context "when form is valid valid" do
       before do
-        allow(PageRepository).to receive(:save!).and_return(page)
-
         question_input.question_text = "How old are you?"
         question_input.hint_text = "As a number"
         question_input.is_optional = "false"

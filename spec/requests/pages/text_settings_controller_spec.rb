@@ -95,10 +95,6 @@ RSpec.describe Pages::TextSettingsController, type: :request do
   describe "#update" do
     let(:page) { create :page, :with_text_settings, form: }
 
-    before do
-      allow(PageRepository).to receive(:save!).with(hash_including(page_id: "2", form_id: 1))
-    end
-
     context "when form is valid and ready to update in the DB" do
       let(:input_type) { "single_line" }
 

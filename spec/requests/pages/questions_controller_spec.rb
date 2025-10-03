@@ -212,13 +212,11 @@ RSpec.describe Pages::QuestionsController, type: :request do
       end
 
       before do
-        allow(PageRepository).to receive_messages(save!: page)
-
         post update_question_path(form_id: form.id, page_id: page.id), params:
       end
 
       it "Updates the page through the page repository" do
-        expect(PageRepository).to have_received(:save!)
+        expect(page.reload.question_text).to eq("What is your home address?")
       end
 
       it "Redirects you to edit page for question that was updated" do

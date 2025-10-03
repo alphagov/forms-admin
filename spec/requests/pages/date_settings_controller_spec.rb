@@ -10,8 +10,6 @@ RSpec.describe Pages::DateSettingsController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(PageRepository).to receive_messages(save!: page)
-
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
@@ -99,10 +97,6 @@ RSpec.describe Pages::DateSettingsController, type: :request do
       new_page = create(:page, :with_date_settings, form:)
       new_page.answer_settings = { input_type: { uk_date: "false", international_date: "true" } }
       new_page
-    end
-
-    before do
-      allow(PageRepository).to receive(:save!).with(hash_including(page_id: "2", form_id: 1))
     end
 
     context "when form is valid and ready to update in the DB" do

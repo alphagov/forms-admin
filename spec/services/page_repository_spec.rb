@@ -4,54 +4,6 @@ describe PageRepository do
   let(:form_id) { form.id }
   let(:form) { create(:form_record) }
 
-  describe "#save!" do
-    let(:page) { create(:page_record, form:, is_optional: false, question_text: "database page") }
-
-    it "saves the page to the database" do
-      page.is_optional = true
-
-      expect {
-        described_class.save!(page)
-      }.to change { Page.find(page.id).is_optional }.to(true)
-    end
-
-    it "returns the database page" do
-      expect(described_class.save!(page)).to eq(page)
-    end
-
-    context "when there are no changes to save" do
-      let(:form) { create(:form_record, question_section_completed: true) }
-      let(:page) { create(:page_record, form: form, answer_type: "number", answer_settings: { foo: "bar" }) }
-      let(:updated_page_resource) do
-        build(:page_resource,
-              id: page.id,
-              form_id:,
-              question_text: page.question_text,
-              answer_type: page.answer_type,
-              answer_settings: page.answer_settings,
-              position: page.position)
-      end
-
-      it "does not update the form" do
-        expect {
-          described_class.save!(page)
-        }.not_to(change { Form.find(form_id).question_section_completed })
-      end
-    end
-
-    context "when there are changes to save" do
-      let(:form) { create(:form_record, question_section_completed: true) }
-
-      it "updates the form" do
-        page.is_optional = true
-
-        expect {
-          described_class.save!(page)
-        }.to change { Form.find(form_id).question_section_completed }.to(false)
-      end
-    end
-  end
-
   describe "#destroy" do
     let!(:page) { create(:page_record, form_id:) }
 
