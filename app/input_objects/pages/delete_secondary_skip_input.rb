@@ -9,7 +9,7 @@ class Pages::DeleteSecondarySkipInput < ConfirmActionInput
     result = true
 
     if confirmed?
-      result = ConditionRepository.destroy(record)
+      result = record.destroy
     end
 
     result

@@ -29,26 +29,17 @@ RSpec.describe Pages::Routes::DeleteConfirmationInput, type: :model do
     end
 
     context "when valid" do
-      subject(:delete_confirmation_input) { described_class.new(form:, page: form.pages[0]) }
+      subject(:delete_confirmation_input) { described_class.new(form:, page:) }
 
-      let(:form) { create :form, pages: build_pages }
-
-      def build_pages
-        pages = build_list(:page, 5)
-
-        # primary route
-        pages[0].routing_conditions = [build(:condition, routing_page: pages.first, check_page: pages.first, goto_page: pages.last)]
-        # secondary skip
-        pages[3].routing_conditions = [build(:condition, routing_page: pages.fourth, check_page: pages.first, goto_page: pages.last)]
-
-        # unrelated condition
-        pages[2].routing_conditions = [build(:condition, routing_page: pages.third, check_page: pages.third, skip_to_end: true)]
-
-        pages
-      end
+      let(:form) { create :form, :ready_for_routing }
+      let(:pages) { form.pages }
+      let(:page) { pages.first }
+      let!(:primary_condition) { create :condition, routing_page: pages.first, check_page: pages.first, goto_page: pages.last }
+      let!(:secondary_skip_condition) { create :condition, routing_page: pages.fourth, check_page: pages.first, goto_page: pages.last }
+      let!(:other_condition) { create :condition, routing_page: pages.third, check_page: pages.third, skip_to_end: true }
 
       before do
-        allow(ConditionRepository).to receive(:destroy)
+        pages.each(&:reload)
       end
 
       it "returns true" do
@@ -56,21 +47,33 @@ RSpec.describe Pages::Routes::DeleteConfirmationInput, type: :model do
         expect(delete_confirmation_input.submit).to be true
       end
 
-      it "does not delete routes when not confirmed" do
-        delete_confirmation_input.confirm = "no"
+      context "when 'No' is selected" do
+        it "does not delete any routes" do
+          delete_confirmation_input.confirm = "no"
 
-        delete_confirmation_input.submit
-
-        expect(ConditionRepository).not_to have_received(:destroy)
+          expect {
+            delete_confirmation_input.submit
+          }.not_to change(Condition, :count)
+        end
       end
 
-      it "deletes routes when confirmed" do
-        delete_confirmation_input.confirm = "yes"
-        delete_confirmation_input.submit
+      context "when 'Yes' is selected" do
+        before do
+          delete_confirmation_input.confirm = "yes"
+          delete_confirmation_input.submit
+        end
 
-        expect(ConditionRepository).to have_received(:destroy).with(form.pages[0].routing_conditions.first)
-        expect(ConditionRepository).to have_received(:destroy).with(form.pages[3].routing_conditions.first)
-        expect(ConditionRepository).not_to have_received(:destroy).with(form.pages[2].routing_conditions.first)
+        it "deletes the primary route" do
+          expect(Condition.exists?(primary_condition.id)).to be false
+        end
+
+        it "deletes the secondary skip route" do
+          expect(Condition.exists?(secondary_skip_condition.id)).to be false
+        end
+
+        it "does not delete an unrelated route" do
+          expect(Condition.exists?(other_condition.id)).to be true
+        end
       end
     end
   end

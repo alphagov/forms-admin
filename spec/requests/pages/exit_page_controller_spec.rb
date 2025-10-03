@@ -184,8 +184,6 @@ RSpec.describe Pages::ExitPageController, type: :request do
     let(:params) { { pages_delete_exit_page_input: { confirm: "yes" } } }
 
     before do
-      allow(ConditionRepository).to receive(:destroy).and_call_original
-
       delete destroy_exit_page_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id, params:)
     end
 
@@ -199,7 +197,7 @@ RSpec.describe Pages::ExitPageController, type: :request do
     end
 
     it "deletes the exit page" do
-      expect(ConditionRepository).to have_received(:destroy).with(condition)
+      expect(Condition.exists?(condition.id)).to be false
     end
 
     context "when confirmation is not provided" do
@@ -218,7 +216,7 @@ RSpec.describe Pages::ExitPageController, type: :request do
       end
 
       it "doesn't delete the exit page" do
-        expect(ConditionRepository).not_to have_received(:destroy)
+        expect(Condition.exists?(condition.id)).to be true
       end
     end
 

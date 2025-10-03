@@ -10,7 +10,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
       first_page.answer_settings = DataStruct.new(
         only_one_option: true,
         selection_options: [OpenStruct.new(attributes: { name: "Option 1" }),
-                            OpenStruct.new(attributes: { name: "Option 2" })],
+          OpenStruct.new(attributes: { name: "Option 2" })],
       )
     end
   end
@@ -247,9 +247,9 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
     before do
       put update_condition_path(form_id: form.id,
-                                page_id: page.id,
-                                condition_id: condition.id,
-                                params:)
+        page_id: page.id,
+        condition_id: condition.id,
+        params:)
     end
 
     it "redirects to the page list" do
@@ -299,9 +299,9 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
       before do
         put update_condition_path(form_id: form.id,
-                                  page_id: page.id,
-                                  condition_id: condition.id,
-                                  params:)
+          page_id: page.id,
+          condition_id: condition.id,
+          params:)
       end
 
       context "when changing to a non-exit page" do
@@ -349,36 +349,46 @@ RSpec.describe Pages::ConditionsController, type: :request do
   describe "#destroy" do
     let(:condition) { create :condition, id: 1, routing_page_id: page.id, check_page_id: page.id, answer_value: "Wales", goto_page_id: pages.last.id }
     let(:confirm) { "yes" }
-    let(:destroy_bool) { true }
 
-    before do
-      allow(ConditionRepository).to receive_messages(destroy: destroy_bool)
+    context "when the destroy is successful" do
+      before do
+        delete destroy_condition_path(form_id: form.id,
+          page_id: page.id,
+          condition_id: condition.id,
+          params: { pages_delete_condition_input: { confirm: } })
+      end
 
-      delete destroy_condition_path(form_id: form.id,
-                                    page_id: page.id,
-                                    condition_id: condition.id,
-                                    params: { pages_delete_condition_input: { confirm: } })
-    end
+      it "redirects to the page list" do
+        expect(response).to redirect_to form_pages_path(form_id: form.id)
+      end
 
-    it "redirects to the page list" do
-      expect(response).to redirect_to form_pages_path(form_id: form.id)
-    end
+      it "displays success message" do
+        follow_redirect!
+        expect(response.body).to include(I18n.t("banner.success.route_deleted", question_number: 1))
+      end
 
-    it "displays success message" do
-      follow_redirect!
-      expect(response.body).to include(I18n.t("banner.success.route_deleted", question_number: 1))
-    end
+      context "when confirm deletion is false" do
+        let(:confirm) { "no" }
 
-    context "when confirm deletion is false" do
-      let(:confirm) { "no" }
-
-      it "redirects to edit the condition" do
-        expect(response).to redirect_to edit_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id)
+        it "redirects to edit the condition" do
+          expect(response).to redirect_to edit_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id)
+        end
       end
     end
 
     context "when the destroy fails" do
-      let(:destroy_bool) { false }
+      before do
+        allow(Pages::DeleteConditionInput).to receive(:new).and_wrap_original do |original_method, *args, **kwargs|
+          delete_condition_input = original_method.call(*args, **kwargs)
+          allow(delete_condition_input).to receive(:submit).and_return(false)
+          delete_condition_input
+        end
+
+        delete destroy_condition_path(form_id: form.id,
+          page_id: page.id,
+          condition_id: condition.id,
+          params: { pages_delete_condition_input: { confirm: } })
+      end
 
       it "return 422 error code" do
         expect(response).to have_http_status(:unprocessable_content)

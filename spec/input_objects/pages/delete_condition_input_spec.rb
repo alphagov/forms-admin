@@ -19,14 +19,23 @@ RSpec.describe Pages::DeleteConditionInput, type: :model do
     end
   end
 
-  describe "#delete" do
+  describe "#submit" do
     context "when validation pass" do
-      it "destroys the condition" do
-        allow(ConditionRepository).to receive(:destroy).and_return(true)
+      before do
         delete_condition_input.confirm = "yes"
+      end
 
-        delete_condition_input.submit
-        expect(ConditionRepository).to have_received(:destroy)
+      it "destroys the condition" do
+        expect {
+          delete_condition_input.submit
+        }.to change(Condition, :count).by(-1)
+      end
+
+      context "when the destroy fails" do
+        it "returns false" do
+          allow(condition).to receive(:destroy).and_return(false)
+          expect(delete_condition_input.submit).to be(false)
+        end
       end
     end
 
@@ -39,6 +48,7 @@ RSpec.describe Pages::DeleteConditionInput, type: :model do
         )
       end
     end
+
   end
 
   describe "#goto_page_question_text" do
