@@ -64,6 +64,34 @@ RSpec.describe Condition, type: :model do
     end
   end
 
+  describe "#save_and_update_form" do
+    subject(:condition) { create :condition, :with_exit_page, routing_page: page, check_page: page }
+
+    let(:page) { create :page, :with_selection_settings, form: }
+    let(:form) { create :form, question_section_completed: true }
+
+    before do
+      condition.exit_page_heading = "New heading"
+      condition.save_and_update_form
+    end
+
+    it "updates the condition" do
+      expect(condition.reload.exit_page_heading).to eq("New heading")
+    end
+
+    it "sets form.question_section_completed to false" do
+      expect(form.reload.question_section_completed).to be false
+    end
+
+    context "when the form is live" do
+      let(:form) { create :form, :live }
+
+      it "updates the form state to live_with_draft" do
+        expect(form.reload.state).to eq("live_with_draft")
+      end
+    end
+  end
+
   describe "#validation_errors" do
     let(:form) { create :form_record }
     let(:routing_page) { create :page_record, form: }
