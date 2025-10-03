@@ -3,12 +3,8 @@ require "rails_helper"
 feature "Share a preview", type: :feature do
   let(:form) { create :form, :with_pages, name: "Test form" }
   let(:group) { create(:group, organisation: standard_user.organisation, status: "active") }
-  let(:fake_page) { build :page, form_id: form.id, id: 2 }
 
   before do
-    allow(PageRepository).to receive(:find).with(page_id: "2", form_id: form.id).and_return(fake_page)
-    allow(PageRepository).to receive(:create!).with(hash_including(form_id: 1))
-
     GroupForm.create!(group:, form_id: form.id)
     create(:membership, group:, user: standard_user, added_by: standard_user, role: :group_admin)
 

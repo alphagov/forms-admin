@@ -12,13 +12,6 @@ feature "Editing answer_settings for existing question", type: :feature do
     create(:page, :with_selection_settings, form:, is_optional: true)
     create(:page, :with_text_settings, form:, input_type: "long_text")
 
-    allow(PageRepository).to receive_messages(create!: true)
-
-    pages.each do |page|
-      allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: form.id).and_return(page)
-    end
-    allow(PageRepository).to receive(:create!).with(hash_including(form_id: 1))
-
     GroupForm.create! group:, form_id: form.id
     create(:membership, group:, user: standard_user, added_by: standard_user)
 

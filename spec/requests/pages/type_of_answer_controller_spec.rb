@@ -2,15 +2,13 @@ require "rails_helper"
 
 RSpec.describe Pages::TypeOfAnswerController, type: :request do
   let(:form) { create :form }
-  let(:pages) { build_list :page, 5, form_id: form.id }
+  let(:pages) { create_list :page, 5, form: }
   let(:page) { pages.first }
   let(:type_of_answer_input) { build :type_of_answer_input }
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(PageRepository).to receive_messages(find: page, save!: page)
-
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
@@ -142,11 +140,9 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
   end
 
   describe "#edit", :capture_logging do
-    let(:page) { build :page, :with_simple_answer_type, id: 2, form_id: form.id }
+    let(:page) { create :page, :with_simple_answer_type, form: }
 
     before do
-      allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
-
       get type_of_answer_edit_path(form_id: page.form_id, page_id: page.id)
     end
 
@@ -174,12 +170,7 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
   end
 
   describe "#update" do
-    let(:page) { build :page, :with_simple_answer_type, id: 2, form_id: form.id, answer_type: "email" }
-
-    before do
-      allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
-      allow(PageRepository).to receive(:save!).with(hash_including(page_id: "2", form_id: 1))
-    end
+    let(:page) { create :page, :with_simple_answer_type, form:, answer_type: "email" }
 
     context "when form is valid and ready to update in the DB", :capture_logging do
       let(:answer_type) { "number" }

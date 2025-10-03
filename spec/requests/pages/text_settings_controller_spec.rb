@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Pages::TextSettingsController, type: :request do
   let(:form) { create :form }
-  let(:pages) { build_list :page, 5, form_id: form.id }
+  let(:pages) { create_list :page, 5, form: }
   let(:page) { pages.first }
 
   let(:text_settings_input) { build :text_settings_input }
@@ -10,8 +10,6 @@ RSpec.describe Pages::TextSettingsController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(PageRepository).to receive_messages(find: page, save!: page)
-
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
@@ -62,7 +60,7 @@ RSpec.describe Pages::TextSettingsController, type: :request do
   end
 
   describe "#edit" do
-    let(:page) { build :page, :with_text_settings, id: 2, form_id: form.id }
+    let(:page) { create :page, :with_text_settings, form: }
     let(:draft_question) do
       create :draft_question,
              answer_type: "text",
@@ -75,8 +73,6 @@ RSpec.describe Pages::TextSettingsController, type: :request do
     end
 
     before do
-      allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
-
       draft_question
       get text_settings_edit_path(form_id: page.form_id, page_id: page.id)
     end
@@ -97,12 +93,7 @@ RSpec.describe Pages::TextSettingsController, type: :request do
   end
 
   describe "#update" do
-    let(:page) { build :page, :with_text_settings, id: 2, form_id: form.id }
-
-    before do
-      allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
-      allow(PageRepository).to receive(:save!).with(hash_including(page_id: "2", form_id: 1))
-    end
+    let(:page) { create :page, :with_text_settings, form: }
 
     context "when form is valid and ready to update in the DB" do
       let(:input_type) { "single_line" }

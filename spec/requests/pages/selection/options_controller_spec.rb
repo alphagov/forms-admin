@@ -20,8 +20,6 @@ describe Pages::Selection::OptionsController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(PageRepository).to receive_messages(find: page, save!: page)
-
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
@@ -133,12 +131,10 @@ describe Pages::Selection::OptionsController, type: :request do
   end
 
   describe "#edit" do
-    let(:page) { build :page, :with_selection_settings, id: 2, form_id: form.id }
+    let(:page) { create :page, :with_selection_settings, form: }
     let(:page_id) { page.id }
 
     before do
-      allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
-
       draft_question
       get selection_options_edit_path(form_id: page.form_id, page_id: page.id)
     end
@@ -166,13 +162,10 @@ describe Pages::Selection::OptionsController, type: :request do
   end
 
   describe "#update" do
-    let(:page) { build :page, id: 2, form_id: form.id }
+    let(:page) { create :page, form: }
     let(:page_id) { page.id }
 
     before do
-      allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
-      allow(PageRepository).to receive(:save!).with(hash_including(page_id: "2", form_id: 1))
-
       draft_question
     end
 

@@ -39,10 +39,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
   describe "#set_routing_page" do
     let(:params) { { pages_routing_page_input: { routing_page_id: page.id } } }
 
-    before do
-      allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: form.id).and_return(page)
-    end
-
     context "when the page doesn't have a condition associated with it" do
       before do
         post routing_page_path(form_id: form.id, params:)
@@ -56,7 +52,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     context "when the page already has a condition associated with it" do
       before do
         create :condition, routing_page_id: page.id, check_page_id: page.id, goto_page_id: pages.last.id
-        page.reload
 
         post routing_page_path(form_id: form.id, params:)
       end
@@ -101,8 +96,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
   describe "#new" do
     before do
-      allow(PageRepository).to receive(:find).and_return(page)
-
       get new_condition_path(form_id: form.id, page_id: page.id)
     end
 
@@ -129,7 +122,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     let(:condition) { build :condition }
 
     before do
-      allow(PageRepository).to receive(:find).and_return(page)
       allow(ConditionRepository).to receive(:create!).and_return(condition)
     end
 
@@ -213,7 +205,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     let(:conditions_input) { @conditions_input } # rubocop:disable RSpec/InstanceVariable
 
     before do
-      allow(PageRepository).to receive(:find).and_return(page)
       allow(ConditionRepository).to receive(:find).and_return(condition)
 
       allow(Pages::ConditionsInput).to receive(:new).and_wrap_original do |original_method, *args, **kwargs|
@@ -256,7 +247,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     let(:condition) { create :condition, routing_page_id: page.id, check_page_id: page.id, goto_page_id: pages.last.id, answer_value: "Wales" }
 
     before do
-      allow(PageRepository).to receive(:find).and_return(page)
       allow(ConditionRepository).to receive(:find).and_return(condition)
       allow(ConditionRepository).to receive(:save!).and_invoke(->(condition) { condition })
 
@@ -312,7 +302,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
       let(:condition) { create :condition, :with_exit_page, check_page_id: page.id }
 
       before do
-        allow(PageRepository).to receive(:find).and_return(page)
         allow(ConditionRepository).to receive(:find).and_return(condition)
         allow(ConditionRepository).to receive(:save!).and_invoke(->(condition) { condition })
 
@@ -348,8 +337,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     let(:condition) { create :condition, id: 1, routing_page_id: page.id, check_page_id: page.id, answer_value: "Wales", goto_page_id: pages.last.id }
 
     before do
-      allow(PageRepository).to receive(:find).and_return(page)
-
       allow(ConditionRepository).to receive(:find).and_return(condition)
 
       get delete_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id)
@@ -378,7 +365,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     let(:destroy_bool) { true }
 
     before do
-      allow(PageRepository).to receive(:find).and_return(page)
       allow(ConditionRepository).to receive_messages(find: condition, destroy: destroy_bool)
 
       delete destroy_condition_path(form_id: form.id,
@@ -443,7 +429,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     let(:goto_page_id) { "2" }
 
     before do
-      allow(PageRepository).to receive(:find).and_return(page)
       allow(ConditionRepository).to receive(:find).and_return(condition)
 
       get confirm_change_exit_page_path(
@@ -480,7 +465,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     let(:update_condition_result) { nil }
 
     before do
-      allow(PageRepository).to receive(:find).and_return(page)
       allow(ConditionRepository).to receive_messages(find: condition, save!: condition)
 
       allow(Pages::ConditionsInput).to receive(:new).and_wrap_original do |original_method, *args, **kwargs|
