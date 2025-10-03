@@ -20,8 +20,6 @@ describe Pages::Selection::OptionsController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(PageRepository).to receive_messages(save!: page)
-
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
@@ -168,8 +166,6 @@ describe Pages::Selection::OptionsController, type: :request do
     let(:page_id) { page.id }
 
     before do
-      allow(PageRepository).to receive(:save!).with(hash_including(page_id: form.id, form_id: 1))
-
       draft_question
     end
 

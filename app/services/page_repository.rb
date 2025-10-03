@@ -1,10 +1,5 @@
 class PageRepository
   class << self
-    def save!(record)
-      record.save_and_update_form
-      record
-    end
-
     def destroy(record)
       begin
         Page.find(record.id).destroy_and_update_form!

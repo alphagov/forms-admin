@@ -49,7 +49,7 @@ class Pages::QuestionInput < BaseInput
 
     draft_question.save!(validate: false)
 
-    PageRepository.save!(page)
+    page.save_and_update_form
   end
 
   def default_options

@@ -9,8 +9,6 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(PageRepository).to receive_messages(save!: page)
-
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
@@ -173,10 +171,6 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
 
   describe "#update" do
     let(:page) { create :page, :with_simple_answer_type, form:, answer_type: "email" }
-
-    before do
-      allow(PageRepository).to receive(:save!).with(hash_including(page_id: page.id, form_id: 1))
-    end
 
     context "when form is valid and ready to update in the DB", :capture_logging do
       let(:answer_type) { "number" }
