@@ -14,7 +14,6 @@ describe "pages/conditions/edit.html.erb" do
     page.position = 1
     allow(form).to receive_messages(group: group, qualifying_route_pages: pages)
     allow(condition_input).to receive(:secondary_skip?).and_return(secondary_skip)
-    allow(FormRepository).to receive_messages(pages:)
     condition_input.check_errors_from_api
 
     render template: "pages/conditions/edit", locals: { condition_input: }

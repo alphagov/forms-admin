@@ -37,7 +37,7 @@ class Forms::ContactDetailsInput < BaseInput
     form.support_url = link_href if supplied(:supply_link)
     form.support_url_text = link_text if supplied(:supply_link)
 
-    FormRepository.save!(form)
+    form.save_draft!
   end
 
   def assign_form_values

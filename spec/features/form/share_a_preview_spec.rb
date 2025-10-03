@@ -6,7 +6,6 @@ feature "Share a preview", type: :feature do
   let(:fake_page) { build :page, form_id: form.id, id: 2 }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, save!: form, pages: form.pages)
     allow(PageRepository).to receive(:find).with(page_id: "2", form_id: form.id).and_return(fake_page)
     allow(PageRepository).to receive(:create!).with(hash_including(form_id: 1))
 

@@ -5,10 +5,6 @@ RSpec.describe Forms::GroupSelect, type: :model do
   let(:group) { build(:group, :org_has_org_admin) }
   let(:group_select) { described_class.new(group:, form:) }
 
-  before do
-    allow(FormRepository).to receive(:find).and_return(form)
-  end
-
   describe "groups" do
     it "returns groups" do
       create_list(:group, 3) do |g|

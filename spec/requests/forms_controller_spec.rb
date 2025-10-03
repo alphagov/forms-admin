@@ -18,8 +18,6 @@ RSpec.describe FormsController, type: :request do
       let(:params) { {} }
 
       before do
-        allow(FormRepository).to receive_messages(find: form, pages: form.pages)
-
         get form_path(form.id, params)
       end
 
@@ -34,8 +32,6 @@ RSpec.describe FormsController, type: :request do
 
     context "with a non-live form" do
       before do
-        allow(FormRepository).to receive_messages(find: form, pages: form.pages)
-
         get form_path(form.id)
       end
 
@@ -48,8 +44,6 @@ RSpec.describe FormsController, type: :request do
       let(:user) { build :user }
 
       before do
-        allow(FormRepository).to receive(:find).and_return(form)
-
         get form_path(form.id)
       end
 
@@ -89,8 +83,6 @@ RSpec.describe FormsController, type: :request do
     end
 
     before do
-      allow(FormRepository).to receive_messages(find: form, pages:, save!: form)
-
       login_as user
 
       post form_pages_path(form.id), params: { forms_mark_pages_section_complete_input: { mark_complete: "true" } }
@@ -102,8 +94,6 @@ RSpec.describe FormsController, type: :request do
 
     context "when the mark completed form is invalid" do
       before do
-        allow(FormRepository).to receive_messages(find: form, save!: nil)
-
         post form_pages_path(form.id), params: { forms_mark_pages_section_complete_input: { mark_complete: nil } }
       end
 

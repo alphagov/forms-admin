@@ -6,16 +6,11 @@ describe MakeFormLiveService do
   let(:live_form_document) { current_form.live_form_document }
   let(:current_user) { build :user }
 
-  before do
-    allow(FormRepository).to receive(:make_live!) do |form|
-      form.state = "live"
-    end
-  end
-
   describe "#make_live" do
-    it "calls make_live! on the Form Repository with the current form" do
-      expect(FormRepository).to receive(:make_live!).with(current_form)
-      make_form_live_service.make_live
+    it "makes the form live" do
+      expect {
+        make_form_live_service.make_live
+      }.to change(current_form, :state).to("live")
     end
 
     it "does not call the SubmissionEmailMailer" do

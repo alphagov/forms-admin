@@ -14,13 +14,7 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
 
   describe "#archive" do
     before do
-      allow(FormRepository).to receive(:find).and_return(form)
-
       get archive_form_path(id)
-    end
-
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "returns 200" do
@@ -43,18 +37,15 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
   describe "#update" do
     let(:confirm) { :yes }
 
-    before do
-      allow(FormRepository).to receive_messages(find: form, archive!: form)
-
-      post archive_form_update_path(id), params: { forms_confirm_archive_input: { confirm:, form: } }
-    end
-
     context "when 'Yes' is selected" do
       it "archives the form" do
-        expect(FormRepository).to have_received(:archive!)
+        expect {
+          post archive_form_update_path(id), params: { forms_confirm_archive_input: { confirm:, form: } }
+        }.to change { form.reload.state }.to("archived")
       end
 
       it "redirects to the success page" do
+        post archive_form_update_path(id), params: { forms_confirm_archive_input: { confirm:, form: } }
         expect(response).to redirect_to(archive_form_confirmation_path(id))
       end
     end
@@ -63,12 +54,17 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
       let(:confirm) { :no }
 
       it "redirects to live form page" do
+        post archive_form_update_path(id), params: { forms_confirm_archive_input: { confirm:, form: } }
         expect(response).to redirect_to(live_form_path(id))
       end
     end
 
     context "when no option is selected" do
       let(:confirm) { nil }
+
+      before do
+        post archive_form_update_path(id), params: { forms_confirm_archive_input: { confirm:, form: } }
+      end
 
       it "returns 422" do
         expect(response).to have_http_status(:unprocessable_content)
@@ -84,10 +80,13 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
       let(:form) { create(:form, :archived) }
 
       it "doesn't archive the form" do
-        expect(FormRepository).not_to have_received(:archive!)
+        expect {
+          post archive_form_update_path(id), params: { forms_confirm_archive_input: { confirm:, form: } }
+        }.not_to change(form, :state)
       end
 
       it "redirects to archived form page" do
+        post archive_form_update_path(id), params: { forms_confirm_archive_input: { confirm:, form: } }
         expect(response).to redirect_to(archived_form_path(id))
       end
     end
@@ -95,8 +94,6 @@ RSpec.describe Forms::ArchiveFormController, type: :request do
 
   describe "#confirmation" do
     before do
-      allow(FormRepository).to receive(:find).and_return(form)
-
       get archive_form_confirmation_path(id)
     end
 

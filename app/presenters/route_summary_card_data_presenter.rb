@@ -21,7 +21,7 @@ class RouteSummaryCardDataPresenter
   end
 
   def pages
-    @pages ||= FormRepository.pages(form)
+    @pages ||= form.pages
   end
 
   def next_page

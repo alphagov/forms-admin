@@ -18,7 +18,7 @@ class Pages::Routes::DeleteConfirmationInput < ConfirmActionInput
 private
 
   def delete_routes
-    pages = FormRepository.pages(form)
+    pages = form.pages
     page_routes = PageRoutesService.new(form:, pages:, page:).routes
     page_routes.each { |condition| ConditionRepository.destroy(condition) }
   end

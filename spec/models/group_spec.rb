@@ -190,8 +190,6 @@ RSpec.describe Group, type: :model do
     end
 
     it "is associated with a form through the form ID" do
-      allow(FormRepository).to receive(:find).with(form_id: form.id).and_return(form)
-
       group = build(:group, id: 1)
       group.group_forms.build(form:)
       group.save!

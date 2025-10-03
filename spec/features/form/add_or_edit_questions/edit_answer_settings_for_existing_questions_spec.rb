@@ -12,7 +12,6 @@ feature "Editing answer_settings for existing question", type: :feature do
     create(:page, :with_selection_settings, form:, is_optional: true)
     create(:page, :with_text_settings, form:, input_type: "long_text")
 
-    allow(FormRepository).to receive_messages(find: form, pages:)
     allow(PageRepository).to receive_messages(create!: true)
 
     pages.each do |page|

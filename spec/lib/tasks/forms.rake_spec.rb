@@ -17,13 +17,6 @@ RSpec.describe "forms.rake" do
     let(:forms) { create_list(:form, 3) }
     let(:form_ids) { forms.map(&:id) }
 
-    before do
-      allow(FormRepository).to receive(:find).and_call_original
-      forms.each do |form|
-        allow(FormRepository).to receive(:find).with(form_id: form.id).and_return(form)
-      end
-    end
-
     context "with valid arguments" do
       context "with a single form not in a group" do
         let(:form_id) { form_ids.first }
@@ -147,19 +140,16 @@ RSpec.describe "forms.rake" do
       let(:submission_email) { "test@example.gov.uk" }
       let(:valid_args) { [form.id, submission_email] }
 
-      before do
-        allow(FormRepository).to receive_messages(find: form, save!: form)
-      end
-
       shared_examples "submission email update" do
         it "changes the form submission email" do
-          expect(FormRepository).to receive(:save!).with(an_object_having_attributes(submission_email:))
-          task.invoke(*valid_args)
+          expect {
+            task.invoke(*valid_args)
+          }.to change { form.reload.submission_email }.to(submission_email)
         end
 
         it "updates the email confirmation status" do
-          expect(FormRepository).to receive(:save!).with(an_object_having_attributes(email_confirmation_status: :email_set_without_confirmation))
           task.invoke(*valid_args)
+          expect(form.reload.email_confirmation_status).to eq(:email_set_without_confirmation)
         end
       end
 

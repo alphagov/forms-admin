@@ -6,7 +6,6 @@ feature "Add/editing a single question", type: :feature do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, save!: form, pages: form.pages)
     allow(PageRepository).to receive_messages(find: fake_page, create!: fake_page)
 
     GroupForm.create!(group:, form_id: form.id)

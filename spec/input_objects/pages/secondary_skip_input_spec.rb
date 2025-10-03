@@ -9,10 +9,6 @@ RSpec.describe Pages::SecondarySkipInput, type: :model do
   let(:page) { pages.second }
   let(:condition) { nil }
 
-  before do
-    allow(FormRepository).to receive_messages(pages:)
-  end
-
   describe "validations" do
     it "is valid given valid params" do
       secondary_skip_input.routing_page_id = form.pages.first.id.to_s

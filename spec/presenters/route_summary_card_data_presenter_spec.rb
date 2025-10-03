@@ -10,7 +10,6 @@ describe RouteSummaryCardDataPresenter do
   let(:page) { pages.first }
 
   before do
-    allow(FormRepository).to receive_messages(pages: form.pages)
     allow(form).to receive(:group).and_return(build(:group))
   end
 
@@ -168,16 +167,8 @@ describe RouteSummaryCardDataPresenter do
     end
   end
 
-  describe "#pages" do
-    it "calls the FormRepository" do
-      expect(FormRepository).to receive(:pages).with(form)
-      service.pages
-    end
-  end
-
   describe "#next_page" do
     it "returns the next page" do
-      allow(FormRepository).to receive(:pages).and_return(pages)
       expect(service.next_page).to eq(pages.second)
     end
   end

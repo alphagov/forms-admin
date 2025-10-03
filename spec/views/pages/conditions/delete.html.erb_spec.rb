@@ -11,7 +11,6 @@ describe "pages/conditions/delete.html.erb" do
   before do
     page.position = 1
     secondary_skip_condition
-    allow(FormRepository).to receive_messages(pages:)
     render template: "pages/conditions/delete", locals: { delete_condition_input: }
   end
 

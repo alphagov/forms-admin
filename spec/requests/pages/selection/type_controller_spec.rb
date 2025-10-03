@@ -24,7 +24,6 @@ describe Pages::Selection::TypeController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, pages: pages)
     allow(PageRepository).to receive_messages(find: page, save!: page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
@@ -36,10 +35,6 @@ describe Pages::Selection::TypeController, type: :request do
     before do
       draft_question
       get selection_type_new_path(form_id: form.id)
-    end
-
-    it "reads the existing form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "sets an instance variable for selection_type_path" do
@@ -106,10 +101,6 @@ describe Pages::Selection::TypeController, type: :request do
 
       draft_question
       get selection_type_edit_path(form_id: page.form_id, page_id: page.id)
-    end
-
-    it "reads the existing form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "returns the existing draft question answer settings" do

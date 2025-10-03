@@ -4,8 +4,6 @@ RSpec.describe WebController, type: :request do
   let(:form) { create :form }
 
   before do
-    allow(FormRepository).to receive_messages(find: form)
-
     login_as_standard_user
   end
 

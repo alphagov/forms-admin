@@ -12,7 +12,7 @@ class Forms::DeclarationInput < Forms::MarkCompleteInput
 
     form.declaration_text = declaration_text
     form.declaration_section_completed = mark_complete
-    FormRepository.save!(form)
+    form.save_draft!
   end
 
   def assign_form_values

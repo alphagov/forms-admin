@@ -36,13 +36,13 @@ class Pages::SecondarySkipInput < BaseInput
 
   def goto_page_options
     [
-      *pages_after_current_page(FormRepository.pages(form), page).map { |p| OpenStruct.new(id: p.id, question_text: p.question_with_number) },
+      *pages_after_current_page(form.pages, page).map { |p| OpenStruct.new(id: p.id, question_text: p.question_with_number) },
       OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers")),
     ]
   end
 
   def routing_page_options
-    pages_after_current_page(FormRepository.pages(form), page).map { |p| OpenStruct.new(id: p.id, question_text: p.question_with_number) }
+    pages_after_current_page(form.pages, page).map { |p| OpenStruct.new(id: p.id, question_text: p.question_with_number) }
   end
 
   def end_page_name
@@ -64,7 +64,7 @@ class Pages::SecondarySkipInput < BaseInput
   end
 
   def question_name(page_id)
-    target_page = FormRepository.pages(form).find { |page| page.id == page_id }
+    target_page = form.pages.find { |page| page.id == page_id }
 
     return if target_page.blank?
 
@@ -76,7 +76,7 @@ class Pages::SecondarySkipInput < BaseInput
 
   def next_page_number
     if page.has_next_page?
-      target_page = FormRepository.pages(form).find { it.id == page.next_page }
+      target_page = form.pages.find { it.id == page.next_page }
       question_number = target_page.position
       return question_number
     end
@@ -107,8 +107,8 @@ private
   def pages_in_valid_order
     if routing_page_id.present? && goto_page_id.present?
 
-      routing_page = FormRepository.pages(form).find { |page| page.id.to_s == routing_page_id.to_s }
-      goto_page = FormRepository.pages(form).find { |page| page.id.to_s == goto_page_id.to_s }
+      routing_page = form.pages.find { |page| page.id.to_s == routing_page_id.to_s }
+      goto_page = form.pages.find { |page| page.id.to_s == goto_page_id.to_s }
 
       if goto_page_id == routing_page_id
         errors.add(:goto_page_id, :equal, message: I18n.t("activemodel.errors.models.pages/secondary_skip_input.attributes.goto_page_id.equal"))

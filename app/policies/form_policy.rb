@@ -17,7 +17,7 @@ class FormPolicy
   alias_method :destroy?, :delete?
 
   def can_add_page_routing_conditions?
-    form_has_two_or_more_pages = FormRepository.pages(form).length >= 2
+    form_has_two_or_more_pages = form.pages.length >= 2
     form_has_qualifying_pages = form.qualifying_route_pages.any?
 
     form_has_two_or_more_pages && form_has_qualifying_pages

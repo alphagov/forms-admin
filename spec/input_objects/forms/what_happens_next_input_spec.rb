@@ -25,10 +25,6 @@ RSpec.describe Forms::WhatHappensNextInput, type: :model do
     end
 
     describe "#submit" do
-      before do
-        allow(FormRepository).to receive(:save!).and_return(true)
-      end
-
       it "returns false if the data is invalid" do
         what_happens_next_input.what_happens_next_markdown = "# abc"
         expect(what_happens_next_input.submit).to be false
@@ -65,10 +61,6 @@ RSpec.describe Forms::WhatHappensNextInput, type: :model do
     end
 
     describe "#submit" do
-      before do
-        allow(FormRepository).to receive(:save!).and_return(true)
-      end
-
       it "returns false if the data is invalid" do
         what_happens_next_input = described_class.new(form:, what_happens_next_markdown: "# a level one heading")
         expect(what_happens_next_input.submit).to be false

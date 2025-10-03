@@ -22,8 +22,6 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, pages: pages)
-
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
@@ -32,10 +30,6 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
   describe "#new" do
     before do
       get address_settings_new_path(form_id: form.id)
-    end
-
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "sets an instance variable for address_settings_path" do
@@ -98,10 +92,6 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
       draft_question
       get address_settings_edit_path(form_id: page.form_id, page_id: page.id)
-    end
-
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "returns the existing page input type" do

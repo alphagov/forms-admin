@@ -6,24 +6,11 @@ RSpec.describe Forms::UnarchiveController, type: :request do
   let(:form) { create(:form, :archived) }
   let(:made_live_form) { build(:made_live_form, id: form.id) }
 
-  let(:updated_form) do
-    create(:form,
-           :live,
-           name: form.name,
-           form_slug: form.form_slug,
-           submission_email: form.submission_email,
-           privacy_policy_url: form.privacy_policy_url,
-           support_email: form.support_email,
-           pages: form.pages)
-  end
-
   let(:group) { create(:group, organisation: user.organisation, status: :active) }
   let(:form_params) { nil }
 
   describe "#new" do
     before do
-      allow(FormRepository).to receive_messages(save!: updated_form)
-
       Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user, role: :group_admin)
       GroupForm.create!(form_id: form.id, group_id: group.id)
 
@@ -51,28 +38,28 @@ RSpec.describe Forms::UnarchiveController, type: :request do
 
   describe "#create" do
     before do
-      allow(FormRepository).to receive_messages(make_live!: form)
-
       Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user, role: :group_admin)
       GroupForm.create!(form_id: form.id, group_id: group.id)
 
       login_as user
-
-      post(unarchive_create_path(form_id: form.id), params: form_params)
     end
 
     context "when making a form live again" do
       let(:form_params) { { forms_make_live_input: { confirm: :yes, form: } } }
 
       it "makes form live" do
-        expect(FormRepository).to have_received(:make_live!)
+        expect {
+          post(unarchive_create_path(form_id: form.id), params: form_params)
+        }.to change { form.reload.state }.to("live")
       end
 
       it "renders the confirmation page" do
+        post(unarchive_create_path(form_id: form.id), params: form_params)
         expect(response).to render_template("forms/make_live/confirmation")
       end
 
       it "has the page title 'Your form is live'" do
+        post(unarchive_create_path(form_id: form.id), params: form_params)
         expect(response.body).to include "Your form is live"
       end
     end
@@ -81,10 +68,13 @@ RSpec.describe Forms::UnarchiveController, type: :request do
       let(:form_params) { { forms_make_live_input: { confirm: :no } } }
 
       it "does not make the form live" do
-        expect(FormRepository).not_to have_received(:make_live!)
+        expect {
+          post(unarchive_create_path(form_id: form.id), params: form_params)
+        }.not_to(change { form.reload.state })
       end
 
       it "redirects you to the archived form page" do
+        post(unarchive_create_path(form_id: form.id), params: form_params)
         expect(response).to redirect_to(archived_form_path(form.id))
       end
     end
@@ -93,14 +83,18 @@ RSpec.describe Forms::UnarchiveController, type: :request do
       let(:form_params) { { forms_make_live_input: { confirm: :"" } } }
 
       it "returns 422" do
+        post(unarchive_create_path(form_id: form.id), params: form_params)
         expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "does not make the form live" do
-        expect(FormRepository).not_to have_received(:make_live!)
+        expect {
+          post(unarchive_create_path(form_id: form.id), params: form_params)
+        }.not_to(change { form.reload.state })
       end
 
       it "re-renders the page with an error" do
+        post(unarchive_create_path(form_id: form.id), params: form_params)
         expect(response).to render_template("unarchive_form")
         expect(response.body).to include("You must choose an option")
       end
@@ -110,6 +104,7 @@ RSpec.describe Forms::UnarchiveController, type: :request do
       let(:user) { build :user }
 
       it "is forbidden" do
+        post(unarchive_create_path(form_id: form.id), params: form_params)
         expect(response).to have_http_status(:forbidden)
       end
     end

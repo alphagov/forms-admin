@@ -12,8 +12,6 @@ RSpec.describe Pages::QuestionTextController, type: :request do
   let(:logger) { ActiveSupport::Logger.new(output) }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, pages: pages)
-
     allow(Lograge).to receive(:logger).and_return(logger)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
@@ -24,10 +22,6 @@ RSpec.describe Pages::QuestionTextController, type: :request do
   describe "#new" do
     before do
       get question_text_new_path(form_id: form.id)
-    end
-
-    it "reads the existing form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "sets an instance variable for question_text_path" do

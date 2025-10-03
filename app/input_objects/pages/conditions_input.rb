@@ -77,7 +77,7 @@ class Pages::ConditionsInput < BaseInput
 
   def next_page_number
     if page.has_next_page?
-      target_page = FormRepository.pages(form).find { it.id == page.next_page }
+      target_page = form.pages.find { it.id == page.next_page }
       target_page.position
     end
   end
@@ -87,13 +87,13 @@ class Pages::ConditionsInput < BaseInput
   end
 
   def secondary_skip?
-    PageRoutesService.new(form:, pages: FormRepository.pages(form), page:).routes.find(&:secondary_skip?)
+    PageRoutesService.new(form:, pages: form.pages, page:).routes.find(&:secondary_skip?)
   end
 
 private
 
   def pages_after_position(position)
-    all_pages = FormRepository.pages(form)
+    all_pages = form.pages
     all_pages.filter { |page| page.position > position }
   end
 end

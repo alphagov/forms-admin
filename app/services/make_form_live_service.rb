@@ -14,7 +14,7 @@ class MakeFormLiveService
   end
 
   def make_live
-    FormRepository.make_live!(@current_form)
+    @current_form.make_live!
 
     if live_form_submission_email_has_changed
       SubmissionEmailMailer.alert_email_change(

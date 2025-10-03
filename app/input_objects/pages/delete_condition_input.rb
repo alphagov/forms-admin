@@ -30,6 +30,6 @@ class Pages::DeleteConditionInput < ConfirmActionInput
 private
 
   def pages
-    @pages ||= FormRepository.pages(form)
+    @pages ||= form.pages
   end
 end

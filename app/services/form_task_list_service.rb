@@ -46,7 +46,7 @@ private
   end
 
   def create_form_section_tasks
-    question_path = if FormRepository.pages(@form).any?
+    question_path = if @form.pages.any?
                       form_pages_path(@form.id)
                     else
                       start_new_question_path(@form.id)
@@ -161,7 +161,7 @@ private
         task_name: share_preview_task_name,
         path: share_preview_path(@form.id),
         status: @task_statuses[:share_preview_status],
-        active: FormRepository.pages(@form).any?,
+        active: @form.pages.any?,
       },
       {
         task_name: live_task_name,

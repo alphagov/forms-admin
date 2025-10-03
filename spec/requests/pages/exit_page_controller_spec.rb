@@ -22,7 +22,6 @@ RSpec.describe Pages::ExitPageController, type: :request do
   let(:condition) { build(:condition, id: 1, routing_page_id: selected_page.id, exit_page_heading: "Exit Page Heading") }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, pages: pages)
     allow(PageRepository).to receive_messages(find: selected_page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)

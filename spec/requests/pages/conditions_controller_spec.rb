@@ -21,8 +21,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
   let(:user) { standard_user }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, pages: pages)
-
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as user
@@ -31,10 +29,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
   describe "#routing_page" do
     before do
       get routing_page_path(form_id: form.id)
-    end
-
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "renders the routing page template" do
@@ -52,10 +46,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     context "when the page doesn't have a condition associated with it" do
       before do
         post routing_page_path(form_id: form.id, params:)
-      end
-
-      it "reads the form" do
-        expect(FormRepository).to have_received(:find)
       end
 
       it "redirects the user to the new conditions page" do
@@ -116,10 +106,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
       get new_condition_path(form_id: form.id, page_id: page.id)
     end
 
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
-    end
-
     it "renders the new condition page template" do
       expect(response).to render_template("pages/conditions/new")
     end
@@ -150,10 +136,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     context "when the page doesn't have an existing condition" do
       before do
         post create_condition_path(form_id: form.id, page_id: page.id, params:)
-      end
-
-      it "reads the form" do
-        expect(FormRepository).to have_received(:find)
       end
 
       it "redirects to the page list" do
@@ -244,10 +226,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
       get edit_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id)
     end
 
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
-    end
-
     it "Checks the errors from the API response" do
       expect(conditions_input).to have_received(:check_errors_from_api).exactly(1).times
     end
@@ -286,10 +264,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
                                 page_id: page.id,
                                 condition_id: condition.id,
                                 params:)
-    end
-
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "redirects to the page list" do
@@ -351,10 +325,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
       context "when changing to a non-exit page" do
         let(:params) { { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: 3, answer_value: "Wales" } } }
 
-        it "reads the form" do
-          expect(FormRepository).to have_received(:find).twice
-        end
-
         it "redirects to the confirm exit page deletion page" do
           expect(response).to redirect_to confirm_change_exit_page_path(form_id: form.id, page_id: page.id, condition_id: condition.id, params: { answer_value: "Wales", goto_page_id: 3 })
         end
@@ -383,10 +353,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
       allow(ConditionRepository).to receive(:find).and_return(condition)
 
       get delete_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id)
-    end
-
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "renders the delete condition page template" do
@@ -419,10 +385,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
                                     page_id: page.id,
                                     condition_id: condition.id,
                                     params: { pages_delete_condition_input: { confirm: } })
-    end
-
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "redirects to the page list" do
@@ -493,10 +455,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
       )
     end
 
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
-    end
-
     it "renders the confirm_delete_exit_page template" do
       expect(response).to render_template("pages/conditions/confirm_delete_exit_page")
     end
@@ -541,10 +499,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
         goto_page_id: goto_page_id,
         params: { pages_delete_exit_page_input: { confirm: } },
       )
-    end
-
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "clears the exit page fields" do

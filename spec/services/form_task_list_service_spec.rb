@@ -23,7 +23,6 @@ describe FormTaskListService do
     group_policy = instance_double(GroupPolicy,
                                    upgrade?: upgrade)
     allow(Pundit).to receive(:policy).with(current_user, kind_of(Group)).and_return(group_policy)
-    allow(FormRepository).to receive_messages(pages: pages)
     GroupForm.create!(form_id: form.id, group_id: group.id)
   end
 

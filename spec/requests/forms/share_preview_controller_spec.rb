@@ -16,13 +16,7 @@ RSpec.describe Forms::SharePreviewController, type: :request do
 
   describe "#new" do
     before do
-      allow(FormRepository).to receive(:find).and_return(form)
-
       get share_preview_path(id)
-    end
-
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "returns 200" do
@@ -44,54 +38,43 @@ RSpec.describe Forms::SharePreviewController, type: :request do
 
   describe "#create" do
     let(:mark_complete) { "true" }
-
-    before do
-      allow(FormRepository).to receive_messages(find: form, save!: form)
-
-      post share_preview_create_path(id), params: { forms_share_preview_input: { form:, mark_complete: } }
-    end
-
-    it "reads the form" do
-      expect(FormRepository).to have_received(:find)
-    end
+    let(:params) { { forms_share_preview_input: { form:, mark_complete: } } }
 
     context "when 'Yes' is selected" do
-      let(:updated_form) do
-        form.tap do |f|
-          f.share_preview_completed = "true"
-        end
-      end
-
       it "updates the form" do
-        expect(FormRepository).to have_received(:save!)
+        expect {
+          post(share_preview_create_path(id), params:)
+        }.to change { form.reload.share_preview_completed }.to(true)
       end
 
       it "redirects to the form" do
+        post(share_preview_create_path(id), params:)
         expect(response).to redirect_to(form_path(id))
       end
 
       it "displays a success banner" do
+        post(share_preview_create_path(id), params:)
         expect(flash[:success]).to eq(I18n.t("banner.success.form.share_preview_completed"))
       end
     end
 
     context "when 'No' is selected" do
       let(:mark_complete) { "false" }
-      let(:updated_form) do
-        form.tap do |f|
-          f.share_preview_completed = "false"
-        end
-      end
+      let(:form) { create(:form, share_preview_completed: true) }
 
       it "updates the form" do
-        expect(FormRepository).to have_received(:save!)
+        expect {
+          post(share_preview_create_path(id), params:)
+        }.to change { form.reload.share_preview_completed }.to(false)
       end
 
       it "redirects to the form" do
+        post(share_preview_create_path(id), params:)
         expect(response).to redirect_to(form_path(id))
       end
 
       it "does not display a success banner" do
+        post(share_preview_create_path(id), params:)
         expect(flash).to be_empty
       end
     end
@@ -100,14 +83,18 @@ RSpec.describe Forms::SharePreviewController, type: :request do
       let(:mark_complete) { "" }
 
       it "does not update the form" do
-        expect(FormRepository).not_to have_received(:save!)
+        expect {
+          post(share_preview_create_path(id), params:)
+        }.not_to(change { form.reload.share_preview_completed })
       end
 
       it "returns an 422" do
+        post(share_preview_create_path(id), params:)
         expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "re-renders the page with an error" do
+        post(share_preview_create_path(id), params:)
         expect(response).to render_template(:new)
         expect(response.body).to include("You must choose an option")
       end
@@ -117,6 +104,7 @@ RSpec.describe Forms::SharePreviewController, type: :request do
       let(:current_user) { build :user }
 
       it "returns 403" do
+        post(share_preview_create_path(id), params:)
         expect(response).to have_http_status(:forbidden)
       end
     end

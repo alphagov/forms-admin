@@ -21,12 +21,7 @@ RSpec.describe "Create a form", type: :feature do
 
     login_as user
 
-    allow(FormRepository).to receive(:create!).and_return form, unwanted_form
-    allow(FormRepository).to receive(:find).with(form_id: form.id).and_return form
-    allow(FormRepository).to receive(:find).with(form_id: form.id.to_s).and_return form
-    allow(FormRepository).to receive(:find).with(form_id: unwanted_form.id).and_return unwanted_form
-    allow(FormRepository).to receive(:find).with(form_id: unwanted_form.id.to_s).and_return unwanted_form
-    allow(FormRepository).to receive(:pages).and_return([])
+    allow(Form).to receive(:create!).and_return form, unwanted_form
   end
 
   after do
@@ -45,7 +40,7 @@ RSpec.describe "Create a form", type: :feature do
 
     it "creates only one form" do
       expect(page).to have_title form.name
-      expect(FormRepository).to have_received(:create!).once
+      expect(Form).to have_received(:create!).once
       expect(GroupForm.count).to eq 1
     end
 
@@ -54,7 +49,7 @@ RSpec.describe "Create a form", type: :feature do
 
       it "creates only one form" do
         expect(page).to have_title form.name
-        expect(FormRepository).to have_received(:create!).once
+        expect(Form).to have_received(:create!).once
         expect(GroupForm.count).to eq 1
       end
     end
@@ -71,11 +66,6 @@ RSpec.describe "Create a form", type: :feature do
         fill_in "What’s the name of your form?", with: form.name
 
         click_on "Save and continue"
-
-        allow(FormRepository).to receive(:destroy).and_invoke(lambda do |record|
-          GroupForm.find_by_form_id(record.id).destroy!
-          record
-        end)
 
         click_on "Delete draft form"
         choose "Yes"

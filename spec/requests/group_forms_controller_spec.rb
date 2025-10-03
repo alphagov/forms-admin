@@ -54,7 +54,6 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
     before do
       create(:form_record, id: form.id)
       login_as_organisation_admin_user
-      allow(FormRepository).to receive(:find).and_return(form)
 
       group.group_forms.create!(form_id: form.id)
       group.organisation = organisation_admin_user.organisation
@@ -108,10 +107,10 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
     end
 
     context "with valid parameters" do
-      let(:form) { create :form }
-
-      before do
-        allow(FormRepository).to receive(:create!).and_return(form)
+      it "creates a form" do
+        expect {
+          post group_forms_url(group), params: { forms_name_input: valid_attributes }
+        }.to change(Form, :count).by(1)
       end
 
       it "associates the new form with the group" do
@@ -119,12 +118,12 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
           post group_forms_url(group), params: { forms_name_input: valid_attributes }
         }.to change(GroupForm, :count).by(1)
 
-        expect(GroupForm.last).to have_attributes(group_id: group.id, form_id: form.id)
+        expect(GroupForm.last).to have_attributes(group_id: group.id, form_id: Form.last.id)
       end
 
       it "redirects to the created form" do
         post group_forms_url(group), params: { forms_name_input: valid_attributes }
-        expect(response).to redirect_to(form_url(form.id))
+        expect(response).to redirect_to(form_url(Form.last.id))
       end
     end
 

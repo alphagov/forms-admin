@@ -11,7 +11,7 @@ class FormsController < WebController
 
   def mark_pages_section_completed
     authorize current_form, :can_view_form?
-    @pages = FormRepository.pages(current_form)
+    @pages = current_form.pages
     @mark_complete_input = Forms::MarkPagesSectionCompleteInput.new(mark_complete_input_params)
 
     if @mark_complete_input.submit

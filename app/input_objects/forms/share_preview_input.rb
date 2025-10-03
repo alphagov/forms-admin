@@ -3,11 +3,7 @@ class Forms::SharePreviewInput < Forms::MarkCompleteInput
     return false if invalid?
 
     form.share_preview_completed = mark_complete
-    if FormRepository.save!(form)
-      true
-    else
-      false
-    end
+    form.save_draft!
   end
 
   def assign_form_values

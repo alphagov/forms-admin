@@ -9,7 +9,6 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(FormRepository).to receive_messages(find: form, pages: pages)
     allow(PageRepository).to receive_messages(find: page, save!: page)
 
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
@@ -20,10 +19,6 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
   describe "#new" do
     before do
       get type_of_answer_new_path(form_id: form.id)
-    end
-
-    it "reads the existing form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "sets an instance variable for type_of_answer_path" do
@@ -153,10 +148,6 @@ RSpec.describe Pages::TypeOfAnswerController, type: :request do
       allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
 
       get type_of_answer_edit_path(form_id: page.form_id, page_id: page.id)
-    end
-
-    it "reads the existing form" do
-      expect(FormRepository).to have_received(:find)
     end
 
     it "returns the existing page answer type" do
