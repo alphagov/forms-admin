@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Pages::Selection::BulkOptionsInput, type: :model do
+  let(:form) { create :form }
   let(:bulk_options_input) { build :bulk_options_input, draft_question: }
   let(:only_one_option) { "true" }
-  let(:draft_question) { build :draft_question, answer_type: "selection", answer_settings: { only_one_option: } }
+  let(:draft_question) { create :draft_question, answer_type: "selection", answer_settings: { only_one_option: }, form_id: form.id }
 
   it "has a valid factory" do
     expect(bulk_options_input).to be_valid
@@ -75,7 +76,7 @@ RSpec.describe Pages::Selection::BulkOptionsInput, type: :model do
     end
 
     context "when include_none_of_the_above is not 'true' or 'false'" do
-      let(:bulk_options_input) { build :bulk_options_input, include_none_of_the_above: nil }
+      let(:bulk_options_input) { build :bulk_options_input, include_none_of_the_above: nil, draft_question: }
 
       it "is invalid" do
         error_message = I18n.t("activemodel.errors.models.pages/selection/bulk_options_input.attributes.include_none_of_the_above.inclusion")

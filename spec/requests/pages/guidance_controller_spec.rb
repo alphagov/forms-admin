@@ -4,7 +4,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
   let(:form) { create :form, id: 1 }
   let(:pages) { create_list :page, 5, form_id: form.id }
   let(:page) { pages.first }
-  let(:draft_question) { build :draft_question }
+  let(:draft_question) { build :draft_question, form_id: form.id }
   let(:page_heading) { "Page heading" }
   let(:guidance_markdown) { "## Heading level 2" }
 

@@ -13,4 +13,8 @@ class DraftQuestion < ApplicationRecord
 
     raw_settings.deep_symbolize_keys
   end
+
+  def form_name
+    Form.find(form_id).name
+  end
 end
