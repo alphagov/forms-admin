@@ -360,39 +360,30 @@ RSpec.describe Pages::ConditionsController, type: :request do
   describe "#destroy" do
     let(:condition) { create :condition, id: 1, routing_page_id: page.id, check_page_id: page.id, answer_value: "Wales", goto_page_id: pages.last.id }
     let(:confirm) { "yes" }
-    let(:destroy_bool) { true }
 
     before do
-      allow(ConditionRepository).to receive_messages(destroy: destroy_bool)
-
       delete destroy_condition_path(form_id: form.id,
                                     page_id: page.id,
                                     condition_id: condition.id,
                                     params: { pages_delete_condition_input: { confirm: } })
     end
 
-    it "redirects to the page list" do
-      expect(response).to redirect_to form_pages_path(form_id: form.id)
-    end
-
-    it "displays success message" do
-      follow_redirect!
-      expect(response.body).to include(I18n.t("banner.success.route_deleted", question_number: 1))
-    end
-
-    context "when confirm deletion is false" do
-      let(:confirm) { "no" }
-
-      it "redirects to edit the condition" do
-        expect(response).to redirect_to edit_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id)
+    context "when the destroy is successful" do
+      it "redirects to the page list" do
+        expect(response).to redirect_to form_pages_path(form_id: form.id)
       end
-    end
 
-    context "when the destroy fails" do
-      let(:destroy_bool) { false }
+      it "displays success message" do
+        follow_redirect!
+        expect(response.body).to include(I18n.t("banner.success.route_deleted", question_number: 1))
+      end
 
-      it "return 422 error code" do
-        expect(response).to have_http_status(:unprocessable_content)
+      context "when confirm deletion is false" do
+        let(:confirm) { "no" }
+
+        it "redirects to edit the condition" do
+          expect(response).to redirect_to edit_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id)
+        end
       end
     end
 

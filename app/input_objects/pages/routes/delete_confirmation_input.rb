@@ -20,6 +20,6 @@ private
   def delete_routes
     pages = form.pages
     page_routes = PageRoutesService.new(form:, pages:, page:).routes
-    page_routes.each { |condition| ConditionRepository.destroy(condition) }
+    page_routes.each(&:destroy_and_update_form!)
   end
 end

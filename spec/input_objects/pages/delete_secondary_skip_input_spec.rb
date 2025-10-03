@@ -4,7 +4,7 @@ RSpec.describe Pages::DeleteSecondarySkipInput, type: :model do
   let(:delete_secondary_skip_input) { described_class.new(form:, page:, record: condition) }
   let(:form) { create :form, :ready_for_routing }
   let(:page) { form.pages.first }
-  let(:condition) { build :condition, routing_page_id: page.id }
+  let(:condition) { create :condition, routing_page_id: page.id }
 
   describe "validations" do
     it "is invalid if confirm is nil" do
@@ -30,12 +30,11 @@ RSpec.describe Pages::DeleteSecondarySkipInput, type: :model do
     end
 
     context "when confirm is 'yes'" do
-      before { allow(ConditionRepository).to receive(:destroy) }
-
       it "destroys the condition" do
         delete_secondary_skip_input.confirm = "yes"
-        delete_secondary_skip_input.submit
-        expect(ConditionRepository).to have_received(:destroy)
+        expect {
+          delete_secondary_skip_input.submit
+        }.to change(Condition, :count).by(-1)
       end
     end
   end

@@ -64,7 +64,7 @@ class Pages::ExitPageController < PagesController
       return redirect_to edit_exit_page_path(@current_form.id, @page.id, @exit_page.id)
     end
 
-    ConditionRepository.destroy(@exit_page)
+    @exit_page.destroy_and_update_form!
 
     redirect_to new_condition_path(@current_form.id, @page.id), success: t("banner.success.exit_page_deleted")
   end

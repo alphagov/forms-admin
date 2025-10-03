@@ -7,7 +7,7 @@ class Pages::SecondarySkipInput < BaseInput
   def submit
     return false if invalid?
 
-    # We need to take extra care when updating an exisitng Condition.
+    # We need to take extra care when updating an existing Condition.
     # Because conditions are accessed from the API with page id, we can only
     # update a condition if the user hasn't changed the routing_page_id.
     #
@@ -22,7 +22,7 @@ class Pages::SecondarySkipInput < BaseInput
     end
 
     if record.present?
-      ConditionRepository.destroy(record)
+      record.destroy_and_update_form!
     end
 
     Condition.create_and_update_form!(
