@@ -128,8 +128,6 @@ RSpec.describe PagesController, type: :request do
       let(:pages) { [page] }
 
       before do
-        allow(PageRepository).to receive(:destroy)
-
         GroupForm.create!(form_id: form.id, group_id: group.id)
       end
 
@@ -260,8 +258,6 @@ RSpec.describe PagesController, type: :request do
 
     context "with a valid page" do
       before do
-        allow(PageRepository).to receive_messages(destroy: true)
-
         GroupForm.create!(form_id: form.id, group_id: group.id)
       end
 
@@ -278,8 +274,8 @@ RSpec.describe PagesController, type: :request do
           expect(flash[:success]).to eq "The question, ‘#{page.question_text}’, has been deleted"
         end
 
-        it "destroys the page through the page repository" do
-          expect(PageRepository).to have_received(:destroy)
+        it "destroys the page" do
+          expect(Page.exists?(page.id)).to be false
         end
 
         include_examples "logging"
@@ -291,8 +287,8 @@ RSpec.describe PagesController, type: :request do
             expect(response).to have_http_status :forbidden
           end
 
-          it "does not call destroy through the page repository" do
-            expect(PageRepository).not_to have_received(:destroy)
+          it "does not destroy the form" do
+            expect(Page.exists?(page.id)).to be true
           end
         end
       end
@@ -307,8 +303,8 @@ RSpec.describe PagesController, type: :request do
           expect(response.body).to include "Select ‘Yes’ to delete the question"
         end
 
-        it "does not call destroy through the page repository" do
-          expect(PageRepository).not_to have_received(:destroy)
+        it "does not destroy the form" do
+          expect(Page.exists?(page.id)).to be true
         end
       end
     end

@@ -63,7 +63,7 @@ class PagesController < WebController
       return redirect_to @back_url
     end
 
-    unless PageRepository.destroy(page)
+    unless page.destroy
       flash[:message] = "Deletion unsuccessful"
       return redirect_to @back_url
     end
