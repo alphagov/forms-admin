@@ -59,7 +59,6 @@ RSpec.describe PagesController, type: :request do
 
       before do
         create(:condition, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: nil, goto_page_id: pages.last.id)
-        pages.first.reload
 
         allow(standard_user).to receive(:collect_analytics?).and_return(collect_analytics)
 
@@ -118,7 +117,7 @@ RSpec.describe PagesController, type: :request do
       let(:page) do
         create(
           :page,
-          form_id: form.id,
+          form:,
           question_text: "What is your work address?",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
@@ -129,11 +128,6 @@ RSpec.describe PagesController, type: :request do
       let(:pages) { [page] }
 
       before do
-        pages.each do |page|
-          allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: form.id).and_return(page)
-          allow(PageRepository).to receive(:find).with(page_id: page.id, form_id: form.id).and_return(page)
-        end
-
         allow(PageRepository).to receive(:destroy)
 
         GroupForm.create!(form_id: form.id, group_id: group.id)
@@ -143,12 +137,6 @@ RSpec.describe PagesController, type: :request do
         get delete_page_path(form_id: form.id, page_id: page.id)
 
         expect(response).to render_template("pages/delete")
-      end
-
-      it "reads the form through the page repository" do
-        get delete_page_path(form_id: form.id, page_id: page.id)
-
-        expect(PageRepository).to have_received(:find)
       end
 
       describe "logging" do
@@ -184,7 +172,6 @@ RSpec.describe PagesController, type: :request do
 
         before do
           create(:condition, routing_page_id: page.id, check_page_id: page.id, answer_value: "Red", goto_page_id: pages.last.id)
-          page.reload
         end
 
         it "renders a warning about deleting this page" do
@@ -206,8 +193,6 @@ RSpec.describe PagesController, type: :request do
 
         before do
           create(:condition, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Red", goto_page_id: page.id)
-          page.reload
-          pages.first.reload
         end
 
         it "renders a warning about deleting this page" do
@@ -230,7 +215,6 @@ RSpec.describe PagesController, type: :request do
         before do
           create(:condition, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Red", goto_page_id: pages.third.id)
           create(:condition, routing_page_id: page.id, check_page_id: pages.first.id, answer_value: nil, goto_page_id: pages.last.id)
-          page.reload
         end
 
         it "renders a warning about deleting this page" do
@@ -253,7 +237,6 @@ RSpec.describe PagesController, type: :request do
         before do
           create(:condition, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Red", goto_page_id: pages.third.id)
           create(:condition, routing_page_id: pages.second.id, check_page_id: pages.first.id, answer_value: nil, goto_page_id: pages.last.id)
-          pages.second.reload
         end
 
         it "renders a warning about deleting this page" do
@@ -277,7 +260,7 @@ RSpec.describe PagesController, type: :request do
 
     context "with a valid page" do
       before do
-        allow(PageRepository).to receive_messages(find: page, destroy: true)
+        allow(PageRepository).to receive_messages(destroy: true)
 
         GroupForm.create!(form_id: form.id, group_id: group.id)
       end
@@ -336,8 +319,6 @@ RSpec.describe PagesController, type: :request do
     let(:pages) { form.pages }
 
     before do
-      allow(PageRepository).to receive_messages(find: pages[1])
-
       GroupForm.create!(form_id: form.id, group_id: group.id)
     end
 

@@ -23,7 +23,7 @@ class PagesController < WebController
       @routing = :start_of_secondary_skip_route
 
       # route page is condition check page
-      @route_page = PageRepository.find(page_id: page.routing_conditions.first.check_page_id, form_id: current_form.id)
+      @route_page = page.routing_conditions.first.check_page
     elsif page.routing_conditions.any?
       @routing = :start_of_route
 
@@ -33,12 +33,12 @@ class PagesController < WebController
       @routing = :end_of_secondary_skip_route
 
       # route page is condition check page
-      @route_page = PageRepository.find(page_id: @page_goto_conditions.first.check_page_id, form_id: current_form.id)
+      @route_page = @page_goto_conditions.first.check_page
     elsif @page_goto_conditions.any?
       @routing = :end_of_route
 
       # route page is condition routing page
-      @route_page = PageRepository.find(page_id: @page_goto_conditions.first.routing_page_id, form_id: current_form.id)
+      @route_page = @page_goto_conditions.first.routing_page
     end
 
     @delete_confirmation_input = Pages::DeleteConfirmationInput.new
@@ -77,7 +77,7 @@ class PagesController < WebController
   end
 
   def move_page
-    page_to_move = PageRepository.find(page_id: move_params[:page_id], form_id: move_params[:form_id])
+    page_to_move = current_form.pages.find(move_params[:page_id])
 
     moved_page = PageRepository.move_page(page_to_move, move_params[:direction])
 
@@ -95,7 +95,7 @@ private
   end
 
   def page
-    @page ||= PageRepository.find(page_id: params[:page_id], form_id: current_form.id)
+    @page ||= current_form.pages.find(params[:page_id])
   end
 
   def draft_question

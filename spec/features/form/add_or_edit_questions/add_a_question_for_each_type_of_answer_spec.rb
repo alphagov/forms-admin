@@ -1,13 +1,9 @@
 require "rails_helper"
 
 feature "Add/editing a single question", type: :feature do
-  let(:form) { create :form, pages: }
-  let(:fake_page) { build :page, form_id: form.id, id: 2 }
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(PageRepository).to receive_messages(find: fake_page, create!: fake_page)
-
     GroupForm.create!(group:, form_id: form.id)
     create(:membership, group:, user: standard_user, added_by: standard_user)
 
@@ -15,12 +11,13 @@ feature "Add/editing a single question", type: :feature do
   end
 
   context "when a form has no existing pages" do
-    let(:pages) { [] }
+    let(:form) { create :form }
 
     scenario "add a question for each type of answer" do
+      when_i_am_viewing_an_existing_form
+      and_i_want_to_create_or_edit_a_page
+
       Page::ANSWER_TYPES.each do |answer_type|
-        when_i_am_viewing_an_existing_form
-        and_i_want_to_create_or_edit_a_page
         and_i_select_a_type_of_answer_option(answer_type)
         and_i_provide_a_question_text(answer_type)
 
@@ -39,13 +36,9 @@ feature "Add/editing a single question", type: :feature do
   end
 
   context "when a form has existing pages" do
-    let(:pages) do
-      existing_pages = []
-      5.times { |id| existing_pages.push(build(:page, id:)) }
-      existing_pages
-    end
+    let(:form) { create :form, :with_pages }
 
-    scenario "add a question for each type of answer" do
+    scenario "add a question" do
       when_i_am_viewing_an_existing_form
       and_i_want_to_create_or_edit_a_page
       and_i_can_see_a_list_of_existing_pages

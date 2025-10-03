@@ -17,8 +17,6 @@ RSpec.describe Pages::GuidanceController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(PageRepository).to receive(:find).and_return(page)
-
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
@@ -122,8 +120,6 @@ RSpec.describe Pages::GuidanceController, type: :request do
 
   describe "#edit" do
     before do
-      allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: 1).and_return(page)
-
       get guidance_edit_path(form_id: form.id, page_id: page.id)
     end
 

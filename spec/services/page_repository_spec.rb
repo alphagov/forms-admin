@@ -4,24 +4,6 @@ describe PageRepository do
   let(:form_id) { form.id }
   let(:form) { create(:form_record) }
 
-  describe "#find" do
-    let(:page) { create(:page_record, form:) }
-
-    it "returns the page" do
-      expect(described_class.find(page_id: page.id, form_id:)).to eq(page)
-    end
-
-    context "when given a form_id that the page doesn't belong to" do
-      let(:form_id) { "non-existent-id" }
-
-      it "raises a RecordNotFound error" do
-        expect {
-          described_class.find(page_id: page.id, form_id:)
-        }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-    end
-  end
-
   describe "#create!" do
     let(:page_params) do
       { question_text: "asdf",
