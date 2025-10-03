@@ -8,6 +8,28 @@ class Condition < ApplicationRecord
 
   before_destroy :destroy_postconditions
 
+  def self.create_and_update_form!(
+    check_page_id:,
+    routing_page_id:,
+    answer_value:,
+    goto_page_id:,
+    skip_to_end:,
+    exit_page_heading: nil,
+    exit_page_markdown: nil
+  )
+    condition = Condition.new(
+      check_page_id:,
+      routing_page_id:,
+      answer_value:,
+      goto_page_id:,
+      skip_to_end:,
+      exit_page_heading:,
+      exit_page_markdown:,
+    )
+    condition.save_and_update_form
+    condition
+  end
+
   def save_and_update_form
     save!
     form.question_section_completed = false

@@ -36,9 +36,6 @@ RSpec.describe Pages::ConditionsInput, type: :model do
   describe "#submit" do
     context "when validation pass" do
       before do
-        allow(ConditionRepository).to receive(:create!)
-
-        page.id = 2
         conditions_input.answer_value = "Rabbit"
         conditions_input.goto_page_id = 4
       end
@@ -51,9 +48,9 @@ RSpec.describe Pages::ConditionsInput, type: :model do
       end
 
       it "creates a condition" do
-        conditions_input.submit
-
-        expect(ConditionRepository).to have_received(:create!)
+        expect {
+          conditions_input.submit
+        }.to change(Condition, :count).by(1)
       end
 
       context "when goto_page_id is 'create_exit_page'" do

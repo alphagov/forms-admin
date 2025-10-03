@@ -7,8 +7,6 @@ feature "Adding branching to a form", type: :feature do
   let(:first_answer_value) { form.pages.first.answer_settings.selection_options.first[:name] }
 
   before do
-    allow(ConditionRepository).to receive_messages(create!: true)
-
     GroupForm.create! group:, form_id: form.id
     create(:membership, group:, user: standard_user, added_by: standard_user)
 

@@ -5,43 +5,6 @@ describe ConditionRepository do
   let(:routing_page) { create(:page_record, form:) }
   let(:goto_page) { create(:page_record, form:) }
 
-  describe "#create!" do
-    let(:condition_params) do
-      { check_page_id: routing_page.id,
-        routing_page_id: routing_page.id,
-        answer_value: "Yes",
-        goto_page_id: goto_page.id,
-        skip_to_end: false,
-        exit_page_heading: nil,
-        exit_page_markdown: nil }
-    end
-
-    it "saves the condition to the database" do
-      expect {
-        described_class.create!(**condition_params)
-      }.to change(Condition, :count).by(1)
-    end
-
-    it "returns a condition record" do
-      expect(described_class.create!(**condition_params)).to be_a(Condition)
-    end
-
-    context "when the form question section is complete" do
-      let(:form) { create(:form_record, question_section_completed: true) }
-
-      it "updates the form to mark the question section as incomplete" do
-        expect {
-          described_class.create!(**condition_params)
-        }.to change { Form.find(form.id).question_section_completed }.to(false)
-      end
-    end
-
-    it "associates the condition with pages" do
-      described_class.create!(**condition_params)
-      expect(Condition.last).to have_attributes(routing_page_id: routing_page.id, check_page_id: routing_page.id, goto_page_id: goto_page.id)
-    end
-  end
-
   describe "#find" do
     let(:condition) { create(:condition_record, routing_page_id: routing_page.id, check_page_id: routing_page.id, goto_page_id: goto_page.id) }
 
