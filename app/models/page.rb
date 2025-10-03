@@ -25,6 +25,12 @@ class Page < ApplicationRecord
 
   attribute :answer_settings, DataStructType.new
 
+  def self.create_and_update_form!(...)
+    page = Page.new(...)
+    page.save_and_update_form
+    page
+  end
+
   def destroy_and_update_form!
     form = self.form
     destroy! && form.update!(question_section_completed: false)

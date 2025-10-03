@@ -4,62 +4,6 @@ describe PageRepository do
   let(:form_id) { form.id }
   let(:form) { create(:form_record) }
 
-  describe "#create!" do
-    let(:page_params) do
-      { question_text: "asdf",
-        hint_text: "",
-        is_optional: false,
-        is_repeatable: false,
-        form_id:,
-        answer_settings:,
-        page_heading: nil,
-        guidance_markdown: nil,
-        answer_type: }
-    end
-    let(:answer_type) { "organisation_name" }
-    let(:answer_settings) { {} }
-
-    it "saves the new page to the database" do
-      expect {
-        described_class.create!(**page_params)
-      }.to change(Page, :count).by(1)
-    end
-
-    it "returns a page record" do
-      expect(described_class.create!(**page_params)).to be_a(Page)
-    end
-
-    it "associates the page with a form" do
-      described_class.create!(**page_params)
-      expect(Page.last).to have_attributes(form_id:)
-    end
-
-    context "when the form question section is complete" do
-      let(:form) { create(:form_record, question_section_completed: true) }
-
-      it "updates the form to mark the question section as incomplete" do
-        expect {
-          described_class.create!(**page_params)
-        }.to change { Form.find(form_id).question_section_completed }.to(false)
-      end
-    end
-
-    context "when the page has answer settings" do
-      let(:answer_type) { "selection" }
-      let(:answer_settings) { { only_one_option: "true", selection_options: [] } }
-
-      it "saves the answer settings to the database" do
-        described_class.create!(**page_params)
-        expect(Page.last).to have_attributes(
-          "answer_settings" => DataStruct.new({
-            "only_one_option" => "true",
-            "selection_options" => [],
-          }),
-        )
-      end
-    end
-  end
-
   describe "#save!" do
     let(:page) { create(:page_record, form:, is_optional: false, question_text: "database page") }
 

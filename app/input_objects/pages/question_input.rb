@@ -26,15 +26,15 @@ class Pages::QuestionInput < BaseInput
 
     draft_question.save!(validate: false)
 
-    PageRepository.create!(form_id:,
-                           question_text:,
-                           hint_text:,
-                           is_optional:,
-                           is_repeatable:,
-                           answer_settings:,
-                           page_heading:,
-                           guidance_markdown:,
-                           answer_type:)
+    Page.create_and_update_form!(form_id:,
+                                 question_text:,
+                                 hint_text:,
+                                 is_optional:,
+                                 is_repeatable:,
+                                 answer_settings:,
+                                 page_heading:,
+                                 guidance_markdown:,
+                                 answer_type:)
   end
 
   def update_page(page)
