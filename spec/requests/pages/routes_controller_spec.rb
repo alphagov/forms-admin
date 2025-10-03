@@ -69,7 +69,6 @@ describe Pages::RoutesController, type: :request do
     let!(:secondary_skip) { create :condition, routing_page_id: secondary_skip_page.id, check_page_id: page.id, goto_page_id: pages[3].id }
 
     before do
-      allow(ConditionRepository).to receive(:find).and_return(condition)
       allow(ConditionRepository).to receive(:destroy)
     end
 

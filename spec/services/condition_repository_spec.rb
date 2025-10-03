@@ -5,24 +5,6 @@ describe ConditionRepository do
   let(:routing_page) { create(:page_record, form:) }
   let(:goto_page) { create(:page_record, form:) }
 
-  describe "#find" do
-    let(:condition) { create(:condition_record, routing_page_id: routing_page.id, check_page_id: routing_page.id, goto_page_id: goto_page.id) }
-
-    it "returns the condition" do
-      expect(described_class.find(condition_id: condition.id, page_id: routing_page.id)).to eq(condition)
-    end
-
-    context "when given a page_id that the condition doesn't belong to" do
-      let(:page_id) { "non-existent-id" }
-
-      it "raises a RecordNotFound error" do
-        expect {
-          described_class.find(condition_id: condition.id, page_id: page_id)
-        }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-    end
-  end
-
   describe "#save!" do
     let(:condition) { create(:condition_record, skip_to_end: false, routing_page_id: routing_page.id, answer_value: "database condition") }
 

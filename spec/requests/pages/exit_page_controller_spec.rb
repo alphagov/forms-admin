@@ -19,7 +19,7 @@ RSpec.describe Pages::ExitPageController, type: :request do
 
   let(:group) { create(:group, organisation: standard_user.organisation) }
   let(:user) { standard_user }
-  let(:condition) { build(:condition, id: 1, routing_page_id: selected_page.id, exit_page_heading: "Exit Page Heading") }
+  let(:condition) { create(:condition, :with_exit_page, routing_page_id: selected_page.id) }
 
   before do
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
@@ -109,11 +109,7 @@ RSpec.describe Pages::ExitPageController, type: :request do
   end
 
   describe "#edit" do
-    let(:condition) { create :condition, :with_exit_page, form:, routing_page_id: selected_page.id }
-
     before do
-      allow(ConditionRepository).to receive(:find).and_return(condition)
-
       get edit_exit_page_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id)
     end
 
@@ -123,11 +119,10 @@ RSpec.describe Pages::ExitPageController, type: :request do
   end
 
   describe "#update" do
-    let(:condition) { create :condition, :with_exit_page, routing_page_id: selected_page.id }
     let(:params) { { pages_update_exit_page_input: { exit_page_heading: "Exit Page Heading", exit_page_markdown: "Exit Page Markdown" } } }
 
     before do
-      allow(ConditionRepository).to receive_messages(save!: true, find: condition)
+      allow(ConditionRepository).to receive_messages(save!: true)
 
       put update_exit_page_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id, params:)
     end
@@ -156,7 +151,6 @@ RSpec.describe Pages::ExitPageController, type: :request do
 
   describe "#delete" do
     before do
-      allow(ConditionRepository).to receive(:find).and_return(condition)
       allow(condition).to receive(:exit_page?).and_return(true)
 
       get delete_exit_page_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id)
@@ -192,8 +186,7 @@ RSpec.describe Pages::ExitPageController, type: :request do
     let(:params) { { pages_delete_exit_page_input: { confirm: "yes" } } }
 
     before do
-      allow(condition).to receive(:exit_page?).and_return(true)
-      allow(ConditionRepository).to receive_messages(find: condition, destroy: true)
+      allow(ConditionRepository).to receive(:destroy).and_call_original
 
       delete destroy_exit_page_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id, params:)
     end
@@ -204,7 +197,6 @@ RSpec.describe Pages::ExitPageController, type: :request do
 
     it "displays success message" do
       follow_redirect!
-
       expect(response.body).to include(I18n.t("banner.success.exit_page_deleted"))
     end
 
@@ -233,6 +225,8 @@ RSpec.describe Pages::ExitPageController, type: :request do
     end
 
     context "when the condition is not an exit page" do
+      let(:condition) { create :condition, routing_page_id: page.id, check_page_id: page.id, skip_to_end: true }
+
       before do
         allow(condition).to receive(:exit_page?).and_return(false)
         delete destroy_exit_page_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id, params:)
