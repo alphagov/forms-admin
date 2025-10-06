@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Pages::AddressSettingsController, type: :request do
   let(:form) { create :form }
-  let(:pages) { build_list :page, 5, answer_type: "address", form_id: 1 }
+  let(:pages) { create_list :page, 5, answer_type: "address", form: }
 
   let(:draft_question) do
     create :draft_question_for_new_page,
@@ -72,7 +72,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
   end
 
   describe "#edit" do
-    let(:page) { build :page, :with_address_settings, id: 2, form_id: form.id }
+    let(:page) { create :page, :with_address_settings, id: 2, form: }
     let(:draft_question) do
       create :draft_question,
              answer_type: "address",
@@ -88,8 +88,6 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
     end
 
     before do
-      allow(PageRepository).to receive(:find).and_return(page)
-
       draft_question
       get address_settings_edit_path(form_id: page.form_id, page_id: page.id)
     end
@@ -112,13 +110,9 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
   describe "#update" do
     let(:page) do
-      new_page = build :page, :with_address_settings, id: 2, form_id: form.id
+      new_page = create(:page, :with_address_settings, form:)
       new_page.answer_settings = { input_type: { uk_address: "false", international_address: "true" } }
       new_page
-    end
-
-    before do
-      allow(PageRepository).to receive_messages(find: page, save!: page)
     end
 
     context "when form is valid and ready to update in the DB" do

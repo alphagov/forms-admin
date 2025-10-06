@@ -23,7 +23,7 @@ class PagesController < WebController
       @routing = :start_of_secondary_skip_route
 
       # route page is condition check page
-      @route_page = PageRepository.find(page_id: page.routing_conditions.first.check_page_id, form_id: current_form.id)
+      @route_page = page.routing_conditions.first.check_page
     elsif page.routing_conditions.any?
       @routing = :start_of_route
 
@@ -33,12 +33,12 @@ class PagesController < WebController
       @routing = :end_of_secondary_skip_route
 
       # route page is condition check page
-      @route_page = PageRepository.find(page_id: @page_goto_conditions.first.check_page_id, form_id: current_form.id)
+      @route_page = @page_goto_conditions.first.check_page
     elsif @page_goto_conditions.any?
       @routing = :end_of_route
 
       # route page is condition routing page
-      @route_page = PageRepository.find(page_id: @page_goto_conditions.first.routing_page_id, form_id: current_form.id)
+      @route_page = @page_goto_conditions.first.routing_page
     end
 
     @delete_confirmation_input = Pages::DeleteConfirmationInput.new
@@ -63,11 +63,7 @@ class PagesController < WebController
       return redirect_to @back_url
     end
 
-    unless PageRepository.destroy(page)
-      flash[:message] = "Deletion unsuccessful"
-      return redirect_to @back_url
-    end
-
+    page.destroy_and_update_form!
     redirect_to form_pages_path(current_form), status: :see_other, success: t(".success", question_text: page.question_text)
   end
 
@@ -77,11 +73,15 @@ class PagesController < WebController
   end
 
   def move_page
-    page_to_move = PageRepository.find(page_id: move_params[:page_id], form_id: move_params[:form_id])
+    page = current_form.pages.find(move_params[:page_id])
+    page.move_page(move_params[:direction])
 
-    moved_page = PageRepository.move_page(page_to_move, move_params[:direction])
+    success_message = t("banner.success.form.page_moved",
+                        question_text: page.question_text,
+                        direction: move_params[:direction],
+                        question_number: page.position)
 
-    redirect_to form_pages_path, success: t("banner.success.form.page_moved", question_text: page_to_move.question_text, direction: move_params[:direction], question_number: moved_page.position)
+    redirect_to form_pages_path, success: success_message
   end
 
 private
@@ -95,7 +95,7 @@ private
   end
 
   def page
-    @page ||= PageRepository.find(page_id: params[:page_id], form_id: current_form.id)
+    @page ||= current_form.pages.find(params[:page_id])
   end
 
   def draft_question
@@ -119,8 +119,8 @@ private
 
     if edit_draft_question.new_record?
       attributes = page.attributes
-        .slice(*edit_draft_question.attribute_names)
-        .except("id")
+                       .slice(*edit_draft_question.attribute_names)
+                       .except("id")
       edit_draft_question.attributes = attributes
       edit_draft_question.save!(validate: false)
     end

@@ -25,6 +25,12 @@ class Page < ApplicationRecord
 
   attribute :answer_settings, DataStructType.new
 
+  def self.create_and_update_form!(...)
+    page = Page.new(...)
+    page.save_and_update_form
+    page
+  end
+
   def destroy_and_update_form!
     form = self.form
     destroy! && form.update!(question_section_completed: false)
@@ -97,12 +103,8 @@ class Page < ApplicationRecord
 private
 
   def update_form
-    # TODO: https://trello.com/c/dg9CFPgp/1503-user-triggers-state-change-from-live-to-livewithdraft
-    # Will not be needed when users can trigger this event themselves through the UI
-    form.create_draft_from_live_form! if form.live?
-    form.create_draft_from_archived_form! if form.archived?
-
-    form.update!(question_section_completed: false)
+    form.question_section_completed = false
+    form.save_draft!
   end
 
   def guidance_fields_presence

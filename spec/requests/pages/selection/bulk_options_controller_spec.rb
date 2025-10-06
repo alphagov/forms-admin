@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe Pages::Selection::BulkOptionsController, type: :request do
   let(:form) { create :form }
-  let(:pages) { build_list :page, 5, form_id: form.id }
+  let(:pages) { create_list :page, 5, form: }
   let(:page) { pages.first }
 
   let(:draft_question) do
@@ -20,8 +20,6 @@ describe Pages::Selection::BulkOptionsController, type: :request do
   let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
-    allow(PageRepository).to receive_messages(find: page, save!: page)
-
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
     login_as_standard_user
@@ -104,13 +102,12 @@ describe Pages::Selection::BulkOptionsController, type: :request do
   end
 
   describe "#edit" do
-    let(:page) { build :page, :with_selection_settings, id: 2, form_id: form.id, answer_settings: }
+    let(:page) { create :page, :with_selection_settings, form:, answer_settings: }
     let(:answer_settings) { { selection_options: } }
     let(:selection_options) { [{ name: "Option 1" }, { name: "Option 2" }] }
     let(:page_id) { page.id }
 
     before do
-      allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
       draft_question
       get selection_bulk_options_edit_path(form_id: page.form_id, page_id: page.id)
     end
@@ -138,14 +135,9 @@ describe Pages::Selection::BulkOptionsController, type: :request do
   end
 
   describe "#update" do
-    let(:page) { build :page, :with_selection_settings, id: 2, form_id: form.id, answer_settings: }
+    let(:page) { create :page, :with_selection_settings, form:, answer_settings: }
     let(:answer_settings) { { only_one_option: "true", selection_options: } }
     let(:selection_options) { [{ name: "Option 1" }, { name: "Option 2" }] }
-
-    before do
-      allow(PageRepository).to receive(:find).with(page_id: "2", form_id: 1).and_return(page)
-      allow(PageRepository).to receive(:save!).with(hash_including(page_id: "2", form_id: 1))
-    end
 
     context "when form is valid and ready to update in the DB" do
       before do

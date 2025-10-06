@@ -59,7 +59,6 @@ RSpec.describe PagesController, type: :request do
 
       before do
         create(:condition, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: nil, goto_page_id: pages.last.id)
-        pages.first.reload
 
         allow(standard_user).to receive(:collect_analytics?).and_return(collect_analytics)
 
@@ -118,7 +117,7 @@ RSpec.describe PagesController, type: :request do
       let(:page) do
         create(
           :page,
-          form_id: form.id,
+          form:,
           question_text: "What is your work address?",
           hint_text: "This should be the location stated in your contract.",
           answer_type: "address",
@@ -129,13 +128,6 @@ RSpec.describe PagesController, type: :request do
       let(:pages) { [page] }
 
       before do
-        pages.each do |page|
-          allow(PageRepository).to receive(:find).with(page_id: page.id.to_s, form_id: form.id).and_return(page)
-          allow(PageRepository).to receive(:find).with(page_id: page.id, form_id: form.id).and_return(page)
-        end
-
-        allow(PageRepository).to receive(:destroy)
-
         GroupForm.create!(form_id: form.id, group_id: group.id)
       end
 
@@ -143,12 +135,6 @@ RSpec.describe PagesController, type: :request do
         get delete_page_path(form_id: form.id, page_id: page.id)
 
         expect(response).to render_template("pages/delete")
-      end
-
-      it "reads the form through the page repository" do
-        get delete_page_path(form_id: form.id, page_id: page.id)
-
-        expect(PageRepository).to have_received(:find)
       end
 
       describe "logging" do
@@ -184,7 +170,6 @@ RSpec.describe PagesController, type: :request do
 
         before do
           create(:condition, routing_page_id: page.id, check_page_id: page.id, answer_value: "Red", goto_page_id: pages.last.id)
-          page.reload
         end
 
         it "renders a warning about deleting this page" do
@@ -206,8 +191,6 @@ RSpec.describe PagesController, type: :request do
 
         before do
           create(:condition, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Red", goto_page_id: page.id)
-          page.reload
-          pages.first.reload
         end
 
         it "renders a warning about deleting this page" do
@@ -230,7 +213,6 @@ RSpec.describe PagesController, type: :request do
         before do
           create(:condition, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Red", goto_page_id: pages.third.id)
           create(:condition, routing_page_id: page.id, check_page_id: pages.first.id, answer_value: nil, goto_page_id: pages.last.id)
-          page.reload
         end
 
         it "renders a warning about deleting this page" do
@@ -253,7 +235,6 @@ RSpec.describe PagesController, type: :request do
         before do
           create(:condition, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Red", goto_page_id: pages.third.id)
           create(:condition, routing_page_id: pages.second.id, check_page_id: pages.first.id, answer_value: nil, goto_page_id: pages.last.id)
-          pages.second.reload
         end
 
         it "renders a warning about deleting this page" do
@@ -277,8 +258,6 @@ RSpec.describe PagesController, type: :request do
 
     context "with a valid page" do
       before do
-        allow(PageRepository).to receive_messages(find: page, destroy: true)
-
         GroupForm.create!(form_id: form.id, group_id: group.id)
       end
 
@@ -295,8 +274,8 @@ RSpec.describe PagesController, type: :request do
           expect(flash[:success]).to eq "The question, ‘#{page.question_text}’, has been deleted"
         end
 
-        it "destroys the page through the page repository" do
-          expect(PageRepository).to have_received(:destroy)
+        it "destroys the page" do
+          expect(Page.exists?(page.id)).to be false
         end
 
         include_examples "logging"
@@ -308,8 +287,8 @@ RSpec.describe PagesController, type: :request do
             expect(response).to have_http_status :forbidden
           end
 
-          it "does not call destroy through the page repository" do
-            expect(PageRepository).not_to have_received(:destroy)
+          it "does not destroy the form" do
+            expect(Page.exists?(page.id)).to be true
           end
         end
       end
@@ -324,8 +303,8 @@ RSpec.describe PagesController, type: :request do
           expect(response.body).to include "Select ‘Yes’ to delete the question"
         end
 
-        it "does not call destroy through the page repository" do
-          expect(PageRepository).not_to have_received(:destroy)
+        it "does not destroy the form" do
+          expect(Page.exists?(page.id)).to be true
         end
       end
     end
@@ -334,55 +313,44 @@ RSpec.describe PagesController, type: :request do
   describe "#move_page" do
     let(:form) { create(:form, :with_pages) }
     let(:pages) { form.pages }
+    let(:page) { pages.second }
 
     before do
-      allow(PageRepository).to receive_messages(find: pages[1])
-
       GroupForm.create!(form_id: form.id, group_id: group.id)
     end
 
     context "when moving the page up", :capture_logging do
-      before do
-        allow(PageRepository).to receive(:move_page) do |page, _direction|
-          page.move_higher
-          page
-        end
-
-        post move_page_path({ form_id: form.id, move_direction: { up: pages[1].id } })
-      end
-
       it "logs the params" do
-        expect(log_line["params"]).to include "move_direction" => { "up" => pages[1].id.to_s }
+        post move_page_path({ form_id: form.id, move_direction: { up: page.id } })
+        expect(log_line["params"]).to include "move_direction" => { "up" => page.id.to_s }
       end
 
-      it "calls the page repository to move the page up" do
-        expect(PageRepository).to have_received(:move_page).with(pages[1], :up)
+      it "moves the page up" do
+        expect {
+          post move_page_path({ form_id: form.id, move_direction: { up: page.id } })
+        }.to change { page.reload.position }.from(2).to(1)
       end
 
       it "renders a success banner with the page's new position" do
+        post move_page_path({ form_id: form.id, move_direction: { up: page.id } })
         expect(flash[:success]).to eq("‘#{pages[1].question_text}’ has moved up to number 1")
       end
     end
 
     context "when moving the page down", :capture_logging do
-      before do
-        allow(PageRepository).to receive(:move_page) do |page, _direction|
-          page.move_lower
-          page
-        end
-
-        post move_page_path({ form_id: form.id, move_direction: { down: pages[1].id } })
-      end
-
       it "logs the params" do
-        expect(log_line["params"]).to include "move_direction" => { "down" => pages[1].id.to_s }
+        post move_page_path({ form_id: form.id, move_direction: { down: page.id } })
+        expect(log_line["params"]).to include "move_direction" => { "down" => page.id.to_s }
       end
 
-      it "calls the page repository to move the page down" do
-        expect(PageRepository).to have_received(:move_page).with(pages[1], :down)
+      it "moves the page down" do
+        expect {
+          post move_page_path({ form_id: form.id, move_direction: { down: page.id } })
+        }.to change { page.reload.position }.from(2).to(3)
       end
 
       it "renders a success banner with the page's new position" do
+        post move_page_path({ form_id: form.id, move_direction: { down: page.id } })
         expect(flash[:success]).to eq("‘#{pages[1].question_text}’ has moved down to number 3")
       end
     end

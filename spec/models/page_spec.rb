@@ -328,6 +328,74 @@ RSpec.describe Page, type: :model do
     end
   end
 
+  describe ".create_and_update_form!" do
+    let(:form) { create(:form, question_section_completed: true) }
+    let(:page_params) do
+      { form_id: form.id,
+        question_text: "What is the name of your organisation?",
+        hint_text: "Some hint text",
+        is_optional: true,
+        is_repeatable: false,
+        answer_settings:,
+        page_heading: "A page heading",
+        guidance_markdown: "some guidance markdown",
+        answer_type: }
+    end
+    let(:answer_type) { "organisation_name" }
+    let(:answer_settings) { {} }
+
+    it "creates a page" do
+      expect {
+        described_class.create_and_update_form!(**page_params)
+      }.to change(described_class, :count).by(1)
+    end
+
+    it "creates with the parameters provided" do
+      page = described_class.create_and_update_form!(**page_params)
+      expect(page.question_text).to eq(page_params[:question_text])
+      expect(page.hint_text).to eq(page_params[:hint_text])
+      expect(page.is_optional).to eq(page_params[:is_optional])
+      expect(page.is_repeatable).to eq(page_params[:is_repeatable])
+      expect(page.page_heading).to eq(page_params[:page_heading])
+      expect(page.guidance_markdown).to eq(page_params[:guidance_markdown])
+      expect(page.answer_type).to eq(page_params[:answer_type])
+    end
+
+    it "returns the page" do
+      expect(described_class.create_and_update_form!(**page_params)).to be_a(described_class)
+    end
+
+    it "associates the page with a form" do
+      described_class.create_and_update_form!(**page_params)
+      expect(described_class.last.form).to eq(form)
+    end
+
+    context "when the form question section is complete" do
+      let(:form) { create(:form_record, question_section_completed: true) }
+
+      it "updates the form to mark the question section as incomplete" do
+        expect {
+          described_class.create_and_update_form!(**page_params)
+        }.to change { form.reload.question_section_completed }.to(false)
+      end
+    end
+
+    context "when the page has answer settings" do
+      let(:answer_type) { "selection" }
+      let(:answer_settings) { { only_one_option: "true", selection_options: [] } }
+
+      it "saves the answer settings to the database" do
+        described_class.create!(**page_params)
+        expect(described_class.last).to have_attributes(
+          "answer_settings" => DataStruct.new({
+            "only_one_option" => "true",
+            "selection_options" => [],
+          }),
+        )
+      end
+    end
+  end
+
   describe "#destroy_and_update_form!" do
     let(:page) { create :page_record }
     let(:form) { page.form }
