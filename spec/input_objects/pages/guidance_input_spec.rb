@@ -1,8 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Pages::GuidanceInput, type: :model do
+  let(:form) { create :form }
   let(:guidance_input) { build :guidance_input, page_heading:, guidance_markdown:, draft_question: }
-  let(:draft_question) { build :draft_question, page_heading:, guidance_markdown: }
+  let(:draft_question) { build :draft_question, page_heading:, guidance_markdown:, form_id: form.id }
   let(:page_heading) { "New guidance heading" }
   let(:guidance_markdown) { "## Level heading 2" }
 

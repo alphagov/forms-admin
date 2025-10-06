@@ -3,7 +3,9 @@ require "rails_helper"
 RSpec.describe Pages::Selection::TypeInput do
   subject(:input) { described_class.new(draft_question:, only_one_option:) }
 
-  let(:draft_question) { build :draft_question, answer_type: "selection" }
+  let(:form) { create :form }
+
+  let(:draft_question) { build :draft_question, answer_type: "selection", form_id: form.id }
   let(:only_one_option) { nil }
 
   describe "validations" do

@@ -3,7 +3,7 @@ require "rails_helper"
 describe "pages/conditions/routing_page.html.erb" do
   let(:form) { create :form, :ready_for_routing }
   let(:pages) { form.pages }
-  let(:routing_page_input) { Pages::RoutingPageInput.new }
+  let(:routing_page_input) { Pages::RoutingPageInput.new(form:) }
   let(:allowed_to_create_routes) { true }
   let(:all_routes_created) { false }
   let(:group) do

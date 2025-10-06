@@ -1,8 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Pages::QuestionInput, type: :model do
+  let(:form) { create :form }
   let(:question_input) { build :question_input, answer_type:, question_text:, draft_question:, is_optional:, is_repeatable: }
-  let(:draft_question) { build :draft_question, question_text: }
+  let(:draft_question) { build :draft_question, question_text:, form_id: form.id }
   let(:question_text) { "What is your full name?" }
   let(:is_optional) { "false" }
   let(:is_repeatable) { "false" }
@@ -78,7 +79,7 @@ RSpec.describe Pages::QuestionInput, type: :model do
     end
 
     describe "#hint_text" do
-      let(:question_input) { build :question_input, hint_text: }
+      let(:question_input) { build :question_input, hint_text:, draft_question: }
       let(:hint_text) { "Enter your full name as it appears in your passport" }
 
       it "is valid if hint text is empty" do
@@ -113,7 +114,7 @@ RSpec.describe Pages::QuestionInput, type: :model do
     end
 
     describe "#is_optional" do
-      let(:question_input) { build :question_input, is_optional: }
+      let(:question_input) { build :question_input, is_optional:, draft_question: }
 
       context "when is_optional is nil" do
         let(:is_optional) { nil }
@@ -156,7 +157,7 @@ RSpec.describe Pages::QuestionInput, type: :model do
     end
 
     describe "#is_repeatable" do
-      let(:question_input) { build :question_input, is_repeatable: }
+      let(:question_input) { build :question_input, is_repeatable:, draft_question: }
 
       context "and is_repeatable is nil" do
         let(:is_repeatable) { nil }
@@ -209,7 +210,7 @@ RSpec.describe Pages::QuestionInput, type: :model do
     describe "selection options" do
       let(:selection_options) { (1..31).to_a.map { |i| { name: i.to_s } } }
       let(:only_one_option) { "false" }
-      let(:draft_question) { build :selection_draft_question, answer_settings: { selection_options:, only_one_option: } }
+      let(:draft_question) { build :selection_draft_question, answer_settings: { selection_options:, only_one_option: }, form_id: form.id }
 
       context "when only_one_option is true" do
         let(:only_one_option) { "true" }
@@ -240,7 +241,7 @@ RSpec.describe Pages::QuestionInput, type: :model do
       end
 
       context "when answer type is not selection" do
-        let(:draft_question) { build :name_draft_question, answer_settings: { selection_options:, only_one_option: } }
+        let(:draft_question) { build :name_draft_question, answer_settings: { selection_options:, only_one_option: }, form_id: form.id }
 
         it "is valid" do
           expect(question_input).to be_valid
