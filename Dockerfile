@@ -1,7 +1,7 @@
-ARG ALPINE_VERSION=3.21
-ARG RUBY_VERSION=3.4.1
+ARG ALPINE_VERSION=3.22
+ARG RUBY_VERSION=3.4.6
 
-ARG DOCKER_IMAGE_DIGEST=sha256:e5c30595c6a322bc3fbaacd5e35d698a6b9e6d1079ab0af09ffe52f5816aec3b
+ARG DOCKER_IMAGE_DIGEST=sha256:d594d5debffa14c591c4fe03b9d0d79cdc28f30d594f47be748e642746057fec
 
 FROM ruby:${RUBY_VERSION}-alpine${ALPINE_VERSION}@${DOCKER_IMAGE_DIGEST} AS base
 ARG NODEJS_VERSION=22
@@ -13,7 +13,7 @@ WORKDIR /app
 
 RUN apk update
 RUN apk upgrade --available
-RUN apk add libc6-compat openssl-dev build-base libpq-dev nodejs=~${NODEJS_VERSION} npm git python3
+RUN apk add libc6-compat openssl-dev build-base libpq-dev nodejs=~${NODEJS_VERSION} npm git python3 yaml-dev
 RUN adduser -D ruby
 RUN mkdir /node_modules && chown ruby:ruby -R /node_modules /app
 
