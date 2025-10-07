@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_07_133521) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_07_151345) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -190,6 +190,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_07_133521) do
     t.index ["slug"], name: "index_organisations_on_slug", unique: true
   end
 
+  create_table "page_translations", force: :cascade do |t|
+    t.text "question_text"
+    t.text "hint_text"
+    t.jsonb "answer_settings"
+    t.text "page_heading"
+    t.text "guidance_markdown"
+    t.string "locale", null: false
+    t.bigint "page_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["locale"], name: "index_page_translations_on_locale"
+    t.index ["page_id", "locale"], name: "index_page_translations_on_page_id_and_locale", unique: true
+  end
+
   create_table "pages", force: :cascade do |t|
     t.text "question_text"
     t.text "hint_text"
@@ -258,6 +272,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_07_133521) do
   add_foreign_key "memberships", "users", column: "added_by_id"
   add_foreign_key "mou_signatures", "organisations"
   add_foreign_key "mou_signatures", "users"
+  add_foreign_key "page_translations", "pages"
   add_foreign_key "pages", "forms"
   add_foreign_key "users", "organisations"
 end
