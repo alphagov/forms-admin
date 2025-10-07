@@ -64,14 +64,9 @@ describe Pages::RoutesController, type: :request do
   end
 
   describe "#destroy" do
-    let(:condition) { create :condition, routing_page_id: page.id, check_page_id: page.id, goto_page_id: pages.last.id, answer_value: "Option 1" }
+    let!(:condition) { create :condition, routing_page_id: page.id, check_page_id: page.id, goto_page_id: pages.last.id, answer_value: "Option 1" }
     let(:secondary_skip_page) { form.pages[2] }
     let!(:secondary_skip) { create :condition, routing_page_id: secondary_skip_page.id, check_page_id: page.id, goto_page_id: pages[3].id }
-
-    before do
-      allow(ConditionRepository).to receive(:find).and_return(condition)
-      allow(ConditionRepository).to receive(:destroy)
-    end
 
     context "when confirmed" do
       it "redirects to page list" do
@@ -79,18 +74,13 @@ describe Pages::RoutesController, type: :request do
         expect(response).to redirect_to form_pages_path(form_id: form.id)
       end
 
-      it "calls destroy on conditions" do
-        expect(ConditionRepository).to receive(:destroy).with(have_attributes(id: condition.id))
-        expect(ConditionRepository).to receive(:destroy).with(have_attributes(id: secondary_skip.id))
+      it "destroys the conditions" do
         delete destroy_routes_path(form_id: form.id, page_id: page.id, pages_routes_delete_confirmation_input: { confirm: "yes" })
+        expect(Condition.exists?(condition.id)).to be false
+        expect(Condition.exists?(secondary_skip.id)).to be false
       end
 
       context "but one of the routes is already deleted" do
-        before do
-          # forms-api may choose to delete the secondary skip when the condition is deleted
-          allow(ConditionRepository).to receive(:destroy).and_call_original
-        end
-
         it "does not render an error page" do
           delete destroy_routes_path(form_id: form.id, page_id: page.id, pages_routes_delete_confirmation_input: { confirm: "yes" })
           expect(response).not_to be_client_error
@@ -113,9 +103,10 @@ describe Pages::RoutesController, type: :request do
         expect(response).to redirect_to show_routes_path(form_id: form.id, page_id: page.id)
       end
 
-      it "does no call destroy on conditions" do
-        expect(ConditionRepository).not_to receive(:destroy)
+      it "does not destroy the conditions" do
         delete destroy_routes_path(form_id: form.id, page_id: page.id, pages_routes_delete_confirmation_input: { confirm: "no" })
+        expect(Condition.exists?(condition.id)).to be true
+        expect(Condition.exists?(secondary_skip.id)).to be true
       end
     end
   end

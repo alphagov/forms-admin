@@ -119,11 +119,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
 
   describe "#create" do
     let(:params) { { pages_conditions_input: { routing_page_id: page.id, check_page_id: page.id, goto_page_id: pages.last.id, answer_value: "Wales" } } }
-    let(:condition) { build :condition }
-
-    before do
-      allow(ConditionRepository).to receive(:create!).and_return(condition)
-    end
 
     context "when the page doesn't have an existing condition" do
       before do
@@ -135,13 +130,16 @@ RSpec.describe Pages::ConditionsController, type: :request do
       end
 
       it "creates the condition" do
-        expect(ConditionRepository).to have_received(:create!).with(
-          check_page_id: page.id,
-          routing_page_id: page.id,
-          answer_value: "Wales",
-          goto_page_id: pages.last.id.to_s,
-          skip_to_end: false,
-        )
+        expect(page.reload.routing_conditions.count).to eq(1)
+      end
+
+      it "has the expected attributes" do
+        condition = page.reload.routing_conditions.first
+        expect(condition.answer_value).to eq("Wales")
+        expect(condition.check_page_id).to eq(page.id)
+        expect(condition.routing_page_id).to eq(page.id)
+        expect(condition.goto_page_id).to eq(pages.last.id)
+        expect(condition.skip_to_end).to be(false)
       end
 
       it "displays success message" do
@@ -186,13 +184,16 @@ RSpec.describe Pages::ConditionsController, type: :request do
     context "when the page already has a condition associated with it" do
       before do
         create :condition, routing_page_id: page.id, check_page_id: page.id, goto_page_id: pages.last.id
-        page.reload
-
-        post create_condition_path(form_id: form.id, page_id: page.id, params:)
       end
 
       it "does not create the condition and redirects the user to the question routes page" do
-        expect(ConditionRepository).not_to have_received(:create!)
+        expect {
+          post create_condition_path(form_id: form.id, page_id: page.id, params:)
+        }.not_to change(Condition, :count)
+      end
+
+      it "redirects to the question routes page" do
+        post create_condition_path(form_id: form.id, page_id: page.id, params:)
         expect(response).to redirect_to show_routes_path(form_id: form.id, page_id: page.id)
       end
     end
@@ -205,8 +206,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     let(:conditions_input) { @conditions_input } # rubocop:disable RSpec/InstanceVariable
 
     before do
-      allow(ConditionRepository).to receive(:find).and_return(condition)
-
       allow(Pages::ConditionsInput).to receive(:new).and_wrap_original do |original_method, *args, **kwargs|
         @conditions_input = original_method.call(*args, **kwargs)
         allow(conditions_input).to receive(:check_errors_from_api).and_call_original
@@ -246,27 +245,29 @@ RSpec.describe Pages::ConditionsController, type: :request do
     let(:params) { { pages_conditions_input: { routing_page_id: page.id, check_page_id: page.id, goto_page_id: pages.last.id, answer_value: "England" } } }
     let(:condition) { create :condition, routing_page_id: page.id, check_page_id: page.id, goto_page_id: pages.last.id, answer_value: "Wales" }
 
-    before do
-      allow(ConditionRepository).to receive(:find).and_return(condition)
-      allow(ConditionRepository).to receive(:save!).and_invoke(->(condition) { condition })
-
-      put update_condition_path(form_id: form.id,
-                                page_id: page.id,
-                                condition_id: condition.id,
-                                params:)
-    end
-
     it "redirects to the page list" do
+      put update_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id, params:)
       expect(response).to redirect_to show_routes_path(form_id: form.id, page_id: page.id)
     end
 
+    it "updates the condition" do
+      expect {
+        put update_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id, params:)
+      }.to(change { condition.reload.attributes })
+    end
+
     it "displays success message" do
+      put update_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id, params:)
       follow_redirect!
       expect(response.body).to include(I18n.t("banner.success.route_updated", question_number: pages.first.position))
     end
 
     context "when form submit fails" do
       let(:params) { { pages_conditions_input: { routing_page_id: nil, check_page_id: nil, goto_page_id: nil, answer_value: nil } } }
+
+      before do
+        put update_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id, params:)
+      end
 
       it "return 422 error code" do
         expect(response).to have_http_status(:unprocessable_content)
@@ -282,12 +283,17 @@ RSpec.describe Pages::ConditionsController, type: :request do
       let(:params) { { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: "create_exit_page", answer_value: "Wales" } } }
 
       it "redirects to the edit exit page" do
+        put update_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id, params:)
         expect(response).to redirect_to edit_exit_page_path(form_id: form.id, page_id: page.id, condition_id: condition.id)
       end
     end
 
     context "when user should not be allowed to add routes to pages" do
       let(:user) { build :user }
+
+      before do
+        put update_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id, params:)
+      end
 
       it "Renders the forbidden page" do
         expect(response).to render_template("errors/forbidden")
@@ -299,27 +305,20 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when the condition is already an exit page" do
-      let(:condition) { create :condition, :with_exit_page, check_page_id: page.id }
-
-      before do
-        allow(ConditionRepository).to receive(:find).and_return(condition)
-        allow(ConditionRepository).to receive(:save!).and_invoke(->(condition) { condition })
-
-        put update_condition_path(form_id: form.id,
-                                  page_id: page.id,
-                                  condition_id: condition.id,
-                                  params:)
-      end
+      let(:condition) { create :condition, :with_exit_page, routing_page_id: page.id, check_page_id: page.id }
 
       context "when changing to a non-exit page" do
         let(:params) { { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: 3, answer_value: "Wales" } } }
 
         it "redirects to the confirm exit page deletion page" do
+          put update_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id, params:)
           expect(response).to redirect_to confirm_change_exit_page_path(form_id: form.id, page_id: page.id, condition_id: condition.id, params: { answer_value: "Wales", goto_page_id: 3 })
         end
 
-        it "does not call save! for the condition" do
-          expect(ConditionRepository).not_to have_received(:save!)
+        it "does not update the condition" do
+          expect {
+            put update_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id, params:)
+          }.not_to(change(condition, :attributes))
         end
       end
 
@@ -327,6 +326,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
         let(:params) { { pages_conditions_input: { routing_page_id: 1, check_page_id: 1, goto_page_id: "exit_page", answer_value: "Wales" } } }
 
         it "redirects to the edit exit page" do
+          put update_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id, params:)
           expect(response).to redirect_to show_routes_path(form_id: form.id, page_id: page.id)
         end
       end
@@ -337,8 +337,6 @@ RSpec.describe Pages::ConditionsController, type: :request do
     let(:condition) { create :condition, id: 1, routing_page_id: page.id, check_page_id: page.id, answer_value: "Wales", goto_page_id: pages.last.id }
 
     before do
-      allow(ConditionRepository).to receive(:find).and_return(condition)
-
       get delete_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id)
     end
 
@@ -362,39 +360,30 @@ RSpec.describe Pages::ConditionsController, type: :request do
   describe "#destroy" do
     let(:condition) { create :condition, id: 1, routing_page_id: page.id, check_page_id: page.id, answer_value: "Wales", goto_page_id: pages.last.id }
     let(:confirm) { "yes" }
-    let(:destroy_bool) { true }
 
     before do
-      allow(ConditionRepository).to receive_messages(find: condition, destroy: destroy_bool)
-
       delete destroy_condition_path(form_id: form.id,
                                     page_id: page.id,
                                     condition_id: condition.id,
                                     params: { pages_delete_condition_input: { confirm: } })
     end
 
-    it "redirects to the page list" do
-      expect(response).to redirect_to form_pages_path(form_id: form.id)
-    end
-
-    it "displays success message" do
-      follow_redirect!
-      expect(response.body).to include(I18n.t("banner.success.route_deleted", question_number: 1))
-    end
-
-    context "when confirm deletion is false" do
-      let(:confirm) { "no" }
-
-      it "redirects to edit the condition" do
-        expect(response).to redirect_to edit_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id)
+    context "when the destroy is successful" do
+      it "redirects to the page list" do
+        expect(response).to redirect_to form_pages_path(form_id: form.id)
       end
-    end
 
-    context "when the destroy fails" do
-      let(:destroy_bool) { false }
+      it "displays success message" do
+        follow_redirect!
+        expect(response.body).to include(I18n.t("banner.success.route_deleted", question_number: 1))
+      end
 
-      it "return 422 error code" do
-        expect(response).to have_http_status(:unprocessable_content)
+      context "when confirm deletion is false" do
+        let(:confirm) { "no" }
+
+        it "redirects to edit the condition" do
+          expect(response).to redirect_to edit_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id)
+        end
       end
     end
 
@@ -424,13 +413,11 @@ RSpec.describe Pages::ConditionsController, type: :request do
   end
 
   describe "#confirm_delete_exit_page" do
-    let(:condition) { create :condition, :with_exit_page, check_page_id: page.id }
+    let(:condition) { create :condition, :with_exit_page, routing_page_id: page.id, check_page_id: page.id }
     let(:answer_value) { "Option 1" }
     let(:goto_page_id) { "2" }
 
     before do
-      allow(ConditionRepository).to receive(:find).and_return(condition)
-
       get confirm_change_exit_page_path(
         form_id: form.id,
         page_id: page.id,
@@ -458,15 +445,13 @@ RSpec.describe Pages::ConditionsController, type: :request do
   end
 
   describe "#update_change_exit_page" do
-    let(:condition) { create :condition, :with_exit_page, check_page_id: page.id }
+    let(:condition) { create :condition, :with_exit_page, routing_page_id: page.id, check_page_id: page.id }
     let(:answer_value) { "Option 1" }
     let(:goto_page_id) { "2" }
     let(:confirm) { "yes" }
     let(:update_condition_result) { nil }
 
     before do
-      allow(ConditionRepository).to receive_messages(find: condition, save!: condition)
-
       allow(Pages::ConditionsInput).to receive(:new).and_wrap_original do |original_method, *args, **kwargs|
         conditions_input = original_method.call(*args, **kwargs)
         allow(conditions_input).to receive(:update_condition).and_return(update_condition_result) unless update_condition_result.nil?
@@ -486,8 +471,8 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     it "clears the exit page fields" do
-      expect(condition.exit_page_heading).to be_nil
-      expect(condition.exit_page_markdown).to be_nil
+      expect(condition.reload.exit_page_heading).to be_nil
+      expect(condition.reload.exit_page_markdown).to be_nil
     end
 
     it "redirects to the question routes page" do
@@ -527,7 +512,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
     end
 
     context "when condition is not an exit page" do
-      let(:condition) { create :condition, check_page_id: page.id, goto_page_id: pages.last.id }
+      let(:condition) { create :condition, routing_page_id: page.id, check_page_id: page.id, goto_page_id: pages.last.id }
 
       it "redirects to the form pages path" do
         expect(response).to redirect_to form_pages_path(form_id: form.id)

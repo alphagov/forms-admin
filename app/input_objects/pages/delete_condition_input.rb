@@ -6,13 +6,8 @@ class Pages::DeleteConditionInput < ConfirmActionInput
   def submit
     return false if invalid?
 
-    result = true
-
-    if confirmed?
-      result = ConditionRepository.destroy(record)
-    end
-
-    result
+    record.destroy_and_update_form! if confirmed?
+    true
   end
 
   def goto_page_question_text

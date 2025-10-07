@@ -11,11 +11,13 @@ class Pages::ConditionsInput < BaseInput
     else
       assign_skip_to_end
 
-      ConditionRepository.create!(check_page_id: page.id,
-                                  routing_page_id: page.id,
-                                  answer_value:,
-                                  goto_page_id:,
-                                  skip_to_end:)
+      Condition.create_and_update_form!(
+        check_page_id: page.id,
+        routing_page_id: page.id,
+        answer_value:,
+        goto_page_id:,
+        skip_to_end:,
+      )
     end
   end
 
@@ -33,7 +35,7 @@ class Pages::ConditionsInput < BaseInput
       record.exit_page_markdown = nil
     end
 
-    ConditionRepository.save!(record)
+    record.save_and_update_form
   end
 
   def routing_answer_options

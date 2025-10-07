@@ -20,7 +20,7 @@ class Pages::ExitPageController < PagesController
   end
 
   def edit
-    condition = ConditionRepository.find(condition_id: params[:condition_id], page_id: page.id)
+    condition = page.routing_conditions.find(params[:condition_id])
 
     update_exit_page_input = Pages::UpdateExitPageInput.new(form: current_form, page:, record: condition).assign_condition_values
 
@@ -28,7 +28,7 @@ class Pages::ExitPageController < PagesController
   end
 
   def update
-    condition = ConditionRepository.find(condition_id: params[:condition_id], page_id: page.id)
+    condition = page.routing_conditions.find(params[:condition_id])
 
     form_params = update_exit_page_input_params.merge(record: condition)
 
@@ -42,12 +42,12 @@ class Pages::ExitPageController < PagesController
   end
 
   def delete
-    @exit_page = ConditionRepository.find(condition_id: params[:condition_id], page_id: page.id)
+    @exit_page = page.routing_conditions.find(params[:condition_id])
     @delete_exit_page_input = Pages::DeleteExitPageInput.new
   end
 
   def destroy
-    condition = ConditionRepository.find(condition_id: params[:condition_id], page_id: page.id)
+    condition = page.routing_conditions.find(params[:condition_id])
 
     # if this isn't an exit page, maybe because of a multiple tabs, redirect to the form pages page
     return redirect_to form_pages_path(current_form.id) unless condition.exit_page?
@@ -64,7 +64,7 @@ class Pages::ExitPageController < PagesController
       return redirect_to edit_exit_page_path(@current_form.id, @page.id, @exit_page.id)
     end
 
-    ConditionRepository.destroy(@exit_page)
+    @exit_page.destroy_and_update_form!
 
     redirect_to new_condition_path(@current_form.id, @page.id), success: t("banner.success.exit_page_deleted")
   end

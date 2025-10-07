@@ -56,18 +56,15 @@ RSpec.describe Pages::ExitPageInput, type: :model do
   describe "#submit" do
     context "when validation pass" do
       before do
-        allow(ConditionRepository).to receive(:create!)
-
-        page.id = 2
         exit_page_input.answer_value = "Frog"
         exit_page_input.exit_page_markdown = "You have selected an amphibian"
         exit_page_input.exit_page_heading = "You need to request anything other than an amphibian to use this service"
       end
 
       it "creates a condition" do
-        exit_page_input.submit
-
-        expect(ConditionRepository).to have_received(:create!)
+        expect {
+          exit_page_input.submit
+        }.to change(Condition, :count).by(1)
       end
     end
 

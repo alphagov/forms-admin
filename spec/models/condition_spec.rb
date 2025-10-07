@@ -64,6 +64,80 @@ RSpec.describe Condition, type: :model do
     end
   end
 
+  describe ".create_and_update_form!" do
+    let(:form) { create(:form) }
+    let(:routing_page) { create(:page, form:) }
+    let(:goto_page) { create(:page, form:) }
+    let(:condition_params) do
+      { check_page_id: routing_page.id,
+        routing_page_id: routing_page.id,
+        answer_value: "Yes",
+        goto_page_id: goto_page.id,
+        skip_to_end: false,
+        exit_page_heading: nil,
+        exit_page_markdown: nil }
+    end
+
+    it "saves the condition to the database" do
+      expect {
+        described_class.create_and_update_form!(**condition_params)
+      }.to change(described_class, :count).by(1)
+    end
+
+    it "creates the condition with the given attributes" do
+      created_condition = described_class.create_and_update_form!(**condition_params)
+      expect(created_condition).to have_attributes(
+        check_page_id: routing_page.id,
+        routing_page_id: routing_page.id,
+        goto_page_id: goto_page.id,
+        answer_value: "Yes",
+        skip_to_end: false,
+      )
+    end
+
+    it "returns a condition record" do
+      expect(described_class.create_and_update_form!(**condition_params)).to be_a(described_class)
+    end
+
+    context "when the form question section is complete" do
+      let(:form) { create(:form_record, question_section_completed: true) }
+
+      it "updates the form to mark the question section as incomplete" do
+        expect {
+          described_class.create_and_update_form!(**condition_params)
+        }.to change { Form.find(form.id).question_section_completed }.to(false)
+      end
+    end
+  end
+
+  describe "#save_and_update_form" do
+    subject(:condition) { create :condition, :with_exit_page, routing_page: page, check_page: page }
+
+    let(:page) { create :page, :with_selection_settings, form: }
+    let(:form) { create :form, question_section_completed: true }
+
+    before do
+      condition.exit_page_heading = "New heading"
+      condition.save_and_update_form
+    end
+
+    it "updates the condition" do
+      expect(condition.reload.exit_page_heading).to eq("New heading")
+    end
+
+    it "sets form.question_section_completed to false" do
+      expect(form.reload.question_section_completed).to be false
+    end
+
+    context "when the form is live" do
+      let(:form) { create :form, :live }
+
+      it "updates the form state to live_with_draft" do
+        expect(form.reload.state).to eq("live_with_draft")
+      end
+    end
+  end
+
   describe "#validation_errors" do
     let(:form) { create :form_record }
     let(:routing_page) { create :page_record, form: }
