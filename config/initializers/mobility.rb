@@ -70,7 +70,7 @@ Mobility.configure do
     # column_fallback
     #
     # Or uncomment this line to enable column fallback with a global default.
-    # column_fallback true
+    column_fallback true
 
     # Fallbacks
     #
@@ -115,7 +115,7 @@ Mobility.configure do
     # locale_accessors
     #
     # Or define specific defaults by uncommenting line below
-    # locale_accessors [:en, :ja]
+    locale_accessors %i[en cy]
 
     # Attribute Methods
     #

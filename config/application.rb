@@ -71,5 +71,8 @@ module FormsAdmin
 
     # Include full precision of timestamps in JSON responses
     config.active_support.time_precision = 6
+
+    I18n.available_locales = %i[en cy]
+    I18n.default_locale = :en
   end
 end
