@@ -1,5 +1,6 @@
 class Form < ApplicationRecord
   include FormStateMachine
+  extend Mobility
 
   has_many :pages, -> { order(position: :asc) }, dependent: :destroy
   has_one :form_submission_email, dependent: :destroy
@@ -9,6 +10,16 @@ class Form < ApplicationRecord
   has_one :archived_form_document, -> { where tag: "archived" }, class_name: "FormDocument"
   has_one :draft_form_document, -> { where tag: "draft" }, class_name: "FormDocument"
   has_many :conditions, through: :pages, source: :routing_conditions
+
+  translates :name,
+             :privacy_policy_url,
+             :support_email,
+             :support_phone,
+             :support_url,
+             :support_url_text,
+             :declaration_text,
+             :what_happens_next_markdown,
+             :payment_url
 
   enum :submission_type, {
     email: "email",
