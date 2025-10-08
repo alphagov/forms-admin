@@ -10,9 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_07_151345) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_07_152124) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "condition_translations", force: :cascade do |t|
+    t.string "answer_value"
+    t.text "exit_page_markdown"
+    t.text "exit_page_heading"
+    t.string "locale", null: false
+    t.bigint "condition_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["condition_id", "locale"], name: "index_condition_translations_on_condition_id_and_locale", unique: true
+    t.index ["locale"], name: "index_condition_translations_on_locale"
+  end
 
   create_table "conditions", force: :cascade do |t|
     t.bigint "check_page_id", comment: "The question page this condition looks at to compare answers"
@@ -260,6 +272,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_07_151345) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "condition_translations", "conditions"
   add_foreign_key "create_form_events", "groups", on_delete: :cascade
   add_foreign_key "create_form_events", "users", on_delete: :cascade
   add_foreign_key "draft_questions", "users"
