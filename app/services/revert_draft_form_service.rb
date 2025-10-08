@@ -3,30 +3,9 @@
 class RevertDraftFormService
   attr_reader :form
 
-  # A list of attributes on the Form model that should be reverted
-  FORM_ATTRIBUTES_TO_REVERT = %w[
-    available_languages
-    declaration_section_completed
-    declaration_text
-    external_id
-    form_slug
-    language
-    name
-    payment_url
-    privacy_policy_url
-    question_section_completed
-    s3_bucket_aws_account_id
-    s3_bucket_name
-    s3_bucket_region
-    share_preview_completed
-    submission_email
-    submission_type
-    support_email
-    support_phone
-    support_url
-    support_url_text
-    what_happens_next_markdown
-  ].freeze
+  # A list of attributes on the Form model that should be not be reverted
+  FORM_ATTRIBUTES_TO_PRESERVE = %i[id created_at updated_at creator_id].freeze
+  ATTRIBUTES_TO_EXCLUDE = Form::ATTRIBUTES_NOT_IN_FORM_DOCUMENT + FORM_ATTRIBUTES_TO_PRESERVE
 
   def initialize(form)
     @form = form
@@ -60,8 +39,9 @@ private
 
   # revert the top-level attributes of the Form object
   def revert_form_attributes(form_document_content)
-    attributes_to_update = form_document_content.slice(*FORM_ATTRIBUTES_TO_REVERT)
-    form.assign_attributes(attributes_to_update)
+    attributes_to_update = Form.attribute_names - ATTRIBUTES_TO_EXCLUDE.map(&:to_s)
+
+    form.assign_attributes(form_document_content.slice(*attributes_to_update))
   end
 
   # synchronize all pages and their nested routing conditions
