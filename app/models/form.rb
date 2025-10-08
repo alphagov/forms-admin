@@ -31,6 +31,7 @@ class Form < ApplicationRecord
 
   after_create :set_external_id
   after_update :update_draft_form_document
+  ATTRIBUTES_NOT_IN_FORM_DOCUMENT = %i[state external_id pages question_section_completed declaration_section_completed share_preview_completed].freeze
 
   def save_draft!
     save!
@@ -148,7 +149,7 @@ class Form < ApplicationRecord
 
   def as_form_document(live_at: nil)
     content = as_json(
-      except: %i[state external_id pages question_section_completed declaration_section_completed share_preview_completed],
+      except: ATTRIBUTES_NOT_IN_FORM_DOCUMENT,
       methods: %i[start_page steps],
     )
     content["form_id"] = content.delete("id").to_s
