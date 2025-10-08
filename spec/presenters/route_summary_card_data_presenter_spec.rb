@@ -159,11 +159,16 @@ describe RouteSummaryCardDataPresenter do
   end
 
   describe "#routes" do
-    it "calls the PageRoutesService" do
-      double = instance_double(PageRoutesService, routes: [])
-      allow(PageRoutesService).to receive(:new).with(form: form, pages: pages, page: page).and_return(double)
-      service.routes
-      expect(double).to have_received(:routes)
+    let!(:condition) { create :condition, routing_page: page, check_page: page, goto_page: pages.third, answer_value: "Option 1" }
+    let!(:secondary_skip_condition) { create :condition, routing_page: pages.second, check_page: page, goto_page: pages.fourth }
+
+    before do
+      pages.each(&:reload)
+    end
+
+    it "returns the conditions that check this page" do
+      expect(service.routes.count).to eq 2
+      expect(service.routes).to contain_exactly(condition, secondary_skip_condition)
     end
   end
 

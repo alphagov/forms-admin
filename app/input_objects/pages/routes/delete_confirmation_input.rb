@@ -18,8 +18,6 @@ class Pages::Routes::DeleteConfirmationInput < ConfirmActionInput
 private
 
   def delete_routes
-    pages = form.pages
-    page_routes = PageRoutesService.new(form:, pages:, page:).routes
-    page_routes.each(&:destroy_and_update_form!)
+    page.check_conditions.each(&:destroy_and_update_form!)
   end
 end

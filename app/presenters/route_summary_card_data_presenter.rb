@@ -17,7 +17,7 @@ class RouteSummaryCardDataPresenter
   end
 
   def routes
-    @routes ||= PageRoutesService.new(form:, pages:, page:).routes
+    @routes ||= page.check_conditions
   end
 
   def pages

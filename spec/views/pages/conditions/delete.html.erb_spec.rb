@@ -3,7 +3,7 @@ require "rails_helper"
 describe "pages/conditions/delete.html.erb" do
   let(:delete_condition_input) { Pages::DeleteConditionInput.new(form:, page:, record: condition) }
   let(:form) { create :form, :ready_for_routing }
-  let(:condition) { build :condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Wales", goto_page_id: pages.last.id }
+  let(:condition) { create :condition, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Wales", goto_page_id: pages.last.id }
   let(:secondary_skip_condition) { nil }
   let(:pages) { form.pages }
   let(:page) { pages.first }
@@ -11,6 +11,7 @@ describe "pages/conditions/delete.html.erb" do
   before do
     page.position = 1
     secondary_skip_condition
+    pages.each(&:reload)
     render template: "pages/conditions/delete", locals: { delete_condition_input: }
   end
 
@@ -59,15 +60,11 @@ describe "pages/conditions/delete.html.erb" do
 
   context "when the condition has a secondary skip condition" do
     let(:condition) do
-      condition = build :condition, id: 1, routing_page_id: start_of_branches.id, check_page_id: start_of_branches.id, answer_value: "Wales", goto_page_id: start_of_second_branch.id
-      start_of_branches.routing_conditions << condition
-      condition
+      create :condition, id: 1, routing_page_id: start_of_branches.id, check_page_id: start_of_branches.id, answer_value: "Wales", goto_page_id: start_of_second_branch.id
     end
 
     let(:secondary_skip_condition) do
-      condition = build :condition, id: 2, routing_page_id: end_of_first_branch.id, check_page_id: start_of_branches.id, answer_value: nil, goto_page_id: end_of_branches.id
-      end_of_first_branch.routing_conditions << condition
-      condition
+      create :condition, id: 2, routing_page_id: end_of_first_branch.id, check_page_id: start_of_branches.id, answer_value: nil, goto_page_id: end_of_branches.id
     end
 
     let(:start_of_branches) { pages.first }
@@ -98,7 +95,7 @@ describe "pages/conditions/delete.html.erb" do
   end
 
   context "when the condition has an exit page" do
-    let(:condition) { build :condition, :with_exit_page, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id }
+    let(:condition) { create :condition, :with_exit_page, id: 1, routing_page_id: pages.first.id, check_page_id: pages.first.id }
 
     it "renders a warning about the exit page" do
       expect(rendered).to have_css ".govuk-notification-banner", text: "If you delete this route, the exit page it goes to will also be deleted"
