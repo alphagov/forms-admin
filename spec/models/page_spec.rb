@@ -688,4 +688,29 @@ RSpec.describe Page, type: :model do
       end
     end
   end
+
+  describe "#secondary_skip_condition" do
+    let(:form) { create :form, :ready_for_routing }
+    let(:page) { form.pages.second }
+
+    before do
+      # create some conditions that won't be returned
+      create(:condition, routing_page: page, check_page: page, goto_page: form.pages.fifth, answer_value: "Option 1")
+      create(:condition, routing_page: page, check_page: page, goto_page: form.pages.fifth, answer_value: nil)
+    end
+
+    context "when there is a secondary skip condition" do
+      let!(:secondary_skip_condition) { create :condition, routing_page: form.pages.third, check_page: page, goto_page: form.pages.fourth }
+
+      it "returns the secondary skip condition" do
+        expect(page.secondary_skip_condition).to eq secondary_skip_condition
+      end
+    end
+
+    context "when there are no secondary skip conditions" do
+      it "returns nil" do
+        expect(page.secondary_skip_condition).to be_nil
+      end
+    end
+  end
 end
