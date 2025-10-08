@@ -80,6 +80,14 @@ describe "forms/show.html.erb" do
     end
   end
 
+  context "when the form state is live_with_draft" do
+    let(:form) { create(:form, :live_with_draft) }
+
+    it "contains a link to delete the draft form" do
+      expect(rendered).to have_link("Delete draft form", href: delete_form_path(form.id))
+    end
+  end
+
   context "when form state is archived" do
     let(:form) { create :form, :archived }
 
