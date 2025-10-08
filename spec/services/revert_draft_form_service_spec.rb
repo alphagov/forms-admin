@@ -1,29 +1,33 @@
 require "rails_helper"
-# require "helpers/revert_to_live_state_matcher"
-
-RSpec::Matchers.define :be_reverted_to_live_state do
-  match do |form|
-    # reload the form to get the latest state from the database
-    reloaded_form = form.reload
-
-    # the form should be live
-    is_live = reloaded_form.live?
-
-    # We convert the form to a form document and compare the content
-    # to the live form document content and check they match baring the live_at times
-    # this is the closest we can get to saying there is no changes to the form
-    document_matches = reloaded_form.as_form_document.except("live_at") == form.live_form_document.content.except("live_at")
-
-    is_live && document_matches
-  end
-end
 
 describe RevertDraftFormService do
-  subject(:revert_draft_to_live_form_service) { described_class.new(form) }
+  subject(:revert_draft_form_service) { described_class.new(form) }
 
   let(:form) { create(:form, :live_with_draft) }
+  let(:tag) { :live }
 
-  delegate :revert_draft_to_live, to: :revert_draft_to_live_form_service
+  RSpec::Matchers.define :be_reverted_to_state do |expected_state|
+    match do |form|
+      # reload the form to get the latest state from the database
+      reloaded_form = form.reload
+
+      # the form should be live
+      # is_live = reloaded_form.live?
+      state_matches = reloaded_form.state == expected_state.to_s
+
+      # We convert the form to a form document and compare the content
+      # to the live form document content and check they match baring the live_at times
+      # this is the closest we can get to saying there is no changes to the form
+      form_document = FormDocument.find_by(form_id: form.id, tag:, language: "en")
+      document_matches = reloaded_form.as_form_document.except("live_at") == form_document.content.except("live_at")
+
+      state_matches && document_matches
+    end
+  end
+
+  def revert_draft_to_live
+    revert_draft_form_service.revert_draft_from_form_document(tag)
+  end
 
   # we use `freeze_time` to freeze the timestamps of the form and its pages
   # reverting a draft will not keep the timestamps from the live version
@@ -32,7 +36,7 @@ describe RevertDraftFormService do
   context "when the draft has no changes" do
     it "reverts the form to its live state" do
       revert_draft_to_live
-      expect(form).to be_reverted_to_live_state
+      expect(form).to be_reverted_to_state(:live)
     end
   end
 
@@ -43,7 +47,7 @@ describe RevertDraftFormService do
 
     it "reverts the attribute change" do
       revert_draft_to_live
-      expect(form).to be_reverted_to_live_state
+      expect(form).to be_reverted_to_state(:live)
     end
   end
 
@@ -54,7 +58,7 @@ describe RevertDraftFormService do
 
     it "reverts the page change" do
       revert_draft_to_live
-      expect(form).to be_reverted_to_live_state
+      expect(form).to be_reverted_to_state(:live)
     end
   end
 
@@ -65,7 +69,7 @@ describe RevertDraftFormService do
 
     it "removes the added page" do
       revert_draft_to_live
-      expect(form).to be_reverted_to_live_state
+      expect(form).to be_reverted_to_state(:live)
     end
   end
 
@@ -76,7 +80,7 @@ describe RevertDraftFormService do
 
     it "re-adds the removed page" do
       revert_draft_to_live
-      expect(form).to be_reverted_to_live_state
+      expect(form).to be_reverted_to_state(:live)
     end
   end
 
@@ -105,7 +109,7 @@ describe RevertDraftFormService do
 
       it "removes the added routing condition" do
         revert_draft_to_live
-        expect(form).to be_reverted_to_live_state
+        expect(form).to be_reverted_to_state(:live)
       end
     end
 
@@ -116,7 +120,7 @@ describe RevertDraftFormService do
 
       it "re-adds the removed routing condition" do
         revert_draft_to_live
-        expect(form).to be_reverted_to_live_state
+        expect(form).to be_reverted_to_state(:live)
       end
     end
 
@@ -127,8 +131,17 @@ describe RevertDraftFormService do
 
       it "reverts the changed routing condition" do
         revert_draft_to_live
-        expect(form).to be_reverted_to_live_state
+        expect(form).to be_reverted_to_state(:live)
       end
+    end
+  end
+
+  context "when reverting to an archived form_document" do
+    let(:form) { create(:form, :archived) }
+    let(:tag) { :archived }
+
+    it "reverts the form to its live state" do
+      expect(form).to be_reverted_to_state(:archived)
     end
   end
 end
