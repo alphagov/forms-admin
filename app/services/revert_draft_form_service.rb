@@ -1,5 +1,5 @@
-# This service reverts a draft form to its last live version,
-# effectively discarding all draft changes.
+# This service reverts a draft form to a form_document with a given tag,
+# effectively discarding all draft changes
 class RevertDraftFormService
   attr_reader :form
 
@@ -33,17 +33,18 @@ class RevertDraftFormService
   end
 
   # Discards draft changes by reverting the form and its associations
-  # to the state of the last live version
+  # to the state of the form_document with the given tag
   # Returns true on success, false on failure
-  def revert_draft_to_live
+  def revert_draft_from_form_document(tag)
     # Return early if there's no draft to discard
-    return true unless form.live_with_draft?
+    form_document = FormDocument.find_by(form_id: form.id, tag:, language: "en")
+    return false if form_document.blank?
 
-    live_form_data = form.live_form_document.content
+    form_document_content = form_document.content
 
     ActiveRecord::Base.transaction do
-      revert_form_attributes(live_form_data)
-      revert_pages_and_nested_associations(live_form_data["steps"])
+      revert_form_attributes(form_document_content)
+      revert_pages_and_nested_associations(form_document_content["steps"])
 
       form.delete_draft_from_live_form
       form.save!
@@ -58,23 +59,23 @@ class RevertDraftFormService
 private
 
   # revert the top-level attributes of the Form object
-  def revert_form_attributes(live_data)
-    attributes_to_update = live_data.slice(*FORM_ATTRIBUTES_TO_REVERT)
+  def revert_form_attributes(form_document_content)
+    attributes_to_update = form_document_content.slice(*FORM_ATTRIBUTES_TO_REVERT)
     form.assign_attributes(attributes_to_update)
   end
 
   # synchronize all pages and their nested routing conditions
-  def revert_pages_and_nested_associations(live_steps_data)
+  def revert_pages_and_nested_associations(steps_data)
     # ensure we have the latest version of pages
     form.pages.reload
 
-    live_step_ids = live_steps_data.pluck("id")
+    form_document_step_ids = steps_data.pluck("id")
 
-    # delete any pages on the form that are not present in the live version
-    form.pages.where.not(id: live_step_ids).destroy_all
+    # delete any pages on the form that are not present in the form_document version
+    form.pages.where.not(id: form_document_step_ids).destroy_all
 
-    # iterate through the live data to create or update pages
-    live_steps_data.each do |step_data|
+    # iterate through the form_document steps data to create or update pages using the original ids
+    steps_data.each do |step_data|
       page = form.pages.find_or_initialize_by(id: step_data["id"])
 
       assign_page_attributes(page, step_data)
@@ -84,7 +85,7 @@ private
     end
   end
 
-  # steps in a formDocument store the page attributes under "data"
+  # steps in a form_document store the page attributes under "data"
   def assign_page_attributes(page, step_data)
     page_data = step_data["data"]
     page.assign_attributes(
@@ -101,14 +102,14 @@ private
   end
 
   # synchronize the routing conditions for a single page
-  def synchronize_routing_conditions_for_page(page, live_conditions_data)
-    live_condition_ids = live_conditions_data.pluck("id")
+  def synchronize_routing_conditions_for_page(page, conditions_data)
+    form_document_condition_ids = conditions_data.pluck("id")
 
-    # remove any conditions which have been added to the draft but are not in the live data
-    page.routing_conditions.where.not(id: live_condition_ids).destroy_all
+    # remove any conditions which have been added to the draft but are not in the form_document data
+    page.routing_conditions.where.not(id: form_document_condition_ids).destroy_all
 
-    # create or update conditions from the live data
-    live_conditions_data.each do |condition_data|
+    # create or update conditions from the form_document data
+    conditions_data.each do |condition_data|
       condition = Condition.find_by(id: condition_data["id"]) ||
         page.routing_conditions.build(id: condition_data["id"])
 
