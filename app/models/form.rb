@@ -8,6 +8,7 @@ class Form < ApplicationRecord
   has_one :live_form_document, -> { where tag: "live" }, class_name: "FormDocument"
   has_one :archived_form_document, -> { where tag: "archived" }, class_name: "FormDocument"
   has_one :draft_form_document, -> { where tag: "draft" }, class_name: "FormDocument"
+  has_many :conditions, through: :pages, source: :routing_conditions
 
   enum :submission_type, {
     email: "email",
@@ -89,7 +90,6 @@ class Form < ApplicationRecord
   def qualifying_route_pages
     max_routes_per_page = 2
 
-    conditions = pages.flat_map(&:routing_conditions).compact_blank
     condition_counts = conditions.group_by(&:check_page_id).transform_values(&:length)
 
     pages.filter do |page|
@@ -181,7 +181,11 @@ private
   end
 
   def steps
-    pages.map(&:as_form_document_step)
+    ordered_pages = pages.includes(:routing_conditions).to_a
+    ordered_pages.map.with_index do |page, index|
+      next_page = ordered_pages.fetch(index + 1, nil)
+      page.as_form_document_step(next_page)
+    end
   end
 
   def start_page

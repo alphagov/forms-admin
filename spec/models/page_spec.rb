@@ -664,27 +664,33 @@ RSpec.describe Page, type: :model do
     let!(:second_page) { create :page, form: }
 
     it "has an id" do
-      expect(page.as_form_document_step).to match a_hash_including("id" => page.id)
+      expect(page.as_form_document_step(second_page)).to match a_hash_including("id" => page.id)
     end
 
     it "has a position" do
-      expect(page.as_form_document_step).to match a_hash_including("position" => page.position)
+      expect(page.as_form_document_step(second_page)).to match a_hash_including("position" => page.position)
     end
 
     it "has a next_step_id" do
-      expect(page.as_form_document_step).to match a_hash_including("next_step_id" => second_page.id)
+      expect(page.as_form_document_step(second_page)).to match a_hash_including("next_step_id" => second_page.id)
     end
 
     it "includes all attributes for the page as a step" do
       page_attributes = described_class.attribute_names - %w[id form_id next_page position created_at updated_at]
-      expect(page.as_form_document_step["data"]).to match a_hash_including(*page_attributes)
+      expect(page.as_form_document_step(second_page)["data"]).to match a_hash_including(*page_attributes)
     end
 
     context "when there are conditions associated with the page" do
       let!(:condition) { create :condition, routing_page_id: page.id, check_page_id: page.id }
 
       it "includes the routing conditions" do
-        expect(page.reload.as_form_document_step["routing_conditions"]).to include(condition.as_form_document_condition)
+        expect(page.reload.as_form_document_step(second_page)["routing_conditions"]).to include(condition.as_form_document_condition)
+      end
+    end
+
+    context "when the provided next_page is nil" do
+      it "has nil next_step_id" do
+        expect(page.as_form_document_step(nil)["next_step_id"]).to be_nil
       end
     end
   end

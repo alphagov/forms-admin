@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe PageListComponent::ErrorSummary::View, type: :component do
   let(:form) { create :form }
   let(:pages) { form.reload.pages }
-  let(:error_summary_component) { described_class.new(pages:) }
+  let(:error_summary_component) { described_class.new(form) }
 
   describe "rendering component" do
     context "when there are no pages" do
