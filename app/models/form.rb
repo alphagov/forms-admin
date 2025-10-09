@@ -181,7 +181,11 @@ private
   end
 
   def steps
-    pages.map(&:as_form_document_step)
+    ordered_pages = pages.includes(:routing_conditions).to_a
+    ordered_pages.map.with_index do |page, index|
+      next_page = ordered_pages.fetch(index + 1, nil)
+      page.as_form_document_step(next_page)
+    end
   end
 
   def start_page
