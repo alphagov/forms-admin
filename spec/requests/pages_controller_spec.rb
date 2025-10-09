@@ -252,9 +252,9 @@ RSpec.describe PagesController, type: :request do
   end
 
   describe "#destroy" do
-    let(:form) { create(:form, :with_pages) }
+    let(:form) { create(:form, :with_pages, pages_count: 3) }
     let(:pages) { form.pages }
-    let(:page) { pages.first }
+    let(:page) { pages.second }
 
     context "with a valid page" do
       before do
@@ -276,6 +276,22 @@ RSpec.describe PagesController, type: :request do
 
         it "destroys the page" do
           expect(Page.exists?(page.id)).to be false
+        end
+
+        it "updates the form document" do
+          form_document_steps = form.reload.draft_form_document.content["steps"]
+          expect(form_document_steps).to contain_exactly(
+            hash_including(
+              "id" => pages.first.id,
+              "position" => 1,
+              "next_step_id" => pages.third.id,
+            ),
+            hash_including(
+              "id" => pages.third.id,
+              "position" => 2,
+              "next_step_id" => nil,
+            ),
+          )
         end
 
         include_examples "logging"
@@ -311,7 +327,7 @@ RSpec.describe PagesController, type: :request do
   end
 
   describe "#move_page" do
-    let(:form) { create(:form, :with_pages) }
+    let(:form) { create(:form, :with_pages, pages_count: 3) }
     let(:pages) { form.pages }
     let(:page) { pages.second }
 
@@ -334,6 +350,28 @@ RSpec.describe PagesController, type: :request do
       it "renders a success banner with the page's new position" do
         post move_page_path({ form_id: form.id, move_direction: { up: page.id } })
         expect(flash[:success]).to eq("‘#{pages[1].question_text}’ has moved up to number 1")
+      end
+
+      it "updates the form document" do
+        post move_page_path({ form_id: form.id, move_direction: { up: page.id } })
+        form_document_steps = form.reload.draft_form_document.content["steps"]
+        expect(form_document_steps).to contain_exactly(
+          hash_including(
+            "id" => pages.second.id,
+            "position" => 1,
+            "next_step_id" => pages.first.id,
+          ),
+          hash_including(
+            "id" => pages.first.id,
+            "position" => 2,
+            "next_step_id" => pages.third.id,
+          ),
+          hash_including(
+            "id" => pages.third.id,
+            "position" => 3,
+            "next_step_id" => nil,
+          ),
+        )
       end
     end
 

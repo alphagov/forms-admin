@@ -7,7 +7,7 @@ describe StepSummaryCardService do
 
   let(:form_document_content) { FormDocument::Content.from_form_document(form.live_form_document) }
   let(:form_document_steps) { form_document_content.steps }
-  let(:form_document_step) { FormDocument::Step.new(page.as_form_document_step) }
+  let(:form_document_step) { FormDocument::Step.new(page.as_form_document_step(nil)) }
 
   let(:form) { create :form, :live }
 

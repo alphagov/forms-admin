@@ -4,14 +4,15 @@ RSpec.describe FormDocument::Step, type: :model do
   subject(:form_document_step) { described_class.new(page_as_form_document_step) }
 
   let(:page) { create :page }
-  let(:page_as_form_document_step) { page.as_form_document_step }
+  let(:next_page) { create :page }
+  let(:page_as_form_document_step) { page.as_form_document_step(next_page) }
 
   it "ignores any attributes that are not defined" do
     expect(described_class.new(foo: "bar").attributes).not_to include(:foo)
   end
 
-  it "has the position and next page ID from the original page" do
-    expect(form_document_step).to have_attributes(position: page.position, next_step_id: page.next_page)
+  it "has the position and next page ID from the form_document_step" do
+    expect(form_document_step).to have_attributes(position: page.position, next_step_id: next_page.id)
   end
 
   it "has all question attributes the original page has" do

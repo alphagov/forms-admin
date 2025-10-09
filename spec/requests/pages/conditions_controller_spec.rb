@@ -142,6 +142,16 @@ RSpec.describe Pages::ConditionsController, type: :request do
         expect(condition.skip_to_end).to be(false)
       end
 
+      it "updates the form document" do
+        routing_conditions = form.reload.draft_form_document.content["steps"][0]["routing_conditions"]
+        expect(routing_conditions).to contain_exactly(
+          hash_including(
+            "routing_page_id" => page.id,
+            "answer_value" => "Wales",
+          ),
+        )
+      end
+
       it "displays success message" do
         follow_redirect!
         expect(response.body).to include(I18n.t("banner.success.route_created", route_number: 1))
@@ -254,6 +264,16 @@ RSpec.describe Pages::ConditionsController, type: :request do
       expect {
         put update_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id, params:)
       }.to(change { condition.reload.attributes })
+    end
+
+    it "updates the form document" do
+      put update_condition_path(form_id: form.id, page_id: page.id, condition_id: condition.id, params:)
+      routing_conditions = form.reload.draft_form_document.content["steps"][0]["routing_conditions"]
+      expect(routing_conditions).to contain_exactly(
+        a_hash_including(
+          "answer_value" => "England",
+        ),
+      )
     end
 
     it "displays success message" do
@@ -376,6 +396,11 @@ RSpec.describe Pages::ConditionsController, type: :request do
       it "displays success message" do
         follow_redirect!
         expect(response.body).to include(I18n.t("banner.success.route_deleted", question_number: 1))
+      end
+
+      it "updates the form document" do
+        routing_conditions = form.reload.draft_form_document.content["steps"][0]["routing_conditions"]
+        expect(routing_conditions).to be_empty
       end
 
       context "when confirm deletion is false" do
