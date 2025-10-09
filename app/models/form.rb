@@ -90,7 +90,7 @@ class Form < ApplicationRecord
   def qualifying_route_pages
     max_routes_per_page = 2
 
-    condition_counts = routing_conditions.group_by(&:check_page_id).transform_values(&:length)
+    condition_counts = conditions.group_by(&:check_page_id).transform_values(&:length)
 
     pages.filter do |page|
       page.answer_type == "selection" &&
