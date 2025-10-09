@@ -100,6 +100,10 @@ class Page < ApplicationRecord
     }
   end
 
+  def secondary_skip_condition
+    check_conditions.where(answer_value: nil).where.not("check_page_id = routing_page_id").first
+  end
+
 private
 
   def update_form

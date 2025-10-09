@@ -18,8 +18,7 @@ class Pages::DeleteConditionInput < ConfirmActionInput
 
   def has_secondary_skip?
     check_page = pages.find(proc { raise "Cannot find page with id #{check_page_id}" }) { it.id == check_page_id }
-    page_conditions_service = PageConditionsService.new(form:, pages:, page: check_page)
-    page_conditions_service.check_conditions.any? { it != record && it.routing_page_id != it.check_page_id }
+    check_page.check_conditions.any? { it != record && it.routing_page_id != it.check_page_id }
   end
 
 private

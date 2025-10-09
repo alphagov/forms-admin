@@ -267,13 +267,23 @@ RSpec.describe Pages::ConditionsInput, type: :model do
     let(:page_routes_service) { instance_double(PageRoutesService) }
 
     before do
-      allow(PageRoutesService).to receive(:new).and_return(page_routes_service)
-      allow(page_routes_service).to receive(:routes).and_return([instance_double(Api::V1::ConditionResource, secondary_skip?: true)])
+      page.reload
     end
 
-    it "calls the PageRoutesService" do
-      expect(PageRoutesService).to receive(:new).with(form:, pages:, page:)
-      conditions_input.secondary_skip?
+    context "when the page has a secondary skip condition" do
+      let(:condition) { create :condition, routing_page_id: pages.first.id, check_page_id: page.id, goto_page_id: pages.fourth.id }
+
+      it "is true" do
+        expect(conditions_input.secondary_skip?).to be true
+      end
+    end
+
+    context "when the page does not have a secondary skip condition" do
+      let(:condition) { create :condition, routing_page_id: page.id, check_page_id: page.id, answer_value: "England", goto_page_id: pages.fourth.id }
+
+      it "is false" do
+        expect(conditions_input.secondary_skip?).to be false
+      end
     end
   end
 end

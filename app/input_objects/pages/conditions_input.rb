@@ -89,7 +89,7 @@ class Pages::ConditionsInput < BaseInput
   end
 
   def secondary_skip?
-    PageRoutesService.new(form:, pages: form.pages, page:).routes.find(&:secondary_skip?)
+    page.secondary_skip_condition.present?
   end
 
 private

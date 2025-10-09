@@ -86,9 +86,7 @@ RSpec.describe Pages::DeleteConditionInput, type: :model do
       subject(:has_secondary_skip?) { delete_condition_input.has_secondary_skip? }
 
       let(:condition) do
-        condition = build :condition, id: 1, routing_page_id: start_of_branches.id, check_page_id: start_of_branches.id, answer_value: "Wales", goto_page_id: start_of_second_branch.id
-        start_of_branches.routing_conditions << condition
-        condition
+        create :condition, routing_page_id: start_of_branches.id, check_page_id: start_of_branches.id, answer_value: "Wales", goto_page_id: start_of_second_branch.id
       end
 
       let(:start_of_branches) { pages.first }
@@ -97,8 +95,8 @@ RSpec.describe Pages::DeleteConditionInput, type: :model do
       let(:end_of_branches) { pages.last }
 
       before do
-        secondary_skip_condition = build :condition, id: 2, routing_page_id: end_of_first_branch.id, check_page_id: start_of_branches.id, answer_value: nil, goto_page_id: end_of_branches.id
-        end_of_first_branch.routing_conditions << secondary_skip_condition
+        create :condition, routing_page_id: end_of_first_branch.id, check_page_id: start_of_branches.id, answer_value: nil, goto_page_id: end_of_branches.id
+        pages.each(&:reload)
       end
 
       it { is_expected.to be true }

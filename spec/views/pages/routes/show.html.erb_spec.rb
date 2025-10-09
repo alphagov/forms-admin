@@ -4,7 +4,7 @@ describe "pages/routes/show.html.erb" do
   let(:form) { create :form, :ready_for_routing }
   let(:pages) { form.pages }
   let(:page) { pages.first }
-  let(:routes) { PageRoutesService.new(form:, pages:, page:).routes }
+  let(:routes) { page.check_conditions }
   let(:errors) { [] }
 
   let(:route_cards) do
