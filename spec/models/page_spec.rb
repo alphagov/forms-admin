@@ -568,6 +568,65 @@ RSpec.describe Page, type: :model do
     end
   end
 
+  describe "next_page_id" do
+    let(:next_page) { nil }
+
+    before do
+      page
+      next_page
+      form.reload
+    end
+
+    context "when there is no next page" do
+      let(:next_page) { nil }
+
+      it "returns nil" do
+        expect(page.next_page_id).to be_nil
+      end
+    end
+
+    context "when there is a next page" do
+      let(:next_page) { create :page_record, form: page.form }
+
+      it "returns the id of the next page" do
+        expect(page.next_page_id).to eq(next_page.id)
+      end
+    end
+
+    context "when a page is added" do
+      it "updates the return value" do
+        expect(page.next_page_id).to be_nil
+        next_page = described_class.create_and_update_form!(**attributes_for(:page_record), form:)
+        expect(page.next_page_id).to eq(next_page.id)
+      end
+    end
+
+    context "when pages are reordered" do
+      let(:next_page) { create :page_record, form: page.form }
+
+      it "updates the return value" do
+        expect(page.next_page_id).to eq(next_page.id)
+        next_page.move_page(:up)
+        expect(page.next_page_id).to be_nil
+      end
+    end
+
+    context "with a form with a lot of pages" do
+      let(:form) { create :form_record, :with_pages, pages_count: 100 }
+      let(:page) { nil }
+      let(:next_page) { nil }
+
+      it "is faster than next_page", :benchmark do
+        puts
+        times = Benchmark.bm do |bm|
+          bm.report("#next_page_id") { form.pages.map(&:next_page_id) }
+          bm.report("#next_page") { form.pages.map(&:next_page) }
+        end
+        expect(times.first.real).to be <= times.second.real
+      end
+    end
+  end
+
   describe "#has_next_page?" do
     context "when there is no next page" do
       it "returns false" do

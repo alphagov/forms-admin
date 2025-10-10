@@ -62,6 +62,16 @@ class Page < ApplicationRecord
     lower_item&.id
   end
 
+  def next_page_id
+    # form.page_ids should be cached automatically by Rails for the lifetime of a controller action
+    # changes to pages that also update the form will invalidate the cache
+    ordered_page_ids = form.page_ids
+
+    next_page_ids = ordered_page_ids.zip(ordered_page_ids.drop(1)).to_h
+
+    next_page_ids[id]
+  end
+
   def has_next_page?
     next_page.present?
   end
