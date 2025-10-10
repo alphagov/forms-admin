@@ -64,9 +64,14 @@ class Form < ApplicationRecord
 
   alias_method :is_archived?, :has_been_archived
 
-  def name=(val)
-    super(val)
-    self[:form_slug] = name.parameterize
+  def name=(val, ...)
+    super
+
+    # We need to call form_slug= to ensure Mobility's logic is called in
+    # setting translations. We capture arguments using the splat operator
+    # to get the {locale: } value.
+    # Because we override the writer, we call the original method
+    method(:form_slug=).super_method.call(name(...).parameterize, ...)
   end
 
   # form_slug is always set based on name
