@@ -31,6 +31,10 @@ class Page < ApplicationRecord
   validate :guidance_markdown_length_and_tags
 
   attribute :answer_settings, DataStructType.new
+  # Open the Model class used for tanslations and make the same change to the answer_settings attribute
+  class Translation
+    attribute :answer_settings, DataStructType.new
+  end
 
   def self.create_and_update_form!(...)
     page = Page.new(...)
