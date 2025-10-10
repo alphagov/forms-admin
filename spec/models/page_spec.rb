@@ -328,6 +328,46 @@ RSpec.describe Page, type: :model do
     end
   end
 
+  describe "translations" do
+    let(:translated_attributes) do
+      %i[question_text hint_text page_heading guidance_markdown]
+    end
+
+    it "can set and read translated attributes for :en and :cy locales" do
+      Mobility.with_locale(:en) do
+        page.answer_settings = { "only_one_option" => "true", "selection_options" => [{ name: "Option 1 english" }, { name: "Option 2 english" }] }
+        translated_attributes.each do |attribute|
+          page.send("#{attribute}=", "english_#{attribute}")
+        end
+        page.save!
+      end
+
+      Mobility.with_locale(:cy) do
+        page.answer_settings = { "only_one_option" => "false", "selection_options" => [{ name: "Option 1 welsh" }, { name: "Option 2 welsh" }] }
+        translated_attributes.each do |attribute|
+          page.send("#{attribute}=", "welsh_#{attribute}")
+        end
+        page.save!
+      end
+
+      Mobility.with_locale(:en) do
+        page.reload
+        expect(page.answer_settings["selection_options"]).to eq([DataStruct.new(name: "Option 1 english"), DataStruct.new(name: "Option 2 english")])
+        translated_attributes.each do |attribute|
+          expect(page.send(attribute)).to eq("english_#{attribute}")
+        end
+      end
+
+      Mobility.with_locale(:cy) do
+        page.reload
+        expect(page.answer_settings["selection_options"]).to eq([DataStruct.new(name: "Option 1 welsh"), DataStruct.new(name: "Option 2 welsh")])
+        translated_attributes.each do |attribute|
+          expect(page.send(attribute)).to eq("welsh_#{attribute}")
+        end
+      end
+    end
+  end
+
   describe ".create_and_update_form!" do
     let(:form) { create(:form, question_section_completed: true) }
     let(:page_params) do
