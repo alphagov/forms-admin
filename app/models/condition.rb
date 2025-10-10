@@ -11,8 +11,8 @@ class Condition < ApplicationRecord
   before_destroy :destroy_postconditions
 
   translates :answer_value,
-             :exit_page_markdown,
              :exit_page_heading
+  translates :exit_page_markdown, presence: false # Without presence here, the value is nil if set to ""
 
   def self.create_and_update_form!(...)
     condition = Condition.new(...)
