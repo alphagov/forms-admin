@@ -60,7 +60,7 @@ module FormStateMachine
       end
 
       event :delete_draft_from_live_form do
-        transitions from: :live_with_draft, to: :live
+        transitions from: %i[live_with_draft live], to: :live
       end
     end
   end
