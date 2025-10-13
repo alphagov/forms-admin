@@ -44,11 +44,17 @@ private
     form.assign_attributes(form_document_content.slice(*attributes_to_update))
   end
 
-  # synchronize all pages and their nested routing conditions
   def revert_pages_and_nested_associations(steps_data)
-    # ensure we have the latest version of pages
     form.pages.reload
 
+    revert_pages(steps_data)
+
+    # revert conditions after pages are created to make sure conditions don't
+    # have validation errors if the page hasn't been created yet
+    revert_routing_conditions(steps_data)
+  end
+
+  def revert_pages(steps_data)
     form_document_step_ids = steps_data.pluck("id")
 
     # delete any pages on the form that are not present in the form_document version
@@ -59,7 +65,6 @@ private
       page = form.pages.find_or_initialize_by(id: step_data["id"])
 
       assign_page_attributes(page, step_data)
-      synchronize_routing_conditions_for_page(page, step_data["routing_conditions"] || [])
 
       page.save!
     end
@@ -81,25 +86,27 @@ private
     )
   end
 
-  # synchronize the routing conditions for a single page
-  def synchronize_routing_conditions_for_page(page, conditions_data)
-    form_document_condition_ids = conditions_data.pluck("id")
+  def revert_routing_conditions(steps_data)
+    all_conditions_data = steps_data.flat_map { |step| step["routing_conditions"] || [] }
+    form_document_condition_ids = all_conditions_data.pluck("id")
 
     # remove any conditions which have been added to the draft but are not in the form_document data
-    page.routing_conditions.where.not(id: form_document_condition_ids).destroy_all
+    Condition.where(routing_page_id: form.pages.select(:id)).where.not(id: form_document_condition_ids).destroy_all
 
-    # create or update conditions from the form_document data
-    conditions_data.each do |condition_data|
-      condition = Condition.find_by(id: condition_data["id"]) ||
-        page.routing_conditions.build(id: condition_data["id"])
+    all_conditions_data.each do |condition_data|
+      condition = Condition.find_or_initialize_by(id: condition_data["id"])
 
-      condition.assign_attributes(
-        answer_value: condition_data["answer_value"],
-        routing_page_id: condition_data["routing_page_id"],
-        check_page_id: condition_data["check_page_id"],
-        goto_page_id: condition_data["goto_page_id"],
-      )
+      assign_condition_attributes(condition, condition_data)
       condition.save!
     end
+  end
+
+  def assign_condition_attributes(condition, condition_data)
+    condition.assign_attributes(
+      answer_value: condition_data["answer_value"],
+      routing_page_id: condition_data["routing_page_id"],
+      check_page_id: condition_data["check_page_id"],
+      goto_page_id: condition_data["goto_page_id"],
+    )
   end
 end
