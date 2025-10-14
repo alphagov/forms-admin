@@ -8,6 +8,7 @@ class FormCopyService
     copied_form = @form.dup
     copied_form.state = "draft"
     copied_form.external_id = nil
+    copied_form.group_form = GroupForm.new(group_id: @form.group.id, form_id: copied_form.id)
     copied_form.save!
 
     copy_pages(copied_form)

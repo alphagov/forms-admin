@@ -6,8 +6,11 @@ describe FormCopyService do
   end
 
   let(:form) { create(:form, :ready_for_live, pages_count: 2) }
+  let(:group) { create(:group) }
 
   before do
+    form.group_form = GroupForm.new(group_id: group.id, form_id: form.id)
+
     # live version with a routing condition
     form.pages.first.routing_conditions.create!(
       answer_value: "Yes",
@@ -29,6 +32,10 @@ describe FormCopyService do
       expect(copied_form.external_id).not_to be_nil
       expect(copied_form.external_id).not_to be_empty
       expect(copied_form.external_id).not_to eq(form.external_id)
+    end
+
+    it "copies the group the form belongs to" do
+      expect(copied_form.group).to eq(group)
     end
 
     it "does not copy over the id or timestamps" do
