@@ -8,6 +8,7 @@ class FormCopyService
     copied_form = @form.dup
     copied_form.state = "draft"
     copied_form.external_id = nil
+    copied_form.submission_email = nil
     copied_form.group_form = GroupForm.new(group_id: @form.group.id, form_id: copied_form.id)
     copied_form.save!
 
@@ -15,6 +16,7 @@ class FormCopyService
     copy_conditions_for_all_pages
 
     copied_form.reload
+    FormDocumentSyncService.update_draft_form_document(copied_form)
     copied_form
   end
 
