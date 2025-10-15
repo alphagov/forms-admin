@@ -24,6 +24,7 @@ class TaskStatusService
       payment_link_status:,
       privacy_policy_status:,
       support_contact_details_status:,
+      welsh_language_status:,
       receive_csv_status:,
       share_preview_status:,
       make_live_status:,
@@ -72,6 +73,13 @@ private
     return :completed if @form.support_email.present? || @form.support_phone.present? || (@form.support_url_text.present? && @form.support_url)
 
     :not_started
+  end
+
+  def welsh_language_status
+    # return :completed if @form.welsh_completed?
+    # return :in_progress if @form.welsh_enabled?
+
+    :optional
   end
 
   def receive_csv_status

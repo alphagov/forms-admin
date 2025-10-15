@@ -319,6 +319,7 @@ describe TaskStatusService do
         payment_link_status: :optional,
         privacy_policy_status: :completed,
         support_contact_details_status: :completed,
+        welsh_language_status: :optional,
         make_live_status: :completed,
         receive_csv_status: :optional,
         share_preview_status: :completed,
