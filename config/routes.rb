@@ -64,6 +64,8 @@ Rails.application.routes.draw do
     post "/receive-csv" => "forms/receive_csv#create", as: :receive_csv_create
     get "/share-preview" => "forms/share_preview#new", as: :share_preview
     post "/share-preview" => "forms/share_preview#create", as: :share_preview_create
+    get "/translations" => "forms/translations#new", as: :translations
+    post "/translations" => "forms/translations#create", as: :translations_create
 
     scope "/pages" do
       get "/" => "pages#index", as: :form_pages

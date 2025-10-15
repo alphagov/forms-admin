@@ -4,7 +4,7 @@
   <% end %>
 <% end %>
 <%= tag.div(**html_attributes) do %>
-  <% sections.each do |section| %>
+  <% sections.each_with_index do |section, index| %>
     <% unless section.rows.empty? && section.body_text.blank? %>
       <% if section.subsection %>
         <h3 class="govuk-heading-s"><%= section.title %></h3>
