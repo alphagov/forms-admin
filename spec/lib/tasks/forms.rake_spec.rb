@@ -239,22 +239,22 @@ RSpec.describe "forms.rake" do
 
     context "when the form is live" do
       it "sets a form's submission_type to email" do
-        expect { task.invoke(form.id) }
+        expect { task.invoke(form.id, "email") }
           .to change { form.reload.submission_type }.to("email")
       end
 
       it "updates a form's live form document" do
-        task.invoke(form.id)
+        task.invoke(form.id, "email")
         expect(form.live_form_document.reload.content["submission_type"]).to eq("email")
       end
 
       it "updates the form's draft form document" do
-        task.invoke(form.id)
+        task.invoke(form.id, "email")
         expect(form.draft_form_document.reload.content["submission_type"]).to eq("email")
       end
 
       it "does not update a different form" do
-        expect { task.invoke(form.id) }
+        expect { task.invoke(form.id, "email") }
           .not_to(change { other_form.reload.submission_type })
       end
     end
@@ -263,68 +263,42 @@ RSpec.describe "forms.rake" do
       let(:form) { create :form, submission_type: "s3" }
 
       it "sets a form's submission_type to email" do
-        expect { task.invoke(form.id) }
+        expect { task.invoke(form.id, "email") }
           .to change { form.reload.submission_type }.to("email")
       end
 
       it "updates the form's draft form document" do
-        task.invoke(form.id)
+        task.invoke(form.id, "email")
         expect(form.draft_form_document.reload.content["submission_type"]).to eq("email")
       end
     end
 
-    context "without arguments" do
+    context "when the provided submission_type is email_with_csv" do
+      it "sets a form's submission_type to email_with_csv" do
+        expect { task.invoke(form.id, "email_with_csv") }
+          .to change { form.reload.submission_type }.to("email_with_csv")
+      end
+    end
+
+    context "when the provided submission_type is email_with_json" do
+      it "sets a form's submission_type to email_with_json" do
+        expect { task.invoke(form.id, "email_with_json") }
+          .to change { form.reload.submission_type }.to("email_with_json")
+      end
+    end
+
+    context "when the provided submission_type is email_with_csv_and_json" do
+      it "sets a form's submission_type to email_with_csv_and_json" do
+        expect { task.invoke(form.id, "email_with_csv_and_json") }
+          .to change { form.reload.submission_type }.to("email_with_csv_and_json")
+      end
+    end
+
+    context "when the provided submission_type is s3" do
       it "aborts with a usage message" do
-        expect {
-          task.invoke
-        }.to raise_error(SystemExit)
-               .and output("usage: rake forms:submission_type:set_to_email[<form_id>]\n").to_stderr
-      end
-    end
-  end
-
-  describe "forms:submission_type:set_to_email_with_csv" do
-    subject(:task) do
-      Rake::Task["forms:submission_type:set_to_email_with_csv"]
-        .tap(&:reenable)
-    end
-
-    let(:form) { create :form, :live, submission_type: "s3" }
-    let!(:other_form) { create :form, :live, submission_type: "s3" }
-
-    context "when the form is live" do
-      it "sets a form's submission_type to email_with_csv" do
-        expect { task.invoke(form.id) }
-          .to change { form.reload.submission_type }.to("email_with_csv")
-      end
-
-      it "updates a form's live form document" do
-        task.invoke(form.id)
-        expect(form.live_form_document.reload.content["submission_type"]).to eq("email_with_csv")
-      end
-
-      it "updates the form's draft form document" do
-        task.invoke(form.id)
-        expect(form.draft_form_document.reload.content["submission_type"]).to eq("email_with_csv")
-      end
-
-      it "does not update a different form" do
-        expect { task.invoke(form.id) }
-          .not_to(change { other_form.reload.submission_type })
-      end
-    end
-
-    context "when the form is draft" do
-      let(:form) { create :form, submission_type: "s3" }
-
-      it "sets a form's submission_type to email_with_csv" do
-        expect { task.invoke(form.id) }
-          .to change { form.reload.submission_type }.to("email_with_csv")
-      end
-
-      it "updates the form's draft form document" do
-        task.invoke(form.id)
-        expect(form.draft_form_document.reload.content["submission_type"]).to eq("email_with_csv")
+        expect { task.invoke(form.id, "s3") }
+          .to raise_error(SystemExit)
+                .and output("submission_type must be one of email, email_with_csv, email_with_json, email_with_csv_and_json\n").to_stderr
       end
     end
 
@@ -333,7 +307,7 @@ RSpec.describe "forms.rake" do
         expect {
           task.invoke
         }.to raise_error(SystemExit)
-               .and output("usage: rake forms:submission_type:set_to_email_with_csv[<form_id>]\n").to_stderr
+               .and output("usage: rake forms:submission_type:set_to_email[<form_id>, <submission_type>]\n").to_stderr
       end
     end
   end

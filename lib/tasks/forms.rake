@@ -45,19 +45,14 @@ namespace :forms do
 
   namespace :submission_type do
     desc "Set submission_type to email"
-    task :set_to_email, %i[form_id] => :environment do |_, args|
-      usage_message = "usage: rake forms:submission_type:set_to_email[<form_id>]".freeze
+    task :set_to_email, %i[form_id submission_type] => :environment do |_, args|
+      usage_message = "usage: rake forms:submission_type:set_to_email[<form_id>, <submission_type>]".freeze
       abort usage_message if args[:form_id].blank?
 
-      set_submission_type("email", args[:form_id])
-    end
+      supported_types = Form.submission_types.keys - %w[s3]
+      abort "submission_type must be one of #{supported_types.join(', ')}" unless supported_types.include? args[:submission_type]
 
-    desc "Set submission_type to email_with_csv"
-    task :set_to_email_with_csv, %i[form_id] => :environment do |_, args|
-      usage_message = "usage: rake forms:submission_type:set_to_email_with_csv[<form_id>]".freeze
-      abort usage_message if args[:form_id].blank?
-
-      set_submission_type("email_with_csv", args[:form_id])
+      set_submission_type(args[:submission_type], args[:form_id])
     end
 
     desc "Set submission_type to s3"
