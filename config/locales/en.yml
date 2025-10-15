@@ -407,6 +407,9 @@ en:
       receive_csv_subsection:
         receive_csv: Get completed forms as CSV files
         title: Optional task
+      translations_section:
+        add_welsh: Add Welsh language version of your form
+        title: Add translations to your form (optional)
     task_list_edit:
       create_form_section:
         declaration: Edit the declaration for people to agree to
@@ -433,6 +436,9 @@ en:
       receive_csv_subsection:
         receive_csv: Get completed forms as CSV files
         title: Optional task
+      translations_section:
+        add_welsh: Edit Welsh language version of your form
+        title: Add translations to your form (optional)
   group_forms:
     edit:
       body_html: "<p> We’ll send an email to members of the current group to let them know the form has moved and they may no longer have access to it. </p>\n"

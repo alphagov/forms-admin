@@ -633,6 +633,7 @@ RSpec.describe Form, type: :model do
         payment_link_status: :optional,
         receive_csv_status: :optional,
         support_contact_details_status: :completed,
+        welsh_language_status: :optional,
         share_preview_status: :completed,
         make_live_status: :completed,
       }
