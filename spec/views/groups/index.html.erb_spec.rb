@@ -1,15 +1,17 @@
 require "rails_helper"
 
 RSpec.describe "groups/index", type: :view do
-  let(:trial_groups) { create_list :group, 2 }
-  let(:upgrade_requested_groups) { create_list :group, 2, status: :upgrade_requested }
-  let(:active_groups) { create_list :group, 2, status: :active }
-  let(:current_user) { build :user }
+  let(:organisation) { build :organisation, id: 3, slug: "org-slug" }
+  let(:trial_groups) { create_list :group, 2, organisation: }
+  let(:upgrade_requested_groups) { create_list :group, 2, status: :upgrade_requested, organisation: }
+  let(:active_groups) { create_list :group, 2, status: :active, organisation: }
+  let(:current_user) { build :user, organisation: }
 
   before do
     assign(:trial_groups, trial_groups)
     assign(:upgrade_requested_groups, upgrade_requested_groups)
     assign(:active_groups, active_groups)
+    assign(:organisation, organisation)
 
     assign(:current_user, current_user)
   end
@@ -43,12 +45,10 @@ RSpec.describe "groups/index", type: :view do
 
     context "when the user has a standard role" do
       context "and org has not signed an MOU" do
-        let(:current_user) do
-          instance_double User, standard?: true, organisation_admin?: false, super_admin?: false, current_org_has_mou?: false
-        end
+        let(:current_user) { build :user, organisation: }
 
-        it "shows the details text for users who are not org/super admins" do
-          expect(rendered).to have_content("If you need access to an existing form or group, ask someone who has access to that group to add you.")
+        it "shows the details text for users who are not org/super admins without org admins" do
+          expect(rendered).to have_content("If you’re not sure if you should make a new group, speak with your organisation’s GOV.UK publishing team.")
         end
 
         it "shows a notification banner explaining forms cannot be made live" do
@@ -57,7 +57,12 @@ RSpec.describe "groups/index", type: :view do
       end
 
       context "and org has signed an MOU" do
+        let(:organisation) { build :organisation, :with_org_admin, id: 3, slug: "org-slug" }
         let(:current_user) { build :user, :org_has_signed_mou }
+
+        it "shows the details text for users who are not org/super admins with org admins" do
+          expect(rendered).to have_content("If you’re not sure if you should make a new group, speak with your organisation’s GOV.UK Forms admin. Contact them at:")
+        end
 
         it "does not show a banner" do
           expect(rendered).not_to have_css ".govuk-notification-banner"
@@ -66,10 +71,10 @@ RSpec.describe "groups/index", type: :view do
     end
 
     context "when the user is an organisation admin" do
-      let(:current_user) { build :organisation_admin_user }
+      let(:current_user) { build :organisation_admin_user, organisation: }
 
       it "shows the details text for admins" do
-        expect(rendered).to have_content("Because you’re an organisation admin, you can access all the groups in your organisation.")
+        expect(rendered).to have_content("People in your organisation can also ask you to do these things.")
       end
 
       it "does not show an organisation selector" do
@@ -105,6 +110,7 @@ RSpec.describe "groups/index", type: :view do
   context "when the user is a super admin" do
     let(:current_user) { build :super_admin_user }
     let(:search_input) { OrganisationSearchInput.new({ organisation_id: current_user.organisation_id }) }
+    let(:organisation) { current_user.organisation }
 
     before do
       assign(:search_input, search_input)

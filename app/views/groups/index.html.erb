@@ -58,13 +58,20 @@
 
 <div class="govuk-grid-row govuk-!-margin-top-3">
   <div class="govuk-grid-column-two-thirds">
-    <%= govuk_details(summary_text: t("groups.index.group_explainer_title")) do
-      if @current_user.organisation_admin? || @current_user.super_admin?
-        t("groups.index.group_explainer_org_admin_body_html")
-      else
-        t("groups.index.group_explainer_body_html")
-      end
-    end %>
+  <%= govuk_details(summary_text: t("groups.index.group_explainer_title")) do %>
+    <% if @current_user.can_administer_org?(@organisation) %>
+        <%= t("groups.index.group_explainer_org_admin_body_html") %>
+      <% elsif @organisation.admin_users.empty? %>
+        <%= t("groups.index.group_explainer_body_org_without_admin_html") %>
+     <% else %>
+        <%= t("groups.index.group_explainer_body_org_with_admin_html") %>
+        <ul class="govuk-list govuk-list--bullet">
+          <% @organisation.admin_users.order(:email).each do |user| %>
+            <li><%= user.email %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% end %>
   </div>
 </div>
 
