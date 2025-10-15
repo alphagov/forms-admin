@@ -22,13 +22,13 @@ module Forms
         return redirect_to @back_url
       end
 
-      success_url = current_form.group.present? ? group_path(current_form.group) : root_path
 
       unless current_form.destroy
         flash[:message] = "Deletion unsuccessful"
         return redirect_to @back_url
       end
 
+      success_url = group_path(current_form.group)
       redirect_to success_url, status: :see_other, success: t(".success", form_name: current_form.name)
     end
 
