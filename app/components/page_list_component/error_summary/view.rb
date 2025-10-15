@@ -1,9 +1,9 @@
 module PageListComponent
   module ErrorSummary
     class View < ApplicationComponent
-      def initialize(pages: [])
+      def initialize(form)
         super()
-        @pages = pages
+        @form = form
       end
 
       def self.error_id(number)
@@ -31,17 +31,15 @@ module PageListComponent
       end
 
       def errors_for_summary
-        @pages.flat_map(&:routing_conditions)
-          .map { |condition|
-            condition.validation_errors.map do |error|
-              error_object(
-                error_name: error.name,
-                page: condition.check_page,
-                condition: condition,
-              )
-            end
-          }
-          .flatten
+        @form.conditions.map { |condition|
+          condition.validation_errors.map do |error|
+            error_object(
+              error_name: error.name,
+              page: condition.check_page,
+              condition: condition,
+            )
+          end
+        }.flatten
       end
     end
   end

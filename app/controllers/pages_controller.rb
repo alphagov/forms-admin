@@ -7,7 +7,7 @@ class PagesController < WebController
   def index
     @pages = current_form.pages
     @mark_complete_input = Forms::MarkPagesSectionCompleteInput.new(form: current_form).assign_form_values
-    log_validation_errors(@pages)
+    log_validation_errors
     render :index, locals: { current_form: }
   end
 
@@ -134,18 +134,17 @@ private
     end
   end
 
-  def log_validation_errors(pages)
+  def log_validation_errors
     # these validation errors don't come from an input object, so we log them ourselves
-    errors = pages.flat_map(&:routing_conditions).flat_map(&:validation_errors)
-    CurrentLoggingAttributes.validation_errors = errors.map { |error| "PageList: #{error.name}" } if errors.any?
-
-    pages.each do |page|
-      page.routing_conditions.each do |condition|
-        condition.validation_errors.each do |error|
-          error_type = condition.secondary_skip? ? "any_other_answer_route.#{error.name}" : error.name
-          AnalyticsService.track_validation_errors(input_object_name: "PageList", field: :condition, error_type:, form_name: current_form.name)
-        end
+    errors = []
+    current_form.conditions.each do |condition|
+      condition.validation_errors.each do |error|
+        errors << error.name
+        error_type = condition.secondary_skip? ? "any_other_answer_route.#{error.name}" : error.name
+        AnalyticsService.track_validation_errors(input_object_name: "PageList", field: :condition, error_type:, form_name: current_form.name)
       end
     end
+
+    CurrentLoggingAttributes.validation_errors = errors.map { |error| "PageList: #{error}" } if errors.any?
   end
 end
