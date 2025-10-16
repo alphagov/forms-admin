@@ -641,20 +641,22 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#page_number" do
-    let(:completed_form) { build :form_resource, :live }
+    let(:completed_form) { create :form_record, :live }
 
     context "with an existing page" do
       let(:page) { completed_form.pages.first }
 
       it "returns the page position" do
-        expect(completed_form.page_number(page)).to eq(1)
+        expect(completed_form.page_number(page)).to eq(page.position)
       end
 
       context "when the page's attributes have changed but it has the same ID" do
-        let(:page) { build :page_resource, id: completed_form.pages.first.id }
+        before do
+          page.update(question_text: "different question text")
+        end
 
         it "returns the page position" do
-          expect(completed_form.page_number(page)).to eq(1)
+          expect(completed_form.page_number(page)).to eq(page.position)
         end
       end
     end
