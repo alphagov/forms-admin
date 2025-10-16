@@ -17,14 +17,24 @@ class FormTaskListService
   end
 
   def all_sections
-    [
-      create_form_section,
+    sections = [
+      create_form_section(section_number: 1),
       payment_link_subsection,
-      email_address_section,
+      email_address_section(section_number: 2),
       receive_csv_subsection,
-      privacy_and_contact_details_section,
-      make_form_live_section,
+      privacy_and_contact_details_section(section_number: 3),
     ]
+
+    last_sections = [make_form_live_section(section_number: 4)]
+
+    if FeatureService.new(group: @form.group).enabled?(:welsh)
+      last_sections = [
+        translations_section(section_number: 4),
+        make_form_live_section(section_number: 5),
+      ]
+    end
+
+    sections + last_sections
   end
 
 private
@@ -36,11 +46,11 @@ private
     "create"
   end
 
-  def create_form_section
+  def create_form_section(section_number:)
     {
       title: I18n.t("forms.task_list_#{create_or_edit}.create_form_section.title"),
       rows: create_form_section_tasks,
-      section_number: 1,
+      section_number:,
       subsection: false,
     }
   end
@@ -74,10 +84,10 @@ private
     ]
   end
 
-  def email_address_section
+  def email_address_section(section_number:)
     {
       title: I18n.t("forms.task_list_#{create_or_edit}.email_address_section.title"),
-      section_number: 2,
+      section_number:,
       subsection: false,
       rows: email_address_section_tasks,
     }
@@ -104,11 +114,11 @@ private
     ]
   end
 
-  def privacy_and_contact_details_section
+  def privacy_and_contact_details_section(section_number:)
     {
       title: I18n.t("forms.task_list_#{create_or_edit}.privacy_and_contact_details_section.title"),
       rows: privacy_and_contact_details_section_tasks,
-      section_number: 3,
+      section_number:,
       subsection: false,
     }
   end
@@ -120,10 +130,25 @@ private
     ]
   end
 
-  def make_form_live_section
+  def translations_section(section_number:)
+    {
+      title: I18n.t("forms.task_list_#{create_or_edit}.translations_section.title"),
+      rows: translations_section_task,
+      section_number:,
+      subsection: false,
+    }
+  end
+
+  def translations_section_task
+    [
+      { task_name: I18n.t("forms.task_list_#{create_or_edit}.translations_section.add_welsh"), path: translations_path(@form.id), status: @task_statuses[:translations_status] },
+    ]
+  end
+
+  def make_form_live_section(section_number:)
     section = {
       title: live_title_name,
-      section_number: 4,
+      section_number:,
       subsection: false,
     }
 
