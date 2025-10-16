@@ -74,18 +74,10 @@ GEM
       globalid (>= 0.3.6)
     activemodel (8.0.3)
       activesupport (= 8.0.3)
-    activemodel-serializers-xml (1.0.3)
-      activemodel (>= 5.0.0.a)
-      activesupport (>= 5.0.0.a)
-      builder (~> 3.1)
     activerecord (8.0.3)
       activemodel (= 8.0.3)
       activesupport (= 8.0.3)
       timeout (>= 0.4.0)
-    activeresource (6.2.0)
-      activemodel (>= 7.0)
-      activemodel-serializers-xml (~> 1.0)
-      activesupport (>= 7.0)
     activestorage (8.0.3)
       actionpack (= 8.0.3)
       activejob (= 8.0.3)
@@ -602,7 +594,6 @@ PLATFORMS
 DEPENDENCIES
   MailchimpMarketing (~> 3.0)
   aasm (~> 5.5)
-  activeresource (~> 6.2)
   acts_as_list
   after_commit_everywhere (~> 1.6)
   aws-sdk-cloudwatch (~> 1.122)
@@ -664,9 +655,7 @@ CHECKSUMS
   actionview (8.0.3) sha256=5171946ff07d1e95bf3d805ad9425a89040a013dea11bb1f4cf604f108b1ce66
   activejob (8.0.3) sha256=469eddb3822aff1c6a0df0bd3398f28bff8fcd1bd0e9d309e6b7ccbd0bdba1b6
   activemodel (8.0.3) sha256=406907245a1c6c04cdf2187cc4590fdc081d7a07392123d322125677022ea67c
-  activemodel-serializers-xml (1.0.3) sha256=fa1b16305e7254cc58a59c68833e3c0a593a59c8ab95d3be5aaea7cd9416c397
   activerecord (8.0.3) sha256=9b95c63b2ae9ccb57bb15db730300fdd02af387e12474eb9002a668acab3cea8
-  activeresource (6.2.0) sha256=818ca60d3cd1ff7bbb7277f41250ad4d61a7cdbe30fbf52b2145e1b66ed13900
   activestorage (8.0.3) sha256=4f4eadeb5d128a35ed21d960eeece027225b36d54542512c8a36ad5316988c5e
   activesupport (8.0.3) sha256=a711ce5e30660b23232f26a38699469f8d859d47aa1f722e183fda6d7cc17823
   acts_as_list (1.2.4) sha256=5e6ed695f1879d66ae7d8eb1625a72db215a26a9c8ec0047b866a80883ea5651
