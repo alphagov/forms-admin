@@ -413,4 +413,106 @@ RSpec.describe "groups/show", type: :view do
       end
     end
   end
+
+  describe "Details component manage group" do
+    let(:organisation) { create(:organisation) }
+    let(:group) { create(:group, organisation:) }
+    let(:current_user) { create(:user, organisation:) }
+
+    def details
+      Capybara.string(rendered).find(".govuk-details")
+    end
+
+    context "when the organisation does not have admin users" do
+      before do
+        create(:mou_signature_for_organisation, organisation:)
+      end
+
+      it "does not render the details component" do
+        expect(rendered).not_to have_css("details.govuk-details")
+      end
+    end
+
+    context "when the organisation has not signed the MOU" do
+      before do
+        # We have to delete it rather because it's hard to create an org with
+        # an admin but no MOU
+        group.organisation.mou_signatures.destroy_all
+      end
+
+      it "does not render the details component" do
+        expect(rendered).not_to have_css("details.govuk-details")
+      end
+    end
+
+    context "when the organisation has admin users and has signed the MOU" do
+      let(:organisation) { create(:organisation, :with_org_admin) }
+
+      it "renders the details component with the correct summary text" do
+        expect(rendered).to have_css("details.govuk-details .govuk-details__summary-text", text: t("groups.show.details.title"))
+      end
+
+      context "when the current user is an organisation admin" do
+        let(:current_user) { create :user, :organisation_admin, organisation: }
+
+        context "and the group is active" do
+          let(:group) { create :group, :active, organisation: }
+
+          it "shows content for an org admin about an active group" do
+            expected_text = Capybara.string(t("groups.show.details.org_admin.active_group_summary_html")).text
+            expect(details).to have_text(expected_text)
+          end
+        end
+
+        context "and the group is a trial group" do
+          let(:group) { create :group, :trial, organisation: }
+
+          it "shows content for an org admin about a trial group" do
+            expected_text = Capybara.string(t("groups.show.details.org_admin.trial_group_summary_html")).text
+            expect(details).to have_text(expected_text)
+          end
+        end
+      end
+
+      context "when the current user is a standard user" do
+        let(:current_user) { create :user, :standard, organisation: }
+
+        context "and the group is active" do
+          let(:group) { create :group, :active, organisation: }
+
+          it "shows content for a standard user about an active group" do
+            expected_text = Capybara.string(t("groups.show.details.standard_user.active_group_summary_html")).text
+            expect(details).to have_text(expected_text)
+          end
+
+          it "lists the organisation's admin users" do
+            admin_user_email = group.organisation.admin_users.first.email
+            expect(details).to have_text(admin_user_email)
+          end
+        end
+
+        context "and the group is a trial group" do
+          let(:group) { create :group, :trial, organisation: }
+
+          it "shows content for a standard user about a trial group" do
+            expected_text = Capybara.string(t("groups.show.details.standard_user.trial_group_summary_html")).text
+            expect(details).to have_text(expected_text)
+          end
+
+          it "lists the organisation's admin users" do
+            admin_user_email = group.organisation.admin_users.first.email
+            expect(details).to have_text(admin_user_email)
+          end
+        end
+      end
+
+      context "when the current user is a super admin" do
+        let(:current_user) { create :super_admin_user, organisation: }
+
+        it "does not render the details component" do
+          expect(rendered).not_to have_css("details.govuk-details")
+        end
+      end
+    end
+  end
 end

@@ -82,3 +82,38 @@
     <%= govuk_button_link_to t(".delete_group"), delete_group_path(@group), warning: true %>
   </div>
 <% end %>
+
+<% unless @current_user.super_admin? %>
+  <% if @group.organisation.admin_users.present? && @group.organisation.mou_signatures.present? %>
+    <div class="govuk-grid-row govuk-!-margin-top-3">
+      <div class="govuk-grid-column-two-thirds">
+        <%= govuk_details(summary_text: t(".details.title")) do %>
+          <% if @current_user.organisation_admin? %>
+            <% if @group.active? %>
+              <%= t(".details.org_admin.active_group_summary_html") %>
+            <% else %>
+              <%= t(".details.org_admin.trial_group_summary_html") %>
+            <% end %>
+          <% end %>
+          <% if @current_user.standard? %>
+            <% if @group.active? %>
+              <%= t(".details.standard_user.active_group_summary_html") %>
+              <ul class="govuk-list govuk-list--bullet">
+                <% @group.organisation.admin_users.order(:email).each do |user| %>
+                  <li><%= user.email %></li>
+                <% end %>
+              </ul>
+            <% else %>
+              <%= t(".details.standard_user.trial_group_summary_html") %>
+              <ul class="govuk-list govuk-list--bullet">
+                <% @group.organisation.admin_users.order(:email).each do |user| %>
+                  <li><%= user.email %></li>
+                <% end %>
+              </ul>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
