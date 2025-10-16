@@ -662,7 +662,7 @@ RSpec.describe Form, type: :model do
     end
 
     context "with an new page" do
-      let(:page) { build :page_resource }
+      let(:page) { create :page_record }
 
       it "returns the position for a new page" do
         expect(completed_form.page_number(page)).to eq(completed_form.pages.count + 1)
@@ -676,7 +676,7 @@ RSpec.describe Form, type: :model do
     end
 
     context "with a page which has a null id" do
-      let(:page) { build :page_resource, id: nil }
+      let(:page) { build :page_record, id: nil }
 
       it "returns the position for a new page" do
         expect(completed_form.page_number(nil)).to eq(completed_form.pages.count + 1)
