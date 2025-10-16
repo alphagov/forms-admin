@@ -517,16 +517,16 @@ en:
       active_empty_message: You’re not in any active groups.
       active_title: Active groups
       create_group: Create a group
-      group_explainer_body_org_without_admin_html: |
-        <p> Each form is created inside a group. People can be added to a group to create and edit forms in it. </p>
-        <p> If you need access to an existing form or group, ask someone who has access to the group to add you. </p>
-        <p> When a group is first created it will be a ‘trial’ group. That means you cannot make any forms in the group live. You can request for a group to be upgraded to an ‘active’ group if you need to make forms live. </p>
-        <p> If you’re not sure if you should make a new group, speak with your organisation’s GOV.UK publishing team. </p>
       group_explainer_body_org_with_admin_html: |
         <p> Each form is created inside a group. People can be added to a group to create and edit forms in it. </p>
         <p> If you need access to an existing form or group, ask someone who has access to the group to add you. </p>
         <p> When a group is first created it will be a ‘trial’ group. That means you cannot make any forms in the group live. You can request for a group to be upgraded to an ‘active’ group if you need to make forms live. </p>
         <p> If you’re not sure if you should make a new group, speak with your organisation’s GOV.UK Forms admin. Contact them at: </p>
+      group_explainer_body_org_without_admin_html: |
+        <p> Each form is created inside a group. People can be added to a group to create and edit forms in it. </p>
+        <p> If you need access to an existing form or group, ask someone who has access to the group to add you. </p>
+        <p> When a group is first created it will be a ‘trial’ group. That means you cannot make any forms in the group live. You can request for a group to be upgraded to an ‘active’ group if you need to make forms live. </p>
+        <p> If you’re not sure if you should make a new group, speak with your organisation’s GOV.UK publishing team. </p>
       group_explainer_org_admin_body_html: |
         <p> Each form is created inside a group. Anyone with a GOV.UK Forms account can make a group. They can add people from their organisation to that group to view, create and edit forms in it. </p>
         <p> When a group is first created it will be a ‘trial’ group. That means forms in the group cannot be made live. </p>
@@ -584,6 +584,44 @@ en:
       radios_legend: Do you want to upgrade this group?
     show:
       delete_group: Delete this group
+      details:
+        org_admin:
+          active_group_summary_html: |
+            <p>As an organisation admin you can:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>add and remove group admins </li>
+              <li>move a form to a different group</li>
+              <li>delete groups that do not have any forms in them</li>
+            </ul>
+            <p>People in your organisation can also ask you to do these things for them.</p>
+          trial_group_summary_html: |
+            <p> As an organisation admin, you can: </p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>upgrade a trial group to an ‘active’ group so forms in the group can be made live </li>
+              <li>add and remove group admins </li>
+              <li>move a form to a different group</li>
+              <li>delete groups that do not have any forms in them</li>
+            </ul>
+            <p>People in your organisation can also ask you to do these things for them.</p>
+        standard_user:
+          active_group_summary_html: |
+            <p>You can ask your organisation's GOV.UK Forms admin to:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>add and remove group admins </li>
+              <li>move a form to a different group</li>
+              <li>delete groups that do not have any forms in them</li>
+            </ul>
+            <p>Contact them at:</p>
+          trial_group_summary_html: |
+            <p>You can ask your organisation's GOV.UK Forms admin to:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>upgrade a trial group to an ‘active’ group so forms in the group can be made live </li>
+              <li>add and remove group admins </li>
+              <li>move a form to a different group</li>
+              <li>delete groups that do not have any forms in them</li>
+            </ul>
+            <p>Contact them at:</p>
+        title: Managing this group
       edit_group_members: Edit members of this group
       edit_group_name: Change the name of this group
       move: Move this group to another organisation
