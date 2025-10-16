@@ -4,7 +4,6 @@ RSpec.describe Forms::UnarchiveController, type: :request do
   let(:user) { standard_user }
 
   let(:form) { create(:form, :archived) }
-  let(:made_live_form) { build(:made_live_form, id: form.id) }
 
   let(:group) { create(:group, organisation: user.organisation, status: :active) }
   let(:form_params) { nil }

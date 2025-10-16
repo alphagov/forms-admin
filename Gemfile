@@ -6,8 +6,6 @@ ruby file: ".ruby-version"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "8.0.3"
 
-gem "activeresource", "~> 6.2"
-
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.6"
 
