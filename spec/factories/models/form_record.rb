@@ -120,3 +120,11 @@ FactoryBot.define do
     end
   end
 end
+
+def link_pages_list(pages)
+  pages.to_enum.with_index(1).each do |page, index|
+    page.position = index
+  end
+
+  pages
+end

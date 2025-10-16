@@ -72,13 +72,6 @@ en:
           attributes:
             agreed:
               accepted: You must agree to the terms of use to continue
-        api/v1/page_resource:
-          attributes:
-            hint_text:
-              too_long: Hint text must be %{count} characters or less
-            question_text:
-              blank: Enter a question
-              too_long: Question text must be %{count} characters or less
         forms/delete_confirmation_input:
           blank: Select ‘Yes’ to delete the draft
         forms/receive_csv_input:
