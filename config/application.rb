@@ -71,5 +71,9 @@ module FormsAdmin
 
     # Include full precision of timestamps in JSON responses
     config.active_support.time_precision = 6
+
+    # Turn off locale enforcement - this allows us to use locales
+    # in Mobility without enabling those languages for the admin UI
+    I18n.enforce_available_locales = false
   end
 end
