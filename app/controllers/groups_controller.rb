@@ -11,10 +11,12 @@ class GroupsController < WebController
       @active_groups = policy_scope(Group).where(organisation_id: @search_input.organisation_id).active
       @upgrade_requested_groups = policy_scope(Group).where(organisation_id: @search_input.organisation_id).upgrade_requested
       @trial_groups = policy_scope(Group).where(organisation_id: @search_input.organisation_id).trial
+      @organisation = @search_input.organisation
     else
       @active_groups = policy_scope(Group).active
       @upgrade_requested_groups = policy_scope(Group).upgrade_requested
       @trial_groups = policy_scope(Group).trial
+      @organisation = @current_user.organisation
     end
   end
 
