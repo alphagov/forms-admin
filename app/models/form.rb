@@ -68,8 +68,10 @@ class Form < ApplicationRecord
   alias_method :is_archived?, :has_been_archived
 
   def name=(val)
-    super(val)
-    self[:form_slug] = name.parameterize
+    super
+
+    # Always set form_slug using the English name
+    self[:form_slug] = name_en.parameterize
   end
 
   # form_slug is always set based on name
