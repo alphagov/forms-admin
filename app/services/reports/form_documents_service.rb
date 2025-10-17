@@ -31,6 +31,10 @@ class Reports::FormDocumentsService
       end
     end
 
+    def has_add_another_answer?(form_document)
+      form_document["content"]["steps"].any? { |step| step["data"]["is_repeatable"] }
+    end
+
     def has_payments?(form_document)
       form_document["content"]["payment_url"].present?
     end
