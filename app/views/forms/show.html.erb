@@ -41,8 +41,6 @@
                                            sections: @task_list)
     %>
 
-  <% if current_form.draft? or current_form.live_with_draft? %>
-    <%= govuk_button_link_to(t("forms.delete_form"), delete_form_path(current_form.id), warning: true) %>
-  <% end %>
+    <%= govuk_button_link_to(t("forms.delete_form"), delete_form_path(current_form.id), warning: true) if current_form.state.to_sym == :draft %>
   </div>
 </div>

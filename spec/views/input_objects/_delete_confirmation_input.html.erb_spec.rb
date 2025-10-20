@@ -1,15 +1,13 @@
 require "rails_helper"
 
 RSpec.describe "input_objects/_delete_confirmation_input" do
-  let(:hint_text) { nil }
-
   before do
     delete_confirmation_input = DeleteConfirmationInput.new
     url = "/delete"
     caption_text = "Thing"
     legend_text = "Are you sure you want to delete this thing?"
 
-    render locals: { delete_confirmation_input:, url:, caption_text:, legend_text:, hint_text: }
+    render locals: { delete_confirmation_input:, url:, caption_text:, legend_text: }
   end
 
   it "posts the confirm value to the destroy action" do
@@ -29,19 +27,5 @@ RSpec.describe "input_objects/_delete_confirmation_input" do
 
   it "has a submit button" do
     expect(rendered).to have_button "Continue", class: "govuk-button"
-  end
-
-  context "when no hint_text is provided" do
-    it "doesn't have a hint" do
-      expect(rendered).not_to have_css "fieldset legend:has(~ .govuk-hint)"
-    end
-  end
-
-  context "when hint_text is provided" do
-    let(:hint_text) { "This is a hint" }
-
-    it "has a hint" do
-      expect(rendered).to have_css ".govuk-hint", text: "This is a hint"
-    end
   end
 end
