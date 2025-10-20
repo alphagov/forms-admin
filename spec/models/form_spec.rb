@@ -232,7 +232,7 @@ RSpec.describe Form, type: :model do
       Mobility.with_locale(:cy) do
         form.reload
         expect(form.name).to eq("Welsh Name")
-        expect(form.form_slug).to eq("welsh-name")
+        expect(form.form_slug).to eq("english-name")
         expect(form.payment_url).to eq("https://example.gov.uk/cy")
         translated_attributes.each do |attribute|
           expect(form.send(attribute)).to eq("welsh_#{attribute}")
