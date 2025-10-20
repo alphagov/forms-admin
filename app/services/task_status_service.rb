@@ -76,8 +76,8 @@ private
   end
 
   def welsh_language_status
-    # return :completed if @form.welsh_completed?
-    # return :in_progress if @form.welsh_enabled?
+    return :completed if @form.welsh_completed?
+    return :in_progress if @form.available_languages.include?("cy") && !@form.welsh_completed?
 
     :optional
   end

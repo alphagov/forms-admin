@@ -28,7 +28,7 @@ RSpec.describe FormDocument::Content, type: :model do
   end
 
   it "has all form attributes the original form has" do
-    expected_attributes = form.attributes.except(*%w[id state external_id pages question_section_completed declaration_section_completed share_preview_completed])
+    expected_attributes = form.attributes.except(*%w[id state external_id pages question_section_completed declaration_section_completed share_preview_completed welsh_completed])
     expect(form_document_content).to have_attributes(expected_attributes)
   end
 

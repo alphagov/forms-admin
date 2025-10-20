@@ -141,7 +141,7 @@ private
 
   def translations_section_task
     [
-      { task_name: I18n.t("forms.task_list_#{create_or_edit}.translations_section.add_welsh"), path: translations_path(@form.id), status: @task_statuses[:translations_status] },
+      { task_name: I18n.t("forms.task_list_#{create_or_edit}.translations_section.add_welsh"), path: translations_path(@form.id), status: @task_statuses[:welsh_language_status] },
     ]
   end
 
