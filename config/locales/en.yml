@@ -347,10 +347,8 @@ en:
   forms:
     delete_confirmation:
       delete:
-        hint_for_live_draft: Deleting this draft will not remove the live form.
         title: Are you sure you want to delete this draft?
       destroy:
-        failure: Deletion unsuccessful
         success: The draft form, ‘%{form_name}’, has been deleted
     delete_form: Delete draft form
     form_overview:
