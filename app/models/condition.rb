@@ -1,5 +1,7 @@
 class Condition < ApplicationRecord
   include ConditionMethods
+  extend Mobility
+
   belongs_to :routing_page, class_name: "Page"
   belongs_to :check_page, class_name: "Page", optional: true
   belongs_to :goto_page, class_name: "Page", optional: true
@@ -7,6 +9,10 @@ class Condition < ApplicationRecord
   has_one :form, through: :routing_page
 
   before_destroy :destroy_postconditions
+
+  translates :answer_value,
+             :exit_page_heading
+  translates :exit_page_markdown, presence: false # Without presence here, the value is nil if set to ""
 
   def self.create_and_update_form!(...)
     condition = Condition.new(...)

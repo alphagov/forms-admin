@@ -64,6 +64,40 @@ RSpec.describe Condition, type: :model do
     end
   end
 
+  describe "translations" do
+    let(:condition) { create(:condition_record) }
+
+    it "can set and read translated attributes for :en and :cy locales" do
+      Mobility.with_locale(:en) do
+        condition.answer_value = "english_answer_value"
+        condition.exit_page_heading = "english_exit_page_heading"
+        condition.exit_page_markdown = "english_exit_page_markdown"
+        condition.save!
+      end
+
+      Mobility.with_locale(:cy) do
+        condition.answer_value = "welsh_answer_value"
+        condition.exit_page_heading = "welsh_exit_page_heading"
+        condition.exit_page_markdown = "welsh_exit_page_markdown"
+        condition.save!
+      end
+
+      Mobility.with_locale(:en) do
+        condition.reload
+        expect(condition.answer_value).to eq("english_answer_value")
+        expect(condition.exit_page_heading).to eq("english_exit_page_heading")
+        expect(condition.exit_page_markdown).to eq("english_exit_page_markdown")
+      end
+
+      Mobility.with_locale(:cy) do
+        condition.reload
+        expect(condition.answer_value).to eq("welsh_answer_value")
+        expect(condition.exit_page_heading).to eq("welsh_exit_page_heading")
+        expect(condition.exit_page_markdown).to eq("welsh_exit_page_markdown")
+      end
+    end
+  end
+
   describe ".create_and_update_form!" do
     let(:form) { create(:form) }
     let(:routing_page) { create(:page, form:) }

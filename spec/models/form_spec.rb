@@ -185,6 +185,62 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "translations" do
+    let(:form) { create(:form_record) }
+
+    let(:translated_attributes) do
+      %i[
+        privacy_policy_url
+        support_email
+        support_phone
+        support_url
+        support_url_text
+        declaration_text
+        what_happens_next_markdown
+      ]
+    end
+
+    it "can set and read translated attributes for :en and :cy locales" do
+      Mobility.with_locale(:en) do
+        form.name = "English Name"
+        form.payment_url = "https://example.gov.uk/en"
+        translated_attributes.each do |attribute|
+          form.send("#{attribute}=", "english_#{attribute}")
+        end
+        form.save!
+      end
+
+      Mobility.with_locale(:cy) do
+        form.name = "Welsh Name"
+        form.payment_url = "https://example.gov.uk/cy"
+        translated_attributes.each do |attribute|
+          form.send("#{attribute}=", "welsh_#{attribute}")
+        end
+        form.save!
+      end
+
+      Mobility.with_locale(:en) do
+        form.reload
+        expect(form.name).to eq("English Name")
+        expect(form.form_slug).to eq("english-name")
+        expect(form.payment_url).to eq("https://example.gov.uk/en")
+        translated_attributes.each do |attribute|
+          expect(form.send(attribute)).to eq("english_#{attribute}")
+        end
+      end
+
+      Mobility.with_locale(:cy) do
+        form.reload
+        expect(form.name).to eq("Welsh Name")
+        expect(form.form_slug).to eq("english-name")
+        expect(form.payment_url).to eq("https://example.gov.uk/cy")
+        translated_attributes.each do |attribute|
+          expect(form.send(attribute)).to eq("welsh_#{attribute}")
+        end
+      end
+    end
+  end
+
   describe "external_id" do
     it "intialises a new form with an external id matching its id" do
       form = create :form_record

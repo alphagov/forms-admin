@@ -10,9 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_26_113735) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_07_152124) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "condition_translations", force: :cascade do |t|
+    t.string "answer_value"
+    t.text "exit_page_markdown"
+    t.text "exit_page_heading"
+    t.string "locale", null: false
+    t.bigint "condition_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["condition_id", "locale"], name: "index_condition_translations_on_condition_id_and_locale", unique: true
+    t.index ["locale"], name: "index_condition_translations_on_locale"
+  end
 
   create_table "conditions", force: :cascade do |t|
     t.bigint "check_page_id", comment: "The question page this condition looks at to compare answers"
@@ -82,6 +94,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_26_113735) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["form_id"], name: "index_form_submission_emails_on_form_id"
+  end
+
+  create_table "form_translations", force: :cascade do |t|
+    t.text "name"
+    t.text "privacy_policy_url"
+    t.text "support_email"
+    t.text "support_phone"
+    t.text "support_url"
+    t.text "support_url_text"
+    t.text "declaration_text"
+    t.text "what_happens_next_markdown"
+    t.string "payment_url"
+    t.string "locale", null: false
+    t.bigint "form_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["form_id", "locale"], name: "index_form_translations_on_form_id_and_locale", unique: true
+    t.index ["locale"], name: "index_form_translations_on_locale"
   end
 
   create_table "forms", force: :cascade do |t|
@@ -172,6 +202,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_26_113735) do
     t.index ["slug"], name: "index_organisations_on_slug", unique: true
   end
 
+  create_table "page_translations", force: :cascade do |t|
+    t.text "question_text"
+    t.text "hint_text"
+    t.jsonb "answer_settings"
+    t.text "page_heading"
+    t.text "guidance_markdown"
+    t.string "locale", null: false
+    t.bigint "page_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["locale"], name: "index_page_translations_on_locale"
+    t.index ["page_id", "locale"], name: "index_page_translations_on_page_id_and_locale", unique: true
+  end
+
   create_table "pages", force: :cascade do |t|
     t.text "question_text"
     t.text "hint_text"
@@ -228,10 +272,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_26_113735) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "condition_translations", "conditions"
   add_foreign_key "create_form_events", "groups", on_delete: :cascade
   add_foreign_key "create_form_events", "users", on_delete: :cascade
   add_foreign_key "draft_questions", "users"
   add_foreign_key "form_documents", "forms"
+  add_foreign_key "form_translations", "forms"
   add_foreign_key "groups", "users", column: "creator_id"
   add_foreign_key "groups", "users", column: "upgrade_requester_id"
   add_foreign_key "memberships", "groups"
@@ -239,6 +285,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_26_113735) do
   add_foreign_key "memberships", "users", column: "added_by_id"
   add_foreign_key "mou_signatures", "organisations"
   add_foreign_key "mou_signatures", "users"
+  add_foreign_key "page_translations", "pages"
   add_foreign_key "pages", "forms"
   add_foreign_key "users", "organisations"
 end

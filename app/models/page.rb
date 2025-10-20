@@ -1,4 +1,5 @@
 class Page < ApplicationRecord
+  extend Mobility
   before_destroy :destroy_secondary_skip_conditions
 
   belongs_to :form
@@ -6,6 +7,12 @@ class Page < ApplicationRecord
   has_many :check_conditions, class_name: "Condition", foreign_key: "check_page_id", dependent: :destroy
   has_many :goto_conditions, class_name: "Condition", foreign_key: "goto_page_id", dependent: :destroy
   acts_as_list scope: :form
+
+  translates :question_text,
+             :hint_text,
+             :answer_settings,
+             :page_heading,
+             :guidance_markdown
 
   ANSWER_TYPES = %w[name organisation_name email phone_number national_insurance_number address date selection number text file].freeze
 
@@ -24,6 +31,10 @@ class Page < ApplicationRecord
   validate :guidance_markdown_length_and_tags
 
   attribute :answer_settings, DataStructType.new
+  # Open the Model class used for tanslations and make the same change to the answer_settings attribute
+  class Translation
+    attribute :answer_settings, DataStructType.new
+  end
 
   def self.create_and_update_form!(...)
     page = Page.new(...)
