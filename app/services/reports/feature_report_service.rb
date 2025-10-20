@@ -23,7 +23,7 @@ class Reports::FeatureReportService
       report[:forms_with_payment] += 1 if Reports::FormDocumentsService.has_payments?(form)
       report[:forms_with_routing] += 1 if Reports::FormDocumentsService.has_routes?(form)
       report[:forms_with_branch_routing] += 1 if Reports::FormDocumentsService.has_secondary_skip_routes?(form)
-      report[:forms_with_add_another_answer] += 1 if form["content"]["steps"].any? { |step| step["data"]["is_repeatable"] }
+      report[:forms_with_add_another_answer] += 1 if Reports::FormDocumentsService.has_add_another_answer?(form)
       report[:forms_with_csv_submission_enabled] += 1 if Reports::FormDocumentsService.has_csv_submission_enabled?(form)
       report[:forms_with_exit_pages] += 1 if Reports::FormDocumentsService.has_exit_pages?(form)
 

@@ -214,4 +214,29 @@ RSpec.describe Reports::FormDocumentsService do
       it { is_expected.to be false }
     end
   end
+
+  describe ".has_add_another_answer?" do
+    let(:form) do
+      create(:form, :live, pages: [
+        create(:page, is_repeatable:),
+      ])
+    end
+    let(:form_document) { form.live_form_document }
+
+    context "when the form has a question with add another answer" do
+      let(:is_repeatable) { true }
+
+      it "returns true" do
+        expect(described_class.has_add_another_answer?(form_document)).to be true
+      end
+    end
+
+    context "when the form does not have a question with add another answer" do
+      let(:is_repeatable) { false }
+
+      it "returns false" do
+        expect(described_class.has_add_another_answer?(form_document)).to be false
+      end
+    end
+  end
 end
