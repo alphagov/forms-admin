@@ -178,4 +178,93 @@ RSpec.describe GroupService do
       )
     end
   end
+
+  describe "#delete_group" do
+    let(:org) { create :organisation, :with_signed_mou }
+    let(:current_user) { create(:organisation_admin_user, organisation: org) }
+    let(:other_user) { create(:organisation_admin_user, organisation: org) }
+    let(:group) { create(:group, id: 2, organisation: org) }
+    let(:form) { create :form, id: 1 }
+    let(:delivery) { double }
+
+    before do
+      allow(GroupDeleteMailer).to receive_messages(group_deleted_email_org_admin: delivery, group_deleted_email_group_admins_and_editors: delivery)
+      allow(delivery).to receive(:deliver_now).with(any_args)
+    end
+
+    context "when there are other org admins" do
+      let(:org_admins) { create_list(:organisation_admin_user, 2, organisation: org) }
+
+      before do
+        org_admins.each do |admin|
+          Membership.create!(group: group, user: admin, role: :group_admin, added_by_id: current_user.id)
+        end
+      end
+
+      it "sends emails to other org admins" do
+        group_service.send_group_deleted_emails
+
+        expect(delivery).to have_received(:deliver_now).with(any_args).exactly(2).times
+
+        org_admins.each do |org_admin|
+          expect(GroupDeleteMailer).to have_received(:group_deleted_email_org_admin).with(
+            to_email: org_admin.email,
+            org_admin_name: current_user.name,
+            org_admin_email_address: current_user.email,
+            group_name: group.name,
+          )
+        end
+      end
+    end
+
+    context "when there are other group admins" do
+      let(:group_admins) { create_list(:user, 2, organisation: org) }
+
+      before do
+        group_admins.each do |admin|
+          Membership.create!(group: group, user: admin, role: :group_admin, added_by_id: current_user.id)
+        end
+      end
+
+      it "sends emails to group admins" do
+        group_service.send_group_deleted_emails
+
+        expect(delivery).to have_received(:deliver_now).with(any_args).exactly(2).times
+
+        group_admins.each do |user|
+          expect(GroupDeleteMailer).to have_received(:group_deleted_email_group_admins_and_editors).with(
+            to_email: user.email,
+            org_admin_name: current_user.name,
+            org_admin_email_address: current_user.email,
+            group_name: group.name,
+          )
+        end
+      end
+    end
+
+    context "when there are group editors" do
+      let(:group_editors) { create_list(:user, 2, organisation: org) }
+
+      before do
+        group_editors.each do |admin|
+          Membership.create!(group: group, user: admin, role: :editor, added_by_id: current_user.id)
+        end
+      end
+
+      it "sends emails to group editors" do
+        group_service.send_group_deleted_emails
+
+        expect(delivery).to have_received(:deliver_now).with(any_args).exactly(2).times
+
+        group_editors.each do |user|
+          expect(GroupDeleteMailer).to have_received(:group_deleted_email_group_admins_and_editors).with(
+            to_email: user.email,
+            org_admin_name: current_user.name,
+            org_admin_email_address: current_user.email,
+            group_name: group.name,
+          )
+        end
+      end
+    end
+  end
 end
