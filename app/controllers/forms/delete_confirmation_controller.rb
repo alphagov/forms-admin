@@ -33,7 +33,9 @@ module Forms
   private
 
     def delete_form_or_draft
-      if current_form.draft?
+      # We allow deleting a live form because the end to end tests use it to clear up forms.
+      # Real users are not intended to delete live forms and we don't show the button on live forms.
+      if current_form.draft? || current_form.live?
         success_url = group_path(current_form.group)
         success = current_form.destroy
         { success: success, redirect_url: success_url }
