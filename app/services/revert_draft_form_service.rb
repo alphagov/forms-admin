@@ -91,7 +91,7 @@ private
     form_document_condition_ids = all_conditions_data.pluck("id")
 
     # remove any conditions which have been added to the draft but are not in the form_document data
-    Condition.where(routing_page_id: form.pages.select(:id)).where.not(id: form_document_condition_ids).destroy_all
+    form.conditions.where.not(id: form_document_condition_ids).destroy_all
 
     all_conditions_data.each do |condition_data|
       condition = Condition.find_or_initialize_by(id: condition_data["id"])
