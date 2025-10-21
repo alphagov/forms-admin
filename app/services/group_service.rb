@@ -23,6 +23,10 @@ class GroupService
     send_group_upgrade_requested_emails
   end
 
+  def send_group_deleted_emails
+    send_group_deleted_emails_to_correct_users
+  end
+
 private
 
   def send_group_upgraded_emails
@@ -40,6 +44,21 @@ private
   def send_group_upgrade_requested_emails
     @group.organisation.admin_users.each do |user|
       send_group_upgrade_requested_email(user.email)
+    end
+  end
+
+  def send_group_deleted_emails_to_correct_users
+    @group.organisation.admin_users.each do |user|
+      next if user.id == @current_user.id
+
+      send_delete_email_to_org_admin_user(user.email)
+    end
+
+    @group.users.each do |user|
+      next if user.id == @current_user.id
+      next if user.organisation_admin?
+
+      send_delete_email_to_group_admin_or_editor_user(user.email)
     end
   end
 
@@ -73,6 +92,24 @@ private
       requester_email_address: @current_user.email,
       group_name: @group.name,
       view_request_url: group_url(@group, host: @host),
+    ).deliver_now
+  end
+
+  def send_delete_email_to_org_admin_user(to_email)
+    GroupDeleteMailer.group_deleted_email_org_admin(
+      to_email: to_email,
+      group_name: @group.name,
+      org_admin_email_address: @current_user.email,
+      org_admin_name: @current_user.name,
+    ).deliver_now
+  end
+
+  def send_delete_email_to_group_admin_or_editor_user(to_email)
+    GroupDeleteMailer.group_deleted_email_group_admins_and_editors(
+      to_email: to_email,
+      group_name: @group.name,
+      org_admin_email_address: @current_user.email,
+      org_admin_name: @current_user.name,
     ).deliver_now
   end
 end
