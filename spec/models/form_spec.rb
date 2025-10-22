@@ -5,12 +5,12 @@ RSpec.describe Form, type: :model do
 
   describe "factory" do
     it "has a valid factory" do
-      form = create :form_record
+      form = create :form
       expect(form).to be_valid
     end
 
     it "has a ready for live trait" do
-      form = build :form_record, :ready_for_live
+      form = build :form, :ready_for_live
       expect(form.ready_for_live).to be true
       expect(form.incomplete_tasks).to be_empty
       expect(form.task_statuses).to include(
@@ -25,33 +25,33 @@ RSpec.describe Form, type: :model do
     end
 
     it "has a live trait" do
-      form = build :form_record, :live
+      form = build :form, :live
       expect(form.state).to eq "live"
     end
 
     it "has a live with draft trait" do
-      form = build :form_record, :live_with_draft
+      form = build :form, :live_with_draft
       expect(form.state).to eq "live_with_draft"
     end
 
     it "has an archived trait" do
-      form = build :form_record, :archived
+      form = build :form, :archived
       expect(form.state).to eq "archived"
     end
 
     it "has an archived with draft trait" do
-      form = build :form_record, :archived_with_draft
+      form = build :form, :archived_with_draft
       expect(form.state).to eq "archived_with_draft"
     end
 
     it "has a ready for routing trait" do
-      form = create :form_record, :ready_for_routing
+      form = create :form, :ready_for_routing
       expect(form.pages).to be_present
       expect(form.pages.map(&:position)).to eq [1, 2, 3, 4, 5]
     end
 
     it "has a missing pages trait" do
-      form = build :form_record, :missing_pages
+      form = build :form, :missing_pages
       expect(form.incomplete_tasks).to eq %i[missing_pages]
     end
   end
@@ -111,13 +111,13 @@ RSpec.describe Form, type: :model do
     end
 
     context "when the form has validation errors" do
-      let(:form) { create :form_record, pages: [routing_page, goto_page] }
+      let(:form) { create :form, pages: [routing_page, goto_page] }
       let(:routing_page) do
-        new_routing_page = create :page_record
-        new_routing_page.routing_conditions = [(create :condition_record, routing_page_id: new_routing_page.id, goto_page_id: nil)]
+        new_routing_page = create :page
+        new_routing_page.routing_conditions = [(create :condition, routing_page_id: new_routing_page.id, goto_page_id: nil)]
         new_routing_page
       end
-      let(:goto_page) { create :page_record }
+      let(:goto_page) { create :page }
       let(:goto_page_id) { goto_page.id }
 
       context "when the form is marked complete" do
@@ -186,7 +186,7 @@ RSpec.describe Form, type: :model do
   end
 
   describe "translations" do
-    let(:form) { create(:form_record) }
+    let(:form) { create(:form) }
 
     let(:translated_attributes) do
       %i[
@@ -243,7 +243,7 @@ RSpec.describe Form, type: :model do
 
   describe "external_id" do
     it "intialises a new form with an external id matching its id" do
-      form = create :form_record
+      form = create :form
       expect(form.external_id).to eq(form.id.to_s)
     end
   end
@@ -259,10 +259,10 @@ RSpec.describe Form, type: :model do
 
   describe "page scope" do
     it "returns pages in position order" do
-      form = create :form_record
+      form = create :form
 
-      page_a = create :page_record, form_id: form.id, position: 2
-      page_b = create :page_record, form_id: form.id, position: 1
+      page_a = create :page, form_id: form.id, position: 2
+      page_b = create :page, form_id: form.id, position: 1
 
       expect(form.reload.pages).to eq([page_b, page_a])
     end
@@ -346,7 +346,7 @@ RSpec.describe Form, type: :model do
 
   describe "FormStateMachine" do
     describe "#create_draft_from_live_form!" do
-      let(:form) { create :form_record, :live }
+      let(:form) { create :form, :live }
 
       it "sets share_preview_completed to false" do
         expect { form.create_draft_from_live_form! }.to change(form, :share_preview_completed).to(false)
@@ -354,7 +354,7 @@ RSpec.describe Form, type: :model do
     end
 
     describe "#create_draft_from_archived_form!" do
-      let(:form) { create :form_record, :archived }
+      let(:form) { create :form, :archived }
 
       it "sets share_preview_completed to false" do
         expect { form.create_draft_from_archived_form! }.to change(form, :share_preview_completed).to(false)
@@ -403,8 +403,8 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#has_draft_version" do
-    let(:live_form) { create(:form_record, :live) }
-    let(:new_form) { create(:form_record) }
+    let(:live_form) { create(:form, :live) }
+    let(:new_form) { create(:form) }
 
     it "returns true if form is draft" do
       new_form.state = :draft
@@ -438,8 +438,8 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#has_live_version" do
-    let(:live_form) { create(:form_record, :live) }
-    let(:new_form) { create(:form_record) }
+    let(:live_form) { create(:form, :live) }
+    let(:new_form) { create(:form) }
 
     it "returns false if form has not been made live before" do
       expect(new_form.has_live_version).to be(false)
@@ -451,9 +451,9 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#has_been_archived" do
-    let(:live_form) { create(:form_record, :live) }
-    let(:archived_form) { create(:form_record, state: :archived) }
-    let(:archived_with_draft_form) { create(:form_record, state: :archived_with_draft) }
+    let(:live_form) { create(:form, :live) }
+    let(:archived_form) { create(:form, state: :archived) }
+    let(:archived_with_draft_form) { create(:form, state: :archived_with_draft) }
 
     it "returns false if form is live" do
       expect(live_form.has_been_archived).to be(false)
@@ -469,13 +469,13 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#has_routing_errors" do
-    let(:form) { create :form_record, pages: [routing_page, goto_page] }
+    let(:form) { create :form, pages: [routing_page, goto_page] }
     let(:routing_page) do
-      new_routing_page = create :page_record
-      new_routing_page.routing_conditions = [(create :condition_record, routing_page_id: new_routing_page.id, goto_page_id:)]
+      new_routing_page = create :page
+      new_routing_page.routing_conditions = [(create :condition, routing_page_id: new_routing_page.id, goto_page_id:)]
       new_routing_page
     end
-    let(:goto_page) { create :page_record }
+    let(:goto_page) { create :page }
     let(:goto_page_id) { goto_page.id }
 
     context "when there are no validation errors" do
@@ -495,7 +495,7 @@ RSpec.describe Form, type: :model do
 
   describe "#ready_for_live" do
     context "when a form is complete and ready to be made live" do
-      let(:completed_form) { create(:form_record, :live) }
+      let(:completed_form) { create(:form, :live) }
 
       it "returns true" do
         expect(completed_form.ready_for_live).to be true
@@ -503,7 +503,7 @@ RSpec.describe Form, type: :model do
     end
 
     context "when a form is incomplete and should still be in draft state" do
-      let(:new_form) { build :form_record, :new_form }
+      let(:new_form) { build :form, :new_form }
 
       [
         {
@@ -533,7 +533,7 @@ RSpec.describe Form, type: :model do
 
   describe "#all_incomplete_tasks" do
     context "when a form is complete and ready to be made live" do
-      let(:completed_form) { build :form_record, :live }
+      let(:completed_form) { build :form, :live }
 
       it "returns no missing sections" do
         expect(completed_form.all_incomplete_tasks).to be_empty
@@ -541,7 +541,7 @@ RSpec.describe Form, type: :model do
     end
 
     context "when a form is incomplete and should still be in draft state" do
-      let(:new_form) { build :form_record, :new_form }
+      let(:new_form) { build :form, :new_form }
 
       it "returns a set of keys related to missing fields" do
         expect(new_form.all_incomplete_tasks).to match_array(%i[missing_pages missing_submission_email missing_privacy_policy_url missing_contact_details missing_what_happens_next share_preview_not_completed])
@@ -559,10 +559,10 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#destroy" do
-    let(:form) { create :form_record }
+    let(:form) { create :form }
 
     context "when form is in a group" do
-      let(:form) { create :form_record }
+      let(:form) { create :form }
 
       before do
         group = create :group
@@ -619,7 +619,7 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#all_task_statuses" do
-    let(:completed_form) { build :form_record, :live }
+    let(:completed_form) { build :form, :live }
 
     it "returns a hash with each of the task statuses" do
       expected_hash = {
@@ -641,7 +641,7 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#page_number" do
-    let(:completed_form) { create :form_record, :live }
+    let(:completed_form) { create :form, :live }
 
     context "with an existing page" do
       let(:page) { completed_form.pages.first }
@@ -662,7 +662,7 @@ RSpec.describe Form, type: :model do
     end
 
     context "with an new page" do
-      let(:page) { create :page_record }
+      let(:page) { create :page }
 
       it "returns the position for a new page" do
         expect(completed_form.page_number(page)).to eq(completed_form.pages.count + 1)
@@ -676,7 +676,7 @@ RSpec.describe Form, type: :model do
     end
 
     context "with a page which has a null id" do
-      let(:page) { build :page_record, id: nil }
+      let(:page) { build :page, id: nil }
 
       it "returns the position for a new page" do
         expect(completed_form.page_number(nil)).to eq(completed_form.pages.count + 1)
@@ -685,7 +685,7 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#email_confirmation_status" do
-    let(:form) { create :form_record, :new_form }
+    let(:form) { create :form, :new_form }
 
     it "returns :not_started" do
       expect(form.email_confirmation_status).to eq(:not_started)
@@ -714,20 +714,20 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#qualifying_route_pages" do
-    let(:form) { create :form_record }
-    let!(:non_selection_page) { create(:page_record, form:, position: 1) }
-    let!(:selection_page_without_routes) { create(:page_record, :with_selection_settings, form:, position: 2) }
-    let!(:selection_page_with_route) { create(:page_record, :with_selection_settings, form:, position: 3) }
-    let!(:selection_page_with_branching) { create(:page_record, :with_selection_settings, form:, position: 4) }
-    let!(:secondary_skip_page) { create(:page_record, :with_selection_settings, form:, position: 5) }
-    let!(:branch_route_go_to_page) { create(:page_record, :with_selection_settings, form:, position: 6) }
-    let!(:last_page) { create(:page_record, :with_selection_settings, form:, position: 7) }
+    let(:form) { create :form }
+    let!(:non_selection_page) { create(:page, form:, position: 1) }
+    let!(:selection_page_without_routes) { create(:page, :with_selection_settings, form:, position: 2) }
+    let!(:selection_page_with_route) { create(:page, :with_selection_settings, form:, position: 3) }
+    let!(:selection_page_with_branching) { create(:page, :with_selection_settings, form:, position: 4) }
+    let!(:secondary_skip_page) { create(:page, :with_selection_settings, form:, position: 5) }
+    let!(:branch_route_go_to_page) { create(:page, :with_selection_settings, form:, position: 6) }
+    let!(:last_page) { create(:page, :with_selection_settings, form:, position: 7) }
 
     before do
-      create(:condition_record, routing_page_id: selection_page_with_route.id, check_page_id: selection_page_with_route.id, answer_value: "Option 1", goto_page_id: secondary_skip_page.id)
+      create(:condition, routing_page_id: selection_page_with_route.id, check_page_id: selection_page_with_route.id, answer_value: "Option 1", goto_page_id: secondary_skip_page.id)
 
-      create(:condition_record, routing_page_id: selection_page_with_branching.id, check_page_id: selection_page_with_branching.id, answer_value: "Option 1", goto_page_id: branch_route_go_to_page.id)
-      create(:condition_record, routing_page_id: secondary_skip_page.id, check_page_id: selection_page_with_branching.id, goto_page_id: last_page.id)
+      create(:condition, routing_page_id: selection_page_with_branching.id, check_page_id: selection_page_with_branching.id, answer_value: "Option 1", goto_page_id: branch_route_go_to_page.id)
+      create(:condition, routing_page_id: secondary_skip_page.id, check_page_id: selection_page_with_branching.id, goto_page_id: last_page.id)
 
       form.reload
       form.pages.each(&:reload)
@@ -766,17 +766,17 @@ RSpec.describe Form, type: :model do
 
   describe "#has_no_remaining_routes_available?" do
     context "when the form has routes" do
-      let(:form) { create :form_record }
+      let(:form) { create :form }
       let(:pages) do
         [
-          create(:page_record, :with_selection_settings, form:, position: 1),
-          create(:page_record, :with_selection_settings, form:, position: 2),
-          create(:page_record, :with_selection_settings, form:, position: 3),
+          create(:page, :with_selection_settings, form:, position: 1),
+          create(:page, :with_selection_settings, form:, position: 2),
+          create(:page, :with_selection_settings, form:, position: 3),
         ]
       end
 
       before do
-        create :condition_record, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Option 1", skip_to_end: true
+        create :condition, routing_page_id: pages.first.id, check_page_id: pages.first.id, answer_value: "Option 1", skip_to_end: true
         form.pages.each(&:reload)
       end
 
@@ -788,7 +788,7 @@ RSpec.describe Form, type: :model do
 
       context "when there are no pages that a route can be added to" do
         before do
-          create :condition_record, routing_page_id: pages.second.id, check_page_id: pages.first.id, skip_to_end: true
+          create :condition, routing_page_id: pages.second.id, check_page_id: pages.first.id, skip_to_end: true
           form.pages.each(&:reload)
         end
 
@@ -799,8 +799,8 @@ RSpec.describe Form, type: :model do
     end
 
     context "when the form does not have routes" do
-      let(:form) { create :form_record }
-      let(:pages) { create_list :page_record, 3, :with_selection_settings, form: }
+      let(:form) { create :form }
+      let(:pages) { create_list :page, 3, :with_selection_settings, form: }
 
       it "returns false" do
         expect(form.has_no_remaining_routes_available?).to be(false)
@@ -809,7 +809,7 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#group" do
-    let(:form) { create :form_record }
+    let(:form) { create :form }
 
     it "returns nil if form is not in a group" do
       expect(form.group).to be_nil
@@ -823,12 +823,12 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#file_upload_question_count" do
-    let(:form) { create :form_record }
+    let(:form) { create :form }
 
     before do
-      create_list :page_record, 3, form:, answer_type: :file
+      create_list :page, 3, form:, answer_type: :file
       Page::ANSWER_TYPES.each do |answer_type|
-        create(:page_record, form:, answer_type:)
+        create(:page, form:, answer_type:)
       end
     end
 
