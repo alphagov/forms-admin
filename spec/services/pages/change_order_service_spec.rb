@@ -80,4 +80,131 @@ RSpec.describe Pages::ChangeOrderService do
       end
     end
   end
+
+  describe ".update_page_order" do
+    let(:form) { create(:form, :with_pages, pages_count: 5, question_section_completed:) }
+    let(:question_section_completed) { true }
+    let(:pages) { form.pages }
+
+    context "when the input array has already been ordered by the new page positions" do
+      let(:page_ids_and_positions) do
+        [
+          { page_id: pages[1].id, new_position: nil },
+          { page_id: pages[4].id, new_position: nil },
+          { page_id: pages[3].id, new_position: nil },
+          { page_id: pages[0].id, new_position: nil },
+          { page_id: pages[2].id, new_position: nil },
+        ]
+      end
+
+      it "updates the page positions to match the new order" do
+        expected_order = page_ids_and_positions.map { it[:page_id] }
+
+        described_class.update_page_order(form:, page_ids_and_positions:)
+        expect(pages.reload.map(&:id)).to eq(expected_order)
+      end
+
+      context "when the form's question_section_completed is true" do
+        it "updates question_section_completed to false" do
+          expect {
+            described_class.update_page_order(form:, page_ids_and_positions:)
+          }.to change { form.reload.question_section_completed }.from(true).to(false)
+        end
+
+        it "updates the draft form document" do
+          described_class.update_page_order(form:, page_ids_and_positions:)
+          expect(form.reload.draft_form_document.content["steps"][0]).to include({
+            "id" => pages[1].id,
+            "next_step_id" => pages[4].id,
+          })
+        end
+      end
+
+      context "when the form's question_section_completed is false" do
+        let(:question_section_completed) { false }
+
+        it "updates the draft form document" do
+          described_class.update_page_order(form:, page_ids_and_positions:)
+          expect(form.reload.draft_form_document.content["steps"][0]).to include({
+            "id" => pages[1].id,
+            "next_step_id" => pages[4].id,
+          })
+        end
+      end
+    end
+
+    context "when the input array has not yet been ordered by the new page positions" do
+      let(:page_ids_and_positions) do
+        [
+          { page_id: pages[0].id, new_position: 4 },
+          { page_id: pages[1].id, new_position: 1 },
+          { page_id: pages[2].id, new_position: 5 },
+          { page_id: pages[3].id, new_position: 3 },
+          { page_id: pages[4].id, new_position: 2 },
+        ]
+      end
+
+      it "calculates the new order and updates the page positions accordingly" do
+        expected_order = [pages[1].id, pages[4].id, pages[3].id, pages[0].id, pages[2].id]
+
+        described_class.update_page_order(form:, page_ids_and_positions:)
+        expect(pages.reload.map(&:id)).to eq(expected_order)
+      end
+    end
+
+    context "when a page has been added to the form that does not exist in the input array" do
+      let(:page_ids_and_positions) do
+        [
+          { page_id: pages[1].id, new_position: nil },
+          { page_id: pages[3].id, new_position: nil },
+          { page_id: pages[0].id, new_position: nil },
+          { page_id: pages[2].id, new_position: nil },
+        ]
+      end
+
+      it "raises an error" do
+        expect { described_class.update_page_order(form:, page_ids_and_positions:) }
+          .to raise_error Pages::ChangeOrderService::FormPagesAddedError
+      end
+    end
+
+    context "when a page exists in the input array that has been deleted from the form" do
+      let(:non_existent_page_id) { pages.last.id + 1 }
+      let(:page_ids_and_positions) do
+        [
+          { page_id: pages[1].id, new_position: nil },
+          { page_id: pages[4].id, new_position: nil },
+          { page_id: non_existent_page_id, new_position: nil },
+          { page_id: pages[3].id, new_position: nil },
+          { page_id: pages[0].id, new_position: nil },
+          { page_id: pages[2].id, new_position: nil },
+        ]
+      end
+
+      it "sets the new order, omitting the deleted page" do
+        expected_order = [pages[1].id, pages[4].id, pages[3].id, pages[0].id, pages[2].id]
+
+        described_class.update_page_order(form:, page_ids_and_positions:)
+        expect(pages.reload.map(&:id)).to eq(expected_order)
+      end
+    end
+
+    context "when a page has been added and another page has been deleted from the form" do
+      let(:non_existent_page_id) { pages.last.id + 1 }
+      let(:page_ids_and_positions) do
+        [
+          { page_id: pages[1].id, new_position: nil },
+          { page_id: pages[3].id, new_position: nil },
+          { page_id: pages[0].id, new_position: nil },
+          { page_id: pages[2].id, new_position: nil },
+          { page_id: non_existent_page_id, new_position: nil },
+        ]
+      end
+
+      it "raises an error" do
+        expect { described_class.update_page_order(form:, page_ids_and_positions:) }
+          .to raise_error Pages::ChangeOrderService::FormPagesAddedError
+      end
+    end
+  end
 end
