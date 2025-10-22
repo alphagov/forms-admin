@@ -1,4 +1,6 @@
 class ReorderPagesService
+  class FormPagesConflictError < StandardError; end
+
   def self.generate_new_page_order(page_ids_and_positions)
     pages_with_position = page_ids_and_positions.select { |page| page[:new_position].present? }
                                              .sort_by { |page| page[:new_position].to_i }
@@ -24,5 +26,17 @@ class ReorderPagesService
     end
 
     new_page_order
+  end
+
+  def self.update_page_order(form:, page_ids_and_positions:)
+    new_page_order = generate_new_page_order(page_ids_and_positions)
+
+    raise FormPagesConflictError if form.pages.pluck(:id).sort != new_page_order.sort
+
+    Page.acts_as_list_no_update do
+      new_page_order.each_with_index do |page_id, index|
+        form.pages.find(page_id).update!(position: index + 1)
+      end
+    end
   end
 end
