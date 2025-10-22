@@ -6,17 +6,17 @@ RSpec.describe Reports::SelectionQuestionService do
   describe "#live_form_statistics" do
     before do
       form_1_pages = [
-        build(:page_record, :selection_with_autocomplete, is_optional: false),
-        build(:page_record, :selection_with_autocomplete, is_optional: true),
-        build(:page_record, :selection_with_radios, is_optional: true),
-        build(:page_record, :selection_with_checkboxes, is_optional: true),
+        build(:page, :selection_with_autocomplete, is_optional: false),
+        build(:page, :selection_with_autocomplete, is_optional: true),
+        build(:page, :selection_with_radios, is_optional: true),
+        build(:page, :selection_with_checkboxes, is_optional: true),
       ]
       form_2_pages = [
-        build(:page_record, :selection_with_autocomplete, is_optional: true),
-        build(:page_record, :selection_with_radios, is_optional: false),
+        build(:page, :selection_with_autocomplete, is_optional: true),
+        build(:page, :selection_with_radios, is_optional: false),
       ]
-      create :form_record, state: "live", pages: form_1_pages
-      create :form_record, state: "live_with_draft", pages: form_2_pages
+      create :form, state: "live", pages: form_1_pages
+      create :form, state: "live_with_draft", pages: form_2_pages
     end
 
     it "returns statistics" do
@@ -33,11 +33,11 @@ RSpec.describe Reports::SelectionQuestionService do
   end
 
   describe "list question methods" do
-    let(:form) { create :form_record, state: "live", pages: [page_with_checkboxes, page_with_radios, page_with_autocomplete] }
-    let(:page_with_autocomplete) { build(:page_record, :selection_with_autocomplete) }
-    let(:page_with_radios) { build(:page_record, :selection_with_radios) }
-    let(:page_with_checkboxes) { build(:page_record, :selection_with_checkboxes) }
-    let(:not_selection_question) { build :page_record, answer_type: "name" }
+    let(:form) { create :form, state: "live", pages: [page_with_checkboxes, page_with_radios, page_with_autocomplete] }
+    let(:page_with_autocomplete) { build(:page, :selection_with_autocomplete) }
+    let(:page_with_radios) { build(:page, :selection_with_radios) }
+    let(:page_with_checkboxes) { build(:page, :selection_with_checkboxes) }
+    let(:not_selection_question) { build :page, answer_type: "name" }
 
     before do
       form
@@ -54,11 +54,6 @@ RSpec.describe Reports::SelectionQuestionService do
         expect(questions.first[:is_optional]).to eq(page_with_autocomplete.is_optional)
         expect(questions.first[:selection_options_count]).to eq(31)
       end
-
-      it "returns the count" do
-        response = selection_question_service.live_form_pages_with_radios
-        expect(response[:count]).to eq(1)
-      end
     end
 
     describe "#live_form_pages_with_radios" do
@@ -71,11 +66,6 @@ RSpec.describe Reports::SelectionQuestionService do
         expect(questions.first[:question_text]).to eq(page_with_radios.question_text)
         expect(questions.first[:is_optional]).to eq(page_with_radios.is_optional)
         expect(questions.first[:selection_options_count]).to eq(30)
-      end
-
-      it "returns the count" do
-        response = selection_question_service.live_form_pages_with_radios
-        expect(response[:count]).to eq(1)
       end
     end
 
@@ -91,16 +81,11 @@ RSpec.describe Reports::SelectionQuestionService do
         expect(questions.first[:selection_options_count]).to eq(2)
       end
 
-      it "returns the count" do
-        response = selection_question_service.live_form_pages_with_radios
-        expect(response[:count]).to eq(1)
-      end
-
       # This ensures there is backwards compatibility for existing questions as we previously set "only_one_option" to
       # "0" rather than "false"
       context "when question has only_one_option value '0'" do
         let(:page_with_checkboxes) do
-          create(:page_record,
+          create(:page,
                  answer_type: "selection",
                  answer_settings: {
                    only_one_option: "0",

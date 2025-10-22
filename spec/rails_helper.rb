@@ -36,7 +36,6 @@ Capybara.server = :puma, { Silent: true }
 
 # Prevent specs from calling a running forms-api instance
 WebMock.disable_net_connect!(allow_localhost: true)
-ActiveResource::HttpMock.disable_net_connection!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are

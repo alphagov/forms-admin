@@ -1,20 +1,20 @@
 require "rails_helper"
 
 RSpec.describe Page, type: :model do
-  subject(:page) { create :page_record, :with_selection_settings, form:, routing_conditions:, check_conditions: }
+  subject(:page) { create :page, :with_selection_settings, form:, routing_conditions:, check_conditions: }
 
-  let(:form) { create :form_record }
+  let(:form) { create :form }
   let(:routing_conditions) { [] }
   let(:check_conditions) { [] }
 
   it "has a valid factory" do
-    page = create :page_record
+    page = create :page
     expect(page).to be_valid
   end
 
   shared_examples "update form state" do
     context "when the form is live" do
-      let(:form) { create(:form_record, :live) }
+      let(:form) { create(:form, :live) }
 
       it "updates the form state to live_with_draft" do
         expect(form.state).to eq("live_with_draft")
@@ -22,7 +22,7 @@ RSpec.describe Page, type: :model do
     end
 
     context "when the form is archived" do
-      let(:form) { create(:form_record, :archived) }
+      let(:form) { create(:form, :archived) }
 
       it "updates the form state to archived_with_draft" do
         expect(form.state).to eq("archived_with_draft")
@@ -31,8 +31,8 @@ RSpec.describe Page, type: :model do
   end
 
   describe "associations" do
-    let(:form) { create :form_record }
-    let(:page) { create :page_record, form: }
+    let(:form) { create :form }
+    let(:page) { create :page, form: }
 
     context "when it has a routing condition" do
       let!(:condition) { page.routing_conditions.create! }
@@ -45,7 +45,7 @@ RSpec.describe Page, type: :model do
     end
 
     context "when it has a check condition" do
-      let(:routing_page) { create :page_record, form: }
+      let(:routing_page) { create :page, form: }
       let!(:condition) { page.check_conditions.create! routing_page: }
 
       it "deletes the condition if it is deleted" do
@@ -56,7 +56,7 @@ RSpec.describe Page, type: :model do
     end
 
     context "when it has a go to condition" do
-      let(:routing_page) { create :page_record, form: }
+      let(:routing_page) { create :page, form: }
       let!(:condition) { page.goto_conditions.create! routing_page: }
 
       it "removes association from the condition if it is deleted" do
@@ -67,7 +67,7 @@ RSpec.describe Page, type: :model do
       end
 
       context "and the routing page has a secondary skip condition" do
-        let(:end_of_first_branch) { create :page_record, form: }
+        let(:end_of_first_branch) { create :page, form: }
         let!(:condition) { page.goto_conditions.create! routing_page:, check_page: routing_page }
         let!(:secondary_skip_condition) { routing_page.check_conditions.create! routing_page: end_of_first_branch, skip_to_end: true }
 
@@ -97,16 +97,16 @@ RSpec.describe Page, type: :model do
     end
 
     context "when the form has a branching route with skip and secondary skip" do
-      let(:branch_question) { create :page_record, form: }
-      let(:end_of_first_branch) { create :page_record, form: }
-      let(:start_of_second_branch) { create :page_record, form: }
-      let(:end_of_branches) { create :page_record, form: }
+      let(:branch_question) { create :page, form: }
+      let(:end_of_first_branch) { create :page, form: }
+      let(:start_of_second_branch) { create :page, form: }
+      let(:end_of_branches) { create :page, form: }
 
       let!(:skip_condition) do
-        create :condition_record, routing_page: branch_question, check_page: branch_question, goto_page: start_of_second_branch
+        create :condition, routing_page: branch_question, check_page: branch_question, goto_page: start_of_second_branch
       end
       let!(:secondary_skip_condition) do
-        create :condition_record, routing_page: end_of_first_branch, check_page: branch_question, goto_page: end_of_branches
+        create :condition, routing_page: end_of_first_branch, check_page: branch_question, goto_page: end_of_branches
       end
 
       before do
@@ -170,7 +170,7 @@ RSpec.describe Page, type: :model do
     end
 
     describe "#question_text" do
-      let(:page) { build :page_record, question_text: }
+      let(:page) { build :page, question_text: }
       let(:question_text) { "What is your address?" }
 
       it "is required" do
@@ -206,7 +206,7 @@ RSpec.describe Page, type: :model do
     end
 
     describe "#hint_text" do
-      let(:page) { build :page_record, hint_text: }
+      let(:page) { build :page, hint_text: }
       let(:hint_text) { "Enter your full name as it appears in your passport" }
 
       it "is valid if hint text is empty" do
@@ -272,7 +272,7 @@ RSpec.describe Page, type: :model do
       end
 
       describe "page_heading length validations" do
-        let(:page) { build :page_record, :with_guidance, page_heading: }
+        let(:page) { build :page, :with_guidance, page_heading: }
         let(:page_heading) { "What is your address?" }
 
         it "is valid if page heading below 500 characters" do
@@ -411,7 +411,7 @@ RSpec.describe Page, type: :model do
     end
 
     context "when the form question section is complete" do
-      let(:form) { create(:form_record, question_section_completed: true) }
+      let(:form) { create(:form, question_section_completed: true) }
 
       it "updates the form to mark the question section as incomplete" do
         expect {
@@ -437,7 +437,7 @@ RSpec.describe Page, type: :model do
   end
 
   describe "#destroy_and_update_form!" do
-    let(:page) { create :page_record }
+    let(:page) { create :page }
     let(:form) { page.form }
 
     it "sets form.question_section_completed to false" do
@@ -463,7 +463,7 @@ RSpec.describe Page, type: :model do
     end
 
     context "when page has routing conditions" do
-      let(:routing_conditions) { [(create :condition_record)] }
+      let(:routing_conditions) { [(create :condition)] }
       let(:check_conditions) { routing_conditions }
 
       it "does not delete existing conditions" do
@@ -600,7 +600,7 @@ RSpec.describe Page, type: :model do
     end
 
     context "when there is a next page" do
-      let!(:next_page) { create :page_record, form: page.form }
+      let!(:next_page) { create :page, form: page.form }
 
       it "returns the next page" do
         expect(page.next_page).to eq(next_page.id)
@@ -617,7 +617,7 @@ RSpec.describe Page, type: :model do
 
     context "when there is a next page" do
       before do
-        create :page_record, form: page.form
+        create :page, form: page.form
       end
 
       it "returns true" do
@@ -627,9 +627,9 @@ RSpec.describe Page, type: :model do
   end
 
   describe "#has_routing_errors" do
-    subject(:page) { build :page_record, :with_selection_settings, routing_conditions: [condition] }
+    subject(:page) { build :page, :with_selection_settings, routing_conditions: [condition] }
 
-    let(:condition) { build :condition_record }
+    let(:condition) { build :condition }
     let(:has_routing_errors) { false }
 
     before do
@@ -653,7 +653,7 @@ RSpec.describe Page, type: :model do
 
   describe "#answer_settings" do
     context "when the answer_settings are a Hash" do
-      let(:page) { build :page_record, answer_settings: { "first_key" => "first_keys_value", "second_key" => { "third_key" => "third_keys_value" } } }
+      let(:page) { build :page, answer_settings: { "first_key" => "first_keys_value", "second_key" => { "third_key" => "third_keys_value" } } }
 
       it "returns an OpenStruct with the answer settings" do
         expect(page.answer_settings).to be_a(OpenStruct)

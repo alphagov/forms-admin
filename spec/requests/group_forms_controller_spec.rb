@@ -52,7 +52,7 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
     let(:form) { build :form, id: 1 }
 
     before do
-      create(:form_record, id: form.id)
+      create(:form, id: form.id)
       login_as_organisation_admin_user
 
       group.group_forms.create!(form_id: form.id)

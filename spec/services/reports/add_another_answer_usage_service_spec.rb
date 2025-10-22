@@ -4,17 +4,17 @@ describe Reports::AddAnotherAnswerUsageService do
   subject(:features_report_service) { described_class.new }
 
   describe "#add_another_answer_forms" do
-    let!(:add_another_answer_draft_form) { create(:form_record, state: "draft", pages: draft_form_pages) }
+    let!(:add_another_answer_draft_form) { create(:form, state: "draft", pages: draft_form_pages) }
     let(:draft_form_pages) do
       [
-        (build :page_record, answer_type: "name", is_repeatable: true),
+        (build :page, answer_type: "name", is_repeatable: true),
       ]
     end
-    let!(:add_another_answer_live_form) { create(:form_record, state: "live", pages: live_form_pages) }
+    let!(:add_another_answer_live_form) { create(:form, state: "live", pages: live_form_pages) }
     let(:live_form_pages) do
       [
-        (build :page_record, answer_type: "name", is_repeatable: true),
-        (build :page_record, answer_type: "text", is_repeatable: true),
+        (build :page, answer_type: "name", is_repeatable: true),
+        (build :page, answer_type: "text", is_repeatable: true),
       ]
     end
 

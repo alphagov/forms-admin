@@ -3,7 +3,6 @@ require "resolv"
 class WebController < ApplicationController
   include Pundit::Authorization
   include AfterSignInPathHelper
-  before_action :set_request_id
   before_action :check_maintenance_mode_is_enabled
   before_action :authenticate_and_check_access
   before_action :set_paper_trail_whodunnit
@@ -31,15 +30,6 @@ class WebController < ApplicationController
   def check_maintenance_mode_is_enabled
     if Settings.maintenance_mode.enabled && non_maintenance_bypass_ip_address?
       redirect_to maintenance_page_path
-    end
-  end
-
-  def set_request_id
-    # Pass the request id to the API to enable tracing
-    if Rails.env.production?
-      [Api::V1::FormResource, Api::V1::PageResource].each do |active_resource_model|
-        active_resource_model.headers["X-Request-ID"] = request.request_id
-      end
     end
   end
 
