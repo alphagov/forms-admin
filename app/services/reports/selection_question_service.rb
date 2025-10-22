@@ -65,8 +65,7 @@ class Reports::SelectionQuestionService
 private
 
   def question_list_response(questions)
-    # adding the count even though forms-admin doesn't use it as ActiveResource doesn't like parsing JSON with a single root key
-    OpenStruct.new(questions:, count: questions.length)
+    OpenStruct.new(questions:)
   end
 
   def all_selection_questions

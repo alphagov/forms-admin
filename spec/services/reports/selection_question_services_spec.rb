@@ -54,11 +54,6 @@ RSpec.describe Reports::SelectionQuestionService do
         expect(questions.first[:is_optional]).to eq(page_with_autocomplete.is_optional)
         expect(questions.first[:selection_options_count]).to eq(31)
       end
-
-      it "returns the count" do
-        response = selection_question_service.live_form_pages_with_radios
-        expect(response[:count]).to eq(1)
-      end
     end
 
     describe "#live_form_pages_with_radios" do
@@ -72,11 +67,6 @@ RSpec.describe Reports::SelectionQuestionService do
         expect(questions.first[:is_optional]).to eq(page_with_radios.is_optional)
         expect(questions.first[:selection_options_count]).to eq(30)
       end
-
-      it "returns the count" do
-        response = selection_question_service.live_form_pages_with_radios
-        expect(response[:count]).to eq(1)
-      end
     end
 
     describe "#live_form_pages_with_checkboxes" do
@@ -89,11 +79,6 @@ RSpec.describe Reports::SelectionQuestionService do
         expect(questions.first[:question_text]).to eq(page_with_checkboxes.question_text)
         expect(questions.first[:is_optional]).to eq(page_with_checkboxes.is_optional)
         expect(questions.first[:selection_options_count]).to eq(2)
-      end
-
-      it "returns the count" do
-        response = selection_question_service.live_form_pages_with_radios
-        expect(response[:count]).to eq(1)
       end
 
       # This ensures there is backwards compatibility for existing questions as we previously set "only_one_option" to
