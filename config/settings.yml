@@ -32,6 +32,8 @@ govuk_notify:
   group_upgraded_template_id: b5d0d3d4-fc24-403e-aba6-b421fdcebd55
   group_upgrade_requested_template_id: e2251c92-9365-429a-9857-56780263718f
   group_upgrade_rejected_template_id: f494999a-1a38-4b01-a3c8-dbb2d60e6e5f
+  group_deleted_group_admin_editor_template_id: b987d794-9214-40f5-8014-65d5b9c058d8
+  group_deleted_org_admin_template_id: 4c6d6c67-e9f1-4012-adc2-05f23dc69638
 
 # When set to true, any capybara tests will run chrome normally rather than in headless mode.
 show_browser_during_tests: false
