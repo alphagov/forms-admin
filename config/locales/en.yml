@@ -210,6 +210,8 @@ en:
         receive_csv_enabled: Completed form emails will include a CSV file
         share_preview_completed: The preview task has been completed
         support_details_saved: Your contact details for support have been saved
+        welsh_translation_saved: The Welsh version of your form has been saved
+        welsh_translation_saved_and_completed: The Welsh version of your form has been saved and marked as complete
         what_happens_next_saved: Your information about what happens next has been saved
       page_routes_deleted: Question %{question_number}’s routes have been deleted
       route_created: Route %{route_number} has been added
