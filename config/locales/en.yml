@@ -1384,6 +1384,7 @@ en:
     index:
       add_a_question_route: Add a question route
       add_question: Add a question
+      change_order: Change your question order
       mark_complete:
         legend: Have you finished editing your questions?
       title: Add and edit your questions
