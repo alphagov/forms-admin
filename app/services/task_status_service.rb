@@ -16,7 +16,7 @@ class TaskStatusService
   end
 
   def task_statuses
-    {
+    statuses = {
       name_status:,
       pages_status:,
       declaration_status:,
@@ -28,6 +28,12 @@ class TaskStatusService
       share_preview_status:,
       make_live_status:,
     }
+
+    if FeatureService.new(group: @form.group).enabled?(:welsh)
+      statuses.merge!({ welsh_language_status: })
+    end
+
+    statuses
   end
 
 private
@@ -72,6 +78,13 @@ private
     return :completed if @form.support_email.present? || @form.support_phone.present? || (@form.support_url_text.present? && @form.support_url)
 
     :not_started
+  end
+
+  def welsh_language_status
+    return :completed if @form.welsh_completed?
+    return :in_progress if @form.available_languages.include?("cy") && !@form.welsh_completed?
+
+    :optional
   end
 
   def receive_csv_status

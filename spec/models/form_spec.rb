@@ -10,7 +10,7 @@ RSpec.describe Form, type: :model do
     end
 
     it "has a ready for live trait" do
-      form = build :form, :ready_for_live
+      form = build :form, :ready_for_live, :with_group
       expect(form.ready_for_live).to be true
       expect(form.incomplete_tasks).to be_empty
       expect(form.task_statuses).to include(
@@ -619,7 +619,8 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#all_task_statuses" do
-    let(:completed_form) { build :form, :live }
+    let(:group) { create :group, :with_welsh_enabled }
+    let(:completed_form) { build :form, :live, :with_group, group: }
 
     it "returns a hash with each of the task statuses" do
       expected_hash = {
@@ -633,6 +634,7 @@ RSpec.describe Form, type: :model do
         payment_link_status: :optional,
         receive_csv_status: :optional,
         support_contact_details_status: :completed,
+        welsh_language_status: :optional,
         share_preview_status: :completed,
         make_live_status: :completed,
       }

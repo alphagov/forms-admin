@@ -88,9 +88,34 @@ describe FormTaskListService do
       expect(all_sections).to be_an_instance_of(Array)
     end
 
-    it "returns 5 sections" do
-      expected_sections = [{ title: "Task 1" }, { title: "Task 2" }, { title: "Task 3" }, { title: "Task 4" }, { title: "Task 5" }, { title: "Task 6" }]
-      expect(all_sections.count).to eq expected_sections.count
+    context "when welsh is not enabled" do
+      it "returns 6 sections" do
+        expect(all_sections.count).to eq 6
+      end
+
+      it "does not include translations section" do
+        section_titles = all_sections.map { |section| section[:title] }
+        expect(section_titles).not_to include(I18n.t("forms.task_list_create.translations_section.title"))
+      end
+    end
+
+    context "when welsh is enabled" do
+      let(:group) { create(:group, :with_welsh_enabled, name: "Group 1", organisation:, status: group_status) }
+
+      it "returns 7 sections" do
+        expect(all_sections.count).to eq 7
+      end
+
+      it "includes translations section" do
+        section_titles = all_sections.map { |section| section[:title] }
+        expect(section_titles).to include(I18n.t("forms.task_list_create.translations_section.title"))
+      end
+
+      it "has translations section before make form live section" do
+        translations_section_index = all_sections.index { |section| section[:title] == I18n.t("forms.task_list_create.translations_section.title") }
+        make_live_section_index = all_sections.index { |section| section[:title] == I18n.t("forms.task_list_create.make_form_live_section.title") }
+        expect(translations_section_index).to be < make_live_section_index
+      end
     end
 
     describe "create form section tasks" do
