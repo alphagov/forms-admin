@@ -1,0 +1,9 @@
+---
+en:
+  activemodel:
+    errors:
+      models:
+        forms/welsh_translation_input:
+          attributes:
+            mark_complete:
+              blank: You must choose an option
