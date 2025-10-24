@@ -1,4 +1,4 @@
-class ReorderPagesService
+class Pages::ChangeOrderService
   class FormPagesConflictError < StandardError; end
 
   def self.generate_new_page_order(page_ids_and_positions)

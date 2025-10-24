@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ReorderPagesService do
+RSpec.describe Pages::ChangeOrderService do
   describe ".generate_new_page_order" do
     let(:pages_to_reorder) { [{ page_id: 101, new_position: nil }, { page_id: 102, new_position: nil }, { page_id: 103, new_position: nil }] }
 
@@ -135,7 +135,7 @@ RSpec.describe ReorderPagesService do
 
       it "raises an error" do
         expect { described_class.update_page_order(form:, page_ids_and_positions:) }
-          .to raise_error ReorderPagesService::FormPagesConflictError
+          .to raise_error Pages::ChangeOrderService::FormPagesConflictError
       end
     end
 
@@ -154,7 +154,7 @@ RSpec.describe ReorderPagesService do
 
       it "raises an error" do
         expect { described_class.update_page_order(form:, page_ids_and_positions:) }
-          .to raise_error ReorderPagesService::FormPagesConflictError
+          .to raise_error Pages::ChangeOrderService::FormPagesConflictError
       end
     end
   end
