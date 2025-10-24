@@ -14,7 +14,7 @@ module Forms
       if @welsh_translation_input.submit
         redirect_to form_path(@welsh_translation_input.form)
       else
-        render :new
+        render :new, status: :unprocessable_content
       end
     end
 

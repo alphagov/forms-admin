@@ -69,6 +69,27 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
       end
     end
 
+    context "when no value is selected" do
+      let(:mark_complete) { "" }
+
+      it "does not update the form" do
+        expect {
+          post(welsh_translation_create_path(id), params:)
+        }.not_to(change { form.reload.welsh_completed })
+      end
+
+      it "returns a 422" do
+        post(welsh_translation_create_path(id), params:)
+        expect(response).to have_http_status(:unprocessable_content)
+      end
+
+      it "re-renders the page with an error" do
+        post(welsh_translation_create_path(id), params:)
+        expect(response).to render_template(:new)
+        expect(response.body).to include(I18n.t("activemodel.errors.models.forms/welsh_translation_input.attributes.mark_complete.blank"))
+      end
+    end
+
     context "when the user is not authorized" do
       let(:current_user) { build :user }
 
