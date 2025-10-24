@@ -323,48 +323,73 @@ RSpec.describe "forms.rake" do
     let(:s3_bucket_name) { "a-bucket" }
     let(:s3_bucket_aws_account_id) { "an-aws-account-id" }
     let(:s3_bucket_region) { "eu-west-1" }
+    let(:format) { "csv" }
+    let(:valid_args) { [form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region, format] }
 
     context "when the form is live" do
-      it "sets a form's submission_type to s3" do
-        expect { task.invoke(form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region) }
-          .to change { form.reload.submission_type }.to("s3")
+      context "when the format is csv" do
+        it "sets a form's submission_type to s3" do
+          expect { task.invoke(*valid_args) }
+            .to change { form.reload.submission_type }.to("s3")
+        end
+
+        it "updates the live form document" do
+          task.invoke(*valid_args)
+          form_document = form.live_form_document.reload
+          expect(form_document.content["submission_type"]).to eq("s3")
+          expect(form_document.content["s3_bucket_name"]).to eq(s3_bucket_name)
+          expect(form_document.content["s3_bucket_aws_account_id"]).to eq(s3_bucket_aws_account_id)
+          expect(form_document.content["s3_bucket_region"]).to eq(s3_bucket_region)
+        end
+
+        it "updates the draft form document" do
+          task.invoke(*valid_args)
+          form_document = form.draft_form_document.reload
+          expect(form_document.content["submission_type"]).to eq("s3")
+          expect(form_document.content["s3_bucket_name"]).to eq(s3_bucket_name)
+          expect(form_document.content["s3_bucket_aws_account_id"]).to eq(s3_bucket_aws_account_id)
+          expect(form_document.content["s3_bucket_region"]).to eq(s3_bucket_region)
+        end
+      end
+
+      context "when the format is json" do
+        let(:format) { "json" }
+
+        it "sets a form's submission_type to s3_with_json" do
+          expect { task.invoke(*valid_args) }
+            .to change { form.reload.submission_type }.to("s3_with_json")
+        end
+
+        it "updates the live form document" do
+          task.invoke(*valid_args)
+          form_document = form.live_form_document.reload
+          expect(form_document.content["submission_type"]).to eq("s3_with_json")
+        end
+
+        it "updates the draft form document" do
+          task.invoke(*valid_args)
+          form_document = form.draft_form_document.reload
+          expect(form_document.content["submission_type"]).to eq("s3_with_json")
+        end
       end
 
       it "sets a form's s3_bucket_name" do
-        expect { task.invoke(form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region) }
+        expect { task.invoke(*valid_args) }
           .to change { form.reload.s3_bucket_name }.to(s3_bucket_name)
       end
 
       it "sets a form's s3_bucket_aws_account_id" do
-        expect { task.invoke(form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region) }
+        expect { task.invoke(*valid_args) }
           .to change { form.reload.s3_bucket_aws_account_id }.to(s3_bucket_aws_account_id)
       end
 
       it "sets a form's s3_bucket_region" do
-        expect { task.invoke(form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region) }
+        expect { task.invoke(*valid_args) }
           .to change { form.reload.s3_bucket_region }.to(s3_bucket_region)
       end
 
-      it "updates the live form document" do
-        task.invoke(form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region)
-        form_document = form.live_form_document.reload
-        expect(form_document.content["submission_type"]).to eq("s3")
-        expect(form_document.content["s3_bucket_name"]).to eq(s3_bucket_name)
-        expect(form_document.content["s3_bucket_aws_account_id"]).to eq(s3_bucket_aws_account_id)
-        expect(form_document.content["s3_bucket_region"]).to eq(s3_bucket_region)
-      end
-
-      it "updates the draft form document" do
-        task.invoke(form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region)
-        form_document = form.draft_form_document.reload
-        expect(form_document.content["submission_type"]).to eq("s3")
-        expect(form_document.content["s3_bucket_name"]).to eq(s3_bucket_name)
-        expect(form_document.content["s3_bucket_aws_account_id"]).to eq(s3_bucket_aws_account_id)
-        expect(form_document.content["s3_bucket_region"]).to eq(s3_bucket_region)
-      end
-
       it "does not update a different form" do
-        expect { task.invoke(form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region) }
+        expect { task.invoke(*valid_args) }
           .not_to(change { other_form.reload.submission_type })
       end
     end
@@ -373,12 +398,12 @@ RSpec.describe "forms.rake" do
       let(:form) { create :form }
 
       it "sets a form's submission_type to s3" do
-        expect { task.invoke(form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region) }
+        expect { task.invoke(*valid_args) }
           .to change { form.reload.submission_type }.to("s3")
       end
 
       it "updates the draft form document" do
-        task.invoke(form.id, s3_bucket_name, s3_bucket_aws_account_id, s3_bucket_region)
+        task.invoke(*valid_args)
         form_document = form.draft_form_document.reload
         expect(form_document.content["submission_type"]).to eq("s3")
         expect(form_document.content["s3_bucket_name"]).to eq(s3_bucket_name)
@@ -392,7 +417,7 @@ RSpec.describe "forms.rake" do
         expect {
           task.invoke
         }.to raise_error(SystemExit)
-               .and output("usage: rake forms:submission_type:set_to_s3[<form_id>, <s3_bucket_name>, <s3_bucket_aws_account_id>, <s3_bucket_region>]\n").to_stderr
+               .and output("usage: rake forms:submission_type:set_to_s3[<form_id>, <s3_bucket_name>, <s3_bucket_aws_account_id>, <s3_bucket_region>, <format>]\n").to_stderr
       end
     end
 
@@ -401,7 +426,7 @@ RSpec.describe "forms.rake" do
         expect {
           task.invoke(1)
         }.to raise_error(SystemExit)
-               .and output("usage: rake forms:submission_type:set_to_s3[<form_id>, <s3_bucket_name>, <s3_bucket_aws_account_id>, <s3_bucket_region>]\n").to_stderr
+               .and output("usage: rake forms:submission_type:set_to_s3[<form_id>, <s3_bucket_name>, <s3_bucket_aws_account_id>, <s3_bucket_region>, <format>]\n").to_stderr
       end
     end
 
@@ -410,7 +435,7 @@ RSpec.describe "forms.rake" do
         expect {
           task.invoke(1, s3_bucket_name)
         }.to raise_error(SystemExit)
-               .and output("usage: rake forms:submission_type:set_to_s3[<form_id>, <s3_bucket_name>, <s3_bucket_aws_account_id>, <s3_bucket_region>]\n").to_stderr
+               .and output("usage: rake forms:submission_type:set_to_s3[<form_id>, <s3_bucket_name>, <s3_bucket_aws_account_id>, <s3_bucket_region>, <format>]\n").to_stderr
       end
     end
 
@@ -419,16 +444,34 @@ RSpec.describe "forms.rake" do
         expect {
           task.invoke(1, s3_bucket_name, s3_bucket_aws_account_id)
         }.to raise_error(SystemExit)
-               .and output("usage: rake forms:submission_type:set_to_s3[<form_id>, <s3_bucket_name>, <s3_bucket_aws_account_id>, <s3_bucket_region>]\n").to_stderr
+               .and output("usage: rake forms:submission_type:set_to_s3[<form_id>, <s3_bucket_name>, <s3_bucket_aws_account_id>, <s3_bucket_region>, <format>]\n").to_stderr
+      end
+    end
+
+    context "without format argument" do
+      it "aborts with a usage message" do
+        expect {
+          task.invoke(1, s3_bucket_name, s3_bucket_aws_account_id, "eu-west-2")
+        }.to raise_error(SystemExit)
+               .and output("usage: rake forms:submission_type:set_to_s3[<form_id>, <s3_bucket_name>, <s3_bucket_aws_account_id>, <s3_bucket_region>, <format>]\n").to_stderr
       end
     end
 
     context "when region is not allowed" do
       it "aborts with message" do
         expect {
-          task.invoke(1, s3_bucket_name, s3_bucket_aws_account_id, "eu-west-3")
+          task.invoke(1, s3_bucket_name, s3_bucket_aws_account_id, "eu-west-3", "csv")
         }.to raise_error(SystemExit)
                .and output("s3_bucket_region must be one of eu-west-1 or eu-west-2\n").to_stderr
+      end
+    end
+
+    context "when format is invalid" do
+      it "aborts with a usage message" do
+        expect {
+          task.invoke(1, s3_bucket_name, s3_bucket_aws_account_id, "eu-west-2", "xml")
+        }.to raise_error(SystemExit)
+                       .and output("format must be one of csv or json\n").to_stderr
       end
     end
   end
