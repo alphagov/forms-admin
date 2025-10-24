@@ -1,0 +1,22 @@
+<% set_page_title(title_with_error_prefix(t('page_titles.welsh_translation'), @welsh_translation_input.errors.present?)) %>
+<% content_for :back_link, govuk_back_link_to(form_path(@welsh_translation_input.form), t("back_link.form_create")) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: @welsh_translation_input, url: welsh_translation_create_path(@welsh_translation_input.form)) do |f| %>
+      <% if @welsh_translation_input&.errors&.present? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @welsh_translation_input.form.name %></span>
+        <%= t("page_titles.welsh_translation") %>
+      </h1>
+
+      <%= render MarkCompleteComponent::View.new(generate_form: false, form_builder: f, form_model: @welsh_translation_input, legend: t(".legend"), hint: t(".hint")) %>
+
+      <%= f.govuk_submit t("save_and_continue") %>
+    <% end %>
+  </div>
+</div>
+

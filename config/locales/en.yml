@@ -441,6 +441,10 @@ en:
       translations_section:
         add_welsh: Edit Welsh language version of your form
         title: Add translations to your form (optional)
+    welsh_translation:
+      new:
+        hint: Selecting ‘Yes’ will mark this task as complete. You’ll still be able to make more changes if you need to.
+        legend: Have you finished adding your Welsh version?
   group_forms:
     edit:
       body_html: "<p> We’ll send an email to members of the current group to let them know the form has moved and they may no longer have access to it. </p>\n"
@@ -1270,6 +1274,7 @@ en:
     text_settings: How much text will people need to provide?
     type_of_answer: What kind of answer do you need to this question?
     unarchive_form: Make your form live again
+    welsh_translation: Add a Welsh version of your form
     what_happens_next: Add information about what happens next
     your_changes_are_live: Your changes are live
     your_form_is_live: Your form is live
