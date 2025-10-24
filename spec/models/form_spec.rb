@@ -841,7 +841,7 @@ RSpec.describe Form, type: :model do
     let(:form) { create :form, :ready_for_live }
 
     it "includes all attributes for the form" do
-      form_attributes = described_class.attribute_names - %w[id state external_id pages question_section_completed declaration_section_completed share_preview_completed]
+      form_attributes = described_class.attribute_names - %w[id state external_id pages question_section_completed declaration_section_completed share_preview_completed welsh_completed]
       expect(form.as_form_document).to match a_hash_including(*form_attributes)
     end
 
