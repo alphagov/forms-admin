@@ -51,6 +51,11 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
         post(welsh_translation_create_path(id), params:)
         expect(response).to redirect_to(form_path(id))
       end
+
+      it "displays a success banner including text about being marked complete" do
+        post(welsh_translation_create_path(id), params:)
+        expect(flash[:success]).to eq(I18n.t("banner.success.form.welsh_translation_saved_and_completed"))
+      end
     end
 
     context "when 'No' is selected" do
@@ -66,6 +71,11 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
       it "redirects to the form" do
         post(welsh_translation_create_path(id), params:)
         expect(response).to redirect_to(form_path(id))
+      end
+
+      it "displays a success banner without text about being marked complete" do
+        post(welsh_translation_create_path(id), params:)
+        expect(flash[:success]).to eq(I18n.t("banner.success.form.welsh_translation_saved"))
       end
     end
 
@@ -87,6 +97,11 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
         post(welsh_translation_create_path(id), params:)
         expect(response).to render_template(:new)
         expect(response.body).to include(I18n.t("activemodel.errors.models.forms/welsh_translation_input.attributes.mark_complete.blank"))
+      end
+
+      it "does not display a success banner" do
+        post(welsh_translation_create_path(id), params:)
+        expect(flash).to be_empty
       end
     end
 

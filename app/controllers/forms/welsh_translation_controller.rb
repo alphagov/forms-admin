@@ -12,7 +12,13 @@ module Forms
       @welsh_translation_input = WelshTranslationInput.new(**welsh_translation_input_params)
 
       if @welsh_translation_input.submit
-        redirect_to form_path(@welsh_translation_input.form)
+        success_message = if @welsh_translation_input.mark_complete == "true"
+                            t("banner.success.form.welsh_translation_saved_and_completed")
+                          else
+                            t("banner.success.form.welsh_translation_saved")
+                          end
+
+        redirect_to form_path(@welsh_translation_input.form), success: success_message
       else
         render :new, status: :unprocessable_content
       end
