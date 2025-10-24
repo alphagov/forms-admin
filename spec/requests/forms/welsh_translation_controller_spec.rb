@@ -5,7 +5,9 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
   let(:id) { form.id }
 
   let(:current_user) { standard_user }
-  let(:group) { create(:group, organisation: standard_user.organisation, welsh_enabled: false) }
+  let(:group) { create(:group, organisation: standard_user.organisation, welsh_enabled:) }
+
+  let(:welsh_enabled) { true }
 
   before do
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
@@ -32,6 +34,14 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
 
       it "returns 403" do
         expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when the welsh feature is not enabled for the group" do
+      let(:welsh_enabled) { false }
+
+      it "redirects to the form" do
+        expect(response).to redirect_to(form_path(id))
       end
     end
   end
@@ -117,6 +127,21 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
       it "returns 403" do
         post(welsh_translation_create_path(id), params:)
         expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when the welsh feature is not enabled for the group" do
+      let(:welsh_enabled) { false }
+
+      it "does not update the form" do
+        expect {
+          post(welsh_translation_create_path(id), params:)
+        }.not_to(change { form.reload.welsh_completed })
+      end
+
+      it "redirects to the form" do
+        post(welsh_translation_create_path(id), params:)
+        expect(response).to redirect_to(form_path(id))
       end
     end
   end
