@@ -53,6 +53,6 @@ feature "Move a group", type: :feature do
   end
 
   def then_i_see_my_new_org_for_this_group
-    expect(page).to have_content("Group's organisation has changed to #{other_org.name}")
+    expect(page).to have_content("Group’s organisation has changed to #{other_org.name}")
   end
 end
