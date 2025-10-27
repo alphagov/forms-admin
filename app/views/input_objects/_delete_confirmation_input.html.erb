@@ -3,9 +3,18 @@
     <%= f.govuk_error_summary %>
   <% end %>
   <span class="govuk-caption-l"><%= caption_text %></span>
+  <%
+    options = {
+      legend: { text: legend_text, size: 'l', tag: 'h1' }
+    }
+
+    if local_assigns.key?(:hint_text) && hint_text.present?
+      options[:hint] = { text: hint_text }
+    end
+  %>
   <%= f.govuk_collection_radio_buttons :confirm,
                                        delete_confirmation_input.values, ->(option) { option }, ->(option) { t('helpers.label.confirm_action_input.options.' + "#{option}") },
-                                       legend: { text: legend_text, size: 'l', tag: 'h1' }
+                                       **options
                                        %>
 
   <%= f.govuk_submit local_assigns.fetch(:submit_text, t(:continue)) %>
