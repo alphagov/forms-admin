@@ -19,6 +19,23 @@ FactoryBot.define do
     payment_url { nil }
     external_id { nil }
 
+    trait :with_group do
+      transient do
+        group { nil }
+      end
+
+      after(:build) do |form, evaluator|
+        g = evaluator.group || FactoryBot.create(:group)
+        form.instance_variable_set(:@associated_group, g)
+        form.define_singleton_method(:group) { g }
+      end
+
+      after(:create) do |form, _evaluator|
+        g = form.instance_variable_get(:@associated_group)
+        GroupForm.create!(form_id: form.id, group_id: g.id) unless GroupForm.exists?(form_id: form.id, group_id: g.id)
+      end
+    end
+
     trait :new_form do
       submission_email { "" }
       privacy_policy_url { "" }
