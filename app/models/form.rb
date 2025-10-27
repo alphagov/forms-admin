@@ -27,6 +27,7 @@ class Form < ApplicationRecord
     email_with_json: "email_with_json",
     email_with_csv_and_json: "email_with_csv_and_json",
     s3: "s3",
+    s3_with_json: "s3_with_json",
   }
 
   enum :language, {

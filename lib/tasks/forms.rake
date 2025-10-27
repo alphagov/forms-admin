@@ -49,24 +49,28 @@ namespace :forms do
       usage_message = "usage: rake forms:submission_type:set_to_email[<form_id>, <submission_type>]".freeze
       abort usage_message if args[:form_id].blank?
 
-      supported_types = Form.submission_types.keys - %w[s3]
+      supported_types = Form.submission_types.keys - %w[s3 s3_with_json]
       abort "submission_type must be one of #{supported_types.join(', ')}" unless supported_types.include? args[:submission_type]
 
       set_submission_type(args[:submission_type], args[:form_id])
     end
 
     desc "Set submission_type to s3"
-    task :set_to_s3, %i[form_id s3_bucket_name s3_bucket_aws_account_id s3_bucket_region] => :environment do |_, args|
-      usage_message = "usage: rake forms:submission_type:set_to_s3[<form_id>, <s3_bucket_name>, <s3_bucket_aws_account_id>, <s3_bucket_region>]".freeze
+    task :set_to_s3, %i[form_id s3_bucket_name s3_bucket_aws_account_id s3_bucket_region format] => :environment do |_, args|
+      usage_message = "usage: rake forms:submission_type:set_to_s3[<form_id>, <s3_bucket_name>, <s3_bucket_aws_account_id>, <s3_bucket_region>, <format>]".freeze
       abort usage_message if args[:form_id].blank?
       abort usage_message if args[:s3_bucket_name].blank?
       abort usage_message if args[:s3_bucket_aws_account_id].blank?
       abort usage_message if args[:s3_bucket_region].blank?
+      abort usage_message if args[:format].blank?
       abort "s3_bucket_region must be one of eu-west-1 or eu-west-2" unless %w[eu-west-1 eu-west-2].include? args[:s3_bucket_region]
+      abort "format must be one of csv or json" unless %w[csv json].include? args[:format]
 
-      Rails.logger.info("Setting submission_type to s3 and s3_bucket_name to #{args[:s3_bucket_name]} for form: #{args[:form_id]}")
+      submission_type = args[:format] == "csv" ? "s3" : "s3_with_json"
+
+      Rails.logger.info("Setting submission_type to #{submission_type} and s3_bucket_name to #{args[:s3_bucket_name]} for form: #{args[:form_id]}")
       form = Form.find(args[:form_id])
-      form.submission_type = "s3"
+      form.submission_type = submission_type
       form.s3_bucket_name = args[:s3_bucket_name]
       form.s3_bucket_aws_account_id = args[:s3_bucket_aws_account_id]
       form.s3_bucket_region = args[:s3_bucket_region]
@@ -76,7 +80,7 @@ namespace :forms do
         form_document = form.live_form_document
         content = form_document.content
 
-        content[:submission_type] = "s3"
+        content[:submission_type] = submission_type
         content[:s3_bucket_name] = args[:s3_bucket_name]
         content[:s3_bucket_aws_account_id] = args[:s3_bucket_aws_account_id]
         content[:s3_bucket_region] = args[:s3_bucket_region]
@@ -84,7 +88,7 @@ namespace :forms do
         form_document.save!
       end
 
-      Rails.logger.info("Set submission_type to s3 and s3_bucket_name to #{args[:s3_bucket_name]} for form: #{args[:form_id]}")
+      Rails.logger.info("Set submission_type to #{submission_type} and s3_bucket_name to #{args[:s3_bucket_name]} for form: #{args[:form_id]}")
     end
   end
 end
