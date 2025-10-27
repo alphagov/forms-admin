@@ -184,6 +184,8 @@ private
   end
 
   def task_status_service
+    # TODO: refactor this in favour of dependency injection
+    # it can also lead to use of `allow_any_instance_of` in testing
     @task_status_service ||= TaskStatusService.new(form: self)
   end
 
@@ -196,6 +198,8 @@ private
   end
 
   def email_task_status_service
+    # TODO: refactor this in favour of dependency injection
+    # it can also lead to use of `allow_any_instance_of` in testing
     @email_task_status_service ||= EmailTaskStatusService.new(form: self)
   end
 
