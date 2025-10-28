@@ -1,0 +1,55 @@
+<% set_page_title(title_with_error_prefix(t("page_titles.change_page_order"), @change_order_input.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(form_pages_path(@change_order_input.form.id), t("pages.change_order.back_link")) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: @change_order_input, url: change_order_create_path(@change_order_input.form.id), method: 'POST') do |f| %>
+      <% if @change_order_input&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+
+      <% if show_banner %>
+        <%= govuk_notification_banner(title_text: t("banner.default.title")) do |banner| %>
+          <% banner.with_heading(text: t("pages.change_order.preview_banner")) %>
+        <% end %>
+      <% end %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @change_order_input.form.name %></span>
+        <%= t("page_titles.change_page_order") %>
+      </h1>
+
+      <p><%= t("pages.change_order.summary") %></p>
+
+      <h2 class="govuk-heading-m"><%= t("pages.change_order.subheading") %></h2>
+      <dl class="govuk-summary-list">
+        <% @change_order_input.pages.each_with_index do |page, index| %>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key app-change-order-list__key">
+              <%= index + 1 %>
+            </dt>
+
+            <dd class="govuk-summary-list__value app-change-order-list__value">
+              <h3 class="govuk-heading-s"><%= page.question_text %></h3>
+              <% input_name = @change_order_input.input_name(page) %>
+              <%= f.govuk_number_field input_name,
+                width: 3,
+                label: { text: t("pages.change_order.move_question_to_label", position: index + 1) },
+                value: @change_order_input.page_position_params&.[](input_name),
+                autocomplete: "off" %>
+            </dd>
+          </div>
+        <% end %>
+      </dl>
+
+      <%= f.govuk_submit t("pages.change_order.preview_button"), secondary: true, name: 'preview', value: "true" %>
+
+      <%= f.govuk_collection_radio_buttons :confirm,
+        Pages::ChangeOrderInput::RADIO_OPTIONS.keys, ->(option) { option }, ->(option) { t('helpers.label.pages/change_order_input.options.' + "#{option}") },
+        legend: { text: t('pages.change_order.radios_legend'), size: 'm' }
+      %>
+
+      <%= f.govuk_submit t("save_and_continue") %>
+    <% end %>
+  </div>
+</div>

@@ -1255,6 +1255,7 @@ en:
     archive_form_confirmation: Your form has been archived
     bulk_options: Enter your list’s options into a text box
     change_name: Name your form
+    change_page_order: Change your question order
     confirm_delete_exit_page: Your exit page will be deleted
     confirm_email: Enter the confirmation code
     confirm_email_success: Email address confirmed
@@ -1311,6 +1312,15 @@ en:
     your_form_is_live: Your form is live
   pages:
     answer_settings: Answer settings
+    change_order:
+      back_link: Back to Add and edit your questions
+      move_question_to_label: Move question %{position} to (optional)
+      preview_banner: You need to save this question order if you want to keep these changes 
+      preview_button: Preview new question order
+      radios_legend: Do you want to save the new question order?
+      subheading: Enter new question positions
+      success: Your new question order has been saved
+      summary: Enter a new number for questions you want to move to a new position. Questions will move up or down to accommodate the new order when you save your changes.
     conditions:
       confirm_delete_exit_page:
         back_link: Back to edit route 1
