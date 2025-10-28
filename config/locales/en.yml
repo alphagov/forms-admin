@@ -606,7 +606,7 @@ en:
             <p>People in your organisation can also ask you to do these things for them.</p>
         standard_user:
           active_group_summary_html: |
-            <p>You can ask your organisation's GOV.UK Forms admin to:</p>
+            <p>You can ask your organisation’s GOV.UK Forms admin to:</p>
             <ul class="govuk-list govuk-list--bullet">
               <li>add and remove group admins </li>
               <li>move a form to a different group</li>
@@ -614,7 +614,7 @@ en:
             </ul>
             <p>Contact them at:</p>
           trial_group_summary_html: |
-            <p>You can ask your organisation's GOV.UK Forms admin to:</p>
+            <p>You can ask your organisation’s GOV.UK Forms admin to:</p>
             <ul class="govuk-list govuk-list--bullet">
               <li>upgrade a trial group to an ‘active’ group so forms in the group can be made live </li>
               <li>add and remove group admins </li>
@@ -655,7 +655,7 @@ en:
       trial: Trial group
       upgrade_requested: Trial group
     success_messages:
-      move: Group's organisation has changed to %{org_name}
+      move: Group’s organisation has changed to %{org_name}
       update: The name of this group has been changed
       upgrade: This group is now active
     upgrade_requested:
