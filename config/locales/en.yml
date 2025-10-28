@@ -210,6 +210,8 @@ en:
         receive_csv_enabled: Completed form emails will include a CSV file
         share_preview_completed: The preview task has been completed
         support_details_saved: Your contact details for support have been saved
+        welsh_translation_saved: The Welsh version of your form has been saved
+        welsh_translation_saved_and_completed: The Welsh version of your form has been saved and marked as complete
         what_happens_next_saved: Your information about what happens next has been saved
       page_routes_deleted: Question %{question_number}’s routes have been deleted
       route_created: Route %{route_number} has been added
@@ -439,6 +441,10 @@ en:
       translations_section:
         add_welsh: Edit Welsh language version of your form
         title: Add translations to your form (optional)
+    welsh_translation:
+      new:
+        hint: Selecting ‘Yes’ will mark this task as complete. You’ll still be able to make more changes if you need to.
+        legend: Have you finished adding your Welsh version?
   group_forms:
     edit:
       body_html: "<p> We’ll send an email to members of the current group to let them know the form has moved and they may no longer have access to it. </p>\n"
@@ -1268,6 +1274,7 @@ en:
     text_settings: How much text will people need to provide?
     type_of_answer: What kind of answer do you need to this question?
     unarchive_form: Make your form live again
+    welsh_translation: Add a Welsh version of your form
     what_happens_next: Add information about what happens next
     your_changes_are_live: Your changes are live
     your_form_is_live: Your form is live
