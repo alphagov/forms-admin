@@ -91,6 +91,13 @@ en:
         groups/delete_confirmation_input:
           blank: Select ‘Yes’ to delete the group
           group_has_forms: This group cannot be deleted because it has forms in it
+        pages/change_order_input:
+          attributes:
+            confirm:
+              blank: Select ‘Yes, save this question order’ to save your changes
+              inclusion: Select ‘Yes, save this question order’ to save your changes
+            page_position:
+              invalid: Position must be a whole number between 1 and %{maximum}
         pages/delete_confirmation_input:
           blank: Select ‘Yes’ to delete the question
         pages/delete_exit_page_input:
@@ -887,6 +894,10 @@ en:
           names:
             long_text: More than a single line of text
             single_line: Single line of text
+      pages/change_order_input:
+        options:
+          'no': No, discard my changes
+          'yes': Yes, save this question order
       pages_conditions_input:
         default_answer_value: Select an answer
         default_goto_page_id: Select a question or page
