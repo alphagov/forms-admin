@@ -45,7 +45,7 @@ COPY --chown=ruby:ruby . .
 RUN SECRET_KEY_BASE=dummyvalue rails vite:build_all
 
 # Remove devDependencies once assets have been built
-RUN npm ci --ignore-scripts --only=production
+RUN npm ci --ignore-scripts --omit=dev
 
 FROM base AS app
 
