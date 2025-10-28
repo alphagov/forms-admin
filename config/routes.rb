@@ -71,6 +71,8 @@ Rails.application.routes.draw do
       get "/" => "pages#index", as: :form_pages
       post "/" => "forms#mark_pages_section_completed"
       post "/move-page" => "pages#move_page", as: :move_page
+      get "/change-order" => "pages/change_order#new", as: :change_order_new
+      post "/change-order" => "pages/change_order#create", as: :change_order_create
 
       scope "/new" do
         get "/start-new-question" => "pages#start_new_question", as: :start_new_question

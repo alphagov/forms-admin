@@ -36,11 +36,11 @@ class Pages::ChangeOrderInput < BaseInput
     "#{Pages::ChangeOrderInput::INPUT_PREFIX}#{page.id}".to_sym
   end
 
-private
-
   def confirmed?
     confirm == RADIO_OPTIONS[:yes]
   end
+
+private
 
   def page_ids_and_positions
     page_position_params
