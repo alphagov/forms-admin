@@ -7,3 +7,15 @@ en:
           attributes:
             mark_complete:
               blank: You must choose an option
+  helpers:
+    label:
+      forms_welsh_translation_input:
+        declaration_text_cy: Declaration text (Welsh)
+        name_cy: Form name (Welsh)
+        payment_url_cy: Payment URL (Welsh)
+        privacy_policy_url_cy: Privacy policy URL (Welsh)
+        support_email_cy: Support email (Welsh)
+        support_phone_cy: Support phone (Welsh)
+        support_url_cy: Support URL (Welsh)
+        support_url_text_cy: Support URL text (Welsh)
+        what_happens_next_markdown_cy: What happens next (Welsh)
