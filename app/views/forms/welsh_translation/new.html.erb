@@ -2,7 +2,7 @@
 <% content_for :back_link, govuk_back_link_to(form_path(@welsh_translation_input.form), t("back_link.form_create")) %>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-full-width">
     <%= form_with(model: @welsh_translation_input, url: welsh_translation_create_path(@welsh_translation_input.form)) do |f| %>
       <% if @welsh_translation_input&.errors&.present? %>
         <%= f.govuk_error_summary %>
