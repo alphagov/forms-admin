@@ -312,6 +312,9 @@ en:
   error_summary:
     heading: There is a problem
   errors:
+    change_order_pages_added:
+      questions_added: One or more new questions were added to the form so we could not save the new order.
+      try_again_html: Please try to <a href="%{change_order_link}">change your question order</a> again.
     messages:
       non_government_email: Enter a government email address
     missing_draft_question:
@@ -1255,6 +1258,7 @@ en:
     archive_form_confirmation: Your form has been archived
     bulk_options: Enter your list’s options into a text box
     change_name: Name your form
+    change_order_pages_added_error: Sorry, we could not save the new question order
     change_page_order: Change your question order
     confirm_delete_exit_page: Your exit page will be deleted
     confirm_email: Enter the confirmation code
@@ -1315,7 +1319,7 @@ en:
     change_order:
       back_link: Back to Add and edit your questions
       move_question_to_label: Move question %{position} to (optional)
-      preview_banner: You need to save this question order if you want to keep these changes 
+      preview_banner: You need to save this question order if you want to keep these changes
       preview_button: Preview new question order
       radios_legend: Do you want to save the new question order?
       subheading: Enter new question positions

@@ -21,6 +21,8 @@ class Pages::ChangeOrderController < PagesController
     end
 
     render :change_order, locals: { show_banner: false }
+  rescue Pages::ChangeOrderService::FormPagesAddedError
+    render "errors/change_order_pages_added", status: :unprocessable_content, formats: :html
   end
 
   def pages_change_order_input_params

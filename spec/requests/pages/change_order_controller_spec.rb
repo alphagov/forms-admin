@@ -99,6 +99,22 @@ RSpec.describe Pages::ChangeOrderController, type: :request do
           it "shows a success message" do
             expect(flash[:success]).to eq("Your new question order has been saved")
           end
+
+          context "when a page has been added to the form during changing the page order" do
+            let(:params) do
+              {
+                pages_change_order_input: {
+                  "position_for_page_#{form.pages[0].id}" => "2",
+                  "position_for_page_#{form.pages[1].id}" => "",
+                  confirm:,
+                },
+              }
+            end
+
+            it "renders an error template" do
+              expect(response).to have_rendered("errors/change_order_pages_added")
+            end
+          end
         end
 
         context "when 'no' was selected" do
