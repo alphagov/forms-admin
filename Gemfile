@@ -90,6 +90,9 @@ gem "after_commit_everywhere", "~> 1.6"
 # For pagination
 gem "pagy"
 
+# IDNA conversion needed for validating email addresses
+gem "uri-idna"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
