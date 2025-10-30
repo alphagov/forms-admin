@@ -29,7 +29,7 @@ module Forms
     end
 
     def welsh_translation_input_params
-      params.require(:forms_welsh_translation_input).permit(:mark_complete, pages: %i[id question_text_cy]).merge(form: current_form)
+      params.require(:forms_welsh_translation_input).permit(:mark_complete, pages: %i[id question_text_cy hint_text_cy page_heading_cy guidance_markdown_cy]).merge(form: current_form)
     end
 
     def welsh_enabled?

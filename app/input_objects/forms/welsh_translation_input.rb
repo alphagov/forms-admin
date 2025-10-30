@@ -9,6 +9,9 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
     pages.each_value do |page|
       form_page = form.pages.find_by(id: page["id"])
       form_page.question_text_cy = page["question_text_cy"]
+      form_page.hint_text_cy = page["hint_text_cy"]
+      form_page.page_heading_cy = page["page_heading_cy"]
+      form_page.guidance_markdown_cy = page["guidance_markdown_cy"]
 
       form_page.save!
     end
