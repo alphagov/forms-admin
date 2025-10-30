@@ -1,9 +1,9 @@
 <% set_page_title(title_with_error_prefix(t('page_titles.welsh_translation'), @welsh_translation_input.errors.present?)) %>
 <% content_for :back_link, govuk_back_link_to(form_path(@welsh_translation_input.form), t("back_link.form_create")) %>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <%= form_with(model: @welsh_translation_input, url: welsh_translation_create_path(@welsh_translation_input.form)) do |f| %>
+<%= form_with(model: @welsh_translation_input, url: welsh_translation_create_path(@welsh_translation_input.form)) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
       <% if @welsh_translation_input&.errors&.present? %>
         <%= f.govuk_error_summary %>
       <% end %>
@@ -12,9 +12,12 @@
         <span class="govuk-caption-l"><%= @welsh_translation_input.form.name %></span>
         <%= t("page_titles.welsh_translation") %>
       </h1>
+    </div>
+  </div>
 
-      <%= govuk_table(classes: "govuk-!-margin-bottom-9") do |table| %>
-        <%= table.with_caption(size: 'm', text: t(".section_headings.form_name"))
+  <div class="govuk-grid-row">
+    <%= govuk_table(classes: "govuk-!-margin-bottom-9") do |table| %>
+      <%= table.with_caption(size: 'm', text: t(".section_headings.form_name"))
         table.with_head do |head|
           head.with_row do |row|
             row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header"), width: "one-half")
@@ -22,7 +25,7 @@
           end
         end %>
 
-        <%= table.with_body do |body|
+      <%= table.with_body do |body|
           body.with_row do |row|
             row.with_cell(text: @welsh_translation_input.form.name)
             row.with_cell do
@@ -30,11 +33,11 @@
             end
           end
         end %>
-      <% end %>
+    <% end %>
 
-      <div class="govuk-!-margin-bottom-9">
-        <% if @welsh_translation_input.form_has_declaration? %>
-          <%= govuk_table do |table|
+    <div class="govuk-!-margin-bottom-9">
+      <% if @welsh_translation_input.form_has_declaration? %>
+        <%= govuk_table do |table|
           table.with_caption(size: 'm', text: t(".section_headings.declaration"))
             table.with_head do |head|
               head.with_row do |row|
@@ -52,52 +55,16 @@
               end
             end
           end %>
-        <% else %>
-          <h2 class="govuk-heading-m"><%= t(".section_headings.declaration") %></h2>
-          <p><%= t(".no_declaration_added") %></p>
-        <% end %>
-      </div>
+      <% else %>
+        <h2 class="govuk-heading-m"><%= t(".section_headings.declaration") %></h2>
+        <p><%= t(".no_declaration_added") %></p>
+      <% end %>
+    </div>
 
-      <%= govuk_table(classes: "govuk-!-margin-bottom-9") do |table|
-        table.with_caption(size: 'm', text: t(".section_headings.what_happens_next"))
-        table.with_head do |head|
-          head.with_row do |row|
-            row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header"), width: "one-half")
-            row.with_cell(header: true, text: t("forms.welsh_translation.new.welsh_header"))
-          end
-        end
-
-        table.with_body do |body|
-          body.with_row do |row|
-            row.with_cell(text: @welsh_translation_input.form.what_happens_next_markdown)
-            row.with_cell do
-              f.govuk_text_area :what_happens_next_markdown_cy, label: { class: "govuk-visually-hidden" }
-            end
-          end
-        end
-      end %>
-
-      <%= govuk_table(classes: "govuk-!-margin-bottom-9") do |table|
-        table.with_caption(size: 'm', text: t(".section_headings.privacy_information"))
-        table.with_head do |head|
-          head.with_row do |row|
-            row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header"), width: "one-half")
-            row.with_cell(header: true, text: t("forms.welsh_translation.new.welsh_header"))
-          end
-        end
-
-        table.with_body do |body|
-          body.with_row do |row|
-            row.with_cell(text: @welsh_translation_input.form.privacy_policy_url)
-            row.with_cell do
-              f.govuk_text_field :privacy_policy_url_cy, label: { class: "govuk-visually-hidden" }
-            end
-          end
-        end
-      end %>
-
-      <% if @welsh_translation_input.form_has_payment_url? %>
-        <%= govuk_table(classes: "govuk-!-margin-bottom-9") do |table|
+    <div class="govuk-!-margin-bottom-9">
+      <% if @welsh_translation_input.form_has_what_happens_next? %>
+        <%= govuk_table do |table|
+            table.with_caption(size: 'm', text: t(".section_headings.what_happens_next"))
             table.with_head do |head|
               head.with_row do |row|
                 row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header"), width: "one-half")
@@ -114,11 +81,15 @@
               end
             end
           end %>
+      <% else %>
+        <h2 class="govuk-heading-m"><%= t(".section_headings.what_happens_next") %></h2>
+        <p><%= t(".no_what_happens_next_added") %></p>
       <% end %>
+    </div>
 
-      <div class="govuk-!-margin-bottom-9">
-        <% if @welsh_translation_input.form_has_privacy_information? %>
-          <%= govuk_table do |table|
+    <div class="govuk-!-margin-bottom-9">
+      <% if @welsh_translation_input.form_has_privacy_information? %>
+        <%= govuk_table do |table|
             table.with_caption(size: 'm', text: t(".section_headings.privacy_information"))
             table.with_head do |head|
               head.with_row do |row|
@@ -136,14 +107,14 @@
               end
             end
           end %>
-        <% else %>
-          <h2 class="govuk-heading-m"><%= t(".section_headings.privacy_information") %></h2>
-          <p><%= t(".no_privacy_information_added") %></p>
-        <% end %>
-      </div>
+      <% else %>
+        <h2 class="govuk-heading-m"><%= t(".section_headings.privacy_information") %></h2>
+        <p><%= t(".no_privacy_information_added") %></p>
+      <% end %>
+    </div>
 
-      <% if @welsh_translation_input.form_has_payment_url? %>
-        <%= govuk_table(classes: "govuk-!-margin-bottom-9") do |table|
+    <% if @welsh_translation_input.form_has_payment_url? %>
+      <%= govuk_table(classes: "govuk-!-margin-bottom-9") do |table|
           table.with_head do |head|
             head.with_row do |row|
               row.with_cell
@@ -162,21 +133,11 @@
             end
           end
         end %>
-      <% end %>
-      <h3 class="govuk-heading-m">Pages</h2>
+    <% end %>
 
-      <% @welsh_translation_input.pages.each_with_index do |page, index| %>
-        <h3 class="govuk-heading-s"><%= page.question_with_number %></h2>
-        <%= f.fields_for :pages, page, index: index do |pages_fields| %>
-          <%= pages_fields.hidden_field :id %>
-          <p>question_text_en: <%= page.question_text %></p>
-          <%= pages_fields.govuk_text_field :question_text_cy, label: {text: "question_text_cy"} %>
-        <% end %>
-      <% end %>
-
-      <div class="govuk-!-margin-bottom-9">
-        <% if @welsh_translation_input.form_has_support_information? %>
-          <%= govuk_table do |table|
+    <div class="govuk-!-margin-bottom-9">
+      <% if @welsh_translation_input.form_has_support_information? %>
+        <%= govuk_table do |table|
             table.with_caption(size: 'm', text: t(".section_headings.support_information"))
             table.with_head do |head|
               head.with_row do |row|
@@ -226,15 +187,45 @@
               end
             end
           end %>
-        <% else %>
-          <h2 class="govuk-heading-m"><%= t(".section_headings.support_information") %></h2>
-          <p><%= t(".no_support_information_added") %></p>
-        <% end %>
-      </div>
+      <% else %>
+        <h2 class="govuk-heading-m"><%= t(".section_headings.support_information") %></h2>
+        <p><%= t(".no_support_information_added") %></p>
+      <% end %>
 
+      <% @welsh_translation_input.pages.each_with_index do |page, index| %>
+        <%= f.fields_for :pages, page, index: index do |pages_fields| %>
+          <%= pages_fields.hidden_field :id, value: page.id, readonly: true %>
+
+          <%= govuk_table do |table| %>
+            <%= table.with_caption(size: 'm', text: "Question #{page.position}") %>
+            <%= table.with_head do |head| %>
+              <%= head.with_row do |row| %>
+                <%= row.with_cell(header: true, text: nil) %>
+                <%= row.with_cell(header: true, text: "English content") %>
+                <%= row.with_cell(header: true, text: "Welsh content") %>
+              <% end %>
+            <% end %>
+
+            <%= table.with_body do |body| %>
+              <%= body.with_row do |row| %>
+                <%= row.with_cell(header: true, text: "Question text") %>
+                <%= row.with_cell(text: page.question_text) %>
+                <%= row.with_cell do |cell| %>
+                  <%= pages_fields.govuk_text_field :question_text_cy, label: {text: "Question #{page.position} Welsh question text", class: "govuk-visually-hidden"} %>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
       <%= render MarkCompleteComponent::View.new(generate_form: false, form_builder: f, form_model: @welsh_translation_input, legend: t(".legend"), hint: t(".hint")) %>
 
       <%= f.govuk_submit t("save_and_continue") %>
-    <% end %>
+    </div>
   </div>
-</div>
+<% end %>
