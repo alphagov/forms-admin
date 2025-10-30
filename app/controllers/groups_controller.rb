@@ -109,6 +109,8 @@ class GroupsController < WebController
       return render :delete, status: :unprocessable_content
     end
 
+    GroupService.new(group: @group, current_user: @current_user).send_group_deleted_emails
+
     redirect_to groups_path, success: t(".success", group_name: @group.name), status: :see_other
   end
 
