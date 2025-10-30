@@ -13,10 +13,20 @@
         <%= t("page_titles.welsh_translation") %>
       </h1>
 
+      <h3 class="govuk-heading-m">Pages</h2>
+
+      <% @welsh_translation_input.pages.each_with_index do |page, index| %>
+        <h3 class="govuk-heading-s"><%= page.question_with_number %></h2>
+        <%= f.fields_for :pages, page, index: index do |pages_fields| %>
+          <%= pages_fields.hidden_field :id %>
+          <p>question_text_en: <%= page.question_text %></p>
+          <%= pages_fields.govuk_text_field :question_text_cy, label: {text: "question_text_cy"} %>
+        <% end %>
+      <% end %>
+
       <%= render MarkCompleteComponent::View.new(generate_form: false, form_builder: f, form_model: @welsh_translation_input, legend: t(".legend"), hint: t(".hint")) %>
 
       <%= f.govuk_submit t("save_and_continue") %>
     <% end %>
   </div>
 </div>
-
