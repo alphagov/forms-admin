@@ -137,6 +137,12 @@ en:
             question_text:
               blank: Enter a question
               too_long: Question text must be %{count} characters or less
+        form:
+          attributes:
+            submission_email:
+              invalid_email: Enter an email address in the correct format, like name@example.gov.uk
+            support_email:
+              invalid_email: Enter an email address in the correct format, like name@example.gov.uk
         group:
           attributes:
             name:

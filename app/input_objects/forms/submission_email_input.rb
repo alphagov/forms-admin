@@ -1,10 +1,8 @@
 class Forms::SubmissionEmailInput < BaseInput
   attr_accessor :form, :temporary_submission_email, :email_code, :confirmation_code, :current_user, :notify_response_id
 
-  EMAIL_REGEX = /.*@.*/
-
   validates :temporary_submission_email, presence: true
-  validates :temporary_submission_email, format: { with: EMAIL_REGEX, message: :invalid_email }
+  validates :temporary_submission_email, email_address: { message: :invalid_email }
   validates :temporary_submission_email, allowed_email_domain: true
 
   EMAIL_CODE_REGEX = /[0-9]{6}/

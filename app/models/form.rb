@@ -40,6 +40,8 @@ class Form < ApplicationRecord
   validate :marking_complete_with_errors
   validates :submission_type, presence: true
   validates :available_languages, presence: true, inclusion: { in: Form.languages }
+  validates :submission_email, email_address: { message: :invalid_email }, allow_blank: true
+  validates :support_email, email_address: { message: :invalid_email }, allow_blank: true
 
   after_create :set_external_id
   after_update :update_draft_form_document

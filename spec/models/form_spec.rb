@@ -110,6 +110,70 @@ RSpec.describe Form, type: :model do
       expect(form.errors[:available_languages]).to be_empty
     end
 
+    context "when submission_email contains multiple email addresses" do
+      it "is invalid with comma-separated email addresses" do
+        form.name = "test"
+        form.submission_email = "first@example.gov.uk,second@example.gov.uk"
+        expect(form).to be_invalid
+      end
+
+      it "is invalid with semi-colon-separated email addresses" do
+        form.name = "test"
+        form.submission_email = "first@example.gov.uk;second@example.gov.uk"
+        expect(form).to be_invalid
+      end
+
+      it "is invalid with comma-separated email addresses with spaces" do
+        form.name = "test"
+        form.submission_email = "first@example.gov.uk, second@example.gov.uk"
+        expect(form).to be_invalid
+      end
+
+      it "is invalid with semi-colon-separated email addresses with spaces" do
+        form.name = "test"
+        form.submission_email = "first@example.gov.uk; second@example.gov.uk"
+        expect(form).to be_invalid
+      end
+
+      it "is valid with a single email address" do
+        form.name = "test"
+        form.submission_email = "single@example.gov.uk"
+        expect(form).to be_valid
+      end
+    end
+
+    context "when support_email contains multiple email addresses" do
+      it "is invalid with comma-separated email addresses" do
+        form.name = "test"
+        form.support_email = "first@example.gov.uk,second@example.gov.uk"
+        expect(form).to be_invalid
+      end
+
+      it "is invalid with semi-colon-separated email addresses" do
+        form.name = "test"
+        form.support_email = "first@example.gov.uk;second@example.gov.uk"
+        expect(form).to be_invalid
+      end
+
+      it "is invalid with comma-separated email addresses with spaces" do
+        form.name = "test"
+        form.support_email = "first@example.gov.uk, second@example.gov.uk"
+        expect(form).to be_invalid
+      end
+
+      it "is invalid with semi-colon-separated email addresses with spaces" do
+        form.name = "test"
+        form.support_email = "first@example.gov.uk; second@example.gov.uk"
+        expect(form).to be_invalid
+      end
+
+      it "is valid with a single email address" do
+        form.name = "test"
+        form.support_email = "single@example.gov.uk"
+        expect(form).to be_valid
+      end
+    end
+
     context "when the form has validation errors" do
       let(:form) { create :form, pages: [routing_page, goto_page] }
       let(:routing_page) do
@@ -205,7 +269,8 @@ RSpec.describe Form, type: :model do
         form.name = "English Name"
         form.payment_url = "https://example.gov.uk/en"
         translated_attributes.each do |attribute|
-          form.send("#{attribute}=", "english_#{attribute}")
+          value = attribute == :support_email ? "english@example.gov.uk" : "english_#{attribute}"
+          form.send("#{attribute}=", value)
         end
         form.save!
       end
@@ -214,7 +279,8 @@ RSpec.describe Form, type: :model do
         form.name = "Welsh Name"
         form.payment_url = "https://example.gov.uk/cy"
         translated_attributes.each do |attribute|
-          form.send("#{attribute}=", "welsh_#{attribute}")
+          value = attribute == :support_email ? "welsh@example.gov.uk" : "welsh_#{attribute}"
+          form.send("#{attribute}=", value)
         end
         form.save!
       end
@@ -225,7 +291,8 @@ RSpec.describe Form, type: :model do
         expect(form.form_slug).to eq("english-name")
         expect(form.payment_url).to eq("https://example.gov.uk/en")
         translated_attributes.each do |attribute|
-          expect(form.send(attribute)).to eq("english_#{attribute}")
+          expected_value = attribute == :support_email ? "english@example.gov.uk" : "english_#{attribute}"
+          expect(form.send(attribute)).to eq(expected_value)
         end
       end
 
@@ -235,7 +302,8 @@ RSpec.describe Form, type: :model do
         expect(form.form_slug).to eq("english-name")
         expect(form.payment_url).to eq("https://example.gov.uk/cy")
         translated_attributes.each do |attribute|
-          expect(form.send(attribute)).to eq("welsh_#{attribute}")
+          expected_value = attribute == :support_email ? "welsh@example.gov.uk" : "welsh_#{attribute}"
+          expect(form.send(attribute)).to eq(expected_value)
         end
       end
     end
