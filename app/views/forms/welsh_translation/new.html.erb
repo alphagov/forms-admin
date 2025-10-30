@@ -2,8 +2,8 @@
 <% content_for :back_link, govuk_back_link_to(form_path(@welsh_translation_input.form), t("back_link.form_create")) %>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <%= form_with(model: @welsh_translation_input, url: welsh_translation_create_path(@welsh_translation_input.form)) do |f| %>
+  <%= form_with(model: @welsh_translation_input, url: welsh_translation_create_path(@welsh_translation_input.form)) do |f| %>
+    <div class="govuk-grid-column-two-thirds">
       <% if @welsh_translation_input&.errors&.present? %>
         <%= f.govuk_error_summary %>
       <% end %>
@@ -12,21 +12,41 @@
         <span class="govuk-caption-l"><%= @welsh_translation_input.form.name %></span>
         <%= t("page_titles.welsh_translation") %>
       </h1>
+    </div>
 
-      <h3 class="govuk-heading-m">Pages</h2>
-
+    <div class="govuk-grid-column-full">
       <% @welsh_translation_input.pages.each_with_index do |page, index| %>
-        <h3 class="govuk-heading-s"><%= page.question_with_number %></h2>
         <%= f.fields_for :pages, page, index: index do |pages_fields| %>
-          <%= pages_fields.hidden_field :id %>
-          <p>question_text_en: <%= page.question_text %></p>
-          <%= pages_fields.govuk_text_field :question_text_cy, label: {text: "question_text_cy"} %>
+          <%= pages_fields.hidden_field :id, value: page.id, readonly: true %>
+
+          <%= govuk_table do |table| %>
+            <%= table.with_caption(size: 'm', text: "Question #{page.position}") %>
+            <%= table.with_head do |head| %>
+              <%= head.with_row do |row| %>
+                <%= row.with_cell(header: true, text: nil) %>
+                <%= row.with_cell(header: true, text: "English content") %>
+                <%= row.with_cell(header: true, text: "Welsh content") %>
+              <% end %>
+            <% end %>
+
+            <%= table.with_body do |body| %>
+              <%= body.with_row do |row| %>
+                <%= row.with_cell(header: true, text: "Question text") %>
+                <%= row.with_cell(text: page.question_text) %>
+                <%= row.with_cell do |cell| %>
+                  <%= pages_fields.govuk_text_field :question_text_cy, label: {text: "Question #{page.position} Welsh question text", class: "govuk-visually-hidden"} %>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
         <% end %>
       <% end %>
+    </div>
 
+    <div class="govuk-grid-column-two-thirds">
       <%= render MarkCompleteComponent::View.new(generate_form: false, form_builder: f, form_model: @welsh_translation_input, legend: t(".legend"), hint: t(".hint")) %>
 
       <%= f.govuk_submit t("save_and_continue") %>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>
