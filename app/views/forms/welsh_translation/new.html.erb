@@ -15,12 +15,12 @@
     </div>
 
     <div class="govuk-grid-column-full">
-      <% @welsh_translation_input.pages.each_with_index do |page, index| %>
-        <%= f.fields_for :pages, page, index: index do |pages_fields| %>
-          <%= pages_fields.hidden_field :id, value: page.id, readonly: true %>
+      <% @welsh_translation_input.page_translations.each_with_index do |page_translation, index| %>
+        <%= f.fields_for :page_translations, page_translation, index: index do |page_translation_fields| %>
+          <%= page_translation_fields.hidden_field :id, value: page_translation.id, readonly: true %>
 
           <%= govuk_table do |table| %>
-            <%= table.with_caption(size: 'm', text: "Question #{page.form_page.position}") %>
+            <%= table.with_caption(size: 'm', text: "Question #{page_translation.page.position}") %>
             <%= table.with_head do |head| %>
               <%= head.with_row do |row| %>
                 <%= row.with_cell(header: true, text: nil) %>
@@ -32,35 +32,35 @@
             <%= table.with_body do |body| %>
               <%= body.with_row do |row| %>
                 <%= row.with_cell(header: true, text: "Question text") %>
-                <%= row.with_cell(text: page.form_page.question_text) %>
+                <%= row.with_cell(text: page_translation.page.question_text) %>
                 <%= row.with_cell do |cell| %>
-                  <%= pages_fields.govuk_text_field :question_text_cy, label: {text: "Question #{page.form_page.position} Welsh question text", class: "govuk-visually-hidden"} %>
+                  <%= page_translation_fields.govuk_text_field :question_text_cy, label: {text: "Question #{page_translation.page.position} Welsh question text", class: "govuk-visually-hidden"} %>
                 <% end %>
               <% end %>
-              <% if page.form_page.hint_text.present? %>
+              <% if page_translation.page.hint_text.present? %>
                 <%= body.with_row do |row| %>
                   <%= row.with_cell(header: true, text: "Hint text") %>
-                  <%= row.with_cell(text: page.form_page.hint_text) %>
+                  <%= row.with_cell(text: page_translation.page.hint_text) %>
                   <%= row.with_cell do |cell| %>
-                    <%= pages_fields.govuk_text_area :hint_text_cy, label: {text: "Question #{page.form_page.position} Welsh hint text", class: "govuk-visually-hidden"} %>
+                    <%= page_translation_fields.govuk_text_area :hint_text_cy, label: {text: "Question #{page_translation.page.position} Welsh hint text", class: "govuk-visually-hidden"} %>
                   <% end %>
                 <% end %>
               <% end %>
-              <% if page.form_page.guidance_markdown.present? %>
+              <% if page_translation.page.guidance_markdown.present? %>
                 <%= body.with_row do |row| %>
                   <%= row.with_cell(header: true, text: "Page heading") %>
-                  <%= row.with_cell(text: page.form_page.page_heading) %>
+                  <%= row.with_cell(text: page_translation.page.page_heading) %>
                   <%= row.with_cell do |cell| %>
-                    <%= pages_fields.govuk_text_field :page_heading_cy, label: {text: "Question #{page.form_page.position} Welsh page heading", class: "govuk-visually-hidden"} %>
+                    <%= page_translation_fields.govuk_text_field :page_heading_cy, label: {text: "Question #{page_translation.page.position} Welsh page heading", class: "govuk-visually-hidden"} %>
                   <% end %>
                 <% end %>
               <% end %>
-              <% if page.form_page.guidance_markdown.present? %>
+              <% if page_translation.page.guidance_markdown.present? %>
                 <%= body.with_row do |row| %>
                   <%= row.with_cell(header: true, text: "Guidance markdown") %>
-                  <%= row.with_cell(text: page.form_page.guidance_markdown) %>
+                  <%= row.with_cell(text: page_translation.page.guidance_markdown) %>
                   <%= row.with_cell do |cell| %>
-                    <%= pages_fields.govuk_text_area :guidance_markdown_cy, label: {text: "Question #{page.form_page.position} Welsh guidance markdown", class: "govuk-visually-hidden"} %>
+                    <%= page_translation_fields.govuk_text_area :guidance_markdown_cy, label: {text: "Question #{page_translation.page.position} Welsh guidance markdown", class: "govuk-visually-hidden"} %>
                   <% end %>
                 <% end %>
               <% end %>

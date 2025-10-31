@@ -1,12 +1,12 @@
 class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   include TextInputHelper
 
-  attr_accessor :pages
+  attr_accessor :page_translations
 
   def submit
     return false if invalid?
 
-    pages.each(&:submit)
+    page_translations.each(&:submit)
 
     form.welsh_completed = mark_complete
     form.save_draft!
