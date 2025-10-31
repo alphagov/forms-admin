@@ -430,6 +430,52 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "#save_question_changes!" do
+    let(:form) { create :form, question_section_completed: true }
+
+    it "saves the form" do
+      form.name = "new name"
+
+      expect {
+        form.save_question_changes!
+      }.to change { described_class.find(form.id).name }.to("new name")
+    end
+
+    it "updates the question section completed to false" do
+      expect {
+        form.save_question_changes!
+      }.to change { form.reload.question_section_completed }.to(false)
+    end
+
+    context "when the form is draft" do
+      it "does not change the form's state" do
+        expect {
+          form.save_question_changes!
+        }.not_to(change { form.reload.state })
+      end
+    end
+
+    context "when the form is live" do
+      let(:form) { create(:form, :live) }
+
+      it "changes the form's state to live_with_draft" do
+        expect {
+          form.save_question_changes!
+        }.to change { form.reload.state }.to("live_with_draft")
+      end
+    end
+
+    context "when the form is archived" do
+      let(:form) { create(:form, :archived) }
+
+      it "changes the form's state to archived_with_draft" do
+        expect {
+          form.save_draft!
+        }.to change { form.reload.state }.to("archived_with_draft")
+      end
+    end
+  end
+
   describe "#save_draft!" do
     let(:form) { create :form }
 

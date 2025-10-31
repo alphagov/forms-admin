@@ -1,0 +1,8 @@
+<% set_page_title(t("page_titles.change_order_pages_added_error")) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= t("page_titles.change_order_pages_added_error") %></h1>
+    <p><%= t(".questions_added") %></p>
+    <p><%= t(".try_again_html", change_order_link: change_order_new_path(@current_form.id)) %></p>
+  </div>
+</div>

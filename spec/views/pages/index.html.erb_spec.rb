@@ -41,7 +41,7 @@ describe "pages/index.html.erb" do
     end
   end
 
-  describe "when there are one or more page to display" do
+  describe "when there are more than one page to display" do
     let(:pages) { [(build :page, id: 1, position: 1, form_id: 1), (build :page, id: 2, position: 2, form_id: 1), (build :page, id: 3, position: 3, form_id: 1)] }
 
     it "allows the user to add a page" do
@@ -51,6 +51,10 @@ describe "pages/index.html.erb" do
     it "does contain a summary list entry each page" do
       expect(rendered).to have_text I18n.t("forms.form_overview.your_questions")
       expect(rendered).to have_css ".govuk-summary-list__row", count: 3
+    end
+
+    it "has a link to change the page order" do
+      expect(rendered).to have_link("Change your question order", href: change_order_new_path(form.id))
     end
   end
 end
