@@ -32,4 +32,12 @@ class Forms::WelshPageTranslationInput < BaseInput
   def form_field_id(attribute)
     field_id(:forms_welsh_page_translation_input, page.id, :page_translations, attribute)
   end
+
+  def page_has_hint_text?
+    page.hint_text.present?
+  end
+
+  def page_has_page_heading_and_guidance_markdown?
+    page.page_heading.present? && page.guidance_markdown.present?
+  end
 end

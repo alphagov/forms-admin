@@ -82,4 +82,40 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
       expect(welsh_page_translation_input.guidance_markdown_cy).to eq(page.guidance_markdown_cy)
     end
   end
+
+  describe "#page_has_hint_text?" do
+    context "when the page has hint_text" do
+      let(:page) { create_page(hint_text: "Choose 'Yes' if you already have a valid licence.") }
+
+      it "returns true" do
+        expect(welsh_page_translation_input.page_has_hint_text?).to be true
+      end
+    end
+
+    context "when the page has no hint_text" do
+      let(:page) { create_page(hint_text: nil) }
+
+      it "returns false" do
+        expect(welsh_page_translation_input.page_has_hint_text?).to be false
+      end
+    end
+  end
+
+  describe "#page_has_page_heading_and_guidance_markdown?" do
+    context "when the page has a page_heading" do
+      let(:page) { create_page(page_heading: "Licencing") }
+
+      it "returns true" do
+        expect(welsh_page_translation_input.page_has_page_heading_and_guidance_markdown?).to be true
+      end
+    end
+
+    context "when the page has no page_heading and guidance_markdown" do
+      let(:page) { create_page(page_heading: nil, guidance_markdown: nil) }
+
+      it "returns false" do
+        expect(welsh_page_translation_input.page_has_page_heading_and_guidance_markdown?).to be false
+      end
+    end
+  end
 end
