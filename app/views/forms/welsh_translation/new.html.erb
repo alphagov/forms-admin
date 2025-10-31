@@ -34,7 +34,10 @@
                 <%= row.with_cell(header: true, text: "Question text") %>
                 <%= row.with_cell(text: page_translation.page.question_text) %>
                 <%= row.with_cell do |cell| %>
-                  <%= page_translation_fields.govuk_text_field :question_text_cy, label: {text: "Question #{page_translation.page.position} Welsh question text", class: "govuk-visually-hidden"} %>
+                  <%= page_translation_fields.govuk_text_field :question_text_cy,
+                                                               id: page_translation.form_field_id(:question_text_cy),
+                                                               label: {text: "Question #{page_translation.page.position} Welsh question text", class: "govuk-visually-hidden", for: page_translation.form_field_id(:question_text_cy)}
+                                                               %>
                 <% end %>
               <% end %>
               <% if page_translation.page.hint_text.present? %>
@@ -42,7 +45,10 @@
                   <%= row.with_cell(header: true, text: "Hint text") %>
                   <%= row.with_cell(text: page_translation.page.hint_text) %>
                   <%= row.with_cell do |cell| %>
-                    <%= page_translation_fields.govuk_text_area :hint_text_cy, label: {text: "Question #{page_translation.page.position} Welsh hint text", class: "govuk-visually-hidden"} %>
+                    <%= page_translation_fields.govuk_text_area :hint_text_cy,
+                                                                id: page_translation.form_field_id(:hint_text),
+                                                                label: {text: "Question #{page_translation.page.position} Welsh hint text", class: "govuk-visually-hidden", for: page_translation.form_field_id(:hint_text)}
+                                                                %>
                   <% end %>
                 <% end %>
               <% end %>
@@ -51,7 +57,10 @@
                   <%= row.with_cell(header: true, text: "Page heading") %>
                   <%= row.with_cell(text: page_translation.page.page_heading) %>
                   <%= row.with_cell do |cell| %>
-                    <%= page_translation_fields.govuk_text_field :page_heading_cy, label: {text: "Question #{page_translation.page.position} Welsh page heading", class: "govuk-visually-hidden"} %>
+                    <%= page_translation_fields.govuk_text_field :page_heading_cy,
+                                                                 id: page_translation.form_field_id(:page_heading_cy),
+                                                                 label: {text: "Question #{page_translation.page.position} Welsh page heading", class: "govuk-visually-hidden", for: page_translation.form_field_id(:page_heading_cy)}
+                                                                 %>
                   <% end %>
                 <% end %>
               <% end %>
@@ -60,7 +69,10 @@
                   <%= row.with_cell(header: true, text: "Guidance markdown") %>
                   <%= row.with_cell(text: page_translation.page.guidance_markdown) %>
                   <%= row.with_cell do |cell| %>
-                    <%= page_translation_fields.govuk_text_area :guidance_markdown_cy, label: {text: "Question #{page_translation.page.position} Welsh guidance markdown", class: "govuk-visually-hidden"} %>
+                    <%= page_translation_fields.govuk_text_area :guidance_markdown_cy,
+                                                                id: page_translation.form_field_id(:guidance_markdown_cy),
+                                                                label: {text: "Question #{page_translation.page.position} Welsh guidance markdown", class: "govuk-visually-hidden", for: page_translation.form_field_id(:guidance_markdown_cy)}
+                                                                %>
                   <% end %>
                 <% end %>
               <% end %>
