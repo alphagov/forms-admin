@@ -1,0 +1,49 @@
+class Forms::WelshPageTranslationInput < BaseInput
+  include TextInputHelper
+  include ActionView::Helpers::FormTagHelper
+
+  attr_accessor :id, :question_text_cy, :hint_text_cy, :page_heading_cy, :guidance_markdown_cy
+
+  validates :question_text_cy, presence: true
+
+  def submit
+    return false if invalid?
+
+    page.question_text_cy = question_text_cy
+    page.hint_text_cy = hint_text_cy
+    page.page_heading_cy = page_heading_cy
+    page.guidance_markdown_cy = guidance_markdown_cy
+
+    page.save!
+  end
+
+  def assign_page_values
+    self.question_text_cy = page.question_text_cy
+    self.hint_text_cy = page.hint_text_cy
+    self.page_heading_cy = page.page_heading_cy
+    self.guidance_markdown_cy = page.guidance_markdown_cy
+
+    self
+  end
+
+  def page
+    @page ||= Page.find(id)
+    @page
+  end
+
+  def form_field_id(attribute)
+    field_id(:forms_welsh_page_translation_input, page.id, :page_translations, attribute)
+  end
+
+  def page_has_hint_text?
+    page.hint_text.present?
+  end
+
+  def page_has_page_heading?
+    page.page_heading.present?
+  end
+
+  def page_has_guidance_markdown?
+    page.guidance_markdown.present?
+  end
+end
