@@ -3,14 +3,14 @@ module Forms
     after_action :verify_authorized
 
     def new
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
       return redirect_to form_path(current_form) unless welsh_enabled?
 
       @welsh_translation_input = WelshTranslationInput.new(form: current_form).assign_form_values
     end
 
     def create
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
       return redirect_to form_path(current_form) unless welsh_enabled?
 
       @welsh_translation_input = WelshTranslationInput.new(**welsh_translation_input_params)
@@ -29,7 +29,7 @@ module Forms
     end
 
     def welsh_translation_input_params
-      params.require(:forms_welsh_translation_input).permit(:mark_complete).merge(form: current_form)
+      params.require(:forms_welsh_translation_input).permit(WelshTranslationInput.attribute_names).merge(form: current_form)
     end
 
     def welsh_enabled?
