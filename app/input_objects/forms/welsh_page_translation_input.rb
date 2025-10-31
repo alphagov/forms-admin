@@ -1,5 +1,6 @@
 class Forms::WelshPageTranslationInput < BaseInput
   include TextInputHelper
+  include ActionView::Helpers::FormTagHelper
 
   attr_accessor :id, :question_text_cy, :hint_text_cy, :page_heading_cy, :guidance_markdown_cy
 
@@ -26,5 +27,9 @@ class Forms::WelshPageTranslationInput < BaseInput
   def page
     @page ||= Page.find(id)
     @page
+  end
+
+  def form_field_id(attribute)
+    field_id(:forms_welsh_page_translation_input, page.id, :page_translations, attribute)
   end
 end
