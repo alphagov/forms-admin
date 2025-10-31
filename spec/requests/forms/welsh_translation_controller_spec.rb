@@ -48,8 +48,8 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
 
   describe "#create" do
     let(:mark_complete) { "true" }
-    let(:pages) { { "0" => { "id" => form.pages.first.id, question_text_cy: "Ydych chi'n adnewyddu trwydded?" } } }
-    let(:params) { { forms_welsh_translation_input: { form:, mark_complete:, pages: } } }
+    let(:page_translations) { { "0" => { "id" => form.pages.first.id, question_text_cy: "Ydych chi'n adnewyddu trwydded?" } } }
+    let(:params) { { forms_welsh_translation_input: { form:, mark_complete:, page_translations: } } }
 
     context "when 'Yes' is selected" do
       it "updates the form" do

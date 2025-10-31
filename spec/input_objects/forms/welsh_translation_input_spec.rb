@@ -147,15 +147,12 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
       end
 
       context "when the form includes page translation objects" do
-        let(:page_translation) { Forms::PageTranslationInput.new(id: page.id, question_text_cy: "Ydych chi'n adnewyddu trwydded?", hint_text_cy: "Dewiswch 'Ydw' os oes gennych drwydded ddilys eisoes.") }
-        let(:another_page_translation) { Forms::PageTranslationInput.new(id: another_page.id, question_text_cy: "Ydych chi'n adnewyddu trwydded?") }
+        let(:page_translation) { Forms::WelshPageTranslationInput.new(id: page.id, question_text_cy: "Ydych chi'n adnewyddu trwydded?", hint_text_cy: "Dewiswch 'Ydw' os oes gennych drwydded ddilys eisoes.") }
+        let(:another_page_translation) { Forms::WelshPageTranslationInput.new(id: another_page.id, question_text_cy: "Ydych chi'n adnewyddu trwydded?") }
 
-        let(:new_input_data) { super().merge(pages: [page_translation, another_page_translation]) }
+        let(:new_input_data) { super().merge(page_translations: [page_translation, another_page_translation]) }
 
         it "submits the data on the page translation objects" do
-          expect(page_translation).to receive(:submit).once
-          expect(another_page_translation).to receive(:submit).once
-
           welsh_translation_input.submit
 
           expect(page.reload.question_text_cy).to eq("Ydych chi'n adnewyddu trwydded?")

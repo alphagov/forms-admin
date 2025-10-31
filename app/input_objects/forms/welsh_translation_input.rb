@@ -2,7 +2,7 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   include TextInputHelper
   include ActiveModel::Attributes
 
-  attr_accessor :form, :pages
+  attr_accessor :form, :page_translations
 
   attribute :mark_complete
 
@@ -36,8 +36,8 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
 
     form.what_happens_next_markdown_cy = what_happens_next_markdown_cy
 
-    if pages.present?
-      pages.each(&:submit)
+    if page_translations.present?
+      page_translations.each(&:submit)
     end
 
     form.welsh_completed = mark_complete

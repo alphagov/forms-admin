@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe Forms::PageTranslationInput, type: :model do
-  subject(:page_translation_input) { described_class.new(new_input_data) }
+RSpec.describe Forms::WelshPageTranslationInput, type: :model do
+  subject(:welsh_page_translation_input) { described_class.new(new_input_data) }
 
   let(:page) { create_page }
 
@@ -32,11 +32,11 @@ RSpec.describe Forms::PageTranslationInput, type: :model do
 
   describe "#submit" do
     it "returns true" do
-      expect(page_translation_input.submit).to be true
+      expect(welsh_page_translation_input.submit).to be true
     end
 
     it "updates the page's welsh attributes with the new values" do
-      page_translation_input.submit
+      welsh_page_translation_input.submit
       page.reload
 
       expect(page.question_text_cy).to eq(new_input_data[:question_text_cy])
@@ -47,7 +47,7 @@ RSpec.describe Forms::PageTranslationInput, type: :model do
 
     it "does not update any non-welsh attributes" do
       english_value_before = page.question_text
-      page_translation_input.submit
+      welsh_page_translation_input.submit
       expect(page.question_text).to eq(english_value_before)
     end
 
@@ -55,7 +55,7 @@ RSpec.describe Forms::PageTranslationInput, type: :model do
       let(:page) { create_page(hint_text: nil) }
 
       it "clears the Welsh hint text" do
-        page_translation_input.submit
+        welsh_page_translation_input.submit
         expect(page.hint_text_cy).to be_nil
       end
     end
@@ -64,7 +64,7 @@ RSpec.describe Forms::PageTranslationInput, type: :model do
       let(:page) { create_page(page_heading: nil, guidance_markdown: nil) }
 
       it "clears the Welsh page heading" do
-        page_translation_input.submit
+        welsh_page_translation_input.submit
         expect(page.page_heading_cy).to be_nil
         expect(page.guidance_markdown_cy).to be_nil
       end
@@ -73,13 +73,13 @@ RSpec.describe Forms::PageTranslationInput, type: :model do
 
   describe "#assign_page_values" do
     it "loads the existing welsh attributes from the page" do
-      page_translation_input = described_class.new(id: page.id)
-      page_translation_input.assign_page_values
+      welsh_page_translation_input = described_class.new(id: page.id)
+      welsh_page_translation_input.assign_page_values
 
-      expect(page_translation_input.question_text_cy).to eq(page.question_text_cy)
-      expect(page_translation_input.hint_text_cy).to eq(page.hint_text_cy)
-      expect(page_translation_input.page_heading_cy).to eq(page.page_heading_cy)
-      expect(page_translation_input.guidance_markdown_cy).to eq(page.guidance_markdown_cy)
+      expect(welsh_page_translation_input.question_text_cy).to eq(page.question_text_cy)
+      expect(welsh_page_translation_input.hint_text_cy).to eq(page.hint_text_cy)
+      expect(welsh_page_translation_input.page_heading_cy).to eq(page.page_heading_cy)
+      expect(welsh_page_translation_input.guidance_markdown_cy).to eq(page.guidance_markdown_cy)
     end
   end
 end

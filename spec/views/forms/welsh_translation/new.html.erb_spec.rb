@@ -4,9 +4,9 @@ describe "forms/welsh_translation/new.html.erb" do
   let(:form) { build_form }
   let(:page) { create :page, position: 1 }
   let(:another_page) { create :page, position: 2 }
-  let(:page_translation_input) { Forms::PageTranslationInput.new(id: page.id).assign_page_values }
-  let(:another_page_translation_input) { Forms::PageTranslationInput.new(id: another_page.id).assign_page_values }
-  let(:welsh_translation_input) { Forms::WelshTranslationInput.new(form:, pages: [page_translation_input, another_page_translation_input]).assign_form_values }
+  let(:welsh_page_translation_input) { Forms::WelshPageTranslationInput.new(id: page.id).assign_page_values }
+  let(:another_welsh_page_translation_input) { Forms::WelshPageTranslationInput.new(id: another_page.id).assign_page_values }
+  let(:welsh_translation_input) { Forms::WelshTranslationInput.new(form:, page_translations: [welsh_page_translation_input, another_welsh_page_translation_input]).assign_form_values }
 
   def build_form(attributes = {})
     default_attributes = {
@@ -208,7 +208,6 @@ describe "forms/welsh_translation/new.html.erb" do
       context "when a page has a page heading and guidance markdown" do
         let(:page) { create :page, guidance_markdown: nil, page_heading: nil }
         let(:another_page) { create :page, guidance_markdown: "This part of the form concerns licencing.", page_heading: "Licencing" }
-
 
         it "shows the English text and Welsh fields for pages with English page heading and guidance markdown" do
           expect(rendered).to have_css("td", text: page.page_heading)
