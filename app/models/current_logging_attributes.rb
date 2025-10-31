@@ -15,5 +15,7 @@ class CurrentLoggingAttributes < ActiveSupport::CurrentAttributes
             :answer_type,
             :auth0_session_id,
             :validation_errors,
-            :params
+            :params,
+            :queries_count,
+            :cached_queries_count
 end
