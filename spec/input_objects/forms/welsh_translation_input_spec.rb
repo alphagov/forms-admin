@@ -4,6 +4,8 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
   subject(:welsh_translation_input) { described_class.new(new_input_data) }
 
   let(:form) { build_form }
+  let(:page) { create :page }
+  let(:another_page) { create :page }
 
   let(:new_input_data) do
     {
@@ -141,6 +143,24 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
         it "clears the Welsh support email" do
           welsh_translation_input.submit
           expect(form.support_email_cy).to be_nil
+        end
+      end
+
+      context "when the form includes page translation objects" do
+        let(:page_translation) { Forms::PageTranslationInput.new(id: page.id, question_text_cy: "Ydych chi'n adnewyddu trwydded?", hint_text_cy: "Dewiswch 'Ydw' os oes gennych drwydded ddilys eisoes.") }
+        let(:another_page_translation) { Forms::PageTranslationInput.new(id: another_page.id, question_text_cy: "Ydych chi'n adnewyddu trwydded?") }
+
+        let(:new_input_data) { super().merge(pages: [page_translation, another_page_translation]) }
+
+        it "submits the data on the page translation objects" do
+          expect(page_translation).to receive(:submit).once
+          expect(another_page_translation).to receive(:submit).once
+
+          welsh_translation_input.submit
+
+          expect(page.reload.question_text_cy).to eq("Ydych chi'n adnewyddu trwydded?")
+          expect(page.reload.hint_text_cy).to eq("Dewiswch 'Ydw' os oes gennych drwydded ddilys eisoes.")
+          expect(another_page.reload.question_text_cy).to eq("Ydych chi'n adnewyddu trwydded?")
         end
       end
     end

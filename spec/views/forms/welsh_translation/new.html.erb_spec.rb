@@ -2,7 +2,11 @@ require "rails_helper"
 
 describe "forms/welsh_translation/new.html.erb" do
   let(:form) { build_form }
-  let(:welsh_translation_input) { Forms::WelshTranslationInput.new(form:).assign_form_values }
+  let(:page) { create :page, position: 1 }
+  let(:another_page) { create :page, position: 2 }
+  let(:page_translation_input) { Forms::PageTranslationInput.new(id: page.id).assign_page_values }
+  let(:another_page_translation_input) { Forms::PageTranslationInput.new(id: another_page.id).assign_page_values }
+  let(:welsh_translation_input) { Forms::WelshTranslationInput.new(form:, pages: [page_translation_input, another_page_translation_input]).assign_form_values }
 
   def build_form(attributes = {})
     default_attributes = {
@@ -20,6 +24,7 @@ describe "forms/welsh_translation/new.html.erb" do
       support_url: "https://www.gov.uk/support",
       support_url_text: "Support URL text",
       declaration_text: "Declaration text", # no welsh version to test nil
+      pages: [page, another_page],
     }
     build(:form, default_attributes.merge(attributes))
   end
@@ -177,6 +182,50 @@ describe "forms/welsh_translation/new.html.erb" do
 
       it "renders message for no privacy information" do
         expect(rendered).to have_text("No link to privacy information was added to this form.")
+      end
+    end
+
+    context "when the form has pages" do
+      it "has a field for each page's Welsh question text" do
+        expect(rendered).to have_field("Question #{page.position} Welsh question text", type: "text")
+        expect(rendered).to have_field("Question #{another_page.position} Welsh question text", type: "text")
+      end
+
+      context "when a page has hint text" do
+        let(:page) { create :page, hint_text: "Choose 'Yes' if you already have a valid licence." }
+        let(:another_page) { create :page, hint_text: nil }
+
+        it "shows the English text and Welsh field for pages with English hint text" do
+          expect(rendered).to have_css("td", text: page.hint_text)
+          expect(rendered).to have_field("Question #{page.position} Welsh hint text", type: "textarea")
+        end
+
+        it "does not show the Welsh field for pages without English hint text" do
+          expect(rendered).not_to have_field("Question #{another_page.position} Welsh hint text")
+        end
+      end
+
+      context "when a page has a page heading and guidance markdown" do
+        let(:page) { create :page, guidance_markdown: nil, page_heading: nil }
+        let(:another_page) { create :page, guidance_markdown: "This part of the form concerns licencing.", page_heading: "Licencing" }
+
+
+        it "shows the English text and Welsh fields for pages with English page heading and guidance markdown" do
+          expect(rendered).to have_css("td", text: page.page_heading)
+          expect(rendered).to have_field("Question #{another_page.position} Welsh page heading")
+          expect(rendered).to have_css("td", text: page.guidance_markdown)
+          expect(rendered).to have_field("Question #{another_page.position} Welsh guidance markdown")
+        end
+
+        it "does not show the Welsh field for pages without English page heading and guidance markdown" do
+          expect(rendered).not_to have_field("Question #{page.position} Welsh page heading", type: "text")
+          expect(rendered).not_to have_field("Question #{page.position} Welsh guidance markdown", type: "textarea")
+        end
+
+        it "shows a field for Welsh page heading and guidance markdown on pages with English page heading and guidance markdown" do
+          expect(rendered).to have_field("Question #{another_page.position} Welsh page heading")
+          expect(rendered).to have_field("Question #{another_page.position} Welsh guidance markdown")
+        end
       end
     end
   end

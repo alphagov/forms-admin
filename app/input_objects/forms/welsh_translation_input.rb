@@ -2,7 +2,7 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   include TextInputHelper
   include ActiveModel::Attributes
 
-  attr_accessor :form
+  attr_accessor :form, :pages
 
   attribute :mark_complete
 
@@ -15,8 +15,6 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   attribute :declaration_text_cy
   attribute :what_happens_next_markdown_cy
   attribute :payment_url_cy
-
-  attr_accessor :pages
 
   def submit
     return false if invalid?
@@ -38,14 +36,8 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
 
     form.what_happens_next_markdown_cy = what_happens_next_markdown_cy
 
-    pages.each_value do |page|
-      form_page = form.pages.find_by(id: page["id"])
-      form_page.question_text_cy = page["question_text_cy"]
-      form_page.hint_text_cy = page["hint_text_cy"]
-      form_page.page_heading_cy = page["page_heading_cy"]
-      form_page.guidance_markdown_cy = page["guidance_markdown_cy"]
-
-      form_page.save!
+    if pages.present?
+      pages.each(&:submit)
     end
 
     form.welsh_completed = mark_complete
@@ -63,7 +55,6 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
     self.what_happens_next_markdown_cy = form.what_happens_next_markdown_cy
     self.payment_url_cy = form.payment_url_cy
 
-    self.pages = form.pages
     self.mark_complete = form.try(:welsh_completed)
     self
   end
