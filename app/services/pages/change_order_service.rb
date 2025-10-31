@@ -34,9 +34,9 @@ class Pages::ChangeOrderService
     raise FormPagesAddedError if (form.pages.pluck(:id) - new_page_order).any?
 
     Page.acts_as_list_no_update do
-      new_page_order.map { |page_id| form.pages.find_by(id: page_id) }
-                    .compact
-                    .each_with_index { |page, index| page.update!(position: index + 1) }
+      form.pages.reorder(nil).in_order_of(:id, new_page_order).each_with_index do |page, index|
+        page.update!(position: index + 1)
+      end
     end
 
     form.save_question_changes!

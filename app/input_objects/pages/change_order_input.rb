@@ -13,8 +13,7 @@ class Pages::ChangeOrderInput < BaseInput
   end
 
   def update_preview
-    change_ordered_page_ids = Pages::ChangeOrderService.generate_new_page_order(page_ids_and_positions)
-    @pages_preview_order = change_ordered_page_ids.map { |page_id| form.pages.find_by(id: page_id) }.compact
+    @pages_preview_order = Pages::ChangeOrderService.generate_new_page_order(page_ids_and_positions)
     @page_position_params = nil
   end
 
@@ -26,10 +25,10 @@ class Pages::ChangeOrderInput < BaseInput
   end
 
   def pages
-    return @pages_preview_order if @pages_preview_order
-    return form.pages unless @page_position_params
+    return form.pages unless @pages_preview_order || @page_position_params
 
-    page_position_params.map { |name, _value| form.pages.find_by(id: page_id_from_input_name(name)) }.compact
+    ordered_page_ids = @pages_preview_order.presence || @page_position_params.map { |name, _value| page_id_from_input_name(name) }
+    form.pages.reorder(nil).in_order_of(:id, ordered_page_ids).to_a
   end
 
   def input_name(page)
