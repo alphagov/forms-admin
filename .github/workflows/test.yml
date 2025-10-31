@@ -33,7 +33,7 @@ jobs:
       DATABASE_URL: "postgres://postgres:postgres@localhost:5432/forms_admin_test"
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v5.0.0
       # Add or replace dependency steps here
       - name: Install Ruby and gems
         # The ruby version is taken from the .ruby-version file, no need to specify here.
@@ -41,7 +41,7 @@ jobs:
         with:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Install Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
           node-version-file: ".nvmrc"
           cache: "npm"
