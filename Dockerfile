@@ -31,13 +31,12 @@ RUN bundle install
 COPY --chown=ruby:ruby package.json package-lock.json ./
 RUN npm ci --ignore-scripts
 
-ARG RAILS_ENV
+ARG RAILS_ENV NODE_ENV
 ENV RAILS_ENV="${RAILS_ENV:-production}" \
     NODE_ENV="${NODE_ENV:-production}" \
     PATH="${PATH}:/home/ruby/.local/bin:/node_modules/.bin" \
     USER="ruby" \
-    REDIS_URL="${REDIS_URL:-redis://notset/}" \
-    GOVUK_APP_DOMAIN="${GOVUK_APP_DOMAIN:-https://not-set}"
+    GOVUK_APP_DOMAIN="https://not-set"
 
 COPY --chown=ruby:ruby . .
 
@@ -46,11 +45,11 @@ COPY --chown=ruby:ruby . .
 RUN SECRET_KEY_BASE=dummyvalue rails vite:build_all
 
 # Remove devDependencies once assets have been built
-RUN npm ci --ignore-scripts --only=production
+RUN npm ci --ignore-scripts --omit=dev
 
 FROM base AS app
 
-
+ARG RAILS_ENV
 ENV RAILS_ENV="${RAILS_ENV:-production}" \
     PATH="${PATH}:/home/ruby/.local/bin" \
     USER="ruby"
