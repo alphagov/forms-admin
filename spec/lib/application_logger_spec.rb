@@ -63,4 +63,20 @@ RSpec.describe ApplicationLogger, :capture_logging do
       expect(log_line["request_id"]).to eq "a-request-id"
     end
   end
+
+  context "when logged message is not a string or a hash" do
+    before do
+      error = RuntimeError.new("An error occurred")
+      logger.info(error)
+    end
+
+    it "includes the message as a field" do
+      expect(log_line).to include "message"
+    end
+
+    it "includes the message as a string" do
+      expect(log_line["message"]).to be_a String
+      expect(log_line["message"]).to eq "An error occurred"
+    end
+  end
 end
