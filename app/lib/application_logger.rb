@@ -40,9 +40,8 @@ private
   end
 
   def message_to_hash(message)
-    return { message: } if message.is_a? String
     return message if message.is_a? Hash
 
-    raise ArgumentError, "message must be a string or hash"
+    { message: message.to_s }
   end
 end
