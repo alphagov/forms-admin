@@ -30,6 +30,12 @@ class Form < ApplicationRecord
     s3_with_json: "s3_with_json",
   }
 
+  # ActiveRecord doesn't support enums with arrays
+  # enum :submission_format, {
+  #   csv: "csv",
+  #   json: "json",
+  # }
+
   enum :language, {
     en: "en",
     cy: "cy",

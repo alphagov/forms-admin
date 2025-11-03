@@ -20,6 +20,7 @@ class FormDocument::Content
   attribute :support_phone, :string
   attribute :s3_bucket_name, :string
   attribute :submission_type, :string
+  attribute :submission_format, array: true
   attribute :declaration_text, :string
   attribute :s3_bucket_region, :string
   attribute :submission_email, :string
@@ -30,9 +31,9 @@ class FormDocument::Content
 
   alias_attribute :id, :form_id
 
-  def initialize(attribute = {})
-    @steps = attribute.fetch("steps", []).map { |step| FormDocument::Step.new(**step) }
-    attribute.slice!(*self.class.attribute_names)
+  def initialize(attributes = {})
+    @steps = attributes.fetch("steps", []).map { |step| FormDocument::Step.new(**step) }
+    attributes.slice!(*self.class.attribute_names)
     super
   end
 
