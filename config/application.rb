@@ -57,7 +57,11 @@ module FormsAdmin
     config.lograge.keep_original_rails_log = false
 
     config.lograge.custom_options = lambda do |event|
-      CurrentLoggingAttributes.attributes.merge(exception: event.payload[:exception]).compact
+      CurrentLoggingAttributes.attributes.merge(
+        exception: event.payload[:exception],
+        queries_count: event.payload[:queries_count],
+        cached_queries_count: event.payload[:cached_queries_count],
+      ).compact
     end
 
     # Use custom logger and formatter to log in JSON with request context fields. To use conventional
