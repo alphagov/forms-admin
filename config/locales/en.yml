@@ -91,6 +91,13 @@ en:
         groups/delete_confirmation_input:
           blank: Select ‘Yes’ to delete the group
           group_has_forms: This group cannot be deleted because it has forms in it
+        pages/change_order_input:
+          attributes:
+            confirm:
+              blank: Select ‘Yes, save this question order’ to save your changes
+              inclusion: Select ‘Yes, save this question order’ to save your changes
+            page_position:
+              invalid: Position must be a whole number between 1 and %{maximum}
         pages/delete_confirmation_input:
           blank: Select ‘Yes’ to delete the question
         pages/delete_exit_page_input:
@@ -305,6 +312,9 @@ en:
   error_summary:
     heading: There is a problem
   errors:
+    change_order_pages_added:
+      questions_added: One or more new questions were added to the form so we could not save the new order.
+      try_again_html: Please try to <a href="%{change_order_link}">change your question order</a> again.
     messages:
       non_government_email: Enter a government email address
     missing_draft_question:
@@ -887,6 +897,10 @@ en:
           names:
             long_text: More than a single line of text
             single_line: Single line of text
+      pages/change_order_input:
+        options:
+          'no': No, discard my changes
+          'yes': Yes, save this question order
       pages_conditions_input:
         default_answer_value: Select an answer
         default_goto_page_id: Select a question or page
@@ -1244,6 +1258,8 @@ en:
     archive_form_confirmation: Your form has been archived
     bulk_options: Enter your list’s options into a text box
     change_name: Name your form
+    change_order_pages_added_error: Sorry, we could not save the new question order
+    change_page_order: Change your question order
     confirm_delete_exit_page: Your exit page will be deleted
     confirm_email: Enter the confirmation code
     confirm_email_success: Email address confirmed
@@ -1300,6 +1316,15 @@ en:
     your_form_is_live: Your form is live
   pages:
     answer_settings: Answer settings
+    change_order:
+      back_link: Back to Add and edit your questions
+      move_question_to_label: Move question %{position} to (optional)
+      preview_banner: You need to save this question order if you want to keep these changes
+      preview_button: Preview new question order
+      radios_legend: Do you want to save the new question order?
+      subheading: Enter new question positions
+      success: Your new question order has been saved
+      summary: Enter a new number for questions you want to move to a new position. Questions will move up or down to accommodate the new order when you save your changes.
     conditions:
       confirm_delete_exit_page:
         back_link: Back to edit route 1
@@ -1363,6 +1388,7 @@ en:
     index:
       add_a_question_route: Add a question route
       add_question: Add a question
+      change_order: Change your question order
       mark_complete:
         legend: Have you finished editing your questions?
       title: Add and edit your questions

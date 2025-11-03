@@ -51,7 +51,7 @@ class Page < ApplicationRecord
     return true unless has_changes_to_save?
 
     save!
-    update_form
+    form.save_question_changes!
     check_conditions.destroy_all if answer_type_changed_from_selection
     check_conditions.destroy_all if answer_settings_changed_from_only_one_option
 
@@ -62,10 +62,10 @@ class Page < ApplicationRecord
     case direction
     when :up
       move_higher
-      update_form
+      form.save_question_changes!
     when :down
       move_lower
-      update_form
+      form.save_question_changes!
     end
   end
 
@@ -116,11 +116,6 @@ class Page < ApplicationRecord
   end
 
 private
-
-  def update_form
-    form.question_section_completed = false
-    form.save_draft!
-  end
 
   def guidance_fields_presence
     if page_heading.present? && guidance_markdown.blank?

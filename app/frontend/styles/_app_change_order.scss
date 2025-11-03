@@ -1,0 +1,5 @@
+.app-change-order-list__key {
+  @include govuk-media-query($from: desktop) {
+    width: 10%;
+  }
+}

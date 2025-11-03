@@ -47,6 +47,11 @@ class Form < ApplicationRecord
   after_update :update_draft_form_document
   ATTRIBUTES_NOT_IN_FORM_DOCUMENT = %i[state external_id pages question_section_completed declaration_section_completed share_preview_completed welsh_completed].freeze
 
+  def save_question_changes!
+    self.question_section_completed = false
+    save_draft!
+  end
+
   def save_draft!
     save!
     create_draft_from_live_form! if live?
