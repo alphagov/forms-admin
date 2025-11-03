@@ -463,6 +463,7 @@ en:
         hint: Selecting ‘Yes’ will mark this task as complete. You’ll still be able to make more changes if you need to.
         legend: Have you finished adding your Welsh version?
         no_declaration_added: No declaration was added to this form.
+        no_what_happens_next_added: No information about what happens next was added to this form.
         section_headings:
           declaration: Declaration for people to agree to
           form_name: Form name

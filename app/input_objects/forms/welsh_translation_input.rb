@@ -78,4 +78,8 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   def form_has_support_information?
     form_has_support_email? || form_has_support_phone? || form_has_support_url?
   end
+
+  def form_has_what_happens_next?
+    form.what_happens_next_markdown.present?
+  end
 end

@@ -151,6 +151,18 @@ describe "forms/welsh_translation/new.html.erb" do
         expect(rendered).not_to have_text("Contact details for support")
       end
     end
+
+    context "when the form has no what happens next information" do
+      let(:form) { build_form(what_happens_next_markdown: nil) }
+
+      it "does not render what happens next information" do
+        expect(rendered).not_to have_field("What happens next", type: "textarea")
+      end
+
+      it "renders message for no what happens next information" do
+        expect(rendered).to have_text("No information about what happens next was added to this form.")
+      end
+    end
   end
 
   context "when the form has validation errors" do
