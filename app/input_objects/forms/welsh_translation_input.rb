@@ -82,4 +82,8 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   def form_has_what_happens_next?
     form.what_happens_next_markdown.present?
   end
+
+  def form_has_privacy_information?
+    form.privacy_policy_url.present?
+  end
 end

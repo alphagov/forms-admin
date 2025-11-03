@@ -103,8 +103,10 @@
         <% end %>
       </div>
 
-        <% if @welsh_translation_input.form_has_payment_url? %>
-          <%= govuk_table(classes: "govuk-!-margin-bottom-9") do |table|
+      <div class="govuk-!-margin-bottom-9">
+        <% if @welsh_translation_input.form_has_privacy_information? %>
+          <%= govuk_table do |table|
+            table.with_caption(size: 'm', text: t(".section_headings.privacy_information"))
             table.with_head do |head|
               head.with_row do |row|
                 row.with_cell
@@ -123,7 +125,11 @@
               end
             end
           end %>
+        <% else %>
+          <h2 class="govuk-heading-m"><%= t(".section_headings.privacy_information") %></h2>
+          <p><%= t(".no_privacy_information_added") %></p>
         <% end %>
+      </div>
 
       <% if @welsh_translation_input.form_has_support_information? %>
         <%= govuk_table(classes: "govuk-!-margin-bottom-9") do |table|

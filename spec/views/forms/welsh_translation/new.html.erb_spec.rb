@@ -163,6 +163,18 @@ describe "forms/welsh_translation/new.html.erb" do
         expect(rendered).to have_text("No information about what happens next was added to this form.")
       end
     end
+
+    context "when the form has no privacy information" do
+      let(:form) { build_form(privacy_policy_url: nil) }
+
+      it "does not render privacy information field" do
+        expect(rendered).not_to have_field("Privacy policy URL", type: "text")
+      end
+
+      it "renders message for no privacy information" do
+        expect(rendered).to have_text("No link to privacy information was added to this form.")
+      end
+    end
   end
 
   context "when the form has validation errors" do
