@@ -464,6 +464,7 @@ en:
         legend: Have you finished adding your Welsh version?
         no_declaration_added: No declaration was added to this form.
         no_privacy_information_added: No link to privacy information was added to this form.
+        no_support_information_added: No contact details for support were added to this form.
         no_what_happens_next_added: No information about what happens next was added to this form.
         section_headings:
           declaration: Declaration for people to agree to

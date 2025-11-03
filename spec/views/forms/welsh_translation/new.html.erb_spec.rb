@@ -148,7 +148,11 @@ describe "forms/welsh_translation/new.html.erb" do
       let(:form) { build_form(support_email: nil, support_phone: nil, support_url: nil, support_url_text: nil) }
 
       it "does not render support information" do
-        expect(rendered).not_to have_text("Contact details for support")
+        expect(rendered).not_to have_text("Contact details for support", exact: true)
+      end
+
+      it "renders message for no support information" do
+        expect(rendered).to have_text("No contact details for support were added to this form.")
       end
     end
 
