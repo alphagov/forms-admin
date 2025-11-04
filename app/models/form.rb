@@ -81,7 +81,7 @@ class Form < ApplicationRecord
     super
 
     # Always set form_slug using the English name
-    self[:form_slug] = name_en.parameterize
+    self[:form_slug] = name.present? ? name_en.parameterize : ""
   end
 
   # form_slug is always set based on name

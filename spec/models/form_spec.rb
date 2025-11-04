@@ -242,6 +242,11 @@ RSpec.describe Form, type: :model do
       expect(form.form_slug).to eq("apply-for-a-license-to-test-forms")
     end
 
+    it "is blank if the name is blank" do
+      form.name = ""
+      expect(form.form_slug).to eq("")
+    end
+
     it "setting form slug directly doesn't change it" do
       form.name = "Apply for a license to test forms"
       form.form_slug = "something totally different"
