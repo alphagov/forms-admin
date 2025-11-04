@@ -27,6 +27,20 @@ RSpec.describe FormStateMachine do
   end
 
   describe ".make_live" do
+    shared_examples "transition to live state" do |form_state|
+      before do
+        allow(form).to receive(:ready_for_live).and_return(true)
+      end
+
+      it "transitions to live state" do
+        allow(FormDocumentSyncService).to receive(:synchronize_form)
+        allow(form).to receive(:touch)
+
+        expect(form).to transition_from(form_state).to(:live).on_event(:make_live)
+        expect(FormDocumentSyncService).to have_received(:synchronize_form).with(form)
+      end
+    end
+
     context "when form is draft" do
       let(:form) { FakeForm.new(state: :draft) }
 
@@ -35,7 +49,7 @@ RSpec.describe FormStateMachine do
       end
 
       context "when all sections are completed" do
-        it_behaves_like "transition to live state", FakeForm, :draft
+        it_behaves_like "transition to live state", :draft
       end
     end
 
@@ -47,7 +61,7 @@ RSpec.describe FormStateMachine do
       end
 
       context "when all sections are completed" do
-        it_behaves_like "transition to live state", FakeForm, :live_with_draft
+        it_behaves_like "transition to live state", :live_with_draft
       end
     end
 
@@ -59,7 +73,7 @@ RSpec.describe FormStateMachine do
       end
 
       context "when all sections are completed" do
-        it_behaves_like "transition to live state", FakeForm, :archived
+        it_behaves_like "transition to live state", :archived
       end
     end
 
@@ -71,7 +85,7 @@ RSpec.describe FormStateMachine do
       end
 
       context "when all sections are completed" do
-        it_behaves_like "transition to live state", FakeForm, :archived_with_draft
+        it_behaves_like "transition to live state", :archived_with_draft
       end
     end
   end
