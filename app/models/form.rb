@@ -221,4 +221,15 @@ private
   def start_page
     pages&.first&.id
   end
+
+  # callbacks for FormStateMachine
+  def after_create_draft
+    update!(share_preview_completed: false)
+  end
+
+  def after_make_live
+    FormDocumentSyncService.synchronize_form(self)
+  end
+
+  alias_method :after_archive, :after_make_live
 end

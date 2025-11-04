@@ -1,7 +1,15 @@
 require "rails_helper"
 
-class FakeForm < Form
+class FakeForm < ApplicationRecord
+  self.table_name = "forms"
+
   include FormStateMachine
+
+  # stub the expected interface
+  def ready_for_live; end
+  def after_create_draft; end
+  def after_make_live; end
+  def after_archive; end
 end
 
 RSpec.describe FormStateMachine do
@@ -29,15 +37,16 @@ RSpec.describe FormStateMachine do
   describe ".make_live" do
     shared_examples "transition to live state" do |form_state|
       before do
-        allow(form).to receive(:ready_for_live).and_return(true)
+        allow(form).to receive_messages(ready_for_live: true, after_make_live: nil)
       end
 
       it "transitions to live state" do
-        allow(FormDocumentSyncService).to receive(:synchronize_form)
-        allow(form).to receive(:touch)
-
         expect(form).to transition_from(form_state).to(:live).on_event(:make_live)
-        expect(FormDocumentSyncService).to have_received(:synchronize_form).with(form)
+      end
+
+      it "calls the after_make_live callback" do
+        form.make_live
+        expect(form).to have_received(:after_make_live)
       end
     end
 
@@ -93,9 +102,17 @@ RSpec.describe FormStateMachine do
   describe ".create_draft_from_live_form" do
     let(:form) { FakeForm.new(state: :live) }
 
+    before do
+      allow(form).to receive(:after_create_draft)
+    end
+
     it "transitions to live_with_draft if form is live" do
-      allow(form).to receive(:update!)
       expect(form).to transition_from(:live).to(:live_with_draft).on_event(:create_draft_from_live_form)
+    end
+
+    it "calls the after_create_draft callback" do
+      form.create_draft_from_live_form
+      expect(form).to have_received :after_create_draft
     end
 
     context "when form is draft" do
@@ -104,6 +121,11 @@ RSpec.describe FormStateMachine do
       it "does not transition to live_with_draft" do
         expect(form).not_to transition_from(:draft).to(:live_with_draft).on_event(:create_draft_from_live_form)
       end
+
+      it "does not call the after_create_draft callback" do
+        expect { form.create_draft_from_live_form }.to raise_error AASM::InvalidTransition
+        expect(form).not_to have_received :after_create_draft
+      end
     end
   end
 
@@ -111,18 +133,28 @@ RSpec.describe FormStateMachine do
     let(:form) { FakeForm.new(state: :archived) }
 
     before do
-      allow(form).to receive(:update!)
+      allow(form).to receive(:after_create_draft)
     end
 
     it "transitions to archived_with_draft" do
       expect(form).to transition_from(:archived).to(:archived_with_draft).on_event(:create_draft_from_archived_form)
     end
 
+    it "calls the after_create_draft callback" do
+      form.create_draft_from_archived_form
+      expect(form).to have_received :after_create_draft
+    end
+
     context "when form is draft" do
       let(:form) { FakeForm.new(state: :draft) }
 
-      it "does not transition to live_with_draft" do
+      it "does not transition to archived_with_draft" do
         expect(form).not_to transition_from(:draft).to(:archived_with_draft).on_event(:create_draft_from_archived_form)
+      end
+
+      it "does not call the after_create_draft callback" do
+        expect { form.create_draft_from_archived_form }.to raise_error AASM::InvalidTransition
+        expect(form).not_to have_received :after_create_draft
       end
     end
   end
@@ -140,16 +172,16 @@ RSpec.describe FormStateMachine do
       let(:form) { FakeForm.new(state: :live) }
 
       before do
-        allow(FormDocumentSyncService).to receive(:synchronize_form)
+        allow(form).to receive(:after_archive)
       end
 
       it "transitions to archived" do
         expect(form).to transition_from(:live).to(:archived).on_event(:archive_live_form)
       end
 
-      it "calls the FormDocumentSyncService" do
+      it "calls the after_archive callback" do
         form.archive_live_form
-        expect(FormDocumentSyncService).to have_received(:synchronize_form).with(form)
+        expect(form).to have_received(:after_archive)
       end
     end
 
@@ -157,7 +189,7 @@ RSpec.describe FormStateMachine do
       let(:form) { FakeForm.new(state: :live_with_draft) }
 
       before do
-        allow(FormDocumentSyncService).to receive(:synchronize_form)
+        allow(form).to receive(:after_archive)
       end
 
       it "transitions to archived_with_draft" do
@@ -166,7 +198,7 @@ RSpec.describe FormStateMachine do
 
       it "calls the FormDocumentSyncService" do
         form.archive_live_form
-        expect(FormDocumentSyncService).to have_received(:synchronize_form).with(form)
+        expect(form).to have_received(:after_archive)
       end
     end
   end

@@ -418,11 +418,39 @@ RSpec.describe Form, type: :model do
   end
 
   describe "FormStateMachine" do
+    describe "#make_live!" do
+      let(:form) { create :form, :ready_for_live }
+
+      it "calls FormDocumentSyncService" do
+        allow(FormDocumentSyncService).to receive(:synchronize_form)
+        form.make_live!
+        expect(FormDocumentSyncService).to have_received(:synchronize_form).with(form)
+      end
+
+      it "creates a live form document" do
+        expect { form.make_live! }.to change { form.reload.live_form_document }.from(nil)
+      end
+    end
+
+    describe "#archive_live_form!" do
+      let(:form) { create :form, :live }
+
+      it "calls FormDocumentSyncService" do
+        allow(FormDocumentSyncService).to receive(:synchronize_form)
+        form.archive_live_form!
+        expect(FormDocumentSyncService).to have_received(:synchronize_form).with(form)
+      end
+
+      it "creates a archived form document" do
+        expect { form.archive_live_form! }.to change { form.reload.archived_form_document }.from(nil)
+      end
+    end
+
     describe "#create_draft_from_live_form!" do
       let(:form) { create :form, :live }
 
       it "sets share_preview_completed to false" do
-        expect { form.create_draft_from_live_form! }.to change(form, :share_preview_completed).to(false)
+        expect { form.create_draft_from_live_form! }.to change { form.reload.share_preview_completed }.to(false)
       end
     end
 
@@ -430,7 +458,7 @@ RSpec.describe Form, type: :model do
       let(:form) { create :form, :archived }
 
       it "sets share_preview_completed to false" do
-        expect { form.create_draft_from_archived_form! }.to change(form, :share_preview_completed).to(false)
+        expect { form.create_draft_from_archived_form! }.to change { form.reload.share_preview_completed }.to(false)
       end
     end
   end
