@@ -475,7 +475,7 @@ RSpec.describe Form, type: :model do
 
       it "changes the form's state to archived_with_draft" do
         expect {
-          form.save_draft!
+          form.save_question_changes!
         }.to change { form.reload.state }.to("archived_with_draft")
       end
     end
