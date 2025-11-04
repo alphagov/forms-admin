@@ -4,6 +4,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <% hint_text = t(".hint_for_live_draft") if @current_form&.live_with_draft? %>
+    <% hint_text = t(".hint_for_archived_draft") if @current_form&.archived_with_draft? %>
     <%= render(
       @delete_confirmation_input,
       url: @url,

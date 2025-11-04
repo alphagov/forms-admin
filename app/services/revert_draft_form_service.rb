@@ -25,7 +25,12 @@ class RevertDraftFormService
       revert_form_attributes(form_document_content)
       revert_pages_and_nested_associations(form_document_content["steps"])
 
-      form.delete_draft_from_live_form
+      if tag == :live
+        form.delete_draft_from_live_form
+      elsif tag == :archived
+        form.delete_draft_from_archived_form
+      end
+
       form.save!
     end
 
