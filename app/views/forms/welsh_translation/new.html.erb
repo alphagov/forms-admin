@@ -58,49 +58,12 @@
         <% end %>
       </div>
 
-      <%= govuk_table(classes: "govuk-!-margin-bottom-9") do |table|
-        table.with_caption(size: 'm', text: t(".section_headings.what_happens_next"))
-        table.with_head do |head|
-          head.with_row do |row|
-            row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header"), width: "one-half")
-            row.with_cell(header: true, text: t("forms.welsh_translation.new.welsh_header"))
-          end
-        end
-
-        table.with_body do |body|
-          body.with_row do |row|
-            row.with_cell(text: @welsh_translation_input.form.what_happens_next_markdown)
-            row.with_cell do
-              f.govuk_text_area :what_happens_next_markdown_cy, label: { class: "govuk-visually-hidden" }
-            end
-          end
-        end
-      end %>
-
-      <%= govuk_table(classes: "govuk-!-margin-bottom-9") do |table|
-        table.with_caption(size: 'm', text: t(".section_headings.privacy_information"))
-        table.with_head do |head|
-          head.with_row do |row|
-            row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header"), width: "one-half")
-            row.with_cell(header: true, text: t("forms.welsh_translation.new.welsh_header"))
-          end
-        end
-
-        table.with_body do |body|
-          body.with_row do |row|
-            row.with_cell(text: @welsh_translation_input.form.privacy_policy_url)
-            row.with_cell do
-              f.govuk_text_field :privacy_policy_url_cy, label: { class: "govuk-visually-hidden" }
-            end
-          end
-        end
-      end %>
-
-        <% if @welsh_translation_input.form_has_payment_url? %>
-          <%= govuk_table(classes: "govuk-!-margin-bottom-9") do |table|
+      <div class="govuk-!-margin-bottom-9">
+        <% if @welsh_translation_input.form_has_what_happens_next? %>
+          <%= govuk_table do |table|
+            table.with_caption(size: 'm', text: t(".section_headings.what_happens_next"))
             table.with_head do |head|
               head.with_row do |row|
-                row.with_cell
                 row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header"), width: "one-half")
                 row.with_cell(header: true, text: t("forms.welsh_translation.new.welsh_header"))
               end
@@ -108,68 +71,124 @@
 
             table.with_body do |body|
               body.with_row do |row|
-                row.with_cell(header: true, text: t(".section_headings.payment_link"))
-                row.with_cell(text: @welsh_translation_input.form.payment_url)
+                row.with_cell(text: @welsh_translation_input.form.what_happens_next_markdown)
                 row.with_cell do
-                  f.govuk_text_field :payment_url_cy, label: { class: "govuk-visually-hidden" }
+                  f.govuk_text_area :what_happens_next_markdown_cy, label: { class: "govuk-visually-hidden" }
                 end
               end
             end
           end %>
+        <% else %>
+          <h2 class="govuk-heading-m"><%= t(".section_headings.what_happens_next") %></h2>
+          <p><%= t(".no_what_happens_next_added") %></p>
         <% end %>
+      </div>
 
-      <% if @welsh_translation_input.form_has_support_information? %>
+      <div class="govuk-!-margin-bottom-9">
+        <% if @welsh_translation_input.form_has_privacy_information? %>
+          <%= govuk_table do |table|
+            table.with_caption(size: 'm', text: t(".section_headings.privacy_information"))
+            table.with_head do |head|
+              head.with_row do |row|
+                row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header"), width: "one-half")
+                row.with_cell(header: true, text: t("forms.welsh_translation.new.welsh_header"))
+              end
+            end
+
+            table.with_body do |body|
+              body.with_row do |row|
+                row.with_cell(text: @welsh_translation_input.form.privacy_policy_url)
+                row.with_cell do
+                  f.govuk_text_field :privacy_policy_url_cy, label: { class: "govuk-visually-hidden" }
+                end
+              end
+            end
+          end %>
+        <% else %>
+          <h2 class="govuk-heading-m"><%= t(".section_headings.privacy_information") %></h2>
+          <p><%= t(".no_privacy_information_added") %></p>
+        <% end %>
+      </div>
+
+      <% if @welsh_translation_input.form_has_payment_url? %>
         <%= govuk_table(classes: "govuk-!-margin-bottom-9") do |table|
-          table.with_caption(size: 'm', text: t(".section_headings.support_information"))
           table.with_head do |head|
             head.with_row do |row|
               row.with_cell
-              row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header"))
+              row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header"), width: "one-half")
               row.with_cell(header: true, text: t("forms.welsh_translation.new.welsh_header"))
             end
           end
 
-          if @welsh_translation_input.form_has_support_email?
-            table.with_body do |body|
-              body.with_row do |row|
-                row.with_cell(header: true, text: t("forms.welsh_translation.new.support_email"))
-                row.with_cell(text: @welsh_translation_input.form.support_email)
-                row.with_cell do
-                  f.govuk_text_field :support_email_cy, label: { class: "govuk-visually-hidden" }
-                end
-              end
-
-              if @welsh_translation_input.form_has_support_phone?
-                body.with_row do |row|
-                  row.with_cell(header: true, text: t("forms.welsh_translation.new.support_phone"))
-                  row.with_cell(text: @welsh_translation_input.form.support_phone)
-                  row.with_cell do
-                    f.govuk_text_area :support_phone_cy, label: { class: "govuk-visually-hidden" }
-                  end
-                end
-              end
-
-              if @welsh_translation_input.form_has_support_url?
-                body.with_row do |row|
-                  row.with_cell(header: true, text: t("forms.welsh_translation.new.support_url_text"))
-                  row.with_cell(text: @welsh_translation_input.form.support_url_text)
-                  row.with_cell do
-                    f.govuk_text_field :support_url_text_cy, label: { class: "govuk-visually-hidden" }
-                  end
-                end
-
-                body.with_row do |row|
-                  row.with_cell(header: true, text: t("forms.welsh_translation.new.support_url"))
-                  row.with_cell(text: @welsh_translation_input.form.support_url)
-                  row.with_cell do
-                    f.govuk_text_field :support_url_cy, label: { class: "govuk-visually-hidden" }
-                  end
-                end
+          table.with_body do |body|
+            body.with_row do |row|
+              row.with_cell(header: true, text: t(".section_headings.payment_link"))
+              row.with_cell(text: @welsh_translation_input.form.payment_url)
+              row.with_cell do
+                f.govuk_text_field :payment_url_cy, label: { class: "govuk-visually-hidden" }
               end
             end
           end
         end %>
       <% end %>
+
+      <div class="govuk-!-margin-bottom-9">
+        <% if @welsh_translation_input.form_has_support_information? %>
+          <%= govuk_table do |table|
+            table.with_caption(size: 'm', text: t(".section_headings.support_information"))
+            table.with_head do |head|
+              head.with_row do |row|
+                row.with_cell
+                row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header"))
+                row.with_cell(header: true, text: t("forms.welsh_translation.new.welsh_header"))
+              end
+            end
+
+            if @welsh_translation_input.form_has_support_email?
+              table.with_body do |body|
+                body.with_row do |row|
+                  row.with_cell(header: true, text: t("forms.welsh_translation.new.support_email"))
+                  row.with_cell(text: @welsh_translation_input.form.support_email)
+                  row.with_cell do
+                    f.govuk_text_field :support_email_cy, label: { class: "govuk-visually-hidden" }
+                  end
+                end
+
+                if @welsh_translation_input.form_has_support_phone?
+                  body.with_row do |row|
+                    row.with_cell(header: true, text: t("forms.welsh_translation.new.support_phone"))
+                    row.with_cell(text: @welsh_translation_input.form.support_phone)
+                    row.with_cell do
+                      f.govuk_text_area :support_phone_cy, label: { class: "govuk-visually-hidden" }
+                    end
+                  end
+                end
+
+                if @welsh_translation_input.form_has_support_url?
+                  body.with_row do |row|
+                    row.with_cell(header: true, text: t("forms.welsh_translation.new.support_url_text"))
+                    row.with_cell(text: @welsh_translation_input.form.support_url_text)
+                    row.with_cell do
+                      f.govuk_text_field :support_url_text_cy, label: { class: "govuk-visually-hidden" }
+                    end
+                  end
+
+                  body.with_row do |row|
+                    row.with_cell(header: true, text: t("forms.welsh_translation.new.support_url"))
+                    row.with_cell(text: @welsh_translation_input.form.support_url)
+                    row.with_cell do
+                      f.govuk_text_field :support_url_cy, label: { class: "govuk-visually-hidden" }
+                    end
+                  end
+                end
+              end
+            end
+          end %>
+        <% else %>
+          <h2 class="govuk-heading-m"><%= t(".section_headings.support_information") %></h2>
+          <p><%= t(".no_support_information_added") %></p>
+        <% end %>
+      </div>
 
       <%= render MarkCompleteComponent::View.new(generate_form: false, form_builder: f, form_model: @welsh_translation_input, legend: t(".legend"), hint: t(".hint")) %>
 

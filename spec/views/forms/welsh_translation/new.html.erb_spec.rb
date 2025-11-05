@@ -148,7 +148,35 @@ describe "forms/welsh_translation/new.html.erb" do
       let(:form) { build_form(support_email: nil, support_phone: nil, support_url: nil, support_url_text: nil) }
 
       it "does not render support information" do
-        expect(rendered).not_to have_text("Contact details for support")
+        expect(rendered).not_to have_text("Contact details for support", exact: true)
+      end
+
+      it "renders message for no support information" do
+        expect(rendered).to have_text("No contact details for support were added to this form.")
+      end
+    end
+
+    context "when the form has no what happens next information" do
+      let(:form) { build_form(what_happens_next_markdown: nil) }
+
+      it "does not render what happens next information" do
+        expect(rendered).not_to have_field("What happens next", type: "textarea")
+      end
+
+      it "renders message for no what happens next information" do
+        expect(rendered).to have_text("No information about what happens next was added to this form.")
+      end
+    end
+
+    context "when the form has no privacy information" do
+      let(:form) { build_form(privacy_policy_url: nil) }
+
+      it "does not render privacy information field" do
+        expect(rendered).not_to have_field("Privacy policy URL", type: "text")
+      end
+
+      it "renders message for no privacy information" do
+        expect(rendered).to have_text("No link to privacy information was added to this form.")
       end
     end
   end
