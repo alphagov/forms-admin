@@ -187,8 +187,8 @@ describe "forms/welsh_translation/new.html.erb" do
 
     context "when the form has pages" do
       it "has a field for each page's Welsh question text" do
-        expect(rendered).to have_field("Question #{page.position} Welsh question text", type: "text", id: "forms_welsh_page_translation_input_#{page.id}_page_translations_question_text_cy")
-        expect(rendered).to have_field("Question #{another_page.position} Welsh question text", type: "text", id: "forms_welsh_page_translation_input_#{another_page.id}_page_translations_question_text_cy")
+        expect(rendered).to have_field(t("forms.welsh_translation.new.page_labels.question_text_cy", question_number: page.position), type: "text", id: "forms_welsh_page_translation_input_#{page.id}_page_translations_question_text_cy")
+        expect(rendered).to have_field(t("forms.welsh_translation.new.page_labels.question_text_cy", question_number: another_page.position), type: "text", id: "forms_welsh_page_translation_input_#{another_page.id}_page_translations_question_text_cy")
       end
 
       context "when a page has hint text" do
@@ -197,11 +197,11 @@ describe "forms/welsh_translation/new.html.erb" do
 
         it "shows the English text and Welsh field for pages with English hint text" do
           expect(rendered).to have_css("td", text: page.hint_text)
-          expect(rendered).to have_field("Question #{page.position} Welsh hint text", type: "textarea", id: "forms_welsh_page_translation_input_#{page.id}_page_translations_hint_text_cy")
+          expect(rendered).to have_field(t("forms.welsh_translation.new.page_labels.hint_text_cy", question_number: page.position), type: "textarea", id: "forms_welsh_page_translation_input_#{page.id}_page_translations_hint_text_cy")
         end
 
         it "does not show the Welsh field for pages without English hint text" do
-          expect(rendered).not_to have_field("Question #{another_page.position} Welsh hint text")
+          expect(rendered).not_to have_field(t("forms.welsh_translation.new.page_labels.hint_text_cy", question_number: another_page.position))
         end
       end
 
@@ -211,19 +211,19 @@ describe "forms/welsh_translation/new.html.erb" do
 
         it "shows the English text and Welsh fields for pages with English page heading and guidance markdown" do
           expect(rendered).to have_css("td", text: page.page_heading)
-          expect(rendered).to have_field("Question #{another_page.position} Welsh page heading", id: "forms_welsh_page_translation_input_#{another_page.id}_page_translations_page_heading_cy")
+          expect(rendered).to have_field(t("forms.welsh_translation.new.page_labels.page_heading_cy", question_number: another_page.position), id: "forms_welsh_page_translation_input_#{another_page.id}_page_translations_page_heading_cy")
           expect(rendered).to have_css("td", text: page.guidance_markdown)
-          expect(rendered).to have_field("Question #{another_page.position} Welsh guidance markdown", id: "forms_welsh_page_translation_input_#{another_page.id}_page_translations_guidance_markdown_cy")
+          expect(rendered).to have_field(t("forms.welsh_translation.new.page_labels.guidance_markdown_cy", question_number: another_page.position), id: "forms_welsh_page_translation_input_#{another_page.id}_page_translations_guidance_markdown_cy")
         end
 
         it "does not show the Welsh field for pages without English page heading and guidance markdown" do
-          expect(rendered).not_to have_field("Question #{page.position} Welsh page heading", type: "text")
-          expect(rendered).not_to have_field("Question #{page.position} Welsh guidance markdown", type: "textarea")
+          expect(rendered).not_to have_field(t("forms.welsh_translation.new.page_labels.page_heading_cy", question_number: page.position))
+          expect(rendered).not_to have_field(t("forms.welsh_translation.new.page_labels.guidance_markdown_cy", question_number: page.position), type: "textarea")
         end
 
         it "shows a field for Welsh page heading and guidance markdown on pages with English page heading and guidance markdown" do
-          expect(rendered).to have_field("Question #{another_page.position} Welsh page heading")
-          expect(rendered).to have_field("Question #{another_page.position} Welsh guidance markdown")
+          expect(rendered).to have_field(t("forms.welsh_translation.new.page_labels.page_heading_cy", question_number: another_page.position))
+          expect(rendered).to have_field(t("forms.welsh_translation.new.page_labels.guidance_markdown_cy", question_number: another_page.position))
         end
       end
     end

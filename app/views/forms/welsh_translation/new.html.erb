@@ -197,56 +197,56 @@
           <%= page_translation_fields.hidden_field :id, value: page_translation.id, readonly: true %>
 
           <%= govuk_table do |table| %>
-            <%= table.with_caption(size: 'm', text: "Question #{page_translation.page.position}") %>
+            <%= table.with_caption(size: 'm', text: t("forms.welsh_translation.new.question_number", question_number: page_translation.page.position)) %>
             <%= table.with_head do |head| %>
               <%= head.with_row do |row| %>
                 <%= row.with_cell(header: true, text: nil) %>
-                <%= row.with_cell(header: true, text: "English content") %>
-                <%= row.with_cell(header: true, text: "Welsh content") %>
+                <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header")) %>
+                <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.welsh_header")) %>
               <% end %>
             <% end %>
 
             <%= table.with_body do |body| %>
               <%= body.with_row do |row| %>
-                <%= row.with_cell(header: true, text: "Question text") %>
+                <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.question_text")) %>
                 <%= row.with_cell(text: page_translation.page.question_text) %>
                 <%= row.with_cell do |cell| %>
                   <%= page_translation_fields.govuk_text_field :question_text_cy,
                                                                id: page_translation.form_field_id(:question_text_cy),
-                                                               label: {text: "Question #{page_translation.page.position} Welsh question text", class: "govuk-visually-hidden", for: page_translation.form_field_id(:question_text_cy)}
+                                                               label: {text: t("forms.welsh_translation.new.page_labels.question_text_cy",question_number: page_translation.page.position), class: "govuk-visually-hidden", for: page_translation.form_field_id(:question_text_cy)}
                                                                %>
                 <% end %>
               <% end %>
               <% if page_translation.page_has_hint_text? %>
                 <%= body.with_row do |row| %>
-                  <%= row.with_cell(header: true, text: "Hint text") %>
+                  <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.hint_text")) %>
                   <%= row.with_cell(text: page_translation.page.hint_text) %>
                   <%= row.with_cell do |cell| %>
                     <%= page_translation_fields.govuk_text_area :hint_text_cy,
                                                                 id: page_translation.form_field_id(:hint_text_cy),
-                                                                label: {text: "Question #{page_translation.page.position} Welsh hint text", class: "govuk-visually-hidden", for: page_translation.form_field_id(:hint_text_cy)}
+                                                                label: {text: t("forms.welsh_translation.new.page_labels.hint_text_cy",question_number: page_translation.page.position), class: "govuk-visually-hidden", for: page_translation.form_field_id(:hint_text_cy)}
                                                                 %>
                   <% end %>
                 <% end %>
               <% end %>
               <% if page_translation.page_has_page_heading_and_guidance_markdown? %>
                 <%= body.with_row do |row| %>
-                  <%= row.with_cell(header: true, text: "Page heading") %>
+                  <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.page_heading")) %>
                   <%= row.with_cell(text: page_translation.page.page_heading) %>
                   <%= row.with_cell do |cell| %>
                     <%= page_translation_fields.govuk_text_field :page_heading_cy,
                                                                  id: page_translation.form_field_id(:page_heading_cy),
-                                                                 label: {text: "Question #{page_translation.page.position} Welsh page heading", class: "govuk-visually-hidden", for: page_translation.form_field_id(:page_heading_cy)}
+                                                                 label: {text: t("forms.welsh_translation.new.page_labels.page_heading_cy",question_number: page_translation.page.position), class: "govuk-visually-hidden", for: page_translation.form_field_id(:page_heading_cy)}
                                                                  %>
                   <% end %>
                 <% end %>
                 <%= body.with_row do |row| %>
-                  <%= row.with_cell(header: true, text: "Guidance markdown") %>
+                  <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.guidance_markdown")) %>
                   <%= row.with_cell(text: page_translation.page.guidance_markdown) %>
                   <%= row.with_cell do |cell| %>
                     <%= page_translation_fields.govuk_text_area :guidance_markdown_cy,
                                                                 id: page_translation.form_field_id(:guidance_markdown_cy),
-                                                                label: {text: "Question #{page_translation.page.position} Welsh guidance markdown", class: "govuk-visually-hidden", for: page_translation.form_field_id(:guidance_markdown_cy)}
+                                                                label: {text: t("forms.welsh_translation.new.page_labels.guidance_markdown_cy",question_number: page_translation.page.position), class: "govuk-visually-hidden", for: page_translation.form_field_id(:guidance_markdown_cy)}
                                                                 %>
                   <% end %>
                 <% end %>

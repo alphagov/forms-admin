@@ -460,12 +460,22 @@ en:
     welsh_translation:
       new:
         english_header: English content
+        guidance_markdown: Guidance markdown
         hint: Selecting ‘Yes’ will mark this task as complete. You’ll still be able to make more changes if you need to.
+        hint_text: Hint text
         legend: Have you finished adding your Welsh version?
         no_declaration_added: No declaration was added to this form.
         no_privacy_information_added: No link to privacy information was added to this form.
         no_support_information_added: No contact details for support were added to this form.
         no_what_happens_next_added: No information about what happens next was added to this form.
+        page_heading: Page heading
+        page_labels:
+          guidance_markdown_cy: Question %{question_number} guidance markdown (Welsh)
+          hint_text_cy: Question %{question_number} hint text (Welsh)
+          page_heading_cy: Question %{question_number} page heading (Welsh)
+          question_text_cy: Question %{question_number} question text (Welsh)
+        question_number: Question %{question_number}
+        question_text: Question text
         section_headings:
           declaration: Declaration for people to agree to
           form_name: Form name
