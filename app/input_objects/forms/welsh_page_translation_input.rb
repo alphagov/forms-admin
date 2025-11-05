@@ -8,9 +8,9 @@ class Forms::WelshPageTranslationInput < BaseInput
     return false if invalid?
 
     page.question_text_cy = question_text_cy
-    page.hint_text_cy = hint_text_cy
-    page.page_heading_cy = page_heading_cy
-    page.guidance_markdown_cy = guidance_markdown_cy
+    page.hint_text_cy = page_has_hint_text? ? hint_text_cy : nil
+    page.page_heading_cy = page_has_page_heading_and_guidance_markdown? ? page_heading_cy : nil
+    page.guidance_markdown_cy = page_has_page_heading_and_guidance_markdown? ? guidance_markdown_cy : nil
 
     page.save!
   end

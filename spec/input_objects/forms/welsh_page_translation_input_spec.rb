@@ -39,10 +39,10 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
       welsh_page_translation_input.submit
       page.reload
 
-      expect(page.question_text_cy).to eq(new_input_data[:question_text_cy])
-      expect(page.hint_text_cy).to eq(new_input_data[:hint_text_cy])
-      expect(page.page_heading_cy).to eq(new_input_data[:page_heading_cy])
-      expect(page.guidance_markdown_cy).to eq(new_input_data[:guidance_markdown_cy])
+      expect(page.reload.question_text_cy).to eq(new_input_data[:question_text_cy])
+      expect(page.reload.hint_text_cy).to eq(new_input_data[:hint_text_cy])
+      expect(page.reload.page_heading_cy).to eq(new_input_data[:page_heading_cy])
+      expect(page.reload.guidance_markdown_cy).to eq(new_input_data[:guidance_markdown_cy])
     end
 
     it "does not update any non-welsh attributes" do
@@ -56,7 +56,7 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
 
       it "clears the Welsh hint text" do
         welsh_page_translation_input.submit
-        expect(page.hint_text_cy).to be_nil
+        expect(page.reload.hint_text_cy).to be_nil
       end
     end
 

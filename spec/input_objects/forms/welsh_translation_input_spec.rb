@@ -4,7 +4,7 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
   subject(:welsh_translation_input) { described_class.new(new_input_data) }
 
   let(:form) { build_form }
-  let(:page) { create :page }
+  let(:page) { create :page, question_text: "Are you renewing a licence?", hint_text: "Choose 'Yes' if you already have a valid licence.", page_heading: "Licencing", guidance_markdown: "This part of the form concerns licencing." }
   let(:another_page) { create :page }
 
   let(:new_input_data) do
