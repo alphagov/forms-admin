@@ -242,6 +242,11 @@ RSpec.describe Form, type: :model do
       expect(form.form_slug).to eq("apply-for-a-license-to-test-forms")
     end
 
+    it "is blank if the name is blank" do
+      form.name = ""
+      expect(form.form_slug).to eq("")
+    end
+
     it "setting form slug directly doesn't change it" do
       form.name = "Apply for a license to test forms"
       form.form_slug = "something totally different"
@@ -413,11 +418,39 @@ RSpec.describe Form, type: :model do
   end
 
   describe "FormStateMachine" do
+    describe "#make_live!" do
+      let(:form) { create :form, :ready_for_live }
+
+      it "calls FormDocumentSyncService" do
+        allow(FormDocumentSyncService).to receive(:synchronize_form)
+        form.make_live!
+        expect(FormDocumentSyncService).to have_received(:synchronize_form).with(form)
+      end
+
+      it "creates a live form document" do
+        expect { form.make_live! }.to change { form.reload.live_form_document }.from(nil)
+      end
+    end
+
+    describe "#archive_live_form!" do
+      let(:form) { create :form, :live }
+
+      it "calls FormDocumentSyncService" do
+        allow(FormDocumentSyncService).to receive(:synchronize_form)
+        form.archive_live_form!
+        expect(FormDocumentSyncService).to have_received(:synchronize_form).with(form)
+      end
+
+      it "creates a archived form document" do
+        expect { form.archive_live_form! }.to change { form.reload.archived_form_document }.from(nil)
+      end
+    end
+
     describe "#create_draft_from_live_form!" do
       let(:form) { create :form, :live }
 
       it "sets share_preview_completed to false" do
-        expect { form.create_draft_from_live_form! }.to change(form, :share_preview_completed).to(false)
+        expect { form.create_draft_from_live_form! }.to change { form.reload.share_preview_completed }.to(false)
       end
     end
 
@@ -425,7 +458,7 @@ RSpec.describe Form, type: :model do
       let(:form) { create :form, :archived }
 
       it "sets share_preview_completed to false" do
-        expect { form.create_draft_from_archived_form! }.to change(form, :share_preview_completed).to(false)
+        expect { form.create_draft_from_archived_form! }.to change { form.reload.share_preview_completed }.to(false)
       end
     end
   end
@@ -470,48 +503,131 @@ RSpec.describe Form, type: :model do
 
       it "changes the form's state to archived_with_draft" do
         expect {
-          form.save_draft!
+          form.save_question_changes!
         }.to change { form.reload.state }.to("archived_with_draft")
       end
     end
   end
 
   describe "#save_draft!" do
-    let(:form) { create :form }
+    shared_examples "#save_draft!" do
+      context "when the form has valid unsaved changes" do
+        before do
+          form.name = "new name"
+        end
 
-    it "saves the form" do
-      form.name = "new name"
+        it "returns true" do
+          expect(form.save_draft!).to be true
+        end
 
-      expect {
-        form.save_draft!
-      }.to change { described_class.find(form.id).name }.to("new name")
+        it "saves the form" do
+          expect {
+            form.save_draft!
+          }.to change { described_class.find(form.id).name }.to("new name")
+        end
+
+        it "updates the draft form document" do
+          expect {
+            form.name = "new name"
+            form.save_draft!
+          }.to change { form.reload.draft_form_document.content["name"] }.to("new name")
+        end
+
+        it "updates previous_changes" do
+          form.name = "new name"
+
+          expect {
+            form.save_draft!
+          }.to change(form, :previous_changes).to(a_hash_including("name" => ["old name", "new name"]))
+        end
+      end
+
+      context "when the form has invalid unsaved changes" do
+        before do
+          form.name = ""
+        end
+
+        it "raises an error" do
+          expect { form.save_draft! }.to raise_error ActiveRecord::RecordInvalid
+        end
+
+        it "does not save the form" do
+          expect {
+            expect { form.save_draft! }.to raise_error ActiveRecord::RecordInvalid
+          }.not_to(change { described_class.find(form.id).name })
+        end
+
+        it "does not update the draft form document" do
+          expect {
+            form.name = ""
+            expect { form.save_draft! }.to raise_error ActiveRecord::RecordInvalid
+          }.not_to(change { form.reload.draft_form_document.content["name"] })
+        end
+
+        it "does not change share_preview_completed" do
+          expected = form.share_preview_completed
+          expect { form.save_draft! }.to raise_error ActiveRecord::RecordInvalid
+          expect(form.share_preview_completed).to be expected
+          expect(form.reload.share_preview_completed).to be expected
+        end
+      end
     end
 
     context "when the form is draft" do
+      let(:form) { create :form, name: "old name" }
+
+      include_examples "#save_draft!"
+
       it "does not change the form's state" do
         expect {
           form.save_draft!
         }.not_to(change { form.reload.state })
       end
+
+      context "when share_preview_completed is true" do
+        let(:form) { create :form, :ready_for_live }
+
+        it "does not set share_preview_completed to false" do
+          form.save_draft!
+          expect(form.share_preview_completed).not_to be false
+          expect(form.reload.share_preview_completed).not_to be false
+        end
+      end
     end
 
     context "when the form is live" do
-      let(:form) { create(:form, :live) }
+      let(:form) { create(:form, :live, name: "old name") }
+
+      include_examples "#save_draft!"
 
       it "changes the form's state to live_with_draft" do
         expect {
           form.save_draft!
         }.to change { form.reload.state }.to("live_with_draft")
       end
+
+      it "sets share_preview_completed to false" do
+        form.save_draft!
+        expect(form.share_preview_completed).to be false
+        expect(form.reload.share_preview_completed).to be false
+      end
     end
 
     context "when the form is archived" do
-      let(:form) { create(:form, :archived) }
+      let(:form) { create(:form, :archived, name: "old name") }
+
+      include_examples "#save_draft!"
 
       it "changes the form's state to archived_with_draft" do
         expect {
           form.save_draft!
         }.to change { form.reload.state }.to("archived_with_draft")
+      end
+
+      it "sets share_preview_completed to false" do
+        form.save_draft!
+        expect(form.share_preview_completed).to be false
+        expect(form.reload.share_preview_completed).to be false
       end
     end
   end

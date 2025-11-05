@@ -53,10 +53,13 @@ class Form < ApplicationRecord
   end
 
   def save_draft!
-    save!
-    create_draft_from_live_form! if live?
-    create_draft_from_archived_form! if archived?
-    true
+    if live?
+      create_draft_from_live_form!
+    elsif archived?
+      create_draft_from_archived_form!
+    else
+      save!
+    end
   end
 
   def has_draft_version
@@ -81,7 +84,7 @@ class Form < ApplicationRecord
     super
 
     # Always set form_slug using the English name
-    self[:form_slug] = name_en.parameterize
+    self[:form_slug] = name.present? ? name_en.parameterize : ""
   end
 
   # form_slug is always set based on name
@@ -221,4 +224,15 @@ private
   def start_page
     pages&.first&.id
   end
+
+  # callbacks for FormStateMachine
+  def after_create_draft
+    update_columns(share_preview_completed: false)
+  end
+
+  def after_make_live
+    FormDocumentSyncService.synchronize_form(self)
+  end
+
+  alias_method :after_archive, :after_make_live
 end

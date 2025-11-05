@@ -13,7 +13,7 @@ module FormStateMachine
       archived_with_draft: "archived_with_draft",
     }
 
-    aasm column: :state, enum: true do
+    aasm column: :state, enum: true, whiny_persistence: true do
       state :draft, initial: true
       state :deleted, :live, :live_with_draft, :archived, :archived_with_draft
 
@@ -27,33 +27,25 @@ module FormStateMachine
       end
 
       event :make_live do
-        after do
-          FormDocumentSyncService.synchronize_form(self)
-        end
+        after :after_make_live
 
-        transitions from: %i[draft live_with_draft archived archived_with_draft], to: :live, guard: proc { ready_for_live }
+        transitions from: %i[draft live_with_draft archived archived_with_draft], to: :live, guard: :ready_for_live
       end
 
       event :create_draft_from_live_form do
-        after do
-          update!(share_preview_completed: false)
-        end
+        after :after_create_draft
 
         transitions from: :live, to: :live_with_draft
       end
 
       event :create_draft_from_archived_form do
-        after do
-          update!(share_preview_completed: false)
-        end
+        after :after_create_draft
 
         transitions from: :archived, to: :archived_with_draft
       end
 
       event :archive_live_form do
-        after do
-          FormDocumentSyncService.synchronize_form(self)
-        end
+        after :after_archive
 
         transitions from: :live, to: :archived
         transitions from: :live_with_draft, to: :archived_with_draft
