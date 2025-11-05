@@ -12,7 +12,7 @@ RSpec.describe Forms::ReceiveCsvController, type: :request do
   end
 
   describe "#create" do
-    let(:params) { { forms_receive_csv_input: { submission_type: } } }
+    let(:params) { { forms_submission_type_input: { submission_type: } } }
 
     context "when params are valid" do
       let(:submission_type) { "email_with_csv" }
@@ -86,7 +86,7 @@ RSpec.describe Forms::ReceiveCsvController, type: :request do
       it "re-renders the page with an error" do
         post(receive_csv_path(form_id: form.id), params:)
         expect(response).to render_template("new")
-        expect(response.body).to include(I18n.t("activemodel.errors.models.forms/receive_csv_input.attributes.submission_type.blank"))
+        expect(response.body).to include(I18n.t("activemodel.errors.models.forms/submission_type_input.attributes.submission_type.blank"))
       end
     end
   end

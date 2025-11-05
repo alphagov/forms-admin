@@ -4,15 +4,15 @@ module Forms
 
     def new
       authorize current_form, :can_view_form?
-      @receive_csv_input = ReceiveCsvInput.new(form: current_form).assign_form_values
+      @submission_type_input = SubmissionTypeInput.new(form: current_form).assign_form_values
     end
 
     def create
       authorize current_form, :can_view_form?
-      @receive_csv_input = ReceiveCsvInput.new(receive_csv_input_params)
+      @submission_type_input = SubmissionTypeInput.new(submission_type_input_params)
 
-      if @receive_csv_input.submit
-        redirect_to form_path(@receive_csv_input.form.id), success: success_message(@receive_csv_input.form)
+      if @submission_type_input.submit
+        redirect_to form_path(@submission_type_input.form.id), success: success_message(@submission_type_input.form)
       else
         render :new, status: :unprocessable_content
       end
@@ -20,8 +20,8 @@ module Forms
 
   private
 
-    def receive_csv_input_params
-      params.require(:forms_receive_csv_input).permit(:submission_type).merge(form: current_form)
+    def submission_type_input_params
+      params.require(:forms_submission_type_input).permit(:submission_type).merge(form: current_form)
     end
 
     def success_message(form)
