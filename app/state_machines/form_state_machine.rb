@@ -13,7 +13,7 @@ module FormStateMachine
       archived_with_draft: "archived_with_draft",
     }
 
-    aasm column: :state, enum: true do
+    aasm column: :state, enum: true, whiny_persistence: true do
       state :draft, initial: true
       state :deleted, :live, :live_with_draft, :archived, :archived_with_draft
 

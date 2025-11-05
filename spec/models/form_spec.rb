@@ -532,6 +532,14 @@ RSpec.describe Form, type: :model do
             form.save_draft!
           }.to change { form.reload.draft_form_document.content["name"] }.to("new name")
         end
+
+        it "updates previous_changes" do
+          form.name = "new name"
+
+          expect {
+            form.save_draft!
+          }.to change(form, :previous_changes).to(a_hash_including("name" => ["old name", "new name"]))
+        end
       end
 
       context "when the form has invalid unsaved changes" do
@@ -566,7 +574,7 @@ RSpec.describe Form, type: :model do
     end
 
     context "when the form is draft" do
-      let(:form) { create :form }
+      let(:form) { create :form, name: "old name" }
 
       include_examples "#save_draft!"
 
@@ -588,7 +596,7 @@ RSpec.describe Form, type: :model do
     end
 
     context "when the form is live" do
-      let(:form) { create(:form, :live) }
+      let(:form) { create(:form, :live, name: "old name") }
 
       include_examples "#save_draft!"
 
@@ -606,7 +614,7 @@ RSpec.describe Form, type: :model do
     end
 
     context "when the form is archived" do
-      let(:form) { create(:form, :archived) }
+      let(:form) { create(:form, :archived, name: "old name") }
 
       include_examples "#save_draft!"
 

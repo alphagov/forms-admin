@@ -53,10 +53,13 @@ class Form < ApplicationRecord
   end
 
   def save_draft!
-    save!
-    create_draft_from_live_form! if live?
-    create_draft_from_archived_form! if archived?
-    true
+    if live?
+      create_draft_from_live_form!
+    elsif archived?
+      create_draft_from_archived_form!
+    else
+      save!
+    end
   end
 
   def has_draft_version
@@ -224,7 +227,7 @@ private
 
   # callbacks for FormStateMachine
   def after_create_draft
-    update!(share_preview_completed: false)
+    update_columns(share_preview_completed: false)
   end
 
   def after_make_live
