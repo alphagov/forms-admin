@@ -1,8 +1,13 @@
 class Forms::WelshPageTranslationInput < BaseInput
   include TextInputHelper
   include ActionView::Helpers::FormTagHelper
+  include ActiveModel::Attributes
 
-  attr_accessor :id, :question_text_cy, :hint_text_cy, :page_heading_cy, :guidance_markdown_cy
+  attribute :id
+  attribute :question_text_cy
+  attribute :hint_text_cy
+  attribute :page_heading_cy
+  attribute :guidance_markdown_cy
 
   def submit
     return false if invalid?

@@ -33,7 +33,7 @@ module Forms
     end
 
     def page_translation_input_params
-      params.require(:forms_welsh_translation_input).permit(page_translations: %i[id question_text_cy hint_text_cy page_heading_cy guidance_markdown_cy])
+      params.require(:forms_welsh_translation_input).permit(page_translations: WelshPageTranslationInput.attribute_names)
     end
 
     def welsh_enabled?
