@@ -1,4 +1,9 @@
 // Largely based on [WAI's toolbar example](https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/examples/toolbar/)
+import h2Icon from '~/icons/markdown-editor-h2.svg?raw'
+import h3Icon from '~/icons/markdown-editor-h3.svg?raw'
+import bulletListIcon from '~/icons/markdown-editor-bullet-list.svg?raw'
+import numberedListIcon from '~/icons/markdown-editor-numbered-list.svg?raw'
+import linkIcon from '~/icons/markdown-editor-link.svg?raw'
 
 const blockPrefixPattern = /^(## |### |\* |- |1. )/g
 
@@ -60,25 +65,36 @@ const buttonGroupConfiguration = [
     {
       identifier: 'h2',
       callback: addH2,
-      isHeading: true
+      isHeading: true,
+      icon: h2Icon
     },
     {
       identifier: 'h3',
       callback: addH3,
-      isHeading: true
+      isHeading: true,
+      icon: h3Icon
     }
   ],
-  [{ identifier: 'link', callback: addLink, isHeading: false }],
+  [
+    {
+      identifier: 'link',
+      callback: addLink,
+      isHeading: false,
+      icon: bulletListIcon
+    }
+  ],
   [
     {
       identifier: 'bullet-list',
       callback: addUnorderedList,
-      isHeading: false
+      isHeading: false,
+      icon: numberedListIcon
     },
     {
       identifier: 'numbered-list',
       callback: addOrderedList,
-      isHeading: false
+      isHeading: false,
+      icon: linkIcon
     }
   ]
 ]
@@ -114,7 +130,8 @@ const createButtonGroup = (
         textArea,
         getButtonText(buttonConfig.identifier, i18n),
         buttonConfig.callback,
-        buttonConfig.identifier
+        buttonConfig.identifier,
+        buttonConfig.icon
       )
     )
 
@@ -122,18 +139,40 @@ const createButtonGroup = (
   return buttonGroup
 }
 
-const createButton = (textArea, linkText, callback, identifier) => {
+const createButton = (textArea, linkText, callback, identifier, icon) => {
   const button = document.createElement('button')
   button.innerHTML = `<span class='govuk-visually-hidden'>${linkText}</span>`
+
+  const iconElement = createIconElement(icon)
+  button.prepend(iconElement)
+
   button.classList.add(
     'govuk-button',
     'govuk-button--secondary',
     'app-markdown-editor__toolbar-button',
     `app-markdown-editor__toolbar-button--${identifier}`
   )
+
   button.setAttribute('title', linkText)
   addClickAndKeyboardEventListeners(textArea, button, callback)
+
   return button
+}
+
+const createIconElement = icon => {
+  // create element from raw icon HTML
+  const iconElement = new DOMParser().parseFromString(
+    icon,
+    'text/xml'
+  ).firstChild
+
+  // Hide element from assistive tech since the adjacent text conveys
+  // the same meaning
+  iconElement.setAttribute('aria-hidden', 'true')
+
+  iconElement.classList.add('app-markdown-editor__toolbar-icon')
+
+  return iconElement
 }
 
 const getSelection = element => {

@@ -61,26 +61,12 @@
   background-repeat: no-repeat;
   background-size: 100% 100%;
   margin: 0;
+  padding: govuk-px-to-rem(2);
+}
 
-  &--h2 {
-    background-image: url("~/icons/markdown-editor-h2.svg");
-  }
-
-  &--h3 {
-    background-image: url("~/icons/markdown-editor-h3.svg");
-  }
-
-  &--bullet-list {
-    background-image: url("~/icons/markdown-editor-bullet-list.svg");
-  }
-
-  &--numbered-list {
-    background-image: url("~/icons/markdown-editor-numbered-list.svg");
-  }
-
-  &--link {
-    background-image: url("~/icons/markdown-editor-link.svg");
-  }
+.app-markdown-editor__toolbar-icon {
+  width: 100%;
+  height: 100%;
 }
 
 .app-markdown-editor__markdown-example-block {
