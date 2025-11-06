@@ -788,6 +788,35 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "submission format" do
+    let(:form) { create :form }
+
+    it "can be nil" do
+      form.update!(submission_format: nil)
+      expect(form.submission_format).to be_nil
+    end
+
+    it "can be empty" do
+      form.update!(submission_format: [])
+      expect(form.submission_format).to be_empty
+    end
+
+    it "stores an array of strings" do
+      form.update!(submission_format: %w[csv json])
+      expect(form.submission_format).to include "csv"
+      expect(form.submission_format).to include "json"
+    end
+
+    # ActiveRecord doesn't support enums with arrays
+    # describe "enum" do
+    #   it "returns a list of submission formats" do
+    #     formats = %w[csv json]
+    #     expect(described_class.submission_formats.keys).to eq formats
+    #     expect(described_class.submission_formats.values).to eq formats
+    #   end
+    # end
+  end
+
   describe "#destroy" do
     let(:form) { create :form }
 
