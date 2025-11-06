@@ -2,10 +2,10 @@ require "rails_helper"
 
 describe "forms/receive_csv/new.html.erb" do
   let(:current_form) { OpenStruct.new(id: 1, name: "Form 1", form_slug: "form-1") }
-  let(:receive_csv_input) { Forms::ReceiveCsvInput.new(form: current_form).assign_form_values }
+  let(:submission_type_input) { Forms::SubmissionTypeInput.new(form: current_form).assign_form_values }
 
   before do
-    assign(:receive_csv_input, receive_csv_input)
+    assign(:submission_type_input, submission_type_input)
     allow(view).to receive_messages(form_path: "/forms/1", receive_csv_create_path: "/forms/1/receive-csv")
     render template: "forms/receive_csv/new"
   end
@@ -23,8 +23,8 @@ describe "forms/receive_csv/new.html.erb" do
   end
 
   it "has a checkbox for setting the submission type" do
-    expect(rendered).to have_css("fieldset", text: I18n.t("helpers.legend.forms_receive_csv_input.submission_type"))
-    expect(rendered).to have_field(I18n.t("helpers.label.forms_receive_csv_input.submission_type_options.email_with_csv"), type: :checkbox)
+    expect(rendered).to have_css("fieldset", text: I18n.t("helpers.legend.forms_submission_type_input.submission_type"))
+    expect(rendered).to have_field(I18n.t("helpers.label.forms_submission_type_input.submission_type_options.email_with_csv"), type: :checkbox)
   end
 
   it "has a submit button" do

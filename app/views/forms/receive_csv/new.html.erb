@@ -1,14 +1,14 @@
-<% set_page_title(title_with_error_prefix(t(".title"), @receive_csv_input.errors.any?)) %>
+<% set_page_title(title_with_error_prefix(t(".title"), @submission_type_input.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_path, t("back_link.form_create")) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with(model: @receive_csv_input, url: receive_csv_create_path) do |f| %>
-      <% if @receive_csv_input&.errors.any? %>
+    <%= form_with(model: @submission_type_input, url: receive_csv_create_path) do |f| %>
+      <% if @submission_type_input&.errors.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
 
-      <span class="govuk-caption-l"><%= @receive_csv_input.form.name %></span>
+      <span class="govuk-caption-l"><%= @submission_type_input.form.name %></span>
       <h1 class="govuk-heading-l">
         <%= t(".title") %>
       </h1>

@@ -1,4 +1,4 @@
-class Forms::ReceiveCsvInput < BaseInput
+class Forms::SubmissionTypeInput < BaseInput
   attr_accessor :form, :submission_type
 
   validates :submission_type, presence: true

@@ -11,19 +11,51 @@ RSpec.describe Forms::ReceiveCsvController, type: :request do
     login_as_super_admin_user
   end
 
+  describe "#new" do
+    before do
+      get receive_csv_path(form_id: form.id)
+    end
+
+    it "renders the receive csv view" do
+      expect(response).to have_rendered :new
+    end
+
+    it "uses the form submission type input" do
+      expect(assigns).to include submission_type_input: an_instance_of(Forms::SubmissionTypeInput)
+    end
+
+    describe "submission type checkbox" do
+      subject(:submission_type_checkbox) { page.find_field("forms_submission_type_input[submission_type]") }
+
+      let(:page) { Capybara.string(response.body) }
+
+      context "when the form has submission type 'email'" do
+        let(:original_submission_type) { "email" }
+
+        it { is_expected.not_to be_checked }
+      end
+
+      context "when the form has submission type 'email_with_csv'" do
+        let(:original_submission_type) { "email_with_csv" }
+
+        it { is_expected.to be_checked }
+      end
+    end
+  end
+
   describe "#create" do
-    let(:params) { { forms_receive_csv_input: { submission_type: } } }
+    let(:params) { { forms_submission_type_input: { submission_type: } } }
 
     context "when params are valid" do
       let(:submission_type) { "email_with_csv" }
 
-      it "Updates the form" do
+      it "updates the form submission type" do
         expect {
           post(receive_csv_path(form_id: form.id), params:)
         }.to change { form.reload.submission_type }.to(submission_type)
       end
 
-      it "Redirects you to the form overview page" do
+      it "redirects you to the form overview page" do
         post(receive_csv_path(form_id: form.id), params:)
         expect(response).to redirect_to(form_path(form.id))
       end
@@ -86,7 +118,7 @@ RSpec.describe Forms::ReceiveCsvController, type: :request do
       it "re-renders the page with an error" do
         post(receive_csv_path(form_id: form.id), params:)
         expect(response).to render_template("new")
-        expect(response.body).to include(I18n.t("activemodel.errors.models.forms/receive_csv_input.attributes.submission_type.blank"))
+        expect(response.body).to include(I18n.t("activemodel.errors.models.forms/submission_type_input.attributes.submission_type.blank"))
       end
     end
   end
