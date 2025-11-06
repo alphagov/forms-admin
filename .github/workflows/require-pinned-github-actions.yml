@@ -1,0 +1,16 @@
+name: Ensure actions are pinned to SHAs
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/**.yml"
+      - ".github/workflows/**.yaml"
+
+jobs:
+  check-actions-sha:
+    name: Check actions are pinned to SHAs
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493 # v5.0.0
+      - name: Ensure SHA pinned actions
+        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@9e9574ef04ea69da568d6249bd69539ccc704e74 # v4.0.0
