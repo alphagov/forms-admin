@@ -368,6 +368,13 @@ RSpec.describe Page, type: :model do
     end
   end
 
+  describe "before_create" do
+    it "sets the external_id" do
+      page = create :page
+      expect(page.external_id).to be_present
+    end
+  end
+
   describe ".create_and_update_form!" do
     let(:form) { create(:form, question_section_completed: true) }
     let(:page_params) do
