@@ -716,7 +716,7 @@ RSpec.describe Page, type: :model do
     end
 
     it "includes all attributes for the page as a step" do
-      page_attributes = described_class.attribute_names - %w[id form_id next_page position created_at updated_at]
+      page_attributes = described_class.attribute_names - %w[id external_id form_id next_page position created_at updated_at]
       expect(page.as_form_document_step(second_page)["data"]).to match a_hash_including(*page_attributes)
     end
 
