@@ -710,16 +710,20 @@ RSpec.describe Page, type: :model do
     let!(:page) { create :page, form: }
     let!(:second_page) { create :page, form: }
 
-    it "has an id" do
-      expect(page.as_form_document_step(second_page)).to match a_hash_including("id" => page.id)
+    it "has an id which is the page's external_id" do
+      expect(page.as_form_document_step(second_page)).to match a_hash_including("id" => page.external_id)
     end
 
     it "has a position" do
       expect(page.as_form_document_step(second_page)).to match a_hash_including("position" => page.position)
     end
 
-    it "has a next_step_id" do
-      expect(page.as_form_document_step(second_page)).to match a_hash_including("next_step_id" => second_page.id)
+    it "has a next_step_id which is the external ID of the next page" do
+      expect(page.as_form_document_step(second_page)).to match a_hash_including("next_step_id" => second_page.external_id)
+    end
+
+    it "has an database_id" do
+      expect(page.as_form_document_step(second_page)).to match a_hash_including("database_id" => page.id)
     end
 
     it "does not include the external_id" do

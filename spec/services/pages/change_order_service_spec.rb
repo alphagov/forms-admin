@@ -114,8 +114,8 @@ RSpec.describe Pages::ChangeOrderService do
         it "updates the draft form document" do
           described_class.update_page_order(form:, page_ids_and_positions:)
           expect(form.reload.draft_form_document.content["steps"][0]).to include({
-            "id" => pages[1].id,
-            "next_step_id" => pages[4].id,
+            "id" => pages[1].external_id,
+            "next_step_id" => pages[4].external_id,
           })
         end
       end
@@ -126,8 +126,8 @@ RSpec.describe Pages::ChangeOrderService do
         it "updates the draft form document" do
           described_class.update_page_order(form:, page_ids_and_positions:)
           expect(form.reload.draft_form_document.content["steps"][0]).to include({
-            "id" => pages[1].id,
-            "next_step_id" => pages[4].id,
+            "id" => pages[1].external_id,
+            "next_step_id" => pages[4].external_id,
           })
         end
       end

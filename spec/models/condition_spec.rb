@@ -624,15 +624,16 @@ RSpec.describe Condition, type: :model do
   describe "#as_form_document_condition" do
     let(:form) { create :form }
     let(:check_page) { create :page, :with_selection_settings, form: }
+    let(:routing_page) { create :page, :with_selection_settings, form: }
     let(:goto_page) { create :page, form: }
-    let(:condition) { create :condition, routing_page_id: check_page.id, check_page_id: check_page.id, goto_page_id: goto_page.id, skip_to_end: false }
+    let(:condition) { create :condition, routing_page_id: routing_page.id, check_page_id: check_page.id, goto_page_id: goto_page.id, skip_to_end: false }
 
     it "returns a json object" do
       expect(condition.as_form_document_condition).to match({
         "id" => condition.id,
-        "check_page_id" => check_page.id,
-        "routing_page_id" => check_page.id,
-        "goto_page_id" => goto_page.id,
+        "check_page_id" => check_page.external_id,
+        "routing_page_id" => routing_page.external_id,
+        "goto_page_id" => goto_page.external_id,
         "answer_value" => nil,
         "created_at" => a_kind_of(String),
         "updated_at" => a_kind_of(String),
@@ -641,7 +642,6 @@ RSpec.describe Condition, type: :model do
         "exit_page_heading" => nil,
         "validation_errors" => [
           { "name" => "answer_value_doesnt_exist" },
-          { "name" => "cannot_route_to_next_page" },
         ],
       })
     end

@@ -105,7 +105,12 @@ class Condition < ApplicationRecord
   end
 
   def as_form_document_condition
-    as_json(methods: %i[validation_errors])
+    data = as_json(methods: %i[validation_errors])
+    data.merge(
+      "routing_page_id" => routing_page&.external_id,
+      "check_page_id" => check_page&.external_id,
+      "goto_page_id" => goto_page&.external_id,
+    )
   end
 
 private

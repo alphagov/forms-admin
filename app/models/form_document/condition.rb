@@ -9,9 +9,9 @@ class FormDocument::Condition
   attribute :updated_at, :datetime
   attribute :skip_to_end, :boolean
   attribute :answer_value, :string
-  attribute :goto_page_id, :integer
-  attribute :check_page_id, :integer
-  attribute :routing_page_id, :integer
+  attribute :goto_page_id, :string
+  attribute :check_page_id, :string
+  attribute :routing_page_id, :string
   attribute :exit_page_heading, :string
   attribute :validation_errors, DataStructType.new
   attribute :exit_page_markdown, :string

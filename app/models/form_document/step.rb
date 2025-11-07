@@ -4,11 +4,11 @@ class FormDocument::Step
 
   attr_reader :routing_conditions
 
-  attribute :id, :integer
+  attribute :id, :string
   attribute :data, DataStructType.new
   attribute :type, :string
   attribute :position, :integer
-  attribute :next_step_id, :integer
+  attribute :next_step_id, :string
 
   delegate_missing_to :data
 

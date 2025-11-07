@@ -146,7 +146,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
         routing_conditions = form.reload.draft_form_document.content["steps"][0]["routing_conditions"]
         expect(routing_conditions).to contain_exactly(
           hash_including(
-            "routing_page_id" => page.id,
+            "routing_page_id" => page.external_id,
             "answer_value" => "Wales",
           ),
         )
