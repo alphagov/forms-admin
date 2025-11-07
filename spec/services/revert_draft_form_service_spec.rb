@@ -15,7 +15,9 @@ describe RevertDraftFormService do
     expect(reloaded_form_document_content.except("live_at", "steps")).to eq(form_document.content.except("live_at", "steps"))
 
     # Compare the steps separately so we get a nice diff if the expectation fails
-    expect(reloaded_form_document_content["steps"]).to eq(form_document.content["steps"])
+    reloaded_steps = reloaded_form_document_content["steps"].map { |s| s.except("database_id") }
+    expected_steps = form_document.content["steps"].map { |s| s.except("database_id") }
+    expect(reloaded_steps).to eq(expected_steps)
   end
 
   # we use `freeze_time` to freeze the timestamps of the form and its pages
@@ -30,6 +32,21 @@ describe RevertDraftFormService do
 
     def revert_draft(tag)
       revert_draft_form_service.revert_draft_from_form_document(tag)
+    end
+
+    context "when migration to use page external IDs not run" do
+      before do
+        live_form.live_form_document.content["steps"].each do |step|
+          step.delete("database_id")
+        end
+        live_form.live_form_document.save!
+      end
+
+      it "raises an error" do
+        expect {
+          revert_draft(live_tag)
+        }.to raise_error(StandardError, "Migration to use page external IDs not run for form #{live_form.id}")
+      end
     end
 
     context "when the draft has no changes" do
