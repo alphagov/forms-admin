@@ -715,8 +715,12 @@ RSpec.describe Page, type: :model do
       expect(page.as_form_document_step(second_page)).to match a_hash_including("next_step_id" => second_page.id)
     end
 
+    it "does not include the external_id" do
+      expect(page.as_form_document_step(second_page)).not_to have_key("external_id")
+    end
+
     it "includes all attributes for the page as a step" do
-      page_attributes = described_class.attribute_names - %w[id form_id next_page position created_at updated_at]
+      page_attributes = described_class.attribute_names - %w[id external_id form_id next_page position created_at updated_at]
       expect(page.as_form_document_step(second_page)["data"]).to match a_hash_including(*page_attributes)
     end
 
