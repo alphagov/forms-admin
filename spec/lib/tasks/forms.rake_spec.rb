@@ -234,27 +234,29 @@ RSpec.describe "forms.rake" do
         .tap(&:reenable)
     end
 
-    let(:form) { create :form, :live, submission_type: "s3" }
-    let!(:other_form) { create :form, :live, submission_type: "s3" }
+    let(:form) { create :form, :live, submission_type: "s3", submission_format: nil }
+    let!(:other_form) { create :form, :live, submission_type: "s3", submission_format: nil }
 
     context "when the form is live" do
       it "sets a form's submission_type to email" do
-        expect { task.invoke(form.id, "email") }
+        expect { task.invoke(form.id) }
           .to change { form.reload.submission_type }.to("email")
       end
 
       it "updates a form's live form document" do
-        task.invoke(form.id, "email")
+        task.invoke(form.id)
         expect(form.live_form_document.reload.content["submission_type"]).to eq("email")
+        expect(form.live_form_document.reload.content["submission_format"]).to eq([])
       end
 
       it "updates the form's draft form document" do
-        task.invoke(form.id, "email")
+        task.invoke(form.id)
         expect(form.draft_form_document.reload.content["submission_type"]).to eq("email")
+        expect(form.live_form_document.reload.content["submission_format"]).to eq([])
       end
 
       it "does not update a different form" do
-        expect { task.invoke(form.id, "email") }
+        expect { task.invoke(form.id) }
           .not_to(change { other_form.reload.submission_type })
       end
     end
@@ -263,33 +265,73 @@ RSpec.describe "forms.rake" do
       let(:form) { create :form, submission_type: "s3" }
 
       it "sets a form's submission_type to email" do
-        expect { task.invoke(form.id, "email") }
+        expect { task.invoke(form.id) }
           .to change { form.reload.submission_type }.to("email")
       end
 
       it "updates the form's draft form document" do
-        task.invoke(form.id, "email")
+        task.invoke(form.id)
         expect(form.draft_form_document.reload.content["submission_type"]).to eq("email")
+        expect(form.draft_form_document.reload.content["submission_format"]).to eq([])
       end
     end
 
-    context "when the provided submission_type is email_with_csv" do
+    context "when the provided submission format is empty" do
+      it "sets a form's submission format to empty" do
+        expect { task.invoke(form.id) }
+          .to change { form.reload.submission_format }.to([])
+      end
+
+      it "sets a form's submission_type to email" do
+        expect { task.invoke(form.id) }
+          .to change { form.reload.submission_type }.to("email")
+      end
+    end
+
+    context "when the provided submission format is email" do
+      it "sets a form's submission format to empty" do
+        expect { task.invoke(form.id, "email") }
+          .to change { form.reload.submission_format }.to([])
+      end
+
+      it "sets a form's submission_type to email" do
+        expect { task.invoke(form.id, "email") }
+          .to change { form.reload.submission_type }.to("email")
+      end
+    end
+
+    context "when the provided submission format is csv" do
+      it "sets a form's submission format to csv" do
+        expect { task.invoke(form.id, "csv") }
+          .to change { form.reload.submission_format }.to(%w[csv])
+      end
+
       it "sets a form's submission_type to email_with_csv" do
-        expect { task.invoke(form.id, "email_with_csv") }
+        expect { task.invoke(form.id, "csv") }
           .to change { form.reload.submission_type }.to("email_with_csv")
       end
     end
 
-    context "when the provided submission_type is email_with_json" do
+    context "when the provided submission formate is json" do
+      it "sets a form's submission format to json" do
+        expect { task.invoke(form.id, "json") }
+          .to change { form.reload.submission_format }.to(%w[json])
+      end
+
       it "sets a form's submission_type to email_with_json" do
-        expect { task.invoke(form.id, "email_with_json") }
+        expect { task.invoke(form.id, "json") }
           .to change { form.reload.submission_type }.to("email_with_json")
       end
     end
 
-    context "when the provided submission_type is email_with_csv_and_json" do
+    context "when the provided submission format is csv, json" do
+      it "sets a form's submission format to csv and json" do
+        expect { task.invoke(form.id, "csv", "json") }
+          .to change { form.reload.submission_format }.to(%w[csv json])
+      end
+
       it "sets a form's submission_type to email_with_csv_and_json" do
-        expect { task.invoke(form.id, "email_with_csv_and_json") }
+        expect { task.invoke(form.id, "csv", "json") }
           .to change { form.reload.submission_type }.to("email_with_csv_and_json")
       end
     end
@@ -298,7 +340,7 @@ RSpec.describe "forms.rake" do
       it "aborts with a usage message" do
         expect { task.invoke(form.id, "s3") }
           .to raise_error(SystemExit)
-                .and output("submission_type must be one of email, email_with_csv, email_with_json, email_with_csv_and_json\n").to_stderr
+                .and output("submission_format must be one of csv, json\n").to_stderr
       end
     end
 
@@ -307,7 +349,7 @@ RSpec.describe "forms.rake" do
         expect {
           task.invoke
         }.to raise_error(SystemExit)
-               .and output("usage: rake forms:submission_type:set_to_email[<form_id>, <submission_type>]\n").to_stderr
+               .and output("usage: rake forms:submission_type:set_to_email[<form_id>(, <submission_format>)*]\n").to_stderr
       end
     end
   end
@@ -333,10 +375,16 @@ RSpec.describe "forms.rake" do
             .to change { form.reload.submission_type }.to("s3")
         end
 
+        it "sets a form's submission_format to csv" do
+          expect { task.invoke(*valid_args) }
+            .to change { form.reload.submission_format }.to(%w[csv])
+        end
+
         it "updates the live form document" do
           task.invoke(*valid_args)
           form_document = form.live_form_document.reload
           expect(form_document.content["submission_type"]).to eq("s3")
+          expect(form_document.content["submission_format"]).to eq(%w[csv])
           expect(form_document.content["s3_bucket_name"]).to eq(s3_bucket_name)
           expect(form_document.content["s3_bucket_aws_account_id"]).to eq(s3_bucket_aws_account_id)
           expect(form_document.content["s3_bucket_region"]).to eq(s3_bucket_region)
@@ -346,6 +394,7 @@ RSpec.describe "forms.rake" do
           task.invoke(*valid_args)
           form_document = form.draft_form_document.reload
           expect(form_document.content["submission_type"]).to eq("s3")
+          expect(form_document.content["submission_format"]).to eq(%w[csv])
           expect(form_document.content["s3_bucket_name"]).to eq(s3_bucket_name)
           expect(form_document.content["s3_bucket_aws_account_id"]).to eq(s3_bucket_aws_account_id)
           expect(form_document.content["s3_bucket_region"]).to eq(s3_bucket_region)
@@ -360,16 +409,23 @@ RSpec.describe "forms.rake" do
             .to change { form.reload.submission_type }.to("s3_with_json")
         end
 
+        it "sets a form's submission_format to json" do
+          expect { task.invoke(*valid_args) }
+            .to change { form.reload.submission_format }.to(%w[json])
+        end
+
         it "updates the live form document" do
           task.invoke(*valid_args)
           form_document = form.live_form_document.reload
           expect(form_document.content["submission_type"]).to eq("s3_with_json")
+          expect(form_document.content["submission_format"]).to eq(%w[json])
         end
 
         it "updates the draft form document" do
           task.invoke(*valid_args)
           form_document = form.draft_form_document.reload
           expect(form_document.content["submission_type"]).to eq("s3_with_json")
+          expect(form_document.content["submission_format"]).to eq(%w[json])
         end
       end
 
@@ -402,10 +458,16 @@ RSpec.describe "forms.rake" do
           .to change { form.reload.submission_type }.to("s3")
       end
 
+      it "sets a form's submission_format" do
+        expect { task.invoke(*valid_args) }
+          .to change { form.reload.submission_format }.to([format])
+      end
+
       it "updates the draft form document" do
         task.invoke(*valid_args)
         form_document = form.draft_form_document.reload
         expect(form_document.content["submission_type"]).to eq("s3")
+        expect(form_document.content["submission_format"]).to eq([format])
         expect(form_document.content["s3_bucket_name"]).to eq(s3_bucket_name)
         expect(form_document.content["s3_bucket_aws_account_id"]).to eq(s3_bucket_aws_account_id)
         expect(form_document.content["s3_bucket_region"]).to eq(s3_bucket_region)

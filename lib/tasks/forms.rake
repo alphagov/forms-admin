@@ -45,14 +45,29 @@ namespace :forms do
 
   namespace :submission_type do
     desc "Set submission_type to email"
-    task :set_to_email, %i[form_id submission_type] => :environment do |_, args|
-      usage_message = "usage: rake forms:submission_type:set_to_email[<form_id>, <submission_type>]".freeze
+    task :set_to_email, %i[form_id submission_formats] => :environment do |_, args|
+      submission_format = args[:submission_formats].nil? ? [] : args.to_a[1..]
+      submission_format = [] if submission_format == %w[email]
+
+      usage_message = "usage: rake forms:submission_type:set_to_email[<form_id>(, <submission_format>)*]".freeze
       abort usage_message if args[:form_id].blank?
 
-      supported_types = Form.submission_types.keys - %w[s3 s3_with_json]
-      abort "submission_type must be one of #{supported_types.join(', ')}" unless supported_types.include? args[:submission_type]
+      supported_formats = %w[csv json]
+      abort "submission_format must be one of #{supported_formats.join(', ')}" unless submission_format.all? { supported_formats.include? it }
 
-      set_submission_type(args[:submission_type], args[:form_id])
+      # Use old style submission type
+      # TODO: remove this
+      submission_type = if submission_format.include?("csv") && submission_format.include?("json")
+                          "email_with_csv_and_json"
+                        elsif submission_format.include?("csv")
+                          "email_with_csv"
+                        elsif submission_format.include?("json")
+                          "email_with_json"
+                        else
+                          "email"
+                        end
+
+      set_submission_type(args[:form_id], submission_type, submission_format)
     end
 
     desc "Set submission_type to s3"
@@ -66,11 +81,14 @@ namespace :forms do
       abort "s3_bucket_region must be one of eu-west-1 or eu-west-2" unless %w[eu-west-1 eu-west-2].include? args[:s3_bucket_region]
       abort "format must be one of csv or json" unless %w[csv json].include? args[:format]
 
+      # TODO: remove conversion to old style submission type
       submission_type = args[:format] == "csv" ? "s3" : "s3_with_json"
+      submission_format = [args[:format]]
 
       Rails.logger.info("Setting submission_type to #{submission_type} and s3_bucket_name to #{args[:s3_bucket_name]} for form: #{args[:form_id]}")
       form = Form.find(args[:form_id])
       form.submission_type = submission_type
+      form.submission_format = submission_format
       form.s3_bucket_name = args[:s3_bucket_name]
       form.s3_bucket_aws_account_id = args[:s3_bucket_aws_account_id]
       form.s3_bucket_region = args[:s3_bucket_region]
@@ -81,6 +99,7 @@ namespace :forms do
         content = form_document.content
 
         content[:submission_type] = submission_type
+        content[:submission_format] = submission_format
         content[:s3_bucket_name] = args[:s3_bucket_name]
         content[:s3_bucket_aws_account_id] = args[:s3_bucket_aws_account_id]
         content[:s3_bucket_region] = args[:s3_bucket_region]
@@ -121,11 +140,12 @@ def fmt_group(group)
   "group #{group.external_id} (\"#{group.name}\", #{group.organisation.name}, #{group.creator&.name || 'GOV.UK Forms Team'})"
 end
 
-def set_submission_type(submission_type, form_id)
-  Rails.logger.info("Setting submission_type to #{submission_type} for form: #{form_id}")
+def set_submission_type(form_id, submission_type, submission_format)
+  Rails.logger.info("Setting submission_type to #{submission_type} with submission_format #{submission_format} for form: #{form_id}")
 
   form = Form.find(form_id)
   form.submission_type = submission_type
+  form.submission_format = submission_format
   form.save!
 
   if form.is_live?
@@ -133,9 +153,10 @@ def set_submission_type(submission_type, form_id)
     content = form_document.content
 
     content[:submission_type] = submission_type
+    content[:submission_format] = submission_format
 
     form_document.save!
   end
 
-  Rails.logger.info("Set submission_type to #{submission_type} for form: #{form_id}")
+  Rails.logger.info("Set submission_type to #{submission_type} with submission_format #{submission_format} for form: #{form_id}")
 end
