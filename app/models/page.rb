@@ -31,10 +31,12 @@ class Page < ApplicationRecord
   validate :guidance_markdown_length_and_tags
 
   attribute :answer_settings, DataStructType.new
-  # Open the Model class used for tanslations and make the same change to the answer_settings attribute
+  # Open the Model class used for translations and make the same change to the answer_settings attribute
   class Translation
     attribute :answer_settings, DataStructType.new
   end
+
+  before_create :set_external_id
 
   def self.create_and_update_form!(...)
     page = Page.new(...)
@@ -154,5 +156,9 @@ private
       .flat_map(&:check_conditions)
       .filter { |condition| condition.check_page_id != condition.routing_page_id }
       .each(&:destroy!)
+  end
+
+  def set_external_id
+    self.external_id = ExternalIdProvider.generate_unique_id_for(Page)
   end
 end
