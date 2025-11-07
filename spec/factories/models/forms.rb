@@ -3,6 +3,7 @@ FactoryBot.define do
     sequence(:name) { |n| "Form #{n}" }
     submission_email { Faker::Internet.email(domain: "example.gov.uk") }
     submission_type { "email" }
+    submission_format { [] }
     privacy_policy_url { Faker::Internet.url(host: "gov.uk") }
     language { "en" }
     support_email { nil }
