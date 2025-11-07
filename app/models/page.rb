@@ -105,6 +105,7 @@ class Page < ApplicationRecord
   def as_form_document_step(next_page)
     {
       "id" => id,
+      "external_id" => external_id,
       "position" => position,
       "next_step_id" => next_page&.id,
       "type" => "question_page",

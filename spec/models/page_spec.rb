@@ -714,6 +714,10 @@ RSpec.describe Page, type: :model do
       expect(page.as_form_document_step(second_page)).to match a_hash_including("id" => page.id)
     end
 
+    it "has an external_id" do
+      expect(page.as_form_document_step(second_page)).to match a_hash_including("external_id" => page.external_id)
+    end
+
     it "has a position" do
       expect(page.as_form_document_step(second_page)).to match a_hash_including("position" => page.position)
     end
