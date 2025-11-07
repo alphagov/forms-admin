@@ -160,6 +160,6 @@ private
   end
 
   def set_external_id
-    self.external_id = ExternalIdProvider.generate_unique_id_for(Page)
+    self.external_id ||= ExternalIdProvider.generate_unique_id_for(Page)
   end
 end

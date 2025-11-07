@@ -79,6 +79,7 @@ private
   def assign_page_attributes(page, step_data)
     page_data = step_data["data"]
     page.assign_attributes(
+      external_id: step_data["external_id"],
       position: step_data["position"],
       question_text: page_data["question_text"],
       hint_text: page_data["hint_text"],
