@@ -130,7 +130,7 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
   test_group = Group.create! name: "Test Group", organisation: gds, creator: default_user
   Group.create! name: "Ministry of Tests forms", organisation: mot_org
   Group.create! name: "Ministry of Tests forms - secret!", organisation: mot_org, creator: mot_user
-  Group.create! name: "Welsh enabled", organisation: gds, welsh_enabled: true
+  welsh_group = Group.create! name: "Welsh enabled", organisation: gds, welsh_enabled: true
 
   Membership.create! user: default_user, group: end_to_end_group, added_by: default_user, role: :group_admin
 
@@ -345,8 +345,61 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
   )
   branch_route_form.reload.make_live!
 
+  welsh_form = Form.create!(
+    name: "A Welsh form",
+    pages: [
+      Page.create(
+        question_text: "What’s your name?",
+        answer_type: "name",
+        hint_text: "Enter your name as it appears on your licence.",
+        answer_settings: {
+          input_type: "full_name",
+          title_needed: false,
+        },
+        is_optional: false,
+        is_repeatable: false,
+      ),
+      Page.create(
+        question_text: "What’s your email address?",
+        answer_type: "email",
+        is_optional: false,
+        is_repeatable: false,
+        page_heading: "Email",
+        guidance_markdown: "We'll use your email to:\n\n- contact you if there are any issues with your submission\n\n- send you your digital licence",
+      ),
+      Page.create(
+        question_text: "What was the reference of your previous submission?",
+        answer_type: "text",
+        answer_settings: {
+          input_type: "single_line",
+        },
+        is_optional: false,
+        is_repeatable: false,
+      ),
+      Page.create(
+        question_text: "What’s your answer?",
+        answer_type: "text",
+        answer_settings: {
+          input_type: "single_line",
+        },
+        is_optional: false,
+        is_repeatable: false,
+      ),
+    ],
+    question_section_completed: true,
+    declaration_text: "",
+    declaration_section_completed: true,
+    privacy_policy_url: "https://www.gov.uk/help/privacy-notice",
+    submission_email:,
+    support_email: "your.email+fakedata84701@gmail.com.gov.uk",
+    support_phone: "08000800",
+    what_happens_next_markdown: "Test",
+    share_preview_completed: true,
+  )
+
   # add forms to groups
   GroupForm.create! group: end_to_end_group, form_id: all_question_types_form.id # All question types form
   GroupForm.create! group: end_to_end_group, form_id: e2e_s3_forms.id # s3 submission test form
   GroupForm.create! group: test_group, form_id: branch_route_form.id # Branch routing form
+  GroupForm.create! group: welsh_group, form_id: welsh_form.id # Welsh form
 end

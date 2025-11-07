@@ -6,14 +6,14 @@ module Forms
       authorize current_form, :can_edit_form?
       return redirect_to form_path(current_form) unless welsh_enabled?
 
-      @welsh_translation_input = WelshTranslationInput.new(form: current_form).assign_form_values
+      @welsh_translation_input = WelshTranslationInput.new(form: current_form, page_translations: welsh_page_translation_inputs_from_page).assign_form_values
     end
 
     def create
       authorize current_form, :can_edit_form?
       return redirect_to form_path(current_form) unless welsh_enabled?
 
-      @welsh_translation_input = WelshTranslationInput.new(**welsh_translation_input_params)
+      @welsh_translation_input = WelshTranslationInput.new(**welsh_translation_input_params, page_translations: welsh_page_translation_inputs_from_params)
 
       if @welsh_translation_input.submit
         success_message = if @welsh_translation_input.mark_complete == "true"
@@ -32,8 +32,24 @@ module Forms
       params.require(:forms_welsh_translation_input).permit(WelshTranslationInput.attribute_names).merge(form: current_form)
     end
 
+    def page_translation_input_params
+      params.require(:forms_welsh_translation_input).permit(page_translations: WelshPageTranslationInput.attribute_names)
+    end
+
     def welsh_enabled?
       FeatureService.new(group: current_form.group).enabled?(:welsh)
+    end
+
+  private
+
+    def welsh_page_translation_inputs_from_page
+      current_form.pages.map { |page| WelshPageTranslationInput.new(id: page.id).assign_page_values }
+    end
+
+    def welsh_page_translation_inputs_from_params
+      return [] if page_translation_input_params[:page_translations].blank?
+
+      page_translation_input_params[:page_translations].each_value.map { |page_translation| WelshPageTranslationInput.new(**page_translation) }
     end
   end
 end

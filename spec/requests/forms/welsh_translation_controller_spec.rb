@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Forms::WelshTranslationController, type: :request do
-  let(:form) { create(:form, welsh_completed: false) }
+  let(:form) { create(:form, :with_pages, welsh_completed: false) }
   let(:id) { form.id }
 
   let(:current_user) { standard_user }
@@ -48,13 +48,20 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
 
   describe "#create" do
     let(:mark_complete) { "true" }
-    let(:params) { { forms_welsh_translation_input: { form:, mark_complete: } } }
+    let(:page_translations) { { "0" => { "id" => form.pages.first.id, question_text_cy: "Ydych chi'n adnewyddu trwydded?" } } }
+    let(:params) { { forms_welsh_translation_input: { form:, mark_complete:, page_translations: } } }
 
     context "when 'Yes' is selected" do
       it "updates the form" do
         expect {
           post(welsh_translation_create_path(id), params:)
         }.to change { form.reload.welsh_completed }.to(true)
+      end
+
+      it "updates the form's pages" do
+        expect {
+          post(welsh_translation_create_path(id), params:)
+        }.to change { form.pages.first.reload.question_text_cy }.to("Ydych chi'n adnewyddu trwydded?")
       end
 
       it "redirects to the form" do
@@ -70,7 +77,7 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
 
     context "when 'No' is selected" do
       let(:mark_complete) { "false" }
-      let(:form) { create(:form, welsh_completed: true) }
+      let(:form) { create(:form, :with_pages, welsh_completed: true) }
 
       it "updates the form" do
         expect {
@@ -96,6 +103,12 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
         expect {
           post(welsh_translation_create_path(id), params:)
         }.not_to(change { form.reload.welsh_completed })
+      end
+
+      it "does not update the form's pages" do
+        expect {
+          post(welsh_translation_create_path(id), params:)
+        }.not_to(change { form.pages.first.reload.question_text_cy })
       end
 
       it "returns a 422" do
@@ -124,6 +137,12 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
         }.not_to(change { form.reload.welsh_completed })
       end
 
+      it "does not update the form's pages" do
+        expect {
+          post(welsh_translation_create_path(id), params:)
+        }.not_to(change { form.pages.first.reload.question_text_cy })
+      end
+
       it "returns 403" do
         post(welsh_translation_create_path(id), params:)
         expect(response).to have_http_status(:forbidden)
@@ -137,6 +156,12 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
         expect {
           post(welsh_translation_create_path(id), params:)
         }.not_to(change { form.reload.welsh_completed })
+      end
+
+      it "does not update the form's pages" do
+        expect {
+          post(welsh_translation_create_path(id), params:)
+        }.not_to(change { form.pages.first.reload.question_text_cy })
       end
 
       it "redirects to the form" do
