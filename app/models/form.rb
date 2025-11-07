@@ -228,7 +228,7 @@ private
   end
 
   def start_page
-    pages&.first&.id
+    pages&.first&.external_id
   end
 
   # callbacks for FormStateMachine
