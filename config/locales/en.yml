@@ -459,6 +459,10 @@ en:
         title: Add translations to your form (optional)
     welsh_translation:
       new:
+        condition:
+          heading: Question %{question_number}’s route
+        condition_labels:
+          answer_value_cy: Answer value for question %{question_number}'s condition (Welsh)
         english_header: English content
         guidance_markdown: Guidance markdown
         hint: Selecting ‘Yes’ will mark this task as complete. You’ll still be able to make more changes if you need to.

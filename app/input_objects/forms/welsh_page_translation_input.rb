@@ -3,6 +3,8 @@ class Forms::WelshPageTranslationInput < BaseInput
   include ActionView::Helpers::FormTagHelper
   include ActiveModel::Attributes
 
+  attr_accessor :condition_translations
+
   attribute :id
   attribute :question_text_cy
   attribute :hint_text_cy
@@ -16,6 +18,10 @@ class Forms::WelshPageTranslationInput < BaseInput
     page.hint_text_cy = page_has_hint_text? ? hint_text_cy : nil
     page.page_heading_cy = page_has_page_heading_and_guidance_markdown? ? page_heading_cy : nil
     page.guidance_markdown_cy = page_has_page_heading_and_guidance_markdown? ? guidance_markdown_cy : nil
+
+    if condition_translations.present?
+      condition_translations.each(&:submit)
+    end
 
     page.save!
   end
