@@ -4,8 +4,11 @@ describe "forms/welsh_translation/new.html.erb" do
   let(:form) { build_form }
   let(:page) { create :page, position: 1 }
   let(:another_page) { create :page, position: 2 }
-  let(:welsh_page_translation_input) { Forms::WelshPageTranslationInput.new(id: page.id).assign_page_values }
-  let(:another_welsh_page_translation_input) { Forms::WelshPageTranslationInput.new(id: another_page.id).assign_page_values }
+  let(:condition) { create :condition, routing_page_id: page.id }
+  let(:welsh_condition_translation_input) { Forms::WelshConditionTranslationInput.new(id: condition.id).assign_condition_values }
+  let(:condition_translations) { [] }
+  let(:welsh_page_translation_input) { Forms::WelshPageTranslationInput.new(id: page.id, condition_translations:).assign_page_values }
+  let(:another_welsh_page_translation_input) { Forms::WelshPageTranslationInput.new(id: another_page.id, condition_translations: []).assign_page_values }
   let(:welsh_translation_input) { Forms::WelshTranslationInput.new(form:, page_translations: [welsh_page_translation_input, another_welsh_page_translation_input]).assign_form_values }
 
   def build_form(attributes = {})
@@ -224,6 +227,31 @@ describe "forms/welsh_translation/new.html.erb" do
         it "shows a field for Welsh page heading and guidance markdown on pages with English page heading and guidance markdown" do
           expect(rendered).to have_field(t("forms.welsh_translation.new.page_labels.page_heading_cy", question_number: another_page.position))
           expect(rendered).to have_field(t("forms.welsh_translation.new.page_labels.guidance_markdown_cy", question_number: another_page.position))
+        end
+      end
+
+      context "when at least one page has routing conditions" do
+        let(:condition_translations) { [welsh_condition_translation_input] }
+
+        it "shows a caption with the page the condition applies to" do
+          expect(rendered).to have_css("caption", text: t("forms.welsh_translation.new.condition.heading", question_number: condition.routing_page.position))
+          expect(rendered).to have_field(t("forms.welsh_translation.new.condition_labels.answer_value_cy", question_number: condition.routing_page.position), type: "text", id: welsh_condition_translation_input.form_field_id(:answer_value_cy))
+        end
+
+        it "shows the English text and Welsh field for each condition's answer_value" do
+          expect(rendered).to have_css("td", text: condition.answer_value)
+          expect(rendered).to have_field(t("forms.welsh_translation.new.condition_labels.answer_value_cy", question_number: condition.routing_page.position), type: "text", id: welsh_condition_translation_input.form_field_id(:answer_value_cy))
+        end
+
+        context "when the condition has an exit page" do
+          let(:condition) { create :condition, :with_exit_page, routing_page_id: page.id }
+
+          it "shows the English text and Welsh field for each condition's exit page fields" do
+            expect(rendered).to have_css("td", text: condition.exit_page_heading)
+            expect(rendered).to have_field(t("forms.welsh_translation.new.condition_labels.exit_page_heading_cy", question_number: condition.routing_page.position), type: "text", id: welsh_condition_translation_input.form_field_id(:exit_page_heading_cy))
+            expect(rendered).to have_css("td", text: condition.exit_page_markdown)
+            expect(rendered).to have_field(t("forms.welsh_translation.new.condition_labels.exit_page_markdown_cy", question_number: condition.routing_page.position), type: "textarea", id: welsh_condition_translation_input.form_field_id(:exit_page_markdown_cy))
+          end
         end
       end
     end
