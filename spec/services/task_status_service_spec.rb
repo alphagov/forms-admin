@@ -149,12 +149,12 @@ describe TaskStatusService do
       end
     end
 
-    describe "receive_csv_status" do
+    describe "submission_attachments_status" do
       context "with a new form" do
         let(:form) { build(:form, :new_form, :with_group, group:) }
 
         it "returns optional" do
-          expect(task_status_service.task_statuses[:receive_csv_status]).to eq :optional
+          expect(task_status_service.task_statuses[:submission_attachments_status]).to eq :optional
         end
       end
 
@@ -162,7 +162,7 @@ describe TaskStatusService do
         let(:form) { build(:form, :new_form, :with_group, submission_type: "email", group:) }
 
         it "returns optional" do
-          expect(task_status_service.task_statuses[:receive_csv_status]).to eq :optional
+          expect(task_status_service.task_statuses[:submission_attachments_status]).to eq :optional
         end
       end
 
@@ -170,7 +170,7 @@ describe TaskStatusService do
         let(:form) { build(:form, :new_form, :with_group, submission_type: "email_with_csv", group:) }
 
         it "returns completed" do
-          expect(task_status_service.task_statuses[:receive_csv_status]).to eq :completed
+          expect(task_status_service.task_statuses[:submission_attachments_status]).to eq :completed
         end
       end
     end
@@ -322,7 +322,7 @@ describe TaskStatusService do
         support_contact_details_status: :completed,
         welsh_language_status: :optional,
         make_live_status: :completed,
-        receive_csv_status: :optional,
+        submission_attachments_status: :optional,
         share_preview_status: :completed,
       }
       expect(task_status_service.task_statuses).to eq expected_hash
