@@ -100,14 +100,33 @@ private
   end
 
   def submission_attachments_subsection
-    {
-      title: I18n.t("forms.task_list_#{create_or_edit}.receive_csv_subsection.title"),
-      section_number: nil,
-      subsection: true,
-      rows: [
-        { task_name: I18n.t("forms.task_list_#{create_or_edit}.receive_csv_subsection.receive_csv"), path: receive_csv_path(@form.id), status: @task_statuses[:submission_attachments_status] },
-      ],
-    }
+    if FeatureService.enabled?(:json_submission_enabled)
+      {
+        title: I18n.t("forms.task_list_#{create_or_edit}.submission_attachments_subsection.title"),
+        section_number: nil,
+        subsection: true,
+        rows: [
+          {
+            task_name: I18n.t("forms.task_list_#{create_or_edit}.submission_attachments_subsection.task_name"),
+            path: submission_attachments_path(@form.id),
+            status: @task_statuses[:submission_attachments_status],
+          },
+        ],
+      }
+    else
+      {
+        title: I18n.t("forms.task_list_#{create_or_edit}.receive_csv_subsection.title"),
+        section_number: nil,
+        subsection: true,
+        rows: [
+          {
+            task_name: I18n.t("forms.task_list_#{create_or_edit}.receive_csv_subsection.receive_csv"),
+            path: receive_csv_path(@form.id),
+            status: @task_statuses[:submission_attachments_status],
+          },
+        ],
+      }
+    end
   end
 
   def privacy_and_contact_details_section(section_number:)
