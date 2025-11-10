@@ -278,16 +278,33 @@ describe FormTaskListService do
       end
     end
 
-    describe "receive CSV subsection tasks" do
+    describe "submission attachments subsection tasks" do
       let(:section) do
         all_sections[3]
       end
 
       let(:section_rows) { section[:rows] }
 
-      it "has link to receive CSV settings" do
-        expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_create.receive_csv_subsection.receive_csv")
-        expect(section_rows.first[:path]).to eq "/forms/#{form.id}/receive-csv"
+      before do
+        allow(FeatureService).to receive(:enabled?).with(:json_submission_enabled).and_return(json_submission_enabled)
+      end
+
+      context "when the json_submission_enabled feature is enabled" do
+        let(:json_submission_enabled) { true }
+
+        it "has link to the submission attachments page" do
+          expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_create.submission_attachments_subsection.task_name")
+          expect(section_rows.first[:path]).to eq "/forms/#{form.id}/submission-attachments"
+        end
+      end
+
+      context "when the json_submission_enabled feature is disabled" do
+        let(:json_submission_enabled) { false }
+
+        it "has link to receive CSV settings" do
+          expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_create.receive_csv_subsection.receive_csv")
+          expect(section_rows.first[:path]).to eq "/forms/#{form.id}/receive-csv"
+        end
       end
     end
 
