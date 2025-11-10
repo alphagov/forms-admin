@@ -37,7 +37,7 @@ describe FormTaskListService do
         support_contact_details_status: :not_started,
         what_happens_next_status: :completed,
         payment_link_status: :optional,
-        receive_csv_status: :optional,
+        submission_attachments_status: :optional,
         share_preview_status: :completed,
       }
     end

@@ -891,7 +891,7 @@ RSpec.describe Form, type: :model do
         confirm_submission_email_status: :completed,
         privacy_policy_status: :completed,
         payment_link_status: :optional,
-        receive_csv_status: :optional,
+        submission_attachments_status: :optional,
         support_contact_details_status: :completed,
         welsh_language_status: :optional,
         share_preview_status: :completed,

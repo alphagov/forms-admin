@@ -24,7 +24,7 @@ class TaskStatusService
       payment_link_status:,
       privacy_policy_status:,
       support_contact_details_status:,
-      receive_csv_status:,
+      submission_attachments_status:,
       share_preview_status:,
       make_live_status:,
     }
@@ -87,7 +87,7 @@ private
     :optional
   end
 
-  def receive_csv_status
+  def submission_attachments_status
     return :completed if @form.email_with_csv?
 
     :optional
