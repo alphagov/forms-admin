@@ -88,7 +88,7 @@ private
   end
 
   def submission_attachments_status
-    return :completed if @form.email_with_csv?
+    return :completed if @form.email? && @form.submission_format.any?
 
     :optional
   end
