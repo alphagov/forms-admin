@@ -3,8 +3,7 @@ require "rails_helper"
 RSpec.describe FormCopyService do
   let(:source_form) { create(:form, :live_with_draft) }
   let(:source_form_document) { FormDocument.find_by(form_id: source_form.id) }
-  let(:copier) { described_class.new(source_form) }
-  let(:copied_form) { copier.copy(tag: "live") }
+  let(:copied_form) { described_class.new(source_form).copy(tag: "live") }
 
   describe "#copy" do
     it "creates a new form" do
@@ -43,6 +42,11 @@ RSpec.describe FormCopyService do
     context "when source form has pages" do
       let(:source_form) { create(:form, :live_with_draft, :with_pages, pages_count: 3) }
 
+      before do
+        # Update the live form document to include the pages created after the initial form document
+        source_form.live_form_document.update!(content: source_form.as_form_document)
+      end
+
       it "copies all pages to the new form" do
         expect(copied_form.pages.count).to eq(source_form.pages.count)
       end
@@ -80,17 +84,17 @@ RSpec.describe FormCopyService do
 
     context "when source form has pages with routing conditions" do
       let(:source_form) { create(:form, :live_with_draft, :ready_for_routing, pages_count: 3) }
-      let!(:routing_condition) do
+
+      before do
         create(:condition,
                form: source_form,
                routing_page: source_form.pages.first,
                check_page: source_form.pages.first,
                goto_page: source_form.pages.last,
                answer_value: "Yes")
-      end
-
-      before do
         source_form.reload
+        # Update the live form document to include the pages and conditions
+        source_form.live_form_document.update!(content: source_form.as_form_document)
       end
 
       it "copies routing conditions to the new form" do
@@ -136,6 +140,8 @@ RSpec.describe FormCopyService do
 
       before do
         source_form.reload
+        # Update the live form document to include the pages and conditions
+        source_form.live_form_document.update!(content: source_form.as_form_document)
       end
 
       it "copies exit page conditions" do

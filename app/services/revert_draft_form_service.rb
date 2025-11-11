@@ -45,7 +45,7 @@ private
   end
 
   def revert_pages_and_nested_associations(steps_data)
-    form.pages.reload
+    # form.pages.reload
 
     revert_pages(steps_data)
 
