@@ -75,7 +75,6 @@ en:
         forms/delete_confirmation_input:
           blank: Select ‘Yes’ to delete the draft
         forms/submission_attachments_input:
-          invalid_submission_format: Choose if you want to get completed forms as CSV or JSON files
           attributes:
             submission_format:
               blank: Sorry, there was a problem. Please try again.
@@ -84,8 +83,6 @@ en:
           attributes:
             submission_type:
               blank: Choose if you want to get completed forms as CSV files
-        forms/submission_attachments_input:
-          invalid_submission_format: Choose if you want to get completed forms as CSV or JSON files
         group_member_input:
           attributes:
             member_email_address:
@@ -227,8 +224,11 @@ en:
         payment_link_removed: Your payment link has been removed
         payment_link_saved: Your payment link has been saved
         privacy_details_saved: Your privacy information link has been saved
+        receive_csv_and_json_enabled: Completed form emails will include a CSV and a JSON file
         receive_csv_disabled: Completed form emails will not include a CSV file
         receive_csv_enabled: Completed form emails will include a CSV file
+        receive_json_enabled: Completed form emails will include a JSON file
+        receive_no_attachments: Completed form emails will not include a CSV or JSON file
         share_preview_completed: The preview task has been completed
         support_details_saved: Your contact details for support have been saved
         welsh_translation_saved: The Welsh version of your form has been saved
@@ -391,6 +391,21 @@ en:
           <p>If you select this option, a CSV file will be attached to each completed form email.</p>
         submit: Save and continue
         title: Get completed forms as CSV files
+    submission_attachments:
+      new:
+        body_html: |
+          <p>When your form’s completed, the answers provided will be sent in the body of an email to the email address you set.</p>
+
+          <p>You can also get the answers in:</p>
+
+          <ul class="govuk-list govuk-list--bullet">
+            <li>A CSV file - this lists all the answers in plain text, separated by commas. It can be easily imported into a spreadsheet or database application.</li>
+            <li>a JSON file - this is a plain text format for exchanging and storing data. It can make it easier to use automated processing for your form submissions.</li>
+          </ul>
+
+          <p>If you select one or both of these options, the files will be attached to each completed form email.</p>
+        submit: Save and continue
+        title: Get a CSV or JSON file of each completed form
     task_list_create:
       create_form_section:
         declaration: Add a declaration for people to agree to
@@ -827,6 +842,10 @@ en:
         confirm: Are you sure you want to make your draft live?
       forms_make_live_input:
         confirm: Are you sure you want to make your form live?
+      forms_submission_attachments_input:
+        submission_format_options:
+          csv: Get a CSV file of each completed form
+          json: Get a JSON file of each completed form
       forms_submission_type_input:
         submission_type_options:
           email_with_csv: Get CSV files
@@ -973,6 +992,8 @@ en:
     legend:
       account_terms_of_use_input:
         agreed: Do you agree to these terms?
+      forms_submission_attachments_input:
+        submission_format: Do you want to get a CSV or JSON file of each completed form?
       forms_submission_type_input:
         submission_type: Do you want to get completed forms as CSV files?
       mou_signature:
