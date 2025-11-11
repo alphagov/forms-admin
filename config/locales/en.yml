@@ -74,10 +74,18 @@ en:
               accepted: You must agree to the terms of use to continue
         forms/delete_confirmation_input:
           blank: Select ‘Yes’ to delete the draft
+        forms/submission_attachments_input:
+          invalid_submission_format: Choose if you want to get completed forms as CSV or JSON files
+          attributes:
+            submission_format:
+              blank: Sorry, there was a problem. Please try again.
+          invalid_submission_format: Sorry, there was a problem. Please try again.
         forms/submission_type_input:
           attributes:
             submission_type:
               blank: Choose if you want to get completed forms as CSV files
+        forms/submission_attachments_input:
+          invalid_submission_format: Choose if you want to get completed forms as CSV or JSON files
         group_member_input:
           attributes:
             member_email_address:
