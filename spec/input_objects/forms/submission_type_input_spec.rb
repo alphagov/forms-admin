@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.describe Forms::SubmissionTypeInput, type: :model do
   subject(:submission_type_input) { described_class.new(form:, submission_type:) }
 
-  let(:form) { build(:form, :live, submission_type: original_submission_type, submission_format: original_submission_format) }
+  let(:form) { build(:form, :live, submission_type: "email", submission_format: original_submission_format) }
 
   let(:original_submission_type) { "email" }
-  let(:original_submission_format) { nil }
+  let(:original_submission_format) { [] }
   let(:submission_type) { nil }
 
   describe "validation" do
@@ -39,53 +39,23 @@ RSpec.describe Forms::SubmissionTypeInput, type: :model do
   describe "#assign_form_value" do
     subject(:submission_type_input) { described_class.new(form:) }
 
-    context "when form has submission type 'email_with_csv'" do
-      let(:original_submission_type) { "email_with_csv" }
+    context "when form has submission format []" do
+      let(:original_submission_format) { [] }
 
-      it "set the submission type" do
+      it "sets the submission type to 'email'" do
         expect {
           submission_type_input.assign_form_values
-        }.to change(submission_type_input, :submission_type).to original_submission_type
-      end
-
-      context "and submission format %w[csv]" do
-        let(:original_submission_format) { %w[csv] }
-
-        it "sets the submission type to 'email_with_csv'" do
-          expect {
-            submission_type_input.assign_form_values
-          }.to change(submission_type_input, :submission_type).to "email_with_csv"
-        end
+        }.to change(submission_type_input, :submission_type).to "email"
       end
     end
 
-    context "when form has submission type 'email'" do
-      let(:original_submission_type) { "email" }
+    context "when form has submission format %w[csv]" do
+      let(:original_submission_format) { %w[csv] }
 
-      it "set the submission type" do
+      it "sets the submission type to 'email_with_csv'" do
         expect {
           submission_type_input.assign_form_values
-        }.to change(submission_type_input, :submission_type).to original_submission_type
-      end
-
-      context "and submission format []" do
-        let(:original_submission_format) { [] }
-
-        it "sets the submission type to 'email'" do
-          expect {
-            submission_type_input.assign_form_values
-          }.to change(submission_type_input, :submission_type).to "email"
-        end
-      end
-
-      context "and submission format %w[csv]" do # this can happen after forms have been migrated to new style submission type
-        let(:original_submission_format) { %w[csv] }
-
-        it "sets the submission type to 'email_with_csv'" do
-          expect {
-            submission_type_input.assign_form_values
-          }.to change(submission_type_input, :submission_type).to "email_with_csv"
-        end
+        }.to change(submission_type_input, :submission_type).to "email_with_csv"
       end
     end
   end

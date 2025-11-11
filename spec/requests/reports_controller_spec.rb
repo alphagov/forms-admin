@@ -271,7 +271,7 @@ RSpec.describe ReportsController, type: :request do
 
   describe "#forms_with_csv_submission_enabled" do
     let(:path) { report_forms_with_csv_submission_enabled_path(tag: :live) }
-    let(:form) { create(:form, :live, submission_type: "email_with_csv", submission_format: %w[csv]) }
+    let(:form) { create(:form, :live, submission_type: "email", submission_format: %w[csv]) }
     let(:forms) { [form] }
 
     include_examples "unauthorized user is forbidden"
@@ -614,7 +614,7 @@ RSpec.describe ReportsController, type: :request do
     end
 
     describe "#forms_with_csv_submission_enabled as csv" do
-      let(:form) { create(:form, :live, submission_type: "email_with_csv", submission_format: %w[csv]) }
+      let(:form) { create(:form, :live, submission_type: "email", submission_format: %w[csv]) }
       let(:forms) { [form, *create_list(:form, 2, :live)] }
 
       before do
