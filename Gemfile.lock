@@ -24,7 +24,7 @@ GEM
     MailchimpMarketing (3.0.80)
       excon (>= 0.76.0, < 1)
       json (~> 2.1, >= 2.1.0)
-    aasm (5.5.1)
+    aasm (5.5.2)
       concurrent-ruby (~> 1.0)
     actioncable (8.0.3)
       actionpack (= 8.0.3)
@@ -646,7 +646,7 @@ DEPENDENCIES
 
 CHECKSUMS
   MailchimpMarketing (3.0.80) sha256=782e60d3ef88c8d8969de7f1f6614c47445134af37b94e2fbd4e3794f94f6624
-  aasm (5.5.1) sha256=8cd7d59f43bf52d2e1bafcbf30b11de3b66a82d92f69a11ea3bc5a1898e1bce1
+  aasm (5.5.2) sha256=a3b874b33d9cbb3be4a2c77185c340a07fb46d7cd31911cbc49337e31d12612f
   actioncable (8.0.3) sha256=f8cad39cebefaa1c9d4904f3e843022f22ee7a9201b59db703bf3ef7f2877493
   actionmailbox (8.0.3) sha256=2a0444f8937c641db100128a1826554c5298ade65c62b623a1fcb34a1dc6bd2f
   actionmailer (8.0.3) sha256=6dc0c3701065a96f845a05a28e9d7a60055222cfc324cc6c3a281cec148cc723
