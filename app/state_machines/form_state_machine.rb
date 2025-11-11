@@ -54,6 +54,10 @@ module FormStateMachine
       event :delete_draft_from_live_form do
         transitions from: %i[live_with_draft live], to: :live
       end
+
+      event :delete_draft_from_archived_form do
+        transitions from: %i[archived_with_draft archived], to: :archived
+      end
     end
   end
 end

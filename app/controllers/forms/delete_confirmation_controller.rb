@@ -43,6 +43,10 @@ module Forms
         success_url = live_form_path(current_form.id)
         success = RevertDraftFormService.new(current_form).revert_draft_from_form_document(:live)
         { success: success, redirect_url: success_url }
+      elsif current_form.archived_with_draft?
+        success_url = live_form_path(current_form.id)
+        success = RevertDraftFormService.new(current_form).revert_draft_from_form_document(:archived)
+        { success: success, redirect_url: success_url }
       else
         { success: false }
       end

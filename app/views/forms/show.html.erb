@@ -41,7 +41,7 @@
                                            sections: @task_list)
     %>
 
-  <% if current_form.draft? or current_form.live_with_draft? %>
+  <% if current_form.draft? or current_form.live_with_draft? or current_form.archived_with_draft? %>
     <%= govuk_button_link_to(t("forms.delete_form"), delete_form_path(current_form.id), warning: true) %>
   <% end %>
   </div>

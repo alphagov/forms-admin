@@ -358,6 +358,7 @@ en:
   forms:
     delete_confirmation:
       delete:
+        hint_for_archived_draft: Deleting this draft will not remove the archived form.
         hint_for_live_draft: Deleting this draft will not remove the live form.
         title: Are you sure you want to delete this draft?
       destroy:

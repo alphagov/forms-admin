@@ -111,8 +111,8 @@ describe "forms/show.html.erb" do
   context "when form state is archived with draft" do
     let(:form) { create :form, :archived_with_draft }
 
-    it "does not contain a link to delete the form" do
-      expect(rendered).not_to have_link("Delete draft form", href: delete_form_path(2))
+    it "contains a link to delete the form" do
+      expect(rendered).to have_link("Delete draft form", href: delete_form_path(form.id))
     end
   end
 end
