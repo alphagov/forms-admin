@@ -808,13 +808,14 @@ RSpec.describe Form, type: :model do
     end
 
     # ActiveRecord doesn't support enums with arrays
-    # describe "enum" do
-    #   it "returns a list of submission formats" do
-    #     formats = %w[csv json]
-    #     expect(described_class.submission_formats.keys).to eq formats
-    #     expect(described_class.submission_formats.values).to eq formats
-    #   end
-    # end
+    # but we've implemented some of the same behaviour anyway
+    describe "enum" do
+      it "returns a list of submission formats" do
+        formats = %w[csv json]
+        expect(described_class.submission_formats.keys).to eq formats
+        expect(described_class.submission_formats.values).to eq formats
+      end
+    end
   end
 
   describe "#destroy" do

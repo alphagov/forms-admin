@@ -31,10 +31,14 @@ class Form < ApplicationRecord
   }
 
   # ActiveRecord doesn't support enums with arrays
-  # enum :submission_format, {
-  #   csv: "csv",
-  #   json: "json",
-  # }
+  # but it's useful to have the valid values defined anyway
+  # enum :submission_format
+  def self.submission_formats
+    {
+      csv: "csv",
+      json: "json",
+    }.with_indifferent_access
+  end
 
   enum :language, {
     en: "en",
