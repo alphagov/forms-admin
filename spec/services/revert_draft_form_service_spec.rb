@@ -1,21 +1,21 @@
 require "rails_helper"
 
 describe RevertDraftFormService do
-  RSpec::Matchers.define :be_reverted_to_state do |expected_state|
-    match do |form|
-      # reload the form to get the latest state from the database
-      reloaded_form = form.reload
+  def expect_form_state_and_content_to_be_reverted(form, expected_state)
+    # reload the form to get the latest state from the database
+    reloaded_form = form.reload
 
-      state_matches = reloaded_form.state == expected_state.to_s
+    expect(reloaded_form.state).to eq(expected_state.to_s)
 
-      # We convert the form to a form document and compare the content
-      # to the live form document content and check they match baring the live_at times
-      # this is the closest we can get to saying there is no changes to the form
-      form_document = FormDocument.find_by(form_id: form.id, tag: expected_state, language: "en")
-      document_matches = reloaded_form.as_form_document.except("live_at") == form_document.content.except("live_at")
+    # We convert the form to a form document and compare the content
+    # to the live form document content and check they match baring the live_at times
+    # this is the closest we can get to saying there is no changes to the form
+    form_document = FormDocument.find_by(form_id: form.id, tag: expected_state, language: "en")
+    reloaded_form_document_content = form.reload.as_form_document
+    expect(reloaded_form_document_content.except("live_at", "steps")).to eq(form_document.content.except("live_at", "steps"))
 
-      state_matches && document_matches
-    end
+    # Compare the steps separately so we get a nice diff if the expectation fails
+    expect(reloaded_form_document_content["steps"]).to eq(form_document.content["steps"])
   end
 
   # we use `freeze_time` to freeze the timestamps of the form and its pages
@@ -35,7 +35,7 @@ describe RevertDraftFormService do
     context "when the draft has no changes" do
       it "reverts a live form to its live state" do
         revert_draft(live_tag)
-        expect(live_form).to be_reverted_to_state(:live)
+        expect_form_state_and_content_to_be_reverted(live_form, :live)
       end
     end
 
@@ -46,7 +46,7 @@ describe RevertDraftFormService do
 
       it "reverts the attribute change" do
         revert_draft(live_tag)
-        expect(live_form).to be_reverted_to_state(:live)
+        expect_form_state_and_content_to_be_reverted(live_form, :live)
       end
     end
 
@@ -57,7 +57,7 @@ describe RevertDraftFormService do
 
       it "reverts the page change" do
         revert_draft(live_tag)
-        expect(live_form).to be_reverted_to_state(:live)
+        expect_form_state_and_content_to_be_reverted(live_form, :live)
       end
     end
 
@@ -68,7 +68,7 @@ describe RevertDraftFormService do
 
       it "removes the added page" do
         revert_draft(live_tag)
-        expect(live_form).to be_reverted_to_state(:live)
+        expect_form_state_and_content_to_be_reverted(live_form, :live)
       end
     end
 
@@ -79,7 +79,7 @@ describe RevertDraftFormService do
 
       it "re-adds the removed page" do
         revert_draft(live_tag)
-        expect(live_form).to be_reverted_to_state(:live)
+        expect_form_state_and_content_to_be_reverted(live_form, :live)
       end
     end
 
@@ -108,7 +108,7 @@ describe RevertDraftFormService do
 
         it "removes the added routing condition" do
           revert_draft(live_tag)
-          expect(live_form).to be_reverted_to_state(:live)
+          expect_form_state_and_content_to_be_reverted(live_form, :live)
         end
       end
 
@@ -119,7 +119,7 @@ describe RevertDraftFormService do
 
         it "re-adds the removed routing condition" do
           revert_draft(live_tag)
-          expect(live_form).to be_reverted_to_state(:live)
+          expect_form_state_and_content_to_be_reverted(live_form, :live)
         end
       end
 
@@ -130,7 +130,7 @@ describe RevertDraftFormService do
 
         it "reverts the changed routing condition" do
           revert_draft(live_tag)
-          expect(live_form).to be_reverted_to_state(:live)
+          expect_form_state_and_content_to_be_reverted(live_form, :live)
         end
       end
     end
@@ -149,7 +149,7 @@ describe RevertDraftFormService do
     context "when the draft has no changes" do
       it "reverts an archived form to its archived state" do
         revert_draft(archived_tag)
-        expect(archived_form).to be_reverted_to_state(:archived)
+        expect_form_state_and_content_to_be_reverted(archived_form, :archived)
       end
     end
 
@@ -160,7 +160,7 @@ describe RevertDraftFormService do
 
       it "reverts the attribute change" do
         revert_draft(archived_tag)
-        expect(archived_form).to be_reverted_to_state(:archived)
+        expect_form_state_and_content_to_be_reverted(archived_form, :archived)
       end
     end
 
@@ -171,7 +171,7 @@ describe RevertDraftFormService do
 
       it "reverts the page change" do
         revert_draft(archived_tag)
-        expect(archived_form).to be_reverted_to_state(:archived)
+        expect_form_state_and_content_to_be_reverted(archived_form, :archived)
       end
     end
 
@@ -182,7 +182,7 @@ describe RevertDraftFormService do
 
       it "removes the added page" do
         revert_draft(archived_tag)
-        expect(archived_form).to be_reverted_to_state(:archived)
+        expect_form_state_and_content_to_be_reverted(archived_form, :archived)
       end
     end
 
@@ -193,7 +193,7 @@ describe RevertDraftFormService do
 
       it "re-adds the removed page" do
         revert_draft(archived_tag)
-        expect(archived_form).to be_reverted_to_state(:archived)
+        expect_form_state_and_content_to_be_reverted(archived_form, :archived)
       end
     end
 
@@ -222,7 +222,7 @@ describe RevertDraftFormService do
 
         it "removes the added routing condition" do
           revert_draft(archived_tag)
-          expect(archived_form).to be_reverted_to_state(:archived)
+          expect_form_state_and_content_to_be_reverted(archived_form, :archived)
         end
       end
 
@@ -233,7 +233,7 @@ describe RevertDraftFormService do
 
         it "re-adds the removed routing condition" do
           revert_draft(archived_tag)
-          expect(archived_form).to be_reverted_to_state(:archived)
+          expect_form_state_and_content_to_be_reverted(archived_form, :archived)
         end
       end
 
@@ -244,7 +244,7 @@ describe RevertDraftFormService do
 
         it "reverts the changed routing condition" do
           revert_draft(archived_tag)
-          expect(archived_form).to be_reverted_to_state(:archived)
+          expect_form_state_and_content_to_be_reverted(archived_form, :archived)
         end
       end
     end
