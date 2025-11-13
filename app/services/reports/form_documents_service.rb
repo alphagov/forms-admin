@@ -40,7 +40,7 @@ class Reports::FormDocumentsService
     end
 
     def has_csv_submission_enabled?(form_document)
-      form_document["content"]["submission_type"] == "email_with_csv"
+      form_document["content"]["submission_format"].include? "csv"
     end
 
     def has_exit_pages?(form_document)

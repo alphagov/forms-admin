@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Forms::ReceiveCsvController, type: :request do
-  let(:form) { create(:form, :live, submission_type: original_submission_type) }
+  let(:form) { create(:form, :live, submission_type: original_submission_type, submission_format: original_submission_format) }
 
   let(:original_submission_type) { "email" }
+  let(:original_submission_format) { [] }
 
   let(:submission_type) { nil }
 
@@ -29,14 +30,16 @@ RSpec.describe Forms::ReceiveCsvController, type: :request do
 
       let(:page) { Capybara.string(response.body) }
 
-      context "when the form has submission type 'email'" do
+      context "when the form has email only submissions" do
         let(:original_submission_type) { "email" }
+        let(:original_submission_format) { [] }
 
         it { is_expected.not_to be_checked }
       end
 
-      context "when the form has submission type 'email_with_csv'" do
+      context "when the form has email with csv submissions" do
         let(:original_submission_type) { "email_with_csv" }
+        let(:original_submission_format) { %w[csv] }
 
         it { is_expected.to be_checked }
       end
@@ -48,6 +51,7 @@ RSpec.describe Forms::ReceiveCsvController, type: :request do
 
     context "when params are valid" do
       let(:submission_type) { "email_with_csv" }
+      let(:original_submission_format) { %w[csv] }
 
       it "updates the form submission type" do
         expect {
@@ -60,8 +64,9 @@ RSpec.describe Forms::ReceiveCsvController, type: :request do
         expect(response).to redirect_to(form_path(form.id))
       end
 
-      context "when submission type has changed from 'email' to 'email_with_csv'" do
+      context "when submissions have changed from email only to email with csv" do
         let(:original_submission_type) { "email" }
+        let(:original_submission_format) { [] }
         let(:submission_type) { "email_with_csv" }
 
         it "displays a success flash message" do
@@ -70,8 +75,9 @@ RSpec.describe Forms::ReceiveCsvController, type: :request do
         end
       end
 
-      context "when submission type has changed from 'email_with_csv' to 'email'" do
+      context "when submissions have changed from email with csv to email only" do
         let(:original_submission_type) { "email_with_csv" }
+        let(:original_submission_format) { %w[csv] }
         let(:submission_type) { "email" }
 
         it "displays a success flash message" do
@@ -80,21 +86,23 @@ RSpec.describe Forms::ReceiveCsvController, type: :request do
         end
       end
 
-      context "when submission type has not changed from 'email'" do
+      context "when submissions have not changed from email only" do
         let(:original_submission_type) { "email" }
+        let(:original_submission_format) { [] }
         let(:submission_type) { "email" }
 
-        it "displays a success flash message" do
+        it "does not display a success flash message" do
           post(receive_csv_path(form_id: form.id), params:)
           expect(flash[:success]).to be_nil
         end
       end
 
-      context "when submission type has not changed from 'email_with_csv'" do
+      context "when submissions have not changed from email with csv" do
         let(:original_submission_type) { "email_with_csv" }
+        let(:original_submission_format) { %w[csv] }
         let(:submission_type) { "email_with_csv" }
 
-        it "displays a success flash message" do
+        it "does not display a success flash message" do
           post(receive_csv_path(form_id: form.id), params:)
           expect(flash[:success]).to be_nil
         end
