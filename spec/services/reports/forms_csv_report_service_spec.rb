@@ -22,7 +22,7 @@ RSpec.describe Reports::FormsCsvReportService do
     end
   end
   let(:form) do
-    create(:form, :live, :with_support, submission_type: "email_with_csv", payment_url: "https://www.gov.uk/payments/organisation/service", pages: [
+    create(:form, :live, :with_support, submission_type: "email_with_csv_and_json", submission_format: %w[csv json], payment_url: "https://www.gov.uk/payments/organisation/service", pages: [
       create(:page, :with_address_settings, is_repeatable: true),
       create(:page, :with_date_settings),
       create(:page, answer_type: "email"),
@@ -69,7 +69,8 @@ RSpec.describe Reports::FormsCsvReportService do
         form.support_phone,
         form.privacy_policy_url,
         form.what_happens_next_markdown,
-        "email_with_csv",
+        "email_with_csv_and_json",
+        "csv json",
         "en",
       )
     end
