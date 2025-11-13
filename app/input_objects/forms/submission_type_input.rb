@@ -12,7 +12,12 @@ class Forms::SubmissionTypeInput < BaseInput
   end
 
   def assign_form_values
-    self.submission_type = form.try(:submission_type)
+    if form.submission_format.nil?
+      self.submission_type = form.submission_type
+    else
+      self.submission_format = form.submission_format
+    end
+
     self
   end
 

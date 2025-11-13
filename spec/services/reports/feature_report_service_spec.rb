@@ -13,7 +13,7 @@ RSpec.describe Reports::FeatureReportService do
   let(:group) { create(:group) }
 
   let(:form_with_all_answer_types) do
-    create(:form, :live, :with_support, submission_type: "email_with_csv", payment_url: "https://www.gov.uk/payments/organisation/service", pages: [
+    create(:form, :live, :with_support, submission_type: "email_with_csv", submission_format: %w[csv], payment_url: "https://www.gov.uk/payments/organisation/service", pages: [
       create(:page, :with_address_settings, is_repeatable: true),
       create(:page, :with_date_settings),
       create(:page, answer_type: "email"),

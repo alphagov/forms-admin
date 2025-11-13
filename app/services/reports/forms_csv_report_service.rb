@@ -25,6 +25,7 @@ class Reports::FormsCsvReportService
     "Privacy policy URL",
     "What happens next markdown",
     "Submission type",
+    "Submission formats",
     "Language",
   ].freeze
 
@@ -72,6 +73,7 @@ private
       form["content"]["privacy_policy_url"],
       form["content"]["what_happens_next_markdown"],
       form["content"]["submission_type"],
+      form["content"]["submission_format"]&.sort&.join(" "),
       form["content"]["language"],
     ]
   end

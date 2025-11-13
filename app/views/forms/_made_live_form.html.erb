@@ -56,8 +56,11 @@
     <h4 class="govuk-heading-s"><%= t('made_live_form.submission_email') %></h4>
     <p class="govuk-!-text-break-word"><%= form_document.submission_email %></p>
 
-    <h4 class="govuk-heading-s"><%= t("made_live_form.csv") %></h4>
-    <p><%= t("made_live_form.submission_type.#{form_document.submission_type}") %></p>
+    <% if form_document.submission_type.start_with? "email" %>
+      <% submission_format = ["email", *form_document.submission_format].join("_") %>
+      <h4 class="govuk-heading-s"><%= t("made_live_form.csv") %></h4>
+      <p><%= t("made_live_form.submission_format.email.#{submission_format}") %></p>
+    <% end %>
 
     <h3 class="govuk-heading-m"><%= t('made_live_form.privacy_policy_link') %></h3>
     <p><%= govuk_link_to(form_document.privacy_policy_url, form_document.privacy_policy_url) %></p>
