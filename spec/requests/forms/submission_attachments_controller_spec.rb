@@ -35,6 +35,14 @@ RSpec.describe Forms::SubmissionAttachmentsController, type: :request do
       it "uses the form submission attachments input" do
         expect(assigns).to include submission_attachments_input: an_instance_of(Forms::SubmissionAttachmentsInput)
       end
+
+      context "when the submission_type is s3" do
+        let(:form) { create(:form, submission_type: "s3") }
+
+        it "returns a 404 page" do
+          expect(response).to redirect_to :error_404
+        end
+      end
     end
   end
 
@@ -136,6 +144,16 @@ RSpec.describe Forms::SubmissionAttachmentsController, type: :request do
           post(submission_attachments_path(form_id: form.id), params:)
           expect(response).to render_template("new")
           expect(response.body).to include(I18n.t("activemodel.errors.models.forms/submission_attachments_input.invalid_submission_format"))
+        end
+      end
+
+      context "when the submission_type is s3" do
+        let(:form) { create(:form, submission_type: "s3") }
+        let(:submission_format) { %w[csv] }
+
+        it "returns a 404 page" do
+          post(submission_attachments_path(form_id: form.id), params:)
+          expect(response).to redirect_to :error_404
         end
       end
     end
