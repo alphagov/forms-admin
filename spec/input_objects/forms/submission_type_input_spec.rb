@@ -93,49 +93,52 @@ RSpec.describe Forms::SubmissionTypeInput, type: :model do
   describe "#submit" do
     context "when submission type has changed from 'email_with_csv' to 'email'" do
       let(:submission_type) { "email" }
-      let(:original_submission_type) { "email_with_csv" }
       let(:original_submission_format) { %w[csv] }
-
-      it "updates the form submission type" do
-        expect {
-          submission_type_input.submit
-        }.to change(form, :submission_type).to(submission_type)
-      end
 
       it "updates the form submission format" do
         expect {
           submission_type_input.submit
         }.to change(form, :submission_format).to([])
       end
+
+      it "does not update the form submission type" do
+        expect {
+          submission_type_input.submit
+        }.not_to change(form, :submission_type)
+      end
     end
 
     context "when submission type has changed from 'email' to 'email_with_csv'" do
       let(:submission_type) { "email_with_csv" }
-      let(:original_submission_type) { "email" }
       let(:original_submission_format) { [] }
-
-      it "updates the form submission type" do
-        expect {
-          submission_type_input.submit
-        }.to change(form, :submission_type).to(submission_type)
-      end
 
       it "updates the form submission format" do
         expect {
           submission_type_input.submit
         }.to change(form, :submission_format).to(%w[csv])
       end
+
+      it "does not update the form submission type" do
+        expect {
+          submission_type_input.submit
+        }.not_to change(form, :submission_type)
+      end
     end
 
     context "when submission type has not changed from 'email'" do
       let(:submission_type) { "email" }
-      let(:original_submission_type) { "email" }
       let(:original_submission_format) { [] }
 
       it "does not change the form submission type" do
         expect {
           submission_type_input.submit
         }.not_to(change(form, :submission_type))
+      end
+
+      it "does not change the form submission format" do
+        expect {
+          submission_type_input.submit
+        }.not_to(change(form, :submission_format))
       end
 
       context "when the form submission format is not set" do
