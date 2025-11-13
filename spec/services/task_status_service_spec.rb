@@ -149,28 +149,48 @@ describe TaskStatusService do
       end
     end
 
-    describe "receive_csv_status" do
+    describe "submission_attachments_status" do
       context "with a new form" do
         let(:form) { build(:form, :new_form, :with_group, group:) }
 
         it "returns optional" do
-          expect(task_status_service.task_statuses[:receive_csv_status]).to eq :optional
+          expect(task_status_service.task_statuses[:submission_attachments_status]).to eq :optional
         end
       end
 
       context "with submission_type set to 'email'" do
-        let(:form) { build(:form, :new_form, :with_group, submission_type: "email", group:) }
+        let(:form) { build(:form, :new_form, :with_group, submission_type: "email", submission_format:, group:) }
 
-        it "returns optional" do
-          expect(task_status_service.task_statuses[:receive_csv_status]).to eq :optional
+        context "with submission format empty" do
+          let(:submission_format) { [] }
+
+          it "returns optional" do
+            expect(task_status_service.task_statuses[:submission_attachments_status]).to eq :optional
+          end
+        end
+
+        context "with submission format csv" do
+          let(:submission_format) { %w[csv] }
+
+          it "returns completed" do
+            expect(task_status_service.task_statuses[:submission_attachments_status]).to eq :completed
+          end
+        end
+
+        context "with submission format has multiple values" do
+          let(:submission_format) { %w[csv json] }
+
+          it "returns completed" do
+            expect(task_status_service.task_statuses[:submission_attachments_status]).to eq :completed
+          end
         end
       end
 
-      context "with submission_type set to 'email_with_csv'" do
-        let(:form) { build(:form, :new_form, :with_group, submission_type: "email_with_csv", group:) }
+      context "with submission_type set s3" do
+        let(:form) { build(:form, :new_form, :with_group, submission_type: "s3", submission_format: "csv", group:) }
 
-        it "returns completed" do
-          expect(task_status_service.task_statuses[:receive_csv_status]).to eq :completed
+        it "returns optional" do
+          expect(task_status_service.task_statuses[:submission_attachments_status]).to eq :optional
         end
       end
     end
@@ -322,7 +342,7 @@ describe TaskStatusService do
         support_contact_details_status: :completed,
         welsh_language_status: :optional,
         make_live_status: :completed,
-        receive_csv_status: :optional,
+        submission_attachments_status: :optional,
         share_preview_status: :completed,
       }
       expect(task_status_service.task_statuses).to eq expected_hash
