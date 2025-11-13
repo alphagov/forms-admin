@@ -66,6 +66,8 @@ Rails.application.routes.draw do
     post "/share-preview" => "forms/share_preview#create", as: :share_preview_create
     get "/welsh-translation" => "forms/welsh_translation#new", as: :welsh_translation
     post "/welsh-translation" => "forms/welsh_translation#create", as: :welsh_translation_create
+    get "/submission-attachments" => "forms/submission_attachments#new", as: :submission_attachments
+    post "/submission-attachments" => "forms/submission_attachments#create", as: :submission_attachments_create
 
     scope "/pages" do
       get "/" => "pages#index", as: :form_pages
