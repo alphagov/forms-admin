@@ -6,7 +6,6 @@ class Forms::SubmissionTypeInput < BaseInput
   def submit
     return false if invalid?
 
-    form.submission_type = submission_type
     form.submission_format = submission_format
     form.save_draft!
   end
