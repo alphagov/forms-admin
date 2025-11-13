@@ -292,9 +292,20 @@ describe FormTaskListService do
       context "when the json_submission_enabled feature is enabled" do
         let(:json_submission_enabled) { true }
 
-        it "has link to the submission attachments page" do
-          expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_create.submission_attachments_subsection.task_name")
-          expect(section_rows.first[:path]).to eq "/forms/#{form.id}/submission-attachments"
+        context "when the submission type is email" do
+          it "has link to the submission attachments page" do
+            expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_create.submission_attachments_subsection.task_name")
+            expect(section_rows.first[:path]).to eq "/forms/#{form.id}/submission-attachments"
+          end
+        end
+
+        context "when the submission type is s3" do
+          let(:form) { create(:form, submission_type: "s3") }
+
+          it "does not have link to the submission attachments page" do
+            all_task_names = all_sections.flat_map { |section| section[:rows] }.compact.map { |row| row[:task_name] }
+            expect(all_task_names).not_to include I18n.t("forms.task_list_create.submission_attachments_subsection.task_name")
+          end
         end
       end
 
