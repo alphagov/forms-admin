@@ -28,6 +28,12 @@ module Forms
       end
     end
 
+  private
+
+    def welsh_enabled?
+      FeatureService.new(group: current_form.group).enabled?(:welsh)
+    end
+
     def welsh_translation_input_params
       params.require(:forms_welsh_translation_input).permit(WelshTranslationInput.attribute_names).merge(form: current_form)
     end
@@ -36,20 +42,36 @@ module Forms
       params.require(:forms_welsh_translation_input).permit(page_translations: WelshPageTranslationInput.attribute_names)
     end
 
-    def welsh_enabled?
-      FeatureService.new(group: current_form.group).enabled?(:welsh)
+    def condition_translation_input_params
+      params.require(:forms_welsh_translation_input).permit(condition_translations: WelshConditionTranslationInput.attribute_names)
     end
 
-  private
-
     def welsh_page_translation_inputs_from_page
-      current_form.pages.map { |page| WelshPageTranslationInput.new(id: page.id).assign_page_values }
+      current_form.pages.map do |page|
+        condition_translations = page.routing_conditions.map { |condition| WelshConditionTranslationInput.new(id: condition.id).assign_condition_values }
+
+        WelshPageTranslationInput.new(id: page.id, condition_translations:).assign_page_values
+      end
     end
 
     def welsh_page_translation_inputs_from_params
       return [] if page_translation_input_params[:page_translations].blank?
 
-      page_translation_input_params[:page_translations].each_value.map { |page_translation| WelshPageTranslationInput.new(**page_translation) }
+      page_translation_input_params[:page_translations].each_value.map do |page_translation|
+        condition_translations = welsh_condition_translation_inputs_from_params.filter { |condition_translation| condition_translation.condition.routing_page_id == page_translation["id"].to_i }
+
+        WelshPageTranslationInput.new(**page_translation, condition_translations:)
+      end
+    end
+
+    def welsh_condition_translation_inputs_from_condition
+      current_form.conditions.map { |condition| WelshConditionTranslationInput.new(id: condition.id).assign_condition_values }
+    end
+
+    def welsh_condition_translation_inputs_from_params
+      return [] if condition_translation_input_params[:condition_translations].blank?
+
+      condition_translation_input_params[:condition_translations].each_value.map { |condition_translation| WelshConditionTranslationInput.new(**condition_translation) }
     end
   end
 end
