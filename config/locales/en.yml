@@ -1039,11 +1039,12 @@ en:
       one: View your form’s 1 question
       other: View your form’s %{count} questions
     submission_email: Email
-    submission_type:
-      email: You have not opted in to receive a CSV file with each completed form email.
-      email_with_csv: Each completed form is also attached to the email as a CSV file.
-      email_with_csv_and_json: Each completed form is also attached to the email as a CSV file and a JSON file.
-      email_with_json: Each completed form is also attached to the email as a JSON file.
+    submission_format:
+      email:
+        email: You have not opted in to receive a CSV file with each completed form email.
+        email_csv: Each completed form is also attached to the email as a CSV file.
+        email_csv_json: Each completed form is also attached to the email as a CSV file and a JSON file.
+        email_json: Each completed form is also attached to the email as a JSON file.
     support_email: Email
     support_phone: Phone
     support_url: Support contact online
