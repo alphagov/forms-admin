@@ -21,9 +21,13 @@ class FormTaskListService
       create_form_section(section_number: 1),
       payment_link_subsection,
       email_address_section(section_number: 2),
-      submission_attachments_subsection,
-      privacy_and_contact_details_section(section_number: 3),
     ]
+
+    if @form.email?
+      sections << submission_attachments_subsection
+    end
+
+    sections << privacy_and_contact_details_section(section_number: 3)
 
     last_sections = [make_form_live_section(section_number: 4)]
 
