@@ -51,12 +51,12 @@ RSpec.describe Forms::ReceiveCsvController, type: :request do
 
     context "when params are valid" do
       let(:submission_type) { "email_with_csv" }
-      let(:original_submission_format) { %w[csv] }
+      let(:original_submission_format) { [] }
 
-      it "updates the form submission type" do
+      it "updates the form submission format" do
         expect {
           post(receive_csv_path(form_id: form.id), params:)
-        }.to change { form.reload.submission_type }.to(submission_type)
+        }.to change { form.reload.submission_format }.to(%w[csv])
       end
 
       it "redirects you to the form overview page" do
