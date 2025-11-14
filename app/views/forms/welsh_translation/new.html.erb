@@ -251,6 +251,27 @@
                   <% end %>
                 <% end %>
               <% end %>
+              <% if page_translation.page_has_selection_options? %>
+                <% page_translation.page.answer_settings.selection_options.each_with_index do |option, index| %>
+                  <%= body.with_row do |row| %>
+                    <%= row.with_cell %>
+                    <%= row.with_cell(text: option.name) %>
+                      <%= page_translation_fields.govuk_fieldset legend: { text: t("selection_options.add_options") } do %>
+                      <%= row.with_cell do %>
+                        <%= page_translation_fields.fields_for :selection_options_cy, page_translation.page.answer_settings_cy.selection_options[index], index: index do |selection_options_form| %>
+                          <%= selection_options_form.govuk_text_field :name, id: "forms-selections-settings-form-selection-options-name-field-#{index}", label: {
+                            text: t("selection_options.option", option_number: index + 1),
+                              class: "govuk-visually-hidden",
+                              for: "forms-selections-settings-form-selection-options-name-field-#{index}",
+                          },
+                          class: "govuk-input--width-20",
+                          form_group: { classes: "app-select-options__form-group" } %>
+                      <% end %>
+                      <% end %>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              <% end %>
             <% end %>
           <% end %>
         <% end %>

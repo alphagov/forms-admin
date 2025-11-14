@@ -106,9 +106,26 @@ class Page < ApplicationRecord
       "position" => position,
       "next_step_id" => next_page&.id,
       "type" => "question_page",
-      "data" => slice(*%w[question_text hint_text answer_type is_optional answer_settings page_heading guidance_markdown is_repeatable]),
+      "data" => slice(*%w[question_text hint_text answer_type is_optional page_heading guidance_markdown is_repeatable]).merge(answer_settings: answer_settings_with_modified_selection_options),
       "routing_conditions" => routing_conditions.map(&:as_form_document_condition),
     }
+  end
+
+  def answer_settings_with_modified_selection_options
+    return answer_settings if answer_settings&.selection_options.blank?
+
+    answer_settings_with_values = answer_settings_en.selection_options.map.with_index do |option, index|
+      {
+        "value" => option[:name],
+        # Set name to value from current locale answer_settings.
+        # If we don't have a value, use the english name as the default
+        "name" => answer_settings.selection_options[index][:name].presence || option[:name],
+      }
+    end
+
+    answer_settings.dup.tap do |answer_settings|
+      answer_settings["selection_options"] = DataStructType.new.cast_value(answer_settings_with_values)
+    end
   end
 
   def secondary_skip_condition
