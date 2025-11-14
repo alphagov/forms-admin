@@ -1113,7 +1113,7 @@ RSpec.describe Form, type: :model do
     end
 
     it "includes start page" do
-      expect(form.as_form_document).to match a_hash_including("start_page" => form.pages.first.id)
+      expect(form.as_form_document).to match a_hash_including("start_page" => form.pages.first.external_id)
     end
 
     it "includes steps" do
