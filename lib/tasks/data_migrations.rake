@@ -28,4 +28,15 @@ namespace :data_migrations do
         .update_all(content: Arel.sql("jsonb_set(content, '{submission_type}', ?)", new_submission_type.to_json))
     end
   end
+
+  desc "Set external ID for pages where one does not exist"
+  task set_page_external_ids: :environment do
+    updated_page_count = 0
+    Page.where(external_id: nil).find_each do |page|
+      page.update!(external_id: ExternalIdProvider.generate_unique_id_for(Page))
+      updated_page_count += 1
+    end
+
+    Rails.logger.info "data_migrations:set_page_external_ids updated #{updated_page_count} pages"
+  end
 end
