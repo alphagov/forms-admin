@@ -41,6 +41,9 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
     end
 
     form.welsh_completed = mark_complete
+
+    form.available_languages = %i[en cy]
+
     form.save_draft!
   end
 
