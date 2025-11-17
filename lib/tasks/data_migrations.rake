@@ -35,6 +35,8 @@ namespace :data_migrations do
     Page.where(external_id: nil).find_each do |page|
       page.update!(external_id: ExternalIdProvider.generate_unique_id_for(Page))
       updated_page_count += 1
+    rescue ActiveRecord::RecordInvalid => e
+      Rails.logger.warn("Failed to update page #{page.id}: #{e.message}")
     end
 
     Rails.logger.info "data_migrations:set_page_external_ids updated #{updated_page_count} pages"
