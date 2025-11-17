@@ -48,6 +48,15 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
       expect(condition.reload.answer_value).to eq(english_value_before)
     end
 
+    context "when the condition has no answer value" do
+      let(:condition) { create_condition(answer_value: nil) }
+
+      it "clears the Welsh answer value" do
+        welsh_condition_translation_input.submit
+        expect(condition.reload.answer_value_cy).to be_nil
+      end
+    end
+
     context "when the condition has no exit page markdown" do
       let(:condition) { create_condition(exit_page_markdown: nil) }
 
@@ -67,6 +76,78 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
       expect(welsh_condition_translation_input.answer_value_cy).to eq(condition.answer_value_cy)
       expect(welsh_condition_translation_input.exit_page_markdown_cy).to eq(condition.exit_page_markdown_cy)
       expect(welsh_condition_translation_input.exit_page_heading_cy).to eq(condition.exit_page_heading_cy)
+    end
+  end
+
+  describe "#condition_has_answer_value?" do
+    context "when the condition has an answer_value" do
+      let(:condition) do
+        create_condition(answer_value: "Yes")
+      end
+
+      it "returns true" do
+        expect(welsh_condition_translation_input.condition_has_answer_value?).to be true
+      end
+    end
+
+    context "when the condition has no answer_value" do
+      let(:condition) do
+        create_condition(answer_value: nil)
+      end
+
+      it "returns false" do
+        expect(welsh_condition_translation_input.condition_has_answer_value?).to be false
+      end
+    end
+  end
+
+  describe "#has_translatable_content?" do
+    context "when the condition has an answer_value and an exit page" do
+      let(:condition) do
+        create_condition(answer_value: "Yes",
+                         exit_page_heading: "You are ineligible",
+                         exit_page_markdown: "Sorry, you are ineligible for this service.")
+      end
+
+      it "returns true" do
+        expect(welsh_condition_translation_input.has_translatable_content?).to be true
+      end
+    end
+
+    context "when the condition has an answer_value and no exit page" do
+      let(:condition) do
+        create_condition(exit_page_heading: nil,
+                         exit_page_markdown: nil,
+                         answer_value: "Yes")
+      end
+
+      it "returns true" do
+        expect(welsh_condition_translation_input.has_translatable_content?).to be true
+      end
+    end
+
+    context "when the condition has an exit page and no answer_value" do
+      let(:condition) do
+        create_condition(exit_page_heading: "You are ineligible",
+                         exit_page_markdown: "Sorry, you are ineligible for this service.",
+                         answer_value: nil)
+      end
+
+      it "returns true" do
+        expect(welsh_condition_translation_input.has_translatable_content?).to be true
+      end
+    end
+
+    context "when the condition has no exit page or answer_value" do
+      let(:condition) do
+        create_condition(exit_page_heading: nil,
+                         exit_page_markdown: nil,
+                         answer_value: nil)
+      end
+
+      it "returns true" do
+        expect(welsh_condition_translation_input.has_translatable_content?).to be false
+      end
     end
   end
 

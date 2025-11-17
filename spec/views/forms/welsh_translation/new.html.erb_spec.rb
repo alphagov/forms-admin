@@ -232,19 +232,27 @@ describe "forms/welsh_translation/new.html.erb" do
 
       context "when at least one page has routing conditions" do
         let(:condition_translations) { [welsh_condition_translation_input] }
+        let(:condition) { create :condition, routing_page_id: page.id }
 
-        it "shows a caption with the page the condition applies to" do
-          expect(rendered).to have_css("caption", text: t("forms.welsh_translation.new.condition.heading", question_number: condition.routing_page.position))
-          expect(rendered).to have_field(t("forms.welsh_translation.new.condition_labels.answer_value_cy", question_number: condition.routing_page.position), type: "text", id: welsh_condition_translation_input.form_field_id(:answer_value_cy))
-        end
+        context "when the condition has an English answer_value" do
+          let(:condition) { create :condition, routing_page_id: page.id, answer_value: "Yes" }
 
-        it "shows the English text and Welsh field for each condition's answer_value" do
-          expect(rendered).to have_css("td", text: condition.answer_value)
-          expect(rendered).to have_field(t("forms.welsh_translation.new.condition_labels.answer_value_cy", question_number: condition.routing_page.position), type: "text", id: welsh_condition_translation_input.form_field_id(:answer_value_cy))
+          it "shows a caption with the page the condition applies to" do
+            expect(rendered).to have_css("caption", text: t("forms.welsh_translation.new.condition.heading", question_number: condition.routing_page.position))
+          end
+
+          it "shows the English text and Welsh field for each condition's answer_value" do
+            expect(rendered).to have_css("td", text: condition.answer_value)
+            expect(rendered).to have_field(t("forms.welsh_translation.new.condition_labels.answer_value_cy", question_number: condition.routing_page.position), type: "text", id: welsh_condition_translation_input.form_field_id(:answer_value_cy))
+          end
         end
 
         context "when the condition has an exit page" do
           let(:condition) { create :condition, :with_exit_page, routing_page_id: page.id }
+
+          it "shows a caption with the page the condition applies to" do
+            expect(rendered).to have_css("caption", text: t("forms.welsh_translation.new.condition.heading", question_number: condition.routing_page.position))
+          end
 
           it "shows the English text and Welsh field for each condition's exit page fields" do
             expect(rendered).to have_css("td", text: condition.exit_page_heading)
