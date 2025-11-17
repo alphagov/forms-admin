@@ -504,6 +504,7 @@ en:
         hint_text: Hint text
         legend: Have you finished adding your Welsh version?
         no_declaration_added: No declaration was added to this form.
+        no_pages_added: No questions have been added to this form yet.
         no_privacy_information_added: No link to privacy information was added to this form.
         no_support_information_added: No contact details for support were added to this form.
         no_what_happens_next_added: No information about what happens next was added to this form.
@@ -518,6 +519,7 @@ en:
         section_headings:
           declaration: Declaration for people to agree to
           form_name: Form name
+          pages: Form questions
           payment_link: Payment link
           privacy_information: Link to privacy information for this form
           support_information: Contact details for support

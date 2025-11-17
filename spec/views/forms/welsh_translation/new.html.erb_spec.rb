@@ -188,6 +188,19 @@ describe "forms/welsh_translation/new.html.erb" do
       end
     end
 
+    context "when the form does not have any pages" do
+      let(:form) { build_form(pages: []) }
+      let(:welsh_translation_input) { Forms::WelshTranslationInput.new(form:, page_translations: []).assign_form_values }
+
+      it "does not render any page translation content" do
+        expect(rendered).not_to have_field(id: "forms_welsh_page_translation_input_#{page.id}_page_translations_question_text_cy", type: "text")
+      end
+
+      it "renders message for no pages" do
+        expect(rendered).to have_text("No questions have been added to this form yet.")
+      end
+    end
+
     context "when the form has pages" do
       it "has a field for each page's Welsh question text" do
         expect(rendered).to have_field(t("forms.welsh_translation.new.page_labels.question_text_cy", question_number: page.position), type: "text", id: "forms_welsh_page_translation_input_#{page.id}_page_translations_question_text_cy")
