@@ -115,7 +115,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
         "true",
         "2",
         nil,
-        "{\"only_one_option\" => \"true\", \"selection_options\" => [{\"name\" => \"Option 1\"}, {\"name\" => \"Option 2\"}]}",
+        "{\"only_one_option\" => \"true\", \"selection_options\" => [{\"name\" => \"Option 1\", \"value\" => \"Option 1\"}, {\"name\" => \"Option 2\", \"value\" => \"Option 2\"}]}",
       )
     end
 
@@ -175,7 +175,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
         "true",
         "2",
         nil,
-        "{\"only_one_option\" => \"true\", \"selection_options\" => [{\"name\" => \"Option 1\"}, {\"name\" => \"Option 2\"}]}",
+        "{\"only_one_option\" => \"true\", \"selection_options\" => [{\"name\" => \"Option 1\", \"value\" => \"Option 1\"}, {\"name\" => \"Option 2\", \"value\" => \"Option 2\"}]}",
       )
     end
 
@@ -205,7 +205,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
         "true",
         "2",
         nil,
-        "{\"only_one_option\" => \"true\", \"selection_options\" => [{\"name\" => \"Option 1\"}, {\"name\" => \"Option 2\"}]}",
+        "{\"only_one_option\" => \"true\", \"selection_options\" => [{\"name\" => \"Option 1\", \"value\" => \"Option 1\"}, {\"name\" => \"Option 2\", \"value\" => \"Option 2\"}]}",
       )
     end
   end
