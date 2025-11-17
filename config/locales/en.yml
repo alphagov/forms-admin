@@ -449,6 +449,9 @@ en:
       receive_csv_subsection:
         receive_csv: Get completed forms as CSV files
         title: Optional task
+      submission_attachments_subsection:
+        task_name: Get a CSV or JSON file of each completed form
+        title: Optional task
       translations_section:
         add_welsh: Add a Welsh version of your form
         title: Create a Welsh version of your form (optional)
@@ -477,6 +480,9 @@ en:
         title: Privacy and contact details
       receive_csv_subsection:
         receive_csv: Get completed forms as CSV files
+        title: Optional task
+      submission_attachments_subsection:
+        task_name: Get a CSV or JSON file of each completed form
         title: Optional task
       translations_section:
         add_welsh: Edit Welsh language version of your form
