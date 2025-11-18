@@ -1031,6 +1031,7 @@ en:
     archive_this_form: Archive this form
     contact_details: Your form’s contact details for support
     csv: CSV
+    csv_and_json: CSV and JSON
     declaration: Declaration
     declaration_description: Your form’s declaration is shown to people when they have answered all the questions, just before they submit the form.
     draft_create: Create a draft to edit
@@ -1047,10 +1048,19 @@ en:
     submission_email: Email
     submission_format:
       email:
-        email: You have not opted in to receive a CSV file with each completed form email.
-        email_csv: Each completed form is also attached to the email as a CSV file.
-        email_csv_json: Each completed form is also attached to the email as a CSV file and a JSON file.
-        email_json: Each completed form is also attached to the email as a JSON file.
+        email_csv_html: |
+          Each completed form is also attached to the email as a CSV file.</br>
+          You have not opted to get each completed form as a JSON file.
+        email_csv_json_html: Each completed form is also attached to the email as a CSV file and a JSON file.
+        email_html: You have not opted to also get each completed form as a JSON or CSV file.
+        email_json_html: |
+          Each completed form is also attached to the email as a JSON file.</br>
+          You have not opted to get each completed form as a CSV file.
+        json_submissions_disabled:
+          email: You have not opted in to receive a CSV file with each completed form email.
+          email_csv: Each completed form is also attached to the email as a CSV file.
+          email_csv_json: Each completed form is also attached to the email as a CSV file and a JSON file.
+          email_json: Each completed form is also attached to the email as a JSON file.
     support_email: Email
     support_phone: Phone
     support_url: Support contact online
