@@ -17,9 +17,11 @@ describe "forms/_made_live_form.html.erb" do
   let(:submission_type) { "email" }
   let(:submission_format) { [] }
   let(:cloudwatch_service) { instance_double(CloudWatchService, metrics_data:) }
+  let(:json_submission_enabled) { true }
 
   before do
     allow(CloudWatchService).to receive(:new).and_return(cloudwatch_service)
+    allow(FeatureService).to receive(:enabled?).with(:json_submission_enabled).and_return(json_submission_enabled)
 
     if group.present?
       GroupForm.create!(form_id: form_document.id, group_id: group.id)
@@ -137,47 +139,113 @@ describe "forms/_made_live_form.html.erb" do
     expect(rendered).to have_text(form_document.submission_email)
   end
 
-  context "when CSV submission is enabled" do
-    let(:submission_type) { "email_with_csv" }
-    let(:submission_format) { %w[csv] }
+  context "when the submission type is 'email'" do
+    context "when json_submission_enabled is enabled" do
+      let(:json_submission_enabled) { true }
 
-    it "tells the user they have CSVs enabled" do
-      expect(rendered).to have_css("h4", text: I18n.t("made_live_form.csv"))
-      expect(rendered).to have_text(I18n.t("made_live_form.submission_format.email.email_csv"))
-      expect(rendered).not_to have_text(I18n.t("made_live_form.submission_format.email.email"))
+      context "when CSV submission is enabled" do
+        let(:submission_format) { %w[csv] }
+
+        it "tells the user they have CSVs enabled" do
+          expect(rendered).to have_css("h4", text: I18n.t("made_live_form.csv_and_json"))
+          expect(rendered).to include(I18n.t("made_live_form.submission_format.email.email_csv_html"))
+        end
+      end
+
+      context "when JSON submission is enabled" do
+        let(:submission_format) { %w[json] }
+
+        it "tells the user they have JSON submissions enabled" do
+          expect(rendered).to have_css("h4", text: I18n.t("made_live_form.csv_and_json"))
+          expect(rendered).to include(I18n.t("made_live_form.submission_format.email.email_json_html"))
+        end
+      end
+
+      context "when both CSV and JSON submissions are enabled" do
+        let(:submission_format) { %w[csv json] }
+
+        it "tells the user they have CSV and JSON submissions enabled" do
+          expect(rendered).to have_css("h4", text: I18n.t("made_live_form.csv_and_json"))
+          expect(rendered).to include(I18n.t("made_live_form.submission_format.email.email_csv_json_html"))
+        end
+      end
+
+      context "when CSV submission is not enabled" do
+        let(:submission_format) { %w[] }
+
+        it "tells the user they do not have CSVs enabled" do
+          expect(rendered).to have_css("h4", text: I18n.t("made_live_form.csv_and_json"))
+          expect(rendered).to include(I18n.t("made_live_form.submission_format.email.email_html"))
+        end
+      end
+    end
+
+    context "when json_submission_enabled is disabled" do
+      let(:json_submission_enabled) { false }
+
+      context "when CSV submission is enabled" do
+        let(:submission_format) { %w[csv] }
+
+        it "tells the user they have CSVs enabled" do
+          expect(rendered).to have_css("h4", text: I18n.t("made_live_form.csv"))
+          expect(rendered).not_to have_css("h4", text: I18n.t("made_live_form.csv_and_json"))
+          expect(rendered).to have_text(I18n.t("made_live_form.submission_format.email.json_submissions_disabled.email_csv"))
+          expect(rendered).not_to have_text(I18n.t("made_live_form.submission_format.email.json_submissions_disabled.email"))
+        end
+      end
+
+      context "when JSON submission is enabled" do
+        let(:submission_format) { %w[json] }
+
+        it "tells the user they have JSON submissions enabled" do
+          expect(rendered).to have_css("h4", text: I18n.t("made_live_form.csv"))
+          expect(rendered).not_to have_css("h4", text: I18n.t("made_live_form.csv_and_json"))
+          expect(rendered).to have_text(I18n.t("made_live_form.submission_format.email.json_submissions_disabled.email_json"))
+          expect(rendered).not_to have_text(I18n.t("made_live_form.submission_format.email.json_submissions_disabled.email"))
+        end
+      end
+
+      context "when both CSV and JSON submissions are enabled" do
+        let(:submission_format) { %w[csv json] }
+
+        it "tells the user they have CSV and JSON submissions enabled" do
+          expect(rendered).to have_css("h4", text: I18n.t("made_live_form.csv"))
+          expect(rendered).not_to have_css("h4", text: I18n.t("made_live_form.csv_and_json"))
+          expect(rendered).to have_text(I18n.t("made_live_form.submission_format.email.json_submissions_disabled.email_csv_json"))
+          expect(rendered).not_to have_text(I18n.t("made_live_form.submission_format.email.json_submissions_disabled.email"))
+        end
+      end
+
+      context "when CSV submission is not enabled" do
+        let(:submission_format) { %w[] }
+
+        it "tells the user they do not have CSVs enabled" do
+          expect(rendered).to have_css("h4", text: I18n.t("made_live_form.csv"))
+          expect(rendered).not_to have_css("h4", text: I18n.t("made_live_form.csv_and_json"))
+          expect(rendered).not_to have_text(I18n.t("made_live_form.submission_format.email.json_submissions_disabled.email_csv"))
+          expect(rendered).to have_text(I18n.t("made_live_form.submission_format.email.json_submissions_disabled.email"))
+        end
+      end
     end
   end
 
-  context "when JSON submission is enabled" do
-    let(:submission_type) { "email_with_json" }
-    let(:submission_format) { %w[json] }
+  context "when the submission type is 's3'" do
+    let(:submission_type) { "s3" }
 
-    it "tells the user they have JSON submissions enabled" do
-      expect(rendered).to have_css("h4", text: I18n.t("made_live_form.csv"))
-      expect(rendered).to have_text(I18n.t("made_live_form.submission_format.email.email_json"))
-      expect(rendered).not_to have_text(I18n.t("made_live_form.submission_format.email.email"))
+    context "when json_submission_enabled is enabled" do
+      let(:json_submission_enabled) { true }
+
+      it "does not include the CSV and JSON section" do
+        expect(rendered).not_to have_css("h4", text: I18n.t("made_live_form.csv_and_json"))
+      end
     end
-  end
 
-  context "when both CSV and JSON submissions are enabled" do
-    let(:submission_type) { "email_with_csv_and_json" }
-    let(:submission_format) { %w[csv json] }
+    context "when json_submission_enabled is disabled" do
+      let(:json_submission_enabled) { false }
 
-    it "tells the user they have CSV and JSON submissions enabled" do
-      expect(rendered).to have_css("h4", text: I18n.t("made_live_form.csv"))
-      expect(rendered).to have_text(I18n.t("made_live_form.submission_format.email.email_csv_json"))
-      expect(rendered).not_to have_text(I18n.t("made_live_form.submission_format.email.email"))
-    end
-  end
-
-  context "when CSV submission is not enabled" do
-    let(:submission_type) { "email" }
-    let(:submission_format) { %w[] }
-
-    it "tells the user they do not have CSVs enabled" do
-      expect(rendered).to have_css("h4", text: I18n.t("made_live_form.csv"))
-      expect(rendered).not_to have_text(I18n.t("made_live_form.submission_format.email.email_csv"))
-      expect(rendered).to have_text(I18n.t("made_live_form.submission_format.email.email"))
+      it "does not include the CSV and JSON section" do
+        expect(rendered).not_to have_css("h4", text: I18n.t("made_live_form.csv"))
+      end
     end
   end
 
