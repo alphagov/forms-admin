@@ -68,6 +68,10 @@ module ReportHelper
     questions.map { |question| report_questions_table_row(question) }
   end
 
+  def tag_label(tag)
+    t("reports.tag_labels.#{tag}")
+  end
+
 private
 
   def report_forms_table_row(form)

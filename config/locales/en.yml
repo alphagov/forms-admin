@@ -1699,6 +1699,10 @@ en:
           view_questions: Questions where you can select one from up to 30 options
         title: Selection from a list of options answer type usage in live forms
         with_none_of_the_above: Questions with ‘None of the above’
+    tag_labels:
+      draft: draft
+      live: live
+      live-or-archived: live or archived
     users:
       heading: Number of users per organisation
       table_headings:
