@@ -4,8 +4,9 @@
     <h1 class="govuk-heading-l"><%= t(".title") %></h1>
     <ul class="govuk-list">
       <li><%= govuk_link_to t("reports.add_another_answer.title"), report_add_another_answer_path %></li>
-      <li><%= govuk_link_to t("reports.features.title", tag: "live"), report_features_path(tag: :live) %></li>
-      <li><%= govuk_link_to t("reports.features.title", tag: "draft"), report_features_path(tag: :draft) %></li>
+      <li><%= govuk_link_to t("reports.features.title", tag: tag_label("live")), report_features_path(tag: :live) %></li>
+      <li><%= govuk_link_to t("reports.features.title", tag: tag_label("live-or-archived")), report_features_path(tag: 'live-or-archived') %></li>
+      <li><%= govuk_link_to t("reports.features.title", tag: tag_label("draft")), report_features_path(tag: :draft) %></li>
       <li><%= govuk_link_to t("reports.features.long_list_usage.title"), report_selection_questions_summary_path %></li>
       <li><%= govuk_link_to t("reports.users.title"), report_users_path %></li>
       <li><%= govuk_link_to t("reports.last_signed_in_at.title"), report_last_signed_in_at_path %></li>
