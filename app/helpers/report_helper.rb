@@ -104,6 +104,8 @@ private
                    form_pages_path(form_id:)
                  when "live"
                    live_form_pages_path(form_id:)
+                 when "archived"
+                   archived_form_pages_path(form_id:)
                  else
                    raise "tag of form record '#{form['tag']}' is not expected"
                  end

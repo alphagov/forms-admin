@@ -4,6 +4,7 @@ describe "reports/feature_report" do
   let(:report) {}
   let(:records) { [] }
   let(:tag) { "live" }
+  let(:form_document_tag) { tag }
 
   before do
     controller.request.path_parameters[:action] = report
@@ -16,8 +17,8 @@ describe "reports/feature_report" do
     let(:report) { "forms_with_csv_submission_enabled" }
     let(:records) do
       [
-        { "form_id" => 1, "tag" => tag, "content" => { "name" => "All question types form" }, "organisation_name" => "Government Digital Service" },
-        { "form_id" => 3, "tag" => tag, "content" => { "name" => "Branch route form" }, "organisation_name" => "Government Digital Service" },
+        { "form_id" => 1, "tag" => form_document_tag, "content" => { "name" => "All question types form" }, "organisation_name" => "Government Digital Service" },
+        { "form_id" => 3, "tag" => form_document_tag, "content" => { "name" => "Branch route form" }, "organisation_name" => "Government Digital Service" },
       ]
     end
 
@@ -62,6 +63,18 @@ describe "reports/feature_report" do
           expect(rendered).to have_table do |table|
             expect(table).to have_link "All question types form", href: form_pages_path(1)
             expect(table).to have_link "Branch route form", href: form_pages_path(3)
+          end
+        end
+      end
+
+      context "with archived forms" do
+        let(:tag) { "live-or-archived" }
+        let(:form_document_tag) { "archived" }
+
+        it "has links for each form" do
+          expect(rendered).to have_table do |table|
+            expect(table).to have_link "All question types form", href: archived_form_pages_path(1)
+            expect(table).to have_link "Branch route form", href: archived_form_pages_path(3)
           end
         end
       end
