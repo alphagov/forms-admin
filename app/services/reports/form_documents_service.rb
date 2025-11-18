@@ -1,8 +1,9 @@
 class Reports::FormDocumentsService
   class << self
     def form_documents(tag:)
+      form_document_tags = tag == "live-or-archived" ? %w[live archived] : tag
       form_documents = FormDocument.joins(form: { group_form: { group: :organisation } })
-                  .where(tag:)
+                  .where(tag: form_document_tags)
                   .where.not(organisation: { "internal": true })
                   .select("form_documents.*", "organisation.name AS organisation_name", "organisation.id AS organisation_id", "groups.external_id AS group_external_id", "groups.name AS group_name")
 
