@@ -282,12 +282,12 @@ RSpec.describe PagesController, type: :request do
           form_document_steps = form.reload.draft_form_document.content["steps"]
           expect(form_document_steps).to contain_exactly(
             hash_including(
-              "id" => pages.first.id,
+              "id" => pages.first.external_id,
               "position" => 1,
-              "next_step_id" => pages.third.id,
+              "next_step_id" => pages.third.external_id,
             ),
             hash_including(
-              "id" => pages.third.id,
+              "id" => pages.third.external_id,
               "position" => 2,
               "next_step_id" => nil,
             ),
@@ -357,17 +357,17 @@ RSpec.describe PagesController, type: :request do
         form_document_steps = form.reload.draft_form_document.content["steps"]
         expect(form_document_steps).to contain_exactly(
           hash_including(
-            "id" => pages.second.id,
+            "id" => pages.second.external_id,
             "position" => 1,
-            "next_step_id" => pages.first.id,
+            "next_step_id" => pages.first.external_id,
           ),
           hash_including(
-            "id" => pages.first.id,
+            "id" => pages.first.external_id,
             "position" => 2,
-            "next_step_id" => pages.third.id,
+            "next_step_id" => pages.third.external_id,
           ),
           hash_including(
-            "id" => pages.third.id,
+            "id" => pages.third.external_id,
             "position" => 3,
             "next_step_id" => nil,
           ),

@@ -11,8 +11,12 @@ RSpec.describe FormDocument::Step, type: :model do
     expect(described_class.new(foo: "bar").attributes).not_to include(:foo)
   end
 
-  it "has the position and next page ID from the form_document_step" do
-    expect(form_document_step).to have_attributes(position: page.position, next_step_id: next_page.id)
+  it "has the ID, position and next page ID from the form_document_step" do
+    expect(form_document_step).to have_attributes(
+      id: page.external_id,
+      position: page.position,
+      next_step_id: next_page.external_id,
+    )
   end
 
   it "has all question attributes the original page has" do

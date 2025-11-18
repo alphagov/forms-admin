@@ -61,13 +61,15 @@ private
 
   def revert_pages(steps_data)
     form_document_step_ids = steps_data.pluck("id")
+    # TODO: Remove this once the database migration has been run
+    raise "Migration to use page external IDs not run for form #{form.id}" if steps_data.any? { |step| step["database_id"].nil? }
 
     # delete any pages on the form that are not present in the form_document version
-    form.pages.where.not(id: form_document_step_ids).destroy_all
+    form.pages.where.not(external_id: form_document_step_ids).destroy_all
 
-    # iterate through the form_document steps data to create or update pages using the original ids
+    # iterate through the form_document steps data to create or update pages using the external ID
     steps_data.each do |step_data|
-      page = form.pages.find_or_initialize_by(id: step_data["id"])
+      page = form.pages.find_or_initialize_by(external_id: step_data["id"])
 
       assign_page_attributes(page, step_data)
 
@@ -107,11 +109,9 @@ private
   end
 
   def assign_condition_attributes(condition, condition_data)
-    condition.assign_attributes(
-      answer_value: condition_data["answer_value"],
-      routing_page_id: condition_data["routing_page_id"],
-      check_page_id: condition_data["check_page_id"],
-      goto_page_id: condition_data["goto_page_id"],
-    )
+    condition.answer_value = condition_data["answer_value"]
+    condition.routing_page = Page.find_by!(external_id: condition_data["routing_page_id"]) if condition_data["routing_page_id"]
+    condition.check_page = Page.find_by!(external_id: condition_data["check_page_id"]) if condition_data["check_page_id"]
+    condition.goto_page = Page.find_by!(external_id: condition_data["goto_page_id"]) if condition_data["goto_page_id"]
   end
 end
