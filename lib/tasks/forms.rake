@@ -55,19 +55,7 @@ namespace :forms do
       supported_formats = %w[csv json]
       abort "submission_format must be one of #{supported_formats.join(', ')}" unless submission_format.all? { supported_formats.include? it }
 
-      # Use old style submission type
-      # TODO: remove this
-      submission_type = if submission_format.include?("csv") && submission_format.include?("json")
-                          "email_with_csv_and_json"
-                        elsif submission_format.include?("csv")
-                          "email_with_csv"
-                        elsif submission_format.include?("json")
-                          "email_with_json"
-                        else
-                          "email"
-                        end
-
-      set_submission_type(args[:form_id], submission_type, submission_format)
+      set_submission_type(args[:form_id], "email", submission_format)
     end
 
     desc "Set submission_type to s3"
@@ -81,8 +69,7 @@ namespace :forms do
       abort "s3_bucket_region must be one of eu-west-1 or eu-west-2" unless %w[eu-west-1 eu-west-2].include? args[:s3_bucket_region]
       abort "format must be one of csv or json" unless %w[csv json].include? args[:format]
 
-      # TODO: remove conversion to old style submission type
-      submission_type = args[:format] == "csv" ? "s3" : "s3_with_json"
+      submission_type = "s3"
       submission_format = [args[:format]]
 
       Rails.logger.info("Setting submission_type to #{submission_type} and s3_bucket_name to #{args[:s3_bucket_name]} for form: #{args[:form_id]}")

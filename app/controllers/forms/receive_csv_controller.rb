@@ -25,9 +25,9 @@ module Forms
     end
 
     def success_message(form)
-      return nil unless form.submission_type_previously_changed?
+      return nil unless form.submission_format_previously_changed?
 
-      return t("banner.success.form.receive_csv_enabled") if form.submission_type.include? "csv"
+      return t("banner.success.form.receive_csv_enabled") if form.submission_format.include? "csv"
 
       t("banner.success.form.receive_csv_disabled")
     end
