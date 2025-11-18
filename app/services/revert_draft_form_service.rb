@@ -61,8 +61,6 @@ private
 
   def revert_pages(steps_data)
     form_document_step_ids = steps_data.pluck("id")
-    # TODO: Remove this once the database migration has been run
-    raise "Migration to use page external IDs not run for form #{form.id}" if steps_data.any? { |step| step["database_id"].nil? }
 
     # delete any pages on the form that are not present in the form_document version
     form.pages.where.not(external_id: form_document_step_ids).destroy_all
