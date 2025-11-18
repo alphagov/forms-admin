@@ -116,7 +116,7 @@ class ReportsController < WebController
   def csv_downloads; end
 
   def live_forms_csv
-    forms = Reports::FormDocumentsService.form_documents(tag: "live")
+    forms = Reports::FormDocumentsService.form_documents(tag: "live-or-archived")
 
     send_data Reports::FormsCsvReportService.new(forms).csv,
               type: "text/csv; charset=iso-8859-1",
@@ -124,7 +124,7 @@ class ReportsController < WebController
   end
 
   def live_questions_csv
-    forms = Reports::FormDocumentsService.form_documents(tag: "live")
+    forms = Reports::FormDocumentsService.form_documents(tag: "live-or-archived")
     questions = Reports::FeatureReportService.new(forms).questions
 
     send_data Reports::QuestionsCsvReportService.new(questions).csv,
