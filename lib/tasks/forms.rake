@@ -37,7 +37,8 @@ namespace :forms do
 
       Rails.logger.info "forms:submission_email:update: setting #{fmt_form(form)} submission email to \'#{form.submission_email}\'"
 
-      form.save_draft!
+      # skip validations on the Form model, don't update live or archived
+      form.save!(validate: false)
 
       form.form_submission_email&.destroy!
     end
