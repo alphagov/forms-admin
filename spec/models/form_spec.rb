@@ -791,11 +791,6 @@ RSpec.describe Form, type: :model do
   describe "submission format" do
     let(:form) { create :form }
 
-    it "can be nil" do
-      form.update!(submission_format: nil)
-      expect(form.submission_format).to be_nil
-    end
-
     it "can be empty" do
       form.update!(submission_format: [])
       expect(form.submission_format).to be_empty
