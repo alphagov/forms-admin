@@ -34,21 +34,6 @@ describe RevertDraftFormService do
       revert_draft_form_service.revert_draft_from_form_document(tag)
     end
 
-    context "when migration to use page external IDs not run" do
-      before do
-        live_form.live_form_document.content["steps"].each do |step|
-          step.delete("database_id")
-        end
-        live_form.live_form_document.save!
-      end
-
-      it "raises an error" do
-        expect {
-          revert_draft(live_tag)
-        }.to raise_error(StandardError, "Migration to use page external IDs not run for form #{live_form.id}")
-      end
-    end
-
     context "when the draft has no changes" do
       it "reverts a live form to its live state" do
         revert_draft(live_tag)
