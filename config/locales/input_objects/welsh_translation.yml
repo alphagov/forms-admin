@@ -5,8 +5,26 @@ en:
       models:
         forms/welsh_translation_input:
           attributes:
+            declaration_text_cy:
+              blank: Enter a declaration in Welsh
             mark_complete:
               blank: You must choose an option
+            name_cy:
+              blank: Enter a Welsh form name
+            payment_url_cy:
+              blank: Enter a payment link in Welsh # TODO: get correct translation for this
+            privacy_policy_url_cy:
+              blank: Enter a link to privacy information in Welsh
+            support_email_cy:
+              blank: Enter a support email address in Welsh
+            support_phone_cy:
+              blank: Enter a support phone number in Welsh
+            support_url_cy:
+              blank: Enter a support URL in Welsh
+            support_url_text_cy:
+              blank: Enter support text in Welsh
+            what_happens_next_markdown_cy:
+              blank: Enter information about what happens next in Welsh
   helpers:
     label:
       forms_welsh_translation_input:
