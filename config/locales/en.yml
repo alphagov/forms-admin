@@ -491,7 +491,7 @@ en:
       new:
         answer_value: Answer value
         condition:
-          heading: Question %{question_number}’s route
+          heading: Question %{question_number}’s exit page
         condition_labels:
           answer_value_cy: Answer value for question %{question_number}'s condition (Welsh)
           exit_page_heading_cy: Exit page heading for question %{question_number}'s condition (Welsh)
