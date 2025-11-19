@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Forms::ReceiveCsvController, type: :request do
-  let(:form) { create(:form, :live, submission_type: original_submission_type, submission_format: original_submission_format) }
+  let(:form) { create(:form, :live, submission_type: "email", submission_format: original_submission_format) }
 
   let(:original_submission_type) { "email" }
   let(:original_submission_format) { [] }

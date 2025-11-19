@@ -234,8 +234,8 @@ RSpec.describe "forms.rake" do
         .tap(&:reenable)
     end
 
-    let(:form) { create :form, :live, submission_type: "s3", submission_format: nil }
-    let!(:other_form) { create :form, :live, submission_type: "s3", submission_format: nil }
+    let(:form) { create :form, :live, submission_type: "s3", submission_format: [] }
+    let!(:other_form) { create :form, :live, submission_type: "s3", submission_format: [] }
 
     context "when the form is live" do
       it "sets a form's submission_type to email" do
@@ -277,6 +277,8 @@ RSpec.describe "forms.rake" do
     end
 
     context "when the provided submission format is empty" do
+      let(:form) { create :form, :live, submission_type: "s3", submission_format: %w[json] }
+
       it "sets a form's submission format to empty" do
         expect { task.invoke(form.id) }
           .to change { form.reload.submission_format }.to([])
@@ -289,6 +291,8 @@ RSpec.describe "forms.rake" do
     end
 
     context "when the provided submission format is email" do
+      let(:form) { create :form, :live, submission_type: "s3", submission_format: %w[json] }
+
       it "sets a form's submission format to empty" do
         expect { task.invoke(form.id, "email") }
           .to change { form.reload.submission_format }.to([])

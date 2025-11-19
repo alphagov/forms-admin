@@ -782,19 +782,14 @@ RSpec.describe Form, type: :model do
   describe "submission type" do
     describe "enum" do
       it "returns a list of submission types" do
-        expect(described_class.submission_types.keys).to eq(%w[email email_with_csv email_with_json email_with_csv_and_json s3 s3_with_json])
-        expect(described_class.submission_types.values).to eq(%w[email email_with_csv email_with_json email_with_csv_and_json s3 s3_with_json])
+        expect(described_class.submission_types.keys).to eq(%w[email s3])
+        expect(described_class.submission_types.values).to eq(%w[email s3])
       end
     end
   end
 
   describe "submission format" do
     let(:form) { create :form }
-
-    it "can be nil" do
-      form.update!(submission_format: nil)
-      expect(form.submission_format).to be_nil
-    end
 
     it "can be empty" do
       form.update!(submission_format: [])
