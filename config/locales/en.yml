@@ -494,8 +494,8 @@ en:
           heading: Question %{question_number}’s exit page
         condition_labels:
           answer_value_cy: Answer value for question %{question_number}'s condition (Welsh)
-          exit_page_heading_cy: Exit page heading for question %{question_number}'s condition (Welsh)
-          exit_page_markdown_cy: Exit page markdown for question %{question_number}'s condition (Welsh)
+          exit_page_heading_cy: Question %{question_number} exit page heading (Welsh)
+          exit_page_markdown_cy: Question %{question_number} exit page markdown (Welsh)
         english_header: English content
         exit_page_heading: Exit page heading
         exit_page_markdown: Exit page markdown
