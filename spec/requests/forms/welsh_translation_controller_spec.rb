@@ -51,7 +51,7 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
     let(:mark_complete) { "true" }
     let(:condition_translations) { { "0" => { "id" => condition.id, answer_value_cy: "Nac ydw" } } }
     let(:page_translations) { { "0" => { "id" => form.pages.first.id, question_text_cy: "Ydych chi'n adnewyddu trwydded?" } } }
-    let(:params) { { forms_welsh_translation_input: { form:, mark_complete:, page_translations:, condition_translations: } } }
+    let(:params) { { forms_welsh_translation_input: { form:, mark_complete:, name_cy: "Gwneud cais am drwydded jyglo", privacy_policy_url_cy: "https://juggling.gov.uk/privacy_policy/cy", page_translations:, condition_translations: } } }
 
     context "when 'Yes' is selected" do
       it "updates the form" do

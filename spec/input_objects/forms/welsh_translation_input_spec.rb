@@ -4,13 +4,20 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
   subject(:welsh_translation_input) { described_class.new(new_input_data) }
 
   let(:form) { build_form }
-  let(:page) { create :page, question_text: "Are you renewing a licence?", hint_text: "Choose 'Yes' if you already have a valid licence.", page_heading: "Licencing", guidance_markdown: "This part of the form concerns licencing." }
+  let(:page) do
+    create :page,
+           question_text: "Are you renewing a licence?",
+           hint_text: "Choose 'Yes' if you already have a valid licence.",
+           page_heading: "Licencing",
+           guidance_markdown: "This part of the form concerns licencing."
+  end
   let(:another_page) { create :page }
 
   let(:new_input_data) do
     {
       form:,
       mark_complete: "true",
+      name_cy: "New Welsh name",
       what_happens_next_markdown_cy: "New Welsh what happens next",
       declaration_text_cy: "New Welsh declaration",
       support_email_cy: "new-welsh-support@example.gov.uk",
@@ -54,6 +61,8 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
       expect(welsh_translation_input).not_to be_valid
       expect(welsh_translation_input.errors.full_messages_for(:mark_complete)).to include "Mark complete #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.mark_complete.blank')}"
     end
+
+    # TODO: add tests for form attribute presence validation
   end
 
   describe "#submit" do
