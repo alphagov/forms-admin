@@ -3,14 +3,12 @@ class Forms::WelshConditionTranslationInput < BaseInput
   include ActiveModel::Attributes
 
   attribute :id
-  attribute :answer_value_cy
   attribute :exit_page_markdown_cy
   attribute :exit_page_heading_cy
 
   def submit
     return false if invalid?
 
-    condition.answer_value_cy = condition_has_answer_value? ? answer_value_cy : nil
     condition.exit_page_markdown_cy = condition_has_exit_page? ? exit_page_markdown_cy : nil
     condition.exit_page_heading_cy = condition_has_exit_page? ? exit_page_heading_cy : nil
 
@@ -18,7 +16,6 @@ class Forms::WelshConditionTranslationInput < BaseInput
   end
 
   def assign_condition_values
-    self.answer_value_cy = condition.answer_value_cy
     self.exit_page_markdown_cy = condition.exit_page_markdown_cy
     self.exit_page_heading_cy = condition.exit_page_heading_cy
 
@@ -35,7 +32,7 @@ class Forms::WelshConditionTranslationInput < BaseInput
   end
 
   def has_translatable_content?
-    condition_has_answer_value? || condition.is_exit_page?
+    condition.is_exit_page?
   end
 
   def condition_has_answer_value?

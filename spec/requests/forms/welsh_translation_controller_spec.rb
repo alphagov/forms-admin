@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Forms::WelshTranslationController, type: :request do
   let(:form) { create(:form, :ready_for_routing, welsh_completed: false) }
   let(:id) { form.id }
-  let(:condition) { create :condition, routing_page: form.pages.first, answer_value: "No" }
+  let(:condition) { create :condition, routing_page: form.pages.first, exit_page_markdown: "You are ineligible", exit_page_heading: "Sorry, you are ineligible" }
 
   let(:current_user) { standard_user }
   let(:group) { create(:group, organisation: standard_user.organisation, welsh_enabled:) }
@@ -49,7 +49,9 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
 
   describe "#create" do
     let(:mark_complete) { "true" }
-    let(:condition_translations) { { "0" => { "id" => condition.id, answer_value_cy: "Nac ydw" } } }
+    let(:condition_translations) do
+      { "0" => { "id" => condition.id, exit_page_markdown_cy: "Nid ydych yn gymwys", exit_page_heading_cy: "Mae'n ddrwg gennym, nid ydych yn gymwys ar gyfer y gwasanaeth hwn." } }
+    end
     let(:page_translations) { { "0" => { "id" => form.pages.first.id, question_text_cy: "Ydych chi'n adnewyddu trwydded?" } } }
     let(:params) { { forms_welsh_translation_input: { form:, mark_complete:, page_translations:, condition_translations: } } }
 
@@ -69,7 +71,7 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
       it "updates the form's conditions" do
         expect {
           post(welsh_translation_create_path(id), params:)
-        }.to change { condition.reload.answer_value_cy }.to("Nac ydw")
+        }.to change { condition.reload.exit_page_markdown_cy }.to("Nid ydych yn gymwys")
       end
 
       it "redirects to the form" do
@@ -122,7 +124,7 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
       it "does not update the form's conditions" do
         expect {
           post(welsh_translation_create_path(id), params:)
-        }.not_to(change { condition.reload.answer_value_cy })
+        }.not_to(change { condition.reload.exit_page_markdown_cy })
       end
 
       it "returns a 422" do
@@ -160,7 +162,7 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
       it "does not update the form's conditions" do
         expect {
           post(welsh_translation_create_path(id), params:)
-        }.not_to(change { condition.reload.answer_value_cy })
+        }.not_to(change { condition.reload.exit_page_markdown_cy })
       end
 
       it "returns 403" do
@@ -187,7 +189,7 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
       it "does not update the form's conditions" do
         expect {
           post(welsh_translation_create_path(id), params:)
-        }.not_to(change { condition.reload.answer_value_cy })
+        }.not_to(change { condition.reload.exit_page_markdown_cy })
       end
 
       it "redirects to the form" do
