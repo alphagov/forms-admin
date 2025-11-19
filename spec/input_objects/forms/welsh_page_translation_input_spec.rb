@@ -5,6 +5,14 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
 
   let(:page) { create_page }
 
+  let(:condition) do
+    create :condition, routing_page: page, answer_value: "Yes",
+                       exit_page_heading: "You are ineligible",
+                       exit_page_markdown: "Sorry, you are ineligible for this service."
+  end
+
+  let(:another_condition) { create :condition, routing_page: page, answer_value: "Yes" }
+
   let(:new_input_data) do
     {
       id: page.id,
@@ -67,6 +75,22 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
         welsh_page_translation_input.submit
         expect(page.page_heading_cy).to be_nil
         expect(page.guidance_markdown_cy).to be_nil
+      end
+    end
+
+    context "when the form includes condition translation objects" do
+      let(:condition_translation) { Forms::WelshConditionTranslationInput.new(id: condition.id, answer_value_cy: "Ydw", exit_page_heading_cy: "Nid ydych yn gymwys", exit_page_markdown_cy: "Mae'n ddrwg gennym, nid ydych yn gymwys ar gyfer y gwasanaeth hwn.") }
+      let(:another_condition_translation) { Forms::WelshConditionTranslationInput.new(id: another_condition.id, answer_value_cy: "Nac ydw") }
+
+      let(:new_input_data) { super().merge(condition_translations: [condition_translation, another_condition_translation]) }
+
+      it "submits the data on the condition translation objects" do
+        welsh_page_translation_input.submit
+
+        expect(condition.reload.answer_value_cy).to eq("Ydw")
+        expect(condition.reload.exit_page_heading_cy).to eq("Nid ydych yn gymwys")
+        expect(condition.reload.exit_page_markdown_cy).to eq("Mae'n ddrwg gennym, nid ydych yn gymwys ar gyfer y gwasanaeth hwn.")
+        expect(another_condition.reload.answer_value_cy).to eq("Nac ydw")
       end
     end
   end

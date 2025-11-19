@@ -489,12 +489,22 @@ en:
         title: Add translations to your form (optional)
     welsh_translation:
       new:
+        answer_value: Answer value
+        condition:
+          heading: Question %{question_number}’s route
+        condition_labels:
+          answer_value_cy: Answer value for question %{question_number}'s condition (Welsh)
+          exit_page_heading_cy: Exit page heading for question %{question_number}'s condition (Welsh)
+          exit_page_markdown_cy: Exit page markdown for question %{question_number}'s condition (Welsh)
         english_header: English content
+        exit_page_heading: Exit page heading
+        exit_page_markdown: Exit page markdown
         guidance_markdown: Guidance markdown
         hint: Selecting ‘Yes’ will mark this task as complete. You’ll still be able to make more changes if you need to.
         hint_text: Hint text
         legend: Have you finished adding your Welsh version?
         no_declaration_added: No declaration was added to this form.
+        no_pages_added: No questions have been added to this form yet.
         no_privacy_information_added: No link to privacy information was added to this form.
         no_support_information_added: No contact details for support were added to this form.
         no_what_happens_next_added: No information about what happens next was added to this form.
@@ -509,6 +519,7 @@ en:
         section_headings:
           declaration: Declaration for people to agree to
           form_name: Form name
+          pages: Form questions
           payment_link: Payment link
           privacy_information: Link to privacy information for this form
           support_information: Contact details for support
