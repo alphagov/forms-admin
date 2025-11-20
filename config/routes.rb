@@ -69,6 +69,11 @@ Rails.application.routes.draw do
     get "/submission-attachments" => "forms/submission_attachments#new", as: :submission_attachments
     post "/submission-attachments" => "forms/submission_attachments#create", as: :submission_attachments_create
 
+    scope "/pages-by-external-id/:page_external_id" do
+      get "/edit-question" => "forms/redirect_from_forms_runner#edit_question", as: :edit_question_by_external_id
+      get "/routes" => "forms/redirect_from_forms_runner#routes", as: :show_routes_by_external_id
+    end
+
     scope "/pages" do
       get "/" => "pages#index", as: :form_pages
       post "/" => "forms#mark_pages_section_completed"
