@@ -19,6 +19,7 @@ class FormCopyService
 
       copy_pages(content["steps"])
       copy_routing_conditions(content["steps"])
+      copy_group
 
       @copied_form.save!
 
@@ -97,5 +98,9 @@ private
     )
 
     condition.save!
+  end
+
+  def copy_group
+    GroupForm.create(group_id: @form.group.id, form_id: @copied_form.id)
   end
 end
