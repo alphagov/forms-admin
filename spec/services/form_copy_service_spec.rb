@@ -1,9 +1,14 @@
 require "rails_helper"
 
 RSpec.describe FormCopyService do
+  let(:group) { create(:group) }
   let(:source_form) { create(:form, :live_with_draft) }
   let(:source_form_document) { FormDocument.find_by(form_id: source_form.id) }
   let(:copied_form) { described_class.new(source_form).copy(tag: "live") }
+
+  before do
+    GroupForm.create!(form: source_form, group: group)
+  end
 
   describe "#copy" do
     it "creates a new form" do
@@ -201,6 +206,16 @@ RSpec.describe FormCopyService do
 
       it "creates a draft form document for the new form" do
         expect(copied_form.state).to eq("draft")
+      end
+    end
+
+    context "when source form is in a group" do
+      let(:group) { create(:group) }
+      let(:source_form) { create(:form, :live_with_draft) }
+
+      it "places the copied form in the same group as the original form" do
+        expect(copied_form.group).to eq(source_form.group)
+        expect(copied_form.group).to eq(group)
       end
     end
   end
