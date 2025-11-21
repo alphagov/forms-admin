@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe FormDocumentSyncService do
-  let(:service) { described_class }
+  let(:service) { described_class.new(form) }
   let(:form) { create(:form) }
 
   describe "#synchronize_form" do
@@ -12,7 +12,7 @@ RSpec.describe FormDocumentSyncService do
       context "when there is no existing form document" do
         it "creates a live form document" do
           expect {
-            service.synchronize_form(form)
+            service.synchronize_form
           }.to change(FormDocument, :count).by(1)
 
           expect(FormDocument.last).to have_attributes(form:, tag: "live", content: form.as_form_document(live_at: expected_live_at))
@@ -26,12 +26,12 @@ RSpec.describe FormDocumentSyncService do
           new_name = "new name"
           form.name = new_name
           expect {
-            service.synchronize_form(form)
+            service.synchronize_form
           }.to change { form_document.reload.content["name"] }.to(new_name)
         end
 
         it "updates the live_at date in the form document" do
-          service.synchronize_form(form)
+          service.synchronize_form
           expect(FormDocument.last["content"]).to include("live_at" => form.reload.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%6NZ"))
         end
       end
@@ -43,13 +43,13 @@ RSpec.describe FormDocumentSyncService do
 
         it "destroys the archived form document" do
           expect {
-            service.synchronize_form(form)
+            service.synchronize_form
           }.to(change { FormDocument.exists?(form:, tag: "archived") }.from(true).to(false))
         end
 
         it "creates the live form document" do
           expect {
-            service.synchronize_form(form)
+            service.synchronize_form
           }.to(change { FormDocument.exists?(form:, tag: "live") }.from(false).to(true))
         end
       end
@@ -60,7 +60,7 @@ RSpec.describe FormDocumentSyncService do
         context "when there is no existing live form document" do
           it "raises an ActiveRecord::RecordNotFound error" do
             expect {
-              service.synchronize_form(form)
+              service.synchronize_form
             }.to raise_error(ActiveRecord::RecordNotFound)
           end
         end
@@ -70,13 +70,13 @@ RSpec.describe FormDocumentSyncService do
 
           it "destroys the live form document" do
             expect {
-              service.synchronize_form(form)
+              service.synchronize_form
             }.to(change { FormDocument.exists?(form:, tag: "live") }.from(true).to(false))
           end
 
           it "creates the archived form document" do
             expect {
-              service.synchronize_form(form)
+              service.synchronize_form
             }.to(change { FormDocument.exists?(form:, tag: "archived", content: live_form_document.content) }.from(false).to(true))
           end
         end
@@ -104,7 +104,7 @@ RSpec.describe FormDocumentSyncService do
 
       it "creates a draft form document" do
         expect {
-          service.update_draft_form_document(form)
+          service.update_draft_form_document
         }.to(change { FormDocument.exists?(form:, tag: "draft") }.from(false).to(true))
       end
     end
@@ -119,7 +119,7 @@ RSpec.describe FormDocumentSyncService do
 
       it "updates the draft form document" do
         expect {
-          service.update_draft_form_document(form)
+          service.update_draft_form_document
         }.to change { form_document.reload.content["name"] }.to(new_name)
       end
 
@@ -128,7 +128,7 @@ RSpec.describe FormDocumentSyncService do
 
         it "does not modify the live form document" do
           expect {
-            service.update_draft_form_document(form)
+            service.update_draft_form_document
           }.not_to(change { live_form_document.reload.content })
         end
       end
