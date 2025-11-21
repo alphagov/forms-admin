@@ -7,7 +7,6 @@ if Settings.sentry.dsn.present?
     config.dsn = Settings.sentry.dsn
     config.breadcrumbs_logger = %i[active_support_logger http_logger]
     config.debug = true
-    config.enable_tracing = false
     config.environment = Settings.sentry.environment
     config.excluded_exceptions += %w[NotFoundError]
 
@@ -16,7 +15,25 @@ if Settings.sentry.dsn.present?
       mask: Settings.sentry.filter_mask,
     )
     config.before_send = lambda do |event, _hint|
-      filter.filter(event.to_hash)
+      if event.extra
+        event.extra = filter.filter(event.extra)
+      end
+      if event.user
+        event.user = filter.filter(event.user)
+      end
+      if event.contexts
+        event.contexts = filter.filter(event.contexts)
+      end
+
+      event
+    end
+
+    config.before_breadcrumb = lambda do |breadcrumb, _hint|
+      if breadcrumb.data
+        breadcrumb.data = filter.filter(breadcrumb.data)
+      end
+
+      breadcrumb
     end
   end
 end

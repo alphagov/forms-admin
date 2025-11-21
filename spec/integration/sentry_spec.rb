@@ -43,11 +43,11 @@ RSpec.describe "config/initializers/sentry" do
     end
 
     it "replaces the email address in the context with a mask" do
-      expect(last_sentry_event[:contexts][:user][:email]).to eq "[Filtered (client-side)]"
+      expect(last_sentry_event.contexts[:user][:email]).to eq "[Filtered (client-side)]"
     end
 
     it "keeps the rest of the context" do
-      expect(last_sentry_event[:contexts][:user][:id]).to eq "some-user-id"
+      expect(last_sentry_event.contexts[:user][:id]).to eq "some-user-id"
     end
   end
 
