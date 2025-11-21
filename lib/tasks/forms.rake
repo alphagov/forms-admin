@@ -98,31 +98,6 @@ namespace :forms do
       Rails.logger.info("Set submission_type to #{submission_type} and s3_bucket_name to #{args[:s3_bucket_name]} for form: #{args[:form_id]}")
     end
   end
-
-  desc "Check all submission email and support email are valid"
-  task check_submission_emails: :environment do
-    invalid_submission_email_count = 0
-    invalid_support_email_count = 0
-
-    Rails.logger.info "Checking submission emails and support emails"
-
-    Form.select(%i[id submission_email support_email])
-      .where.not(submission_email: nil)
-      .or(Form.where.not(support_email: nil))
-      .find_each do |form|
-        if form.submission_email.present? && !validate_email(form.submission_email)
-          Rails.logger.info "Form #{form.id} submission_email '#{form.submission_email}' is not a valid email address"
-          invalid_submission_email_count += 1
-        end
-
-        if form.support_email.present? && !validate_email(form.support_email)
-          Rails.logger.info "Form #{form.id} support_email '#{form.support_email}' is not a valid email address"
-          invalid_support_email_count += 1
-        end
-      end
-
-    Rails.logger.info "Invalid email check completed. There were #{invalid_submission_email_count} invalid submission emails and #{invalid_support_email_count} invalid support emails"
-  end
 end
 
 def move_forms(form_ids, group_id)
