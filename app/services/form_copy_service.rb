@@ -1,6 +1,6 @@
 class FormCopyService
-  TO_INCLUDE = %i[creator_id created_at updated_at creator_id].freeze
-  TO_EXCLUDE = Form::ATTRIBUTES_NOT_IN_FORM_DOCUMENT + TO_INCLUDE
+  DONT_COPY = %i[created_at updated_at support_email support_phone support_url support_url_text declaration_text privacy_policy_url what_happens_next_markdown].freeze
+  TO_EXCLUDE = Form::ATTRIBUTES_NOT_IN_FORM_DOCUMENT + DONT_COPY
 
   def initialize(form)
     @form = form
@@ -17,15 +17,20 @@ class FormCopyService
       copy_attributes(content)
       prepend_name
 
-      @copied_form.save!
       copy_pages(content["steps"])
       copy_routing_conditions(content["steps"])
 
-      @copied_form
+      @copied_form.save!
+
+      copy_group
     rescue ActiveRecord::RecordInvalid => e
       Rails.logger.error("Failed to copy form #{@form.id}: #{e.message}")
       raise
     end
+
+    Rails.logger.info("Form #{@form.id} copied to #{@copied_form.id} by #{@form.creator_id}")
+
+    @copied_form
   end
 
 private
