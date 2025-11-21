@@ -68,6 +68,10 @@ module ReportHelper
     questions.map { |question| report_questions_table_row(question) }
   end
 
+  def tag_label(tag)
+    t("reports.tag_labels.#{tag}")
+  end
+
 private
 
   def report_forms_table_row(form)
@@ -100,6 +104,8 @@ private
                    form_pages_path(form_id:)
                  when "live"
                    live_form_pages_path(form_id:)
+                 when "archived"
+                   archived_form_pages_path(form_id:)
                  else
                    raise "tag of form record '#{form['tag']}' is not expected"
                  end

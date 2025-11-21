@@ -1,11 +1,11 @@
-<% set_page_title(t("reports.#{report}.heading", tag:).upcase_first)%>
+<% set_page_title(t("reports.#{report}.heading", tag: tag_label(tag)).upcase_first)%>
 <% content_for :back_link, govuk_back_link_to(report_features_path, t("reports.back_to_feature_usage")) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l"><%= t("reports.#{report}.heading", tag:).upcase_first %></h1>
+    <h1 class="govuk-heading-l"><%= t("reports.#{report}.heading", tag: tag_label(tag)).upcase_first %></h1>
 
     <% if records.any? %>
-      <p><%=govuk_link_to(t("reports.#{report}.download_csv", tag:).upcase_first, url_for(format: :csv))%></p>
+      <p><%=govuk_link_to(t("reports.#{report}.download_csv", tag: tag_label(tag)).upcase_first, url_for(format: :csv))%></p>
     <% end %>
   </div>
 
@@ -13,7 +13,7 @@
     <% if records.any? %>
       <%= govuk_table(**report_table(records)) %>
     <% else %>
-      <p class="govuk-body"><%= t("reports.#{report}.empty", tag:) %></p>
+      <p class="govuk-body"><%= t("reports.#{report}.empty", tag: tag_label(tag)) %></p>
     <% end %>
   </div>
 </div>

@@ -118,6 +118,24 @@ RSpec.describe Reports::FormDocumentsService do
         )
       end
     end
+
+    context "when the tag is live-or-archived" do
+      let(:tag) { "live-or-archived" }
+
+      it "only includes live or archived form documents from external organisations" do
+        form_documents = described_class.form_documents(tag:)
+        expect(form_documents.map { |form_document| form_document["form_id"] })
+          .to contain_exactly(
+            form_with_no_routes.id,
+            live_with_draft_form.id,
+            branch_route_form.id,
+            basic_route_form.id,
+            form_with_2_branch_routes.id,
+            archived_form.id,
+            archived_with_draft_form.id,
+          )
+      end
+    end
   end
 
   describe ".has_secondary_skip_routes?" do

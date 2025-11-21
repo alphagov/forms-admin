@@ -531,6 +531,12 @@ RSpec.describe ReportsController, type: :request do
     end
 
     describe "#live_forms_csv" do
+      let(:forms) do
+        live_forms = create_list(:form, 2, :live)
+        archived_form = create(:form, :archived)
+        [*live_forms, archived_form]
+      end
+
       before do
         login_as_super_admin_user
 
@@ -548,7 +554,7 @@ RSpec.describe ReportsController, type: :request do
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
         expect(csv.headers).to eq Reports::FormsCsvReportService::FORM_CSV_HEADERS
-        expect(csv.length).to eq 4
+        expect(csv.length).to eq 3
       end
     end
 
@@ -642,6 +648,12 @@ RSpec.describe ReportsController, type: :request do
     end
 
     describe "#live_questions_csv" do
+      let(:forms) do
+        live_forms = create_list(:form, 2, :live, pages_count: 3)
+        archived_form = create(:form, :archived, pages_count: 2)
+        [*live_forms, archived_form]
+      end
+
       before do
         login_as_super_admin_user
 
@@ -659,7 +671,7 @@ RSpec.describe ReportsController, type: :request do
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
         expect(csv.headers).to eq Reports::QuestionsCsvReportService::QUESTIONS_CSV_HEADERS
-        expect(csv.length).to eq 20
+        expect(csv.length).to eq 8
       end
     end
 

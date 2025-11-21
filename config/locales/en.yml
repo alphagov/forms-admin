@@ -1601,8 +1601,8 @@ en:
         name: Name
       title: Users interested in research
     csv_downloads:
-      live_forms: Download data about all live forms as a CSV file
-      live_questions: Download all questions in live forms as a CSV file
+      forms: Download data about all live or archived forms as a CSV file
+      questions: Download all questions in live or archived forms as a CSV file
       title: Download form data as a CSV file
     features:
       answer_types:
@@ -1699,6 +1699,10 @@ en:
           view_questions: Questions where you can select one from up to 30 options
         title: Selection from a list of options answer type usage in live forms
         with_none_of_the_above: Questions with ‘None of the above’
+    tag_labels:
+      draft: draft
+      live: live
+      live-or-archived: live or archived
     users:
       heading: Number of users per organisation
       table_headings:
