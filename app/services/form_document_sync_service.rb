@@ -1,6 +1,10 @@
 class FormDocumentSyncService
   attr_reader :form
 
+  DRAFT_TAG = "draft".freeze
+  LIVE_TAG = "live".freeze
+  ARCHIVED_TAG = "archived".freeze
+
   def initialize(form)
     @form = form
   end
@@ -15,21 +19,21 @@ class FormDocumentSyncService
   end
 
   def update_draft_form_document
-    update_or_create_form_document("draft", form.as_form_document)
+    update_or_create_form_document(DRAFT_TAG, form.as_form_document)
   end
 
 private
 
   def sync_live_form
     content = form.as_form_document(live_at: form.updated_at)
-    update_or_create_form_document("live", content)
-    delete_form_documents("archived")
+    update_or_create_form_document(LIVE_TAG, content)
+    delete_form_documents(ARCHIVED_TAG)
   end
 
   def sync_archived_form
-    live_form_document = FormDocument.find_by!(form:, tag: "live")
-    update_or_create_form_document("archived", live_form_document.content)
-    delete_form_documents("live")
+    live_form_document = FormDocument.find_by!(form:, tag: LIVE_TAG)
+    update_or_create_form_document(ARCHIVED_TAG, live_form_document.content)
+    delete_form_documents(LIVE_TAG)
   end
 
   def update_or_create_form_document(tag, content)
