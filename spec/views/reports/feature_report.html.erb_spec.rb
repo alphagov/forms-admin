@@ -34,7 +34,7 @@ describe "reports/feature_report" do
     end
 
     it "has a link to download the CSV" do
-      expect(rendered).to have_link("Download data about all live forms with CSV submission email attachments enabled as a CSV file", href: report_forms_with_csv_submission_email_attachments_path(format: :csv))
+      expect(rendered).to have_link("Download data about all live forms with CSV submission email attachments enabled (as a CSV)", href: report_forms_with_csv_submission_email_attachments_path(format: :csv))
     end
 
     describe "forms table" do

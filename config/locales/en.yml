@@ -1643,7 +1643,7 @@ en:
       empty: There are no %{tag} forms with branch routes
       heading: "%{tag} forms with branch routes"
     forms_with_csv_submission_email_attachments:
-      download_csv: Download data about all %{tag} forms with CSV submission email attachments enabled as a CSV file
+      download_csv: Download data about all %{tag} forms with CSV submission email attachments enabled (as a CSV)
       empty: There are no %{tag} forms with CSV submission email attachments enabled
       heading: "%{tag} forms with CSV submission email attachments enabled"
     forms_with_exit_pages:
@@ -1651,7 +1651,7 @@ en:
       empty: There are no %{tag} forms with exit pages
       heading: "%{tag} forms with exit pages"
     forms_with_json_submission_email_attachments:
-      download_csv: Download data about all %{tag} forms with JSON submission email attachments enabled as a CSV file
+      download_csv: Download data about all %{tag} forms with JSON submission email attachments enabled (as a CSV)
       empty: There are no %{tag} forms with JSON submission email attachments enabled
       heading: "%{tag} forms with JSON submission email attachments enabled"
     forms_with_payments:
@@ -1663,7 +1663,7 @@ en:
       empty: There are no %{tag} forms with routes
       heading: "%{tag} forms with routes"
     forms_with_s3_submissions:
-      download_csv: Download data about all %{tag} forms with S3 submissions enabled as a CSV file
+      download_csv: Download data about all %{tag} forms with S3 submissions enabled (as a CSV)
       empty: There are no %{tag} forms with S3 submissions enabled
       heading: "%{tag} forms with S3 submissions enabled"
     index:
