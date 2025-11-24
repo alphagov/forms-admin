@@ -44,6 +44,10 @@ class Reports::FormDocumentsService
       form_document["content"]["submission_type"] == "email" && form_document["content"]["submission_format"].include?("csv")
     end
 
+    def has_json_submission_email_attachments(form_document)
+      form_document["content"]["submission_type"] == "email" && form_document["content"]["submission_format"].include?("json")
+    end
+
     def has_exit_pages?(form_document)
       form_document["content"]["steps"].any? do |step|
         step["routing_conditions"].any? do |condition|

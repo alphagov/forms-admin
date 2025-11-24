@@ -31,6 +31,10 @@
         <%= row.with_value(text: govuk_link_to(data[:forms_with_csv_submission_email_attachments], report_forms_with_csv_submission_email_attachments_path, no_visited_state: true)) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".features.forms_with_json_submission_email_attachments", tag: tag_label(tag)).upcase_first) %>
+        <%= row.with_value(text: govuk_link_to(data[:forms_with_json_submission_email_attachments], report_forms_with_json_submission_email_attachments_path, no_visited_state: true)) %>
+      <% end %>
+      <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".features.forms_with_exit_pages", tag: tag_label(tag)).upcase_first) %>
         <%= row.with_value(text: govuk_link_to(data[:forms_with_exit_pages], report_forms_with_exit_pages_path, no_visited_state: true)) %>
       <% end %>

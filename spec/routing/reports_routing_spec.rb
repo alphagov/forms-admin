@@ -45,6 +45,14 @@ RSpec.describe ReportsController, type: :routing do
             expect(get: "/reports/features/#{tag}/forms-with-csv-submission-email-attachments.csv").to route_to("reports#forms_with_csv_submission_email_attachments", tag:, format: "csv")
           end
 
+          it "routes to #forms_with_json_submission_email_attachments for #{tag} forms" do
+            expect(get: "/reports/features/#{tag}/forms-with-json-submission-email-attachments").to route_to("reports#forms_with_json_submission_email_attachments", tag:)
+          end
+
+          it "routes to #forms_with_json_submission_email_attachments for #{tag} forms with csv format" do
+            expect(get: "/reports/features/#{tag}/forms-with-json-submission-email-attachments.csv").to route_to("reports#forms_with_json_submission_email_attachments", tag:, format: "csv")
+          end
+
           it "routes to #forms_with_branch_routes for #{tag} forms" do
             expect(get: "/reports/features/#{tag}/forms-with-branch-routes").to route_to("reports#forms_with_branch_routes", tag:)
           end

@@ -32,6 +32,7 @@ describe "reports/features.html.erb" do
       forms_with_routing: 2,
       forms_with_add_another_answer: 3,
       forms_with_csv_submission_email_attachments: 2,
+      forms_with_json_submission_email_attachments: 4,
       forms_with_exit_pages: 1,
     }
   end
@@ -121,6 +122,10 @@ describe "reports/features.html.erb" do
 
   it "includes the number of live forms with CSV email attachments" do
     expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with CSV email attachments#{report[:forms_with_csv_submission_email_attachments]}")
+  end
+
+  it "includes the number of live forms with JSON email attachments" do
+    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with JSON email attachments#{report[:forms_with_json_submission_email_attachments]}")
   end
 
   it "includes the number of live forms with exit pages" do

@@ -26,7 +26,7 @@ RSpec.describe Reports::FeatureReportService do
     ])
   end
   let(:form_with_a_few_answer_types) do
-    create(:form, :live, pages: [
+    create(:form, :live, submission_type: "email", submission_format: %w[csv json], pages: [
       create(:page, answer_type: "email"),
       *create_list(:page, 3, answer_type: "name"),
     ])
@@ -61,7 +61,8 @@ RSpec.describe Reports::FeatureReportService do
         forms_with_routing: 2,
         forms_with_branch_routing: 1,
         forms_with_add_another_answer: 1,
-        forms_with_csv_submission_enabled: 1,
+        forms_with_csv_submission_email_attachments: 2,
+        forms_with_json_submission_email_attachments: 1,
         forms_with_answer_type: {
           "address" => 1,
           "date" => 1,
@@ -309,6 +310,26 @@ RSpec.describe Reports::FeatureReportService do
           "form_id" => form_with_all_answer_types.id,
           "content" => a_hash_including(
             "name" => form_with_all_answer_types.name,
+          ),
+        ),
+        a_hash_including(
+          "form_id" => form_with_a_few_answer_types.id,
+          "content" => a_hash_including(
+            "name" => form_with_a_few_answer_types.name,
+          ),
+        ),
+      ]
+    end
+  end
+
+  describe "#forms_with_json_submission_email_attachments" do
+    it "returns live forms with json enabled" do
+      forms = described_class.new(form_documents).forms_with_json_submission_email_attachments
+      expect(forms).to match [
+        a_hash_including(
+          "form_id" => form_with_a_few_answer_types.id,
+          "content" => a_hash_including(
+            "name" => form_with_a_few_answer_types.name,
           ),
         ),
       ]

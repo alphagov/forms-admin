@@ -225,6 +225,7 @@ Rails.application.routes.draw do
       get "forms-with-branch-routes", to: "reports#forms_with_branch_routes", as: :report_forms_with_branch_routes
       get "forms-with-payments", to: "reports#forms_with_payments", as: :report_forms_with_payments
       get "forms-with-csv-submission-email-attachments", to: "reports#forms_with_csv_submission_email_attachments", as: :report_forms_with_csv_submission_email_attachments
+      get "forms-with-json-submission-email-attachments", to: "reports#forms_with_json_submission_email_attachments", as: :report_forms_with_json_submission_email_attachments
       get "forms-with-exit-pages", to: "reports#forms_with_exit_pages", as: :report_forms_with_exit_pages
     end
 
