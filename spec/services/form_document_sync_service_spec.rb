@@ -78,6 +78,18 @@ RSpec.describe FormDocumentSyncService do
         }.to(change { FormDocument.exists?(form:, tag: "archived", content: live_form_document.content) }.from(false).to(true))
       end
     end
+
+    context "when there is an existing archived form document" do
+      before do
+        create :form_document, :live, form:, content: "live content"
+        create :form_document, :archived, form:, content: "old archived content"
+      end
+
+      it "replaces the archived form document" do
+        service.synchronize_archived_form
+        expect(FormDocument.find_by!(form:, tag: "archived").content).to eq("live content")
+      end
+    end
   end
 
   describe "#update_draft_form_document" do
