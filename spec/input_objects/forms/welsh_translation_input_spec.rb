@@ -63,6 +63,8 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
     end
 
     # TODO: add tests for form attribute presence validation
+
+    # TODO: test that presence is only required if mark_complete is true
   end
 
   describe "#submit" do

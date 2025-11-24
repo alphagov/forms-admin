@@ -16,15 +16,15 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   attribute :what_happens_next_markdown_cy
   attribute :payment_url_cy
 
-  validates :name_cy, presence: true
-  validates :privacy_policy_url_cy, presence: true, if: -> { form.privacy_policy_url.present? }
-  validates :support_email_cy, presence: true, if: -> { form_has_support_email? }
-  validates :support_phone_cy, presence: true, if: -> { form_has_support_phone? }
-  validates :support_url_cy, presence: true, if: -> { form_has_support_url? }
-  validates :support_url_text_cy, presence: true, if: -> { form_has_support_url? }
-  validates :declaration_text_cy, presence: true, if: -> { form_has_declaration? }
-  validates :what_happens_next_markdown_cy, presence: true, if: -> { form.what_happens_next_markdown.present? }
-  validates :payment_url_cy, presence: true, if: -> { form_has_payment_url? }
+  validates :name_cy, presence: true, if: -> { form_marked_complete? }
+  validates :privacy_policy_url_cy, presence: true, if: -> { form_marked_complete? && form.privacy_policy_url.present? }
+  validates :support_email_cy, presence: true, if: -> { form_marked_complete? && form_has_support_email? }
+  validates :support_phone_cy, presence: true, if: -> { form_marked_complete? && form_has_support_phone? }
+  validates :support_url_cy, presence: true, if: -> { form_marked_complete? && form_has_support_url? }
+  validates :support_url_text_cy, presence: true, if: -> { form_marked_complete? && form_has_support_url? }
+  validates :declaration_text_cy, presence: true, if: -> { form_marked_complete? && form_has_declaration? }
+  validates :what_happens_next_markdown_cy, presence: true, if: -> { form_marked_complete? && form.what_happens_next_markdown.present? }
+  validates :payment_url_cy, presence: true, if: -> { form_marked_complete? && form_has_payment_url? }
 
   def submit
     return false if invalid?
@@ -99,5 +99,9 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
 
   def form_has_privacy_information?
     form.privacy_policy_url.present?
+  end
+
+  def form_marked_complete?
+    mark_complete == "true"
   end
 end
