@@ -329,6 +329,36 @@ RSpec.describe ReportsController, type: :request do
     end
   end
 
+  describe "#forms_with_s3_submissions" do
+    let(:path) { report_forms_with_s3_submissions_path(tag: :live) }
+    let(:form) { create(:form, :live, submission_type: "s3", submission_format: %w[json]) }
+    let(:forms) { [form] }
+
+    include_examples "unauthorized user is forbidden"
+
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+
+        get path
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the features report view" do
+        expect(response).to render_template("reports/feature_report")
+      end
+
+      it "includes the report data" do
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[1]", text: "Form name"
+        expect(node).to have_xpath "//tbody/tr[1]/td[1]", text: form.name
+      end
+    end
+  end
+
   describe "#users" do
     let(:path) { report_users_path }
 

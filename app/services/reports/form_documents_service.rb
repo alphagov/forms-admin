@@ -48,6 +48,10 @@ class Reports::FormDocumentsService
       form_document["content"]["submission_type"] == "email" && form_document["content"]["submission_format"].include?("json")
     end
 
+    def has_s3_submissions(form_document)
+      form_document["content"]["submission_type"] == "s3"
+    end
+
     def has_exit_pages?(form_document)
       form_document["content"]["steps"].any? do |step|
         step["routing_conditions"].any? do |condition|

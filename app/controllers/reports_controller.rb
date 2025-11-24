@@ -83,6 +83,14 @@ class ReportsController < WebController
     forms_feature_report(tag, params[:action], forms)
   end
 
+  def forms_with_s3_submissions
+    tag = params[:tag]
+    forms = Reports::FormDocumentsService.form_documents(tag:)
+    forms = Reports::FeatureReportService.new(forms).forms_with_s3_submissions
+
+    forms_feature_report(tag, params[:action], forms)
+  end
+
   def users
     data = Reports::UsersReportService.new.user_data
 

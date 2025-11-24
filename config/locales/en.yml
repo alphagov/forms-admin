@@ -1625,6 +1625,7 @@ en:
         forms_with_json_submission_email_attachments: "%{tag} forms with JSON email attachments"
         forms_with_payments: "%{tag} forms with payments"
         forms_with_routes: "%{tag} forms with routes"
+        forms_with_s3_submissions: "%{tag} forms with S3 submissions"
         heading: Feature usage
         total_forms: Total %{tag} forms
       long_list_usage:
@@ -1661,6 +1662,10 @@ en:
       download_csv: Download data about all %{tag} forms with routes as a CSV file
       empty: There are no %{tag} forms with routes
       heading: "%{tag} forms with routes"
+    forms_with_s3_submissions:
+      download_csv: Download data about all %{tag} forms with S3 submissions enabled as a CSV file
+      empty: There are no %{tag} forms with S3 submissions enabled
+      heading: "%{tag} forms with S3 submissions enabled"
     index:
       title: Reports
     last_signed_in_at:
