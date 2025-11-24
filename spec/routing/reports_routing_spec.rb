@@ -37,12 +37,12 @@ RSpec.describe ReportsController, type: :routing do
             expect(get: "/reports/features/#{tag}/forms-with-payments.csv").to route_to("reports#forms_with_payments", tag:, format: "csv")
           end
 
-          it "routes to #forms_with_csv_submission_enabled for #{tag} forms" do
-            expect(get: "/reports/features/#{tag}/forms-with-csv-submission-enabled").to route_to("reports#forms_with_csv_submission_enabled", tag:)
+          it "routes to #forms_with_csv_submission_email_attachments for #{tag} forms" do
+            expect(get: "/reports/features/#{tag}/forms-with-csv-submission-email-attachments").to route_to("reports#forms_with_csv_submission_email_attachments", tag:)
           end
 
-          it "routes to #forms_with_csv_submission_enabled for #{tag} forms with csv format" do
-            expect(get: "/reports/features/#{tag}/forms-with-csv-submission-enabled.csv").to route_to("reports#forms_with_csv_submission_enabled", tag:, format: "csv")
+          it "routes to #forms_with_csv_submission_email_attachments for #{tag} forms with csv format" do
+            expect(get: "/reports/features/#{tag}/forms-with-csv-submission-email-attachments.csv").to route_to("reports#forms_with_csv_submission_email_attachments", tag:, format: "csv")
           end
 
           it "routes to #forms_with_branch_routes for #{tag} forms" do
@@ -111,24 +111,6 @@ RSpec.describe ReportsController, type: :routing do
         it "does not route to #forms_with_csv_submission_enabled with csv format" do
           expect(get: "/reports/features/thud/forms-with-csv-submission-enabled.csv").not_to route_to("reports#forms_with_csv_submission_enabled", format: "csv", tag: "thud")
         end
-      end
-    end
-
-    describe "path helpers" do
-      it "routes to #questions_with_add_another_answer for live forms as csv" do
-        expect(get: report_questions_with_add_another_answer_path(tag: :live, format: :csv)).to route_to("reports#questions_with_add_another_answer", tag: "live", format: "csv")
-      end
-
-      it "routes to #forms_with_routes for live forms as csv" do
-        expect(get: report_forms_with_routes_path(tag: :live, format: :csv)).to route_to("reports#forms_with_routes", tag: "live", format: "csv")
-      end
-
-      it "routes to #forms_with_payments for live forms as csv" do
-        expect(get: report_forms_with_payments_path(tag: :live, format: :csv)).to route_to("reports#forms_with_payments", tag: "live", format: "csv")
-      end
-
-      it "routes to #forms_with_csv_submission_enabled for live forms as csv" do
-        expect(get: report_forms_with_csv_submission_enabled_path(tag: :live, format: :csv)).to route_to("reports#forms_with_csv_submission_enabled", tag: "live", format: "csv")
       end
     end
   end

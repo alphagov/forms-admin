@@ -269,8 +269,8 @@ RSpec.describe ReportsController, type: :request do
     end
   end
 
-  describe "#forms_with_csv_submission_enabled" do
-    let(:path) { report_forms_with_csv_submission_enabled_path(tag: :live) }
+  describe "#forms_with_csv_submission_email_attachments" do
+    let(:path) { report_forms_with_csv_submission_email_attachments_path(tag: :live) }
     let(:form) { create(:form, :live, submission_type: "email", submission_format: %w[csv]) }
     let(:forms) { [form] }
 

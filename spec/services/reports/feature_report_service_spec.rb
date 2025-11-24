@@ -301,9 +301,9 @@ RSpec.describe Reports::FeatureReportService do
     end
   end
 
-  describe "#forms_with_csv_submission_enabled" do
+  describe "#forms_with_csv_submission_email_attachments" do
     it "returns live forms with csv enabled" do
-      forms = described_class.new(form_documents).forms_with_csv_submission_enabled
+      forms = described_class.new(form_documents).forms_with_csv_submission_email_attachments
       expect(forms).to match [
         a_hash_including(
           "form_id" => form_with_all_answer_types.id,

@@ -27,8 +27,8 @@
         <%= row.with_value(text: govuk_link_to(data[:forms_with_add_another_answer], report_questions_with_add_another_answer_path, no_visited_state: true)) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: t(".features.forms_with_csv_submission_enabled", tag: tag_label(tag)).upcase_first) %>
-        <%= row.with_value(text: govuk_link_to(data[:forms_with_csv_submission_enabled], report_forms_with_csv_submission_enabled_path, no_visited_state: true)) %>
+        <%= row.with_key(text: t(".features.forms_with_csv_submission_email_attachments", tag: tag_label(tag)).upcase_first) %>
+        <%= row.with_value(text: govuk_link_to(data[:forms_with_csv_submission_email_attachments], report_forms_with_csv_submission_email_attachments_path, no_visited_state: true)) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".features.forms_with_exit_pages", tag: tag_label(tag)).upcase_first) %>

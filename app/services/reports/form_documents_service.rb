@@ -40,8 +40,8 @@ class Reports::FormDocumentsService
       form_document["content"]["payment_url"].present?
     end
 
-    def has_csv_submission_enabled?(form_document)
-      form_document["content"]["submission_format"].include? "csv"
+    def has_csv_submission_email_attachments(form_document)
+      form_document["content"]["submission_type"] == "email" && form_document["content"]["submission_format"].include?("csv")
     end
 
     def has_exit_pages?(form_document)

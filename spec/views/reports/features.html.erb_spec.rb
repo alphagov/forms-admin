@@ -31,7 +31,7 @@ describe "reports/features.html.erb" do
       forms_with_payment: 1,
       forms_with_routing: 2,
       forms_with_add_another_answer: 3,
-      forms_with_csv_submission_enabled: 2,
+      forms_with_csv_submission_email_attachments: 2,
       forms_with_exit_pages: 1,
     }
   end
@@ -94,7 +94,7 @@ describe "reports/features.html.erb" do
         forms_with_payment: 1,
         forms_with_routing: 2,
         forms_with_add_another_answer: 3,
-        forms_with_csv_submission_enabled: 2,
+        forms_with_csv_submission_email_attachments: 2,
       }
     end
 
@@ -119,8 +119,8 @@ describe "reports/features.html.erb" do
     expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with add another answer#{report[:forms_with_add_another_answer]}")
   end
 
-  it "includes the number of live forms with CSV submission enabled" do
-    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with CSV submission enabled#{report[:forms_with_csv_submission_enabled]}")
+  it "includes the number of live forms with CSV email attachments" do
+    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with CSV email attachments#{report[:forms_with_csv_submission_email_attachments]}")
   end
 
   it "includes the number of live forms with exit pages" do
