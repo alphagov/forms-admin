@@ -19,6 +19,10 @@
         <%= row.with_value(text: govuk_link_to(data[:forms_with_branch_routing], report_forms_with_branch_routes_path, no_visited_state: true)) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".features.forms_with_exit_pages", tag: tag_label(tag)).upcase_first) %>
+        <%= row.with_value(text: govuk_link_to(data[:forms_with_exit_pages], report_forms_with_exit_pages_path, no_visited_state: true)) %>
+      <% end %>
+      <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".features.forms_with_payments", tag: tag_label(tag)).upcase_first) %>
         <%= row.with_value(text: govuk_link_to(data[:forms_with_payment], report_forms_with_payments_path, no_visited_state: true)) %>
       <% end %>
@@ -37,10 +41,6 @@
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".features.forms_with_s3_submissions", tag: tag_label(tag)).upcase_first) %>
         <%= row.with_value(text: govuk_link_to(data[:forms_with_s3_submissions], report_forms_with_s3_submissions_path, no_visited_state: true)) %>
-      <% end %>
-      <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: t(".features.forms_with_exit_pages", tag: tag_label(tag)).upcase_first) %>
-        <%= row.with_value(text: govuk_link_to(data[:forms_with_exit_pages], report_forms_with_exit_pages_path, no_visited_state: true)) %>
       <% end %>
     <% end %>
 
