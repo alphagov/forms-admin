@@ -10,15 +10,19 @@ class FormDocumentSyncService
   end
 
   def synchronize_live_form
-    content = form.as_form_document(live_at: form.updated_at)
-    update_or_create_form_document(LIVE_TAG, content)
-    delete_form_documents(ARCHIVED_TAG)
+    FormDocument.transaction do
+      content = form.as_form_document(live_at: form.updated_at)
+      update_or_create_form_document(LIVE_TAG, content)
+      delete_form_documents(ARCHIVED_TAG)
+    end
   end
 
   def synchronize_archived_form
-    live_form_document = FormDocument.find_by!(form:, tag: LIVE_TAG)
-    update_or_create_form_document(ARCHIVED_TAG, live_form_document.content)
-    delete_form_documents(LIVE_TAG)
+    FormDocument.transaction do
+      live_form_document = FormDocument.find_by!(form:, tag: LIVE_TAG)
+      update_or_create_form_document(ARCHIVED_TAG, live_form_document.content)
+      delete_form_documents(LIVE_TAG)
+    end
   end
 
   def update_draft_form_document

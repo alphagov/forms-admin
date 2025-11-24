@@ -51,6 +51,19 @@ RSpec.describe FormDocumentSyncService do
           service.synchronize_live_form
         }.to(change { FormDocument.exists?(form:, tag: "live") }.from(false).to(true))
       end
+
+      context "and deleting the archived FormDocument fails" do
+        before do
+          allow(service).to receive(:delete_form_documents).with(FormDocumentSyncService::ARCHIVED_TAG)
+            .and_raise(ActiveRecord::StatementInvalid)
+        end
+
+        it "does not create the live FormDocument" do
+          expect {
+            service.synchronize_live_form
+          }.to raise_error(ActiveRecord::StatementInvalid).and not_change(FormDocument, :count)
+        end
+      end
     end
   end
 
@@ -88,6 +101,19 @@ RSpec.describe FormDocumentSyncService do
       it "replaces the archived form document" do
         service.synchronize_archived_form
         expect(FormDocument.find_by!(form:, tag: "archived").content).to eq("live content")
+      end
+
+      context "and deleting the live FormDocument fails" do
+        before do
+          allow(service).to receive(:delete_form_documents).with(FormDocumentSyncService::LIVE_TAG)
+            .and_raise(ActiveRecord::StatementInvalid)
+        end
+
+        it "does not change the archived FormDocument" do
+          expect {
+            service.synchronize_archived_form
+          }.to raise_error(ActiveRecord::StatementInvalid).and(not_change { form.reload.archived_form_document.content })
+        end
       end
     end
   end
