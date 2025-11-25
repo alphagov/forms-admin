@@ -427,7 +427,7 @@ RSpec.describe Form, type: :model do
       it "calls FormDocumentSyncService" do
         sync_service_instance = instance_double(FormDocumentSyncService)
         allow(FormDocumentSyncService).to receive(:new).with(form).and_return(sync_service_instance)
-        expect(sync_service_instance).to receive(:synchronize_form)
+        expect(sync_service_instance).to receive(:synchronize_live_form)
         expect(sync_service_instance).to receive(:update_draft_form_document)
         form.make_live!
       end
@@ -443,7 +443,7 @@ RSpec.describe Form, type: :model do
       it "calls FormDocumentSyncService" do
         sync_service_instance = instance_double(FormDocumentSyncService)
         allow(FormDocumentSyncService).to receive(:new).with(form).and_return(sync_service_instance)
-        expect(sync_service_instance).to receive(:synchronize_form)
+        expect(sync_service_instance).to receive(:synchronize_archived_form)
         expect(sync_service_instance).to receive(:update_draft_form_document)
 
         form.archive_live_form!

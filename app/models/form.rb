@@ -233,8 +233,10 @@ private
   end
 
   def after_make_live
-    FormDocumentSyncService.new(self).synchronize_form
+    FormDocumentSyncService.new(self).synchronize_live_form
   end
 
-  alias_method :after_archive, :after_make_live
+  def after_archive
+    FormDocumentSyncService.new(self).synchronize_archived_form
+  end
 end
