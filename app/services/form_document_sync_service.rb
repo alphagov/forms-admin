@@ -33,7 +33,7 @@ private
     form_document.save!
   end
 
-  def delete_form_documents(tag)
+  def delete_form_documents_by_tag(tag)
     FormDocument.where(form:, tag:).delete_all
   end
 end
