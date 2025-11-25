@@ -6,7 +6,7 @@ RSpec.describe FormDocumentSyncService do
 
   describe "#synchronize_live_form" do
     let!(:form) { create(:form, state: "live") }
-    let(:expected_live_at) { form.reload.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%6NZ") }
+    let(:expected_live_at) { form.reload.updated_at.as_json }
 
     context "when there is no existing form document" do
       it "creates a live form document" do
@@ -31,7 +31,7 @@ RSpec.describe FormDocumentSyncService do
 
       it "updates the live_at date in the form document" do
         service.synchronize_live_form
-        expect(FormDocument.last["content"]).to include("live_at" => form.reload.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%6NZ"))
+        expect(FormDocument.last["content"]).to include("live_at" => form.reload.updated_at.as_json)
       end
     end
 
