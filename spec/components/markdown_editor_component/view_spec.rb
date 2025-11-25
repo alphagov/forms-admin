@@ -131,14 +131,14 @@ RSpec.describe MarkdownEditorComponent::View, type: :component do
 
   describe "allowed_formats" do
     it "returns the allowed formats including headings" do
-      expect(markdown_editor.allowed_formats).to eq(%w[links headings bulleted_lists numbered_lists])
+      expect(markdown_editor.allowed_formats).to eq(%w[links headings bulleted_lists numbered_lists new_lines_and_paragraphs])
     end
 
     context "when headings are not allowed" do
       let(:allow_headings) { false }
 
       it "returns the allowed formats without headings" do
-        expect(markdown_editor.allowed_formats).to eq(%w[links bulleted_lists numbered_lists])
+        expect(markdown_editor.allowed_formats).to eq(%w[links bulleted_lists numbered_lists new_lines_and_paragraphs])
       end
     end
   end

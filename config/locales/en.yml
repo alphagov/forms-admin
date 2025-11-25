@@ -1159,6 +1159,12 @@ en:
         example: "[Link text](https://www.gov.uk/link-text-url)"
         heading: Links and URLs
         instructions: 'To add a link, use square brackets [ ] around the link text, and round brackets ( ) around the full URL. Make sure there are no spaces between the two sets of brackets. For example:'
+      new_lines_and_paragraphs:
+        heading: New lines and paragraphs
+        instructions: |
+          To start a new paragraph, press Enter or Return twice.
+
+          To start a piece of text on the next line without starting a new paragraph, add 2 spaces then press Enter or Return.
       numbered_lists:
         example: |
           1. First item
