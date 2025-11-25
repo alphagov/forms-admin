@@ -1,10 +1,13 @@
 class FormCopyService
+  include LoggingHelper
+
   DONT_COPY = %i[created_at updated_at submission_email].freeze
   TO_EXCLUDE = Form::ATTRIBUTES_NOT_IN_FORM_DOCUMENT + DONT_COPY
 
-  def initialize(form)
+  def initialize(form, logged_in_user)
     @form = form
     @copied_form = Form.new
+    @logged_in_user = logged_in_user
   end
 
   def copy(tag: "draft")
@@ -27,7 +30,7 @@ class FormCopyService
       raise
     end
 
-    Rails.logger.info("Form #{@form.id} copied to #{@copied_form.id} by #{@form.creator_id}")
+    log_form_copied(original_form_id: @form.id, copied_form_id: @copied_form.id, creator_id: @logged_in_user.id)
 
     @copied_form
   end

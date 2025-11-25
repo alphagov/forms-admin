@@ -4,7 +4,8 @@ RSpec.describe FormCopyService do
   let(:group) { create(:group) }
   let(:source_form) { create(:form, :live_with_draft) }
   let(:source_form_document) { FormDocument.find_by(form_id: source_form.id) }
-  let(:copied_form) { described_class.new(source_form).copy(tag: "live") }
+  let(:logged_in_user) { create(:user) }
+  let(:copied_form) { described_class.new(source_form, logged_in_user).copy(tag: "live") }
 
   before do
     GroupForm.create!(form: source_form, group: group)
