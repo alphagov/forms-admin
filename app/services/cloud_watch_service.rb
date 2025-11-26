@@ -4,24 +4,17 @@ class CloudWatchService
   A_DAY = 86_400
   METRICS_NAMESPACE = "Forms".freeze
 
-  attr_reader :form_id, :made_live_date
+  attr_reader :form_id
 
-  def initialize(form_id, made_live_date)
+  def initialize(form_id)
     @form_id = form_id
-    @made_live_date = made_live_date
   end
 
   def metrics_data
     return nil unless Settings.cloudwatch_metrics_enabled
-    return nil if made_live_date.nil?
 
-    # If the form went live today, there won't be any metrics to show
-    today = Time.zone.today
-
-    form_is_new = made_live_date == today
-
-    weekly_submissions = form_is_new ? 0 : week_submissions(form_id:)
-    weekly_starts = form_is_new ? 0 : week_starts(form_id:)
+    weekly_submissions = week_submissions(form_id:)
+    weekly_starts = week_starts(form_id:)
 
     {
       weekly_submissions:,
@@ -35,8 +28,6 @@ class CloudWatchService
   end
 
   def daily_metrics_data
-    return nil if made_live_date.nil?
-
     {
       submissions: daily_submissions(form_id:),
       starts: daily_starts(form_id:),

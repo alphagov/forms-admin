@@ -1,11 +1,10 @@
 require "rails_helper"
 
 describe CloudWatchService do
-  subject(:cloud_watch_service) { described_class.new(form_id, made_live_date) }
+  subject(:cloud_watch_service) { described_class.new(form_id) }
 
   let(:forms_env) { "test" }
   let(:form_id) { 3 }
-  let(:made_live_date) { live_at.to_date }
   let(:live_at) { Time.zone.now - 1.day }
 
   let(:cloud_watch_client) { Aws::CloudWatch::Client.new(stub_responses: true) }
@@ -148,19 +147,6 @@ describe CloudWatchService do
       end
     end
 
-    context "when the form was made today" do
-      let(:live_at) { Time.zone.now }
-
-      it "returns 0 weekly submissions" do
-        expect(cloud_watch_service.metrics_data).to eq({ weekly_submissions: 0, weekly_starts: 0 })
-      end
-
-      it "does not call CloudWatch" do
-        cloud_watch_service.metrics_data
-        expect(cloud_watch_client).not_to have_received(:get_metric_statistics)
-      end
-    end
-
     context "when AWS credentials have not been configured" do
       before do
         allow(Sentry).to receive(:capture_exception)
@@ -197,14 +183,6 @@ describe CloudWatchService do
       it "does not call CloudWatch" do
         cloud_watch_service.metrics_data
         expect(cloud_watch_client).not_to have_received(:get_metric_statistics)
-      end
-    end
-
-    context "when the made_live_date is nil" do
-      let(:made_live_date) { nil }
-
-      it "returns nil" do
-        expect(cloud_watch_service.metrics_data).to be_nil
       end
     end
   end
@@ -347,14 +325,6 @@ describe CloudWatchService do
         it "returns an empty array for the full starts" do
           expect(cloud_watch_service.daily_metrics_data[:starts]).to eq([])
         end
-      end
-    end
-
-    context "when the made_live_date is nil" do
-      let(:made_live_date) { nil }
-
-      it "returns nil" do
-        expect(cloud_watch_service.daily_metrics_data).to be_nil
       end
     end
   end
