@@ -16,7 +16,7 @@ describe CloudWatchService do
     allow(Aws::CloudWatch::Client).to receive(:new).and_return(cloud_watch_client)
   end
 
-  describe "#metrics_data" do
+  describe "#past_week_metrics_data" do
     let(:submitted_datapoints) { [{ sum: total_submissions }] }
     let(:total_submissions) { 3.0 }
 
@@ -95,11 +95,11 @@ describe CloudWatchService do
           unit: "Count",
         }).once
 
-        cloud_watch_service.metrics_data
+        cloud_watch_service.past_week_metrics_data
       end
 
       it "returns the week submissions total" do
-        expect(cloud_watch_service.metrics_data[:weekly_submissions]).to eq(total_submissions)
+        expect(cloud_watch_service.past_week_metrics_data[:weekly_submissions]).to eq(total_submissions)
       end
 
       it "calls the CloudWatch client to get the started metrics" do
@@ -123,11 +123,11 @@ describe CloudWatchService do
           unit: "Count",
         }).once
 
-        cloud_watch_service.metrics_data
+        cloud_watch_service.past_week_metrics_data
       end
 
       it "returns the week starts total" do
-        expect(cloud_watch_service.metrics_data[:weekly_starts]).to eq(total_starts)
+        expect(cloud_watch_service.past_week_metrics_data[:weekly_starts]).to eq(total_starts)
       end
     end
 
@@ -135,7 +135,7 @@ describe CloudWatchService do
       let(:submitted_datapoints) { [] }
 
       it "returns 0 for the weekly submissions total" do
-        expect(cloud_watch_service.metrics_data[:weekly_submissions]).to eq(0)
+        expect(cloud_watch_service.past_week_metrics_data[:weekly_submissions]).to eq(0)
       end
     end
 
@@ -143,7 +143,7 @@ describe CloudWatchService do
       let(:started_datapoints) { [] }
 
       it "returns 0 for the weekly starts total" do
-        expect(cloud_watch_service.metrics_data[:weekly_starts]).to eq(0)
+        expect(cloud_watch_service.past_week_metrics_data[:weekly_starts]).to eq(0)
       end
     end
 
@@ -154,7 +154,7 @@ describe CloudWatchService do
       end
 
       it "returns nil and logs the exception in Sentry" do
-        expect(cloud_watch_service.metrics_data).to be_nil
+        expect(cloud_watch_service.past_week_metrics_data).to be_nil
         expect(Sentry).to have_received(:capture_exception).once
       end
     end
@@ -168,7 +168,7 @@ describe CloudWatchService do
       end
 
       it "returns nil and logs the exception in Sentry" do
-        expect(cloud_watch_service.metrics_data).to be_nil
+        expect(cloud_watch_service.past_week_metrics_data).to be_nil
         expect(Sentry).to have_received(:capture_exception).once
       end
     end
@@ -177,17 +177,17 @@ describe CloudWatchService do
       let(:cloudwatch_metrics_enabled) { false }
 
       it "returns nil" do
-        expect(cloud_watch_service.metrics_data).to be_nil
+        expect(cloud_watch_service.past_week_metrics_data).to be_nil
       end
 
       it "does not call CloudWatch" do
-        cloud_watch_service.metrics_data
+        cloud_watch_service.past_week_metrics_data
         expect(cloud_watch_client).not_to have_received(:get_metric_statistics)
       end
     end
   end
 
-  describe "#full_metrics_data" do
+  describe "#daily_metrics_data" do
     let(:submitted_datapoints) do
       [
         { timestamp: Time.zone.now - 1.week, sum: 11.0 },

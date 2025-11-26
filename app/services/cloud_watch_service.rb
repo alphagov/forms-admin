@@ -10,7 +10,7 @@ class CloudWatchService
     @form_id = form_id
   end
 
-  def metrics_data
+  def past_week_metrics_data
     return nil unless Settings.cloudwatch_metrics_enabled
 
     weekly_submissions = week_submissions(form_id:)
