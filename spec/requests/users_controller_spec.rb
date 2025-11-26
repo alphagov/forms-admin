@@ -106,7 +106,7 @@ RSpec.describe UsersController, type: :request do
             expect(parsed_params).to match(
               "filter[name]" => %w[Test],
               "filter[email]" => %w[123],
-              "filter[organisation_id]" => [""],
+              "filter[organisation_id]" => [],
               "filter[role]" => %w[standard],
               "filter[has_access]" => %w[true],
             )
