@@ -4,8 +4,6 @@ class CloudWatchService
   A_DAY = 86_400
   METRICS_NAMESPACE = "Forms".freeze
 
-  attr_reader :form_id
-
   def initialize(form_id)
     @form_id = form_id
   end
@@ -13,8 +11,8 @@ class CloudWatchService
   def past_week_metrics_data
     return nil unless Settings.cloudwatch_metrics_enabled
 
-    weekly_submissions = week_submissions(form_id:)
-    weekly_starts = week_starts(form_id:)
+    weekly_submissions = week_submissions
+    weekly_starts = week_starts
 
     {
       weekly_submissions:,
@@ -29,8 +27,8 @@ class CloudWatchService
 
   def daily_metrics_data
     {
-      submissions: daily_submissions(form_id:),
-      starts: daily_starts(form_id:),
+      submissions: daily_submissions,
+      starts: daily_starts,
     }
   rescue Aws::CloudWatch::Errors::ServiceError,
          Aws::Errors::MissingCredentialsError => e
@@ -41,7 +39,7 @@ class CloudWatchService
 
 private
 
-  def week_submissions(form_id:)
+  def week_submissions
     cloudwatch_client = Aws::CloudWatch::Client.new(region: REGION)
 
     response = cloudwatch_client.get_metric_statistics({
@@ -49,7 +47,7 @@ private
       namespace: METRICS_NAMESPACE,
       dimensions: [
         environment_dimension,
-        form_id_dimension(form_id),
+        form_id_dimension,
       ],
       start_time: start_of_today - 7.days,
       end_time: start_of_today,
@@ -61,7 +59,7 @@ private
     response.datapoints[0]&.sum.to_i || 0
   end
 
-  def week_starts(form_id:)
+  def week_starts
     cloudwatch_client = Aws::CloudWatch::Client.new(region: REGION)
 
     response = cloudwatch_client.get_metric_statistics({
@@ -69,7 +67,7 @@ private
       namespace: METRICS_NAMESPACE,
       dimensions: [
         environment_dimension,
-        form_id_dimension(form_id),
+        form_id_dimension,
       ],
       start_time: start_of_today - 7.days,
       end_time: start_of_today,
@@ -81,7 +79,7 @@ private
     response.datapoints[0]&.sum.to_i || 0
   end
 
-  def daily_submissions(form_id:)
+  def daily_submissions
     cloudwatch_client = Aws::CloudWatch::Client.new(region: REGION)
 
     response = cloudwatch_client.get_metric_statistics({
@@ -89,7 +87,7 @@ private
       namespace: METRICS_NAMESPACE,
       dimensions: [
         environment_dimension,
-        form_id_dimension(form_id),
+        form_id_dimension,
       ],
       start_time: start_of_today - 15.months,
       end_time: start_of_today,
@@ -101,7 +99,7 @@ private
     response.datapoints.sort_by(&:timestamp).map { { timestamp: it.timestamp, sum: it.sum } }
   end
 
-  def daily_starts(form_id:)
+  def daily_starts
     cloudwatch_client = Aws::CloudWatch::Client.new(region: REGION)
 
     response = cloudwatch_client.get_metric_statistics({
@@ -109,7 +107,7 @@ private
       namespace: METRICS_NAMESPACE,
       dimensions: [
         environment_dimension,
-        form_id_dimension(form_id),
+        form_id_dimension,
       ],
       start_time: start_of_today - 15.months,
       end_time: start_of_today,
@@ -128,10 +126,10 @@ private
     }
   end
 
-  def form_id_dimension(form_id)
+  def form_id_dimension
     {
       name: "FormId",
-      value: form_id.to_s,
+      value: @form_id.to_s,
     }
   end
 
