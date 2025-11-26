@@ -40,8 +40,16 @@ class Reports::FormDocumentsService
       form_document["content"]["payment_url"].present?
     end
 
-    def has_csv_submission_enabled?(form_document)
-      form_document["content"]["submission_format"].include? "csv"
+    def has_csv_submission_email_attachments(form_document)
+      form_document["content"]["submission_type"] == "email" && form_document["content"]["submission_format"].include?("csv")
+    end
+
+    def has_json_submission_email_attachments(form_document)
+      form_document["content"]["submission_type"] == "email" && form_document["content"]["submission_format"].include?("json")
+    end
+
+    def has_s3_submissions(form_document)
+      form_document["content"]["submission_type"] == "s3"
     end
 
     def has_exit_pages?(form_document)

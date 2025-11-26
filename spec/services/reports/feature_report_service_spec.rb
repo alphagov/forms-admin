@@ -26,13 +26,13 @@ RSpec.describe Reports::FeatureReportService do
     ])
   end
   let(:form_with_a_few_answer_types) do
-    create(:form, :live, pages: [
+    create(:form, :live, submission_type: "email", submission_format: %w[csv json], pages: [
       create(:page, answer_type: "email"),
       *create_list(:page, 3, answer_type: "name"),
     ])
   end
   let(:branch_route_form) do
-    form = create(:form, :live, :ready_for_routing)
+    form = create(:form, :live, :ready_for_routing, submission_type: "s3", submission_format: %w[csv])
     create(:condition, :with_exit_page, routing_page_id: form.pages[0].id, check_page_id: form.pages[0].id, answer_value: "Option 1")
     create(:condition, routing_page_id: form.pages[1].id, check_page_id: form.pages[1].id, answer_value: "Option 1", goto_page_id: form.pages[3].id)
     create(:condition, routing_page_id: form.pages[2].id, check_page_id: form.pages[1].id, goto_page_id: form.pages[4].id)
@@ -61,7 +61,9 @@ RSpec.describe Reports::FeatureReportService do
         forms_with_routing: 2,
         forms_with_branch_routing: 1,
         forms_with_add_another_answer: 1,
-        forms_with_csv_submission_enabled: 1,
+        forms_with_csv_submission_email_attachments: 2,
+        forms_with_json_submission_email_attachments: 1,
+        forms_with_s3_submissions: 1,
         forms_with_answer_type: {
           "address" => 1,
           "date" => 1,
@@ -301,14 +303,51 @@ RSpec.describe Reports::FeatureReportService do
     end
   end
 
-  describe "#forms_with_csv_submission_enabled" do
+  describe "#forms_with_csv_submission_email_attachments" do
     it "returns live forms with csv enabled" do
-      forms = described_class.new(form_documents).forms_with_csv_submission_enabled
+      forms = described_class.new(form_documents).forms_with_csv_submission_email_attachments
+      expect(forms.length).to eq 2
       expect(forms).to match [
         a_hash_including(
           "form_id" => form_with_all_answer_types.id,
           "content" => a_hash_including(
             "name" => form_with_all_answer_types.name,
+          ),
+        ),
+        a_hash_including(
+          "form_id" => form_with_a_few_answer_types.id,
+          "content" => a_hash_including(
+            "name" => form_with_a_few_answer_types.name,
+          ),
+        ),
+      ]
+    end
+  end
+
+  describe "#forms_with_json_submission_email_attachments" do
+    it "returns live forms with json enabled" do
+      forms = described_class.new(form_documents).forms_with_json_submission_email_attachments
+      expect(forms.length).to eq 1
+      expect(forms).to match [
+        a_hash_including(
+          "form_id" => form_with_a_few_answer_types.id,
+          "content" => a_hash_including(
+            "name" => form_with_a_few_answer_types.name,
+          ),
+        ),
+      ]
+    end
+  end
+
+  describe "#forms_with_s3_submissions" do
+    it "returns live forms with json enabled" do
+      forms = described_class.new(form_documents).forms_with_s3_submissions
+      expect(forms.length).to eq 1
+      expect(forms).to match [
+        a_hash_including(
+          "form_id" => branch_route_form.id,
+          "content" => a_hash_including(
+            "name" => branch_route_form.name,
           ),
         ),
       ]

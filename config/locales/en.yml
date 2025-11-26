@@ -1620,10 +1620,12 @@ en:
       features:
         forms_with_add_another_answer: "%{tag} forms with add another answer"
         forms_with_branch_routes: "%{tag} forms with branch routes"
-        forms_with_csv_submission_enabled: "%{tag} forms with CSV submission enabled"
+        forms_with_csv_submission_email_attachments: "%{tag} forms with CSV email attachments"
         forms_with_exit_pages: "%{tag} forms with exit pages"
+        forms_with_json_submission_email_attachments: "%{tag} forms with JSON email attachments"
         forms_with_payments: "%{tag} forms with payments"
         forms_with_routes: "%{tag} forms with routes"
+        forms_with_s3_submissions: "%{tag} forms with S3 submissions"
         heading: Feature usage
         total_forms: Total %{tag} forms
       long_list_usage:
@@ -1640,14 +1642,18 @@ en:
       download_csv: Download data about all %{tag} forms with branch routes as a CSV file
       empty: There are no %{tag} forms with branch routes
       heading: "%{tag} forms with branch routes"
-    forms_with_csv_submission_enabled:
-      download_csv: Download data about all %{tag} forms with CSV submission enabled as a CSV file
-      empty: There are no %{tag} forms with CSV submission enabled
-      heading: "%{tag} forms with CSV submission enabled"
+    forms_with_csv_submission_email_attachments:
+      download_csv: Download data about all %{tag} forms with CSV submission email attachments enabled (as a CSV)
+      empty: There are no %{tag} forms with CSV submission email attachments enabled
+      heading: "%{tag} forms with CSV submission email attachments enabled"
     forms_with_exit_pages:
       download_csv: Download data about all %{tag} forms with exit pages as a CSV file
       empty: There are no %{tag} forms with exit pages
       heading: "%{tag} forms with exit pages"
+    forms_with_json_submission_email_attachments:
+      download_csv: Download data about all %{tag} forms with JSON submission email attachments enabled (as a CSV)
+      empty: There are no %{tag} forms with JSON submission email attachments enabled
+      heading: "%{tag} forms with JSON submission email attachments enabled"
     forms_with_payments:
       download_csv: Download data about all %{tag} forms with payments as a CSV file
       empty: There are no %{tag} forms with payments
@@ -1656,6 +1662,10 @@ en:
       download_csv: Download data about all %{tag} forms with routes as a CSV file
       empty: There are no %{tag} forms with routes
       heading: "%{tag} forms with routes"
+    forms_with_s3_submissions:
+      download_csv: Download data about all %{tag} forms with S3 submissions enabled (as a CSV)
+      empty: There are no %{tag} forms with S3 submissions enabled
+      heading: "%{tag} forms with S3 submissions enabled"
     index:
       title: Reports
     last_signed_in_at:

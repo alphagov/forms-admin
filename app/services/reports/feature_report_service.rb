@@ -12,7 +12,9 @@ class Reports::FeatureReportService
       forms_with_routing: 0,
       forms_with_branch_routing: 0,
       forms_with_add_another_answer: 0,
-      forms_with_csv_submission_enabled: 0,
+      forms_with_csv_submission_email_attachments: 0,
+      forms_with_json_submission_email_attachments: 0,
+      forms_with_s3_submissions: 0,
       forms_with_answer_type: HashWithIndifferentAccess.new,
       steps_with_answer_type: HashWithIndifferentAccess.new,
       forms_with_exit_pages: 0,
@@ -24,7 +26,9 @@ class Reports::FeatureReportService
       report[:forms_with_routing] += 1 if Reports::FormDocumentsService.has_routes?(form)
       report[:forms_with_branch_routing] += 1 if Reports::FormDocumentsService.has_secondary_skip_routes?(form)
       report[:forms_with_add_another_answer] += 1 if Reports::FormDocumentsService.has_add_another_answer?(form)
-      report[:forms_with_csv_submission_enabled] += 1 if Reports::FormDocumentsService.has_csv_submission_enabled?(form)
+      report[:forms_with_csv_submission_email_attachments] += 1 if Reports::FormDocumentsService.has_csv_submission_email_attachments(form)
+      report[:forms_with_json_submission_email_attachments] += 1 if Reports::FormDocumentsService.has_json_submission_email_attachments(form)
+      report[:forms_with_s3_submissions] += 1 if Reports::FormDocumentsService.has_s3_submissions(form)
       report[:forms_with_exit_pages] += 1 if Reports::FormDocumentsService.has_exit_pages?(form)
 
       answer_types_in_form = form["content"]["steps"].map { |step| step["data"]["answer_type"] }
@@ -88,9 +92,19 @@ class Reports::FeatureReportService
       .select { |form| Reports::FormDocumentsService.has_exit_pages?(form) }
   end
 
-  def forms_with_csv_submission_enabled
+  def forms_with_csv_submission_email_attachments
     form_documents
-      .select { |form| Reports::FormDocumentsService.has_csv_submission_enabled?(form) }
+      .select { |form| Reports::FormDocumentsService.has_csv_submission_email_attachments(form) }
+  end
+
+  def forms_with_json_submission_email_attachments
+    form_documents
+      .select { |form| Reports::FormDocumentsService.has_json_submission_email_attachments(form) }
+  end
+
+  def forms_with_s3_submissions
+    form_documents
+      .select { |form| Reports::FormDocumentsService.has_s3_submissions(form) }
   end
 
 private

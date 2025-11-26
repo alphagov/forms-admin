@@ -269,9 +269,69 @@ RSpec.describe ReportsController, type: :request do
     end
   end
 
-  describe "#forms_with_csv_submission_enabled" do
-    let(:path) { report_forms_with_csv_submission_enabled_path(tag: :live) }
+  describe "#forms_with_csv_submission_email_attachments" do
+    let(:path) { report_forms_with_csv_submission_email_attachments_path(tag: :live) }
     let(:form) { create(:form, :live, submission_type: "email", submission_format: %w[csv]) }
+    let(:forms) { [form] }
+
+    include_examples "unauthorized user is forbidden"
+
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+
+        get path
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the features report view" do
+        expect(response).to render_template("reports/feature_report")
+      end
+
+      it "includes the report data" do
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[1]", text: "Form name"
+        expect(node).to have_xpath "//tbody/tr[1]/td[1]", text: form.name
+      end
+    end
+  end
+
+  describe "#forms_with_json_submission_email_attachments" do
+    let(:path) { report_forms_with_json_submission_email_attachments_path(tag: :live) }
+    let(:form) { create(:form, :live, submission_type: "email", submission_format: %w[json]) }
+    let(:forms) { [form] }
+
+    include_examples "unauthorized user is forbidden"
+
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+
+        get path
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the features report view" do
+        expect(response).to render_template("reports/feature_report")
+      end
+
+      it "includes the report data" do
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[1]", text: "Form name"
+        expect(node).to have_xpath "//tbody/tr[1]/td[1]", text: form.name
+      end
+    end
+  end
+
+  describe "#forms_with_s3_submissions" do
+    let(:path) { report_forms_with_s3_submissions_path(tag: :live) }
+    let(:form) { create(:form, :live, submission_type: "s3", submission_format: %w[json]) }
     let(:forms) { [form] }
 
     include_examples "unauthorized user is forbidden"
@@ -628,13 +688,13 @@ RSpec.describe ReportsController, type: :request do
 
         travel_to Time.utc(2025, 5, 15, 15, 31, 57)
 
-        get report_forms_with_csv_submission_enabled_path(tag: :live, format: :csv)
+        get report_forms_with_csv_submission_email_attachments_path(tag: :live, format: :csv)
       end
 
       it_behaves_like "csv response"
 
       it "responds with an attachment content-disposition header" do
-        expect(response.headers["content-disposition"]).to match("attachment; filename=live_forms_with_csv_submission_enabled_report-2025-05-15 15:31:57 UTC.csv")
+        expect(response.headers["content-disposition"]).to match("attachment; filename=live_forms_with_csv_submission_email_attachments_report-2025-05-15 15:31:57 UTC.csv")
       end
 
       it "has expected response body" do

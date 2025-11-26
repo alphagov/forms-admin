@@ -242,6 +242,7 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
     what_happens_next_markdown: "Test",
     share_preview_completed: true,
     submission_type: "s3",
+    submission_format: %w[csv],
     s3_bucket_region: "eu-west-2",
   )
   e2e_s3_forms.make_live!

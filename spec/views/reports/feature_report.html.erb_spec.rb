@@ -13,8 +13,8 @@ describe "reports/feature_report" do
     render locals: { tag:, report:, records: }
   end
 
-  context "with forms_with_csv_submission_enabled report" do
-    let(:report) { "forms_with_csv_submission_enabled" }
+  context "with forms_with_csv_submission_email_attachments report" do
+    let(:report) { "forms_with_csv_submission_email_attachments" }
     let(:records) do
       [
         { "form_id" => 1, "tag" => form_document_tag, "content" => { "name" => "All question types form" }, "organisation_name" => "Government Digital Service" },
@@ -24,7 +24,7 @@ describe "reports/feature_report" do
 
     describe "page title" do
       it "matches the heading" do
-        expect(view.content_for(:title)).to eq "Live forms with CSV submission enabled"
+        expect(view.content_for(:title)).to eq "Live forms with CSV submission email attachments enabled"
         expect(rendered).to have_css "h1", text: view.content_for(:title)
       end
     end
@@ -34,7 +34,7 @@ describe "reports/feature_report" do
     end
 
     it "has a link to download the CSV" do
-      expect(rendered).to have_link("Download data about all live forms with CSV submission enabled as a CSV file", href: report_forms_with_csv_submission_enabled_path(format: :csv))
+      expect(rendered).to have_link("Download data about all live forms with CSV submission email attachments enabled (as a CSV)", href: report_forms_with_csv_submission_email_attachments_path(format: :csv))
     end
 
     describe "forms table" do
@@ -257,7 +257,7 @@ describe "reports/feature_report" do
   end
 
   context "when there are no records to render" do
-    let(:report) { "forms_with_csv_submission_enabled" }
+    let(:report) { "forms_with_csv_submission_email_attachments" }
     let(:records) { [] }
     let(:tag) { "live" }
 
