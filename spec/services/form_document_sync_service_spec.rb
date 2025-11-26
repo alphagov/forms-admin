@@ -54,7 +54,7 @@ RSpec.describe FormDocumentSyncService do
 
       context "and deleting the archived FormDocument fails" do
         before do
-          allow(service).to receive(:delete_form_documents).with(FormDocumentSyncService::ARCHIVED_TAG)
+          allow(service).to receive(:delete_form_documents_by_tag).with(FormDocumentSyncService::ARCHIVED_TAG)
             .and_raise(ActiveRecord::StatementInvalid)
         end
 
@@ -62,6 +62,35 @@ RSpec.describe FormDocumentSyncService do
           expect {
             service.synchronize_live_form
           }.to raise_error(ActiveRecord::StatementInvalid).and not_change(FormDocument, :count)
+        end
+      end
+    end
+
+    context "when the form has welsh translations" do
+      let(:form) { create(:form, state: "live", available_languages: %w[en cy]) }
+
+      it "creates a draft form document for each language" do
+        expect {
+          service.synchronize_live_form
+        }.to change(FormDocument, :count).by(2)
+
+        expect(FormDocument.where(form:, tag: "draft", language: "en")).to exist
+        expect(FormDocument.where(form:, tag: "draft", language: "cy")).to exist
+      end
+
+      context "and the English form fails to save" do
+        before do
+          allow(service).to receive(:update_or_create_form_document).and_call_original
+          # saving welsh form fails
+          allow(service).to receive(:update_or_create_form_document)
+            .with("live", anything, "cy")
+            .and_raise(ActiveRecord::RecordInvalid.new(form), "simulated FormDocument saving error")
+        end
+
+        it "does not create any FormDocuments" do
+          expect {
+            service.synchronize_live_form
+          }.to raise_error(ActiveRecord::RecordInvalid).and not_change(FormDocument, :count)
         end
       end
     end
@@ -90,6 +119,20 @@ RSpec.describe FormDocumentSyncService do
           service.synchronize_archived_form
         }.to(change { FormDocument.exists?(form:, tag: "archived", content: live_form_document.content) }.from(false).to(true))
       end
+
+      context "when the live FormDocument fails to delete" do
+        before do
+          allow(service).to receive(:delete_form_documents_by_tag).and_call_original
+          allow(service).to receive(:delete_form_documents_by_tag).with(FormDocumentSyncService::ARCHIVED_TAG)
+            .and_raise(ActiveRecord::RecordInvalid.new(live_form_document), "simulated FormDocument deleting error")
+        end
+
+        it "does not create the live FormDocument" do
+          expect {
+            service.synchronize_archived_form
+          }.to raise_error(ActiveRecord::RecordInvalid).and not_change(FormDocument, :count)
+        end
+      end
     end
 
     context "when there is an existing archived form document" do
@@ -103,9 +146,9 @@ RSpec.describe FormDocumentSyncService do
         expect(FormDocument.find_by!(form:, tag: "archived").content).to eq("live content")
       end
 
-      context "and deleting the live FormDocument fails" do
+      context "and deleting the existing archived FormDocuments fails" do
         before do
-          allow(service).to receive(:delete_form_documents).with(FormDocumentSyncService::LIVE_TAG)
+          allow(service).to receive(:delete_form_documents_by_tag).with(FormDocumentSyncService::ARCHIVED_TAG)
             .and_raise(ActiveRecord::StatementInvalid)
         end
 
@@ -152,6 +195,18 @@ RSpec.describe FormDocumentSyncService do
           expect {
             service.update_draft_form_document
           }.not_to(change { live_form_document.reload.content })
+        end
+      end
+
+      context "when there is a draft form document in welsh" do
+        before do
+          create :form_document, :draft, form:, content: "content", language: "cy"
+        end
+
+        it "removes the draft form document in welsh" do
+          expect {
+            service.update_draft_form_document
+          }.to(change { FormDocument.exists?(form:, tag: "draft", language: "cy") }.from(true).to(false))
         end
       end
     end
