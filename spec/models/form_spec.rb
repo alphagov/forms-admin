@@ -325,7 +325,10 @@ RSpec.describe Form, type: :model do
     let(:form) { create :form }
 
     it "calls FormDocumentSyncService to update the draft Form" do
-      expect(FormDocumentSyncService).to receive(:update_draft_form_document).with(form)
+      sync_service_instance = instance_double(FormDocumentSyncService)
+      allow(FormDocumentSyncService).to receive(:new).with(form).and_return(sync_service_instance)
+      expect(sync_service_instance).to receive(:update_draft_form_document)
+
       form.update!(name: "new name")
     end
   end
@@ -422,9 +425,11 @@ RSpec.describe Form, type: :model do
       let(:form) { create :form, :ready_for_live }
 
       it "calls FormDocumentSyncService" do
-        allow(FormDocumentSyncService).to receive(:synchronize_form)
+        sync_service_instance = instance_double(FormDocumentSyncService)
+        allow(FormDocumentSyncService).to receive(:new).with(form).and_return(sync_service_instance)
+        expect(sync_service_instance).to receive(:synchronize_live_form)
+        expect(sync_service_instance).to receive(:update_draft_form_document)
         form.make_live!
-        expect(FormDocumentSyncService).to have_received(:synchronize_form).with(form)
       end
 
       it "creates a live form document" do
@@ -436,9 +441,12 @@ RSpec.describe Form, type: :model do
       let(:form) { create :form, :live }
 
       it "calls FormDocumentSyncService" do
-        allow(FormDocumentSyncService).to receive(:synchronize_form)
+        sync_service_instance = instance_double(FormDocumentSyncService)
+        allow(FormDocumentSyncService).to receive(:new).with(form).and_return(sync_service_instance)
+        expect(sync_service_instance).to receive(:synchronize_archived_form)
+        expect(sync_service_instance).to receive(:update_draft_form_document)
+
         form.archive_live_form!
-        expect(FormDocumentSyncService).to have_received(:synchronize_form).with(form)
       end
 
       it "creates a archived form document" do
