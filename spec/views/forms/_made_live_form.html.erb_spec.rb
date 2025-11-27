@@ -7,7 +7,7 @@ describe "forms/_made_live_form.html.erb" do
   let(:form_metadata) { create :form, :live, declaration_text:, what_happens_next_markdown:, submission_type:, submission_format: }
   let(:form_document) do
     form_document_content = FormDocument::Content.from_form_document(form_metadata.live_form_document)
-    form_document_content.live_at = 1.week.ago
+    form_document_content.first_made_live_at = 1.week.ago
     form_document_content
   end
   let(:group) { create(:group, name: "Group 1") }

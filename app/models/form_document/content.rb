@@ -6,6 +6,7 @@ class FormDocument::Content
 
   attribute :form_id, :integer
   attribute :live_at, :datetime
+  attribute :first_made_live_at, :datetime
   attribute :name, :string
   attribute :available_languages, array: true
   attribute :language, :string
@@ -38,10 +39,19 @@ class FormDocument::Content
   end
 
   def made_live_date
-    live_at.to_date if live_at.present?
+    first_made_live_at&.to_date
   end
 
   def self.from_form_document(form_document)
-    new(**form_document.content)
+    content = new(**form_document.content)
+
+    # TODO: this can be removed once we've back-filled the first_made_live_at for existing forms.
+    if content.live_at.present?
+      # give the earliest date we have in the system that could be the date the form first went live, this won't be
+      # accurate in the case where a form was archived and made live again
+      content.first_made_live_at = [content.first_made_live_at, content.live_at, form_document.created_at].compact.min
+    end
+
+    content
   end
 end
