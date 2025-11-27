@@ -302,4 +302,8 @@ describe "forms/welsh_translation/new.html.erb" do
       expect(rendered).to have_css(".govuk-error-message", text: error_message)
     end
   end
+
+  context "when a page translation has validation errors" do
+    # Add test for error summary behaviour
+  end
 end
