@@ -306,4 +306,8 @@ describe "forms/welsh_translation/new.html.erb" do
   context "when a page translation has validation errors" do
     # Add test for error summary behaviour
   end
+
+  context "when a condition translation has validation errors" do
+    # Add test for error summary behaviour
+  end
 end

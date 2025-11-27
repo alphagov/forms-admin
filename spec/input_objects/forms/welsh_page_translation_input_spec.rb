@@ -93,6 +93,8 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
         expect(condition.reload.exit_page_markdown_cy).to eq("Mae'n ddrwg gennym, nid ydych yn gymwys ar gyfer y gwasanaeth hwn.")
         expect(another_condition.reload.answer_value_cy).to eq("Nac ydw")
       end
+
+      # TODO add test for condition validation
     end
   end
 

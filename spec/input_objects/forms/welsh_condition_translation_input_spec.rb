@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
+  # TODO: add tests for presence validations
   subject(:welsh_condition_translation_input) { described_class.new(new_input_data) }
 
   let(:condition) { create_condition }
