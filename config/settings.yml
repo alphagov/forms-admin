@@ -97,5 +97,7 @@ analytics_enabled: false
 
 act_as_user_enabled: false
 
+cloudwatch_metrics_enabled: true
+
 reports:
   forms_api_forms_per_request_page: 100

@@ -9,9 +9,10 @@ describe CloudWatchService do
   let(:live_at) { Time.zone.now - 1.day }
 
   let(:cloud_watch_client) { Aws::CloudWatch::Client.new(stub_responses: true) }
+  let(:cloudwatch_metrics_enabled) { true }
 
   before do
-    allow(Settings).to receive(:forms_env).and_return(forms_env)
+    allow(Settings).to receive_messages(forms_env: forms_env, cloudwatch_metrics_enabled: cloudwatch_metrics_enabled)
 
     allow(Aws::CloudWatch::Client).to receive(:new).and_return(cloud_watch_client)
   end
@@ -183,6 +184,19 @@ describe CloudWatchService do
       it "returns nil and logs the exception in Sentry" do
         expect(cloud_watch_service.metrics_data).to be_nil
         expect(Sentry).to have_received(:capture_exception).once
+      end
+    end
+
+    context "when cloudwatch_metrics_enabled is false" do
+      let(:cloudwatch_metrics_enabled) { false }
+
+      it "returns nil" do
+        expect(cloud_watch_service.metrics_data).to be_nil
+      end
+
+      it "does not call CloudWatch" do
+        cloud_watch_service.metrics_data
+        expect(cloud_watch_client).not_to have_received(:get_metric_statistics)
       end
     end
 

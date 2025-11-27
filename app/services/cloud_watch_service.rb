@@ -12,6 +12,7 @@ class CloudWatchService
   end
 
   def metrics_data
+    return nil unless Settings.cloudwatch_metrics_enabled
     return nil if made_live_date.nil?
 
     # If the form went live today, there won't be any metrics to show
