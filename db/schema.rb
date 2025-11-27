@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_19_064304) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_27_114216) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -142,6 +142,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_19_064304) do
     t.text "available_languages", default: ["en"], null: false, array: true
     t.boolean "welsh_completed", default: false
     t.string "submission_format", default: [], null: false, array: true
+    t.datetime "first_made_live_at"
     t.index ["external_id"], name: "index_forms_on_external_id", unique: true
   end
 
