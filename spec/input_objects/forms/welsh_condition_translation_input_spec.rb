@@ -28,6 +28,68 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
     create(:condition, default_attributes.merge(attributes))
   end
 
+  describe "validations" do
+    context "when the Welsh answer value is missing" do
+      let(:new_input_data) { super().merge(answer_value_cy: nil) }
+
+      context "when the form has an answer value in English" do
+        it "is not valid" do
+          expect(welsh_condition_translation_input).not_to be_valid
+          expect(welsh_condition_translation_input.errors.full_messages_for(:answer_value_cy)).to include "Answer value cy #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.answer_value_cy.blank')}"
+        end
+      end
+
+      context "when the form does not have an answer value in English" do
+        let(:condition) { create_condition(answer_value: nil) }
+
+        it "is valid" do
+          expect(welsh_condition_translation_input).to be_valid
+          expect(welsh_condition_translation_input.errors.full_messages_for(:answer_value_cy)).to be_empty
+        end
+      end
+    end
+
+    context "when the Welsh exit page heading is missing" do
+      let(:new_input_data) { super().merge(exit_page_heading_cy: nil) }
+
+      context "when the form has an exit page in English" do
+        it "is not valid" do
+          expect(welsh_condition_translation_input).not_to be_valid
+          expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_heading_cy)).to include "Exit page heading cy #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_heading_cy.blank')}"
+        end
+      end
+
+      context "when the form does not have an exit page in English" do
+        let(:condition) { create_condition(exit_page_heading: nil, exit_page_markdown: nil) }
+
+        it "is valid" do
+          expect(welsh_condition_translation_input).to be_valid
+          expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_heading_cy)).to be_empty
+        end
+      end
+    end
+
+    context "when the Welsh exit page markdown is missing" do
+      let(:new_input_data) { super().merge(exit_page_markdown_cy: nil) }
+
+      context "when the form has an exit page in English" do
+        it "is not valid" do
+          expect(welsh_condition_translation_input).not_to be_valid
+          expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_markdown_cy)).to include "Exit page markdown cy #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_markdown_cy.blank')}"
+        end
+      end
+
+      context "when the form does not have an exit page in English" do
+        let(:condition) { create_condition(exit_page_heading: nil, exit_page_markdown: nil) }
+
+        it "is valid" do
+          expect(welsh_condition_translation_input).to be_valid
+          expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_markdown_cy)).to be_empty
+        end
+      end
+    end
+  end
+
   describe "#submit" do
     it "returns true" do
       expect(welsh_condition_translation_input.submit).to be true

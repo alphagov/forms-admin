@@ -7,6 +7,10 @@ class Forms::WelshConditionTranslationInput < BaseInput
   attribute :exit_page_markdown_cy
   attribute :exit_page_heading_cy
 
+  validate :answer_value_cy_present?
+  validate :exit_page_heading_cy_present?
+  validate :exit_page_markdown_cy_present?
+
   def submit
     return false if invalid?
 
@@ -44,5 +48,17 @@ class Forms::WelshConditionTranslationInput < BaseInput
 
   def condition_has_exit_page?
     condition.is_exit_page?
+  end
+
+  def answer_value_cy_present?
+    errors.add(:answer_value_cy, :blank, url: "##{form_field_id(:answer_value_cy)}") if condition_has_answer_value? && answer_value_cy.blank?
+  end
+
+  def exit_page_heading_cy_present?
+    errors.add(:exit_page_heading_cy, :blank, url: "##{form_field_id(:exit_page_heading_cy)}") if condition_has_exit_page? && exit_page_heading_cy.blank?
+  end
+
+  def exit_page_markdown_cy_present?
+    errors.add(:exit_page_markdown_cy, :blank, url: "##{form_field_id(:exit_page_markdown_cy)}") if condition_has_exit_page? && exit_page_markdown_cy.blank?
   end
 end

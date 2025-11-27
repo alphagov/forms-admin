@@ -15,6 +15,7 @@ class Forms::WelshPageTranslationInput < BaseInput
   validate :hint_text_cy_present?
   validate :page_heading_cy_present?
   validate :guidance_markdown_cy_present?
+  validate :condition_translations_valid?
 
   def submit
     return false if invalid?
@@ -71,5 +72,15 @@ class Forms::WelshPageTranslationInput < BaseInput
 
   def guidance_markdown_cy_present?
     errors.add(:guidance_markdown_cy, :blank, url: "##{form_field_id(:guidance_markdown_cy)}") if page_has_page_heading_and_guidance_markdown? && guidance_markdown_cy.blank?
+  end
+
+  def condition_translations_valid?
+    return if condition_translations.nil?
+
+    condition_translations.each do |condition_translation|
+      condition_translation.validate
+
+      errors.merge!(condition_translation.errors)
+    end
   end
 end

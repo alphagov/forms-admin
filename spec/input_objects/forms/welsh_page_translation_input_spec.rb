@@ -107,6 +107,16 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
         end
       end
     end
+
+    context "when any of the page's condition translations have errors" do
+      let(:condition_translation) { Forms::WelshConditionTranslationInput.new(id: condition.id) }
+      let(:new_input_data) { super().merge(condition_translations: [condition_translation]) }
+
+      it "is invalid" do
+        expect(welsh_page_translation_input).not_to be_valid
+        expect(welsh_page_translation_input.errors.full_messages_for(:answer_value_cy)).to include "Answer value cy #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.answer_value_cy.blank')}"
+      end
+    end
   end
 
   describe "#submit" do

@@ -1,0 +1,19 @@
+---
+en:
+  activemodel:
+    errors:
+      models:
+        forms/welsh_condition_translation_input:
+          attributes:
+            answer_value_cy:
+              blank: Enter answer value in Welsh # TODO: add question number to error messages
+            exit_page_markdown_cy:
+              blank: Enter exit page markdown in Welsh
+            exit_page_heading_cy:
+              blank: Enter exit page heading in Welsh
+  helpers:
+    label:
+      forms_welsh_condition_translation_input:
+        answer_value_cy: Answer value (Welsh)
+        exit_page_markdown_cy: Exit page markdown (Welsh)
+        exit_page_heading_cy: Exit page heading (Welsh)

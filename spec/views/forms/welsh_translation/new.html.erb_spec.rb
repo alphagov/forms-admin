@@ -328,4 +328,33 @@ describe "forms/welsh_translation/new.html.erb" do
       expect(rendered).to have_css(".govuk-error-message", text: error_message)
     end
   end
+
+  context "when a condition translation has validation errors" do
+    let(:condition) { create :condition, routing_page_id: page.id, answer_value: "Yes" }
+    let(:condition_translations) { [welsh_condition_translation_input] }
+
+    before do
+      welsh_condition_translation_input.answer_value_cy = nil
+      welsh_translation_input.mark_complete = "true"
+      welsh_translation_input.validate
+
+      assign(:welsh_translation_input, welsh_translation_input)
+      render
+    end
+
+    it "displays an error summary box" do
+      expect(rendered).to have_css(".govuk-error-summary")
+      expect(rendered).to have_css("h2.govuk-error-summary__title", text: "There is a problem")
+    end
+
+    it "links the error summary to the invalid field" do
+      error_message = I18n.t("activemodel.errors.models.forms/welsh_condition_translation_input.attributes.answer_value_cy.blank")
+      expect(rendered).to have_link(error_message, href: "#forms_welsh_condition_translation_input_#{condition.id}_condition_translations_answer_value_cy")
+    end
+
+    it "adds an inline error message to the invalid field" do
+      error_message = "Error: #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.answer_value_cy.blank')}"
+      expect(rendered).to have_css(".govuk-error-message", text: error_message)
+    end
+  end
 end
