@@ -37,3 +37,17 @@ updates:
     cooldown:
       default-days: 7
     open-pull-requests-limit: 10
+
+  - package-ecosystem: terraform
+    directory: ".review_apps/"
+    schedule:
+      interval: weekly
+      day: tuesday
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 10
+    groups:
+      terraform-all-dependencies:
+        patterns:
+          - "*"
+    target-branch: main

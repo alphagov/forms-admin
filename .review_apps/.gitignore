@@ -1,0 +1,2 @@
+# When testing, it's useful to create `terraform.tfvars`. But we shouldn't ever commit it.
+terraform.tfvars
