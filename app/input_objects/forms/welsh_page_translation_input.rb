@@ -11,6 +11,11 @@ class Forms::WelshPageTranslationInput < BaseInput
   attribute :page_heading_cy
   attribute :guidance_markdown_cy
 
+  validate :question_text_cy_present?
+  validate :hint_text_cy_present?
+  validate :page_heading_cy_present?
+  validate :guidance_markdown_cy_present?
+
   def submit
     return false if invalid?
 
@@ -50,5 +55,21 @@ class Forms::WelshPageTranslationInput < BaseInput
 
   def page_has_page_heading_and_guidance_markdown?
     page.page_heading.present? && page.guidance_markdown.present?
+  end
+
+  def question_text_cy_present?
+    errors.add(:question_text_cy, :blank) if question_text_cy.blank?
+  end
+
+  def hint_text_cy_present?
+    errors.add(:hint_text_cy, :blank) if page_has_hint_text? && hint_text_cy.blank?
+  end
+
+  def page_heading_cy_present?
+    errors.add(:page_heading_cy, :blank) if page_has_page_heading_and_guidance_markdown? && page_heading_cy.blank?
+  end
+
+  def guidance_markdown_cy_present?
+    errors.add(:guidance_markdown_cy, :blank) if page_has_page_heading_and_guidance_markdown? && guidance_markdown_cy.blank?
   end
 end
