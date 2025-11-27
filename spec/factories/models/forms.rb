@@ -89,7 +89,11 @@ FactoryBot.define do
       ready_for_live
       state { :live }
       after(:create) do |form|
-        FormDocument.create(form:, tag: "live", content: form.as_form_document(live_at: form.updated_at))
+        form.available_languages.each do |language|
+          Mobility.with_locale(language) do
+            FormDocument.create(form:, tag: "live", content: form.as_form_document(live_at: form.updated_at), language:)
+          end
+        end
       end
     end
 
@@ -102,7 +106,11 @@ FactoryBot.define do
       ready_for_live
       state { :archived }
       after(:create) do |form|
-        FormDocument.create(form:, tag: "archived", content: form.as_form_document(live_at: form.updated_at))
+        form.available_languages.each do |language|
+          Mobility.with_locale(language) do
+            FormDocument.create(form:, tag: "archived", content: form.as_form_document(live_at: form.updated_at), language:)
+          end
+        end
       end
     end
 
@@ -135,6 +143,12 @@ FactoryBot.define do
     trait :missing_pages do
       ready_for_live
       question_section_completed { false }
+    end
+
+    trait :with_welsh_translation do
+      available_languages { %w[en cy] }
+
+      name_cy { name.prepend("Welsh ") }
     end
   end
 end

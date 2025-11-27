@@ -81,6 +81,17 @@ RSpec.describe Reports::FormDocumentsService do
           "group_external_id" => group.external_id,
         )
       end
+
+      context "when there is a welsh translation" do
+        let(:live_with_draft_form_and_welsh) { create(:form, :live_with_draft, :with_welsh_translation, :with_group, group:) }
+
+        it "does not include the welsh translation form document" do
+          form_documents = described_class.form_documents(tag:)
+          expect(form_documents.pluck("language").to_a).to all(eq "en")
+          expect(form_documents.map { |form_document| form_document["form_id"] })
+            .to contain_exactly(draft_form.id, live_with_draft_form.id, live_with_draft_form_and_welsh.id, archived_with_draft_form.id)
+        end
+      end
     end
 
     context "when the tag is live" do
