@@ -5,7 +5,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <% if @welsh_translation_input&.errors&.present? %>
-        <%= f.govuk_error_summary %>
+        <%= f.govuk_error_summary(presenter: ErrorSummaryPresenter.new(@welsh_translation_input.errors)) %>
       <% end %>
 
       <h1 class="govuk-heading-l">

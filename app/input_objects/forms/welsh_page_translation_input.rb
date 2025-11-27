@@ -58,18 +58,18 @@ class Forms::WelshPageTranslationInput < BaseInput
   end
 
   def question_text_cy_present?
-    errors.add(:question_text_cy, :blank) if question_text_cy.blank?
+    errors.add(:question_text_cy, :blank, url: "##{form_field_id(:question_text_cy)}") if question_text_cy.blank?
   end
 
   def hint_text_cy_present?
-    errors.add(:hint_text_cy, :blank) if page_has_hint_text? && hint_text_cy.blank?
+    errors.add(:hint_text_cy, :blank, url: "##{form_field_id(:hint_text_cy)}") if page_has_hint_text? && hint_text_cy.blank?
   end
 
   def page_heading_cy_present?
-    errors.add(:page_heading_cy, :blank) if page_has_page_heading_and_guidance_markdown? && page_heading_cy.blank?
+    errors.add(:page_heading_cy, :blank, url: "##{form_field_id(:page_heading_cy)}") if page_has_page_heading_and_guidance_markdown? && page_heading_cy.blank?
   end
 
   def guidance_markdown_cy_present?
-    errors.add(:guidance_markdown_cy, :blank) if page_has_page_heading_and_guidance_markdown? && guidance_markdown_cy.blank?
+    errors.add(:guidance_markdown_cy, :blank, url: "##{form_field_id(:guidance_markdown_cy)}") if page_has_page_heading_and_guidance_markdown? && guidance_markdown_cy.blank?
   end
 end
