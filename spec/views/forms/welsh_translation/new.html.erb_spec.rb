@@ -10,6 +10,7 @@ describe "forms/welsh_translation/new.html.erb" do
   let(:welsh_page_translation_input) { Forms::WelshPageTranslationInput.new(id: page.id, condition_translations:).assign_page_values }
   let(:another_welsh_page_translation_input) { Forms::WelshPageTranslationInput.new(id: another_page.id, condition_translations: []).assign_page_values }
   let(:welsh_translation_input) { Forms::WelshTranslationInput.new(form:, page_translations: [welsh_page_translation_input, another_welsh_page_translation_input]).assign_form_values }
+  let(:mark_complete) { "true" }
 
   def build_form(attributes = {})
     default_attributes = {
@@ -30,6 +31,10 @@ describe "forms/welsh_translation/new.html.erb" do
       pages: [page, another_page],
     }
     build(:form, default_attributes.merge(attributes))
+  end
+
+  before do
+    welsh_translation_input.mark_complete = mark_complete
   end
 
   context "when the form has no errors" do
@@ -279,8 +284,9 @@ describe "forms/welsh_translation/new.html.erb" do
   end
 
   context "when the form has validation errors" do
+    let(:mark_complete) { nil }
+
     before do
-      welsh_translation_input.mark_complete = nil
       welsh_translation_input.validate
 
       assign(:welsh_translation_input, welsh_translation_input)
@@ -306,7 +312,7 @@ describe "forms/welsh_translation/new.html.erb" do
   context "when a page translation has validation errors" do
     before do
       welsh_page_translation_input.question_text_cy = nil
-      welsh_translation_input.mark_complete = "true"
+      welsh_page_translation_input.mark_complete = mark_complete
       welsh_translation_input.validate
 
       assign(:welsh_translation_input, welsh_translation_input)

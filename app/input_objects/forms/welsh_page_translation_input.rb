@@ -3,7 +3,7 @@ class Forms::WelshPageTranslationInput < BaseInput
   include ActionView::Helpers::FormTagHelper
   include ActiveModel::Attributes
 
-  attr_accessor :condition_translations
+  attr_accessor :condition_translations, :mark_complete
 
   attribute :id
   attribute :question_text_cy
@@ -37,6 +37,7 @@ class Forms::WelshPageTranslationInput < BaseInput
     self.hint_text_cy = page.hint_text_cy
     self.page_heading_cy = page.page_heading_cy
     self.guidance_markdown_cy = page.guidance_markdown_cy
+    self.mark_complete = page.form.try(:welsh_completed)
 
     self
   end
@@ -59,19 +60,23 @@ class Forms::WelshPageTranslationInput < BaseInput
   end
 
   def question_text_cy_present?
-    errors.add(:question_text_cy, :blank, url: "##{form_field_id(:question_text_cy)}") if question_text_cy.blank?
+    errors.add(:question_text_cy, :blank, url: "##{form_field_id(:question_text_cy)}") if form_marked_complete? && question_text_cy.blank?
   end
 
   def hint_text_cy_present?
-    errors.add(:hint_text_cy, :blank, url: "##{form_field_id(:hint_text_cy)}") if page_has_hint_text? && hint_text_cy.blank?
+    errors.add(:hint_text_cy, :blank, url: "##{form_field_id(:hint_text_cy)}") if form_marked_complete? && page_has_hint_text? && hint_text_cy.blank?
   end
 
   def page_heading_cy_present?
-    errors.add(:page_heading_cy, :blank, url: "##{form_field_id(:page_heading_cy)}") if page_has_page_heading_and_guidance_markdown? && page_heading_cy.blank?
+    errors.add(:page_heading_cy, :blank, url: "##{form_field_id(:page_heading_cy)}") if form_marked_complete? && page_has_page_heading_and_guidance_markdown? && page_heading_cy.blank?
   end
 
   def guidance_markdown_cy_present?
-    errors.add(:guidance_markdown_cy, :blank, url: "##{form_field_id(:guidance_markdown_cy)}") if page_has_page_heading_and_guidance_markdown? && guidance_markdown_cy.blank?
+    errors.add(:guidance_markdown_cy, :blank, url: "##{form_field_id(:guidance_markdown_cy)}") if form_marked_complete? && page_has_page_heading_and_guidance_markdown? && guidance_markdown_cy.blank?
+  end
+
+  def form_marked_complete?
+    mark_complete == "true"
   end
 
   def condition_translations_valid?

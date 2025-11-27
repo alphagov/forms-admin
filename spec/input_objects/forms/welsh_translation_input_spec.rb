@@ -323,7 +323,7 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
     end
 
     context "when any of the form's page translations have errors" do
-      let(:page_translation) { Forms::WelshPageTranslationInput.new(id: page.id) }
+      let(:page_translation) { Forms::WelshPageTranslationInput.new(id: page.id, mark_complete: "true") }
       let(:new_input_data) { super().merge(page_translations: [page_translation]) }
 
       it "is invalid" do
