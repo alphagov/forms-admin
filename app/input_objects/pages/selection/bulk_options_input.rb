@@ -50,6 +50,8 @@ private
   end
 
   def selection_options_without_blanks
+    return [] if bulk_selection_options.nil?
+
     bulk_selection_options.split(/\n/).map(&:strip).compact_blank
   end
 
