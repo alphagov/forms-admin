@@ -8,6 +8,7 @@ class FakeForm < ApplicationRecord
   # stub the expected interface
   def ready_for_live; end
   def after_create_draft; end
+  def before_make_live; end
   def after_make_live; end
   def after_archive; end
 end
@@ -37,11 +38,16 @@ RSpec.describe FormStateMachine do
   describe ".make_live" do
     shared_examples "transition to live state" do |form_state|
       before do
-        allow(form).to receive_messages(ready_for_live: true, after_make_live: nil)
+        allow(form).to receive_messages(ready_for_live: true, before_make_live: nil, after_make_live: nil)
       end
 
       it "transitions to live state" do
         expect(form).to transition_from(form_state).to(:live).on_event(:make_live)
+      end
+
+      it "calls the before_make_live callback" do
+        form.make_live
+        expect(form).to have_received(:before_make_live)
       end
 
       it "calls the after_make_live callback" do

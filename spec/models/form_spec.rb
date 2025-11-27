@@ -435,6 +435,37 @@ RSpec.describe Form, type: :model do
       it "creates a live form document" do
         expect { form.make_live! }.to change { form.reload.live_form_document }.from(nil)
       end
+
+      context "when first_made_live_at is not already set" do
+        it "sets first_made_live_at" do
+          freeze_time do
+            expect { form.make_live! }.to change { form.reload.first_made_live_at }.from(nil).to(Time.zone.now)
+            expect(form.first_made_live_at).to eq(form.updated_at)
+          end
+        end
+
+        it "populates first_made_live_at in the live FormDocument" do
+          freeze_time do
+            form.make_live!
+            expect(form.reload.live_form_document.reload.content["first_made_live_at"]).to eq(Time.zone.now.iso8601(6))
+          end
+        end
+
+        it "populates first_made_live_at in the draft FormDocument" do
+          freeze_time do
+            form.make_live!
+            expect(form.reload.draft_form_document.reload.content["first_made_live_at"]).to eq(Time.zone.now.iso8601(6))
+          end
+        end
+      end
+
+      context "when first_made_live_at is already set" do
+        let(:form) { create :form, :live_with_draft }
+
+        it "does no update the first_made_live_at" do
+          expect { form.make_live! }.not_to(change { form.reload.first_made_live_at })
+        end
+      end
     end
 
     describe "#archive_live_form!" do

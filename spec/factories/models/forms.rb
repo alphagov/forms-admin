@@ -88,6 +88,7 @@ FactoryBot.define do
     trait :live do
       ready_for_live
       state { :live }
+      first_made_live_at { Time.zone.now }
       after(:create) do |form|
         form.available_languages.each do |language|
           Mobility.with_locale(language) do

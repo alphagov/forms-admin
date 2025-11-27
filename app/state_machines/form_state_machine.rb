@@ -27,6 +27,7 @@ module FormStateMachine
       end
 
       event :make_live do
+        before :before_make_live
         after :after_make_live
 
         transitions from: %i[draft live_with_draft archived archived_with_draft], to: :live, guard: :ready_for_live
