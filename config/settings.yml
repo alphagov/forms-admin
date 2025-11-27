@@ -4,7 +4,7 @@ features:
     enabled_by_group: true
   welsh:
     enabled_by_group: true
-  json_submission_enabled: false
+  json_submission_enabled: true
 
 forms_api:
   # Authentication key to authenticate with forms-api
