@@ -26,6 +26,8 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   validates :what_happens_next_markdown_cy, presence: true, if: -> { form_marked_complete? && form.what_happens_next_markdown.present? }
   validates :payment_url_cy, presence: true, if: -> { form_marked_complete? && form_has_payment_url? }
 
+  validate :page_translations_valid, if: -> { form_marked_complete? }
+
   def submit
     return false if invalid?
 
@@ -103,5 +105,15 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
 
   def form_marked_complete?
     mark_complete == "true"
+  end
+
+  def page_translations_valid
+    return if page_translations.nil?
+
+    page_translations.each do |page_translation|
+      page_translation.validate
+
+      errors.merge!(page_translation.errors)
+    end
   end
 end

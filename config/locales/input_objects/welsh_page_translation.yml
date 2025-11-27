@@ -1,0 +1,22 @@
+---
+en:
+  activemodel:
+    errors:
+      models:
+        forms/welsh_page_translation_input:
+          attributes:
+            question_text_cy:
+              blank: Enter question text in Welsh # TODO: add question number to error messages
+            hint_text_cy:
+              blank: Enter hint text in Welsh
+            page_heading_cy:
+              blank: Enter page heading in Welsh
+            guidance_markdown_cy:
+              blank: Enter guidance markdown in Welsh
+  helpers:
+    label:
+      forms_welsh_page_translation_input:
+        question_text_cy: Question text (Welsh)
+        hint_text_cy: Hint text (Welsh)
+        page_heading_cy: Page heading (Welsh)
+        guidance_markdown_cy: Guidance markdown (Welsh)
