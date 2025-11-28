@@ -60,8 +60,6 @@ Rails.application.routes.draw do
     post "/declaration" => "forms/declaration#create", as: :declaration_create
     get "/payment-link" => "forms/payment_link#new", as: :payment_link
     post "/payment-link" => "forms/payment_link#create", as: :payment_link_create
-    get "/receive-csv" => "forms/receive_csv#new", as: :receive_csv
-    post "/receive-csv" => "forms/receive_csv#create", as: :receive_csv_create
     get "/share-preview" => "forms/share_preview#new", as: :share_preview
     post "/share-preview" => "forms/share_preview#create", as: :share_preview_create
     get "/welsh-translation" => "forms/welsh_translation#new", as: :welsh_translation
