@@ -107,7 +107,6 @@ class Page < ApplicationRecord
       "id" => external_id,
       "position" => position,
       "next_step_id" => next_page&.external_id,
-      "database_id" => id, # temporary attribute so we don't lose answers for in-progress forms-runner user sessions
       "type" => "question_page",
       "data" => slice(*%w[question_text hint_text answer_type is_optional answer_settings page_heading guidance_markdown is_repeatable]),
       "routing_conditions" => routing_conditions.map(&:as_form_document_condition),
