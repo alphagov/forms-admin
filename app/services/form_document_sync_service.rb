@@ -80,7 +80,7 @@ private
 
   def form_content(language, **options)
     Mobility.with_locale(language) do
-      form.as_form_document(**options)
+      form.as_form_document(language:, **options)
     end
   end
 end

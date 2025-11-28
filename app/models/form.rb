@@ -172,13 +172,14 @@ class Form < ApplicationRecord
     group_form&.destroy
   end
 
-  def as_form_document(live_at: nil)
+  def as_form_document(live_at: nil, language: :en)
     content = as_json(
       except: ATTRIBUTES_NOT_IN_FORM_DOCUMENT,
       methods: %i[start_page steps],
     )
     content["form_id"] = content.delete("id").to_s
     content["live_at"] = live_at if live_at.present?
+    content["language"] = language.to_s if language.present?
     content
   end
 
