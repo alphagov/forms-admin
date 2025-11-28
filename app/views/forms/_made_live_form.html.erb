@@ -58,13 +58,8 @@
 
     <% if form_document.submission_type == "email" %>
       <% submission_format = ["email", *form_document.submission_format].join("_") %>
-      <% if FeatureService.enabled?(:json_submission_enabled) %>
-        <h4 class="govuk-heading-s"><%= t("made_live_form.csv_and_json") %></h4>
-        <p><%= t("made_live_form.submission_format.email.#{submission_format}_html") %></p>
-      <% else %>
-        <h4 class="govuk-heading-s"><%= t("made_live_form.csv") %></h4>
-        <p><%= t("made_live_form.submission_format.email.json_submissions_disabled.#{submission_format}") %></p>
-      <% end %>
+      <h4 class="govuk-heading-s"><%= t("made_live_form.csv_and_json") %></h4>
+      <p><%= t("made_live_form.submission_format.email.#{submission_format}_html") %></p>
     <% end %>
 
     <h3 class="govuk-heading-m"><%= t('made_live_form.privacy_policy_link') %></h3>

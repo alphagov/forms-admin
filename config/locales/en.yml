@@ -446,9 +446,6 @@ en:
         contact_details: Provide contact details for support
         privacy_policy: Provide a link to privacy information for this form
         title: Provide privacy and contact details
-      receive_csv_subsection:
-        receive_csv: Get completed forms as CSV files
-        title: Optional task
       submission_attachments_subsection:
         task_name: Get a CSV or JSON file of each completed form
         title: Optional task
@@ -478,9 +475,6 @@ en:
         contact_details: Edit the contact details for support
         privacy_policy: Edit the link to privacy information for this form
         title: Privacy and contact details
-      receive_csv_subsection:
-        receive_csv: Get completed forms as CSV files
-        title: Optional task
       submission_attachments_subsection:
         task_name: Get a CSV or JSON file of each completed form
         title: Optional task
@@ -1041,7 +1035,6 @@ en:
   made_live_form:
     archive_this_form: Archive this form
     contact_details: Your form’s contact details for support
-    csv: CSV
     csv_and_json: CSV and JSON
     declaration: Declaration
     declaration_description: Your form’s declaration is shown to people when they have answered all the questions, just before they submit the form.
@@ -1067,11 +1060,6 @@ en:
         email_json_html: |
           Each completed form is also attached to the email as a JSON file.</br>
           You have not opted to get each completed form as a CSV file.
-        json_submissions_disabled:
-          email: You have not opted in to receive a CSV file with each completed form email.
-          email_csv: Each completed form is also attached to the email as a CSV file.
-          email_csv_json: Each completed form is also attached to the email as a CSV file and a JSON file.
-          email_json: Each completed form is also attached to the email as a JSON file.
     support_email: Email
     support_phone: Phone
     support_url: Support contact online
