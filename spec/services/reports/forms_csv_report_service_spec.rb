@@ -72,7 +72,6 @@ RSpec.describe Reports::FormsCsvReportService do
         form.what_happens_next_markdown,
         "email",
         "csv json",
-        "en",
       )
     end
   end
