@@ -13,7 +13,7 @@
     </h1>
     <%= render FormStatusTagDescriptionComponent::View.new(status: status) %>
 
-    <% metrics_data = CloudWatchService.new(form_document.id, form_document.made_live_date).metrics_data %>
+    <% metrics_data = CloudWatchService.new(form_document.id).past_week_metrics_data %>
     <%= render MetricsSummaryComponent::View.new(form_document.made_live_date, metrics_data) %>
 
     <h2 class="govuk-heading-l">Your form</h2>
@@ -55,7 +55,7 @@
 
     <h4 class="govuk-heading-s"><%= t('made_live_form.submission_email') %></h4>
     <p class="govuk-!-text-break-word"><%= form_document.submission_email %></p>
-    
+
     <% if form_document.submission_type == "email" %>
       <% submission_format = ["email", *form_document.submission_format].join("_") %>
       <% if FeatureService.enabled?(:json_submission_enabled) %>

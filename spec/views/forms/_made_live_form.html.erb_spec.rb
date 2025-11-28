@@ -2,12 +2,12 @@ require "rails_helper"
 
 describe "forms/_made_live_form.html.erb" do
   let(:declaration_text) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
-  let(:metrics_data) { { weekly_submissions: 125, weekly_starts: 256 } }
+  let(:past_week_metrics_data) { { weekly_submissions: 125, weekly_starts: 256 } }
   let(:what_happens_next_markdown) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:form_metadata) { create :form, :live, declaration_text:, what_happens_next_markdown:, submission_type:, submission_format: }
   let(:form_document) do
     form_document_content = FormDocument::Content.from_form_document(form_metadata.live_form_document)
-    form_document_content.live_at = 1.week.ago
+    form_document_content.first_made_live_at = 1.week.ago
     form_document_content
   end
   let(:group) { create(:group, name: "Group 1") }
@@ -16,7 +16,7 @@ describe "forms/_made_live_form.html.erb" do
   let(:questions_path) { Faker::Internet.url }
   let(:submission_type) { "email" }
   let(:submission_format) { [] }
-  let(:cloudwatch_service) { instance_double(CloudWatchService, metrics_data:) }
+  let(:cloudwatch_service) { instance_double(CloudWatchService, past_week_metrics_data:) }
   let(:json_submission_enabled) { true }
 
   before do

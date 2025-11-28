@@ -24,5 +24,7 @@ mailchimp:
   active_users_list: list-1
   mou_signers_list: list-2
 
+cloudwatch_metrics_enabled: false
+
 reports:
   forms_api_forms_per_request_page: 3

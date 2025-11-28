@@ -232,6 +232,10 @@ private
     update_columns(share_preview_completed: false)
   end
 
+  def before_make_live
+    self.first_made_live_at = current_time_from_proper_timezone if first_made_live_at.nil?
+  end
+
   def after_make_live
     FormDocumentSyncService.new(self).synchronize_live_form
   end
