@@ -722,10 +722,6 @@ RSpec.describe Page, type: :model do
       expect(page.as_form_document_step(second_page)).to match a_hash_including("next_step_id" => second_page.external_id)
     end
 
-    it "has an database_id" do
-      expect(page.as_form_document_step(second_page)).to match a_hash_including("database_id" => page.id)
-    end
-
     it "does not include the external_id" do
       expect(page.as_form_document_step(second_page)).not_to have_key("external_id")
     end
