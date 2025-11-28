@@ -11,7 +11,7 @@ class FormCopyService
   end
 
   def copy(tag: "draft")
-    form_doc = FormDocument.find_by(form_id: @form.id, tag:, language: @form.language)
+    form_doc = FormDocument.find_by(form_id: @form.id, tag:, language: :en)
     return false if form_doc.blank?
 
     content = form_doc.content
