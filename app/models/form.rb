@@ -2,6 +2,8 @@ class Form < ApplicationRecord
   include FormStateMachine
   extend Mobility
 
+  SUPPORTED_LANGUAGES = %w[en cy].freeze
+
   has_many :pages, -> { order(position: :asc) }, dependent: :destroy
   has_one :form_submission_email, dependent: :destroy
   has_one :group_form, dependent: :destroy
@@ -32,16 +34,11 @@ class Form < ApplicationRecord
   #   json: "json",
   # }
 
-  enum :language, {
-    en: "en",
-    cy: "cy",
-  }
-
   validates :name, presence: true
   validates :payment_url, url: true, allow_blank: true
   validate :marking_complete_with_errors
   validates :submission_type, presence: true
-  validates :available_languages, presence: true, inclusion: { in: Form.languages }
+  validates :available_languages, presence: true, inclusion: { in: SUPPORTED_LANGUAGES }
   validates :submission_email, email_address: { message: :invalid_email }, allow_blank: true
   validates :support_email, email_address: { message: :invalid_email }, allow_blank: true
 
