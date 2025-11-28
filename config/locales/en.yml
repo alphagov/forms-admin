@@ -225,7 +225,6 @@ en:
         payment_link_saved: Your payment link has been saved
         privacy_details_saved: Your privacy information link has been saved
         receive_csv_and_json_enabled: Completed form emails will include a CSV and a JSON file
-        receive_csv_disabled: Completed form emails will not include a CSV file
         receive_csv_enabled: Completed form emails will include a CSV file
         receive_json_enabled: Completed form emails will include a JSON file
         receive_no_attachments: Completed form emails will not include a CSV or JSON file
@@ -381,16 +380,6 @@ en:
       title_create: Create a form
       title_edit: Edit your form
       your_questions: Your questions
-    receive_csv:
-      new:
-        body_html: |
-          <p>When a form is completed, the answers provided will be sent in the  body of an email to the email address you set up.</p>
-
-          <p>If you wish, you can also get the answers in a comma-separated values (CSV) file. A CSV lists all the answers in plain text, separated by commas. It can be easier to copy and paste, or import into spreadsheets or other applications.</p>
-
-          <p>If you select this option, a CSV file will be attached to each completed form email.</p>
-        submit: Save and continue
-        title: Get completed forms as CSV files
     submission_attachments:
       new:
         body_html: |
