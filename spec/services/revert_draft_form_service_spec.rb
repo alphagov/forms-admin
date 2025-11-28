@@ -15,8 +15,8 @@ describe RevertDraftFormService do
     expect(reloaded_form_document_content.except("live_at", "steps")).to eq(form_document.content.except("live_at", "steps"))
 
     # Compare the steps separately so we get a nice diff if the expectation fails
-    reloaded_steps = reloaded_form_document_content["steps"].map { |s| s.except("database_id") }
-    expected_steps = form_document.content["steps"].map { |s| s.except("database_id") }
+    reloaded_steps = reloaded_form_document_content["steps"]
+    expected_steps = form_document.content["steps"]
     expect(reloaded_steps).to eq(expected_steps)
   end
 
