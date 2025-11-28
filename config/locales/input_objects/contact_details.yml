@@ -18,7 +18,7 @@ en:
               blank: Enter an online contact link description
               too_long: The link description cannot be longer than 120 characters
             phone:
-              blank: Enter a phone number and opening hours
+              blank: Enter a phone number and opening times
               too_long: The phone number information cannot be longer than 500 characters
   helpers:
     hint:
