@@ -79,18 +79,16 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
     end
 
     context "when the form includes condition translation objects" do
-      let(:condition_translation) { Forms::WelshConditionTranslationInput.new(id: condition.id, answer_value_cy: "Ydw", exit_page_heading_cy: "Nid ydych yn gymwys", exit_page_markdown_cy: "Mae'n ddrwg gennym, nid ydych yn gymwys ar gyfer y gwasanaeth hwn.") }
-      let(:another_condition_translation) { Forms::WelshConditionTranslationInput.new(id: another_condition.id, answer_value_cy: "Nac ydw") }
+      let(:condition_translation) { Forms::WelshConditionTranslationInput.new(id: condition.id, exit_page_heading_cy: "Nid ydych yn gymwys", exit_page_markdown_cy: "Mae'n ddrwg gennym, nid ydych yn gymwys ar gyfer y gwasanaeth hwn.") }
+      let(:another_condition_translation) { Forms::WelshConditionTranslationInput.new(id: another_condition.id) }
 
       let(:new_input_data) { super().merge(condition_translations: [condition_translation, another_condition_translation]) }
 
       it "submits the data on the condition translation objects" do
         welsh_page_translation_input.submit
 
-        expect(condition.reload.answer_value_cy).to eq("Ydw")
         expect(condition.reload.exit_page_heading_cy).to eq("Nid ydych yn gymwys")
         expect(condition.reload.exit_page_markdown_cy).to eq("Mae'n ddrwg gennym, nid ydych yn gymwys ar gyfer y gwasanaeth hwn.")
-        expect(another_condition.reload.answer_value_cy).to eq("Nac ydw")
       end
     end
   end
