@@ -285,36 +285,19 @@ describe FormTaskListService do
 
       let(:section_rows) { section[:rows] }
 
-      before do
-        allow(FeatureService).to receive(:enabled?).with(:json_submission_enabled).and_return(json_submission_enabled)
-      end
-
-      context "when the json_submission_enabled feature is enabled" do
-        let(:json_submission_enabled) { true }
-
-        context "when the submission type is email" do
-          it "has link to the submission attachments page" do
-            expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_create.submission_attachments_subsection.task_name")
-            expect(section_rows.first[:path]).to eq "/forms/#{form.id}/submission-attachments"
-          end
-        end
-
-        context "when the submission type is s3" do
-          let(:form) { create(:form, submission_type: "s3") }
-
-          it "does not have link to the submission attachments page" do
-            all_task_names = all_sections.flat_map { |section| section[:rows] }.compact.map { |row| row[:task_name] }
-            expect(all_task_names).not_to include I18n.t("forms.task_list_create.submission_attachments_subsection.task_name")
-          end
+      context "when the submission type is email" do
+        it "has link to the submission attachments page" do
+          expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_create.submission_attachments_subsection.task_name")
+          expect(section_rows.first[:path]).to eq "/forms/#{form.id}/submission-attachments"
         end
       end
 
-      context "when the json_submission_enabled feature is disabled" do
-        let(:json_submission_enabled) { false }
+      context "when the submission type is s3" do
+        let(:form) { create(:form, submission_type: "s3") }
 
-        it "has link to receive CSV settings" do
-          expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_create.receive_csv_subsection.receive_csv")
-          expect(section_rows.first[:path]).to eq "/forms/#{form.id}/receive-csv"
+        it "does not have link to the submission attachments page" do
+          all_task_names = all_sections.flat_map { |section| section[:rows] }.compact.map { |row| row[:task_name] }
+          expect(all_task_names).not_to include I18n.t("forms.task_list_create.submission_attachments_subsection.task_name")
         end
       end
     end
