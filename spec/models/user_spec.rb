@@ -179,15 +179,15 @@ describe User, type: :model do
       end
 
       describe ".by_name" do
-        let!(:matched_user) { create(:user, name: "Sir John Doe") }
-        let!(:other_matched_user) { create(:user, name: "Lord John Smith") }
+        let!(:matched_user) { create(:user, name: "Sir Abcdefg Higjklmop") }
+        let!(:other_matched_user) { create(:user, name: "Lord Abcdefg Smith") }
 
         it "returns users with partial match" do
-          expect(described_class.by_name("John")).to contain_exactly(matched_user, other_matched_user)
+          expect(described_class.by_name("Abcdefg")).to contain_exactly(matched_user, other_matched_user)
         end
 
         it "returns users with case insensitive match" do
-          expect(described_class.by_name("doe")).to contain_exactly(matched_user)
+          expect(described_class.by_name("Higjklmop")).to contain_exactly(matched_user)
         end
 
         it "returns all users when provided name is nil" do
@@ -200,19 +200,19 @@ describe User, type: :model do
       end
 
       describe ".by_email" do
-        let!(:matched_user) { create(:user, email: "sir.john.doe@example.com") }
-        let!(:other_matched_user) { create(:user, email: "lord.john.smith@example.com") }
+        let!(:matched_user) { create(:user, email: "sir.abcdefg.higjklmnop@example.com") }
+        let!(:other_matched_user) { create(:user, email: "lord.abcdefg.smith@example.com") }
 
         it "returns users with partial match" do
-          expect(described_class.by_email(".john")).to contain_exactly(matched_user, other_matched_user)
+          expect(described_class.by_email(".abcdefg")).to contain_exactly(matched_user, other_matched_user)
         end
 
         it "returns the user with an exact match" do
-          expect(described_class.by_email("sir.john.doe@example.com")).to contain_exactly(matched_user)
+          expect(described_class.by_email("sir.abcdefg.higjklmnop@example.com")).to contain_exactly(matched_user)
         end
 
         it "returns users with case insensitive match" do
-          expect(described_class.by_email("DOE")).to contain_exactly(matched_user)
+          expect(described_class.by_email("HIGJKLMNOP")).to contain_exactly(matched_user)
         end
 
         it "returns all users when provided email is nil" do
