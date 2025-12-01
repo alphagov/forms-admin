@@ -1,6 +1,6 @@
 module Forms
   class SubmissionAttachmentsController < WebController
-    before_action :json_submission_enabled?, :submission_type_email?
+    before_action :submission_type_email?
     after_action :verify_authorized
 
     def new
@@ -23,10 +23,6 @@ module Forms
 
     def submission_attachments_input_params
       params.require(:forms_submission_attachments_input).permit(submission_format: []).merge(form: current_form)
-    end
-
-    def json_submission_enabled?
-      redirect_to error_404_path unless Settings.features.json_submission_enabled
     end
 
     def submission_type_email?
