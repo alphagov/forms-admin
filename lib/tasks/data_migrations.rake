@@ -29,6 +29,23 @@ namespace :data_migrations do
       raise ActiveRecord::Rollback
     end
   end
+
+  desc "Updates forms to backfill first_made_live_at where missing"
+  task backfill_first_made_live_at: :environment do
+    Rails.logger.info "data_migration:backfill_first_made_live_at"
+
+    backfill_first_made_live_at
+  end
+
+  desc "Dry run updates forms to backfill first_made_live_at where missing"
+  task dry_run_backfill_first_made_live_at: :environment do
+    Rails.logger.info "data_migration:dry_run_backfill_first_made_live_at"
+    ActiveRecord::Base.transaction do
+      backfill_first_made_live_at
+
+      raise ActiveRecord::Rollback
+    end
+  end
 end
 
 def update_forms_first_made_live_at(forms_and_dates)
@@ -54,5 +71,30 @@ def update_forms_first_made_live_at(forms_and_dates)
     rescue StandardError => e
       Rails.logger.info "Failed to update form #{form_id}: #{e.message}"
     end
+  end
+end
+
+def backfill_first_made_live_at
+  Rails.logger.info "Backfilling forms missing first_made_live_at"
+
+  forms_without_first_made_live_at = Form.where(state: %w[live live_with_draft archived archived_with_draft]).where(first_made_live_at: nil)
+
+  Rails.logger.info "Found #{forms_without_first_made_live_at.count} forms missing first_made_live_at"
+
+  forms_without_first_made_live_at.find_each do |form|
+    current_live_at = form.form_documents.where(tag: %w[live archived]).first.content["live_at"]
+
+    Rails.logger.info "Backfilling form #{form.id} to have first_made_live_at #{current_live_at}"
+
+    form.first_made_live_at = current_live_at
+    form.save!
+
+    form.form_documents.each do |form_document|
+      form_document.content[:first_made_live_at] = current_live_at
+
+      form_document.save!
+    end
+  rescue StandardError => e
+    Rails.logger.info "Failed to backfill form #{form.id}: #{e.message}"
   end
 end
