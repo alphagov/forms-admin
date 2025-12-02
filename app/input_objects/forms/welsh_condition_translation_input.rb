@@ -2,6 +2,8 @@ class Forms::WelshConditionTranslationInput < BaseInput
   include ActionView::Helpers::FormTagHelper
   include ActiveModel::Attributes
 
+  attr_accessor :mark_complete
+
   attribute :id
   attribute :answer_value_cy
   attribute :exit_page_markdown_cy
@@ -25,6 +27,7 @@ class Forms::WelshConditionTranslationInput < BaseInput
     self.answer_value_cy = condition.answer_value_cy
     self.exit_page_markdown_cy = condition.exit_page_markdown_cy
     self.exit_page_heading_cy = condition.exit_page_heading_cy
+    self.mark_complete = condition.routing_page.form.try(:welsh_completed)
 
     self
   end
@@ -51,14 +54,18 @@ class Forms::WelshConditionTranslationInput < BaseInput
   end
 
   def answer_value_cy_present?
-    errors.add(:answer_value_cy, :blank, url: "##{form_field_id(:answer_value_cy)}") if condition_has_answer_value? && answer_value_cy.blank?
+    errors.add(:answer_value_cy, :blank, url: "##{form_field_id(:answer_value_cy)}") if form_marked_complete? && condition_has_answer_value? && answer_value_cy.blank?
   end
 
   def exit_page_heading_cy_present?
-    errors.add(:exit_page_heading_cy, :blank, url: "##{form_field_id(:exit_page_heading_cy)}") if condition_has_exit_page? && exit_page_heading_cy.blank?
+    errors.add(:exit_page_heading_cy, :blank, url: "##{form_field_id(:exit_page_heading_cy)}") if form_marked_complete? && condition_has_exit_page? && exit_page_heading_cy.blank?
   end
 
   def exit_page_markdown_cy_present?
-    errors.add(:exit_page_markdown_cy, :blank, url: "##{form_field_id(:exit_page_markdown_cy)}") if condition_has_exit_page? && exit_page_markdown_cy.blank?
+    errors.add(:exit_page_markdown_cy, :blank, url: "##{form_field_id(:exit_page_markdown_cy)}") if form_marked_complete? && condition_has_exit_page? && exit_page_markdown_cy.blank?
+  end
+
+  def form_marked_complete?
+    mark_complete == "true"
   end
 end

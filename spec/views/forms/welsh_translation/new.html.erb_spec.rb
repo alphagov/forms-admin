@@ -341,7 +341,7 @@ describe "forms/welsh_translation/new.html.erb" do
 
     before do
       welsh_condition_translation_input.answer_value_cy = nil
-      welsh_translation_input.mark_complete = "true"
+      welsh_condition_translation_input.mark_complete = "true"
       welsh_translation_input.validate
 
       assign(:welsh_translation_input, welsh_translation_input)
