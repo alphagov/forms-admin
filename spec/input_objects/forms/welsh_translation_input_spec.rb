@@ -328,7 +328,7 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
 
       it "is invalid" do
         expect(welsh_translation_input).not_to be_valid
-        expect(welsh_translation_input.errors.full_messages_for(:question_text_cy)).to include "Question text cy #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.question_text_cy.blank')}"
+        expect(welsh_translation_input.errors.full_messages_for(:question_text_cy)).to include "Question text cy #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.question_text_cy.blank', question_number: page.position)}"
       end
     end
   end

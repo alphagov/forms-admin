@@ -6,13 +6,13 @@ en:
         forms/welsh_page_translation_input:
           attributes:
             question_text_cy:
-              blank: Enter question text in Welsh # TODO: add question number to error messages
+              blank: Enter question text for question %{question_number} in Welsh
             hint_text_cy:
-              blank: Enter hint text in Welsh
+              blank: Enter hint text for question %{question_number} in Welsh
             page_heading_cy:
-              blank: Enter page heading in Welsh
+              blank: Enter a page heading in Welsh for question %{question_number}
             guidance_markdown_cy:
-              blank: Enter guidance markdown in Welsh
+              blank: Enter guidance text in Welsh for question %{question_number}
   helpers:
     label:
       forms_welsh_page_translation_input:

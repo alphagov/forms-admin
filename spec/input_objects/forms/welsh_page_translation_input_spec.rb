@@ -50,7 +50,7 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
 
         it "is not valid" do
           expect(welsh_page_translation_input).not_to be_valid
-          expect(welsh_page_translation_input.errors.full_messages_for(:question_text_cy)).to include "Question text cy #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.question_text_cy.blank')}"
+          expect(welsh_page_translation_input.errors.full_messages_for(:question_text_cy)).to include "Question text cy #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.question_text_cy.blank', question_number: page.position)}"
         end
       end
 
@@ -60,7 +60,7 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
         context "when the form has hint text in English" do
           it "is not valid" do
             expect(welsh_page_translation_input).not_to be_valid
-            expect(welsh_page_translation_input.errors.full_messages_for(:hint_text_cy)).to include "Hint text cy #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.hint_text_cy.blank')}"
+            expect(welsh_page_translation_input.errors.full_messages_for(:hint_text_cy)).to include "Hint text cy #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.hint_text_cy.blank', question_number: page.position)}"
           end
         end
 
@@ -80,7 +80,7 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
         context "when the form has guidance markdown in English" do
           it "is not valid" do
             expect(welsh_page_translation_input).not_to be_valid
-            expect(welsh_page_translation_input.errors.full_messages_for(:page_heading_cy)).to include "Page heading cy #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.page_heading_cy.blank')}"
+            expect(welsh_page_translation_input.errors.full_messages_for(:page_heading_cy)).to include "Page heading cy #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.page_heading_cy.blank', question_number: page.position)}"
           end
         end
 
@@ -100,7 +100,7 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
         context "when the form has guidance markdown in English" do
           it "is not valid" do
             expect(welsh_page_translation_input).not_to be_valid
-            expect(welsh_page_translation_input.errors.full_messages_for(:guidance_markdown_cy)).to include "Guidance markdown cy #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.guidance_markdown_cy.blank')}"
+            expect(welsh_page_translation_input.errors.full_messages_for(:guidance_markdown_cy)).to include "Guidance markdown cy #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.guidance_markdown_cy.blank', question_number: page.position)}"
           end
         end
 
