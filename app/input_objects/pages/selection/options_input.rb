@@ -1,7 +1,7 @@
 class Pages::Selection::OptionsInput < BaseInput
   include LoggingHelper
 
-  DEFAULT_OPTIONS = { selection_options: [{ name: "" }, { name: "" }] }.freeze
+  DEFAULT_OPTIONS = { selection_options: [{ name: "", value: "" }, { name: "", value: "" }] }.freeze
   INCLUDE_NONE_OF_THE_ABOVE_OPTIONS = %w[true false].freeze
   MAXIMUM_CHOOSE_ONLY_ONE_OPTION = 1000
   MAXIMUM_CHOOSE_MORE_THAN_ONE_OPTION = 30
@@ -12,7 +12,7 @@ class Pages::Selection::OptionsInput < BaseInput
   validates :include_none_of_the_above, inclusion: { in: INCLUDE_NONE_OF_THE_ABOVE_OPTIONS }
 
   def add_another
-    selection_options.append({ name: "" })
+    selection_options.append({ name: "", value: "" })
   end
 
   def remove(index)
@@ -38,7 +38,7 @@ class Pages::Selection::OptionsInput < BaseInput
   end
 
   def selection_options_form_objects
-    selection_options.map { |option| OpenStruct.new(name: option[:name]) }
+    selection_options.map { |option| OpenStruct.new(name: option[:name], value: option[:name]) }
   end
 
   def include_none_of_the_above_options

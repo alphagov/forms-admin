@@ -1,7 +1,7 @@
 class Pages::Selection::OptionsController < PagesController
   def new
     @selection_options_input = Pages::Selection::OptionsInput.new(selection_options: draft_question.answer_settings[:selection_options]
-                                                                                         .map { |option| { name: option[:name] } },
+                                                                                         .map { |option| { name: option[:name], value: option[:value] } },
                                                                   include_none_of_the_above: draft_question.is_optional,
                                                                   draft_question:)
     @selection_options_path = selection_options_create_path(current_form.id)
@@ -33,7 +33,7 @@ class Pages::Selection::OptionsController < PagesController
 
   def edit
     @selection_options_input = Pages::Selection::OptionsInput.new(selection_options: draft_question.answer_settings[:selection_options]
-                                                                                                  .map { |option| { name: option[:name] } },
+                                                                                                  .map { |option| { name: option[:name], value: option[:value] } },
                                                                   include_none_of_the_above: draft_question.is_optional,
                                                                   draft_question:)
     @selection_options_path = selection_options_update_path(current_form.id)
@@ -75,6 +75,6 @@ private
 
   def input_params
     params.require(:pages_selection_options_input)
-          .permit(:include_none_of_the_above, selection_options: [:name]).to_h.deep_symbolize_keys
+          .permit(:include_none_of_the_above, selection_options: [:name, :value]).to_h.deep_symbolize_keys
   end
 end

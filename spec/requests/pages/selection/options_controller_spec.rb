@@ -12,7 +12,7 @@ describe Pages::Selection::OptionsController, type: :request do
            user: standard_user,
            form_id: form.id,
            is_optional: false,
-           answer_settings: { selection_options: [{ name: "" }, { name: "" }],
+           answer_settings: { selection_options: [{ name: "", value: "" }, { name: "", value: "" }],
                               only_one_option: false }
   end
   let(:page_id) { nil }
@@ -53,14 +53,14 @@ describe Pages::Selection::OptionsController, type: :request do
                user: standard_user,
                form_id: form.id,
                is_optional: true,
-               answer_settings: { selection_options: [{ name: "Option 1" }, { name: "Option 2" }],
+               answer_settings: { selection_options: [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }],
                                   only_one_option: false }
       end
 
       it "returns the existing draft question answer settings" do
         selection_options_input = assigns(:selection_options_input)
         draft_question_settings = draft_question.answer_settings
-        expect(selection_options_input.selection_options.map { |option| { name: option[:name] } }).to eq(draft_question_settings[:selection_options].map { |option| { name: option[:name] } })
+        expect(selection_options_input.selection_options.map { |option| { name: option[:name], value: option[:value] } }).to eq(draft_question_settings[:selection_options].map { |option| { name: option[:name], value: option[:value] } })
         expect(selection_options_input.include_none_of_the_above).to eq draft_question.is_optional
       end
     end
@@ -74,7 +74,7 @@ describe Pages::Selection::OptionsController, type: :request do
     context "when form is valid and ready to store", :capture_logging do
       let(:pages_selection_options_input) do
         {
-          selection_options: { "0": { name: "Option 1" }, "1": { name: "Option 2" } },
+          selection_options: { "0": { name: "Option 1", value: "Option 1" }, "1": { name: "Option 2", value: "Option 2" } },
           include_none_of_the_above: true,
         }
       end
@@ -87,7 +87,7 @@ describe Pages::Selection::OptionsController, type: :request do
         expect(log_line).to include(
           "params" => a_hash_including(
             "pages_selection_options_input" => {
-              "selection_options" => { "0" => { "name" => "Option 1" }, "1" => { "name" => "Option 2" } },
+              "selection_options" => { "0" => { "name" => "Option 1", "value" => "Option 1" }, "1" => { "name" => "Option 2", "value" => "Option 2" } },
               "include_none_of_the_above" => "true",
             },
           ),
@@ -98,7 +98,7 @@ describe Pages::Selection::OptionsController, type: :request do
         selection_options_input = assigns(:selection_options_input)
         draft_question_settings = selection_options_input.draft_question.answer_settings
 
-        expect(draft_question_settings).to include(selection_options: [{ name: "Option 1" }, { name: "Option 2" }])
+        expect(draft_question_settings).to include(selection_options: [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }])
       end
 
       it "does not overwrite the only_one_option setting on the draft question" do
@@ -142,7 +142,7 @@ describe Pages::Selection::OptionsController, type: :request do
     it "returns the existing draft question answer settings" do
       selection_options_input = assigns(:selection_options_input)
       draft_question_settings = draft_question.answer_settings
-      expect(selection_options_input.selection_options.map { |option| { name: option[:name] } }).to eq(draft_question_settings[:selection_options].map { |option| { name: option[:name] } })
+      expect(selection_options_input.selection_options.map { |option| { name: option[:name], value: option[:value] } }).to eq(draft_question_settings[:selection_options].map { |option| { name: option[:name], value: option[:value] } })
       expect(selection_options_input.include_none_of_the_above).to eq draft_question.is_optional
     end
 
@@ -172,7 +172,7 @@ describe Pages::Selection::OptionsController, type: :request do
     context "when form is valid and ready to update in the DB" do
       let(:pages_selection_options_input) do
         {
-          selection_options: { "0": { name: "Option 1" }, "1": { name: "Option 2" } },
+          selection_options: { "0": { name: "Option 1", value: "Option 1" }, "1": { name: "Option 2", value: "Option 2" } },
           include_none_of_the_above: true,
         }
       end
@@ -186,7 +186,7 @@ describe Pages::Selection::OptionsController, type: :request do
         selection_options_input = assigns(:selection_options_input)
         draft_question_settings = selection_options_input.draft_question.answer_settings
 
-        expect(draft_question_settings).to include(selection_options: [{ name: "Option 1" }, { name: "Option 2" }])
+        expect(draft_question_settings).to include(selection_options: [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }])
       end
 
       it "does not overwrite the only_one_option setting on the draft question" do
