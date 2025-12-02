@@ -11,19 +11,13 @@ RSpec.describe FormDocument::Content, type: :model do
   end
 
   describe "#made_live_date" do
-    let(:created_at) { Time.zone.local(2023, 1, 1, 2, 2, 2) }
-    let(:live_at) { Time.zone.local(2024, 1, 1, 2, 2, 2) }
-    let(:first_made_live_at) { Time.zone.local(2024, 1, 1, 2, 2, 2) }
     let(:form_document) do
       form.live_form_document.tap do |form_document|
-        form_document.created_at = created_at
-        form_document.content["live_at"] = live_at
         form_document.content["first_made_live_at"] = first_made_live_at
       end
     end
 
-    context "when live_at is not set" do
-      let(:live_at) { nil }
+    context "when the first_made_live_at date is not set" do
       let(:first_made_live_at) { nil }
 
       it "returns nil" do
@@ -31,36 +25,11 @@ RSpec.describe FormDocument::Content, type: :model do
       end
     end
 
-    context "when live_at is set" do
-      context "when the created_at is the earliest date" do
-        it "returns the created_at date" do
-          expect(form_document_content.made_live_date).to eq(Time.zone.local(2023, 1, 1))
-        end
-      end
+    context "when first_made_live_at is set" do
+      let(:first_made_live_at) { Time.zone.local(2021, 3, 3, 4, 4, 4) }
 
-      context "when the live_at is the earliest date" do
-        let(:live_at) { Time.zone.local(2022, 3, 3, 4, 4, 4) }
-
-        it "returns the live_at date" do
-          expect(form_document_content.made_live_date).to eq(Time.zone.local(2022, 3, 3))
-        end
-      end
-
-      context "when the first_made_live_at date is the earliest date" do
-        let(:live_at) { Time.zone.local(2022, 3, 3, 4, 4, 4) }
-        let(:first_made_live_at) { Time.zone.local(2021, 3, 3, 4, 4, 4) }
-
-        it "returns the first_made_live_at date" do
-          expect(form_document_content.made_live_date).to eq(Time.zone.local(2021, 3, 3))
-        end
-      end
-
-      context "when the first_made_live_at date is not set" do
-        let(:first_made_live_at) { nil }
-
-        it "returns the earliest of created_at and live_at" do
-          expect(form_document_content.made_live_date).to eq(Time.zone.local(2023, 1, 1))
-        end
+      it "returns the first_made_live_at date" do
+        expect(form_document_content.made_live_date).to eq(Time.zone.local(2021, 3, 3))
       end
     end
   end
