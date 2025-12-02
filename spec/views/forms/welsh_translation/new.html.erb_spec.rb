@@ -252,19 +252,6 @@ describe "forms/welsh_translation/new.html.erb" do
         let(:condition_translations) { [welsh_condition_translation_input] }
         let(:condition) { create :condition, routing_page_id: page.id }
 
-        context "when the condition has an English answer_value" do
-          let(:condition) { create :condition, routing_page_id: page.id, answer_value: "Yes" }
-
-          it "shows a caption with the page the condition applies to" do
-            expect(rendered).to have_css("caption", text: t("forms.welsh_translation.new.condition.heading", question_number: condition.routing_page.position))
-          end
-
-          it "shows the English text and Welsh field for each condition's answer_value" do
-            expect(rendered).to have_css("td", text: condition.answer_value)
-            expect(rendered).to have_field(t("forms.welsh_translation.new.condition_labels.answer_value_cy", question_number: condition.routing_page.position), type: "text", id: welsh_condition_translation_input.form_field_id(:answer_value_cy))
-          end
-        end
-
         context "when the condition has an exit page" do
           let(:condition) { create :condition, :with_exit_page, routing_page_id: page.id }
 
@@ -336,11 +323,11 @@ describe "forms/welsh_translation/new.html.erb" do
   end
 
   context "when a condition translation has validation errors" do
-    let(:condition) { create :condition, routing_page_id: page.id, answer_value: "Yes" }
+    let(:condition) { create :condition, :with_exit_page, routing_page_id: page.id, answer_value: "Yes" }
     let(:condition_translations) { [welsh_condition_translation_input] }
 
     before do
-      welsh_condition_translation_input.answer_value_cy = nil
+      welsh_condition_translation_input.exit_page_heading_cy = nil
       welsh_condition_translation_input.mark_complete = "true"
       welsh_translation_input.validate
 
@@ -354,12 +341,12 @@ describe "forms/welsh_translation/new.html.erb" do
     end
 
     it "links the error summary to the invalid field" do
-      error_message = I18n.t("activemodel.errors.models.forms/welsh_condition_translation_input.attributes.answer_value_cy.blank")
-      expect(rendered).to have_link(error_message, href: "#forms_welsh_condition_translation_input_#{condition.id}_condition_translations_answer_value_cy")
+      error_message = I18n.t("activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_heading_cy.blank")
+      expect(rendered).to have_link(error_message, href: "#forms_welsh_condition_translation_input_#{condition.id}_condition_translations_exit_page_heading_cy")
     end
 
     it "adds an inline error message to the invalid field" do
-      error_message = "Error: #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.answer_value_cy.blank')}"
+      error_message = "Error: #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_heading_cy.blank')}"
       expect(rendered).to have_css(".govuk-error-message", text: error_message)
     end
   end

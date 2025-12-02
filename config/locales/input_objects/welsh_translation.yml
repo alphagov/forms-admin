@@ -12,7 +12,7 @@ en:
             name_cy:
               blank: Enter a Welsh form name
             payment_url_cy:
-              blank: Enter a payment link in Welsh # TODO: get correct translation for this
+              blank: Enter a payment link in Welsh
             privacy_policy_url_cy:
               blank: Enter a link to privacy information in Welsh
             support_email_cy:

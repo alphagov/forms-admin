@@ -472,11 +472,9 @@ en:
         title: Add translations to your form (optional)
     welsh_translation:
       new:
-        answer_value: Answer value
         condition:
           heading: Question %{question_number}’s route
         condition_labels:
-          answer_value_cy: Answer value for question %{question_number}'s condition (Welsh)
           exit_page_heading_cy: Exit page heading for question %{question_number}'s condition (Welsh)
           exit_page_markdown_cy: Exit page markdown for question %{question_number}'s condition (Welsh)
         english_header: English content
