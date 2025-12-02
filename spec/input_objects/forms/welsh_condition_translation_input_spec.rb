@@ -39,7 +39,7 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
         context "when the form has an exit page in English" do
           it "is not valid" do
             expect(welsh_condition_translation_input).not_to be_valid
-            expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_heading_cy)).to include "Exit page heading cy #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_heading_cy.blank')}"
+            expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_heading_cy)).to include "Exit page heading cy #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_heading_cy.blank', question_number: condition.routing_page.position)}"
           end
         end
 
@@ -59,7 +59,7 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
         context "when the form has an exit page in English" do
           it "is not valid" do
             expect(welsh_condition_translation_input).not_to be_valid
-            expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_markdown_cy)).to include "Exit page markdown cy #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_markdown_cy.blank')}"
+            expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_markdown_cy)).to include "Exit page markdown cy #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_markdown_cy.blank', question_number: condition.routing_page.position)}"
           end
         end
 

@@ -11,7 +11,7 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
                        exit_page_markdown: "Sorry, you are ineligible for this service."
   end
 
-  let(:another_condition) { create :condition, routing_page: page, answer_value: "Yes", exit_page_heading: "Exit page heading", exit_page_markdown: "Exit page markdown"}
+  let(:another_condition) { create :condition, routing_page: page, answer_value: "Yes", exit_page_heading: "Exit page heading", exit_page_markdown: "Exit page markdown" }
 
   let(:mark_complete) { "true" }
 
@@ -161,7 +161,7 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
 
       it "is invalid" do
         expect(welsh_page_translation_input).not_to be_valid
-        expect(welsh_page_translation_input.errors.full_messages_for(:exit_page_markdown_cy)).to include "Exit page markdown cy #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_markdown_cy.blank')}"
+        expect(welsh_page_translation_input.errors.full_messages_for(:exit_page_markdown_cy)).to include "Exit page markdown cy #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_markdown_cy.blank', question_number: page.position)}"
       end
     end
   end

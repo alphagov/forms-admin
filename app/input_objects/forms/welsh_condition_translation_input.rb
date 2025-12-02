@@ -42,11 +42,19 @@ class Forms::WelshConditionTranslationInput < BaseInput
   end
 
   def exit_page_heading_cy_present?
-    errors.add(:exit_page_heading_cy, :blank, url: "##{form_field_id(:exit_page_heading_cy)}") if form_marked_complete? && condition_has_exit_page? && exit_page_heading_cy.blank?
+    if form_marked_complete? && condition_has_exit_page? && exit_page_heading_cy.blank?
+      errors.add(:exit_page_heading_cy,
+                 I18n.t("activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_heading_cy.blank", question_number: condition.routing_page.position),
+                 url: "##{form_field_id(:exit_page_heading_cy)}")
+    end
   end
 
   def exit_page_markdown_cy_present?
-    errors.add(:exit_page_markdown_cy, :blank, url: "##{form_field_id(:exit_page_markdown_cy)}") if form_marked_complete? && condition_has_exit_page? && exit_page_markdown_cy.blank?
+    if form_marked_complete? && condition_has_exit_page? && exit_page_markdown_cy.blank?
+      errors.add(:exit_page_markdown_cy,
+                 I18n.t("activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_markdown_cy.blank", question_number: condition.routing_page.position),
+                 url: "##{form_field_id(:exit_page_markdown_cy)}")
+    end
   end
 
   def form_marked_complete?

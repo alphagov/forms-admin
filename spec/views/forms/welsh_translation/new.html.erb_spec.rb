@@ -4,7 +4,7 @@ describe "forms/welsh_translation/new.html.erb" do
   let(:form) { build_form }
   let(:page) { create :page, position: 1 }
   let(:another_page) { create :page, position: 2 }
-  let(:condition) { create :condition, routing_page_id: page.id }
+  let(:condition) { create :condition, :with_exit_page, routing_page_id: page.id }
   let(:welsh_condition_translation_input) { Forms::WelshConditionTranslationInput.new(id: condition.id).assign_condition_values }
   let(:condition_translations) { [] }
   let(:welsh_page_translation_input) { Forms::WelshPageTranslationInput.new(id: page.id, condition_translations:).assign_page_values }
@@ -341,12 +341,12 @@ describe "forms/welsh_translation/new.html.erb" do
     end
 
     it "links the error summary to the invalid field" do
-      error_message = I18n.t("activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_heading_cy.blank")
+      error_message = I18n.t("activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_heading_cy.blank", question_number: page.position)
       expect(rendered).to have_link(error_message, href: "#forms_welsh_condition_translation_input_#{condition.id}_condition_translations_exit_page_heading_cy")
     end
 
     it "adds an inline error message to the invalid field" do
-      error_message = "Error: #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_heading_cy.blank')}"
+      error_message = "Error: #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_heading_cy.blank', question_number: page.position)}"
       expect(rendered).to have_css(".govuk-error-message", text: error_message)
     end
   end
