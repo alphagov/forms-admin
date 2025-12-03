@@ -12,17 +12,17 @@ en:
             name_cy:
               blank: Enter a Welsh form name
             payment_url_cy:
-              blank: Enter a payment link in Welsh
+              blank: Enter a Welsh GOV.UK Pay payment link
             privacy_policy_url_cy:
               blank: Enter a link to privacy information in Welsh
             support_email_cy:
-              blank: Enter a support email address in Welsh
+              blank: Enter an email address for support
             support_phone_cy:
-              blank: Enter a support phone number in Welsh
+              blank: Enter the phone number and opening times for support in Welsh
             support_url_cy:
-              blank: Enter a support URL in Welsh
+              blank: Enter an online contact link for support
             support_url_text_cy:
-              blank: Enter support text in Welsh
+              blank: Enter text to describe the contact link for support
             what_happens_next_markdown_cy:
               blank: Enter information about what happens next in Welsh
   helpers:
