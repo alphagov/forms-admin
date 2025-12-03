@@ -64,7 +64,7 @@ gem "validate_url"
 gem "paper_trail"
 
 # For AWS interactions
-gem "aws-sdk-cloudwatch", "~> 1.123"
+gem "aws-sdk-cloudwatch", "~> 1.125"
 gem "aws-sdk-codepipeline", "~> 1.108"
 
 # For Mailchimp audience integration
