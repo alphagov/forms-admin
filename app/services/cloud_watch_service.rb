@@ -96,7 +96,7 @@ private
       unit: "Count",
     })
 
-    response.datapoints.sort_by(&:timestamp).map { { timestamp: it.timestamp, sum: it.sum } }
+    datapoints_to_hash_by_date(response.datapoints)
   end
 
   def daily_starts(start_time)
@@ -116,7 +116,14 @@ private
       unit: "Count",
     })
 
-    response.datapoints.sort_by(&:timestamp).map { { timestamp: it.timestamp, sum: it.sum } }
+    datapoints_to_hash_by_date(response.datapoints)
+  end
+
+  def datapoints_to_hash_by_date(datapoints)
+    datapoints.sort_by(&:timestamp).each_with_object({}) do |item, acc|
+      key = item[:timestamp].to_date.iso8601
+      acc[key] = item[:sum]
+    end
   end
 
   def environment_dimension
