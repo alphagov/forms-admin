@@ -113,7 +113,9 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
     page_translations.each do |page_translation|
       page_translation.validate
 
-      errors.merge!(page_translation.errors)
+      page_translation.errors.each do |error|
+        errors.import(error, { attribute: "page_#{page_translation.page.position}_#{error.attribute}".to_sym })
+      end
     end
   end
 end
