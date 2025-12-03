@@ -431,7 +431,7 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.3.1)
-    rdoc (6.16.0)
+    rdoc (6.16.1)
       erb
       psych (>= 4.0.0)
       tsort
@@ -508,10 +508,10 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 4.0)
       websocket (~> 1.0)
-    sentry-rails (5.28.0)
-      railties (>= 5.0)
-      sentry-ruby (~> 5.28.0)
-    sentry-ruby (5.28.0)
+    sentry-rails (6.1.2)
+      railties (>= 5.2.0)
+      sentry-ruby (~> 6.1.2)
+    sentry-ruby (6.1.2)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
     simplecov (0.22.0)
@@ -528,7 +528,7 @@ GEM
       spring (>= 0.9.1)
     spring-prspec (1.0.0)
       spring (>= 0.9.1)
-    stringio (3.1.8)
+    stringio (3.1.9)
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
     thor (1.4.0)
@@ -801,7 +801,7 @@ CHECKSUMS
   railties (8.1.1) sha256=fb0c7038b147bea41bf6697fa443ff1c5c47d3bb1eedd9ecf1bceeb90efcb868
   rainbow (3.1.1) sha256=039491aa3a89f42efa1d6dec2fc4e62ede96eb6acd95e52f1ad581182b79bc6a
   rake (13.3.1) sha256=8c9e89d09f66a26a01264e7e3480ec0607f0c497a861ef16063604b1b08eb19c
-  rdoc (6.16.0) sha256=d0ce6f787027a24e480c1acb9f3110125213cb5df6806fd7832d5a1b8f26a205
+  rdoc (6.16.1) sha256=71357cc208e6da77ba0c4494e01ae870dd18b437c7c7d801dd73ee2f340b9f5c
   redcarpet (3.6.1) sha256=d444910e6aa55480c6bcdc0cdb057626e8a32c054c29e793fa642ba2f155f445
   regexp_parser (2.11.2) sha256=5e5e9c1485ffd8de53ab1d2807affd81f617f72967dfc64fc75a69e2cbf0ff98
   reline (0.6.3) sha256=1198b04973565b36ec0f11542ab3f5cfeeec34823f4e54cebde90968092b1835
@@ -824,8 +824,8 @@ CHECKSUMS
   rubyzip (3.2.2) sha256=c0ed99385f0625415c8f05bcae33fe649ed2952894a95ff8b08f26ca57ea5b3c
   securerandom (0.4.1) sha256=cc5193d414a4341b6e225f0cb4446aceca8e50d5e1888743fac16987638ea0b1
   selenium-webdriver (4.38.0) sha256=0a84e71fef66394ae8d9290d3a5bc24b33de49d45a7aa57fc09f246218bf102f
-  sentry-rails (5.28.0) sha256=a0cbba7ce86312172db9d1b3c39c5302de07e446e7df3f68e4f4b1d240a91fc2
-  sentry-ruby (5.28.0) sha256=745c1db3b85c765993dfeb941830aeafff82d85330cd953410c7f37197b0bd99
+  sentry-rails (6.1.2) sha256=a0488e0f11f2fdae388fdcf16bf8b6d41ae3bb7810cdd5e5a85de624bbd6126b
+  sentry-ruby (6.1.2) sha256=9ddc588a90926fbe4c8f6838a4f43278bede823bdef5da264488bd739d7a5a64
   simplecov (0.22.0) sha256=fe2622c7834ff23b98066bb0a854284b2729a569ac659f82621fc22ef36213a5
   simplecov-html (0.12.3) sha256=4b1aad33259ffba8b29c6876c12db70e5750cb9df829486e4c6e5da4fa0aa07b
   simplecov_json_formatter (0.1.4) sha256=529418fbe8de1713ac2b2d612aa3daa56d316975d307244399fa4838c601b428
@@ -833,7 +833,7 @@ CHECKSUMS
   spring (4.3.0) sha256=0aaaf3bcce38e8528275854881d1922660d76cbd19a9a3af4a419d95b7fe7122
   spring-commands-rspec (1.0.4) sha256=6202e54fa4767452e3641461a83347645af478bf45dddcca9737b43af0dd1a2c
   spring-prspec (1.0.0) sha256=2933669caa026e94de5a7bd288f74775298892549fd068b4129d798a3008478f
-  stringio (3.1.8) sha256=99c43c3a9302843cca223fd985bfc503dd50a4b1723d3e4a9eb1d9c37d99e4ec
+  stringio (3.1.9) sha256=c111af13d3a73eab96a3bc2655ecf93788d13d28cb8e25c1dcbff89ace885121
   terminal-table (4.0.0) sha256=f504793203f8251b2ea7c7068333053f0beeea26093ec9962e62ea79f94301d2
   thor (1.4.0) sha256=8763e822ccb0f1d7bee88cde131b19a65606657b847cc7b7b4b82e772bcd8a3d
   thread_safe (0.3.6) sha256=9ed7072821b51c57e8d6b7011a8e282e25aeea3a4065eab326e43f66f063b05a
