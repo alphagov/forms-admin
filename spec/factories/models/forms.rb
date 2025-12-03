@@ -106,6 +106,7 @@ FactoryBot.define do
     trait :archived do
       ready_for_live
       state { :archived }
+      first_made_live_at { Time.zone.now }
       after(:create) do |form|
         form.available_languages.each do |language|
           Mobility.with_locale(language) do
