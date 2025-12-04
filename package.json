@@ -27,7 +27,7 @@
     "jsdom": "^27.2.0",
     "postcss": "^8.5.6",
     "regenerator-runtime": "^0.14.1",
-    "sass": "^1.94.1",
+    "sass": "^1.94.2",
     "snazzy": "^9.0.0",
     "standard": "^17.1.2",
     "stylelint": "^16.26.0",
