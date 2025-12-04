@@ -77,22 +77,53 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
         end
       end
 
-      context "when the Welsh privacy_policy_url is missing" do
-        let(:new_input_data) { super().merge(privacy_policy_url_cy: nil) }
+      describe "Welsh privacy policy URL" do
+        context "when the Welsh privacy policy URL is present" do
+          context "when the Welsh privacy policy is a valid link" do
+            let(:new_input_data) { super().merge(privacy_policy_url_cy: "https://www.gov.uk/welsh-privacy") }
 
-        context "when the form has a privacy policy URL in English" do
-          it "is not valid" do
-            expect(welsh_translation_input).not_to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:privacy_policy_url_cy)).to include "Privacy policy url cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.privacy_policy_url_cy.blank')}"
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:privacy_policy_url_cy)).to be_empty
+            end
+          end
+
+          context "when the Welsh privacy policy is a link to the example" do
+            let(:new_input_data) { super().merge(privacy_policy_url_cy: "https://www.gov.uk/help/privacy-notice") }
+
+            it "is invalid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:privacy_policy_url_cy)).to include "Privacy policy url cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.privacy_policy_url_cy.exclusion')}"
+            end
+          end
+
+          context "when the Welsh privacy policy is not a URL" do
+            let(:new_input_data) { super().merge(privacy_policy_url_cy: "Something that isn't a URL") }
+
+            it "is invalid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:privacy_policy_url_cy)).to include "Privacy policy url cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.privacy_policy_url_cy.url')}"
+            end
           end
         end
 
-        context "when the form does not have a privacy policy URL in English" do
-          let(:form) { build_form(privacy_policy_url: nil) }
+        context "when the Welsh privacy policy URL is missing" do
+          let(:new_input_data) { super().merge(privacy_policy_url_cy: nil) }
 
-          it "is valid" do
-            expect(welsh_translation_input).to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:privacy_policy_url_cy)).to be_empty
+          context "when the form has a privacy policy URL in English" do
+            it "is not valid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:privacy_policy_url_cy)).to include "Privacy policy url cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.privacy_policy_url_cy.blank')}"
+            end
+          end
+
+          context "when the form does not have a privacy policy URL in English" do
+            let(:form) { build_form(privacy_policy_url: nil) }
+
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:privacy_policy_url_cy)).to be_empty
+            end
           end
         end
       end

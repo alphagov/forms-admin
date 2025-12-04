@@ -15,6 +15,8 @@ en:
               blank: Enter a Welsh GOV.UK Pay payment link
             privacy_policy_url_cy:
               blank: Enter a link to privacy information in Welsh
+              exclusion: https://www.gov.uk/help/privacy-notice is the privacy notice for the GOV.UK website and cannot be used for your form
+              url: Enter a link to Welsh privacy information in the correct format, like https://www.gov.uk/help/privacy-notice
             support_email_cy:
               blank: Enter an email address for support
               invalid_email_address: Enter an email address for support in the correct format, like name@example.com

@@ -17,7 +17,10 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   attribute :payment_url_cy
 
   validates :name_cy, presence: true, if: -> { form_marked_complete? }
+
   validates :privacy_policy_url_cy, presence: true, if: -> { form_marked_complete? && form.privacy_policy_url.present? }
+  validates :privacy_policy_url_cy, url: true, if: -> { privacy_policy_url_cy.present? }
+  validates :privacy_policy_url_cy, exclusion: { in: %w[https://www.gov.uk/help/privacy-notice] }, if: -> { privacy_policy_url_cy.present? }
 
   validates :support_email_cy, presence: true, if: -> { form_marked_complete? && form_has_support_email? }
   validates :support_email_cy, email_address: true, allowed_email_domain: true, if: -> { support_email_cy.present? }
