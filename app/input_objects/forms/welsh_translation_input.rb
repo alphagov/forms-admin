@@ -18,7 +18,9 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
 
   validates :name_cy, presence: true, if: -> { form_marked_complete? }
   validates :privacy_policy_url_cy, presence: true, if: -> { form_marked_complete? && form.privacy_policy_url.present? }
+
   validates :support_email_cy, presence: true, if: -> { form_marked_complete? && form_has_support_email? }
+  validates :support_email_cy, email_address: true, allowed_email_domain: true, if: -> { support_email_cy.present? }
 
   validates :support_phone_cy, presence: true, if: -> { form_marked_complete? && form_has_support_phone? }
   validates :support_phone_cy, length: { maximum: 500 }, if: -> { support_phone_cy.present? }

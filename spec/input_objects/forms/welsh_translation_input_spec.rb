@@ -97,22 +97,49 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
         end
       end
 
-      context "when the Welsh support email is missing" do
-        let(:new_input_data) { super().merge(support_email_cy: nil) }
+      describe "Welsh support email" do
+        context "when the Welsh support email is present" do
+          it_behaves_like "a field that rejects invalid email addresses" do
+            let(:model) { welsh_translation_input }
+            let(:attribute) { :support_email_cy }
+          end
 
-        context "when the form has a support email in English" do
-          it "is not valid" do
-            expect(welsh_translation_input).not_to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:support_email_cy)).to include "Support email cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_email_cy.blank')}"
+          context "when the Welsh support email is a valid Government email address" do
+            let(:new_input_data) { super().merge(support_email_cy: "someone@example.gov.uk") }
+
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_email_cy)).to be_empty
+            end
+          end
+
+          context "when the Welsh support email is a correctly formatted email address with a non-government domain" do
+            let(:new_input_data) { super().merge(support_email_cy: "someone@example.com") }
+
+            it "is invalid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_email_cy)).to include "Support email cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_email_cy.non_government_email')}"
+            end
           end
         end
 
-        context "when the form does not have a support email in English" do
-          let(:form) { build_form(support_email: nil) }
+        context "when the Welsh support email is missing" do
+          let(:new_input_data) { super().merge(support_email_cy: nil) }
 
-          it "is valid" do
-            expect(welsh_translation_input).to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:support_email_cy)).to be_empty
+          context "when the form has a support email in English" do
+            it "is not valid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_email_cy)).to include "Support email cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_email_cy.blank')}"
+            end
+          end
+
+          context "when the form does not have a support email in English" do
+            let(:form) { build_form(support_email: nil) }
+
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_email_cy)).to be_empty
+            end
           end
         end
       end
