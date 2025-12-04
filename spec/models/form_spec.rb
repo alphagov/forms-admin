@@ -1172,5 +1172,18 @@ RSpec.describe Form, type: :model do
         expect(form.as_form_document(live_at:)["live_at"]).to eq("2023-10-16 13:24:00.000000")
       end
     end
+
+    it "includes default language if not provided" do
+      expect(form.as_form_document["language"]).to eq("en")
+    end
+
+    it "includes the language if provided" do
+      expect(form.as_form_document(language: :cy)["language"]).to eq("cy")
+    end
+
+    it "does not include language if blank or nil" do
+      expect(form.as_form_document(language: "")["language"]).to be_nil
+      expect(form.as_form_document(language: nil)["language"]).to be_nil
+    end
   end
 end

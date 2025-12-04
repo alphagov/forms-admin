@@ -2,6 +2,10 @@ class Form < ApplicationRecord
   include FormStateMachine
   extend Mobility
 
+  self.ignored_columns += [:language]
+
+  SUPPORTED_LANGUAGES = %w[en cy].freeze
+
   has_many :pages, -> { order(position: :asc) }, dependent: :destroy
   has_one :form_submission_email, dependent: :destroy
   has_one :group_form, dependent: :destroy
@@ -32,16 +36,11 @@ class Form < ApplicationRecord
   #   json: "json",
   # }
 
-  enum :language, {
-    en: "en",
-    cy: "cy",
-  }
-
   validates :name, presence: true
   validates :payment_url, url: true, allow_blank: true
   validate :marking_complete_with_errors
   validates :submission_type, presence: true
-  validates :available_languages, presence: true, inclusion: { in: Form.languages }
+  validates :available_languages, presence: true, inclusion: { in: SUPPORTED_LANGUAGES }
   validates :submission_email, email_address: { message: :invalid_email }, allow_blank: true
   validates :support_email, email_address: { message: :invalid_email }, allow_blank: true
 
@@ -175,13 +174,14 @@ class Form < ApplicationRecord
     group_form&.destroy
   end
 
-  def as_form_document(live_at: nil)
+  def as_form_document(live_at: nil, language: :en)
     content = as_json(
       except: ATTRIBUTES_NOT_IN_FORM_DOCUMENT,
       methods: %i[start_page steps],
     )
     content["form_id"] = content.delete("id").to_s
     content["live_at"] = live_at if live_at.present?
+    content["language"] = language.to_s if language.present?
     content
   end
 
