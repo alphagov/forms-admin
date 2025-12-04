@@ -197,22 +197,29 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
         end
       end
 
-      context "when the Welsh what happens next markdown is missing" do
-        let(:new_input_data) { super().merge(what_happens_next_markdown_cy: nil) }
-
-        context "when the form has what_happens_next_markdown in English" do
-          it "is not valid" do
-            expect(welsh_translation_input).not_to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:what_happens_next_markdown_cy)).to include "What happens next markdown cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.what_happens_next_markdown_cy.blank')}"
-          end
+      describe "what_happens_next_markdown_cy" do
+        it_behaves_like "a markdown field with headings disallowed" do
+          let(:model) { welsh_translation_input }
+          let(:attribute) { :what_happens_next_markdown_cy }
         end
 
-        context "when the form does not have what_happens_next_markdown in English" do
-          let(:form) { build_form(what_happens_next_markdown: nil) }
+        context "when the Welsh what happens next markdown is missing" do
+          let(:new_input_data) { super().merge(what_happens_next_markdown_cy: nil) }
 
-          it "is valid" do
-            expect(welsh_translation_input).to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:what_happens_next_markdown_cy)).to be_empty
+          context "when the form has what_happens_next_markdown in English" do
+            it "is not valid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:what_happens_next_markdown_cy)).to include "What happens next markdown cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.what_happens_next_markdown_cy.blank')}"
+            end
+          end
+
+          context "when the form does not have what_happens_next_markdown in English" do
+            let(:form) { build_form(what_happens_next_markdown: nil) }
+
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:what_happens_next_markdown_cy)).to be_empty
+            end
           end
         end
       end

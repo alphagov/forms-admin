@@ -23,7 +23,10 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   validates :support_url_cy, presence: true, if: -> { form_marked_complete? && form_has_support_url? }
   validates :support_url_text_cy, presence: true, if: -> { form_marked_complete? && form_has_support_url? }
   validates :declaration_text_cy, presence: true, if: -> { form_marked_complete? && form_has_declaration? }
+
   validates :what_happens_next_markdown_cy, presence: true, if: -> { form_marked_complete? && form.what_happens_next_markdown.present? }
+  validates :what_happens_next_markdown_cy, markdown: { allow_headings: false }, if: -> { what_happens_next_markdown_cy.present? }
+
   validates :payment_url_cy, presence: true, if: -> { form_marked_complete? && form_has_payment_url? }
 
   validate :page_translations_valid
