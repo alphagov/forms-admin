@@ -31,6 +31,9 @@ updates:
       aws-sdk:
         patterns:
           - "aws-sdk-*"
+      sentry:
+        patterns:
+          - "sentry-*"
 
   # Maintain dependencies for npm
   - package-ecosystem: npm
