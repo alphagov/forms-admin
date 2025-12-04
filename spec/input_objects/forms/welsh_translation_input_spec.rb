@@ -117,22 +117,44 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
         end
       end
 
-      context "when the Welsh support phone number is missing" do
-        let(:new_input_data) { super().merge(support_phone_cy: nil) }
+      describe "Welsh support phone number" do
+        context "when the Welsh support phone number is present" do
+          context "when the Welsh support phone number is 500 characters or fewer" do
+            let(:new_input_data) { super().merge(support_phone_cy: "01632 960051\nOpening hours: 9am-5pm".ljust(500, "x")) }
 
-        context "when the form has a support phone number in English" do
-          it "is not valid" do
-            expect(welsh_translation_input).not_to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:support_phone_cy)).to include "Support phone cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_phone_cy.blank')}"
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_phone_cy)).to be_empty
+            end
+          end
+
+          context "when the Welsh support phone number is 501 characters or more" do
+            let(:new_input_data) { super().merge(support_phone_cy: "01632 960051\nOpening hours: 9am-5pm".ljust(501, "x")) }
+
+            it "is invalid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_phone_cy)).to include "Support phone cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_phone_cy.too_long')}"
+            end
           end
         end
 
-        context "when the form does not have a support phone number in English" do
-          let(:form) { build_form(support_phone: nil) }
+        context "when the Welsh support phone number is missing" do
+          let(:new_input_data) { super().merge(support_phone_cy: nil) }
 
-          it "is valid" do
-            expect(welsh_translation_input).to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:support_phone_cy)).to be_empty
+          context "when the form has a support phone number in English" do
+            it "is not valid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_phone_cy)).to include "Support phone cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_phone_cy.blank')}"
+            end
+          end
+
+          context "when the form does not have a support phone number in English" do
+            let(:form) { build_form(support_phone: nil) }
+
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_phone_cy)).to be_empty
+            end
           end
         end
       end

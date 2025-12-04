@@ -19,6 +19,7 @@ en:
               blank: Enter an email address for support
             support_phone_cy:
               blank: Enter the phone number and opening times for support in Welsh
+              too_long: The phone information for support cannot be longer than 500 characters
             support_url_cy:
               blank: Enter an online contact link for support
               too_long: The link for support cannot be longer than 120 characters
