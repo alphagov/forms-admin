@@ -66,6 +66,7 @@ Rails.application.routes.draw do
     post "/welsh-translation" => "forms/welsh_translation#create", as: :welsh_translation_create
     get "/submission-attachments" => "forms/submission_attachments#new", as: :submission_attachments
     post "/submission-attachments" => "forms/submission_attachments#create", as: :submission_attachments_create
+    get "/metrics" => "forms/metrics#metrics_csv", as: :metrics_csv
 
     scope "/pages-by-external-id/:page_external_id" do
       get "/edit-question" => "forms/redirect_from_forms_runner#edit_question", as: :edit_question_by_external_id
