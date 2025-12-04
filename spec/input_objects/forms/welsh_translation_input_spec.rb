@@ -137,42 +137,94 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
         end
       end
 
-      context "when the Welsh support url is missing" do
-        let(:new_input_data) { super().merge(support_url_cy: nil) }
+      describe "Welsh support link" do
+        context "when the Welsh support link is present" do
+          context "when the link URL is 120 characters or fewer" do
+            let(:new_input_data) { super().merge(support_url_cy: "https://example.org/".ljust(120, "x")) }
 
-        context "when the form has a support url in English" do
-          it "is not valid" do
-            expect(welsh_translation_input).not_to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:support_url_cy)).to include "Support url cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_url_cy.blank')}"
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+            end
+          end
+
+          context "when the link URL is 120 characters or more" do
+            let(:new_input_data) { super().merge(support_url_cy: "https://example.org/".ljust(121, "x")) }
+
+            it "is invalid" do
+              error_message = I18n.t("activemodel.errors.models.forms/welsh_translation_input.attributes.support_url_cy.too_long")
+              expect(welsh_translation_input).to be_invalid
+              expect(welsh_translation_input.errors.full_messages_for(:support_url_cy)).to include "Support url cy #{error_message}"
+            end
+          end
+
+          context "when the link URL is not in a valid URL format" do
+            let(:new_input_data) { super().merge(support_url_cy: "not a URL") }
+
+            it "link_href is invalid if not a URL" do
+              error_message = I18n.t("activemodel.errors.models.forms/welsh_translation_input.attributes.support_url_cy.url")
+              expect(welsh_translation_input).to be_invalid
+              expect(welsh_translation_input.errors.full_messages_for(:support_url_cy)).to include "Support url cy #{error_message}"
+            end
           end
         end
 
-        context "when the form does not have a support_url in English" do
-          let(:form) { build_form(support_url: nil) }
+        context "when the Welsh support url is missing" do
+          let(:new_input_data) { super().merge(support_url_cy: nil) }
 
-          it "is valid" do
-            expect(welsh_translation_input).to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:support_url_cy)).to be_empty
+          context "when the form has a support url in English" do
+            it "is not valid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_url_cy)).to include "Support url cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_url_cy.blank')}"
+            end
+          end
+
+          context "when the form does not have a support_url in English" do
+            let(:form) { build_form(support_url: nil) }
+
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_url_cy)).to be_empty
+            end
           end
         end
-      end
 
-      context "when the Welsh support link text is missing" do
-        let(:new_input_data) { super().merge(support_url_text_cy: nil) }
+        context "when the Welsh support link text is present" do
+          context "when the link text is 120 characters or fewer" do
+            let(:new_input_data) { super().merge(support_url_text_cy: "Online contact form".ljust(120, "x")) }
 
-        context "when the form has a support url in English" do
-          it "is not valid" do
-            expect(welsh_translation_input).not_to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:support_url_text_cy)).to include "Support url text cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_url_text_cy.blank')}"
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+            end
+          end
+
+          context "when the link text is 120 characters or more" do
+            let(:new_input_data) { super().merge(support_url_text_cy: "Online contact form".ljust(121, "x")) }
+
+            it "is invalid" do
+              error_message = I18n.t("activemodel.errors.models.forms/welsh_translation_input.attributes.support_url_text_cy.too_long")
+              expect(welsh_translation_input).to be_invalid
+              expect(welsh_translation_input.errors.full_messages_for(:support_url_text_cy)).to include "Support url text cy #{error_message}"
+            end
           end
         end
 
-        context "when the form does not have a support_url in English" do
-          let(:form) { build_form(support_url: nil) }
+        context "when the Welsh support link text is missing" do
+          let(:new_input_data) { super().merge(support_url_text_cy: nil) }
 
-          it "is valid" do
-            expect(welsh_translation_input).to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:support_url_text_cy)).to be_empty
+          context "when the form has a support url in English" do
+            it "is not valid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_url_text_cy)).to include "Support url text cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_url_text_cy.blank')}"
+            end
+          end
+
+          context "when the form does not have a support_url in English" do
+            let(:form) { build_form(support_url: nil) }
+
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_url_text_cy)).to be_empty
+            end
           end
         end
       end
