@@ -27,6 +27,10 @@ updates:
     allow:
       - dependency-type: "direct"
       - dependency-name: "vite_ruby"
+    groups:
+      aws-sdk:
+        patterns:
+          - "aws-sdk-*"
 
   # Maintain dependencies for npm
   - package-ecosystem: npm
