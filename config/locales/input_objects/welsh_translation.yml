@@ -13,6 +13,7 @@ en:
               blank: Enter a Welsh form name
             payment_url_cy:
               blank: Enter a Welsh GOV.UK Pay payment link
+              url: Enter a GOV.UK Pay payment link in the correct format, like https://www.gov.uk/payments/your-payment-link
             privacy_policy_url_cy:
               blank: Enter a link to privacy information in Welsh
               exclusion: https://www.gov.uk/help/privacy-notice is the privacy notice for the GOV.UK website and cannot be used for your form

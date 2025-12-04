@@ -28,7 +28,7 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
       support_url_cy: "https://www.gov.uk/new-welsh-support",
       support_url_text_cy: "New Welsh Support",
       privacy_policy_url_cy: "https://www.gov.uk/new-welsh-privacy",
-      payment_url_cy: "https://www.gov.uk/new-welsh-payment",
+      payment_url_cy: "https://www.gov.uk/payments/new-welsh-payment-link",
     }
   end
 
@@ -51,7 +51,7 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
       support_url_text: "English Support",
       privacy_policy_url_cy: "https://www.gov.uk/welsh-privacy",
       payment_url: "https://www.gov.uk/english-payment",
-      payment_url_cy: "https://www.gov.uk/welsh-payment",
+      payment_url_cy: "https://www.gov.uk/payments/your-welsh-payment-link",
     }
     build(:form, default_attributes.merge(attributes))
   end
@@ -356,22 +356,40 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
         end
       end
 
-      context "when the Welsh payment_url_cy is missing" do
-        let(:new_input_data) { super().merge(payment_url_cy: nil) }
+      describe "Welsh payment link" do
+        context "when the Welsh payment URL is present" do
+          it_behaves_like "a payment link validator" do
+            let(:model) { welsh_translation_input }
+            let(:attribute) { :payment_url_cy }
+          end
 
-        context "when the form has a payment url in English" do
-          it "is not valid" do
-            expect(welsh_translation_input).not_to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:payment_url_cy)).to include "Payment url cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.payment_url_cy.blank')}"
+          context "when the payment link is not a url" do
+            let(:new_input_data) { super().merge(payment_url_cy: "Something that isn't a URL") }
+
+            it "is invalid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:payment_url_cy)).to include "Payment url cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.payment_url_cy.url')}"
+            end
           end
         end
 
-        context "when the form does not have a payment_url_cy in English" do
-          let(:form) { build_form(payment_url: nil) }
+        context "when the Welsh payment URL is missing" do
+          let(:new_input_data) { super().merge(payment_url_cy: nil) }
 
-          it "is valid" do
-            expect(welsh_translation_input).to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:payment_url_cy)).to be_empty
+          context "when the form has a payment url in English" do
+            it "is not valid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:payment_url_cy)).to include "Payment url cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.payment_url_cy.blank')}"
+            end
+          end
+
+          context "when the form does not have a payment_url_cy in English" do
+            let(:form) { build_form(payment_url: nil) }
+
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:payment_url_cy)).to be_empty
+            end
           end
         end
       end

@@ -40,6 +40,8 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   validates :what_happens_next_markdown_cy, markdown: { allow_headings: false }, if: -> { what_happens_next_markdown_cy.present? }
 
   validates :payment_url_cy, presence: true, if: -> { form_marked_complete? && form_has_payment_url? }
+  validates :payment_url_cy, url: true, if: -> { payment_url_cy.present? }
+  validates :payment_url_cy, payment_link: true, if: -> { payment_url_cy.present? }
 
   validate :page_translations_valid
 
