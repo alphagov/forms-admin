@@ -5,9 +5,6 @@
         <%= error_message.html_safe %>
     </div>
   <% else %>
-    <p>
-      <%= description %>
-    </p>
     <div class="app-metrics__container">
       <div class="app-metrics__big-number">
         <%= t("metrics_summary.completion_rate") %> <span class="app-metrics__big-number-number"><%= weekly_completion_rate %></span>
