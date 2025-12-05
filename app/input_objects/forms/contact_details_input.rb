@@ -1,9 +1,7 @@
 class Forms::ContactDetailsInput < BaseInput
   attr_accessor :form, :email, :phone, :link_text, :link_href, :contact_details_supplied, :current_user
 
-  EMAIL_REGEX = /.*@.*/
-
-  validates :email, presence: true, format: { with: EMAIL_REGEX, message: :invalid_email }, if: -> { supplied :supply_email }
+  validates :email, presence: true, email_address: true, if: -> { supplied :supply_email }
   validates :email, allowed_email_domain: true, if: -> { supplied :supply_email }
   validates :phone, presence: true, length: { maximum: 500 }, if: -> { supplied :supply_phone }
   validates :link_href, presence: true, url: true, length: { maximum: 120 }, if: -> { supplied :supply_link }

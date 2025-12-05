@@ -9,7 +9,7 @@ en:
               must_be_supply_contact_details: Select at least one option
             email:
               blank: Enter an email address
-              invalid_email: Enter an email address in the correct format, like name@example.com
+              invalid_email_address: Enter an email address in the correct format, like name@example.com
             link_href:
               blank: Enter an online contact link
               too_long: The link cannot be longer than 120 characters

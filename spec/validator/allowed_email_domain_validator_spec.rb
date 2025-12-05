@@ -1,13 +1,13 @@
 require "rails_helper"
 
-class Validatable
+class AllowedEmailDomainModel
   include ActiveModel::Validations
   attr_accessor :email
 
   validates :email, allowed_email_domain: true
 end
 
-class ValidatableWithCurrentUser
+class AllowedEmailDomainModelWithCurrentUser
   include ActiveModel::Model
   attr_accessor :current_user, :email
 
@@ -15,7 +15,7 @@ class ValidatableWithCurrentUser
 end
 
 RSpec.describe AllowedEmailDomainValidator do
-  let(:model) { Validatable.new }
+  let(:model) { AllowedEmailDomainModel.new }
 
   it "validates email with .gov.uk" do
     model.email = "test.gov.uk"
@@ -29,7 +29,7 @@ RSpec.describe AllowedEmailDomainValidator do
 
   context "with model with current_user" do
     let(:current_user) { build :user, email: "a@ogd.example" }
-    let(:model) { ValidatableWithCurrentUser.new(current_user:) }
+    let(:model) { AllowedEmailDomainModelWithCurrentUser.new(current_user:) }
 
     it "validates email with .gov.uk" do
       model.email = "inbox@test.gov.uk"

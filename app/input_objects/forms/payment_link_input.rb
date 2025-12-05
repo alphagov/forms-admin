@@ -4,7 +4,7 @@ class Forms::PaymentLinkInput < BaseInput
   attr_accessor :form, :payment_url
 
   validates :payment_url, url: true, if: -> { payment_url.present? }
-  validate :is_pay_url?, if: -> { payment_url.present? }
+  validates :payment_url, payment_link: true, if: -> { payment_url.present? }
 
   def submit
     return false if invalid?
@@ -16,9 +16,5 @@ class Forms::PaymentLinkInput < BaseInput
   def assign_form_values
     self.payment_url = form.payment_url
     self
-  end
-
-  def is_pay_url?
-    errors.add :payment_url, :url unless payment_url.starts_with?("https://www.gov.uk/payments/", "https://gov.uk/payments/")
   end
 end

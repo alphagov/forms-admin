@@ -21,15 +21,12 @@ RSpec.describe Forms::ContactDetailsInput, type: :model do
           expect(contact_details_input.errors).to be_added :email, :non_government_email
         end
 
-        it "is invalid if doesn't have an @ symbol in" do
-          error_message = I18n.t("activemodel.errors.models.forms/contact_details_input.attributes.email.invalid_email")
-          contact_details_input = build :contact_details_input, email: "something.something.gov.uk"
-          expect(contact_details_input).to be_invalid
-
-          expect(contact_details_input.errors.full_messages_for(:email)).to include "Email #{error_message}"
+        it_behaves_like "a field that rejects invalid email addresses" do
+          let(:model) { build :contact_details_input }
+          let(:attribute) { :email }
         end
 
-        it "is valid if given an email with an @ and ending in .gov.uk" do
+        it "is valid if given an email in the correct format and ending in .gov.uk" do
           contact_details_input = build :contact_details_input, email: "something@something.gov.uk"
           expect(contact_details_input).to be_valid
         end
