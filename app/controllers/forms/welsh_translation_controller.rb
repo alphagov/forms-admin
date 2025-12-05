@@ -39,11 +39,11 @@ module Forms
     end
 
     def page_translation_input_params
-      params.require(:forms_welsh_translation_input).permit(page_translations: WelshPageTranslationInput.attribute_names)
+      params.require(:forms_welsh_translation_input).permit(:mark_complete, page_translations: WelshPageTranslationInput.attribute_names)
     end
 
     def condition_translation_input_params
-      params.require(:forms_welsh_translation_input).permit(condition_translations: WelshConditionTranslationInput.attribute_names)
+      params.require(:forms_welsh_translation_input).permit(:mark_complete, condition_translations: WelshConditionTranslationInput.attribute_names)
     end
 
     def welsh_page_translation_inputs_from_page
@@ -60,7 +60,7 @@ module Forms
       page_translation_input_params[:page_translations].each_value.map do |page_translation|
         condition_translations = welsh_condition_translation_inputs_from_params.filter { |condition_translation| condition_translation.condition.routing_page_id == page_translation["id"].to_i }
 
-        WelshPageTranslationInput.new(**page_translation, condition_translations:)
+        WelshPageTranslationInput.new(**page_translation, mark_complete: page_translation_input_params[:mark_complete], condition_translations:)
       end
     end
 
@@ -71,7 +71,7 @@ module Forms
     def welsh_condition_translation_inputs_from_params
       return [] if condition_translation_input_params[:condition_translations].blank?
 
-      condition_translation_input_params[:condition_translations].each_value.map { |condition_translation| WelshConditionTranslationInput.new(**condition_translation) }
+      condition_translation_input_params[:condition_translations].each_value.map { |condition_translation| WelshConditionTranslationInput.new(**condition_translation, mark_complete: condition_translation_input_params[:mark_complete]) }
     end
   end
 end

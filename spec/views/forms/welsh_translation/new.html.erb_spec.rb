@@ -4,12 +4,13 @@ describe "forms/welsh_translation/new.html.erb" do
   let(:form) { build_form }
   let(:page) { create :page, position: 1 }
   let(:another_page) { create :page, position: 2 }
-  let(:condition) { create :condition, routing_page_id: page.id }
+  let(:condition) { create :condition, :with_exit_page, routing_page_id: page.id }
   let(:welsh_condition_translation_input) { Forms::WelshConditionTranslationInput.new(id: condition.id).assign_condition_values }
   let(:condition_translations) { [] }
   let(:welsh_page_translation_input) { Forms::WelshPageTranslationInput.new(id: page.id, condition_translations:).assign_page_values }
   let(:another_welsh_page_translation_input) { Forms::WelshPageTranslationInput.new(id: another_page.id, condition_translations: []).assign_page_values }
   let(:welsh_translation_input) { Forms::WelshTranslationInput.new(form:, page_translations: [welsh_page_translation_input, another_welsh_page_translation_input]).assign_form_values }
+  let(:mark_complete) { "true" }
 
   def build_form(attributes = {})
     default_attributes = {
@@ -30,6 +31,10 @@ describe "forms/welsh_translation/new.html.erb" do
       pages: [page, another_page],
     }
     build(:form, default_attributes.merge(attributes))
+  end
+
+  before do
+    welsh_translation_input.mark_complete = mark_complete
   end
 
   context "when the form has no errors" do
@@ -247,19 +252,6 @@ describe "forms/welsh_translation/new.html.erb" do
         let(:condition_translations) { [welsh_condition_translation_input] }
         let(:condition) { create :condition, routing_page_id: page.id }
 
-        context "when the condition has an English answer_value" do
-          let(:condition) { create :condition, routing_page_id: page.id, answer_value: "Yes" }
-
-          it "shows a caption with the page the condition applies to" do
-            expect(rendered).to have_css("caption", text: t("forms.welsh_translation.new.condition.heading", question_number: condition.routing_page.position))
-          end
-
-          it "shows the English text and Welsh field for each condition's answer_value" do
-            expect(rendered).to have_css("td", text: condition.answer_value)
-            expect(rendered).to have_field(t("forms.welsh_translation.new.condition_labels.answer_value_cy", question_number: condition.routing_page.position), type: "text", id: welsh_condition_translation_input.form_field_id(:answer_value_cy))
-          end
-        end
-
         context "when the condition has an exit page" do
           let(:condition) { create :condition, :with_exit_page, routing_page_id: page.id }
 
@@ -279,8 +271,9 @@ describe "forms/welsh_translation/new.html.erb" do
   end
 
   context "when the form has validation errors" do
+    let(:mark_complete) { nil }
+
     before do
-      welsh_translation_input.mark_complete = nil
       welsh_translation_input.validate
 
       assign(:welsh_translation_input, welsh_translation_input)
@@ -299,6 +292,61 @@ describe "forms/welsh_translation/new.html.erb" do
 
     it "adds an inline error message to the invalid field" do
       error_message = "Error: #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.mark_complete.blank')}"
+      expect(rendered).to have_css(".govuk-error-message", text: error_message)
+    end
+  end
+
+  context "when a page translation has validation errors" do
+    before do
+      welsh_page_translation_input.question_text_cy = nil
+      welsh_page_translation_input.mark_complete = mark_complete
+      welsh_translation_input.validate
+
+      assign(:welsh_translation_input, welsh_translation_input)
+      render
+    end
+
+    it "displays an error summary box" do
+      expect(rendered).to have_css(".govuk-error-summary")
+      expect(rendered).to have_css("h2.govuk-error-summary__title", text: "There is a problem")
+    end
+
+    it "links the error summary to the invalid field" do
+      error_message = I18n.t("activemodel.errors.models.forms/welsh_page_translation_input.attributes.question_text_cy.blank", question_number: page.position)
+      expect(rendered).to have_link(error_message, href: "#forms_welsh_page_translation_input_#{page.id}_page_translations_question_text_cy")
+    end
+
+    it "adds an inline error message to the invalid field" do
+      error_message = "Error: #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.question_text_cy.blank', question_number: page.position)}"
+      expect(rendered).to have_css(".govuk-error-message", text: error_message)
+    end
+  end
+
+  context "when a condition translation has validation errors" do
+    let(:condition) { create :condition, :with_exit_page, routing_page_id: page.id, answer_value: "Yes" }
+    let(:condition_translations) { [welsh_condition_translation_input] }
+
+    before do
+      welsh_condition_translation_input.exit_page_heading_cy = nil
+      welsh_condition_translation_input.mark_complete = "true"
+      welsh_translation_input.validate
+
+      assign(:welsh_translation_input, welsh_translation_input)
+      render
+    end
+
+    it "displays an error summary box" do
+      expect(rendered).to have_css(".govuk-error-summary")
+      expect(rendered).to have_css("h2.govuk-error-summary__title", text: "There is a problem")
+    end
+
+    it "links the error summary to the invalid field" do
+      error_message = I18n.t("activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_heading_cy.blank", question_number: page.position)
+      expect(rendered).to have_link(error_message, href: "#forms_welsh_condition_translation_input_#{condition.id}_condition_translations_exit_page_heading_cy")
+    end
+
+    it "adds an inline error message to the invalid field" do
+      error_message = "Error: #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_heading_cy.blank', question_number: page.position)}"
       expect(rendered).to have_css(".govuk-error-message", text: error_message)
     end
   end

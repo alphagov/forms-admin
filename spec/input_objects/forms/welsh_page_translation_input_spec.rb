@@ -11,7 +11,9 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
                        exit_page_markdown: "Sorry, you are ineligible for this service."
   end
 
-  let(:another_condition) { create :condition, routing_page: page, answer_value: "Yes" }
+  let(:another_condition) { create :condition, routing_page: page, answer_value: "Yes", exit_page_heading: "Exit page heading", exit_page_markdown: "Exit page markdown" }
+
+  let(:mark_complete) { "true" }
 
   let(:new_input_data) do
     {
@@ -20,6 +22,7 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
       hint_text_cy: "Dewiswch 'Ydw' os oes gennych drwydded ddilys eisoes.",
       page_heading_cy: "Trwyddedu",
       guidance_markdown_cy: "Mae'r rhan hon o'r ffurflen yn ymwneud â thrwyddedu.",
+      mark_complete:,
     }
   end
 
@@ -36,6 +39,131 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
       guidance_markdown_cy: "",
     }
     create(:page, default_attributes.merge(attributes))
+  end
+
+  describe "validations" do
+    context "when the form is marked complete" do
+      let(:mark_complete) { "true" }
+
+      context "when the Welsh question text is missing" do
+        let(:new_input_data) { super().merge(question_text_cy: nil) }
+
+        it "is not valid" do
+          expect(welsh_page_translation_input).not_to be_valid
+          expect(welsh_page_translation_input.errors.full_messages_for(:question_text_cy)).to include "Question text cy #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.question_text_cy.blank', question_number: page.position)}"
+        end
+      end
+
+      context "when the Welsh hint text is missing" do
+        let(:new_input_data) { super().merge(hint_text_cy: nil) }
+
+        context "when the form has hint text in English" do
+          it "is not valid" do
+            expect(welsh_page_translation_input).not_to be_valid
+            expect(welsh_page_translation_input.errors.full_messages_for(:hint_text_cy)).to include "Hint text cy #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.hint_text_cy.blank', question_number: page.position)}"
+          end
+        end
+
+        context "when the form does not have hint text in English" do
+          let(:page) { create_page(hint_text: nil) }
+
+          it "is valid" do
+            expect(welsh_page_translation_input).to be_valid
+            expect(welsh_page_translation_input.errors.full_messages_for(:hint_text_cy)).to be_empty
+          end
+        end
+      end
+
+      context "when the Welsh page heading is missing" do
+        let(:new_input_data) { super().merge(page_heading_cy: nil) }
+
+        context "when the form has guidance markdown in English" do
+          it "is not valid" do
+            expect(welsh_page_translation_input).not_to be_valid
+            expect(welsh_page_translation_input.errors.full_messages_for(:page_heading_cy)).to include "Page heading cy #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.page_heading_cy.blank', question_number: page.position)}"
+          end
+        end
+
+        context "when the form does not have guidance markdown in English" do
+          let(:page) { create_page(page_heading: nil, guidance_markdown: nil) }
+
+          it "is valid" do
+            expect(welsh_page_translation_input).to be_valid
+            expect(welsh_page_translation_input.errors.full_messages_for(:page_heading_cy)).to be_empty
+          end
+        end
+      end
+
+      context "when the Welsh guidance markdown is missing" do
+        let(:new_input_data) { super().merge(guidance_markdown_cy: nil) }
+
+        context "when the form has guidance markdown in English" do
+          it "is not valid" do
+            expect(welsh_page_translation_input).not_to be_valid
+            expect(welsh_page_translation_input.errors.full_messages_for(:guidance_markdown_cy)).to include "Guidance markdown cy #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.guidance_markdown_cy.blank', question_number: page.position)}"
+          end
+        end
+
+        context "when the form does not have guidance markdown in English" do
+          let(:page) { create_page(page_heading: nil, guidance_markdown: nil) }
+
+          it "is valid" do
+            expect(welsh_page_translation_input).to be_valid
+            expect(welsh_page_translation_input.errors.full_messages_for(:guidance_markdown_cy)).to be_empty
+          end
+        end
+      end
+    end
+
+    context "when the form is not marked complete" do
+      let(:mark_complete) { "false" }
+
+      context "when the Welsh question text is missing" do
+        let(:new_input_data) { super().merge(question_text_cy: nil) }
+
+        it "is valid" do
+          expect(welsh_page_translation_input).to be_valid
+          expect(welsh_page_translation_input.errors.full_messages_for(:question_text_cy)).to be_empty
+        end
+      end
+
+      context "when the Welsh hint text is missing" do
+        let(:new_input_data) { super().merge(hint_text_cy: nil) }
+
+        it "is valid" do
+          expect(welsh_page_translation_input).to be_valid
+          expect(welsh_page_translation_input.errors.full_messages_for(:hint_text_cy)).to be_empty
+        end
+      end
+
+      context "when the Welsh page heading is missing" do
+        let(:new_input_data) { super().merge(page_heading_cy: nil) }
+
+        it "is valid" do
+          expect(welsh_page_translation_input).to be_valid
+          expect(welsh_page_translation_input.errors.full_messages_for(:page_heading_cy)).to be_empty
+        end
+      end
+
+      context "when the Welsh guidance markdown is missing" do
+        let(:new_input_data) { super().merge(guidance_markdown_cy: nil) }
+
+        it "is valid" do
+          expect(welsh_page_translation_input).to be_valid
+          expect(welsh_page_translation_input.errors.full_messages_for(:guidance_markdown_cy)).to be_empty
+        end
+      end
+    end
+
+    context "when any of the page's condition translations have errors" do
+      let(:condition_translation) { Forms::WelshConditionTranslationInput.new(id: condition.id, mark_complete: "true") }
+      let(:new_input_data) { super().merge(condition_translations: [condition_translation]) }
+
+      it "is invalid" do
+        expect(welsh_page_translation_input).not_to be_valid
+        expect(welsh_page_translation_input.errors.full_messages_for(:exit_page_markdown_cy)).to include "Exit page markdown cy #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_markdown_cy.blank', question_number: page.position)}"
+      end
+    end
   end
 
   describe "#submit" do
@@ -79,18 +207,18 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
     end
 
     context "when the form includes condition translation objects" do
-      let(:condition_translation) { Forms::WelshConditionTranslationInput.new(id: condition.id, answer_value_cy: "Ydw", exit_page_heading_cy: "Nid ydych yn gymwys", exit_page_markdown_cy: "Mae'n ddrwg gennym, nid ydych yn gymwys ar gyfer y gwasanaeth hwn.") }
-      let(:another_condition_translation) { Forms::WelshConditionTranslationInput.new(id: another_condition.id, answer_value_cy: "Nac ydw") }
+      let(:condition_translation) { Forms::WelshConditionTranslationInput.new(id: condition.id, exit_page_heading_cy: "Nid ydych yn gymwys", exit_page_markdown_cy: "Mae'n ddrwg gennym, nid ydych yn gymwys ar gyfer y gwasanaeth hwn.") }
+      let(:another_condition_translation) { Forms::WelshConditionTranslationInput.new(id: another_condition.id, exit_page_heading_cy: "Welsh exit page heading", exit_page_markdown_cy: "Welsh exit page markdown") }
 
       let(:new_input_data) { super().merge(condition_translations: [condition_translation, another_condition_translation]) }
 
       it "submits the data on the condition translation objects" do
         welsh_page_translation_input.submit
 
-        expect(condition.reload.answer_value_cy).to eq("Ydw")
         expect(condition.reload.exit_page_heading_cy).to eq("Nid ydych yn gymwys")
         expect(condition.reload.exit_page_markdown_cy).to eq("Mae'n ddrwg gennym, nid ydych yn gymwys ar gyfer y gwasanaeth hwn.")
-        expect(another_condition.reload.answer_value_cy).to eq("Nac ydw")
+        expect(another_condition.reload.exit_page_heading_cy).to eq("Welsh exit page heading")
+        expect(another_condition.reload.exit_page_markdown_cy).to eq("Welsh exit page markdown")
       end
     end
   end

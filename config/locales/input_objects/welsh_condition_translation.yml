@@ -1,0 +1,16 @@
+---
+en:
+  activemodel:
+    errors:
+      models:
+        forms/welsh_condition_translation_input:
+          attributes:
+            exit_page_heading_cy:
+              blank: Enter an exit page heading in Welsh for question %{question_number}
+            exit_page_markdown_cy:
+              blank: Enter exit page content in Welsh for question %{question_number}
+  helpers:
+    label:
+      forms_welsh_condition_translation_input:
+        exit_page_heading_cy: Exit page heading (Welsh)
+        exit_page_markdown_cy: Exit page markdown (Welsh)

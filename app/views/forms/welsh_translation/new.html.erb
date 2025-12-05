@@ -5,7 +5,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <% if @welsh_translation_input&.errors&.present? %>
-        <%= f.govuk_error_summary %>
+        <%= f.govuk_error_summary(presenter: ErrorSummaryPresenter.new(@welsh_translation_input.errors)) %>
       <% end %>
 
       <h1 class="govuk-heading-l">
@@ -103,7 +103,7 @@
 
             <% if page_translation.condition_translations.present? %>
               <% page_translation.condition_translations.each_with_index do |condition_translation, index| %>
-                <% if condition_translation.has_translatable_content? %>
+                <% if condition_translation.condition_has_exit_page? %>
                   <%= f.fields_for :condition_translations, condition_translation, index: index do |condition_translation_fields| %>
                     <%= condition_translation_fields.hidden_field :id, value: condition_translation.id, readonly: true %>
 
@@ -118,38 +118,24 @@
                       <% end %>
 
                       <%= table.with_body do |body| %>
-                        <% if condition_translation.condition_has_answer_value? %>
-                          <%= body.with_row do |row| %>
-                            <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.answer_value")) %>
-                            <%= row.with_cell(text: condition_translation.condition.answer_value) %>
-                            <%= row.with_cell do |cell| %>
-                              <%= condition_translation_fields.govuk_text_field :answer_value_cy,
-                                                               id: condition_translation.form_field_id(:answer_value_cy),
-                                                               label: {text: t("forms.welsh_translation.new.condition_labels.answer_value_cy", question_number: page_translation.page.position), class: "govuk-visually-hidden", for: condition_translation.form_field_id(:answer_value_cy)}
-                                                               %>
-                            <% end %>
-                          <% end %>
-                        <% end %>
-                        <% if condition_translation.condition_has_exit_page? %>
-                          <%= body.with_row do |row| %>
-                            <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.exit_page_heading")) %>
-                            <%= row.with_cell(text: condition_translation.condition.exit_page_heading) %>
-                            <%= row.with_cell do |cell| %>
-                              <%= condition_translation_fields.govuk_text_field :exit_page_heading_cy,
+                        <%= body.with_row do |row| %>
+                          <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.exit_page_heading")) %>
+                          <%= row.with_cell(text: condition_translation.condition.exit_page_heading) %>
+                          <%= row.with_cell do |cell| %>
+                            <%= condition_translation_fields.govuk_text_field :exit_page_heading_cy,
                                                                id: condition_translation.form_field_id(:exit_page_heading_cy),
                                                                label: {text: t("forms.welsh_translation.new.condition_labels.exit_page_heading_cy", question_number: page_translation.page.position), class: "govuk-visually-hidden", for: condition_translation.form_field_id(:exit_page_heading_cy)}
                                                                %>
-                            <% end %>
                           <% end %>
-                          <%= body.with_row do |row| %>
-                            <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.exit_page_markdown")) %>
-                            <%= row.with_cell(text: condition_translation.condition.exit_page_markdown) %>
-                            <%= row.with_cell do |cell| %>
-                              <%= condition_translation_fields.govuk_text_area :exit_page_markdown_cy,
+                        <% end %>
+                        <%= body.with_row do |row| %>
+                          <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.exit_page_markdown")) %>
+                          <%= row.with_cell(text: condition_translation.condition.exit_page_markdown) %>
+                          <%= row.with_cell do |cell| %>
+                            <%= condition_translation_fields.govuk_text_area :exit_page_markdown_cy,
                                                                id: condition_translation.form_field_id(:exit_page_markdown_cy),
                                                                label: {text: t("forms.welsh_translation.new.condition_labels.exit_page_markdown_cy", question_number: page_translation.page.position), class: "govuk-visually-hidden", for: condition_translation.form_field_id(:exit_page_markdown_cy)}
                                                                %>
-                            <% end %>
                           <% end %>
                         <% end %>
                       <% end %>
