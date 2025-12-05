@@ -190,20 +190,21 @@ describe CloudWatchService do
   describe "#daily_metrics_data" do
     let(:submitted_datapoints) do
       [
-        { timestamp: Time.zone.now - 1.week, sum: 11.0 },
-        { timestamp: Time.zone.now - 1.day, sum: 5.0 },
+        { timestamp: Time.zone.local(2021, 6, 14, 0, 0, 0), sum: 11.0 },
+        { timestamp: Time.zone.local(2021, 6, 12, 0, 0, 0), sum: 5.0 },
       ]
     end
 
     let(:started_datapoints) do
       [
-        { timestamp: Time.zone.now - 1.week, sum: 13.0 },
-        { timestamp: Time.zone.now - 1.day, sum: 7.0 },
+        { timestamp: Time.zone.local(2021, 6, 14, 0, 0, 0), sum: 13.0 },
+        { timestamp: Time.zone.local(2021, 6, 12, 0, 0, 0), sum: 7.0 },
       ]
     end
+    let(:start_time) { Time.zone.now.midnight - 15.months }
 
     around do |example|
-      travel_to(Time.zone.local(2021, 1, 1, 4, 30, 0)) do
+      travel_to(Time.zone.local(2021, 6, 15, 4, 30, 0)) do
         example.run
       end
     end
@@ -255,7 +256,7 @@ describe CloudWatchService do
     end
 
     context "when CloudWatch returns metrics" do
-      it "calls the CloudWatch client to get the full submitted metrics" do
+      it "calls the CloudWatch client to get the daily submitted metrics" do
         expect(cloud_watch_client).to receive(:get_metric_statistics).with({
           metric_name: "Submitted",
           namespace: "Forms",
@@ -269,21 +270,24 @@ describe CloudWatchService do
               value: form_id.to_s,
             },
           ],
-          start_time: Time.zone.now.midnight - 15.months,
+          start_time: start_time,
           end_time: Time.zone.now.midnight,
           period: 86_400,
           statistics: %w[Sum],
           unit: "Count",
         }).once
 
-        cloud_watch_service.daily_metrics_data
+        cloud_watch_service.daily_metrics_data(start_time)
       end
 
-      it "returns the full submissions total" do
-        expect(cloud_watch_service.daily_metrics_data[:submissions]).to eq(submitted_datapoints)
+      it "returns a hash of timestamps to submission totals per day" do
+        expect(cloud_watch_service.daily_metrics_data(start_time)[:submissions]).to eq({
+          "2021-06-12" => submitted_datapoints[1][:sum],
+          "2021-06-14" => submitted_datapoints[0][:sum],
+        })
       end
 
-      it "calls the CloudWatch client to get the full started metrics" do
+      it "calls the CloudWatch client to get the daily started metrics" do
         expect(cloud_watch_client).to receive(:get_metric_statistics).with({
           metric_name: "Started",
           namespace: "Forms",
@@ -297,33 +301,36 @@ describe CloudWatchService do
               value: form_id.to_s,
             },
           ],
-          start_time: Time.zone.now.midnight - 15.months,
+          start_time: start_time,
           end_time: Time.zone.now.midnight,
           period: 86_400,
           statistics: %w[Sum],
           unit: "Count",
         }).once
 
-        cloud_watch_service.daily_metrics_data
+        cloud_watch_service.daily_metrics_data(start_time)
       end
 
-      it "returns the full starts total" do
-        expect(cloud_watch_service.daily_metrics_data[:starts]).to eq(started_datapoints)
+      it "returns a hash of timestamps to started totals per day" do
+        expect(cloud_watch_service.daily_metrics_data(start_time)[:starts]).to eq({
+          "2021-06-12" => started_datapoints[1][:sum],
+          "2021-06-14" => started_datapoints[0][:sum],
+        })
       end
 
       context "when there is no data for the submitted metric" do
         let(:submitted_datapoints) { [] }
 
-        it "returns an empty array for the full submissions" do
-          expect(cloud_watch_service.daily_metrics_data[:submissions]).to eq([])
+        it "returns an empty hash for the full submissions" do
+          expect(cloud_watch_service.daily_metrics_data(start_time)[:submissions]).to eq({})
         end
       end
 
       context "when there is no data for the started metric" do
         let(:started_datapoints) { [] }
 
-        it "returns an empty array for the full starts" do
-          expect(cloud_watch_service.daily_metrics_data[:starts]).to eq([])
+        it "returns an empty hash for the full starts" do
+          expect(cloud_watch_service.daily_metrics_data(start_time)[:starts]).to eq({})
         end
       end
     end

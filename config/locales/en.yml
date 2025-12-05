@@ -1182,6 +1182,14 @@ en:
         roles:
           editor: "%{member_name} is now an editor"
           group_admin: "%{member_name} is now a group admin"
+  metrics_csv:
+    headers:
+      completed: Completed
+      completion_rate: Completion rate (%)
+      date: Date
+      started: Started
+      started_but not completed: Started but not completed
+    no_starts: No starts
   metrics_summary:
     completion_rate: Completion rate
     date_range: "%{start_date} to %{end_date}"

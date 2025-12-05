@@ -25,10 +25,10 @@ class CloudWatchService
     nil
   end
 
-  def daily_metrics_data
+  def daily_metrics_data(start_time)
     {
-      submissions: daily_submissions,
-      starts: daily_starts,
+      submissions: daily_submissions(start_time),
+      starts: daily_starts(start_time),
     }
   rescue Aws::CloudWatch::Errors::ServiceError,
          Aws::Errors::MissingCredentialsError => e
@@ -79,7 +79,7 @@ private
     response.datapoints[0]&.sum.to_i || 0
   end
 
-  def daily_submissions
+  def daily_submissions(start_time)
     cloudwatch_client = Aws::CloudWatch::Client.new(region: REGION)
 
     response = cloudwatch_client.get_metric_statistics({
@@ -89,17 +89,17 @@ private
         environment_dimension,
         form_id_dimension,
       ],
-      start_time: start_of_today - 15.months,
+      start_time: start_time,
       end_time: start_of_today,
       period: A_DAY,
       statistics: %w[Sum],
       unit: "Count",
     })
 
-    response.datapoints.sort_by(&:timestamp).map { { timestamp: it.timestamp, sum: it.sum } }
+    datapoints_to_hash_by_date(response.datapoints)
   end
 
-  def daily_starts
+  def daily_starts(start_time)
     cloudwatch_client = Aws::CloudWatch::Client.new(region: REGION)
 
     response = cloudwatch_client.get_metric_statistics({
@@ -109,14 +109,21 @@ private
         environment_dimension,
         form_id_dimension,
       ],
-      start_time: start_of_today - 15.months,
+      start_time: start_time,
       end_time: start_of_today,
       period: A_DAY,
       statistics: %w[Sum],
       unit: "Count",
     })
 
-    response.datapoints.sort_by(&:timestamp).map { { timestamp: it.timestamp, sum: it.sum } }
+    datapoints_to_hash_by_date(response.datapoints)
+  end
+
+  def datapoints_to_hash_by_date(datapoints)
+    datapoints.sort_by(&:timestamp).each_with_object({}) do |item, acc|
+      key = item[:timestamp].to_date.iso8601
+      acc[key] = item[:sum]
+    end
   end
 
   def environment_dimension
