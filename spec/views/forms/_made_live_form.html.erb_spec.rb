@@ -259,6 +259,50 @@ describe "forms/_made_live_form.html.erb" do
     end
   end
 
+  describe "the make a copy of this form button" do
+    context "when the form is live with no draft" do
+      it "contains a link to make a copy of the form" do
+        expect(rendered).to have_link("Make a copy of this form")
+      end
+    end
+
+    context "when the form is live with a draft" do
+      let(:form_metadata) { create :form, :live_with_draft }
+
+      it "contains a link to make a copy of the form" do
+        expect(rendered).to have_link("Make a copy of this form")
+      end
+    end
+
+    context "when the form is archived with no draft" do
+      let(:status) { :archived }
+      let(:form_metadata) { create :form, :archived }
+      let(:form_document) do
+        form_document_content = FormDocument::Content.from_form_document(form_metadata.archived_form_document)
+        form_document_content.live_at = 1.week.ago
+        form_document_content
+      end
+
+      it "contains a link to make a copy of the form" do
+        expect(rendered).to have_link("Make a copy of this form")
+      end
+    end
+
+    context "when the form is archived with a draft" do
+      let(:status) { :archived }
+      let(:form_metadata) { create :form, :archived_with_draft }
+      let(:form_document) do
+        form_document_content = FormDocument::Content.from_form_document(form_metadata.archived_form_document)
+        form_document_content.live_at = 1.week.ago
+        form_document_content
+      end
+
+      it "contains a link to make a copy of the form" do
+        expect(rendered).to have_link("Make a copy of this form")
+      end
+    end
+  end
+
   it "renders the metrics summary component" do
     expect(rendered).to have_text("If you want to track metrics over a longer period you’ll need to make a note of these on the same day each week.")
   end
