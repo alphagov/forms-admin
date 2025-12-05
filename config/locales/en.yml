@@ -1204,9 +1204,6 @@ en:
   metrics_summary:
     completion_rate: Completion rate
     date_range: "%{start_date} to %{end_date}"
-    description:
-      complete_week: If you want to track metrics over a longer period you’ll need to make a note of these on the same day each week.
-      incomplete_week: The metrics shown here are for less than a week. To see a full week’s metrics, check again when your form’s been live for 7 days.
     download_csv: Download a CSV of this form’s metrics (up to 14 months of data)
     errors:
       error_loading_data_html: |
