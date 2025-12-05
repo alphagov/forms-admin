@@ -1,6 +1,6 @@
 require "rails_helper"
 
-class ValidatableEmailModel
+class EmailAddressModel
   include ActiveModel::Model
   attr_accessor :email
 
@@ -9,7 +9,7 @@ end
 
 RSpec.describe EmailAddressValidator do
   it_behaves_like "a field that rejects invalid email addresses" do
-    let(:model) { ValidatableEmailModel.new }
+    let(:model) { EmailAddressModel.new }
     let(:attribute) { :email }
   end
 end
