@@ -14,7 +14,7 @@
     <%= render FormStatusTagDescriptionComponent::View.new(status: status) %>
 
     <% metrics_data = CloudWatchService.new(form_document.id).past_week_metrics_data %>
-    <%= render MetricsSummaryComponent::View.new(form_document.made_live_date, metrics_data) %>
+    <%= render MetricsSummaryComponent::View.new(form_id: form_document.id, form_live_date: form_document.made_live_date, metrics_data:) %>
 
     <h2 class="govuk-heading-l">Your form</h2>
 

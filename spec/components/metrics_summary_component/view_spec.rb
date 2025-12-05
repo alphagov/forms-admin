@@ -3,7 +3,8 @@ require "rails_helper"
 RSpec.describe MetricsSummaryComponent::View, type: :component do
   let(:metrics_data) { nil }
   let(:form_live_date) { 7.days.ago.to_date }
-  let(:metrics_summary) { described_class.new(form_live_date, metrics_data) }
+  let(:form_id) { 123 }
+  let(:metrics_summary) { described_class.new(form_id:, form_live_date:, metrics_data:) }
 
   before do
     render_inline(metrics_summary)
@@ -90,6 +91,10 @@ RSpec.describe MetricsSummaryComponent::View, type: :component do
     it "renders the error message" do
       expect(render_inline(metrics_summary).to_html).to include(metrics_summary.error_message)
     end
+
+    it "does not render the CSV download link" do
+      expect(page).not_to have_link(I18n.t("metrics_summary.download_csv"))
+    end
   end
 
   context "when form is too new" do
@@ -106,6 +111,10 @@ RSpec.describe MetricsSummaryComponent::View, type: :component do
 
     it "renders the heading without date information" do
       expect(page).to have_css("h2", exact_text: I18n.t("metrics_summary.heading_without_dates"))
+    end
+
+    it "does not render the CSV download link" do
+      expect(page).not_to have_link(I18n.t("metrics_summary.download_csv"))
     end
   end
 
@@ -142,6 +151,10 @@ RSpec.describe MetricsSummaryComponent::View, type: :component do
     it "renders the heading without date information" do
       expect(page).to have_css("h2", exact_text: I18n.t("metrics_summary.heading_with_single_date", date: form_live_date.strftime("%e %B %Y").strip))
     end
+
+    it "renders the CSV download link" do
+      expect(page).to have_link(I18n.t("metrics_summary.download_csv"), href: metrics_csv_path(form_id:))
+    end
   end
 
   context "when weekly starts is zero" do
@@ -153,6 +166,10 @@ RSpec.describe MetricsSummaryComponent::View, type: :component do
 
     it "renders the error message" do
       expect(render_inline(metrics_summary).to_html).to include(metrics_summary.error_message)
+    end
+
+    it "renders the CSV download link" do
+      expect(page).to have_link(I18n.t("metrics_summary.download_csv"), href: metrics_csv_path(form_id:))
     end
   end
 
@@ -184,6 +201,10 @@ RSpec.describe MetricsSummaryComponent::View, type: :component do
     it "renders the forms started but not completed figure" do
       expect(page).to have_text("#{I18n.t('metrics_summary.forms_started_but_not_completed')} #{forms_started_but_not_completed}")
     end
+
+    it "renders the CSV download link" do
+      expect(page).to have_link(I18n.t("metrics_summary.download_csv"), href: metrics_csv_path(form_id:))
+    end
   end
 
   context "when there are fewer than 7 days worth of data" do
@@ -214,6 +235,10 @@ RSpec.describe MetricsSummaryComponent::View, type: :component do
 
     it "renders the forms started but not completed figure" do
       expect(page).to have_text("#{I18n.t('metrics_summary.forms_started_but_not_completed')} #{forms_started_but_not_completed}")
+    end
+
+    it "renders the CSV download link" do
+      expect(page).to have_link(I18n.t("metrics_summary.download_csv"), href: metrics_csv_path(form_id:))
     end
   end
 end
