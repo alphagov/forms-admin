@@ -7,10 +7,12 @@ class Pages::Selection::NoneOfTheAboveInput < BaseInput
   validates :question_text, presence: true, length: { maximum: 250 }
 
   def answer_settings
-    draft_question.answer_settings.merge({
-      question_text:,
-      is_optional:,
-    })
+    draft_question.answer_settings.merge(
+      none_of_the_above_entry: {
+        question_text:,
+        is_optional:,
+      },
+    )
   end
 
   def submit

@@ -2,7 +2,7 @@ class Pages::Selection::OptionsInput < BaseInput
   include LoggingHelper
 
   DEFAULT_OPTIONS = { selection_options: [{ name: "" }, { name: "" }] }.freeze
-  INCLUDE_NONE_OF_THE_ABOVE_OPTIONS = %w[true false].freeze
+  INCLUDE_NONE_OF_THE_ABOVE_OPTIONS = %w[yes yes_with_input no].freeze
   MAXIMUM_CHOOSE_ONLY_ONE_OPTION = 1000
   MAXIMUM_CHOOSE_MORE_THAN_ONE_OPTION = 30
 
@@ -20,16 +20,15 @@ class Pages::Selection::OptionsInput < BaseInput
   end
 
   def answer_settings
-    draft_question.answer_settings.merge({ selection_options: })
+    answer_settings.delete(:none_of_the_above_entry) unless include_none_of_the_above == "yes_with_input"
+    answer_settings.merge({ selection_options: })
   end
 
   def submit
     return false if invalid?
 
-    # Set answer_settings for the draft_question
-    draft_question
-      .assign_attributes({ answer_settings:,
-                           is_optional: include_none_of_the_above })
+    is_optional = include_none_of_the_above != "no"
+    draft_question.assign_attributes(answer_settings:, is_optional:)
 
     success = draft_question.save!(validate: false)
     log_submission if success
@@ -42,7 +41,11 @@ class Pages::Selection::OptionsInput < BaseInput
   end
 
   def include_none_of_the_above_options
-    [OpenStruct.new(id: "true"), OpenStruct.new(id: "false")]
+    if FeatureService.enabled?(:describe_none_of_the_above_enabled)
+      [OpenStruct.new(id: "yes"), OpenStruct.new(id: "yes_with_input"), OpenStruct.new(id: "no")]
+    else
+      [OpenStruct.new(id: "yes"), OpenStruct.new(id: "no")]
+    end
   end
 
   def maximum_options
@@ -51,6 +54,13 @@ class Pages::Selection::OptionsInput < BaseInput
 
   def only_one_option?
     draft_question.answer_settings[:only_one_option] == "true"
+  end
+
+  def self.selected_none_of_the_above_option(draft_question)
+    return "no" unless draft_question.is_optional
+    return "yes_with_input" if draft_question.answer_settings.key?(:none_of_the_above_entry)
+
+    "yes"
   end
 
 private
