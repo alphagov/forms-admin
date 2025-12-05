@@ -821,6 +821,10 @@ en:
       pages_selection_bulk_options_input:
         include_none_of_the_above_options:
           'true': We’ll add ‘None of the above’ to the end of your list of options
+      pages_selection_none_of_the_above_input:
+        is_optional_options:
+          'true': We’ll add ‘(optional)’ to the end of the question or label.
+        question_text: For example, if you asked them to select the country they live in, you could use ‘Enter the country you live in’.
       pages_selection_options_input:
         include_none_of_the_above_options:
           'true': We’ll add ‘None of the above’ to the end of your list of options
@@ -979,6 +983,11 @@ en:
         include_none_of_the_above_options:
           'false': 'No'
           'true': 'Yes'
+      pages_selection_none_of_the_above_input:
+        is_optional_options:
+          'false': Mandatory
+          'true': Optional
+        question_text: Enter a question or label for the text box
       pages_selection_options_input:
         include_none_of_the_above_options:
           'false': 'No'
@@ -1001,6 +1010,8 @@ en:
         is_repeatable: Should people be able to answer this question more than once?
       pages_selection_bulk_options_input:
         include_none_of_the_above: Should the list include an option for ‘None of the above’?
+      pages_selection_none_of_the_above_input:
+        is_optional: Should this additional question be mandatory or optional?
       pages_selection_options_input:
         include_none_of_the_above: Should the list include an option for ‘None of the above’?
   home:
