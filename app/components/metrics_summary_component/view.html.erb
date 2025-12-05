@@ -20,4 +20,9 @@
       </div>
     </div>
   <% end %>
+  <% if show_csv_link %>
+    <p>
+      <%= govuk_link_to t("metrics_summary.download_csv"), metrics_csv_path(form_id: ) %>
+    </p>
+  <% end %>
 </div>
