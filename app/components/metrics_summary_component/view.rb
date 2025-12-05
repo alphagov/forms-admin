@@ -52,10 +52,6 @@ module MetricsSummaryComponent
       (number.to_f * 100 / total).round
     end
 
-    def description
-      complete_week? ? I18n.t("metrics_summary.description.complete_week") : I18n.t("metrics_summary.description.incomplete_week")
-    end
-
     def heading_text
       if form_went_live_today?
         I18n.t("metrics_summary.heading_without_dates")
