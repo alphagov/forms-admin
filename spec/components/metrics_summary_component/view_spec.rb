@@ -3,7 +3,8 @@ require "rails_helper"
 RSpec.describe MetricsSummaryComponent::View, type: :component do
   let(:metrics_data) { nil }
   let(:form_live_date) { 7.days.ago.to_date }
-  let(:metrics_summary) { described_class.new(form_live_date, metrics_data) }
+  let(:form_id) { 123 }
+  let(:metrics_summary) { described_class.new(form_id:, form_live_date:, metrics_data:) }
 
   before do
     render_inline(metrics_summary)
@@ -66,22 +67,6 @@ RSpec.describe MetricsSummaryComponent::View, type: :component do
     end
   end
 
-  describe "#description" do
-    context "when there is a week's worth of metrics" do
-      it "returns the complete week description translation" do
-        expect(metrics_summary.description).to eq(I18n.t("metrics_summary.description.complete_week"))
-      end
-    end
-
-    context "when there is less than a week's worth of metrics" do
-      let(:form_live_date) { 3.days.ago.to_date }
-
-      it "returns the incomplete week description translation" do
-        expect(metrics_summary.description).to eq(I18n.t("metrics_summary.description.incomplete_week"))
-      end
-    end
-  end
-
   context "when metrics_data is null" do
     it "returns the 'error loading data' message" do
       expect(metrics_summary.error_message).to eq(I18n.t("metrics_summary.errors.error_loading_data_html"))
@@ -89,6 +74,10 @@ RSpec.describe MetricsSummaryComponent::View, type: :component do
 
     it "renders the error message" do
       expect(render_inline(metrics_summary).to_html).to include(metrics_summary.error_message)
+    end
+
+    it "does not render the CSV download link" do
+      expect(page).not_to have_link(I18n.t("metrics_summary.download_csv"))
     end
   end
 
@@ -106,6 +95,10 @@ RSpec.describe MetricsSummaryComponent::View, type: :component do
 
     it "renders the heading without date information" do
       expect(page).to have_css("h2", exact_text: I18n.t("metrics_summary.heading_without_dates"))
+    end
+
+    it "does not render the CSV download link" do
+      expect(page).not_to have_link(I18n.t("metrics_summary.download_csv"))
     end
   end
 
@@ -127,10 +120,6 @@ RSpec.describe MetricsSummaryComponent::View, type: :component do
       expect(metrics_summary.weekly_started_but_not_completed).to eq(forms_started_but_not_completed)
     end
 
-    it "renders the incomplete week description text" do
-      expect(page).to have_text(I18n.t("metrics_summary.description.incomplete_week"))
-    end
-
     it "renders the weekly submissions figure" do
       expect(page).to have_text("#{I18n.t('metrics_summary.forms_submitted')} #{metrics_data[:weekly_submissions]}")
     end
@@ -141,6 +130,10 @@ RSpec.describe MetricsSummaryComponent::View, type: :component do
 
     it "renders the heading without date information" do
       expect(page).to have_css("h2", exact_text: I18n.t("metrics_summary.heading_with_single_date", date: form_live_date.strftime("%e %B %Y").strip))
+    end
+
+    it "renders the CSV download link" do
+      expect(page).to have_link(I18n.t("metrics_summary.download_csv"), href: metrics_csv_path(form_id:))
     end
   end
 
@@ -153,6 +146,10 @@ RSpec.describe MetricsSummaryComponent::View, type: :component do
 
     it "renders the error message" do
       expect(render_inline(metrics_summary).to_html).to include(metrics_summary.error_message)
+    end
+
+    it "renders the CSV download link" do
+      expect(page).to have_link(I18n.t("metrics_summary.download_csv"), href: metrics_csv_path(form_id:))
     end
   end
 
@@ -173,16 +170,16 @@ RSpec.describe MetricsSummaryComponent::View, type: :component do
       expect(metrics_summary.weekly_started_but_not_completed).to eq(forms_started_but_not_completed)
     end
 
-    it "renders the complete week description text" do
-      expect(page).to have_text(I18n.t("metrics_summary.description.complete_week"))
-    end
-
     it "renders the weekly submissions figure" do
       expect(page).to have_text("#{I18n.t('metrics_summary.forms_submitted')} #{metrics_data[:weekly_submissions]}")
     end
 
     it "renders the forms started but not completed figure" do
       expect(page).to have_text("#{I18n.t('metrics_summary.forms_started_but_not_completed')} #{forms_started_but_not_completed}")
+    end
+
+    it "renders the CSV download link" do
+      expect(page).to have_link(I18n.t("metrics_summary.download_csv"), href: metrics_csv_path(form_id:))
     end
   end
 
@@ -204,16 +201,16 @@ RSpec.describe MetricsSummaryComponent::View, type: :component do
       expect(metrics_summary.weekly_started_but_not_completed).to eq(forms_started_but_not_completed)
     end
 
-    it "renders the incomplete week description text" do
-      expect(page).to have_text(I18n.t("metrics_summary.description.incomplete_week"))
-    end
-
     it "renders the weekly submissions figure" do
       expect(page).to have_text("#{I18n.t('metrics_summary.forms_submitted')} #{metrics_data[:weekly_submissions]}")
     end
 
     it "renders the forms started but not completed figure" do
       expect(page).to have_text("#{I18n.t('metrics_summary.forms_started_but_not_completed')} #{forms_started_but_not_completed}")
+    end
+
+    it "renders the CSV download link" do
+      expect(page).to have_link(I18n.t("metrics_summary.download_csv"), href: metrics_csv_path(form_id:))
     end
   end
 end
