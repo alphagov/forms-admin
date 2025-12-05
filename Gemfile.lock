@@ -165,7 +165,7 @@ GEM
     config (5.6.1)
       deep_merge (~> 1.2, >= 1.2.1)
       ostruct
-    connection_pool (2.5.5)
+    connection_pool (3.0.1)
     crack (1.0.1)
       bigdecimal
       rexml
@@ -239,7 +239,7 @@ GEM
       activesupport (>= 6.1.4.4)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
-    i18n-tasks (1.1.1)
+    i18n-tasks (1.1.2)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
       erubi
@@ -258,7 +258,7 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jmespath (1.6.2)
-    json (2.17.0)
+    json (2.17.1)
     jwt (2.10.2)
       base64
     language_server-protocol (3.17.0.5)
@@ -621,7 +621,7 @@ DEPENDENCIES
   govuk-forms-markdown!
   govuk_design_system_formbuilder
   govuk_notify_rails
-  i18n-tasks (~> 1.1.1)
+  i18n-tasks (~> 1.1.2)
   lograge
   mobility (~> 1.3)
   omniauth-auth0
@@ -689,7 +689,7 @@ CHECKSUMS
   coercible (1.0.0) sha256=5081ad24352cc8435ce5472bc2faa30260c7ea7f2102cc6a9f167c4d9bffaadc
   concurrent-ruby (1.3.5) sha256=813b3e37aca6df2a21a3b9f1d497f8cbab24a2b94cab325bffe65ee0f6cbebc6
   config (5.6.1) sha256=a9f0f0f9ffa6d12d43147a3fa1ab8486fe484c3098a350c6a2e0f32430e0d1cc
-  connection_pool (2.5.5) sha256=e54ff92855753df1fd7c59fa04a398833355f27dd14c074f8c83a05f72a716ad
+  connection_pool (3.0.1) sha256=819ea60fcbee0b557fec6dce41925ec7d24a137a6602587785a9e5a3aaaa6b6c
   crack (1.0.1) sha256=ff4a10390cd31d66440b7524eb1841874db86201d5b70032028553130b6d4c7e
   crass (1.0.6) sha256=dc516022a56e7b3b156099abc81b6d2b08ea1ed12676ac7a5657617f012bd45d
   csv (3.3.5) sha256=6e5134ac3383ef728b7f02725d9872934f523cb40b961479f69cf3afa6c8e73f
@@ -724,12 +724,12 @@ CHECKSUMS
   highline (3.1.2) sha256=67cbd34d19f6ef11a7ee1d82ffab5d36dfd5b3be861f450fc1716c7125f4bb4a
   html-attributes-utils (1.0.2) sha256=594e0b37b3dd4e554abe893bee9719896f876675fd08fe534fc2e6e1b4e2538c
   i18n (1.14.7) sha256=ceba573f8138ff2c0915427f1fc5bdf4aa3ab8ae88c8ce255eb3ecf0a11a5d0f
-  i18n-tasks (1.1.1) sha256=fcde802f4efdcebff520bac4422dff18a0ee4990a1d153b8d7d80f4867cbb742
+  i18n-tasks (1.1.2) sha256=4dcfba49e52a623f30661cb316cb80d84fbba5cb8c6d88ef5e02545fffa3637a
   ice_nine (0.11.2) sha256=5d506a7d2723d5592dc121b9928e4931742730131f22a1a37649df1c1e2e63db
   io-console (0.8.1) sha256=1e15440a6b2f67b6ea496df7c474ed62c860ad11237f29b3bd187f054b925fcb
   irb (1.15.3) sha256=4349edff1efa7ff7bfd34cb9df74a133a588ba88c2718098b3b4468b81184aaa
   jmespath (1.6.2) sha256=238d774a58723d6c090494c8879b5e9918c19485f7e840f2c1c7532cf84ebcb1
-  json (2.17.0) sha256=90895466df75c53f0c7ddbae5748bcdf4f908d9d6485242cf4c647f6c3d788b1
+  json (2.17.1) sha256=e0e4824541336a44915436f53e7ea74c687314fb8f88080fa1456f6a34ead92e
   jwt (2.10.2) sha256=31e1ee46f7359883d5e622446969fe9c118c3da87a0b1dca765ce269c3a0c4f4
   language_server-protocol (3.17.0.5) sha256=fd1e39a51a28bf3eec959379985a72e296e9f9acfce46f6a79d31ca8760803cc
   lint_roller (1.1.0) sha256=2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87
