@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 module Forms
   class CopyController < WebController
     after_action :verify_authorized
@@ -27,5 +28,10 @@ module Forms
     def copy_input_params(form)
       params.require(:forms_copy_input).permit(:name).merge(form:)
     end
+=======
+module Form
+  class CopyController < WebController
+    def copy; end
+>>>>>>> 9cfeaa34 (Add controller and route for copying)
   end
 end
