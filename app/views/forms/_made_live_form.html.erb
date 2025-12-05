@@ -91,6 +91,7 @@
       <% elsif status == :archived %>
         <%= govuk_button_link_to t("made_live_form.make_this_form_live"), unarchive_path(form_document.id), secondary: true %>
       <% end %>
+      <%= govuk_button_link_to("Make a copy of this form", copy_form_path(form_metadata.id), secondary: true) %>
     </div>
   </div>
 </div>
