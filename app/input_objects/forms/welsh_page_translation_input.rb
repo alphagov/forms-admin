@@ -69,9 +69,7 @@ class Forms::WelshPageTranslationInput < BaseInput
 
   def question_text_cy_present?
     if form_marked_complete? && question_text_cy.blank?
-      errors.add(:question_text_cy,
-                 I18n.t("activemodel.errors.models.forms/welsh_page_translation_input.attributes.question_text_cy.blank", question_number: page.position),
-                 url: "##{form_field_id(:question_text_cy)}")
+      errors.add(:question_text_cy, :blank, question_number: page.position, url: "##{form_field_id(:question_text_cy)}")
     end
   end
 
@@ -83,9 +81,7 @@ class Forms::WelshPageTranslationInput < BaseInput
 
   def hint_text_cy_present?
     if form_marked_complete? && page_has_hint_text? && hint_text_cy.blank?
-      errors.add(:hint_text_cy,
-                 I18n.t("activemodel.errors.models.forms/welsh_page_translation_input.attributes.hint_text_cy.blank", question_number: page.position),
-                 url: "##{form_field_id(:hint_text_cy)}")
+      errors.add(:hint_text_cy, :blank, question_number: page.position, url: "##{form_field_id(:hint_text_cy)}")
     end
   end
 
@@ -97,9 +93,7 @@ class Forms::WelshPageTranslationInput < BaseInput
 
   def page_heading_cy_present?
     if form_marked_complete? && page_has_page_heading_and_guidance_markdown? && page_heading_cy.blank?
-      errors.add(:page_heading_cy,
-                 I18n.t("activemodel.errors.models.forms/welsh_page_translation_input.attributes.page_heading_cy.blank", question_number: page.position),
-                 url: "##{form_field_id(:page_heading_cy)}")
+      errors.add(:page_heading_cy, :blank, question_number: page.position, url: "##{form_field_id(:page_heading_cy)}")
     end
   end
 
@@ -111,9 +105,7 @@ class Forms::WelshPageTranslationInput < BaseInput
 
   def guidance_markdown_cy_present?
     if form_marked_complete? && page_has_page_heading_and_guidance_markdown? && guidance_markdown_cy.blank?
-      errors.add(:guidance_markdown_cy,
-                 I18n.t("activemodel.errors.models.forms/welsh_page_translation_input.attributes.guidance_markdown_cy.blank", question_number: page.position),
-                 url: "##{form_field_id(:guidance_markdown_cy)}")
+      errors.add(:guidance_markdown_cy, :blank, question_number: page.position, url: "##{form_field_id(:guidance_markdown_cy)}")
     end
   end
 
