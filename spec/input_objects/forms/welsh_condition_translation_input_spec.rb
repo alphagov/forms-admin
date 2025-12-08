@@ -92,6 +92,13 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
           end
         end
       end
+
+      context "when the Welsh exit page markdown is present" do
+        it_behaves_like "a markdown field with headings allowed" do
+          let(:model) { welsh_condition_translation_input }
+          let(:attribute) { :exit_page_markdown_cy }
+        end
+      end
     end
 
     context "when the form is not marked complete" do
@@ -132,6 +139,13 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
         it "is valid" do
           expect(welsh_condition_translation_input).to be_valid
           expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_markdown_cy)).to be_empty
+        end
+      end
+
+      context "when the Welsh exit page markdown is present" do
+        it_behaves_like "a markdown field with headings allowed" do
+          let(:model) { welsh_condition_translation_input }
+          let(:attribute) { :exit_page_markdown_cy }
         end
       end
     end

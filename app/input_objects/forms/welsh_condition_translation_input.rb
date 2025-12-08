@@ -12,6 +12,7 @@ class Forms::WelshConditionTranslationInput < BaseInput
   validate :exit_page_heading_cy_length, if: -> { exit_page_heading_cy.present? }
 
   validate :exit_page_markdown_cy_present?
+  validate :exit_page_markdown_cy_length_and_tags, if: -> { exit_page_markdown_cy.present? }
 
   def submit
     return false if invalid?
@@ -58,6 +59,21 @@ class Forms::WelshConditionTranslationInput < BaseInput
   def exit_page_markdown_cy_present?
     if form_marked_complete? && condition_has_exit_page? && exit_page_markdown_cy.blank?
       errors.add(:exit_page_markdown_cy, :blank, question_number: condition.routing_page.position, url: "##{form_field_id(:exit_page_markdown_cy)}")
+    end
+  end
+
+  def exit_page_markdown_cy_length_and_tags
+    markdown_validation = GovukFormsMarkdown.validate(exit_page_markdown_cy)
+
+    return true if markdown_validation[:errors].empty?
+
+    if markdown_validation[:errors].include?(:too_long)
+      errors.add(:exit_page_markdown_cy, :too_long, count: 4999, question_number: condition.routing_page.position, url: "##{form_field_id(:exit_page_markdown_cy)}")
+    end
+
+    tag_errors = markdown_validation[:errors].excluding(:too_long)
+    if tag_errors.any?
+      errors.add(:exit_page_markdown_cy, :unsupported_markdown_syntax, question_number: condition.routing_page.position, url: "##{form_field_id(:exit_page_markdown_cy)}")
     end
   end
 
