@@ -50,9 +50,9 @@ class Forms::WelshConditionTranslationInput < BaseInput
   end
 
   def exit_page_heading_cy_length
-    return if exit_page_heading_cy.length <= 4999
+    return if exit_page_heading_cy.length <= 250
 
-    errors.add(:exit_page_heading_cy, :too_long, question_number: condition.routing_page.position, count: 4999, url: "##{form_field_id(:exit_page_heading_cy)}")
+    errors.add(:exit_page_heading_cy, :too_long, question_number: condition.routing_page.position, count: 250, url: "##{form_field_id(:exit_page_heading_cy)}")
   end
 
   def exit_page_markdown_cy_present?
