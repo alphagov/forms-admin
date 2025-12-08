@@ -348,11 +348,14 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
 
   welsh_form = Form.create!(
     name: "A Welsh form",
+    name_cy: "Ffurflen Gymraeg",
     pages: [
       Page.create(
         question_text: "What’s your name?",
+        question_text_cy: "Beth yw eich enw?",
         answer_type: "name",
         hint_text: "Enter your name as it appears on your licence.",
+        hint_text_cy: "Rhowch eich enw fel y mae’n ymddangos ar eich trwydded.",
         answer_settings: {
           input_type: "full_name",
           title_needed: false,
@@ -362,14 +365,18 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
       ),
       Page.create(
         question_text: "What’s your email address?",
+        question_text_cy: "Beth yw eich cyfeiriad e-bost?",
         answer_type: "email",
         is_optional: false,
         is_repeatable: false,
         page_heading: "Email",
+        page_heading_cy: "E-bost",
         guidance_markdown: "We'll use your email to:\n\n- contact you if there are any issues with your submission\n\n- send you your digital licence",
+        guidance_markdown_cy: "Byddwn yn defnyddio eich cyfeiriad e-bost i:\n\n- gysylltu â chi os byddwch yn cael unrhyw broblemau gyda’ch cyflwyniad\n\n- anfonwch eich trwydded digidol atoch",
       ),
       Page.create(
         question_text: "What was the reference of your previous submission?",
+        question_text_cy: "Beth oedd cyfeirnod eich cyflwyniad blaenorol?",
         answer_type: "text",
         answer_settings: {
           input_type: "single_line",
@@ -379,6 +386,7 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
       ),
       Page.create(
         question_text: "What’s your answer?",
+        question_text_cy: "Beth yw eich ateb?",
         answer_type: "text",
         answer_settings: {
           input_type: "single_line",
@@ -389,13 +397,19 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
     ],
     question_section_completed: true,
     declaration_text: "",
+    declaration_text_cy: "",
     declaration_section_completed: true,
-    privacy_policy_url: "https://www.gov.uk/help/privacy-notice",
+    privacy_policy_url: "https://www.gov.uk/help/welsh-privacy-notice",
+    privacy_policy_url_cy: "https://www.gov.uk/help/welsh-privacy-notice",
     submission_email:,
     support_email: "your.email+fakedata84701@gmail.com.gov.uk",
+    support_email_cy: "welsh-your.email+fakedata84701@gmail.com.gov.uk",
     support_phone: "08000800",
+    support_phone_cy: "welsh 08000800",
     what_happens_next_markdown: "Test",
+    what_happens_next_markdown_cy: "Prawf",
     share_preview_completed: true,
+    available_languages: %w[en cy],
   )
 
   # add forms to groups
