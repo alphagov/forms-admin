@@ -14,6 +14,7 @@ en:
               too_long: The hint text for question %{question_number} cannot be longer than %{count} characters
             page_heading_cy:
               blank: Enter a page heading in Welsh for question %{question_number}
+              too_long: The page heading for question %{question_number} cannot be longer than %{count} characters
             question_text_cy:
               blank: Enter question text for question %{question_number} in Welsh
               too_long: The question text for question %{question_number} cannot be longer than %{count} characters

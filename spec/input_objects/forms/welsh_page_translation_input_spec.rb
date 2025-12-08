@@ -134,6 +134,26 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
         end
       end
 
+      context "when the Welsh page heading is present" do
+        context "when the Welsh page heading is 251 characters or more" do
+          let(:new_input_data) { super().merge(page_heading_cy: "a" * 251) }
+
+          it "is not valid" do
+            expect(welsh_page_translation_input).not_to be_valid
+            expect(welsh_page_translation_input.errors.full_messages_for(:page_heading_cy)).to include "Page heading cy #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.page_heading_cy.too_long', question_number: page.position, count: 250)}"
+          end
+        end
+
+        context "when the Welsh page heading is 250 characters or fewer" do
+          let(:new_input_data) { super().merge(page_heading_cy: "a" * 250) }
+
+          it "is valid" do
+            expect(welsh_page_translation_input).to be_valid
+            expect(welsh_page_translation_input.errors.full_messages_for(:page_heading_cy)).to be_empty
+          end
+        end
+      end
+
       context "when the Welsh guidance markdown is missing" do
         let(:new_input_data) { super().merge(guidance_markdown_cy: nil) }
 
@@ -229,6 +249,26 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
         it "is valid" do
           expect(welsh_page_translation_input).to be_valid
           expect(welsh_page_translation_input.errors.full_messages_for(:page_heading_cy)).to be_empty
+        end
+      end
+
+      context "when the Welsh page heading is present" do
+        context "when the Welsh page heading is 251 characters or more" do
+          let(:new_input_data) { super().merge(page_heading_cy: "a" * 251) }
+
+          it "is not valid" do
+            expect(welsh_page_translation_input).not_to be_valid
+            expect(welsh_page_translation_input.errors.full_messages_for(:page_heading_cy)).to include "Page heading cy #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.page_heading_cy.too_long', question_number: page.position, count: 250)}"
+          end
+        end
+
+        context "when the Welsh page heading is 250 characters or fewer" do
+          let(:new_input_data) { super().merge(page_heading_cy: "a" * 250) }
+
+          it "is valid" do
+            expect(welsh_page_translation_input).to be_valid
+            expect(welsh_page_translation_input.errors.full_messages_for(:page_heading_cy)).to be_empty
+          end
         end
       end
 
