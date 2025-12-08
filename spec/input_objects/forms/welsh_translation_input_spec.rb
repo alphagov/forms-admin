@@ -28,7 +28,7 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
       support_url_cy: "https://www.gov.uk/new-welsh-support",
       support_url_text_cy: "New Welsh Support",
       privacy_policy_url_cy: "https://www.gov.uk/new-welsh-privacy",
-      payment_url_cy: "https://www.gov.uk/new-welsh-payment",
+      payment_url_cy: "https://www.gov.uk/payments/new-welsh-payment-link",
     }
   end
 
@@ -51,7 +51,7 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
       support_url_text: "English Support",
       privacy_policy_url_cy: "https://www.gov.uk/welsh-privacy",
       payment_url: "https://www.gov.uk/english-payment",
-      payment_url_cy: "https://www.gov.uk/welsh-payment",
+      payment_url_cy: "https://www.gov.uk/payments/your-welsh-payment-link",
     }
     build(:form, default_attributes.merge(attributes))
   end
@@ -77,102 +77,234 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
         end
       end
 
-      context "when the Welsh privacy_policy_url is missing" do
-        let(:new_input_data) { super().merge(privacy_policy_url_cy: nil) }
+      describe "Welsh privacy policy URL" do
+        context "when the Welsh privacy policy URL is present" do
+          context "when the Welsh privacy policy is a valid link" do
+            let(:new_input_data) { super().merge(privacy_policy_url_cy: "https://www.gov.uk/welsh-privacy") }
 
-        context "when the form has a privacy policy URL in English" do
-          it "is not valid" do
-            expect(welsh_translation_input).not_to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:privacy_policy_url_cy)).to include "Privacy policy url cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.privacy_policy_url_cy.blank')}"
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:privacy_policy_url_cy)).to be_empty
+            end
+          end
+
+          context "when the Welsh privacy policy is a link to the example" do
+            let(:new_input_data) { super().merge(privacy_policy_url_cy: "https://www.gov.uk/help/privacy-notice") }
+
+            it "is invalid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:privacy_policy_url_cy)).to include "Privacy policy url cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.privacy_policy_url_cy.exclusion')}"
+            end
+          end
+
+          context "when the Welsh privacy policy is not a URL" do
+            let(:new_input_data) { super().merge(privacy_policy_url_cy: "Something that isn't a URL") }
+
+            it "is invalid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:privacy_policy_url_cy)).to include "Privacy policy url cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.privacy_policy_url_cy.url')}"
+            end
           end
         end
 
-        context "when the form does not have a privacy policy URL in English" do
-          let(:form) { build_form(privacy_policy_url: nil) }
+        context "when the Welsh privacy policy URL is missing" do
+          let(:new_input_data) { super().merge(privacy_policy_url_cy: nil) }
 
-          it "is valid" do
-            expect(welsh_translation_input).to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:privacy_policy_url_cy)).to be_empty
+          context "when the form has a privacy policy URL in English" do
+            it "is not valid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:privacy_policy_url_cy)).to include "Privacy policy url cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.privacy_policy_url_cy.blank')}"
+            end
           end
-        end
-      end
 
-      context "when the Welsh support email is missing" do
-        let(:new_input_data) { super().merge(support_email_cy: nil) }
+          context "when the form does not have a privacy policy URL in English" do
+            let(:form) { build_form(privacy_policy_url: nil) }
 
-        context "when the form has a support email in English" do
-          it "is not valid" do
-            expect(welsh_translation_input).not_to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:support_email_cy)).to include "Support email cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_email_cy.blank')}"
-          end
-        end
-
-        context "when the form does not have a support email in English" do
-          let(:form) { build_form(support_email: nil) }
-
-          it "is valid" do
-            expect(welsh_translation_input).to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:support_email_cy)).to be_empty
-          end
-        end
-      end
-
-      context "when the Welsh support phone number is missing" do
-        let(:new_input_data) { super().merge(support_phone_cy: nil) }
-
-        context "when the form has a support phone number in English" do
-          it "is not valid" do
-            expect(welsh_translation_input).not_to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:support_phone_cy)).to include "Support phone cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_phone_cy.blank')}"
-          end
-        end
-
-        context "when the form does not have a support phone number in English" do
-          let(:form) { build_form(support_phone: nil) }
-
-          it "is valid" do
-            expect(welsh_translation_input).to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:support_phone_cy)).to be_empty
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:privacy_policy_url_cy)).to be_empty
+            end
           end
         end
       end
 
-      context "when the Welsh support url is missing" do
-        let(:new_input_data) { super().merge(support_url_cy: nil) }
+      describe "Welsh support email" do
+        context "when the Welsh support email is present" do
+          it_behaves_like "a field that rejects invalid email addresses" do
+            let(:model) { welsh_translation_input }
+            let(:attribute) { :support_email_cy }
+          end
 
-        context "when the form has a support url in English" do
-          it "is not valid" do
-            expect(welsh_translation_input).not_to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:support_url_cy)).to include "Support url cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_url_cy.blank')}"
+          context "when the Welsh support email is a valid Government email address" do
+            let(:new_input_data) { super().merge(support_email_cy: "someone@example.gov.uk") }
+
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_email_cy)).to be_empty
+            end
+          end
+
+          context "when the Welsh support email is a correctly formatted email address with a non-government domain" do
+            let(:new_input_data) { super().merge(support_email_cy: "someone@example.com") }
+
+            it "is invalid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_email_cy)).to include "Support email cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_email_cy.non_government_email')}"
+            end
           end
         end
 
-        context "when the form does not have a support_url in English" do
-          let(:form) { build_form(support_url: nil) }
+        context "when the Welsh support email is missing" do
+          let(:new_input_data) { super().merge(support_email_cy: nil) }
 
-          it "is valid" do
-            expect(welsh_translation_input).to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:support_url_cy)).to be_empty
+          context "when the form has a support email in English" do
+            it "is not valid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_email_cy)).to include "Support email cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_email_cy.blank')}"
+            end
+          end
+
+          context "when the form does not have a support email in English" do
+            let(:form) { build_form(support_email: nil) }
+
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_email_cy)).to be_empty
+            end
           end
         end
       end
 
-      context "when the Welsh support link text is missing" do
-        let(:new_input_data) { super().merge(support_url_text_cy: nil) }
+      describe "Welsh support phone number" do
+        context "when the Welsh support phone number is present" do
+          context "when the Welsh support phone number is 500 characters or fewer" do
+            let(:new_input_data) { super().merge(support_phone_cy: "01632 960051\nOpening hours: 9am-5pm".ljust(500, "x")) }
 
-        context "when the form has a support url in English" do
-          it "is not valid" do
-            expect(welsh_translation_input).not_to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:support_url_text_cy)).to include "Support url text cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_url_text_cy.blank')}"
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_phone_cy)).to be_empty
+            end
+          end
+
+          context "when the Welsh support phone number is 501 characters or more" do
+            let(:new_input_data) { super().merge(support_phone_cy: "01632 960051\nOpening hours: 9am-5pm".ljust(501, "x")) }
+
+            it "is invalid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_phone_cy)).to include "Support phone cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_phone_cy.too_long')}"
+            end
           end
         end
 
-        context "when the form does not have a support_url in English" do
-          let(:form) { build_form(support_url: nil) }
+        context "when the Welsh support phone number is missing" do
+          let(:new_input_data) { super().merge(support_phone_cy: nil) }
 
-          it "is valid" do
-            expect(welsh_translation_input).to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:support_url_text_cy)).to be_empty
+          context "when the form has a support phone number in English" do
+            it "is not valid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_phone_cy)).to include "Support phone cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_phone_cy.blank')}"
+            end
+          end
+
+          context "when the form does not have a support phone number in English" do
+            let(:form) { build_form(support_phone: nil) }
+
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_phone_cy)).to be_empty
+            end
+          end
+        end
+      end
+
+      describe "Welsh support link" do
+        context "when the Welsh support link is present" do
+          context "when the link URL is 120 characters or fewer" do
+            let(:new_input_data) { super().merge(support_url_cy: "https://example.org/".ljust(120, "x")) }
+
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+            end
+          end
+
+          context "when the link URL is 120 characters or more" do
+            let(:new_input_data) { super().merge(support_url_cy: "https://example.org/".ljust(121, "x")) }
+
+            it "is invalid" do
+              error_message = I18n.t("activemodel.errors.models.forms/welsh_translation_input.attributes.support_url_cy.too_long")
+              expect(welsh_translation_input).to be_invalid
+              expect(welsh_translation_input.errors.full_messages_for(:support_url_cy)).to include "Support url cy #{error_message}"
+            end
+          end
+
+          context "when the link URL is not in a valid URL format" do
+            let(:new_input_data) { super().merge(support_url_cy: "not a URL") }
+
+            it "link_href is invalid if not a URL" do
+              error_message = I18n.t("activemodel.errors.models.forms/welsh_translation_input.attributes.support_url_cy.url")
+              expect(welsh_translation_input).to be_invalid
+              expect(welsh_translation_input.errors.full_messages_for(:support_url_cy)).to include "Support url cy #{error_message}"
+            end
+          end
+        end
+
+        context "when the Welsh support url is missing" do
+          let(:new_input_data) { super().merge(support_url_cy: nil) }
+
+          context "when the form has a support url in English" do
+            it "is not valid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_url_cy)).to include "Support url cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_url_cy.blank')}"
+            end
+          end
+
+          context "when the form does not have a support_url in English" do
+            let(:form) { build_form(support_url: nil) }
+
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_url_cy)).to be_empty
+            end
+          end
+        end
+
+        context "when the Welsh support link text is present" do
+          context "when the link text is 120 characters or fewer" do
+            let(:new_input_data) { super().merge(support_url_text_cy: "Online contact form".ljust(120, "x")) }
+
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+            end
+          end
+
+          context "when the link text is 120 characters or more" do
+            let(:new_input_data) { super().merge(support_url_text_cy: "Online contact form".ljust(121, "x")) }
+
+            it "is invalid" do
+              error_message = I18n.t("activemodel.errors.models.forms/welsh_translation_input.attributes.support_url_text_cy.too_long")
+              expect(welsh_translation_input).to be_invalid
+              expect(welsh_translation_input.errors.full_messages_for(:support_url_text_cy)).to include "Support url text cy #{error_message}"
+            end
+          end
+        end
+
+        context "when the Welsh support link text is missing" do
+          let(:new_input_data) { super().merge(support_url_text_cy: nil) }
+
+          context "when the form has a support url in English" do
+            it "is not valid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_url_text_cy)).to include "Support url text cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.support_url_text_cy.blank')}"
+            end
+          end
+
+          context "when the form does not have a support_url in English" do
+            let(:form) { build_form(support_url: nil) }
+
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:support_url_text_cy)).to be_empty
+            end
           end
         end
       end
@@ -197,42 +329,67 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
         end
       end
 
-      context "when the Welsh what happens next markdown is missing" do
-        let(:new_input_data) { super().merge(what_happens_next_markdown_cy: nil) }
-
-        context "when the form has what_happens_next_markdown in English" do
-          it "is not valid" do
-            expect(welsh_translation_input).not_to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:what_happens_next_markdown_cy)).to include "What happens next markdown cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.what_happens_next_markdown_cy.blank')}"
-          end
+      describe "what_happens_next_markdown_cy" do
+        it_behaves_like "a markdown field with headings disallowed" do
+          let(:model) { welsh_translation_input }
+          let(:attribute) { :what_happens_next_markdown_cy }
         end
 
-        context "when the form does not have what_happens_next_markdown in English" do
-          let(:form) { build_form(what_happens_next_markdown: nil) }
+        context "when the Welsh what happens next markdown is missing" do
+          let(:new_input_data) { super().merge(what_happens_next_markdown_cy: nil) }
 
-          it "is valid" do
-            expect(welsh_translation_input).to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:what_happens_next_markdown_cy)).to be_empty
+          context "when the form has what_happens_next_markdown in English" do
+            it "is not valid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:what_happens_next_markdown_cy)).to include "What happens next markdown cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.what_happens_next_markdown_cy.blank')}"
+            end
+          end
+
+          context "when the form does not have what_happens_next_markdown in English" do
+            let(:form) { build_form(what_happens_next_markdown: nil) }
+
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:what_happens_next_markdown_cy)).to be_empty
+            end
           end
         end
       end
 
-      context "when the Welsh payment_url_cy is missing" do
-        let(:new_input_data) { super().merge(payment_url_cy: nil) }
+      describe "Welsh payment link" do
+        context "when the Welsh payment URL is present" do
+          it_behaves_like "a payment link validator" do
+            let(:model) { welsh_translation_input }
+            let(:attribute) { :payment_url_cy }
+          end
 
-        context "when the form has a payment url in English" do
-          it "is not valid" do
-            expect(welsh_translation_input).not_to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:payment_url_cy)).to include "Payment url cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.payment_url_cy.blank')}"
+          context "when the payment link is not a url" do
+            let(:new_input_data) { super().merge(payment_url_cy: "Something that isn't a URL") }
+
+            it "is invalid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:payment_url_cy)).to include "Payment url cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.payment_url_cy.url')}"
+            end
           end
         end
 
-        context "when the form does not have a payment_url_cy in English" do
-          let(:form) { build_form(payment_url: nil) }
+        context "when the Welsh payment URL is missing" do
+          let(:new_input_data) { super().merge(payment_url_cy: nil) }
 
-          it "is valid" do
-            expect(welsh_translation_input).to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:payment_url_cy)).to be_empty
+          context "when the form has a payment url in English" do
+            it "is not valid" do
+              expect(welsh_translation_input).not_to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:payment_url_cy)).to include "Payment url cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.payment_url_cy.blank')}"
+            end
+          end
+
+          context "when the form does not have a payment_url_cy in English" do
+            let(:form) { build_form(payment_url: nil) }
+
+            it "is valid" do
+              expect(welsh_translation_input).to be_valid
+              expect(welsh_translation_input.errors.full_messages_for(:payment_url_cy)).to be_empty
+            end
           end
         end
       end
