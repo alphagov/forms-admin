@@ -5,10 +5,12 @@ class Forms::WelshConditionTranslationInput < BaseInput
   attr_accessor :mark_complete
 
   attribute :id
-  attribute :exit_page_markdown_cy
   attribute :exit_page_heading_cy
+  attribute :exit_page_markdown_cy
 
   validate :exit_page_heading_cy_present?
+  validate :exit_page_heading_cy_length, if: -> { exit_page_heading_cy.present? }
+
   validate :exit_page_markdown_cy_present?
 
   def submit
@@ -45,6 +47,12 @@ class Forms::WelshConditionTranslationInput < BaseInput
     if form_marked_complete? && condition_has_exit_page? && exit_page_heading_cy.blank?
       errors.add(:exit_page_heading_cy, :blank, question_number: condition.routing_page.position, url: "##{form_field_id(:exit_page_heading_cy)}")
     end
+  end
+
+  def exit_page_heading_cy_length
+    return if exit_page_heading_cy.length <= 4999
+
+    errors.add(:exit_page_heading_cy, :too_long, question_number: condition.routing_page.position, count: 4999, url: "##{form_field_id(:exit_page_heading_cy)}")
   end
 
   def exit_page_markdown_cy_present?

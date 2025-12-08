@@ -53,6 +53,26 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
         end
       end
 
+      context "when the Welsh exit page heading is present" do
+        context "when the Welsh exit page heading is 5000 characters or more" do
+          let(:new_input_data) { super().merge(exit_page_heading_cy: "a" * 5000) }
+
+          it "is not valid" do
+            expect(welsh_condition_translation_input).not_to be_valid
+            expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_heading_cy)).to include "Exit page heading cy #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_heading_cy.too_long', question_number: condition.routing_page.position, count: 4999)}"
+          end
+        end
+
+        context "when the Welsh exit page heading is 4999 characters or fewer" do
+          let(:new_input_data) { super().merge(exit_page_heading_cy: "a" * 4999) }
+
+          it "is valid" do
+            expect(welsh_condition_translation_input).to be_valid
+            expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_heading_cy)).to be_empty
+          end
+        end
+      end
+
       context "when the Welsh exit page markdown is missing" do
         let(:new_input_data) { super().merge(exit_page_markdown_cy: nil) }
 
@@ -83,6 +103,26 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
         it "is valid" do
           expect(welsh_condition_translation_input).to be_valid
           expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_heading_cy)).to be_empty
+        end
+      end
+
+      context "when the Welsh exit page heading is present" do
+        context "when the Welsh exit page heading is 5000 characters or more" do
+          let(:new_input_data) { super().merge(exit_page_heading_cy: "a" * 5000) }
+
+          it "is not valid" do
+            expect(welsh_condition_translation_input).not_to be_valid
+            expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_heading_cy)).to include "Exit page heading cy #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_heading_cy.too_long', question_number: condition.routing_page.position, count: 4999)}"
+          end
+        end
+
+        context "when the Welsh exit page heading is 4999 characters or fewer" do
+          let(:new_input_data) { super().merge(exit_page_heading_cy: "a" * 4999) }
+
+          it "is valid" do
+            expect(welsh_condition_translation_input).to be_valid
+            expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_heading_cy)).to be_empty
+          end
         end
       end
 

@@ -7,6 +7,7 @@ en:
           attributes:
             exit_page_heading_cy:
               blank: Enter an exit page heading in Welsh for question %{question_number}
+              too_long: The exit page heading for question %{question_number} cannot be longer than %{count} characters
             exit_page_markdown_cy:
               blank: Enter exit page content in Welsh for question %{question_number}
   helpers:
