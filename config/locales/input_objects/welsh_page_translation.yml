@@ -9,6 +9,7 @@ en:
               blank: Enter guidance text in Welsh for question %{question_number}
             hint_text_cy:
               blank: Enter hint text for question %{question_number} in Welsh
+              too_long: The hint text for question %{question_number} cannot be longer than %{count} characters
             page_heading_cy:
               blank: Enter a page heading in Welsh for question %{question_number}
             question_text_cy:
