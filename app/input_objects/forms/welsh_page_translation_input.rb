@@ -18,7 +18,10 @@ class Forms::WelshPageTranslationInput < BaseInput
   validate :hint_text_cy_length, if: -> { hint_text_cy.present? }
 
   validate :page_heading_cy_present?
+
   validate :guidance_markdown_cy_present?
+  validate :guidance_markdown_cy_length_and_tags, if: -> { guidance_markdown_cy.present? }
+
   validate :condition_translations_valid?
 
   def submit
@@ -104,6 +107,21 @@ class Forms::WelshPageTranslationInput < BaseInput
       errors.add(:guidance_markdown_cy,
                  I18n.t("activemodel.errors.models.forms/welsh_page_translation_input.attributes.guidance_markdown_cy.blank", question_number: page.position),
                  url: "##{form_field_id(:guidance_markdown_cy)}")
+    end
+  end
+
+  def guidance_markdown_cy_length_and_tags
+    markdown_validation = GovukFormsMarkdown.validate(guidance_markdown_cy)
+
+    return true if markdown_validation[:errors].empty?
+
+    if markdown_validation[:errors].include?(:too_long)
+      errors.add(:guidance_markdown_cy, :too_long, count: 4999, question_number: page.position, url: "##{form_field_id(:guidance_markdown_cy)}")
+    end
+
+    tag_errors = markdown_validation[:errors].excluding(:too_long)
+    if tag_errors.any?
+      errors.add(:guidance_markdown_cy, :unsupported_markdown_syntax, question_number: page.position, url: "##{form_field_id(:guidance_markdown_cy)}")
     end
   end
 
