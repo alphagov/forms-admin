@@ -12,6 +12,8 @@ class Forms::WelshPageTranslationInput < BaseInput
   attribute :guidance_markdown_cy
 
   validate :question_text_cy_present?
+  validate :question_text_cy_length, if: -> { question_text_cy.present? }
+
   validate :hint_text_cy_present?
   validate :page_heading_cy_present?
   validate :guidance_markdown_cy_present?
@@ -65,6 +67,12 @@ class Forms::WelshPageTranslationInput < BaseInput
                  I18n.t("activemodel.errors.models.forms/welsh_page_translation_input.attributes.question_text_cy.blank", question_number: page.position),
                  url: "##{form_field_id(:question_text_cy)}")
     end
+  end
+
+  def question_text_cy_length
+    return if question_text_cy.length <= QuestionTextValidation::QUESTION_TEXT_MAX_LENGTH
+
+    errors.add(:question_text_cy, :too_long, question_number: page.position, count: QuestionTextValidation::QUESTION_TEXT_MAX_LENGTH, url: "##{form_field_id(:question_text_cy)}")
   end
 
   def hint_text_cy_present?
