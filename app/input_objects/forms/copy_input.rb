@@ -5,7 +5,6 @@ class Forms::CopyInput < Forms::NameInput
 
   validates :copied_name, presence: true, length: { maximum: 2000 }
 
-
   def submit
     return false if invalid?
 
