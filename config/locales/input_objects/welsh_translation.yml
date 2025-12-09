@@ -34,7 +34,7 @@ en:
               too_long: The text to describe the contact link for support cannot be longer than 120 characters
             what_happens_next_markdown_cy:
               blank: Enter information about what happens next in Welsh
-              too_long: The information about what happens next cannot be longer than 5,000 characters
+              too_long: The information about what happens next cannot be longer than 4,999 characters
               unsupported_markdown_syntax: The information about what happens next can only contain formatting for links, bulleted lists (*), or numbered lists (1.)
   helpers:
     label:

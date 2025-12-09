@@ -68,7 +68,7 @@ class Forms::WelshConditionTranslationInput < BaseInput
     return true if markdown_validation[:errors].empty?
 
     if markdown_validation[:errors].include?(:too_long)
-      errors.add(:exit_page_markdown_cy, :too_long, count: 4999, question_number: page.position, url: "##{form_field_id(:exit_page_markdown_cy)}")
+      errors.add(:exit_page_markdown_cy, :too_long, count: "4,999", question_number: page.position, url: "##{form_field_id(:exit_page_markdown_cy)}")
     end
 
     tag_errors = markdown_validation[:errors].excluding(:too_long)
