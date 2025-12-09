@@ -531,6 +531,11 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
         expect(form.what_happens_next_markdown).to eq(english_value_before)
       end
 
+      it "adds :cy to the avaliable languages" do
+        welsh_translation_input.submit
+        expect(form.available_languages).to include("cy")
+      end
+
       context "when the form has no declaration text" do
         let(:form) { build_form(declaration_text: nil) }
 
