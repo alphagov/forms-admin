@@ -7,9 +7,12 @@ class BaseInput
 private
 
   def set_validation_error_logging_attributes
-    CurrentLoggingAttributes.validation_errors = errors.map { |error| "#{error.attribute}: #{error.type}" } if errors.any?
+    # Remove nested errors, since they'll already be logged in the object where they were originally raised
+    errors_without_nested_errors = errors.reject { |error| error.is_a? ActiveModel::NestedError }
 
-    errors.each do |error|
+    CurrentLoggingAttributes.validation_errors = errors_without_nested_errors.map { |error| "#{error.attribute}: #{error.type}" } if errors.any?
+
+    errors_without_nested_errors.each do |error|
       AnalyticsService.track_validation_errors(input_object_name: self.class.name, field: error.attribute, error_type: error.type, form_name:)
     end
   end

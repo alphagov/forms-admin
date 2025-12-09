@@ -28,6 +28,17 @@ class TestInputWithPage < BaseInput
   validates :email, format: { with: /.*@.*/, message: "must be a valid email address" }
 end
 
+class TestInputWithNestedError < BaseInput
+  validate :has_no_nested_errors
+
+  def has_no_nested_errors
+    nested_input = TestInput.new
+    nested_input.validate
+
+    errors.merge!(nested_input.errors)
+  end
+end
+
 RSpec.describe BaseInput do
   describe "validation error logging" do
     let(:analytics_service) { class_double(AnalyticsService).as_stubbed_const }
@@ -174,6 +185,41 @@ RSpec.describe BaseInput do
             expect(analytics_service).to have_received(:track_validation_errors)
               .with(input_object_name: "TestInputWithPage", form_name:, field: :email, error_type: :invalid)
           end
+        end
+      end
+
+      context "when there is a nested error on the input" do
+        let(:input) { TestInputWithNestedError.new }
+
+        it "is invalid" do
+          expect(input).to be_invalid
+        end
+
+        it "only sets validation errors on CurrentLoggingAttributes once" do
+          input.valid?
+
+          expect(CurrentLoggingAttributes).to have_received(:validation_errors=)
+            .with(array_including("name: blank", "email: invalid")).once
+        end
+
+        it "tracks the nested model's validation errors through AnalyticsService" do
+          input.valid?
+
+          expect(analytics_service).to have_received(:track_validation_errors)
+            .with(input_object_name: "TestInput", form_name: nil, field: :name, error_type: :blank).once
+
+          expect(analytics_service).to have_received(:track_validation_errors)
+            .with(input_object_name: "TestInput", form_name: nil, field: :email, error_type: :invalid).once
+        end
+
+        it "does not track the parent model's validation errors through AnalyticsService" do
+          input.valid?
+
+          expect(analytics_service).not_to have_received(:track_validation_errors)
+            .with(hash_including(input_object_name: "TestInputWithNestedError"))
+
+          expect(analytics_service).not_to have_received(:track_validation_errors)
+            .with(hash_including(input_object_name: "TestInputWithNestedError"))
         end
       end
     end
