@@ -26,7 +26,7 @@ class Forms::WelshConditionTranslationInput < BaseInput
   def assign_condition_values
     self.exit_page_markdown_cy = condition.exit_page_markdown_cy
     self.exit_page_heading_cy = condition.exit_page_heading_cy
-    self.mark_complete = condition.routing_page.form.try(:welsh_completed)
+    self.mark_complete = page.form.try(:welsh_completed)
 
     self
   end
@@ -46,19 +46,19 @@ class Forms::WelshConditionTranslationInput < BaseInput
 
   def exit_page_heading_cy_present?
     if form_marked_complete? && condition_has_exit_page? && exit_page_heading_cy.blank?
-      errors.add(:exit_page_heading_cy, :blank, question_number: condition.routing_page.position, url: "##{form_field_id(:exit_page_heading_cy)}")
+      errors.add(:exit_page_heading_cy, :blank, question_number: page.position, url: "##{form_field_id(:exit_page_heading_cy)}")
     end
   end
 
   def exit_page_heading_cy_length
     return if exit_page_heading_cy.length <= 250
 
-    errors.add(:exit_page_heading_cy, :too_long, question_number: condition.routing_page.position, count: 250, url: "##{form_field_id(:exit_page_heading_cy)}")
+    errors.add(:exit_page_heading_cy, :too_long, question_number: page.position, count: 250, url: "##{form_field_id(:exit_page_heading_cy)}")
   end
 
   def exit_page_markdown_cy_present?
     if form_marked_complete? && condition_has_exit_page? && exit_page_markdown_cy.blank?
-      errors.add(:exit_page_markdown_cy, :blank, question_number: condition.routing_page.position, url: "##{form_field_id(:exit_page_markdown_cy)}")
+      errors.add(:exit_page_markdown_cy, :blank, question_number: page.position, url: "##{form_field_id(:exit_page_markdown_cy)}")
     end
   end
 
@@ -68,16 +68,20 @@ class Forms::WelshConditionTranslationInput < BaseInput
     return true if markdown_validation[:errors].empty?
 
     if markdown_validation[:errors].include?(:too_long)
-      errors.add(:exit_page_markdown_cy, :too_long, count: 4999, question_number: condition.routing_page.position, url: "##{form_field_id(:exit_page_markdown_cy)}")
+      errors.add(:exit_page_markdown_cy, :too_long, count: 4999, question_number: page.position, url: "##{form_field_id(:exit_page_markdown_cy)}")
     end
 
     tag_errors = markdown_validation[:errors].excluding(:too_long)
     if tag_errors.any?
-      errors.add(:exit_page_markdown_cy, :unsupported_markdown_syntax, question_number: condition.routing_page.position, url: "##{form_field_id(:exit_page_markdown_cy)}")
+      errors.add(:exit_page_markdown_cy, :unsupported_markdown_syntax, question_number: page.position, url: "##{form_field_id(:exit_page_markdown_cy)}")
     end
   end
 
   def form_marked_complete?
     mark_complete == "true"
+  end
+
+  def page
+    @page ||= condition.routing_page
   end
 end
