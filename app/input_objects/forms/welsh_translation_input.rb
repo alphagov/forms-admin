@@ -70,6 +70,13 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
     end
 
     form.welsh_completed = mark_complete
+
+    # We add :cy to the available languages so that the welsh form can be
+    # previewed. This means that if mark_complete is false, welsh form docs
+    # will be generated.
+    # TODO: Add a button for removing the Welsh form
+    form.available_languages = %w[en cy]
+
     form.save_draft!
   end
 
