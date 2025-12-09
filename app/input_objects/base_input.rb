@@ -17,6 +17,7 @@ private
   def form_name
     return form.name if defined?(form) && form.present?
     return draft_question.form_name if defined?(draft_question) && draft_question.present?
+    return page.form.name if defined?(page) && page.present?
 
     nil
   end

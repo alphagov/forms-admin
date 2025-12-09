@@ -21,6 +21,13 @@ class TestInputWithDraftQuestion < BaseInput
   validates :email, format: { with: /.*@.*/, message: "must be a valid email address" }
 end
 
+class TestInputWithPage < BaseInput
+  attr_accessor :name, :email, :page
+
+  validates :name, presence: true
+  validates :email, format: { with: /.*@.*/, message: "must be a valid email address" }
+end
+
 RSpec.describe BaseInput do
   describe "validation error logging" do
     let(:analytics_service) { class_double(AnalyticsService).as_stubbed_const }
@@ -133,6 +140,39 @@ RSpec.describe BaseInput do
 
             expect(analytics_service).to have_received(:track_validation_errors)
               .with(input_object_name: "TestInputWithDraftQuestion", form_name:, field: :email, error_type: :invalid)
+          end
+        end
+      end
+
+      context "when the page is defined in the input" do
+        let(:input) { TestInputWithPage.new }
+
+        context "when the page is nil" do
+          it "does not include a form name in the validation errors" do
+            input.valid?
+
+            expect(analytics_service).to have_received(:track_validation_errors)
+              .with(input_object_name: "TestInputWithPage", form_name: nil, field: :name, error_type: :blank)
+
+            expect(analytics_service).to have_received(:track_validation_errors)
+              .with(input_object_name: "TestInputWithPage", form_name: nil, field: :email, error_type: :invalid)
+          end
+        end
+
+        context "when the page is present" do
+          let(:form_name) { "Apply for a juggling licence" }
+          let(:form) { create :form, name: form_name }
+          let(:page) { build :page, form_id: form.id }
+          let(:input) { TestInputWithPage.new(page:) }
+
+          it "includes the form name in the validation errors" do
+            input.valid?
+
+            expect(analytics_service).to have_received(:track_validation_errors)
+              .with(input_object_name: "TestInputWithPage", form_name:, field: :name, error_type: :blank)
+
+            expect(analytics_service).to have_received(:track_validation_errors)
+              .with(input_object_name: "TestInputWithPage", form_name:, field: :email, error_type: :invalid)
           end
         end
       end
