@@ -1,3 +1,24 @@
 .app-form-field-table {
-  // TODO: add styles
+  height: 100%;
+}
+
+.app-form-field-table .govuk-table__row {
+  height: 100%;
+}
+
+.app-form-field-table .govuk-table__cell {
+  height: 100%;
+}
+
+.app-form-field-table .govuk-form-group {
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.app-form-field-table .govuk-textarea {
+  min-height: 5lh;
+  flex-grow: 1;
+  margin-bottom: 0;
+  field-sizing: content;
 }
