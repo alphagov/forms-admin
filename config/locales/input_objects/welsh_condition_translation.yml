@@ -15,5 +15,5 @@ en:
   helpers:
     label:
       forms_welsh_condition_translation_input:
-        exit_page_heading_cy: Exit page heading (Welsh)
-        exit_page_markdown_cy: Exit page markdown (Welsh)
+        exit_page_heading_cy_html: Enter Welsh exit page heading <span class="govuk-visually-hidden">for question %{question_number}’s exit page</span>
+        exit_page_markdown_cy_html: Enter Welsh exit page content <span class="govuk-visually-hidden">for question %{question_number}’s exit page</span>

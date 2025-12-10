@@ -49,7 +49,7 @@ describe "forms/welsh_translation/new.html.erb" do
     end
 
     it "renders a text input for 'Form name'" do
-      expect(rendered).to have_field("Form name", type: "text", with: "My Welsh form")
+      expect(rendered).to have_field("Enter your Welsh form name", type: "text", with: "My Welsh form")
     end
 
     it "renders english text for 'Form name'" do
@@ -57,7 +57,7 @@ describe "forms/welsh_translation/new.html.erb" do
     end
 
     it "renders a text area for 'Declaration'" do
-      expect(rendered).to have_field("Declaration", type: "textarea", with: nil)
+      expect(rendered).to have_field("Enter your Welsh declaration", type: "textarea", with: nil)
     end
 
     it "renders english text for 'Declaration'" do
@@ -65,7 +65,7 @@ describe "forms/welsh_translation/new.html.erb" do
     end
 
     it "renders a text area for 'What happens next'" do
-      expect(rendered).to have_field("What happens next", type: "textarea", with: "Welsh what happens next")
+      expect(rendered).to have_field("Enter information about what happens next in Welsh", type: "textarea", with: "Welsh what happens next")
     end
 
     it "renders english text for 'What happens next'" do
@@ -73,7 +73,7 @@ describe "forms/welsh_translation/new.html.erb" do
     end
 
     it "renders a text input for 'Privacy policy URL'" do
-      expect(rendered).to have_field("Privacy policy URL", type: "text", with: "https://www.gov.uk/privacy_cy")
+      expect(rendered).to have_field("Enter link to your Welsh privacy information", type: "text", with: "https://www.gov.uk/privacy_cy")
     end
 
     it "renders english text for 'Privacy policy URL'" do
@@ -81,7 +81,7 @@ describe "forms/welsh_translation/new.html.erb" do
     end
 
     it "renders a text input for 'Link to a payment page'" do
-      expect(rendered).to have_field("Payment URL", type: "text", with: "https://www.gov.uk/payment_cy")
+      expect(rendered).to have_field("Enter Welsh GOV.UK Pay payment link", type: "text", with: "https://www.gov.uk/payment_cy")
     end
 
     it "renders english text for 'Link to a payment page'" do
@@ -89,14 +89,14 @@ describe "forms/welsh_translation/new.html.erb" do
     end
 
     it "renders text inputs for all the support contact fields" do
-      expect(rendered).to have_field("Support email", type: "text")
-      expect(rendered).to have_field("Support phone", type: "textarea")
-      expect(rendered).to have_field("Support URL", type: "text")
-      expect(rendered).to have_field("Support URL text", type: "text")
+      expect(rendered).to have_field("Enter email address for Welsh support", type: "text")
+      expect(rendered).to have_field("Enter phone information for Welsh support", type: "textarea")
+      expect(rendered).to have_field("Enter an online contact link for Welsh support", type: "text")
+      expect(rendered).to have_field("Enter text to describe the contact link for Welsh support", type: "text")
     end
 
     it "renders english text for support contact fields" do
-      expect(rendered).to have_text("Support email")
+      expect(rendered).to have_text("support@example.gov.uk")
       expect(rendered).to have_text("English support phone")
       expect(rendered).to have_text("https://www.gov.uk/support")
       expect(rendered).to have_text("Support URL text")
@@ -120,7 +120,7 @@ describe "forms/welsh_translation/new.html.erb" do
       end
 
       it "renders message for no declaration text" do
-        expect(rendered).to have_text("No declaration was added to this form.")
+        expect(rendered).to have_text("No declaration has been added to the form.")
       end
     end
 
@@ -165,7 +165,7 @@ describe "forms/welsh_translation/new.html.erb" do
       end
 
       it "renders message for no support information" do
-        expect(rendered).to have_text("No contact details for support were added to this form.")
+        expect(rendered).to have_text("No contact details for support have been added to the form yet.")
       end
     end
 
@@ -177,7 +177,7 @@ describe "forms/welsh_translation/new.html.erb" do
       end
 
       it "renders message for no what happens next information" do
-        expect(rendered).to have_text("No information about what happens next was added to this form.")
+        expect(rendered).to have_text("No information about what happens next has been added to the form yet.")
       end
     end
 
@@ -189,7 +189,7 @@ describe "forms/welsh_translation/new.html.erb" do
       end
 
       it "renders message for no privacy information" do
-        expect(rendered).to have_text("No link to privacy information was added to this form.")
+        expect(rendered).to have_text("No privacy information has been added to the form yet.")
       end
     end
 
@@ -202,14 +202,14 @@ describe "forms/welsh_translation/new.html.erb" do
       end
 
       it "renders message for no pages" do
-        expect(rendered).to have_text("No questions have been added to this form yet.")
+        expect(rendered).to have_text("No questions have been added to the form yet.")
       end
     end
 
     context "when the form has pages" do
       it "has a field for each page's Welsh question text" do
-        expect(rendered).to have_field(t("forms.welsh_translation.new.page_labels.question_text_cy", question_number: page.position), type: "text", id: "forms_welsh_page_translation_input_#{page.id}_page_translations_question_text_cy")
-        expect(rendered).to have_field(t("forms.welsh_translation.new.page_labels.question_text_cy", question_number: another_page.position), type: "text", id: "forms_welsh_page_translation_input_#{another_page.id}_page_translations_question_text_cy")
+        expect(rendered).to have_field("Enter Welsh question text for question #{page.position}", type: "text", id: "forms_welsh_page_translation_input_#{page.id}_page_translations_question_text_cy")
+        expect(rendered).to have_field("Enter Welsh question text for question #{another_page.position}", type: "text", id: "forms_welsh_page_translation_input_#{another_page.id}_page_translations_question_text_cy")
       end
 
       context "when a page has hint text" do
@@ -218,11 +218,11 @@ describe "forms/welsh_translation/new.html.erb" do
 
         it "shows the English text and Welsh field for pages with English hint text" do
           expect(rendered).to have_css("td", text: page.hint_text)
-          expect(rendered).to have_field(t("forms.welsh_translation.new.page_labels.hint_text_cy", question_number: page.position), type: "textarea", id: "forms_welsh_page_translation_input_#{page.id}_page_translations_hint_text_cy")
+          expect(rendered).to have_field("Enter Welsh hint text for question #{page.position}", type: "textarea", id: "forms_welsh_page_translation_input_#{page.id}_page_translations_hint_text_cy")
         end
 
         it "does not show the Welsh field for pages without English hint text" do
-          expect(rendered).not_to have_field(t("forms.welsh_translation.new.page_labels.hint_text_cy", question_number: another_page.position))
+          expect(rendered).not_to have_field("Enter Welsh hint text for question #{another_page.position}")
         end
       end
 
@@ -231,20 +231,15 @@ describe "forms/welsh_translation/new.html.erb" do
         let(:another_page) { create :page, guidance_markdown: "This part of the form concerns licencing.", page_heading: "Licencing" }
 
         it "shows the English text and Welsh fields for pages with English page heading and guidance markdown" do
-          expect(rendered).to have_css("td", text: page.page_heading)
-          expect(rendered).to have_field(t("forms.welsh_translation.new.page_labels.page_heading_cy", question_number: another_page.position), id: "forms_welsh_page_translation_input_#{another_page.id}_page_translations_page_heading_cy")
-          expect(rendered).to have_css("td", text: page.guidance_markdown)
-          expect(rendered).to have_field(t("forms.welsh_translation.new.page_labels.guidance_markdown_cy", question_number: another_page.position), id: "forms_welsh_page_translation_input_#{another_page.id}_page_translations_guidance_markdown_cy")
+          expect(rendered).to have_css("td", text: another_page.page_heading)
+          expect(rendered).to have_field("Enter Welsh page heading for question #{another_page.position}", id: "forms_welsh_page_translation_input_#{another_page.id}_page_translations_page_heading_cy")
+          expect(rendered).to have_css("td", text: another_page.guidance_markdown)
+          expect(rendered).to have_field("Enter Welsh guidance text for question #{another_page.position}", id: "forms_welsh_page_translation_input_#{another_page.id}_page_translations_guidance_markdown_cy")
         end
 
         it "does not show the Welsh field for pages without English page heading and guidance markdown" do
-          expect(rendered).not_to have_field(t("forms.welsh_translation.new.page_labels.page_heading_cy", question_number: page.position))
-          expect(rendered).not_to have_field(t("forms.welsh_translation.new.page_labels.guidance_markdown_cy", question_number: page.position), type: "textarea")
-        end
-
-        it "shows a field for Welsh page heading and guidance markdown on pages with English page heading and guidance markdown" do
-          expect(rendered).to have_field(t("forms.welsh_translation.new.page_labels.page_heading_cy", question_number: another_page.position))
-          expect(rendered).to have_field(t("forms.welsh_translation.new.page_labels.guidance_markdown_cy", question_number: another_page.position))
+          expect(rendered).not_to have_field("Enter Welsh page heading for question #{page.position}")
+          expect(rendered).not_to have_field("Enter Welsh guidance text for question #{page.position}", type: "textarea")
         end
       end
 
@@ -261,9 +256,9 @@ describe "forms/welsh_translation/new.html.erb" do
 
           it "shows the English text and Welsh field for each condition's exit page fields" do
             expect(rendered).to have_css("td", text: condition.exit_page_heading)
-            expect(rendered).to have_field(t("forms.welsh_translation.new.condition_labels.exit_page_heading_cy", question_number: condition.routing_page.position), type: "text", id: welsh_condition_translation_input.form_field_id(:exit_page_heading_cy))
+            expect(rendered).to have_field("Enter Welsh exit page heading for question #{condition.routing_page.position}", type: "text", id: welsh_condition_translation_input.form_field_id(:exit_page_heading_cy))
             expect(rendered).to have_css("td", text: condition.exit_page_markdown)
-            expect(rendered).to have_field(t("forms.welsh_translation.new.condition_labels.exit_page_markdown_cy", question_number: condition.routing_page.position), type: "textarea", id: welsh_condition_translation_input.form_field_id(:exit_page_markdown_cy))
+            expect(rendered).to have_field("Enter Welsh exit page content for question #{condition.routing_page.position}", type: "textarea", id: welsh_condition_translation_input.form_field_id(:exit_page_markdown_cy))
           end
         end
       end
