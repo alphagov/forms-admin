@@ -1,10 +1,15 @@
 require "rails_helper"
 
 RSpec.describe Pages::Selection::OptionsInput do
+  subject(:input) { described_class.new(draft_question:, include_none_of_the_above:, selection_options:) }
+
   let(:form) { create :form }
   let(:only_one_option) { "true" }
-  let(:draft_question) { build :draft_question, answer_type: "selection", answer_settings: { only_one_option: }, form_id: form.id }
+  let(:answer_settings) { { only_one_option: } }
+  let(:is_optional) { nil }
+  let(:draft_question) { build :draft_question, answer_type: "selection", answer_settings:, form_id: form.id, is_optional: }
   let(:selection_options) { [{ name: "option 1" }, { name: "option 2" }] }
+  let(:include_none_of_the_above) { "true" }
 
   describe "validations" do
     describe "include_none_of_the_above" do
@@ -35,8 +40,7 @@ RSpec.describe Pages::Selection::OptionsInput do
 
     describe "selection_options" do
       it "is invalid if fewer than 2 selection options are provided" do
-        selection_options = []
-        input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
+        input.selection_options = []
         error_message = I18n.t("activemodel.errors.models.pages/selection/options_input.attributes.selection_options.minimum")
         expect(input).not_to be_valid
 
@@ -44,8 +48,7 @@ RSpec.describe Pages::Selection::OptionsInput do
       end
 
       it "is invalid if selection options are not unique" do
-        selection_options = [{ name: "option 1" }, { name: "option 2" }, { name: "option 1" }]
-        input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
+        input.selection_options = [{ name: "option 1" }, { name: "option 2" }, { name: "option 1" }]
         error_message = I18n.t("activemodel.errors.models.pages/selection/options_input.attributes.selection_options.uniqueness")
         expect(input).not_to be_valid
 
@@ -53,16 +56,14 @@ RSpec.describe Pages::Selection::OptionsInput do
       end
 
       it "is valid if there are 2 unique selection values" do
-        selection_options = (1..2).to_a.map { |i| { name: i.to_s } }
-        input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
+        input.selection_options = (1..2).to_a.map { |i| { name: i.to_s } }
 
         expect(input).to be_valid
       end
 
       context "when only_one_option is true for the draft_question" do
         it "is invalid if more than 1000 selection options are provided" do
-          selection_options = (1..1001).to_a.map { |i| OpenStruct.new(name: i.to_s) }
-          input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
+          input.selection_options = (1..1001).to_a.map { |i| OpenStruct.new(name: i.to_s) }
           error_message = I18n.t("activemodel.errors.models.pages/selection/options_input.attributes.selection_options.maximum_choose_only_one_option")
           expect(input).not_to be_valid
 
@@ -70,8 +71,7 @@ RSpec.describe Pages::Selection::OptionsInput do
         end
 
         it "is valid if there are 1000 unique selection values" do
-          selection_options = (1..1000).to_a.map { |i| { name: i.to_s } }
-          input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
+          input.selection_options = (1..1000).to_a.map { |i| { name: i.to_s } }
 
           expect(input).to be_valid
         end
@@ -81,8 +81,7 @@ RSpec.describe Pages::Selection::OptionsInput do
         let(:only_one_option) { "false" }
 
         it "is invalid if more than 30 selection options are provided" do
-          selection_options = (1..31).to_a.map { |i| OpenStruct.new(name: i.to_s) }
-          input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
+          input.selection_options = (1..31).to_a.map { |i| OpenStruct.new(name: i.to_s) }
           error_message = I18n.t("activemodel.errors.models.pages/selection/options_input.attributes.selection_options.maximum_choose_more_than_one_option")
           expect(input).not_to be_valid
 
@@ -90,8 +89,7 @@ RSpec.describe Pages::Selection::OptionsInput do
         end
 
         it "is valid if there are 30 unique selection values" do
-          selection_options = (1..30).to_a.map { |i| { name: i.to_s } }
-          input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
+          input.selection_options = (1..30).to_a.map { |i| { name: i.to_s } }
 
           expect(input).to be_valid
         end
@@ -106,22 +104,17 @@ RSpec.describe Pages::Selection::OptionsInput do
     end
 
     it "sets draft_question answer_settings and is_optional" do
-      input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
       input.submit
 
       expect(input.draft_question.answer_settings).to include(selection_options:)
     end
 
     it "sets draft_question is_optional" do
-      input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
-
       expect { input.submit }.to change(draft_question, :is_optional).to true
     end
 
     it "logs submission" do
       allow(Rails.logger).to receive(:info)
-
-      input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
       input.submit
 
       expect(Rails.logger).to have_received(:info).with("Submitted selection options for a selection question", {
@@ -132,13 +125,14 @@ RSpec.describe Pages::Selection::OptionsInput do
     end
 
     context "when there are existing answer settings" do
+      let(:answer_settings) { { foo: "bar" } }
+
       before do
-        draft_question.answer_settings = { foo: "bar" }
+        draft_question.answer_settings = answer_settings
+        input.submit
       end
 
       it "does not overwrite other answer_settings" do
-        input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
-        input.submit
         expect(draft_question.answer_settings).to include({ selection_options:, foo: "bar" })
       end
     end
@@ -146,7 +140,6 @@ RSpec.describe Pages::Selection::OptionsInput do
 
   describe "#add_another" do
     it "adds an empty item to the end of the selection options array" do
-      input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
       input.add_another
 
       expect(input.selection_options).to eq([{ name: "option 1" }, { name: "option 2" }, { name: "" }])
@@ -155,7 +148,6 @@ RSpec.describe Pages::Selection::OptionsInput do
 
   describe "#remove" do
     it "removes the specified option from the selection options array" do
-      input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
       input.remove(1)
 
       expect(input.selection_options.to_json).to eq([{ name: "option 1" }].to_json)
@@ -164,29 +156,12 @@ RSpec.describe Pages::Selection::OptionsInput do
 
   describe "#filter_out_blank_options" do
     it "filters out blank inputs" do
-      selection_options = [{ name: "1" }, { name: "" }, { name: "2" }]
-      input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
+      input.selection_options = [{ name: "1" }, { name: "" }, { name: "2" }]
       input.validate
 
       expect(input.selection_options.to_json).to eq([{ name: "1" }, { name: "2" }].to_json)
     end
   end
 
-  describe "#maximum_options" do
-    context "when only_one_option is true for the draft_question" do
-      it "returns 1000" do
-        input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
-        expect(input.maximum_options).to eq 1000
-      end
-    end
-
-    context "when only_one_option is false for the draft_question" do
-      let(:only_one_option) { "false" }
-
-      it "returns 30" do
-        input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
-        expect(input.maximum_options).to eq 30
-      end
-    end
-  end
+  it_behaves_like "base selection options input"
 end
