@@ -153,7 +153,7 @@ RSpec.describe Pages::Selection::BulkOptionsInput, type: :model do
 
   describe "#none_of_the_above_options" do
     it "returns true and false as options" do
-      expect(bulk_options_input.none_of_the_above_options).to eq [OpenStruct.new(id: "true"), OpenStruct.new(id: "false")]
+      expect(bulk_options_input.include_none_of_the_above_options).to eq [OpenStruct.new(id: "true"), OpenStruct.new(id: "false")]
     end
   end
 
