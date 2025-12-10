@@ -61,4 +61,30 @@ RSpec.describe PagesHelper, type: :helper do
       end
     end
   end
+
+  describe "#has_more_than_30_options?" do
+    context "when draft_question has no answer_settings" do
+      it "returns false" do
+        expect(helper.has_more_than_30_options?(draft_question)).to be false
+      end
+    end
+
+    context "when draft_question has 30 selection options" do
+      let(:selection_options) { (1..30).to_a.map { |i| { name: i.to_s } } }
+      let(:draft_question) { build :draft_question, answer_settings: { selection_options: } }
+
+      it "returns false" do
+        expect(helper.has_more_than_30_options?(draft_question)).to be false
+      end
+    end
+
+    context "when draft_question has more than 30 selection options" do
+      let(:selection_options) { (1..31).to_a.map { |i| { name: i.to_s } } }
+      let(:draft_question) { build :draft_question, answer_settings: { selection_options: } }
+
+      it "returns true" do
+        expect(helper.has_more_than_30_options?(draft_question)).to be true
+      end
+    end
+  end
 end
