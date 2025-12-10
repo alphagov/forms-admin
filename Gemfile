@@ -100,7 +100,7 @@ group :development, :test do
   gem "rubocop-govuk", require: false
 
   # For security auditing gem vulnerabilities. RUN IN CI
-  gem "bundler-audit", "~> 0.9.2"
+  gem "bundler-audit", "~> 0.9.3"
 
   # For detecting security vulnerabilities in Ruby on Rails applications via static analysis.
   gem "brakeman", "~> 7.1.1"
