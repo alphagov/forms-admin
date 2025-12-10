@@ -6,7 +6,7 @@
       <% if @copy_input&.errors.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
-      <%= f.govuk_text_field :name, label: {  tag: 'h1', size: 'l' } %>
+      <%= f.govuk_text_field :name, value: "Copy of #{@current_form.name}", label: {  tag: 'h1', size: 'l' } %>
       <%= f.govuk_submit t("save_and_continue") %>
     <% end %>
   </div>

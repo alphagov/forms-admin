@@ -11,7 +11,7 @@ class Forms::NameInput < BaseInput
   end
 
   def assign_form_values
-    self.name = "Copy of #{form.name}"
+    self.name = "#{form.name}"
     self
   end
 
