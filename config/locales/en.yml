@@ -1371,6 +1371,7 @@ en:
     routing_page_delete: Delete question %{question_number}’s route
     routing_page_edit: Edit route %{route_number}
     routing_page_new: 'Add route %{route_number}: select an answer and where to skip to'
+    selection_none_of_the_above: Ask for an answer if someone selects ‘None of the above’
     selection_options: Create a list of options
     selection_type: How many options should people be able to select?
     separator: " – "
@@ -1759,6 +1760,9 @@ en:
         <p>If you need to, you can make them skip one or more consecutive questions that only people on route %{route_number} need to answer.</p>
       primary_route_answer_key: If the answer is
       primary_route_continue_key: skip the person to
+  selection_none_of_the_above:
+    preamble: If someone selects ‘None of the above’, we’ll show them a text box to enter their answer.
+    preamble_more_than_30_options: If someone selects ‘None of the above’, we’ll show them a text box to enter their answer. If your list has over 30 options, we’ll show this text box on the next page of the form.
   selection_options:
     add_another: Add another option
     add_options: Add options to your list

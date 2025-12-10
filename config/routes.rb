@@ -97,6 +97,8 @@ Rails.application.routes.draw do
         post "/selection/options" => "pages/selection/options#create", as: :selection_options_create
         get "/selection/bulk-options" => "pages/selection/bulk_options#new", as: :selection_bulk_options_new
         post "/selection/bulk-options" => "pages/selection/bulk_options#create", as: :selection_bulk_options_create
+        get "/selection/none-of-the-above" => "pages/selection/none_of_the_above#new", as: :selection_none_of_the_above_new
+        post "/selection/none-of-the-above" => "pages/selection/none_of_the_above#create", as: :selection_none_of_the_above_create
         get "/address-settings" => "pages/address_settings#new", as: :address_settings_new
         post "/address-settings" => "pages/address_settings#create", as: :address_settings_create
         get "/name-settings" => "pages/name_settings#new", as: :name_settings_new
@@ -154,6 +156,8 @@ Rails.application.routes.draw do
           post "/selection/options" => "pages/selection/options#update", as: :selection_options_update
           get "/selection/bulk-options" => "pages/selection/bulk_options#edit", as: :selection_bulk_options_edit
           post "/selection/bulk-options" => "pages/selection/bulk_options#update", as: :selection_bulk_options_update
+          get "/selection/none-of-the-above" => "pages/selection/none_of_the_above#edit", as: :selection_none_of_the_above_edit
+          post "/selection/none-of-the-above" => "pages/selection/none_of_the_above#update", as: :selection_none_of_the_above_update
           get "/address-settings" => "pages/address_settings#edit", as: :address_settings_edit
           post "/address-settings" => "pages/address_settings#update", as: :address_settings_update
           get "/name-settings" => "pages/name_settings#edit", as: :name_settings_edit

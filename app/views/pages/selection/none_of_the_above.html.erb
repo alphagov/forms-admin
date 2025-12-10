@@ -1,0 +1,29 @@
+<% set_page_title(title_with_error_prefix(t("page_titles.selection_none_of_the_above"), @none_of_the_above_input.errors.any?)) %>
+
+<% content_for :back_link, govuk_back_link_to(@back_link_url) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: [current_form, @none_of_the_above_input], url: @none_of_the_above_path do |f| %>
+      <%= f.govuk_error_summary %>
+      <span class="govuk-caption-l"><%= t("pages.question") %> <%= current_form.page_number(@page) %></span>
+      <h1 class="govuk-heading-l"><%= t("page_titles.selection_none_of_the_above") %></h1>
+
+      <% if has_more_than_30_options?(@none_of_the_above_input.draft_question) %>
+        <p><%= t("selection_none_of_the_above.preamble_more_than_30_options") %></p>
+      <% else %>
+        <p><%= t("selection_none_of_the_above.preamble") %></p>
+      <% end %>
+
+      <%= f.govuk_text_field :question_text, label: { tag: 'h2', size: 'm' } %>
+
+      <%= f.govuk_collection_radio_buttons :is_optional, @none_of_the_above_input.is_optional_options, :id, legend: { size: 'm', tag: 'h2' }, bold_labels: false %>
+
+      <%= f.govuk_submit t('continue') %>
+    <% end %>
+
+    <p>
+      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form.id) %>
+    </p>
+  </div>
+</div>
