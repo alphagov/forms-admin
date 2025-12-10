@@ -107,7 +107,7 @@ RSpec.describe Forms::CopyInput, type: :model do
 
       copy_input.assign_form_values
 
-      expect(copy_input.name).to eq("Copy of Test Form")
+      expect(copy_input.name).to eq("Test Form")
     end
 
     it "returns self" do
