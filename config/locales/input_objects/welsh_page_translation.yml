@@ -7,12 +7,17 @@ en:
           attributes:
             guidance_markdown_cy:
               blank: Enter guidance text in Welsh for question %{question_number}
+              too_long: The guidance text for question %{question_number} cannot be longer than %{count} characters
+              unsupported_markdown_syntax: Guidance text for question %{question_number} can only contain formatting for links, subheadings (##), bulleted lists (*), or numbered lists (1.)
             hint_text_cy:
               blank: Enter hint text for question %{question_number} in Welsh
+              too_long: The hint text for question %{question_number} cannot be longer than %{count} characters
             page_heading_cy:
               blank: Enter a page heading in Welsh for question %{question_number}
+              too_long: The page heading for question %{question_number} cannot be longer than %{count} characters
             question_text_cy:
               blank: Enter question text for question %{question_number} in Welsh
+              too_long: The question text for question %{question_number} cannot be longer than %{count} characters
   helpers:
     label:
       forms_welsh_page_translation_input:

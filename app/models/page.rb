@@ -135,7 +135,7 @@ private
     return true if markdown_validation[:errors].empty?
 
     if markdown_validation[:errors].include?(:too_long)
-      errors.add(:guidance_markdown, :too_long, count: 4999)
+      errors.add(:guidance_markdown, :too_long, count: "4,999")
     end
 
     tag_errors = markdown_validation[:errors].excluding(:too_long)

@@ -305,7 +305,7 @@ RSpec.describe Page, type: :model do
         it "adds an error to guidance_markdown" do
           page.guidance_markdown = "ABC" * 5000
           expect(page).to be_invalid
-          expect(page.errors[:guidance_markdown]).to include("is too long (maximum is 4999 characters)")
+          expect(page.errors[:guidance_markdown]).to include("is too long (maximum is 4,999 characters)")
         end
       end
 
@@ -322,7 +322,7 @@ RSpec.describe Page, type: :model do
           page.guidance_markdown = "# Heading level 1\n\n" * 5000
           expect(page).to be_invalid
           expect(page.errors[:guidance_markdown]).to include("can only contain formatting for links, subheadings(##), bulleted listed (*), or numbered lists(1.)")
-          expect(page.errors[:guidance_markdown]).to include("is too long (maximum is 4999 characters)")
+          expect(page.errors[:guidance_markdown]).to include("is too long (maximum is 4,999 characters)")
         end
       end
     end

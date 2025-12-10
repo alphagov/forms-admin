@@ -2,7 +2,8 @@ class Pages::ExitPageInput < BaseInput
   attr_accessor :form, :page, :record, :exit_page_markdown, :exit_page_heading, :answer_value
 
   validates :exit_page_heading, :exit_page_markdown, :answer_value, presence: true
-  validates :exit_page_heading, :exit_page_markdown, length: { maximum: 4999 }
+  validates :exit_page_heading, length: { maximum: 250 }
+  validates :exit_page_markdown, markdown: { allow_headings: true }
 
   def submit
     return false if invalid?
