@@ -20,6 +20,7 @@ module PageSettingsSummaryComponent
       @change_text_settings_path = change_text_settings_path
       @change_selections_only_one_option_path = change_selections_only_one_option_path
       @change_selections_options_path = change_selections_options_path
+      @change_selections_none_of_the_above_question_path = change_selections_none_of_the_above_question_path
     end
 
   private
@@ -43,6 +44,17 @@ module PageSettingsSummaryComponent
 
     def selection_options
       answer_settings[:selection_options]
+    end
+
+    def selection_none_of_the_above_question_text
+      none_of_the_above_question = answer_settings[:none_of_the_above_question]
+      return unless @draft_question.is_optional? && none_of_the_above_question
+
+      if none_of_the_above_question[:is_optional] == "true"
+        I18n.t("page_settings_summary.selection.none_of_the_above_question_optional", question_text: none_of_the_above_question[:question_text])
+      else
+        none_of_the_above_question[:question_text]
+      end
     end
 
     def change_answer_type_path
@@ -96,6 +108,14 @@ module PageSettingsSummaryComponent
       return selection_options_new_path_for_draft_question(@draft_question) if is_new_question?
 
       selection_options_edit_path_for_draft_question(@draft_question)
+    end
+
+    def change_selections_none_of_the_above_question_path
+      return unless @draft_question.answer_type == "selection"
+
+      return selection_none_of_the_above_new_path(form_id: @draft_question.form_id) if is_new_question?
+
+      selection_none_of_the_above_edit_path(form_id: @draft_question.form_id, page_id: @draft_question.page_id)
     end
 
     def change_text_settings_path

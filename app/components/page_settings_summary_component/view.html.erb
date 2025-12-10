@@ -53,6 +53,15 @@
                     href: @change_selections_options_path,
                     visually_hidden_text: t("page_settings_summary.selection.include_none_of_the_above")) %>
     <% end %>
+    <% if selection_none_of_the_above_question_text.present? %>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t("page_settings_summary.selection.none_of_the_above_question")) %>
+        <%= row.with_value(text: selection_none_of_the_above_question_text) %>
+        <%= row.with_action(text: t("page_settings_summary.change"),
+                      href: change_selections_none_of_the_above_question_path,
+                      visually_hidden_text: t("page_settings_summary.selection.none_of_the_above_question"))  %>
+      <% end %>
+    <% end %>
   <% end %>
 
   <% if show_text_settings_summary %>

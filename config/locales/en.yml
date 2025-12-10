@@ -1310,6 +1310,8 @@ en:
       how_many_selections: How many options can people select
       include_none_of_the_above: Include an option for ‘None of the above’
       'no': 'No'
+      none_of_the_above_question: If ‘None of the above’ is selected
+      none_of_the_above_question_optional: "%{question_text} (optional)"
       options: Options
       options_count: "%{number_of_options} options:"
       options_summary: Show %{number_of_options} options

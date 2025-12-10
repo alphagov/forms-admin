@@ -27,6 +27,8 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
   let(:new_selection_type_path) { selection_type_new_path(form_id: draft_question.form_id) }
   let(:edit_selection_options_path) { selection_options_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
   let(:new_selection_options_path) { selection_options_new_path(form_id: draft_question.form_id) }
+  let(:edit_selection_none_of_the_above_path) { selection_none_of_the_above_edit_path(form_id: draft_question.form_id, page_id: draft_question.page_id) }
+  let(:new_selection_none_of_the_above_path) { selection_none_of_the_above_new_path(form_id: draft_question.form_id) }
 
   before do
     allow(errors).to receive(:has_key?).with(:selection_options).and_return(selection_options_error_messages.present?)
@@ -122,7 +124,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
         end
       end
 
-      context "when 'None of the above' is a setting" do
+      context "when 'None of the above' option is included" do
         let(:draft_question) { build :selection_draft_question, is_optional: true }
 
         it "renders the selection settings" do
@@ -138,6 +140,45 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
           expect(rows[2].find(".govuk-summary-list__value")).to have_text I18n.t("helpers.label.pages_selection_type_input.only_one_option_options.true")
           expect(rows[3].find(".govuk-summary-list__key")).to have_text "Include an option for ‘None of the above’"
           expect(rows[3].find(".govuk-summary-list__value")).to have_text "Yes"
+        end
+
+        context "when there is a question if 'None of the above' is selected" do
+          let(:draft_question) { build :selection_draft_question, :with_mandatory_none_of_the_above_question }
+
+          it "includes a row for the none of the above question" do
+            rows = page.find_all(".govuk-summary-list__row")
+
+            expect(rows.length).to eq(5)
+            expect(rows[4].find(".govuk-summary-list__key")).to have_text I18n.t("page_settings_summary.selection.none_of_the_above_question")
+          end
+
+          it "has a link to change the none of the above question" do
+            expect(page).to have_link("Change #{I18n.t('page_settings_summary.selection.none_of_the_above_question')}", href: edit_selection_none_of_the_above_path)
+          end
+
+          context "when the none of the above question is mandatory" do
+            it "indicates that the none of the above question is mandatory" do
+              rows = page.find_all(".govuk-summary-list__row")
+              expect(rows[4].find(".govuk-summary-list__value")).to have_text "Enter your own option"
+            end
+          end
+
+          context "when the none of the above question is optional" do
+            let(:draft_question) { build :selection_draft_question, :with_optional_none_of_the_above_question }
+
+            it "indicates that the none of the above question is optional" do
+              rows = page.find_all(".govuk-summary-list__row")
+              expect(rows[4].find(".govuk-summary-list__value")).to have_text "Enter your own option (optional)"
+            end
+          end
+        end
+
+        context "when there is not a question if 'None of the above' is selected" do
+          it "does not include a row for the none of the above question" do
+            rows = page.find_all(".govuk-summary-list__row")
+
+            expect(rows.length).to eq(4)
+          end
         end
       end
 
@@ -199,7 +240,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
     end
 
     context "when creating a new question" do
-      let(:draft_question) { build :selection_draft_question, page_id: nil }
+      let(:draft_question) { build :selection_draft_question, :with_mandatory_none_of_the_above_question, page_id: nil }
 
       it "has a link to change the answer type" do
         expect(page).to have_link("Change #{I18n.t('page_settings_summary.answer_type')}", href: new_answer_type_path)
