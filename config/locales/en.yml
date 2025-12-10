@@ -1211,13 +1211,13 @@ en:
         <p>Try again later.</p>
       new_form_html: |
         <p>No metrics are available yet as no-one has started or submitted this form since it went live.</p>
-        <p>Once they have, you’ll be able to see the following metrics for the past 7 days:</p>
+        <p>Once they have, you’ll be able to see the:</p>
         <ul class="govuk-list govuk-list--bullet">
-          <li>Number of forms completed</li>
-          <li>Number of forms started but not completed</li>
-          <li>Completion rate</li>
+          <li>number of forms completed</li>
+          <li>number of forms started but not completed</li>
+          <li>completion rate</li>
         </ul>
-      no_submissions_html: "<p>No metrics are available as no-one has started or submitted this form in the past 7 days.</p>\n"
+      no_submissions_html: "<p>No-one has started or submitted this form in the past 7 days.</p>\n"
     forms_started_but_not_completed: Forms started but not completed
     forms_submitted: Forms submitted
     heading_with_dates: 'Form metrics for the past %{number_of_days} days: %{formatted_date_range}'
