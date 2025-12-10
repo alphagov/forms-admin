@@ -73,27 +73,38 @@ describe Pages::Selection::BulkOptionsController, type: :request do
     end
 
     context "when form is valid and ready to store" do
+      let(:include_none_of_the_above) { "yes" }
       let(:params) do
         {
           pages_selection_bulk_options_input:
             {
               bulk_selection_options: "Option 1\nOption 2",
-              include_none_of_the_above: "no",
+              include_none_of_the_above:,
             },
         }
       end
 
-      it "saves the settings to the draft question" do
-        settings_form = assigns(:bulk_options_input)
-        draft_question_settings = settings_form.draft_question.answer_settings
+      context "when 'include_none_of_the_above' is yes" do
+        it "saves the settings to the draft question" do
+          settings_form = assigns(:bulk_options_input)
+          draft_question_settings = settings_form.draft_question.answer_settings
 
-        expect(draft_question_settings).to include(only_one_option: "true",
-                                                   selection_options: [{ name: "Option 1" }, { name: "Option 2" }])
-        expect(settings_form.draft_question.is_optional).to be false
+          expect(draft_question_settings).to include(only_one_option: "true",
+                                                     selection_options: [{ name: "Option 1" }, { name: "Option 2" }])
+          expect(settings_form.draft_question.is_optional).to be true
+        end
+
+        it "redirects the user to the question details page" do
+          expect(response).to redirect_to new_question_path(form.id)
+        end
       end
 
-      it "redirects the user to the question details page" do
-        expect(response).to redirect_to new_question_path(form.id)
+      context "when include_none_of_the_above is yes_with_question" do
+        let(:include_none_of_the_above) { "yes_with_question" }
+
+        it "redirects the user to the none of the above description page" do
+          expect(response).to redirect_to selection_none_of_the_above_new_path(form.id)
+        end
       end
     end
 
@@ -145,8 +156,16 @@ describe Pages::Selection::BulkOptionsController, type: :request do
 
   describe "#update" do
     let(:page) { create :page, :with_selection_settings, form:, answer_settings: }
+    let(:page_id) { page.id }
     let(:answer_settings) { { only_one_option: "true", selection_options: } }
-    let(:selection_options) { [{ name: "Option 1" }, { name: "Option 2" }] }
+    let(:selection_options) { [{ name: "Old option 1" }, { name: "Old option 2" }] }
+    let(:include_none_of_the_above) { "yes" }
+    let(:pages_selection_bulk_options_input) do
+      {
+        bulk_selection_options: "Option 1\nNew option 2",
+        include_none_of_the_above:,
+      }
+    end
 
     before do
       post(selection_bulk_options_update_path(form_id: page.form_id, page_id: page.id), params:)
@@ -158,21 +177,31 @@ describe Pages::Selection::BulkOptionsController, type: :request do
           pages_selection_bulk_options_input:
             {
               bulk_selection_options: "Option 1\nNew option 2",
-              include_none_of_the_above: "no",
+              include_none_of_the_above:,
             },
         }
       end
 
-      it "saves the updated answer settings to DB" do
-        settings_form = assigns(:bulk_options_input)
-        draft_question_settings = settings_form.draft_question.answer_settings
+      context "when 'include_none_of_the_above' is yes" do
+        it "saves the updated answer settings to DB" do
+          settings_form = assigns(:bulk_options_input)
+          draft_question_settings = settings_form.draft_question.answer_settings
 
-        new_settings = { only_one_option: "true", selection_options: [{ name: "Option 1" }, { name: "New option 2" }] }
-        expect(draft_question_settings).to eq new_settings
+          new_settings = { only_one_option: "true", selection_options: [{ name: "Option 1" }, { name: "New option 2" }] }
+          expect(draft_question_settings).to eq new_settings
+        end
+
+        it "redirects the user to the question details page" do
+          expect(response).to redirect_to edit_question_path(form.id, page.id)
+        end
       end
 
-      it "redirects the user to the question details page" do
-        expect(response).to redirect_to edit_question_path(form.id, page.id)
+      context "when include_none_of_the_above is yes_with_question" do
+        let(:include_none_of_the_above) { "yes_with_question" }
+
+        it "redirects the user to the none of the above description page" do
+          expect(response).to redirect_to selection_none_of_the_above_edit_path(form.id, page.id)
+        end
       end
     end
 

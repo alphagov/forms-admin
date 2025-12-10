@@ -27,6 +27,10 @@ class Pages::Selection::BaseOptionsInput < BaseInput
     end
   end
 
+  def include_none_of_the_above_with_question?
+    include_none_of_the_above == "yes_with_question"
+  end
+
   def only_one_option?
     draft_question.answer_settings[:only_one_option] == "true"
   end

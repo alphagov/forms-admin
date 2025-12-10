@@ -9,12 +9,16 @@ class Pages::Selection::BulkOptionsController < PagesController
 
   def create
     @bulk_options_input = Pages::Selection::BulkOptionsInput.new(**bulk_options_input_params,
-                                                                           draft_question:)
+      draft_question:)
     @bulk_options_path = selection_bulk_options_create_path(current_form.id)
     @back_link_url = selection_type_new_path(current_form.id)
 
     if @bulk_options_input.submit
-      redirect_to new_question_path(current_form.id)
+      if @bulk_options_input.include_none_of_the_above_with_question?
+        redirect_to selection_none_of_the_above_new_path(current_form.id)
+      else
+        redirect_to new_question_path(current_form.id)
+      end
     else
       render "pages/selection/bulk_options", locals: { current_form: }
     end
@@ -30,12 +34,16 @@ class Pages::Selection::BulkOptionsController < PagesController
 
   def update
     @bulk_options_input = Pages::Selection::BulkOptionsInput.new(**bulk_options_input_params,
-                                                                           draft_question:)
+      draft_question:)
     @bulk_options_path = selection_bulk_options_update_path(current_form.id)
     @back_link_url = edit_question_path(current_form.id, page.id)
 
     if @bulk_options_input.submit
-      redirect_to edit_question_path(current_form.id)
+      if @bulk_options_input.include_none_of_the_above_with_question?
+        redirect_to selection_none_of_the_above_edit_path(current_form.id)
+      else
+        redirect_to edit_question_path(current_form.id)
+      end
     else
       render "pages/selection/bulk_options", locals: { current_form: }
     end

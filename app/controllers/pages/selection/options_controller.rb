@@ -23,7 +23,11 @@ class Pages::Selection::OptionsController < PagesController
       @selection_options_input.remove(params[:remove].to_i)
       render "pages/selection/options", locals: { current_form: }
     elsif @selection_options_input.submit
-      redirect_to new_question_path(current_form.id)
+      if @selection_options_input.include_none_of_the_above_with_question?
+        redirect_to selection_none_of_the_above_new_path(current_form.id)
+      else
+        redirect_to new_question_path(current_form.id)
+      end
     else
       render "pages/selection/options", locals: { current_form: }
     end
@@ -53,7 +57,11 @@ class Pages::Selection::OptionsController < PagesController
       @selection_options_input.remove(params[:remove].to_i)
       render "pages/selection/options", locals: { current_form: }
     elsif @selection_options_input.submit
-      redirect_to edit_question_path(current_form.id)
+      if @selection_options_input.include_none_of_the_above_with_question?
+        redirect_to selection_none_of_the_above_edit_path(current_form.id)
+      else
+        redirect_to edit_question_path(current_form.id)
+      end
     else
       render "pages/selection/options", locals: { current_form: }
     end
