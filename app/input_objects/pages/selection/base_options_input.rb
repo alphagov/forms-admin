@@ -1,7 +1,7 @@
 class Pages::Selection::BaseOptionsInput < BaseInput
   include LoggingHelper
 
-  INCLUDE_NONE_OF_THE_ABOVE_OPTIONS = %w[true false].freeze
+  INCLUDE_NONE_OF_THE_ABOVE_OPTIONS = %w[yes yes_with_question no].freeze
   MAXIMUM_CHOOSE_ONLY_ONE_OPTION = 1000
   MAXIMUM_CHOOSE_MORE_THAN_ONE_OPTION = 30
 
@@ -10,7 +10,8 @@ class Pages::Selection::BaseOptionsInput < BaseInput
   def submit
     return false if invalid?
 
-    draft_question.assign_attributes(answer_settings:, is_optional: include_none_of_the_above)
+    is_optional = include_none_of_the_above != "no"
+    draft_question.assign_attributes(answer_settings:, is_optional:)
 
     success = draft_question.save!(validate: false)
     log_submission if success
@@ -19,7 +20,11 @@ class Pages::Selection::BaseOptionsInput < BaseInput
   end
 
   def include_none_of_the_above_options
-    [OpenStruct.new(id: "true"), OpenStruct.new(id: "false")]
+    if FeatureService.enabled?(:describe_none_of_the_above_enabled)
+      [OpenStruct.new(id: "yes"), OpenStruct.new(id: "yes_with_question"), OpenStruct.new(id: "no")]
+    else
+      [OpenStruct.new(id: "yes"), OpenStruct.new(id: "no")]
+    end
   end
 
   def only_one_option?
@@ -31,6 +36,14 @@ class Pages::Selection::BaseOptionsInput < BaseInput
   end
 
 private
+
+  def selected_none_of_the_above_option(draft_question)
+    return nil if draft_question.is_optional.nil?
+    return "no" unless draft_question.is_optional
+    return "yes_with_question" if draft_question.answer_settings.key?(:none_of_the_above_question)
+
+    "yes"
+  end
 
   def maximum_error_type
     only_one_option? ? :maximum_choose_only_one_option : :maximum_choose_more_than_one_option

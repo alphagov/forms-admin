@@ -819,15 +819,13 @@ en:
         is_repeatable_options:
           'true': After adding their first answer we’ll ask if they need to add another - up to a maximum of 50.
       pages_selection_bulk_options_input:
-        include_none_of_the_above_options:
-          'true': We’ll add ‘None of the above’ to the end of your list of options
+        include_none_of_the_above: If you select ‘Yes’ we’ll add ‘None of the above’ to the end of your list of options.
       pages_selection_none_of_the_above_input:
         is_optional_options:
           'true': We’ll add ‘(optional)’ to the end of the question or label.
         question_text: For example, if you asked them to select the country they live in, you could use ‘Enter the country you live in’.
       pages_selection_options_input:
-        include_none_of_the_above_options:
-          'true': We’ll add ‘None of the above’ to the end of your list of options
+        include_none_of_the_above: If you select ‘Yes’ we’ll add ‘None of the above’ to the end of your list of options.
       pages_selection_type_input:
         only_one_option_options:
           'false': Your list can have up to 30 options
@@ -981,8 +979,9 @@ en:
         routing_page_id: Select the last question you want them to answer before they skip
       pages_selection_bulk_options_input:
         include_none_of_the_above_options:
-          'false': 'No'
-          'true': 'Yes'
+          'no': 'No'
+          'yes': 'Yes'
+          yes_with_question: Yes, and let people provide a different answer
       pages_selection_none_of_the_above_input:
         is_optional_options:
           'false': Mandatory
@@ -990,8 +989,9 @@ en:
         question_text: Enter a question or label for the text box
       pages_selection_options_input:
         include_none_of_the_above_options:
-          'false': 'No'
-          'true': 'Yes'
+          'no': 'No'
+          'yes': 'Yes'
+          yes_with_question: Yes, and let people provide a different answer
       pages_selection_type_input:
         only_one_option_options:
           'false': One or more options

@@ -61,7 +61,7 @@ describe Pages::Selection::OptionsController, type: :request do
         selection_options_input = assigns(:selection_options_input)
         draft_question_settings = draft_question.answer_settings
         expect(selection_options_input.selection_options.map { |option| { name: option[:name] } }).to eq(draft_question_settings[:selection_options].map { |option| { name: option[:name] } })
-        expect(selection_options_input.include_none_of_the_above).to eq draft_question.is_optional
+        expect(selection_options_input.include_none_of_the_above).to eq "yes"
       end
     end
   end
@@ -72,10 +72,11 @@ describe Pages::Selection::OptionsController, type: :request do
     end
 
     context "when form is valid and ready to store", :capture_logging do
+      let(:include_none_of_the_above) { "yes" }
       let(:pages_selection_options_input) do
         {
           selection_options: { "0": { name: "Option 1" }, "1": { name: "Option 2" } },
-          include_none_of_the_above: true,
+          include_none_of_the_above:,
         }
       end
 
@@ -88,7 +89,7 @@ describe Pages::Selection::OptionsController, type: :request do
           "params" => a_hash_including(
             "pages_selection_options_input" => {
               "selection_options" => { "0" => { "name" => "Option 1" }, "1" => { "name" => "Option 2" } },
-              "include_none_of_the_above" => "true",
+              "include_none_of_the_above" => "yes",
             },
           ),
         )
@@ -143,7 +144,7 @@ describe Pages::Selection::OptionsController, type: :request do
       selection_options_input = assigns(:selection_options_input)
       draft_question_settings = draft_question.answer_settings
       expect(selection_options_input.selection_options.map { |option| { name: option[:name] } }).to eq(draft_question_settings[:selection_options].map { |option| { name: option[:name] } })
-      expect(selection_options_input.include_none_of_the_above).to eq draft_question.is_optional
+      expect(selection_options_input.include_none_of_the_above).to eq "no"
     end
 
     it "sets an instance variable for selections_settings_path" do
@@ -173,7 +174,7 @@ describe Pages::Selection::OptionsController, type: :request do
       let(:pages_selection_options_input) do
         {
           selection_options: { "0": { name: "Option 1" }, "1": { name: "Option 2" } },
-          include_none_of_the_above: true,
+          include_none_of_the_above: "yes",
         }
       end
 

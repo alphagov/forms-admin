@@ -1,7 +1,24 @@
 RSpec.shared_examples "base selection options input" do
   describe "#include_none_of_the_above_options" do
-    it "returns true and false as options" do
-      expect(input.include_none_of_the_above_options).to eq [OpenStruct.new(id: "true"), OpenStruct.new(id: "false")]
+    let(:describe_none_of_the_above_enabled) { true }
+
+    before do
+      allow(FeatureService).to receive(:enabled?).with(:describe_none_of_the_above_enabled)
+                                                 .and_return(describe_none_of_the_above_enabled)
+    end
+
+    context "when the describe_none_of_the_above_enabled feature is enabled" do
+      it "includes an option for yes_with_question" do
+        expect(input.include_none_of_the_above_options).to contain_exactly(OpenStruct.new(id: "yes"), OpenStruct.new(id: "yes_with_question"), OpenStruct.new(id: "no"))
+      end
+    end
+
+    context "when the describe_none_of_the_above_enabled feature is disabled" do
+      let(:describe_none_of_the_above_enabled) { false }
+
+      it "does not include an option for yes_with_question" do
+        expect(input.include_none_of_the_above_options).to contain_exactly(OpenStruct.new(id: "yes"), OpenStruct.new(id: "no"))
+      end
     end
   end
 

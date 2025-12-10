@@ -7,7 +7,7 @@ class Pages::Selection::BulkOptionsInput < Pages::Selection::BaseOptionsInput
 
   def assign_form_values
     self.bulk_selection_options = draft_question.answer_settings[:selection_options].map { |option| option[:name] }.join("\n")
-    self.include_none_of_the_above = draft_question.is_optional
+    self.include_none_of_the_above = selected_none_of_the_above_option(draft_question)
   end
 
   def selection_options_without_blanks

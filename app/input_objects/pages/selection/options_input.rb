@@ -6,6 +6,11 @@ class Pages::Selection::OptionsInput < Pages::Selection::BaseOptionsInput
   validate :selection_options, :validate_selection_options
   validates :include_none_of_the_above, inclusion: { in: INCLUDE_NONE_OF_THE_ABOVE_OPTIONS }
 
+  def assign_form_values
+    self.selection_options = draft_question.answer_settings[:selection_options].map { |option| { name: option[:name] } }
+    self.include_none_of_the_above = selected_none_of_the_above_option(draft_question)
+  end
+
   def add_another
     selection_options.append({ name: "" })
   end

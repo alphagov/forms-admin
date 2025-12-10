@@ -61,7 +61,7 @@ describe Pages::Selection::BulkOptionsController, type: :request do
         settings_form = assigns(:bulk_options_input)
         draft_question_settings = draft_question.answer_settings
         expect(settings_form.bulk_selection_options).to eq(draft_question_settings[:selection_options].map { |option| option[:name] }.join("\n"))
-        expect(settings_form.include_none_of_the_above).to eq draft_question.is_optional
+        expect(settings_form.include_none_of_the_above).to eq "yes"
       end
     end
   end
@@ -69,11 +69,18 @@ describe Pages::Selection::BulkOptionsController, type: :request do
   describe "#create" do
     before do
       draft_question
+      post selection_bulk_options_create_path(form_id: form.id, params:)
     end
 
     context "when form is valid and ready to store" do
-      before do
-        post selection_bulk_options_create_path form_id: form.id, params: { pages_selection_bulk_options_input: { bulk_selection_options: "Option 1\nOption 2", include_none_of_the_above: false } }
+      let(:params) do
+        {
+          pages_selection_bulk_options_input:
+            {
+              bulk_selection_options: "Option 1\nOption 2",
+              include_none_of_the_above: "no",
+            },
+        }
       end
 
       it "saves the settings to the draft question" do
@@ -91,8 +98,10 @@ describe Pages::Selection::BulkOptionsController, type: :request do
     end
 
     context "when form is invalid" do
-      before do
-        post selection_bulk_options_create_path form_id: form.id, params: { pages_selection_bulk_options_input: { bulk_selection_options: "" } }
+      let(:params) do
+        {
+          pages_selection_bulk_options_input: { bulk_selection_options: "" },
+        }
       end
 
       it "renders the type of answer view if there are errors" do
@@ -116,7 +125,7 @@ describe Pages::Selection::BulkOptionsController, type: :request do
       settings_form = assigns(:bulk_options_input)
       draft_question_settings = settings_form.draft_question.answer_settings
       expect(settings_form.bulk_selection_options).to eq(draft_question_settings[:selection_options].map { |option| option[:name] }.join("\n"))
-      expect(settings_form.include_none_of_the_above).to eq settings_form.draft_question.is_optional
+      expect(settings_form.include_none_of_the_above).to eq "no"
     end
 
     it "sets an instance variable for back_link_url" do
@@ -139,16 +148,26 @@ describe Pages::Selection::BulkOptionsController, type: :request do
     let(:answer_settings) { { only_one_option: "true", selection_options: } }
     let(:selection_options) { [{ name: "Option 1" }, { name: "Option 2" }] }
 
+    before do
+      post(selection_bulk_options_update_path(form_id: page.form_id, page_id: page.id), params:)
+    end
+
     context "when form is valid and ready to update in the DB" do
-      before do
-        post selection_bulk_options_update_path(form_id: page.form_id, page_id: page.id), params: { pages_selection_bulk_options_input: { bulk_selection_options: "Option 1\nNew option 2", include_none_of_the_above: false } }
+      let(:params) do
+        {
+          pages_selection_bulk_options_input:
+            {
+              bulk_selection_options: "Option 1\nNew option 2",
+              include_none_of_the_above: "no",
+            },
+        }
       end
 
       it "saves the updated answer settings to DB" do
-        new_settings = { only_one_option: "true", selection_options: [{ name: "Option 1" }, { name: "New option 2" }] }
         settings_form = assigns(:bulk_options_input)
         draft_question_settings = settings_form.draft_question.answer_settings
 
+        new_settings = { only_one_option: "true", selection_options: [{ name: "Option 1" }, { name: "New option 2" }] }
         expect(draft_question_settings).to eq new_settings
       end
 
@@ -158,8 +177,8 @@ describe Pages::Selection::BulkOptionsController, type: :request do
     end
 
     context "when form is invalid" do
-      before do
-        post selection_bulk_options_create_path form_id: form.id, params: { pages_selection_bulk_options_input: { bulk_selection_options: nil } }
+      let(:params) do
+        { pages_selection_bulk_options_input: { bulk_selection_options: nil } }
       end
 
       it "renders the bulk selection options view if there are errors" do

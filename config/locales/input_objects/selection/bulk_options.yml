@@ -11,4 +11,4 @@ en:
               minimum: Enter at least 2 options
               uniqueness: All your options must be unique. ‘%{duplicate}’ currently appears in your list more than once.
             include_none_of_the_above:
-              inclusion: Select ‘Yes’ if the list should include an option for ‘None of the above’
+              inclusion: Select if the list should include an option for ‘None of the above’

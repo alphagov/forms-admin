@@ -9,7 +9,7 @@ RSpec.describe Pages::Selection::OptionsInput do
   let(:is_optional) { nil }
   let(:draft_question) { build :draft_question, answer_type: "selection", answer_settings:, form_id: form.id, is_optional: }
   let(:selection_options) { [{ name: "option 1" }, { name: "option 2" }] }
-  let(:include_none_of_the_above) { "true" }
+  let(:include_none_of_the_above) { "yes" }
 
   describe "validations" do
     describe "include_none_of_the_above" do
@@ -27,13 +27,17 @@ RSpec.describe Pages::Selection::OptionsInput do
         expect(input.errors.full_messages_for(:include_none_of_the_above)).to include("Include none of the above #{expected_message}")
       end
 
-      it "is valid if include_none_of_the_above is true" do
-        input = described_class.new(draft_question:, include_none_of_the_above: "true", selection_options:)
+      it "is valid if include_none_of_the_above is yes" do
         expect(input).to be_valid
       end
 
-      it "is valid if include_none_of_the_above is false" do
-        input = described_class.new(draft_question:, include_none_of_the_above: "false", selection_options:)
+      it "is valid if include_none_of_the_above is yes_with_question" do
+        input = described_class.new(draft_question:, include_none_of_the_above: "yes_with_question", selection_options:)
+        expect(input).to be_valid
+      end
+
+      it "is valid if include_none_of_the_above is no" do
+        input = described_class.new(draft_question:, include_none_of_the_above: "no", selection_options:)
         expect(input).to be_valid
       end
     end
@@ -97,6 +101,65 @@ RSpec.describe Pages::Selection::OptionsInput do
     end
   end
 
+  describe "#assign_form_values" do
+    subject(:input) { described_class.new(draft_question:) }
+
+    let(:answer_settings) do
+      {
+        selection_options: [{ name: "option 1" }, { name: "option 2" }],
+        only_one_option: "true",
+      }
+    end
+
+    before do
+      input.assign_form_values
+    end
+
+    it "assigns selection_options from draft question answer_settings" do
+      expect(input.selection_options.to_json).to eq([{ name: "option 1" }, { name: "option 2" }].to_json)
+    end
+
+    context "when is_optional is nil for the draft question" do
+      let(:is_optional) { nil }
+
+      it "assigns include_none_of_the_above to nil" do
+        expect(input.include_none_of_the_above).to be_nil
+      end
+    end
+
+    context "when is_optional is false for the draft question" do
+      let(:is_optional) { false }
+
+      it "assigns include_none_of_the_above to 'no'" do
+        expect(input.include_none_of_the_above).to eq "no"
+      end
+    end
+
+    context "when is_optional is true for the draft question" do
+      let(:is_optional) { true }
+
+      context "when the answer_settings does not contain none_of_the_above_question" do
+        it "assigns include_none_of_the_above to 'yes'" do
+          expect(input.include_none_of_the_above).to eq "yes"
+        end
+      end
+
+      context "when the answer_settings contains none_of_the_above_question" do
+        let(:answer_settings) do
+          {
+            selection_options: [{ name: "option 1" }, { name: "option 2" }],
+            only_one_option: "true",
+            none_of_the_above_question: { question_text: "Enter something" },
+          }
+        end
+
+        it "assigns include_none_of_the_above to 'yes_with_question'" do
+          expect(input.include_none_of_the_above).to eq "yes_with_question"
+        end
+      end
+    end
+  end
+
   describe "#submit" do
     it "returns false if the form is invalid" do
       input = described_class.new(draft_question:, include_none_of_the_above: nil, selection_options:)
@@ -126,6 +189,7 @@ RSpec.describe Pages::Selection::OptionsInput do
 
     context "when there are existing answer settings" do
       let(:answer_settings) { { foo: "bar" } }
+      let(:include_none_of_the_above) { "yes" }
 
       before do
         draft_question.answer_settings = answer_settings

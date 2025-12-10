@@ -4,7 +4,7 @@ RSpec.describe Pages::Selection::BulkOptionsInput, type: :model do
   subject(:input) { build :bulk_options_input, draft_question:, include_none_of_the_above: }
 
   let(:form) { create :form }
-  let(:include_none_of_the_above) { "true" }
+  let(:include_none_of_the_above) { "yes" }
   let(:only_one_option) { "true" }
   let(:answer_settings) { { only_one_option: } }
   let(:is_optional) { nil }
@@ -79,14 +79,81 @@ RSpec.describe Pages::Selection::BulkOptionsInput, type: :model do
       expect(input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
     end
 
-    context "when include_none_of_the_above is not 'true' or 'false'" do
-      let(:bulk_options_input) { build :bulk_options_input, include_none_of_the_above: nil, draft_question: }
+    context "when include_none_of_the_above is not in allowed values" do
       subject(:input) { build :bulk_options_input, include_none_of_the_above: nil, draft_question: }
 
       it "is invalid" do
         error_message = I18n.t("activemodel.errors.models.pages/selection/bulk_options_input.attributes.include_none_of_the_above.inclusion")
-        expect(bulk_options_input).to be_invalid
-        expect(bulk_options_input.errors.full_messages_for(:include_none_of_the_above)).to include("Include none of the above #{error_message}")
+        expect(input).to be_invalid
+        expect(input.errors.full_messages_for(:include_none_of_the_above)).to include("Include none of the above #{error_message}")
+      end
+    end
+
+    %w[yes yes_with_question no].each do |value|
+      context "when include_none_of_the_above is '#{value}'" do
+        subject(:input) { build :bulk_options_input, include_none_of_the_above: value, draft_question: }
+
+        it "is valid" do
+          expect(input).to be_valid
+        end
+      end
+    end
+  end
+
+  describe "#assign_form_values" do
+    let(:answer_settings) do
+      {
+        selection_options: [{ name: "Option 1" }, { name: "Option 2" }],
+        only_one_option: "true",
+      }
+    end
+
+    before do
+      input.assign_form_values
+    end
+
+    it "assigns bulk_selection_options from the draft question" do
+      expect(input.bulk_selection_options).to eq("Option 1\nOption 2")
+    end
+
+    context "when is_optional is nil for the draft question" do
+      let(:is_optional) { nil }
+
+      it "assigns include_none_of_the_above to nil" do
+        expect(input.include_none_of_the_above).to be_nil
+      end
+    end
+
+    context "when is_optional is false for the draft question" do
+      let(:is_optional) { false }
+
+      it "assigns include_none_of_the_above to 'no'" do
+        expect(input.include_none_of_the_above).to eq("no")
+      end
+    end
+
+    context "when is_optional is true for the draft question" do
+      let(:is_optional) { true }
+
+      context "when the answer_settings does not contain none_of_the_above_question" do
+        it "assigns include_none_of_the_above to 'yes'" do
+          expect(input.include_none_of_the_above).to eq("yes")
+        end
+      end
+
+      context "when the answer_settings contains none_of_the_above_question" do
+        let(:is_optional) { true }
+        let(:answer_settings) do
+          {
+            selection_options: [{ name: "Option 1" }, { name: "Option 2" }],
+            only_one_option: "true",
+            none_of_the_above_question: { question_text: "Enter something" },
+          }
+        end
+
+        it "assigns include_none_of_the_above to 'yes_with_question'" do
+          expect(input.include_none_of_the_above).to eq("yes_with_question")
+        end
       end
     end
   end
