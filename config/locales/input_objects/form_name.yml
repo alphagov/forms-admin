@@ -3,6 +3,10 @@ en:
   activemodel:
     errors:
       models:
+        forms/copy_input:
+          attributes:
+            copied_name:
+              blank: Enter a name for the form
         forms/name_input:
           attributes:
             name:
