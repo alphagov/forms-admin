@@ -8,6 +8,8 @@ feature "Add/editing a single question", type: :feature do
     create(:membership, group:, user: standard_user, added_by: standard_user)
 
     login_as standard_user
+
+    allow(FeatureService).to receive(:enabled?).with(:describe_none_of_the_above_enabled).and_return(true)
   end
 
   context "when a form has no existing pages" do
@@ -222,7 +224,13 @@ private
     fill_in "Option 2", with: options[1]
     click_button "Add another option"
     fill_in "Option 3", with: options[2]
-    choose "Yes"
+    choose "Yes, and let people provide a different answer"
+    click_button "Continue"
+
+    expect(page.find("h1")).to have_text "Ask for an answer if someone selects ‘None of the above’"
+    expect_page_to_have_no_axe_errors(page)
+    fill_in "Enter a question or label for the text box", with: "Enter your own option"
+    choose "Mandatory"
     click_button "Continue"
 
     click_link "Change Options"
