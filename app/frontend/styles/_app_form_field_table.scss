@@ -1,13 +1,19 @@
 .app-form-field-table {
   height: 100%;
+  table-layout: fixed;
 }
 
-.app-form-field-table .govuk-table__row {
+.app-form-field-table .table__row {
   height: 100%;
 }
 
 .app-form-field-table .govuk-table__cell {
   height: 100%;
+  width: 37.5%;
+}
+
+.app-form-field-table--two-column .govuk-table__cell {
+  width: 50%;
 }
 
 .app-form-field-table .govuk-form-group {
@@ -21,4 +27,8 @@
   flex-grow: 1;
   margin-bottom: 0;
   field-sizing: content;
+}
+
+.app-form-field-table .govuk-table__header[scope="row"] {
+  width: 25%;
 }
