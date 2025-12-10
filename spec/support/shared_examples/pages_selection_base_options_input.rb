@@ -49,4 +49,28 @@ RSpec.shared_examples "base selection options input" do
       it { expect(input.maximum_options).to eq 30 }
     end
   end
+
+  describe "#submit handling for include_none_of_the_above" do
+    before do
+      draft_question.answer_settings = { none_of_the_above_question: { question_text: "Enter something" }, only_one_option: only_one_option }
+    end
+
+    it "keeps none_of_the_above_question when yes_with_question selected" do
+      input.include_none_of_the_above = "yes_with_question"
+      input.submit
+      expect(draft_question.reload.answer_settings).to have_key(:none_of_the_above_question)
+    end
+
+    it "deletes none_of_the_above_question when yes selected" do
+      input.include_none_of_the_above = "yes"
+      input.submit
+      expect(draft_question.reload.answer_settings).not_to have_key(:none_of_the_above_question)
+    end
+
+    it "deletes none_of_the_above_question when no selected" do
+      input.include_none_of_the_above = "no"
+      input.submit
+      expect(draft_question.reload.answer_settings).not_to have_key(:none_of_the_above_question)
+    end
+  end
 end
