@@ -12,7 +12,7 @@ describe Pages::Selection::OptionsController, type: :request do
            user: standard_user,
            form_id: form.id,
            is_optional: false,
-           answer_settings: { selection_options: [{ name: "" }, { name: "" }],
+           answer_settings: { selection_options: [{ name: "", value: "" }, { name: "", value: "" }],
                               only_one_option: false }
   end
   let(:page_id) { nil }
