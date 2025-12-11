@@ -51,7 +51,13 @@ private
 
   def answer_settings
     new_answer_settings = draft_question.answer_settings.deep_dup
-    new_answer_settings.delete(:none_of_the_above_question) unless include_none_of_the_above == "yes_with_question"
+
+    if include_none_of_the_above == "yes_with_question"
+      new_answer_settings[:none_of_the_above_question] = {} if new_answer_settings[:none_of_the_above_question].nil?
+    else
+      new_answer_settings.delete(:none_of_the_above_question)
+    end
+
     new_answer_settings.merge({ selection_options: })
   end
 
