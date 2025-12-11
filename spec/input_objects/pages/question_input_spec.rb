@@ -2,10 +2,11 @@ require "rails_helper"
 
 RSpec.describe Pages::QuestionInput, type: :model do
   let(:form) { create :form }
+  let(:answer_settings) { { foo: "bar" } }
   let(:question_input) do
     build(:question_input, answer_type:, question_text:, draft_question:, is_optional:,
-      is_repeatable:, form_id: form.id, answer_settings: draft_question.answer_settings,
-      page_heading: draft_question.page_heading, guidance_markdown: draft_question.guidance_markdown)
+                           is_repeatable:, form_id: form.id, answer_settings:, page_heading: draft_question.page_heading,
+                           guidance_markdown: draft_question.guidance_markdown)
   end
   let(:draft_question) { build :address_draft_question, :with_guidance, question_text:, form_id: form.id }
   let(:question_text) { "What is your full name?" }
@@ -204,7 +205,10 @@ RSpec.describe Pages::QuestionInput, type: :model do
     end
 
     context "when not given a draft_question" do
-      let(:draft_question) { nil }
+      let(:question_input) do
+        build(:question_input, answer_type:, question_text:, draft_question: nil, is_optional:,
+                               is_repeatable:, form_id: form.id)
+      end
 
       it "is invalid" do
         expect(question_input).to be_invalid
@@ -321,6 +325,7 @@ RSpec.describe Pages::QuestionInput, type: :model do
       end
 
       it "updates the page attributes" do
+        page.reload
         expect(page.question_text).to eq question_input.question_text
         expect(page.hint_text).to eq question_input.hint_text
         expect(page.is_optional.to_s).to eq question_input.is_optional
@@ -329,6 +334,22 @@ RSpec.describe Pages::QuestionInput, type: :model do
         expect(page.page_heading).to eq question_input.page_heading
         expect(page.guidance_markdown).to eq question_input.guidance_markdown
         expect(page.answer_type).to eq question_input.answer_type
+      end
+
+      context "when the answer_settings has an empty hash for none_of_the_above_question" do
+        let(:answer_settings) { { foo: "bar", none_of_the_above_question: {} } }
+
+        it "removes the empty hash from the answer_settings" do
+          expect(page.reload.answer_settings).to eq DataStruct.recursive_new({ "foo": "bar" })
+        end
+      end
+
+      context "when the answer_settings has popolated none_of_the_above_question" do
+        let(:answer_settings) { { foo: "bar", none_of_the_above_question: { "question_text": "Enter something" } } }
+
+        it "keeps the populated none_of_the_above_question in the answer_settings" do
+          expect(page.reload.answer_settings).to eq DataStruct.recursive_new({ "foo": "bar", "none_of_the_above_question": { "question_text": "Enter something" } })
+        end
       end
     end
   end

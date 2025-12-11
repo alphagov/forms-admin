@@ -17,7 +17,7 @@ class Pages::QuestionInput < BaseInput
   def submit
     return false if invalid?
 
-    update_draft_question
+    prepare_for_save
 
     Page.create_and_update_form!(form_id:,
                                  question_text:,
@@ -33,16 +33,16 @@ class Pages::QuestionInput < BaseInput
   def update_page(page)
     return false if invalid?
 
-    update_draft_question
+    prepare_for_save
 
     page.assign_attributes(question_text:,
-      hint_text:,
-      is_optional:,
-      is_repeatable:,
-      answer_settings:,
-      page_heading:,
-      guidance_markdown:,
-      answer_type:)
+                           hint_text:,
+                           is_optional:,
+                           is_repeatable:,
+                           answer_settings:,
+                           page_heading:,
+                           guidance_markdown:,
+                           answer_type:)
     page.save_and_update_form
   end
 
@@ -78,6 +78,15 @@ class Pages::QuestionInput < BaseInput
   end
 
 private
+
+  def prepare_for_save
+    compact_answer_settings
+    update_draft_question
+  end
+
+  def compact_answer_settings
+    answer_settings.delete(:none_of_the_above_question) if answer_settings[:none_of_the_above_question].blank?
+  end
 
   def update_draft_question
     draft_question.assign_attributes(
