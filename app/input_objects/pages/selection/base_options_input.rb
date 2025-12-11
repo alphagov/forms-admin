@@ -62,7 +62,7 @@ private
       new_answer_settings.delete(:none_of_the_above_question)
     end
 
-    new_answer_settings.merge({ selection_options: })
+    new_answer_settings.merge({ selection_options: selection_options_with_value })
   end
 
   def is_bulk_entry?
@@ -75,5 +75,9 @@ private
       options_count: selection_options.length,
       only_one_option: only_one_option?,
     )
+  end
+
+  def selection_options_with_value
+    selection_options.map { |option| { name: option[:name], value: option[:name] } }
   end
 end

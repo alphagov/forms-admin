@@ -100,7 +100,7 @@ describe Pages::Selection::OptionsController, type: :request do
           selection_options_input = assigns(:selection_options_input)
           draft_question_settings = selection_options_input.draft_question.answer_settings
 
-          expect(draft_question_settings).to include(selection_options: [{ name: "Option 1" }, { name: "Option 2" }])
+          expect(draft_question_settings).to include(selection_options: [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }])
         end
 
         it "does not overwrite the only_one_option setting on the draft question" do
@@ -199,7 +199,7 @@ describe Pages::Selection::OptionsController, type: :request do
           selection_options_input = assigns(:selection_options_input)
           draft_question_settings = selection_options_input.draft_question.answer_settings
 
-          expect(draft_question_settings).to include(selection_options: [{ name: "Option 1" }, { name: "Option 2" }])
+          expect(draft_question_settings).to include(selection_options: [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }])
         end
 
         it "does not overwrite the only_one_option setting on the draft question" do

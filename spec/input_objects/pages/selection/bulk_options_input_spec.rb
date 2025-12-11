@@ -168,7 +168,7 @@ RSpec.describe Pages::Selection::BulkOptionsInput, type: :model do
       input.bulk_selection_options = "1\n\n2"
       input.submit
 
-      expect(input.draft_question.answer_settings[:selection_options]).to eq([{ name: "1" }, { name: "2" }])
+      expect(input.draft_question.answer_settings[:selection_options]).to eq([{ name: "1", value: "1" }, { name: "2", value: "2" }])
     end
 
     it "logs submission" do
@@ -193,7 +193,7 @@ RSpec.describe Pages::Selection::BulkOptionsInput, type: :model do
 
         expected_settings = {
           only_one_option:,
-          selection_options: [{ name: "1" }, { name: "2" }],
+          selection_options: [{ name: "1", value: "1" }, { name: "2", value: "2" }],
         }
 
         expect(input.draft_question.answer_settings).to include(expected_settings)
@@ -210,7 +210,7 @@ RSpec.describe Pages::Selection::BulkOptionsInput, type: :model do
 
         expected_settings = {
           only_one_option:,
-          selection_options: [{ name: "1" }, { name: "2" }],
+          selection_options: [{ name: "1", value: "1" }, { name: "2", value: "2" }],
         }
 
         expect(input.draft_question.answer_settings).to include(expected_settings)
