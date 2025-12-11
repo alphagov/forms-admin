@@ -32,3 +32,10 @@
 .app-form-field-table .govuk-table__header[scope="row"] {
   width: 25%;
 }
+
+.app-form-field-table__markdown-preview {
+  white-space: pre-wrap;
+  font-size: inherit;
+  font-family: inherit;
+  margin: 0;
+}
