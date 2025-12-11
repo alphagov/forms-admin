@@ -12,6 +12,7 @@
         <span class="govuk-caption-l"><%= @welsh_translation_input.form.name %></span>
         <%= t("page_titles.welsh_translation") %>
       </h1>
+      <%# TODO: draft tag %>
     </div>
   </div>
 
@@ -53,28 +54,6 @@
                 <% end %>
 
                 <%= table.with_body do |body| %>
-                  <%= body.with_row do |row| %>
-                    <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.question_text")) %>
-                    <%= row.with_cell(text: page_translation.page.question_text, classes: "govuk-!-text-break-word") %>
-                    <%= row.with_cell do |cell| %>
-                      <%= page_translation_fields.govuk_text_field :question_text_cy,
-                                                               id: page_translation.form_field_id(:question_text_cy),
-                                                               label: { text: t("helpers.label.forms_welsh_page_translation_input.question_text_cy_html", question_number: page_translation.page.position), for: page_translation.form_field_id(:question_text_cy) }
-                                                               %>
-                    <% end %>
-                  <% end %>
-                  <% if page_translation.page_has_hint_text? %>
-                    <%= body.with_row do |row| %>
-                      <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.hint_text")) %>
-                      <%= row.with_cell(text: page_translation.page.hint_text, classes: "govuk-!-text-break-word") %>
-                      <%= row.with_cell do |cell| %>
-                        <%= page_translation_fields.govuk_text_area :hint_text_cy,
-                                                                id: page_translation.form_field_id(:hint_text_cy),
-                                                                label: { text: t("helpers.label.forms_welsh_page_translation_input.hint_text_cy_html", question_number: page_translation.page.position), for: page_translation.form_field_id(:hint_text_cy) }
-                                                                %>
-                      <% end %>
-                    <% end %>
-                  <% end %>
                   <% if page_translation.page_has_page_heading_and_guidance_markdown? %>
                     <%= body.with_row do |row| %>
                       <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.page_heading")) %>
@@ -99,8 +78,32 @@
                       <% end %>
                     <% end %>
                   <% end %>
+                  <%= body.with_row do |row| %>
+                    <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.question_text")) %>
+                    <%= row.with_cell(text: page_translation.page.question_text, classes: "govuk-!-text-break-word") %>
+                    <%= row.with_cell do |cell| %>
+                      <%= page_translation_fields.govuk_text_field :question_text_cy,
+                                                               id: page_translation.form_field_id(:question_text_cy),
+                                                               label: { text: t("helpers.label.forms_welsh_page_translation_input.question_text_cy_html", question_number: page_translation.page.position), for: page_translation.form_field_id(:question_text_cy) }
+                                                               %>
+                    <% end %>
+                  <% end %>
+                  <% if page_translation.page_has_hint_text? %>
+                    <%= body.with_row do |row| %>
+                      <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.hint_text")) %>
+                      <%= row.with_cell(text: page_translation.page.hint_text, classes: "govuk-!-text-break-word") %>
+                      <%= row.with_cell do |cell| %>
+                        <%= page_translation_fields.govuk_text_area :hint_text_cy,
+                                                                id: page_translation.form_field_id(:hint_text_cy),
+                                                                label: { text: t("helpers.label.forms_welsh_page_translation_input.hint_text_cy_html", question_number: page_translation.page.position), for: page_translation.form_field_id(:hint_text_cy) }
+                                                                %>
+                      <% end %>
+                    <% end %>
+                  <% end %>
                 <% end %>
               <% end %>
+
+              <%# TODO: add fields for selection options %>
             <% end %>
 
             <% if page_translation.condition_translations.present? %>
