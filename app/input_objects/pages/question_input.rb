@@ -17,14 +17,7 @@ class Pages::QuestionInput < BaseInput
   def submit
     return false if invalid?
 
-    draft_question.assign_attributes(
-      question_text:,
-      hint_text:,
-      is_optional:,
-      is_repeatable:,
-    )
-
-    draft_question.save!(validate: false)
+    update_draft_question
 
     Page.create_and_update_form!(form_id:,
                                  question_text:,
@@ -40,15 +33,16 @@ class Pages::QuestionInput < BaseInput
   def update_page(page)
     return false if invalid?
 
-    draft_question.assign_attributes(
-      question_text:,
+    update_draft_question
+
+    page.assign_attributes(question_text:,
       hint_text:,
       is_optional:,
       is_repeatable:,
-    )
-
-    draft_question.save!(validate: false)
-
+      answer_settings:,
+      page_heading:,
+      guidance_markdown:,
+      answer_type:)
     page.save_and_update_form
   end
 
@@ -81,5 +75,18 @@ class Pages::QuestionInput < BaseInput
 
     translation_key = answer_type == "file" ? :too_long_file : :too_long
     errors.add(:question_text, translation_key, count: QuestionTextValidation::QUESTION_TEXT_MAX_LENGTH)
+  end
+
+private
+
+  def update_draft_question
+    draft_question.assign_attributes(
+      question_text:,
+      hint_text:,
+      is_optional:,
+      is_repeatable:,
+    )
+
+    draft_question.save!(validate: false)
   end
 end

@@ -2,12 +2,16 @@ require "rails_helper"
 
 RSpec.describe Pages::QuestionInput, type: :model do
   let(:form) { create :form }
-  let(:question_input) { build :question_input, answer_type:, question_text:, draft_question:, is_optional:, is_repeatable:, form_id: form.id }
-  let(:draft_question) { build :draft_question, question_text:, form_id: form.id }
+  let(:question_input) do
+    build(:question_input, answer_type:, question_text:, draft_question:, is_optional:,
+      is_repeatable:, form_id: form.id, answer_settings: draft_question.answer_settings,
+      page_heading: draft_question.page_heading, guidance_markdown: draft_question.guidance_markdown)
+  end
+  let(:draft_question) { build :address_draft_question, :with_guidance, question_text:, form_id: form.id }
   let(:question_text) { "What is your full name?" }
   let(:is_optional) { "false" }
   let(:is_repeatable) { "false" }
-  let(:answer_type) { "email" }
+  let(:answer_type) { draft_question.answer_type }
 
   it "has a valid factory" do
     expect(build(:question_input)).to be_valid
@@ -314,6 +318,17 @@ RSpec.describe Pages::QuestionInput, type: :model do
 
       it "sets a draft_question is_repeatable" do
         expect(question_input.draft_question.is_repeatable.to_s).to eq question_input.is_repeatable
+      end
+
+      it "updates the page attributes" do
+        expect(page.question_text).to eq question_input.question_text
+        expect(page.hint_text).to eq question_input.hint_text
+        expect(page.is_optional.to_s).to eq question_input.is_optional
+        expect(page.is_repeatable.to_s).to eq question_input.is_repeatable
+        expect(page.answer_settings).to eq DataStruct.recursive_new(question_input.answer_settings)
+        expect(page.page_heading).to eq question_input.page_heading
+        expect(page.guidance_markdown).to eq question_input.guidance_markdown
+        expect(page.answer_type).to eq question_input.answer_type
       end
     end
   end
