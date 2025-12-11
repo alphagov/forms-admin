@@ -103,67 +103,118 @@ describe StepSummaryCardService do
     end
 
     context "with selection" do
+      let(:is_optional) { "false" }
+      let(:only_one_option) { "false" }
+      let(:selection_options) do
+        [DataStruct.new({ name: "Option 1" }),
+         DataStruct.new({ name: "Option 2" })]
+      end
       let(:page) do
         create :page,
                form:,
-               is_optional: "false",
+               is_optional:,
                answer_type: "selection",
-               answer_settings: DataStruct.new(only_one_option: "true",
-                                               selection_options: [DataStruct.new({ name: "Option 1" }),
-                                                                   DataStruct.new({ name: "Option 2" })])
+               answer_settings: DataStruct.new(only_one_option:, selection_options:)
       end
 
       it "returns the correct options" do
         expect(step_summary_card_service.all_options_for_answer_type).to eq([
-          { key: { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list, one option only" } },
+          { key: { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list" } },
           { key: { text: I18n.t("step_summary_card.options_title") }, value: { text: "<p class=\"govuk-body-s\">2 options:</p><ul class=\"govuk-list govuk-list--bullet\"><li>Option 1</li><li>Option 2</li></ul>" } },
         ])
       end
-    end
 
-    context "with selection not only_one_option" do
-      let(:page) do
-        create :page,
-               form:,
-               is_optional: "false",
-               answer_type: "selection",
-               answer_settings: DataStruct.new(only_one_option: "false",
-                                               selection_options: [DataStruct.new({ name: "Option 1" }),
-                                                                   DataStruct.new({ name: "Option 2" })])
+      context "with only_one_option true" do
+        let(:only_one_option) { "true" }
+
+        it "returns the correct options" do
+          expect(step_summary_card_service.all_options_for_answer_type).to eq([
+            { key: { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list, one option only" } },
+            { key: { text: "Options" }, value: { text: "<p class=\"govuk-body-s\">2 options:</p><ul class=\"govuk-list govuk-list--bullet\"><li>Option 1</li><li>Option 2</li></ul>" } },
+          ])
+        end
       end
 
-      it "returns the correct options" do
-        expect(step_summary_card_service.all_options_for_answer_type).to eq([
-          { key: { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list" } },
-          { key: { text: "Options" }, value: { text: "<p class=\"govuk-body-s\">2 options:</p><ul class=\"govuk-list govuk-list--bullet\"><li>Option 1</li><li>Option 2</li></ul>" } },
-        ])
+      context "with more than ten options" do
+        let(:option_names) { Array.new(11).each_with_index.map { |_element, index| "Option #{index}" } }
+        let(:selection_options) { option_names.map { |option| DataStruct.new({ name: option }) } }
+
+        it "returns the options in a details component" do
+          expected_list_items = "<li>#{option_names.join('</li><li>')}</li>"
+
+          expected_options_html = "<details class=\"govuk-details\"><summary class=\"govuk-details__summary\">" \
+            "<span class=\"govuk-details__summary-text\">Show 11 options</span></summary>" \
+            "<div class=\"govuk-details__text\"><ul class=\"govuk-list govuk-list--bullet\">" \
+            "#{expected_list_items}" \
+            "</ul></div></details>"
+
+          expect(step_summary_card_service.all_options_for_answer_type).to eq([
+            { key: { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list" } },
+            { key: { text: "Options" }, value: { text: expected_options_html } },
+          ])
+        end
       end
-    end
 
-    context "with selection with more than ten options" do
-      let(:option_names) { Array.new(11).each_with_index.map { |_element, index| "Option #{index}" } }
-      let(:selection_options) { option_names.map { |option| DataStruct.new({ name: option }) } }
-      let(:page) do
-        create :page,
-               form:,
-               is_optional: "false",
-               answer_type: "selection",
-               answer_settings: DataStruct.new(only_one_option: "false", selection_options:)
-      end
+      context "with none of the above option" do
+        let(:is_optional) { "true" }
 
-      it "returns the options in a details component" do
-        expected_list_items = "<li>#{option_names.join('</li><li>')}</li>"
+        it "includes 'None of the above' in the options list" do
+          expect(step_summary_card_service.all_options_for_answer_type).to include({
+            key: { text: "Options" },
+            value: { text: "<p class=\"govuk-body-s\">3 options:</p><ul class=\"govuk-list govuk-list--bullet\"><li>Option 1</li><li>Option 2</li><li>None of the above</li></ul>" },
+          })
+        end
 
-        expected_options_html = "<details class=\"govuk-details\"><summary class=\"govuk-details__summary\">" \
-          "<span class=\"govuk-details__summary-text\">Show 11 options</span></summary>" \
-          "<div class=\"govuk-details__text\"><ul class=\"govuk-list govuk-list--bullet\">" \
-          "#{expected_list_items}" \
-          "</ul></div></details>"
+        context "when there is not a none of the above question" do
+          it "does not include a row for none of the above question" do
+            expect(step_summary_card_service.all_options_for_answer_type).not_to include({
+              key: { text: I18n.t("step_summary_card.none_of_the_above_question_title") },
+            })
+          end
+        end
 
-        expect(step_summary_card_service.all_options_for_answer_type).to eq([
-          { key: { text: I18n.t("helpers.label.page.answer_type_options.title") }, value: { text: "Selection from a list" } },
-          { key: { text: "Options" }, value: { text: expected_options_html } },
-        ])
+        context "when there is an empty none_of_the_above_question" do
+          before do
+            page.answer_settings.none_of_the_above_question = DataStruct.new
+          end
+
+          it "does not include a row for none of the above question" do
+            expect(step_summary_card_service.all_options_for_answer_type).not_to include({
+              key: { text: I18n.t("step_summary_card.none_of_the_above_question_title") },
+            })
+          end
+        end
+
+        context "when there is an optional none of the above question" do
+          let(:none_of_the_above_question_optional) { "true" }
+
+          before do
+            page.answer_settings.none_of_the_above_question = DataStruct.new({
+              question_text: "Enter your own option",
+              is_optional: none_of_the_above_question_optional,
+            })
+          end
+
+          context "when it is optional" do
+            it "includes a row for none of the above question with optional text" do
+              expect(step_summary_card_service.all_options_for_answer_type).to include({
+                key: { text: I18n.t("step_summary_card.none_of_the_above_question_title") },
+                value: { text: "Enter your own option (optional)" },
+              })
+            end
+          end
+
+          context "when it is mandatory" do
+            let(:none_of_the_above_question_optional) { "false" }
+
+            it "includes a row for none of the above question without optional text" do
+              expect(step_summary_card_service.all_options_for_answer_type).to include({
+                key: { text: I18n.t("step_summary_card.none_of_the_above_question_title") },
+                value: { text: "Enter your own option" },
+              })
+            end
+          end
+        end
       end
     end
 

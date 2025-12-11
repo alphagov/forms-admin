@@ -83,10 +83,21 @@ private
   end
 
   def selection_options
-    [
+    options = [
       { key: { text: I18n.t("step_summary_card.answer_type") }, value: { text: selection_answer_type } },
       { key: { text: I18n.t("step_summary_card.options_title") }, value: { text: selection_list } },
     ]
+
+    none_of_the_above_question_text = get_none_of_the_above_question_text
+    if @step.is_optional? && none_of_the_above_question_text.present?
+      question_text = none_of_the_above_question_text
+      options << {
+        key: { text: I18n.t("step_summary_card.none_of_the_above_question_title") },
+        value: { text: question_text },
+      }
+    end
+
+    options
   end
 
   def selection_answer_type
@@ -110,6 +121,17 @@ private
     else
       caption = content_tag(:p, I18n.t("page_settings_summary.selection.options_count", number_of_options: options.length), class: "govuk-body-s")
       safe_join([caption, formatted_list])
+    end
+  end
+
+  def get_none_of_the_above_question_text
+    none_of_the_above_question = @step.answer_settings.none_of_the_above_question
+    return nil if none_of_the_above_question.blank? || none_of_the_above_question.question_text.blank?
+
+    if ActiveRecord::Type::Boolean.new.cast(none_of_the_above_question.is_optional)
+      I18n.t("step_summary_card.none_of_the_above_question_optional", question_text: none_of_the_above_question.question_text)
+    else
+      none_of_the_above_question.question_text
     end
   end
 

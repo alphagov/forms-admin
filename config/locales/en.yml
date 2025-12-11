@@ -1833,6 +1833,8 @@ en:
     name_type:
       title_not_selected: Title not needed
       title_selected: Title needed
+    none_of_the_above_question_optional: "%{question_text} (optional)"
+    none_of_the_above_question_title: If ‘None of the above’ is selected
     options_title: Options
     page_heading: Page heading
     selection_type:
