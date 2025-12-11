@@ -1,3 +1,6 @@
 # This is here exclusively to inform the version of Checkov we use.
 # We do not write anything in Python.
-checkov==3.2.369
+checkov==3.2.470
+# This has been added due to an incompatibility between checkov and the latest pycares version. This can be removed
+# when checkov updates their dependency to support 5.x versions of pycares.
+pycares<5.0.0
