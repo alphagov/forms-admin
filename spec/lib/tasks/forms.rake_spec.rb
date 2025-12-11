@@ -541,4 +541,47 @@ RSpec.describe "forms.rake" do
       end
     end
   end
+
+  describe "add_value_to_selection_options" do
+    subject(:task) do
+      Rake::Task["forms:add_value_to_selection_options"]
+        .tap(&:reenable)
+    end
+
+    let(:form) { create :form, pages: }
+    let(:form_without_selection_options) { create :form, :with_pages }
+    let(:pages) do
+      [
+        create(:page,
+               :with_selection_settings,
+               answer_settings: DataStruct.new(
+                 only_one_option: "true",
+                 selection_options: [{ name: "option 1" }, { name: "option 2" }],
+               )),
+        create(:page, :with_single_line_text_settings),
+      ]
+    end
+
+    it "adds value to the step with selection options" do
+      expect {
+        task.invoke
+      }.to change { form.draft_form_document.reload.content.dig("steps", 0, "data", "answer_settings") }.to(
+        { "only_one_option" => "true", # only_one_option doesn't change
+          "selection_options" => [{ "name" => "option 1", "value" => "option 1" },
+                                  { "name" => "option 2", "value" => "option 2" }] },
+      )
+    end
+
+    it "does not add value to the step without selection options" do
+      expect {
+        task.invoke
+      }.not_to(change { form.draft_form_document.reload.content.dig("steps", 1, "data", "answer_settings") })
+    end
+
+    it "does not change form documents without selection options" do
+      expect {
+        task.invoke
+      }.not_to(change { form_without_selection_options.draft_form_document.reload.content["steps"] })
+    end
+  end
 end

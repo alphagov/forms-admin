@@ -98,6 +98,31 @@ namespace :forms do
       Rails.logger.info("Set submission_type to #{submission_type} and s3_bucket_name to #{args[:s3_bucket_name]} for form: #{args[:form_id]}")
     end
   end
+
+  desc "Updates form documents to add value to all selection options"
+  task add_value_to_selection_options: :environment do
+    # find all form documents where any of the steps have an answer_type of selection
+    form_documents_with_selection_steps = FormDocument.where("jsonb_path_exists(content, '$.steps[*] ? (@.data.answer_type == \"selection\")')")
+    Rails.logger.info "data_migrations:add_value_to_selection_options will update #{form_documents_with_selection_steps.count} form_documents"
+
+    form_documents_with_selection_steps.find_each do |form_document|
+      form_document.content["steps"].each do |step|
+        next unless step["data"]["answer_type"] == "selection"
+
+        step["data"]["answer_settings"]["selection_options"].each do |option|
+          option["value"] = option["name"]
+        end
+      end
+
+      begin
+        form_document.save!
+      rescue StandardError => e
+        Rails.logger.info "data_migrations:add_value_to_selection_options Failed to update form #{form_document.id}: #{e.message}"
+      end
+    end
+
+    Rails.logger.info "data_migrations:add_value_to_selection_options finished"
+  end
 end
 
 def move_forms(form_ids, group_id)
