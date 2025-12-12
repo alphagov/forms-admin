@@ -55,9 +55,42 @@ FactoryBot.define do
     end
 
     factory :selection_draft_question do
+      transient do
+        only_one_option { "true" }
+        selection_options { [{ name: "Option 1" }, { name: "Option 2" }] }
+      end
+
       question_text { Faker::Lorem.question }
       answer_type { "selection" }
-      answer_settings { { only_one_option: "true", selection_options: [{ name: "Option 1" }, { name: "Option 2" }] } }
+      answer_settings { { only_one_option:, selection_options: } }
+
+      trait :with_optional_none_of_the_above_question do
+        is_optional { true }
+        answer_settings do
+          {
+            only_one_option:,
+            selection_options:,
+            none_of_the_above_question: {
+              question_text: "Enter your own option",
+              is_optional: "true",
+            },
+          }
+        end
+      end
+
+      trait :with_mandatory_none_of_the_above_question do
+        is_optional { true }
+        answer_settings do
+          {
+            only_one_option:,
+            selection_options:,
+            none_of_the_above_question: {
+              question_text: "Enter your own option",
+              is_optional: "false",
+            },
+          }
+        end
+      end
     end
 
     factory :text_draft_question do

@@ -61,7 +61,7 @@ describe Pages::Selection::OptionsController, type: :request do
         selection_options_input = assigns(:selection_options_input)
         draft_question_settings = draft_question.answer_settings
         expect(selection_options_input.selection_options.map { |option| { name: option[:name] } }).to eq(draft_question_settings[:selection_options].map { |option| { name: option[:name] } })
-        expect(selection_options_input.include_none_of_the_above).to eq draft_question.is_optional
+        expect(selection_options_input.include_none_of_the_above).to eq "yes"
       end
     end
   end
@@ -72,10 +72,11 @@ describe Pages::Selection::OptionsController, type: :request do
     end
 
     context "when form is valid and ready to store", :capture_logging do
+      let(:include_none_of_the_above) { "yes" }
       let(:pages_selection_options_input) do
         {
           selection_options: { "0": { name: "Option 1" }, "1": { name: "Option 2" } },
-          include_none_of_the_above: true,
+          include_none_of_the_above:,
         }
       end
 
@@ -88,34 +89,44 @@ describe Pages::Selection::OptionsController, type: :request do
           "params" => a_hash_including(
             "pages_selection_options_input" => {
               "selection_options" => { "0" => { "name" => "Option 1" }, "1" => { "name" => "Option 2" } },
-              "include_none_of_the_above" => "true",
+              "include_none_of_the_above" => "yes",
             },
           ),
         )
       end
 
-      it "saves the selection options to the draft question" do
-        selection_options_input = assigns(:selection_options_input)
-        draft_question_settings = selection_options_input.draft_question.answer_settings
+      context "when include_none_of_the_above is yes" do
+        it "saves the selection options to the draft question" do
+          selection_options_input = assigns(:selection_options_input)
+          draft_question_settings = selection_options_input.draft_question.answer_settings
 
-        expect(draft_question_settings).to include(selection_options: [{ name: "Option 1" }, { name: "Option 2" }])
+          expect(draft_question_settings).to include(selection_options: [{ name: "Option 1" }, { name: "Option 2" }])
+        end
+
+        it "does not overwrite the only_one_option setting on the draft question" do
+          selection_options_input = assigns(:selection_options_input)
+          draft_question_settings = selection_options_input.draft_question.answer_settings
+
+          expect(draft_question_settings).to include(only_one_option: false)
+        end
+
+        it "updates is_optional on the draft question" do
+          selection_options_input = assigns(:selection_options_input)
+
+          expect(selection_options_input.draft_question.is_optional).to be true
+        end
+
+        it "redirects the user to the question details page" do
+          expect(response).to redirect_to new_question_path(form.id)
+        end
       end
 
-      it "does not overwrite the only_one_option setting on the draft question" do
-        selection_options_input = assigns(:selection_options_input)
-        draft_question_settings = selection_options_input.draft_question.answer_settings
+      context "when include_none_of_the_above is yes_with_question" do
+        let(:include_none_of_the_above) { "yes_with_question" }
 
-        expect(draft_question_settings).to include(only_one_option: false)
-      end
-
-      it "updates is_optional on the draft question" do
-        selection_options_input = assigns(:selection_options_input)
-
-        expect(selection_options_input.draft_question.is_optional).to be true
-      end
-
-      it "redirects the user to the question details page" do
-        expect(response).to redirect_to new_question_path(form.id)
+        it "redirects the user to the none of the above description page" do
+          expect(response).to redirect_to selection_none_of_the_above_new_path(form.id)
+        end
       end
     end
 
@@ -143,7 +154,7 @@ describe Pages::Selection::OptionsController, type: :request do
       selection_options_input = assigns(:selection_options_input)
       draft_question_settings = draft_question.answer_settings
       expect(selection_options_input.selection_options.map { |option| { name: option[:name] } }).to eq(draft_question_settings[:selection_options].map { |option| { name: option[:name] } })
-      expect(selection_options_input.include_none_of_the_above).to eq draft_question.is_optional
+      expect(selection_options_input.include_none_of_the_above).to eq "no"
     end
 
     it "sets an instance variable for selections_settings_path" do
@@ -170,10 +181,11 @@ describe Pages::Selection::OptionsController, type: :request do
     end
 
     context "when form is valid and ready to update in the DB" do
+      let(:include_none_of_the_above) { "yes" }
       let(:pages_selection_options_input) do
         {
           selection_options: { "0": { name: "Option 1" }, "1": { name: "Option 2" } },
-          include_none_of_the_above: true,
+          include_none_of_the_above:,
         }
       end
 
@@ -182,28 +194,38 @@ describe Pages::Selection::OptionsController, type: :request do
              params: { pages_selection_options_input: }
       end
 
-      it "saves the selection options to the draft question" do
-        selection_options_input = assigns(:selection_options_input)
-        draft_question_settings = selection_options_input.draft_question.answer_settings
+      context "when include_none_of_the_above is yes" do
+        it "saves the selection options to the draft question" do
+          selection_options_input = assigns(:selection_options_input)
+          draft_question_settings = selection_options_input.draft_question.answer_settings
 
-        expect(draft_question_settings).to include(selection_options: [{ name: "Option 1" }, { name: "Option 2" }])
+          expect(draft_question_settings).to include(selection_options: [{ name: "Option 1" }, { name: "Option 2" }])
+        end
+
+        it "does not overwrite the only_one_option setting on the draft question" do
+          selection_options_input = assigns(:selection_options_input)
+          draft_question_settings = selection_options_input.draft_question.answer_settings
+
+          expect(draft_question_settings).to include(only_one_option: false)
+        end
+
+        it "updates is_optional on the draft question" do
+          selection_options_input = assigns(:selection_options_input)
+
+          expect(selection_options_input.draft_question.is_optional).to be true
+        end
+
+        it "redirects the user to the question details page" do
+          expect(response).to redirect_to edit_question_path(form.id, page.id)
+        end
       end
 
-      it "does not overwrite the only_one_option setting on the draft question" do
-        selection_options_input = assigns(:selection_options_input)
-        draft_question_settings = selection_options_input.draft_question.answer_settings
+      context "when include_none_of_the_above is yes_with_question" do
+        let(:include_none_of_the_above) { "yes_with_question" }
 
-        expect(draft_question_settings).to include(only_one_option: false)
-      end
-
-      it "updates is_optional on the draft question" do
-        selection_options_input = assigns(:selection_options_input)
-
-        expect(selection_options_input.draft_question.is_optional).to be true
-      end
-
-      it "redirects the user to the question details page" do
-        expect(response).to redirect_to edit_question_path(form.id, page.id)
+        it "redirects the user to the none of the above description page" do
+          expect(response).to redirect_to selection_none_of_the_above_edit_path(form.id, page.id)
+        end
       end
     end
 

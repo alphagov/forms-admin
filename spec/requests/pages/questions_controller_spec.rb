@@ -176,24 +176,19 @@ RSpec.describe Pages::QuestionsController, type: :request do
 
   describe "#update" do
     let(:draft_question) do
-      record = create :draft_question, user: standard_user, form_id: form.id
-      record.question_text = nil
-      record.save!(validate: false)
-      record.reload
+      create(:address_draft_question, :with_guidance, page_id: page.id, user: standard_user, form_id: form.id)
     end
 
     let(:page) do
       create(
         :page,
         form_id: form.id,
-        question_text: "What is your work address?",
-        hint_text: "This should be the location stated in your contract.",
-        answer_type: "address",
+        question_text: "Old question text",
+        hint_text: "Old hint text",
+        answer_type: "email",
         answer_settings: nil,
         is_optional: false,
         is_repeatable: false,
-        page_heading: "New page heading",
-        guidance_markdown: "## Heading level 2",
       )
     end
 
@@ -203,20 +198,27 @@ RSpec.describe Pages::QuestionsController, type: :request do
           form_id: form.id,
           question_text: "What is your home address?",
           hint_text: "This should be the location stated in your contract.",
-          answer_type: "address",
-          is_optional: "false",
-          is_repeatable: "false",
-          page_heading: "New page heading",
-          guidance_markdown: "## Heading level 2",
+          is_optional: "true",
+          is_repeatable: "true",
         } }
       end
 
       before do
+        draft_question
         post update_question_path(form_id: form.id, page_id: page.id), params:
       end
 
-      it "Updates the page through the page repository" do
-        expect(page.reload.question_text).to eq("What is your home address?")
+      it "Updates the page" do
+        expect(page.reload).to have_attributes(
+          question_text: "What is your home address?",
+          hint_text: "This should be the location stated in your contract.",
+          is_optional: true,
+          is_repeatable: true,
+          answer_type: "address",
+          answer_settings: DataStruct.recursive_new(draft_question.answer_settings),
+          page_heading: draft_question.page_heading,
+          guidance_markdown: draft_question.guidance_markdown,
+        )
       end
 
       it "Redirects you to edit page for question that was updated" do
@@ -233,7 +235,7 @@ RSpec.describe Pages::QuestionsController, type: :request do
       end
 
       it "logs the answer type from the page", :capture_logging do
-        expect(log_line["answer_type"]).to eq(page.answer_type)
+        expect(log_line["answer_type"]).to eq(page.reload.answer_type)
       end
 
       context "when question being updated has a question after it" do

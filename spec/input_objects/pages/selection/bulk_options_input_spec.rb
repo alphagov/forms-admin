@@ -1,45 +1,49 @@
 require "rails_helper"
 
 RSpec.describe Pages::Selection::BulkOptionsInput, type: :model do
+  subject(:input) { build :bulk_options_input, draft_question:, include_none_of_the_above: }
+
   let(:form) { create :form }
-  let(:bulk_options_input) { build :bulk_options_input, draft_question: }
+  let(:include_none_of_the_above) { "yes" }
   let(:only_one_option) { "true" }
-  let(:draft_question) { create :draft_question, answer_type: "selection", answer_settings: { only_one_option: }, form_id: form.id }
+  let(:answer_settings) { { only_one_option: } }
+  let(:is_optional) { nil }
+  let(:draft_question) { create :draft_question, answer_type: "selection", answer_settings:, form_id: form.id, is_optional: }
 
   it "has a valid factory" do
-    expect(bulk_options_input).to be_valid
+    expect(input).to be_valid
   end
 
   describe "validations" do
     it "is invalid if fewer than 2 Bulk selection options are provided" do
-      bulk_options_input.bulk_selection_options = "A single option"
+      input.bulk_selection_options = "A single option"
       error_message = I18n.t("activemodel.errors.models.pages/selection/bulk_options_input.attributes.bulk_selection_options.minimum")
-      expect(bulk_options_input).not_to be_valid
+      expect(input).not_to be_valid
 
-      expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
+      expect(input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
     end
 
     context "when only_one_option is true for the draft_question" do
       let(:only_one_option) { "true" }
 
       it "is valid if there are between 2 and 1000 unique selection values" do
-        bulk_options_input.bulk_selection_options = (1..2).to_a.join("\n")
+        input.bulk_selection_options = (1..2).to_a.join("\n")
 
-        expect(bulk_options_input).to be_valid
-        expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to be_empty
+        expect(input).to be_valid
+        expect(input.errors.full_messages_for(:bulk_selection_options)).to be_empty
 
-        bulk_options_input.bulk_selection_options = (1..1000).to_a.join("\n")
+        input.bulk_selection_options = (1..1000).to_a.join("\n")
 
-        expect(bulk_options_input).to be_valid
-        expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to be_empty
+        expect(input).to be_valid
+        expect(input.errors.full_messages_for(:bulk_selection_options)).to be_empty
       end
 
       it "is invalid if more than 1000 Bulk selection options are provided" do
-        bulk_options_input.bulk_selection_options = (1..1001).to_a.join("\n")
+        input.bulk_selection_options = (1..1001).to_a.join("\n")
         error_message = I18n.t("activemodel.errors.models.pages/selection/bulk_options_input.attributes.bulk_selection_options.maximum_choose_only_one_option")
-        expect(bulk_options_input).not_to be_valid
+        expect(input).not_to be_valid
 
-        expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
+        expect(input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
       end
     end
 
@@ -47,65 +51,131 @@ RSpec.describe Pages::Selection::BulkOptionsInput, type: :model do
       let(:only_one_option) { "false" }
 
       it "is valid if there are between 2 and 30 unique selection values" do
-        bulk_options_input.bulk_selection_options = (1..2).to_a.join("\n")
+        input.bulk_selection_options = (1..2).to_a.join("\n")
 
-        expect(bulk_options_input).to be_valid
-        expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to be_empty
+        expect(input).to be_valid
+        expect(input.errors.full_messages_for(:bulk_selection_options)).to be_empty
 
-        bulk_options_input.bulk_selection_options = (1..30).to_a.join("\n")
+        input.bulk_selection_options = (1..30).to_a.join("\n")
 
-        expect(bulk_options_input).to be_valid
-        expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to be_empty
+        expect(input).to be_valid
+        expect(input.errors.full_messages_for(:bulk_selection_options)).to be_empty
       end
 
       it "is invalid if more than 30 Bulk selection options are provided" do
-        bulk_options_input.bulk_selection_options = (1..31).to_a.join("\n")
+        input.bulk_selection_options = (1..31).to_a.join("\n")
         error_message = I18n.t("activemodel.errors.models.pages/selection/bulk_options_input.attributes.bulk_selection_options.maximum_choose_more_than_one_option")
-        expect(bulk_options_input).not_to be_valid
+        expect(input).not_to be_valid
 
-        expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
+        expect(input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
       end
     end
 
     it "is invalid if there are duplicate values" do
-      bulk_options_input.bulk_selection_options = "1\n2\n2"
+      input.bulk_selection_options = "1\n2\n2"
       error_message = I18n.t("activemodel.errors.models.pages/selection/bulk_options_input.attributes.bulk_selection_options.uniqueness", duplicate: "2")
-      expect(bulk_options_input).not_to be_valid
+      expect(input).not_to be_valid
 
-      expect(bulk_options_input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
+      expect(input.errors.full_messages_for(:bulk_selection_options)).to include("Bulk selection options #{error_message}")
     end
 
-    context "when include_none_of_the_above is not 'true' or 'false'" do
-      let(:bulk_options_input) { build :bulk_options_input, include_none_of_the_above: nil, draft_question: }
+    context "when include_none_of_the_above is not in allowed values" do
+      subject(:input) { build :bulk_options_input, include_none_of_the_above: nil, draft_question: }
 
       it "is invalid" do
         error_message = I18n.t("activemodel.errors.models.pages/selection/bulk_options_input.attributes.include_none_of_the_above.inclusion")
-        expect(bulk_options_input).to be_invalid
-        expect(bulk_options_input.errors.full_messages_for(:include_none_of_the_above)).to include("Include none of the above #{error_message}")
+        expect(input).to be_invalid
+        expect(input.errors.full_messages_for(:include_none_of_the_above)).to include("Include none of the above #{error_message}")
+      end
+    end
+
+    %w[yes yes_with_question no].each do |value|
+      context "when include_none_of_the_above is '#{value}'" do
+        subject(:input) { build :bulk_options_input, include_none_of_the_above: value, draft_question: }
+
+        it "is valid" do
+          expect(input).to be_valid
+        end
+      end
+    end
+  end
+
+  describe "#assign_form_values" do
+    let(:answer_settings) do
+      {
+        selection_options: [{ name: "Option 1" }, { name: "Option 2" }],
+        only_one_option: "true",
+      }
+    end
+
+    before do
+      input.assign_form_values
+    end
+
+    it "assigns bulk_selection_options from the draft question" do
+      expect(input.bulk_selection_options).to eq("Option 1\nOption 2")
+    end
+
+    context "when is_optional is nil for the draft question" do
+      let(:is_optional) { nil }
+
+      it "assigns include_none_of_the_above to nil" do
+        expect(input.include_none_of_the_above).to be_nil
+      end
+    end
+
+    context "when is_optional is false for the draft question" do
+      let(:is_optional) { false }
+
+      it "assigns include_none_of_the_above to 'no'" do
+        expect(input.include_none_of_the_above).to eq("no")
+      end
+    end
+
+    context "when is_optional is true for the draft question" do
+      let(:is_optional) { true }
+
+      context "when the answer_settings does not contain none_of_the_above_question" do
+        it "assigns include_none_of_the_above to 'yes'" do
+          expect(input.include_none_of_the_above).to eq("yes")
+        end
+      end
+
+      context "when the answer_settings contains none_of_the_above_question" do
+        let(:is_optional) { true }
+        let(:answer_settings) do
+          {
+            selection_options: [{ name: "Option 1" }, { name: "Option 2" }],
+            only_one_option: "true",
+            none_of_the_above_question: { question_text: "Enter something" },
+          }
+        end
+
+        it "assigns include_none_of_the_above to 'yes_with_question'" do
+          expect(input.include_none_of_the_above).to eq("yes_with_question")
+        end
       end
     end
   end
 
   describe "#submit" do
     it "returns false if the form is invalid" do
-      bulk_options_input.bulk_selection_options = ""
-      expect(bulk_options_input.submit).to be_falsey
+      input.bulk_selection_options = ""
+      expect(input.submit).to be_falsey
     end
 
     it "filters out blank inputs" do
-      bulk_options_input.bulk_selection_options = "1\n\n2"
-      bulk_options_input.include_none_of_the_above = "true"
-      bulk_options_input.submit
+      input.bulk_selection_options = "1\n\n2"
+      input.submit
 
-      expect(bulk_options_input.draft_question.answer_settings[:selection_options]).to eq([{ name: "1" }, { name: "2" }])
+      expect(input.draft_question.answer_settings[:selection_options]).to eq([{ name: "1" }, { name: "2" }])
     end
 
     it "logs submission" do
       allow(Rails.logger).to receive(:info)
 
-      bulk_options_input.bulk_selection_options = (1..2).to_a.join("\n")
-      bulk_options_input.include_none_of_the_above = "true"
-      bulk_options_input.submit
+      input.bulk_selection_options = (1..2).to_a.join("\n")
+      input.submit
 
       expect(Rails.logger).to have_received(:info).with("Submitted selection options for a selection question", {
         "is_bulk_entry": true,
@@ -118,17 +188,16 @@ RSpec.describe Pages::Selection::BulkOptionsInput, type: :model do
       let(:only_one_option) { "true" }
 
       it "sets draft_question answer_settings and is_optional" do
-        bulk_options_input.bulk_selection_options = (1..2).to_a.join("\n")
-        bulk_options_input.include_none_of_the_above = "true"
-        bulk_options_input.submit
+        input.bulk_selection_options = (1..2).to_a.join("\n")
+        input.submit
 
         expected_settings = {
           only_one_option:,
           selection_options: [{ name: "1" }, { name: "2" }],
         }
 
-        expect(bulk_options_input.draft_question.answer_settings).to include(expected_settings)
-        expect(bulk_options_input.draft_question.is_optional).to be(true)
+        expect(input.draft_question.answer_settings).to include(expected_settings)
+        expect(input.draft_question.is_optional).to be(true)
       end
     end
 
@@ -136,42 +205,19 @@ RSpec.describe Pages::Selection::BulkOptionsInput, type: :model do
       let(:only_one_option) { "false" }
 
       it "sets draft_question answer_settings and is_optional" do
-        bulk_options_input.bulk_selection_options = (1..2).to_a.join("\n")
-        bulk_options_input.include_none_of_the_above = "true"
-        bulk_options_input.submit
+        input.bulk_selection_options = (1..2).to_a.join("\n")
+        input.submit
 
         expected_settings = {
           only_one_option:,
           selection_options: [{ name: "1" }, { name: "2" }],
         }
 
-        expect(bulk_options_input.draft_question.answer_settings).to include(expected_settings)
-        expect(bulk_options_input.draft_question.is_optional).to be(true)
+        expect(input.draft_question.answer_settings).to include(expected_settings)
+        expect(input.draft_question.is_optional).to be(true)
       end
     end
   end
 
-  describe "#none_of_the_above_options" do
-    it "returns true and false as options" do
-      expect(bulk_options_input.none_of_the_above_options).to eq [OpenStruct.new(id: "true"), OpenStruct.new(id: "false")]
-    end
-  end
-
-  describe "#only_one_option?" do
-    context "when only_one_option is set to 'true' for the draft question" do
-      let(:only_one_option) { "true" }
-
-      it "returns true" do
-        expect(bulk_options_input.only_one_option?).to be true
-      end
-    end
-
-    context "when only_one_option is set to 'false' for the draft question" do
-      let(:only_one_option) { "false" }
-
-      it "returns false" do
-        expect(bulk_options_input.only_one_option?).to be false
-      end
-    end
-  end
+  it_behaves_like "base selection options input"
 end

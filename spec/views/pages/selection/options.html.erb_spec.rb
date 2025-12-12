@@ -8,9 +8,10 @@ describe "pages/selection/options.html.erb", type: :view do
   let(:bulk_options_url) { "/a-link-to-bulk-options-page" }
   let(:selection_options_path) { "/a-path" }
   let(:selection_options) { [{ name: "France" }, { name: "Spain" }, { name: "Italy" }] }
-  let(:include_none_of_the_above) { "true" }
+  let(:include_none_of_the_above) { "yes" }
   let(:only_one_option) { "true" }
   let(:draft_question) { build :draft_question, answer_type: "selection", answer_settings: { only_one_option: } }
+  let(:describe_none_of_the_above_enabled) { true }
 
   before do
     # # mock the form.page_number method
@@ -20,6 +21,8 @@ describe "pages/selection/options.html.erb", type: :view do
     without_partial_double_verification do
       allow(view).to receive_messages(form_pages_path: "/pages", current_form: form)
     end
+
+    allow(FeatureService).to receive(:enabled?).with(:describe_none_of_the_above_enabled).and_return(describe_none_of_the_above_enabled)
 
     # # setup instance variables
     assign(:page, page)
@@ -123,30 +126,60 @@ describe "pages/selection/options.html.erb", type: :view do
   end
 
   describe "include none of the above radios" do
-    context "when input object has value of true" do
-      let(:include_none_of_the_above) { "true" }
+    context "when the describe_none_of_the_above_enabled feature is enabled" do
+      it "contains a radio question for choosing whether to make the form live" do
+        expect(rendered).to have_css("fieldset", text: I18n.t("helpers.legend.pages_selection_bulk_options_input.include_none_of_the_above"))
+        expect(rendered).to have_field(I18n.t("helpers.label.pages_selection_bulk_options_input.include_none_of_the_above_options.yes"), type: "radio")
+        expect(rendered).to have_field(I18n.t("helpers.label.pages_selection_bulk_options_input.include_none_of_the_above_options.yes_with_question"), type: "radio")
+        expect(rendered).to have_field(I18n.t("helpers.label.pages_selection_bulk_options_input.include_none_of_the_above_options.no"), type: "radio")
+      end
 
-      it "has 'Yes' radio selected" do
-        expect(rendered).to have_checked_field("pages_selection_options_input[include_none_of_the_above]", with: "true")
-        expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "false")
+      context "when input object has value of yes'" do
+        let(:include_none_of_the_above) { "yes" }
+
+        it "has 'Yes' radio selected" do
+          expect(rendered).to have_checked_field("pages_selection_options_input[include_none_of_the_above]", with: "yes")
+          expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "yes_with_question")
+          expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "no")
+        end
+      end
+
+      context "when input object has value of yes_with_question" do
+        let(:include_none_of_the_above) { "yes_with_question" }
+
+        it "has 'No' radio selected" do
+          expect(rendered).to have_checked_field("pages_selection_options_input[include_none_of_the_above]", with: "yes_with_question")
+          expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "yes")
+          expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "no")
+        end
+      end
+
+      context "when input object has value of no" do
+        let(:include_none_of_the_above) { "no" }
+
+        it "has 'No' radio selected" do
+          expect(rendered).to have_checked_field("pages_selection_options_input[include_none_of_the_above]", with: "no")
+          expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "yes")
+          expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "yes_with_question")
+        end
+      end
+
+      context "when input object has no value set" do
+        let(:include_none_of_the_above) { nil }
+
+        it "does not have a radio option selected" do
+          expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "no")
+          expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "yes")
+          expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "yes_with_question")
+        end
       end
     end
 
-    context "when input object has value of false" do
-      let(:include_none_of_the_above) { "false" }
+    context "when the describe_none_of_the_above_enabled feature is disabled" do
+      let(:describe_none_of_the_above_enabled) { false }
 
-      it "has 'No' radio selected" do
-        expect(rendered).to have_checked_field("pages_selection_options_input[include_none_of_the_above]", with: "false")
-        expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "true")
-      end
-    end
-
-    context "when input object has no value set" do
-      let(:include_none_of_the_above) { nil }
-
-      it "does not have a radio option selected" do
-        expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "false")
-        expect(rendered).to have_unchecked_field("pages_selection_options_input[include_none_of_the_above]", with: "true")
+      it "does not render the yes_with_question radio option" do
+        expect(rendered).not_to have_field(I18n.t("helpers.label.pages_selection_bulk_options_input.include_none_of_the_above_options.yes_with_question"))
       end
     end
   end

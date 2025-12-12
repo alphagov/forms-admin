@@ -819,11 +819,13 @@ en:
         is_repeatable_options:
           'true': After adding their first answer we’ll ask if they need to add another - up to a maximum of 50.
       pages_selection_bulk_options_input:
-        include_none_of_the_above_options:
-          'true': We’ll add ‘None of the above’ to the end of your list of options
+        include_none_of_the_above: If you select ‘Yes’ we’ll add ‘None of the above’ to the end of your list of options.
+      pages_selection_none_of_the_above_input:
+        is_optional_options:
+          'true': We’ll add ‘(optional)’ to the end of the question or label.
+        question_text: For example, if you asked them to select the country they live in, you could use ‘Enter the country you live in’.
       pages_selection_options_input:
-        include_none_of_the_above_options:
-          'true': We’ll add ‘None of the above’ to the end of your list of options
+        include_none_of_the_above: If you select ‘Yes’ we’ll add ‘None of the above’ to the end of your list of options.
       pages_selection_type_input:
         only_one_option_options:
           'false': Your list can have up to 30 options
@@ -977,12 +979,19 @@ en:
         routing_page_id: Select the last question you want them to answer before they skip
       pages_selection_bulk_options_input:
         include_none_of_the_above_options:
-          'false': 'No'
-          'true': 'Yes'
+          'no': 'No'
+          'yes': 'Yes'
+          yes_with_question: Yes, and let people provide a different answer
+      pages_selection_none_of_the_above_input:
+        is_optional_options:
+          'false': Mandatory
+          'true': Optional
+        question_text: Enter a question or label for the text box
       pages_selection_options_input:
         include_none_of_the_above_options:
-          'false': 'No'
-          'true': 'Yes'
+          'no': 'No'
+          'yes': 'Yes'
+          yes_with_question: Yes, and let people provide a different answer
       pages_selection_type_input:
         only_one_option_options:
           'false': One or more options
@@ -1001,6 +1010,8 @@ en:
         is_repeatable: Should people be able to answer this question more than once?
       pages_selection_bulk_options_input:
         include_none_of_the_above: Should the list include an option for ‘None of the above’?
+      pages_selection_none_of_the_above_input:
+        is_optional: Should this additional question be mandatory or optional?
       pages_selection_options_input:
         include_none_of_the_above: Should the list include an option for ‘None of the above’?
   home:
@@ -1299,6 +1310,8 @@ en:
       how_many_selections: How many options can people select
       include_none_of_the_above: Include an option for ‘None of the above’
       'no': 'No'
+      none_of_the_above_question: If ‘None of the above’ is selected
+      none_of_the_above_question_optional: "%{question_text} (optional)"
       options: Options
       options_count: "%{number_of_options} options:"
       options_summary: Show %{number_of_options} options
@@ -1360,6 +1373,7 @@ en:
     routing_page_delete: Delete question %{question_number}’s route
     routing_page_edit: Edit route %{route_number}
     routing_page_new: 'Add route %{route_number}: select an answer and where to skip to'
+    selection_none_of_the_above: Ask for an answer if someone selects ‘None of the above’
     selection_options: Create a list of options
     selection_type: How many options should people be able to select?
     separator: " – "
@@ -1748,6 +1762,9 @@ en:
         <p>If you need to, you can make them skip one or more consecutive questions that only people on route %{route_number} need to answer.</p>
       primary_route_answer_key: If the answer is
       primary_route_continue_key: skip the person to
+  selection_none_of_the_above:
+    preamble: If someone selects ‘None of the above’, we’ll show them a text box to enter their answer.
+    preamble_more_than_30_options: If someone selects ‘None of the above’, we’ll show them a text box to enter their answer. If your list has over 30 options, we’ll show this text box on the next page of the form.
   selection_options:
     add_another: Add another option
     add_options: Add options to your list

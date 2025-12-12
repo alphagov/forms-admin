@@ -1,0 +1,12 @@
+---
+en:
+  activemodel:
+    errors:
+      models:
+        pages/selection/none_of_the_above_input:
+          attributes:
+            is_optional:
+              inclusion: Select 'Mandatory' if people have to answer this additional question
+            question_text:
+              blank: Enter a question or label for the text box
+              too_long: Question or label text must be shorter than %{count} characters
