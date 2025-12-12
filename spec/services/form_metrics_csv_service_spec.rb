@@ -18,25 +18,25 @@ describe FormMetricsCsvService do
   end
 
   describe "#csv" do
-    context "when the first_made_live_at is more than 15 months ago" do
+    context "when the first_made_live_at is more than 14 months ago" do
       let(:first_made_live_at) { 16.months.ago }
 
-      it "calls CloudWatchService with a start date 15 months ago" do
-        expect(cloud_watch_service_double).to receive(:daily_metrics_data).with(15.months.ago.midnight)
+      it "calls CloudWatchService with a start date 14 months ago" do
+        expect(cloud_watch_service_double).to receive(:daily_metrics_data).with(14.months.ago.midnight)
         described_class.csv(form_id:, first_made_live_at:)
       end
 
-      it "generates a CSV with 15 months of rows" do
+      it "generates a CSV with 14 months of rows" do
         csv = described_class.csv(form_id:, first_made_live_at:)
         rows = CSV.parse(csv)
-        expect(rows.length).to eq(458) # 456 days + header row
+        expect(rows.length).to eq(427) # 456 days + header row
       end
     end
 
-    context "when the first_made_live_at is less than 15 months ago" do
+    context "when the first_made_live_at is less than 14 months ago" do
       let(:first_made_live_at) { 1.month.ago }
 
-      it "calls CloudWatchService with a start date 15 months ago" do
+      it "calls CloudWatchService with a start date 14 months ago" do
         expect(cloud_watch_service_double).to receive(:daily_metrics_data).with(first_made_live_at.midnight)
         described_class.csv(form_id:, first_made_live_at:)
       end

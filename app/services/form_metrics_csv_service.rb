@@ -1,5 +1,5 @@
 class FormMetricsCsvService
-  MAXIMUM_LOOK_BACK = 15.months
+  MAXIMUM_LOOK_BACK = 14.months
 
   def self.csv(form_id:, first_made_live_at:)
     start_time = [first_made_live_at.utc.beginning_of_day, MAXIMUM_LOOK_BACK.ago.utc.beginning_of_day].max
