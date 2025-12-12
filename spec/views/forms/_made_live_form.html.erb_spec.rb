@@ -260,7 +260,7 @@ describe "forms/_made_live_form.html.erb" do
   end
 
   it "renders the metrics summary component" do
-    expect(rendered).to have_text("If you want to track metrics over a longer period you’ll need to make a note of these on the same day each week.")
+    expect(rendered).to have_text("Form metrics for the past 7 days")
   end
 
   context "when form is not in a group" do

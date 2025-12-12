@@ -2,13 +2,18 @@
 
 module MetricsSummaryComponent
   class View < ApplicationComponent
-    attr_reader :start_date, :end_date, :weekly_submissions, :weekly_starts, :weekly_started_but_not_completed, :weekly_completion_rate, :form_has_metrics, :error_message, :heading
+    attr_reader :form_id, :start_date, :end_date, :weekly_submissions, :weekly_starts,
+                :weekly_started_but_not_completed, :weekly_completion_rate, :form_has_metrics, :error_message, :heading,
+                :show_csv_link
 
-    def initialize(form_live_date, metrics_data)
+    def initialize(form_id:, form_live_date:, metrics_data:)
       super()
+      @form_id = form_id
       @start_date = [form_live_date, 7.days.ago.to_date].max
       @end_date = 1.day.ago.to_date
       @heading = heading_text.html_safe
+
+      @show_csv_link = !metrics_data.nil? && !form_went_live_today?
 
       if metrics_data.nil?
         @error_message = I18n.t("metrics_summary.errors.error_loading_data_html")
@@ -45,10 +50,6 @@ module MetricsSummaryComponent
       return nil if total.zero?
 
       (number.to_f * 100 / total).round
-    end
-
-    def description
-      complete_week? ? I18n.t("metrics_summary.description.complete_week") : I18n.t("metrics_summary.description.incomplete_week")
     end
 
     def heading_text

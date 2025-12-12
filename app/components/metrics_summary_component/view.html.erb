@@ -5,9 +5,6 @@
         <%= error_message.html_safe %>
     </div>
   <% else %>
-    <p>
-      <%= description %>
-    </p>
     <div class="app-metrics__container">
       <div class="app-metrics__big-number">
         <%= t("metrics_summary.completion_rate") %> <span class="app-metrics__big-number-number"><%= weekly_completion_rate %></span>
@@ -19,5 +16,10 @@
         <%= t("metrics_summary.forms_started_but_not_completed") %> <span class="app-metrics__big-number-number"><%= weekly_started_but_not_completed %></span>
       </div>
     </div>
+  <% end %>
+  <% if show_csv_link %>
+    <p>
+      <%= govuk_link_to t("metrics_summary.download_csv"), metrics_csv_path(form_id: ) %>
+    </p>
   <% end %>
 </div>
