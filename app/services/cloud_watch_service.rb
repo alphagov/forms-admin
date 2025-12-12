@@ -27,6 +27,9 @@ class CloudWatchService
     nil
   end
 
+  # The code to look up metrics using the old namespace can be removed from
+  # July 1st 2026 as these metrics will no longer exist in CloudWatch
+
   def daily_metrics_data(start_time)
     {
       submissions: combined_daily_submissions(start_time),
