@@ -32,11 +32,6 @@ class CloudWatchService
       submissions: combined_daily_submissions(start_time),
       starts: combined_daily_starts(start_time),
     }
-  rescue Aws::CloudWatch::Errors::ServiceError,
-         Aws::Errors::MissingCredentialsError => e
-
-    Sentry.capture_exception(e)
-    nil
   end
 
 private
