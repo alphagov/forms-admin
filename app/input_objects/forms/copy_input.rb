@@ -4,8 +4,7 @@ class Forms::CopyInput < Forms::NameInput
   attr_accessor :tag
 
   validates :name, length: { maximum: 2000 }
-  validates :tag, inclusion: { in: %w[draft live archived],
-                               message: "%{tag} is not a valid tag" }
+  validates :tag, inclusion: { in: %w[draft live archived] }
 
   def assign_form_values
     self.name = form.name

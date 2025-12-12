@@ -69,7 +69,7 @@ RSpec.describe Forms::CopyInput, type: :model do
 
         copy_input.validate(:tag)
 
-        expect(copy_input.errors[:tag]).to include("%{tag} is not a valid tag")
+        expect(copy_input.errors[:tag]).to include("\"invalid\" is not a valid tag")
       end
 
       it "is invalid with nil tag" do
@@ -77,7 +77,7 @@ RSpec.describe Forms::CopyInput, type: :model do
 
         copy_input.validate(:tag)
 
-        expect(copy_input.errors[:tag]).to include("%{tag} is not a valid tag")
+        expect(copy_input.errors[:tag]).to include("\"\" is not a valid tag")
       end
     end
   end

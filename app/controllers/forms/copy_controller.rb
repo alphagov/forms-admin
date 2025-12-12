@@ -13,7 +13,6 @@ module Forms
                current_form
              end
 
-      pp form.name
       @copy_input = Forms::CopyInput.new(form: form, tag: tag).assign_form_values
 
       render :confirm
