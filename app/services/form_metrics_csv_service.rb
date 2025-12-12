@@ -2,9 +2,9 @@ class FormMetricsCsvService
   MAXIMUM_LOOK_BACK = 15.months
 
   def self.csv(form_id:, first_made_live_at:)
-    start_time = [first_made_live_at.midnight, MAXIMUM_LOOK_BACK.ago.midnight].max
+    start_time = [first_made_live_at.utc.beginning_of_day, MAXIMUM_LOOK_BACK.ago.utc.beginning_of_day].max
     metrics_data = CloudWatchService.new(form_id).daily_metrics_data(start_time)
-    end_date = Time.zone.today - 1
+    end_date = Time.zone.now.utc.to_date - 1
 
     CSV.generate do |csv|
       csv << headers
