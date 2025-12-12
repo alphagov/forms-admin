@@ -38,22 +38,64 @@ RSpec.describe Forms::CopyInput, type: :model do
         expect(copy_input.errors[:name]).to include("is too long (maximum is 2000 characters)")
       end
     end
+
+    describe "tag" do
+      it "is valid with 'draft' tag" do
+        copy_input = described_class.new(tag: "draft")
+
+        copy_input.validate(:tag)
+
+        expect(copy_input.errors[:tag]).to be_empty
+      end
+
+      it "is valid with 'live' tag" do
+        copy_input = described_class.new(tag: "live")
+
+        copy_input.validate(:tag)
+
+        expect(copy_input.errors[:tag]).to be_empty
+      end
+
+      it "is valid with 'archived' tag" do
+        copy_input = described_class.new(tag: "archived")
+
+        copy_input.validate(:tag)
+
+        expect(copy_input.errors[:tag]).to be_empty
+      end
+
+      it "is invalid with an invalid tag" do
+        copy_input = described_class.new(tag: "invalid")
+
+        copy_input.validate(:tag)
+
+        expect(copy_input.errors[:tag]).to include("%{tag} is not a valid tag")
+      end
+
+      it "is invalid with nil tag" do
+        copy_input = described_class.new(tag: nil)
+
+        copy_input.validate(:tag)
+
+        expect(copy_input.errors[:tag]).to include("%{tag} is not a valid tag")
+      end
+    end
   end
 
   describe "#submit" do
     context "with valid attributes" do
-      it "saves the form with the copied name" do
+      it "assigns the name to the form" do
         form = create :form, name: "Original Form"
-        copy_input = described_class.new(form:, name: "Copied Form")
+        copy_input = described_class.new(form:, name: "Copied Form", tag: "draft")
 
         expect {
           copy_input.submit
         }.to change(form, :name).from("Original Form").to("Copied Form")
       end
 
-      it "returns the result of save_draft!" do
+      it "returns truthy when valid" do
         form = create :form
-        copy_input = described_class.new(form:, name: "New Copied Form")
+        copy_input = described_class.new(form:, name: "New Copied Form", tag: "draft")
 
         result = copy_input.submit
 
@@ -62,9 +104,9 @@ RSpec.describe Forms::CopyInput, type: :model do
     end
 
     context "with invalid attributes" do
-      it "does not save the form when name is blank" do
+      it "does not change the form name when name is blank" do
         form = create :form, name: "Original Form"
-        copy_input = described_class.new(form:, name: "")
+        copy_input = described_class.new(form:, name: "", tag: "draft")
 
         expect {
           copy_input.submit
@@ -73,16 +115,16 @@ RSpec.describe Forms::CopyInput, type: :model do
 
       it "returns false when name is blank" do
         form = create :form
-        copy_input = described_class.new(form:, name: "")
+        copy_input = described_class.new(form:, name: "", tag: "draft")
 
         result = copy_input.submit
 
         expect(result).to be false
       end
 
-      it "does not save the form when name exceeds maximum length" do
+      it "does not change the form name when name exceeds maximum length" do
         form = create :form, name: "Original Form"
-        copy_input = described_class.new(form:, name: "A" * 2001)
+        copy_input = described_class.new(form:, name: "A" * 2001, tag: "draft")
 
         expect {
           copy_input.submit
@@ -91,7 +133,25 @@ RSpec.describe Forms::CopyInput, type: :model do
 
       it "returns false when name exceeds maximum length" do
         form = create :form
-        copy_input = described_class.new(form:, name: "A" * 2001)
+        copy_input = described_class.new(form:, name: "A" * 2001, tag: "draft")
+
+        result = copy_input.submit
+
+        expect(result).to be false
+      end
+
+      it "does not change the form name when tag is invalid" do
+        form = create :form, name: "Original Form"
+        copy_input = described_class.new(form:, name: "Copied Form", tag: "invalid")
+
+        expect {
+          copy_input.submit
+        }.not_to change(form, :name)
+      end
+
+      it "returns false when tag is invalid" do
+        form = create :form
+        copy_input = described_class.new(form:, name: "Copied Form", tag: "invalid")
 
         result = copy_input.submit
 

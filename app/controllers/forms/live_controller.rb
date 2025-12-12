@@ -19,11 +19,5 @@ module Forms
 
       render :show_pages, locals: { form_document: current_live_form }
     end
-
-  private
-
-    def current_live_form
-      @current_live_form ||= FormDocument::Content.from_form_document(current_form.live_form_document)
-    end
   end
 end

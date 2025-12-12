@@ -24,10 +24,7 @@ Rails.application.routes.draw do
     post "/change-name" => "forms/change_name#update"
 
     get "/copy" => "forms/copy#copy", as: :copy_form
-<<<<<<< HEAD
     post "/copy" => "forms/copy#create"
-=======
->>>>>>> 9cfeaa34 (Add controller and route for copying)
 
     scope "/live" do
       get "/" => "forms/live#show_form", as: :live_form
