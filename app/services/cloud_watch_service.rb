@@ -4,7 +4,7 @@ class CloudWatchService
   A_DAY = 86_400
   METRICS_NAMESPACE = "Forms".freeze
   OLD_METRICS_NAMESPACE = "forms/#{Settings.forms_env}".downcase.freeze
-  NAMESPACE_CHANGE_DATE = Time.zone.local(2025, 3, 14).midnight.freeze
+  NAMESPACE_CHANGE_DATE = Time.utc(2025, 3, 14).freeze
 
   def initialize(form_id)
     @form_id = form_id
@@ -203,6 +203,6 @@ private
   end
 
   def start_of_today
-    Time.zone.now.midnight
+    Time.zone.now.beginning_of_day.utc
   end
 end
