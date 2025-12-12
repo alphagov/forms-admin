@@ -4,7 +4,7 @@ class CloudWatchService
   A_DAY = 86_400
   METRICS_NAMESPACE = "Forms".freeze
   OLD_METRICS_NAMESPACE = "forms/#{Settings.forms_env}".downcase.freeze
-  NAMESPACE_CHANGE_DATE = Time.zone.local(2025, 3, 14).midnight.freeze
+  NAMESPACE_CHANGE_DATE = Time.utc(2025, 3, 14).freeze
 
   def initialize(form_id)
     @form_id = form_id
@@ -27,16 +27,14 @@ class CloudWatchService
     nil
   end
 
+  # The code to look up metrics using the old namespace can be removed from
+  # July 1st 2026 as these metrics will no longer exist in CloudWatch
+
   def daily_metrics_data(start_time)
     {
       submissions: combined_daily_submissions(start_time),
       starts: combined_daily_starts(start_time),
     }
-  rescue Aws::CloudWatch::Errors::ServiceError,
-         Aws::Errors::MissingCredentialsError => e
-
-    Sentry.capture_exception(e)
-    nil
   end
 
 private
@@ -203,6 +201,6 @@ private
   end
 
   def start_of_today
-    Time.zone.now.midnight
+    Time.zone.now.beginning_of_day.utc
   end
 end
