@@ -82,6 +82,9 @@ private
   end
 
   def combined_daily_submissions(start_time)
+    # The code to look up metrics using the old namespace can be removed from
+    # July 1st 2026 as these metrics will no longer exist in CloudWatch
+
     if start_time <= NAMESPACE_CHANGE_DATE
       daily_submissions(start_time).merge(old_namespace_daily_submissions(start_time))
     else
@@ -132,6 +135,9 @@ private
   end
 
   def combined_daily_starts(start_time)
+    # The code to look up metrics using the old namespace can be removed from
+    # July 1st 2026 as these metrics will no longer exist in CloudWatch
+
     if start_time <= NAMESPACE_CHANGE_DATE
       daily_starts(start_time).merge(old_namespace_daily_starts(start_time))
     else
