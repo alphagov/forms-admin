@@ -10,7 +10,7 @@ RSpec.describe Forms::MetricsController, type: :request do
   let(:current_user) { standard_user }
 
   around do |example|
-    travel_to(Time.zone.local(2021, 6, 15, 4, 30, 0)) do
+    travel_to(Time.zone.local(2025, 6, 15, 4, 30, 0)) do
       example.run
     end
   end
@@ -21,15 +21,15 @@ RSpec.describe Forms::MetricsController, type: :request do
     allow(Aws::CloudWatch::Client).to receive(:new).and_return(cloud_watch_client)
 
     submitted_datapoints = [
-      { timestamp: Time.zone.local(2021, 6, 13), sum: 5.0 },
-      { timestamp: Time.zone.local(2021, 6, 14), sum: 9.0 },
+      { timestamp: Time.zone.local(2025, 6, 13), sum: 5.0 },
+      { timestamp: Time.zone.local(2025, 6, 14), sum: 9.0 },
     ]
     submitted_metric_response = cloud_watch_client.stub_data(:get_metric_statistics, datapoints: submitted_datapoints)
     allow(cloud_watch_client).to receive(:get_metric_statistics).with(cloud_watch_request("Submitted")).and_return(submitted_metric_response)
 
     started_datapoints = [
-      { timestamp: Time.zone.local(2021, 6, 13), sum: 7.0 },
-      { timestamp: Time.zone.local(2021, 6, 14), sum: 12.0 },
+      { timestamp: Time.zone.local(2025, 6, 13), sum: 7.0 },
+      { timestamp: Time.zone.local(2025, 6, 14), sum: 12.0 },
     ]
     started_metric_response = cloud_watch_client.stub_data(:get_metric_statistics, datapoints: started_datapoints)
     allow(cloud_watch_client).to receive(:get_metric_statistics).with(cloud_watch_request("Started")).and_return(started_metric_response)
@@ -50,15 +50,15 @@ RSpec.describe Forms::MetricsController, type: :request do
           expect(response).to have_http_status(:ok)
           expect(response.content_type).to eq("text/csv; charset=iso-8859-1")
           expect(response.headers["content-disposition"])
-            .to match("attachment; filename=a_form_name_that_is_really_long_and_will_cause_the_filename_to_be_truncated_to_obey_2021-06-15.csv")
+            .to match("attachment; filename=a_form_name_that_is_really_long_and_will_cause_the_filename_to_be_truncated_to_obey_2025-06-15.csv")
         end
 
         it "includes the correct metrics data in the CSV" do
           rows = CSV.parse(response.body)
           expect(rows).to eq([
             ["Date", "Started", "Completed", "Completion rate (%)", "Started but not completed"],
-            ["14/06/2021", "12", "9", "75.0", "3"],
-            ["13/06/2021", "7", "5", "71.4", "2"],
+            ["14/06/2025", "12", "9", "75.0", "3"],
+            ["13/06/2025", "7", "5", "71.4", "2"],
           ])
         end
       end

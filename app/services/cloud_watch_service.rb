@@ -3,6 +3,8 @@ class CloudWatchService
   A_WEEK = 604_800
   A_DAY = 86_400
   METRICS_NAMESPACE = "Forms".freeze
+  OLD_METRICS_NAMESPACE = "forms/#{Settings.forms_env}".downcase.freeze
+  NAMESPACE_CHANGE_DATE = Time.zone.local(2025, 3, 14).midnight.freeze
 
   def initialize(form_id)
     @form_id = form_id
@@ -27,8 +29,8 @@ class CloudWatchService
 
   def daily_metrics_data(start_time)
     {
-      submissions: daily_submissions(start_time),
-      starts: daily_starts(start_time),
+      submissions: combined_daily_submissions(start_time),
+      starts: combined_daily_starts(start_time),
     }
   rescue Aws::CloudWatch::Errors::ServiceError,
          Aws::Errors::MissingCredentialsError => e
@@ -79,6 +81,14 @@ private
     response.datapoints[0]&.sum.to_i || 0
   end
 
+  def combined_daily_submissions(start_time)
+    if start_time <= NAMESPACE_CHANGE_DATE
+      daily_submissions(start_time).merge(old_namespace_daily_submissions(start_time))
+    else
+      daily_submissions(start_time)
+    end
+  end
+
   def daily_submissions(start_time)
     cloudwatch_client = Aws::CloudWatch::Client.new(region: REGION)
 
@@ -99,6 +109,36 @@ private
     datapoints_to_hash_by_date(response.datapoints)
   end
 
+  def old_namespace_daily_submissions(start_time)
+    cloudwatch_client = Aws::CloudWatch::Client.new(region: REGION)
+
+    response = cloudwatch_client.get_metric_statistics({
+      metric_name: "submitted",
+      namespace: OLD_METRICS_NAMESPACE,
+      dimensions: [
+        {
+          name: "form_id",
+          value: @form_id.to_s,
+        },
+      ],
+      start_time: start_time,
+      end_time: NAMESPACE_CHANGE_DATE,
+      period: A_DAY,
+      statistics: %w[Sum],
+      unit: "Count",
+    })
+
+    datapoints_to_hash_by_date(response.datapoints)
+  end
+
+  def combined_daily_starts(start_time)
+    if start_time <= NAMESPACE_CHANGE_DATE
+      daily_starts(start_time).merge(old_namespace_daily_starts(start_time))
+    else
+      daily_starts(start_time)
+    end
+  end
+
   def daily_starts(start_time)
     cloudwatch_client = Aws::CloudWatch::Client.new(region: REGION)
 
@@ -111,6 +151,28 @@ private
       ],
       start_time: start_time,
       end_time: start_of_today,
+      period: A_DAY,
+      statistics: %w[Sum],
+      unit: "Count",
+    })
+
+    datapoints_to_hash_by_date(response.datapoints)
+  end
+
+  def old_namespace_daily_starts(start_time)
+    cloudwatch_client = Aws::CloudWatch::Client.new(region: REGION)
+
+    response = cloudwatch_client.get_metric_statistics({
+      metric_name: "started",
+      namespace: OLD_METRICS_NAMESPACE,
+      dimensions: [
+        {
+          name: "form_id",
+          value: @form_id.to_s,
+        },
+      ],
+      start_time: start_time,
+      end_time: NAMESPACE_CHANGE_DATE,
       period: A_DAY,
       statistics: %w[Sum],
       unit: "Count",
