@@ -12,7 +12,10 @@
         <span class="govuk-caption-l"><%= @welsh_translation_input.form.name %></span>
         <%= t("page_titles.welsh_translation") %>
       </h1>
-      <%# TODO: draft tag %>
+
+      <p>
+        <%= render PreviewLinkComponent::View.new(@welsh_translation_input.form.pages, preview_link(@welsh_translation_input.form, locale: :cy), t(".preview_link_text")) %>
+      </p>
     </div>
   </div>
 

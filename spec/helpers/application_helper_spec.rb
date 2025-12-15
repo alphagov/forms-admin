@@ -31,6 +31,72 @@ RSpec.describe ApplicationHelper, type: :helper do
         expect(helper.link_to_runner("example.com", 2, "garden-form-slug", mode: :live)).to eq "example.com/form/2/garden-form-slug"
       end
     end
+
+    context "with no locale provided" do
+      it "defaults to the :en locale" do
+        expect(helper.link_to_runner("example.com", 2, "garden-form-slug")).to eq "example.com/preview-draft/2/garden-form-slug"
+      end
+    end
+
+    context "with a locale provided" do
+      it "generates a link for the provided locale" do
+        expect(helper.link_to_runner("example.com", 2, "garden-form-slug", locale: :cy)).to eq "example.com/preview-draft/2/garden-form-slug.cy"
+      end
+    end
+  end
+
+  describe "#preview_link" do
+    let(:form) { Form.new }
+
+    def preview_link(form, mode: :preview_draft, locale: :en)
+      link_to_runner(Settings.forms_runner.url, form.id, form.form_slug, mode:, locale:)
+    end
+
+    before do
+      allow(form).to receive_messages(id: 1, form_slug: "garden-form-slug")
+    end
+
+    context "when no mode is provided" do
+      it "returns a draft preview link to the form" do
+        expect(helper.preview_link(form)).to eq "runner-host/preview-draft/1/garden-form-slug"
+      end
+    end
+
+    context "when preview_draft mode is provided" do
+      it "returns a draft preview link to the form" do
+        expect(helper.preview_link(form, mode: :preview_draft)).to eq "runner-host/preview-draft/1/garden-form-slug"
+      end
+    end
+
+    context "when preview_live mode is provided" do
+      it "returns a live preview link to the form" do
+        expect(helper.preview_link(form, mode: :preview_live)).to eq "runner-host/preview-live/1/garden-form-slug"
+      end
+    end
+
+    context "when live mode is provided" do
+      it "returns a live link to the form" do
+        expect(helper.preview_link(form, mode: :live)).to eq "runner-host/form/1/garden-form-slug"
+      end
+    end
+
+    context "when no locale is provided" do
+      it "returns an English link to the form" do
+        expect(helper.preview_link(form)).to eq "runner-host/preview-draft/1/garden-form-slug"
+      end
+    end
+
+    context "when the English locale is provided" do
+      it "returns an English link to the form" do
+        expect(helper.preview_link(form, locale: :en)).to eq "runner-host/preview-draft/1/garden-form-slug"
+      end
+    end
+
+    context "when the Welsh locale is provided" do
+      it "returns a Welsh link to the form" do
+        expect(helper.preview_link(form, locale: :cy)).to eq "runner-host/preview-draft/1/garden-form-slug.cy"
+      end
+    end
   end
 
   describe "contact_url" do

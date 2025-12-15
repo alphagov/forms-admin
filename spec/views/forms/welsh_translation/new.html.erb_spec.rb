@@ -48,6 +48,10 @@ describe "forms/welsh_translation/new.html.erb" do
       expect(rendered).to have_css("h1.govuk-heading-l", text: "Add a Welsh version of your form")
     end
 
+    it "contains a link to preview the Welsh form" do
+      expect(rendered).to have_link(t("forms.welsh_translation.new.preview_link_text"), href: preview_link(form, locale: :cy))
+    end
+
     it "renders a text input for 'Form name'" do
       expect(rendered).to have_field("Enter your Welsh form name", type: "text", with: "My Welsh form")
     end
