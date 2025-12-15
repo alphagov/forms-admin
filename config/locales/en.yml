@@ -1204,24 +1204,20 @@ en:
   metrics_summary:
     completion_rate: Completion rate
     date_range: "%{start_date} to %{end_date}"
-    description:
-      complete_week: If you want to track metrics over a longer period you’ll need to make a note of these on the same day each week.
-      incomplete_week: The metrics shown here are for less than a week. To see a full week’s metrics, check again when your form’s been live for 7 days.
+    download_csv: Download a CSV of this form’s metrics (up to 14 months of data)
     errors:
       error_loading_data_html: |
         <p>Sorry, there’s a problem getting your form’s metrics.</p>
         <p>Try again later.</p>
       new_form_html: |
-        <p>No metrics are available yet as no-one has started or submitted a form since it went live.</p>
-        <p>Once they have, you’ll be able to see the following metrics for the past 7 days:</p>
+        <p>No metrics are available yet as no-one has started or submitted this form since it went live.</p>
+        <p>Once they have, you’ll be able to see the:</p>
         <ul class="govuk-list govuk-list--bullet">
-          <li>Number of forms completed</li>
-          <li>Number of forms started but not completed</li>
-          <li>Completion rate</li>
+          <li>number of forms completed</li>
+          <li>number of forms started but not completed</li>
+          <li>completion rate</li>
         </ul>
-      no_submissions_html: |
-        <p>No metrics are available as no-one has started or submitted a form in the past 7 days.</p>
-        <p>This may be because the form is no longer published on GOV.UK.</p>
+      no_submissions_html: "<p>No-one has started or submitted this form in the past 7 days.</p>\n"
     forms_started_but_not_completed: Forms started but not completed
     forms_submitted: Forms submitted
     heading_with_dates: 'Form metrics for the past %{number_of_days} days: %{formatted_date_range}'
