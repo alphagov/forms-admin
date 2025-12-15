@@ -23,6 +23,6 @@ class Pages::Selection::NoneOfTheAboveInput < BaseInput
   end
 
   def is_optional_options
-    [OpenStruct.new(id: "true"), OpenStruct.new(id: "false")]
+    [OpenStruct.new(id: "false"), OpenStruct.new(id: "true")]
   end
 end
