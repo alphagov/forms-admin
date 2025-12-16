@@ -192,9 +192,9 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
         answer_settings: {
           "only_one_option": "0", # TODO: investigate why we set this to "0"
           "selection_options": [
-            { "name": "Option 1" },
-            { "name": "Option 2" },
-            { "name": "Option 3" },
+            { "name": "Option 1", value: "Option 1" },
+            { "name": "Option 2", value: "Option 2" },
+            { "name": "Option 3", value: "Option 3" },
           ],
         },
         is_optional: true, # Include an option for 'None of the above'
@@ -256,8 +256,8 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
         answer_settings: {
           only_one_option: "true",
           selection_options: [
-            { "name": "Yes" },
-            { "name": "No" },
+            { "name": "Yes", value: "Yes" },
+            { "name": "No", value: "No" },
           ],
         },
         is_optional: false,
@@ -268,8 +268,8 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
         answer_settings: {
           only_one_option: "true",
           selection_options: [
-            { "name": "Once" },
-            { "name": "More than once" },
+            { "name": "Once", value: "Once" },
+            { "name": "More than once", value: "More than once" },
           ],
         },
         is_optional: false,
