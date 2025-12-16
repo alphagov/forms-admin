@@ -49,7 +49,7 @@ describe "forms/show.html.erb" do
   end
 
   it "has a button to copy the form" do
-    expect(rendered).to have_link("Make a copy of this form", href: copy_form_path(form.id))
+    expect(rendered).to have_link("Make a copy of this form", href: copy_form_path(form.id, "draft"))
   end
 
   context "when a form is not in a group" do

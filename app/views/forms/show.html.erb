@@ -46,7 +46,7 @@
       <%= govuk_button_link_to(t("forms.delete_form"), delete_form_path(current_form.id), warning: true) %>
     <% end %>
     <% unless current_form.live? or current_form.archived? %>
-      <%= govuk_button_link_to("Make a copy of this form", copy_form_path(current_form.id), secondary: true) %>
+      <%= govuk_button_link_to("Make a copy of this form", copy_form_path(current_form.id, "draft"), secondary: true) %>
     <% end %>
     </div>
   </div>

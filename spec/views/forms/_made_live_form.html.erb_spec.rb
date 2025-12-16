@@ -265,8 +265,8 @@ describe "forms/_made_live_form.html.erb" do
         expect(rendered).to have_link("Make a copy of this form")
       end
 
-      it "includes the live tag as a query parameter" do
-        expect(rendered).to have_link("Make a copy of this form", href: %r{/copy\?.*tag=live})
+      it "includes the live tag in the path" do
+        expect(rendered).to have_link("Make a copy of this form", href: %r{/copy/live})
       end
     end
 
@@ -277,8 +277,8 @@ describe "forms/_made_live_form.html.erb" do
         expect(rendered).to have_link("Make a copy of this form")
       end
 
-      it "includes the live tag as a query parameter" do
-        expect(rendered).to have_link("Make a copy of this form", href: %r{/copy\?.*tag=live})
+      it "includes the live tag in the path" do
+        expect(rendered).to have_link("Make a copy of this form", href: %r{/copy/live})
       end
     end
 
@@ -295,8 +295,8 @@ describe "forms/_made_live_form.html.erb" do
         expect(rendered).to have_link("Make a copy of this form")
       end
 
-      it "includes the archived tag as a query parameter" do
-        expect(rendered).to have_link("Make a copy of this form", href: %r{/copy\?.*tag=archived})
+      it "includes the archived tag in the path" do
+        expect(rendered).to have_link("Make a copy of this form", href: %r{/copy/archived})
       end
     end
 
@@ -313,8 +313,8 @@ describe "forms/_made_live_form.html.erb" do
         expect(rendered).to have_link("Make a copy of this form")
       end
 
-      it "includes the archived tag as a query parameter" do
-        expect(rendered).to have_link("Make a copy of this form", href: %r{/copy\?.*tag=archived})
+      it "includes the archived tag in the path" do
+        expect(rendered).to have_link("Make a copy of this form", href: %r{/copy/archived})
       end
     end
   end

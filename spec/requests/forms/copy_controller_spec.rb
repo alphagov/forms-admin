@@ -14,7 +14,7 @@ RSpec.describe Forms::CopyController, type: :request do
 
   describe "#copy" do
     before do
-      get copy_form_path(id)
+      get copy_form_path(id, "draft")
     end
 
     it "returns 200" do
@@ -29,7 +29,7 @@ RSpec.describe Forms::CopyController, type: :request do
   describe "#create" do
     context "when the copy is successful" do
       it "redirects to the form page" do
-        post copy_form_path(id), params: { forms_copy_input: { name: "Copied Form", tag: "draft" } }
+        post create_copy_form_path(id), params: { forms_copy_input: { name: "Copied Form", tag: "draft" } }
 
         expect(response).to have_http_status(:found)
         expect(response).to redirect_to(form_path(Form.last.id))
@@ -38,7 +38,7 @@ RSpec.describe Forms::CopyController, type: :request do
 
     context "when the copy fails" do
       it "renders the confirm template" do
-        post copy_form_path(id), params: { forms_copy_input: { name: "", tag: "draft" } }
+        post create_copy_form_path(id), params: { forms_copy_input: { name: "", tag: "draft" } }
 
         expect(response).to have_http_status(:ok)
         expect(response).to render_template(:confirm)
