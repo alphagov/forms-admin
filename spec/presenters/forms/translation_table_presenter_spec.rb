@@ -5,13 +5,13 @@ describe Forms::TranslationTablePresenter do
 
   describe "#two_column_classes" do
     it "returns classes to render a translation table with the two column layout" do
-      expect(presenter.two_column_classes).to eq(["govuk-!-margin-bottom-9", "app-form-field-table", "app-form-field-table--two-column"])
+      expect(presenter.two_column_classes).to eq(["govuk-!-margin-bottom-9", "app-translation-table", "app-translation-table--two-column"])
     end
   end
 
   describe "#three_column_classes" do
     it "returns classes to render a translation table with the three column layout" do
-      expect(presenter.three_column_classes).to eq(["govuk-!-margin-bottom-9", "app-form-field-table"])
+      expect(presenter.three_column_classes).to eq(["govuk-!-margin-bottom-9", "app-translation-table"])
     end
   end
 

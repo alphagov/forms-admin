@@ -1,6 +1,6 @@
 class Forms::TranslationTablePresenter
   def two_column_classes
-    ["govuk-!-margin-bottom-9", "app-form-field-table", "app-form-field-table--two-column"]
+    ["govuk-!-margin-bottom-9", "app-translation-table", "app-translation-table--two-column"]
   end
 
   def two_column_headers
@@ -11,7 +11,7 @@ class Forms::TranslationTablePresenter
   end
 
   def three_column_classes
-    ["govuk-!-margin-bottom-9", "app-form-field-table"]
+    ["govuk-!-margin-bottom-9", "app-translation-table"]
   end
 
   def three_column_headers
