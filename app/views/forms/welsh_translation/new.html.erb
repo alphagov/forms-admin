@@ -21,14 +21,9 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <%= govuk_table(classes: ["govuk-!-margin-bottom-9", "app-form-field-table", "app-form-field-table--two-column"]) do |table| %>
+      <%= govuk_table(classes: @table_presenter.two_column_classes) do |table| %>
         <%= table.with_caption(size: 'm', text: t(".section_headings.form_name"))
-        table.with_head do |head|
-          head.with_row do |row|
-            row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header"))
-            row.with_cell(header: true, text: t("forms.welsh_translation.new.welsh_header"))
-          end
-        end %>
+        table.with_head(**@table_presenter.two_column_headers) %>
 
         <%= table.with_body do |body|
           body.with_row do |row|
@@ -46,15 +41,9 @@
             <%= f.fields_for :page_translations, page_translation, index: index do |page_translation_fields| %>
               <%= page_translation_fields.hidden_field :id, value: page_translation.id, readonly: true %>
 
-              <%= govuk_table(classes: ["govuk-!-margin-bottom-9", "app-form-field-table"]) do |table| %>
+              <%= govuk_table(classes: @table_presenter.three_column_classes) do |table| %>
                 <%= table.with_caption(size: 'm', text: t("forms.welsh_translation.new.question_number", question_number: page_translation.page.position)) %>
-                <%= table.with_head do |head| %>
-                  <%= head.with_row do |row| %>
-                    <%= row.with_cell(header: true, text: nil) %>
-                    <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header")) %>
-                    <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.welsh_header")) %>
-                  <% end %>
-                <% end %>
+                <%= table.with_head(**@table_presenter.three_column_headers) %>
 
                 <%= table.with_body do |body| %>
                   <% if page_translation.page_has_page_heading_and_guidance_markdown? %>
@@ -115,15 +104,9 @@
                   <%= f.fields_for :condition_translations, condition_translation, index: index do |condition_translation_fields| %>
                     <%= condition_translation_fields.hidden_field :id, value: condition_translation.id, readonly: true %>
 
-                    <%= govuk_table(classes: ["govuk-!-margin-bottom-9", "app-form-field-table"]) do |table| %>
+                    <%= govuk_table(classes: @table_presenter.three_column_classes) do |table| %>
                       <%= table.with_caption(size: 's', text: t("forms.welsh_translation.new.condition.heading", question_number: page_translation.page.position)) %>
-                      <%= table.with_head do |head| %>
-                        <%= head.with_row do |row| %>
-                          <%= row.with_cell(header: true, text: nil) %>
-                          <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header")) %>
-                          <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.welsh_header")) %>
-                        <% end %>
-                      <% end %>
+                      <%= table.with_head(**@table_presenter.three_column_headers) %>
 
                       <%= table.with_body do |body| %>
                         <%= body.with_row do |row| %>
@@ -163,14 +146,9 @@
 
       <div class="govuk-!-margin-bottom-9">
         <% if @welsh_translation_input.form_has_declaration? %>
-          <%= govuk_table(classes:["govuk-!-margin-bottom-9", "app-form-field-table", "app-form-field-table--two-column"]) do |table|
-          table.with_caption(size: 'm', text: t(".section_headings.declaration"))
-            table.with_head do |head|
-              head.with_row do |row|
-                row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header"))
-                row.with_cell(header: true, text: t("forms.welsh_translation.new.welsh_header"))
-              end
-            end
+          <%= govuk_table(classes: @table_presenter.two_column_classes) do |table|
+            table.with_caption(size: 'm', text: t(".section_headings.declaration"))
+            table.with_head(**@table_presenter.two_column_headers)
 
             table.with_body do |body|
               body.with_row do |row|
@@ -189,14 +167,9 @@
 
       <div class="govuk-!-margin-bottom-9">
         <% if @welsh_translation_input.form_has_what_happens_next? %>
-          <%= govuk_table(classes:["govuk-!-margin-bottom-9", "app-form-field-table", "app-form-field-table--two-column"]) do |table| %>
+          <%= govuk_table(classes: @table_presenter.two_column_classes) do |table| %>
             <% table.with_caption(size: 'm', text: t(".section_headings.what_happens_next"))%>
-            <%table.with_head do |head|%>
-              <% head.with_row do |row|%>
-                <%  row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header"))%>
-                <%  row.with_cell(header: true, text: t("forms.welsh_translation.new.welsh_header"))%>
-              <% end %>
-            <% end %>
+            <% table.with_head(**@table_presenter.two_column_headers) %>
 
             <% table.with_body do |body|%>
               <%  body.with_row do |row|%>
@@ -217,14 +190,9 @@
 
       <div class="govuk-!-margin-bottom-9">
         <% if @welsh_translation_input.form_has_privacy_information? %>
-          <%= govuk_table(classes:["govuk-!-margin-bottom-9", "app-form-field-table", "app-form-field-table--two-column"]) do |table|
+          <%= govuk_table(classes: @table_presenter.two_column_classes) do |table|
             table.with_caption(size: 'm', text: t(".section_headings.privacy_information"))
-            table.with_head do |head|
-              head.with_row do |row|
-                row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header"))
-                row.with_cell(header: true, text: t("forms.welsh_translation.new.welsh_header"))
-              end
-            end
+            table.with_head(**@table_presenter.two_column_headers)
 
             table.with_body do |body|
               body.with_row do |row|
@@ -242,14 +210,9 @@
       </div>
 
       <% if @welsh_translation_input.form_has_payment_url? %>
-        <%= govuk_table(classes:["govuk-!-margin-bottom-9", "app-form-field-table", "app-form-field-table--two-column"]) do |table|
+        <%= govuk_table(classes: @table_presenter.two_column_classes) do |table|
           table.with_caption(text: t(".section_headings.payment_link"))
-          table.with_head do |head|
-            head.with_row do |row|
-              row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header"))
-              row.with_cell(header: true, text: t("forms.welsh_translation.new.welsh_header"))
-            end
-          end
+          table.with_head(**@table_presenter.two_column_headers)
 
           table.with_body do |body|
             body.with_row do |row|
@@ -264,15 +227,9 @@
 
       <div class="govuk-!-margin-bottom-9">
         <% if @welsh_translation_input.form_has_support_information? %>
-          <%= govuk_table(classes:["govuk-!-margin-bottom-9", "app-form-field-table", "app-form-field-table--two-column"]) do |table|
+          <%= govuk_table(classes: @table_presenter.two_column_classes) do |table|
             table.with_caption(size: 'm', text: t(".section_headings.support_information"))
-            table.with_head do |head|
-              head.with_row do |row|
-                row.with_cell
-                row.with_cell(header: true, text: t("forms.welsh_translation.new.english_header"))
-                row.with_cell(header: true, text: t("forms.welsh_translation.new.welsh_header"))
-              end
-            end
+            table.with_head(**@table_presenter.three_column_headers)
 
             if @welsh_translation_input.form_has_support_email?
               table.with_body do |body|

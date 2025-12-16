@@ -10,6 +10,7 @@ describe "forms/welsh_translation/new.html.erb" do
   let(:welsh_page_translation_input) { Forms::WelshPageTranslationInput.new(id: page.id, condition_translations:).assign_page_values }
   let(:another_welsh_page_translation_input) { Forms::WelshPageTranslationInput.new(id: another_page.id, condition_translations: []).assign_page_values }
   let(:welsh_translation_input) { Forms::WelshTranslationInput.new(form:, page_translations: [welsh_page_translation_input, another_welsh_page_translation_input]).assign_form_values }
+  let(:table_presenter) { Forms::TranslationTablePresenter.new }
   let(:mark_complete) { "true" }
 
   def build_form(attributes = {})
@@ -35,6 +36,7 @@ describe "forms/welsh_translation/new.html.erb" do
 
   before do
     welsh_translation_input.mark_complete = mark_complete
+    assign(:table_presenter, table_presenter)
   end
 
   context "when the form has no errors" do

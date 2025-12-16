@@ -7,6 +7,7 @@ module Forms
       return redirect_to form_path(current_form) unless welsh_enabled?
 
       @welsh_translation_input = WelshTranslationInput.new(form: current_form, page_translations: welsh_page_translation_inputs_from_page).assign_form_values
+      @table_presenter = Forms::TranslationTablePresenter.new
     end
 
     def create
@@ -14,6 +15,7 @@ module Forms
       return redirect_to form_path(current_form) unless welsh_enabled?
 
       @welsh_translation_input = WelshTranslationInput.new(**welsh_translation_input_params, page_translations: welsh_page_translation_inputs_from_params)
+      @table_presenter = Forms::TranslationTablePresenter.new
 
       if @welsh_translation_input.submit
         success_message = if @welsh_translation_input.mark_complete == "true"
