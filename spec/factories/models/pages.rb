@@ -31,7 +31,7 @@ FactoryBot.define do
     trait :with_selection_settings do
       transient do
         only_one_option { "true" }
-        selection_options { [{ name: "Option 1" }, { name: "Option 2" }] }
+        selection_options { [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }] }
       end
 
       question_text { Faker::Lorem.question }
@@ -44,7 +44,7 @@ FactoryBot.define do
       answer_settings do
         {
           only_one_option: "true",
-          selection_options: (1..30).to_a.map { |i| { name: i.to_s } },
+          selection_options: (1..30).to_a.map { |i| { name: i.to_s, value: i.to_s } },
         }
       end
     end
@@ -54,7 +54,7 @@ FactoryBot.define do
       answer_settings do
         {
           only_one_option: "true",
-          selection_options: (1..31).to_a.map { |i| { name: i.to_s } },
+          selection_options: (1..31).to_a.map { |i| { name: i.to_s, value: i.to_s } },
         }
       end
     end
@@ -64,7 +64,7 @@ FactoryBot.define do
       answer_settings do
         {
           only_one_option: "false",
-          selection_options: [{ name: "Option 1" }, { name: "Option 2" }],
+          selection_options: [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }],
         }
       end
     end

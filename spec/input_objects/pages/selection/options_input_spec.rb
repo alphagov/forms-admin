@@ -169,7 +169,7 @@ RSpec.describe Pages::Selection::OptionsInput do
     it "sets draft_question answer_settings and is_optional" do
       input.submit
 
-      expect(input.draft_question.answer_settings).to include(selection_options:)
+      expect(input.draft_question.answer_settings).to include(selection_options: [{ name: "option 1", value: "option 1" }, { name: "option 2", value: "option 2" }])
     end
 
     it "sets draft_question is_optional" do
@@ -197,7 +197,7 @@ RSpec.describe Pages::Selection::OptionsInput do
       end
 
       it "does not overwrite other answer_settings" do
-        expect(draft_question.answer_settings).to include({ selection_options:, foo: "bar" })
+        expect(draft_question.answer_settings).to include({ selection_options: [{ name: "option 1", value: "option 1" }, { name: "option 2", value: "option 2" }], foo: "bar" })
       end
     end
   end

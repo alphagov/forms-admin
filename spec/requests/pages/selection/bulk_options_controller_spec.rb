@@ -90,7 +90,7 @@ describe Pages::Selection::BulkOptionsController, type: :request do
           draft_question_settings = settings_form.draft_question.answer_settings
 
           expect(draft_question_settings).to include(only_one_option: "true",
-                                                     selection_options: [{ name: "Option 1" }, { name: "Option 2" }])
+                                                     selection_options: [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }])
           expect(settings_form.draft_question.is_optional).to be true
         end
 
@@ -124,7 +124,7 @@ describe Pages::Selection::BulkOptionsController, type: :request do
   describe "#edit" do
     let(:page) { create :page, :with_selection_settings, form:, answer_settings: }
     let(:answer_settings) { { selection_options: } }
-    let(:selection_options) { [{ name: "Option 1" }, { name: "Option 2" }] }
+    let(:selection_options) { [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }] }
     let(:page_id) { page.id }
 
     before do
@@ -187,7 +187,7 @@ describe Pages::Selection::BulkOptionsController, type: :request do
           settings_form = assigns(:bulk_options_input)
           draft_question_settings = settings_form.draft_question.answer_settings
 
-          new_settings = { only_one_option: "true", selection_options: [{ name: "Option 1" }, { name: "New option 2" }] }
+          new_settings = { only_one_option: "true", selection_options: [{ name: "Option 1", value: "Option 1" }, { name: "New option 2", value: "New option 2" }] }
           expect(draft_question_settings).to eq new_settings
         end
 
