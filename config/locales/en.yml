@@ -774,7 +774,8 @@ en:
         name: You do not need to include a title or any middle names.
       account_organisation_input:
         organisation_id: Currently, GOV.UK Forms is only available for central government organisations that publish content on the GOV.UK website.
-      copy: The form name will be shown at the top of each page of the form. Use a name that describes what the form will help people to do. For example ‘Apply for a juggling licence’.
+      forms_copy_input:
+        name: The form name will be shown at the top of each page of the form. Use a name that describes what the form will help people to do. For example ‘Apply for a juggling licence’.
       page:
         answer_type: The answer will be checked to make sure it’s in the selected format.
         guidance:
@@ -840,7 +841,8 @@ en:
       account_terms_of_use_input:
         agreed_options:
           '1': I agree to these terms
-      copy: What is the name of your form?
+      forms_copy_input:
+        name: What is the name of your form?
       forms_make_changes_live:
         confirm: Are you sure you want to make your draft live?
       forms_make_live_input:
