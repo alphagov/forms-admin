@@ -13,6 +13,7 @@ class FormPolicy
   end
 
   alias_method :can_edit_form?, :can_view_form?
+  alias_method :copy?, :can_view_form?
   alias_method :delete?, :can_edit_form?
   alias_method :destroy?, :delete?
 

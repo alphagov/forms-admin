@@ -1,0 +1,9 @@
+---
+en:
+  activemodel:
+    errors:
+      models:
+        forms/copy_input:
+          attributes:
+            tag:
+              inclusion: '"%{value}" is not a valid tag'

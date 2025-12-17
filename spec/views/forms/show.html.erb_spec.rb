@@ -32,6 +32,10 @@ describe "forms/show.html.erb" do
     expect(rendered).to have_link("Delete draft form", href: delete_form_path(form.id))
   end
 
+  it "contains a link to make a copy of the form" do
+    expect(rendered).to have_link("Make a copy of this form")
+  end
+
   it "contains a summary of completed tasks out of the total tasks" do
     expect(rendered).to have_selector(".app-task-list__summary", text: "You’ve completed 12 of 20 tasks.")
   end
@@ -42,6 +46,10 @@ describe "forms/show.html.erb" do
 
   it "has a back link to the group page" do
     expect(view.content_for(:back_link)).to have_link("Back to Group 1", href: group_path(group))
+  end
+
+  it "has a button to copy the form" do
+    expect(rendered).to have_link("Make a copy of this form", href: copy_form_path(form.id, "draft"))
   end
 
   context "when a form is not in a group" do
@@ -86,6 +94,10 @@ describe "forms/show.html.erb" do
     it "contains a link to delete the draft form" do
       expect(rendered).to have_link("Delete draft form", href: delete_form_path(form.id))
     end
+
+    it "contains a link to make a copy of the form" do
+      expect(rendered).to have_link("Make a copy of this form")
+    end
   end
 
   context "when form state is archived" do
@@ -113,6 +125,10 @@ describe "forms/show.html.erb" do
 
     it "contains a link to delete the form" do
       expect(rendered).to have_link("Delete draft form", href: delete_form_path(form.id))
+    end
+
+    it "contains a link to make a copy of the form" do
+      expect(rendered).to have_link("Make a copy of this form")
     end
   end
 end

@@ -23,6 +23,9 @@ Rails.application.routes.draw do
     get "/change-name" => "forms/change_name#edit", as: :change_form_name
     post "/change-name" => "forms/change_name#update"
 
+    get "/copy/:tag" => "forms/copy#copy", as: :copy_form
+    post "/copy" => "forms/copy#create", as: :create_copy_form
+
     scope "/live" do
       get "/" => "forms/live#show_form", as: :live_form
       get "/pages" => "forms/live#show_pages", as: :live_form_pages
