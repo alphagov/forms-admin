@@ -29,7 +29,7 @@
           body.with_row do |row|
             row.with_cell(text: @welsh_translation_input.form.name, classes: "govuk-!-text-break-word")
             row.with_cell do
-              f.govuk_text_field :name_cy
+              f.govuk_text_field :name_cy, lang: "cy"
             end
           end
         end %>
@@ -53,7 +53,8 @@
                       <%= row.with_cell do |cell| %>
                         <%= page_translation_fields.govuk_text_field :page_heading_cy,
                                                                  id: page_translation.form_field_id(:page_heading_cy),
-                                                                 label: { text: t("helpers.label.forms_welsh_page_translation_input.page_heading_cy_html", question_number: page_translation.page.position), for: page_translation.form_field_id(:page_heading_cy) }
+                                                                 label: { text: t("helpers.label.forms_welsh_page_translation_input.page_heading_cy_html", question_number: page_translation.page.position), for: page_translation.form_field_id(:page_heading_cy) },
+                                                                 lang: "cy"
                                                                  %>
                       <% end %>
                     <% end %>
@@ -65,7 +66,8 @@
                       <%= row.with_cell do |cell| %>
                         <%= page_translation_fields.govuk_text_area :guidance_markdown_cy,
                                                                 id: page_translation.form_field_id(:guidance_markdown_cy),
-                                                                label: { text: t("helpers.label.forms_welsh_page_translation_input.guidance_markdown_cy_html", question_number: page_translation.page.position), for: page_translation.form_field_id(:guidance_markdown_cy) }
+                                                                label: { text: t("helpers.label.forms_welsh_page_translation_input.guidance_markdown_cy_html", question_number: page_translation.page.position), for: page_translation.form_field_id(:guidance_markdown_cy) },
+                                                                lang: "cy"
                                                                 %>
                       <% end %>
                     <% end %>
@@ -76,7 +78,8 @@
                     <%= row.with_cell do |cell| %>
                       <%= page_translation_fields.govuk_text_field :question_text_cy,
                                                                id: page_translation.form_field_id(:question_text_cy),
-                                                               label: { text: t("helpers.label.forms_welsh_page_translation_input.question_text_cy_html", question_number: page_translation.page.position), for: page_translation.form_field_id(:question_text_cy) }
+                                                               label: { text: t("helpers.label.forms_welsh_page_translation_input.question_text_cy_html", question_number: page_translation.page.position), for: page_translation.form_field_id(:question_text_cy) },
+                                                               lang: "cy"
                                                                %>
                     <% end %>
                   <% end %>
@@ -87,7 +90,8 @@
                       <%= row.with_cell do |cell| %>
                         <%= page_translation_fields.govuk_text_area :hint_text_cy,
                                                                 id: page_translation.form_field_id(:hint_text_cy),
-                                                                label: { text: t("helpers.label.forms_welsh_page_translation_input.hint_text_cy_html", question_number: page_translation.page.position), for: page_translation.form_field_id(:hint_text_cy) }
+                                                                label: { text: t("helpers.label.forms_welsh_page_translation_input.hint_text_cy_html", question_number: page_translation.page.position), for: page_translation.form_field_id(:hint_text_cy) },
+                                                                lang: "cy"
                                                                 %>
                       <% end %>
                     <% end %>
@@ -115,7 +119,8 @@
                           <%= row.with_cell do |cell| %>
                             <%= condition_translation_fields.govuk_text_field :exit_page_heading_cy,
                                                                id: condition_translation.form_field_id(:exit_page_heading_cy),
-                                                               label: { text: t("helpers.label.forms_welsh_condition_translation_input.exit_page_heading_cy_html", question_number: page_translation.page.position), for: condition_translation.form_field_id(:exit_page_heading_cy) }
+                                                               label: { text: t("helpers.label.forms_welsh_condition_translation_input.exit_page_heading_cy_html", question_number: page_translation.page.position), for: condition_translation.form_field_id(:exit_page_heading_cy) },
+                                                               lang: "cy"
                                                                %>
                           <% end %>
                         <% end %>
@@ -127,7 +132,8 @@
                           <%= row.with_cell do |cell| %>
                             <%= condition_translation_fields.govuk_text_area :exit_page_markdown_cy,
                                                                id: condition_translation.form_field_id(:exit_page_markdown_cy),
-                                                               label: { text: t("helpers.label.forms_welsh_condition_translation_input.exit_page_markdown_cy_html", question_number: page_translation.page.position), for: condition_translation.form_field_id(:exit_page_markdown_cy) }
+                                                               label: { text: t("helpers.label.forms_welsh_condition_translation_input.exit_page_markdown_cy_html", question_number: page_translation.page.position), for: condition_translation.form_field_id(:exit_page_markdown_cy) },
+                                                               lang: "cy"
                                                                %>
                           <% end %>
                         <% end %>
@@ -154,7 +160,7 @@
               body.with_row do |row|
                 row.with_cell(text: @welsh_translation_input.form.declaration_text, classes: "govuk-!-text-break-word")
                 row.with_cell do
-                  f.govuk_text_area :declaration_text_cy
+                  f.govuk_text_area :declaration_text_cy, lang: "cy"
                 end
               end
             end
@@ -177,7 +183,7 @@
                   <pre class="app-translation-table__markdown-preview"><%= @welsh_translation_input.form.what_happens_next_markdown %></pre>
                 <%end %>
                 <% row.with_cell do %>
-                  <%= f.govuk_text_area :what_happens_next_markdown_cy %>
+                  <%= f.govuk_text_area :what_happens_next_markdown_cy, lang: "cy" %>
                 <% end %>
               <% end %>
             <% end %>
@@ -198,7 +204,7 @@
               body.with_row do |row|
                 row.with_cell(text: @welsh_translation_input.form.privacy_policy_url, classes: "govuk-!-text-break-word")
                 row.with_cell do
-                  f.govuk_text_field :privacy_policy_url_cy
+                  f.govuk_text_field :privacy_policy_url_cy, lang: "cy"
                 end
               end
             end
@@ -218,7 +224,7 @@
             body.with_row do |row|
               row.with_cell(text: @welsh_translation_input.form.payment_url, classes: "govuk-!-text-break-word")
               row.with_cell do
-                f.govuk_text_field :payment_url_cy
+                f.govuk_text_field :payment_url_cy, lang: "cy"
               end
             end
           end
@@ -237,7 +243,7 @@
                   row.with_cell(header: true, text: t("forms.welsh_translation.new.support_email"))
                   row.with_cell(text: @welsh_translation_input.form.support_email, classes: "govuk-!-text-break-word")
                   row.with_cell do
-                    f.govuk_text_field :support_email_cy
+                    f.govuk_text_field :support_email_cy, lang: "cy"
                   end
                 end
 
@@ -246,7 +252,7 @@
                     row.with_cell(header: true, text: t("forms.welsh_translation.new.support_phone"))
                     row.with_cell(text: @welsh_translation_input.form.support_phone, classes: "govuk-!-text-break-word")
                     row.with_cell do
-                      f.govuk_text_area :support_phone_cy
+                      f.govuk_text_area :support_phone_cy, lang: "cy"
                     end
                   end
                 end
@@ -256,7 +262,7 @@
                     row.with_cell(header: true, text: t("forms.welsh_translation.new.support_url_text"))
                     row.with_cell(text: @welsh_translation_input.form.support_url_text, classes: "govuk-!-text-break-word")
                     row.with_cell do
-                      f.govuk_text_field :support_url_text_cy
+                      f.govuk_text_field :support_url_text_cy, lang: "cy"
                     end
                   end
 
@@ -264,7 +270,7 @@
                     row.with_cell(header: true, text: t("forms.welsh_translation.new.support_url"))
                     row.with_cell(text: @welsh_translation_input.form.support_url, classes: "govuk-!-text-break-word")
                     row.with_cell do
-                      f.govuk_text_field :support_url_cy
+                      f.govuk_text_field :support_url_cy, lang: "cy"
                     end
                   end
                 end

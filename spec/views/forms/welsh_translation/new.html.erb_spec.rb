@@ -118,6 +118,14 @@ describe "forms/welsh_translation/new.html.erb" do
       expect(rendered).to have_button("Save and continue")
     end
 
+    it "renders all of the translation form fields with the welsh lang attribute" do
+      form_fields = Capybara.string(rendered).find_all(".app-translation-table .govuk-form-group")
+
+      expect(form_fields).not_to be_empty
+
+      expect(form_fields).to all(have_css("[lang='cy']"))
+    end
+
     context "when the form does not have a declaration text" do
       let(:form) { build_form(declaration_text: nil) }
 
