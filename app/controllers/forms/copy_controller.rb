@@ -13,6 +13,8 @@ module Forms
                current_form
              end
 
+      set_back_link(form)
+
       @copy_input = Forms::CopyInput.new(form: form, tag: tag).assign_form_values
 
       render :confirm
@@ -27,6 +29,7 @@ module Forms
         copied_form.update!(name: @copy_input.name)
         redirect_to form_path(copied_form.id), success: t("banner.success.form.copied")
       else
+        set_back_link(current_form)
         render :confirm
       end
     end
@@ -41,6 +44,16 @@ module Forms
       return "draft" if params[:tag].blank?
 
       params[:tag]
+    end
+
+    def set_back_link(form)
+      @back_link = if tag == "live"
+                     { url: live_form_path(form.id), body: I18n.t("back_link.form_view") }
+                   elsif tag == "archived"
+                     { url: archived_form_path(form.id), body: I18n.t("back_link.form_view") }
+                   else
+                     { url: form_path(form.id), body: I18n.t("back_link.form_edit") }
+                   end
     end
   end
 end

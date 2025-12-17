@@ -24,6 +24,33 @@ RSpec.describe Forms::CopyController, type: :request do
     it "renders copy template" do
       expect(response).to render_template(:confirm)
     end
+
+    describe "#set_back_link" do
+      context "when copying a draft form" do
+        it "sets the back link to the draft form edit page" do
+          get copy_form_path(id, "draft")
+          expect(assigns(:back_link)).to eq({ url: form_path(form.id), body: I18n.t("back_link.form_edit") })
+        end
+      end
+
+      context "when copying a live form" do
+        let(:form) { create(:form, :live) }
+
+        it "sets the back link to the live form view page" do
+          get copy_form_path(id, "live")
+          expect(assigns(:back_link)).to eq({ url: live_form_path(form.id), body: I18n.t("back_link.form_view") })
+        end
+      end
+
+      context "when copying an archived form" do
+        let(:form) { create(:form, :archived) }
+
+        it "sets the back link to the archived form view page" do
+          get copy_form_path(id, "archived")
+          expect(assigns(:back_link)).to eq({ url: archived_form_path(form.id), body: I18n.t("back_link.form_view") })
+        end
+      end
+    end
   end
 
   describe "#create" do
