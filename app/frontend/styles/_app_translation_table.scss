@@ -1,6 +1,7 @@
 .app-translation-table {
   height: 100%;
   table-layout: fixed;
+  min-width: govuk-px-to-rem(450);
 }
 
 .app-translation-table .table__row {
