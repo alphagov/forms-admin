@@ -29,7 +29,8 @@
   field-sizing: content;
 }
 
-.app-translation-table .govuk-table__header[scope="row"] {
+.app-translation-table .govuk-table__header[scope="row"],
+.app-translation-table__empty-header-cell {
   width: 25%;
 }
 
