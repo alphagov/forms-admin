@@ -2,10 +2,11 @@
 
 module PreviewLinkComponent
   class View < ApplicationComponent
-    def initialize(pages, link)
+    def initialize(pages, link_url, link_text = nil)
       super()
       @pages = pages
-      @link = link
+      @link_url = link_url
+      @link_text = link_text
     end
 
     def render?

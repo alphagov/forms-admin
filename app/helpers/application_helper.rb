@@ -25,10 +25,16 @@ module ApplicationHelper
     )
   end
 
-  def link_to_runner(runner_url, form_id, form_slug, mode: :preview_draft)
+  def link_to_runner(runner_url, form_id, form_slug, mode: :preview_draft, locale: :en)
     modes = { preview_draft: "preview-draft", live: "form", preview_live: "preview-live", preview_archived: "preview-archived" }
     mode_segment = modes.fetch(mode, "preview-draft")
-    "#{runner_url}/#{mode_segment}/#{form_id}/#{form_slug}"
+    locale_segment = locale == :en ? "" : ".#{locale}"
+
+    "#{runner_url}/#{mode_segment}/#{form_id}/#{form_slug}#{locale_segment}"
+  end
+
+  def preview_link(form, mode: :preview_draft, locale: :en)
+    link_to_runner(Settings.forms_runner.url, form.id, form.form_slug, mode:, locale:)
   end
 
   def contact_url

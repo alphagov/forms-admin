@@ -26,11 +26,11 @@ en:
               blank: Enter the phone number and opening times for support in Welsh
               too_long: The phone information for support cannot be longer than 500 characters
             support_url_cy:
-              blank: Enter an online contact link for support
+              blank: Enter an online contact link for Welsh support
               too_long: The link for support cannot be longer than 120 characters
               url: Enter a link for support in the correct format, like https://www.gov.uk/contact
             support_url_text_cy:
-              blank: Enter text to describe the contact link for support
+              blank: Enter text to describe the contact link for Welsh support
               too_long: The text to describe the contact link for support cannot be longer than 120 characters
             what_happens_next_markdown_cy:
               blank: Enter information about what happens next in Welsh
@@ -39,12 +39,12 @@ en:
   helpers:
     label:
       forms_welsh_translation_input:
-        declaration_text_cy: Declaration text (Welsh)
-        name_cy: Form name (Welsh)
-        payment_url_cy: Payment URL (Welsh)
-        privacy_policy_url_cy: Privacy policy URL (Welsh)
-        support_email_cy: Support email (Welsh)
-        support_phone_cy: Support phone (Welsh)
-        support_url_cy: Support URL (Welsh)
-        support_url_text_cy: Support URL text (Welsh)
-        what_happens_next_markdown_cy: What happens next (Welsh)
+        declaration_text_cy: Enter your Welsh declaration
+        name_cy: Enter your Welsh form name
+        payment_url_cy: Enter Welsh GOV.UK Pay payment link
+        privacy_policy_url_cy: Enter link to your Welsh privacy information
+        support_email_cy: Enter email address for Welsh support
+        support_phone_cy: Enter phone information for Welsh support
+        support_url_cy: Enter an online contact link for Welsh support
+        support_url_text_cy: Enter text to describe the contact link for Welsh support
+        what_happens_next_markdown_cy: Enter information about what happens next in Welsh
