@@ -18,6 +18,10 @@ RSpec.describe FormCopyService do
       expect(copied_form.id).not_to eq(source_form.id)
     end
 
+    it "has a reference to the original form" do
+      expect(copied_form.copied_from_id).to eq(source_form.id)
+    end
+
     it "copies and updates the name of the copy" do
       expect(copied_form.name).to eq("Copy of #{source_form.name}")
     end

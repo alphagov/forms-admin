@@ -10,150 +10,151 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_27_114216) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_18_113120) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "condition_translations", force: :cascade do |t|
     t.string "answer_value"
-    t.text "exit_page_markdown"
-    t.text "exit_page_heading"
-    t.string "locale", null: false
     t.bigint "condition_id", null: false
     t.datetime "created_at", null: false
+    t.text "exit_page_heading"
+    t.text "exit_page_markdown"
+    t.string "locale", null: false
     t.datetime "updated_at", null: false
     t.index ["condition_id", "locale"], name: "index_condition_translations_on_condition_id_and_locale", unique: true
     t.index ["locale"], name: "index_condition_translations_on_locale"
   end
 
   create_table "conditions", force: :cascade do |t|
-    t.bigint "check_page_id", comment: "The question page this condition looks at to compare answers"
-    t.bigint "routing_page_id", comment: "The question page at which this conditional route takes place"
-    t.bigint "goto_page_id", comment: "The question page which this conditions will skip forwards to"
     t.string "answer_value"
+    t.bigint "check_page_id", comment: "The question page this condition looks at to compare answers"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "skip_to_end", default: false
-    t.text "exit_page_markdown", comment: "When not nil this condition should be treated as an exit page. When set it contains the markdown for the body of the exit page"
     t.text "exit_page_heading", comment: "Text for the heading of the exit page"
+    t.text "exit_page_markdown", comment: "When not nil this condition should be treated as an exit page. When set it contains the markdown for the body of the exit page"
+    t.bigint "goto_page_id", comment: "The question page which this conditions will skip forwards to"
+    t.bigint "routing_page_id", comment: "The question page at which this conditional route takes place"
+    t.boolean "skip_to_end", default: false
+    t.datetime "updated_at", null: false
     t.index ["check_page_id"], name: "index_conditions_on_check_page_id"
     t.index ["goto_page_id"], name: "index_conditions_on_goto_page_id"
     t.index ["routing_page_id"], name: "index_conditions_on_routing_page_id"
   end
 
   create_table "create_form_events", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "group_id", null: false
-    t.string "form_name", null: false
-    t.bigint "form_id"
-    t.integer "dedup_version"
     t.datetime "created_at", null: false
+    t.integer "dedup_version"
+    t.bigint "form_id"
+    t.string "form_name", null: false
+    t.bigint "group_id", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["group_id", "form_name", "dedup_version"], name: "idx_on_group_id_form_name_dedup_version_9b12b4ae60", unique: true
     t.index ["group_id"], name: "index_create_form_events_on_group_id"
     t.index ["user_id"], name: "index_create_form_events_on_user_id"
   end
 
   create_table "draft_questions", force: :cascade do |t|
-    t.integer "form_id"
-    t.bigint "user_id", null: false
-    t.integer "page_id"
+    t.jsonb "answer_settings", default: {}
     t.text "answer_type"
-    t.text "question_text"
+    t.datetime "created_at", null: false
+    t.integer "form_id"
+    t.text "guidance_markdown"
     t.text "hint_text"
     t.boolean "is_optional"
-    t.text "page_heading"
-    t.text "guidance_markdown"
-    t.jsonb "answer_settings", default: {}
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.boolean "is_repeatable"
+    t.text "page_heading"
+    t.integer "page_id"
+    t.text "question_text"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["form_id"], name: "index_draft_questions_on_form_id"
     t.index ["user_id"], name: "index_draft_questions_on_user_id"
   end
 
   create_table "form_documents", force: :cascade do |t|
-    t.bigint "form_id", comment: "The form this document belongs to"
-    t.text "tag", null: false, comment: "The tag for the form, for example: 'live' or 'draft'"
     t.jsonb "content", comment: "The JSON which describes the form"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.bigint "form_id", comment: "The form this document belongs to"
     t.string "language", default: "en", null: false
+    t.text "tag", null: false, comment: "The tag for the form, for example: 'live' or 'draft'"
+    t.datetime "updated_at", null: false
     t.index ["form_id", "tag", "language"], name: "index_form_documents_on_form_id_tag_and_language", unique: true
     t.index ["form_id"], name: "index_form_documents_on_form_id"
   end
 
   create_table "form_submission_emails", force: :cascade do |t|
+    t.string "confirmation_code"
+    t.datetime "created_at", null: false
+    t.string "created_by_email"
+    t.string "created_by_name"
     t.integer "form_id"
     t.string "temporary_submission_email"
-    t.string "confirmation_code"
-    t.string "created_by_name"
-    t.string "created_by_email"
-    t.string "updated_by_name"
-    t.string "updated_by_email"
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "updated_by_email"
+    t.string "updated_by_name"
     t.index ["form_id"], name: "index_form_submission_emails_on_form_id"
   end
 
   create_table "form_translations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "declaration_text"
+    t.bigint "form_id", null: false
+    t.string "locale", null: false
     t.text "name"
+    t.string "payment_url"
     t.text "privacy_policy_url"
     t.text "support_email"
     t.text "support_phone"
     t.text "support_url"
     t.text "support_url_text"
-    t.text "declaration_text"
-    t.text "what_happens_next_markdown"
-    t.string "payment_url"
-    t.string "locale", null: false
-    t.bigint "form_id", null: false
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "what_happens_next_markdown"
     t.index ["form_id", "locale"], name: "index_form_translations_on_form_id_and_locale", unique: true
     t.index ["locale"], name: "index_form_translations_on_locale"
   end
 
   create_table "forms", force: :cascade do |t|
-    t.text "name"
-    t.text "submission_email"
-    t.text "privacy_policy_url"
+    t.text "available_languages", default: ["en"], null: false, array: true
+    t.integer "copied_from_id"
+    t.datetime "created_at", null: false
+    t.bigint "creator_id"
+    t.boolean "declaration_section_completed", default: false
+    t.text "declaration_text"
+    t.string "external_id"
+    t.datetime "first_made_live_at"
     t.text "form_slug"
+    t.string "language", default: "en", null: false
+    t.text "name"
+    t.string "payment_url"
+    t.text "privacy_policy_url"
+    t.boolean "question_section_completed", default: false
+    t.string "s3_bucket_aws_account_id"
+    t.string "s3_bucket_name"
+    t.string "s3_bucket_region"
+    t.boolean "share_preview_completed", default: false, null: false
+    t.string "state"
+    t.text "submission_email"
+    t.string "submission_format", default: [], null: false, array: true
+    t.string "submission_type", default: "email", null: false
     t.text "support_email"
     t.text "support_phone"
     t.text "support_url"
     t.text "support_url_text"
-    t.text "declaration_text"
-    t.boolean "question_section_completed", default: false
-    t.boolean "declaration_section_completed", default: false
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "creator_id"
-    t.text "what_happens_next_markdown"
-    t.string "state"
-    t.string "payment_url"
-    t.string "external_id"
-    t.string "submission_type", default: "email", null: false
-    t.boolean "share_preview_completed", default: false, null: false
-    t.string "s3_bucket_name"
-    t.string "s3_bucket_aws_account_id"
-    t.string "s3_bucket_region"
-    t.string "language", default: "en", null: false
-    t.text "available_languages", default: ["en"], null: false, array: true
     t.boolean "welsh_completed", default: false
-    t.string "submission_format", default: [], null: false, array: true
-    t.datetime "first_made_live_at"
+    t.text "what_happens_next_markdown"
     t.index ["external_id"], name: "index_forms_on_external_id", unique: true
   end
 
   create_table "groups", force: :cascade do |t|
-    t.string "name"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.bigint "creator_id"
     t.text "external_id", null: false
+    t.string "name"
     t.bigint "organisation_id"
     t.string "status", default: "trial"
-    t.bigint "creator_id"
+    t.datetime "updated_at", null: false
     t.bigint "upgrade_requester_id"
     t.boolean "welsh_enabled", default: false
     t.index ["creator_id"], name: "index_groups_on_creator_id"
@@ -171,21 +172,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_27_114216) do
   end
 
   create_table "memberships", force: :cascade do |t|
-    t.bigint "user_id", null: false, comment: "The user who is a member of the group"
-    t.bigint "group_id", null: false, comment: "The group that the user is a member of"
     t.bigint "added_by_id", null: false, comment: "The user who created the membership"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.bigint "group_id", null: false, comment: "The group that the user is a member of"
     t.string "role", default: "editor"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false, comment: "The user who is a member of the group"
     t.index ["added_by_id"], name: "index_memberships_on_added_by_id"
     t.index ["user_id", "group_id"], name: "index_memberships_on_user_id_and_group_id", unique: true, comment: "Ensure that a user can only be a member of a group once"
   end
 
   create_table "mou_signatures", comment: "User signatures of a memorandum of understanding (MOU) for an organisation", force: :cascade do |t|
-    t.bigint "user_id", null: false, comment: "User who signed MOU"
-    t.bigint "organisation_id", comment: "Organisation which user signed MOU on behalf of, or null"
     t.datetime "created_at", null: false
+    t.bigint "organisation_id", comment: "Organisation which user signed MOU on behalf of, or null"
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false, comment: "User who signed MOU"
     t.index ["organisation_id"], name: "index_mou_signatures_on_organisation_id"
     t.index ["user_id", "organisation_id"], name: "index_mou_signatures_on_user_id_and_organisation_id", unique: true, comment: "Users can only sign an MOU for an Organisation once"
     t.index ["user_id"], name: "index_mou_signatures_on_user_id"
@@ -193,46 +194,46 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_27_114216) do
   end
 
   create_table "organisations", force: :cascade do |t|
-    t.string "govuk_content_id"
-    t.string "slug", null: false
-    t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "closed", default: false
     t.string "abbreviation"
+    t.boolean "closed", default: false
+    t.datetime "created_at", null: false
+    t.string "govuk_content_id"
     t.boolean "internal", default: false
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.datetime "updated_at", null: false
     t.index ["govuk_content_id"], name: "index_organisations_on_govuk_content_id", unique: true
     t.index ["slug"], name: "index_organisations_on_slug", unique: true
   end
 
   create_table "page_translations", force: :cascade do |t|
-    t.text "question_text"
-    t.text "hint_text"
     t.jsonb "answer_settings"
-    t.text "page_heading"
-    t.text "guidance_markdown"
-    t.string "locale", null: false
-    t.bigint "page_id", null: false
     t.datetime "created_at", null: false
+    t.text "guidance_markdown"
+    t.text "hint_text"
+    t.string "locale", null: false
+    t.text "page_heading"
+    t.bigint "page_id", null: false
+    t.text "question_text"
     t.datetime "updated_at", null: false
     t.index ["locale"], name: "index_page_translations_on_locale"
     t.index ["page_id", "locale"], name: "index_page_translations_on_page_id_and_locale", unique: true
   end
 
   create_table "pages", force: :cascade do |t|
-    t.text "question_text"
-    t.text "hint_text"
-    t.text "answer_type"
-    t.boolean "is_optional", null: false
     t.jsonb "answer_settings"
+    t.text "answer_type"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "form_id"
-    t.integer "position"
-    t.text "page_heading"
-    t.text "guidance_markdown"
-    t.boolean "is_repeatable", default: false, null: false
     t.string "external_id", null: false
+    t.bigint "form_id"
+    t.text "guidance_markdown"
+    t.text "hint_text"
+    t.boolean "is_optional", null: false
+    t.boolean "is_repeatable", default: false, null: false
+    t.text "page_heading"
+    t.integer "position"
+    t.text "question_text"
+    t.datetime "updated_at", null: false
     t.index ["external_id"], name: "index_pages_on_external_id", unique: true
     t.index ["form_id"], name: "index_pages_on_form_id"
   end
@@ -242,24 +243,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_27_114216) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.string "uid"
-    t.string "organisation_slug"
-    t.string "organisation_content_id"
     t.string "app_name"
-    t.text "permissions"
-    t.boolean "remotely_signed_out", default: false
-    t.boolean "disabled", default: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "role", default: "standard"
-    t.bigint "organisation_id"
+    t.boolean "disabled", default: false
+    t.string "email"
     t.boolean "has_access", default: true
-    t.string "provider"
-    t.datetime "terms_agreed_at"
     t.datetime "last_signed_in_at"
+    t.string "name"
+    t.string "organisation_content_id"
+    t.bigint "organisation_id"
+    t.string "organisation_slug"
+    t.text "permissions"
+    t.string "provider"
+    t.boolean "remotely_signed_out", default: false
     t.string "research_contact_status", default: "to_be_asked"
+    t.string "role", default: "standard"
+    t.datetime "terms_agreed_at"
+    t.string "uid"
+    t.datetime "updated_at", null: false
     t.datetime "user_research_opted_in_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
@@ -267,13 +268,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_27_114216) do
   end
 
   create_table "versions", force: :cascade do |t|
-    t.string "item_type", null: false
-    t.bigint "item_id", null: false
-    t.string "event", null: false
-    t.string "whodunnit"
-    t.jsonb "object"
     t.datetime "created_at"
+    t.string "event", null: false
+    t.bigint "item_id", null: false
+    t.string "item_type", null: false
+    t.jsonb "object"
     t.jsonb "object_changes"
+    t.string "whodunnit"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
