@@ -127,7 +127,7 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
 
   # create some test groups
   end_to_end_group = Group.create! name: "End to end tests", organisation: gds, status: :active
-  test_group = Group.create! name: "Test Group", organisation: gds, creator: default_user
+  test_group = Group.create! name: "Test Group", organisation: gds, creator: default_user, status: :active
   Group.create! name: "Ministry of Tests forms", organisation: mot_org
   Group.create! name: "Ministry of Tests forms - secret!", organisation: mot_org, creator: mot_user
   welsh_group = Group.create! name: "Welsh enabled", organisation: gds, welsh_enabled: true
