@@ -24,6 +24,8 @@ class FormCopyService
       copy_routing_conditions(content["steps"])
       copy_group
 
+      @copied_form.copied_from_id = @form.id
+
       @copied_form.save!
     rescue ActiveRecord::RecordInvalid => e
       Rails.logger.error("Failed to copy form #{@form.id}: #{e.message}")
