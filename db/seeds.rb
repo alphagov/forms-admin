@@ -346,6 +346,38 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
   )
   branch_route_form.reload.make_live!
 
+  none_of_the_above_form = Form.create!(
+    name: "None of the above form",
+    pages: [
+      Page.create(
+        question_text: "Which option do you want",
+        answer_type: "selection",
+        answer_settings: {
+          only_one_option: "true",
+          selection_options: [
+            { "name": "The first option", value: "The first option" },
+            { "name": "The second option", value: "The second option" },
+          ],
+          none_of_the_above_question: {
+            question_text: "What other option could you possibly want?",
+            is_optional: "true",
+          },
+        },
+        is_optional: true,
+      ),
+    ],
+    question_section_completed: true,
+    declaration_text: "",
+    declaration_section_completed: true,
+    privacy_policy_url: "https://www.gov.uk/help/privacy-notice",
+    submission_email:,
+    support_email: "your.email+fakedata84701@gmail.com.gov.uk",
+    support_phone: "08000800",
+    what_happens_next_markdown: "Test",
+    share_preview_completed: true,
+  )
+  none_of_the_above_form.make_live!
+
   welsh_form = Form.create!(
     name: "A Welsh form",
     name_cy: "Ffurflen Gymraeg",
@@ -416,5 +448,6 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
   GroupForm.create! group: end_to_end_group, form_id: all_question_types_form.id # All question types form
   GroupForm.create! group: end_to_end_group, form_id: e2e_s3_forms.id # s3 submission test form
   GroupForm.create! group: test_group, form_id: branch_route_form.id # Branch routing form
+  GroupForm.create! group: test_group, form_id: none_of_the_above_form.id # None of the above form
   GroupForm.create! group: welsh_group, form_id: welsh_form.id # Welsh form
 end
