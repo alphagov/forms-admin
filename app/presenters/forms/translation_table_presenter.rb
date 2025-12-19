@@ -16,7 +16,7 @@ class Forms::TranslationTablePresenter
 
   def three_column_headers
     { rows: [[
-      { header: true, text: nil },
+      { header: true, text: nil, classes: "app-translation-table__empty-header-cell" },
       { header: true, text: I18n.t("forms.welsh_translation.new.english_header") },
       { header: true, text: I18n.t("forms.welsh_translation.new.welsh_header") },
     ]] }
