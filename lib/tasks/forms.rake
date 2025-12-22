@@ -121,7 +121,48 @@ namespace :forms do
       end
     end
 
+    Page.where(answer_type: "selection").find_each do |page|
+      page.answer_settings["selection_options"].each do |option|
+        option["value"] = option["name"]
+      end
+
+      begin
+        page.save!
+      rescue StandardError => e
+        Rails.logger.info "data_migrations:add_value_to_selection_options Failed to update page #{page.id}: #{e.message}"
+      end
+    end
+
+    DraftQuestion.where(answer_type: "selection").find_each do |question|
+      new_selection_options = question.answer_settings[:selection_options].each do |option|
+        option[:value] = option[:name]
+      end
+
+      question.answer_settings = question.answer_settings.merge(selection_options: new_selection_options)
+
+      begin
+        question.save!
+      rescue StandardError => e
+        Rails.logger.info "data_migrations:add_value_to_selection_options Failed to update question #{question.id}: #{e.message}"
+      end
+    end
+
     Rails.logger.info "data_migrations:add_value_to_selection_options finished"
+  end
+
+  desc "Check selection options in Page DraftQuestion and FormDocument"
+  task check_selection_options: :environment do
+    pages_with_selection_options_with_no_value = Page.where(answer_type: "selection")
+        .where("jsonb_path_exists(answer_settings, '$.selection_options[*] ? (!exists(@.value))')")
+        .count
+
+    draft_questions_with_selection_options_with_no_value = DraftQuestion.where(answer_type: "selection")
+        .where("jsonb_path_exists(answer_settings, '$.selection_options[*] ? (!exists(@.value))')")
+        .count
+
+    Rails.logger.info "Pages with selection options with no value: #{pages_with_selection_options_with_no_value}"
+    Rails.logger.info "DraftQuestions with selection options with no value: #{draft_questions_with_selection_options_with_no_value}"
+    Rails.logger.info "data_migrations:check_selection_options finished"
   end
 end
 

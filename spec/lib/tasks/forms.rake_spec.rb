@@ -561,6 +561,7 @@ RSpec.describe "forms.rake" do
         create(:page, :with_single_line_text_settings),
       ]
     end
+    let(:draft_question) { create :selection_draft_question, selection_options: [{ name: "option 1" }, { name: "option 2" }] }
 
     it "adds value to the step with selection options" do
       expect {
@@ -582,6 +583,26 @@ RSpec.describe "forms.rake" do
       expect {
         task.invoke
       }.not_to(change { form_without_selection_options.draft_form_document.reload.content["steps"] })
+    end
+
+    it "updates the pages with selection options" do
+      expect {
+        task.invoke
+      }.to change { pages.first.reload.answer_settings.as_json }.to(
+        { "only_one_option" => "true",
+          "selection_options" => [{ "name" => "option 1", "value" => "option 1" },
+                                  { "name" => "option 2", "value" => "option 2" }] },
+      )
+    end
+
+    it "updates the draft questions with selection options" do
+      expect {
+        task.invoke
+      }.to change { draft_question.reload.answer_settings.as_json }.to(
+        { "only_one_option" => "true",
+          "selection_options" => [{ "name" => "option 1", "value" => "option 1" },
+                                  { "name" => "option 2", "value" => "option 2" }] },
+      )
     end
   end
 end

@@ -57,7 +57,7 @@ FactoryBot.define do
     factory :selection_draft_question do
       transient do
         only_one_option { "true" }
-        selection_options { [{ name: "Option 1" }, { name: "Option 2" }] }
+        selection_options { [{ name: "Option 1", value: "option 1" }, { name: "Option 2", value: "option 2" }] }
       end
 
       question_text { Faker::Lorem.question }
