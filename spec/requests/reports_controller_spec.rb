@@ -123,6 +123,37 @@ RSpec.describe ReportsController, type: :request do
     end
   end
 
+  describe "#forms_that_are_copies" do
+    let(:path) { report_forms_that_are_copies_path(tag: :live) }
+    let(:original_form) { create(:form, :live) }
+    let(:form) { create(:form, :live, copied_from_id: original_form.id) }
+    let(:forms) { [form] }
+
+    include_examples "unauthorized user is forbidden"
+
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+
+        get path
+      end
+
+      it "returns http code 200" do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the features report view" do
+        expect(response).to render_template("reports/feature_report")
+      end
+
+      it "includes the report data" do
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[1]", text: "Form name"
+        expect(node).to have_xpath "//tbody/tr[1]/td[1]", text: form.name
+      end
+    end
+  end
+
   describe "#forms_with_routes" do
     let(:path) { report_forms_with_routes_path(tag: :live) }
     let(:form) do
