@@ -22,6 +22,11 @@ RSpec.describe FormCopyService do
       expect(copied_form.copied_from_id).to eq(source_form.id)
     end
 
+    it "sets copied_from_id in the FormDocument content" do
+      form_document = copied_form.draft_form_document
+      expect(form_document.content["copied_from_id"]).to eq(source_form.id)
+    end
+
     it "copies and updates the name of the copy" do
       expect(copied_form.name).to eq("Copy of #{source_form.name}")
     end
