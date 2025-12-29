@@ -8,6 +8,7 @@ class Reports::FeatureReportService
   def report
     report = {
       total_forms: 0,
+      copied_forms: 0,
       forms_with_payment: 0,
       forms_with_routing: 0,
       forms_with_branch_routing: 0,
@@ -22,6 +23,7 @@ class Reports::FeatureReportService
 
     form_documents.each do |form|
       report[:total_forms] += 1
+      report[:copied_forms] += 1 if Reports::FormDocumentsService.is_copy?(form)
       report[:forms_with_payment] += 1 if Reports::FormDocumentsService.has_payments?(form)
       report[:forms_with_routing] += 1 if Reports::FormDocumentsService.has_routes?(form)
       report[:forms_with_branch_routing] += 1 if Reports::FormDocumentsService.has_secondary_skip_routes?(form)
@@ -68,6 +70,10 @@ class Reports::FeatureReportService
         .select { |step| step["data"]["is_repeatable"] }
         .map { |step| questions_details(form, step) }
     end
+  end
+
+  def forms_that_are_copies
+    form_documents.select { |form| Reports::FormDocumentsService.is_copy?(form) }
   end
 
   def forms_with_routes

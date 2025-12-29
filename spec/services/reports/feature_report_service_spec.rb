@@ -7,6 +7,7 @@ RSpec.describe Reports::FeatureReportService do
       form_with_a_few_answer_types,
       branch_route_form,
       basic_route_form,
+      copied_form,
     ]
   end
   let(:form_documents) { forms.map { |form| form.live_form_document.as_json } }
@@ -45,6 +46,11 @@ RSpec.describe Reports::FeatureReportService do
     form.live_form_document.update!(content: form.reload.as_form_document(live_at: form.updated_at))
     form
   end
+  let(:copied_form) do
+    original_form = create(:form, :live, pages: [])
+    form = create(:form, :live, copied_from_id: original_form.id, pages: [])
+    form
+  end
 
   before do
     forms.each do |form|
@@ -56,7 +62,8 @@ RSpec.describe Reports::FeatureReportService do
     it "returns the feature report" do
       report = described_class.new(form_documents).report
       expect(report).to eq({
-        total_forms: 4,
+        total_forms: 5,
+        copied_forms: 1,
         forms_with_payment: 1,
         forms_with_routing: 2,
         forms_with_branch_routing: 1,
@@ -348,6 +355,22 @@ RSpec.describe Reports::FeatureReportService do
           "form_id" => branch_route_form.id,
           "content" => a_hash_including(
             "name" => branch_route_form.name,
+          ),
+        ),
+      ]
+    end
+  end
+
+  describe "#forms_that_are_copies" do
+    it "returns forms that are copies" do
+      forms = described_class.new(form_documents).forms_that_are_copies
+      expect(forms.length).to eq 1
+      expect(forms).to match [
+        a_hash_including(
+          "form_id" => copied_form.id,
+          "content" => a_hash_including(
+            "name" => copied_form.name,
+            "copied_from_id" => copied_form.copied_from_id,
           ),
         ),
       ]
