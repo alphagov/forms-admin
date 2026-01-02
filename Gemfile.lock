@@ -110,14 +110,14 @@ GEM
       activesupport
     ast (2.4.3)
     aws-eventstream (1.4.0)
-    aws-partitions (1.1190.0)
-    aws-sdk-cloudwatch (1.125.0)
+    aws-partitions (1.1200.0)
+    aws-sdk-cloudwatch (1.126.0)
       aws-sdk-core (~> 3, >= 3.239.1)
       aws-sigv4 (~> 1.5)
     aws-sdk-codepipeline (1.109.0)
       aws-sdk-core (~> 3, >= 3.239.1)
       aws-sigv4 (~> 1.5)
-    aws-sdk-core (3.239.2)
+    aws-sdk-core (3.240.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
@@ -604,7 +604,7 @@ DEPENDENCIES
   aasm (~> 5.5)
   acts_as_list
   after_commit_everywhere (~> 1.6)
-  aws-sdk-cloudwatch (~> 1.125)
+  aws-sdk-cloudwatch (~> 1.126)
   aws-sdk-codepipeline (~> 1.109)
   axe-core-rspec
   bootsnap
@@ -673,10 +673,10 @@ CHECKSUMS
   after_commit_everywhere (1.6.0) sha256=c8b3409a1172e43070d2e57f4b9d7b89dce5a7f057576b748cb9fe0a0dd4d917
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   aws-eventstream (1.4.0) sha256=116bf85c436200d1060811e6f5d2d40c88f65448f2125bc77ffce5121e6e183b
-  aws-partitions (1.1190.0) sha256=3e21ce1c99329a96fb71419a5d92d0cece5b276a9f47bc91d6a1290450fb3669
-  aws-sdk-cloudwatch (1.125.0) sha256=2ff95a362fc2b539936b61e07669ca882939f24487b09e24e794d8c792613793
+  aws-partitions (1.1200.0) sha256=8f356d9a4c05377b8ae5f6c8a7b0bd7b1b3562fd12f700eb9c4a0cb2115a049a
+  aws-sdk-cloudwatch (1.126.0) sha256=6508bc68e5db03421cc80311d39ccd82b738bab6ce6a8050c37b0b02dd1c90a6
   aws-sdk-codepipeline (1.109.0) sha256=15c0bd0e1e50cc689dbb7394e81e0df1bef7f5e5086340a8ba789027bc3d650c
-  aws-sdk-core (3.239.2) sha256=a6801845ee0bdb061a3f9fb488136f3a585d51ff05b77063a9e228c9539cf239
+  aws-sdk-core (3.240.0) sha256=86b63890525caaf56702972e2669b30ec89230c2b45f12c88290ee678d8d189e
   aws-sigv4 (1.12.1) sha256=6973ff95cb0fd0dc58ba26e90e9510a2219525d07620c8babeb70ef831826c00
   axe-core-api (4.11.0) sha256=3d9c94e3c8f8f9b8f154a3ce036b3dec2dabf7bb7de5e51d663b18bd8a0d691b
   axe-core-rspec (4.11.0) sha256=3c3e3ef3863d9f5243e056b7da328932c0b6682dda299bb4bd74d760641486d7
