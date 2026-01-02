@@ -4,6 +4,7 @@ describe "reports/features.html.erb" do
   let(:report) do
     {
       total_forms: 3,
+      copied_forms: 1,
       forms_with_answer_type: {
         address: 1,
         date: 1,
@@ -63,6 +64,10 @@ describe "reports/features.html.erb" do
     expect(rendered).to have_css(".govuk-summary-list__row", text: "Total live forms#{report[:total_forms]}")
   end
 
+  it "includes the number of copied live forms" do
+    expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms that are copies#{report[:copied_forms]}")
+  end
+
   it "has a table of answer type usage" do
     expect(rendered).to have_table "Answer type usage" do |table|
       expect(table.find_all("thead th").map(&:text)).to eq [
@@ -91,6 +96,7 @@ describe "reports/features.html.erb" do
     let(:report) do
       {
         total_forms: 3,
+        copied_forms: 0,
         forms_with_answer_type: { address: 1 },
         steps_with_answer_type: { address: 1 },
         forms_with_payment: 1,

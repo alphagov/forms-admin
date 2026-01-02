@@ -1610,6 +1610,7 @@ en:
           number_of_forms: Number of %{tag} forms with this answer type
           number_of_pages: Number of uses of this answer type in %{tag} forms
       features:
+        copied_forms: "%{tag} forms that are copies"
         forms_with_add_another_answer: "%{tag} forms with add another answer"
         forms_with_branch_routes: "%{tag} forms with branch routes"
         forms_with_csv_submission_email_attachments: "%{tag} forms with CSV email attachments"
@@ -1630,6 +1631,10 @@ en:
         number_of_routes: Number of routes
         organisation: Organisation
         question_text: Question text
+    forms_that_are_copies:
+      download_csv: Download data about all %{tag} forms that are copies as a CSV file
+      empty: There are no %{tag} forms that are copies
+      heading: "%{tag} forms that are copies"
     forms_with_branch_routes:
       download_csv: Download data about all %{tag} forms with branch routes as a CSV file
       empty: There are no %{tag} forms with branch routes
