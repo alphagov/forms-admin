@@ -10,34 +10,15 @@ RSpec.describe ReportsController, type: :request do
   end
 
   shared_examples "unauthorized user is forbidden" do
-    context "when the user is a standard user" do
+    context "when the user is not a super admin" do
       before do
         login_as_standard_user
 
         get path
       end
 
-      it "returns http code 403" do
+      it "returns http code 403 and renders forbidden" do
         expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
-
-    context "when the user is an organisation admin" do
-      before do
-        login_as_organisation_admin_user
-
-        get path
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
         expect(response).to render_template("errors/forbidden")
       end
     end
@@ -55,15 +36,9 @@ RSpec.describe ReportsController, type: :request do
         get path
       end
 
-      it "returns http code 200" do
+      it "returns a success response and renders the index view" do
         expect(response).to have_http_status(:ok)
-      end
-
-      it "renders the features index view" do
         expect(response).to render_template("reports/index")
-      end
-
-      it "includes the heading text" do
         expect(response.body).to include "Reports"
       end
     end
@@ -81,15 +56,9 @@ RSpec.describe ReportsController, type: :request do
         get path
       end
 
-      it "returns http code 200" do
+      it "returns http code 200 and renders the features report view" do
         expect(response).to have_http_status(:ok)
-      end
-
-      it "renders the features report view" do
         expect(response).to render_template("reports/features")
-      end
-
-      it "includes the report data" do
         node = Capybara.string(response.body)
         expect(node).to have_xpath "//dl/div[1]/dt", text: "Total live forms"
         expect(node).to have_xpath "//dl/div[1]/dd", text: "4"
@@ -116,15 +85,9 @@ RSpec.describe ReportsController, type: :request do
         get path
       end
 
-      it "returns http code 200" do
+      it "returns http code 200 with the expected report data" do
         expect(response).to have_http_status(:ok)
-      end
-
-      it "renders the features report view" do
         expect(response).to render_template("reports/questions_with_answer_type")
-      end
-
-      it "includes the report data" do
         node = Capybara.string(response.body)
         expect(node).to have_xpath "//thead/tr/th[3]", text: "Question text"
         expect(node).to have_xpath "//tbody/tr[1]/td[3]", text: form.pages.first.question_text
@@ -152,13 +115,7 @@ RSpec.describe ReportsController, type: :request do
 
       it "returns http code 200" do
         expect(response).to have_http_status(:ok)
-      end
-
-      it "renders the features report view" do
         expect(response).to render_template("reports/feature_report")
-      end
-
-      it "includes the report data" do
         node = Capybara.string(response.body)
         expect(node).to have_xpath "//thead/tr/th[3]", text: "Question text"
         expect(node).to have_xpath "//tbody/tr/td[3]", text: form.pages.first.question_text
@@ -185,15 +142,10 @@ RSpec.describe ReportsController, type: :request do
         get path
       end
 
-      it "returns http code 200" do
+      it "returns http code 200 with the expected report data" do
         expect(response).to have_http_status(:ok)
-      end
-
-      it "renders the features report view" do
         expect(response).to render_template("reports/feature_report")
-      end
 
-      it "includes the report data" do
         node = Capybara.string(response.body)
         expect(node).to have_xpath "//thead/tr/th[3]", text: "Number of routes"
         expect(node).to have_xpath "//tbody/tr[1]/td[3]", text: "1"
@@ -221,15 +173,10 @@ RSpec.describe ReportsController, type: :request do
         get path
       end
 
-      it "returns http code 200" do
+      it "returns http code 200 with the expected report data" do
         expect(response).to have_http_status(:ok)
-      end
-
-      it "renders the features report view" do
         expect(response).to render_template("reports/feature_report")
-      end
 
-      it "includes the report data" do
         node = Capybara.string(response.body)
         expect(node).to have_xpath "//thead/tr/th[3]", text: "Number of routes"
         expect(node).to have_xpath "//tbody/tr/td[3]", text: "2"
@@ -253,15 +200,10 @@ RSpec.describe ReportsController, type: :request do
         get path
       end
 
-      it "returns http code 200" do
+      it "returns http code 200 with the expected report data" do
         expect(response).to have_http_status(:ok)
-      end
-
-      it "renders the features report view" do
         expect(response).to render_template("reports/feature_report")
-      end
 
-      it "includes the report data" do
         node = Capybara.string(response.body)
         expect(node).to have_xpath "//thead/tr/th[1]", text: "Form name"
         expect(node).to have_xpath "//tbody/tr[1]/td[1]", text: form.name
@@ -283,15 +225,10 @@ RSpec.describe ReportsController, type: :request do
         get path
       end
 
-      it "returns http code 200" do
+      it "returns http code 200 with the expected report data" do
         expect(response).to have_http_status(:ok)
-      end
-
-      it "renders the features report view" do
         expect(response).to render_template("reports/feature_report")
-      end
 
-      it "includes the report data" do
         node = Capybara.string(response.body)
         expect(node).to have_xpath "//thead/tr/th[1]", text: "Form name"
         expect(node).to have_xpath "//tbody/tr[1]/td[1]", text: form.name
@@ -313,15 +250,10 @@ RSpec.describe ReportsController, type: :request do
         get path
       end
 
-      it "returns http code 200" do
+      it "returns http code 200 with the expected report data" do
         expect(response).to have_http_status(:ok)
-      end
-
-      it "renders the features report view" do
         expect(response).to render_template("reports/feature_report")
-      end
 
-      it "includes the report data" do
         node = Capybara.string(response.body)
         expect(node).to have_xpath "//thead/tr/th[1]", text: "Form name"
         expect(node).to have_xpath "//tbody/tr[1]/td[1]", text: form.name
@@ -343,15 +275,10 @@ RSpec.describe ReportsController, type: :request do
         get path
       end
 
-      it "returns http code 200" do
+      it "returns http code 200 with the expected report data" do
         expect(response).to have_http_status(:ok)
-      end
-
-      it "renders the features report view" do
         expect(response).to render_template("reports/feature_report")
-      end
 
-      it "includes the report data" do
         node = Capybara.string(response.body)
         expect(node).to have_xpath "//thead/tr/th[1]", text: "Form name"
         expect(node).to have_xpath "//tbody/tr[1]/td[1]", text: form.name
@@ -371,11 +298,9 @@ RSpec.describe ReportsController, type: :request do
         get path
       end
 
-      it "returns http code 200" do
+      it "returns http code 200 and renders the users report template" do
         expect(response).to have_http_status(:ok)
-      end
 
-      it "renders the users report view" do
         expect(response).to render_template("reports/users")
       end
     end
@@ -405,15 +330,10 @@ RSpec.describe ReportsController, type: :request do
         get path
       end
 
-      it "returns http code 200" do
+      it "returns http code 200 and renders the add another answer template" do
         expect(response).to have_http_status(:ok)
-      end
-
-      it "renders the features report view" do
         expect(response).to render_template("reports/add_another_answer")
-      end
 
-      it "includes the report data" do
         expect(response.body).to include "All forms with add another answer"
         expect(response.body).to include question_text
       end
@@ -435,15 +355,10 @@ RSpec.describe ReportsController, type: :request do
       get report_last_signed_in_at_path
     end
 
-    it "returns http code 200" do
+    it "returns http code 200 and renders the last signed in at report" do
       expect(response).to have_http_status(:ok)
-    end
-
-    it "renders the last_signed_in_at report view" do
       expect(response).to render_template("reports/last_signed_in_at")
-    end
 
-    it "includes the report data" do
       expect(response.body).to include "When users last signed in"
       expect(response.body).to include users.first.email
       expect(response.body).to include users.second.email
@@ -481,11 +396,8 @@ RSpec.describe ReportsController, type: :request do
       get report_selection_questions_summary_path
     end
 
-    it "returns http code 200" do
+    it "returns http code 200 and renders the selection questions summary template" do
       expect(response).to have_http_status(:ok)
-    end
-
-    it "renders the selection questions summary report view" do
       expect(response).to render_template("reports/selection_questions/summary")
     end
   end
@@ -518,13 +430,8 @@ RSpec.describe ReportsController, type: :request do
 
       it "returns http code 200" do
         expect(response).to have_http_status(:ok)
-      end
-
-      it "renders the autocomplete questions report view" do
         expect(response).to render_template("reports/selection_questions/autocomplete")
-      end
 
-      it "includes the report data" do
         expect(response.body).to include "A form"
         expect(response.body).to include "A question"
       end
@@ -540,15 +447,10 @@ RSpec.describe ReportsController, type: :request do
         get report_selection_questions_with_radios_path
       end
 
-      it "returns http code 200" do
+      it "returns http code 200 and renders the report" do
         expect(response).to have_http_status(:ok)
-      end
-
-      it "renders the autocomplete questions report view" do
         expect(response).to render_template("reports/selection_questions/radios")
-      end
 
-      it "includes the report data" do
         expect(response.body).to include "A form"
         expect(response.body).to include "A question"
       end
@@ -564,15 +466,10 @@ RSpec.describe ReportsController, type: :request do
         get report_selection_questions_with_checkboxes_path
       end
 
-      it "returns http code 200" do
+      it "returns http code 200 and renders the report" do
         expect(response).to have_http_status(:ok)
-      end
-
-      it "renders the autocomplete questions report view" do
         expect(response).to render_template("reports/selection_questions/checkboxes")
-      end
 
-      it "includes the report data" do
         expect(response.body).to include "A form"
         expect(response.body).to include "A question"
       end
@@ -581,12 +478,10 @@ RSpec.describe ReportsController, type: :request do
 
   describe "csv downloads" do
     shared_examples_for "csv response" do
-      it "returns http code 200" do
+      it "returns http code 200 with content-type text/csv and expected filename" do
         expect(response).to have_http_status(:ok)
-      end
-
-      it "has content-type text/csv" do
         expect(response.headers["content-type"]).to eq "text/csv; charset=iso-8859-1"
+        expect(response.headers["content-disposition"]).to match("attachment; filename=#{expected_csv_filename}")
       end
     end
 
@@ -596,6 +491,7 @@ RSpec.describe ReportsController, type: :request do
         archived_form = create(:form, :archived)
         [*live_forms, archived_form]
       end
+      let(:expected_csv_filename) { "live_forms_report-2025-05-15 15:31:57 UTC.csv" }
 
       before do
         login_as_super_admin_user
@@ -606,10 +502,6 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it_behaves_like "csv response"
-
-      it "responds with an attachment content-disposition header" do
-        expect(response.headers["content-disposition"]).to match("attachment; filename=live_forms_report-2025-05-15 15:31:57 UTC.csv")
-      end
 
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
@@ -626,6 +518,7 @@ RSpec.describe ReportsController, type: :request do
         form
       end
       let(:forms) { [form, *create_list(:form, 2, :live)] }
+      let(:expected_csv_filename) { "live_forms_with_routes_report-2025-05-15 15:31:57 UTC.csv" }
 
       before do
         login_as_super_admin_user
@@ -636,10 +529,6 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it_behaves_like "csv response"
-
-      it "responds with an attachment content-disposition header" do
-        expect(response.headers["content-disposition"]).to match("attachment; filename=live_forms_with_routes_report-2025-05-15 15:31:57 UTC.csv")
-      end
 
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
@@ -654,6 +543,7 @@ RSpec.describe ReportsController, type: :request do
     describe "#forms_with_payments as csv" do
       let(:form) { create(:form, :live, payment_url: "https://www.gov.uk/payments/organisation/service") }
       let(:forms) { [form, *create_list(:form, 2, :live)] }
+      let(:expected_csv_filename) { "live_forms_with_payments_report-2025-05-15 15:31:57 UTC.csv" }
 
       before do
         login_as_super_admin_user
@@ -664,10 +554,6 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it_behaves_like "csv response"
-
-      it "responds with an attachment content-disposition header" do
-        expect(response.headers["content-disposition"]).to match("attachment; filename=live_forms_with_payments_report-2025-05-15 15:31:57 UTC.csv")
-      end
 
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
@@ -682,6 +568,7 @@ RSpec.describe ReportsController, type: :request do
     describe "#forms_with_csv_submission_enabled as csv" do
       let(:form) { create(:form, :live, submission_type: "email", submission_format: %w[csv]) }
       let(:forms) { [form, *create_list(:form, 2, :live)] }
+      let(:expected_csv_filename) { "live_forms_with_csv_submission_email_attachments_report-2025-05-15 15:31:57 UTC.csv" }
 
       before do
         login_as_super_admin_user
@@ -692,10 +579,6 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it_behaves_like "csv response"
-
-      it "responds with an attachment content-disposition header" do
-        expect(response.headers["content-disposition"]).to match("attachment; filename=live_forms_with_csv_submission_email_attachments_report-2025-05-15 15:31:57 UTC.csv")
-      end
 
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
@@ -713,6 +596,7 @@ RSpec.describe ReportsController, type: :request do
         archived_form = create(:form, :archived, pages_count: 2)
         [*live_forms, archived_form]
       end
+      let(:expected_csv_filename) { "live_questions_report-2025-05-15 15:31:57 UTC.csv" }
 
       before do
         login_as_super_admin_user
@@ -723,10 +607,6 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it_behaves_like "csv response"
-
-      it "responds with an attachment content-disposition header" do
-        expect(response.headers["content-disposition"]).to match("attachment; filename=live_questions_report-2025-05-15 15:31:57 UTC.csv")
-      end
 
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
@@ -742,6 +622,7 @@ RSpec.describe ReportsController, type: :request do
         ])
       end
       let(:forms) { [form, *create_list(:form, 2, :live)] }
+      let(:expected_csv_filename) { "live_questions_report_text_answer_type-2025-05-15 15:31:57 UTC.csv" }
 
       before do
         login_as_super_admin_user
@@ -752,10 +633,6 @@ RSpec.describe ReportsController, type: :request do
       end
 
       it_behaves_like "csv response"
-
-      it "responds with an attachment content-disposition header" do
-        expect(response.headers["content-disposition"]).to match("attachment; filename=live_questions_report_text_answer_type-2025-05-15 15:31:57 UTC.csv")
-      end
 
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
@@ -771,6 +648,7 @@ RSpec.describe ReportsController, type: :request do
         ])
       end
       let(:forms) { [form, *create_list(:form, 2, :live)] }
+      let(:expected_csv_filename) { "live_questions_with_add_another_answer_report-2025-05-15 15:31:57 UTC.csv" }
 
       before do
         login_as_super_admin_user
@@ -782,10 +660,6 @@ RSpec.describe ReportsController, type: :request do
 
       it_behaves_like "csv response"
 
-      it "responds with an attachment content-disposition header" do
-        expect(response.headers["content-disposition"]).to match("attachment; filename=live_questions_with_add_another_answer_report-2025-05-15 15:31:57 UTC.csv")
-      end
-
       it "has expected response body" do
         csv = CSV.parse(response.body, headers: true)
         expect(csv.headers).to eq Reports::QuestionsCsvReportService::QUESTIONS_CSV_HEADERS
@@ -795,50 +669,19 @@ RSpec.describe ReportsController, type: :request do
   end
 
   describe "#contact_for_research" do
-    context "when the user is an editor" do
-      before do
-        login_as_standard_user
+    let(:path) { report_contact_for_research_path }
 
-        get report_contact_for_research_path
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
-
-    context "when the user is an organisation admin" do
-      before do
-        login_as_organisation_admin_user
-
-        get report_contact_for_research_path
-      end
-
-      it "returns http code 403" do
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "renders the forbidden view" do
-        expect(response).to render_template("errors/forbidden")
-      end
-    end
+    include_examples "unauthorized user is forbidden"
 
     context "when the user is a super admin" do
       before do
         login_as_super_admin_user
 
-        get report_contact_for_research_path
+        get path
       end
 
-      it "returns http code 200" do
+      it "returns http code 200 and renders the template" do
         expect(response).to have_http_status(:ok)
-      end
-
-      it "renders the users report view" do
         expect(response).to render_template("reports/contact_for_research")
       end
     end
