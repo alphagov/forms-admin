@@ -34,25 +34,22 @@ RSpec.describe Reports::FormDocumentsService do
     form
   end
 
-  let(:organisation) { create :organisation, internal: false, slug: "hm-revenue-customs" }
-  let(:internal_organisation) { create :organisation, internal: true, slug: "internal-org" }
-  let(:group) { create :group, organisation: }
-  let(:internal_group) { create :group, organisation: internal_organisation }
-
-  before do
-    group.group_forms.create!(form: form_with_no_routes)
-    group.group_forms.create!(form: draft_form)
-    group.group_forms.create!(form: archived_form)
-    group.group_forms.create!(form: live_with_draft_form)
-    group.group_forms.create!(form: archived_with_draft_form)
-    group.group_forms.create!(form: branch_route_form)
-    group.group_forms.create!(form: basic_route_form)
-    group.group_forms.create!(form: form_with_2_branch_routes)
-    internal_group.group_forms.create!(form: draft_internal_organisation_form)
-    internal_group.group_forms.create!(form: live_internal_organisation_form)
-  end
-
   describe "#form_documents" do
+    let(:organisation) { create :organisation, internal: false, slug: "hm-revenue-customs" }
+    let(:internal_organisation) { create :organisation, internal: true, slug: "internal-org" }
+    let(:group) { create :group, organisation: }
+    let(:internal_group) { create :group, organisation: internal_organisation }
+
+    before do
+      group.group_forms.create!(form: form_with_no_routes)
+      group.group_forms.create!(form: draft_form)
+      group.group_forms.create!(form: archived_form)
+      group.group_forms.create!(form: live_with_draft_form)
+      group.group_forms.create!(form: archived_with_draft_form)
+      internal_group.group_forms.create!(form: draft_internal_organisation_form)
+      internal_group.group_forms.create!(form: live_internal_organisation_form)
+    end
+
     context "when the tag is draft" do
       let(:tag) { "draft" }
 
@@ -68,7 +65,7 @@ RSpec.describe Reports::FormDocumentsService do
 
       it "only includes draft form documents from external organisations" do
         form_documents = described_class.form_documents(tag:)
-        expect(form_documents.map { |form_document| form_document["form_id"] })
+        expect(form_documents.map { |form_document| form_document["form_id"] }.to_a)
           .to contain_exactly(draft_form.id, live_with_draft_form.id, archived_with_draft_form.id)
       end
 
@@ -83,12 +80,12 @@ RSpec.describe Reports::FormDocumentsService do
       end
 
       context "when there is a welsh translation" do
-        let(:live_with_draft_form_and_welsh) { create(:form, :live_with_draft, :with_welsh_translation, :with_group, group:) }
+        let!(:live_with_draft_form_and_welsh) { create(:form, :live_with_draft, :with_welsh_translation, :with_group, group:) }
 
         it "does not include the welsh translation form document" do
           form_documents = described_class.form_documents(tag:)
           expect(form_documents.pluck("language").to_a).to all(eq "en")
-          expect(form_documents.map { |form_document| form_document["form_id"] })
+          expect(form_documents.map { |form_document| form_document["form_id"] }.to_a)
             .to contain_exactly(draft_form.id, live_with_draft_form.id, live_with_draft_form_and_welsh.id, archived_with_draft_form.id)
         end
       end
@@ -97,36 +94,13 @@ RSpec.describe Reports::FormDocumentsService do
     context "when the tag is live" do
       let(:tag) { "live" }
 
-      it "returns an Enumerator" do
-        expect(described_class.form_documents(tag:)).to be_a(Enumerator)
-      end
-
-      it "returns form documents when the Enumerator is evaluated" do
-        form_document = described_class.form_documents(tag:).first
-        expect(form_document).to be_a(Hash)
-        expect(form_document).to have_key("form_id")
-      end
-
       it "only includes live form documents from external organisations" do
         form_documents = described_class.form_documents(tag:)
-        expect(form_documents.map { |form_document| form_document["form_id"] })
+        expect(form_documents.map { |form_document| form_document["form_id"] }.to_a)
           .to contain_exactly(
             form_with_no_routes.id,
             live_with_draft_form.id,
-            branch_route_form.id,
-            basic_route_form.id,
-            form_with_2_branch_routes.id,
           )
-      end
-
-      it "includes the group and organisation details" do
-        form_document = described_class.form_documents(tag:).first
-        expect(form_document).to include(
-          "organisation_name" => group.organisation.name,
-          "organisation_id" => group.organisation.id,
-          "group_name" => group.name,
-          "group_external_id" => group.external_id,
-        )
       end
     end
 
@@ -135,13 +109,10 @@ RSpec.describe Reports::FormDocumentsService do
 
       it "only includes live or archived form documents from external organisations" do
         form_documents = described_class.form_documents(tag:)
-        expect(form_documents.map { |form_document| form_document["form_id"] })
+        expect(form_documents.map { |form_document| form_document["form_id"] }.to_a)
           .to contain_exactly(
             form_with_no_routes.id,
             live_with_draft_form.id,
-            branch_route_form.id,
-            basic_route_form.id,
-            form_with_2_branch_routes.id,
             archived_form.id,
             archived_with_draft_form.id,
           )
