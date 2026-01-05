@@ -60,6 +60,10 @@ class Reports::FormDocumentsService
       end
     end
 
+    def is_copy?(form_document)
+      form_document["content"]["copied_from_id"].present?
+    end
+
   private
 
     def secondary_skip_conditions(form_document)

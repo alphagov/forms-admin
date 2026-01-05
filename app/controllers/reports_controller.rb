@@ -35,6 +35,14 @@ class ReportsController < WebController
     questions_feature_report(tag, params[:action], questions)
   end
 
+  def forms_that_are_copies
+    tag = params[:tag]
+    forms = Reports::FormDocumentsService.form_documents(tag:)
+    forms = Reports::FeatureReportService.new(forms).forms_that_are_copies
+
+    forms_feature_report(tag, params[:action], forms)
+  end
+
   def forms_with_routes
     tag = params[:tag]
     forms = Reports::FormDocumentsService.form_documents(tag:)

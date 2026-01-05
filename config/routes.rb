@@ -227,6 +227,7 @@ Rails.application.routes.draw do
       get "/", to: "reports#features", as: :report_features
       get "questions-with-answer-type/:answer_type", to: "reports#questions_with_answer_type", as: :report_questions_with_answer_type
       get "questions-with-add-another-answer", to: "reports#questions_with_add_another_answer", as: :report_questions_with_add_another_answer
+      get "forms-that-are-copies", to: "reports#forms_that_are_copies", as: :report_forms_that_are_copies
       get "forms-with-routes", to: "reports#forms_with_routes", as: :report_forms_with_routes
       get "forms-with-branch-routes", to: "reports#forms_with_branch_routes", as: :report_forms_with_branch_routes
       get "forms-with-payments", to: "reports#forms_with_payments", as: :report_forms_with_payments
