@@ -3,7 +3,7 @@ class FormMetricsCsvService
 
   def self.csv(form_id:, first_made_live_at:)
     start_time = [first_made_live_at.utc.beginning_of_day, MAXIMUM_LOOK_BACK.ago.utc.beginning_of_day].max
-    metrics_data = CloudWatchService.new(form_id).daily_metrics_data(start_time)
+    metrics_data = FormMetricsService.new(form_id).daily_metrics_data(start_time)
     end_date = Time.zone.now.utc.to_date - 1
 
     CSV.generate do |csv|
@@ -16,10 +16,10 @@ class FormMetricsCsvService
 
         csv << [
           date.strftime("%d/%m/%Y"),
-          starts.to_i,
-          completions.to_i,
+          starts,
+          completions,
           completion_rate,
-          incomplete.to_i,
+          incomplete,
         ]
       end
     end
@@ -28,7 +28,7 @@ class FormMetricsCsvService
   def self.compute_completion_rate(starts, completions)
     return I18n.t("metrics_csv.no_starts") if starts.zero?
 
-    sprintf("%.1f", (completions / starts * 100).round(1))
+    sprintf("%.1f", (completions.to_f / starts * 100).round(1))
   end
 
   def self.headers
