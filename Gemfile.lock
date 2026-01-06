@@ -515,12 +515,13 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 4.0)
       websocket (~> 1.0)
-    sentry-rails (5.28.1)
-      railties (>= 5.0)
-      sentry-ruby (~> 5.28.1)
-    sentry-ruby (5.28.1)
+    sentry-rails (6.4.1)
+      railties (>= 5.2.0)
+      sentry-ruby (~> 6.4.1)
+    sentry-ruby (6.4.1)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
+      logger
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -645,8 +646,8 @@ DEPENDENCIES
   rspec-rails (>= 3.9.0)
   rubocop-govuk
   selenium-webdriver
-  sentry-rails
-  sentry-ruby
+  sentry-rails (~> 6)
+  sentry-ruby (~> 6)
   simplecov (~> 0.22.0)
   spring-commands-rspec
   spring-prspec
@@ -833,8 +834,8 @@ CHECKSUMS
   rubyzip (3.2.2) sha256=c0ed99385f0625415c8f05bcae33fe649ed2952894a95ff8b08f26ca57ea5b3c
   securerandom (0.4.1) sha256=cc5193d414a4341b6e225f0cb4446aceca8e50d5e1888743fac16987638ea0b1
   selenium-webdriver (4.41.0) sha256=cdc1173cd55cf186022cea83156cc2d0bec06d337e039b02ad25d94e41bedd22
-  sentry-rails (5.28.1) sha256=43a5f884622c60fa459ba05dc8bd22fbd5f28daaced1d00dbcfc4669eaf93807
-  sentry-ruby (5.28.1) sha256=1162d474271e8b82202c984b1116db234007a084c5b73293e921468898d07e99
+  sentry-rails (6.4.1) sha256=fb800a375533f2fff3101f26a1a32bdce0a4b99b16cd5be7b64b15e93bcb58e8
+  sentry-ruby (6.4.1) sha256=dac04976f791ad6ecd4fd30440c29d9b73aee08f790eeca73b439b5d67370f38
   simplecov (0.22.0) sha256=fe2622c7834ff23b98066bb0a854284b2729a569ac659f82621fc22ef36213a5
   simplecov-html (0.12.3) sha256=4b1aad33259ffba8b29c6876c12db70e5750cb9df829486e4c6e5da4fa0aa07b
   simplecov_json_formatter (0.1.4) sha256=529418fbe8de1713ac2b2d612aa3daa56d316975d307244399fa4838c601b428
