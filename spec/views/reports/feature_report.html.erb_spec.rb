@@ -5,12 +5,13 @@ describe "reports/feature_report" do
   let(:records) { [] }
   let(:tag) { "live" }
   let(:form_document_tag) { tag }
+  let(:type) { :forms }
 
   before do
     controller.request.path_parameters[:action] = report
     controller.request.path_parameters[:tag] = tag
 
-    render locals: { tag:, report:, records: }
+    render locals: { tag:, report:, records:, type: }
   end
 
   context "with forms_with_csv_submission_email_attachments report" do
@@ -139,6 +140,7 @@ describe "reports/feature_report" do
 
   context "with forms_with_routes report" do
     let(:report) { "forms_with_routes" }
+    let(:type) { :forms_with_routes }
     let(:records) do
       [
         { "form_id" => 1, "tag" => tag, "content" => { "name" => "All question types form" }, "organisation_name" => "Government Digital Service", "metadata" => { "number_of_routes" => 1 } },
@@ -195,6 +197,7 @@ describe "reports/feature_report" do
 
   context "with questions_with_add_another_answer report" do
     let(:report) { "questions_with_add_another_answer" }
+    let(:type) { :questions }
     let(:records) do
       [
         { "type" => "question_page", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "tag" => tag, "content" => { "name" => "All question types form" }, "organisation_name" => "Government Digital Service" } },

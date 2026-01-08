@@ -48,7 +48,7 @@ class ReportsController < WebController
     forms = Reports::FormDocumentsService.form_documents(tag:)
     forms = Reports::FeatureReportService.new(forms).forms_with_routes
 
-    forms_feature_report(tag, params[:action], forms)
+    forms_feature_report(tag, params[:action], forms, type: :forms_with_routes)
   end
 
   def forms_with_branch_routes
@@ -56,7 +56,7 @@ class ReportsController < WebController
     forms = Reports::FormDocumentsService.form_documents(tag:)
     forms = Reports::FeatureReportService.new(forms).forms_with_branch_routes
 
-    forms_feature_report(tag, params[:action], forms)
+    forms_feature_report(tag, params[:action], forms, type: :forms_with_routes)
   end
 
   def forms_with_payments
@@ -170,17 +170,17 @@ private
                 type: "text/csv; charset=iso-8859-1",
                 disposition: "attachment; filename=#{csv_filename("#{tag}_#{report}_report")}"
     else
-      render template: "reports/feature_report", locals: { tag:, report:, records: questions }
+      render template: "reports/feature_report", locals: { tag:, report:, records: questions, type: :questions }
     end
   end
 
-  def forms_feature_report(tag, report, forms)
+  def forms_feature_report(tag, report, forms, type: :forms)
     if params[:format] == "csv"
       send_data Reports::FormsCsvReportService.new(forms).csv,
                 type: "text/csv; charset=iso-8859-1",
                 disposition: "attachment; filename=#{csv_filename("#{tag}_#{report}_report")}"
     else
-      render template: "reports/feature_report", locals: { tag:, report:, records: forms }
+      render template: "reports/feature_report", locals: { tag:, report:, records: forms, type: }
     end
   end
 

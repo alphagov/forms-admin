@@ -1,15 +1,14 @@
 module ReportHelper
-  def report_table(records)
-    type = records.first.fetch("type", "form")
-
-    if type == "form"
-      with_routes = records.first.dig("metadata", "number_of_routes").present?
-
-      with_routes ? report_forms_with_routes_table(records) : report_forms_table(records)
-    elsif type == "question_page"
+  def report_table(type, records)
+    case type
+    when :forms
+      report_forms_table(records)
+    when :forms_with_routes
+      report_forms_with_routes_table(records)
+    when :questions
       report_questions_table(records)
     else
-      raise "type of records '#{type}' is not one of 'forms', 'question_page'"
+      raise "type '#{type}' is not expected"
     end
   end
 
