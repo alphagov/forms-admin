@@ -1681,21 +1681,12 @@ en:
       empty: There are no %{tag} questions with %{answer_type} answer type
       heading: "%{tag} questions with %{answer_type} answer type"
     selection_questions:
-      autocomplete:
-        title: Questions where you can select one from over 30 options
-      checkboxes:
-        title: Questions where you can select one or more from up to 30 options
       questions:
-        back_link: Back to selection from a list of options usage
         none_of_the_above_no: 'No'
         none_of_the_above_yes: 'Yes'
         table_headings:
-          form_name: Form name
           none_of_the_above: "‘None of the above’"
           number_of_options: Number of options
-          question: Question
-      radios:
-        title: Questions where you can select one from up to 30 options
       summary:
         autocomplete:
           heading: Select one from over 30 options
@@ -1713,6 +1704,18 @@ en:
           view_questions: Questions where you can select one from up to 30 options
         title: Selection from a list of options answer type usage in live forms
         with_none_of_the_above: Questions with ‘None of the above’
+    selection_questions_with_autocomplete:
+      download_csv: Download all questions where you can select one from over 30 options in %{tag} forms as a CSV file
+      empty: There are no questions where you can select one from over 30 options in %{tag} forms
+      heading: Questions where you can select one from over 30 options in %{tag} forms
+    selection_questions_with_checkboxes:
+      download_csv: Download all questions where you can select one or more from up to 30 options in %{tag} forms as a CSV file
+      empty: There are no questions where you can select one or more from up to 30 options in %{tag} forms
+      heading: Questions where you can select one or more from up to 30 options in %{tag} forms
+    selection_questions_with_radios:
+      download_csv: Download all questions where you can select one from up to 30 options in %{tag} forms as a CSV file
+      empty: There are no questions where you can select one from up to 30 options in %{tag} forms
+      heading: Questions where you can select one from up to 30 options in %{tag} forms
     tag_labels:
       draft: draft
       live: live

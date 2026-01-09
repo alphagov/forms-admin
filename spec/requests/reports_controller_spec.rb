@@ -422,58 +422,46 @@ RSpec.describe ReportsController, type: :request do
 
     describe "#selection_questions_with_autocomplete" do
       before do
-        selection_question_service = Reports::SelectionQuestionService.new
-        allow(selection_question_service).to receive(:live_form_pages_with_autocomplete).and_return(data)
-        allow(Reports::SelectionQuestionService).to receive(:new).and_return(selection_question_service)
-
         login_as_super_admin_user
         get report_selection_questions_with_autocomplete_path
       end
 
       it "returns http code 200" do
         expect(response).to have_http_status(:ok)
-        expect(response).to render_template("reports/selection_questions/autocomplete")
+        expect(response).to render_template("reports/feature_report")
 
         expect(response.body).to include "A form"
-        expect(response.body).to include "A question"
+        expect(response.body).to include "Autocomplete question"
       end
     end
 
     describe "#selection_questions_with_radios" do
       before do
-        selection_question_service = Reports::SelectionQuestionService.new
-        allow(selection_question_service).to receive(:live_form_pages_with_radios).and_return(data)
-        allow(Reports::SelectionQuestionService).to receive(:new).and_return(selection_question_service)
-
         login_as_super_admin_user
         get report_selection_questions_with_radios_path
       end
 
       it "returns http code 200 and renders the report" do
         expect(response).to have_http_status(:ok)
-        expect(response).to render_template("reports/selection_questions/radios")
+        expect(response).to render_template("reports/feature_report")
 
         expect(response.body).to include "A form"
-        expect(response.body).to include "A question"
+        expect(response.body).to include "Radios question"
       end
     end
 
     describe "#selection_questions_with_checkboxes" do
       before do
-        selection_question_service = Reports::SelectionQuestionService.new
-        allow(selection_question_service).to receive(:live_form_pages_with_checkboxes).and_return(data)
-        allow(Reports::SelectionQuestionService).to receive(:new).and_return(selection_question_service)
-
         login_as_super_admin_user
         get report_selection_questions_with_checkboxes_path
       end
 
       it "returns http code 200 and renders the report" do
         expect(response).to have_http_status(:ok)
-        expect(response).to render_template("reports/selection_questions/checkboxes")
+        expect(response).to render_template("reports/feature_report")
 
         expect(response.body).to include "A form"
-        expect(response.body).to include "A question"
+        expect(response.body).to include "Checkboxes question"
       end
     end
   end

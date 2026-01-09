@@ -122,21 +122,27 @@ class ReportsController < WebController
   end
 
   def selection_questions_with_autocomplete
-    data = Reports::SelectionQuestionService.new.live_form_pages_with_autocomplete
+    tag = "live"
+    forms = Reports::FormDocumentsService.form_documents(tag:)
+    questions = Reports::FeatureReportService.new(forms).selection_questions_with_autocomplete
 
-    render template: "reports/selection_questions/autocomplete", locals: { data: }
+    questions_feature_report(tag, params[:action], questions, type: :selection_questions)
   end
 
   def selection_questions_with_radios
-    data = Reports::SelectionQuestionService.new.live_form_pages_with_radios
+    tag = "live"
+    forms = Reports::FormDocumentsService.form_documents(tag:)
+    questions = Reports::FeatureReportService.new(forms).selection_questions_with_radios
 
-    render template: "reports/selection_questions/radios", locals: { data: }
+    questions_feature_report(tag, params[:action], questions, type: :selection_questions)
   end
 
   def selection_questions_with_checkboxes
-    data = Reports::SelectionQuestionService.new.live_form_pages_with_checkboxes
+    tag = "live"
+    forms = Reports::FormDocumentsService.form_documents(tag:)
+    questions = Reports::FeatureReportService.new(forms).selection_questions_with_checkboxes
 
-    render template: "reports/selection_questions/checkboxes", locals: { data: }
+    questions_feature_report(tag, params[:action], questions, type: :selection_questions)
   end
 
   def csv_downloads; end
@@ -166,13 +172,13 @@ class ReportsController < WebController
 
 private
 
-  def questions_feature_report(tag, report, questions)
+  def questions_feature_report(tag, report, questions, type: :questions)
     if params[:format] == "csv"
       send_data Reports::QuestionsCsvReportService.new(questions).csv,
                 type: "text/csv; charset=iso-8859-1",
                 disposition: "attachment; filename=#{csv_filename("#{tag}_#{report}_report")}"
     else
-      render template: "reports/feature_report", locals: { tag:, report:, records: questions, type: :questions }
+      render template: "reports/feature_report", locals: { tag:, report:, records: questions, type: }
     end
   end
 
