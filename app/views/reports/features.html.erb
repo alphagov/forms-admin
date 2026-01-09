@@ -61,7 +61,7 @@
       <% end %>
 
       <% answer_type_links = {
-        "selection" => tag == "live" ? report_selection_questions_summary_path : nil,
+        "selection" => report_selection_questions_summary_path,
       } %>
       <%= table.with_body do |body| %>
         <% Page::ANSWER_TYPES.each do |answer_type| %>

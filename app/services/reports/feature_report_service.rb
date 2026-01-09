@@ -72,6 +72,41 @@ class Reports::FeatureReportService
     end
   end
 
+  def selection_questions_with_autocomplete
+    @form_documents.flat_map do |form|
+      form["content"]["steps"]
+        .select { |step|
+          step["data"]["answer_type"] == "selection" &&
+            step["data"]["answer_settings"]["only_one_option"] == "true" &&
+            step["data"]["answer_settings"]["selection_options"].length > 30
+        }
+        .map { |step| questions_details(form, step) }
+    end
+  end
+
+  def selection_questions_with_radios
+    @form_documents.flat_map do |form|
+      form["content"]["steps"]
+        .select { |step|
+          step["data"]["answer_type"] == "selection" &&
+            step["data"]["answer_settings"]["only_one_option"] == "true" &&
+            step["data"]["answer_settings"]["selection_options"].length <= 30
+        }
+        .map { |step| questions_details(form, step) }
+    end
+  end
+
+  def selection_questions_with_checkboxes
+    @form_documents.flat_map do |form|
+      form["content"]["steps"]
+        .select { |step|
+          step["data"]["answer_type"] == "selection" &&
+            step["data"]["answer_settings"]["only_one_option"] != "true"
+        }
+        .map { |step| questions_details(form, step) }
+    end
+  end
+
   def forms_that_are_copies
     form_documents.select { |form| Reports::FormDocumentsService.is_copy?(form) }
   end

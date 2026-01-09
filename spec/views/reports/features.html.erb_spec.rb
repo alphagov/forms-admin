@@ -143,17 +143,7 @@ describe "reports/features.html.erb" do
     expect(rendered).to have_css(".govuk-summary-list__row", text: "Live forms with exit pages#{report[:forms_with_exit_pages]}")
   end
 
-  context "with live tag" do
-    it "has a link to the selection questions summary report" do
-      expect(rendered).to have_link href: report_selection_questions_summary_path
-    end
-  end
-
-  context "with draft tag" do
-    let(:tag) { "draft" }
-
-    it "does not have a link to the selection questions summary report" do
-      expect(rendered).not_to have_link href: report_selection_questions_summary_path
-    end
+  it "has a link to the selection questions summary report" do
+    expect(rendered).to have_link href: report_selection_questions_summary_path
   end
 end

@@ -242,6 +242,61 @@ RSpec.describe Reports::FeatureReportService do
     end
   end
 
+  describe "selection questions methods" do
+    let(:page_with_autocomplete) { build(:page, :selection_with_autocomplete) }
+    let(:page_with_radios) { build(:page, :selection_with_radios) }
+    let(:page_with_checkboxes) { build(:page, :selection_with_checkboxes) }
+    let(:not_selection_question) { build :page, answer_type: "name" }
+    let(:form) { create(:form, :live, pages: [page_with_checkboxes, page_with_radios, page_with_autocomplete, not_selection_question]) }
+    let(:forms) { [form] }
+
+    describe "#selection_questions_with_autocomplete" do
+      it "returns question with autocomplete" do
+        questions = described_class.new(form_documents).selection_questions_with_autocomplete
+        expect(questions.length).to be(1)
+        expect(questions.first["data"]["question_text"]).to eq(page_with_autocomplete.question_text)
+        expect(questions.first["form"]["form_id"]).to eq(form.id)
+      end
+    end
+
+    describe "#selection_questions_with_radios" do
+      it "returns question with radios" do
+        questions = described_class.new(form_documents).selection_questions_with_radios
+        expect(questions.length).to be(1)
+        expect(questions.first["data"]["question_text"]).to eq(page_with_radios.question_text)
+        expect(questions.first["form"]["form_id"]).to eq(form.id)
+      end
+    end
+
+    describe "#selection_questions_with_checkboxes" do
+      it "returns question with checkboxes" do
+        questions = described_class.new(form_documents).selection_questions_with_checkboxes
+        expect(questions.length).to be(1)
+        expect(questions.first["data"]["question_text"]).to eq(page_with_checkboxes.question_text)
+        expect(questions.first["form"]["form_id"]).to eq(form.id)
+      end
+
+      # This ensures there is backwards compatibility for existing questions as we previously set "only_one_option" to
+      # "0" rather than "false"
+      context "when question has only_one_option value '0'" do
+        let(:page_with_checkboxes) do
+          create(:page,
+                 answer_type: "selection",
+                 answer_settings: {
+                   only_one_option: "0",
+                   selection_options: [{ name: "Option 1" }, { name: "Option 2" }],
+                 })
+        end
+
+        it "returns question with checkboxes" do
+          questions = described_class.new(form_documents).selection_questions_with_checkboxes
+          expect(questions.length).to be(1)
+          expect(questions.first["data"]["question_text"]).to eq(page_with_checkboxes.question_text)
+        end
+      end
+    end
+  end
+
   describe "#forms_with_branch_routes" do
     it "returns details needed to render report" do
       forms = described_class.new(form_documents).forms_with_branch_routes

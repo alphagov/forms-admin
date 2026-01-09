@@ -7,6 +7,8 @@ module ReportHelper
       report_forms_with_routes_table(records)
     when :questions
       report_questions_table(records)
+    when :selection_questions
+      report_selection_questions_table(records)
     else
       raise "type '#{type}' is not expected"
     end
@@ -30,6 +32,13 @@ module ReportHelper
     {
       head: report_questions_table_head,
       rows: report_questions_table_rows(questions),
+    }
+  end
+
+  def report_selection_questions_table(questions)
+    {
+      head: report_selection_questions_table_head,
+      rows: report_selection_questions_table_rows(questions),
     }
   end
 
@@ -92,6 +101,28 @@ private
     [
       *report_forms_table_row(question["form"]),
       question["data"]["question_text"],
+    ]
+  end
+
+  def report_selection_questions_table_head
+    [
+      *report_questions_table_head,
+      I18n.t("reports.selection_questions.questions.table_headings.number_of_options"),
+      I18n.t("reports.selection_questions.questions.table_headings.none_of_the_above"),
+    ]
+  end
+
+  def report_selection_questions_table_rows(questions)
+    questions.map { |question| report_selection_questions_table_row(question) }
+  end
+
+  def report_selection_questions_table_row(question)
+    selection_options_count = question.dig("data", "answer_settings", "selection_options").length.to_s
+    none_of_the_above = question["data"]["is_optional"] ? I18n.t("reports.selection_questions.questions.none_of_the_above_yes") : I18n.t("reports.selection_questions.questions.none_of_the_above_no")
+    [
+      *report_questions_table_row(question),
+      selection_options_count,
+      none_of_the_above,
     ]
   end
 

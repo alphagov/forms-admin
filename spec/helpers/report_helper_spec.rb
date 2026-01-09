@@ -50,6 +50,59 @@ RSpec.describe ReportHelper, type: :helper do
         expect(helper).to have_received(:report_questions_table).with(questions)
       end
     end
+
+    context "with 'selection_questions' type" do
+      subject(:table) { helper.report_table(:selection_questions, questions) }
+
+      let(:questions) do
+        [
+          build(:page, :selection_with_radios, question_text: "Radios question", is_optional: true).as_form_document_step(nil).merge("form" => forms[0]),
+          build(:page, :selection_with_checkboxes, question_text: "Checkboxes question", is_optional: false).as_form_document_step(nil).merge("form" => forms[1]),
+        ]
+      end
+
+      it "includes the correct table head" do
+        expect(table[:head]).to eq [
+          I18n.t("reports.form_or_questions_list_table.headings.form_name"),
+          I18n.t("reports.form_or_questions_list_table.headings.organisation"),
+          I18n.t("reports.form_or_questions_list_table.headings.question_text"),
+          I18n.t("reports.selection_questions.questions.table_headings.number_of_options"),
+          I18n.t("reports.selection_questions.questions.table_headings.none_of_the_above"),
+        ]
+      end
+
+      it "formats a link for each form for the first column of each row" do
+        expect(table[:rows].map(&:first)).to eq [
+          "<a class=\"govuk-link\" href=\"/forms/1/live/pages\">All question types form</a>",
+          "<a class=\"govuk-link\" href=\"/forms/3/live/pages\">Branch route form</a>",
+        ]
+      end
+
+      it "includes the organisation name for each form for the second column of each row" do
+        expect(table[:rows].map(&:second)).to eq [
+          "Government Digital Service",
+          "Ministry of Tests",
+        ]
+      end
+
+      it "includes the question text for each question for the third column of each row" do
+        expect(table[:rows].map(&:third)).to eq [
+          "Radios question",
+          "Checkboxes question",
+        ]
+      end
+
+      it "includes the number of options for each question for the fourth column of each row" do
+        expect(table[:rows].map(&:fourth)).to eq %w[30 2]
+      end
+
+      it "includes whether 'none of the above' is included for each question for the fifth column of each row" do
+        expect(table[:rows].map(&:fifth)).to eq [
+          I18n.t("reports.selection_questions.questions.none_of_the_above_yes"),
+          I18n.t("reports.selection_questions.questions.none_of_the_above_no"),
+        ]
+      end
+    end
   end
 
   describe "#report_forms_table" do
