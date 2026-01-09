@@ -1696,6 +1696,16 @@ en:
         forms_row_heading: "%{tag} forms using one or more"
         heading: Select one or more
         view_questions: Questions where you can select one or more from up to 30 questions
+      none_of_the_above:
+        heading: Questions with ‘None of the above’
+        table_headings:
+          follow_up_questions: Follow-up questions if ‘None of the above’ is selected
+          forms_with_follow_up_questions: "%{tag} forms with follow-up question if ‘None of the above’ is selected"
+          forms_with_none_of_the_above: "%{tag} forms with ‘None of the above’ in a question"
+          mandatory_follow_up_questions: Mandatory ‘None of the above’ follow‑up questions
+          optional_follow_up_questions: Optional ‘None of the above’ follow‑up questions
+          questions_with_none_of_the_above: Questions with ‘None of the above’
+        view_questions: Questions with ‘None of the above’ (including follow-up questions)
       number_of_questions: Number of questions
       radios:
         forms_row_heading: "%{tag} forms with 30 options or fewer"

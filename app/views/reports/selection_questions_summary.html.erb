@@ -8,15 +8,15 @@
     <p><%= govuk_link_to t(".autocomplete.view_questions"), report_selection_questions_with_autocomplete_path, no_visited_state: true %></p>
     <%= govuk_summary_list(actions: false) do |summary_list| %>
       <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: t(".autocomplete.forms_row_heading", tag: tag_label(tag)).upcase_first) %>
+        <%= row.with_key(text: t(".autocomplete.forms_row_heading", tag: tag_label(tag)).upcase_first, classes: "govuk-!-width-one-half") %>
         <%= row.with_value(text: data[:autocomplete][:form_ids].length) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: t(".number_of_questions")) %>
+        <%= row.with_key(text: t(".number_of_questions"), classes: "govuk-!-width-one-half") %>
         <%= row.with_value(text: data[:autocomplete][:question_count]) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: t(".with_none_of_the_above")) %>
+        <%= row.with_key(text: t(".with_none_of_the_above"), classes: "govuk-!-width-one-half") %>
         <%= row.with_value(text: data[:autocomplete][:optional_question_count]) %>
       <% end %>
     <% end %>
@@ -25,15 +25,15 @@
     <p><%= govuk_link_to t(".radios.view_questions"), report_selection_questions_with_radios_path, no_visited_state: true %></p>
     <%= govuk_summary_list(actions: false) do |summary_list| %>
       <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: t(".radios.forms_row_heading", tag: tag_label(tag)).upcase_first) %>
+        <%= row.with_key(text: t(".radios.forms_row_heading", tag: tag_label(tag)).upcase_first, classes: "govuk-!-width-one-half") %>
         <%= row.with_value(text: data[:radios][:form_ids].length) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: t(".number_of_questions")) %>
+        <%= row.with_key(text: t(".number_of_questions"), classes: "govuk-!-width-one-half") %>
         <%= row.with_value(text: data[:radios][:question_count]) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: t(".with_none_of_the_above")) %>
+        <%= row.with_key(text: t(".with_none_of_the_above"), classes: "govuk-!-width-one-half") %>
         <%= row.with_value(text: data[:radios][:optional_question_count]) %>
       <% end %>
     <% end %>
@@ -42,16 +42,45 @@
     <p><%= govuk_link_to t(".checkboxes.view_questions"), report_selection_questions_with_checkboxes_path, no_visited_state: true %></p>
     <%= govuk_summary_list(actions: false) do |summary_list| %>
       <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: t(".checkboxes.forms_row_heading", tag: tag_label(tag)).upcase_first) %>
+        <%= row.with_key(text: t(".checkboxes.forms_row_heading", tag: tag_label(tag)).upcase_first, classes: "govuk-!-width-one-half") %>
         <%= row.with_value(text: data[:checkboxes][:form_ids].length) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: t(".number_of_questions")) %>
+        <%= row.with_key(text: t(".number_of_questions"), classes: "govuk-!-width-one-half") %>
         <%= row.with_value(text: data[:checkboxes][:question_count]) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: t(".with_none_of_the_above")) %>
+        <%= row.with_key(text: t(".with_none_of_the_above"), classes: "govuk-!-width-one-half") %>
         <%= row.with_value(text: data[:checkboxes][:optional_question_count]) %>
+      <% end %>
+    <% end %>
+
+    <h2 class="govuk-heading-m"><%= t(".none_of_the_above.heading") %></h2>
+    <p><%= govuk_link_to t(".none_of_the_above.view_questions"), report_selection_questions_with_none_of_the_above_path, no_visited_state: true %></p>
+    <%= govuk_summary_list(actions: false) do |summary_list| %>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".none_of_the_above.table_headings.forms_with_none_of_the_above", tag: tag_label(tag)).upcase_first, classes: "govuk-!-width-one-half") %>
+        <%= row.with_value(text: data[:include_none_of_the_above][:form_ids].length) %>
+      <% end %>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".none_of_the_above.table_headings.questions_with_none_of_the_above"), classes: "govuk-!-width-one-half") %>
+        <%= row.with_value(text: data[:include_none_of_the_above][:question_count]) %>
+      <% end %>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".none_of_the_above.table_headings.forms_with_follow_up_questions", tag: tag_label(tag)).upcase_first, classes: "govuk-!-width-one-half") %>
+        <%= row.with_value(text: data[:include_none_of_the_above][:with_follow_up_question][:form_ids].length) %>
+      <% end %>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".none_of_the_above.table_headings.follow_up_questions"), classes: "govuk-!-width-one-half") %>
+        <%= row.with_value(text: data[:include_none_of_the_above][:with_follow_up_question][:question_count]) %>
+      <% end %>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".none_of_the_above.table_headings.mandatory_follow_up_questions"), classes: "govuk-!-width-one-half") %>
+        <%= row.with_value(text: data[:include_none_of_the_above][:with_follow_up_question][:mandatory_follow_up_question_count]) %>
+      <% end %>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".none_of_the_above.table_headings.optional_follow_up_questions"), classes: "govuk-!-width-one-half") %>
+        <%= row.with_value(text: data[:include_none_of_the_above][:with_follow_up_question][:optional_follow_up_question_count]) %>
       <% end %>
     <% end %>
   </div>

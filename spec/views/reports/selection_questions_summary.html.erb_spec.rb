@@ -18,6 +18,16 @@ describe "reports/selection_questions_summary.html.erb" do
         question_count: 99,
         optional_question_count: 88,
       },
+      include_none_of_the_above: {
+        form_ids: Set.new([1, 2]),
+        question_count: 5,
+        with_follow_up_question: {
+          form_ids: Set.new([1]),
+          question_count: 4,
+          mandatory_follow_up_question_count: 3,
+          optional_follow_up_question_count: 1,
+        },
+      },
     }
   end
   let(:tag) { "live" }
@@ -72,5 +82,24 @@ describe "reports/selection_questions_summary.html.erb" do
 
   it "has link to questions with checkboxes report" do
     expect(rendered).to have_link("Questions where you can select one or more from up to 30 questions", href: report_selection_questions_with_checkboxes_path)
+  end
+
+  it "has statistics about questions with none of the above" do
+    expect(rendered).to have_xpath "(//dl)[4]/div[1]/dt", text: "Live forms with ‘None of the above’"
+    expect(rendered).to have_xpath "(//dl)[4]/div[1]/dd", text: "2"
+    expect(rendered).to have_xpath "(//dl)[4]/div[2]/dt", text: "Questions with ‘None of the above’"
+    expect(rendered).to have_xpath "(//dl)[4]/div[2]/dd", text: "5"
+    expect(rendered).to have_xpath "(//dl)[4]/div[3]/dt", text: "Live forms with follow-up question if ‘None of the above’ is selected"
+    expect(rendered).to have_xpath "(//dl)[4]/div[3]/dd", text: "1"
+    expect(rendered).to have_xpath "(//dl)[4]/div[4]/dt", text: "Follow-up questions if ‘None of the above’ is selected"
+    expect(rendered).to have_xpath "(//dl)[4]/div[4]/dd", text: "4"
+    expect(rendered).to have_xpath "(//dl)[4]/div[5]/dt", text: "Mandatory ‘None of the above’ follow‑up questions"
+    expect(rendered).to have_xpath "(//dl)[4]/div[5]/dd", text: "3"
+    expect(rendered).to have_xpath "(//dl)[4]/div[6]/dt", text: "Optional ‘None of the above’ follow‑up questions"
+    expect(rendered).to have_xpath "(//dl)[4]/div[6]/dd", text: "1"
+  end
+
+  it "has link to questions with none of the above report" do
+    expect(rendered).to have_link("Questions with ‘None of the above’ (including follow-up questions)", href: report_selection_questions_with_none_of_the_above_path)
   end
 end
