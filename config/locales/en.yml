@@ -1622,8 +1622,6 @@ en:
         forms_with_s3_submissions: "%{tag} forms with S3 submissions"
         heading: Feature usage
         total_forms: Total %{tag} forms
-      long_list_usage:
-        title: Selection from a list of options feature usage in live forms
       title: Feature and answer type usage in %{tag} forms
     form_or_questions_list_table:
       headings:
@@ -1689,20 +1687,20 @@ en:
           number_of_options: Number of options
       summary:
         autocomplete:
+          forms_row_heading: "%{tag} forms with more than 30 options"
           heading: Select one from over 30 options
-          live_forms: Live forms with more than 30 options
           view_questions: Questions where you can select one from over 30 options
         back_link: Back to feature usage
         checkboxes:
+          forms_row_heading: "%{tag} forms using one or more"
           heading: Select one or more
-          live_forms: Live forms using one or more
           view_questions: Questions where you can select one or more from up to 30 questions
         number_of_questions: Number of questions
         radios:
+          forms_row_heading: "%{tag} forms with 30 options or fewer"
           heading: Select one from up to 30 options
-          live_forms: Live forms with 30 options or fewer
           view_questions: Questions where you can select one from up to 30 options
-        title: Selection from a list of options answer type usage in live forms
+        title: Selection from a list of options answer type usage in %{tag} forms
         with_none_of_the_above: Questions with ‘None of the above’
     selection_questions_with_autocomplete:
       download_csv: Download all questions where you can select one from over 30 options in %{tag} forms as a CSV file

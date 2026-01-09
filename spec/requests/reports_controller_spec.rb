@@ -407,7 +407,7 @@ RSpec.describe ReportsController, type: :request do
     describe "#selection_questions_summary" do
       before do
         login_as_super_admin_user
-        get report_selection_questions_summary_path
+        get report_selection_questions_summary_path(tag: :live)
       end
 
       it "returns http code 200 and renders the selection questions summary template" do
@@ -415,7 +415,7 @@ RSpec.describe ReportsController, type: :request do
         expect(response).to render_template("reports/selection_questions/summary")
 
         node = Capybara.string(response.body)
-        expect(node).to have_xpath "(//dl)[1]/div[1]/dt", text: I18n.t("reports.selection_questions.summary.autocomplete.live_forms")
+        expect(node).to have_xpath "(//dl)[1]/div[1]/dt", text: "Live forms with more than 30 options"
         expect(node).to have_xpath "(//dl)[1]/div[1]/dd", text: "1"
       end
     end
@@ -423,7 +423,7 @@ RSpec.describe ReportsController, type: :request do
     describe "#selection_questions_with_autocomplete" do
       before do
         login_as_super_admin_user
-        get report_selection_questions_with_autocomplete_path
+        get report_selection_questions_with_autocomplete_path(tag: :live)
       end
 
       it "returns http code 200" do
@@ -438,7 +438,7 @@ RSpec.describe ReportsController, type: :request do
     describe "#selection_questions_with_radios" do
       before do
         login_as_super_admin_user
-        get report_selection_questions_with_radios_path
+        get report_selection_questions_with_radios_path(tag: :live)
       end
 
       it "returns http code 200 and renders the report" do
@@ -453,7 +453,7 @@ RSpec.describe ReportsController, type: :request do
     describe "#selection_questions_with_checkboxes" do
       before do
         login_as_super_admin_user
-        get report_selection_questions_with_checkboxes_path
+        get report_selection_questions_with_checkboxes_path(tag: :live)
       end
 
       it "returns http code 200 and renders the report" do

@@ -114,15 +114,15 @@ class ReportsController < WebController
   def last_signed_in_at; end
 
   def selection_questions_summary
-    tag = "live"
+    tag = params[:tag]
     forms = Reports::FormDocumentsService.form_documents(tag:)
     data = Reports::SelectionQuestionService.new(forms).statistics
 
-    render template: "reports/selection_questions/summary", locals: { data: }
+    render template: "reports/selection_questions/summary", locals: { tag:, data: }
   end
 
   def selection_questions_with_autocomplete
-    tag = "live"
+    tag = params[:tag]
     forms = Reports::FormDocumentsService.form_documents(tag:)
     questions = Reports::FeatureReportService.new(forms).selection_questions_with_autocomplete
 
@@ -130,7 +130,7 @@ class ReportsController < WebController
   end
 
   def selection_questions_with_radios
-    tag = "live"
+    tag = params[:tag]
     forms = Reports::FormDocumentsService.form_documents(tag:)
     questions = Reports::FeatureReportService.new(forms).selection_questions_with_radios
 
@@ -138,7 +138,7 @@ class ReportsController < WebController
   end
 
   def selection_questions_with_checkboxes
-    tag = "live"
+    tag = params[:tag]
     forms = Reports::FormDocumentsService.form_documents(tag:)
     questions = Reports::FeatureReportService.new(forms).selection_questions_with_checkboxes
 

@@ -235,15 +235,15 @@ Rails.application.routes.draw do
       get "forms-with-json-submission-email-attachments", to: "reports#forms_with_json_submission_email_attachments", as: :report_forms_with_json_submission_email_attachments
       get "forms-with-s3-submissions", to: "reports#forms_with_s3_submissions", as: :report_forms_with_s3_submissions
       get "forms-with-exit-pages", to: "reports#forms_with_exit_pages", as: :report_forms_with_exit_pages
+      get "selection-questions-summary", to: "reports#selection_questions_summary", as: :report_selection_questions_summary
+      get "selection-questions-with-autocomplete", to: "reports#selection_questions_with_autocomplete", as: :report_selection_questions_with_autocomplete
+      get "selection-questions-with-radios", to: "reports#selection_questions_with_radios", as: :report_selection_questions_with_radios
+      get "selection-questions-with-checkboxes", to: "reports#selection_questions_with_checkboxes", as: :report_selection_questions_with_checkboxes
     end
 
     get "users", to: "reports#users", as: :report_users
     get "add_another_answer", to: "reports#add_another_answer", as: :report_add_another_answer
     get "last-signed-in-at", to: "reports#last_signed_in_at", as: :report_last_signed_in_at
-    get "selection-questions-summary", to: "reports#selection_questions_summary", as: :report_selection_questions_summary
-    get "selection-questions-with-autocomplete", to: "reports#selection_questions_with_autocomplete", as: :report_selection_questions_with_autocomplete
-    get "selection-questions-with-radios", to: "reports#selection_questions_with_radios", as: :report_selection_questions_with_radios
-    get "selection-questions-with-checkboxes", to: "reports#selection_questions_with_checkboxes", as: :report_selection_questions_with_checkboxes
     get "csv-downloads", to: "reports#csv_downloads", as: :report_csv_downloads
     get "live-forms-csv", to: "reports#live_forms_csv", as: :report_live_forms_csv
     get "live-questions-csv", to: "reports#live_questions_csv", as: :report_live_questions_csv
