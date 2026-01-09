@@ -253,6 +253,11 @@ Rails.application.routes.draw do
   scope "api/v2", as: "api_v2" do
     scope "forms/:form_id" do
       get "/:tag", to: "api/form_documents#show", as: :form_document, constraints: { tag: /draft|live|archived/ }
+
+      scope "/metrics" do
+        post "/started", to: "api/form_metrics#record_form_started", as: :record_form_started
+        post "/submitted", to: "api/form_metrics#record_form_submitted", as: :record_form_submitted
+      end
     end
   end
 

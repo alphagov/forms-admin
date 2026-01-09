@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_18_113120) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_05_160954) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -81,6 +81,15 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_18_113120) do
     t.datetime "updated_at", null: false
     t.index ["form_id", "tag", "language"], name: "index_form_documents_on_form_id_tag_and_language", unique: true
     t.index ["form_id"], name: "index_form_documents_on_form_id"
+  end
+
+  create_table "form_metrics", force: :cascade do |t|
+    t.date "date", null: false
+    t.bigint "form_id", null: false
+    t.string "metric_name", null: false
+    t.integer "total", default: 0, null: false
+    t.index ["form_id", "date", "metric_name"], name: "index_form_metrics_on_form_id_and_date_and_metric_name", unique: true
+    t.index ["form_id"], name: "index_form_metrics_on_form_id"
   end
 
   create_table "form_submission_emails", force: :cascade do |t|
@@ -283,6 +292,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_18_113120) do
   add_foreign_key "create_form_events", "users", on_delete: :cascade
   add_foreign_key "draft_questions", "users"
   add_foreign_key "form_documents", "forms"
+  add_foreign_key "form_metrics", "forms"
   add_foreign_key "form_translations", "forms"
   add_foreign_key "groups", "users", column: "creator_id"
   add_foreign_key "groups", "users", column: "upgrade_requester_id"
