@@ -30,23 +30,23 @@ RSpec.describe ReportHelper, type: :helper do
       allow(helper).to receive(:report_questions_table).and_call_original
     end
 
-    context "with list of forms" do
+    context "with 'forms' type" do
       it "calls #report_forms_table" do
-        helper.report_table(forms)
+        helper.report_table(:forms, forms)
         expect(helper).to have_received(:report_forms_table).with(forms)
       end
     end
 
-    context "with list of forms with routes" do
+    context "with 'forms_with_routes' type" do
       it "calls #report_forms_with_routes_table" do
-        helper.report_table(forms_with_routes)
+        helper.report_table(:forms_with_routes, forms_with_routes)
         expect(helper).to have_received(:report_forms_with_routes_table).with(forms_with_routes)
       end
     end
 
-    context "with list of questions" do
+    context "with 'questions' type" do
       it "calls #report_questions_table" do
-        helper.report_table(questions)
+        helper.report_table(:questions, questions)
         expect(helper).to have_received(:report_questions_table).with(questions)
       end
     end
