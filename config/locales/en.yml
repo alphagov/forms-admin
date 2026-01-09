@@ -1591,6 +1591,7 @@ en:
       title: All forms with add another answer
     back_link: Back to reports
     back_to_feature_usage: Back to feature and answer type usage
+    back_to_selection_questions_summary: Back to selection from a list of options usage
     contact_for_research:
       heading: Users who’ve agreed to be contacted about user research
       table_headings:
