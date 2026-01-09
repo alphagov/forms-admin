@@ -2,23 +2,23 @@ require "rails_helper"
 
 describe "reports/selection_questions/summary.html.erb" do
   let(:data) do
-    OpenStruct.new(
-      autocomplete: OpenStruct.new(
-        form_count: 222,
+    {
+      autocomplete: {
+        form_ids: Set.new([1, 2, 3, 4]),
         question_count: 444,
         optional_question_count: 111,
-      ),
-      radios: OpenStruct.new(
-        form_count: 33,
+      },
+      radios: {
+        form_ids: Set.new([1, 2, 3]),
         question_count: 77,
         optional_question_count: 44,
-      ),
-      checkboxes: OpenStruct.new(
-        form_count: 55,
+      },
+      checkboxes: {
+        form_ids: Set.new([1, 2]),
         question_count: 99,
         optional_question_count: 88,
-      ),
-    )
+      },
+    }
   end
   let(:tag) { "live" }
 
@@ -37,7 +37,7 @@ describe "reports/selection_questions/summary.html.erb" do
 
   it "has statistics about questions with autocomplete" do
     expect(rendered).to have_xpath "(//dl)[1]/div[1]/dt", text: "Live forms with more than 30 options"
-    expect(rendered).to have_xpath "(//dl)[1]/div[1]/dd", text: "222"
+    expect(rendered).to have_xpath "(//dl)[1]/div[1]/dd", text: "4"
     expect(rendered).to have_xpath "(//dl)[1]/div[2]/dt", text: "Number of questions"
     expect(rendered).to have_xpath "(//dl)[1]/div[2]/dd", text: "444"
     expect(rendered).to have_xpath "(//dl)[1]/div[3]/dt", text: "Questions with ‘None of the above’"
@@ -50,7 +50,7 @@ describe "reports/selection_questions/summary.html.erb" do
 
   it "has statistics about questions with radio buttons" do
     expect(rendered).to have_xpath "(//dl)[2]/div[1]/dt", text: "Live forms with 30 options or fewer"
-    expect(rendered).to have_xpath "(//dl)[2]/div[1]/dd", text: "33"
+    expect(rendered).to have_xpath "(//dl)[2]/div[1]/dd", text: "3"
     expect(rendered).to have_xpath "(//dl)[2]/div[2]/dt", text: "Number of questions"
     expect(rendered).to have_xpath "(//dl)[2]/div[2]/dd", text: "77"
     expect(rendered).to have_xpath "(//dl)[2]/div[3]/dt", text: "Questions with ‘None of the above’"
@@ -63,7 +63,7 @@ describe "reports/selection_questions/summary.html.erb" do
 
   it "has statistics about questions with checkboxes buttons" do
     expect(rendered).to have_xpath "(//dl)[3]/div[1]/dt", text: "Live forms using one or more"
-    expect(rendered).to have_xpath "(//dl)[3]/div[1]/dd", text: "55"
+    expect(rendered).to have_xpath "(//dl)[3]/div[1]/dd", text: "2"
     expect(rendered).to have_xpath "(//dl)[3]/div[2]/dt", text: "Number of questions"
     expect(rendered).to have_xpath "(//dl)[3]/div[2]/dd", text: "99"
     expect(rendered).to have_xpath "(//dl)[3]/div[3]/dt", text: "Questions with ‘None of the above’"

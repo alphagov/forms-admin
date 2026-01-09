@@ -6,53 +6,53 @@
 
     <h2 class="govuk-heading-m"><%= t(".autocomplete.heading") %></h2>
     <p><%= govuk_link_to t(".autocomplete.view_questions"), report_selection_questions_with_autocomplete_path, no_visited_state: true %></p>
-    <%= govuk_summary_list do |summary_list|%>
+    <%= govuk_summary_list(actions: false) do |summary_list| %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".autocomplete.forms_row_heading", tag: tag_label(tag)).upcase_first) %>
-        <%= row.with_value(text: data.autocomplete.form_count) %>
-      <%end%>
+        <%= row.with_value(text: data[:autocomplete][:form_ids].length) %>
+      <% end %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".number_of_questions")) %>
-        <%= row.with_value(text: data.autocomplete.question_count) %>
-      <%end%>
+        <%= row.with_value(text: data[:autocomplete][:question_count]) %>
+      <% end %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".with_none_of_the_above")) %>
-        <%= row.with_value(text: data.autocomplete.optional_question_count) %>
-      <%end%>
-    <%end%>
+        <%= row.with_value(text: data[:autocomplete][:optional_question_count]) %>
+      <% end %>
+    <% end %>
 
     <h2 class="govuk-heading-m"><%= t(".radios.heading") %></h2>
     <p><%= govuk_link_to t(".radios.view_questions"), report_selection_questions_with_radios_path, no_visited_state: true %></p>
-    <%= govuk_summary_list do |summary_list|%>
+    <%= govuk_summary_list(actions: false) do |summary_list| %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".radios.forms_row_heading", tag: tag_label(tag)).upcase_first) %>
-        <%= row.with_value(text: data.radios.form_count) %>
-      <%end%>
+        <%= row.with_value(text: data[:radios][:form_ids].length) %>
+      <% end %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".number_of_questions")) %>
-        <%= row.with_value(text: data.radios.question_count) %>
-      <%end%>
+        <%= row.with_value(text: data[:radios][:question_count]) %>
+      <% end %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".with_none_of_the_above")) %>
-        <%= row.with_value(text: data.radios.optional_question_count) %>
-      <%end%>
-    <%end%>
+        <%= row.with_value(text: data[:radios][:optional_question_count]) %>
+      <% end %>
+    <% end %>
 
     <h2 class="govuk-heading-m"><%= t(".checkboxes.heading") %></h2>
     <p><%= govuk_link_to t(".checkboxes.view_questions"), report_selection_questions_with_checkboxes_path, no_visited_state: true %></p>
-    <%= govuk_summary_list do |summary_list|%>
+    <%= govuk_summary_list(actions: false) do |summary_list| %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".checkboxes.forms_row_heading", tag: tag_label(tag)).upcase_first) %>
-        <%= row.with_value(text: data.checkboxes.form_count) %>
-      <%end%>
+        <%= row.with_value(text: data[:checkboxes][:form_ids].length) %>
+      <% end %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".number_of_questions")) %>
-        <%= row.with_value(text: data.checkboxes.question_count) %>
-      <%end%>
+        <%= row.with_value(text: data[:checkboxes][:question_count]) %>
+      <% end %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".with_none_of_the_above")) %>
-        <%= row.with_value(text: data.checkboxes.optional_question_count) %>
-      <%end%>
-    <%end%>
+        <%= row.with_value(text: data[:checkboxes][:optional_question_count]) %>
+      <% end %>
+    <% end %>
   </div>
 </div>

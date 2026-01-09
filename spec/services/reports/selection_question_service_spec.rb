@@ -24,14 +24,14 @@ RSpec.describe Reports::SelectionQuestionService do
 
     it "returns statistics" do
       response = selection_question_service.statistics
-      expect(response[:autocomplete].unique_form_ids_set.length).to be 2
-      expect(response[:autocomplete].question_count).to be 3
-      expect(response[:autocomplete].optional_question_count).to be 2
-      expect(response[:radios].unique_form_ids_set.length).to be 2
-      expect(response[:radios].question_count).to be 2
-      expect(response[:radios].optional_question_count).to be 1
-      expect(response[:checkboxes].unique_form_ids_set.length).to be 1
-      expect(response[:checkboxes].optional_question_count).to be 1
+      expect(response[:autocomplete][:form_ids].length).to be 2
+      expect(response[:autocomplete][:question_count]).to be 3
+      expect(response[:autocomplete][:optional_question_count]).to be 2
+      expect(response[:radios][:form_ids].length).to be 2
+      expect(response[:radios][:question_count]).to be 2
+      expect(response[:radios][:optional_question_count]).to be 1
+      expect(response[:checkboxes][:form_ids].length).to be 1
+      expect(response[:checkboxes][:optional_question_count]).to be 1
     end
   end
 end
