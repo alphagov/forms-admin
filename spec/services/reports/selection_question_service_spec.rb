@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Reports::SelectionQuestionService do
-  subject(:selection_question_service) { described_class.new }
+  subject(:selection_question_service) { described_class.new(form_documents) }
 
-  describe "#live_form_statistics" do
-    before do
+  describe "#statistics" do
+    let(:form_documents) do
       form_1_pages = [
         build(:page, :selection_with_autocomplete, is_optional: false),
         build(:page, :selection_with_autocomplete, is_optional: true),
@@ -15,12 +15,15 @@ RSpec.describe Reports::SelectionQuestionService do
         build(:page, :selection_with_autocomplete, is_optional: true),
         build(:page, :selection_with_radios, is_optional: false),
       ]
-      create :form, state: "live", pages: form_1_pages
-      create :form, state: "live_with_draft", pages: form_2_pages
+
+      [
+        create(:form, :live, pages: form_1_pages).live_form_document.as_json,
+        create(:form, :live, pages: form_2_pages).live_form_document.as_json,
+      ]
     end
 
     it "returns statistics" do
-      response = selection_question_service.live_form_statistics
+      response = selection_question_service.statistics
       expect(response[:autocomplete].unique_form_ids_set.length).to be 2
       expect(response[:autocomplete].question_count).to be 3
       expect(response[:autocomplete].optional_question_count).to be 2
@@ -38,6 +41,7 @@ RSpec.describe Reports::SelectionQuestionService do
     let(:page_with_radios) { build(:page, :selection_with_radios) }
     let(:page_with_checkboxes) { build(:page, :selection_with_checkboxes) }
     let(:not_selection_question) { build :page, answer_type: "name" }
+    let(:form_documents) { [] }
 
     before do
       form
@@ -86,11 +90,11 @@ RSpec.describe Reports::SelectionQuestionService do
       context "when question has only_one_option value '0'" do
         let(:page_with_checkboxes) do
           create(:page,
-                 answer_type: "selection",
-                 answer_settings: {
-                   only_one_option: "0",
-                   selection_options: [{ name: "Option 1" }, { name: "Option 2" }],
-                 })
+            answer_type: "selection",
+            answer_settings: {
+              only_one_option: "0",
+              selection_options: [{ name: "Option 1" }, { name: "Option 2" }],
+            })
         end
 
         it "returns question with checkboxes" do

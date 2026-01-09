@@ -114,7 +114,9 @@ class ReportsController < WebController
   def last_signed_in_at; end
 
   def selection_questions_summary
-    data = Reports::SelectionQuestionService.new.live_form_statistics
+    tag = "live"
+    forms = Reports::FormDocumentsService.form_documents(tag:)
+    data = Reports::SelectionQuestionService.new(forms).statistics
 
     render template: "reports/selection_questions/summary", locals: { data: }
   end
