@@ -11,6 +11,7 @@ class FormCopyService
   end
 
   def copy(tag: "draft")
+    # Copy the main form structure from English FormDocument first
     form_doc = FormDocument.find_by(form_id: @form.id, tag:, language: :en)
     return false if form_doc.blank?
 
@@ -18,15 +19,19 @@ class FormCopyService
 
     ActiveRecord::Base.transaction do
       copy_attributes(content)
-      prepend_name
+      prepend_name_for_language(:en)
 
       copy_pages(content["steps"])
       copy_routing_conditions(content["steps"])
       copy_group
 
       @copied_form.copied_from_id = @form.id
-
       @copied_form.save!
+
+      # Copy Welsh translations if available
+      if @form.available_languages.include?("cy")
+        copy_welsh_translations(tag:)
+      end
     rescue ActiveRecord::RecordInvalid => e
       Rails.logger.error("Failed to copy form #{@form.id}: #{e.message}")
       raise
@@ -34,6 +39,7 @@ class FormCopyService
 
     log_form_copied(original_form_id: @form.id, copied_form_id: @copied_form.id, creator_id: @logged_in_user.id)
 
+    @copied_form.reload
     @copied_form
   end
 
@@ -72,8 +78,34 @@ private
     )
   end
 
-  def prepend_name
-    @copied_form.name = "Copy of #{@form.name}"
+  def prepend_name_for_language(language)
+    if language == :en
+      @copied_form.name = "Copy of #{@form.name}"
+    elsif language == :cy
+      @copied_form.name_cy = "Copy of #{@form.name_cy}" if @form.name_cy.present?
+    end
+  end
+
+  def copy_welsh_translations(tag:)
+    welsh_doc = FormDocument.find_by(form_id: @form.id, tag:, language: :cy)
+    return unless welsh_doc
+
+    welsh_content = welsh_doc.content
+
+    # Copy Welsh translations from FormDocument content
+    Mobility.with_locale(:cy) do
+      # Only copy the translatable attributes in Welsh locale
+      translatable_attrs = %w[name privacy_policy_url support_email support_phone support_url support_url_text declaration_text what_happens_next_markdown payment_url]
+      welsh_content.slice(*translatable_attrs).each do |key, value|
+        @copied_form.send("#{key}=", value) if value.present?
+      end
+      prepend_name_for_language(:cy)
+
+      # Copy Welsh page translations
+      copy_welsh_page_translations(welsh_content["steps"])
+
+      @copied_form.save!
+    end
   end
 
   def copy_routing_conditions(steps)
@@ -105,5 +137,25 @@ private
 
   def copy_group
     GroupForm.create(group_id: @form.group.id, form_id: @copied_form.id)
+  end
+
+  def copy_welsh_page_translations(welsh_steps)
+    return if welsh_steps.blank?
+
+    welsh_steps.each_with_index do |step, index|
+      page = @copied_form.pages[index]
+      next unless page
+
+      data = step["data"]
+      # Copy Welsh translatable fields for the page
+      # We need to reload to ensure Mobility has the right locale context
+      page.reload
+      page.question_text = data["question_text"] if data["question_text"].present?
+      page.hint_text = data["hint_text"] if data["hint_text"].present?
+      page.page_heading = data["page_heading"] if data["page_heading"].present?
+      page.guidance_markdown = data["guidance_markdown"] if data["guidance_markdown"].present?
+      page.answer_settings = data["answer_settings"] if data["answer_settings"].present?
+      page.save!(validate: false)
+    end
   end
 end

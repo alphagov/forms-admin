@@ -228,5 +228,113 @@ RSpec.describe FormCopyService do
         expect(copied_form.group).to eq(group)
       end
     end
+
+    context "when source form has Welsh language version with translated content" do
+      let(:source_form) do
+        form = create(:form, :live, :with_pages, pages_count: 2, available_languages: %w[en cy])
+        # Set Welsh-specific translations for form
+        form.name_cy = "Ffurflen Gymraeg"
+        form.privacy_policy_url_cy = "https://example.com/preifatrwydd"
+        form.support_email_cy = "cymorth@example.com"
+        form.support_phone_cy = "0800 111 222"
+        form.support_url_cy = "https://example.com/cymorth"
+        form.support_url_text_cy = "Cael cymorth"
+        form.declaration_text_cy = "Rwy'n datgan bod hyn yn wir"
+        form.what_happens_next_markdown_cy = "Byddwn yn cysylltu â chi"
+        form.payment_url_cy = "https://example.com/talu"
+        form.save!
+        # Set Welsh translations for pages - must save each page individually
+        form.pages.first.update!(question_text_cy: "Cwestiwn Cymraeg 1", hint_text_cy: "Awgrym Cymraeg 1", page_heading_cy: "Pennwr Tudalen Cymraeg 1")
+        form.pages.last.update!(question_text_cy: "Cwestiwn Cymraeg 2", hint_text_cy: "Awgrym Cymraeg 2")
+        # Synchronize live FormDocuments for both languages
+        FormDocumentSyncService.new(form).synchronize_live_form
+        form.reload
+        form
+      end
+
+      it "copies the Welsh-translated content from the source form" do
+        source_welsh = source_form.form_documents.find_by(language: "cy", tag: "live")
+        expect(source_welsh).to be_present
+        expect(source_welsh.content["name"]).to eq("Ffurflen Gymraeg")
+
+        # Copied form should have Welsh FormDocument with translated content
+        copied_welsh = copied_form.form_documents.find_by(language: "cy", tag: "draft")
+        expect(copied_welsh).to be_present
+        expect(copied_welsh.content["name"]).to eq("Copy of Ffurflen Gymraeg")
+        expect(copied_welsh.content["privacy_policy_url"]).to eq("https://example.com/preifatrwydd")
+        expect(copied_welsh.content["support_email"]).to eq("cymorth@example.com")
+        expect(copied_welsh.content["support_phone"]).to eq("0800 111 222")
+        expect(copied_welsh.content["support_url"]).to eq("https://example.com/cymorth")
+        expect(copied_welsh.content["support_url_text"]).to eq("Cael cymorth")
+        expect(copied_welsh.content["declaration_text"]).to eq("Rwy'n datgan bod hyn yn wir")
+        expect(copied_welsh.content["what_happens_next_markdown"]).to eq("Byddwn yn cysylltu â chi")
+        expect(copied_welsh.content["payment_url"]).to eq("https://example.com/talu")
+      end
+
+      it "persists Welsh translations on the copied Form model" do
+        # Ensure model-level Mobility translations are set correctly
+        expect(copied_form.name_cy).to eq("Copy of Ffurflen Gymraeg")
+        expect(copied_form.privacy_policy_url_cy).to eq("https://example.com/preifatrwydd")
+        expect(copied_form.support_email_cy).to eq("cymorth@example.com")
+        expect(copied_form.support_phone_cy).to eq("0800 111 222")
+        expect(copied_form.support_url_cy).to eq("https://example.com/cymorth")
+        expect(copied_form.support_url_text_cy).to eq("Cael cymorth")
+        expect(copied_form.declaration_text_cy).to eq("Rwy'n datgan bod hyn yn wir")
+        expect(copied_form.what_happens_next_markdown_cy).to eq("Byddwn yn cysylltu â chi")
+        expect(copied_form.payment_url_cy).to eq("https://example.com/talu")
+
+        # Check that values are accessible in Welsh locale context
+        Mobility.with_locale(:cy) do
+          expect(copied_form.name).to eq("Copy of Ffurflen Gymraeg")
+          expect(copied_form.privacy_policy_url).to eq("https://example.com/preifatrwydd")
+          expect(copied_form.support_email).to eq("cymorth@example.com")
+        end
+      end
+
+      it "persists Welsh translations on copied pages" do
+        expect(copied_form.pages.count).to eq(2)
+
+        # Reload to get the latest state from the database
+        copied_form.reload
+        first_page = copied_form.pages.first
+        expect(first_page.question_text_cy).to eq("Cwestiwn Cymraeg 1")
+        expect(first_page.hint_text_cy).to eq("Awgrym Cymraeg 1")
+        expect(first_page.page_heading_cy).to eq("Pennwr Tudalen Cymraeg 1")
+
+        last_page = copied_form.pages.last
+        expect(last_page.question_text_cy).to eq("Cwestiwn Cymraeg 2")
+        expect(last_page.hint_text_cy).to eq("Awgrym Cymraeg 2")
+
+        # Check that page values are accessible in Welsh locale context
+        Mobility.with_locale(:cy) do
+          expect(first_page.question_text).to eq("Cwestiwn Cymraeg 1")
+          expect(first_page.hint_text).to eq("Awgrym Cymraeg 1")
+        end
+      end
+    end
+
+    context "when Welsh copy fails" do
+      let(:source_form) do
+        form = create(:form, :live, available_languages: %w[en cy])
+        form.name_cy = "Ffurflen Gymraeg"
+        form.save!
+        FormDocumentSyncService.new(form).synchronize_live_form
+        form
+      end
+
+      it "rolls back the entire copy if Welsh translation copying fails" do
+        # Stub the Welsh copying to raise an AR::RecordInvalid to simulate a failure mid-transaction
+        service = described_class.new(source_form, logged_in_user)
+        allow(service).to receive(:copy_welsh_translations)
+          .and_raise(ActiveRecord::RecordInvalid.new(Form.new))
+
+        expect {
+          service.copy(tag: "live")
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        # Ensure no copied form was persisted
+        expect(Form.where(copied_from_id: source_form.id)).to be_empty
+      end
+    end
   end
 end
