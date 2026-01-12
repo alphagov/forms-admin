@@ -193,7 +193,9 @@ private
   def print_route(condition)
     answer_value = ActionController::Base.helpers.sanitize(condition.answer_value)
 
-    if condition.skip_to_end
+    if condition.skip_to_end && condition.secondary_skip?
+      I18n.t("page_conditions.condition_compact_html_secondary_skip_to_end_of_form")
+    elsif condition.skip_to_end
       I18n.t("page_conditions.condition_compact_html_end_of_form", answer_value:).html_safe
     elsif condition.secondary_skip?
       goto_question = @steps.find { |page| page.id == condition.goto_page_id }

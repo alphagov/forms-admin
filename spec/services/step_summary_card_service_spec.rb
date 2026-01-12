@@ -340,6 +340,27 @@ describe StepSummaryCardService do
         end
       end
 
+      context "with a secondary skip condition that points to the end of the form" do
+        let(:page) { pages.second }
+
+        before do
+          create :condition, routing_page_id: pages.first.id, check_page_id: pages.first.id, goto_page_id: pages.third.id, answer_value: "Option 1"
+          create :condition, routing_page_id: page.id, check_page_id: pages.first.id, skip_to_end: true
+
+          page.reload
+          form.reload.make_live!
+        end
+
+        it "returns the correct options" do
+          expect(step_summary_card_service.all_options_for_answer_type).to include(
+            {
+              key: { text: I18n.t("page_conditions.route") },
+              value: { text: I18n.t("page_conditions.condition_compact_html_secondary_skip_to_end_of_form") },
+            },
+          )
+        end
+      end
+
       context "with a secondary skip" do
         let(:page) { form.pages.second }
 
