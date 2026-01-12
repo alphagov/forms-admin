@@ -397,112 +397,71 @@ RSpec.describe ReportsController, type: :request do
     end
   end
 
-  describe "#selection_questions_summary" do
-    let(:summary) do
-      OpenStruct.new(
-        autocomplete: OpenStruct.new(
-          form_count: 234,
-          question_count: 432,
-          optional_question_count: 20,
-        ),
-        radios: OpenStruct.new(
-          form_count: 2,
-          question_count: 2,
-          optional_question_count: 1,
-        ),
-        checkboxes: OpenStruct.new(
-          form_count: 1,
-          question_count: 1,
-          optional_question_count: 1,
-        ),
-      )
-    end
-
-    before do
-      selection_question_service = Reports::SelectionQuestionService.new
-      allow(selection_question_service).to receive(:live_form_statistics).and_return(summary)
-      allow(Reports::SelectionQuestionService).to receive(:new).and_return(selection_question_service)
-
-      login_as_super_admin_user
-      get report_selection_questions_summary_path
-    end
-
-    it "returns http code 200 and renders the selection questions summary template" do
-      expect(response).to have_http_status(:ok)
-      expect(response).to render_template("reports/selection_questions/summary")
-    end
-  end
-
   describe "selection question reports" do
-    let(:data) do
-      OpenStruct.new(
-        questions: [
-          OpenStruct.new(
-            form_id: 1,
-            form_name: "A form",
-            question_text: "A question",
-            is_optional: true,
-            selection_options_count: 33,
-          ),
-        ],
-        count: 1,
-      )
+    let(:page_with_autocomplete) { build(:page, :selection_with_autocomplete, question_text: "Autocomplete question") }
+    let(:page_with_radios) { build(:page, :selection_with_radios, question_text: "Radios question") }
+    let(:page_with_checkboxes) { build(:page, :selection_with_checkboxes, question_text: "Checkboxes question") }
+    let(:form) { create(:form, :live, name: "A form", pages: [page_with_checkboxes, page_with_radios, page_with_autocomplete]) }
+    let(:forms) { [form] }
+
+    describe "#selection_questions_summary" do
+      before do
+        login_as_super_admin_user
+        get report_selection_questions_summary_path(tag: :live)
+      end
+
+      it "returns http code 200 and renders the selection questions summary template" do
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template("reports/selection_questions/summary")
+
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "(//dl)[1]/div[1]/dt", text: "Live forms with more than 30 options"
+        expect(node).to have_xpath "(//dl)[1]/div[1]/dd", text: "1"
+      end
     end
 
     describe "#selection_questions_with_autocomplete" do
       before do
-        selection_question_service = Reports::SelectionQuestionService.new
-        allow(selection_question_service).to receive(:live_form_pages_with_autocomplete).and_return(data)
-        allow(Reports::SelectionQuestionService).to receive(:new).and_return(selection_question_service)
-
         login_as_super_admin_user
-        get report_selection_questions_with_autocomplete_path
+        get report_selection_questions_with_autocomplete_path(tag: :live)
       end
 
       it "returns http code 200" do
         expect(response).to have_http_status(:ok)
-        expect(response).to render_template("reports/selection_questions/autocomplete")
+        expect(response).to render_template("reports/feature_report")
 
         expect(response.body).to include "A form"
-        expect(response.body).to include "A question"
+        expect(response.body).to include "Autocomplete question"
       end
     end
 
     describe "#selection_questions_with_radios" do
       before do
-        selection_question_service = Reports::SelectionQuestionService.new
-        allow(selection_question_service).to receive(:live_form_pages_with_radios).and_return(data)
-        allow(Reports::SelectionQuestionService).to receive(:new).and_return(selection_question_service)
-
         login_as_super_admin_user
-        get report_selection_questions_with_radios_path
+        get report_selection_questions_with_radios_path(tag: :live)
       end
 
       it "returns http code 200 and renders the report" do
         expect(response).to have_http_status(:ok)
-        expect(response).to render_template("reports/selection_questions/radios")
+        expect(response).to render_template("reports/feature_report")
 
         expect(response.body).to include "A form"
-        expect(response.body).to include "A question"
+        expect(response.body).to include "Radios question"
       end
     end
 
     describe "#selection_questions_with_checkboxes" do
       before do
-        selection_question_service = Reports::SelectionQuestionService.new
-        allow(selection_question_service).to receive(:live_form_pages_with_checkboxes).and_return(data)
-        allow(Reports::SelectionQuestionService).to receive(:new).and_return(selection_question_service)
-
         login_as_super_admin_user
-        get report_selection_questions_with_checkboxes_path
+        get report_selection_questions_with_checkboxes_path(tag: :live)
       end
 
       it "returns http code 200 and renders the report" do
         expect(response).to have_http_status(:ok)
-        expect(response).to render_template("reports/selection_questions/checkboxes")
+        expect(response).to render_template("reports/feature_report")
 
         expect(response.body).to include "A form"
-        expect(response.body).to include "A question"
+        expect(response.body).to include "Checkboxes question"
       end
     end
   end

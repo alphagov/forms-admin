@@ -259,6 +259,14 @@ describe "reports/feature_report" do
     end
   end
 
+  context "when type is selection_questions" do
+    let(:type) { :selection_questions }
+
+    it "has a back link to selection questions summary" do
+      expect(view.content_for(:back_link)).to have_link(I18n.t("reports.back_to_selection_questions_summary"), href: report_selection_questions_summary_path)
+    end
+  end
+
   context "when there are no records to render" do
     let(:report) { "forms_with_csv_submission_email_attachments" }
     let(:records) { [] }

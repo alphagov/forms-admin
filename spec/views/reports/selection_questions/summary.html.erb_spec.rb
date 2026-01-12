@@ -20,9 +20,11 @@ describe "reports/selection_questions/summary.html.erb" do
       ),
     )
   end
+  let(:tag) { "live" }
 
   before do
-    render template: "reports/selection_questions/summary", locals: { data: }
+    controller.request.path_parameters[:tag] = tag
+    render template: "reports/selection_questions/summary", locals: { tag:, data: }
   end
 
   it "has expected page title" do
