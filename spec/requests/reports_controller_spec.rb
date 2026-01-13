@@ -412,7 +412,7 @@ RSpec.describe ReportsController, type: :request do
 
       it "returns http code 200 and renders the selection questions summary template" do
         expect(response).to have_http_status(:ok)
-        expect(response).to render_template("reports/selection_questions/summary")
+        expect(response).to render_template("reports/selection_questions_summary")
 
         node = Capybara.string(response.body)
         expect(node).to have_xpath "(//dl)[1]/div[1]/dt", text: "Live forms with more than 30 options"

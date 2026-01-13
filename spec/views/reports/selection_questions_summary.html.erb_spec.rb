@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "reports/selection_questions/summary.html.erb" do
+describe "reports/selection_questions_summary.html.erb" do
   let(:data) do
     {
       autocomplete: {
@@ -24,7 +24,7 @@ describe "reports/selection_questions/summary.html.erb" do
 
   before do
     controller.request.path_parameters[:tag] = tag
-    render template: "reports/selection_questions/summary", locals: { tag:, data: }
+    render template: "reports/selection_questions_summary", locals: { tag:, data: }
   end
 
   it "has expected page title" do

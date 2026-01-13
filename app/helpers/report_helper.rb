@@ -107,8 +107,8 @@ private
   def report_selection_questions_table_head
     [
       *report_questions_table_head,
-      I18n.t("reports.selection_questions.questions.table_headings.number_of_options"),
-      I18n.t("reports.selection_questions.questions.table_headings.none_of_the_above"),
+      I18n.t("reports.form_or_questions_list_table.headings.number_of_options"),
+      I18n.t("reports.form_or_questions_list_table.headings.none_of_the_above"),
     ]
   end
 
@@ -118,7 +118,7 @@ private
 
   def report_selection_questions_table_row(question)
     selection_options_count = question.dig("data", "answer_settings", "selection_options").length.to_s
-    none_of_the_above = question["data"]["is_optional"] ? I18n.t("reports.selection_questions.questions.none_of_the_above_yes") : I18n.t("reports.selection_questions.questions.none_of_the_above_no")
+    none_of_the_above = question["data"]["is_optional"] ? I18n.t("reports.form_or_questions_list_table.values.yes") : I18n.t("reports.form_or_questions_list_table.values.no")
     [
       *report_questions_table_row(question),
       selection_options_count,

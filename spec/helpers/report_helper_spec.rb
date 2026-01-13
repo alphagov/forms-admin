@@ -66,8 +66,8 @@ RSpec.describe ReportHelper, type: :helper do
           I18n.t("reports.form_or_questions_list_table.headings.form_name"),
           I18n.t("reports.form_or_questions_list_table.headings.organisation"),
           I18n.t("reports.form_or_questions_list_table.headings.question_text"),
-          I18n.t("reports.selection_questions.questions.table_headings.number_of_options"),
-          I18n.t("reports.selection_questions.questions.table_headings.none_of_the_above"),
+          I18n.t("reports.form_or_questions_list_table.headings.number_of_options"),
+          I18n.t("reports.form_or_questions_list_table.headings.none_of_the_above"),
         ]
       end
 
@@ -98,8 +98,8 @@ RSpec.describe ReportHelper, type: :helper do
 
       it "includes whether 'none of the above' is included for each question for the fifth column of each row" do
         expect(table[:rows].map(&:fifth)).to eq [
-          I18n.t("reports.selection_questions.questions.none_of_the_above_yes"),
-          I18n.t("reports.selection_questions.questions.none_of_the_above_no"),
+          I18n.t("reports.form_or_questions_list_table.values.yes"),
+          I18n.t("reports.form_or_questions_list_table.values.no"),
         ]
       end
     end
