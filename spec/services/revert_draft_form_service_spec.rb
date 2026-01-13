@@ -136,6 +136,89 @@ describe RevertDraftFormService do
         end
       end
     end
+
+    context "when form has Welsh content" do
+      let(:live_form) do
+        form = create(:form, :live, :with_pages, pages_count: 2, available_languages: %w[en cy])
+        # Set Welsh translations for the form
+        form.name_cy = "Ffurflen Gymraeg"
+        form.privacy_policy_url_cy = "https://example.com/preifatrwydd"
+        form.support_email_cy = "cymorth@example.com"
+        form.support_phone_cy = "0800 111 222"
+        form.declaration_text_cy = "Rwy'n datgan bod hyn yn wir"
+        form.save!
+        # Set Welsh translations for pages
+        form.pages.first.update!(question_text_cy: "Cwestiwn Cymraeg 1", hint_text_cy: "Awgrym Cymraeg 1")
+        form.pages.last.update!(question_text_cy: "Cwestiwn Cymraeg 2", hint_text_cy: "Awgrym Cymraeg 2")
+        # Synchronize live FormDocuments for both languages
+        FormDocumentSyncService.new(form).synchronize_live_form
+        # Make the form live_with_draft
+        form.create_draft_from_live_form!
+        form.reload
+        form
+      end
+
+      context "when Welsh translations are changed in the draft" do
+        before do
+          # Change Welsh translations in the draft
+          live_form.name_cy = "Ffurflen Cymraeg Newydd"
+          live_form.support_email_cy = "cymorth_newydd@example.com"
+          live_form.pages.first.update!(question_text_cy: "Cwestiwn Newydd 1")
+          live_form.save!
+        end
+
+        it "restores the original Welsh translations from the live version" do
+          revert_draft(live_tag)
+
+          # Reload to get the restored state
+          live_form.reload
+
+          # Check that form-level Welsh translations are restored
+          expect(live_form.name_cy).to eq("Ffurflen Gymraeg")
+          expect(live_form.privacy_policy_url_cy).to eq("https://example.com/preifatrwydd")
+          expect(live_form.support_email_cy).to eq("cymorth@example.com")
+          expect(live_form.support_phone_cy).to eq("0800 111 222")
+          expect(live_form.declaration_text_cy).to eq("Rwy'n datgan bod hyn yn wir")
+
+          # Check that page-level Welsh translations are restored
+          expect(live_form.pages.first.question_text_cy).to eq("Cwestiwn Cymraeg 1")
+          expect(live_form.pages.first.hint_text_cy).to eq("Awgrym Cymraeg 1")
+          expect(live_form.pages.last.question_text_cy).to eq("Cwestiwn Cymraeg 2")
+          expect(live_form.pages.last.hint_text_cy).to eq("Awgrym Cymraeg 2")
+
+          # Verify Welsh content is accessible in Welsh locale
+          Mobility.with_locale(:cy) do
+            expect(live_form.name).to eq("Ffurflen Gymraeg")
+            expect(live_form.support_email).to eq("cymorth@example.com")
+            expect(live_form.pages.first.question_text).to eq("Cwestiwn Cymraeg 1")
+          end
+        end
+      end
+
+      context "when Welsh FormDocument exists in live but is modified in draft" do
+        before do
+          # Modify the form's Welsh content in draft
+          live_form.update!(name_cy: "Ffurflen Wedi'i Diwygio")
+        end
+
+        it "restores the Welsh FormDocument to match the live version" do
+          # Get the original live Welsh FormDocument content
+          original_welsh_doc = FormDocument.find_by(form_id: live_form.id, tag: "live", language: "cy")
+          expect(original_welsh_doc).to be_present
+          original_welsh_name = original_welsh_doc.content["name"]
+          expect(original_welsh_name).to eq("Ffurflen Gymraeg")
+
+          revert_draft(live_tag)
+
+          # After reverting, the Welsh FormDocument should be restored
+          live_form.reload
+          restored_welsh_doc = FormDocument.find_by(form_id: live_form.id, tag: "draft", language: "cy")
+          expect(restored_welsh_doc).to be_present
+          expect(restored_welsh_doc.content["name"]).to eq("Ffurflen Gymraeg")
+          expect(live_form.name_cy).to eq("Ffurflen Gymraeg")
+        end
+      end
+    end
   end
 
   describe "when using an archived form with drafts" do
