@@ -1628,6 +1628,7 @@ en:
       headings:
         form_name: Form name
         none_of_the_above: "‘None of the above’"
+        none_of_the_above_follow_up_question: "‘None of the above’ follow-up question"
         number_of_branch_routes: Number of branch routes
         number_of_options: Number of options
         number_of_routes: Number of routes
@@ -1635,6 +1636,7 @@ en:
         question_text: Question text
       values:
         'no': 'No'
+        no_follow_up_question: No follow-up question
         'yes': 'Yes'
     forms_that_are_copies:
       download_csv: Download data about all %{tag} forms that are copies as a CSV file
@@ -1709,6 +1711,10 @@ en:
       download_csv: Download all questions where you can select one or more from up to 30 options in %{tag} forms as a CSV file
       empty: There are no questions where you can select one or more from up to 30 options in %{tag} forms
       heading: Questions where you can select one or more from up to 30 options in %{tag} forms
+    selection_questions_with_none_of_the_above:
+      download_csv: Download all select from a list questions with ‘None of the above’ in %{tag} forms as a CSV file
+      empty: There are no select from a list questions with ‘None of the above’ in %{tag} forms
+      heading: Select from a list questions with ‘None of the above’ in %{tag} forms
     selection_questions_with_radios:
       download_csv: Download all questions where you can select one from up to 30 options in %{tag} forms as a CSV file
       empty: There are no questions where you can select one from up to 30 options in %{tag} forms

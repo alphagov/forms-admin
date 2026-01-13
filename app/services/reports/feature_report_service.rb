@@ -107,6 +107,17 @@ class Reports::FeatureReportService
     end
   end
 
+  def selection_questions_with_none_of_the_above
+    @form_documents.flat_map do |form|
+      form["content"]["steps"]
+        .select { |step|
+          step["data"]["answer_type"] == "selection" &&
+            step["data"]["is_optional"] == true
+        }
+        .map { |step| questions_details(form, step) }
+    end
+  end
+
   def forms_that_are_copies
     form_documents.select { |form| Reports::FormDocumentsService.is_copy?(form) }
   end

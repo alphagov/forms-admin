@@ -145,6 +145,14 @@ class ReportsController < WebController
     questions_feature_report(tag, params[:action], questions, type: :selection_questions)
   end
 
+  def selection_questions_with_none_of_the_above
+    tag = params[:tag]
+    forms = Reports::FormDocumentsService.form_documents(tag:)
+    questions = Reports::FeatureReportService.new(forms).selection_questions_with_none_of_the_above
+
+    questions_feature_report(tag, params[:action], questions, type: :selection_questions_with_none_of_the_above)
+  end
+
   def csv_downloads; end
 
   def live_forms_csv
