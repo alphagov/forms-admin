@@ -308,8 +308,7 @@ describe "forms/welsh_translation/new.html.erb" do
   context "when a page translation has validation errors" do
     before do
       welsh_page_translation_input.question_text_cy = nil
-      welsh_page_translation_input.mark_complete = mark_complete
-      welsh_translation_input.validate
+      welsh_translation_input.validate(mark_complete ? :mark_complete : nil)
 
       assign(:welsh_translation_input, welsh_translation_input)
       render
@@ -337,8 +336,7 @@ describe "forms/welsh_translation/new.html.erb" do
 
     before do
       welsh_condition_translation_input.exit_page_heading_cy = nil
-      welsh_condition_translation_input.mark_complete = "true"
-      welsh_translation_input.validate
+      welsh_translation_input.validate(mark_complete ? :mark_complete : nil)
 
       assign(:welsh_translation_input, welsh_translation_input)
       render

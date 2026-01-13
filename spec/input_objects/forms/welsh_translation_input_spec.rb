@@ -481,11 +481,11 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
     end
 
     context "when any of the form's page translations have errors" do
-      let(:page_translation) { Forms::WelshPageTranslationInput.new(id: page.id, mark_complete: "true") }
+      let(:page_translation) { Forms::WelshPageTranslationInput.new(id: page.id) }
       let(:new_input_data) { super().merge(page_translations: [page_translation]) }
 
       it "includes the page error with a custom attribute" do
-        expect(welsh_translation_input).not_to be_valid
+        expect(welsh_translation_input).not_to be_valid(:mark_complete)
         expect(welsh_translation_input.errors.full_messages_for(:page_1_question_text_cy)).to include "Page 1 question text cy #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.question_text_cy.blank', question_number: page.position)}"
       end
     end

@@ -154,8 +154,12 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   def page_translations_valid
     return if page_translations.nil?
 
+    # We pass :mark_complete as the validation context so the page_translations
+    # can validate differently depending on whether the form is marked complete
+    validation_context = form_marked_complete? ? :mark_complete : nil
+
     page_translations.each do |page_translation|
-      page_translation.validate
+      page_translation.validate(validation_context)
 
       page_translation.errors.each do |error|
         errors.import(error, { attribute: "page_#{page_translation.page.position}_#{error.attribute}".to_sym })

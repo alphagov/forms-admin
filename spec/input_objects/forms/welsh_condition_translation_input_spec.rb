@@ -11,11 +11,8 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
       id: condition.id,
       exit_page_markdown_cy: "Nid ydych yn gymwys",
       exit_page_heading_cy: "Mae'n ddrwg gennym, nid ydych yn gymwys ar gyfer y gwasanaeth hwn.",
-      mark_complete:,
     }
   end
-
-  let(:mark_complete) { "true" }
 
   def create_condition(attributes = {})
     default_attributes = {
@@ -31,14 +28,14 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
 
   describe "validations" do
     context "when the form is marked complete" do
-      let(:mark_complete) { "true" }
+      let(:validation_context) { :mark_complete }
 
       context "when the Welsh exit page heading is missing" do
         let(:new_input_data) { super().merge(exit_page_heading_cy: nil) }
 
         context "when the form has an exit page in English" do
           it "is not valid" do
-            expect(welsh_condition_translation_input).not_to be_valid
+            expect(welsh_condition_translation_input).not_to be_valid(validation_context)
             expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_heading_cy)).to include "Exit page heading cy #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_heading_cy.blank', question_number: condition.routing_page.position)}"
           end
         end
@@ -47,7 +44,7 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
           let(:condition) { create_condition(exit_page_heading: nil, exit_page_markdown: nil) }
 
           it "is valid" do
-            expect(welsh_condition_translation_input).to be_valid
+            expect(welsh_condition_translation_input).to be_valid(validation_context)
             expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_heading_cy)).to be_empty
           end
         end
@@ -58,7 +55,7 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
           let(:new_input_data) { super().merge(exit_page_heading_cy: "a" * 251) }
 
           it "is not valid" do
-            expect(welsh_condition_translation_input).not_to be_valid
+            expect(welsh_condition_translation_input).not_to be_valid(validation_context)
             expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_heading_cy)).to include "Exit page heading cy #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_heading_cy.too_long', question_number: condition.routing_page.position, count: 250)}"
           end
         end
@@ -67,7 +64,7 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
           let(:new_input_data) { super().merge(exit_page_heading_cy: "a" * 250) }
 
           it "is valid" do
-            expect(welsh_condition_translation_input).to be_valid
+            expect(welsh_condition_translation_input).to be_valid(validation_context)
             expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_heading_cy)).to be_empty
           end
         end
@@ -78,7 +75,7 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
 
         context "when the form has an exit page in English" do
           it "is not valid" do
-            expect(welsh_condition_translation_input).not_to be_valid
+            expect(welsh_condition_translation_input).not_to be_valid(validation_context)
             expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_markdown_cy)).to include "Exit page markdown cy #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_markdown_cy.blank', question_number: condition.routing_page.position)}"
           end
         end
@@ -87,14 +84,14 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
           let(:condition) { create_condition(exit_page_heading: nil, exit_page_markdown: nil) }
 
           it "is valid" do
-            expect(welsh_condition_translation_input).to be_valid
+            expect(welsh_condition_translation_input).to be_valid(validation_context)
             expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_markdown_cy)).to be_empty
           end
         end
       end
 
       context "when the Welsh exit page markdown is present" do
-        it_behaves_like "a markdown field with headings allowed" do
+        it_behaves_like "a markdown field with headings allowed", :mark_complete do
           let(:model) { welsh_condition_translation_input }
           let(:attribute) { :exit_page_markdown_cy }
         end
@@ -102,13 +99,13 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
     end
 
     context "when the form is not marked complete" do
-      let(:mark_complete) { "false" }
+      let(:validation_context) { nil }
 
       context "when the Welsh exit page heading is missing" do
         let(:new_input_data) { super().merge(exit_page_heading_cy: nil) }
 
         it "is valid" do
-          expect(welsh_condition_translation_input).to be_valid
+          expect(welsh_condition_translation_input).to be_valid(validation_context)
           expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_heading_cy)).to be_empty
         end
       end
@@ -118,7 +115,7 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
           let(:new_input_data) { super().merge(exit_page_heading_cy: "a" * 251) }
 
           it "is not valid" do
-            expect(welsh_condition_translation_input).not_to be_valid
+            expect(welsh_condition_translation_input).not_to be_valid(validation_context)
             expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_heading_cy)).to include "Exit page heading cy #{I18n.t('activemodel.errors.models.forms/welsh_condition_translation_input.attributes.exit_page_heading_cy.too_long', question_number: condition.routing_page.position, count: 250)}"
           end
         end
@@ -127,7 +124,7 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
           let(:new_input_data) { super().merge(exit_page_heading_cy: "a" * 250) }
 
           it "is valid" do
-            expect(welsh_condition_translation_input).to be_valid
+            expect(welsh_condition_translation_input).to be_valid(validation_context)
             expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_heading_cy)).to be_empty
           end
         end
@@ -137,13 +134,13 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
         let(:new_input_data) { super().merge(exit_page_markdown_cy: nil) }
 
         it "is valid" do
-          expect(welsh_condition_translation_input).to be_valid
+          expect(welsh_condition_translation_input).to be_valid(validation_context)
           expect(welsh_condition_translation_input.errors.full_messages_for(:exit_page_markdown_cy)).to be_empty
         end
       end
 
       context "when the Welsh exit page markdown is present" do
-        it_behaves_like "a markdown field with headings allowed" do
+        it_behaves_like "a markdown field with headings allowed", :mark_complete do
           let(:model) { welsh_condition_translation_input }
           let(:attribute) { :exit_page_markdown_cy }
         end
