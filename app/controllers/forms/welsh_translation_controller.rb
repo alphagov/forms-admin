@@ -6,7 +6,7 @@ module Forms
       authorize current_form, :can_edit_form?
       return redirect_to form_path(current_form) unless welsh_enabled?
 
-      @welsh_translation_input = WelshTranslationInput.new(form: current_form).assign_form_values
+      @welsh_translation_input = WelshTranslationInput.new(form: form_with_pages_and_conditions).assign_form_values
       @table_presenter = Forms::TranslationTablePresenter.new
     end
 
@@ -44,6 +44,10 @@ module Forms
           { condition_translations_attributes: WelshConditionTranslationInput.attribute_names },
         ],
       ).merge(form: current_form)
+    end
+
+    def form_with_pages_and_conditions
+      Form.includes(pages: [:routing_conditions]).find(current_form.id)
     end
   end
 end

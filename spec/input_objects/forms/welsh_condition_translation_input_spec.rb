@@ -8,7 +8,7 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
 
   let(:new_input_data) do
     {
-      id: condition.id,
+      condition:,
       exit_page_markdown_cy: "Nid ydych yn gymwys",
       exit_page_heading_cy: "Mae'n ddrwg gennym, nid ydych yn gymwys ar gyfer y gwasanaeth hwn.",
     }
@@ -180,7 +180,7 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
 
   describe "#assign_page_values" do
     it "loads the existing welsh attributes from the page" do
-      welsh_condition_translation_input = described_class.new(id: condition.id)
+      welsh_condition_translation_input = described_class.new(condition:)
       welsh_condition_translation_input.assign_condition_values
 
       expect(welsh_condition_translation_input.exit_page_markdown_cy).to eq(condition.exit_page_markdown_cy)

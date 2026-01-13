@@ -4,6 +4,7 @@ class Forms::WelshPageTranslationInput < BaseInput
   include ActiveModel::Attributes
 
   attr_accessor :condition_translations
+  attr_reader :page
 
   attribute :id
   attribute :question_text_cy
@@ -26,7 +27,9 @@ class Forms::WelshPageTranslationInput < BaseInput
   validate :condition_translations_valid?
 
   def initialize(attributes = {})
+    @page = attributes.delete(:page) if attributes.key?(:page)
     super
+    self.id ||= @page&.id
     @condition_translations ||= []
   end
 
@@ -46,32 +49,33 @@ class Forms::WelshPageTranslationInput < BaseInput
   end
 
   def assign_page_values
-    page = Page.find_by(id:)
-    return self unless page # Guard clause
+    return self unless page
 
     self.question_text_cy = page.question_text_cy
     self.hint_text_cy = page.hint_text_cy
     self.page_heading_cy = page.page_heading_cy
     self.guidance_markdown_cy = page.guidance_markdown_cy
-    # self.mark_complete = page.form.try(:welsh_completed)
 
     self.condition_translations = page.routing_conditions.map do |condition|
-      Forms::WelshConditionTranslationInput.new(id: condition.id).assign_condition_values
+      Forms::WelshConditionTranslationInput.new(condition:).assign_condition_values
     end
     self
   end
 
-  # Custom writer for condition translations
   def condition_translations_attributes=(attributes)
-    self.condition_translations = attributes.is_a?(Hash) ? attributes.values : attributes
-    condition_translations.map! do |condition_attrs|
-      Forms::WelshConditionTranslationInput.new(**condition_attrs.symbolize_keys)
-    end
-  end
+    submitted_condition_ids = attributes.values.map { |attrs| attrs["id"] }.compact
 
-  def page
-    @page ||= Page.find(id)
-    @page
+    conditions_by_id = page.routing_conditions.where(id: submitted_condition_ids).index_by(&:id)
+
+    self.condition_translations = attributes.values.map { |condition_attrs|
+      condition_id = condition_attrs["id"].to_i
+      condition_object = conditions_by_id[condition_id]
+
+      # skip the condition if it doesn't belong to the page
+      next unless condition_object
+
+      Forms::WelshConditionTranslationInput.new(condition_attrs.symbolize_keys.merge(condition: condition_object))
+    }.compact
   end
 
   def form_field_id(attribute)

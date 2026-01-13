@@ -481,7 +481,7 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
     end
 
     context "when any of the form's page translations have errors" do
-      let(:page_translation) { Forms::WelshPageTranslationInput.new(id: page.id) }
+      let(:page_translation) { Forms::WelshPageTranslationInput.new(page:) }
       let(:new_input_data) { super().merge(page_translations: [page_translation]) }
 
       it "includes the page error with a custom attribute" do
@@ -587,8 +587,8 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
       end
 
       context "when the form includes page translation objects" do
-        let(:page_translation) { Forms::WelshPageTranslationInput.new(id: page.id, question_text_cy: "Ydych chi'n adnewyddu trwydded?", hint_text_cy: "Dewiswch 'Ydw' os oes gennych drwydded ddilys eisoes.", page_heading_cy: "Trwyddedu", guidance_markdown_cy: "Mae'r rhan hon o'r ffurflen yn ymwneud â thrwyddedu.") }
-        let(:another_page_translation) { Forms::WelshPageTranslationInput.new(id: another_page.id, question_text_cy: "Ydych chi'n adnewyddu trwydded?") }
+        let(:page_translation) { Forms::WelshPageTranslationInput.new(page:, question_text_cy: "Ydych chi'n adnewyddu trwydded?", hint_text_cy: "Dewiswch 'Ydw' os oes gennych drwydded ddilys eisoes.", page_heading_cy: "Trwyddedu", guidance_markdown_cy: "Mae'r rhan hon o'r ffurflen yn ymwneud â thrwyddedu.") }
+        let(:another_page_translation) { Forms::WelshPageTranslationInput.new(page: another_page, question_text_cy: "Ydych chi'n adnewyddu trwydded?") }
 
         let(:new_input_data) { super().merge(page_translations: [page_translation, another_page_translation]) }
 

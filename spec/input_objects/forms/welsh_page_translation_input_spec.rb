@@ -15,7 +15,7 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
 
   let(:new_input_data) do
     {
-      id: page.id,
+      page:,
       question_text_cy: "Ydych chi'n adnewyddu trwydded?",
       hint_text_cy: "Dewiswch 'Ydw' os oes gennych drwydded ddilys eisoes.",
       page_heading_cy: "Trwyddedu",
@@ -283,7 +283,7 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
     end
 
     context "when any of the page's condition translations have errors" do
-      let(:condition_translation) { Forms::WelshConditionTranslationInput.new(id: condition.id) }
+      let(:condition_translation) { Forms::WelshConditionTranslationInput.new(condition:) }
       let(:new_input_data) { super().merge(condition_translations: [condition_translation]) }
 
       it "is invalid" do
@@ -334,8 +334,8 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
     end
 
     context "when the form includes condition translation objects" do
-      let(:condition_translation) { Forms::WelshConditionTranslationInput.new(id: condition.id, exit_page_heading_cy: "Nid ydych yn gymwys", exit_page_markdown_cy: "Mae'n ddrwg gennym, nid ydych yn gymwys ar gyfer y gwasanaeth hwn.") }
-      let(:another_condition_translation) { Forms::WelshConditionTranslationInput.new(id: another_condition.id, exit_page_heading_cy: "Welsh exit page heading", exit_page_markdown_cy: "Welsh exit page markdown") }
+      let(:condition_translation) { Forms::WelshConditionTranslationInput.new(condition: condition, exit_page_heading_cy: "Nid ydych yn gymwys", exit_page_markdown_cy: "Mae'n ddrwg gennym, nid ydych yn gymwys ar gyfer y gwasanaeth hwn.") }
+      let(:another_condition_translation) { Forms::WelshConditionTranslationInput.new(condition: another_condition, exit_page_heading_cy: "Welsh exit page heading", exit_page_markdown_cy: "Welsh exit page markdown") }
 
       let(:new_input_data) { super().merge(condition_translations: [condition_translation, another_condition_translation]) }
 

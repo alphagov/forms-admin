@@ -2,6 +2,8 @@ class Forms::WelshConditionTranslationInput < BaseInput
   include ActionView::Helpers::FormTagHelper
   include ActiveModel::Attributes
 
+  attr_accessor :condition
+
   attribute :id
 
   attribute :exit_page_heading_cy
@@ -14,8 +16,9 @@ class Forms::WelshConditionTranslationInput < BaseInput
   validate :exit_page_markdown_cy_length_and_tags, if: -> { exit_page_markdown_cy.present? }
 
   def initialize(attributes = {})
+    @condition = attributes.delete(:condition) if attributes.key?(:condition)
     super
-    @condition_translations ||= []
+    self.id ||= @condition&.id
   end
 
   def submit
@@ -28,18 +31,12 @@ class Forms::WelshConditionTranslationInput < BaseInput
   end
 
   def assign_condition_values
-    condition = Condition.find_by(id:)
     return self unless condition
 
     self.exit_page_markdown_cy = condition.exit_page_markdown_cy
     self.exit_page_heading_cy = condition.exit_page_heading_cy
 
     self
-  end
-
-  def condition
-    @condition ||= Condition.find(id)
-    @condition
   end
 
   def form_field_id(attribute)

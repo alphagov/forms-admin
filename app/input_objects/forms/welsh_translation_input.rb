@@ -46,18 +46,27 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   validate :page_translations_valid
 
   def initialize(attributes = {})
+    @form = attributes.delete(:form)
     super
-    @page_translations ||= [] # Ensure it's an array
+    @page_translations ||= []
   end
 
-  # This is the custom writer that Rails will call for the nested attributes.
-  # The 'attributes' here will be a hash from the form, where keys are "0", "1", "2"...
-  # an array of hashes.
   def page_translations_attributes=(attributes)
-    self.page_translations = attributes.is_a?(Hash) ? attributes.values : attributes
-    page_translations.map! do |page_attrs|
-      Forms::WelshPageTranslationInput.new(**page_attrs.symbolize_keys)
-    end
+    # Get all submitted page IDs from the params hash.
+    submitted_page_ids = attributes.values.map { |attrs| attrs["id"] }.compact
+
+    # lookup hash for efficiency
+    pages_by_id = form.pages.where(id: submitted_page_ids).includes(:routing_conditions).index_by(&:id)
+
+    self.page_translations = attributes.values.map { |page_attrs|
+      page_id = page_attrs["id"].to_i
+      page_object = pages_by_id[page_id]
+
+      # skip the page if it doesn't belong to the form
+      next unless page_object
+
+      Forms::WelshPageTranslationInput.new(page_attrs.symbolize_keys.merge(page: page_object))
+    }.compact
   end
 
   def submit
@@ -109,7 +118,7 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
     self.mark_complete = form.try(:welsh_completed)
 
     self.page_translations = form.pages.map do |page|
-      Forms::WelshPageTranslationInput.new(id: page.id).assign_page_values
+      Forms::WelshPageTranslationInput.new(page:).assign_page_values
     end
 
     self
