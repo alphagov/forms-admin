@@ -256,6 +256,22 @@ describe "forms/welsh_translation/new.html.erb" do
         end
       end
 
+      context "when a page has a selection question" do
+        let(:page) { create :page, :with_selection_settings }
+
+        it "shows the selection heading" do
+          expect(rendered).to have_css("caption", text: t("forms.welsh_translation.new.section_headings.selection_options", question_number: page.position))
+        end
+
+        it "shows the English text and Welsh field for pages with English selection options" do
+          expect(rendered).to have_css("td", text: page.answer_settings.selection_options.first["name"])
+          expect(rendered).to have_field("Enter Welsh option 1")
+
+          expect(rendered).to have_css("td", text: page.answer_settings.selection_options.second["name"])
+          expect(rendered).to have_field("Enter Welsh option 2")
+        end
+      end
+
       context "when at least one page has routing conditions" do
         context "when the condition has an exit page" do
           let(:page) { create :page, position: 1, routing_conditions: [condition] }
