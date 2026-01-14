@@ -58,4 +58,39 @@ RSpec.describe Forms::WelshSelectionOptionTranslationInput, type: :model do
       expect(welsh_selection_option_translation_input.question_number).to eq(page.position)
     end
   end
+
+  describe "validations" do
+    context "when the translation is not marked complete" do
+      context "when the name_cy is blank" do
+        let(:new_input_data) { super().merge(name_cy: "") }
+
+        it "is valid" do
+          expect(welsh_selection_option_translation_input).to be_valid
+          expect(welsh_selection_option_translation_input.errors.full_messages_for(:name_cy)).to be_empty
+        end
+      end
+
+      context "when the name_cy is 251 characters or more" do
+        let(:new_input_data) { super().merge(name_cy: "a" * 251) }
+
+        it "is invalid when name_cy is over 250 characters" do
+          expect(welsh_selection_option_translation_input).not_to be_valid
+          expected_error_message = "Name cy #{I18n.t('activemodel.errors.models.forms/welsh_selection_option_translation_input.attributes.name_cy.too_long', selection_number: 2, question_number: page.position, count: 250)}"
+          expect(welsh_selection_option_translation_input.errors.full_messages_for(:name_cy)).to include(expected_error_message)
+        end
+      end
+    end
+
+    context "when the translation is marked complete" do
+      context "when the name_cy is blank" do
+        let(:new_input_data) { super().merge(name_cy: "") }
+
+        it "is invalid" do
+          expect(welsh_selection_option_translation_input).not_to be_valid(:mark_complete)
+          expected_error_message = "Name cy #{I18n.t('activemodel.errors.models.forms/welsh_selection_option_translation_input.attributes.name_cy.blank', selection_number: 2, question_number: page.position)}"
+          expect(welsh_selection_option_translation_input.errors.full_messages_for(:name_cy)).to include(expected_error_message)
+        end
+      end
+    end
+  end
 end

@@ -190,6 +190,18 @@ class Forms::WelshPageTranslationInput < BaseInput
   def selection_options_valid?
     return if selection_options_cy.nil?
 
+    # We check for duplicates here rather than in the
+    # selection_option_translation because here we can see all the selection options at once
+
+    # This is a list of all the selection options, which we'll use to check for duplicates
+    selection_options_without_blanks = selection_options_cy.map(&:name_cy).compact_blank
+
+    # If there are any duplicates, add a single error and link it to the first selection option
+    if selection_options_without_blanks.uniq.count != selection_options_without_blanks.count
+      first_selection_option_id = selection_options_cy.first.form_field_id(:name_cy)
+      errors.add(:selection_options_cy, :uniqueness, duplicate: selection_options_without_blanks.first, question_number: page.position, url: "##{first_selection_option_id}")
+    end
+
     # Import all the errors from the child objects
     selection_options_cy.each do |selection_option_translation|
       selection_option_translation.validate(validation_context)

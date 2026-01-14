@@ -3,10 +3,15 @@ class Forms::WelshSelectionOptionTranslationInput < BaseInput
   include ActionView::Helpers::FormTagHelper
   include ActiveModel::Attributes
 
+  NAME_MAX_LENGTH = 250
+
   attr_accessor :selection_option, :page
 
   attribute :id, :integer
   attribute :name_cy
+
+  validate :name_present?, on: :mark_complete
+  validate :name_length, if: -> { name_cy.present? }
 
   def initialize(attributes = {})
     @selection_option = attributes.delete(:selection_option) if attributes.key?(:selection_option)
@@ -35,5 +40,19 @@ class Forms::WelshSelectionOptionTranslationInput < BaseInput
 
   def question_number
     page.position
+  end
+
+private
+
+  def name_present?
+    if name_cy.blank?
+      errors.add(:name_cy, :blank, selection_number:, question_number:, url: "##{form_field_id(:name_cy)}")
+    end
+  end
+
+  def name_length
+    return if name_cy.length <= NAME_MAX_LENGTH
+
+    errors.add(:name_cy, :too_long, selection_number:, question_number:, count: NAME_MAX_LENGTH, url: "##{form_field_id(:name_cy)}")
   end
 end

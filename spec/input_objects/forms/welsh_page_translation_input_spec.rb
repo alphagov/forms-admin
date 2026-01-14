@@ -280,6 +280,24 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
           let(:attribute) { :guidance_markdown_cy }
         end
       end
+
+      context "when the page has repeated selection options" do
+        let(:page) do
+          create_page(answer_type: "selection",
+                      answer_settings: { only_one_option: "true", selection_options: [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }] })
+        end
+        let(:new_input_data) do
+          super().merge({ selection_options_cy_attributes: {
+            "0" => { "id" => "0", "name_cy" => "same" },
+            "1" => { "id" => "1", "name_cy" => "same" },
+          } })
+        end
+
+        it "is invalid" do
+          expect(welsh_page_translation_input).not_to be_valid(:mark_complete)
+          expect(welsh_page_translation_input.errors.full_messages_for(:selection_options_cy)).to include "Selection options cy #{I18n.t('activemodel.errors.models.forms/welsh_page_translation_input.attributes.selection_options_cy.uniqueness', question_number: page.position)}"
+        end
+      end
     end
 
     context "when any of the page's condition translations have errors" do
