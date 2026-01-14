@@ -19,15 +19,19 @@ class Pages::QuestionInput < BaseInput
 
     prepare_for_save
 
-    Page.create_and_update_form!(form_id:,
-                                 question_text:,
-                                 hint_text:,
-                                 is_optional:,
-                                 is_repeatable:,
-                                 answer_settings:,
-                                 page_heading:,
-                                 guidance_markdown:,
-                                 answer_type:)
+    attrs = {
+      form_id:,
+      question_text:,
+      hint_text:,
+      is_optional:,
+      is_repeatable:,
+      answer_settings:,
+      page_heading:,
+      guidance_markdown:,
+      answer_type:,
+    }
+
+    Page.create_and_update_form!(**attrs)
   end
 
   def update_page(page)
@@ -35,14 +39,19 @@ class Pages::QuestionInput < BaseInput
 
     prepare_for_save
 
-    page.assign_attributes(question_text:,
-                           hint_text:,
-                           is_optional:,
-                           is_repeatable:,
-                           answer_settings:,
-                           page_heading:,
-                           guidance_markdown:,
-                           answer_type:)
+    attrs = {
+      question_text:,
+      hint_text:,
+      is_optional:,
+      is_repeatable:,
+      answer_settings:,
+      page_heading:,
+      guidance_markdown:,
+      answer_type:,
+    }
+
+    page.assign_attributes(**attrs)
+
     page.save_and_update_form
   end
 
