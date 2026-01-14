@@ -108,14 +108,14 @@ RSpec.describe Forms::ContactDetailsInput, type: :model do
             expect(contact_details_input.errors.full_messages_for(:link_href)).to include "Link href #{error_message}"
           end
 
-          it "link_href is valid if 120 characters" do
-            contact_details_input = build :contact_details_input, link_href: "https://example.org/".ljust(120, "x")
+          it "link_href is valid if 500 characters" do
+            contact_details_input = build :contact_details_input, link_href: "https://example.org/".ljust(500, "x")
             expect(contact_details_input).to be_valid
           end
 
-          it "link_href is invalid if 121 characters" do
+          it "link_href is invalid if 501 characters" do
             error_message = I18n.t("activemodel.errors.models.forms/contact_details_input.attributes.link_href.too_long")
-            contact_details_input = build :contact_details_input, link_href: "https://example.org/".ljust(121, "x")
+            contact_details_input = build :contact_details_input, link_href: "https://example.org/".ljust(501, "x")
             expect(contact_details_input).to be_invalid
             expect(contact_details_input.errors.full_messages_for(:link_href)).to include "Link href #{error_message}"
           end
