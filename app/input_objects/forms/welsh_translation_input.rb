@@ -45,6 +45,21 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
 
   validate :page_translations_valid
 
+  def initialize(attributes = {})
+    super
+    @page_translations ||= [] # Ensure it's an array
+  end
+
+  # This is the custom writer that Rails will call for the nested attributes.
+  # The 'attributes' here will be a hash from the form, where keys are "0", "1", "2"...
+  # an array of hashes.
+  def page_translations_attributes=(attributes)
+    self.page_translations = attributes.is_a?(Hash) ? attributes.values : attributes
+    page_translations.map! do |page_attrs|
+      Forms::WelshPageTranslationInput.new(**page_attrs.symbolize_keys)
+    end
+  end
+
   def submit
     return false if invalid?
 
@@ -92,6 +107,11 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
     self.payment_url_cy = form.payment_url_cy
 
     self.mark_complete = form.try(:welsh_completed)
+
+    self.page_translations = form.pages.map do |page|
+      Forms::WelshPageTranslationInput.new(id: page.id).assign_page_values
+    end
+
     self
   end
 

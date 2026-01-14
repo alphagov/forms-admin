@@ -25,6 +25,11 @@ class Forms::WelshPageTranslationInput < BaseInput
 
   validate :condition_translations_valid?
 
+  def initialize(attributes = {})
+    super
+    @condition_translations ||= []
+  end
+
   def submit
     return false if invalid?
 
@@ -41,13 +46,27 @@ class Forms::WelshPageTranslationInput < BaseInput
   end
 
   def assign_page_values
+    page = Page.find_by(id:)
+    return self unless page # Guard clause
+
     self.question_text_cy = page.question_text_cy
     self.hint_text_cy = page.hint_text_cy
     self.page_heading_cy = page.page_heading_cy
     self.guidance_markdown_cy = page.guidance_markdown_cy
     self.mark_complete = page.form.try(:welsh_completed)
 
+    self.condition_translations = page.routing_conditions.map do |condition|
+      Forms::WelshConditionTranslationInput.new(id: condition.id).assign_condition_values
+    end
     self
+  end
+
+  # Custom writer for condition translations
+  def condition_translations_attributes=(attributes)
+    self.condition_translations = attributes.is_a?(Hash) ? attributes.values : attributes
+    condition_translations.map! do |condition_attrs|
+      Forms::WelshConditionTranslationInput.new(**condition_attrs.symbolize_keys)
+    end
   end
 
   def page
