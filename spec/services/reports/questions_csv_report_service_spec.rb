@@ -32,7 +32,7 @@ RSpec.describe Reports::QuestionsCsvReportService do
       create(:page, answer_type: "national_insurance_number"),
       create(:page, answer_type: "number"),
       create(:page, answer_type: "phone_number"),
-      create(:page, :with_selection_settings, is_optional: true),
+      create(:page, :selection_with_none_of_the_above_question, none_of_the_above_question_text: "A follow-up question", none_of_the_above_question_is_optional: "true"),
       create(:page, :with_single_line_text_settings, is_repeatable: true),
     ])
   end
@@ -85,6 +85,8 @@ RSpec.describe Reports::QuestionsCsvReportService do
         nil,
         nil,
         nil,
+        nil,
+        nil,
         "{\"input_type\" => \"single_line\"}",
       )
     end
@@ -114,8 +116,10 @@ RSpec.describe Reports::QuestionsCsvReportService do
         nil,
         "true",
         "2",
+        "true",
+        "A follow-up question (optional)",
         nil,
-        "{\"only_one_option\" => \"true\", \"selection_options\" => [{\"name\" => \"Option 1\", \"value\" => \"Option 1\"}, {\"name\" => \"Option 2\", \"value\" => \"Option 2\"}]}",
+        String,
       )
     end
 
@@ -142,6 +146,8 @@ RSpec.describe Reports::QuestionsCsvReportService do
         "false",
         "false",
         "full_name",
+        nil,
+        nil,
         nil,
         nil,
         "false",
@@ -174,6 +180,8 @@ RSpec.describe Reports::QuestionsCsvReportService do
         nil,
         "true",
         "2",
+        "false",
+        "No follow-up question",
         nil,
         "{\"only_one_option\" => \"true\", \"selection_options\" => [{\"name\" => \"Option 1\", \"value\" => \"Option 1\"}, {\"name\" => \"Option 2\", \"value\" => \"Option 2\"}]}",
       )
@@ -204,6 +212,8 @@ RSpec.describe Reports::QuestionsCsvReportService do
         nil,
         "true",
         "2",
+        "false",
+        "No follow-up question",
         nil,
         "{\"only_one_option\" => \"true\", \"selection_options\" => [{\"name\" => \"Option 1\", \"value\" => \"Option 1\"}, {\"name\" => \"Option 2\", \"value\" => \"Option 2\"}]}",
       )
