@@ -38,7 +38,7 @@ describe "reports/selection_questions_summary.html.erb" do
   end
 
   it "has expected page title" do
-    expect(view.content_for(:title)).to eq "Selection from a list of options answer type usage in live forms"
+    expect(view.content_for(:title)).to eq "Select from a list questions in live forms"
   end
 
   it "has a back link to the selection from a list of options usage report" do

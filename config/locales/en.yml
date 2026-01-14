@@ -1592,7 +1592,7 @@ en:
       title: All forms with add another answer
     back_link: Back to reports
     back_to_feature_usage: Back to feature and answer type usage
-    back_to_selection_questions_summary: Back to selection from a list of options usage
+    back_to_selection_questions_summary: Back to select from a list questions
     contact_for_research:
       heading: Users who’ve agreed to be contacted about user research
       table_headings:
@@ -1711,7 +1711,7 @@ en:
         forms_row_heading: "%{tag} forms with 30 options or fewer"
         heading: Select one from up to 30 options
         view_questions: Questions where you can select one from up to 30 options
-      title: Selection from a list of options answer type usage in %{tag} forms
+      title: Select from a list questions in %{tag} forms
       with_none_of_the_above: Questions with ‘None of the above’
     selection_questions_with_autocomplete:
       download_csv: Download all questions where you can select one from over 30 options in %{tag} forms as a CSV file
