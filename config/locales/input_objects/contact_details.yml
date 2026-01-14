@@ -12,7 +12,7 @@ en:
               invalid_email_address: Enter an email address in the correct format, like name@example.com
             link_href:
               blank: Enter an online contact link
-              too_long: The link cannot be longer than 120 characters
+              too_long: The link cannot be longer than 500 characters
               url: Enter a link in the correct format, like https://www.gov.uk/contact
             link_text:
               blank: Enter an online contact link description

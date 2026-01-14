@@ -4,7 +4,7 @@ class Forms::ContactDetailsInput < BaseInput
   validates :email, presence: true, email_address: true, if: -> { supplied :supply_email }
   validates :email, allowed_email_domain: true, if: -> { supplied :supply_email }
   validates :phone, presence: true, length: { maximum: 500 }, if: -> { supplied :supply_phone }
-  validates :link_href, presence: true, url: true, length: { maximum: 120 }, if: -> { supplied :supply_link }
+  validates :link_href, presence: true, url: true, length: { maximum: 500 }, if: -> { supplied :supply_link }
   validates :link_text, presence: true, length: { maximum: 120 }, if: -> { supplied :supply_link }
 
   def must_be_supply_contact_details
