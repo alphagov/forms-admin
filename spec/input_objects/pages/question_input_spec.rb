@@ -291,6 +291,23 @@ RSpec.describe Pages::QuestionInput, type: :model do
     end
   end
 
+  context "when the form has a Welsh translation" do
+    let(:form) { create :form, available_languages: %w[en cy] }
+
+    context "when the page has selection options" do
+      let(:draft_question) { build :selection_draft_question, form_id: form.id }
+      let(:answer_settings) { { selection_options: [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }] } }
+
+      it "sets the welsh answer_settings to blank selection options" do
+        question_input.question_text = "Choose an option"
+        question_input.is_optional = "false"
+        question_input.is_repeatable = "false"
+        page = question_input.submit
+        expect(page.answer_settings_cy.as_json).to eq({ "selection_options" => [{ "name" => "", "value" => "Option 1" }, { "name" => "", "value" => "Option 2" }] })
+      end
+    end
+  end
+
   describe "#update_page" do
     let(:page) { create(:page, form:) }
 
@@ -336,6 +353,10 @@ RSpec.describe Pages::QuestionInput, type: :model do
         expect(page.answer_type).to eq question_input.answer_type
       end
 
+      it "does not change the answer_settings_cy" do
+        expect(page.answer_settings_cy).to be_nil
+      end
+
       context "when the answer_settings has an empty hash for none_of_the_above_question" do
         let(:answer_settings) { { foo: "bar", none_of_the_above_question: {} } }
 
@@ -349,6 +370,36 @@ RSpec.describe Pages::QuestionInput, type: :model do
 
         it "keeps the populated none_of_the_above_question in the answer_settings" do
           expect(page.reload.answer_settings).to eq DataStruct.recursive_new({ "foo": "bar", "none_of_the_above_question": { "question_text": "Enter something" } })
+        end
+      end
+
+      context "when the page has selection options and no Welsh translation" do
+        let(:draft_question) { build :selection_draft_question, form_id: form.id }
+        let(:answer_settings) { { selection_options: [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }] } }
+
+        it "welsh answer_settings is nil" do
+          expect(page.answer_settings_cy.as_json).to be_nil
+        end
+      end
+
+      context "when the form has a Welsh translation and the page has selection options but no Welsh options yet" do
+        let(:form) { create :form, available_languages: %w[en cy] }
+        let(:draft_question) { build :selection_draft_question, form_id: form.id }
+        let(:answer_settings) { { selection_options: [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }] } }
+
+        it "adds the welsh answer_settings" do
+          expect(page.answer_settings_cy.as_json).to eq({ "selection_options" => [{ "name" => "", "value" => "Option 1" }, { "name" => "", "value" => "Option 2" }] })
+        end
+      end
+
+      context "when the form has a Welsh translation and the page has selection options and existing Welsh options" do
+        let(:form) { create :form, available_languages: %w[en cy] }
+        let(:draft_question) { build :selection_draft_question, form_id: form.id }
+        let(:answer_settings) { { selection_options: [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }] } }
+        let(:page) { create(:page, form:, answer_settings_cy: { selection_options: [{ name: "Yes", value: "Yes" }, { name: "No", value: "No" }] }) }
+
+        it "keeps the welsh text but updates the new values" do
+          expect(page.answer_settings_cy.as_json).to eq({ "selection_options" => [{ "name" => "Yes", "value" => "Option 1" }, { "name" => "No", "value" => "Option 2" }] })
         end
       end
     end

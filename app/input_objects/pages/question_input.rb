@@ -31,6 +31,10 @@ class Pages::QuestionInput < BaseInput
       answer_type:,
     }
 
+    if draft_question.form.available_languages.include?("cy")
+      attrs[:answer_settings_cy] = answer_settings_cy
+    end
+
     Page.create_and_update_form!(**attrs)
   end
 
@@ -49,6 +53,10 @@ class Pages::QuestionInput < BaseInput
       guidance_markdown:,
       answer_type:,
     }
+
+    if draft_question.form.available_languages.include?("cy")
+      attrs[:answer_settings_cy] = answer_settings_cy(page)
+    end
 
     page.assign_attributes(**attrs)
 
@@ -106,5 +114,19 @@ private
     )
 
     draft_question.save!(validate: false)
+  end
+
+  def answer_settings_cy(page = nil)
+    return unless answer_type == "selection"
+
+    answer_settings_cloned = DataStructType.new.cast_value(answer_settings.as_json)
+
+    answer_settings_cloned.selection_options.each.with_index do |selection_option, index|
+      welsh_name = page&.answer_settings_cy&.dig("selection_options", index, "name")
+
+      selection_option.name = (welsh_name.presence || "")
+    end
+
+    answer_settings_cloned
   end
 end
