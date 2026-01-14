@@ -41,6 +41,7 @@ module Forms
         *WelshTranslationInput.attribute_names,
         page_translations_attributes: [
           *WelshPageTranslationInput.attribute_names,
+          { selection_options_cy_attributes: %i[id name_cy] },
           { condition_translations_attributes: WelshConditionTranslationInput.attribute_names },
         ],
       ).merge(form: current_form)

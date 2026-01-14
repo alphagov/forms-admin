@@ -348,6 +348,30 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
         expect(another_condition.reload.exit_page_markdown_cy).to eq("Welsh exit page markdown")
       end
     end
+
+    context "when the page has selection options" do
+      let(:page) do
+        create_page(answer_type: "selection",
+                    answer_settings: { only_one_option: "true", selection_options: [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }] })
+      end
+      let(:new_input_data) do
+        super().merge({ selection_options_cy_attributes: {
+          "0" => { "id" => "0", "name_cy" => "welsh option 1" },
+          "1" => { "id" => "1", "name_cy" => "welsh option 2" },
+        } })
+      end
+
+      it "submits the data on the selection options" do
+        welsh_page_translation_input.submit
+
+        expect(page.reload.answer_settings_cy.selection_options.count).to eq(2)
+        expect(page.reload.answer_settings_cy.selection_options.first.name).to eq("welsh option 1")
+        expect(page.reload.answer_settings_cy.selection_options.first.value).to eq("Option 1")
+
+        expect(page.reload.answer_settings_cy.selection_options.second.name).to eq("welsh option 2")
+        expect(page.reload.answer_settings_cy.selection_options.second.value).to eq("Option 2")
+      end
+    end
   end
 
   describe "#assign_page_values" do
@@ -359,6 +383,63 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
       expect(welsh_page_translation_input.hint_text_cy).to eq(page.hint_text_cy)
       expect(welsh_page_translation_input.page_heading_cy).to eq(page.page_heading_cy)
       expect(welsh_page_translation_input.guidance_markdown_cy).to eq(page.guidance_markdown_cy)
+    end
+
+    context "when the page has selection options" do
+      let(:page) do
+        create_page(answer_type: "selection",
+                    answer_settings: { only_one_option: "true", selection_options: [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }] })
+      end
+
+      it "sets the welsh names to empty and keeps values" do
+        welsh_page_translation_input.assign_page_values
+
+        selection_options_cy = welsh_page_translation_input.selection_options_cy.map(&:as_selection_option)
+        expect(selection_options_cy.count).to eq(2)
+        expect(selection_options_cy).to eq([
+          { name: "", value: "Option 1" },
+          { name: "", value: "Option 2" },
+        ])
+      end
+    end
+
+    context "when the page has selection options and existing Welsh options" do
+      let(:page) do
+        create_page(answer_type: "selection",
+                    answer_settings: { only_one_option: "true", selection_options: [{ name: "New value 1", value: "New value 1" }, { name: "New value 2", value: "New value 2" }] },
+                    answer_settings_cy: { only_one_option: "true", selection_options: [{ name: "Welsh option 1", value: "Old value 1" }, { name: "Welsh option 2", value: "Old value 2" }] })
+      end
+
+      it "keeps the welsh text but updates the new values" do
+        welsh_page_translation_input.assign_page_values
+
+        selection_options_cy = welsh_page_translation_input.selection_options_cy.map(&:as_selection_option)
+        expect(selection_options_cy.count).to eq(2)
+        expect(selection_options_cy).to eq([
+          { name: "Welsh option 1", value: "New value 1" },
+          { name: "Welsh option 2", value: "New value 2" },
+        ])
+      end
+    end
+
+    context "when the page has selection options and partial Welsh options" do
+      let(:page) do
+        create_page(answer_type: "selection",
+                    answer_settings: { only_one_option: "true", selection_options: [{ name: "Yes", value: "Yes" }, { name: "No", value: "No" }, { name: "Maybe", value: "Maybe" }] },
+                    answer_settings_cy: { only_one_option: "true", selection_options: [{ name: "Welsh option 1", value: "Yes" }, { name: "", value: "Option 2" }] })
+      end
+
+      it "keeps the welsh text and adds blanks for missing values" do
+        welsh_page_translation_input.assign_page_values
+
+        selection_options_cy = welsh_page_translation_input.selection_options_cy.map(&:as_selection_option)
+
+        expect(selection_options_cy).to eq([
+          { name: "Welsh option 1", value: "Yes" },
+          { name:  "", value: "No" },
+          { name:  "", value: "Maybe" },
+        ])
+      end
     end
   end
 
