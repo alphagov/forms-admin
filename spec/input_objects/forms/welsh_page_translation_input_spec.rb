@@ -390,6 +390,22 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
         expect(page.reload.answer_settings_cy.selection_options.second.value).to eq("Option 2")
       end
     end
+
+    context "when the page has a selection question with none of the above" do
+      let(:page) do
+        create_page(attributes_for(:page, :selection_with_none_of_the_above_question))
+      end
+
+      let(:new_input_data) do
+        super().merge({ none_of_the_above_question_cy: "Welsh none of the above question?" })
+      end
+
+      it "assigns the welsh none of the above question text" do
+        welsh_page_translation_input.submit
+
+        expect(page.answer_settings_cy.none_of_the_above_question.question_text).to eq("Welsh none of the above question?")
+      end
+    end
   end
 
   describe "#assign_page_values" do
@@ -459,6 +475,39 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
         ])
       end
     end
+
+    context "when the page has a selection question with none of the above" do
+      let(:page) do
+        create_page(attributes_for(:page, :selection_with_none_of_the_above_question))
+      end
+
+      it "none_of_the_above_question_cy is nil" do
+        welsh_page_translation_input.assign_page_values
+        expect(welsh_page_translation_input.none_of_the_above_question_cy).to be_nil
+      end
+
+      context "when the welsh none of the above question is present" do
+        let(:page) do
+          create_page(attributes_for(:page,
+                                     :selection_with_none_of_the_above_question,
+                                     answer_settings_cy: {
+                                       selection_options: [
+                                         { name: "Welsh option 1", value: "Option 1" },
+                                         { name: "Welsh option 2", value: "Option 2" },
+                                       ],
+                                       none_of_the_above_question: {
+                                         question_text: "Welsh none of the above question?",
+                                         is_optional: "true",
+                                       },
+                                     }))
+        end
+
+        it "none_of_the_above_question_cy is the welsh text" do
+          welsh_page_translation_input.assign_page_values
+          expect(welsh_page_translation_input.none_of_the_above_question_cy).to eq("Welsh none of the above question?")
+        end
+      end
+    end
   end
 
   describe "#page_has_hint_text?" do
@@ -493,6 +542,22 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
 
       it "returns false" do
         expect(welsh_page_translation_input.page_has_page_heading_and_guidance_markdown?).to be false
+      end
+    end
+  end
+
+  describe "#page_has_none_of_the_above_question?" do
+    it "is false" do
+      expect(welsh_page_translation_input.page_has_none_of_the_above_question?).to be false
+    end
+
+    context "when the page has a selection question with none of the above" do
+      let(:page) do
+        create_page(attributes_for(:page, :selection_with_none_of_the_above_question))
+      end
+
+      it "is true" do
+        expect(welsh_page_translation_input.page_has_none_of_the_above_question?).to be true
       end
     end
   end

@@ -11,6 +11,7 @@ class Forms::WelshPageTranslationInput < BaseInput
   attribute :hint_text_cy
   attribute :page_heading_cy
   attribute :guidance_markdown_cy
+  attribute :none_of_the_above_question_cy
 
   validate :question_text_cy_present?, on: :mark_complete
   validate :question_text_cy_length, if: -> { question_text_cy.present? }
@@ -49,6 +50,10 @@ class Forms::WelshPageTranslationInput < BaseInput
 
     page.answer_settings_cy = welsh_answer_settings
 
+    if page_has_none_of_the_above_question?
+      page.answer_settings_cy.none_of_the_above_question.question_text = none_of_the_above_question_cy
+    end
+
     if page_has_selection_options?
       page.answer_settings_cy.selection_options = DataStructType.new.cast_value(selection_options_cy.map(&:as_selection_option))
     end
@@ -63,6 +68,7 @@ class Forms::WelshPageTranslationInput < BaseInput
     self.hint_text_cy = page.hint_text_cy
     self.page_heading_cy = page.page_heading_cy
     self.guidance_markdown_cy = page.guidance_markdown_cy
+    self.none_of_the_above_question_cy = page.answer_settings_cy&.none_of_the_above_question&.question_text
 
     self.condition_translations = page.routing_conditions.map do |condition|
       Forms::WelshConditionTranslationInput.new(condition:).assign_condition_values
@@ -114,6 +120,12 @@ class Forms::WelshPageTranslationInput < BaseInput
 
   def page_has_page_heading_and_guidance_markdown?
     page.page_heading.present? && page.guidance_markdown.present?
+  end
+
+  def page_has_none_of_the_above_question?
+    return false unless page.answer_type == "selection"
+
+    page.answer_settings&.none_of_the_above_question&.question_text.present?
   end
 
   def question_text_cy_present?
@@ -228,6 +240,10 @@ class Forms::WelshPageTranslationInput < BaseInput
 
     answer_settings_cloned.selection_options.each.with_index do |selection_option, index|
       selection_option.name = page.answer_settings_cy&.dig("selection_options", index, "name") || ""
+    end
+
+    if answer_settings_cloned.none_of_the_above_question.present?
+      answer_settings_cloned.none_of_the_above_question.question_text = page.answer_settings_cy&.none_of_the_above_question&.question_text || ""
     end
 
     answer_settings_cloned
