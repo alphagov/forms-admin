@@ -127,6 +127,11 @@ private
       selection_option.name = (welsh_name.presence || "")
     end
 
+    if answer_settings_cloned.none_of_the_above_question.present?
+      welsh_none_of_the_above_question = page&.answer_settings_cy&.dig("none_of_the_above_question", "question_text")
+      answer_settings_cloned.none_of_the_above_question.question_text = welsh_none_of_the_above_question || ""
+    end
+
     answer_settings_cloned
   end
 end
