@@ -349,7 +349,7 @@ GEM
       activerecord (>= 7.1)
       request_store (~> 1.4)
     parallel (1.27.0)
-    parallel_rspec (2.6.0)
+    parallel_rspec (3.0.0)
       rake (> 10.0)
       rspec
     parser (3.3.10.0)
@@ -771,7 +771,7 @@ CHECKSUMS
   pagy (9.4.0) sha256=db3f2e043f684155f18f78be62a81e8d033e39b9f97b1e1a8d12ad38d7bce738
   paper_trail (17.0.0) sha256=1c2842061d3874ca7015908e821e2aa14f9b982af2acb2a7974713bf79021c85
   parallel (1.27.0) sha256=4ac151e1806b755fb4e2dc2332cbf0e54f2e24ba821ff2d3dcf86bf6dc4ae130
-  parallel_rspec (2.6.0) sha256=990de9c5ad5cff54210629e0fbc69244a2e5bd320c5dda3d77adbf693d87662b
+  parallel_rspec (3.0.0) sha256=adbfc7a10958958cca544fb183c4ba32620cba98307d9ec514536f8e9c5fc4c7
   parser (3.3.10.0) sha256=ce3587fa5cc55a88c4ba5b2b37621b3329aadf5728f9eafa36bbd121462aabd6
   pg (1.6.3) sha256=1388d0563e13d2758c1089e35e973a3249e955c659592d10e5b77c468f628a99
   pg (1.6.3-aarch64-linux) sha256=0698ad563e02383c27510b76bf7d4cd2de19cd1d16a5013f375dd473e4be72ea
