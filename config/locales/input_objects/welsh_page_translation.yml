@@ -12,6 +12,9 @@ en:
             hint_text_cy:
               blank: Enter hint text for question %{question_number} in Welsh
               too_long: The hint text for question %{question_number} cannot be longer than %{count} characters
+            none_of_the_above_question_cy:
+              blank: Enter Welsh question or label if ‘None of the above’ is selected for question %{question_number}
+              too_long: Welsh question or label text for question %{question_number} must be shorter than %{count} characters
             page_heading_cy:
               blank: Enter a page heading in Welsh for question %{question_number}
               too_long: The page heading for question %{question_number} cannot be longer than %{count} characters

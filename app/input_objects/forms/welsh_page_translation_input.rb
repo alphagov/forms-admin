@@ -25,6 +25,9 @@ class Forms::WelshPageTranslationInput < BaseInput
   validate :guidance_markdown_cy_present?, on: :mark_complete
   validate :guidance_markdown_cy_length_and_tags, if: -> { guidance_markdown_cy.present? }
 
+  validate :none_of_the_above_question_cy_present?, on: :mark_complete
+  validate :none_of_the_above_question_cy_length, if: -> { none_of_the_above_question_cy.present? }
+
   validate :condition_translations_valid?
   validate :selection_options_valid?
 
@@ -183,6 +186,18 @@ class Forms::WelshPageTranslationInput < BaseInput
     if tag_errors.any?
       errors.add(:guidance_markdown_cy, :unsupported_markdown_syntax, question_number: page.position, url: "##{form_field_id(:guidance_markdown_cy)}")
     end
+  end
+
+  def none_of_the_above_question_cy_present?
+    if page_has_none_of_the_above_question? && none_of_the_above_question_cy.blank?
+      errors.add(:none_of_the_above_question_cy, :blank, question_number: page.position, url: "##{form_field_id(:none_of_the_above_question_cy)}")
+    end
+  end
+
+  def none_of_the_above_question_cy_length
+    return if none_of_the_above_question_cy.length <= 250
+
+    errors.add(:none_of_the_above_question_cy, :too_long, count: 250, question_number: page.position, url: "##{form_field_id(:none_of_the_above_question_cy)}")
   end
 
   def form_marked_complete?
