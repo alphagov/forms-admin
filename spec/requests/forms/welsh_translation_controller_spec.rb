@@ -49,9 +49,9 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
 
   describe "#create" do
     let(:mark_complete) { "true" }
-    let(:condition_translations) { { "0" => { "id" => condition.id, exit_page_heading_cy: "Nid ydych yn gymwys", exit_page_markdown_cy: "Mae'n ddrwg gennym, nid ydych yn gymwys ar gyfer y gwasanaeth hwn." } } }
-    let(:page_translations) { { "0" => { "id" => form.pages.first.id, question_text_cy: "Ydych chi'n adnewyddu trwydded?" } } }
-    let(:params) { { forms_welsh_translation_input: { form:, mark_complete:, name_cy: "Gwneud cais am drwydded jyglo", privacy_policy_url_cy: "https://juggling.gov.uk/privacy_policy/cy", page_translations:, condition_translations: } } }
+    let(:condition_translations_attributes) { { "0" => { "id" => condition.id, exit_page_heading_cy: "Nid ydych yn gymwys", exit_page_markdown_cy: "Mae'n ddrwg gennym, nid ydych yn gymwys ar gyfer y gwasanaeth hwn." } } }
+    let(:page_translations_attributes) { { "0" => { "id" => form.pages.first.id, question_text_cy: "Ydych chi'n adnewyddu trwydded?", condition_translations_attributes: } } }
+    let(:params) { { forms_welsh_translation_input: { form:, mark_complete:, name_cy: "Gwneud cais am drwydded jyglo", privacy_policy_url_cy: "https://juggling.gov.uk/privacy_policy/cy", page_translations_attributes: } } }
 
     context "when 'Yes' is selected" do
       it "updates the form" do

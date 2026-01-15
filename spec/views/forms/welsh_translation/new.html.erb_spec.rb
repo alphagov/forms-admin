@@ -5,10 +5,9 @@ describe "forms/welsh_translation/new.html.erb" do
   let(:page) { create :page, position: 1 }
   let(:another_page) { create :page, position: 2 }
   let(:condition) { create :condition, :with_exit_page, routing_page_id: page.id }
-  let(:welsh_condition_translation_input) { Forms::WelshConditionTranslationInput.new(id: condition.id).assign_condition_values }
-  let(:condition_translations) { [] }
-  let(:welsh_page_translation_input) { Forms::WelshPageTranslationInput.new(id: page.id, condition_translations:).assign_page_values }
-  let(:another_welsh_page_translation_input) { Forms::WelshPageTranslationInput.new(id: another_page.id, condition_translations: []).assign_page_values }
+  let(:welsh_condition_translation_input) { Forms::WelshConditionTranslationInput.new(condition:).assign_condition_values }
+  let(:welsh_page_translation_input) { Forms::WelshPageTranslationInput.new(page:).assign_page_values }
+  let(:another_welsh_page_translation_input) { Forms::WelshPageTranslationInput.new(page: another_page).assign_page_values }
   let(:welsh_translation_input) { Forms::WelshTranslationInput.new(form:, page_translations: [welsh_page_translation_input, another_welsh_page_translation_input]).assign_form_values }
   let(:table_presenter) { Forms::TranslationTablePresenter.new }
   let(:mark_complete) { "true" }
@@ -258,11 +257,9 @@ describe "forms/welsh_translation/new.html.erb" do
       end
 
       context "when at least one page has routing conditions" do
-        let(:condition_translations) { [welsh_condition_translation_input] }
-        let(:condition) { create :condition, routing_page_id: page.id }
-
         context "when the condition has an exit page" do
-          let(:condition) { create :condition, :with_exit_page, routing_page_id: page.id }
+          let(:page) { create :page, position: 1, routing_conditions: [condition] }
+          let(:condition) { create :condition, :with_exit_page }
 
           it "shows a caption with the page the condition applies to" do
             expect(rendered).to have_css("caption", text: t("forms.welsh_translation.new.condition.heading", question_number: condition.routing_page.position))
@@ -308,8 +305,7 @@ describe "forms/welsh_translation/new.html.erb" do
   context "when a page translation has validation errors" do
     before do
       welsh_page_translation_input.question_text_cy = nil
-      welsh_page_translation_input.mark_complete = mark_complete
-      welsh_translation_input.validate
+      welsh_translation_input.validate(mark_complete ? :mark_complete : nil)
 
       assign(:welsh_translation_input, welsh_translation_input)
       render
@@ -332,13 +328,12 @@ describe "forms/welsh_translation/new.html.erb" do
   end
 
   context "when a condition translation has validation errors" do
-    let(:condition) { create :condition, :with_exit_page, routing_page_id: page.id, answer_value: "Yes" }
-    let(:condition_translations) { [welsh_condition_translation_input] }
+    let(:page) { create :page, position: 1, routing_conditions: [condition] }
+    let(:condition) { create :condition, :with_exit_page, answer_value: "Yes" }
 
     before do
       welsh_condition_translation_input.exit_page_heading_cy = nil
-      welsh_condition_translation_input.mark_complete = "true"
-      welsh_translation_input.validate
+      welsh_translation_input.validate(mark_complete ? :mark_complete : nil)
 
       assign(:welsh_translation_input, welsh_translation_input)
       render

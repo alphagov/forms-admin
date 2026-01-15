@@ -3,7 +3,8 @@ class Forms::WelshPageTranslationInput < BaseInput
   include ActionView::Helpers::FormTagHelper
   include ActiveModel::Attributes
 
-  attr_accessor :condition_translations, :mark_complete
+  attr_accessor :condition_translations
+  attr_reader :page
 
   attribute :id
   attribute :question_text_cy
@@ -11,19 +12,26 @@ class Forms::WelshPageTranslationInput < BaseInput
   attribute :page_heading_cy
   attribute :guidance_markdown_cy
 
-  validate :question_text_cy_present?
+  validate :question_text_cy_present?, on: :mark_complete
   validate :question_text_cy_length, if: -> { question_text_cy.present? }
 
-  validate :hint_text_cy_present?
+  validate :hint_text_cy_present?, on: :mark_complete
   validate :hint_text_cy_length, if: -> { hint_text_cy.present? }
 
-  validate :page_heading_cy_present?
+  validate :page_heading_cy_present?, on: :mark_complete
   validate :page_heading_cy_length, if: -> { page_heading_cy.present? }
 
-  validate :guidance_markdown_cy_present?
+  validate :guidance_markdown_cy_present?, on: :mark_complete
   validate :guidance_markdown_cy_length_and_tags, if: -> { guidance_markdown_cy.present? }
 
   validate :condition_translations_valid?
+
+  def initialize(attributes = {})
+    @page = attributes.delete(:page) if attributes.key?(:page)
+    super
+    self.id ||= @page&.id
+    @condition_translations ||= []
+  end
 
   def submit
     return false if invalid?
@@ -41,18 +49,33 @@ class Forms::WelshPageTranslationInput < BaseInput
   end
 
   def assign_page_values
+    return self unless page
+
     self.question_text_cy = page.question_text_cy
     self.hint_text_cy = page.hint_text_cy
     self.page_heading_cy = page.page_heading_cy
     self.guidance_markdown_cy = page.guidance_markdown_cy
-    self.mark_complete = page.form.try(:welsh_completed)
 
+    self.condition_translations = page.routing_conditions.map do |condition|
+      Forms::WelshConditionTranslationInput.new(condition:).assign_condition_values
+    end
     self
   end
 
-  def page
-    @page ||= Page.find(id)
-    @page
+  def condition_translations_attributes=(attributes)
+    submitted_condition_ids = attributes.values.map { |attrs| attrs["id"] }.compact
+
+    conditions_by_id = page.routing_conditions.where(id: submitted_condition_ids).index_by(&:id)
+
+    self.condition_translations = attributes.values.map { |condition_attrs|
+      condition_id = condition_attrs["id"].to_i
+      condition_object = conditions_by_id[condition_id]
+
+      # skip the condition if it doesn't belong to the page
+      next unless condition_object
+
+      Forms::WelshConditionTranslationInput.new(condition_attrs.symbolize_keys.merge(condition: condition_object))
+    }.compact
   end
 
   def form_field_id(attribute)
@@ -68,7 +91,7 @@ class Forms::WelshPageTranslationInput < BaseInput
   end
 
   def question_text_cy_present?
-    if form_marked_complete? && question_text_cy.blank?
+    if question_text_cy.blank?
       errors.add(:question_text_cy, :blank, question_number: page.position, url: "##{form_field_id(:question_text_cy)}")
     end
   end
@@ -80,7 +103,7 @@ class Forms::WelshPageTranslationInput < BaseInput
   end
 
   def hint_text_cy_present?
-    if form_marked_complete? && page_has_hint_text? && hint_text_cy.blank?
+    if page_has_hint_text? && hint_text_cy.blank?
       errors.add(:hint_text_cy, :blank, question_number: page.position, url: "##{form_field_id(:hint_text_cy)}")
     end
   end
@@ -92,7 +115,7 @@ class Forms::WelshPageTranslationInput < BaseInput
   end
 
   def page_heading_cy_present?
-    if form_marked_complete? && page_has_page_heading_and_guidance_markdown? && page_heading_cy.blank?
+    if page_has_page_heading_and_guidance_markdown? && page_heading_cy.blank?
       errors.add(:page_heading_cy, :blank, question_number: page.position, url: "##{form_field_id(:page_heading_cy)}")
     end
   end
@@ -104,7 +127,7 @@ class Forms::WelshPageTranslationInput < BaseInput
   end
 
   def guidance_markdown_cy_present?
-    if form_marked_complete? && page_has_page_heading_and_guidance_markdown? && guidance_markdown_cy.blank?
+    if page_has_page_heading_and_guidance_markdown? && guidance_markdown_cy.blank?
       errors.add(:guidance_markdown_cy, :blank, question_number: page.position, url: "##{form_field_id(:guidance_markdown_cy)}")
     end
   end
@@ -132,7 +155,7 @@ class Forms::WelshPageTranslationInput < BaseInput
     return if condition_translations.nil?
 
     condition_translations.each do |condition_translation|
-      condition_translation.validate
+      condition_translation.validate(validation_context)
 
       errors.merge!(condition_translation.errors)
     end

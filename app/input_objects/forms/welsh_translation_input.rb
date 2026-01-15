@@ -45,6 +45,30 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
 
   validate :page_translations_valid
 
+  def initialize(attributes = {})
+    @form = attributes.delete(:form)
+    super
+    @page_translations ||= []
+  end
+
+  def page_translations_attributes=(attributes)
+    # Get all submitted page IDs from the params hash.
+    submitted_page_ids = attributes.values.map { |attrs| attrs["id"] }.compact
+
+    # lookup hash for efficiency
+    pages_by_id = form.pages.where(id: submitted_page_ids).includes(:routing_conditions).index_by(&:id)
+
+    self.page_translations = attributes.values.map { |page_attrs|
+      page_id = page_attrs["id"].to_i
+      page_object = pages_by_id[page_id]
+
+      # skip the page if it doesn't belong to the form
+      next unless page_object
+
+      Forms::WelshPageTranslationInput.new(page_attrs.symbolize_keys.merge(page: page_object))
+    }.compact
+  end
+
   def submit
     return false if invalid?
 
@@ -92,6 +116,11 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
     self.payment_url_cy = form.payment_url_cy
 
     self.mark_complete = form.try(:welsh_completed)
+
+    self.page_translations = form.pages.map do |page|
+      Forms::WelshPageTranslationInput.new(page:).assign_page_values
+    end
+
     self
   end
 
@@ -134,8 +163,12 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   def page_translations_valid
     return if page_translations.nil?
 
+    # We pass :mark_complete as the validation context so the page_translations
+    # can validate differently depending on whether the form is marked complete
+    validation_context = form_marked_complete? ? :mark_complete : nil
+
     page_translations.each do |page_translation|
-      page_translation.validate
+      page_translation.validate(validation_context)
 
       page_translation.errors.each do |error|
         errors.import(error, { attribute: "page_#{page_translation.page.position}_#{error.attribute}".to_sym })
