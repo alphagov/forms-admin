@@ -412,7 +412,7 @@ RSpec.describe ReportsController, type: :request do
 
       it "returns http code 200 and renders the selection questions summary template" do
         expect(response).to have_http_status(:ok)
-        expect(response).to render_template("reports/selection_questions/summary")
+        expect(response).to render_template("reports/selection_questions_summary")
 
         node = Capybara.string(response.body)
         expect(node).to have_xpath "(//dl)[1]/div[1]/dt", text: "Live forms with more than 30 options"
@@ -463,6 +463,26 @@ RSpec.describe ReportsController, type: :request do
         expect(response.body).to include "A form"
         expect(response.body).to include "Checkboxes question"
       end
+    end
+  end
+
+  describe "#selection_questions_with_none_of_the_above" do
+    let(:page) { build(:page, :with_selection_settings, question_text: "Question with none of the above", is_optional: true) }
+    let(:form) { create(:form, :live, name: "A form", pages: [page]) }
+    let(:forms) { [form] }
+
+    before do
+      login_as_super_admin_user
+      get report_selection_questions_with_none_of_the_above_path(tag: :live)
+    end
+
+    it "returns http code 200 and renders the report" do
+      expect(response).to have_http_status(:ok)
+      expect(response).to render_template("reports/feature_report")
+
+      expect(response.body).to include "A form"
+      expect(response.body).to include "Question with none of the above"
+      expect(response.body).to include "‘None of the above’ follow-up question"
     end
   end
 

@@ -9,6 +9,8 @@ module ReportHelper
       report_questions_table(records)
     when :selection_questions
       report_selection_questions_table(records)
+    when :selection_questions_with_none_of_the_above
+      report_selection_questions_with_none_of_the_above_table(records)
     else
       raise "type '#{type}' is not expected"
     end
@@ -39,6 +41,13 @@ module ReportHelper
     {
       head: report_selection_questions_table_head,
       rows: report_selection_questions_table_rows(questions),
+    }
+  end
+
+  def report_selection_questions_with_none_of_the_above_table(questions)
+    {
+      head: report_selection_questions_with_none_of_the_above_table_head,
+      rows: report_selection_questions_with_none_of_the_above_table_rows(questions),
     }
   end
 
@@ -107,8 +116,15 @@ private
   def report_selection_questions_table_head
     [
       *report_questions_table_head,
-      I18n.t("reports.selection_questions.questions.table_headings.number_of_options"),
-      I18n.t("reports.selection_questions.questions.table_headings.none_of_the_above"),
+      I18n.t("reports.form_or_questions_list_table.headings.number_of_options"),
+      I18n.t("reports.form_or_questions_list_table.headings.none_of_the_above"),
+    ]
+  end
+
+  def report_selection_questions_with_none_of_the_above_table_head
+    [
+      *report_questions_table_head,
+      I18n.t("reports.form_or_questions_list_table.headings.none_of_the_above_follow_up_question"),
     ]
   end
 
@@ -118,12 +134,37 @@ private
 
   def report_selection_questions_table_row(question)
     selection_options_count = question.dig("data", "answer_settings", "selection_options").length.to_s
-    none_of_the_above = question["data"]["is_optional"] ? I18n.t("reports.selection_questions.questions.none_of_the_above_yes") : I18n.t("reports.selection_questions.questions.none_of_the_above_no")
+    none_of_the_above = question["data"]["is_optional"] ? I18n.t("reports.form_or_questions_list_table.values.yes") : I18n.t("reports.form_or_questions_list_table.values.no")
     [
       *report_questions_table_row(question),
       selection_options_count,
       none_of_the_above,
     ]
+  end
+
+  def report_selection_questions_with_none_of_the_above_table_rows(questions)
+    questions.map { |question| report_selection_questions_with_none_of_the_above_table_row(question) }
+  end
+
+  def report_selection_questions_with_none_of_the_above_table_row(question)
+    [
+      *report_questions_table_row(question),
+      none_of_the_above_question_text(question),
+    ]
+  end
+
+  def none_of_the_above_question_text(question)
+    none_of_the_above_question = question.dig("data", "answer_settings", "none_of_the_above_question")
+
+    if none_of_the_above_question.blank?
+      return I18n.t("reports.form_or_questions_list_table.values.no_follow_up_question")
+    end
+
+    if ActiveRecord::Type::Boolean.new.cast(none_of_the_above_question["is_optional"])
+      I18n.t("step_summary_card.none_of_the_above_question_optional", question_text: none_of_the_above_question["question_text"])
+    else
+      none_of_the_above_question["question_text"]
+    end
   end
 
   def form_link(form)

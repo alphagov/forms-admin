@@ -118,7 +118,7 @@ class ReportsController < WebController
     forms = Reports::FormDocumentsService.form_documents(tag:)
     data = Reports::SelectionQuestionService.new(forms).statistics
 
-    render template: "reports/selection_questions/summary", locals: { tag:, data: }
+    render template: "reports/selection_questions_summary", locals: { tag:, data: }
   end
 
   def selection_questions_with_autocomplete
@@ -143,6 +143,14 @@ class ReportsController < WebController
     questions = Reports::FeatureReportService.new(forms).selection_questions_with_checkboxes
 
     questions_feature_report(tag, params[:action], questions, type: :selection_questions)
+  end
+
+  def selection_questions_with_none_of_the_above
+    tag = params[:tag]
+    forms = Reports::FormDocumentsService.form_documents(tag:)
+    questions = Reports::FeatureReportService.new(forms).selection_questions_with_none_of_the_above
+
+    questions_feature_report(tag, params[:action], questions, type: :selection_questions_with_none_of_the_above)
   end
 
   def csv_downloads; end

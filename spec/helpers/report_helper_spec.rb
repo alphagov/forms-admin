@@ -55,9 +55,14 @@ RSpec.describe ReportHelper, type: :helper do
       subject(:table) { helper.report_table(:selection_questions, questions) }
 
       let(:questions) do
+        pages = [
+          build(:page, :selection_with_radios, question_text: "Radios question", is_optional: true),
+          build(:page, :selection_with_checkboxes, question_text: "Checkboxes question", is_optional: false),
+        ]
+
         [
-          build(:page, :selection_with_radios, question_text: "Radios question", is_optional: true).as_form_document_step(nil).merge("form" => forms[0]),
-          build(:page, :selection_with_checkboxes, question_text: "Checkboxes question", is_optional: false).as_form_document_step(nil).merge("form" => forms[1]),
+          question_data_from_page(pages[0], forms[0]),
+          question_data_from_page(pages[1], forms[1]),
         ]
       end
 
@@ -66,8 +71,8 @@ RSpec.describe ReportHelper, type: :helper do
           I18n.t("reports.form_or_questions_list_table.headings.form_name"),
           I18n.t("reports.form_or_questions_list_table.headings.organisation"),
           I18n.t("reports.form_or_questions_list_table.headings.question_text"),
-          I18n.t("reports.selection_questions.questions.table_headings.number_of_options"),
-          I18n.t("reports.selection_questions.questions.table_headings.none_of_the_above"),
+          I18n.t("reports.form_or_questions_list_table.headings.number_of_options"),
+          I18n.t("reports.form_or_questions_list_table.headings.none_of_the_above"),
         ]
       end
 
@@ -98,8 +103,73 @@ RSpec.describe ReportHelper, type: :helper do
 
       it "includes whether 'none of the above' is included for each question for the fifth column of each row" do
         expect(table[:rows].map(&:fifth)).to eq [
-          I18n.t("reports.selection_questions.questions.none_of_the_above_yes"),
-          I18n.t("reports.selection_questions.questions.none_of_the_above_no"),
+          I18n.t("reports.form_or_questions_list_table.values.yes"),
+          I18n.t("reports.form_or_questions_list_table.values.no"),
+        ]
+      end
+    end
+
+    context "with 'selection_questions_with_none_of_the_above' type" do
+      subject(:table) { helper.report_table(:selection_questions_with_none_of_the_above, questions) }
+
+      let(:questions) do
+        pages = [
+          build(:page, :selection_with_none_of_the_above_question,
+                question_text: "With optional follow-up",
+                none_of_the_above_question_text: "You can enter something",
+                none_of_the_above_question_is_optional: "true"),
+          build(:page, :selection_with_none_of_the_above_question,
+                question_text: "With mandatory follow-up",
+                none_of_the_above_question_text: "You must enter something",
+                none_of_the_above_question_is_optional: "false"),
+          build(:page, :with_selection_settings, question_text: "Without follow-up", is_optional: true),
+        ]
+
+        [
+          question_data_from_page(pages[0], forms[0]),
+          question_data_from_page(pages[1], forms[1]),
+          question_data_from_page(pages[2], forms[2]),
+        ]
+      end
+
+      it "includes the correct table head" do
+        expect(table[:head]).to eq [
+          I18n.t("reports.form_or_questions_list_table.headings.form_name"),
+          I18n.t("reports.form_or_questions_list_table.headings.organisation"),
+          I18n.t("reports.form_or_questions_list_table.headings.question_text"),
+          I18n.t("reports.form_or_questions_list_table.headings.none_of_the_above_follow_up_question"),
+        ]
+      end
+
+      it "formats a link for each form for the first column of each row" do
+        expect(table[:rows].map(&:first)).to eq [
+          "<a class=\"govuk-link\" href=\"/forms/1/live/pages\">All question types form</a>",
+          "<a class=\"govuk-link\" href=\"/forms/3/live/pages\">Branch route form</a>",
+          "<a class=\"govuk-link\" href=\"/forms/4/live/pages\">Skip route form</a>",
+        ]
+      end
+
+      it "includes the organisation name for each form for the second column of each row" do
+        expect(table[:rows].map(&:second)).to eq [
+          "Government Digital Service",
+          "Ministry of Tests",
+          "Department for Testing",
+        ]
+      end
+
+      it "includes the question text for each question for the third column of each row" do
+        expect(table[:rows].map(&:third)).to eq [
+          "With optional follow-up",
+          "With mandatory follow-up",
+          "Without follow-up",
+        ]
+      end
+
+      it "includes the none of the above follow-up question for each question for the fourth column of each row" do
+        expect(table[:rows].map(&:fourth)).to eq [
+          "You can enter something (optional)",
+          "You must enter something",
+          "No follow-up question",
         ]
       end
     end
@@ -160,8 +230,8 @@ RSpec.describe ReportHelper, type: :helper do
     it "returns an array of arrays of strings" do
       expect(helper.report_forms_table_rows(forms))
         .to be_an(Array)
-        .and(all(be_an(Array)))
-        .and(all(all(be_a(String))))
+              .and(all(be_an(Array)))
+              .and(all(all(be_a(String))))
     end
 
     it "returns a row for each form" do
@@ -226,8 +296,8 @@ RSpec.describe ReportHelper, type: :helper do
     it "returns an array of arrays of strings" do
       expect(helper.report_forms_with_routes_table_rows(forms))
         .to be_an(Array)
-        .and(all(be_an(Array)))
-        .and(all(all(be_a(String))))
+              .and(all(be_an(Array)))
+              .and(all(all(be_a(String))))
     end
 
     it "returns a row for each form" do
@@ -283,8 +353,8 @@ RSpec.describe ReportHelper, type: :helper do
     it "returns an array of arrays of strings" do
       expect(helper.report_questions_table_rows(questions))
         .to be_an(Array)
-        .and(all(be_an(Array)))
-        .and(all(all(be_a(String))))
+              .and(all(be_an(Array)))
+              .and(all(all(be_a(String))))
     end
 
     it "formats a link for each form for the first column of each row" do
@@ -307,5 +377,9 @@ RSpec.describe ReportHelper, type: :helper do
         "What’s your email address?",
       ]
     end
+  end
+
+  def question_data_from_page(page, form_data)
+    page.as_form_document_step(nil).as_json.merge("form" => form_data)
   end
 end

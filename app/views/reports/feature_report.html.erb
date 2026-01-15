@@ -1,5 +1,5 @@
 <% set_page_title(t("reports.#{report}.heading", tag: tag_label(tag)).upcase_first) %>
-<% if type == :selection_questions %>
+<% if [:selection_questions, :selection_questions_with_none_of_the_above].include?(type) %>
   <% content_for :back_link, govuk_back_link_to(report_selection_questions_summary_path, t("reports.back_to_selection_questions_summary"))  %>
 <% else %>
   <% content_for :back_link, govuk_back_link_to(report_features_path, t("reports.back_to_feature_usage")) %>

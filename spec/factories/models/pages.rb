@@ -69,6 +69,28 @@ FactoryBot.define do
       end
     end
 
+    trait :selection_with_none_of_the_above_question do
+      transient do
+        only_one_option { "true" }
+        selection_options { [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }] }
+        none_of_the_above_question_text { "None of the above question?" }
+        none_of_the_above_question_is_optional { "true" }
+      end
+
+      answer_type { "selection" }
+      is_optional { true }
+      answer_settings do
+        {
+          only_one_option:,
+          selection_options:,
+          none_of_the_above_question: {
+            question_text: none_of_the_above_question_text,
+            is_optional: none_of_the_above_question_is_optional,
+          },
+        }
+      end
+    end
+
     trait :with_text_settings do
       transient do
         input_type { Pages::TextSettingsInput::INPUT_TYPES.sample }

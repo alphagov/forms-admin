@@ -297,6 +297,20 @@ RSpec.describe Reports::FeatureReportService do
     end
   end
 
+  describe "#selection_questions_with_none_of_the_above" do
+    it "returns selection questions that include none of the above" do
+      form = create(:form, :live, pages: [
+        create(:page, :with_selection_settings, is_optional: true),
+        create(:page, :with_selection_settings, is_optional: false),
+      ])
+      form_document = form.live_form_document.as_json
+
+      questions = described_class.new([form_document]).selection_questions_with_none_of_the_above
+      expect(questions.length).to eq 1
+      expect(questions.first["data"]["question_text"]).to eq(form.pages[0].question_text)
+    end
+  end
+
   describe "#forms_with_branch_routes" do
     it "returns details needed to render report" do
       forms = described_class.new(form_documents).forms_with_branch_routes

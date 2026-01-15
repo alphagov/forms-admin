@@ -1592,7 +1592,7 @@ en:
       title: All forms with add another answer
     back_link: Back to reports
     back_to_feature_usage: Back to feature and answer type usage
-    back_to_selection_questions_summary: Back to selection from a list of options usage
+    back_to_selection_questions_summary: Back to select from a list questions
     contact_for_research:
       heading: Users who’ve agreed to be contacted about user research
       table_headings:
@@ -1627,10 +1627,17 @@ en:
     form_or_questions_list_table:
       headings:
         form_name: Form name
+        none_of_the_above: "‘None of the above’"
+        none_of_the_above_follow_up_question: "‘None of the above’ follow-up question"
         number_of_branch_routes: Number of branch routes
+        number_of_options: Number of options
         number_of_routes: Number of routes
         organisation: Organisation
         question_text: Question text
+      values:
+        'no': 'No'
+        no_follow_up_question: No follow-up question
+        'yes': 'Yes'
     forms_that_are_copies:
       download_csv: Download data about all %{tag} forms that are copies as a CSV file
       empty: There are no %{tag} forms that are copies
@@ -1679,30 +1686,33 @@ en:
       download_csv: Download all questions in %{tag} forms with this answer type as a CSV file
       empty: There are no %{tag} questions with %{answer_type} answer type
       heading: "%{tag} questions with %{answer_type} answer type"
-    selection_questions:
-      questions:
-        none_of_the_above_no: 'No'
-        none_of_the_above_yes: 'Yes'
+    selection_questions_summary:
+      autocomplete:
+        forms_row_heading: "%{tag} forms with more than 30 options"
+        heading: Select one from over 30 options
+        view_questions: Questions where you can select one from over 30 options
+      back_link: Back to feature usage
+      checkboxes:
+        forms_row_heading: "%{tag} forms using one or more"
+        heading: Select one or more
+        view_questions: Questions where you can select one or more from up to 30 questions
+      none_of_the_above:
+        heading: Questions with ‘None of the above’
         table_headings:
-          none_of_the_above: "‘None of the above’"
-          number_of_options: Number of options
-      summary:
-        autocomplete:
-          forms_row_heading: "%{tag} forms with more than 30 options"
-          heading: Select one from over 30 options
-          view_questions: Questions where you can select one from over 30 options
-        back_link: Back to feature usage
-        checkboxes:
-          forms_row_heading: "%{tag} forms using one or more"
-          heading: Select one or more
-          view_questions: Questions where you can select one or more from up to 30 questions
-        number_of_questions: Number of questions
-        radios:
-          forms_row_heading: "%{tag} forms with 30 options or fewer"
-          heading: Select one from up to 30 options
-          view_questions: Questions where you can select one from up to 30 options
-        title: Selection from a list of options answer type usage in %{tag} forms
-        with_none_of_the_above: Questions with ‘None of the above’
+          follow_up_questions: Follow-up questions if ‘None of the above’ is selected
+          forms_with_follow_up_questions: "%{tag} forms with follow-up question if ‘None of the above’ is selected"
+          forms_with_none_of_the_above: "%{tag} forms with ‘None of the above’ in a question"
+          mandatory_follow_up_questions: Mandatory ‘None of the above’ follow‑up questions
+          optional_follow_up_questions: Optional ‘None of the above’ follow‑up questions
+          questions_with_none_of_the_above: Questions with ‘None of the above’
+        view_questions: Questions with ‘None of the above’ (including follow-up questions)
+      number_of_questions: Number of questions
+      radios:
+        forms_row_heading: "%{tag} forms with 30 options or fewer"
+        heading: Select one from up to 30 options
+        view_questions: Questions where you can select one from up to 30 options
+      title: Select from a list questions in %{tag} forms
+      with_none_of_the_above: Questions with ‘None of the above’
     selection_questions_with_autocomplete:
       download_csv: Download all questions where you can select one from over 30 options in %{tag} forms as a CSV file
       empty: There are no questions where you can select one from over 30 options in %{tag} forms
@@ -1711,6 +1721,10 @@ en:
       download_csv: Download all questions where you can select one or more from up to 30 options in %{tag} forms as a CSV file
       empty: There are no questions where you can select one or more from up to 30 options in %{tag} forms
       heading: Questions where you can select one or more from up to 30 options in %{tag} forms
+    selection_questions_with_none_of_the_above:
+      download_csv: Download all select from a list questions with ‘None of the above’ in %{tag} forms as a CSV file
+      empty: There are no select from a list questions with ‘None of the above’ in %{tag} forms
+      heading: Select from a list questions with ‘None of the above’ in %{tag} forms
     selection_questions_with_radios:
       download_csv: Download all questions where you can select one from up to 30 options in %{tag} forms as a CSV file
       empty: There are no questions where you can select one from up to 30 options in %{tag} forms
