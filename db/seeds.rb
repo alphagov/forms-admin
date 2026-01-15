@@ -350,7 +350,7 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
     name: "None of the above form",
     pages: [
       Page.create(
-        question_text: "Which option do you want",
+        question_text: "Which option do you want?",
         answer_type: "selection",
         answer_settings: {
           only_one_option: "true",
@@ -361,6 +361,21 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
           none_of_the_above_question: {
             question_text: "What other option could you possibly want?",
             is_optional: "true",
+          },
+        },
+        is_optional: true,
+      ),
+      Page.create(
+        question_text: "What is your favourite number?",
+        answer_type: "selection",
+        answer_settings: {
+          only_one_option: "true",
+          selection_options: (0..100).map do |number|
+            { "name": number, value: number }
+          end,
+          none_of_the_above_question: {
+            question_text: "Enter a number",
+            is_optional: "false",
           },
         },
         is_optional: true,
