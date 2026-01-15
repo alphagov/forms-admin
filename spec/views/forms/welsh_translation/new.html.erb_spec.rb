@@ -272,6 +272,19 @@ describe "forms/welsh_translation/new.html.erb" do
         end
       end
 
+      context "when a page has a selection question with none of the above" do
+        let(:page) { create :page, :selection_with_none_of_the_above_question }
+
+        it "has row for the none of the above question text" do
+          expect(rendered).to have_css("th", text: t("forms.welsh_translation.new.none_of_the_above_question"))
+        end
+
+        it "shows the English text and Welsh field for none of the above question" do
+          expect(rendered).to have_css("td", text: page.answer_settings.none_of_the_above_question.question_text)
+          expect(rendered).to have_field("Enter Welsh question or label if ‘None of the above’ is selected")
+        end
+      end
+
       context "when at least one page has routing conditions" do
         context "when the condition has an exit page" do
           let(:page) { create :page, position: 1, routing_conditions: [condition] }

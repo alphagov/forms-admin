@@ -487,6 +487,7 @@ en:
         no_privacy_information_added: No privacy information has been added to the form yet.
         no_support_information_added: No contact details for support have been added to the form yet.
         no_what_happens_next_added: No information about what happens next has been added to the form yet.
+        none_of_the_above_question: Question or label if ‘None of the above’ is selected
         page_heading: Page heading
         preview_link_text: Preview this form in Welsh
         question_number: Question %{question_number}
