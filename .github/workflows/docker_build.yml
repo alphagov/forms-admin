@@ -1,4 +1,4 @@
-name: "Docker build"
+name: "Build image"
 on:
   push:
     branches: [main]
@@ -7,15 +7,5 @@ on:
   merge_group:
     types: [checks_requested]
 jobs:
-  build_the_image:
-    runs-on: ubuntu-24.04-arm
-    steps:
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
-
-      - name: Build
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
-        with:
-          push: false
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+  build-image:
+    uses: alphagov/forms-deploy/.github/workflows/reusable-build-image.yml@main
