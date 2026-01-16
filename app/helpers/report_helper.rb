@@ -89,6 +89,20 @@ module ReportHelper
     t("reports.tag_labels.#{tag}")
   end
 
+  def none_of_the_above_question_text(question)
+    none_of_the_above_question = question.dig("data", "answer_settings", "none_of_the_above_question")
+
+    if none_of_the_above_question.blank?
+      return I18n.t("reports.form_or_questions_list_table.values.no_follow_up_question")
+    end
+
+    if ActiveRecord::Type::Boolean.new.cast(none_of_the_above_question["is_optional"])
+      I18n.t("step_summary_card.none_of_the_above_question_optional", question_text: none_of_the_above_question["question_text"])
+    else
+      none_of_the_above_question["question_text"]
+    end
+  end
+
 private
 
   def report_forms_table_row(form)
@@ -151,20 +165,6 @@ private
       *report_questions_table_row(question),
       none_of_the_above_question_text(question),
     ]
-  end
-
-  def none_of_the_above_question_text(question)
-    none_of_the_above_question = question.dig("data", "answer_settings", "none_of_the_above_question")
-
-    if none_of_the_above_question.blank?
-      return I18n.t("reports.form_or_questions_list_table.values.no_follow_up_question")
-    end
-
-    if ActiveRecord::Type::Boolean.new.cast(none_of_the_above_question["is_optional"])
-      I18n.t("step_summary_card.none_of_the_above_question_optional", question_text: none_of_the_above_question["question_text"])
-    else
-      none_of_the_above_question["question_text"]
-    end
   end
 
   def form_link(form)

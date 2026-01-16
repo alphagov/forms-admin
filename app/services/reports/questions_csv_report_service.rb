@@ -1,6 +1,8 @@
 require "csv"
 
 class Reports::QuestionsCsvReportService
+  include ReportHelper
+
   IS_REPEATABLE = "Is repeatable?".freeze
   QUESTIONS_CSV_HEADERS = [
     "Form ID",
@@ -21,8 +23,10 @@ class Reports::QuestionsCsvReportService
     "Has routes?",
     "Has branch routes?",
     "Answer settings - Input type",
-    "Selection settings - Only one option?",
-    "Selection settings - Number of options",
+    "Select from a list settings - Only one option?",
+    "Select from a list settings - Number of options",
+    "Select from a list settings - None of the above?",
+    "Select from a list settings - None of the above follow-up question",
     "Name settings - Title needed?",
     "Raw answer settings",
   ].freeze
@@ -73,6 +77,8 @@ private
       step.dig("data", "answer_settings", "input_type"),
       step.dig("data", "answer_settings", "only_one_option").presence.try { |o| o.to_s == "true" },
       step.dig("data", "answer_settings", "selection_options")&.length,
+      step["data"]["answer_type"] == "selection" ? step["data"]["is_optional"] : nil,
+      step["data"]["answer_type"] == "selection" ? none_of_the_above_question_text(step) : nil,
       step.dig("data", "answer_settings", "title_needed"),
       step["data"]["answer_settings"].as_json,
     ]
