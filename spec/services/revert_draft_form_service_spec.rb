@@ -313,6 +313,102 @@ describe RevertDraftFormService do
         end
       end
     end
+
+    context "when form has no Welsh content in live but Welsh is added in draft" do
+      let(:live_form) do
+        form = create(:form, :live, :with_pages, pages_count: 2)
+        # Create live FormDocument without Welsh version
+        FormDocumentSyncService.new(form).synchronize_live_form
+        form.create_draft_from_live_form!
+        form.reload
+        form
+      end
+
+      context "when Welsh translations are added to the draft" do
+        before do
+          live_form.update!(name_cy: "Ffurflen Gymraeg Newydd", available_languages: %w[en cy])
+          live_form.pages.first.update!(question_text_cy: "Cwestiwn Cymraeg")
+        end
+
+        it "removes the Welsh translations when reverting to live" do
+          revert_draft(live_tag)
+
+          live_form.reload
+
+          # Check that Welsh translations are cleared
+          expect(live_form.name_cy).to be_nil
+          expect(live_form.pages.first.question_text_cy).to be_nil
+        end
+      end
+
+      context "when Welsh translations are added to conditions in the draft" do
+        let(:live_form) do
+          form = create(:form, :live, pages_count: 2)
+          form.pages.first.update!(answer_type: "selection", answer_settings: { "only_one_option" => "true", "selection_options" => [{ "name" => "Yes" }, { "name" => "No" }] })
+          form.pages.first.routing_conditions.create!(
+            answer_value: "Yes",
+            goto_page_id: form.pages.last.id,
+            routing_page_id: form.pages.first.id,
+          )
+          # Synchronize live FormDocument (no Welsh version)
+          FormDocumentSyncService.new(form).synchronize_live_form
+          form.create_draft_from_live_form!
+          form.reload
+          form
+        end
+
+        before do
+          # Add Welsh translations to condition in draft
+          condition = live_form.pages.first.routing_conditions.first
+          condition.answer_value_cy = "Ie"
+          condition.save!
+        end
+
+        it "removes the Welsh translations from conditions when reverting to live" do
+          revert_draft(live_tag)
+
+          live_form.reload
+          condition = live_form.pages.first.routing_conditions.first
+
+          expect(condition.answer_value_cy).to be_nil
+        end
+      end
+
+      context "when Welsh exit page translations are added to conditions in the draft" do
+        let(:live_form) do
+          form = create(:form, :live, pages_count: 2)
+          form.pages.first.update!(answer_type: "selection", answer_settings: { "only_one_option" => "true", "selection_options" => [{ "name" => "Yes" }, { "name" => "No" }] })
+          form.pages.first.routing_conditions.create!(
+            answer_value: "No",
+            routing_page_id: form.pages.first.id,
+            exit_page_heading: "You cannot continue",
+            exit_page_markdown: "Please contact us",
+          )
+          # Synchronize live FormDocument (no Welsh version)
+          FormDocumentSyncService.new(form).synchronize_live_form
+          form.create_draft_from_live_form!
+          form.reload
+          form
+        end
+
+        before do
+          # Add Welsh exit page translations to condition in draft
+          condition = live_form.pages.first.routing_conditions.first
+          condition.exit_page_heading_cy = "Ni allwch barhau"
+          condition.exit_page_markdown_cy = "Cysylltwch â ni"
+          condition.save!
+        end
+
+        it "removes the Welsh exit page translations from conditions when reverting to live" do
+          revert_draft(live_tag)
+
+          live_form.reload
+          condition = live_form.pages.first.routing_conditions.first
+
+          expect(condition.exit_page_heading_cy).to be_nil
+          expect(condition.exit_page_markdown_cy).to be_nil
+        end
+      end
     end
   end
 

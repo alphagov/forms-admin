@@ -24,7 +24,11 @@ class RevertDraftFormService
     ActiveRecord::Base.transaction do
       revert_form_attributes(form_document_content)
       revert_pages_and_nested_associations(form_document_content["steps"])
-      revert_welsh_translations(tag) if welsh_form_document_exists?(tag)
+      if welsh_form_document_exists?(tag)
+        revert_welsh_translations(tag)
+      else
+        clear_welsh_translations(form_document_content["steps"])
+      end
 
       if tag == :live
         form.delete_draft_from_live_form
@@ -189,6 +193,43 @@ private
       condition.exit_page_heading_cy = condition_data["exit_page_heading"] if condition_data.key?("exit_page_heading")
       condition.exit_page_markdown_cy = condition_data["exit_page_markdown"] if condition_data.key?("exit_page_markdown")
 
+      condition.save!
+    end
+  end
+
+  def clear_welsh_translations(_steps_data)
+    # Clear form-level Welsh translations
+    translatable_attributes = %w[
+      name
+      privacy_policy_url
+      support_email
+      support_phone
+      support_url
+      support_url_text
+      declaration_text
+      what_happens_next_markdown
+      payment_url
+    ]
+
+    translatable_attributes.each do |attr|
+      form.public_send("#{attr}_cy=", nil)
+    end
+
+    # Clear page-level Welsh translations
+    form.pages.each do |page|
+      page.question_text_cy = nil
+      page.hint_text_cy = nil
+      page.answer_settings_cy = nil
+      page.page_heading_cy = nil
+      page.guidance_markdown_cy = nil
+      page.save!
+    end
+
+    # Clear condition-level Welsh translations
+    form.conditions.each do |condition|
+      condition.answer_value_cy = nil
+      condition.exit_page_heading_cy = nil
+      condition.exit_page_markdown_cy = nil
       condition.save!
     end
   end
