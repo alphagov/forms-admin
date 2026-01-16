@@ -218,6 +218,101 @@ describe RevertDraftFormService do
           expect(live_form.name_cy).to eq("Ffurflen Gymraeg")
         end
       end
+
+      context "when conditions have Welsh translations in live version" do
+        let(:live_form) do
+          form = create(:form, :live, pages_count: 2, available_languages: %w[en cy])
+          # Set up a condition with Welsh translations
+          form.pages.first.update!(answer_type: "selection", answer_settings: { "only_one_option" => "true", "selection_options" => [{ "name" => "Yes" }, { "name" => "No" }] })
+          condition = form.pages.first.routing_conditions.create!(
+            answer_value: "Yes",
+            goto_page_id: form.pages.last.id,
+            routing_page_id: form.pages.first.id,
+          )
+          # Set Welsh translations for the condition
+          condition.answer_value_cy = "Ie"
+          condition.save!
+          # Synchronize live FormDocuments for both languages
+          FormDocumentSyncService.new(form).synchronize_live_form
+          # Make the form live_with_draft
+          form.create_draft_from_live_form!
+          form.reload
+          form
+        end
+
+        context "when Welsh translations are changed in the draft" do
+          before do
+            # Change Welsh translation in the draft
+            condition = live_form.pages.first.routing_conditions.first
+            condition.answer_value_cy = "Ydw"
+            condition.save!
+          end
+
+          it "restores the original Welsh translations for conditions" do
+            revert_draft(live_tag)
+
+            # Reload to get the restored state
+            live_form.reload
+            condition = live_form.pages.first.routing_conditions.first
+
+            # Check that condition-level Welsh translations are restored
+            expect(condition.answer_value_cy).to eq("Ie")
+
+            # Verify Welsh content is accessible in Welsh locale
+            Mobility.with_locale(:cy) do
+              expect(condition.answer_value).to eq("Ie")
+            end
+          end
+        end
+      end
+
+      context "when conditions have exit page Welsh translations in live version" do
+        let(:live_form) do
+          form = create(:form, :live, pages_count: 2, available_languages: %w[en cy])
+          form.pages.first.update!(answer_type: "selection", answer_settings: { "only_one_option" => "true", "selection_options" => [{ "name" => "Yes" }, { "name" => "No" }] })
+          condition = form.pages.first.routing_conditions.create!(
+            answer_value: "No",
+            routing_page_id: form.pages.first.id,
+            exit_page_heading: "You cannot continue",
+            exit_page_markdown: "Please contact us",
+          )
+          # Set Welsh translations for exit page content
+          condition.exit_page_heading_cy = "Ni allwch barhau"
+          condition.exit_page_markdown_cy = "Cysylltwch â ni"
+          condition.save!
+          # Synchronize live FormDocuments for both languages
+          FormDocumentSyncService.new(form).synchronize_live_form
+          # Make the form live_with_draft
+          form.create_draft_from_live_form!
+          form.reload
+          form
+        end
+
+        context "when exit page Welsh translations are changed in the draft" do
+          before do
+            condition = live_form.pages.first.routing_conditions.first
+            condition.exit_page_heading_cy = "Ni allwch fynd ymlaen"
+            condition.exit_page_markdown_cy = "Ffoniwch ni"
+            condition.save!
+          end
+
+          it "restores the original exit page Welsh translations for conditions" do
+            revert_draft(live_tag)
+
+            live_form.reload
+            condition = live_form.pages.first.routing_conditions.first
+
+            expect(condition.exit_page_heading_cy).to eq("Ni allwch barhau")
+            expect(condition.exit_page_markdown_cy).to eq("Cysylltwch â ni")
+
+            Mobility.with_locale(:cy) do
+              expect(condition.exit_page_heading).to eq("Ni allwch barhau")
+              expect(condition.exit_page_markdown).to eq("Cysylltwch â ni")
+            end
+          end
+        end
+      end
+    end
     end
   end
 

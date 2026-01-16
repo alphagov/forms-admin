@@ -129,6 +129,9 @@ private
 
     # Revert page-level Welsh translations
     revert_pages_welsh_attributes(welsh_content["steps"])
+
+    # Revert condition-level Welsh translations
+    revert_conditions_welsh_attributes(welsh_content["steps"])
   end
 
   def revert_form_welsh_attributes(welsh_content)
@@ -169,6 +172,24 @@ private
       page.guidance_markdown_cy = page_data["guidance_markdown"] if page_data.key?("guidance_markdown")
 
       page.save!
+    end
+  end
+
+  def revert_conditions_welsh_attributes(steps_data)
+    return if steps_data.blank?
+
+    all_conditions_data = steps_data.flat_map { |step| step["routing_conditions"] || [] }
+
+    all_conditions_data.each do |condition_data|
+      condition = Condition.find_by(id: condition_data["id"])
+      next if condition.blank?
+
+      # Revert Welsh translations for condition attributes
+      condition.answer_value_cy = condition_data["answer_value"] if condition_data.key?("answer_value")
+      condition.exit_page_heading_cy = condition_data["exit_page_heading"] if condition_data.key?("exit_page_heading")
+      condition.exit_page_markdown_cy = condition_data["exit_page_markdown"] if condition_data.key?("exit_page_markdown")
+
+      condition.save!
     end
   end
 end
