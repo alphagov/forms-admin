@@ -24,6 +24,11 @@ class RevertDraftFormService
     ActiveRecord::Base.transaction do
       revert_form_attributes(form_document_content)
       revert_pages_and_nested_associations(form_document_content["steps"])
+      if welsh_form_document_exists?(tag)
+        revert_welsh_translations(tag)
+      else
+        clear_welsh_translations
+      end
 
       if tag == :live
         form.delete_draft_from_live_form
@@ -111,5 +116,91 @@ private
     condition.routing_page = Page.find_by!(external_id: condition_data["routing_page_id"]) if condition_data["routing_page_id"]
     condition.check_page = Page.find_by!(external_id: condition_data["check_page_id"]) if condition_data["check_page_id"]
     condition.goto_page = Page.find_by!(external_id: condition_data["goto_page_id"]) if condition_data["goto_page_id"]
+  end
+
+  def welsh_form_document_exists?(tag)
+    FormDocument.exists?(form_id: form.id, tag:, language: "cy")
+  end
+
+  def revert_welsh_translations(tag)
+    welsh_form_document = FormDocument.find_by(form_id: form.id, tag:, language: "cy")
+    return if welsh_form_document.blank?
+
+    welsh_content = welsh_form_document.content
+
+    # Revert form-level Welsh translations
+    revert_form_welsh_attributes(welsh_content)
+
+    # Revert page-level Welsh translations
+    revert_pages_welsh_attributes(welsh_content["steps"])
+
+    # Revert condition-level Welsh translations
+    revert_conditions_welsh_attributes(welsh_content["steps"])
+  end
+
+  def revert_form_welsh_attributes(welsh_content)
+    # Get the list of translatable attributes from the Form model
+    translatable_attributes = %w[
+      name
+      privacy_policy_url
+      support_email
+      support_phone
+      support_url
+      support_url_text
+      declaration_text
+      what_happens_next_markdown
+      payment_url
+    ]
+
+    translatable_attributes.each do |attr|
+      welsh_value = welsh_content[attr]
+      form.public_send("#{attr}_cy=", welsh_value) if welsh_content.key?(attr)
+    end
+  end
+
+  def revert_pages_welsh_attributes(steps_data)
+    return if steps_data.blank?
+
+    steps_data.each do |step_data|
+      page = form.pages.find_by(external_id: step_data["id"])
+      next if page.blank?
+
+      page_data = step_data["data"]
+      next if page_data.blank?
+
+      # Revert Welsh translations for page attributes
+      page.question_text_cy = page_data["question_text"] if page_data.key?("question_text")
+      page.hint_text_cy = page_data["hint_text"] if page_data.key?("hint_text")
+      page.answer_settings_cy = page_data["answer_settings"] if page_data.key?("answer_settings")
+      page.page_heading_cy = page_data["page_heading"] if page_data.key?("page_heading")
+      page.guidance_markdown_cy = page_data["guidance_markdown"] if page_data.key?("guidance_markdown")
+
+      page.save!
+    end
+  end
+
+  def revert_conditions_welsh_attributes(steps_data)
+    return if steps_data.blank?
+
+    all_conditions_data = steps_data.flat_map { |step| step["routing_conditions"] || [] }
+
+    all_conditions_data.each do |condition_data|
+      condition = Condition.find_by(id: condition_data["id"])
+      next if condition.blank?
+
+      # Revert Welsh translations for condition attributes
+      condition.answer_value_cy = condition_data["answer_value"] if condition_data.key?("answer_value")
+      condition.exit_page_heading_cy = condition_data["exit_page_heading"] if condition_data.key?("exit_page_heading")
+      condition.exit_page_markdown_cy = condition_data["exit_page_markdown"] if condition_data.key?("exit_page_markdown")
+
+      condition.save!
+    end
+  end
+
+  def clear_welsh_translations
+    # Delete Welsh translations directly from the database using Mobility's translations association
+    form.translations.where(locale: :cy).delete_all
+    Page::Translation.where(locale: :cy, page_id: form.page_ids).delete_all
+    Condition::Translation.where(locale: :cy, condition_id: form.condition_ids).delete_all
   end
 end
