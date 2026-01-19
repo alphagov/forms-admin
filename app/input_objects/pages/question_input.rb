@@ -19,15 +19,23 @@ class Pages::QuestionInput < BaseInput
 
     prepare_for_save
 
-    Page.create_and_update_form!(form_id:,
-                                 question_text:,
-                                 hint_text:,
-                                 is_optional:,
-                                 is_repeatable:,
-                                 answer_settings:,
-                                 page_heading:,
-                                 guidance_markdown:,
-                                 answer_type:)
+    attrs = {
+      form_id:,
+      question_text:,
+      hint_text:,
+      is_optional:,
+      is_repeatable:,
+      answer_settings:,
+      page_heading:,
+      guidance_markdown:,
+      answer_type:,
+    }
+
+    if draft_question.form.available_languages.include?("cy")
+      attrs[:answer_settings_cy] = answer_settings_cy
+    end
+
+    Page.create_and_update_form!(**attrs)
   end
 
   def update_page(page)
@@ -35,14 +43,23 @@ class Pages::QuestionInput < BaseInput
 
     prepare_for_save
 
-    page.assign_attributes(question_text:,
-                           hint_text:,
-                           is_optional:,
-                           is_repeatable:,
-                           answer_settings:,
-                           page_heading:,
-                           guidance_markdown:,
-                           answer_type:)
+    attrs = {
+      question_text:,
+      hint_text:,
+      is_optional:,
+      is_repeatable:,
+      answer_settings:,
+      page_heading:,
+      guidance_markdown:,
+      answer_type:,
+    }
+
+    if draft_question.form.available_languages.include?("cy")
+      attrs[:answer_settings_cy] = answer_settings_cy(page)
+    end
+
+    page.assign_attributes(**attrs)
+
     page.save_and_update_form
   end
 
@@ -97,5 +114,19 @@ private
     )
 
     draft_question.save!(validate: false)
+  end
+
+  def answer_settings_cy(page = nil)
+    return unless answer_type == "selection"
+
+    answer_settings_cloned = DataStructType.new.cast_value(answer_settings.as_json)
+
+    answer_settings_cloned.selection_options.each.with_index do |selection_option, index|
+      welsh_name = page&.answer_settings_cy&.dig("selection_options", index, "name")
+
+      selection_option.name = (welsh_name.presence || "")
+    end
+
+    answer_settings_cloned
   end
 end

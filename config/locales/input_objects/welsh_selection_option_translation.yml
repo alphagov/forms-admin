@@ -1,0 +1,10 @@
+---
+en:
+  activemodel:
+    errors:
+      models:
+        forms/welsh_selection_option_translation_input:
+          attributes:
+            name_cy:
+              blank: Enter option %{selection_number} in Welsh for question %{question_number}
+              too_long: Option %{selection_number} for question %{question_number} cannot be longer than %{count} characters

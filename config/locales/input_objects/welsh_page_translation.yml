@@ -18,6 +18,8 @@ en:
             question_text_cy:
               blank: Enter question text for question %{question_number} in Welsh
               too_long: The question text for question %{question_number} cannot be longer than %{count} characters
+            selection_options_cy:
+              uniqueness: All of question %{question_number}’s options must be unique
   helpers:
     label:
       forms_welsh_page_translation_input:
@@ -25,3 +27,4 @@ en:
         hint_text_cy_html: Enter Welsh hint text <span class="govuk-visually-hidden">for question %{question_number}</span>
         page_heading_cy_html: Enter Welsh page heading <span class="govuk-visually-hidden">for question %{question_number}</span>
         question_text_cy_html: Enter Welsh question text <span class="govuk-visually-hidden">for question %{question_number}</span>
+        selection_options_cy_html: Enter Welsh option %{option_number} <span class="govuk-visually-hidden">for question %{question_number}</span>

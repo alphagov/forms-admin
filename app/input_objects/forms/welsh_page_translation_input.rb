@@ -3,7 +3,7 @@ class Forms::WelshPageTranslationInput < BaseInput
   include ActionView::Helpers::FormTagHelper
   include ActiveModel::Attributes
 
-  attr_accessor :condition_translations
+  attr_accessor :condition_translations, :selection_options_cy
   attr_reader :page
 
   attribute :id
@@ -25,12 +25,14 @@ class Forms::WelshPageTranslationInput < BaseInput
   validate :guidance_markdown_cy_length_and_tags, if: -> { guidance_markdown_cy.present? }
 
   validate :condition_translations_valid?
+  validate :selection_options_valid?
 
   def initialize(attributes = {})
     @page = attributes.delete(:page) if attributes.key?(:page)
     super
     self.id ||= @page&.id
     @condition_translations ||= []
+    @selection_options_cy ||= []
   end
 
   def submit
@@ -43,6 +45,12 @@ class Forms::WelshPageTranslationInput < BaseInput
 
     if condition_translations.present?
       condition_translations.each(&:submit)
+    end
+
+    page.answer_settings_cy = welsh_answer_settings
+
+    if page_has_selection_options?
+      page.answer_settings_cy.selection_options = DataStructType.new.cast_value(selection_options_cy.map(&:as_selection_option))
     end
 
     page.save!
@@ -59,6 +67,11 @@ class Forms::WelshPageTranslationInput < BaseInput
     self.condition_translations = page.routing_conditions.map do |condition|
       Forms::WelshConditionTranslationInput.new(condition:).assign_condition_values
     end
+
+    self.selection_options_cy = welsh_answer_settings&.selection_options&.map&.with_index do |selection_option, index|
+      Forms::WelshSelectionOptionTranslationInput.new(selection_option:, page:, id: index).assign_selection_option_values
+    end
+
     self
   end
 
@@ -75,6 +88,19 @@ class Forms::WelshPageTranslationInput < BaseInput
       next unless condition_object
 
       Forms::WelshConditionTranslationInput.new(condition_attrs.symbolize_keys.merge(condition: condition_object))
+    }.compact
+  end
+
+  def selection_options_cy_attributes=(attributes)
+    self.selection_options_cy = attributes.values.map { |selection_option_attrs|
+      # Get the English selection option from the page's answer settings
+      selection_option_index = selection_option_attrs["id"].to_i
+      english_selection_option = page.answer_settings&.selection_options&.[](selection_option_index)
+
+      # Skip if the selection option doesn't exist in the English version
+      next unless english_selection_option
+
+      Forms::WelshSelectionOptionTranslationInput.new(**selection_option_attrs.symbolize_keys, page:, selection_option: english_selection_option)
     }.compact
   end
 
@@ -159,5 +185,51 @@ class Forms::WelshPageTranslationInput < BaseInput
 
       errors.merge!(condition_translation.errors)
     end
+  end
+
+  def selection_options_valid?
+    return if selection_options_cy.nil?
+
+    # We check for duplicates here rather than in the
+    # selection_option_translation because here we can see all the selection options at once
+
+    # This is a list of all the selection options, which we'll use to check for duplicates
+    selection_options_without_blanks = selection_options_cy.map(&:name_cy).compact_blank
+
+    # If there are any duplicates, add a single error and link it to the first selection option
+    if selection_options_without_blanks.uniq.count != selection_options_without_blanks.count
+      first_selection_option_id = selection_options_cy.first.form_field_id(:name_cy)
+      errors.add(:selection_options_cy, :uniqueness, duplicate: selection_options_without_blanks.first, question_number: page.position, url: "##{first_selection_option_id}")
+    end
+
+    # Import all the errors from the child objects
+    selection_options_cy.each do |selection_option_translation|
+      selection_option_translation.validate(validation_context)
+
+      selection_option_translation.errors.each do |error|
+        errors.import(error, { attribute: "select_option_#{selection_option_translation.id}_#{error.attribute}".to_sym })
+      end
+    end
+  end
+
+  def page_has_selection_options?
+    page.answer_type == "selection"
+  end
+
+  # We need to normalize the Welsh answer settings to match the English ones.
+  # The only answer settings that need translating are the selection options
+  # We ensure that welsh answer settings are correct by copying the English
+  # ones setting the selection_options using any existing translations we have
+  # and emptying any we don't have.
+  def welsh_answer_settings
+    return nil unless page_has_selection_options?
+
+    answer_settings_cloned = DataStructType.new.cast_value(page.answer_settings.as_json)
+
+    answer_settings_cloned.selection_options.each.with_index do |selection_option, index|
+      selection_option.name = page.answer_settings_cy&.dig("selection_options", index, "name") || ""
+    end
+
+    answer_settings_cloned
   end
 end

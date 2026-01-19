@@ -201,4 +201,23 @@ RSpec.describe DraftQuestion, type: :model do
       end
     end
   end
+
+  describe "#form" do
+    context "when the associated form exists" do
+      let(:form) { create :form }
+      let(:draft_question) { create :draft_question, form_id: form.id }
+
+      it "returns the associated form" do
+        expect(draft_question.form).to eq(form)
+      end
+    end
+
+    context "when the associated form does not exist" do
+      let(:draft_question) { create :draft_question, form_id: 0 }
+
+      it "throws a NotFoundError" do
+        expect { draft_question.form }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
 end
