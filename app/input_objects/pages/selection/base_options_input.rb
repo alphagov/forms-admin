@@ -20,11 +20,7 @@ class Pages::Selection::BaseOptionsInput < BaseInput
   end
 
   def include_none_of_the_above_options
-    if FeatureService.enabled?(:describe_none_of_the_above_enabled)
-      [OpenStruct.new(id: "yes"), OpenStruct.new(id: "yes_with_question"), OpenStruct.new(id: "no")]
-    else
-      [OpenStruct.new(id: "yes"), OpenStruct.new(id: "no")]
-    end
+    [OpenStruct.new(id: "yes"), OpenStruct.new(id: "yes_with_question"), OpenStruct.new(id: "no")]
   end
 
   def include_none_of_the_above_with_question?
