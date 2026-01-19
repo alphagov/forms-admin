@@ -19,7 +19,7 @@ en:
               blank: Enter question text for question %{question_number} in Welsh
               too_long: The question text for question %{question_number} cannot be longer than %{count} characters
             selection_options_cy:
-              uniqueness: All of question %{question_number}'s options must be unique
+              uniqueness: All of question %{question_number}’s options must be unique
   helpers:
     label:
       forms_welsh_page_translation_input:
