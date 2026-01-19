@@ -23,7 +23,6 @@ describe "Settings" do
     features = settings[:features]
 
     include_examples expected_value_test, :welsh, features, { "enabled_by_group" => true }
-    include_examples expected_value_test, :describe_none_of_the_above_enabled, features, false
   end
 
   describe "forms_api" do

@@ -8,8 +8,6 @@ feature "Add/editing a single question", type: :feature do
     create(:membership, group:, user: standard_user, added_by: standard_user)
 
     login_as standard_user
-
-    allow(FeatureService).to receive(:enabled?).with(:describe_none_of_the_above_enabled).and_return(true)
   end
 
   context "when a form has no existing pages" do
