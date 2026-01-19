@@ -38,6 +38,17 @@ class Pages::QuestionInput < BaseInput
     Page.create_and_update_form!(**attrs)
   end
 
+  def update_draft_question!
+    draft_question.assign_attributes(
+      question_text:,
+      hint_text:,
+      is_optional:,
+      is_repeatable:,
+    )
+
+    draft_question.save!(validate: false)
+  end
+
   def update_page(page)
     return false if invalid?
 
@@ -98,22 +109,12 @@ private
 
   def prepare_for_save
     compact_answer_settings
-    update_draft_question
+    update_draft_question!
   end
 
   def compact_answer_settings
     answer_settings.delete(:none_of_the_above_question) if answer_settings[:none_of_the_above_question].blank?
   end
-
-  def update_draft_question
-    draft_question.assign_attributes(
-      question_text:,
-      hint_text:,
-      is_optional:,
-      is_repeatable:,
-    )
-
-    draft_question.save!(validate: false)
   end
 
   def answer_settings_cy(page = nil)
@@ -128,5 +129,4 @@ private
     end
 
     answer_settings_cloned
-  end
 end
