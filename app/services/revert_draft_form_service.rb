@@ -27,7 +27,7 @@ class RevertDraftFormService
       if welsh_form_document_exists?(tag)
         revert_welsh_translations(tag)
       else
-        clear_welsh_translations(form_document_content["steps"])
+        clear_welsh_translations
       end
 
       if tag == :live
@@ -197,40 +197,10 @@ private
     end
   end
 
-  def clear_welsh_translations(_steps_data)
-    # Clear form-level Welsh translations
-    translatable_attributes = %w[
-      name
-      privacy_policy_url
-      support_email
-      support_phone
-      support_url
-      support_url_text
-      declaration_text
-      what_happens_next_markdown
-      payment_url
-    ]
-
-    translatable_attributes.each do |attr|
-      form.public_send("#{attr}_cy=", nil)
-    end
-
-    # Clear page-level Welsh translations
-    form.pages.each do |page|
-      page.question_text_cy = nil
-      page.hint_text_cy = nil
-      page.answer_settings_cy = nil
-      page.page_heading_cy = nil
-      page.guidance_markdown_cy = nil
-      page.save!
-    end
-
-    # Clear condition-level Welsh translations
-    form.conditions.each do |condition|
-      condition.answer_value_cy = nil
-      condition.exit_page_heading_cy = nil
-      condition.exit_page_markdown_cy = nil
-      condition.save!
-    end
+  def clear_welsh_translations
+    # Delete Welsh translations directly from the database using Mobility's translations association
+    form.translations.where(locale: :cy).delete_all
+    Page::Translation.where(locale: :cy, page_id: form.page_ids).delete_all
+    Condition::Translation.where(locale: :cy, condition_id: form.condition_ids).delete_all
   end
 end
