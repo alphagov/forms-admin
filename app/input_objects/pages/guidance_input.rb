@@ -11,6 +11,6 @@ class Pages::GuidanceInput < BaseInput
     draft_question
       .assign_attributes({ page_heading:, guidance_markdown: })
 
-    draft_question.save!(validate: false)
+    draft_question.save!
   end
 end
