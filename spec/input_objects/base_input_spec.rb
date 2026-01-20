@@ -29,6 +29,9 @@ class TestInputWithPage < BaseInput
 end
 
 class TestInputWithNestedError < BaseInput
+  attr_accessor :date
+
+  validates :date, presence: true
   validate :has_no_nested_errors
 
   def has_no_nested_errors
@@ -195,11 +198,18 @@ RSpec.describe BaseInput do
           expect(input).to be_invalid
         end
 
-        it "only sets validation errors on CurrentLoggingAttributes once" do
+        it "sets validation errors on CurrentLoggingAttributes including the nested errors" do
           input.valid?
 
           expect(CurrentLoggingAttributes).to have_received(:validation_errors=)
-            .with(array_including("name: blank", "email: invalid")).once
+            .with(array_including("date: blank", "name: blank", "email: invalid"))
+        end
+
+        it "tracks the parent model's validation errors through AnalyticsService" do
+          input.valid?
+
+          expect(analytics_service).to have_received(:track_validation_errors)
+            .with(input_object_name: "TestInputWithNestedError", form_name: nil, field: :date, error_type: :blank).once
         end
 
         it "tracks the nested model's validation errors through AnalyticsService" do
@@ -212,14 +222,14 @@ RSpec.describe BaseInput do
             .with(input_object_name: "TestInput", form_name: nil, field: :email, error_type: :invalid).once
         end
 
-        it "does not track the parent model's validation errors through AnalyticsService" do
+        it "does not track the nested validation errors on the parent model through AnalyticsService" do
           input.valid?
 
           expect(analytics_service).not_to have_received(:track_validation_errors)
-            .with(hash_including(input_object_name: "TestInputWithNestedError"))
+            .with(hash_including(input_object_name: "TestInputWithNestedError", field: :name))
 
           expect(analytics_service).not_to have_received(:track_validation_errors)
-            .with(hash_including(input_object_name: "TestInputWithNestedError"))
+            .with(hash_including(input_object_name: "TestInputWithNestedError", field: :email))
         end
       end
     end
