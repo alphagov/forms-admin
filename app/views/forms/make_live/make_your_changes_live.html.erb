@@ -1,7 +1,6 @@
 <% set_page_title(title_with_error_prefix(t('page_titles.make_changes_live'), @make_live_input.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_path, t("back_link.form_edit")) %>
 
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(model: @make_live_input, url: make_live_create_path) do |f| %>
@@ -21,6 +20,12 @@
       <p>
         <%= t("make_changes_live.url_will_remain_same") %>
       </p>
+
+      <% if current_form.has_welsh_translation? %>
+        <p class="govuk-inset-text">
+          <%= t("make_changes_live.welsh_reminder") %>
+        </p>
+      <% end %>
 
       <%= f.govuk_collection_radio_buttons :confirm,
                                            @make_live_input.values, ->(option) { option }, ->(option) { t('helpers.label.confirm_action_input.options.' + "#{option}") },

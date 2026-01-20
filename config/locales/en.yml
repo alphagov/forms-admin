@@ -1095,6 +1095,7 @@ en:
       When you make your changes live, there may be an impact on people who are
       filling in the live form at the same time. They may lose any answers they
       have already provided and may need to start again.
+    welsh_reminder: Remember to make sure that the English and Welsh versions of your form match.
   make_live:
     confirmation:
       body_html: |
