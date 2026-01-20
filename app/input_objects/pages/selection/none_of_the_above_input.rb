@@ -19,7 +19,7 @@ class Pages::Selection::NoneOfTheAboveInput < BaseInput
     return false if invalid?
 
     draft_question.assign_attributes(answer_settings:)
-    draft_question.save!(validate: false)
+    draft_question.save!
   end
 
   def is_optional_options

@@ -14,7 +14,7 @@ class Pages::TypeOfAnswerInput < BaseInput
     draft_question
       .assign_attributes({ answer_type:, answer_settings: default_answer_settings_for_answer_type })
 
-    draft_question.save!(validate: false)
+    draft_question.save!
   end
 
 private

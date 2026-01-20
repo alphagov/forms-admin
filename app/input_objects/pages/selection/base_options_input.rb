@@ -13,7 +13,7 @@ class Pages::Selection::BaseOptionsInput < BaseInput
     is_optional = include_none_of_the_above != "no"
     draft_question.assign_attributes(answer_settings:, is_optional:)
 
-    success = draft_question.save!(validate: false)
+    success = draft_question.save!
     log_submission if success
 
     success

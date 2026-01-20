@@ -121,7 +121,7 @@ private
                        .slice(*edit_draft_question.attribute_names)
                        .except("id")
       edit_draft_question.attributes = attributes
-      edit_draft_question.save!(validate: false)
+      edit_draft_question.save!
     end
     edit_draft_question
   end

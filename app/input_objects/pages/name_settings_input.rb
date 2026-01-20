@@ -21,6 +21,6 @@ class Pages::NameSettingsInput < BaseInput
     draft_question
       .assign_attributes({ answer_settings: })
 
-    draft_question.save!(validate: false)
+    draft_question.save!
   end
 end

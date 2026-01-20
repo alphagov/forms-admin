@@ -113,7 +113,7 @@ private
       is_repeatable:,
     )
 
-    draft_question.save!(validate: false)
+    draft_question.save!
   end
 
   def answer_settings_cy(page = nil)
