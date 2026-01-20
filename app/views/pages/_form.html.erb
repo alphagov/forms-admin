@@ -29,12 +29,7 @@
     <p><%= hint_for_edit_page_field("guidance", draft_question.answer_type, draft_question.answer_settings) %></p>
 
     <p>
-      <% guidance_link = unless is_new_page
-                            guidance_edit_path(form_id: form_object.id, page_id: page_object.id)
-                          else
-                            guidance_new_path(form_id: form_object.id)
-                          end%>
-      <%= govuk_button_link_to t("guidance.add_guidance"), guidance_link, secondary: true %>
+      <%= f.govuk_submit t("guidance.add_guidance"), secondary: true, name: "submit_type", value: "add_guidance" %>
     </p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <% end %>
@@ -59,7 +54,7 @@
 
   <ul class="govuk-list govuk-list--spaced">
     <li>
-      <%= f.govuk_submit t('pages.submit_save'), class: "govuk-!-margin-bottom-3" %>
+      <%= f.govuk_submit t('pages.submit_save'), class: "govuk-!-margin-bottom-3", name: "submit_type", value: "save" %>
     </li>
     <% unless is_new_page %>
       <li>

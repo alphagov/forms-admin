@@ -4,6 +4,7 @@ class Pages::QuestionsController < PagesController
   def new
     @question_input = Pages::QuestionInput.new(answer_type: draft_question.answer_type,
                                                question_text: draft_question.question_text,
+                                               hint_text: draft_question.hint_text,
                                                answer_settings: draft_question.answer_settings,
                                                is_optional: draft_question.is_optional,
                                                is_repeatable: draft_question.is_repeatable,
@@ -14,6 +15,11 @@ class Pages::QuestionsController < PagesController
 
   def create
     @question_input = Pages::QuestionInput.new(page_params_for_form_object)
+
+    if adding_guidance?
+      @question_input.update_draft_question!
+      return redirect_to guidance_new_path(form_id: current_form.id)
+    end
 
     if @question_input.valid?
       @page = @question_input.submit
@@ -37,6 +43,11 @@ class Pages::QuestionsController < PagesController
   def update
     @question_input = Pages::QuestionInput.new(page_params_for_form_object)
 
+    if adding_guidance?
+      @question_input.update_draft_question!
+      return redirect_to guidance_edit_path(form_id: current_form.id, page_id: @page.id)
+    end
+
     if @question_input.update_page(@page)
       clear_draft_questions_data
       redirect_to edit_question_path(current_form.id, @page.id), success: "Your changes have been saved"
@@ -49,6 +60,10 @@ private
 
   def page_params
     params.require(:pages_question_input).permit(:question_text, :hint_text, :is_optional, :is_repeatable)
+  end
+
+  def adding_guidance?
+    params[:submit_type].to_s == "add_guidance"
   end
 
   def page_params_for_form_object

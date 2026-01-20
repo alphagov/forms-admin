@@ -68,16 +68,16 @@ describe "pages/_form.html.erb", type: :view do
     end
   end
 
-  it "has a submit button with the correct text" do
-    expect(rendered).to have_button(I18n.t("pages.submit_save"))
+  it "has a submit button to save the question" do
+    expect(rendered).to have_button(I18n.t("pages.submit_save"), name: "submit_type", value: "save")
   end
 
   it "does not have a delete button" do
     expect(rendered).not_to have_button("delete")
   end
 
-  it "contains a link to add guidance" do
-    expect(rendered).to have_link(text: I18n.t("guidance.add_guidance"), href: guidance_new_path(form_id: form.id))
+  it "has a submit button to add guidance" do
+    expect(rendered).to have_button(text: I18n.t("guidance.add_guidance"), name: "submit_type", value: "add_guidance")
   end
 
   it "contains a hint for guidance" do
@@ -86,10 +86,6 @@ describe "pages/_form.html.erb", type: :view do
 
   context "when it is not a new page" do
     let(:is_new_page) { false }
-
-    it "contains a link to add guidance" do
-      expect(rendered).to have_link(text: I18n.t("guidance.add_guidance"), href: guidance_edit_path(form_id: form.id, page_id: 2))
-    end
 
     it "has no hidden field for the answer type" do
       expect(rendered).not_to have_field("question_input[answer_type]", type: :hidden)

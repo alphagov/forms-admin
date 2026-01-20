@@ -52,10 +52,6 @@ RSpec.describe "pages/new" do
       expect(rendered).to have_element "form", action: create_question_path(form_id: form.id)
     end
 
-    it "has a link to add guidance" do
-      expect(rendered).to have_link href: guidance_new_path(form_id: form.id)
-    end
-
     it "does not have a button to delete the question" do
       expect(rendered).not_to have_button "Delete question"
     end

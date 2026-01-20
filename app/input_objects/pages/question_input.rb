@@ -63,6 +63,15 @@ class Pages::QuestionInput < BaseInput
     page.save_and_update_form
   end
 
+  def update_draft_question!
+    draft_question.update!(
+      question_text:,
+      hint_text:,
+      is_optional:,
+      is_repeatable:,
+    )
+  end
+
   def default_options
     [OpenStruct.new(id: "false"), OpenStruct.new(id: "true")]
   end
@@ -98,22 +107,11 @@ private
 
   def prepare_for_save
     compact_answer_settings
-    update_draft_question
+    update_draft_question!
   end
 
   def compact_answer_settings
     answer_settings.delete(:none_of_the_above_question) if answer_settings[:none_of_the_above_question].blank?
-  end
-
-  def update_draft_question
-    draft_question.assign_attributes(
-      question_text:,
-      hint_text:,
-      is_optional:,
-      is_repeatable:,
-    )
-
-    draft_question.save!
   end
 
   def answer_settings_cy(page = nil)

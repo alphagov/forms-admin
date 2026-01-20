@@ -62,13 +62,18 @@ RSpec.describe Pages::QuestionsController, type: :request do
   end
 
   describe "#create" do
+    let(:question_text) { "What is your home address?" }
+    let(:hint_text) { "This should be the location stated in your contract." }
     let(:params) do
-      { pages_question_input: {
-        question_text: "What is your home address?",
-        hint_text: "This should be the location stated in your contract.",
-        is_optional: false,
-        is_repeatable: false,
-      } }
+      {
+        submit_type:,
+        pages_question_input: {
+          question_text:,
+          hint_text:,
+          is_optional: false,
+          is_repeatable: false,
+        },
+      }
     end
 
     before do
@@ -76,75 +81,105 @@ RSpec.describe Pages::QuestionsController, type: :request do
       draft_question
     end
 
-    describe "Given a valid page" do
-      it "creates a page" do
-        expect {
+    context "when the Save question submit button was clicked" do
+      let(:submit_type) { "save" }
+
+      context "with valid input" do
+        it "creates a page" do
+          expect {
+            post(create_question_path(form.id), params:)
+          }.to change(Page, :count).by(1)
+        end
+
+        it "Redirects you to edit page for new question" do
           post(create_question_path(form.id), params:)
-        }.to change(Page, :count).by(1)
+          expect(response).to redirect_to(edit_question_path(form_id: form.id, page_id: Page.last.id))
+        end
+
+        it "displays a notification banner with call to action links" do
+          post(create_question_path(form.id), params:)
+          follow_redirect!
+          results = Capybara.string(response.body)
+          banner_contents = results.find(".govuk-notification-banner .govuk-notification-banner__content")
+
+          expect(banner_contents).to have_link(text: "Add a question", href: start_new_question_path(form_id: form.id))
+          expect(banner_contents).to have_link(text: "Back to your questions", href: form_pages_path(form_id: form.id))
+        end
+
+        describe "logging" do
+          before do
+            post(create_question_path(form.id), params:)
+          end
+
+          include_examples "logging"
+        end
       end
 
-      it "Redirects you to edit page for new question" do
-        post(create_question_path(form.id), params:)
-        expect(response).to redirect_to(edit_question_path(form_id: form.id, page_id: Page.last.id))
-      end
+      context "when question_input has invalid data" do
+        let(:params) do
+          { pages_question_input: {
+            hint_text: "This should be the location stated in your contract.",
+            is_optional: false,
+          } }
+        end
 
-      it "displays a notification banner with call to action links" do
-        post(create_question_path(form.id), params:)
-        follow_redirect!
-        results = Capybara.string(response.body)
-        banner_contents = results.find(".govuk-notification-banner .govuk-notification-banner__content")
-
-        expect(banner_contents).to have_link(text: "Add a question", href: start_new_question_path(form_id: form.id))
-        expect(banner_contents).to have_link(text: "Back to your questions", href: form_pages_path(form_id: form.id))
-      end
-
-      describe "logging" do
         before do
           post(create_question_path(form.id), params:)
         end
 
-        include_examples "logging"
+        it "returns 422" do
+          expect(response).to have_http_status(:unprocessable_content)
+        end
+
+        it "renders new template" do
+          expect(response).to have_rendered(:new)
+        end
+
+        it "outputs error message" do
+          expect(response.body).to include("Enter a question")
+        end
+      end
+
+      context "when the draft question is not present" do
+        let(:draft_question) { nil }
+
+        before do
+          post(create_question_path(form.id), params:)
+        end
+
+        it "renders the index page" do
+          expect(response).to render_template("errors/missing_draft_question")
+        end
+
+        it "returns a 422 error code" do
+          expect(response.status).to eq(422)
+        end
       end
     end
 
-    context "when question_input has invalid data" do
-      let(:params) do
-        { pages_question_input: {
-          hint_text: "This should be the location stated in your contract.",
+    context "when the Add guidance submit button was clicked" do
+      let(:submit_type) { "add_guidance" }
+      let(:hint_text) { "a" * 501 } # invalid hint text to ensure validation is skipped
+
+      it "does not create a page" do
+        expect {
+          post(create_question_path(form.id), params:)
+        }.not_to change(Page, :count)
+      end
+
+      it "updates the draft question in the database" do
+        post(create_question_path(form.id), params:)
+        expect(draft_question.reload).to have_attributes(
+          question_text: "What is your home address?",
+          hint_text: hint_text,
           is_optional: false,
-        } }
+          is_repeatable: false,
+        )
       end
 
-      before do
+      it "redirects to the add guidance page" do
         post(create_question_path(form.id), params:)
-      end
-
-      it "returns 422" do
-        expect(response).to have_http_status(:unprocessable_content)
-      end
-
-      it "renders new template" do
-        expect(response).to have_rendered(:new)
-      end
-
-      it "outputs error message" do
-        expect(response.body).to include("Enter a question")
-      end
-    end
-
-    context "when the draft question is not present" do
-      let(:draft_question) { nil }
-
-      before do
-        post(create_question_path(form.id), params:)
-      end
-
-      it "renders the index page" do
-        expect(response).to render_template("errors/missing_draft_question")
-      end
-
-      it "returns a 422 error code" do
-        expect(response.status).to eq(422)
+        expect(response).to redirect_to(guidance_new_path(form_id: form.id))
       end
     end
   end
@@ -175,9 +210,10 @@ RSpec.describe Pages::QuestionsController, type: :request do
   end
 
   describe "#update" do
-    let(:draft_question) do
+    let!(:draft_question) do
       create(:address_draft_question, :with_guidance, page_id: page.id, user: standard_user, form_id: form.id)
     end
+    let(:update_path) { update_question_path(form_id: form.id, page_id: page.id) }
 
     let(:page) do
       create(
@@ -192,70 +228,43 @@ RSpec.describe Pages::QuestionsController, type: :request do
       )
     end
 
-    describe "Given a page" do
-      let(:params) do
-        { pages_question_input: {
+    let(:question_text) { "What is your home address?" }
+    let(:hint_text) { "This should be the location stated in your contract." }
+    let(:params) do
+      {
+        submit_type:,
+        pages_question_input: {
           form_id: form.id,
-          question_text: "What is your home address?",
-          hint_text: "This should be the location stated in your contract.",
+          question_text:,
+          hint_text:,
           is_optional: "true",
           is_repeatable: "true",
-        } }
-      end
+        },
+      }
+    end
 
-      before do
-        draft_question
-        post update_question_path(form_id: form.id, page_id: page.id), params:
-      end
+    context "when the Save question submit button was clicked" do
+      let(:submit_type) { "save" }
 
-      it "Updates the page" do
-        expect(page.reload).to have_attributes(
-          question_text: "What is your home address?",
-          hint_text: "This should be the location stated in your contract.",
-          is_optional: true,
-          is_repeatable: true,
-          answer_type: "address",
-          answer_settings: DataStruct.recursive_new(draft_question.answer_settings),
-          page_heading: draft_question.page_heading,
-          guidance_markdown: draft_question.guidance_markdown,
-        )
-      end
-
-      it "Redirects you to edit page for question that was updated" do
-        expect(response).to redirect_to(edit_question_path(form_id: form.id, page_id: page.id))
-      end
-
-      it "displays a notification banner with call to action links" do
-        follow_redirect!
-        results = Capybara.string(response.body)
-        banner_contents = results.find(".govuk-notification-banner .govuk-notification-banner__content")
-
-        expect(banner_contents).to have_link(text: "Add a question", href: start_new_question_path(form_id: form.id))
-        expect(banner_contents).to have_link(text: "Back to your questions", href: form_pages_path(form_id: form.id))
-      end
-
-      it "logs the answer type from the page", :capture_logging do
-        expect(log_line["answer_type"]).to eq(page.reload.answer_type)
-      end
-
-      context "when question being updated has a question after it" do
-        let!(:next_page) { create(:page, form_id: form.id) }
-
-        let(:params) do
-          { pages_question_input: {
-            page_id: page.id,
-            form_id: form.id,
-            question_text: "What is your home address?",
-            hint_text: "This should be the location stated in your contract.",
-            answer_type: "address",
-            is_optional: "false",
-            is_repeatable: "false",
-            page_heading: "New page heading",
-            guidance_markdown: "## Heading level 2",
-          } }
+      context "with valid input" do
+        before do
+          post update_path, params:
         end
 
-        it "Redirects you to edit page for new question" do
+        it "Updates the page" do
+          expect(page.reload).to have_attributes(
+            question_text: "What is your home address?",
+            hint_text: "This should be the location stated in your contract.",
+            is_optional: true,
+            is_repeatable: true,
+            answer_type: "address",
+            answer_settings: DataStruct.recursive_new(draft_question.answer_settings),
+            page_heading: draft_question.page_heading,
+            guidance_markdown: draft_question.guidance_markdown,
+          )
+        end
+
+        it "Redirects you to edit page for question that was updated" do
           expect(response).to redirect_to(edit_question_path(form_id: form.id, page_id: page.id))
         end
 
@@ -264,34 +273,95 @@ RSpec.describe Pages::QuestionsController, type: :request do
           results = Capybara.string(response.body)
           banner_contents = results.find(".govuk-notification-banner .govuk-notification-banner__content")
 
-          expect(banner_contents).to have_link(text: "Edit next question", href: edit_question_path(form_id: form.id, page_id: next_page.id))
+          expect(banner_contents).to have_link(text: "Add a question", href: start_new_question_path(form_id: form.id))
           expect(banner_contents).to have_link(text: "Back to your questions", href: form_pages_path(form_id: form.id))
+        end
+
+        it "logs the answer type from the page", :capture_logging do
+          expect(log_line["answer_type"]).to eq(page.reload.answer_type)
+        end
+
+        context "when question being updated has a question after it" do
+          let!(:next_page) { create(:page, form_id: form.id) }
+
+          let(:params) do
+            { pages_question_input: {
+              page_id: page.id,
+              form_id: form.id,
+              question_text: "What is your home address?",
+              hint_text: "This should be the location stated in your contract.",
+              answer_type: "address",
+              is_optional: "false",
+              is_repeatable: "false",
+              page_heading: "New page heading",
+              guidance_markdown: "## Heading level 2",
+            } }
+          end
+
+          it "Redirects you to edit page for new question" do
+            expect(response).to redirect_to(edit_question_path(form_id: form.id, page_id: page.id))
+          end
+
+          it "displays a notification banner with call to action links" do
+            follow_redirect!
+            results = Capybara.string(response.body)
+            banner_contents = results.find(".govuk-notification-banner .govuk-notification-banner__content")
+
+            expect(banner_contents).to have_link(text: "Edit next question", href: edit_question_path(form_id: form.id, page_id: next_page.id))
+            expect(banner_contents).to have_link(text: "Back to your questions", href: form_pages_path(form_id: form.id))
+          end
+        end
+      end
+
+      context "when question_input has invalid data" do
+        before do
+          post update_question_path(form_id: form.id, page_id: page.id), params: { pages_question_input: {
+            form_id: form.id,
+            question_text: nil,
+            hint_text: "This should be the location stated in your contract.",
+            answer_type: "address",
+            page_heading: "New page heading",
+            guidance_markdown: "## Heading level 2",
+          } }
+        end
+
+        it "returns 422" do
+          expect(response).to have_http_status(:unprocessable_content)
+        end
+
+        it "renders edit template" do
+          expect(response).to have_rendered(:edit)
+        end
+
+        it "outputs error message" do
+          expect(response.body).to include("Enter a question")
         end
       end
     end
 
-    context "when question_input has invalid data" do
-      before do
-        post update_question_path(form_id: form.id, page_id: page.id), params: { pages_question_input: {
-          form_id: form.id,
-          question_text: nil,
-          hint_text: "This should be the location stated in your contract.",
-          answer_type: "address",
-          page_heading: "New page heading",
-          guidance_markdown: "## Heading level 2",
-        } }
+    context "when the Add guidance submit button was clicked" do
+      let(:submit_type) { "add_guidance" }
+      let(:hint_text) { "a" * 501 } # invalid hint text to ensure validation is skipped
+
+      it "does not update the page" do
+        expect {
+          post(update_path, params:)
+        }.not_to(change { page.reload.attributes })
       end
 
-      it "returns 422" do
-        expect(response).to have_http_status(:unprocessable_content)
+      it "updates the draft question in the database" do
+        post(update_path, params:)
+        expect(draft_question.reload).to have_attributes(
+          question_text:,
+          hint_text:,
+          is_optional: true,
+          is_repeatable: true,
+        )
       end
 
-      it "renders edit template" do
-        expect(response).to have_rendered(:edit)
-      end
-
-      it "outputs error message" do
-        expect(response.body).to include("Enter a question")
+      it "redirects to the add guidance page" do
+        post(update_path, params:)
+        expect(response).to redirect_to(guidance_edit_path(form_id: form.id, page_id: page.id))
       end
     end
   end
