@@ -476,4 +476,20 @@ RSpec.describe Pages::QuestionInput, type: :model do
       end
     end
   end
+
+  describe "#update_draft_question!" do
+    let(:question_input) { build :question_input, question_text:, hint_text:, is_optional: "true", is_repeatable: "false", draft_question: }
+    let(:hint_text) { "Enter your full name as it appears in your passport" }
+    let(:draft_question) { create :draft_question_for_new_page }
+
+    it "updates the draft_question attributes" do
+      question_input.update_draft_question!
+      expect(draft_question.reload).to have_attributes(
+        question_text:,
+        hint_text:,
+        is_optional: true,
+        is_repeatable: false,
+      )
+    end
+  end
 end
