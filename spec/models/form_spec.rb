@@ -1186,4 +1186,39 @@ RSpec.describe Form, type: :model do
       expect(form.as_form_document(language: nil)["language"]).to be_nil
     end
   end
+
+  describe "#has_welsh_translation?" do
+    let(:form) { create :form, :ready_for_live }
+    let(:group) { create :group }
+
+    before do
+      GroupForm.create!(group:, form:)
+    end
+
+    context "when the Welsh feature is not enabled for the form's group" do
+      it "returns false" do
+        expect(form.has_welsh_translation?).to be false
+      end
+    end
+
+    context "when the Welsh feature is enabled for the form's group" do
+      let(:group) { create :group, :with_welsh_enabled }
+
+      context "when the available_languages array does not include Welsh" do
+        let(:form) { create :form, :ready_for_live, available_languages: %w[en] }
+
+        it "returns false" do
+          expect(form.has_welsh_translation?).to be false
+        end
+      end
+
+      context "when the available_languages field does includes Welsh" do
+        let(:form) { create :form, :ready_for_live, available_languages: %w[en cy] }
+
+        it "returns true" do
+          expect(form.has_welsh_translation?).to be true
+        end
+      end
+    end
+  end
 end
