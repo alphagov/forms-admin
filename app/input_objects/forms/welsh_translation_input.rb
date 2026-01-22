@@ -17,6 +17,7 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   attribute :payment_url_cy
 
   validates :name_cy, presence: true, if: -> { form_marked_complete? }
+  validates :name_cy, length: { maximum: 2000 }, if: -> { name_cy.present? }
 
   validates :privacy_policy_url_cy, presence: true, if: -> { form_marked_complete? && form.privacy_policy_url.present? }
   validates :privacy_policy_url_cy, url: true, if: -> { privacy_policy_url_cy.present? }

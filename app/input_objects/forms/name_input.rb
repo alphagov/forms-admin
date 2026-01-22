@@ -1,7 +1,7 @@
 class Forms::NameInput < BaseInput
   attr_accessor :form, :name
 
-  validates :name, presence: true
+  validates :name, presence: true, length: { maximum: 2000 }
 
   def submit
     return false if invalid?
