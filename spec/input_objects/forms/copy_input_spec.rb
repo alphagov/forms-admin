@@ -35,7 +35,7 @@ RSpec.describe Forms::CopyInput, type: :model do
 
         copy_input.validate(:name)
 
-        expect(copy_input.errors[:name]).to include("is too long (maximum is 2000 characters)")
+        expect(copy_input.errors[:name]).to include(I18n.t("activemodel.errors.models.forms/name_input.attributes.name.too_long"))
       end
     end
 
