@@ -7,14 +7,19 @@ on:
     types: [opened, reopened, synchronize]
 jobs:
   update-review-app:
-    # this references a codebuild project configured in forms-deploy
-    # see: https://docs.aws.amazon.com/codebuild/latest/userguide/action-runner.html
-    runs-on: codebuild-review-forms-admin-gha-runner-${{github.run_id}}-${{github.run_attempt}}
+    runs-on: ubuntu-24.04-arm
 
     permissions:
+      id-token: write
+      contents: read
       pull-requests: write
 
     steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
+        with:
+          role-to-assume: arn:aws:iam::842676007477:role/review-github-actions-forms-admin
+          aws-region: eu-west-2
       - name: Generate container image URI
         run: |
           echo "CONTAINER_IMAGE_URI=842676007477.dkr.ecr.eu-west-2.amazonaws.com/forms-admin:pr-${{github.event.pull_request.number}}-${{github.event.pull_request.head.sha}}-$(date +%s)" >> "$GITHUB_ENV"
@@ -24,9 +29,6 @@ jobs:
 
       - name: Build container
         run: |
-          # Docker credentials are configured in CodeBuild
-          # CodeBuild retrieves the credentials from ParameterStore
-          echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
           docker build \
             --tag "${{env.CONTAINER_IMAGE_URI}}" \
             .
