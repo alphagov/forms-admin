@@ -3,6 +3,10 @@ on:
   pull_request:
     # only run when a PR is closed or merged
     types: [closed]
+
+concurrency:
+  group: "review-apps-forms-admin-pr-${{ github.event.pull_request.number }}"
+  cancel-in-progress: false
 env:
   IMAGE_TAG: "842676007477.dkr.ecr.eu-west-2.amazonaws.com/forms-admin:pr-${{github.event.pull_request.number}}-${{github.event.pull_request.head.ref}}"
 jobs:
