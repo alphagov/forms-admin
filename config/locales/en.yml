@@ -469,8 +469,8 @@ en:
         task_name: Get a CSV or JSON file of each completed form
         title: Optional task
       translations_section:
-        add_welsh: Edit Welsh language version of your form
-        title: Add translations to your form (optional)
+        add_welsh: Add a Welsh version of your form
+        title: Create a Welsh version of your form (optional)
     welsh_translation:
       new:
         condition:
