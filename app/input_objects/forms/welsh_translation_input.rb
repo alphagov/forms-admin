@@ -35,6 +35,7 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   validates :support_url_text_cy, length: { maximum: 120 }, if: -> { support_url_text_cy.present? }
 
   validates :declaration_text_cy, presence: true, if: -> { form_marked_complete? && form_has_declaration? }
+  validates :declaration_text_cy, length: { maximum: 2000 }, if: -> { declaration_text_cy.present? }
 
   validates :what_happens_next_markdown_cy, presence: true, if: -> { form_marked_complete? && form.what_happens_next_markdown.present? }
   validates :what_happens_next_markdown_cy, markdown: { allow_headings: false }, if: -> { what_happens_next_markdown_cy.present? }

@@ -309,6 +309,25 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
         end
       end
 
+      context "when the Welsh declaration text is present" do
+        context "when the Welsh declaration text is 2000 characters or fewer" do
+          let(:new_input_data) { super().merge(declaration_text_cy: "By submitting this form you’re confirming that, to the best of your knowledge, the answers you’re providing are correct.".ljust(2000, "x")) }
+
+          it "is valid" do
+            expect(welsh_translation_input).to be_valid
+          end
+        end
+
+        context "when the Welsh declaration text is 2001 characters or more" do
+          let(:new_input_data) { super().merge(declaration_text_cy: "By submitting this form you’re confirming that, to the best of your knowledge, the answers you’re providing are correct.".ljust(2001, "x")) }
+
+          it "is invalid" do
+            expect(welsh_translation_input).not_to be_valid
+            expect(welsh_translation_input.errors.full_messages_for(:declaration_text_cy)).to include "Declaration text cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.declaration_text_cy.too_long')}"
+          end
+        end
+      end
+
       context "when the Welsh declaration text is missing" do
         let(:new_input_data) { super().merge(declaration_text_cy: nil) }
 
