@@ -15,9 +15,9 @@ RSpec.shared_examples "a payment link validator" do
     end
   end
 
-  context "when given a value that does not start with GOV.UK Pay formatting" do
+  context "when given a value that is not a valid URI" do
     it "returns a validation error" do
-      model.send("#{attribute}=", "http://www.example.com")
+      model.send("#{attribute}=", "https://gov.uk/payments/ test-org /test-service")
 
       expect(model).to be_invalid
       expect(model.errors.map(&:type)).to include :url
