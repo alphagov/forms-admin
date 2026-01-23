@@ -7,7 +7,7 @@ en:
           attributes:
             name:
               blank: Enter a name for the form
-              too_long: The form name cannot be longer than 2,000 characters
+              too_long: The form name cannot be longer than %{count} characters
   helpers:
     hint:
       forms_name_input:

@@ -69,20 +69,20 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
       let(:mark_complete) { "true" }
 
       context "when the Welsh form name is present" do
-        context "when the Welsh form name is 2000 characters or fewer" do
-          let(:new_input_data) { super().merge(name_cy: "A form".ljust(2000, "x")) }
+        context "when the Welsh form name is 500 characters or fewer" do
+          let(:new_input_data) { super().merge(name_cy: "A form".ljust(500, "x")) }
 
           it "is valid" do
             expect(welsh_translation_input).to be_valid
           end
         end
 
-        context "when the Welsh form name is 2001 characters or more" do
-          let(:new_input_data) { super().merge(name_cy: "A form".ljust(2001, "x")) }
+        context "when the Welsh form name is 501 characters or more" do
+          let(:new_input_data) { super().merge(name_cy: "A form".ljust(501, "x")) }
 
           it "is not valid" do
             expect(welsh_translation_input).not_to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:name_cy)).to include "Name cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.name_cy.too_long')}"
+            expect(welsh_translation_input.errors.full_messages_for(:name_cy)).to include "Name cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.name_cy.too_long', count: 500)}"
           end
         end
       end

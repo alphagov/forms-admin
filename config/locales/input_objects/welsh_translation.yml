@@ -12,7 +12,7 @@ en:
               blank: You must choose an option
             name_cy:
               blank: Enter a Welsh form name
-              too_long: The form name cannot be longer than 2,000 characters
+              too_long: The form name cannot be longer than %{count} characters
             payment_url_cy:
               blank: Enter a Welsh GOV.UK Pay payment link
               url: Enter a GOV.UK Pay payment link in the correct format, like https://www.gov.uk/payments/your-payment-link
