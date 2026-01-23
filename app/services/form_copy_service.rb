@@ -94,9 +94,7 @@ private
 
     # Copy Welsh translations from FormDocument content
     Mobility.with_locale(:cy) do
-      # Only copy the translatable attributes in Welsh locale
-      translatable_attrs = %w[name privacy_policy_url support_email support_phone support_url support_url_text declaration_text what_happens_next_markdown payment_url]
-      welsh_content.slice(*translatable_attrs).each do |key, value|
+      welsh_content.slice(*Form.mobility_attributes).each do |key, value|
         @copied_form.send("#{key}=", value) if value.present?
       end
       prepend_name_for_language(:cy)
@@ -150,13 +148,10 @@ private
       # Copy Welsh translatable fields for the page
       # We need to reload to ensure Mobility has the right locale context
       page.reload
-      page.question_text = data["question_text"] if data["question_text"].present?
-      page.hint_text = data["hint_text"] if data["hint_text"].present?
-      page.page_heading = data["page_heading"] if data["page_heading"].present?
-      page.guidance_markdown = data["guidance_markdown"] if data["guidance_markdown"].present?
-      page.answer_settings = data["answer_settings"] if data["answer_settings"].present?
+      Page.mobility_attributes.each do |attr|
+        page.send("#{attr}=", data[attr]) if data[attr].present?
+      end
       copy_welsh_exit_page_conditions(step, page)
-
       page.save!(validate: false)
     end
   end
