@@ -81,10 +81,11 @@ private
   end
 
   def welsh_language_status
+    return :optional unless @form.available_languages.include?("cy")
+    return :in_progress if WelshChangeDetectionService.new(@form).update_welsh?
     return :completed if @form.welsh_completed?
-    return :in_progress if @form.available_languages.include?("cy") && !@form.welsh_completed?
 
-    :optional
+    :in_progress
   end
 
   def submission_attachments_status
