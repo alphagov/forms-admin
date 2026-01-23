@@ -17,5 +17,11 @@
       <%= f.govuk_text_field :temporary_submission_email, label: {  tag: 'h2', size: 'm' } %>
       <%= f.govuk_submit t("save_and_continue") %>
     <% end %>
+
+    <div class="govuk-!-margin-top-3">
+      <%= govuk_details(summary_text: t("set_email.new.s3_details.summary_text")) do %>
+        <%= t("set_email.new.s3_details.summary_content_html") %>
+      <% end %>
+    </div>
   </div>
 </div>
