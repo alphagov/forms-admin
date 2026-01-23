@@ -139,20 +139,7 @@ private
   end
 
   def revert_form_welsh_attributes(welsh_content)
-    # Get the list of translatable attributes from the Form model
-    translatable_attributes = %w[
-      name
-      privacy_policy_url
-      support_email
-      support_phone
-      support_url
-      support_url_text
-      declaration_text
-      what_happens_next_markdown
-      payment_url
-    ]
-
-    translatable_attributes.each do |attr|
+    Form.mobility_attributes.each do |attr|
       welsh_value = welsh_content[attr]
       form.public_send("#{attr}_cy=", welsh_value) if welsh_content.key?(attr)
     end
@@ -169,11 +156,9 @@ private
       next if page_data.blank?
 
       # Revert Welsh translations for page attributes
-      page.question_text_cy = page_data["question_text"] if page_data.key?("question_text")
-      page.hint_text_cy = page_data["hint_text"] if page_data.key?("hint_text")
-      page.answer_settings_cy = page_data["answer_settings"] if page_data.key?("answer_settings")
-      page.page_heading_cy = page_data["page_heading"] if page_data.key?("page_heading")
-      page.guidance_markdown_cy = page_data["guidance_markdown"] if page_data.key?("guidance_markdown")
+      Page.mobility_attributes.each do |attr|
+        page.public_send("#{attr}_cy=", page_data[attr]) if page_data.key?(attr)
+      end
 
       page.save!
     end
@@ -189,8 +174,9 @@ private
       next if condition.blank?
 
       # Revert Welsh translations for condition attributes
-      condition.exit_page_heading_cy = condition_data["exit_page_heading"] if condition_data.key?("exit_page_heading")
-      condition.exit_page_markdown_cy = condition_data["exit_page_markdown"] if condition_data.key?("exit_page_markdown")
+      Condition.mobility_attributes.each do |attr|
+        condition.public_send("#{attr}_cy=", condition_data[attr]) if condition_data.key?(attr)
+      end
 
       condition.save!
     end
