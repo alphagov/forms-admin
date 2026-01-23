@@ -45,7 +45,8 @@ jobs:
       - name: Determine Terraform version
         id: terraform-version
         run: |
-          cat .review_apps/.terraform-version | xargs printf "TF_VERSION=%s" >> "$GITHUB_OUTPUT"
+          TF_VERSION=$(< .review_apps/.terraform-version)
+          printf "TF_VERSION=%s\n" "$TF_VERSION" >> "$GITHUB_OUTPUT"
 
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
@@ -63,10 +64,14 @@ jobs:
             -var "forms_admin_container_image=${{env.CONTAINER_IMAGE_URI}}" \
             -no-color \
             -auto-approve
-
-          echo "REVIEW_APP_URL=$(terraform output -raw review_app_url)" >> "$GITHUB_OUTPUT"
-          echo "ECS_CLUSTER_ID=$(terraform output -raw review_app_ecs_cluster_id)" >> "$GITHUB_OUTPUT"
-          echo "ECS_SERVICE_NAME=$(terraform output -raw review_app_ecs_service_name)" >> "$GITHUB_OUTPUT"
+          REVIEW_APP_URL=$(terraform output -raw review_app_url)
+          ECS_CLUSTER_ID=$(terraform output -raw review_app_ecs_cluster_id)
+          ECS_SERVICE_NAME=$(terraform output -raw review_app_ecs_service_name)
+          {
+            printf 'REVIEW_APP_URL=%s\n' "$REVIEW_APP_URL"
+            printf 'ECS_CLUSTER_ID=%s\n' "$ECS_CLUSTER_ID"
+            printf 'ECS_SERVICE_NAME=%s\n' "$ECS_SERVICE_NAME"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Wait for AWS ECS deployments to finish
         run: |
@@ -91,7 +96,7 @@ jobs:
           $COMMENT_MARKER
           EOF
 
-          old_comment_ids=$(gh api "repos/{owner}/{repo}/issues/${{github.event.pull_request.number}}/comments" --jq 'map(select((.user.login == "github-actions[bot]") and (.body | endswith($ENV.COMMENT_MARKER + "\n")))) | .[].id')
+          old_comment_ids=$(gh api "repos/{owner}/{repo}/issues/${{github.event.pull_request.number}}/comments" --jq "map(select((.user.login == \"github-actions[bot]\") and (.body | endswith(env.COMMENT_MARKER + \"\n\")))) | .[].id")
           for comment_id in $old_comment_ids; do
             gh api -X DELETE "repos/{owner}/{repo}/issues/comments/${comment_id}"
           done
