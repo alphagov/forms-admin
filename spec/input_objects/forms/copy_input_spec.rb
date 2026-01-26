@@ -23,7 +23,7 @@ RSpec.describe Forms::CopyInput, type: :model do
       end
 
       it "is valid with a name within the length limit" do
-        copy_input = described_class.new(name: "A" * 2000)
+        copy_input = described_class.new(name: "A" * 500)
 
         copy_input.validate(:name)
 
@@ -31,11 +31,11 @@ RSpec.describe Forms::CopyInput, type: :model do
       end
 
       it "is invalid if longer than 2000 characters" do
-        copy_input = described_class.new(name: "A" * 2001)
+        copy_input = described_class.new(name: "A" * 501)
 
         copy_input.validate(:name)
 
-        expect(copy_input.errors[:name]).to include("is too long (maximum is 2000 characters)")
+        expect(copy_input.errors[:name]).to include(I18n.t("activemodel.errors.models.forms/name_input.attributes.name.too_long", count: 500))
       end
     end
 

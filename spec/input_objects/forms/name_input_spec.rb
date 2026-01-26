@@ -12,6 +12,23 @@ RSpec.describe Forms::NameInput, type: :model do
         ["Name #{error_message}"],
       )
     end
+
+    it "is invalid if longer than 500 characters" do
+      name_input = described_class.new(name: "Apply for a juggling licence".ljust(501, "a"))
+      error_message = I18n.t("activemodel.errors.models.forms/name_input.attributes.name.too_long", count: 500)
+
+      expect(name_input).to be_invalid
+
+      expect(name_input.errors.full_messages_for(:name)).to eq(
+        ["Name #{error_message}"],
+      )
+    end
+
+    it "is valid if 500 characters or fewer" do
+      name_input = described_class.new(name: "Apply for a juggling licence".ljust(500, "a"))
+
+      expect(name_input).to be_valid
+    end
   end
 
   describe "#submit" do

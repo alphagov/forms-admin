@@ -17,6 +17,7 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   attribute :payment_url_cy
 
   validates :name_cy, presence: true, if: -> { form_marked_complete? }
+  validates :name_cy, length: { maximum: 500 }, if: -> { name_cy.present? }
 
   validates :privacy_policy_url_cy, presence: true, if: -> { form_marked_complete? && form.privacy_policy_url.present? }
   validates :privacy_policy_url_cy, url: true, if: -> { privacy_policy_url_cy.present? }
@@ -35,12 +36,12 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   validates :support_url_text_cy, length: { maximum: 120 }, if: -> { support_url_text_cy.present? }
 
   validates :declaration_text_cy, presence: true, if: -> { form_marked_complete? && form_has_declaration? }
+  validates :declaration_text_cy, length: { maximum: 2000 }, if: -> { declaration_text_cy.present? }
 
   validates :what_happens_next_markdown_cy, presence: true, if: -> { form_marked_complete? && form.what_happens_next_markdown.present? }
   validates :what_happens_next_markdown_cy, markdown: { allow_headings: false }, if: -> { what_happens_next_markdown_cy.present? }
 
   validates :payment_url_cy, presence: true, if: -> { form_marked_complete? && form_has_payment_url? }
-  validates :payment_url_cy, url: true, if: -> { payment_url_cy.present? }
   validates :payment_url_cy, payment_link: true, if: -> { payment_url_cy.present? }
 
   validate :page_translations_valid
