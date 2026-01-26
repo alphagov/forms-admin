@@ -189,7 +189,6 @@ private
       next if condition.blank?
 
       # Revert Welsh translations for condition attributes
-      condition.answer_value_cy = condition_data["answer_value"] if condition_data.key?("answer_value")
       condition.exit_page_heading_cy = condition_data["exit_page_heading"] if condition_data.key?("exit_page_heading")
       condition.exit_page_markdown_cy = condition_data["exit_page_markdown"] if condition_data.key?("exit_page_markdown")
 

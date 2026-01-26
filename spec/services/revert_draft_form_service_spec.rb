@@ -225,12 +225,12 @@ describe RevertDraftFormService do
           # Set up a condition with Welsh translations
           form.pages.first.update!(answer_type: "selection", answer_settings: { "only_one_option" => "true", "selection_options" => [{ "name" => "Yes" }, { "name" => "No" }] })
           condition = form.pages.first.routing_conditions.create!(
-            answer_value: "Yes",
             goto_page_id: form.pages.last.id,
-            routing_page_id: form.pages.first.id,
+            exit_page_heading: "Exit page heading",
+            exit_page_markdown: "Exit page markdown",
           )
           # Set Welsh translations for the condition
-          condition.answer_value_cy = "Ie"
+          condition.exit_page_heading_cy = "Welsh Exit page heading"
           condition.save!
           # Synchronize live FormDocuments for both languages
           FormDocumentSyncService.new(form).synchronize_live_form
@@ -244,7 +244,7 @@ describe RevertDraftFormService do
           before do
             # Change Welsh translation in the draft
             condition = live_form.pages.first.routing_conditions.first
-            condition.answer_value_cy = "Ydw"
+            condition.exit_page_heading_cy = "New Welsh Exit page heading"
             condition.save!
           end
 
@@ -256,11 +256,11 @@ describe RevertDraftFormService do
             condition = live_form.pages.first.routing_conditions.first
 
             # Check that condition-level Welsh translations are restored
-            expect(condition.answer_value_cy).to eq("Ie")
+            expect(condition.exit_page_heading_cy).to eq("Welsh Exit page heading")
 
             # Verify Welsh content is accessible in Welsh locale
             Mobility.with_locale(:cy) do
-              expect(condition.answer_value).to eq("Ie")
+              expect(condition.exit_page_heading).to eq("Welsh Exit page heading")
             end
           end
         end
@@ -346,9 +346,9 @@ describe RevertDraftFormService do
           form = create(:form, :live, pages_count: 2)
           form.pages.first.update!(answer_type: "selection", answer_settings: { "only_one_option" => "true", "selection_options" => [{ "name" => "Yes" }, { "name" => "No" }] })
           form.pages.first.routing_conditions.create!(
-            answer_value: "Yes",
             goto_page_id: form.pages.last.id,
-            routing_page_id: form.pages.first.id,
+            exit_page_heading: "Exit page heading",
+            exit_page_markdown: "Exit page markdown",
           )
           # Synchronize live FormDocument (no Welsh version)
           FormDocumentSyncService.new(form).synchronize_live_form
@@ -360,7 +360,7 @@ describe RevertDraftFormService do
         before do
           # Add Welsh translations to condition in draft
           condition = live_form.pages.first.routing_conditions.first
-          condition.answer_value_cy = "Ie"
+          condition.exit_page_heading_cy = "Welsh Exit page heading"
           condition.save!
         end
 
@@ -370,7 +370,7 @@ describe RevertDraftFormService do
           live_form.reload
           condition = live_form.pages.first.routing_conditions.first
 
-          expect(condition.answer_value_cy).to be_nil
+          expect(condition.exit_page_heading_cy).to be_nil
         end
       end
 
