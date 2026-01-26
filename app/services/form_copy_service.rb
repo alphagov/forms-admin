@@ -155,7 +155,22 @@ private
       page.page_heading = data["page_heading"] if data["page_heading"].present?
       page.guidance_markdown = data["guidance_markdown"] if data["guidance_markdown"].present?
       page.answer_settings = data["answer_settings"] if data["answer_settings"].present?
+      copy_welsh_exit_page_conditions(step, page)
+
       page.save!(validate: false)
+    end
+  end
+
+  def copy_welsh_exit_page_conditions(step, page)
+    if page.routing_conditions.any?
+      page.routing_conditions.zip(step["routing_conditions"]) do |condition, step_condition|
+        next unless step_condition
+
+        %w[exit_page_heading exit_page_markdown].each do |attr|
+          condition.send("#{attr}_cy=", step_condition[attr]) if step_condition.key?(attr)
+        end
+        condition.save!
+      end
     end
   end
 end
