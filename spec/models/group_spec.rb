@@ -291,6 +291,18 @@ RSpec.describe Group, type: :model do
     end
   end
 
+  describe "welsh_enabled" do
+    it "has a default welsh_enabled of false" do
+      group = described_class.build(name: "Test Group")
+      expect(group.welsh_enabled).to be(false)
+    end
+
+    it "can be set to true" do
+      group = build :group, welsh_enabled: true
+      expect(group).to be_valid
+    end
+  end
+
   describe "ordering" do
     it "orders groups by name" do
       user = create :user
