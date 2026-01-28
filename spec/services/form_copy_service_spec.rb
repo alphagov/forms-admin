@@ -232,6 +232,21 @@ RSpec.describe FormCopyService do
     context "when source form has Welsh language version with translated content" do
       let(:source_form) do
         form = create(:form, :live, :with_pages, pages_count: 2, available_languages: %w[en cy])
+        # Add an exit page condition to the first page
+        form.pages.first.answer_type = "selection"
+        form.pages.first.answer_settings = DataStruct.new(only_one_option: true,
+                                                          selection_options: [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }])
+        form.pages.first.routing_conditions << Condition.new(routing_page_id:
+                                                             form.pages.first.id,
+                                                             check_page_id:
+                                                             form.pages.first.id,
+                                                             answer_value:
+                                                             "Option 1",
+                                                             goto_page_id: nil,
+                                                             skip_to_end: true,
+                                                             exit_page_heading:
+                                                             "Exit page heading English",
+                                                             exit_page_markdown: "Exit page markdown English")
         # Set Welsh-specific translations for form
         form.name_cy = "Ffurflen Gymraeg"
         form.privacy_policy_url_cy = "https://example.com/preifatrwydd"
@@ -246,6 +261,13 @@ RSpec.describe FormCopyService do
         # Set Welsh translations for pages - must save each page individually
         form.pages.first.update!(question_text_cy: "Cwestiwn Cymraeg 1", hint_text_cy: "Awgrym Cymraeg 1", page_heading_cy: "Pennwr Tudalen Cymraeg 1")
         form.pages.last.update!(question_text_cy: "Cwestiwn Cymraeg 2", hint_text_cy: "Awgrym Cymraeg 2")
+
+        # Set the Welsh exit page text
+        exit_page = form.pages.first.routing_conditions.first
+        exit_page.exit_page_heading_cy = "Welsh exit page heading"
+        exit_page.exit_page_markdown_cy = "Welsh exit page markdown"
+        exit_page.save!
+
         # Synchronize live FormDocuments for both languages
         FormDocumentSyncService.new(form).synchronize_live_form
         form.reload
@@ -310,6 +332,13 @@ RSpec.describe FormCopyService do
           expect(first_page.question_text).to eq("Cwestiwn Cymraeg 1")
           expect(first_page.hint_text).to eq("Awgrym Cymraeg 1")
         end
+      end
+
+      it "persists Welsh translations on copied exit page conditions" do
+        copied_condition = copied_form.pages.first.routing_conditions.first
+
+        expect(copied_condition.exit_page_heading_cy).to eq("Welsh exit page heading")
+        expect(copied_condition.exit_page_markdown_cy).to eq("Welsh exit page markdown")
       end
     end
 
