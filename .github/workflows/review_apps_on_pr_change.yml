@@ -1,83 +1,80 @@
 name: "Review apps: on PR change"
 on:
   pull_request:
-    # being explicit about what to trigger on.
-    # matches the docs for the default types
-    # https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#pull_request
     types: [opened, reopened, synchronize]
+
+concurrency:
+  group: "review-apps-forms-admin-pr-${{ github.event.pull_request.number }}"
+  cancel-in-progress: false
+
 jobs:
   update-review-app:
-    # this references a codebuild project configured in forms-deploy
-    # see: https://docs.aws.amazon.com/codebuild/latest/userguide/action-runner.html
-    runs-on: codebuild-review-forms-admin-gha-runner-${{github.run_id}}-${{github.run_attempt}}
-
+    runs-on: ubuntu-24.04-arm
     permissions:
+      id-token: write
+      contents: read
       pull-requests: write
 
     steps:
-      - name: Generate container image URI
-        run: |
-          echo "CONTAINER_IMAGE_URI=842676007477.dkr.ecr.eu-west-2.amazonaws.com/forms-admin:pr-${{github.event.pull_request.number}}-${{github.event.pull_request.head.sha}}-$(date +%s)" >> "$GITHUB_ENV"
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
+        with:
+          role-to-assume: arn:aws:iam::842676007477:role/review-github-actions-forms-admin
+          aws-region: eu-west-2
 
       - name: Checkout code
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
-      - name: Build container
+      - name: Generate container image URI
         run: |
-          # Docker credentials are configured in CodeBuild
-          # CodeBuild retrieves the credentials from ParameterStore
-          echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
-          docker build \
-            --tag "${{env.CONTAINER_IMAGE_URI}}" \
-            .
+          echo "CONTAINER_IMAGE_URI=842676007477.dkr.ecr.eu-west-2.amazonaws.com/forms-admin:pr-${{github.event.pull_request.number}}-${{github.event.pull_request.head.sha}}-$(date +%s)" >> "$GITHUB_ENV"
+
+      - name: Build container
+        run: docker build --tag "${{env.CONTAINER_IMAGE_URI}}" .
 
       - name: Push container
-        id: build-container
         run: |
           aws ecr get-login-password --region eu-west-2 \
           | docker login --username AWS --password-stdin 842676007477.dkr.ecr.eu-west-2.amazonaws.com
-
-          echo "Pushing container image"
-          echo "${{env.CONTAINER_IMAGE_URI}}"
-
           docker push "${CONTAINER_IMAGE_URI}"
 
-      - name: Determine Terraform version
-        id: terraform-version
-        run: |
-          TF_VERSION=$(< .review_apps/.terraform-version)
-          printf "TF_VERSION=%s\n" "$TF_VERSION" >> "$GITHUB_OUTPUT"
-
-      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+      - name: Deploy review app via CodeBuild
+        id: codebuild
+        uses: aws-actions/aws-codebuild-run-build@4d15a47425739ac2296ba5e7eee3bdd4bfbdd767 # v1.0.18
         with:
-          terraform_version: ${{steps.terraform-version.outputs.TF_VERSION}}
+          project-name: review-forms-admin-deploy
+          env-vars-for-codebuild: |
+            PR_NUMBER,
+            CONTAINER_IMAGE
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          CONTAINER_IMAGE: ${{ env.CONTAINER_IMAGE_URI }}
 
-      - name: Deploy review app
-        id: deploy
+      - name: Fetch terraform outputs
+        id: outputs
         run: |
-          cd .review_apps/
+          # Extract build UUID from ARN (format: arn:aws:codebuild:region:account:build/project:uuid)
+          BUILD_ID="${{ steps.codebuild.outputs.aws-build-id }}"
+          BUILD_UUID="${BUILD_ID##*:}"
 
-          terraform init -backend-config="key=review-apps/forms-admin/pr-${{github.event.pull_request.number}}.tfstate"
+          # Download artifact
+          aws s3 cp "s3://forms-review-codebuild-artifacts/${BUILD_UUID}/review-forms-admin-deploy/outputs.json" outputs.json
 
-          terraform apply \
-            -var "pull_request_number=${{github.event.pull_request.number}}" \
-            -var "forms_admin_container_image=${{env.CONTAINER_IMAGE_URI}}" \
-            -no-color \
-            -auto-approve
-          REVIEW_APP_URL=$(terraform output -raw review_app_url)
-          ECS_CLUSTER_ID=$(terraform output -raw review_app_ecs_cluster_id)
-          ECS_SERVICE_NAME=$(terraform output -raw review_app_ecs_service_name)
+          # Parse outputs
           {
-            printf 'REVIEW_APP_URL=%s\n' "$REVIEW_APP_URL"
-            printf 'ECS_CLUSTER_ID=%s\n' "$ECS_CLUSTER_ID"
-            printf 'ECS_SERVICE_NAME=%s\n' "$ECS_SERVICE_NAME"
+            echo "REVIEW_APP_URL=$(jq -r '.review_app_url.value' outputs.json)"
+            echo "ECS_CLUSTER_ID=$(jq -r '.review_app_ecs_cluster_id.value' outputs.json)"
+            echo "ECS_SERVICE_NAME=$(jq -r '.review_app_ecs_service_name.value' outputs.json)"
           } >> "$GITHUB_OUTPUT"
+
+          # Clean up artifact
+          aws s3 rm "s3://forms-review-codebuild-artifacts/${BUILD_UUID}/review-forms-admin-deploy/outputs.json"
 
       - name: Wait for AWS ECS deployments to finish
         run: |
           aws ecs wait services-stable \
-            --cluster "${{steps.deploy.outputs.ECS_CLUSTER_ID}}" \
-            --services "${{steps.deploy.outputs.ECS_SERVICE_NAME}}"
+            --cluster "${{ steps.outputs.outputs.ECS_CLUSTER_ID }}" \
+            --services "${{ steps.outputs.outputs.ECS_SERVICE_NAME }}"
 
       - name: Comment on PR
         env:
@@ -85,7 +82,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           cat <<EOF > "${{runner.temp}}/pr-comment.md"
-          :tada: A review copy of this PR has been deployed! You can reach it at: ${{steps.deploy.outputs.REVIEW_APP_URL}}
+          :tada: A review copy of this PR has been deployed! You can reach it at: ${{steps.outputs.outputs.REVIEW_APP_URL}}
 
           It may take 5 minutes or so for the application to be fully deployed and working. If it still isn't ready
           after 5 minutes, there may be something wrong with the ECS task. You will need to go to the integration AWS account
