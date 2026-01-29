@@ -100,13 +100,13 @@ RSpec.describe ApplicationHelper, type: :helper do
   end
 
   describe "contact_url" do
-    it "returns a link to the contact email address" do
+    it "returns a link to contact support" do
       expect(helper.contact_url).to eq t("contact_url")
     end
   end
 
   describe "contact_link" do
-    it "returns a link to the contact email address with default text" do
+    it "returns a link to contact support with default text" do
       link = <<~HTML
         <a class="govuk-link" href="#{t('contact_url')}">contact the GOV.UK Forms team</a>
       HTML
@@ -115,7 +115,7 @@ RSpec.describe ApplicationHelper, type: :helper do
       expect(helper.contact_link).to include(link)
     end
 
-    it "returns a link to the contact email address with custom text" do
+    it "returns a link to contact support with custom text" do
       link = <<~HTML
         <a class="govuk-link" href="#{t('contact_url')}">test</a>
       HTML

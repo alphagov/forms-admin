@@ -267,7 +267,7 @@ en:
       hint: Select at least one option
       title: How can people get help with filling in this form?
   contact_govuk_forms: contact the GOV.UK Forms team
-  contact_url: mailto:govuk-forms-support@govuk.zendesk.com
+  contact_url: https://www.forms.service.gov.uk/support
   continue: Continue
   date:
     formats:
