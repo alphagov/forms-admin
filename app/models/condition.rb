@@ -13,11 +13,6 @@ class Condition < ApplicationRecord
   translates :exit_page_heading
   translates :exit_page_markdown, presence: false # Without presence here, the value is nil if set to ""
 
-  # Open the Model class used for translations and ignore the answer_value attribute so we can safely remove it later
-  class Translation
-    self.ignored_columns = %w[answer_value]
-  end
-
   def self.create_and_update_form!(...)
     condition = Condition.new(...)
     condition.save_and_update_form
