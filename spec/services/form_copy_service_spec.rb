@@ -18,6 +18,13 @@ RSpec.describe FormCopyService do
       expect(copied_form.id).not_to eq(source_form.id)
     end
 
+    it "sets the creator as the user who copied the form (the logged in user)" do
+      source_form.creator_id = create(:user).id
+
+      expect(copied_form.creator_id).not_to eq(source_form.creator_id)
+      expect(copied_form.creator_id).to eq(logged_in_user.id)
+    end
+
     it "has a reference to the original form" do
       expect(copied_form.copied_from_id).to eq(source_form.id)
     end

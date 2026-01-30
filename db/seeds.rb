@@ -62,7 +62,7 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
   )
 
   # create extra super admins
-  User.create!(
+  craig = User.create!(
     email: "craig@example.gov.uk",
     name: "Craig",
     role: :super_admin,
@@ -138,6 +138,7 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
 
   all_question_types_form = Form.create!(
     name: "All question types form",
+    creator_id: craig.id,
     pages: [
       Page.create(
         question_text: "Single line of text",

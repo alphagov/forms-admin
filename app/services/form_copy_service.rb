@@ -26,6 +26,7 @@ class FormCopyService
       copy_group
 
       @copied_form.copied_from_id = @form.id
+      @copied_form.creator_id = @logged_in_user.id
       @copied_form.save!
 
       # Copy Welsh translations if available
