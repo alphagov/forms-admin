@@ -18,6 +18,7 @@ FactoryBot.define do
     state { :draft }
     payment_url { nil }
     external_id { nil }
+    batch_submissions { false }
 
     trait :with_group do
       transient do
