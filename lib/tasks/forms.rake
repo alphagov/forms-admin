@@ -164,6 +164,25 @@ namespace :forms do
     Rails.logger.info "DraftQuestions with selection options with no value: #{draft_questions_with_selection_options_with_no_value}"
     Rails.logger.info "data_migrations:check_selection_options finished"
   end
+
+  desc "Updates form documents to add batch_submissions attribute"
+  task add_send_daily_submission_batch_to_form_documents: :environment do
+    # find all form documents that don't have a batch_submissions attribute
+    form_documents_without_send_daily_submission_batch = FormDocument.where("NOT jsonb_path_exists(content, '$.send_daily_submission_batch')")
+    Rails.logger.info "data_migrations:add_batch_submissions_to_form_documents will update #{form_documents_without_send_daily_submission_batch.count} form_documents"
+
+    form_documents_without_send_daily_submission_batch.find_each do |form_document|
+      form_document.content["send_daily_submission_batch"] = false
+
+      begin
+        form_document.save!
+      rescue StandardError => e
+        Rails.logger.info "data_migrations:add_send_daily_submission_batch_to_form_documents Failed to update form #{form_document.id}: #{e.message}"
+      end
+    end
+
+    Rails.logger.info "data_migrations:add_send_daily_submission_batch_to_form_documents finished"
+  end
 end
 
 def move_forms(form_ids, group_id)
