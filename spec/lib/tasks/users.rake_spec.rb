@@ -83,10 +83,10 @@ RSpec.describe "users.rake" do
 
     let(:users) do
       [].concat(
-        create_list(:user, 3, :old),
-        create_list(:user, 3, :old, :with_no_name),
-        create_list(:user, 3, :old, :with_no_org),
-        create_list(:user, 3, :old, :with_no_name, :with_no_org),
+        create_list(:user, 3, :old, :with_unique_email),
+        create_list(:user, 3, :old, :with_no_name, :with_unique_email),
+        create_list(:user, 3, :old, :with_no_org, :with_unique_email),
+        create_list(:user, 3, :old, :with_no_name, :with_no_org, :with_unique_email),
       )
     end
 
