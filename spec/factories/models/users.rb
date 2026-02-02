@@ -56,6 +56,10 @@ FactoryBot.define do
       name { nil }
     end
 
+    trait :with_unique_email do
+      email { Faker::Internet.email(domain: "example.gov.uk") }
+    end
+
     trait :old do
       created_at { Faker::Time.between(from: Time.zone.local(2022, 3, 8), to: Time.zone.local(2022, 4, 11)) }
       last_signed_in_at { nil }
