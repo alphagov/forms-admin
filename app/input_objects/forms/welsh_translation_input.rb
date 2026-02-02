@@ -158,7 +158,7 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   end
 
   def form_marked_complete?
-    mark_complete == "true"
+    ["true", true].include?(mark_complete)
   end
 
   def page_translations_valid
