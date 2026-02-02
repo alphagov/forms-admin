@@ -85,7 +85,7 @@ private
 
   def welsh_language_status
     return :optional unless @form.available_languages.include?("cy")
-    return :in_progress if WelshChangeDetectionService.new(@form).update_welsh?
+    return :in_progress if welsh_translations_invalid
     return :completed if @form.welsh_completed?
 
     :in_progress
@@ -113,5 +113,12 @@ private
 
   def make_live_status_for_draft
     mandatory_tasks_completed? ? :not_started : :cannot_start
+  end
+
+  def welsh_translations_invalid
+    @welsh_translations_invalid ||= begin
+      translation_input = Forms::WelshTranslationInput.new(form: @form, mark_complete: true).assign_form_values
+      translation_input.invalid?
+    end
   end
 end
