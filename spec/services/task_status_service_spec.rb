@@ -255,6 +255,12 @@ describe TaskStatusService do
         context "and Welsh translation is completed" do
           let(:form) { create(:form, :live, :with_group, available_languages: %w[en cy], welsh_completed: true, group:) }
 
+          before do
+            welsh_translation_input = instance_double(Forms::WelshTranslationInput)
+            allow(welsh_translation_input).to receive_messages(assign_form_values: welsh_translation_input, invalid?: false)
+            allow(Forms::WelshTranslationInput).to receive(:new).and_return(welsh_translation_input)
+          end
+
           it "returns completed" do
             expect(task_status_service.task_statuses[:welsh_language_status]).to eq :completed
           end
@@ -386,6 +392,12 @@ describe TaskStatusService do
 
         context "when the optional Welsh task has been completed" do
           let(:form) { create(:form, :live, :with_group, available_languages: %w[en cy], welsh_completed: true, group:) }
+
+          before do
+            welsh_translation_input = instance_double(Forms::WelshTranslationInput)
+            allow(welsh_translation_input).to receive_messages(assign_form_values: welsh_translation_input, invalid?: false)
+            allow(Forms::WelshTranslationInput).to receive(:new).and_return(welsh_translation_input)
+          end
 
           it "returns no missing sections" do
             expect(task_status_service.incomplete_tasks).to be_empty
