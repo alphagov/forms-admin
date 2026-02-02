@@ -42,8 +42,8 @@ RSpec.describe Forms::MakeLiveInput, type: :model do
       end
 
       context "when there are incomplete tasks" do
-        let(:form) { create :form, :new_form }
-        let(:incomplete_tasks) { %i[missing_pages missing_privacy_policy_url missing_contact_details missing_what_happens_next share_preview_not_completed] }
+        let(:form) { create :form, :new_form, available_languages: %w[en cy] }
+        let(:incomplete_tasks) { %i[missing_pages missing_privacy_policy_url missing_contact_details missing_what_happens_next share_preview_not_completed missing_welsh_translations] }
 
         it "shows a validation message for the incomplete task" do
           expect(make_live_input).not_to be_valid

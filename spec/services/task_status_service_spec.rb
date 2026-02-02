@@ -367,8 +367,53 @@ describe TaskStatusService do
     context "when mandatory tasks are complete" do
       let(:form) { build(:form, :live, :with_group, group:) }
 
-      it "returns no missing sections" do
-        expect(task_status_service.incomplete_tasks).to be_empty
+      context "when the Welsh feature is not enabled" do
+        let(:group) { create(:group) }
+
+        it "returns no missing sections" do
+          expect(task_status_service.incomplete_tasks).to be_empty
+        end
+      end
+
+      context "when the Welsh feature is enabled" do
+        context "when the optional Welsh task has not been started" do
+          let(:form) { create(:form, :live, :with_group, available_languages: %w[en], welsh_completed: false, group:) }
+
+          it "returns no missing sections" do
+            expect(task_status_service.incomplete_tasks).to be_empty
+          end
+        end
+
+        context "when the optional Welsh task has been completed" do
+          let(:form) { create(:form, :live, :with_group, available_languages: %w[en cy], welsh_completed: true, group:) }
+
+          it "returns no missing sections" do
+            expect(task_status_service.incomplete_tasks).to be_empty
+          end
+        end
+
+        context "and the form has structural changes require Welsh updates" do
+          let(:form) { create(:form, :live, :with_group, available_languages: %w[en cy], welsh_completed: true, group:) }
+
+          before do
+            # Create initial Welsh FormDocument
+            FormDocumentSyncService.new(form).synchronize_live_form
+            # Add new content requiring Welsh translation
+            form.update!(declaration_text: "I declare this is correct", share_preview_completed: true)
+          end
+
+          it "flags the Welsh task as incomplete" do
+            expect(task_status_service.incomplete_tasks).to match_array(%i[missing_welsh_translations])
+          end
+        end
+
+        context "when the optional Welsh task has been started but not completed" do
+          let(:form) { build(:form, :live, :with_group, available_languages: %w[en cy], welsh_completed: false, group:) }
+
+          it "flags the Welsh task as incomplete" do
+            expect(task_status_service.incomplete_tasks).to match_array(%i[missing_welsh_translations])
+          end
+        end
       end
     end
 
