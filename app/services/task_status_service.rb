@@ -15,7 +15,7 @@ class TaskStatusService
       missing_contact_details: support_contact_details_status,
       share_preview_not_completed: share_preview_status,
       missing_welsh_translations: welsh_language_status,
-    }.reject { |_k, v| %i[completed optional].include?(v) }.map { |k, _v| k }
+    }.reject { |_k, v| %i[completed optional].include?(v) }.keys
   end
 
   def task_statuses

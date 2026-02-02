@@ -10,7 +10,7 @@ class EmailTaskStatusService
   def incomplete_email_tasks
     {
       missing_submission_email: submission_email_status,
-    }.reject { |_k, v| v == :completed }.map { |k, _v| k }
+    }.reject { |_k, v| v == :completed }.keys
   end
 
   def email_task_statuses
