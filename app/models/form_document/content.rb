@@ -29,6 +29,7 @@ class FormDocument::Content
   attribute :privacy_policy_url, :string
   attribute :s3_bucket_aws_account_id, :string
   attribute :what_happens_next_markdown, :string
+  attribute :send_daily_submission_batch, :boolean
 
   alias_attribute :id, :form_id
 
