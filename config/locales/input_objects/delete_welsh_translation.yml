@@ -1,0 +1,9 @@
+---
+en:
+  activemodel:
+    errors:
+      models:
+        forms/delete_welsh_translation_input:
+          attributes:
+            confirm:
+              blank: Select ‘Yes’ to delete the Welsh version of your form
