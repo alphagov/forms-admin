@@ -16,32 +16,32 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   attribute :what_happens_next_markdown_cy
   attribute :payment_url_cy
 
-  validates :name_cy, presence: true, if: -> { form_marked_complete? }
+  validates :name_cy, presence: true, if: -> { marked_complete? }
   validates :name_cy, length: { maximum: 500 }, if: -> { name_cy.present? }
 
-  validates :privacy_policy_url_cy, presence: true, if: -> { form_marked_complete? && form.privacy_policy_url.present? }
+  validates :privacy_policy_url_cy, presence: true, if: -> { marked_complete? && form.privacy_policy_url.present? }
   validates :privacy_policy_url_cy, url: true, if: -> { privacy_policy_url_cy.present? }
   validates :privacy_policy_url_cy, exclusion: { in: %w[https://www.gov.uk/help/privacy-notice] }, if: -> { privacy_policy_url_cy.present? }
 
-  validates :support_email_cy, presence: true, if: -> { form_marked_complete? && form_has_support_email? }
+  validates :support_email_cy, presence: true, if: -> { marked_complete? && form_has_support_email? }
   validates :support_email_cy, email_address: true, allowed_email_domain: true, if: -> { support_email_cy.present? }
 
-  validates :support_phone_cy, presence: true, if: -> { form_marked_complete? && form_has_support_phone? }
+  validates :support_phone_cy, presence: true, if: -> { marked_complete? && form_has_support_phone? }
   validates :support_phone_cy, length: { maximum: 500 }, if: -> { support_phone_cy.present? }
 
-  validates :support_url_cy, presence: true, if: -> { form_marked_complete? && form_has_support_url? }
+  validates :support_url_cy, presence: true, if: -> { marked_complete? && form_has_support_url? }
   validates :support_url_cy, url: true, length: { maximum: 120 }, if: -> { support_url_cy.present? }
 
-  validates :support_url_text_cy, presence: true, if: -> { form_marked_complete? && form_has_support_url? }
+  validates :support_url_text_cy, presence: true, if: -> { marked_complete? && form_has_support_url? }
   validates :support_url_text_cy, length: { maximum: 120 }, if: -> { support_url_text_cy.present? }
 
-  validates :declaration_text_cy, presence: true, if: -> { form_marked_complete? && form_has_declaration? }
+  validates :declaration_text_cy, presence: true, if: -> { marked_complete? && form_has_declaration? }
   validates :declaration_text_cy, length: { maximum: 2000 }, if: -> { declaration_text_cy.present? }
 
-  validates :what_happens_next_markdown_cy, presence: true, if: -> { form_marked_complete? && form.what_happens_next_markdown.present? }
+  validates :what_happens_next_markdown_cy, presence: true, if: -> { marked_complete? && form.what_happens_next_markdown.present? }
   validates :what_happens_next_markdown_cy, markdown: { allow_headings: false }, if: -> { what_happens_next_markdown_cy.present? }
 
-  validates :payment_url_cy, presence: true, if: -> { form_marked_complete? && form_has_payment_url? }
+  validates :payment_url_cy, presence: true, if: -> { marked_complete? && form_has_payment_url? }
   validates :payment_url_cy, payment_link: true, if: -> { payment_url_cy.present? }
 
   validate :page_translations_valid
@@ -157,16 +157,12 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
     form.privacy_policy_url.present?
   end
 
-  def form_marked_complete?
-    mark_complete == "true"
-  end
-
   def page_translations_valid
     return if page_translations.nil?
 
     # We pass :mark_complete as the validation context so the page_translations
     # can validate differently depending on whether the form is marked complete
-    validation_context = form_marked_complete? ? :mark_complete : nil
+    validation_context = marked_complete? ? :mark_complete : nil
 
     page_translations.each do |page_translation|
       page_translation.validate(validation_context)

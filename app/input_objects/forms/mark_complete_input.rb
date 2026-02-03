@@ -4,6 +4,6 @@ class Forms::MarkCompleteInput < BaseInput
   validates :mark_complete, presence: true
 
   def marked_complete?
-    mark_complete == "true"
+    ["true", true].include?(mark_complete)
   end
 end
