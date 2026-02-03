@@ -39,8 +39,8 @@ RSpec.describe Forms::DeleteWelshTranslationInput, type: :model do
     let(:form) do
       create :form,
              name_cy: "New Welsh name",
-             what_happens_next_markdown: "New Welsh what happens next",
-             what_happens_next_markdown_cy: "English what happens next",
+             what_happens_next_markdown: "English what happens next",
+             what_happens_next_markdown_cy: "New Welsh what happens next",
              declaration_text: "English declaration",
              declaration_text_cy: "New Welsh declaration",
              support_email: "english-support@example.gov.uk",
