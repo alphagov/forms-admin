@@ -8,9 +8,18 @@ RSpec.describe Reports::FeatureReportService do
       branch_route_form,
       basic_route_form,
       copied_form,
+      form_with_a_welsh_translation,
     ]
   end
-  let(:form_documents) { forms.map { |form| form.live_form_document.as_json } }
+  let(:form_documents) do
+    forms.map do |form|
+      # FormDocumentsService adds in the welsh_completed details as part of the database query
+      form.live_form_document.as_json
+          .merge({
+            "welsh_completed" => form.welsh_completed ? true : false,
+          })
+    end
+  end
   let(:group) { create(:group) }
 
   let(:form_with_all_answer_types) do
@@ -51,6 +60,10 @@ RSpec.describe Reports::FeatureReportService do
     form = create(:form, :live, copied_from_id: original_form.id, pages: [])
     form
   end
+  let(:form_with_a_welsh_translation) do
+    form = create(:form, :live, welsh_completed: true, pages: [])
+    form
+  end
 
   before do
     forms.each do |form|
@@ -62,7 +75,7 @@ RSpec.describe Reports::FeatureReportService do
     it "returns the feature report" do
       report = described_class.new(form_documents).report
       expect(report).to eq({
-        total_forms: 5,
+        total_forms: 6,
         copied_forms: 1,
         forms_with_payment: 1,
         forms_with_routing: 2,
@@ -94,6 +107,7 @@ RSpec.describe Reports::FeatureReportService do
           "text" => 1,
         },
         forms_with_exit_pages: 1,
+        forms_with_welsh_translation: 1,
       })
     end
   end
@@ -440,6 +454,21 @@ RSpec.describe Reports::FeatureReportService do
           "content" => a_hash_including(
             "name" => copied_form.name,
             "copied_from_id" => copied_form.copied_from_id,
+          ),
+        ),
+      ]
+    end
+  end
+
+  describe "#forms_with_welsh_translation" do
+    it "returns live forms with welsh translation" do
+      forms = described_class.new(form_documents).forms_with_welsh_translation
+      expect(forms.length).to eq 1
+      expect(forms).to match [
+        a_hash_including(
+          "form_id" => form_with_a_welsh_translation.id,
+          "content" => a_hash_including(
+            "name" => form_with_a_welsh_translation.name,
           ),
         ),
       ]
