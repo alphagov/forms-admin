@@ -12,6 +12,7 @@ describe "forms/welsh_translation/new.html.erb" do
   let(:table_presenter) { Forms::TranslationTablePresenter.new }
   let(:mark_complete) { "true" }
   let(:welsh_translation_delete_path) { "/welsh-translation/delete" }
+  let(:has_welsh_translation?) { false }
 
   def build_form(attributes = {})
     default_attributes = {
@@ -37,6 +38,7 @@ describe "forms/welsh_translation/new.html.erb" do
   before do
     welsh_translation_input.mark_complete = mark_complete
     allow(view).to receive(:welsh_translation_delete_path).and_return(welsh_translation_delete_path)
+    allow(form).to receive(:has_welsh_translation?).and_return(has_welsh_translation?)
     assign(:table_presenter, table_presenter)
   end
 
@@ -109,7 +111,7 @@ describe "forms/welsh_translation/new.html.erb" do
       expect(rendered).to have_text("Support URL text")
     end
 
-    it "renders radio buttons for 'finsihed adding your Welsh version?'" do
+    it "renders radio buttons for 'finished adding your Welsh version?'" do
       expect(rendered).to have_css("legend", text: "Have you finished adding your Welsh version?")
       expect(rendered).to have_field("Yes", type: "radio")
       expect(rendered).to have_field("No", type: "radio")
@@ -119,8 +121,8 @@ describe "forms/welsh_translation/new.html.erb" do
       expect(rendered).to have_button("Save and continue")
     end
 
-    it "renders a link to delete the translation" do
-      expect(rendered).to have_link(t("forms.welsh_translation.new.delete_welsh_version"), href: welsh_translation_delete_path, class: "govuk-button--warning")
+    it "does not render a link to delete the translation" do
+      expect(rendered).not_to have_link(href: welsh_translation_delete_path)
     end
 
     it "renders all of the translation form fields with the welsh lang attribute" do
@@ -129,6 +131,14 @@ describe "forms/welsh_translation/new.html.erb" do
       expect(form_fields).not_to be_empty
 
       expect(form_fields).to all(have_css("[lang='cy']"))
+    end
+
+    context "when the form already has a Welsh translation" do
+      let(:has_welsh_translation?) { true }
+
+      it "renders a link to delete the translation" do
+        expect(rendered).to have_link(t("forms.welsh_translation.new.delete_welsh_version"), href: welsh_translation_delete_path, class: "govuk-button--warning")
+      end
     end
 
     context "when the form does not have a declaration text" do

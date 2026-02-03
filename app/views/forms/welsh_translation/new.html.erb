@@ -346,7 +346,10 @@
 
       <div class="govuk-button-group">
         <%= f.govuk_submit t("save_and_continue") %>
-        <%= govuk_button_link_to(t(".delete_welsh_version"), welsh_translation_delete_path(@welsh_translation_input.form.id), warning: true) %>
+
+        <% if @welsh_translation_input.form.has_welsh_translation? %>
+          <%= govuk_button_link_to(t(".delete_welsh_version"), welsh_translation_delete_path(@welsh_translation_input.form.id), warning: true) %>
+        <% end %>
       </div>
     </div>
   </div>
