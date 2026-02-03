@@ -39,24 +39,34 @@ RSpec.describe Forms::DeleteWelshTranslationInput, type: :model do
     let(:form) do
       create :form,
              name_cy: "New Welsh name",
-             what_happens_next_markdown_cy: "New Welsh what happens next",
+             what_happens_next_markdown: "New Welsh what happens next",
+             what_happens_next_markdown_cy: "English what happens next",
+             declaration_text: "English declaration",
              declaration_text_cy: "New Welsh declaration",
+             support_email: "english-support@example.gov.uk",
              support_email_cy: "new-welsh-support@example.gov.uk",
+             support_phone: "English support phone",
              support_phone_cy: "0800 123 4567",
+             support_url: "https://www.gov.uk/english-support",
              support_url_cy: "https://www.gov.uk/new-welsh-support",
+             support_url_text: "English support url text",
              support_url_text_cy: "New Welsh Support",
+             privacy_policy_url: "https://www.gov.uk/english-privacy",
              privacy_policy_url_cy: "https://www.gov.uk/new-welsh-privacy",
              payment_url_cy: "https://www.gov.uk/payments/new-welsh-payment-link",
              available_languages: %w[en cy],
-             welsh_completed: true
+             welsh_completed: true,
+             pages: [page]
     end
 
     let(:page) do
       create :page,
-             form:,
              question_text_cy: "Ydych chi'n adnewyddu trwydded?",
+             hint_text: "English hint text",
              hint_text_cy: "Dewiswch 'Ydw' os oes gennych drwydded ddilys eisoes.",
+             page_heading: "English page heading",
              page_heading_cy: "Trwyddedu",
+             guidance_markdown: "English guidance",
              guidance_markdown_cy: "Mae'r rhan hon o'r ffurflen yn ymwneud â thrwyddedu.",
              answer_settings_cy: {
                selection_options: [

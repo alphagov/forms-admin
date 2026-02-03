@@ -139,7 +139,7 @@ describe RevertDraftFormService do
 
     context "when form has Welsh content" do
       let(:live_form) do
-        form = create(:form, :live, :with_pages, pages_count: 2, available_languages: %w[en cy])
+        form = create(:form, :live, :with_pages, pages_count: 2, available_languages: %w[en cy], support_phone: "01234 567890", support_url: "https://example.gov.uk/support", support_url_text: "Our English support site", declaration_text: "English declaration", payment_url: "https://www.pay.gov.uk")
         # Set Welsh translations for the form
         form.name_cy = "Ffurflen Gymraeg"
         form.privacy_policy_url_cy = "https://example.com/preifatrwydd"
@@ -147,6 +147,8 @@ describe RevertDraftFormService do
         form.support_phone_cy = "0800 111 222"
         form.declaration_text_cy = "Rwy'n datgan bod hyn yn wir"
         form.save!
+        form.pages.first.hint_text = "English first page hint text"
+        form.pages.last.hint_text = "English last page hint text"
         # Set Welsh translations for pages
         form.pages.first.update!(question_text_cy: "Cwestiwn Cymraeg 1", hint_text_cy: "Awgrym Cymraeg 1")
         form.pages.last.update!(question_text_cy: "Cwestiwn Cymraeg 2", hint_text_cy: "Awgrym Cymraeg 2")

@@ -238,9 +238,12 @@ RSpec.describe FormCopyService do
 
     context "when source form has Welsh language version with translated content" do
       let(:source_form) do
-        form = create(:form, :live, :with_pages, pages_count: 2, available_languages: %w[en cy])
+        form = create(:form, :live, :with_pages, pages_count: 2, available_languages: %w[en cy], support_phone: "01234 567890", support_url: "https://example.gov.uk/support", support_url_text: "Our English support site", declaration_text: "English declaration", payment_url: "https://www.pay.gov.uk")
         # Add an exit page condition to the first page
         form.pages.first.answer_type = "selection"
+        form.pages.first.hint_text = "English hint text"
+        form.pages.first.page_heading = "English page heading"
+        form.pages.first.guidance_markdown = "English guidance markdown"
         form.pages.first.answer_settings = DataStruct.new(only_one_option: true,
                                                           selection_options: [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }])
         form.pages.first.routing_conditions << Condition.new(routing_page_id:
@@ -254,6 +257,7 @@ RSpec.describe FormCopyService do
                                                              exit_page_heading:
                                                              "Exit page heading English",
                                                              exit_page_markdown: "Exit page markdown English")
+        form.pages.last.hint_text = "English last page hint text"
         # Set Welsh-specific translations for form
         form.name_cy = "Ffurflen Gymraeg"
         form.privacy_policy_url_cy = "https://example.com/preifatrwydd"
