@@ -1221,4 +1221,102 @@ RSpec.describe Form, type: :model do
       end
     end
   end
+
+  describe "#normalise_welsh!" do
+    let!(:form) { create(:form, available_languages: languages, pages: [page]) }
+    let!(:page) { create(:page) }
+    let(:welsh_attributes) do
+      {
+        declaration_text: "cy declaration",
+        payment_url: "https://cy.example.com",
+        support_email: "cy@example.com",
+        support_phone: "cy phone",
+        support_url: "https://cy.support.com",
+        support_url_text: "cy support text",
+        what_happens_next_markdown: "cy what happens next",
+      }
+    end
+
+    context "when Welsh is not an available language" do
+      let(:languages) { %w[en] }
+
+      it "does not clear any Welsh translations" do
+        Mobility.with_locale(:cy) do
+          welsh_attributes.each do |attr, value|
+            form.send("#{attr}=", value)
+          end
+        end
+
+        form.normalise_welsh!
+
+        Mobility.with_locale(:cy) do
+          welsh_attributes.each do |attr, value|
+            expect(form.send(attr)).to eq(value)
+          end
+        end
+      end
+
+      it "does not call normalise_welsh! on its pages" do
+        allow(page).to receive(:normalise_welsh!)
+        form.normalise_welsh!
+        expect(page).not_to have_received(:normalise_welsh!)
+      end
+    end
+
+    context "when Welsh is an available language" do
+      let(:languages) { %w[en cy] }
+
+      it "calls normalise_welsh! on each of its pages" do
+        allow(page).to receive(:normalise_welsh!)
+        form.normalise_welsh!
+        expect(page).to have_received(:normalise_welsh!)
+      end
+
+      context "when the English attributes are present" do
+        before do
+          form.declaration_text = "en declaration"
+          form.payment_url = "https://en.example.com"
+
+          form.declaration_text_cy = "cy declaration"
+          form.payment_url_cy = "https://cy.example.com"
+
+          form.save!
+        end
+
+        it "does not clear the Welsh translations" do
+          form.normalise_welsh!
+          form.reload
+          expect(form.declaration_text_cy).to eq("cy declaration")
+          expect(form.payment_url_cy).to eq("https://cy.example.com")
+        end
+      end
+
+      context "when the English attributes are blank" do
+        before do
+          Mobility.with_locale(:en) do
+            welsh_attributes.each_key do |attr|
+              form.send("#{attr}=", "")
+            end
+          end
+
+          Mobility.with_locale(:cy) do
+            welsh_attributes.each do |attr, value|
+              form.send("#{attr}=", value)
+            end
+          end
+          form.save!
+        end
+
+        it "clears the corresponding Welsh translations" do
+          form.normalise_welsh!
+
+          Mobility.with_locale(:cy) do
+            welsh_attributes.each_key do |attr|
+              expect(form.send(attr)).to be_nil
+            end
+          end
+        end
+      end
+    end
+  end
 end
