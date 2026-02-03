@@ -183,6 +183,18 @@ namespace :forms do
 
     Rails.logger.info "data_migrations:add_send_daily_submission_batch_to_form_documents finished"
   end
+
+  desc "Toggle send_daily_submission_batch for a form"
+  task :toggle_send_daily_submission_batch, %i[form_id] => :environment do |_, args|
+    usage_message = "usage: rake forms:toggle_send_daily_submission_batch[<form_id>]".freeze
+    abort usage_message if args[:form_id].blank?
+
+    form = Form.find(args[:form_id])
+    form.update!(send_daily_submission_batch: !form.send_daily_submission_batch)
+
+    Rails.logger.info "send_daily_submission_batch set to #{form.send_daily_submission_batch} for #{fmt_form(form)}."
+    Rails.logger.info "You will need to make the changes live for the change to take effect for live submissions." if form.is_live?
+  end
 end
 
 def move_forms(form_ids, group_id)
