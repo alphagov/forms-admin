@@ -472,6 +472,9 @@ en:
         add_welsh: Add a Welsh version of your form
         title: Create a Welsh version of your form (optional)
     welsh_translation:
+      delete:
+        back_link: Back to edit the Welsh version of your form
+        title: Are you sure you want to delete the Welsh version of your form?
       destroy:
         success: The Welsh version of your form has been deleted
       new:

@@ -1,0 +1,14 @@
+<% set_page_title(title_with_error_prefix(t(".title"), @delete_welsh_translation_input.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(welsh_translation_path(@delete_welsh_translation_input.form.id), t(".back_link")) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render(
+      @delete_welsh_translation_input,
+      url: welsh_translation_destroy_path(@delete_welsh_translation_input.form.id),
+      caption_text: @delete_welsh_translation_input.form.name,
+      legend_text: t(".title"),
+      submit_text: t("save_and_continue"),
+    ) %>
+  </div>
+</div>

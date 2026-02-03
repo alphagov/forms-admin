@@ -271,7 +271,7 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
         delete(welsh_translation_destroy_path(id), params:)
         expect(response).to have_http_status(:unprocessable_content)
         expect(response).to render_template(:delete)
-        # TODO: add expected error
+        expect(response.body).to include(I18n.t("activemodel.errors.models.forms/delete_welsh_translation_input.attributes.confirm.blank"))
         expect(flash).to be_empty
       end
     end
