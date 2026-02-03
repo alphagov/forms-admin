@@ -472,6 +472,8 @@ en:
         add_welsh: Add a Welsh version of your form
         title: Create a Welsh version of your form (optional)
     welsh_translation:
+      destroy:
+        success: The Welsh version of your form has been deleted
       new:
         condition:
           heading: Question %{question_number}’s exit page

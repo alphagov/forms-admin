@@ -196,4 +196,114 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
       end
     end
   end
+
+  describe "#delete" do
+    before do
+      get welsh_translation_delete_path(id)
+    end
+
+    it "renders the template" do
+      expect(response).to have_http_status(:ok)
+      expect(response).to render_template(:delete)
+    end
+
+    context "when the user is not authorized" do
+      let(:current_user) { build :user }
+
+      it "returns 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when the welsh feature is not enabled for the group" do
+      let(:welsh_enabled) { false }
+
+      it "redirects to the form" do
+        expect(response).to redirect_to(form_path(id))
+      end
+    end
+  end
+
+  describe "#destroy" do
+    let(:form) { create(:form, :with_welsh_translation) }
+    let(:confirm) { "yes" }
+    let(:params) { { forms_delete_welsh_translation_input: { form:, confirm: } } }
+
+    context "when 'Yes' is selected" do
+      it "removes the Welsh content from the form" do
+        expect {
+          delete(welsh_translation_destroy_path(id), params:)
+        }.to change { form.reload.name_cy }.to(nil)
+      end
+
+      it "redirects to the form with a success banner" do
+        delete(welsh_translation_destroy_path(id), params:)
+        expect(response).to redirect_to(form_path(id))
+        expect(flash[:success]).to eq(I18n.t("forms.welsh_translation.destroy.success"))
+      end
+    end
+
+    context "when 'No' is selected" do
+      let(:confirm) { "no" }
+
+      it "does not change the form" do
+        expect {
+          delete(welsh_translation_destroy_path(id), params:)
+        }.not_to(change(form, :reload))
+      end
+
+      it "redirects back to the Welsh version page" do
+        delete(welsh_translation_destroy_path(id), params:)
+        expect(response).to redirect_to(welsh_translation_path(id))
+      end
+    end
+
+    context "when no value is selected" do
+      let(:confirm) { nil }
+
+      it "does not change the form" do
+        expect {
+          delete(welsh_translation_destroy_path(id), params:)
+        }.not_to(change(form, :reload))
+      end
+
+      it "re-renders the page with an error and a 422 response" do
+        delete(welsh_translation_destroy_path(id), params:)
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response).to render_template(:delete)
+        # TODO: add expected error
+        expect(flash).to be_empty
+      end
+    end
+
+    context "when the user is not authorized" do
+      let(:current_user) { build :user }
+
+      it "does not change the form" do
+        expect {
+          delete(welsh_translation_destroy_path(id), params:)
+        }.not_to(change(form, :reload))
+      end
+
+      it "returns 403" do
+        delete(welsh_translation_destroy_path(id), params:)
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when the welsh feature is not enabled for the group" do
+      let(:welsh_enabled) { false }
+
+      it "does not change the form" do
+        expect {
+          delete(welsh_translation_destroy_path(id), params:)
+        }.not_to(change(form, :reload))
+      end
+
+      it "redirects to the form" do
+        delete(welsh_translation_destroy_path(id), params:)
+        expect(response).to redirect_to(form_path(id))
+      end
+    end
+  end
 end

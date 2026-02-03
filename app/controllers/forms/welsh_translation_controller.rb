@@ -30,6 +30,30 @@ module Forms
       end
     end
 
+    def delete
+      authorize current_form, :can_edit_form?
+      return redirect_to form_path(current_form) unless welsh_enabled?
+
+      @delete_welsh_translation_input = Forms::DeleteWelshTranslationInput.new(form: current_form)
+    end
+
+    def destroy
+      authorize current_form, :can_edit_form?
+      return redirect_to form_path(current_form) unless welsh_enabled?
+
+      @delete_welsh_translation_input = Forms::DeleteWelshTranslationInput.new(delete_welsh_translation_params)
+
+      if @delete_welsh_translation_input.submit
+        if @delete_welsh_translation_input.confirmed?
+          redirect_to form_path(@delete_welsh_translation_input.form), success: t(".success")
+        else
+          redirect_to welsh_translation_path(@delete_welsh_translation_input.form)
+        end
+      else
+        render :delete, status: :unprocessable_content
+      end
+    end
+
   private
 
     def welsh_enabled?
@@ -45,6 +69,10 @@ module Forms
           { condition_translations_attributes: WelshConditionTranslationInput.attribute_names },
         ],
       ).merge(form: current_form)
+    end
+
+    def delete_welsh_translation_params
+      params.require(:forms_delete_welsh_translation_input).permit(:confirm).merge(form: current_form)
     end
 
     def form_with_pages_and_conditions
