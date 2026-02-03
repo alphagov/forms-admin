@@ -172,6 +172,26 @@ RSpec.describe FormDocumentSyncService do
           service.update_draft_form_document
         }.to(change { FormDocument.exists?(form:, tag: "draft") }.from(false).to(true))
       end
+
+      context "when there is a declaration in Welsh but not in English translations" do
+        let(:form) { create(:form, available_languages: %w[en cy], declaration_text: "", declaration_text_cy: "Shouldn't be here") }
+
+        it "does not include the declaration in Welsh" do
+          service.update_draft_form_document
+          welsh_form_document = FormDocument.find_by(form:, tag: "draft", language: "cy")
+          expect(welsh_form_document.content).to include("declaration_text" => nil)
+        end
+      end
+
+      context "when there is hint test in Welsh but not in English translations" do
+        let(:form) { create(:form, available_languages: %w[en cy], pages: [create(:page, hint_text: "", hint_text_cy: "Shouldn't be here")]) }
+
+        it "does not include the hint text in Welsh" do
+          service.update_draft_form_document
+          welsh_form_document = FormDocument.find_by(form:, tag: "draft", language: "cy")
+          expect(welsh_form_document.content["steps"].first["data"]).to include("hint_text" => nil)
+        end
+      end
     end
 
     context "when there is a draft form document" do

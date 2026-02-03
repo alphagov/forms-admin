@@ -40,6 +40,7 @@ private
   # Create/update documents for all languages for a specific tag
   def synchronize_documents_for_tag(tag, **content_options)
     FormDocument.transaction do
+      form.normalise_welsh!
       form.available_languages.each do |language|
         content = form_content(language, **content_options)
         update_or_create_form_document(tag, content, language)
