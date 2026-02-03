@@ -480,6 +480,7 @@ en:
       new:
         condition:
           heading: Question %{question_number}’s exit page
+        delete_welsh_version: Delete Welsh version
         english_header: English content
         exit_page_heading: Exit page heading
         exit_page_markdown: Exit page content

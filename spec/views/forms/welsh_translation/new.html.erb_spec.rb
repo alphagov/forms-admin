@@ -11,6 +11,7 @@ describe "forms/welsh_translation/new.html.erb" do
   let(:welsh_translation_input) { Forms::WelshTranslationInput.new(form:, page_translations: [welsh_page_translation_input, another_welsh_page_translation_input]).assign_form_values }
   let(:table_presenter) { Forms::TranslationTablePresenter.new }
   let(:mark_complete) { "true" }
+  let(:welsh_translation_delete_path) { "/welsh-translation/delete" }
 
   def build_form(attributes = {})
     default_attributes = {
@@ -35,6 +36,7 @@ describe "forms/welsh_translation/new.html.erb" do
 
   before do
     welsh_translation_input.mark_complete = mark_complete
+    allow(view).to receive(:welsh_translation_delete_path).and_return(welsh_translation_delete_path)
     assign(:table_presenter, table_presenter)
   end
 
@@ -115,6 +117,10 @@ describe "forms/welsh_translation/new.html.erb" do
 
     it "renders a 'Save and continue' button" do
       expect(rendered).to have_button("Save and continue")
+    end
+
+    it "renders a link to delete the translation" do
+      expect(rendered).to have_link(t("forms.welsh_translation.new.delete_welsh_version"), href: welsh_translation_delete_path, class: "govuk-button--warning")
     end
 
     it "renders all of the translation form fields with the welsh lang attribute" do
