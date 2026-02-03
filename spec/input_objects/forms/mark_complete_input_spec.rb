@@ -22,6 +22,14 @@ RSpec.describe Forms::MarkCompleteInput, type: :model do
       end
     end
 
+    context "when mark_complete is boolean true" do
+      let(:mark_complete) { true }
+
+      it "is valid" do
+        expect(mark_complete_input).to be_valid
+      end
+    end
+
     context "when mark_complete is false" do
       let(:mark_complete) { "false" }
 
