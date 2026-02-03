@@ -344,7 +344,10 @@
     <div class="govuk-grid-column-two-thirds">
       <%= render MarkCompleteComponent::View.new(generate_form: false, form_builder: f, form_model: @welsh_translation_input, legend: t(".legend"), hint: t(".hint")) %>
 
-      <%= f.govuk_submit t("save_and_continue") %>
+      <div class="govuk-button-group">
+        <%= f.govuk_submit t("save_and_continue") %>
+        <%= govuk_button_link_to(t(".delete_welsh_version"), welsh_translation_delete_path(@welsh_translation_input.form.id), warning: true) %>
+      </div>
     </div>
   </div>
 <% end %>
