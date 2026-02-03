@@ -642,4 +642,33 @@ RSpec.describe Condition, type: :model do
       })
     end
   end
+
+  describe "#normalise_welsh!" do
+    context "when the condition is destroyed" do
+      it "does not raise an error" do
+        condition.destroy!
+        expect { condition.normalise_welsh! }.not_to raise_error
+      end
+    end
+
+    context "when the condition is an exit page" do
+      subject(:condition) { create :condition, :with_exit_page, exit_page_heading_cy: "Welsh heading", exit_page_markdown_cy: "Welsh markdown" }
+
+      it "doesn't clear Welsh" do
+        condition.normalise_welsh!
+        expect(condition.reload.exit_page_heading_cy).to eq("Welsh heading")
+        expect(condition.reload.exit_page_markdown_cy).to eq("Welsh markdown")
+      end
+    end
+
+    context "when the condition is not an exit page" do
+      subject(:condition) { create :condition, exit_page_heading_cy: "Welsh heading", exit_page_markdown_cy: "Welsh markdown" }
+
+      it "clears Welsh" do
+        condition.normalise_welsh!
+        expect(condition.reload.exit_page_heading_cy).to be_nil
+        expect(condition.reload.exit_page_markdown_cy).to be_nil
+      end
+    end
+  end
 end

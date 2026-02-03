@@ -129,6 +129,8 @@ class Page < ApplicationRecord
         guidance_markdown_cy: nil,
       )
     end
+
+    routing_conditions.each(&:normalise_welsh!)
   end
 
 private

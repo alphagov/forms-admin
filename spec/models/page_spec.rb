@@ -850,5 +850,15 @@ RSpec.describe Page, type: :model do
         end
       end
     end
+
+    context "when the page has conditions" do
+      let!(:condition) { page.routing_conditions.create! }
+
+      it "normalises the conditions" do
+        allow(condition).to receive(:normalise_welsh!)
+        page.normalise_welsh!
+        expect(condition).to have_received(:normalise_welsh!)
+      end
+    end
   end
 end
