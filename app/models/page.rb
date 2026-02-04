@@ -117,6 +117,22 @@ class Page < ApplicationRecord
     check_conditions.where(answer_value: nil).where.not("check_page_id = routing_page_id").first
   end
 
+  def normalise_welsh!
+    # If the page has been destroyed, update! will raise an error
+    return if destroyed?
+
+    update!(hint_text_cy: nil) if hint_text.blank?
+
+    if page_heading.blank? && guidance_markdown.blank?
+      update!(
+        page_heading_cy: nil,
+        guidance_markdown_cy: nil,
+      )
+    end
+
+    routing_conditions.each(&:normalise_welsh!)
+  end
+
 private
 
   def guidance_fields_presence

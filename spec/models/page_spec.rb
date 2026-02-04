@@ -770,4 +770,95 @@ RSpec.describe Page, type: :model do
       end
     end
   end
+
+  describe "#normalise_welsh!" do
+    let!(:page) { create(:page, form: create(:form)) }
+
+    context "when the page is destroyed" do
+      it "does not raise an error" do
+        page.destroy!
+        expect { page.normalise_welsh! }.not_to raise_error
+      end
+    end
+
+    context "with hint text" do
+      context "when hint_text (English) is present" do
+        before do
+          page.update!(hint_text: "English hint")
+          page.update!(hint_text_cy: "Welsh hint")
+          page.normalise_welsh!
+        end
+
+        it "does not clear the Welsh hint text" do
+          expect(page.reload.hint_text_cy).to eq "Welsh hint"
+        end
+      end
+
+      context "when hint_text (English) is blank" do
+        before do
+          page.update!(hint_text: "")
+          page.update!(hint_text_cy: "Welsh hint")
+          page.normalise_welsh!
+        end
+
+        it "clears the Welsh hint text" do
+          expect(page.reload.hint_text_cy).to be_nil
+        end
+      end
+    end
+
+    context "with guidance fields" do
+      let(:welsh_page_heading) { "Welsh heading" }
+      let(:welsh_guidance_markdown) { "Welsh markdown" }
+
+      before do
+        page.update!(
+          page_heading_cy: welsh_page_heading,
+          guidance_markdown_cy: welsh_guidance_markdown,
+        )
+      end
+
+      context "when page_heading and guidance_markdown (English) are present" do
+        before do
+          page.update!(
+            page_heading: "English heading",
+            guidance_markdown: "English markdown",
+          )
+          page.normalise_welsh!
+        end
+
+        it "does not clear the Welsh guidance fields" do
+          page.reload
+          expect(page.page_heading_cy).to eq welsh_page_heading
+          expect(page.guidance_markdown_cy).to eq welsh_guidance_markdown
+        end
+      end
+
+      context "when page_heading and guidance_markdown (English) are blank" do
+        before do
+          page.update!(
+            page_heading: "",
+            guidance_markdown: "",
+          )
+          page.normalise_welsh!
+        end
+
+        it "clears the Welsh guidance fields" do
+          page.reload
+          expect(page.page_heading_cy).to be_nil
+          expect(page.guidance_markdown_cy).to be_nil
+        end
+      end
+    end
+
+    context "when the page has conditions" do
+      let!(:condition) { page.routing_conditions.create! }
+
+      it "normalises the conditions" do
+        allow(condition).to receive(:normalise_welsh!)
+        page.normalise_welsh!
+        expect(condition).to have_received(:normalise_welsh!)
+      end
+    end
+  end
 end

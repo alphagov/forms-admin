@@ -97,7 +97,7 @@ RSpec.describe WelshChangeDetectionService do
       end
 
       context "when page is deleted" do
-        let(:deleted_external_id) { form.pages.first.external_id }
+        let!(:deleted_external_id) { form.pages.first.external_id }
 
         before do
           form.pages.first.destroy!

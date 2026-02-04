@@ -191,6 +191,20 @@ class Form < ApplicationRecord
     available_languages.include?("cy")
   end
 
+  def normalise_welsh!
+    return unless available_languages.include?("cy")
+
+    self.declaration_text_cy = nil if declaration_text.blank?
+    self.payment_url_cy = nil if payment_url.blank?
+    self.support_email_cy = nil if support_email.blank?
+    self.support_phone_cy = nil if support_phone.blank?
+    self.support_url_cy = nil if support_url.blank?
+    self.support_url_text_cy = nil if support_url_text.blank?
+    self.what_happens_next_markdown_cy = nil if what_happens_next_markdown.blank?
+
+    pages.each(&:normalise_welsh!)
+  end
+
 private
 
   def set_external_id

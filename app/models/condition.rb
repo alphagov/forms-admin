@@ -112,6 +112,13 @@ class Condition < ApplicationRecord
     )
   end
 
+  def normalise_welsh!
+    # If the condition has been destroyed, update! will raise an error
+    return if destroyed?
+
+    update!(exit_page_heading_cy: nil, exit_page_markdown_cy: nil) unless is_exit_page?
+  end
+
 private
 
   def has_precondition?
