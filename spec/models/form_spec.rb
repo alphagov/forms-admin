@@ -368,6 +368,32 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "live_welsh_form_document" do
+    context "when there is no live Welsh form document" do
+      subject(:form) { create :form, :live }
+
+      it "returns nil" do
+        expect(form.live_welsh_form_document).to be_nil
+      end
+    end
+
+    context "when there is a live Welsh form document" do
+      subject(:form) { create :form, :live, :with_welsh_translation }
+
+      it "returns the live form document" do
+        expect(form.live_welsh_form_document).to be_a(FormDocument)
+      end
+    end
+
+    context "when there only an archived Welsh form document" do
+      subject(:form) { create :form, :archived, :with_welsh_translation }
+
+      it "returns nil" do
+        expect(form.live_welsh_form_document).to be_nil
+      end
+    end
+  end
+
   describe "archived_form_document" do
     context "when there is no archived form document" do
       it "returns nil" do
@@ -388,6 +414,32 @@ RSpec.describe Form, type: :model do
 
       it "returns nil" do
         expect(form.archived_form_document).to be_nil
+      end
+    end
+  end
+
+  describe "archived_welsh_form_document" do
+    context "when there is no archived Welsh form document" do
+      subject(:form) { create :form, :archived }
+
+      it "returns nil" do
+        expect(form.archived_welsh_form_document).to be_nil
+      end
+    end
+
+    context "when there is an archived Welsh form document" do
+      subject(:form) { create :form, :archived, :with_welsh_translation }
+
+      it "returns nil" do
+        expect(form.archived_welsh_form_document).to be_a(FormDocument)
+      end
+    end
+
+    context "when there is only a live Welsh form document" do
+      subject(:form) { create :form, :live, :with_welsh_translation }
+
+      it "returns nil" do
+        expect(form.archived_welsh_form_document).to be_nil
       end
     end
   end
