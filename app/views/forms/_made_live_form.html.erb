@@ -57,11 +57,32 @@
       <%= govuk_details(summary_text: t('made_live_form.what_is_declaration'), text: t('made_live_form.declaration_description')) %>
     <% end %>
 
-    <h3 class="govuk-heading-m"><%= t('made_live_form.what_happens_next') %></h3>
-    <div class="app-preview-area">
-      <%= GovukFormsMarkdown.render(form_document.what_happens_next_markdown).html_safe %>
-    </div>
-    <%= govuk_details(summary_text: t('made_live_form.what_is_what_happens_next'), text: t('made_live_form.what_happens_next_description')) %>
+    <% if form_document.has_welsh_translation? %>
+      <%= govuk_summary_card(title: t('made_live_form.what_happens_next')) do |card| %>
+        <%= govuk_table do |table| %>
+          <%= table.with_caption(size: 'm', text: t(".section_headings.form_name"))
+          table.with_head(**Forms::TranslationTablePresenter.new.two_column_headers) %>
+
+          <%= table.with_body do |body|
+            body.with_row do |row|
+              row.with_cell do
+                GovukFormsMarkdown.render(form_document.what_happens_next_markdown).html_safe
+              end
+              row.with_cell do
+                GovukFormsMarkdown.render(welsh_form_document.what_happens_next_markdown).html_safe
+              end
+            end
+          end %>
+        <% end %>
+        <%= govuk_details(summary_text: t('made_live_form.what_is_what_happens_next'), text: t('made_live_form.what_happens_next_description')) %>
+      <% end %>
+    <% else %>
+      <h3 class="govuk-heading-m"><%= t('made_live_form.what_happens_next') %></h3>
+      <div class="app-preview-area">
+        <%= GovukFormsMarkdown.render(form_document.what_happens_next_markdown).html_safe %>
+      </div>
+      <%= govuk_details(summary_text: t('made_live_form.what_is_what_happens_next'), text: t('made_live_form.what_happens_next_description')) %>
+    <% end %>
 
     <% if form_document.respond_to?(:payment_url) && form_document.payment_url.present? %>
       <h3 class="govuk-heading-m"><%= t("made_live_form.payment_link") %></h3>
