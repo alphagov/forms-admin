@@ -351,6 +351,11 @@ describe "forms/_made_live_form.html.erb" do
       form_document_content
     end
 
+    it "includes the Welsh name of the form" do
+      expect(rendered).to have_css("h3", text: "Welsh form name")
+      expect(rendered).to have_text(welsh_form_document.name)
+    end
+
     it "includes a link to preview the English version" do
       expect(rendered).to have_link("English", href: "runner-host/preview-live/#{form_document.id}/#{form_document.form_slug}", visible: :all)
     end

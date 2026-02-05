@@ -29,6 +29,11 @@
       </p>
     <% end %>
 
+    <% if form_document.has_welsh_translation? %>
+      <h3 class="govuk-heading-m"><%= t(".welsh_form_name") %></h3>
+      <p><%= welsh_form_document.name %></p>
+    <% end %>
+
     <% if status == :live %>
       <% if form_document.has_welsh_translation? %>
         <h3 class="govuk-heading-m"><%= t(".live_form_url_multilingual.en") %></h3>
