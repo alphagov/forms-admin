@@ -3,9 +3,10 @@ require "rails_helper"
 describe "forms/live/show_form.html.erb" do
   let(:form_metadata) { create :form, :live }
   let(:form_document) { FormDocument::Content.from_form_document(form_metadata.live_form_document) }
+  let(:welsh_form_document) { nil }
 
   before do
-    render(template: "forms/live/show_form", locals: { form_document:, form_metadata: })
+    render(template: "forms/live/show_form", locals: { form_document:, form_metadata:, welsh_form_document: })
   end
 
   it "renders the live tag" do
@@ -27,6 +28,11 @@ describe "forms/live/show_form.html.erb" do
 
   context "when the form has a Welsh translation" do
     let(:form_metadata) { create :form, :live, :with_welsh_translation }
+    let(:welsh_form_document) do
+      form_document_content = FormDocument::Content.from_form_document(form_metadata.live_welsh_form_document)
+      form_document_content.first_made_live_at = 1.week.ago
+      form_document_content
+    end
 
     it "includes a link to preview the English version" do
       expect(rendered).to have_link("English", href: "runner-host/preview-live/#{form_document.id}/#{form_document.form_slug}", visible: :all)

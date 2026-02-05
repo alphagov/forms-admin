@@ -10,6 +10,7 @@ describe "forms/_made_live_form.html.erb" do
     form_document_content.first_made_live_at = 1.week.ago
     form_document_content
   end
+  let(:welsh_form_document) { nil }
   let(:group) { create(:group, name: "Group 1") }
   let(:status) { :live }
   let(:preview_mode) { :preview_live }
@@ -28,6 +29,7 @@ describe "forms/_made_live_form.html.erb" do
     render(partial: "forms/made_live_form", locals: {
       form_metadata:,
       form_document:,
+      welsh_form_document:,
       status:,
       preview_mode:,
       questions_path:,
@@ -343,6 +345,11 @@ describe "forms/_made_live_form.html.erb" do
 
   context "when the form has a Welsh translation" do
     let(:form_metadata) { create :form, :live, :with_welsh_translation, declaration_text:, what_happens_next_markdown:, submission_type:, submission_format: }
+    let(:welsh_form_document) do
+      form_document_content = FormDocument::Content.from_form_document(form_metadata.live_welsh_form_document)
+      form_document_content.first_made_live_at = 1.week.ago
+      form_document_content
+    end
 
     it "includes a link to preview the English version" do
       expect(rendered).to have_link("English", href: "runner-host/preview-live/#{form_document.id}/#{form_document.form_slug}", visible: :all)
