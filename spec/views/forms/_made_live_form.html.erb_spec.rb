@@ -373,5 +373,13 @@ describe "forms/_made_live_form.html.erb" do
       expect(rendered).to have_css("h3", text: "Welsh form URL")
       expect(rendered).to have_text(link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live, locale: :cy))
     end
+
+    it "contains a table displaying the what happens next text in each language" do
+      expect(rendered).to have_css(".govuk-summary-card__title", text: "What happens next information")
+      expect(rendered).to have_css("th", text: "English content")
+      expect(rendered).to have_css("td", text: form_document.what_happens_next_markdown)
+      expect(rendered).to have_css("th", text: "Welsh content")
+      expect(rendered).to have_css("td", text: welsh_form_document.what_happens_next_markdown)
+    end
   end
 end
