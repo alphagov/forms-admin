@@ -46,4 +46,8 @@ class FormDocument::Content
   def self.from_form_document(form_document)
     new(**form_document.content)
   end
+
+  def has_welsh_translation?
+    available_languages.include?("cy")
+  end
 end
