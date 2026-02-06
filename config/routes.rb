@@ -272,9 +272,11 @@ Rails.application.routes.draw do
     match "/500", to: "errors#internal_server_error", as: :error_500, via: :all
   end
 
+  get "/sitemap" => "sitemap#index", as: :sitemap
+
   direct(:accessibility_statement) { "https://www.forms.service.gov.uk/accessibility" }
   direct(:cookies) { "https://www.forms.service.gov.uk/cookies" }
   direct(:privacy) { "https://www.forms.service.gov.uk/privacy" }
   direct(:terms_of_use) { "https://www.forms.service.gov.uk/terms-of-use" }
-  direct(:support) { Settings.forms_product_page.support_url }
+  direct(:support) { "https://www.forms.service.gov.uk/support" }
 end
