@@ -5,6 +5,7 @@ FactoryBot.define do
     creator { association :user, organisation: }
     status { :trial }
     welsh_enabled { false }
+    external_id { SecureRandom.base58(8) }
 
     trait :org_has_org_admin do
       organisation { association :organisation, :with_org_admin, id: 1, slug: "test-org" }
