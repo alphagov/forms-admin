@@ -5,7 +5,7 @@ class Reports::FormDocumentsService
       form_documents = FormDocument.joins(form: { group_form: { group: :organisation } })
                   .where(tag: form_document_tags, language: "en")
                   .where.not(organisation: { "internal": true })
-                  .select("form_documents.*", "organisation.name AS organisation_name", "organisation.id AS organisation_id", "groups.external_id AS group_external_id", "groups.name AS group_name")
+                  .select("form_documents.*", "organisation.name AS organisation_name", "organisation.id AS organisation_id", "groups.external_id AS group_external_id", "groups.name AS group_name", "welsh_completed AS welsh_completed")
 
       if tag == "draft"
         form_documents = form_documents.where(form: { "state": %w[draft live_with_draft archived_with_draft] })
@@ -62,6 +62,10 @@ class Reports::FormDocumentsService
 
     def is_copy?(form_document)
       form_document["content"]["copied_from_id"].present?
+    end
+
+    def has_welsh_translation(form_document)
+      form_document["welsh_completed"].present?
     end
 
   private
