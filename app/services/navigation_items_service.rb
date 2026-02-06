@@ -62,7 +62,7 @@ private
   def support_navigation_item
     return nil if Settings.forms_product_page.support_url.blank?
 
-    NavigationItem.new(text: I18n.t("header.support"), href: Settings.forms_product_page.support_url, active: false)
+    NavigationItem.new(text: I18n.t("header.support"), href: support_url, active: false)
   end
 
   def profile_navigation_item
