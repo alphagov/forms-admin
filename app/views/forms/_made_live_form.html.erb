@@ -52,9 +52,29 @@
     <p><%= govuk_link_to t('made_live_form.questions_link', count: form_document.steps.count), questions_path %></p>
 
     <% if form_document.declaration_text.present? %>
-      <h3 class="govuk-heading-m"><%= t('made_live_form.declaration') %></h3>
-      <p><%= form_document.declaration_text %></p>
-      <%= govuk_details(summary_text: t('made_live_form.what_is_declaration'), text: t('made_live_form.declaration_description')) %>
+      <% if form_document.has_welsh_translation? %>
+        <%= govuk_summary_card(title: t('made_live_form.declaration')) do |card| %>
+          <%= govuk_table do |table| %>
+            <%= table.with_caption(size: 'm', text: t("made_live_form.declaration"), classes:"govuk-visually-hidden")
+          table.with_head(**Forms::TranslationTablePresenter.new.two_column_headers) %>
+
+            <%= table.with_body do |body|
+            body.with_row do |row|
+              row.with_cell do
+                form_document.declaration_text
+              end
+              row.with_cell do
+                welsh_form_document.declaration_text
+              end
+            end
+          end %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <h3 class="govuk-heading-m"><%= t('made_live_form.declaration') %></h3>
+        <p><%= form_document.declaration_text %></p>
+        <%= govuk_details(summary_text: t('made_live_form.what_is_declaration'), text: t('made_live_form.declaration_description')) %>
+      <% end %>
     <% end %>
 
     <% if form_document.has_welsh_translation? %>
