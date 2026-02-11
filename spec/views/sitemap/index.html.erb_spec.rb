@@ -75,7 +75,7 @@ describe "sitemap/index.html.erb" do
     it "does not include a link to the MOUs page" do
       render_template
 
-      expect(rendered).to have_link("GOV.UK Forms Memorandum of Understanding")
+      expect(rendered).not_to have_link("Memorandum of Understanding")
     end
   end
 
