@@ -344,7 +344,7 @@ describe "forms/_made_live_form.html.erb" do
   end
 
   context "when the form has a Welsh translation" do
-    let(:form_metadata) { create :form, :live, :with_welsh_translation, declaration_text:, what_happens_next_markdown:, submission_type:, submission_format: }
+    let(:form_metadata) { create :form, :live, :with_welsh_translation, what_happens_next_markdown:, submission_type:, submission_format: }
     let(:welsh_form_document) do
       form_document_content = FormDocument::Content.from_form_document(form_metadata.live_welsh_form_document)
       form_document_content.first_made_live_at = 1.week.ago
@@ -380,6 +380,18 @@ describe "forms/_made_live_form.html.erb" do
       expect(rendered).to have_css("td", text: form_document.what_happens_next_markdown)
       expect(rendered).to have_css("th", text: "Welsh content")
       expect(rendered).to have_css("td", text: welsh_form_document.what_happens_next_markdown)
+    end
+
+    context "when the form has a declaration" do
+      let(:form_metadata) { create :form, :live, :with_welsh_translation, declaration_text:, what_happens_next_markdown:, submission_type:, submission_format: }
+
+      it "contains a table displaying the declaration text in each language" do
+        expect(rendered).to have_css(".govuk-summary-card__title", text: "Declaration")
+        expect(rendered).to have_css("th", text: "English content")
+        expect(rendered).to have_css("td", text: form_document.declaration_text)
+        expect(rendered).to have_css("th", text: "Welsh content")
+        expect(rendered).to have_css("td", text: welsh_form_document.declaration_text)
+      end
     end
   end
 end
