@@ -60,7 +60,7 @@
     <% if form_document.has_welsh_translation? %>
       <%= govuk_summary_card(title: t('made_live_form.what_happens_next')) do |card| %>
         <%= govuk_table do |table| %>
-          <%= table.with_caption(size: 'm', text: t(".section_headings.form_name"))
+          <%= table.with_caption(size: 'm', text: t("made_live_form.what_happens_next"), classes:"govuk-visually-hidden")
           table.with_head(**Forms::TranslationTablePresenter.new.two_column_headers) %>
 
           <%= table.with_body do |body|
