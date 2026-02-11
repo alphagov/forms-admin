@@ -414,5 +414,24 @@ describe "forms/_made_live_form.html.erb" do
       expect(rendered).to have_css("th", text: "Welsh content")
       expect(rendered).to have_css("td", text: welsh_form_document.privacy_policy_url)
     end
+
+    context "with support details" do
+      let(:form_metadata) { create :form, :live, :with_welsh_translation, what_happens_next_markdown:, submission_type:, submission_format:, support_email: "support@example.gov.uk", support_phone: "phone details", support_url_text: "website", support_url: "www.example.gov.uk" }
+
+      it "contains a table displaying the support details in each language" do
+        expect(rendered).to have_css(".govuk-summary-card__title", text: "Your form’s contact details for support")
+        expect(rendered).to have_css("th", text: "English content")
+        expect(rendered).to have_css("th", text: "Welsh content")
+        expect(rendered).to have_css("th", text: "Email")
+        expect(rendered).to have_css("td", text: form_document.support_email)
+        expect(rendered).to have_css("td", text: welsh_form_document.support_email)
+        expect(rendered).to have_css("th", text: "Phone")
+        expect(rendered).to have_css("td", text: form_document.support_phone)
+        expect(rendered).to have_css("td", text: welsh_form_document.support_phone)
+        expect(rendered).to have_css("th", text: "Support contact online")
+        expect(rendered).to have_css("td > a[href=\"#{form_document.support_url}\"]", text: form_document.support_url_text)
+        expect(rendered).to have_css("td > a[href=\"#{welsh_form_document.support_url}\"]", text: welsh_form_document.support_url_text)
+      end
+    end
   end
 end
