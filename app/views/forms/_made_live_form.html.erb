@@ -140,14 +140,27 @@
       <p><%= t("made_live_form.submission_format.email.#{submission_format}_html") %></p>
     <% end %>
 
-    <h3 class="govuk-heading-m"><%= t('made_live_form.privacy_policy_link') %></h3>
-    <p><%= govuk_link_to(form_document.privacy_policy_url, form_document.privacy_policy_url) %></p>
+    <% if form_document.has_welsh_translation? %>
+      <%= govuk_summary_card(title: t('made_live_form.privacy_policy_link')) do |card| %>
+        <%= govuk_table do |table| %>
+          <%= table.with_caption(size: 'm', text: t("made_live_form.privacy_policy_link"), classes:"govuk-visually-hidden")
+          table.with_head(**Forms::TranslationTablePresenter.new.two_column_headers) %>
 
-    <h3 class="govuk-heading-m"><%= t('made_live_form.contact_details') %></h3>
-
-    <% if form_document.support_email %>
-      <h4 class="govuk-heading-s"><%= t('made_live_form.support_email') %></h4>
-      <p class="govuk-!-text-break-word"><%= form_document.support_email %></p>
+          <%= table.with_body do |body|
+            body.with_row do |row|
+              row.with_cell do
+                govuk_link_to(form_document.privacy_policy_url, form_document.privacy_policy_url)
+              end
+              row.with_cell do
+                govuk_link_to(welsh_form_document.privacy_policy_url, welsh_form_document.privacy_policy_url)
+              end
+            end
+          end %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <h3 class="govuk-heading-m"><%= t('made_live_form.privacy_policy_link') %></h3>
+      <p><%= govuk_link_to(form_document.privacy_policy_url, form_document.privacy_policy_url) %></p>
     <% end %>
 
     <% if form_document.support_phone %>
