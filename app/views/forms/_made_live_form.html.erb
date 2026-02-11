@@ -105,8 +105,28 @@
     <% end %>
 
     <% if form_document.respond_to?(:payment_url) && form_document.payment_url.present? %>
-      <h3 class="govuk-heading-m"><%= t("made_live_form.payment_link") %></h3>
-      <p><%= govuk_link_to(form_document.payment_url, form_document.payment_url) %></p>
+      <% if form_document.has_welsh_translation? %>
+        <%= govuk_summary_card(title: t('made_live_form.payment_link')) do |card| %>
+          <%= govuk_table do |table| %>
+            <%= table.with_caption(size: 'm', text: t("made_live_form.payment_link"), classes:"govuk-visually-hidden")
+          table.with_head(**Forms::TranslationTablePresenter.new.two_column_headers) %>
+
+            <%= table.with_body do |body|
+            body.with_row do |row|
+              row.with_cell do
+                govuk_link_to(form_document.payment_url, form_document.payment_url)
+              end
+              row.with_cell do
+                govuk_link_to(welsh_form_document.payment_url, welsh_form_document.payment_url)
+              end
+            end
+          end %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <h3 class="govuk-heading-m"><%= t("made_live_form.payment_link") %></h3>
+        <p><%= govuk_link_to(form_document.payment_url, form_document.payment_url) %></p>
+      <% end %>
     <% end %>
 
     <h3 class="govuk-heading-m"><%= t("made_live_form.how_you_get_completed_forms") %></h3>
