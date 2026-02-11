@@ -406,5 +406,13 @@ describe "forms/_made_live_form.html.erb" do
         expect(rendered).to have_css("td", text: welsh_form_document.payment_url)
       end
     end
+
+    it "contains a table displaying the privacy link in each language" do
+      expect(rendered).to have_css(".govuk-summary-card__title", text: "Privacy policy link")
+      expect(rendered).to have_css("th", text: "English content")
+      expect(rendered).to have_css("td", text: form_document.privacy_policy_url)
+      expect(rendered).to have_css("th", text: "Welsh content")
+      expect(rendered).to have_css("td", text: welsh_form_document.privacy_policy_url)
+    end
   end
 end
