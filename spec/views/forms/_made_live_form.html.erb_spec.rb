@@ -393,5 +393,18 @@ describe "forms/_made_live_form.html.erb" do
         expect(rendered).to have_css("td", text: welsh_form_document.declaration_text)
       end
     end
+
+    context "when the form has a GOV.UK Pay payment link" do
+      let(:payment_url) { "https://www.gov.uk/payments/your-payment-link" }
+      let(:form_metadata) { create :form, :live, :with_welsh_translation, declaration_text:, what_happens_next_markdown:, submission_type:, submission_format:, payment_url: }
+
+      it "contains a table displaying the payment link in each language" do
+        expect(rendered).to have_css(".govuk-summary-card__title", text: "GOV.UK Pay payment link")
+        expect(rendered).to have_css("th", text: "English content")
+        expect(rendered).to have_css("td", text: form_document.payment_url)
+        expect(rendered).to have_css("th", text: "Welsh content")
+        expect(rendered).to have_css("td", text: welsh_form_document.payment_url)
+      end
+    end
   end
 end
