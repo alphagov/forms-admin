@@ -103,7 +103,7 @@ group :development, :test do
   gem "bundler-audit", "~> 0.9.3"
 
   # For detecting security vulnerabilities in Ruby on Rails applications via static analysis.
-  gem "brakeman", "~> 7.1.2"
+  gem "brakeman", "~> 8.0.2"
 end
 
 group :test do
