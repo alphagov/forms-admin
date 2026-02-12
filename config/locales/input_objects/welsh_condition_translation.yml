@@ -13,6 +13,9 @@ en:
               too_long: The exit page content for question %{question_number} cannot be longer than %{count} characters
               unsupported_markdown_syntax: Exit page content for question %{question_number} can only contain formatting for links, subheadings (##), bulleted lists (*), or numbered lists (1.)
   helpers:
+    hints:
+      forms_welsh_condition_translation_input:
+        exit_page_markdown_cy: Enter Welsh exit page content
     label:
       forms_welsh_condition_translation_input:
         exit_page_heading_cy_html: Enter Welsh exit page heading <span class="govuk-visually-hidden">for question %{question_number}’s exit page</span>
