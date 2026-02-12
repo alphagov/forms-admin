@@ -24,6 +24,10 @@ en:
             selection_options_cy:
               uniqueness: All of question %{question_number}’s options must be unique
   helpers:
+    hint:
+      forms_welsh_page_translation_input:
+        guidance_markdown_cy: Enter Welsh guidance text
+        what_happens_next_markdown_cy: Enter information about what happens next in Welsh
     label:
       forms_welsh_page_translation_input:
         guidance_markdown_cy_html: Enter Welsh guidance text <span class="govuk-visually-hidden">for question %{question_number}</span>
