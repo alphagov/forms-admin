@@ -178,7 +178,7 @@ RSpec.describe Form, type: :model do
       let(:form) { create :form, pages: [routing_page, goto_page] }
       let(:routing_page) do
         new_routing_page = create :page
-        new_routing_page.routing_conditions = [(create :condition, routing_page_id: new_routing_page.id, goto_page_id: nil)]
+        new_routing_page.routing_conditions = [create(:condition, routing_page_id: new_routing_page.id, goto_page_id: nil)]
         new_routing_page
       end
       let(:goto_page) { create :page }
@@ -741,7 +741,7 @@ RSpec.describe Form, type: :model do
     let(:form) { create :form, pages: [routing_page, goto_page] }
     let(:routing_page) do
       new_routing_page = create :page
-      new_routing_page.routing_conditions = [(create :condition, routing_page_id: new_routing_page.id, goto_page_id:)]
+      new_routing_page.routing_conditions = [create(:condition, routing_page_id: new_routing_page.id, goto_page_id:)]
       new_routing_page
     end
     let(:goto_page) { create :page }

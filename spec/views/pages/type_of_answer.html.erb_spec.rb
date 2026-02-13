@@ -69,7 +69,7 @@ describe "pages/type_of_answer.html.erb", type: :view do
   context "when editing an existing" do
     let(:page) { OpenStruct.new(routing_conditions:, answer_type:) }
     let(:answer_type) { "selection" }
-    let(:routing_conditions) { [(build :condition)] }
+    let(:routing_conditions) { [build(:condition)] }
 
     it "displays a warning about routes being deleted if answer type changes" do
       expect(Capybara.string(rendered.html).find(".govuk-notification-banner__content").text(normalize_ws: true))

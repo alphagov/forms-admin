@@ -80,7 +80,7 @@ describe "pages/selection/type.html.erb", type: :view do
         end
 
         context "when a routing condition is set" do
-          let(:routing_conditions) { [(build :condition)] }
+          let(:routing_conditions) { [build(:condition)] }
 
           context "when the options will not need to be reduced" do
             before do
