@@ -21,9 +21,7 @@ class Pages::SecondarySkipInput < BaseInput
       return record.save_and_update_form
     end
 
-    if record.present?
-      record.destroy_and_update_form!
-    end
+    record.presence&.destroy_and_update_form!
 
     Condition.create_and_update_form!(
       check_page_id: page.id,

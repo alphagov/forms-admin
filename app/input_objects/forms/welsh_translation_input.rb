@@ -90,9 +90,7 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
 
     form.what_happens_next_markdown_cy = what_happens_next_markdown_cy
 
-    if page_translations.present?
-      page_translations.each(&:submit)
-    end
+    page_translations.presence&.each(&:submit)
 
     form.welsh_completed = mark_complete
 

@@ -47,9 +47,7 @@ class Forms::WelshPageTranslationInput < BaseInput
     page.page_heading_cy = page_has_page_heading_and_guidance_markdown? ? page_heading_cy : nil
     page.guidance_markdown_cy = page_has_page_heading_and_guidance_markdown? ? guidance_markdown_cy : nil
 
-    if condition_translations.present?
-      condition_translations.each(&:submit)
-    end
+    condition_translations.presence&.each(&:submit)
 
     page.answer_settings_cy = welsh_answer_settings
 

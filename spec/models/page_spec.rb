@@ -470,7 +470,7 @@ RSpec.describe Page, type: :model do
     end
 
     context "when page has routing conditions" do
-      let(:routing_conditions) { [(create :condition)] }
+      let(:routing_conditions) { [create :condition] }
       let(:check_conditions) { routing_conditions }
 
       it "does not delete existing conditions" do

@@ -61,7 +61,7 @@ class PageListComponent::PageListComponentPreview < ViewComponent::Preview
                             (build :condition, id: 2, routing_page_id: 1, check_page_id: 1, answer_value: "England"),
                             (build :condition, id: 3, routing_page_id: 1, check_page_id: 1),
                             (build :condition, id: 5, routing_page_id: 1, check_page_id: 1, answer_value: "Wales", goto_page_id: 2)]
-    routing_conditions_2 = [(build :condition, id: 4, routing_page_id: 2, check_page_id: 2, answer_value: "England", goto_page_id: 1)]
+    routing_conditions_2 = [build :condition, id: 4, routing_page_id: 2, check_page_id: 2, answer_value: "England", goto_page_id: 1]
     pages = [(build :page, id: 1, position: 1, question_text: "Enter your name", routing_conditions: routing_conditions_1),
              (build :page, id: 2, position: 2, question_text: "What is your pet's phone number?", routing_conditions: routing_conditions_2),
              (build :page, id: 3, position: 3, question_text: "How many pets do you own?", routing_conditions: [])]
