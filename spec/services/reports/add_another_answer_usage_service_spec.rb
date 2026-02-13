@@ -7,7 +7,7 @@ describe Reports::AddAnotherAnswerUsageService do
     let!(:add_another_answer_draft_form) { create(:form, state: "draft", pages: draft_form_pages) }
     let(:draft_form_pages) do
       [
-        build :page, answer_type: "name", is_repeatable: true,
+        build(:page, answer_type: "name", is_repeatable: true),
       ]
     end
     let!(:add_another_answer_live_form) { create(:form, state: "live", pages: live_form_pages) }
