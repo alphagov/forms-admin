@@ -1,0 +1,53 @@
+<% set_page_title(t("page_titles.sitemap")) %>
+<h1 class="govuk-heading-l"><%= t("page_titles.sitemap") %></h1>
+
+<h2 class="govuk-heading-m"><%= link_to t("page_titles.group_index"), groups_path %></h2>
+<% if active_groups.any? %>
+  <h3 class="govuk-heading-s"><%= t("groups.index.active_title") %>:</h3>
+  <ul class="govuk-list govuk-list--spaced">
+    <% active_groups.each do |group| %>
+      <li><%= link_to group.name, group_path(group) %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% if trial_groups.any? %>
+  <h3 class="govuk-heading-s"><%= t("groups.index.trial_title") %>:</h3>
+  <ul class="govuk-list govuk-list--spaced">
+    <% trial_groups.each do |group| %>
+      <li><%= link_to group.name, group_path(group) %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% if should_show_mous_link %>
+  <h2 class="govuk-heading-m"><%= link_to t("page_titles.mou_signatures"), mou_signatures_path %></h2>
+  <ul class="govuk-list govuk-list--spaced">
+    <li><%= link_to t("page_titles.mou_signature_new"), mou_signature_url %></li>
+  </ul>
+<% end %>
+
+<% if should_show_users_link %>
+  <h2 class="govuk-heading-m"><%= link_to t("users.index.title"), users_path %></h2>
+<% end %>
+
+<% if should_show_reports_link %>
+  <h2 class="govuk-heading-m"><%= link_to t("reports.index.title"), reports_path %></h2>
+  <ul class="govuk-list govuk-list--spaced">
+    <li><%= govuk_link_to t("reports.add_another_answer.title"), report_add_another_answer_path %></li>
+    <li><%= govuk_link_to t("reports.features.title", tag: tag_label("live")), report_features_path(tag: :live) %></li>
+    <li><%= govuk_link_to t("reports.features.title", tag: tag_label("live-or-archived")), report_features_path(tag: 'live-or-archived') %></li>
+    <li><%= govuk_link_to t("reports.features.title", tag: tag_label("draft")), report_features_path(tag: :draft) %></li>
+    <li><%= govuk_link_to t("reports.selection_questions_summary.title", tag: tag_label("live")), report_selection_questions_summary_path(tag: :live) %></li>
+    <li><%= govuk_link_to t("reports.users.title"), report_users_path %></li>
+    <li><%= govuk_link_to t("reports.last_signed_in_at.title"), report_last_signed_in_at_path %></li>
+    <li><%= govuk_link_to t("reports.csv_downloads.title"), report_csv_downloads_path %></li>
+    <li><%= govuk_link_to t("reports.contact_for_research.title"), report_contact_for_research_path %></li>
+  </ul>
+<% end %>
+
+<h2 class="govuk-heading-m"><%= link_to t("header.support"), support_url %></h2>
+<h2 class="govuk-heading-m"><%= link_to t("footer.accessibility_statement"), accessibility_statement_url %></h2>
+<h2 class="govuk-heading-m"><%= link_to t("footer.cookies"), cookies_url %></h2>
+<h2 class="govuk-heading-m"><%= link_to t("footer.privacy"), privacy_url %></h2>
+<h2 class="govuk-heading-m"><%= link_to t("footer.terms_of_use"), terms_of_use_url %></h2>
