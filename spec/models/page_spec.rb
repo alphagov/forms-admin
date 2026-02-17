@@ -418,12 +418,18 @@ RSpec.describe Page, type: :model do
     end
 
     context "when the form question section is complete" do
-      let(:form) { create(:form, question_section_completed: true) }
+      let(:form) { create(:form, :live, question_section_completed: true) }
 
       it "updates the form to mark the question section as incomplete" do
         expect {
           described_class.create_and_update_form!(**page_params)
         }.to change { form.reload.question_section_completed }.to(false)
+      end
+
+      it "changes the form to live_with_draft" do
+        expect {
+          described_class.create_and_update_form!(**page_params)
+        }.to change { form.reload.state }.to("live_with_draft")
       end
     end
 
@@ -444,14 +450,19 @@ RSpec.describe Page, type: :model do
   end
 
   describe "#destroy_and_update_form!" do
-    let(:page) { create :page }
-    let(:form) { page.form }
+    let(:form) { create :form, :live, question_section_completed: true }
+    let(:page) { create :page, form: }
 
     it "sets form.question_section_completed to false" do
-      form.update!(question_section_completed: true)
+      expect {
+        page.destroy_and_update_form!
+      }.to change { form.reload.question_section_completed }.to(false)
+    end
 
-      page.destroy_and_update_form!
-      expect(form.question_section_completed).to be false
+    it "changes the form to live_with_draft" do
+      expect {
+        page.destroy_and_update_form!
+      }.to change { form.reload.state }.to("live_with_draft")
     end
   end
 

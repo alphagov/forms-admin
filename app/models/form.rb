@@ -51,6 +51,8 @@ class Form < ApplicationRecord
   def save_question_changes!
     self.question_section_completed = false
     save_draft!
+    # Make sure the updated_at is updated as we use this to determine if the form has changed in forms-runner.
+    touch unless changed?
   end
 
   def save_draft!

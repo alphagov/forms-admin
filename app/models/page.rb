@@ -46,7 +46,7 @@ class Page < ApplicationRecord
 
   def destroy_and_update_form!
     form = self.form
-    destroy! && form.update!(question_section_completed: false)
+    destroy! && form.save_question_changes!
   end
 
   def save_and_update_form
