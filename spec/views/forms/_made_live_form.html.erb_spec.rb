@@ -319,6 +319,20 @@ describe "forms/_made_live_form.html.erb" do
     end
   end
 
+  describe "the archive welsh button" do
+    it "template does not contain a link to archive the welsh version of the form" do
+      expect(rendered).not_to have_link("Archive the Welsh version of this form", href: archive_welsh_path(form_document.id))
+    end
+
+    context "when the form is live and the form has a welsh translation" do
+      let(:form_metadata) { create :form, :live, :with_welsh_translation }
+
+      it "template contains a link to archive the welsh version of the form" do
+        expect(rendered).to have_link("Archive the Welsh version of this form", href: archive_welsh_path(form_document.id))
+      end
+    end
+  end
+
   it "renders the metrics summary component" do
     expect(rendered).to have_text("Form metrics for the past 7 days")
   end

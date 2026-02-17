@@ -1051,6 +1051,7 @@ en:
     not_since_last_signed_in_at_added: Sometime between 3 November 2023 and 4 November 2024
   made_live_form:
     archive_this_form: Archive this form
+    archive_welsh: Archive the Welsh version of this form
     contact_details: Your form’s contact details for support
     csv_and_json: CSV and JSON
     declaration: Declaration
