@@ -21,12 +21,11 @@ class Condition < ApplicationRecord
 
   def save_and_update_form
     save!
-    form.question_section_completed = false
-    form.save_draft!
+    form.save_question_changes!
   end
 
   def destroy_and_update_form!
-    destroy! && form.update!(question_section_completed: false)
+    destroy! && form.save_question_changes!
   end
 
   def validation_errors

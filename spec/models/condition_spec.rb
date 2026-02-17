@@ -168,6 +168,33 @@ RSpec.describe Condition, type: :model do
     end
   end
 
+  describe "#destroy_and_update_form!" do
+    subject(:condition) { create :condition, :with_exit_page, routing_page: page, check_page: page }
+
+    let(:page) { create :page, :with_selection_settings, form: }
+    let(:form) { create :form, question_section_completed: true }
+
+    before do
+      condition.destroy_and_update_form!
+    end
+
+    it "destroys the condition" do
+      expect(condition).to be_destroyed
+    end
+
+    it "sets form.question_section_completed to false" do
+      expect(form.reload.question_section_completed).to be false
+    end
+
+    context "when the form is live" do
+      let(:form) { create :form, :live }
+
+      it "updates the form state to live_with_draft" do
+        expect(form.reload.state).to eq("live_with_draft")
+      end
+    end
+  end
+
   describe "#validation_errors" do
     let(:form) { create :form }
     let(:routing_page) { create :page, form: }
