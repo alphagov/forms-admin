@@ -31,6 +31,27 @@ class FormDocumentSyncService
     end
   end
 
+  def synchronize_archived_welsh_form
+    FormDocument.transaction do
+      # Ensure we only archive forms that are currently live
+      raise ActiveRecord::RecordNotFound, "Cannot archive a form that has no live version." unless FormDocument.where(form:, tag: LIVE_TAG, language: "cy").exists?
+
+      # Remove any pre-existing archived documents
+      FormDocument.where(form:, tag: ARCHIVED_TAG, language: "cy").delete_all
+
+      # Change all live documents to archived
+      FormDocument.where(form:, tag: LIVE_TAG, language: "cy").update_all(tag: ARCHIVED_TAG)
+
+      # Update the content of the live version to show that it doesn't support welsh anymore
+      FormDocument.where(form:, tag: [LIVE_TAG, DRAFT_TAG], language: "en").find_each do |live_document|
+        live_document.content["available_languages"] = live_document.content["available_languages"].reject { |lang| lang == "cy" }
+        live_document.save!
+      end
+
+      form.update_columns(available_languages: %w[en], welsh_completed: false)
+    end
+  end
+
   def update_draft_form_document
     synchronize_documents_for_tag(DRAFT_TAG)
   end
