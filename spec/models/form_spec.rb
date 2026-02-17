@@ -546,6 +546,14 @@ RSpec.describe Form, type: :model do
         }.to change { form.reload.state }.to("archived_with_draft")
       end
     end
+
+    context "when no attributes on the form will be changed" do
+      it "still changes the form's updated_at" do
+        expect {
+          form.save_question_changes!
+        }.to(change { form.reload.updated_at })
+      end
+    end
   end
 
   describe "#save_draft!" do
