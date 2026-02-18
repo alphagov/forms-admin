@@ -66,11 +66,14 @@
                     <pre class="app-translation-table__markdown-preview"><%= page_form.object.page.guidance_markdown %></pre>
                   <% end %>
                   <%= row.with_cell do |cell| %>
-                    <%= page_form.govuk_text_area :guidance_markdown_cy,
-                      id: page_form.object.form_field_id(:guidance_markdown_cy),
-                      label: { text: t("helpers.label.forms_welsh_page_translation_input.guidance_markdown_cy_html", question_number: page_form.object.page.position), for: page_form.object.form_field_id(:guidance_markdown_cy) },
-                      lang: "cy"
-                    %>
+                    <%= render MarkdownEditorComponent::View.new(:guidance_markdown_cy,
+                      form_builder: page_form,
+                      render_preview_path: nil,
+                      preview_html: nil,
+                      form_model: page_form.object,
+                      label: t("helpers.label.forms_welsh_page_translation_input.guidance_markdown_cy_html", question_number: page_form.object.page.position),
+                      hint: t("helpers.hint.forms_welsh_page_translation_input.guidance_markdown_cy"),
+                      lang: "cy") %>
                 <% end %>
               <% end %>
             <% end %>
@@ -174,11 +177,14 @@
                 <pre class="app-translation-table__markdown-preview"><%= condition_form.object.condition.exit_page_markdown %></pre>
               <% end %>
               <%= row.with_cell do |cell| %>
-                <%= condition_form.govuk_text_area :exit_page_markdown_cy,
-                  id: condition_form.object.form_field_id(:exit_page_markdown_cy),
-                  label: { text: t("helpers.label.forms_welsh_condition_translation_input.exit_page_markdown_cy_html", question_number: page_form.object.page.position), for: condition_form.object.form_field_id(:exit_page_markdown_cy) },
-                  lang: "cy"
-                %>
+                <%= render MarkdownEditorComponent::View.new(:exit_page_markdown_cy,
+                  form_builder: condition_form,
+                  render_preview_path: nil,
+                  preview_html: nil,
+                  form_model: condition_form.object,
+                  label: t("helpers.label.forms_welsh_condition_translation_input.exit_page_markdown_cy_html", question_number: page_form.object.page.position),
+                  hint: t("helpers.hints.forms_welsh_condition_translation_input.exit_page_markdown_cy"),
+                  lang: "cy") %>
             <% end %>
           <% end %>
         <% end %>
@@ -231,7 +237,14 @@
                   <pre class="app-translation-table__markdown-preview"><%= @welsh_translation_input.form.what_happens_next_markdown %></pre>
                 <%end %>
                 <% row.with_cell do %>
-                  <%= f.govuk_text_area :what_happens_next_markdown_cy, lang: "cy" %>
+                  <%= render MarkdownEditorComponent::View.new(:what_happens_next_markdown_cy,
+                    form_builder: f,
+                    render_preview_path: nil,
+                    preview_html: nil,
+                    form_model: @welsh_translation_input,
+                    label: t("helpers.label.forms_welsh_translation_input.what_happens_next_markdown_cy"),
+                    hint: t("helpers.hint.forms_welsh_page_translation_input.what_happens_next_markdown_cy"),
+                    lang: "cy") %>
                 <% end %>
               <% end %>
             <% end %>
