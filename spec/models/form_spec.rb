@@ -548,10 +548,18 @@ RSpec.describe Form, type: :model do
     end
 
     context "when no attributes on the form will be changed" do
+      let(:form) { create :form, question_section_completed: false }
+
       it "still changes the form's updated_at" do
         expect {
           form.save_question_changes!
         }.to(change { form.reload.updated_at })
+      end
+
+      it "changes the form_document's updated at" do
+        expect {
+          form.save_question_changes!
+        }.to(change { form.reload.draft_form_document.content["updated_at"] })
       end
     end
   end
