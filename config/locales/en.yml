@@ -200,6 +200,17 @@ en:
       form_name_heading: Form name
       links_will_no_longer_work_body: People who go to the form’s URL will get an error page. Make sure any links to the form are removed.
       links_will_no_longer_work_heading: Links to this form will no longer work
+  archive_welsh:
+    confirm:
+      body_html: |
+        <p>When you archive the Welsh version of this form:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>links to the Welsh version of the form will no longer work - make sure any links to it have been removed</li>
+          <li>people will still be able to complete the English version of the form</li>
+          <li>anyone who is part way through completing the form will lose their progress and get an error page</li>
+        </ul>
+        <p>You can make a new draft of the form and make the Welsh version live again if you need to.</p>
+      radios_legend: Are you sure you want to archive the Welsh version of this form?
   back_link:
     form_create: Back to create your form
     form_edit: Back to edit your form
@@ -1334,6 +1345,7 @@ en:
     address_settings: What kind of addresses do you expect to receive?
     archive_form_confirm: Archive this form
     archive_form_confirmation: Your form has been archived
+    archive_welsh_confirm: Archive the Welsh version of this form
     bulk_options: Enter your list’s options into a text box
     change_name: Name your form
     change_order_pages_added_error: Sorry, we could not save the new question order
