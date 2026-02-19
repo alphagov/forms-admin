@@ -211,6 +211,7 @@ en:
         </ul>
         <p>You can make a new draft of the form and make the Welsh version live again if you need to.</p>
       radios_legend: Are you sure you want to archive the Welsh version of this form?
+    success: The Welsh version of your form has been archived
   back_link:
     form_create: Back to create your form
     form_edit: Back to edit your form
