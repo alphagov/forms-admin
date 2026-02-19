@@ -161,6 +161,71 @@ RSpec.describe FormDocumentSyncService do
     end
   end
 
+  describe "#synchronize_archived_welsh_form" do
+    let(:form) { create(:form, available_languages: %w[en cy], state: "live", welsh_completed: true) }
+
+    context "when there is no existing live form document" do
+      it "raises an ActiveRecord::RecordNotFound error" do
+        expect {
+          service.synchronize_archived_welsh_form
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when there is an existing live Welsh form document" do
+      let!(:live_form_document_cy) { create :form_document, :live, form:, language: "cy", content: { "available_languages" => %w[en cy] } }
+      let!(:live_form_document_en) { create :form_document, :live, form:, language: "en", content: { "available_languages" => %w[en cy] } }
+
+      it "destroys the live welsh form document" do
+        expect {
+          service.synchronize_archived_welsh_form
+        }.to(change { FormDocument.exists?(form:, tag: "live", language: "cy") }.from(true).to(false))
+      end
+
+      it "creates the archived welsh form document" do
+        expect {
+          service.synchronize_archived_welsh_form
+        }.to(change { FormDocument.exists?(form:, tag: "archived", content: live_form_document_cy.content) }.from(false).to(true))
+      end
+
+      it "changes the available languages in form to only include English" do
+        expect {
+          service.synchronize_archived_welsh_form
+        }.to(change(form, :available_languages).from(%w[en cy]).to(%w[en]))
+      end
+
+      it "changes the welsh completed in form to false" do
+        expect {
+          service.synchronize_archived_welsh_form
+        }.to(change(form, :welsh_completed).from(true).to(false))
+      end
+
+      it "changes the available languages in the draft english form document to only include English" do
+        expect {
+          service.synchronize_archived_welsh_form
+        }.to(change { form.draft_form_document.reload.content["available_languages"] }.from(%w[en cy]).to(%w[en]))
+      end
+
+      it "changes the available languages in the live english form document to only include English" do
+        expect {
+          service.synchronize_archived_welsh_form
+        }.to(change { live_form_document_en.reload.content["available_languages"] }.from(%w[en cy]).to(%w[en]))
+      end
+    end
+
+    context "when there is an existing archived Welsh form document" do
+      before do
+        create :form_document, :live, form:, content: "live content cy", language: "cy"
+        create :form_document, :archived, form:, content: "old archived content cy", language: "cy"
+      end
+
+      it "replaces the archived form document" do
+        service.synchronize_archived_form
+        expect(FormDocument.find_by!(form:, tag: "archived", language: "cy").content).to eq("live content cy")
+      end
+    end
+  end
+
   describe "#update_draft_form_document" do
     context "when there is no draft form document" do
       before do

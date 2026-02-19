@@ -1,0 +1,9 @@
+---
+en:
+  activemodel:
+    errors:
+      models:
+        forms/confirm_archive_welsh_input:
+          attributes:
+            confirm:
+              blank: Select ‘Yes’ if you want to archive the Welsh version of this form

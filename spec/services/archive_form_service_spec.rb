@@ -34,4 +34,17 @@ describe ArchiveFormService do
       archive_form_service.archive
     end
   end
+
+  describe "#archive_welsh_only" do
+    let!(:form) { create(:form, :live, :with_welsh_translation) }
+    let!(:welsh_form_document) { FormDocument.find_by(form:, tag: "live", language: "cy") }
+
+    context "when the form has a welsh form document" do
+      it "archives the welsh form document" do
+        expect {
+          archive_form_service.archive_welsh_only
+        }.to change { welsh_form_document.reload.tag }.from("live").to("archived")
+      end
+    end
+  end
 end
