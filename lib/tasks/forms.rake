@@ -195,6 +195,27 @@ namespace :forms do
     Rails.logger.info "send_daily_submission_batch set to #{form.send_daily_submission_batch} for #{fmt_form(form)}."
     Rails.logger.info "You will need to make the changes live for the change to take effect for live submissions." if form.is_live?
   end
+
+  desc "List the contact emails for the given form IDs"
+  task :list_contact_emails, [] => :environment do |_, args|
+    form_ids = args.to_a
+    usage_message = "usage: rake forms:list_contact_emails[<form_id>, ...]".freeze
+    abort usage_message if form_ids.blank?
+
+    form_ids.each do |form_id|
+      form = Form.find(form_id)
+      creator_email = User.where(id: form.creator_id).pick(:email) if form.creator_id.present?
+      group = form.group
+      group_admins = group.users.group_admins.pluck(:email)
+      organisation = group.organisation
+      org_admins = organisation.admin_users.pluck(:email)
+
+      puts "Form ID: #{form_id}, Form Name: #{form.name}, Organisation: #{organisation.name}, Group: #{group.name}"
+      puts "Form creator: #{creator_email || 'Unknown'}"
+      puts "Group admins: #{group_admins.join(', ')}"
+      puts "Organisation admins: #{org_admins.join(', ')}\n"
+    end
+  end
 end
 
 def move_forms(form_ids, group_id)
