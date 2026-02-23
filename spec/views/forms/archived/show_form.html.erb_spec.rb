@@ -9,6 +9,10 @@ describe "archived/show_form.html.erb" do
     render(template: "forms/archived/show_form", locals: { form_document:, form_metadata:, welsh_form_document: })
   end
 
+  it "renders the made_live_form partial" do
+    expect(rendered).to render_template(partial: "forms/_made_live_form")
+  end
+
   it "renders the archived tag" do
     expect(rendered).to have_css(".govuk-tag.govuk-tag--orange", text: "Archived")
   end
