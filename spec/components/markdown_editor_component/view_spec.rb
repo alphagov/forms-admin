@@ -43,6 +43,37 @@ RSpec.describe MarkdownEditorComponent::View, type: :component do
     expect(page).to have_css("div", text: markdown_editor.hint)
   end
 
+  describe "label heading" do
+    context "when label_heading is true (default)" do
+      it "renders the label inside an h2" do
+        expect(page).to have_css("label h2.govuk-heading-m", text: markdown_editor.label)
+      end
+    end
+
+    context "when label_heading is false" do
+      let(:markdown_editor) do
+        described_class.new(:guidance_markdown,
+                            form_builder:,
+                            render_preview_path: "#",
+                            preview_html: "<p>No markdown added</p>",
+                            form_model: Pages::GuidanceInput.new,
+                            label: "Add some markdown",
+                            hint: "Use Markdown to format your content. Formatting help can be found below.",
+                            local_translations:,
+                            allow_headings:,
+                            label_heading: false)
+      end
+
+      it "renders the label without an h2" do
+        expect(page).not_to have_css("label h2")
+      end
+
+      it "renders the label with the govuk-label class" do
+        expect(page).to have_css("label.govuk-label", text: markdown_editor.label)
+      end
+    end
+  end
+
   it "renders the edit markdown link" do
     expect(page).to have_link(I18n.t("markdown_editor.edit_markdown_link"), href: "##{markdown_editor.form_field_id}")
   end

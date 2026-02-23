@@ -1,7 +1,11 @@
 <div class="app-markdown-editor" data-module="ajax-markdown-preview" data-ajax-markdown-endpoint="<%= render_preview_path %>" data-i18n="<%= translations.to_json() %>">
-  <label class="govuk-label govuk-label--m" for='<%= form_field_id %>'>
-    <h2 class="govuk-heading-m"><%= label %></h2>
-  </label>
+  <% if label_heading %>
+    <label class="govuk-label govuk-label--m" for='<%= form_field_id %>'>
+      <h2 class="govuk-heading-m"><%= label %></h2>
+    </label>
+  <% else %>
+    <label class="govuk-label" for='<%= form_field_id %>'><%= label %></label>
+  <% end %>
   <div class="govuk-hint" id="<%= form_field_id %>-hint"><%= hint %></div>
   <%= govuk_tabs(title: nil) do |component| %>
     <% component.with_tab(label: translations[:write_tab_text]) do %>
