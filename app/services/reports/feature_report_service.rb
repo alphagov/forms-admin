@@ -19,6 +19,7 @@ class Reports::FeatureReportService
       forms_with_answer_type: HashWithIndifferentAccess.new,
       steps_with_answer_type: HashWithIndifferentAccess.new,
       forms_with_exit_pages: 0,
+      forms_with_welsh_translation: 0,
     }
 
     form_documents.each do |form|
@@ -32,6 +33,7 @@ class Reports::FeatureReportService
       report[:forms_with_json_submission_email_attachments] += 1 if Reports::FormDocumentsService.has_json_submission_email_attachments(form)
       report[:forms_with_s3_submissions] += 1 if Reports::FormDocumentsService.has_s3_submissions(form)
       report[:forms_with_exit_pages] += 1 if Reports::FormDocumentsService.has_exit_pages?(form)
+      report[:forms_with_welsh_translation] += 1 if Reports::FormDocumentsService.has_welsh_translation(form)
 
       answer_types_in_form = form["content"]["steps"].map { |step| step["data"]["answer_type"] }
 
@@ -157,6 +159,11 @@ class Reports::FeatureReportService
   def forms_with_s3_submissions
     form_documents
       .select { |form| Reports::FormDocumentsService.has_s3_submissions(form) }
+  end
+
+  def forms_with_welsh_translation
+    form_documents
+      .select { |form| Reports::FormDocumentsService.has_welsh_translation(form) }
   end
 
 private

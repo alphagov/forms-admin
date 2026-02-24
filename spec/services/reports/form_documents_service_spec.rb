@@ -8,6 +8,7 @@ RSpec.describe Reports::FormDocumentsService do
   let(:archived_with_draft_form) { create(:form, :archived_with_draft) }
   let(:draft_internal_organisation_form) { create :form }
   let(:live_internal_organisation_form) { create :form }
+  let(:form_with_welsh_translation) { create :form, welsh_completed: true }
   let(:branch_route_form) do
     form = create(:form, :live, :ready_for_routing)
     create(:condition, :with_exit_page, routing_page_id: form.pages[0].id, check_page_id: form.pages[0].id, answer_value: "Option 1")
@@ -236,6 +237,18 @@ RSpec.describe Reports::FormDocumentsService do
 
       it "returns false" do
         expect(described_class.has_add_another_answer?(form_document)).to be false
+      end
+    end
+  end
+
+  describe ".has_welsh_translation" do
+    subject(:has_welsh_translation) do
+      described_class.has_welsh_translation(form_document)
+    end
+
+    context "when form has a welsh translation" do
+      it "returns true" do
+        expect(described_class.has_welsh_translation(form_with_welsh_translation)).to be true
       end
     end
   end
