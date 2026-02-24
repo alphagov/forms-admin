@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_30_103235) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_24_131843) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -97,6 +97,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_30_103235) do
 
   create_table "form_translations", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.text "declaration_markdown"
     t.text "declaration_text"
     t.bigint "form_id", null: false
     t.string "locale", null: false
@@ -118,6 +119,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_30_103235) do
     t.integer "copied_from_id"
     t.datetime "created_at", null: false
     t.bigint "creator_id"
+    t.text "declaration_markdown"
     t.boolean "declaration_section_completed", default: false
     t.text "declaration_text"
     t.string "external_id"
