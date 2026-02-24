@@ -4,40 +4,40 @@ RSpec.describe Forms::DeclarationInput, type: :model do
   describe "validations" do
     describe "Character length" do
       it "is valid if less than 2000 characters" do
-        declaration_input = described_class.new(declaration_text: "a", mark_complete: true)
+        declaration_input = described_class.new(declaration_markdown: "a", mark_complete: true)
 
         expect(declaration_input).to be_valid
       end
 
       it "is valid if 2000 characters" do
-        declaration_input = described_class.new(declaration_text: "a" * 2000, mark_complete: true)
+        declaration_input = described_class.new(declaration_markdown: "a" * 2000, mark_complete: true)
 
         expect(declaration_input).to be_valid
       end
 
       it "is strips carriage returns before calculating the length" do
-        declaration_text = "#{'a' * 1000}\r\n#{'a' * 999}"
-        declaration_input = described_class.new(declaration_text:, mark_complete: true)
+        declaration_markdown = "#{'a' * 1000}\r\n#{'a' * 999}"
+        declaration_input = described_class.new(declaration_markdown:, mark_complete: true)
 
         expect(declaration_input).to be_valid
       end
 
       it "is invalid if more than 2000 characters" do
-        declaration_input = described_class.new(declaration_text: "a" * 2001, mark_complete: true)
-        error_message = I18n.t("activemodel.errors.models.forms/declaration_input.attributes.declaration_text.too_long")
+        declaration_input = described_class.new(declaration_markdown: "a" * 2001, mark_complete: true)
+        error_message = I18n.t("activemodel.errors.models.forms/declaration_input.attributes.declaration_markdown.too_long")
 
         expect(declaration_input).not_to be_valid
 
-        declaration_input.validate(:declaration_text)
+        declaration_input.validate(:declaration_markdown)
 
-        expect(declaration_input.errors.full_messages_for(:declaration_text)).to include(
-          "Declaration text #{error_message}",
+        expect(declaration_input.errors.full_messages_for(:declaration_markdown)).to include(
+          "Declaration markdown #{error_message}",
         )
       end
     end
 
     it "is valid if declaration text is blank" do
-      declaration_input = described_class.new(declaration_text: "", mark_complete: true)
+      declaration_input = described_class.new(declaration_markdown: "", mark_complete: true)
 
       expect(declaration_input).to be_valid
     end
@@ -52,31 +52,17 @@ RSpec.describe Forms::DeclarationInput, type: :model do
 
   describe "#submit" do
     it "returns false if the data is invalid" do
-      form = OpenStruct.new(declaration_text: "", name: "Apply for a juggling licence")
-      declaration_input = described_class.new(declaration_text: ("abc" * 2001), form:)
+      form = OpenStruct.new(declaration_markdown: "", name: "Apply for a juggling licence")
+      declaration_input = described_class.new(declaration_markdown: ("abc" * 2001), form:)
       expect(declaration_input.submit).to be false
     end
 
     it "sets the form's attribute values" do
-      form = OpenStruct.new(declaration_text: "abc", declaration_section_completed: "false")
-      declaration_input = described_class.new(form:, declaration_text: "new declaration text", mark_complete: "true")
+      form = OpenStruct.new(declaration_markdown: "abc", declaration_section_completed: "false")
+      declaration_input = described_class.new(form:, declaration_markdown: "new declaration text", mark_complete: "true")
       declaration_input.submit
-      expect(declaration_input.form.declaration_text).to eq "new declaration text"
+      expect(declaration_input.form.declaration_markdown).to eq "new declaration text"
       expect(declaration_input.form.declaration_section_completed).to eq "true"
-    end
-
-    it "sets the form's declaration_markdown attribute" do
-      form = OpenStruct.new(declaration_text: nil, declaration_markdown: nil)
-      declaration_input = described_class.new(form:, declaration_text: "<ul><li>declaration text</li></ul>", mark_complete: "true")
-      declaration_input.submit
-      expect(declaration_input.form.declaration_markdown).to eq "* declaration text\n\n"
-    end
-
-    it "sets the form's declaration_markdown to blank if the declaration text is blank" do
-      form = OpenStruct.new(declaration_text: "original", declaration_markdown: "original")
-      declaration_input = described_class.new(form:, declaration_text: "", mark_complete: "true")
-      declaration_input.submit
-      expect(declaration_input.form.declaration_markdown).to eq ""
     end
   end
 end

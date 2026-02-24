@@ -63,6 +63,7 @@ Rails.application.routes.draw do
     post "/contact-details" => "forms/contact_details#create", as: :contact_details_create
     get "/declaration" => "forms/declaration#new", as: :declaration
     post "/declaration" => "forms/declaration#create", as: :declaration_create
+    post "/declaration-preview" => "forms/declaration#render_preview", as: :declaration_render_preview
     get "/payment-link" => "forms/payment_link#new", as: :payment_link
     post "/payment-link" => "forms/payment_link#create", as: :payment_link_create
     get "/share-preview" => "forms/share_preview#new", as: :share_preview
