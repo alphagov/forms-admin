@@ -2,7 +2,7 @@ class Pages::Selection::BaseOptionsInput < BaseInput
   include LoggingHelper
 
   INCLUDE_NONE_OF_THE_ABOVE_OPTIONS = %w[yes yes_with_question no].freeze
-  MAXIMUM_CHOOSE_ONLY_ONE_OPTION = 1000
+  MAXIMUM_CHOOSE_ONLY_ONE_OPTION = 3000
   MAXIMUM_CHOOSE_MORE_THAN_ONE_OPTION = 30
 
   attr_accessor :include_none_of_the_above, :draft_question

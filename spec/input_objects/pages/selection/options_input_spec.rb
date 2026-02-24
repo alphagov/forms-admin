@@ -66,16 +66,16 @@ RSpec.describe Pages::Selection::OptionsInput do
       end
 
       context "when only_one_option is true for the draft_question" do
-        it "is invalid if more than 1000 selection options are provided" do
-          input.selection_options = (1..1001).to_a.map { |i| OpenStruct.new(name: i.to_s) }
+        it "is invalid if more than 3000 selection options are provided" do
+          input.selection_options = (1..3001).to_a.map { |i| OpenStruct.new(name: i.to_s) }
           error_message = I18n.t("activemodel.errors.models.pages/selection/options_input.attributes.selection_options.maximum_choose_only_one_option")
           expect(input).not_to be_valid
 
           expect(input.errors.full_messages_for(:selection_options)).to include("Selection options #{error_message}")
         end
 
-        it "is valid if there are 1000 unique selection values" do
-          input.selection_options = (1..1000).to_a.map { |i| { name: i.to_s } }
+        it "is valid if there are 3000 unique selection values" do
+          input.selection_options = (1..3000).to_a.map { |i| { name: i.to_s } }
 
           expect(input).to be_valid
         end

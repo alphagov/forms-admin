@@ -26,20 +26,20 @@ RSpec.describe Pages::Selection::BulkOptionsInput, type: :model do
     context "when only_one_option is true for the draft_question" do
       let(:only_one_option) { "true" }
 
-      it "is valid if there are between 2 and 1000 unique selection values" do
+      it "is valid if there are between 2 and 3000 unique selection values" do
         input.bulk_selection_options = (1..2).to_a.join("\n")
 
         expect(input).to be_valid
         expect(input.errors.full_messages_for(:bulk_selection_options)).to be_empty
 
-        input.bulk_selection_options = (1..1000).to_a.join("\n")
+        input.bulk_selection_options = (1..3000).to_a.join("\n")
 
         expect(input).to be_valid
         expect(input.errors.full_messages_for(:bulk_selection_options)).to be_empty
       end
 
-      it "is invalid if more than 1000 Bulk selection options are provided" do
-        input.bulk_selection_options = (1..1001).to_a.join("\n")
+      it "is invalid if more than 3000 Bulk selection options are provided" do
+        input.bulk_selection_options = (1..3001).to_a.join("\n")
         error_message = I18n.t("activemodel.errors.models.pages/selection/bulk_options_input.attributes.bulk_selection_options.maximum_choose_only_one_option")
         expect(input).not_to be_valid
 

@@ -60,27 +60,27 @@ describe "pages/selection/options.html.erb", type: :view do
         expect(rendered).not_to have_text("You can add up to")
       end
 
-      context "when there are fewer than 1000 options" do
-        let(:selection_options) { (1..999).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
+      context "when there are fewer than 3000 options" do
+        let(:selection_options) { (1..2999).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
 
         it "has an add another button" do
           expect(rendered).to have_button(I18n.t("selection_options.add_another"))
         end
 
         it "does not have inset text stating you cannot add more options" do
-          expect(rendered).not_to have_css(".govuk-inset-text", text: "You cannot add any more options as you have reached the maximum of 1000 options.")
+          expect(rendered).not_to have_css(".govuk-inset-text", text: "You cannot add any more options as you have reached the maximum of 3000 options.")
         end
       end
 
-      context "when there are 1000 options" do
-        let(:selection_options) { (1..1000).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
+      context "when there are 3000 options" do
+        let(:selection_options) { (1..3000).to_a.map { |i| OpenStruct.new(name: i.to_s) } }
 
         it "does not have an add another button" do
           expect(rendered).not_to have_button(I18n.t("selection_options.add_another"))
         end
 
         it "has inset text stating you cannot add more options" do
-          expect(rendered).to have_css(".govuk-inset-text", text: "You cannot add any more options as you have reached the maximum of 1000 options.")
+          expect(rendered).to have_css(".govuk-inset-text", text: "You cannot add any more options as you have reached the maximum of 3000 options.")
         end
       end
     end

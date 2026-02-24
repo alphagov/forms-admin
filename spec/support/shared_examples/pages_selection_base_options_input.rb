@@ -23,7 +23,7 @@ RSpec.shared_examples "base selection options input" do
     context "when only_one_option is true" do
       let(:only_one_option) { "true" }
 
-      it { expect(input.maximum_options).to eq 1000 }
+      it { expect(input.maximum_options).to eq 3000 }
     end
 
     context "when only_one_option is false" do
