@@ -246,7 +246,7 @@ en:
     longer_than_30_options: If your list is longer than 30 options, people will be able to search and find the options by typing into an autocomplete box.
     select_more_than_one_option: People will be able to select one or more options from your list.
     select_one_option: People will be able to select one option from your list.
-    up_to_1000_options: You can have up to 1,000 options.
+    up_to_3000_options: You can have up to 3,000 options.
     up_to_30_options: You can have up to 30 options.
   cancel: Cancel
   contact_details:
@@ -834,7 +834,7 @@ en:
       pages_selection_type_input:
         only_one_option_options:
           'false': Your list can have up to 30 options
-          'true': Your list can have up to 1,000 options
+          'true': Your list can have up to 3,000 options
     label:
       account_name_input:
         name: Enter your full name
@@ -1808,7 +1808,7 @@ en:
     remove_html: Remove <span class="govuk-visually-hidden">option %{option_number}</span>
     select_more_than_one_option: People will be able to select one or more options from your list.
     select_one_option: People will be able to select one option from your list.
-    up_to_1000_options: You can have up to 1,000 options.
+    up_to_3000_options: You can have up to 3,000 options.
     up_to_30_options: You can have up to 30 options.
   selection_type:
     reduce_your_options_warning:
