@@ -7,8 +7,8 @@
     <label class="govuk-label" for='<%= form_field_id %>'><%= label %></label>
   <% end %>
   <div class="govuk-hint" id="<%= form_field_id %>-hint"><%= hint %></div>
-  <%= govuk_tabs(title: nil) do |component| %>
-    <% component.with_tab(label: translations[:write_tab_text]) do %>
+  <%= govuk_tabs(title: nil, id: "#{form_field_id}-tabs") do |component| %>
+    <% component.with_tab(label: translations[:write_tab_text], id: "#{form_field_id}-write") do %>
       <%= f.govuk_text_area(attribute_name,
                         label: nil,
                         hint: nil,
@@ -56,8 +56,8 @@
       <% end %>
     <% end %>
 
-    <% component.with_tab(label: translations[:preview_tab_text]) do %>
-      <% if preview_html.present? %>
+    <% component.with_tab(label: translations[:preview_tab_text], id: "#{form_field_id}-preview") do %>
+      <% if preview_html.present? || render_preview_path.present? %>
         <div class="app-markdown-editor__preview-intro">
           <h2 class="govuk-heading-m"><%= translations[:preview_heading] %></h2>
 
@@ -65,7 +65,7 @@
         </div>
 
         <div class="app-markdown-editor__preview-area" role="region" aria-label="<%= translations[:preview_area_label] %>" data-ajax-markdown-target>
-          <%= preview_html.html_safe %>
+          <%= preview_html&.html_safe %>
         </div>
 
         <%= govuk_link_to translations[:edit_markdown_link], "##{form_field_id}", class: "app-markdown-editor__edit-link" %>

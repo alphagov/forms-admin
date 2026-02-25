@@ -68,7 +68,7 @@
                   <%= row.with_cell do |cell| %>
                     <%= render MarkdownEditorComponent::View.new(:guidance_markdown_cy,
                       form_builder: page_form,
-                      render_preview_path: nil,
+                      render_preview_path: welsh_translation_render_preview_path(@welsh_translation_input.form.id),
                       preview_html: nil,
                       form_model: page_form.object,
                       label: t("helpers.label.forms_welsh_page_translation_input.guidance_markdown_cy_html", question_number: page_form.object.page.position),
@@ -179,7 +179,7 @@
               <%= row.with_cell do |cell| %>
                 <%= render MarkdownEditorComponent::View.new(:exit_page_markdown_cy,
                   form_builder: condition_form,
-                  render_preview_path: nil,
+                  render_preview_path: welsh_translation_render_preview_path(@welsh_translation_input.form.id),
                   preview_html: nil,
                   form_model: condition_form.object,
                   label: t("helpers.label.forms_welsh_condition_translation_input.exit_page_markdown_cy_html", question_number: page_form.object.page.position),
@@ -239,7 +239,7 @@
                 <% row.with_cell do %>
                   <%= render MarkdownEditorComponent::View.new(:what_happens_next_markdown_cy,
                     form_builder: f,
-                    render_preview_path: nil,
+                    render_preview_path: welsh_translation_render_preview_path(@welsh_translation_input.form.id),
                     preview_html: nil,
                     form_model: @welsh_translation_input,
                     label: t("helpers.label.forms_welsh_translation_input.what_happens_next_markdown_cy"),
