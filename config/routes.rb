@@ -71,6 +71,8 @@ Rails.application.routes.draw do
     delete "/welsh-translation/delete" => "forms/welsh_translation#destroy", as: :welsh_translation_destroy
     get "/submission-attachments" => "forms/submission_attachments#new", as: :submission_attachments
     post "/submission-attachments" => "forms/submission_attachments#create", as: :submission_attachments_create
+    get "/daily-submission-csv" => "forms/daily_submission_batch#new", as: :daily_submission_batch
+    post "/daily-submission-csv" => "forms/daily_submission_batch#create", as: :daily_submission_batch_create
     get "/metrics" => "forms/metrics#metrics_csv", as: :metrics_csv
 
     scope "/pages-by-external-id/:page_external_id" do
