@@ -5,8 +5,11 @@ RSpec.describe Forms::DailySubmissionBatchController, type: :request do
   let(:send_daily_submission_batch_original_value) { false }
   let(:current_user) { standard_user }
   let(:group) { create(:group, organisation: standard_user.organisation) }
+  let(:daily_submission_emails_enabled) { true }
 
   before do
+    allow(FeatureService).to receive(:enabled?).with(:daily_submission_emails_enabled).and_return(daily_submission_emails_enabled)
+
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
 
@@ -31,6 +34,14 @@ RSpec.describe Forms::DailySubmissionBatchController, type: :request do
 
       it "returns 403" do
         expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when the feature flag is disabled" do
+      let(:daily_submission_emails_enabled) { false }
+
+      it "returns 404" do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

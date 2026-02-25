@@ -1,5 +1,6 @@
 module Forms
   class DailySubmissionBatchController < WebController
+    before_action :check_feature_flag
     after_action :verify_authorized
 
     def new
@@ -19,6 +20,10 @@ module Forms
     end
 
   private
+
+    def check_feature_flag
+      raise NotFoundError unless FeatureService.enabled?(:daily_submission_emails_enabled)
+    end
 
     def daily_submission_batch_input_params
       params.require(:forms_daily_submission_batch_input).permit(:send_daily_submission_batch).merge(form: current_form)
