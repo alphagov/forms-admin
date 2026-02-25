@@ -382,6 +382,14 @@ en:
       title_create: Create a form
       title_edit: Edit your form
       your_questions: Your questions
+    daily_submission_batch:
+      new:
+        body_html: |
+          <p>You can get a daily email with all the answers from the previous day’s completed forms collected into a CSV file.</p>
+          <p>The CSV will list all the answers in plain text, separated by commas, with a row for each completed form.</p>
+          <p>We’ll send the email shortly after 2am with the completed forms from the previous day. It’ll be sent to the same email address you set for completed forms.</p>
+          <p>If you make changes to the form such as adding, moving or deleting a question, the structure of the CSV will change. Forms completed before and after the change will be split into separate CSV files.</p>
+          <p>You’ll continue to receive individual completed form emails. If your form has any file upload questions, the uploaded files will only be attached to the individual completed form emails.</p>
     submission_attachments:
       new:
         body_html: |
@@ -856,6 +864,9 @@ en:
       forms_submission_type_input:
         submission_type_options:
           email_with_csv: Get CSV files
+      forms_daily_submission_batch_input:
+        send_daily_submission_batch_options:
+          '1': Get a daily CSV of completed forms
       group:
         name: Enter a name for your new group
       group_member_input:
@@ -1010,6 +1021,8 @@ en:
         submission_format: Do you want to get a CSV or JSON file of each completed form?
       forms_submission_type_input:
         submission_type: Do you want to get completed forms as CSV files?
+      forms_daily_submission_batch_input:
+        send_daily_submission_batch: Do you want to get a daily CSV of the previous day’s completed forms?
       mou_signature:
         agreed: Do you agree to the MOU?
       pages_question_input:
@@ -1379,6 +1392,7 @@ en:
     routing_page_delete: Delete question %{question_number}’s route
     routing_page_edit: Edit route %{route_number}
     routing_page_new: 'Add route %{route_number}: select an answer and where to skip to'
+    daily_submission_batch: Get a daily CSV of the previous day’s completed forms
     selection_none_of_the_above: Ask for an answer if someone selects ‘None of the above’
     selection_options: Create a list of options
     selection_type: How many options should people be able to select?

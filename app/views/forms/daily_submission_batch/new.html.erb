@@ -1,0 +1,25 @@
+<% set_page_title(title_with_error_prefix(t("page_titles.daily_submission_batch"), @daily_submission_batch_input.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(form_path(@daily_submission_batch_input.form.id), t("back_link.form_create")) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: @daily_submission_batch_input, url: daily_submission_batch_create_path(@daily_submission_batch_input.form.id)) do |f| %>
+      <% if @daily_submission_batch_input&.errors.any? %>
+        <%= f.govuk_error_summary %>
+      <% end %>
+
+      <span class="govuk-caption-l"><%= @daily_submission_batch_input.form.name %></span>
+      <h1 class="govuk-heading-l">
+        <%= t("page_titles.daily_submission_batch") %>
+      </h1>
+
+      <%= t(".body_html") %>
+
+      <%= f.govuk_check_boxes_fieldset :send_daily_submission_batch, multiple: false, legend: { tag: 'h2', size: 'm'} do %>
+        <%= f.govuk_check_box :send_daily_submission_batch, 1, 0, multiple: false, link_errors: true %>
+      <% end %>
+
+      <%= f.govuk_submit t("save_and_continue") %>
+    <% end %>
+  </div>
+</div>
