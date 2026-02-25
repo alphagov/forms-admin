@@ -32,7 +32,7 @@ private
     return errors.add(:bulk_selection_options, :minimum) if options.length < 2
     return errors.add(:bulk_selection_options, maximum_error_type) if options.length > maximum_options
 
-    duplicates = selection_options_without_blanks.filter { |option| selection_options_without_blanks.count(option) > 1 }
+    duplicates = options.filter { |option| options.count(option) > 1 }
     if duplicates.any?
       errors.add(:bulk_selection_options, I18n.t("activemodel.errors.models.pages/selection/bulk_options_input.attributes.bulk_selection_options.uniqueness", duplicate: duplicates.first))
     end
