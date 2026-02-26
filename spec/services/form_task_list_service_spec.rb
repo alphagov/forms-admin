@@ -38,6 +38,7 @@ describe FormTaskListService do
         what_happens_next_status: :completed,
         payment_link_status: :optional,
         submission_attachments_status: :optional,
+        daily_submission_batch_status: :optional,
         share_preview_status: :completed,
       }
     end
@@ -175,7 +176,7 @@ describe FormTaskListService do
       end
     end
 
-    describe "email address section tasks" do
+    describe "how you get completed forms section tasks" do
       let(:section) do
         all_sections[2]
       end
@@ -278,12 +279,13 @@ describe FormTaskListService do
       end
     end
 
-    describe "submission attachments subsection tasks" do
+    describe "how you get completed forms optional subsection tasks" do
       let(:section) do
         all_sections[3]
       end
 
       let(:section_rows) { section[:rows] }
+      let(:all_task_names) { all_sections.flat_map { |section| section[:rows] }.compact.map { |row| row[:task_name] } }
 
       context "when the submission type is email" do
         it "has link to the submission attachments page" do
@@ -296,8 +298,32 @@ describe FormTaskListService do
         let(:form) { create(:form, submission_type: "s3") }
 
         it "does not have link to the submission attachments page" do
-          all_task_names = all_sections.flat_map { |section| section[:rows] }.compact.map { |row| row[:task_name] }
           expect(all_task_names).not_to include I18n.t("forms.task_list_create.how_you_get_completed_forms_section.optional_subsection.submission_attachments")
+        end
+      end
+
+      context "when the daily_submission_emails_enabled feature flag is enabled" do
+        before do
+          allow(FeatureService).to receive(:enabled?).with(:daily_submission_emails_enabled).and_return(true)
+        end
+
+        it "has link to the daily submission batch page" do
+          expect(section_rows.second[:task_name]).to eq I18n.t("forms.task_list_create.how_you_get_completed_forms_section.optional_subsection.daily_submission_batch")
+          expect(section_rows.second[:path]).to eq "/forms/#{form.id}/daily-submission-csv"
+        end
+      end
+
+      context "when the daily_submission_emails_enabled feature flag is disabled", feature_daily_submission_emails_enabled: false do
+        it "does not have link to the daily submission batch page" do
+          expect(all_task_names).not_to include I18n.t("forms.task_list_create.how_you_get_completed_forms_section.optional_subsection.daily_submission_batch")
+        end
+
+        context "when the submission type is s3" do
+          let(:form) { create(:form, submission_type: "s3") }
+
+          it "does not include the optional tasks subsection at all" do
+            expect(section[:title]).to eq I18n.t("forms.task_list_create.privacy_and_contact_details_section.title")
+          end
         end
       end
     end

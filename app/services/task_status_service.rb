@@ -28,6 +28,7 @@ class TaskStatusService
       privacy_policy_status:,
       support_contact_details_status:,
       submission_attachments_status:,
+      daily_submission_batch_status:,
       share_preview_status:,
       make_live_status:,
     }
@@ -93,6 +94,12 @@ private
 
   def submission_attachments_status
     return :completed if @form.email? && @form.submission_format.any?
+
+    :optional
+  end
+
+  def daily_submission_batch_status
+    return :completed if @form.send_daily_submission_batch
 
     :optional
   end
