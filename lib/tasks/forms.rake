@@ -195,6 +195,38 @@ namespace :forms do
     Rails.logger.info "send_daily_submission_batch set to #{form.send_daily_submission_batch} for #{fmt_form(form)}."
     Rails.logger.info "You will need to make the changes live for the change to take effect for live submissions." if form.is_live?
   end
+
+  desc "Add declation_markdown based on declation_text"
+  task convert_declaration_text_to_markdown: :environment do
+    Rails.logger.info "convert_declaration_text_to_markdown: started"
+
+    Form.find_each do |form|
+      next if form.declaration_text.blank?
+
+      atttibutes_to_update = {}
+
+      markdown = MarkdownConversionService.new(form.declaration_text).to_markdown
+
+      atttibutes_to_update[:declaration_markdown] = markdown
+
+      if form.declaration_text_cy.present?
+        markdown_cy = MarkdownConversionService.new(form.declaration_text_cy).to_markdown
+        atttibutes_to_update[:declaration_markdown_cy] = markdown_cy
+      end
+
+      form.update!(atttibutes_to_update)
+    end
+
+    FormDocument.find_each do |form_document|
+      next if form_document.content["declaration_markdown"].present?
+
+      markdown = MarkdownConversionService.new(form_document.content["declaration_text"]).to_markdown
+
+      form_document.update!(content: form_document.content.merge({ "declaration_markdown": markdown }))
+    end
+
+    Rails.logger.info "convert_declaration_text_to_markdown: finished"
+  end
 end
 
 def move_forms(form_ids, group_id)

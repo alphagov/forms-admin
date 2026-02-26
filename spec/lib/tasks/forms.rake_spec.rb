@@ -653,4 +653,45 @@ RSpec.describe "forms.rake" do
       }.to change { form.reload.send_daily_submission_batch }.from(true).to(false)
     end
   end
+
+  describe "convert_declaration_text_to_markdown" do
+    subject(:task) do
+      Rake::Task["forms:convert_declaration_text_to_markdown"]
+        .tap(&:reenable)
+    end
+
+    let(:form) { create :form, declaration_text: "<p>This is a declaration</p>" }
+    let(:form_document) { form.draft_form_document }
+
+    it "converts declaration_text to markdown" do
+      expect {
+        task.invoke
+      }.to change { form.reload.declaration_markdown }.from(nil).to("This is a declaration\n\n")
+    end
+
+    it "does not set declaration_markdown if markdown_text is empty" do
+      form.update!(declaration_text: "")
+
+      expect {
+        task.invoke
+      }.not_to(change { form.reload.declaration_markdown })
+    end
+
+    it "converts form documents" do
+      expect {
+        task.invoke
+      }.to change { form_document.reload.content["declaration_markdown"] }.from(nil).to("This is a declaration\n\n")
+    end
+
+    context "when a form has a Welsh version" do
+      let(:form) { create :form, :with_welsh_translation, declaration_text: "<p>This is a declaration</p>", declaration_text_cy: "<p>This is the Welsh declaration</p>" }
+      let(:form_document) { form.draft_form_document }
+
+      it "converts declaration_text to markdown" do
+        expect {
+          task.invoke
+        }.to change { form.reload.declaration_markdown_cy }.from(nil).to("This is the Welsh declaration\n\n")
+      end
+    end
+  end
 end
