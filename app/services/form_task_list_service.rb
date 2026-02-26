@@ -71,7 +71,7 @@ private
 
   def payment_link_subsection
     {
-      title: I18n.t("forms.task_list_#{create_or_edit}.payment_link_subsection.title"),
+      title: I18n.t("forms.task_list.optional_tasks_title", count: 1),
       rows: payment_link_subsection_tasks,
       section_number: nil,
       subsection: true,
@@ -107,7 +107,7 @@ private
     return nil if rows.empty?
 
     {
-      title: I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.optional_subsection.title"),
+      title: I18n.t("forms.task_list.optional_tasks_title", count: rows.count),
       section_number: nil,
       subsection: true,
       rows:,
