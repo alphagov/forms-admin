@@ -287,7 +287,7 @@ describe FormTaskListService do
 
       context "when the submission type is email" do
         it "has link to the submission attachments page" do
-          expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_create.submission_attachments_subsection.task_name")
+          expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_create.how_you_get_completed_forms_section.optional_subsection.submission_attachments")
           expect(section_rows.first[:path]).to eq "/forms/#{form.id}/submission-attachments"
         end
       end
@@ -297,7 +297,7 @@ describe FormTaskListService do
 
         it "does not have link to the submission attachments page" do
           all_task_names = all_sections.flat_map { |section| section[:rows] }.compact.map { |row| row[:task_name] }
-          expect(all_task_names).not_to include I18n.t("forms.task_list_create.submission_attachments_subsection.task_name")
+          expect(all_task_names).not_to include I18n.t("forms.task_list_create.how_you_get_completed_forms_section.optional_subsection.submission_attachments")
         end
       end
     end

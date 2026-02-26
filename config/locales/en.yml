@@ -418,6 +418,9 @@ en:
         confirm_email: Enter the email address confirmation code
         email: Set the email address completed forms will be sent to
         hint_text_html: Completed forms will be sent to:<br> <span class="govuk-!-text-break-word">%{submission_email}</span>
+        optional_subsection:
+          submission_attachments: Get a CSV or JSON file of each completed form
+          title: Optional task
         title: Set up how you get completed forms
       make_form_live_section:
         group_not_active:
@@ -447,9 +450,6 @@ en:
         contact_details: Provide contact details for support
         privacy_policy: Provide a link to privacy information for this form
         title: Provide privacy and contact details
-      submission_attachments_subsection:
-        task_name: Get a CSV or JSON file of each completed form
-        title: Optional task
       translations_section:
         add_welsh: Add a Welsh version of your form
         title: Create a Welsh version of your form (optional)
@@ -464,6 +464,9 @@ en:
         confirm_email: Enter the email address confirmation code
         email: Edit the email address completed forms will be sent to
         hint_text_html: Completed forms will be sent to:<br> <span class="govuk-!-text-break-word">%{submission_email}</span>
+        optional_subsection:
+          submission_attachments: Get a CSV or JSON file of each completed form
+          title: Optional task
         title: Change how you get completed forms
       make_form_live_section:
         make_live: Make your changes live
@@ -476,9 +479,6 @@ en:
         contact_details: Edit the contact details for support
         privacy_policy: Edit the link to privacy information for this form
         title: Privacy and contact details
-      submission_attachments_subsection:
-        task_name: Get a CSV or JSON file of each completed form
-        title: Optional task
       translations_section:
         add_welsh: Add a Welsh version of your form
         title: Create a Welsh version of your form (optional)

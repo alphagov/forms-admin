@@ -24,7 +24,7 @@ class FormTaskListService
     ]
 
     if @form.email?
-      sections << submission_attachments_subsection
+      sections << how_you_get_completed_forms_optional_subsection
     end
 
     sections << privacy_and_contact_details_section(section_number: 3)
@@ -103,14 +103,14 @@ private
      { task_name: I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.confirm_email"), path: submission_email_code_path(@form.id), status: @task_statuses[:confirm_submission_email_status], active: can_enter_submission_email_code }]
   end
 
-  def submission_attachments_subsection
+  def how_you_get_completed_forms_optional_subsection
     {
-      title: I18n.t("forms.task_list_#{create_or_edit}.submission_attachments_subsection.title"),
+      title: I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.optional_subsection.title"),
       section_number: nil,
       subsection: true,
       rows: [
         {
-          task_name: I18n.t("forms.task_list_#{create_or_edit}.submission_attachments_subsection.task_name"),
+          task_name: I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.optional_subsection.submission_attachments"),
           path: submission_attachments_path(@form.id),
           status: @task_statuses[:submission_attachments_status],
         },
