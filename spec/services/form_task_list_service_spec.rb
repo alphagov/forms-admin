@@ -198,7 +198,7 @@ describe FormTaskListService do
         end
 
         it "has hint text explaining where completed forms will be sent to" do
-          expect(section_rows.first[:hint_text]).to eq I18n.t("forms.task_list_create.email_address_section.hint_text_html", submission_email: form.submission_email)
+          expect(section_rows.first[:hint_text]).to eq I18n.t("forms.task_list_create.how_you_get_completed_forms_section.hint_text_html", submission_email: form.submission_email)
         end
 
         it "has the correct default status" do

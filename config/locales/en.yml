@@ -414,7 +414,7 @@ en:
         questions: Add and edit your questions
         title: Create your form
         what_happens_next: Add information about what happens next
-      email_address_section:
+      how_you_get_completed_forms_section:
         confirm_email: Enter the email address confirmation code
         email: Set the email address completed forms will be sent to
         hint_text_html: Completed forms will be sent to:<br> <span class="govuk-!-text-break-word">%{submission_email}</span>
@@ -460,7 +460,7 @@ en:
         questions: Edit your questions
         title: Your form
         what_happens_next: Edit the information about what happens next
-      email_address_section:
+      how_you_get_completed_forms_section:
         confirm_email: Enter the email address confirmation code
         email: Edit the email address completed forms will be sent to
         hint_text_html: Completed forms will be sent to:<br> <span class="govuk-!-text-break-word">%{submission_email}</span>

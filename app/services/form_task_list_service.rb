@@ -20,7 +20,7 @@ class FormTaskListService
     sections = [
       create_form_section(section_number: 1),
       payment_link_subsection,
-      email_address_section(section_number: 2),
+      how_you_get_completed_forms_section(section_number: 2),
     ]
 
     if @form.email?
@@ -88,19 +88,19 @@ private
     ]
   end
 
-  def email_address_section(section_number:)
+  def how_you_get_completed_forms_section(section_number:)
     {
-      title: I18n.t("forms.task_list_#{create_or_edit}.email_address_section.title"),
+      title: I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.title"),
       section_number:,
       subsection: false,
-      rows: email_address_section_tasks,
+      rows: how_you_get_completed_forms_section_tasks,
     }
   end
 
-  def email_address_section_tasks
-    hint_text = I18n.t("forms.task_list_#{create_or_edit}.email_address_section.hint_text_html", submission_email: @form.submission_email) if @form.submission_email.present?
-    [{ task_name: I18n.t("forms.task_list_#{create_or_edit}.email_address_section.email"), path: submission_email_input_path(@form.id), hint_text:, status: @task_statuses[:submission_email_status] },
-     { task_name: I18n.t("forms.task_list_#{create_or_edit}.email_address_section.confirm_email"), path: submission_email_code_path(@form.id), status: @task_statuses[:confirm_submission_email_status], active: can_enter_submission_email_code }]
+  def how_you_get_completed_forms_section_tasks
+    hint_text = I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.hint_text_html", submission_email: @form.submission_email) if @form.submission_email.present?
+    [{ task_name: I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.email"), path: submission_email_input_path(@form.id), hint_text:, status: @task_statuses[:submission_email_status] },
+     { task_name: I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.confirm_email"), path: submission_email_code_path(@form.id), status: @task_statuses[:confirm_submission_email_status], active: can_enter_submission_email_code }]
   end
 
   def submission_attachments_subsection
