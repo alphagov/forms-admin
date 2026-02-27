@@ -217,6 +217,8 @@ en:
       form:
         change_name: Your form name has been saved
         copied: Your form has been copied
+        daily_submission_batch_disabled: You will not get a daily CSV of the previous day’s completed forms
+        daily_submission_batch_enabled: You’ll get a daily CSV of the previous day’s completed forms
         declaration_saved: Your declaration has been saved
         declaration_saved_and_completed: Your declaration has been saved and marked as complete
         page_moved: "‘%{question_text}’ has moved %{direction} to number %{question_number}"
@@ -365,6 +367,14 @@ en:
     copy_to_clipboard: Copy URL to clipboard
     form_url: Form URL
   forms:
+    daily_submission_batch:
+      new:
+        body_html: |
+          <p>You can get a daily email with all the answers from the previous day’s completed forms collected into a CSV file.</p>
+          <p>The CSV will list all the answers in plain text, separated by commas, with a row for each completed form.</p>
+          <p>We’ll send the email shortly after 2am with the completed forms from the previous day. It’ll be sent to the same email address you set for completed forms.</p>
+          <p>If you make changes to the form such as adding, moving or deleting a question, the structure of the CSV will change. Forms completed before and after the change will be split into separate CSV files.</p>
+          <p>You’ll continue to receive individual completed form emails. If your form has any file upload questions, the uploaded files will only be attached to the individual completed form emails.</p>
     delete_confirmation:
       delete:
         hint_for_archived_draft: Deleting this draft will not remove the archived form.
@@ -845,6 +855,9 @@ en:
           '1': I agree to these terms
       forms_copy_input:
         name: What is the name of your form?
+      forms_daily_submission_batch_input:
+        send_daily_submission_batch_options:
+          '1': Get a daily CSV of completed forms
       forms_make_changes_live:
         confirm: Are you sure you want to make your draft live?
       forms_make_live_input:
@@ -1006,6 +1019,8 @@ en:
     legend:
       account_terms_of_use_input:
         agreed: Do you agree to these terms?
+      forms_daily_submission_batch_input:
+        send_daily_submission_batch: Do you want to get a daily CSV of the previous day’s completed forms?
       forms_submission_attachments_input:
         submission_format: Do you want to get a CSV or JSON file of each completed form?
       forms_submission_type_input:
@@ -1343,6 +1358,7 @@ en:
     confirm_email_success: Email address confirmed
     contact_details: Provide contact details for support
     copy: What is the name of your form?
+    daily_submission_batch: Get a daily CSV of the previous day’s completed forms
     date_settings: Are you asking for someone’s date of birth?
     declaration: Add a declaration for people to agree to
     delete_secondary_skip: Are you sure you want to delete the route for any other answer?
