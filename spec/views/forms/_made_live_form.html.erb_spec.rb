@@ -134,8 +134,8 @@ describe "forms/_made_live_form.html.erb" do
   end
 
   it "contains information about how you get completed forms" do
-    expect(rendered).to have_css("h3", text: I18n.t("forms.made_live_form.how_you_get_completed_forms"))
-    expect(rendered).to have_xpath("//h3[text()='#{I18n.t('forms.made_live_form.how_you_get_completed_forms')}']/following-sibling::h4", text: "Email")
+    expect(rendered).to have_css("h3", text: I18n.t("forms.made_live_form.how_you_get_completed_forms.title"))
+    expect(rendered).to have_xpath("//h3[text()='#{I18n.t('forms.made_live_form.how_you_get_completed_forms.title')}']/following-sibling::h4", text: "Email")
     expect(rendered).to have_text(form_document.submission_email)
   end
 
@@ -144,8 +144,8 @@ describe "forms/_made_live_form.html.erb" do
       let(:submission_format) { %w[csv] }
 
       it "tells the user they have CSVs enabled" do
-        expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.csv_and_json"))
-        expect(rendered).to include(I18n.t("forms.made_live_form.submission_format.email.email_csv_html"))
+        expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.how_you_get_completed_forms.csv_and_json"))
+        expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.submission_format.email.email_csv_html"))
       end
     end
 
@@ -153,8 +153,8 @@ describe "forms/_made_live_form.html.erb" do
       let(:submission_format) { %w[json] }
 
       it "tells the user they have JSON submissions enabled" do
-        expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.csv_and_json"))
-        expect(rendered).to include(I18n.t("forms.made_live_form.submission_format.email.email_json_html"))
+        expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.how_you_get_completed_forms.csv_and_json"))
+        expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.submission_format.email.email_json_html"))
       end
     end
 
@@ -162,8 +162,8 @@ describe "forms/_made_live_form.html.erb" do
       let(:submission_format) { %w[csv json] }
 
       it "tells the user they have CSV and JSON submissions enabled" do
-        expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.csv_and_json"))
-        expect(rendered).to include(I18n.t("forms.made_live_form.submission_format.email.email_csv_json_html"))
+        expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.how_you_get_completed_forms.csv_and_json"))
+        expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.submission_format.email.email_csv_json_html"))
       end
     end
 
@@ -171,8 +171,8 @@ describe "forms/_made_live_form.html.erb" do
       let(:submission_format) { %w[] }
 
       it "tells the user they do not have CSVs enabled" do
-        expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.csv_and_json"))
-        expect(rendered).to include(I18n.t("forms.made_live_form.submission_format.email.email_html"))
+        expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.how_you_get_completed_forms.csv_and_json"))
+        expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.submission_format.email.email_html"))
       end
     end
   end
@@ -181,7 +181,7 @@ describe "forms/_made_live_form.html.erb" do
     let(:submission_type) { "s3" }
 
     it "does not include the CSV and JSON section" do
-      expect(rendered).not_to have_css("h4", text: I18n.t("forms.made_live_form.csv_and_json"))
+      expect(rendered).not_to have_css("h4", text: I18n.t("forms.made_live_form.how_you_get_completed_forms.csv_and_json"))
     end
   end
 
