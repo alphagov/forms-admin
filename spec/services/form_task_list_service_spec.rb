@@ -524,5 +524,44 @@ describe FormTaskListService do
         end
       end
     end
+
+    context "when editing an existing form", :feature_daily_submission_emails_enabled do
+      let(:form) { create(:form, :live) }
+      let(:group) { create(:group, :with_welsh_enabled, name: "Group 1", organisation:, status: group_status) }
+      let(:can_make_form_live) { true }
+
+      it "has the expected section titles" do
+        section_titles = all_sections.map { |section| section[:title] }
+        expect(section_titles).to contain_exactly(
+          I18n.t("forms.task_list_edit.create_form_section.title"),
+          I18n.t("forms.task_list.optional_tasks_title.one"),
+          I18n.t("forms.task_list_edit.how_you_get_completed_forms_section.title"),
+          I18n.t("forms.task_list.optional_tasks_title.other"),
+          I18n.t("forms.task_list_edit.privacy_and_contact_details_section.title"),
+          I18n.t("forms.task_list_edit.translations_section.title"),
+          I18n.t("forms.task_list_edit.make_form_live_section.make_live"),
+        )
+      end
+
+      it "has the expected task names" do
+        task_names = all_sections.flat_map { |section| section[:rows] }.compact.map { |row| row[:task_name] }
+        expect(task_names).to contain_exactly(
+          I18n.t("forms.task_list_edit.create_form_section.name"),
+          I18n.t("forms.task_list_edit.create_form_section.questions"),
+          I18n.t("forms.task_list_edit.create_form_section.declaration"),
+          I18n.t("forms.task_list_edit.create_form_section.what_happens_next"),
+          I18n.t("forms.task_list_edit.payment_link_subsection.payment_link"),
+          I18n.t("forms.task_list_edit.how_you_get_completed_forms_section.email"),
+          I18n.t("forms.task_list_edit.how_you_get_completed_forms_section.confirm_email"),
+          I18n.t("forms.task_list_edit.how_you_get_completed_forms_section.optional_subsection.submission_attachments"),
+          I18n.t("forms.task_list_edit.how_you_get_completed_forms_section.optional_subsection.daily_submission_batch"),
+          I18n.t("forms.task_list_edit.privacy_and_contact_details_section.privacy_policy"),
+          I18n.t("forms.task_list_edit.privacy_and_contact_details_section.contact_details"),
+          I18n.t("forms.task_list_edit.translations_section.add_welsh"),
+          I18n.t("forms.task_list_edit.make_form_live_section.share_preview"),
+          I18n.t("forms.task_list_edit.make_form_live_section.make_live"),
+        )
+      end
+    end
   end
 end
