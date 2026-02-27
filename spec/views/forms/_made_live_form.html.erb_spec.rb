@@ -4,7 +4,10 @@ describe "forms/_made_live_form.html.erb" do
   let(:declaration_text) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:past_week_metrics_data) { { weekly_submissions: 125, weekly_starts: 256 } }
   let(:what_happens_next_markdown) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
-  let(:form_metadata) { create :form, :live, declaration_text:, what_happens_next_markdown:, submission_type:, submission_format: }
+  let(:form_metadata) do
+    create(:form, :live, declaration_text:, what_happens_next_markdown:, submission_type:, submission_format:,
+                         send_daily_submission_batch:)
+  end
   let(:form_document) do
     form_document_content = FormDocument::Content.from_form_document(form_metadata.live_form_document)
     form_document_content.first_made_live_at = 1.week.ago
@@ -17,6 +20,7 @@ describe "forms/_made_live_form.html.erb" do
   let(:questions_path) { Faker::Internet.url }
   let(:submission_type) { "email" }
   let(:submission_format) { [] }
+  let(:send_daily_submission_batch) { true }
   let(:cloudwatch_service) { instance_double(CloudWatchService, past_week_metrics_data:) }
 
   before do
@@ -182,6 +186,24 @@ describe "forms/_made_live_form.html.erb" do
 
     it "does not include the CSV and JSON section" do
       expect(rendered).not_to have_css("h4", text: I18n.t("forms.made_live_form.how_you_get_completed_forms.csv_and_json"))
+    end
+  end
+
+  context "when send_daily_submission_batch is true" do
+    let(:send_daily_submission_batch) { true }
+
+    it "tells the user they getting a daily CSV" do
+      expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.how_you_get_completed_forms.daily_csv.title"))
+      expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.daily_csv.enabled"))
+    end
+  end
+
+  context "when send_daily_submission_batch is false" do
+    let(:send_daily_submission_batch) { false }
+
+    it "tells the user they have not opted to get a daily CSV" do
+      expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.how_you_get_completed_forms.daily_csv.title"))
+      expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.daily_csv.disabled"))
     end
   end
 

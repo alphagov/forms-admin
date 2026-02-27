@@ -405,6 +405,10 @@ en:
       draft_edit: Edit the draft of this form
       how_you_get_completed_forms:
         csv_and_json: CSV and JSON
+        daily_csv:
+          disabled: You have not opted to get a daily CSV of the previous day’s completed forms.
+          enabled: You are getting a daily CSV of the previous day’s completed forms.
+          title: Daily CSV
         submission_email: Email
         submission_format:
           email:
