@@ -289,4 +289,127 @@ describe('AJAX Markdown preview', () => {
       expect(ariaLiveRegion.getAttribute('aria-busy')).toBe('false')
     })
   })
+
+  describe('when there are multiple instances on the page', () => {
+    let source1, target1, target2
+
+    const jsonResponse1 = {
+      preview_html: '<p>Preview for editor 1</p>',
+      errors: []
+    }
+
+    const jsonResponse2 = {
+      preview_html: '<p>Preview for editor 2</p>',
+      errors: []
+    }
+
+    const setupMultipleEditors = () => {
+      const i18n = JSON.stringify({
+        preview_loading: 'Loading...',
+        preview_error: 'There was an error'
+      })
+
+      document.body.innerHTML = `
+        <div data-module="ajax-markdown-preview" data-ajax-markdown-endpoint="/endpoint1" data-i18n='${i18n}'>
+          <div class="govuk-form-group">
+            <textarea id="editor1" data-ajax-markdown-source="true">Content for editor 1</textarea>
+          </div>
+          <div data-ajax-markdown-target><p>Old preview 1</p></div>
+        </div>
+        <div data-module="ajax-markdown-preview" data-ajax-markdown-endpoint="/endpoint2" data-i18n='${i18n}'>
+          <div class="govuk-form-group">
+            <textarea id="editor2" data-ajax-markdown-source="true">Content for editor 2</textarea>
+          </div>
+          <div data-ajax-markdown-target><p>Old preview 2</p></div>
+        </div>
+      `
+
+      document
+        .querySelectorAll('[data-module="ajax-markdown-preview"]')
+        .forEach(element => {
+          ajaxMarkdownPreview(
+            element.querySelector('[data-ajax-markdown-target]'),
+            element.querySelector('[data-ajax-markdown-source]'),
+            element.getAttribute('data-ajax-markdown-endpoint'),
+            JSON.parse(element.getAttribute('data-i18n'))
+          )
+        })
+
+      const editors = document.querySelectorAll(
+        '[data-module="ajax-markdown-preview"]'
+      )
+      source1 = editors[0].querySelector('[data-ajax-markdown-source]')
+      target1 = editors[0].querySelector('[data-ajax-markdown-target]')
+      target2 = editors[1].querySelector('[data-ajax-markdown-target]')
+    }
+
+    beforeEach(() => {
+      // Mock fetch to return different responses based on endpoint
+      global.fetch = vi.fn(url => {
+        const response = url === '/endpoint1' ? jsonResponse1 : jsonResponse2
+        return Promise.resolve({
+          json: () => Promise.resolve(response)
+        })
+      })
+
+      setupMultipleEditors()
+    })
+
+    test('each instance has its own preview target', () => {
+      expect(target1.innerHTML).toBe(jsonResponse1.preview_html)
+      expect(target2.innerHTML).toBe(jsonResponse2.preview_html)
+    })
+
+    test('each instance calls its own endpoint', () => {
+      expect(global.fetch).toHaveBeenCalledWith(
+        '/endpoint1',
+        expect.objectContaining({
+          body: expect.stringContaining('Content for editor 1')
+        })
+      )
+      expect(global.fetch).toHaveBeenCalledWith(
+        '/endpoint2',
+        expect.objectContaining({
+          body: expect.stringContaining('Content for editor 2')
+        })
+      )
+    })
+
+    test('updating one editor does not affect the other', async () => {
+      // Clear the initial calls
+      global.fetch.mockClear()
+
+      // Update only the first editor
+      source1.value = 'Updated content for editor 1'
+      source1.dispatchEvent(new window.Event('input'))
+
+      await vi.runAllTimersAsync()
+
+      // Only endpoint1 should be called
+      expect(global.fetch).toHaveBeenCalledTimes(1)
+      expect(global.fetch).toHaveBeenCalledWith(
+        '/endpoint1',
+        expect.objectContaining({
+          body: expect.stringContaining('Updated content for editor 1')
+        })
+      )
+
+      // Target 2 should still have its original content
+      expect(target2.innerHTML).toBe(jsonResponse2.preview_html)
+    })
+
+    test('each instance has its own live region', () => {
+      const liveRegions = document.querySelectorAll(
+        '.app-markdown-editor__notification-area'
+      )
+      expect(liveRegions).toHaveLength(2)
+    })
+
+    test('each instance has its own error area', () => {
+      const errorAreas = document.querySelectorAll(
+        '.app-markdown-editor__error-message'
+      )
+      expect(errorAreas).toHaveLength(2)
+    })
+  })
 })

@@ -1,153 +1,171 @@
 import debounce from '../utils/debounce'
 
-const store = {
-  target: null,
-  source: null,
-  authenticityToken: null,
-  csrfToken: null,
-  liveRegion: null,
-  i18n: null,
-  errorArea: null
-}
+class AjaxMarkdownPreview {
+  constructor (target, source, endpoint, i18n) {
+    this.target = target
+    this.source = source
+    this.endpoint = endpoint
+    this.i18n = i18n
+    this.liveRegion = null
+    this.errorArea = null
+    this.authenticityToken = document.querySelector(
+      'input[name="authenticity_token"]'
+    )?.value
+    this.csrfToken = document
+      .querySelector('meta[name="csrf-token"]')
+      ?.getAttribute('content')
 
-const setLoadingStatus = () => {
-  store.liveRegion.setAttribute('aria-busy', 'true')
-  store.target.innerHTML = `<p>${store.i18n.preview_loading}</p>`
-}
+    // Create a debounced version of triggerAjaxMarkdownPreview bound to this instance
+    this.debouncedAjaxMarkdownPreview = debounce(() => {
+      this.triggerAjaxMarkdownPreview()
+    }, 1000)
 
-const setFailureStatus = () => {
-  store.target.innerHTML = `<p>${store.i18n.preview_error}</p>`
-  const retryButton = document.createElement('button')
-  retryButton.classList.add('govuk-button', 'govuk-button--secondary')
-  retryButton.innerHTML = 'Retry preview'
-  addEventListeners(retryButton, manuallyTriggerMarkdownPreview)
-  store.target.appendChild(retryButton)
-}
+    this.init()
+  }
 
-const triggerAjaxMarkdownPreview = async () => {
-  try {
-    if (store.endpoint) {
-      const response = await window.fetch(store.endpoint, {
-        method: 'POST',
-        mode: 'same-origin',
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': store.csrfToken
-        },
-        redirect: 'follow',
-        referrerPolicy: 'same-origin',
-        body: JSON.stringify({
-          markdown: store.source.value,
-          authenticity_token: store.authenticityToken
+  init () {
+    this.addLiveRegion()
+    this.createErrorArea()
+
+    // run on page load
+    this.setLoadingStatus()
+    this.triggerAjaxMarkdownPreview()
+
+    // run when the user types
+    this.source.addEventListener('input', () => this.inputEventListener())
+  }
+
+  setLoadingStatus () {
+    this.liveRegion.setAttribute('aria-busy', 'true')
+    this.target.innerHTML = `<p>${this.i18n.preview_loading}</p>`
+  }
+
+  setFailureStatus () {
+    this.target.innerHTML = `<p>${this.i18n.preview_error}</p>`
+    const retryButton = document.createElement('button')
+    retryButton.classList.add('govuk-button', 'govuk-button--secondary')
+    retryButton.innerHTML = 'Retry preview'
+    retryButton.addEventListener('click', event => {
+      this.manuallyTriggerMarkdownPreview(event)
+    })
+    this.target.appendChild(retryButton)
+  }
+
+  async triggerAjaxMarkdownPreview () {
+    try {
+      if (this.endpoint) {
+        const response = await window.fetch(this.endpoint, {
+          method: 'POST',
+          mode: 'same-origin',
+          cache: 'no-cache',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': this.csrfToken
+          },
+          redirect: 'follow',
+          referrerPolicy: 'same-origin',
+          body: JSON.stringify({
+            markdown: this.source.value,
+            authenticity_token: this.authenticityToken
+          })
         })
-      })
 
-      // insert the preview into the DOM
-      const json = await response.json()
-      store.target.innerHTML = json.preview_html
-      if (json.errors.length > 0) {
-        addErrorToField(json.errors[0])
-        addErrorClass()
+        // insert the preview into the DOM
+        const json = await response.json()
+        this.target.innerHTML = json.preview_html
+        if (json.errors.length > 0) {
+          this.addErrorToField(json.errors[0])
+          this.addErrorClass()
+        } else {
+          this.clearErrorsFromField()
+          this.removeErrorClass()
+        }
+        this.addNotification('Preview updated.')
       } else {
-        clearErrorsFromField()
-        removeErrorClass()
+        throw new Error('No endpoint set')
       }
-      addNotification('Preview updated.')
-    } else {
-      throw new Error('No endpoint set')
+    } catch {
+      this.setFailureStatus()
+      this.addNotification(this.i18n.preview_error)
     }
-  } catch {
-    setFailureStatus()
-    addNotification(store.i18n.preview_error)
   }
-}
 
-const manuallyTriggerMarkdownPreview = event => {
-  event?.preventDefault()
+  manuallyTriggerMarkdownPreview (event) {
+    event?.preventDefault()
+    this.triggerAjaxMarkdownPreview()
+  }
 
-  triggerAjaxMarkdownPreview()
-}
+  inputEventListener () {
+    this.setLoadingStatus()
+    return this.debouncedAjaxMarkdownPreview()
+  }
 
-const addEventListeners = (trigger, callback) => {
-  trigger.addEventListener('click', callback)
-}
+  addLiveRegion () {
+    const liveRegion = document.createElement('div')
+    liveRegion.setAttribute('role', 'status')
+    liveRegion.classList.add('app-markdown-editor__notification-area')
+    this.liveRegion = liveRegion
+    this.source.after(liveRegion)
+  }
 
-// debounce the AJAX request so we don't hammer the server with one request per keystroke
-const debouncedAjaxMarkdownPreview = debounce(() => {
-  triggerAjaxMarkdownPreview()
-}, 1000)
+  addNotification (text) {
+    this.liveRegion.setAttribute('aria-busy', 'false')
+    this.liveRegion.innerHTML = text
+    setTimeout(() => {
+      this.liveRegion.innerHTML = ''
+    }, 5000)
+  }
 
-const inputEventListener = () => {
-  setLoadingStatus()
-  return debouncedAjaxMarkdownPreview()
-}
-
-const addLiveRegion = () => {
-  const liveRegion = document.createElement('div')
-  liveRegion.setAttribute('role', 'status')
-  liveRegion.classList.add('app-markdown-editor__notification-area')
-  store.liveRegion = liveRegion
-  store.source.after(liveRegion)
-}
-
-const addNotification = text => {
-  store.liveRegion.setAttribute('aria-busy', 'false')
-  store.liveRegion.innerHTML = text
-  setTimeout(() => {
-    store.liveRegion.innerHTML = ''
-  }, 5000)
-}
-
-const createErrorArea = () => {
-  // Use existing error area if there's a server side error present on the field
-  store.errorArea =
-    store.source
-      .closest('.govuk-form-group')
-      ?.querySelector('.govuk-error-message') ?? document.createElement('p')
-  store.errorArea.classList.add(
-    'govuk-error-message',
-    'app-markdown-editor__error-message'
-  )
-  store.source.closest('.govuk-form-group').prepend(store.errorArea)
-  setAriaAttributesForError()
-}
-
-const setAriaAttributesForError = () => {
-  if (!store.errorArea.getAttribute('id')) {
-    const id = `${store.source.getAttribute('id')}-error`
-    store.errorArea.setAttribute('id', id)
-    store.source.setAttribute(
-      'aria-describedby',
-      `${id} ${store.source.getAttribute('aria-describedby')}`
+  createErrorArea () {
+    // Use existing error area if there's a server side error present on the field
+    this.errorArea =
+      this.source
+        .closest('.govuk-form-group')
+        ?.querySelector('.govuk-error-message') ?? document.createElement('p')
+    this.errorArea.classList.add(
+      'govuk-error-message',
+      'app-markdown-editor__error-message'
     )
+    this.source.closest('.govuk-form-group').prepend(this.errorArea)
+    this.setAriaAttributesForError()
   }
-  store.errorArea.setAttribute('aria-live', 'polite')
-}
 
-const addErrorToField = error => {
-  if (!store.errorArea) createErrorArea()
-  store.errorArea.innerHTML = `<span class="govuk-visually-hidden">Error:</span> ${error}`
-}
+  setAriaAttributesForError () {
+    if (!this.errorArea.getAttribute('id')) {
+      const id = `${this.source.getAttribute('id')}-error`
+      this.errorArea.setAttribute('id', id)
+      this.source.setAttribute(
+        'aria-describedby',
+        `${id} ${this.source.getAttribute('aria-describedby')}`
+      )
+    }
+    this.errorArea.setAttribute('aria-live', 'polite')
+  }
 
-const clearErrorsFromField = () => {
-  if (!store.errorArea) createErrorArea()
-  store.errorArea.innerHTML = ''
-}
+  addErrorToField (error) {
+    if (!this.errorArea) this.createErrorArea()
+    this.errorArea.innerHTML = `<span class="govuk-visually-hidden">Error:</span> ${error}`
+  }
 
-const addErrorClass = () => {
-  store.source
-    .closest('.govuk-form-group')
-    ?.classList.add('govuk-form-group--error')
-  store.source.classList.add('govuk-textarea--error')
-}
+  clearErrorsFromField () {
+    if (!this.errorArea) this.createErrorArea()
+    this.errorArea.innerHTML = ''
+  }
 
-const removeErrorClass = () => {
-  store.source
-    .closest('.govuk-form-group--error')
-    ?.classList.remove('govuk-form-group--error')
-  store.source.classList.remove('govuk-textarea--error')
+  addErrorClass () {
+    this.source
+      .closest('.govuk-form-group')
+      ?.classList.add('govuk-form-group--error')
+    this.source.classList.add('govuk-textarea--error')
+  }
+
+  removeErrorClass () {
+    this.source
+      .closest('.govuk-form-group--error')
+      ?.classList.remove('govuk-form-group--error')
+    this.source.classList.remove('govuk-textarea--error')
+  }
 }
 
 /**
@@ -156,28 +174,11 @@ const removeErrorClass = () => {
  * @param {HTMLElement} source - The element which contains the raw markdown for conversion.
  * @param {string} endpoint - The URL for the endpoint that renders the markdown.
  * @param {Object} i18n - An object containing translations for the component.
+ * @returns {AjaxMarkdownPreview} The instance of the AjaxMarkdownPreview class.
  */
 const ajaxMarkdownPreview = (target, source, endpoint, i18n) => {
-  store.target = target
-  store.source = source
-  store.endpoint = endpoint
-  store.i18n = i18n
-  store.authenticityToken = document.querySelector(
-    'input[name="authenticity_token"]'
-  )?.value
-  store.csrfToken = document
-    .querySelector('meta[name="csrf-token"]')
-    ?.getAttribute('content')
-
-  addLiveRegion()
-  createErrorArea()
-
-  // run on page load
-  setLoadingStatus()
-  triggerAjaxMarkdownPreview()
-
-  // run when the user types
-  source.addEventListener('input', inputEventListener)
+  return new AjaxMarkdownPreview(target, source, endpoint, i18n)
 }
 
 export default ajaxMarkdownPreview
+export { AjaxMarkdownPreview }
