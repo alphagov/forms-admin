@@ -16,8 +16,9 @@ describe "archived/show_form.html.erb" do
     expect(rendered).to have_link(t("home.preview"), href: "runner-host/preview-archived/#{form_document.id}/#{form_document.form_slug}", visible: :all)
   end
 
-  it "contains the title 'Previous form URL'" do
+  it "contains the previous form URL" do
     expect(rendered).to have_css("h3", text: "Previous form URL")
+    expect(rendered).to have_text(link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live))
   end
 
   it "contains a link to view questions" do
@@ -26,5 +27,27 @@ describe "archived/show_form.html.erb" do
 
   it "contains a link to make the form live again" do
     expect(rendered).to have_link("Make this form live", href: "/forms/#{form_document.id}/unarchive")
+  end
+
+  context "when the form has a Welsh translation" do
+    let(:form_metadata) { create :form, :archived, :with_welsh_translation }
+
+    it "includes a link to preview the English version" do
+      expect(rendered).to have_link("English", href: "runner-host/preview-archived/#{form_document.id}/#{form_document.form_slug}", visible: :all)
+    end
+
+    it "includes a link to preview the Welsh version" do
+      expect(rendered).to have_link("Preview this form in Welsh", href: "runner-host/preview-archived/#{form_document.id}/#{form_document.form_slug}.cy", visible: :all)
+    end
+
+    it "contains the previous English form URL" do
+      expect(rendered).to have_css("h3", text: "Previous English form URL")
+      expect(rendered).to have_text(link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live))
+    end
+
+    it "contains the previous Welsh form URL" do
+      expect(rendered).to have_css("h3", text: "Previous Welsh form URL")
+      expect(rendered).to have_text(link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live, locale: :cy))
+    end
   end
 end

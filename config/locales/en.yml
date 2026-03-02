@@ -392,6 +392,18 @@ en:
       title_create: Create a form
       title_edit: Edit your form
       your_questions: Your questions
+    made_live_form:
+      archived_form_url: Previous form URL
+      archived_form_url_multilingual:
+        cy: Previous Welsh form URL
+        en: Previous English form URL
+      live_form_url: Form URL
+      live_form_url_multilingual:
+        cy: Welsh form URL
+        en: English form URL
+      preview:
+        cy: Preview this form in Welsh
+        en: Preview this form in English
     submission_attachments:
       new:
         body_html: |

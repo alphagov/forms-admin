@@ -81,7 +81,7 @@ describe "forms/_made_live_form.html.erb" do
   describe "the link to the live form" do
     context "when the form is live" do
       it "contains the title 'Form URL'" do
-        expect(rendered).to have_css("h2", text: "Form URL")
+        expect(rendered).to have_css("h3", text: "Form URL")
       end
 
       it "contains a link to the form in the runner" do
@@ -338,6 +338,28 @@ describe "forms/_made_live_form.html.erb" do
     it "contains a link to the payment url" do
       expect(rendered).to have_css("h3", text: "GOV.UK Pay payment link")
       expect(rendered).to have_link(payment_url, href: payment_url)
+    end
+  end
+
+  context "when the form has a Welsh translation" do
+    let(:form_metadata) { create :form, :live, :with_welsh_translation, declaration_text:, what_happens_next_markdown:, submission_type:, submission_format: }
+
+    it "includes a link to preview the English version" do
+      expect(rendered).to have_link("English", href: "runner-host/preview-live/#{form_document.id}/#{form_document.form_slug}", visible: :all)
+    end
+
+    it "includes a link to preview the Welsh version" do
+      expect(rendered).to have_link("Preview this form in Welsh", href: "runner-host/preview-live/#{form_document.id}/#{form_document.form_slug}.cy", visible: :all)
+    end
+
+    it "contains the English form URL" do
+      expect(rendered).to have_css("h3", text: "English form URL")
+      expect(rendered).to have_text(link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live))
+    end
+
+    it "contains the Welsh form URL" do
+      expect(rendered).to have_css("h3", text: "Welsh form URL")
+      expect(rendered).to have_text(link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live, locale: :cy))
     end
   end
 end
