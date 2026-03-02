@@ -55,7 +55,7 @@ private
 
   def declaration_status
     return :completed if @form.declaration_section_completed
-    return :in_progress if @form.declaration_text.present?
+    return :in_progress if @form.declaration_markdown.present?
 
     :not_started
   end
