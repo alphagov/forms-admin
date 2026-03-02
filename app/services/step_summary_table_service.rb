@@ -33,6 +33,29 @@ class StepSummaryTableService
     generic_row
   end
 
+  def route_content
+    conditions_for_step.map do |condition|
+      welsh_condition = welsh_condition_from_id(condition.id)
+      condition_data = {
+        answer_value: condition.answer_value,
+        answer_value_cy: welsh_answer_value(welsh_condition),
+        goto_page: print_goto_page(condition, @steps),
+        goto_page_cy: print_goto_page(welsh_condition, @welsh_steps),
+        routing_page: print_routing_page(condition, @steps),
+        routing_page_cy: print_routing_page(welsh_condition, @welsh_steps),
+        check_page: print_check_page(condition, @steps),
+        check_page_cy: print_check_page(welsh_condition, @welsh_steps),
+        secondary_skip: condition.secondary_skip?,
+        exit_page: condition.exit_page?,
+        exit_page_heading: condition.exit_page_heading,
+        exit_page_heading_cy: welsh_condition.exit_page_heading,
+        exit_page_markdown: condition.exit_page_markdown,
+        exit_page_markdown_cy: welsh_condition.exit_page_markdown,
+      }
+      condition_data
+    end
+  end
+
 private
 
   def page_heading_row
@@ -228,5 +251,48 @@ private
 
   def welsh_step
     @welsh_steps.find { |welsh_step| welsh_step.id == @step.id }
+  end
+
+  def step_from_id(id)
+    @steps.find { |welsh_step| welsh_step.id == id }
+  end
+
+  def welsh_step_from_id(id)
+    @welsh_steps.find { |step| step.id == id }
+  end
+
+  def conditions_for_step
+    @steps.flat_map(&:routing_conditions).filter { |condition| condition.check_page_id == @step.id }
+  end
+
+  def welsh_condition_from_id(condition_id)
+    @welsh_steps.flat_map(&:routing_conditions).find { |welsh_condition| welsh_condition.id == condition_id }
+  end
+
+  def build_title(step)
+    question_text = ActionController::Base.helpers.sanitize(step.question_text)
+
+    "#{step.position}. #{question_text}"
+  end
+
+  def print_goto_page(condition, steps, locale: "en")
+    return I18n.t("step_summary_card.check_your_answers.#{locale}") if condition.skip_to_end
+    return condition.exit_page_heading if condition.exit_page?
+
+    build_title(steps.find { |step| step.id == condition.goto_page_id })
+  end
+
+  def print_routing_page(condition, steps)
+    build_title(steps.find { |step| step.id == condition.routing_page_id })
+  end
+
+  def print_check_page(condition, steps)
+    build_title(steps.find { |step| step.id == condition.check_page_id })
+  end
+
+  def welsh_answer_value(welsh_condition)
+    return nil if welsh_condition.answer_value.blank?
+
+    @welsh_steps.find { |step| step.id == welsh_condition.check_page_id }.answer_settings.selection_options.find { |option| option.value == welsh_condition.answer_value }.name
   end
 end

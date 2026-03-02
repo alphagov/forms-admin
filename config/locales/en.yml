@@ -1899,6 +1899,9 @@ en:
     status: Status
   step_summary_card:
     answer_type: Answer type
+    check_your_answers:
+      cy: Check your answers before submitting
+      en: Check your answers before submitting
     date_type:
       date_of_birth: Date of birth
       other_date: Date

@@ -27,18 +27,33 @@ class StepSummaryCardPresenter
   def build_bilingual_table
     {
       classes: %w[app-translation-table],
-      head: [
-        { text: nil, classes: "app-translation-table__empty-header-cell" },
-        { text: I18n.t("forms.welsh_translation.new.english_header") },
-        { text: I18n.t("forms.welsh_translation.new.welsh_header") },
-      ],
-      rows: StepSummaryTableService.call(step: @step, steps: @steps, welsh_steps: @welsh_steps).values_with_welsh_content,
+      head: bilingual_table_header,
+      rows: step_summary_table_service.values_with_welsh_content,
       first_cell_is_header: true,
     }
   end
 
   def build_untranslated_content
-    StepSummaryTableService.call(step: @step, steps: @steps, welsh_steps: @welsh_steps).untranslated_content
+    step_summary_table_service.untranslated_content
+  end
+
+  def build_route_tables
+    return nil if step_summary_table_service.route_content.empty?
+
+    step_summary_table_service.route_content.map do |route|
+      if route[:secondary_skip]
+        rows =  build_secondary_step_rows(route)
+        caption = "Route for any other answer"
+      else
+        rows = build_primary_route_rows(route)
+        caption = "Question #{page_number(@step)}’s route"
+      end
+
+      {
+        route_table: translation_table_config(caption:, rows:),
+        exit_page_table: (build_exit_page_table(route) if route[:exit_page]),
+      }
+    end
   end
 
 private
@@ -87,5 +102,79 @@ private
     return nil if @welsh_steps.blank?
 
     @welsh_steps.find { |welsh_step| welsh_step.id == @step.id }
+  end
+
+  def step_summary_table_service
+    StepSummaryTableService.call(step: @step, steps: @steps, welsh_steps: @welsh_steps)
+  end
+
+  def translation_table_config(caption: nil, rows: [])
+    {
+      caption:,
+      classes: %w[app-translation-table],
+      head: bilingual_table_header,
+      rows:,
+      first_cell_is_header: true,
+    }
+  end
+
+  def bilingual_table_header
+    [
+      { text: nil, classes: "app-translation-table__empty-header-cell" },
+      { text: I18n.t("forms.welsh_translation.new.english_header") },
+      { text: I18n.t("forms.welsh_translation.new.welsh_header") },
+    ]
+  end
+
+  def build_secondary_step_rows(route)
+    [
+      [
+        "Continue to",
+        route[:check_page],
+        route[:check_page_cy],
+      ],
+      [
+        "Then after",
+        route[:routing_page],
+        route[:routing_page_cy],
+      ],
+      [
+        "skip the person to",
+        route[:goto_page],
+        route[:goto_page_cy],
+      ],
+    ]
+  end
+
+  def build_primary_route_rows(route)
+    [
+      [
+        "If the answer is",
+        route[:answer_value],
+        route[:answer_value_cy],
+      ],
+      [
+        "Take the person to",
+        route[:goto_page],
+        route[:goto_page_cy],
+      ],
+    ]
+  end
+
+  def build_exit_page_table(route)
+    rows = [
+      [
+        "Page title",
+        route[:exit_page_heading],
+        route[:exit_page_heading_cy],
+      ],
+      [
+        "Page content",
+        { text: route[:exit_page_markdown], classes: %w[app-translation-table__markdown-preview] },
+        { text: route[:exit_page_markdown_cy], classes: %w[app-translation-table__markdown-preview] },
+      ],
+    ]
+
+    translation_table_config(caption: "Exit page", rows:)
   end
 end
