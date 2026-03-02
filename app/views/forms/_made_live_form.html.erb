@@ -59,7 +59,7 @@
     <h3 class="govuk-heading-m"><%= t('.questions') %></h3>
     <p><%= govuk_link_to t('.questions_link', count: form_document.steps.count), questions_path %></p>
 
-    <% if form_document.declaration_text.present? %>
+    <% if form_document.declaration_markdown.present? %>
       <% if form_document.has_welsh_translation? %>
         <%= govuk_summary_card(title: t('.declaration')) do |card| %>
           <%= govuk_table do |table| %>
@@ -69,10 +69,10 @@
             <%= table.with_body do |body|
             body.with_row do |row|
               row.with_cell do
-                form_document.declaration_text
+                GovukFormsMarkdown.render(form_document.declaration_markdown, locale: "en").html_safe
               end
               row.with_cell do
-                welsh_form_document.declaration_text
+                GovukFormsMarkdown.render(welsh_form_document.declaration_markdown, locale: "cy").html_safe
               end
             end
           end %>
@@ -81,7 +81,9 @@
         <% end %>
       <% else %>
         <h3 class="govuk-heading-m"><%= t('.declaration') %></h3>
-        <p><%= form_document.declaration_text %></p>
+        <div class="app-preview-area">
+          <%= GovukFormsMarkdown.render(form_document.declaration_markdown, locale: "en").html_safe %>
+        </div>
         <%= govuk_details(summary_text: t('.what_is_declaration'), text: t('.declaration_description')) %>
       <% end %>
     <% end %>
