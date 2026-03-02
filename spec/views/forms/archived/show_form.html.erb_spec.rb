@@ -23,7 +23,7 @@ describe "archived/show_form.html.erb" do
 
   it "contains the previous form URL" do
     expect(rendered).to have_css("h3", text: "Previous form URL")
-    expect(rendered).to have_text(link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live))
+    expect(rendered).to have_css("[data-copy-target]", text: link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live))
   end
 
   it "contains a link to view questions" do
@@ -52,12 +52,12 @@ describe "archived/show_form.html.erb" do
 
     it "contains the previous English form URL" do
       expect(rendered).to have_css("h3", text: "Previous English form URL")
-      expect(rendered).to have_text(link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live))
+      expect(rendered).to have_css("[data-copy-target]", text: link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live))
     end
 
     it "contains the previous Welsh form URL" do
       expect(rendered).to have_css("h3", text: "Previous Welsh form URL")
-      expect(rendered).to have_text(link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live, locale: :cy))
+      expect(rendered).to have_css("[data-copy-target]", text: link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live, locale: :cy))
     end
   end
 end

@@ -87,7 +87,7 @@ describe "forms/_made_live_form.html.erb" do
       end
 
       it "contains a link to the form in the runner" do
-        expect(rendered).to have_content("runner-host/form/#{form_document.id}/#{form_document.form_slug}")
+        expect(rendered).to have_css("[data-copy-target]", text: "runner-host/form/#{form_document.id}/#{form_document.form_slug}")
       end
     end
 
@@ -99,7 +99,7 @@ describe "forms/_made_live_form.html.erb" do
       end
 
       it "contains a link to the form in the runner" do
-        expect(rendered).to have_content("runner-host/form/#{form_document.id}/#{form_document.form_slug}")
+        expect(rendered).to have_css("[data-copy-target]", text: "runner-host/form/#{form_document.id}/#{form_document.form_slug}")
       end
     end
   end
