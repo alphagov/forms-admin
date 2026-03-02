@@ -264,7 +264,7 @@ RSpec.describe Form, type: :model do
         support_phone
         support_url
         support_url_text
-        declaration_text
+        declaration_markdown
         what_happens_next_markdown
       ]
     end
@@ -1296,7 +1296,7 @@ RSpec.describe Form, type: :model do
     let!(:page) { create(:page) }
     let(:welsh_attributes) do
       {
-        declaration_text: "cy declaration",
+        declaration_markdown: "cy declaration",
         payment_url: "https://cy.example.com",
         support_email: "cy@example.com",
         support_phone: "cy phone",
@@ -1343,10 +1343,10 @@ RSpec.describe Form, type: :model do
 
       context "when the English attributes are present" do
         before do
-          form.declaration_text = "en declaration"
+          form.declaration_markdown = "en declaration"
           form.payment_url = "https://en.example.com"
 
-          form.declaration_text_cy = "cy declaration"
+          form.declaration_markdown_cy = "cy declaration"
           form.payment_url_cy = "https://cy.example.com"
 
           form.save!
@@ -1355,7 +1355,7 @@ RSpec.describe Form, type: :model do
         it "does not clear the Welsh translations" do
           form.normalise_welsh!
           form.reload
-          expect(form.declaration_text_cy).to eq("cy declaration")
+          expect(form.declaration_markdown_cy).to eq("cy declaration")
           expect(form.payment_url_cy).to eq("https://cy.example.com")
         end
       end
