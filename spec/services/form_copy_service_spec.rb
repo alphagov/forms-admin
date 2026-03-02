@@ -257,7 +257,7 @@ RSpec.describe FormCopyService do
 
     context "when source form has Welsh language version with translated content" do
       let(:source_form) do
-        form = create(:form, :live, :with_pages, pages_count: 2, available_languages: %w[en cy], support_phone: "01234 567890", support_url: "https://example.gov.uk/support", support_url_text: "Our English support site", declaration_text: "English declaration", payment_url: "https://www.pay.gov.uk")
+        form = create(:form, :live, :with_pages, pages_count: 2, available_languages: %w[en cy], support_phone: "01234 567890", support_url: "https://example.gov.uk/support", support_url_text: "Our English support site", declaration_markdown: "English declaration", payment_url: "https://www.pay.gov.uk")
         # Add an exit page condition to the first page
         form.pages.first.answer_type = "selection"
         form.pages.first.hint_text = "English hint text"
@@ -284,7 +284,7 @@ RSpec.describe FormCopyService do
         form.support_phone_cy = "0800 111 222"
         form.support_url_cy = "https://example.com/cymorth"
         form.support_url_text_cy = "Cael cymorth"
-        form.declaration_text_cy = "Rwy'n datgan bod hyn yn wir"
+        form.declaration_markdown_cy = "Rwy'n datgan bod hyn yn wir"
         form.what_happens_next_markdown_cy = "Byddwn yn cysylltu â chi"
         form.payment_url_cy = "https://example.com/talu"
         form.save!
@@ -318,7 +318,7 @@ RSpec.describe FormCopyService do
         expect(copied_welsh.content["support_phone"]).to eq("0800 111 222")
         expect(copied_welsh.content["support_url"]).to eq("https://example.com/cymorth")
         expect(copied_welsh.content["support_url_text"]).to eq("Cael cymorth")
-        expect(copied_welsh.content["declaration_text"]).to eq("Rwy'n datgan bod hyn yn wir")
+        expect(copied_welsh.content["declaration_markdown"]).to eq("Rwy'n datgan bod hyn yn wir")
         expect(copied_welsh.content["what_happens_next_markdown"]).to eq("Byddwn yn cysylltu â chi")
         expect(copied_welsh.content["payment_url"]).to eq("https://example.com/talu")
       end
@@ -331,7 +331,7 @@ RSpec.describe FormCopyService do
         expect(copied_form.support_phone_cy).to eq("0800 111 222")
         expect(copied_form.support_url_cy).to eq("https://example.com/cymorth")
         expect(copied_form.support_url_text_cy).to eq("Cael cymorth")
-        expect(copied_form.declaration_text_cy).to eq("Rwy'n datgan bod hyn yn wir")
+        expect(copied_form.declaration_markdown_cy).to eq("Rwy'n datgan bod hyn yn wir")
         expect(copied_form.what_happens_next_markdown_cy).to eq("Byddwn yn cysylltu â chi")
         expect(copied_form.payment_url_cy).to eq("https://example.com/talu")
 

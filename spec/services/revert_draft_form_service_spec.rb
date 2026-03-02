@@ -139,13 +139,13 @@ describe RevertDraftFormService do
 
     context "when form has Welsh content" do
       let(:live_form) do
-        form = create(:form, :live, :with_pages, pages_count: 2, available_languages: %w[en cy], support_phone: "01234 567890", support_url: "https://example.gov.uk/support", support_url_text: "Our English support site", declaration_text: "English declaration", payment_url: "https://www.pay.gov.uk")
+        form = create(:form, :live, :with_pages, pages_count: 2, available_languages: %w[en cy], support_phone: "01234 567890", support_url: "https://example.gov.uk/support", support_url_text: "Our English support site", declaration_markdown: "English declaration", payment_url: "https://www.pay.gov.uk")
         # Set Welsh translations for the form
         form.name_cy = "Ffurflen Gymraeg"
         form.privacy_policy_url_cy = "https://example.com/preifatrwydd"
         form.support_email_cy = "cymorth@example.com"
         form.support_phone_cy = "0800 111 222"
-        form.declaration_text_cy = "Rwy'n datgan bod hyn yn wir"
+        form.declaration_markdown = "Rwy'n datgan bod hyn yn wir"
         form.save!
         form.pages.first.hint_text = "English first page hint text"
         form.pages.last.hint_text = "English last page hint text"
@@ -180,7 +180,7 @@ describe RevertDraftFormService do
           expect(live_form.privacy_policy_url_cy).to eq("https://example.com/preifatrwydd")
           expect(live_form.support_email_cy).to eq("cymorth@example.com")
           expect(live_form.support_phone_cy).to eq("0800 111 222")
-          expect(live_form.declaration_text_cy).to eq("Rwy'n datgan bod hyn yn wir")
+          expect(live_form.declaration_markdown_cy).to eq("Rwy'n datgan bod hyn yn wir")
 
           # Check that page-level Welsh translations are restored
           expect(live_form.pages.first.question_text_cy).to eq("Cwestiwn Cymraeg 1")
