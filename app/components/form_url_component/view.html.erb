@@ -1,7 +1,7 @@
 <%= tag.div "data-module": "copy-to-clipboard", "data-copy-button-text": @button_text do %>
-  <h2 class="govuk-heading-m">
+  <%= content_tag("h#{@heading_level}", class: "govuk-heading-m") do %>
     <%= @heading_text %>
-  </h2>
+  <%end%>
 
   <p data-copy-target>
     <%= @runner_link %>

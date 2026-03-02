@@ -2,11 +2,12 @@
 
 module FormUrlComponent
   class View < ApplicationComponent
-    def initialize(runner_link:, heading_text: nil, button_text: nil)
+    def initialize(runner_link:, heading_text: nil, button_text: nil, heading_level: 2)
       super()
       @runner_link = runner_link
       @heading_text = heading_text
       @button_text = button_text
+      @heading_level = heading_level
     end
 
     def before_render

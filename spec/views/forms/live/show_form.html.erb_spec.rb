@@ -23,7 +23,7 @@ describe "forms/live/show_form.html.erb" do
 
   it "contains the form URL" do
     expect(rendered).to have_css("h3", text: "Form URL")
-    expect(rendered).to have_text(link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live))
+    expect(rendered).to have_css("[data-copy-target]", text: link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live))
   end
 
   it "contains a link to view questions" do
@@ -48,12 +48,12 @@ describe "forms/live/show_form.html.erb" do
 
     it "contains the English form URL" do
       expect(rendered).to have_css("h3", text: "English form URL")
-      expect(rendered).to have_text(link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live))
+      expect(rendered).to have_css("[data-copy-target]", text: link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live))
     end
 
     it "contains the Welsh form URL" do
       expect(rendered).to have_css("h3", text: "Welsh form URL")
-      expect(rendered).to have_text(link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live, locale: :cy))
+      expect(rendered).to have_css("[data-copy-target]", text: link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live, locale: :cy))
     end
   end
 end

@@ -35,4 +35,16 @@ RSpec.describe FormUrlComponent::View, type: :component do
       expect(page).to have_css("[data-copy-button-text='#{button_text}']")
     end
   end
+
+  context "when a custom heading level is provided" do
+    let(:heading_level) { 3 }
+
+    before do
+      render_inline(described_class.new(runner_link: "https://example.com", heading_level:))
+    end
+
+    it "renders the heading with default text" do
+      expect(page).to have_css("h3", text: "Form URL")
+    end
+  end
 end
