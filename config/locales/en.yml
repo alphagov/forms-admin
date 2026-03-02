@@ -407,6 +407,10 @@ en:
           <p>If you select one or both of these options, the files will be attached to each completed form email.</p>
         submit: Save and continue
         title: Get a CSV or JSON file of each completed form
+    task_list:
+      optional_tasks_title:
+        one: Optional task
+        other: Optional tasks
     task_list_create:
       create_form_section:
         declaration: Add a declaration for people to agree to
@@ -414,10 +418,13 @@ en:
         questions: Add and edit your questions
         title: Create your form
         what_happens_next: Add information about what happens next
-      email_address_section:
+      how_you_get_completed_forms_section:
         confirm_email: Enter the email address confirmation code
         email: Set the email address completed forms will be sent to
         hint_text_html: Completed forms will be sent to:<br> <span class="govuk-!-text-break-word">%{submission_email}</span>
+        optional_subsection:
+          daily_submission_batch: Get a daily CSV of the previous day’s completed forms
+          submission_attachments: Get a CSV or JSON file of each completed form
         title: Set up how you get completed forms
       make_form_live_section:
         group_not_active:
@@ -442,14 +449,10 @@ en:
             <a href="%{group_members_path}">View the members of the group</a> to find a group admin.
       payment_link_subsection:
         payment_link: Add a link to a payment page on GOV.UK Pay
-        title: Optional task
       privacy_and_contact_details_section:
         contact_details: Provide contact details for support
         privacy_policy: Provide a link to privacy information for this form
         title: Provide privacy and contact details
-      submission_attachments_subsection:
-        task_name: Get a CSV or JSON file of each completed form
-        title: Optional task
       translations_section:
         add_welsh: Add a Welsh version of your form
         title: Create a Welsh version of your form (optional)
@@ -460,10 +463,13 @@ en:
         questions: Edit your questions
         title: Your form
         what_happens_next: Edit the information about what happens next
-      email_address_section:
+      how_you_get_completed_forms_section:
         confirm_email: Enter the email address confirmation code
         email: Edit the email address completed forms will be sent to
         hint_text_html: Completed forms will be sent to:<br> <span class="govuk-!-text-break-word">%{submission_email}</span>
+        optional_subsection:
+          daily_submission_batch: Get a daily CSV of the previous day’s completed forms
+          submission_attachments: Get a CSV or JSON file of each completed form
         title: Change how you get completed forms
       make_form_live_section:
         make_live: Make your changes live
@@ -471,14 +477,10 @@ en:
         title: Make your changes live
       payment_link_subsection:
         payment_link: Add a link to a payment page on GOV.UK Pay
-        title: Optional task
       privacy_and_contact_details_section:
         contact_details: Edit the contact details for support
         privacy_policy: Edit the link to privacy information for this form
         title: Privacy and contact details
-      submission_attachments_subsection:
-        task_name: Get a CSV or JSON file of each completed form
-        title: Optional task
       translations_section:
         add_welsh: Add a Welsh version of your form
         title: Create a Welsh version of your form (optional)

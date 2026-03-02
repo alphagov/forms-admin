@@ -20,14 +20,10 @@ class FormTaskListService
     sections = [
       create_form_section(section_number: 1),
       payment_link_subsection,
-      email_address_section(section_number: 2),
-    ]
-
-    if @form.email?
-      sections << submission_attachments_subsection
-    end
-
-    sections << privacy_and_contact_details_section(section_number: 3)
+      how_you_get_completed_forms_section(section_number: 2),
+      how_you_get_completed_forms_optional_subsection,
+      privacy_and_contact_details_section(section_number: 3),
+    ].compact
 
     last_sections = [make_form_live_section(section_number: 4)]
 
@@ -75,7 +71,7 @@ private
 
   def payment_link_subsection
     {
-      title: I18n.t("forms.task_list_#{create_or_edit}.payment_link_subsection.title"),
+      title: I18n.t("forms.task_list.optional_tasks_title", count: 1),
       rows: payment_link_subsection_tasks,
       section_number: nil,
       subsection: true,
@@ -88,33 +84,49 @@ private
     ]
   end
 
-  def email_address_section(section_number:)
+  def how_you_get_completed_forms_section(section_number:)
     {
-      title: I18n.t("forms.task_list_#{create_or_edit}.email_address_section.title"),
+      title: I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.title"),
       section_number:,
       subsection: false,
-      rows: email_address_section_tasks,
+      rows: how_you_get_completed_forms_section_tasks,
     }
   end
 
-  def email_address_section_tasks
-    hint_text = I18n.t("forms.task_list_#{create_or_edit}.email_address_section.hint_text_html", submission_email: @form.submission_email) if @form.submission_email.present?
-    [{ task_name: I18n.t("forms.task_list_#{create_or_edit}.email_address_section.email"), path: submission_email_input_path(@form.id), hint_text:, status: @task_statuses[:submission_email_status] },
-     { task_name: I18n.t("forms.task_list_#{create_or_edit}.email_address_section.confirm_email"), path: submission_email_code_path(@form.id), status: @task_statuses[:confirm_submission_email_status], active: can_enter_submission_email_code }]
+  def how_you_get_completed_forms_section_tasks
+    hint_text = I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.hint_text_html", submission_email: @form.submission_email) if @form.submission_email.present?
+    [{ task_name: I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.email"), path: submission_email_input_path(@form.id), hint_text:, status: @task_statuses[:submission_email_status] },
+     { task_name: I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.confirm_email"), path: submission_email_code_path(@form.id), status: @task_statuses[:confirm_submission_email_status], active: can_enter_submission_email_code }]
   end
 
-  def submission_attachments_subsection
+  def how_you_get_completed_forms_optional_subsection
+    rows = []
+    rows << submission_attachments_task if @form.email?
+    rows << daily_submission_batch_task if FeatureService.enabled?(:daily_submission_emails_enabled)
+
+    return nil if rows.empty?
+
     {
-      title: I18n.t("forms.task_list_#{create_or_edit}.submission_attachments_subsection.title"),
+      title: I18n.t("forms.task_list.optional_tasks_title", count: rows.count),
       section_number: nil,
       subsection: true,
-      rows: [
-        {
-          task_name: I18n.t("forms.task_list_#{create_or_edit}.submission_attachments_subsection.task_name"),
-          path: submission_attachments_path(@form.id),
-          status: @task_statuses[:submission_attachments_status],
-        },
-      ],
+      rows:,
+    }
+  end
+
+  def submission_attachments_task
+    {
+      task_name: I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.optional_subsection.submission_attachments"),
+      path: submission_attachments_path(@form.id),
+      status: @task_statuses[:submission_attachments_status],
+    }
+  end
+
+  def daily_submission_batch_task
+    {
+      task_name: I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.optional_subsection.daily_submission_batch"),
+      path: daily_submission_batch_path(@form.id),
+      status: @task_statuses[:daily_submission_batch_status],
     }
   end
 
@@ -245,6 +257,7 @@ private
   def remove_optional_statuses(statuses)
     statuses.delete(:payment_link_status)
     statuses.delete(:submission_attachments_status)
+    statuses.delete(:daily_submission_batch_status)
   end
 
   def can_enter_submission_email_code

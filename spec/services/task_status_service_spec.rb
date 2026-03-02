@@ -195,6 +195,26 @@ describe TaskStatusService do
       end
     end
 
+    describe "daily_submission_batch_status" do
+      let(:form) { build(:form, :new_form, :with_group, group:, send_daily_submission_batch:) }
+
+      context "with send_daily_submission_batch set to true" do
+        let(:send_daily_submission_batch) { true }
+
+        it "returns completed" do
+          expect(task_status_service.task_statuses[:daily_submission_batch_status]).to eq :completed
+        end
+      end
+
+      context "with send_daily_submission_batch set to false" do
+        let(:send_daily_submission_batch) { false }
+
+        it "returns optional" do
+          expect(task_status_service.task_statuses[:daily_submission_batch_status]).to eq :optional
+        end
+      end
+    end
+
     describe "share_preview_status" do
       context "with share_preview_completed set to false" do
         context "when the form does not have any pages" do
@@ -453,6 +473,7 @@ describe TaskStatusService do
         welsh_language_status: :optional,
         make_live_status: :completed,
         submission_attachments_status: :optional,
+        daily_submission_batch_status: :optional,
         share_preview_status: :completed,
       }
       expect(task_status_service.task_statuses).to eq expected_hash
