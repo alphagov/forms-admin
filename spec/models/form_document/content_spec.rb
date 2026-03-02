@@ -66,4 +66,22 @@ RSpec.describe FormDocument::Content, type: :model do
       expect(described_class.from_form_document(form_document)).to be_a(described_class)
     end
   end
+
+  describe "#has_welsh_translation?" do
+    context "when available_languages includes Welsh" do
+      let(:form) { create :form, :live, available_languages: %w[en cy] }
+
+      it "returns true" do
+        expect(form_document_content.has_welsh_translation?).to be true
+      end
+    end
+
+    context "when available_languages does not include Welsh" do
+      let(:form) { create :form, :live, available_languages: %w[en] }
+
+      it "returns false" do
+        expect(form_document_content.has_welsh_translation?).to be false
+      end
+    end
+  end
 end

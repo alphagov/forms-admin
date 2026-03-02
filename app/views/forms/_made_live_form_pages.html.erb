@@ -10,9 +10,30 @@
     </h1>
 
     <%= render FormStatusTagDescriptionComponent::View.new(status: status) %>
+  </div>
 
+  <div class="govuk-grid-column-full">
     <% form_document.steps.each_with_index do |step, index| %>
-      <%= govuk_summary_list(**StepSummaryCardPresenter.call(step:, steps: form_document.steps).build_data)%>
+      <%= govuk_summary_card(**StepSummaryCardPresenter.call(step:, steps: form_document.steps, welsh_steps: welsh_form_document&.steps).build_card) do %>
+        <% if welsh_form_document.present? && welsh_form_document&.steps.any? %>
+          <%= govuk_table(**StepSummaryCardPresenter.call(step:, steps: form_document.steps, welsh_steps: welsh_form_document.steps).build_bilingual_table) %>
+          <% if StepSummaryCardPresenter.call(step:, steps: form_document.steps, welsh_steps: welsh_form_document.steps).build_route_tables.present? %>
+            <% StepSummaryCardPresenter.call(step:, steps: form_document.steps, welsh_steps: welsh_form_document.steps).build_route_tables.each do |condition_data| %>
+              <%= govuk_table(**condition_data[:route_table]) %>
+
+              <% if condition_data[:exit_page_table].present? %>
+                <%= govuk_table(**condition_data[:exit_page_table]) %>
+              <% end %>
+            <% end %>
+          <% end %>
+
+          <%= govuk_details(summary_text: StepSummaryCardPresenter.call(step:, steps: form_document.steps, welsh_steps: welsh_form_document.steps).build_untranslated_content[:summary]) do %>
+            <%= StepSummaryCardPresenter.call(step:, steps: form_document.steps, welsh_steps: welsh_form_document.steps).build_untranslated_content[:text] %>
+          <% end %>
+        <% else %>
+          <%= govuk_summary_list(**StepSummaryCardPresenter.call(step:, steps: form_document.steps).build_summary_list)%>
+        <% end %>
+      <% end %>
     <% end %>
 
     <p>

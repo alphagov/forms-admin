@@ -8,7 +8,7 @@ module Forms
       return redirect_to archived_form_path if current_form.is_archived?
       raise NotFoundError unless current_form.is_live?
 
-      render :show_form, locals: { form_metadata: current_form, form_document: current_live_form }
+      render :show_form, locals: { form_metadata: current_form, form_document: current_live_form, welsh_form_document: }
     end
 
     def show_pages
@@ -17,7 +17,15 @@ module Forms
       return redirect_to archived_form_pages_path if current_form.is_archived?
       raise NotFoundError unless current_form.is_live?
 
-      render :show_pages, locals: { form_document: current_live_form }
+      render :show_pages, locals: { form_document: current_live_form, welsh_form_document: }
+    end
+
+  private
+
+    def welsh_form_document
+      return nil unless current_live_form.has_welsh_translation?
+
+      current_live_welsh_form
     end
   end
 end

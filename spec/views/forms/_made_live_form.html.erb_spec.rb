@@ -10,6 +10,7 @@ describe "forms/_made_live_form.html.erb" do
     form_document_content.first_made_live_at = 1.week.ago
     form_document_content
   end
+  let(:welsh_form_document) { nil }
   let(:group) { create(:group, name: "Group 1") }
   let(:status) { :live }
   let(:preview_mode) { :preview_live }
@@ -28,6 +29,7 @@ describe "forms/_made_live_form.html.erb" do
     render(partial: "forms/made_live_form", locals: {
       form_metadata:,
       form_document:,
+      welsh_form_document:,
       status:,
       preview_mode:,
       questions_path:,
@@ -81,7 +83,7 @@ describe "forms/_made_live_form.html.erb" do
   describe "the link to the live form" do
     context "when the form is live" do
       it "contains the title 'Form URL'" do
-        expect(rendered).to have_css("h2", text: "Form URL")
+        expect(rendered).to have_css("h3", text: "Form URL")
       end
 
       it "contains a link to the form in the runner" do
@@ -132,8 +134,8 @@ describe "forms/_made_live_form.html.erb" do
   end
 
   it "contains information about how you get completed forms" do
-    expect(rendered).to have_css("h3", text: I18n.t("made_live_form.how_you_get_completed_forms"))
-    expect(rendered).to have_xpath("//h3[text()='#{I18n.t('made_live_form.how_you_get_completed_forms')}']/following-sibling::h4", text: "Email")
+    expect(rendered).to have_css("h3", text: I18n.t("forms.made_live_form.how_you_get_completed_forms"))
+    expect(rendered).to have_xpath("//h3[text()='#{I18n.t('forms.made_live_form.how_you_get_completed_forms')}']/following-sibling::h4", text: "Email")
     expect(rendered).to have_text(form_document.submission_email)
   end
 
@@ -142,8 +144,8 @@ describe "forms/_made_live_form.html.erb" do
       let(:submission_format) { %w[csv] }
 
       it "tells the user they have CSVs enabled" do
-        expect(rendered).to have_css("h4", text: I18n.t("made_live_form.csv_and_json"))
-        expect(rendered).to include(I18n.t("made_live_form.submission_format.email.email_csv_html"))
+        expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.csv_and_json"))
+        expect(rendered).to include(I18n.t("forms.made_live_form.submission_format.email.email_csv_html"))
       end
     end
 
@@ -151,8 +153,8 @@ describe "forms/_made_live_form.html.erb" do
       let(:submission_format) { %w[json] }
 
       it "tells the user they have JSON submissions enabled" do
-        expect(rendered).to have_css("h4", text: I18n.t("made_live_form.csv_and_json"))
-        expect(rendered).to include(I18n.t("made_live_form.submission_format.email.email_json_html"))
+        expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.csv_and_json"))
+        expect(rendered).to include(I18n.t("forms.made_live_form.submission_format.email.email_json_html"))
       end
     end
 
@@ -160,8 +162,8 @@ describe "forms/_made_live_form.html.erb" do
       let(:submission_format) { %w[csv json] }
 
       it "tells the user they have CSV and JSON submissions enabled" do
-        expect(rendered).to have_css("h4", text: I18n.t("made_live_form.csv_and_json"))
-        expect(rendered).to include(I18n.t("made_live_form.submission_format.email.email_csv_json_html"))
+        expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.csv_and_json"))
+        expect(rendered).to include(I18n.t("forms.made_live_form.submission_format.email.email_csv_json_html"))
       end
     end
 
@@ -169,8 +171,8 @@ describe "forms/_made_live_form.html.erb" do
       let(:submission_format) { %w[] }
 
       it "tells the user they do not have CSVs enabled" do
-        expect(rendered).to have_css("h4", text: I18n.t("made_live_form.csv_and_json"))
-        expect(rendered).to include(I18n.t("made_live_form.submission_format.email.email_html"))
+        expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.csv_and_json"))
+        expect(rendered).to include(I18n.t("forms.made_live_form.submission_format.email.email_html"))
       end
     end
   end
@@ -179,7 +181,7 @@ describe "forms/_made_live_form.html.erb" do
     let(:submission_type) { "s3" }
 
     it "does not include the CSV and JSON section" do
-      expect(rendered).not_to have_css("h4", text: I18n.t("made_live_form.csv_and_json"))
+      expect(rendered).not_to have_css("h4", text: I18n.t("forms.made_live_form.csv_and_json"))
     end
   end
 
@@ -191,7 +193,7 @@ describe "forms/_made_live_form.html.erb" do
     let(:form_metadata) { create :form, :live, support_email: "support@example.gov.uk" }
 
     it "shows the support email address" do
-      expect(rendered).to have_xpath("//h3[text()='#{I18n.t('made_live_form.contact_details')}']/following-sibling::h4", text: "Email")
+      expect(rendered).to have_xpath("//h3[text()='#{I18n.t('forms.made_live_form.contact_details')}']/following-sibling::h4", text: "Email")
       expect(rendered).to have_content("support@example.gov.uk")
     end
   end
@@ -338,6 +340,98 @@ describe "forms/_made_live_form.html.erb" do
     it "contains a link to the payment url" do
       expect(rendered).to have_css("h3", text: "GOV.UK Pay payment link")
       expect(rendered).to have_link(payment_url, href: payment_url)
+    end
+  end
+
+  context "when the form has a Welsh translation" do
+    let(:form_metadata) { create :form, :live, :with_welsh_translation, what_happens_next_markdown:, submission_type:, submission_format: }
+    let(:welsh_form_document) do
+      form_document_content = FormDocument::Content.from_form_document(form_metadata.live_welsh_form_document)
+      form_document_content.first_made_live_at = 1.week.ago
+      form_document_content
+    end
+
+    it "includes the Welsh name of the form" do
+      expect(rendered).to have_css("h3", text: "Welsh form name")
+      expect(rendered).to have_text(welsh_form_document.name)
+    end
+
+    it "includes a link to preview the English version" do
+      expect(rendered).to have_link("English", href: "runner-host/preview-live/#{form_document.id}/#{form_document.form_slug}", visible: :all)
+    end
+
+    it "includes a link to preview the Welsh version" do
+      expect(rendered).to have_link("Preview this form in Welsh", href: "runner-host/preview-live/#{form_document.id}/#{form_document.form_slug}.cy", visible: :all)
+    end
+
+    it "contains the English form URL" do
+      expect(rendered).to have_css("h3", text: "English form URL")
+      expect(rendered).to have_text(link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live))
+    end
+
+    it "contains the Welsh form URL" do
+      expect(rendered).to have_css("h3", text: "Welsh form URL")
+      expect(rendered).to have_text(link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live, locale: :cy))
+    end
+
+    it "contains a table displaying the what happens next text in each language" do
+      expect(rendered).to have_css(".govuk-summary-card__title", text: "What happens next information")
+      expect(rendered).to have_css("th", text: "English content")
+      expect(rendered).to have_css("td", text: form_document.what_happens_next_markdown)
+      expect(rendered).to have_css("th", text: "Welsh content")
+      expect(rendered).to have_css("td", text: welsh_form_document.what_happens_next_markdown)
+    end
+
+    context "when the form has a declaration" do
+      let(:form_metadata) { create :form, :live, :with_welsh_translation, declaration_text:, what_happens_next_markdown:, submission_type:, submission_format: }
+
+      it "contains a table displaying the declaration text in each language" do
+        expect(rendered).to have_css(".govuk-summary-card__title", text: "Declaration")
+        expect(rendered).to have_css("th", text: "English content")
+        expect(rendered).to have_css("td", text: form_document.declaration_text)
+        expect(rendered).to have_css("th", text: "Welsh content")
+        expect(rendered).to have_css("td", text: welsh_form_document.declaration_text)
+      end
+    end
+
+    context "when the form has a GOV.UK Pay payment link" do
+      let(:payment_url) { "https://www.gov.uk/payments/your-payment-link" }
+      let(:form_metadata) { create :form, :live, :with_welsh_translation, declaration_text:, what_happens_next_markdown:, submission_type:, submission_format:, payment_url: }
+
+      it "contains a table displaying the payment link in each language" do
+        expect(rendered).to have_css(".govuk-summary-card__title", text: "GOV.UK Pay payment link")
+        expect(rendered).to have_css("th", text: "English content")
+        expect(rendered).to have_css("td", text: form_document.payment_url)
+        expect(rendered).to have_css("th", text: "Welsh content")
+        expect(rendered).to have_css("td", text: welsh_form_document.payment_url)
+      end
+    end
+
+    it "contains a table displaying the privacy link in each language" do
+      expect(rendered).to have_css(".govuk-summary-card__title", text: "Privacy policy link")
+      expect(rendered).to have_css("th", text: "English content")
+      expect(rendered).to have_css("td", text: form_document.privacy_policy_url)
+      expect(rendered).to have_css("th", text: "Welsh content")
+      expect(rendered).to have_css("td", text: welsh_form_document.privacy_policy_url)
+    end
+
+    context "with support details" do
+      let(:form_metadata) { create :form, :live, :with_welsh_translation, what_happens_next_markdown:, submission_type:, submission_format:, support_email: "support@example.gov.uk", support_phone: "phone details", support_url_text: "website", support_url: "www.example.gov.uk" }
+
+      it "contains a table displaying the support details in each language" do
+        expect(rendered).to have_css(".govuk-summary-card__title", text: "Your form’s contact details for support")
+        expect(rendered).to have_css("th", text: "English content")
+        expect(rendered).to have_css("th", text: "Welsh content")
+        expect(rendered).to have_css("th", text: "Email")
+        expect(rendered).to have_css("td", text: form_document.support_email)
+        expect(rendered).to have_css("td", text: welsh_form_document.support_email)
+        expect(rendered).to have_css("th", text: "Phone")
+        expect(rendered).to have_css("td", text: form_document.support_phone)
+        expect(rendered).to have_css("td", text: welsh_form_document.support_phone)
+        expect(rendered).to have_css("th", text: "Support contact online")
+        expect(rendered).to have_css("td > a[href=\"#{form_document.support_url}\"]", text: form_document.support_url_text)
+        expect(rendered).to have_css("td > a[href=\"#{welsh_form_document.support_url}\"]", text: welsh_form_document.support_url_text)
+      end
     end
   end
 end
