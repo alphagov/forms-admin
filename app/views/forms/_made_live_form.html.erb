@@ -41,7 +41,7 @@
     <% if status == :live %>
       <% if form_document.has_welsh_translation? %>
         <h3 class="govuk-heading-m"><%= t(".live_form_url_multilingual.en") %></h3>
-        <p>
+        <p id="live-form-url-en" data-copy-target>
           <%= link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live) %>
         </p>
 
@@ -51,7 +51,7 @@
         </p>
       <% else %>
         <h3 class="govuk-heading-m"><%= t(".live_form_url") %></h3>
-        <p>
+        <p id="live-form-url-en" data-copy-target>
           <%= link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live) %>
         </p>
       <% end %>
