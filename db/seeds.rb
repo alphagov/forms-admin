@@ -130,7 +130,7 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
   test_group = Group.create! name: "Test Group", organisation: gds, creator: default_user, status: :active
   Group.create! name: "Ministry of Tests forms", organisation: mot_org
   Group.create! name: "Ministry of Tests forms - secret!", organisation: mot_org, creator: mot_user
-  welsh_group = Group.create! name: "Welsh enabled", organisation: gds, welsh_enabled: true
+  welsh_group = Group.create! name: "Welsh enabled", organisation: gds, welsh_enabled: true, status: :active
 
   Membership.create! user: default_user, group: end_to_end_group, added_by: default_user, role: :group_admin
 
@@ -458,7 +458,10 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
     what_happens_next_markdown_cy: "Prawf",
     share_preview_completed: true,
     available_languages: %w[en cy],
+    welsh_completed: true,
   )
+
+  welsh_form.make_live!
 
   # add forms to groups
   GroupForm.create! group: end_to_end_group, form_id: all_question_types_form.id # All question types form
