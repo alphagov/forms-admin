@@ -27,6 +27,7 @@ class Reports::FormsCsvReportService
     "What happens next markdown",
     "Submission type",
     "Submission formats",
+    "Daily submissions CSV enabled",
   ].freeze
 
   attr_reader :form_documents
@@ -75,6 +76,7 @@ private
       form["content"]["what_happens_next_markdown"],
       form["content"]["submission_type"],
       form["content"]["submission_format"]&.sort&.join(" "),
+      form["content"]["send_daily_submission_batch"],
     ]
   end
 end

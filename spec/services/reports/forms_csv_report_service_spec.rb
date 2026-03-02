@@ -22,17 +22,18 @@ RSpec.describe Reports::FormsCsvReportService do
     end
   end
   let(:form) do
-    create(:form, :live, :with_support, submission_type: "email", submission_format: %w[csv json], payment_url: "https://www.gov.uk/payments/organisation/service", pages: [
-      create(:page, :with_address_settings, is_repeatable: true),
-      create(:page, :with_date_settings),
-      create(:page, answer_type: "email"),
-      create(:page, :with_full_name_settings),
-      create(:page, answer_type: "national_insurance_number"),
-      create(:page, answer_type: "number"),
-      create(:page, answer_type: "phone_number"),
-      create(:page, :with_selection_settings, is_optional: true),
-      create(:page, :with_single_line_text_settings, is_repeatable: true),
-    ])
+    create(:form, :live, :with_support, submission_type: "email", submission_format: %w[csv json],
+                                        payment_url: "https://www.gov.uk/payments/organisation/service", send_daily_submission_batch: true, pages: [
+                                          create(:page, :with_address_settings, is_repeatable: true),
+                                          create(:page, :with_date_settings),
+                                          create(:page, answer_type: "email"),
+                                          create(:page, :with_full_name_settings),
+                                          create(:page, answer_type: "national_insurance_number"),
+                                          create(:page, answer_type: "number"),
+                                          create(:page, answer_type: "phone_number"),
+                                          create(:page, :with_selection_settings, is_optional: true),
+                                          create(:page, :with_single_line_text_settings, is_repeatable: true),
+                                        ])
   end
   let(:forms) { [form, create(:form, :live)] }
 
@@ -72,6 +73,7 @@ RSpec.describe Reports::FormsCsvReportService do
         form.what_happens_next_markdown,
         "email",
         "csv json",
+        "true",
       )
     end
   end
