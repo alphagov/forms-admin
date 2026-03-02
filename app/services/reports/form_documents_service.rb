@@ -48,6 +48,10 @@ class Reports::FormDocumentsService
       form_document["content"]["submission_type"] == "email" && form_document["content"]["submission_format"].include?("json")
     end
 
+    def has_daily_submission_csv(form_document)
+      form_document["content"]["send_daily_submission_batch"]
+    end
+
     def has_s3_submissions(form_document)
       form_document["content"]["submission_type"] == "s3"
     end

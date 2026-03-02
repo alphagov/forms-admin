@@ -1658,6 +1658,7 @@ en:
         forms_with_add_another_answer: "%{tag} forms with add another answer"
         forms_with_branch_routes: "%{tag} forms with branch routes"
         forms_with_csv_submission_email_attachments: "%{tag} forms with CSV email attachments"
+        forms_with_daily_submission_csv: "%{tag} forms getting a daily CSV of completed forms"
         forms_with_exit_pages: "%{tag} forms with exit pages"
         forms_with_json_submission_email_attachments: "%{tag} forms with JSON email attachments"
         forms_with_payments: "%{tag} forms with payments"
@@ -1693,6 +1694,10 @@ en:
       download_csv: Download data about all %{tag} forms with CSV submission email attachments enabled (as a CSV)
       empty: There are no %{tag} forms with CSV submission email attachments enabled
       heading: "%{tag} forms with CSV submission email attachments enabled"
+    forms_with_daily_submission_csv:
+      download_csv: Download data about all %{tag} forms getting a daily CSV of completed forms (as a CSV)
+      empty: There are no %{tag} forms getting a daily CSV of completed forms
+      heading: "%{tag} forms getting a daily CSV of completed forms"
     forms_with_exit_pages:
       download_csv: Download data about all %{tag} forms with exit pages as a CSV file
       empty: There are no %{tag} forms with exit pages

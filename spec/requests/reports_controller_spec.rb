@@ -292,6 +292,31 @@ RSpec.describe ReportsController, type: :request do
     end
   end
 
+  describe "#forms_with_daily_submission_csv" do
+    let(:path) { report_forms_with_daily_submission_csv_path(tag: :live) }
+    let(:form) { create(:form, :live, submission_type: "email", send_daily_submission_batch: true) }
+    let(:forms) { [form] }
+
+    include_examples "unauthorized user is forbidden"
+
+    context "when the user is a super admin" do
+      before do
+        login_as_super_admin_user
+
+        get path
+      end
+
+      it "returns http code 200 with the expected report data" do
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template("reports/feature_report")
+
+        node = Capybara.string(response.body)
+        expect(node).to have_xpath "//thead/tr/th[1]", text: "Form name"
+        expect(node).to have_xpath "//tbody/tr[1]/td[1]", text: form.name
+      end
+    end
+  end
+
   describe "#forms_with_s3_submissions" do
     let(:path) { report_forms_with_s3_submissions_path(tag: :live) }
     let(:form) { create(:form, :live, submission_type: "s3", submission_format: %w[json]) }
