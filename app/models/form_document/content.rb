@@ -48,6 +48,6 @@ class FormDocument::Content
   end
 
   def has_welsh_translation?
-    available_languages.include?("cy")
+    available_languages.present? && available_languages.include?("cy")
   end
 end

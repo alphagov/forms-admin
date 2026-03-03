@@ -83,5 +83,14 @@ RSpec.describe FormDocument::Content, type: :model do
         expect(form_document_content.has_welsh_translation?).to be false
       end
     end
+
+    context "when available_languages is not set" do
+      let(:form_document) { form.live_form_document }
+
+      it "returns false" do
+        form_document.content.delete("available_languages")
+        expect(form_document_content.has_welsh_translation?).to be false
+      end
+    end
   end
 end
