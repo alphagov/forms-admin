@@ -241,6 +241,24 @@ RSpec.describe Reports::FormDocumentsService do
     end
   end
 
+  describe ".has_daily_submission_csv" do
+    context "when the form has send_daily_submission_batch enabled" do
+      let(:form_document) { create(:form, :live, send_daily_submission_batch: true).live_form_document }
+
+      it "returns true" do
+        expect(described_class.has_daily_submission_csv(form_document)).to be true
+      end
+    end
+
+    context "when the form has send_daily_submission_batch disabled" do
+      let(:form_document) { create(:form, :live, send_daily_submission_batch: false).live_form_document }
+
+      it "returns false" do
+        expect(described_class.has_daily_submission_csv(form_document)).to be false
+      end
+    end
+  end
+
   describe ".has_welsh_translation" do
     subject(:has_welsh_translation) do
       described_class.has_welsh_translation(form_document)
