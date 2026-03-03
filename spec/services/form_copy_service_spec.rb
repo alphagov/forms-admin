@@ -54,6 +54,11 @@ RSpec.describe FormCopyService do
       expect(copied_form.updated_at).not_to eq(source_form.updated_at)
     end
 
+    it "does not copy attributes that we exclude from copying" do
+      expect(copied_form.first_made_live_at).to be_nil
+      expect(copied_form.submission_email).to be_nil
+    end
+
     context "when source form has completed tasks" do
       before do
         source_form.update!(

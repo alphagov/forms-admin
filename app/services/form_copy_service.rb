@@ -1,7 +1,7 @@
 class FormCopyService
   include LoggingHelper
 
-  DONT_COPY = %i[created_at updated_at submission_email].freeze
+  DONT_COPY = %i[created_at updated_at first_made_live_at submission_email].freeze
   TO_EXCLUDE = Form::ATTRIBUTES_NOT_IN_FORM_DOCUMENT + DONT_COPY
 
   def initialize(form, logged_in_user)
