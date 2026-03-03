@@ -6,9 +6,34 @@
 
     <h2 class="govuk-heading-m"><%= t('make_live.confirmation.form_name') %></h2>
 
-    <p><%= current_form.name %></p>
+    <% if current_form.has_welsh_translation? %>
+      <%= govuk_summary_list(actions: false) do |summary_list| %>
+        <% summary_list.with_row do |row| %>
+          <% row.with_key(text: t('make_live.confirmation.english_form')) %>
+          <% row.with_value(text: current_form.name) %>
+        <% end %>
+        <% summary_list.with_row do |row| %>
+          <% row.with_key(text: t('make_live.confirmation.welsh_form')) %>
+          <% row.with_value(text: current_form.name_cy) %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <p><%= current_form.name %></p>
+    <% end %>
 
-    <%= render FormUrlComponent::View.new(runner_link: link_to_runner(Settings.forms_runner.url, current_form.id, current_form.form_slug, mode: :live )) %>
+    <%= render FormUrlComponent::View.new(
+      runner_link: link_to_runner(Settings.forms_runner.url, current_form.id, current_form.form_slug, mode: :live),
+      heading_text: current_form.has_welsh_translation? ? t('make_live.confirmation.english_form_url') : nil,
+      button_text: current_form.has_welsh_translation? ? t('make_live.confirmation.copy_english_url_to_clipboard') : nil
+    ) %>
+
+    <% if current_form.has_welsh_translation? %>
+      <%= render FormUrlComponent::View.new(
+        runner_link: link_to_runner(Settings.forms_runner.url, current_form.id, current_form.form_slug, mode: :live, locale: :cy),
+        heading_text: t('make_live.confirmation.welsh_form_url'),
+        button_text: t('make_live.confirmation.copy_welsh_url_to_clipboard')
+      ) %>
+    <% end %>
 
     <%= confirmation_page_body %>
 
