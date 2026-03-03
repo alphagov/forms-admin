@@ -16,6 +16,23 @@ namespace :fix_first_made_live_at do
       raise ActiveRecord::Rollback
     end
   end
+
+  desc "Clear first_made_live_at for draft forms"
+  task clear_for_draft: :environment do
+    forms = Form.draft.where.not(first_made_live_at: nil)
+    Rails.logger.info "Found #{forms.count} draft forms with first_made_live_at set"
+    forms.update_all(first_made_live_at: nil)
+    Rails.logger.info "Finished clearing first_made_live_at for draft forms"
+  end
+
+  desc "Clear first_made_live_at for draft forms"
+  task clear_for_draft_dry_run: :environment do
+    forms = Form.draft.where.not(first_made_live_at: nil)
+    Rails.logger.info "Found #{forms.count} draft forms with first_made_live_at set"
+    forms.find_each do |form|
+      Rails.logger.info "Would clear first_made_live_at for form with ID #{form.id}"
+    end
+  end
 end
 
 def update_forms_first_made_live_at(forms_and_dates)
