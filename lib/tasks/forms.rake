@@ -153,12 +153,12 @@ namespace :forms do
   desc "Check selection options in Page DraftQuestion and FormDocument"
   task check_selection_options: :environment do
     pages_with_selection_options_with_no_value = Page.where(answer_type: "selection")
-        .where("jsonb_path_exists(answer_settings, '$.selection_options[*] ? (!exists(@.value))')")
-        .count
+                                                     .where("jsonb_path_exists(answer_settings, '$.selection_options[*] ? (!exists(@.value))')")
+                                                     .count
 
     draft_questions_with_selection_options_with_no_value = DraftQuestion.where(answer_type: "selection")
-        .where("jsonb_path_exists(answer_settings, '$.selection_options[*] ? (!exists(@.value))')")
-        .count
+                                                                        .where("jsonb_path_exists(answer_settings, '$.selection_options[*] ? (!exists(@.value))')")
+                                                                        .count
 
     Rails.logger.info "Pages with selection options with no value: #{pages_with_selection_options_with_no_value}"
     Rails.logger.info "DraftQuestions with selection options with no value: #{draft_questions_with_selection_options_with_no_value}"
