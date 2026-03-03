@@ -138,15 +138,22 @@
       <% end %>
     <% end %>
 
-    <h3 class="govuk-heading-m"><%= t(".how_you_get_completed_forms") %></h3>
+    <h3 class="govuk-heading-m"><%= t(".how_you_get_completed_forms.title") %></h3>
 
-    <h4 class="govuk-heading-s"><%= t('.submission_email') %></h4>
+    <h4 class="govuk-heading-s"><%= t('.how_you_get_completed_forms.submission_email') %></h4>
     <p class="govuk-!-text-break-word"><%= form_document.submission_email %></p>
 
     <% if form_document.submission_type == "email" %>
       <% submission_format = ["email", *form_document.submission_format].join("_") %>
-      <h4 class="govuk-heading-s"><%= t(".csv_and_json") %></h4>
-      <p><%= t(".submission_format.email.#{submission_format}_html") %></p>
+      <h4 class="govuk-heading-s"><%= t(".how_you_get_completed_forms.csv_and_json") %></h4>
+      <p><%= t(".how_you_get_completed_forms.submission_format.email.#{submission_format}_html") %></p>
+    <% end %>
+
+    <h4 class="govuk-heading-s"><%= t(".how_you_get_completed_forms.daily_csv.title") %></h4>
+    <% if form_document.send_daily_submission_batch %>
+      <p><%= t(".how_you_get_completed_forms.daily_csv.enabled") %></p>
+    <% else %>
+      <p><%= t(".how_you_get_completed_forms.daily_csv.disabled") %></p>
     <% end %>
 
     <% if form_document.has_welsh_translation? %>
