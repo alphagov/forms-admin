@@ -54,7 +54,19 @@ module Forms
       end
     end
 
+    def render_preview
+      authorize current_form, :can_view_form?
+
+      render json: { preview_html:, errors: [] }.to_json
+    end
+
   private
+
+    def preview_html
+      return t("guidance.no_guidance_added_html") if params[:markdown].blank?
+
+      GovukFormsMarkdown.render(params[:markdown])
+    end
 
     def welsh_enabled?
       FeatureService.new(group: current_form.group).enabled?(:welsh)
