@@ -151,6 +151,66 @@ RSpec.describe Forms::DeleteWelshTranslationInput, type: :model do
         it "resets the welsh_completed status" do
           expect { delete_welsh_translation_input.submit }.to change { form.reload.welsh_completed }.to(false)
         end
+
+        context "when the form is live" do
+          let(:form)  do
+            create :form,
+                   :live,
+                   name_cy: "New Welsh name",
+                   what_happens_next_markdown: "English what happens next",
+                   what_happens_next_markdown_cy: "New Welsh what happens next",
+                   declaration_text: "English declaration",
+                   declaration_text_cy: "New Welsh declaration",
+                   support_email: "english-support@example.gov.uk",
+                   support_email_cy: "new-welsh-support@example.gov.uk",
+                   support_phone: "English support phone",
+                   support_phone_cy: "0800 123 4567",
+                   support_url: "https://www.gov.uk/english-support",
+                   support_url_cy: "https://www.gov.uk/new-welsh-support",
+                   support_url_text: "English support url text",
+                   support_url_text_cy: "New Welsh Support",
+                   privacy_policy_url: "https://www.gov.uk/english-privacy",
+                   privacy_policy_url_cy: "https://www.gov.uk/new-welsh-privacy",
+                   payment_url_cy: "https://www.gov.uk/payments/new-welsh-payment-link",
+                   available_languages: %w[en cy],
+                   welsh_completed: true,
+                   pages: [page]
+          end
+
+          it "sets the form_status to `live_with_draft`" do
+            expect { delete_welsh_translation_input.submit }.to change { form.reload.state }.to("live_with_draft")
+          end
+        end
+
+        context "when the form is archived" do
+          let(:form)  do
+            create :form,
+                   :archived,
+                   name_cy: "New Welsh name",
+                   what_happens_next_markdown: "English what happens next",
+                   what_happens_next_markdown_cy: "New Welsh what happens next",
+                   declaration_text: "English declaration",
+                   declaration_text_cy: "New Welsh declaration",
+                   support_email: "english-support@example.gov.uk",
+                   support_email_cy: "new-welsh-support@example.gov.uk",
+                   support_phone: "English support phone",
+                   support_phone_cy: "0800 123 4567",
+                   support_url: "https://www.gov.uk/english-support",
+                   support_url_cy: "https://www.gov.uk/new-welsh-support",
+                   support_url_text: "English support url text",
+                   support_url_text_cy: "New Welsh Support",
+                   privacy_policy_url: "https://www.gov.uk/english-privacy",
+                   privacy_policy_url_cy: "https://www.gov.uk/new-welsh-privacy",
+                   payment_url_cy: "https://www.gov.uk/payments/new-welsh-payment-link",
+                   available_languages: %w[en cy],
+                   welsh_completed: true,
+                   pages: [page]
+          end
+
+          it "sets the form_status to `archived_with_draft`" do
+            expect { delete_welsh_translation_input.submit }.to change { form.reload.state }.to("archived_with_draft")
+          end
+        end
       end
     end
   end
