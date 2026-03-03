@@ -1280,12 +1280,11 @@ en:
     heading_with_single_date: Form metrics for %{date}
     heading_without_dates: Form metrics
     percentage: "%{number}%"
-  mou_signature:
+  mou_signatures:
     confirmation:
       body_html: |
         <h2 class="govuk-heading-m">What happens next</h2>
         <p>We’ll email you with any updates to the MOU that are made in the future.</p>
-  mou_signatures:
     index:
       share_mou_link_html: "<p>Allow users to view and agree to the latest Memorandum of Understanding by sharing %{mou_link}.</p>"
       table_caption: Signed MOUs
@@ -1294,6 +1293,10 @@ en:
         email: Email address
         name: Name
         organisation: Organisation
+    show:
+      already_agreed_banner:
+        heading: The Memorandum of Understanding was agreed on %{date}
+        title: MOU has been agreed already
   new_condition:
     routing_page_text: If the question
   not_found:

@@ -6,7 +6,7 @@
     <%= form_with(model: @mou_signature, url: mou_signature_url) do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">GOV.UK Forms Memorandum of Understanding</h1>
+      <h1 class="govuk-heading-l"><%= t("page_titles.mou_signature_new") %></h1>
 
       <%= render "mou_version_current" %>
 
