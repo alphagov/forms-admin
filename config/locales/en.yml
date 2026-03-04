@@ -406,6 +406,7 @@ en:
       your_questions: Your questions
     made_live_form:
       archive_this_form: Archive this form
+      archive_welsh: Archive the Welsh version of this form
       archived_form_url: Previous form URL
       archived_form_url_multilingual:
         cy: Previous Welsh form URL
