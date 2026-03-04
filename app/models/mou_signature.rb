@@ -4,6 +4,11 @@ class MouSignature < ApplicationRecord
 
   validates :agreed, acceptance: true
 
+  enum :agreement_type, {
+    crown: "crown",
+    non_crown: "non_crown",
+  }
+
   def self.add_mou_signature_organisation(user)
     mous_without_organisations = MouSignature.where(user:, organisation: nil)
     mous_without_organisations.update!(organisation_id: user.organisation.id)
