@@ -21,7 +21,7 @@ private
     form.translations.where(locale: :cy).delete_all
     form.available_languages = %w[en]
     form.welsh_completed = false
-    form.save!
+    form.save_draft!
   end
 
   def reset_page_translations
