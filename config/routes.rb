@@ -48,6 +48,8 @@ Rails.application.routes.draw do
     get "/archive" => "forms/archive_form#archive", as: :archive_form
     post "/archive" => "forms/archive_form#update", as: :archive_form_update
     get "/archive-success" => "forms/archive_form#confirmation", as: :archive_form_confirmation
+    get "/archive-welsh" => "forms/archive_welsh#show", as: :archive_welsh
+    post "/archive-welsh" => "forms/archive_welsh#update", as: :archive_welsh_update
     get "/privacy-policy" => "forms/privacy_policy#new", as: :privacy_policy
     post "/privacy-policy" => "forms/privacy_policy#create"
     get "/make-live" => "forms/make_live#new", as: :make_live
