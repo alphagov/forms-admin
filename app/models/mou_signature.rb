@@ -2,7 +2,9 @@ class MouSignature < ApplicationRecord
   belongs_to :user
   belongs_to :organisation, optional: true
 
-  validates :agreed, acceptance: true
+  validates :agreed, acceptance: { message: lambda do |record, _|
+    I18n.t("activerecord.errors.models.mou_signature.attributes.agreed.#{record.agreement_type}")
+  end }
 
   enum :agreement_type, {
     crown: "crown",

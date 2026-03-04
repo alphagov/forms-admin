@@ -163,7 +163,8 @@ en:
         mou_signature:
           attributes:
             agreed:
-              accepted: You must agree to the memorandum of understanding
+              crown: You must agree to the memorandum of understanding
+              non_crown: You must agree to the Agreement to continue
         page:
           attributes:
             hint_text:

@@ -15,6 +15,24 @@ RSpec.describe MouSignature, type: :model do
     expect(mou_signature.errors[:user]).to include(error_message)
   end
 
+  context "when agreement type is crown" do
+    it "is invalid when it is not accepted" do
+      mou_signature.agreed = false
+      expect(mou_signature).to be_invalid
+      expect(mou_signature.errors[:agreed]).to include("You must agree to the memorandum of understanding")
+    end
+  end
+
+  context "when agreement type is non_crown" do
+    let(:mou_signature) { build :mou_signature, agreement_type: :non_crown }
+
+    it "is invalid when it is not accepted" do
+      mou_signature.agreed = false
+      expect(mou_signature).to be_invalid
+      expect(mou_signature.errors[:agreed]).to include("You must agree to the Agreement to continue")
+    end
+  end
+
   describe "#add_mou_signature_organisation" do
     let(:user) { create :user }
     let(:other_organisation) { create :organisation }
