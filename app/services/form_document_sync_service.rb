@@ -44,7 +44,7 @@ class FormDocumentSyncService
 
       # Update the content of the live version to show that it doesn't support welsh anymore
       FormDocument.where(form:, tag: [LIVE_TAG, DRAFT_TAG], language: "en").find_each do |live_document|
-        live_document.content["available_languages"] = live_document.content["available_languages"].reject { |lang| lang == "cy" }
+        live_document.content["available_languages"].delete("cy")
         live_document.save!
       end
 
