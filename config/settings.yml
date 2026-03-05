@@ -36,6 +36,16 @@ govuk_notify:
   group_upgrade_rejected_template_id: f494999a-1a38-4b01-a3c8-dbb2d60e6e5f
   group_deleted_group_admin_editor_template_id: b987d794-9214-40f5-8014-65d5b9c058d8
   group_deleted_org_admin_template_id: 4c6d6c67-e9f1-4012-adc2-05f23dc69638
+  org_admin_alerts:
+    new_draft_form_made_live_template_id: 95065d23-e7ad-4af7-9a2f-7209276d74d0
+    live_form_changes_made_live_template_id: 02c38f9b-197e-480d-8031-bba9498d5907
+    archived_form_changes_made_live_template_id: 9db2d85b-9db4-48c3-bbc6-31aa0c742384
+    copied_form_made_live_template_id: 2c8d446c-474e-4f0e-9319-4c1b309e9727
+    archived_form_made_live_template_id: 85a4fb11-5cc5-42dc-ae27-78d187850605
+    new_draft_form_created_template_id: 1dc55d5d-c088-4464-b56f-132da1802058
+    copied_draft_form_created_template_id: a2d4f9a0-71b6-483d-ba83-0eb2e2592772
+    new_archived_form_draft_created_template_id: 02228b71-e680-4152-a5bd-0bc4b8a4695f
+    new_live_form_draft_created_template_id: 8c114e68-edd1-470b-bbf9-532733eaa0d1
 
 # When set to true, any capybara tests will run chrome normally rather than in headless mode.
 show_browser_during_tests: false
