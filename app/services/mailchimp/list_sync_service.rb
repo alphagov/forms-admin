@@ -1,17 +1,17 @@
-class MailchimpListSyncService
+class Mailchimp::ListSyncService
   def synchronize_lists
     Rails.logger.debug "Synchronizing active users mailing list"
-    MailchimpListSynchronizer.new(list_id: Settings.mailchimp.active_users_list).synchronize(desired_members: active_users)
+    Mailchimp::ListSynchronizer.new(list_id: Settings.mailchimp.active_users_list).synchronize(desired_members: active_users)
 
     Rails.logger.debug "Synchronizing MOU signers mailing list"
-    MailchimpListSynchronizer.new(list_id: Settings.mailchimp.mou_signers_list).synchronize(desired_members: mou_signers)
+    Mailchimp::ListSynchronizer.new(list_id: Settings.mailchimp.mou_signers_list).synchronize(desired_members: mou_signers)
   end
 
   def active_users
     User
       .where(has_access: true)
       .pluck(:email)
-      .map { |email| MailchimpMember.new(email: email, status: "subscribed") }
+      .map { |email| Mailchimp::Member.new(email: email, status: "subscribed") }
   end
 
   def mou_signers
@@ -20,7 +20,7 @@ class MailchimpListSyncService
       .where(has_access: true)
       .where("mou_signatures.id IS NOT NULL OR users.role = ?", "organisation_admin")
       .distinct
-      .map { |user| MailchimpMember.new(email: user.email, status: "subscribed", role: mou_role(user)) }
+      .map { |user| Mailchimp::Member.new(email: user.email, status: "subscribed", role: mou_role(user)) }
   end
 
 private
