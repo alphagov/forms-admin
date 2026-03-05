@@ -1283,9 +1283,14 @@ en:
     percentage: "%{number}%"
   mou_signatures:
     confirmation:
-      body_html: |
-        <h2 class="govuk-heading-m">What happens next</h2>
-        <p>We’ll email you with any updates to the MOU that are made in the future.</p>
+      crown:
+        body_html: |
+          <h2 class="govuk-heading-m">What happens next</h2>
+          <p>We’ll email you with any updates to the MOU that are made in the future.</p>
+      non_crown:
+        body_html: |
+          <h2 class="govuk-heading-m">What happens next</h2>
+          <p>We’ll email you with any updates to the agreement that are made in the future.</p>
     index:
       share_mou_link_html: "<p>Allow users to view and agree to the latest Memorandum of Understanding by sharing %{mou_link}.</p>"
       table_caption: Signed MOUs
@@ -1423,6 +1428,7 @@ en:
     name_settings: Ask for a person’s name
     new_page: Edit question
     new_secondary_skip: 'Route for any other answer: set questions to skip'
+    non_crown_agreement_confirmation: You’ve agreed to the GOV.UK Forms Agreement
     non_crown_agreement_new: GOV.UK Forms Agreement
     not_found: Page not found
     payment_link: Add a link to a payment page on GOV.UK Pay
