@@ -14,7 +14,13 @@ if Settings.sentry.dsn.present?
       [EmailParameterFilterProc.new(mask: Settings.sentry.filter_mask)],
       mask: Settings.sentry.filter_mask,
     )
+
     config.before_send = lambda do |event, _hint|
+      if event.exception && event.exception.values.present?
+        event.exception.values.each do |exception| # rubocop:disable Style/HashEachMethods
+          exception.value = filter.filter_param(nil, exception.value)
+        end
+      end
       if event.extra
         event.extra = filter.filter(event.extra)
       end

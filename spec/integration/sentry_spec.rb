@@ -3,6 +3,10 @@ require "rails_helper"
 RSpec.describe "config/initializers/sentry" do
   let(:test_dsn) { "https://fake@test-dsn/1".freeze }
 
+  # set the email address up here to keep it out of the traceback for the test error event
+  let(:submission_email) { "submission-email@test.example" }
+  let(:user_email) { "user@example.org" }
+
   before do
     allow(Settings.sentry).to receive(:dsn).and_return(test_dsn)
 
@@ -16,12 +20,12 @@ RSpec.describe "config/initializers/sentry" do
   end
 
   context "when an exception is raised containing personally identifying information" do
-    let(:form) { create :form, submission_email: "submission-email@test.example" }
+    let(:form) { create :form, submission_email: }
 
     before do
       raise "Something went wrong: #{form.inspect}"
     rescue RuntimeError => e
-      Sentry.set_context(:user, { email: "user@example.org", id: "some-user-id" })
+      Sentry.set_context(:user, { email: user_email, id: "some-user-id" })
       Sentry.capture_exception(e)
     end
 
@@ -30,8 +34,8 @@ RSpec.describe "config/initializers/sentry" do
     end
 
     it "scrubs email addresses from everywhere in the event" do
-      expect(last_sentry_event.to_h.to_s).not_to include "submission-email@test.example"
-      expect(last_sentry_event.to_h.to_s).not_to include "user@example.org"
+      expect(last_sentry_event.to_h.to_s).not_to include submission_email
+      expect(last_sentry_event.to_h.to_s).not_to include user_email
     end
 
     it "replaces the email address in the exception with a mask" do
