@@ -1,11 +1,16 @@
-<% set_page_title(t("page_titles.mou_signature_new")) %>
+<% page_title = @agreement_type == :crown ? t("page_titles.mou_signature_new") : t("page_titles.non_crown_agreement_new") %>
+<% set_page_title(page_title) %>
 
 <% if @mou_signature.present? %>
-  <%= govuk_notification_banner(title_text: t(".already_agreed_banner.title")) do |banner| %>
-    <% banner.with_heading(text: t(".already_agreed_banner.heading", date: @mou_signature.created_at.to_date.to_fs), tag: "p") %>
+  <%= govuk_notification_banner(title_text: t(".#{@agreement_type}.banner.title")) do |banner| %>
+    <% banner.with_heading(text: t(".#{@agreement_type}.banner.heading", date: @mou_signature.created_at.to_date.to_fs), tag: "p") %>
   <% end %>
 <% end %>
 
-<h1 class="govuk-heading-l"><%= t("page_titles.mou_signature_new") %></h1>
+<h1 class="govuk-heading-l"><%= page_title %></h1>
 
-<%= render "mou_version_current" %>
+<% if @agreement_type == :crown %>
+  <%= render "mou_version_current" %>
+<% else %>
+  <%= render "non_crown_agreement_version_current" %>
+<% end %>

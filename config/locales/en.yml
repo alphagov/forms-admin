@@ -1300,9 +1300,14 @@ en:
         name: Name
         organisation: Organisation
     show:
-      already_agreed_banner:
-        heading: The Memorandum of Understanding was agreed on %{date}
-        title: MOU has been agreed already
+      crown:
+        banner:
+          heading: The Memorandum of Understanding was agreed on %{date}
+          title: MOU has been agreed already
+      non_crown:
+        banner:
+          heading: The GOV.UK Forms Agreement was agreed on %{date}
+          title: Agreed already
   new_condition:
     routing_page_text: If the question
   not_found:
