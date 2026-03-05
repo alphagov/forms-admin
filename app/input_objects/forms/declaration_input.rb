@@ -11,6 +11,7 @@ class Forms::DeclarationInput < Forms::MarkCompleteInput
     return false if invalid?
 
     form.declaration_text = declaration_text
+    form.declaration_markdown = MarkdownConversionService.new(declaration_text).to_markdown
     form.declaration_section_completed = mark_complete
     form.save_draft!
   end
