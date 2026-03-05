@@ -1,17 +1,22 @@
-<% set_page_title(title_with_error_prefix(t("page_titles.mou_signature_new"), @mou_signature.errors.any?)) %>
+<% page_title = @agreement_type == :crown ? t("page_titles.mou_signature_new") : t("page_titles.non_crown_agreement_new") %>
+<% set_page_title(title_with_error_prefix(page_title, @mou_signature.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(root_path, t("back_link.forms")) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with(model: @mou_signature, url: mou_signature_url) do |f| %>
+    <%= form_with(model: @mou_signature, url: @create_path) do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l"><%= t("page_titles.mou_signature_new") %></h1>
+      <h1 class="govuk-heading-l"><%= page_title %></h1>
 
-      <%= render "mou_version_current" %>
+      <% if @agreement_type == :crown %>
+        <%= render "mou_version_current" %>
+      <% else %>
+        <%= render "non_crown_agreement_version_current" %>
+      <% end %>
 
-      <%= f.govuk_check_boxes_fieldset :agreed, multiple: false, legend: { tag: 'h2', size: 'm' } do %>
-        <%= f.govuk_check_box :agreed, 1, 0, multiple: false, link_errors: true  %>
+      <%= f.govuk_check_boxes_fieldset :agreed, multiple: false, legend: { tag: 'h2', size: 'm', text: t("helpers.legend.mou_signature.#{@agreement_type}_agreed") } do %>
+        <%= f.govuk_check_box :agreed, 1, 0, multiple: false, link_errors: true, label: { text: t("helpers.label.mou_signature.#{@agreement_type}_agreed") } %>
       <% end %>
 
       <%= f.govuk_submit t('save_and_continue') %>
