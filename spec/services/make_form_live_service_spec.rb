@@ -68,7 +68,10 @@ describe MakeFormLiveService do
   end
 
   describe "#confirmation_page_body" do
+    let(:group) { create :group }
+
     before do
+      GroupForm.create!(group:, form: current_form)
       make_form_live_service.make_live
     end
 

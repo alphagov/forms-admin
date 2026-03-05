@@ -34,7 +34,10 @@ class MakeFormLiveService
   end
 
   def confirmation_page_body
+    return I18n.t("make_changes_live.confirmation.body_html_cy").html_safe if @current_form_was_live && @current_form.has_welsh_translation?
     return I18n.t("make_changes_live.confirmation.body_html").html_safe if @current_form_was_live
+
+    return I18n.t("make_live.confirmation.body_html_cy").html_safe if @current_form.has_welsh_translation?
 
     I18n.t("make_live.confirmation.body_html").html_safe
   end
