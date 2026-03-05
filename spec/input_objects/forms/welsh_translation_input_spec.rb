@@ -624,6 +624,15 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
         end
       end
 
+      context "when the form has declaration text" do
+        let(:new_input_data) { super().merge(declaration_text_cy: "<p>This is the Welsh declaration</p>") }
+
+        it "converts the declaration text to markdown" do
+          welsh_translation_input.submit
+          expect(form.declaration_markdown_cy).to eq("This is the Welsh declaration\n\n")
+        end
+      end
+
       context "when the form includes page translation objects" do
         let(:page_translation) { Forms::WelshPageTranslationInput.new(page:, question_text_cy: "Ydych chi'n adnewyddu trwydded?", hint_text_cy: "Dewiswch 'Ydw' os oes gennych drwydded ddilys eisoes.", page_heading_cy: "Trwyddedu", guidance_markdown_cy: "Mae'r rhan hon o'r ffurflen yn ymwneud â thrwyddedu.") }
         let(:another_page_translation) { Forms::WelshPageTranslationInput.new(page: another_page, question_text_cy: "Ydych chi'n adnewyddu trwydded?") }

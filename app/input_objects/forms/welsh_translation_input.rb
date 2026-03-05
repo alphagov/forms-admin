@@ -75,6 +75,7 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
 
     form.name_cy = name_cy
     form.declaration_text_cy = form_has_declaration? ? declaration_text_cy : nil
+    form.declaration_markdown_cy = form_has_declaration? ? MarkdownConversionService.new(form.declaration_text_cy).to_markdown : nil
     form.payment_url_cy = form_has_payment_url? ? payment_url_cy : nil
     form.privacy_policy_url_cy = privacy_policy_url_cy
     form.support_email_cy = form_has_support_email? ? support_email_cy : nil
