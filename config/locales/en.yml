@@ -164,7 +164,7 @@ en:
           attributes:
             agreed:
               crown: You must agree to the memorandum of understanding
-              non_crown: You must agree to the Agreement to continue
+              non_crown: You must agree to the agreement to continue
         page:
           attributes:
             hint_text:
@@ -952,7 +952,7 @@ en:
             name: Group admin
       mou_signature:
         crown_agreed: I agree to the MOU on behalf of my organisation
-        non_crown_agreed: I agree to the GOV.UK Forms Agreement on behalf of my organisation
+        non_crown_agreed: I agree to the GOV.UK Forms agreement on behalf of my organisation
       page:
         address_settings_options:
           input_types:
@@ -1096,7 +1096,7 @@ en:
         submission_type: Do you want to get completed forms as CSV files?
       mou_signature:
         crown_agreed: Do you agree to the MOU?
-        non_crown_agreed: Do you agree to the GOV.UK Forms Agreement?
+        non_crown_agreed: Do you agree to the GOV.UK Forms agreement?
       pages_question_input:
         is_optional: Should this question be mandatory or optional?
         is_repeatable: Should people be able to answer this question more than once?
@@ -1307,7 +1307,7 @@ en:
           title: MOU has been agreed already
       non_crown:
         banner:
-          heading: The GOV.UK Forms Agreement was agreed on %{date}
+          heading: The GOV.UK Forms agreement was agreed on %{date}
           title: Agreed already
   new_condition:
     routing_page_text: If the question
@@ -1434,8 +1434,8 @@ en:
     name_settings: Ask for a person’s name
     new_page: Edit question
     new_secondary_skip: 'Route for any other answer: set questions to skip'
-    non_crown_agreement_confirmation: You’ve agreed to the GOV.UK Forms Agreement
-    non_crown_agreement_new: GOV.UK Forms Agreement
+    non_crown_agreement_confirmation: You’ve agreed to the GOV.UK Forms agreement
+    non_crown_agreement_new: GOV.UK Forms agreement
     not_found: Page not found
     payment_link: Add a link to a payment page on GOV.UK Pay
     privacy_policy: Provide a link to privacy information for this form

@@ -29,7 +29,7 @@ RSpec.describe MouSignature, type: :model do
     it "is invalid when it is not accepted" do
       mou_signature.agreed = false
       expect(mou_signature).to be_invalid
-      expect(mou_signature.errors[:agreed]).to include("You must agree to the Agreement to continue")
+      expect(mou_signature.errors[:agreed]).to include("You must agree to the agreement to continue")
     end
   end
 
