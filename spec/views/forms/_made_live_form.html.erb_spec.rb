@@ -3,7 +3,7 @@ require "rails_helper"
 describe "forms/_made_live_form.html.erb" do
   let(:declaration_text) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:past_week_metrics_data) { { weekly_submissions: 125, weekly_starts: 256 } }
-  let(:what_happens_next_markdown) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
+  let(:what_happens_next_markdown) { "If you have not received a response within 5 working days, [contact our user support team](https://example.com)." }
   let(:form_metadata) do
     create(:form, :live, declaration_text:, what_happens_next_markdown:, submission_type:, submission_format:,
                          send_daily_submission_batch:)
@@ -134,7 +134,7 @@ describe "forms/_made_live_form.html.erb" do
   end
 
   it "contains what happens next text" do
-    expect(rendered).to have_content(what_happens_next_markdown)
+    expect(rendered).to include("<p class=\"govuk-body\">If you have not received a response within 5 working days, <a href=\"https://example.com\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">contact our user support team (opens in new tab)</a>.</p>")
   end
 
   it "contains information about how you get completed forms" do
@@ -424,9 +424,9 @@ describe "forms/_made_live_form.html.erb" do
     it "contains a table displaying the what happens next text in each language" do
       expect(rendered).to have_css(".govuk-summary-card__title", text: "What happens next information")
       expect(rendered).to have_css("th", text: "English content")
-      expect(rendered).to have_css("td", text: form_document.what_happens_next_markdown)
+      expect(rendered).to include("<p class=\"govuk-body\">If you have not received a response within 5 working days, <a href=\"https://example.com\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">contact our user support team (opens in new tab)</a>.</p>")
       expect(rendered).to have_css("th", text: "Welsh content")
-      expect(rendered).to have_css("td", text: welsh_form_document.what_happens_next_markdown)
+      expect(rendered).to include("<p class=\"govuk-body\">If you have not received a response within 5 working days, <a href=\"https://example.com\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">contact our user support team (agor mewn tab newydd)</a>.</p>")
     end
 
     context "when the form has a declaration" do
