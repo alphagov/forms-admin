@@ -95,10 +95,10 @@
           <%= table.with_body do |body|
             body.with_row do |row|
               row.with_cell do
-                GovukFormsMarkdown.render(form_document.what_happens_next_markdown).html_safe
+                GovukFormsMarkdown.render(form_document.what_happens_next_markdown, locale: "en").html_safe
               end
               row.with_cell do
-                GovukFormsMarkdown.render(welsh_form_document.what_happens_next_markdown).html_safe
+                GovukFormsMarkdown.render(welsh_form_document.what_happens_next_markdown, locale: "cy").html_safe
               end
             end
           end %>
@@ -108,7 +108,7 @@
     <% else %>
       <h3 class="govuk-heading-m"><%= t('.what_happens_next') %></h3>
       <div class="app-preview-area">
-        <%= GovukFormsMarkdown.render(form_document.what_happens_next_markdown).html_safe %>
+        <%= GovukFormsMarkdown.render(form_document.what_happens_next_markdown, locale: "en").html_safe %>
       </div>
       <%= govuk_details(summary_text: t('.what_is_what_happens_next'), text: t('.what_happens_next_description')) %>
     <% end %>

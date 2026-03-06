@@ -46,7 +46,7 @@ module Forms
     def preview_html(what_happens_next_input)
       return t("guidance.no_guidance_added_html") if what_happens_next_input.what_happens_next_markdown.blank?
 
-      GovukFormsMarkdown.render(what_happens_next_input.what_happens_next_markdown, allow_headings: false)
+      GovukFormsMarkdown.render(what_happens_next_input.what_happens_next_markdown, allow_headings: false, locale: "en")
     end
   end
 end

@@ -65,7 +65,7 @@ module Forms
     def preview_html
       return t("guidance.no_guidance_added_html") if params[:markdown].blank?
 
-      GovukFormsMarkdown.render(params[:markdown])
+      GovukFormsMarkdown.render(params[:markdown], locale: "cy")
     end
 
     def welsh_enabled?
