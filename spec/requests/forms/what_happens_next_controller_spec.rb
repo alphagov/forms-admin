@@ -39,15 +39,10 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
     let(:route_to) { "save_and_continue" }
     let(:params) { { forms_what_happens_next_input: { what_happens_next_markdown: }, route_to: } }
 
-    it "Updates the form" do
+    it "Updates the form and redirects to the form overview page" do
       expect {
         post(what_happens_next_path(form_id: form.id), params:)
-      }.to change { form.reload.what_happens_next_markdown }.to(what_happens_next_markdown)
-    end
-
-    it "Redirects you to the form overview page" do
-      post(what_happens_next_path(form_id: form.id), params:)
-      expect(response).to redirect_to(form_path(form.id))
+      }.to change { form.reload.what_happens_next_markdown }.to(what_happens_next_markdown).and change { response }.to redirect_to(form_path(form.id))
     end
 
     context "when previewing markdown" do
@@ -58,27 +53,18 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
         post(what_happens_next_path(form_id: form.id), params:)
       end
 
-      it "renders the what happens next template" do
-        expect(response).to have_rendered("forms/what_happens_next/new")
-      end
-
-      it "returns 200" do
-        expect(response).to have_http_status(:ok)
-      end
-
       it "renders the guidance markdown as html" do
+        expect(response).to have_rendered("forms/what_happens_next/new")
+        expect(response).to have_http_status(:ok)
         expect(response.body).to include('<a href="https://example.com" class="govuk-link" rel="noreferrer noopener" target="_blank">a link (opens in new tab)</a>')
       end
 
       context "when markdown is invalid" do
         let(:what_happens_next_markdown) { "# A level one heading" }
 
-        it "renders the template" do
-          expect(response).to have_rendered("forms/what_happens_next/new")
-        end
-
-        it "returns 422" do
+        it "returns 422 and renders the `new` template" do
           expect(response).to have_http_status(:unprocessable_content)
+          expect(response).to have_rendered("forms/what_happens_next/new")
         end
       end
 
@@ -105,11 +91,8 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       context "when markdown is invalid" do
         let(:what_happens_next_markdown) { "# A level one heading" }
 
-        it "returns 422" do
+        it "returns 422 and renders the `new` template" do
           expect(response).to have_http_status(:unprocessable_content)
-        end
-
-        it "renders the template" do
           expect(response).to have_rendered("forms/what_happens_next/new")
         end
       end
@@ -117,29 +100,26 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
   end
 
   describe "#render_preview" do
-    let(:markdown) { "- Markdown" }
+    let(:markdown) { "[Markdown](https://example.com)" }
 
     before do
       post what_happens_next_render_preview_path(form_id: form.id), params: { markdown: }
     end
 
     it "returns a JSON object containing the converted HTML" do
-      expect(response.body).to eq({ preview_html: "<ul class=\"govuk-list govuk-list--bullet\">\n  <li>Markdown</li>\n\n</ul>", errors: [] }.to_json)
-    end
-
-    it "returns 200" do
       expect(response).to have_http_status(:ok)
+      expect(response.body).to eq({
+        preview_html: "<p class=\"govuk-body\"><a href=\"https://example.com\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">Markdown (opens in new tab)</a></p>",
+        errors: [],
+      }.to_json)
     end
 
     context "when markdown is blank" do
       let(:markdown) { "" }
 
       it "returns a JSON object containing the converted HTML" do
-        expect(response.body).to eq({ preview_html: I18n.t("guidance.no_guidance_added_html"), errors: [] }.to_json)
-      end
-
-      it "returns 200" do
         expect(response).to have_http_status(:ok)
+        expect(response.body).to eq({ preview_html: I18n.t("guidance.no_guidance_added_html"), errors: [] }.to_json)
       end
     end
 
@@ -147,11 +127,8 @@ RSpec.describe Forms::WhatHappensNextController, type: :request do
       let(:markdown) { "# A level one heading" }
 
       it "returns a JSON object containing the converted HTML" do
-        expect(response.body).to eq({ preview_html: "<p class=\"govuk-body\">A level one heading</p>", errors: [I18n.t("activemodel.errors.models.forms/what_happens_next_input.attributes.what_happens_next_markdown.unsupported_markdown_syntax")] }.to_json)
-      end
-
-      it "returns 200" do
         expect(response).to have_http_status(:ok)
+        expect(response.body).to eq({ preview_html: "<p class=\"govuk-body\">A level one heading</p>", errors: [I18n.t("activemodel.errors.models.forms/what_happens_next_input.attributes.what_happens_next_markdown.unsupported_markdown_syntax")] }.to_json)
       end
     end
 

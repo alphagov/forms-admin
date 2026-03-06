@@ -22,11 +22,8 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
       get welsh_translation_path(id)
     end
 
-    it "returns 200" do
-      expect(response).to have_http_status(:ok)
-    end
-
     it "renders the template" do
+      expect(response).to have_http_status(:ok)
       expect(response).to render_template(:new)
     end
 
@@ -54,31 +51,17 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
     let(:params) { { forms_welsh_translation_input: { form:, mark_complete:, name_cy: "Gwneud cais am drwydded jyglo", privacy_policy_url_cy: "https://juggling.gov.uk/privacy_policy/cy", page_translations_attributes: } } }
 
     context "when 'Yes' is selected" do
-      it "updates the form" do
+      it "updates the form, pages and conditions" do
         expect {
           post(welsh_translation_create_path(id), params:)
         }.to change { form.reload.welsh_completed }.to(true)
+        .and change { form.pages.first.reload.question_text_cy }.to("Ydych chi'n adnewyddu trwydded?")
+        .and change { condition.reload.exit_page_heading_cy }.to("Nid ydych yn gymwys")
       end
 
-      it "updates the form's pages" do
-        expect {
-          post(welsh_translation_create_path(id), params:)
-        }.to change { form.pages.first.reload.question_text_cy }.to("Ydych chi'n adnewyddu trwydded?")
-      end
-
-      it "updates the form's conditions" do
-        expect {
-          post(welsh_translation_create_path(id), params:)
-        }.to change { condition.reload.exit_page_heading_cy }.to("Nid ydych yn gymwys")
-      end
-
-      it "redirects to the form" do
+      it "redirects to the form task list and displays a success banner including text about being marked complete" do
         post(welsh_translation_create_path(id), params:)
         expect(response).to redirect_to(form_path(id))
-      end
-
-      it "displays a success banner including text about being marked complete" do
-        post(welsh_translation_create_path(id), params:)
         expect(flash[:success]).to eq(I18n.t("banner.success.form.welsh_translation_saved_and_completed"))
       end
     end
@@ -87,19 +70,15 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
       let(:mark_complete) { "false" }
       let(:form) { create(:form, :ready_for_routing, welsh_completed: true) }
 
-      it "updates the form" do
+      it "updates the form and redirects to the form task list" do
         expect {
           post(welsh_translation_create_path(id), params:)
         }.to change { form.reload.welsh_completed }.to(false)
       end
 
-      it "redirects to the form" do
+      it "redirects to the form and displays a success banner without text about being marked complete" do
         post(welsh_translation_create_path(id), params:)
         expect(response).to redirect_to(form_path(id))
-      end
-
-      it "displays a success banner without text about being marked complete" do
-        post(welsh_translation_create_path(id), params:)
         expect(flash[:success]).to eq(I18n.t("banner.success.form.welsh_translation_saved"))
       end
     end
@@ -107,37 +86,20 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
     context "when no value is selected" do
       let(:mark_complete) { "" }
 
-      it "does not update the form" do
+      it "does not update the form, pages or conditions" do
         expect {
           post(welsh_translation_create_path(id), params:)
-        }.not_to(change { form.reload.welsh_completed })
+        }.to not_change { form.reload.welsh_completed }
+        .and not_change { form.pages.first.reload.question_text_cy }
+        .and(not_change { condition.reload.exit_page_markdown_cy })
       end
 
-      it "does not update the form's pages" do
-        expect {
-          post(welsh_translation_create_path(id), params:)
-        }.not_to(change { form.pages.first.reload.question_text_cy })
-      end
-
-      it "does not update the form's conditions" do
-        expect {
-          post(welsh_translation_create_path(id), params:)
-        }.not_to(change { condition.reload.exit_page_markdown_cy })
-      end
-
-      it "returns a 422" do
+      it "returns a 422, re-renders the page with an error, and does not display a success banner" do
         post(welsh_translation_create_path(id), params:)
+
         expect(response).to have_http_status(:unprocessable_content)
-      end
-
-      it "re-renders the page with an error" do
-        post(welsh_translation_create_path(id), params:)
         expect(response).to render_template(:new)
         expect(response.body).to include(I18n.t("activemodel.errors.models.forms/welsh_translation_input.attributes.mark_complete.blank"))
-      end
-
-      it "does not display a success banner" do
-        post(welsh_translation_create_path(id), params:)
         expect(flash).to be_empty
       end
     end
@@ -145,22 +107,12 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
     context "when the user is not authorized" do
       let(:current_user) { build :user }
 
-      it "does not update the form" do
+      it "does not update the form, pages or conditions" do
         expect {
           post(welsh_translation_create_path(id), params:)
-        }.not_to(change { form.reload.welsh_completed })
-      end
-
-      it "does not update the form's pages" do
-        expect {
-          post(welsh_translation_create_path(id), params:)
-        }.not_to(change { form.pages.first.reload.question_text_cy })
-      end
-
-      it "does not update the form's conditions" do
-        expect {
-          post(welsh_translation_create_path(id), params:)
-        }.not_to(change { condition.reload.exit_page_heading_cy })
+        }.to not_change { form.reload.welsh_completed }
+        .and not_change { form.pages.first.reload.question_text_cy }
+        .and(not_change { condition.reload.exit_page_markdown_cy })
       end
 
       it "returns 403" do
@@ -172,22 +124,12 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
     context "when the welsh feature is not enabled for the group" do
       let(:welsh_enabled) { false }
 
-      it "does not update the form" do
+      it "does not update the form, pages or conditions" do
         expect {
           post(welsh_translation_create_path(id), params:)
-        }.not_to(change { form.reload.welsh_completed })
-      end
-
-      it "does not update the form's pages" do
-        expect {
-          post(welsh_translation_create_path(id), params:)
-        }.not_to(change { form.pages.first.reload.question_text_cy })
-      end
-
-      it "does not update the form's conditions" do
-        expect {
-          post(welsh_translation_create_path(id), params:)
-        }.not_to(change { condition.reload.exit_page_heading_cy })
+        }.to not_change { form.reload.welsh_completed }
+        .and not_change { form.pages.first.reload.question_text_cy }
+        .and(not_change { condition.reload.exit_page_markdown_cy })
       end
 
       it "redirects to the form" do
@@ -303,6 +245,31 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
       it "redirects to the form" do
         delete(welsh_translation_destroy_path(id), params:)
         expect(response).to redirect_to(form_path(id))
+      end
+    end
+  end
+
+  describe "#render_preview" do
+    let(:markdown) { "[Markdown](https://example.com)" }
+
+    before do
+      post welsh_translation_render_preview_path(form_id: form.id), params: { markdown: }
+    end
+
+    it "returns a JSON object containing the converted HTML" do
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to eq({
+        preview_html: "<p class=\"govuk-body\"><a href=\"https://example.com\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">Markdown (agor mewn tab newydd)</a></p>",
+        errors: [],
+      }.to_json)
+    end
+
+    context "when markdown is blank" do
+      let(:markdown) { "" }
+
+      it "returns a JSON object containing the converted HTML" do
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to eq({ preview_html: I18n.t("guidance.no_guidance_added_html"), errors: [] }.to_json)
       end
     end
   end

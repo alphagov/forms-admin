@@ -41,11 +41,8 @@ RSpec.describe Pages::ExitPageController, type: :request do
       let(:pages) { [create(:page)] }
 
       it "Renders the forbidden page" do
-        expect(response).to render_template("errors/forbidden")
-      end
-
-      it "Returns a 403 status" do
         expect(response.status).to eq(403)
+        expect(response).to render_template("errors/forbidden")
       end
     end
 
@@ -65,11 +62,8 @@ RSpec.describe Pages::ExitPageController, type: :request do
       post create_exit_page_path(form_id: form.id, page_id: selected_page.id, params:)
     end
 
-    it "redirects to the show routes page" do
+    it "redirects to the show routes page with a success message" do
       expect(response).to redirect_to show_routes_path(form_id: form.id, page_id: selected_page.id)
-    end
-
-    it "displays success message" do
       follow_redirect!
       expect(response.body).to include(I18n.t("banner.success.exit_page_created"))
     end
@@ -85,11 +79,8 @@ RSpec.describe Pages::ExitPageController, type: :request do
     context "when form submit fails" do
       let(:params) { { pages_exit_page_input: { exit_page_heading: nil, exit_page_markdown: nil, answer_value: } } }
 
-      it "return 422 error code" do
+      it "renders new page with a 422 error code" do
         expect(response).to have_http_status(:unprocessable_content)
-      end
-
-      it "renders new page" do
         expect(response).to render_template("pages/exit_page/new")
       end
     end
@@ -99,11 +90,8 @@ RSpec.describe Pages::ExitPageController, type: :request do
       let(:pages) { [create(:page)] }
 
       it "Renders the forbidden page" do
-        expect(response).to render_template("errors/forbidden")
-      end
-
-      it "Returns a 403 status" do
         expect(response.status).to eq(403)
+        expect(response).to render_template("errors/forbidden")
       end
     end
   end
@@ -125,11 +113,8 @@ RSpec.describe Pages::ExitPageController, type: :request do
       put update_exit_page_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id, params:)
     end
 
-    it "redirects to the edit condition page" do
+    it "redirects to the edit condition page with a success message" do
       expect(response).to redirect_to edit_condition_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id)
-    end
-
-    it "displays success message" do
       follow_redirect!
       expect(response.body).to include(I18n.t("banner.success.exit_page_updated"))
     end
@@ -137,11 +122,8 @@ RSpec.describe Pages::ExitPageController, type: :request do
     context "when form submit fails" do
       let(:params) { { pages_update_exit_page_input: { exit_page_heading: nil, exit_page_markdown: nil } } }
 
-      it "return 422 error code" do
+      it "renders edit page with a 422 error code" do
         expect(response).to have_http_status(:unprocessable_content)
-      end
-
-      it "renders edit page" do
         expect(response).to render_template("pages/exit_page/edit")
       end
     end
@@ -154,15 +136,9 @@ RSpec.describe Pages::ExitPageController, type: :request do
       get delete_exit_page_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id)
     end
 
-    it "renders the delete exit page template" do
+    it "renders the delete exit page template with the correct assignments" do
       expect(response).to render_template("pages/exit_page/delete")
-    end
-
-    it "assigns the exit page" do
       expect(assigns(:exit_page)).to eq(condition)
-    end
-
-    it "assigns a new delete exit page input" do
       expect(assigns(:delete_exit_page_input)).to be_a(Pages::DeleteExitPageInput)
     end
 
@@ -170,12 +146,9 @@ RSpec.describe Pages::ExitPageController, type: :request do
       let(:form) { create :form, id: 1 }
       let(:pages) { [create(:page)] }
 
-      it "renders the forbidden page" do
-        expect(response).to render_template("errors/forbidden")
-      end
-
-      it "returns a 403 status" do
+      it "Renders the forbidden page" do
         expect(response.status).to eq(403)
+        expect(response).to render_template("errors/forbidden")
       end
     end
   end
@@ -187,16 +160,10 @@ RSpec.describe Pages::ExitPageController, type: :request do
       delete destroy_exit_page_path(form_id: form.id, page_id: selected_page.id, condition_id: condition.id, params:)
     end
 
-    it "redirects to form pages path" do
+    it "redirects to form pages path with a success message and deletes the exit page" do
       expect(response).to redirect_to(new_condition_path(form.id, selected_page.id))
-    end
-
-    it "displays success message" do
       follow_redirect!
       expect(response.body).to include(I18n.t("banner.success.exit_page_deleted"))
-    end
-
-    it "deletes the exit page" do
       expect(Condition.exists?(condition.id)).to be false
     end
 
@@ -211,11 +178,8 @@ RSpec.describe Pages::ExitPageController, type: :request do
     context "when confirmation is no" do
       let(:params) { { pages_delete_exit_page_input: { confirm: "no" } } }
 
-      it "redirects to form pages path" do
+      it "redirects to form pages path without deleting the exit page" do
         expect(response).to redirect_to(edit_exit_page_path(form.id, page.id, condition.id))
-      end
-
-      it "doesn't delete the exit page" do
         expect(Condition.exists?(condition.id)).to be true
       end
     end
@@ -237,18 +201,15 @@ RSpec.describe Pages::ExitPageController, type: :request do
       let(:form) { create :form, id: 1 }
       let(:pages) { [create(:page)] }
 
-      it "renders the forbidden page" do
-        expect(response).to render_template("errors/forbidden")
-      end
-
-      it "returns a 403 status" do
+      it "Renders the forbidden page" do
         expect(response.status).to eq(403)
+        expect(response).to render_template("errors/forbidden")
       end
     end
   end
 
   describe "#render_preview" do
-    let(:markdown) { "### Markdown" }
+    let(:markdown) { "[Markdown](https://example.com)" }
     let(:check_preview_validation) { "true" }
 
     before do
@@ -256,33 +217,27 @@ RSpec.describe Pages::ExitPageController, type: :request do
     end
 
     it "returns a JSON object containing the converted HTML" do
-      expect(response.body).to eq({ preview_html: "<h3 class=\"govuk-heading-s\">Markdown</h3>", errors: [] }.to_json)
-    end
-
-    it "returns 200" do
       expect(response).to have_http_status(:ok)
+      expect(response.body).to eq({
+        preview_html: "<p class=\"govuk-body\"><a href=\"https://example.com\" class=\"govuk-link\" rel=\"noreferrer noopener\" target=\"_blank\">Markdown (opens in new tab)</a></p>",
+        errors: [],
+      }.to_json)
     end
 
     context "when markdown is blank" do
       let(:markdown) { "" }
 
       it "returns a JSON object containing the converted HTML with an error" do
-        expect(response.body).to eq({ preview_html: I18n.t("exit_page.no_content_added_html"), errors: [I18n.t("activemodel.errors.models.pages/exit_page_input.attributes.exit_page_markdown.blank")] }.to_json)
-      end
-
-      it "returns 200" do
         expect(response).to have_http_status(:ok)
+        expect(response.body).to eq({ preview_html: I18n.t("exit_page.no_content_added_html"), errors: [I18n.t("activemodel.errors.models.pages/exit_page_input.attributes.exit_page_markdown.blank")] }.to_json)
       end
 
       context "when validation is disabled" do
         let(:check_preview_validation) { "false" }
 
         it "returns a JSON object containing the converted HTML" do
-          expect(response.body).to eq({ preview_html: I18n.t("exit_page.no_content_added_html"), errors: [] }.to_json)
-        end
-
-        it "returns 200" do
           expect(response).to have_http_status(:ok)
+          expect(response.body).to eq({ preview_html: I18n.t("exit_page.no_content_added_html"), errors: [] }.to_json)
         end
       end
     end

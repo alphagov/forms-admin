@@ -100,6 +100,6 @@ private
   def preview_html(exit_page_input_object)
     return t("exit_page.no_content_added_html") if exit_page_input_object.exit_page_markdown.blank?
 
-    GovukFormsMarkdown.render(exit_page_input_object.exit_page_markdown)
+    GovukFormsMarkdown.render(exit_page_input_object.exit_page_markdown, locale: "en")
   end
 end
