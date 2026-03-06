@@ -2,9 +2,10 @@ require "rails_helper"
 
 describe "mou_signatures/index.html.erb" do
   let(:mou_signatures) do
-    build_list(:mou_signature, 3) do |mou_signature|
-      mou_signature.created_at = Time.zone.parse("October 12, 2023")
-    end
+    [
+      build(:mou_signature, agreement_type: :crown, created_at: Time.zone.parse("October 12, 2023")),
+      build(:mou_signature, agreement_type: :non_crown, created_at: Time.zone.parse("October 13, 2023")),
+    ]
   end
 
   before do
@@ -17,6 +18,12 @@ describe "mou_signatures/index.html.erb" do
 
   it "contains a scrollable wrapper with a table in it" do
     expect(rendered).to have_css(".app-scrolling-wrapper > table")
+  end
+
+  it "contains the agreement type" do
+    expect(rendered).to have_xpath "//thead/tr/th[1]", text: I18n.t("mou_signatures.index.table_headings.agreement_type")
+    expect(rendered).to have_xpath "//tbody/tr[1]/td[1]", text: I18n.t("mou_signatures.index.agreement_type.crown")
+    expect(rendered).to have_xpath "//tbody/tr[2]/td[1]", text: I18n.t("mou_signatures.index.agreement_type.non_crown")
   end
 
   it "contains the user's name" do

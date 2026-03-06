@@ -1293,10 +1293,16 @@ en:
           <h2 class="govuk-heading-m">What happens next</h2>
           <p>We’ll email you with any updates to the agreement that are made in the future.</p>
     index:
-      share_mou_link_html: "<p>Allow users to view and agree to the latest Memorandum of Understanding by sharing %{mou_link}.</p>"
-      table_caption: Signed MOUs
+      agreement_type:
+        crown: Crown MOU
+        non_crown: Non-crown agreement
+      preamble_html: "<p>Someone from each organisation needs to agree to one of the GOV.UK Forms agreements before an organisation admin can be assigned or any groups upgraded to ‘active’.</p>\n"
+      share_mou_link_html: "<p>For Crown organisations, like government departments and executive agencies, share the Memorandum of Understanding:<br />%{mou_link}</p>\n"
+      share_non_crown_agreement_link_html: "<p>For non-crown organisations, like local authorities, share the GOV.UK Forms agreement:<br />%{agreement_link}</p>\n"
+      table_caption: Agreed MOUs and agreements
       table_headings:
         agreed_at: Agreed on
+        agreement_type: Agreement type
         email: Email address
         name: Name
         organisation: Organisation
@@ -1429,7 +1435,7 @@ en:
     missing_draft_question: There’s a problem with this page
     mou_signature_confirmation: You’ve agreed to the MOU
     mou_signature_new: GOV.UK Forms Memorandum of Understanding
-    mou_signatures: Memorandum of Understanding agreements
+    mou_signatures: MOUs and agreements
     move_form: Move this form to a different group
     name_settings: Ask for a person’s name
     new_page: Edit question
