@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe MailchimpListSynchronizer do
+RSpec.describe Mailchimp::ListSynchronizer do
   subject(:mailchimp_list_synchronizer) { described_class }
 
   before do
@@ -108,7 +108,7 @@ RSpec.describe MailchimpListSynchronizer do
     end
 
     context "when the user is in the list of users to synchronize" do
-      let(:desired_members) { [MailchimpMember.new(email: "user@domain.org", status: "subscribed")] }
+      let(:desired_members) { [Mailchimp::Member.new(email: "user@domain.org", status: "subscribed")] }
 
       context "when the user is not present in the MailChimp list" do
         let(:list_1_members_info) do
@@ -194,7 +194,7 @@ RSpec.describe MailchimpListSynchronizer do
     end
 
     context "when the user is not in the list of users to synchronize" do
-      let(:desired_members) { [MailchimpMember.new(email: "some_other_user@domain.org", status: "subscribed")] }
+      let(:desired_members) { [Mailchimp::Member.new(email: "some_other_user@domain.org", status: "subscribed")] }
 
       context "when the user is not present in the MailChimp list" do
         let(:list_1_members_info) do
@@ -280,7 +280,7 @@ RSpec.describe MailchimpListSynchronizer do
     end
 
     context "when the mailing list has more than 1000 members" do
-      let(:desired_members) { [MailchimpMember.new(email: "some_email_address@domain.org", status: "subscribed")] }
+      let(:desired_members) { [Mailchimp::Member.new(email: "some_email_address@domain.org", status: "subscribed")] }
 
       let(:list_1) do
         {
@@ -307,7 +307,7 @@ RSpec.describe MailchimpListSynchronizer do
     end
 
     context "when there is a MailChimp API error" do
-      let(:desired_members) { [MailchimpMember.new(email: "user@domain.org", status: "subscribed")] }
+      let(:desired_members) { [Mailchimp::Member.new(email: "user@domain.org", status: "subscribed")] }
 
       let(:list_1_members_info) do
         {
@@ -337,7 +337,7 @@ RSpec.describe MailchimpListSynchronizer do
           instance: "ecc64220-55ff-d413-6c81-583a656331db",
           status: 400,
           subscriber_hash: "640f8c96cd7de424a8248a15d8b19b4d",
-          task: "MailchimpListSynchronizer#synchronize",
+          task: "Mailchimp::ListSynchronizer#synchronize",
           title: "Member In Compliance State",
         }
 
@@ -358,7 +358,7 @@ RSpec.describe MailchimpListSynchronizer do
           instance: "unknown",
           status: 400,
           subscriber_hash: "640f8c96cd7de424a8248a15d8b19b4d",
-          task: "MailchimpListSynchronizer#synchronize",
+          task: "Mailchimp::ListSynchronizer#synchronize",
           title: "Unknown error",
         }
 
@@ -369,7 +369,7 @@ RSpec.describe MailchimpListSynchronizer do
 
     context "when member is new and role is set" do
       let(:list_1_members_info) { { "members" => [] } }
-      let(:desired_members) { [MailchimpMember.new(email: "user@domain.org", status: "subscribed", role: "AGREED_MOU")] }
+      let(:desired_members) { [Mailchimp::Member.new(email: "user@domain.org", status: "subscribed", role: "AGREED_MOU")] }
 
       it "updates the role" do
         expect(mailchimp_client_lists).to receive(:set_list_member).with(
@@ -399,7 +399,7 @@ RSpec.describe MailchimpListSynchronizer do
         }] }
       end
 
-      let(:desired_members) { [MailchimpMember.new(email: "user@domain.org", status: "subscribed", role: "AGREED_MOU")] }
+      let(:desired_members) { [Mailchimp::Member.new(email: "user@domain.org", status: "subscribed", role: "AGREED_MOU")] }
 
       it "updates the role" do
         expect(mailchimp_client_lists).to receive(:set_list_member).with(
@@ -429,7 +429,7 @@ RSpec.describe MailchimpListSynchronizer do
         }] }
       end
 
-      let(:desired_members) { [MailchimpMember.new(email: "user@domain.org", status: "subscribed", role: "AGREED_MOU")] }
+      let(:desired_members) { [Mailchimp::Member.new(email: "user@domain.org", status: "subscribed", role: "AGREED_MOU")] }
 
       it "does not update role" do
         expect(mailchimp_client_lists).not_to receive(:set_list_member)

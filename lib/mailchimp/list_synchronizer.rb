@@ -1,23 +1,7 @@
 require "digest"
 require "MailchimpMarketing"
 
-MailchimpMember = Data.define(:email, :status, :role) do
-  def initialize(email:, status:, role: nil) = super
-
-  def unsubscribed?
-    status == "unsubscribed"
-  end
-
-  def archivable?
-    %w[subscribed cleaned pending transactional].include?(status)
-  end
-
-  def subscriber_hash
-    Digest::MD5.hexdigest email.downcase
-  end
-end
-
-class MailchimpListSynchronizer
+class Mailchimp::ListSynchronizer
   attr_reader :client, :list_id
 
   PAGE_SIZE = 1000
@@ -96,7 +80,7 @@ class MailchimpListSynchronizer
       response = client.lists.get_list_members_info(list_id, count: PAGE_SIZE, offset: offset)
 
       response["members"].each do |member_data|
-        yield MailchimpMember.new(
+        yield Mailchimp::Member.new(
           email: member_data["email_address"],
           status: member_data["status"],
           role: member_data.dig("merge_fields", "ROLE"),
@@ -152,7 +136,7 @@ class MailchimpListSynchronizer
     EmailParameterFilterProc.new.call(nil, error_details["detail"].to_s)
 
     Rails.logger.warn(
-      task: "MailchimpListSynchronizer#synchronize",
+      task: "Mailchimp::ListSynchronizer#synchronize",
       mailchimp_action: action,
       subscriber_hash: subscriber_hash,
       title: error_details["title"],
