@@ -1,8 +1,9 @@
-<% set_page_title(t("page_titles.mou_signature_confirmation")) %>
+<% page_title = @agreement_type == :crown ? t("page_titles.mou_signature_confirmation") : t("page_titles.non_crown_agreement_confirmation") %>
+<% set_page_title(page_title) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= govuk_panel(title_text: t("page_titles.mou_signature_confirmation")) %>
-    <%= t("mou_signature.confirmation.body_html") %>
+    <%= govuk_panel(title_text: page_title) %>
+    <%= t(".#{@agreement_type}.body_html") %>
   </div>
 </div>
