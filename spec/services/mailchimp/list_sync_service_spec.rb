@@ -65,11 +65,20 @@ RSpec.describe Mailchimp::ListSyncService do
     let(:user_without_access) { create(:user, email: "inactive_user@example.com", has_access: false) }
     let(:user_access_and_admin_with_mou) { create(:user, email: "admin_mou_user@example.com") }
 
+    let(:non_crown_org) { create(:organisation, id: 2, slug: "non-crown-org") }
+    let(:user_that_signed_non_crown_agreement) { create(:user, organisation: non_crown_org) }
+    let(:not_org_admin_that_signed_non_crown_agreement) { create(:user, organisation: non_crown_org) }
+    let(:org_admin_for_non_crown_org) { create(:user, organisation: non_crown_org) }
+
     before do
       create(:mou_signature, user: user_with_access_and_mou)
       create(:mou_signature, user: user_access_and_admin_with_mou)
+      create(:mou_signature, agreement_type: :non_crown, user: user_that_signed_non_crown_agreement)
+      create(:mou_signature, agreement_type: :non_crown, user: not_org_admin_that_signed_non_crown_agreement)
       user_with_access_admin.reload.organisation_admin!
       user_access_and_admin_with_mou.reload.organisation_admin!
+      user_that_signed_non_crown_agreement.reload.organisation_admin!
+      org_admin_for_non_crown_org.reload.organisation_admin!
     end
 
     it "returns MOU signers with access and correct roles" do
@@ -85,6 +94,14 @@ RSpec.describe Mailchimp::ListSyncService do
     it "does not include users without access" do
       expect(mailchimp_list_sync_service.mou_signers).not_to include(
         Mailchimp::Member.new(email: "inactive_user@example.com", status: "subscribed"),
+      )
+    end
+
+    it "does not include users that only signed a non-crown agreement" do
+      expect(mailchimp_list_sync_service.mou_signers).not_to include(
+        Mailchimp::Member.new(email: user_that_signed_non_crown_agreement.email, status: "subscribed"),
+        Mailchimp::Member.new(email: not_org_admin_that_signed_non_crown_agreement.email, status: "subscribed"),
+        Mailchimp::Member.new(email: org_admin_for_non_crown_org.email, status: "subscribed"),
       )
     end
   end
