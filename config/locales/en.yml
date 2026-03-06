@@ -1147,6 +1147,11 @@ en:
         <p>
           If a link to this form has not been published yet, contact your organisation’s GOV⁠.⁠UK publishing team to do this.
         </p>
+      body_html_cy: |
+        <p>
+          Links to your form need to be published on GOV.UK so people can find it.
+          Contact your organisation’s GOV.UK publishing team to do this.
+        </p>
     url_will_remain_same: Links to the form will still work, even if you’ve changed the form’s name.
     warning: |
       When you make your changes live, there may be an impact on people who are
@@ -1160,8 +1165,18 @@ en:
           The form will not be indexed by search engines, so people will not be able to find it easily.
           Contact your GOV.UK publishing team to publish a link to your form on GOV.UK so people can find it.
         </p>
+      body_html_cy: |
+        <p>
+          The form will not be indexed by search engines, so people will not be able to find it easily. Contact your GOV⁠.⁠UK publishing team to publish links to your form on GOV⁠.⁠UK so people can find it.
+        </p>
       continue_link: Continue to form details
+      copy_english_url_to_clipboard: Copy English URL to clipboard
+      copy_welsh_url_to_clipboard: Copy Welsh URL to clipboard
+      english_form: English form
+      english_form_url: English form URL
       form_name: Form name
+      welsh_form: Welsh form
+      welsh_form_url: Welsh form URL
     new:
       body_html: |
         <p>
