@@ -30,13 +30,13 @@ RSpec.describe Mailchimp::ListSyncService do
         create :user, email:, has_access: false
       end
 
-      # Create MOU signer with an active user
+      # Create MOU signature with an active user
       create :mou_signature, user: User.where(email: mou_signer_with_access).first
 
-      # Create MOU signer with an inactive user
+      # Create MOU signature with an inactive user
       create :mou_signature, user: User.where(email: mou_signer_without_access).first
 
-      # Create MOU signer for org admin user
+      # Create MOU signature for org admin user
       create :mou_signature, user: User.where(email: mou_signer_and_organisation_admin_with_access).first
 
       # set organisation admins
@@ -45,12 +45,21 @@ RSpec.describe Mailchimp::ListSyncService do
     end
 
     it "runs the mailchimp synchronization on each list" do
-      list_synchronizer = instance_double(Mailchimp::ListSynchronizer)
-      allow(Mailchimp::ListSynchronizer).to receive(:new).with(list_id: Settings.mailchimp.active_users_list).and_return(list_synchronizer)
-      allow(Mailchimp::ListSynchronizer).to receive(:new).with(list_id: Settings.mailchimp.mou_signers_list).and_return(list_synchronizer)
+      active_users_list_synchronizer = instance_double(Mailchimp::ListSynchronizer)
+      mou_signers_list_synchronizer = instance_double(Mailchimp::ListSynchronizer)
+      allow(Mailchimp::ListSynchronizer).to receive(:new).with(list_id: Settings.mailchimp.active_users_list).and_return(active_users_list_synchronizer)
+      allow(Mailchimp::ListSynchronizer).to receive(:new).with(list_id: Settings.mailchimp.mou_signers_list).and_return(mou_signers_list_synchronizer)
 
-      expect(list_synchronizer).to receive(:synchronize).with(desired_members: match_array(users_with_access.map { |email| Mailchimp::Member.new(email: email, status: "subscribed") })).once
-      expect(list_synchronizer).to receive(:synchronize).with(desired_members: contain_exactly(Mailchimp::Member.new(email: mou_signer_with_access, status: "subscribed", role: "Agreed MOU"), Mailchimp::Member.new(email: organisation_admin_with_access, status: "subscribed", role: "Organisation admin"), Mailchimp::Member.new(email: mou_signer_and_organisation_admin_with_access, status: "subscribed", role: "Organisation admin agreed MOU"))).once
+      expect(active_users_list_synchronizer).to receive(:synchronize).with(desired_members: match_array(
+        users_with_access
+          .map { |email| Mailchimp::Member.new(email: email, status: "subscribed") },
+      )).once
+
+      expect(mou_signers_list_synchronizer).to receive(:synchronize).with(desired_members: contain_exactly(
+        Mailchimp::Member.new(email: mou_signer_with_access, status: "subscribed", role: "Agreed MOU"),
+        Mailchimp::Member.new(email: organisation_admin_with_access, status: "subscribed", role: "Organisation admin"),
+        Mailchimp::Member.new(email: mou_signer_and_organisation_admin_with_access, status: "subscribed", role: "Organisation admin agreed MOU"),
+      )).once
 
       expect(Rails.logger).to receive(:debug).with("Synchronizing active users mailing list").once
       expect(Rails.logger).to receive(:debug).with("Synchronizing MOU signers mailing list").once
