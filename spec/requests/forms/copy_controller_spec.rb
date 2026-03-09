@@ -4,7 +4,7 @@ RSpec.describe Forms::CopyController, type: :request do
   let(:id) { form.id }
   let(:form) { create(:form) }
 
-  let(:group) { create(:group, organisation: standard_user.organisation) }
+  let(:group) { create(:group, organisation: standard_user.organisation, status: :active) }
 
   before do
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
@@ -54,12 +54,24 @@ RSpec.describe Forms::CopyController, type: :request do
   end
 
   describe "#create" do
+    before do
+      create(:organisation_admin_user, organisation: standard_user.organisation)
+    end
+
     context "when the copy is successful" do
       it "redirects to the form page" do
         post create_copy_form_path(id), params: { forms_copy_input: { name: "Copied Form", tag: "draft" } }
 
         expect(response).to have_http_status(:found)
         expect(response).to redirect_to(form_path(Form.last.id))
+      end
+
+      it "sends an email to the organisation admins" do
+        post create_copy_form_path(id), params: { forms_copy_input: { name: "Copied Form", tag: "draft" } }
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+
+        template_id = Settings.govuk_notify.org_admin_alerts.copied_draft_form_created_template_id
+        expect(ActionMailer::Base.deliveries.last.govuk_notify_template).to eq(template_id)
       end
     end
 
@@ -69,6 +81,11 @@ RSpec.describe Forms::CopyController, type: :request do
 
         expect(response).to have_http_status(:ok)
         expect(response).to render_template(:confirm)
+      end
+
+      it "does not send an email to the organisation admins", :feature_org_admin_alerts_enabled do
+        post create_copy_form_path(id), params: { forms_copy_input: { name: "", tag: "draft" } }
+        expect(ActionMailer::Base.deliveries.count).to eq(0)
       end
     end
   end
