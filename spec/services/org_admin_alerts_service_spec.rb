@@ -229,4 +229,73 @@ RSpec.describe OrgAdminAlertsService do
       end
     end
   end
+
+  describe "#draft_of_existing_form_created" do
+    context "when the form state is live with draft" do
+      let(:form) { create(:form, :live_with_draft) }
+
+      it "sends the live form changes made live email to the organisation admins" do
+        expect(OrgAdminAlerts::DraftCreatedMailer).to receive(:new_live_form_draft_created).with(
+          form: form,
+          user: current_user,
+          to_email: organisation_admins.first.email,
+        ).and_call_original
+
+        expect(OrgAdminAlerts::DraftCreatedMailer).to receive(:new_live_form_draft_created).with(
+          form: form,
+          user: current_user,
+          to_email: organisation_admins.second.email,
+        ).and_call_original
+
+        service.draft_of_existing_form_created
+
+        expect(ActionMailer::Base.deliveries.size).to eq(2)
+      end
+
+      it "does not send an email to the current user" do
+        allow(OrgAdminAlerts::DraftCreatedMailer).to receive(:new_live_form_draft_created).and_call_original
+        service.draft_of_existing_form_created
+
+        expect(OrgAdminAlerts::DraftCreatedMailer).not_to have_received(:new_live_form_draft_created).with(
+          form: form,
+          user: current_user,
+          to_email: current_user.email,
+        )
+      end
+    end
+
+    context "when the form state is archived with draft" do
+      let(:form) { create(:form, :archived_with_draft) }
+
+      it "sends the archived form changes made live email to the organisation admins" do
+        expect(OrgAdminAlerts::DraftCreatedMailer).to receive(:new_archived_form_draft_created).with(
+          form: form,
+          user: current_user,
+          to_email: organisation_admins.first.email,
+        ).and_call_original
+
+        expect(OrgAdminAlerts::DraftCreatedMailer).to receive(:new_archived_form_draft_created).with(
+          form: form,
+          user: current_user,
+          to_email: organisation_admins.second.email,
+        ).and_call_original
+
+        service.draft_of_existing_form_created
+
+        expect(ActionMailer::Base.deliveries.size).to eq(2)
+      end
+    end
+
+    context "when the form state is unexpected" do
+      let(:form) { create(:form) }
+
+      it "raises an error and does not send any emails" do
+        expect {
+          service.draft_of_existing_form_created
+        }.to raise_error(StandardError, "Unexpected form state: draft")
+
+        expect(ActionMailer::Base.deliveries.size).to eq(0)
+      end
+    end
+  end
 end
