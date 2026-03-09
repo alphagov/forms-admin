@@ -23,11 +23,12 @@ class FormCopyService
 
       copy_pages(content["steps"])
       copy_routing_conditions(content["steps"])
-      copy_group
 
       @copied_form.copied_from_id = @form.id
       @copied_form.creator_id = @logged_in_user.id
       @copied_form.save!
+
+      copy_group
 
       # Copy Welsh translations if available
       if @form.available_languages.include?("cy")
