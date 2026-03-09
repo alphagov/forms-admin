@@ -37,6 +37,6 @@ private
   end
 
   def then_i_can_see_the_mou_page
-    expect(page).to have_text "Memorandum of Understanding agreements"
+    expect(page).to have_text "MOUs and agreements"
   end
 end
