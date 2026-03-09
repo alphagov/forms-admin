@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "/groups/:group_id/forms", type: :request do
-  let(:group) { create :group }
+  let(:group) { create :group, organisation:, status: :active }
+  let(:organisation) { test_org }
   let(:nonexistent_group) { "foobar" }
 
   before do
@@ -106,6 +107,10 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
       { name: "" }
     end
 
+    before do
+      create(:organisation_admin_user, organisation:)
+    end
+
     context "with valid parameters" do
       it "creates a form" do
         expect {
@@ -124,6 +129,14 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
       it "redirects to the created form" do
         post group_forms_url(group), params: { forms_name_input: valid_attributes }
         expect(response).to redirect_to(form_url(Form.last.id))
+      end
+
+      it "sends an email to the organisation admins" do
+        post group_forms_url(group), params: { forms_name_input: valid_attributes }
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+
+        template_id = Settings.govuk_notify.org_admin_alerts.new_draft_form_created_template_id
+        expect(ActionMailer::Base.deliveries.last.govuk_notify_template).to eq(template_id)
       end
     end
 
@@ -146,6 +159,11 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
         expect(response).to render_template("group_forms/new")
         expect(response).to render_template("input_objects/forms/_name_input")
         expect(response.body).to include I18n.t("error_summary.heading")
+      end
+
+      it "does not send an email to the organisation admins", :feature_org_admin_alerts_enabled do
+        post group_forms_url(group), params: { forms_name_input: invalid_attributes }
+        expect(ActionMailer::Base.deliveries.count).to eq(0)
       end
     end
 

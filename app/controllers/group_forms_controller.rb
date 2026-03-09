@@ -19,6 +19,7 @@ class GroupFormsController < WebController
 
     if @name_input.valid?
       @form = CreateFormService.new.create!(creator: @current_user, group: @group, name: @name_input.name)
+      OrgAdminAlertsService.new(form: @form, current_user:).new_draft_form_created
 
       redirect_to form_path(@form.id)
     else
