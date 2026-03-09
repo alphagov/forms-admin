@@ -11,6 +11,14 @@ class OrgAdminAlertsService
     end
   end
 
+  def new_draft_form_created
+    return unless @form.group.active?
+
+    @org_admins.each do |org_admin_user|
+      new_draft_form_created_email(to_email: org_admin_user.email).deliver_now
+    end
+  end
+
 private
 
   def form_made_live_email(to_email:)
@@ -31,11 +39,22 @@ private
   end
 
   def new_draft_made_live_email(to_email:)
-    if @form.copied_from_id.present?
-      copied_from_form = Form.find(@form.copied_from_id)
+    if copied_from_form
       OrgAdminAlerts::MadeLiveMailer.copied_form_made_live(form: @form, copied_from_form:, user: @current_user, to_email:)
     else
       OrgAdminAlerts::MadeLiveMailer.new_draft_form_made_live(form: @form, user: @current_user, to_email:)
     end
+  end
+
+  def new_draft_form_created_email(to_email:)
+    if copied_from_form
+      OrgAdminAlerts::DraftCreatedMailer.copied_draft_form_created(form: @form, copied_from_form:, user: @current_user, to_email:)
+    else
+      OrgAdminAlerts::DraftCreatedMailer.new_draft_form_created(form: @form, user: @current_user, to_email:)
+    end
+  end
+
+  def copied_from_form
+    Form.find_by(id: @form.copied_from_id)
   end
 end
