@@ -24,6 +24,7 @@ class Form < ApplicationRecord
              :support_url,
              :support_url_text,
              :declaration_text,
+             :declaration_markdown,
              :what_happens_next_markdown,
              :payment_url
 
@@ -199,6 +200,7 @@ class Form < ApplicationRecord
     return unless available_languages.include?("cy")
 
     self.declaration_text_cy = nil if declaration_text.blank?
+    self.declaration_markdown_cy = nil if declaration_text_cy.blank?
     self.payment_url_cy = nil if payment_url.blank?
     self.support_email_cy = nil if support_email.blank?
     self.support_phone_cy = nil if support_phone.blank?

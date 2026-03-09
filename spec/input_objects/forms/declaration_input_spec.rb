@@ -64,5 +64,19 @@ RSpec.describe Forms::DeclarationInput, type: :model do
       expect(declaration_input.form.declaration_text).to eq "new declaration text"
       expect(declaration_input.form.declaration_section_completed).to eq "true"
     end
+
+    it "sets the form's declaration_markdown attribute" do
+      form = OpenStruct.new(declaration_text: nil, declaration_markdown: nil)
+      declaration_input = described_class.new(form:, declaration_text: "<ul><li>declaration text</li></ul>", mark_complete: "true")
+      declaration_input.submit
+      expect(declaration_input.form.declaration_markdown).to eq "* declaration text\n\n"
+    end
+
+    it "sets the form's declaration_markdown to blank if the declaration text is blank" do
+      form = OpenStruct.new(declaration_text: "original", declaration_markdown: "original")
+      declaration_input = described_class.new(form:, declaration_text: "", mark_complete: "true")
+      declaration_input.submit
+      expect(declaration_input.form.declaration_markdown).to eq ""
+    end
   end
 end

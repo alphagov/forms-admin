@@ -97,6 +97,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_04_145907) do
 
   create_table "form_translations", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.text "declaration_markdown"
     t.text "declaration_text"
     t.bigint "form_id", null: false
     t.string "locale", null: false
@@ -118,6 +119,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_04_145907) do
     t.integer "copied_from_id"
     t.datetime "created_at", null: false
     t.bigint "creator_id"
+    t.text "declaration_markdown"
     t.boolean "declaration_section_completed", default: false
     t.text "declaration_text"
     t.string "external_id"

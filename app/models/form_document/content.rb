@@ -23,6 +23,7 @@ class FormDocument::Content
   attribute :submission_type, :string
   attribute :submission_format, array: true
   attribute :declaration_text, :string
+  attribute :declaration_markdown, :string
   attribute :s3_bucket_region, :string
   attribute :submission_email, :string
   attribute :support_url_text, :string
