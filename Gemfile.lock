@@ -242,10 +242,10 @@ GEM
       rake (>= 13)
     googleapis-common-protos-types (1.22.0)
       google-protobuf (~> 4.26)
-    govuk-components (5.13.1)
+    govuk-components (6.0.0)
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (>= 6, < 10)
-      view_component (>= 4.0, < 4.2)
+      view_component (>= 4.0, < 4.3)
     govuk_design_system_formbuilder (5.13.0)
       actionview (>= 6.1)
       activemodel (>= 6.1)
@@ -822,7 +822,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   gds-sso
-  govuk-components
+  govuk-components (~> 6)
   govuk-forms-markdown!
   govuk_design_system_formbuilder
   govuk_notify_rails
@@ -933,7 +933,7 @@ CHECKSUMS
   google-protobuf (4.33.4-x86_64-linux-gnu) sha256=a8cff953d742bc804ece78bd96e82d88cf65a7d8c1910e045359e2f53074e55d
   google-protobuf (4.33.4-x86_64-linux-musl) sha256=265e6e5bbcc0ba1367268739e31c4cc84ff310b56e8d738d2a3245b5cccfc2e7
   googleapis-common-protos-types (1.22.0) sha256=f97492b77bd6da0018c860d5004f512fe7cd165554d7019a8f4df6a56fbfc4c7
-  govuk-components (5.13.1) sha256=74808d8188a7de2c5e83e5a829c5f8ac3851df27f82410a4a2444cf53c24cfe5
+  govuk-components (6.0.0) sha256=38feaed165ea2afe4c6f9f68bfcdfdb56426be133d2402912817e21830cbce81
   govuk-forms-markdown (0.8.0)
   govuk_design_system_formbuilder (5.13.0) sha256=126ff4af70b36f06395e8f4f09d399944bcc10e9a41c2ff7d7773e81e92ca885
   govuk_notify_rails (3.0.0) sha256=e0e1b8b0a7c47f90963034f290fb2982652aa8051a733c25c178680d44f2d7aa

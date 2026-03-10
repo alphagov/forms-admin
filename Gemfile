@@ -41,7 +41,7 @@ gem "bootsnap", require: false
 gem "vite_rails"
 
 # For GOV.UK branding
-gem "govuk-components"
+gem "govuk-components", "~> 6"
 gem "govuk_design_system_formbuilder"
 
 # The autocomplete component is not currently published as a gem, if changing
