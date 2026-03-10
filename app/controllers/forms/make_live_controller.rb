@@ -1,7 +1,5 @@
 module Forms
-  class MakeLiveController < WebController
-    after_action :verify_authorized
-
+  class MakeLiveController < FormsController
     def new
       authorize current_form, :can_make_form_live?
       @make_live_input = MakeLiveInput.new(form: current_form)

@@ -1,7 +1,6 @@
 module Forms
-  class SubmissionEmailController < WebController
+  class SubmissionEmailController < FormsController
     before_action :submission_email_input, except: %i[create confirm_submission_email_code]
-    after_action :verify_authorized
 
     def new
       authorize current_form, :can_view_form?

@@ -1,7 +1,6 @@
 module Forms
-  class SharePreviewController < WebController
+  class SharePreviewController < FormsController
     before_action :check_user_has_permission
-    after_action :verify_authorized
 
     def new
       @share_preview_input = Forms::SharePreviewInput.new(form: current_form).assign_form_values

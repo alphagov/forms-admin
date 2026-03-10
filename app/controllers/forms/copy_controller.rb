@@ -1,7 +1,5 @@
 module Forms
-  class CopyController < WebController
-    after_action :verify_authorized
-
+  class CopyController < FormsController
     def copy
       authorize current_form, :copy?
 

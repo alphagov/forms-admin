@@ -1,7 +1,5 @@
 module Forms
-  class PaymentLinkController < WebController
-    after_action :verify_authorized
-
+  class PaymentLinkController < FormsController
     def new
       authorize current_form, :can_view_form?
       @payment_link_input = PaymentLinkInput.new(form: current_form).assign_form_values

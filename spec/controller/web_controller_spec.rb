@@ -3,8 +3,6 @@ require "rails_helper"
 describe WebController, type: :controller do
   subject(:web_controller) { described_class.new }
 
-  let(:form) { create :form }
-
   describe "#user_ip" do
     [
       ["", nil],
@@ -77,26 +75,6 @@ describe WebController, type: :controller do
           end
         end
       end
-    end
-  end
-
-  describe "#current_form" do
-    before do
-      params = ActionController::Parameters.new(form_id: form.id)
-      allow(controller).to receive(:params).and_return(params)
-    end
-
-    it "returns the current form" do
-      expect(controller.current_form).to eq form
-    end
-
-    it "memorizes the find form request so it doesn't have to repeat the calls" do
-      allow(Form).to receive(:find).with(form.id).and_return(form)
-
-      controller.current_form
-      controller.current_form
-
-      expect(Form).to have_received(:find).exactly(1).times
     end
   end
 

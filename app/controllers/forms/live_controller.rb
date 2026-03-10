@@ -1,7 +1,5 @@
 module Forms
-  class LiveController < WebController
-    after_action :verify_authorized
-
+  class LiveController < FormsController
     def show_form
       authorize current_form, :can_view_form?
 

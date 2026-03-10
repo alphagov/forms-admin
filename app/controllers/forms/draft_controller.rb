@@ -1,6 +1,4 @@
-class Forms::DraftController < WebController
-  after_action :verify_authorized
-
+class Forms::DraftController < FormsController
   def show
     authorize current_form, :can_view_form?
     task_service = FormTaskListService.call(form: current_form, current_user:)

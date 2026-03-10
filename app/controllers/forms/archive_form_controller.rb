@@ -1,7 +1,6 @@
 module Forms
-  class ArchiveFormController < WebController
+  class ArchiveFormController < FormsController
     before_action :check_user_has_permission
-    after_action :verify_authorized
 
     def archive
       return redirect_to path_to_form unless current_form.is_live?

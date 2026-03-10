@@ -1,7 +1,6 @@
 module Forms
-  class SubmissionAttachmentsController < WebController
+  class SubmissionAttachmentsController < FormsController
     before_action :submission_type_email?
-    after_action :verify_authorized
 
     def new
       authorize current_form, :can_view_form?

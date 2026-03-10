@@ -1,7 +1,6 @@
 module Forms
-  class ArchiveWelshController < WebController
+  class ArchiveWelshController < FormsController
     before_action :check_user_has_permission
-    after_action :verify_authorized
 
     def show
       return redirect_to path_to_form unless has_live_welsh_translation?

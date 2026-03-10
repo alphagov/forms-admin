@@ -1,7 +1,5 @@
 module Forms
-  class WhatHappensNextController < WebController
-    after_action :verify_authorized
-
+  class WhatHappensNextController < FormsController
     def new
       authorize current_form, :can_view_form?
       @what_happens_next_input = WhatHappensNextInput.new(form: current_form).assign_form_values

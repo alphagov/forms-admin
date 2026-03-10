@@ -1,6 +1,5 @@
 module Forms
-  class ContactDetailsController < WebController
-    after_action :verify_authorized
+  class ContactDetailsController < FormsController
     def new
       authorize current_form, :can_view_form?
       @contact_details_input = ContactDetailsInput.new(form: current_form).assign_form_values

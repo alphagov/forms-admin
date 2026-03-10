@@ -1,4 +1,4 @@
-class PagesController < WebController
+class PagesController < FormsController
   before_action :check_user_has_permission
   before_action :clear_draft_questions_data, only: %i[index move_page]
   after_action :verify_authorized
