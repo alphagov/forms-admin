@@ -1,35 +1,23 @@
 class FormsController < WebController
   after_action :verify_authorized
 
-  def show
-    authorize current_form, :can_view_form?
-    task_service = FormTaskListService.call(form: current_form, current_user:)
-    @task_list = task_service.all_sections
-    @task_status_counts = task_service.task_counts
-    render :show, locals: { current_form: }
+  def current_form
+    @current_form ||= Form.find(params[:form_id])
   end
 
-  def mark_pages_section_completed
-    authorize current_form, :can_view_form?
-    @pages = current_form.pages
-    @mark_complete_input = Forms::MarkPagesSectionCompleteInput.new(mark_complete_input_params)
-
-    if @mark_complete_input.submit
-      success_message = if @mark_complete_input.mark_complete == "true"
-                          t("banner.success.form.pages_saved_and_section_completed")
-                        else
-                          t("banner.success.form.pages_saved")
-                        end
-      redirect_to form_path(current_form.id), success: success_message
-    else
-      @mark_complete_input.mark_complete = "false"
-      render "pages/index", locals: { current_form: }, status: :unprocessable_content
-    end
+  def current_live_form
+    @current_live_form ||= FormDocument::Content.from_form_document(current_form.live_form_document)
   end
 
-private
+  def current_live_welsh_form
+    @current_live_welsh_form ||= FormDocument::Content.from_form_document(current_form.live_welsh_form_document)
+  end
 
-  def mark_complete_input_params
-    params.require(:forms_mark_pages_section_complete_input).permit(:mark_complete).merge(form: current_form)
+  def current_archived_form
+    @current_archived_form ||= FormDocument::Content.from_form_document(current_form.archived_form_document)
+  end
+
+  def current_archived_welsh_form
+    @current_archived_welsh_form ||= FormDocument::Content.from_form_document(current_form.archived_welsh_form_document)
   end
 end

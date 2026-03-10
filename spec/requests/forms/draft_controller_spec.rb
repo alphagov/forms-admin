@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe FormsController, type: :request do
+RSpec.describe Forms::DraftController, type: :request do
   let(:form) { create(:form) }
   let(:group) { create(:group, organisation: standard_user.organisation) }
   let(:user) { standard_user }
@@ -22,7 +22,7 @@ RSpec.describe FormsController, type: :request do
       end
 
       it "renders the show template" do
-        expect(response).to render_template("forms/show")
+        expect(response).to render_template("show")
       end
 
       it "includes a task list" do
@@ -36,7 +36,7 @@ RSpec.describe FormsController, type: :request do
       end
 
       it "renders the show template" do
-        expect(response).to render_template("forms/show")
+        expect(response).to render_template("show")
       end
     end
 
@@ -68,46 +68,6 @@ RSpec.describe FormsController, type: :request do
 
     it "returns 404" do
       expect(response.status).to eq(404)
-    end
-  end
-
-  describe "#mark_pages_section_completed" do
-    let(:pages) do
-      [build(:page, id: 99)]
-    end
-
-    let(:form) { create(:form, pages:, question_section_completed: "false") }
-
-    let(:user) do
-      standard_user
-    end
-
-    before do
-      login_as user
-
-      post form_pages_path(form.id), params: { forms_mark_pages_section_complete_input: { mark_complete: "true" } }
-    end
-
-    it "Redirects you to the form overview page" do
-      expect(response).to redirect_to(form_path(form.id))
-    end
-
-    context "when the mark completed form is invalid" do
-      before do
-        post form_pages_path(form.id), params: { forms_mark_pages_section_complete_input: { mark_complete: nil } }
-      end
-
-      it "renders the index page" do
-        expect(response).to render_template("pages/index")
-      end
-
-      it "returns 422 error code" do
-        expect(response.status).to eq(422)
-      end
-
-      it "sets mark_complete to false" do
-        expect(assigns[:mark_complete_input].mark_complete).to eq("false")
-      end
     end
   end
 end

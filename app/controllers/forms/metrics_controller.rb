@@ -1,7 +1,5 @@
 module Forms
-  class MetricsController < WebController
-    after_action :verify_authorized
-
+  class MetricsController < FormsController
     FORM_NAME_IN_FILENAME_MAX_LENGTH = 85 # limit the filename length to 100 characters
 
     def metrics_csv

@@ -1,7 +1,5 @@
 module Forms
-  class WelshTranslationController < WebController
-    after_action :verify_authorized
-
+  class WelshTranslationController < FormsController
     def new
       authorize current_form, :can_edit_form?
       return redirect_to form_path(current_form) unless welsh_enabled?

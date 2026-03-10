@@ -1,6 +1,5 @@
 module Forms
-  class DeclarationController < WebController
-    after_action :verify_authorized
+  class DeclarationController < FormsController
     def new
       authorize current_form, :can_view_form?
       @declaration_input = DeclarationInput.new(form: current_form).assign_form_values

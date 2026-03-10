@@ -1,6 +1,5 @@
-class Forms::RedirectFromFormsRunnerController < WebController
+class Forms::RedirectFromFormsRunnerController < FormsController
   before_action :check_user_has_permission
-  after_action :verify_authorized
 
   def edit_question
     page_external_id = params.require(:page_external_id)

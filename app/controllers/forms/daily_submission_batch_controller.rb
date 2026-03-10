@@ -1,7 +1,6 @@
 module Forms
-  class DailySubmissionBatchController < WebController
+  class DailySubmissionBatchController < FormsController
     before_action :check_feature_flag
-    after_action :verify_authorized
 
     def new
       authorize current_form, :can_edit_form?

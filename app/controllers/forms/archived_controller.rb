@@ -1,7 +1,5 @@
 module Forms
-  class ArchivedController < WebController
-    after_action :verify_authorized
-
+  class ArchivedController < FormsController
     def show_form
       authorize current_form, :can_view_form?
 

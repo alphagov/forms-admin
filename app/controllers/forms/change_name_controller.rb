@@ -1,7 +1,5 @@
 module Forms
-  class ChangeNameController < WebController
-    after_action :verify_authorized
-
+  class ChangeNameController < FormsController
     def edit
       authorize current_form, :can_view_form?
       @name_input = NameInput.new(form: current_form).assign_form_values

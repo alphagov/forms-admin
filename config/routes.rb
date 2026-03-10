@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   end
 
   scope "forms/:form_id" do
-    get "/" => "forms#show", as: :form
+    get "/" => "forms/draft#show", as: :form
     get "/change-name" => "forms/change_name#edit", as: :change_form_name
     post "/change-name" => "forms/change_name#update"
 
@@ -85,7 +85,7 @@ Rails.application.routes.draw do
 
     scope "/pages" do
       get "/" => "pages#index", as: :form_pages
-      post "/" => "forms#mark_pages_section_completed"
+      post "/" => "pages#mark_pages_section_completed"
       post "/move-page" => "pages#move_page", as: :move_page
       get "/change-order" => "pages/change_order#new", as: :change_order_new
       post "/change-order" => "pages/change_order#create", as: :change_order_create
