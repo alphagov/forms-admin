@@ -42,7 +42,7 @@ gem "vite_rails"
 
 # For GOV.UK branding
 gem "govuk-components", "~> 6"
-gem "govuk_design_system_formbuilder"
+gem "govuk_design_system_formbuilder", "~> 6"
 
 # The autocomplete component is not currently published as a gem, if changing
 # the hash, also change in package.json
