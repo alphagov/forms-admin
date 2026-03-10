@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Forms::CopyController, type: :request do
+RSpec.describe Forms::CopyController, :feature_org_admin_alerts_enabled, type: :request do
   let(:id) { form.id }
   let(:form) { create(:form) }
 
@@ -83,7 +83,7 @@ RSpec.describe Forms::CopyController, type: :request do
         expect(response).to render_template(:confirm)
       end
 
-      it "does not send an email to the organisation admins", :feature_org_admin_alerts_enabled do
+      it "does not send an email to the organisation admins" do
         post create_copy_form_path(id), params: { forms_copy_input: { name: "", tag: "draft" } }
         expect(ActionMailer::Base.deliveries.count).to eq(0)
       end

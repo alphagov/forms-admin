@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe OrgAdminAlertsService do
+RSpec.describe OrgAdminAlertsService, :feature_org_admin_alerts_enabled do
   subject(:service) { described_class.new(form:, current_user:) }
 
   let(:organisation) { create(:organisation, :with_signed_mou) }
@@ -156,6 +156,15 @@ RSpec.describe OrgAdminAlertsService do
         expect(ActionMailer::Base.deliveries.size).to eq(0)
       end
     end
+
+    context "when the feature is disabled", feature_org_admin_alerts_enabled: false do
+      let(:previous_state) { :draft }
+
+      it "does not send any emails" do
+        service.form_made_live
+        expect(ActionMailer::Base.deliveries.size).to eq(0)
+      end
+    end
   end
 
   describe "#new_draft_form_created" do
@@ -228,6 +237,13 @@ RSpec.describe OrgAdminAlertsService do
         expect(ActionMailer::Base.deliveries.size).to eq(0)
       end
     end
+
+    context "when the feature is disabled", feature_org_admin_alerts_enabled: false do
+      it "does not send any emails" do
+        service.new_draft_form_created
+        expect(ActionMailer::Base.deliveries.size).to eq(0)
+      end
+    end
   end
 
   describe "#draft_of_existing_form_created" do
@@ -294,6 +310,15 @@ RSpec.describe OrgAdminAlertsService do
           service.draft_of_existing_form_created
         }.to raise_error(StandardError, "Unexpected form state: draft")
 
+        expect(ActionMailer::Base.deliveries.size).to eq(0)
+      end
+    end
+
+    context "when the feature is disabled", feature_org_admin_alerts_enabled: false do
+      let(:form) { create(:form, :live_with_draft) }
+
+      it "does not send any emails" do
+        service.draft_of_existing_form_created
         expect(ActionMailer::Base.deliveries.size).to eq(0)
       end
     end

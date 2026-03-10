@@ -12,7 +12,7 @@ RSpec.describe FormsController, type: :request do
     login_as user
   end
 
-  describe "#alert_org_admins_if_draft_created" do
+  describe "#alert_org_admins_if_draft_created", :feature_org_admin_alerts_enabled do
     before do
       # Adding a new question loads in the form again from the database during creation. Post to this route to test that
       # this triggers an alert email for the status change even though the Form model loaded in by the controller isn't

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Forms::UnarchiveController, type: :request do
+RSpec.describe Forms::UnarchiveController, :feature_org_admin_alerts_enabled, type: :request do
   let(:user) { standard_user }
 
   let(:form) { create(:form, :archived) }

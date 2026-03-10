@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Forms::MakeLiveController, type: :request do
+RSpec.describe Forms::MakeLiveController, :feature_org_admin_alerts_enabled, type: :request do
   let(:user) { build :user, organisation: }
   let(:form) { create(:form, :ready_for_live) }
   let(:id) { form.id }

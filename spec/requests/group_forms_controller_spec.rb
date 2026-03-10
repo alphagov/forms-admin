@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/groups/:group_id/forms", type: :request do
+RSpec.describe "/groups/:group_id/forms", :feature_org_admin_alerts_enabled, type: :request do
   let(:group) { create :group, organisation:, status: :active }
   let(:organisation) { test_org }
   let(:nonexistent_group) { "foobar" }
@@ -161,7 +161,7 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
         expect(response.body).to include I18n.t("error_summary.heading")
       end
 
-      it "does not send an email to the organisation admins", :feature_org_admin_alerts_enabled do
+      it "does not send an email to the organisation admins" do
         post group_forms_url(group), params: { forms_name_input: invalid_attributes }
         expect(ActionMailer::Base.deliveries.count).to eq(0)
       end
