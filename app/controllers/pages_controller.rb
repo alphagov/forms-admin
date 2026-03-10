@@ -83,6 +83,23 @@ class PagesController < WebController
     redirect_to form_pages_path, success: success_message
   end
 
+  def mark_pages_section_completed
+    @pages = current_form.pages
+    @mark_complete_input = Forms::MarkPagesSectionCompleteInput.new(mark_complete_input_params)
+
+    if @mark_complete_input.submit
+      success_message = if @mark_complete_input.mark_complete == "true"
+                          t("banner.success.form.pages_saved_and_section_completed")
+                        else
+                          t("banner.success.form.pages_saved")
+                        end
+      redirect_to form_path(current_form.id), success: success_message
+    else
+      @mark_complete_input.mark_complete = "false"
+      render "pages/index", locals: { current_form: }, status: :unprocessable_content
+    end
+  end
+
 private
 
   def clear_draft_questions_data
@@ -124,6 +141,10 @@ private
       edit_draft_question.save!
     end
     edit_draft_question
+  end
+
+  def mark_complete_input_params
+    params.require(:forms_mark_pages_section_complete_input).permit(:mark_complete).merge(form: current_form)
   end
 
   def set_answer_type_logging_attribute

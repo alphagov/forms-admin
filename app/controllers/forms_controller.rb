@@ -8,28 +8,4 @@ class FormsController < WebController
     @task_status_counts = task_service.task_counts
     render :show, locals: { current_form: }
   end
-
-  def mark_pages_section_completed
-    authorize current_form, :can_view_form?
-    @pages = current_form.pages
-    @mark_complete_input = Forms::MarkPagesSectionCompleteInput.new(mark_complete_input_params)
-
-    if @mark_complete_input.submit
-      success_message = if @mark_complete_input.mark_complete == "true"
-                          t("banner.success.form.pages_saved_and_section_completed")
-                        else
-                          t("banner.success.form.pages_saved")
-                        end
-      redirect_to form_path(current_form.id), success: success_message
-    else
-      @mark_complete_input.mark_complete = "false"
-      render "pages/index", locals: { current_form: }, status: :unprocessable_content
-    end
-  end
-
-private
-
-  def mark_complete_input_params
-    params.require(:forms_mark_pages_section_complete_input).permit(:mark_complete).merge(form: current_form)
-  end
 end
