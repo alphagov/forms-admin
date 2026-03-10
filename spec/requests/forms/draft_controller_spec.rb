@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe FormsController, type: :request do
+RSpec.describe Forms::DraftController, type: :request do
   let(:form) { create(:form) }
   let(:group) { create(:group, organisation: standard_user.organisation) }
   let(:user) { standard_user }
@@ -22,7 +22,7 @@ RSpec.describe FormsController, type: :request do
       end
 
       it "renders the show template" do
-        expect(response).to render_template("forms/show")
+        expect(response).to render_template("show")
       end
 
       it "includes a task list" do
@@ -36,7 +36,7 @@ RSpec.describe FormsController, type: :request do
       end
 
       it "renders the show template" do
-        expect(response).to render_template("forms/show")
+        expect(response).to render_template("show")
       end
     end
 

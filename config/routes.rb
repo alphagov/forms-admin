@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   end
 
   scope "forms/:form_id" do
-    get "/" => "forms#show", as: :form
+    get "/" => "forms/draft#show", as: :form
     get "/change-name" => "forms/change_name#edit", as: :change_form_name
     post "/change-name" => "forms/change_name#update"
 

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "forms/show.html.erb" do
+describe "forms/draft/show.html.erb" do
   let(:user) { build :user }
   let(:form) { create :form, :with_pages, name: "Form 1", form_slug: "form-1" }
   let(:group) { create :group, name: "Group 1" }
@@ -16,7 +16,7 @@ describe "forms/show.html.erb" do
       GroupForm.create!(form_id: form.id, group_id: group.id)
     end
 
-    render template: "forms/show"
+    render
   end
 
   it "contains page heading and sub-heading" do

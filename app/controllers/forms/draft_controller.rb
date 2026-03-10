@@ -1,4 +1,4 @@
-class FormsController < WebController
+class Forms::DraftController < WebController
   after_action :verify_authorized
 
   def show
