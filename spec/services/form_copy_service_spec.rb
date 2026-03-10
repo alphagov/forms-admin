@@ -5,7 +5,8 @@ RSpec.describe FormCopyService do
   let(:source_form) { create(:form, :live_with_draft) }
   let(:source_form_document) { FormDocument.find_by(form_id: source_form.id) }
   let(:logged_in_user) { create(:user) }
-  let(:copied_form) { described_class.new(source_form, logged_in_user).copy(tag: "live") }
+  let(:tag) { "live" }
+  let(:copied_form) { described_class.new(source_form, logged_in_user).copy(tag:) }
 
   before do
     GroupForm.create!(form: source_form, group: group)
@@ -233,11 +234,24 @@ RSpec.describe FormCopyService do
 
     context "when source form is in a group" do
       let(:group) { create(:group) }
-      let(:source_form) { create(:form, :live_with_draft) }
 
-      it "places the copied form in the same group as the original form" do
-        expect(copied_form.group).to eq(source_form.group)
-        expect(copied_form.group).to eq(group)
+      context "when copying a live form" do
+        let(:source_form) { create(:form, :live_with_draft) }
+
+        it "places the copied form in the same group as the original form" do
+          expect(copied_form.group).to eq(source_form.group)
+          expect(copied_form.group).to eq(group)
+        end
+      end
+
+      context "when copying a draft form with no pages" do
+        let(:source_form) { create(:form) }
+        let(:tag) { "draft" }
+
+        it "places the copied form in the same group as the original form" do
+          expect(copied_form.group).to eq(source_form.group)
+          expect(copied_form.group).to eq(group)
+        end
       end
     end
 
