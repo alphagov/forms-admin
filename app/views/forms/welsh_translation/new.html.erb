@@ -210,9 +210,18 @@
 
             table.with_body do |body|
               body.with_row do |row|
-                row.with_cell(text: @welsh_translation_input.form.declaration_text, classes: "govuk-!-text-break-word")
+                row.with_cell(text: @welsh_translation_input.form.declaration_markdown, classes: "govuk-!-text-break-word")
                 row.with_cell do
-                  f.govuk_text_area :declaration_text_cy, lang: "cy"
+                  f.govuk_text_area :declaration_markdown_cy, lang: "cy"
+                  render MarkdownEditorComponent::View.new(:declaration_markdown_cy,
+                    form_builder: f,
+                    render_preview_path: welsh_translation_render_preview_path(@welsh_translation_input.form.id),
+                    preview_html: nil,
+                    form_model: @welsh_translation_input,
+                    label: t("helpers.label.forms_welsh_translation_input.declaration_markdown_cy"),
+                    lang: "cy",
+                    allow_headings: true,
+                    label_heading: false)
                 end
               end
             end

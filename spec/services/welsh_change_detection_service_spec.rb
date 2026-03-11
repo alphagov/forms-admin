@@ -115,7 +115,7 @@ RSpec.describe WelshChangeDetectionService do
 
       context "when there are new form fields" do
         before do
-          form.update!(declaration_text: "I declare this is correct")
+          form.update!(declaration_markdown: "I declare this is correct")
           form.save_question_changes!
         end
 
@@ -123,7 +123,7 @@ RSpec.describe WelshChangeDetectionService do
           changes = described_class.new(form).changes
 
           expect(changes).to include(
-            hash_including(type: :new_field, field: :declaration_text, scope: :form),
+            hash_including(type: :new_field, field: :declaration_markdown, scope: :form),
           )
         end
       end
@@ -312,15 +312,15 @@ RSpec.describe WelshChangeDetectionService do
 
       context "when there are untranslated form fields" do
         before do
-          form.update!(declaration_text: "I declare this is correct")
+          form.update!(declaration_markdown: "I declare this is correct")
           form.save_question_changes!
         end
 
-        it "detects untranslated declaration_text" do
+        it "detects untranslated declaration_markdown" do
           changes = described_class.new(form).changes
 
           expect(changes).to include(
-            hash_including(type: :untranslated_field, field: :declaration_text, scope: :form),
+            hash_including(type: :untranslated_field, field: :declaration_markdown, scope: :form),
           )
         end
       end

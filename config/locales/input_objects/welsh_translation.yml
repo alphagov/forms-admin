@@ -5,7 +5,7 @@ en:
       models:
         forms/welsh_translation_input:
           attributes:
-            declaration_text_cy:
+            declaration_markdown_cy:
               blank: Enter a declaration in Welsh
               too_long: The declaration cannot be longer than 2,000 characters
             mark_complete:
@@ -41,7 +41,7 @@ en:
   helpers:
     label:
       forms_welsh_translation_input:
-        declaration_text_cy: Enter your Welsh declaration
+        declaration_markdown_cy: Enter your Welsh declaration
         name_cy: Enter your Welsh form name
         payment_url_cy: Enter Welsh GOV.UK Pay payment link
         privacy_policy_url_cy: Enter link to your Welsh privacy information

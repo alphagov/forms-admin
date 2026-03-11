@@ -199,8 +199,7 @@ class Form < ApplicationRecord
   def normalise_welsh!
     return unless available_languages.include?("cy")
 
-    self.declaration_text_cy = nil if declaration_text.blank?
-    self.declaration_markdown_cy = nil if declaration_text_cy.blank?
+    self.declaration_markdown_cy = nil if declaration_markdown.blank?
     self.payment_url_cy = nil if payment_url.blank?
     self.support_email_cy = nil if support_email.blank?
     self.support_phone_cy = nil if support_phone.blank?
