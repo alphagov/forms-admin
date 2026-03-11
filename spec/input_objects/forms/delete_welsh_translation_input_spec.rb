@@ -41,8 +41,8 @@ RSpec.describe Forms::DeleteWelshTranslationInput, type: :model do
              name_cy: "New Welsh name",
              what_happens_next_markdown: "English what happens next",
              what_happens_next_markdown_cy: "New Welsh what happens next",
-             declaration_text: "English declaration",
-             declaration_text_cy: "New Welsh declaration",
+             declaration_markdown: "English declaration",
+             declaration_markdown_cy: "New Welsh declaration",
              support_email: "english-support@example.gov.uk",
              support_email_cy: "new-welsh-support@example.gov.uk",
              support_phone: "English support phone",
@@ -122,7 +122,7 @@ RSpec.describe Forms::DeleteWelshTranslationInput, type: :model do
 
         it "deletes all of the welsh form content" do
           expect { delete_welsh_translation_input.submit }.to change { form.reload.what_happens_next_markdown_cy }.to(nil)
-            .and change { form.reload.declaration_text_cy }.to(nil)
+            .and change { form.reload.declaration_markdown_cy }.to(nil)
             .and change { form.reload.support_email_cy }.to(nil)
             .and change { form.reload.support_phone_cy }.to(nil)
             .and change { form.reload.support_url_cy }.to(nil)
@@ -159,8 +159,8 @@ RSpec.describe Forms::DeleteWelshTranslationInput, type: :model do
                    name_cy: "New Welsh name",
                    what_happens_next_markdown: "English what happens next",
                    what_happens_next_markdown_cy: "New Welsh what happens next",
-                   declaration_text: "English declaration",
-                   declaration_text_cy: "New Welsh declaration",
+                   declaration_markdown: "English declaration",
+                   declaration_markdown_cy: "New Welsh declaration",
                    support_email: "english-support@example.gov.uk",
                    support_email_cy: "new-welsh-support@example.gov.uk",
                    support_phone: "English support phone",
@@ -189,8 +189,8 @@ RSpec.describe Forms::DeleteWelshTranslationInput, type: :model do
                    name_cy: "New Welsh name",
                    what_happens_next_markdown: "English what happens next",
                    what_happens_next_markdown_cy: "New Welsh what happens next",
-                   declaration_text: "English declaration",
-                   declaration_text_cy: "New Welsh declaration",
+                   declaration_markdown: "English declaration",
+                   declaration_markdown_cy: "New Welsh declaration",
                    support_email: "english-support@example.gov.uk",
                    support_email_cy: "new-welsh-support@example.gov.uk",
                    support_phone: "English support phone",
