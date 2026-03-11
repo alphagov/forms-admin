@@ -24,7 +24,7 @@ feature "Archive a form", type: :feature do
   def given_i_am_viewing_a_live_form
     visit live_form_path(form.id)
     expect(page.find("h1")).to have_text form.name
-    expect(page).to have_css ".govuk-tag.govuk-tag--turquoise", text: "Live"
+    expect(page).to have_css ".govuk-tag.govuk-tag--teal", text: "Live"
     expect_page_to_have_no_axe_errors(page)
   end
 
