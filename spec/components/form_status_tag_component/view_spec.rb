@@ -24,8 +24,8 @@ RSpec.describe FormStatusTagComponent::View, type: :component do
       expect(page).to have_text("Live")
     end
 
-    it "renders status in turquoise" do
-      expect(page).to have_css(".govuk-tag--turquoise")
+    it "renders status in teal" do
+      expect(page).to have_css(".govuk-tag--teal")
     end
   end
 
@@ -46,7 +46,7 @@ RSpec.describe FormStatusTagComponent::View, type: :component do
   describe "string status" do
     it "accepts status as a string" do
       expect(described_class.new(status: "draft").status_colour).to eq "yellow"
-      expect(described_class.new(status: "live").status_colour).to eq "turquoise"
+      expect(described_class.new(status: "live").status_colour).to eq "teal"
     end
   end
 end

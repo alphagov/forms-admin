@@ -57,8 +57,8 @@ RSpec.describe HeaderComponent::View, type: :component do
 
   describe "#app_header_class_for_environment" do
     [
-      { colour: "pink" },
-      { colour: "turquoise" },
+      { colour: "magenta" },
+      { colour: "teal" },
       { colour: "yellow" },
     ].each do |scenario|
       context "when colour_for_environment is #{scenario[:colour]}" do
@@ -85,8 +85,8 @@ RSpec.describe HeaderComponent::View, type: :component do
 
   describe "#colour_for_environment" do
     [
-      { friendly_environment_name: "Local", expected_result: "pink" },
-      { friendly_environment_name: "Development", expected_result: "turquoise" },
+      { friendly_environment_name: "Local", expected_result: "magenta" },
+      { friendly_environment_name: "Development", expected_result: "teal" },
       { friendly_environment_name: "Staging", expected_result: "yellow" },
       { friendly_environment_name: "Production", expected_result: "blue" },
       { friendly_environment_name: "User research", expected_result: "blue" },
@@ -111,8 +111,8 @@ RSpec.describe HeaderComponent::View, type: :component do
     end
 
     [
-      { friendly_environment_name: "Local", colour_for_environment: "pink" },
-      { friendly_environment_name: "Development", colour_for_environment: "turquoise" },
+      { friendly_environment_name: "Local", colour_for_environment: "magenta" },
+      { friendly_environment_name: "Development", colour_for_environment: "teal" },
       { friendly_environment_name: "Staging", colour_for_environment: "yellow" },
       { friendly_environment_name: "User research", colour_for_environment: "blue" },
     ].each do |scenario|

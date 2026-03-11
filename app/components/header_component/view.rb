@@ -22,9 +22,9 @@ module HeaderComponent
     def colour_for_environment
       case environment_name
       when "Local"
-        "pink"
+        "magenta"
       when "Development"
-        "turquoise"
+        "teal"
       when "Staging"
         "yellow"
       else

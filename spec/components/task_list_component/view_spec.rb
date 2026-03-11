@@ -283,8 +283,8 @@ RSpec.describe TaskListComponent::View, type: :component do
     context "when status is in_progress" do
       let(:status) { :in_progress }
 
-      it "returns blue" do
-        expect(row.get_status_colour).to eq("light-blue")
+      it "returns teal" do
+        expect(row.get_status_colour).to eq("teal")
       end
     end
 

@@ -64,7 +64,7 @@ module TaskListComponent
 
       {
         completed: nil,
-        in_progress: "light-blue",
+        in_progress: "teal",
         cannot_start: nil,
         not_started: "blue",
         optional: "grey",

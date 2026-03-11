@@ -55,7 +55,7 @@ describe "forms/_made_live_form.html.erb" do
   describe "form status tag" do
     context "when the form is live" do
       it "renders the live tag" do
-        expect(rendered).to have_css(".govuk-tag.govuk-tag--turquoise", text: "Live")
+        expect(rendered).to have_css(".govuk-tag.govuk-tag--teal", text: "Live")
       end
     end
 
