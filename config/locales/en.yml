@@ -829,7 +829,6 @@ en:
       preview_tab_text: Preview guidance
       update_preview: Update preview
       write_tab_text: Write guidance
-    no_guidance_added_html: "<p>No guidance added</p>"
     when_to_use_guidance_html: |
       <p>
         Use guidance if you need to:
@@ -1242,6 +1241,7 @@ en:
         example: "### This is a third-level heading"
         heading: Third-level headings
         instructions: 'To add a third-level heading (H3), use 3 hashtags followed by a space. For example:'
+    no_markdown_content_html: "<p>No content added</p>"
     preview:
       description: Below is a preview of how your markdown content will be shown to the person completing your form.
       heading: Preview your markdown below

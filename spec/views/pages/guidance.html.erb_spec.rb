@@ -4,7 +4,7 @@ describe "pages/guidance.html.erb", type: :view do
   let(:form) { create :form }
   let(:page) { OpenStruct.new(conditions: [], answer_type: "number") }
   let(:guidance_input) { Pages::GuidanceInput.new }
-  let(:preview_html) { I18n.t("guidance.no_guidance_added_html") }
+  let(:preview_html) { I18n.t("markdown_editor.no_markdown_content_html") }
   let(:back_link) { "/forms/1/pages/new" }
   let(:question_number) { 1 }
   let(:is_new_page) { true }
