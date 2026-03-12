@@ -211,6 +211,15 @@ class Form < ApplicationRecord
     pages.each(&:normalise_welsh!)
   end
 
+  # Pass in the previous state rather than getting it from #state_previously_was as the Form may have been updated in a
+  # separate instance
+  def draft_created?(previous_state)
+    return false if state.to_sym == previous_state.to_sym
+
+    (previous_state.to_sym == :live && live_with_draft?) ||
+      (previous_state.to_sym == :archived && archived_with_draft?)
+  end
+
 private
 
   def set_external_id

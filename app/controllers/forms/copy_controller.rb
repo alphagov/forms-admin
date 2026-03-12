@@ -25,6 +25,9 @@ module Forms
       if @copy_input.submit
         copied_form = FormCopyService.new(current_form, current_user).copy(tag: @copy_input.tag)
         copied_form.update!(name: @copy_input.name)
+
+        OrgAdminAlertsService.new(form: copied_form, current_user:).new_draft_form_created
+
         redirect_to form_path(copied_form.id), success: t("banner.success.form.copied")
       else
         set_back_link(current_form)

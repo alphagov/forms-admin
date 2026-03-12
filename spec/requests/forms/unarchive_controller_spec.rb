@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Forms::UnarchiveController, type: :request do
+RSpec.describe Forms::UnarchiveController, :feature_org_admin_alerts_enabled, type: :request do
   let(:user) { standard_user }
 
   let(:form) { create(:form, :archived) }
@@ -39,6 +39,7 @@ RSpec.describe Forms::UnarchiveController, type: :request do
     before do
       Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user, role: :group_admin)
       GroupForm.create!(form_id: form.id, group_id: group.id)
+      create(:organisation_admin_user, organisation: standard_user.organisation)
 
       login_as user
     end
@@ -61,6 +62,14 @@ RSpec.describe Forms::UnarchiveController, type: :request do
         post(unarchive_create_path(form_id: form.id), params: form_params)
         expect(response.body).to include "Your form is live"
       end
+
+      it "sends an email to the organisation admins" do
+        post(unarchive_create_path(form_id: form.id), params: form_params)
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+
+        template_id = Settings.govuk_notify.org_admin_alerts.archived_form_made_live_template_id
+        expect(ActionMailer::Base.deliveries.last.govuk_notify_template).to eq(template_id)
+      end
     end
 
     context "when deciding not to make a form live again" do
@@ -75,6 +84,11 @@ RSpec.describe Forms::UnarchiveController, type: :request do
       it "redirects you to the archived form page" do
         post(unarchive_create_path(form_id: form.id), params: form_params)
         expect(response).to redirect_to(archived_form_path(form.id))
+      end
+
+      it "does not send an email to the organisation admins" do
+        post(make_live_path(form_id: form.id), params: form_params)
+        expect(ActionMailer::Base.deliveries.count).to eq(0)
       end
     end
 
@@ -96,6 +110,11 @@ RSpec.describe Forms::UnarchiveController, type: :request do
         post(unarchive_create_path(form_id: form.id), params: form_params)
         expect(response).to render_template("unarchive_form")
         expect(response.body).to include("You must choose an option")
+      end
+
+      it "does not send an email to the organisation admins" do
+        post(make_live_path(form_id: form.id), params: form_params)
+        expect(ActionMailer::Base.deliveries.count).to eq(0)
       end
     end
 

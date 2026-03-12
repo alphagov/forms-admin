@@ -1,14 +1,15 @@
 require "rails_helper"
 
-RSpec.describe Forms::MakeLiveController, type: :request do
-  let(:user) { build :user }
+RSpec.describe Forms::MakeLiveController, :feature_org_admin_alerts_enabled, type: :request do
+  let(:user) { build :user, organisation: }
   let(:form) { create(:form, :ready_for_live) }
   let(:id) { form.id }
 
   let(:form_params) { nil }
 
+  let(:organisation) { test_org }
   let(:group_role) { :group_admin }
-  let(:group) { create(:group, organisation: user.organisation, status: :active) }
+  let(:group) { create(:group, organisation:, status: :active) }
 
   describe "#new" do
     before do
@@ -59,6 +60,7 @@ RSpec.describe Forms::MakeLiveController, type: :request do
     before do
       Membership.create!(group_id: group.id, user:, added_by: user, role: group_role)
       GroupForm.create!(form_id: form.id, group_id: group.id)
+      create(:organisation_admin_user, organisation:)
 
       login_as user
     end
@@ -74,6 +76,14 @@ RSpec.describe Forms::MakeLiveController, type: :request do
       it "renders the confirmation page" do
         post(make_live_path(form_id: form.id), params: form_params)
         expect(response).to render_template(:confirmation)
+      end
+
+      it "sends an email to the organisation admins" do
+        post(make_live_path(form_id: form.id), params: form_params)
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+
+        template_id = Settings.govuk_notify.org_admin_alerts.new_draft_form_made_live_template_id
+        expect(ActionMailer::Base.deliveries.last.govuk_notify_template).to eq(template_id)
       end
 
       context "and that form has not been made live before" do
@@ -107,6 +117,11 @@ RSpec.describe Forms::MakeLiveController, type: :request do
             expect {
               post(make_live_path(form_id: form.id), params: form_params)
             }.not_to(change { form.reload.live_form_document.updated_at })
+          end
+
+          it "does not send an email to the organisation admins" do
+            post(make_live_path(form_id: form.id), params: form_params)
+            expect(ActionMailer::Base.deliveries.count).to eq(0)
           end
         end
 
@@ -144,6 +159,11 @@ RSpec.describe Forms::MakeLiveController, type: :request do
 
       it "redirects you to the form page" do
         expect(response).to redirect_to(form_path(form.id))
+      end
+
+      it "does not send an email to the organisation admins" do
+        post(make_live_path(form_id: form.id), params: form_params)
+        expect(ActionMailer::Base.deliveries.count).to eq(0)
       end
     end
 

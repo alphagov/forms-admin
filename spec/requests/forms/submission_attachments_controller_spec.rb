@@ -2,10 +2,14 @@ require "rails_helper"
 
 RSpec.describe Forms::SubmissionAttachmentsController, type: :request do
   let(:form) { create(:form, :live, submission_format: original_submission_format) }
+  let(:user) { standard_user }
   let(:original_submission_format) { [] }
+  let(:group) { create(:group, organisation: user.organisation) }
 
   before do
-    login_as_super_admin_user
+    Membership.create!(group_id: group.id, user:, added_by: user, role: :group_admin)
+    GroupForm.create!(form:, group_id: group.id)
+    login_as user
   end
 
   describe "#new" do

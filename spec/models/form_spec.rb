@@ -1306,6 +1306,45 @@ RSpec.describe Form, type: :model do
       }
     end
 
+    describe "#draft_created?" do
+      subject(:draft_created?) { form.draft_created?(initial_state) }
+
+      context "when a draft has been created for a live form" do
+        let(:form) { create(:form, :live_with_draft) }
+        let(:initial_state) { "live" }
+
+        it { is_expected.to be true }
+      end
+
+      context "when a draft has been created for an archived form" do
+        let(:form) { create(:form, :archived_with_draft) }
+        let(:initial_state) { "archived" }
+
+        it { is_expected.to be true }
+      end
+
+      context "when the state has not changed" do
+        let(:form) { create(:form, :live_with_draft) }
+        let(:initial_state) { "live_with_draft" }
+
+        it { is_expected.to be false }
+      end
+
+      context "when the state has been updated to live" do
+        let(:form) { create(:form, :live) }
+        let(:initial_state) { "live_with_draft" }
+
+        it { is_expected.to be false }
+      end
+
+      context "when the state has been updated from live with draft to archived with draft" do
+        let(:form) { create(:form, :archived_with_draft) }
+        let(:initial_state) { "live_with_draft" }
+
+        it { is_expected.to be false }
+      end
+    end
+
     context "when Welsh is not an available language" do
       let(:languages) { %w[en] }
 

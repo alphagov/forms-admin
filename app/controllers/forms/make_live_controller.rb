@@ -17,6 +17,10 @@ module Forms
       @make_form_live_service = MakeFormLiveService.call(current_form:, current_user:)
       @make_form_live_service.make_live unless current_form.live?
 
+      if current_form.state_previously_changed?
+        OrgAdminAlertsService.new(form: current_form, current_user:).form_made_live
+      end
+
       render "confirmation", locals: { current_form:, confirmation_page_title: @make_form_live_service.page_title, confirmation_page_body: @make_form_live_service.confirmation_page_body }
     end
 
