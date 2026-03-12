@@ -1,7 +1,5 @@
 module Forms
   class DailySubmissionBatchController < FormsController
-    before_action :check_feature_flag
-
     def new
       authorize current_form, :can_edit_form?
       @daily_submission_batch_input = Forms::DailySubmissionBatchInput.new(form: current_form).assign_form_values
@@ -19,10 +17,6 @@ module Forms
     end
 
   private
-
-    def check_feature_flag
-      raise NotFoundError unless FeatureService.enabled?(:daily_submission_emails_enabled)
-    end
 
     def daily_submission_batch_input_params
       params.require(:forms_daily_submission_batch_input).permit(:send_daily_submission_batch).merge(form: current_form)

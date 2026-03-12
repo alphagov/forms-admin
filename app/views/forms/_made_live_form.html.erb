@@ -149,13 +149,11 @@
       <p><%= t(".how_you_get_completed_forms.submission_format.email.#{submission_format}_html") %></p>
     <% end %>
 
-    <% if FeatureService.enabled?(:daily_submission_emails_enabled) %>
-      <h4 class="govuk-heading-s"><%= t(".how_you_get_completed_forms.daily_csv.title") %></h4>
-      <% if form_document.send_daily_submission_batch %>
-        <p><%= t(".how_you_get_completed_forms.daily_csv.enabled") %></p>
-      <% else %>
-        <p><%= t(".how_you_get_completed_forms.daily_csv.disabled") %></p>
-      <% end %>
+    <h4 class="govuk-heading-s"><%= t(".how_you_get_completed_forms.daily_csv.title") %></h4>
+    <% if form_document.send_daily_submission_batch %>
+      <p><%= t(".how_you_get_completed_forms.daily_csv.enabled") %></p>
+    <% else %>
+      <p><%= t(".how_you_get_completed_forms.daily_csv.disabled") %></p>
     <% end %>
 
     <% if form_document.has_welsh_translation? %>
