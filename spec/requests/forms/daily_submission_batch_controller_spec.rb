@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Forms::DailySubmissionBatchController, :feature_daily_submission_emails_enabled, type: :request do
+RSpec.describe Forms::DailySubmissionBatchController, type: :request do
   let(:form) { create(:form, :live, send_daily_submission_batch: send_daily_submission_batch_original_value) }
   let(:send_daily_submission_batch_original_value) { false }
   let(:current_user) { standard_user }
@@ -31,12 +31,6 @@ RSpec.describe Forms::DailySubmissionBatchController, :feature_daily_submission_
 
       it "returns 403" do
         expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context "when the feature flag is disabled", feature_daily_submission_emails_enabled: false do
-      it "returns 404" do
-        expect(response).to have_http_status(:not_found)
       end
     end
   end

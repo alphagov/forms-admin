@@ -189,29 +189,21 @@ describe "forms/_made_live_form.html.erb" do
     end
   end
 
-  context "when the daily_submission_emails_enabled feature is enabled", :feature_daily_submission_emails_enabled do
-    context "when send_daily_submission_batch is true" do
-      let(:send_daily_submission_batch) { true }
+  context "when send_daily_submission_batch is true" do
+    let(:send_daily_submission_batch) { true }
 
-      it "tells the user they getting a daily CSV" do
-        expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.how_you_get_completed_forms.daily_csv.title"))
-        expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.daily_csv.enabled"))
-      end
-    end
-
-    context "when send_daily_submission_batch is false" do
-      let(:send_daily_submission_batch) { false }
-
-      it "tells the user they have not opted to get a daily CSV" do
-        expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.how_you_get_completed_forms.daily_csv.title"))
-        expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.daily_csv.disabled"))
-      end
+    it "tells the user they getting a daily CSV" do
+      expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.how_you_get_completed_forms.daily_csv.title"))
+      expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.daily_csv.enabled"))
     end
   end
 
-  context "when the daily_submission_emails_enabled feature is disabled", feature_daily_submission_emails_enabled: false do
-    it "does not include the daily CSV section" do
-      expect(rendered).not_to have_css("h4", text: I18n.t("forms.made_live_form.how_you_get_completed_forms.daily_csv.title"))
+  context "when send_daily_submission_batch is false" do
+    let(:send_daily_submission_batch) { false }
+
+    it "tells the user they have not opted to get a daily CSV" do
+      expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.how_you_get_completed_forms.daily_csv.title"))
+      expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.daily_csv.disabled"))
     end
   end
 

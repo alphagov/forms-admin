@@ -287,48 +287,32 @@ describe FormTaskListService do
       let(:section_rows) { section[:rows] }
       let(:all_task_names) { all_sections.flat_map { |section| section[:rows] }.compact.map { |row| row[:task_name] } }
 
-      context "when the daily_submission_emails_enabled feature flag is enabled", :feature_daily_submission_emails_enabled do
-        context "when the submission type is email" do
-          it "has link to the submission attachments page" do
-            expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_create.how_you_get_completed_forms_section.optional_subsection.submission_attachments")
-            expect(section_rows.first[:path]).to eq "/forms/#{form.id}/submission-attachments"
-          end
-
-          it "has the subsection title 'Optional tasks' as there are multiple tasks" do
-            expect(section[:title]).to eq I18n.t("forms.task_list.optional_tasks_title.other")
-          end
+      context "when the submission type is email" do
+        it "has link to the submission attachments page" do
+          expect(section_rows.first[:task_name]).to eq I18n.t("forms.task_list_create.how_you_get_completed_forms_section.optional_subsection.submission_attachments")
+          expect(section_rows.first[:path]).to eq "/forms/#{form.id}/submission-attachments"
         end
 
-        context "when the submission type is s3" do
-          let(:form) { create(:form, submission_type: "s3") }
-
-          it "does not have link to the submission attachments page" do
-            expect(all_task_names).not_to include I18n.t("forms.task_list_create.how_you_get_completed_forms_section.optional_subsection.submission_attachments")
-          end
-
-          it "has the subsection title 'Optional task' as there is only one task" do
-            expect(section[:title]).to eq I18n.t("forms.task_list.optional_tasks_title.one")
-          end
-        end
-
-        it "has link to the daily submission batch page" do
-          expect(section_rows.second[:task_name]).to eq I18n.t("forms.task_list_create.how_you_get_completed_forms_section.optional_subsection.daily_submission_batch")
-          expect(section_rows.second[:path]).to eq "/forms/#{form.id}/daily-submission-csv"
+        it "has the subsection title 'Optional tasks' as there are multiple tasks" do
+          expect(section[:title]).to eq I18n.t("forms.task_list.optional_tasks_title.other")
         end
       end
 
-      context "when the daily_submission_emails_enabled feature flag is disabled", feature_daily_submission_emails_enabled: false do
-        it "does not have link to the daily submission batch page" do
-          expect(all_task_names).not_to include I18n.t("forms.task_list_create.how_you_get_completed_forms_section.optional_subsection.daily_submission_batch")
+      context "when the submission type is s3" do
+        let(:form) { create(:form, submission_type: "s3") }
+
+        it "does not have link to the submission attachments page" do
+          expect(all_task_names).not_to include I18n.t("forms.task_list_create.how_you_get_completed_forms_section.optional_subsection.submission_attachments")
         end
 
-        context "when the submission type is s3" do
-          let(:form) { create(:form, submission_type: "s3") }
-
-          it "does not include the optional tasks subsection at all" do
-            expect(section[:title]).to eq I18n.t("forms.task_list_create.privacy_and_contact_details_section.title")
-          end
+        it "has the subsection title 'Optional task' as there is only one task" do
+          expect(section[:title]).to eq I18n.t("forms.task_list.optional_tasks_title.one")
         end
+      end
+
+      it "has link to the daily submission batch page" do
+        expect(section_rows.second[:task_name]).to eq I18n.t("forms.task_list_create.how_you_get_completed_forms_section.optional_subsection.daily_submission_batch")
+        expect(section_rows.second[:path]).to eq "/forms/#{form.id}/daily-submission-csv"
       end
     end
 
@@ -525,7 +509,7 @@ describe FormTaskListService do
       end
     end
 
-    context "when editing an existing form", :feature_daily_submission_emails_enabled do
+    context "when editing an existing form" do
       let(:form) { create(:form, :live) }
       let(:group) { create(:group, :with_welsh_enabled, name: "Group 1", organisation:, status: group_status) }
       let(:can_make_form_live) { true }

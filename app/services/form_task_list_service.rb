@@ -102,7 +102,7 @@ private
   def how_you_get_completed_forms_optional_subsection
     rows = []
     rows << submission_attachments_task if @form.email?
-    rows << daily_submission_batch_task if FeatureService.enabled?(:daily_submission_emails_enabled)
+    rows << daily_submission_batch_task
 
     return nil if rows.empty?
 
