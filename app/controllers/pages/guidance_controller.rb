@@ -66,7 +66,7 @@ private
   end
 
   def preview_html(guidance_input)
-    return t("guidance.no_guidance_added_html") if guidance_input.guidance_markdown.blank?
+    return t("markdown_editor.no_markdown_content_html") if guidance_input.guidance_markdown.blank?
 
     GovukFormsMarkdown.render(guidance_input.guidance_markdown, locale: "en")
   end

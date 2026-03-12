@@ -269,7 +269,7 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
 
       it "returns a JSON object containing the converted HTML" do
         expect(response).to have_http_status(:ok)
-        expect(response.body).to eq({ preview_html: I18n.t("guidance.no_guidance_added_html"), errors: [] }.to_json)
+        expect(response.body).to eq({ preview_html: I18n.t("markdown_editor.no_markdown_content_html"), errors: [] }.to_json)
       end
     end
   end

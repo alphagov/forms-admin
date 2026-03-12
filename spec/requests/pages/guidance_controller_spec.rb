@@ -61,7 +61,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
         it "renders the default HTML" do
           expect(response).to have_http_status(:ok)
           expect(response).to have_rendered("pages/guidance")
-          expect(response.body).to include(I18n.t("guidance.no_guidance_added_html"))
+          expect(response.body).to include(I18n.t("markdown_editor.no_markdown_content_html"))
         end
       end
     end
@@ -125,7 +125,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
         it "renders the default HTML" do
           expect(response).to have_http_status(:ok)
           expect(response).to have_rendered("pages/guidance")
-          expect(response.body).to include(I18n.t("guidance.no_guidance_added_html"))
+          expect(response.body).to include(I18n.t("markdown_editor.no_markdown_content_html"))
         end
       end
     end
@@ -170,7 +170,7 @@ RSpec.describe Pages::GuidanceController, type: :request do
 
       it "returns a JSON object containing the converted HTML" do
         expect(response).to have_http_status(:ok)
-        expect(response.body).to eq({ preview_html: I18n.t("guidance.no_guidance_added_html"), errors: [] }.to_json)
+        expect(response.body).to eq({ preview_html: I18n.t("markdown_editor.no_markdown_content_html"), errors: [] }.to_json)
       end
     end
 

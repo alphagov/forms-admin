@@ -61,7 +61,7 @@ module Forms
   private
 
     def preview_html
-      return t("guidance.no_guidance_added_html") if params[:markdown].blank?
+      return t("markdown_editor.no_markdown_content_html") if params[:markdown].blank?
 
       GovukFormsMarkdown.render(params[:markdown], locale: "cy")
     end
