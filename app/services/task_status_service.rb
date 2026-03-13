@@ -19,7 +19,7 @@ class TaskStatusService
   end
 
   def task_statuses
-    statuses = {
+    {
       name_status:,
       pages_status:,
       declaration_status:,
@@ -31,13 +31,8 @@ class TaskStatusService
       daily_submission_batch_status:,
       share_preview_status:,
       make_live_status:,
+      welsh_language_status:,
     }
-
-    if FeatureService.new(group: @form.group).enabled?(:welsh)
-      statuses.merge!({ welsh_language_status: })
-    end
-
-    statuses
   end
 
 private

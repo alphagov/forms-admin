@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe TaskStatusService do
-  let(:group) { create(:group, :with_welsh_enabled) }
+  let(:group) { create :group }
   let(:task_status_service) do
     described_class.new(form:)
   end
@@ -254,60 +254,49 @@ describe TaskStatusService do
     end
 
     describe "welsh_language_status" do
-      context "when form does not have Welsh enabled for group" do
-        let(:group) { create(:group) } # No Welsh enabled
-        let(:form) { build(:form, :new_form, :with_group, available_languages: %w[en], group:) }
+      context "and Welsh translation is not started" do
+        let(:form) { create(:form, :live, :with_group, available_languages: %w[en], welsh_completed: false, group:) }
 
-        it "is not included in task statuses" do
-          expect(task_status_service.task_statuses).not_to have_key(:welsh_language_status)
+        it "returns optional" do
+          expect(task_status_service.task_statuses[:welsh_language_status]).to eq :optional
         end
       end
 
-      context "when form has Welsh enabled" do
-        context "and Welsh translation is not started" do
-          let(:form) { create(:form, :live, :with_group, available_languages: %w[en], welsh_completed: false, group:) }
+      context "and Welsh translation is completed" do
+        let(:form) { create(:form, :live, :with_group, available_languages: %w[en cy], welsh_completed: true, group:) }
 
-          it "returns optional" do
-            expect(task_status_service.task_statuses[:welsh_language_status]).to eq :optional
-          end
+        before do
+          welsh_translation_input = instance_double(Forms::WelshTranslationInput)
+          allow(welsh_translation_input).to receive_messages(assign_form_values: welsh_translation_input, invalid?: false)
+          allow(Forms::WelshTranslationInput).to receive(:new).and_return(welsh_translation_input)
         end
 
-        context "and Welsh translation is completed" do
-          let(:form) { create(:form, :live, :with_group, available_languages: %w[en cy], welsh_completed: true, group:) }
+        it "returns completed" do
+          expect(task_status_service.task_statuses[:welsh_language_status]).to eq :completed
+        end
+      end
 
-          before do
-            welsh_translation_input = instance_double(Forms::WelshTranslationInput)
-            allow(welsh_translation_input).to receive_messages(assign_form_values: welsh_translation_input, invalid?: false)
-            allow(Forms::WelshTranslationInput).to receive(:new).and_return(welsh_translation_input)
-          end
+      context "and structural changes require Welsh updates" do
+        let(:form) { create(:form, :live, :with_group, available_languages: %w[en cy], welsh_completed: true, group:) }
 
-          it "returns completed" do
-            expect(task_status_service.task_statuses[:welsh_language_status]).to eq :completed
-          end
+        before do
+          # Create initial Welsh FormDocument
+          FormDocumentSyncService.new(form).synchronize_live_form
+          # Add new content requiring Welsh translation
+          form.update!(declaration_text: "I declare this is correct")
+          form.save_question_changes!
         end
 
-        context "and structural changes require Welsh updates" do
-          let(:form) { create(:form, :live, :with_group, available_languages: %w[en cy], welsh_completed: true, group:) }
-
-          before do
-            # Create initial Welsh FormDocument
-            FormDocumentSyncService.new(form).synchronize_live_form
-            # Add new content requiring Welsh translation
-            form.update!(declaration_text: "I declare this is correct")
-            form.save_question_changes!
-          end
-
-          it "returns in_progress" do
-            expect(task_status_service.task_statuses[:welsh_language_status]).to eq :in_progress
-          end
+        it "returns in_progress" do
+          expect(task_status_service.task_statuses[:welsh_language_status]).to eq :in_progress
         end
+      end
 
-        context "and Welsh is started but not completed" do
-          let(:form) { build(:form, :new_form, :with_group, available_languages: %w[en cy], welsh_completed: false, group:) }
+      context "and Welsh is started but not completed" do
+        let(:form) { build(:form, :new_form, :with_group, available_languages: %w[en cy], welsh_completed: false, group:) }
 
-          it "returns in_progress" do
-            expect(task_status_service.task_statuses[:welsh_language_status]).to eq :in_progress
-          end
+        it "returns in_progress" do
+          expect(task_status_service.task_statuses[:welsh_language_status]).to eq :in_progress
         end
       end
     end
