@@ -560,6 +560,7 @@ en:
       new:
         condition:
           heading: Question %{question_number}’s exit page
+        csv_download: Download content as CSV
         delete_welsh_version: Delete Welsh version
         english_header: English content
         exit_page_heading: Exit page heading

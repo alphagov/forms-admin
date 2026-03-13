@@ -13,9 +13,10 @@
         <%= t("page_titles.welsh_translation") %>
       </h1>
 
-      <p>
+      <div class="govuk-button-group">
+        <%= govuk_button_link_to t(".csv_download"), welsh_translation_download_path(@welsh_translation_input.form), secondary: true %>
         <%= render PreviewLinkComponent::View.new(@welsh_translation_input.form.pages, preview_link(@welsh_translation_input.form, locale: :cy), t(".preview_link_text")) %>
-      </p>
+      </div>
     </div>
   </div>
 
