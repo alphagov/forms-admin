@@ -2,7 +2,6 @@ module Forms
   class WelshTranslationController < FormsController
     def new
       authorize current_form, :can_edit_form?
-      return redirect_to form_path(current_form) unless welsh_enabled?
 
       @welsh_translation_input = WelshTranslationInput.new(form: form_with_pages_and_conditions).assign_form_values
       @table_presenter = Forms::TranslationTablePresenter.new
@@ -10,7 +9,6 @@ module Forms
 
     def create
       authorize current_form, :can_edit_form?
-      return redirect_to form_path(current_form) unless welsh_enabled?
 
       @welsh_translation_input = WelshTranslationInput.new(welsh_translation_params)
       @table_presenter = Forms::TranslationTablePresenter.new
@@ -30,14 +28,12 @@ module Forms
 
     def delete
       authorize current_form, :can_edit_form?
-      return redirect_to form_path(current_form) unless welsh_enabled?
 
       @delete_welsh_translation_input = Forms::DeleteWelshTranslationInput.new(form: current_form)
     end
 
     def destroy
       authorize current_form, :can_edit_form?
-      return redirect_to form_path(current_form) unless welsh_enabled?
 
       @delete_welsh_translation_input = Forms::DeleteWelshTranslationInput.new(delete_welsh_translation_params)
 
@@ -64,10 +60,6 @@ module Forms
       return t("markdown_editor.no_markdown_content_html") if params[:markdown].blank?
 
       GovukFormsMarkdown.render(params[:markdown], locale: "cy")
-    end
-
-    def welsh_enabled?
-      FeatureService.new(group: current_form.group).enabled?(:welsh)
     end
 
     def welsh_translation_params
