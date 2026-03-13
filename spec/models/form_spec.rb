@@ -980,7 +980,7 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#all_task_statuses" do
-    let(:group) { create :group}
+    let(:group) { create :group }
     let(:completed_form) { build :form, :live, :with_group, group: }
 
     it "returns a hash with each of the task statuses" do

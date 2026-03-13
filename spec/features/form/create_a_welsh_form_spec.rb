@@ -1,7 +1,7 @@
 require "rails_helper"
 
 feature "Create a form with a welsh version", type: :feature do
-  let(:group) { create(:group, name: "Welsh enabled", organisation: standard_user.organisation, status: "active", welsh_enabled: true) }
+  let(:group) { create(:group, name: "Welsh enabled", organisation: standard_user.organisation, status: "active") }
 
   before do
     GroupForm.create!(group:, form_id: form.id)
