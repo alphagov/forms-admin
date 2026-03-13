@@ -12,6 +12,7 @@ describe "forms/welsh_translation/new.html.erb" do
   let(:table_presenter) { Forms::TranslationTablePresenter.new }
   let(:mark_complete) { "true" }
   let(:welsh_translation_delete_path) { "/welsh-translation/delete" }
+  let(:welsh_translation_download_path) { "/welsh-translation/download" }
   let(:has_welsh_translation?) { false }
 
   def build_form(attributes = {})
@@ -37,7 +38,7 @@ describe "forms/welsh_translation/new.html.erb" do
 
   before do
     welsh_translation_input.mark_complete = mark_complete
-    allow(view).to receive(:welsh_translation_delete_path).and_return(welsh_translation_delete_path)
+    allow(view).to receive_messages(welsh_translation_delete_path:, welsh_translation_download_path:)
     allow(form).to receive(:has_welsh_translation?).and_return(has_welsh_translation?)
     assign(:table_presenter, table_presenter)
   end
@@ -131,6 +132,10 @@ describe "forms/welsh_translation/new.html.erb" do
       expect(form_fields).not_to be_empty
 
       expect(form_fields).to all(have_css("[lang='cy']"))
+    end
+
+    it "renders a button to download the form as a CSV" do
+      expect(rendered).to have_link(t("forms.welsh_translation.new.csv_download"), href: welsh_translation_download_path)
     end
 
     context "when the form already has a Welsh translation" do
