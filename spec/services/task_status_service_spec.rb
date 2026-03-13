@@ -61,7 +61,7 @@ describe TaskStatusService do
       end
 
       context "with a form which has declaration content and is marked incomplete" do
-        let(:form) { build(:form, :with_group, declaration_text: "I understand the implications", declaration_section_completed: false, group:) }
+        let(:form) { build(:form, :with_group, declaration_markdown: "I understand the implications", declaration_section_completed: false, group:) }
 
         it "returns the in progress status" do
           expect(task_status_service.task_statuses[:declaration_status]).to eq :in_progress
@@ -293,7 +293,7 @@ describe TaskStatusService do
             # Create initial Welsh FormDocument
             FormDocumentSyncService.new(form).synchronize_live_form
             # Add new content requiring Welsh translation
-            form.update!(declaration_text: "I declare this is correct")
+            form.update!(declaration_markdown: "I declare this is correct")
             form.save_question_changes!
           end
 
@@ -431,7 +431,7 @@ describe TaskStatusService do
             # Create initial Welsh FormDocument
             FormDocumentSyncService.new(form).synchronize_live_form
             # Add new content requiring Welsh translation
-            form.update!(declaration_text: "I declare this is correct", share_preview_completed: true)
+            form.update!(declaration_markdown: "I declare this is correct", share_preview_completed: true)
           end
 
           it "flags the Welsh task as incomplete" do

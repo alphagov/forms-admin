@@ -22,8 +22,8 @@ describe StepSummaryTableService do
       name_cy: "Apply for a juggling licence (Welsh)",
       what_happens_next_markdown: "English what happens next",
       what_happens_next_markdown_cy: "Welsh what happens next",
-      declaration_text: "English declaration",
-      declaration_text_cy: "Welsh declaration",
+      declaration_markdown: "English declaration",
+      declaration_markdown_cy: "Welsh declaration",
       support_email: "english-support@example.gov.uk",
       support_email_cy: "welsh-support@example.gov.uk",
       support_phone: "01234 987654",
@@ -404,153 +404,156 @@ describe StepSummaryTableService do
   describe "#route_content" do
     context "when the form has routing conditions" do
       let(:form) do
-        create :form, :with_welsh_translation, :ready_for_live, id: 1,
-                                                                name: "Apply for a juggling licence",
-                                                                name_cy: "Apply for a juggling licence (Welsh)",
-                                                                what_happens_next_markdown: "English what happens next",
-                                                                what_happens_next_markdown_cy: "Welsh what happens next",
-                                                                declaration_text: "English declaration",
-                                                                declaration_text_cy: "Welsh declaration",
-                                                                support_email: "english-support@example.gov.uk",
-                                                                support_email_cy: "welsh-support@example.gov.uk",
-                                                                support_phone: "01234 987654",
-                                                                support_phone_cy: "01234 567891",
-                                                                support_url_cy: "https://www.gov.uk/welsh-support",
-                                                                support_url: "https://www.gov.uk/english-support",
-                                                                support_url_text_cy: "Welsh Support",
-                                                                support_url_text: "English Support",
-                                                                privacy_policy_url: "https://www.gov.uk/english-privacy",
-                                                                privacy_policy_url_cy: "https://www.gov.uk/welsh-privacy",
-                                                                payment_url: "https://www.gov.uk/english-payment",
-                                                                payment_url_cy: "https://www.gov.uk/payments/your-welsh-payment-link",
-                                                                welsh_completed: true,
-                                                                pages: [
-                                                                  create(
-                                                                    :page,
-                                                                    question_text: "Question",
-                                                                    question_text_cy: "Question (Welsh)",
-                                                                  ),
-                                                                  create(
-                                                                    :page,
-                                                                    :with_selection_settings,
-                                                                    question_text: "Branch question (start of a route)",
-                                                                    question_text_cy: "Branch question (start of a route) (Welsh)",
-                                                                    answer_settings: DataStruct.new(
-                                                                      only_one_option: "true",
-                                                                      selection_options: [
-                                                                        {
-                                                                          name: "First branch",
-                                                                          value: "First branch",
-                                                                        },
-                                                                        {
-                                                                          name: "Second branch",
-                                                                          value: "Second branch",
-                                                                        },
-                                                                      ],
-                                                                    ),
-                                                                    answer_settings_cy: DataStruct.new(
-                                                                      only_one_option: "true",
-                                                                      selection_options: [
-                                                                        {
-                                                                          name: "First branch (Welsh)",
-                                                                          value: "First branch",
-                                                                        },
-                                                                        {
-                                                                          name: "Second branch (Welsh)",
-                                                                          value: "Second branch",
-                                                                        },
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                  create(
-                                                                    :page,
-                                                                    question_text: "Question in branch 1",
-                                                                    question_text_cy: "Question in branch 1 (Welsh)",
-                                                                  ),
-                                                                  create(
-                                                                    :page,
-                                                                    question_text: "Question at the end of branch 1 (start of a secondary skip)",
-                                                                    question_text_cy: "Question at the end of branch 1 (start of a secondary skip) (Welsh)",
-                                                                  ),
-                                                                  create(
-                                                                    :page,
-                                                                    question_text: "Question at the start of branch 2 (end of a route)",
-                                                                    question_text_cy: "Question at the start of branch 2 (end of a route) (Welsh)",
-                                                                  ),
-                                                                  create(
-                                                                    :page,
-                                                                    question_text: "Question in branch 2",
-                                                                    question_text_cy: "Question in branch 2 (Welsh)",
-                                                                  ),
-                                                                  create(
-                                                                    :page,
-                                                                    question_text: "Question at the end of branch 2",
-                                                                    question_text_cy: "Question at the end of branch 2 (Welsh)",
-                                                                  ),
-                                                                  create(
-                                                                    :page,
-                                                                    question_text: "Question after a branch route (end of a secondary skip)",
-                                                                    question_text_cy: "Question after a branch route (end of a secondary skip) (Welsh)",
-                                                                  ),
-                                                                  create(
-                                                                    :page,
-                                                                    question_text: "Question",
-                                                                    question_text_cy: "Question (Welsh)",
-                                                                  ),
-                                                                  create(
-                                                                    :page,
-                                                                    :with_selection_settings,
-                                                                    question_text: "Skip question",
-                                                                    question_text_cy: "Skip question (Welsh)",
-                                                                    answer_settings: DataStruct.new(only_one_option: "true", selection_options: [{ name: "Skip", value: "Skip" }, { name: "Don't skip", value: "Don't skip" }]),
-                                                                    answer_settings_cy: DataStruct.new(only_one_option: "true", selection_options: [{ name: "Skip (Welsh)", value: "Skip" }, { name: "Don't skip (Welsh)", value: "Don't skip" }]),
-                                                                  ),
-                                                                  create(
-                                                                    :page,
-                                                                    :with_selection_settings,
-                                                                    question_text: "Question to be skipped",
-                                                                    question_text_cy: "Question to be skipped (Welsh)",
-                                                                    answer_settings: DataStruct.new(only_one_option: "true", selection_options: [{ name: "Skip to end", value: "Skip to end" }, { name: "Don't skip", value: "Don't skip" }]),
-                                                                    answer_settings_cy: DataStruct.new(only_one_option: "true", selection_options: [{ name: "Skip to end (Welsh)", value: "Skip to end" }, { name: "Don't skip (Welsh)", value: "Don't skip" }]),
-                                                                  ),
-                                                                  create(
-                                                                    :page,
-                                                                    question_text: "Question",
-                                                                    question_text_cy: "Question (Welsh)",
-                                                                  ),
-                                                                  create(
-                                                                    :page,
-                                                                    :with_selection_settings,
-                                                                    question_text: "Exit page question",
-                                                                    question_text_cy: "Exit page question (Welsh)",
-                                                                    answer_settings: DataStruct.new(
-                                                                      only_one_option: "true",
-                                                                      selection_options: [
-                                                                        {
-                                                                          name: "Exit",
-                                                                          value: "Exit",
-                                                                        },
-                                                                        {
-                                                                          name: "Don't exit",
-                                                                          value: "Don't exit",
-                                                                        },
-                                                                      ],
-                                                                    ),
-                                                                    answer_settings_cy: DataStruct.new(
-                                                                      only_one_option: "true",
-                                                                      selection_options: [
-                                                                        {
-                                                                          name: "Exit (Welsh)",
-                                                                          value: "Exit",
-                                                                        },
-                                                                        {
-                                                                          name: "Don't exit (Welsh)",
-                                                                          value: "Don't exit",
-                                                                        },
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ]
+        create :form,
+               :with_welsh_translation,
+               :ready_for_live,
+               id: 1,
+               name: "Apply for a juggling licence",
+               name_cy: "Apply for a juggling licence (Welsh)",
+               what_happens_next_markdown: "English what happens next",
+               what_happens_next_markdown_cy: "Welsh what happens next",
+               declaration_markdown: "English declaration",
+               declaration_markdown_cy: "Welsh declaration",
+               support_email: "english-support@example.gov.uk",
+               support_email_cy: "welsh-support@example.gov.uk",
+               support_phone: "01234 987654",
+               support_phone_cy: "01234 567891",
+               support_url_cy: "https://www.gov.uk/welsh-support",
+               support_url: "https://www.gov.uk/english-support",
+               support_url_text_cy: "Welsh Support",
+               support_url_text: "English Support",
+               privacy_policy_url: "https://www.gov.uk/english-privacy",
+               privacy_policy_url_cy: "https://www.gov.uk/welsh-privacy",
+               payment_url: "https://www.gov.uk/english-payment",
+               payment_url_cy: "https://www.gov.uk/payments/your-welsh-payment-link",
+               welsh_completed: true,
+               pages: [
+                 create(
+                   :page,
+                   question_text: "Question",
+                   question_text_cy: "Question (Welsh)",
+                 ),
+                 create(
+                   :page,
+                   :with_selection_settings,
+                   question_text: "Branch question (start of a route)",
+                   question_text_cy: "Branch question (start of a route) (Welsh)",
+                   answer_settings: DataStruct.new(
+                     only_one_option: "true",
+                     selection_options: [
+                       {
+                         name: "First branch",
+                         value: "First branch",
+                       },
+                       {
+                         name: "Second branch",
+                         value: "Second branch",
+                       },
+                     ],
+                   ),
+                   answer_settings_cy: DataStruct.new(
+                     only_one_option: "true",
+                     selection_options: [
+                       {
+                         name: "First branch (Welsh)",
+                         value: "First branch",
+                       },
+                       {
+                         name: "Second branch (Welsh)",
+                         value: "Second branch",
+                       },
+                     ],
+                   ),
+                 ),
+                 create(
+                   :page,
+                   question_text: "Question in branch 1",
+                   question_text_cy: "Question in branch 1 (Welsh)",
+                 ),
+                 create(
+                   :page,
+                   question_text: "Question at the end of branch 1 (start of a secondary skip)",
+                   question_text_cy: "Question at the end of branch 1 (start of a secondary skip) (Welsh)",
+                 ),
+                 create(
+                   :page,
+                   question_text: "Question at the start of branch 2 (end of a route)",
+                   question_text_cy: "Question at the start of branch 2 (end of a route) (Welsh)",
+                 ),
+                 create(
+                   :page,
+                   question_text: "Question in branch 2",
+                   question_text_cy: "Question in branch 2 (Welsh)",
+                 ),
+                 create(
+                   :page,
+                   question_text: "Question at the end of branch 2",
+                   question_text_cy: "Question at the end of branch 2 (Welsh)",
+                 ),
+                 create(
+                   :page,
+                   question_text: "Question after a branch route (end of a secondary skip)",
+                   question_text_cy: "Question after a branch route (end of a secondary skip) (Welsh)",
+                 ),
+                 create(
+                   :page,
+                   question_text: "Question",
+                   question_text_cy: "Question (Welsh)",
+                 ),
+                 create(
+                   :page,
+                   :with_selection_settings,
+                   question_text: "Skip question",
+                   question_text_cy: "Skip question (Welsh)",
+                   answer_settings: DataStruct.new(only_one_option: "true", selection_options: [{ name: "Skip", value: "Skip" }, { name: "Don't skip", value: "Don't skip" }]),
+                   answer_settings_cy: DataStruct.new(only_one_option: "true", selection_options: [{ name: "Skip (Welsh)", value: "Skip" }, { name: "Don't skip (Welsh)", value: "Don't skip" }]),
+                 ),
+                 create(
+                   :page,
+                   :with_selection_settings,
+                   question_text: "Question to be skipped",
+                   question_text_cy: "Question to be skipped (Welsh)",
+                   answer_settings: DataStruct.new(only_one_option: "true", selection_options: [{ name: "Skip to end", value: "Skip to end" }, { name: "Don't skip", value: "Don't skip" }]),
+                   answer_settings_cy: DataStruct.new(only_one_option: "true", selection_options: [{ name: "Skip to end (Welsh)", value: "Skip to end" }, { name: "Don't skip (Welsh)", value: "Don't skip" }]),
+                 ),
+                 create(
+                   :page,
+                   question_text: "Question",
+                   question_text_cy: "Question (Welsh)",
+                 ),
+                 create(
+                   :page,
+                   :with_selection_settings,
+                   question_text: "Exit page question",
+                   question_text_cy: "Exit page question (Welsh)",
+                   answer_settings: DataStruct.new(
+                     only_one_option: "true",
+                     selection_options: [
+                       {
+                         name: "Exit",
+                         value: "Exit",
+                       },
+                       {
+                         name: "Don't exit",
+                         value: "Don't exit",
+                       },
+                     ],
+                   ),
+                   answer_settings_cy: DataStruct.new(
+                     only_one_option: "true",
+                     selection_options: [
+                       {
+                         name: "Exit (Welsh)",
+                         value: "Exit",
+                       },
+                       {
+                         name: "Don't exit (Welsh)",
+                         value: "Don't exit",
+                       },
+                     ],
+                   ),
+                 ),
+               ]
       end
 
       let(:pages) do

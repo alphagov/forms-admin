@@ -15,7 +15,14 @@
 
       <%= t("declaration_input.new.body_html") %>
 
-      <%= f.govuk_text_area :declaration_text, max_chars: 2000, label: {size: 'm' } %>
+      <%= render MarkdownEditorComponent::View.new(:declaration_markdown,
+        form_builder: f,
+        render_preview_path: declaration_render_preview_path(@declaration_input.form.id),
+        preview_html: @preview_html,
+        form_model: @declaration_input,
+        label: "Enter a declaration for people to agree to (optional)",
+        hint: nil,
+        allow_headings: true) %>
 
       <%= render MarkCompleteComponent::View.new(generate_form: false, form_builder: f, form_model: @declaration_input) %>
 

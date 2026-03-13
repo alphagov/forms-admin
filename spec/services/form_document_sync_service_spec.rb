@@ -239,12 +239,12 @@ RSpec.describe FormDocumentSyncService do
       end
 
       context "when there is a declaration in Welsh but not in English translations" do
-        let(:form) { create(:form, available_languages: %w[en cy], declaration_text: "", declaration_text_cy: "Shouldn't be here") }
+        let(:form) { create(:form, available_languages: %w[en cy], declaration_markdown: "", declaration_markdown_cy: "Shouldn't be here") }
 
         it "does not include the declaration in Welsh" do
           service.update_draft_form_document
           welsh_form_document = FormDocument.find_by(form:, tag: "draft", language: "cy")
-          expect(welsh_form_document.content).to include("declaration_text" => nil)
+          expect(welsh_form_document.content).to include("declaration_markdown" => nil)
         end
       end
 
